@@ -1,0 +1,301 @@
+<?php
+
+/**
+ * Hoa Framework
+ *
+ *
+ * @license
+ *
+ * GNU General Public License
+ *
+ * This file is part of HOA Open Accessibility.
+ * Copyright (c) 2007, 2008 Ivan ENDERLIN. All rights reserved.
+ *
+ * HOA Open Accessibility is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * HOA Open Accessibility is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with HOA Open Accessibility; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ *
+ * @category    Framework
+ * @package     Hoa_Translate
+ * @subpackage  Hoa_Translate_Adapter_Gettext
+ *
+ */
+
+/**
+ * Hoa_Framework
+ */
+require_once 'Framework.php';
+
+/**
+ * Hoa_Translate_Adapter_Abstract
+ */
+import('Translate.Adapter.Abstract');
+
+/**
+ * Hoa_File
+ */
+import('File.~');
+
+/**
+ * Class Hoa_Translate_Adapter_Gettext.
+ *
+ * Gettext adapter (for Unix and Windows).
+ *
+ * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
+ * @license     http://gnu.org/licenses/gpl.txt GNU GPL
+ * @since       PHP 5
+ * @version     0.1
+ * @package     Hoa_Translate
+ * @subpackage  Hoa_Translate_Adapter_Gettext
+ */
+
+class Hoa_Translate_Adapter_Gettext extends Hoa_Translate_Adapter_Abstract {
+
+    /**
+     * Current filename.
+     *
+     * @var Hoa_Translate_Adapter_Gettext string
+     */
+    protected $filename = '';
+
+    /**
+     * Big endian byte order if true. Else little endian.
+     *
+     * @var Hoa_Translate_Adapter_Gettext bool
+     */
+    private $_bigEndianByte = false;
+
+
+
+    /**
+     * __construct
+     * Set options.
+     *
+     * @access  public
+     * @param   path    string    Path to locale directory.
+     * @param   locale  string    Locale value.
+     * @param   domain  string    Domain.
+     * @return  void
+     * @throw   Hoa_Translate_Exception
+     */
+    public function __construct ( $path = '', $locale = '', $domain = null ) {
+
+        parent::__construct($path, $locale, $domain);;
+    }
+
+    /**
+     * setDomain
+     * Set domain and filename, and unpack data.
+     *
+     * @access  public
+     * @param   domain  string    Domain.
+     * @param   header  bool      If file got headers : true, else : false.
+     * @return  string
+     * @throw   Hoa_Translate_Exception
+     */
+    public function setDomain ( $domain = '', $header = true ) {
+
+        $filename = $this->path . $this->locale .
+                    '/LC_MESSAGES/' . $domain . '.mo';
+
+        if(!file_exists($filename))
+            throw new Hoa_Translate_Exception('Filename %s is not found.',
+                1, $filename);
+
+        $old              = $this->filename;
+        $this->filename   = $filename;
+
+        $this->_translate = $this->unpackData($header);
+
+        return $old;
+    }
+
+    /**
+     * unpackData
+     * Unpack data from domain.
+     * Help could be found here : http://gnu.org/software/gettext/manual/gettext.txt.
+     * See chapter "10.3 : The Format of GNU MO Files".
+     *
+     * @access  protected
+     * @return  array
+     */
+    protected function unpackData ( ) {
+
+        Hoa_File::seek($this->filename, 0);
+
+        /**
+         * The first two words serve the identification of the file.
+         * The magic number will always signal GNU MO files. 
+         * The number is stored in the byte order of the generating machine,
+         * so the magic number really is two numbers: `0x950412de' and `0xde120495'.
+         **/
+        $magicNumber = $this->_read(1);
+
+        switch(dechex($magicNumber)) {
+
+            case '950412de':
+                $this->_bigEndianByte = false;
+              break;
+
+            case 'de120495':
+                $this->_bigEndianByte = true;
+              break;
+
+            default:
+                throw new Hoa_Translate_Exception('%s is not a GNU MO file.',
+        }
+
+        /**
+         * For explain the following code, we will look this table :
+         *
+         *         byte
+         *               +------------------------------------------+
+         *            0  | magic number = 0x950412de                |
+         *               |                                          |
+         *            4  | file format revision = 0                 |
+         *               |                                          |
+         *            8  | number of strings                        |  == N
+         *               |                                          |
+         *           12  | offset of table with original strings    |  == O
+         *               |                                          |
+         *           16  | offset of table with translation strings |  == T
+         *               |                                          |
+         *           20  | size of hashing table                    |  == S
+         *               |                                          |
+         *           24  | offset of hashing table                  |  == H
+         *               |                                          |
+         *               .                                          .
+         *               .    (possibly more entries later)         .
+         *               .                                          .
+         *               |                                          |
+         *            O  | length & offset 0th string  ----------------.
+         *        O + 8  | length & offset 1st string  ------------------.
+         *                ...                                    ...   | |
+         *  O + ((N-1)*8)| length & offset (N-1)th string           |  | |
+         *               |                                          |  | |
+         *            T  | length & offset 0th translation  ---------------.
+         *        T + 8  | length & offset 1st translation  -----------------.
+         *                ...                                    ...   | | | |
+         *  T + ((N-1)*8)| length & offset (N-1)th translation      |  | | | |
+         *               |                                          |  | | | |
+         *            H  | start hash table                         |  | | | |
+         *                ...                                    ...   | | | |
+         *    H + S * 4  | end hash table                           |  | | | |
+         *               |                                          |  | | | |
+         *               | NUL terminated 0th string  <----------------' | | |
+         *               |                                          |    | | |
+         *               | NUL terminated 1st string  <------------------' | |
+         *               |                                          |      | |
+         *                ...                                    ...       | |
+         *               |                                          |      | |
+         *               | NUL terminated 0th translation  <---------------' |
+         *               |                                          |        |
+         *               | NUL terminated 1st translation  <-----------------'
+         *               |                                          |
+         *                ...                                    ...
+         *               |                                          |
+         *               +------------------------------------------+
+         */
+
+        $revision = $this->_read(1);
+        $notsh    = array(
+            'N'   => $this->_read(1),
+            'O'   => $this->_read(1),
+            'T'   => $this->_read(1),
+            'S'   => $this->_read(1),
+            'H'   => $this->_read(1)
+        );
+
+
+        // Prepare original strings array.
+        Hoa_File::seek($this->filename, $notsh['O']);
+        $originalStrOffset    = $this->_read(2*$notsh['N'], null);
+
+        // Prepare translation strings array.
+        Hoa_File::seek($this->filename, $notsh['T']);
+        $translationStrOffset = $this->_read(2*$notsh['N'], null);
+
+        $headers = '';
+
+        for($e = 0, $max = $notsh['N']; $e < $max; $e++) {
+
+            if($originalStrOffset[$e*2+1] == 0) {
+                if(!empty($header))
+                    continue;
+                Hoa_File::seek($this->filename, $translationStrOffset[$e*2+2]);
+                $headers = Hoa_File::read($this->filename, $translationStrOffset[$e*2+1]);
+            }
+
+            Hoa_File::seek($this->filename, $originalStrOffset[$e*2+2]);
+            $key = Hoa_File::read($this->filename, $originalStrOffset[$e*2+1]);
+
+            Hoa_File::seek($this->filename, $translationStrOffset[$e*2+2]);
+            $return[$key] = Hoa_File::read($this->filename, $translationStrOffset[$e*2+1]);
+        }
+
+        $this->_makeHeaders($headers);
+
+        return $return;
+    }
+
+    /**
+     * _read
+     * Private read MO data.
+     *
+     * @access  private
+     * @param   bytes    int    Bytes.
+     * @param   ptr      int    Array pointer.
+     * @return  string
+     */
+    private function _read ( $bytes, $ptr = 1 ) {
+
+        if(false === $this->_bigEndianByte)
+            $return = unpack('V' . $bytes, Hoa_File::read($this->filename, 4*$bytes));
+        else
+            $return = unpack('N' . $bytes, Hoa_File::read($this->filename, 4*$bytes));
+
+        if(isset($return[$ptr]))
+            return $return[$ptr];
+
+        return $return;
+    }
+
+    /**
+     * _makeHeaders
+     * Make headers.
+     *
+     * @access  private
+     * @param   headers  string    Headers.
+     * @return  void
+     */
+    private function _makeHeaders ( $headers ) {
+
+        $headers = explode("\n", $headers);
+        $return  = array();
+
+        foreach($headers as $type => $value) {
+
+            if(empty($value))
+                continue;
+
+            $type  = substr($value, 0, strpos($value, ':'));
+            $value = substr($value, strpos($value, ':')+1);
+
+            $return[$type] = trim($value);
+        }
+
+        $this->_headers = $return;
+    }
+}
