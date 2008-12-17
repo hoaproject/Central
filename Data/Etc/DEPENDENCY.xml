@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+Informations       :
+    - generated at : 2008-11-13T19:26:11.000000Z.
+-->
+
+<dependency>
+  <package name="Acl">
+    <dependent on="Graph" />
+  </package>
+  <package name="Archive">
+    <dependent on="File" />
+  </package>
+  <package name="Bench" />
+  <package name="Cache">
+    <dependent on="File" />
+  </package>
+  <package name="Compress" />
+  <package name="Configuration">
+    <dependent on="StdClass" />
+    <dependent on="Xml" />
+    <dependent on="Yaml" />
+  </package>
+  <package name="Console" />
+  <package name="Controller">
+    <dependent on="View" />
+    <dependent on="Factory" />
+  </package>
+  <package name="Database" />
+  <package name="Factory" />
+  <package name="File" />
+  <package name="Filter">
+    <dependent on="Factory" />
+  </package>
+  <package name="Form">
+    <dependent on="Filter" />
+    <dependent on="Validate" />
+    <dependent on="Factory" />
+  </package>
+  <package name="Graph">
+    <dependent on="Factory" />
+  </package>
+  <package name="I18n" />
+  <package name="Iterator" />
+  <package name="Locale">
+    <dependent on="File" />
+  </package>
+  <package name="Mail">
+    <dependent on="Socket" />
+  </package>
+  <package name="Mime" />
+  <package name="Registry" />
+  <package name="Service">
+    <dependent on="Xml" />
+  </package>
+  <package name="Session" />
+  <package name="Socket" />
+  <package name="Stack" />
+  <package name="StdClass" />
+  <package name="Translate">
+    <dependent on="File" />
+    <dependent on="Registry" />
+    <dependent on="Factory" />
+  </package>
+  <package name="Uri" />
+  <package name="Validate">
+    <dependent on="Mail" />
+    <dependent on="Factory" />
+  </package>
+  <package name="Version" />
+  <package name="View" />
+  <package name="Xml" />
+  <package name="XmlRpc">
+    <dependent on="Uri" />
+    <dependent on="Socket" />
+    <dependent on="File" />
+    <dependent on="Xml" />
+  </package>
+  <package name="Yaml" />
+</dependency>

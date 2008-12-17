@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Very simple …
+
+if [ "" = "$1" ]; then
+    echo "Usage : echoe <filename.echo>"
+    exit 1
+fi
+
+echo -e "`cat $1`"
+
+exit 0

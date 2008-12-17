@@ -1,0 +1,54 @@
+# Router configurations
+route:
+  type:           Get
+  parameter:
+    default:
+      module:     index
+      action:     index
+  controller:
+    key:          module
+  action:
+    key:          action
+  directory:      Application/Controller/
+
+# or for the rewrite router.
+# type: Rewrite
+# parameter:
+#   base:         /MyBase
+#   rules:
+#     default:
+#       pattern:  /(:module)/(:action).html
+#       default:
+#         module: index
+#         action: index
+
+# View configurations.
+view:
+  theme:          MyTheme
+  directory:      "Application/View/(:Theme)/"
+  layout:         Front
+  enable:
+    layout:       true
+  helper:
+    directory:    Application/View/Helper/
+
+# Model configurations.
+model:
+  directory:      "Application/Model/(:Controller)/"
+
+# Pattern configurations.
+pattern:
+  controller:
+    class:        "(:Controller)Controller"
+    file:         "(:Controller)Controller.php"
+    directory:    "(:Controller)Controller/"
+  action:
+    class:        "(:Action)Controller"
+    method:       "(:Action)Action"
+    file:         "(:Action)Controller.php"
+  view:
+    layout:       "(:Layout)Layout.phtml"
+    file:         "(:Action)Action.phtml"
+    directory:    "(:Controller)View/"
+  model:
+    directory:    "(:Controller)Model/"

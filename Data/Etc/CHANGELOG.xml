@@ -1,0 +1,3986 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+Informations             :
+    - repository path    : /Users/hywan/Svn/Hoa/Repository/ ;
+    - path in repository : /Project/Framework/Trunk/ ;
+    - generated at       : 2008-11-13T19:26:04.000000Z.
+-->
+
+<log>
+  <logentry revision="457">
+    <author>hywan</author>
+    <date>2008-11-13T19:25:51.257292Z</date>
+    <msg>Add exception and edit the prepare/execute methods interface to make it more fluent.</msg>
+    <paths>
+      <path action="M">Framework/Database/Dal/AbstractLayer/Pdo/Pdo.php</path>
+      <path action="M">Framework/Database/Dal/AbstractLayer/Pdo/PdoStatement.php</path>
+      <path action="M">Framework/Database/Dal/DalStatement.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="456">
+    <author>hywan</author>
+    <date>2008-11-13T18:16:13.884167Z</date>
+    <msg>Move the autoload script (__construct to getInstance) because of a particular (but logical) PHP behavior.</msg>
+    <paths>
+      <path action="M">Framework/Database/Database.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="455">
+    <author>hywan</author>
+    <date>2008-11-13T17:47:00.075676Z</date>
+    <msg>Replace a catchable error when querying by a Hoa exception (more explicite).</msg>
+    <paths>
+      <path action="M">Framework/Database/Dal/AbstractLayer/Pdo/Pdo.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="454">
+    <author>hywan</author>
+    <date>2008-11-11T16:55:43.204578Z</date>
+    <msg>Change DNS to DSN (oops), and ameliorate the bindParameter() method (is a real linker now).</msg>
+    <paths>
+      <path action="M">Data/Configuration/Database.yml</path>
+      <path action="M">Framework/Database/Dal/AbstractLayer/Pdo/PdoStatement.php</path>
+      <path action="M">Framework/Database/Dal/Dal.php</path>
+      <path action="M">Framework/Database/Dal/DalStatement.php</path>
+      <path action="M">Framework/Database/Dal/Interface/WrapperStatement.php</path>
+      <path action="M">Framework/Database/Database.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="452">
+    <author>hywan</author>
+    <date>2008-11-07T15:59:53.662915Z</date>
+    <msg>Oops, change DNS for DSN, just a bad name …</msg>
+    <paths>
+      <path action="M">Framework/Database/Dal/Dal.php</path>
+      <path action="M">Framework/Database/Database.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="449">
+    <author>hywan</author>
+    <date>2008-10-31T01:43:17.421367Z</date>
+    <msg>Shot the 0.4b.</msg>
+    <paths>
+      <path action="M">Data/Etc/CHANGELOG</path>
+      <path action="M">Data/Etc/CHANGELOG.echo</path>
+      <path action="M">Data/Etc/CHANGELOG.xml</path>
+      <path action="M">Data/Etc/DEPENDENCY</path>
+      <path action="M">Data/Etc/DEPENDENCY.echo</path>
+      <path action="M">Data/Etc/DEPENDENCY.xml</path>
+      <path action="M">Framework/Version/Version.php</path>
+      <path action="M">README</path>
+    </paths>
+  </logentry>
+  <logentry revision="448">
+    <author>hywan</author>
+    <date>2008-10-31T01:39:31.347661Z</date>
+    <msg>Ready for the 0.4b ?</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Maintenance/Cache.php</path>
+      <path action="M">Data/Configuration/Cache/Cache.php</path>
+      <path action="M">Data/Configuration/Cache/Console.php</path>
+      <path action="M">Data/Configuration/Cache/Controller.php</path>
+      <path action="M">Data/Configuration/Cache/Database.php</path>
+      <path action="M">Data/Etc/CHANGELOG</path>
+      <path action="M">Data/Etc/CHANGELOG.echo</path>
+      <path action="M">Data/Etc/CHANGELOG.xml</path>
+      <path action="M">Data/Etc/DEPENDENCY</path>
+      <path action="M">Data/Etc/DEPENDENCY.echo</path>
+      <path action="M">Data/Etc/DEPENDENCY.xml</path>
+      <path action="M">Framework/Version/Version.php</path>
+      <path action="M">README</path>
+    </paths>
+  </logentry>
+  <logentry revision="446">
+    <author>hywan</author>
+    <date>2008-10-30T19:28:13.899701Z</date>
+    <msg>Write the INSTALL and README files.</msg>
+    <paths>
+      <path action="A">INSTALL</path>
+      <path action="M">README</path>
+    </paths>
+  </logentry>
+  <logentry revision="445">
+    <author>hywan</author>
+    <date>2008-10-30T00:56:38.504287Z</date>
+    <msg>Complete the API documentation.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Controller/Create.php</path>
+      <path action="M">Data/Bin/Command/Controller/Delete.php</path>
+      <path action="M">Data/Bin/Command/Controller/Whereis.php</path>
+      <path action="M">Data/Bin/Command/Database/BuildModel.php</path>
+      <path action="M">Data/Bin/Command/Documentation/Mysql.php</path>
+      <path action="M">Data/Bin/Command/Documentation/Php.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="444">
+    <author>hywan</author>
+    <date>2008-10-29T21:57:42.071004Z</date>
+    <msg>Add thanking.</msg>
+    <paths>
+      <path action="A">Framework/Database/THANKS</path>
+    </paths>
+  </logentry>
+  <logentry revision="443">
+    <author>hywan</author>
+    <date>2008-10-29T20:57:13.325616Z</date>
+    <msg>Add double quotes surround %HOA%.</msg>
+    <paths>
+      <path action="M">Data/Bin/hoa.bat</path>
+    </paths>
+  </logentry>
+  <logentry revision="442">
+    <author>hywan</author>
+    <date>2008-10-29T20:54:43.588539Z</date>
+    <msg>Fix a bug with the import() and autoload() method on Windows (does not support inode, yep …).</msg>
+    <paths>
+      <path action="M">Framework/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="441">
+    <author>hywan</author>
+    <date>2008-10-29T19:10:39.496336Z</date>
+    <msg>Add the HOA_DATA_LOSTFOUND constant.</msg>
+    <paths>
+      <path action="M">Framework/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="440">
+    <author>hywan</author>
+    <date>2008-10-29T19:08:49.496005Z</date>
+    <msg>Remove some stuff.</msg>
+    <paths>
+      <path action="D">Data/Bin/Command/View</path>
+    </paths>
+  </logentry>
+  <logentry revision="439">
+    <author>hywan</author>
+    <date>2008-10-29T19:08:27.151538Z</date>
+    <msg>Remove some stuff.</msg>
+    <paths>
+      <path action="D">Data/Bin/Command/Tool</path>
+    </paths>
+  </logentry>
+  <logentry revision="438">
+    <author>hywan</author>
+    <date>2008-10-29T19:07:56.470106Z</date>
+    <msg></msg>
+    <paths>
+      <path action="D">Data/Bin/Command/Action</path>
+    </paths>
+  </logentry>
+  <logentry revision="436">
+    <author>hywan</author>
+    <date>2008-10-29T19:01:41.942266Z</date>
+    <msg>Remove useless command.</msg>
+    <paths>
+      <path action="D">Data/Bin/Command/Controller/Move.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="435">
+    <author>hywan</author>
+    <date>2008-10-29T18:57:46.147856Z</date>
+    <msg>Oops, forget to remove some tests.</msg>
+    <paths>
+      <path action="D">Data/Lost+found/3255d7431d3798e28134ffb1e3e364cf</path>
+      <path action="D">Data/Lost+found/8ffd166525cb20030107d7d914e92123</path>
+    </paths>
+  </logentry>
+  <logentry revision="434">
+    <author>hywan</author>
+    <date>2008-10-29T18:57:16.839422Z</date>
+    <msg>Make some stuff here.</msg>
+    <paths>
+      <path action="D">Data/Bin/Command/Action/Create.php</path>
+      <path action="D">Data/Bin/Command/Action/Delete.php</path>
+      <path action="D">Data/Bin/Command/Action/Move.php</path>
+      <path action="M">Data/Bin/Command/Application/Start.php</path>
+      <path action="M">Data/Bin/Command/Controller/Create.php</path>
+      <path action="M">Data/Bin/Command/Controller/Delete.php</path>
+      <path action="A">Data/Bin/Command/Controller/Whereis.php</path>
+      <path action="A">Data/Bin/Command/Database/BuildModel.php</path>
+      <path action="D">Data/Bin/Command/Database/Model.php</path>
+      <path action="D">Data/Bin/Command/Database/Schema.php</path>
+      <path action="D">Data/Bin/Command/Documentation/Hoa.php</path>
+      <path action="M">Data/Bin/Command/Documentation/Mysql.php</path>
+      <path action="M">Data/Bin/Command/Documentation/Php.php</path>
+      <path action="M">Data/Bin/Command/Main/Changelog.php</path>
+      <path action="M">Data/Bin/Command/Main/Version.php</path>
+      <path action="M">Data/Bin/Command/Main/Welcome.php</path>
+      <path action="D">Data/Bin/Command/Maintenance/Update.php</path>
+      <path action="D">Data/Bin/Command/Tool/Form.php</path>
+      <path action="D">Data/Bin/Command/View/Layout.php</path>
+      <path action="D">Data/Bin/Command/View/Theme.php</path>
+      <path action="M">Data/Bin/Hoa.php</path>
+      <path action="M">Data/Bin/Style/Sheet.php</path>
+      <path action="M">Data/Bin/hoa.bat</path>
+      <path action="M">Data/Configuration/Cache.yml</path>
+      <path action="M">Data/Configuration/Cache/Cache.php</path>
+      <path action="M">Data/Configuration/Cache/Console.php</path>
+      <path action="M">Data/Configuration/Cache/Controller.php</path>
+      <path action="M">Data/Configuration/Cache/Database.php</path>
+      <path action="M">Data/Configuration/Console.yml</path>
+      <path action="M">Data/Configuration/Database.yml</path>
+      <path action="A">Data/Database</path>
+      <path action="M">Data/Etc/CHANGELOG</path>
+      <path action="M">Data/Etc/CHANGELOG.echo</path>
+      <path action="M">Data/Etc/CHANGELOG.xml</path>
+      <path action="M">Data/Etc/DEPENDENCY</path>
+      <path action="M">Data/Etc/DEPENDENCY.echo</path>
+      <path action="M">Data/Etc/DEPENDENCY.xml</path>
+      <path action="M">Data/Etc/echoe</path>
+      <path action="A">Data/Lost+found</path>
+      <path action="A">Data/Lost+found/3255d7431d3798e28134ffb1e3e364cf</path>
+      <path action="A">Data/Lost+found/3255d7431d3798e28134ffb1e3e364cf/IndexController</path>
+      <path action="A">Data/Lost+found/3255d7431d3798e28134ffb1e3e364cf/IndexController.php</path>
+      <path action="A">Data/Lost+found/3255d7431d3798e28134ffb1e3e364cf/IndexController/TataController.php</path>
+      <path action="A">Data/Lost+found/3255d7431d3798e28134ffb1e3e364cf/IndexController/TotoController.php</path>
+      <path action="A">Data/Lost+found/8ffd166525cb20030107d7d914e92123</path>
+      <path action="A">Data/Lost+found/8ffd166525cb20030107d7d914e92123/HopController.php</path>
+      <path action="M">Data/Template/ViewLayout.tpl</path>
+    </paths>
+  </logentry>
+  <logentry revision="433">
+    <author>hywan</author>
+    <date>2008-10-29T18:46:54.707068Z</date>
+    <msg>Ameliorate the “finder” file support (take care of package parameters).</msg>
+    <paths>
+      <path action="M">Framework/Database/Schema/Schema.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="432">
+    <author>hywan</author>
+    <date>2008-10-29T18:19:27.855053Z</date>
+    <msg>Fixe a bug when treating integer short option.</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/GetOption.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="431">
+    <author>hywan</author>
+    <date>2008-10-28T18:47:20.370633Z</date>
+    <msg>Fix a bug when print out a status that contains \e[ style.</msg>
+    <paths>
+      <path action="M">Framework/Console/Command/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="430">
+    <author>hywan</author>
+    <date>2008-10-28T17:36:00.545075Z</date>
+    <msg>Write the API documentation, clean files etc.</msg>
+    <paths>
+      <path action="M">Framework/Database/Cache/Abstract.php</path>
+      <path action="M">Framework/Database/Cache/Query.php</path>
+      <path action="M">Framework/Database/Cache/Table.php</path>
+      <path action="M">Framework/Database/Constraint/Abstract.php</path>
+      <path action="M">Framework/Database/Constraint/Field.php</path>
+      <path action="M">Framework/Database/Constraint/Table.php</path>
+      <path action="M">Framework/Database/Criterion/Abstract.php</path>
+      <path action="M">Framework/Database/Criterion/Predicate.php</path>
+      <path action="A">Framework/Database/Dal/AbstractLayer/Dba/Dba.php</path>
+      <path action="A">Framework/Database/Dal/AbstractLayer/Dba/DbaStatement.php</path>
+      <path action="A">Framework/Database/Dal/AbstractLayer/Dbx/Dbx.php</path>
+      <path action="A">Framework/Database/Dal/AbstractLayer/Dbx/DbxStatement.php</path>
+      <path action="A">Framework/Database/Dal/AbstractLayer/Odbc/Odbc.php</path>
+      <path action="A">Framework/Database/Dal/AbstractLayer/Odbc/OdbcStatement.php</path>
+      <path action="M">Framework/Database/Dal/AbstractLayer/Pdo/Pdo.php</path>
+      <path action="M">Framework/Database/Dal/AbstractLayer/Pdo/PdoStatement.php</path>
+      <path action="M">Framework/Database/Dal/Dal.php</path>
+      <path action="M">Framework/Database/Dal/DalStatement.php</path>
+      <path action="M">Framework/Database/Dal/Interface/Wrapper.php</path>
+      <path action="M">Framework/Database/Dal/Interface/WrapperStatement.php</path>
+      <path action="M">Framework/Database/Database.php</path>
+      <path action="M">Framework/Database/Model/Base.php</path>
+      <path action="M">Framework/Database/Model/Collection.php</path>
+      <path action="M">Framework/Database/Model/Field.php</path>
+      <path action="M">Framework/Database/Model/Join.php</path>
+      <path action="M">Framework/Database/Model/Table.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Criterion/GroupBy.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Criterion/OrderBy.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Criterion/SearchCondition.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Ddl/Abstract.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Ddl/Create.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Dml/Delete.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Dml/Insert.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Dml/Select.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Dml/Update.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Field.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Function/Abstract.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Function/Common.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Interface.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Table.php</path>
+      <path action="M">Framework/Database/Schema/Schema.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="429">
+    <author>hywan</author>
+    <date>2008-10-28T16:40:24.581760Z</date>
+    <msg>Forget to care about the ALL and DISTINCT selection.</msg>
+    <paths>
+      <path action="M">Framework/Database/QueryBuilder/Dml/Select.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="428">
+    <author>hywan</author>
+    <date>2008-10-27T18:11:31.525769Z</date>
+    <msg>Ameliorate the connection with DAL. Add the autoload connection notion.</msg>
+    <paths>
+      <path action="M">Framework/Database/Dal/Dal.php</path>
+      <path action="M">Framework/Database/Database.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="427">
+    <author>hywan</author>
+    <date>2008-10-27T18:10:35.418630Z</date>
+    <msg>Resolve a problem with fetching. query() method now returns an array, not an object.</msg>
+    <paths>
+      <path action="M">Framework/Database/Model/Table.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="426">
+    <author>hywan</author>
+    <date>2008-10-26T00:39:44.329428Z</date>
+    <msg>Declare an undeclared variable.</msg>
+    <paths>
+      <path action="M">Framework/Exception.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="425">
+    <author>hywan</author>
+    <date>2008-10-25T19:46:18.388803Z</date>
+    <msg>Ameliorate the multiton of DAL.</msg>
+    <paths>
+      <path action="M">Framework/Database/Dal/Dal.php</path>
+      <path action="M">Framework/Database/Model/Collection.php</path>
+      <path action="M">Framework/Database/Model/Table.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="424">
+    <author>hywan</author>
+    <date>2008-10-25T18:47:06.711072Z</date>
+    <msg>End of the QueryBuilder Ddl Create class.</msg>
+    <paths>
+      <path action="M">Framework/Database/QueryBuilder/Ddl/Create.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="423">
+    <author>hywan</author>
+    <date>2008-10-25T18:46:40.229335Z</date>
+    <msg>End of the QueryBuilder Dml Select remake class.</msg>
+    <paths>
+      <path action="M">Framework/Database/QueryBuilder/Dml/Select.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="422">
+    <author>hywan</author>
+    <date>2008-10-25T18:44:19.823489Z</date>
+    <msg>Add primary key and foreign key pattern name in parameter.</msg>
+    <paths>
+      <path action="M">Framework/Database/Database.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="421">
+    <author>hywan</author>
+    <date>2008-10-25T00:36:41.001447Z</date>
+    <msg>Trying to program the join structure but it is really hard, and some problems appeared … Rollback to a better linked table support but the join system is unabled for now (commented). Remake the QueryBuilder Dml Select class (not finished).</msg>
+    <paths>
+      <path action="M">Framework/Database/Model/Field.php</path>
+      <path action="A">Framework/Database/Model/Join.php</path>
+      <path action="M">Framework/Database/Model/Table.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Dml/Select.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="420">
+    <author>hywan</author>
+    <date>2008-10-25T00:31:55.213248Z</date>
+    <msg>End of the foreign key support.</msg>
+    <paths>
+      <path action="M">Framework/Database/Constraint/Field.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="419">
+    <author>hywan</author>
+    <date>2008-10-25T00:31:24.372284Z</date>
+    <msg>Minor edit : solve a problem in an exception message.</msg>
+    <paths>
+      <path action="M">Framework/Database/QueryBuilder/Table.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="418">
+    <author>hywan</author>
+    <date>2008-10-21T21:51:37.079837Z</date>
+    <msg>Maybe the end of the schema layer.</msg>
+    <paths>
+      <path action="M">Framework/Database/Schema/Schema.php</path>
+      <path action="M">Framework/Database/Schema/Xsd/0.1</path>
+    </paths>
+  </logentry>
+  <logentry revision="417">
+    <author>hywan</author>
+    <date>2008-10-21T21:51:15.893120Z</date>
+    <msg>Add the schema configuration.</msg>
+    <paths>
+      <path action="M">Framework/Database/Database.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="416">
+    <author>hywan</author>
+    <date>2008-10-20T21:44:35.407647Z</date>
+    <msg>First step to convert XML to PHP (based-on XSD). Nearlly finished.</msg>
+    <paths>
+      <path action="A">Framework/Database/Schema/Exception.php</path>
+      <path action="A">Framework/Database/Schema/Schema.php</path>
+      <path action="M">Framework/Database/Schema/Xsd/0.1</path>
+    </paths>
+  </logentry>
+  <logentry revision="415">
+    <author>hywan</author>
+    <date>2008-10-20T19:38:12.998990Z</date>
+    <msg>Built the Xml Schema Definition (in 0.1 version).</msg>
+    <paths>
+      <path action="A">Framework/Database/Schema/Xsd</path>
+      <path action="A">Framework/Database/Schema/Xsd/0.1</path>
+    </paths>
+  </logentry>
+  <logentry revision="414">
+    <author>hywan</author>
+    <date>2008-10-20T01:18:26.826037Z</date>
+    <msg>Start the DDL layer. Start to think about foreign keys support (and other constraints update).</msg>
+    <paths>
+      <path action="M">Framework/Database/Constraint/Field.php</path>
+      <path action="D">Framework/Database/Constraint/NOTE</path>
+      <path action="A">Framework/Database/QueryBuilder/Ddl/Abstract.php</path>
+      <path action="A">Framework/Database/QueryBuilder/Ddl/Alter.php</path>
+      <path action="A">Framework/Database/QueryBuilder/Ddl/Create.php</path>
+      <path action="A">Framework/Database/QueryBuilder/Ddl/Drop.php</path>
+      <path action="A">Framework/Database/QueryBuilder/Ddl/Exception.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="413">
+    <author>hywan</author>
+    <date>2008-10-20T00:42:29.408768Z</date>
+    <msg>Bad method call on field …</msg>
+    <paths>
+      <path action="M">Framework/Database/Constraint/Table.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="412">
+    <author>hywan</author>
+    <date>2008-10-16T18:45:30.929765Z</date>
+    <msg>End of the cache system : add the table cache, ameliorate the query cache etc. Add some parameters in the Hoa_Database class.</msg>
+    <paths>
+      <path action="M">Framework/Database/Cache/Abstract.php</path>
+      <path action="D">Framework/Database/Cache/Bridge.php</path>
+      <path action="M">Framework/Database/Cache/Query.php</path>
+      <path action="M">Framework/Database/Cache/Table.php</path>
+      <path action="M">Framework/Database/Database.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="411">
+    <author>hywan</author>
+    <date>2008-10-16T17:11:53.557198Z</date>
+    <msg>Fix a bug when given a boolean parameter to the setParameters() metho.</msg>
+    <paths>
+      <path action="M">Framework/Console/Console.php</path>
+      <path action="M">Framework/Controller/Front.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="410">
+    <author>hywan</author>
+    <date>2008-10-16T01:13:59.391275Z</date>
+    <msg>Just write the structure (making a test).</msg>
+    <paths>
+      <path action="M">Framework/Database/Cache/Table.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="409">
+    <author>hywan</author>
+    <date>2008-10-14T01:06:23.278300Z</date>
+    <msg>Write the API documentation of latest commits.</msg>
+    <paths>
+      <path action="M">Framework/Database/Cache/Abstract.php</path>
+      <path action="M">Framework/Database/Cache/Query.php</path>
+      <path action="M">Framework/Database/Criterion/Abstract.php</path>
+      <path action="M">Framework/Database/Model/Table.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="408">
+    <author>hywan</author>
+    <date>2008-10-14T00:29:47.275252Z</date>
+    <msg>Start the cache subpackage : set the query cache up.</msg>
+    <paths>
+      <path action="M">Framework/Database/Cache/Abstract.php</path>
+      <path action="A">Framework/Database/Cache/Exception.php</path>
+      <path action="A">Framework/Database/Cache/Query.php</path>
+      <path action="A">Framework/Database/Cache/Table.php</path>
+      <path action="M">Framework/Database/Model/Table.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="407">
+    <author>hywan</author>
+    <date>2008-10-14T00:27:47.048975Z</date>
+    <msg>Add the cache.enable parameter.</msg>
+    <paths>
+      <path action="M">Framework/Database/Database.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="406">
+    <author>hywan</author>
+    <date>2008-10-14T00:27:07.731457Z</date>
+    <msg>Add linked tables support (on a master table).</msg>
+    <paths>
+      <path action="M">Framework/Database/Criterion/Abstract.php</path>
+      <path action="M">Framework/Database/Criterion/Predicate.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Dml/Select.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="405">
+    <author>hywan</author>
+    <date>2008-10-14T00:24:06.651995Z</date>
+    <msg>Set the getTable() method in public access.</msg>
+    <paths>
+      <path action="M">Framework/Database/Model/Field.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="403">
+    <author>hywan</author>
+    <date>2008-10-09T17:13:12.250707Z</date>
+    <msg>Edit the API documentation of the Hoa_Console_Interface_Text::wordwrap() method, and make a wrap in the Hoa_Console_Command_Abstract class to this method.</msg>
+    <paths>
+      <path action="M">Framework/Console/Command/Abstract.php</path>
+      <path action="M">Framework/Console/Interface/Text.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="400">
+    <author>hywan</author>
+    <date>2008-10-07T01:16:13.185367Z</date>
+    <msg>Modify the tips to run the Hoa CLI everywhere.</msg>
+    <paths>
+      <path action="M">Framework/Console/Dispatcher.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="399">
+    <author>hywan</author>
+    <date>2008-10-07T01:15:39.830074Z</date>
+    <msg>Finalize the constructor.</msg>
+    <paths>
+      <path action="M">Framework/Console/Command/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="396">
+    <author>hywan</author>
+    <date>2008-10-05T20:06:59.862686Z</date>
+    <msg>Correct a bug when an option with a required argument does not have argument.</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/Cli/Parser.php</path>
+      <path action="M">Framework/Console/Core/GetOption.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="395">
+    <author>hywan</author>
+    <date>2008-10-05T15:52:42.596299Z</date>
+    <msg>Add a lot of control exception.</msg>
+    <paths>
+      <path action="M">Framework/Session/Session.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="394">
+    <author>hywan</author>
+    <date>2008-10-03T00:58:00.423359Z</date>
+    <msg>Prepare archive and compress packages, and prepare the sub-package database querybuilder ddl.</msg>
+    <paths>
+      <path action="A">Framework/Archive/Deb</path>
+      <path action="A">Framework/Archive/Dmg</path>
+      <path action="A">Framework/Archive/Rar</path>
+      <path action="A">Framework/Archive/Tar</path>
+      <path action="A">Framework/Compress</path>
+      <path action="A">Framework/Compress/Bzip2</path>
+      <path action="A">Framework/Compress/Lzf</path>
+      <path action="A">Framework/Compress/Phar</path>
+      <path action="A">Framework/Compress/Zip</path>
+      <path action="A">Framework/Compress/Zlib</path>
+      <path action="A">Framework/Database/QueryBuilder/Ddl</path>
+    </paths>
+  </logentry>
+  <logentry revision="391">
+    <author>hywan</author>
+    <date>2008-10-02T18:43:01.429291Z</date>
+    <msg>Oops, bad name for the ResponsePointerAlreadyExists exception (forget the Response prefix …). Rename it.</msg>
+    <paths>
+      <path action="M">Framework/Controller/Exception/ResponsePointerAlreadyExists.php</path>
+      <path action="M">Framework/Controller/Response/Standard.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="389">
+    <author>hywan</author>
+    <date>2008-10-02T17:45:25.542438Z</date>
+    <msg>Add the unsetAll() method, rename the getMaximum() method to getLongest(), and change the graphic width from N to N^+ in the drawStatistic() method.</msg>
+    <paths>
+      <path action="M">Framework/Bench/Bench.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="387">
+    <author>hywan</author>
+    <date>2008-10-01T00:46:55.623661Z</date>
+    <msg>Set the Hoa_Session class to abstract and delete the private constructor …</msg>
+    <paths>
+      <path action="M">Framework/Session/Session.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="386">
+    <author>hywan</author>
+    <date>2008-10-01T00:46:20.740925Z</date>
+    <msg>Minor : edit API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Graph/Node/Interface.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="384">
+    <author>hywan</author>
+    <date>2008-09-30T19:39:39.958926Z</date>
+    <msg>Add the dependency viewer.</msg>
+    <paths>
+      <path action="A">Data/Bin/Command/Main/Dependency.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="383">
+    <author>hywan</author>
+    <date>2008-09-30T19:16:48.415712Z</date>
+    <msg>Change the handler to only catch the Hoa_Exception.</msg>
+    <paths>
+      <path action="M">Framework/Exception.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="382">
+    <author>hywan</author>
+    <date>2008-09-29T17:54:37.108920Z</date>
+    <msg>No regrets ?</msg>
+    <paths>
+      <path action="D">Framework/Database.old</path>
+    </paths>
+  </logentry>
+  <logentry revision="381">
+    <author>hywan</author>
+    <date>2008-09-29T17:51:28.359370Z</date>
+    <msg>Change the tree database parameters for the data configuration file.</msg>
+    <paths>
+      <path action="M">Framework/Database/Database.php</path>
+      <path action="M">Framework/Database/Model/Base.php</path>
+      <path action="M">Framework/Database/Model/Collection.php</path>
+      <path action="M">Framework/Database/Model/Field.php</path>
+      <path action="M">Framework/Database/Model/Table.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="380">
+    <author>hywan</author>
+    <date>2008-09-29T17:47:08.314166Z</date>
+    <msg>Remove a useless code (bad copy/paste :().</msg>
+    <paths>
+      <path action="M">Framework/Console/Console.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="379">
+    <author>hywan</author>
+    <date>2008-09-29T17:35:42.357660Z</date>
+    <msg>Write the DML query builder classes, to built DELETE, INSERT, SELECT and UPDATE clauses.</msg>
+    <paths>
+      <path action="M">Framework/Database/Criterion/Abstract.php</path>
+      <path action="M">Framework/Database/Model/Table.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Dml/Delete.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Dml/Insert.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Dml/Interface.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Dml/Select.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Dml/Update.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Table.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="378">
+    <author>hywan</author>
+    <date>2008-09-29T15:40:36.118982Z</date>
+    <msg>Set the base model support, and the database configurations (with patterns, parameters etc.). The subpackage View is replaced by Cache.</msg>
+    <paths>
+      <path action="A">Framework/Database/Cache</path>
+      <path action="A">Framework/Database/Cache/Abstract.php</path>
+      <path action="A">Framework/Database/Cache/Bridge.php</path>
+      <path action="M">Framework/Database/Database.php</path>
+      <path action="M">Framework/Database/Model/Base.php</path>
+      <path action="M">Framework/Database/Model/Collection.php</path>
+      <path action="M">Framework/Database/Model/Field.php</path>
+      <path action="M">Framework/Database/Model/Table.php</path>
+      <path action="D">Framework/Database/View</path>
+    </paths>
+  </logentry>
+  <logentry revision="377">
+    <author>hywan</author>
+    <date>2008-09-24T00:32:19.425419Z</date>
+    <msg>Prepare the Base model support, and the Interface model directory (an idea to built special tables).</msg>
+    <paths>
+      <path action="A">Framework/Database/Model/Base.php</path>
+      <path action="A">Framework/Database/Model/Interface</path>
+      <path action="A">Framework/Database/Model/Interface/NOTE</path>
+    </paths>
+  </logentry>
+  <logentry revision="376">
+    <author>hywan</author>
+    <date>2008-09-24T00:29:53.653062Z</date>
+    <msg>Remake the query interface (with database) : use the prepared query cache of the database server, so change the Criterion layer to use prepared query, and some other composants. Finally, change the fluid interface to force the call of the query() method (on table or collection model).</msg>
+    <paths>
+      <path action="M">Framework/Database/Criterion/Abstract.php</path>
+      <path action="M">Framework/Database/Criterion/Predicate.php</path>
+      <path action="M">Framework/Database/Model/Collection.php</path>
+      <path action="M">Framework/Database/Model/Table.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Dml/Interface.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Table.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="375">
+    <author>hywan</author>
+    <date>2008-09-24T00:29:01.566374Z</date>
+    <msg>Minor : edit API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Database/Dal/Dal.php</path>
+      <path action="M">Framework/Database/Dal/Interface/Wrapper.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="374">
+    <author>hywan</author>
+    <date>2008-09-22T20:04:13.279943Z</date>
+    <msg>Temp correction of a bug.</msg>
+    <paths>
+      <path action="M">Framework/Yaml/Parser.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="373">
+    <author>hywan</author>
+    <date>2008-09-22T20:03:37.923916Z</date>
+    <msg>Minor : edit API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Framework.php</path>
+      <path action="M">Framework/Graph/Graph.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="372">
+    <author>hywan</author>
+    <date>2008-09-22T20:03:01.185889Z</date>
+    <msg>Minor : edit API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Session/Exception.php</path>
+      <path action="M">Framework/Session/Session.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="369">
+    <author>hywan</author>
+    <date>2008-09-22T19:23:43.907317Z</date>
+    <msg>Remove a useless method (was for a test).</msg>
+    <paths>
+      <path action="M">Framework/Database/Model/Table.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="368">
+    <author>hywan</author>
+    <date>2008-09-22T19:23:08.491548Z</date>
+    <msg>Assign fields value from a select query in table and collection (first shot).</msg>
+    <paths>
+      <path action="M">Framework/Database/Model/Collection.php</path>
+      <path action="M">Framework/Database/Model/Table.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Dml/Interface.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Table.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="367">
+    <author>hywan</author>
+    <date>2008-09-22T18:42:09.321602Z</date>
+    <msg>Remake the collection structure (through the Hoa_Database_Model_Collection class).</msg>
+    <paths>
+      <path action="D">Framework/Database/Criterion/NOTE</path>
+      <path action="M">Framework/Database/Model/Collection.php</path>
+      <path action="M">Framework/Database/Model/Table.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Field.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Table.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="366">
+    <author>hywan</author>
+    <date>2008-09-22T17:06:35.593668Z</date>
+    <msg>Add the AS clause on the field, i.e. add the Hoa_Database_Model_Field::rename() method. It creates a new field in the table, and not destroys the current field. And correct a bug in the Hoa_Database_Model_Table::addField() method when no field name was given in the initial array.</msg>
+    <paths>
+      <path action="M">Framework/Database/Model/Field.php</path>
+      <path action="D">Framework/Database/Model/NOTE</path>
+      <path action="M">Framework/Database/Model/Table.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="365">
+    <author>hywan</author>
+    <date>2008-09-22T16:49:53.385215Z</date>
+    <msg>Add the user check constraints method.</msg>
+    <paths>
+      <path action="A">Framework/Database/Constraint/User</path>
+      <path action="A">Framework/Database/Constraint/User/Exception.php</path>
+      <path action="M">Framework/Database/Model/Field.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="364">
+    <author>hywan</author>
+    <date>2008-09-21T19:24:23.560979Z</date>
+    <msg>Support the table AS clause, support the ALL and DISTINCT selection, link WHERE and HAVING clauses by a boolean clause (AND or OR) when having more than one clause, move the field identifier formatting (better, it allows user to make more with field functions) etc. Clean all, and write the API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Database/Criterion/Abstract.php</path>
+      <path action="M">Framework/Database/Criterion/Predicate.php</path>
+      <path action="M">Framework/Database/Model/Exception.php</path>
+      <path action="M">Framework/Database/Model/Field.php</path>
+      <path action="M">Framework/Database/Model/Table.php</path>
+      <path action="D">Framework/Database/NOTE</path>
+      <path action="M">Framework/Database/QueryBuilder/Criterion/GroupBy.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Criterion/OrderBy.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Criterion/SearchCondition.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Dml/Select.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Field.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Function/Common.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Interface.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Table.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="363">
+    <author>hywan</author>
+    <date>2008-09-21T16:32:51.040003Z</date>
+    <msg>Remove useless methods.</msg>
+    <paths>
+      <path action="M">Framework/Bench/Mark.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="362">
+    <author>hywan</author>
+    <date>2008-09-21T12:47:03.191017Z</date>
+    <msg>Better criterion support (for output), link the Criterion layer to the QueryBuilder layer. Try to make a select (quickly, will change).</msg>
+    <paths>
+      <path action="M">Framework/Database/Criterion/Abstract.php</path>
+      <path action="M">Framework/Database/Criterion/Predicate.php</path>
+      <path action="M">Framework/Database/Model/Field.php</path>
+      <path action="M">Framework/Database/NOTE</path>
+      <path action="A">Framework/Database/QueryBuilder/Criterion/Exception.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Criterion/GroupBy.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Criterion/OrderBy.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Criterion/SearchCondition.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Dml/Select.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Field.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Function/Abstract.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Function/Common.php</path>
+      <path action="A">Framework/Database/QueryBuilder/Interface.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Table.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="361">
+    <author>hywan</author>
+    <date>2008-09-20T11:32:05.813079Z</date>
+    <msg>Write all (criterion) predicates and edit some stuff (minor).</msg>
+    <paths>
+      <path action="M">Framework/Database/.Wip/TableManipulation.bnf</path>
+      <path action="M">Framework/Database/Criterion/Abstract.php</path>
+      <path action="M">Framework/Database/Criterion/Predicate.php</path>
+      <path action="M">Framework/Database/Model/Table.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Dml/Select.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Table.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="360">
+    <author>hywan</author>
+    <date>2008-09-19T23:20:47.620315Z</date>
+    <msg>Split the Criterion_Abstract to Criterion_Predicate (entry class for the moment). Make a little first shot with Criterion and the QueryBuilder.</msg>
+    <paths>
+      <path action="M">Framework/Database/Criterion/Abstract.php</path>
+      <path action="D">Framework/Database/Criterion/Criteria.php</path>
+      <path action="A">Framework/Database/Criterion/NOTE</path>
+      <path action="A">Framework/Database/Criterion/Predicate.php</path>
+      <path action="M">Framework/Database/Model/Field.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Dml/Select.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="359">
+    <author>hywan</author>
+    <date>2008-09-19T19:51:38.292589Z</date>
+    <msg>Built the QueryBuilder structure (frameset), and the criterion architecture. Go ahead :).</msg>
+    <paths>
+      <path action="M">Framework/Database/.Wip/TableManipulation.bnf</path>
+      <path action="A">Framework/Database/Criterion/Abstract.php</path>
+      <path action="A">Framework/Database/Criterion/Exception.php</path>
+      <path action="D">Framework/Database/Criterion/Function.php</path>
+      <path action="D">Framework/Database/Criterion/SearchCondition.php</path>
+      <path action="M">Framework/Database/Model/Collection.php</path>
+      <path action="M">Framework/Database/Model/Exception.php</path>
+      <path action="M">Framework/Database/Model/Field.php</path>
+      <path action="M">Framework/Database/Model/Table.php</path>
+      <path action="A">Framework/Database/NOTE</path>
+      <path action="A">Framework/Database/QueryBuilder/Criterion</path>
+      <path action="A">Framework/Database/QueryBuilder/Criterion/GroupBy.php</path>
+      <path action="A">Framework/Database/QueryBuilder/Criterion/OrderBy.php</path>
+      <path action="A">Framework/Database/QueryBuilder/Criterion/SearchCondition.php</path>
+      <path action="A">Framework/Database/QueryBuilder/Dml/Exception.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Dml/Interface.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Dml/Select.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Exception.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Field.php</path>
+      <path action="A">Framework/Database/QueryBuilder/Function/Abstract.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Function/Common.php</path>
+      <path action="A">Framework/Database/QueryBuilder/Function/Exception.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Table.php</path>
+      <path action="D">Framework/Database/QueryBuilder/Tool.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="357">
+    <author>hywan</author>
+    <date>2008-09-18T18:42:26.161938Z</date>
+    <msg>Hope to solve the constraint, criterion, and query builder program. Start to program it : create many subpackages, big edit for the model, …</msg>
+    <paths>
+      <path action="A">Framework/Database/.Wip</path>
+      <path action="A">Framework/Database/.Wip/ReservedKeyword</path>
+      <path action="A">Framework/Database/.Wip/Schema.bnf</path>
+      <path action="A">Framework/Database/.Wip/TableManipulation.bnf</path>
+      <path action="A">Framework/Database/.Wip/Type.bnf</path>
+      <path action="A">Framework/Database/Constraint</path>
+      <path action="A">Framework/Database/Constraint/Abstract.php</path>
+      <path action="A">Framework/Database/Constraint/Exception.php</path>
+      <path action="A">Framework/Database/Constraint/Field.php</path>
+      <path action="A">Framework/Database/Constraint/NOTE</path>
+      <path action="A">Framework/Database/Constraint/Table.php</path>
+      <path action="A">Framework/Database/Criterion</path>
+      <path action="A">Framework/Database/Criterion/Criteria.php</path>
+      <path action="A">Framework/Database/Criterion/Function.php</path>
+      <path action="A">Framework/Database/Criterion/SearchCondition.php</path>
+      <path action="D">Framework/Database/Model/Base.php</path>
+      <path action="M">Framework/Database/Model/Collection.php</path>
+      <path action="D">Framework/Database/Model/Criteria.php</path>
+      <path action="M">Framework/Database/Model/Field.php</path>
+      <path action="D">Framework/Database/Model/Interface</path>
+      <path action="A">Framework/Database/Model/NOTE</path>
+      <path action="M">Framework/Database/Model/Table.php</path>
+      <path action="D">Framework/Database/QueryBuilder/Base.php</path>
+      <path action="A">Framework/Database/QueryBuilder/Dml</path>
+      <path action="A">Framework/Database/QueryBuilder/Dml/Delete.php</path>
+      <path action="A">Framework/Database/QueryBuilder/Dml/Insert.php</path>
+      <path action="A">Framework/Database/QueryBuilder/Dml/Interface.php</path>
+      <path action="A">Framework/Database/QueryBuilder/Dml/Select.php</path>
+      <path action="A">Framework/Database/QueryBuilder/Dml/Update.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="356">
+    <author>hywan</author>
+    <date>2008-09-18T15:44:57.325497Z</date>
+    <msg>Add a simple and quick iterator, and interfaces for simple and aggregate iterator.</msg>
+    <paths>
+      <path action="A">Framework/Iterator</path>
+      <path action="A">Framework/Iterator/Exception.php</path>
+      <path action="A">Framework/Iterator/Interface</path>
+      <path action="A">Framework/Iterator/Interface/Aggregate.php</path>
+      <path action="A">Framework/Iterator/Interface/Iterator.php</path>
+      <path action="A">Framework/Iterator/Iterator.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="355">
+    <author>hywan</author>
+    <date>2008-09-15T19:28:44.221980Z</date>
+    <msg>Minor edit : code presentation and add a precaution import.</msg>
+    <paths>
+      <path action="M">Framework/Cache/Backend/Apc.php</path>
+      <path action="M">Framework/Cache/Backend/Sqlite.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="354">
+    <author>hywan</author>
+    <date>2008-09-15T19:21:53.697343Z</date>
+    <msg>Some API corrections, code corrections (importations, conditions, …), … Nothing really important, minor edit.</msg>
+    <paths>
+      <path action="M">Framework/Cache/Backend/Abstract.php</path>
+      <path action="M">Framework/Cache/Backend/Apc.php</path>
+      <path action="M">Framework/Cache/Backend/File.php</path>
+      <path action="M">Framework/Cache/Backend/Memcache.php</path>
+      <path action="M">Framework/Cache/Backend/Sqlite.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="353">
+    <author>hywan</author>
+    <date>2008-09-15T19:20:12.988554Z</date>
+    <msg>Add the EAccelerator, XCache and ZendPlatform backend manager.</msg>
+    <paths>
+      <path action="A">Framework/Cache/Backend/Eaccelerator.php</path>
+      <path action="A">Framework/Cache/Backend/Xcache.php</path>
+      <path action="A">Framework/Cache/Backend/ZendPlatform.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="352">
+    <author>hywan</author>
+    <date>2008-09-12T15:00:10.125841Z</date>
+    <msg>Trim the uptime (when uptime is greater than one hour, a space appears).</msg>
+    <paths>
+      <path action="M">Framework/Console/Environment/System.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="351">
+    <author>hywan</author>
+    <date>2008-09-12T14:58:49.066718Z</date>
+    <msg>Correct a parse error :( …</msg>
+    <paths>
+      <path action="M">Framework/File/File.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="350">
+    <author>hywan</author>
+    <date>2008-09-12T14:58:17.346358Z</date>
+    <msg>Add a commentary for SQLite (in database -&gt; host options).</msg>
+    <paths>
+      <path action="M">Framework/Cache/Cache.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="349">
+    <author>hywan</author>
+    <date>2008-09-12T14:56:30.599002Z</date>
+    <msg>Update some stuff (API documentation, code …).</msg>
+    <paths>
+      <path action="M">Framework/Cache/Backend/Abstract.php</path>
+      <path action="M">Framework/Cache/Backend/Apc.php</path>
+      <path action="M">Framework/Cache/Backend/File.php</path>
+      <path action="M">Framework/Cache/Backend/Memcache.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="348">
+    <author>hywan</author>
+    <date>2008-09-12T14:56:03.461367Z</date>
+    <msg>Add the SQLite backend.</msg>
+    <paths>
+      <path action="A">Framework/Cache/Backend/Sqlite.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="347">
+    <author>hywan</author>
+    <date>2008-09-10T18:54:45.186889Z</date>
+    <msg>Add the system environment methods : get the uptime, uname, nodename, version and release of the system.</msg>
+    <paths>
+      <path action="M">Framework/Console/Environment/Environment.php</path>
+      <path action="A">Framework/Console/Environment/System.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="346">
+    <author>hywan</author>
+    <date>2008-09-08T20:22:52.050523Z</date>
+    <msg>Change the path to the license file (was with bad case).</msg>
+    <paths>
+      <path action="M">Framework/Version/Version.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="345">
+    <author>hywan</author>
+    <date>2008-09-08T20:22:03.956317Z</date>
+    <msg>Minor edit : API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Acl/Acl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="344">
+    <author>hywan</author>
+    <date>2008-09-08T20:20:39.297066Z</date>
+    <msg>Finalize the package (for a moment) : edit the API documentation, remove useless code, … clean.</msg>
+    <paths>
+      <path action="M">Framework/Console/Console.php</path>
+      <path action="M">Framework/Console/Core/Cli.php</path>
+      <path action="M">Framework/Console/Core/Cli/Parser.php</path>
+      <path action="M">Framework/Console/Core/GetOption.php</path>
+      <path action="M">Framework/Console/Core/Io.php</path>
+      <path action="M">Framework/Console/Dispatcher.php</path>
+      <path action="M">Framework/Console/Interface/Animation.php</path>
+      <path action="M">Framework/Console/Interface/Sound.php</path>
+      <path action="M">Framework/Console/Interface/Style.php</path>
+      <path action="M">Framework/Console/Interface/Text.php</path>
+      <path action="M">Framework/Console/Request.php</path>
+      <path action="M">Framework/Console/Router.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="343">
+    <author>hywan</author>
+    <date>2008-09-08T20:19:32.110983Z</date>
+    <msg>Correct a bug for Windows (bad regex).</msg>
+    <paths>
+      <path action="M">Framework/Console/Environment/Window.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="342">
+    <author>hywan</author>
+    <date>2008-09-08T19:56:05.624809Z</date>
+    <msg>Add some user informations (uid, username, gid, groupname, and group effective ID and name).</msg>
+    <paths>
+      <path action="M">Framework/Console/Environment/Environment.php</path>
+      <path action="A">Framework/Console/Environment/User.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="341">
+    <author>hywan</author>
+    <date>2008-09-08T18:58:03.045290Z</date>
+    <msg>Simplify the abstracat class.</msg>
+    <paths>
+      <path action="M">Framework/Console/Command/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="340">
+    <author>hywan</author>
+    <date>2008-09-07T17:20:48.609753Z</date>
+    <msg>Temporally commit. Add the PREVIOUS_* constants and the getPrevious*() methods, usefull for the command main:changelog, and add the getSignature() method.</msg>
+    <paths>
+      <path action="M">Framework/Version/Version.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="339">
+    <author>hywan</author>
+    <date>2008-09-07T17:19:32.765021Z</date>
+    <msg>Wrap the Hoa_Console_Core_Cli_Parser::parseSpecialValue() method.</msg>
+    <paths>
+      <path action="M">Framework/Console/Command/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="338">
+    <author>hywan</author>
+    <date>2008-09-07T17:18:51.272757Z</date>
+    <msg>Add exception, and make the parseSpecialValue() method.</msg>
+    <paths>
+      <path action="A">Framework/Console/Core/Cli/Exception.php</path>
+      <path action="M">Framework/Console/Core/Cli/Parser.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="337">
+    <author>hywan</author>
+    <date>2008-09-07T16:00:15.415955Z</date>
+    <msg>Remove last stylized error and replace them by exception.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Main/Changelog.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="336">
+    <author>hywan</author>
+    <date>2008-09-07T15:58:33.789915Z</date>
+    <msg>Use the parent::getEnvironment() method instead of import ourself the package etc.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Main/Changelog.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="335">
+    <author>hywan</author>
+    <date>2008-09-07T15:50:49.177059Z</date>
+    <msg>Use the parent::status() method.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Maintenance/Cache.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="334">
+    <author>hywan</author>
+    <date>2008-09-07T15:50:14.066972Z</date>
+    <msg>Add a style.</msg>
+    <paths>
+      <path action="M">Data/Bin/Style/Sheet.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="333">
+    <author>hywan</author>
+    <date>2008-09-07T15:49:46.912002Z</date>
+    <msg>Support negative number and throw exceptions instead of stylized error.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Main/Changelog.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="332">
+    <author>hywan</author>
+    <date>2008-09-07T15:48:29.880039Z</date>
+    <msg>Minor edit : API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/Cli/Parser.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="331">
+    <author>hywan</author>
+    <date>2008-09-07T15:28:53.475046Z</date>
+    <msg>Add the status() method.</msg>
+    <paths>
+      <path action="M">Framework/Console/Command/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="330">
+    <author>hywan</author>
+    <date>2008-09-07T15:28:27.963095Z</date>
+    <msg>Correct an import path, oops.</msg>
+    <paths>
+      <path action="M">Framework/Console/Environment/Window.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="329">
+    <author>hywan</author>
+    <date>2008-09-07T15:27:34.283461Z</date>
+    <msg>Add the transferSwitchToInput() method (from the Hoa_Console_Core_Cli_Parser class).</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/GetOption.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="328">
+    <author>hywan</author>
+    <date>2008-09-07T15:26:48.995328Z</date>
+    <msg>New parser, new regex, and support (all ?)/many cases.</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/Cli/Parser.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="327">
+    <author>hywan</author>
+    <date>2008-09-06T19:27:00.797873Z</date>
+    <msg>Take care of the window width when printing the changelog in plain text.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Main/Changelog.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="326">
+    <author>hywan</author>
+    <date>2008-09-06T19:24:29.175567Z</date>
+    <msg>Support the keyword HEAD in the --revision argument, and support range min:max.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Main/Changelog.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="325">
+    <author>hywan</author>
+    <date>2008-09-06T18:31:50.703504Z</date>
+    <msg>Oops, forget a condition.</msg>
+    <paths>
+      <path action="M">Framework/Console/Interface/Text.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="324">
+    <author>hywan</author>
+    <date>2008-09-06T18:27:39.021891Z</date>
+    <msg>Add the window width support for the cout() method.</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/Io.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="323">
+    <author>hywan</author>
+    <date>2008-09-06T18:26:46.471708Z</date>
+    <msg>The columnize() method takes care of the window width, and add the separator of column management.</msg>
+    <paths>
+      <path action="M">Framework/Console/Command/Abstract.php</path>
+      <path action="M">Framework/Console/Interface/Text.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="322">
+    <author>hywan</author>
+    <date>2008-09-06T15:47:22.498732Z</date>
+    <msg>Add the first shot for sub-package Environment. First shot for the Hoa_Console_Environment_Window too, will be ameliorated.</msg>
+    <paths>
+      <path action="M">Framework/Console/Command/Abstract.php</path>
+      <path action="A">Framework/Console/Environment/Environment.php</path>
+      <path action="A">Framework/Console/Environment/Exception.php</path>
+      <path action="A">Framework/Console/Environment/Interface.php</path>
+      <path action="A">Framework/Console/Environment/Window.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="321">
+    <author>hywan</author>
+    <date>2008-09-06T11:53:20.072316Z</date>
+    <msg>Detect last CRLF to convert to LF.</msg>
+    <paths>
+      <path action="M">Framework/Acl/Exception.php</path>
+      <path action="M">Framework/Archive/todo.txt</path>
+      <path action="M">Framework/Bench/Exception.php</path>
+      <path action="M">Framework/Console/Command/Abstract.php</path>
+      <path action="M">Framework/Console/Command/Exception.php</path>
+      <path action="M">Framework/Console/Core/Exception.php</path>
+      <path action="M">Framework/Console/Exception.php</path>
+      <path action="M">Framework/Console/Interface/Exception.php</path>
+      <path action="M">Framework/Console/Request.php</path>
+      <path action="M">Framework/Console/System/Exception.php</path>
+      <path action="M">Framework/Database.old/Database.php</path>
+      <path action="M">Framework/Database.old/Dml/Select.php</path>
+      <path action="M">Framework/Database.old/Exception.php</path>
+      <path action="M">Framework/Database.old/Field.php</path>
+      <path action="M">Framework/Database.old/Model/Abstract.php</path>
+      <path action="M">Framework/Database.old/Model/Pdo.php</path>
+      <path action="M">Framework/Database.old/Table.php</path>
+      <path action="M">Framework/Database/Dal/Exception.php</path>
+      <path action="M">Framework/Database/Exception.php</path>
+      <path action="M">Framework/Database/Model/Exception.php</path>
+      <path action="M">Framework/Form/Exception.php</path>
+      <path action="M">Framework/Graph/Exception.php</path>
+      <path action="M">Framework/I18n/phputf8/README</path>
+      <path action="M">Framework/Service/Skype/_img/README</path>
+      <path action="M">Framework/Session/Exception.php</path>
+      <path action="M">Framework/Session/Exception/NamespaceIsExpired.php</path>
+      <path action="M">Framework/Session/Exception/SessionIsExpired.php</path>
+      <path action="M">Framework/Socket/Exception.php</path>
+      <path action="M">Framework/Socket/Socket.php</path>
+      <path action="M">Framework/Uri/@todo.txt</path>
+      <path action="M">Framework/Validate/Array.php</path>
+      <path action="M">Framework/Validate/Exception.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="320">
+    <author>hywan</author>
+    <date>2008-09-06T11:31:17.913251Z</date>
+    <msg>Change the @licence tag by @license …</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Action/Create.php</path>
+      <path action="M">Data/Bin/Command/Action/Delete.php</path>
+      <path action="M">Data/Bin/Command/Action/Move.php</path>
+      <path action="M">Data/Bin/Command/Application/Start.php</path>
+      <path action="M">Data/Bin/Command/Controller/Create.php</path>
+      <path action="M">Data/Bin/Command/Controller/Delete.php</path>
+      <path action="M">Data/Bin/Command/Controller/Move.php</path>
+      <path action="M">Data/Bin/Command/Database/Model.php</path>
+      <path action="M">Data/Bin/Command/Database/Schema.php</path>
+      <path action="M">Data/Bin/Command/Documentation/Hoa.php</path>
+      <path action="M">Data/Bin/Command/Documentation/Mysql.php</path>
+      <path action="M">Data/Bin/Command/Main/Changelog.php</path>
+      <path action="M">Data/Bin/Command/Main/Version.php</path>
+      <path action="M">Data/Bin/Command/Main/Welcome.php</path>
+      <path action="M">Data/Bin/Command/Maintenance/Cache.php</path>
+      <path action="M">Data/Bin/Command/Maintenance/Update.php</path>
+      <path action="M">Data/Bin/Command/Tool/Form.php</path>
+      <path action="M">Data/Bin/Command/View/Layout.php</path>
+      <path action="M">Data/Bin/Command/View/Theme.php</path>
+      <path action="M">Data/Bin/Style/Sheet.php</path>
+      <path action="M">Framework/Acl/Acl.php</path>
+      <path action="M">Framework/Acl/Assert/Interface.php</path>
+      <path action="M">Framework/Acl/Group.php</path>
+      <path action="M">Framework/Acl/Permission.php</path>
+      <path action="M">Framework/Acl/Resource.php</path>
+      <path action="M">Framework/Acl/User.php</path>
+      <path action="M">Framework/Bench/Bench.php</path>
+      <path action="M">Framework/Bench/Mark.php</path>
+      <path action="M">Framework/Console/Console.php</path>
+      <path action="M">Framework/Console/Interface/Animation.php</path>
+      <path action="M">Framework/Console/Interface/Sound.php</path>
+      <path action="M">Framework/Console/Interface/Style.php</path>
+      <path action="M">Framework/Console/Interface/Text.php</path>
+      <path action="M">Framework/Console/System/System.php</path>
+      <path action="M">Framework/Database/Dal/AbstractLayer/Pdo/Pdo.php</path>
+      <path action="M">Framework/Database/Dal/AbstractLayer/Pdo/PdoStatement.php</path>
+      <path action="M">Framework/Database/Dal/Dal.php</path>
+      <path action="M">Framework/Database/Dal/DalStatement.php</path>
+      <path action="M">Framework/Database/Dal/Interface/Wrapper.php</path>
+      <path action="M">Framework/Database/Dal/Interface/WrapperStatement.php</path>
+      <path action="M">Framework/Database/Model/Base.php</path>
+      <path action="M">Framework/Database/Model/Collection.php</path>
+      <path action="M">Framework/Database/Model/Criteria.php</path>
+      <path action="M">Framework/Database/Model/Field.php</path>
+      <path action="M">Framework/Database/Model/Interface/Dml.php</path>
+      <path action="M">Framework/Database/Model/Table.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Base.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Field.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Table.php</path>
+      <path action="M">Framework/Database/QueryBuilder/Tool.php</path>
+      <path action="M">Framework/Filter/Abstract.php</path>
+      <path action="M">Framework/Filter/Filter.php</path>
+      <path action="M">Framework/Form/Decorator/Abstract.php</path>
+      <path action="M">Framework/Form/Decorator/Fieldset.php</path>
+      <path action="M">Framework/Form/Decorator/InputButton.php</path>
+      <path action="M">Framework/Form/Decorator/InputCheckbox.php</path>
+      <path action="M">Framework/Form/Decorator/InputFile.php</path>
+      <path action="M">Framework/Form/Decorator/InputHidden.php</path>
+      <path action="M">Framework/Form/Decorator/InputImage.php</path>
+      <path action="M">Framework/Form/Decorator/InputPassword.php</path>
+      <path action="M">Framework/Form/Decorator/InputRadio.php</path>
+      <path action="M">Framework/Form/Decorator/InputReset.php</path>
+      <path action="M">Framework/Form/Decorator/InputSubmit.php</path>
+      <path action="M">Framework/Form/Decorator/InputText.php</path>
+      <path action="M">Framework/Form/Decorator/Select.php</path>
+      <path action="M">Framework/Form/Decorator/SelectOptgroup.php</path>
+      <path action="M">Framework/Form/Decorator/SelectOption.php</path>
+      <path action="M">Framework/Form/Decorator/Textarea.php</path>
+      <path action="M">Framework/Form/Element/Abstract.php</path>
+      <path action="M">Framework/Form/Element/Fieldset.php</path>
+      <path action="M">Framework/Form/Element/Form.php</path>
+      <path action="M">Framework/Form/Element/InputButton.php</path>
+      <path action="M">Framework/Form/Element/InputCheckbox.php</path>
+      <path action="M">Framework/Form/Element/InputFile.php</path>
+      <path action="M">Framework/Form/Element/InputHidden.php</path>
+      <path action="M">Framework/Form/Element/InputImage.php</path>
+      <path action="M">Framework/Form/Element/InputPassword.php</path>
+      <path action="M">Framework/Form/Element/InputRadio.php</path>
+      <path action="M">Framework/Form/Element/InputReset.php</path>
+      <path action="M">Framework/Form/Element/InputSubmit.php</path>
+      <path action="M">Framework/Form/Element/InputText.php</path>
+      <path action="M">Framework/Form/Element/Label.php</path>
+      <path action="M">Framework/Form/Element/Legend.php</path>
+      <path action="M">Framework/Form/Element/Select.php</path>
+      <path action="M">Framework/Form/Element/SelectOptgroup.php</path>
+      <path action="M">Framework/Form/Element/SelectOption.php</path>
+      <path action="M">Framework/Form/Element/Textarea.php</path>
+      <path action="M">Framework/Form/Form.php</path>
+      <path action="M">Framework/Graph/AdjacencyList.php</path>
+      <path action="M">Framework/Graph/Graph.php</path>
+      <path action="M">Framework/Graph/Node/Interface.php</path>
+      <path action="M">Framework/Graph/Node/SimpleNode.php</path>
+      <path action="M">Framework/Session/Flash.php</path>
+      <path action="M">Framework/Session/Namespace.php</path>
+      <path action="M">Framework/Session/Option.php</path>
+      <path action="M">Framework/Session/SaveHandler/Interface.php</path>
+      <path action="M">Framework/Session/Session.php</path>
+      <path action="M">Framework/Validate/Abstract.php</path>
+      <path action="M">Framework/Validate/Alpha.php</path>
+      <path action="M">Framework/Validate/AlphaNumeric.php</path>
+      <path action="M">Framework/Validate/Email.php</path>
+      <path action="M">Framework/Validate/Empty.php</path>
+      <path action="M">Framework/Validate/Float.php</path>
+      <path action="M">Framework/Validate/GreaterThan.php</path>
+      <path action="M">Framework/Validate/Hexa.php</path>
+      <path action="M">Framework/Validate/Integer.php</path>
+      <path action="M">Framework/Validate/Ip.php</path>
+      <path action="M">Framework/Validate/LessThan.php</path>
+      <path action="M">Framework/Validate/Lower.php</path>
+      <path action="M">Framework/Validate/Null.php</path>
+      <path action="M">Framework/Validate/StringLength.php</path>
+      <path action="M">Framework/Validate/Upper.php</path>
+      <path action="M">Framework/Validate/Validate.php</path>
+      <path action="M">Framework/Version/Version.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="319">
+    <author>hywan</author>
+    <date>2008-09-06T11:30:48.071324Z</date>
+    <msg>Make the documentation:php command.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Documentation/Php.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="318">
+    <author>hywan</author>
+    <date>2008-09-05T14:23:25.537779Z</date>
+    <msg>Edit the parser, correct a bug when no input is given (minor bug).</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/Cli/Parser.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="317">
+    <author>hywan</author>
+    <date>2008-09-05T14:22:45.760910Z</date>
+    <msg>Add a parameter to the cout() method : allow to not wordwrap the text to print, according to the *WORDWRAP constants.</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/Io.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="316">
+    <author>hywan</author>
+    <date>2008-09-05T14:21:37.569618Z</date>
+    <msg>Add the HOA_DATA_ETC constants.</msg>
+    <paths>
+      <path action="M">Framework/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="315">
+    <author>hywan</author>
+    <date>2008-09-05T14:21:02.724453Z</date>
+    <msg>Add the main:changelog command. Allow to manage the changelog (show some revisions, in differents formats …).</msg>
+    <paths>
+      <path action="A">Data/Bin/Command/Main/Changelog.php</path>
+      <path action="M">Data/Bin/Command/Main/Welcome.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="314">
+    <author>hywan</author>
+    <date>2008-09-05T14:19:40.306883Z</date>
+    <msg>Add the echoe bash script. An alias to print the .echo format.</msg>
+    <paths>
+      <path action="A">Data/Etc/echoe</path>
+    </paths>
+  </logentry>
+  <logentry revision="313">
+    <author>hywan</author>
+    <date>2008-09-04T15:55:36.381207Z</date>
+    <msg>Reorganize the data directory.</msg>
+    <paths>
+      <path action="D">CHANGELOG</path>
+      <path action="D">CHANGELOG.echo</path>
+      <path action="D">DEPENDENCY</path>
+      <path action="D">DEPENDENCY.echo</path>
+      <path action="A">Data/Bin/Command/Action</path>
+      <path action="A">Data/Bin/Command/Action/Create.php</path>
+      <path action="A">Data/Bin/Command/Action/Delete.php</path>
+      <path action="A">Data/Bin/Command/Action/Move.php</path>
+      <path action="A">Data/Bin/Command/Application</path>
+      <path action="A">Data/Bin/Command/Application/Start.php</path>
+      <path action="A">Data/Bin/Command/Controller</path>
+      <path action="A">Data/Bin/Command/Controller/Create.php</path>
+      <path action="A">Data/Bin/Command/Controller/Delete.php</path>
+      <path action="A">Data/Bin/Command/Controller/Move.php</path>
+      <path action="A">Data/Bin/Command/Database</path>
+      <path action="A">Data/Bin/Command/Database/Model.php</path>
+      <path action="A">Data/Bin/Command/Database/Schema.php</path>
+      <path action="A">Data/Bin/Command/Documentation</path>
+      <path action="A">Data/Bin/Command/Documentation/Hoa.php</path>
+      <path action="A">Data/Bin/Command/Documentation/Mysql.php</path>
+      <path action="A">Data/Bin/Command/Documentation/Php.php</path>
+      <path action="D">Data/Bin/Command/Main/Help.php</path>
+      <path action="A">Data/Bin/Command/Main/Welcome.php</path>
+      <path action="M">Data/Bin/Command/Maintenance/Cache.php</path>
+      <path action="A">Data/Bin/Command/Maintenance/Update.php</path>
+      <path action="A">Data/Bin/Command/Tool</path>
+      <path action="A">Data/Bin/Command/Tool/Form.php</path>
+      <path action="A">Data/Bin/Command/View</path>
+      <path action="A">Data/Bin/Command/View/Layout.php</path>
+      <path action="A">Data/Bin/Command/View/Theme.php</path>
+      <path action="M">Data/Bin/Hoa.php</path>
+      <path action="M">Data/Bin/hoa</path>
+      <path action="M">Data/Bin/hoa.bat</path>
+      <path action="M">Data/Configuration/Cache.yml</path>
+      <path action="A">Data/Configuration/Cache/Cache.php</path>
+      <path action="A">Data/Configuration/Cache/Console.php</path>
+      <path action="A">Data/Configuration/Cache/Controller.php</path>
+      <path action="A">Data/Configuration/Cache/Database.php</path>
+      <path action="M">Data/Configuration/Console.yml</path>
+      <path action="M">Data/Configuration/Controller.yml</path>
+      <path action="A">Data/Configuration/Database.yml</path>
+      <path action="A">Data/Etc</path>
+      <path action="A">Data/Etc/CHANGELOG</path>
+      <path action="A">Data/Etc/CHANGELOG.echo</path>
+      <path action="A">Data/Etc/CHANGELOG.xml</path>
+      <path action="A">Data/Etc/DEPENDENCY</path>
+      <path action="A">Data/Etc/DEPENDENCY.echo</path>
+      <path action="A">Data/Etc/DEPENDENCY.xml</path>
+      <path action="A">Data/Template</path>
+      <path action="A">Data/Template/Bootstrap.tpl</path>
+      <path action="A">Data/Template/BootstrapSimple.tpl</path>
+      <path action="A">Data/Template/PrimaryController.tpl</path>
+      <path action="A">Data/Template/SecondaryController.tpl</path>
+      <path action="A">Data/Template/ViewLayout.tpl</path>
+      <path action="A">Data/Template/ViewLayoutSimple.tpl</path>
+      <path action="M">README</path>
+    </paths>
+  </logentry>
+  <logentry revision="311">
+    <author>hywan</author>
+    <date>2008-09-04T15:15:03.628141Z</date>
+    <msg>Edit the API documentation and forget to convert the CRLF to LF mode.</msg>
+    <paths>
+      <path action="M">Framework/Exception.php</path>
+      <path action="M">Framework/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="310">
+    <author>hywan</author>
+    <date>2008-09-03T19:16:55.550462Z</date>
+    <msg>Refresh the changelog, and add the dependency files.</msg>
+    <paths>
+      <path action="M">CHANGELOG</path>
+      <path action="M">CHANGELOG.echo</path>
+      <path action="A">DEPENDENCY</path>
+      <path action="A">DEPENDENCY.echo</path>
+    </paths>
+  </logentry>
+  <logentry revision="308">
+    <author>hywan</author>
+    <date>2008-09-03T18:46:50.518327Z</date>
+    <msg>Convert old files in CRLF mode (Win) to LF mode (Unix).</msg>
+    <paths>
+      <path action="M">Framework/Archive/Pkg/Exception.php</path>
+      <path action="M">Framework/Archive/Pkg/Pkg.php</path>
+      <path action="M">Framework/Cache/Backend/Abstract.php</path>
+      <path action="M">Framework/Cache/Backend/Apc.php</path>
+      <path action="M">Framework/Cache/Backend/File.php</path>
+      <path action="M">Framework/Cache/Backend/Memcache.php</path>
+      <path action="M">Framework/Cache/Cache.php</path>
+      <path action="M">Framework/Cache/Exception.php</path>
+      <path action="M">Framework/Cache/Frontend/Class.php</path>
+      <path action="M">Framework/Cache/Frontend/Function.php</path>
+      <path action="M">Framework/Cache/Frontend/Output.php</path>
+      <path action="M">Framework/Configuration/Array.php</path>
+      <path action="M">Framework/Configuration/Configuration.php</path>
+      <path action="M">Framework/Configuration/Exception.php</path>
+      <path action="M">Framework/Configuration/Ini.php</path>
+      <path action="M">Framework/Configuration/Xml.php</path>
+      <path action="M">Framework/Configuration/Yaml.php</path>
+      <path action="M">Framework/Controller/Action/Standard.php</path>
+      <path action="M">Framework/Controller/Dispatcher/Abstract.php</path>
+      <path action="M">Framework/Controller/Dispatcher/Action.php</path>
+      <path action="M">Framework/Controller/Exception.php</path>
+      <path action="M">Framework/Controller/Front.php</path>
+      <path action="M">Framework/Controller/Plugin/Interface.php</path>
+      <path action="M">Framework/Controller/Plugin/Standard.php</path>
+      <path action="M">Framework/Controller/Request/Abstract.php</path>
+      <path action="M">Framework/Controller/Response/Standard.php</path>
+      <path action="M">Framework/Controller/Router/Get.php</path>
+      <path action="M">Framework/Controller/Router/Interface.php</path>
+      <path action="M">Framework/Controller/Router/Pattern.php</path>
+      <path action="M">Framework/Controller/Router/Rewrite.php</path>
+      <path action="M">Framework/Controller/Router/Standard.php</path>
+      <path action="M">Framework/Database/Model/Field.php</path>
+      <path action="M">Framework/Database/Model/Table.php</path>
+      <path action="M">Framework/Factory/Exception.php</path>
+      <path action="M">Framework/Factory/Factory.php</path>
+      <path action="M">Framework/File/Dir.php</path>
+      <path action="M">Framework/File/Exception.php</path>
+      <path action="M">Framework/File/File.php</path>
+      <path action="M">Framework/File/Upload.php</path>
+      <path action="M">Framework/File/Util.php</path>
+      <path action="M">Framework/Filter/Alpha.php</path>
+      <path action="M">Framework/Filter/AlphaNumeric.php</path>
+      <path action="M">Framework/Filter/Array.php</path>
+      <path action="M">Framework/Filter/Blank.php</path>
+      <path action="M">Framework/Filter/Exception.php</path>
+      <path action="M">Framework/Filter/HtmlEntities.php</path>
+      <path action="M">Framework/Filter/Integer.php</path>
+      <path action="M">Framework/Filter/Lower.php</path>
+      <path action="M">Framework/Filter/Null.php</path>
+      <path action="M">Framework/Filter/Space.php</path>
+      <path action="M">Framework/Filter/Tag.php</path>
+      <path action="M">Framework/Filter/Upper.php</path>
+      <path action="M">Framework/I18n/i18n.php</path>
+      <path action="M">Framework/Locale/Exception.php</path>
+      <path action="M">Framework/Locale/Locale.php</path>
+      <path action="M">Framework/Mail/Antispam.php</path>
+      <path action="M">Framework/Mail/Exception.php</path>
+      <path action="M">Framework/Mail/Mail.php</path>
+      <path action="M">Framework/Mail/Mime.php</path>
+      <path action="M">Framework/Mail/Protocol/Abstract.php</path>
+      <path action="M">Framework/Mail/Protocol/Exception.php</path>
+      <path action="M">Framework/Mail/Protocol/Smtp.php</path>
+      <path action="M">Framework/Mail/Rfc882.php</path>
+      <path action="M">Framework/Mail/Transport/Abstract.php</path>
+      <path action="M">Framework/Mail/Transport/Exception.php</path>
+      <path action="M">Framework/Mail/Transport/Sendmail.php</path>
+      <path action="M">Framework/Mail/Transport/Smtp.php</path>
+      <path action="M">Framework/Mime/Exception.php</path>
+      <path action="M">Framework/Mime/Mime.php</path>
+      <path action="M">Framework/Mime/Parameter.php</path>
+      <path action="M">Framework/Mime/mime.types.ini</path>
+      <path action="M">Framework/Registry/Exception.php</path>
+      <path action="M">Framework/Registry/Registry.php</path>
+      <path action="M">Framework/Service/Skype/Exception.php</path>
+      <path action="M">Framework/Service/Skype/Skype.php</path>
+      <path action="M">Framework/Service/ToutMessenger/Exception.php</path>
+      <path action="M">Framework/Service/ToutMessenger/ToutMessenger.php</path>
+      <path action="M">Framework/Stack/Exception.php</path>
+      <path action="M">Framework/Stack/Stack.php</path>
+      <path action="M">Framework/StdClass/Exception.php</path>
+      <path action="M">Framework/StdClass/StdClass.php</path>
+      <path action="M">Framework/StdClass/Util.php</path>
+      <path action="M">Framework/Translate/Adapter/Abstract.php</path>
+      <path action="M">Framework/Translate/Adapter/Gettext.php</path>
+      <path action="M">Framework/Translate/Adapter/Tmx.php</path>
+      <path action="M">Framework/Translate/Adapter/Xliff.php</path>
+      <path action="M">Framework/Translate/Exception.php</path>
+      <path action="M">Framework/Translate/Translate.php</path>
+      <path action="M">Framework/Uri/Exception.php</path>
+      <path action="M">Framework/Uri/Http.php</path>
+      <path action="M">Framework/Uri/Uri.php</path>
+      <path action="M">Framework/View/Exception.php</path>
+      <path action="M">Framework/View/Helper/Abstract.php</path>
+      <path action="M">Framework/View/Helper/Exception.php</path>
+      <path action="M">Framework/View/Helper/formHelper.php</path>
+      <path action="M">Framework/View/View.php</path>
+      <path action="M">Framework/Xml/Dumper.php</path>
+      <path action="M">Framework/Xml/Exception.php</path>
+      <path action="M">Framework/Xml/Parser.php</path>
+      <path action="M">Framework/Xml/Xml.php</path>
+      <path action="M">Framework/Xml/Xslt.php</path>
+      <path action="M">Framework/XmlRpc/Client.php</path>
+      <path action="M">Framework/XmlRpc/Exception.php</path>
+      <path action="M">Framework/XmlRpc/Message.php</path>
+      <path action="M">Framework/XmlRpc/Method/system.listMethods.php</path>
+      <path action="M">Framework/XmlRpc/MethodAbstract.php</path>
+      <path action="M">Framework/XmlRpc/Server.php</path>
+      <path action="M">Framework/XmlRpc/Value.php</path>
+      <path action="M">Framework/XmlRpc/XmlRpc.php</path>
+      <path action="M">Framework/Yaml/Dumper.php</path>
+      <path action="M">Framework/Yaml/Exception.php</path>
+      <path action="M">Framework/Yaml/Node.php</path>
+      <path action="M">Framework/Yaml/Parser.php</path>
+      <path action="M">Framework/Yaml/Yaml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="307">
+    <author>hywan</author>
+    <date>2008-09-03T17:38:35.068713Z</date>
+    <msg>Remove an empty line.</msg>
+    <paths>
+      <path action="M">Framework/Yaml/Yaml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="306">
+    <author>hywan</author>
+    <date>2008-09-03T16:23:56.530429Z</date>
+    <msg>Correct a bug when unlinearizing configuration (make an array merge recursively to correct the bug).</msg>
+    <paths>
+      <path action="M">Framework/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="305">
+    <author>hywan</author>
+    <date>2008-09-03T16:22:52.959411Z</date>
+    <msg>Correct a bug when rebuilting the command-line from .</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/Cli.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="304">
+    <author>hywan</author>
+    <date>2008-09-03T16:22:17.292599Z</date>
+    <msg>Correct an exception message.</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/GetOption.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="303">
+    <author>hywan</author>
+    <date>2008-09-03T16:21:24.685930Z</date>
+    <msg>Complete the API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Validate/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="302">
+    <author>hywan</author>
+    <date>2008-09-03T16:21:06.036549Z</date>
+    <msg>Forget to replace a function by a variable, oops.</msg>
+    <paths>
+      <path action="M">Framework/Controller/Dispatcher/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="301">
+    <author>hywan</author>
+    <date>2008-09-03T16:01:30.683068Z</date>
+    <msg>Bad exception filename, does not follow the Hoa conventions and does not work with the new import() function.</msg>
+    <paths>
+      <path action="A">Framework/Controller/Exception/ActionIsNotFound.php</path>
+      <path action="D">Framework/Controller/Exception/Action_Is_Not_Found.php</path>
+      <path action="A">Framework/Controller/Exception/ControllerIsNotFound.php</path>
+      <path action="A">Framework/Controller/Exception/ControllerNotExtendsActionStandard.php</path>
+      <path action="D">Framework/Controller/Exception/Controller_Is_Not_Found.php</path>
+      <path action="D">Framework/Controller/Exception/Controller_Not_Extends_Action_Standard.php</path>
+      <path action="D">Framework/Controller/Exception/Controller_Reflection.php</path>
+      <path action="A">Framework/Controller/Exception/PluginIsAlreadyRegistered.php</path>
+      <path action="D">Framework/Controller/Exception/Plugin_Is_Already_Registered.php</path>
+      <path action="A">Framework/Controller/Exception/Reflection.php</path>
+      <path action="A">Framework/Controller/Exception/ResponsePointerAlreadyExists.php</path>
+      <path action="D">Framework/Controller/Exception/Response_Pointer_Already_Exists.php</path>
+      <path action="A">Framework/Controller/Exception/RouterDoesNotReturnAnArray.php</path>
+      <path action="A">Framework/Controller/Exception/RouterFactory.php</path>
+      <path action="D">Framework/Controller/Exception/Router_Does_Not_Return_An_Array.php</path>
+      <path action="D">Framework/Controller/Exception/Router_Factory.php</path>
+      <path action="A">Framework/Session/Exception/NamespaceIsExpired.php</path>
+      <path action="D">Framework/Session/Exception/Namespace_Is_Expired.php</path>
+      <path action="A">Framework/Session/Exception/SessionIsExpired.php</path>
+      <path action="D">Framework/Session/Exception/Session_Is_Expired.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="300">
+    <author>hywan</author>
+    <date>2008-09-03T15:58:00.010721Z</date>
+    <msg>Bad exception name, does not follow the Hoa conventions and does not work with the new import() function.</msg>
+    <paths>
+      <path action="M">Framework/Controller/Dispatcher/Abstract.php</path>
+      <path action="M">Framework/Controller/Exception/Action_Is_Not_Found.php</path>
+      <path action="M">Framework/Controller/Exception/Controller_Is_Not_Found.php</path>
+      <path action="M">Framework/Controller/Exception/Controller_Not_Extends_Action_Standard.php</path>
+      <path action="M">Framework/Controller/Exception/Controller_Reflection.php</path>
+      <path action="M">Framework/Controller/Exception/Plugin_Is_Already_Registered.php</path>
+      <path action="M">Framework/Controller/Exception/Response_Pointer_Already_Exists.php</path>
+      <path action="M">Framework/Controller/Exception/Router_Does_Not_Return_An_Array.php</path>
+      <path action="M">Framework/Controller/Exception/Router_Factory.php</path>
+      <path action="M">Framework/Controller/Plugin/Standard.php</path>
+      <path action="M">Framework/Controller/Response/Standard.php</path>
+      <path action="M">Framework/Controller/Router/Standard.php</path>
+      <path action="M">Framework/Session/Exception/Namespace_Is_Expired.php</path>
+      <path action="M">Framework/Session/Exception/Session_Is_Expired.php</path>
+      <path action="M">Framework/Session/Namespace.php</path>
+      <path action="M">Framework/Session/Session.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="299">
+    <author>hywan</author>
+    <date>2008-09-03T12:31:35.999454Z</date>
+    <msg>Forget to remove a debuging line, oops.</msg>
+    <paths>
+      <path action="M">Framework/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="298">
+    <author>hywan</author>
+    <date>2008-09-03T11:43:39.677943Z</date>
+    <msg>Forget to remove a debuging line, oops.</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/Cli/Parser.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="297">
+    <author>hywan</author>
+    <date>2008-09-03T11:41:37.273204Z</date>
+    <msg>Rewrite the parser. Stay one bug ; please, see the API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/Cli/Parser.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="296">
+    <author>hywan</author>
+    <date>2008-09-01T11:18:22.992121Z</date>
+    <msg>Faster calculs for the drawStatistic() method, and use the default str_pad() parameter in the same method.</msg>
+    <paths>
+      <path action="M">Framework/Bench/Bench.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="295">
+    <author>hywan</author>
+    <date>2008-09-01T11:09:29.415211Z</date>
+    <msg>Bip, bip … ! </msg>
+    <paths>
+      <path action="M">Framework/Console/Interface/Sound.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="294">
+    <author>hywan</author>
+    <date>2008-08-31T21:04:44.987823Z</date>
+    <msg>Forget to use the default command name in the router, oops.</msg>
+    <paths>
+      <path action="M">Framework/Console/Router.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="293">
+    <author>hywan</author>
+    <date>2008-08-31T21:04:21.072413Z</date>
+    <msg>Change the default command name.</msg>
+    <paths>
+      <path action="M">Framework/Console/Console.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="292">
+    <author>hywan</author>
+    <date>2008-08-31T21:03:58.297053Z</date>
+    <msg>Edit the regular expression to tolerate path pattern in inputs.</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/Cli/Parser.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="291">
+    <author>hywan</author>
+    <date>2008-08-31T21:03:11.519173Z</date>
+    <msg>Edit the path management to have the possibility to use the command-line interface every where.</msg>
+    <paths>
+      <path action="M">Framework/Console/Dispatcher.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="290">
+    <author>hywan</author>
+    <date>2008-08-31T21:01:53.027695Z</date>
+    <msg>Add an alias to get all inputs directly.</msg>
+    <paths>
+      <path action="M">Framework/Console/Command/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="289">
+    <author>hywan</author>
+    <date>2008-08-31T21:01:20.383845Z</date>
+    <msg>Add a constant for the data template directory.</msg>
+    <paths>
+      <path action="M">Framework/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="288">
+    <author>hywan</author>
+    <date>2008-08-31T14:03:02.328669Z</date>
+    <msg>Minor : edit the output presentation.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Maintenance/Cache.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="287">
+    <author>hywan</author>
+    <date>2008-08-31T14:02:25.291050Z</date>
+    <msg>Correct a YAML syntax (was not well-written).</msg>
+    <paths>
+      <path action="M">Data/Configuration/Controller.yml</path>
+    </paths>
+  </logentry>
+  <logentry revision="286">
+    <author>hywan</author>
+    <date>2008-08-31T13:49:32.960521Z</date>
+    <msg>Add command to generate configuration cache files.</msg>
+    <paths>
+      <path action="A">Data/Bin/Command/Maintenance</path>
+      <path action="A">Data/Bin/Command/Maintenance/Cache.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="285">
+    <author>hywan</author>
+    <date>2008-08-31T13:49:10.408291Z</date>
+    <msg>Set the default time-zone if using date functions.</msg>
+    <paths>
+      <path action="M">Data/Bin/Hoa.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="284">
+    <author>hywan</author>
+    <date>2008-08-31T13:48:29.086207Z</date>
+    <msg>Adding ideas in comment.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Main/Help.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="283">
+    <author>hywan</author>
+    <date>2008-08-31T13:37:16.296173Z</date>
+    <msg>Set the import() method to dynamic (not static).</msg>
+    <paths>
+      <path action="M">Data/Bin/Style/Sheet.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="282">
+    <author>hywan</author>
+    <date>2008-08-31T13:36:09.824438Z</date>
+    <msg>Create the different package configuration files.</msg>
+    <paths>
+      <path action="A">Data/Configuration/Cache.yml</path>
+      <path action="A">Data/Configuration/Console.yml</path>
+      <path action="A">Data/Configuration/Controller.yml</path>
+    </paths>
+  </logentry>
+  <logentry revision="281">
+    <author>hywan</author>
+    <date>2008-08-31T13:33:22.541569Z</date>
+    <msg>Discover a bug (see the API documentation for explanations).</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/Cli/Parser.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="280">
+    <author>hywan</author>
+    <date>2008-08-31T13:32:43.778195Z</date>
+    <msg>Correct a bug in E_STRICT mode, oops.</msg>
+    <paths>
+      <path action="M">Framework/Console/Interface/Style.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="279">
+    <author>hywan</author>
+    <date>2008-08-31T13:32:07.959250Z</date>
+    <msg>Implement the Hoa_Framework::configurePackage() method.</msg>
+    <paths>
+      <path action="M">Framework/Cache/Cache.php</path>
+      <path action="M">Framework/Console/Console.php</path>
+      <path action="M">Framework/Console/Router.php</path>
+      <path action="M">Framework/Controller/Front.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="278">
+    <author>hywan</author>
+    <date>2008-08-31T13:30:40.633123Z</date>
+    <msg>Add the configurePackage() method, allow packages to get their default configurations in data configuration cache files.</msg>
+    <paths>
+      <path action="M">Framework/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="277">
+    <author>hywan</author>
+    <date>2008-08-30T18:06:18.435785Z</date>
+    <msg>First short of the data framework part. Prepare some basic commands, and the configuration structure.</msg>
+    <paths>
+      <path action="A">Data/Bin/Command/Main/Help.php</path>
+      <path action="A">Data/Bin/Command/Main/Version.php</path>
+      <path action="A">Data/Bin/Hoa.php</path>
+      <path action="A">Data/Bin/Style/Sheet.php</path>
+      <path action="A">Data/Bin/hoa</path>
+      <path action="A">Data/Bin/hoa.bat</path>
+      <path action="A">Data/Configuration</path>
+      <path action="A">Data/Configuration/Cache</path>
+    </paths>
+  </logentry>
+  <logentry revision="276">
+    <author>hywan</author>
+    <date>2008-08-30T18:03:52.179661Z</date>
+    <msg>Change the default width of the screen.</msg>
+    <paths>
+      <path action="M">Framework/Console/Interface/Text.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="275">
+    <author>hywan</author>
+    <date>2008-08-30T18:03:28.201868Z</date>
+    <msg>Support strange command-line syntax.</msg>
+    <paths>
+      <path action="M">Framework/Console/Router.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="274">
+    <author>hywan</author>
+    <date>2008-08-30T18:03:03.697678Z</date>
+    <msg>Forget to wordwrap to cout() method, oops.</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/Io.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="273">
+    <author>hywan</author>
+    <date>2008-08-30T18:02:33.000973Z</date>
+    <msg>Add more and more alias …</msg>
+    <paths>
+      <path action="M">Framework/Console/Command/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="272">
+    <author>hywan</author>
+    <date>2008-08-30T18:02:06.683337Z</date>
+    <msg>Minor edit : API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Console/Request.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="271">
+    <author>hywan</author>
+    <date>2008-08-30T16:39:21.259266Z</date>
+    <msg>Prepare the frame of the framework.</msg>
+    <paths>
+      <path action="D">Bin</path>
+      <path action="M">CHANGELOG</path>
+      <path action="M">CHANGELOG.echo</path>
+      <path action="A">Data</path>
+      <path action="A">Data/Bin</path>
+      <path action="A">Data/Bin/Command</path>
+      <path action="A">Data/Bin/Command/Main</path>
+      <path action="A">Data/Bin/Style</path>
+      <path action="M">Framework/Controller/Front.php</path>
+      <path action="M">Framework/Exception.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="270">
+    <author>hywan</author>
+    <date>2008-08-30T16:00:18.637332Z</date>
+    <msg>Implement the exception support.</msg>
+    <paths>
+      <path action="M">Framework/Console/Console.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="269">
+    <author>hywan</author>
+    <date>2008-08-30T15:59:47.107657Z</date>
+    <msg>Add alias constants, some wraps etc.</msg>
+    <paths>
+      <path action="M">Framework/Console/Command/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="268">
+    <author>hywan</author>
+    <date>2008-08-30T15:58:55.868433Z</date>
+    <msg>Add methods to escape argument and command.</msg>
+    <paths>
+      <path action="M">Framework/Console/System/System.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="267">
+    <author>hywan</author>
+    <date>2008-08-30T15:58:12.657994Z</date>
+    <msg>Add the ALIGN_CENTER constant, our own wordwrap() method (just an alias), and the underline() method.</msg>
+    <paths>
+      <path action="M">Framework/Console/Interface/Text.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="266">
+    <author>hywan</author>
+    <date>2008-08-30T15:56:59.311789Z</date>
+    <msg>Add the listInputs() method.</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/Cli/Parser.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="265">
+    <author>hywan</author>
+    <date>2008-08-30T15:56:13.654327Z</date>
+    <msg>Update the cin() method. Add the question and password support. This last need to be ameliorated.</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/Io.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="264">
+    <author>hywan</author>
+    <date>2008-08-30T15:54:48.354595Z</date>
+    <msg>Set the *_ARGUMENT constant support up.</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/GetOption.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="263">
+    <author>hywan</author>
+    <date>2008-08-30T00:31:15.038365Z</date>
+    <msg>Add the thin system layer. It allows to get an access to the system for executing commands.</msg>
+    <paths>
+      <path action="A">Framework/Console/System</path>
+      <path action="A">Framework/Console/System/Exception.php</path>
+      <path action="A">Framework/Console/System/System.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="262">
+    <author>hywan</author>
+    <date>2008-08-30T00:29:39.392612Z</date>
+    <msg>Forget a point in an exception message.</msg>
+    <paths>
+      <path action="M">Framework/Console/Dispatcher.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="261">
+    <author>hywan</author>
+    <date>2008-08-30T00:28:50.913946Z</date>
+    <msg>Minor edit : API documentation, and code presentation.</msg>
+    <paths>
+      <path action="M">Framework/Console/Interface/Text.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="260">
+    <author>hywan</author>
+    <date>2008-08-30T00:28:05.364277Z</date>
+    <msg>Correct a bug when the pipette is empty, and add the possibility to loop once even if the pipette is empty : it allows to run a default method in the “getOption switch” if no argument is given to the command.</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/GetOption.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="259">
+    <author>hywan</author>
+    <date>2008-08-30T00:26:02.315668Z</date>
+    <msg>Minor edit : add a return.</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/Cli/Parser.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="258">
+    <author>hywan</author>
+    <date>2008-08-30T00:24:47.516436Z</date>
+    <msg>Add the makeUsageOptionsList() method, this is an helper for making the usage options list from a simple array. Set the wrap methods to final. And finally, add wrapper for columnize(), align(), and execute() method.</msg>
+    <paths>
+      <path action="M">Framework/Console/Command/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="257">
+    <author>hywan</author>
+    <date>2008-08-29T19:53:20.618787Z</date>
+    <msg>End of the columnize() method, and add the align() method.</msg>
+    <paths>
+      <path action="M">Framework/Console/Interface/Text.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="256">
+    <author>hywan</author>
+    <date>2008-08-29T18:59:26.111946Z</date>
+    <msg>Not clean, but hard word, need a backup.</msg>
+    <paths>
+      <path action="M">Framework/Console/Interface/Text.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="255">
+    <author>hywan</author>
+    <date>2008-08-29T14:00:28.665709Z</date>
+    <msg>Add a changelog format (be appreciated with the “echo -e” command), remake the changelog, and the readme file.</msg>
+    <paths>
+      <path action="M">CHANGELOG</path>
+      <path action="A">CHANGELOG.echo</path>
+      <path action="M">README</path>
+    </paths>
+  </logentry>
+  <logentry revision="254">
+    <author>hywan</author>
+    <date>2008-08-29T13:47:44.618468Z</date>
+    <msg>Edit the API documentation and the code presentation.</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/Io.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="253">
+    <author>hywan</author>
+    <date>2008-08-29T13:43:41.564332Z</date>
+    <msg>Edit the API documentation, and code presentation.</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/Cli/Parser.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="252">
+    <author>hywan</author>
+    <date>2008-08-29T13:40:33.602266Z</date>
+    <msg>Edit the API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/Cli.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="251">
+    <author>hywan</author>
+    <date>2008-08-29T13:35:18.080461Z</date>
+    <msg>Edit the dispatch method to make a fluid interface, and set the style sheets support up (through the importStyle() method).</msg>
+    <paths>
+      <path action="M">Framework/Console/Console.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="250">
+    <author>hywan</author>
+    <date>2008-08-29T13:33:11.939802Z</date>
+    <msg>Wrap the Hoa_Console_Interface_Sound::bip() method.</msg>
+    <paths>
+      <path action="M">Framework/Console/Command/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="249">
+    <author>hywan</author>
+    <date>2008-08-29T13:31:55.712354Z</date>
+    <msg>First short to create an animation.</msg>
+    <paths>
+      <path action="M">Framework/Console/Interface/Animation.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="248">
+    <author>hywan</author>
+    <date>2008-08-29T13:31:21.325126Z</date>
+    <msg>Add the possibility to add a group of styles, and add the import() method. The goal is to allow user to write his own style sheets.</msg>
+    <paths>
+      <path action="M">Framework/Console/Interface/Style.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="247">
+    <author>hywan</author>
+    <date>2008-08-29T13:29:10.998528Z</date>
+    <msg>Try to bip, but does not work right now.</msg>
+    <paths>
+      <path action="M">Framework/Console/Interface/Sound.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="246">
+    <author>hywan</author>
+    <date>2008-08-29T11:38:48.800490Z</date>
+    <msg>Replace boolean by constants, and cout() an empty line by default.</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/Io.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="245">
+    <author>hywan</author>
+    <date>2008-08-28T21:27:15.033375Z</date>
+    <msg></msg>
+    <paths>
+      <path action="D">Framework/Console/Interface/Color.php</path>
+      <path action="A">Framework/Console/Interface/Exception.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="244">
+    <author>hywan</author>
+    <date>2008-08-28T21:26:56.487152Z</date>
+    <msg>Write the stylize() method that wraps the Hoa_Console_Interface_Style::stylize() method.</msg>
+    <paths>
+      <path action="M">Framework/Console/Command/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="243">
+    <author>hywan</author>
+    <date>2008-08-28T21:25:49.441685Z</date>
+    <msg>First shot (and maybe the last ?).</msg>
+    <paths>
+      <path action="A">Framework/Console/Interface/Style.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="242">
+    <author>hywan</author>
+    <date>2008-08-28T20:25:34.544025Z</date>
+    <msg>Clean, write API documentation, set up the “standalone mode”, and some other features.</msg>
+    <paths>
+      <path action="M">Framework/Console/Command/Abstract.php</path>
+      <path action="M">Framework/Console/Console.php</path>
+      <path action="M">Framework/Console/Core/Cli.php</path>
+      <path action="M">Framework/Console/Core/GetOption.php</path>
+      <path action="M">Framework/Console/Core/Io.php</path>
+      <path action="M">Framework/Console/Dispatcher.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="241">
+    <author>hywan</author>
+    <date>2008-08-28T18:30:00.531514Z</date>
+    <msg>Correct a bug when a class has the same name that a folder.</msg>
+    <paths>
+      <path action="M">Framework/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="240">
+    <author>hywan</author>
+    <date>2008-08-28T18:04:16.608502Z</date>
+    <msg>Just API corrections.</msg>
+    <paths>
+      <path action="M">Framework/Exception.php</path>
+      <path action="M">Framework/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="239">
+    <author>hywan</author>
+    <date>2008-08-28T18:00:27.832626Z</date>
+    <msg>Just an API correction.</msg>
+    <paths>
+      <path action="M">Framework/Session/SaveHandler/Interface.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="238">
+    <author>hywan</author>
+    <date>2008-08-28T17:59:36.986075Z</date>
+    <msg>Just an API correction.</msg>
+    <paths>
+      <path action="M">Framework/Controller/Router/Rewrite.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="237">
+    <author>hywan</author>
+    <date>2008-08-28T17:46:35.624076Z</date>
+    <msg>Forget to replace some boolean by constants.</msg>
+    <paths>
+      <path action="M">Framework/Configuration/Xml.php</path>
+      <path action="M">Framework/Configuration/Yaml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="236">
+    <author>hywan</author>
+    <date>2008-08-28T17:38:25.637187Z</date>
+    <msg>Just add one space to vertical-aligned symbols.</msg>
+    <paths>
+      <path action="M">Framework/Cache/Cache.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="235">
+    <author>hywan</author>
+    <date>2008-08-28T17:35:01.971765Z</date>
+    <msg>Remove a useless import.</msg>
+    <paths>
+      <path action="M">Framework/Acl/Assert/Interface.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="234">
+    <author>hywan</author>
+    <date>2008-08-28T17:34:06.795675Z</date>
+    <msg>Just an API correction.</msg>
+    <paths>
+      <path action="M">Framework/Acl/Assert/Interface.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="233">
+    <author>hywan</author>
+    <date>2008-08-28T16:21:44.370322Z</date>
+    <msg>Complete the API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Bench/Mark.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="232">
+    <author>hywan</author>
+    <date>2008-08-28T16:21:34.563073Z</date>
+    <msg>Ameliorate the getMaximum() method, and complete the API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Bench/Bench.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="231">
+    <author>hywan</author>
+    <date>2008-08-28T15:41:18.753738Z</date>
+    <msg>Add the statistic support (return an array or draw in text mode).</msg>
+    <paths>
+      <path action="M">Framework/Bench/Bench.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="230">
+    <author>hywan</author>
+    <date>2008-08-28T15:40:27.787875Z</date>
+    <msg>Set up the pause event.</msg>
+    <paths>
+      <path action="M">Framework/Bench/Mark.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="229">
+    <author>hywan</author>
+    <date>2008-08-27T18:26:20.595029Z</date>
+    <msg>Start the bench package.</msg>
+    <paths>
+      <path action="A">Framework/Bench</path>
+      <path action="A">Framework/Bench/Bench.php</path>
+      <path action="A">Framework/Bench/Exception.php</path>
+      <path action="A">Framework/Bench/Mark.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="227">
+    <author>hywan</author>
+    <date>2008-08-27T14:00:03.130092Z</date>
+    <msg>Just an API correction : add the @throw tag.</msg>
+    <paths>
+      <path action="M">Framework/Factory/Factory.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="226">
+    <author>hywan</author>
+    <date>2008-08-27T13:58:39.200706Z</date>
+    <msg>Try to link to Database Abstract Layer to the Model.</msg>
+    <paths>
+      <path action="M">Framework/Database/Dal/Dal.php</path>
+      <path action="M">Framework/Database/Model/Collection.php</path>
+      <path action="M">Framework/Database/Model/Field.php</path>
+      <path action="M">Framework/Database/Model/Interface/Dml.php</path>
+      <path action="M">Framework/Database/Model/Table.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="225">
+    <author>hywan</author>
+    <date>2008-08-27T13:57:26.221287Z</date>
+    <msg>Bad class name for Hoa_Dir. Rename it into Hoa_File_Dir, and correct the dependencies.</msg>
+    <paths>
+      <path action="M">Framework/Archive/Pkg/Pkg.php</path>
+      <path action="M">Framework/Cache/Backend/File.php</path>
+      <path action="M">Framework/File/Dir.php</path>
+      <path action="M">Framework/File/File.php</path>
+      <path action="M">Framework/File/Upload.php</path>
+      <path action="M">Framework/XmlRpc/Method/system.listMethods.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="224">
+    <author>hywan</author>
+    <date>2008-08-27T13:52:46.974538Z</date>
+    <msg>Just API corrections.</msg>
+    <paths>
+      <path action="M">Framework/Exception.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="223">
+    <author>hywan</author>
+    <date>2008-08-27T13:52:23.479768Z</date>
+    <msg>Set the new import method (with the pre-load notion) up. Better and faster import pattern, and autoload support.</msg>
+    <paths>
+      <path action="M">Framework/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="222">
+    <author>hywan</author>
+    <date>2008-08-26T11:37:46.221779Z</date>
+    <msg>Set the good fetch mode.</msg>
+    <paths>
+      <path action="M">Framework/Database/Dal/AbstractLayer/Pdo/PdoStatement.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="221">
+    <author>hywan</author>
+    <date>2008-08-25T20:26:06.306454Z</date>
+    <msg>End of the DAL structure (manage multiton of abstract layer).</msg>
+    <paths>
+      <path action="M">Framework/Database/Dal/AbstractLayer/Pdo/Pdo.php</path>
+      <path action="M">Framework/Database/Dal/Dal.php</path>
+      <path action="M">Framework/Database/Dal/DalStatement.php</path>
+      <path action="M">Framework/Database/Dal/Interface/Wrapper.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="220">
+    <author>hywan</author>
+    <date>2008-08-25T19:03:43.927977Z</date>
+    <msg>Correct an extending class name case “problem”.</msg>
+    <paths>
+      <path action="M">Framework/File/Util.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="219">
+    <author>hywan</author>
+    <date>2008-08-23T01:04:06.672132Z</date>
+    <msg>Write the PDO wrapper.</msg>
+    <paths>
+      <path action="M">Framework/Database/Dal/AbstractLayer/Pdo/Pdo.php</path>
+      <path action="M">Framework/Database/Dal/AbstractLayer/Pdo/PdoStatement.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="218">
+    <author>hywan</author>
+    <date>2008-08-23T01:03:40.384039Z</date>
+    <msg>Correct some elements in interfaces.</msg>
+    <paths>
+      <path action="M">Framework/Database/Dal/Interface/Wrapper.php</path>
+      <path action="M">Framework/Database/Dal/Interface/WrapperStatement.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="217">
+    <author>hywan</author>
+    <date>2008-08-22T19:07:25.666986Z</date>
+    <msg>Prepare the wrapper interface.</msg>
+    <paths>
+      <path action="M">Framework/Database/Dal/Interface/Wrapper.php</path>
+      <path action="M">Framework/Database/Dal/Interface/WrapperStatement.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="216">
+    <author>hywan</author>
+    <date>2008-08-22T17:43:09.271797Z</date>
+    <msg>Add the exception class.</msg>
+    <paths>
+      <path action="A">Framework/Database/Dal/Exception.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="215">
+    <author>hywan</author>
+    <date>2008-08-22T17:36:11.808325Z</date>
+    <msg>First shot for the DAL structure.</msg>
+    <paths>
+      <path action="D">Framework/Database/Connexion</path>
+      <path action="A">Framework/Database/Dal</path>
+      <path action="A">Framework/Database/Dal/AbstractLayer</path>
+      <path action="A">Framework/Database/Dal/AbstractLayer/Dba</path>
+      <path action="A">Framework/Database/Dal/AbstractLayer/Dbx</path>
+      <path action="A">Framework/Database/Dal/AbstractLayer/Odbc</path>
+      <path action="A">Framework/Database/Dal/AbstractLayer/Pdo</path>
+      <path action="A">Framework/Database/Dal/AbstractLayer/Pdo/Pdo.php</path>
+      <path action="A">Framework/Database/Dal/AbstractLayer/Pdo/PdoStatement.php</path>
+      <path action="A">Framework/Database/Dal/Dal.php</path>
+      <path action="A">Framework/Database/Dal/DalStatement.php</path>
+      <path action="A">Framework/Database/Dal/Interface</path>
+      <path action="A">Framework/Database/Dal/Interface/Wrapper.php</path>
+      <path action="A">Framework/Database/Dal/Interface/WrapperStatement.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="214">
+    <author>hywan</author>
+    <date>2008-08-21T19:59:05.037737Z</date>
+    <msg>Add the Criteria class, it will manage the criterions for deleting, inserting, selecting, and updating data.</msg>
+    <paths>
+      <path action="A">Framework/Database/Model/Criteria.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="213">
+    <author>hywan</author>
+    <date>2008-08-21T19:57:10.726150Z</date>
+    <msg>Prepare the schema directory, will host the schema' scripts.</msg>
+    <paths>
+      <path action="A">Framework/Database/Schema</path>
+    </paths>
+  </logentry>
+  <logentry revision="212">
+    <author>hywan</author>
+    <date>2008-08-21T19:37:50.568845Z</date>
+    <msg>Add interface for DML (Data Modeling Language).</msg>
+    <paths>
+      <path action="M">Framework/Database/Model/Collection.php</path>
+      <path action="M">Framework/Database/Model/Field.php</path>
+      <path action="A">Framework/Database/Model/Interface</path>
+      <path action="A">Framework/Database/Model/Interface/Dml.php</path>
+      <path action="M">Framework/Database/Model/Table.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="211">
+    <author>hywan</author>
+    <date>2008-08-21T14:49:09.566695Z</date>
+    <msg>Add the IteratorAggregate interface to be strict (the method was already written).</msg>
+    <paths>
+      <path action="M">Framework/Form/Form.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="210">
+    <author>hywan</author>
+    <date>2008-08-21T11:55:20.842060Z</date>
+    <msg>Oops, bad place to declare the __DIR__ constant …</msg>
+    <paths>
+      <path action="M">Framework/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="209">
+    <author>hywan</author>
+    <date>2008-08-20T18:57:35.293232Z</date>
+    <msg>Set up the category type support and the type checking.</msg>
+    <paths>
+      <path action="M">Framework/Database/Model/Field.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="206">
+    <author>hywan</author>
+    <date>2008-08-18T18:34:45.608427Z</date>
+    <msg>Just adding a space.</msg>
+    <paths>
+      <path action="M">Framework/Controller/Front.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="205">
+    <author>hywan</author>
+    <date>2008-08-18T18:34:12.534302Z</date>
+    <msg>First shot.</msg>
+    <paths>
+      <path action="A">Framework/Database/Connexion</path>
+      <path action="A">Framework/Database/Connexion/Abstract.php</path>
+      <path action="A">Framework/Database/Connexion/Pdo.php</path>
+      <path action="A">Framework/Database/Database.php</path>
+      <path action="A">Framework/Database/Exception.php</path>
+      <path action="A">Framework/Database/Model</path>
+      <path action="A">Framework/Database/Model/Base.php</path>
+      <path action="A">Framework/Database/Model/Collection.php</path>
+      <path action="A">Framework/Database/Model/Exception.php</path>
+      <path action="A">Framework/Database/Model/Field.php</path>
+      <path action="A">Framework/Database/Model/Table.php</path>
+      <path action="A">Framework/Database/QueryBuilder</path>
+      <path action="A">Framework/Database/QueryBuilder/Base.php</path>
+      <path action="A">Framework/Database/QueryBuilder/Exception.php</path>
+      <path action="A">Framework/Database/QueryBuilder/Field.php</path>
+      <path action="A">Framework/Database/QueryBuilder/Function</path>
+      <path action="A">Framework/Database/QueryBuilder/Function/Common.php</path>
+      <path action="A">Framework/Database/QueryBuilder/Function/MySQL.php</path>
+      <path action="A">Framework/Database/QueryBuilder/Function/Oracle.php</path>
+      <path action="A">Framework/Database/QueryBuilder/Function/PostgreSQL.php</path>
+      <path action="A">Framework/Database/QueryBuilder/Function/SQLite.php</path>
+      <path action="A">Framework/Database/QueryBuilder/Table.php</path>
+      <path action="A">Framework/Database/QueryBuilder/Tool.php</path>
+      <path action="A">Framework/Database/View</path>
+      <path action="A">Framework/Database/View/Exception.php</path>
+      <path action="A">Framework/Database/View/Registry.php</path>
+      <path action="A">Framework/Database/View/SQLite.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="204">
+    <author>hywan</author>
+    <date>2008-08-17T19:57:01.203671Z</date>
+    <msg>Add brackets when instancing the Hoa_View class.</msg>
+    <paths>
+      <path action="M">Framework/Controller/Front.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="203">
+    <author>hywan</author>
+    <date>2008-08-17T19:54:43.825472Z</date>
+    <msg>Edit the API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Controller/Router/Interface.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="202">
+    <author>hywan</author>
+    <date>2008-08-14T23:34:13.685441Z</date>
+    <msg>Remove a bug comment (was not a bug).</msg>
+    <paths>
+      <path action="M">Framework/Translate/Adapter/Gettext.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="201">
+    <author>hywan</author>
+    <date>2008-08-14T23:33:27.014794Z</date>
+    <msg>Correct a bug with the iterator.</msg>
+    <paths>
+      <path action="M">Framework/StdClass/StdClass.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="200">
+    <author>hywan</author>
+    <date>2008-08-07T00:08:35.838160Z</date>
+    <msg>Correct the @package tag for the API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Filter/HtmlEntities.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="199">
+    <author>hywan</author>
+    <date>2008-08-06T22:53:04.819087Z</date>
+    <msg>Add an end-slash to a directory.</msg>
+    <paths>
+      <path action="M">Framework/Controller/Front.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="198">
+    <author>hywan</author>
+    <date>2008-07-31T19:31:36.445485Z</date>
+    <msg>Prepare the ORM.</msg>
+    <paths>
+      <path action="A">Framework/Database</path>
+    </paths>
+  </logentry>
+  <logentry revision="197">
+    <author>hywan</author>
+    <date>2008-07-31T19:31:20.675661Z</date>
+    <msg>Prepare the ORM.</msg>
+    <paths>
+      <path action="D">Framework/Database</path>
+      <path action="A">Framework/Database.old</path>
+    </paths>
+  </logentry>
+  <logentry revision="196">
+    <author>hywan</author>
+    <date>2008-07-17T16:43:30.565014Z</date>
+    <msg>Continue the package.</msg>
+    <paths>
+      <path action="M">Framework/Console/Command/Abstract.php</path>
+      <path action="M">Framework/Console/Console.php</path>
+      <path action="M">Framework/Console/Core/Cli.php</path>
+      <path action="M">Framework/Console/Core/Cli/Parser.php</path>
+      <path action="M">Framework/Console/Core/GetOption.php</path>
+      <path action="M">Framework/Console/Core/Io.php</path>
+      <path action="M">Framework/Console/Dispatcher.php</path>
+      <path action="M">Framework/Console/Router.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="195">
+    <author>hywan</author>
+    <date>2008-07-17T15:32:31.320853Z</date>
+    <msg>Forget to remove a print_r :(.</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/Cli/Parser.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="194">
+    <author>hywan</author>
+    <date>2008-07-17T15:30:38.158545Z</date>
+    <msg>Add the longOnly parsing support, and ameliorate the regex (considere a command without input).</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/Cli/Parser.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="193">
+    <author>hywan</author>
+    <date>2008-07-15T18:10:39.233541Z</date>
+    <msg>Remake the file tree.</msg>
+    <paths>
+      <path action="D">Framework/Console/Core/Dispatcher.php</path>
+      <path action="D">Framework/Console/Core/Router.php</path>
+      <path action="A">Framework/Console/Dispatcher.php</path>
+      <path action="A">Framework/Console/Router.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="192">
+    <author>hywan</author>
+    <date>2008-07-15T18:10:21.690318Z</date>
+    <msg>Remake the file tree.</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/Dispatcher.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="191">
+    <author>hywan</author>
+    <date>2008-07-14T20:47:58.673779Z</date>
+    <msg>Just for a test.</msg>
+    <paths>
+      <path action="M">Framework/Console/Command/Abstract.php</path>
+      <path action="M">Framework/Console/Console.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="190">
+    <author>hywan</author>
+    <date>2008-07-14T20:47:43.646493Z</date>
+    <msg>Set up the support of the new CLI parser.</msg>
+    <paths>
+      <path action="M">Framework/Console/Core/Cli.php</path>
+      <path action="M">Framework/Console/Core/Dispatcher.php</path>
+      <path action="M">Framework/Console/Core/Router.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="189">
+    <author>hywan</author>
+    <date>2008-07-14T20:47:23.089490Z</date>
+    <msg>Write a first sketch of the CLI parser.</msg>
+    <paths>
+      <path action="A">Framework/Console/Core/Cli</path>
+      <path action="A">Framework/Console/Core/Cli/Parser.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="188">
+    <author>hywan</author>
+    <date>2008-07-12T20:34:18.509086Z</date>
+    <msg>First step.</msg>
+    <paths>
+      <path action="M">Framework/Console/Command/Exception.php</path>
+      <path action="M">Framework/Console/Console.php</path>
+      <path action="M">Framework/Console/Core/Cli.php</path>
+      <path action="M">Framework/Console/Core/Dispatcher.php</path>
+      <path action="M">Framework/Console/Core/Exception.php</path>
+      <path action="M">Framework/Console/Core/GetOption.php</path>
+      <path action="A">Framework/Console/Core/Io.php</path>
+      <path action="M">Framework/Console/Core/Router.php</path>
+      <path action="M">Framework/Console/Exception.php</path>
+      <path action="A">Framework/Console/Request.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="187">
+    <author>hywan</author>
+    <date>2008-07-11T19:47:21.010927Z</date>
+    <msg>Prepare the Hoa_Console package.</msg>
+    <paths>
+      <path action="A">Framework/Console</path>
+      <path action="A">Framework/Console/Command</path>
+      <path action="A">Framework/Console/Command/Abstract.php</path>
+      <path action="A">Framework/Console/Command/Exception.php</path>
+      <path action="A">Framework/Console/Console.php</path>
+      <path action="A">Framework/Console/Core</path>
+      <path action="A">Framework/Console/Core/Cli.php</path>
+      <path action="A">Framework/Console/Core/Dispatcher.php</path>
+      <path action="A">Framework/Console/Core/Exception.php</path>
+      <path action="A">Framework/Console/Core/GetOption.php</path>
+      <path action="A">Framework/Console/Core/Router.php</path>
+      <path action="A">Framework/Console/Environment</path>
+      <path action="A">Framework/Console/Exception.php</path>
+      <path action="A">Framework/Console/Interface</path>
+      <path action="A">Framework/Console/Interface/Animation.php</path>
+      <path action="A">Framework/Console/Interface/Color.php</path>
+      <path action="A">Framework/Console/Interface/Sound.php</path>
+      <path action="A">Framework/Console/Interface/Text.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="178">
+    <author>hywan</author>
+    <date>2008-07-08T18:17:59.274637Z</date>
+    <msg>Make the 0.3.7b tag.</msg>
+    <paths>
+      <path action="M">CHANGELOG</path>
+    </paths>
+  </logentry>
+  <logentry revision="171">
+    <author>hywan</author>
+    <date>2008-07-08T15:30:00.960974Z</date>
+    <msg>Prepare the new version.</msg>
+    <paths>
+      <path action="M">Framework/Version/Version.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="170">
+    <author>hywan</author>
+    <date>2008-07-08T15:26:14.318427Z</date>
+    <msg>Ameliorate the rmComment method. Do not remove a sharp when it is quoted.</msg>
+    <paths>
+      <path action="M">Framework/Yaml/Parser.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="169">
+    <author>hywan</author>
+    <date>2008-07-08T15:04:41.281734Z</date>
+    <msg>Simplify objects name in constants.</msg>
+    <paths>
+      <path action="M">Framework/Form/Form.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="168">
+    <author>hywan</author>
+    <date>2008-07-08T15:02:08.348345Z</date>
+    <msg>Simplify objects name to call (in addElement method).
+</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Form.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="164">
+    <author>hywan</author>
+    <date>2008-07-08T12:42:45.492947Z</date>
+    <msg>Add the changelog.</msg>
+    <paths>
+      <path action="A">CHANGELOG</path>
+    </paths>
+  </logentry>
+  <logentry revision="163">
+    <author>hywan</author>
+    <date>2008-07-08T11:30:42.625185Z</date>
+    <msg>An optgroup cannot have a name attribute.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Abstract.php</path>
+      <path action="M">Framework/Form/Element/Select.php</path>
+      <path action="M">Framework/Form/Element/SelectOptgroup.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="162">
+    <author>hywan</author>
+    <date>2008-07-08T11:22:46.286397Z</date>
+    <msg>Remake the indentation.</msg>
+    <paths>
+      <path action="M">Framework/Form/Decorator/Fieldset.php</path>
+      <path action="M">Framework/Form/Decorator/Select.php</path>
+      <path action="M">Framework/Form/Decorator/SelectOptgroup.php</path>
+      <path action="M">Framework/Form/Decorator/SelectOption.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="161">
+    <author>hywan</author>
+    <date>2008-07-08T11:14:56.596224Z</date>
+    <msg>Manage the null label.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/InputButton.php</path>
+      <path action="M">Framework/Form/Element/InputCheckbox.php</path>
+      <path action="M">Framework/Form/Element/InputImage.php</path>
+      <path action="M">Framework/Form/Element/InputRadio.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="160">
+    <author>hywan</author>
+    <date>2008-07-07T22:34:01.021678Z</date>
+    <msg>Try to manage many form in the same page.</msg>
+    <paths>
+      <path action="M">Framework/Form/Form.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="158">
+    <author>hywan</author>
+    <date>2008-07-07T17:48:32.052662Z</date>
+    <msg>Ameliorate attributes array support.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Select.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="157">
+    <author>hywan</author>
+    <date>2008-07-07T16:02:32.453198Z</date>
+    <msg>Correct a typo.</msg>
+    <paths>
+      <path action="M">Framework/Form/Form.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="156">
+    <author>hywan</author>
+    <date>2008-07-07T16:01:28.933306Z</date>
+    <msg>Ameliorate the decorator management.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="155">
+    <author>hywan</author>
+    <date>2008-07-07T15:11:08.141696Z</date>
+    <msg>Correct a bug when unset all namespaces : bad variable call.</msg>
+    <paths>
+      <path action="M">Framework/Session/Session.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="154">
+    <author>hywan</author>
+    <date>2008-07-07T12:12:13.138156Z</date>
+    <msg>Forget to write the class definition in comment.</msg>
+    <paths>
+      <path action="M">Framework/Validate/Validate.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="153">
+    <author>hywan</author>
+    <date>2008-07-07T12:11:53.675890Z</date>
+    <msg>Forget to write the class definition in comment.</msg>
+    <paths>
+      <path action="M">Framework/Filter/Filter.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="152">
+    <author>hywan</author>
+    <date>2008-07-07T11:44:00.107749Z</date>
+    <msg>Remove useless code.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="151">
+    <author>hywan</author>
+    <date>2008-07-07T11:24:28.100107Z</date>
+    <msg>Ameliorate the security support (hidding password).</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/InputPassword.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="149">
+    <author>hywan</author>
+    <date>2008-07-06T16:06:40.508700Z</date>
+    <msg>Correct a bug.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/SelectOption.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="148">
+    <author>hywan</author>
+    <date>2008-07-06T16:06:09.887859Z</date>
+    <msg>Import the SelectOption class, and correct a bug.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Select.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="147">
+    <author>hywan</author>
+    <date>2008-07-06T16:05:41.796774Z</date>
+    <msg>Correct a bug : adding the label attribute when using Select class (because of inheritance).</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/SelectOptgroup.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="145">
+    <author>hywan</author>
+    <date>2008-07-05T12:44:30.578704Z</date>
+    <msg>Change the default attribute to be set when  is a string.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/InputReset.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="144">
+    <author>hywan</author>
+    <date>2008-07-05T12:15:11.622320Z</date>
+    <msg>Overload setValue and getValue method, because an image does not have a value.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/InputImage.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="143">
+    <author>hywan</author>
+    <date>2008-07-05T12:00:28.596500Z</date>
+    <msg>Manange if all attributes are well-set when calling __toString.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Abstract.php</path>
+      <path action="M">Framework/Form/Element/Fieldset.php</path>
+      <path action="M">Framework/Form/Element/Form.php</path>
+      <path action="M">Framework/Form/Element/InputButton.php</path>
+      <path action="M">Framework/Form/Element/InputCheckbox.php</path>
+      <path action="M">Framework/Form/Element/InputFile.php</path>
+      <path action="M">Framework/Form/Element/InputHidden.php</path>
+      <path action="M">Framework/Form/Element/InputImage.php</path>
+      <path action="M">Framework/Form/Element/InputPassword.php</path>
+      <path action="M">Framework/Form/Element/InputRadio.php</path>
+      <path action="M">Framework/Form/Element/InputReset.php</path>
+      <path action="M">Framework/Form/Element/InputSubmit.php</path>
+      <path action="M">Framework/Form/Element/InputText.php</path>
+      <path action="M">Framework/Form/Element/Label.php</path>
+      <path action="M">Framework/Form/Element/Legend.php</path>
+      <path action="M">Framework/Form/Element/Select.php</path>
+      <path action="M">Framework/Form/Element/SelectOptgroup.php</path>
+      <path action="M">Framework/Form/Element/SelectOption.php</path>
+      <path action="M">Framework/Form/Element/Textarea.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="142">
+    <author>hywan</author>
+    <date>2008-07-05T11:49:42.049643Z</date>
+    <msg>Remake the __toString method.
+</msg>
+    <paths>
+      <path action="M">Framework/Exception.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="141">
+    <author>hywan</author>
+    <date>2008-07-05T11:37:39.161094Z</date>
+    <msg>Manage if attributes are well-set when built element normally and correct API doc.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="140">
+    <author>hywan</author>
+    <date>2008-07-04T17:03:26.834946Z</date>
+    <msg>Correct a bug (setValidator instead of setFilter).
+</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/InputCheckbox.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="138">
+    <author>hywan</author>
+    <date>2008-07-04T16:32:22.980568Z</date>
+    <msg>Correct one bug and manage the value attribute (to null).</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Fieldset.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="137">
+    <author>hywan</author>
+    <date>2008-07-04T16:31:36.192305Z</date>
+    <msg>Make the attribute entry, in the array declaration, not obligatory.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Form.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="136">
+    <author>hywan</author>
+    <date>2008-07-04T15:28:48.355358Z</date>
+    <msg>Add the getIteratorIterator suppport.</msg>
+    <paths>
+      <path action="M">Framework/Form/Form.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="135">
+    <author>hywan</author>
+    <date>2008-07-04T14:57:36.171133Z</date>
+    <msg>Add an exception when the document is not well-parsed.</msg>
+    <paths>
+      <path action="M">Framework/Yaml/Parser.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="134">
+    <author>hywan</author>
+    <date>2008-07-04T14:53:38.214809Z</date>
+    <msg>Alllow to create a new attribute with a null value.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="133">
+    <author>hywan</author>
+    <date>2008-07-04T14:50:26.589307Z</date>
+    <msg>Forget to remove a debugging line, oops.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Form.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="132">
+    <author>hywan</author>
+    <date>2008-07-04T14:49:37.482711Z</date>
+    <msg>Ameliorate the attribute array support (again …).</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Form.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="131">
+    <author>hywan</author>
+    <date>2008-07-04T14:30:02.669636Z</date>
+    <msg>Complete the API documentation for the label method, and remove an useless line for the autoComplete method.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="130">
+    <author>hywan</author>
+    <date>2008-07-04T14:10:49.285663Z</date>
+    <msg>Remake the tabulation.</msg>
+    <paths>
+      <path action="M">Framework/Form/Decorator/SelectOption.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="129">
+    <author>hywan</author>
+    <date>2008-07-04T14:07:48.895147Z</date>
+    <msg>Ameliorate attributes array support.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Form.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="128">
+    <author>hywan</author>
+    <date>2008-07-04T13:59:28.902220Z</date>
+    <msg>Ameliorate attributes array support.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Select.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="127">
+    <author>hywan</author>
+    <date>2008-07-04T13:52:24.975579Z</date>
+    <msg>Overload setValue and getValue to complete the security with the value attribute.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/InputPassword.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="126">
+    <author>hywan</author>
+    <date>2008-07-04T13:40:06.682206Z</date>
+    <msg>Overload the auto-complete method to not auto-complete (because of security of course).</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/InputPassword.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="125">
+    <author>hywan</author>
+    <date>2008-07-04T10:42:24.401880Z</date>
+    <msg>Call-time pass-by-reference has been deprecated.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Select.php</path>
+      <path action="M">Framework/Form/Element/SelectOptgroup.php</path>
+      <path action="M">Framework/Form/Form.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="124">
+    <author>hywan</author>
+    <date>2008-07-03T17:05:35.794033Z</date>
+    <msg>Manage the super array for creating all elements in one time.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Form.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="123">
+    <author>hywan</author>
+    <date>2008-07-03T17:04:36.772169Z</date>
+    <msg>Add the addElement method, alias for addOption.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/SelectOptgroup.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="122">
+    <author>hywan</author>
+    <date>2008-07-03T17:04:08.035587Z</date>
+    <msg>Add the setName method, alias for setAttribute, correct a typo, and manage the default value when creating a new attribute.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="120">
+    <author>hywan</author>
+    <date>2008-07-03T10:58:09.708321Z</date>
+    <msg>Fixe the PHP bug 20221.</msg>
+    <paths>
+      <path action="M">Framework/Form/Decorator/Select.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="119">
+    <author>hywan</author>
+    <date>2008-07-03T10:57:48.132892Z</date>
+    <msg>Fixe the PHP bug 20221.</msg>
+    <paths>
+      <path action="M">Framework/Form/Decorator/SelectOptgroup.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="118">
+    <author>hywan</author>
+    <date>2008-07-03T10:56:40.281091Z</date>
+    <msg>Fixe the PHP bug 20221.</msg>
+    <paths>
+      <path action="M">Framework/Form/Decorator/Fieldset.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="116">
+    <author>hywan</author>
+    <date>2008-07-02T17:55:42.075925Z</date>
+    <msg>Add the setId method (alias for setAttribute).</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="114">
+    <author>hywan</author>
+    <date>2008-07-02T16:24:25.680082Z</date>
+    <msg>Resolve the ID and name conflict.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="113">
+    <author>hywan</author>
+    <date>2008-07-02T15:25:27.022957Z</date>
+    <msg>Change the default attribut to be set if  is a string.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/InputSubmit.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="112">
+    <author>hywan</author>
+    <date>2008-07-02T15:20:50.025072Z</date>
+    <msg>Ameliorate the random ID generator.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="111">
+    <author>hywan</author>
+    <date>2008-07-02T15:19:33.119412Z</date>
+    <msg>Erase the revision 108 and 109.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Abstract.php</path>
+      <path action="M">Framework/Form/Element/InputButton.php</path>
+      <path action="M">Framework/Form/Element/InputCheckbox.php</path>
+      <path action="M">Framework/Form/Element/InputFile.php</path>
+      <path action="M">Framework/Form/Element/InputHidden.php</path>
+      <path action="M">Framework/Form/Element/InputImage.php</path>
+      <path action="M">Framework/Form/Element/InputPassword.php</path>
+      <path action="M">Framework/Form/Element/InputRadio.php</path>
+      <path action="M">Framework/Form/Element/InputReset.php</path>
+      <path action="M">Framework/Form/Element/InputSubmit.php</path>
+      <path action="M">Framework/Form/Element/InputText.php</path>
+      <path action="M">Framework/Form/Element/Select.php</path>
+      <path action="M">Framework/Form/Element/Textarea.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="110">
+    <author>hywan</author>
+    <date>2008-07-02T14:34:39.960836Z</date>
+    <msg>Ameliorate the random ID generator.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="109">
+    <author>hywan</author>
+    <date>2008-07-02T14:31:43.465104Z</date>
+    <msg>The ID attribute is not required.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/InputButton.php</path>
+      <path action="M">Framework/Form/Element/InputCheckbox.php</path>
+      <path action="M">Framework/Form/Element/InputFile.php</path>
+      <path action="M">Framework/Form/Element/InputPassword.php</path>
+      <path action="M">Framework/Form/Element/InputRadio.php</path>
+      <path action="M">Framework/Form/Element/InputText.php</path>
+      <path action="M">Framework/Form/Element/Select.php</path>
+      <path action="M">Framework/Form/Element/Textarea.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="108">
+    <author>hywan</author>
+    <date>2008-07-02T13:58:34.113510Z</date>
+    <msg>Replace the default attribute to be set if  is a string.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/InputButton.php</path>
+      <path action="M">Framework/Form/Element/InputCheckbox.php</path>
+      <path action="M">Framework/Form/Element/InputFile.php</path>
+      <path action="M">Framework/Form/Element/InputHidden.php</path>
+      <path action="M">Framework/Form/Element/InputImage.php</path>
+      <path action="M">Framework/Form/Element/InputPassword.php</path>
+      <path action="M">Framework/Form/Element/InputRadio.php</path>
+      <path action="M">Framework/Form/Element/InputReset.php</path>
+      <path action="M">Framework/Form/Element/InputSubmit.php</path>
+      <path action="M">Framework/Form/Element/InputText.php</path>
+      <path action="M">Framework/Form/Element/Select.php</path>
+      <path action="M">Framework/Form/Element/Textarea.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="107">
+    <author>hywan</author>
+    <date>2008-06-30T15:53:50.625031Z</date>
+    <msg>Edit to be conform to strict standard.</msg>
+    <paths>
+      <path action="M">Framework/Form/Form.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="106">
+    <author>hywan</author>
+    <date>2008-06-30T15:20:54.018102Z</date>
+    <msg>Temporary quote the str_replace function, donot know why it takes too memory.</msg>
+    <paths>
+      <path action="M">Framework/Form/Decorator/Fieldset.php</path>
+      <path action="M">Framework/Form/Decorator/SelectOptgroup.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="105">
+    <author>hywan</author>
+    <date>2008-06-30T15:17:36.103530Z</date>
+    <msg>Temporary quote the str_replace function, donot know why it takes too memory.</msg>
+    <paths>
+      <path action="M">Framework/Form/Decorator/Select.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="104">
+    <author>hywan</author>
+    <date>2008-06-30T14:44:36.329872Z</date>
+    <msg>Add the support of the name attribute typped as array.</msg>
+    <paths>
+      <path action="M">Framework/Form/Form.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="103">
+    <author>hywan</author>
+    <date>2008-06-30T12:12:10.061343Z</date>
+    <msg>Manage the null label.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/InputPassword.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="102">
+    <author>hywan</author>
+    <date>2008-06-30T12:11:01.950592Z</date>
+    <msg>Add the support of the name attribute typped as array.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Abstract.php</path>
+      <path action="M">Framework/Form/Element/Form.php</path>
+      <path action="M">Framework/Form/Element/InputCheckbox.php</path>
+      <path action="M">Framework/Form/Element/InputRadio.php</path>
+      <path action="M">Framework/Form/Element/InputText.php</path>
+      <path action="M">Framework/Form/Element/Select.php</path>
+      <path action="M">Framework/Form/Element/SelectOptgroup.php</path>
+      <path action="M">Framework/Form/Element/SelectOption.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="97">
+    <author>hywan</author>
+    <date>2008-06-28T18:57:13.218370Z</date>
+    <msg>Useless package, just a test.</msg>
+    <paths>
+      <path action="D">Framework/Bin</path>
+    </paths>
+  </logentry>
+  <logentry revision="95">
+    <author>hywan</author>
+    <date>2008-06-28T16:18:18.904962Z</date>
+    <msg>Add the auto-complete with the method attribute value data array support.</msg>
+    <paths>
+      <path action="M">Framework/Form/Form.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="94">
+    <author>hywan</author>
+    <date>2008-06-28T16:15:39.823705Z</date>
+    <msg>Add the auto-complete with the method attribute value data array support.</msg>
+    <paths>
+      <path action="M">Framework/Form/Form.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="93">
+    <author>hywan</author>
+    <date>2008-06-28T16:06:25.692403Z</date>
+    <msg>Cleaning.</msg>
+    <paths>
+      <path action="M">Framework/Form/Form.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="92">
+    <author>hywan</author>
+    <date>2008-06-28T15:47:50.111845Z</date>
+    <msg>Cleaning.</msg>
+    <paths>
+      <path action="M">Framework/Form/Decorator/Abstract.php</path>
+      <path action="M">Framework/Form/Decorator/Fieldset.php</path>
+      <path action="M">Framework/Form/Decorator/InputButton.php</path>
+      <path action="M">Framework/Form/Decorator/InputCheckbox.php</path>
+      <path action="M">Framework/Form/Decorator/InputFile.php</path>
+      <path action="M">Framework/Form/Decorator/InputHidden.php</path>
+      <path action="M">Framework/Form/Decorator/InputImage.php</path>
+      <path action="M">Framework/Form/Decorator/InputPassword.php</path>
+      <path action="M">Framework/Form/Decorator/InputRadio.php</path>
+      <path action="M">Framework/Form/Decorator/InputReset.php</path>
+      <path action="M">Framework/Form/Decorator/InputSubmit.php</path>
+      <path action="M">Framework/Form/Decorator/InputText.php</path>
+      <path action="M">Framework/Form/Decorator/Select.php</path>
+      <path action="M">Framework/Form/Decorator/SelectOptgroup.php</path>
+      <path action="M">Framework/Form/Decorator/SelectOption.php</path>
+      <path action="M">Framework/Form/Decorator/Textarea.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="91">
+    <author>hywan</author>
+    <date>2008-06-28T15:23:28.508773Z</date>
+    <msg>Cleaning.</msg>
+    <paths>
+      <path action="M">Framework/Form/Decorator/Abstract.php</path>
+      <path action="M">Framework/Form/Decorator/Fieldset.php</path>
+      <path action="M">Framework/Form/Decorator/InputButton.php</path>
+      <path action="M">Framework/Form/Decorator/InputCheckbox.php</path>
+      <path action="M">Framework/Form/Decorator/InputFile.php</path>
+      <path action="M">Framework/Form/Decorator/InputHidden.php</path>
+      <path action="M">Framework/Form/Decorator/InputImage.php</path>
+      <path action="M">Framework/Form/Decorator/InputPassword.php</path>
+      <path action="M">Framework/Form/Decorator/InputRadio.php</path>
+      <path action="M">Framework/Form/Decorator/InputReset.php</path>
+      <path action="M">Framework/Form/Decorator/InputSubmit.php</path>
+      <path action="M">Framework/Form/Decorator/InputText.php</path>
+      <path action="M">Framework/Form/Decorator/Select.php</path>
+      <path action="M">Framework/Form/Decorator/SelectOptgroup.php</path>
+      <path action="M">Framework/Form/Decorator/SelectOption.php</path>
+      <path action="M">Framework/Form/Decorator/Textarea.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="90">
+    <author>hywan</author>
+    <date>2008-06-28T15:19:33.957424Z</date>
+    <msg>Cleaning.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Abstract.php</path>
+      <path action="M">Framework/Form/Element/Form.php</path>
+      <path action="M">Framework/Form/Element/Select.php</path>
+      <path action="M">Framework/Form/Element/SelectOptgroup.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="89">
+    <author>hywan</author>
+    <date>2008-06-28T15:12:14.436640Z</date>
+    <msg>Cleaning.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/InputHidden.php</path>
+      <path action="M">Framework/Form/Element/InputImage.php</path>
+      <path action="M">Framework/Form/Element/InputPassword.php</path>
+      <path action="M">Framework/Form/Element/InputRadio.php</path>
+      <path action="M">Framework/Form/Element/InputReset.php</path>
+      <path action="M">Framework/Form/Element/InputSubmit.php</path>
+      <path action="M">Framework/Form/Element/Label.php</path>
+      <path action="M">Framework/Form/Element/Legend.php</path>
+      <path action="M">Framework/Form/Element/Select.php</path>
+      <path action="M">Framework/Form/Element/SelectOptgroup.php</path>
+      <path action="M">Framework/Form/Element/SelectOption.php</path>
+      <path action="M">Framework/Form/Element/Textarea.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="87">
+    <author>hywan</author>
+    <date>2008-06-27T16:43:23.271905Z</date>
+    <msg>Cleaning</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/InputButton.php</path>
+      <path action="M">Framework/Form/Element/InputCheckbox.php</path>
+      <path action="M">Framework/Form/Element/InputFile.php</path>
+      <path action="M">Framework/Form/Element/InputHidden.php</path>
+      <path action="M">Framework/Form/Element/InputImage.php</path>
+      <path action="M">Framework/Form/Element/InputPassword.php</path>
+      <path action="M">Framework/Form/Element/InputRadio.php</path>
+      <path action="M">Framework/Form/Element/InputReset.php</path>
+      <path action="M">Framework/Form/Element/InputSubmit.php</path>
+      <path action="M">Framework/Form/Element/InputText.php</path>
+      <path action="M">Framework/Form/Element/Label.php</path>
+      <path action="M">Framework/Form/Element/Legend.php</path>
+      <path action="M">Framework/Form/Element/Select.php</path>
+      <path action="M">Framework/Form/Element/SelectOptgroup.php</path>
+      <path action="M">Framework/Form/Element/SelectOption.php</path>
+      <path action="M">Framework/Form/Element/Textarea.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="86">
+    <author>hywan</author>
+    <date>2008-06-27T16:14:41.725091Z</date>
+    <msg>Cleaning.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Form.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="85">
+    <author>hywan</author>
+    <date>2008-06-27T14:13:35.207847Z</date>
+    <msg>Cleaning.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Fieldset.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="84">
+    <author>hywan</author>
+    <date>2008-06-27T12:53:11.735890Z</date>
+    <msg>Cleaning.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="83">
+    <author>hywan</author>
+    <date>2008-06-27T12:15:32.972668Z</date>
+    <msg>Add the __DIR__ constant for PHP &lt; 5.3</msg>
+    <paths>
+      <path action="M">Framework/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="80">
+    <author>hywan</author>
+    <date>2008-06-26T17:17:59.926785Z</date>
+    <msg>Edit the error output.</msg>
+    <paths>
+      <path action="M">Framework/Validate/Array.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="79">
+    <author>hywan</author>
+    <date>2008-06-26T17:03:01.194495Z</date>
+    <msg>Correct a bug.</msg>
+    <paths>
+      <path action="M">Framework/Validate/Ip.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="78">
+    <author>hywan</author>
+    <date>2008-06-26T16:53:21.625753Z</date>
+    <msg>Add the array support.</msg>
+    <paths>
+      <path action="A">Framework/Validate/Array.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="77">
+    <author>hywan</author>
+    <date>2008-06-26T16:53:06.918680Z</date>
+    <msg>Correct a bug.</msg>
+    <paths>
+      <path action="M">Framework/Validate/Float.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="73">
+    <author>hywan</author>
+    <date>2008-06-23T18:58:37.585427Z</date>
+    <msg>Ameliorate the argument support.</msg>
+    <paths>
+      <path action="M">Framework/Validate/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="72">
+    <author>hywan</author>
+    <date>2008-06-23T18:57:20.715284Z</date>
+    <msg>Change the constant, was incorrect.</msg>
+    <paths>
+      <path action="M">Framework/Validate/Empty.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="71">
+    <author>hywan</author>
+    <date>2008-06-23T12:41:19.692262Z</date>
+    <msg>Not usefull for now.</msg>
+    <paths>
+      <path action="D">Framework/Validate/UriHttp.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="70">
+    <author>hywan</author>
+    <date>2008-06-23T12:40:23.275619Z</date>
+    <msg>Regex will be replace by the users's validators.</msg>
+    <paths>
+      <path action="D">Framework/Validate/Regex.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="69">
+    <author>hywan</author>
+    <date>2008-06-21T17:07:23.681419Z</date>
+    <msg>Terminate the remake.</msg>
+    <paths>
+      <path action="M">Framework/Filter/Abstract.php</path>
+      <path action="M">Framework/Filter/Array.php</path>
+      <path action="M">Framework/Filter/Filter.php</path>
+      <path action="M">Framework/Filter/Tag.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="64">
+    <author>hywan</author>
+    <date>2008-06-19T16:58:03.750373Z</date>
+    <msg>Correct a PHP bug.</msg>
+    <paths>
+      <path action="M">Framework/Filter/Tag.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="63">
+    <author>hywan</author>
+    <date>2008-06-19T16:37:29.651580Z</date>
+    <msg>Edit the definition of operatione.</msg>
+    <paths>
+      <path action="M">Framework/Filter/Integer.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="62">
+    <author>hywan</author>
+    <date>2008-06-19T16:32:28.312155Z</date>
+    <msg>Edit the definition of doubleEncode.</msg>
+    <paths>
+      <path action="M">Framework/Filter/HtmlEntities.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="61">
+    <author>hywan</author>
+    <date>2008-06-19T16:25:52.823786Z</date>
+    <msg>Edit the definition of quoteStyle.</msg>
+    <paths>
+      <path action="M">Framework/Filter/HtmlEntities.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="60">
+    <author>hywan</author>
+    <date>2008-06-19T16:10:30.634546Z</date>
+    <msg>Change the constant value (more logical now).</msg>
+    <paths>
+      <path action="M">Framework/Filter/Integer.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="59">
+    <author>hywan</author>
+    <date>2008-06-19T15:56:34.607783Z</date>
+    <msg>Delete input. It's useless, Array make the same job.</msg>
+    <paths>
+      <path action="D">Framework/Filter/Input.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="58">
+    <author>hywan</author>
+    <date>2008-06-19T15:39:42.604516Z</date>
+    <msg>Remake all the package.</msg>
+    <paths>
+      <path action="A">Framework/Filter/Abstract.php</path>
+      <path action="M">Framework/Filter/Alpha.php</path>
+      <path action="M">Framework/Filter/AlphaNumeric.php</path>
+      <path action="M">Framework/Filter/Array.php</path>
+      <path action="M">Framework/Filter/Blank.php</path>
+      <path action="M">Framework/Filter/Exception.php</path>
+      <path action="M">Framework/Filter/Filter.php</path>
+      <path action="M">Framework/Filter/HtmlEntities.php</path>
+      <path action="M">Framework/Filter/Input.php</path>
+      <path action="M">Framework/Filter/Integer.php</path>
+      <path action="D">Framework/Filter/Interface.php</path>
+      <path action="M">Framework/Filter/Lower.php</path>
+      <path action="M">Framework/Filter/Null.php</path>
+      <path action="M">Framework/Filter/Space.php</path>
+      <path action="M">Framework/Filter/Tag.php</path>
+      <path action="M">Framework/Filter/Upper.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="57">
+    <author>hywan</author>
+    <date>2008-06-19T12:22:46.566264Z</date>
+    <msg>Correct some defaut with the inheritance of the abstract class.</msg>
+    <paths>
+      <path action="M">Framework/Validate/Validate.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="56">
+    <author>hywan</author>
+    <date>2008-06-19T10:59:35.010266Z</date>
+    <msg>Remove the import of Hoa_Validate_Exception, useless.</msg>
+    <paths>
+      <path action="M">Framework/Validate/Abstract.php</path>
+      <path action="M">Framework/Validate/Alpha.php</path>
+      <path action="M">Framework/Validate/AlphaNumeric.php</path>
+      <path action="M">Framework/Validate/Email.php</path>
+      <path action="M">Framework/Validate/Empty.php</path>
+      <path action="M">Framework/Validate/Float.php</path>
+      <path action="M">Framework/Validate/GreaterThan.php</path>
+      <path action="M">Framework/Validate/Hexa.php</path>
+      <path action="M">Framework/Validate/Integer.php</path>
+      <path action="M">Framework/Validate/Ip.php</path>
+      <path action="M">Framework/Validate/LessThan.php</path>
+      <path action="M">Framework/Validate/Lower.php</path>
+      <path action="M">Framework/Validate/Null.php</path>
+      <path action="M">Framework/Validate/StringLength.php</path>
+      <path action="M">Framework/Validate/Upper.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="55">
+    <author>hywan</author>
+    <date>2008-06-18T20:12:50.238138Z</date>
+    <msg>Finalize the package.</msg>
+    <paths>
+      <path action="M">Framework/Graph/AdjacencyList.php</path>
+      <path action="M">Framework/Graph/Graph.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="51">
+    <author>hywan</author>
+    <date>2008-06-18T19:47:56.704432Z</date>
+    <msg>Edit the __toString method. Language DOT wasnot correct.</msg>
+    <paths>
+      <path action="M">Framework/Graph/AdjacencyList.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="50">
+    <author>hywan</author>
+    <date>2008-06-18T19:36:04.314489Z</date>
+    <msg>Forget brackets …</msg>
+    <paths>
+      <path action="M">Framework/Acl/Acl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="49">
+    <author>hywan</author>
+    <date>2008-06-18T19:34:15.108053Z</date>
+    <msg>Add the DOT language support.</msg>
+    <paths>
+      <path action="M">Framework/Acl/Acl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="47">
+    <author>hywan</author>
+    <date>2008-06-18T19:04:41.886067Z</date>
+    <msg>Edit because of the Hoa_Graph modifications.</msg>
+    <paths>
+      <path action="M">Framework/Acl/Group.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="46">
+    <author>hywan</author>
+    <date>2008-06-18T17:11:23.328887Z</date>
+    <msg>Finalize the package.</msg>
+    <paths>
+      <path action="M">Framework/Graph/AdjacencyList.php</path>
+      <path action="M">Framework/Graph/Graph.php</path>
+      <path action="M">Framework/Graph/Node/SimpleNode.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="45">
+    <author>hywan</author>
+    <date>2008-06-18T16:29:00.931934Z</date>
+    <msg>Change the package.</msg>
+    <paths>
+      <path action="D">Framework/Graph/AdjacencyList</path>
+      <path action="M">Framework/Graph/AdjacencyList.php</path>
+      <path action="M">Framework/Graph/Graph.php</path>
+      <path action="A">Framework/Graph/Node</path>
+      <path action="R">Framework/Graph/Node/Interface.php</path>
+      <path action="R">Framework/Graph/Node/SimpleNode.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="44">
+    <author>hywan</author>
+    <date>2008-06-18T16:26:14.490804Z</date>
+    <msg>Change the package.</msg>
+    <paths>
+      <path action="M">Framework/Graph/AdjacencyList/Interface.php</path>
+      <path action="M">Framework/Graph/AdjacencyList/SimpleNode.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="43">
+    <author>hywan</author>
+    <date>2008-06-16T23:51:00.696439Z</date>
+    <msg>Add possibilities.</msg>
+    <paths>
+      <path action="M">Framework/Graph/AdjacencyList.php</path>
+      <path action="M">Framework/Graph/AdjacencyList/SimpleNode.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="39">
+    <author>hywan</author>
+    <date>2008-06-12T19:27:05.885158Z</date>
+    <msg>Last reading.</msg>
+    <paths>
+      <path action="M">Framework/Session/Flash.php</path>
+      <path action="M">Framework/Session/Option.php</path>
+      <path action="M">Framework/Session/Session.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="30">
+    <author>hywan</author>
+    <date>2008-06-11T11:02:39.190815Z</date>
+    <msg>Replace boolean per constants CONVERT_TO_OBJECT|ARRAY.</msg>
+    <paths>
+      <path action="M">Framework/Configuration/Array.php</path>
+      <path action="M">Framework/Configuration/Configuration.php</path>
+      <path action="M">Framework/Configuration/Ini.php</path>
+      <path action="M">Framework/Configuration/Xml.php</path>
+      <path action="M">Framework/Configuration/Yaml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="29">
+    <author>hywan</author>
+    <date>2008-06-11T10:46:52.046583Z</date>
+    <msg>Change die to exit method. Die is depreciated.</msg>
+    <paths>
+      <path action="M">Framework/Exception.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="27">
+    <author>hywan</author>
+    <date>2008-06-10T23:47:59.961071Z</date>
+    <msg>Correct some option name.</msg>
+    <paths>
+      <path action="M">Framework/Session/Option.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="26">
+    <author>hywan</author>
+    <date>2008-06-10T16:04:48.798720Z</date>
+    <msg>Add the getValue for a select element.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Select.php</path>
+      <path action="M">Framework/Form/Element/SelectOptgroup.php</path>
+      <path action="M">Framework/Form/Element/SelectOption.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="25">
+    <author>hywan</author>
+    <date>2008-06-10T15:31:26.290475Z</date>
+    <msg>Remove an empty line.</msg>
+    <paths>
+      <path action="M">Framework/Locale/Locale.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="24">
+    <author>hywan</author>
+    <date>2008-06-10T15:14:57.993556Z</date>
+    <msg>Correct a bug in the iterator.</msg>
+    <paths>
+      <path action="M">Framework/Form/Form.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="23">
+    <author>hywan</author>
+    <date>2008-06-10T15:14:37.910959Z</date>
+    <msg>Correct a bug in the iterator.</msg>
+    <paths>
+      <path action="M">Framework/Form/Form.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="22">
+    <author>hywan</author>
+    <date>2008-06-10T14:39:40.862121Z</date>
+    <msg>Correct a bug during the validation.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Abstract.php</path>
+      <path action="M">Framework/Form/Element/Select.php</path>
+      <path action="M">Framework/Form/Form.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="21">
+    <author>hywan</author>
+    <date>2008-06-10T12:26:29.670272Z</date>
+    <msg>Damned ! The bug 20221 is here …</msg>
+    <paths>
+      <path action="M">Framework/Form/Decorator/Select.php</path>
+      <path action="M">Framework/Form/Decorator/SelectOptgroup.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="20">
+    <author>hywan</author>
+    <date>2008-06-10T10:39:57.713382Z</date>
+    <msg>Change boundaries.</msg>
+    <paths>
+      <path action="M">Framework/Validate/StringLength.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="19">
+    <author>hywan</author>
+    <date>2008-06-10T10:35:32.753139Z</date>
+    <msg>Make the difference between integer and float.</msg>
+    <paths>
+      <path action="A">Framework/Validate/Float.php</path>
+      <path action="M">Framework/Validate/Integer.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="18">
+    <author>hywan</author>
+    <date>2008-06-09T16:39:51.320452Z</date>
+    <msg>Add the validator output support.</msg>
+    <paths>
+      <path action="M">Framework/Form/Decorator/InputCheckbox.php</path>
+      <path action="M">Framework/Form/Decorator/InputFile.php</path>
+      <path action="M">Framework/Form/Decorator/InputPassword.php</path>
+      <path action="M">Framework/Form/Decorator/InputRadio.php</path>
+      <path action="M">Framework/Form/Decorator/Select.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="17">
+    <author>hywan</author>
+    <date>2008-06-09T16:20:16.684622Z</date>
+    <msg>Remake the error management and write the most of the validator.</msg>
+    <paths>
+      <path action="M">Framework/Validate/Abstract.php</path>
+      <path action="M">Framework/Validate/Alpha.php</path>
+      <path action="M">Framework/Validate/AlphaNumeric.php</path>
+      <path action="M">Framework/Validate/Email.php</path>
+      <path action="M">Framework/Validate/Empty.php</path>
+      <path action="M">Framework/Validate/GreaterThan.php</path>
+      <path action="M">Framework/Validate/Hexa.php</path>
+      <path action="M">Framework/Validate/Integer.php</path>
+      <path action="M">Framework/Validate/Ip.php</path>
+      <path action="M">Framework/Validate/LessThan.php</path>
+      <path action="M">Framework/Validate/Lower.php</path>
+      <path action="M">Framework/Validate/StringLength.php</path>
+      <path action="M">Framework/Validate/Upper.php</path>
+      <path action="M">Framework/Validate/Validate.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="16">
+    <author>hywan</author>
+    <date>2008-06-09T16:18:17.929517Z</date>
+    <msg>2 bugs corrected : Mail does not exist, it is Hoa_Mail class, and add the set/get result method.</msg>
+    <paths>
+      <path action="M">Framework/Mail/Rfc882.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="15">
+    <author>hywan</author>
+    <date>2008-06-09T12:28:45.406119Z</date>
+    <msg>Add the get method and set up the iterator.</msg>
+    <paths>
+      <path action="M">Framework/Form/Form.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="14">
+    <author>hywan</author>
+    <date>2008-06-09T12:17:04.859738Z</date>
+    <msg>Remove useless code, correct getValue, and add getName methods.</msg>
+    <paths>
+      <path action="M">Framework/Form/Element/Abstract.php</path>
+      <path action="M">Framework/Form/Element/InputReset.php</path>
+      <path action="M">Framework/Form/Element/InputSubmit.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="13">
+    <author>hywan</author>
+    <date>2008-06-09T11:09:55.995367Z</date>
+    <msg>Forget to add the namespace expiration exception.</msg>
+    <paths>
+      <path action="A">Framework/Session/Exception/Namespace_Is_Expired.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="11">
+    <author>hywan</author>
+    <date>2008-06-08T18:51:30.346161Z</date>
+    <msg>Reset some option (bad default value).</msg>
+    <paths>
+      <path action="M">Framework/Session/Option.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="8">
+    <author>hywan</author>
+    <date>2008-06-08T12:25:52.176122Z</date>
+    <msg>Add fonctionnalities and tests.</msg>
+    <paths>
+      <path action="M">Framework/Session/Namespace.php</path>
+      <path action="M">Framework/Session/Session.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="6">
+    <author>hywan</author>
+    <date>2008-06-07T23:24:49.002756Z</date>
+    <msg>Add the new exception support.</msg>
+    <paths>
+      <path action="A">Framework/Session/Exception</path>
+      <path action="A">Framework/Session/Exception/Session_Is_Expired.php</path>
+      <path action="M">Framework/Session/Session.php</path>
+    </paths>
+  </logentry>
+</log>

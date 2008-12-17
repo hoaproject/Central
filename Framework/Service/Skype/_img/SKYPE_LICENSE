@@ -1,0 +1,109 @@
+Skype Component License 1.0
+===========================
+
+WHEREAS
+ * Skype has developed and distributes Skype Software and Skype APIs,
+   and owns the copyright in all Components thereof;
+ * You develop and distribute a software or hardware product that
+   works with a Skype API;
+ * Skype is willing to allow You to use certain Components of Skype
+   Software in order to ensure coherent user experience throughout
+   Skype Software and the Products;
+
+NOW THEREFORE, Skype enters into this License Agreement with You
+as follows:
+
+0. Definitions
+
+ * "Component": Icon or UI String.
+ * "Component Archive": an archive file created by Skype containing
+   individual Components, list of their associated Use Cases, and this
+   License.
+ * "Icon": a graphical representation of an Use Case.
+ * "Product": a software or hardware product designed by You to work
+   with a Skype API.
+ * "Skype": Skype Limited, an Irish limited company having its address
+   at Blanchardstown Corporate Park, !ServeCentric Unit 6, Dublin 15.
+ * "Skype API": an application program interface to Skype Software.
+ * "Skype Software": any computer program created by Skype.
+ * "UI String": a textual representation of an Use Case.
+ * "Use Case": requirements and/or specifications describing an action
+   or a state of Skype Software or a Product. The names of Components
+   in the Component Archive shall be relied on as Use Cases, unless
+   there is a more detailed specification/description in the Component
+   Archive, in which case the more detail description shall be relied
+   on as the prevailing Use Case.
+ * "You": the individual or legal entity who owns the copyright in a
+   Product.
+
+1. Grant of License
+
+Subject to the restrictions set forth in Article 2 below, Skype grants
+You a personal, non-exclusive, non-transferable, non-assignable,
+worldwide, revocable royalty-free license to incorporate individual
+Components into your Products and to distribute the Components along
+with your Products.
+
+2. Restrictions
+
+You must:
+ * use each Component to represent an action in, or a state of the
+   Product that is consistent with the Use Case associated with this
+   Component in the Component Archive;
+ * not modify the Components in any way (except if Your Product,
+   development tools or operating environment require the icons to be
+   stored in file formats other than PNG, then You may perform the
+   most lossless conversion to Your required file format);
+ * never use the name or any other trademarks of Skype to endorse or
+   promote your product without prior written permission from Skype.
+
+Your Product must:
+ * be designed to work with Skype APIs;
+ * be developed and distributed according to any then-current terms
+   and conditions covering the use of any Skype APIs concerned;
+ * not be reasonably considered to adversely affect the performance of
+   Skype Software or Skype Services, or to otherwise harm Skype's
+   brand or good name;
+ * reasonably allow its user to find Your contact details (Skype name
+   or e-mail address under which You can be reached when necessary)
+   from the user interface or documentation of the Product;
+ * reproduce, in the reasonable location of its user interface or
+   documentation, the entire disclaimer set forth in Article 4 below.
+
+If You distribute Your Product under an open-source license or any
+other license that permits making derivative works of the Product,
+then You must include the complete unmodified Component Archive with
+the source code of your Product.
+
+3. Termination
+
+If Skype becomes aware that Your Product violates any of the
+restrictions above or breaches any of the terms of this liencse, Skype
+will notify You of the violation and/or breach. If You fail to bring
+the Product into compliance with the above terms within 30days from
+the date of notification, this license will automatically terminate
+with regard to that Product. Upon termination you agree to immediately
+stop any further use and distribution of the icons. No party will be
+liable to any other for compensation, indemnity or damages of any sort
+solely as a result of terminating this license in accordance with its
+terms, and termination of this license will be without prejudice to
+any other right or remedy of any party.
+
+4. Disclaimer
+
+Portions copyright © 2004-2006 Skype Limited. All rights reserved.
+
+This product contains certain non-functional components that are
+property of Skype Limited (Skype). Skype has licensed these components
+to the creator of this product "as is" and disclaims any express or
+implied warranties, including but not limited to the implied
+warranties of merchantability and fitness for a particular purpose.
+In no event shall Skype or its contributors be liable for any direct,
+indirect, incidental, special, exemplary, or consequential damages
+(including, but not limited to, procurement of substitute goods or
+services; loss of use, data, or profits; or business interruption)
+however caused and on any theory of liability, whether in contract,
+strict liability, or tort (including negligence or otherwise) arising
+in any way out of the use of this product, even if advised of the
+possibility of such damage).
+

@@ -1,0 +1,122 @@
+                                 Hoa Framework
+                                 *************
+
+Summary
+-------
+
+  Installation  ...........................................................   21
+  One framework, two ways of using  .......................................   28
+    Set of libraries  .....................................................   31
+    Standalone mode  ......................................................   38
+  System requirement  .....................................................   47
+  Development versions  ...................................................   54
+  Configuring the include path  ...........................................   63
+  Content  ................................................................   85
+    Root  .................................................................   88
+    Changelog, dependencies etc.  .........................................   95
+    Configuration  ........................................................  114
+
+
+
+Installation
+------------
+
+Hoa  Framework  requires  no  special  installation  steps.  Simply download the
+framework archive, extract it, and the “installation” is over.
+
+
+One framework, two ways of using
+--------------------------------
+
+  Set of libraires
+
+Hoa  Framework  can  be  used  partially,  i.e.  you should used just one or two
+packages  (with their dependences), and included them in an other project. Then,
+the    command-line    is   useless,   the   /Data   folder   is   not   needed.
+In these conditions, Hoa is used like a set of libraries.
+
+  Standalone mode
+
+Hoa  Framework  can also be used entirely, i.e. with all these packages. In this
+case,    packages    will    search    their    configuration   files   in   the
+/Data/Configuration/Cache  folder  by  default  (and if exists) for example, the
+command-line  interface  will  be  operational  etc. In these conditions, Hoa is
+used like a frame for working (… a framework !).
+
+
+System requirement
+------------------
+
+Hoa Framework requires PHP 5.1.4 or later.
+Hoa Framework uses some SPL libraries, they must be present.
+
+
+Development versions
+--------------------
+
+Only  archived  snapshots  are online (please, go to <http://hoa-project.net> to
+get more details).
+The  SVN  support  is  currently (31 october 2008) down, but it will coming back
+soon.
+
+
+Configuring the include path
+----------------------------
+
+Once  a  copy of Hoa Framework is available, the application will need to access
+the  framework  classes.  Though there are several ways to achieve this, the PHP
+include_path  needs  to contains the path to the Hoa Framework classes under the
+/Framework directory.
+You  can  find  out  more  about the PHP include_path configuration directive at
+these addresses :
+    * http://php.net/ini.core ;
+    * http://php.net/set_include_path,
+or input :
+    $ php --rf set_include_path
+to get the function prototype.
+
+For example, your bootstrap file should contain :
+    set_include_path('./'            . PATH_SEPARATOR .
+                     './Application' . PATH_SEPARATOR .
+                     './Framework'   . PATH_SEPARATOR .
+                     get_include_path())
+
+
+Content
+-------
+
+  Root
+
+At the Hoa Framework root, we can find :
+    * /Data : that  contains  all  the “standalone” informations,  i.e. packages
+      configuration files, binaries, templates etc. ;
+    * /Framework : that contains libraries.
+
+  Changelog, dependencies etc.
+
+In  the  /Data/Etc  folder are placed the changelog and the dependency files (in
+many   formats).  Changelog  contains  a  historic  of  the  SVN  repository  in
+descending  order  of  revision  number.  Dependency  file  contains dependences
+for each package in the framework (if exist).
+Changelog and dependency files exist in many formats :
+    * plain text :  without  any  decorations, patterns, very easy to understand
+      for human reader ;
+    * .echo :  same  presentation  like  the  plain  text  format, but with some
+      colours.  Colours  will only be seen in a tty terminal, because we use the
+      \e[[0-9]+m format. To see it in the terminal, input :
+          /Data/Etc $ echo -e "`cat CHANGELOG.echo`"
+      or
+          /Data/Etc $ ./echoe CHANGELOG.echo
+      it is equivalent.
+    * .xml : structured presentation, very usefull for parsing, analysing,
+      sharing etc.
+
+  Configuration
+
+When  Hoa  is  used  in “standalone” mode, each package that need configurations
+will find it in the /Data/Configuration/Cache folder. Cache are in PHP format (a
+simple   array),   but   the   configurations  source  is  in  YAML  format,  in
+/Data/Configuration.
+To rebuild configuration cache files, input :
+    /Data/Bin $ ./hoa maintenance:cache
+By default, all caches are generated.

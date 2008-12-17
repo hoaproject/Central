@@ -1,0 +1,1 @@
+faire une classe Interface pour tous les packages Archive

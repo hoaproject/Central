@@ -1,0 +1,85 @@
+                     Dependencies of Hoa Framework packages
+                     **************************************
+
+
+Informations       :
+    - generated at : 2008-11-13T19:26:11.000000Z.
+
+
+Acl
+               Graph
+Archive
+               File
+Bench
+               (No dependency)
+Cache
+               File
+Compress
+               (No dependency)
+Configuration
+               StdClass
+               Xml
+               Yaml
+Console
+               (No dependency)
+Controller
+               View
+               Factory
+Database
+               (No dependency)
+Factory
+               (No dependency)
+File
+               (No dependency)
+Filter
+               Factory
+Form
+               Filter
+               Validate
+               Factory
+Graph
+               Factory
+I18n
+               (No dependency)
+Iterator
+               (No dependency)
+Locale
+               File
+Mail
+               Socket
+Mime
+               (No dependency)
+Registry
+               (No dependency)
+Service
+               Xml
+Session
+               (No dependency)
+Socket
+               (No dependency)
+Stack
+               (No dependency)
+StdClass
+               (No dependency)
+Translate
+               File
+               Registry
+               Factory
+Uri
+               (No dependency)
+Validate
+               Mail
+               Factory
+Version
+               (No dependency)
+View
+               (No dependency)
+Xml
+               (No dependency)
+XmlRpc
+               Uri
+               Socket
+               File
+               Xml
+Yaml
+               (No dependency)

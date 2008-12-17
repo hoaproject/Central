@@ -1,0 +1,1 @@
+On va avoir un soucis entre http et https car ce sera la même classe : faire quelque chose.

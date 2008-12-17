@@ -1,0 +1,39 @@
+# System configuration.
+system:
+  group:
+    default:     Main
+  command:
+    default:     Welcome
+
+# Route configuration.
+route:
+  directory:     Command/
+  grpcmd:
+    "separator": :
+
+# Pattern configuration.
+pattern:
+  group:         "(:Group)"
+  command:
+    name:        "(:Command)"
+    file:        "(:Command)"
+    class:       "(:Command)Command"
+
+# Prompt configuration.
+prompt:
+  prefix: 
+  symbol:        "> "
+
+# CLI configuration.
+cli:
+  longonly:      true
+
+# Interface configuration.
+interface:
+  style:
+    directory:   Style/
+
+# Command (system) configuration.
+command:
+  php:           php
+  browser:       open

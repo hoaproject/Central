@@ -1,0 +1,69 @@
+                                 Hoa Framework
+                                 *************
+
+Summary
+-------
+
+  Introduction  ............................................................  19
+  Release informations  ....................................................  27
+  Special notices for upgrading  ...........................................  34
+    0.3.7b to 0.4.0b  ......................................................  37
+  New features in 0.4.0b  ..................................................  44
+  Installation  ............................................................  55
+  Project  .................................................................  58
+    Site, manuals, download, communauty etc.  ..............................  61
+    License  ...............................................................  67
+
+
+
+Introduction
+------------
+
+Welcome  to  Hoa  Framework  0.4.0b.  This is the maintenance release of the Hoa
+Framework   0.x  series  since  the  0.3.7b  version.  Please,  read  with  much
+attention special notices.
+
+
+Release informations
+--------------------
+
+Hoa Framework 0.4.0b (448).
+Released on 31 october 2008.
+
+
+Special notices for upgrading
+-----------------------------
+
+  0.3.7b to 0.4.0b
+
+After  remaking  the  importation  system,  certain  packages have to be renamed
+because  they  were not following Hoa naming conventions. Please, read revisions
+301, 300, and 225, thank you :
+    /Data/Bin $ ./hoa changelog -r 301,300,225 -t -c
+
+New features in 0.4.0b
+----------------------
+
+Please,  read  the  changelog  from  the previous revision number to the current
+prevision number :
+    /Data/Bin $ ./hoa changelog -r HEAD:PREV -t -c
+
+
+Installation
+------------
+
+Please, read /INSTALL.
+
+
+Project
+-------
+
+  Site, manuals, download, communauty etc.
+
+Hoa   Framework   web   site   should  be  found  at  the  following  address  :
+<http://hoa-project.net>.   At   this  address  is  placed  differents  manuals,
+download section, communauty support etc.
+
+  License
+
+Hoa Framework is under the GNU GPL v3 license. Please, read /LICENSE.

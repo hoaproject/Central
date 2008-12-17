@@ -1,0 +1,85 @@
+                     \e[34mDependencies of Hoa Framework packages\e[0m
+                     **************************************
+
+
+\e[31mInformations\e[0m       :
+    - generated at : 2008-11-13T19:26:11.000000Z.
+
+
+\e[33mAcl\e[0m
+               Graph
+\e[33mArchive\e[0m
+               File
+\e[33mBench\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mCache\e[0m
+               File
+\e[33mCompress\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mConfiguration\e[0m
+               StdClass
+               Xml
+               Yaml
+\e[33mConsole\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mController\e[0m
+               View
+               Factory
+\e[33mDatabase\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mFactory\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mFile\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mFilter\e[0m
+               Factory
+\e[33mForm\e[0m
+               Filter
+               Validate
+               Factory
+\e[33mGraph\e[0m
+               Factory
+\e[33mI18n\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mIterator\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mLocale\e[0m
+               File
+\e[33mMail\e[0m
+               Socket
+\e[33mMime\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mRegistry\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mService\e[0m
+               Xml
+\e[33mSession\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mSocket\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mStack\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mStdClass\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mTranslate\e[0m
+               File
+               Registry
+               Factory
+\e[33mUri\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mValidate\e[0m
+               Mail
+               Factory
+\e[33mVersion\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mView\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mXml\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mXmlRpc\e[0m
+               Uri
+               Socket
+               File
+               Xml
+\e[33mYaml\e[0m
+               \e[31m(No dependency)\e[0m
