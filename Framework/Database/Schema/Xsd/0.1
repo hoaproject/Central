@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xsd:targetNamespace="http://lily.hoa-project.net/">
+
+  <xsd:annotation>
+    <xsd:documentation xml:lang="en">
+      GNU General Public License
+
+      This file is part of HOA Open Accessibility.
+      Copyright (c) 2007, 2008 Ivan ENDERLIN. All rights reserved.
+
+      HOA Open Accessibility is free software; you can redistribute it and/or
+      modify it under the terms of the GNU General Public License as published by
+      the Free Software Foundation; either version 2 of the License, or
+      (at your option) any later version.
+
+      HOA Open Accessibility is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+
+      You should have received a copy of the GNU General Public License
+      along with HOA Open Accessibility; if not, write to the Free Software
+      Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    </xsd:documentation>
+  </xsd:annotation>
+
+  <xsd:annotation>
+    <xsd:documentation xml:lang="en">
+      author      Ivan ENDERLIN &lt;ivan.enderlin@hoa-project.net&gt;
+      copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
+      license     http://gnu.org/licenses/gpl.txt GNU GPL
+      version     0.1
+    </xsd:documentation>
+  </xsd:annotation>
+
+  <xsd:simpleType      name="category">
+    <xsd:restriction   base="xsd:string">
+      <xsd:enumeration value="string" />
+      <xsd:enumeration value="national_string" />
+      <xsd:enumeration value="exact" />
+      <xsd:enumeration value="approched" />
+      <xsd:enumeration value="integer" />
+      <xsd:enumeration value="binary" />
+      <xsd:enumeration value="temporal" />
+      <xsd:enumeration value="datetime" />
+      <xsd:enumeration value="boolean" />
+      <xsd:enumeration value="clob" />
+      <xsd:enumeration value="blob" />
+      <xsd:enumeration value="structure" />
+      <xsd:enumeration value="udt" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType      name="foreignId">
+    <xsd:restriction   base="xsd:string">
+      <xsd:pattern     value="(.*)\.(.*)" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType      name="formattedStr">
+    <xsd:restriction   base="xsd:string">
+      <xsd:whiteSpace  value="collapse" />
+      <xsd:length      value="255" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+
+  <xsd:complexType name="base">
+    <xsd:sequence>
+      <xsd:element name="comment"     type="comment"      minOccurs="0"  maxOccurs="unbounded" />
+      <xsd:element name="table"       type="table"        minOccurs="1"  maxOccurs="unbounded" />
+    </xsd:sequence>
+
+    <xsd:attribute name="name"        type="xsd:ID"       use="required" />
+  </xsd:complexType>
+
+  <xsd:complexType name="table">
+    <xsd:sequence>
+      <xsd:element name="row"         type="row"          minOccurs="1"  maxOccurs="unbounded" />
+    </xsd:sequence>
+
+    <xsd:attribute name="name"        type="xsd:string"   use="required" />
+  </xsd:complexType>
+
+  <xsd:complexType name="row">
+    <xsd:attribute name="type"        type="xsd:string"   use="required" />
+    <xsd:attribute name="category"    type="xsd:string"   use="optional" />
+    <xsd:attribute name="null"        type="xsd:boolean"  use="optional" default="false" />
+    <xsd:attribute name="primary"     type="xsd:boolean"  use="optional" default="false" />
+    <xsd:attribute name="unique"      type="xsd:boolean"  use="optional" default="false" />
+    <xsd:attribute name="index"       type="xsd:boolean"  use="optional" default="false" />
+    <xsd:attribute name="foreign"     type="foreignId"    use="optional" />
+    <xsd:attribute name="increment"   type="xsd:boolean"  use="optional" default="false" />
+    <xsd:attribute name="charset"     type="xsd:string"   use="optional" default="utf8" />
+    <xsd:attribute name="charcollate" type="xsd:string"   use="optional" default="utf8_bin" />
+    <xsd:attribute name="check"       type="xsd:string"   use="optional" />
+    <xsd:attribute name="comment"     type="formattedStr" use="optional" />
+  </xsd:complexType>
+
+  <xsd:complexType name="comment">
+    <xsd:element   name="author"      type="formattedStr" use="required">
+    <xsd:element   name="mail"        type="formattedStr" use="optional">
+    <xsd:element   name="copyright"   type="formattedStr" use="optional">
+    <xsd:element   name="license"     type="formattedStr" use="optional">
+    <xsd:element   name="version"     type="formattedStr" use="optional">
+  </xsd:complexType>
+
+  <xsd:element     name="database"    type="base" />
+</xsd:schema>
