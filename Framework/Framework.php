@@ -416,7 +416,7 @@ class Hoa_Framework {
      *         'a.b.c' => 'd',
      *         'a.b.e' => 'f',
      *         'a.g'   => 'h',
-     *         'x'     => y
+     *         'x'     => 'y'
      *     )
      * The method returns a string, and not the array. To get the array, please,
      * see the self::getLinearizedConfiguration() method.
