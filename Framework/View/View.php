@@ -55,7 +55,7 @@ import('View.Helper.Abstract');
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
- * @version     0.1
+ * @version     0.2
  * @package     Hoa_View
  */
 
@@ -109,6 +109,13 @@ class Hoa_View {
      * @var Hoa_View string
      */
     protected $helperDirectory = null;
+
+    /**
+     * Router.
+     *
+     * @var Hoa_Controller_Router_Standard object
+     */
+    protected $router          = null;
 
     /**
      * View variables.
@@ -232,6 +239,32 @@ class Hoa_View {
         $this->helperDirectory = $directory;
 
         return $old;
+    }
+
+    /**
+     * Set router.
+     *
+     * @access  public
+     * @param   Hoa_Controller_Router_Standard  $router    Router.
+     * @return  Hoa_Controller_Router_Standard
+     */
+    public function setRouter ( Hoa_Controller_Router_Standard $router ) {
+
+        $old          = $this->router;
+        $this->router = $router;
+
+        return $old;
+    }
+
+    /**
+     * Get router.
+     *
+     * @access  protected
+     * @return  Hoa_Controller_Router_Standard
+     */
+    protected function getRouter ( ) {
+
+        return $this->router;
     }
 
     /**
@@ -409,5 +442,18 @@ class Hoa_View {
         }
 
         return $return;
+    }
+
+    /**
+     * Built a path according to router parameters.
+     *
+     * @access  public
+     * @param   array   $values    Path values.
+     * @param   string  $rule      Specific rule name.
+     * @return  string
+     */
+    public function buildPath ( Array $values = array(), $rule = null ) {
+
+        return $this->getRouter()->build($values, $rule);
     }
 }
