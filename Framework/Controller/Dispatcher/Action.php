@@ -58,35 +58,35 @@ class Hoa_Controller_Dispatcher_Action {
      *
      * @var Hoa_Controller_Response_Standard object
      */
-    protected $response = null;
+    protected $response    = null;
 
     /**
      * View.
      *
      * @var Hoa_View object
      */
-    protected $view = null;
+    protected $view        = null;
 
     /**
      * Request.
      *
      * @var Hoa_Controller_Request_Abstract object
      */
-    private $_request = null;
+    private $_request      = null;
 
     /**
      * Dispatcher.
      *
      * @var Hoa_Controller_Dispatcher_Abstract object
      */
-    private $_dispatcher = null;
+    private $_dispatcher   = null;
 
     /**
      * Router pattern.
      *
      * @var Hoa_Controller_Router_Pattern object
      */
-    protected $_pattern = null;
+    protected $_pattern    = null;
 
     /**
      * Magics variables (but used for attached objects).
@@ -101,11 +101,12 @@ class Hoa_Controller_Dispatcher_Action {
      * Set objects.
      *
      * @access  public
-     * @param   object  $request            Hoa_Controller_Request_Abstract.
-     * @param   object  $dispatcher         Hoa_Controller_Dispatcher_Abstract.
-     * @param   object  $response           Hoa_Controller_Response_Standard.
-     * @param   object  $view               Hoa_View.
-     * @param   object  $attachedObjects    ArrayObject of attached objects.
+     * @param   Hoa_Controller_Request_Abstract     $request            Request.
+     * @param   Hoa_Controller_Dispatcher_Abstract  $dispatcher         Dispatcher.
+     * @param   Hoa_Controller_Response_Standard    $response           Response.
+     * @param   Hoa_View                            $view               View.
+     * @param   ArrayObject                         $attachedObjects    Attached
+     *                                                                  objects.
      * @return  void
      */
     public function __construct ( Hoa_Controller_Request_Abstract    $request,
@@ -116,7 +117,7 @@ class Hoa_Controller_Dispatcher_Action {
 
         $this->_request    = $request;
         $this->_dispatcher = $dispatcher;
-        $this->_pattern    = new Hoa_Controller_Router_Pattern;
+        $this->_pattern    = new Hoa_Controller_Router_Pattern();
         $this->response    = $response;
         $this->view        = $view;
 

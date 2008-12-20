@@ -43,6 +43,11 @@ require_once 'Framework.php';
 import('Controller.Router.Interface');
 
 /**
+ * Hoa_Controller_Exception
+ */
+import('Controller.Exception');
+
+/**
  * Class Hoa_Controller_Router_Rewrite.
  *
  * The rewrite router ameliorates the using of URLs rewriting.
@@ -51,7 +56,7 @@ import('Controller.Router.Interface');
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
- * @version     0.1
+ * @version     0.2
  * @package     Hoa_Controller
  * @subpackage  Hoa_Controller_Router_Rewrite
  */
@@ -86,6 +91,13 @@ class Hoa_Controller_Router_Rewrite implements Hoa_Controller_Router_Interface {
      */
     protected $_base       = null;
 
+    /**
+     * The rule.
+     *
+     * @var Hoa_Controller_Router_Rewrite array
+     */
+    protected $_theRule    = null;
+
 
 
     /**
@@ -102,17 +114,67 @@ class Hoa_Controller_Router_Rewrite implements Hoa_Controller_Router_Interface {
         $this->setBase();
         $this->setUrl();
 
-        $rules      = $this->prepareASetOfRules($parameters);
-        $candidates = $this->findCandidatesRules($rules);
-        $theRule    = $this->findTheRule($candidates);
+        $rules          = $this->prepareASetOfRules($parameters);
+        $candidates     = $this->findCandidatesRules($rules);
+        $theRule        = $this->findTheRule($candidates);
 
         if(null === $theRule)
             throw new Hoa_Controller_Exception(
                 'No rule was adapted.', 0);
 
-        $return     = $this->completeWithDefaultValue($theRule);
+        $this->_theRule = $theRule;
+        $return         = $this->completeWithDefaultValue($theRule);
 
         return current($return);
+    }
+
+    /**
+     * Build a path.
+     *
+     * @access  public
+     * @param   array   $parameters    Parameters of the router.
+     * @param   array   $data          Current data.
+     * @param   array   $values        Values of path.
+     * @param   sting   $rule          Specific rule name.
+     * @return  string
+     * @throw   Hoa_Controller_Exception
+     */
+    public function build ( Array $parameters = array(),
+                            Array $data       = array(),
+                            Array $values     = array(),
+                                  $rule       = null ) {
+
+        if(null === $rule)
+            $rule = key($this->_theRule);
+        $out      = $parameters['rules'][$rule]['pattern'];
+
+        if(!isset($parameters['rules'][$rule]['default']))
+            $parameters['rules'][$rule]['default'] = array();
+
+        foreach($parameters['rules'][$rule]['default'] as $name => $value)
+            if(!array_key_exists($name, $values))
+                $values[$name] = $value;
+
+        foreach($values as $name => $value) {
+
+            if($value == '(:current)')
+                if(isset($data[$name]))
+                    $value = $data[$name];
+                else
+                    throw new Hoa_Controller_Exception(
+                        'The current value of %s does not exist.', 1,
+                        $name);
+            elseif($value == '\\(:current)')
+                $value = '(:current)';
+
+            $out = str_replace(
+                       '(:' . $name . ')',
+                       urlencode(ucfirst($value)),
+                       $out
+                   );
+        }
+
+        return $parameters['base'] . $out;
     }
 
     /**
@@ -127,11 +189,11 @@ class Hoa_Controller_Router_Rewrite implements Hoa_Controller_Router_Interface {
 
         if(!isset($parameters['rules']))
             throw new Hoa_Controller_Exception(
-                'Rules must be defined.', 1);
+                'Rules must be defined.', 2);
 
         if(empty($parameters['rules']))
             throw new Hoa_Controller_Exception(
-                'At least, one rule must be defined', 2);
+                'At least, one rule must be defined', 3);
 
         $return = array();
         foreach($parameters['rules'] as $name => $patdef)
@@ -201,7 +263,7 @@ class Hoa_Controller_Router_Rewrite implements Hoa_Controller_Router_Interface {
                                     $newPattern, $foo,
                                     PREG_SET_ORDER))
                 throw new Hoa_Controller_Exception(
-                    'Cannot split the new pattern : %s.', 3, $newPattern);
+                    'Cannot split the new pattern : %s.', 4, $newPattern);
 
             $handle = array();
             foreach($foo as $key => $splitted) {
@@ -416,12 +478,12 @@ class Hoa_Controller_Router_Rewrite implements Hoa_Controller_Router_Interface {
 
         if(!isset($_SERVER['REQUEST_URI']))
             throw new Hoa_Controller_Exception(
-                'REQUEST_URI variable is not defined.', 4);
+                'REQUEST_URI variable is not defined.', 5);
 
         if(0 === preg_match('#^' . $this->getBase() . '(.*)?$#',
                             $_SERVER['REQUEST_URI'], $elements))
             throw new Hoa_Controller_Exception(
-                'Cannot match the base %s.', 5, $this->getBase());
+                'Cannot match the base %s.', 6, $this->getBase());
 
         $old        = $this->_url;
         $this->_url = $elements[1];

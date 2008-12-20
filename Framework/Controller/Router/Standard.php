@@ -58,6 +58,11 @@ import('Controller.Exception.RouterFactory');
 import('Controller.Exception.RouterDoesNotReturnAnArray');
 
 /**
+ * Hoa_Controller_Exception_RouterDoesNotReturnAString
+ */
+import('Controller.Exception.RouterDoesNotReturnAString');
+
+/**
  * Hoa_Factory
  */
 import('Factory.~');
@@ -72,55 +77,54 @@ import('Factory.~');
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
- * @version     0.2
+ * @version     0.3
  * @package     Hoa_Controller
  * @subpackage  Hoa_Controller_Router_Standard
  */
 
-class Hoa_Controller_Router_Standard extends    Hoa_Controller_Router_Pattern
-                                     implements Hoa_Controller_Router_Interface {
+class Hoa_Controller_Router_Standard extends Hoa_Controller_Router_Pattern {
 
     /**
      * Request.
      *
      * @var Hoa_Controller_Router_Standard object
      */
-    protected $_request = null;
+    protected $_request            = null;
 
     /**
      * Data array.
      *
      * @var Hoa_Controller_Router_Standard array
      */
-    protected $dataArray = null;
+    protected $dataArray           = null;
 
     /**
      * Directory.
      *
      * @var Hoa_Controller_Router_Standard string
      */
-    protected $directory = null;
+    protected $directory           = null;
 
     /**
      * Controller value.
      *
      * @var Hoa_Controller_Router_Standard string
      */
-    protected $controllerValue = null;
+    protected $controllerValue     = null;
 
     /**
      * Controller class.
      *
      * @var Hoa_Controller_Router_Standard string
      */
-    protected $controllerClass = null;
+    protected $controllerClass     = null;
 
     /**
      * Controller file.
      *
      * @var Hoa_Controller_Router_Standard string
      */
-    protected $controllerFile = null;
+    protected $controllerFile      = null;
 
     /**
      * Controller directory.
@@ -134,54 +138,45 @@ class Hoa_Controller_Router_Standard extends    Hoa_Controller_Router_Pattern
      *
      * @var Hoa_Controller_Router_Standard string
      */
-    protected $actionValue = null;
+    protected $actionValue         = null;
 
     /**
      * Action class.
      *
      * @var Hoa_Controller_Router_Standard string
      */
-    protected $actionClass = null;
+    protected $actionClass         = null;
 
     /**
      * Action method.
      *
      * @var Hoa_Controller_Router_Standard string
      */
-    protected $actionMethod = null;
+    protected $actionMethod        = null;
 
     /**
      * Action file.
      *
      * @var Hoa_Controller_Router_Standard string
      */
-    protected $actionFile = null;
-
-
+    protected $actionFile          = null;
 
     /**
-     * Set request to Hoa_Controller_Router_Standard.
+     * Specific router.
      *
-     * @access  public
-     * @param   object  $request    Hoa_Controller_Request_Abstract
-     * @return  object
+     * @var Hoa_Controller_Router_Interface object
      */
-    public function setRequest ( Hoa_Controller_Request_Abstract $request ) {
+    protected $router              = null;
 
-        $this->resetObject();
-        $this->_request  = $request;
 
-        return $this;
-    }
 
     /**
      * Start router.
      *
      * @access  public
-     * @param   array   $parameters    Just to be compatible with the interface.
      * @return  void
      */
-    public function route ( Array $parameters = array() ) {
+    public function route ( ) {
 
         $this->_request->setParameter(
             'data.array'          , $this->getDataArray());
@@ -215,41 +210,118 @@ class Hoa_Controller_Router_Standard extends    Hoa_Controller_Router_Pattern
     }
 
     /**
+     * Build a path.
+     *
+     * @access  public
+     * @param   array   $values    Values of path.
+     * @param   string  $rule      Specific rule name.
+     * @return  string
+     * @throw   Hoa_Controller_Exception_RouterDoesNotReturnAString
+     */
+    public function build ( Array $values = array(), $rule = null ) {
+
+        $return = $this->getRouter()->build(
+                      $this->_request->getParameter('route.parameter'),
+                      $this->getDataArray(),
+                      $values,
+                      $rule
+                  );
+
+        if(!is_string($return))
+            throw new Hoa_Controller_Exception_RouterDoesNotReturnAString(
+                'Router %s does not return a string.', 0,
+                $this->_request->getParameter('route.type'));
+
+        return $return;
+    }
+
+    /**
+     * Set request to Hoa_Controller_Router_Standard.
+     *
+     * @access  public
+     * @param   Hoa_Controller_Request_Abstract  $request    Request.
+     * @return  Hoa_Controller_Request_Abstract
+     */
+    public function setRequest ( Hoa_Controller_Request_Abstract $request ) {
+
+        $this->resetObject();
+        $this->_request = $request;
+
+        return $this;
+    }
+
+    /**
+     * Set specific router.
+     *
+     * @access  protected
+     * @return  Hoa_Controller_Router_Interface
+     * @throw   Hoa_Controller_Exception_RouterFactory
+     */
+    protected function setRouter ( ) {
+
+        $old    = $this->router;
+        $router = null;
+
+        try {
+
+            $router = Hoa_Factory::get(
+                          'Controller.Router',
+                          $this->_request->getParameter('route.type'),
+                          array(),
+                          '__construct',
+                          'Hoa_Controller_Router_Interface'
+                      );
+        }
+        catch ( Hoa_Factory_Exception $e ) {
+
+            throw new Hoa_Controller_Exception_RouterFactory(
+                $e->getFormattedMessage(), $e->getCode());
+        }
+
+        $this->router = $router;
+
+        return $old;
+    }
+
+    /**
+     * Get the specific router.
+     *
+     * @access  public
+     * @return  Hoa_Controller_Router_Interface
+     */
+    public function getRouter ( ) {
+
+        if(null === $this->router)
+            $this->setRouter();
+
+        return $this->router;
+    }
+
+    /**
      * Set data array.
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Controller_Exception_RouterFactory
      * @throw   Hoa_Controller_Exception_RouterDoesNotReturnAnArray
-     * @throw   Hoa_Controller_Exception
      */
     public function setDataArray ( ) {
 
         $return      = null;
-        $routerType  = $this->_request->getParameter('route.type');
-        $routerParam = array($this->_request->getParameter('route.parameter'));
         $personal    = $this->_request->getParameter('data.array.personal');
 
         if(null === $personal) {
 
-            try {
-
-                $return = Hoa_Factory::get('Controller.Router',
-                                           $routerType, $routerParam, 'route',
-                                           'Hoa_Controller_Router_Interface');
-            }
-            catch ( Hoa_Factory_Exception $e ) {
-
-                throw new Hoa_Controller_Exception_RouterFactory(
-                    $e->getMessage(), $e->getCode());
-            }
+            $return = $this->getRouter()->route(
+                          $this->_request->getParameter('route.parameter')
+                      );
         }
         else
             $return = $personal;
 
         if(!is_array($return))
             throw new Hoa_Controller_Exception_RouterDoesNotReturnAnArray(
-                'Router %s does not return an array.', 0, $routerType);
+                'Router %s does not return an array.', 1,
+                $this->_request->getParameter('route.type'));
 
         $old             = $this->dataArray;
         $this->dataArray = $return;

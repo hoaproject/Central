@@ -92,7 +92,7 @@ import('View.~');
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
- * @version     0.2
+ * @version     0.3
  * @package     Hoa_Controller
  * @subpackage  Hoa_Controller_Front
  */
@@ -436,7 +436,9 @@ class Hoa_Controller_Front {
                 /**
                  * Set request to dispatch, and run dispatch.
                  */
-                $dispatch       = $dispatcher->setRequest($request)->dispatch();
+                $dispatch       = $dispatcher->setRequest($request)
+                                             ->setRouterToView($router)
+                                             ->dispatch();
 
                 /**
                  * Notify post dispatcher.
@@ -475,7 +477,7 @@ class Hoa_Controller_Front {
      */
     protected function getRouter ( ) {
 
-        return new Hoa_Controller_Router_Standard;
+        return new Hoa_Controller_Router_Standard();
     }
 
     /**
@@ -486,7 +488,7 @@ class Hoa_Controller_Front {
      */
     protected function getDispatcher ( ) {
 
-        return new Hoa_Controller_Dispatcher_Abstract;
+        return new Hoa_Controller_Dispatcher_Abstract();
     }
 
     /**
@@ -497,7 +499,7 @@ class Hoa_Controller_Front {
      */
     protected function getResponse ( ) {
 
-        return new Hoa_Controller_Response_Standard;
+        return new Hoa_Controller_Response_Standard();
     }
 
     /**

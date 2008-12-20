@@ -64,7 +64,7 @@ class Hoa_Controller_Response_Standard {
      *
      * @var Hoa_Controller_Response_Standard array
      */
-    protected $output = array();
+    protected $output  = array();
 
     /**
      * Output pointer.
@@ -86,8 +86,8 @@ class Hoa_Controller_Response_Standard {
      * Create a new output (but not delete previous output).
      *
      * @access  public
-     * @param   string  pointer    Name of pointer.
-     * @return  object
+     * @param   string  $pointer    Name of pointer.
+     * @return  Hoa_Controller_Response_Standard
      * @throw   Hoa_Controller_Exception_ResponsePointerAlreadyExists
      * @throw   Hoa_Controller_Exception
      */
@@ -99,6 +99,7 @@ class Hoa_Controller_Response_Standard {
                 0, $pointer);
 
         if(null === $pointer) {
+
             $this->output[] = null;
             end($this->output);
             $pointer = key($this->output);

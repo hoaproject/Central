@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Controller
- * @subpackage  Hoa_Controller_Router_Interface
+ * @subpackage  Hoa_Controller_Exception_RouterDoesNotReturnAString
  *
  */
 
@@ -38,42 +38,22 @@
 require_once 'Framework.php';
 
 /**
- * Class Hoa_Controller_Router_Interface.
+ * Hoa_Controller_Exception
+ */
+import('Controller.Exception');
+
+/**
+ * Class Hoa_Controller_Exception_RouterDoesNotReturnAString.
  *
- * Router interface.
+ * Extending the Hoa_Controller_Exception class.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
- * @version     0.3
+ * @version     0.1
  * @package     Hoa_Controller
- * @subpackage  Hoa_Controller_Router_Interface
+ * @subpackage  Hoa_Controller_Exception_RouterDoesNotReturnAString
  */
 
-interface Hoa_Controller_Router_Interface {
-
-    /**
-     * Start the routing.
-     *
-     * @access  public
-     * @param   array   $parameters    Parameters of the router.
-     * @return  array
-     */
-    public function route ( Array $parameters = array() );
-
-    /**
-     * Build a path.
-     *
-     * @access  public
-     * @param   array   $parameters    Parameters of the router.
-     * @param   array   $data          Current data.
-     * @param   array   $values        Values of path.
-     * @param   string  $rule          Specific rule name.
-     * @return  string
-     */
-    public function build ( Array $parameters = array(),
-                            Array $data       = array(),
-                            Array $values     = array(),
-                                  $rule       = null );
-}
+class Hoa_Controller_Exception_RouterDoesNotReturnAString extends Hoa_Controller_Exception { }

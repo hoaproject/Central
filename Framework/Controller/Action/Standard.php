@@ -54,7 +54,7 @@ import('Controller.Dispatcher.Action');
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
- * @version     0.1
+ * @version     0.2
  * @package     Hoa_Controller
  * @subpackage  Hoa_Controller_Action_Standard
  */
@@ -103,11 +103,12 @@ class Hoa_Controller_Action_Standard extends Hoa_Controller_Dispatcher_Action {
      * Prepare autoload model, and set view parameters.
      *
      * @access  public
-     * @param   object  $request            Hoa_Controller_Request_Abstract.
-     * @param   object  $dispatcher         Hoa_Controller_Dispatcher_Abstract.
-     * @param   object  $response           Hoa_Controller_Response_Standard.
-     * @param   object  $view               Hoa_View.
-     * @param   object  $attachedObjects    ArrayObject of attached objects.
+     * @param   Hoa_Controller_Request_Abstract     $request            Request.
+     * @param   Hoa_Controller_Dispatcher_Abstract  $dispatcher         Dispatcher.
+     * @param   Hoa_Controller_Response_Standard    $response           Response.
+     * @param   Hoa_View                            $view               View.
+     * @param   ArrayObject                         $attachedObjects    Attached
+     *                                                                  objects.
      * @return  void
      */
     public function __construct ( Hoa_Controller_Request_Abstract    $request,
@@ -314,5 +315,18 @@ class Hoa_Controller_Action_Standard extends Hoa_Controller_Dispatcher_Action {
             $this->setViewHelperDirectory();
 
         return $this->viewHelperDirectory;
+    }
+
+    /**
+     * Build a path.
+     *
+     * @access  public
+     * @param   array   $values    Values of path.
+     * @param   string  $rule      Specific rule name.
+     * @return  string
+     */
+    public function buildPath ( Array $values = array(), $rule = null ) {
+
+        return $this->view->buildPath($values, $rule);
     }
 }

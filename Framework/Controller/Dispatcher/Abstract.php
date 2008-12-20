@@ -75,7 +75,7 @@ import('Controller.Exception.Reflection');
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
- * @version     0.1
+ * @version     0.2
  * @package     Hoa_Controller
  * @subpackage  Hoa_Controller_Dispatcher_Abstract
  */
@@ -87,14 +87,14 @@ class Hoa_Controller_Dispatcher_Abstract {
      *
      * @var Hoa_Controller_Request_Abstract object
      */
-    protected $_request = null;
+    protected $_request        = null;
 
     /**
      * Response.
      *
      * @var Hoa_Controller_Response_Standard object
      */
-    protected $_response = null;
+    protected $_response       = null;
 
     /**
      * Attached objects.
@@ -108,14 +108,14 @@ class Hoa_Controller_Dispatcher_Abstract {
      *
      * @var Hoa_View object
      */
-    protected $_view = null;
+    protected $_view           = null;
 
     /**
      * Dispatch.
      *
      * @var Hoa_Controller_Dispatcher_Abstract mixed
      */
-    protected $_dispatch = '';
+    protected $_dispatch       = '';
 
 
 
@@ -124,8 +124,8 @@ class Hoa_Controller_Dispatcher_Abstract {
      * Return $this for fluide interface.
      *
      * @access  public
-     * @param   object  $response    Hoa_Controller_Response_Standard.
-     * @return  object
+     * @param   Hoa_Controller_Response_Standard  $response    Response.
+     * @return  Hoa_Controller_Dispatcher_Abstract
      */
     public function setResponse ( Hoa_Controller_Response_Standard $response ) {
 
@@ -139,8 +139,8 @@ class Hoa_Controller_Dispatcher_Abstract {
      * Return $this for fluide interface.
      *
      * @access  public
-     * @param   object   $view    Hoa_View.
-     * @return  object
+     * @param   Hoa_View  $view    View.
+     * @return  Hoa_Controller_Dispatcher_Abstract
      */
     public function setView ( Hoa_View $view ) {
 
@@ -153,8 +153,8 @@ class Hoa_Controller_Dispatcher_Abstract {
      * Set attached objects.
      *
      * @access  public
-     * @param   object   $objects    ArrayObject.
-     * @return  object
+     * @param   ArrayObject  $objects    Attached objects.
+     * @return  Hoa_Controller_Dispatcher_Abstract
      */
     public function setAttachedObject ( ArrayObject $objects ) {
 
@@ -167,12 +167,26 @@ class Hoa_Controller_Dispatcher_Abstract {
      * Set request to Hoa_Controller_Dispatcher_Abstract.
      *
      * @access  public
-     * @param   object   $request    Hoa_Controller_Request_Abstract
-     * @return  object
+     * @param   Hoa_Controller_Request_Abstract  $request    Request.
+     * @return  Hoa_Controller_Dispatcher_Abstract
      */
     public function setRequest ( Hoa_Controller_Request_Abstract $request ) {
 
         $this->_request = $request;
+
+        return $this;
+    }
+
+    /**
+     * Set router to view.
+     *
+     * @access  public
+     * @param   Hoa_Controller_Router_Standard  $router    Router.
+     * @return  Hoa_Controller_Dispatcher_Abstract
+     */
+    public function setRouterToView ( Hoa_Controller_Router_Standard $router ) {
+
+        $this->_view->setRouter($router);
 
         return $this;
     }
@@ -275,14 +289,14 @@ class Hoa_Controller_Dispatcher_Abstract {
                  */
                 ob_start();
                 ob_implicit_flush(false);
-                $obLevel = ob_get_level();
+                $obLevel     = ob_get_level();
 
                 /**
                  * Initialize controller.
                  */
-                $actionInit = $reflection->hasMethod('init')
-                                  ? $object->init()
-                                  : null;
+                $actionInit  = $reflection->hasMethod('init')
+                                   ? $object->init()
+                                   : null;
 
 
                 if(!method_exists($object, $action))
@@ -293,18 +307,18 @@ class Hoa_Controller_Dispatcher_Abstract {
                 /**
                  * Run action.
                  */
-                $actionRun  = $object->$action();
+                $actionRun   = $object->$action();
 
                 /**
                  * Stop buffer.
                  */
-                $return = null;
+                $return      = null;
                 while(ob_get_level() >= $obLevel)
                     $return .= ob_get_clean();
             }
             else {
 
-                $object = null;
+                $object      = null;
                 throw new Hoa_Controller_Exception_ControllerNotExtendsActionStandard(
                     'Class %s must be extend Hoa_Controller_Action_Standard.',
                     1, $class);
