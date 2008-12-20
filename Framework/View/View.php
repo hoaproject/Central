@@ -66,42 +66,42 @@ class Hoa_View {
      *
      * @var Hoa_View string
      */
-    protected $directory = null;
+    protected $directory       = null;
 
     /**
      * Layout filename.
      *
      * @var Hoa_View string
      */
-    protected $layout = null;
+    protected $layout          = null;
 
     /**
      * Has layout.
      *
      * @var Hoa_View bool
      */
-    protected $hasLayout = false;
+    protected $hasLayout       = false;
 
     /**
      * Layout content.
      *
      * @var Hoa_View string
      */
-    protected $layoutContent = null;
+    protected $layoutContent   = null;
 
     /**
      * View filename
      *
      * @var Hoa_View string
      */
-    protected $view = null;
+    protected $view            = null;
 
     /**
      * View content.
      *
      * @var Hoa_View string
      */
-    protected $viewContent = null;
+    protected $viewContent     = null;
 
     /**
      * View helper directory (for application, not framework).
@@ -115,16 +115,15 @@ class Hoa_View {
      *
      * @var Hoa_View array
      */
-    private $_properties = array();
+    private $_properties       = array();
 
 
 
     /**
-     * __construct
      * Set parameters.
      *
      * @access  public
-     * @param   directory  string    Directory.
+     * @param   string  $directory    Directory.
      * @return  void
      */
     public function __construct ( $directory = null ) {
@@ -134,11 +133,10 @@ class Hoa_View {
     }
 
     /**
-     * setDirectory
      * Set directory.
      *
      * @access  public
-     * @param   directory  string    Directory.
+     * @param   string  $directory    Directory.
      * @return  string
      * @throw   Hoa_View_Exception
      */
@@ -154,13 +152,13 @@ class Hoa_View {
     }
 
     /**
-     * setLayout
      * Set layout.
      *
      * @access  public
-     * @param   layout  string    Layout.
-     * @param   enable  string    Enable layout.
+     * @param   string  $layout    Layout.
+     * @param   string  $enable    Enable layout.
      * @return  string
+     * @throw   Hoa_View_Exception
      */
     public function setLayout ( $layout = '', $enable = true ) {
 
@@ -177,11 +175,10 @@ class Hoa_View {
     }
 
     /**
-     * enableLayout
      * Enable layout file.
      *
      * @access  public
-     * @param   enable  bool    Enable layout.
+     * @param   bool    $enable    Enable layout.
      * @return  bool
      */
     public function enableLayout ( $enable = true ) {
@@ -193,7 +190,6 @@ class Hoa_View {
     }
 
     /**
-     * hasLayout
      * Has layout.
      *
      * @access  public
@@ -205,11 +201,10 @@ class Hoa_View {
     }
 
     /**
-     * setView
      * Set view.
      *
      * @access  public
-     * @param   view    string    View.
+     * @param   string  $view    View.
      * @return  string
      */
     public function setView ( $view = '' ) {
@@ -225,11 +220,10 @@ class Hoa_View {
     }
 
     /**
-     * setHelperDirectory
      * Set helper directory.
      *
      * @access  public
-     * @param   directory  string    Directory.
+     * @param   string  $directory    Directory.
      * @return  string
      */
     public function setHelperDirectory ( $directory = '' ) {
@@ -241,12 +235,11 @@ class Hoa_View {
     }
 
     /**
-     * __set
      * Overloading property.
      *
      * @access  public
-     * @param   name    string    Name.
-     * @param   value   string    Value.
+     * @param   string  $name      Name.
+     * @param   string  $value     Value.
      * @return  mixed
      */
     public function __set ( $name, $value ) {
@@ -262,11 +255,10 @@ class Hoa_View {
     }
 
     /**
-     * __get
      * Overloading property.
      *
      * @access  public
-     * @param   name    string    Name.
+     * @param   string  $name    Name.
      * @return  mixed
      */
     public function __get ( $name ) {
@@ -288,11 +280,10 @@ class Hoa_View {
     }
 
     /**
-     * __isset
      * Overloading property.
      *
      * @access  public
-     * @param   name    string    Name.
+     * @param   string  $name    Name.
      * @return  bool
      */
     public function __isset ( $name ) {
@@ -301,11 +292,10 @@ class Hoa_View {
     }
 
     /**
-     * __unset
      * Overloading property.
      *
      * @access  public
-     * @param   name    string    Name.
+     * @param   string  $name    Name.
      * @return  void
      */
     public function __unset ( $name ) {
@@ -314,12 +304,11 @@ class Hoa_View {
     }
 
     /**
-     * render
      * Make a render.
      *
      * @access  public
-     * @param   specific      string    Specific file.
-     * @param   enableLayout  bool      Enable layout.
+     * @param   string  $specific        Specific file.
+     * @param   bool    $enableLayout    Enable layout.
      * @return  string
      */
     public function render ( $specific = null, $enableLayout = false ) {
@@ -337,12 +326,12 @@ class Hoa_View {
     }
 
     /**
-     * viewRenderer
      * View renderer.
      *
      * @access  public
-     * @param   specific  string    Specific file.
+     * @param   string  $specific    Specific file.
      * @return  string
+     * @throw   Hoa_View_Exception
      */
     public function viewRenderer ( $specific = null ) {
 
@@ -362,7 +351,6 @@ class Hoa_View {
     }
 
     /**
-     * layoutRenderer
      * Layout renderer.
      *
      * @access  public
@@ -380,13 +368,13 @@ class Hoa_View {
     }
 
     /**
-     * __call
      * Overloading helpers.
      *
      * @access  public
-     * @param   name       string    Name of called method, but not used.
-     * @param   arguments  array     Arguments.
+     * @param   string  $name         Name of called method, but not used.
+     * @param   array   $arguments    Arguments.
      * @return  void
+     * @throw   Hoa_View_Exception
      */
     public function __call ( $name, Array $argument ) {
 
@@ -412,9 +400,11 @@ class Hoa_View {
             $return     = $object->__toString();
         }
         catch ( ReflectionException $e ) {
+
             throw new Hoa_View_Exception($e->getMessage(), $e->getCode());
         }
         catch ( Hoa_View_Exception $e ) {
+
             throw $e;
         }
 
