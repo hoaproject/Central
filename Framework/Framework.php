@@ -516,6 +516,7 @@ class Hoa_Framework {
     public static function registerShutdownFunction ( $class = '', $method = '' ) {
 
         if(!isset(self::$rsdf[$class][$method])) {
+
             self::$rsdf[$class][$method] = true;
             return register_shutdown_function(array($class, $method));
         }
