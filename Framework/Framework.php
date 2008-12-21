@@ -125,14 +125,14 @@ class Hoa_Framework {
      *
      * @var Hoa_Framework array
      */
-    private static   $importStack            = array();
+    private static   $importStack             = array();
 
     /**
      * Stack of all registered shutdown function.
      *
      * @var Hoa_Framework array
      */
-    private static   $rsdf                   = array();
+    private static   $rsdf                    = array();
 
     /**
      * Current linearized configuration.
@@ -524,9 +524,9 @@ class Hoa_Framework {
  * Alias of Hoa_Framework::_define().
  *
  * @access  public
- * @param   string  $name      The name of the constant.
- * @param   string  $value     The value of the constant.
- * @param   bool    $case      True set the case-insentisitve.
+ * @param   string  $name     The name of the constant.
+ * @param   string  $value    The value of the constant.
+ * @param   bool    $case     True set the case-insentisitve.
  * @return  bool
  */
 function _define ( $name = '', $value = '', $case = false ) {
