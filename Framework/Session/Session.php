@@ -560,7 +560,7 @@ abstract class Hoa_Session {
      * Set writable.
      *
      * @access  protected
-     * @param   bool       $writable   Value of write access.
+     * @param   bool       $writable    Value of write access.
      * @return  bool
      */
     protected static function setWritable ( $writable ) {
@@ -575,7 +575,7 @@ abstract class Hoa_Session {
      * Set readable.
      *
      * @access  protected
-     * @param   bool       $readable   Value of read access.
+     * @param   bool       $readable    Value of read access.
      * @return  bool
      */
     protected static function setReadable ( $readable ) {
