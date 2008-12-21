@@ -1,0 +1,261 @@
+<?php
+
+/**
+ * Hoa Framework
+ *
+ *
+ * @license
+ *
+ * GNU General Public License
+ *
+ * This file is part of Hoa Open Accessibility.
+ * Copyright (c) 2007, 2008 Ivan ENDERLIN. All rights reserved.
+ *
+ * HOA Open Accessibility is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * HOA Open Accessibility is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with HOA Open Accessibility; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ *
+ * @category    Framework
+ * @package     Hoa_Tokenizer
+ *
+ */
+
+/**
+ * Hoa_Framework
+ */
+require_once 'Framework.php';
+
+/**
+ * Hoa_Tokenizer_Parser
+ */
+import('Tokenizer.Parser');
+
+/**
+ * Hoa_Tokenizer_Builder
+ */
+import('Tokenizer.Builder');
+
+/**
+ * Class Hoa_Tokenizer.
+ *
+ * Describe all token constants and propose alias for parsing and building.
+ *
+ * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
+ * @license     http://gnu.org/licenses/gpl.txt GNU GPL
+ * @since       PHP 5
+ * @version     0.1
+ * @package     Hoa_Tokenizer
+ */
+
+abstract class Hoa_Tokenizer {
+
+    /**
+     * List of all PHP tokens.
+     *
+     * @const int
+     */
+    const _ABSTRACT      = T_ABSTRACT;      // abstract
+    const _AND_EQUAL     = T_AND_EQUAL;     // &=
+    const _ARRAY         = T_ARRAY;         // array()
+    const _ARRAY_CAST    = T_ARRAY_CAST;    // (array)
+    const _AS            = T_AS;            // as (in foreach).
+    const _BAD_CHARACTER = T_BAD_CHARACTER; // all characters < 0x32, except
+                                            // 0x09, 0x0a and 0x0d
+    const _BOOLEAN_AND   = T_BOOLEAN_AND;   // &&
+    const _BOOLEAN_OR    = T_BOOLEAN_OR;    // ||
+    const _BOOL_CAST     = T_BOOL_CAST;     // (bool) or (boolean)
+    const _BREAK         = T_BREAK;         // break
+    const _CASE          = T_CASE;          // case
+    const _CATCH         = T_CATCH;         // catch
+    const _CHARACTER     = T_CHARACTER;
+    const _CLASS         = T_CLASS;         // class
+    const _CLASS_C       = T_CLASS_C;       // __CLASS_
+    const _CLONE         = T_CLONE;         // clone
+    const _CLOSE_TAG     = T_CLOSE_TAG;     // (?|%)>
+    const _COMMENT       = T_COMMENT;       // //, #, or /* */
+    const _CONCAT_EQUAL  = T_CONCAT_EQUAL;  // .=
+    const _CONST         = T_CONST;         // const
+    const _CONSTANT_ENCAPSED_STRING =
+                           T_CONSTANT_ENCAPSED_STRING; // "foo" or 'bar'
+    const _CONTINUE      = T_CONTINUE;      // continue
+    const _CURLY_OPEN    = T_CURLY_OPEN;
+    const _DEC           = T_DEC;           // --
+    const _DECLARE       = T_DECLARE;       // declare
+    const _DEFAULT       = T_DEFAULT;       // default
+    // in PHP 5.3
+    //const _DIR         = T_DIR;           // __DIR__
+    const _DIV_EQUAL     = T_DIV_EQUAL;     // /=
+    const _DNUMBER       = T_DNUMBER;       // 0.12 etc.
+    const _DOC_COMMENT   = T_DOC_COMMENT;   // /** */
+    const _DO            = T_DO;            // do
+    const _DOLLAR_OPEN_CURLY_BRACES =
+                           T_DOLLAR_OPEN_CURLY_BRACES; // ${
+    const _DOUBLE_ARROW  = T_DOUBLE_ARROW;  // =>
+    const _DOUBLE_CAST   = T_DOUBLE_CAST;   // (real), (double) or (float)
+    const _DOUBLE_COLON  = T_DOUBLE_COLON;  // ::
+    const _ECHO          = T_ECHO;          // echo
+    const _ELSE          = T_ELSE;          // else
+    const _ELSEIF        = T_ELSEIF;        // elseif
+    const _EMPTY         = T_EMPTY;         // empty
+    const _ENCAPSED_AND_WHITESPACE =
+                           T_ENCAPSED_AND_WHITESPACE;
+    const _ENDDECLARE    = T_ENDDECLARE;    // enddeclare
+    const _ENDFOR        = T_ENDFOR;        // endfor
+    const _ENDFOREACH    = T_ENDFOREACH;    // endforeach
+    const _ENDIF         = T_ENDIF;         // endif
+    const _ENDSWITCH     = T_ENDSWITCH;     // endswitch
+    const _ENDWHILE      = T_ENDWHILE;      // endwhile
+    const _END_HEREDOC   = T_END_HEREDOC;
+    const _EVAL          = T_EVAL;          // eval
+    const _EXIT          = T_EXIT;          // exit
+    const _EXTENDS       = T_EXTENDS;       // extends
+    const _FILE          = T_FILE;          // __FILE__
+    const _FINAL         = T_FINAL;         // final
+    const _FOR           = T_FOR;           // for
+    const _FOREACH       = T_FOREACH;       // foreach
+    const _FUNCTION      = T_FUNCTION;      // function or cfunction
+    const _FUNC_C        = T_FUNC_C;        // __FUNCTION__
+    const _GLOBAL        = T_GLOBAL;        // global
+    const _GOTO          = T_GOTO;          // goto
+    const _HALT_COMPILER = T_HALT_COMPILER; // __halt_compiler
+    const _IF            = T_IF;            // if
+    const _IMPLEMENTS    = T_IMPLEMENTS;    // implements
+    const _INC           = T_INC;           // ++
+    const _INCLUDE       = T_INCLUDE;       // include
+    const _INCLUDE_ONCE  = T_INCLUDE_ONCE;  // include_once
+    const _INLINE_HTML   = T_INLINE_HTML;
+    const _INSTANCEOF    = T_INSTANCEOF;    // instanceof
+    const _INT_CAST      = T_INT_CAST;      // (int) or (integer)
+    const _INTERFACE     = T_INTERFACE;     // interface
+    const _ISSET         = T_ISSET;         // isset
+    const _IS_EQUAL      = T_IS_EQUAL;      // ==
+    const _IS_GREATER_OR_EQUAL =
+                           T_IS_GREATER_OR_EQUAL; // >=
+    const _IS_IDENTICAL  = T_IS_IDENTICAL;  // ===
+    const _IS_NOT_EQUAL  = T_IS_NOT_EQUAL;  // != or <>
+    const _IS_NOT_IDENTICAL =
+                           T_IS_NOT_IDENTICAL; // !==
+    const _IS_SMALLER_OR_EQUAL =
+                           T_IS_SMALLER_OR_EQUAL; // <=
+    const _LINE          = T_LINE;          // __LINE__
+    const _LIST          = T_LIST;          // list
+    const _LNUMBER       = T_LNUMBER;       // 123, 012, 0x1AC etc.
+    const _LOGICAL_AND   = T_LOGICAL_AND;   // and
+    const _LOGICAL_OR    = T_LOGICAL_OR;    // or
+    const _LOGICAL_XOR   = T_LOGICAL_XOR;   // xor
+    const _METHOD_C      = T_METHOD_C;      // __METHOD__
+    const _MINUS_EQUAL   = T_MINUS_EQUAL;   // -=
+    const _ML_COMMENT    = T_ML_COMMENT;    // /* */
+    const _MOD_EQUAL     = T_MOD_EQUAL;     // %=
+    const _MUL_EQUAL     = T_MUL_EQUAL;     // *=
+    // in PHP 5.3
+    //const _NS_C        = T_NS_C;          // __NAMESPACE__
+    //const _NAMESPACE   = T_NAMESPACE;     // __NAMESPACE__
+    const _NEW           = T_NEW;           // new
+    const _NUM_STRING    = T_NUMB_STRING;
+    const _OBJECT_CAST   = T_OBJECT_CAST;   // (object)
+    const _OBJECT_OPERATOR =
+                           T_OBJECT_OPERATOR; // ->
+    const _OLD_FUNCTION  = T_OLD_FUNCTION;  // old_function
+    const _OPEN_TAG      = T_OPEN_TAG;      // <(?php|?|%)
+    const _OPEN_TAG_WITH_ECHO =
+                           T_OPEN_TAG_WITH_ECHO; // <(?|%)=
+    const _OR_EQUAL      = T_OR_EQUAL;      // |=
+    const _PAAMAYIM_NEKUDOTAYIM =
+                           T_PAAMAYIM_NEKUDOTAYIM; // ::
+    const _PLUS_EQUAL    = T_PLUS_EQUAL;    // +=
+    const _PRINT         = T_PRINT;         // print
+    const _PRIVATE       = T_PRIVATE;       // private
+    const _PUBLIC        = T_PUBLIC;        // public
+    const _PROTECTED     = T_PROTECTED;     // protected
+    const _REQUIRE       = T_REQUIRE;       // require
+    const _REQUIRE_ONCE  = T_REQUIRE_ONCE;  // require_once
+    const _RETURN        = T_RETURN;        // return
+    const _SL            = T_SL;            // <<
+    const _SL_EQUAL      = T_SL_EQUAL;      // <<=
+    const _SR            = T_SR;            // >>
+    const _SR_EQUAL      = T_SR_EQUAL;      // >>=
+    const _START_HEREDOC = T_START_HEREDOC; // <<<
+    const _STATIC        = T_STATIC;        // static
+    const _STRING        = T_STRING;
+    const _STRING_CAST   = T_STRING_CAST;   // (string)
+    const _STRING_VARNAME =
+                           T_STRING_VARNAME;
+    const _SWITCH        = T_SWITCH;        // switch
+    const _THROW         = T_THROW;         // throw
+    const _TRY           = T_TRY;           // try
+    const _UNSET         = T_UNSET;         // unset
+    const _UNSET_CAST    = T_UNSET_CAST;    // (unset)
+    // in PHP 5.3
+    //const _USE         = T_USE;           // use
+    const _VAR           = T_VAR;           // var
+    const _VARIABLE      = T_VARIABLE;      // $foo
+    const _WHILE         = T_WHILE;         // while
+    const _WHITESPACE    = T_WHITESPACE;
+    const _XOR_EQUAL     = T_XOR_EQUAL;     // ^=
+
+    /**
+     * List of other token characters.
+     *
+     * @const string
+     */
+    const _CLOSE_BRACE       = '}';
+    const _CLOSE_BRACKET     = ']';
+    const _CLOSE_PARENTHESES = ')';
+    const _COMMA             = ',';
+    const _DIV               = '/';
+    const _EQUAL             = '=';
+    const _EXCLAMATION_MARK  = '!';
+    const _QUESTION_MARK     = '?';
+    const _MINUS             = '-';
+    const _MOD               = '%';
+    const _MUL               = '+';
+    const _OPEN_BRACE        = '{';
+    const _OPEN_BRACKET      = '[';
+    const _OPEN_PARENTHESES  = '(';
+    const _PLUS              = '+';
+    const _POINT             = '.';
+    const _SEMI_COLON        = ';';
+
+
+
+    /**
+     * Parse a PHP source code.
+     *
+     * @access  public
+     * @param   string  $source    Source or filename.
+     * @param   int     $type      Given by constants
+     *                             Hoa_Tokenizer_Parser::SOURCE and
+     *                             Hoa_Tokenizer_Parser::FILE.
+     * @return  Hoa_Tokenizer_Parser
+     */
+    public static function parse ( $source = null,
+                                   $type   = Hoa_Tokenizer_Parser::SOURCE ) {
+
+        return new Hoa_Tokenizer_Parser($source, $type);
+    }
+
+    /**
+     * Build a tokened PHP source code.
+     *
+     * @access  public
+     * @param   Hoa_Tokenizer_Parser  $tokened    Tokened source code.
+     * @return  string
+     */
+    public static function build ( Hoa_Tokenizer_Parser $tokened ) {
+
+        return new Hoa_Tokenizer_Builder($tokened);
+    }
+}
