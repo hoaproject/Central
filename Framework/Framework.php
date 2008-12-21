@@ -37,12 +37,17 @@
 require_once 'Exception.php';
 
 /**
- * Some usefull constants.
+ * Some usefull constants, …
  */
 !defined('DS')     and define('DS'    , DIRECTORY_SEPARATOR);
 !defined('PS')     and define('PS'    , PATH_SEPARATOR);
 !defined('CRLF')   and define('CRLF'  , "\r\n");
 !defined('OS_WIN') and define('OS_WIN', !strncasecmp(PHP_OS, 'win', 3));
+
+/**
+ * … and type.
+ */
+!defined('void')   and define('void'  , (unset) null);
 
 /**
  * Check if Hoa was well-included.
