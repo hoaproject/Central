@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Util_Interface
+ * @subpackage  Hoa_Tokenizer_Token_Null
  *
  */
 
@@ -38,14 +38,19 @@
 require_once 'Framework.php';
 
 /**
+ * Hoa_Tokenizer_Token_Util_Exception
+ */
+import('Tokenizer.Token.Util.Exception');
+
+/**
  * Hoa_Tokenizer
  */
 import('Tokenizer.~');
 
 /**
- * Interface Hoa_Tokenizer_Token_Util_Interface.
+ * Class Hoa_Tokenizer_Token_Null.
  *
- * Force somes methods for token classes.
+ * Represent a null value.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -53,17 +58,37 @@ import('Tokenizer.~');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Util_Interface
+ * @subpackage  Hoa_Tokenizer_Token_Null
  */
 
-interface Hoa_Tokenizer_Token_Util_Interface {
+class Hoa_Tokenizer_Token_Null extends Hoa_Tokenizer_Token_String {
 
     /**
-     * Transform token to “tokenizer array”.
+     * Value.
+     *
+     * @var Hoa_Tokenizer_Token_Null string
+     */
+    protected $_value = 'null';
+
+
+
+    /**
+     * Set string.
      *
      * @access  public
-     * @param   int     $context    Context.
-     * @return  array
+     * @param   string  $string    String.
+     * @return  string
+     * @throw   Hoa_Tokenizer_Token_Util_Exception
      */
-    public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD );
+    public function setString ( $string ) {
+
+        if(empty($string))
+            $string = 'null';
+
+        if($string != 'null')
+            throw new Hoa_Tokenizer_Token_Util_Exception(
+                'Null cannot be different of null. Given %s.', 0, $string);
+
+        return parent::setString($string);
+    }
 }

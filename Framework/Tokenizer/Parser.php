@@ -181,4 +181,26 @@ class Hoa_Tokenizer_Parser {
 
         return $this->_lineNumber;
     }
+
+    /**
+     * Get a more friendly view of the plain tokenizer result.
+     *
+     * @access  public
+     * @return  string
+     * @todo    Ameliorate.
+     */
+    public function __toString ( ) {
+
+        $out    = null;
+
+        foreach($this->get() as $i => $token)
+            $out .= sprintf(
+                       '%-6s%-28s%s',
+                       ($token[2] < 0 ? '~' : $token[2]),
+                       Hoa_Tokenizer::tokenName($token[0]),
+                       $token[1]
+                   ) . "\n";
+
+        return $out;
+    }
 }

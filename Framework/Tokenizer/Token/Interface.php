@@ -53,6 +53,11 @@ import('Tokenizer.Token.Util.Interface');
 import('Tokenizer.~');
 
 /**
+ * Hoa_Tokenizer_Token_String
+ */
+import('Tokenizer.Token.String');
+
+/**
  * Hoa_Tokenizer_Token_Comment
  */
 import('Tokenizer.Token.Comment');
@@ -98,23 +103,16 @@ class Hoa_Tokenizer_Token_Interface implements Hoa_Tokenizer_Token_Util_Interfac
     /**
      * Interface name.
      *
-     * @var Hoa_Tokenizer_Token_Interface string
+     * @var Hoa_Tokenizer_Token_String object
      */
     protected $_name       = null;
 
     /**
-     * Parent class.
+     * Parent interface.
      *
      * @var Hoa_Tokenizer_Token_Class object
      */
     protected $_parent     = null;
-
-    /**
-     * Collection of interfaces.
-     *
-     * @var Hoa_Tokenizer_Token_Interface array
-     */
-    protected $_interfaces = array();
 
     /**
      * Collection of constants.
@@ -136,7 +134,8 @@ class Hoa_Tokenizer_Token_Interface implements Hoa_Tokenizer_Token_Util_Interfac
      * Constructor.
      *
      * @access  public
-     * @param   string  $name    Class name.
+     * @param   mixed   $name    Interface name. Could be a string or a
+     *                           Hoa_Tokenizer_Token_String instance.
      * @return  void
      */
     public function __construct ( $name ) {
@@ -147,10 +146,10 @@ class Hoa_Tokenizer_Token_Interface implements Hoa_Tokenizer_Token_Util_Interfac
     }
 
     /**
-     * Set class comment.
+     * Set interface comment.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Comment  $comment    Class comment.
+     * @param   Hoa_Tokenizer_Token_Comment  $comment    Interface comment.
      * @return  Hoa_Tokenizer_Token_Comment
      */
     public function setComment ( Hoa_Tokenizer_Token_Comment $comment ) {
@@ -162,7 +161,7 @@ class Hoa_Tokenizer_Token_Interface implements Hoa_Tokenizer_Token_Util_Interfac
     }
 
     /**
-     * Remove class comment.
+     * Remove interface comment.
      *
      * @access  public
      * @return  Hoa_Tokenizer_Token_Comment
@@ -173,13 +172,17 @@ class Hoa_Tokenizer_Token_Interface implements Hoa_Tokenizer_Token_Util_Interfac
     }
 
     /**
-     * Set class name.
+     * Set interface name.
      *
      * @access  public
-     * @param   string  $name    Class name.
-     * @return  string
+     * @param   mixed   $name    Interface name. Could be a string or a
+     *                           Hoa_Tokenizer_Token_String instance.
+     * @return  Hoa_Tokenizer_Token_String
      */
     public function setName ( $name ) {
+
+        if(!($name instanceof Hoa_Tokenizer_Token_String))
+            $name    = new Hoa_Tokenizer_Token_String($name);
 
         $old         = $this->_name;
         $this->_name = $name;
@@ -188,10 +191,10 @@ class Hoa_Tokenizer_Token_Interface implements Hoa_Tokenizer_Token_Util_Interfac
     }
 
     /**
-     * Set the parent class.
+     * Set the parent interface.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Class  $parent    Parent name.
+     * @param   Hoa_Tokenizer_Token_Class  $parent    Parent.
      * @return  Hoa_Tokenizer_Token_Class
      */
     public function setParent ( Hoa_Tokenizer_Token_Class $parent ) {
@@ -203,7 +206,7 @@ class Hoa_Tokenizer_Token_Interface implements Hoa_Tokenizer_Token_Util_Interfac
     }
 
     /**
-     * Check if class has a parent.
+     * Check if interface has a parent.
      *
      * @access  public
      * @return  bool
@@ -214,7 +217,7 @@ class Hoa_Tokenizer_Token_Interface implements Hoa_Tokenizer_Token_Util_Interfac
     }
 
     /**
-     * Remove class parent.
+     * Remove interface parent.
      *
      * @access  public
      * @return  Hoa_Tokenizer_Token_Class
@@ -222,82 +225,6 @@ class Hoa_Tokenizer_Token_Interface implements Hoa_Tokenizer_Token_Util_Interfac
     public function removeParent ( ) {
 
         return $this->setParent(null);
-    }
-
-    /**
-     * Add many interfaces.
-     *
-     * @access  public
-     * @param   array   $interfaces    Interfaces to add.
-     * @return  array
-     */
-    public function addInterfaces ( Array $interfaces ) {
-
-        foreach($interfaces as $i => $interface)
-            $this->addInterface($interface);
-
-        return $this->_interfaces;
-    }
-
-    /**
-     * Check if an interface is implemented.
-     *
-     * @access  public
-     * @param   mixed   $interface    Interface to check. Could be a string or
-     *                                a Hoa_Tokenizer_Token_Interface instance.
-     * @return  bool
-     */
-    public function isImplemented ( $interface ) {
-
-        if($interface instanceof Hoa_Tokenizer_Token_Interface)
-            $interface = $interface->getName();
-
-        foreach($this->getInterfaces() as $i => $ii)
-            if($ii->getName() == $interface)
-                return true;
-
-        return false;
-    }
-
-    /**
-     * Add an interface.
-     *
-     * @access  public
-     * @param   Hoa_Tokenizer_Token_Interface  $interface    Interface instance.
-     * @return  Hoa_Tokenizer_Token_Interface
-     */
-    public function addInterface ( Hoa_Tokenizer_Token_Interface $interface ) {
-
-        if(true === $this->isImplemented($interface))
-            return;
-
-        return $this->_interfaces[] = $interface;
-    }
-
-    /**
-     * Remove an interface.
-     *
-     * @access  public
-     * @param   mixed   $interface    Interface name. Could be a string or a
-     *                                Hoa_Tokenizer_Token_Interface instance.
-     * @return  array
-     */
-    public function removeInterface ( $interface ) {
-
-        if($interface instanceof Hoa_Tokenizer_Token_Interface)
-            $interface = $interface->getName();
-
-        if(false === $this->isImplemented($interface))
-            return $this->_interfaces;
-
-        foreach($this->getInterfaces() as $i => $ii)
-            if($ii->getName() == $interface) {
-
-                unset($this->_interfaces[$i]);
-                break;
-            }
-
-        return $this->_interfaces;
     }
 
     /**
@@ -456,7 +383,7 @@ class Hoa_Tokenizer_Token_Interface implements Hoa_Tokenizer_Token_Util_Interfac
     }
 
     /**
-     * Check if class has a body.
+     * Check if interface has a body.
      *
      * @access  public
      * @return  bool
@@ -468,10 +395,10 @@ class Hoa_Tokenizer_Token_Interface implements Hoa_Tokenizer_Token_Util_Interfac
     }
 
     /**
-     * Get class name.
+     * Get interface name.
      *
      * @access  public
-     * @return  string
+     * @return  Hoa_Tokenizer_Token_String
      */
     public function getName ( ) {
 
@@ -479,7 +406,7 @@ class Hoa_Tokenizer_Token_Interface implements Hoa_Tokenizer_Token_Util_Interfac
     }
 
     /**
-     * Get class comment.
+     * Get interface comment.
      *
      * @access  public
      * @return  Hoa_Tokenizer_Token_Comment
@@ -490,7 +417,7 @@ class Hoa_Tokenizer_Token_Interface implements Hoa_Tokenizer_Token_Util_Interfac
     }
 
     /**
-     * Get parent name.
+     * Get parent.
      *
      * @access  public
      * @return  Hoa_Tokenizer_Token_Class
@@ -498,17 +425,6 @@ class Hoa_Tokenizer_Token_Interface implements Hoa_Tokenizer_Token_Util_Interfac
     public function getParent ( ) {
 
         return $this->_parent;
-    }
-
-    /**
-     * Get all interfaces.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function getInterfaces ( ) {
-
-        return $this->_interfaces;
     }
 
     /**
@@ -541,6 +457,6 @@ class Hoa_Tokenizer_Token_Interface implements Hoa_Tokenizer_Token_Util_Interfac
      */
     public function toArray ( ) {
 
-        return array();
+        return array(array());
     }
 }

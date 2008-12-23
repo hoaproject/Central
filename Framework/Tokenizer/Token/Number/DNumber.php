@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator
+ * @subpackage  Hoa_Tokenizer_Token_Number_DNumber
  *
  */
 
@@ -43,14 +43,19 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface
+ * Hoa_Tokenizer
  */
-import('Tokenizer.Token.Util.Interface');
+import('Tokenizer.~');
 
 /**
- * Class Hoa_Tokenizer_Token_Operator.
+ * Hoa_Tokenizer_Token_Number
+ */
+import('Tokenizer.Token.Number');
+
+/**
+ * Class Hoa_Tokenizer_Token_Number_DNumber.
  *
- * Represent an operator.
+ * Represent a dnumber : float, double or real number, i.e. ℝ.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -58,58 +63,49 @@ import('Tokenizer.Token.Util.Interface');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator
+ * @subpackage  Hoa_Tokenizer_Token_Number_DNumber
  */
 
-abstract class Hoa_Tokenizer_Token_Operator implements Hoa_Tokenizer_Token_Util_Interface {
+class Hoa_Tokenizer_Token_Number_DNumber extends Hoa_Tokenizer_Token_Number {
 
     /**
-     * Operator.
+     * Value.
      *
-     * @var Hoa_Tokenizer_Token_Operator string
+     * @var Hoa_Tokenizer_Token_Number_DNumber float
      */
-    protected $_operator = null;
+    protected $_value = 0.0;
 
 
 
     /**
-     * Constructor.
+     * Set number.
      *
      * @access  public
-     * @param   string  $operator    Operator.
-     * @return  void
+     * @param   mixed   $number    Number. Could be a string or a number.
+     * @return  float
      */
-    public function __construct ( $operator ) {
+    public function setNumber ( $number ) {
 
-        $this->setOperator($operator);
+        $number  = (float) $number;
+        $pattern = Hoa_Tokenizer_Token_Number::D_DNUM . '|' .
+                   Hoa_Tokenizer_Token_Number::D_EXPONENT_DNUM;
 
-        return;
+        if(0 === preg_match('#' . $pattern . '#', (string) $number))
+            throw new Hoa_Tokenizer_Token_Util_Exception(
+                'DNumber %d is not well-formed.', 0, $number);
+
+        return parent::setNumber($number);
     }
 
     /**
-     * Set operator.
+     * Get number.
      *
      * @access  public
-     * @param   string  $operator    Operator.
-     * @return  string
+     * @return  float
      */
-    public function setOperator ( $operator ) {
+    public function getNumber ( ) {
 
-        $old             = $this->_operator;
-        $this->_operator = $operator;
-
-        return $old;
-    }
-
-    /**
-     * Get operator.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getOperator ( ) {
-
-        return $this->_operator;
+        return (float) $this->_value;
     }
 
     /**
@@ -119,5 +115,12 @@ abstract class Hoa_Tokenizer_Token_Operator implements Hoa_Tokenizer_Token_Util_
      * @param   int     $context    Context.
      * @return  array
      */
-    abstract public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD );
+    public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD ) {
+
+        return array(array(
+            0 => Hoa_Tokenizer::_DNUMBER,
+            1 => $this->getNumber(),
+            2 => -1
+        ));
+    }
 }

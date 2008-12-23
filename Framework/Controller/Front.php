@@ -220,7 +220,7 @@ class Hoa_Controller_Front {
         $this->_attachedObject = new ArrayObject(
             array(), ArrayObject::ARRAY_AS_PROPS, 'ArrayIterator');
 
-        $this->_plugin  = new Hoa_Controller_Plugin_Standard;
+        $this->_plugin  = new Hoa_Controller_Plugin_Standard();
 
         if(false !== $parameters)
             $this->addRequest(0, $parameters);

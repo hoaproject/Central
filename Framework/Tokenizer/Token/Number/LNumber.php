@@ -1,3 +1,4 @@
+
 <?php
 
 /**
@@ -28,7 +29,7 @@
  *
  * @category    Framework
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Util_Interface
+ * @subpackage  Hoa_Tokenizer_Token_Number_LNumber
  *
  */
 
@@ -38,14 +39,24 @@
 require_once 'Framework.php';
 
 /**
+ * Hoa_Tokenizer_Token_Util_Exception
+ */
+import('Tokenizer.Token.Util.Exception');
+
+/**
  * Hoa_Tokenizer
  */
 import('Tokenizer.~');
 
 /**
- * Interface Hoa_Tokenizer_Token_Util_Interface.
+ * Hoa_Tokenizer_Token_Number
+ */
+import('Tokenizer.Token.Number');
+
+/**
+ * Class Hoa_Tokenizer_Token_Number_LNumber.
  *
- * Force somes methods for token classes.
+ * Represent a lnumber : integer, hexadecimal etc., i.e. ℤ.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -53,10 +64,49 @@ import('Tokenizer.~');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Util_Interface
+ * @subpackage  Hoa_Tokenizer_Token_Number_LNumber
  */
 
-interface Hoa_Tokenizer_Token_Util_Interface {
+class Hoa_Tokenizer_Token_Number_LNumber extends Hoa_Tokenizer_Token_Number {
+
+    /**
+     * Value.
+     *
+     * @var Hoa_Tokenizer_Token_Number_LNumber int
+     */
+    protected $_value = 0;
+
+
+
+    /**
+     * Set number.
+     *
+     * @access  public
+     * @param   mixed   $number    Number. Could be a string or a number.
+     * @return  int
+     */
+    public function setNumber ( $number ) {
+
+        $number  = (int) $number;
+        $pattern = Hoa_Tokenizer_Token_Number::L_INT;
+
+        if(0 === preg_match('#' . $pattern . '#', (string) $number))
+            throw new Hoa_Tokenizer_Token_Util_Exception(
+                'LNumber %d is not well-formed.', 0, $number);
+
+        return parent::setNumber($number);
+    }
+
+    /**
+     * Get number.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getNumber ( ) {
+
+        return (int) $this->_value;
+    }
 
     /**
      * Transform token to “tokenizer array”.
@@ -65,5 +115,12 @@ interface Hoa_Tokenizer_Token_Util_Interface {
      * @param   int     $context    Context.
      * @return  array
      */
-    public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD );
+    public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD ) {
+
+        return array(array(
+            0 => Hoa_Tokenizer::_LNUMBER,
+            1 => $this->getNumber(),
+            2 => -1
+        ));
+    }
 }

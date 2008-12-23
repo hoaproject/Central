@@ -229,6 +229,15 @@ abstract class Hoa_Tokenizer {
     const _POINT             = '.';
     const _SEMI_COLON        = ';';
 
+    /**
+     * Describe context of using token.
+     *
+     * @const int
+     */
+    const CONTEXT_STANDARD    = 0;
+    const CONTEXT_DECLARATION = 1;
+    const CONTEXT_USING       = 2;
+
 
 
     /**
@@ -257,5 +266,94 @@ abstract class Hoa_Tokenizer {
     public static function build ( Hoa_Tokenizer_Parser $tokened ) {
 
         return new Hoa_Tokenizer_Builder($tokened);
+    }
+
+    /**
+     * Get token name.
+     *
+     * @access  public
+     * @param   mixed   $token    Token identifier, could be an integer or a
+     *                            string.
+     * @return  string
+     */
+    public static function tokenName ( $token ) {
+
+        if(is_int($token))
+            return substr(token_name($token), 2);
+
+        switch($token) {
+
+            case '}':
+                return 'CLOSE_BRACE';
+              break;
+
+            case ']':
+                return 'CLOSE_BRACKET';
+              break;
+
+            case ')':
+                return 'CLOSE_PARENTHESES';
+              break;
+
+            case ',':
+                return 'COMMA';
+              break;
+
+            case '/':
+                return 'DIV';
+              break;
+
+            case '=':
+                return 'EQUAL';
+              break;
+
+            case '!':
+                return 'EXCLAMATION_MARK';
+              break;
+
+            case '?':
+                return 'QUESTION_MARK';
+              break;
+
+            case '-':
+                return 'MINUS';
+              break;
+
+            case '%':
+                return 'MOD';
+              break;
+
+            case '*':
+                return 'MUL';
+              break;
+
+            case '{':
+                return 'OPEN_BRACE';
+              break;
+
+            case '[':
+                return 'OPEN_BRACKET';
+              break;
+
+            case '(':
+                return 'OPEN_PARENTHESES';
+              break;
+
+            case '+':
+                return 'PLUS';
+              break;
+
+            case '.':
+                return 'POINT';
+              break;
+
+            case ';':
+                return 'SEMI_COLON';
+              break;
+
+            default:
+                throw new Hoa_Tokenizer_Exception(
+                    'Token %s does not exist.', 0);
+        }
     }
 }

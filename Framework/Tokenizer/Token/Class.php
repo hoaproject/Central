@@ -53,6 +53,11 @@ import('Tokenizer.Token.Util.Interface');
 import('Tokenizer.~');
 
 /**
+ * Hoa_Tokenizer_Token_String
+ */
+import('Tokenizer.Token.String');
+
+/**
  * Hoa_Tokenizer_Token_Comment
  */
 import('Tokenizer.Token.Comment');
@@ -94,6 +99,20 @@ import('Tokenizer.Token.Class.Method');
 class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface {
 
     /**
+     * Class is final.
+     *
+     * @const bool
+     */
+    const FINAL_CLASS      = true;
+
+    /**
+     * Class is a member of the family, i.e. not final.
+     *
+     * @const bool
+     */
+    const MEMBER_CLASS     = false;
+
+    /**
      * Class is abstract.
      *
      * @const bool
@@ -117,9 +136,16 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface {
     /**
      * Class name.
      *
-     * @var Hoa_Tokenizer_Token_Class string
+     * @var Hoa_Tokenizer_Token_String object
      */
     protected $_name       = null;
+
+    /**
+     * Whether class is final.
+     *
+     * @var Hoa_Tokenizer_Token_Class bool
+     */
+    protected $_isFinal    = false;
 
     /**
      * Whether class is abstract.
@@ -169,7 +195,8 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface {
      * Constructor.
      *
      * @access  public
-     * @param   string  $name    Class name.
+     * @param   mixed   $name    Class name. Could be a string or a
+     *                           Hoa_Tokenizer_Token_String instance.
      * @return  void
      */
     public function __construct ( $name ) {
@@ -209,13 +236,36 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface {
      * Set class name.
      *
      * @access  public
-     * @param   string  $name    Class name.
-     * @return  string
+     * @param   mixed   $name    Class name. Could be a string or a
+     *                           Hoa_Tokenizer_Token_String instance.
+     * @return  Hoa_Tokenizer_Token_String
      */
     public function setName ( $name ) {
 
+        if(!($name instanceof Hoa_Tokenizer_Token_String))
+            $name    = new Hoa_Tokenizer_Token_String($name);
+
         $old         = $this->_name;
         $this->_name = $name;
+
+        return $old;
+    }
+
+    /**
+     * Final class.
+     *
+     * @access  public
+     * @param   bool    $final    Whether class is final, given by
+     *                            constants self::FINAL_CLASS or
+     *                            self::MEMBER_CLASS.
+     * @return  bool
+     */
+    public function finalMe ( $final = self::FINAL_CLASS ) {
+
+        $this->abstractMe(self::CONCRET_CLASS);
+
+        $old            = $this->_isFinal;;
+        $this->_isFinal = $final;
 
         return $old;
     }
@@ -231,6 +281,8 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface {
      */
     public function abstractMe ( $abstract = self::ABSTRACT_CLASS ) {
 
+        $this->finalMe(self::MEMBER_CLASS);
+
         $old               = $this->_isAbstract;
         $this->_isAbstract = $abstract;
 
@@ -241,7 +293,7 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface {
      * Set the parent class.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Class  $parent    Parent name.
+     * @param   Hoa_Tokenizer_Token_Class  $parent    Parent.
      * @return  Hoa_Tokenizer_Token_Class
      */
     public function setParent ( Hoa_Tokenizer_Token_Class $parent ) {
@@ -601,11 +653,22 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface {
      * Get class name.
      *
      * @access  public
-     * @return  string
+     * @return  Hoa_Tokenizer_Token_String
      */
     public function getName ( ) {
 
         return $this->_name;
+    }
+
+    /**
+     * Whether class is final.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isFinal ( ) {
+
+        return $this->_isFinal;
     }
 
     /**
@@ -689,10 +752,11 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface {
      * Transform token to “tokenizer array”.
      *
      * @access  public
+     * @param   int     $context    Context.
      * @return  array
      */
-    public function toArray ( ) {
+    public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD ) {
 
-        return array();
+        return array(array());
     }
 }

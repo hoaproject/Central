@@ -249,17 +249,18 @@ class Hoa_Tokenizer_Token_Comment implements Hoa_Tokenizer_Token_Util_Interface 
      * Transform token to “tokenizer array”.
      *
      * @access  public
+     * @param   int     $context    Context.
      * @return  array
      */
-    public function toArray ( ) {
+    public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD ) {
 
-        return array(
+        return array(array(
             self::TYPE_DOCUMENTATION === $this->getType()
                 ? Hoa_Tokenizer::_DOC_COMMENT
                 : Hoa_Tokenizer::_COMMENT,
             $this->getContent(),
             -1
-        );
+        ));
     }
 
     /**
