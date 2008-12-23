@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Null
+ * @subpackage  Hoa_Tokenizer_Token_String_Null
  *
  */
 
@@ -48,7 +48,12 @@ import('Tokenizer.Token.Util.Exception');
 import('Tokenizer.~');
 
 /**
- * Class Hoa_Tokenizer_Token_Null.
+ * Hoa_Tokenizer_Token_String
+ */
+import('Tokenizer.Token.String');
+
+/**
+ * Class Hoa_Tokenizer_Token_String_Null.
  *
  * Represent a null value.
  *
@@ -58,15 +63,15 @@ import('Tokenizer.~');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Null
+ * @subpackage  Hoa_Tokenizer_Token_String_Null
  */
 
-class Hoa_Tokenizer_Token_Null extends Hoa_Tokenizer_Token_String {
+class Hoa_Tokenizer_Token_String_Null extends Hoa_Tokenizer_Token_String {
 
     /**
      * Value.
      *
-     * @var Hoa_Tokenizer_Token_Null string
+     * @var Hoa_Tokenizer_Token_String_Null string
      */
     protected $_value = 'null';
 

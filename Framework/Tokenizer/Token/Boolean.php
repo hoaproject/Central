@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Boolean
+ * @subpackage  Hoa_Tokenizer_Token_String_Boolean
  *
  */
 
@@ -48,7 +48,12 @@ import('Tokenizer.Token.Util.Exception');
 import('Tokenizer.~');
 
 /**
- * Class Hoa_Tokenizer_Token_Boolean.
+ * Hoa_Tokenizer_Token_String
+ */
+import('Tokenizer.Token.String');
+
+/**
+ * Class Hoa_Tokenizer_Token_String_Boolean.
  *
  * Represent a boolean.
  *
@@ -58,10 +63,10 @@ import('Tokenizer.~');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Boolean
+ * @subpackage  Hoa_Tokenizer_Token_String_Boolean
  */
 
-class Hoa_Tokenizer_Token_Boolean extends Hoa_Tokenizer_Token_String {
+class Hoa_Tokenizer_Token_String_Boolean extends Hoa_Tokenizer_Token_String {
 
     /**
      * Set string.
