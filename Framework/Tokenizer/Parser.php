@@ -191,7 +191,7 @@ class Hoa_Tokenizer_Parser {
      */
     public function __toString ( ) {
 
-        $out    = null;
+        $out = null;
 
         foreach($this->get() as $i => $token)
             $out .= sprintf(

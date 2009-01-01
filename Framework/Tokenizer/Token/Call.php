@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_String
+ * @subpackage  Hoa_Tokenizer_Token_Call
  *
  */
 
@@ -53,9 +53,9 @@ import('Tokenizer.Token.Util.Interface');
 import('Tokenizer.~');
 
 /**
- * Class Hoa_Tokenizer_Token_String.
+ * Class Hoa_Tokenizer_Token_Call.
  *
- * Represent a string (not a constant encapsed string !).
+ * .
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -63,79 +63,17 @@ import('Tokenizer.~');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_String
+ * @subpackage  Hoa_Tokenizer_Token_Call
  */
 
-class Hoa_Tokenizer_Token_String implements Hoa_Tokenizer_Token_Util_Interface {
-
-    /**
-     * Name.
-     *
-     * @var Hoa_Tokenizer_Token_String string
-     */
-    protected $_name = null;
-
-
-
-    /**
-     * Constructor.
-     *
-     * @access  public
-     * @param   string  $string    String.
-     * @return  void
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
-     */
-    public function __construct ( $string ) {
-
-        $this->setString($string);
-
-        return;
-    }
-
-    /**
-     * Set string.
-     *
-     * @access  public
-     * @param   string  $string    String.
-     * @return  string
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
-     */
-    public function setString ( $string ) {
-
-        if(0 === preg_match('#[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*#', $string))
-            throw new Hoa_Tokenizer_Token_Util_Exception(
-                'String %s is not well-formed.', 0, $string);
-
-        $old         = $this->_name;
-        $this->_name = $string;
-
-        return $old;
-    }
-
-    /**
-     * Get string.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getString ( ) {
-
-        return $this->_name;
-    }
+abstract class Hoa_Tokenizer_Token_Call implements Hoa_Tokenizer_Token_Util_Interface {
 
     /**
      * Transform token to “tokenizer array”.
      *
      * @access  public
-     * @param   int     $context     Context.
+     * @param   int     $context    Context.
      * @return  array
      */
-    public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD ) {
-
-        return array(array(
-            0 => Hoa_Tokenizer::_STRING,
-            1 => $this->getString(),
-            2 => -1
-        ));
-    }
+    abstract public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD );
 }

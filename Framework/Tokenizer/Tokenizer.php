@@ -211,11 +211,13 @@ abstract class Hoa_Tokenizer {
      *
      * @const string
      */
+    const _AROBASE           = '@';
     const _CLOSE_BRACE       = '}';
     const _CLOSE_BRACKET     = ']';
     const _CLOSE_PARENTHESES = ')';
     const _COMMA             = ',';
     const _DIV               = '/';
+    const _DOUBLE_QUOTES     = '"';
     const _EQUAL             = '=';
     const _EXCLAMATION_MARK  = '!';
     const _QUESTION_MARK     = '?';
@@ -227,6 +229,7 @@ abstract class Hoa_Tokenizer {
     const _OPEN_PARENTHESES  = '(';
     const _PLUS              = '+';
     const _POINT             = '.';
+    const _REFERENCE         = '&';
     const _SEMI_COLON        = ';';
 
     /**
@@ -275,6 +278,7 @@ abstract class Hoa_Tokenizer {
      * @param   mixed   $token    Token identifier, could be an integer or a
      *                            string.
      * @return  string
+     * @throw   Hoa_Tokenizer_Exception
      */
     public static function tokenName ( $token ) {
 
@@ -282,6 +286,10 @@ abstract class Hoa_Tokenizer {
             return substr(token_name($token), 2);
 
         switch($token) {
+
+            case '@':
+                return 'AROBASE';
+              break;
 
             case '}':
                 return 'CLOSE_BRACE';
@@ -301,6 +309,10 @@ abstract class Hoa_Tokenizer {
 
             case '/':
                 return 'DIV';
+              break;
+
+            case '"':
+                return 'DOUBLE_QUOTES';
               break;
 
             case '=':
@@ -347,13 +359,17 @@ abstract class Hoa_Tokenizer {
                 return 'POINT';
               break;
 
+            case '&':
+                return 'REFERENCE';
+              break;
+
             case ';':
                 return 'SEMI_COLON';
               break;
 
             default:
                 throw new Hoa_Tokenizer_Exception(
-                    'Token %s does not exist.', 0);
+                    'Token %s does not exist.', 0, $token);
         }
     }
 }

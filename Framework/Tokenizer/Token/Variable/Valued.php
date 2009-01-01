@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_String
+ * @subpackage  Hoa_Tokenizer_Token_Variable_Valued
  *
  */
 
@@ -43,19 +43,19 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface
- */
-import('Tokenizer.Token.Util.Interface');
-
-/**
  * Hoa_Tokenizer
  */
 import('Tokenizer.~');
 
 /**
- * Class Hoa_Tokenizer_Token_String.
+ * Hoa_Tokenizer_Token_Variable
+ */
+import('Tokenizer.Token.Variable');
+
+/**
+ * Class Hoa_Tokenizer_Token_Variable_Valued.
  *
- * Represent a string (not a constant encapsed string !).
+ * .
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -63,79 +63,83 @@ import('Tokenizer.~');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_String
+ * @subpackage  Hoa_Tokenizer_Token_Variable_Valued
  */
 
-class Hoa_Tokenizer_Token_String implements Hoa_Tokenizer_Token_Util_Interface {
+class Hoa_Tokenizer_Token_Variable_Valued extends Hoa_Tokenizer_Token_Variable {
 
     /**
-     * Name.
+     * Operator.
      *
-     * @var Hoa_Tokenizer_Token_String string
+     * @var Hoa_Tokenizer_Token_Operator_Assign object
      */
-    protected $_name = null;
-
-
+    protected $_operator = null;
 
     /**
-     * Constructor.
+     * Value.
      *
-     * @access  public
-     * @param   string  $string    String.
-     * @return  void
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @var mixed object
      */
-    public function __construct ( $string ) {
+    protected $_value    = null;
 
-        $this->setString($string);
 
-        return;
-    }
 
     /**
-     * Set string.
+     * Set operator.
      *
      * @access  public
-     * @param   string  $string    String.
-     * @return  string
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @param   Hoa_Tokenizer_Token_Operator_Assign  $operator    Operator.
+     * @return  Hoa_Tokenizer_Token_Operator_Assign
      */
-    public function setString ( $string ) {
+    public function setOperator ( Hoa_Tokenizer_Token_Operator_Assign $operator ) {
 
-        if(0 === preg_match('#[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*#', $string))
-            throw new Hoa_Tokenizer_Token_Util_Exception(
-                'String %s is not well-formed.', 0, $string);
-
-        $old         = $this->_name;
-        $this->_name = $string;
+        $old             = $this->_operator;
+        $this->_operator = $operator;
 
         return $old;
     }
 
     /**
-     * Get string.
+     * Set value.
      *
      * @access  public
-     * @return  string
+     * @param   mixed   $value    Variable's value.
+     * @return  mixed
      */
-    public function getString ( ) {
+    public function setValue ( $value ) {
 
-        return $this->_name;
+        // TO BE COMPLETED !!
+
+        $old          = $this->_value;
+        $this->_value = $value;
+
+        return $old;
+    }
+
+    /**
+     * Get operator.
+     *
+     * @access  public
+     * @return  Hoa_Tokenizer_Token_Operator_Assign
+     */
+    public function getOperator ( ) {
+
+        return $this->_operator;
     }
 
     /**
      * Transform token to “tokenizer array”.
      *
      * @access  public
-     * @param   int     $context     Context.
+     * @param   int     $context    Context.
      * @return  array
      */
     public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD ) {
 
-        return array(array(
-            0 => Hoa_Tokenizer::_STRING,
-            1 => $this->getString(),
-            2 => -1
-        ));
+        return array_merge(
+            parent::toArray($context),
+            $this->getOperator(),
+            $this->getValue()
+        );
     }
 }

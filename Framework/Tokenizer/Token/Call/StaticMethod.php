@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Variable
+ * @subpackage  Hoa_Tokenizer_Token_Call_StaticMethod
  *
  */
 
@@ -43,17 +43,17 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface
- */
-import('Tokenizer.Token.Util.Interface');
-
-/**
  * Hoa_Tokenizer
  */
 import('Tokenizer.~');
 
 /**
- * Class Hoa_Tokenizer_Token_Variable.
+ * Hoa_Tokenizer_Token_Call
+ */
+import('Tokenizer.Token.Call');
+
+/**
+ * Class Hoa_Tokenizer_Token_Call_StaticMethod.
  *
  * .
  *
@@ -63,17 +63,24 @@ import('Tokenizer.~');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Variable
+ * @subpackage  Hoa_Tokenizer_Token_Call_StaticMethod
  */
 
-class Hoa_Tokenizer_Token_Variable implements Hoa_Tokenizer_Token_Util_Interface {
+class Hoa_Tokenizer_Token_Call_StaticMethod extends Hoa_Tokenizer_Token_Call {
 
     /**
-     * Name.
+     * Class name.
      *
      * @var Hoa_Tokenizer_Token_String object
      */
-    protected $_name = null;
+    protected $_class     = null;
+
+    /**
+     * Method name.
+     *
+     * @var Hoa_Tokenizer_Token_Call_Function object
+     */
+    protected $_method    = null;
 
 
 
@@ -81,40 +88,66 @@ class Hoa_Tokenizer_Token_Variable implements Hoa_Tokenizer_Token_Util_Interface
      * Constructor.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_String  $name    Variable name.
+     * @param   Hoa_Tokenizer_Token_String  $class    Class name.
      * @return  void
      */
-    public function __construct ( Hoa_Tokenizer_Token_String $name ) {
+    public function __construct ( Hoa_Tokenizer_Token_String $class ) {
 
-        $this->setName($name);
+        $this->setClass($class);
 
         return;
     }
 
     /**
-     * Set name.
+     * Set class name.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_String  $name    Variable name.
+     * @param   Hoa_Tokenizer_Token_String  $class    Class name.
      * @return  Hoa_Tokenizer_Token_String
      */
-    public function setName ( Hoa_Tokenizer_Token_String $name ) {
+    public function setClass ( Hoa_Tokenizer_Token_String $class ) {
 
-        $old         = $this->_name;
-        $this->_name = $name;
+        $old          = $this->_class;
+        $this->_class = $class;
 
         return $old;
     }
 
     /**
-     * Get name.
+     * Set method name.
+     *
+     * @access  public
+     * @param   Hoa_Tokenizer_Token_Call_Function   $method    Method name.
+     * @return  Hoa_Tokenizer_Token_Call_Function
+     */
+    public function setMethod ( Hoa_Tokenizer_Token_Call_Function $method ) {
+
+        $old           = $this->_method;
+        $this->_method = $method;
+
+        return $old;
+    }
+
+    /**
+     * Get class name.
      *
      * @access  public
      * @return  Hoa_Tokenizer_Token_String
      */
-    public function getName ( ) {
+    public function getClass ( ) {
 
-        return $this->_name;
+        return $this->_class;
+    }
+
+    /**
+     * Get method name.
+     *
+     * @access  public
+     * @return  Hoa_Tokenizer_Token_Call_Function
+     */
+    public function getMethod ( ) {
+
+        return $this->_method;
     }
 
     /**
@@ -126,10 +159,14 @@ class Hoa_Tokenizer_Token_Variable implements Hoa_Tokenizer_Token_Util_Interface
      */
     public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD ) {
 
-        return array(array(
-            0 => Hoa_Tokenizer::_VARIABLE,
-            1 => '$' . $this->getName()->getString(),
-            2 => -1
-        ));
+        return array_merge(
+            $this->getClass()->toArray(),
+            array(array(
+                0 => Hoa_Tokenizer::_DOUBLE_COLON,
+                1 => '::',
+                2 => -1
+            )),
+            $this->getMethod()->toArray()
+        );
     }
 }

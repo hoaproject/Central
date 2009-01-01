@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_String
+ * @subpackage  Hoa_Tokenizer_Token_String_EncapsedConstant
  *
  */
 
@@ -43,19 +43,19 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface
- */
-import('Tokenizer.Token.Util.Interface');
-
-/**
  * Hoa_Tokenizer
  */
 import('Tokenizer.~');
 
 /**
- * Class Hoa_Tokenizer_Token_String.
+ * Hoa_Tokenizer_Token_String
+ */
+import('Tokenizer.Token.String');
+
+/**
+ * Class Hoa_Tokenizer_Token_String_EncapsedConstant.
  *
- * Represent a string (not a constant encapsed string !).
+ * Represent a constant encapsed string.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -63,34 +63,10 @@ import('Tokenizer.~');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_String
+ * @subpackage  Hoa_Tokenizer_Token_String_EncapsedConstant
  */
 
-class Hoa_Tokenizer_Token_String implements Hoa_Tokenizer_Token_Util_Interface {
-
-    /**
-     * Name.
-     *
-     * @var Hoa_Tokenizer_Token_String string
-     */
-    protected $_name = null;
-
-
-
-    /**
-     * Constructor.
-     *
-     * @access  public
-     * @param   string  $string    String.
-     * @return  void
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
-     */
-    public function __construct ( $string ) {
-
-        $this->setString($string);
-
-        return;
-    }
+class Hoa_Tokenizer_Token_String_EncapsedConstant extends Hoa_Tokenizer_Token_String {
 
     /**
      * Set string.
@@ -102,25 +78,10 @@ class Hoa_Tokenizer_Token_String implements Hoa_Tokenizer_Token_Util_Interface {
      */
     public function setString ( $string ) {
 
-        if(0 === preg_match('#[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*#', $string))
-            throw new Hoa_Tokenizer_Token_Util_Exception(
-                'String %s is not well-formed.', 0, $string);
-
-        $old         = $this->_name;
-        $this->_name = $string;
+        $old          = $this->_value;
+        $this->_value = $string;
 
         return $old;
-    }
-
-    /**
-     * Get string.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getString ( ) {
-
-        return $this->_name;
     }
 
     /**
@@ -133,7 +94,7 @@ class Hoa_Tokenizer_Token_String implements Hoa_Tokenizer_Token_Util_Interface {
     public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD ) {
 
         return array(array(
-            0 => Hoa_Tokenizer::_STRING,
+            0 => Hoa_Tokenizer::_CONSTANT_ENCAPSED_STRING,
             1 => $this->getString(),
             2 => -1
         ));

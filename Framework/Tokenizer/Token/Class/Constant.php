@@ -324,8 +324,10 @@ class Hoa_Tokenizer_Token_Class_Constant implements Hoa_Tokenizer_Token_Util_Int
      */
     public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD ) {
 
+        /*
         if(   $context == Hoa_Tokenizer::CONTEXT_STANDARD
-           || $context == Hoa_Tokenizer::CONTEXT_DECLARATION) {
+           || $context == Hoa_Tokenizer::CONTEXT_DECLARATION)
+        */
             return array_merge(
                 $this->getComment()->toArray(),
                 array(array(
@@ -343,6 +345,7 @@ class Hoa_Tokenizer_Token_Class_Constant implements Hoa_Tokenizer_Token_Util_Int
                 ))
             );
 
+        /*
         else
             return array_merge(
                 $this->getClass()->getName()->toArray(),
@@ -353,5 +356,6 @@ class Hoa_Tokenizer_Token_Class_Constant implements Hoa_Tokenizer_Token_Util_Int
                 ),
                 $this->getName()->toArray()
             );
+        */
     }
 }

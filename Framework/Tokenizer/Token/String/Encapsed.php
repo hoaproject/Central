@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Array
+ * @subpackage  Hoa_Tokenizer_Token_String_Encapsed
  *
  */
 
@@ -53,9 +53,9 @@ import('Tokenizer.Token.Util.Interface');
 import('Tokenizer.~');
 
 /**
- * Class Hoa_Tokenizer_Token_Array.
+ * Class Hoa_Tokenizer_Token_String_Encapsed.
  *
- * Represent an array (aïe, not easy …).
+ * Represent an encapsed string.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -63,17 +63,17 @@ import('Tokenizer.~');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Array
+ * @subpackage  Hoa_Tokenizer_Token_String_Encapsed
  */
 
-class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface {
+class Hoa_Tokenizer_Token_String_Encapsed implements Hoa_Tokenizer_Token_Util_Interface {
 
     /**
-     * Set of key/value that constitute an array.
+     * Sequence of elements that constitute an encapsed string.
      *
-     * @var Hoa_Tokenizer_Token_Array array
+     * @var Hoa_Tokenizer_Token_String_Encapsed array
      */
-    protected $_array = array();
+    protected $_sequence = array();
 
 
 
@@ -96,38 +96,34 @@ class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface {
      * Add many elements.
      *
      * @access  public
-     * @param   array   $elements    Add many elements to the array.
+     * @param   array   $elements    Add many elements to the sequence.
      * @return  array
      */
     public function addElements ( Array $elements = array() ) {
 
         foreach($elements as $i => $element)
-            $this->addElement($element[0], $element[1]);
+            $this->addElement($element);
 
-        return $this->getArray();
+        return $this->getSequence();
     }
 
     /**
      * Add an element.
      *
      * @access  public
-     * @param   mixed   $key      Key to add.
-     * @param   mixed   $value    Value to add.
+     * @param   mixed   $element    Element to add.
      * @return  array
      * @throw   Hoa_Tokenizer_Token_Util_Exception
      */
-    public function addElement ( $key, $value ) {
+    public function addElement ( $element ) {
 
-        // to be completed.
-
-        switch(get_class($key)) {
+        switch(get_class($element)) {
 
             case 'Hoa_Tokenizer_Token_Comment':
             case 'Hoa_Tokenizer_Token_String': // Boolean, Constant, Null,
                                                // EncapsedConstant.
-            case 'Hoa_Tokenizer_Token_Array':
+            case 'Hoa_Tokenizer_Token_String_Encapsed':
             case 'Hoa_Tokenizer_Token_Number': // DNumber, LNumber.
-            case 'Hoa_Tokenizer_Token_Call':
             case 'Hoa_Tokenizer_Token_Variable':
             case 'Hoa_Tokenizer_Token_New':
             case 'Hoa_Tokenizer_Token_Clone':
@@ -140,18 +136,18 @@ class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface {
                     'is an instance of %s.', 0, $element);
         }
 
-        return $this->_array[] = $element;
+        return $this->_sequence[] = $element;
     }
 
     /**
-     * Get the complete array.
+     * Get the complete sequence.
      *
      * @access  protected
      * @return  array
      */
-    protected function getArray ( ) {
+    protected function getSequence ( ) {
 
-        return $this->_array;
+        return $this->_sequence;
     }
 
     /**
@@ -163,8 +159,26 @@ class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface {
      */
     public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD ) {
 
-        return array(array(
+        $array = array();
+        $set   = false;
 
-        ));
+        foreach($this->getSequence() as $i => $element) {
+
+            if(   true === $set
+               && !($element instanceof Hoa_Tokenizer_Token_Comment)) {
+
+                $array[] = array(array(
+                    0 => Hoa_Tokenizer::_POINT,
+                    1 => '.',
+                    2 => -1
+                ));
+            }
+            else
+                $set = true;
+
+            $array[] = $element->toArray();
+        }
+
+        return array_merge($array);
     }
 }

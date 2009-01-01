@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Array
+ * @subpackage  Hoa_Tokenizer_Token_String_Constant
  *
  */
 
@@ -43,19 +43,19 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface
- */
-import('Tokenizer.Token.Util.Interface');
-
-/**
  * Hoa_Tokenizer
  */
 import('Tokenizer.~');
 
 /**
- * Class Hoa_Tokenizer_Token_Array.
+ * Hoa_Tokenizer_Token_String
+ */
+import('Tokenizer.Token.String');
+
+/**
+ * Class Hoa_Tokenizer_Token_String_Constant.
  *
- * Represent an array (aïe, not easy …).
+ * Represent a constant.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -63,74 +63,53 @@ import('Tokenizer.~');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Array
+ * @subpackage  Hoa_Tokenizer_Token_String_Constant
  */
 
-class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface {
+class Hoa_Tokenizer_Token_String_Constant extends Hoa_Tokenizer_Token_String {
 
     /**
-     * Set of key/value that constitute an array.
+     * Sequence of values.
      *
-     * @var Hoa_Tokenizer_Token_Array array
+     * @var Hoa_Tokenizer_Token_String_Constant array
      */
-    protected $_array = array();
+    protected $_sequence = array();
 
 
-
-    /**
-     * Constructor.
-     *
-     * @access  public
-     * @param   mixed   $elements    Could be an instance of an element or a
-     *                               collection of elements.
-     * @return  void
-     */
-    public function __construct ( $elements = array() ) {
-
-        $this->addElements((array) $elements);
-
-        return;
-    }
 
     /**
      * Add many elements.
      *
      * @access  public
-     * @param   array   $elements    Add many elements to the array.
+     * @param   array   $elements    Add many elements to the sequence.
      * @return  array
      */
     public function addElements ( Array $elements = array() ) {
 
         foreach($elements as $i => $element)
-            $this->addElement($element[0], $element[1]);
+            $this->addElement($element);
 
-        return $this->getArray();
+        return $this->getSequence();
     }
 
     /**
      * Add an element.
      *
      * @access  public
-     * @param   mixed   $key      Key to add.
-     * @param   mixed   $value    Value to add.
+     * @param   mixed   $element    Element to add.
      * @return  array
      * @throw   Hoa_Tokenizer_Token_Util_Exception
      */
-    public function addElement ( $key, $value ) {
+    public function addElement ( $element ) {
 
-        // to be completed.
+        switch(get_class($element)) {
 
-        switch(get_class($key)) {
-
+            case 'Hoa_Tokenizer_Token_String':
+            case 'Hoa_Tokenizer_Token_String_Encapsed':
             case 'Hoa_Tokenizer_Token_Comment':
-            case 'Hoa_Tokenizer_Token_String': // Boolean, Constant, Null,
-                                               // EncapsedConstant.
-            case 'Hoa_Tokenizer_Token_Array':
-            case 'Hoa_Tokenizer_Token_Number': // DNumber, LNumber.
+            case 'Hoa_Tokenizer_Token_Number':
             case 'Hoa_Tokenizer_Token_Call':
             case 'Hoa_Tokenizer_Token_Variable':
-            case 'Hoa_Tokenizer_Token_New':
-            case 'Hoa_Tokenizer_Token_Clone':
             case 'Hoa_Tokenizer_Token_Operator':
               break;
 
@@ -140,18 +119,18 @@ class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface {
                     'is an instance of %s.', 0, $element);
         }
 
-        return $this->_array[] = $element;
+        return $this->_sequence[] = $element;
     }
 
     /**
-     * Get the complete array.
+     * Get the complete sequence.
      *
      * @access  protected
      * @return  array
      */
-    protected function getArray ( ) {
+    protected function getSequence ( ) {
 
-        return $this->_array;
+        return $this->_sequence;
     }
 
     /**
@@ -163,8 +142,25 @@ class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface {
      */
     public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD ) {
 
-        return array(array(
+        $array = array();
+        $set   = false;
 
-        ));
+        foreach($this->getSequence() as $i => $element) {
+
+            if(true === $set) {
+
+                $array[] = array(array(
+                    0 => Hoa_Tokenizer::_POINT,
+                    1 => '.',
+                    2 => -1
+                ));
+            }
+            else
+                $set = true;
+
+            $array[] = $element->toArray();
+        }
+
+        return array_merge($array);
     }
 }

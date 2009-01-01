@@ -69,11 +69,11 @@ import('Tokenizer.Token.String');
 class Hoa_Tokenizer_Token_String_Null extends Hoa_Tokenizer_Token_String {
 
     /**
-     * Value.
+     * Name.
      *
      * @var Hoa_Tokenizer_Token_String_Null string
      */
-    protected $_value = 'null';
+    protected $_name = 'null';
 
 
 
@@ -90,10 +90,12 @@ class Hoa_Tokenizer_Token_String_Null extends Hoa_Tokenizer_Token_String {
         if(empty($string))
             $string = 'null';
 
+        $string = strtolower($string);
+
         if($string != 'null')
             throw new Hoa_Tokenizer_Token_Util_Exception(
                 'Null cannot be different of null. Given %s.', 0, $string);
 
-        return parent::setString($string);
+        return 'null';
     }
 }

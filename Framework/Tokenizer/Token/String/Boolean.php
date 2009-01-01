@@ -72,7 +72,7 @@ class Hoa_Tokenizer_Token_String_Boolean extends Hoa_Tokenizer_Token_String {
      * Set string.
      *
      * @access  public
-     * @param   string  $string    String.
+     * @param   mixed   $string    String, could be a boolean or a string.
      * @return  string
      * @throw   Hoa_Tokenizer_Token_Util_Exception
      */
@@ -82,6 +82,8 @@ class Hoa_Tokenizer_Token_String_Boolean extends Hoa_Tokenizer_Token_String {
             $string    = 'true';
         elseif(false === $string)
             $string    = 'false';
+
+        $string = strtolower($string);
 
         if(   $string != 'true'
            && $string != 'false')
