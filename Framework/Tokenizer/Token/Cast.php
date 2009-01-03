@@ -55,7 +55,7 @@ import('Tokenizer.~');
 /**
  * Class Hoa_Tokenizer_Token_Cast.
  *
- * Represent an array (aïe, not easy …).
+ * Represent a cast.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
