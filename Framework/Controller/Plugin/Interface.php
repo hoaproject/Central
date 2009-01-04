@@ -73,7 +73,7 @@ interface Hoa_Controller_Plugin_Interface {
      * @throw   Hoa_Controller_Exception
      */
     public function postRouter ( Hoa_Controller_Request_Abstract $request,
-                                 Hoa_Controller_Router_Standard  $router);
+                                 Hoa_Controller_Router_Standard  $router );
 
     /**
      * preDispatcher notification.
@@ -85,7 +85,7 @@ interface Hoa_Controller_Plugin_Interface {
      * @throw   Hoa_Controller_Exception
      */
     public function preDispatcher ( Hoa_Controller_Request_Abstract $request,
-                                    Hoa_Controller_Router_Standard  $router);
+                                    Hoa_Controller_Router_Standard  $router );
 
     /**
      * postDispatcher notification.
@@ -102,5 +102,5 @@ interface Hoa_Controller_Plugin_Interface {
      */
     public function postDispatcher ( Hoa_Controller_Request_Abstract    $request,
                                      Hoa_Controller_Dispatcher_Abstract $dispatcher,
-                                     $dispatch);
+                                     $dispatch );
 }
