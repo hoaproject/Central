@@ -125,7 +125,7 @@ class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface {
             case 'Hoa_Tokenizer_Token_Comment':
             case 'Hoa_Tokenizer_Token_String': // Boolean, Constant, Null,
                                                // EncapsedConstant.
-            case 'Hoa_Tokenizer_Token_Array':
+            //case 'Hoa_Tokenizer_Token_Array':
             case 'Hoa_Tokenizer_Token_Number': // DNumber, LNumber.
             case 'Hoa_Tokenizer_Token_Call':
             case 'Hoa_Tokenizer_Token_Variable':
