@@ -69,7 +69,7 @@ import('Tokenizer.~');
 abstract class Hoa_Tokenizer_Token_Number implements Hoa_Tokenizer_Token_Util_Interface {
 
     /**
-     * Pattern of a {DEC} : ([1-9][0-9]*) | 0.
+     * Pattern of a {DEC} : ([1-9][0-9]*) | 0.
      *
      * @const string
      */
