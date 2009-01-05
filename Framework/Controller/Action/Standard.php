@@ -140,7 +140,7 @@ class Hoa_Controller_Action_Standard extends Hoa_Controller_Dispatcher_Action {
      *
      * @access  public
      * @param   string  $className    Class name.
-     * @return  object
+     * @return  bool
      */
     public function autoloadModel ( $classname ) {
 
@@ -157,6 +157,8 @@ class Hoa_Controller_Action_Standard extends Hoa_Controller_Dispatcher_Action {
             return false;
 
         require_once $path;
+
+        return true;
     }
 
     /**
