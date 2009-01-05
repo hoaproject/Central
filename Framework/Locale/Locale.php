@@ -152,7 +152,7 @@ class Hoa_Locale {
      *
      * @var Hoa_Locale string
      */
-    private $_country       = '';
+    private $_country         = '';
 
     /**
      * Alpha3.
