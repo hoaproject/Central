@@ -363,7 +363,7 @@ class Hoa_Framework {
 
         if($type === self::CONFIGURATION_ARRAY) {
 
-            $configuration = require($path);
+            $configuration = require $path;
             return true;
         }
 
