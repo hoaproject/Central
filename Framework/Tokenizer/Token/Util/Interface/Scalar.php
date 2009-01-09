@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Util_Interface
+ * @subpackage  Hoa_Tokenizer_Token_Util_Interface_Scalar
  *
  */
 
@@ -38,14 +38,14 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Tokenizer_Token_Util_Interface_Type
  */
-import('Tokenizer.~');
+import('Tokenizer.Token.Util.Interface.Type');
 
 /**
- * Interface Hoa_Tokenizer_Token_Util_Interface.
+ * Interface Hoa_Tokenizer_Token_Util_Interface_Scalar.
  *
- * Force somes methods for token classes.
+ * Whether a data is scalar.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -53,17 +53,7 @@ import('Tokenizer.~');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Util_Interface
+ * @subpackage  Hoa_Tokenizer_Token_Util_Interface_Scalar
  */
 
-interface Hoa_Tokenizer_Token_Util_Interface {
-
-    /**
-     * Transform token to “tokenizer array”.
-     *
-     * @access  public
-     * @param   int     $context    Context.
-     * @return  array
-     */
-    public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD );
-}
+interface Hoa_Tokenizer_Token_Util_Interface_Scalar { }
