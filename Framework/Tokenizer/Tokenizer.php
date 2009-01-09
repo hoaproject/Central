@@ -211,7 +211,11 @@ abstract class Hoa_Tokenizer {
      *
      * @const string
      */
-    const _AT                = '@';
+    const _AT_SIGN           = '@';
+    const _BITWISE_AND       = '&';
+    const _BITWISE_OR        = '|';
+    const _BITWISE_XOR       = '^';
+    const _BITWISE_NOT       = '~';
     const _CLOSE_BRACE       = '}';
     const _CLOSE_BRACKET     = ']';
     const _CLOSE_PARENTHESES = ')';
@@ -219,8 +223,11 @@ abstract class Hoa_Tokenizer {
     const _DIV               = '/';
     const _DOUBLE_QUOTES     = '"';
     const _EQUAL             = '=';
-    const _EXCLAMATION_MARK  = '!';
+    const _EXECUTION         = '`';
+    const _IS_GREATER        = '>';
+    const _IS_SMALLER        = '<';
     const _QUESTION_MARK     = '?';
+    const _LOGICAL_NOT       = '!';
     const _MINUS             = '-';
     const _MOD               = '%';
     const _MUL               = '*';
@@ -288,7 +295,23 @@ abstract class Hoa_Tokenizer {
         switch($token) {
 
             case '@':
-                return 'AT';
+                return 'AT_SIGN';
+              break;
+
+            case '&':
+                return 'BITWISE_AND';
+              break;
+
+            case '|':
+                return 'BITWISE_OR';
+              break;
+
+            case '^':
+                return 'BITWISE_XOR';
+              break;
+
+            case '~':
+                return 'BITWISE_NOT';
               break;
 
             case '}':
@@ -319,12 +342,24 @@ abstract class Hoa_Tokenizer {
                 return 'EQUAL';
               break;
 
-            case '!':
-                return 'EXCLAMATION_MARK';
+            case '`':
+                return 'EXECUTION';
+              break;
+
+            case '>':
+                return 'IS_GREATER';
+              break;
+
+            case '<':
+                return 'IS_SMALLER';
               break;
 
             case '?':
                 return 'QUESTION_MARK';
+              break;
+
+            case '!':
+                return 'LOGICAL_NOT';
               break;
 
             case '-':
