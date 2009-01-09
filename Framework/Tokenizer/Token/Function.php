@@ -43,9 +43,14 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface
+ * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface');
+import('Tokenizer.Token.Util.Interface.Tokenizable');
+
+/**
+ * Hoa_Tokenizer_Token_Util_Interface_SuperScalar
+ */
+import('Tokenizer.Token.Util.Interface.SuperScalar');
 
 /**
  * Hoa_Tokenizer
@@ -66,7 +71,8 @@ import('Tokenizer.~');
  * @subpackage  Hoa_Tokenizer_Token_Function
  */
 
-abstract class Hoa_Tokenizer_Token_Function implements Hoa_Tokenizer_Token_Util_Interface {
+abstract class Hoa_Tokenizer_Token_Function implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable,
+                                                       Hoa_Tokenizer_Token_Util_Interface_SuperScalar {
 
     /**
      * Comment.
@@ -267,7 +273,8 @@ abstract class Hoa_Tokenizer_Token_Function implements Hoa_Tokenizer_Token_Util_
         switch(get_class($element)) {
 
             case '':
-            // TO BE COMPLETED.
+                // TO BE COMPLETED.
+              break;
 
             default:
                 throw new Hoa_Tokenizer_Token_Util_Exception(
@@ -335,11 +342,21 @@ abstract class Hoa_Tokenizer_Token_Function implements Hoa_Tokenizer_Token_Util_
     }
 
     /**
+     * Check if a data is an uniform super-scalar or not.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isUniformSuperScalar ( ) {
+
+        return false;
+    }
+
+    /**
      * Transform token to “tokenizer array”.
      *
      * @access  public
-     * @param   int     $context    Context.
      * @return  array
      */
-    abstract public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD );
+    abstract public function tokenize ( );
 }

@@ -71,7 +71,7 @@ class Hoa_Tokenizer_Token_Variable_Valued extends Hoa_Tokenizer_Token_Variable {
     /**
      * Operator.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Assign object
+     * @var Hoa_Tokenizer_Token_Operator_Assignement object
      */
     protected $_operator = null;
 
@@ -85,13 +85,27 @@ class Hoa_Tokenizer_Token_Variable_Valued extends Hoa_Tokenizer_Token_Variable {
 
 
     /**
+     * Constructor.
+     *
+     * @access  public
+     * @param   Hoa_Tokenizer_Token_String  $name    Variable name.
+     * @return  void
+     */
+    public function __construct ( Hoa_Tokenizer_Token_String $name ) {
+
+        $this->setOperator(new Hoa_Tokenizer_Token_Operator_Assignement('='));
+
+        return parent::__construct($name);
+    }
+
+    /**
      * Set operator.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Operator_Assign  $operator    Operator.
-     * @return  Hoa_Tokenizer_Token_Operator_Assign
+     * @param   Hoa_Tokenizer_Token_Operator_Assignement  $operator    Operator.
+     * @return  Hoa_Tokenizer_Token_Operator_Assignement
      */
-    public function setOperator ( Hoa_Tokenizer_Token_Operator_Assign $operator ) {
+    public function setOperator ( Hoa_Tokenizer_Token_Operator_Assignement $operator ) {
 
         $old             = $this->_operator;
         $this->_operator = $operator;
@@ -105,10 +119,29 @@ class Hoa_Tokenizer_Token_Variable_Valued extends Hoa_Tokenizer_Token_Variable {
      * @access  public
      * @param   mixed   $value    Variable's value.
      * @return  mixed
+     * @throw   Hoa_Tokenizer_Token_Util_Exception
      */
     public function setValue ( $value ) {
 
-        // TO BE COMPLETED !!
+        switch(get_class($value)) {
+
+            case 'Hoa_Tokenizer_Token_Array':
+            case 'Hoa_Tokenizer_Token_Call':
+            case 'Hoa_Tokenizer_Token_Cast':
+            case 'Hoa_Tokenizer_Token_Clone':
+            case 'Hoa_Tokenizer_Token_Comment':
+            case 'Hoa_Tokenizer_Token_New':
+            case 'Hoa_Tokenizer_Token_Number':
+            case 'Hoa_Tokenizer_Token_Operation':
+            case 'Hoa_Tokenizer_Token_String':
+            case 'Hoa_Tokenizer_Token_Variable':
+              break;
+
+            default:
+                throw new Hoa_Tokenizer_Token_Util_Exception(
+                    'A variable cannot accept in value a class that is %s.', 0,
+                    get_class($value));
+        }
 
         $old          = $this->_value;
         $this->_value = $value;
@@ -120,7 +153,7 @@ class Hoa_Tokenizer_Token_Variable_Valued extends Hoa_Tokenizer_Token_Variable {
      * Get operator.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_Operator_Assign
+     * @return  Hoa_Tokenizer_Token_Operator_Assignement
      */
     public function getOperator ( ) {
 
@@ -131,13 +164,12 @@ class Hoa_Tokenizer_Token_Variable_Valued extends Hoa_Tokenizer_Token_Variable {
      * Transform token to “tokenizer array”.
      *
      * @access  public
-     * @param   int     $context    Context.
      * @return  array
      */
-    public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD ) {
+    public function tokenize ( ) {
 
         return array_merge(
-            parent::toArray($context),
+            parent::tokenize(),
             $this->getOperator(),
             $this->getValue()
         );
