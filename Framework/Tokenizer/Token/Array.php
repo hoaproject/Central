@@ -43,9 +43,19 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface
+ * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface');
+import('Tokenizer.Token.Util.Interface.Tokenizable');
+
+/**
+ * Hoa_Tokenizer_Token_Util_Interface_SuperScalar
+ */
+import('Tokenizer.Token.Util.Interface.SuperScalar');
+
+/**
+ * Hoa_Tokenizer_Token_Util_Interface_Type
+ */
+import('Tokenizer.Token.Util.Interface.Type');
 
 /**
  * Hoa_Tokenizer
@@ -66,7 +76,23 @@ import('Tokenizer.~');
  * @subpackage  Hoa_Tokenizer_Token_Array
  */
 
-class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface {
+class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable,
+                                           Hoa_Tokenizer_Token_Util_Interface_SuperScalar,
+                                           Hoa_Tokenizer_Token_Util_Interface_Type {
+
+    /**
+     * Represent a key of an array.
+     *
+     * @const int
+     */
+    const KEY   = 0;
+
+    /**
+     * Represent a value of an array.
+     *
+     * @const int
+     */
+    const VALUE = 0;
 
     /**
      * Set of key/value that constitute an array.
@@ -102,7 +128,7 @@ class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface {
     public function addElements ( Array $elements = array() ) {
 
         foreach($elements as $i => $element)
-            $this->addElement($element[0], $element[1]);
+            $this->addElement($element[self::KEY], $element[self::VALUE]);
 
         return $this->getArray();
     }
@@ -118,20 +144,16 @@ class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface {
      */
     public function addElement ( $key, $value ) {
 
-        // to be completed.
-
         switch(get_class($key)) {
 
             case 'Hoa_Tokenizer_Token_Comment':
-            case 'Hoa_Tokenizer_Token_String': // Boolean, Constant, Null,
-                                               // EncapsedConstant.
-            //case 'Hoa_Tokenizer_Token_Array':
-            case 'Hoa_Tokenizer_Token_Number': // DNumber, LNumber.
+            case 'Hoa_Tokenizer_Token_String':
+            case 'Hoa_Tokenizer_Token_Number':
             case 'Hoa_Tokenizer_Token_Call':
             case 'Hoa_Tokenizer_Token_Variable':
             case 'Hoa_Tokenizer_Token_New':
             case 'Hoa_Tokenizer_Token_Clone':
-            case 'Hoa_Tokenizer_Token_Operator':
+            case 'Hoa_Tokenizer_Token_Operation':
               break;
 
             default:
@@ -155,13 +177,76 @@ class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface {
     }
 
     /**
+     * Empty this array.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function emptyMe ( ) {
+
+        $old          = $this->_array;
+        $this->_array = array();
+
+        return $old;
+    }
+
+    /**
+     * Check if this array is empty or not.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isEmpty ( ) {
+
+        return $this->getArray() == array();
+    }
+
+    /**
+     * Check if a data is an uniform super-scalar or not.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isUniformSuperScalar ( ) {
+
+        $old     = null;
+        $current = null;
+
+        foreach($this->getArray() as $i => $entry) {
+
+            if($entry instanceof Hoa_Tokenizer_Token_Util_Interface_Scalar)
+                if($entry->isUniformSuperScalar())
+                    continue;
+                else
+                    return false;
+
+            if(!($entry instanceof Hoa_Tokenizer_Token_Util_Interface_Scalar))
+                return false;
+
+            if(null === $old) {
+
+                $old = get_class($entry);
+                continue;
+            }
+
+            $current = get_class($entry);
+
+            if($current != $old)
+                return false;
+
+            $old = $current;
+        }
+
+        return true;
+    }
+
+    /**
      * Transform token to “tokenizer array”.
      *
      * @access  public
-     * @param   int     $context    Context.
      * @return  array
      */
-    public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD ) {
+    public function tokenize ( ) {
 
         return array(array(
 

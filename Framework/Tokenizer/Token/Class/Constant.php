@@ -43,9 +43,9 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface
+ * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface');
+import('Tokenizer.Token.Util.Interface.Tokenizable');
 
 /**
  * Hoa_Tokenizer
@@ -96,7 +96,7 @@ import('Tokenizer.Token.Operator.Assign');
  * @subpackage  Hoa_Tokenizer_Token_Class_Constant
  */
 
-class Hoa_Tokenizer_Token_Class_Constant implements Hoa_Tokenizer_Token_Util_Interface {
+class Hoa_Tokenizer_Token_Class_Constant implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
 
     /**
      * Constant class (that contains this constant).
@@ -319,25 +319,24 @@ class Hoa_Tokenizer_Token_Class_Constant implements Hoa_Tokenizer_Token_Util_Int
      * Transform token to “tokenizer array”.
      *
      * @access  public
-     * @param   int     $context    Context.
      * @return  array
      */
-    public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD ) {
+    public function tokenize ( ) {
 
         /*
         if(   $context == Hoa_Tokenizer::CONTEXT_STANDARD
            || $context == Hoa_Tokenizer::CONTEXT_DECLARATION)
         */
             return array_merge(
-                $this->getComment()->toArray(),
+                $this->getComment()->tokenize(),
                 array(array(
                     Hoa_Tokenizer::_CONST,
                     'const',
                     -1
                 )),
-                $this->getName()->toArray(),
-                $this->getOperator()->toArray(),
-                $this->getValue()->toArray(),
+                $this->getName()->tokenize(),
+                $this->getOperator()->tokenize(),
+                $this->getValue()->tokenize(),
                 array(array(
                     Hoa_Tokenizer::_SEMI_COLON,
                     ';',
@@ -348,13 +347,13 @@ class Hoa_Tokenizer_Token_Class_Constant implements Hoa_Tokenizer_Token_Util_Int
         /*
         else
             return array_merge(
-                $this->getClass()->getName()->toArray(),
+                $this->getClass()->getName()->tokenize(),
                 array(
                     Hoa_Tokenizer::_DOUBLE_COLON,
                     '::',
                     -1
                 ),
-                $this->getName()->toArray()
+                $this->getName()->tokenize()
             );
         */
     }

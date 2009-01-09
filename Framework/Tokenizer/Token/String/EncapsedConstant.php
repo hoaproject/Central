@@ -88,10 +88,9 @@ class Hoa_Tokenizer_Token_String_EncapsedConstant extends Hoa_Tokenizer_Token_St
      * Transform token to “tokenizer array”.
      *
      * @access  public
-     * @param   int     $context     Context.
      * @return  array
      */
-    public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD ) {
+    public function tokenize ( ) {
 
         return array(array(
             0 => Hoa_Tokenizer::_CONSTANT_ENCAPSED_STRING,

@@ -43,6 +43,11 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
+ * Hoa_Tokenizer_Token_Util_Interface_Scalar
+ */
+import('Tokenizer.Token.Util.Interface.Scalar');
+
+/**
  * Hoa_Tokenizer
  */
 import('Tokenizer.~');
@@ -66,7 +71,8 @@ import('Tokenizer.Token.Call');
  * @subpackage  Hoa_Tokenizer_Token_Call_ClassConstant
  */
 
-class Hoa_Tokenizer_Token_Call_ClassConstant extends Hoa_Tokenizer_Token_Call {
+class Hoa_Tokenizer_Token_Call_ClassConstant extends    Hoa_Tokenizer_Token_Call
+                                             implements Hoa_Tokenizer_Token_Util_Interface_Scalar {
 
     /**
      * Class name.
@@ -154,19 +160,18 @@ class Hoa_Tokenizer_Token_Call_ClassConstant extends Hoa_Tokenizer_Token_Call {
      * Transform token to “tokenizer array”.
      *
      * @access  public
-     * @param   int     $context    Context.
      * @return  array
      */
-    public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD ) {
+    public function tokenize ( ) {
 
         return array_merge(
-            $this->getClass()->toArray(),
+            $this->getClass()->tokenize(),
             array(array(
                 0 => Hoa_Tokenizer::_DOUBLE_COLON,
                 1 => '::',
                 2 => -1
             )),
-            $this->getConstante()->toArray()
+            $this->getConstante()->tokenize()
         );
     }
 }

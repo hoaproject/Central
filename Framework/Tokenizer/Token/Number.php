@@ -43,9 +43,14 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface
+ * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface');
+import('Tokenizer.Token.Util.Interface.Tokenizable');
+
+/**
+ * Hoa_Tokenizer_Token_Util_Interface_Scalar
+ */
+import('Tokenizer.Token.Util.Interface.Scalar');
 
 /**
  * Hoa_Tokenizer
@@ -66,7 +71,8 @@ import('Tokenizer.~');
  * @subpackage  Hoa_Tokenizer_Token_Number
  */
 
-abstract class Hoa_Tokenizer_Token_Number implements Hoa_Tokenizer_Token_Util_Interface {
+abstract class Hoa_Tokenizer_Token_Number implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable,
+                                                     Hoa_Tokenizer_Token_Util_Interface_Scalar {
 
     /**
      * Pattern of a {DEC} : ([1-9][0-9]*) | 0.
@@ -173,5 +179,5 @@ abstract class Hoa_Tokenizer_Token_Number implements Hoa_Tokenizer_Token_Util_In
      * @param   int     $context    Context.
      * @return  array
      */
-    abstract public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD );
+    abstract public function tokenize ( );
 }

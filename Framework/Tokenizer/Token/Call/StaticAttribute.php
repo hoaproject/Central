@@ -43,6 +43,11 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
+ * Hoa_Tokenizer_Token_Util_Interface_SuperScalar
+ */
+import('Tokenizer.Token.Util.Interface.SuperScalar');
+
+/**
  * Hoa_Tokenizer
  */
 import('Tokenizer.~');
@@ -66,7 +71,8 @@ import('Tokenizer.Token.Call');
  * @subpackage  Hoa_Tokenizer_Token_Call_StaticAttribute
  */
 
-class Hoa_Tokenizer_Token_Call_StaticAttribute extends Hoa_Tokenizer_Token_Call {
+class Hoa_Tokenizer_Token_Call_StaticAttribute extends    Hoa_Tokenizer_Token_Call
+                                               implements Hoa_Tokenizer_Token_Util_Interface_SuperScalar {
 
     /**
      * Class name.
@@ -151,22 +157,32 @@ class Hoa_Tokenizer_Token_Call_StaticAttribute extends Hoa_Tokenizer_Token_Call 
     }
 
     /**
+     * Check if a data is an uniform super-scalar or not.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isUniformSuperScalar ( ) {
+
+        return false;
+    }
+
+    /**
      * Transform token to “tokenizer array”.
      *
      * @access  public
-     * @param   int     $context    Context.
      * @return  array
      */
-    public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD ) {
+    public function tokenize ( ) {
 
         return array_merge(
-            $this->getClass()->toArray(),
+            $this->getClass()->tokenize(),
             array(array(
                 0 => Hoa_Tokenizer::_DOUBLE_COLON,
                 1 => '::',
                 2 => -1
             )),
-            $this->getAttribute()->toArray()
+            $this->getAttribute()->tokenize()
         );
     }
 }

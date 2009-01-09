@@ -43,9 +43,9 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface
+ * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface');
+import('Tokenizer.Token.Util.Interface.Tokenizable');
 
 /**
  * Hoa_Tokenizer
@@ -66,7 +66,7 @@ import('Tokenizer.~');
  * @subpackage  Hoa_Tokenizer_Token_New
  */
 
-class Hoa_Tokenizer_Token_New implements Hoa_Tokenizer_Token_Util_Interface {
+class Hoa_Tokenizer_Token_New implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
 
     /**
      * Class name.
@@ -212,10 +212,9 @@ class Hoa_Tokenizer_Token_New implements Hoa_Tokenizer_Token_Util_Interface {
      * Transform token to “tokenizer array”.
      *
      * @access  public
-     * @param   int     $context    Context.
      * @return  array
      */
-    public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD ) {
+    public function tokenize ( ) {
 
         $arguments = array();
         $argSet    = false;
@@ -233,7 +232,7 @@ class Hoa_Tokenizer_Token_New implements Hoa_Tokenizer_Token_Util_Interface {
             else
                 $argSet = true;
 
-            $arguments[] = $argument->toArray();
+            $arguments[] = $argument->tokenize();
         }
 
         return array_merge(
@@ -242,7 +241,7 @@ class Hoa_Tokenizer_Token_New implements Hoa_Tokenizer_Token_Util_Interface {
                 1 => 'new',
                 2 => -1
             )),
-            $this->getClass()->toArray(),
+            $this->getClass()->tokenize(),
             array(array(
                 0 => Hoa_Tokenizer::_OPEN_PARENTHESES,
                 1 => '(',

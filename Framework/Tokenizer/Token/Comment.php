@@ -43,9 +43,9 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface
+ * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface');
+import('Tokenizer.Token.Util.Interface.Tokenizable');
 
 /**
  * Hoa_Tokenizer
@@ -66,7 +66,7 @@ import('Tokenizer.~');
  * @subpackage  Hoa_Tokenizer_Token_Comment
  */
 
-class Hoa_Tokenizer_Token_Comment implements Hoa_Tokenizer_Token_Util_Interface {
+class Hoa_Tokenizer_Token_Comment implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
 
     /**
      * Documentation comment, i.e. starting by /**.
@@ -249,10 +249,9 @@ class Hoa_Tokenizer_Token_Comment implements Hoa_Tokenizer_Token_Util_Interface 
      * Transform token to “tokenizer array”.
      *
      * @access  public
-     * @param   int     $context    Context.
      * @return  array
      */
-    public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD ) {
+    public function tokenize ( ) {
 
         return array(array(
             self::TYPE_DOCUMENTATION === $this->getType()

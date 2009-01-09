@@ -43,6 +43,11 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
+ * Hoa_Tokenizer_Token_Util_Interface_SuperScalar
+ */
+import('Tokenizer.Token.Util.Interface.SuperScalar');
+
+/**
  * Hoa_Tokenizer
  */
 import('Tokenizer.~');
@@ -66,7 +71,8 @@ import('Tokenizer.Token.Call');
  * @subpackage  Hoa_Tokenizer_Token_Call_Function
  */
 
-class Hoa_Tokenizer_Token_Call_Function extends Hoa_Tokenizer_Token_Call {
+class Hoa_Tokenizer_Token_Call_Function extends    Hoa_Tokenizer_Token_Call
+                                        implements Hoa_Tokenizer_Token_Util_Interface_SuperScalar {
 
     /**
      * Function name.
@@ -157,7 +163,7 @@ class Hoa_Tokenizer_Token_Call_Function extends Hoa_Tokenizer_Token_Call {
             case 'Hoa_Tokenizer_Token_Clone':
             case 'Hoa_Tokenizer_Token_New':
             case 'Hoa_Tokenizer_Token_Number':
-            case 'Hoa_Tokenizer_Token_Operator':
+            case 'Hoa_Tokenizer_Token_Operation':
             case 'Hoa_Tokenizer_Token_String':
             case 'Hoa_Tokenizer_Token_String_Encapsed':
             case 'Hoa_Tokenizer_Token_Variable_Valued':
@@ -165,7 +171,8 @@ class Hoa_Tokenizer_Token_Call_Function extends Hoa_Tokenizer_Token_Call {
 
             default:
                 throw new Hoa_Tokenizer_Token_Util_Exception(
-                    'Cannot call a function with a %s in argument', 0, $argument);
+                    'Cannot call a function with a %s in argument', 0,
+                    get_class($argument));
         }
 
         $this->_arguments[] = $argument;
@@ -210,13 +217,23 @@ class Hoa_Tokenizer_Token_Call_Function extends Hoa_Tokenizer_Token_Call {
     }
 
     /**
+     * Check if a data is an uniform super-scalar or not.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isUniformSuperScalar ( ) {
+
+        return false;
+    }
+
+    /**
      * Transform token to “tokenizer array”.
      *
      * @access  public
-     * @param   int     $context    Context.
      * @return  array
      */
-    public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD ) {
+    public function tokenize ( ) {
 
         $arguments = array();
         $argSet    = false;
@@ -234,11 +251,11 @@ class Hoa_Tokenizer_Token_Call_Function extends Hoa_Tokenizer_Token_Call {
             else
                 $argSet = true;
 
-            $arguments[] = $argument->toArray();
+            $arguments[] = $argument->tokenize();
         }
 
         return array_merge(
-            $this->getName()->toArray(),
+            $this->getName()->tokenize(),
             array(array(
                 0 => Hoa_Tokenizer::_OPEN_PARENTHESES,
                 1 => '(',

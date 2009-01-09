@@ -43,9 +43,9 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface
+ * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface');
+import('Tokenizer.Token.Util.Interface.Tokenizable');
 
 /**
  * Hoa_Tokenizer
@@ -66,7 +66,7 @@ import('Tokenizer.~');
  * @subpackage  Hoa_Tokenizer_Token_String_Encapsed
  */
 
-class Hoa_Tokenizer_Token_String_Encapsed implements Hoa_Tokenizer_Token_Util_Interface {
+class Hoa_Tokenizer_Token_String_Encapsed implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
 
     /**
      * Sequence of elements that constitute an encapsed string.
@@ -127,13 +127,13 @@ class Hoa_Tokenizer_Token_String_Encapsed implements Hoa_Tokenizer_Token_Util_In
             case 'Hoa_Tokenizer_Token_Variable':
             case 'Hoa_Tokenizer_Token_New':
             case 'Hoa_Tokenizer_Token_Clone':
-            case 'Hoa_Tokenizer_Token_Operator':
+            case 'Hoa_Tokenizer_Token_Operation':
               break;
 
             default:
                 throw new Hoa_Tokenizer_Token_Util_Exception(
                     'A constant encapsed string cannot accept a class that ' .
-                    'is an instance of %s.', 0, $element);
+                    'is an instance of %s.', 0, get_class($element));
         }
 
         return $this->_sequence[] = $element;
@@ -154,10 +154,9 @@ class Hoa_Tokenizer_Token_String_Encapsed implements Hoa_Tokenizer_Token_Util_In
      * Transform token to “tokenizer array”.
      *
      * @access  public
-     * @param   int     $context    Context.
      * @return  array
      */
-    public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD ) {
+    public function tokenize ( ) {
 
         $array = array();
         $set   = false;
@@ -176,7 +175,7 @@ class Hoa_Tokenizer_Token_String_Encapsed implements Hoa_Tokenizer_Token_Util_In
             else
                 $set = true;
 
-            $array[] = $element->toArray();
+            $array[] = $element->tokenize();
         }
 
         return array_merge($array);

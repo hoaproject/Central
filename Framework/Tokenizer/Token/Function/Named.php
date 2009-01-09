@@ -75,7 +75,7 @@ class Hoa_Tokenizer_Token_Function_Named extends Hoa_Tokenizer_Token_Function {
      * @param   int     $context    Context.
      * @return  array
      */
-    public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD ) {
+    public function tokenize ( ) {
 
         $argSet    = false;
         $arguments = array();
@@ -94,14 +94,14 @@ class Hoa_Tokenizer_Token_Function_Named extends Hoa_Tokenizer_Token_Function {
             else
                 $argSet      = true;
 
-            $arguments[]     = $argument->toArray();
+            $arguments[]     = $argument->tokenize();
         }
 
         foreach($this->getBody as $i => $b)
-            $body[] = $b->toArray();
+            $body[] = $b->tokenize();
 
         return array_merge(
-            $this->getComment()->toArray(),
+            $this->getComment()->tokenize(),
             (
              true === $this->_isReferenced
                  ? array(array(
@@ -111,7 +111,7 @@ class Hoa_Tokenizer_Token_Function_Named extends Hoa_Tokenizer_Token_Function {
                    ))
                  : array(array())
             ),
-            $this->getName()->toArray(),
+            $this->getName()->tokenize(),
             array(array(
                 0 => Hoa_Tokenizer::_OPEN_PARENTHESES,
                 1 => '(',

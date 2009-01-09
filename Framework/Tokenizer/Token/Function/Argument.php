@@ -43,9 +43,9 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface
+ * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface');
+import('Tokenizer.Token.Util.Interface.Tokenizable');
 
 /**
  * Hoa_Tokenizer
@@ -71,7 +71,7 @@ import('Tokenizer.Token.Operator.Assign');
  * @subpackage  Hoa_Tokenizer_Token_Function_Argument
  */
 
-class Hoa_Tokenizer_Token_Function_Argument implements Hoa_Tokenizer_Token_Util_Interface {
+class Hoa_Tokenizer_Token_Function_Argument implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
 
     /**
      * Whether argument is passed by reference.
@@ -193,24 +193,15 @@ class Hoa_Tokenizer_Token_Function_Argument implements Hoa_Tokenizer_Token_Util_
      */
     public function setDefaultValue ( $default ) {
 
-        switch(get_class($default)) {
-
-            case 'Hoa_Tokenizer_Token_Array':
-                if(false === $default->isScalar())
-                    throw new Hoa_Tokenizer_Token_Util_Exception(
-                        'Default value must be scalar.', 0);
-              break;
-
-            case 'Hoa_Tokenizer_Token_Number':
-            case 'Hoa_Tokenizer_Token_String':
-            case 'Hoa_Tokenizer_Token_String_EncapsedString':
-            case 'Hoa_Tokenizer_Token_Call_ClassConstant':
-              break;
-
-            default:
+        if($default instanceof Hoa_Tokenizer_Token_Util_Interface_SuperScalar)
+            if(false === $default->isUniformSuperScalar())
                 throw new Hoa_Tokenizer_Token_Util_Exception(
-                    'Default value must be scalar.', 1);
-        }
+                    'Default value should effectively be a super-scalar, ' .
+                    'but a uniform super-scalar.', 0);
+
+        if(!($default instanceof Hoa_Tokenizer_Token_Util_Interface_Scalar))
+            throw new Hoa_Tokenizer_Token_Util_Exception(
+                'Default value should be a scalar or a uniform super-scalar.', 1);
 
         $old            = $this->_default;
         $this->_default = $default;
@@ -299,10 +290,9 @@ class Hoa_Tokenizer_Token_Function_Argument implements Hoa_Tokenizer_Token_Util_
      * Transform token to “tokenizer array”.
      *
      * @access  public
-     * @param   int     $context    Context.
      * @return  array
      */
-    public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD ) {
+    public function tokenize ( ) {
 
         return array_merge(
             (
@@ -314,7 +304,7 @@ class Hoa_Tokenizer_Token_Function_Argument implements Hoa_Tokenizer_Token_Util_
                               1 => $this->getType()->getString(),
                               2 => -1
                           ))
-                        : $this->getType()->toArray()
+                        : $this->getType()->tokenize()
                    )
                  : array(array())
             ),
@@ -327,12 +317,12 @@ class Hoa_Tokenizer_Token_Function_Argument implements Hoa_Tokenizer_Token_Util_
                    ))
                  : array(array())
             ),
-            $this->getName()->toArray(),
+            $this->getName()->tokenize(),
             (
              true === $this->hasDefaultValue()
                  ? array(array_merge(
-                       $this->getOperator()->toArray(),
-                       $this->getDefaultValue()->toArray()
+                       $this->getOperator()->tokenize(),
+                       $this->getDefaultValue()->tokenize()
                    ))
                  : array(array())
             )
