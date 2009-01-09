@@ -211,7 +211,7 @@ abstract class Hoa_Tokenizer {
      *
      * @const string
      */
-    const _AROBASE           = '@';
+    const _AT                = '@';
     const _CLOSE_BRACE       = '}';
     const _CLOSE_BRACKET     = ']';
     const _CLOSE_PARENTHESES = ')';
@@ -223,7 +223,7 @@ abstract class Hoa_Tokenizer {
     const _QUESTION_MARK     = '?';
     const _MINUS             = '-';
     const _MOD               = '%';
-    const _MUL               = '+';
+    const _MUL               = '*';
     const _OPEN_BRACE        = '{';
     const _OPEN_BRACKET      = '[';
     const _OPEN_PARENTHESES  = '(';
@@ -288,7 +288,7 @@ abstract class Hoa_Tokenizer {
         switch($token) {
 
             case '@':
-                return 'AROBASE';
+                return 'AT';
               break;
 
             case '}':
