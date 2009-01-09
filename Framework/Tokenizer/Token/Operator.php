@@ -43,9 +43,9 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface
+ * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface');
+import('Tokenizer.Token.Util.Interface.Tokenizable');
 
 /**
  * Class Hoa_Tokenizer_Token_Operator.
@@ -61,7 +61,7 @@ import('Tokenizer.Token.Util.Interface');
  * @subpackage  Hoa_Tokenizer_Token_Operator
  */
 
-abstract class Hoa_Tokenizer_Token_Operator implements Hoa_Tokenizer_Token_Util_Interface {
+abstract class Hoa_Tokenizer_Token_Operator implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
 
     /**
      * Operator.
@@ -69,6 +69,13 @@ abstract class Hoa_Tokenizer_Token_Operator implements Hoa_Tokenizer_Token_Util_
      * @var Hoa_Tokenizer_Token_Operator string
      */
     protected $_operator = null;
+
+    /**
+     * Operator type.
+     *
+     * @var Hoa_Tokenizer_Token_Operator mixed
+     */
+    protected $_type     = null;
 
 
 
@@ -102,6 +109,21 @@ abstract class Hoa_Tokenizer_Token_Operator implements Hoa_Tokenizer_Token_Util_
     }
 
     /**
+     * Set type.
+     *
+     * @access  protected
+     * @param   mixed      $type    Type of operator.
+     * @return  mixed
+     */
+    protected function setType ( $type ) {
+
+        $old         = $this->_type;
+        $this->_type = $type;
+
+        return $old;
+    }
+
+    /**
      * Get operator.
      *
      * @access  public
@@ -113,11 +135,28 @@ abstract class Hoa_Tokenizer_Token_Operator implements Hoa_Tokenizer_Token_Util_
     }
 
     /**
+     * Get type.
+     *
+     * @access  protected
+     * @return  mixed
+     */
+    protected function getType ( ) {
+
+        return $this->_type;
+    }
+
+    /**
      * Transform token to “tokenizer array”.
      *
      * @access  public
-     * @param   int     $context    Context.
      * @return  array
      */
-    abstract public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD );
+    public function tokenize ( ) {
+
+        return array(array(
+            $this->getType(),
+            $this->getOperator(),
+            -1
+        ));
+    }
 }

@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator_Comparison
+ * @subpackage  Hoa_Tokenizer_Token_Operator_Logical
  *
  */
 
@@ -53,9 +53,9 @@ import('Tokenizer.~');
 import('Tokenizer.Token.Operator');
 
 /**
- * Class Hoa_Tokenizer_Token_Operator_Comparison.
+ * Class Hoa_Tokenizer_Token_Operator_Logical.
  *
- * Represent comparisons operators.
+ * Represent logical operators.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -63,24 +63,24 @@ import('Tokenizer.Token.Operator');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator_Comparison
+ * @subpackage  Hoa_Tokenizer_Token_Operator_Logical
  */
 
-class Hoa_Tokenizer_Token_Operator_Comparison extends Hoa_Tokenizer_Token_Operator {
+class Hoa_Tokenizer_Token_Operator_Logical extends Hoa_Tokenizer_Token_Operator {
 
     /**
      * Operator.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Comparison string
+     * @var Hoa_Tokenizer_Token_Operator_Logical string
      */
-    protected $_operator = '==';
+    protected $_operator = '&&';
 
     /**
      * Operator type.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Comparison mixed
+     * @var Hoa_Tokenizer_Token_Operator_Logical mixed
      */
-    protected $_type     = Hoa_Tokenizer::_IS_EQUAL;
+    protected $_type     = Hoa_Tokenizer::_BOOLEAN_AND;
 
 
 
@@ -96,42 +96,33 @@ class Hoa_Tokenizer_Token_Operator_Comparison extends Hoa_Tokenizer_Token_Operat
 
         switch($operator) {
 
-            case '==';
-                $this->setType(Hoa_Tokenizer::_IS_EQUAL);
+            case '&&';
+                $this->setType(Hoa_Tokenizer::_BOOLEAN_AND);
               break;
 
-            case '===':
-                $this->setType(Hoa_Tokenizer::_IS_IDENTICAL);
+            case '||':
+                $this->setType(Hoa_Tokenizer::_BOOLEAN_OR);
               break;
 
-            case '!=':
-            case '<>':
-                $this->setType(Hoa_Tokenizer::_IS_NOT_EQUAL);
+            case 'and':
+                $this->setType(Hoa_Tokenizer::_LOGICAL_AND);
               break;
 
-            case '!==':
-                $this->setType(Hoa_Tokenizer::_IS_NOT_IDENTICAL);
+            case 'or':
+                $this->setType(Hoa_Tokenizer::_LOGICAL_OR);
               break;
 
-            case '<':
-                $this->setType(Hoa_Tokenizer::_IS_SMALLER);
+            case 'xor':
+                $this->setType(Hoa_Tokenizer::_LOGICAL_XOR);
               break;
 
-            case '>':
-                $this->setType(Hoa_Tokenizer::_IS_GREATER);
-              break;
-
-            case '<=':
-                $this->setType(Hoa_Tokenizer::_IS_SMALLER_OR_EQUAL);
-              break;
-
-            case '>=':
-                $this->setType(Hoa_Tokenizer::_IS_GREATER_OR_EQUAL);
+            case '!':
+                $this->setType(Hoa_Tokenizer::_LOGICAL_NOT);
               break;
 
             default:
                 throw new Hoa_Tokenizer_Token_Util_Exception(
-                    'Operator %s is not a comparison operator.', 0, $operator);
+                    'Operator %s is not a bitwise operator.', 0, $operator);
         }
 
         return parent::setOperator($operator);

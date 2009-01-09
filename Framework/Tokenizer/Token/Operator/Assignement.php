@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator_Assign
+ * @subpackage  Hoa_Tokenizer_Token_Operator_Assignement
  *
  */
 
@@ -53,9 +53,9 @@ import('Tokenizer.~');
 import('Tokenizer.Token.Operator');
 
 /**
- * Class Hoa_Tokenizer_Token_Operator_Assign.
+ * Class Hoa_Tokenizer_Token_Operator_Assignement.
  *
- * Represent an operator type assign.
+ * Represent assignement operators.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -63,22 +63,22 @@ import('Tokenizer.Token.Operator');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator_Assign
+ * @subpackage  Hoa_Tokenizer_Token_Operator_Assignement
  */
 
-class Hoa_Tokenizer_Token_Operator_Assign extends Hoa_Tokenizer_Token_Operator {
+class Hoa_Tokenizer_Token_Operator_Assignement extends Hoa_Tokenizer_Token_Operator {
 
     /**
      * Operator.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Assign string
+     * @var Hoa_Tokenizer_Token_Operator_Assignement string
      */
     protected $_operator = '=';
 
     /**
      * Operator type.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Assign mixed
+     * @var Hoa_Tokenizer_Token_Operator_Assignement mixed
      */
     protected $_type     = Hoa_Tokenizer::_EQUAL;
 
@@ -146,61 +146,9 @@ class Hoa_Tokenizer_Token_Operator_Assign extends Hoa_Tokenizer_Token_Operator {
 
             default:
                 throw new Hoa_Tokenizer_Token_Util_Exception(
-                    'Operator %s is not a assign operator.', 0, $operator);
+                    'Operator %s is not an assign operator.', 0, $operator);
         }
+
         return parent::setOperator($operator);
-    }
-
-    /**
-     * Set type.
-     *
-     * @access  protected
-     * @param   mixed      $type    Type of operator.
-     * @return  mixed
-     */
-    protected function setType ( $type ) {
-
-        $old         = $this->_type;
-        $this->_type = $type;
-
-        return $old;
-    }
-
-    /**
-     * Get operator.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getOperator ( ) {
-
-        return $this->_operator;
-    }
-
-    /**
-     * Get type.
-     *
-     * @access  protected
-     * @return  mixed
-     */
-    protected function getType ( ) {
-
-        return $this->_type;
-    }
-
-    /**
-     * Transform token to “tokenizer array”.
-     *
-     * @access  public
-     * @param   int     $context    Context.
-     * @return  array
-     */
-    public function toArray ( $context = Hoa_Tokenizer::CONTEXT_STANDARD ) {
-
-        return array(array(
-            $this->getType(),
-            $this->getOperator(),
-            -1
-        ));
     }
 }
