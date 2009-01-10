@@ -69,6 +69,61 @@ import('Tokenizer.~');
 class Hoa_Tokenizer_Token_Whitespace implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
 
     /**
+     * Whitespace.
+     *
+     * @var Hoa_Tokenizer_Token_Whitespace
+     */
+    protected $_whitespace = null;
+
+
+
+    /**
+     * Constructor.
+     *
+     * @access  public
+     * @param   string  $whitespace    Whitespace.
+     * @return  void
+     */
+    public function __construct ( $whitespace ) {
+
+        $this->setWhitespace($whitespace);
+
+        return;
+    }
+
+    /**
+     * Set whitespace.
+     *
+     * @acccess  public
+     * @param    string  $whitespace    Whitespace.
+     * @return   void
+     * @throw    Hoa_Tokenizer_Token_Util_Exception
+     */
+    public function setWhitespace ( $whitespace ) {
+
+        if(0 === preg_match('^[:space:]$', $whitespace))
+            throw new Hoa_Tokenizer_Token_Util_Exception(
+                'A whitespace must only contain spaces, horizontal or ' .
+                'vertical tabs, or newlines.', 0);
+
+        $old               = $this->_whitespace;
+        $this->_whitespace = $whitespace;
+
+        return $old;
+    }
+
+    /**
+     * Get whitespace.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getWhitespace ( ) {
+
+        return $this->_whitespace;
+    }
+
+    /**
      * Transform token to “tokenizer array”.
      *
      * @access  public
@@ -77,7 +132,9 @@ class Hoa_Tokenizer_Token_Whitespace implements Hoa_Tokenizer_Token_Util_Interfa
     public function tokenize ( ) {
 
         return array(array(
-            
+            0 => Hoa_Tokenizer::_WHITESPACE,
+            1 => $this->getWhitespace,
+            2 => -1
         ));
     }
 }
