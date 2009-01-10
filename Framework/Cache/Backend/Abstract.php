@@ -76,7 +76,7 @@ abstract class Hoa_Cache_Backend_Abstract {
      *
      * @var Hoa_Cache array
      */
-    protected $_backendOptions = array();
+    protected $_backendOptions  = array();
 
 
 

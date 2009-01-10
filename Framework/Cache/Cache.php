@@ -95,7 +95,7 @@ class Hoa_Cache {
      *
      * @var Hoa_Cache object
      */
-    protected $_backend = null;
+    protected $_backend         = null;
 
     /**
      * Frontend options.
@@ -103,14 +103,14 @@ class Hoa_Cache {
      * @var Hoa_Cache array
      */
     protected $_frontendOptions = array(
-        'lifetime'          => 3600,
-        'serialize_content' => true,
-        'make_id_with'      => array(
-            'get'           => true,
-            'post'          => true,
-            'cookie'        => true,
-            'session'       => true,
-            'files'         => true
+        'lifetime'              => 3600,
+        'serialize_content'     => true,
+        'make_id_with'          => array(
+            'get'               => true,
+            'post'              => true,
+            'cookie'            => true,
+            'session'           => true,
+            'files'             => true
         )
     );
 
@@ -119,17 +119,17 @@ class Hoa_Cache {
      *
      * @var Hoa_Cache array
      */
-    protected $_backendOptions = array(
-        'cache_directory' => '/tmp/',
-        'compress'        => array(
-            'active'      => true,
-            'level'       => 9
+    protected $_backendOptions  = array(
+        'cache_directory'       => '/tmp/',
+        'compress'              => array(
+            'active'            => true,
+            'level'             => 9
         ),
-        'database'        => array(
-            'host'        => '127.0.0.1',
-            // 'host'     => ':memory:' or '/tmp/sqlite.db' when using SQLite,
-            'port'        => 11211,
-            'persistent'  => true
+        'database'              => array(
+            'host'              => '127.0.0.1',
+            // 'host'           => ':memory:' or '/tmp/sqlite.db' when using SQLite,
+            'port'              => 11211,
+            'persistent'        => true
         )
     );
 
@@ -138,7 +138,7 @@ class Hoa_Cache {
      *
      * @var Hoa_Cache array
      */
-    protected $_id = array();
+    protected $_id              = array();
 
 
 
@@ -234,10 +234,12 @@ class Hoa_Cache {
                 'be Hoa_Cache::FRONTEND or Hoa_Cache::BACKEND.', 2, $end);
 
         if(empty($recursiveEnd)) {
+
             $array       =& $this->{'_' . $end . 'Options'};
             $recursivity = false;
         }
         else {
+
             $array       =& $recursiveEnd;
             $recursivity = true;
         }
@@ -352,9 +354,11 @@ class Hoa_Cache {
         if($element == 'id') {
 
             if($specific !== null) {
+
                 if(false === $out = array_search($specific, $this->_id))
                     throw new Hoa_Cache_Exception(
                         'ID encoded in MD5 %s is not found.', 8, $specific);
+
                 return $out;
             }
             else
