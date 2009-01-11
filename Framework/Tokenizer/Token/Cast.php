@@ -130,6 +130,7 @@ class Hoa_Tokenizer_Token_Cast implements Hoa_Tokenizer_Token_Util_Interface_Tok
               break;
 
             case 'int':
+            case 'integer':
                 $this->_value = 'int';
                 $this->_token = Hoa_Tokenizer::_INT_CAST;
               break;
