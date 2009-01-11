@@ -120,7 +120,9 @@ class Hoa_Tokenizer_Token_Operation implements Hoa_Tokenizer_Token_Util_Interfac
         switch(get_class($element)) {
 
             case 'Hoa_Tokenizer_Token_Array':
+            case 'Hoa_Tokenizer_Token_Call':
             case 'Hoa_Tokenizer_Token_Comment':
+            case 'Hoa_Tokenizer_Token_String':
             case 'Hoa_Tokenizer_Token_Number':
             case 'Hoa_Tokenizer_Token_Operator':
             case 'Hoa_Tokenizer_Token_Variable':
