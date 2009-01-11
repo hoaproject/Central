@@ -190,6 +190,7 @@ class Hoa_Tokenizer_Token_Function_Argument implements Hoa_Tokenizer_Token_Util_
      * @access  public
      * @param   mixed   $default    Default argument.
      * @return  mixed
+     * @throw   Hoa_Tokenizer_Token_Util_Exception
      */
     public function setDefaultValue ( $default ) {
 
@@ -201,7 +202,7 @@ class Hoa_Tokenizer_Token_Function_Argument implements Hoa_Tokenizer_Token_Util_
 
         if(!($default instanceof Hoa_Tokenizer_Token_Util_Interface_Scalar))
             throw new Hoa_Tokenizer_Token_Util_Exception(
-                'Default value should be a scalar or a uniform super-scalar.', 1);
+                'Default value must be a scalar or a uniform super-scalar.', 1);
 
         $old            = $this->_default;
         $this->_default = $default;
