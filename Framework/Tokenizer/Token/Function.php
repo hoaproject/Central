@@ -342,6 +342,17 @@ abstract class Hoa_Tokenizer_Token_Function implements Hoa_Tokenizer_Token_Util_
     }
 
     /**
+     * Check if function has a body.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function hasBody ( ) {
+
+        return $this->getBody() == array();
+    }
+
+    /**
      * Check if a data is an uniform super-scalar or not.
      *
      * @access  public
