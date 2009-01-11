@@ -69,7 +69,7 @@ import('Tokenizer.~');
 class Hoa_Tokenizer_Token_Variable implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
 
     /**
-     * Name.
+     * Variable name.
      *
      * @var Hoa_Tokenizer_Token_String object
      */
