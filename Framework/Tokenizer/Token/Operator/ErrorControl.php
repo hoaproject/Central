@@ -73,14 +73,28 @@ class Hoa_Tokenizer_Token_Operator_ErrorControl extends Hoa_Tokenizer_Token_Oper
      *
      * @var Hoa_Tokenizer_Token_Operator_ErrorControl string
      */
-    protected $_operator = '@';
+    protected $_operator   = '@';
 
     /**
      * Operator type.
      *
      * @var Hoa_Tokenizer_Token_Operator_ErrorControl mixed
      */
-    protected $_type     = Hoa_Tokenizer::_AT_SIGN;
+    protected $_type       = Hoa_Tokenizer::_AT_SIGN;
+
+    /**
+     * Operator arity.
+     *
+     * @var Hoa_Tokenizer_Token_Operator_ErrorControl int
+     */
+    protected $_arity      = parent::UNARY;
+
+    /**
+     * Operator precedence.
+     *
+     * @var Hoa_Tokenizer_Token_Operator_ErrorControl int
+     */
+    protected $_precedence = 18;
 
 
 

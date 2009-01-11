@@ -73,14 +73,28 @@ class Hoa_Tokenizer_Token_Operator_Assignement extends Hoa_Tokenizer_Token_Opera
      *
      * @var Hoa_Tokenizer_Token_Operator_Assignement string
      */
-    protected $_operator = '=';
+    protected $_operator   = '=';
 
     /**
      * Operator type.
      *
      * @var Hoa_Tokenizer_Token_Operator_Assignement mixed
      */
-    protected $_type     = Hoa_Tokenizer::_EQUAL;
+    protected $_type       = Hoa_Tokenizer::_EQUAL;
+
+    /**
+     * Operator arity.
+     *
+     * @var Hoa_Tokenizer_Token_Operator_Assignement int
+     */
+    protected $_arity      = parent::BINARY;
+
+    /**
+     * Operator precedence.
+     *
+     * @var Hoa_Tokenizer_Token_Operator_Assignement int
+     */
+    protected $_precedence = 4;
 
 
 

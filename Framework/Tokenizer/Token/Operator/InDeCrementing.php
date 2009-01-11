@@ -73,14 +73,28 @@ class Hoa_Tokenizer_Token_Operator_InDeCrementing extends Hoa_Tokenizer_Token_Op
      *
      * @var Hoa_Tokenizer_Token_Operator_InDeCrementing string
      */
-    protected $_operator = '++';
+    protected $_operator   = '++';
 
     /**
      * Operator type.
      *
      * @var Hoa_Tokenizer_Token_Operator_InDeCrementing mixed
      */
-    protected $_type     = Hoa_Tokenizer::_INC;
+    protected $_type       = Hoa_Tokenizer::_INC;
+
+    /**
+     * Operator arity.
+     *
+     * @var Hoa_Tokenizer_Token_Operator_InDeCrementing int
+     */
+    protected $_arity      = parent::UNARY;
+
+    /**
+     * Operator precedence.
+     *
+     * @var Hoa_Tokenizer_Token_Operator_InDeCrementing int
+     */
+    protected $_precedence = 19;
 
 
 

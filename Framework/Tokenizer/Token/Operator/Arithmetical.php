@@ -73,14 +73,28 @@ class Hoa_Tokenizer_Token_Operator_Arithmetical extends Hoa_Tokenizer_Token_Oper
      *
      * @var Hoa_Tokenizer_Token_Operator_Arithmetical string
      */
-    protected $_operator = '+';
+    protected $_operator   = '+';
 
     /**
      * Operator type.
      *
      * @var Hoa_Tokenizer_Token_Operator_Arithmetical mixed
      */
-    protected $_type     = Hoa_Tokenizer::_PLUS;
+    protected $_type       = Hoa_Tokenizer::_PLUS;
+
+    /**
+     * Operator arity.
+     *
+     * @var Hoa_Tokenizer_Token_Operator_Arithmetical int
+     */
+    protected $_arity      = parent::BINARY;
+
+    /**
+     * Operator precedence.
+     *
+     * @var Hoa_Tokenizer_Token_Operator_Arithmetical int
+     */
+    protected $_precedence = 14;
 
 
 
@@ -98,22 +112,32 @@ class Hoa_Tokenizer_Token_Operator_Arithmetical extends Hoa_Tokenizer_Token_Oper
 
             case '+';
                 $this->setType(Hoa_Tokenizer::_PLUS);
+                $this->setArity(parent::BINARY);
+                $this->setPrecedence(14);
               break;
 
             case '-':
                 $this->setType(Hoa_Tokenizer::_MINUS);
+                $this->setArity(parent::MIXED);
+                $this->setPrecedence(14);
               break;
 
             case '*':
                 $this->setType(Hoa_Tokenizer::_MUL);
+                $this->setArity(parent::BINARY);
+                $this->setPrecedence(15);
               break;
 
             case '/':
                 $this->setType(Hoa_Tokenizer::_DIV);
+                $this->setArity(parent::BINARY);
+                $this->setPrecedence(15);
               break;
 
             case '%':
                 $this->setType(Hoa_Tokenizer::_MOD);
+                $this->setArity(parent::BINARY);
+                $this->setPrecedence(15);
               break;
 
             default:

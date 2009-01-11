@@ -64,18 +64,53 @@ import('Tokenizer.Token.Util.Interface.Tokenizable');
 abstract class Hoa_Tokenizer_Token_Operator implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
 
     /**
+     * Arity : whether operator is unary.
+     *
+     * @const int
+     */
+    const UNARY  = 0;
+
+    /**
+     * Arity : whether operator is binary.
+     *
+     * @const int
+     */
+    const BINARY = 1;
+
+    /**
+     * Arity : whether operator should be unary or binary (for example : minus).
+     *
+     * @const int
+     */
+    const MIXED  = 2;
+
+    /**
      * Operator.
      *
      * @var Hoa_Tokenizer_Token_Operator string
      */
-    protected $_operator = null;
+    protected $_operator   = null;
 
     /**
      * Operator type.
      *
      * @var Hoa_Tokenizer_Token_Operator mixed
      */
-    protected $_type     = null;
+    protected $_type       = null;
+
+    /**
+     * Operator arity.
+     *
+     * @var Hoa_Tokenizer_Token_Operator int
+     */
+    protected $_arity      = 0;
+
+    /**
+     * Operator precedence.
+     *
+     * @var Hoa_Tokenizer_Token_Operator int
+     */
+    protected $_precedence = -1;
 
 
 
@@ -124,6 +159,36 @@ abstract class Hoa_Tokenizer_Token_Operator implements Hoa_Tokenizer_Token_Util_
     }
 
     /**
+     * Set arity.
+     *
+     * @access  protected
+     * @param   int        $arity    Arity of operator.
+     * @return  int
+     */
+    protected function setArity ( $arity ) {
+
+        $old          = $this->_arity;
+        $this->_arity = $arity;
+
+        return $old;
+    }
+
+    /**
+     * Set precedence.
+     *
+     * @access  protected
+     * @param   int        $precedence    Predence of operator.
+     * @return  int
+     */
+    protected function setPrecedence ( $precedence ) {
+
+        $old               = $this->_precedence;
+        $this->_precedence = $precedence;
+
+        return $old;
+    }
+
+    /**
      * Get operator.
      *
      * @access  public
@@ -143,6 +208,30 @@ abstract class Hoa_Tokenizer_Token_Operator implements Hoa_Tokenizer_Token_Util_
     protected function getType ( ) {
 
         return $this->_type;
+    }
+
+    /**
+     * Get arity.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getArity ( ) {
+
+        return $this->_arity == self::UNARY
+                   ? 1
+                   : 2;
+    }
+
+    /**
+     * Get precedence.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getPrecedence ( ) {
+
+        return $this->_precedence;
     }
 
     /**

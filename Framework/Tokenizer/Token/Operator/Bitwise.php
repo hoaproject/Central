@@ -73,14 +73,28 @@ class Hoa_Tokenizer_Token_Operator_Bitwise extends Hoa_Tokenizer_Token_Operator 
      *
      * @var Hoa_Tokenizer_Token_Operator_Bitwise string
      */
-    protected $_operator = '&';
+    protected $_operator   = '&';
 
     /**
      * Operator type.
      *
      * @var Hoa_Tokenizer_Token_Operator_Bitwise mixed
      */
-    protected $_type     = Hoa_Tokenizer::_BITWISE_AND;
+    protected $_type       = Hoa_Tokenizer::_BITWISE_AND;
+
+    /**
+     * Operator arity.
+     *
+     * @var Hoa_Tokenizer_Token_Operator_Bitwise int
+     */
+    protected $_arity      = parent::BINARY;
+
+    /**
+     * Operator precedence.
+     *
+     * @var Hoa_Tokenizer_Token_Operator_Bitwise int
+     */
+    protected $_precedence = 10;
 
 
 
@@ -98,26 +112,38 @@ class Hoa_Tokenizer_Token_Operator_Bitwise extends Hoa_Tokenizer_Token_Operator 
 
             case '&';
                 $this->setType(Hoa_Tokenizer::_BITWISE_AND);
+                $this->setArity(parent::BINARY);
+                $this->setPrecedence(10);
               break;
 
             case '|':
                 $this->setType(Hoa_Tokenizer::_BITWISE_OR);
+                $this->setArity(parent::BINARY);
+                $this->setPrecedence(8);
               break;
 
             case '^':
                 $this->setType(Hoa_Tokenizer::_BITWISE_XOR);
+                $this->setArity(parent::BINARY);
+                $this->setPrecedence(9);
               break;
 
             case '~':
                 $this->setType(Hoa_Tokenizer::_BITWISE_NOT);
+                $this->setArity(parent::UNARY);
+                $this->setPrecedence(18);
               break;
 
             case '>>':
                 $this->setType(Hoa_Tokenizer::_SR);
+                $this->setArity(parent::BINARY);
+                $this->setPrecedence(13);
               break;
 
             case '<<':
                 $this->setType(Hoa_Tokenizer::_SL);
+                $this->setArity(parent::BINARY);
+                $this->setPrecedence(13);
               break;
 
             default:

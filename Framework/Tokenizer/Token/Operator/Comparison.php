@@ -73,14 +73,28 @@ class Hoa_Tokenizer_Token_Operator_Comparison extends Hoa_Tokenizer_Token_Operat
      *
      * @var Hoa_Tokenizer_Token_Operator_Comparison string
      */
-    protected $_operator = '==';
+    protected $_operator   = '==';
 
     /**
      * Operator type.
      *
      * @var Hoa_Tokenizer_Token_Operator_Comparison mixed
      */
-    protected $_type     = Hoa_Tokenizer::_IS_EQUAL;
+    protected $_type       = Hoa_Tokenizer::_IS_EQUAL;
+
+    /**
+     * Operator arity.
+     *
+     * @var Hoa_Tokeniezr_Token_Operator_Comparison int
+     */
+    protected $_arity      = parent::BINARY;
+
+    /**
+     * Operator precedence.
+     *
+     * @var Hoa_Tokenizer_Token_Operator_Comparison int
+     */
+    protected $_precedence = 11;
 
 
 
@@ -98,35 +112,47 @@ class Hoa_Tokenizer_Token_Operator_Comparison extends Hoa_Tokenizer_Token_Operat
 
             case '==';
                 $this->setType(Hoa_Tokenizer::_IS_EQUAL);
+                $this->setPrecedence(11);
               break;
 
             case '===':
                 $this->setType(Hoa_Tokenizer::_IS_IDENTICAL);
+                $this->setPrecedence(11);
               break;
 
             case '!=':
+                $this->setType(Hoa_Tokenizer::_IS_NOT_EQUAL);
+                $this->setPrecedence(12);
+              break;
+
             case '<>':
                 $this->setType(Hoa_Tokenizer::_IS_NOT_EQUAL);
+                $this->setPrecedence(11);
               break;
 
             case '!==':
                 $this->setType(Hoa_Tokenizer::_IS_NOT_IDENTICAL);
+                $this->setPrecedence(11);
               break;
 
             case '<':
                 $this->setType(Hoa_Tokenizer::_IS_SMALLER);
+                $this->setPrecedence(12);
               break;
 
             case '>':
                 $this->setType(Hoa_Tokenizer::_IS_GREATER);
+                $this->setPrecedence(12);
               break;
 
             case '<=':
                 $this->setType(Hoa_Tokenizer::_IS_SMALLER_OR_EQUAL);
+                $this->setPrecedence(12);
               break;
 
             case '>=':
                 $this->setType(Hoa_Tokenizer::_IS_GREATER_OR_EQUAL);
+                $this->setPrecedence(12);
               break;
 
             default:

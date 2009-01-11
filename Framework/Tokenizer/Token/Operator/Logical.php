@@ -73,14 +73,28 @@ class Hoa_Tokenizer_Token_Operator_Logical extends Hoa_Tokenizer_Token_Operator 
      *
      * @var Hoa_Tokenizer_Token_Operator_Logical string
      */
-    protected $_operator = '&&';
+    protected $_operator   = '&&';
 
     /**
      * Operator type.
      *
      * @var Hoa_Tokenizer_Token_Operator_Logical mixed
      */
-    protected $_type     = Hoa_Tokenizer::_BOOLEAN_AND;
+    protected $_type       = Hoa_Tokenizer::_BOOLEAN_AND;
+
+    /**
+     * Operator arity.
+     *
+     * @var Hoa_Tokenizer_Token_Operator_Logical int
+     */
+    protected $_arity      = parent::BINARY;
+
+    /**
+     * Operator precedence.
+     *
+     * @var Hoa_Tokenizer_Token_Operator_Logical int
+     */
+    protected $_precedence = 7;
 
 
 
@@ -98,26 +112,38 @@ class Hoa_Tokenizer_Token_Operator_Logical extends Hoa_Tokenizer_Token_Operator 
 
             case '&&';
                 $this->setType(Hoa_Tokenizer::_BOOLEAN_AND);
+                $this->setArity(parent::BINARY);
+                $this->setPrecedence(7);
               break;
 
             case '||':
                 $this->setType(Hoa_Tokenizer::_BOOLEAN_OR);
+                $this->setArity(parent::BINARY);
+                $this->setPrecedence(6);
               break;
 
             case 'and':
                 $this->setType(Hoa_Tokenizer::_LOGICAL_AND);
+                $this->setArity(parent::BINARY);
+                $this->setPrecedence(3);
               break;
 
             case 'or':
                 $this->setType(Hoa_Tokenizer::_LOGICAL_OR);
+                $this->setArity(parent::BINARY);
+                $this->setPrecedence(1);
               break;
 
             case 'xor':
                 $this->setType(Hoa_Tokenizer::_LOGICAL_XOR);
+                $this->setArity(parent::BINARY);
+                $this->setPrecedence(2);
               break;
 
             case '!':
                 $this->setType(Hoa_Tokenizer::_LOGICAL_NOT);
+                $this->setArity(parent::UNARY);
+                $this->setPrecedence(16);
               break;
 
             default:

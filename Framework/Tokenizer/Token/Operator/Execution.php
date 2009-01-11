@@ -73,14 +73,28 @@ class Hoa_Tokenizer_Token_Operator_Execution extends Hoa_Tokenizer_Token_Operato
      *
      * @var Hoa_Tokenizer_Token_Operator_Execution string
      */
-    protected $_operator = '`';
+    protected $_operator   = '`';
 
     /**
      * Operator type.
      *
      * @var Hoa_Tokenizer_Token_Operator_Execution mixed
      */
-    protected $_type     = Hoa_Tokenizer::_EXECUTION;
+    protected $_type       = Hoa_Tokenizer::_EXECUTION;
+
+    /**
+     * Operator arity.
+     *
+     * @var Hoa_Tokenizer_Token_Operator_Execution int
+     */
+    protected $_arity      = parent::UNARY;
+
+    /**
+     * Operator precedence.
+     *
+     * @var Hoa_Tokenizer_Token_Operator_Execution int
+     */
+    protected $_precedence = -1;
 
 
 

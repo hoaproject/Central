@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator_Type
+ * @subpackage  Hoa_Tokenizer_Token_Operator_String
  *
  */
 
@@ -53,9 +53,9 @@ import('Tokenizer.~');
 import('Tokenizer.Token.Operator');
 
 /**
- * Class Hoa_Tokenizer_Token_Operator_Type.
+ * Class Hoa_Tokenizer_Token_Operator_String.
  *
- * Represent a type operator.
+ * Represent bitwise operators.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -63,38 +63,38 @@ import('Tokenizer.Token.Operator');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator_Type
+ * @subpackage  Hoa_Tokenizer_Token_Operator_String
  */
 
-class Hoa_Tokenizer_Token_Operator_Type extends Hoa_Tokenizer_Token_Operator {
+class Hoa_Tokenizer_Token_Operator_String extends Hoa_Tokenizer_Token_Operator {
 
     /**
      * Operator.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Type string
+     * @var Hoa_Tokenizer_Token_Operator_String string
      */
-    protected $_operator   = 'instanceof';
+    protected $_operator   = '.';
 
     /**
      * Operator type.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Type mixed
+     * @var Hoa_Tokenizer_Token_Operator_String mixed
      */
-    protected $_type       = Hoa_Tokenizer::_INSTANCEOF;
+    protected $_type       = Hoa_Tokenizer::_POINT;
 
     /**
      * Operator arity.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Type int
+     * @var Hoa_Tokenizer_Token_Operator_String int
      */
     protected $_arity      = parent::BINARY;
 
     /**
      * Operator precedence.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Type int
+     * @var Hoa_Tokenizer_Token_Operator_String int
      */
-    protected $_precedence = 17;
+    protected $_precedence = 14;
 
 
 
@@ -108,16 +108,9 @@ class Hoa_Tokenizer_Token_Operator_Type extends Hoa_Tokenizer_Token_Operator {
      */
     public function setOperator ( $operator ) {
 
-        switch($operator) {
-
-            case 'instanceof';
-                $this->setType(Hoa_Tokenizer::_INSTANCEOF);
-              break;
-
-            default:
-                throw new Hoa_Tokenizer_Token_Util_Exception(
-                    'Operator %s is not a type operator.', 0, $operator);
-        }
+        if($operator != '.')
+            throw new Hoa_Tokenizer_Toekn_Util_Exception(
+                'The point is the only one string operator.', 0);
 
         return parent::setOperator($operator);
     }
