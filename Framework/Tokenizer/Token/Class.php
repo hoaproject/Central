@@ -58,34 +58,9 @@ import('Tokenizer.Token.Util.Interface.SuperScalar');
 import('Tokenizer.~');
 
 /**
- * Hoa_Tokenizer_Token_String
- */
-import('Tokenizer.Token.String');
-
-/**
  * Hoa_Tokenizer_Token_Comment
  */
 import('Tokenizer.Token.Comment');
-
-/**
- * Hoa_Tokenizer_Token_Interface
- */
-import('Tokenizer.Token.Interface');
-
-/**
- * Hoa_Tokenizer_Token_Class_Constant
- */
-import('Tokenizer.Token.Class.Constant');
-
-/**
- * Hoa_Tokenizer_Token_Class_Attribute
- */
-import('Tokenizer.Token.Class.Attribute');
-
-/**
- * Hoa_Tokenizer_Token_Class_Method
- */
-import('Tokenizer.Token.Class.Method');
 
 /**
  * Class Hoa_Tokenizer_Token_Class.
@@ -161,14 +136,14 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
     protected $_isAbstract = false;
 
     /**
-     * Parent class.
+     * Parent class name.
      *
-     * @var Hoa_Tokenizer_Token_Class object
+     * @var Hoa_Tokenizer_Token_String object
      */
     protected $_parent     = null;
 
     /**
-     * Collection of interfaces.
+     * Collection of interface names.
      *
      * @var Hoa_Tokenizer_Token_Class array
      */
@@ -201,11 +176,10 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
      * Constructor.
      *
      * @access  public
-     * @param   mixed   $name    Class name. Could be a string or a
-     *                           Hoa_Tokenizer_Token_String instance.
+     * @param   Hoa_Tokenizer_Token_String  $name    Class name.
      * @return  void
      */
-    public function __construct ( $name ) {
+    public function __construct ( Hoa_Tokenizer_Token_String $name ) {
 
         $this->setName($name);
 
@@ -242,14 +216,10 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
      * Set class name.
      *
      * @access  public
-     * @param   mixed   $name    Class name. Could be a string or a
-     *                           Hoa_Tokenizer_Token_String instance.
+     * @param   Hoa_Tokenizer_Token_String  $name    Class name.
      * @return  Hoa_Tokenizer_Token_String
      */
-    public function setName ( $name ) {
-
-        if(!($name instanceof Hoa_Tokenizer_Token_String))
-            $name    = new Hoa_Tokenizer_Token_String($name);
+    public function setName ( Hoa_Tokenizer_Token_String $name ) {
 
         $old         = $this->_name;
         $this->_name = $name;
@@ -270,7 +240,7 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
 
         $this->abstractMe(self::CONCRET_CLASS);
 
-        $old            = $this->_isFinal;;
+        $old            = $this->_isFinal;
         $this->_isFinal = $final;
 
         return $old;
@@ -299,10 +269,10 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
      * Set the parent class.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Class  $parent    Parent.
-     * @return  Hoa_Tokenizer_Token_Class
+     * @param   Hoa_Tokenizer_Token_String  $parent    Parent.
+     * @return  Hoa_Tokenizer_Token_String
      */
-    public function setParent ( Hoa_Tokenizer_Token_Class $parent ) {
+    public function setParent ( Hoa_Tokenizer_Token_String $parent ) {
 
         $old           = $this->_parent;
         $this->_parent = $parent;
@@ -351,59 +321,40 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
      * Check if an interface is implemented.
      *
      * @access  public
-     * @param   mixed   $interface    Interface to check. Could be a string or
-     *                                a Hoa_Tokenizer_Token_Interface instance.
+     * @param   Hoa_Tokenizer_Token_String  $interface    Interface name to
+     *                                                    check.
      * @return  bool
      */
-    public function isImplemented ( $interface ) {
+    public function isImplemented ( Hoa_Tokenizer_Token_String $interface ) {
 
-        if($interface instanceof Hoa_Tokenizer_Token_Interface)
-            $interface = $interface->getName();
-
-        foreach($this->getInterfaces() as $i => $ii)
-            if($ii->getName() == $interface)
-                return true;
-
-        return false;
+        return isset($this->_interfaces[$interface->getString()]);
     }
 
     /**
      * Add an interface.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Interface  $interface    Interface instance.
-     * @return  Hoa_Tokenizer_Token_Interface
+     * @param   Hoa_Tokenizer_Token_String  $interface    Interface name.
+     * @return  Hoa_Tokenizer_Token_String
      */
-    public function addInterface ( Hoa_Tokenizer_Token_Interface $interface ) {
+    public function addInterface ( Hoa_Tokenizer_Token_String $interface ) {
 
         if(true === $this->isImplemented($interface))
             return;
 
-        return $this->_interfaces[] = $interface;
+        return $this->_interfaces[$interface->getString()] = $interface;
     }
 
     /**
      * Remove an interface.
      *
      * @access  public
-     * @param   mixed   $interface    Interface name. Could be a string or a
-     *                                Hoa_Tokenizer_Token_Interface instance.
+     * @param   Hoa_Tokenizer_Token_String  $interface    Interface name.
      * @return  array
      */
-    public function removeInterface ( $interface ) {
+    public function removeInterface ( Hoa_Tokenizer_Token_String $interface ) {
 
-        if($interface instanceof Hoa_Tokenizer_Token_Interface)
-            $interface = $interface->getName();
-
-        if(false === $this->isImplemented($interface))
-            return $this->_interfaces;
-
-        foreach($this->getInterfaces() as $i => $ii)
-            if($ii->getName() == $interface) {
-
-                unset($this->_interfaces[$i]);
-                break;
-            }
+        unset($this->_interfaces[$interface->getString()]);
 
         return $this->_interfaces;
     }
@@ -427,21 +378,13 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
      * Check if a constant exists.
      *
      * @access  public
-     * @param   mixed   $constant    Constant to check. Could be a string or
-     *                               a Hoa_Tokenizer_Token_Class_Constant
-     *                               instance.
+     * @param   Hoa_Tokenizer_Token_Class_Constant   $constant    Constant to
+     *                                                            check.
      * @return  bool
      */
-    public function constantExists ( $constant ) {
+    public function constantExists ( Hoa_Tokenizer_Token_Class_Constant $constant ) {
 
-        if($constant instanceof Hoa_Tokenizer_Token_Class_Constant)
-            $constant = $constant->getName();
-
-        foreach($this->getConstants() as $i => $c)
-            if($c->getName() == $constant)
-                return true;
-
-        return false;
+        return isset($this->_constants[$constant->getName()->getString()]);
     }
 
     /**
@@ -457,32 +400,19 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
         if(true === $this->constantExists($constant))
             return;
 
-        return $this->_constants[] = $constant;
+        return $this->_constants[$constant->getName()->getString()] = $constant;
     }
 
     /**
      * Remove a constant.
      *
      * @access  public
-     * @param   mixed   $constant    Constant name. Could be a string or a
-     *                               Hoa_Tokenizer_Token_Class_Constant
-     *                               instance.
+     * @param   Hoa_Tokenizer_Token_Class_Constant  $constant    Constant name.
      * @return  array
      */
-    public function removeConstant ( $constant ) {
+    public function removeConstant ( Hoa_Tokenizer_Token_Class_Constant $constant ) {
 
-        if($constant instanceof Hoa_Tokenizer_Token_Class_Constant)
-            $constant = $constant->getName();
-
-        if(false === $this->constantExists($constant))
-            return $this->_constants;
-
-        foreach($this->getConstants() as $i => $c)
-            if($c->getName() == $constant) {
-
-                unset($this->_constants[$i]);
-                break;
-            }
+        unset($this->_constants[$constant->getName()->getString()]);
 
         return $this->_constants;
     }
@@ -506,21 +436,13 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
      * Check if an attribute exists.
      *
      * @access  public
-     * @param   mixed   $attribute    Attribute to check. Could be a string or
-     *                                a Hoa_Tokenizer_Token_Class_Attribute
-     *                                instance.
+     * @param   Hoa_Tokenizer_Token_Class_Attribute  $attribute    Attribute to
+     *                                                             check.
      * @return  bool
      */
-    public function attributeExists ( $attribute ) {
+    public function attributeExists ( Hoa_Tokenizer_Token_Class_Attribute $attribute ) {
 
-        if($attribute instanceof Hoa_Tokenizer_Token_Class_Attribute)
-            $attribute = $attribute->getName();
-
-        foreach($this->getAttributes() as $i => $a)
-            if($a->getName() == $attribute)
-                return true;
-
-        return false;
+        return isset($this->_attributes[$attribute->getName()->getString()]);
     }
 
     /**
@@ -536,32 +458,19 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
         if(true === $this->attributeExists($attribute))
             return;
 
-        return $this->_attributes[] = $attribute;
+        return $this->_attributes[$attribute->getName()->getString()] = $attribute;
     }
 
     /**
      * Remove an attribute.
      *
      * @access  public
-     * @param   mixed   $attribute    Attribute name. Could be a string or a
-     *                                Hoa_Tokenizer_Token_Class_Attribute
-     *                                instance.
+     * @param   Hoa_Tokenizer_Token_Class_Attribute  $attribute    Attribute name.
      * @return  array
      */
-    public function removeAttribute ( $attribute ) {
+    public function removeAttribute ( Hoa_Tokenizer_Token_Class_Attribute $attribute ) {
 
-        if($attribute instanceof Hoa_Tokenizer_Token_Class_Attribute)
-            $constant = $constant->getName();
-
-        if(false === $this->attributeExists($attribute))
-            return $this->_attributes;
-
-        foreach($this->getAttributes() as $i => $a)
-            if($a->getName() == $attribute) {
-
-                unset($this->_attributes[$i]);
-                break;
-            }
+        unset($this->_attributes[$attribute->getName()->getString()]);
 
         return $this->_attributes;
     }
@@ -585,20 +494,12 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
      * Check if a method exists.
      *
      * @access  public
-     * @param   mixed   $method    Method to check. Could be a string or
-     *                             a Hoa_Tokenizer_Token_Class_Method instance.
+     * @param   Hoa_Tokenizer_Token_Class_Method  $method    Method to check.
      * @return  bool
      */
-    public function methodExists ( $method ) {
+    public function methodExists ( Hoa_Tokenizer_Token_Class_Method $method ) {
 
-        if($method instanceof Hoa_Tokenizer_Token_Class_Method)
-            $method = $method->getName();
-
-        foreach($this->getMethods() as $i => $m)
-            if($m->getName() == $method)
-                return true;
-
-        return false;
+        return isset($this->_methods[$method->getName()->getString()]);
     }
 
     /**
@@ -613,31 +514,19 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
         if(true === $this->methodExists($method))
             return;
 
-        return $this->_methods[] = $method;
+        return $this->_methods[$method->getName()->getString()] = $method;
     }
 
     /**
      * Remove a method.
      *
      * @access  public
-     * @param   mixed   $method    Method name. Could be a string or a
-     *                             Hoa_Tokenizer_Token_Class_Method instance.
+     * @param   Hoa_Tokenizer_Token_Class_Method  $method    Method name.
      * @return  array
      */
-    public function removeMethod ( $method ) {
+    public function removeMethod ( Hoa_Tokenizer_Token_Class_Method $method ) {
 
-        if($method instanceof Hoa_Tokenizer_Token_Class_Method)
-            $method = $method->getName();
-
-        if(false === $this->methodExists($method))
-            return $this->_methods;
-
-        foreach($this->getMethods() as $i => $m)
-            if($m->getName() == $method) {
-
-                unset($this->_methods[$i]);
-                break;
-            }
+        unset($this->_methods[$method->getName()->getString()]);
 
         return $this->_methods;
     }
@@ -703,7 +592,7 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
      * Get parent.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_Class
+     * @return  Hoa_Tokenizer_Token_String
      */
     public function getParent ( ) {
 

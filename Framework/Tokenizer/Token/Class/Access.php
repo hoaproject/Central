@@ -93,7 +93,7 @@ class Hoa_Tokenizer_Token_Class_Access implements Hoa_Tokenizer_Token_Util_Inter
      */
     public function __construct ( $access ) {
 
-        $this->setAccess();
+        $this->setAccess($access);
 
         return;
     }
