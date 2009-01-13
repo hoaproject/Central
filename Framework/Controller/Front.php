@@ -104,7 +104,7 @@ class Hoa_Controller_Front {
      *
      * @var Hoa_Controller_Front object
      */
-    private static $_instance = null;
+    private static $_instance          = null;
 
     /**
      * If exception should be thrown out from controller, this parameter should
@@ -112,35 +112,35 @@ class Hoa_Controller_Front {
      *
      * @var Hoa_Controller_Front bool
      */
-    protected $throwException = false;
+    protected $throwException          = false;
 
     /**
      * Hoa_Controller_Plugin_Standard instance.
      *
      * @var Hoa_Controller_Plugin_Standard string
      */
-    protected $_plugin = null;
+    protected $_plugin                 = null;
 
     /**
      * List of requests for each controller.
      *
      * @var Hoa_Controller_Front oject
      */
-    protected $_request = null;
+    protected $_request                = null;
 
     /**
      * Attached objects.
      *
      * @var Hoa_Controller_Front object
      */
-    protected $_attachedObject = null;
+    protected $_attachedObject         = null;
 
     /**
      * Default parameters.
      *
      * @var Hoa_Controler_Front array
      */
-    private $defaultParameters = array(
+    private $defaultParameters         = array(
         'data.array'                   => array(),
         'data.array.personal'          => null,
 
@@ -196,7 +196,7 @@ class Hoa_Controller_Front {
      *
      * @var Hoa_Controller_Front array
      */
-    protected $parameters = array();
+    protected $parameters              = array();
 
 
 

@@ -73,7 +73,7 @@ class Hoa_Acl_User {
      *
      * @var Hoa_Acl_User mixed
      */
-    protected $userId = null;
+    protected $userId    = null;
 
     /**
      * User label.
@@ -87,7 +87,7 @@ class Hoa_Acl_User {
      *
      * @var Hoa_Acl_User array
      */
-    protected $groups = array();
+    protected $groups    = array();
 
 
 

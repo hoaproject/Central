@@ -79,14 +79,14 @@ class Hoa_Acl_Group implements Hoa_Graph_Node_Interface {
      *
      * @var Hoa_Acl_Group mixed
      */
-    protected $groupId = null;
+    protected $groupId     = null;
 
     /**
      * Group label.
      *
      * @var Hoa_Acl_Group string
      */
-    protected $groupLabel = null;
+    protected $groupLabel  = null;
 
     /**
      * Collections of all permissions.

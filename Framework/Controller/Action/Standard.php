@@ -66,28 +66,28 @@ class Hoa_Controller_Action_Standard extends Hoa_Controller_Dispatcher_Action {
      *
      * @var Hoa_Controller_Action_Standard string
      */
-    protected $viewDirectory = null;
+    protected $viewDirectory       = null;
 
     /**
      * View layout filename.
      *
      * @var Hoa_Controller_Action_Standard string
      */
-    protected $viewLayout = null;
+    protected $viewLayout          = null;
 
     /**
      * View enable layout.
      *
      * @var Hoa_Controller_Action_Standard string
      */
-    protected $viewEnableLayout = null;
+    protected $viewEnableLayout    = null;
 
     /**
      * View filename.
      *
      * @var Hoa_Controller_Action_Standard string
      */
-    protected $viewFile = null;
+    protected $viewFile            = null;
 
     /**
      * View helper directory.
