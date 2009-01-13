@@ -220,6 +220,7 @@ abstract class Hoa_Tokenizer {
     const _CLOSE_BRACKET     = ']';
     const _CLOSE_PARENTHESES = ')';
     const _COMMA             = ',';
+    const _COLON             = ':';
     const _DIV               = '/';
     const _DOUBLE_QUOTES     = '"';
     const _EQUAL             = '=';
@@ -324,6 +325,10 @@ abstract class Hoa_Tokenizer {
 
             case ')':
                 return 'CLOSE_PARENTHESES';
+              break;
+
+            case ':':
+                return 'COLON';
               break;
 
             case ',':
