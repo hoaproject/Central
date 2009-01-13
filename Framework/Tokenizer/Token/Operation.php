@@ -121,16 +121,19 @@ class Hoa_Tokenizer_Token_Operation implements Hoa_Tokenizer_Token_Util_Interfac
 
             case 'Hoa_Tokenizer_Token_Array':
             case 'Hoa_Tokenizer_Token_Call':
+            case 'Hoa_Tokenizer_Token_Cast':
+            case 'Hoa_Tokenizer_Token_Clone':
             case 'Hoa_Tokenizer_Token_Comment':
-            case 'Hoa_Tokenizer_Token_String':
+            case 'Hoa_Tokenizer_Token_New':
             case 'Hoa_Tokenizer_Token_Number':
             case 'Hoa_Tokenizer_Token_Operator':
+            case 'Hoa_Tokenizer_Token_String':
             case 'Hoa_Tokenizer_Token_Variable':
               break;
 
             default:
                 throw new Hoa_Tokenizer_Token_Util_Exception(
-                    'An operation cannot be composed a class that ' .
+                    'An operation cannot be composed by a class that ' .
                     'is an instance of %s.', 0, get_class($element));
         }
 
