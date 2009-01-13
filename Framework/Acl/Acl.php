@@ -88,7 +88,7 @@ class Hoa_Acl {
      *
      * @const bool
      */
-    const DELETE_CASCADE = true;
+    const DELETE_CASCADE  = true;
 
     /**
      * Restricte delete.
@@ -109,21 +109,21 @@ class Hoa_Acl {
      *
      * @var Hoa_Acl array
      */
-    protected $users = array();
+    protected $users          = array();
 
     /**
      * Graph of groups.
      *
      * @var Hoa_Acl Hoa_Graph
      */
-    protected $groups = null;
+    protected $groups         = null;
 
     /**
      * Array of all resources.
      *
      * @var Hoa_Acl array
      */
-    protected $resources = array();
+    protected $resources      = array();
 
 
 

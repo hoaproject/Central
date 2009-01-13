@@ -73,7 +73,7 @@ class Hoa_Acl_Resource {
      *
      * @var Hoa_Acl_Resource mixed
      */
-    protected $resourceId = null;
+    protected $resourceId    = null;
 
     /**
      * Resource label.
@@ -87,7 +87,7 @@ class Hoa_Acl_Resource {
      *
      * @var Hoa_Acl_Resource array
      */
-    protected $users = array();
+    protected $users         = array();
 
 
 
