@@ -43,14 +43,14 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
+ * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ */
+import('Tokenizer.Token.Util.Interface.Tokenizable');
+
+/**
  * Hoa_Tokenizer
  */
 import('Tokenizer.~');
-
-/**
- * Hoa_Tokenizer_Token_Variable_Valued
- */
-import('Tokenizer.Token.Variable.Valued');
 
 /**
  * Hoa_Tokenizer_Token_Class_Access
@@ -71,21 +71,42 @@ import('Tokenizer.Token.Class.Access');
  * @subpackage  Hoa_Tokenizer_Token_Class_Attribute
  */
 
-class Hoa_Tokenizer_Token_Class_Attribute extends Hoa_Tokenizer_Token_Variable_Valued {
+class Hoa_Tokenizer_Token_Class_Attribute implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
 
     /**
      * Attribute comment.
      *
      * @var Hoa_Tokenizer_Token_Comment object
      */
-    protected $_comment = null;
+    protected $_comment  = null;
 
     /**
      * Attribute access.
      *
      * @var Hoa_Tokenizer_Token_Class_Access object
      */
-    protected $_access  = null;
+    protected $_access   = null;
+
+    /**
+     * Attribuale name (variable).
+     *
+     * @var Hoa_Tokenizer_Token_Variable object
+     */
+    protected $_name     = null;
+
+    /**
+     * Attribute operator.
+     *
+     * @var Hoa_Tokenizer_Token_Operator_Assignement object
+     */
+    protected $_operator = null;
+
+    /**
+     * Attribute value.
+     *
+     * @var mixed object
+     */
+    protected $_value    = null;
 
 
 
@@ -99,6 +120,7 @@ class Hoa_Tokenizer_Token_Class_Attribute extends Hoa_Tokenizer_Token_Variable_V
     public function __construct ( Hoa_Tokenizer_Token_String $name ) {
 
         $this->setAccess(new Hoa_Tokenizer_Token_Class_Access('public'));
+        $this->setOperator();
         $this->setName($name);
 
         return;
@@ -135,14 +157,28 @@ class Hoa_Tokenizer_Token_Class_Attribute extends Hoa_Tokenizer_Token_Variable_V
     }
 
     /**
-     * Set operator.
-     * Will not define the new operator. Force “=”.
+     * Set name (variable).
      *
      * @access  public
+     * @param   Hoa_Tokenizer_Token_Variable  $variable    Variable.
+     * @return  Hoa_Tokenizer_Token_Variable
+     */
+    public function setName ( Hoa_Tokenizer_Token_Variable $variable ) {
+
+        $old         = $this->_name;
+        $this->_name = $variable;
+
+        return $old;
+    }
+
+    /**
+     * Set operator.
+     *
+     * @access  protected
      * @param   Hoa_Tokenizer_Token_Operator_Assignement  $operator    Operator.
      * @return  Hoa_Tokenizer_Token_Operator_Assignement
      */
-    public function setOperator ( Hoa_Tokenizer_Token_Operator_Assignement $operator ) {
+    protected function setOperator ( Hoa_Tokenizer_Token_Operator_Assignement $operator ) {
 
         $old             = $this->_operator;
         $this->_operator = new Hoa_Tokenizer_Token_Operator_Assignement('=');
@@ -164,11 +200,11 @@ class Hoa_Tokenizer_Token_Class_Attribute extends Hoa_Tokenizer_Token_Variable_V
             if(false === $value->isUniformSuperScalar())
                 throw new Hoa_Tokenizer_Token_Util_Exception(
                     'Value should effectively be a super-scalar, ' .
-                    'but a uniform super-scalar.', 0);
+                    'but an uniform super-scalar.', 0);
 
         if(!($value instanceof Hoa_Tokenizer_Token_Util_Interface_Scalar))
             throw new Hoa_Tokenizer_Token_Util_Exception(
-                'Value must be a scalar or a uniform super-scalar.', 1);
+                'Value must be a scalar or an uniform super-scalar.', 1);
 
         $old          = $this->_value;
         $this->_value = $value;
@@ -193,9 +229,42 @@ class Hoa_Tokenizer_Token_Class_Attribute extends Hoa_Tokenizer_Token_Variable_V
      * @access  public
      * @return  Hoa_Tokenizer_Token_Class_Access
      */
-    public function getAcess ( ) {
+    public function getAccess ( ) {
 
         return $this->_access;
+    }
+
+    /**
+     * Get name.
+     *
+     * @access  public
+     * @return  Hoa_Tokenizer_Token_Variable
+     */
+    public function getName ( ) {
+
+        return $this->_name;
+    }
+
+    /**
+     * Get operator.
+     *
+     * @access  public
+     * @return  Hoa_Tokenizer_Token_Operator_Assignement
+     */
+    public function getOperator ( ) {
+
+        return $this->_operator;
+    }
+
+    /**
+     * Get value.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function getValue ( ) {
+
+        return $this->_value;
     }
 
     /**
@@ -209,7 +278,9 @@ class Hoa_Tokenizer_Token_Class_Attribute extends Hoa_Tokenizer_Token_Variable_V
         return array_merge(
             $this->getComment()->tokenize(),
             $this->getAccess()->tokenize(),
-            parent::tokenize()
+            $this->getName()->tokenize(),
+            $this->getOperator()->tokenize()
+            $this->getValue()->tokenize()
         );
     }
 }
