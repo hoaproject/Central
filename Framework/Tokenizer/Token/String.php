@@ -53,6 +53,11 @@ import('Tokenizer.Token.Util.Interface.Tokenizable');
 import('Tokenizer.Token.Util.Interface.Scalar');
 
 /**
+ * Hoa_Tokenizer_Token_Util_Interface_Type
+ */
+import('Tokenizer.Token.Util.Interface.Type');
+
+/**
  * Hoa_Tokenizer
  */
 import('Tokenizer.~');
@@ -72,7 +77,8 @@ import('Tokenizer.~');
  */
 
 class Hoa_Tokenizer_Token_String implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable,
-                                            Hoa_Tokenizer_Token_Util_Interface_Scalar {
+                                            Hoa_Tokenizer_Token_Util_Interface_Scalar,
+                                            Hoa_Tokenizer_Token_Util_Interface_Type {
 
     /**
      * Name.

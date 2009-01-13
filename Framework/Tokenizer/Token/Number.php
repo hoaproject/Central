@@ -53,6 +53,11 @@ import('Tokenizer.Token.Util.Interface.Tokenizable');
 import('Tokenizer.Token.Util.Interface.Scalar');
 
 /**
+ * Hoa_Tokenizer_Token_Util_Interface_Type
+ */
+import('Tokenizer.Token.Util.Interface.Type');
+
+/**
  * Hoa_Tokenizer
  */
 import('Tokenizer.~');
@@ -72,7 +77,8 @@ import('Tokenizer.~');
  */
 
 abstract class Hoa_Tokenizer_Token_Number implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable,
-                                                     Hoa_Tokenizer_Token_Util_Interface_Scalar {
+                                                     Hoa_Tokenizer_Token_Util_Interface_Scalar,
+                                                     Hoa_Tokenizer_Token_Util_Interface_Type {
 
     /**
      * Pattern of a {DEC} : ([1-9][0-9]*) | 0.
