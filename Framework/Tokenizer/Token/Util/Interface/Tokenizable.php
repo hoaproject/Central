@@ -56,7 +56,7 @@ import('Tokenizer.~');
  * @subpackage  Hoa_Tokenizer_Token_Util_Tokenizable
  */
 
-interface Hoa_Tokenizer_Token_Util_Tokenizable {
+interface Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
 
     /**
      * Transform token to “tokenizer array”.
