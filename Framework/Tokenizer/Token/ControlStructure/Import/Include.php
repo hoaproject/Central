@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure
+ * @subpackage  Hoa_Tokenizer_Token_ControlStructure_Import_Include
  *
  */
 
@@ -43,17 +43,17 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
- */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
-
-/**
  * Hoa_Tokenizer
  */
 import('Tokenizer.~');
 
 /**
- * Class Hoa_Tokenizer_Token_ControlStructure.
+ * Hoa_Tokenizer_Token_ControlStructure_Import
+ */
+import('Tokenizer.Token.ControlStructure.Import');
+
+/**
+ * Class Hoa_Tokenizer_Token_ControlStructure_Import_Include.
  *
  * .
  *
@@ -63,10 +63,10 @@ import('Tokenizer.~');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure
+ * @subpackage  Hoa_Tokenizer_Token_ControlStructure_Import_Include
  */
 
-abstract class Hoa_Tokenizer_Token_ControlStructure implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+class Hoa_Tokenizer_Token_ControlStructure_Import_Include extends Hoa_Tokenizer_Token_ControlStructure_Import {
 
     /**
      * Transform token to “tokenizer array”.
@@ -74,5 +74,15 @@ abstract class Hoa_Tokenizer_Token_ControlStructure implements Hoa_Tokenizer_Tok
      * @access  public
      * @return  array
      */
-    abstract public function tokenize ( );
+    public function tokenize ( ) {
+
+        return array_merge(
+            array(array(
+                0 => Hoa_Tokenizer::_INCLUDE,
+                1 => 'include',
+                2 => -1
+            )),
+            $this->getValue()->tokenize()
+        );
+    }
 }

@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure
+ * @subpackage  Hoa_Tokenizer_Token_ControlStructure_Conditional_If_Else
  *
  */
 
@@ -53,7 +53,12 @@ import('Tokenizer.Token.Util.Interface.Tokenizable');
 import('Tokenizer.~');
 
 /**
- * Class Hoa_Tokenizer_Token_ControlStructure.
+ * Hoa_Tokenizer_Token_Instruction_Block
+ */
+import('Tokenizer.Token.Instruction.Block');
+
+/**
+ * Class Hoa_Tokenizer_Token_ControlStructure_Conditional_If_Else.
  *
  * .
  *
@@ -63,10 +68,12 @@ import('Tokenizer.~');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure
+ * @subpackage  Hoa_Tokenizer_Token_ControlStructure_Conditional_If_Else
  */
 
-abstract class Hoa_Tokenizer_Token_ControlStructure implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+class          Hoa_Tokenizer_Token_ControlStructure_Conditional_If_Else
+    extends    Hoa_Tokenizer_Token_Instruction_Block
+    implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
 
     /**
      * Transform token to “tokenizer array”.
@@ -74,5 +81,15 @@ abstract class Hoa_Tokenizer_Token_ControlStructure implements Hoa_Tokenizer_Tok
      * @access  public
      * @return  array
      */
-    abstract public function tokenize ( );
+    public function tokenize ( ) {
+
+        return array_merge(
+            array(array(
+                0 => Hoa_Tokenizer::_ELSE,
+                1 => 'else',
+                2 => -1
+            )),
+            parent::tokenize()
+        );
+    }
 }

@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure
+ * @subpackage  Hoa_Tokenizer_Token_ControlStructure_TryCatch
  *
  */
 
@@ -53,7 +53,7 @@ import('Tokenizer.Token.Util.Interface.Tokenizable');
 import('Tokenizer.~');
 
 /**
- * Class Hoa_Tokenizer_Token_ControlStructure.
+ * Class Hoa_Tokenizer_Token_ControlStructure_TryCatch.
  *
  * .
  *
@@ -63,10 +63,10 @@ import('Tokenizer.~');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure
+ * @subpackage  Hoa_Tokenizer_Token_ControlStructure_TryCatch
  */
 
-abstract class Hoa_Tokenizer_Token_ControlStructure implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+abstract class Hoa_Tokenizer_Token_ControlStructure_TryCatch implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
 
     /**
      * Transform token to “tokenizer array”.

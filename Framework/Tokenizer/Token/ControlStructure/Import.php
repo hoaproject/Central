@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure
+ * @subpackage  Hoa_Tokenizer_Token_ControlStructure_Import
  *
  */
 
@@ -43,17 +43,17 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
- */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
-
-/**
  * Hoa_Tokenizer
  */
 import('Tokenizer.~');
 
 /**
- * Class Hoa_Tokenizer_Token_ControlStructure.
+ * Hoa_Tokenizer_Token_ControlStructure
+ */
+import('Tokenizer.Token.ControlStructure');
+
+/**
+ * Class Hoa_Tokenizer_Token_ControlStructure_Import.
  *
  * .
  *
@@ -63,10 +63,59 @@ import('Tokenizer.~');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure
+ * @subpackage  Hoa_Tokenizer_Token_ControlStructure_Import
  */
 
-abstract class Hoa_Tokenizer_Token_ControlStructure implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+abstract class Hoa_Tokenizer_Token_ControlStructure_Import extends Hoa_Tokenizer_Token_ControlStructure {
+
+    /**
+     * Value of import.
+     *
+     * @var Hoa_Tokenizer_Token_Operation object
+     */
+    protected $_value = null;
+
+
+
+    /**
+     * Constructor.
+     *
+     * @access  public
+     * @param   Hoa_Tokenizer_Token_Operation  $value    Value of import.
+     * @return  void
+     */
+    public function __construct ( Hoa_Tokenizer_Token_Operation $value ) {
+
+        $this->setValue($value);
+
+        return;
+    }
+
+    /**
+     * Set value.
+     *
+     * @access  public
+     * @param   Hoa_Tokenizer_Token_Operation  $value    Value of import.
+     * @return  Hoa_Tokenizer_Token_Operation
+     */
+    public function setValue ( Hoa_Tokenizer_Token_Operation $value ) {
+
+        $old          = $this->_value;
+        $this->_value = $value;
+
+        return $old;
+    }
+
+    /**
+     * Get value.
+     *
+     * @access  public
+     * @return  Hoa_Tokenizer_Token_Operation
+     */
+    public function getValue ( ) {
+
+        return $this->_value;
+    }
 
     /**
      * Transform token to “tokenizer array”.
