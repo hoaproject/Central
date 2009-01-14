@@ -58,6 +58,11 @@ import('Tokenizer.~');
 import('Tokenizer.Token.Comment');
 
 /**
+ * Hoa_Tokenizer_Token_Util_Interface_Type
+ */
+import('Tokenizer.Token.Util.Interface.Type');
+
+/**
  * Class Hoa_Tokenizer_Token_Interface.
  *
  * Represent an interface.
@@ -71,7 +76,8 @@ import('Tokenizer.Token.Comment');
  * @subpackage  Hoa_Tokenizer_Token_Interface
  */
 
-class Hoa_Tokenizer_Token_Interface implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+class Hoa_Tokenizer_Token_Interface implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable,
+                                               Hoa_Tokenizer_Token_Util_Interface_Type {
 
     /**
      * Interface comment.

@@ -63,6 +63,11 @@ import('Tokenizer.~');
 import('Tokenizer.Token.Comment');
 
 /**
+ * Hoa_Tokenizer_Token_Util_Interface_Type
+ */
+import('Tokenizer.Token.Util.Interface.Type');
+
+/**
  * Class Hoa_Tokenizer_Token_Class.
  *
  * Represent a class.
@@ -77,7 +82,8 @@ import('Tokenizer.Token.Comment');
  */
 
 class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable,
-                                           Hoa_Tokenizer_Token_Util_Interface_SuperScalar {
+                                           Hoa_Tokenizer_Token_Util_Interface_SuperScalar,
+                                           Hoa_Tokenizer_Token_Util_Interface_Type {
 
     /**
      * Class is final.
