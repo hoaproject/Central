@@ -78,8 +78,8 @@ class Hoa_Tokenizer_Token_String_EncapsedConstant extends Hoa_Tokenizer_Token_St
      */
     public function setString ( $string ) {
 
-        $old          = $this->_value;
-        $this->_value = $string;
+        $old         = $this->_name;
+        $this->_name = $string;
 
         return $old;
     }
