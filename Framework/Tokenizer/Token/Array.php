@@ -214,7 +214,7 @@ class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface_To
 
         foreach($this->getArray() as $i => $entry) {
 
-            if($entry instanceof Hoa_Tokenizer_Token_Util_Interface_Scalar)
+            if($entry instanceof Hoa_Tokenizer_Token_Util_Interface_SuperScalar)
                 if($entry->isUniformSuperScalar())
                     continue;
                 else
