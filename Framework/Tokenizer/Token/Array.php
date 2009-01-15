@@ -137,32 +137,61 @@ class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface_To
      * Add an element.
      *
      * @access  public
-     * @param   mixed   $key      Key to add.
+     * @param   mixed   $key      Key to add. Null to auto-increment.
      * @param   mixed   $value    Value to add.
      * @return  array
      * @throw   Hoa_Tokenizer_Token_Util_Exception
      */
     public function addElement ( $key, $value ) {
 
-        switch(get_class($key)) {
+        if(null !== $key)
+            switch(get_class($key)) {
 
-            case 'Hoa_Tokenizer_Token_Comment':
-            case 'Hoa_Tokenizer_Token_String':
-            case 'Hoa_Tokenizer_Token_Number':
+                case 'Hoa_Tokenizer_Token_Call':
+                case 'Hoa_Tokenizer_Token_Clone':
+                case 'Hoa_Tokenizer_Token_Comment':
+                case 'Hoa_Tokenizer_Token_New':
+                case 'Hoa_Tokenizer_Token_Number':
+                case 'Hoa_Tokenizer_Token_Operation':
+                case 'Hoa_Tokenizer_Token_String_Boolean':
+                case 'Hoa_Tokenizer_Token_String_Constant':
+                case 'Hoa_Tokenizer_Token_String_EncapsedConstant':
+                case 'Hoa_Tokenizer_Token_String_Null':
+                case 'Hoa_Tokenizer_Token_Variable':
+                  break;
+
+                default:
+                    throw new Hoa_Tokenizer_Token_Util_Exception(
+                        'An array key cannot accept a class that ' .
+                        'is an instance of %s.', 0, get_class($key));
+            }
+
+        switch(get_class($value)) {
+
+            case 'Hoa_Tokenizer_Token_Array':
             case 'Hoa_Tokenizer_Token_Call':
-            case 'Hoa_Tokenizer_Token_Variable':
-            case 'Hoa_Tokenizer_Token_New':
             case 'Hoa_Tokenizer_Token_Clone':
+            case 'Hoa_Tokenizer_Token_Comment':
+            case 'Hoa_Tokenizer_Token_New':
+            case 'Hoa_Tokenizer_Token_Number':
             case 'Hoa_Tokenizer_Token_Operation':
+            case 'Hoa_Tokenizer_Token_String_Boolean':
+            case 'Hoa_Tokenizer_Token_String_Constant':
+            case 'Hoa_Tokenizer_Token_String_EncapsedConstant':
+            case 'Hoa_Tokenizer_Token_String_Null':
+            case 'Hoa_Tokenizer_Token_Variable':
               break;
 
             default:
                 throw new Hoa_Tokenizer_Token_Util_Exception(
-                    'A constant encapsed string cannot accept a class that ' .
-                    'is an instance of %s.', 0, $element);
+                    'An array value cannot accept a class that ' .
+                    'is an instance of %s.', 0, get_class($value));
         }
 
-        return $this->_array[] = $element;
+        return $this->_array[] = array(
+            self::KEY   => $key,
+            self::VALUE => $value
+        );
     }
 
     /**
@@ -248,8 +277,51 @@ class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface_To
      */
     public function tokenize ( ) {
 
-        return array(array(
+        $first = true;
+        $array = array();
 
-        ));
+        foreach($this->getArray() as $i => $a) {
+
+            if(false === $first)
+                $array[] = array(array(
+                    0 => Hoa_Tokenizer::_COMMA,
+                    1 => ',',
+                    2 => -1
+                ));
+            else
+                $first = false;
+
+            $array[] = array_merge(
+                (null !== $a[self::KEY]
+                     ? $a[self::KEY]->tokenize()
+                     : array()
+                ),
+                array(array(
+                    0 => Hoa_Tokenizer::_DOUBLE_ARROW,
+                    1 => '=>',
+                    2 => -1
+                )),
+                $a[self::VALUE]->tokenize()
+            );
+        }
+
+        return array_merge(
+            array(array(
+                0 => Hoa_Tokenizer::_ARRAY,
+                1 => 'array',
+                2 => -1
+            )),
+            array(array(
+                0 => Hoa_Tokenizer::_OPEN_PARENTHESES,
+                1 => '(',
+                2 => -1
+            )),
+            $array,
+            array(array(
+                0 => Hoa_Tokenizer::_CLOSE_PARENTHESES,
+                1 => ')',
+                2 => -1
+            ))
+        );
     }
 }
