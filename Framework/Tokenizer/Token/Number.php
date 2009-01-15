@@ -132,7 +132,7 @@ abstract class Hoa_Tokenizer_Token_Number implements Hoa_Tokenizer_Token_Util_In
     /**
      * Value.
      *
-     * @var Hoa_Tokenizer_Token_String mixed
+     * @var Hoa_Tokenizer_Token_Number mixed
      */
     protected $_value     = null;
 
