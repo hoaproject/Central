@@ -43,6 +43,11 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
+ * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ */
+import('Tokenizer.Token.Util.Interface.Tokenizable');
+
+/**
  * Hoa_Tokenizer
  */
 import('Tokenizer.~');
@@ -66,7 +71,43 @@ import('Tokenizer.Token.Function');
  * @subpackage  Hoa_Tokenizer_Token_Function_Named
  */
 
-class Hoa_Tokenizer_Token_Function_Named extends Hoa_Tokenizer_Token_Function {
+class Hoa_Tokenizer_Token_Function_Named extends    Hoa_Tokenizer_Token_Function
+                                         implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+
+    /**
+     * Whether comment is enabled.
+     *
+     * @var Hoa_Tokenizer_Token_Function_Named bool
+     */
+    protected $_commentEnabled = true;
+
+
+
+    /**
+     * Enable comment.
+     *
+     * @access  protected
+     * @param   bool       $enable    Enable comment or not.
+     * @return  bool
+     */
+    protected function enableComment ( $enable ) {
+
+        $old                   = $this->_commentEnabled;
+        $this->_commentEnabled = $enable;
+
+        return $old;
+    }
+
+    /**
+     * Check if comment is enabled or not.
+     *
+     * @access  protected
+     * @return  bool
+     */
+    protected function isCommentEnabled ( ) {
+
+        return $this->_commentEnabled;
+    }
 
     /**
      * Transform token to “tokenizer array”.
@@ -81,35 +122,39 @@ class Hoa_Tokenizer_Token_Function_Named extends Hoa_Tokenizer_Token_Function {
         $arguments = array();
         $body      = array();
 
-        foreach($this->getArguments as $i => $argument) {
+        foreach($this->getArguments() as $i => $argument) {
 
             if(true === $argSet) {
 
-                $arguments[] = array(array(
+                $arguments[] = array(
                     0 => Hoa_Tokenizer::_COMMA,
                     1 => ',',
                     2 => -1
-                ));
+                );
             }
             else
                 $argSet      = true;
 
-            $arguments[]     = $argument->tokenize();
+            foreach($argument->tokenize() as $key => $value)
+                $arguments[] = $value;
         }
 
-        foreach($this->getBody as $i => $b)
-            $body[] = $b->tokenize();
+        foreach($this->getBody() as $i => $b)
+            foreach($b->tokenize() as $key => $value)
+                $body[] = $value;
 
         return array_merge(
-            $this->getComment()->tokenize(),
-            (
-             true === $this->_isReferenced
+            (true === $this->hasComment() && true === $this->isCommentEnabled()
+                 ? $this->getComment()->tokenize()
+                 : array()
+            ),
+            (true === $this->isReferenced()
                  ? array(array(
                        0 => Hoa_Tokenizer::_REFERENCE,
                        1 => '&',
                        3 => -1
                    ))
-                 : array(array())
+                 : array()
             ),
             $this->getName()->tokenize(),
             array(array(
