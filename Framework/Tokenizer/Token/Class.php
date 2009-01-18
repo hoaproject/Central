@@ -244,10 +244,9 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
      */
     public function finalMe ( $final = self::FINAL_CLASS ) {
 
-        $this->abstractMe(self::CONCRET_CLASS);
-
-        $old            = $this->_isFinal;
-        $this->_isFinal = $final;
+        $old               = $this->_isFinal;
+        $this->_isFinal    = $final;
+        $this->_isAbstract = self::CONCRET_CLASS;
 
         return $old;
     }
@@ -263,10 +262,9 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
      */
     public function abstractMe ( $abstract = self::ABSTRACT_CLASS ) {
 
-        $this->finalMe(self::MEMBER_CLASS);
-
         $old               = $this->_isAbstract;
         $this->_isAbstract = $abstract;
+        $this->_isFinal    = self::MEMBER_CLASS;
 
         return $old;
     }
@@ -284,17 +282,6 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
         $this->_parent = $parent;
 
         return $old;
-    }
-
-    /**
-     * Check if class has a parent.
-     *
-     * @access  public
-     * @return  bool
-     */
-    public function hasParent ( ) {
-
-        return null !== $this->getParent();
     }
 
     /**
@@ -342,11 +329,13 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
      * @access  public
      * @param   Hoa_Tokenizer_Token_String  $interface    Interface name.
      * @return  Hoa_Tokenizer_Token_String
+     * @throw   Hoa_Tokenizer_Token_Util_Exception
      */
     public function addInterface ( Hoa_Tokenizer_Token_String $interface ) {
 
         if(true === $this->isImplemented($interface))
-            return;
+            throw new Hoa_Tokenizer_Token_Util_Exception(
+                'Interface %s is already implemented.', 0, $interface->getString());
 
         return $this->_interfaces[$interface->getString()] = $interface;
     }
@@ -400,11 +389,14 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
      * @param   Hoa_Tokenizer_Token_Class_Constant  $constant    Constant
      *                                                           instance.
      * @return  Hoa_Tokenizer_Token_Class_Constant
+     * @throw   Hoa_Tokenizer_Token_Util_Exception
      */
     public function addConstant ( Hoa_Tokenizer_Token_Class_Constant $constant ) {
 
         if(true === $this->constantExists($constant))
-            return;
+            throw new Hoa_Tokenizer_Token_Util_Exception(
+                'Constant %s already exists.',
+                0, $constant->getName()->getString());
 
         return $this->_constants[$constant->getName()->getString()] = $constant;
     }
@@ -448,7 +440,7 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
      */
     public function attributeExists ( Hoa_Tokenizer_Token_Class_Attribute $attribute ) {
 
-        return isset($this->_attributes[$attribute->getName()->getString()]);
+        return isset($this->_attributes[$attribute->getName()->getName()->getString()]);
     }
 
     /**
@@ -458,13 +450,16 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
      * @param   Hoa_Tokenizer_Token_Class_Attribute  $attribute    Attribute
      *                                                             instance.
      * @return  Hoa_Tokenizer_Token_Class_Attribute
+     * @throw   Hoa_Tokenizer_Token_Util_Exception
      */
     public function addAttribute ( Hoa_Tokenizer_Token_Class_Attribute $attribute ) {
 
         if(true === $this->attributeExists($attribute))
-            return;
+            throw new Hoa_Tokenizer_Token_Util_Exception(
+                'Attribute %s alreaday exists.',
+                0, $attribute->getName()->getName()->getString());
 
-        return $this->_attributes[$attribute->getName()->getString()] = $attribute;
+        return $this->_attributes[$attribute->getName()->getName()->getString()] = $attribute;
     }
 
     /**
@@ -476,7 +471,7 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
      */
     public function removeAttribute ( Hoa_Tokenizer_Token_Class_Attribute $attribute ) {
 
-        unset($this->_attributes[$attribute->getName()->getString()]);
+        unset($this->_attributes[$attribute->getName()->getName()->getString()]);
 
         return $this->_attributes;
     }
@@ -514,11 +509,13 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
      * @access  public
      * @param   Hoa_Tokenizer_Token_Class_Method  $method    Method instance.
      * @return  Hoa_Tokenizer_Token_Class_Method
+     * @throw   Hoa_Tokenizer_Token_Util_Exception
      */
     public function addMethod ( Hoa_Tokenizer_Token_Class_Method $method ) {
 
         if(true === $this->methodExists($method))
-            return;
+            throw new Hoa_Tokenizer_Token_Util_Exception(
+                'Method %s already exists.', 0, $method->getName()->getString());
 
         return $this->_methods[$method->getName()->getString()] = $method;
     }
@@ -595,6 +592,17 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
     }
 
     /**
+     * Check if class has a comment.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function hasComment ( ) {
+
+        return null !== $this->getComment();
+    }
+
+    /**
      * Get parent.
      *
      * @access  public
@@ -606,6 +614,17 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
     }
 
     /**
+     * Check if class has parent.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function hasParent ( ) {
+
+        return null !== $this->getParent();
+    }
+
+    /**
      * Get all interfaces.
      *
      * @access  public
@@ -614,6 +633,17 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
     public function getInterfaces ( ) {
 
         return $this->_interfaces;
+    }
+
+    /**
+     * Check if class has one or many interfaces.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function hasInterfaces ( ) {
+
+        return $this->getInterfaces() != array();
     }
 
     /**
@@ -668,6 +698,104 @@ class Hoa_Tokenizer_Token_Class implements Hoa_Tokenizer_Token_Util_Interface_To
      */
     public function tokenize ( ) {
 
-        return array(array());
+        $ifirst     = true;
+        $interfaces = array();
+
+        foreach($this->getInterfaces() as $i => $interface) {
+
+            if(false === $ifirst)
+                $interfaces[] = array(
+                    0 => Hoa_Tokenizer::_COMMA,
+                    1 => ',',
+                    2 => -1
+                );
+            else
+                $ifirst = false;
+
+            $handle       = $interface->tokenize();
+            $interfaces[] = $handle[0];
+        }
+
+        $constants  = array();
+
+        foreach($this->getConstants() as $i => $constant)
+            foreach($constant->tokenize() as $key => $value)
+                $constants[] = $value;
+
+        $attributes = array();
+
+        foreach($this->getAttributes() as $i => $attribute)
+            foreach($attribute->tokenize() as $key => $value)
+                $attributes[] = $value;
+
+        $methods    = array();
+
+        foreach($this->getMethods() as $i => $method)
+            foreach($method->tokenize() as $key => $value)
+                $methods[] = $value;
+
+        return array_merge(
+            (true === $this->hasComment()
+                 ? $this->getComment()->tokenize()
+                 : array()
+            ),
+            (true === $this->isAbstract()
+                 ? array(array(
+                       0 => Hoa_Tokenizer::_ABSTRACT,
+                       1 => 'abstract',
+                       2 => -1
+                   ))
+                 : array()
+            ),
+            (true === $this->isFinal()
+                 ? array(array(
+                       0 => Hoa_Tokenizer::_FINAL,
+                       1 => 'final',
+                       2 => -1
+                   ))
+                 : array()
+            ),
+            array(array(
+                0 => Hoa_Tokenizer::_CLASS,
+                1 => 'class',
+                2 => -1
+            )),
+            $this->getName()->tokenize(),
+            (true === $this->hasParent()
+                 ? array_merge(
+                       array(array(
+                           0 => Hoa_Tokenizer::_EXTENDS,
+                           1 => 'extends',
+                           2 => -1
+                       )),
+                       $this->getParent()->tokenize()
+                   )
+                 : array()
+            ),
+            (true === $this->hasInterfaces()
+                 ? array_merge(
+                       array(array(
+                           0 => Hoa_Tokenizer::_IMPLEMENTS,
+                           1 => 'implements',
+                           2 => -1
+                       )),
+                       $interfaces
+                   )
+                 : array()
+            ),
+            array(array(
+                0 => Hoa_Tokenizer::_OPEN_BRACE,
+                1 => '{',
+                2 => -1
+            )),
+            $constants,
+            $attributes,
+            $methods,
+            array(array(
+                0 => Hoa_Tokenizer::_CLOSE_BRACE,
+                1 => '}',
+                2 => -1
+            ))
+        );
     }
 }
