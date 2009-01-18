@@ -293,14 +293,16 @@ class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface_To
 
             $array[] = array_merge(
                 (null !== $a[self::KEY]
-                     ? $a[self::KEY]->tokenize()
+                     ? array_merge(
+                           $a[self::KEY]->tokenize(),
+                           array(array(
+                               0 => Hoa_Tokenizer::_DOUBLE_ARROW,
+                               1 => '=>',
+                               2 => -1
+                           ))
+                       )
                      : array()
                 ),
-                array(array(
-                    0 => Hoa_Tokenizer::_DOUBLE_ARROW,
-                    1 => '=>',
-                    2 => -1
-                )),
                 $a[self::VALUE]->tokenize()
             );
         }
