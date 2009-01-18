@@ -134,6 +134,7 @@ class Hoa_Tokenizer_Token_Class_Method extends Hoa_Tokenizer_Token_Function_Name
     public function __construct ( Hoa_Tokenizer_Token_String $name ) {
 
         $this->setAccess(new Hoa_Tokenizer_Token_Class_Access('public'));
+        parent::enableComment(false);
 
         return parent::__construct($name);
     }
@@ -233,13 +234,17 @@ class Hoa_Tokenizer_Token_Class_Method extends Hoa_Tokenizer_Token_Function_Name
     public function tokenize ( ) {
 
         return array_merge(
+            (true === $this->hasComment()
+                 ? $this->getComment()->tokenize()
+                 : array()
+            ),
             (true === $this->isFinal()
                  ? array(array(
                        0 => Hoa_Tokenizer::_FINAL,
                        1 => 'final',
                        2 => -1
                    ))
-                 : array(array())
+                 : array()
             ),
             (true === $this->isAbstract()
                  ? array(array(
@@ -247,7 +252,7 @@ class Hoa_Tokenizer_Token_Class_Method extends Hoa_Tokenizer_Token_Function_Name
                        1 => 'abstract',
                        2 => -1
                    ))
-                 : array(array())
+                 : array()
             ),
             $this->getAccess()->tokenize(),
             parent::tokenize()
