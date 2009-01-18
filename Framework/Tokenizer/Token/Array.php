@@ -92,7 +92,7 @@ class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface_To
      *
      * @const int
      */
-    const VALUE = 0;
+    const VALUE = 1;
 
     /**
      * Set of key/value that constitute an array.
