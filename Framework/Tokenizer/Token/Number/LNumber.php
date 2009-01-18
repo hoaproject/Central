@@ -44,6 +44,11 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
+ * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ */
+import('Tokenizer.Token.Util.Interface.Tokenizable');
+
+/**
  * Hoa_Tokenizer
  */
 import('Tokenizer.~');
@@ -67,7 +72,8 @@ import('Tokenizer.Token.Number');
  * @subpackage  Hoa_Tokenizer_Token_Number_LNumber
  */
 
-class Hoa_Tokenizer_Token_Number_LNumber extends Hoa_Tokenizer_Token_Number {
+class Hoa_Tokenizer_Token_Number_LNumber extends    Hoa_Tokenizer_Token_Number
+                                         implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
 
     /**
      * Value.

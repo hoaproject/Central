@@ -43,6 +43,11 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
+ * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ */
+import('Tokenizer.Token.Util.Interface.Tokenizable');
+
+/**
  * Hoa_Tokenizer
  */
 import('Tokenizer.~');
@@ -66,7 +71,8 @@ import('Tokenizer.Token.Number');
  * @subpackage  Hoa_Tokenizer_Token_Number_DNumber
  */
 
-class Hoa_Tokenizer_Token_Number_DNumber extends Hoa_Tokenizer_Token_Number {
+class Hoa_Tokenizer_Token_Number_DNumber extends    Hoa_Tokenizer_Token_Number
+                                         implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
 
     /**
      * Value.
@@ -87,7 +93,8 @@ class Hoa_Tokenizer_Token_Number_DNumber extends Hoa_Tokenizer_Token_Number {
     public function setNumber ( $number ) {
 
         $number  = (float) $number;
-        $pattern = Hoa_Tokenizer_Token_Number::D_DNUM . '|' .
+        $pattern = Hoa_Tokenizer_Token_Number::D_LNUM . '|' .
+                   Hoa_Tokenizer_Token_Number::D_DNUM . '|' .
                    Hoa_Tokenizer_Token_Number::D_EXPONENT_DNUM;
 
         if(0 === preg_match('#' . $pattern . '#', (string) $number))

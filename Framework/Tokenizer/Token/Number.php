@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
- */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
-
-/**
  * Hoa_Tokenizer_Token_Util_Interface_Scalar
  */
 import('Tokenizer.Token.Util.Interface.Scalar');
@@ -76,8 +71,7 @@ import('Tokenizer.~');
  * @subpackage  Hoa_Tokenizer_Token_Number
  */
 
-abstract class Hoa_Tokenizer_Token_Number implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable,
-                                                     Hoa_Tokenizer_Token_Util_Interface_Scalar,
+abstract class Hoa_Tokenizer_Token_Number implements Hoa_Tokenizer_Token_Util_Interface_Scalar,
                                                      Hoa_Tokenizer_Token_Util_Interface_Type {
 
     /**
@@ -177,13 +171,4 @@ abstract class Hoa_Tokenizer_Token_Number implements Hoa_Tokenizer_Token_Util_In
 
         return $this->_value;
     }
-
-    /**
-     * Transform token to “tokenizer array”.
-     *
-     * @access  public
-     * @param   int     $context    Context.
-     * @return  array
-     */
-    abstract public function tokenize ( );
 }
