@@ -43,6 +43,16 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
+ * Hoa_Tokenizer_Token_Util_Interface_Scalar
+ */
+import('Tokenizer.Token.Util.Interface.Scalar');
+
+/**
+ * Hoa_Tokenizer_Token_Util_Interface_Type
+ */
+import('Tokenizer.Token.Util.Interface.Type');
+
+/**
  * Hoa_Tokenizer
  */
 import('Tokenizer.~');
@@ -66,7 +76,9 @@ import('Tokenizer.Token.String');
  * @subpackage  Hoa_Tokenizer_Token_String_EncapsedConstant
  */
 
-class Hoa_Tokenizer_Token_String_EncapsedConstant extends Hoa_Tokenizer_Token_String {
+class Hoa_Tokenizer_Token_String_EncapsedConstant extends    Hoa_Tokenizer_Token_String
+                                                  implements Hoa_Tokenizer_Token_Util_Interface_Scalar,
+                                                             Hoa_Tokenizer_Token_Util_Interface_Type {
 
     /**
      * Set string.
