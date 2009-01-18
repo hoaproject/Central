@@ -58,6 +58,11 @@ import('Tokenizer.~');
 import('Tokenizer.Token.Class.Access');
 
 /**
+ * Hoa_Tokenizer_Token_Operator_Assignement
+ */
+import('Tokenizer.Token.Operator.Assignement');
+
+/**
  * Class Hoa_Tokenizer_Token_Class_Attribute.
  *
  * .
@@ -114,13 +119,13 @@ class Hoa_Tokenizer_Token_Class_Attribute implements Hoa_Tokenizer_Token_Util_In
      * Constructor.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_String  $name    Attribute name.
+     * @param   Hoa_Tokenizer_Token_Variable  $name    Attribute name.
      * @return  void
      */
-    public function __construct ( Hoa_Tokenizer_Token_String $name ) {
+    public function __construct ( Hoa_Tokenizer_Token_Variable $name ) {
 
         $this->setAccess(new Hoa_Tokenizer_Token_Class_Access('public'));
-        $this->setOperator();
+        $this->setOperator(new Hoa_Tokenizer_Token_Operator_Assignement('='));
         $this->setName($name);
 
         return;
@@ -181,7 +186,7 @@ class Hoa_Tokenizer_Token_Class_Attribute implements Hoa_Tokenizer_Token_Util_In
     protected function setOperator ( Hoa_Tokenizer_Token_Operator_Assignement $operator ) {
 
         $old             = $this->_operator;
-        $this->_operator = new Hoa_Tokenizer_Token_Operator_Assignement('=');
+        $this->_operator = $operator;
 
         return $old;
     }
@@ -221,6 +226,17 @@ class Hoa_Tokenizer_Token_Class_Attribute implements Hoa_Tokenizer_Token_Util_In
     public function getComment ( ) {
 
         return $this->_comment;
+    }
+
+    /**
+     * Check if attribute has a comment.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function hasComment ( ) {
+
+        return null !== $this->getComment();
     }
 
     /**
@@ -268,6 +284,17 @@ class Hoa_Tokenizer_Token_Class_Attribute implements Hoa_Tokenizer_Token_Util_In
     }
 
     /**
+     * Check if attribute has a default value.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function hasValue ( ) {
+
+        return null !== $this->getValue();
+    }
+
+    /**
      * Transform token to “tokenizer array”.
      *
      * @access  public
@@ -276,11 +303,24 @@ class Hoa_Tokenizer_Token_Class_Attribute implements Hoa_Tokenizer_Token_Util_In
     public function tokenize ( ) {
 
         return array_merge(
-            $this->getComment()->tokenize(),
+            (true === $this->hasComment()
+                 ? $this->getComment->tokenizer()
+                 : array()
+            ),
             $this->getAccess()->tokenize(),
             $this->getName()->tokenize(),
-            $this->getOperator()->tokenize()
-            $this->getValue()->tokenize()
+            (true === $this->hasValue()
+                ? array_merge(
+                      $this->getOperator()->tokenize(),
+                      $this->getValue()->tokenize()
+                  )
+                : array()
+            ),
+            array(array(
+                0 => Hoa_Tokenizer::_SEMI_COLON,
+                1 => ';',
+                2 => -1
+            ))
         );
     }
 }
