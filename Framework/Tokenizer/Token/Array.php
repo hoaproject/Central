@@ -279,21 +279,22 @@ class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface_To
      */
     public function tokenize ( ) {
 
-        $first = true;
-        $array = array();
+        $first  = true;
+        $array  = array();
+        $handle = null;
 
         foreach($this->getArray() as $i => $a) {
 
             if(false === $first)
-                $array[] = array(array(
+                $array[] = array(
                     0 => Hoa_Tokenizer::_COMMA,
                     1 => ',',
                     2 => -1
-                ));
+                );
             else
                 $first = false;
 
-            $array[] = array_merge(
+            $handle = array_merge(
                 (null !== $a[self::KEY]
                      ? array_merge(
                            $a[self::KEY]->tokenize(),
@@ -307,6 +308,9 @@ class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface_To
                 ),
                 $a[self::VALUE]->tokenize()
             );
+
+            foreach($handle as $key => $value)
+                $array[] = $value;
         }
 
         return array_merge(
