@@ -114,7 +114,7 @@ class Hoa_Tokenizer_Token_String implements Hoa_Tokenizer_Token_Util_Interface_T
      */
     public function setString ( $string ) {
 
-        if(0 === preg_match('#[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*#', $string))
+        if(0 === preg_match('#^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$#', $string))
             throw new Hoa_Tokenizer_Token_Util_Exception(
                 'String %s is not well-formed.', 0, $string);
 
