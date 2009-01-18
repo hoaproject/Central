@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('Tokenizer.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
- */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
-
-/**
  * Hoa_Tokenizer_Token_Util_Interface_SuperScalar
  */
 import('Tokenizer.Token.Util.Interface.SuperScalar');
@@ -71,8 +66,7 @@ import('Tokenizer.~');
  * @subpackage  Hoa_Tokenizer_Token_Function
  */
 
-abstract class Hoa_Tokenizer_Token_Function implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable,
-                                                       Hoa_Tokenizer_Token_Util_Interface_SuperScalar {
+abstract class Hoa_Tokenizer_Token_Function implements Hoa_Tokenizer_Token_Util_Interface_SuperScalar {
 
     /**
      * Comment.
@@ -160,8 +154,8 @@ abstract class Hoa_Tokenizer_Token_Function implements Hoa_Tokenizer_Token_Util_
      */
     public function referenceMe ( $active = true ) {
 
-        $old                = $this->_isReferenced;
-        $this->_isReference = $active;
+        $old                 = $this->_isReferenced;
+        $this->_isReferenced = $active;
 
         return $old;
     }
@@ -298,6 +292,17 @@ abstract class Hoa_Tokenizer_Token_Function implements Hoa_Tokenizer_Token_Util_
     }
 
     /**
+     * Check if function has a comment.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function hasComment ( ) {
+
+        return null !== $this->getComment();
+    }
+
+    /**
      * Whether returned values are given by reference.
      *
      * @access  public
@@ -362,12 +367,4 @@ abstract class Hoa_Tokenizer_Token_Function implements Hoa_Tokenizer_Token_Util_
 
         return false;
     }
-
-    /**
-     * Transform token to “tokenizer array”.
-     *
-     * @access  public
-     * @return  array
-     */
-    abstract public function tokenize ( );
 }
