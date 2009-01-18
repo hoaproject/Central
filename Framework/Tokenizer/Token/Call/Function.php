@@ -242,16 +242,17 @@ class Hoa_Tokenizer_Token_Call_Function extends    Hoa_Tokenizer_Token_Call
 
             if(true === $argSet) {
 
-                $arguments[] = array(array(
+                $arguments[] = array(
                     0 => Hoa_Tokenizer::_COMMA,
                     1 => ',',
                     2 => -1
-                ));
+                );
             }
             else
                 $argSet = true;
 
-            $arguments[] = $argument->tokenize();
+            foreach($argument->tokenize() as $key => $value)
+                $arguments[] = $value;
         }
 
         return array_merge(
