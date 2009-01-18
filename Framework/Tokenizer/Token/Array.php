@@ -150,8 +150,9 @@ class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface_To
                 case 'Hoa_Tokenizer_Token_Call':
                 case 'Hoa_Tokenizer_Token_Clone':
                 case 'Hoa_Tokenizer_Token_Comment':
+                case 'Hoa_Tokenizer_Token_Number_DNumber':
+                case 'Hoa_Tokenizer_Token_Number_LNumber':
                 case 'Hoa_Tokenizer_Token_New':
-                case 'Hoa_Tokenizer_Token_Number':
                 case 'Hoa_Tokenizer_Token_Operation':
                 case 'Hoa_Tokenizer_Token_String_Boolean':
                 case 'Hoa_Tokenizer_Token_String_Constant':
@@ -172,8 +173,9 @@ class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface_To
             case 'Hoa_Tokenizer_Token_Call':
             case 'Hoa_Tokenizer_Token_Clone':
             case 'Hoa_Tokenizer_Token_Comment':
+            case 'Hoa_Tokenizer_Token_Number_DNumber':
+            case 'Hoa_Tokenizer_Token_Number_LNumber':
             case 'Hoa_Tokenizer_Token_New':
-            case 'Hoa_Tokenizer_Token_Number':
             case 'Hoa_Tokenizer_Token_Operation':
             case 'Hoa_Tokenizer_Token_String_Boolean':
             case 'Hoa_Tokenizer_Token_String_Constant':
