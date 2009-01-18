@@ -90,9 +90,7 @@ class Hoa_Tokenizer_Token_String_Null extends Hoa_Tokenizer_Token_String {
         if(empty($string))
             $string = 'null';
 
-        $string = strtolower($string);
-
-        if($string != 'null')
+        if(strtolower($string) != 'null')
             throw new Hoa_Tokenizer_Token_Util_Exception(
                 'Null cannot be different of null. Given %s.', 0, $string);
 
