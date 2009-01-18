@@ -37,9 +37,14 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Parser
+ * Hoa_Tokenizer_Parser_LR
  */
-import('Tokenizer.Parser');
+import('Tokenizer.Parser.LR');
+
+/**
+ * Hoa_Tokenizer_Parser_Token
+ */
+import('Tokenizer.Parser.Token');
 
 /**
  * Hoa_Tokenizer_Builder
@@ -257,14 +262,16 @@ abstract class Hoa_Tokenizer {
      * @access  public
      * @param   string  $source    Source or filename.
      * @param   int     $type      Given by constants
-     *                             Hoa_Tokenizer_Parser::SOURCE and
-     *                             Hoa_Tokenizer_Parser::FILE.
+     *                             Hoa_Tokenizer_Parser_Token::SOURCE and
+     *                             Hoa_Tokenizer_Parser_Token::FILE.
      * @return  Hoa_Tokenizer_Parser
      */
     public static function parse ( $source = null,
-                                   $type   = Hoa_Tokenizer_Parser::SOURCE ) {
+                                   $type   = Hoa_Tokenizer_Parser_Token::SOURCE ) {
 
-        return new Hoa_Tokenizer_Parser($source, $type);
+        $parser = new Hoa_Tokenizer_Parser_LR($source, $type);
+
+        return $parser->tokenize();
     }
 
     /**
