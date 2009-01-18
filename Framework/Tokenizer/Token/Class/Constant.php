@@ -58,9 +58,9 @@ import('Tokenizer.Token.Util.Interface.Scalar');
 import('Tokenizer.~');
 
 /**
- * Hoa_Tokenizer_Token_Operator_Assign
+ * Hoa_Tokenizer_Token_Operator_Assignement
  */
-import('Tokenizer.Token.Operator.Assign');
+import('Tokenizer.Token.Operator.Assignement');
 
 /**
  * Class Hoa_Tokenizer_Token_Class_Constant.
@@ -215,6 +215,17 @@ class Hoa_Tokenizer_Token_Class_Constant implements Hoa_Tokenizer_Token_Util_Int
     }
 
     /**
+     * Check if constant has a comment.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function hasComment ( ) {
+
+        return null !== $this->getComment();
+    }
+
+    /**
      * Get constant value.
      *
      * @access  public
@@ -223,6 +234,17 @@ class Hoa_Tokenizer_Token_Class_Constant implements Hoa_Tokenizer_Token_Util_Int
     public function getValue ( ) {
 
         return $this->_value;
+    }
+
+    /**
+     * Check if constant has a value.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function hasValue ( ) {
+
+        return null !== $this->getValue();
     }
 
     /**
@@ -241,11 +263,19 @@ class Hoa_Tokenizer_Token_Class_Constant implements Hoa_Tokenizer_Token_Util_Int
      *
      * @access  public
      * @return  array
+     * @throw   Hoa_Tokenizer_Token_Util_Exception
      */
     public function tokenize ( ) {
 
+        if(false === $this->hasValue())
+           throw new Hoa_Tokenizer_Token_Util_Exception(
+            'A constant must have a value.', 0);
+
         return array_merge(
-            $this->getComment()->tokenize(),
+            (true === $this->hasComment()
+                 ? $this->getComment()->tokenize()
+                 : array()
+            ),
             array(array(
                 Hoa_Tokenizer::_CONST,
                 'const',
