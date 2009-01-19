@@ -53,6 +53,11 @@ import('Tokenizer.~');
 import('Tokenizer.Parser');
 
 /**
+ * Hoa_Tokenizer_Parser_Token
+ */
+import('Tokenizer.Parser.Token');
+
+/**
  * Class Hoa_Tokenizer_Parser_LR.
  *
  * .
@@ -68,5 +73,31 @@ import('Tokenizer.Parser');
 
 class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
 
-    
+    protected $max = 0;
+
+    /**
+     * Constructor.
+     *
+     * @...
+     */
+    public function __construct ( $source = null,
+                                  $type   = Hoa_Tokenizer_Parser_Token::SOURCE ) {
+
+        parent::__construct($source, $type);
+
+        // Take a deep breath, and here we go …
+        $this->axiome();
+    }
+
+    /**
+     * Axiom.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function axiome ( ) {
+
+        $this->max = $this->max();
+        reset($this->_token);
+    }
 }
