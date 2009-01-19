@@ -43,9 +43,9 @@ require_once 'Framework.php';
 import('Tokenizer.Exception');
 
 /**
- * Hoa_Tokenize_Token_Util_Exception
+ * Hoa_Tokenizer_Token_Util_Exception
  */
-import('Tokenize.Token.Util.Exception');
+import('Tokenizer.Token.Util.Exception');
 
 /**
  * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
@@ -81,12 +81,12 @@ import('Tokenizer.Token.Root');
  * @subpackage  Hoa_Tokenizer_Parser
  */
 
-abstract class Hoa_Tokenizer_Parser implements Hoa_Tokenizable_Token_Util_Interface_Tokenizable {
+abstract class Hoa_Tokenizer_Parser implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
 
     /**
      * Token collection.
      *
-     * @var Hoa_Tokenizer_Parser_Token object
+     * @var Hoa_Tokenizer_Parser array
      */
     protected $_token = null;
 
@@ -132,7 +132,8 @@ abstract class Hoa_Tokenizer_Parser implements Hoa_Tokenizable_Token_Util_Interf
                                   $type   = Hoa_Tokenizer_Parser_Token::SOURCE ) {
 
         $old          = $this->_token;
-        $this->_token = new Hoa_Tokenizer_Parser_Token($source, $type);
+        $handle       = new Hoa_Tokenizer_Parser_Token($source, $type);
+        $this->_token = $handle->get();
 
         return $old;
     }
@@ -171,6 +172,114 @@ abstract class Hoa_Tokenizer_Parser implements Hoa_Tokenizable_Token_Util_Interf
     protected function r ( ) {
 
         return $this->_root;
+    }
+
+    /**
+     * Control : go to previous token.
+     *
+     * @access  protected
+     * @return  void
+     */
+    protected function p ( ) {
+
+        prev($this->_token);
+    }
+
+    /**
+     * Control : go to next token.
+     *
+     * @access  protected
+     * @return  void
+     */
+    protected function n ( ) {
+
+        next($this->_token);
+    }
+
+    /**
+     * Control : get the current position.
+     *
+     * @access  protected
+     * @return  int
+     */
+    protected function i ( ) {
+
+        return key($this->_token);
+    }
+
+    /**
+     * Control : get the current token array.
+     *
+     * @access  protected
+     * @return  array
+     */
+    protected function c ( ) {
+
+        return current($this->_token);
+    }
+
+    /**
+     * Control : get the current token token.
+     *
+     * @access  protected
+     * @return  mixed
+     */
+    protected function ct ( ) {
+
+        $handle = $this->c();
+
+        return $handle[0];
+    }
+
+    /**
+     * Control : get the current token value.
+     *
+     * @access  protected
+     * @return  string
+     */
+    protected function cv ( ) {
+
+        $handle = $this->c();
+
+        return $handle[1];
+    }
+
+    /**
+     * Control : get the current token line.
+     *
+     * @access  protected
+     * @return  int
+     */
+    protected function cl ( ) {
+
+        $handle = $this->c();
+
+        return $handle[2];
+    }
+
+    /**
+     * Control : check if we are at the end or not.
+     *
+     * @access  protected
+     * @return  bool
+     */
+    protected function end ( ) {
+
+        $r = $this->n();
+        $this->p();
+
+        return false === $r;
+    }
+
+    /**
+     * Control : get the maximum of token.
+     *
+     * @access  protected
+     * @return  int
+     */
+    protected function max ( ) {
+
+        return count($this->_token);
     }
 
     /**
