@@ -97,6 +97,20 @@ abstract class Hoa_Tokenizer_Parser implements Hoa_Tokenizer_Token_Util_Interfac
      */
     protected $_root  = null;
 
+    /**
+     * Maximum of tokens.
+     *
+     * @var Hoa_Tokenizer_Parser int
+     */
+    protected $_max   = 0;
+
+    /**
+     * Current token position.
+     *
+     * @var Hoa_Tokenizer_Parser int
+     */
+    protected $_i     = 0;
+
 
 
     /**
@@ -134,6 +148,7 @@ abstract class Hoa_Tokenizer_Parser implements Hoa_Tokenizer_Token_Util_Interfac
         $old          = $this->_token;
         $handle       = new Hoa_Tokenizer_Parser_Token($source, $type);
         $this->_token = $handle->get();
+        $this->_max   = count($this->_token);
 
         return $old;
     }
@@ -178,22 +193,30 @@ abstract class Hoa_Tokenizer_Parser implements Hoa_Tokenizer_Token_Util_Interfac
      * Control : go to previous token.
      *
      * @access  protected
+     * @param   int        $n    Number of whitespaces to skip.
      * @return  void
      */
-    protected function p ( ) {
+    protected function p ( $n = -1 ) {
 
-        prev($this->_token);
+        while( --$this->_i
+              && $this->_i >= 0
+              && $n-- != 0
+              && $this->ct() == Hoa_Tokenizer::_WHITESPACE);
     }
 
     /**
      * Control : go to next token.
      *
      * @access  protected
+     * @param   int        $n    Number of whitespace to skip.
      * @return  void
      */
-    protected function n ( ) {
+    protected function n ( $n = -1 ) {
 
-        next($this->_token);
+        while( ++$this->_i
+              && $this->end()
+              && $n-- != 0
+              && $this->ct() == Hoa_Tokenizer::_WHITESPACE);
     }
 
     /**
@@ -204,7 +227,7 @@ abstract class Hoa_Tokenizer_Parser implements Hoa_Tokenizer_Token_Util_Interfac
      */
     protected function i ( ) {
 
-        return key($this->_token);
+        return $this->_i;
     }
 
     /**
@@ -215,7 +238,7 @@ abstract class Hoa_Tokenizer_Parser implements Hoa_Tokenizer_Token_Util_Interfac
      */
     protected function c ( ) {
 
-        return current($this->_token);
+        return $this->_token[$this->_i];
     }
 
     /**
@@ -226,9 +249,7 @@ abstract class Hoa_Tokenizer_Parser implements Hoa_Tokenizer_Token_Util_Interfac
      */
     protected function ct ( ) {
 
-        $handle = $this->c();
-
-        return $handle[0];
+        return $this->_token[$this->_i][0];
     }
 
     /**
@@ -239,9 +260,7 @@ abstract class Hoa_Tokenizer_Parser implements Hoa_Tokenizer_Token_Util_Interfac
      */
     protected function cv ( ) {
 
-        $handle = $this->c();
-
-        return $handle[1];
+        return $this->_token[$this->_i][1];
     }
 
     /**
@@ -252,9 +271,7 @@ abstract class Hoa_Tokenizer_Parser implements Hoa_Tokenizer_Token_Util_Interfac
      */
     protected function cl ( ) {
 
-        $handle = $this->c();
-
-        return $handle[2];
+        return $this->_token[$this->_i][2];
     }
 
     /**
@@ -265,10 +282,7 @@ abstract class Hoa_Tokenizer_Parser implements Hoa_Tokenizer_Token_Util_Interfac
      */
     protected function end ( ) {
 
-        $r = $this->n();
-        $this->p();
-
-        return false === $r;
+        return $this->_i < $this->_max;
     }
 
     /**
@@ -291,5 +305,6 @@ abstract class Hoa_Tokenizer_Parser implements Hoa_Tokenizer_Token_Util_Interfac
     public function tokenize ( ) {
 
         return $this->r()->tokenize();
+        //return array();
     }
 }
