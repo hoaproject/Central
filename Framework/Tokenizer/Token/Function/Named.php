@@ -148,6 +148,11 @@ class Hoa_Tokenizer_Token_Function_Named extends    Hoa_Tokenizer_Token_Function
                  ? $this->getComment()->tokenize()
                  : array()
             ),
+            array(array(
+                0 => Hoa_Tokenizer::_FUNCTION,
+                1 => 'function',
+                2 => -1
+            )),
             (true === $this->isReferenced()
                  ? array(array(
                        0 => Hoa_Tokenizer::_REFERENCE,
