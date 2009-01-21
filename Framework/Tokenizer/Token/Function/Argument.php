@@ -53,9 +53,9 @@ import('Tokenizer.Token.Util.Interface.Tokenizable');
 import('Tokenizer.~');
 
 /**
- * Hoa_Tokenizer_Token_Operator_Assign
+ * Hoa_Tokenizer_Token_Operator_Assignement
  */
-import('Tokenizer.Token.Operator.Assign');
+import('Tokenizer.Token.Operator.Assignement');
 
 /**
  * Class Hoa_Tokenizer_Token_Function_Argument.
@@ -174,12 +174,12 @@ class Hoa_Tokenizer_Token_Function_Argument implements Hoa_Tokenizer_Token_Util_
      * Set operator.
      *
      * @access  protected
-     * @return  Hoa_Tokenizer_Token_Operator_Assign
+     * @return  Hoa_Tokenizer_Token_Operator_Assignement
      */
     protected function setOperator ( ) {
 
         $old             = $this->_operator;
-        $this->_operator = new Hoa_Tokenizer_Token_Operator_Assign('=');
+        $this->_operator = new Hoa_Tokenizer_Token_Operator_Assignement('=');
 
         return $old;
     }
@@ -258,7 +258,7 @@ class Hoa_Tokenizer_Token_Function_Argument implements Hoa_Tokenizer_Token_Util_
      * Get operator.
      *
      * @access  protected
-     * @return  Hoa_Tokenizer_Token_Operator_Assign
+     * @return  Hoa_Tokenizer_Token_Operator_Assignement
      */
     protected function getOperator ( ) {
 
@@ -307,7 +307,7 @@ class Hoa_Tokenizer_Token_Function_Argument implements Hoa_Tokenizer_Token_Util_
                           ))
                         : $this->getType()->tokenize()
                    )
-                 : array(array())
+                 : array()
             ),
             (
              true === $this->isReferenced()
@@ -316,16 +316,16 @@ class Hoa_Tokenizer_Token_Function_Argument implements Hoa_Tokenizer_Token_Util_
                        1 => '&',
                        2 => -1
                    ))
-                 : array(array())
+                 : array()
             ),
             $this->getName()->tokenize(),
             (
              true === $this->hasDefaultValue()
-                 ? array(array_merge(
+                 ? array_merge(
                        $this->getOperator()->tokenize(),
                        $this->getDefaultValue()->tokenize()
-                   ))
-                 : array(array())
+                   )
+                 : array()
             )
         );
     }
