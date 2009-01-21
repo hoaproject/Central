@@ -79,6 +79,20 @@ import('Tokenizer.Token.Operator.Assignement');
 class Hoa_Tokenizer_Token_Class_Attribute implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
 
     /**
+     * Attribute is static (STATIC_M_, M means MEMORY).
+     *
+     * @cons bool
+     */
+    const STATICM  = true;
+
+    /**
+     * Attribute is dynamic (DYNAMIC_M_, M means MEMORY).
+     *
+     * @const bool
+     */
+    const DYNAMICM = false;
+
+    /**
      * Attribute comment.
      *
      * @var Hoa_Tokenizer_Token_Comment object
@@ -91,6 +105,13 @@ class Hoa_Tokenizer_Token_Class_Attribute implements Hoa_Tokenizer_Token_Util_In
      * @var Hoa_Tokenizer_Token_Class_Access object
      */
     protected $_access   = null;
+
+    /**
+     * Whether attribute is static.
+     *
+     * @var Hoa_Tokenizer_Token_Class_Attribute bool
+     */
+    protected $_static   = false;
 
     /**
      * Attribuale name (variable).
@@ -159,6 +180,33 @@ class Hoa_Tokenizer_Token_Class_Attribute implements Hoa_Tokenizer_Token_Util_In
         $this->_access = $access;
 
         return $old;
+    }
+
+    /**
+     * Set if attribute is static or not.
+     *
+     * @access  public
+     * @param   bool    $static    Static or not (given by constants *M).
+     * @return  bool
+     */
+    public function staticMe ( $static = self::STATICM ) {
+
+        $old           = $this->_static;
+        $this->_static = $static;
+
+        return $old;
+    }
+
+    /**
+     * Set if attribute is dynamic or not.
+     *
+     * @access  public
+     * @param   bool    $dynamique    Dynamique or not (given by constants *M).
+     * @return  bool
+     */
+    public function dynamicMe ( $dynamic = self::DYNAMICM ) {
+
+        return !$this->staticMe(!$dynamic);
     }
 
     /**
@@ -251,6 +299,28 @@ class Hoa_Tokenizer_Token_Class_Attribute implements Hoa_Tokenizer_Token_Util_In
     }
 
     /**
+     * Check if attribute is static or not.
+     *
+     * @access  public
+     * @return   bool
+     */
+    public function isStatic ( ) {
+
+        return $this->_static;
+    }
+
+    /**
+     * Check if attribute is dynamic or not.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isDynamic ( ) {
+
+        return !$this->isStatic();
+    }
+
+    /**
      * Get name.
      *
      * @access  public
@@ -304,10 +374,18 @@ class Hoa_Tokenizer_Token_Class_Attribute implements Hoa_Tokenizer_Token_Util_In
 
         return array_merge(
             (true === $this->hasComment()
-                 ? $this->getComment->tokenizer()
+                 ? $this->getComment()->tokenize()
                  : array()
             ),
             $this->getAccess()->tokenize(),
+            (true === $this->isStatic()
+                 ? array(array(
+                       0 => Hoa_Tokenizer::_STATIC,
+                       1 => 'static',
+                       2 => -1
+                   ))
+                 : array()
+            ),
             $this->getName()->tokenize(),
             (true === $this->hasValue()
                 ? array_merge(
