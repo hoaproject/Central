@@ -86,7 +86,7 @@ class Hoa_Tokenizer_Token_Call_ClassConstant extends    Hoa_Tokenizer_Token_Call
      *
      * @var Hoa_Tokenizer_Token_String object
      */
-    protected $_constante = null;
+    protected $_constant  = null;
 
 
 
@@ -120,16 +120,16 @@ class Hoa_Tokenizer_Token_Call_ClassConstant extends    Hoa_Tokenizer_Token_Call
     }
 
     /**
-     * Set constante name.
+     * Set constant name.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_String  $constante    Constante name.
+     * @param   Hoa_Tokenizer_Token_String  $constant    Constant name.
      * @return  Hoa_Tokenizer_Token_String
      */
-    public function setConstante ( Hoa_Tokenizer_Token_String $constante ) {
+    public function setConstant ( Hoa_Tokenizer_Token_String $constant ) {
 
-        $old              = $this->_constante;
-        $this->_constante = $constante;
+        $old             = $this->_constant;
+        $this->_constant = $constant;
 
         return $old;
     }
@@ -146,14 +146,14 @@ class Hoa_Tokenizer_Token_Call_ClassConstant extends    Hoa_Tokenizer_Token_Call
     }
 
     /**
-     * Get constante name.
+     * Get constant name.
      *
      * @access  public
      * @return  Hoa_Tokenizer_Token_String
      */
-    public function getConstante ( ) {
+    public function getConstant ( ) {
 
-        return $this->_constante;
+        return $this->_constant;
     }
 
     /**
@@ -171,7 +171,7 @@ class Hoa_Tokenizer_Token_Call_ClassConstant extends    Hoa_Tokenizer_Token_Call
                 1 => '::',
                 2 => -1
             )),
-            $this->getConstante()->tokenize()
+            $this->getConstant()->tokenize()
         );
     }
 }
