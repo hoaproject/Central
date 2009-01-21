@@ -245,15 +245,6 @@ abstract class Hoa_Tokenizer {
     const _REFERENCE         = '&';
     const _SEMI_COLON        = ';';
 
-    /**
-     * Describe context of using token.
-     *
-     * @const int
-     */
-    const CONTEXT_STANDARD    = 0;
-    const CONTEXT_DECLARATION = 1;
-    const CONTEXT_USING       = 2;
-
 
 
     /**
