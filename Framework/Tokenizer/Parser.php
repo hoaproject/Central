@@ -297,6 +297,17 @@ abstract class Hoa_Tokenizer_Parser implements Hoa_Tokenizer_Token_Util_Interfac
     }
 
     /**
+     * Get root.
+     *
+     * @access  public
+     * @return  Hoa_Tokenizer_Token_Root
+     */
+    public function getRoot ( ) {
+
+        return $this->r();
+    }
+
+    /**
      * Transform root to “tokenizer array”.
      *
      * @access  public
@@ -305,6 +316,5 @@ abstract class Hoa_Tokenizer_Parser implements Hoa_Tokenizer_Token_Util_Interfac
     public function tokenize ( ) {
 
         return $this->r()->tokenize();
-        //return array();
     }
 }
