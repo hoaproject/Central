@@ -255,14 +255,14 @@ abstract class Hoa_Tokenizer {
      * @param   int     $type      Given by constants
      *                             Hoa_Tokenizer_Parser_Token::SOURCE and
      *                             Hoa_Tokenizer_Parser_Token::FILE.
-     * @return  Hoa_Tokenizer_Parser
+     * @return  Hoa_Tokenizer_Token_Root
      */
     public static function parse ( $source = null,
                                    $type   = Hoa_Tokenizer_Parser_Token::SOURCE ) {
 
         $parser = new Hoa_Tokenizer_Parser_LR($source, $type);
 
-        return $parser->tokenize();
+        return $parser->getRoot();
     }
 
     /**
