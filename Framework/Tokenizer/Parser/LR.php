@@ -224,10 +224,12 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
             switch($this->ct()) {
 
                 case Hoa_Tokenizer::_CLASS:
+                    var_dump('go compile class');
                     $handle = $this->clas();
                   break;
 
                 case Hoa_Tokenizer::_FUNCTION:
+                    var_dump('go compile function');
                     $handle = $this->func();
                   break;
             }
@@ -243,6 +245,8 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
     public function arra ( ) {
 
         var_dump('ARRAAAAAYYYYYYY');
+        $this->n();
+        $this->n();
     }
 
     /**
@@ -307,11 +311,23 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
             $this->p();
         }
 
-        $this->n();
+        $i = 1;
 
-        for(; $this->end(); $this->n()) {
+        while($i > 0) {
 
+            $this->n();
             $ct = $this->ct();
+
+            switch($ct) {
+
+                case Hoa_Tokenizer::_OPEN_BRACE:
+                    $i++;
+                  break;
+
+                case Hoa_Tokenizer::_CLOSE_BRACE:
+                    $i--;
+                  break;
+            }
 
             if($ct == Hoa_Tokenizer::_CONST) {
 
@@ -359,7 +375,6 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
                 $val = null;
 
                 $this->p(1);
-
 
                 if(   $this->ct() == Hoa_Tokenizer::_COMMENT
                    || $this->ct() == Hoa_Tokenizer::_DOC_COMMENT)
@@ -411,14 +426,110 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
 
                     $attributes[] = $att;
                 }
-                else {
+                else { // METHOD
 
+                    $fin = false;
+                    $abs = false;
+                    $ref = false;
+                    $arg = array();
+                    $bod = array();
+                    $met = null;
 
+                    for($e = 2; $e >= 0; $e--, $this->p())
+                        switch($this->ct()) {
+
+                            case Hoa_Tokenizer::_ABSTRACT:
+                                $abs = true;
+                              break 2;
+
+                            case Hoa_Tokenizer::_FINAL:
+                                $fin = true;
+                              break 2;
+                        }
+
+                    while($this->ct() != Hoa_Tokenizer::_FUNCTION && $this->n() + 1);
+                    $this->n();
+
+                    if($this->ct() == Hoa_Tokenizer::_REFERENCE) {
+
+                        $ref = true;
+                        $this->n();
+                    }
+
+                    $nam = new Hoa_Tokenizer_Token_String($this->cv());
+                    $this->n();
+                    $this->n();
+
+                    while($this->ct() != Hoa_Tokenizer::_CLOSE_PARENTHESES) {
+
+                        $ty = null;
+                        $re = false;
+                        $va = null;
+                        $de = null;
+                        $ar = null;
+
+                        if(   $this->ct() == Hoa_Tokenizer::_STRING
+                           || $this->ct() == Hoa_Tokenizer::_ARRAY) {
+
+                            $ty = new Hoa_Tokenizer_Token_String($this->cv());
+                            $this->n();
+                        }
+
+                        if($this->ct() == Hoa_Tokenizer::_REFERENCE) {
+
+                            $re = true;
+                            $this->n();
+                        }
+
+                        $va = new Hoa_Tokenizer_Token_String(substr($this->cv(), 1));
+                        $va = new Hoa_Tokenizer_Token_Variable($va);
+                        $this->n();
+
+                        if($this->ct() == Hoa_Tokenizer::_EQUAL) {
+
+                            $this->n();
+                            $de = $this->defv();
+                            $this->n();
+                        }
+
+                        if($this->ct() == Hoa_Tokenizer::_COMMA)
+                            $this->n();
+
+                        $ar = new Hoa_Tokenizer_Token_Function_Argument($va);
+                        $ar->referenceMe($re);
+
+                        if(null !== $ty)
+                            $ar->setType($ty);
+
+                        if(null !== $de)
+                            $ar->setDefaultValue($de);
+
+                        $arg[] = $ar;
+                    }
+
+                    $this->n();
+                    $this->goToEndBlock();
+
+                    $met = new Hoa_Tokenizer_Token_Class_Method($nam);
+
+                    if(null !== $com)
+                        $met->setComment($com);
+
+                    $met->setAccess($acc);
+                    $met->finalMe($fin);
+                    $met->abstractMe($abs);
+                    $met->staticMe($sta);
+                    $met->referenceMe($ref);
+                    $met->addArguments($arg);
+
+                    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    // body (pay attention to abstract).
+                    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+                    $methods[] = $met;
                 }
             }
         }
-
-
 
         $class = new Hoa_Tokenizer_Token_Class($name);
 
@@ -434,6 +545,7 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
         $class->addInterfaces($interfaces);
         $class->addConstants($constants);
         $class->addAttributes($attributes);
+        $class->addMethods($methods);
 
         return $class;
     }
@@ -520,7 +632,7 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
 
         if($this->ct() == Hoa_Tokenizer::_REFERENCE) {
 
-            $reference =  true;
+            $reference = true;
             $this->n();
         }
 
@@ -575,6 +687,9 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
             $arguments[] = $arg;
         }
 
+        $this->n();
+        $this->goToEndBlock();
+
         $function = new Hoa_Tokenizer_Token_Function_Named($name);
 
         if(null !== $comment)
@@ -588,5 +703,32 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         return $function;
+    }
+
+    /**
+     *
+     */
+    public function goToEndBlock ( ) {
+
+        if($this->ct() != Hoa_Tokenizer::_OPEN_BRACE)
+            return;
+
+        $i = 1;
+
+        while($i > 0) {
+
+            $this->n();
+
+            switch($this->ct()) {
+
+                case Hoa_Tokenizer::_OPEN_BRACE:
+                    $i++;
+                  break;
+
+                case Hoa_Tokenizer::_CLOSE_BRACE:
+                    $i--;
+                  break;
+            }
+        }
     }
 }
