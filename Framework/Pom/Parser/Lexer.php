@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Pom
- * @subpackage  Hoa_Pom_Parser_Token
+ * @subpackage  Hoa_Pom_Parser_Lexer
  *
  */
 
@@ -48,7 +48,7 @@ import('Pom.Exception');
 import('Pom.~');
 
 /**
- * Class Hoa_Pom_Parser_Token.
+ * Class Hoa_Pom_Parser_Lexer.
  *
  * Parse a PHP source code.
  *
@@ -58,10 +58,10 @@ import('Pom.~');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Pom
- * @subpackage  Hoa_Pom_Parser_Token
+ * @subpackage  Hoa_Pom_Parser_Lexer
  */
 
-class Hoa_Pom_Parser_Token {
+class Hoa_Pom_Parser_Lexer {
 
     /**
      * Whether tokenize a source.
@@ -80,14 +80,14 @@ class Hoa_Pom_Parser_Token {
     /**
      * Whether line numbers exist or not.
      *
-     * @var Hoa_Pom_Parser_Token array
+     * @var Hoa_Pom_Parser_Lexer array
      */
     protected $_lineNumber = true;
 
     /**
      * Pom result.
      *
-     * @var Hoa_Pom_Parser_Token array
+     * @var Hoa_Pom_Parser_Lexer array
      */
     protected $_token      = null;
 

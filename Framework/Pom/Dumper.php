@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Pom
- * @subpackage  Hoa_Pom_Builder
+ * @subpackage  Hoa_Pom_Dumper
  *
  */
 
@@ -53,9 +53,9 @@ import('Pom.~');
 import('Pom.Style.Null');
 
 /**
- * Class Hoa_Pom_Builder.
+ * Class Hoa_Pom_Dumper.
  *
- * Build a tokened PHP source code.
+ * Build/dump a tokened PHP source code.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -63,10 +63,10 @@ import('Pom.Style.Null');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Pom
- * @subpackage  Hoa_Pom_Builder
+ * @subpackage  Hoa_Pom_Dumper
  */
 
-class Hoa_Pom_Builder {
+class Hoa_Pom_Dumper {
 
     /**
      * Tokenize result.
@@ -78,7 +78,7 @@ class Hoa_Pom_Builder {
     /**
      * Collection of plugins.
      *
-     * @var Hoa_Pom_Builder array
+     * @var Hoa_Pom_Dumper array
      */
     protected $_plugin = array();
 

@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Pom
- * @subpackage  Hoa_Pom_Parser_LR
+ * @subpackage  Hoa_Pom_Parser_ParserLr
  *
  */
 
@@ -180,7 +180,7 @@ import('Pom.Token.Function.Argument');
 import('Pom.Token.Variable');
 
 /**
- * Class Hoa_Pom_Parser_LR.
+ * Class Hoa_Pom_Parser_ParserLr.
  *
  * .
  *
@@ -190,10 +190,10 @@ import('Pom.Token.Variable');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Pom
- * @subpackage  Hoa_Pom_Parser_LR
+ * @subpackage  Hoa_Pom_Parser_ParserLr
  */
 
-class Hoa_Pom_Parser_LR extends Hoa_Pom_Parser {
+class Hoa_Pom_Parser_ParserLr extends Hoa_Pom_Parser {
 
     /**
      * Constructor.
