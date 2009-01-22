@@ -37,19 +37,19 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Pom_Parser_LR
+ * Hoa_Pom_Parser_ParserLr
  */
-import('Pom.Parser.LR');
+import('Pom.Parser.ParserLr');
 
 /**
- * Hoa_Pom_Parser_Token
+ * Hoa_Pom_Parser_Lexer
  */
-import('Pom.Parser.Token');
+import('Pom.Parser.Lexer');
 
 /**
- * Hoa_Pom_Builder
+ * Hoa_Pom_Dumper
  */
-import('Pom.Builder');
+import('Pom.Dumper');
 
 /**
  * Class Hoa_Pom.
@@ -253,14 +253,14 @@ abstract class Hoa_Pom {
      * @access  public
      * @param   string  $source    Source or filename.
      * @param   int     $type      Given by constants
-     *                             Hoa_Pom_Parser_Token::SOURCE and
-     *                             Hoa_Pom_Parser_Token::FILE.
+     *                             Hoa_Pom_Parser_Lexer::SOURCE and
+     *                             Hoa_Pom_Parser_Lexer::FILE.
      * @return  Hoa_Pom_Token_Root
      */
     public static function parse ( $source = null,
-                                   $type   = Hoa_Pom_Parser_Token::SOURCE ) {
+                                   $type   = Hoa_Pom_Parser_Lexer::SOURCE ) {
 
-        $parser = new Hoa_Pom_Parser_LR($source, $type);
+        $parser = new Hoa_Pom_Parser_ParserLr($source, $type);
 
         return $parser->getRoot();
     }
@@ -274,7 +274,7 @@ abstract class Hoa_Pom {
      */
     public static function build ( Hoa_Pom_Parser $tokened ) {
 
-        return new Hoa_Pom_Builder($tokened);
+        return new Hoa_Pom_Dumper($tokened);
     }
 
     /**

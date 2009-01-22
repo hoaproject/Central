@@ -58,9 +58,9 @@ import('Pom.Token.Util.Interface.Tokenizable');
 import('Pom.~');
 
 /**
- * Hoa_Pom_Parser_Token
+ * Hoa_Pom_Parser_Lexer
  */
-import('Pom.Parser.Token');
+import('Pom.Parser.Lexer');
 
 /**
  * Hoa_Pom_Token_Root
@@ -119,12 +119,12 @@ abstract class Hoa_Pom_Parser implements Hoa_Pom_Token_Util_Interface_Tokenizabl
      * @access  public
      * @param   string  $source    Source or filename.
      * @param   int     $type      Given by constants
-     *                             Hoa_Pom_Parser_Token::SOURCE and
-     *                             Hoa_Pom_Parser_Token::FILE.
+     *                             Hoa_Pom_Parser_Lexer::SOURCE and
+     *                             Hoa_Pom_Parser_Lexer::FILE.
      * @return  void
      */
     public function __construct ( $source = null,
-                                  $type   = Hoa_Pom_Parser_Token::SOURCE ) {
+                                  $type   = Hoa_Pom_Parser_Lexer::SOURCE ) {
 
         $this->setToken($source, $type);
         $this->setRoot();
@@ -138,15 +138,15 @@ abstract class Hoa_Pom_Parser implements Hoa_Pom_Token_Util_Interface_Tokenizabl
      * @access  protected
      * @param   string     $source    Source or filename.
      * @param   int        $type      Given by constants
-     *                                Hoa_Pom_Parser_Token::SOURCE and
-     *                                Hoa_Pom_Parser_Token::FILE.
-     * @return  Hoa_Pom_Parser_Token
+     *                                Hoa_Pom_Parser_Lexer::SOURCE and
+     *                                Hoa_Pom_Parser_Lexer::FILE.
+     * @return  Hoa_Pom_Parser_Lexer
      */
     protected function setToken ( $source = null,
-                                  $type   = Hoa_Pom_Parser_Token::SOURCE ) {
+                                  $type   = Hoa_Pom_Parser_Lexer::SOURCE ) {
 
         $old          = $this->_token;
-        $handle       = new Hoa_Pom_Parser_Token($source, $type);
+        $handle       = new Hoa_Pom_Parser_Lexer($source, $type);
         $this->_token = $handle->get();
         $this->_max   = count($this->_token);
 
@@ -171,7 +171,7 @@ abstract class Hoa_Pom_Parser implements Hoa_Pom_Token_Util_Interface_Tokenizabl
      * Get token.
      *
      * @access  protected
-     * @return  Hoa_Pom_Parser_Token
+     * @return  Hoa_Pom_Parser_Lexer
      */
     protected function t ( ) {
 

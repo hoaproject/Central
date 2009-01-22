@@ -53,9 +53,9 @@ import('Pom.~');
 import('Pom.Parser');
 
 /**
- * Hoa_Pom_Parser_Token
+ * Hoa_Pom_Parser_Lexer
  */
-import('Pom.Parser.Token');
+import('Pom.Parser.Lexer');
 
 //
 
@@ -201,7 +201,7 @@ class Hoa_Pom_Parser_ParserLr extends Hoa_Pom_Parser {
      * @...
      */
     public function __construct ( $source = null,
-                                  $type   = Hoa_Pom_Parser_Token::SOURCE ) {
+                                  $type   = Hoa_Pom_Parser_Lexer::SOURCE ) {
 
         parent::__construct($source, $type);
 
