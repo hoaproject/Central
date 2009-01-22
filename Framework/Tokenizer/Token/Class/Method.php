@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Class_Method
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Class_Method
  *
  */
 
@@ -38,40 +38,40 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_Function_Named
+ * Hoa_Pom_Token_Function_Named
  */
-import('Tokenizer.Token.Function.Named');
+import('Pom.Token.Function.Named');
 
 /**
- * Hoa_Tokenizer_Token_Class_Access
+ * Hoa_Pom_Token_Class_Access
  */
-import('Tokenizer.Token.Class.Access');
+import('Pom.Token.Class.Access');
 
 /**
- * Class Hoa_Tokenizer_Token_Class_Method.
+ * Class Hoa_Pom_Token_Class_Method.
  *
- * .
+ * Represent a method.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Class_Method
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Class_Method
  */
 
-class Hoa_Tokenizer_Token_Class_Method extends Hoa_Tokenizer_Token_Function_Named {
+class Hoa_Pom_Token_Class_Method extends Hoa_Pom_Token_Function_Named {
 
     /**
      * Method is final.
@@ -118,28 +118,28 @@ class Hoa_Tokenizer_Token_Class_Method extends Hoa_Tokenizer_Token_Function_Name
     /**
      * Access.
      *
-     * @var Hoa_Tokenizer_Token_Class_Access object
+     * @var Hoa_Pom_Token_Class_Access object
      */
     protected $_access     = null;
 
     /**
      * Whether attribute is static.
      *
-     * @var Hoa_Tokenizer_Token_Class_Method bool
+     * @var Hoa_Pom_Token_Class_Method bool
      */
     protected $_static     = false;
 
     /**
      * Whether method is final.
      *
-     * @var Hoa_Tokenizer_Token_Clas_Method bool
+     * @var Hoa_Pom_Token_Clas_Method bool
      */
     protected $_isFinal    = false;
 
     /**
      * Whether method is abstract.
      *
-     * @var Hoa_Tokenizer_Token_Class_Method bool
+     * @var Hoa_Pom_Token_Class_Method bool
      */
     protected $_isAbstract = false;
 
@@ -149,12 +149,12 @@ class Hoa_Tokenizer_Token_Class_Method extends Hoa_Tokenizer_Token_Function_Name
      * Constructor.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_String  $name    Method name.
+     * @param   Hoa_Pom_Token_String  $name    Method name.
      * @return  void
      */
-    public function __construct ( Hoa_Tokenizer_Token_String $name ) {
+    public function __construct ( Hoa_Pom_Token_String $name ) {
 
-        $this->setAccess(new Hoa_Tokenizer_Token_Class_Access('public'));
+        $this->setAccess(new Hoa_Pom_Token_Class_Access('public'));
         parent::enableComment(false);
 
         return parent::__construct($name);
@@ -164,10 +164,10 @@ class Hoa_Tokenizer_Token_Class_Method extends Hoa_Tokenizer_Token_Function_Name
      * Set access.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Class_Access  $access    Method access.
-     * @return  Hoa_Tokenizer_Token_Class_Access
+     * @param   Hoa_Pom_Token_Class_Access  $access    Method access.
+     * @return  Hoa_Pom_Token_Class_Access
      */
-    public function setAccess ( Hoa_Tokenizer_Token_Class_Access $access ) {
+    public function setAccess ( Hoa_Pom_Token_Class_Access $access ) {
 
         $old           = $this->_access;
         $this->_access = $access;
@@ -242,7 +242,7 @@ class Hoa_Tokenizer_Token_Class_Method extends Hoa_Tokenizer_Token_Function_Name
      * Get access.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_Class_Access
+     * @return  Hoa_Pom_Token_Class_Access
      */
     public function getAccess ( ) {
 
@@ -308,7 +308,7 @@ class Hoa_Tokenizer_Token_Class_Method extends Hoa_Tokenizer_Token_Function_Name
             ),
             (true === $this->isFinal()
                  ? array(array(
-                       0 => Hoa_Tokenizer::_FINAL,
+                       0 => Hoa_Pom::_FINAL,
                        1 => 'final',
                        2 => -1
                    ))
@@ -316,7 +316,7 @@ class Hoa_Tokenizer_Token_Class_Method extends Hoa_Tokenizer_Token_Function_Name
             ),
             (true === $this->isAbstract()
                  ? array(array(
-                       0 => Hoa_Tokenizer::_ABSTRACT,
+                       0 => Hoa_Pom::_ABSTRACT,
                        1 => 'abstract',
                        2 => -1
                    ))
@@ -325,7 +325,7 @@ class Hoa_Tokenizer_Token_Class_Method extends Hoa_Tokenizer_Token_Function_Name
             $this->getAccess()->tokenize(),
             (true === $this->isStatic()
                  ? array(array(
-                       0 => Hoa_Tokenizer::_STATIC,
+                       0 => Hoa_Pom::_STATIC,
                        1 => 'static',
                        2 => -1
                    ))

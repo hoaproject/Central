@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator_InDeCrementing
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Operator_InDeCrementing
  *
  */
 
@@ -38,22 +38,22 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_Operator
+ * Hoa_Pom_Token_Operator
  */
-import('Tokenizer.Token.Operator');
+import('Pom.Token.Operator');
 
 /**
- * Class Hoa_Tokenizer_Token_Operator_InDeCrementing.
+ * Class Hoa_Pom_Token_Operator_InDeCrementing.
  *
  * Represent arithmetics operators.
  *
@@ -62,37 +62,37 @@ import('Tokenizer.Token.Operator');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator_InDeCrementing
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Operator_InDeCrementing
  */
 
-class Hoa_Tokenizer_Token_Operator_InDeCrementing extends Hoa_Tokenizer_Token_Operator {
+class Hoa_Pom_Token_Operator_InDeCrementing extends Hoa_Pom_Token_Operator {
 
     /**
      * Operator.
      *
-     * @var Hoa_Tokenizer_Token_Operator_InDeCrementing string
+     * @var Hoa_Pom_Token_Operator_InDeCrementing string
      */
     protected $_operator   = '++';
 
     /**
      * Operator type.
      *
-     * @var Hoa_Tokenizer_Token_Operator_InDeCrementing mixed
+     * @var Hoa_Pom_Token_Operator_InDeCrementing mixed
      */
-    protected $_type       = Hoa_Tokenizer::_INC;
+    protected $_type       = Hoa_Pom::_INC;
 
     /**
      * Operator arity.
      *
-     * @var Hoa_Tokenizer_Token_Operator_InDeCrementing int
+     * @var Hoa_Pom_Token_Operator_InDeCrementing int
      */
     protected $_arity      = parent::UNARY;
 
     /**
      * Operator precedence.
      *
-     * @var Hoa_Tokenizer_Token_Operator_InDeCrementing int
+     * @var Hoa_Pom_Token_Operator_InDeCrementing int
      */
     protected $_precedence = 19;
 
@@ -104,22 +104,22 @@ class Hoa_Tokenizer_Token_Operator_InDeCrementing extends Hoa_Tokenizer_Token_Op
      * @access  public
      * @param   string  $operator    Operator.
      * @return  string
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
     public function setOperator ( $operator ) {
 
         switch($operator) {
 
             case '++';
-                $this->setType(Hoa_Tokenizer::_INC);
+                $this->setType(Hoa_Pom::_INC);
               break;
 
             case '--':
-                $this->setType(Hoa_Tokenizer::_DEC);
+                $this->setType(Hoa_Pom::_DEC);
               break;
 
             default:
-                throw new Hoa_Tokenizer_Token_Util_Exception(
+                throw new Hoa_Pom_Token_Util_Exception(
                     'Operator %s is not a de/in-crementing  operator.', 0, $operator);
         }
 

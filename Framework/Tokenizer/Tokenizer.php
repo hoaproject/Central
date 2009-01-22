@@ -27,7 +27,7 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
+ * @package     Hoa_Pom
  *
  */
 
@@ -37,22 +37,22 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Parser_LR
+ * Hoa_Pom_Parser_LR
  */
-import('Tokenizer.Parser.LR');
+import('Pom.Parser.LR');
 
 /**
- * Hoa_Tokenizer_Parser_Token
+ * Hoa_Pom_Parser_Token
  */
-import('Tokenizer.Parser.Token');
+import('Pom.Parser.Token');
 
 /**
- * Hoa_Tokenizer_Builder
+ * Hoa_Pom_Builder
  */
-import('Tokenizer.Builder');
+import('Pom.Builder');
 
 /**
- * Class Hoa_Tokenizer.
+ * Class Hoa_Pom.
  *
  * Describe all token constants and propose alias for parsing and building.
  *
@@ -61,10 +61,10 @@ import('Tokenizer.Builder');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
+ * @package     Hoa_Pom
  */
 
-abstract class Hoa_Tokenizer {
+abstract class Hoa_Pom {
 
     /**
      * List of all PHP tokens.
@@ -253,14 +253,14 @@ abstract class Hoa_Tokenizer {
      * @access  public
      * @param   string  $source    Source or filename.
      * @param   int     $type      Given by constants
-     *                             Hoa_Tokenizer_Parser_Token::SOURCE and
-     *                             Hoa_Tokenizer_Parser_Token::FILE.
-     * @return  Hoa_Tokenizer_Token_Root
+     *                             Hoa_Pom_Parser_Token::SOURCE and
+     *                             Hoa_Pom_Parser_Token::FILE.
+     * @return  Hoa_Pom_Token_Root
      */
     public static function parse ( $source = null,
-                                   $type   = Hoa_Tokenizer_Parser_Token::SOURCE ) {
+                                   $type   = Hoa_Pom_Parser_Token::SOURCE ) {
 
-        $parser = new Hoa_Tokenizer_Parser_LR($source, $type);
+        $parser = new Hoa_Pom_Parser_LR($source, $type);
 
         return $parser->getRoot();
     }
@@ -269,12 +269,12 @@ abstract class Hoa_Tokenizer {
      * Build a tokened PHP source code.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Parser  $tokened    Tokened source code.
+     * @param   Hoa_Pom_Parser  $tokened    Tokened source code.
      * @return  string
      */
-    public static function build ( Hoa_Tokenizer_Parser $tokened ) {
+    public static function build ( Hoa_Pom_Parser $tokened ) {
 
-        return new Hoa_Tokenizer_Builder($tokened);
+        return new Hoa_Pom_Builder($tokened);
     }
 
     /**
@@ -284,7 +284,7 @@ abstract class Hoa_Tokenizer {
      * @param   mixed   $token    Token identifier, could be an integer or a
      *                            string.
      * @return  string
-     * @throw   Hoa_Tokenizer_Exception
+     * @throw   Hoa_Pom_Exception
      */
     public static function tokenName ( $token ) {
 
@@ -406,7 +406,7 @@ abstract class Hoa_Tokenizer {
               break;
 
             default:
-                throw new Hoa_Tokenizer_Exception(
+                throw new Hoa_Pom_Exception(
                     'Token %s does not exist.', 0, $token);
         }
     }

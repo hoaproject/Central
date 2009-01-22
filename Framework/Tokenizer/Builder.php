@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Builder
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Builder
  *
  */
 
@@ -38,22 +38,22 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Exception
+ * Hoa_Pom_Exception
  */
-import('Tokenizer.Exception');
+import('Pom.Exception');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Style_Null
+ * Hoa_Pom_Style_Null
  */
-import('Tokenizer.Style.Null');
+import('Pom.Style.Null');
 
 /**
- * Class Hoa_Tokenizer_Builder.
+ * Class Hoa_Pom_Builder.
  *
  * Build a tokened PHP source code.
  *
@@ -62,30 +62,30 @@ import('Tokenizer.Style.Null');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Builder
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Builder
  */
 
-class Hoa_Tokenizer_Builder {
+class Hoa_Pom_Builder {
 
     /**
      * Tokenize result.
      *
-     * @var Hoa_Tokenizer_Parser object
+     * @var Hoa_Pom_Parser object
      */
     protected $_token  = null;
 
     /**
      * Collection of plugins.
      *
-     * @var Hoa_Tokenizer_Builder array
+     * @var Hoa_Pom_Builder array
      */
     protected $_plugin = array();
 
     /**
      * Style.
      *
-     * @var Hoa_Tokenizer_Style_Interface object
+     * @var Hoa_Pom_Style_Interface object
      */
     protected $_style  = null;
 
@@ -95,26 +95,26 @@ class Hoa_Tokenizer_Builder {
      * Redirect to $this->setTokened().
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Parser  $tokened    Tokened PHP source code.
+     * @param   Hoa_Pom_Parser  $tokened    Tokened PHP source code.
      * @return  void
      */
-    public function __construct ( Hoa_Tokenizer_Parser $tokened = null ) {
+    public function __construct ( Hoa_Pom_Parser $tokened = null ) {
 
         $this->setTokened($tokened);
-        $this->setStyle(new Hoa_Tokenizer_Style_Null());
+        $this->setStyle(new Hoa_Pom_Style_Null());
     }
 
     /**
      * Set tokened PHP source code.
      *
      * @access  protected
-     * @param   Hoa_Tokenizer_Parser  $tokened    Tokened PHP source code.
+     * @param   Hoa_Pom_Parser  $tokened    Tokened PHP source code.
      * @return  void
      */
-    protected function setTokened ( Hoa_Tokenizer_Parser $tokened = null ) {
+    protected function setTokened ( Hoa_Pom_Parser $tokened = null ) {
 
         if(null === $tokened)
-            $tokened  = new Hoa_Tokenizer_Parser();
+            $tokened  = new Hoa_Pom_Parser();
 
         $old          = $this->_token;
         $this->_token = $tokened;
@@ -126,7 +126,7 @@ class Hoa_Tokenizer_Builder {
      * Get tokened PHP source code.
      *
      * @access  protected
-     * @return  Hoa_Tokenizer_Parser
+     * @return  Hoa_Pom_Parser
      */
     protected function getTokened ( ) {
 
@@ -137,10 +137,10 @@ class Hoa_Tokenizer_Builder {
      * Register a plugin.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Plugin_Interface  $plugin    Plugin.
+     * @param   Hoa_Pom_Plugin_Interface  $plugin    Plugin.
      * @return  void
      */
-    public function registerPlugin ( Hoa_Tokenizer_Plugin_Interface $plugin ) {
+    public function registerPlugin ( Hoa_Pom_Plugin_Interface $plugin ) {
 
         $this->_plugin[] = $plugin;
     }
@@ -149,10 +149,10 @@ class Hoa_Tokenizer_Builder {
      * Define the current style.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Style_Interface  $style    Current style.
-     * @return  Hoa_Tokenizer_Style_Interface
+     * @param   Hoa_Pom_Style_Interface  $style    Current style.
+     * @return  Hoa_Pom_Style_Interface
      */
-    public function setStyle ( Hoa_Tokenizer_Style_Interface $style ) {
+    public function setStyle ( Hoa_Pom_Style_Interface $style ) {
 
         $old          = $this->_style;
         $this->_style = $style;
@@ -164,7 +164,7 @@ class Hoa_Tokenizer_Builder {
      * Get the current style.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Style_Interface
+     * @return  Hoa_Pom_Style_Interface
      */
     public function getStyle ( ) {
 

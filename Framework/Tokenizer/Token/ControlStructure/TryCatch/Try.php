@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure_TryCatch_Try
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_ControlStructure_TryCatch_Try
  *
  */
 
@@ -38,47 +38,47 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ * Hoa_Pom_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
+import('Pom.Token.Util.Interface.Tokenizable');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_Instruction_Block
+ * Hoa_Pom_Token_Instruction_Block
  */
-import('Tokenizer.Token.Instruction.Block');
+import('Pom.Token.Instruction.Block');
 
 /**
- * Class Hoa_Tokenizer_Token_ControlStructure_TryCatch_Try.
+ * Class Hoa_Pom_Token_ControlStructure_TryCatch_Try.
  *
- * .
+ * Represent a try block.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure_TryCatch_Try
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_ControlStructure_TryCatch_Try
  */
 
-class          Hoa_Tokenizer_Token_ControlStructure_TryCatch_Try
-    extends    Hoa_Tokenizer_Token_Instruction_Block
-    implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+class          Hoa_Pom_Token_ControlStructure_TryCatch_Try
+    extends    Hoa_Pom_Token_Instruction_Block
+    implements Hoa_Pom_Token_Util_Interface_Tokenizable {
 
     /**
      * Collections of catch.
      *
-     * @var Hoa_Tokenizer_Token_TryCatch_Try array
+     * @var Hoa_Pom_Token_TryCatch_Try array
      */
     protected $_catch  = array();
 
@@ -117,10 +117,10 @@ class          Hoa_Tokenizer_Token_ControlStructure_TryCatch_Try
      * Add a catch block.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_ControlStructure_TryCatch_Catch  $catch    Catch block.
-     * @return  Hoa_Tokenizer_Token_ControlStructure_TryCatch_Catch
+     * @param   Hoa_Pom_Token_ControlStructure_TryCatch_Catch  $catch    Catch block.
+     * @return  Hoa_Pom_Token_ControlStructure_TryCatch_Catch
      */
-    public function addCatch ( Hoa_Tokenizer_Token_ControlStructure_TryCatch_Catch $catch ) {
+    public function addCatch ( Hoa_Pom_Token_ControlStructure_TryCatch_Catch $catch ) {
 
         return $this->_catch[] = $catch;
     }
@@ -171,13 +171,13 @@ class          Hoa_Tokenizer_Token_ControlStructure_TryCatch_Try
      *
      * @access  public
      * @param   int     $i    Catch block number.
-     * @return  Hoa_Tokenizer_Token_ControlStructure_TryCatch_Catch
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @return  Hoa_Pom_Token_ControlStructure_TryCatch_Catch
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
     public function getCatch ( $i ) {
 
         if(!isset($this->_catch[$i]))
-            throw new Hoa_Tokenizer_Token_Util_Exception(
+            throw new Hoa_Pom_Token_Util_Exception(
                 'Catch block number %d does not exist.', 0, $i);
 
         return $this->_catch[$i];
@@ -199,23 +199,24 @@ class          Hoa_Tokenizer_Token_ControlStructure_TryCatch_Try
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
     public function tokenize ( ) {
 
         if(false === $this->hasCatch())
-            throw new Hoa_Tokenizer_Token_Util_Exception(
+            throw new Hoa_Pom_Token_Util_Exception(
                 'A try structure must be coupled with one catch block at ' .
-                'least.', 0);
+                'least.', 1);
 
         $catchs = array();
 
         foreach($this->getCatchs() as $i => $catch)
-            $catchs[] = $catch->tokenize();
+            foreach($catch->tokenize() as $key => $value)
+                $catchs[] = $value;
 
         return array_merge(
             array(array(
-                0 => Hoa_Tokenizer::_TRY,
+                0 => Hoa_Pom::_TRY,
                 1 => 'try',
                 2 => -1
             )),

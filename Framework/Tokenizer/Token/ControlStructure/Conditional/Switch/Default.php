@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch_Default
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_ControlStructure_Conditional_Switch_Default
  *
  */
 
@@ -38,42 +38,42 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ * Hoa_Pom_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
+import('Pom.Token.Util.Interface.Tokenizable');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_Instruction_Block
+ * Hoa_Pom_Token_Instruction_Block
  */
-import('Tokenizer.Token.Instruction.Block');
+import('Pom.Token.Instruction.Block');
 
 /**
- * Class Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch_Default.
+ * Class Hoa_Pom_Token_ControlStructure_Conditional_Switch_Default.
  *
- * .
+ * Reprsent a default.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch_Default
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_ControlStructure_Conditional_Switch_Default
  */
 
-class          Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch_Default
-    extends    Hoa_Tokenizer_Token_Instruction_Block
-    implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+class          Hoa_Pom_Token_ControlStructure_Conditional_Switch_Default
+    extends    Hoa_Pom_Token_Instruction_Block
+    implements Hoa_Pom_Token_Util_Interface_Tokenizable {
 
     /**
      * Constructor.
@@ -100,12 +100,12 @@ class          Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch_Default
 
         return array_merge(
             array(array(
-                0 => Hoa_Tokenizer::_DEFAULT,
+                0 => Hoa_Pom::_DEFAULT,
                 1 => 'default',
                 2 => -1
             )),
             array(array(
-                0 => Hoa_Tokenizer::_COLON,,
+                0 => Hoa_Pom::_COLON,,
                 1 => ':',
                 2 => -1
             )),

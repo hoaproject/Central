@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Operator
  *
  */
 
@@ -38,17 +38,17 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ * Hoa_Pom_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
+import('Pom.Token.Util.Interface.Tokenizable');
 
 /**
- * Class Hoa_Tokenizer_Token_Operator.
+ * Class Hoa_Pom_Token_Operator.
  *
  * Represent an operator.
  *
@@ -57,11 +57,11 @@ import('Tokenizer.Token.Util.Interface.Tokenizable');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Operator
  */
 
-abstract class Hoa_Tokenizer_Token_Operator implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+abstract class Hoa_Pom_Token_Operator implements Hoa_Pom_Token_Util_Interface_Tokenizable {
 
     /**
      * Arity : whether operator is unary.
@@ -87,28 +87,28 @@ abstract class Hoa_Tokenizer_Token_Operator implements Hoa_Tokenizer_Token_Util_
     /**
      * Operator.
      *
-     * @var Hoa_Tokenizer_Token_Operator string
+     * @var Hoa_Pom_Token_Operator string
      */
     protected $_operator   = null;
 
     /**
      * Operator type.
      *
-     * @var Hoa_Tokenizer_Token_Operator mixed
+     * @var Hoa_Pom_Token_Operator mixed
      */
     protected $_type       = null;
 
     /**
      * Operator arity.
      *
-     * @var Hoa_Tokenizer_Token_Operator int
+     * @var Hoa_Pom_Token_Operator int
      */
     protected $_arity      = 0;
 
     /**
      * Operator precedence.
      *
-     * @var Hoa_Tokenizer_Token_Operator int
+     * @var Hoa_Pom_Token_Operator int
      */
     protected $_precedence = -1;
 

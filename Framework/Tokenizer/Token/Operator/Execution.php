@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator_Execution
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Operator_Execution
  *
  */
 
@@ -38,22 +38,22 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_Operator
+ * Hoa_Pom_Token_Operator
  */
-import('Tokenizer.Token.Operator');
+import('Pom.Token.Operator');
 
 /**
- * Class Hoa_Tokenizer_Token_Operator_Execution.
+ * Class Hoa_Pom_Token_Operator_Execution.
  *
  * Represent an execution operator.
  *
@@ -62,37 +62,37 @@ import('Tokenizer.Token.Operator');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator_Execution
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Operator_Execution
  */
 
-class Hoa_Tokenizer_Token_Operator_Execution extends Hoa_Tokenizer_Token_Operator {
+class Hoa_Pom_Token_Operator_Execution extends Hoa_Pom_Token_Operator {
 
     /**
      * Operator.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Execution string
+     * @var Hoa_Pom_Token_Operator_Execution string
      */
     protected $_operator   = '`';
 
     /**
      * Operator type.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Execution mixed
+     * @var Hoa_Pom_Token_Operator_Execution mixed
      */
-    protected $_type       = Hoa_Tokenizer::_EXECUTION;
+    protected $_type       = Hoa_Pom::_EXECUTION;
 
     /**
      * Operator arity.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Execution int
+     * @var Hoa_Pom_Token_Operator_Execution int
      */
     protected $_arity      = parent::UNARY;
 
     /**
      * Operator precedence.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Execution int
+     * @var Hoa_Pom_Token_Operator_Execution int
      */
     protected $_precedence = -1;
 
@@ -104,18 +104,18 @@ class Hoa_Tokenizer_Token_Operator_Execution extends Hoa_Tokenizer_Token_Operato
      * @access  public
      * @param   string  $operator    Operator.
      * @return  string
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
     public function setOperator ( $operator ) {
 
         switch($operator) {
 
             case '`';
-                $this->setType(Hoa_Tokenizer::_EXECUTION);
+                $this->setType(Hoa_Pom::_EXECUTION);
               break;
 
             default:
-                throw new Hoa_Tokenizer_Token_Util_Exception(
+                throw new Hoa_Pom_Token_Util_Exception(
                     'Operator %s is not an execution operator.', 0, $operator);
         }
 

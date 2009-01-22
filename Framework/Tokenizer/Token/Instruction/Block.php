@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Instruction_Block
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Instruction_Block
  *
  */
 
@@ -38,35 +38,35 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ * Hoa_Pom_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
+import('Pom.Token.Util.Interface.Tokenizable');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Class Hoa_Tokenizer_Token_Instruction_Block.
+ * Class Hoa_Pom_Token_Instruction_Block.
  *
- * .
+ * Represent a collection/block of instructions.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Instruction_Block
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Instruction_Block
  */
 
-class Hoa_Tokenizer_Token_Instruction_Block implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+class Hoa_Pom_Token_Instruction_Block implements Hoa_Pom_Token_Util_Interface_Tokenizable {
 
     /**
      * Force to write braces.
@@ -113,21 +113,21 @@ class Hoa_Tokenizer_Token_Instruction_Block implements Hoa_Tokenizer_Token_Util_
     /**
      * Collection of instructions.
      *
-     * @var Hoa_Tokenizer_Token_Instruction_Block array
+     * @var Hoa_Pom_Token_Instruction_Block array
      */
     protected $_instructions = array();
 
     /**
      * Braces mode. Given by constants self::*_BRACES.
      *
-     * @var Hoa_Tokenizer_Token_Instruction_Block int
+     * @var Hoa_Pom_Token_Instruction_Block int
      */
     protected $_braces       = self::DETERMINE_BRACES;
 
     /**
      * Empty mode. Given by constants self::*_EMPTY.
      *
-     * @var Hoa_Tokenizer_Token_Instruction_Block int
+     * @var Hoa_Pom_Token_Instruction_Block int
      */
     protected $_empty        = self::SEMI_COLON_EMPTY;
 
@@ -166,11 +166,11 @@ class Hoa_Tokenizer_Token_Instruction_Block implements Hoa_Tokenizer_Token_Util_
      * Add an instruction.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Instruction  $instruction    Instruction to
-     *                                                           add.
-     * @return  Hoa_Tokenizer_Token_Instruction
+     * @param   Hoa_Pom_Token_Instruction  $instruction    Instruction to
+     *                                                     add.
+     * @return  Hoa_Pom_Token_Instruction
      */
-    public function addInstruction ( Hoa_Tokenizer_Token_Instruction $instruction ) {
+    public function addInstruction ( Hoa_Pom_Token_Instruction $instruction ) {
 
         return $this->_instructions[] = $instruction;
     }
@@ -242,13 +242,13 @@ class Hoa_Tokenizer_Token_Instruction_Block implements Hoa_Tokenizer_Token_Util_
      *
      * @access  public
      * @param   int     $i     Instruction number.
-     * @return  Hoa_Tokenizer_Token_Instruction
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @return  Hoa_Pom_Token_Instruction
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
     public function getInstruction ( $i ) {
 
         if(!isset($this->_instructions[$i]))
-            throw new Hoa_Tokenizer_Token_Util_Exception(
+            throw new Hoa_Pom_Token_Util_Exception(
                 'Instruction number %d does not exist.', 0, $i);
 
         return $this->_instructions[$i];
@@ -298,10 +298,11 @@ class Hoa_Tokenizer_Token_Instruction_Block implements Hoa_Tokenizer_Token_Util_
         $array = array();
 
         foreach($this->getInstructions() as $i => $instruction)
-            $array[] = $instruction->tokenize();
+            foreach($instruction->tokenize() as $key => $value)
+                $array[] = $value;
 
         $braces = true;
-        $scolon  = false;
+        $scolon = false;
 
         switch($this->getBracesMode()) {
 
@@ -345,24 +346,24 @@ class Hoa_Tokenizer_Token_Instruction_Block implements Hoa_Tokenizer_Token_Util_
         return array_merge(
             (true === $braces
                  ? array(array(
-                       0 => Hoa_Tokenizer::_OPEN_BRACE,
+                       0 => Hoa_Pom::_OPEN_BRACE,
                        1 => '{',
                        2 => -1
-                   ))
-                 : array(array())
+                       ))
+                 : array()
             ),
             $array,
             (true === $braces
                  ? array(array(
-                       0 => Hoa_Tokenizer::_CLOSE_BRACE,
+                       0 => Hoa_Pom::_CLOSE_BRACE,
                        1 => '}',
                        2 => -1
                    ))
-                 : array(array())
+                 : array()
             ),
             (true === $scolon
                  ? array(array(
-                       0 => Hoa_Tokenizer::_SEMI_COLON,
+                       0 => Hoa_Pom::_SEMI_COLON,
                        1 => ';',
                        2 => -1
                    ))

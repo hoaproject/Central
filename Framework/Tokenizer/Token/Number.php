@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Number
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Number
  *
  */
 
@@ -38,27 +38,27 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Scalar
+ * Hoa_Pom_Token_Util_Interface_Scalar
  */
-import('Tokenizer.Token.Util.Interface.Scalar');
+import('Pom.Token.Util.Interface.Scalar');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Type
+ * Hoa_Pom_Token_Util_Interface_Type
  */
-import('Tokenizer.Token.Util.Interface.Type');
+import('Pom.Token.Util.Interface.Type');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Class Hoa_Tokenizer_Token_Number.
+ * Class Hoa_Pom_Token_Number.
  *
  * Represent a number.
  *
@@ -67,12 +67,12 @@ import('Tokenizer.~');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Number
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Number
  */
 
-abstract class Hoa_Tokenizer_Token_Number implements Hoa_Tokenizer_Token_Util_Interface_Scalar,
-                                                     Hoa_Tokenizer_Token_Util_Interface_Type {
+abstract class Hoa_Pom_Token_Number implements Hoa_Pom_Token_Util_Interface_Scalar,
+                                               Hoa_Pom_Token_Util_Interface_Type {
 
     /**
      * Pattern of a {DEC} : ([1-9][0-9]*) | 0.
@@ -126,7 +126,7 @@ abstract class Hoa_Tokenizer_Token_Number implements Hoa_Tokenizer_Token_Util_In
     /**
      * Value.
      *
-     * @var Hoa_Tokenizer_Token_Number mixed
+     * @var Hoa_Pom_Token_Number mixed
      */
     protected $_value     = null;
 

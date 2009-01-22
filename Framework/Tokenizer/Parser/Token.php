@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Parser_Token
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Parser_Token
  *
  */
 
@@ -38,17 +38,17 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Exception
+ * Hoa_Pom_Exception
  */
-import('Tokenizer.Exception');
+import('Pom.Exception');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Class Hoa_Tokenizer_Parser_Token.
+ * Class Hoa_Pom_Parser_Token.
  *
  * Parse a PHP source code.
  *
@@ -57,11 +57,11 @@ import('Tokenizer.~');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Parser_Token
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Parser_Token
  */
 
-class Hoa_Tokenizer_Parser_Token {
+class Hoa_Pom_Parser_Token {
 
     /**
      * Whether tokenize a source.
@@ -80,14 +80,14 @@ class Hoa_Tokenizer_Parser_Token {
     /**
      * Whether line numbers exist or not.
      *
-     * @var Hoa_Tokenizer_Parser_Token array
+     * @var Hoa_Pom_Parser_Token array
      */
     protected $_lineNumber = true;
 
     /**
-     * Tokenizer result.
+     * Pom result.
      *
-     * @var Hoa_Tokenizer_Parser_Token array
+     * @var Hoa_Pom_Parser_Token array
      */
     protected $_token      = null;
 
@@ -101,7 +101,7 @@ class Hoa_Tokenizer_Parser_Token {
      * @param   int     $type      Given by constants self::SOURCE and
      *                             self::FILE.
      * @return  void
-     * @throw   Hoa_Tokenizer_Exception
+     * @throw   Hoa_Pom_Exception
      */
     public function __construct ( $source = null, $type = self::SOURCE ) {
 
@@ -119,7 +119,7 @@ class Hoa_Tokenizer_Parser_Token {
      * @param   int        $type      Given by constants self::SOURCE and
      *                                self::FILE.
      * @return  array
-     * @throw   Hoa_Tokenizer_Exception
+     * @throw   Hoa_Pom_Exception
      */
     protected function token ( $source = null, $type = self::SOURCE ) {
 
@@ -128,7 +128,7 @@ class Hoa_Tokenizer_Parser_Token {
         if(self::FILE == $type) {
 
             if(!file_exists($source))
-                throw new Hoa_Tokenizer_Exception(
+                throw new Hoa_Pom_Exception(
                     'Cannot parse file %s, because it does not exist.', 0,
                     $source);
 
@@ -197,7 +197,7 @@ class Hoa_Tokenizer_Parser_Token {
             $out .= sprintf(
                         '%-6s%-28s%s',
                         ($token[2] < 0 ? '~' : $token[2]),
-                        Hoa_Tokenizer::tokenName($token[0]),
+                        Hoa_Pom::tokenName($token[0]),
                         $token[1]
                     ) . "\n";
 

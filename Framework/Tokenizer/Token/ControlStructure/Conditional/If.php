@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure_Conditional_If
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_ControlStructure_Conditional_If
  *
  */
 
@@ -38,55 +38,55 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_ControlStructure_Conditional
+ * Hoa_Pom_Token_ControlStructure_Conditional
  */
-import('Tokenizer.Token.ControlStructure.Conditional');
+import('Pom.Token.ControlStructure.Conditional');
 
 /**
- * Class Hoa_Tokenizer_Token_ControlStructure_Conditional_If.
+ * Class Hoa_Pom_Token_ControlStructure_Conditional_If.
  *
- * .
+ * Represent an if structure.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure_Conditional_If
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_ControlStructure_Conditional_If
  */
 
-class       Hoa_Tokenizer_Token_ControlStructure_Conditional_If
-    extends Hoa_Tokenizer_Token_ControlStructure_Conditional {
+class       Hoa_Pom_Token_ControlStructure_Conditional_If
+    extends Hoa_Pom_Token_ControlStructure_Conditional {
 
     /**
      * If.
      *
-     * @var Hoa_Tokenizer_Token_ControlStructure_Conditional_If_If object
+     * @var Hoa_Pom_Token_ControlStructure_Conditional_If_If object
      */
     protected $_if     = null;
 
     /**
      * Collection of Elseif.
      *
-     * @var Hoa_Tokenizer_Token_ControlStructure_Conditional_If array
+     * @var Hoa_Pom_Token_ControlStructure_Conditional_If array
      */
     protected $_elseif = array();
 
     /**
      * Else.
      *
-     * @var Hoa_Tokenizer_Token_ControlStructure_Conditional_If_Else object
+     * @var Hoa_Pom_Token_ControlStructure_Conditional_If_Else object
      */
     protected $_else   = null;
 
@@ -96,10 +96,10 @@ class       Hoa_Tokenizer_Token_ControlStructure_Conditional_If
      * Constructor.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_ControlStructure_Conditional_If_If  $if    If.
+     * @param   Hoa_Pom_Token_ControlStructure_Conditional_If_If  $if    If.
      * @return  void
      */
-    public function __construct ( Hoa_Tokenizer_Token_ControlStructure_Conditional_If_If $if ) {
+    public function __construct ( Hoa_Pom_Token_ControlStructure_Conditional_If_If $if ) {
 
         $this->setIf($if);
 
@@ -110,10 +110,10 @@ class       Hoa_Tokenizer_Token_ControlStructure_Conditional_If
      * Set if.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_ControlStructure_Conditional_If_If  $if    If.
-     * @return  Hoa_Tokenizer_Token_ControlStructure_Conditional_If_If
+     * @param   Hoa_Pom_Token_ControlStructure_Conditional_If_If  $if    If.
+     * @return  Hoa_Pom_Token_ControlStructure_Conditional_If_If
      */
-    public function setIf ( Hoa_Tokenizer_Token_ControlStructure_Conditional_If_If $if ) {
+    public function setIf ( Hoa_Pom_Token_ControlStructure_Conditional_If_If $if ) {
 
         $old       = $this->_if;
         $this->_if = $if;
@@ -140,10 +140,10 @@ class       Hoa_Tokenizer_Token_ControlStructure_Conditional_If
      * Add an elseif.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_ControlStructure_Conditional_If_Elseif  $elseif    Elseif to add.
-     * @return  Hoa_Tokenizer_Token_ControlStructure_Conditional_If_Elseif
+     * @param   Hoa_Pom_Token_ControlStructure_Conditional_If_Elseif  $elseif    Elseif to add.
+     * @return  Hoa_Pom_Token_ControlStructure_Conditional_If_Elseif
      */
-    public function addElseif ( Hoa_Tokenizer_Token_ControlStructure_Conditional_If_Elseif $elseif ) {
+    public function addElseif ( Hoa_Pom_Token_ControlStructure_Conditional_If_Elseif $elseif ) {
 
         return $this->_elseif[] = $elseif;
     }
@@ -182,10 +182,10 @@ class       Hoa_Tokenizer_Token_ControlStructure_Conditional_If
      * Set else.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_ControlStructure_Conditional_If_Else  $else    Else to add.
-     * @return  Hoa_Tokenizer_Token_ControlStructure_Conditional_If_Else
+     * @param   Hoa_Pom_Token_ControlStructure_Conditional_If_Else  $else    Else to add.
+     * @return  Hoa_Pom_Token_ControlStructure_Conditional_If_Else
      */
-    public function setElse ( Hoa_Tokenizer_Token_ControlStructure_Conditional_If_Elseif $else ) {
+    public function setElse ( Hoa_Pom_Token_ControlStructure_Conditional_If_Elseif $else ) {
 
         $old         = $this->_else;
         $this->_else = $else;
@@ -197,7 +197,7 @@ class       Hoa_Tokenizer_Token_ControlStructure_Conditional_If
      * Remove else.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_ControlStructure_Conditional_If_Elseif
+     * @return  Hoa_Pom_Token_ControlStructure_Conditional_If_Elseif
      */
     public function removeElse ( ) {
 
@@ -211,7 +211,7 @@ class       Hoa_Tokenizer_Token_ControlStructure_Conditional_If
      * Get if.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_ControlStructure_Conditional_If_If
+     * @return  Hoa_Pom_Token_ControlStructure_Conditional_If_If
      */
     public function getIf ( ) {
 
@@ -234,13 +234,13 @@ class       Hoa_Tokenizer_Token_ControlStructure_Conditional_If
      *
      * @access  public
      * @param   int     $i    Elseif number.
-     * @return  Hoa_Tokenizer_Token_ControlStructure_Conditional_If_Elseif
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @return  Hoa_Pom_Token_ControlStructure_Conditional_If_Elseif
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
     public function getElseif ( $i ) {
 
         if(!isset($this->_elseif[$i]))
-            throw new Hoa_Tokenizer_Token_Util_Exception(
+            throw new Hoa_Pom_Token_Util_Exception(
                 'Elseif number %d does not exist.', 0, $i);
 
         return $this->_elseif[$i];
@@ -261,7 +261,7 @@ class       Hoa_Tokenizer_Token_ControlStructure_Conditional_If
      * Get else.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_ControlStructure_Conditional_If_Else
+     * @return  Hoa_Pom_Token_ControlStructure_Conditional_If_Else
      */
     public function getElse ( ) {
 
@@ -291,7 +291,8 @@ class       Hoa_Tokenizer_Token_ControlStructure_Conditional_If
         $elseif = array();
 
         foreach($this->getElseifs() as $i => $ei)
-            $elseif[] = $ei->tokenize();
+            foreach($ei->tokenize() as $key => $value)
+                $elseif[] = $value;
 
         $else   = true === $this->hasElse()
                       ? $this->getElse()->tokenize()

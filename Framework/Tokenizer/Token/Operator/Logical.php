@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator_Logical
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Operator_Logical
  *
  */
 
@@ -38,22 +38,22 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_Operator
+ * Hoa_Pom_Token_Operator
  */
-import('Tokenizer.Token.Operator');
+import('Pom.Token.Operator');
 
 /**
- * Class Hoa_Tokenizer_Token_Operator_Logical.
+ * Class Hoa_Pom_Token_Operator_Logical.
  *
  * Represent logical operators.
  *
@@ -62,37 +62,37 @@ import('Tokenizer.Token.Operator');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator_Logical
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Operator_Logical
  */
 
-class Hoa_Tokenizer_Token_Operator_Logical extends Hoa_Tokenizer_Token_Operator {
+class Hoa_Pom_Token_Operator_Logical extends Hoa_Pom_Token_Operator {
 
     /**
      * Operator.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Logical string
+     * @var Hoa_Pom_Token_Operator_Logical string
      */
     protected $_operator   = '&&';
 
     /**
      * Operator type.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Logical mixed
+     * @var Hoa_Pom_Token_Operator_Logical mixed
      */
-    protected $_type       = Hoa_Tokenizer::_BOOLEAN_AND;
+    protected $_type       = Hoa_Pom::_BOOLEAN_AND;
 
     /**
      * Operator arity.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Logical int
+     * @var Hoa_Pom_Token_Operator_Logical int
      */
     protected $_arity      = parent::BINARY;
 
     /**
      * Operator precedence.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Logical int
+     * @var Hoa_Pom_Token_Operator_Logical int
      */
     protected $_precedence = 7;
 
@@ -104,50 +104,50 @@ class Hoa_Tokenizer_Token_Operator_Logical extends Hoa_Tokenizer_Token_Operator 
      * @access  public
      * @param   string  $operator    Operator.
      * @return  string
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
     public function setOperator ( $operator ) {
 
         switch($operator) {
 
             case '&&';
-                $this->setType(Hoa_Tokenizer::_BOOLEAN_AND);
+                $this->setType(Hoa_Pom::_BOOLEAN_AND);
                 $this->setArity(parent::BINARY);
                 $this->setPrecedence(7);
               break;
 
             case '||':
-                $this->setType(Hoa_Tokenizer::_BOOLEAN_OR);
+                $this->setType(Hoa_Pom::_BOOLEAN_OR);
                 $this->setArity(parent::BINARY);
                 $this->setPrecedence(6);
               break;
 
             case 'and':
-                $this->setType(Hoa_Tokenizer::_LOGICAL_AND);
+                $this->setType(Hoa_Pom::_LOGICAL_AND);
                 $this->setArity(parent::BINARY);
                 $this->setPrecedence(3);
               break;
 
             case 'or':
-                $this->setType(Hoa_Tokenizer::_LOGICAL_OR);
+                $this->setType(Hoa_Pom::_LOGICAL_OR);
                 $this->setArity(parent::BINARY);
                 $this->setPrecedence(1);
               break;
 
             case 'xor':
-                $this->setType(Hoa_Tokenizer::_LOGICAL_XOR);
+                $this->setType(Hoa_Pom::_LOGICAL_XOR);
                 $this->setArity(parent::BINARY);
                 $this->setPrecedence(2);
               break;
 
             case '!':
-                $this->setType(Hoa_Tokenizer::_LOGICAL_NOT);
+                $this->setType(Hoa_Pom::_LOGICAL_NOT);
                 $this->setArity(parent::UNARY);
                 $this->setPrecedence(16);
               break;
 
             default:
-                throw new Hoa_Tokenizer_Token_Util_Exception(
+                throw new Hoa_Pom_Token_Util_Exception(
                     'Operator %s is not a bitwise operator.', 0, $operator);
         }
 

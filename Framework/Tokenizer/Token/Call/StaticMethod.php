@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Call_StaticMethod
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Call_StaticMethod
  *
  */
 
@@ -38,55 +38,55 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_SuperScalar
+ * Hoa_Pom_Token_Util_Interface_SuperScalar
  */
-import('Tokenizer.Token.Util.Interface.SuperScalar');
+import('Pom.Token.Util.Interface.SuperScalar');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_Call
+ * Hoa_Pom_Token_Call
  */
-import('Tokenizer.Token.Call');
+import('Pom.Token.Call');
 
 /**
- * Class Hoa_Tokenizer_Token_Call_StaticMethod.
+ * Class Hoa_Pom_Token_Call_StaticMethod.
  *
- * .
+ * Represent a call to a static method.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Call_StaticMethod
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Call_StaticMethod
  */
 
-class Hoa_Tokenizer_Token_Call_StaticMethod extends    Hoa_Tokenizer_Token_Call
-                                            implements Hoa_Tokenizer_Token_Util_Interface_SuperScalar {
+class Hoa_Pom_Token_Call_StaticMethod extends    Hoa_Pom_Token_Call
+                                      implements Hoa_Pom_Token_Util_Interface_SuperScalar {
 
     /**
      * Class name.
      *
-     * @var Hoa_Tokenizer_Token_String object
+     * @var Hoa_Pom_Token_String object
      */
-    protected $_class     = null;
+    protected $_class  = null;
 
     /**
      * Method name.
      *
-     * @var Hoa_Tokenizer_Token_Call_Function object
+     * @var Hoa_Pom_Token_Call_Function object
      */
-    protected $_method    = null;
+    protected $_method = null;
 
 
 
@@ -94,10 +94,10 @@ class Hoa_Tokenizer_Token_Call_StaticMethod extends    Hoa_Tokenizer_Token_Call
      * Constructor.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_String  $class    Class name.
+     * @param   Hoa_Pom_Token_String  $class    Class name.
      * @return  void
      */
-    public function __construct ( Hoa_Tokenizer_Token_String $class ) {
+    public function __construct ( Hoa_Pom_Token_String $class ) {
 
         $this->setClass($class);
 
@@ -108,10 +108,10 @@ class Hoa_Tokenizer_Token_Call_StaticMethod extends    Hoa_Tokenizer_Token_Call
      * Set class name.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_String  $class    Class name.
-     * @return  Hoa_Tokenizer_Token_String
+     * @param   Hoa_Pom_Token_String  $class    Class name.
+     * @return  Hoa_Pom_Token_String
      */
-    public function setClass ( Hoa_Tokenizer_Token_String $class ) {
+    public function setClass ( Hoa_Pom_Token_String $class ) {
 
         $old          = $this->_class;
         $this->_class = $class;
@@ -123,10 +123,10 @@ class Hoa_Tokenizer_Token_Call_StaticMethod extends    Hoa_Tokenizer_Token_Call
      * Set method name.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Call_Function   $method    Method name.
-     * @return  Hoa_Tokenizer_Token_Call_Function
+     * @param   Hoa_Pom_Token_Call_Function   $method    Method name.
+     * @return  Hoa_Pom_Token_Call_Function
      */
-    public function setMethod ( Hoa_Tokenizer_Token_Call_Function $method ) {
+    public function setMethod ( Hoa_Pom_Token_Call_Function $method ) {
 
         $old           = $this->_method;
         $this->_method = $method;
@@ -138,7 +138,7 @@ class Hoa_Tokenizer_Token_Call_StaticMethod extends    Hoa_Tokenizer_Token_Call
      * Get class name.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_String
+     * @return  Hoa_Pom_Token_String
      */
     public function getClass ( ) {
 
@@ -149,7 +149,7 @@ class Hoa_Tokenizer_Token_Call_StaticMethod extends    Hoa_Tokenizer_Token_Call
      * Get method name.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_Call_Function
+     * @return  Hoa_Pom_Token_Call_Function
      */
     public function getMethod ( ) {
 
@@ -178,7 +178,7 @@ class Hoa_Tokenizer_Token_Call_StaticMethod extends    Hoa_Tokenizer_Token_Call
         return array_merge(
             $this->getClass()->tokenize(),
             array(array(
-                0 => Hoa_Tokenizer::_DOUBLE_COLON,
+                0 => Hoa_Pom::_DOUBLE_COLON,
                 1 => '::',
                 2 => -1
             )),

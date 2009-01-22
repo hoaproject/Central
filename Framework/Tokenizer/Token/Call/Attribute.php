@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Call_Attribute
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Call_Attribute
  *
  */
 
@@ -38,53 +38,53 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_SuperScalar
+ * Hoa_Pom_Token_Util_Interface_SuperScalar
  */
-import('Tokenizer.Token.Util.Interface.SuperScalar');
+import('Pom.Token.Util.Interface.SuperScalar');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_Call
+ * Hoa_Pom_Token_Call
  */
-import('Tokenizer.Token.Call');
+import('Pom.Token.Call');
 
 /**
- * Class Hoa_Tokenizer_Token_Call_Attribute.
+ * Class Hoa_Pom_Token_Call_Attribute.
  *
- * .
+ * Represent a call to an attribute.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Call_Attribute
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Call_Attribute
  */
 
-class Hoa_Tokenizer_Token_Call_Attribute extends    Hoa_Tokenizer_Token_Call
-                                         implements Hoa_Tokenizer_Token_Util_Interface_SuperScalar {
+class Hoa_Pom_Token_Call_Attribute extends    Hoa_Pom_Token_Call
+                                   implements Hoa_Pom_Token_Util_Interface_SuperScalar {
 
     /**
      * Object name.
      *
-     * @var Hoa_Tokenizer_Token_Variable object
+     * @var Hoa_Pom_Token_Variable object
      */
     protected $_object    = null;
 
     /**
      * Attribute name.
      *
-     * @var Hoa_Tokenizer_Token_Variable object
+     * @var Hoa_Pom_Token_Variable object
      */
     protected $_attribute = null;
 
@@ -94,10 +94,10 @@ class Hoa_Tokenizer_Token_Call_Attribute extends    Hoa_Tokenizer_Token_Call
      * Constructor.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Variable  $object    Object name.
+     * @param   Hoa_Pom_Token_Variable  $object    Object name.
      * @return  void
      */
-    public function __construct ( Hoa_Tokenizer_Token_Variable $object ) {
+    public function __construct ( Hoa_Pom_Token_Variable $object ) {
 
         $this->setObject($object);
 
@@ -108,10 +108,10 @@ class Hoa_Tokenizer_Token_Call_Attribute extends    Hoa_Tokenizer_Token_Call
      * Set object name.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Variable  $object    Object name.
-     * @return  Hoa_Tokenizer_Token_Variable
+     * @param   Hoa_Pom_Token_Variable  $object    Object name.
+     * @return  Hoa_Pom_Token_Variable
      */
-    public function setObject ( Hoa_Tokenizer_Token_String $object ) {
+    public function setObject ( Hoa_Pom_Token_String $object ) {
 
         $old           = $this->_object;
         $this->_object = $object;
@@ -123,10 +123,10 @@ class Hoa_Tokenizer_Token_Call_Attribute extends    Hoa_Tokenizer_Token_Call
      * Set attribute name.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Variable  $attribute    Attribute name.
-     * @return  Hoa_Tokenizer_Token_Variable
+     * @param   Hoa_Pom_Token_Variable  $attribute    Attribute name.
+     * @return  Hoa_Pom_Token_Variable
      */
-    public function setAttribute ( Hoa_Tokenizer_Token_Variable $attribute ) {
+    public function setAttribute ( Hoa_Pom_Token_Variable $attribute ) {
 
         $old              = $this->_attribute;
         $this->_attribute = $attribute;
@@ -138,7 +138,7 @@ class Hoa_Tokenizer_Token_Call_Attribute extends    Hoa_Tokenizer_Token_Call
      * Get object name.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_Variable
+     * @return  Hoa_Pom_Token_Variable
      */
     public function getObject ( ) {
 
@@ -149,7 +149,7 @@ class Hoa_Tokenizer_Token_Call_Attribute extends    Hoa_Tokenizer_Token_Call
      * Get attribute name.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_String
+     * @return  Hoa_Pom_Token_String
      */
     public function getAttribute ( ) {
 
@@ -178,7 +178,7 @@ class Hoa_Tokenizer_Token_Call_Attribute extends    Hoa_Tokenizer_Token_Call
         return array_merge(
             $this->getObject()->tokenize(),
             array(array(
-                0 => Hoa_Tokenizer::_OBJECT_OPERATOR,
+                0 => Hoa_Pom::_OBJECT_OPERATOR,
                 1 => '->',
                 2 => -1
             )),

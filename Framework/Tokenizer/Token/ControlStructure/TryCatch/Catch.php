@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure_TryCatch_Catch
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_ControlStructure_TryCatch_Catch
  *
  */
 
@@ -38,54 +38,54 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ * Hoa_Pom_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
+import('Pom.Token.Util.Interface.Tokenizable');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_Instruction_Block
+ * Hoa_Pom_Token_Instruction_Block
  */
-import('Tokenizer.Token.Instruction.Block');
+import('Pom.Token.Instruction.Block');
 
 /**
- * Class Hoa_Tokenizer_Token_ControlStructure_TryCatch_Catch.
+ * Class Hoa_Pom_Token_ControlStructure_TryCatch_Catch.
  *
- * .
+ * Represent a catch block.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure_TryCatch_Catch
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_ControlStructure_TryCatch_Catch
  */
 
-class          Hoa_Tokenizer_Token_ControlStructure_TryCatch_Catch
-    extends    Hoa_Tokenizer_Token_Instruction_Block
-    implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+class          Hoa_Pom_Token_ControlStructure_TryCatch_Catch
+    extends    Hoa_Pom_Token_Instruction_Block
+    implements Hoa_Pom_Token_Util_Interface_Tokenizable {
 
     /**
      * Type of exception.
      *
-     * @var Hoa_Tokenizer_Token_String object
+     * @var Hoa_Pom_Token_String object
      */
     protected $_type     = null;
 
     /**
      * Variable that will receive the thrown exception.
      *
-     * @var Hoa_Tokenizer_Token_Variable object
+     * @var Hoa_Pom_Token_Variable object
      */
     protected $_variable = null;
 
@@ -95,12 +95,12 @@ class          Hoa_Tokenizer_Token_ControlStructure_TryCatch_Catch
      * Constructor.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_String    $type        Type of exception.
-     * @param   Hoa_Tokenizer_Token_Variable  $variable    Variable.
+     * @param   Hoa_Pom_Token_String    $type        Type of exception.
+     * @param   Hoa_Pom_Token_Variable  $variable    Variable.
      * @return  void
      */
-    public function __construct ( Hoa_Tokenizer_Token_String   $type,
-                                  Hoa_Tokenizer_Token_Variable $variable ) {
+    public function __construct ( Hoa_Pom_Token_String   $type,
+                                  Hoa_Pom_Token_Variable $variable ) {
 
         parent::setBracesMode(parent::FORCE_BRACES);
 
@@ -114,10 +114,10 @@ class          Hoa_Tokenizer_Token_ControlStructure_TryCatch_Catch
      * Set type of exception.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_String  $type    Type of exception.
-     * @return  Hoa_Tokenizer_Token_String
+     * @param   Hoa_Pom_Token_String  $type    Type of exception.
+     * @return  Hoa_Pom_Token_String
      */
-    public function setType ( Hoa_Tokenizer_Token_String $type ) {
+    public function setType ( Hoa_Pom_Token_String $type ) {
 
         $old         = $this->_type;
         $this->_type = $type;
@@ -129,10 +129,10 @@ class          Hoa_Tokenizer_Token_ControlStructure_TryCatch_Catch
      * Set variable that will receive the exception.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Variable  $variable    Variable.
-     * @return  Hoa_Tokenizer_Token_Variable
+     * @param   Hoa_Pom_Token_Variable  $variable    Variable.
+     * @return  Hoa_Pom_Token_Variable
      */
-    public function setVariable ( Hoa_Tokenizer_Token_Variable $variable ) {
+    public function setVariable ( Hoa_Pom_Token_Variable $variable ) {
 
         $old             = $this->_variable;
         $this->_variable = $variable;
@@ -144,7 +144,7 @@ class          Hoa_Tokenizer_Token_ControlStructure_TryCatch_Catch
      * Get type.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_String
+     * @return  Hoa_Pom_Token_String
      */
     public function getType ( ) {
 
@@ -155,7 +155,7 @@ class          Hoa_Tokenizer_Token_ControlStructure_TryCatch_Catch
      * Get variable.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_Variable
+     * @return  Hoa_Pom_Token_Variable
      */
     public function getVariable ( ) {
 
@@ -172,19 +172,19 @@ class          Hoa_Tokenizer_Token_ControlStructure_TryCatch_Catch
 
         return array_merge(
             array(array(
-                0 => Hoa_Tokenizer::_CATCH,
+                0 => Hoa_Pom::_CATCH,
                 1 => 'catch',
                 2 => -1
             )),
             array(array(
-                0 => Hoa_Tokenizer::_OPEN_PARENTHESES,
+                0 => Hoa_Pom::_OPEN_PARENTHESES,
                 1 => '(',
                 2 => -1
             )),
             $this->getType()->tokenize(),
             $this->getVariable()->tokenize(),
             array(array(
-                0 => Hoa_Tokenizer::_CLOSE_PARENTHESES,
+                0 => Hoa_Pom::_CLOSE_PARENTHESES,
                 1 => ')',
                 2 => -1
             )),

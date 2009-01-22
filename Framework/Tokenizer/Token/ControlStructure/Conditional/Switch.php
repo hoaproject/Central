@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_ControlStructure_Conditional_Switch
  *
  */
 
@@ -38,36 +38,36 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_ControlStructure_Conditional
+ * Hoa_Pom_Token_ControlStructure_Conditional
  */
-import('Tokenizer.Token.ControlStructure.Conditional');
+import('Pom.Token.ControlStructure.Conditional');
 
 /**
- * Class Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch.
+ * Class Hoa_Pom_Token_ControlStructure_Conditional_Switch.
  *
- * .
+ * Represent a switch structure.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_ControlStructure_Conditional_Switch
  */
 
-class       Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch
-    extends Hoa_Tokenizer_Token_ControlStructure_Conditional {
+class       Hoa_Pom_Token_ControlStructure_Conditional_Switch
+    extends Hoa_Pom_Token_ControlStructure_Conditional {
 
     /**
      * Expression to test.
@@ -79,14 +79,14 @@ class       Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch
     /**
      * Collection of cases.
      *
-     * @var Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch array
+     * @var Hoa_Pom_Token_ControlStructure_Conditional_Switch array
      */
     protected $_cases      = array();
 
     /**
      * Default case.
      *
-     * @var Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch_Default object
+     * @var Hoa_Pom_Token_ControlStructure_Conditional_Switch_Default object
      */
     protected $_default    = null;
 
@@ -117,20 +117,20 @@ class       Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch
 
         switch(get_class($expression)) {
 
-            case 'Hoa_Tokenizer_Token_Array':
-            case 'Hoa_Tokenizer_Token_Call':
-            case 'Hoa_Tokenizer_Token_Cast':
-            case 'Hoa_Tokenizer_Token_Clone':
-            case 'Hoa_Tokenizer_Token_Comment':
-            case 'Hoa_Tokenizer_Token_New':
-            case 'Hoa_Tokenizer_Token_Number':
-            case 'Hoa_Tokenizer_Token_Operation':
-            case 'Hoa_Tokenizer_Token_String':
-            case 'Hoa_Tokenizer_Token_Variable':
+            case 'Hoa_Pom_Token_Array':
+            case 'Hoa_Pom_Token_Call':
+            case 'Hoa_Pom_Token_Cast':
+            case 'Hoa_Pom_Token_Clone':
+            case 'Hoa_Pom_Token_Comment':
+            case 'Hoa_Pom_Token_New':
+            case 'Hoa_Pom_Token_Number':
+            case 'Hoa_Pom_Token_Operation':
+            case 'Hoa_Pom_Token_String':
+            case 'Hoa_Pom_Token_Variable':
               break;
 
             default:
-                throw new Hoa_Tokenizer_Token_Util_Exception(
+                throw new Hoa_Pom_Token_Util_Exception(
                     'An expression cannot be constitued by a class that ' .
                     'is an instance of %s.', 0, get_class($expression));
         }
@@ -160,10 +160,10 @@ class       Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch
      * Add a case.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch_Case  $case    Case to add.
-     * @return  Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch_Case
+     * @param   Hoa_Pom_Token_ControlStructure_Conditional_Switch_Case  $case    Case to add.
+     * @return  Hoa_Pom_Token_ControlStructure_Conditional_Switch_Case
      */
-    public function addCase ( Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch_Case $case ) {
+    public function addCase ( Hoa_Pom_Token_ControlStructure_Conditional_Switch_Case $case ) {
 
         return $this->_cases[] = $case;
     }
@@ -202,10 +202,10 @@ class       Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch
      * Set default.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch_Default  $default    Default case.
-     * @return  Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch_Default
+     * @param   Hoa_Pom_Token_ControlStructure_Conditional_Switch_Default  $default    Default case.
+     * @return  Hoa_Pom_Token_ControlStructure_Conditional_Switch_Default
      */
-    public function setDefault ( Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch_Default  $default ) {
+    public function setDefault ( Hoa_Pom_Token_ControlStructure_Conditional_Switch_Default  $default ) {
 
         $old            = $this->_default;
         $this->_default = $default;
@@ -217,7 +217,7 @@ class       Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch
      * Remove default.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch_Default
+     * @return  Hoa_Pom_Token_ControlStructure_Conditional_Switch_Default
      */
     public function removeDefault ( ) {
 
@@ -254,13 +254,13 @@ class       Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch
      *
      * @access  public
      * @param   int     $i    Case number.
-     * @return  Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch_Case
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @return  Hoa_Pom_Token_ControlStructure_Conditional_Switch_Case
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
     public function getCase ( $i ) {
 
         if(!isset($this->_cases[$i]))
-            throw new Hoa_Tokenizer_Token_Util_Exception(
+            throw new Hoa_Pom_Token_Util_Exception(
                 'Case number %s does not exist.', 0, $i);
 
         return $this->_cases[$i];
@@ -281,7 +281,7 @@ class       Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch
      * Get default.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch_Default
+     * @return  Hoa_Pom_Token_ControlStructure_Conditional_Switch_Default
      */
     public function getDefault ( ) {
 
@@ -311,7 +311,8 @@ class       Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch
         $cases       = array();
 
         foreach($this->getCases() as $i => $case)
-            $cases[] = $case->tokenize();
+            foreach($case->tokenize() as $key => $value)
+                $cases[] = $value;
 
         $default     = true === $this->hasDefault()
                            ? $this->getDefault()->tokenize()
@@ -319,30 +320,30 @@ class       Hoa_Tokenizer_Token_ControlStructure_Conditional_Switch
 
         return array_merge(
             array(array(
-                0 => Hoa_Tokenizer::_SWITCH,
+                0 => Hoa_Pom::_SWITCH,
                 1 => 'switch',
                 2 => -1
             )),
             array(array(
-                0 => Hoa_Tokenizer::_OPEN_PARENTHESES,
+                0 => Hoa_Pom::_OPEN_PARENTHESES,
                 1 => '(',
                 2 => -1
             )),
             $expression,
             array(array(
-                0 => Hoa_Tokenizer::_CLOSE_PARENTHESES,
+                0 => Hoa_Pom::_CLOSE_PARENTHESES,
                 1 => ')',
                 2 => -1
             )),
             array(array(
-                0 => Hoa_Tokenizer::_OPEN_BRACE,
+                0 => Hoa_Pom::_OPEN_BRACE,
                 1 => '{',
                 2 => -1
             )),
             $cases,
             $default,
             array(array(
-                0 => Hoa_Tokenizer::_CLOSE_BRACE,
+                0 => Hoa_Pom::_CLOSE_BRACE,
                 1 => '}',
                 2 => -1
             )),

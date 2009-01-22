@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Parser
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Parser
  *
  */
 
@@ -38,37 +38,37 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Exception
+ * Hoa_Pom_Exception
  */
-import('Tokenizer.Exception');
+import('Pom.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ * Hoa_Pom_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
+import('Pom.Token.Util.Interface.Tokenizable');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Parser_Token
+ * Hoa_Pom_Parser_Token
  */
-import('Tokenizer.Parser.Token');
+import('Pom.Parser.Token');
 
 /**
- * Hoa_Tokenizer_Token_Root
+ * Hoa_Pom_Token_Root
  */
-import('Tokenizer.Token.Root');
+import('Pom.Token.Root');
 
 /**
- * Class Hoa_Tokenizer_Parser.
+ * Class Hoa_Pom_Parser.
  *
  * .
  *
@@ -77,37 +77,37 @@ import('Tokenizer.Token.Root');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Parser
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Parser
  */
 
-abstract class Hoa_Tokenizer_Parser implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+abstract class Hoa_Pom_Parser implements Hoa_Pom_Token_Util_Interface_Tokenizable {
 
     /**
      * Token collection.
      *
-     * @var Hoa_Tokenizer_Parser array
+     * @var Hoa_Pom_Parser array
      */
     protected $_token = null;
 
     /**
      * Root of object model.
      *
-     * @var Hoa_Tokenizer_Token_Root object
+     * @var Hoa_Pom_Token_Root object
      */
     protected $_root  = null;
 
     /**
      * Maximum of tokens.
      *
-     * @var Hoa_Tokenizer_Parser int
+     * @var Hoa_Pom_Parser int
      */
     protected $_max   = 0;
 
     /**
      * Current token position.
      *
-     * @var Hoa_Tokenizer_Parser int
+     * @var Hoa_Pom_Parser int
      */
     protected $_i     = 0;
 
@@ -119,12 +119,12 @@ abstract class Hoa_Tokenizer_Parser implements Hoa_Tokenizer_Token_Util_Interfac
      * @access  public
      * @param   string  $source    Source or filename.
      * @param   int     $type      Given by constants
-     *                             Hoa_Tokenizer_Parser_Token::SOURCE and
-     *                             Hoa_Tokenizer_Parser_Token::FILE.
+     *                             Hoa_Pom_Parser_Token::SOURCE and
+     *                             Hoa_Pom_Parser_Token::FILE.
      * @return  void
      */
     public function __construct ( $source = null,
-                                  $type   = Hoa_Tokenizer_Parser_Token::SOURCE ) {
+                                  $type   = Hoa_Pom_Parser_Token::SOURCE ) {
 
         $this->setToken($source, $type);
         $this->setRoot();
@@ -138,15 +138,15 @@ abstract class Hoa_Tokenizer_Parser implements Hoa_Tokenizer_Token_Util_Interfac
      * @access  protected
      * @param   string     $source    Source or filename.
      * @param   int        $type      Given by constants
-     *                                Hoa_Tokenizer_Parser_Token::SOURCE and
-     *                                Hoa_Tokenizer_Parser_Token::FILE.
-     * @return  Hoa_Tokenizer_Parser_Token
+     *                                Hoa_Pom_Parser_Token::SOURCE and
+     *                                Hoa_Pom_Parser_Token::FILE.
+     * @return  Hoa_Pom_Parser_Token
      */
     protected function setToken ( $source = null,
-                                  $type   = Hoa_Tokenizer_Parser_Token::SOURCE ) {
+                                  $type   = Hoa_Pom_Parser_Token::SOURCE ) {
 
         $old          = $this->_token;
-        $handle       = new Hoa_Tokenizer_Parser_Token($source, $type);
+        $handle       = new Hoa_Pom_Parser_Token($source, $type);
         $this->_token = $handle->get();
         $this->_max   = count($this->_token);
 
@@ -157,12 +157,12 @@ abstract class Hoa_Tokenizer_Parser implements Hoa_Tokenizer_Token_Util_Interfac
      * Set root.
      *
      * @access  protected
-     * @return  Hoa_Tokenizer_Token_Root
+     * @return  Hoa_Pom_Token_Root
      */
     protected function setRoot ( ) {
 
         $old         = $this->_root;
-        $this->_root = new Hoa_Tokenizer_Token_Root();
+        $this->_root = new Hoa_Pom_Token_Root();
 
         return $old;
     }
@@ -171,7 +171,7 @@ abstract class Hoa_Tokenizer_Parser implements Hoa_Tokenizer_Token_Util_Interfac
      * Get token.
      *
      * @access  protected
-     * @return  Hoa_Tokenizer_Parser_Token
+     * @return  Hoa_Pom_Parser_Token
      */
     protected function t ( ) {
 
@@ -182,7 +182,7 @@ abstract class Hoa_Tokenizer_Parser implements Hoa_Tokenizer_Token_Util_Interfac
      * Get root.
      *
      * @access  protected
-     * @return  Hoa_Tokenizer_Token_Root
+     * @return  Hoa_Pom_Token_Root
      */
     protected function r ( ) {
 
@@ -201,7 +201,7 @@ abstract class Hoa_Tokenizer_Parser implements Hoa_Tokenizer_Token_Util_Interfac
         while( --$this->_i
               && $this->_i >= 0
               && $n-- != 0
-              && $this->ct() == Hoa_Tokenizer::_WHITESPACE);
+              && $this->ct() == Hoa_Pom::_WHITESPACE);
     }
 
     /**
@@ -216,7 +216,7 @@ abstract class Hoa_Tokenizer_Parser implements Hoa_Tokenizer_Token_Util_Interfac
         while( ++$this->_i
               && $this->end()
               && $n-- != 0
-              && $this->ct() == Hoa_Tokenizer::_WHITESPACE);
+              && $this->ct() == Hoa_Pom::_WHITESPACE);
     }
 
     /**
@@ -300,7 +300,7 @@ abstract class Hoa_Tokenizer_Parser implements Hoa_Tokenizer_Token_Util_Interfac
      * Get root.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_Root
+     * @return  Hoa_Pom_Token_Root
      */
     public function getRoot ( ) {
 

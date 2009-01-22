@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_String_Constant
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_String_Constant
  *
  */
 
@@ -38,32 +38,32 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Scalar
+ * Hoa_Pom_Token_Util_Interface_Scalar
  */
-import('Tokenizer.Token.Util.Interface.Scalar');
+import('Pom.Token.Util.Interface.Scalar');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Type
+ * Hoa_Pom_Token_Util_Interface_Type
  */
-import('Tokenizer.Token.Util.Interface.Type');
+import('Pom.Token.Util.Interface.Type');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_String
+ * Hoa_Pom_Token_String
  */
-import('Tokenizer.Token.String');
+import('Pom.Token.String');
 
 /**
- * Class Hoa_Tokenizer_Token_String_Constant.
+ * Class Hoa_Pom_Token_String_Constant.
  *
  * Represent a constant.
  *
@@ -72,10 +72,10 @@ import('Tokenizer.Token.String');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_String_Constant
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_String_Constant
  */
 
-class Hoa_Tokenizer_Token_String_Constant extends    Hoa_Tokenizer_Token_String
-                                          implements Hoa_Tokenizer_Token_Util_Interface_Scalar,
-                                                     Hoa_Tokenizer_Token_Util_Interface_Type { }
+class Hoa_Pom_Token_String_Constant extends    Hoa_Pom_Token_String
+                                    implements Hoa_Pom_Token_Util_Interface_Scalar,
+                                               Hoa_Pom_Token_Util_Interface_Type { }

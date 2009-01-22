@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Root
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Root
  *
  */
 
@@ -38,40 +38,40 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ * Hoa_Pom_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
+import('Pom.Token.Util.Interface.Tokenizable');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Class Hoa_Tokenizer_Token_Root.
+ * Class Hoa_Pom_Token_Root.
  *
- * .
+ * Represent the root of object model.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Root
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Root
  */
 
-class Hoa_Tokenizer_Token_Root implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+class Hoa_Pom_Token_Root implements Hoa_Pom_Token_Util_Interface_Tokenizable {
 
     /**
      * Collection of childs.
      *
-     * @var Hoa_Tokenizer_Token_Root array
+     * @var Hoa_Pom_Token_Root array
      */
     protected $_childs = array();
 

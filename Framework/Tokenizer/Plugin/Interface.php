@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Plugin_Interface
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Plugin_Interface
  *
  */
 
@@ -38,7 +38,7 @@
 require_once 'Framework.php';
 
 /**
- * Interface Hoa_Tokenizer_Plugin_Interface.
+ * Interface Hoa_Pom_Plugin_Interface.
  *
  * Interface of tokenizer builder plugins.
  *
@@ -47,11 +47,11 @@ require_once 'Framework.php';
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Plugin_Interface
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Plugin_Interface
  */
 
-interface Hoa_Tokenizer_Plugin_Interface {
+interface Hoa_Pom_Plugin_Interface {
 
     /**
      * Receive a token.
@@ -61,7 +61,7 @@ interface Hoa_Tokenizer_Plugin_Interface {
      * @param   string  $content       Token content.
      * @param   int     $lineNumber    Token line number.
      * @return  array
-     * @throw   Hoa_Tokenizer_Plugin_Exception
+     * @throw   Hoa_Pom_Plugin_Exception
      */
     public function receive ( $token, $content, $lineNumber );
 }

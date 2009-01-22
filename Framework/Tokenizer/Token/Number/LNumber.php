@@ -28,8 +28,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Number_LNumber
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Number_LNumber
  *
  */
 
@@ -39,27 +39,27 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ * Hoa_Pom_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
+import('Pom.Token.Util.Interface.Tokenizable');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_Number
+ * Hoa_Pom_Token_Number
  */
-import('Tokenizer.Token.Number');
+import('Pom.Token.Number');
 
 /**
- * Class Hoa_Tokenizer_Token_Number_LNumber.
+ * Class Hoa_Pom_Token_Number_LNumber.
  *
  * Represent a lnumber : integer, hexadecimal etc., i.e. ℤ.
  *
@@ -68,17 +68,17 @@ import('Tokenizer.Token.Number');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Number_LNumber
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Number_LNumber
  */
 
-class Hoa_Tokenizer_Token_Number_LNumber extends    Hoa_Tokenizer_Token_Number
-                                         implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+class Hoa_Pom_Token_Number_LNumber extends    Hoa_Pom_Token_Number
+                                   implements Hoa_Pom_Token_Util_Interface_Tokenizable {
 
     /**
      * Value.
      *
-     * @var Hoa_Tokenizer_Token_Number_LNumber int
+     * @var Hoa_Pom_Token_Number_LNumber int
      */
     protected $_value = 0;
 
@@ -94,10 +94,10 @@ class Hoa_Tokenizer_Token_Number_LNumber extends    Hoa_Tokenizer_Token_Number
     public function setNumber ( $number ) {
 
         $number  = (int) $number;
-        $pattern = Hoa_Tokenizer_Token_Number::L_INT;
+        $pattern = Hoa_Pom_Token_Number::L_INT;
 
         if(0 === preg_match('#' . $pattern . '#', (string) $number))
-            throw new Hoa_Tokenizer_Token_Util_Exception(
+            throw new Hoa_Pom_Token_Util_Exception(
                 'LNumber %d is not well-formed.', 0, $number);
 
         return parent::setNumber($number);
@@ -123,7 +123,7 @@ class Hoa_Tokenizer_Token_Number_LNumber extends    Hoa_Tokenizer_Token_Number
     public function tokenize ( ) {
 
         return array(array(
-            0 => Hoa_Tokenizer::_LNUMBER,
+            0 => Hoa_Pom::_LNUMBER,
             1 => $this->getNumber(),
             2 => -1
         ));

@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Variable
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Variable
  *
  */
 
@@ -38,40 +38,40 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ * Hoa_Pom_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
+import('Pom.Token.Util.Interface.Tokenizable');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Class Hoa_Tokenizer_Token_Variable.
+ * Class Hoa_Pom_Token_Variable.
  *
- * .
+ * Represent a variable.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Variable
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Variable
  */
 
-class Hoa_Tokenizer_Token_Variable implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+class Hoa_Pom_Token_Variable implements Hoa_Pom_Token_Util_Interface_Tokenizable {
 
     /**
      * Variable name.
      *
-     * @var Hoa_Tokenizer_Token_String object
+     * @var Hoa_Pom_Token_String object
      */
     protected $_name = null;
 
@@ -81,10 +81,10 @@ class Hoa_Tokenizer_Token_Variable implements Hoa_Tokenizer_Token_Util_Interface
      * Constructor.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_String  $name    Variable name.
+     * @param   Hoa_Pom_Token_String  $name    Variable name.
      * @return  void
      */
-    public function __construct ( Hoa_Tokenizer_Token_String $name ) {
+    public function __construct ( Hoa_Pom_Token_String $name ) {
 
         $this->setName($name);
 
@@ -95,10 +95,10 @@ class Hoa_Tokenizer_Token_Variable implements Hoa_Tokenizer_Token_Util_Interface
      * Set name.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_String  $name    Variable name.
-     * @return  Hoa_Tokenizer_Token_String
+     * @param   Hoa_Pom_Token_String  $name    Variable name.
+     * @return  Hoa_Pom_Token_String
      */
-    public function setName ( Hoa_Tokenizer_Token_String $name ) {
+    public function setName ( Hoa_Pom_Token_String $name ) {
 
         $old         = $this->_name;
         $this->_name = $name;
@@ -110,7 +110,7 @@ class Hoa_Tokenizer_Token_Variable implements Hoa_Tokenizer_Token_Util_Interface
      * Get name.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_String
+     * @return  Hoa_Pom_Token_String
      */
     public function getName ( ) {
 
@@ -126,7 +126,7 @@ class Hoa_Tokenizer_Token_Variable implements Hoa_Tokenizer_Token_Util_Interface
     public function tokenize ( ) {
 
         return array(array(
-            0 => Hoa_Tokenizer::_VARIABLE,
+            0 => Hoa_Pom::_VARIABLE,
             1 => '$' . $this->getName()->getString(),
             2 => -1
         ));

@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Parser_LR
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Parser_LR
  *
  */
 
@@ -38,149 +38,149 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Parser_Exception
+ * Hoa_Pom_Parser_Exception
  */
-import('Tokenizer.Parser.Exception');
+import('Pom.Parser.Exception');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Parser
+ * Hoa_Pom_Parser
  */
-import('Tokenizer.Parser');
+import('Pom.Parser');
 
 /**
- * Hoa_Tokenizer_Parser_Token
+ * Hoa_Pom_Parser_Token
  */
-import('Tokenizer.Parser.Token');
+import('Pom.Parser.Token');
 
 //
 
 /**
- * Hoa_Tokenizer_Token_Array
+ * Hoa_Pom_Token_Array
  */
-import('Tokenizer.Token.Array');
+import('Pom.Token.Array');
 
 /**
- * Hoa_Tokenizer_Token_Call_Attribute
+ * Hoa_Pom_Token_Call_Attribute
  */
-import('Tokenizer.Token.Call.Attribute');
+import('Pom.Token.Call.Attribute');
 
 /**
- * Hoa_Tokenizer_Token_Call_ClassConstant
+ * Hoa_Pom_Token_Call_ClassConstant
  */
-import('Tokenizer.Token.Call.ClassConstant');
+import('Pom.Token.Call.ClassConstant');
 
 /**
- * Hoa_Tokenizer_Token_Call_Function
+ * Hoa_Pom_Token_Call_Function
  */
-import('Tokenizer.Token.Call.Function');
+import('Pom.Token.Call.Function');
 
 /**
- * Hoa_Tokenizer_Token_Call_Method
+ * Hoa_Pom_Token_Call_Method
  */
-import('Tokenizer.Token.Call.Method');
+import('Pom.Token.Call.Method');
 
 /**
- * Hoa_Tokenizer_Token_Call_StaticAttribute
+ * Hoa_Pom_Token_Call_StaticAttribute
  */
-import('Tokenizer.Token.Call.StaticAttribute');
+import('Pom.Token.Call.StaticAttribute');
 
 /**
- * Hoa_Tokenizer_Token_Call_StaticMethod
+ * Hoa_Pom_Token_Call_StaticMethod
  */
-import('Tokenizer.Token.Call.StaticMethod');
+import('Pom.Token.Call.StaticMethod');
 
 /**
- * Hoa_Tokenizer_Token_Cast
+ * Hoa_Pom_Token_Cast
  */
-import('Tokenizer.Token.Cast');
+import('Pom.Token.Cast');
 
 /**
- * Hoa_Tokenizer_Token_Class
+ * Hoa_Pom_Token_Class
  */
-import('Tokenizer.Token.Class');
+import('Pom.Token.Class');
 
 /**
- * Hoa_Tokenizer_Token_Class_Access
+ * Hoa_Pom_Token_Class_Access
  */
-import('Tokenizer.Token.Class.Access');
+import('Pom.Token.Class.Access');
 
 /**
- * Hoa_Tokenizer_Token_Class_Attribute
+ * Hoa_Pom_Token_Class_Attribute
  */
-import('Tokenizer.Token.Class.Attribute');
+import('Pom.Token.Class.Attribute');
 
 /**
- * Hoa_Tokenizer_Token_Class_Constant
+ * Hoa_Pom_Token_Class_Constant
  */
-import('Tokenizer.Token.Class.Constant');
+import('Pom.Token.Class.Constant');
 
 /**
- * Hoa_Tokenizer_Token_Class_Method
+ * Hoa_Pom_Token_Class_Method
  */
-import('Tokenizer.Token.Class.Method');
+import('Pom.Token.Class.Method');
 
 /**
- * Hoa_Tokenizer_Token_Number_DNumber
+ * Hoa_Pom_Token_Number_DNumber
  */
-import('Tokenizer.Token.Number.DNumber');
+import('Pom.Token.Number.DNumber');
 
 /**
- * Hoa_Tokenizer_Token_Number_LNumber
+ * Hoa_Pom_Token_Number_LNumber
  */
-import('Tokenizer.Token.Number.LNumber');
+import('Pom.Token.Number.LNumber');
 
 /**
- * Hoa_Tokenizer_Token_String
+ * Hoa_Pom_Token_String
  */
-import('Tokenizer.Token.String');
+import('Pom.Token.String');
 
 /**
- * Hoa_Tokenizer_Token_String_Boolean
+ * Hoa_Pom_Token_String_Boolean
  */
-import('Tokenizer.Token.String.Boolean');
+import('Pom.Token.String.Boolean');
 
 /**
- * Hoa_Tokenizer_Token_String_Constant
+ * Hoa_Pom_Token_String_Constant
  */
-import('Tokenizer.Token.String.Constant');
+import('Pom.Token.String.Constant');
 
 /**
- * Hoa_Tokenizer_Token_String_EncapsedConstant
+ * Hoa_Pom_Token_String_EncapsedConstant
  */
-import('Tokenizer.Token.String.EncapsedConstant');
+import('Pom.Token.String.EncapsedConstant');
 
 /**
- * Hoa_Tokenizer_Token_String_Null
+ * Hoa_Pom_Token_String_Null
  */
-import('Tokenizer.Token.String.Null');
+import('Pom.Token.String.Null');
 
 /**
- * Hoa_Tokenizer_Token_Comment
+ * Hoa_Pom_Token_Comment
  */
-import('Tokenizer.Token.Comment');
+import('Pom.Token.Comment');
 
 /**
- * Hoa_Tokenizer_Token_Function_Named
+ * Hoa_Pom_Token_Function_Named
  */
-import('Tokenizer.Token.Function.Named');
+import('Pom.Token.Function.Named');
 
 /**
- * Hoa_Tokenizer_Token_Function_Argument
+ * Hoa_Pom_Token_Function_Argument
  */
-import('Tokenizer.Token.Function.Argument');
+import('Pom.Token.Function.Argument');
 
 /**
- * Hoa_Tokenizer_Token_Variable
+ * Hoa_Pom_Token_Variable
  */
-import('Tokenizer.Token.Variable');
+import('Pom.Token.Variable');
 
 /**
- * Class Hoa_Tokenizer_Parser_LR.
+ * Class Hoa_Pom_Parser_LR.
  *
  * .
  *
@@ -189,11 +189,11 @@ import('Tokenizer.Token.Variable');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Parser_LR
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Parser_LR
  */
 
-class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
+class Hoa_Pom_Parser_LR extends Hoa_Pom_Parser {
 
     /**
      * Constructor.
@@ -201,7 +201,7 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
      * @...
      */
     public function __construct ( $source = null,
-                                  $type   = Hoa_Tokenizer_Parser_Token::SOURCE ) {
+                                  $type   = Hoa_Pom_Parser_Token::SOURCE ) {
 
         parent::__construct($source, $type);
 
@@ -223,12 +223,12 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
 
             switch($this->ct()) {
 
-                case Hoa_Tokenizer::_CLASS:
+                case Hoa_Pom::_CLASS:
                     var_dump('go compile class');
                     $handle = $this->clas();
                   break;
 
-                case Hoa_Tokenizer::_FUNCTION:
+                case Hoa_Pom::_FUNCTION:
                     var_dump('go compile function');
                     $handle = $this->func();
                   break;
@@ -267,44 +267,44 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
 
         $this->p(1);
 
-        if($this->ct() == Hoa_Tokenizer::_ABSTRACT) {
+        if($this->ct() == Hoa_Pom::_ABSTRACT) {
 
             $abstract = true;
             $this->p(1);
         }
-        elseif($this->ct() == Hoa_Tokenizer::_FINAL) {
+        elseif($this->ct() == Hoa_Pom::_FINAL) {
 
             $final    = true;
             $this->p(1);
         }
 
-        if(   $this->ct() == Hoa_Tokenizer::_COMMENT
-           || $this->ct() == Hoa_Tokenizer::_DOC_COMMENT)
+        if(   $this->ct() == Hoa_Pom::_COMMENT
+           || $this->ct() == Hoa_Pom::_DOC_COMMENT)
             $comment = $this->comm();
 
-        while($this->n() && $this->ct() != Hoa_Tokenizer::_CLASS);
+        while($this->n() && $this->ct() != Hoa_Pom::_CLASS);
         $this->n();
 
-        $name = new Hoa_Tokenizer_Token_String($this->cv());
+        $name = new Hoa_Pom_Token_String($this->cv());
         $this->n();
 
-        if($this->ct() == Hoa_Tokenizer::_EXTENDS) {
+        if($this->ct() == Hoa_Pom::_EXTENDS) {
 
             $this->n();
-            $parent = new Hoa_Tokenizer_Token_String($this->cv());
+            $parent = new Hoa_Pom_Token_String($this->cv());
             $this->n();
         }
 
-        if($this->ct() == Hoa_Tokenizer::_IMPLEMENTS) {
+        if($this->ct() == Hoa_Pom::_IMPLEMENTS) {
 
             $this->n();
 
-            while($this->ct() != Hoa_Tokenizer::_OPEN_BRACE) {
+            while($this->ct() != Hoa_Pom::_OPEN_BRACE) {
 
-                $interfaces[] = new Hoa_Tokenizer_Token_String($this->cv());
+                $interfaces[] = new Hoa_Pom_Token_String($this->cv());
                 $this->n();
 
-                if($this->ct() == Hoa_Tokenizer::_COMMA)
+                if($this->ct() == Hoa_Pom::_COMMA)
                     $this->n();
             }
 
@@ -320,16 +320,16 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
 
             switch($ct) {
 
-                case Hoa_Tokenizer::_OPEN_BRACE:
+                case Hoa_Pom::_OPEN_BRACE:
                     $i++;
                   break;
 
-                case Hoa_Tokenizer::_CLOSE_BRACE:
+                case Hoa_Pom::_CLOSE_BRACE:
                     $i--;
                   break;
             }
 
-            if($ct == Hoa_Tokenizer::_CONST) {
+            if($ct == Hoa_Pom::_CONST) {
 
                 $com = null;
                 $nam = null;
@@ -338,14 +338,14 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
 
                 $this->p(1);
 
-                if(   $this->ct() == Hoa_Tokenizer::_COMMENT
-                   || $this->ct() == Hoa_Tokenizer::_DOC_COMMENT)
+                if(   $this->ct() == Hoa_Pom::_COMMENT
+                   || $this->ct() == Hoa_Pom::_DOC_COMMENT)
                     $com = $this->comm();
 
-                while($this->n() && $this->ct == Hoa_Tokenizer::_CONST);
+                while($this->n() && $this->ct == Hoa_Pom::_CONST);
                 $this->n();
 
-                $nam = new Hoa_Tokenizer_Token_String($this->cv());
+                $nam = new Hoa_Pom_Token_String($this->cv());
                 $this->n();
                 $this->n();
 
@@ -353,7 +353,7 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
                 $this->n();
                 $this->n();
 
-                $con = new Hoa_Tokenizer_Token_Class_Constant($nam);
+                $con = new Hoa_Pom_Token_Class_Constant($nam);
 
                 if(null !== $com)
                     $con->setComment($com);
@@ -363,10 +363,10 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
                 $constants[] = $con;
             }
 
-            elseif(   $ct == Hoa_Tokenizer::_PUBLIC
-                   || $ct == Hoa_Tokenizer::_PROTECTED
-                   || $ct == Hoa_Tokenizer::_PRIVATE
-                   || $ct == Hoa_Tokenizer::_STATIC) {
+            elseif(   $ct == Hoa_Pom::_PUBLIC
+                   || $ct == Hoa_Pom::_PROTECTED
+                   || $ct == Hoa_Pom::_PRIVATE
+                   || $ct == Hoa_Pom::_STATIC) {
 
                 $com = null;
                 $acc = null;
@@ -376,44 +376,44 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
 
                 $this->p(1);
 
-                if(   $this->ct() == Hoa_Tokenizer::_COMMENT
-                   || $this->ct() == Hoa_Tokenizer::_DOC_COMMENT)
+                if(   $this->ct() == Hoa_Pom::_COMMENT
+                   || $this->ct() == Hoa_Pom::_DOC_COMMENT)
                     $com = $this->comm();
 
                 $this->n(1);
 
-                if($ct == Hoa_Tokenizer::_STATIC)
+                if($ct == Hoa_Pom::_STATIC)
                     $sta = true;
 
-                if($ct == Hoa_Tokenizer::_PUBLIC)
-                    $acc = new Hoa_Tokenizer_Token_Class_Access('public');
-                elseif($ct == Hoa_Tokenizer::_PROTECTED)
-                    $acc = new Hoa_Tokenizer_Token_Class_Access('protected');
-                elseif($ct == Hoa_Tokenizer::_PRIVATE)
-                    $acc = new Hoa_Tokenizer_Token_Class_Access('private');
+                if($ct == Hoa_Pom::_PUBLIC)
+                    $acc = new Hoa_Pom_Token_Class_Access('public');
+                elseif($ct == Hoa_Pom::_PROTECTED)
+                    $acc = new Hoa_Pom_Token_Class_Access('protected');
+                elseif($ct == Hoa_Pom::_PRIVATE)
+                    $acc = new Hoa_Pom_Token_Class_Access('private');
 
                 $this->n();
 
-                if($this->ct() == Hoa_Tokenizer::_STATIC) {
+                if($this->ct() == Hoa_Pom::_STATIC) {
 
                     $sta = true;
                     $this->n();
                 }
 
-                if($this->ct() == Hoa_Tokenizer::_VARIABLE) {
+                if($this->ct() == Hoa_Pom::_VARIABLE) {
 
-                    $nam = new Hoa_Tokenizer_Token_String(substr($this->cv(), 1));
-                    $nam = new Hoa_Tokenizer_Token_Variable($nam);
+                    $nam = new Hoa_Pom_Token_String(substr($this->cv(), 1));
+                    $nam = new Hoa_Pom_Token_Variable($nam);
                     $this->n();
 
-                    if($this->ct() == Hoa_Tokenizer::_EQUAL) {
+                    if($this->ct() == Hoa_Pom::_EQUAL) {
 
                         $this->n();
                         $val = $this->defv();
                         $this->n();
                     }
 
-                    $att = new Hoa_Tokenizer_Token_Class_Attribute($nam);
+                    $att = new Hoa_Pom_Token_Class_Attribute($nam);
 
                     if(null !== $com)
                         $att->setComment($com);
@@ -438,29 +438,29 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
                     for($e = 2; $e >= 0; $e--, $this->p())
                         switch($this->ct()) {
 
-                            case Hoa_Tokenizer::_ABSTRACT:
+                            case Hoa_Pom::_ABSTRACT:
                                 $abs = true;
                               break 2;
 
-                            case Hoa_Tokenizer::_FINAL:
+                            case Hoa_Pom::_FINAL:
                                 $fin = true;
                               break 2;
                         }
 
-                    while($this->ct() != Hoa_Tokenizer::_FUNCTION && $this->n() + 1);
+                    while($this->ct() != Hoa_Pom::_FUNCTION && $this->n() + 1);
                     $this->n();
 
-                    if($this->ct() == Hoa_Tokenizer::_REFERENCE) {
+                    if($this->ct() == Hoa_Pom::_REFERENCE) {
 
                         $ref = true;
                         $this->n();
                     }
 
-                    $nam = new Hoa_Tokenizer_Token_String($this->cv());
+                    $nam = new Hoa_Pom_Token_String($this->cv());
                     $this->n();
                     $this->n();
 
-                    while($this->ct() != Hoa_Tokenizer::_CLOSE_PARENTHESES) {
+                    while($this->ct() != Hoa_Pom::_CLOSE_PARENTHESES) {
 
                         $ty = null;
                         $re = false;
@@ -468,34 +468,34 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
                         $de = null;
                         $ar = null;
 
-                        if(   $this->ct() == Hoa_Tokenizer::_STRING
-                           || $this->ct() == Hoa_Tokenizer::_ARRAY) {
+                        if(   $this->ct() == Hoa_Pom::_STRING
+                           || $this->ct() == Hoa_Pom::_ARRAY) {
 
-                            $ty = new Hoa_Tokenizer_Token_String($this->cv());
+                            $ty = new Hoa_Pom_Token_String($this->cv());
                             $this->n();
                         }
 
-                        if($this->ct() == Hoa_Tokenizer::_REFERENCE) {
+                        if($this->ct() == Hoa_Pom::_REFERENCE) {
 
                             $re = true;
                             $this->n();
                         }
 
-                        $va = new Hoa_Tokenizer_Token_String(substr($this->cv(), 1));
-                        $va = new Hoa_Tokenizer_Token_Variable($va);
+                        $va = new Hoa_Pom_Token_String(substr($this->cv(), 1));
+                        $va = new Hoa_Pom_Token_Variable($va);
                         $this->n();
 
-                        if($this->ct() == Hoa_Tokenizer::_EQUAL) {
+                        if($this->ct() == Hoa_Pom::_EQUAL) {
 
                             $this->n();
                             $de = $this->defv();
                             $this->n();
                         }
 
-                        if($this->ct() == Hoa_Tokenizer::_COMMA)
+                        if($this->ct() == Hoa_Pom::_COMMA)
                             $this->n();
 
-                        $ar = new Hoa_Tokenizer_Token_Function_Argument($va);
+                        $ar = new Hoa_Pom_Token_Function_Argument($va);
                         $ar->referenceMe($re);
 
                         if(null !== $ty)
@@ -510,7 +510,7 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
                     $this->n();
                     $this->goToEndBlock();
 
-                    $met = new Hoa_Tokenizer_Token_Class_Method($nam);
+                    $met = new Hoa_Pom_Token_Class_Method($nam);
 
                     if(null !== $com)
                         $met->setComment($com);
@@ -531,7 +531,7 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
             }
         }
 
-        $class = new Hoa_Tokenizer_Token_Class($name);
+        $class = new Hoa_Pom_Token_Class($name);
 
         if(null !== $comment)
             $class->setComment($comment);
@@ -555,7 +555,7 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
      */
     public function comm ( ) {
 
-        return new Hoa_Tokenizer_Token_Comment($this->cv());
+        return new Hoa_Pom_Token_Comment($this->cv());
     }
 
     /**
@@ -568,42 +568,42 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
 
         if(   $cv == 'true'
            || $cv == 'false')
-            $default = new Hoa_Tokenizer_Token_String_Boolean($this->cv());
+            $default = new Hoa_Pom_Token_String_Boolean($this->cv());
 
         elseif($cv == 'null')
-            $default = new Hoa_Tokenizer_Token_String_Null($this->cv());
+            $default = new Hoa_Pom_Token_String_Null($this->cv());
 
-        elseif($this->ct() == Hoa_Tokenizer::_CONSTANT_ENCAPSED_STRING)
-            $default = new Hoa_Tokenizer_Token_String_EncapsedConstant($this->cv());
+        elseif($this->ct() == Hoa_Pom::_CONSTANT_ENCAPSED_STRING)
+            $default = new Hoa_Pom_Token_String_EncapsedConstant($this->cv());
 
-        elseif($this->ct() == Hoa_Tokenizer::_DNUMBER)
-            $default = new Hoa_Tokenizer_Token_Number_DNumber($this->cv());
+        elseif($this->ct() == Hoa_Pom::_DNUMBER)
+            $default = new Hoa_Pom_Token_Number_DNumber($this->cv());
 
-        elseif($this->ct() == Hoa_Tokenizer::_LNUMBER)
-            $default = new Hoa_Tokenizer_Token_Number_LNumber($this->cv());
+        elseif($this->ct() == Hoa_Pom::_LNUMBER)
+            $default = new Hoa_Pom_Token_Number_LNumber($this->cv());
 
-        elseif($this->ct() == Hoa_Tokenizer::_STRING) {
+        elseif($this->ct() == Hoa_Pom::_STRING) {
 
             $tmp = $this->cv();
             $this->n();
 
-            if($this->ct() == Hoa_Tokenizer::_DOUBLE_COLON) {
+            if($this->ct() == Hoa_Pom::_DOUBLE_COLON) {
 
                 $this->n();
-                $default = new Hoa_Tokenizer_Token_Call_ClassConstant(
-                    new Hoa_Tokenizer_Token_String($tmp)
+                $default = new Hoa_Pom_Token_Call_ClassConstant(
+                    new Hoa_Pom_Token_String($tmp)
                 );
-                $default->setConstant(new Hoa_Tokenizer_Token_String($this->cv()));
+                $default->setConstant(new Hoa_Pom_Token_String($this->cv()));
             }
             else
-                $default = new Hoa_Tokenizer_Token_String_Constant($tmp);
+                $default = new Hoa_Pom_Token_String_Constant($tmp);
         }
 
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         // array
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        elseif($this->ct() == Hoa_Tokenizer::_ARRAY)
+        elseif($this->ct() == Hoa_Pom::_ARRAY)
             $default = $this->arra();
 
         return $default;
@@ -623,24 +623,24 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
 
         $this->p(1);
 
-        if(   $this->ct() == Hoa_Tokenizer::_COMMENT
-           || $this->ct() == Hoa_Tokenizer::_DOC_COMMENT)
+        if(   $this->ct() == Hoa_Pom::_COMMENT
+           || $this->ct() == Hoa_Pom::_DOC_COMMENT)
             $comment = $this->comm();
 
-        while($this->n() && $this->ct != Hoa_Tokenizer::_FUNCTION);
+        while($this->n() && $this->ct != Hoa_Pom::_FUNCTION);
         $this->n();
 
-        if($this->ct() == Hoa_Tokenizer::_REFERENCE) {
+        if($this->ct() == Hoa_Pom::_REFERENCE) {
 
             $reference = true;
             $this->n();
         }
 
-        $name = new Hoa_Tokenizer_Token_String($this->cv());
+        $name = new Hoa_Pom_Token_String($this->cv());
         $this->n();
         $this->n();
 
-        while($this->ct() != Hoa_Tokenizer::_CLOSE_PARENTHESES) {
+        while($this->ct() != Hoa_Pom::_CLOSE_PARENTHESES) {
 
             $type     = null;
             $ref      = false;
@@ -648,34 +648,34 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
             $default  = null;
             $arg      = null;
 
-            if(   $this->ct() == Hoa_Tokenizer::_STRING
-               || $this->ct() == Hoa_Tokenizer::_ARRAY) {
+            if(   $this->ct() == Hoa_Pom::_STRING
+               || $this->ct() == Hoa_Pom::_ARRAY) {
 
-                $type = new Hoa_Tokenizer_Token_String($this->cv());
+                $type = new Hoa_Pom_Token_String($this->cv());
                 $this->n();
             }
 
-            if($this->ct() == Hoa_Tokenizer::_REFERENCE) {
+            if($this->ct() == Hoa_Pom::_REFERENCE) {
 
                 $ref = true;
                 $this->n();
             }
 
-            $variable = new Hoa_Tokenizer_Token_String(substr($this->cv(), 1));
-            $variable = new Hoa_Tokenizer_Token_Variable($variable);
+            $variable = new Hoa_Pom_Token_String(substr($this->cv(), 1));
+            $variable = new Hoa_Pom_Token_Variable($variable);
             $this->n();
 
-            if($this->ct() == Hoa_Tokenizer::_EQUAL) {
+            if($this->ct() == Hoa_Pom::_EQUAL) {
 
                 $this->n();
                 $default = $this->defv();
                 $this->n();
             }
 
-            if($this->ct() == Hoa_Tokenizer::_COMMA)
+            if($this->ct() == Hoa_Pom::_COMMA)
                 $this->n();
 
-            $arg = new Hoa_Tokenizer_Token_Function_Argument($variable);
+            $arg = new Hoa_Pom_Token_Function_Argument($variable);
             $arg->referenceMe($reference);
 
             if(null !== $type)
@@ -690,7 +690,7 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
         $this->n();
         $this->goToEndBlock();
 
-        $function = new Hoa_Tokenizer_Token_Function_Named($name);
+        $function = new Hoa_Pom_Token_Function_Named($name);
 
         if(null !== $comment)
             $function->setComment($comment);
@@ -710,7 +710,7 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
      */
     public function goToEndBlock ( ) {
 
-        if($this->ct() != Hoa_Tokenizer::_OPEN_BRACE)
+        if($this->ct() != Hoa_Pom::_OPEN_BRACE)
             return;
 
         $i = 1;
@@ -721,11 +721,11 @@ class Hoa_Tokenizer_Parser_LR extends Hoa_Tokenizer_Parser {
 
             switch($this->ct()) {
 
-                case Hoa_Tokenizer::_OPEN_BRACE:
+                case Hoa_Pom::_OPEN_BRACE:
                     $i++;
                   break;
 
-                case Hoa_Tokenizer::_CLOSE_BRACE:
+                case Hoa_Pom::_CLOSE_BRACE:
                     $i--;
                   break;
             }

@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Util_Interface_SuperScalar
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Util_Interface_SuperScalar
  *
  */
 
@@ -38,7 +38,7 @@
 require_once 'Framework.php';
 
 /**
- * Interface Hoa_Tokenizer_Token_Util_Interface_SuperScalar.
+ * Interface Hoa_Pom_Token_Util_Interface_SuperScalar.
  *
  * Whether a data is (uniform or not) super-scalar.
  *
@@ -47,11 +47,11 @@ require_once 'Framework.php';
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Util_Interface_SuperScalar
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Util_Interface_SuperScalar
  */
 
-interface Hoa_Tokenizer_Token_Util_Interface_SuperScalar {
+interface Hoa_Pom_Token_Util_Interface_SuperScalar {
 
     /**
      * Check if a data is an uniform super-scalar or not.

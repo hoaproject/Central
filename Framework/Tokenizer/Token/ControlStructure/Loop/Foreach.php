@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure_Loop_Foreach
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_ControlStructure_Loop_Foreach
  *
  */
 
@@ -38,42 +38,42 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ * Hoa_Pom_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
+import('Pom.Token.Util.Interface.Tokenizable');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_Instruction_Block
+ * Hoa_Pom_Token_Instruction_Block
  */
-import('Tokenizer.Token.Instruction.Block');
+import('Pom.Token.Instruction.Block');
 
 /**
- * Class Hoa_Tokenizer_Token_ControlStructure_Loop_Foreach.
+ * Class Hoa_Pom_Token_ControlStructure_Loop_Foreach.
  *
- * .
+ * Represent a foreach loop.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure_Loop_Foreach
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_ControlStructure_Loop_Foreach
  */
 
-class          Hoa_Tokenizer_Token_ControlStructure_Loop_Foreach
-    extends    Hoa_Tokenizer_Token_Instruction_Block
-    implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+class          Hoa_Pom_Token_ControlStructure_Loop_Foreach
+    extends    Hoa_Pom_Token_Instruction_Block
+    implements Hoa_Pom_Token_Util_Interface_Tokenizable {
 
     /**
      * Array expression.
@@ -85,21 +85,21 @@ class          Hoa_Tokenizer_Token_ControlStructure_Loop_Foreach
     /**
      * Key.
      *
-     * @var Hoa_Tokenizer_Token_Variable object
+     * @var Hoa_Pom_Token_Variable object
      */
     protected $_key             = null;
 
     /**
      * Value.
      *
-     * @var Hoa_Tokenizer_Token_Variable object
+     * @var Hoa_Pom_Token_Variable object
      */
     protected $_value           = null;
 
     /**
      * Whether value is referenced.
      *
-     * @var Hoa_Tokenizer_Token_ControlStructure_Loop_Foreach bool
+     * @var Hoa_Pom_Token_ControlStructure_Loop_Foreach bool
      */
     protected $_referenced      = false;
 
@@ -131,18 +131,18 @@ class          Hoa_Tokenizer_Token_ControlStructure_Loop_Foreach
         switch(get_class($arrayExpression)) {
 
             // ternay works here.
-            case 'Hoa_Tokenizer_Token_Array':
-            case 'Hoa_Tokenizer_Token_Call':
-            case 'Hoa_Tokenizer_Token_Cast':
-            case 'Hoa_Tokenizer_Token_Clone':
-            case 'Hoa_Tokenizer_Token_Comment':
-            case 'Hoa_Tokenizer_Token_New':
-            case 'Hoa_Tokenizer_Token_Operation':
-            case 'Hoa_Tokenizer_Token_Variable':
+            case 'Hoa_Pom_Token_Array':
+            case 'Hoa_Pom_Token_Call':
+            case 'Hoa_Pom_Token_Cast':
+            case 'Hoa_Pom_Token_Clone':
+            case 'Hoa_Pom_Token_Comment':
+            case 'Hoa_Pom_Token_New':
+            case 'Hoa_Pom_Token_Operation':
+            case 'Hoa_Pom_Token_Variable':
               break;
 
             default:
-                throw new Hoa_Tokenizer_Token_Util_Exception(
+                throw new Hoa_Pom_Token_Util_Exception(
                     'An array expression cannot be constitued by a class that ' .
                     'is an instance of %s.', 0, get_class($expression));
         }
@@ -157,10 +157,10 @@ class          Hoa_Tokenizer_Token_ControlStructure_Loop_Foreach
      * Set key.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Variable  $key    Key.
-     * @return  Hoa_Tokenizer_Token_Variable
+     * @param   Hoa_Pom_Token_Variable  $key    Key.
+     * @return  Hoa_Pom_Token_Variable
      */
-    public function setKey ( Hoa_Tokenizer_Token_Variable $key ) {
+    public function setKey ( Hoa_Pom_Token_Variable $key ) {
 
         $old        = $this->_key;
         $this->_key = $key;
@@ -186,10 +186,10 @@ class          Hoa_Tokenizer_Token_ControlStructure_Loop_Foreach
      * Set value.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Variable  $value    Value.
-     * @return  Hoa_Tokenizer_Token_Variable
+     * @param   Hoa_Pom_Token_Variable  $value    Value.
+     * @return  Hoa_Pom_Token_Variable
      */
-    public function setValue ( Hoa_Tokenizer_Token_Variable $value ) {
+    public function setValue ( Hoa_Pom_Token_Variable $value ) {
 
         $old          = $this->_value;
         $this->_value = $value;
@@ -227,7 +227,7 @@ class          Hoa_Tokenizer_Token_ControlStructure_Loop_Foreach
      * Get key.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_Variable
+     * @return  Hoa_Pom_Token_Variable
      */
     public function getKey ( ) {
 
@@ -249,7 +249,7 @@ class          Hoa_Tokenizer_Token_ControlStructure_Loop_Foreach
      * Get value.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_Variable
+     * @return  Hoa_Pom_Token_Variable
      */
     public function getValue ( ) {
 
@@ -283,36 +283,36 @@ class          Hoa_Tokenizer_Token_ControlStructure_Loop_Foreach
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Tokenizer_Token_Util_Interface
+     * @throw   Hoa_Pom_Token_Util_Interface
      */
     public function tokenize ( ) {
 
         if(false === $this->valueExists())
-            throw new Hoa_Tokenizer_Token_Util_Exception(
-                'A foreach loop must have a value variable.', 0);
+            throw new Hoa_Pom_Token_Util_Exception(
+                'A foreach loop must have a value variable.', 1);
 
         return array_merge(
             array(array(
-                0 => Hoa_Tokenizer::_FOREACH,
+                0 => Hoa_Pom::_FOREACH,
                 1 => 'foreach',
                 2 => -1,
             )),
             array(array(
-                0 => Hoa_Tokenizer::_OPEN_PARENTHESES,
+                0 => Hoa_Pom::_OPEN_PARENTHESES,
                 1 => '(',
                 2 => -1
             )),
             $this->getArrayExpression()->tokenize(),
             array(array(
-                0 => Hoa_Tokenizer::_AS,
+                0 => Hoa_Pom::_AS,
                 1 => 'as',
                 2 => -1
             )),
             (true === $this->keyExists()
                  ? array_merge(
-                       $this->getKey()->tokenize()
+                       $this->getKey()->tokenize(),
                        array(array(
-                           0 => Hoa_Tokenizer::_DOUBLE_ARROW,
+                           0 => Hoa_Pom::_DOUBLE_ARROW,
                            1 => '=>',
                            2 => -1
                        ))
@@ -321,7 +321,7 @@ class          Hoa_Tokenizer_Token_ControlStructure_Loop_Foreach
             ),
             $this->getValue()->tokenize(),
             array(array(
-                0 => Hoa_Tokenizer::_CLOSE_PARENTHESES,
+                0 => Hoa_Pom::_CLOSE_PARENTHESES,
                 1 => ')',
                 2 => -1
             )),

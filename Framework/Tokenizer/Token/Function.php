@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Function
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Function
  *
  */
 
@@ -38,68 +38,68 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_SuperScalar
+ * Hoa_Pom_Token_Util_Interface_SuperScalar
  */
-import('Tokenizer.Token.Util.Interface.SuperScalar');
+import('Pom.Token.Util.Interface.SuperScalar');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Class Hoa_Tokenizer_Token_Function.
+ * Class Hoa_Pom_Token_Function.
  *
- * .
+ * Represent an abstract function.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Function
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Function
  */
 
-abstract class Hoa_Tokenizer_Token_Function implements Hoa_Tokenizer_Token_Util_Interface_SuperScalar {
+abstract class Hoa_Pom_Token_Function implements Hoa_Pom_Token_Util_Interface_SuperScalar {
 
     /**
      * Comment.
      *
-     * @var Hoa_Tokenizer_Token_Comment object
+     * @var Hoa_Pom_Token_Comment object
      */
     protected $_comment      = null;
 
     /**
      * Whether returned values are given by reference.
      *
-     * @var Hoa_Tokenizer_Token_Function bool
+     * @var Hoa_Pom_Token_Function bool
      */
     protected $_isReferenced = false;
 
     /**
      * Name.
      *
-     * @var Hoa_Tokenizer_Token_String object
+     * @var Hoa_Pom_Token_String object
      */
     protected $_name         = null;
 
     /**
      * List of arguments.
      *
-     * @var Hoa_Tokenizer_Token_Function array
+     * @var Hoa_Pom_Token_Function array
      */
     protected $_arguments    = array();
 
     /**
      * Body.
      *
-     * @var Hoa_Tokenizer_Token_Function array
+     * @var Hoa_Pom_Token_Function array
      */
     protected $_body         = array();
 
@@ -109,10 +109,10 @@ abstract class Hoa_Tokenizer_Token_Function implements Hoa_Tokenizer_Token_Util_
      * Constructor.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_String  $name    Function name.
+     * @param   Hoa_Pom_Token_String  $name    Function name.
      * @return  void
      */
-    public function __construct ( Hoa_Tokenizer_Token_String $name ) {
+    public function __construct ( Hoa_Pom_Token_String $name ) {
 
         $this->setName($name);
 
@@ -123,10 +123,10 @@ abstract class Hoa_Tokenizer_Token_Function implements Hoa_Tokenizer_Token_Util_
      * Set function comment.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Comment  $comment    Function comment.
-     * @return  Hoa_Tokenizer_Token_Comment
+     * @param   Hoa_Pom_Token_Comment  $comment    Function comment.
+     * @return  Hoa_Pom_Token_Comment
      */
-    public function setComment ( Hoa_Tokenizer_Token_Comment $comment ) {
+    public function setComment ( Hoa_Pom_Token_Comment $comment ) {
 
         $old            = $this->_comment;
         $this->_comment = $comment;
@@ -138,11 +138,11 @@ abstract class Hoa_Tokenizer_Token_Function implements Hoa_Tokenizer_Token_Util_
      * Remove function comment.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_Comment
+     * @return  Hoa_Pom_Token_Comment
      */
     public function removeComment ( ) {
 
-        return $this->setComment(new Hoa_Tokenizer_Token_Comment(null));
+        return $this->setComment(new Hoa_Pom_Token_Comment(null));
     }
 
     /**
@@ -164,10 +164,10 @@ abstract class Hoa_Tokenizer_Token_Function implements Hoa_Tokenizer_Token_Util_
      * Set function name.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_String  $name    Function name.
-     * @return  Hoa_Tokenizer_Token_String
+     * @param   Hoa_Pom_Token_String  $name    Function name.
+     * @return  Hoa_Pom_Token_String
      */
-    public function setName ( Hoa_Tokenizer_Token_String $name ) {
+    public function setName ( Hoa_Pom_Token_String $name ) {
 
         $old         = $this->_name;
         $this->_name = $name;
@@ -195,13 +195,13 @@ abstract class Hoa_Tokenizer_Token_Function implements Hoa_Tokenizer_Token_Util_
      *
      * @access  public
      * @param   mixed   $argument    Argument to check. Could be a string or
-     *                               a Hoa_Tokenizer_Token_Function_Argument
+     *                               a Hoa_Pom_Token_Function_Argument
      *                               instance.
      * @return  bool
      */
     public function argumentExists ( $argument ) {
 
-        if($argument instanceof Hoa_Tokenizer_Token_Function_Argument)
+        if($argument instanceof Hoa_Pom_Token_Function_Argument)
             $argument = $argument->getName();
 
         foreach($this->getArguments() as $i => $a)
@@ -215,11 +215,11 @@ abstract class Hoa_Tokenizer_Token_Function implements Hoa_Tokenizer_Token_Util_
      * Add an argument.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Function_Argument  $argument    Argument
-     *                                                              instance.
-     * @return  Hoa_Tokenizer_Token_Function_Argument
+     * @param   Hoa_Pom_Token_Function_Argument  $argument    Argument
+     *                                                        instance.
+     * @return  Hoa_Pom_Token_Function_Argument
      */
-    public function addArgument ( Hoa_Tokenizer_Token_Function_Argument $argument ) {
+    public function addArgument ( Hoa_Pom_Token_Function_Argument $argument ) {
 
         if(true === $this->argumentExists($argument))
             return;
@@ -232,13 +232,13 @@ abstract class Hoa_Tokenizer_Token_Function implements Hoa_Tokenizer_Token_Util_
      *
      * @access  public
      * @param   mixed   $argument    Argument name. Could be a string or a
-     *                               Hoa_Tokenizer_Token_Function_Argument
+     *                               Hoa_Pom_Token_Function_Argument
      *                               instance.
      * @return  array
      */
     public function removeArgument ( $argument ) {
 
-        if($argument instanceof Hoa_Tokenizer_Token_Function_Argument)
+        if($argument instanceof Hoa_Pom_Token_Function_Argument)
             $argument = $argument->getName();
 
         if(false === $this->argumentExists($argument))
@@ -260,20 +260,13 @@ abstract class Hoa_Tokenizer_Token_Function implements Hoa_Tokenizer_Token_Util_
      * @access  public
      * @param   mixed   $element    Element to add.
      * @return  array
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
     public function addBody ( $element ) {
 
-        switch(get_class($element)) {
-
-            case '':
-                // TO BE COMPLETED.
-              break;
-
-            default:
-                throw new Hoa_Tokenizer_Token_Util_Exception(
-                    'A function cannot have a %s in his body.', 0, $element);
-        }
+        if(!($element instanceof Hoa_Pom_Token_ControlStructure))
+            throw new Hoa_Pom_Token_Util_Exception(
+                'A function cannot have %s in his body.', 0, get_class($element));
 
         $this->_body[] = $element;
 
@@ -284,7 +277,7 @@ abstract class Hoa_Tokenizer_Token_Function implements Hoa_Tokenizer_Token_Util_
      * Get function comment.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_Comment
+     * @return  Hoa_Pom_Token_Comment
      */
     public function getComment ( ) {
 
@@ -317,7 +310,7 @@ abstract class Hoa_Tokenizer_Token_Function implements Hoa_Tokenizer_Token_Util_
      * Get function name.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_String
+     * @return  Hoa_Pom_Token_String
      */
     public function getName ( ) {
 

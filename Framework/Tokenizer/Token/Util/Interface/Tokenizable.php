@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Util_Tokenizable
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Util_Tokenizable
  *
  */
 
@@ -38,12 +38,12 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Interface Hoa_Tokenizer_Token_Util_Tokenizable.
+ * Interface Hoa_Pom_Token_Util_Tokenizable.
  *
  * Force somes methods for token classes.
  *
@@ -52,11 +52,11 @@ import('Tokenizer.~');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Util_Tokenizable
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Util_Tokenizable
  */
 
-interface Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+interface Hoa_Pom_Token_Util_Interface_Tokenizable {
 
     /**
      * Transform token to “tokenizer array”.

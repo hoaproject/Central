@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Class_Constant
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Class_Constant
  *
  */
 
@@ -38,32 +38,32 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ * Hoa_Pom_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
+import('Pom.Token.Util.Interface.Tokenizable');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Scalar
+ * Hoa_Pom_Token_Util_Interface_Scalar
  */
-import('Tokenizer.Token.Util.Interface.Scalar');
+import('Pom.Token.Util.Interface.Scalar');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_Operator_Assignement
+ * Hoa_Pom_Token_Operator_Assignement
  */
-import('Tokenizer.Token.Operator.Assignement');
+import('Pom.Token.Operator.Assignement');
 
 /**
- * Class Hoa_Tokenizer_Token_Class_Constant.
+ * Class Hoa_Pom_Token_Class_Constant.
  *
  * Represent a class (or interface) constant.
  *
@@ -72,38 +72,38 @@ import('Tokenizer.Token.Operator.Assignement');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Class_Constant
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Class_Constant
  */
 
-class Hoa_Tokenizer_Token_Class_Constant implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable,
-                                                    Hoa_Tokenizer_Token_Util_Interface_Scalar {
+class Hoa_Pom_Token_Class_Constant implements Hoa_Pom_Token_Util_Interface_Tokenizable,
+                                                    Hoa_Pom_Token_Util_Interface_Scalar {
 
     /**
      * Constant comment.
      *
-     * @var Hoa_Tokenizer_Token_Comment object
+     * @var Hoa_Pom_Token_Comment object
      */
     protected $_comment  = null;
 
     /**
      * Constant name.
      *
-     * @var Hoa_Tokenizer_Token_String object
+     * @var Hoa_Pom_Token_String object
      */
     protected $_name     = null;
 
     /**
      * Constant value.
      *
-     * @var Hoa_Tokenizer_Token_Util_Interface_Scalar object
+     * @var Hoa_Pom_Token_Util_Interface_Scalar object
      */
     protected $_value    = null;
 
     /**
      * Constant operator.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Assignement object
+     * @var Hoa_Pom_Token_Operator_Assignement object
      */
     protected $_operator = null;
 
@@ -113,10 +113,10 @@ class Hoa_Tokenizer_Token_Class_Constant implements Hoa_Tokenizer_Token_Util_Int
      * Constructor.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_String  $name    Constant name.
+     * @param   Hoa_Pom_Token_String  $name    Constant name.
      * @return  void
      */
-    public function __construct ( Hoa_Tokenizer_Token_String $name ) {
+    public function __construct ( Hoa_Pom_Token_String $name ) {
 
         $this->setOperator();
         $this->setName($name);
@@ -128,10 +128,10 @@ class Hoa_Tokenizer_Token_Class_Constant implements Hoa_Tokenizer_Token_Util_Int
      * Set comment.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Comment  $comment    Class comment.
-     * @return  Hoa_Tokenizer_Token_Comment
+     * @param   Hoa_Pom_Token_Comment  $comment    Class comment.
+     * @return  Hoa_Pom_Token_Comment
      */
-    public function setComment ( Hoa_Tokenizer_Token_Comment $comment ) {
+    public function setComment ( Hoa_Pom_Token_Comment $comment ) {
 
         $old            = $this->_comment;
         $this->_comment = $comment;
@@ -143,21 +143,21 @@ class Hoa_Tokenizer_Token_Class_Constant implements Hoa_Tokenizer_Token_Util_Int
      * Remove constant comment.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_Comment
+     * @return  Hoa_Pom_Token_Comment
      */
     public function removeComment ( ) {
 
-        return $this->setComment(new Hoa_Tokenizer_Token_Comment(null));
+        return $this->setComment(new Hoa_Pom_Token_Comment(null));
     }
 
     /**
      * Set constant name.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_String  $name    Constant name.
-     * @return  Hoa_Tokenizer_Token_String
+     * @param   Hoa_Pom_Token_String  $name    Constant name.
+     * @return  Hoa_Pom_Token_String
      */
-    public function setName ( Hoa_Tokenizer_Token_String $name ) {
+    public function setName ( Hoa_Pom_Token_String $name ) {
 
         $old         = $this->_name;
         $this->_name = $name;
@@ -169,11 +169,11 @@ class Hoa_Tokenizer_Token_Class_Constant implements Hoa_Tokenizer_Token_Util_Int
      * Set constant value.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Util_Interface_Scalar  $value    Constant
+     * @param   Hoa_Pom_Token_Util_Interface_Scalar  $value    Constant
      *                                                               value.
-     * @return  Hoa_Tokenizer_Token_Util_Interface_Scalar
+     * @return  Hoa_Pom_Token_Util_Interface_Scalar
      */
-    public function setValue ( Hoa_Tokenizer_Token_Util_Interface_Scalar $value ) {
+    public function setValue ( Hoa_Pom_Token_Util_Interface_Scalar $value ) {
 
         $old          = $this->_value;
         $this->_value = $value;
@@ -185,18 +185,18 @@ class Hoa_Tokenizer_Token_Class_Constant implements Hoa_Tokenizer_Token_Util_Int
      * Set the operator.
      *
      * @access  protected
-     * @return  Hoa_Tokenizer_Token_Operator_Assignement
+     * @return  Hoa_Pom_Token_Operator_Assignement
      */
     protected function setOperator ( ) {
 
-        return $this->_operator = new Hoa_Tokenizer_Token_Operator_Assignement('=');
+        return $this->_operator = new Hoa_Pom_Token_Operator_Assignement('=');
     }
 
     /**
      * Get constant name.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_String
+     * @return  Hoa_Pom_Token_String
      */
     public function getName ( ) {
 
@@ -207,7 +207,7 @@ class Hoa_Tokenizer_Token_Class_Constant implements Hoa_Tokenizer_Token_Util_Int
      * Get constant comment.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_Comment
+     * @return  Hoa_Pom_Token_Comment
      */
     public function getComment ( ) {
 
@@ -229,7 +229,7 @@ class Hoa_Tokenizer_Token_Class_Constant implements Hoa_Tokenizer_Token_Util_Int
      * Get constant value.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_Util_Interface_Scalar
+     * @return  Hoa_Pom_Token_Util_Interface_Scalar
      */
     public function getValue ( ) {
 
@@ -251,7 +251,7 @@ class Hoa_Tokenizer_Token_Class_Constant implements Hoa_Tokenizer_Token_Util_Int
      * Get constant operator.
      *
      * @access  protected
-     * @return  Hoa_Tokenizer_Token_Operator_Assignement
+     * @return  Hoa_Pom_Token_Operator_Assignement
      */
     protected function getOperator ( ) {
 
@@ -263,12 +263,12 @@ class Hoa_Tokenizer_Token_Class_Constant implements Hoa_Tokenizer_Token_Util_Int
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
     public function tokenize ( ) {
 
         if(false === $this->hasValue())
-           throw new Hoa_Tokenizer_Token_Util_Exception(
+           throw new Hoa_Pom_Token_Util_Exception(
             'A constant must have a value.', 0);
 
         return array_merge(
@@ -277,7 +277,7 @@ class Hoa_Tokenizer_Token_Class_Constant implements Hoa_Tokenizer_Token_Util_Int
                  : array()
             ),
             array(array(
-                Hoa_Tokenizer::_CONST,
+                Hoa_Pom::_CONST,
                 'const',
                 -1
             )),
@@ -285,7 +285,7 @@ class Hoa_Tokenizer_Token_Class_Constant implements Hoa_Tokenizer_Token_Util_Int
             $this->getOperator()->tokenize(),
             $this->getValue()->tokenize(),
             array(array(
-                Hoa_Tokenizer::_SEMI_COLON,
+                Hoa_Pom::_SEMI_COLON,
                 ';',
                 -1
             ))

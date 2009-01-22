@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator_Type
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Operator_Type
  *
  */
 
@@ -38,22 +38,22 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_Operator
+ * Hoa_Pom_Token_Operator
  */
-import('Tokenizer.Token.Operator');
+import('Pom.Token.Operator');
 
 /**
- * Class Hoa_Tokenizer_Token_Operator_Type.
+ * Class Hoa_Pom_Token_Operator_Type.
  *
  * Represent a type operator.
  *
@@ -62,37 +62,37 @@ import('Tokenizer.Token.Operator');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator_Type
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Operator_Type
  */
 
-class Hoa_Tokenizer_Token_Operator_Type extends Hoa_Tokenizer_Token_Operator {
+class Hoa_Pom_Token_Operator_Type extends Hoa_Pom_Token_Operator {
 
     /**
      * Operator.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Type string
+     * @var Hoa_Pom_Token_Operator_Type string
      */
     protected $_operator   = 'instanceof';
 
     /**
      * Operator type.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Type mixed
+     * @var Hoa_Pom_Token_Operator_Type mixed
      */
-    protected $_type       = Hoa_Tokenizer::_INSTANCEOF;
+    protected $_type       = Hoa_Pom::_INSTANCEOF;
 
     /**
      * Operator arity.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Type int
+     * @var Hoa_Pom_Token_Operator_Type int
      */
     protected $_arity      = parent::BINARY;
 
     /**
      * Operator precedence.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Type int
+     * @var Hoa_Pom_Token_Operator_Type int
      */
     protected $_precedence = 17;
 
@@ -104,18 +104,18 @@ class Hoa_Tokenizer_Token_Operator_Type extends Hoa_Tokenizer_Token_Operator {
      * @access  public
      * @param   string  $operator    Operator.
      * @return  string
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
     public function setOperator ( $operator ) {
 
         switch($operator) {
 
             case 'instanceof';
-                $this->setType(Hoa_Tokenizer::_INSTANCEOF);
+                $this->setType(Hoa_Pom::_INSTANCEOF);
               break;
 
             default:
-                throw new Hoa_Tokenizer_Token_Util_Exception(
+                throw new Hoa_Pom_Token_Util_Exception(
                     'Operator %s is not a type operator.', 0, $operator);
         }
 

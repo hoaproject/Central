@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Call_ClassConstant
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Call_ClassConstant
  *
  */
 
@@ -38,55 +38,55 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Scalar
+ * Hoa_Pom_Token_Util_Interface_Scalar
  */
-import('Tokenizer.Token.Util.Interface.Scalar');
+import('Pom.Token.Util.Interface.Scalar');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_Call
+ * Hoa_Pom_Token_Call
  */
-import('Tokenizer.Token.Call');
+import('Pom.Token.Call');
 
 /**
- * Class Hoa_Tokenizer_Token_Call_ClassConstant.
+ * Class Hoa_Pom_Token_Call_ClassConstant.
  *
- * .
+ * Represent a call to a class constant.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Call_ClassConstant
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Call_ClassConstant
  */
 
-class Hoa_Tokenizer_Token_Call_ClassConstant extends    Hoa_Tokenizer_Token_Call
-                                             implements Hoa_Tokenizer_Token_Util_Interface_Scalar {
+class Hoa_Pom_Token_Call_ClassConstant extends    Hoa_Pom_Token_Call
+                                       implements Hoa_Pom_Token_Util_Interface_Scalar {
 
     /**
      * Class name.
      *
-     * @var Hoa_Tokenizer_Token_String object
+     * @var Hoa_Pom_Token_String object
      */
-    protected $_class     = null;
+    protected $_class    = null;
 
     /**
      * Constant name.
      *
-     * @var Hoa_Tokenizer_Token_String object
+     * @var Hoa_Pom_Token_String object
      */
-    protected $_constant  = null;
+    protected $_constant = null;
 
 
 
@@ -94,10 +94,10 @@ class Hoa_Tokenizer_Token_Call_ClassConstant extends    Hoa_Tokenizer_Token_Call
      * Constructor.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_String  $class    Class name.
+     * @param   Hoa_Pom_Token_String  $class    Class name.
      * @return  void
      */
-    public function __construct ( Hoa_Tokenizer_Token_String $class ) {
+    public function __construct ( Hoa_Pom_Token_String $class ) {
 
         $this->setClass($class);
 
@@ -108,10 +108,10 @@ class Hoa_Tokenizer_Token_Call_ClassConstant extends    Hoa_Tokenizer_Token_Call
      * Set class name.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_String  $class    Class name.
-     * @return  Hoa_Tokenizer_Token_String
+     * @param   Hoa_Pom_Token_String  $class    Class name.
+     * @return  Hoa_Pom_Token_String
      */
-    public function setClass ( Hoa_Tokenizer_Token_String $class ) {
+    public function setClass ( Hoa_Pom_Token_String $class ) {
 
         $old          = $this->_class;
         $this->_class = $class;
@@ -123,10 +123,10 @@ class Hoa_Tokenizer_Token_Call_ClassConstant extends    Hoa_Tokenizer_Token_Call
      * Set constant name.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_String  $constant    Constant name.
-     * @return  Hoa_Tokenizer_Token_String
+     * @param   Hoa_Pom_Token_String  $constant    Constant name.
+     * @return  Hoa_Pom_Token_String
      */
-    public function setConstant ( Hoa_Tokenizer_Token_String $constant ) {
+    public function setConstant ( Hoa_Pom_Token_String $constant ) {
 
         $old             = $this->_constant;
         $this->_constant = $constant;
@@ -138,7 +138,7 @@ class Hoa_Tokenizer_Token_Call_ClassConstant extends    Hoa_Tokenizer_Token_Call
      * Get class name.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_String
+     * @return  Hoa_Pom_Token_String
      */
     public function getClass ( ) {
 
@@ -149,7 +149,7 @@ class Hoa_Tokenizer_Token_Call_ClassConstant extends    Hoa_Tokenizer_Token_Call
      * Get constant name.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_String
+     * @return  Hoa_Pom_Token_String
      */
     public function getConstant ( ) {
 
@@ -167,7 +167,7 @@ class Hoa_Tokenizer_Token_Call_ClassConstant extends    Hoa_Tokenizer_Token_Call
         return array_merge(
             $this->getClass()->tokenize(),
             array(array(
-                0 => Hoa_Tokenizer::_DOUBLE_COLON,
+                0 => Hoa_Pom::_DOUBLE_COLON,
                 1 => '::',
                 2 => -1
             )),

@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure_Import_IncludeOnce
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_ControlStructure_Import_IncludeOnce
  *
  */
 
@@ -38,35 +38,35 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_ControlStructure_Import
+ * Hoa_Pom_Token_ControlStructure_Import
  */
-import('Tokenizer.Token.ControlStructure.Import');
+import('Pom.Token.ControlStructure.Import');
 
 /**
- * Class Hoa_Tokenizer_Token_ControlStructure_Import_IncludeOnce.
+ * Class Hoa_Pom_Token_ControlStructure_Import_IncludeOnce.
  *
- * .
+ * Represent an include_once function.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure_Import_IncludeOnce
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_ControlStructure_Import_IncludeOnce
  */
 
-class Hoa_Tokenizer_Token_ControlStructure_Import_IncludeOnce extends Hoa_Tokenizer_Token_ControlStructure_Import {
+class Hoa_Pom_Token_ControlStructure_Import_IncludeOnce extends Hoa_Pom_Token_ControlStructure_Import {
 
     /**
      * Transform token to “tokenizer array”.
@@ -78,7 +78,7 @@ class Hoa_Tokenizer_Token_ControlStructure_Import_IncludeOnce extends Hoa_Tokeni
 
         return array_merge(
             array(array(
-                0 => Hoa_Tokenizer::_INCLUDE_ONCE,
+                0 => Hoa_Pom::_INCLUDE_ONCE,
                 1 => 'include_once',
                 2 => -1
             )),

@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure_Import
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_ControlStructure_Import
  *
  */
 
@@ -38,40 +38,40 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_ControlStructure
+ * Hoa_Pom_Token_ControlStructure
  */
-import('Tokenizer.Token.ControlStructure');
+import('Pom.Token.ControlStructure');
 
 /**
- * Class Hoa_Tokenizer_Token_ControlStructure_Import.
+ * Class Hoa_Pom_Token_ControlStructure_Import.
  *
- * .
+ * Represent an import structure.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure_Import
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_ControlStructure_Import
  */
 
-abstract class Hoa_Tokenizer_Token_ControlStructure_Import extends Hoa_Tokenizer_Token_ControlStructure {
+abstract class Hoa_Pom_Token_ControlStructure_Import extends Hoa_Pom_Token_ControlStructure {
 
     /**
      * Value of import.
      *
-     * @var Hoa_Tokenizer_Token_Operation object
+     * @var Hoa_Pom_Token_Operation object
      */
     protected $_value = null;
 
@@ -81,10 +81,10 @@ abstract class Hoa_Tokenizer_Token_ControlStructure_Import extends Hoa_Tokenizer
      * Constructor.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Operation  $value    Value of import.
+     * @param   Hoa_Pom_Token_Operation  $value    Value of import.
      * @return  void
      */
-    public function __construct ( Hoa_Tokenizer_Token_Operation $value ) {
+    public function __construct ( Hoa_Pom_Token_Operation $value ) {
 
         $this->setValue($value);
 
@@ -95,10 +95,10 @@ abstract class Hoa_Tokenizer_Token_ControlStructure_Import extends Hoa_Tokenizer
      * Set value.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Operation  $value    Value of import.
-     * @return  Hoa_Tokenizer_Token_Operation
+     * @param   Hoa_Pom_Token_Operation  $value    Value of import.
+     * @return  Hoa_Pom_Token_Operation
      */
-    public function setValue ( Hoa_Tokenizer_Token_Operation $value ) {
+    public function setValue ( Hoa_Pom_Token_Operation $value ) {
 
         $old          = $this->_value;
         $this->_value = $value;
@@ -110,7 +110,7 @@ abstract class Hoa_Tokenizer_Token_ControlStructure_Import extends Hoa_Tokenizer
      * Get value.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_Operation
+     * @return  Hoa_Pom_Token_Operation
      */
     public function getValue ( ) {
 

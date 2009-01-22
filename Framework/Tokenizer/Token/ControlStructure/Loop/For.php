@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure_Loop_For
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_ControlStructure_Loop_For
  *
  */
 
@@ -38,47 +38,47 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ * Hoa_Pom_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
+import('Pom.Token.Util.Interface.Tokenizable');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_Instruction_Block
+ * Hoa_Pom_Token_Instruction_Block
  */
-import('Tokenizer.Token.Instruction.Block');
+import('Pom.Token.Instruction.Block');
 
 /**
- * Class Hoa_Tokenizer_Token_ControlStructure_Loop_For.
+ * Class Hoa_Pom_Token_ControlStructure_Loop_For.
  *
- * .
+ * Represent a for loop.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure_Loop_For
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_ControlStructure_Loop_For
  */
 
-class          Hoa_Tokenizer_Token_ControlStructure_Loop_For
-    extends    Hoa_Tokenizer_Token_Instruction_Block
-    implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+class          Hoa_Pom_Token_ControlStructure_Loop_For
+    extends    Hoa_Pom_Token_Instruction_Block
+    implements Hoa_Pom_Token_Util_Interface_Tokenizable {
 
     /**
      * Initializing expression.
      *
-     * @var Hoa_Tokenizer_Token_ControlStructure_Loop_For array
+     * @var Hoa_Pom_Token_ControlStructure_Loop_For array
      */
     protected $_iniExpression  = array();
 
@@ -92,7 +92,7 @@ class          Hoa_Tokenizer_Token_ControlStructure_Loop_For
     /**
      * Next step expression.
      *
-     * @var Hoa_Tokenizer_Token_ControlStructure_Loop_For array
+     * @var Hoa_Pom_Token_ControlStructure_Loop_For array
      */
     protected $_nextExpression = array();
 
@@ -124,19 +124,19 @@ class          Hoa_Tokenizer_Token_ControlStructure_Loop_For
 
         switch(get_class($iniExpression)) {
 
-            case 'Hoa_Tokenizer_Token_Call':
-            case 'Hoa_Tokenizer_Token_Cast':
-            case 'Hoa_Tokenizer_Token_Clone':
-            case 'Hoa_Tokenizer_Token_Comment':
-            case 'Hoa_Tokenizer_Token_New':
-            case 'Hoa_Tokenizer_Token_Number':
-            case 'Hoa_Tokenizer_Token_Operation':
-            case 'Hoa_Tokenizer_Token_String':
-            case 'Hoa_Tokenizer_Token_Variable':
+            case 'Hoa_Pom_Token_Call':
+            case 'Hoa_Pom_Token_Cast':
+            case 'Hoa_Pom_Token_Clone':
+            case 'Hoa_Pom_Token_Comment':
+            case 'Hoa_Pom_Token_New':
+            case 'Hoa_Pom_Token_Number':
+            case 'Hoa_Pom_Token_Operation':
+            case 'Hoa_Pom_Token_String':
+            case 'Hoa_Pom_Token_Variable':
               break;
 
             default:
-                throw new Hoa_Tokenizer_Token_Util_Exception(
+                throw new Hoa_Pom_Token_Util_Exception(
                     'An ini expression cannot be constitued by a class that ' .
                     'is an instance of %s.', 0, get_class($iniExpression));
         }
@@ -178,10 +178,10 @@ class          Hoa_Tokenizer_Token_ControlStructure_Loop_For
      * Set conditional expression.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Operation  $condExpression    Expression.
-     * @return  Hoa_Tokenizer_Token_Operation
+     * @param   Hoa_Pom_Token_Operation  $condExpression    Expression.
+     * @return  Hoa_Pom_Token_Operation
      */
-    public function setCondExpression ( Hoa_Tokenizer_Token_Operation $condExpression ) {
+    public function setCondExpression ( Hoa_Pom_Token_Operation $condExpression ) {
 
         $old                   = $this->_condExpression;
         $this->_condExpression = $condExpression;
@@ -193,7 +193,7 @@ class          Hoa_Tokenizer_Token_ControlStructure_Loop_For
      * Remove conditional expression.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_Operation
+     * @return  Hoa_Pom_Token_Operation
      */
     public function removeCondExpression ( ) {
 
@@ -229,21 +229,21 @@ class          Hoa_Tokenizer_Token_ControlStructure_Loop_For
 
         switch(get_class($nextExpression)) {
 
-            case 'Hoa_Tokenizer_Token_Call':
-            case 'Hoa_Tokenizer_Token_Cast':
-            case 'Hoa_Tokenizer_Token_Clone':
-            case 'Hoa_Tokenizer_Token_Comment':
-            case 'Hoa_Tokenizer_Token_New':
-            case 'Hoa_Tokenizer_Token_Number':
-            case 'Hoa_Tokenizer_Token_Operation':
-            case 'Hoa_Tokenizer_Token_String':
-            case 'Hoa_Tokenizer_Token_Variable':
+            case 'Hoa_Pom_Token_Call':
+            case 'Hoa_Pom_Token_Cast':
+            case 'Hoa_Pom_Token_Clone':
+            case 'Hoa_Pom_Token_Comment':
+            case 'Hoa_Pom_Token_New':
+            case 'Hoa_Pom_Token_Number':
+            case 'Hoa_Pom_Token_Operation':
+            case 'Hoa_Pom_Token_String':
+            case 'Hoa_Pom_Token_Variable':
               break;
 
             default:
-                throw new Hoa_Tokenizer_Token_Util_Exception(
+                throw new Hoa_Pom_Token_Util_Exception(
                     'An next expression cannot be constitued by a class that ' .
-                    'is an instance of %s.', 0, get_class($nextExpression));
+                    'is an instance of %s.', 1, get_class($nextExpression));
         }
 
         return $this->_nextExpression[] = $nextExpression;
@@ -296,13 +296,13 @@ class          Hoa_Tokenizer_Token_ControlStructure_Loop_For
      * @access  public
      * @param   int     $i    Expression to get.
      * @return  mixed
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
     public function getIniExpression ( $i ) {
 
         if(!isset($this->_iniExpression[$i]))
-            throw new Hoa_Tokenizer_Token_Util_Exception(
-                'Ini expression number %s does not exist.', 0, $i);
+            throw new Hoa_Pom_Token_Util_Exception(
+                'Ini expression number %s does not exist.', 2, $i);
 
         return $this->_iniExpression[$i];
     }
@@ -322,7 +322,7 @@ class          Hoa_Tokenizer_Token_ControlStructure_Loop_For
      * Get conditional expression.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_Operation
+     * @return  Hoa_Pom_Token_Operation
      */
     public function getCondExpression ( ) {
 
@@ -357,13 +357,13 @@ class          Hoa_Tokenizer_Token_ControlStructure_Loop_For
      * @access  public
      * @param   int     $i    Expression to get.
      * @return  mixed
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
     public function getNextExpression ( $i ) {
 
         if(!isset($this->_nextExpression[$i]))
-            throw new Hoa_Tokenizer_Token_Util_Exception(
-                'Next expression number %s does not exist.', 0, $i);
+            throw new Hoa_Pom_Token_Util_Exception(
+                'Next expression number %s does not exist.', 3, $i);
 
         return $this->_nextExpression[$i];
     }
@@ -395,29 +395,31 @@ class          Hoa_Tokenizer_Token_ControlStructure_Loop_For
         foreach($this->getIniExpressions()  as $i => $iniExpression) {
 
             if($fi === true)
-                $ini[] = array(array(
-                             0 => Hoa_Tokenizer::_COMMA,
+                $ini[] = array(
+                             0 => Hoa_Pom::_COMMA,
                              1 => ',',
                              2 => -1
-                         ));
+                         );
             else
                 $fi = true;
 
-            $ini[]  = $iniExpression->tokenize();
+            foreach($iniExpression->tokenize() as $key => $value)
+                $ini[] = $value;
         }
 
         foreach($this->getNextExpressions() as $i => $nextExpression) {
 
             if($fn === true)
-                $next[] = array(array(
-                              0 => Hoa_Tokenizer::_COMMA,
+                $next[] = array(
+                              0 => Hoa_Pom::_COMMA,
                               1 => ',',
                               2 => -1
-                          ));
+                          );
             else
                 $fn = true;
 
-            $next[] = $nextExpression->tokenize();
+            foreach($nextExpression->tokenize() as $key => $value)
+                $next[] = $value;
         }
 
         $cond = true === $this->hasCondExpression()
@@ -426,30 +428,30 @@ class          Hoa_Tokenizer_Token_ControlStructure_Loop_For
 
         return array_merge(
             array(array(
-                0 => Hoa_Tokenizer::_FOR,
+                0 => Hoa_Pom::_FOR,
                 1 => 'for',
                 2 => -1
             )),
             array(array(
-                0 => Hoa_Tokenizer::_OPEN_PARENTHESES,
+                0 => Hoa_Pom::_OPEN_PARENTHESES,
                 1 => '(',
                 2 => -1
             )),
             $ini,
             array(array(
-                0 => Hoa_Tokenizer::_SEMI_COLON,
+                0 => Hoa_Pom::_SEMI_COLON,
                 1 => ';',
                 2 => -1
             )),
             $cond,
             array(array(
-                0 => Hoa_Tokenizer::_SEMI_COLON,
+                0 => Hoa_Pom::_SEMI_COLON,
                 1 => ';',
                 2 => -1
             )),
             $next
             array(array(
-                0 => Hoa_Tokenizer::_CLOSE_PARENTHESES,
+                0 => Hoa_Pom::_CLOSE_PARENTHESES,
                 1 => ')',
                 2 => -1
             )),

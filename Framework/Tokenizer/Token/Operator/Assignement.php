@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator_Assignement
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Operator_Assignement
  *
  */
 
@@ -38,22 +38,22 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_Operator
+ * Hoa_Pom_Token_Operator
  */
-import('Tokenizer.Token.Operator');
+import('Pom.Token.Operator');
 
 /**
- * Class Hoa_Tokenizer_Token_Operator_Assignement.
+ * Class Hoa_Pom_Token_Operator_Assignement.
  *
  * Represent assignement operators.
  *
@@ -62,37 +62,37 @@ import('Tokenizer.Token.Operator');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator_Assignement
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Operator_Assignement
  */
 
-class Hoa_Tokenizer_Token_Operator_Assignement extends Hoa_Tokenizer_Token_Operator {
+class Hoa_Pom_Token_Operator_Assignement extends Hoa_Pom_Token_Operator {
 
     /**
      * Operator.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Assignement string
+     * @var Hoa_Pom_Token_Operator_Assignement string
      */
     protected $_operator   = '=';
 
     /**
      * Operator type.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Assignement mixed
+     * @var Hoa_Pom_Token_Operator_Assignement mixed
      */
-    protected $_type       = Hoa_Tokenizer::_EQUAL;
+    protected $_type       = Hoa_Pom::_EQUAL;
 
     /**
      * Operator arity.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Assignement int
+     * @var Hoa_Pom_Token_Operator_Assignement int
      */
     protected $_arity      = parent::BINARY;
 
     /**
      * Operator precedence.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Assignement int
+     * @var Hoa_Pom_Token_Operator_Assignement int
      */
     protected $_precedence = 4;
 
@@ -104,62 +104,62 @@ class Hoa_Tokenizer_Token_Operator_Assignement extends Hoa_Tokenizer_Token_Opera
      * @access  public
      * @param   string  $operator    Operator.
      * @return  string
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
     public function setOperator ( $operator ) {
 
         switch($operator) {
 
             case '=';
-                $this->setType(Hoa_Tokenizer::_EQUAL);
+                $this->setType(Hoa_Pom::_EQUAL);
               break;
 
             case '&=':
-                $this->setType(Hoa_Tokenizer::_AND_EQUAL);
+                $this->setType(Hoa_Pom::_AND_EQUAL);
               break;
 
             case '.=':
-                $this->setType(Hoa_Tokenizer::_CONCAT_EQUAL);
+                $this->setType(Hoa_Pom::_CONCAT_EQUAL);
               break;
 
             case '/=':
-                $this->setType(Hoa_Tokenizer::_DIV_EQUAL);
+                $this->setType(Hoa_Pom::_DIV_EQUAL);
               break;
 
             case '-=':
-                $this->setType(Hoa_Tokenizer::_MINUS_EQUAL);
+                $this->setType(Hoa_Pom::_MINUS_EQUAL);
               break;
 
             case '%=':
-                $this->setType(Hoa_Tokenizer::_MOD_EQUAL);
+                $this->setType(Hoa_Pom::_MOD_EQUAL);
               break;
 
             case '*=':
-                $this->setType(Hoa_Tokenizer::_MUL_EQUAL);
+                $this->setType(Hoa_Pom::_MUL_EQUAL);
               break;
 
             case '|=':
-                $this->setType(Hoa_Tokenizer::_OR_EQUAL);
+                $this->setType(Hoa_Pom::_OR_EQUAL);
               break;
 
             case '+=':
-                $this->setType(Hoa_Tokenizer::_PLUS_EQUAL);
+                $this->setType(Hoa_Pom::_PLUS_EQUAL);
               break;
 
             case '<<=':
-                $this->setType(Hoa_Tokenizer::_SL_EQUAL);
+                $this->setType(Hoa_Pom::_SL_EQUAL);
               break;
 
             case '>>=':
-                $this->setType(Hoa_Tokenizer::_SR_EQUAL);
+                $this->setType(Hoa_Pom::_SR_EQUAL);
               break;
 
             case '^=':
-                $this->setType(Hoa_Tokenizer::_XOR_EQUAL);
+                $this->setType(Hoa_Pom::_XOR_EQUAL);
               break;
 
             default:
-                throw new Hoa_Tokenizer_Token_Util_Exception(
+                throw new Hoa_Pom_Token_Util_Exception(
                     'Operator %s is not an assign operator.', 0, $operator);
         }
 

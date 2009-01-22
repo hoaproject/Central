@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_String_Null
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_String_Null
  *
  */
 
@@ -38,32 +38,32 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Scalar
+ * Hoa_Pom_Token_Util_Interface_Scalar
  */
-import('Tokenizer.Token.Util.Interface.Scalar');
+import('Pom.Token.Util.Interface.Scalar');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Type
+ * Hoa_Pom_Token_Util_Interface_Type
  */
-import('Tokenizer.Token.Util.Interface.Type');
+import('Pom.Token.Util.Interface.Type');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_String
+ * Hoa_Pom_Token_String
  */
-import('Tokenizer.Token.String');
+import('Pom.Token.String');
 
 /**
- * Class Hoa_Tokenizer_Token_String_Null.
+ * Class Hoa_Pom_Token_String_Null.
  *
  * Represent a null value.
  *
@@ -72,18 +72,18 @@ import('Tokenizer.Token.String');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_String_Null
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_String_Null
  */
 
-class Hoa_Tokenizer_Token_String_Null extends    Hoa_Tokenizer_Token_String
-                                      implements Hoa_Tokenizer_Token_Util_Interface_Scalar,
-                                                 Hoa_Tokenizer_Token_Util_Interface_Type {
+class Hoa_Pom_Token_String_Null extends    Hoa_Pom_Token_String
+                                implements Hoa_Pom_Token_Util_Interface_Scalar,
+                                           Hoa_Pom_Token_Util_Interface_Type {
 
     /**
      * Name.
      *
-     * @var Hoa_Tokenizer_Token_String_Null string
+     * @var Hoa_Pom_Token_String_Null string
      */
     protected $_name = 'null';
 
@@ -95,7 +95,7 @@ class Hoa_Tokenizer_Token_String_Null extends    Hoa_Tokenizer_Token_String
      * @access  public
      * @param   string  $string    String.
      * @return  string
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
     public function setString ( $string ) {
 
@@ -103,7 +103,7 @@ class Hoa_Tokenizer_Token_String_Null extends    Hoa_Tokenizer_Token_String
             $string = 'null';
 
         if(strtolower($string) != 'null')
-            throw new Hoa_Tokenizer_Token_Util_Exception(
+            throw new Hoa_Pom_Token_Util_Exception(
                 'Null cannot be different of null. Given %s.', 0, $string);
 
         return 'null';

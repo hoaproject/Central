@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Util_Interface_Type
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Util_Interface_Type
  *
  */
 
@@ -38,7 +38,7 @@
 require_once 'Framework.php';
 
 /**
- * Interface Hoa_Tokenizer_Token_Util_Interface_Type.
+ * Interface Hoa_Pom_Token_Util_Interface_Type.
  *
  * Define a type.
  *
@@ -47,8 +47,8 @@ require_once 'Framework.php';
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Util_Interface_Type
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Util_Interface_Type
  */
 
-interface Hoa_Tokenizer_Token_Util_Interface_Type { }
+interface Hoa_Pom_Token_Util_Interface_Type { }

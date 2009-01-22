@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Util_Interface_Scalar
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Util_Interface_Scalar
  *
  */
 
@@ -38,12 +38,12 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Type
+ * Hoa_Pom_Token_Util_Interface_Type
  */
-import('Tokenizer.Token.Util.Interface.Type');
+import('Pom.Token.Util.Interface.Type');
 
 /**
- * Interface Hoa_Tokenizer_Token_Util_Interface_Scalar.
+ * Interface Hoa_Pom_Token_Util_Interface_Scalar.
  *
  * Whether a data is scalar.
  *
@@ -52,8 +52,8 @@ import('Tokenizer.Token.Util.Interface.Type');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Util_Interface_Scalar
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Util_Interface_Scalar
  */
 
-interface Hoa_Tokenizer_Token_Util_Interface_Scalar { }
+interface Hoa_Pom_Token_Util_Interface_Scalar { }

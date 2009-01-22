@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operation
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Operation
  *
  */
 
@@ -38,40 +38,40 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ * Hoa_Pom_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
+import('Pom.Token.Util.Interface.Tokenizable');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Class Hoa_Tokenizer_Token_Operation.
+ * Class Hoa_Pom_Token_Operation.
  *
- * .
+ * Represent an operation.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operation
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Operation
  */
 
-class Hoa_Tokenizer_Token_Operation implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+class Hoa_Pom_Token_Operation implements Hoa_Pom_Token_Util_Interface_Tokenizable {
 
     /**
      * Sequence of elements that constitute an operation.
      *
-     * @var Hoa_Tokenizer_Token_Operation array
+     * @var Hoa_Pom_Token_Operation array
      */
     protected $_sequence = array();
 
@@ -113,26 +113,26 @@ class Hoa_Tokenizer_Token_Operation implements Hoa_Tokenizer_Token_Util_Interfac
      * @access  public
      * @param   mixed    $element    Element to add.
      * @return  array
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
     public function addElement ( $element ) {
 
         switch(get_class($element)) {
 
-            case 'Hoa_Tokenizer_Token_Array':
-            case 'Hoa_Tokenizer_Token_Call':
-            case 'Hoa_Tokenizer_Token_Cast':
-            case 'Hoa_Tokenizer_Token_Clone':
-            case 'Hoa_Tokenizer_Token_Comment':
-            case 'Hoa_Tokenizer_Token_New':
-            case 'Hoa_Tokenizer_Token_Number':
-            case 'Hoa_Tokenizer_Token_Operator':
-            case 'Hoa_Tokenizer_Token_String':
-            case 'Hoa_Tokenizer_Token_Variable':
+            case 'Hoa_Pom_Token_Array':
+            case 'Hoa_Pom_Token_Call':
+            case 'Hoa_Pom_Token_Cast':
+            case 'Hoa_Pom_Token_Clone':
+            case 'Hoa_Pom_Token_Comment':
+            case 'Hoa_Pom_Token_New':
+            case 'Hoa_Pom_Token_Number':
+            case 'Hoa_Pom_Token_Operator':
+            case 'Hoa_Pom_Token_String':
+            case 'Hoa_Pom_Token_Variable':
               break;
 
             default:
-                throw new Hoa_Tokenizer_Token_Util_Exception(
+                throw new Hoa_Pom_Token_Util_Exception(
                     'An operation cannot be composed by a class that ' .
                     'is an instance of %s.', 0, get_class($element));
         }
@@ -144,10 +144,10 @@ class Hoa_Tokenizer_Token_Operation implements Hoa_Tokenizer_Token_Util_Interfac
      * Add an operator (i.e. add an element typed like an operator).
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Operator  $operator    Operator to add.
+     * @param   Hoa_Pom_Token_Operator  $operator    Operator to add.
      * @return  array
      */
-    public function addOperator ( Hoa_Tokenizer_Token_Operator $operator ) {
+    public function addOperator ( Hoa_Pom_Token_Operator $operator ) {
 
         return $this->addElement($operator);
     }
@@ -171,6 +171,7 @@ class Hoa_Tokenizer_Token_Operation implements Hoa_Tokenizer_Token_Util_Interfac
      */
     public function tokenize ( ) {
 
+        // @todo.
         return array(array(
 
         ));

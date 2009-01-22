@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Class_Access
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Class_Access
  *
  */
 
@@ -38,22 +38,22 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ * Hoa_Pom_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
+import('Pom.Token.Util.Interface.Tokenizable');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Class Hoa_Tokenizer_Token_Class_Access.
+ * Class Hoa_Pom_Token_Class_Access.
  *
  * Represent an access : public, protected or private.
  *
@@ -62,25 +62,25 @@ import('Tokenizer.~');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Class_Access
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Class_Access
  */
 
-class Hoa_Tokenizer_Token_Class_Access implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+class Hoa_Pom_Token_Class_Access implements Hoa_Pom_Token_Util_Interface_Tokenizable {
 
     /**
      * Access.
      *
-     * @var Hoa_Tokenizer_Token_Class_Access string
+     * @var Hoa_Pom_Token_Class_Access string
      */
     protected $_access = 'public';
 
     /**
      * Type of access.
      *
-     * @var Hoa_Tokenizer_Token_Class_Access  int
+     * @var Hoa_Pom_Token_Class_Access  int
      */
-    protected $_type   = Hoa_Tokenizer::_PUBLIC;
+    protected $_type   = Hoa_Pom::_PUBLIC;
 
 
 
@@ -104,7 +104,7 @@ class Hoa_Tokenizer_Token_Class_Access implements Hoa_Tokenizer_Token_Util_Inter
      * @access  public
      * @param   string  $access  Access.
      * @return  string
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
     public function setAccess ( $access ) {
 
@@ -114,21 +114,21 @@ class Hoa_Tokenizer_Token_Class_Access implements Hoa_Tokenizer_Token_Util_Inter
 
             case 'public':
                 $this->_access = 'public';
-                $this->_type   = Hoa_Tokenizer::_PUBLIC;
+                $this->_type   = Hoa_Pom::_PUBLIC;
               break;
 
             case 'protected':
                 $this->_access = 'protected';
-                $this->_type   = Hoa_Tokenizer::_PROTECTED;
+                $this->_type   = Hoa_Pom::_PROTECTED;
               break;
 
             case 'private':
                 $this->_access = 'private';
-                $this->_type   = Hoa_Tokenizer::_PRIVATE;
+                $this->_type   = Hoa_Pom::_PRIVATE;
               break;
 
             default:
-                throw new Hoa_Tokenizer_Token_Util_Exception(
+                throw new Hoa_Pom_Token_Util_Exception(
                     'Access %s does not exist.', 0, $access);
         }
 

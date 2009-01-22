@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Style_Null
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Style_Null
  *
  */
 
@@ -38,12 +38,12 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Style_Interface
+ * Hoa_Pom_Style_Interface
  */
-import('Tokenizer.Style.Interface');
+import('Pom.Style.Interface');
 
 /**
- * Class Hoa_Tokenizer_Style_Null.
+ * Class Hoa_Pom_Style_Null.
  *
  * Null style, i.e. does not edit any token.
  *
@@ -52,11 +52,11 @@ import('Tokenizer.Style.Interface');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Style_Null
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Style_Null
  */
 
-class Hoa_Tokenizer_Style_Null implements Hoa_Tokenizer_Style_Interface {
+class Hoa_Pom_Style_Null implements Hoa_Pom_Style_Interface {
 
     /**
      * Receive a token.

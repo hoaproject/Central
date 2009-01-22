@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Clone
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Clone
  *
  */
 
@@ -38,40 +38,40 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ * Hoa_Pom_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
+import('Pom.Token.Util.Interface.Tokenizable');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Class Hoa_Tokenizer_Token_Clone.
+ * Class Hoa_Pom_Token_Clone.
  *
- * .
+ * Represent a cloning.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Clone
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Clone
  */
 
-class Hoa_Tokenizer_Token_Clone implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+class Hoa_Pom_Token_Clone implements Hoa_Pom_Token_Util_Interface_Tokenizable {
 
     /**
      * Object name.
      *
-     * @var Hoa_Tokenizer_Token_Variable object
+     * @var Hoa_Pom_Token_Variable object
      */
     protected $_object = null;
 
@@ -81,10 +81,10 @@ class Hoa_Tokenizer_Token_Clone implements Hoa_Tokenizer_Token_Util_Interface_To
      * Constructor.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Variable  $object    Object name.
+     * @param   Hoa_Pom_Token_Variable  $object    Object name.
      * @return  void
      */
-    public function __construct ( Hoa_Tokenizer_Token_Variable $object ) {
+    public function __construct ( Hoa_Pom_Token_Variable $object ) {
 
         $this->setObject($object);
 
@@ -95,10 +95,10 @@ class Hoa_Tokenizer_Token_Clone implements Hoa_Tokenizer_Token_Util_Interface_To
      * Set object name.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Variable  $object    Object name.
-     * @return  Hoa_Tokenizer_Token_Variable
+     * @param   Hoa_Pom_Token_Variable  $object    Object name.
+     * @return  Hoa_Pom_Token_Variable
      */
-    public function setObject ( Hoa_Tokenizer_Token_Variable $object ) {
+    public function setObject ( Hoa_Pom_Token_Variable $object ) {
 
         $old           = $this->_object;
         $this->_object = $object;
@@ -110,7 +110,7 @@ class Hoa_Tokenizer_Token_Clone implements Hoa_Tokenizer_Token_Util_Interface_To
      * Get object name.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_Variable
+     * @return  Hoa_Pom_Token_Variable
      */
     public function getObject ( ) {
 
@@ -127,7 +127,7 @@ class Hoa_Tokenizer_Token_Clone implements Hoa_Tokenizer_Token_Util_Interface_To
 
         return array_merge(
             array(array(
-                0 => Hoa_Tokenizer::_CLONE,
+                0 => Hoa_Pom::_CLONE,
                 1 => 'clone',
                 2 => -1
             )),

@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Function_Named
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Function_Named
  *
  */
 
@@ -38,46 +38,46 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ * Hoa_Pom_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
+import('Pom.Token.Util.Interface.Tokenizable');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_Function
+ * Hoa_Pom_Token_Function
  */
-import('Tokenizer.Token.Function');
+import('Pom.Token.Function');
 
 /**
- * Class Hoa_Tokenizer_Token_Function_Named.
+ * Class Hoa_Pom_Token_Function_Named.
  *
- * .
+ * Represent a named function.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Function_Named
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Function_Named
  */
 
-class Hoa_Tokenizer_Token_Function_Named extends    Hoa_Tokenizer_Token_Function
-                                         implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+class Hoa_Pom_Token_Function_Named extends    Hoa_Pom_Token_Function
+                                   implements Hoa_Pom_Token_Util_Interface_Tokenizable {
 
     /**
      * Whether comment is enabled.
      *
-     * @var Hoa_Tokenizer_Token_Function_Named bool
+     * @var Hoa_Pom_Token_Function_Named bool
      */
     protected $_commentEnabled = true;
 
@@ -124,14 +124,12 @@ class Hoa_Tokenizer_Token_Function_Named extends    Hoa_Tokenizer_Token_Function
 
         foreach($this->getArguments() as $i => $argument) {
 
-            if(true === $argSet) {
-
+            if(true === $argSet)
                 $arguments[] = array(
-                    0 => Hoa_Tokenizer::_COMMA,
+                    0 => Hoa_Pom::_COMMA,
                     1 => ',',
                     2 => -1
                 );
-            }
             else
                 $argSet      = true;
 
@@ -149,13 +147,13 @@ class Hoa_Tokenizer_Token_Function_Named extends    Hoa_Tokenizer_Token_Function
                  : array()
             ),
             array(array(
-                0 => Hoa_Tokenizer::_FUNCTION,
+                0 => Hoa_Pom::_FUNCTION,
                 1 => 'function',
                 2 => -1
             )),
             (true === $this->isReferenced()
                  ? array(array(
-                       0 => Hoa_Tokenizer::_REFERENCE,
+                       0 => Hoa_Pom::_REFERENCE,
                        1 => '&',
                        3 => -1
                    ))
@@ -163,24 +161,24 @@ class Hoa_Tokenizer_Token_Function_Named extends    Hoa_Tokenizer_Token_Function
             ),
             $this->getName()->tokenize(),
             array(array(
-                0 => Hoa_Tokenizer::_OPEN_PARENTHESES,
+                0 => Hoa_Pom::_OPEN_PARENTHESES,
                 1 => '(',
                 2 => -1
             )),
             $arguments,
             array(array(
-                0 => Hoa_Tokenizer::_CLOSE_PARENTHESES,
+                0 => Hoa_Pom::_CLOSE_PARENTHESES,
                 1 => ')',
                 2 => -1
             )),
             array(array(
-                0 => Hoa_Tokenizer::_OPEN_BRACE,
+                0 => Hoa_Pom::_OPEN_BRACE,
                 1 => '{',
                 2 => -1
             )),
             $body,
             array(array(
-                0 => Hoa_Tokenizer::_CLOSE_BRACE,
+                0 => Hoa_Pom::_CLOSE_BRACE,
                 1 => '}',
                 2 => -1
             ))

@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Exception
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Exception
  *
  */
 
@@ -38,7 +38,7 @@
 require_once 'Framework.php';
 
 /**
- * Class Hoa_Tokenizer_Exception.
+ * Class Hoa_Pom_Exception.
  *
  * Extending the Hoa_Exception class.
  *
@@ -47,8 +47,8 @@ require_once 'Framework.php';
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Exception
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Exception
  */
 
-class Hoa_Tokenizer_Exception extends Hoa_Exception { }
+class Hoa_Pom_Exception extends Hoa_Exception { }

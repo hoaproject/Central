@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Call_Function
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Call_Function
  *
  */
 
@@ -38,41 +38,41 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_SuperScalar
+ * Hoa_Pom_Token_Util_Interface_SuperScalar
  */
-import('Tokenizer.Token.Util.Interface.SuperScalar');
+import('Pom.Token.Util.Interface.SuperScalar');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_Call
+ * Hoa_Pom_Token_Call
  */
-import('Tokenizer.Token.Call');
+import('Pom.Token.Call');
 
 /**
- * Class Hoa_Tokenizer_Token_Call_Function.
+ * Class Hoa_Pom_Token_Call_Function.
  *
- * .
+ * Represent a call to a function.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Call_Function
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Call_Function
  */
 
-class Hoa_Tokenizer_Token_Call_Function extends    Hoa_Tokenizer_Token_Call
-                                        implements Hoa_Tokenizer_Token_Util_Interface_SuperScalar {
+class Hoa_Pom_Token_Call_Function extends    Hoa_Pom_Token_Call
+                                  implements Hoa_Pom_Token_Util_Interface_SuperScalar {
 
     /**
      * Function name.
@@ -84,7 +84,7 @@ class Hoa_Tokenizer_Token_Call_Function extends    Hoa_Tokenizer_Token_Call
     /**
      * List of arguments.
      *
-     * @var Hoa_Tokenizer_Token_Call_Function array
+     * @var Hoa_Pom_Token_Call_Function array
      */
     protected $_arguments = array();
 
@@ -97,7 +97,7 @@ class Hoa_Tokenizer_Token_Call_Function extends    Hoa_Tokenizer_Token_Call
      * @param   mixed   $name    Function name.
      * @return  void
      */
-    public function __construct ( Hoa_Tokenizer_Token_String $name ) {
+    public function __construct ( Hoa_Pom_Token_String $name ) {
 
         $this->setName($name);
 
@@ -110,18 +110,18 @@ class Hoa_Tokenizer_Token_Call_Function extends    Hoa_Tokenizer_Token_Call
      * @access  public
      * @param   mixed   $name    Function name.
      * @return  mixed
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
-    public function setName ( Hoa_Tokenizer_Token_String $name ) {
+    public function setName ( Hoa_Pom_Token_String $name ) {
 
         switch(get_class($method)) {
 
-            case 'Hoa_Tokenizer_Token_String':
-            case 'Hoa_Tokenizer_Token_Variable':
+            case 'Hoa_Pom_Token_String':
+            case 'Hoa_Pom_Token_Variable':
               break;
 
             default:
-                throw new Hoa_Tokenizer_Token_Util_Exception(
+                throw new Hoa_Pom_Token_Util_Exception(
                     'A static method should only be called by a string or a ' .
                     'variable. Given %s.', 0, $method);
         }
@@ -158,20 +158,20 @@ class Hoa_Tokenizer_Token_Call_Function extends    Hoa_Tokenizer_Token_Call
 
         switch(get_class($argument)) {
 
-            case 'Hoa_Tokenizer_Token_Array':
-            case 'Hoa_Tokenizer_Token_Call':
-            case 'Hoa_Tokenizer_Token_Clone':
-            case 'Hoa_Tokenizer_Token_New':
-            case 'Hoa_Tokenizer_Token_Number':
-            case 'Hoa_Tokenizer_Token_Operation':
-            case 'Hoa_Tokenizer_Token_String':
-            case 'Hoa_Tokenizer_Token_String_Encapsed':
-            case 'Hoa_Tokenizer_Token_Variable_Valued':
+            case 'Hoa_Pom_Token_Array':
+            case 'Hoa_Pom_Token_Call':
+            case 'Hoa_Pom_Token_Clone':
+            case 'Hoa_Pom_Token_New':
+            case 'Hoa_Pom_Token_Number':
+            case 'Hoa_Pom_Token_Operation':
+            case 'Hoa_Pom_Token_String':
+            case 'Hoa_Pom_Token_String_Encapsed':
+            case 'Hoa_Pom_Token_Variable_Valued':
               break;
 
             default:
-                throw new Hoa_Tokenizer_Token_Util_Exception(
-                    'Cannot call a function with a %s in argument', 0,
+                throw new Hoa_Pom_Token_Util_Exception(
+                    'Cannot call a function with a %s in argument', 1,
                     get_class($argument));
         }
 
@@ -198,7 +198,7 @@ class Hoa_Tokenizer_Token_Call_Function extends    Hoa_Tokenizer_Token_Call
      * Get name.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_String
+     * @return  Hoa_Pom_Token_String
      */
     public function getName ( ) {
 
@@ -243,7 +243,7 @@ class Hoa_Tokenizer_Token_Call_Function extends    Hoa_Tokenizer_Token_Call
             if(true === $argSet) {
 
                 $arguments[] = array(
-                    0 => Hoa_Tokenizer::_COMMA,
+                    0 => Hoa_Pom::_COMMA,
                     1 => ',',
                     2 => -1
                 );
@@ -258,13 +258,13 @@ class Hoa_Tokenizer_Token_Call_Function extends    Hoa_Tokenizer_Token_Call
         return array_merge(
             $this->getName()->tokenize(),
             array(array(
-                0 => Hoa_Tokenizer::_OPEN_PARENTHESES,
+                0 => Hoa_Pom::_OPEN_PARENTHESES,
                 1 => '(',
                 2 => -1
             )),
             $arguments,
             array(array(
-                0 => Hoa_Tokenizer::_CLOSE_PARENTHESES,
+                0 => Hoa_Pom::_CLOSE_PARENTHESES,
                 1 => ')',
                 2 => -1
             ))

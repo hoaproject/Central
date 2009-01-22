@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Array
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Array
  *
  */
 
@@ -38,32 +38,32 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ * Hoa_Pom_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
+import('Pom.Token.Util.Interface.Tokenizable');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_SuperScalar
+ * Hoa_Pom_Token_Util_Interface_SuperScalar
  */
-import('Tokenizer.Token.Util.Interface.SuperScalar');
+import('Pom.Token.Util.Interface.SuperScalar');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Type
+ * Hoa_Pom_Token_Util_Interface_Type
  */
-import('Tokenizer.Token.Util.Interface.Type');
+import('Pom.Token.Util.Interface.Type');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Class Hoa_Tokenizer_Token_Array.
+ * Class Hoa_Pom_Token_Array.
  *
  * Represent an array (aïe, not easy …).
  *
@@ -72,13 +72,13 @@ import('Tokenizer.~');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Array
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Array
  */
 
-class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable,
-                                           Hoa_Tokenizer_Token_Util_Interface_SuperScalar,
-                                           Hoa_Tokenizer_Token_Util_Interface_Type {
+class Hoa_Pom_Token_Array implements Hoa_Pom_Token_Util_Interface_Tokenizable,
+                                     Hoa_Pom_Token_Util_Interface_SuperScalar,
+                                     Hoa_Pom_Token_Util_Interface_Type {
 
     /**
      * Represent a key of an array.
@@ -97,7 +97,7 @@ class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface_To
     /**
      * Set of key/value that constitute an array.
      *
-     * @var Hoa_Tokenizer_Token_Array array
+     * @var Hoa_Pom_Token_Array array
      */
     protected $_array = array();
 
@@ -140,54 +140,54 @@ class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface_To
      * @param   mixed   $key      Key to add. Null to auto-increment.
      * @param   mixed   $value    Value to add.
      * @return  array
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
     public function addElement ( $key, $value ) {
 
         if(null !== $key)
             switch(get_class($key)) {
 
-                case 'Hoa_Tokenizer_Token_Call':
-                case 'Hoa_Tokenizer_Token_Clone':
-                case 'Hoa_Tokenizer_Token_Comment':
-                case 'Hoa_Tokenizer_Token_Number_DNumber':
-                case 'Hoa_Tokenizer_Token_Number_LNumber':
-                case 'Hoa_Tokenizer_Token_New':
-                case 'Hoa_Tokenizer_Token_Operation':
-                case 'Hoa_Tokenizer_Token_String_Boolean':
-                case 'Hoa_Tokenizer_Token_String_Constant':
-                case 'Hoa_Tokenizer_Token_String_EncapsedConstant':
-                case 'Hoa_Tokenizer_Token_String_Null':
-                case 'Hoa_Tokenizer_Token_Variable':
+                case 'Hoa_Pom_Token_Call':
+                case 'Hoa_Pom_Token_Clone':
+                case 'Hoa_Pom_Token_Comment':
+                case 'Hoa_Pom_Token_Number_DNumber':
+                case 'Hoa_Pom_Token_Number_LNumber':
+                case 'Hoa_Pom_Token_New':
+                case 'Hoa_Pom_Token_Operation':
+                case 'Hoa_Pom_Token_String_Boolean':
+                case 'Hoa_Pom_Token_String_Constant':
+                case 'Hoa_Pom_Token_String_EncapsedConstant':
+                case 'Hoa_Pom_Token_String_Null':
+                case 'Hoa_Pom_Token_Variable':
                   break;
 
                 default:
-                    throw new Hoa_Tokenizer_Token_Util_Exception(
+                    throw new Hoa_Pom_Token_Util_Exception(
                         'An array key cannot accept a class that ' .
                         'is an instance of %s.', 0, get_class($key));
             }
 
         switch(get_class($value)) {
 
-            case 'Hoa_Tokenizer_Token_Array':
-            case 'Hoa_Tokenizer_Token_Call':
-            case 'Hoa_Tokenizer_Token_Clone':
-            case 'Hoa_Tokenizer_Token_Comment':
-            case 'Hoa_Tokenizer_Token_Number_DNumber':
-            case 'Hoa_Tokenizer_Token_Number_LNumber':
-            case 'Hoa_Tokenizer_Token_New':
-            case 'Hoa_Tokenizer_Token_Operation':
-            case 'Hoa_Tokenizer_Token_String_Boolean':
-            case 'Hoa_Tokenizer_Token_String_Constant':
-            case 'Hoa_Tokenizer_Token_String_EncapsedConstant':
-            case 'Hoa_Tokenizer_Token_String_Null':
-            case 'Hoa_Tokenizer_Token_Variable':
+            case 'Hoa_Pom_Token_Array':
+            case 'Hoa_Pom_Token_Call':
+            case 'Hoa_Pom_Token_Clone':
+            case 'Hoa_Pom_Token_Comment':
+            case 'Hoa_Pom_Token_Number_DNumber':
+            case 'Hoa_Pom_Token_Number_LNumber':
+            case 'Hoa_Pom_Token_New':
+            case 'Hoa_Pom_Token_Operation':
+            case 'Hoa_Pom_Token_String_Boolean':
+            case 'Hoa_Pom_Token_String_Constant':
+            case 'Hoa_Pom_Token_String_EncapsedConstant':
+            case 'Hoa_Pom_Token_String_Null':
+            case 'Hoa_Pom_Token_Variable':
               break;
 
             default:
-                throw new Hoa_Tokenizer_Token_Util_Exception(
+                throw new Hoa_Pom_Token_Util_Exception(
                     'An array value cannot accept a class that ' .
-                    'is an instance of %s.', 0, get_class($value));
+                    'is an instance of %s.', 1, get_class($value));
         }
 
         return $this->_array[] = array(
@@ -245,13 +245,13 @@ class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface_To
 
         foreach($this->getArray() as $i => $entry) {
 
-            if($entry instanceof Hoa_Tokenizer_Token_Util_Interface_SuperScalar)
+            if($entry instanceof Hoa_Pom_Token_Util_Interface_SuperScalar)
                 if($entry->isUniformSuperScalar())
                     continue;
                 else
                     return false;
 
-            if(!($entry instanceof Hoa_Tokenizer_Token_Util_Interface_Scalar))
+            if(!($entry instanceof Hoa_Pom_Token_Util_Interface_Scalar))
                 return false;
 
             if(null === $old) {
@@ -287,7 +287,7 @@ class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface_To
 
             if(false === $first)
                 $array[] = array(
-                    0 => Hoa_Tokenizer::_COMMA,
+                    0 => Hoa_Pom::_COMMA,
                     1 => ',',
                     2 => -1
                 );
@@ -299,7 +299,7 @@ class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface_To
                      ? array_merge(
                            $a[self::KEY]->tokenize(),
                            array(array(
-                               0 => Hoa_Tokenizer::_DOUBLE_ARROW,
+                               0 => Hoa_Pom::_DOUBLE_ARROW,
                                1 => '=>',
                                2 => -1
                            ))
@@ -315,18 +315,18 @@ class Hoa_Tokenizer_Token_Array implements Hoa_Tokenizer_Token_Util_Interface_To
 
         return array_merge(
             array(array(
-                0 => Hoa_Tokenizer::_ARRAY,
+                0 => Hoa_Pom::_ARRAY,
                 1 => 'array',
                 2 => -1
             )),
             array(array(
-                0 => Hoa_Tokenizer::_OPEN_PARENTHESES,
+                0 => Hoa_Pom::_OPEN_PARENTHESES,
                 1 => '(',
                 2 => -1
             )),
             $array,
             array(array(
-                0 => Hoa_Tokenizer::_CLOSE_PARENTHESES,
+                0 => Hoa_Pom::_CLOSE_PARENTHESES,
                 1 => ')',
                 2 => -1
             ))

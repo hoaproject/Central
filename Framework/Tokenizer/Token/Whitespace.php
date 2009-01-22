@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Whitespace
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Whitespace
  *
  */
 
@@ -38,22 +38,22 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ * Hoa_Pom_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
+import('Pom.Token.Util.Interface.Tokenizable');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Class Hoa_Tokenizer_Token_Whitespace.
+ * Class Hoa_Pom_Token_Whitespace.
  *
  * Represent a whitespace.
  *
@@ -62,16 +62,16 @@ import('Tokenizer.~');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Whitespace
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Whitespace
  */
 
-class Hoa_Tokenizer_Token_Whitespace implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+class Hoa_Pom_Token_Whitespace implements Hoa_Pom_Token_Util_Interface_Tokenizable {
 
     /**
      * Whitespace.
      *
-     * @var Hoa_Tokenizer_Token_Whitespace
+     * @var Hoa_Pom_Token_Whitespace
      */
     protected $_whitespace = null;
 
@@ -97,12 +97,12 @@ class Hoa_Tokenizer_Token_Whitespace implements Hoa_Tokenizer_Token_Util_Interfa
      * @acccess  public
      * @param    string  $whitespace    Whitespace.
      * @return   void
-     * @throw    Hoa_Tokenizer_Token_Util_Exception
+     * @throw    Hoa_Pom_Token_Util_Exception
      */
     public function setWhitespace ( $whitespace ) {
 
         if(0 === preg_match('^[:space:]$', $whitespace))
-            throw new Hoa_Tokenizer_Token_Util_Exception(
+            throw new Hoa_Pom_Token_Util_Exception(
                 'A whitespace must only contain spaces, horizontal or ' .
                 'vertical tabs, or newlines.', 0);
 
@@ -132,7 +132,7 @@ class Hoa_Tokenizer_Token_Whitespace implements Hoa_Tokenizer_Token_Util_Interfa
     public function tokenize ( ) {
 
         return array(array(
-            0 => Hoa_Tokenizer::_WHITESPACE,
+            0 => Hoa_Pom::_WHITESPACE,
             1 => $this->getWhitespace,
             2 => -1
         ));

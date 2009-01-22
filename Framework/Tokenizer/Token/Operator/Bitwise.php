@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator_Bitwise
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Operator_Bitwise
  *
  */
 
@@ -38,22 +38,22 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_Operator
+ * Hoa_Pom_Token_Operator
  */
-import('Tokenizer.Token.Operator');
+import('Pom.Token.Operator');
 
 /**
- * Class Hoa_Tokenizer_Token_Operator_Bitwise.
+ * Class Hoa_Pom_Token_Operator_Bitwise.
  *
  * Represent bitwise operators.
  *
@@ -62,37 +62,37 @@ import('Tokenizer.Token.Operator');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator_Bitwise
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Operator_Bitwise
  */
 
-class Hoa_Tokenizer_Token_Operator_Bitwise extends Hoa_Tokenizer_Token_Operator {
+class Hoa_Pom_Token_Operator_Bitwise extends Hoa_Pom_Token_Operator {
 
     /**
      * Operator.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Bitwise string
+     * @var Hoa_Pom_Token_Operator_Bitwise string
      */
     protected $_operator   = '&';
 
     /**
      * Operator type.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Bitwise mixed
+     * @var Hoa_Pom_Token_Operator_Bitwise mixed
      */
-    protected $_type       = Hoa_Tokenizer::_BITWISE_AND;
+    protected $_type       = Hoa_Pom::_BITWISE_AND;
 
     /**
      * Operator arity.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Bitwise int
+     * @var Hoa_Pom_Token_Operator_Bitwise int
      */
     protected $_arity      = parent::BINARY;
 
     /**
      * Operator precedence.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Bitwise int
+     * @var Hoa_Pom_Token_Operator_Bitwise int
      */
     protected $_precedence = 10;
 
@@ -104,50 +104,50 @@ class Hoa_Tokenizer_Token_Operator_Bitwise extends Hoa_Tokenizer_Token_Operator 
      * @access  public
      * @param   string  $operator    Operator.
      * @return  string
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
     public function setOperator ( $operator ) {
 
         switch($operator) {
 
             case '&';
-                $this->setType(Hoa_Tokenizer::_BITWISE_AND);
+                $this->setType(Hoa_Pom::_BITWISE_AND);
                 $this->setArity(parent::BINARY);
                 $this->setPrecedence(10);
               break;
 
             case '|':
-                $this->setType(Hoa_Tokenizer::_BITWISE_OR);
+                $this->setType(Hoa_Pom::_BITWISE_OR);
                 $this->setArity(parent::BINARY);
                 $this->setPrecedence(8);
               break;
 
             case '^':
-                $this->setType(Hoa_Tokenizer::_BITWISE_XOR);
+                $this->setType(Hoa_Pom::_BITWISE_XOR);
                 $this->setArity(parent::BINARY);
                 $this->setPrecedence(9);
               break;
 
             case '~':
-                $this->setType(Hoa_Tokenizer::_BITWISE_NOT);
+                $this->setType(Hoa_Pom::_BITWISE_NOT);
                 $this->setArity(parent::UNARY);
                 $this->setPrecedence(18);
               break;
 
             case '>>':
-                $this->setType(Hoa_Tokenizer::_SR);
+                $this->setType(Hoa_Pom::_SR);
                 $this->setArity(parent::BINARY);
                 $this->setPrecedence(13);
               break;
 
             case '<<':
-                $this->setType(Hoa_Tokenizer::_SL);
+                $this->setType(Hoa_Pom::_SL);
                 $this->setArity(parent::BINARY);
                 $this->setPrecedence(13);
               break;
 
             default:
-                throw new Hoa_Tokenizer_Token_Util_Exception(
+                throw new Hoa_Pom_Token_Util_Exception(
                     'Operator %s is not a bitwise operator.', 0, $operator);
         }
 

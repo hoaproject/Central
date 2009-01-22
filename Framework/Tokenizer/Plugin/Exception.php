@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Plugin_Exception
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Plugin_Exception
  *
  */
 
@@ -38,22 +38,22 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Exception
+ * Hoa_Pom_Exception
  */
-import('Tokenizer.Exception');
+import('Pom.Exception');
 
 /**
- * Class Hoa_Tokenizer_Plugin_Exception.
+ * Class Hoa_Pom_Plugin_Exception.
  *
- * Extending the Hoa_Tokenizer_Exception class.
+ * Extending the Hoa_Pom_Exception class.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Plugin_Exception
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Plugin_Exception
  */
 
-class Hoa_Tokenizer_Plugin_Exception extends Hoa_Tokenizer_Exception { }
+class Hoa_Pom_Plugin_Exception extends Hoa_Pom_Exception { }

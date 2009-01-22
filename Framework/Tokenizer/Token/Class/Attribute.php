@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Class_Attribute
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Class_Attribute
  *
  */
 
@@ -38,45 +38,45 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ * Hoa_Pom_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
+import('Pom.Token.Util.Interface.Tokenizable');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_Class_Access
+ * Hoa_Pom_Token_Class_Access
  */
-import('Tokenizer.Token.Class.Access');
+import('Pom.Token.Class.Access');
 
 /**
- * Hoa_Tokenizer_Token_Operator_Assignement
+ * Hoa_Pom_Token_Operator_Assignement
  */
-import('Tokenizer.Token.Operator.Assignement');
+import('Pom.Token.Operator.Assignement');
 
 /**
- * Class Hoa_Tokenizer_Token_Class_Attribute.
+ * Class Hoa_Pom_Token_Class_Attribute.
  *
- * .
+ * Represent an attribute.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Class_Attribute
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Class_Attribute
  */
 
-class Hoa_Tokenizer_Token_Class_Attribute implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+class Hoa_Pom_Token_Class_Attribute implements Hoa_Pom_Token_Util_Interface_Tokenizable {
 
     /**
      * Attribute is static (STATIC_M_, M means MEMORY).
@@ -95,35 +95,35 @@ class Hoa_Tokenizer_Token_Class_Attribute implements Hoa_Tokenizer_Token_Util_In
     /**
      * Attribute comment.
      *
-     * @var Hoa_Tokenizer_Token_Comment object
+     * @var Hoa_Pom_Token_Comment object
      */
     protected $_comment  = null;
 
     /**
      * Attribute access.
      *
-     * @var Hoa_Tokenizer_Token_Class_Access object
+     * @var Hoa_Pom_Token_Class_Access object
      */
     protected $_access   = null;
 
     /**
      * Whether attribute is static.
      *
-     * @var Hoa_Tokenizer_Token_Class_Attribute bool
+     * @var Hoa_Pom_Token_Class_Attribute bool
      */
     protected $_static   = false;
 
     /**
      * Attribuale name (variable).
      *
-     * @var Hoa_Tokenizer_Token_Variable object
+     * @var Hoa_Pom_Token_Variable object
      */
     protected $_name     = null;
 
     /**
      * Attribute operator.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Assignement object
+     * @var Hoa_Pom_Token_Operator_Assignement object
      */
     protected $_operator = null;
 
@@ -140,13 +140,13 @@ class Hoa_Tokenizer_Token_Class_Attribute implements Hoa_Tokenizer_Token_Util_In
      * Constructor.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Variable  $name    Attribute name.
+     * @param   Hoa_Pom_Token_Variable  $name    Attribute name.
      * @return  void
      */
-    public function __construct ( Hoa_Tokenizer_Token_Variable $name ) {
+    public function __construct ( Hoa_Pom_Token_Variable $name ) {
 
-        $this->setAccess(new Hoa_Tokenizer_Token_Class_Access('public'));
-        $this->setOperator(new Hoa_Tokenizer_Token_Operator_Assignement('='));
+        $this->setAccess(new Hoa_Pom_Token_Class_Access('public'));
+        $this->setOperator(new Hoa_Pom_Token_Operator_Assignement('='));
         $this->setName($name);
 
         return;
@@ -156,10 +156,10 @@ class Hoa_Tokenizer_Token_Class_Attribute implements Hoa_Tokenizer_Token_Util_In
      * Set comment.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Comment  $comment    Attribute comment.
-     * @return  Hoa_Tokenizer_Token_Comment
+     * @param   Hoa_Pom_Token_Comment  $comment    Attribute comment.
+     * @return  Hoa_Pom_Token_Comment
      */
-    public function setComment ( Hoa_Tokenizer_Token_Comment $comment ) {
+    public function setComment ( Hoa_Pom_Token_Comment $comment ) {
 
         $old            = $this->_comment;
         $this->_comment = $comment;
@@ -171,10 +171,10 @@ class Hoa_Tokenizer_Token_Class_Attribute implements Hoa_Tokenizer_Token_Util_In
      * Set access.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Class_Access  $access  Attribute access.
-     * @return  Hoa_Tokenizer_Token_Class_Access
+     * @param   Hoa_Pom_Token_Class_Access  $access  Attribute access.
+     * @return  Hoa_Pom_Token_Class_Access
      */
-    public function setAccess ( Hoa_Tokenizer_Token_Class_Access $access ) {
+    public function setAccess ( Hoa_Pom_Token_Class_Access $access ) {
 
         $old           = $this->_access;
         $this->_access = $access;
@@ -213,10 +213,10 @@ class Hoa_Tokenizer_Token_Class_Attribute implements Hoa_Tokenizer_Token_Util_In
      * Set name (variable).
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Variable  $variable    Variable.
-     * @return  Hoa_Tokenizer_Token_Variable
+     * @param   Hoa_Pom_Token_Variable  $variable    Variable.
+     * @return  Hoa_Pom_Token_Variable
      */
-    public function setName ( Hoa_Tokenizer_Token_Variable $variable ) {
+    public function setName ( Hoa_Pom_Token_Variable $variable ) {
 
         $old         = $this->_name;
         $this->_name = $variable;
@@ -228,10 +228,10 @@ class Hoa_Tokenizer_Token_Class_Attribute implements Hoa_Tokenizer_Token_Util_In
      * Set operator.
      *
      * @access  protected
-     * @param   Hoa_Tokenizer_Token_Operator_Assignement  $operator    Operator.
-     * @return  Hoa_Tokenizer_Token_Operator_Assignement
+     * @param   Hoa_Pom_Token_Operator_Assignement  $operator    Operator.
+     * @return  Hoa_Pom_Token_Operator_Assignement
      */
-    protected function setOperator ( Hoa_Tokenizer_Token_Operator_Assignement $operator ) {
+    protected function setOperator ( Hoa_Pom_Token_Operator_Assignement $operator ) {
 
         $old             = $this->_operator;
         $this->_operator = $operator;
@@ -245,18 +245,18 @@ class Hoa_Tokenizer_Token_Class_Attribute implements Hoa_Tokenizer_Token_Util_In
      * @access  public
      * @param   mixed   $value    Attribute value.
      * @return  mixed
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
     public function setValue ( $value ) {
 
-        if($value instanceof Hoa_Tokenizer_Token_Util_Interface_SuperScalar)
+        if($value instanceof Hoa_Pom_Token_Util_Interface_SuperScalar)
             if(false === $value->isUniformSuperScalar())
-                throw new Hoa_Tokenizer_Token_Util_Exception(
+                throw new Hoa_Pom_Token_Util_Exception(
                     'Value should effectively be a super-scalar, ' .
                     'but an uniform super-scalar.', 0);
 
-        if(!($value instanceof Hoa_Tokenizer_Token_Util_Interface_Scalar))
-            throw new Hoa_Tokenizer_Token_Util_Exception(
+        if(!($value instanceof Hoa_Pom_Token_Util_Interface_Scalar))
+            throw new Hoa_Pom_Token_Util_Exception(
                 'Value must be a scalar or an uniform super-scalar.', 1);
 
         $old          = $this->_value;
@@ -269,7 +269,7 @@ class Hoa_Tokenizer_Token_Class_Attribute implements Hoa_Tokenizer_Token_Util_In
      * Get comment.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_Comment
+     * @return  Hoa_Pom_Token_Comment
      */
     public function getComment ( ) {
 
@@ -291,7 +291,7 @@ class Hoa_Tokenizer_Token_Class_Attribute implements Hoa_Tokenizer_Token_Util_In
      * Get access.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_Class_Access
+     * @return  Hoa_Pom_Token_Class_Access
      */
     public function getAccess ( ) {
 
@@ -324,7 +324,7 @@ class Hoa_Tokenizer_Token_Class_Attribute implements Hoa_Tokenizer_Token_Util_In
      * Get name.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_Variable
+     * @return  Hoa_Pom_Token_Variable
      */
     public function getName ( ) {
 
@@ -335,7 +335,7 @@ class Hoa_Tokenizer_Token_Class_Attribute implements Hoa_Tokenizer_Token_Util_In
      * Get operator.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_Operator_Assignement
+     * @return  Hoa_Pom_Token_Operator_Assignement
      */
     public function getOperator ( ) {
 
@@ -380,7 +380,7 @@ class Hoa_Tokenizer_Token_Class_Attribute implements Hoa_Tokenizer_Token_Util_In
             $this->getAccess()->tokenize(),
             (true === $this->isStatic()
                  ? array(array(
-                       0 => Hoa_Tokenizer::_STATIC,
+                       0 => Hoa_Pom::_STATIC,
                        1 => 'static',
                        2 => -1
                    ))
@@ -395,7 +395,7 @@ class Hoa_Tokenizer_Token_Class_Attribute implements Hoa_Tokenizer_Token_Util_In
                 : array()
             ),
             array(array(
-                0 => Hoa_Tokenizer::_SEMI_COLON,
+                0 => Hoa_Pom::_SEMI_COLON,
                 1 => ';',
                 2 => -1
             ))

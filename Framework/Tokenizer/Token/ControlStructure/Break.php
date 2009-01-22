@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure_Break
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_ControlStructure_Break
  *
  */
 
@@ -38,35 +38,35 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_ControlStructure
+ * Hoa_Pom_Token_ControlStructure
  */
-import('Tokenizer.Token.ControlStructure');
+import('Pom.Token.ControlStructure');
 
 /**
- * Class Hoa_Tokenizer_Token_ControlStructure_Break.
+ * Class Hoa_Pom_Token_ControlStructure_Break.
  *
- * .
+ * Represent a break.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_ControlStructure_Break
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_ControlStructure_Break
  */
 
-class Hoa_Tokenizer_Token_ControlStructure_Break extends Hoa_Tokenizer_Token_ControlStructure {
+class Hoa_Pom_Token_ControlStructure_Break extends Hoa_Pom_Token_ControlStructure {
 
     /**
      * Level up.
@@ -81,10 +81,10 @@ class Hoa_Tokenizer_Token_ControlStructure_Break extends Hoa_Tokenizer_Token_Con
      * Constructor.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Number_LNumber  $level    Level up.
+     * @param   Hoa_Pom_Token_Number_LNumber  $level    Level up.
      * @return  void
      */
-    public function __construct ( Hoa_Tokenizer_Token_Number_LNumber $level ) {
+    public function __construct ( Hoa_Pom_Token_Number_LNumber $level ) {
 
         $this->setLevel($level);
 
@@ -95,10 +95,10 @@ class Hoa_Tokenizer_Token_ControlStructure_Break extends Hoa_Tokenizer_Token_Con
      * Set level.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Number_LNumber  $level    Level up.
-     * @return  Hoa_Tokenizer_Token_Number_LNumber
+     * @param   Hoa_Pom_Token_Number_LNumber  $level    Level up.
+     * @return  Hoa_Pom_Token_Number_LNumber
      */
-    public function setLevel ( Hoa_Tokenizer_Token_Number_LNumber $level ) {
+    public function setLevel ( Hoa_Pom_Token_Number_LNumber $level ) {
 
         $old          = $this->_level;
         $this->_level = $level;
@@ -110,7 +110,7 @@ class Hoa_Tokenizer_Token_ControlStructure_Break extends Hoa_Tokenizer_Token_Con
      * Set auto-level.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_Number_LNumber
+     * @return  Hoa_Pom_Token_Number_LNumber
      */
     public function setAutoLevel ( ) {
 
@@ -124,7 +124,7 @@ class Hoa_Tokenizer_Token_ControlStructure_Break extends Hoa_Tokenizer_Token_Con
      * Get level.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_Number_LNumber
+     * @return  Hoa_Pom_Token_Number_LNumber
      */
     public function getLevel ( ) {
 
@@ -152,7 +152,7 @@ class Hoa_Tokenizer_Token_ControlStructure_Break extends Hoa_Tokenizer_Token_Con
 
         return array_merge(
             array(array(
-                0 => Hoa_Tokenizer::_BREAK,
+                0 => Hoa_Pom::_BREAK,
                 1 => 'break',
                 2 => -1
             )),

@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Function_Argument
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Function_Argument
  *
  */
 
@@ -38,66 +38,66 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ * Hoa_Pom_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
+import('Pom.Token.Util.Interface.Tokenizable');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_Operator_Assignement
+ * Hoa_Pom_Token_Operator_Assignement
  */
-import('Tokenizer.Token.Operator.Assignement');
+import('Pom.Token.Operator.Assignement');
 
 /**
- * Class Hoa_Tokenizer_Token_Function_Argument.
+ * Class Hoa_Pom_Token_Function_Argument.
  *
- * .
+ * Represent an argument of a function.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Function_Argument
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Function_Argument
  */
 
-class Hoa_Tokenizer_Token_Function_Argument implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+class Hoa_Pom_Token_Function_Argument implements Hoa_Pom_Token_Util_Interface_Tokenizable {
 
     /**
      * Whether argument is passed by reference.
      *
-     * @var Hoa_Tokenizer_Token_Function_Argument bool
+     * @var Hoa_Pom_Token_Function_Argument bool
      */
     protected $_isReferenced = false;
 
     /**
      * Type (Array or class name).
      *
-     * @var Hoa_Tokenizer_Token_String object
+     * @var Hoa_Pom_Token_String object
      */
     protected $_type         = null;
 
     /**
      * Name.
      *
-     * @var Hoa_Tokenizer_Token_Variable object
+     * @var Hoa_Pom_Token_Variable object
      */
     protected $_name         = null;
 
     /**
      * Operator.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Assign object
+     * @var Hoa_Pom_Token_Operator_Assign object
      */
     protected $_operator     = null;
 
@@ -114,10 +114,10 @@ class Hoa_Tokenizer_Token_Function_Argument implements Hoa_Tokenizer_Token_Util_
      * Constructor.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Variable  $name    Argument name.
+     * @param   Hoa_Pom_Token_Variable  $name    Argument name.
      * @return  void
      */
-    public function __construct ( Hoa_Tokenizer_Token_Variable $name ) {
+    public function __construct ( Hoa_Pom_Token_Variable $name ) {
 
         $this->setName($name);
         $this->setOperator();
@@ -144,10 +144,10 @@ class Hoa_Tokenizer_Token_Function_Argument implements Hoa_Tokenizer_Token_Util_
      * Set type.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_String  $type    Argument type.
-     * @return  Hoa_Tokenizer_Token_String
+     * @param   Hoa_Pom_Token_String  $type    Argument type.
+     * @return  Hoa_Pom_Token_String
      */
-    public function setType ( Hoa_Tokenizer_Token_String $type ) {
+    public function setType ( Hoa_Pom_Token_String $type ) {
 
         $old         = $this->_type;
         $this->_type = $type;
@@ -159,10 +159,10 @@ class Hoa_Tokenizer_Token_Function_Argument implements Hoa_Tokenizer_Token_Util_
      * Set name.
      *
      * @access  public
-     * @param   Hoa_Tokenizer_Token_Variable  $name    Argument name.
-     * @return  Hoa_Tokenizer_Token_Variable
+     * @param   Hoa_Pom_Token_Variable  $name    Argument name.
+     * @return  Hoa_Pom_Token_Variable
      */
-    public function setName ( Hoa_Tokenizer_Token_Variable $name ) {
+    public function setName ( Hoa_Pom_Token_Variable $name ) {
 
         $old         = $this->_name;
         $this->_name = $name;
@@ -174,12 +174,12 @@ class Hoa_Tokenizer_Token_Function_Argument implements Hoa_Tokenizer_Token_Util_
      * Set operator.
      *
      * @access  protected
-     * @return  Hoa_Tokenizer_Token_Operator_Assignement
+     * @return  Hoa_Pom_Token_Operator_Assignement
      */
     protected function setOperator ( ) {
 
         $old             = $this->_operator;
-        $this->_operator = new Hoa_Tokenizer_Token_Operator_Assignement('=');
+        $this->_operator = new Hoa_Pom_Token_Operator_Assignement('=');
 
         return $old;
     }
@@ -190,18 +190,18 @@ class Hoa_Tokenizer_Token_Function_Argument implements Hoa_Tokenizer_Token_Util_
      * @access  public
      * @param   mixed   $default    Default argument.
      * @return  mixed
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
     public function setDefaultValue ( $default ) {
 
-        if($default instanceof Hoa_Tokenizer_Token_Util_Interface_SuperScalar)
+        if($default instanceof Hoa_Pom_Token_Util_Interface_SuperScalar)
             if(false === $default->isUniformSuperScalar())
-                throw new Hoa_Tokenizer_Token_Util_Exception(
+                throw new Hoa_Pom_Token_Util_Exception(
                     'Default value should effectively be a super-scalar, ' .
                     'but a uniform super-scalar.', 0);
 
-        if(!($default instanceof Hoa_Tokenizer_Token_Util_Interface_Scalar))
-            throw new Hoa_Tokenizer_Token_Util_Exception(
+        if(!($default instanceof Hoa_Pom_Token_Util_Interface_Scalar))
+            throw new Hoa_Pom_Token_Util_Exception(
                 'Default value must be a scalar or a uniform super-scalar.', 1);
 
         $old            = $this->_default;
@@ -247,7 +247,7 @@ class Hoa_Tokenizer_Token_Function_Argument implements Hoa_Tokenizer_Token_Util_
      * Get name.
      *
      * @access  public
-     * @return  Hoa_Tokenizer_Token_Variable
+     * @return  Hoa_Pom_Token_Variable
      */
     public function getName ( ) {
 
@@ -258,7 +258,7 @@ class Hoa_Tokenizer_Token_Function_Argument implements Hoa_Tokenizer_Token_Util_
      * Get operator.
      *
      * @access  protected
-     * @return  Hoa_Tokenizer_Token_Operator_Assignement
+     * @return  Hoa_Pom_Token_Operator_Assignement
      */
     protected function getOperator ( ) {
 
@@ -296,12 +296,10 @@ class Hoa_Tokenizer_Token_Function_Argument implements Hoa_Tokenizer_Token_Util_
     public function tokenize ( ) {
 
         return array_merge(
-            (
-             true === $this->isTyped()
-                 ? (
-                    strtolower($this->getType()->getString()) == 'array'
+            (true === $this->isTyped()
+                 ? (strtolower($this->getType()->getString()) == 'array'
                         ? array(array(
-                              0 => Hoa_Tokenizer::_ARRAY,
+                              0 => Hoa_Pom::_ARRAY,
                               1 => $this->getType()->getString(),
                               2 => -1
                           ))
@@ -309,18 +307,16 @@ class Hoa_Tokenizer_Token_Function_Argument implements Hoa_Tokenizer_Token_Util_
                    )
                  : array()
             ),
-            (
-             true === $this->isReferenced()
+            (true === $this->isReferenced()
                  ? array(array(
-                       0 => Hoa_Tokenizer::_REFERENCE,
+                       0 => Hoa_Pom::_REFERENCE,
                        1 => '&',
                        2 => -1
                    ))
                  : array()
             ),
             $this->getName()->tokenize(),
-            (
-             true === $this->hasDefaultValue()
+            (true === $this->hasDefaultValue()
                  ? array_merge(
                        $this->getOperator()->tokenize(),
                        $this->getDefaultValue()->tokenize()

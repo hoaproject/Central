@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Comment
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Comment
  *
  */
 
@@ -38,22 +38,22 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ * Hoa_Pom_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
+import('Pom.Token.Util.Interface.Tokenizable');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Class Hoa_Tokenizer_Token_Comment.
+ * Class Hoa_Pom_Token_Comment.
  *
  * Represents a comment.
  *
@@ -62,11 +62,11 @@ import('Tokenizer.~');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Comment
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Comment
  */
 
-class Hoa_Tokenizer_Token_Comment implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+class Hoa_Pom_Token_Comment implements Hoa_Pom_Token_Util_Interface_Tokenizable {
 
     /**
      * Documentation comment, i.e. starting by /**.
@@ -99,16 +99,16 @@ class Hoa_Tokenizer_Token_Comment implements Hoa_Tokenizer_Token_Util_Interface_
     /**
      * Type of comment.
      *
-     * @var Hoa_Tokenizer_Token_Comment string
+     * @var Hoa_Pom_Token_Comment string
      */
-    protected $_type         = null;
+    protected $_type    = null;
 
     /**
      * Comment content.
      *
-     * @var Hoa_Tokenizer_Token_Comment string
+     * @var Hoa_Pom_Token_Comment string
      */
-    protected $_content      = null;
+    protected $_content = null;
 
 
 
@@ -156,10 +156,10 @@ class Hoa_Tokenizer_Token_Comment implements Hoa_Tokenizer_Token_Util_Interface_
                 else
                     $type = self::TYPE_BLOCK;
             else
-                throw new Hoa_Tokenizer_Token_Util_Exception(
+                throw new Hoa_Pom_Token_Util_Exception(
                     'Comment %s is not well-formed.', 0, $comment);
         else
-            throw new Hoa_Tokenizer_Token_Util_Exception(
+            throw new Hoa_Pom_Token_Util_Exception(
                 'Comment %s is not well-formed.', 1, $comment);
 
         switch($type) {
@@ -255,16 +255,10 @@ class Hoa_Tokenizer_Token_Comment implements Hoa_Tokenizer_Token_Util_Interface_
 
         return array(array(
             self::TYPE_DOCUMENTATION === $this->getType()
-                ? Hoa_Tokenizer::_DOC_COMMENT
-                : Hoa_Tokenizer::_COMMENT,
+                ? Hoa_Pom::_DOC_COMMENT
+                : Hoa_Pom::_COMMENT,
             $this->getContent(),
             -1
         ));
     }
-
-    /**
-     * Good idea ?
-     *
-     * public function toHTML ( );
-     */
 }

@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator_String
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Operator_String
  *
  */
 
@@ -38,22 +38,22 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_Operator
+ * Hoa_Pom_Token_Operator
  */
-import('Tokenizer.Token.Operator');
+import('Pom.Token.Operator');
 
 /**
- * Class Hoa_Tokenizer_Token_Operator_String.
+ * Class Hoa_Pom_Token_Operator_String.
  *
  * Represent bitwise operators.
  *
@@ -62,37 +62,37 @@ import('Tokenizer.Token.Operator');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator_String
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Operator_String
  */
 
-class Hoa_Tokenizer_Token_Operator_String extends Hoa_Tokenizer_Token_Operator {
+class Hoa_Pom_Token_Operator_String extends Hoa_Pom_Token_Operator {
 
     /**
      * Operator.
      *
-     * @var Hoa_Tokenizer_Token_Operator_String string
+     * @var Hoa_Pom_Token_Operator_String string
      */
     protected $_operator   = '.';
 
     /**
      * Operator type.
      *
-     * @var Hoa_Tokenizer_Token_Operator_String mixed
+     * @var Hoa_Pom_Token_Operator_String mixed
      */
-    protected $_type       = Hoa_Tokenizer::_POINT;
+    protected $_type       = Hoa_Pom::_POINT;
 
     /**
      * Operator arity.
      *
-     * @var Hoa_Tokenizer_Token_Operator_String int
+     * @var Hoa_Pom_Token_Operator_String int
      */
     protected $_arity      = parent::BINARY;
 
     /**
      * Operator precedence.
      *
-     * @var Hoa_Tokenizer_Token_Operator_String int
+     * @var Hoa_Pom_Token_Operator_String int
      */
     protected $_precedence = 14;
 
@@ -104,12 +104,12 @@ class Hoa_Tokenizer_Token_Operator_String extends Hoa_Tokenizer_Token_Operator {
      * @access  public
      * @param   string  $operator    Operator.
      * @return  string
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
     public function setOperator ( $operator ) {
 
         if($operator != '.')
-            throw new Hoa_Tokenizer_Toekn_Util_Exception(
+            throw new Hoa_Pom_Toekn_Util_Exception(
                 'The point is the only one string operator.', 0);
 
         return parent::setOperator($operator);

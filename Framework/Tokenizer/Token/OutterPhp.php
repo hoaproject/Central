@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_OutterPhp
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_OutterPhp
  *
  */
 
@@ -38,22 +38,22 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer_Token_Util_Interface_Tokenizable
+ * Hoa_Pom_Token_Util_Interface_Tokenizable
  */
-import('Tokenizer.Token.Util.Interface.Tokenizable');
+import('Pom.Token.Util.Interface.Tokenizable');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Class Hoa_Tokenizer_Token_OutterPhp.
+ * Class Hoa_Pom_Token_OutterPhp.
  *
  * Represent any data that surrounds PHP source code.
  *
@@ -62,16 +62,16 @@ import('Tokenizer.~');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_OutterPhp
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_OutterPhp
  */
 
-class Hoa_Tokenizer_Token_OutterPhp implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
+class Hoa_Pom_Token_OutterPhp implements Hoa_Pom_Token_Util_Interface_Tokenizable {
 
     /**
      * Data.
      *
-     * @var Hoa_Tokenizer_Token_OutterPhp string
+     * @var Hoa_Pom_Token_OutterPhp string
      */
     protected $_data = null;
 
@@ -126,7 +126,7 @@ class Hoa_Tokenizer_Token_OutterPhp implements Hoa_Tokenizer_Token_Util_Interfac
     public function tokenize ( ) {
 
         return array(array(
-            Hoa_Tokenizer::_INLINE_HTML,
+            Hoa_Pom::_INLINE_HTML,
             $this->getData(),
             -1
         ));

@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator_Arithmetical
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Operator_Arithmetical
  *
  */
 
@@ -38,22 +38,22 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Tokenizer_Token_Util_Exception
+ * Hoa_Pom_Token_Util_Exception
  */
-import('Tokenizer.Token.Util.Exception');
+import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Tokenizer
+ * Hoa_Pom
  */
-import('Tokenizer.~');
+import('Pom.~');
 
 /**
- * Hoa_Tokenizer_Token_Operator
+ * Hoa_Pom_Token_Operator
  */
-import('Tokenizer.Token.Operator');
+import('Pom.Token.Operator');
 
 /**
- * Class Hoa_Tokenizer_Token_Operator_Arithmetical.
+ * Class Hoa_Pom_Token_Operator_Arithmetical.
  *
  * Represent arithmetical operators.
  *
@@ -62,37 +62,37 @@ import('Tokenizer.Token.Operator');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Tokenizer
- * @subpackage  Hoa_Tokenizer_Token_Operator_Arithmetical
+ * @package     Hoa_Pom
+ * @subpackage  Hoa_Pom_Token_Operator_Arithmetical
  */
 
-class Hoa_Tokenizer_Token_Operator_Arithmetical extends Hoa_Tokenizer_Token_Operator {
+class Hoa_Pom_Token_Operator_Arithmetical extends Hoa_Pom_Token_Operator {
 
     /**
      * Operator.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Arithmetical string
+     * @var Hoa_Pom_Token_Operator_Arithmetical string
      */
     protected $_operator   = '+';
 
     /**
      * Operator type.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Arithmetical mixed
+     * @var Hoa_Pom_Token_Operator_Arithmetical mixed
      */
-    protected $_type       = Hoa_Tokenizer::_PLUS;
+    protected $_type       = Hoa_Pom::_PLUS;
 
     /**
      * Operator arity.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Arithmetical int
+     * @var Hoa_Pom_Token_Operator_Arithmetical int
      */
     protected $_arity      = parent::BINARY;
 
     /**
      * Operator precedence.
      *
-     * @var Hoa_Tokenizer_Token_Operator_Arithmetical int
+     * @var Hoa_Pom_Token_Operator_Arithmetical int
      */
     protected $_precedence = 14;
 
@@ -104,44 +104,44 @@ class Hoa_Tokenizer_Token_Operator_Arithmetical extends Hoa_Tokenizer_Token_Oper
      * @access  public
      * @param   string  $operator    Operator.
      * @return  string
-     * @throw   Hoa_Tokenizer_Token_Util_Exception
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
     public function setOperator ( $operator ) {
 
         switch($operator) {
 
             case '+';
-                $this->setType(Hoa_Tokenizer::_PLUS);
+                $this->setType(Hoa_Pom::_PLUS);
                 $this->setArity(parent::BINARY);
                 $this->setPrecedence(14);
               break;
 
             case '-':
-                $this->setType(Hoa_Tokenizer::_MINUS);
+                $this->setType(Hoa_Pom::_MINUS);
                 $this->setArity(parent::MIXED);
                 $this->setPrecedence(14);
               break;
 
             case '*':
-                $this->setType(Hoa_Tokenizer::_MUL);
+                $this->setType(Hoa_Pom::_MUL);
                 $this->setArity(parent::BINARY);
                 $this->setPrecedence(15);
               break;
 
             case '/':
-                $this->setType(Hoa_Tokenizer::_DIV);
+                $this->setType(Hoa_Pom::_DIV);
                 $this->setArity(parent::BINARY);
                 $this->setPrecedence(15);
               break;
 
             case '%':
-                $this->setType(Hoa_Tokenizer::_MOD);
+                $this->setType(Hoa_Pom::_MOD);
                 $this->setArity(parent::BINARY);
                 $this->setPrecedence(15);
               break;
 
             default:
-                throw new Hoa_Tokenizer_Token_Util_Exception(
+                throw new Hoa_Pom_Token_Util_Exception(
                     'Operator %s is not an arithmetic operator.', 0, $operator);
         }
 
