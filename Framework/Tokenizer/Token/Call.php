@@ -66,13 +66,4 @@ import('Tokenizer.~');
  * @subpackage  Hoa_Tokenizer_Token_Call
  */
 
-abstract class Hoa_Tokenizer_Token_Call implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable {
-
-    /**
-     * Transform token to “tokenizer array”.
-     *
-     * @access  public
-     * @return  array
-     */
-    abstract public function tokenize ( );
-}
+abstract class Hoa_Tokenizer_Token_Call implements Hoa_Tokenizer_Token_Util_Interface_Tokenizable { }
