@@ -93,14 +93,14 @@ class Hoa_Framework {
      *
      * @const int
      */
-    const IMPORT_PATH = 0;
+    const IMPORT_PATH         = 0;
 
     /**
      * Import constant : load flag collection index.
      *
      * @const int
      */
-    const IMPORT_LOAD = 1;
+    const IMPORT_LOAD         = 1;
 
     /**
      * Configuration constant : load configurations into a simple array.
