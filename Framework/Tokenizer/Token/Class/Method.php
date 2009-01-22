@@ -102,11 +102,32 @@ class Hoa_Tokenizer_Token_Class_Method extends Hoa_Tokenizer_Token_Function_Name
     const CONCRET_METHOD  = false;
 
     /**
+     * Attribute is static (STATIC_M_, M means MEMORY).
+     *
+     * @cons bool
+     */
+    const STATICM         = true;
+
+    /**
+     * Attribute is dynamic (DYNAMIC_M_, M means MEMORY).
+     *
+     * @const bool
+     */
+    const DYNAMICM        = false;
+
+    /**
      * Access.
      *
      * @var Hoa_Tokenizer_Token_Class_Access object
      */
     protected $_access     = null;
+
+    /**
+     * Whether attribute is static.
+     *
+     * @var Hoa_Tokenizer_Token_Class_Method bool
+     */
+    protected $_static     = false;
 
     /**
      * Whether method is final.
@@ -165,10 +186,9 @@ class Hoa_Tokenizer_Token_Class_Method extends Hoa_Tokenizer_Token_Function_Name
      */
     public function finalMe ( $final = self::FINAL_METHOD ) {
 
-        $this->abstractMe(self::CONCRET_METHOD);
-
-        $old            = $this->_isFinal;
-        $this->_isFinal = $final;
+        $old               = $this->_isFinal;
+        $this->_isFinal    = $final;
+        $this->_isAbstract = self::CONCRET_METHOD;
 
         return $old;
     }
@@ -184,12 +204,38 @@ class Hoa_Tokenizer_Token_Class_Method extends Hoa_Tokenizer_Token_Function_Name
      */
     public function abstractMe ( $abstract = self::ABSTRACT_METHOD ) {
 
-        $this->finalMe(self::MEMBER_METHOD);
-
         $old               = $this->_isAbstract;
         $this->_isAbstract = $abstract;
+        $this->_isFinal    = self::MEMBER_METHOD;
 
         return $old;
+    }
+
+    /**
+     * Set if attribute is static or not.
+     *
+     * @access  public
+     * @param   bool    $static    Static or not (given by constants *M).
+     * @return  bool
+     */
+    public function staticMe ( $static = self::STATICM ) {
+
+        $old           = $this->_static;
+        $this->_static = $static;
+
+        return $old;
+    }
+
+    /**
+     * Set if attribute is dynamic or not.
+     *
+     * @access  public
+     * @param   bool    $dynamique    Dynamique or not (given by constants *M).
+     * @return  bool
+     */
+    public function dynamicMe ( $dynamic = self::DYNAMICM ) {
+
+        return !$this->staticMe(!$dynamic);
     }
 
     /**
@@ -226,6 +272,28 @@ class Hoa_Tokenizer_Token_Class_Method extends Hoa_Tokenizer_Token_Function_Name
     }
 
     /**
+     * Check if attribute is static or not.
+     *
+     * @access  public
+     * @return   bool
+     */
+    public function isStatic ( ) {
+
+        return $this->_static;
+    }
+
+    /**
+     * Check if attribute is dynamic or not.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isDynamic ( ) {
+
+        return !$this->isStatic();
+    }
+
+    /**
      * Transform token to “tokenizer array”.
      *
      * @access  public
@@ -255,6 +323,14 @@ class Hoa_Tokenizer_Token_Class_Method extends Hoa_Tokenizer_Token_Function_Name
                  : array()
             ),
             $this->getAccess()->tokenize(),
+            (true === $this->isStatic()
+                 ? array(array(
+                       0 => Hoa_Tokenizer::_STATIC,
+                       1 => 'static',
+                       2 => -1
+                   ))
+                 : array()
+            ),
             parent::tokenize()
         );
     }
