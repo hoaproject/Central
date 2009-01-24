@@ -90,7 +90,7 @@ class Hoa_StdClass_Util {
 
             if(is_array($value)) {
 
-                $currentNode->$variable = new StdClass;
+                $currentNode->$variable = new StdClass();
                 self::convertAtoO($value, $currentNode->$variable);
             }
             else
