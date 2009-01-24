@@ -54,154 +54,381 @@ import('StdClass.Exception');
  * @package     Hoa_StdClass
  */
 
-class Hoa_StdClass implements Iterator, Countable, Serializable {
+class Hoa_StdClass implements Iterator, Countable, Serializable, ArrayAccess {
 
-    protected $_array  = array();
-    protected $_object = null;
+    /**
+     * Data.
+     *
+     * @var Hoa_StdClass array
+     */
+    protected $_data = array();
 
 
 
-    public function __construct ( $array ) {
+    /**
+     * Build the standard class.
+     *
+     * @access  public
+     * @param   mixed   $array    Array that contains values.
+     * @return  void
+     */
+    public function __construct ( $array = array() ) {
 
-        $this->_array = $array;
-        $this->transform($this->_array);
+        $this->transform($array);
     }
 
+    /**
+     * Transform an array to a standard class.
+     *
+     * @access  public
+     * @param   mixed   $array    Array that contains values.
+     * @return  void
+     */
     protected function transform ( $array = array() ) {
-
-        if(empty($array))
-            $array = $this->_array;
 
         if(!is_array($array)) {
 
-            $this->_object[$array] = $array;
+            $this->_data[$array] = $array;
+
             return;
         }
 
         foreach($array as $key => $value) {
 
-            $key = str_replace('.', '_', $key);
-
-            if(!preg_match('#^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$#', $key))
-                throw new Hoa_StdClass_Exception(
-                    'Variable %s is not well formed.', 0, $key);
-            $this->_object[$key] = new Hoa_StdClass($value);
+            $key               = str_replace('.', '_', $key);
+            $this->_data[$key] = new Hoa_StdClass($value);
         }
     }
 
+    /**
+     * Dynamic setter.
+     *
+     * @access  public
+     * @param   string  $name     Attribute name.
+     * @param   mixed   $value    Attribute value.
+     * @return  void
+     */
     public function __set ( $name, $value ) {
 
-        $this->_object[$name] = new Hoa_StdClass($value);
+        $this->_data[$name] = new Hoa_StdClass($value);
+
+        return;
     }
 
+    /**
+     * Dynamic getter.
+     *
+     * @access  public
+     * @param   string  $name    Attribute name.
+     * @return  mixed
+     */
     public function __get ( $name ) {
 
-        if(isset($this->_object[$name]))
-            return $this->_object[$name];
+        if(!isset($this->_data[$name]))
+            return null;
 
-        return null;
+        return $this->_data[$name];
     }
 
+    /**
+     * Dynamic isset.
+     *
+     * @access  public
+     * @param   string  $name    Attribute name.
+     * @return  bool
+     */
     public function __isset ( $name ) {
 
-        return isset($this->_object[$name]);
+        return isset($this->_data[$name]);
     }
 
+    /**
+     * Dynamic unset.
+     *
+     * @access  public
+     * @param   string  $name    Attribute name.
+     * @return  void
+     */
     public function __unset ( $name ) {
 
-        unset($this->_object[$name]);
+        unset($this->_data[$name]);
+
+        return;
     }
 
+    /**
+     * Transform object to string (echo $this is equivalent to
+     * print_r(array(…))).
+     *
+     * @access  public
+     * @return  string
+     */
     public function __toString ( ) {
 
         static $i = 0;
 
-        if(is_string(current($this->_object)))
-            return current($this->_object);
+        if(false === $this->isRecursive())
+            return '' . $this->current();
 
-        $return = 'Hoa_StdClass (' . "\n";
-        foreach($this->_object as $key => $value) {
+        $out = 'Hoa_StdClass (' . "\n";
+
+        foreach($this->_data as $key => $value) {
 
             $i++;
-            $return .= str_repeat("\t", $i) . '[' . $key . '] => ' . $value . "\n";
+            $out .= str_repeat("\t", $i) . '[' . $key . '] => ' . $value . "\n";
             $i--;
         }
-        $return .= str_repeat("\t", $i) . ')';
 
-        return $return;
+        $out .= str_repeat("\t", $i) . ')';
+
+        $this->rewind();
+
+        return $out;
     }
 
+    /**
+     * Transform object to array.
+     *
+     * @access  public
+     * @return  array
+     */
     public function toArray ( ) {
 
-        return $this->_array;
+        if(false === $this->isRecursive())
+            return $this->current();
+
+        $out = array();
+
+        foreach($this->_data as $key => $value)
+            $out[$key] = $value->toArray();
+
+        $this->rewind();
+
+        return $out;
     }
 
+    /**
+     * Transform to string.
+     *
+     * @access  public
+     * @return  string
+     */
     public function toString ( ) {
 
-        return key($this->_object);
+        if(false === $this->isRecursive())
+            return (string) $this->current();
+
+        return $this->current()->toString();
     }
 
+    /**
+     * Transform to integer.
+     *
+     * @access  public
+     * @return  int
+     */
     public function toInt ( ) {
 
-        return (int) $this->toString();
+        if(false === $this->isRecursive())
+            return (int) $this->current();
+
+        return $this->current()->toInt();
     }
 
+    /**
+     * Transform to float.
+     *
+     * @access  public
+     * @return  float
+     */
+    public function toFloat ( ) {
+
+        if(false === $this->isRecursive())
+            return (float) $this->current();
+
+        return $this->current()->toFloat();
+    }
+
+    /**
+     * Transform to bool.
+     *
+     * @access  public
+     * @return  bool
+     */
     public function toBool ( ) {
 
-        return (bool) $this->toString();
+        if(false === $this->isRecursive())
+            return (bool) $this->toString();
+
+        return $this->current()->toBool();
     }
 
+    /**
+     * Get the current collection for the iterator.
+     *
+     * @access  public
+     * @return  mixed
+     */
     public function current ( ) {
 
-        return current($this->_object);
+        return current($this->_data);
     }
 
+    /**
+     * Get the current collection namme for the iterator.
+     *
+     * @access  public
+     * @return  mixed
+     */
     public function key ( ) {
 
-        return key($this->_object);
+        return key($this->_data);
     }
 
+    /**
+     * Advance the interal collection pointer, and return the current
+     * collection.
+     *
+     * @access  public
+     * @return  mixed
+     */
     public function next ( ) {
 
-        return next($this->_object);
+        return next($this->_data);
     }
 
+    /**
+     * Rewind the internal collection pointer, and return the first collection.
+     *
+     * @access  public
+     * @return  mixed
+     */
     public function rewind ( ) {
 
-        return reset($this->_object);
+        return reset($this->_data);
     }
 
+    /**
+     * Check if there is a current element after calls to the rewind or the next
+     * methods.
+     *
+     * @access  public
+     * @return  bool
+     */
     public function valid ( ) {
 
-        if(empty($this->_object))
+        if(empty($this->_data))
             return false;
 
-        $key    = key($this->_object);
-        $return = (next($this->_object) ? true : false);
-        prev($this->_object);
+        $key =  key ($this->_data);
+        $out = (next($this->_data) ? true : false);
+        prev($this->_data);
 
-        if(false === $return) {
+        if(false === $out) {
 
-            end($this->_object);
-            if($key === key($this->_object))
-                $return = true;
+            end($this->_data);
+            if($key === key($this->_data))
+                $out = true;
         }
 
-        return $return;
+        return $out;
     }
 
+    /**
+     * Count number of elements in collection.
+     *
+     * @access  public
+     * @return  int
+     */
     public function count ( ) {
 
-        return count($this->_object);
+        return count($this->_data);
     }
 
+    /**
+     * Serialize this collection.
+     *
+     * @access  public
+     * @return  string
+     */
     public function serialize ( ) {
 
-        return serialize($this->_object);
+        return serialize($this->_data);
     }
 
+    /**
+     * Replace current collection by new unserialized collection.
+     *
+     * @access  public
+     * @param   string  $serialized    Serialized collection.
+     * @return  mixed
+     */
     public function unserialize ( $serialized ) {
 
-        return $this->_object = unserialize($serialized);
+        return $this->_data = unserialize($serialized);
+    }
+
+    /**
+     * Whether the offset exists.
+     *
+     * @access  public
+     * @param   mixed   $offset    Offset to check.
+     * @return  bool
+     */
+    public function offsetExists ( $offset ) {
+
+        return $this->__isset($offset);
+    }
+
+    /**
+     * Value at given offset.
+     *
+     * @access  public
+     * @param   mixed   $offset    Offset to retrive.
+     * @return  mixed
+     */
+    public function offsetGet ( $offset ) {
+
+        return $this->__get($offset);
+    }
+
+    /**
+     * Set a new value to offset.
+     *
+     * @access  public
+     * @param   mixed   $offset    Offset to modify.
+     * @param   mixed   $value     New value.
+     * @return  void
+     */
+    public function offsetSet ( $offset, $value ) {
+
+        $this->__set($offset, $value);
+
+        return;
+    }
+
+    /**
+     * Unset an offset.
+     *
+     * @access  public
+     * @param   mixed   $offset    Offset to unset.
+     * @return  void
+     */
+    public function offsetUnset ( $offset ) {
+
+        $this->__unset($offset);
+
+        return;
+    }
+
+    /**
+     * Check if we go a recursivity (i.e. a level down).
+     *
+     * @access  protected
+     * @return  bool
+     */
+    protected function isRecursive ( ) {
+
+        return $this->current() instanceof Hoa_StdClass;
     }
 }
