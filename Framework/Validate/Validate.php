@@ -95,6 +95,12 @@ class Hoa_Validate extends Hoa_Validate_Abstract {
                 $arguments = array();
             }
 
+            if(is_array($validator)) {
+
+                $arguments = current($validator);
+                $validator = key($validator);
+            }
+
             if(!is_array($arguments))
                 $arguments = array($arguments);
 
