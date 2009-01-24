@@ -95,6 +95,12 @@ class Hoa_Filter extends Hoa_Filter_Abstract {
                 $arguments = array();
             }
 
+            if(is_array($filter)) {
+
+                $arguments = current($filter);
+                $filter    = key($filter);
+            }
+
             if(!is_array($arguments))
                 $arguments = array($arguments);
 
