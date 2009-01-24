@@ -83,7 +83,9 @@ class Hoa_Validate_Empty extends Hoa_Validate_Abstract {
      */
     public function isValid ( $data = null ) {
 
-        if(empty($data)) {
+        $data = (string) $data;
+
+        if($data == '') { // empty($a = 0) or empty($a = '0') returns true …
 
             $this->addOccuredError(self::IS_EMPTY, null);
 
