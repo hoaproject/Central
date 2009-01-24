@@ -714,7 +714,7 @@ abstract class Hoa_Form_Element_Abstract {
         }
         catch ( Hoa_Filter_Exception $e ) {
 
-            throw new Hoa_Form_Exception($e->getMessage(), $e->getCode());
+            throw new Hoa_Form_Exception($e->getFormattedMessage());
         }
 
         return $this;
@@ -769,7 +769,7 @@ abstract class Hoa_Form_Element_Abstract {
         }
         catch ( Hoa_Filter_Exception $e ) {
 
-            throw new Hoa_Form_Exception($e->getMessage(), $e->getCode());
+            throw new Hoa_Form_Exception($e->getFormattedMessage());
         }
 
         return $this;
