@@ -106,6 +106,18 @@ class Hoa_StdClass implements Iterator, Countable, Serializable, ArrayAccess {
     }
 
     /**
+     * Check if tree is empty.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isEmpty ( ) {
+
+        return    false === $this->isRecursive()
+               && false === $this->current();
+    }
+
+    /**
      * Dynamic setter.
      *
      * @access  public
@@ -177,7 +189,7 @@ class Hoa_StdClass implements Iterator, Countable, Serializable, ArrayAccess {
             if(false === $this->current())
                 return 'Hoa_StdClass (' . "\n" . ')';
 
-            return 'plpl' . $this->current();
+            return '' . $this->current();
         }
 
         $out = 'Hoa_StdClass (' . "\n";
@@ -204,8 +216,13 @@ class Hoa_StdClass implements Iterator, Countable, Serializable, ArrayAccess {
      */
     public function toArray ( ) {
 
-        if(false === $this->isRecursive())
+        if(false === $this->isRecursive()) {
+
+            if(false === $this->current())
+                return array();
+
             return $this->current();
+        }
 
         $out = array();
 
@@ -268,7 +285,7 @@ class Hoa_StdClass implements Iterator, Countable, Serializable, ArrayAccess {
     public function toBool ( ) {
 
         if(false === $this->isRecursive())
-            return (bool) $this->toString();
+            return (bool) $this->current();
 
         return true;
     }
@@ -277,10 +294,13 @@ class Hoa_StdClass implements Iterator, Countable, Serializable, ArrayAccess {
      * Transform to JSON.
      *
      * @access  public
+     * @param   mixed   $dummy    Dummy argument (to be compatible with
+     *                            Hoa_Json::toJson() method). Not used in this
+     *                            method.
      * @return  string
      * @throw   Hoa_StdClass_Exception
      */
-    public function toJson ( ) {
+    public function toJson ( $dummy = null ) {
 
         if(false === function_exists('json_encode'))
             if(false === version_compare(phpversion(), '5.2.0', '>'))
