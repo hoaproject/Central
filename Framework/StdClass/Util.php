@@ -82,7 +82,7 @@ class Hoa_StdClass_Util {
     private static function convertAtoO ( Array $array, $previousNode = null ) {
 
         if(null === $previousNode)
-            $previousNode = new StdClass;
+            $previousNode = new StdClass();
 
         foreach($array as $variable => $value) {
 
