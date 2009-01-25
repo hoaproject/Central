@@ -44,7 +44,7 @@ import('StdClass.Exception');
 /**
  * Class Hoa_StdClass.
  *
- * Manipulate StdClass, convert array to StdClass etc.
+ * Alternative to StdClass : more possibilities in manipulation.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -74,6 +74,9 @@ class Hoa_StdClass implements Iterator, Countable, Serializable, ArrayAccess {
      */
     public function __construct ( $array = array() ) {
 
+        if(null === $array)
+            $array = array();
+
         $this->transform($array);
     }
 
@@ -98,6 +101,8 @@ class Hoa_StdClass implements Iterator, Countable, Serializable, ArrayAccess {
             $key               = str_replace('.', '_', $key);
             $this->_data[$key] = new Hoa_StdClass($value);
         }
+
+        return;
     }
 
     /**
@@ -167,8 +172,13 @@ class Hoa_StdClass implements Iterator, Countable, Serializable, ArrayAccess {
 
         static $i = 0;
 
-        if(false === $this->isRecursive())
-            return '' . $this->current();
+        if(false === $this->isRecursive()) {
+
+            if(false === $this->current())
+                return 'Hoa_StdClass (' . "\n" . ')';
+
+            return 'plpl' . $this->current();
+        }
 
         $out = 'Hoa_StdClass (' . "\n";
 
@@ -218,7 +228,7 @@ class Hoa_StdClass implements Iterator, Countable, Serializable, ArrayAccess {
         if(false === $this->isRecursive())
             return (string) $this->current();
 
-        return $this->current()->toString();
+        return $this->__toString();
     }
 
     /**
@@ -232,7 +242,7 @@ class Hoa_StdClass implements Iterator, Countable, Serializable, ArrayAccess {
         if(false === $this->isRecursive())
             return (int) $this->current();
 
-        return $this->current()->toInt();
+        return 0;
     }
 
     /**
@@ -246,7 +256,7 @@ class Hoa_StdClass implements Iterator, Countable, Serializable, ArrayAccess {
         if(false === $this->isRecursive())
             return (float) $this->current();
 
-        return $this->current()->toFloat();
+        return 0.0;
     }
 
     /**
@@ -260,7 +270,27 @@ class Hoa_StdClass implements Iterator, Countable, Serializable, ArrayAccess {
         if(false === $this->isRecursive())
             return (bool) $this->toString();
 
-        return $this->current()->toBool();
+        return true;
+    }
+
+    /**
+     * Transform to JSON.
+     *
+     * @access  public
+     * @return  string
+     * @throw   Hoa_StdClass_Exception
+     */
+    public function toJson ( ) {
+
+        if(false === function_exists('json_encode'))
+            if(false === version_compare(phpversion(), '5.2.0', '>'))
+                throw new Hoa_StdClass_Exception(
+                    'JSON extension is available since PHP 5.2.0', 0);
+            else
+                throw new Hoa_StdClass_Exception(
+                    'JSON extension is disabled.', 1);
+
+        return json_encode($this->toArray());
     }
 
     /**
