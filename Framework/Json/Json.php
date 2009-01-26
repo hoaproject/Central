@@ -120,7 +120,7 @@ class Hoa_Json extends Hoa_StdClass {
 
         $json = json_decode($json, true);
 
-        if(false === $this->hasError())
+        if(true === $this->hasError())
             throw new Hoa_Json_Exception(
                 $this->getLastError(), 2);
 
@@ -136,7 +136,7 @@ class Hoa_Json extends Hoa_StdClass {
     public function hasError ( ) {
 
         if(false === version_compare(phpversion(), '5.3.0', '>'))
-            return true; // cannot find if an error has occured.
+            return false; // cannot find if an error has occured.
 
         return json_last_error() != self::ERROR_NONE;
     }
