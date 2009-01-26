@@ -145,39 +145,53 @@ class Hoa_Json extends Hoa_StdClass {
      * Get last error message.
      *
      * @access  public
+     * @param   bool    $verbose    Return the error code or error message.
      * @return  string
      */
-    public function getLastError ( ) {
+    public function getLastError ( $verbose = false ) {
 
-        if(false === version_compare(phpversion(), '5.3.0', '>'))
-            return '';
+        if(false === version_compare(phpversion(), '5.3.0', '>')) {
 
-        $out = null;
+            if(false === $verbose)
+                return self::ERROR_NONE;
+
+            return 'No error has occured.';
+        }
+
+        $message  = null;
+        $code     = self::ERROR_NONE;
 
         switch(json_last_error()) {
 
             case self::ERROR_NONE:
-                $out = 'No error has occured.';
+                $message = 'No error has occured.';
               break;
 
             case self::ERROR_DEPT:
-                $out = 'The maximum stack depth has been exceeded.';
+                $message = 'The maximum stack depth has been exceeded.';
+                $code    = self::ERROR_DEPT;
               break;
 
             case self::ERROR_STATE_MISMATCH:
-                $out = 'State mismatch (in parser).';
+                $message = 'State mismatch (in parser).';
+                $code    = self::ERROR_STATE_MISMATCH;
               break;
 
             case self::ERROR_CTRL_CHAR:
-                $out = 'Control character error, possibly incorrectly encoded.';
+                $message = 'Control character error, possibly incorrectly encoded.';
+                $code    = self::ERROR_CTRL_CHAR;
               break;
 
             case self::ERROR_SYNTAX:
-                $out = 'Syntax error.';
+                $message = 'Syntax error.';
+                $code    = self::ERROR_SYNTAX;
               break;
         }
 
-        return $out;
+        if(true === $verbose)
+            return $message;
+
+        return $code;
     }
 
     /**
@@ -188,7 +202,7 @@ class Hoa_Json extends Hoa_StdClass {
      */
     public function __toString ( ) {
 
-        return $this->toJson($this->toArray());
+        return $this->toJson();
     }
 
     /**
@@ -204,6 +218,9 @@ class Hoa_Json extends Hoa_StdClass {
         if(is_resource($value))
             throw new Hoa_Json_Exception(
                 'JSON cannot encode a resource.', 0);
+
+        if(null === $value)
+            return parent::toJson();
 
         return json_encode($value);
     }
