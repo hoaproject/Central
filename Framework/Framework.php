@@ -509,8 +509,8 @@ class Hoa_Framework {
      * that a __destruct method.
      *
      * @access  public
-     * @param   string  $class      Class.
-     * @param   string  $methode    Method.
+     * @param   string  $class     Class.
+     * @param   string  $method    Method.
      * @return  bool
      */
     public static function registerShutdownFunction ( $class = '', $method = '' ) {
