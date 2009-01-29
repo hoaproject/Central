@@ -50,7 +50,7 @@ import('Console.Core.GetOption');
 /**
  * Class Hoa_Console_Router.
  *
- * This class is a router, i.e. tries to found pathes to files, directories etc.
+ * This class is a router, i.e. tries to found paths to files, directories etc.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
