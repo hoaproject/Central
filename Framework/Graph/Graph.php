@@ -76,28 +76,28 @@ abstract class Hoa_Graph {
      *
      * @const bool
      */
-    const ALLOW_LOOP      = true;
+    const ALLOW_LOOP         = true;
 
     /**
      * Disallow loop when building graph (when adding nodes).
      *
      * @const bool
      */
-    const DISALLOW_LOOP   = false;
+    const DISALLOW_LOOP      = false;
 
     /**
      * Propagate delete.
      *
      * @const bool
      */
-    const DELETE_CASCADE = true;
+    const DELETE_CASCADE     = true;
 
     /**
      * Restrict delete.
      *
      * @const bool
      */
-    const DELETE_RESTRICT = false;
+    const DELETE_RESTRICT    = false;
 
     /**
      * All nodes.
@@ -112,7 +112,7 @@ abstract class Hoa_Graph {
      *
      * @var Hoa_Graph bool
      */
-    protected $loop = self::DISALLOW_LOOP;
+    protected $loop  = self::DISALLOW_LOOP;
 
 
 
