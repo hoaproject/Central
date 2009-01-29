@@ -245,6 +245,20 @@ abstract class Hoa_Pom {
     const _REFERENCE         = '&';
     const _SEMI_COLON        = ';';
 
+    /**
+     * Whether tokenize a source.
+     *
+     * @const int
+     */
+    const TOKENIZE_SOURCE = Hoa_Pom_Parser_Lexer::SOURCE;
+
+    /**
+     * Whether tokenize a file.
+     *
+     * @const int
+     */
+    const TOKENIZE_FILE   = Hoa_Pom_Parser_Lexer::FILE;
+
 
 
     /**
@@ -252,13 +266,11 @@ abstract class Hoa_Pom {
      *
      * @access  public
      * @param   string  $source    Source or filename.
-     * @param   int     $type      Given by constants
-     *                             Hoa_Pom_Parser_Lexer::SOURCE and
-     *                             Hoa_Pom_Parser_Lexer::FILE.
+     * @param   int     $type      Given by constants self::TOKENIZE_*.
      * @return  Hoa_Pom_Token_Root
      */
     public static function parse ( $source = null,
-                                   $type   = Hoa_Pom_Parser_Lexer::SOURCE ) {
+                                   $type   = self::TOKENIZE_SOURCE ) {
 
         $parser = new Hoa_Pom_Parser_ParserLr($source, $type);
 
