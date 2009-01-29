@@ -73,14 +73,14 @@ class Hoa_Graph_AdjacencyList extends Hoa_Graph {
      *
      * @const int
      */
-    const NODE_VALUE      = 0;
+    const NODE_VALUE = 0;
     
     /**
      * Node child index.
      *
      * @const int
      */
-    const NODE_CHILD      = 1;
+    const NODE_CHILD = 1;
 
 
 
