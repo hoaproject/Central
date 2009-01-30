@@ -107,7 +107,9 @@ class Hoa_Test_Oracle_Eyes {
                 if($element instanceof Hoa_Pom_Token_Class)
                     foreach($element->getMethods() as $i => $method) {
 
-                        var_dump($method->getName()->getString());
+                        echo $method->getName()->getString() . "\n";
+                        //var_dump($method->getComment()->getComment());
+                        print_r($method->getComment()->getParsedTags());
                     }
         }
     }
