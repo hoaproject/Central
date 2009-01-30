@@ -110,6 +110,13 @@ class Hoa_Pom_Token_Comment implements Hoa_Pom_Token_Util_Interface_Tokenizable 
      */
     protected $_content = null;
 
+    /**
+     * Comment tags (if it is a documentation comment).
+     *
+     * @var Hoa_Pom_Token_Comment array
+     */
+    protected $_tags    = array();
+
 
 
     /**
@@ -191,6 +198,7 @@ class Hoa_Pom_Token_Comment implements Hoa_Pom_Token_Util_Interface_Tokenizable 
 
         $this->setType($type);
         $this->setContent($content);
+        $this->parseTags();
     }
 
     /**
@@ -224,6 +232,41 @@ class Hoa_Pom_Token_Comment implements Hoa_Pom_Token_Util_Interface_Tokenizable 
     }
 
     /**
+     * Parse a documentation comment tags.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function parseTags ( ) {
+
+        if($this->getType() != self::TYPE_DOCUMENTATION)
+            return;
+
+        $content  = explode("\n", $this->getContent());
+        $buffer   = null;
+        $tagsOpen = false;
+        $i        = -1;
+        $out      = array();
+
+        foreach($content as $key => $value) {
+
+            if($value{0} == '@') {
+
+                $tagsOpen  = true;
+                $out[++$i] = $value;
+            }
+            else
+                if(true === $tagsOpen)
+                    $out[$i] .= "\n" . $value;
+        }
+
+        $old         = $this->_tags;
+        $this->_tags = $out;
+
+        return $old;
+    }
+
+    /**
      * Get comment type.
      *
      * @access  public
@@ -246,6 +289,49 @@ class Hoa_Pom_Token_Comment implements Hoa_Pom_Token_Util_Interface_Tokenizable 
     }
 
     /**
+     * Get comment (with comment chars).
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getComment ( ) {
+
+        $out = $this->getContent();
+
+        switch($this->getType()) {
+
+            case self::TYPE_SHELL:
+                $out = '# ' . str_replace("\n", "\n# ", $out);
+              break;
+
+            case self::TYPE_INLINE:
+                $out = '// ' .  str_replace("\n", "\n// ", $out);
+              break;
+
+            case self::TYPE_BLOCK:
+                $out = '/*' . "\n * " . str_replace("\n", "\n * ", $out) . "\n" . ' */';
+              break;
+
+            case self::TYPE_DOCUMENTATION:
+                $out = '/**' . "\n * " . str_replace("\n", "\n * ", $out) . "\n" . ' */';
+              break;
+        }
+
+        return $out;
+    }
+
+    /**
+     * Get all documentation tags.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getParsedTags ( ) {
+
+        return $this->_tags;
+    }
+
+    /**
      * Transform token to “tokenizer array”.
      *
      * @access  public
@@ -257,7 +343,7 @@ class Hoa_Pom_Token_Comment implements Hoa_Pom_Token_Util_Interface_Tokenizable 
             self::TYPE_DOCUMENTATION === $this->getType()
                 ? Hoa_Pom::_DOC_COMMENT
                 : Hoa_Pom::_COMMENT,
-            $this->getContent(),
+            $this->getComment(),
             -1
         ));
     }
