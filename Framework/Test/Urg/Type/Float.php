@@ -81,7 +81,7 @@ class Hoa_Test_Urg_Type_Float extends    Hoa_Test_Urg_Type_Number
         //$this->setUpperBoundValue( 1.8e308);
         //$this->setLowerBoundValue(-1.8e308);
         // to big at home …
-        parent::__construct();
+        $this->randomize();
 
         return;
     }

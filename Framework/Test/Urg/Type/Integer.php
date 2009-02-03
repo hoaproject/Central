@@ -80,7 +80,7 @@ class Hoa_Test_Urg_Type_Integer extends    Hoa_Test_Urg_Type_Number
 
         $this->setUpperBoundValue( PHP_INT_MAX);
         $this->setLowerBoundValue(~PHP_INT_MAX);
-        parent::__construct();
+        $this->randomize();
 
         return;
     }
