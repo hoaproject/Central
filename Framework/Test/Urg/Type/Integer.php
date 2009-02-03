@@ -98,7 +98,7 @@ class Hoa_Test_Urg_Type_Integer extends    Hoa_Test_Urg_Type_Number
         $random = mt_rand($lower, $upper);
 
         if($this instanceof Hoa_Test_Urg_Type_Interface_Predicable)
-            while(true === $this->predicate($random)) // Increment test number ?
+            while(false === $this->predicate($random)) // Increment test number ?
                 $random = mt_rand($lower, $upper);
 
         $this->setValue($random);
