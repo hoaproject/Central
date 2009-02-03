@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Test
- * @subpackage  Hoa_Test_Urg_Type_Integer
+ * @subpackage  Hoa_Test_Urg_Type_PositiveInteger
  *
  */
 
@@ -48,14 +48,14 @@ import('Test.Urg.Type.Exception');
 import('Test.Urg.Type.Interface.Randomizable');
 
 /**
- * Hoa_Test_Urg_Type_Number
+ * Hoa_Test_Urg_Type_BoundInteger
  */
-import('Test.Urg.Type.Number');
+import('Test.Urg.Type.BoundInteger');
 
 /**
- * Class Hoa_Test_Urg_Type_Integer.
+ * Class Hoa_Test_Urg_Type_PositiveInteger.
  *
- * Represent an integer.
+ * Represent a negative integer.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  *              Julien LORRAIN
@@ -64,44 +64,24 @@ import('Test.Urg.Type.Number');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Test
- * @subpackage  Hoa_Test_Urg_Type_Integer
+ * @subpackage  Hoa_Test_Urg_Type_PositiveInteger
  */
 
-class Hoa_Test_Urg_Type_Integer extends    Hoa_Test_Urg_Type_Number
-                                implements Hoa_Test_Urg_Type_Interface_Randomizable {
+class Hoa_Test_Urg_Type_PositiveInteger extends    Hoa_Test_Urg_Type_BoundInteger
+                                        implements Hoa_Test_Urg_Type_Interface_Randomizable {
 
     /**
-     * Build a integer.
+     * Build a positive integer.
      *
      * @access  public
+     * @param   int     $upperValue        The upper bound value.
+     * @param   bool    $upperStatement    The upper bound statement (given by
+     *                                     parent::BOUND_* constants).
      * @return  void
      */
-    public function __construct ( ) {
+    public function __construct ( $upperValue, $upperStatement = parent::BOUND_CLOSE ) {
 
-        $this->setUpperBoundValue( PHP_INT_MAX);
-        $this->setLowerBoundValue(~PHP_INT_MAX);
-        parent::__construct();
-
-        return;
-    }
-
-    /**
-     * Choose a random value.
-     *
-     * @access  protected
-     * @return  void
-     */
-    protected function randomize ( ) {
-
-        $upper  = $this->getUpperBoundValue();
-        $lower  = $this->getLowerBoundValue();
-        $random = mt_rand($lower, $upper);
-
-        if($this instanceof Hoa_Test_Urg_Type_Interface_Predicable)
-            while(true === $this->predicate($random)) // Increment test number ?
-                $random = mt_rand($lower, $upper);
-
-        $this->setValue($random);
+        parent::__construct(0, $upperValue, parent::BOUND_OPEN, $upperStatement);
 
         return;
     }
