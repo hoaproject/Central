@@ -62,7 +62,7 @@ interface Hoa_Test_Urg_Type_Interface_Randomizable {
     public function randomize ( );
 
     /**
-     * Get choosen value.
+     * Get random value.
      *
      * @access  public
      * @return  mixed
