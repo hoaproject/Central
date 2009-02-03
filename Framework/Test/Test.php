@@ -93,6 +93,7 @@ class Hoa_Test {
         'test.incubator'           => 'Data/Test/Incubator/',
         'test.ordeal.oracle'       => 'Data/Test/Ordeal/Oracle/',
         'test.ordeal.battleground' => 'Data/Test/Ordeal/Battleground/',
+        'test.predicate.maxtry'    => 64,
 
         'user.type'                => null,
 
