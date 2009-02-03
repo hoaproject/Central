@@ -102,19 +102,6 @@ abstract class Hoa_Test_Urg_Type_Number extends Hoa_Test_Urg_Type {
 
 
     /**
-     * Build a integer.
-     *
-     * @access  public
-     * @return  void
-     */
-    public function __construct ( ) {
-
-        $this->randomize();
-
-        return;
-    }
-
-    /**
      * Set the random value.
      *
      * @access  protected
