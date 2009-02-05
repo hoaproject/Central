@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Test
- * @subpackage  Hoa_Test_Urg_Type_Bool
+ * @subpackage  Hoa_Test_Urg_Type_Boolean
  *
  */
 
@@ -48,7 +48,7 @@ import('Test.Urg.Type.Exception');
 import('Test.Urg.Type.Interface.Randomizable');
 
 /**
- * Class Hoa_Test_Urg_Type_Bool.
+ * Class Hoa_Test_Urg_Type_Boolean.
  *
  * Represent a boolean.
  *
@@ -59,15 +59,15 @@ import('Test.Urg.Type.Interface.Randomizable');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Test
- * @subpackage  Hoa_Test_Urg_Type_Bool
+ * @subpackage  Hoa_Test_Urg_Type_Boolean
  */
 
-class Hoa_Test_Urg_Type_Bool extends Hoa_Test_Urg_Type {
+class Hoa_Test_Urg_Type_Boolean extends Hoa_Test_Urg_Type {
 
     /**
      * Random value.
      *
-     * @var Hoa_Test_Urg_Type_Bool int
+     * @var Hoa_Test_Urg_Type_Boolean int
      */
     protected $_value = null;
 
