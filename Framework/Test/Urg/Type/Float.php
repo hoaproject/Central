@@ -58,7 +58,7 @@ import('Test.Urg.Type.Number');
  * Represent a float.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- *              Julien LORRAIN
+ *              Julien LORRAIN <julien.lorrain@gmail.com>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
@@ -100,7 +100,7 @@ class Hoa_Test_Urg_Type_Float extends    Hoa_Test_Urg_Type_Number
         $random = $lower + lcg_value() * $delta;
 
         if($this instanceof Hoa_Test_Urg_Type_Interface_Predicable)
-            while(false === $this->predicate($random)) // Increment test number ?
+            while(false === $this->predicate($random))
                 $random = $lower + lcg_value() * $delta;
 
         $this->setValue($random);

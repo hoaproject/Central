@@ -53,7 +53,7 @@ import('Test.Urg.Type.Interface.Randomizable');
  * Represent a number.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- *              Julien LORRAIN
+ *              Julien LORRAIN <julien.lorrain@gmail.com>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
