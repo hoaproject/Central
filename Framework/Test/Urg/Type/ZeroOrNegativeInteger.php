@@ -71,7 +71,7 @@ class Hoa_Test_Urg_Type_ZeroOrNegativeInteger extends    Hoa_Test_Urg_Type_Bound
                                               implements Hoa_Test_Urg_Type_Interface_Randomizable {
 
     /**
-     * Build a negative integer.
+     * Build a zero or negative integer.
      *
      * @access  public
      * @param   int     $lowerValue        The lower bound value.
