@@ -55,7 +55,7 @@ import('Test.Urg.Type.BoundInteger');
 /**
  * Class Hoa_Test_Urg_Type_PositiveInteger.
  *
- * Represent a negative integer.
+ * Represent a positive integer.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  *              Julien LORRAIN <julien.lorrain@gmail.com>
