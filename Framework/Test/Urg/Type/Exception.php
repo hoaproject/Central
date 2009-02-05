@@ -48,6 +48,7 @@ import('Test.Urg.Exception');
  * Extending the Hoa_Test_Urg_Exception class.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ *              Julien LORRAIN <julien.lorrain@gmail.com>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
