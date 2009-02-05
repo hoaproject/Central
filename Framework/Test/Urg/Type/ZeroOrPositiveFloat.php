@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Test
- * @subpackage  Hoa_Test_Urg_Type_Bool
+ * @subpackage  Hoa_Test_Urg_Type_ZeroOrPositiveFloat
  *
  */
 
@@ -48,9 +48,14 @@ import('Test.Urg.Type.Exception');
 import('Test.Urg.Type.Interface.Randomizable');
 
 /**
- * Class Hoa_Test_Urg_Type_Bool.
+ * Hoa_Test_Urg_Type_BoundFloat
+ */
+import('Test.Urg.Type.BoundFloat');
+
+/**
+ * Class Hoa_Test_Urg_Type_ZeroOrPositiveFloat.
  *
- * Represent a boolean.
+ * Represent a zero or positive float.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  *              Julien LORRAIN <julien.lorrain@gmail.com>
@@ -59,74 +64,24 @@ import('Test.Urg.Type.Interface.Randomizable');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Test
- * @subpackage  Hoa_Test_Urg_Type_Bool
+ * @subpackage  Hoa_Test_Urg_Type_ZeroOrPositiveFloat
  */
 
-class Hoa_Test_Urg_Type_Bool extends Hoa_Test_Urg_Type {
+class Hoa_Test_Urg_Type_ZeroOrPositiveFloat extends    Hoa_Test_Urg_Type_BoundFloat
+                                            implements Hoa_Test_Urg_Type_Interface_Randomizable {
 
     /**
-     * Random value.
-     *
-     * @var Hoa_Test_Urg_Type_Bool int
-     */
-    protected $_value = null;
-
-
-
-    /**
-     * Build a boolean.
+     * Build a zero or positive float.
      *
      * @access  public
+     * @param   int     $upperValue        The upper bound value.
+     * @param   bool    $upperStatement    The upper bound statement (given by
+     *                                     parent::BOUND_* constants).
      * @return  void
      */
-    public function __construct ( ) {
+    public function __construct ( $upperValue, $upperStatement = parent::BOUND_CLOSE ) {
 
-        $this->randomize();
-
-        return;
-    }
-
-    /**
-     * Set the random value.
-     *
-     * @access  protected
-     * @param   mixed      $value    The random value.
-     * @return  mixed
-     */
-    protected function setValue ( $value ) {
-
-        $old          = $this->_value;
-        $this->_value = $value;
-
-        return $old;
-    }
-
-    /**
-     * Get the random value.
-     *
-     * @access  protected
-     * @return  mixed
-     */
-    protected function getValue ( ) {
-
-        return $this->_value;
-    }
-
-    /**
-     * Choose a random value.
-     *
-     * @access  protected
-     * @return  void
-     */
-    protected function randomize ( ) {
-
-        $random = mt_rand(0, 1);
-
-        if($this instanceof Hoa_Test_Urg_Type_Interface_Predicable)
-            while(false === $this->predicate($random))
-                $random = mt_rand(0, 1);
-
-        $this->setValue($random);
+        parent::__construct(0, $upperValue, parent::BOUND_CLOSE, $upperStatement);
 
         return;
     }

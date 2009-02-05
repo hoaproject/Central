@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Test
- * @subpackage  Hoa_Test_Urg_Type_Bool
+ * @subpackage  Hoa_Test_Urg_Type_EvenInteger
  *
  */
 
@@ -48,9 +48,14 @@ import('Test.Urg.Type.Exception');
 import('Test.Urg.Type.Interface.Randomizable');
 
 /**
- * Class Hoa_Test_Urg_Type_Bool.
+ * Hoa_Test_Urg_Type_BoundInteger
+ */
+import('Test.Urg.Type.BoundInteger');
+
+/**
+ * Class Hoa_Test_Urg_Type_EvenInteger.
  *
- * Represent a boolean.
+ * Represent an even integer.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  *              Julien LORRAIN <julien.lorrain@gmail.com>
@@ -59,74 +64,44 @@ import('Test.Urg.Type.Interface.Randomizable');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Test
- * @subpackage  Hoa_Test_Urg_Type_Bool
+ * @subpackage  Hoa_Test_Urg_Type_EvenInteger
  */
 
-class Hoa_Test_Urg_Type_Bool extends Hoa_Test_Urg_Type {
+class Hoa_Test_Urg_Type_EvenInteger extends    Hoa_Test_Urg_Type_BoundInteger
+                                    implements Hoa_Test_Urg_Type_Interface_Randomizable {
 
     /**
-     * Random value.
-     *
-     * @var Hoa_Test_Urg_Type_Bool int
-     */
-    protected $_value = null;
-
-
-
-    /**
-     * Build a boolean.
+     * Build an even integer.
      *
      * @access  public
      * @return  void
      */
     public function __construct ( ) {
 
+        parent::__construct(
+            ~PHP_INT_MAX,
+            PHP_INT_MAX - 1,
+            parent::BOUND_CLOSE,
+            parent::BOUND_CLOSE
+        );
         $this->randomize();
 
         return;
     }
 
     /**
-     * Set the random value.
-     *
-     * @access  protected
-     * @param   mixed      $value    The random value.
-     * @return  mixed
-     */
-    protected function setValue ( $value ) {
-
-        $old          = $this->_value;
-        $this->_value = $value;
-
-        return $old;
-    }
-
-    /**
-     * Get the random value.
-     *
-     * @access  protected
-     * @return  mixed
-     */
-    protected function getValue ( ) {
-
-        return $this->_value;
-    }
-
-    /**
-     * Choose a random value.
+     * Choose an even integer.
      *
      * @access  protected
      * @return  void
      */
     protected function randomize ( ) {
 
-        $random = mt_rand(0, 1);
+        parent::randomize();
+        $random = $this->getValue();
 
-        if($this instanceof Hoa_Test_Urg_Type_Interface_Predicable)
-            while(false === $this->predicate($random))
-                $random = mt_rand(0, 1);
-
-        $this->setValue($random);
+        if($random % 2 != 0)
+            $this->setValue($random - 1);
 
         return;
     }
