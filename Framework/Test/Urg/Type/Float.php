@@ -53,6 +53,11 @@ import('Test.Urg.Type.Interface.Randomizable');
 import('Test.Urg.Type.Number');
 
 /**
+ * Hoa_Test_Urg
+ */
+import('Test.Urg.~');
+
+/**
  * Class Hoa_Test_Urg_Type_Float.
  *
  * Represent a float.
@@ -96,12 +101,11 @@ class Hoa_Test_Urg_Type_Float extends    Hoa_Test_Urg_Type_Number
 
         $upper  = $this->getUpperBoundValue();
         $lower  = $this->getLowerBoundValue();
-        $delta  = $upper - $lower;
-        $random = $lower + lcg_value() * $delta;
+        $random = Hoa_Test_Urg::Uc($lower, $upper);
 
         if($this instanceof Hoa_Test_Urg_Type_Interface_Predicable)
             while(false === $this->predicate($random))
-                $random = $lower + lcg_value() * $delta;
+                $random = Hoa_Test_Urg::Uc($lower, $upper);
 
         $this->setValue($random);
 

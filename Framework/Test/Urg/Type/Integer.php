@@ -53,6 +53,11 @@ import('Test.Urg.Type.Interface.Randomizable');
 import('Test.Urg.Type.Number');
 
 /**
+ * Hoa_Test_Urg
+ */
+import('Test.Urg.~');
+
+/**
  * Class Hoa_Test_Urg_Type_Integer.
  *
  * Represent an integer.
@@ -95,11 +100,11 @@ class Hoa_Test_Urg_Type_Integer extends    Hoa_Test_Urg_Type_Number
 
         $upper  = $this->getUpperBoundValue();
         $lower  = $this->getLowerBoundValue();
-        $random = mt_rand($lower, $upper);
+        $random = Hoa_Test_Urg::Ud($upper, $lower);
 
         if($this instanceof Hoa_Test_Urg_Type_Interface_Predicable)
             while(false === $this->predicate($random)) // Increment test number ?
-                $random = mt_rand($lower, $upper);
+                $random = Hoa_Test_Urg::Ud($upper, $lower);
 
         $this->setValue($random);
 
