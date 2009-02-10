@@ -48,6 +48,11 @@ import('Test.Urg.Type.Exception');
 import('Test.Urg.Type.Interface.Randomizable');
 
 /**
+ * Hoa_Test_Urg
+ */
+import('Test.Urg.~');
+
+/**
  * Class Hoa_Test_Urg_Type_Boolean.
  *
  * Represent a boolean.
@@ -120,11 +125,11 @@ class Hoa_Test_Urg_Type_Boolean implements Hoa_Test_Urg_Interface_Randomizable {
      */
     protected function randomize ( ) {
 
-        $random = mt_rand(0, 1);
+        $random = Hoa_Test_Urg::Ud(0, 1);
 
         if($this instanceof Hoa_Test_Urg_Type_Interface_Predicable)
             while(false === $this->predicate($random))
-                $random = mt_rand(0, 1);
+                $random = Hoa_Test_Urg::Ud(0, 1);
 
         $this->setValue($random);
 
