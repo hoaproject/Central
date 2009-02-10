@@ -62,7 +62,7 @@ import('Test.Urg.Type.Interface.Randomizable');
  * @subpackage  Hoa_Test_Urg_Type_Boolean
  */
 
-class Hoa_Test_Urg_Type_Boolean extends Hoa_Test_Urg_Type {
+class Hoa_Test_Urg_Type_Boolean implements Hoa_Test_Urg_Interface_Randomizable {
 
     /**
      * Random value.
