@@ -83,6 +83,7 @@ class Hoa_Pom_Token_Variable implements Hoa_Pom_Token_Util_Interface_Tokenizable
      * @access  public
      * @param   Hoa_Pom_Token_String  $name    Variable name.
      * @return  void
+     * @todo    $name should also be a CURLY.
      */
     public function __construct ( Hoa_Pom_Token_String $name ) {
 

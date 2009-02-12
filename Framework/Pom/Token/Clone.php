@@ -53,6 +53,11 @@ import('Pom.Token.Util.Interface.Tokenizable');
 import('Pom.~');
 
 /**
+ * Hoa_Pom_Token_Variable
+ */
+import('Pom.Token.Variable');
+
+/**
  * Class Hoa_Pom_Token_Clone.
  *
  * Represent a cloning.

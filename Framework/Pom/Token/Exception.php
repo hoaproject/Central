@@ -97,25 +97,16 @@ class Hoa_Pom_Token_Exception implements Hoa_Pom_Token_Util_Interface_Tokenizabl
      * @access  public
      * @param   mixed   $exception    Exception.
      * @return  mixed
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
     public function setException  ( $exception ) {
 
-        switch(get_class($exception)) {
-
-            case 'Hoa_Pom_Token_New':
-            case 'Hoa_Pom_Token_Variable':
-            case 'Hoa_Pom_Token_Call_Attribute':
-            case 'Hoa_Pom_Token_Call_Function':
-            case 'Hoa_Pom_Token_Call_Method':
-            case 'Hoa_Pom_Token_Call_StaticAttribute':
-            case 'Hoa_Pom_Token_Call_StaticMethod':
-              break;
-
-            default:
-                throw new Hoa_Pom_Token_Util_Exception(
-                    'Cannot throw a class that represents a %s.', 0,
-                    get_class($exception));
-        }
+        if(   !($exception instanceof Hoa_Pom_Token_Call)
+           && !($exception instanceof Hoa_Pom_Token_New)
+           && !($exception instanceof Hoa_Pom_Token_Variable))
+            throw new Hoa_Pom_Token_Util_Exception(
+                'Cannot throw a class that represents a %s.', 0,
+                get_class($exception));
 
         $this->_exception = $exception;
 

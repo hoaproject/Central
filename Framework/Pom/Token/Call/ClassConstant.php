@@ -58,6 +58,11 @@ import('Pom.~');
 import('Pom.Token.Call');
 
 /**
+ * Hoa_Pom_Token_String
+ */
+import('Pom.Token.String');
+
+/**
  * Class Hoa_Pom_Token_Call_ClassConstant.
  *
  * Represent a call to a class constant.

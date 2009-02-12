@@ -101,19 +101,12 @@ class Hoa_Pom_Token_Instruction implements Hoa_Pom_Token_Util_Interface_Tokeniza
      */
     public function setInstruction ( $instruction ) {
 
-        switch(get_class($instruction)) {
-
-            case 'Hoa_Pom_Token_Call':
-            case 'Hoa_Pom_Token_Operation':
-            case 'Hoa_Pom_Token_ControlStructure_Conditional_If':
-            case 'Hoa_Pom_Token_ControlStructure_Conditional_Switch':
-              break;
-
-            default:
-                throw new Hoa_Pom_Token_Util_Exception(
-                    'An instruction cannot accept a class that is an ' .
-                    'instance of %s.', 0, get_class($instruction));
-        }
+        if(   !($instruction instanceof Hoa_Pom_Token_Call)
+           && !($instruction instanceof Hoa_Pom_Token_Operation)
+           && !($instruction instanceof Hoa_Pom_Token_Variable))
+            throw new Hoa_Pom_Token_Util_Exception(
+                'An instruction cannot accept a class that is an ' .
+                'instance of %s.', 0, get_class($instruction));
 
         $old                = $this->_instruction;
         $this->_instruction = $instruction;

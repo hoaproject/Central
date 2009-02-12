@@ -117,25 +117,19 @@ class Hoa_Pom_Token_Operation implements Hoa_Pom_Token_Util_Interface_Tokenizabl
      */
     public function addElement ( $element ) {
 
-        switch(get_class($element)) {
-
-            case 'Hoa_Pom_Token_Array':
-            case 'Hoa_Pom_Token_Call':
-            case 'Hoa_Pom_Token_Cast':
-            case 'Hoa_Pom_Token_Clone':
-            case 'Hoa_Pom_Token_Comment':
-            case 'Hoa_Pom_Token_New':
-            case 'Hoa_Pom_Token_Number':
-            case 'Hoa_Pom_Token_Operator':
-            case 'Hoa_Pom_Token_String':
-            case 'Hoa_Pom_Token_Variable':
-              break;
-
-            default:
-                throw new Hoa_Pom_Token_Util_Exception(
-                    'An operation cannot be composed by a class that ' .
-                    'is an instance of %s.', 0, get_class($element));
-        }
+        if(   !($element instanceof Hoa_Pom_Token_Array)
+           && !($element instanceof Hoa_Pom_Token_Call)
+           && !($element instanceof Hoa_Pom_Token_Cast)
+           && !($element instanceof Hoa_Pom_Token_Clone)
+           && !($element instanceof Hoa_Pom_Token_Comment)
+           && !($element instanceof Hoa_Pom_Token_New)
+           && !($element instanceof Hoa_Pom_Token_Number)
+           && !($element instanceof Hoa_Pom_Token_Operator)
+           && !($element instanceof Hoa_Pom_Token_String)
+           && !($element instanceof Hoa_Pom_Token_Variable))
+            throw new Hoa_Pom_Token_Util_Exception(
+                'An operation cannot be composed by a class that ' .
+                'is an instance of %s.', 0, get_class($element));
 
         return $this->_sequence[] = $element;
     }
@@ -171,9 +165,12 @@ class Hoa_Pom_Token_Operation implements Hoa_Pom_Token_Util_Interface_Tokenizabl
      */
     public function tokenize ( ) {
 
-        // @todo.
-        return array(array(
+        $out = array();
 
-        ));
+        foreach($this->getSequence() as $i => $operation)
+            foreach($operation->tokenize() as $key => $value)
+                $out[] = $value;
+
+        return $out;
     }
 }

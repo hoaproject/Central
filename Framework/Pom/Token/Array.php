@@ -145,50 +145,28 @@ class Hoa_Pom_Token_Array implements Hoa_Pom_Token_Util_Interface_Tokenizable,
     public function addElement ( $key, $value ) {
 
         if(null !== $key)
-            switch(get_class($key)) {
-
-                case 'Hoa_Pom_Token_Call':
-                case 'Hoa_Pom_Token_Clone':
-                case 'Hoa_Pom_Token_Comment':
-                case 'Hoa_Pom_Token_Number_DNumber':
-                case 'Hoa_Pom_Token_Number_LNumber':
-                case 'Hoa_Pom_Token_New':
-                case 'Hoa_Pom_Token_Operation':
-                case 'Hoa_Pom_Token_String_Boolean':
-                case 'Hoa_Pom_Token_String_Constant':
-                case 'Hoa_Pom_Token_String_EncapsedConstant':
-                case 'Hoa_Pom_Token_String_Null':
-                case 'Hoa_Pom_Token_Variable':
-                  break;
-
-                default:
-                    throw new Hoa_Pom_Token_Util_Exception(
-                        'An array key cannot accept a class that ' .
-                        'is an instance of %s.', 0, get_class($key));
-            }
-
-        switch(get_class($value)) {
-
-            case 'Hoa_Pom_Token_Array':
-            case 'Hoa_Pom_Token_Call':
-            case 'Hoa_Pom_Token_Clone':
-            case 'Hoa_Pom_Token_Comment':
-            case 'Hoa_Pom_Token_Number_DNumber':
-            case 'Hoa_Pom_Token_Number_LNumber':
-            case 'Hoa_Pom_Token_New':
-            case 'Hoa_Pom_Token_Operation':
-            case 'Hoa_Pom_Token_String_Boolean':
-            case 'Hoa_Pom_Token_String_Constant':
-            case 'Hoa_Pom_Token_String_EncapsedConstant':
-            case 'Hoa_Pom_Token_String_Null':
-            case 'Hoa_Pom_Token_Variable':
-              break;
-
-            default:
+            if(   !($key instanceof Hoa_Pom_Token_Call)
+               && !($key instanceof Hoa_Pom_Token_Clone)
+               && !($key instanceof Hoa_Pom_Token_Number)
+               && !($key instanceof Hoa_Pom_Token_New)
+               && !($key instanceof Hoa_Pom_Token_Operation)
+               && !($key instanceof Hoa_Pom_Token_String)
+               && !($key instanceof Hoa_Pom_Token_Variable))
                 throw new Hoa_Pom_Token_Util_Exception(
-                    'An array value cannot accept a class that ' .
-                    'is an instance of %s.', 1, get_class($value));
-        }
+                    'An array key cannot accept a class that ' .
+                    'is an instance of %s.', 0, get_class($key));
+
+        if(   !($value instanceof Hoa_Pom_Token_Array)
+           && !($value instanceof Hoa_Pom_Token_Call)
+           && !($value instanceof Hoa_Pom_Token_Clone)
+           && !($value instanceof Hoa_Pom_Token_Number)
+           && !($value instanceof Hoa_Pom_Token_New)
+           && !($value instanceof Hoa_Pom_Token_Operation)
+           && !($value instanceof Hoa_Pom_Token_String)
+           && !($value instanceof Hoa_Pom_Token_Variable))
+            throw new Hoa_Pom_Token_Util_Exception(
+                'An array value cannot accept a class that ' .
+                'is an instance of %s.', 1, get_class($value));
 
         return $this->_array[] = array(
             self::KEY   => $key,

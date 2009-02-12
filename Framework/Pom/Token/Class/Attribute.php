@@ -53,9 +53,19 @@ import('Pom.Token.Util.Interface.Tokenizable');
 import('Pom.~');
 
 /**
+ * Hoa_Pom_Token_Comment
+ */
+import('Pom.Token.Comment');
+
+/**
  * Hoa_Pom_Token_Class_Access
  */
 import('Pom.Token.Class.Access');
+
+/**
+ * Hoa_Pom_Token_Variable
+ */
+import('Pom.Token.Variable');
 
 /**
  * Hoa_Pom_Token_Operator_Assignement

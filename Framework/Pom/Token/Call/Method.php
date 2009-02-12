@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Pom_Token_Util_Interface_SuperScalar
- */
-import('Pom.Token.Util.Interface.SuperScalar');
-
-/**
  * Hoa_Pom
  */
 import('Pom.~');
@@ -56,6 +51,16 @@ import('Pom.~');
  * Hoa_Pom_Token_Call
  */
 import('Pom.Token.Call');
+
+/**
+ * Hoa_Pom_Token_Variable
+ */
+import('Pom.Token.Variable');
+
+/**
+ * Hoa_Pom_Token_Call_Function
+ */
+import('Pom.Token.Call.Function');
 
 /**
  * Class Hoa_Pom_Token_Call_Method.
@@ -71,8 +76,7 @@ import('Pom.Token.Call');
  * @subpackage  Hoa_Pom_Token_Call_Method
  */
 
-class Hoa_Pom_Token_Call_Method extends    Hoa_Pom_Token_Call
-                                implements Hoa_Pom_Token_Util_Interface_SuperScalar {
+class Hoa_Pom_Token_Call_Method extends Hoa_Pom_Token_Call {
 
     /**
      * Object name.
@@ -111,7 +115,7 @@ class Hoa_Pom_Token_Call_Method extends    Hoa_Pom_Token_Call
      * @param   Hoa_Pom_Token_Variable  $object    Object name.
      * @return  Hoa_Pom_Token_Variable
      */
-    public function setObject ( Hoa_Pom_Token_String $object ) {
+    public function setObject ( Hoa_Pom_Token_Variable $object ) {
 
         $old           = $this->_object;
         $this->_object = $object;
@@ -123,10 +127,10 @@ class Hoa_Pom_Token_Call_Method extends    Hoa_Pom_Token_Call
      * Set method name.
      *
      * @access  public
-     * @param   Hoa_Pom_Token_Call_Function   $method    Method name.
+     * @param   Hoa_Pom_Token_Call_Function  $method    Method name.
      * @return  Hoa_Pom_Token_Call_Function
      */
-    public function setMethod ( Hoa_Pom_Token_Call_Function $method ) {
+    public function setMethod ( $method ) {
 
         $old           = $this->_method;
         $this->_method = $method;
@@ -154,17 +158,6 @@ class Hoa_Pom_Token_Call_Method extends    Hoa_Pom_Token_Call
     public function getMethod ( ) {
 
         return $this->_method;
-    }
-
-    /**
-     * Check if a data is an uniform super-scalar or not.
-     *
-     * @access  public
-     * @return  bool
-     */
-    public function isUniformSuperScalar ( ) {
-
-        return false;
     }
 
     /**

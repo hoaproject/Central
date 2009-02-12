@@ -63,6 +63,26 @@ import('Pom.Token.Comment');
 import('Pom.Token.Util.Interface.Type');
 
 /**
+ * Hoa_Pom_Token_Comment
+ */
+import('Pom.Token.Comment');
+
+/**
+ * Hoa_Pom_Token_String
+ */
+import('Pom.Token.String');
+
+/**
+ * Hoa_Pom_Token_Class_Constant
+ */
+import('Pom.Token.Class.Constant');
+
+/**
+ * Hoa_Pom_Token_Class_Method
+ */
+import('Pom.Token.Class.Method');
+
+/**
  * Class Hoa_Pom_Token_Interface.
  *
  * Represent an interface.
@@ -191,7 +211,7 @@ class Hoa_Pom_Token_Interface implements Hoa_Pom_Token_Util_Interface_Tokenizabl
      *
      * @access  public
      * @param   Hoa_Pom_Token_String  $parent     Parent name to
-     *                                                  check.
+     *                                            check.
      * @return  bool
      */
     public function parentExists ( Hoa_Pom_Token_String $parent ) {

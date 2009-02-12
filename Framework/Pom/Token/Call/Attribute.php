@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Pom_Token_Util_Interface_SuperScalar
- */
-import('Pom.Token.Util.Interface.SuperScalar');
-
-/**
  * Hoa_Pom
  */
 import('Pom.~');
@@ -56,6 +51,16 @@ import('Pom.~');
  * Hoa_Pom_Token_Call
  */
 import('Pom.Token.Call');
+
+/**
+ * Hoa_Pom_Token_String
+ */
+import('Pom.Token.String');
+
+/**
+ * Hoa_Pom_Token_Variable
+ */
+import('Pom.Token.Variable');
 
 /**
  * Class Hoa_Pom_Token_Call_Attribute.
@@ -71,8 +76,7 @@ import('Pom.Token.Call');
  * @subpackage  Hoa_Pom_Token_Call_Attribute
  */
 
-class Hoa_Pom_Token_Call_Attribute extends    Hoa_Pom_Token_Call
-                                   implements Hoa_Pom_Token_Util_Interface_SuperScalar {
+class Hoa_Pom_Token_Call_Attribute extends Hoa_Pom_Token_Call {
 
     /**
      * Object name.
@@ -84,7 +88,7 @@ class Hoa_Pom_Token_Call_Attribute extends    Hoa_Pom_Token_Call
     /**
      * Attribute name.
      *
-     * @var Hoa_Pom_Token_Variable object
+     * @var mixed object
      */
     protected $_attribute = null;
 
@@ -111,7 +115,7 @@ class Hoa_Pom_Token_Call_Attribute extends    Hoa_Pom_Token_Call
      * @param   Hoa_Pom_Token_Variable  $object    Object name.
      * @return  Hoa_Pom_Token_Variable
      */
-    public function setObject ( Hoa_Pom_Token_String $object ) {
+    public function setObject ( Hoa_Pom_Token_Variable $object ) {
 
         $old           = $this->_object;
         $this->_object = $object;
@@ -123,10 +127,26 @@ class Hoa_Pom_Token_Call_Attribute extends    Hoa_Pom_Token_Call
      * Set attribute name.
      *
      * @access  public
-     * @param   Hoa_Pom_Token_Variable  $attribute    Attribute name.
-     * @return  Hoa_Pom_Token_Variable
+     * @param   mixed  $attribute    Attribute name.
+     * @return  mixed
+     * @throw   Hoa_Pom_Token_Util_Exception
+     * @todo    $curly = 'at'; $obj->{$curly . 'tr'} is correct.
+     *                               \_____________/
+     *                                   to do
      */
-    public function setAttribute ( Hoa_Pom_Token_Variable $attribute ) {
+    public function setAttribute ( $attribute ) {
+
+        switch(get_class($attribute)) {
+
+            case 'Hoa_Pom_Token_String':
+            case 'Hoa_Pom_Token_Variable':
+              break;
+
+            default:
+                throw new Hoa_Pom_Token_Util_Exception(
+                    'A attribute could not call with an instance of %s.',
+                    0, get_class($attribute));
+        }
 
         $old              = $this->_attribute;
         $this->_attribute = $attribute;
@@ -138,7 +158,7 @@ class Hoa_Pom_Token_Call_Attribute extends    Hoa_Pom_Token_Call
      * Get object name.
      *
      * @access  public
-     * @return  Hoa_Pom_Token_Variable
+     * @return  Hoa_Pom_Token_String
      */
     public function getObject ( ) {
 
@@ -149,22 +169,11 @@ class Hoa_Pom_Token_Call_Attribute extends    Hoa_Pom_Token_Call
      * Get attribute name.
      *
      * @access  public
-     * @return  Hoa_Pom_Token_String
+     * @return  mixed
      */
     public function getAttribute ( ) {
 
         return $this->_attribute;
-    }
-
-    /**
-     * Check if a data is an uniform super-scalar or not.
-     *
-     * @access  public
-     * @return  bool
-     */
-    public function isUniformSuperScalar ( ) {
-
-        return false;
     }
 
     /**

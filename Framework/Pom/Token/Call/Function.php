@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Pom_Token_Util_Interface_SuperScalar
- */
-import('Pom.Token.Util.Interface.SuperScalar');
-
-/**
  * Hoa_Pom
  */
 import('Pom.~');
@@ -56,6 +51,16 @@ import('Pom.~');
  * Hoa_Pom_Token_Call
  */
 import('Pom.Token.Call');
+
+/**
+ * Hoa_Pom_Token_String
+ */
+import('Pom.Token.String');
+
+/**
+ * Hoa_Pom_Token_Variable
+ */
+import('Pom.Token.Variable');
 
 /**
  * Class Hoa_Pom_Token_Call_Function.
@@ -71,8 +76,7 @@ import('Pom.Token.Call');
  * @subpackage  Hoa_Pom_Token_Call_Function
  */
 
-class Hoa_Pom_Token_Call_Function extends    Hoa_Pom_Token_Call
-                                  implements Hoa_Pom_Token_Util_Interface_SuperScalar {
+class Hoa_Pom_Token_Call_Function extends Hoa_Pom_Token_Call {
 
     /**
      * Function name.
@@ -97,7 +101,7 @@ class Hoa_Pom_Token_Call_Function extends    Hoa_Pom_Token_Call
      * @param   mixed   $name    Function name.
      * @return  void
      */
-    public function __construct ( Hoa_Pom_Token_String $name ) {
+    public function __construct ( $name ) {
 
         $this->setName($name);
 
@@ -122,7 +126,7 @@ class Hoa_Pom_Token_Call_Function extends    Hoa_Pom_Token_Call
 
             default:
                 throw new Hoa_Pom_Token_Util_Exception(
-                    'A static method should only be called by a string or a ' .
+                    'A method should only be called by a string or a ' .
                     'variable. Given %s.', 0, $method);
         }
 
@@ -156,24 +160,17 @@ class Hoa_Pom_Token_Call_Function extends    Hoa_Pom_Token_Call
      */
     public function addArgument ( $argument ) {
 
-        switch(get_class($argument)) {
-
-            case 'Hoa_Pom_Token_Array':
-            case 'Hoa_Pom_Token_Call':
-            case 'Hoa_Pom_Token_Clone':
-            case 'Hoa_Pom_Token_New':
-            case 'Hoa_Pom_Token_Number':
-            case 'Hoa_Pom_Token_Operation':
-            case 'Hoa_Pom_Token_String':
-            case 'Hoa_Pom_Token_String_Encapsed':
-            case 'Hoa_Pom_Token_Variable_Valued':
-              break;
-
-            default:
-                throw new Hoa_Pom_Token_Util_Exception(
-                    'Cannot call a function with a %s in argument', 1,
-                    get_class($argument));
-        }
+        if(   !($argument instanceof Hoa_Pom_Token_Array)
+           && !($argument instanceof Hoa_Pom_Token_Call)
+           && !($argument instanceof Hoa_Pom_Token_Clone)
+           && !($argument instanceof Hoa_Pom_Token_New)
+           && !($argument instanceof Hoa_Pom_Token_Number)
+           && !($argument instanceof Hoa_Pom_Token_Operation)
+           && !($argument instanceof Hoa_Pom_Token_String)
+           && !($argument instanceof Hoa_Pom_Token_Variable))
+            throw new Hoa_Pom_Token_Util_Exception(
+                'Cannot call a function with a %s in argument', 1,
+                get_class($argument));
 
         $this->_arguments[] = $argument;
 
@@ -214,17 +211,6 @@ class Hoa_Pom_Token_Call_Function extends    Hoa_Pom_Token_Call
     public function getArguments ( ) {
 
         return $this->_arguments;
-    }
-
-    /**
-     * Check if a data is an uniform super-scalar or not.
-     *
-     * @access  public
-     * @return  bool
-     */
-    public function isUniformSuperScalar ( ) {
-
-        return false;
     }
 
     /**

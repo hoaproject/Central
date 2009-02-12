@@ -43,14 +43,24 @@ require_once 'Framework.php';
 import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Pom_Token_Util_Interface_SuperScalar
- */
-import('Pom.Token.Util.Interface.SuperScalar');
-
-/**
  * Hoa_Pom
  */
 import('Pom.~');
+
+/**
+ * Hoa_Pom_Token_Comment
+ */
+import('Pom.Token.Comment');
+
+/**
+ * Hoa_Pom_Token_String
+ */
+import('Pom.Token.String');
+
+/**
+ * Hoa_Pom_Token_Function_Argument
+ */
+import('Pom.Token.Function.Argument');
 
 /**
  * Class Hoa_Pom_Token_Function.
@@ -66,7 +76,7 @@ import('Pom.~');
  * @subpackage  Hoa_Pom_Token_Function
  */
 
-abstract class Hoa_Pom_Token_Function implements Hoa_Pom_Token_Util_Interface_SuperScalar {
+abstract class Hoa_Pom_Token_Function {
 
     /**
      * Comment.
@@ -264,7 +274,7 @@ abstract class Hoa_Pom_Token_Function implements Hoa_Pom_Token_Util_Interface_Su
      */
     public function addBody ( $element ) {
 
-        if(!($element instanceof Hoa_Pom_Token_ControlStructure))
+        if(!($element instanceof Hoa_Pom_Token_Instruction))
             throw new Hoa_Pom_Token_Util_Exception(
                 'A function cannot have %s in his body.', 0, get_class($element));
 
@@ -348,16 +358,5 @@ abstract class Hoa_Pom_Token_Function implements Hoa_Pom_Token_Util_Interface_Su
     public function hasBody ( ) {
 
         return $this->getBody() == array();
-    }
-
-    /**
-     * Check if a data is an uniform super-scalar or not.
-     *
-     * @access  public
-     * @return  bool
-     */
-    public function isUniformSuperScalar ( ) {
-
-        return false;
     }
 }

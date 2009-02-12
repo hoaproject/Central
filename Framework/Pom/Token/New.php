@@ -53,6 +53,11 @@ import('Pom.Token.Util.Interface.Tokenizable');
 import('Pom.~');
 
 /**
+ * Hoa_Pom_Token_Call_Function
+ */
+import('Pom.Token.Call.Function');
+
+/**
  * Class Hoa_Pom_Token_New.
  *
  * Represent a new.
@@ -66,147 +71,8 @@ import('Pom.~');
  * @subpackage  Hoa_Pom_Token_New
  */
 
-class Hoa_Pom_Token_New implements Hoa_Pom_Token_Util_Interface_Tokenizable {
-
-    /**
-     * Class name.
-     *
-     * @var mixed object
-     */
-    protected $_class     = null;
-
-    /**
-     * List of arguments.
-     *
-     * @var Hoa_Pom_Token_New array
-     */
-    protected $_arguments = array();
-
-
-
-    /**
-     * Constructor.
-     *
-     * @access  public
-     * @param   mixed   $class    Class name.
-     * @return  void
-     */
-    public function __construct ( $class ) {
-
-        $this->setClass($class);
-
-        return;
-    }
-
-    /**
-     * Set class name.
-     *
-     * @access  public
-     * @param   mixed   $class    Class name.
-     * @return  mixed
-     */
-    public function setClass ( $class ) {
-
-        switch(get_class($class)) {
-
-            case 'Hoa_Pom_Token_String':
-            case 'Hoa_Pom_Token_Variable':
-              break;
-
-            default:
-                throw new Hoa_Pom_Token_Util_Exception(
-                    'Class name should be a string or a variable. Given %s.', 0,
-                    $class);
-        }
-
-        $old          = $this->_class;
-        $this->_class = $class;
-
-        return $old;
-    }
-
-    /**
-     * Add many arguments.
-     *
-     * @access  public
-     * @param   array   $arguments    Arguments to add.
-     * @return  array
-     */
-    public function addArguments ( Array $arguments ) {
-
-        foreach($arguments as $i => $argument)
-            $this->addArgument($argument);
-
-        return $this->_arguments;
-    }
-
-    /**
-     * Add an argument.
-     *
-     * @access  public
-     * @param   mixed   $argument    Argument to add.
-     * @return  array
-     */
-    public function addArgument ( $argument ) {
-
-        switch(get_class($argument)) {
-
-            case 'Hoa_Pom_Token_Array':
-            case 'Hoa_Pom_Token_Call':
-            case 'Hoa_Pom_Token_Clone':
-            case 'Hoa_Pom_Token_New':
-            case 'Hoa_Pom_Token_Number':
-            case 'Hoa_Pom_Token_Operator':
-            case 'Hoa_Pom_Token_String':
-            case 'Hoa_Pom_Token_String_Encapsed':
-            case 'Hoa_Pom_Token_Variable_Valued':
-              break;
-
-            default:
-                throw new Hoa_Pom_Token_Util_Exception(
-                    'Cannot call a function with a %s in argument', 1, $argument);
-        }
-
-        $this->_arguments[] = $argument;
-
-        return $this->_arguments;
-    }
-
-    /**
-     * Remove the n-th argument.
-     *
-     * @access  public
-     * @param   int     $n    Argument number to remove.
-     * @return  void
-     */
-    public function removeArgument ( $n ) {
-
-        unset($this->_arguments[$n]);
-
-        return;
-    }
-
-    /**
-     * Get class name.
-     *
-     * @access  public
-     * @return  mixed
-     */
-    public function getClass ( ) {
-
-        return $this->_class;
-    }
-
-    /**
-     * Get arguments.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function getArguments ( ) {
-
-        return $this->_arguments;
-    }
+class Hoa_Pom_Token_New extends    Hoa_Pom_Token_Call_Function
+                        implements Hoa_Pom_Token_Util_Interface_Tokenizable {
 
     /**
      * Transform token to “tokenizer array”.
@@ -216,44 +82,13 @@ class Hoa_Pom_Token_New implements Hoa_Pom_Token_Util_Interface_Tokenizable {
      */
     public function tokenize ( ) {
 
-        $arguments = array();
-        $argSet    = false;
-
-        foreach($this->getArguments() as $i => $argument) {
-
-            if(true === $argSet) {
-
-                $arguments[] = array(
-                    0 => Hoa_Pom::_COMMA,
-                    1 => ',',
-                    2 => -1
-                );
-            }
-            else
-                $argSet = true;
-
-            foreach($argument->tokenize() as $key => $value)
-                $arguments[] = $value;
-        }
-
         return array_merge(
             array(array(
                 0 => Hoa_Pom::_NEW,
                 1 => 'new',
                 2 => -1
             )),
-            $this->getClass()->tokenize(),
-            array(array(
-                0 => Hoa_Pom::_OPEN_PARENTHESES,
-                1 => '(',
-                2 => -1
-            )),
-            $arguments,
-            array(array(
-                0 => Hoa_Pom::_CLOSE_PARENTHESES,
-                1 => ')',
-                2 => -1
-            ))
+            parent::tokenize()
         );
     }
 }

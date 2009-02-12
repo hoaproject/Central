@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Pom_Token_Util_Interface_SuperScalar
- */
-import('Pom.Token.Util.Interface.SuperScalar');
-
-/**
  * Hoa_Pom
  */
 import('Pom.~');
@@ -56,6 +51,16 @@ import('Pom.~');
  * Hoa_Pom_Token_Call
  */
 import('Pom.Token.Call');
+
+/**
+ * Hoa_Pom_Token_String
+ */
+import('Pom.Token.String');
+
+/**
+ * Hoa_Pom_Token_Variable
+ */
+import('Pom.Token.Variable');
 
 /**
  * Class Hoa_Pom_Token_Call_StaticAttribute.
@@ -71,13 +76,12 @@ import('Pom.Token.Call');
  * @subpackage  Hoa_Pom_Token_Call_StaticAttribute
  */
 
-class Hoa_Pom_Token_Call_StaticAttribute extends    Hoa_Pom_Token_Call
-                                         implements Hoa_Pom_Token_Util_Interface_SuperScalar {
+class Hoa_Pom_Token_Call_StaticAttribute extends Hoa_Pom_Token_Call {
 
     /**
      * Class name.
      *
-     * @var Hoa_Pom_Token_String object
+     * @var mixed object
      */
     protected $_class     = null;
 
@@ -108,10 +112,23 @@ class Hoa_Pom_Token_Call_StaticAttribute extends    Hoa_Pom_Token_Call
      * Set class name.
      *
      * @access  public
-     * @param   Hoa_Pom_Token_String  $class    Class name.
-     * @return  Hoa_Pom_Token_String
+     * @param   mixed  $class    Class name.
+     * @return  mixed
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
-    public function setClass ( Hoa_Pom_Token_String $class ) {
+    public function setClass ( $class ) {
+
+        switch(get_class($class)) {
+
+            case 'Hoa_Pom_Token_String':
+            case 'Hoa_Pom_Token_Variable':
+              break;
+
+            default:
+                throw new Hoa_Pom_Token_Util_Exception(
+                    'A method could not be called statically with a instance '.
+                    'of %s.', 0, get_class($class));
+        }
 
         $old          = $this->_class;
         $this->_class = $class;
@@ -138,7 +155,7 @@ class Hoa_Pom_Token_Call_StaticAttribute extends    Hoa_Pom_Token_Call
      * Get class name.
      *
      * @access  public
-     * @return  Hoa_Pom_Token_String
+     * @return  mixed
      */
     public function getClass ( ) {
 
@@ -154,17 +171,6 @@ class Hoa_Pom_Token_Call_StaticAttribute extends    Hoa_Pom_Token_Call
     public function getAttribute ( ) {
 
         return $this->_attribute;
-    }
-
-    /**
-     * Check if a data is an uniform super-scalar or not.
-     *
-     * @access  public
-     * @return  bool
-     */
-    public function isUniformSuperScalar ( ) {
-
-        return false;
     }
 
     /**

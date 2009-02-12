@@ -53,6 +53,11 @@ import('Pom.Token.Util.Interface.Tokenizable');
 import('Pom.~');
 
 /**
+ * Hoa_Pom_Token_Instruction
+ */
+import('Pom.Token.Instruction');
+
+/**
  * Class Hoa_Pom_Token_Instruction_Block.
  *
  * Represent a collection/block of instructions.

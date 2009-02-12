@@ -53,6 +53,11 @@ import('Pom.Token.Util.Interface.Tokenizable');
 import('Pom.Token.Util.Interface.SuperScalar');
 
 /**
+ * Hoa_Pom_Token_Util_Interface_Type
+ */
+import('Pom.Token.Util.Interface.Type');
+
+/**
  * Hoa_Pom
  */
 import('Pom.~');
@@ -63,9 +68,24 @@ import('Pom.~');
 import('Pom.Token.Comment');
 
 /**
- * Hoa_Pom_Token_Util_Interface_Type
+ * Hoa_Pom_Token_String
  */
-import('Pom.Token.Util.Interface.Type');
+import('Pom.Token.String');
+
+/**
+ * Hoa_Pom_Token_Class_Constant
+ */
+import('Pom.Token.Class.Constant');
+
+/**
+ * Hoa_Pom_Token_Class_Attribute
+ */
+import('Pom.Token.Class.Attribute');
+
+/**
+ * Hoa_Pom_Token_Class_Method
+ */
+import('Pom.Token.Class.Method');
 
 /**
  * Class Hoa_Pom_Token_Class.

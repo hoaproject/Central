@@ -53,9 +53,19 @@ import('Pom.Token.Util.Interface.Tokenizable');
 import('Pom.~');
 
 /**
+ * Hoa_Pom_Token_Variable
+ */
+import('Pom.Token.Variable');
+
+/**
  * Hoa_Pom_Token_Operator_Assignement
  */
 import('Pom.Token.Operator.Assignement');
+
+/**
+ * Hoa_Pom_Token_String
+ */
+import('Pom.Token.String');
 
 /**
  * Class Hoa_Pom_Token_Function_Argument.
@@ -198,11 +208,13 @@ class Hoa_Pom_Token_Function_Argument implements Hoa_Pom_Token_Util_Interface_To
             if(false === $default->isUniformSuperScalar())
                 throw new Hoa_Pom_Token_Util_Exception(
                     'Default value should effectively be a super-scalar, ' .
-                    'but a uniform super-scalar.', 0);
+                    'but a uniform super-scalar, given %s.',
+                    0, get_class($default));
 
         if(!($default instanceof Hoa_Pom_Token_Util_Interface_Scalar))
             throw new Hoa_Pom_Token_Util_Exception(
-                'Default value must be a scalar or a uniform super-scalar.', 1);
+                'Default value must be a scalar or a uniform super-scalar, given %s.',
+                1, get_class($default));
 
         $old            = $this->_default;
         $this->_default = $default;

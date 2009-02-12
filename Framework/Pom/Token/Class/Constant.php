@@ -58,6 +58,16 @@ import('Pom.Token.Util.Interface.Scalar');
 import('Pom.~');
 
 /**
+ * Hoa_Pom_Token_Comment
+ */
+import('Pom.Token.Comment');
+
+/**
+ * Hoa_Pom_Token_String
+ */
+import('Pom.Token.String');
+
+/**
  * Hoa_Pom_Token_Operator_Assignement
  */
 import('Pom.Token.Operator.Assignement');
@@ -77,7 +87,7 @@ import('Pom.Token.Operator.Assignement');
  */
 
 class Hoa_Pom_Token_Class_Constant implements Hoa_Pom_Token_Util_Interface_Tokenizable,
-                                                    Hoa_Pom_Token_Util_Interface_Scalar {
+                                              Hoa_Pom_Token_Util_Interface_Scalar {
 
     /**
      * Constant comment.
@@ -94,18 +104,18 @@ class Hoa_Pom_Token_Class_Constant implements Hoa_Pom_Token_Util_Interface_Token
     protected $_name     = null;
 
     /**
-     * Constant value.
-     *
-     * @var Hoa_Pom_Token_Util_Interface_Scalar object
-     */
-    protected $_value    = null;
-
-    /**
      * Constant operator.
      *
      * @var Hoa_Pom_Token_Operator_Assignement object
      */
     protected $_operator = null;
+
+    /**
+     * Constant value.
+     *
+     * @var Hoa_Pom_Token_Util_Interface_Scalar object
+     */
+    protected $_value    = null;
 
 
 
@@ -170,7 +180,7 @@ class Hoa_Pom_Token_Class_Constant implements Hoa_Pom_Token_Util_Interface_Token
      *
      * @access  public
      * @param   Hoa_Pom_Token_Util_Interface_Scalar  $value    Constant
-     *                                                               value.
+     *                                                         value.
      * @return  Hoa_Pom_Token_Util_Interface_Scalar
      */
     public function setValue ( Hoa_Pom_Token_Util_Interface_Scalar $value ) {
@@ -268,8 +278,8 @@ class Hoa_Pom_Token_Class_Constant implements Hoa_Pom_Token_Util_Interface_Token
     public function tokenize ( ) {
 
         if(false === $this->hasValue())
-           throw new Hoa_Pom_Token_Util_Exception(
-            'A constant must have a value.', 0);
+            throw new Hoa_Pom_Token_Util_Exception(
+                'A constant must have a value.', 0);
 
         return array_merge(
             (true === $this->hasComment()
