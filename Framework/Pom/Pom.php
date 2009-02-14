@@ -259,6 +259,13 @@ abstract class Hoa_Pom {
      */
     const TOKENIZE_FILE   = Hoa_Pom_Parser_Lexer::FILE;
 
+    /**
+     * Whether consume a list of tokens (usefull for the late parser).
+     *
+     * @const int
+     */
+    const TOKENIZE_LATE   = Hoa_Pom_Parser_Lexer::LATE;
+
 
 
     /**
