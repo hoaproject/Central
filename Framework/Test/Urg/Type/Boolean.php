@@ -109,10 +109,10 @@ class Hoa_Test_Urg_Type_Boolean implements Hoa_Test_Urg_Interface_Randomizable {
     /**
      * Get the random value.
      *
-     * @access  protected
-     * @return  mixed
+     * @access  public
+     * @return  bool
      */
-    protected function getValue ( ) {
+    public function getValue ( ) {
 
         return $this->_value;
     }
