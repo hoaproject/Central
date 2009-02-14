@@ -76,6 +76,29 @@ class Hoa_Test_Urg_Type_Integer extends    Hoa_Test_Urg_Type_Number
                                 implements Hoa_Test_Urg_Type_Interface_Randomizable {
 
     /**
+     * Zero.
+     *
+     * @const int
+     */
+    const ZERO         = 0;
+
+    /**
+     * The closest value of zero.
+     *
+     * @const int
+     */
+    const CLOSEST_ZERO = 1;
+
+    /**
+     * The “infinity”, i.e. the greatest value.
+     *
+     * @const int
+     */
+    const INFINITY     = PHP_INT_MAX;
+
+
+
+    /**
      * Build a integer.
      *
      * @access  public
@@ -83,20 +106,75 @@ class Hoa_Test_Urg_Type_Integer extends    Hoa_Test_Urg_Type_Number
      */
     public function __construct ( ) {
 
-        $this->setUpperBoundValue( PHP_INT_MAX);
-        $this->setLowerBoundValue(~PHP_INT_MAX);
+        $this->setUpperBoundValue(self::getPositiveInfinity());
+        $this->setLowerBoundValue(self::getNegativeInfinity());
         $this->randomize();
 
         return;
     }
 
     /**
+     * Get the zero.
+     *
+     * @access  public
+     * @return  int
+     */
+    public static function getZero ( ) {
+
+        return self::ZERO;
+    }
+
+    /**
+     * Get the positive closest value of zero.
+     *
+     * @access  public
+     * @return  int
+     */
+    public static function getPositiveClosestValue ( ) {
+
+        return self::CLOSEST_ZERO;
+    }
+
+    /**
+     * Get the negative closest value of zero.
+     *
+     * @access  public
+     * @return  int
+     */
+    public static function getNegativeClosestValue ( ) {
+
+        return -self::CLOSEST_ZERO;
+    }
+
+    /**
+     * Get the positive infinity.
+     *
+     * @access  public
+     * @return  int
+     */
+    public static function getPositiveInfinity ( ) {
+
+        return self::INFINITY;
+    }
+
+    /**
+     * Get the negative infinity.
+     *
+     * @access  public
+     * @return  int
+     */
+    public static function getNegativeInfinity ( ) {
+
+        return ~self::INFINITY;
+    }
+
+    /**
      * Choose a random value.
      *
-     * @access  protected
+     * @access  public
      * @return  void
      */
-    protected function randomize ( ) {
+    public function randomize ( ) {
 
         $upper  = $this->getUpperBoundValue();
         $lower  = $this->getLowerBoundValue();

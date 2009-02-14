@@ -79,8 +79,8 @@ class Hoa_Test_Urg_Type_OddInteger extends    Hoa_Test_Urg_Type_BoundInteger
     public function __construct ( ) {
 
         parent::__construct(
-            ~PHP_INT_MAX + 1,
-            PHP_INT_MAX,
+            parent::getNegativeInfinity() + 1,
+            parent::getPositiveInfinity(),
             parent::BOUND_CLOSE,
             parent::BOUND_CLOSE
         );
@@ -90,12 +90,12 @@ class Hoa_Test_Urg_Type_OddInteger extends    Hoa_Test_Urg_Type_BoundInteger
     }
 
     /**
-     * Choose an even integer.
+     * Choose a random value.
      *
-     * @access  protected
+     * @access  public
      * @return  void
      */
-    protected function randomize ( ) {
+    public function randomize ( ) {
 
         parent::randomize();
         $random = $this->getValue();

@@ -95,8 +95,8 @@ class Hoa_Test_Urg_Type_Boolean implements Hoa_Test_Urg_Interface_Randomizable {
      * Set the random value.
      *
      * @access  protected
-     * @param   mixed      $value    The random value.
-     * @return  mixed
+     * @param   bool       $value    The random value.
+     * @return  bool
      */
     protected function setValue ( $value ) {
 
@@ -120,16 +120,16 @@ class Hoa_Test_Urg_Type_Boolean implements Hoa_Test_Urg_Interface_Randomizable {
     /**
      * Choose a random value.
      *
-     * @access  protected
+     * @access  public
      * @return  void
      */
-    protected function randomize ( ) {
+    public function randomize ( ) {
 
-        $random = Hoa_Test_Urg::Ud(0, 1);
+        $random = (bool) Hoa_Test_Urg::Ud(0, 1);
 
         if($this instanceof Hoa_Test_Urg_Type_Interface_Predicable)
             while(false === $this->predicate($random))
-                $random = Hoa_Test_Urg::Ud(0, 1);
+                $random = (bool) Hoa_Test_Urg::Ud(0, 1);
 
         $this->setValue($random);
 

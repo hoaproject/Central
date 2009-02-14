@@ -76,6 +76,43 @@ class Hoa_Test_Urg_Type_Float extends    Hoa_Test_Urg_Type_Number
                               implements Hoa_Test_Urg_Type_Interface_Randomizable {
 
     /**
+     * Zero.
+     *
+     * @const float
+     */
+    const ZERO            = 0.0;
+
+    /**
+     * The closest value of zero on a 32 bits system.
+     *
+     * @const float
+     */
+    const CLOSEST_ZERO_32 = 1.4012985e-45;
+
+    /**
+     * The closest value of zero on a 64 bits system.
+     *
+     * @const float
+     */
+    const CLOSEST_ZERO_64 = 4.94065645841e-324;
+
+    /**
+     * The “infinity”, i.e. the greatest value on a 32 bits system.
+     *
+     * @const float
+     */
+    const INFINITY_32     = 3.4028235e38;
+
+    /**
+     * The “infinity”, i.e. the greatest value on a 64 bits system.
+     *
+     * @const float
+     */
+    const INFINITY_64     = 1.7976931348623157e308;
+
+
+
+    /**
      * Build a float.
      *
      * @access  public
@@ -83,21 +120,87 @@ class Hoa_Test_Urg_Type_Float extends    Hoa_Test_Urg_Type_Number
      */
     public function __construct ( ) {
 
-        //$this->setUpperBoundValue( 1.8e308);
-        //$this->setLowerBoundValue(-1.8e308);
-        // to big at home …
+        $this->setUpperBoundValue($this->getPositiveInfinity());
+        $this->setLowerBoundValue($this->getNegativeInfinity());
         $this->randomize();
 
         return;
     }
 
     /**
+     * Get the zero.
+     *
+     * @access  public
+     * @return  float
+     */
+    public static function getZero ( ) {
+
+        return self::ZERO;
+    }
+
+    /**
+     * Get the positive closest value of zero.
+     *
+     * @access  public
+     * @return  float
+     */
+    public static function getPositiveClosestValue ( ) {
+
+        if(true === S_64_BITS)
+            return self::CLOSEST_ZERO_64;
+
+        return self::CLOSEST_ZERO_32;
+    }
+
+    /**
+     * Get the negative closest value of zero.
+     *
+     * @access  public
+     * @return  float
+     */
+    public static function getNegativeClosestValue ( ) {
+
+        if(true === S_64_BITS)
+            return -self::CLOSEST_ZERO_64;
+
+        return -self::CLOSEST_ZERO_32;
+    }
+
+    /**
+     * Get the positive infinity.
+     *
+     * @access  public
+     * @return  float
+     */
+    public static function getPositiveInfinity ( ) {
+
+        if(true === S_64_BITS)
+            return self::INFINITY_64;
+
+        return self::INFINITY_32;
+    }
+
+    /**
+     * Get the negative infinity.
+     *
+     * @access  public
+     * @return  float
+     */
+    public static function getNegativeInfinity ( ) {
+
+        if(true === S_64_BITS)
+            return -self::INFINITY_64;
+
+        return -self::INFINITY_32;
+    }
+
+    /**
      * Choose a random value.
      *
-     * @access  protected
+     * @access  public
      * @return  void
      */
-    protected function randomize ( ) {
+    public function randomize ( ) {
 
         $upper  = $this->getUpperBoundValue();
         $lower  = $this->getLowerBoundValue();
