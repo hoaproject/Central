@@ -48,6 +48,16 @@ import('Test.Oracle.Exception');
 import('Test.Oracle.Eyes');
 
 /**
+ * Hoa_Pom
+ */
+import('Pom.~');
+
+/**
+ * Hoa_Pom_Token_Class_Method
+ */
+import('Pom.Token.Class.Method');
+
+/**
  * Class Hoa_Test_Oracle.
  *
  * .
@@ -88,11 +98,15 @@ class Hoa_Test_Oracle {
     }
 
     /**
+     * Ask the oracle the predict future.
      *
+     * @access  public
+     * @return  void
      */
     public function predict ( ) {
 
         $this->prepareIncubator();
+        $this->prepareOrdealOracle();
         $this->prepareEyes();
     }
 
@@ -175,6 +189,81 @@ class Hoa_Test_Oracle {
         $this->getRequest()->setParameter('convict.result', $files);
 
         return;
+    }
+
+    /**
+     * Prepare the ordeal.oracle.
+     *
+     * @access  protected
+     * @return  void
+     * @throw   Hoa_Test_Oracle_Exception
+     */
+    protected function prepareOrdealOracle ( ) {
+
+        $convict   = $this->getRequest()->getParameter('convict.result');
+        $incubator = $this->getRequest()->getParameter('test.incubator');
+        $oracle    = $this->getRequest()->getParameter('test.ordeal.oracle');
+        $prefix    = $this->getRequest()->getParameter('test.ordeal.methodPrefix');
+
+        if(null === $oracle)
+            throw new Hoa_Test_Oracle_Exception(
+                'A directory for ordeal.oracle must be specified.', 4);
+
+        if(is_dir($oracle)) {
+
+            foreach(new RecursiveIteratorIterator(
+                        new RecursiveDirectoryIterator($oracle),
+                        RecursiveIteratorIterator::CHILD_FIRST
+                    ) as $name => $splFileInfo) {
+
+                if(is_dir($name))
+                    rmdir($name);
+                elseif(is_file($name))
+                    unlink($name);
+            }
+
+            rmdir($oracle);
+        }
+
+        if(false === @mkdir($oracle, 0777, true))
+            throw new Hoa_Test_Oracle_Exception(
+                'Cannot create the ordeal.oracle in %s.', 5, $oracle);
+
+        foreach($convict as $i => $file) {
+
+            $parser      = Hoa_Pom::parse($incubator . $file, Hoa_Pom::TOKENIZE_FILE);
+            $magicSetter = new Hoa_Pom_Token_Class_Method(
+                new Hoa_Pom_Token_String($prefix . 'magicSetter')
+            );
+            $magicSetter->referenceMe(false);
+            $magicSetter->addArguments(array(
+                new Hoa_Pom_Token_Function_Argument(
+                    new Hoa_Pom_Token_Variable(
+                        new Hoa_Pom_Token_String('attr')
+                    )
+                ),
+                new Hoa_Pom_Token_Function_Argument(
+                    new Hoa_Pom_Token_Variable(
+                        new Hoa_Pom_Token_String('value')
+                    )
+                )
+            ));
+
+            foreach($parser->getElements() as $i => $element)
+                if($element instanceof Hoa_Pom_Token_Class)
+                    $element->addMethods(array(
+                        $magicSetter
+                    ));
+
+            foreach($parser->getElements() as $i => $element)
+                if($element instanceof Hoa_Pom_Token_Class)
+                    foreach($element->getMethods() as $e => $method)
+                        var_dump('--- ' . $method->getName()->getString());
+        }
+
+        print_r($convict);
+
+        exit;
     }
 
     /**
