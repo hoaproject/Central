@@ -274,7 +274,8 @@ abstract class Hoa_Pom_Token_Function {
      */
     public function addBody ( $element ) {
 
-        if(!($element instanceof Hoa_Pom_Token_Instruction))
+        if(   !($element instanceof Hoa_Pom_Token_Instruction)
+           && !($element instanceof Hoa_Pom_Token_LateParsing))
             throw new Hoa_Pom_Token_Util_Exception(
                 'A function cannot have %s in his body.', 0, get_class($element));
 
@@ -343,8 +344,14 @@ abstract class Hoa_Pom_Token_Function {
      *
      * @access  public
      * @return  array
+     * @throw   Hoa_Pom_Token_Util_Exception
      */
     public function getBody ( ) {
+
+        if(   isset($this->_body[0])
+           && ($this->_body[0] instanceof Hoa_Pom_Token_LateParsing))
+            throw new Hoa_Pom_Token_Util_Exception(
+                'Cannot run the late parser because it is not yet coded :-P.', 0);
 
         return $this->_body;
     }
