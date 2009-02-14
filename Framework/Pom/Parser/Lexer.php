@@ -78,6 +78,13 @@ class Hoa_Pom_Parser_Lexer {
     const FILE   = 1;
 
     /**
+     * Whether consume a list of tokens (usefull for the late parser).
+     *
+     * @const int
+     */
+    const LATE   = 2;
+
+    /**
      * Whether line numbers exist or not.
      *
      * @var Hoa_Pom_Parser_Lexer array
@@ -97,7 +104,8 @@ class Hoa_Pom_Parser_Lexer {
      * Constructor. Redirect call to $this->token().
      *
      * @access  public
-     * @param   string  $source    Source of file to tokenize.
+     * @param   mixed   $source    Source or path to source to tokenize or
+     *                             tokens.
      * @param   int     $type      Given by constants self::SOURCE and
      *                             self::FILE.
      * @return  void
@@ -115,7 +123,8 @@ class Hoa_Pom_Parser_Lexer {
      * Tokenize a file.
      *
      * @access  protected
-     * @param   string     $source    Source of file to tokenize.
+     * @param   mixed      $source    Source or path to source to tokenize or
+     *                                tokens.
      * @param   int        $type      Given by constants self::SOURCE and
      *                                self::FILE.
      * @return  array
@@ -134,8 +143,10 @@ class Hoa_Pom_Parser_Lexer {
 
             $this->_token = token_get_all(file_get_contents($source));
         }
-        else
+        elseif(self::SOURCE == $type)
             $this->_token = token_get_all($source);
+        else
+            $this->_token = $source;
 
         $this->complete();
 
@@ -150,14 +161,12 @@ class Hoa_Pom_Parser_Lexer {
      */
     protected function complete ( ) {
 
-        foreach($this->_token as $i => &$t) {
-
+        foreach($this->_token as $i => &$t)
             if(is_string($t))
                 $t = array($t, $t, -1);
             else
                 if(false === $this->areLineNumbers())
                     $t[2] = -1;
-        }
     }
 
     /**
@@ -187,7 +196,6 @@ class Hoa_Pom_Parser_Lexer {
      *
      * @access  public
      * @return  string
-     * @todo    Ameliorate.
      */
     public function __toString ( ) {
 
