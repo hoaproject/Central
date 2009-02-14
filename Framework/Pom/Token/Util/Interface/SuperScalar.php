@@ -96,6 +96,14 @@ interface Hoa_Pom_Token_Util_Interface_SuperScalar {
      *   is a super-scalar.
      *
      *   array(
+     *       0 => 'one',       // integer => string
+     *       1 => 'three',     // integer => string
+     *       2 => 'five',      // integer => string
+     *       3 => 'seven'      // integer => string
+     *   )
+     *   is a uniform super-scalar.
+     *
+     *   array(
      *       0 => 1,           // integer => integer = scalar
      *       1 => 3,           // integer => integer = scalar
      *       2 => array(
