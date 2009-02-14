@@ -144,7 +144,8 @@ class Hoa_Pom_Token_Array implements Hoa_Pom_Token_Util_Interface_Tokenizable,
      */
     public function addElement ( $key, $value ) {
 
-        if(null !== $key)
+        if(null !== $key) {
+
             if(   !($key instanceof Hoa_Pom_Token_Call)
                && !($key instanceof Hoa_Pom_Token_Clone)
                && !($key instanceof Hoa_Pom_Token_Number)
@@ -155,6 +156,9 @@ class Hoa_Pom_Token_Array implements Hoa_Pom_Token_Util_Interface_Tokenizable,
                 throw new Hoa_Pom_Token_Util_Exception(
                     'An array key cannot accept a class that ' .
                     'is an instance of %s.', 0, get_class($key));
+        }
+        else
+            $key = new Hoa_Pom_Token_String_Null('null');
 
         if(   !($value instanceof Hoa_Pom_Token_Array)
            && !($value instanceof Hoa_Pom_Token_Call)
@@ -218,32 +222,54 @@ class Hoa_Pom_Token_Array implements Hoa_Pom_Token_Util_Interface_Tokenizable,
      */
     public function isUniformSuperScalar ( ) {
 
-        $old     = null;
-        $current = null;
+        $oldKey       = null;
+        $currentKey   = null;
+        $oldValue     = null;
+        $currentValue = null;
+        $handleKey    = false;
+        $handleValue  = false;
 
         foreach($this->getArray() as $i => $entry) {
 
-            if($entry instanceof Hoa_Pom_Token_Util_Interface_SuperScalar)
-                if($entry->isUniformSuperScalar())
-                    continue;
-                else
-                    return false;
+            $handleKey   = false;
+            $handleValue = false;
 
-            if(!($entry instanceof Hoa_Pom_Token_Util_Interface_Scalar))
+            list($currentKey, $currentValue) = $entry;
+
+            if($currentKey instanceof Hoa_Pom_Token_Util_Interface_SuperScalar)
+                if(true === $currentKey->isUniformSuperScalar())
+                    $handleKey = true;
+
+            if($currentValue instanceof Hoa_Pom_Token_Util_Interface_SuperScalar)
+                if(true === $currentValue->isUniformSuperScalar())
+                    $handleValue = true;
+
+            if(   false === $handleKey
+               || false === $handleValue)
+                continue;
+            else
                 return false;
 
-            if(null === $old) {
+            if(   !($currenyKey   instanceof Hoa_Pom_Token_Util_Interface_Scalar)
+               || !($currentValue instanceof Hoa_Pom_Token_Util_Interface_Scalar))
+                return false;
 
-                $old = get_class($entry);
+            $handleKey   = get_class($currentKey);
+            $handleValue = get_class($currentValue);
+
+            if(null === $oldKey) { // $oldValue is also null.
+
+                $oldKey   = $handleKey;
+                $oldValue = $handleuValue;
                 continue;
             }
 
-            $current = get_class($entry);
+            if(   ($oldKey   != $handleKey)
+               || ($oldValue != $handleValue))
+               return false;
 
-            if($current != $old)
-                return false;
-
-            $old = $current;
+            $oldKey   = $handleKey;
+            $oldValue = $handleValue;
         }
 
         return true;
