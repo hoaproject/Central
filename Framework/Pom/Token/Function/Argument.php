@@ -204,14 +204,15 @@ class Hoa_Pom_Token_Function_Argument implements Hoa_Pom_Token_Util_Interface_To
      */
     public function setDefaultValue ( $default ) {
 
-        if($default instanceof Hoa_Pom_Token_Util_Interface_SuperScalar)
+        if($default instanceof Hoa_Pom_Token_Util_Interface_SuperScalar) {
+
             if(false === $default->isUniformSuperScalar())
                 throw new Hoa_Pom_Token_Util_Exception(
                     'Default value should effectively be a super-scalar, ' .
                     'but a uniform super-scalar, given %s.',
                     0, get_class($default));
-
-        if(!($default instanceof Hoa_Pom_Token_Util_Interface_Scalar))
+        }
+        elseif(!($default instanceof Hoa_Pom_Token_Util_Interface_Scalar))
             throw new Hoa_Pom_Token_Util_Exception(
                 'Default value must be a scalar or a uniform super-scalar, given %s.',
                 1, get_class($default));

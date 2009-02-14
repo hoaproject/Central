@@ -259,15 +259,17 @@ class Hoa_Pom_Token_Class_Attribute implements Hoa_Pom_Token_Util_Interface_Toke
      */
     public function setValue ( $value ) {
 
-        if($value instanceof Hoa_Pom_Token_Util_Interface_SuperScalar)
+        if($value instanceof Hoa_Pom_Token_Util_Interface_SuperScalar) {
+
             if(false === $value->isUniformSuperScalar())
                 throw new Hoa_Pom_Token_Util_Exception(
                     'Value should effectively be a super-scalar, ' .
                     'but an uniform super-scalar.', 0);
-
-        if(!($value instanceof Hoa_Pom_Token_Util_Interface_Scalar))
+        }
+        elseif(!($value instanceof Hoa_Pom_Token_Util_Interface_Scalar))
             throw new Hoa_Pom_Token_Util_Exception(
-                'Value must be a scalar or an uniform super-scalar.', 1);
+                'Value must be a scalar or an uniform super-scalar, given %s.',
+                1, get_class($value));
 
         $old          = $this->_value;
         $this->_value = $value;
