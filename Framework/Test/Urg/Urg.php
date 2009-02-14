@@ -43,9 +43,19 @@ require_once 'Framework.php';
 import('Test.Urg.Exception');
 
 /**
+ * Hoa_Test_Urg_Type_Integer
+ */
+import('Test.Urg.Type.Integer');
+
+/**
+ * Hoa_Test_Urg_Type_Float
+ */
+import('Test.Urg.Type.Float');
+
+/**
  * Class Hoa_Test_Urg.
  *
- * .
+ * Some usefull uniform random generator methods.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -59,7 +69,7 @@ import('Test.Urg.Exception');
 class Hoa_Test_Urg {
 
     /**
-     * Combine a discrete uniform distribution (based on a Mersenne Twister for
+     * Generate a discrete uniform distribution (based on a Mersenne Twister for
      * pseudo-random algorithm).
      *
      * @access  public
@@ -70,16 +80,16 @@ class Hoa_Test_Urg {
     public static function Ud ( $lower = null, $upper = null ) {
 
         if(null === $lower)
-            $lower = ~PHP_INT_MAX;
+            $lower = Hoa_Test_Urg_Type_Integer::getNegativeInfinity();
 
         if(null === $upper)
-            $upper =  PHP_INT_MAX;
+            $upper = Hoa_Test_Urg_Type_Integer::getPositiveInfinity();
 
         return mt_rand($lower, $upper);
     }
 
     /**
-     * Combine a continuous uniform distribution (based on a linear
+     * Generate a continuous uniform distribution (based on a combined linear
      * congruential generator).
      *
      * @access  public
@@ -88,6 +98,12 @@ class Hoa_Test_Urg {
      * @return  float
      */
     public static function Uc ( $lower = null, $upper = null ) {
+
+        if(null === $lower)
+            $lower = Hoa_Test_Urg_Type_Float::getNegativeInfinity();
+
+        if(null === $upper)
+            $upper = Hoa_Test_Urg_Type_Float::getNegativeInfinity();
 
         return $lower + lcg_value() * ($upper - $lower);
     }
