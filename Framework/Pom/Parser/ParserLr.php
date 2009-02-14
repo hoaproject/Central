@@ -125,6 +125,26 @@ import('Pom.Token.Class.Constant');
 import('Pom.Token.Class.Method');
 
 /**
+ * Hoa_Pom_Token_Comment
+ */
+import('Pom.Token.Comment');
+
+/**
+ * Hoa_Pom_Token_Function_Named
+ */
+import('Pom.Token.Function.Named');
+
+/**
+ * Hoa_Pom_Token_LateParsing
+ */
+import('Pom.Token.LateParsing');
+
+/**
+ * Hoa_Pom_Token_Function_Argument
+ */
+import('Pom.Token.Function.Argument');
+
+/**
  * Hoa_Pom_Token_Number_DNumber
  */
 import('Pom.Token.Number.DNumber');
@@ -158,21 +178,6 @@ import('Pom.Token.String.EncapsedConstant');
  * Hoa_Pom_Token_String_Null
  */
 import('Pom.Token.String.Null');
-
-/**
- * Hoa_Pom_Token_Comment
- */
-import('Pom.Token.Comment');
-
-/**
- * Hoa_Pom_Token_Function_Named
- */
-import('Pom.Token.Function.Named');
-
-/**
- * Hoa_Pom_Token_Function_Argument
- */
-import('Pom.Token.Function.Argument');
 
 /**
  * Hoa_Pom_Token_Variable
@@ -217,6 +222,9 @@ class Hoa_Pom_Parser_ParserLr extends Hoa_Pom_Parser {
      */
     public function axiome ( ) {
 
+        $lateBuffer = new Hoa_Pom_Token_LateParsing();
+        $in         = false;
+
         for(; $this->end(); $this->n()) {
 
             $handle = null;
@@ -224,19 +232,33 @@ class Hoa_Pom_Parser_ParserLr extends Hoa_Pom_Parser {
             switch($this->ct()) {
 
                 case Hoa_Pom::_CLASS:
-                    var_dump('go compile class');
                     $handle = $this->clas();
                   break;
 
                 case Hoa_Pom::_FUNCTION:
-                    var_dump('go compile function');
                     $handle = $this->func();
                   break;
+
+                default:
+                    $lateBuffer->addToken($this->c());
+                    $in = true;
             }
 
-            if(null !== $handle)
+            if(null !== $handle) {
+
+                if(true === $in) {
+
+                    $this->r()->addElement($lateBuffer);
+                    $lateBuffer = new Hoa_Pom_Token_LateParsing();
+                    $in         = false;
+                }
+
                 $this->r()->addElement($handle);
+            }
         }
+
+        if(true === $in)
+            $this->r()->addElement($lateBuffer);
     }
 
     /**
@@ -244,9 +266,63 @@ class Hoa_Pom_Parser_ParserLr extends Hoa_Pom_Parser {
      */
     public function arra ( ) {
 
-        var_dump('ARRAAAAAYYYYYYY');
+        $array = new Hoa_Pom_Token_Array();
+        $i     = 1;
+
         $this->n();
-        $this->n();
+
+        while($i > 0) {
+
+            $this->n();
+            $key   = null;
+            $value = null;
+
+            switch($this->ct()) {
+
+                case Hoa_Pom::_OPEN_PARENTHESES:
+                    $i++;
+                  break;
+
+                case Hoa_Pom::_CLOSE_PARENTHESES:
+                    $i--;
+                  break;
+
+                case Hoa_Pom::_COMMA:
+                  break;
+
+                default:
+                    if($this->ct() == Hoa_Pom::_CONSTANT_ENCAPSED_STRING)
+                        $key = new Hoa_Pom_Token_String_EncapsedConstant($this->cv());
+                    elseif($this->ct() == Hoa_Pom::_DNUMBER)
+                        $key = new Hoa_Pom_Token_Number_DNumber($this->cv());
+                    elseif($this->ct() == Hoa_Pom::_LNUMBER)
+                        $key = new Hoa_Pom_Token_Number_LNumber($this->cv());
+
+                    $this->n();
+
+                    if($this->ct() != Hoa_Pom::_DOUBLE_ARROW) {
+
+                        $array->addElement(null, $key);
+                        $this->p();
+                        continue;
+                    }
+                    else
+                        $this->n();
+
+                    if($this->ct() == Hoa_Pom::_CONSTANT_ENCAPSED_STRING)
+                        $value = new Hoa_Pom_Token_String_EncapsedConstant($this->cv());
+                    elseif($this->ct() == Hoa_Pom::_DNUMBER)
+                        $value = new Hoa_Pom_Token_Number_DNumber($this->cv());
+                    elseif($this->ct() == Hoa_Pom::_LNUMBER)
+                        $value = new Hoa_Pom_Token_Number_LNumber($this->cv());
+                    elseif($this->ct() == Hoa_Pom::_ARRAY)
+                        $value = $this->arra();
+
+                    $array->addElement($key, $value);
+            }
+        }
+
+        return $array;
     }
 
     /**
@@ -342,8 +418,7 @@ class Hoa_Pom_Parser_ParserLr extends Hoa_Pom_Parser {
                    || $this->ct() == Hoa_Pom::_DOC_COMMENT)
                     $com = $this->comm();
 
-                while($this->n() && $this->ct == Hoa_Pom::_CONST);
-                $this->n();
+                while($this->n() + 1 && $this->ct() == Hoa_Pom::_CONST);
 
                 $nam = new Hoa_Pom_Token_String($this->cv());
                 $this->n();
@@ -508,7 +583,30 @@ class Hoa_Pom_Parser_ParserLr extends Hoa_Pom_Parser {
                     }
 
                     $this->n();
-                    $this->goToEndBlock();
+
+                    if(false === $abs) {
+
+                        $bod = new Hoa_Pom_Token_LateParsing();
+
+                        $ii = 1;
+
+                        while($ii > 0) {
+
+                            $this->n();
+                            $bod->addToken($this->c());
+
+                            switch($this->ct()) {
+
+                                case Hoa_Pom::_OPEN_BRACE:
+                                    $ii++;
+                                  break;
+
+                                case Hoa_Pom::_CLOSE_BRACE:
+                                    $ii--;
+                                  break;
+                            }
+                        }
+                    }
 
                     $met = new Hoa_Pom_Token_Class_Method($nam);
 
@@ -522,9 +620,8 @@ class Hoa_Pom_Parser_ParserLr extends Hoa_Pom_Parser {
                     $met->referenceMe($ref);
                     $met->addArguments($arg);
 
-                    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    // body (pay attention to abstract).
-                    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    if(null !== $bod)
+                        $met->addBody($bod);
 
                     $methods[] = $met;
                 }
@@ -559,7 +656,7 @@ class Hoa_Pom_Parser_ParserLr extends Hoa_Pom_Parser {
     }
 
     /**
-     *
+     * Default value.
      */
     public function defv ( ) {
 
@@ -627,7 +724,7 @@ class Hoa_Pom_Parser_ParserLr extends Hoa_Pom_Parser {
            || $this->ct() == Hoa_Pom::_DOC_COMMENT)
             $comment = $this->comm();
 
-        while($this->n() && $this->ct != Hoa_Pom::_FUNCTION);
+        while($this->n() + 1 && $this->ct() != Hoa_Pom::_FUNCTION);
         $this->n();
 
         if($this->ct() == Hoa_Pom::_REFERENCE) {
@@ -688,7 +785,26 @@ class Hoa_Pom_Parser_ParserLr extends Hoa_Pom_Parser {
         }
 
         $this->n();
-        $this->goToEndBlock();
+
+        $body = new Hoa_Pom_Token_LateParsing();
+        $i    = 1;
+
+        while($i > 0) {
+
+            $this->n();
+            $body->addToken($this->c());
+
+            switch($this->ct()) {
+
+                case Hoa_Pom::_OPEN_BRACE:
+                    $i++;
+                  break;
+
+                case Hoa_Pom::_CLOSE_BRACE:
+                    $i--;
+                  break;
+            }
+        }
 
         $function = new Hoa_Pom_Token_Function_Named($name);
 
@@ -697,10 +813,7 @@ class Hoa_Pom_Parser_ParserLr extends Hoa_Pom_Parser {
 
         $function->referenceMe($reference);
         $function->addArguments($arguments);
-
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // body
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        $function->addBody($body);
 
         return $function;
     }
