@@ -88,7 +88,7 @@ class Hoa_Test_Oracle_Eyes {
     }
 
     /**
-     * Look.
+     * Oracle opens eyes and looks the future.
      *
      * @access  public
      * @return  void
@@ -105,7 +105,7 @@ class Hoa_Test_Oracle_Eyes {
 
             foreach($parser->getElements() as $i => $element)
                 if($element instanceof Hoa_Pom_Token_Class)
-                    foreach($element->getMethods() as $i => $method) {
+                    foreach($element->getMethods() as $e => $method) {
 
                         echo $method->getName()->getString() . "\n";
                         //var_dump($method->getComment()->getComment());
