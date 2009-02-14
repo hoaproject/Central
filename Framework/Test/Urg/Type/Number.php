@@ -149,10 +149,10 @@ abstract class Hoa_Test_Urg_Type_Number extends Hoa_Test_Urg_Type {
     /**
      * Get the random value.
      *
-     * @access  protected
+     * @access  public
      * @return  mixed
      */
-    protected function getValue ( ) {
+    public function getValue ( ) {
 
         return $this->_value;
     }
