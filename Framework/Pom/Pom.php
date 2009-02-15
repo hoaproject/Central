@@ -47,11 +47,6 @@ import('Pom.Parser.ParserLr');
 import('Pom.Parser.Lexer');
 
 /**
- * Hoa_Pom_Dumper
- */
-import('Pom.Dumper');
-
-/**
  * Class Hoa_Pom.
  *
  * Describe all token constants and propose alias for parsing and building.
