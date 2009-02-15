@@ -43,14 +43,14 @@ require_once 'Framework.php';
 import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Pom_Token_Util_Interface_Tokenizable
- */
-import('Pom.Token.Util.Interface.Tokenizable');
-
-/**
  * Hoa_Pom
  */
 import('Pom.~');
+
+/**
+ * Hoa_Visitor_Element
+ */
+import('Visitor.Element');
 
 /**
  * Class Hoa_Pom_Token_Comment.
@@ -66,7 +66,7 @@ import('Pom.~');
  * @subpackage  Hoa_Pom_Token_Comment
  */
 
-class Hoa_Pom_Token_Comment implements Hoa_Pom_Token_Util_Interface_Tokenizable {
+class Hoa_Pom_Token_Comment implements Hoa_Visitor_Element {
 
     /**
      * Documentation comment, i.e. starting by /**.
@@ -332,19 +332,15 @@ class Hoa_Pom_Token_Comment implements Hoa_Pom_Token_Util_Interface_Tokenizable 
     }
 
     /**
-     * Transform token to “tokenizer array”.
+     * Accept a visitor.
      *
      * @access  public
-     * @return  array
+     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   mixed              $handle     Handle (reference).
+     * @return  mixed
      */
-    public function tokenize ( ) {
+    public function accept ( Hoa_Visitor_Visit $visitor, &$handle = null ) {
 
-        return array(array(
-            self::TYPE_DOCUMENTATION === $this->getType()
-                ? Hoa_Pom::_DOC_COMMENT
-                : Hoa_Pom::_COMMENT,
-            $this->getComment(),
-            -1
-        ));
+        return $visitor->visit($this);
     }
 }

@@ -66,23 +66,5 @@ import('Pom.Token.ControlStructure.Import');
  * @subpackage  Hoa_Pom_Token_ControlStructure_Import_RequireOnce
  */
 
-class Hoa_Pom_Token_ControlStructure_Import_RequireOnce extends Hoa_Pom_Token_ControlStructure_Import {
-
-    /**
-     * Transform token to “tokenizer array”.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function tokenize ( ) {
-
-        return array_merge(
-            array(array(
-                0 => Hoa_Pom::_REQUIRE_ONCE,
-                1 => 'require_once',
-                2 => -1
-            )),
-            $this->getValue()->tokenize()
-        );
-    }
-}
+class       Hoa_Pom_Token_ControlStructure_Import_RequireOnce
+    extends Hoa_Pom_Token_ControlStructure_Import { }

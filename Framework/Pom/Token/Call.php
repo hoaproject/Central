@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Pom_Token_Util_Interface_Tokenizable
- */
-import('Pom.Token.Util.Interface.Tokenizable');
-
-/**
  * Hoa_Pom
  */
 import('Pom.~');
@@ -66,4 +61,4 @@ import('Pom.~');
  * @subpackage  Hoa_Pom_Token_Call
  */
 
-abstract class Hoa_Pom_Token_Call implements Hoa_Pom_Token_Util_Interface_Tokenizable { }
+abstract class Hoa_Pom_Token_Call { }

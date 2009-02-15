@@ -43,14 +43,14 @@ require_once 'Framework.php';
 import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Pom_Token_Util_Interface_Tokenizable
- */
-import('Pom.Token.Util.Interface.Tokenizable');
-
-/**
  * Hoa_Pom
  */
 import('Pom.~');
+
+/**
+ * Hoa_Visitor_Element
+ */
+import('Visitor.Element');
 
 /**
  * Class Hoa_Pom_Token_Operation.
@@ -66,7 +66,7 @@ import('Pom.~');
  * @subpackage  Hoa_Pom_Token_Operation
  */
 
-class Hoa_Pom_Token_Operation implements Hoa_Pom_Token_Util_Interface_Tokenizable {
+class Hoa_Pom_Token_Operation implements Hoa_Visitor_Element {
 
     /**
      * Sequence of elements that constitute an operation.
@@ -156,21 +156,17 @@ class Hoa_Pom_Token_Operation implements Hoa_Pom_Token_Util_Interface_Tokenizabl
 
         return $this->_sequence;
     }
-
+ 
     /**
-     * Transform token to “tokenizer array”.
+     * Accept a visitor.
      *
      * @access  public
-     * @return  array
+     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   mixed              $handle     Handle (reference).
+     * @return  mixed
      */
-    public function tokenize ( ) {
+    public function accept ( Hoa_Visitor_Visit $visitor, &$handle = null ) {
 
-        $out = array();
-
-        foreach($this->getSequence() as $i => $operation)
-            foreach($operation->tokenize() as $key => $value)
-                $out[] = $value;
-
-        return $out;
+        return $visitor->visit($this);
     }
 }

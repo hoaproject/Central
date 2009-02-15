@@ -43,9 +43,14 @@ require_once 'Framework.php';
 import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Pom_Token_Util_Interface_Tokenizable
+ * Hoa_Pom
  */
-import('Pom.Token.Util.Interface.Tokenizable');
+import('Pom.~');
+
+/**
+ * Hoa_Visitor_Element
+ */
+import('Visitor.Element');
 
 /**
  * Class Hoa_Pom_Token_Operator.
@@ -61,7 +66,7 @@ import('Pom.Token.Util.Interface.Tokenizable');
  * @subpackage  Hoa_Pom_Token_Operator
  */
 
-abstract class Hoa_Pom_Token_Operator implements Hoa_Pom_Token_Util_Interface_Tokenizable {
+abstract class Hoa_Pom_Token_Operator implements Hoa_Visitor_Element {
 
     /**
      * Arity : whether operator is unary.
@@ -202,10 +207,10 @@ abstract class Hoa_Pom_Token_Operator implements Hoa_Pom_Token_Util_Interface_To
     /**
      * Get type.
      *
-     * @access  protected
+     * @access  public
      * @return  mixed
      */
-    protected function getType ( ) {
+    public function getType ( ) {
 
         return $this->_type;
     }
@@ -233,19 +238,17 @@ abstract class Hoa_Pom_Token_Operator implements Hoa_Pom_Token_Util_Interface_To
 
         return $this->_precedence;
     }
-
+ 
     /**
-     * Transform token to “tokenizer array”.
+     * Accept a visitor.
      *
      * @access  public
-     * @return  array
+     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   mixed              $handle     Handle (reference).
+     * @return  mixed
      */
-    public function tokenize ( ) {
+    public function accept ( Hoa_Visitor_Visit $visitor, &$handle = null ) {
 
-        return array(array(
-            $this->getType(),
-            $this->getOperator(),
-            -1
-        ));
+        return $visitor->visit($this);
     }
 }

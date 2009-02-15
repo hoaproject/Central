@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Pom_Token_Util_Interface_Tokenizable
- */
-import('Pom.Token.Util.Interface.Tokenizable');
-
-/**
  * Hoa_Pom_Token_Util_Interface_Scalar
  */
 import('Pom.Token.Util.Interface.Scalar');
@@ -73,6 +68,11 @@ import('Pom.Token.String');
 import('Pom.Token.Operator.Assignement');
 
 /**
+ * Hoa_Visitor_Element
+ */
+import('Visitor.Element');
+
+/**
  * Class Hoa_Pom_Token_Class_Constant.
  *
  * Represent a class (or interface) constant.
@@ -86,8 +86,8 @@ import('Pom.Token.Operator.Assignement');
  * @subpackage  Hoa_Pom_Token_Class_Constant
  */
 
-class Hoa_Pom_Token_Class_Constant implements Hoa_Pom_Token_Util_Interface_Tokenizable,
-                                              Hoa_Pom_Token_Util_Interface_Scalar {
+class Hoa_Pom_Token_Class_Constant implements Hoa_Pom_Token_Util_Interface_Scalar,
+                                              Hoa_Visitor_Element {
 
     /**
      * Constant comment.
@@ -260,45 +260,24 @@ class Hoa_Pom_Token_Class_Constant implements Hoa_Pom_Token_Util_Interface_Token
     /**
      * Get constant operator.
      *
-     * @access  protected
+     * @access  public
      * @return  Hoa_Pom_Token_Operator_Assignement
      */
-    protected function getOperator ( ) {
+    public function getOperator ( ) {
 
         return $this->_operator;
     }
 
     /**
-     * Transform token to “tokenizer array”.
+     * Accept a visitor.
      *
      * @access  public
-     * @return  array
-     * @throw   Hoa_Pom_Token_Util_Exception
+     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   mixed              $handle     Handle (reference).
+     * @return  mixed
      */
-    public function tokenize ( ) {
+    public function accept ( Hoa_Visitor_Visit $visitor, &$handle = null ) {
 
-        if(false === $this->hasValue())
-            throw new Hoa_Pom_Token_Util_Exception(
-                'A constant must have a value.', 0);
-
-        return array_merge(
-            (true === $this->hasComment()
-                 ? $this->getComment()->tokenize()
-                 : array()
-            ),
-            array(array(
-                Hoa_Pom::_CONST,
-                'const',
-                -1
-            )),
-            $this->getName()->tokenize(),
-            $this->getOperator()->tokenize(),
-            $this->getValue()->tokenize(),
-            array(array(
-                Hoa_Pom::_SEMI_COLON,
-                ';',
-                -1
-            ))
-        );
+        return $visitor->visit($this);
     }
 }

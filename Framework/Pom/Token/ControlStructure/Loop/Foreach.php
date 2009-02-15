@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Pom_Token_Util_Interface_Tokenizable
- */
-import('Pom.Token.Util.Interface.Tokenizable');
-
-/**
  * Hoa_Pom
  */
 import('Pom.~');
@@ -71,9 +66,8 @@ import('Pom.Token.Instruction.Block');
  * @subpackage  Hoa_Pom_Token_ControlStructure_Loop_Foreach
  */
 
-class          Hoa_Pom_Token_ControlStructure_Loop_Foreach
-    extends    Hoa_Pom_Token_Instruction_Block
-    implements Hoa_Pom_Token_Util_Interface_Tokenizable {
+class       Hoa_Pom_Token_ControlStructure_Loop_Foreach
+    extends Hoa_Pom_Token_Instruction_Block {
 
     /**
      * Array expression.
@@ -276,56 +270,5 @@ class          Hoa_Pom_Token_ControlStructure_Loop_Foreach
     public function isReferencedValue ( ) {
 
         return $this->_referenced;
-    }
-
-    /**
-     * Transform token to “tokenizer array”.
-     *
-     * @access  public
-     * @return  array
-     * @throw   Hoa_Pom_Token_Util_Interface
-     */
-    public function tokenize ( ) {
-
-        if(false === $this->valueExists())
-            throw new Hoa_Pom_Token_Util_Exception(
-                'A foreach loop must have a value variable.', 1);
-
-        return array_merge(
-            array(array(
-                0 => Hoa_Pom::_FOREACH,
-                1 => 'foreach',
-                2 => -1,
-            )),
-            array(array(
-                0 => Hoa_Pom::_OPEN_PARENTHESES,
-                1 => '(',
-                2 => -1
-            )),
-            $this->getArrayExpression()->tokenize(),
-            array(array(
-                0 => Hoa_Pom::_AS,
-                1 => 'as',
-                2 => -1
-            )),
-            (true === $this->keyExists()
-                 ? array_merge(
-                       $this->getKey()->tokenize(),
-                       array(array(
-                           0 => Hoa_Pom::_DOUBLE_ARROW,
-                           1 => '=>',
-                           2 => -1
-                       ))
-                   )
-                 : array()
-            ),
-            $this->getValue()->tokenize(),
-            array(array(
-                0 => Hoa_Pom::_CLOSE_PARENTHESES,
-                1 => ')',
-                2 => -1
-            )),
-            parent::tokenize()
-        );
     }
 }

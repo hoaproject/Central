@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Pom_Token_Util_Interface_Tokenizable
- */
-import('Pom.Token.Util.Interface.Tokenizable');
-
-/**
  * Hoa_Pom
  */
 import('Pom.~');
@@ -56,6 +51,11 @@ import('Pom.~');
  * Hoa_Pom_Token_Instruction
  */
 import('Pom.Token.Instruction');
+
+/**
+ * Hoa_Visitor_Element
+ */
+import('Visitor.Element');
 
 /**
  * Class Hoa_Pom_Token_Instruction_Block.
@@ -71,7 +71,7 @@ import('Pom.Token.Instruction');
  * @subpackage  Hoa_Pom_Token_Instruction_Block
  */
 
-class Hoa_Pom_Token_Instruction_Block implements Hoa_Pom_Token_Util_Interface_Tokenizable {
+class Hoa_Pom_Token_Instruction_Block implements Hoa_Visitor_Element {
 
     /**
      * Force to write braces.
@@ -291,89 +291,17 @@ class Hoa_Pom_Token_Instruction_Block implements Hoa_Pom_Token_Util_Interface_To
 
         return $this->_empty;
     }
-
+ 
     /**
-     * Transform token to “tokenize array”.
+     * Accept a visitor.
      *
      * @access  public
-     * @return  array
+     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   mixed              $handle     Handle (reference).
+     * @return  mixed
      */
-    public function tokenize ( ) {
+    public function accept ( Hoa_Visitor_Visit $visitor, &$handle = null ) {
 
-        $array = array();
-
-        foreach($this->getInstructions() as $i => $instruction)
-            foreach($instruction->tokenize() as $key => $value)
-                $array[] = $value;
-
-        $braces = true;
-        $scolon = false;
-
-        switch($this->getBracesMode()) {
-
-            case self::FORCE_BRACES:
-                $braces = true;
-                $scolon = false;
-              break;
-
-            case self::SKIP_BRACES:
-                $braces = false;
-                $scolon = false;
-              break;
-
-            case self::DETERMINE_BRACES:
-
-                $handle = count($array);
-
-                if($handle == 0)
-                    switch($this->getEmptyMode()) {
-
-                        case self::SEMI_COLON_EMPTY:
-                            $braces = false;
-                            $scolon = true;
-                          break;
-
-                        case self::BRACE_EMPTY:
-                            $braces = true;
-                            $scolon = false;
-                          break;
-
-                        case self::NOTHING_EMPTY:
-                            $braces = false;
-                            $scolon = false;
-                    }
-                else
-                    $braces = $handle > 1;
-
-              break;
-        }
-
-        return array_merge(
-            (true === $braces
-                 ? array(array(
-                       0 => Hoa_Pom::_OPEN_BRACE,
-                       1 => '{',
-                       2 => -1
-                       ))
-                 : array()
-            ),
-            $array,
-            (true === $braces
-                 ? array(array(
-                       0 => Hoa_Pom::_CLOSE_BRACE,
-                       1 => '}',
-                       2 => -1
-                   ))
-                 : array()
-            ),
-            (true === $scolon
-                 ? array(array(
-                       0 => Hoa_Pom::_SEMI_COLON,
-                       1 => ';',
-                       2 => -1
-                   ))
-                 : array()
-            )
-        );
+        return $visitor->visit($this);
     }
 }

@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Pom_Token_Util_Interface_Tokenizable
- */
-import('Pom.Token.Util.Interface.Tokenizable');
-
-/**
  * Hoa_Pom
  */
 import('Pom.~');
@@ -71,9 +66,8 @@ import('Pom.Token.Instruction.Block');
  * @subpackage  Hoa_Pom_Token_ControlStructure_Conditional_If_Elseif
  */
 
-class          Hoa_Pom_Token_ControlStructure_Conditional_If_Elseif
-    extends    Hoa_Pom_Token_Instruction_Block
-    implements Hoa_Pom_Token_Util_Interface_Tokenizable {
+class       Hoa_Pom_Token_ControlStructure_Conditional_If_Elseif
+    extends Hoa_Pom_Token_Instruction_Block {
 
     /**
      * Expression.
@@ -142,34 +136,5 @@ class          Hoa_Pom_Token_ControlStructure_Conditional_If_Elseif
     public function getExpression ( ) {
 
         return $this->_expression;
-    }
-
-    /**
-     * Transform token to “tokenizer array”.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function tokenize ( ) {
-
-        return array_merge(
-            array(array(
-                0 => Hoa_Pom::_ELSEIF,
-                1 => 'elseif',
-                2 => -1
-            )),
-            array(array(
-                0 => Hoa_Pom::_OPEN_PARENTHESES,
-                1 => '(',
-                2 => -1
-            )),
-            $this->getExpression()->tokenize(),
-            array(array(
-                0 => Hoa_Pom::_CLOSE_PARENTHESES,
-                1 => ')',
-                2 => -1
-            )),
-            parent::tokenize()
-        );
     }
 }

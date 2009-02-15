@@ -43,14 +43,14 @@ require_once 'Framework.php';
 import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Pom_Token_Util_Interface_Tokenizable
- */
-import('Pom.Token.Util.Interface.Tokenizable');
-
-/**
  * Hoa_Pom
  */
 import('Pom.~');
+
+/**
+ * Hoa_Visitor_Element
+ */
+import('Visitor.Element');
 
 /**
  * Class Hoa_Pom_Token_ControlStructure.
@@ -66,4 +66,18 @@ import('Pom.~');
  * @subpackage  Hoa_Pom_Token_ControlStructure
  */
 
-abstract class Hoa_Pom_Token_ControlStructure implements Hoa_Pom_Token_Util_Interface_Tokenizable { }
+abstract class Hoa_Pom_Token_ControlStructure implements Hoa_Visitor_Element {
+
+    /**
+     * Accept a visitor.
+     *
+     * @access  public
+     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   mixed              $handle     Handle (reference).
+     * @return  mixed
+     */
+    public function accept ( Hoa_Visitor_Visit $visitor, &$handle = null ) {
+
+        return $visitor->visit($this);
+    }
+}

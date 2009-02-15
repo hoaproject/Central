@@ -43,14 +43,14 @@ require_once 'Framework.php';
 import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Pom_Token_Util_Interface_Tokenizable
- */
-import('Pom.Token.Util.Interface.Tokenizable');
-
-/**
  * Hoa_Pom
  */
 import('Pom.~');
+
+/**
+ * Hoa_Pom_Token_ControlStructure
+ */
+import('Pom.Token.ControlStructure');
 
 /**
  * Class Hoa_Pom_Token_ControlStructure_TryCatch.
@@ -66,4 +66,5 @@ import('Pom.~');
  * @subpackage  Hoa_Pom_Token_ControlStructure_TryCatch
  */
 
-abstract class Hoa_Pom_Token_ControlStructure_TryCatch implements Hoa_Pom_Token_Util_Interface_Tokenizable { }
+abstract class Hoa_Pom_Token_ControlStructure_TryCatch
+    extends    Hoa_Pom_Token_ControlStructure { }

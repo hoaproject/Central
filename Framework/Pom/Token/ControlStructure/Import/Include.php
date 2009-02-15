@@ -66,23 +66,5 @@ import('Pom.Token.ControlStructure.Import');
  * @subpackage  Hoa_Pom_Token_ControlStructure_Import_Include
  */
 
-class Hoa_Pom_Token_ControlStructure_Import_Include extends Hoa_Pom_Token_ControlStructure_Import {
-
-    /**
-     * Transform token to “tokenizer array”.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function tokenize ( ) {
-
-        return array_merge(
-            array(array(
-                0 => Hoa_Pom::_INCLUDE,
-                1 => 'include',
-                2 => -1
-            )),
-            $this->getValue()->tokenize()
-        );
-    }
-}
+class       Hoa_Pom_Token_ControlStructure_Import_Include
+    extends Hoa_Pom_Token_ControlStructure_Import { }

@@ -278,30 +278,4 @@ class       Hoa_Pom_Token_ControlStructure_Conditional_If
 
         return $this->_else !== null;
     }
-
-    /**
-     * Transform token to “tokenizer array”.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function tokenize ( ) {
-
-        $if     = $this->getIf()->tokenize();
-        $elseif = array();
-
-        foreach($this->getElseifs() as $i => $ei)
-            foreach($ei->tokenize() as $key => $value)
-                $elseif[] = $value;
-
-        $else   = true === $this->hasElse()
-                      ? $this->getElse()->tokenize()
-                      : array();
-
-        return array_merge(
-            $if,
-            $elseif,
-            $else
-        );
-    }
 }

@@ -66,7 +66,8 @@ import('Pom.Token.ControlStructure');
  * @subpackage  Hoa_Pom_Token_ControlStructure_Continue
  */
 
-class Hoa_Pom_Token_ControlStructure_Continue extends Hoa_Pom_Token_ControlStructure {
+class        Hoa_Pom_Token_ControlStructure_Continue
+    extends  Hoa_Pom_Token_ControlStructure {
 
     /**
      * Level up.
@@ -140,26 +141,5 @@ class Hoa_Pom_Token_ControlStructure_Continue extends Hoa_Pom_Token_ControlStruc
     public function hasLevel ( ) {
 
         return $this->_level !== null;
-    }
-
-    /**
-     * Transform token to “tokenize array”.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function tokenize ( ) {
-
-        return array_merge(
-            array(array(
-                0 => Hoa_Pom::_CONTINUE,
-                1 => 'continue',
-                2 => -1
-            )),
-            (true === $this->hasLevel()
-                 ? $this->getLevel()->tokenize()
-                 : array()
-            )
-        );
     }
 }

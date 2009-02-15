@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Pom_Token_Util_Interface_Tokenizable
- */
-import('Pom.Token.Util.Interface.Tokenizable');
-
-/**
  * Hoa_Pom
  */
 import('Pom.~');
@@ -71,9 +66,8 @@ import('Pom.Token.Instruction.Block');
  * @subpackage  Hoa_Pom_Token_ControlStructure_Loop_For
  */
 
-class          Hoa_Pom_Token_ControlStructure_Loop_For
-    extends    Hoa_Pom_Token_Instruction_Block
-    implements Hoa_Pom_Token_Util_Interface_Tokenizable {
+class       Hoa_Pom_Token_ControlStructure_Loop_For
+    extends Hoa_Pom_Token_Instruction_Block {
 
     /**
      * Initializing expression.
@@ -377,85 +371,5 @@ class          Hoa_Pom_Token_ControlStructure_Loop_For
     public function hasNextExpression ( ) {
 
         return $this->_nextExpression != array();
-    }
-
-    /**
-     * Transform token to “tokenizer array”.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function tokenize ( ) {
-
-        $fi   = false;
-        $fn   = false;
-        $ini  = array();
-        $next = array();
-
-        foreach($this->getIniExpressions()  as $i => $iniExpression) {
-
-            if($fi === true)
-                $ini[] = array(
-                             0 => Hoa_Pom::_COMMA,
-                             1 => ',',
-                             2 => -1
-                         );
-            else
-                $fi = true;
-
-            foreach($iniExpression->tokenize() as $key => $value)
-                $ini[] = $value;
-        }
-
-        foreach($this->getNextExpressions() as $i => $nextExpression) {
-
-            if($fn === true)
-                $next[] = array(
-                              0 => Hoa_Pom::_COMMA,
-                              1 => ',',
-                              2 => -1
-                          );
-            else
-                $fn = true;
-
-            foreach($nextExpression->tokenize() as $key => $value)
-                $next[] = $value;
-        }
-
-        $cond = true === $this->hasCondExpression()
-                    ? $this->getCondExpression()
-                    : array();
-
-        return array_merge(
-            array(array(
-                0 => Hoa_Pom::_FOR,
-                1 => 'for',
-                2 => -1
-            )),
-            array(array(
-                0 => Hoa_Pom::_OPEN_PARENTHESES,
-                1 => '(',
-                2 => -1
-            )),
-            $ini,
-            array(array(
-                0 => Hoa_Pom::_SEMI_COLON,
-                1 => ';',
-                2 => -1
-            )),
-            $cond,
-            array(array(
-                0 => Hoa_Pom::_SEMI_COLON,
-                1 => ';',
-                2 => -1
-            )),
-            $next
-            array(array(
-                0 => Hoa_Pom::_CLOSE_PARENTHESES,
-                1 => ')',
-                2 => -1
-            )),
-            parent::tokenize()
-        );
     }
 }

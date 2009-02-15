@@ -53,6 +53,11 @@ import('Pom.~');
 import('Pom.Token.ControlStructure');
 
 /**
+ * Hoa_Visitor_Element
+ */
+import('Visitor.Element');
+
+/**
  * Class Hoa_Pom_Token_ControlStructure_Break.
  *
  * Represent a break.
@@ -66,7 +71,8 @@ import('Pom.Token.ControlStructure');
  * @subpackage  Hoa_Pom_Token_ControlStructure_Break
  */
 
-class Hoa_Pom_Token_ControlStructure_Break extends Hoa_Pom_Token_ControlStructure {
+class Hoa_Pom_Token_ControlStructure_Break extends    Hoa_Pom_Token_ControlStructure
+                                           implements Hoa_Visitor_Element {
 
     /**
      * Level up.
@@ -143,23 +149,15 @@ class Hoa_Pom_Token_ControlStructure_Break extends Hoa_Pom_Token_ControlStructur
     }
 
     /**
-     * Transform token to “tokenize array”.
+     * Accept a visitor.
      *
      * @access  public
-     * @return  array
+     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   mixed              $handle     Handle (reference).
+     * @return  mixed
      */
-    public function tokenize ( ) {
+    public function accept ( Hoa_Visitor_Visit $visitor, &$handle = null ) {
 
-        return array_merge(
-            array(array(
-                0 => Hoa_Pom::_BREAK,
-                1 => 'break',
-                2 => -1
-            )),
-            (true === $this->hasLevel()
-                 ? $this->getLevel()->tokenize()
-                 : array()
-            )
-        );
+        return $visitor->visit($this);
     }
 }

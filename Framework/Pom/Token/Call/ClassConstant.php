@@ -63,6 +63,11 @@ import('Pom.Token.Call');
 import('Pom.Token.String');
 
 /**
+ * Hoa_Visitor_Element
+ */
+import('Visitor.Element');
+
+/**
  * Class Hoa_Pom_Token_Call_ClassConstant.
  *
  * Represent a call to a class constant.
@@ -77,7 +82,8 @@ import('Pom.Token.String');
  */
 
 class Hoa_Pom_Token_Call_ClassConstant extends    Hoa_Pom_Token_Call
-                                       implements Hoa_Pom_Token_Util_Interface_Scalar {
+                                       implements Hoa_Pom_Token_Util_Interface_Scalar,
+                                                  Hoa_Visitor_Element {
 
     /**
      * Class name.
@@ -162,21 +168,15 @@ class Hoa_Pom_Token_Call_ClassConstant extends    Hoa_Pom_Token_Call
     }
 
     /**
-     * Transform token to “tokenizer array”.
+     * Accept a visitor.
      *
      * @access  public
-     * @return  array
+     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   mixed              $handle     Handle (reference).
+     * @return  mixed
      */
-    public function tokenize ( ) {
+    public function accept ( Hoa_Visitor_Visit $visitor, &$handle = null ) {
 
-        return array_merge(
-            $this->getClass()->tokenize(),
-            array(array(
-                0 => Hoa_Pom::_DOUBLE_COLON,
-                1 => '::',
-                2 => -1
-            )),
-            $this->getConstant()->tokenize()
-        );
+        return $visitor->visit($this);
     }
 }

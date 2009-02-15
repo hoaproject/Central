@@ -44,11 +44,6 @@ require_once 'Framework.php';
 import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Pom_Token_Util_Interface_Tokenizable
- */
-import('Pom.Token.Util.Interface.Tokenizable');
-
-/**
  * Hoa_Pom
  */
 import('Pom.~');
@@ -72,8 +67,7 @@ import('Pom.Token.Number');
  * @subpackage  Hoa_Pom_Token_Number_LNumber
  */
 
-class Hoa_Pom_Token_Number_LNumber extends    Hoa_Pom_Token_Number
-                                   implements Hoa_Pom_Token_Util_Interface_Tokenizable {
+class Hoa_Pom_Token_Number_LNumber extends Hoa_Pom_Token_Number {
 
     /**
      * Value.
@@ -112,20 +106,5 @@ class Hoa_Pom_Token_Number_LNumber extends    Hoa_Pom_Token_Number
     public function getNumber ( ) {
 
         return (int) $this->_value;
-    }
-
-    /**
-     * Transform token to “tokenizer array”.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function tokenize ( ) {
-
-        return array(array(
-            0 => Hoa_Pom::_LNUMBER,
-            1 => $this->getNumber(),
-            2 => -1
-        ));
     }
 }

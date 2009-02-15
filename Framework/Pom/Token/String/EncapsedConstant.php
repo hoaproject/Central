@@ -95,19 +95,4 @@ class Hoa_Pom_Token_String_EncapsedConstant extends    Hoa_Pom_Token_String
 
         return $old;
     }
-
-    /**
-     * Transform token to “tokenizer array”.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function tokenize ( ) {
-
-        return array(array(
-            0 => Hoa_Pom::_CONSTANT_ENCAPSED_STRING,
-            1 => $this->getString(),
-            2 => -1
-        ));
-    }
 }

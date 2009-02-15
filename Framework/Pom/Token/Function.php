@@ -63,6 +63,11 @@ import('Pom.Token.String');
 import('Pom.Token.Function.Argument');
 
 /**
+ * Hoa_Visitor_Element
+ */
+import('Visitor.Element');
+
+/**
  * Class Hoa_Pom_Token_Function.
  *
  * Represent an abstract function.
@@ -76,7 +81,7 @@ import('Pom.Token.Function.Argument');
  * @subpackage  Hoa_Pom_Token_Function
  */
 
-abstract class Hoa_Pom_Token_Function {
+abstract class Hoa_Pom_Token_Function implements Hoa_Visitor_Element {
 
     /**
      * Comment.
@@ -348,10 +353,12 @@ abstract class Hoa_Pom_Token_Function {
      */
     public function getBody ( ) {
 
+/*
         if(   isset($this->_body[0])
            && ($this->_body[0] instanceof Hoa_Pom_Token_LateParsing))
             throw new Hoa_Pom_Token_Util_Exception(
                 'Cannot run the late parser because it is not yet coded :-P.', 0);
+*/
 
         return $this->_body;
     }
@@ -365,5 +372,18 @@ abstract class Hoa_Pom_Token_Function {
     public function hasBody ( ) {
 
         return $this->getBody() == array();
+    }
+
+    /**
+     * Accept a visitor.
+     *
+     * @access  public
+     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   mixed              $handle     Handle (reference).
+     * @return  mixed
+     */
+    public function accept ( Hoa_Visitor_Visit $visitor, &$handle = null ) {
+
+        return $visitor->visit($this);
     }
 }

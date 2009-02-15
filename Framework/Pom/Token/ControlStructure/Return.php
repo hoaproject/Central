@@ -66,7 +66,8 @@ import('Pom.Token.ControlStructure');
  * @subpackage  Hoa_Pom_Token_ControlStructure_Return
  */
 
-class Hoa_Pom_Token_ControlStructure_Return extends Hoa_Pom_Token_ControlStructure {
+class       Hoa_Pom_Token_ControlStructure_Return
+    extends Hoa_Pom_Token_ControlStructure {
 
     /**
      * Value of return.
@@ -137,23 +138,5 @@ class Hoa_Pom_Token_ControlStructure_Return extends Hoa_Pom_Token_ControlStructu
     public function getValue ( ) {
 
         return $this->_value;
-    }
-
-    /**
-     * Transform token to “tokenize array”.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function tokenize ( ) {
-
-        return array_merge(
-            array(array(
-                0 => Hoa_Pom::_RETURN,
-                1 => 'return',
-                2 => -1
-            )),
-            $this->getValue()->tokenize()
-        );
     }
 }

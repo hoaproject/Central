@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Pom_Token_Util_Interface_Tokenizable
- */
-import('Pom.Token.Util.Interface.Tokenizable');
-
-/**
  * Hoa_Pom
  */
 import('Pom.~');
@@ -71,9 +66,8 @@ import('Pom.Token.Instruction.Block');
  * @subpackage  Hoa_Pom_Token_ControlStructure_TryCatch_Try
  */
 
-class          Hoa_Pom_Token_ControlStructure_TryCatch_Try
-    extends    Hoa_Pom_Token_Instruction_Block
-    implements Hoa_Pom_Token_Util_Interface_Tokenizable {
+class       Hoa_Pom_Token_ControlStructure_TryCatch_Try
+    extends Hoa_Pom_Token_Instruction_Block {
 
     /**
      * Collections of catch.
@@ -192,36 +186,5 @@ class          Hoa_Pom_Token_ControlStructure_TryCatch_Try
     public function hasCatch ( ) {
 
         return $this->_catch != array();
-    }
-
-    /**
-     * Transform token to “tokenizer array”.
-     *
-     * @access  public
-     * @return  array
-     * @throw   Hoa_Pom_Token_Util_Exception
-     */
-    public function tokenize ( ) {
-
-        if(false === $this->hasCatch())
-            throw new Hoa_Pom_Token_Util_Exception(
-                'A try structure must be coupled with one catch block at ' .
-                'least.', 1);
-
-        $catchs = array();
-
-        foreach($this->getCatchs() as $i => $catch)
-            foreach($catch->tokenize() as $key => $value)
-                $catchs[] = $value;
-
-        return array_merge(
-            array(array(
-                0 => Hoa_Pom::_TRY,
-                1 => 'try',
-                2 => -1
-            )),
-            parent::tokenize(),
-            $catchs
-        );
     }
 }

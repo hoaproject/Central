@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Pom_Token_Util_Interface_Tokenizable
- */
-import('Pom.Token.Util.Interface.Tokenizable');
-
-/**
  * Hoa_Pom
  */
 import('Pom.~');
@@ -71,24 +66,4 @@ import('Pom.Token.Call.Function');
  * @subpackage  Hoa_Pom_Token_New
  */
 
-class Hoa_Pom_Token_New extends    Hoa_Pom_Token_Call_Function
-                        implements Hoa_Pom_Token_Util_Interface_Tokenizable {
-
-    /**
-     * Transform token to “tokenizer array”.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function tokenize ( ) {
-
-        return array_merge(
-            array(array(
-                0 => Hoa_Pom::_NEW,
-                1 => 'new',
-                2 => -1
-            )),
-            parent::tokenize()
-        );
-    }
-}
+class Hoa_Pom_Token_New extends Hoa_Pom_Token_Call_Function { }

@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Pom_Token_Util_Interface_Tokenizable
- */
-import('Pom.Token.Util.Interface.Tokenizable');
-
-/**
  * Hoa_Pom
  */
 import('Pom.~');
@@ -71,8 +66,7 @@ import('Pom.Token.Function');
  * @subpackage  Hoa_Pom_Token_Function_Named
  */
 
-class Hoa_Pom_Token_Function_Named extends    Hoa_Pom_Token_Function
-                                   implements Hoa_Pom_Token_Util_Interface_Tokenizable {
+class Hoa_Pom_Token_Function_Named extends Hoa_Pom_Token_Function {
 
     /**
      * Whether comment is enabled.
@@ -101,87 +95,11 @@ class Hoa_Pom_Token_Function_Named extends    Hoa_Pom_Token_Function
     /**
      * Check if comment is enabled or not.
      *
-     * @access  protected
+     * @access  public
      * @return  bool
      */
-    protected function isCommentEnabled ( ) {
+    public function isCommentEnabled ( ) {
 
         return $this->_commentEnabled;
-    }
-
-    /**
-     * Transform token to “tokenizer array”.
-     *
-     * @access  public
-     * @param   int     $context    Context.
-     * @return  array
-     */
-    public function tokenize ( ) {
-
-        $argSet    = false;
-        $arguments = array();
-        $body      = array();
-
-        foreach($this->getArguments() as $i => $argument) {
-
-            if(true === $argSet)
-                $arguments[] = array(
-                    0 => Hoa_Pom::_COMMA,
-                    1 => ',',
-                    2 => -1
-                );
-            else
-                $argSet      = true;
-
-            foreach($argument->tokenize() as $key => $value)
-                $arguments[] = $value;
-        }
-
-        foreach($this->getBody() as $i => $b)
-            foreach($b->tokenize() as $key => $value)
-                $body[] = $value;
-
-        return array_merge(
-            (true === $this->hasComment() && true === $this->isCommentEnabled()
-                 ? $this->getComment()->tokenize()
-                 : array()
-            ),
-            array(array(
-                0 => Hoa_Pom::_FUNCTION,
-                1 => 'function',
-                2 => -1
-            )),
-            (true === $this->isReferenced()
-                 ? array(array(
-                       0 => Hoa_Pom::_REFERENCE,
-                       1 => '&',
-                       3 => -1
-                   ))
-                 : array()
-            ),
-            $this->getName()->tokenize(),
-            array(array(
-                0 => Hoa_Pom::_OPEN_PARENTHESES,
-                1 => '(',
-                2 => -1
-            )),
-            $arguments,
-            array(array(
-                0 => Hoa_Pom::_CLOSE_PARENTHESES,
-                1 => ')',
-                2 => -1
-            )),
-            array(array(
-                0 => Hoa_Pom::_OPEN_BRACE,
-                1 => '{',
-                2 => -1
-            )),
-            $body,
-            array(array(
-                0 => Hoa_Pom::_CLOSE_BRACE,
-                1 => '}',
-                2 => -1
-            ))
-        );
     }
 }

@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Pom_Token_Util_Interface_Tokenizable
- */
-import('Pom.Token.Util.Interface.Tokenizable');
-
-/**
  * Hoa_Pom
  */
 import('Pom.~');
@@ -60,7 +55,7 @@ import('Pom.Token.Instruction.Block');
 /**
  * Class Hoa_Pom_Token_ControlStructure_Conditional_Switch_Default.
  *
- * Reprsent a default.
+ * Represent a default.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -71,9 +66,8 @@ import('Pom.Token.Instruction.Block');
  * @subpackage  Hoa_Pom_Token_ControlStructure_Conditional_Switch_Default
  */
 
-class          Hoa_Pom_Token_ControlStructure_Conditional_Switch_Default
-    extends    Hoa_Pom_Token_Instruction_Block
-    implements Hoa_Pom_Token_Util_Interface_Tokenizable {
+class       Hoa_Pom_Token_ControlStructure_Conditional_Switch_Default
+    extends Hoa_Pom_Token_Instruction_Block {
 
     /**
      * Constructor.
@@ -88,28 +82,5 @@ class          Hoa_Pom_Token_ControlStructure_Conditional_Switch_Default
         parent::setEmptyMode(parent::NOTHING_EMPTY);
 
         return parent::__construct($instructions);
-    }
-
-    /**
-     * Transform token to “tokenizer array”.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function tokenize ( ) {
-
-        return array_merge(
-            array(array(
-                0 => Hoa_Pom::_DEFAULT,
-                1 => 'default',
-                2 => -1
-            )),
-            array(array(
-                0 => Hoa_Pom::_COLON,,
-                1 => ':',
-                2 => -1
-            )),
-            parent::tokenize()
-        );
     }
 }

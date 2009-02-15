@@ -63,6 +63,11 @@ import('Pom.Token.String');
 import('Pom.Token.Variable');
 
 /**
+ * Hoa_Visitor_Element
+ */
+import('Visitor.Element');
+
+/**
  * Class Hoa_Pom_Token_Call_Function.
  *
  * Represent a call to a function.
@@ -76,7 +81,8 @@ import('Pom.Token.Variable');
  * @subpackage  Hoa_Pom_Token_Call_Function
  */
 
-class Hoa_Pom_Token_Call_Function extends Hoa_Pom_Token_Call {
+class Hoa_Pom_Token_Call_Function extends    Hoa_Pom_Token_Call
+                                  implements Hoa_Visitor_Element {
 
     /**
      * Function name.
@@ -214,46 +220,15 @@ class Hoa_Pom_Token_Call_Function extends Hoa_Pom_Token_Call {
     }
 
     /**
-     * Transform token to “tokenizer array”.
+     * Accept a visitor.
      *
      * @access  public
-     * @return  array
+     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   mixed              $handle     Handle (reference).
+     * @return  mixed
      */
-    public function tokenize ( ) {
+    public function accept ( Hoa_Visitor_Visit $visitor, &$handle = null ) {
 
-        $arguments = array();
-        $argSet    = false;
-
-        foreach($this->getArguments() as $i => $argument) {
-
-            if(true === $argSet) {
-
-                $arguments[] = array(
-                    0 => Hoa_Pom::_COMMA,
-                    1 => ',',
-                    2 => -1
-                );
-            }
-            else
-                $argSet = true;
-
-            foreach($argument->tokenize() as $key => $value)
-                $arguments[] = $value;
-        }
-
-        return array_merge(
-            $this->getName()->tokenize(),
-            array(array(
-                0 => Hoa_Pom::_OPEN_PARENTHESES,
-                1 => '(',
-                2 => -1
-            )),
-            $arguments,
-            array(array(
-                0 => Hoa_Pom::_CLOSE_PARENTHESES,
-                1 => ')',
-                2 => -1
-            ))
-        );
+        return $visitor->visit($this);
     }
 }

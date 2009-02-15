@@ -63,6 +63,11 @@ import('Pom.Token.String');
 import('Pom.Token.Variable');
 
 /**
+ * Hoa_Visitor_Element
+ */
+import('Visitor.Element');
+
+/**
  * Class Hoa_Pom_Token_Call_Attribute.
  *
  * Represent a call to an attribute.
@@ -76,7 +81,8 @@ import('Pom.Token.Variable');
  * @subpackage  Hoa_Pom_Token_Call_Attribute
  */
 
-class Hoa_Pom_Token_Call_Attribute extends Hoa_Pom_Token_Call {
+class Hoa_Pom_Token_Call_Attribute extends    Hoa_Pom_Token_Call
+                                   implements Hoa_Visitor_Element {
 
     /**
      * Object name.
@@ -177,21 +183,15 @@ class Hoa_Pom_Token_Call_Attribute extends Hoa_Pom_Token_Call {
     }
 
     /**
-     * Transform token to “tokenizer array”.
+     * Accept a visitor.
      *
      * @access  public
-     * @return  array
+     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   mixed              $handle     Handle (reference).
+     * @return  mixed
      */
-    public function tokenize ( ) {
+    public function accept ( Hoa_Visitor_Visit $visitor, &$handle = null ) {
 
-        return array_merge(
-            $this->getObject()->tokenize(),
-            array(array(
-                0 => Hoa_Pom::_OBJECT_OPERATOR,
-                1 => '->',
-                2 => -1
-            )),
-            $this->getAttribute()->tokenize()
-        );
+        return $visitor->visit($this);
     }
 }

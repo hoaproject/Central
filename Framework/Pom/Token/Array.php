@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Pom_Token_Util_Interface_Tokenizable
- */
-import('Pom.Token.Util.Interface.Tokenizable');
-
-/**
  * Hoa_Pom_Token_Util_Interface_SuperScalar
  */
 import('Pom.Token.Util.Interface.SuperScalar');
@@ -63,6 +58,11 @@ import('Pom.Token.Util.Interface.Type');
 import('Pom.~');
 
 /**
+ * Hoa_Visitor_Element
+ */
+import('Visitor.Element');
+
+/**
  * Class Hoa_Pom_Token_Array.
  *
  * Represent an array (aïe, not easy …).
@@ -76,9 +76,9 @@ import('Pom.~');
  * @subpackage  Hoa_Pom_Token_Array
  */
 
-class Hoa_Pom_Token_Array implements Hoa_Pom_Token_Util_Interface_Tokenizable,
-                                     Hoa_Pom_Token_Util_Interface_SuperScalar,
-                                     Hoa_Pom_Token_Util_Interface_Type {
+class Hoa_Pom_Token_Array implements Hoa_Pom_Token_Util_Interface_SuperScalar,
+                                     Hoa_Pom_Token_Util_Interface_Type,
+                                     Hoa_Visitor_Element {
 
     /**
      * Represent a key of an array.
@@ -181,10 +181,10 @@ class Hoa_Pom_Token_Array implements Hoa_Pom_Token_Util_Interface_Tokenizable,
     /**
      * Get the complete array.
      *
-     * @access  protected
+     * @access  public
      * @return  array
      */
-    protected function getArray ( ) {
+    public function getArray ( ) {
 
         return $this->_array;
     }
@@ -276,64 +276,15 @@ class Hoa_Pom_Token_Array implements Hoa_Pom_Token_Util_Interface_Tokenizable,
     }
 
     /**
-     * Transform token to “tokenizer array”.
+     * Accept a visitor.
      *
      * @access  public
-     * @return  array
+     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   mixed              $handle     Handle (reference).
+     * @return  mixed
      */
-    public function tokenize ( ) {
+    public function accept ( Hoa_Visitor_Visit $visitor, &$handle = null ) {
 
-        $first  = true;
-        $array  = array();
-        $handle = null;
-
-        foreach($this->getArray() as $i => $a) {
-
-            if(false === $first)
-                $array[] = array(
-                    0 => Hoa_Pom::_COMMA,
-                    1 => ',',
-                    2 => -1
-                );
-            else
-                $first = false;
-
-            $handle = array_merge(
-                (null !== $a[self::KEY]
-                     ? array_merge(
-                           $a[self::KEY]->tokenize(),
-                           array(array(
-                               0 => Hoa_Pom::_DOUBLE_ARROW,
-                               1 => '=>',
-                               2 => -1
-                           ))
-                       )
-                     : array()
-                ),
-                $a[self::VALUE]->tokenize()
-            );
-
-            foreach($handle as $key => $value)
-                $array[] = $value;
-        }
-
-        return array_merge(
-            array(array(
-                0 => Hoa_Pom::_ARRAY,
-                1 => 'array',
-                2 => -1
-            )),
-            array(array(
-                0 => Hoa_Pom::_OPEN_PARENTHESES,
-                1 => '(',
-                2 => -1
-            )),
-            $array,
-            array(array(
-                0 => Hoa_Pom::_CLOSE_PARENTHESES,
-                1 => ')',
-                2 => -1
-            ))
-        );
+        return $visitor->visit($this);
     }
 }

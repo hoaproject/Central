@@ -58,6 +58,11 @@ import('Pom.Token.Function.Named');
 import('Pom.Token.Class.Access');
 
 /**
+ * Hoa_Visitor_Element
+ */
+import('Visitor.Element');
+
+/**
  * Class Hoa_Pom_Token_Class_Method.
  *
  * Represent a method.
@@ -71,7 +76,8 @@ import('Pom.Token.Class.Access');
  * @subpackage  Hoa_Pom_Token_Class_Method
  */
 
-class Hoa_Pom_Token_Class_Method extends Hoa_Pom_Token_Function_Named {
+class Hoa_Pom_Token_Class_Method extends    Hoa_Pom_Token_Function_Named
+                                 implements Hoa_Visitor_Element {
 
     /**
      * Method is final.
@@ -294,44 +300,15 @@ class Hoa_Pom_Token_Class_Method extends Hoa_Pom_Token_Function_Named {
     }
 
     /**
-     * Transform token to “tokenizer array”.
+     * Accept a visitor.
      *
      * @access  public
-     * @return  array
+     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   mixed              $handle     Handle (reference).
+     * @return  mixed
      */
-    public function tokenize ( ) {
+    public function accept ( Hoa_Visitor_Visit $visitor, &$handle = null ) {
 
-        return array_merge(
-            (true === $this->hasComment()
-                 ? $this->getComment()->tokenize()
-                 : array()
-            ),
-            (true === $this->isFinal()
-                 ? array(array(
-                       0 => Hoa_Pom::_FINAL,
-                       1 => 'final',
-                       2 => -1
-                   ))
-                 : array()
-            ),
-            (true === $this->isAbstract()
-                 ? array(array(
-                       0 => Hoa_Pom::_ABSTRACT,
-                       1 => 'abstract',
-                       2 => -1
-                   ))
-                 : array()
-            ),
-            $this->getAccess()->tokenize(),
-            (true === $this->isStatic()
-                 ? array(array(
-                       0 => Hoa_Pom::_STATIC,
-                       1 => 'static',
-                       2 => -1
-                   ))
-                 : array()
-            ),
-            parent::tokenize()
-        );
+        return $visitor->visit($this);
     }
 }

@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Pom
- * @subpackage  Hoa_Pom_Token_Util_Tokenizable
+ * @subpackage  Hoa_Pom_Token_Util_Visitor_Tokenize_Exception
  *
  */
 
@@ -38,14 +38,29 @@
 require_once 'Framework.php';
 
 /**
+ * Hoa_Pom_Token_Util_Exception
+ */
+import('Pom.Token.Util.Exception');
+
+/**
  * Hoa_Pom
  */
 import('Pom.~');
 
 /**
- * Interface Hoa_Pom_Token_Util_Tokenizable.
+ * Hoa_Pom_Token_Exception
+ */
+import('Pom.Token.Exception');
+
+/**
+ * Hoa_Visitor_Registry_Aggregate
+ */
+import('Visitor.Registry.Aggregate');
+
+/**
+ * Class Hoa_Pom_Token_Util_Visitor_Tokenize_Exception.
  *
- * Force somes methods for token classes.
+ * Visit a exception.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -53,16 +68,28 @@ import('Pom.~');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Pom
- * @subpackage  Hoa_Pom_Token_Util_Tokenizable
+ * @subpackage  Hoa_Pom_Token_Util_Visitor_Tokenize_Exception
  */
 
-interface Hoa_Pom_Token_Util_Interface_Tokenizable {
+class Hoa_Pom_Token_Util_Visitor_Tokenize_Exception extends Hoa_Visitor_Registry_Aggregate {
 
     /**
-     * Transform token to “tokenizer array”.
+     * Visit an exception.
      *
      * @access  public
+	 * @param   Hoa_Visitor_Element  $element    Element to visit.
+	 * @param   mixed                $handle     Handle (reference).
      * @return  array
      */
-    public function tokenize ( );
+    public function visitException ( Hoa_Visitor_Element $element, &$handle = null ) {
+
+        return array_merge(
+            array(array(
+                0 => Hoa_Pom::_THROW,
+                1 => 'throw',
+                2 => -1
+            )),
+            $element->getException()->accept($this->getVisitor(), $handle)
+        );
+    }
 }

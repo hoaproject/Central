@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Pom_Token_Util_Interface_Tokenizable
- */
-import('Pom.Token.Util.Interface.Tokenizable');
-
-/**
  * Hoa_Pom
  */
 import('Pom.~');
@@ -68,6 +63,11 @@ import('Pom.Token.Operator.Assignement');
 import('Pom.Token.String');
 
 /**
+ * Hoa_Visitor_Element
+ */
+import('Visitor.Element');
+
+/**
  * Class Hoa_Pom_Token_Function_Argument.
  *
  * Represent an argument of a function.
@@ -81,7 +81,7 @@ import('Pom.Token.String');
  * @subpackage  Hoa_Pom_Token_Function_Argument
  */
 
-class Hoa_Pom_Token_Function_Argument implements Hoa_Pom_Token_Util_Interface_Tokenizable {
+class Hoa_Pom_Token_Function_Argument implements Hoa_Visitor_Element {
 
     /**
      * Whether argument is passed by reference.
@@ -270,10 +270,10 @@ class Hoa_Pom_Token_Function_Argument implements Hoa_Pom_Token_Util_Interface_To
     /**
      * Get operator.
      *
-     * @access  protected
+     * @access  public
      * @return  Hoa_Pom_Token_Operator_Assignement
      */
-    protected function getOperator ( ) {
+    public function getOperator ( ) {
 
         return $this->_operator;
     }
@@ -301,41 +301,15 @@ class Hoa_Pom_Token_Function_Argument implements Hoa_Pom_Token_Util_Interface_To
     }
 
     /**
-     * Transform token to “tokenizer array”.
+     * Accept a visitor.
      *
      * @access  public
-     * @return  array
+     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   mixed              $handle     Handle (reference).
+     * @return  mixed
      */
-    public function tokenize ( ) {
+    public function accept ( Hoa_Visitor_Visit $visitor, &$handle = null ) {
 
-        return array_merge(
-            (true === $this->isTyped()
-                 ? (strtolower($this->getType()->getString()) == 'array'
-                        ? array(array(
-                              0 => Hoa_Pom::_ARRAY,
-                              1 => $this->getType()->getString(),
-                              2 => -1
-                          ))
-                        : $this->getType()->tokenize()
-                   )
-                 : array()
-            ),
-            (true === $this->isReferenced()
-                 ? array(array(
-                       0 => Hoa_Pom::_REFERENCE,
-                       1 => '&',
-                       2 => -1
-                   ))
-                 : array()
-            ),
-            $this->getName()->tokenize(),
-            (true === $this->hasDefaultValue()
-                 ? array_merge(
-                       $this->getOperator()->tokenize(),
-                       $this->getDefaultValue()->tokenize()
-                   )
-                 : array()
-            )
-        );
+        return $visitor->visit($this);
     }
 }

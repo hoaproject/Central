@@ -66,7 +66,8 @@ import('Pom.Token.ControlStructure');
  * @subpackage  Hoa_Pom_Token_ControlStructure_Import
  */
 
-abstract class Hoa_Pom_Token_ControlStructure_Import extends Hoa_Pom_Token_ControlStructure {
+abstract class Hoa_Pom_Token_ControlStructure_Import
+    extends    Hoa_Pom_Token_ControlStructure {
 
     /**
      * Value of import.
@@ -116,12 +117,4 @@ abstract class Hoa_Pom_Token_ControlStructure_Import extends Hoa_Pom_Token_Contr
 
         return $this->_value;
     }
-
-    /**
-     * Transform token to “tokenizer array”.
-     *
-     * @access  public
-     * @return  array
-     */
-    abstract public function tokenize ( );
 }

@@ -58,6 +58,11 @@ import('Pom.Token.Util.Interface.Type');
 import('Pom.~');
 
 /**
+ * Hoa_Visitor_Element
+ */
+import('Visitor.Element');
+
+/**
  * Class Hoa_Pom_Token_Number.
  *
  * Represent a number.
@@ -72,7 +77,8 @@ import('Pom.~');
  */
 
 abstract class Hoa_Pom_Token_Number implements Hoa_Pom_Token_Util_Interface_Scalar,
-                                               Hoa_Pom_Token_Util_Interface_Type {
+                                               Hoa_Pom_Token_Util_Interface_Type,
+                                               Hoa_Visitor_Element {
 
     /**
      * Pattern of a {DEC} : ([1-9][0-9]*) | 0.
@@ -170,5 +176,18 @@ abstract class Hoa_Pom_Token_Number implements Hoa_Pom_Token_Util_Interface_Scal
     public function getNumber ( ) {
 
         return $this->_value;
+    }
+ 
+    /**
+     * Accept a visitor.
+     *
+     * @access  public
+     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   mixed              $handle     Handle (reference).
+     * @return  mixed
+     */
+    public function accept ( Hoa_Visitor_Visit $visitor, &$handle = null ) {
+
+        return $visitor->visit($this);
     }
 }

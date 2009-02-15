@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Pom_Token_Util_Interface_Tokenizable
- */
-import('Pom.Token.Util.Interface.Tokenizable');
-
-/**
  * Hoa_Pom_Token_Util_Interface_SuperScalar
  */
 import('Pom.Token.Util.Interface.SuperScalar');
@@ -88,6 +83,11 @@ import('Pom.Token.Class.Attribute');
 import('Pom.Token.Class.Method');
 
 /**
+ * Hoa_Visitor_Element
+ */
+import('Visitor.Element');
+
+/**
  * Class Hoa_Pom_Token_Class.
  *
  * Represent a class.
@@ -101,9 +101,9 @@ import('Pom.Token.Class.Method');
  * @subpackage  Hoa_Pom_Token_Class
  */
 
-class Hoa_Pom_Token_Class implements Hoa_Pom_Token_Util_Interface_Tokenizable,
-                                     Hoa_Pom_Token_Util_Interface_SuperScalar,
-                                     Hoa_Pom_Token_Util_Interface_Type {
+class Hoa_Pom_Token_Class implements Hoa_Pom_Token_Util_Interface_SuperScalar,
+                                     Hoa_Pom_Token_Util_Interface_Type,
+                                     Hoa_Visitor_Element {
 
     /**
      * Class is final.
@@ -711,111 +711,15 @@ class Hoa_Pom_Token_Class implements Hoa_Pom_Token_Util_Interface_Tokenizable,
     }
 
     /**
-     * Transform token to “tokenizer array”.
+     * Accept a visitor.
      *
      * @access  public
-     * @return  array
+     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   mixed              $handle     Handle (reference).
+     * @return  mixed
      */
-    public function tokenize ( ) {
+    public function accept ( Hoa_Visitor_Visit $visitor, &$handle = null ) {
 
-        $ifirst     = true;
-        $interfaces = array();
-
-        foreach($this->getInterfaces() as $i => $interface) {
-
-            if(false === $ifirst)
-                $interfaces[] = array(
-                    0 => Hoa_Pom::_COMMA,
-                    1 => ',',
-                    2 => -1
-                );
-            else
-                $ifirst = false;
-
-            $handle       = $interface->tokenize();
-            $interfaces[] = $handle[0];
-        }
-
-        $constants  = array();
-
-        foreach($this->getConstants() as $i => $constant)
-            foreach($constant->tokenize() as $key => $value)
-                $constants[] = $value;
-
-        $attributes = array();
-
-        foreach($this->getAttributes() as $i => $attribute)
-            foreach($attribute->tokenize() as $key => $value)
-                $attributes[] = $value;
-
-        $methods    = array();
-
-        foreach($this->getMethods() as $i => $method)
-            foreach($method->tokenize() as $key => $value)
-                $methods[] = $value;
-
-        return array_merge(
-            (true === $this->hasComment()
-                 ? $this->getComment()->tokenize()
-                 : array()
-            ),
-            (true === $this->isAbstract()
-                 ? array(array(
-                       0 => Hoa_Pom::_ABSTRACT,
-                       1 => 'abstract',
-                       2 => -1
-                   ))
-                 : array()
-            ),
-            (true === $this->isFinal()
-                 ? array(array(
-                       0 => Hoa_Pom::_FINAL,
-                       1 => 'final',
-                       2 => -1
-                   ))
-                 : array()
-            ),
-            array(array(
-                0 => Hoa_Pom::_CLASS,
-                1 => 'class',
-                2 => -1
-            )),
-            $this->getName()->tokenize(),
-            (true === $this->hasParent()
-                 ? array_merge(
-                       array(array(
-                           0 => Hoa_Pom::_EXTENDS,
-                           1 => 'extends',
-                           2 => -1
-                       )),
-                       $this->getParent()->tokenize()
-                   )
-                 : array()
-            ),
-            (true === $this->hasInterfaces()
-                 ? array_merge(
-                       array(array(
-                           0 => Hoa_Pom::_IMPLEMENTS,
-                           1 => 'implements',
-                           2 => -1
-                       )),
-                       $interfaces
-                   )
-                 : array()
-            ),
-            array(array(
-                0 => Hoa_Pom::_OPEN_BRACE,
-                1 => '{',
-                2 => -1
-            )),
-            $constants,
-            $attributes,
-            $methods,
-            array(array(
-                0 => Hoa_Pom::_CLOSE_BRACE,
-                1 => '}',
-                2 => -1
-            ))
-        );
+        return $visitor->visit($this);
     }
 }
