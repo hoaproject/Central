@@ -48,11 +48,6 @@ import('Pom.Exception');
 import('Pom.Token.Util.Exception');
 
 /**
- * Hoa_Pom_Token_Util_Interface_Tokenizable
- */
-import('Pom.Token.Util.Interface.Tokenizable');
-
-/**
  * Hoa_Pom
  */
 import('Pom.~');
@@ -81,7 +76,7 @@ import('Pom.Token.Root');
  * @subpackage  Hoa_Pom_Parser
  */
 
-abstract class Hoa_Pom_Parser implements Hoa_Pom_Token_Util_Interface_Tokenizable {
+abstract class Hoa_Pom_Parser {
 
     /**
      * Token collection.
@@ -305,16 +300,5 @@ abstract class Hoa_Pom_Parser implements Hoa_Pom_Token_Util_Interface_Tokenizabl
     public function getRoot ( ) {
 
         return $this->r();
-    }
-
-    /**
-     * Transform root to “tokenizer array”.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function tokenize ( ) {
-
-        return $this->r()->tokenize();
     }
 }
