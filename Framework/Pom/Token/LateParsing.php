@@ -138,6 +138,28 @@ class Hoa_Pom_Token_LateParsing implements Hoa_Visitor_Element {
 
         return $subRoot->getElements();
     }
+
+    /**
+     * Pop one token.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function pop ( ) {
+
+        return array_pop($this->_tokens);
+    }
+
+    /**
+     * Shift one token.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function shift ( ) {
+
+        return array_shift($this->_tokens);
+    }
  
     /**
      * Accept a visitor.
