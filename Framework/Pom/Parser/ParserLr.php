@@ -603,10 +603,10 @@ class Hoa_Pom_Parser_ParserLr extends Hoa_Pom_Parser {
                                 case Hoa_Pom::_CLOSE_BRACE:
                                     $ii--;
                                   break;
-
-                                default:
-                                    $bod->addToken($this->c());
                             }
+
+                            if($ii > 0)
+                                $bod->addToken($this->c());
                         }
                     }
 
@@ -800,10 +800,10 @@ class Hoa_Pom_Parser_ParserLr extends Hoa_Pom_Parser {
                 case Hoa_Pom::_CLOSE_BRACE:
                     $i--;
                   break;
-
-                default:
-                    $body->addToken($this->c());
             }
+
+            if($i > 0)
+                $body->addToken($this->c());
         }
 
         $function = new Hoa_Pom_Token_Function_Named($name);
