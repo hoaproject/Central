@@ -118,6 +118,17 @@ class Hoa_Pom_Token_Root implements Hoa_Visitor_Element {
     }
 
     /**
+     * Get the last child.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getLastElement ( ) {
+
+        return end($this->_childs);
+    }
+
+    /**
      * Accept a visitor.
      *
      * @access  public
