@@ -85,9 +85,10 @@ class       Hoa_Pom_Token_ControlStructure_Return
      * @param   mixed   $value    Value.
      * @return  void
      */
-    public function __construct ( $value ) {
+    public function __construct ( $value = null ) {
 
-        $this->setValue($value);
+        if(null !== $value)
+            $this->setValue($value);
 
         return;
     }
@@ -127,6 +128,17 @@ class       Hoa_Pom_Token_ControlStructure_Return
         $this->_value = $value;
 
         return $old;
+    }
+
+    /**
+     * Check if return has a value.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function hasValue ( ) {
+
+        return null !== $this->_value;
     }
 
     /**
