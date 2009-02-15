@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Pom
- * @subpackage  Hoa_Pom_Token_Util_Visitor_Tokenize_Operation
+ * @subpackage  Hoa_Pom_Token_Util_Visitor_PrettyPrint_Aggregate
  *
  */
 
@@ -48,19 +48,14 @@ import('Pom.Token.Util.Exception');
 import('Pom.~');
 
 /**
- * Hoa_Pom_Token_Operation
- */
-import('Pom.Token.Operation');
-
-/**
  * Hoa_Visitor_Registry_Aggregate
  */
 import('Visitor.Registry.Aggregate');
 
 /**
- * Class Hoa_Pom_Token_Util_Visitor_Tokenize_Operation.
+ * Class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Aggregate.
  *
- * Visit an operation.
+ * Add functionnalities to aggregate visitors.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -68,27 +63,21 @@ import('Visitor.Registry.Aggregate');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Pom
- * @subpackage  Hoa_Pom_Token_Util_Visitor_Tokenize_Operation
+ * @subpackage  Hoa_Pom_Token_Util_Visitor_PrettyPrint_Aggregate
  */
 
-class Hoa_Pom_Token_Util_Visitor_Tokenize_Operation extends Hoa_Visitor_Registry_Aggregate {
+class       Hoa_Pom_Token_Util_Visitor_PrettyPrint_Aggregate
+    extends Hoa_Visitor_Registry_Aggregate {
 
     /**
-     * Visit an operation.
+     * Indent a part of a code.
      *
      * @access  public
-	 * @param   Hoa_Visitor_Element  $element    Element to visit.
-	 * @param   mixed                $handle     Handle (reference).
-     * @return  array
+     * @param   string  $string    String to indent.
+     * @return  string
      */
-    public function visitOperation ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function indent ( $string ) {
 
-        $out = array();
-
-        foreach($element->getSequence() as $i => $operation)
-            foreach($operation->accept($element, $handle) as $key => $value)
-                $out[] = $value;
-
-        return $out;
+        return preg_replace('#^(\s*.+)$#m', '    $1', $string);
     }
 }

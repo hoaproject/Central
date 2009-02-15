@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Pom
- * @subpackage  Hoa_Pom_Token_Util_Visitor_Tokenize_Operation
+ * @subpackage  Hoa_Pom_Token_Util_Visitor_PrettyPrint_Number
  *
  */
 
@@ -48,19 +48,29 @@ import('Pom.Token.Util.Exception');
 import('Pom.~');
 
 /**
- * Hoa_Pom_Token_Operation
+ * Hoa_Pom_Token_Number
  */
-import('Pom.Token.Operation');
+import('Pom.Token.Number');
 
 /**
- * Hoa_Visitor_Registry_Aggregate
+ * Hoa_Pom_Token_Number_DNumber
  */
-import('Visitor.Registry.Aggregate');
+import('Pom.Token.Number.DNumber');
 
 /**
- * Class Hoa_Pom_Token_Util_Visitor_Tokenize_Operation.
+ * Hoa_Pom_Token_Number_LNumber
+ */
+import('Pom.Token.Number.LNumber');
+
+/**
+ * Hoa_Pom_Token_Util_Visitor_PrettyPrint_Aggregate
+ */
+import('Pom.Token.Util.Visitor.PrettyPrint.Aggregate');
+
+/**
+ * Class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Number.
  *
- * Visit an operation.
+ * Visit a number.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -68,27 +78,34 @@ import('Visitor.Registry.Aggregate');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Pom
- * @subpackage  Hoa_Pom_Token_Util_Visitor_Tokenize_Operation
+ * @subpackage  Hoa_Pom_Token_Util_Visitor_PrettyPrint_Number
  */
 
-class Hoa_Pom_Token_Util_Visitor_Tokenize_Operation extends Hoa_Visitor_Registry_Aggregate {
+class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Number extends Hoa_Pom_Token_Util_Visitor_PrettyPrint_Aggregate {
 
     /**
-     * Visit an operation.
+     * Visit a number dnumber.
      *
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
-     * @return  array
+     * @return  string
      */
-    public function visitOperation ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitNumberDNumber ( Hoa_Visitor_Element $element, &$handle = null ) {
 
-        $out = array();
+        return $element->getNumber();
+    }
 
-        foreach($element->getSequence() as $i => $operation)
-            foreach($operation->accept($element, $handle) as $key => $value)
-                $out[] = $value;
+    /**
+     * Visit a number lnumber.
+     *
+     * @access  public
+	 * @param   Hoa_Visitor_Element  $element    Element to visit.
+	 * @param   mixed                $handle     Handle (reference).
+     * @return  string
+     */
+    public function visitNumberLNumber ( Hoa_Visitor_Element $element, &$handle = null ) {
 
-        return $out;
+        return $element->getNumber();
     }
 }

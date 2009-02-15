@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Pom
- * @subpackage  Hoa_Pom_Token_Util_Visitor_Tokenize_Operation
+ * @subpackage  Hoa_Pom_Token_Util_Visitor_PrettyPrint_LateParsing
  *
  */
 
@@ -48,19 +48,19 @@ import('Pom.Token.Util.Exception');
 import('Pom.~');
 
 /**
- * Hoa_Pom_Token_Operation
+ * Hoa_Pom_Token_LateParsing
  */
-import('Pom.Token.Operation');
+import('Pom.Token.LateParsing');
 
 /**
- * Hoa_Visitor_Registry_Aggregate
+ * Hoa_Pom_Token_Util_Visitor_PrettyPrint_Aggregate
  */
-import('Visitor.Registry.Aggregate');
+import('Pom.Token.Util.Visitor.PrettyPrint.Aggregate');
 
 /**
- * Class Hoa_Pom_Token_Util_Visitor_Tokenize_Operation.
+ * Class Hoa_Pom_Token_Util_Visitor_PrettyPrint_LateParsing.
  *
- * Visit an operation.
+ * Visit a late parsing.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -68,26 +68,25 @@ import('Visitor.Registry.Aggregate');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Pom
- * @subpackage  Hoa_Pom_Token_Util_Visitor_Tokenize_Operation
+ * @subpackage  Hoa_Pom_Token_Util_Visitor_PrettyPrint_LateParsing
  */
 
-class Hoa_Pom_Token_Util_Visitor_Tokenize_Operation extends Hoa_Visitor_Registry_Aggregate {
+class Hoa_Pom_Token_Util_Visitor_PrettyPrint_LateParsing extends Hoa_Pom_Token_Util_Visitor_PrettyPrint_Aggregate {
 
     /**
-     * Visit an operation.
+     * Visit a late parsing.
      *
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
-     * @return  array
+     * @return  string
      */
-    public function visitOperation ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitLateParsing ( Hoa_Visitor_Element $element, &$handle = null ) {
 
-        $out = array();
+        $out = null;
 
-        foreach($element->getSequence() as $i => $operation)
-            foreach($operation->accept($element, $handle) as $key => $value)
-                $out[] = $value;
+        foreach($element->getTokens() as $i => $token)
+            $out .= $token[1];
 
         return $out;
     }

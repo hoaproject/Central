@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Pom
- * @subpackage  Hoa_Pom_Token_Util_Visitor_Tokenize_Operation
+ * @subpackage  Hoa_Pom_Token_Util_Visitor_PrettyPrint_Exception
  *
  */
 
@@ -48,19 +48,19 @@ import('Pom.Token.Util.Exception');
 import('Pom.~');
 
 /**
- * Hoa_Pom_Token_Operation
+ * Hoa_Pom_Token_Exception
  */
-import('Pom.Token.Operation');
+import('Pom.Token.Exception');
 
 /**
- * Hoa_Visitor_Registry_Aggregate
+ * Hoa_Pom_Token_Util_Visitor_PrettyPrint_Aggregate
  */
-import('Visitor.Registry.Aggregate');
+import('Pom.Token.Util.Visitor.PrettyPrint.Aggregate');
 
 /**
- * Class Hoa_Pom_Token_Util_Visitor_Tokenize_Operation.
+ * Class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Exception.
  *
- * Visit an operation.
+ * Visit a exception.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -68,27 +68,23 @@ import('Visitor.Registry.Aggregate');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Pom
- * @subpackage  Hoa_Pom_Token_Util_Visitor_Tokenize_Operation
+ * @subpackage  Hoa_Pom_Token_Util_Visitor_PrettyPrint_Exception
  */
 
-class Hoa_Pom_Token_Util_Visitor_Tokenize_Operation extends Hoa_Visitor_Registry_Aggregate {
+class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Exception extends Hoa_Pom_Token_Util_Visitor_PrettyPrint_Aggregate {
 
     /**
-     * Visit an operation.
+     * Visit an exception.
      *
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
-     * @return  array
+     * @return  string
      */
-    public function visitOperation ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitException ( Hoa_Visitor_Element $element, &$handle = null ) {
 
-        $out = array();
-
-        foreach($element->getSequence() as $i => $operation)
-            foreach($operation->accept($element, $handle) as $key => $value)
-                $out[] = $value;
-
-        return $out;
+        return 'throw ' .
+               $element->getException()->accept($this->getVisitor(), $handle) .
+               ';';
     }
 }

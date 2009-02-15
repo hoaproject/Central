@@ -187,7 +187,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
             (true === $element->hasLevel()
                  ? $element->getLevel()->accept($this->getVisitor(), $handle)
                  : array()
-            )
+            ),
+            array(array(
+                0 => Hoa_Pom::_SEMI_COLON,
+                1 => ';',
+                2 => -1
+            ))
         );
     }
 
@@ -370,7 +375,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
         return array_merge(
             array(array(
                 0 => Hoa_Pom::_CASE,
-                1 => 'if',
+                1 => 'case',
                 2 => -1
             )),
             $element->getExpression()->accept($this->getVisitor(), $handle),
@@ -429,7 +434,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
             (true === $element->hasLevel()
                  ? $element->getLevel()->accept($this->getVisitor(), $handle)
                  : array()
-            )
+            ),
+            array(array(
+                0 => Hoa_Pom::_SEMI_COLON,
+                1 => ';',
+                2 => -1
+            ))
         );
     }
 
@@ -739,7 +749,15 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
                 1 => 'return',
                 2 => -1
             )),
-            $element->getValue()->accept($this->getVisitor(), $handle)
+            (true === $element->hasValue()
+                 ? $element->getValue()->accept($this->getVisitor(), $handle)
+                 : array()
+            ),
+            array(array(
+                0 => Hoa_Pom::_SEMI_COLON,
+                1 => ';',
+                2 => -1
+            ))
         );
     }
 

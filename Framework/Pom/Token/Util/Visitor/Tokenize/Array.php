@@ -83,9 +83,9 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Array extends Hoa_Visitor_Registry_Agg
      */
     public function visitArray ( Hoa_Visitor_Element $element, &$handle = null ) {
 
-        $first  = true;
-        $array  = array();
-        $handle = null;
+        $first = true;
+        $array = array();
+        $foo   = null;
 
         foreach($element->getArray() as $i => $a) {
 
@@ -98,7 +98,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Array extends Hoa_Visitor_Registry_Agg
             else
                 $first = false;
 
-            $handle = array_merge(
+            $foo = array_merge(
                 (null !== $a[Hoa_Pom_Token_Array::KEY]
                      ? array_merge(
                            $a[Hoa_Pom_Token_Array::KEY]->accept(
@@ -119,7 +119,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Array extends Hoa_Visitor_Registry_Agg
                 )
             );
 
-            foreach($handle as $key => $value)
+            foreach($foo as $key => $value)
                 $array[] = $value;
         }
 
