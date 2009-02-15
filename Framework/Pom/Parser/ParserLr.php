@@ -225,7 +225,7 @@ class Hoa_Pom_Parser_ParserLr extends Hoa_Pom_Parser {
         $lateBuffer = new Hoa_Pom_Token_LateParsing();
         $in         = false;
 
-        for(; $this->end(); $this->n()) {
+        for(; $this->end(); $this->n(0)) {
 
             $handle = null;
 
@@ -592,8 +592,7 @@ class Hoa_Pom_Parser_ParserLr extends Hoa_Pom_Parser {
 
                         while($ii > 0) {
 
-                            $this->n();
-                            $bod->addToken($this->c());
+                            $this->n(0);
 
                             switch($this->ct()) {
 
@@ -604,6 +603,9 @@ class Hoa_Pom_Parser_ParserLr extends Hoa_Pom_Parser {
                                 case Hoa_Pom::_CLOSE_BRACE:
                                     $ii--;
                                   break;
+
+                                default:
+                                    $bod->addToken($this->c());
                             }
                         }
                     }
@@ -696,10 +698,6 @@ class Hoa_Pom_Parser_ParserLr extends Hoa_Pom_Parser {
                 $default = new Hoa_Pom_Token_String_Constant($tmp);
         }
 
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // array
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
         elseif($this->ct() == Hoa_Pom::_ARRAY)
             $default = $this->arra();
 
@@ -791,8 +789,7 @@ class Hoa_Pom_Parser_ParserLr extends Hoa_Pom_Parser {
 
         while($i > 0) {
 
-            $this->n();
-            $body->addToken($this->c());
+            $this->n(0);
 
             switch($this->ct()) {
 
@@ -803,6 +800,9 @@ class Hoa_Pom_Parser_ParserLr extends Hoa_Pom_Parser {
                 case Hoa_Pom::_CLOSE_BRACE:
                     $i--;
                   break;
+
+                default:
+                    $body->addToken($this->c());
             }
         }
 
