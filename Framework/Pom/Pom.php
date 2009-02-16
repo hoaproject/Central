@@ -47,6 +47,16 @@ import('Pom.Parser.ParserLr');
 import('Pom.Parser.Lexer');
 
 /**
+ * Hoa_Pom_Token_Util_Visitor_Tokenize
+ */
+import('Pom.Token.Util.Visitor.Tokenize');
+
+/**
+ * Hoa_Pom_Token_Util_Visitor_PrettyPrint
+ */
+import('Pom.Token.Util.Visitor.PrettyPrint');
+
+/**
  * Class Hoa_Pom.
  *
  * Describe all token constants and propose alias for parsing and building.
@@ -280,15 +290,31 @@ abstract class Hoa_Pom {
     }
 
     /**
-     * Build a tokened PHP source code.
+     * Tokenize the root of object model, i.e. get a “tokenize array”.
      *
      * @access  public
-     * @param   Hoa_Pom_Parser  $tokened    Tokened source code.
+     * @param   Hoa_Pom_Token_Root  $root    Root of object model.
+     * @return  array
+     */
+    public static function tokenize ( Hoa_Pom_Token_Root $root ) {
+
+        $tokenize = new Hoa_Pom_Token_Util_Visitor_Tokenize();
+
+        return $tokenize->visit($root);
+    }
+
+    /**
+     * Print the root of object model.
+     *
+     * @access  public
+     * @param   Hoa_Pom_Token_Root  $root    Root of object model.
      * @return  string
      */
-    public static function build ( Hoa_Pom_Parser $tokened ) {
+    public static function dump ( Hoa_Pom_Token_Root $root ) {
 
-        return new Hoa_Pom_Dumper($tokened);
+        $print = new Hoa_Pom_Token_Util_Visitor_PrettyPrint();
+
+        return $print->visit($root);
     }
 
     /**
