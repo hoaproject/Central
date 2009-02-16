@@ -232,10 +232,12 @@ class Hoa_Pom_Parser_ParserLr extends Hoa_Pom_Parser {
             switch($this->ct()) {
 
                 case Hoa_Pom::_CLASS:
+                    $this->r()->addElement($lateBuffer);
                     $handle = $this->clas();
                   break;
 
                 case Hoa_Pom::_FUNCTION:
+                    $this->r()->addElement($lateBuffer);
                     $handle = $this->func();
                   break;
 
@@ -248,7 +250,6 @@ class Hoa_Pom_Parser_ParserLr extends Hoa_Pom_Parser {
 
                 if(true === $in) {
 
-                    $this->r()->addElement($lateBuffer);
                     $lateBuffer = new Hoa_Pom_Token_LateParsing();
                     $in         = false;
                 }
@@ -342,21 +343,27 @@ class Hoa_Pom_Parser_ParserLr extends Hoa_Pom_Parser {
         $class      = null;
 
         $this->p(1);
+        $this->r()->getLastElement()->pop();
 
         if($this->ct() == Hoa_Pom::_ABSTRACT) {
 
             $abstract = true;
             $this->p(1);
+            $this->r()->getLastElement()->pop();
         }
         elseif($this->ct() == Hoa_Pom::_FINAL) {
 
             $final    = true;
             $this->p(1);
+            $this->r()->getLastElement()->pop();
         }
 
         if(   $this->ct() == Hoa_Pom::_COMMENT
-           || $this->ct() == Hoa_Pom::_DOC_COMMENT)
+           || $this->ct() == Hoa_Pom::_DOC_COMMENT) {
+
             $comment = $this->comm();
+            $this->r()->getLastElement()->pop();
+        }
 
         while($this->n() && $this->ct() != Hoa_Pom::_CLASS);
         $this->n();
@@ -717,10 +724,14 @@ class Hoa_Pom_Parser_ParserLr extends Hoa_Pom_Parser {
         $function  = null;
 
         $this->p(1);
+        $this->r()->getLastElement()->pop();
 
         if(   $this->ct() == Hoa_Pom::_COMMENT
-           || $this->ct() == Hoa_Pom::_DOC_COMMENT)
+           || $this->ct() == Hoa_Pom::_DOC_COMMENT) {
+
             $comment = $this->comm();
+            $this->r()->getLastElement()->pop();
+        }
 
         while($this->n() + 1 && $this->ct() != Hoa_Pom::_FUNCTION);
         $this->n();
