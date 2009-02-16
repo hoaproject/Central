@@ -164,7 +164,7 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Class extends Hoa_Pom_Token_Util_Vi
             $constants .
             $attributes .
             "\n\n" .
-            $methods . "\n" .
+            $methods .
             '}';
     }
 
@@ -258,10 +258,10 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Class extends Hoa_Pom_Token_Util_Vi
             (true === $element->isStatic()
                  ? 'static '
                  : ''
-            ) .
-            $this->getVisitor()
-                 ->visitEntry('Hoa_Pom_Token_Function_Named', $element, $handle) .
-            "\n"
-        );
+            )
+        ) .
+        $this->getVisitor()
+             ->visitEntry('Hoa_Pom_Token_Function_Named', $element, $handle) .
+        "\n";
     }
 }
