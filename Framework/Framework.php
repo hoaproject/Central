@@ -296,8 +296,8 @@ class Hoa_Framework {
             else
                 $className .= '_' . $className;
 
-            $classPath  = HOA_FRAMEWORK_BASE . DS .
-                          str_replace('_', DS, $className) . '.php';
+            $classPath = HOA_FRAMEWORK_BASE . DS .
+                         str_replace('_', DS, $className) . '.php';
         }
 
         if(!file_exists($classPath))
