@@ -118,11 +118,16 @@ class Hoa_Test_Praspel_FreeVariable {
      *
      * @access  public
      * @param   string  $name    Type name.
+     * @param   ...     ...      Type arguments.
      * @return  Hoa_Test_Urg_Type_Interface_Type
      */
     public function hasType ( $name ) {
 
-        return $this->_types[] = new Hoa_Test_Praspel_Type($name);
+        $arguments = func_get_args();
+        array_shift($arguments);
+        $type      = new Hoa_Test_Praspel_Type($name, $arguments);
+
+        return $this->_types[] = $type->getType();
     }
 
     /**
@@ -133,6 +138,6 @@ class Hoa_Test_Praspel_FreeVariable {
      */
     public function chooseOneType ( ) {
 
-        return $this->_types[Hoa_Test_Urg::Ud(0, count($this->_types) - 1];
+        return $this->_types[Hoa_Test_Urg::Ud(0, count($this->_types) - 1)];
     }
 }
