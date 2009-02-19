@@ -139,11 +139,14 @@ class Hoa_Test_Praspel {
      *
      * @access  public
      * @param   string  $name    Type name.
+     * @param   ...     ...      Type arguments.
      * @return  Hoa_Test_Urg_Type_Interface_Type
      */
     public function type ( $name ) {
 
-        $type = new Hoa_Test_Praspel_Type($name);
+        $arguments = func_get_args();
+        array_shift($arguments);
+        $type      = new Hoa_Test_Praspel_Type($name, $arguments);
 
         return $type->getType();
     }
