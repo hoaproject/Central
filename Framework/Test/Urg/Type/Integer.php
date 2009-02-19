@@ -43,9 +43,9 @@ require_once 'Framework.php';
 import('Test.Urg.Type.Exception');
 
 /**
- * Hoa_Test_Urg_Type_Interface_Randomizable
+ * Hoa_Test_Urg_Type_Interface_Type
  */
-import('Test.Urg.Type.Interface.Randomizable');
+import('Test.Urg.Type.Interface.Type');
 
 /**
  * Hoa_Test_Urg_Type_Number
@@ -73,7 +73,7 @@ import('Test.Urg.~');
  */
 
 class Hoa_Test_Urg_Type_Integer extends    Hoa_Test_Urg_Type_Number
-                                implements Hoa_Test_Urg_Type_Interface_Randomizable {
+                                implements Hoa_Test_Urg_Type_Interface_Type {
 
     /**
      * Zero.
@@ -109,6 +109,42 @@ class Hoa_Test_Urg_Type_Integer extends    Hoa_Test_Urg_Type_Number
         $this->setUpperBoundValue(self::getPositiveInfinity());
         $this->setLowerBoundValue(self::getNegativeInfinity());
         $this->randomize();
+
+        return;
+    }
+
+    /**
+     * A predicate.
+     *
+     * @access  public
+     * @param   int     $q    Q-value.
+     * @return  bool
+     */
+    public function predicate ( $q = null ) {
+
+        if(null === $q)
+            $q = $this->getValue();
+
+        return is_int($q);
+    }
+
+    /**
+     * Choose a random value.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function randomize ( ) {
+
+        $lower  = $this->getLowerBoundValue();
+        $upper  = $this->getUpperBoundValue();
+        $random = Hoa_Test_Urg::Ud($lower, $upper);
+
+        if($this instanceof Hoa_Test_Urg_Type_Interface_Predicable)
+            while(false === $this->predicate($random)) // Increment test number ?
+                $random = Hoa_Test_Urg::Ud($lower, $upper);
+
+        $this->setValue($random);
 
         return;
     }
@@ -166,26 +202,5 @@ class Hoa_Test_Urg_Type_Integer extends    Hoa_Test_Urg_Type_Number
     public static function getNegativeInfinity ( ) {
 
         return ~self::INFINITY;
-    }
-
-    /**
-     * Choose a random value.
-     *
-     * @access  public
-     * @return  void
-     */
-    public function randomize ( ) {
-
-        $upper  = $this->getUpperBoundValue();
-        $lower  = $this->getLowerBoundValue();
-        $random = Hoa_Test_Urg::Ud($upper, $lower);
-
-        if($this instanceof Hoa_Test_Urg_Type_Interface_Predicable)
-            while(false === $this->predicate($random)) // Increment test number ?
-                $random = Hoa_Test_Urg::Ud($upper, $lower);
-
-        $this->setValue($random);
-
-        return;
     }
 }

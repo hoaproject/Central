@@ -43,9 +43,9 @@ require_once 'Framework.php';
 import('Test.Urg.Type.Exception');
 
 /**
- * Hoa_Test_Urg_Type_Interface_Randomizable
+ * Hoa_Test_Urg_Type_Interface_Type
  */
-import('Test.Urg.Type.Interface.Randomizable');
+import('Test.Urg.Type.Interface.Type');
 
 /**
  * Hoa_Test_Urg_Type_BoundFloat
@@ -68,7 +68,7 @@ import('Test.Urg.Type.BoundFloat');
  */
 
 class Hoa_Test_Urg_Type_NegativeFloat extends    Hoa_Test_Urg_Type_BoundFloat
-                                      implements Hoa_Test_Urg_Type_Interface_Randomizable {
+                                      implements Hoa_Test_Urg_Type_Interface_Type {
 
     /**
      * Build a negative float.
@@ -79,10 +79,29 @@ class Hoa_Test_Urg_Type_NegativeFloat extends    Hoa_Test_Urg_Type_BoundFloat
      *                                     parent::BOUND_* constants).
      * @return  void
      */
-    public function __construct ( $lowerValue, $lowerStatement = parent::BOUND_OPEN ) {
+    public function __construct ( $lowerValue     = null,
+                                  $lowerStatement = parent::BOUND_OPEN ) {
+
+        if(null === $lowerValue)
+            $lowerValue = $this->getNegativeInfinity();
 
         parent::__construct($lowerValue, 0, $lowerStatement, parent::BOUND_OPEN);
 
         return;
+    }
+
+    /**
+     * A predicate.
+     *
+     * @access  public
+     * @param   float   $q    Q-value.
+     * @return  bool
+     */
+    public function predicate ( $q = null ) {
+
+        if(null === $q)
+            $q = $this->getValue();
+
+        return $q < 0;
     }
 }

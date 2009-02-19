@@ -43,9 +43,9 @@ require_once 'Framework.php';
 import('Test.Urg.Type.Exception');
 
 /**
- * Hoa_Test_Urg_Type_Interface_Randomizable
+ * Hoa_Test_Urg_Type_Interface_Type
  */
-import('Test.Urg.Type.Interface.Randomizable');
+import('Test.Urg.Type.Interface.Type');
 
 /**
  * Hoa_Test_Urg_Type_Float
@@ -68,7 +68,7 @@ import('Test.Urg.Type.Float');
  */
 
 class Hoa_Test_Urg_Type_BoundFloat extends    Hoa_Test_Urg_Type_Integer
-                                   implements Hoa_Test_Urg_Type_Interface_Randomizable {
+                                   implements Hoa_Test_Urg_Type_Interface_Type {
 
     /**
      * Upper bound statement (given by parent::BOUND_* constants).
@@ -116,6 +116,42 @@ class Hoa_Test_Urg_Type_BoundFloat extends    Hoa_Test_Urg_Type_Integer
         $this->randomize();
 
         return;
+    }
+
+    /**
+     * A predicate.
+     *
+     * @access  public
+     * @param   float   $q    Q-value.
+     * @return  bool
+     */
+    public function predicate ( $q = null ) {
+
+        if(null === $q)
+            $q = $this->getValue();
+
+        $lower = $this->getLowerBoundValue();
+        $upper = $this->getUpperBoundValue();
+
+        if(parent::BOUND_CLOSE == $this->getLowerBoundStatement()) {
+
+            if($q < $lower)
+                return false;
+        }
+        else
+            if($q <= $lower)
+                return false;
+
+        if(parent::BOUND_CLOSE == $this->getUpperBoundStatement()) {
+
+            if($q > $upper)
+                return false;
+        }
+        else
+            if($q >= $upper)
+                return false;
+
+        return true;
     }
 
     /**

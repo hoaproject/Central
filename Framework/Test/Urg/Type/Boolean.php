@@ -43,9 +43,9 @@ require_once 'Framework.php';
 import('Test.Urg.Type.Exception');
 
 /**
- * Hoa_Test_Urg_Type_Interface_Randomizable
+ * Hoa_Test_Urg_Type_Interface_Type
  */
-import('Test.Urg.Type.Interface.Randomizable');
+import('Test.Urg.Type.Interface.Type');
 
 /**
  * Hoa_Test_Urg
@@ -67,7 +67,7 @@ import('Test.Urg.~');
  * @subpackage  Hoa_Test_Urg_Type_Boolean
  */
 
-class Hoa_Test_Urg_Type_Boolean implements Hoa_Test_Urg_Interface_Randomizable {
+class Hoa_Test_Urg_Type_Boolean implements Hoa_Test_Urg_Type_Interface_Type {
 
     /**
      * Random value.
@@ -87,6 +87,39 @@ class Hoa_Test_Urg_Type_Boolean implements Hoa_Test_Urg_Interface_Randomizable {
     public function __construct ( ) {
 
         $this->randomize();
+
+        return;
+    }
+
+    /**
+     * A predicate.
+     *
+     * @access  public
+     * @param   bool    $q    Q-value.
+     * @return  bool
+     */
+    public function predicate ( $q = null ) {
+
+        if(null === $q)
+            $q = $this->getValue();
+
+        return is_bool($q);
+    }
+
+    /**
+     * Choose a random value.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function randomize ( ) {
+
+        $random = (bool) Hoa_Test_Urg::Ud(0, 1);
+
+        while(false === $this->predicate($random))
+            $random = (bool) Hoa_Test_Urg::Ud(0, 1);
+
+        $this->setValue($random);
 
         return;
     }
@@ -115,24 +148,5 @@ class Hoa_Test_Urg_Type_Boolean implements Hoa_Test_Urg_Interface_Randomizable {
     public function getValue ( ) {
 
         return $this->_value;
-    }
-
-    /**
-     * Choose a random value.
-     *
-     * @access  public
-     * @return  void
-     */
-    public function randomize ( ) {
-
-        $random = (bool) Hoa_Test_Urg::Ud(0, 1);
-
-        if($this instanceof Hoa_Test_Urg_Type_Interface_Predicable)
-            while(false === $this->predicate($random))
-                $random = (bool) Hoa_Test_Urg::Ud(0, 1);
-
-        $this->setValue($random);
-
-        return;
     }
 }
