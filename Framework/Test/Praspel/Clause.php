@@ -79,7 +79,7 @@ abstract class Hoa_Test_Praspel_Clause {
      * @param   string  $name    Free variable name.
      * @return  Hoa_Test_Praspel_FreeVariable
      */
-    public function declare ( $name ) {
+    public function declareFreeVariable ( $name ) {
 
         if(true === $this->freeVariableExists($name))
             return $this->_freeVariables[$name];
