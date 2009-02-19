@@ -68,7 +68,7 @@ class Hoa_Test_Praspel_Call {
      *
      * @var Hoa_Test_Praspel object
      */
-    protected $_roots     = null;
+    protected $_root      = null;
 
     /**
      * Object to call.
