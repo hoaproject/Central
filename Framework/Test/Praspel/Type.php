@@ -76,13 +76,14 @@ class Hoa_Test_Praspel_Type {
      * Find and build the type.
      *
      * @access  public
-     * @param   string  $name    Type name.
+     * @param   string  $name         Type name.
+     * @param   array   $arguments    Type arguments.
      * @return  void
      * @throws  Hoa_Test_Praspel_Exception
      */
-    public function __construct ( $name ) {
+    public function __construct ( $name, Array $arguments = array() ) {
 
-        $this->factory($name);
+        $this->factory($name, $arguments);
 
         return;
     }
@@ -91,17 +92,19 @@ class Hoa_Test_Praspel_Type {
      * Factory of types.
      *
      * @access  public
-     * @param   string  $name    Type name.
+     * @param   string  $name         Type name.
+     * @param   array   $arguments    Type arguments.
      * @return  void
      */
-    protected function factory ( $name ) {
+    protected function factory ( $name, Array $arguments ) {
 
         $name  = ucfirst(strtolower($name));
         $class = 'Hoa_Test_Urg_Type_' . $name;
 
         import('Test.Urg.Type.' . $name);
 
-        $this->_type = new $class();
+        $reflection  = new ReflectionClass($class);
+        $this->_type = $reflection->newInstanceArgs($arguments);
 
         return;
     }
