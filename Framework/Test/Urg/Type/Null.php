@@ -43,9 +43,9 @@ require_once 'Framework.php';
 import('Test.Urg.Type.Exception');
 
 /**
- * Hoa_Test_Urg_Interface_Randomizable
+ * Hoa_Test_Urg_Interface_Type
  */
-import('Test.Urg.Interface.Randomizable');
+import('Test.Urg.Interface.Type');
 
 /**
  * Hoa_Test_Urg
@@ -66,7 +66,7 @@ import('Test.Urg.~');
  * @subpackage  Hoa_Test_Urg_Type_Null
  */
 
-class Hoa_Test_Urg_Type_Null implements Hoa_Test_Urg_Type_Interface_Randomizable {
+class Hoa_Test_Urg_Type_Null implements Hoa_Test_Urg_Type_Interface_Type {
 
     /**
      * Random value.
@@ -91,14 +91,15 @@ class Hoa_Test_Urg_Type_Null implements Hoa_Test_Urg_Type_Interface_Randomizable
     }
 
     /**
-     * Get the random value.
+     * A predicate.
      *
-     * @access  protected
-     * @return  null
+     * @access  public
+     * @param   mixed   $q    Q-value.
+     * @return  bool
      */
-    public function getValue ( ) {
+    public function predicate ( $q = null ) {
 
-        return null;
+        return null === $q;
     }
 
     /**
@@ -110,5 +111,16 @@ class Hoa_Test_Urg_Type_Null implements Hoa_Test_Urg_Type_Interface_Randomizable
     public function randomize ( ) {
 
         return;
+    }
+
+    /**
+     * Get the random value.
+     *
+     * @access  protected
+     * @return  null
+     */
+    public function getValue ( ) {
+
+        return null;
     }
 }

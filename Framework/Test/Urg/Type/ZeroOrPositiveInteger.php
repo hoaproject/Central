@@ -43,9 +43,9 @@ require_once 'Framework.php';
 import('Test.Urg.Type.Exception');
 
 /**
- * Hoa_Test_Urg_Type_Interface_Randomizable
+ * Hoa_Test_Urg_Type_Interface_Type
  */
-import('Test.Urg.Type.Interface.Randomizable');
+import('Test.Urg.Type.Interface.Type');
 
 /**
  * Hoa_Test_Urg_Type_BoundInteger
@@ -68,7 +68,7 @@ import('Test.Urg.Type.BoundInteger');
  */
 
 class Hoa_Test_Urg_Type_ZeroOrPositiveInteger extends    Hoa_Test_Urg_Type_BoundInteger
-                                              implements Hoa_Test_Urg_Type_Interface_Randomizable {
+                                              implements Hoa_Test_Urg_Type_Interface_Type {
 
     /**
      * Build a zero or positive integer.
@@ -84,5 +84,20 @@ class Hoa_Test_Urg_Type_ZeroOrPositiveInteger extends    Hoa_Test_Urg_Type_Bound
         parent::__construct(0, $upperValue, parent::BOUND_CLOSE, $upperStatement);
 
         return;
+    }
+
+    /**
+     * A predicate.
+     *
+     * @access  public
+     * @param   int     $q    Q-value.
+     * @return  bool
+     */
+    public function predicate ( $q = null ) {
+
+        if(null === $q)
+            $q = $this->getValue();
+
+        return $q >= 0;
     }
 }

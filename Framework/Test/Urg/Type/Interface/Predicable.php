@@ -60,5 +60,5 @@ interface Hoa_Test_Urg_Type_Interface_Predicable {
      * @param   mixed   $q    Q-value.
      * @return  bool
      */
-    public function predicate ( $q );
+    public function predicate ( $q = null );
 }

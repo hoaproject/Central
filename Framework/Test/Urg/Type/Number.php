@@ -43,9 +43,9 @@ require_once 'Framework.php';
 import('Test.Urg.Type.Exception');
 
 /**
- * Hoa_Test_Urg_Type_Interface_Randomizable
+ * Hoa_Test_Urg_Type_Interface_Type
  */
-import('Test.Urg.Type.Interface.Randomizable');
+import('Test.Urg.Type.Interface.Type');
 
 /**
  * Class Hoa_Test_Urg_Type_Number.
@@ -62,7 +62,7 @@ import('Test.Urg.Type.Interface.Randomizable');
  * @subpackage  Hoa_Test_Urg_Type_Number
  */
 
-abstract class Hoa_Test_Urg_Type_Number extends Hoa_Test_Urg_Type {
+abstract class Hoa_Test_Urg_Type_Number implements Hoa_Test_Urg_Type_Interface_Type {
 
     /**
      * Whether bound is open.
