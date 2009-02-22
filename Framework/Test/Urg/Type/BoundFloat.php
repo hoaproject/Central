@@ -67,7 +67,7 @@ import('Test.Urg.Type.Float');
  * @subpackage  Hoa_Test_Urg_Type_BoundFloat
  */
 
-class Hoa_Test_Urg_Type_BoundFloat extends    Hoa_Test_Urg_Type_Integer
+class Hoa_Test_Urg_Type_BoundFloat extends    Hoa_Test_Urg_Type_Float
                                    implements Hoa_Test_Urg_Type_Interface_Type {
 
     /**
