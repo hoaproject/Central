@@ -79,17 +79,12 @@ class Hoa_Test_Urg_Type_Boolean implements Hoa_Test_Urg_Type_Interface_Type {
 
 
     /**
-     * Build a boolean.
+     * Constructor.
      *
      * @access  public
      * @return  void
      */
-    public function __construct ( ) {
-
-        $this->randomize();
-
-        return;
-    }
+    public function __construct ( ) { }
 
     /**
      * A predicate.

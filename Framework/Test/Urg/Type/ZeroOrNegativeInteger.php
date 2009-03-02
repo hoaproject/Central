@@ -85,19 +85,4 @@ class Hoa_Test_Urg_Type_ZeroOrNegativeInteger extends    Hoa_Test_Urg_Type_Bound
 
         return;
     }
-
-    /**
-     * A predicate.
-     *
-     * @access  public
-     * @param   int     $q    Q-value.
-     * @return  bool
-     */
-    public function predicate ( $q = null ) {
-
-        if(null === $q)
-            $q = $this->getValue();
-
-        return $q <= 0;
-    }
 }

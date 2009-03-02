@@ -45,7 +45,7 @@ import('Test.Urg.Type.Exception');
 /**
  * Hoa_Test_Urg_Interface_Type
  */
-import('Test.Urg.Interface.Type');
+import('Test.Urg.Type.Interface.Type');
 
 /**
  * Hoa_Test_Urg
@@ -78,17 +78,12 @@ class Hoa_Test_Urg_Type_Null implements Hoa_Test_Urg_Type_Interface_Type {
 
 
     /**
-     * Build a null value.
+     * Constructor.
      *
      * @access  public
      * @return  void
      */
-    public function __construct ( ) {
-
-        $this->randomize();
-
-        return;
-    }
+    public function __construct ( ) { }
 
     /**
      * A predicate.

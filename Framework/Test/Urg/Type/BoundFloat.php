@@ -113,7 +113,6 @@ class Hoa_Test_Urg_Type_BoundFloat extends    Hoa_Test_Urg_Type_Float
 
         $this->setUpperBoundStatement($upperStatement);
         $this->setLowerBoundStatement($lowerStatement);
-        $this->randomize();
 
         return;
     }

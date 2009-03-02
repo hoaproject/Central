@@ -79,12 +79,11 @@ class Hoa_Test_Urg_Type_OddInteger extends    Hoa_Test_Urg_Type_BoundInteger
     public function __construct ( ) {
 
         parent::__construct(
-            parent::getNegativeInfinity() + 1,
-            parent::getPositiveInfinity(),
+            (parent::getNegativeInfinity() / 2) + 1,
+            (parent::getPositiveInfinity() - 1) / 2,
             parent::BOUND_CLOSE,
             parent::BOUND_CLOSE
         );
-        $this->randomize();
 
         return;
     }
@@ -113,10 +112,13 @@ class Hoa_Test_Urg_Type_OddInteger extends    Hoa_Test_Urg_Type_BoundInteger
     public function randomize ( ) {
 
         parent::randomize();
-        $random = $this->getValue();
+        $random = $this->getValue() * 2 - 1;
 
-        if($random % 2 == 0)
-            $this->setValue($random + 1);
+        while(false === $this->predicate($random)) {
+
+            parent::randomize();
+            $random = $this->getValue() * 2 - 1;
+        }
 
         return;
     }
