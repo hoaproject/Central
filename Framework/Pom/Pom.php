@@ -293,10 +293,10 @@ abstract class Hoa_Pom {
      * Tokenize the root of object model, i.e. get a “tokenize array”.
      *
      * @access  public
-     * @param   Hoa_Pom_Token_Root  $root    Root of object model.
+     * @param   Hoa_Visitor_Element  $root    Root of object model.
      * @return  array
      */
-    public static function tokenize ( Hoa_Pom_Token_Root $root ) {
+    public static function tokenize ( Hoa_Visitor_Element $root ) {
 
         $tokenize = new Hoa_Pom_Token_Util_Visitor_Tokenize();
 
@@ -307,10 +307,10 @@ abstract class Hoa_Pom {
      * Print the root of object model.
      *
      * @access  public
-     * @param   Hoa_Pom_Token_Root  $root    Root of object model.
+     * @param   Hoa_Visitor_Element  $root    Root of object model.
      * @return  string
      */
-    public static function dump ( Hoa_Pom_Token_Root $root ) {
+    public static function dump ( Hoa_Visitor_Element $root ) {
 
         $print = new Hoa_Pom_Token_Util_Visitor_PrettyPrint();
 
