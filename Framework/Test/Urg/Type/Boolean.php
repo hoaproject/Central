@@ -109,10 +109,11 @@ class Hoa_Test_Urg_Type_Boolean implements Hoa_Test_Urg_Type_Interface_Type {
      */
     public function randomize ( ) {
 
-        $random = (bool) Hoa_Test_Urg::Ud(0, 1);
+        do {
 
-        while(false === $this->predicate($random))
             $random = (bool) Hoa_Test_Urg::Ud(0, 1);
+
+        } while(false === $this->predicate($random));
 
         $this->setValue($random);
 

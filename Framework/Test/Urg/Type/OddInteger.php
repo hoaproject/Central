@@ -111,14 +111,12 @@ class Hoa_Test_Urg_Type_OddInteger extends    Hoa_Test_Urg_Type_BoundInteger
      */
     public function randomize ( ) {
 
-        parent::randomize();
-        $random = $this->getValue() * 2 - 1;
-
-        while(false === $this->predicate($random)) {
+        do {
 
             parent::randomize();
             $random = $this->getValue() * 2 - 1;
-        }
+
+        } while(false === $this->predicate($random));
 
         return;
     }
