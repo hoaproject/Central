@@ -101,7 +101,7 @@ class Hoa_Pom_Token_Whitespace implements Hoa_Visitor_Element {
      */
     public function setWhitespace ( $whitespace ) {
 
-        if(0 === preg_match('^[:space:]$', $whitespace))
+        if(0 === preg_match('#^[[:space:]]$#', $whitespace))
             throw new Hoa_Pom_Token_Util_Exception(
                 'A whitespace must only contain spaces, horizontal or ' .
                 'vertical tabs, or newlines.', 0);
