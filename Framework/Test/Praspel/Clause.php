@@ -43,12 +43,7 @@ require_once 'Framework.php';
 import('Test.Praspel.Exception');
 
 /**
- * Hoa_Test_Praspel_FreeVariable
- */
-import('Test.Praspel.FreeVariable');
-
-/**
- * Class Hoa_Test_Praspel_Clause.
+ * Interface Hoa_Test_Praspel_Clause.
  *
  * .
  *
@@ -61,70 +56,4 @@ import('Test.Praspel.FreeVariable');
  * @subpackage  Hoa_Test_Praspel_Clause
  */
 
-abstract class Hoa_Test_Praspel_Clause {
-
-    /**
-     * Collection of free variables.
-     *
-     * @var Hoa_Test_Praspel_Clause array
-     */
-    protected $_freeVariables = array();
-
-
-
-    /**
-     * Declare a free variable.
-     *
-     * @access  public
-     * @param   string  $name    Free variable name.
-     * @return  Hoa_Test_Praspel_FreeVariable
-     */
-    public function declareFreeVariable ( $name ) {
-
-        if(true === $this->freeVariableExists($name))
-            return $this->_freeVariables[$name];
-
-        return $this->_freeVariables[$name] =
-                   new Hoa_Test_Praspel_FreeVariable($name);
-    }
-
-    /**
-     * Check if a free variable already exists or not.
-     *
-     * @access  public
-     * @param   string  $name    Free variable name.
-     * @return  Hoa_Test_Praspel_FreeVariable
-     */
-    public function freeVariableExists ( $name ) {
-
-        return isset($this->_freeVariables[$name]);
-    }
-
-    /**
-     * Get a specific free variable.
-     *
-     * @access  public
-     * @param   string  $name    Free variable name.
-     * @return  Hoa_Test_Praspel_FreeVariable
-     * @throw   Hoa_Test_Praspel_Exception
-     */
-    public function getFreeVariable ( $name ) {
-
-        if(false === $this->freeVariableExists($name))
-            throw new Hoa_Test_Praspel_Exception(
-                'Free variable %s is not found.', 0, $name);
-
-        return $this->_freeVariables[$name];
-    }
-
-    /**
-     * Get all free variables.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function getFreeVariables ( ) {
-
-        return $this->_freeVariables;
-    }
-}
+interface Hoa_Test_Praspel_Clause { }
