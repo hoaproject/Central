@@ -58,6 +58,41 @@ import('Pom.~');
 import('Pom.Token.Class.Method');
 
 /**
+ * Hoa_Pom_Token_Call_Attribute
+ */
+import('Pom.Token.Call.Attribute');
+
+/**
+ * Hoa_Pom_Token_Call_Function
+ */
+import('Pom.Token.Call.Function');
+
+/**
+ * Hoa_Pom_Token_Instruction
+ */
+import('Pom.Token.Instruction');
+
+/**
+ * Hoa_Pom_Token_Operation
+ */
+import('Pom.Token.Operation');
+
+/**
+ * Hoa_Pom_Token_Operator_Assignement
+ */
+import('Pom.Token.Operator.Assignement');
+
+/**
+ * Hoa_Pom_Token_ControlStructure_Return
+ */
+import('Pom.Token.ControlStructure.Return');
+
+/**
+ * Hoa_Pom_Token_Array
+ */
+import('Pom.Token.Array');
+
+/**
  * Class Hoa_Test_Oracle.
  *
  * .
@@ -107,6 +142,7 @@ class Hoa_Test_Oracle {
 
         $this->prepareIncubator();
         $this->prepareOrdealOracle();
+        $this->prepareOrdealBattleground();
         $this->prepareEyes();
     }
 
@@ -229,41 +265,172 @@ class Hoa_Test_Oracle {
             throw new Hoa_Test_Oracle_Exception(
                 'Cannot create the ordeal.oracle in %s.', 5, $oracle);
 
-        foreach($convict as $i => $file) {
-
-            $parser      = Hoa_Pom::parse($incubator . $file, Hoa_Pom::TOKENIZE_FILE);
-            $magicSetter = new Hoa_Pom_Token_Class_Method(
-                new Hoa_Pom_Token_String($prefix . 'magicSetter')
-            );
-            $magicSetter->referenceMe(false);
-            $magicSetter->addArguments(array(
-                new Hoa_Pom_Token_Function_Argument(
-                    new Hoa_Pom_Token_Variable(
-                        new Hoa_Pom_Token_String('attr')
-                    )
-                ),
-                new Hoa_Pom_Token_Function_Argument(
+        $magicSetter = new Hoa_Pom_Token_Class_Method(
+            new Hoa_Pom_Token_String($prefix . 'magicSetter')
+        );
+        $magicSetter->referenceMe(false);
+        $magicSetter->addArguments(array(
+            new Hoa_Pom_Token_Function_Argument(
+                new Hoa_Pom_Token_Variable(
+                    new Hoa_Pom_Token_String('attribut')
+                )
+            ),
+            new Hoa_Pom_Token_Function_Argument(
+                new Hoa_Pom_Token_Variable(
+                    new Hoa_Pom_Token_String('value')
+                )
+            )
+        ));
+        $magicSetter->addBody(
+            new Hoa_Pom_Token_Instruction(
+                new Hoa_Pom_Token_Operation(array(
+                    new Hoa_Pom_Token_Call_Attribute(
+                        new Hoa_Pom_Token_Variable(
+                            new Hoa_Pom_Token_String('this')
+                        ),
+                        new Hoa_Pom_Token_Variable(
+                            new Hoa_Pom_Token_String('attribut')
+                        )
+                    ),
+                    new Hoa_Pom_Token_Operator_Assignement('='),
                     new Hoa_Pom_Token_Variable(
                         new Hoa_Pom_Token_String('value')
                     )
-                )
-            ));
+                ))
+            )
+        );
 
-            foreach($parser->getElements() as $i => $element)
+        $magicGetter = new Hoa_Pom_Token_Class_Method(
+            new Hoa_Pom_Token_String($prefix . 'magicGetter')
+        );
+        $magicGetter->referenceMe(false);
+        $magicGetter->addArguments(array(
+            new Hoa_Pom_Token_Function_Argument(
+                new Hoa_Pom_Token_Variable(
+                    new Hoa_Pom_Token_String('attribut')
+                )
+            )
+        ));
+        $magicGetter->addBody(
+            new Hoa_Pom_Token_ControlStructure_Return(
+                new Hoa_Pom_Token_Call_Attribute(
+                    new Hoa_Pom_Token_Variable(
+                        new Hoa_Pom_Token_String('this')
+                    ),
+                    new Hoa_Pom_Token_Variable(
+                        new Hoa_Pom_Token_String('attribut')
+                    )
+                )
+            )
+        );
+
+        $magicCaller = new Hoa_Pom_Token_Class_Method(
+            new Hoa_Pom_Token_String($prefix . 'magicCaller')
+        );
+        $magicCaller->referenceMe(false);
+        $magicCaller->addArguments(array(
+            new Hoa_Pom_Token_Function_Argument(
+                new Hoa_Pom_Token_Variable(
+                    new Hoa_Pom_Token_String('method')
+                )
+            )
+        ));
+        $magicCaller->addBody(
+            new Hoa_Pom_Token_Instruction(
+                new Hoa_Pom_Token_Operation(array(
+                    new Hoa_Pom_Token_Variable(
+                        new Hoa_Pom_Token_String('arguments')
+                    ),
+                    new Hoa_Pom_Token_Operator_Assignement('='),
+                    new Hoa_Pom_Token_Call_Function(
+                        new Hoa_Pom_Token_String('func_get_args')
+                    )
+                ))
+            )
+        );
+        $magicCaller->addBody(
+            new Hoa_Pom_Token_Instruction(
+                new Hoa_Pom_Token_Call_Function(
+                    new Hoa_Pom_Token_String('array_shift'),
+                    array(
+                        new Hoa_Pom_Token_Variable(
+                            new Hoa_Pom_Token_String('arguments')
+                        )
+                    )
+                )
+            )
+        );
+        $magicCaller->addBody(
+            new Hoa_Pom_Token_ControlStructure_Return(
+                new Hoa_Pom_Token_Call_Function(
+                    new Hoa_Pom_Token_String('call_user_func_array'),
+                    array(
+                        new Hoa_Pom_Token_Array(array(
+                            new Hoa_Pom_Token_Variable(
+                                new Hoa_Pom_Token_String('this')
+                            ),
+                            new Hoa_Pom_Token_Variable(
+                                new Hoa_Pom_Token_String('method')
+                            )
+                        )),
+                        new Hoa_Pom_Token_Variable(
+                            new Hoa_Pom_Token_String('arguments')
+                        )
+                    )
+                )
+            )
+        );
+
+        foreach($convict as $i => $file) {
+
+            $root = Hoa_Pom::parse($incubator . $file, Hoa_Pom::TOKENIZE_FILE);
+
+            foreach($root->getElements() as $i => $element)
                 if($element instanceof Hoa_Pom_Token_Class)
                     $element->addMethods(array(
-                        $magicSetter
+                        $magicSetter,
+                        $magicGetter,
+                        $magicCaller
                     ));
 
-            foreach($parser->getElements() as $i => $element)
-                if($element instanceof Hoa_Pom_Token_Class)
-                    foreach($element->getMethods() as $e => $method)
-                        var_dump('--- ' . $method->getName()->getString());
+            file_put_contents($oracle . $file, Hoa_Pom::dump($root));
+        }
+    }
+
+    /**
+     * Prepare the ordeal.battleground.
+     *
+     * @access  protected
+     * @return  void
+     * @throw   Hoa_Test_Oracle_Exception
+     */
+    protected function prepareOrdealBattleground ( ) {
+
+        $battleground = $this->getRequest()->getParameter('test.ordeal.battleground');
+
+        if(null === $battleground)
+            throw new Hoa_Test_Oracle_Exception(
+                'A directory for ordeal.battleground must be specified.', 6);
+
+        if(is_dir($battleground)) {
+
+            foreach(new RecursiveIteratorIterator(
+                        new RecursiveDirectoryIterator($battleground),
+                        RecursiveIteratorIterator::CHILD_FIRST
+                    ) as $name => $splFileInfo) {
+
+                if(is_dir($name))
+                    rmdir($name);
+                elseif(is_file($name))
+                    unlink($name);
+            }
+
+            rmdir($battleground);
         }
 
-        print_r($convict);
-
-        exit;
+        if(false === @mkdir($battleground, 0777, true))
+            throw new Hoa_Test_Oracle_Exception(
+                'Cannot create the ordeal.battleground in %s.', 7, $battleground);
     }
 
     /**
