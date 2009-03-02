@@ -169,7 +169,8 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Call extends Hoa_Pom_Token_Util_Vis
 
         return $element->getObject()->accept($this->getVisitor(), $handle) .
                '->' .
-               $element->getMethod()->accept($this->getVisitor(), $handle);
+               $this->getVisitor()
+                    ->visitEntry('Hoa_Pom_Token_Call_Function', $element, $handle);
     }
 
     /**

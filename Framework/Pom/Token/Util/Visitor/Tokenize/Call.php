@@ -203,7 +203,8 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Call extends Hoa_Visitor_Registry_Aggr
                 1 => '->',
                 2 => -1
             )),
-            $element->getMethod()->accept($this->getVisitor(), $handle)
+            $this->getVisitor()
+                 ->visitEntry('Hoa_Pom_Token_Call_Function', $element, $handle)
         );
     }
 
