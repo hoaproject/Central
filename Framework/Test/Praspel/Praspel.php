@@ -43,14 +43,29 @@ require_once 'Framework.php';
 import('Test.Praspel.Exception');
 
 /**
+ * Hoa_Test_Praspel_Clause_Ensures
+ */
+import('Test.Praspel.Clause.Ensures');
+
+/**
+ * Hoa_Test_Praspel_Clause_Invariant
+ */
+import('Test.Praspel.Clause.Invariant');
+
+/**
+ * Hoa_Test_Praspel_Clause_Predicate
+ */
+import('Test.Praspel.Clause.Predicate');
+
+/**
  * Hoa_Test_Praspel_Clause_Requires
  */
 import('Test.Praspel.Clause.Requires');
 
 /**
- * Hoa_Test_Praspel_Clause_Ensures
+ * Hoa_Test_Praspel_Clause_Throws
  */
-import('Test.Praspel.Clause.Ensures');
+import('Test.Praspel.Clause.Throws');
 
 /**
  * Hoa_Test_Praspel_Type
@@ -61,6 +76,11 @@ import('Test.Praspel.Type');
  * Hoa_Test_Praspel_Call
  */
 import('Test.Praspel.Call');
+
+/**
+ * Hoa_Test_Log
+ */
+import('Test.Log');
 
 /**
  * Class Hoa_Test_Praspel.
@@ -102,6 +122,17 @@ class Hoa_Test_Praspel {
 
 
     /**
+     * Constructor. Create a default “requires” clause.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function __construct ( ) {
+
+        $this->clause('requires');
+    }
+
+    /**
      * Add a clause.
      *
      * @access  public
@@ -118,12 +149,24 @@ class Hoa_Test_Praspel {
 
         switch($name) {
 
-            case 'requires':
-                $clause = new Hoa_Test_Praspel_Clause_Requires();
+            case 'ensures':
+                $clause = new Hoa_Test_Praspel_Clause_Ensures($this);
               break;
 
-            case 'ensures':
-                $clause = new Hoa_Test_Praspel_Clause_Ensures();
+            case 'invariant':
+                $clause = new Hoa_Test_Praspel_Clause_Invariant($this);
+              break;
+
+            case 'predicate':
+                $clause = new Hoa_Test_Praspel_Clause_Predicate();
+              break;
+
+            case 'requires':
+                $clause = new Hoa_Test_Praspel_Clause_Requires($this);
+              break;
+
+            case 'throws':
+                $clause = new Hoa_Test_Praspel_Clause_Throws();
               break;
 
             default:
@@ -155,16 +198,118 @@ class Hoa_Test_Praspel {
      * Call a method.
      *
      * @access  public
-     * @param   object  $object    Object where method is.
-     * @param   string  $method    Method name.
+     * @param   object  $object         Object where method is.
+     * @param   string  $magicCaller    Magic caller name.
+     * @param   string  $method         Method name.
      * @return  Hoa_Test_Praspel_Call
      */
-    public function call ( $object, $method ) {
+    public function call ( $object, $magicCaller, $method ) {
 
         $old         = $this->_call;
-        $this->_call = new Hoa_Test_Praspel_Call($this, $object, $method);
+        $this->_call = new Hoa_Test_Praspel_Call(
+            $this,
+            $object,
+            $magicCaller,
+            $method
+        );
 
-        return $old;
+        return $this->_call->getObject();
+    }
+
+    /**
+     * Verify clauses.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function verify ( ) {
+
+        $requires = $this->getClause('requires');
+        $ensures  = $this->getClause('ensures');
+        $call     = $this->getCall();
+
+        if(true === $call->hasException()) {
+
+            $exception = $call->getException();
+
+            if(true === $this->clauseExists('throws')) {
+
+                $throws = $this->getClause('throws');
+
+                if(false === $throws->exceptionExists($exception))
+                    // LOG : exception not captured/declared + message.
+                    throw new Hoa_Test_Praspel_Exception(
+                        'Exception %s (with message %s) was thrown and not ' .
+                        'declared in the clause “throws”, only given %s', 0,
+                        array(
+                            get_class($exception),
+                            $exception->getMessage(),
+                            implode(' ∧ ', $throws->getList())
+                        ));
+            }
+            else
+                // LOG : exception not captured/declared + message.
+                throw new Hoa_Test_Praspel_Exception(
+                    'Exception %s (with message %s) was thrown and no ' .
+                    'clause “throws” was declared.', 1,
+                    array(get_class($exception), $exception->getMessage()));
+        }
+
+        $validations = array();
+
+        foreach($ensures->getFreeVariables() as $fvName => $fvInstance) {
+
+            $valid = false;
+
+            if(0 !== preg_match('#\\\old\s*\(\s*([a-z]+)\s*\)#i', $fvName, $matches)) {
+
+                if(true === $requires->freeVariableExists($matches[1]))
+                    $types = $requires->getFreeVariable($matches[1])->getTypes();
+                else
+                    // LOG : cannot verify ensures clause (old(__)).
+                    throw new Hoa_Test_Praspel_Exception(
+                        'Try to touch the “%1$s” free-variable through “%2$s”, ' .
+                        'but “%1$s” is not declared in the “requires” clause.', 2,
+                        array($matcges[1], $fvName));
+            }
+            else
+                $types = $fvInstance->getTypes();
+
+            foreach($types as $i => $type)
+                $valid |= $type->predicate($call->getResult());
+
+            $validations[$fvName] = (bool) $valid;
+        }
+
+        if(!isset($validations['\result']))
+            // LOG : \result must be declared.
+            throw new Hoa_Test_Praspel_Exception(
+                'Test cannot be evaluated because no “\result” free-variable ' .
+                'in the “ensures” clause was declared.', 3);
+
+        $out = true;
+
+        foreach($validations as $i => $valid)
+            $out &= $valid;
+
+        $out = (bool) $out;
+
+        if(true === $out) {
+
+            //throw new Hoa_Test_Praspel_Exception(
+            //    'Test succeed.', 4);
+            var_dump('Test succeed');
+            var_dump($call->getResult());
+            echo "\n";
+        }
+        else {
+
+            //throw new Hoa_Test_Praspel_Exception(
+            //    'Test failed.', 5);
+            var_dump('Test failed.');
+            var_dump($call->getResult());
+            echo "\n";
+        }
     }
 
     /**
