@@ -48,6 +48,11 @@ import('Test.Praspel.Exception');
 import('Test.Praspel.Clause');
 
 /**
+ * Hoa_Test_Praspel_Clause_Contract
+ */
+import('Test.Praspel.Clause.Contract');
+
+/**
  * Class Hoa_Test_Praspel_Clause_Requires.
  *
  * .
@@ -61,4 +66,24 @@ import('Test.Praspel.Clause');
  * @subpackage  Hoa_Test_Praspel_Clause_Requires
  */
 
-class Hoa_Test_Praspel_Clause_Requires extends Hoa_Test_Praspel_Clause { }
+class Hoa_Test_Praspel_Clause_Requires extends    Hoa_Test_Praspel_Clause_Contract
+                                       implements Hoa_Test_Praspel_Clause {
+
+    /**
+     * Declare a free variable.
+     *
+     * @access  public
+     * @param   string  $name    Free variable name.
+     * @return  Hoa_Test_Praspel_FreeVariable
+     * @throws  Hoa_Test_Praspel_Exception
+     */
+    public function declareFreeVariable ( $name ) {
+
+        if($name[0] == '\\')
+            throw new Hoa_Test_Praspel_Exception(
+                'Constructors are not allowed in “ensures” clause, given %s.',
+                0, $name);
+
+        return parent::declareFreeVariable($name);
+    }
+}
