@@ -89,7 +89,7 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Instruction extends Hoa_Pom_Token_U
     public function visitInstruction ( Hoa_Visitor_Element $element, &$handle = null ) {
 
         return $element->getInstruction()->accept($this->getVisitor(), $handle) .
-               ';';
+               ';' . "\n";
     }
 
     /**
