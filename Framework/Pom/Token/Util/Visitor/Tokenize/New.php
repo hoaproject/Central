@@ -90,7 +90,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_New extends Hoa_Visitor_Registry_Aggre
                 2 => -1
             )),
             $this->getVisitor()
-                 ->visitEntry('Hoa_Pom_Token_Function_Named', $element, $handle)
+                 ->visitEntry('Hoa_Pom_Token_Call_Function', $element, $handle)
         );
     }
 }

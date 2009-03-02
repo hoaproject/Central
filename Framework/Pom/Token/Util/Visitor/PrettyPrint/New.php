@@ -85,6 +85,6 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_New extends Hoa_Pom_Token_Util_Visi
 
         return 'new ' .
                $this->getVisitor()
-                    ->visitEntry('Hoa_Pom_Token_Function_Named', $element, $handle);
+                    ->visitEntry('Hoa_Pom_Token_Call_Function', $element, $handle);
     }
 }
