@@ -128,7 +128,10 @@ class Hoa_Pom_Token_Array implements Hoa_Pom_Token_Util_Interface_SuperScalar,
     public function addElements ( Array $elements = array() ) {
 
         foreach($elements as $i => $element)
-            $this->addElement($element[self::KEY], $element[self::VALUE]);
+            if(is_array($element))
+                $this->addElement($element[self::KEY], $element[self::VALUE]);
+            else
+                $this->addElement(null, $element);
 
         return $this->getArray();
     }
@@ -144,27 +147,23 @@ class Hoa_Pom_Token_Array implements Hoa_Pom_Token_Util_Interface_SuperScalar,
      */
     public function addElement ( $key, $value ) {
 
-        if(null !== $key) {
-
+        if(null !== $key)
             if(   !($key instanceof Hoa_Pom_Token_Call)
                && !($key instanceof Hoa_Pom_Token_Clone)
-               && !($key instanceof Hoa_Pom_Token_Number)
                && !($key instanceof Hoa_Pom_Token_New)
+               && !($key instanceof Hoa_Pom_Token_Number)
                && !($key instanceof Hoa_Pom_Token_Operation)
                && !($key instanceof Hoa_Pom_Token_String)
                && !($key instanceof Hoa_Pom_Token_Variable))
                 throw new Hoa_Pom_Token_Util_Exception(
                     'An array key cannot accept a class that ' .
                     'is an instance of %s.', 0, get_class($key));
-        }
-        else
-            $key = new Hoa_Pom_Token_String_Null('null');
 
         if(   !($value instanceof Hoa_Pom_Token_Array)
            && !($value instanceof Hoa_Pom_Token_Call)
            && !($value instanceof Hoa_Pom_Token_Clone)
-           && !($value instanceof Hoa_Pom_Token_Number)
            && !($value instanceof Hoa_Pom_Token_New)
+           && !($value instanceof Hoa_Pom_Token_Number)
            && !($value instanceof Hoa_Pom_Token_Operation)
            && !($value instanceof Hoa_Pom_Token_String)
            && !($value instanceof Hoa_Pom_Token_Variable))
