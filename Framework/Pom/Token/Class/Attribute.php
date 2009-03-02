@@ -150,14 +150,18 @@ class Hoa_Pom_Token_Class_Attribute implements Hoa_Visitor_Element {
      * Constructor.
      *
      * @access  public
-     * @param   Hoa_Pom_Token_Variable  $name    Attribute name.
+     * @param   Hoa_Pom_Token_Variable  $name     Attribute name.
+     * @param   mixed                   $value    Attribute value.
      * @return  void
      */
-    public function __construct ( Hoa_Pom_Token_Variable $name ) {
+    public function __construct ( Hoa_Pom_Token_Variable $name, $value = null ) {
 
         $this->setAccess(new Hoa_Pom_Token_Class_Access('public'));
         $this->setOperator(new Hoa_Pom_Token_Operator_Assignement('='));
         $this->setName($name);
+
+        if(null !== $value)
+            $this->setValue($value);
 
         return;
     }
