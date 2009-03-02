@@ -103,26 +103,20 @@ class       Hoa_Pom_Token_ControlStructure_Return
      */
     public function setValue ( $value ) {
 
-        switch(get_class($value)) {
-
-            case 'Hoa_Pom_Token_Array':
-            case 'Hoa_Pom_Token_Call':
-            case 'Hoa_Pom_Token_Cast':
-            case 'Hoa_Pom_Token_Clone':
-            case 'Hoa_Pom_Token_Comment':
-            case 'Hoa_Pom_Token_ControlStructure_Ternary':
-            case 'Hoa_Pom_Token_New':
-            case 'Hoa_Pom_Token_Number':
-            case 'Hoa_Pom_Token_Operation':
-            case 'Hoa_Pom_Token_String':
-            case 'Hoa_Pom_Token_Variable':
-              break;
-
-            default:
-                throw new Hoa_Pom_Token_Util_Exception(
-                    'A return cannot accept a class like %s.',
-                    0, get_class($value));
-        }
+        if(   !($value instanceof Hoa_Pom_Token_Array)
+           && !($value instanceof Hoa_Pom_Token_Call)
+           && !($value instanceof Hoa_Pom_Token_Cast)
+           && !($value instanceof Hoa_Pom_Token_Clone)
+           && !($value instanceof Hoa_Pom_Token_Comment)
+           && !($value instanceof Hoa_Pom_Token_ControlStructure_Ternary)
+           && !($value instanceof Hoa_Pom_Token_New)
+           && !($value instanceof Hoa_Pom_Token_Number)
+           && !($value instanceof Hoa_Pom_Token_Operation)
+           && !($value instanceof Hoa_Pom_Token_String)
+           && !($value instanceof Hoa_Pom_Token_Variable))
+            throw new Hoa_Pom_Token_Util_Exception(
+                'A return cannot accept a class like %s.',
+                0, get_class($value));
 
         $old          = $this->_value;
         $this->_value = $value;
