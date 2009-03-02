@@ -84,6 +84,20 @@ class Hoa_Pom_Token_LateParsing implements Hoa_Visitor_Element {
 
 
     /**
+     * Constructor. Add many tokens.
+     *
+     * @access  public
+     * @param   array   $tokens    Tokens to add.
+     * @return  array
+     */
+    public function __construct ( Array $tokens = array() ) {
+
+        $this->addTokens($tokens);
+
+        return;
+    }
+
+    /**
      * Add many tokens.
      *
      * @access  public
