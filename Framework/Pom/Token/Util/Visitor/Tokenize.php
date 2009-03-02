@@ -138,6 +138,11 @@ import('Pom.Token.Util.Visitor.Tokenize.Operator');
 import('Pom.Token.Util.Visitor.Tokenize.OutterPhp');
 
 /**
+ * Hoa_Pom_Token_Util_Visitor_Tokenize_Php
+ */
+import('Pom.Token.Util.Visitor.Tokenize.Php');
+
+/**
  * Hoa_Pom_Token_Util_Visitor_Tokenize_Root
  */
 import('Pom.Token.Util.Visitor.Tokenize.Root');
@@ -434,6 +439,11 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize extends Hoa_Visitor_Registry {
         $this->addEntry(
             $_ . 'OutterPhp',
             array(new Hoa_Pom_Token_Util_Visitor_Tokenize_OutterPhp($this), 'visitOutterPhp')
+        );
+
+        $this->addEntry(
+            $_ . 'Php',
+            array(new Hoa_Pom_Token_Util_Visitor_Tokenize_Php($this), 'visitPhp')
         );
 
         $this->addEntry(

@@ -138,6 +138,11 @@ import('Pom.Token.Util.Visitor.PrettyPrint.Operator');
 import('Pom.Token.Util.Visitor.PrettyPrint.OutterPhp');
 
 /**
+ * Hoa_Pom_Token_Util_Visitor_PrettyPrint_Php
+ */
+import('Pom.Token.Util.Visitor.PrettyPrint.Php');
+
+/**
  * Hoa_Pom_Token_Util_Visitor_PrettyPrint_Root
  */
 import('Pom.Token.Util.Visitor.PrettyPrint.Root');
@@ -434,6 +439,11 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint extends Hoa_Visitor_Registry {
         $this->addEntry(
             $_ . 'OutterPhp',
             array(new Hoa_Pom_Token_Util_Visitor_PrettyPrint_OutterPhp($this), 'visitOutterPhp')
+        );
+
+        $this->addEntry(
+            $_ . 'Php',
+            array(new Hoa_Pom_Token_Util_Visitor_PrettyPrint_Php($this), 'visitPhp')
         );
 
         $this->addEntry(
