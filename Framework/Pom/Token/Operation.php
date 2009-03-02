@@ -149,10 +149,10 @@ class Hoa_Pom_Token_Operation implements Hoa_Visitor_Element {
     /**
      * Get the complete sequence.
      *
-     * @access  protected
+     * @access  public
      * @return  array
      */
-    protected function getSequence ( ) {
+    public function getSequence ( ) {
 
         return $this->_sequence;
     }
