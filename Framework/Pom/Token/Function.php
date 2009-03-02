@@ -280,6 +280,7 @@ abstract class Hoa_Pom_Token_Function implements Hoa_Visitor_Element {
     public function addBody ( $element ) {
 
         if(   !($element instanceof Hoa_Pom_Token_Instruction)
+           && !($element instanceof Hoa_Pom_Token_ControlStructure_Return)
            && !($element instanceof Hoa_Pom_Token_LateParsing))
             throw new Hoa_Pom_Token_Util_Exception(
                 'A function cannot have %s in his body.', 0, get_class($element));
