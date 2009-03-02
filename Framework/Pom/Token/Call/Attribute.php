@@ -104,12 +104,16 @@ class Hoa_Pom_Token_Call_Attribute extends    Hoa_Pom_Token_Call
      * Constructor.
      *
      * @access  public
-     * @param   Hoa_Pom_Token_Variable  $object    Object name.
+     * @param   Hoa_Pom_Token_Variable  $object       Object name.
+     * @param   mixed                   $attribute    Attribute name.
      * @return  void
      */
-    public function __construct ( Hoa_Pom_Token_Variable $object ) {
+    public function __construct ( Hoa_Pom_Token_Variable $object, $attribute = null ) {
 
         $this->setObject($object);
+
+        if(null !== $attribute)
+            $this->setAttribute($attribute);
 
         return;
     }
@@ -133,7 +137,7 @@ class Hoa_Pom_Token_Call_Attribute extends    Hoa_Pom_Token_Call
      * Set attribute name.
      *
      * @access  public
-     * @param   mixed  $attribute    Attribute name.
+     * @param   mixed   $attribute    Attribute name.
      * @return  mixed
      * @throw   Hoa_Pom_Token_Util_Exception
      * @todo    $curly = 'at'; $obj->{$curly . 'tr'} is correct.
