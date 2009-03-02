@@ -113,7 +113,6 @@ class Hoa_Test_Urg_Type_BoundInteger extends    Hoa_Test_Urg_Type_Integer
 
         $this->setUpperBoundStatement($upperStatement);
         $this->setLowerBoundStatement($lowerStatement);
-        $this->randomize();
 
         return;
     }

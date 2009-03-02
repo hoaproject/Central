@@ -89,19 +89,4 @@ class Hoa_Test_Urg_Type_NegativeFloat extends    Hoa_Test_Urg_Type_BoundFloat
 
         return;
     }
-
-    /**
-     * A predicate.
-     *
-     * @access  public
-     * @param   float   $q    Q-value.
-     * @return  bool
-     */
-    public function predicate ( $q = null ) {
-
-        if(null === $q)
-            $q = $this->getValue();
-
-        return $q < 0;
-    }
 }

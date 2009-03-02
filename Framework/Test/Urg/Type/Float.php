@@ -122,7 +122,6 @@ class Hoa_Test_Urg_Type_Float extends    Hoa_Test_Urg_Type_Number
 
         $this->setUpperBoundValue($this->getPositiveInfinity());
         $this->setLowerBoundValue($this->getNegativeInfinity());
-        $this->randomize();
 
         return;
     }
@@ -150,13 +149,12 @@ class Hoa_Test_Urg_Type_Float extends    Hoa_Test_Urg_Type_Number
      */
     public function randomize ( ) {
 
-        $upper  = $this->getUpperBoundValue();
         $lower  = $this->getLowerBoundValue();
+        $upper  = $this->getUpperBoundValue();
         $random = Hoa_Test_Urg::Uc($lower, $upper);
 
-        if($this instanceof Hoa_Test_Urg_Type_Interface_Predicable)
-            while(false === $this->predicate($random))
-                $random = Hoa_Test_Urg::Uc($lower, $upper);
+        while(false === $this->predicate($random))
+            $random = Hoa_Test_Urg::Uc($lower, $upper);
 
         $this->setValue($random);
 

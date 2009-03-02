@@ -106,9 +106,8 @@ class Hoa_Test_Urg_Type_Integer extends    Hoa_Test_Urg_Type_Number
      */
     public function __construct ( ) {
 
-        $this->setUpperBoundValue(self::getPositiveInfinity());
         $this->setLowerBoundValue(self::getNegativeInfinity());
-        $this->randomize();
+        $this->setUpperBoundValue(self::getPositiveInfinity());
 
         return;
     }
@@ -140,9 +139,8 @@ class Hoa_Test_Urg_Type_Integer extends    Hoa_Test_Urg_Type_Number
         $upper  = $this->getUpperBoundValue();
         $random = Hoa_Test_Urg::Ud($lower, $upper);
 
-        if($this instanceof Hoa_Test_Urg_Type_Interface_Predicable)
-            while(false === $this->predicate($random)) // Increment test number ?
-                $random = Hoa_Test_Urg::Ud($lower, $upper);
+        while(false === $this->predicate($random))
+            $random = Hoa_Test_Urg::Ud($lower, $upper);
 
         $this->setValue($random);
 
