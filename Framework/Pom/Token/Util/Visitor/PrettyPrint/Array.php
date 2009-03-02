@@ -93,7 +93,7 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Array extends Hoa_Pom_Token_Util_Vi
             else
                 $first  = false;
 
-            $array =
+            $array .=
                 (null !== $a[Hoa_Pom_Token_Array::KEY]
                      ? $a[Hoa_Pom_Token_Array::KEY]->accept(
                            $this->getVisitor(),
