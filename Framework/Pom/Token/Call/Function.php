@@ -104,12 +104,14 @@ class Hoa_Pom_Token_Call_Function extends    Hoa_Pom_Token_Call
      * Constructor.
      *
      * @access  public
-     * @param   mixed   $name    Function name.
+     * @param   mixed   $name         Function name.
+     * @param   array   $arguments    Arguments to add.
      * @return  void
      */
-    public function __construct ( $name ) {
+    public function __construct ( $name, Array $arguments = array() ) {
 
         $this->setName($name);
+        $this->addArguments($arguments);
 
         return;
     }
@@ -124,7 +126,7 @@ class Hoa_Pom_Token_Call_Function extends    Hoa_Pom_Token_Call
      */
     public function setName ( Hoa_Pom_Token_String $name ) {
 
-        switch(get_class($method)) {
+        switch(get_class($name)) {
 
             case 'Hoa_Pom_Token_String':
             case 'Hoa_Pom_Token_Variable':
@@ -133,7 +135,7 @@ class Hoa_Pom_Token_Call_Function extends    Hoa_Pom_Token_Call
             default:
                 throw new Hoa_Pom_Token_Util_Exception(
                     'A method should only be called by a string or a ' .
-                    'variable. Given %s.', 0, $method);
+                    'variable. Given %s.', 0, $name);
         }
 
         $old         = $this->_name;
