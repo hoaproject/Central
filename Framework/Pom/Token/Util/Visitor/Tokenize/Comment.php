@@ -84,11 +84,11 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Comment extends Hoa_Visitor_Registry_A
     public function visitComment ( Hoa_Visitor_Element $element, &$handle = null ) {
 
         return array(array(
-            Hoa_Pom_Token_Comment::TYPE_DOCUMENTATION === $element->getType()
-                ? Hoa_Pom::_DOC_COMMENT
-                : Hoa_Pom::_COMMENT,
-            $element->getComment(),
-            -1
+            0 => Hoa_Pom_Token_Comment::TYPE_DOCUMENTATION === $element->getType()
+                     ? Hoa_Pom::_DOC_COMMENT
+                     : Hoa_Pom::_COMMENT,
+            1 => $element->getComment(),
+            2 => -1
         ));
     }
 }

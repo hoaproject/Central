@@ -84,9 +84,9 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_OutterPhp extends Hoa_Visitor_Registry
     public function visitOutterPhp ( Hoa_Visitor_Element $element, &$handle = null ) {
 
         return array(array(
-            Hoa_Pom::_INLINE_HTML,
-            $element->getData(),
-            -1
+            0 => Hoa_Pom::_INLINE_HTML,
+            1 => $element->getData(),
+            2 => -1
         ));
     }
 }
