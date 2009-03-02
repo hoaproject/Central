@@ -86,7 +86,7 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Operation extends Hoa_Pom_Token_Uti
         $out = null;
 
         foreach($element->getSequence() as $i => $operation)
-            $out .= $operation->accept($element, $handle);
+            $out .= $operation->accept($this->getVisitor(), $handle);
 
         return $out;
     }
