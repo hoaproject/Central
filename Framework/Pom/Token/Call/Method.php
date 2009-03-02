@@ -81,7 +81,7 @@ import('Visitor.Element');
  * @subpackage  Hoa_Pom_Token_Call_Method
  */
 
-class Hoa_Pom_Token_Call_Method extends    Hoa_Pom_Token_Call
+class Hoa_Pom_Token_Call_Method extends    Hoa_Pom_Token_Call_Function
                                 implements Hoa_Visitor_Element {
 
     /**
@@ -91,25 +91,25 @@ class Hoa_Pom_Token_Call_Method extends    Hoa_Pom_Token_Call
      */
     protected $_object = null;
 
-    /**
-     * Method name.
-     *
-     * @var Hoa_Pom_Token_Call_Function object
-     */
-    protected $_method = null;
-
 
 
     /**
      * Constructor.
      *
      * @access  public
-     * @param   Hoa_Pom_Token_Variable  $object    Object name.
+     * @param   Hoa_Pom_Token_Variable        $object       Object name.
+     * @param   mixed                         $method       Method name.
+     * @param   array                         $arguments    Arguments to add.
      * @return  void
      */
-    public function __construct ( Hoa_Pom_Token_Variable $object ) {
+    public function __construct ( Hoa_Pom_Token_Variable $object,
+                                                         $method    = null,
+                                  Array                  $arguments = array() ) {
 
         $this->setObject($object);
+
+        if(null !== $method)
+            parent::__construct($method, $arguments);
 
         return;
     }
@@ -130,21 +130,6 @@ class Hoa_Pom_Token_Call_Method extends    Hoa_Pom_Token_Call
     }
 
     /**
-     * Set method name.
-     *
-     * @access  public
-     * @param   Hoa_Pom_Token_Call_Function  $method    Method name.
-     * @return  Hoa_Pom_Token_Call_Function
-     */
-    public function setMethod ( $method ) {
-
-        $old           = $this->_method;
-        $this->_method = $method;
-
-        return $old;
-    }
-
-    /**
      * Get object name.
      *
      * @access  public
@@ -153,17 +138,6 @@ class Hoa_Pom_Token_Call_Method extends    Hoa_Pom_Token_Call
     public function getObject ( ) {
 
         return $this->_object;
-    }
-
-    /**
-     * Get method name.
-     *
-     * @access  public
-     * @return  Hoa_Pom_Token_Call_Function
-     */
-    public function getMethod ( ) {
-
-        return $this->_method;
     }
 
     /**
