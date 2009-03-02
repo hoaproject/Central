@@ -52,6 +52,11 @@ import('Test.Request');
 import('Test.Oracle.~');
 
 /**
+ * Hoa_Test_Praspel
+ */
+import('Test.Praspel.~');
+
+/**
  * Class Hoa_Test.
  *
  *
@@ -118,7 +123,15 @@ class Hoa_Test {
                 'Test', $parameters, Hoa_Framework::CONFIGURATION_DOT);
         #END_IF
 
-        $this->setParameters($parameters);
+        $this->parameters = $this->setParameters($parameters);
+        $userType         = $this->getParameter('user.type');
+
+        if(null === $userType)
+            $this->setParameters(array(
+                'user.type' => dirname(__FILE__) . DS . 'Urg' . DS . 'Type'
+            ));
+
+        Hoa_Test_Praspel::setUserTypePath($this->getParameter('user.type'));
     }
 
     /**
@@ -210,8 +223,8 @@ class Hoa_Test {
      */
     protected function getParameter ( $parameter ) {
 
-        if(!isset($this->parameters[$parameter]))
-            throw new Hoa_Test(
+        if(!array_key_exists($parameter, $this->parameters))
+            throw new Hoa_Test_Exception(
                 'The parameter %s does not exists.', 0, $parameter);
 
         return $this->parameters[$parameter];
