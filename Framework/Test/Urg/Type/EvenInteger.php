@@ -111,14 +111,13 @@ class Hoa_Test_Urg_Type_EvenInteger extends    Hoa_Test_Urg_Type_BoundInteger
      */
     public function randomize ( ) {
 
-        parent::randomize();
-        $random = $this->getValue() * 2;
-
-        while(false === $this->predicate($random)) {
+        do {
 
             parent::randomize();
             $random = $this->getValue() * 2;
-        }
+
+        } while(false === $this->predicate($random));
+
 
         $this->setValue($random);
 

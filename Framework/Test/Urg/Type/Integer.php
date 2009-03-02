@@ -135,12 +135,14 @@ class Hoa_Test_Urg_Type_Integer extends    Hoa_Test_Urg_Type_Number
      */
     public function randomize ( ) {
 
-        $lower  = $this->getLowerBoundValue();
-        $upper  = $this->getUpperBoundValue();
-        $random = Hoa_Test_Urg::Ud($lower, $upper);
+        $lower = $this->getLowerBoundValue();
+        $upper = $this->getUpperBoundValue();
 
-        while(false === $this->predicate($random))
+        do {
+
             $random = Hoa_Test_Urg::Ud($lower, $upper);
+
+        } while(false === $this->predicate($random));
 
         $this->setValue($random);
 
