@@ -79,7 +79,8 @@ class Hoa_Test_Urg_Type_ZeroOrPositiveInteger extends    Hoa_Test_Urg_Type_Bound
      *                                     parent::BOUND_* constants).
      * @return  void
      */
-    public function __construct ( $upperValue, $upperStatement = parent::BOUND_CLOSE ) {
+    public function __construct ( $upperValue     = parent::INFINITY,
+                                  $upperStatement = parent::BOUND_CLOSE ) {
 
         parent::__construct(0, $upperValue, parent::BOUND_CLOSE, $upperStatement);
 
