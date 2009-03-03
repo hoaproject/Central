@@ -79,7 +79,11 @@ class Hoa_Test_Urg_Type_ZeroOrNegativeInteger extends    Hoa_Test_Urg_Type_Bound
      *                                     parent::BOUND_* constants).
      * @return  void
      */
-    public function __construct ( $lowerValue, $lowerStatement = parent::BOUND_OPEN ) {
+    public function __construct ( $lowerValue     = null,
+                                  $lowerStatement = parent::BOUND_OPEN ) {
+
+        if(null === $lowerValue)
+            $lowerValue = $this->getNegativeInfinity();
 
         parent::__construct($lowerValue, 0, $lowerStatement, parent::BOUND_CLOSE);
 
