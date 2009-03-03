@@ -58,6 +58,11 @@ import('Test.Urg.~');
 import('Test.Urg.Type.BoundInteger');
 
 /**
+ * Hoa_Test
+ */
+import('Test.~');
+
+/**
  * Class Hoa_Test_Urg_Type_Xn.
  *
  * Represent a x^n expression.
@@ -134,12 +139,14 @@ class Hoa_Test_Urg_Type_Xn extends    Hoa_Test_Urg_Type_BoundInteger
      */
     public function randomize ( ) {
 
+        $maxtry = Hoa_Test::getInstance()->getParameter('test.maxtry');
+
         do {
 
             parent::randomize();
             $random = pow($this->getBase(), $this->getValue());
 
-        } while(false === $this->predicate($random));
+        } while(false === $this->predicate($random) && $maxtry-- >= 0);
 
         $this->setValue($random);
 

@@ -53,6 +53,11 @@ import('Test.Urg.Type.Interface.Type');
 import('Test.Urg.~');
 
 /**
+ * Hoa_Test
+ */
+import('Test.~');
+
+/**
  * Class Hoa_Test_Urg_Type_Array.
  *
  * Represent an array.
@@ -146,6 +151,7 @@ class Hoa_Test_Urg_Type_Array implements Hoa_Test_Urg_Type_Interface_Type {
      */
     public function randomize ( ) {
 
+        $maxtry = Hoa_Test::getInstance()->getParameter('test.maxtry');
         $cTypes = count($this->_types) - 1;
         $length = $this->getLength();
 
@@ -171,7 +177,7 @@ class Hoa_Test_Urg_Type_Array implements Hoa_Test_Urg_Type_Interface_Type {
                 $i++;
             }
 
-        } while(false === $this->predicate($random));
+        } while(false === $this->predicate($random) && $maxtry-- >= 0);
 
         $this->setValue($random);
 

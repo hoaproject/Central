@@ -53,6 +53,11 @@ import('Test.Urg.Type.Interface.Type');
 import('Test.Urg.~');
 
 /**
+ * Hoa_Test
+ */
+import('Test.~');
+
+/**
  * Class Hoa_Test_Urg_Type_Boolean.
  *
  * Represent a boolean.
@@ -109,11 +114,13 @@ class Hoa_Test_Urg_Type_Boolean implements Hoa_Test_Urg_Type_Interface_Type {
      */
     public function randomize ( ) {
 
+        $maxtry = Hoa_Test::getInstance()->getParameter('test.maxtry');
+
         do {
 
             $random = (bool) Hoa_Test_Urg::Ud(0, 1);
 
-        } while(false === $this->predicate($random));
+        } while(false === $this->predicate($random) && $maxtry-- >= 0);
 
         $this->setValue($random);
 

@@ -53,6 +53,11 @@ import('Test.Urg.Type.Interface.Type');
 import('Test.Urg.Type.BoundInteger');
 
 /**
+ * Hoa_Test
+ */
+import('Test.~');
+
+/**
  * Class Hoa_Test_Urg_Type_OddInteger.
  *
  * Represent an even integer.
@@ -111,12 +116,14 @@ class Hoa_Test_Urg_Type_OddInteger extends    Hoa_Test_Urg_Type_BoundInteger
      */
     public function randomize ( ) {
 
+        $maxtry = Hoa_Test::getInstance()->getParameter('test.maxtry');
+
         do {
 
             parent::randomize();
             $random = $this->getValue() * 2 - 1;
 
-        } while(false === $this->predicate($random));
+        } while(false === $this->predicate($random) && $maxtry-- >= 0);
 
         return;
     }

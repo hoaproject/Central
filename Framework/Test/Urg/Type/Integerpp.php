@@ -58,6 +58,11 @@ import('Test.Urg.~');
 import('Test.Urg.Type.ZeroOrPositiveInteger');
 
 /**
+ * Hoa_Test
+ */
+import('Test.~');
+
+/**
  * Class Hoa_Test_Urg_Type_Integerpp.
  *
  * Represent an auto-incrementing integer.
@@ -100,11 +105,13 @@ class Hoa_Test_Urg_Type_Integerpp extends    Hoa_Test_Urg_Type_ZeroOrPositiveInt
      */
     public function randomize ( ) {
 
+        $maxtry = Hoa_Test::getInstance()->getParameter('test.maxtry');
+
         do {
 
             $random = $this->_i++;
 
-        } while(false === $this->predicate($random));
+        } while(false === $this->predicate($random) && $maxtry-- >= 0);
 
         $this->setValue($random);
 

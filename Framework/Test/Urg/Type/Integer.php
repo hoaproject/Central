@@ -58,6 +58,11 @@ import('Test.Urg.Type.Number');
 import('Test.Urg.~');
 
 /**
+ * Hoa_Test
+ */
+import('Test.~');
+
+/**
  * Class Hoa_Test_Urg_Type_Integer.
  *
  * Represent an integer.
@@ -135,14 +140,15 @@ class Hoa_Test_Urg_Type_Integer extends    Hoa_Test_Urg_Type_Number
      */
     public function randomize ( ) {
 
-        $lower = $this->getLowerBoundValue();
-        $upper = $this->getUpperBoundValue();
+        $maxtry = Hoa_Test::getInstance()->getParameter('test.maxtry');
+        $lower  = $this->getLowerBoundValue();
+        $upper  = $this->getUpperBoundValue();
 
         do {
 
             $random = Hoa_Test_Urg::Ud($lower, $upper);
 
-        } while(false === $this->predicate($random));
+        } while(false === $this->predicate($random) && $maxtry-- >= 0);
 
         $this->setValue($random);
 
