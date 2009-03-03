@@ -112,13 +112,6 @@ class Hoa_Test_Praspel {
      */
     protected $_call                = null;
 
-    /**
-     * Path to user types.
-     *
-     * @var Hoa_Test_Praspel string
-     */
-    protected static $_userTypePath = null;
-
 
 
     /**
@@ -350,37 +343,5 @@ class Hoa_Test_Praspel {
     public function getCall ( ) {
 
         return $this->_call;
-    }
-
-    /**
-     * Set the path to user types.
-     *
-     * @access  public
-     * @param   string  $path    Path to user types.
-     * @return  string
-     * @throws  Hoa_Test_Praspel_Exception
-     */
-    public static function setUserTypePath ( $path ) {
-
-        if(!is_dir($path))
-            throw new Hoa_Test_Praspel_Exception(
-                'Path %s does not exists, it could not be used as path to user ' .
-                'types.', 0, $path);
-
-        $old                 = self::$_userTypePath;
-        self::$_userTypePath = $path;
-
-        return $old;
-    }
-
-    /**
-     * Get the path to user types.
-     *
-     * @access  public
-     * @return  string
-     */
-    public static function getUserTypePath ( ) {
-
-        return self::$_userTypePath;
     }
 }
