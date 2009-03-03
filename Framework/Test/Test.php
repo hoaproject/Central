@@ -99,7 +99,8 @@ class Hoa_Test {
         'test.ordeal.oracle'       => 'Data/Test/Ordeal/Oracle/',
         'test.ordeal.battleground' => 'Data/Test/Ordeal/Battleground/',
         'test.ordeal.methodPrefix' => '__hoa_',
-        'test.predicate.maxtry'    => 64,
+        'test.dictionary'          => 'Data/Test/Dictionary/',
+        'test.maxtry'              => 64,
 
         'user.type'                => null,
 
@@ -130,8 +131,6 @@ class Hoa_Test {
             $this->setParameters(array(
                 'user.type' => dirname(__FILE__) . DS . 'Urg' . DS . 'Type'
             ));
-
-        Hoa_Test_Praspel::setUserTypePath($this->getParameter('user.type'));
     }
 
     /**
@@ -205,10 +204,10 @@ class Hoa_Test {
     /**
      * Get all parameters.
      *
-     * @access  protected
+     * @access  public
      * @return  array
      */
-    protected function getParameters ( ) {
+    public function getParameters ( ) {
 
         return $this->parameters;
     }
@@ -216,12 +215,12 @@ class Hoa_Test {
     /**
      * Get a specific parameter.
      *
-     * @access  protected
-     * @param   string     $parameter    The parameter name.
+     * @access  public
+     * @param   string  $parameter    The parameter name.
      * @return  mixed
      * @throw   Hoa_Test_Exception
      */
-    protected function getParameter ( $parameter ) {
+    public function getParameter ( $parameter ) {
 
         if(!array_key_exists($parameter, $this->parameters))
             throw new Hoa_Test_Exception(
