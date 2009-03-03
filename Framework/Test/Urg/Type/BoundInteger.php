@@ -92,13 +92,13 @@ class Hoa_Test_Urg_Type_BoundInteger extends    Hoa_Test_Urg_Type_Integer
      * @access  public
      * @param   int     $lowerValue        Lower bound value.
      * @param   int     $upperValue        Upper bound value.
-     * @param   bool    $upperStatement    Given by constant parent::BOUND_*.
      * @param   bool    $lowerStatement    Given by constant parent::BOUND_*.
+     * @param   bool    $upperStatement    Given by constant parent::BOUND_*.
      * @return  void
      */
     public function __construct ( $lowerValue, $upperValue,
-                                  $upperStatement = parent::BOUND_CLOSE,
-                                  $lowerStatement = parent::BOUND_CLOSE ) {
+                                  $lowerStatement = parent::BOUND_CLOSE,
+                                  $upperStatement = parent::BOUND_CLOSE ) {
 
         if($lowerValue > $upperValue) {
 
@@ -132,7 +132,12 @@ class Hoa_Test_Urg_Type_BoundInteger extends    Hoa_Test_Urg_Type_Integer
         $lower = $this->getLowerBoundValue();
         $upper = $this->getUpperBoundValue();
 
+        var_dump($q);
+        var_dump($lower, $upper);
+
         if(parent::BOUND_CLOSE == $this->getLowerBoundStatement()) {
+
+            var_dump('here');
 
             if($q < $lower)
                 return false;
@@ -154,21 +159,6 @@ class Hoa_Test_Urg_Type_BoundInteger extends    Hoa_Test_Urg_Type_Integer
     }
 
     /**
-     * Set upper bound statement.
-     *
-     * @access  protected
-     * @param   bool       $upperStatement    Given by constant parent::BOUND_*.
-     * @return  bool
-     */
-    protected function setUpperBoundStatement ( $upperStatement ) {
-
-        $old                        = $this->_upperBoundStatement;
-        $this->_upperBoundStatement = $upperStatement;
-
-        return $old;
-    }
-
-    /**
      * Set lower bound statement.
      *
      * @access  protected
@@ -184,14 +174,18 @@ class Hoa_Test_Urg_Type_BoundInteger extends    Hoa_Test_Urg_Type_Integer
     }
 
     /**
-     * Get upper bound statement.
+     * Set upper bound statement.
      *
      * @access  protected
+     * @param   bool       $upperStatement    Given by constant parent::BOUND_*.
      * @return  bool
      */
-    protected function getUpperBoundStatement ( ) {
+    protected function setUpperBoundStatement ( $upperStatement ) {
 
-        return $this->_upperBoundStatement;
+        $old                        = $this->_upperBoundStatement;
+        $this->_upperBoundStatement = $upperStatement;
+
+        return $old;
     }
 
     /**
@@ -203,5 +197,16 @@ class Hoa_Test_Urg_Type_BoundInteger extends    Hoa_Test_Urg_Type_Integer
     protected function getLowerBoundStatement ( ) {
 
         return $this->_lowerBoundStatement;
+    }
+
+    /**
+     * Get upper bound statement.
+     *
+     * @access  protected
+     * @return  bool
+     */
+    protected function getUpperBoundStatement ( ) {
+
+        return $this->_upperBoundStatement;
     }
 }

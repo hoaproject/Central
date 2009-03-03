@@ -79,18 +79,18 @@ abstract class Hoa_Test_Urg_Type_Number implements Hoa_Test_Urg_Type_Interface_T
     const BOUND_CLOSE = false;
 
     /**
-     * Upper bound value.
-     *
-     * @var Hoa_Test_Urg_Type_Number mixed
-     */
-    protected $_upperBoundValue = 0;
-
-    /**
      * Lower bound value.
      *
      * @var Hoa_Test_Urg_Type_Number mixed
      */
     protected $_lowerBoundValue = 0;
+
+    /**
+     * Upper bound value.
+     *
+     * @var Hoa_Test_Urg_Type_Number mixed
+     */
+    protected $_upperBoundValue = 0;
 
     /**
      * Random value.
@@ -117,21 +117,6 @@ abstract class Hoa_Test_Urg_Type_Number implements Hoa_Test_Urg_Type_Interface_T
     }
 
     /**
-     * Set the upper bound value.
-     *
-     * @access  protected
-     * @param   mixed      $value    The upper bound value.
-     * @return  mixed
-     */
-    protected function setUpperBoundValue ( $value ) {
-
-        $old                    = $this->_upperBoundValue;
-        $this->_upperBoundValue = $value;
-
-        return $old;
-    }
-
-    /**
      * Set the lower bound value.
      *
      * @access  protected
@@ -142,6 +127,21 @@ abstract class Hoa_Test_Urg_Type_Number implements Hoa_Test_Urg_Type_Interface_T
 
         $old                    = $this->_lowerBoundValue;
         $this->_lowerBoundValue = $value;
+
+        return $old;
+    }
+
+    /**
+     * Set the upper bound value.
+     *
+     * @access  protected
+     * @param   mixed      $value    The upper bound value.
+     * @return  mixed
+     */
+    protected function setUpperBoundValue ( $value ) {
+
+        $old                    = $this->_upperBoundValue;
+        $this->_upperBoundValue = $value;
 
         return $old;
     }
@@ -158,17 +158,6 @@ abstract class Hoa_Test_Urg_Type_Number implements Hoa_Test_Urg_Type_Interface_T
     }
 
     /**
-     * Get the upper bound value.
-     *
-     * @access  protected
-     * @return  mixed
-     */
-    protected function getUpperBoundValue ( ) {
-
-        return $this->_upperBoundValue;
-    }
-
-    /**
      * Get the lower bound value.
      *
      * @access  protected
@@ -177,5 +166,16 @@ abstract class Hoa_Test_Urg_Type_Number implements Hoa_Test_Urg_Type_Interface_T
     protected function getLowerBoundValue ( ) {
 
         return $this->_lowerBoundValue;
+    }
+
+    /**
+     * Get the upper bound value.
+     *
+     * @access  protected
+     * @return  mixed
+     */
+    protected function getUpperBoundValue ( ) {
+
+        return $this->_upperBoundValue;
     }
 }
