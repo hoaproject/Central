@@ -103,14 +103,14 @@ class Hoa_Test_Praspel {
      *
      * @var Hoa_Test_Praspel array
      */
-    protected $_clauses             = array();
+    protected $_clauses = array();
 
     /**
      * The call object.
      *
      * @var Hoa_Test_Praspel_Call object
      */
-    protected $_call                = null;
+    protected $_call    = null;
 
 
 
@@ -220,12 +220,27 @@ class Hoa_Test_Praspel {
         $requires = $this->getClause('requires');
         $ensures  = $this->getClause('ensures');
         $call     = $this->getCall();
+        $table    = array();
+
+        $table['@requires'] = array();
+        foreach($requires->getFreeVariables() as $fvName => $fvInstance) {
+
+            $tmp = array();
+
+            foreach($fvInstance->getTypes() as $i => $type)
+                $tmp[] = get_class($type);
+
+            $table['@requires'][$fvName] = implode(' ∧ ', $tmp);
+        }
 
         if(true === $call->hasException()) {
 
             $exception = $call->getException();
 
             if(true === $this->clauseExists('throws')) {
+
+                $table['@throws'] = implode(' ∧ ', $throws->getList());
+                $table['throws']  = get_class($exception);
 
                 $throws = $this->getClause('throws');
 
@@ -250,6 +265,8 @@ class Hoa_Test_Praspel {
 
         $validations = array();
 
+        $table['@ensures'] = array();
+
         foreach($ensures->getFreeVariables() as $fvName => $fvInstance) {
 
             $valid = false;
@@ -268,11 +285,21 @@ class Hoa_Test_Praspel {
             else
                 $types = $fvInstance->getTypes();
 
-            foreach($types as $i => $type)
+            $tmp = array();
+
+            foreach($types as $i => $type) {
+
+                $tmp[] = get_class($type);
+
                 $valid |= $type->predicate($call->getResult());
+            }
+
+            $table['@ensures'][$fvName] = implode(' ∧ ', $tmp);
 
             $validations[$fvName] = (bool) $valid;
         }
+
+        $table['result'] = gettype($call->getResult()) . ' : ' . $call->getResult();
 
         if(!isset($validations['\result']))
             // LOG : \result must be declared.
@@ -286,6 +313,8 @@ class Hoa_Test_Praspel {
             $out &= $valid;
 
         $out = (bool) $out;
+
+        print_r($table);
 
         if(true === $out) {
 
