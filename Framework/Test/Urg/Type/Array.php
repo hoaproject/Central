@@ -91,7 +91,7 @@ class Hoa_Test_Urg_Type_Array implements Hoa_Test_Urg_Type_Interface_Type {
     /**
      * Size of the array.
      *
-     * @var mixed object
+     * @var Hoa_Test_Urg_Type_Array mixed
      */
     protected $_length = null;
 
