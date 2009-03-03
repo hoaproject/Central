@@ -184,8 +184,8 @@ class Hoa_Framework {
      */
     public static function import ( $path = null ) {
 
-        static $back  = HOA_FRAMEWORK_BASE;
-        static $last  = null;
+        static $back = HOA_FRAMEWORK_BASE;
+        static $last = null;
 
         preg_match('#(?:(.*?)(?<!\\\)\.)|(.*)#', $path, $matches);
 
@@ -229,7 +229,7 @@ class Hoa_Framework {
                                 import(null);
                             }
 
-                            $back  = $tmp;
+                            $back = $tmp;
                         }
                     }
                     else {
