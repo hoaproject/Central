@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Test
- * @subpackage  Hoa_Test_Urg_Type_String
+ * @subpackage  Hoa_Test_Urg_Type_StringWith
  *
  */
 
@@ -58,7 +58,7 @@ import('Test.Urg.~');
 import('Test.~');
 
 /**
- * Class Hoa_Test_Urg_Type_String.
+ * Class Hoa_Test_Urg_Type_StringWith.
  *
  * Represent a string.
  *
@@ -69,38 +69,31 @@ import('Test.~');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Test
- * @subpackage  Hoa_Test_Urg_Type_String
+ * @subpackage  Hoa_Test_Urg_Type_StringWith
  */
 
-class Hoa_Test_Urg_Type_String implements Hoa_Test_Urg_Type_Interface_Type {
+class Hoa_Test_Urg_Type_StringWith implements Hoa_Test_Urg_Type_Interface_Type {
 
     /**
      * Random value.
      *
-     * @var Hoa_Test_Urg_Type_String int
+     * @var Hoa_Test_Urg_Type_StringWith int
      */
-    protected $_value    = null;
+    protected $_value      = null;
 
     /**
-     * Category of strings.
+     * Characters that constitute the string.
      *
-     * @var Hoa_Test_Urg_Type_String string
+     * @var Hoa_Test_Urg_Type_StringWith array
      */
-    protected $_category = null;
+    protected $_characters = array();
 
     /**
      * String length.
      *
-     * @var Hoa_Test_Urg_Type_String mixed
+     * @var Hoa_Test_Urg_Type_StringWith mixed
      */
-    protected $_length   = null;
-
-    /**
-     * Characters to skips.
-     *
-     * @var Hoa_Test_Urg_Type_String array
-     */
-    protected $_skips    = array();
+    protected $_length     = null;
 
 
 
@@ -108,16 +101,14 @@ class Hoa_Test_Urg_Type_String implements Hoa_Test_Urg_Type_Interface_Type {
      * Constructor.
      *
      * @access  public
-     * @param   string  $category    String category.
-     * @param   mixed   $length      String length.
-     * @param   string  $skip        Characters to skip.
+     * @param   string  $characters    String characters.
+     * @param   mixed   $length        String length.
      * @return  void
      */
-    public function __construct ( $category, $length, $skip ) {
+    public function __construct ( $characters, $length ) {
 
-        $this->setCategory($category);
+        $this->setCharacters($characters);
         $this->setLength($length);
-        $this->setSkip($skip);
 
         return;
     }
@@ -128,6 +119,7 @@ class Hoa_Test_Urg_Type_String implements Hoa_Test_Urg_Type_Interface_Type {
      * @access  public
      * @param   bool    $q    Q-value.
      * @return  bool
+     * @throw   Hoa_Test_Urg_Type_Exception
      */
     public function predicate ( $q = null ) {
 
@@ -135,36 +127,21 @@ class Hoa_Test_Urg_Type_String implements Hoa_Test_Urg_Type_Interface_Type {
             $q = $this->getValue();
 
         $q          = $this->stringToArray($q);
-        $dictionary = Hoa_Test::getInstance()->getParameter('test.dictionary');
-        $category   = $dictionary . DS . $this->getCategory();
-
-        if(strtolower(substr($category, -4)) != '.txt')
-            $category .= DS . '*.txt';
-
-        if(!is_dir($category))
-            return false;
-
-        $skip       = $this->getSkip();
         $length     = $this->getLength();
-        $file       = null;
+        $characters = $this->getCharacters();
+        $charLength = count($characters);
 
-        if($length instanceof Hoa_Test_Urg_Type_Integer) {
-
-            $length->randomize();
+        if($length instanceof Hoa_Test_Urg_Type_Integer)
             $length = $length->getValue();
-        }
 
-        foreach(glob($category, GLOB_NOSORT) as $i => $f)
-            $file  .= file_get_contents($f);
-
-        if(mb_strlen($file, 'utf-8') == 0)
+        if($charLength == 0)
             return false;
 
         if(count($q) != $length)
             return false;
 
         foreach($q as $i => $char)
-            if(false === mb_strpos($file, $char) || in_array($char, $skip))
+            if(!in_array($char, $characters))
                 return false;
 
         return true;
@@ -180,19 +157,9 @@ class Hoa_Test_Urg_Type_String implements Hoa_Test_Urg_Type_Interface_Type {
     public function randomize ( ) {
 
         $maxtry     = Hoa_Test::getInstance()->getParameter('test.maxtry');
-        $dictionary = Hoa_Test::getInstance()->getParameter('test.dictionary');
-        $category   = $dictionary . DS . $this->getCategory();
-
-        if(strtolower(substr($category, -4)) != '.txt')
-            $category .= DS . '*.txt';
-
-        if(!is_dir($category))
-            throw new Hoa_Test_Urg_Type_Exception(
-                'Dictionary %s does not exist.', 0, $category);
-
-        $skip       = $this->getSkip();
         $length     = $this->getLength();
-        $file       = null;
+        $characters = $this->getCharacters();
+        $charLength = count($characters);
 
         if($length instanceof Hoa_Test_Urg_Type_Integer) {
 
@@ -200,32 +167,18 @@ class Hoa_Test_Urg_Type_String implements Hoa_Test_Urg_Type_Interface_Type {
             $length = $length->getValue();
         }
 
-        foreach(glob($category, GLOB_NOSORT) as $i => $f)
-            $file  .= file_get_contents($f);
-
-        $fileLength = mb_strlen($file, 'utf-8');
-
-        if($fileLength == 0)
+        if($charLength == 0)
             throw new Hoa_Test_Urg_Type_Exception(
-                'Cannot make test because the union of %s is empty.',
-                1, $category);
+                'Cannot make test because no character is given.',
+                0, $category);
 
         do {
 
             $random = null;
             $i      = 0;
 
-            while($i < $length) {
-
-                $charPos = Hoa_Test_Urg::Ud(0, $fileLength);
-                $char    = mb_substr($file, $charPos - 1, 1, 'utf-8');
-
-                if(in_array($char, $skip))
-                    continue;
-
-                $random .= $char;
-                $i++;
-            }
+            while($i++ < $length)
+                $random .= $characters[Hoa_Test_Urg::Ud(0, $charLength)];
 
         } while(false === $this->predicate($random) && $maxtry-- >= 0);
 
@@ -272,16 +225,16 @@ class Hoa_Test_Urg_Type_String implements Hoa_Test_Urg_Type_Interface_Type {
     }
 
     /**
-     * Set string category.
+     * Set string characters.
      *
      * @access  protected
-     * @param   string     $category    Category.
+     * @param   string     $characters    Characters.
      * @return  string
      */
-    protected function setCategory ( $category ) {
+    protected function setCharacters ( $characters ) {
 
-        $old             = $this->_category;
-        $this->_category = $category;
+        $old               = $this->_characters;
+        $this->_characters = $this->stringToArray($characters);
 
         return $old;
     }
@@ -302,21 +255,6 @@ class Hoa_Test_Urg_Type_String implements Hoa_Test_Urg_Type_Interface_Type {
     }
 
     /**
-     * Set characters to skip.
-     *
-     * @access  protected
-     * @param   string     $skip    Characters to skip.
-     * @return  array
-     */
-    protected function setSkip ( $skip ) {
-
-        $old         = $this->_skip;
-        $this->_skip = $this->stringToArray($skip);
-
-        return $old;
-    }
-
-    /**
      * Get the random value.
      *
      * @access  public
@@ -328,14 +266,14 @@ class Hoa_Test_Urg_Type_String implements Hoa_Test_Urg_Type_Interface_Type {
     }
 
     /**
-     * Get string category.
+     * Get string characters.
      *
      * @access  public
-     * @return  string
+     * @return  array
      */
-    public function getCategory ( ) {
+    public function getCharacters ( ) {
 
-        return $this->_category;
+        return $this->_characters;
     }
 
     /**
@@ -347,16 +285,5 @@ class Hoa_Test_Urg_Type_String implements Hoa_Test_Urg_Type_Interface_Type {
     public function getLength ( ) {
 
         return $this->_length;
-    }
-
-    /**
-     * Get characters to skip.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getSkip ( ) {
-
-        return $this->_skip;
     }
 }
