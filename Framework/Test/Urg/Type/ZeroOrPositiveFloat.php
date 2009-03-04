@@ -79,8 +79,11 @@ class Hoa_Test_Urg_Type_ZeroOrPositiveFloat extends    Hoa_Test_Urg_Type_BoundFl
      *                                     parent::BOUND_* constants).
      * @return  void
      */
-    public function __construct ( $upperValue     = parent::INFINITY,
+    public function __construct ( $upperValue     = null,
                                   $upperStatement = parent::BOUND_CLOSE ) {
+
+        if(null === $upperValue)
+            $upperValue = $this->getPositiveInfinity();
 
         parent::__construct(0, $upperValue, parent::BOUND_CLOSE, $upperStatement);
 

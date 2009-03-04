@@ -81,21 +81,15 @@ class Hoa_Test_Urg_Type_Integerpp extends    Hoa_Test_Urg_Type_ZeroOrPositiveInt
                                   implements Hoa_Test_Urg_Type_Interface_Type {
 
     /**
-     * i.
-     *
-     * @var Hoa_Test_Urg_Type_Integerpp int
-     */
-    protected $_i = 0;
-
-
-
-    /**
      * Constructor.
      *
      * @access  public
      * @return  void
      */
-    public function __construct ( ) { }
+    public function __construct ( ) {
+
+        $this->setValue(0);
+    }
 
     /**
      * Choose a random value.
@@ -109,7 +103,7 @@ class Hoa_Test_Urg_Type_Integerpp extends    Hoa_Test_Urg_Type_ZeroOrPositiveInt
 
         do {
 
-            $random = $this->_i++;
+            $random = $this->_value++;
 
         } while(false === $this->predicate($random) && $maxtry-- >= 0);
 

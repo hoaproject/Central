@@ -100,15 +100,15 @@ class Hoa_Test_Urg_Type_BoundFloat extends    Hoa_Test_Urg_Type_Float
                                   $lowerStatement = parent::BOUND_CLOSE,
                                   $upperStatement = parent::BOUND_CLOSE ) {
 
-        if($lower > $upper) {
+        if($lowerValue > $upperValue) {
 
-            $this->setLowerBoundValue($upper);
-            $this->setUpperBoundValue($lower);
+            $this->setLowerBoundValue($upperValue);
+            $this->setUpperBoundValue($lowerValue);
         }
         else {
 
-            $this->setLowerBoundValue($lower);
-            $this->setUpperBoundValue($upper);
+            $this->setLowerBoundValue($lowerValue);
+            $this->setUpperBoundValue($upperValue);
         }
 
         $this->setUpperBoundStatement($upperStatement);
