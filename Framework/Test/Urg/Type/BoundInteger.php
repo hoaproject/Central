@@ -71,18 +71,18 @@ class Hoa_Test_Urg_Type_BoundInteger extends    Hoa_Test_Urg_Type_Integer
                                      implements Hoa_Test_Urg_Type_Interface_Type {
 
     /**
-     * Upper bound statement (given by parent::BOUND_* constants).
-     *
-     * @var Hoa_Test_Urg_Type_BoundInteger bool
-     */
-    protected $_upperBoundStatement = parent::BOUND_CLOSE;
-
-    /**
      * Lower bound statement (given by parent::BOUND_* constants).
      *
      * @var Hoa_Test_Urg_Type_BoundInteger bool
      */
     protected $_lowerBoundStatement = parent::BOUND_CLOSE;
+
+    /**
+     * Upper bound statement (given by parent::BOUND_* constants).
+     *
+     * @var Hoa_Test_Urg_Type_BoundInteger bool
+     */
+    protected $_upperBoundStatement = parent::BOUND_CLOSE;
 
 
 
