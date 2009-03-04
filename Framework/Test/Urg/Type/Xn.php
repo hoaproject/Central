@@ -85,7 +85,7 @@ class Hoa_Test_Urg_Type_Xn extends    Hoa_Test_Urg_Type_BoundInteger
      *
      * @var Hoa_Test_Urg_Type_Xn int
      */
-    protected $_base  = 0;
+    protected $_base = 0;
 
 
 
@@ -100,7 +100,7 @@ class Hoa_Test_Urg_Type_Xn extends    Hoa_Test_Urg_Type_BoundInteger
 
         $this->setBase($base);
         $bound = (int) floor(log(parent::getPositiveInfinity(), $base));
-        parent::__construct(-$bound, $bound, parent::CLOSE, parent::CLOSE);
+        parent::__construct(-$bound, $bound, parent::BOUND_CLOSE, parent::BOUND_CLOSE);
 
         return;
     }
@@ -125,7 +125,7 @@ class Hoa_Test_Urg_Type_Xn extends    Hoa_Test_Urg_Type_BoundInteger
             $max  = $this->getUpperBoundValue();
             $i   <= $max
             &&
-            $out != $q == pow($this->getBase(), $i);
+            $out = !($q == pow($this->getBase(), $i));
             $i++);
 
         return $out;
