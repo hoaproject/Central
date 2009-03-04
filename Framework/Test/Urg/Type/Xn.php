@@ -125,7 +125,7 @@ class Hoa_Test_Urg_Type_Xn extends    Hoa_Test_Urg_Type_BoundInteger
             $max  = $this->getUpperBoundValue();
             $i   <= $max
             &&
-            $out = !($q == pow($this->getBase(), $i));
+            $out  = !($q == pow($this->getBase(), $i));
             $i++);
 
         return $out;
