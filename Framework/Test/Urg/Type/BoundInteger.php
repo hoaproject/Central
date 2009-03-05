@@ -134,8 +134,6 @@ class Hoa_Test_Urg_Type_BoundInteger extends    Hoa_Test_Urg_Type_Integer
 
         if(parent::BOUND_CLOSE == $this->getLowerBoundStatement()) {
 
-            var_dump('here');
-
             if($q < $lower)
                 return false;
         }

@@ -43,6 +43,11 @@ require_once 'Framework.php';
 import('Test.Urg.Type.Exception');
 
 /**
+ * Hoa_Test_Urg_Type_Exception_Maxtry
+ */
+import('Test.Urg.Type.Exception.Maxtry');
+
+/**
  * Hoa_Test_Urg_Type_Interface_Type
  */
 import('Test.Urg.Type.Interface.Type');
@@ -111,6 +116,7 @@ class Hoa_Test_Urg_Type_Boolean implements Hoa_Test_Urg_Type_Interface_Type {
      *
      * @access  public
      * @return  void
+     * @throws  Hoa_Test_Urg_Type_Exception_Maxtry
      */
     public function randomize ( ) {
 
@@ -120,7 +126,12 @@ class Hoa_Test_Urg_Type_Boolean implements Hoa_Test_Urg_Type_Interface_Type {
 
             $random = (bool) Hoa_Test_Urg::Ud(0, 1);
 
-        } while(false === $this->predicate($random) && $maxtry-- >= 0);
+        } while(false === $this->predicate($random) && $maxtry-- > 0);
+
+        if($maxtry == -1)
+            throw new Hoa_Test_urg_Type_Exception_Maxtry(
+                'All tries failed (%d tries).',
+                0, Hoa_Test::getInstance()->getParameter('test.maxtry'));
 
         $this->setValue($random);
 
