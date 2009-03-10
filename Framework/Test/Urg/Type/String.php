@@ -63,6 +63,11 @@ import('Test.Urg.~');
 import('Test.~');
 
 /**
+ * Hoa_Test_Urg_Type_SuperString
+ */
+import('Test.Urg.Type.SuperString');
+
+/**
  * Class Hoa_Test_Urg_Type_String.
  *
  * Represent a string.
@@ -77,14 +82,8 @@ import('Test.~');
  * @subpackage  Hoa_Test_Urg_Type_String
  */
 
-class Hoa_Test_Urg_Type_String implements Hoa_Test_Urg_Type_Interface_Type {
-
-    /**
-     * Random value.
-     *
-     * @var Hoa_Test_Urg_Type_String int
-     */
-    protected $_value    = null;
+class Hoa_Test_Urg_Type_String extends    Hoa_Test_Urg_Type_SuperString
+                               implements Hoa_Test_Urg_Type_Interface_Type {
 
     /**
      * Category of strings.
@@ -131,13 +130,16 @@ class Hoa_Test_Urg_Type_String implements Hoa_Test_Urg_Type_Interface_Type {
      * A predicate.
      *
      * @access  public
-     * @param   bool    $q    Q-value.
+     * @param   string  $q    Q-value.
      * @return  bool
      */
     public function predicate ( $q = null ) {
 
         if(null === $q)
             $q = $this->getValue();
+
+        if(false === parent::predicate($q))
+            return false;
 
         $q          = $this->stringToArray($q);
         $dictionary = Hoa_Test::getInstance()->getParameter('test.dictionary');
@@ -268,21 +270,6 @@ class Hoa_Test_Urg_Type_String implements Hoa_Test_Urg_Type_Interface_Type {
     }
 
     /**
-     * Set the random value.
-     *
-     * @access  protected
-     * @param   bool       $value    The random value.
-     * @return  bool
-     */
-    protected function setValue ( $value ) {
-
-        $old          = $this->_value;
-        $this->_value = $value;
-
-        return $old;
-    }
-
-    /**
      * Set string category.
      *
      * @access  protected
@@ -325,17 +312,6 @@ class Hoa_Test_Urg_Type_String implements Hoa_Test_Urg_Type_Interface_Type {
         $this->_skip = $this->stringToArray($skip);
 
         return $old;
-    }
-
-    /**
-     * Get the random value.
-     *
-     * @access  public
-     * @return  bool
-     */
-    public function getValue ( ) {
-
-        return $this->_value;
     }
 
     /**

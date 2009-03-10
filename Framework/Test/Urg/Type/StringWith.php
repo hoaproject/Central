@@ -63,6 +63,11 @@ import('Test.Urg.~');
 import('Test.~');
 
 /**
+ * Hoa_Test_Urg_Type_SuperString
+ */
+import('Test.Urg.Type.SuperString');
+
+/**
  * Class Hoa_Test_Urg_Type_StringWith.
  *
  * Represent a string.
@@ -77,14 +82,8 @@ import('Test.~');
  * @subpackage  Hoa_Test_Urg_Type_StringWith
  */
 
-class Hoa_Test_Urg_Type_StringWith implements Hoa_Test_Urg_Type_Interface_Type {
-
-    /**
-     * Random value.
-     *
-     * @var Hoa_Test_Urg_Type_StringWith int
-     */
-    protected $_value      = null;
+class Hoa_Test_Urg_Type_StringWith extends    Hoa_Test_Urg_Type_SuperString
+                                   implements Hoa_Test_Urg_Type_Interface_Type {
 
     /**
      * Characters that constitute the string.
@@ -122,7 +121,7 @@ class Hoa_Test_Urg_Type_StringWith implements Hoa_Test_Urg_Type_Interface_Type {
      * A predicate.
      *
      * @access  public
-     * @param   bool    $q    Q-value.
+     * @param   string  $q    Q-value.
      * @return  bool
      * @throw   Hoa_Test_Urg_Type_Exception
      */
@@ -130,6 +129,9 @@ class Hoa_Test_Urg_Type_StringWith implements Hoa_Test_Urg_Type_Interface_Type {
 
         if(null === $q)
             $q = $this->getValue();
+
+        if(false === parent::predicate($q))
+            return false;
 
         $q          = $this->stringToArray($q);
         $length     = $this->getLength();
@@ -221,21 +223,6 @@ class Hoa_Test_Urg_Type_StringWith implements Hoa_Test_Urg_Type_Interface_Type {
     }
 
     /**
-     * Set the random value.
-     *
-     * @access  protected
-     * @param   bool       $value    The random value.
-     * @return  bool
-     */
-    protected function setValue ( $value ) {
-
-        $old          = $this->_value;
-        $this->_value = $value;
-
-        return $old;
-    }
-
-    /**
      * Set string characters.
      *
      * @access  protected
@@ -263,17 +250,6 @@ class Hoa_Test_Urg_Type_StringWith implements Hoa_Test_Urg_Type_Interface_Type {
         $this->_length = $length;
 
         return $old;
-    }
-
-    /**
-     * Get the random value.
-     *
-     * @access  public
-     * @return  bool
-     */
-    public function getValue ( ) {
-
-        return $this->_value;
     }
 
     /**
