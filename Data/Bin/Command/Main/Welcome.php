@@ -104,6 +104,10 @@ class WelcomeCommand extends Hoa_Console_Command_Abstract {
                 '    ' . parent::stylize('dependency', 'command'),
                 'To know dependencies between packages.'
             ),
+            array(
+                '    ' . parent::stylize('root', 'command'),
+                'To know some roots.'
+            ),
 
             // Application.
             array('Application'),
