@@ -115,7 +115,7 @@ class RootCommand extends Hoa_Console_Command_Abstract {
      */
     public function usage ( ) {
 
-        cout('Usage   : main:root [-v] [-r]');
+        cout('Usage   : main:root [-m] [-f] [-d]');
         cout('Options :');
         cout(parent::makeUsageOptionsList(array(
             'main'      => 'The main root, i.e. the highest.',
