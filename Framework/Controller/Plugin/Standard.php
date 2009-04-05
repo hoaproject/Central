@@ -77,7 +77,7 @@ class Hoa_Controller_Plugin_Standard {
      *
      * @access  public
      * @param   object  $plugin    Hoa_Controller_Plugin_Interface.
-     * @return  array
+     * @return  void
      * @throw   Hoa_Controller_Exception_PluginIsAlreadyRegistered
      * @throw   Hoa_Controller_Exception
      */
@@ -90,6 +90,8 @@ class Hoa_Controller_Plugin_Standard {
                 'Plugin %s is already registered.', 0, $pluginIndex);
 
         $this->_plugins[$pluginIndex] = $plugin;
+
+        return;
     }
 
     /**
@@ -102,6 +104,8 @@ class Hoa_Controller_Plugin_Standard {
     public function unregister ( $pluginIndex = '' ) {
 
         unset($this->_plugins[$pluginIndex]);
+
+        return;
     }
 
     /**
