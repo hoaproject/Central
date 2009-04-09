@@ -1,0 +1,207 @@
+<?php
+
+/**
+ * Hoa Framework
+ *
+ *
+ * @license
+ *
+ * GNU General Public License
+ *
+ * This file is part of Hoa Open Accessibility.
+ * Copyright (c) 2007, 2008 Ivan ENDERLIN. All rights reserved.
+ *
+ * HOA Open Accessibility is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * HOA Open Accessibility is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with HOA Open Accessibility; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ *
+ * @category    Framework
+ * @package     Hoa_Observer
+ *
+ */
+
+/**
+ * Hoa_Framework
+ */
+require_once 'Framework.php';
+
+/**
+ * Hoa_Observer_Exception
+ */
+import('Observer.Exception');
+
+/**
+ * Class Hoa_Observer.
+ *
+ * Create an observer.
+ *
+ * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
+ * @license     http://gnu.org/licenses/gpl.txt GNU GPL
+ * @since       PHP 5
+ * @version     0.1
+ * @package     Hoa_Observer
+ */
+
+class Hoa_Observer {
+
+    /**
+     * Be silent.
+     *
+     * @const bool
+     */
+    const SILENT  = true;
+
+    /**
+     * Be verbose.
+     *
+     * @const bool
+     */
+    const VERBOSE = false;
+
+    /**
+     * Registered services.
+     *
+     * @var Hoa_Observer array
+     */
+    protected static $_register = array();
+
+
+
+    /**
+     * Register a service.
+     *
+     * @access  public
+     * @param   string  $index      Observable service name/index.
+     * @param   mixed   $service    Observable or observer service to register.
+     * @param   bool    $verbose    Verbosity mode, given with self::VERBOSE and
+     *                              self::SILENT constants.
+     * @return  void
+     * @throw   Hoa_Observer_Exception
+     */
+    public static function register ( $index, $service, $verbose = self::VERBOSE ) {
+
+        if($service instanceof Hoa_Observer_Interface_Observable) {
+
+            if(true === self::isRegistered($index))
+                if(self::VERBOSE === $verbose)
+                    throw new Hoa_Observer_Exception(
+                        'Observable service %s is already registered.', 0, $index);
+                else
+                    return;
+
+            self::$_register[$index] = array();
+
+            return;
+        }
+
+        if($service instanceof Hoa_Observer_Interface_Observer) {
+
+            if(false === self::isRegistered($index))
+                if(self::VERBOSE === $verbose)
+                    throw new Hoa_Observer_Exception(
+                        'Observer service %s cannot listen the observable ' .
+                        'service %s because it is not registered.', 1,
+                        array(get_class($service), $index));
+                else
+                    return;
+
+            self::$_register[$index][] = $service;
+
+            return;
+        }
+
+        throw new Hoa_Observer_Exception(
+            'Service %s must implement Hoa_Observer_Interface_Observer or ' .
+            'Hoa_Observer_Interface_Observable interface.',
+            2, get_class($service));
+
+        return;
+    }
+
+    /**
+     * Unregister a service.
+     *
+     * @access  public
+     * @param   mixed   $index    Observable or observer service name/index or
+     *                            instance.
+     * @return  void
+     */
+    public static function unregister ( $index ) {
+
+        if(is_object($index))
+            $index = get_class($index);
+
+        if(true === self::isRegistered($index)) {
+
+            unset(self::$_register[$index]);
+            return;
+        }
+
+        foreach(self::$_register as $i => $observers)
+            foreach($observers as $e => $observer)
+                if($index == get_class($observer))
+                    unset(self::$_register[$i][$e]);
+
+        return;
+    }
+
+    /**
+     * Check if service is already registered or not.
+     *
+     * @access  protected
+     * @param   mixed      $index    Service name/index.
+     * @return  bool
+     */
+    protected static function isRegistered ( $index ) {
+
+        return isset(self::$_register[$index]);
+    }
+
+    /**
+     * Notify an objet.
+     *
+     * @access  public
+     * @param   string  $index        Service name/index.
+     * @param   array   $arguments    Arguments to give to the
+     *                                Hoa_Observer_Interface_Observable::update()
+     *                                method.
+     * @param   bool    $verbose      Verbosity mode, given with self::VERBOSE and
+     *                                self::SILENT constants.
+     * @return  void
+     * @throw   Hoa_Observer_Exception
+     */
+    public static function notify ( $index, Array $arguments = array(),
+                                    $verbose = self::VERBOSE ) {
+
+        if(false === self::isRegistered($index))
+            if(self::VERBOSE === $verbose)
+                throw new Hoa_Observer_Exception(
+                    'Cannt notify the observable service %s, ' .
+                    'because it is not found.', 3, $index);
+            else
+                return;
+
+        foreach(self::$_register[$index] as $i => $observer)
+            call_user_func_array(
+                array(
+                    $observer,
+                    'updateFromObservable'
+                ),
+                array($arguments)
+            );
+
+        return;
+    }
+}
