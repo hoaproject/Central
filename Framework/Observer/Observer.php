@@ -83,14 +83,17 @@ class Hoa_Observer {
      * Register a service.
      *
      * @access  public
-     * @param   string  $index      Observable service name/index.
-     * @param   mixed   $service    Observable or observer service to register.
+     * @param   object  $service    Observable or observer service to register.
+     * @param   string  $index      If $service is an observable, then it is its
+     *                              ID, else if $service is an observer, it is
+     *                              the observable service ID where it would be
+     *                              registered.
      * @param   bool    $verbose    Verbosity mode, given with self::VERBOSE and
      *                              self::SILENT constants.
      * @return  void
      * @throw   Hoa_Observer_Exception
      */
-    public static function register ( $index, $service, $verbose = self::VERBOSE ) {
+    public static function register ( $service, $index, $verbose = self::VERBOSE ) {
 
         if($service instanceof Hoa_Observer_Interface_Observable) {
 
@@ -134,25 +137,34 @@ class Hoa_Observer {
      * Unregister a service.
      *
      * @access  public
-     * @param   mixed   $index    Observable or observer service name/index or
-     *                            instance.
+     * @param   object  $service    Observable or observer service to register.
+     * @param   mixed   $index      If $service is an observable, then it is its
+     *                              ID, else if $service is an observer, it is
+     *                              the $service ID where it is registered.
+     *                              Given * will delete the observer service in
+     *                              all observable services.
      * @return  void
      */
-    public static function unregister ( $index ) {
+    public static function unregister ( $service, $index ) {
 
-        if(is_object($index))
-            $index = get_class($index);
+        if($service instanceof Hoa_Observer_Interface_Observable)
+            if(true === self::isRegistered($index))
+                unset(self::$_register[$index]);
 
-        if(true === self::isRegistered($index)) {
+        $handle = get_class($service);
 
-            unset(self::$_register[$index]);
-            return;
-        }
+        if($service instanceof Hoa_Observer_Interface_Observer)
+            if(true === self::isRegistered($index))
+                foreach(self::$_register[$index] as $e => $observer) {
 
-        foreach(self::$_register as $i => $observers)
-            foreach($observers as $e => $observer)
-                if($index == get_class($observer))
-                    unset(self::$_register[$i][$e]);
+                    if($handle == get_class($observer))
+                        unset(self::$_register[$index][$e]);
+                }
+            elseif($index == '*')
+                foreach(self::$_register as $i => $observers)
+                    foreach($observers as $e => $observer)
+                        if($handle == get_class($observer))
+                            unset(self::$_register[$i][$e]);
 
         return;
     }
