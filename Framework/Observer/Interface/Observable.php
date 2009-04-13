@@ -51,13 +51,4 @@ require_once 'Framework.php';
  * @subpackage  Hoa_Observer_Interface_Observable
  */
 
-interface Hoa_Observer_Interface_Observable {
-
-    /**
-     * Notify observer.
-     *
-     * @access  public
-     * @return  void
-     */
-    public function notifyObserver ( );
-}
+interface Hoa_Observer_Interface_Observable { }
