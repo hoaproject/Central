@@ -95,6 +95,17 @@ class Hoa_Observer {
      */
     public static function register ( $service, $index, $verbose = self::VERBOSE ) {
 
+        if(   ($service instanceof Hoa_Observer_Interface_Observable)
+           && ($service instanceof Hoa_Observer_Interface_Observer)) {
+
+            if(false === self::isRegistered($index))
+                self::$_register[$index]   = array();
+            else
+                self::$_register[$index][] = $service;
+
+            return;
+        }
+
         if($service instanceof Hoa_Observer_Interface_Observable) {
 
             if(true === self::isRegistered($index))
@@ -202,7 +213,7 @@ class Hoa_Observer {
         if(false === self::isRegistered($index))
             if(self::VERBOSE === $verbose)
                 throw new Hoa_Observer_Exception(
-                    'Cannt notify the observable service %s, ' .
+                    'Cannot notify the observable service %s, ' .
                     'because it is not found.', 3, $index);
             else
                 return;
