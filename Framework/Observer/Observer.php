@@ -151,9 +151,10 @@ class Hoa_Observer {
             if(true === self::isRegistered($index))
                 unset(self::$_register[$index]);
 
-        $handle = get_class($service);
+        if($service instanceof Hoa_Observer_Interface_Observer) {
 
-        if($service instanceof Hoa_Observer_Interface_Observer)
+            $handle = get_class($service);
+
             if(true === self::isRegistered($index))
                 foreach(self::$_register[$index] as $e => $observer) {
 
@@ -165,6 +166,7 @@ class Hoa_Observer {
                     foreach($observers as $e => $observer)
                         if($handle == get_class($observer))
                             unset(self::$_register[$i][$e]);
+        }
 
         return;
     }
@@ -209,9 +211,9 @@ class Hoa_Observer {
             call_user_func_array(
                 array(
                     $observer,
-                    'updateFromObservable'
+                    'receiveNotification'
                 ),
-                array($arguments)
+                array($index, $arguments)
             );
 
         return;
