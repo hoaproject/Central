@@ -54,11 +54,12 @@ require_once 'Framework.php';
 interface Hoa_Observer_Interface_Observer {
 
     /**
-     * Update from observable class.
+     * Receive the notification (i.e. an update).
      *
      * @access  public
-     * @param   array   $data    Data or arguments.
+     * @param   string  $index    Service name/index.
+     * @param   array   $data     Data or arguments.
      * @return  void
      */
-    public function updateFromObservable ( Array $data = array() );
+    public function receiveNotification ( $index, Array $data = array() );
 }
