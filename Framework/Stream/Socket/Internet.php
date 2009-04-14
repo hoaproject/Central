@@ -43,6 +43,11 @@ require_once 'Framework.php';
 import('Stream.Socket.Exception');
 
 /**
+ * Hoa_Stream_Socket
+ */
+import('Stream.Socket.~');
+
+/**
  * Hoa_Stream_Socket_Transport
  */
 import('Stream.Socket.Transport');
@@ -61,7 +66,7 @@ import('Stream.Socket.Transport');
  * @subpackage  Hoa_Stream_Socket_Internet
  */
 
-abstract class Hoa_Stream_Socket_Internet {
+abstract class Hoa_Stream_Socket_Internet implements Hoa_Stream_Socket {
 
     /**
      * Address.
@@ -75,7 +80,7 @@ abstract class Hoa_Stream_Socket_Internet {
      *
      * @var Hoa_Stream_Socket_Internet int
      */
-    protected $_port      = 0;
+    protected $_port      = -1;
 
     /**
      * Transport.
@@ -168,6 +173,17 @@ abstract class Hoa_Stream_Socket_Internet {
     }
 
     /**
+     * Check if a port was declared.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function hasPort ( ) {
+
+        return -1 == $this->getPort();
+    }
+
+    /**
      * Get the port.
      *
      * @access  public
@@ -179,6 +195,17 @@ abstract class Hoa_Stream_Socket_Internet {
     }
 
     /**
+     * Check if a transport was declared.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function hasTransport ( ) {
+
+        return null !== $this->getTransport();
+    }
+
+    /**
      * Get the transport.
      *
      * @access  public
@@ -187,5 +214,22 @@ abstract class Hoa_Stream_Socket_Internet {
     public function getTransport ( ) {
 
         return $this->_transport;
+    }
+
+    /**
+     * Get a string that represents the socket address.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function __toString ( ) {
+
+        return (true === $this->hasTransport
+                  ? $this->getTransport() . '://'
+                  : '') .
+               $this->getAddress() .
+               (true === $this->hasPort()
+                  ? ':' . $this->getPort()
+                  : '');
     }
 }
