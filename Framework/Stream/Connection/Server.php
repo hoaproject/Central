@@ -88,6 +88,7 @@ class Hoa_Stream_Connection_Server extends Hoa_Stream_Connection {
      * @param   int                $timeout    Timeout.
      * @param   int                $flag       Flag, see the self::* constants.
      * @return  void
+     * @throw   Hoa_Stream_Connection_Exception
      */
     public function __construct ( Hoa_Stream_Socket $socket, $timeout = 30,
                                   $flag = -1 ) {
@@ -95,7 +96,21 @@ class Hoa_Stream_Connection_Server extends Hoa_Stream_Connection {
         if($flag == -1)
             $flag = self::BIND | self::LISTEN;
 
-        // make test on socket transport.
+        switch($socket->getTransport()) {
+
+            case 'tcp':
+                $flag &= self::LISTEN;
+              break;
+
+            case 'udp':
+                if($flag & self::LISTEN)
+                    throw new Hoa_Stream_Connection_Exception(
+                        'Cannot use the flag Hoa_Stream_Connection_Server::LISTEN ' .
+                        'for connect-less transports (such as UDP).', 0);
+
+                $flag &= self::BIND;
+              break;
+        }
 
         parent::__construct($socket, $timeout, self::BIND & $flag);
 
@@ -122,11 +137,11 @@ class Hoa_Stream_Connection_Server extends Hoa_Stream_Connection {
         if(false === $this->_connection)
             if($errno == 0)
                 throw new Hoa_Stream_Connection_Exception(
-                    'Client cannot join %s.', 0,
+                    'Server cannot join %s.', 0,
                     $this->getSocket()->__toString());
             else
                 throw new Hoa_Stream_Connection_Exception(
-                    'Client returns an error (number %d): %s.',
+                    'Server returns an error (number %d): %s.',
                     1, array($errno, $errstr));
 
         return;
