@@ -54,6 +54,14 @@ require_once 'Framework.php';
 interface Hoa_Stream_Socket {
 
     /**
+     * Get the transport.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getTransport ( );
+
+    /**
      * Get a string that represents the socket address.
      *
      * @access  public
