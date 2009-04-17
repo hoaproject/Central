@@ -27,7 +27,7 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Session_Namespace
+ * @package     Hoa_Session
  * @subpackage  Hoa_Session_Exception_NamespaceIsExpired
  *
  */
@@ -38,22 +38,22 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Session_Namespace_Exception
+ * Hoa_Session_Exception
  */
 import('Session.Exception');
 
 /**
  * Class Hoa_Session_Exception_NamespaceIsExpired.
  *
- * Extending the Hoa_Session_Namespace_Exception class.
+ * Extending the Hoa_Session_Exception class.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Session_Namespace
+ * @package     Hoa_Session
  * @subpackage  Hoa_Session_Exception_NamespaceIsExpired
  */
 
-class Hoa_Session_Exception_NamespaceIsExpired extends Hoa_Exception { }
+class Hoa_Session_Exception_NamespaceIsExpired extends Hoa_Session_Exception { }

@@ -56,4 +56,4 @@ import('Session.Exception');
  * @subpackage  Hoa_Session_Exception_SessionIsExpired
  */
 
-class Hoa_Session_Exception_SessionIsExpired extends Hoa_Exception { }
+class Hoa_Session_Exception_SessionIsExpired extends Hoa_Session_Exception { }
