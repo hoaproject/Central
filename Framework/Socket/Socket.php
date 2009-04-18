@@ -27,8 +27,7 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Stream
- * @subpackage  Hoa_Stream_Socket
+ * @package     Hoa_Socket
  *
  */
 
@@ -38,7 +37,12 @@
 require_once 'Framework.php';
 
 /**
- * Interface Hoa_Stream_Socket.
+ * Hoa_Socket_Exception
+ */
+import('Socket.Exception');
+
+/**
+ * Interface Hoa_Socket.
  *
  * .
  *
@@ -47,11 +51,10 @@ require_once 'Framework.php';
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Stream
- * @subpackage  Hoa_Stream_Socket
+ * @package     Hoa_Socket
  */
 
-interface Hoa_Stream_Socket {
+interface Hoa_Socket {
 
     /**
      * Get the transport.

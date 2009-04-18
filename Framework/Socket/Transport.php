@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Stream
- * @subpackage  Hoa_Stream_Socket_Transport
+ * @package     Hoa_Socket
+ * @subpackage  Hoa_Socket_Transport
  *
  */
 
@@ -38,12 +38,12 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Stream_Socket_Exception
+ * Hoa_Socket_Exception
  */
-import('Stream.Socket.Exception');
+import('Socket.Exception');
 
 /**
- * Class Hoa_Stream_Socket_Transport.
+ * Class Hoa_Socket_Transport.
  *
  * Basic transports manipulation.
  *
@@ -52,11 +52,11 @@ import('Stream.Socket.Exception');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Stream
- * @subpackage  Hoa_Stream_Socket_Transport
+ * @package     Hoa_Socket
+ * @subpackage  Hoa_Socket_Transport
  */
 
-class Hoa_Stream_Socket_Transport {
+class Hoa_Socket_Transport {
 
     /**
      * Get all enable transports.
