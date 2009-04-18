@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Stream
- * @subpackage  Hoa_Stream_Socket_Internet
+ * @package     Hoa_Socket
+ * @subpackage  Hoa_Socket_Internet
  *
  */
 
@@ -38,22 +38,22 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Stream_Socket_Exception
+ * Hoa_Socket_Exception
  */
-import('Stream.Socket.Exception');
+import('Socket.Exception');
 
 /**
- * Hoa_Stream_Socket
+ * Hoa_Socket
  */
-import('Stream.Socket.~');
+import('Socket.~');
 
 /**
- * Hoa_Stream_Socket_Transport
+ * Hoa_Socket_Transport
  */
-import('Stream.Socket.Transport');
+import('Socket.Transport');
 
 /**
- * Class Hoa_Stream_Socket_Internet.
+ * Class Hoa_Socket_Internet.
  *
  * .
  *
@@ -62,30 +62,30 @@ import('Stream.Socket.Transport');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Stream
- * @subpackage  Hoa_Stream_Socket_Internet
+ * @package     Hoa_Socket
+ * @subpackage  Hoa_Socket_Internet
  */
 
-abstract class Hoa_Stream_Socket_Internet implements Hoa_Stream_Socket {
+abstract class Hoa_Socket_Internet implements Hoa_Socket {
 
     /**
      * Address.
      *
-     * @var Hoa_Stream_Socket_Internet string
+     * @var Hoa_Socket_Internet string
      */
     protected $_address   = null;
 
     /**
      * Port.
      *
-     * @var Hoa_Stream_Socket_Internet int
+     * @var Hoa_Socket_Internet int
      */
     protected $_port      = -1;
 
     /**
      * Transport.
      *
-     * @var Hoa_Stream_Socket_Internet string
+     * @var Hoa_Socket_Internet string
      */
     protected $_transport = null;
 
@@ -115,7 +115,7 @@ abstract class Hoa_Stream_Socket_Internet implements Hoa_Stream_Socket {
      * @access  public
      * @param   string  $address    Address.
      * @return  string
-     * @throw   Hoa_Stream_Socket_Exception
+     * @throw   Hoa_Socket_Exception
      */
     abstract public function setAddress ( $address );
 
@@ -125,12 +125,12 @@ abstract class Hoa_Stream_Socket_Internet implements Hoa_Stream_Socket {
      * @access  public
      * @param   int     $port    Port.
      * @return  int
-     * @throw   Hoa_Stream_Socket_Exception
+     * @throw   Hoa_Socket_Exception
      */
     public function setPort ( $port ) {
 
         if($port < 0)
-            throw new Hoa_Stream_Socket_Exception(
+            throw new Hoa_Socket_Exception(
                 'Port must be greater or equal than zero, given %d.', 0, $port);
 
         $old         = $this->_port;
@@ -145,14 +145,14 @@ abstract class Hoa_Stream_Socket_Internet implements Hoa_Stream_Socket {
      * @access  public
      * @param   string  $transport    Transport (TCP, UDP etc.).
      * @return  string
-     * @throw   Hoa_Stream_Socket_Exception
+     * @throw   Hoa_Socket_Exception
      */
     public function setTransport ( $transport ) {
 
         $transport = strtolower($transport);
 
-        if(false === Hoa_Stream_Socket_Transport::exists($transport))
-            throw new Hoa_Stream_Socket_Exception(
+        if(false === Hoa_Socket_Transport::exists($transport))
+            throw new Hoa_Socket_Exception(
                 'Transport %s is not enabled on this machin.', 1, $transport);
 
         $old              = $this->_transport;

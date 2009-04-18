@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Stream
- * @subpackage  Hoa_Stream_Socket_Internet_DomainName
+ * @package     Hoa_Socket
+ * @subpackage  Hoa_Socket_Internet_DomainName
  *
  */
 
@@ -38,17 +38,17 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Stream_Socket_Exception
+ * Hoa_Socket_Exception
  */
-import('Stream.Socket.Exception');
+import('Socket.Exception');
 
 /**
- * Hoa_Stream_Socket_Internet
+ * Hoa_Socket_Internet
  */
-import('Stream.Socket.Internet');
+import('Socket.Internet');
 
 /**
- * Class Hoa_Stream_Socket_Internet_DomainName.
+ * Class Hoa_Socket_Internet_DomainName.
  *
  * Handle a domain name.
  *
@@ -57,11 +57,11 @@ import('Stream.Socket.Internet');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Stream
- * @subpackage  Hoa_Stream_Socket_Internet_DomainName
+ * @package     Hoa_Socket
+ * @subpackage  Hoa_Socket_Internet_DomainName
  */
 
-class Hoa_Stream_Socket_Internet_DomainName extends Hoa_Stream_Socket_Internet {
+class Hoa_Socket_Internet_DomainName extends Hoa_Socket_Internet {
 
     /**
      * Set address.
@@ -69,12 +69,12 @@ class Hoa_Stream_Socket_Internet_DomainName extends Hoa_Stream_Socket_Internet {
      * @access  public
      * @param   string  $address    Address.
      * @return  string
-     * @throw   Hoa_Stream_Socket_Exception
+     * @throw   Hoa_Socket_Exception
      */
     public function setAddress ( $address ) {
 
         if(0 == preg_match('#^[0-9a-z_\-\.]+\.[a-z]{2,4}$#', strtolower($address)))
-            throw new Hoa_Stream_Socket_Exception(
+            throw new Hoa_Socket_Exception(
                 'Address %s is not a valid domain name.', 0, $address);
 
         $old            = $this->_address;
