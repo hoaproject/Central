@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Controller
- * @subpackage  Hoa_Controller_Abstract
+ * @subpackage  Hoa_Controller_Dispatcher_Action
  *
  */
 
@@ -48,7 +48,7 @@ require_once 'Framework.php';
  * @since       PHP 5
  * @version     0.2
  * @package     Hoa_Controller
- * @subpackage  Hoa_Controller_Abstract
+ * @subpackage  Hoa_Controller_Dispacher_Action
  */
 
 class Hoa_Controller_Dispatcher_Action {
