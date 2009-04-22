@@ -66,7 +66,10 @@ class Hoa_Socket_Transport {
      */
     public static function get ( ) {
 
-        static $_ = stream_get_transports();
+        static $_ = null;
+
+        if(null === $_)
+            $_ = stream_get_transports();
 
         return $_;
     }
