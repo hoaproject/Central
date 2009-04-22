@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Stream
- * @subpackage  Hoa_Stream_Connection_Client
+ * @package     Hoa_Socket
+ * @subpackage  Hoa_Socket_Connection_Client
  *
  */
 
@@ -38,17 +38,22 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Stream_Connection_Exception
+ * Hoa_Socket_Connection_Exception
  */
-import('Stream.Connection.Exception');
+import('Socket.Connection.Exception');
 
 /**
- * Hoa_Stream_Connection
+ * Hoa_Socket_Connection
  */
-import('Stream.Connection.~');
+import('Socket.Connection');
 
 /**
- * Class Hoa_Stream_Connection_Client.
+ * Hoa_Socket_Interface
+ */
+import('Socket.Interface');
+
+/**
+ * Class Hoa_Socket_Connection_Client.
  *
  * .
  *
@@ -57,11 +62,11 @@ import('Stream.Connection.~');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Stream
- * @subpackage  Hoa_Stream_Connection_Client
+ * @package     Hoa_Socket
+ * @subpackage  Hoa_Socket_Connection_Client
  */
 
-class Hoa_Stream_Connection_Client extends Hoa_Stream_Connection {
+class Hoa_Socket_Connection_Client extends Hoa_Socket_Connection {
 
     /**
      * Open client socket asynchronously.
@@ -91,12 +96,12 @@ class Hoa_Stream_Connection_Client extends Hoa_Stream_Connection {
      * Configure a socket.
      *
      * @access  public
-     * @param   Hoa_Stream_Socket  $socket     Socket.
-     * @param   int                $timeout    Timeout.
-     * @param   int                $flag       Flag, see the self::* constants.
+     * @param   Hoa_Socket_Interface  $socket     Socket.
+     * @param   int                   $timeout    Timeout.
+     * @param   int                   $flag       Flag, see the self::* constants.
      * @return  void
      */
-    public function __construct ( Hoa_Stream_Socket $socket, $timeout = 30,
+    public function __construct ( Hoa_Socket_Interface $socket, $timeout = 30,
                                   $flag = self::CONNECT ) {
 
         parent::__construct($socket, $timeout, self::CONNECT & $flag);
@@ -105,33 +110,47 @@ class Hoa_Stream_Connection_Client extends Hoa_Stream_Connection {
     }
 
     /**
-     * Connect.
+     * Open the stream and return the associated resource.
      *
-     * @access  public
-     * @return  void
-     * @throw   Hoa_Stream_Connection_Exception
+     * @access  protected
+     * @param   string     $streamName    Socket name (e.g. path or URL).
+     * @return  resource
+     * @throw   Hoa_Socket_Connection_Exception
      */
-    public function connect ( ) {
+    protected function &open ( $streamName ) {
 
-        $this->_connection = stream_socket_client(
-            $this->getSocket()->__toString(),
+        $connection = @stream_socket_client(
+            $streamName,
             $errno,
             $errstr,
             $this->getTimeout(),
             $this->getFlag()
         );
 
-        if(false === $this->_connection)
+        if(false === $connection)
             if($errno == 0)
-                throw new Hoa_Stream_Connection_Exception(
-                    'Client cannot join %s.', 0,
-                    $this->getSocket()->__toString());
+                throw new Hoa_Socket_Connection_Exception(
+                    'Client cannot join %s.', 0, $streamName);
             else
-                throw new Hoa_Stream_Connection_Exception(
+                throw new Hoa_Socket_Connection_Exception(
                     'Client returns an error (number %d): %s.',
                     1, array($errno, $errstr));
 
-        return;
+        return $connection;
+    }
+
+    /**
+     * Close the current stream.
+     *
+     * @access  protected
+     * @return  bool
+     */
+    protected function close ( ) {
+
+        if(true === $this->isPersistent())
+            return false;
+
+        return fclose($this->getStream());
     }
 
     /**

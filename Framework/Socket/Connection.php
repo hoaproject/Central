@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Stream
- * @subpackage  Hoa_Stream_Connection
+ * @package     Hoa_Socket
+ * @subpackage  Hoa_Socket_Connection
  *
  */
 
@@ -38,12 +38,22 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Stream_Connection_Exception
+ * Hoa_Socket_Exception
  */
-import('Stream.Connection.Exception');
+import('Socket.Exception');
 
 /**
- * Class Hoa_Stream_Connection.
+ * Hoa_Stream
+ */
+import('Stream.~');
+
+/**
+ * Hoa_Stream_Io
+ */
+import('Stream.Io');
+
+/**
+ * Class Hoa_Socket_Connection.
  *
  * .
  *
@@ -52,39 +62,55 @@ import('Stream.Connection.Exception');
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Stream
- * @subpackage  Hoa_Stream_Connection
+ * @package     Hoa_Socket
+ * @subpackage  Hoa_Socket_Connection
  */
 
-abstract class Hoa_Stream_Connection {
-
-    /**
-     * Client.
-     *
-     * @var Hoa_Stream_Connection resource
-     */
-    protected $_connection = null;
+abstract class Hoa_Socket_Connection
+    extends    Hoa_Stream
+    implements Hoa_Stream_Io {
 
     /**
      * Socket.
      *
-     * @var Hoa_Stream_Socket object
+     * @var Hoa_Socket_Interface object
      */
     protected $_socket     = null;
 
     /**
      * Timeout.
      *
-     * @var Hoa_Stream_Connection int
+     * @var Hoa_Socket_Connection int
      */
     protected $_timeout    = 30;
 
     /**
      * Flag.
      *
-     * @var Hoa_Stream_Connection int
+     * @var Hoa_Socket_Connection int
      */
     protected $_flag       = 0;
+
+    /**
+     * Whether the stream is quiet.
+     *
+     * @var Hoa_Socket_Connection bool
+     */
+    protected $_quiet      = false;
+
+    /**
+     * Whether the stream is mute.
+     *
+     * @var Hoa_Socket_Connection bool
+     */
+    protected $_mute       = false;
+
+    /**
+     * Whether the stream is disconnected.
+     *
+     * @var Hoa_Socket_Connection bool
+     */
+    protected $_disconnect = false;
 
 
 
@@ -93,12 +119,12 @@ abstract class Hoa_Stream_Connection {
      * Configure a socket.
      *
      * @access  public
-     * @param   Hoa_Stream_Socket  $socket     Socket.
-     * @param   int                $timeout    Timeout.
-     * @param   int                $flag       Flag, see the child::* constants.
+     * @param   Hoa_Socket_Interface  $socket     Socket.
+     * @param   int                   $timeout    Timeout.
+     * @param   int                   $flag       Flag, see the child::* constants.
      * @return  void
      */
-    public function __construct ( Hoa_Stream_Socket $socket, $timeout, $flag) {
+    public function __construct ( Hoa_Socket_Interface $socket, $timeout, $flag) {
 
         $this->setSocket($socket);
         $this->setTimeout($timeout);
@@ -112,45 +138,59 @@ abstract class Hoa_Stream_Connection {
      *
      * @access  public
      * @return  void
-     * @throw   Hoa_Stream_Connection_Exception
      */
-    abstract public function connect ( );
+    public function connect ( ) {
+
+        parent::__construct($this->getSocket()->__toString());
+
+        return;
+    }
 
     /**
      * Disable further receptions.
      *
      * @access  public
-     * @return  void
+     * @return  bool
      */
     public function quiet ( ) {
 
-        stream_socket_shutdown($this->getConnection(), STREAM_SHUT_RD);
-
-        return;
+        return $this->_quiet =
+            stream_socket_shutdown($this->getStream(), STREAM_SHUT_RD);
     }
 
     /**
      * Disable further transmissions.
      *
      * @access  public
-     * @return  void
+     * @return  bool
      */
     public function mute ( ) {
 
-        stream_socket_shutdown($this->getConnection(), STREAM_SHUT_WR);
-
-        return;
+        return $this->_mute =
+            stream_socket_shutdown($this->getStream(), STREAM_SHUT_WR);
     }
 
     /**
      * Disable further receptions and transmissions, i.e. disconnect.
      *
      * @access  public
+     * @return  bool
+     */
+    public function quietAndMute ( ) {
+
+        return $this->_disconnect =
+            stream_socket_shutdown($this->getStream(), STREAM_SHUT_RDWR);
+    }
+
+    /**
+     * Disconnect.
+     *
+     * @access  public
      * @return  void
      */
     public function disconnect ( ) {
 
-        stream_socket_shutdown($this->getConnection(), STREAM_SHUT_RDWR);
+        $this->_disconnect = $this->close();
 
         return;
     }
@@ -159,10 +199,10 @@ abstract class Hoa_Stream_Connection {
      * Set socket.
      *
      * @access  protected
-     * @param   Hoa_Stream_Socket  $socket     Socket.
-     * @return  Hoa_Stream_Socket
+     * @param   Hoa_Socket_Interface  $socket     Socket.
+     * @return  Hoa_Socket_Interface
      */
-    protected function setSocket ( Hoa_Stream_Socket $socket ) {
+    protected function setSocket ( Hoa_Socket_Interface $socket ) {
 
         $old           = $this->_socket;
         $this->_socket = $socket;
@@ -201,21 +241,10 @@ abstract class Hoa_Stream_Connection {
     }
 
     /**
-     * Get connection (client or server).
-     *
-     * @access  protected
-     * @return  resource
-     */
-    protected function getConnection ( ) {
-
-        return $this->_connection;
-    }
-
-    /**
      * Get socket.
      *
      * @access  public
-     * @return  Hoa_Stream_Socket
+     * @return  Hoa_Socket_Socket
      */
     public function getSocket ( ) {
 
@@ -242,5 +271,289 @@ abstract class Hoa_Stream_Connection {
     public function getFlag ( ) {
 
         return $this->_flag;
+    }
+
+    /**
+     * Check if the stream is quiet.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isQuiet ( ) {
+
+        return $this->_quiet;
+    }
+
+    /**
+     * Check if the stream is mute.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isMute ( ) {
+
+        return $this->_mute;
+    }
+
+    /**
+     * Check if the stream is disconnected.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isDisconnected ( ) {
+
+        return $this->_disconnect;
+    }
+
+    // IO interface.
+
+    /**
+     * Read n characters.
+     *
+     * @access  public
+     * @param   int     $length    Length.
+     * @return  string
+     */
+    public function read ( $length ) {
+
+        if(null === $this->getStream())
+            throw new Hoa_Socket_Exception(
+                'Cannot read because socket is not established, ' .
+                'i.e. not connected.', 0);
+
+        return stream_socket_recvfrom($this->getStream(), $length);
+    }
+
+    /**
+     * Alias of $this->read().
+     *
+     * @access  public
+     * @param   int     $length    Length.
+     * @return  string
+     */
+    public function readString ( $length ) {
+
+        return $this->read($length);
+    }
+
+    /**
+     * Read a char.
+     * It could be equivalent to $this->read(1).
+     *
+     * @access  public
+     * @return  string
+     */
+    public function readChar ( ) {
+
+        return $this->read(1);
+    }
+
+    /**
+     * Read an integer.
+     *
+     * @access  public
+     * @param   int     $length    Length.
+     * @return  int
+     */
+    public function readInteger ( $length = 1 ) {
+
+        return (int) $this->read($length);
+    }
+
+    /**
+     * Read a float.
+     *
+     * @access  public
+     * @param   int     $length    Length.
+     * @return  float
+     */
+    public function readFloat ( $length = 1 ) {
+
+        return (float) $this->read($length);
+    }
+
+    /**
+     * Read a line.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function readLine ( ) {
+
+        $out = null;
+        $tmp = null;
+
+        while(('' != $tmp = $this->readChar()) && $tmp != "\n")
+            $out .= $tmp;
+
+        return $out;
+    }
+
+    /**
+     * Read all, i.e. read as much as possible.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function readAll ( ) {
+
+        $out = null;
+        $tmp = null;
+
+        while('' != $tmp = $this->readChar())
+            $out .= $tmp;
+
+        return $out;
+    }
+
+    /**
+     * Write n characters.
+     *
+     * @access  public
+     * @param   string  $string    String.
+     * @return  int
+     * @throw   Hoa_Socket_Exception
+     */
+    public function write ( $string ) {
+
+        if(null === $this->getStream())
+            throw new Hoa_Socket_Exception(
+                'Cannot write because socket is not established, ' .
+                'i.e. not connected.', 0);
+
+        return stream_socket_sendto($this->getStream(), $string);
+    }
+
+    /**
+     * Alias of $this->write().
+     *
+     * @access  public
+     * @param   string  $string    String.
+     * @return  int
+     */
+    public function writeString ( $string ) {
+
+        return $this->write($string);
+    }
+
+    /**
+     * Write a character.
+     * It could be equivalent to $this->write(1).
+     *
+     * @access  public
+     * @param   string  $char    Character.
+     * @return  int
+     */
+    public function writeChar ( $char ) {
+
+        return $this->write($char[0]);
+    }
+
+    /**
+     * Write an integer.
+     *
+     * @access  public
+     * @param   int     $integer    Integer.
+     * @return  int
+     */
+    public function writeInteger ( $integer ) {
+
+        return $this->write((string) $integer);
+    }
+
+    /**
+     * Write a float.
+     *
+     * @access  public
+     * @param   float   $float    Float.
+     * @return  int
+     */
+   public function writeFloat ( $float ) {
+
+       return $this->write((string) $float);
+   }
+
+    /**
+     * Write a line.
+     *
+     * @access  public
+     * @param   string  $line    Line.
+     * @return  int
+     */
+    public function writeLine ( $line ) {
+
+        if(false === $n = strpos($line, "\n"))
+            return $this->write($line);
+
+        return $this->write(substr($line, 0, $n));
+    }
+
+    /**
+     * Write all, i.e. as much as possible.
+     *
+     * @access  public
+     * @param   string  $string    String.
+     * @return  int
+     */
+    public function writeAll ( $string ) {
+
+        return $this->write($string);
+    }
+
+    /**
+     * Parse input from a file according to a format.
+     *
+     * @access  public
+     * @param   string  $format    Format (see printf's formats).
+     * @return  array
+     */
+    public function scanf ( $format ) {
+
+        return sscanf($this->readAll(), $format);
+    }
+
+    /**
+     * Test for end-of-file.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function eof ( ) {
+
+        return feof($this->getStream());
+    }
+
+    /**
+     * Get filename component of path.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function basename ( ) {
+
+        return basename($this->getSocket()->__toString());
+    }
+
+    /**
+     * Get directory name component of path.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function dirname ( ) {
+
+        return dirname($this->getSocket()->__toString());
+    }
+
+    /**
+     * Get size.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function size ( ) {
+
+        return Hoa_Stream_Io::SIZE_UNDEFINED;
     }
 }
