@@ -28,6 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Socket
+ * @subpackage  Hoa_Socket_Interface
  *
  */
 
@@ -42,9 +43,9 @@ require_once 'Framework.php';
 import('Socket.Exception');
 
 /**
- * Interface Hoa_Socket.
+ * Interface Hoa_Socket_Interface.
  *
- * .
+ * Interface for all sockets types.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -52,9 +53,10 @@ import('Socket.Exception');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Socket
+ * @subpackage  Hoa_Socket_Interface
  */
 
-interface Hoa_Socket {
+interface Hoa_Socket_Interface {
 
     /**
      * Get the transport.
