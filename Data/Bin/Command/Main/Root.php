@@ -67,6 +67,7 @@ class RootCommand extends Hoa_Console_Command_Abstract {
         array('main',      parent::NO_ARGUMENT, 'm'),
         array('framework', parent::NO_ARGUMENT, 'f'),
         array('data',      parent::NO_ARGUMENT, 'd'),
+        array('check',     parent::NO_ARGUMENT, 'c'),
         array('help',      parent::NO_ARGUMENT, 'h'),
         array('help',      parent::NO_ARGUMENT, '?')
     );
@@ -81,16 +82,23 @@ class RootCommand extends Hoa_Console_Command_Abstract {
      */
     public function main ( ) {
 
+        $root  = HOA_BASE;
+        $check = false;
+
         while(false !== $c = parent::getOption($v)) {
 
             switch($c) {
 
                 case 'f':
-                    cout(HOA_FRAMEWORK_BASE);
+                    $root = HOA_FRAMEWORK_BASE;
                   break;
 
                 case 'd':
-                    cout(HOA_DATA_BASE);
+                    $root = HOA_DATA_BASE;
+                  break;
+
+                case 'c':
+                    $check = $v;
                   break;
 
                 case 'h':
@@ -100,9 +108,17 @@ class RootCommand extends Hoa_Console_Command_Abstract {
 
                 case 'm':
                 default:
-                    cout(HOA_BASE);
+                    $root = HOA_BASE;
             }
         }
+
+        if(true  === $check)
+            if($root ==  getcwd())
+                cout('You are at the right place!');
+            else
+                cout('You are not at the right place :-(.');
+
+        cout($root);
 
         return HC_SUCCESS;
     }
