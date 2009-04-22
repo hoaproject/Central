@@ -43,9 +43,9 @@ require_once 'Framework.php';
 import('Socket.Exception');
 
 /**
- * Hoa_Socket
+ * Hoa_Socket_Interface
  */
-import('Socket.~');
+import('Socket.Interface');
 
 /**
  * Hoa_Socket_Transport
@@ -66,7 +66,7 @@ import('Socket.Transport');
  * @subpackage  Hoa_Socket_Internet
  */
 
-abstract class Hoa_Socket_Internet implements Hoa_Socket {
+abstract class Hoa_Socket_Internet implements Hoa_Socket_Interface {
 
     /**
      * Address.
@@ -136,7 +136,7 @@ abstract class Hoa_Socket_Internet implements Hoa_Socket {
         $old         = $this->_port;
         $this->_port = $port;
 
-        return $out;
+        return $old;
     }
 
     /**
@@ -158,7 +158,7 @@ abstract class Hoa_Socket_Internet implements Hoa_Socket {
         $old              = $this->_transport;
         $this->_transport = strtolower($transport);
 
-        return $out;
+        return $old;
     }
 
     /**
@@ -180,7 +180,7 @@ abstract class Hoa_Socket_Internet implements Hoa_Socket {
      */
     public function hasPort ( ) {
 
-        return -1 == $this->getPort();
+        return -1 != $this->getPort();
     }
 
     /**
@@ -224,7 +224,7 @@ abstract class Hoa_Socket_Internet implements Hoa_Socket {
      */
     public function __toString ( ) {
 
-        return (true === $this->hasTransport
+        return (true === $this->hasTransport()
                   ? $this->getTransport() . '://'
                   : '') .
                $this->getAddress() .
