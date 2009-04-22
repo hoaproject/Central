@@ -27,8 +27,8 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Stream
- * @subpackage  Hoa_Stream_Connection_Exception
+ * @package     Hoa_Socket
+ * @subpackage  Hoa_Socket_Connection_Exception
  *
  */
 
@@ -38,22 +38,22 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Stream_Exception
+ * Hoa_Socket_Exception
  */
-import('Stream.Exception');
+import('Socket.Exception');
 
 /**
- * Class Hoa_Stream_Connection_Exception.
+ * Class Hoa_Socket_Connection_Exception.
  *
- * Extending the Hoa_Stream_Exception class.
+ * Extending the Hoa_Socket_Exception class.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Stream
- * @subpackage  Hoa_Stream_Connection_Exception
+ * @package     Hoa_Socket
+ * @subpackage  Hoa_Socket_Connection_Exception
  */
 
-class Hoa_Stream_Connection_Exception extends Hoa_Stream_Exception { }
+class Hoa_Socket_Connection_Exception extends Hoa_Socket_Exception { }
