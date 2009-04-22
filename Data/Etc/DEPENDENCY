@@ -1,85 +1,99 @@
-                     Dependencies of Hoa Framework packages
+                     \e[34mDependencies of Hoa Framework packages\e[0m
                      **************************************
 
 
-Informations       :
-    - generated at : 2008-11-13T19:26:11.000000Z.
+\e[31mInformations\e[0m       :
+    - generated at : 2009-04-22T16:54:10.000000Z.
 
 
-Acl
+\e[33mAcl\e[0m
                Graph
-Archive
+\e[33mArchive\e[0m
                File
-Bench
-               (No dependency)
-Cache
+\e[33mBench\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mCache\e[0m
                File
-Compress
-               (No dependency)
-Configuration
+\e[33mCompress\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mConfiguration\e[0m
                StdClass
                Xml
                Yaml
-Console
-               (No dependency)
-Controller
+\e[33mConsole\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mController\e[0m
                View
                Factory
-Database
-               (No dependency)
-Factory
-               (No dependency)
-File
-               (No dependency)
-Filter
+\e[33mDatabase\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mFactory\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mFile\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mFilter\e[0m
                Factory
-Form
+\e[33mForm\e[0m
                Filter
                Validate
                Factory
-Graph
+\e[33mGraph\e[0m
                Factory
-I18n
-               (No dependency)
-Iterator
-               (No dependency)
-Locale
+\e[33mI18n\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mIterator\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mJson\e[0m
+               StdClass
+\e[33mLocale\e[0m
                File
-Mail
+\e[33mMail\e[0m
                Socket
-Mime
-               (No dependency)
-Registry
-               (No dependency)
-Service
+\e[33mMime\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mObserver\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mPom\e[0m
+               Visitor
+\e[33mRegistry\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mService\e[0m
                Xml
-Session
-               (No dependency)
-Socket
-               (No dependency)
-Stack
-               (No dependency)
-StdClass
-               (No dependency)
-Translate
+\e[33mSession\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mSocket\e[0m
+               Stream
+\e[33mStack\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mStdClass\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mStream\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mSwap\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mTest\e[0m
+               Pom
+\e[33mTranslate\e[0m
                File
                Registry
                Factory
-Uri
-               (No dependency)
-Validate
+\e[33mUri\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mValidate\e[0m
                Mail
                Factory
-Version
-               (No dependency)
-View
-               (No dependency)
-Xml
-               (No dependency)
-XmlRpc
+\e[33mVersion\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mView\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mVisitor\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mXml\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mXmlRpc\e[0m
                Uri
                Socket
                File
                Xml
-Yaml
-               (No dependency)
+\e[33mYaml\e[0m
+               \e[31m(No dependency)\e[0m

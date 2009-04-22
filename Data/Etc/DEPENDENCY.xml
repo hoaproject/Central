@@ -2,7 +2,7 @@
 
 <!--
 Informations       :
-    - generated at : 2008-11-13T19:26:11.000000Z.
+    - generated at : 2009-04-22T16:54:10.000000Z.
 -->
 
 <dependency>
@@ -43,6 +43,9 @@ Informations       :
   </package>
   <package name="I18n" />
   <package name="Iterator" />
+  <package name="Json">
+    <dependent on="StdClass" />
+  </package>
   <package name="Locale">
     <dependent on="File" />
   </package>
@@ -50,14 +53,25 @@ Informations       :
     <dependent on="Socket" />
   </package>
   <package name="Mime" />
+  <package name="Observer" />
+  <package name="Pom">
+    <dependent on="Visitor" />
+  </package>
   <package name="Registry" />
   <package name="Service">
     <dependent on="Xml" />
   </package>
   <package name="Session" />
-  <package name="Socket" />
+  <package name="Socket">
+    <dependent on="Stream" />
+  </package>
   <package name="Stack" />
   <package name="StdClass" />
+  <package name="Stream" />
+  <package name="Swap" />
+  <package name="Test">
+    <dependent on="Pom" />
+  </package>
   <package name="Translate">
     <dependent on="File" />
     <dependent on="Registry" />
@@ -70,6 +84,7 @@ Informations       :
   </package>
   <package name="Version" />
   <package name="View" />
+  <package name="Visitor" />
   <package name="Xml" />
   <package name="XmlRpc">
     <dependent on="Uri" />

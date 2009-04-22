@@ -3,7 +3,7 @@
 
 
 \e[31mInformations\e[0m       :
-    - generated at : 2008-11-13T19:26:11.000000Z.
+    - generated at : 2009-04-22T16:54:10.000000Z.
 
 
 \e[33mAcl\e[0m
@@ -43,12 +43,18 @@
                \e[31m(No dependency)\e[0m
 \e[33mIterator\e[0m
                \e[31m(No dependency)\e[0m
+\e[33mJson\e[0m
+               StdClass
 \e[33mLocale\e[0m
                File
 \e[33mMail\e[0m
                Socket
 \e[33mMime\e[0m
                \e[31m(No dependency)\e[0m
+\e[33mObserver\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mPom\e[0m
+               Visitor
 \e[33mRegistry\e[0m
                \e[31m(No dependency)\e[0m
 \e[33mService\e[0m
@@ -56,11 +62,17 @@
 \e[33mSession\e[0m
                \e[31m(No dependency)\e[0m
 \e[33mSocket\e[0m
-               \e[31m(No dependency)\e[0m
+               Stream
 \e[33mStack\e[0m
                \e[31m(No dependency)\e[0m
 \e[33mStdClass\e[0m
                \e[31m(No dependency)\e[0m
+\e[33mStream\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mSwap\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mTest\e[0m
+               Pom
 \e[33mTranslate\e[0m
                File
                Registry
@@ -73,6 +85,8 @@
 \e[33mVersion\e[0m
                \e[31m(No dependency)\e[0m
 \e[33mView\e[0m
+               \e[31m(No dependency)\e[0m
+\e[33mVisitor\e[0m
                \e[31m(No dependency)\e[0m
 \e[33mXml\e[0m
                \e[31m(No dependency)\e[0m
