@@ -55,7 +55,7 @@ import('Socket.Interface');
 /**
  * Class Hoa_Socket_Connection_Client.
  *
- * .
+ * Established a client connection.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.

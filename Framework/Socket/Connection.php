@@ -55,7 +55,7 @@ import('Stream.Io');
 /**
  * Class Hoa_Socket_Connection.
  *
- * .
+ * Abstract connection, usefull for client and server.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.

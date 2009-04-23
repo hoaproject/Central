@@ -55,7 +55,7 @@ import('Socket.Transport');
 /**
  * Class Hoa_Socket_Internet.
  *
- * .
+ * Mother class for Internet sockets.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
