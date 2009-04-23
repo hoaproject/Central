@@ -412,21 +412,25 @@ abstract class Hoa_Socket_Connection
      *
      * @access  public
      * @param   string  $string    String.
+     * @param   int     $length    Length.
      * @return  int
      * @throw   Hoa_Socket_Exception
      */
-    public function write ( $string ) {
+    public function write ( $string, $length ) {
 
         if(null === $this->getStream())
             throw new Hoa_Socket_Exception(
                 'Cannot write because socket is not established, ' .
                 'i.e. not connected.', 0);
 
-        return stream_socket_sendto($this->getStream(), $string);
+        return stream_socket_sendto(
+            $this->getStream(),
+            substr($string, 0, $length)
+        );
     }
 
     /**
-     * Alias of $this->write().
+     * Write a string.
      *
      * @access  public
      * @param   string  $string    String.
@@ -434,12 +438,11 @@ abstract class Hoa_Socket_Connection
      */
     public function writeString ( $string ) {
 
-        return $this->write($string);
+        return $this->write((string) $string, strlen($string));
     }
 
     /**
      * Write a character.
-     * It could be equivalent to $this->write(1).
      *
      * @access  public
      * @param   string  $char    Character.
@@ -447,7 +450,7 @@ abstract class Hoa_Socket_Connection
      */
     public function writeChar ( $char ) {
 
-        return $this->write($char[0]);
+        return $this->write($char[0], 1);
     }
 
     /**
@@ -459,7 +462,7 @@ abstract class Hoa_Socket_Connection
      */
     public function writeInteger ( $integer ) {
 
-        return $this->write((string) $integer);
+        return $this->write((string) $integer, strlen((string) $integer));
     }
 
     /**
@@ -471,7 +474,7 @@ abstract class Hoa_Socket_Connection
      */
    public function writeFloat ( $float ) {
 
-       return $this->write((string) $float);
+       return $this->write((string) $float, strlen((string) $float));
    }
 
     /**
@@ -484,9 +487,9 @@ abstract class Hoa_Socket_Connection
     public function writeLine ( $line ) {
 
         if(false === $n = strpos($line, "\n"))
-            return $this->write($line);
+            return $this->write($line, strlen($line));
 
-        return $this->write(substr($line, 0, $n));
+        return $this->write(substr($line, 0, $n), $n);
     }
 
     /**
@@ -498,11 +501,11 @@ abstract class Hoa_Socket_Connection
      */
     public function writeAll ( $string ) {
 
-        return $this->write($string);
+        return $this->write($string, strlen($string));
     }
 
     /**
-     * Parse input from a file according to a format.
+     * Parse input from a stream according to a format.
      *
      * @access  public
      * @param   string  $format    Format (see printf's formats).
