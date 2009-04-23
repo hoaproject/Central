@@ -423,10 +423,10 @@ abstract class Hoa_Socket_Connection
                 'Cannot write because socket is not established, ' .
                 'i.e. not connected.', 0);
 
-        return stream_socket_sendto(
-            $this->getStream(),
-            substr($string, 0, $length)
-        );
+        if(strlen($string) > $length)
+            $string = substr($string, 0, $length);
+
+        return stream_socket_sendto($this->getStream(), $string);
     }
 
     /**
