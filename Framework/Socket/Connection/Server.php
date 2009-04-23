@@ -82,6 +82,13 @@ class Hoa_Socket_Connection_Server extends Hoa_Socket_Connection {
      */
     const LISTEN = STREAM_SERVER_LISTEN;
 
+    /**
+     * Server.
+     *
+     * @var Hoa_Socket_Connection_Server resource
+     */
+    protected $_server = null;
+
 
 
     /**
@@ -100,24 +107,24 @@ class Hoa_Socket_Connection_Server extends Hoa_Socket_Connection {
 
         if($flag == -1)
             $flag = self::BIND | self::LISTEN;
+        else
+            switch($socket->getTransport()) {
 
-        switch($socket->getTransport()) {
+                case 'tcp':
+                    $flag &= self::LISTEN;
+                  break;
 
-            case 'tcp':
-                $flag &= self::LISTEN;
-              break;
+                case 'udp':
+                    if($flag & self::LISTEN)
+                        throw new Hoa_Socket_Connection_Exception(
+                            'Cannot use the flag Hoa_Socket_Connection_Server::LISTEN ' .
+                            'for connect-less transports (such as UDP).', 0);
 
-            case 'udp':
-                if($flag & self::LISTEN)
-                    throw new Hoa_Socket_Connection_Exception(
-                        'Cannot use the flag Hoa_Socket_Connection_Server::LISTEN ' .
-                        'for connect-less transports (such as UDP).', 0);
+                    $flag &= self::BIND;
+                  break;
+            }
 
-                $flag &= self::BIND;
-              break;
-        }
-
-        parent::__construct($socket, $timeout, self::BIND & $flag);
+        parent::__construct($socket, $timeout, $flag);
 
         return;
     }
@@ -132,15 +139,14 @@ class Hoa_Socket_Connection_Server extends Hoa_Socket_Connection {
      */
     protected function &open ( $streamName ) {
 
-        $connection = @stream_socket_server(
+        $this->_server = @stream_socket_server(
             $streamName,
             $errno,
             $errstr,
-            $this->getTimeout(),
             $this->getFlag()
         );
 
-        if(false === $connection)
+        if(false === $this->_server)
             if($errno == 0)
                 throw new Hoa_Socket_Connection_Exception(
                     'Server cannot join %s.', 0, $streamName);
@@ -148,6 +154,12 @@ class Hoa_Socket_Connection_Server extends Hoa_Socket_Connection {
                 throw new Hoa_Socket_Connection_Exception(
                     'Server returns an error (number %d): %s.',
                     1, array($errno, $errstr));
+
+        $connection = @stream_socket_accept($this->_server);
+
+        if(false === $connection)
+            throw new Hoa_Socket_Connection_Exception(
+                'Operation timed out (nothing to accept).', 2);
 
         return $connection;
     }
@@ -160,17 +172,6 @@ class Hoa_Socket_Connection_Server extends Hoa_Socket_Connection {
      */
     public function close ( ) {
 
-        return fclose($this->getStream());
-    }
-
-    /**
-     * Accept.
-     *
-     * @access  public
-     * @return  mixed
-     */
-    public function accept ( ) {
-
-        return stream_socket_accept($this->getStream());
+        return (bool) (fclose($this->_server) + fclose($this->getStream()));
     }
 }
