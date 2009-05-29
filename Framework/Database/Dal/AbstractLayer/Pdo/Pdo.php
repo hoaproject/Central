@@ -91,6 +91,10 @@ class Hoa_Database_Dal_AbstractLayer_Pdo implements Hoa_Database_Dal_Interface_W
     public function __construct ( $dns, $username, $password,
                                   Array $driverOption = array() ) {
 
+        if(false === extension_loaded('pdo'))
+            throw new Hoa_Database_Dal_Exception(
+                'The module PDO is not enabled.', 0);
+
         $connection = null;
 
         try {
@@ -133,7 +137,7 @@ class Hoa_Database_Dal_AbstractLayer_Pdo implements Hoa_Database_Dal_Interface_W
 
         if(null === $this->connection)
             throw new Hoa_Database_Dal_Exception(
-                'Cannot return a null connection.', 0);
+                'Cannot return a null connection.', 1);
 
         return $this->connection;
     }
@@ -244,7 +248,7 @@ class Hoa_Database_Dal_AbstractLayer_Pdo implements Hoa_Database_Dal_Interface_W
 
         if(!($tmp instanceof PDOStatement))
             throw new Hoa_Database_Dal_Exception(
-                '%3$s (%1$s/%2$d).', 0, $this->errorInfo());
+                '%3$s (%1$s/%2$d).', 2, $this->errorInfo());
 
         return new Hoa_Database_Dal_AbstractLayer_Pdo_PdoStatement($tmp);
     }
