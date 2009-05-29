@@ -325,7 +325,7 @@ class Hoa_StdClass implements Iterator, Countable, Serializable, ArrayAccess {
     }
 
     /**
-     * Get the current collection namme for the iterator.
+     * Get the current collection name for the iterator.
      *
      * @access  public
      * @return  mixed
@@ -336,7 +336,7 @@ class Hoa_StdClass implements Iterator, Countable, Serializable, ArrayAccess {
     }
 
     /**
-     * Advance the interal collection pointer, and return the current
+     * Advance the internal collection pointer, and return the current
      * collection.
      *
      * @access  public
