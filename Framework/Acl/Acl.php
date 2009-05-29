@@ -131,26 +131,30 @@ class Hoa_Acl {
      * Built an access control list.
      *
      * @access  private
+     * @param   bool     $loop    Allow or not loop. Please, see the Hoa_Graph
+     *                            class.
      * @return  void
      */
-    private function __construct ( ) {
+    private function __construct ( $loop = Hoa_Graph::DISALLOW_LOOP ) {
 
         $this->groups = Hoa_Graph::getInstance(
-                            Hoa_Graph::TYPE_ADJACENCYLIST,
-                            Hoa_Graph::DISALLOW_LOOP
-                        );
+            Hoa_Graph::TYPE_ADJACENCYLIST,
+            $loop
+        );
     }
 
     /**
      * Get the instance of Hoa_Acl, make a singleton.
      *
      * @access  public
+     * @param   bool     $loop    Allow or not loop. Please, see the Hoa_Graph
+     *                            class.
      * @return  object
      */
-    public static function getInstance ( ) {
+    public static function getInstance ( $loop = Hoa_Graph::DISALLOW_LOOP ) {
 
         if(null === self::$_instance)
-            self::$_instance = new self();
+            self::$_instance = new self($loop);
 
         return self::$_instance;
     }
