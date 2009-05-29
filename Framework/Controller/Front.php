@@ -321,10 +321,12 @@ class Hoa_Controller_Front {
                                              $recursive  = array()  ) {
 
         if($recursive === array()) {
+
             $array       =& $this->parameters;
             $recursivity = false;
         }
         else {
+
             $array       =& $recursive;
             $recursivity = true;
         }
