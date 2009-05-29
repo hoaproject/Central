@@ -444,7 +444,10 @@ class Hoa_Controller_Front {
                  * Notify post dispatcher.
                  */
                 $postDispatcher = $this->_plugin->notifyPostDispatcher(
-                                      $request, $dispatcher, $dispatch);
+                                      $request,
+                                      $dispatcher,
+                                      $dispatch
+                                  );
 
                 $response->appendOutput($dispatch);
 
