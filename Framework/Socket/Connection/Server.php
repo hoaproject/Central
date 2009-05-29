@@ -99,11 +99,13 @@ class Hoa_Socket_Connection_Server extends Hoa_Socket_Connection {
      * @param   Hoa_Socket_Interface  $socket     Socket.
      * @param   int                   $timeout    Timeout.
      * @param   int                   $flag       Flag, see the self::* constants.
+     * @param   string                $context    Context ID (please, see the
+     *                                            Hoa_Stream_Context class).
      * @return  void
      * @throw   Hoa_Socket_Connection_Exception
      */
     public function __construct ( Hoa_Socket_Interface $socket, $timeout = 30,
-                                  $flag = -1 ) {
+                                  $flag = -1, $context = null ) {
 
         if($flag == -1)
             $flag = self::BIND | self::LISTEN;
@@ -124,7 +126,7 @@ class Hoa_Socket_Connection_Server extends Hoa_Socket_Connection {
                   break;
             }
 
-        parent::__construct($socket, $timeout, $flag);
+        parent::__construct($socket, $timeout, $flag, $context);
 
         return;
     }
@@ -133,18 +135,28 @@ class Hoa_Socket_Connection_Server extends Hoa_Socket_Connection {
      * Open the stream and return the associated resource.
      *
      * @access  protected
-     * @param   string     $streamName    Stream name (e.g. path or URL).
+     * @param   string              $streamName    Stream name (e.g. path or URL).
+     * @param   Hoa_Stream_Context  $context       Context.
      * @return  resource
      * @throw   Hoa_Socket_Connection_Exception
      */
-    protected function &open ( $streamName ) {
+    protected function &open ( $streamName, Hoa_Stream_Context $context = null ) {
 
-        $this->_server = @stream_socket_server(
-            $streamName,
-            $errno,
-            $errstr,
-            $this->getFlag()
-        );
+        if(null === $context)
+            $this->_server = @stream_socket_server(
+                $streamName,
+                $errno,
+                $errstr,
+                $this->getFlag()
+            );
+        else
+            $this->_server = @stream_socket_server(
+                $streamName,
+                $errno,
+                $errstr,
+                $this->getFlag(),
+                $context->getContext()
+            );
 
         if(false === $this->_server)
             if($errno == 0)
@@ -173,5 +185,27 @@ class Hoa_Socket_Connection_Server extends Hoa_Socket_Connection {
     public function close ( ) {
 
         return (bool) (fclose($this->_server) + fclose($this->getStream()));
+    }
+
+    /**
+     * Check if the server bind or not.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isBinding ( ) {
+
+        return (bool) $this->getFlag() & self::BIND;
+    }
+
+    /**
+     * Check if the server is listening or not.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isListening ( ) {
+
+        return (bool) $this->getFlag() & self::LISTEN;
     }
 }

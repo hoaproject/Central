@@ -99,12 +99,14 @@ class Hoa_Socket_Connection_Client extends Hoa_Socket_Connection {
      * @param   Hoa_Socket_Interface  $socket     Socket.
      * @param   int                   $timeout    Timeout.
      * @param   int                   $flag       Flag, see the self::* constants.
+     * @param   string                $context    Context ID (please, see the
+     *                                            Hoa_Stream_Context class).
      * @return  void
      */
     public function __construct ( Hoa_Socket_Interface $socket, $timeout = 30,
-                                  $flag = self::CONNECT ) {
+                                  $flag = self::CONNECT, $context = null ) {
 
-        parent::__construct($socket, $timeout, self::CONNECT & $flag);
+        parent::__construct($socket, $timeout, self::CONNECT & $flag, $context);
 
         return;
     }
@@ -113,19 +115,30 @@ class Hoa_Socket_Connection_Client extends Hoa_Socket_Connection {
      * Open the stream and return the associated resource.
      *
      * @access  protected
-     * @param   string     $streamName    Socket name (e.g. path or URL).
+     * @param   string              $streamName    Socket name (e.g. path or URL).
+     * @param   Hoa_Stream_Context  $context       Context.
      * @return  resource
      * @throw   Hoa_Socket_Connection_Exception
      */
-    protected function &open ( $streamName ) {
+    protected function &open ( $streamName, Hoa_Stream_Context $context = null ) {
 
-        $connection = @stream_socket_client(
-            $streamName,
-            $errno,
-            $errstr,
-            $this->getTimeout(),
-            $this->getFlag()
-        );
+        if(null === $context)
+            $connection = @stream_socket_client(
+                $streamName,
+                $errno,
+                $errstr,
+                $this->getTimeout(),
+                $this->getFlag()
+            );
+        else
+            $connection = @stream_socket_client(
+                $streamName,
+                $errno,
+                $errstr,
+                $this->getTimeout(),
+                $this->getFlag(),
+                $context->getContext()
+            );
 
         if(false === $connection)
             if($errno == 0)

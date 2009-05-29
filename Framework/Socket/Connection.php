@@ -92,6 +92,13 @@ abstract class Hoa_Socket_Connection
     protected $_flag       = 0;
 
     /**
+     * Context ID.
+     *
+     * @var Hoa_Socket_Connection string
+     */
+    protected $_context    = null;
+
+    /**
      * Whether the stream is quiet.
      *
      * @var Hoa_Socket_Connection bool
@@ -122,13 +129,17 @@ abstract class Hoa_Socket_Connection
      * @param   Hoa_Socket_Interface  $socket     Socket.
      * @param   int                   $timeout    Timeout.
      * @param   int                   $flag       Flag, see the child::* constants.
+     * @param   string                $context    Context ID (please, see the
+     *                                Hoa_Stream_Context class).
      * @return  void
      */
-    public function __construct ( Hoa_Socket_Interface $socket, $timeout, $flag) {
+    public function __construct ( Hoa_Socket_Interface $socket, $timeout, $flag,
+                                  $context = null ) {
 
         $this->setSocket($socket);
         $this->setTimeout($timeout);
         $this->setFlag($flag);
+        $this->setContext($context);
 
         return;
     }
@@ -141,7 +152,10 @@ abstract class Hoa_Socket_Connection
      */
     public function connect ( ) {
 
-        parent::__construct($this->getSocket()->__toString());
+        parent::__construct(
+            $this->getSocket()->__toString(),
+            $this->getContext()
+        );
 
         return;
     }
@@ -241,6 +255,21 @@ abstract class Hoa_Socket_Connection
     }
 
     /**
+     * Set context.
+     *
+     * @access  protected
+     * @param   string     $context    Context ID.
+     * @return  string
+     */
+    protected function setContext ( $context ) {
+
+        $old            = $this->_context;
+        $this->_context = $context;
+
+        return $old;
+    }
+
+    /**
      * Get socket.
      *
      * @access  public
@@ -271,6 +300,17 @@ abstract class Hoa_Socket_Connection
     public function getFlag ( ) {
 
         return $this->_flag;
+    }
+
+    /**
+     * Get context.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getContext ( ) {
+
+        return $this->_context;
     }
 
     /**
@@ -339,7 +379,7 @@ abstract class Hoa_Socket_Connection
 
     /**
      * Read a char.
-     * It could be equivalent to $this->read(1).
+     * It is equivalent to $this->read(1).
      *
      * @access  public
      * @return  string
@@ -413,7 +453,7 @@ abstract class Hoa_Socket_Connection
      * @access  public
      * @param   string  $string    String.
      * @param   int     $length    Length.
-     * @return  int
+     * @return  mixed
      * @throw   Hoa_Socket_Exception
      */
     public function write ( $string, $length ) {
@@ -421,7 +461,7 @@ abstract class Hoa_Socket_Connection
         if(null === $this->getStream())
             throw new Hoa_Socket_Exception(
                 'Cannot write because socket is not established, ' .
-                'i.e. not connected.', 0);
+                'i.e. not connected.', 1);
 
         if(strlen($string) > $length)
             $string = substr($string, 0, $length);
@@ -434,11 +474,13 @@ abstract class Hoa_Socket_Connection
      *
      * @access  public
      * @param   string  $string    String.
-     * @return  int
+     * @return  mixed
      */
     public function writeString ( $string ) {
 
-        return $this->write((string) $string, strlen($string));
+        $string = (string) $string;
+
+        return $this->write($string, strlen($string));
     }
 
     /**
@@ -446,11 +488,11 @@ abstract class Hoa_Socket_Connection
      *
      * @access  public
      * @param   string  $char    Character.
-     * @return  int
+     * @return  mixed
      */
-    public function writeChar ( $char ) {
+    public function writeCharacter ( $char ) {
 
-        return $this->write($char[0], 1);
+        return $this->write((string) $char[0], 1);
     }
 
     /**
@@ -458,11 +500,13 @@ abstract class Hoa_Socket_Connection
      *
      * @access  public
      * @param   int     $integer    Integer.
-     * @return  int
+     * @return  mixed
      */
     public function writeInteger ( $integer ) {
 
-        return $this->write((string) $integer, strlen((string) $integer));
+        $integer = (string) (int) $integer;
+
+        return $this->write($integer, strlen($integer));
     }
 
     /**
@@ -470,11 +514,13 @@ abstract class Hoa_Socket_Connection
      *
      * @access  public
      * @param   float   $float    Float.
-     * @return  int
+     * @return  mixed
      */
    public function writeFloat ( $float ) {
 
-       return $this->write((string) $float, strlen((string) $float));
+       $float = (string) (float) $float;
+
+       return $this->write($float, strlen($float));
    }
 
     /**
@@ -482,7 +528,7 @@ abstract class Hoa_Socket_Connection
      *
      * @access  public
      * @param   string  $line    Line.
-     * @return  int
+     * @return  mixed
      */
     public function writeLine ( $line ) {
 
@@ -497,11 +543,23 @@ abstract class Hoa_Socket_Connection
      *
      * @access  public
      * @param   string  $string    String.
-     * @return  int
+     * @return  mixed
      */
     public function writeAll ( $string ) {
 
         return $this->write($string, strlen($string));
+    }
+
+    /**
+     * Truncate a file to a given length.
+     *
+     * @access  public
+     * @param   int     $size    Size.
+     * @return  bool
+     */
+    public function truncate ( $size ) {
+
+        return false;
     }
 
     /**
@@ -533,7 +591,7 @@ abstract class Hoa_Socket_Connection
      * @access  public
      * @return  string
      */
-    public function basename ( ) {
+    public function getBasename ( ) {
 
         return basename($this->getSocket()->__toString());
     }
@@ -544,7 +602,7 @@ abstract class Hoa_Socket_Connection
      * @access  public
      * @return  string
      */
-    public function dirname ( ) {
+    public function getDirname ( ) {
 
         return dirname($this->getSocket()->__toString());
     }
@@ -555,7 +613,7 @@ abstract class Hoa_Socket_Connection
      * @access  public
      * @return  int
      */
-    public function size ( ) {
+    public function getSize ( ) {
 
         return Hoa_Stream_Io::SIZE_UNDEFINED;
     }
