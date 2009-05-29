@@ -137,10 +137,10 @@ class Hoa_Graph_AdjacencyList extends Hoa_Graph {
                     $node->getNodeId());
         }
 
-        $this->nodes[$node->getNodeId()] = array(
-            self::NODE_VALUE => $node,
-            self::NODE_CHILD => array()
-        );
+        $this->nodes[$node->getNodeId()][self::NODE_VALUE] = $node;
+
+        if(!isset($this->nodes[$node->getNodeId()][self::NODE_CHILD]))
+            $this->nodes[$node->getNodeId()][self::NODE_CHILD] = array();
 
         foreach($parent as $foo => $nodeId) {
 
