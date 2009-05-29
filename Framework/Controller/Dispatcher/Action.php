@@ -217,4 +217,16 @@ class Hoa_Controller_Dispatcher_Action {
 
         return $param;
     }
+
+    /**
+     * Know if the controller is called automically (e.g. from an URL) or
+     * manually (e.g. with the data.personal.array).
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isCalledAutomatically ( ) {
+
+        return null === $this->requestGetParameter('data.array.personal');
+    }
 }
