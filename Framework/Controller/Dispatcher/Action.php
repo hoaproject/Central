@@ -219,7 +219,7 @@ class Hoa_Controller_Dispatcher_Action {
     }
 
     /**
-     * Know if the controller is called automically (e.g. from an URL) or
+     * Know if the controller is called automatically (e.g. from an URL) or
      * manually (e.g. with the data.personal.array).
      *
      * @access  public
