@@ -348,8 +348,8 @@ class Hoa_Controller_Dispatcher_Abstract {
      */
     public function setDispatch ( $dispatch ) {
 
-        $old              = $this->_dispatch;
-        $this->_dispatch .= $dispatch;
+        $old             = $this->_dispatch;
+        $this->_dispatch = $dispatch;
 
         return $old;
     }
