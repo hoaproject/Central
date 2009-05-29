@@ -325,9 +325,11 @@ class Hoa_Controller_Dispatcher_Abstract {
             }
         }
         catch ( ReflectionException $e ) {
+
             throw new Hoa_Controller_Exception_Reflection($e->getMessage(), $e->getCode());
         }
         catch ( Hoa_Controller_Exception $e ) {
+
             throw $e;
         }
 
