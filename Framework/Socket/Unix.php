@@ -73,7 +73,7 @@ class Hoa_Socket_Unix implements Hoa_Socket_Interface {
      *
      * @var Hoa_socket_Unix string
      */
-    protected $_path      = null;
+    protected $_address   = null;
 
     /**
      * Transport.
