@@ -100,7 +100,7 @@ abstract class Hoa_Socket_Internet implements Hoa_Socket_Interface {
      * @param   string  $transport    Transport (TCP, UDP etc.).
      * @return  void
      */
-    public function __construct ( $address, $port, $transport = null ) {
+    public function __construct ( $address, $port, $transport ) {
 
         $this->setAddress($address);
         $this->setPort($port);
@@ -156,7 +156,7 @@ abstract class Hoa_Socket_Internet implements Hoa_Socket_Interface {
                 'Transport %s is not enabled on this machin.', 1, $transport);
 
         $old              = $this->_transport;
-        $this->_transport = strtolower($transport);
+        $this->_transport = $transport;
 
         return $old;
     }
