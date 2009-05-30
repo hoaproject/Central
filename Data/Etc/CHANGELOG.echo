@@ -5,8 +5,283 @@
 \e[31mInformations\e[0m             :
     - repository path    : /Users/hywan/Development/Hoa/Svn/Repository ;
     - path in repository : /Framework/Trunk/ ;
-    - generated at       : 2009-04-22T16:54:10.000000Z.
+    - generated at       : 2009-05-30T20:01:47.000000Z.
 
+
+\e[33mRev. 367          \e[0m\e[34mCorrect a bug with a stupid static variable!\e[0m
+    At            2009-05-30T18:01:47.083265Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/File/Abstract.php
+
+\e[33mRev. 366          \e[0m\e[34mMania: formatting spaces.\e[0m
+    At            2009-05-30T17:54:46.297537Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Configuration/Configuration.php
+
+\e[33mRev. 365          \e[0m\e[34mTake care of the $mkdir argument (oops…).\e[0m
+    At            2009-05-30T17:48:40.811959Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/File/Abstract.php
+
+\e[33mRev. 364          \e[0m\e[34mAdd the Hoa_File_Socket class.\e[0m
+    At            2009-05-30T15:13:26.907202Z
+    By            hywan
+    \e[32mAdded\e[0m         Framework/File/Socket.php
+    \e[34mModified\e[0m      Framework/File/Undefined.php
+
+\e[33mRev. 363          \e[0m\e[34mAdd the isSocket(), isFIFOPipe(), isCharacterSpecial(),
+                  isBlockSpecial() and isUnknown() methods.\e[0m
+    At            2009-05-30T15:10:29.289256Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/File/Abstract.php
+
+\e[33mRev. 362          \e[0m\e[34mOops, bad attribute name; change $this->_path to
+                  $this->_address.\e[0m
+    At            2009-05-30T14:51:27.922421Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Socket/Unix.php
+
+\e[33mRev. 361          \e[0m\e[34mSimplify the getTarget() method, it now uses the
+                  Hoa_File_Undefined class. It is a bit slower than before,
+                  but so easy to maintain…\e[0m
+    At            2009-05-30T14:16:37.961170Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/File/Link.php
+
+\e[33mRev. 360          \e[0m\e[34m… no comment.\e[0m
+    At            2009-05-30T14:08:58.475927Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/File/Link.php
+
+\e[33mRev. 359          \e[0m\e[34mWrite the Unix sockets class.\e[0m
+    At            2009-05-30T13:55:49.379113Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Socket/Unix.php
+
+\e[33mRev. 358          \e[0m\e[34mThe $transport argument of the constructor is now
+                  obligatory. Delete a redundant operation when setting the
+                  transport in the setTransport() method.\e[0m
+    At            2009-05-30T13:55:27.510443Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Socket/Internet.php
+
+\e[33mRev. 357          \e[0m\e[34mCorrect a bug with the getTarget() method: use filetype()
+                  function instead of $this->is*() methods. Overload the
+                  getPermissions() method to get the “real” symbolic link
+                  permissions and not the target ones.\e[0m
+    At            2009-05-30T13:38:33.008731Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/File/Link.php
+
+\e[33mRev. 356          \e[0m\e[34mMove the getTarget() method to getTargetName() method. And,
+                  rewrite the getTarget() method to get the object that
+                  matches with the symbolic link target (like the
+                  Hoa_File_Undefined::define() method does).\e[0m
+    At            2009-05-30T13:06:28.401321Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/File/Link.php
+
+\e[33mRev. 355          \e[0m\e[34mSimplify the define() method, and correct an exception
+                  message.\e[0m
+    At            2009-05-30T13:04:17.416560Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/File/Undefined.php
+
+\e[33mRev. 354          \e[0m\e[34mForget to add the argument for the exception format message.\e[0m
+    At            2009-05-30T12:49:46.662505Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/File/Finder.php
+
+\e[33mRev. 352          \e[0m\e[34mCorrect a bug: do not reset node childs if node has already
+                  defined childs, e.g. it is possible if loops are allowed.\e[0m
+    At            2009-05-29T17:10:50.469540Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Graph/AdjacencyList.php
+
+\e[33mRev. 351          \e[0m\e[34mEnable user to allow or disallow loop in the ACL graph
+                  directly from the Hoa_Acl class.\e[0m
+    At            2009-05-29T17:04:20.481291Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Acl/Acl.php
+
+\e[33mRev. 350          \e[0m\e[34mCorrect a typo in the API documentation.\e[0m
+    At            2009-05-29T16:28:09.052297Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Controller/Dispatcher/Action.php
+
+\e[33mRev. 349          \e[0m\e[34mMania is back: formatting spaces.\e[0m
+    At            2009-05-29T16:27:47.227628Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Controller/Dispatcher/Abstract.php
+
+\e[33mRev. 348          \e[0m\e[34mMania is back: formatting spaces.\e[0m
+    At            2009-05-29T16:27:19.521977Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Controller/Front.php
+
+\e[33mRev. 347          \e[0m\e[34mCheck if the PDO extension is loaded before using it.\e[0m
+    At            2009-05-29T16:27:07.358813Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Database/Dal/AbstractLayer/Pdo/Pdo.php
+
+\e[33mRev. 346          \e[0m\e[34mBye bye Hoa_Stack!\e[0m
+    At            2009-05-29T16:25:10.743309Z
+    By            hywan
+    \e[31mDeleted\e[0m       Framework/Stack
+
+\e[33mRev. 345          \e[0m\e[34mImplement the new Hoa_Iterator_Interface_Seekable interface
+                  and the SPL Countable interface.\e[0m
+    At            2009-05-29T15:31:06.696319Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Iterator/Iterator.php
+
+\e[33mRev. 344          \e[0m\e[34mAdd the Hoa_Iterator_Interface_Seekable interface, that
+                  extends the SPL SeekableIterator interface.\e[0m
+    At            2009-05-29T15:30:12.536521Z
+    By            hywan
+    \e[32mAdded\e[0m         Framework/Iterator/Interface/Seekable.php
+
+\e[33mRev. 343          \e[0m\e[34mCorrect typos.\e[0m
+    At            2009-05-29T15:26:51.629308Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/StdClass/StdClass.php
+
+\e[33mRev. 342          \e[0m\e[34mAdd the isCalledAutomatically() method to know if the
+                  controller is called automically (e.g. from an URL) or
+                  manually (e.g. with the data.personal.array).\e[0m
+    At            2009-05-29T15:10:21.273315Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Controller/Dispatcher/Action.php
+
+\e[33mRev. 341          \e[0m\e[34mCorrect a bug with an ouput data sets into the temporary
+                  dispath when having a controllers loop.\e[0m
+    At            2009-05-29T15:08:09.925998Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Controller/Dispatcher/Abstract.php
+
+\e[33mRev. 340          \e[0m\e[34mMania is back.\e[0m
+    At            2009-05-29T15:03:57.311513Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Controller/Front.php
+
+\e[33mRev. 339          \e[0m\e[34mWelcome to the new Hoa_File package!\e[0m
+    At            2009-05-29T15:02:01.801845Z
+    By            hywan
+    \e[32mAdded\e[0m         Framework/File/Abstract.php
+    \e[31mDeleted\e[0m       Framework/File/Dir.php
+    \e[32mAdded\e[0m         Framework/File/Directory.php
+    \e[32mAdded\e[0m         Framework/File/Exception/FileDoesNotExist.php
+    \e[32mAdded\e[0m         Framework/File/Exception/UploadExtension.php
+    \e[31mDeleted\e[0m       Framework/File/Exception/Upload_Extension.php
+    \e[34mModified\e[0m      Framework/File/File.php
+    \e[32mAdded\e[0m         Framework/File/Finder.php
+    \e[32mAdded\e[0m         Framework/File/Link.php
+    \e[32mAdded\e[0m         Framework/File/Temporary.php
+    \e[32mAdded\e[0m         Framework/File/Undefined.php
+    \e[31mDeleted\e[0m       Framework/File/Util.php
+
+\e[33mRev. 338          \e[0m\e[34mAdapt classes to stream context (see last previous
+                  revisions). Adapt the super-class to the new IO interfaces.\e[0m
+    At            2009-05-29T14:55:30.618907Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Socket/Connection.php
+    \e[34mModified\e[0m      Framework/Socket/Connection/Client.php
+    \e[34mModified\e[0m      Framework/Socket/Connection/Server.php
+
+\e[33mRev. 337          \e[0m\e[34mSet up a real stream bucket. Add the stream context into
+                  stream behavior. Correct a little bug: bad method call when
+                  manage the stream buffer.\e[0m
+    At            2009-05-29T14:51:48.830467Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Stream.php
+
+\e[33mRev. 336          \e[0m\e[34mSplit the IO interface into two new interfaces: In and Out.\e[0m
+    At            2009-05-29T14:47:44.838792Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Io.php
+    \e[32mAdded\e[0m         Framework/Stream/Io/In.php
+    \e[32mAdded\e[0m         Framework/Stream/Io/Out.php
+
+\e[33mRev. 335          \e[0m\e[34mAdd four constants: OVERWRITE and DO_NOT_OVERWRITE, to
+                  manage if a file already exists, and MAKE_DIRECTORY and
+                  DO_NOT_MAKE_DIRECTORY, to manage if a directory does not
+                  exist. Correct API documentation and complete some methods
+                  prototypes. Move the truncate() method into another
+                  interface. Finally, the umask() method is now static.\e[0m
+    At            2009-05-29T14:45:09.669332Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Io/Touchable.php
+
+\e[33mRev. 334          \e[0m\e[34mRename some methods to be in compliance with the Hoa coding
+                  and naming standards, and two methods: clearStatisticCache()
+                  and clearAllStatisticCaches() to manage the cache of stat()
+                  calls.\e[0m
+    At            2009-05-29T14:42:00.742081Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Io/Statable.php
+
+\e[33mRev. 333          \e[0m\e[34mCorrect a bad PHP constant name: SEEK_CUR instead of
+                  SEEK_CURRENT.\e[0m
+    At            2009-05-29T14:38:52.828690Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Io/Pointable.php
+
+\e[33mRev. 332          \e[0m\e[34mRemove the first argument of the flush() method.\e[0m
+    At            2009-05-29T14:38:06.136395Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Io/Bufferable.php
+
+\e[33mRev. 331          \e[0m\e[34mThe wrapper argument can be null when calling a previously
+                  declared instance of a context (more logical). Add the
+                  contextExists() method. And set the visibility of
+                  getContext() method from protected to public.\e[0m
+    At            2009-05-29T14:30:31.504464Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Context.php
+
+\e[33mRev. 330          \e[0m\e[34mComplete the API documentation.\e[0m
+    At            2009-04-23T12:53:23.175037Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Socket/Connection.php
+    \e[34mModified\e[0m      Framework/Socket/Connection/Client.php
+    \e[34mModified\e[0m      Framework/Socket/Connection/Server.php
+    \e[34mModified\e[0m      Framework/Socket/Internet.php
+
+\e[33mRev. 329          \e[0m\e[34mBetter flags support, and automatically accept data (easier
+                  for user, no hack is necessary).\e[0m
+    At            2009-04-23T12:49:36.568462Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Socket/Connection/Server.php
+
+\e[33mRev. 328          \e[0m\e[34mThe write() method is now faster.\e[0m
+    At            2009-04-23T12:47:27.286638Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Socket/Connection.php
+
+\e[33mRev. 327          \e[0m\e[34mAdd the setStreamTimeout(), setStreamBlocking(),
+                  setStreamBuffer() and disableStreamBuffer() methods.\e[0m
+    At            2009-04-23T12:40:49.022088Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Stream.php
+
+\e[33mRev. 326          \e[0m\e[34mMake some arrangements: edit API documentations and fit the
+                  code.\e[0m
+    At            2009-04-23T09:58:08.351214Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Socket/Connection.php
+    \e[34mModified\e[0m      Framework/Stream/Io.php
+    \e[34mModified\e[0m      Framework/Stream/Io/Lockable.php
+
+\e[33mRev. 325          \e[0m\e[34mLet's go, commit extra files at least once a month …
+                  \e[0m
+    At            2009-04-22T14:56:05.317941Z
+    By            hywan
+    \e[34mModified\e[0m      Data/Etc/CHANGELOG
+    \e[34mModified\e[0m      Data/Etc/CHANGELOG.echo
+    \e[34mModified\e[0m      Data/Etc/CHANGELOG.xml
+    \e[34mModified\e[0m      Data/Etc/DEPENDENCY
+    \e[34mModified\e[0m      Data/Etc/DEPENDENCY.echo
+    \e[34mModified\e[0m      Data/Etc/DEPENDENCY.xml
 
 \e[33mRev. 324          \e[0m\e[34mAdd the “check” flag.\e[0m
     At            2009-04-22T14:53:16.763691Z

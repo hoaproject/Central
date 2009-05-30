@@ -2,7 +2,7 @@
 
 <!--
 Informations       :
-    - generated at : 2009-04-22T16:54:10.000000Z.
+    - generated at : 2009-05-30T17:14:10.000000Z.
 -->
 
 <dependency>
@@ -29,7 +29,11 @@ Informations       :
   </package>
   <package name="Database" />
   <package name="Factory" />
-  <package name="File" />
+  <package name="File">
+    <dependent on="Stream" />
+    <dependent on="Iterator" />
+    <dependent on="Socket" />
+  </package>
   <package name="Filter">
     <dependent on="Factory" />
   </package>
@@ -65,7 +69,6 @@ Informations       :
   <package name="Socket">
     <dependent on="Stream" />
   </package>
-  <package name="Stack" />
   <package name="StdClass" />
   <package name="Stream" />
   <package name="Swap" />

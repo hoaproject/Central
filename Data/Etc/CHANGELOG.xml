@@ -4,10 +4,373 @@
 Informations             :
     - repository path    : /Users/hywan/Development/Hoa/Svn/Repository ;
     - path in repository : /Framework/Trunk/ ;
-    - generated at       : 2009-04-22T16:54:10.000000Z.
+    - generated at       : 2009-05-30T20:01:47.000000Z.
 -->
 
 <log>
+  <logentry revision="367">
+    <author>hywan</author>
+    <date>2009-05-30T20:01:47.083265Z</date>
+    <msg>Correct a bug with a stupid static variable!</msg>
+    <paths>
+      <path action="M">Framework/File/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="366">
+    <author>hywan</author>
+    <date>2009-05-30T19:54:46.297537Z</date>
+    <msg>Mania: formatting spaces.</msg>
+    <paths>
+      <path action="M">Framework/Configuration/Configuration.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="365">
+    <author>hywan</author>
+    <date>2009-05-30T19:48:40.811959Z</date>
+    <msg>Take care of the $mkdir argument (oops…).</msg>
+    <paths>
+      <path action="M">Framework/File/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="364">
+    <author>hywan</author>
+    <date>2009-05-30T17:13:26.907202Z</date>
+    <msg>Add the Hoa_File_Socket class.</msg>
+    <paths>
+      <path action="A">Framework/File/Socket.php</path>
+      <path action="M">Framework/File/Undefined.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="363">
+    <author>hywan</author>
+    <date>2009-05-30T17:10:29.289256Z</date>
+    <msg>Add the isSocket(), isFIFOPipe(), isCharacterSpecial(), isBlockSpecial() and isUnknown() methods.</msg>
+    <paths>
+      <path action="M">Framework/File/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="362">
+    <author>hywan</author>
+    <date>2009-05-30T16:51:27.922421Z</date>
+    <msg>Oops, bad attribute name; change $this-&amp;gt;_path to $this-&amp;gt;_address.</msg>
+    <paths>
+      <path action="M">Framework/Socket/Unix.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="361">
+    <author>hywan</author>
+    <date>2009-05-30T16:16:37.961170Z</date>
+    <msg>Simplify the getTarget() method, it now uses the Hoa_File_Undefined class. It is a bit slower than before, but so easy to maintain…</msg>
+    <paths>
+      <path action="M">Framework/File/Link.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="360">
+    <author>hywan</author>
+    <date>2009-05-30T16:08:58.475927Z</date>
+    <msg>… no comment.</msg>
+    <paths>
+      <path action="M">Framework/File/Link.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="359">
+    <author>hywan</author>
+    <date>2009-05-30T15:55:49.379113Z</date>
+    <msg>Write the Unix sockets class.</msg>
+    <paths>
+      <path action="M">Framework/Socket/Unix.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="358">
+    <author>hywan</author>
+    <date>2009-05-30T15:55:27.510443Z</date>
+    <msg>The $transport argument of the constructor is now obligatory. Delete a redundant operation when setting the transport in the setTransport() method.</msg>
+    <paths>
+      <path action="M">Framework/Socket/Internet.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="357">
+    <author>hywan</author>
+    <date>2009-05-30T15:38:33.008731Z</date>
+    <msg>Correct a bug with the getTarget() method: use filetype() function instead of $this-&amp;gt;is*() methods. Overload the getPermissions() method to get the “real” symbolic link permissions and not the target ones.</msg>
+    <paths>
+      <path action="M">Framework/File/Link.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="356">
+    <author>hywan</author>
+    <date>2009-05-30T15:06:28.401321Z</date>
+    <msg>Move the getTarget() method to getTargetName() method. And, rewrite the getTarget() method to get the object that matches with the symbolic link target (like the Hoa_File_Undefined::define() method does).</msg>
+    <paths>
+      <path action="M">Framework/File/Link.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="355">
+    <author>hywan</author>
+    <date>2009-05-30T15:04:17.416560Z</date>
+    <msg>Simplify the define() method, and correct an exception message.</msg>
+    <paths>
+      <path action="M">Framework/File/Undefined.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="354">
+    <author>hywan</author>
+    <date>2009-05-30T14:49:46.662505Z</date>
+    <msg>Forget to add the argument for the exception format message.</msg>
+    <paths>
+      <path action="M">Framework/File/Finder.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="352">
+    <author>hywan</author>
+    <date>2009-05-29T19:10:50.469540Z</date>
+    <msg>Correct a bug: do not reset node childs if node has already defined childs, e.g. it is possible if loops are allowed.</msg>
+    <paths>
+      <path action="M">Framework/Graph/AdjacencyList.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="351">
+    <author>hywan</author>
+    <date>2009-05-29T19:04:20.481291Z</date>
+    <msg>Enable user to allow or disallow loop in the ACL graph directly from the Hoa_Acl class.</msg>
+    <paths>
+      <path action="M">Framework/Acl/Acl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="350">
+    <author>hywan</author>
+    <date>2009-05-29T18:28:09.052297Z</date>
+    <msg>Correct a typo in the API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Controller/Dispatcher/Action.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="349">
+    <author>hywan</author>
+    <date>2009-05-29T18:27:47.227628Z</date>
+    <msg>Mania is back: formatting spaces.</msg>
+    <paths>
+      <path action="M">Framework/Controller/Dispatcher/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="348">
+    <author>hywan</author>
+    <date>2009-05-29T18:27:19.521977Z</date>
+    <msg>Mania is back: formatting spaces.</msg>
+    <paths>
+      <path action="M">Framework/Controller/Front.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="347">
+    <author>hywan</author>
+    <date>2009-05-29T18:27:07.358813Z</date>
+    <msg>Check if the PDO extension is loaded before using it.</msg>
+    <paths>
+      <path action="M">Framework/Database/Dal/AbstractLayer/Pdo/Pdo.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="346">
+    <author>hywan</author>
+    <date>2009-05-29T18:25:10.743309Z</date>
+    <msg>Bye bye Hoa_Stack!</msg>
+    <paths>
+      <path action="D">Framework/Stack</path>
+    </paths>
+  </logentry>
+  <logentry revision="345">
+    <author>hywan</author>
+    <date>2009-05-29T17:31:06.696319Z</date>
+    <msg>Implement the new Hoa_Iterator_Interface_Seekable interface and the SPL Countable interface.</msg>
+    <paths>
+      <path action="M">Framework/Iterator/Iterator.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="344">
+    <author>hywan</author>
+    <date>2009-05-29T17:30:12.536521Z</date>
+    <msg>Add the Hoa_Iterator_Interface_Seekable interface, that extends the SPL SeekableIterator interface.</msg>
+    <paths>
+      <path action="A">Framework/Iterator/Interface/Seekable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="343">
+    <author>hywan</author>
+    <date>2009-05-29T17:26:51.629308Z</date>
+    <msg>Correct typos.</msg>
+    <paths>
+      <path action="M">Framework/StdClass/StdClass.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="342">
+    <author>hywan</author>
+    <date>2009-05-29T17:10:21.273315Z</date>
+    <msg>Add the isCalledAutomatically() method to know if the controller is called automically (e.g. from an URL) or manually (e.g. with the data.personal.array).</msg>
+    <paths>
+      <path action="M">Framework/Controller/Dispatcher/Action.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="341">
+    <author>hywan</author>
+    <date>2009-05-29T17:08:09.925998Z</date>
+    <msg>Correct a bug with an ouput data sets into the temporary dispath when having a controllers loop.</msg>
+    <paths>
+      <path action="M">Framework/Controller/Dispatcher/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="340">
+    <author>hywan</author>
+    <date>2009-05-29T17:03:57.311513Z</date>
+    <msg>Mania is back.</msg>
+    <paths>
+      <path action="M">Framework/Controller/Front.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="339">
+    <author>hywan</author>
+    <date>2009-05-29T17:02:01.801845Z</date>
+    <msg>Welcome to the new Hoa_File package!</msg>
+    <paths>
+      <path action="A">Framework/File/Abstract.php</path>
+      <path action="D">Framework/File/Dir.php</path>
+      <path action="A">Framework/File/Directory.php</path>
+      <path action="A">Framework/File/Exception/FileDoesNotExist.php</path>
+      <path action="A">Framework/File/Exception/UploadExtension.php</path>
+      <path action="D">Framework/File/Exception/Upload_Extension.php</path>
+      <path action="M">Framework/File/File.php</path>
+      <path action="A">Framework/File/Finder.php</path>
+      <path action="A">Framework/File/Link.php</path>
+      <path action="A">Framework/File/Temporary.php</path>
+      <path action="A">Framework/File/Undefined.php</path>
+      <path action="D">Framework/File/Util.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="338">
+    <author>hywan</author>
+    <date>2009-05-29T16:55:30.618907Z</date>
+    <msg>Adapt classes to stream context (see last previous revisions). Adapt the super-class to the new IO interfaces.</msg>
+    <paths>
+      <path action="M">Framework/Socket/Connection.php</path>
+      <path action="M">Framework/Socket/Connection/Client.php</path>
+      <path action="M">Framework/Socket/Connection/Server.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="337">
+    <author>hywan</author>
+    <date>2009-05-29T16:51:48.830467Z</date>
+    <msg>Set up a real stream bucket. Add the stream context into stream behavior. Correct a little bug: bad method call when manage the stream buffer.</msg>
+    <paths>
+      <path action="M">Framework/Stream/Stream.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="336">
+    <author>hywan</author>
+    <date>2009-05-29T16:47:44.838792Z</date>
+    <msg>Split the IO interface into two new interfaces: In and Out.</msg>
+    <paths>
+      <path action="M">Framework/Stream/Io.php</path>
+      <path action="A">Framework/Stream/Io/In.php</path>
+      <path action="A">Framework/Stream/Io/Out.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="335">
+    <author>hywan</author>
+    <date>2009-05-29T16:45:09.669332Z</date>
+    <msg>Add four constants: OVERWRITE and DO_NOT_OVERWRITE, to manage if a file already exists, and MAKE_DIRECTORY and DO_NOT_MAKE_DIRECTORY, to manage if a directory does not exist. Correct API documentation and complete some methods prototypes. Move the truncate() method into another interface. Finally, the umask() method is now static.</msg>
+    <paths>
+      <path action="M">Framework/Stream/Io/Touchable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="334">
+    <author>hywan</author>
+    <date>2009-05-29T16:42:00.742081Z</date>
+    <msg>Rename some methods to be in compliance with the Hoa coding and naming standards, and two methods: clearStatisticCache() and clearAllStatisticCaches() to manage the cache of stat() calls.</msg>
+    <paths>
+      <path action="M">Framework/Stream/Io/Statable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="333">
+    <author>hywan</author>
+    <date>2009-05-29T16:38:52.828690Z</date>
+    <msg>Correct a bad PHP constant name: SEEK_CUR instead of SEEK_CURRENT.</msg>
+    <paths>
+      <path action="M">Framework/Stream/Io/Pointable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="332">
+    <author>hywan</author>
+    <date>2009-05-29T16:38:06.136395Z</date>
+    <msg>Remove the first argument of the flush() method.</msg>
+    <paths>
+      <path action="M">Framework/Stream/Io/Bufferable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="331">
+    <author>hywan</author>
+    <date>2009-05-29T16:30:31.504464Z</date>
+    <msg>The wrapper argument can be null when calling a previously declared instance of a context (more logical). Add the contextExists() method. And set the visibility of getContext() method from protected to public.</msg>
+    <paths>
+      <path action="M">Framework/Stream/Context.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="330">
+    <author>hywan</author>
+    <date>2009-04-23T14:53:23.175037Z</date>
+    <msg>Complete the API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Socket/Connection.php</path>
+      <path action="M">Framework/Socket/Connection/Client.php</path>
+      <path action="M">Framework/Socket/Connection/Server.php</path>
+      <path action="M">Framework/Socket/Internet.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="329">
+    <author>hywan</author>
+    <date>2009-04-23T14:49:36.568462Z</date>
+    <msg>Better flags support, and automatically accept data (easier for user, no hack is necessary).</msg>
+    <paths>
+      <path action="M">Framework/Socket/Connection/Server.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="328">
+    <author>hywan</author>
+    <date>2009-04-23T14:47:27.286638Z</date>
+    <msg>The write() method is now faster.</msg>
+    <paths>
+      <path action="M">Framework/Socket/Connection.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="327">
+    <author>hywan</author>
+    <date>2009-04-23T14:40:49.022088Z</date>
+    <msg>Add the setStreamTimeout(), setStreamBlocking(), setStreamBuffer() and disableStreamBuffer() methods.</msg>
+    <paths>
+      <path action="M">Framework/Stream/Stream.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="326">
+    <author>hywan</author>
+    <date>2009-04-23T11:58:08.351214Z</date>
+    <msg>Make some arrangements: edit API documentations and fit the code.</msg>
+    <paths>
+      <path action="M">Framework/Socket/Connection.php</path>
+      <path action="M">Framework/Stream/Io.php</path>
+      <path action="M">Framework/Stream/Io/Lockable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="325">
+    <author>hywan</author>
+    <date>2009-04-22T16:56:05.317941Z</date>
+    <msg>Let's go, commit extra files at least once a month …
+</msg>
+    <paths>
+      <path action="M">Data/Etc/CHANGELOG</path>
+      <path action="M">Data/Etc/CHANGELOG.echo</path>
+      <path action="M">Data/Etc/CHANGELOG.xml</path>
+      <path action="M">Data/Etc/DEPENDENCY</path>
+      <path action="M">Data/Etc/DEPENDENCY.echo</path>
+      <path action="M">Data/Etc/DEPENDENCY.xml</path>
+    </paths>
+  </logentry>
   <logentry revision="324">
     <author>hywan</author>
     <date>2009-04-22T16:53:16.763691Z</date>

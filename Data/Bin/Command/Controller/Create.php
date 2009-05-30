@@ -36,9 +36,9 @@
 import('File.~');
 
 /**
- * Hoa_File_Dir
+ * Hoa_File_Directoryectory
  */
-import('File.Dir');
+import('File.Directory');
 
 /**
  * Hoa_Controller_Router_Pattern
@@ -217,15 +217,12 @@ class CreateCommand extends Hoa_Console_Command_Abstract {
                 'Cannot create the %s controller, because it already exists.',
                 3, $class);
 
+        $c = new Hoa_File($directory . DS . $file, Hoa_File::MODE_TRUNCATE_WRITE);
+        $p = new Hoa_File(HOA_DATA_TEMPLATE . DS . 'PrimaryController.tpl', Hoa_File::MODE_READ);
+
         parent::status(
             'Create the controller file.',
-            false !== Hoa_File::write(
-                $directory . DS . $file,
-                sprintf(
-                    Hoa_File::readAll(HOA_DATA_TEMPLATE . DS . 'PrimaryController.tpl'),
-                    $class
-                )
-            )
+            false !== $c->writeAll(sprintf($p->readAll(), $class))
         );
         parent::status(
             'Create the controller class.',
@@ -260,18 +257,13 @@ class CreateCommand extends Hoa_Console_Command_Abstract {
                 'Cannot create the %s controller, because it already exists.',
                 5, $class);
 
-        Hoa_File_Dir::create($directory . DS . $subdir);
+        Hoa_File_Directory::create($directory . DS . $subdir);
+        $c = new Hoa_File($directory . DS . $subdir . DS . $file, Hoa_File::MODE_TRUNCATE_WRITE);
+        $s = new Hoa_File(HOA_DATA_TEMPLATE . DS . 'SecondaryController.tpl', Hoa_File::MODE_READ);
 
         parent::status(
             'Create the secondary controller file.',
-            false !== Hoa_File::write(
-                $directory . DS . $subdir . DS . $file,
-                sprintf(
-                    Hoa_File::readAll(HOA_DATA_TEMPLATE . DS . 'SecondaryController.tpl'), 
-                    $class,
-                    $pClass
-                )
-            )
+            false !== $c->writeAll(sprintf($s->readAll(), $class, $pClass))
         );
 
         parent::status(

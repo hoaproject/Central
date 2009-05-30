@@ -150,41 +150,52 @@ class DeleteCommand extends Hoa_Console_Command_Abstract {
                                $secondaryName
                            );
         $md5             = md5(time());
+        $h               = null;
 
 
         if(false === $isSecondary) {
 
+            $h = new Hoa_File($directory . $controllerFile, Hoa_File::MODE_READ);
+
             if(file_exists($directory . $controllerFile))
                 parent::status(
                     'Delete the primary controller.',
-                    Hoa_File::move(
-                        $directory . $controllerFile,
+                    $h->move(
                         HOA_DATA_LOSTFOUND . DS . $md5 . DS . $controllerFile,
-                        true
+                        Hoa_Stream_Io_Touchable::DO_NOT_OVERWRITE,
+                        Hoa_Stream_Io_Touchable::MAKE_DIRECTORY
                     )
                 );
+
+            unset($h);
+            $h = new Hoa_File($directory . $controllerDir, Hoa_File::MODE_READ);
 
             if(is_dir($directory . $controllerDir))
                 parent::status(
                     'Delete secondaries controllers.',
-                    Hoa_File::move(
-                        $directory . $controllerDir,
+                    $h->move(
                         HOA_DATA_LOSTFOUND . DS . $md5 . DS . $controllerDir,
-                        true
+                        Hoa_Stream_Io_Touchable::DO_NOT_OVERWRITE,
+                        Hoa_Stream_Io_Touchable::MAKE_DIRECTORY
                     )
                 );
         }
-        else
+        else {
+
+            $h = new Hoa_File($directory . $controllerDir . $actionFile, Hoa_File::MODE_READ);
 
             if(file_exists($directory . $controllerDir . $actionFile))
                 parent::status(
                     'Delete the secondary controller.',
-                    Hoa_File::move(
-                        $directory . $controllerDir . $actionFile,
+                    $h->move(
                         HOA_DATA_LOSTFOUND . DS . $md5 . DS . $controllerDir . $actionFile,
-                        true
+                        Hoa_Stream_Io_Touchable::DO_NOT_OVERWRITE,
+                        Hoa_Stream_Io_Touchable::MAKE_DIRECTORY
                     )
                 );
+        }
+
+        unset($h);
 
 		return HC_SUCCESS;
     }

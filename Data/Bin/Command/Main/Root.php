@@ -137,6 +137,7 @@ class RootCommand extends Hoa_Console_Command_Abstract {
             'main'      => 'The main root, i.e. the highest.',
             'framework' => 'The framework root.',
             'data'      => 'The data root.',
+            'check'     => 'Check with the current path if it matches.',
             'help'      => 'This help.'
         )));
 

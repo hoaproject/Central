@@ -3,7 +3,7 @@
 
 
 \e[31mInformations\e[0m       :
-    - generated at : 2009-04-22T16:54:10.000000Z.
+    - generated at : 2009-05-30T17:14:10.000000Z.
 
 
 \e[33mAcl\e[0m
@@ -30,7 +30,9 @@
 \e[33mFactory\e[0m
                \e[31m(No dependency)\e[0m
 \e[33mFile\e[0m
-               \e[31m(No dependency)\e[0m
+               Stream
+               Iterator
+               Socket
 \e[33mFilter\e[0m
                Factory
 \e[33mForm\e[0m
@@ -63,8 +65,6 @@
                \e[31m(No dependency)\e[0m
 \e[33mSocket\e[0m
                Stream
-\e[33mStack\e[0m
-               \e[31m(No dependency)\e[0m
 \e[33mStdClass\e[0m
                \e[31m(No dependency)\e[0m
 \e[33mStream\e[0m

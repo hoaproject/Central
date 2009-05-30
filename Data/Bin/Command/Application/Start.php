@@ -36,9 +36,9 @@
 import('File.~');
 
 /**
- * Hoa_File_Dir
+ * Hoa_File_Directoryectory
  */
-import('File.Dir');
+import('File.Directory');
 
 /**
  * Hoa_Controller_Router_Pattern
@@ -149,44 +149,50 @@ class StartCommand extends Hoa_Console_Command_Abstract {
 
         parent::status(
             'Create the controller directory.',
-            Hoa_File_Dir::create($controller)
+            Hoa_File_Directory::create($controller)
         );
 
         parent::status(
             'Create the model directory.',
-            Hoa_File_Dir::create($model)
+            Hoa_File_Directory::create($model)
         );
 
         parent::status(
             'Create the view theme directory.',
-            Hoa_File_Dir::create($viewTheme)
+            Hoa_File_Directory::create($viewTheme)
         );
 
         parent::status(
             'Create the view helper directory.',
-            Hoa_File_Dir::create($viewHelper)
+            Hoa_File_Directory::create($viewHelper)
         );
 
         cout(parent::stylize('Files', 'info'));
 
+        $l = new Hoa_File($viewLayout, Hoa_File::MODE_TRUNCATE_WRITE);
+        $b = new Hoa_File($bootstrap,  Hoa_File::MODE_TRUNCATE_WRITE);
+        $h = null;
+
+        if(true === $withLayout)
+            $h = new Hoa_File(HOA_DATA_TEMPLATE . DS . 'ViewLayout.tpl', Hoa_File::MODE_READ);
+        else
+            $h = new Hoa_File(HOA_DATA_TEMPLATE . DS . 'ViewLayoutSimple.tpl', Hoa_File::MODE_READ);
+
         parent::status(
             'Create the default view layout file.',
-            false !== Hoa_File::write(
-                $viewLayout,
-                true === $withLayout
-                    ? Hoa_File::readAll(HOA_DATA_TEMPLATE . DS . 'ViewLayout.tpl')
-                    : Hoa_File::readAll(HOA_DATA_TEMPLATE . DS . 'ViewLayoutSimple.tpl')
-            )
+            false !== $l->writeAll($h->readAll())
         );
+
+        unset($h);
+
+        if(true === $withBootstrap)
+            $h = new Hoa_File(HOA_DATA_TEMPLATE . DS . 'Bootstrap.tpl', Hoa_File::MODE_READ);
+        else
+            $h = new Hoa_File(HOA_DATA_TEMPLATE . DS . 'BootstrapSimple.tpl', Hoa_File::MODE_READ);
 
         parent::status(
             'Create the bootstrap file.',
-            false !== Hoa_File::write(
-                $bootstrap,
-                true === $withBootstrap
-                    ? Hoa_File::readAll(HOA_DATA_TEMPLATE . DS . 'Bootstrap.tpl')
-                    : Hoa_File::readAll(HOA_DATA_TEMPLATE . DS . 'BootstrapSimple.tpl')
-            )
+            false !== $b->writeAll($h->readAll())
         );
 
         return HC_SUCCESS;

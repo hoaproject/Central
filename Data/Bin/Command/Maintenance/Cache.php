@@ -41,9 +41,9 @@ import('Version.~');
 import('File.~');
 
 /**
- * Hoa_File_Util
+ * Hoa_File_Undefined
  */
-import('File.Util');
+import('File.Undefined');
 
 /**
  * Hoa_Configuration_Ini
@@ -244,8 +244,9 @@ class CacheCommand extends Hoa_Console_Command_Abstract {
         foreach($this->file as $i => $file) {
 
             $array = null;
+            $ffile = new Hoa_File($file, Hoa_File::MODE_READ);
 
-            switch(Hoa_File_Util::getExt($file)) {
+            switch($ffile->getExtension()) {
 
                 case 'ini':
                   break;
@@ -267,17 +268,20 @@ class CacheCommand extends Hoa_Console_Command_Abstract {
             }
 
             $filename = substr($file, strrpos($file, '/') + 1);
+            $handle   = new Hoa_File_Undefined($filename);
+            $cFile    = new Hoa_File(
+                $cache . DS . $handle->getFilename() . '.php',
+                Hoa_File::MODE_TRUNCATE_WRITE
+            );
 
             parent::status(
                 'Cache file ' . parent::stylize($filename, 'info') . '.',
-                false !== Hoa_File::write(
-                    $cache . DS . Hoa_File_Util::skipExt($filename) . '.php',
+                false !== $cFile->writeAll(
                     '<?php ' . "\n\n" .
                     '/**' . "\n" .
                     ' * Generated the ' . date('Y-m-d\TH:i:s.000000\Z', time()) . ".\n" .
                     ' */' . "\n\n" .
-                    'return ' . var_export($array, true) . ';',
-                    Hoa_File::MODE_WRITE
+                    'return ' . var_export($array, true) . ';'
                 )
             );
         }

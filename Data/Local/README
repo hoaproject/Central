@@ -1,0 +1,3 @@
+Pour les paquetages, SQLite ici.
+Attention à poser un verrou de façon à ne pas pouvoir installer des paquetages
+en parallèle (merci port) !
