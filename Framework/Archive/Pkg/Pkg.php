@@ -47,6 +47,16 @@ import('Archive.Pkg.Exception');
 import('File.~');
 
 /**
+ * Hoa_File_Directory
+ */
+import('File.Directory');
+
+/**
+ * Hoa_File_Finder
+ */
+import('File.Finder');
+
+/**
  * Class Hoa_Archive_Pkg.
  *
  * Create or "decompress" a package..
@@ -146,15 +156,17 @@ class Hoa_Archive_Pkg {
         $content = $this->view($file);
         $root    = substr($file, 0, -4) . DS;
 
-        Hoa_File_Dir::create($root);
+        Hoa_File_Directory::create($root);
 
         foreach($content['dirs'] as $i => $dir)
-            Hoa_File_Dir::create($root . $dir);
+            Hoa_File_Directory::create($root . $dir);
 
-        foreach($content['files'] as $file => $data)
-            Hoa_File::File::write($root . $file,
-                                  base64_decode($data),
-                                  Hoa_File::MODE_WRITE);
+        foreach($content['files'] as $file => $data) {
+
+            $f = new Hoa_file($root . $file, Hoa_File::MODE_TRUNCATE_WRITE);
+            $f->writeAll(base64_decode($data));
+            $f->close();
+        }
 
         return $root;
     }
@@ -170,15 +182,21 @@ class Hoa_Archive_Pkg {
      */
     protected function dirs ( $dir ) {
 
-        $scan = Hoa_File_Dir::scan($dir, Hoa_File_Dir::LIST_DIR);
+        $scan = new Hoa_File_Finder(
+            $dir,
+            Hoa_File_Finder::LIST_ALL |
+            Hoa_File_Finder::LIST_NO_DOT,
+            Hoa_File_Finder::SORT_INAME
+        );
 
-        if(!empty($scan)) {
+        if(!empty($scan))
             foreach($scan as $i => $dirs) {
 
                 $this->content['dirs'][] = $dir . $dirs['name'] . DS;
                 $this->dirs($dir . $dirs['name'] . DS);
             }
-        }
+
+        return;
     }
 
     /**
@@ -193,7 +211,11 @@ class Hoa_Archive_Pkg {
 
         foreach($this->content['dirs'] as $e => $dir) {
 
-            $scan = Hoa_File_Dir::scan($dir, Hoa_File_Dir::FILE_LIST_FILE);
+            $scan = new Hoa_File_Finder(
+                $dir,
+                Hoa_File_Finder::LIST_FILE,
+                Hoa_File_Finder::SORT_INAME
+            );
 
             foreach($scan as $i => $files) {
                 $key   = $dir . $files['name'];
