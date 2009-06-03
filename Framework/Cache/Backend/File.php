@@ -58,9 +58,14 @@ import('Cache.Backend.Abstract');
 import('File.~');
 
 /**
- * Hoa_File_Dir
+ * Hoa_File_Directory
  */
-import('File.Dir');
+import('File.Directory');
+
+/**
+ * Hoa_File_Finder
+ */
+import('File.Finder');
 
 /**
  * Class Hoa_Cache_Backend_File.
@@ -102,11 +107,14 @@ class Hoa_Cache_Backend_File extends Hoa_Cache_Backend_Abstract {
 
         try {
 
-            $content = Hoa_File::readAll($filePath);
+            $file    = new Hoa_File($filePath, Hoa_File::MODE_READ);
+            $content = $file->readAll();
         }
         catch ( Hoa_File_Exception $e ) {
 
-            throw new Hoa_Cache_Exception($e->getMessage(), 0, $filePath);
+            throw new Hoa_Cache_Exception(
+                $e->getFormattedMessage(), $e->getCode()
+            );
         }
 
         if($this->_backendOptions['compress']['active'] === true)
@@ -147,11 +155,17 @@ class Hoa_Cache_Backend_File extends Hoa_Cache_Backend_Abstract {
 
         try {
 
-            $out = Hoa_File::write($filePath, $data);
+            $file = new Hoa_File($filePath, Hoa_File::MODE_TRUNCATE_WRITE);
+            $out  = $file->writeAll($data);
         }
         catch ( Hoa_File_Exception $e ) {
 
-            throw new Hoa_Cache_Exception($e->getMessage(), $e->getCode(), $filePath);
+            var_dump('plplpl');
+
+            throw new Hoa_Cache_Exception(
+                $e->getFormattedMessage(),
+                $e->getCode()
+            );
         }
 
         return $out;
@@ -188,24 +202,37 @@ class Hoa_Cache_Backend_File extends Hoa_Cache_Backend_Abstract {
                 $lifetime = $lifetime;
         }
 
+        $delete = false;
+
         try {
 
-            $cacheDir  = Hoa_File_Dir::scan($this->_backendOptions['cache_directory']);
+            $cacheDir  = new Hoa_File_Finder(
+                $this->_backendOptions['cache_directory'],
+                Hoa_File_Finder::LIST_FILE |
+                Hoa_File_Finder::LIST_NO_DOT,
+                Hoa_File_Finder::SORT_INAME
+            );
             $fileStack = array();
 
             foreach($cacheDir as $i => $fileinfo)
-                if($fileinfo['mtime'] + $lifetime <= time())
-                    $fileStack[] = $this->_backendOptions['cache_directory'] .
-                                   $fileinfo['name'];
+                if($fileinfo->getMTime() + $lifetime <= time())
+                    $fileStack[] = $fileinfo->__toString();
 
-            $delete = Hoa_File::delete($fileStack);
+            foreach($fileStack as $foo => $bar) {
+
+                $file    = new Hoa_File($bar); 
+                $delete |= $file->delete();
+            }
         }
         catch ( Hoa_File_Exception $e ) {
 
-            throw new Hoa_Cache_Exception($e->getMessage(), $e->getCode());
+            throw new Hoa_Cache_Exception(
+                $e->getFormattedMessage(),
+                $e->getCode()
+            );
         }
 
-        return $delete;
+        return (bool) $delete;
     }
 
     /**
@@ -219,10 +246,16 @@ class Hoa_Cache_Backend_File extends Hoa_Cache_Backend_Abstract {
     public function remove ( $id_md5 ) {
 
         try {
-            $delete = Hoa_File::delete($this->getFilePath($id_md5));
+
+            $file = new Hoa_File($this->getFilePath($id_md5));
+            $file->delete();
         }
         catch ( Hoa_File_Exception $e ) {
-            throw new Hoa_Cache_Exception($e->getMessage(), $e->getCode());
+
+            throw new Hoa_Cache_Exception(
+                $e->getFormattedMessage(),
+                $e->getCode()
+            );
         }
 
         return $delete;
@@ -237,12 +270,11 @@ class Hoa_Cache_Backend_File extends Hoa_Cache_Backend_Abstract {
      */
     protected function getFilePath ( $filename ) {
 
-        $ext = '';
-        if($this->_backendOptions['compress']['active'] === true) $ext .= '.gz';
-        $ext .= '.cache';
-
         return $this->_backendOptions['cache_directory'] .
                $filename .
-               $ext;
+               (true === $this->_backendOptions['compress']['active']
+                    ? '.gz'
+                    : '') .
+               '.cache';
     }
 }
