@@ -42,11 +42,6 @@ require_once 'Framework.php';
 import('Locale.Exception');
 
 /**
- * Hoa_File
- */
-import('File.~');
-
-/**
  * Class Hoa_Locale.
  *
  * Get/Set language, territory, continent, city etc.
@@ -207,11 +202,10 @@ class Hoa_Locale {
      */
     protected function load ( $file = '' ) {
 
-        if(file_exists($this->resourcePath . $file . '.gz.php')) {
-
-            $return = Hoa_File::readAll($this->resourcePath . $file . '.gz.php');
-            return unserialize(gzuncompress($return));
-        }
+        if(file_exists($this->resourcePath . $file . '.gz.php'))
+            return unserialize(gzuncompress(file_get_contents(
+                $this->resourcePath . $file . '.gz.php'
+            )));
         else
             throw new Hoa_Locale_Exception(
                 'File %s.gz.php is not found in %s directory.',
