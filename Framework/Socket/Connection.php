@@ -378,13 +378,13 @@ abstract class Hoa_Socket_Connection
     }
 
     /**
-     * Read a char.
+     * Read a character.
      * It is equivalent to $this->read(1).
      *
      * @access  public
      * @return  string
      */
-    public function readChar ( ) {
+    public function readCharacter ( ) {
 
         return $this->read(1);
     }
@@ -424,7 +424,7 @@ abstract class Hoa_Socket_Connection
         $out = null;
         $tmp = null;
 
-        while(('' != $tmp = $this->readChar()) && $tmp != "\n")
+        while(('' != $tmp = $this->readCharacter()) && $tmp != "\n")
             $out .= $tmp;
 
         return $out;
@@ -441,7 +441,7 @@ abstract class Hoa_Socket_Connection
         $out = null;
         $tmp = null;
 
-        while('' != $tmp = $this->readChar())
+        while('' != $tmp = $this->readCharacter())
             $out .= $tmp;
 
         return $out;
