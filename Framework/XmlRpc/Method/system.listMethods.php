@@ -48,9 +48,14 @@ import('XmlRpc.MethodAbstract');
 import('File.~');
 
 /**
- * Hoa_File_Dir
+ * Hoa_File_Finder
  */
-import('File.Dir');
+import('File.Finder');
+
+/**
+ * Hoa_File_Undefined
+ */
+import('File.Undefined');
 
 /**
  * Class Hoa_XmlRpc_Method_System_ListMethods.
@@ -92,10 +97,15 @@ class Hoa_XmlRpc_Method_System_ListMethods extends Hoa_XmlRpc_Method_Abstract {
     public function get ( ) {
 
         $file   = array();
-        $dir    = Hoa_File_Dir::scan($this->path, Hoa_File_Dir::LIST_FILE);
+        $dir    = new Hoa_File_Finder(
+            $this->path,
+            Hoa_File_Finder::LIST_FILE |
+            Hoa_File_Finder::LIST_VISIBLE,
+            Hoa_File_Finder::SORT_INAME
+        );
 
-        foreach($dir as $i => $fileinfo)
-            $file[] = $this->value(Hoa_File_Util::skipExt($fileinfo['name']), 'string');
+        foreach($dir as $i => $scan)
+            $file[] = $this->value($scan->getFilename(), 'string');
 
         return $this->value($file, 'array')->get();
     }
