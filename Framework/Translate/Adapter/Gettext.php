@@ -115,8 +115,7 @@ class Hoa_Translate_Adapter_Gettext extends Hoa_Translate_Adapter_Abstract {
                 1, $filename);
 
         $old              = $this->filename;
-        $this->filename   = $filename;
-
+        $this->filename   = new Hoa_File($filename, Hoa_File::MODE_READ);
         $this->_translate = $this->unpackData($header);
 
         return $old;
@@ -133,7 +132,7 @@ class Hoa_Translate_Adapter_Gettext extends Hoa_Translate_Adapter_Abstract {
      */
     protected function unpackData ( ) {
 
-        Hoa_File::seek($this->filename, 0);
+        $this->filename->seek(0);
 
         /**
          * The first two words serve the identification of the file.
@@ -154,7 +153,7 @@ class Hoa_Translate_Adapter_Gettext extends Hoa_Translate_Adapter_Abstract {
               break;
 
             default:
-                throw new Hoa_Translate_Exception('%s is not a GNU MO file.',
+                throw new Hoa_Translate_Exception('%s is not a GNU MO file.', 0);
         }
 
         /**
@@ -220,29 +219,30 @@ class Hoa_Translate_Adapter_Gettext extends Hoa_Translate_Adapter_Abstract {
 
 
         // Prepare original strings array.
-        Hoa_File::seek($this->filename, $notsh['O']);
-        $originalStrOffset    = $this->_read(2*$notsh['N'], null);
+        $this->filename->seek($notsh['O']);
+        $originalStrOffset    = $this->_read(2 * $notsh['N'], null);
 
         // Prepare translation strings array.
-        Hoa_File::seek($this->filename, $notsh['T']);
-        $translationStrOffset = $this->_read(2*$notsh['N'], null);
-
-        $headers = '';
+        $this->filename->seek($notsh['T']);
+        $translationStrOffset = $this->_read(2 * $notsh['N'], null);
+        $headers              = null;
 
         for($e = 0, $max = $notsh['N']; $e < $max; $e++) {
 
             if($originalStrOffset[$e*2+1] == 0) {
+
                 if(!empty($header))
                     continue;
-                Hoa_File::seek($this->filename, $translationStrOffset[$e*2+2]);
-                $headers = Hoa_File::read($this->filename, $translationStrOffset[$e*2+1]);
+
+                $this->filename->seek($translationStrOffset[$e * 2 + 2]);
+                $headers = $this->filename->read($translationStrOffset[$e * 2 + 1]);
             }
 
-            Hoa_File::seek($this->filename, $originalStrOffset[$e*2+2]);
-            $key = Hoa_File::read($this->filename, $originalStrOffset[$e*2+1]);
+            $this->filename->seek($originalStrOffset[$e * 2 + 2]);
+            $key = $this->filename->read($originalStrOffset[$e * 2 + 1]);
 
-            Hoa_File::seek($this->filename, $translationStrOffset[$e*2+2]);
-            $return[$key] = Hoa_File::read($this->filename, $translationStrOffset[$e*2+1]);
+            $this->filename->seek($translationStrOffset[$e * 2 + 2]);
+            $return[$key] = $this->filename->read($translationStrOffset[$e * 2 + 1]);
         }
 
         $this->_makeHeaders($headers);
@@ -262,9 +262,9 @@ class Hoa_Translate_Adapter_Gettext extends Hoa_Translate_Adapter_Abstract {
     private function _read ( $bytes, $ptr = 1 ) {
 
         if(false === $this->_bigEndianByte)
-            $return = unpack('V' . $bytes, Hoa_File::read($this->filename, 4*$bytes));
+            $return = unpack('V' . $bytes, $this->filename->read(4 * $bytes));
         else
-            $return = unpack('N' . $bytes, Hoa_File::read($this->filename, 4*$bytes));
+            $return = unpack('N' . $bytes, $this->filename->read(4 * $bytes));
 
         if(isset($return[$ptr]))
             return $return[$ptr];
@@ -297,5 +297,7 @@ class Hoa_Translate_Adapter_Gettext extends Hoa_Translate_Adapter_Abstract {
         }
 
         $this->_headers = $return;
+
+        return;
     }
 }
