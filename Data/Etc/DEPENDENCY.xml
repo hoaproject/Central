@@ -2,7 +2,7 @@
 
 <!--
 Informations       :
-    - generated at : 2009-05-30T17:14:10.000000Z.
+    - generated at : 2009-06-11T19:01:03.000000Z.
 -->
 
 <dependency>
@@ -19,6 +19,7 @@ Informations       :
   <package name="Compress" />
   <package name="Configuration">
     <dependent on="StdClass" />
+    <dependent on="Json" />
     <dependent on="Xml" />
     <dependent on="Yaml" />
   </package>
@@ -50,9 +51,7 @@ Informations       :
   <package name="Json">
     <dependent on="StdClass" />
   </package>
-  <package name="Locale">
-    <dependent on="File" />
-  </package>
+  <package name="Locale" />
   <package name="Mail">
     <dependent on="Socket" />
   </package>
@@ -61,6 +60,7 @@ Informations       :
   <package name="Pom">
     <dependent on="Visitor" />
   </package>
+  <package name="Prototype" />
   <package name="Registry" />
   <package name="Service">
     <dependent on="Xml" />

@@ -5,8 +5,191 @@
 \e[31mInformations\e[0m             :
     - repository path    : /Users/hywan/Development/Hoa/Svn/Repository ;
     - path in repository : /Framework/Trunk/ ;
-    - generated at       : 2009-05-30T20:01:47.000000Z.
+    - generated at       : 2009-06-11T19:01:03.000000Z.
 
+
+\e[33mRev. 396          \e[0m\e[34mAdd the JSON support in Hoa_Configuration!\e[0m
+    At            2009-06-11T16:39:00.849194Z
+    By            hywan
+    \e[32mAdded\e[0m         Framework/Configuration/Json.php
+
+\e[33mRev. 395          \e[0m\e[34mMania: formatting spaces and parentheses.\e[0m
+    At            2009-06-11T16:38:38.909476Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Configuration/Ini.php
+    \e[34mModified\e[0m      Framework/Configuration/Xml.php
+    \e[34mModified\e[0m      Framework/Configuration/Yaml.php
+
+\e[33mRev. 394          \e[0m\e[34mCorrect a “bug” in the __toString() method:
+                  ob_end_clean() instead of ob_end_flush()…\e[0m
+    At            2009-06-11T16:37:52.950727Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Configuration/Configuration.php
+
+\e[33mRev. 393          \e[0m\e[34mJust some minor changes: bash to sh, usage messsage is
+                  better and exit value is better.\e[0m
+    At            2009-06-11T15:23:59.379677Z
+    By            hywan
+    \e[34mModified\e[0m      Data/Etc/echoe
+
+\e[33mRev. 392          \e[0m\e[34mChange API documentation.\e[0m
+    At            2009-06-11T15:16:56.916774Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Filter.php
+
+\e[33mRev. 391          \e[0m\e[34mPrepare the new version.\e[0m
+    At            2009-06-11T15:14:03.823921Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Version/Version.php
+
+\e[33mRev. 390          \e[0m\e[34mTemporary commit.\e[0m
+    At            2009-06-11T15:11:42.853977Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Pom/NOTE
+
+\e[33mRev. 389          \e[0m\e[34mThis package is too bad. Let depreciate it for a moment…\e[0m
+    At            2009-06-11T15:10:05.848370Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/XmlRpc/Client.php
+    \e[34mModified\e[0m      Framework/XmlRpc/Method/system.listMethods.php
+
+\e[33mRev. 388          \e[0m\e[34mOops, forget to change that (send() to writeAll()).\e[0m
+    At            2009-06-11T15:07:35.784776Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Mail/Protocol/Smtp.php
+
+\e[33mRev. 387          \e[0m\e[34mAdapt Hoa_Translate_Adapter_Gettext class to the new
+                  Hoa_File package.\e[0m
+    At            2009-06-11T14:55:44.447512Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Translate/Adapter/Gettext.php
+
+\e[33mRev. 386          \e[0m\e[34mAdapt Hoa_Mail to the new Hoa_Socket package. This is an old
+                  package, it will be rewrite totally again soon.\e[0m
+    At            2009-06-11T14:46:34.937627Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Mail/Protocol/Abstract.php
+    \e[34mModified\e[0m      Framework/Mail/Protocol/Smtp.php
+
+\e[33mRev. 385          \e[0m\e[34mControl errors with the error control operation: it's a
+                  trick to manage error with the return statement higher in
+                  the calls-stack.\e[0m
+    At            2009-06-11T14:21:09.598847Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Socket/Connection/Client.php
+    \e[34mModified\e[0m      Framework/Socket/Connection/Server.php
+
+\e[33mRev. 384          \e[0m\e[34mLet errors go done in the calls stack. And solve a bug with
+                  the Hoa_File::readAll() method and Hoa_Stream_Filter,
+                  because of the file_get_contents()'s needs and behavior.\e[0m
+    At            2009-06-08T18:44:37.109524Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/File/File.php
+
+\e[33mRev. 383          \e[0m\e[34mAdapt the Hoa_Socket_Connection class to the new IO stream
+                  interfaces (please, see the previous revision to get more
+                  infomations).\e[0m
+    At            2009-06-08T18:42:18.128658Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Socket/Connection.php
+
+\e[33mRev. 382          \e[0m\e[34mChange the readChar() and writeChar() methods to
+                  readCharacter() and writeCharacter(). More meaningfull.\e[0m
+    At            2009-06-08T18:40:50.914937Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Io/In.php
+    \e[34mModified\e[0m      Framework/Stream/Io/Out.php
+
+\e[33mRev. 381          \e[0m\e[34mHoa_Stream_Filter now extends the Hoa_Stream class (and
+                  cannot be instanciated because of its abstract declaration).
+                  It allows the class to call the Hoa_Stream::getStream()
+                  protected method. All of that for the user interaction: he
+                  could give a resource or a Hoa_Stream object when appening
+                  or prepending a new filter on a stream.\e[0m
+    At            2009-06-08T18:39:41.852952Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Filter.php
+
+\e[33mRev. 380          \e[0m\e[34mAdd methods to force stream-childs classes to always use a
+                  stream resource instead of a stream name as much as
+                  possible. It solves a problem with Hoa_Stream_Filter and
+                  Hoa_File::readAll() where file_get_contents() is based on a
+                  stream name and opens a new stream resource that
+                  Hoa_Stream_Filter cannot catch. It's a bit complex but works
+                  nice :).\e[0m
+    At            2009-06-08T18:35:51.452657Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Stream.php
+
+\e[33mRev. 379          \e[0m\e[34mMania: formatting a method spaces.\e[0m
+    At            2009-06-08T18:31:18.738960Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Filter/Default.php
+
+\e[33mRev. 378          \e[0m\e[34mContext register is now case-unsensitive.\e[0m
+    At            2009-06-08T18:30:12.534434Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Context.php
+
+\e[33mRev. 377          \e[0m\e[34mWhat's that?\e[0m
+    At            2009-06-08T18:29:23.253217Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Bucket.php
+
+\e[33mRev. 376          \e[0m\e[34mAdd the new Hoa_Prototype package! It enables user to make a
+                  Prototype-based programming in an Object-Oriented
+                  Programming context.\e[0m
+    At            2009-06-05T17:49:00.775634Z
+    By            hywan
+    \e[32mAdded\e[0m         Framework/Prototype
+    \e[32mAdded\e[0m         Framework/Prototype/Exception.php
+    \e[32mAdded\e[0m         Framework/Prototype/Prototype.php
+
+\e[33mRev. 374          \e[0m\e[34mRemove the Hoa_File dependency.\e[0m
+    At            2009-06-03T19:06:51.637214Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Locale/Locale.php
+
+\e[33mRev. 373          \e[0m\e[34mAdapt the code because of its dependency with Hoa_File.\e[0m
+    At            2009-06-03T19:03:44.748082Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Cache/Backend/File.php
+
+\e[33mRev. 372          \e[0m\e[34mControl errors with the error control operator: it's a trick
+                  to manage error with the return statement higher in the call
+                  stack.\e[0m
+    At            2009-06-03T19:02:58.992456Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/File/File.php
+
+\e[33mRev. 371          \e[0m\e[34mEdit class according to the previous revisions about the new
+                  Hoa_File package.\e[0m
+    At            2009-06-01T20:12:55.953270Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Archive/Pkg/Pkg.php
+
+\e[33mRev. 368          \e[0m\e[34mRefresh the Data/ directory.\e[0m
+    At            2009-05-30T18:07:47.448564Z
+    By            hywan
+    \e[34mModified\e[0m      Data/Bin/Command/Application/Start.php
+    \e[34mModified\e[0m      Data/Bin/Command/Controller/Create.php
+    \e[34mModified\e[0m      Data/Bin/Command/Controller/Delete.php
+    \e[34mModified\e[0m      Data/Bin/Command/Main/Root.php
+    \e[34mModified\e[0m      Data/Bin/Command/Maintenance/Cache.php
+    \e[34mModified\e[0m      Data/Configuration/Cache/Cache.php
+    \e[34mModified\e[0m      Data/Configuration/Cache/Console.php
+    \e[34mModified\e[0m      Data/Configuration/Cache/Controller.php
+    \e[34mModified\e[0m      Data/Configuration/Cache/Database.php
+    \e[32mAdded\e[0m         Data/Configuration/Cache/Hoa.php
+    \e[32mAdded\e[0m         Data/Configuration/Hoa.yml
+    \e[34mModified\e[0m      Data/Etc/CHANGELOG
+    \e[34mModified\e[0m      Data/Etc/CHANGELOG.echo
+    \e[34mModified\e[0m      Data/Etc/CHANGELOG.xml
+    \e[34mModified\e[0m      Data/Etc/DEPENDENCY
+    \e[34mModified\e[0m      Data/Etc/DEPENDENCY.echo
+    \e[34mModified\e[0m      Data/Etc/DEPENDENCY.xml
+    \e[32mAdded\e[0m         Data/Local
+    \e[32mAdded\e[0m         Data/Local/README
 
 \e[33mRev. 367          \e[0m\e[34mCorrect a bug with a stupid static variable!\e[0m
     At            2009-05-30T18:01:47.083265Z

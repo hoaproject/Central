@@ -7,8 +7,9 @@ Summary
   Introduction  ............................................................  19
   Release informations  ....................................................  27
   Special notices for upgrading  ...........................................  34
-    0.3.7b to 0.4.0b  ......................................................  37
-  New features in 0.4.0b  ..................................................  44
+    0.4.3b to 0.4.3b  ......................................................
+    0.3.7b to 0.4.0b  ......................................................  
+  New features in 0.4.3b  ..................................................  44
   Installation  ............................................................  55
   Project  .................................................................  58
     Site, manuals, download, communauty etc.  ..............................  61
@@ -19,7 +20,7 @@ Summary
 Introduction
 ------------
 
-Welcome  to  Hoa  Framework  0.4.0b.  This is the maintenance release of the Hoa
+Welcome  to  Hoa  Framework  0.4.3b.  This is the maintenance release of the Hoa
 Framework   0.x  series  since  the  0.3.7b  version.  Please,  read  with  much
 attention special notices.
 
@@ -27,12 +28,30 @@ attention special notices.
 Release informations
 --------------------
 
-Hoa Framework 0.4.0b (448).
-Released on 31 october 2008.
+Hoa Framework 0.4.3b (397).
+Released on 15 june 2009.
 
 
 Special notices for upgrading
 -----------------------------
+
+  0.4.0b to 0.4.3b
+
+The  Hoa_StdClass  has  been  changed.  Take  care of its behavior. Please, read
+revisions 119, 120 and 121:
+    /Data/Bin $ ./hoa changelog -r 121:-2 -t -c
+
+The  Hoa_Stream  is up. Thus, the Hoa_File and Hoa_Socket were totally rewrited.
+Please,  read  revisions  300, 302, 305, 310, 315, 316, 317, 318, 321, 322, 323,
+326,  328, 329, 330, 338, 339, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363,
+364, 365, 367, 372, 383, 384 and 385.
+
+The   Hoa_Session_Exception_*  classes  are  now  well-named  and  have  a  good
+inheritance. You can remove your tricks.
+
+The Hoa_Stack package is dead. Please, see revision 346.
+
+The Hoa_XmlRpc package is temporary depreciated! Please, see revision 389.
 
   0.3.7b to 0.4.0b
 
@@ -41,12 +60,17 @@ because  they  were not following Hoa naming conventions. Please, read revisions
 301, 300, and 225, thank you :
     /Data/Bin $ ./hoa changelog -r 301,300,225 -t -c
 
-New features in 0.4.0b
+New features in 0.4.3b
 ----------------------
 
 Please,  read  the  changelog  from  the previous revision number to the current
 prevision number :
     /Data/Bin $ ./hoa changelog -r HEAD:PREV -t -c
+
+We  can notice new packages, like Hoa_Json, Hoa_Observer, Hoa_Pom, Hoa_Protoype,
+Hoa_Stream, Hoa_Test and Hoa_Visitor.
+The package Hoa_File and Hoa_Socket were totally rewrited. We have a real stream
+support now.
 
 
 Installation
@@ -60,9 +84,11 @@ Project
 
   Site, manuals, download, communauty etc.
 
-Hoa   Framework   web   site   should  be  found  at  the  following  address  :
-<http://hoa-project.net>.   At   this  address  is  placed  differents  manuals,
-download section, communauty support etc.
+Hoa Framework web site should be found at the following address:
+  <http://hoa-project.net>
+At  this  address  is  placed  differents  manuals, download section, communauty
+support etc. The download section is directly accessible at:
+  <http://download.hoa-project.net>.
 
   License
 

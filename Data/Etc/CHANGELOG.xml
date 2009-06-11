@@ -4,10 +4,244 @@
 Informations             :
     - repository path    : /Users/hywan/Development/Hoa/Svn/Repository ;
     - path in repository : /Framework/Trunk/ ;
-    - generated at       : 2009-05-30T20:01:47.000000Z.
+    - generated at       : 2009-06-11T19:01:03.000000Z.
 -->
 
 <log>
+  <logentry revision="396">
+    <author>hywan</author>
+    <date>2009-06-11T18:39:00.849194Z</date>
+    <msg>Add the JSON support in Hoa_Configuration!</msg>
+    <paths>
+      <path action="A">Framework/Configuration/Json.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="395">
+    <author>hywan</author>
+    <date>2009-06-11T18:38:38.909476Z</date>
+    <msg>Mania: formatting spaces and parentheses.</msg>
+    <paths>
+      <path action="M">Framework/Configuration/Ini.php</path>
+      <path action="M">Framework/Configuration/Xml.php</path>
+      <path action="M">Framework/Configuration/Yaml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="394">
+    <author>hywan</author>
+    <date>2009-06-11T18:37:52.950727Z</date>
+    <msg>Correct a “bug” in the __toString() method: ob_end_clean() instead of ob_end_flush()…</msg>
+    <paths>
+      <path action="M">Framework/Configuration/Configuration.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="393">
+    <author>hywan</author>
+    <date>2009-06-11T17:23:59.379677Z</date>
+    <msg>Just some minor changes: bash to sh, usage messsage is better and exit value is better.</msg>
+    <paths>
+      <path action="M">Data/Etc/echoe</path>
+    </paths>
+  </logentry>
+  <logentry revision="392">
+    <author>hywan</author>
+    <date>2009-06-11T17:16:56.916774Z</date>
+    <msg>Change API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Stream/Filter.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="391">
+    <author>hywan</author>
+    <date>2009-06-11T17:14:03.823921Z</date>
+    <msg>Prepare the new version.</msg>
+    <paths>
+      <path action="M">Framework/Version/Version.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="390">
+    <author>hywan</author>
+    <date>2009-06-11T17:11:42.853977Z</date>
+    <msg>Temporary commit.</msg>
+    <paths>
+      <path action="M">Framework/Pom/NOTE</path>
+    </paths>
+  </logentry>
+  <logentry revision="389">
+    <author>hywan</author>
+    <date>2009-06-11T17:10:05.848370Z</date>
+    <msg>This package is too bad. Let depreciate it for a moment…</msg>
+    <paths>
+      <path action="M">Framework/XmlRpc/Client.php</path>
+      <path action="M">Framework/XmlRpc/Method/system.listMethods.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="388">
+    <author>hywan</author>
+    <date>2009-06-11T17:07:35.784776Z</date>
+    <msg>Oops, forget to change that (send() to writeAll()).</msg>
+    <paths>
+      <path action="M">Framework/Mail/Protocol/Smtp.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="387">
+    <author>hywan</author>
+    <date>2009-06-11T16:55:44.447512Z</date>
+    <msg>Adapt Hoa_Translate_Adapter_Gettext class to the new Hoa_File package.</msg>
+    <paths>
+      <path action="M">Framework/Translate/Adapter/Gettext.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="386">
+    <author>hywan</author>
+    <date>2009-06-11T16:46:34.937627Z</date>
+    <msg>Adapt Hoa_Mail to the new Hoa_Socket package. This is an old package, it will be rewrite totally again soon.</msg>
+    <paths>
+      <path action="M">Framework/Mail/Protocol/Abstract.php</path>
+      <path action="M">Framework/Mail/Protocol/Smtp.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="385">
+    <author>hywan</author>
+    <date>2009-06-11T16:21:09.598847Z</date>
+    <msg>Control errors with the error control operation: it's a trick to manage error with the return statement higher in the calls-stack.</msg>
+    <paths>
+      <path action="M">Framework/Socket/Connection/Client.php</path>
+      <path action="M">Framework/Socket/Connection/Server.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="384">
+    <author>hywan</author>
+    <date>2009-06-08T20:44:37.109524Z</date>
+    <msg>Let errors go done in the calls stack. And solve a bug with the Hoa_File::readAll() method and Hoa_Stream_Filter, because of the file_get_contents()'s needs and behavior.</msg>
+    <paths>
+      <path action="M">Framework/File/File.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="383">
+    <author>hywan</author>
+    <date>2009-06-08T20:42:18.128658Z</date>
+    <msg>Adapt the Hoa_Socket_Connection class to the new IO stream interfaces (please, see the previous revision to get more infomations).</msg>
+    <paths>
+      <path action="M">Framework/Socket/Connection.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="382">
+    <author>hywan</author>
+    <date>2009-06-08T20:40:50.914937Z</date>
+    <msg>Change the readChar() and writeChar() methods to readCharacter() and writeCharacter(). More meaningfull.</msg>
+    <paths>
+      <path action="M">Framework/Stream/Io/In.php</path>
+      <path action="M">Framework/Stream/Io/Out.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="381">
+    <author>hywan</author>
+    <date>2009-06-08T20:39:41.852952Z</date>
+    <msg>Hoa_Stream_Filter now extends the Hoa_Stream class (and cannot be instanciated because of its abstract declaration). It allows the class to call the Hoa_Stream::getStream() protected method. All of that for the user interaction: he could give a resource or a Hoa_Stream object when appening or prepending a new filter on a stream.</msg>
+    <paths>
+      <path action="M">Framework/Stream/Filter.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="380">
+    <author>hywan</author>
+    <date>2009-06-08T20:35:51.452657Z</date>
+    <msg>Add methods to force stream-childs classes to always use a stream resource instead of a stream name as much as possible. It solves a problem with Hoa_Stream_Filter and Hoa_File::readAll() where file_get_contents() is based on a stream name and opens a new stream resource that Hoa_Stream_Filter cannot catch. It's a bit complex but works nice :).</msg>
+    <paths>
+      <path action="M">Framework/Stream/Stream.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="379">
+    <author>hywan</author>
+    <date>2009-06-08T20:31:18.738960Z</date>
+    <msg>Mania: formatting a method spaces.</msg>
+    <paths>
+      <path action="M">Framework/Stream/Filter/Default.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="378">
+    <author>hywan</author>
+    <date>2009-06-08T20:30:12.534434Z</date>
+    <msg>Context register is now case-unsensitive.</msg>
+    <paths>
+      <path action="M">Framework/Stream/Context.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="377">
+    <author>hywan</author>
+    <date>2009-06-08T20:29:23.253217Z</date>
+    <msg>What's that?</msg>
+    <paths>
+      <path action="M">Framework/Stream/Bucket.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="376">
+    <author>hywan</author>
+    <date>2009-06-05T19:49:00.775634Z</date>
+    <msg>Add the new Hoa_Prototype package! It enables user to make a Prototype-based programming in an Object-Oriented Programming context.</msg>
+    <paths>
+      <path action="A">Framework/Prototype</path>
+      <path action="A">Framework/Prototype/Exception.php</path>
+      <path action="A">Framework/Prototype/Prototype.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="374">
+    <author>hywan</author>
+    <date>2009-06-03T21:06:51.637214Z</date>
+    <msg>Remove the Hoa_File dependency.</msg>
+    <paths>
+      <path action="M">Framework/Locale/Locale.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="373">
+    <author>hywan</author>
+    <date>2009-06-03T21:03:44.748082Z</date>
+    <msg>Adapt the code because of its dependency with Hoa_File.</msg>
+    <paths>
+      <path action="M">Framework/Cache/Backend/File.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="372">
+    <author>hywan</author>
+    <date>2009-06-03T21:02:58.992456Z</date>
+    <msg>Control errors with the error control operator: it's a trick to manage error with the return statement higher in the call stack.</msg>
+    <paths>
+      <path action="M">Framework/File/File.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="371">
+    <author>hywan</author>
+    <date>2009-06-01T22:12:55.953270Z</date>
+    <msg>Edit class according to the previous revisions about the new Hoa_File package.</msg>
+    <paths>
+      <path action="M">Framework/Archive/Pkg/Pkg.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="368">
+    <author>hywan</author>
+    <date>2009-05-30T20:07:47.448564Z</date>
+    <msg>Refresh the Data/ directory.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Application/Start.php</path>
+      <path action="M">Data/Bin/Command/Controller/Create.php</path>
+      <path action="M">Data/Bin/Command/Controller/Delete.php</path>
+      <path action="M">Data/Bin/Command/Main/Root.php</path>
+      <path action="M">Data/Bin/Command/Maintenance/Cache.php</path>
+      <path action="M">Data/Configuration/Cache/Cache.php</path>
+      <path action="M">Data/Configuration/Cache/Console.php</path>
+      <path action="M">Data/Configuration/Cache/Controller.php</path>
+      <path action="M">Data/Configuration/Cache/Database.php</path>
+      <path action="A">Data/Configuration/Cache/Hoa.php</path>
+      <path action="A">Data/Configuration/Hoa.yml</path>
+      <path action="M">Data/Etc/CHANGELOG</path>
+      <path action="M">Data/Etc/CHANGELOG.echo</path>
+      <path action="M">Data/Etc/CHANGELOG.xml</path>
+      <path action="M">Data/Etc/DEPENDENCY</path>
+      <path action="M">Data/Etc/DEPENDENCY.echo</path>
+      <path action="M">Data/Etc/DEPENDENCY.xml</path>
+      <path action="A">Data/Local</path>
+      <path action="A">Data/Local/README</path>
+    </paths>
+  </logentry>
   <logentry revision="367">
     <author>hywan</author>
     <date>2009-05-30T20:01:47.083265Z</date>

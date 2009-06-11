@@ -56,7 +56,7 @@ class Hoa_Version {
      *
      * @const string
      */
-    const VERSION           = '0.4.3n';
+    const VERSION           = '0.4.3b';
 
     /**
      * Hoa Framework previous version.
@@ -70,7 +70,7 @@ class Hoa_Version {
      *
      * @const int
      */
-    const REVISION          = 391;
+    const REVISION          = 397;
 
     /**
      * Hoa Framework previous revision number.
