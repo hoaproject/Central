@@ -271,7 +271,7 @@ class Hoa_Configuration {
         ob_start();
         print_r($this->_configs[$this->getId()]);
         $return = ob_get_contents();
-        ob_end_flush();
+        ob_end_clean();
         return $return;
     }
 }
