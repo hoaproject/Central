@@ -43,9 +43,24 @@ require_once 'Framework.php';
 import('Uri.~');
 
 /**
- * Hoa_Socket
+ * Hoa_Socket_Connection_Client
  */
-import('Socket.~');
+import('Socket.Connection.Client');
+
+/**
+ * Hoa_Socket_Internet_DomainName
+ */
+import('Socket.Internet.DomainName');
+
+/**
+ * Hoa_Socket_Internet_Ipv4
+ */
+import('Socket.Internet.Ipv4');
+
+/**
+ * Hoa_Socket_Internet_Ipv6
+ */
+import('Socket.Internet.Ipv6');
 
 /**
  * Hoa_XmlRpc
@@ -88,7 +103,7 @@ class Hoa_XmlRpc_Client extends Hoa_XmlRpc {
     /**
      * Connection to RPC server.
      *
-     * @var Hoa_Socket object
+     * @var Hoa_Socket_Connection_Client object
      */
     protected $connection = null;
 
@@ -189,6 +204,9 @@ class Hoa_XmlRpc_Client extends Hoa_XmlRpc {
         if(!empty($this->scheme))
             $remote .= $this->scheme . '://';
         $remote .= $this->domain . ':' . $this->port . $this->abs_path;
+
+        throw new Hoa_Exception(
+            'This package is depreciated!!', 0);
 
         $this->connection = new Hoa_Socket($remote, null, $this->timeout);
 
