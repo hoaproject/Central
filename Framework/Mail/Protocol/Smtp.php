@@ -48,6 +48,21 @@ import('Mail.Protocol.Exception');
 import('Mail.Protocol.Abstract');
 
 /**
+ * Hoa_Socket_Internet_DomainName
+ */
+import('Socket.Internet.DomainName');
+
+/**
+ * Hoa_Socket_Internet_Ipv4
+ */
+import('Socket.Internet.Ipv4');
+
+/**
+ * Hoa_Socket_Internet_Ipv6
+ */
+import('Socket.Internet.Ipv6');
+
+/**
  * Class Hoa_Mail_Protocol_Smtp.
  *
  * SMTP protocol manager.
@@ -64,25 +79,11 @@ import('Mail.Protocol.Abstract');
 class Hoa_Mail_Protocol_Smtp extends Hoa_Mail_Protocol_Abstract {
 
     /**
-     * Hostame or IP of remote server.
+     * Remote server host.
      *
-     * @var Hoa_Mail_Protocol_Smtp string
+     * @var Hoa_Socket_Internet object
      */
     protected $host = '127.0.0.1';
-
-    /**
-     * Port number.
-     *
-     * @var Hoa_Mail_Protocol_Smtp string
-     */
-    protected $port = null;
-
-    /**
-     * Connection time out.
-     *
-     * @var Hoa_Mail_Protocol_Smtp int
-     */
-    protected $timeout = 30;
 
     /**
      * Indicates a MAIL FROM command has been issued.
@@ -122,21 +123,42 @@ class Hoa_Mail_Protocol_Smtp extends Hoa_Mail_Protocol_Abstract {
      * And see RFC 1893 and 2034 for information about enhanced status codes.
      *
      * @access  public
-     * @param   host     string    Hostname or IP of remote server.
-     * @param   port     int       The port to connection.
-     * @param   timeout  int       Stream time out.
+     * @param   host     Hoa_Socket_Internet    Remote server host.
      * @return  void
      * @throw   Hoa_Socket_Exception
      */
-    public function __construct ( $host = '127.0.0.1', $port = null, $timeout = 30 ) {
+    public function __construct ( Hoa_Socket_Internet $host ) {
 
-        $this->host    = $host;
-        $this->port    = $port;
-        $this->timeout = $timeout;
+        $this->host = $host;
 
-        parent::connect($host, $port, $timeout); // place into $this->stream
+        parent::connect($host);
 
         $this->help();
+    }
+
+    /**
+     * Parse server responses for successful code.
+     *
+     * @access  protected
+     * @param   int        $codeA    Low or unique code.
+     * @param   int        $codeB    High code.
+     * @return  bool
+     * @throw   Hoa_Mail_Protocol_Exception
+     */
+    protected function except ( $codeA, $codeB = null ) {
+
+        if(null !== $codeB)
+            $code = range($codeA, $codeB);
+        else
+            $code = array($codeA);
+
+        list($i, $error) = $this->_socket->scanf('%d%s');
+
+        if(null === $i || !in_array($i, $code))
+            throw new Hoa_Mail_Protocol_Exception(
+                '%d: %s.', 0, array($i, $error));
+
+        return true;
     }
 
     /**
@@ -150,11 +172,13 @@ class Hoa_Mail_Protocol_Smtp extends Hoa_Mail_Protocol_Abstract {
     public function help ( ) {
 
         try {
-            $this->cmdList = $this->stream->send('HELP');
 
-            $this->stream->except(211, 214);
+            $this->cmdList = $this->_socket->send('HELP');
+
+            $this->except(211, 214);
         }
         catch ( Hoa_Socket_Exception $e ) {
+
             $this->cmdList = '';
         }
 
@@ -197,8 +221,8 @@ class Hoa_Mail_Protocol_Smtp extends Hoa_Mail_Protocol_Abstract {
         if(empty($who))
             $who = $this->host;
 
-        $out = $this->stream->send('EHLO ' . $who);
-        $this->stream->except(250);
+        $out = $this->_socket->send('EHLO ' . $who);
+        $this->except(250);
 
         $this->_mail = false;
         $this->_rcpt = false;
@@ -227,8 +251,8 @@ class Hoa_Mail_Protocol_Smtp extends Hoa_Mail_Protocol_Abstract {
         if(preg_match('#(<.*?>)#', $mail, $matches))
             $mail = $matches[1];
 
-        $out = $this->stream->send('MAIL FROM: ' . $mail);
-        $this->stream->except(250);
+        $out = $this->_socket->send('MAIL FROM: ' . $mail);
+        $this->except(250);
 
         $this->_mail = true;
         $this->_rcpt = false;
@@ -257,8 +281,8 @@ class Hoa_Mail_Protocol_Smtp extends Hoa_Mail_Protocol_Abstract {
         if(preg_match('#(<.*?>)#', $mail, $matches))
             $mail = $matches[1];
 
-        $out = $this->stream->send('RCPT TO: ' . $mail);
-        $this->stream->except(250, 251);
+        $out = $this->_socket->send('RCPT TO: ' . $mail);
+        $this->except(250, 251);
 
         $this->_rcpt = true;
         $this->_data = false;
@@ -287,18 +311,18 @@ class Hoa_Mail_Protocol_Smtp extends Hoa_Mail_Protocol_Abstract {
             throw new Hoa_Mail_Protocol_Exception(
                 'No sender reverse path has been supplied', 4);
 
-        $out  = $this->stream->send('DATA')."\n";
-        $this->stream->except(354);
+        $out  = $this->_socket->send('DATA')."\n";
+        $this->except(354);
 
         $data = explode(CRLF, $data);
         foreach($data as $line) {
             if(strpos($line, '.') === 0)
                 $line .= '.' . $line;
-            $out .= $this->stream->send($line)."\n";
+            $out .= $this->_socket->send($line)."\n";
         }
 
-        $out .= $this->stream->send(CRLF . '.');
-        $this->stream->except(250);
+        $out .= $this->_socket->send(CRLF . '.');
+        $this->except(250);
 
         $this->_data = true;
     }
@@ -319,8 +343,8 @@ class Hoa_Mail_Protocol_Smtp extends Hoa_Mail_Protocol_Abstract {
                 'Command %s is not enabled by the remote server %s',
                 5, array('RSET', $this->host));
 
-        $out = $this->stream->send('RSET');
-        $this->stream->except(250, 251);
+        $out = $this->_socket->send('RSET');
+        $this->except(250, 251);
 
         $this->_mail = false;
         $this->_rcpt = false;
@@ -346,8 +370,8 @@ class Hoa_Mail_Protocol_Smtp extends Hoa_Mail_Protocol_Abstract {
                 'Command %s is not enabled by the remote server %s',
                 6, array('VRFY', $this->host));
 
-        $out = $this->stream->send('VRFY ' . $user);
-        $this->stream->except(250, 252);
+        $out = $this->_socket->send('VRFY ' . $user);
+        $this->except(250, 252);
 
         return $out;
     }
@@ -368,8 +392,8 @@ class Hoa_Mail_Protocol_Smtp extends Hoa_Mail_Protocol_Abstract {
                 'Command %s is not enabled by the remote server %s',
                 7, array('NOOP', $this->host));
 
-        $out = $this->stream->send('NOOP');
-        $this->stream->except(250);
+        $out = $this->_socket->send('NOOP');
+        $this->except(250);
 
         return $out;
     }
@@ -384,8 +408,8 @@ class Hoa_Mail_Protocol_Smtp extends Hoa_Mail_Protocol_Abstract {
      */
     public function quit ( ) {
 
-        $out = $this->stream->send('QUIT');
-        $this->stream->except(221);
+        $out = $this->_socket->send('QUIT');
+        $this->except(221);
 
         return $out;
     }
@@ -403,8 +427,8 @@ class Hoa_Mail_Protocol_Smtp extends Hoa_Mail_Protocol_Abstract {
      */
     public function cmd ( $cmd, $codeLow = 250, $codeHigh = null ) {
 
-        $out = $this->stream->send($cmd);
-        $this->stream->except($codeLow, $codeHigh);
+        $out = $this->_socket->send($cmd);
+        $this->except($codeLow, $codeHigh);
 
         return $out;
     }
