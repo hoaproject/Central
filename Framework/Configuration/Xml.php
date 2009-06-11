@@ -93,7 +93,7 @@ class Hoa_Configuration_Xml extends Hoa_Configuration {
 
         parent::__construct($file, $convert);
 
-        $xml           = new Hoa_Xml;
+        $xml           = new Hoa_Xml();
         $configuration = $xml->parse($file, 'FILE', $encoding);
 
         if(parent::CONVERT_TO_OBJECT === $convert)

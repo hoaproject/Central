@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Configuration
- * @subpackage  Hoa_Configuration_Array
+ * @subpackage  Hoa_Configuration_Yaml
  *
  */
 
@@ -92,7 +92,7 @@ class Hoa_Configuration_Yaml extends Hoa_Configuration {
 
         parent::__construct($file, $convert);
 
-        $yaml          = new Hoa_Yaml;
+        $yaml          = new Hoa_Yaml();
         $configuration = $yaml->parse(
                              $yaml->load($file),
                              $doc

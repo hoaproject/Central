@@ -63,7 +63,7 @@ class Hoa_Configuration_Ini extends Hoa_Configuration {
      *
      * @var Hoa_Configuration_Ini string
      */
-    protected $_file = null;
+    protected $_file     = null;
 
     /**
      * Category to select.
