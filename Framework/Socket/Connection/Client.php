@@ -163,7 +163,7 @@ class Hoa_Socket_Connection_Client extends Hoa_Socket_Connection {
         if(true === $this->isPersistent())
             return false;
 
-        return fclose($this->getStream());
+        return @fclose($this->getStream());
     }
 
     /**

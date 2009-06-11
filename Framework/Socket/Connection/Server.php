@@ -184,7 +184,7 @@ class Hoa_Socket_Connection_Server extends Hoa_Socket_Connection {
      */
     public function close ( ) {
 
-        return (bool) (fclose($this->_server) + fclose($this->getStream()));
+        return (bool) (@fclose($this->_server) + @fclose($this->getStream()));
     }
 
     /**
