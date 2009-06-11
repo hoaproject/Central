@@ -38,9 +38,24 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Socket
+ * Hoa_Socket_Connection_Client
  */
-import('Socket.~');
+import('Socket.Connection.Client');
+
+/**
+ * Hoa_Socket_Internet_DomainName
+ */
+import('Socket.Internet.DomainName');
+
+/**
+ * Hoa_Socket_Internet_Ipv4
+ */
+import('Socket.Internet.Ipv4');
+
+/**
+ * Hoa_Socket_Internet_Ipv6
+ */
+import('Socket.Internet.Ipv6');
 
 /**
  * Class Hoa_Mail_Protocol_Abstract.
@@ -59,11 +74,11 @@ import('Socket.~');
 class Hoa_Mail_Protocol_Abstract {
 
     /**
-     * Socket resource.
+     * Socket.
      *
-     * @var Hoa_Socket resource
+     * @var Hoa_Socket_Connection_Client object
      */
-    protected $stream = null;
+    protected $_sockt = null;
 
 
 
@@ -72,16 +87,19 @@ class Hoa_Mail_Protocol_Abstract {
      * Try to open a connection to the remote server.
      *
      * @access  public
-     * @param   host     string    Hostname or IP of remote server.
-     * @param   port     int       The port to connection.
-     * @param   timeout  int       Stream time out.
+     * @param   host     Hoa_Socket_Internet    Remote server, represented by
+     *                                          the Hoa_Socket_Internet_DomainName,
+     *                                          Hoa_Socket_Internet_Ipv4 or
+     *                                          Hoa_Socket_Internet_Ipv4 objects.
      * @return  void
      * @throw   Hoa_Socket_Exception
      */
-    public function connect ( $host = '127.0.0.1', $port = null, $timeout = 30 ) {
+    public function connect ( Hoa_Socket_Internet $host ) {
 
-        $this->stream = new Hoa_Socket($host, $port, $timeout);
-        $this->stream->_connect();
+        $this->_socket = new Hoa_Socket_Connection_Client($host, $port, $timeout);
+        $this->_socket->connect();
+
+        return;
     }
 
     /**
@@ -89,10 +107,12 @@ class Hoa_Mail_Protocol_Abstract {
      * Destroy an opened connection.
      *
      * @access  public
-     * @return  bool
+     * @return  void
      */
     public function disconnect ( ) {
 
-        $this->stream->_disconnect();
+        $this->_socket->disconnect();
+
+        return;
     }
 }
