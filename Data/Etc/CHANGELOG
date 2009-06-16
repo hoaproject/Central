@@ -5,8 +5,21 @@
 \e[31mInformations\e[0m             :
     - repository path    : /Users/hywan/Development/Hoa/Svn/Repository ;
     - path in repository : /Framework/Trunk/ ;
-    - generated at       : 2009-06-11T19:01:03.000000Z.
+    - generated at       : 2009-06-11T19:02:22.000000Z.
 
+
+\e[33mRev. 397          \e[0m\e[34mPrepare the coming out of Hoa 0.4.3!\e[0m
+    At            2009-06-11T17:02:21.966577Z
+    By            hywan
+    \e[34mModified\e[0m      Data/Etc/CHANGELOG
+    \e[34mModified\e[0m      Data/Etc/CHANGELOG.echo
+    \e[34mModified\e[0m      Data/Etc/CHANGELOG.xml
+    \e[34mModified\e[0m      Data/Etc/DEPENDENCY
+    \e[34mModified\e[0m      Data/Etc/DEPENDENCY.echo
+    \e[34mModified\e[0m      Data/Etc/DEPENDENCY.xml
+    \e[34mModified\e[0m      Framework/Version/Version.php
+    \e[34mModified\e[0m      INSTALL
+    \e[34mModified\e[0m      README
 
 \e[33mRev. 396          \e[0m\e[34mAdd the JSON support in Hoa_Configuration!\e[0m
     At            2009-06-11T16:39:00.849194Z

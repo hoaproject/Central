@@ -4,10 +4,26 @@
 Informations             :
     - repository path    : /Users/hywan/Development/Hoa/Svn/Repository ;
     - path in repository : /Framework/Trunk/ ;
-    - generated at       : 2009-06-11T19:01:03.000000Z.
+    - generated at       : 2009-06-11T19:02:22.000000Z.
 -->
 
 <log>
+  <logentry revision="397">
+    <author>hywan</author>
+    <date>2009-06-11T19:02:21.966577Z</date>
+    <msg>Prepare the coming out of Hoa 0.4.3!</msg>
+    <paths>
+      <path action="M">Data/Etc/CHANGELOG</path>
+      <path action="M">Data/Etc/CHANGELOG.echo</path>
+      <path action="M">Data/Etc/CHANGELOG.xml</path>
+      <path action="M">Data/Etc/DEPENDENCY</path>
+      <path action="M">Data/Etc/DEPENDENCY.echo</path>
+      <path action="M">Data/Etc/DEPENDENCY.xml</path>
+      <path action="M">Framework/Version/Version.php</path>
+      <path action="M">INSTALL</path>
+      <path action="M">README</path>
+    </paths>
+  </logentry>
   <logentry revision="396">
     <author>hywan</author>
     <date>2009-06-11T18:39:00.849194Z</date>
