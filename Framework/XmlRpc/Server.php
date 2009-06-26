@@ -151,7 +151,7 @@ class Hoa_XmlRpc_Server extends Hoa_XmlRpc {
         $this->header = trim(substr($this->data, 0, $pos));
         $this->xml    = $xml->parse(substr($this->data, $pos, -1), null);
         $this->method = $this->xml['methodName'];
-        $headers      = split("[\r\n]+", $this->header);
+        $headers      = preg_split("#\r|\n#", $this->header);
 
         foreach($headers as $header)
             header($header);
