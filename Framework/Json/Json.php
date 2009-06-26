@@ -104,11 +104,12 @@ class Hoa_Json extends Hoa_StdClass {
      * Convert a JSON tree into a Hoa_StdClass class.
      *
      * @access  public
-     * @param   string  $json    JSON string.
+     * @param   string  $json     JSON string.
+     * @param   int     $depth    Nesting limit.
      * @return  void
      * @throw   Hoa_Json_Exception
      */
-    public function __construct ( $json = '' ) {
+    public function __construct ( $json = '', $depth = 512 ) {
 
         if(false === function_exists('json_decode'))
             if(false === version_compare(phpversion(), '5.2.0', '>'))
@@ -118,7 +119,10 @@ class Hoa_Json extends Hoa_StdClass {
                 throw new Hoa_Json_Exception(
                     'JSON extension is disabled.', 1);
 
-        $json = json_decode($json, true);
+        if(false === version_compare(phpversion(), '5.3.0', '>'))
+            $json = json_decode($json, true);
+        else
+            $json = json_decode($json, true, $depth);
 
         if(true === $this->hasError())
             throw new Hoa_Json_Exception(
