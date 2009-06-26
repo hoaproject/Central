@@ -433,14 +433,14 @@ class Hoa_Locale {
                 $locale = explode(';', $lc_all);
                 foreach($locale as $i => $value) {
 
-                    list($category, $specLocale) = split('[=]', $value);
+                    list($category, $specLocale) = preg_split('#=#', $value);
 
                     if($specLocale == 'C')
                         continue;
 
                     $specLocale               = substr($specLocale, 0,
                                                        strpos($specLocale, '.'));
-                    list($language, $country) = split('[_-]', $specLocale);
+                    list($language, $country) = preg_split('#_|-#', $specLocale);
 
                     $language = strtolower(substr($language, 0, 2));
                     $region   = $this->findRegionFromCountry(strtoupper($country));
@@ -452,7 +452,7 @@ class Hoa_Locale {
 
                     $specLocale               = substr($lc_all, 0,
                                                        strpos($lc_all, '.'));
-                    list($language, $country) = split('[_-]', $specLocale);
+                    list($language, $country) = preg_split('#_|-#', $specLocale);
 
                     $language = strtolower(substr($language, 0, 2));
                     $region   = $this->findRegionFromCountry(strtoupper($country));
@@ -491,7 +491,7 @@ class Hoa_Locale {
                     if(false === strpos($handle, '_') && false === strpos($handle, '-'))
                         continue;
 
-                    list($language, $region) = split('[_-]', $handle);
+                    list($language, $region) = preg_split('#_|-#', $handle);
                     $return[$match[3]] = strtolower($language) . '_' . strtoupper($region);
                 }
 
