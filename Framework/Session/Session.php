@@ -149,20 +149,28 @@ abstract class Hoa_Session {
 
         Hoa_Session_Option::set($option);
 
-        set_error_handler(array('Hoa_Session_Exception', 'handleStartError'),
-                          E_ALL);
-        @session_start();
-        restore_error_handler();
+        if(false === version_compare(phpversion(), '5.3.0', '>')) {
 
-        if(true === Hoa_Session_Exception::hasStartError()) {
-
-            set_error_handler(array('Hoa_Session_Exception', 'handleNull'),
+            set_error_handler(array('Hoa_Session_Exception', 'handleStartError'),
                               E_ALL);
-            @session_write_close();
+            @session_start();
             restore_error_handler();
-            throw new Hoa_Session_Exception(
-                Hoa_Session_Exception::getStartErrorMessage());
+
+            if(true === Hoa_Session_Exception::hasStartError()) {
+
+                set_error_handler(array('Hoa_Session_Exception', 'handleNull'),
+                                  E_ALL);
+                @session_write_close();
+                restore_error_handler();
+                throw new Hoa_Session_Exception(
+                    Hoa_Session_Exception::getStartErrorMessage());
+            }
         }
+        else
+            if(false === session_start())
+                throw new Hoa_Session_Exception(
+                    'Error when starting session. Cannot send session cookie. ' .
+                    'Headers already sent.', 3);
 
         self::setStart(true);
         self::setWritable(true);
@@ -172,7 +180,7 @@ abstract class Hoa_Session {
         self::identifyMe();
 
         if(self::isExpiredSecond())
-            throw new Hoa_Session_Exception_SessionIsExpired('Session is expired.', 3);
+            throw new Hoa_Session_Exception_SessionIsExpired('Session is expired.', 4);
     }
 
     /**
@@ -190,7 +198,7 @@ abstract class Hoa_Session {
         if(!isset($_SERVER['REMOTE_ADDR']))
             throw new Hoa_Session_Exception(
                 'Cannot prepare the session identity, because the ' .
-                '$_SERVER[\'REMOTE_ADDR\'] variable is not found.', 4);
+                '$_SERVER[\'REMOTE_ADDR\'] variable is not found.', 5);
 
         $_SESSION['__Hoa'] = array(
             'namespace'      => array(),
@@ -217,13 +225,13 @@ abstract class Hoa_Session {
         if(headers_sent($filename, $line))
             throw new Hoa_Session_Exception(
                 'Cannot regenerate session ID ; headers already sent in %s ' .
-                'on line %d.', 5,
+                'on line %d.', 6,
                 array($filename, $line));
 
         if(true !== self::isNamespaceSet('__Hoa'))
             throw new Hoa_Session_Exception(
                 'Cannot regenerate ID, because the session was not ' .
-                'well-started.', 6);
+                'well-started.', 7);
 
         $old = session_id();
         session_regenerate_id();
@@ -245,30 +253,30 @@ abstract class Hoa_Session {
 
         if(false === self::isStarted())
             throw new Hoa_Session_Exception(
-                'Cannot identify a no-started session.', 7);
+                'Cannot identify a no-started session.', 8);
 
         if(!isset($_SESSION['__Hoa']['identity']))
             throw new Hoa_Session_Exception(
-                'Cannot identify the current session.', 8);
+                'Cannot identify the current session.', 9);
 
         $identity = $_SESSION['__Hoa']['identity'];
 
         if(!isset($identity['id']))
             throw new Hoa_Session_Exception(
-                'Cannot identify the current session ; session ID missing.', 9);
+                'Cannot identify the current session ; session ID missing.', 10);
 
         if(!isset($identity['ip']))
             throw new Hoa_Session_Exception(
-                'Cannot identify the current session ; session IP missing.', 10);
+                'Cannot identify the current session ; session IP missing.', 11);
 
         if($identity['id'] !== md5(session_id()))
             throw new Hoa_Session_Exception(
                 'Session is not well-identify ; session ID is not the right ' .
-                'ID.', 11);
+                'ID.', 12);
 
         if($identity['ip'] !== md5($_SERVER['REMOTE_ADDR']))
             throw new Hoa_Session_Exception(
-                'Session is not well-identify ; IP is not the right IP.', 12);
+                'Session is not well-identify ; IP is not the right IP.', 13);
 
         return true;
     }
@@ -300,7 +308,7 @@ abstract class Hoa_Session {
 
         if(false === self::isStarted())
             throw new Hoa_Session_Exception(
-                'Cannot unset a namespace on a no-starded session.', 13);
+                'Cannot unset a namespace on a no-starded session.', 14);
 
         $name     = $namespace;
         if($namespace instanceof Hoa_Session_Namespace)
@@ -308,7 +316,7 @@ abstract class Hoa_Session {
 
         if(true === $_SESSION['__Hoa']['namespace'][$name]['lock'])
             throw new Hoa_Session_Exception(
-                'Namespace %s is locked.', 14, $name);
+                'Namespace %s is locked.', 15, $name);
 
         unset($_SESSION[$name]);
         unset($_SESSION['__Hoa']['namespace'][$name]);
@@ -326,7 +334,7 @@ abstract class Hoa_Session {
 
         if(false === self::isStarted())
             throw new Hoa_Session_Exception(
-                'Cannot unset namespaces on a no-starded session.', 15);
+                'Cannot unset namespaces on a no-starded session.', 16);
 
         $nsidList = $_SESSION['__Hoa']['namespace'];
 
@@ -337,7 +345,7 @@ abstract class Hoa_Session {
 
             if(true === $foo['lock'])
                 throw new Hoa_Session_Exception(
-                    'Namespace %s is locked.', 16, $flash);
+                    'Namespace %s is locked.', 17, $flash);
 
             unset($_SESSION[$id]);
             unset($_SESSION['__Hoa']['namespace'][$id]);
@@ -370,13 +378,13 @@ abstract class Hoa_Session {
 
         if(false === self::isStarted())
             throw new Hoa_Session_Exception(
-                'Cannot unset a flash on a no-starded session.', 17);
+                'Cannot unset a flash on a no-starded session.', 18);
 
         $flashId = '_flashMessage_' . md5($flash);
 
         if(true === $_SESSION['__Hoa']['namespace'][$flashId]['lock'])
             throw new Hoa_Session_Exception(
-                'Namespace %s is locked.', 18, $flash);
+                'Namespace %s is locked.', 19, $flash);
 
         unset($_SESSION[$flashId]);
         unset($_SESSION['__Hoa']['namespace'][$flashId]);
@@ -394,7 +402,7 @@ abstract class Hoa_Session {
 
         if(false === self::isStarted())
             throw new Hoa_Session_Exception(
-                'Cannot unset flashes on a no-starded session.', 19);
+                'Cannot unset flashes on a no-starded session.', 20);
 
         $fidList = $_SESSION['__Hoa']['flash'];
         $_SESSION['__Hoa']['flash'] = array();
@@ -403,7 +411,7 @@ abstract class Hoa_Session {
 
             if(true === $_SESSION['__Hoa']['namespace'][$id]['lock'])
                 throw new Hoa_Session_Exception(
-                    'Namespace %s is locked.', 20, $flash);
+                    'Namespace %s is locked.', 21, $flash);
 
             unset($_SESSION[$id]);
             unset($_SESSION['__Hoa']['namespace'][$id]);
@@ -433,7 +441,7 @@ abstract class Hoa_Session {
         if(false === self::isWritable())
             throw new Hoa_Session_Exception(
                 'Cannot write and close the session, because it is not ' .
-                'writable.', 21);
+                'writable.', 22);
 
         set_error_handler(array('Hoa_Session_Exception', 'handleWriteAndCloseError'),
                           E_ALL);
@@ -492,7 +500,7 @@ abstract class Hoa_Session {
 
         if(true === self::isOnlyReadable())
             throw new Hoa_Session_Exception(
-                'Trying to destroy uninitialized session.', 22);
+                'Trying to destroy uninitialized session.', 23);
 
         set_error_handler(array('Hoa_Session_Exception', 'handleDestroyError'),
                           E_ALL);
@@ -609,12 +617,12 @@ abstract class Hoa_Session {
 
         if(false === self::isStarted())
             throw new Hoa_Session_Exception(
-                'Cannot force a no-started session to expire.', 23);
+                'Cannot force a no-started session to expire.', 24);
 
         if(!is_int($time))
             throw new Hoa_Session_Exception(
                 'The expiration time must be an int, that represents seconds. ' .
-                'Given %s.', 24, gettype($time));
+                'Given %s.', 25, gettype($time));
 
         if(null !== $_SESSION['__Hoa']['expire_second'])
             return;
@@ -650,7 +658,7 @@ abstract class Hoa_Session {
 
         if(false === self::isStarted())
             throw new Hoa_Session_Exception(
-                'Cannot get the expiration time for a no-started session.', 25);
+                'Cannot get the expiration time for a no-started session.', 26);
 
         return $_SESSION['__Hoa']['expire_second'];
     }
@@ -666,7 +674,7 @@ abstract class Hoa_Session {
 
         if(false === self::isStarted())
             throw new Hoa_Session_Exception(
-                'Cannot get the expiration time for a no-started session.', 26);
+                'Cannot get the expiration time for a no-started session.', 27);
 
         return self::getExpireSecond() - time();
     }
@@ -698,7 +706,7 @@ abstract class Hoa_Session {
 
         if(false === self::isStarted())
             throw new Hoa_Session_Exception(
-                'Cannot remember a no-started session.', 27);
+                'Cannot remember a no-started session.', 28);
 
         if(   false !== $overwrite
            || null  === self::getExpireSecond()) {
@@ -721,7 +729,7 @@ abstract class Hoa_Session {
 
         if(false === self::isStarted())
             throw new Hoa_Session_Exception(
-                'Cannot forget a no-started session.', 28);
+                'Cannot forget a no-started session.', 29);
 
         $_SESSION['__Hoa']['expire_second'] = time() - 1;
     }
