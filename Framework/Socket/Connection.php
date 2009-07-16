@@ -346,8 +346,6 @@ abstract class Hoa_Socket_Connection
         return $this->_disconnect;
     }
 
-    // IO interface.
-
     /**
      * Read n characters.
      *
@@ -414,6 +412,19 @@ abstract class Hoa_Socket_Connection
     }
 
     /**
+     * Read an array.
+     * Alias of the $this->scanf() method.
+     *
+     * @access  public
+     * @param   string  $format    Format (see printf's formats).
+     * @return  array
+     */
+    public function readArray ( $format ) {
+
+        return $this->scanf($format);
+    }
+
+    /**
      * Read a line.
      *
      * @access  public
@@ -445,6 +456,18 @@ abstract class Hoa_Socket_Connection
             $out .= $tmp;
 
         return $out;
+    }
+
+    /**
+     * Parse input from a stream according to a format.
+     *
+     * @access  public
+     * @param   string  $format    Format (see printf's formats).
+     * @return  array
+     */
+    public function scanf ( $format ) {
+
+        return sscanf($this->readAll(), $format);
     }
 
     /**
@@ -539,6 +562,20 @@ abstract class Hoa_Socket_Connection
     }
 
     /**
+     * Write an array.
+     *
+     * @access  public
+     * @param   array   $array    Array.
+     * @return  mixed
+     */
+    public function writeArray ( $array) {
+
+        $array = serialize($array);
+
+        return $this->write($array, strlen($array));
+    }
+
+    /**
      * Write all, i.e. as much as possible.
      *
      * @access  public
@@ -560,18 +597,6 @@ abstract class Hoa_Socket_Connection
     public function truncate ( $size ) {
 
         return false;
-    }
-
-    /**
-     * Parse input from a stream according to a format.
-     *
-     * @access  public
-     * @param   string  $format    Format (see printf's formats).
-     * @return  array
-     */
-    public function scanf ( $format ) {
-
-        return sscanf($this->readAll(), $format);
     }
 
     /**
