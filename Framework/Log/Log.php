@@ -42,6 +42,11 @@ require_once 'Framework.php';
 import('Log.Exception');
 
 /**
+ * Hoa_Log_Backtrace
+ */
+import('Log.Backtrace');
+
+/**
  * Hoa_Stream
  */
 import('Stream.~');
@@ -125,41 +130,114 @@ class Hoa_Log {
     const DEBUG         = 64;
 
     /**
+     * Stack index: timestamp.
+     *
+     * @const int
+     */
+    const STACK_TIMESTAMP   = 0;
+
+    /**
+     * Stack index: message.
+     *
+     * @const int
+     */
+    const STACK_MESSAGE     = 1;
+
+    /**
+     * Stack index: priority.
+     *
+     * @const int
+     */
+    const STACK_PRIORITY    = 2;
+
+    /**
+     * Stack index: memory.
+     *
+     * @const int
+     */
+    const STACK_MEMORY      = 3;
+
+    /**
+     * Stack index: memory peak.
+     *
+     * @const int
+     */
+    const STACK_MEMORY_PEAK = 4;
+
+    /**
+     * Singleton.
+     *
+     * @var Hoa_Log object
+     */
+    private static $_instance = null;
+
+    /**
      * Logs stack. The structure is:
      *     * timestamp;
      *     * message;
      *     * priority;
-     *     * memory
-     *     * memoryPeak
-     *     * extra, dependent of the priority:
-     *         - debug
+     *     * memory;
+     *     * memoryPeak.
      *
      * @var Hoa_Log array
      */
-    protected $_stack  = array();
+    protected $_stack         = array();
+
+    /**
+     * Backtrace.
+     *
+     * @var Hoa_Log_Backtrace object
+     */
+    protected $_backtrace     = null;
 
     /**
      * Output stream array.
      *
      * @var Hoa_Log array
      */
-    protected $_output = array();
+    protected $_output        = array();
 
     /**
      * Filters (combination of priorities constants, null means all).
      *
      * @var Hoa_Log int
      */
-    protected $_filter = null;
+    protected $_filter        = null;
 
 
 
     /**
      *
      */
-    public function __construct ( Hoa_Stream $stream ) {
+    private function __construct ( $stream ) {
 
-        $this->addOutputStream($stream);
+        $this->addOutputStreams($stream);
+        $this->_backtrace = new Hoa_Log_Backtrace();
+    }
+
+    /**
+     *
+     */
+    public static function getInstance ( $stream = null ) {
+
+        if(null === self::$_instance)
+            self::$_instance = new self($stream);
+
+        return self::$_instance;
+    }
+
+    /**
+     *
+     */
+    public function addOutputStreams ( $streams ) {
+
+        if(!is_array($streams))
+            $streams = array($streams);
+
+        foreach($streams as $i => $stream)
+            $this->addOutputStream($stream);
+
+        return $this->getOutputStack();
     }
 
     /**
@@ -182,6 +260,75 @@ class Hoa_Log {
 
         $this->_output[$stream->__toString()] = $stream;
 
+        return $this->getOutputStack();
+    }
+
+    /**
+     *
+     */
+    public function log ( $message, $type = self::DEBUG ) {
+
+        $this->_stack[] = array(
+            self::STACK_TIMESTAMP   => microtime(true),
+            self::STACK_MESSAGE     => $message,
+            self::STACK_PRIORITY    => $type,
+            self::STACK_MEMORY      => memory_get_usage(),
+            self::STACK_MEMORY_PEAK => memory_get_peak_usage()
+        );
+
+        $this->_backtrace->debug();
+    }
+
+    /**
+     * Get output stack.
+     *
+     * @access  protected
+     * @return  array
+     */
+    protected function getOutputStack ( ) {
+
         return $this->_output;
     }
+
+    /**
+     * Get the backtrace tree.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getBacktraceTree ( ) {
+
+        return $this->_backtrace->getTree();
+    }
+
+    /**
+     * Get the backtrace hashes array.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getBacktraceHashes ( ) {
+
+        return $this->_backtrace->getHashes();
+    }
+
+    /**
+     * Get the backtrace checkpoints array.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getBacktraceCheckpoints ( ) {
+
+        return $this->_backtrace->getCheckpoints();
+    }
+}
+
+
+/**
+ *
+ */
+function hlog ( $message, $type = Hoa_Log::DEBUG ) {
+
+    return Hoa_Log::getInstance()->log($message, $type);
 }
