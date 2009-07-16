@@ -174,6 +174,19 @@ class Hoa_Php_Io_In extends Hoa_Stream implements Hoa_Stream_Io_In {
     }
 
     /**
+     * Read an array.
+     * Alias of the $this->scanf() method.
+     *
+     * @access  public
+     * @param   string  $format    Format (see printf's formats).
+     * @return  array
+     */
+    public function readArray ( $format ) {
+
+        return $this->scanf($format);
+    }
+
+    /**
      * Read a line.
      *
      * @access  public

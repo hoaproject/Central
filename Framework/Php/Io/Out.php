@@ -186,6 +186,20 @@ class Hoa_Php_Io_Out extends Hoa_Stream implements Hoa_Stream_Io_Out {
     }
 
     /**
+     * Write an array.
+     *
+     * @access  public
+     * @param   array   $array    Array.
+     * @return  mixed
+     */
+    public function writeArray ( Array $array ) {
+
+        $array = var_export($array, true);
+
+        return $this->write($array, strlen($array));
+    }
+
+    /**
      * Write a line.
      *
      * @access  public
