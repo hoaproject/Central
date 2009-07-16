@@ -104,9 +104,10 @@ class Hoa_Log_Backtrace {
     protected function computeTree ( $array, &$tree ) {
 
         $trace = array_pop($array);
-        $key   = $trace['file'] . '-' . $trace['line'];
-        $value = @$trace['class'] . @$trace['type'] . @$trace['function'];
-        $hash  = md5($key . ':' . $value);
+        $hash  = md5(
+            $trace['file'] . '-' . $trace['line'] . ':' .
+            @$trace['class'] . @$trace['type'] . @$trace['function']
+        );
 
         $this->_hashes[$hash][$this->_checkpoint] = $trace;
 
@@ -138,7 +139,8 @@ class Hoa_Log_Backtrace {
     public function debug ( ) {
 
         $array = debug_backtrace();
-        array_shift($array);
+        array_shift($array); // Hoa_Log_Backtrace::debug().
+        //array_shift($array); // Hoa_Log::log().
         $trace = $array[0];
 
         $this->_checkpoints[] = $this->_checkpoint = md5(
@@ -174,6 +176,32 @@ class Hoa_Log_Backtrace {
     }
 
     /**
+     *
+     */
+    public function getTrace ( $hash, $checkpoint = null ) {
+
+        if(!isset($this->_hashes[$hash]))
+            throw new Hoa_Log_Exception(
+                'Cannot reach trace from hash %s, because it does not exist.',
+                0, $hash);
+
+        if(null !== $checkpoint) {
+
+            if(!isset($this->_hashes[$hash][$checkpoint]))
+                throw new Hoa_Log_Exception(
+                    'Cannot reach trace from hash %s for the checkpoint %s, ' .
+                    'because the checkpoint does not exist.',
+                    1, array($hash, $checkpoint));
+
+            return $this->_hashes[$hash][$checkpoint];
+        }
+
+        reset($this->_hashes[$hash]);
+
+        return current($this->_hashes[$hash]);
+    }
+
+    /**
      * Get the checkpoints array.
      *
      * @access  public
@@ -182,5 +210,50 @@ class Hoa_Log_Backtrace {
     public function getCheckpoints ( ) {
 
         return $this->_checkpoints;
+    }
+
+    /**
+     *
+     */
+    private function linearizeTree ( $node, $tail = null ) {
+
+        if(empty($node))
+            return $tail;
+
+        $out = null;
+
+        foreach($node as $sibling => $childs) {
+
+            $t = $this->getTrace($sibling);
+
+            $this->_tricky[] = '    "' . md5($tail . $sibling) . '" [label="' .
+                               @$t['class'] . @$t['type'] . @$t['function'] .
+                               '"]';
+
+            $out .= $this->linearizeTree(
+                $childs,
+                $tail .
+                '    "' . md5($tail . $sibling) . '"' .
+                (!empty($childs)
+                     ? "\n" . '    -> '
+                     : ';' . "\n")
+            );
+        }
+
+        return $out;
+    }
+
+    /**
+     * Print the tree in the DOT language.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function __toString ( ) {
+
+        return 'digraph {' . "\n" .
+               $this->linearizeTree($this->getTree()) . "\n" .
+               implode(';' . "\n", $this->_tricky) . "\n" .
+               '}';
     }
 }
