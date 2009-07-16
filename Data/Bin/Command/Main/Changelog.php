@@ -90,11 +90,11 @@ class ChangelogCommand extends Hoa_Console_Command_Abstract {
         $textPlain  = false;
         $withColour = false;
 
-        if(!file_exists(HOA_DATA_ETC . DS . 'Changelog.xml'))
+        if(!file_exists(HOA_DATA_ETC . DS . 'CHANGELOG.xml'))
             throw new Hoa_Console_Command_Exception(
-                'File %s does not exist.', 0, HOA_DATA_ETC . DS . 'Changelog.xml');
+                'File %s does not exist.', 0, HOA_DATA_ETC . DS . 'CHANGELOG.xml');
 
-        $xml = simplexml_load_file(HOA_DATA_ETC . DS . 'Changelog.xml');
+        $xml = simplexml_load_file(HOA_DATA_ETC . DS . 'CHANGELOG.xml');
 
         while(false !== $c = parent::getOption($v)) {
 
