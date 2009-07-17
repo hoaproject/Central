@@ -40,7 +40,9 @@ require_once 'Framework.php';
 /**
  * Class Hoa_Log_Backtrace.
  *
- * .
+ * Build a backtrace tree. Please, read the API documentation of the class
+ * attributes to well-understand.
+ * A DOT output is available.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -104,10 +106,7 @@ class Hoa_Log_Backtrace {
     protected function computeTree ( $array, &$tree ) {
 
         $trace = array_pop($array);
-        $hash  = md5(
-            $trace['file'] . '-' . $trace['line'] . ':' .
-            @$trace['class'] . @$trace['type'] . @$trace['function']
-        );
+        $hash  = md5(serialize($trace));
 
         $this->_hashes[$hash][$this->_checkpoint] = $trace;
 
@@ -140,15 +139,15 @@ class Hoa_Log_Backtrace {
 
         $array = debug_backtrace();
         array_shift($array); // Hoa_Log_Backtrace::debug().
-        //array_shift($array); // Hoa_Log::log().
-        $trace = $array[0];
 
-        $this->_checkpoints[] = $this->_checkpoint = md5(
-            $trace['file'] . '-' . $trace['line'] . ':' . 
-            @$trace['class'] . @$trace['type'] . @$trace['function']
-        );
+        if(isset($array[0]['class']) && $array[0]['class'] == 'Hoa_Log')
+            array_shift($array); // Hoa_Log::log().
 
-        $this->_tree = $this->computeTree($array, $this->_tree);
+        if(isset($array[0]['function']) && $array[0]['function'] == 'hlog')
+            array_shift($array); // hlog().
+
+        $this->_checkpoints[] = $this->_checkpoint = md5(serialize($array[0]));
+        $this->_tree          = $this->computeTree($array, $this->_tree);
 
         return;
     }
@@ -176,7 +175,13 @@ class Hoa_Log_Backtrace {
     }
 
     /**
+     * Get the trace for a specific hash and for a specific checkpoint
+     * (optional).
      *
+     * @access  public
+     * @param   string  $hash          Hash.
+     * @param   string  $checkpoint    Checkpoint hash.
+     * @return  array
      */
     public function getTrace ( $hash, $checkpoint = null ) {
 
@@ -213,47 +218,69 @@ class Hoa_Log_Backtrace {
     }
 
     /**
+     * Check if a hash is a checkpoint or not.
      *
+     * @access  public
+     * @param   string  $hash    Hash.
+     * @return  bool
      */
-    private function linearizeTree ( $node, $tail = null ) {
+    public function isCheckpoint ( $hash ) {
 
-        if(empty($node))
-            return $tail;
+        return in_array($hash, $this->getCheckpoints());
+    }
+
+    /**
+     * Linearize the backtrace tree in DOT language.
+     *
+     * @access  private
+     * @param   array    $node    Current node.
+     * @return  string
+     */
+    private function linearizeTree ( $node ) {
 
         $out = null;
 
         foreach($node as $sibling => $childs) {
 
-            $t = $this->getTrace($sibling);
+            if(empty($childs))
+                continue;
 
-            $this->_tricky[] = '    "' . md5($tail . $sibling) . '" [label="' .
-                               @$t['class'] . @$t['type'] . @$t['function'] .
-                               '"]';
+            $out .= "\n" . '    "' . $sibling . '"';
 
-            $out .= $this->linearizeTree(
-                $childs,
-                $tail .
-                '    "' . md5($tail . $sibling) . '"' .
-                (!empty($childs)
-                     ? "\n" . '    -> '
-                     : ';' . "\n")
-            );
+            foreach($childs as $k => $v)
+                $out .= "\n" . '    -> "' . $k . '"';
+
+            $out .= ';' . "\n" .
+                    $this->linearizeTree($childs);
         }
 
         return $out;
     }
 
     /**
-     * Print the tree in the DOT language.
+     * Print the tree in DOT language.
      *
      * @access  public
      * @return  string
      */
     public function __toString ( ) {
 
-        return 'digraph {' . "\n" .
-               $this->linearizeTree($this->getTree()) . "\n" .
-               implode(';' . "\n", $this->_tricky) . "\n" .
-               '}';
+        $out = 'digraph {' .
+               $this->linearizeTree($this->getTree()) . "\n";
+
+        foreach($this->getHashes() as $hash => $checkpoints) {
+
+            $t = $this->getTrace($hash);
+
+            $out .= '    "' . $hash . '" [label="' .
+                    @$t['class'] . @$t['type'] . @$t['function'] .
+                    (true === $this->isCheckpoint($hash)
+                        ? '", style="setlinewidth(3)'
+                        : ''
+                    ) .
+                    '"];' . "\n";
+        }
+
+        return $out . '}';
     }
 }

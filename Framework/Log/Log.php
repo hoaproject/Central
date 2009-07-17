@@ -248,7 +248,10 @@ class Hoa_Log {
      *                                 Hoa_Stream_Io_Out).
      * @return  array
      */
-    public function addOutputStream ( Hoa_Stream $stream ) {
+    public function addOutputStream ( Hoa_Stream $stream = null ) {
+
+        if(null === $stream)
+            return;
 
         if(!($stream instanceof Hoa_Stream_Io_Out))
             throw new Hoa_Log_Exception(
@@ -275,6 +278,9 @@ class Hoa_Log {
             self::STACK_MEMORY      => memory_get_usage(),
             self::STACK_MEMORY_PEAK => memory_get_peak_usage()
         );
+
+        foreach($this->getOutputStack() as $i => $output)
+            $output->writeAll($message . "\n");
 
         $this->_backtrace->debug();
     }
@@ -321,6 +327,11 @@ class Hoa_Log {
     public function getBacktraceCheckpoints ( ) {
 
         return $this->_backtrace->getCheckpoints();
+    }
+
+    public function __toString ( ) {
+
+        return $this->_backtrace->__toString();
     }
 }
 
