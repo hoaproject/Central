@@ -45,6 +45,8 @@ require_once 'Exception.php';
 !defined('OS_WIN')    and define('OS_WIN',    !strncasecmp(PHP_OS, 'win', 3));
 !defined('S_64_BITS') and define('S_64_BITS', PHP_INT_SIZE == 8);
 !defined('S_32_BITS') and define('S_32_BITS', !S_64_BITS);
+!defined('SUCCEED')   and define('SUCCEED',   true);
+!defined('FAILED')    and define('FAILED',    false);
 
 /**
  * … and type.
