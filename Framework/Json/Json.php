@@ -62,21 +62,21 @@ import('StdClass.~');
 class Hoa_Json extends Hoa_StdClass {
 
     /**
-     * Error : no error has occured.
+     * Error: no error has occured.
      *
      * @const int
      */
     const ERROR_NONE           = 0;
 
     /**
-     * Error : the maximum stack depth has been exceeded.
+     * Error: the maximum stack depth has been exceeded.
      *
      * @const int
      */
     const ERROR_DEPTH          = 1;
 
     /**
-     * Error : state mismatch (in parser).
+     * Error: state mismatch (in parser).
      * It is not officially in documentation, but it is declared
      * in /php5.3-dev/ext/json/JSON_parser.h (dev = 200901251130).
      *
@@ -85,14 +85,14 @@ class Hoa_Json extends Hoa_StdClass {
     const ERROR_STATE_MISMATCH = 2;
 
     /**
-     * Error : Control character error, possibly incorrectly encoded.
+     * Error: control character error, possibly incorrectly encoded.
      *
      * @const int
      */
     const ERROR_CTRL_CHAR      = 3;
 
     /**
-     * Error : syntax error.
+     * Error: syntax error.
      *
      * @const int
      */
