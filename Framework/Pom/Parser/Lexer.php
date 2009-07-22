@@ -113,7 +113,7 @@ class Hoa_Pom_Parser_Lexer {
      */
     public function __construct ( $source = null, $type = self::SOURCE ) {
 
-        $this->_lineNumber = version_compare(phpversion(), '5.2.2', '>=');
+        $this->_lineNumber = PHP_VERSION_ID >= 50202;
         $this->token($source, $type);
 
         return;

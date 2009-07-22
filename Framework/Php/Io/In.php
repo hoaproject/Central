@@ -208,7 +208,7 @@ class Hoa_Php_Io_In extends Hoa_Stream implements Hoa_Stream_Io_In {
         if(true === $this->isStreamResourceMustBeUsed())
             return trim($this->readLine());
 
-        if(version_compare(phpversion(), '6', '<'))
+        if(PHP_VERSION_ID < 60000)
             $second = true;
         else
             $second = 0;

@@ -303,9 +303,10 @@ class Hoa_StdClass implements Iterator, Countable, Serializable, ArrayAccess {
     public function toJson ( $dummy = null ) {
 
         if(false === function_exists('json_encode'))
-            if(false === version_compare(phpversion(), '5.2.0', '>'))
+            if(PHP_VERSION_ID < 50200)
                 throw new Hoa_StdClass_Exception(
-                    'JSON extension is available since PHP 5.2.0', 0);
+                    'JSON extension is available since PHP 5.2.0; ' .
+                    'current version is %.', 0, PHP_VERSION);
             else
                 throw new Hoa_StdClass_Exception(
                     'JSON extension is disabled.', 1);

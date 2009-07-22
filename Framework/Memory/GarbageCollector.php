@@ -138,11 +138,11 @@ class Hoa_Memory_GarbageCollector {
         if(true === self::$_isVersionOk)
             return true;
 
-        if(version_compare($handle = phpversion(), '5.3.0', '<'))
+        if(PHP_VERSION_ID < 50300)
             if(true === $exception)
                 throw new Hoa_Memory_Exception(
                     'PHP 5.3.0 must be installed to use this package; ' .
-                    'the current version is: %s.', 0, $handle);
+                    'the current version is: %s.', 0, PHP_VERSION);
             else
                 return false;
 
