@@ -80,7 +80,7 @@ class Hoa_Filter_HtmlEntities extends Hoa_Filter_Abstract {
      */
     public function filter ( $string = null ) {
 
-        if(true === (bool) version_compare(phpversion(), '5.2.3', '>='))
+        if(PHP_VERSION_ID >= 50203)
             return htmlentities(
                        (string) $string,
                        $this->getFilterArgument('quoteStyle'),
