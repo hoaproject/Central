@@ -112,14 +112,14 @@ class Hoa_Json extends Hoa_StdClass {
     public function __construct ( $json = '', $depth = 512 ) {
 
         if(false === function_exists('json_decode'))
-            if(false === version_compare(phpversion(), '5.2.0', '>'))
+            if(PHP_VERSION_ID > 50200)
                 throw new Hoa_Json_Exception(
                     'JSON extension is available since PHP 5.2.0.', 0);
             else
                 throw new Hoa_Json_Exception(
                     'JSON extension is disabled.', 1);
 
-        if(false === version_compare(phpversion(), '5.3.0', '>'))
+        if(PHP_VERSION_ID < 50300)
             $json = json_decode($json, true);
         else
             $json = json_decode($json, true, $depth);
@@ -139,7 +139,7 @@ class Hoa_Json extends Hoa_StdClass {
      */
     public function hasError ( ) {
 
-        if(false === version_compare(phpversion(), '5.3.0', '>'))
+        if(PHP_VERSION_ID < 50300)
             return false; // cannot find if an error has occured.
 
         return json_last_error() != self::ERROR_NONE;
@@ -154,7 +154,7 @@ class Hoa_Json extends Hoa_StdClass {
      */
     public function getLastError ( $verbose = false ) {
 
-        if(false === version_compare(phpversion(), '5.3.0', '>')) {
+        if(PHP_VERSION_ID < 50300) {
 
             if(false === $verbose)
                 return self::ERROR_NONE;
