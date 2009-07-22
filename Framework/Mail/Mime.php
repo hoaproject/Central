@@ -156,7 +156,7 @@ class Hoa_Mail_Mime {
         $this->header['header']['Content-Type'] = 'text/plain; charset="' .
                                                   $this->getCharset() . '"';
         $this->header['header']['Date']         = date('D, j M Y H:i:s O');
-        $this->header['header']['X-Mailer']     = 'PHP/' . phpversion();
+        $this->header['header']['X-Mailer']     = 'PHP/' . PHP_VERSION;
         $this->setXPriority($priority);
 
         srand((double) microtime() * 1000000);
