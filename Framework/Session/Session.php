@@ -149,7 +149,7 @@ abstract class Hoa_Session {
 
         Hoa_Session_Option::set($option);
 
-        if(false === version_compare(phpversion(), '5.3.0', '>')) {
+        if(PHP_VERSION_ID < 50300) {
 
             set_error_handler(array('Hoa_Session_Exception', 'handleStartError'),
                               E_ALL);
