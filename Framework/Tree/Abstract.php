@@ -163,7 +163,7 @@ abstract class Hoa_Tree_Abstract
      */
     public function rewind ( ) {
 
-        return rewind($this->_childs);
+        return reset($this->_childs);
     }
 
     /**
