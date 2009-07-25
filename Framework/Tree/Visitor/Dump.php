@@ -80,6 +80,19 @@ class          Hoa_Tree_Visitor_Dump
 
 
     /**
+     * Just change the default transversal order value.
+     *
+     * @access  public
+     * @param   int     $order    Traversal order (please, see the * self::*_ORDER
+     *                            constants).
+     * @return  void
+     */
+    public function __construct ( $order = parent::IN_ORDER ) {
+
+        parent::__construct($order);
+    }
+
+    /**
      * Visit an element.
      *
      * @access  public
