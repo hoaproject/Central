@@ -40,7 +40,7 @@ require_once 'Framework.php';
 /**
  * Interface Hoa_Graph_Node_Interface.
  *
- * Force to implement a method : getNodeId.
+ * Force to implement a method: getNodeId.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
