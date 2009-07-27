@@ -104,19 +104,21 @@ class          Hoa_Tree_Visitor_Dump
 
         $pre      = null;
         $in       = '> ' . str_repeat('  ', $this->_i) .
-                    (string) $element->getValue() . "\n";
+                    $element->getValue() . "\n";
         $post     = null;
         $childs   = $element->getChilds();
         $i        = 0;
-        $c        = count($childs);
+        $max      = floor(count($childs) / 2);
 
         $this->_i++;
 
-        for($max  = floor($c / 2); $i < $max; $i++)
-            $pre  = $childs[$i]->accept($this, $handle);
+        foreach($childs as $id => $child) {
 
-        for(; $i < $c; $i++)
-            $post = $childs[$i]->accept($this, $handle);
+            if($i++ < $max)
+                $pre  .= $child->accept($this, $handle);
+            else
+                $post .= $child->accept($this, $handle);
+        }
 
         $this->_i--;
 

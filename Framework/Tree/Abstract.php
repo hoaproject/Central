@@ -43,6 +43,16 @@ require_once 'Framework.php';
 import('Tree.Exception');
 
 /**
+ * Hoa_Tree_Node_Interface
+ */
+import('Tree.Node.Interface');
+
+/**
+ * Hoa_Tree_Node_SimpleNode
+ */
+import('Tree.Node.SimpleNode');
+
+/**
  * Hoa_Visitor_Element
  */
 import('Visitor.Element');
@@ -70,7 +80,7 @@ abstract class Hoa_Tree_Abstract
     /**
      * Node value.
      *
-     * @var Hoa_Tree_Abstract mixed
+     * @var Hoa_Tree_Node_Interface object
      */
     protected $_value  = null;
 
@@ -100,10 +110,13 @@ abstract class Hoa_Tree_Abstract
      * Set the node value.
      *
      * @access  public
-     * @param   mixed   $value     Node value.
+     * @param   mixed   $value    Node value.
      * @return  mixed
      */
     public function setValue ( $value ) {
+
+        if(!($value instanceof Hoa_Tree_Node_Interface))
+            $value    = new Hoa_Tree_Node_SimpleNode(md5($value), $value);
 
         $old          = $this->_value;
         $this->_value = $value;
@@ -115,7 +128,7 @@ abstract class Hoa_Tree_Abstract
      * Get the node value.
      *
      * @access  public
-     * @return  mixed
+     * @return  Hoa_Tree_Node_Interface
      */
     public function getValue ( ) {
 
@@ -227,17 +240,17 @@ abstract class Hoa_Tree_Abstract
      * Get a specific child.
      *
      * @access  public
-     * @param   int     $i    Child index.
+     * @param   mixed   $nodeId    Node ID.
      * @return  Hoa_Tree_Abstract
      * @throw   Hoa_Tree_Exception
      */
-    public function getChild ( $i) {
+    public function getChild ( $nodeId ) {
 
-        if(!isset($this->_childs[$i]))
+        if(false === $this->childExists($nodeId))
             throw new Hoa_Tree_Exception(
-                'Child number %s does not exist.', 0, $i);
+                'Child %s does not exist.', 0, $nodeId);
 
-        return $this->_childs[$i];
+        return $this->_childs[$nodeId];
     }
 
     /**
@@ -249,6 +262,18 @@ abstract class Hoa_Tree_Abstract
     public function getChilds ( ) {
 
         return $this->_childs;
+    }
+
+    /**
+     * Check if a child exists.
+     *
+     * @access  public
+     * @param   mixed   $nodeId    Node ID.
+     * @return  bool
+     */
+    public function childExists ( $nodeId ) {
+
+        return array_key_exists($nodeId, $this->getChilds());
     }
 
     /**
@@ -287,4 +312,17 @@ abstract class Hoa_Tree_Abstract
      * @return  bool
      */
     abstract public function isNode ( );
+
+    /**
+     * Accept a visitor.
+     *
+     * @access  public
+     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   mixed              &$handle    Handle (reference).
+     * @return  mixed
+     */
+    public function accept ( Hoa_Visitor_Visit $visitor, &$handle = null ) {
+
+        return $visitor->visit($this);
+    }
 }

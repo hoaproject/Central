@@ -95,10 +95,10 @@ class          Hoa_Tree_Visitor_Dot
         if($this->_i == 0) {
 
             $ou  = 'digraph {' . "\n";
-            $t   = '}';
+            $t   = '}' . "\n";
         }
 
-        $foo = '    ' . (string) $element->getValue();
+        $foo = '    ' . $element->getValue();
         $bar = null;
         $this->_i++;
 
