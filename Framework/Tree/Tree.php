@@ -77,7 +77,7 @@ class Hoa_Tree extends Hoa_Tree_Abstract {
                 'Child must be an instance of Hoa_Tree; given %s.',
                 0, get_class($child));
 
-        $this->_childs[] = $child;
+        $this->_childs[$child->getValue()->getId()] = $child;
 
         return $this;
     }
@@ -86,13 +86,13 @@ class Hoa_Tree extends Hoa_Tree_Abstract {
      * Delete a child.
      *
      * @access  public
-     * @param   int     $i    Child index.
+     * @param   mixed   $nodeId    Node ID.
      * @return  Hoa_Tree_Abstract
      * @throw   Hoa_Tree_Exception
      */
-    public function delete ( $i ) {
+    public function delete ( $nodeId ) {
 
-        unset($this->_childs[$i]);
+        unset($this->_childs[$nodeId]);
 
         return $this;
     }
@@ -117,18 +117,5 @@ class Hoa_Tree extends Hoa_Tree_Abstract {
     public function isNode ( ) {
 
         return !empty($this->_childs);
-    }
-
-    /**
-     * Accept a visitor.
-     *
-     * @access  public
-     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
-     * @param   mixed              &$handle    Handle (reference).
-     * @param   mixed
-     */
-    public function accept ( Hoa_Visitor_Visit $visitor, &$handle = null ) {
-
-        return $visitor->visit($this);
     }
 }

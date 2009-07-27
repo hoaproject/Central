@@ -245,34 +245,77 @@ class Hoa_Tree_Binary extends Hoa_Tree_Abstract {
      * Get the left child.
      *
      * @access  public
-     * @return  bool
+     * @return  Hoa_Tree_Binary
      */
     public function getLeft ( ) {
 
-        return $this->_childs[0];
+        if(array_key_exists(0, $this->_childs))
+            return $this->_childs[0];
+
+        return null;
     }
 
     /**
      * Get the right child.
      *
      * @access  public
-     * @return  bool
+     * @return  Hoa_Tree_Binary
      */
     public function getRight ( ) {
 
-        return $this->_childs[1];
+        if(array_key_exists(1, $this->_childs))
+            return $this->_childs[1];
+
+        return null;
     }
 
     /**
-     * Accept a visitor.
+     * Get a specific child (not the same behavior that other trees).
      *
      * @access  public
-     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
-     * @param   mixed              &$handle    Handle (reference).
+     * @param   mixed   $nodeId    Node ID.
+     * @return  Hoa_Tree_Binary
+     * @throw   Hoa_Tree_Exception
+     */
+    public function getChild ( $nodeId ) {
+
+        if(false === $i = $this->_childExists($nodeId))
+            throw new Hoa_Tree_Exception(
+                'Child %s does not exist.', 0, $nodeId);
+
+        return $this->_childs[$i];
+    }
+
+    /**
+     * Check if a child exists.
+     *
+     * @access  public
+     * @param   mixed   $nodeId    Node ID.
+     * @return  bool
+     */
+    public function childExists ( $nodeId ) {
+
+        return false !== $this->_childExist($nodeId);
+    }
+
+    /**
+     * Check if a child exists, and return the child index (0 for left and 1 for
+     * right).
+     *
+     * @access  private
+     * @param   mixed    $nodeId    Node ID.
      * @return  mixed
      */
-    public function accept ( Hoa_Visitor_Visit $visitor, &$handle = null ) {
+    private function _childExists ( $nodeId ) {
 
-        return $visitor->visit($this);
+        if(   (null !== $left = $this->getLeft())
+           &&  $left->getValue()->getId() === $nodeId)
+                return 0;
+
+        if(   (null !== $right = $this->getLeft())
+           &&  $right->getValue()->getId() === $nodeId)
+                return 1;
+
+        return false;
     }
 }
