@@ -79,6 +79,11 @@ class Hoa_Tree_Binary extends Hoa_Tree_Abstract {
                 'Child must be an instance of Hoa_Tree_Binary; given %s.',
                 0, get_class($child));
 
+        if(true === $this->isDouble())
+            throw new Hoa_Tree_Exception(
+                'Cannot insert a new element: left and right child are ' .
+                'already set.', 1);
+
         if(false === $this->isSimpleLeft()) {
 
             $this->_childs[0] = $child;
@@ -92,10 +97,6 @@ class Hoa_Tree_Binary extends Hoa_Tree_Abstract {
 
             return $this;
         }
-
-        throw new Hoa_Tree_Exception(
-            'Cannot insert a new element: left and right child are ' .
-            'already set.', 1);
     }
 
     /**
