@@ -174,13 +174,16 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_ControlStructure extends Hoa_Pom_To
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitControlStructureBreak ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureBreak ( Hoa_Visitor_Element $element,
+                                                 &$handle = null,
+                                                  $eldnah = null ) {
 
         return 'break' .
                (true === $element->hasLevel()
-                    ? ' ' . $element->getLevel()->accept($this->getVisitor(), $handle)
+                    ? ' ' . $element->getLevel()->accept($this->getVisitor(), $handle, $eldnah)
                     : ''
                ) .
                ';';
@@ -192,18 +195,21 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_ControlStructure extends Hoa_Pom_To
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitControlStructureConditionalIf ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureConditionalIf ( Hoa_Visitor_Element $element,
+                                                         &$handle = null,
+                                                          $eldnah = null ) {
 
-        $if     = $element->getIf()->accept($this->getVisitor(), $handle);
+        $if     = $element->getIf()->accept($this->getVisitor(), $handle, $eldnah);
         $elseif = null;
 
         foreach($elemen->getElseifs() as $i => $ei)
-            $elseif .= $ei->accept($this->getVisitor(), $handle);
+            $elseif .= $ei->accept($this->getVisitor(), $handle, $eldnah);
 
         $else   = true === $element->hasElse()
-                      ? $element->getElse()->accept($this->getVisitor(), $handle)
+                      ? $element->getElse()->accept($this->getVisitor(), $handle, $eldnah)
                       : '';
 
         return $if     . "\n" .
@@ -217,15 +223,18 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_ControlStructure extends Hoa_Pom_To
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitControlStructureConditionalIfIf ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureConditionalIfIf ( Hoa_Visitor_Element $element,
+                                                           &$handle = null,
+                                                            $eldnah = null ) {
 
         return 'if(' .
-               $element->getExpression()->accept($this->getVisitor(), $handle) .
+               $element->getExpression()->accept($this->getVisitor(), $handle, $eldnah) .
                ')' .
                $this->getVisitor()
-                    ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle);
+                    ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle, $eldnah);
     }
 
     /**
@@ -234,13 +243,16 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_ControlStructure extends Hoa_Pom_To
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitControlStructureConditionalIfElse ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureConditionalIfElse ( Hoa_Visitor_Element $element,
+                                                             &$handle = null,
+                                                              $eldnah = null ) {
 
         return 'else' .
                $this->getVisitor()
-                    ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle);
+                    ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle, $eldnah);
     }
 
     /**
@@ -249,15 +261,18 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_ControlStructure extends Hoa_Pom_To
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitControlStructureConditionalIfElseif ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureConditionalIfElseif ( Hoa_Visitor_Element $element,
+                                                               &$handle = null,
+                                                                $eldnah = null ) {
 
         return 'elseif(' .
-               $element->getExpression()->accept($this->getVisitor(), $handle) .
+               $element->getExpression()->accept($this->getVisitor(), $handle, $eldnah) .
                ')' .
                $this->getVisitor()
-                    ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle);
+                    ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle, $eldnah);
     }
 
     /**
@@ -266,18 +281,21 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_ControlStructure extends Hoa_Pom_To
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitControlStructureConditionalSwitch ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureConditionalSwitch ( Hoa_Visitor_Element $element,
+                                                             &$handle = null,
+                                                              $eldnah = null ) {
 
-        $expression  = $element->getExpression()->accept($this->getVisitor(), $handle);
+        $expression  = $element->getExpression()->accept($this->getVisitor(), $handle, $eldnah);
         $cases       = null;
 
         foreach($element->getCases() as $i => $case)
-            $cases .= $case->accept($this->getVisitor(), $handle) . "\n";
+            $cases .= $case->accept($this->getVisitor(), $handl, $eldnahe) . "\n";
 
         $default    = true === $element->hasDefault()
-                          ? $element->getDefault()->accept($this->getVisitor(), $handle) . "\n"
+                          ? $element->getDefault()->accept($this->getVisitor(), $handle, $eldnah) . "\n"
                           : '';
 
         return 'switch(' .
@@ -294,15 +312,18 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_ControlStructure extends Hoa_Pom_To
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitControlStructureConditionalSwitchCase ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureConditionalSwitchCase ( Hoa_Visitor_Element $element,
+                                                                 &$handle = null,
+                                                                  $eldnah = null ) {
 
         return 'case ' .
-               $element->getExpression()->accept($this->getVisitor(), $handle) .
+               $element->getExpression()->accept($this->getVisitor(), $handle, $eldnah) .
                ':' . "\n" .
                $this->getVisitor()
-                    ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle);
+                    ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle, $eldnah);
     }
 
     /**
@@ -311,13 +332,16 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_ControlStructure extends Hoa_Pom_To
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitControlStructureConditionalSwitchDefault ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureConditionalSwitchDefault ( Hoa_Visitor_Element $element,
+                                                                    &$handle = null,
+                                                                     $eldnah = null ) {
 
         return 'default:' . "\n" .
                $this->getVisitor()
-                    ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle);
+                    ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle, $eldnah);
     }
 
     /**
@@ -326,13 +350,16 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_ControlStructure extends Hoa_Pom_To
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitControlStructureContinue ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureContinue ( Hoa_Visitor_Element $element,
+                                                    &$handle = null,
+                                                     $eldnah = null ) {
 
         return 'continue' .
                (true === $element->hasLevel()
-                    ? ' ' . $element->getLevel()->accept($this->getVisitor(), $handle)
+                    ? ' ' . $element->getLevel()->accept($this->getVisitor(), $handle, $eldnah)
                     : ''
                );
     }
@@ -343,12 +370,15 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_ControlStructure extends Hoa_Pom_To
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitControlStructureImportInclude ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureImportInclude ( Hoa_Visitor_Element $element,
+                                                         &$handle = null,
+                                                          $eldnah = null ) {
 
         return 'include ' .
-               $element->getValue()->accept($this->getVisitor(), $handle);
+               $element->getValue()->accept($this->getVisitor(), $handle, $eldnah);
     }
 
     /**
@@ -357,12 +387,15 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_ControlStructure extends Hoa_Pom_To
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitControlStructureImportIncludeOnce ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureImportIncludeOnce ( Hoa_Visitor_Element $element,
+                                                             &$handle = null,
+                                                              $eldnah = null ) {
 
         return 'include_once ' .
-               $element->getValue()->accept($this->getVisitor(), $handle);
+               $element->getValue()->accept($this->getVisitor(), $handle, $eldnah);
     }
 
     /**
@@ -371,12 +404,15 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_ControlStructure extends Hoa_Pom_To
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitControlStructureImportRequire ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureImportRequire ( Hoa_Visitor_Element $element,
+                                                         &$handle = null,
+                                                          $eldnah = null ) {
 
         return 'require ' .
-               $element->getValue()->accept($this->getVisitor(), $handle);
+               $element->getValue()->accept($this->getVisitor(), $handle, $eldnah);
     }
 
     /**
@@ -385,12 +421,15 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_ControlStructure extends Hoa_Pom_To
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitControlStructureImportRequireOnce ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureImportRequireOnce ( Hoa_Visitor_Element $element,
+                                                             &$handle = null,
+                                                              $eldnah = null ) {
 
         return 'require_once ' .
-               $element->getValue()->accept($this->getVisitor(), $handle);
+               $element->getValue()->accept($this->getVisitor(), $handle, $eldnah);
     }
 
     /**
@@ -399,15 +438,18 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_ControlStructure extends Hoa_Pom_To
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitControlStructureLoopDoWhile ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureLoopDoWhile ( Hoa_Visitor_Element $element,
+                                                       &$handle = null,
+                                                        $eldnah = null ) {
 
         return 'do' .
                $this->getVisitor()
-                    ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle) .
+                    ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle, $eldnah) .
                'while(' .
-               $element->getExpression()->accept($this->getVisitor(), $handle) .
+               $element->getExpression()->accept($this->getVisitor(), $handle, $eldnah) .
                ');';
     }
 
@@ -417,9 +459,12 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_ControlStructure extends Hoa_Pom_To
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitControlStructureLoopFor ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureLoopFor ( Hoa_Visitor_Element $element,
+                                                   &$handle = null,
+                                                    $eldnah = null ) {
 
         $fi   = false;
         $fn   = false;
@@ -433,7 +478,7 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_ControlStructure extends Hoa_Pom_To
             else
                 $fi   = true;
 
-            $ini .= $iniExpression->accept($this->getVisitor(), $handle);
+            $ini .= $iniExpression->accept($this->getVisitor(), $handle, $eldnah);
         }
 
         foreach($element->getNextExpressions() as $i => $nextExpression) {
@@ -443,7 +488,7 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_ControlStructure extends Hoa_Pom_To
             else
                 $fn    = true;
 
-            $next .= $nextExpression->accept($this->getVisitor(), $handle);
+            $next .= $nextExpression->accept($this->getVisitor(), $handle, $eldnah);
         }
 
         $cond = true === $element->hasCondExpression()
@@ -455,7 +500,7 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_ControlStructure extends Hoa_Pom_To
                $cond . '; ' .
                $next . ')'  .
                $this->getVisitor()
-                    ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle);
+                    ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle, $eldnah);
     }
 
     /**
@@ -464,26 +509,29 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_ControlStructure extends Hoa_Pom_To
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitControlStructureLoopForeach ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureLoopForeach ( Hoa_Visitor_Element $element,
+                                                       &$handle = null,
+                                                        $eldnah = null ) {
 
         if(false === $element->valueExists())
             throw new Hoa_Pom_Token_Util_Exception(
                 'A foreach loop must have a value variable.', 1);
 
         return 'foreach(' .
-               $element->getArrayExpression()->accept($this->getVisitor(), $handle) .
+               $element->getArrayExpression()->accept($this->getVisitor(), $handle, $eldnah) .
                ' as ' .
                (true === $element->keyExists()
-                    ? $element->getKey()->accept($this->getVisitor(), $handle) .
+                    ? $element->getKey()->accept($this->getVisitor(), $handle, $eldnah) .
                       ' => '
                     : ''
                ) .
-               $element->getValue()->accept($this->getVisitor(), $handle) .
+               $element->getValue()->accept($this->getVisitor(), $handle, $eldnah) .
                ')' .
                $this->getVisitor()
-                    ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle);
+                    ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle, $eldnah);
     }
 
     /**
@@ -492,15 +540,18 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_ControlStructure extends Hoa_Pom_To
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitControlStructureLoopWhile ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureLoopWhile ( Hoa_Visitor_Element $element,
+                                                     &$handle = null,
+                                                      $eldnah = null ) {
 
         return 'while(' . 
-               $element->getExpression()->accept($this->getVisitor(), $handle) .
+               $element->getExpression()->accept($this->getVisitor(), $handle, $eldnah) .
                ')' .
                $this->getVisitor()
-                    ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle);
+                    ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle, $eldnah);
     }
 
     /**
@@ -509,13 +560,16 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_ControlStructure extends Hoa_Pom_To
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitControlStructureReturn ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureReturn ( Hoa_Visitor_Element $element,
+                                                  &$handle = null,
+                                                   $eldnah = null ) {
 
         return 'return' .
                (true === $element->hasValue()
-                    ? ' ' . $element->getValue()->accept($this->getVisitor(), $handle)
+                    ? ' ' . $element->getValue()->accept($this->getVisitor(), $handle, $eldnah)
                     : ''
                ) . ';';
     }
@@ -526,17 +580,20 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_ControlStructure extends Hoa_Pom_To
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitControlStructureTryCatchCatch ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureTryCatchCatch ( Hoa_Visitor_Element $element,
+                                                         &$handle = null,
+                                                          $eldnah = null ) {
 
         return 'catch ( ' .
-               $element->getType()->accept($this->getVisitor(), $handle) .
+               $element->getType()->accept($this->getVisitor(), $handle, $eldnah) .
                ' ' .
-               $element->getVariable()->accept($this->getVisitor(), $handle) .
+               $element->getVariable()->accept($this->getVisitor(), $handle, $eldnah) .
                ' )' .
                $this->getVisitor()
-                    ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle);
+                    ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle, $eldnah);
     }
 
     /**
@@ -545,9 +602,12 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_ControlStructure extends Hoa_Pom_To
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitControlStructureTryCatchTry ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureTryCatchTry ( Hoa_Visitor_Element $element,
+                                                       &$handle = null,
+                                                        $eldnah = null ) {
 
         if(false === $element->hasCatch())
             throw new Hoa_Pom_Token_Util_Exception(
@@ -557,11 +617,11 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_ControlStructure extends Hoa_Pom_To
         $catchs = null;
 
         foreach($element->getCatchs() as $i => $catch)
-            $catchs .= $element->accept($this->getVisitor(), $handle);
+            $catchs .= $element->accept($this->getVisitor(), $handle, $eldnah);
 
         return 'try' .
                $this->getVisitor()
-                    ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle) .
+                    ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle, $eldnah) .
                $catchs;
     }
 }

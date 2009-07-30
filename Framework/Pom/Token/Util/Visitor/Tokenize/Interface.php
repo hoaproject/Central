@@ -79,7 +79,9 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Interface extends Hoa_Visitor_Registry
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
+     * @todo    TODO.
      */
     public function visitInterface ( Hoa_Visitor_Element $element, &$handle = null ) {
 

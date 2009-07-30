@@ -79,12 +79,15 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Exception extends Hoa_Pom_Token_Uti
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitException ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitException ( Hoa_Visitor_Element $element,
+                                     &$handle = null,
+                                      $eldnah = null ) {
 
         return 'throw ' .
-               $element->getException()->accept($this->getVisitor(), $handle) .
+               $element->getException()->accept($this->getVisitor(), $handle, $eldnah) .
                ';';
     }
 }

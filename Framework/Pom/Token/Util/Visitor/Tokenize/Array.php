@@ -79,9 +79,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Array extends Hoa_Visitor_Registry_Agg
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitArray ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitArray ( Hoa_Visitor_Element $element,
+                                 &$handle = null,
+                                  $eldnah = null ) {
 
         $first = true;
         $array = array();
@@ -103,7 +106,8 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Array extends Hoa_Visitor_Registry_Agg
                      ? array_merge(
                            $a[Hoa_Pom_Token_Array::KEY]->accept(
                                $this->getVisitor(),
-                               $handle
+                               $handle,
+                               $eldnah
                            ),
                            array(array(
                                0 => Hoa_Pom::_DOUBLE_ARROW,
@@ -115,7 +119,8 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Array extends Hoa_Visitor_Registry_Agg
                 ),
                 $a[Hoa_Pom_Token_Array::VALUE]->accept(
                     $this->getVisitor(),
-                    $handle
+                    $handle,
+                    $eldnah
                 )
             );
 

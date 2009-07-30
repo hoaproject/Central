@@ -84,11 +84,14 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Instruction extends Hoa_Pom_Token_U
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitInstruction ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitInstruction ( Hoa_Visitor_Element $element,
+                                       &$handle = null,
+                                        $eldnah = null ) {
 
-        return $element->getInstruction()->accept($this->getVisitor(), $handle) .
+        return $element->getInstruction()->accept($this->getVisitor(), $handle, $eldnah) .
                ';' . "\n";
     }
 
@@ -98,14 +101,17 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Instruction extends Hoa_Pom_Token_U
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitInstructionBlock ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitInstructionBlock ( Hoa_Visitor_Element $element,
+                                            &$handle = null,
+                                             $eldnah = null ) {
 
         $out = null;
 
         foreach($element->getInstructions() as $i => $instruction)
-            $out .= $instruction->accept($this->getVisitor(), $handle);
+            $out .= $instruction->accept($this->getVisitor(), $handle, $eldnah);
 
         $braces = true;
         $scolon = false;

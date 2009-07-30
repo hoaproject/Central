@@ -79,14 +79,17 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Operation extends Hoa_Pom_Token_Uti
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitOperation ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitOperation ( Hoa_Visitor_Element $element,
+                                     &$handle = null,
+                                      $eldnah = null ) {
 
         $out = null;
 
         foreach($element->getSequence() as $i => $operation)
-            $out .= $operation->accept($this->getVisitor(), $handle);
+            $out .= $operation->accept($this->getVisitor(), $handle, $eldnah);
 
         return $out;
     }

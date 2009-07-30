@@ -84,15 +84,18 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Function extends Hoa_Pom_Token_Util
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitFunctionArgument ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitFunctionArgument ( Hoa_Visitor_Element $element,
+                                            &$handle = null,
+                                             $eldnah = null ) {
 
         return
             (true === $element->isTyped()
                  ? (strtolower($element->getType()->getString()) == 'array'
                         ? 'Array'
-                        : $element->getType->accept($this->getVisitor(), $handle)
+                        : $element->getType->accept($this->getVisitor(), $handle, $eldnah)
                    ) . ' '
                  : ''
             ) .
@@ -100,10 +103,10 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Function extends Hoa_Pom_Token_Util
                  ? '&'
                  : ''
             ) .
-            $element->getName()->accept($this->getVisitor(), $handle) .
+            $element->getName()->accept($this->getVisitor(), $handle, $eldnah) .
             (true === $element->hasDefaultValue()
-                 ? $element->getOperator()->accept($this->getVisitor(), $handle) .
-                   $element->getDefaultValue()->accept($this->getVisitor(), $handle)
+                 ? $element->getOperator()->accept($this->getVisitor(), $handle, $eldnah) .
+                   $element->getDefaultValue()->accept($this->getVisitor(), $handle, $eldnah)
                  : ''
             );
     }
@@ -114,9 +117,12 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Function extends Hoa_Pom_Token_Util
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitFunctionNamed ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitFunctionNamed ( Hoa_Visitor_Element $element,
+                                         &$handle = null,
+                                          $eldnah = null ) {
 
         $argSet    = false;
         $arguments = null;
@@ -129,15 +135,15 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Function extends Hoa_Pom_Token_Util
             else
                 $argSet     = true;
 
-            $arguments .= $argument->accept($this->getVisitor(), $handle);
+            $arguments .= $argument->accept($this->getVisitor(), $handle, $eldnah);
         }
 
         foreach($element->getBody() as $i => $b)
-            $body .= $b->accept($this->getVisitor(), $handle);
+            $body .= $b->accept($this->getVisitor(), $handle, $eldnah);
 
         return
             (true === $element->hasComment() && true === $element->isCommentEnabled()
-                 ? $element->getComment()->accept($this->getVisitor(), $handle) . "\n"
+                 ? $element->getComment()->accept($this->getVisitor(), $handle, $eldnah) . "\n"
                  : ''
             ) .
             'function ' .
@@ -145,7 +151,7 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Function extends Hoa_Pom_Token_Util
                  ? '&'
                  : ''
             ) .
-            $element->getName()->accept($this->getVisitor(), $handle) .
+            $element->getName()->accept($this->getVisitor(), $handle, $eldnah) .
             ' ( ' .
             $arguments .
             ' ) {' .

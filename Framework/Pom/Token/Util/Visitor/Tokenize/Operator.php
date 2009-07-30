@@ -124,9 +124,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Operator extends Hoa_Visitor_Registry_
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitOperators ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitOperators ( Hoa_Visitor_Element $element,
+                                     &$handle = null
+                                      $eldnah = null ) {
 
         return array(array(
             $element->getType(),

@@ -79,9 +79,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Clone extends Hoa_Visitor_Registry_Agg
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitClone ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitClone ( Hoa_Visitor_Element $element,
+                                 &$handle = null,
+                                  $eldnah = null ) {
 
         return array_merge(
             array(array(
@@ -89,7 +92,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Clone extends Hoa_Visitor_Registry_Agg
                 1 => 'clone',
                 2 => -1
             )),
-            $element->getObject()->accept($this->getVisitor(), $handle)
+            $element->getObject()->accept($this->getVisitor(), $handle, $eldnah)
         );
     }
 }

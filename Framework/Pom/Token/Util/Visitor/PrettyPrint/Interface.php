@@ -79,7 +79,9 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Interface extends Hoa_Pom_Token_Uti
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
+     * @todo    TO DO.
      */
     public function visitInterface ( Hoa_Visitor_Element $element, &$handle = null ) {
 

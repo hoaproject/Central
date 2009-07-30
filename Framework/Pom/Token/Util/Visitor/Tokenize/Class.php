@@ -102,9 +102,14 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Class extends Hoa_Visitor_Registry_Agg
      * Visit a class.
      *
      * @access  public
+	 * @param   Hoa_Visitor_Element  $element    Element to visit.
+     * @param   mixed                &$handle    Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitClass ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitClass ( Hoa_Visitor_Element $element,
+                                 &$handle = null,
+                                  $eldnah = null ) {
 
         $ifirst     = true;
         $interfaces = array();
@@ -120,31 +125,31 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Class extends Hoa_Visitor_Registry_Agg
             else
                 $ifirst = false;
 
-            $handle       = $interface->accept($this->getVisitor(), $handle);
-            $interfaces[] = $handle[0];
+            $h            = $interface->accept($this->getVisitor(), $handle, $eldnah);
+            $interfaces[] = $h[0];
         }
 
         $constants  = array();
 
         foreach($element->getConstants() as $i => $constant)
-            foreach($constant->accept($this->getVisitor(), $handle) as $key => $value)
+            foreach($constant->accept($this->getVisitor(), $handle, $eldnah) as $key => $value)
                 $constants[] = $value;
 
         $attributes = array();
 
         foreach($element->getAttributes() as $i => $attribute)
-            foreach($attribute->accept($this->getVisitor(), $handle) as $key => $value)
+            foreach($attribute->accept($this->getVisitor(), $handle, $eldnah) as $key => $value)
                 $attributes[] = $value;
 
         $methods    = array();
 
         foreach($element->getMethods() as $i => $method)
-            foreach($method->accept($this->getVisitor(), $handle) as $key => $value)
+            foreach($method->accept($this->getVisitor(), $handle, $eldnah) as $key => $value)
                 $methods[] = $value;
 
         return array_merge(
             (true === $element->hasComment()
-                 ? $element->getComment()->accept($this->getVisitor(), $handle)
+                 ? $element->getComment()->accept($this->getVisitor(), $handle, $eldnah)
                  : array()
             ),
             (true === $element->isAbstract()
@@ -168,7 +173,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Class extends Hoa_Visitor_Registry_Agg
                 1 => 'class',
                 2 => -1
             )),
-            $element->getName()->accept($this->getVisitor(), $handle),
+            $element->getName()->accept($this->getVisitor(), $handle, $eldnah),
             (true === $element->hasParent()
                  ? array_merge(
                        array(array(
@@ -176,7 +181,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Class extends Hoa_Visitor_Registry_Agg
                            1 => 'extends',
                            2 => -1
                        )),
-                       $element->getParent()->accept($this->getVisitor(), $handle)
+                       $element->getParent()->accept($this->getVisitor(), $handle, $eldnah)
                    )
                  : array()
             ),
@@ -211,9 +216,14 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Class extends Hoa_Visitor_Registry_Agg
      * Visit a class access.
      *
      * @access  public
+	 * @param   Hoa_Visitor_Element  $element    Element to visit.
+     * @param   mixed                &$handle    Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitClassAccess ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitClassAccess ( Hoa_Visitor_Element $element,
+                                       &$handle = null,
+                                        $eldnah = null ) {
 
         return array(array(
             $element->getType(),
@@ -226,16 +236,21 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Class extends Hoa_Visitor_Registry_Agg
      * Visit a class attribute.
      *
      * @access  public
+	 * @param   Hoa_Visitor_Element  $element    Element to visit.
+     * @param   mixed                &$handle    Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitClassAttribute ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitClassAttribute ( Hoa_Visitor_Element $element,
+                                          &$handle = null,
+                                           $eldnah = null ) {
 
         return array_merge(
             (true === $element->hasComment()
-                 ? $element->getComment()->accept($this->getVisitor(), $handle)
+                 ? $element->getComment()->accept($this->getVisitor(), $handle, $eldnah)
                  : array()
             ),
-            $element->getAccess()->accept($this->getVisitor(), $handle),
+            $element->getAccess()->accept($this->getVisitor(), $handle, $eldnah),
             (true === $element->isStatic()
                  ? array(array(
                        0 => Hoa_Pom::_STATIC,
@@ -244,11 +259,11 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Class extends Hoa_Visitor_Registry_Agg
                    ))
                  : array()
             ),
-            $element->getName()->accept($this->getVisitor(), $handle),
+            $element->getName()->accept($this->getVisitor(), $handle, $eldnah),
             (true === $element->hasValue()
                 ? array_merge(
-                      $element->getOperator()->accept($this->getVisitor(), $handle),
-                      $element->getValue()->accept($this->getVisitor(), $handle)
+                      $element->getOperator()->accept($this->getVisitor(), $handle, $eldnah),
+                      $element->getValue()->accept($this->getVisitor(), $handle, $eldnah)
                   )
                 : array()
             ),
@@ -264,9 +279,14 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Class extends Hoa_Visitor_Registry_Agg
      * Visit a class constant.
      *
      * @access  public
+	 * @param   Hoa_Visitor_Element  $element    Element to visit.
+     * @param   mixed                &$handle    Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitClassConstant ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitClassConstant ( Hoa_Visitor_Element $element,
+                                         &$handle = null,
+                                          $eldnah = null ) {
 
         if(false === $element->hasValue())
             throw new Hoa_Pom_Token_Util_Exception(
@@ -274,7 +294,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Class extends Hoa_Visitor_Registry_Agg
 
         return array_merge(
             (true === $element->hasComment()
-                 ? $element->getComment()->accept($this->getVisitor(), $handle)
+                 ? $element->getComment()->accept($this->getVisitor(), $handle, $eldnah)
                  : array()
             ),
             array(array(
@@ -282,9 +302,9 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Class extends Hoa_Visitor_Registry_Agg
                 'const',
                 -1
             )),
-            $element->getName()->accept($this->getVisitor(), $handle),
-            $element->getOperator()->accept($this->getVisitor(), $handle),
-            $element->getValue()->accept($this->getVisitor(), $handle),
+            $element->getName()->accept($this->getVisitor(), $handle, $eldnah),
+            $element->getOperator()->accept($this->getVisitor(), $handle, $eldnah),
+            $element->getValue()->accept($this->getVisitor(), $handle, $eldnah),
             array(array(
                 Hoa_Pom::_SEMI_COLON,
                 ';',
@@ -297,13 +317,18 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Class extends Hoa_Visitor_Registry_Agg
      * Visit a class method.
      *
      * @access  public
+	 * @param   Hoa_Visitor_Element  $element    Element to visit.
+     * @param   mixed                &$handle    Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitClassMethod ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitClassMethod ( Hoa_Visitor_Element $element,
+                                       &$handle = null,
+                                        $eldnah = null ) {
 
         return array_merge(
             (true === $element->hasComment()
-                 ? $element->getComment()->accept($this->getVisitor(), $handle)
+                 ? $element->getComment()->accept($this->getVisitor(), $handle, $eldnah)
                  : array()
             ),
             (true === $element->isFinal()
@@ -322,7 +347,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Class extends Hoa_Visitor_Registry_Agg
                    ))
                  : array()
             ),
-            $element->getAccess()->accept($this->getVisitor(), $handle),
+            $element->getAccess()->accept($this->getVisitor(), $handle, $eldnah),
             (true === $element->isStatic()
                  ? array(array(
                        0 => Hoa_Pom::_STATIC,
@@ -332,7 +357,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Class extends Hoa_Visitor_Registry_Agg
                  : array()
             ),
             $this->getVisitor()
-                 ->visitEntry('Hoa_Pom_Token_Function_Named', $element, $handle)
+                 ->visitEntry('Hoa_Pom_Token_Function_Named', $element, $handle, $eldnah)
         );
     }
 }

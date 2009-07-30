@@ -56,22 +56,22 @@ interface Hoa_Pom_Token_Util_Interface_SuperScalar {
     /**
      * Check if a data is an uniform super-scalar or not.
      *
-     * Lemma :
-     *   In PHP, keys of arrays should be typed. For example :
+     * Lemma:
+     *   In PHP, keys of arrays should be typed. For example:
      *   array('0' => 1) is different of array(0 => 1).
      *
-     * Definition 1 : Super-scalar
-     *   An array, an object or a resource are — per definition —
+     * Definition 1: Super-scalar
+     *   An array, an object or a resource are —per definition—
      *   super-scalars, because they are structures that should contain many
      *   differents types.
      *
-     * Definition 2 : Uniform super-scalar
+     * Definition 2: Uniform super-scalar
      *   A super-scalar data should contains many types. A uniform super-scalar
-     *   data must verify two conditions :
-     *     * all data must have the same type ;
+     *   data must verify two conditions:
+     *     * all data must have the same type;
      *     * all data must be scalar or uniform super-scalar.
      *
-     * Examples :
+     * Examples:
      *   array(
      *       0 => true,        // boolean
      *       1 => 3,           // integer
@@ -88,7 +88,7 @@ interface Hoa_Pom_Token_Util_Interface_SuperScalar {
      *   )
      *   is a uniform super-scalar.
      *
-     * Advanced examples :
+     * Advanced examples:
      *   array(
      *       '0' => 1,         // string  => integer
      *       1   => 3          // integer => integer

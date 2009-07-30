@@ -380,11 +380,14 @@ abstract class Hoa_Pom_Token_Function implements Hoa_Visitor_Element {
      *
      * @access  public
      * @param   Hoa_Visitor_Visit  $visitor    Visitor.
-     * @param   mixed              $handle     Handle (reference).
+     * @param   mixed              &$handle    Handle (reference).
+     * @param   mixed              $eldnah     Handle (not reference).
      * @return  mixed
      */
-    public function accept ( Hoa_Visitor_Visit $visitor, &$handle = null ) {
+    public function accept ( Hoa_Visitor_Visit $visitor,
+                             &$handle = null,
+                              $eldnah = null ) {
 
-        return $visitor->visit($this);
+        return $visitor->visit($this, $handle, $eldnah);
     }
 }

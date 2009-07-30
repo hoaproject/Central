@@ -102,9 +102,14 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Class extends Hoa_Pom_Token_Util_Vi
      * Visit a class.
      *
      * @access  public
+	 * @param   Hoa_Visitor_Element  $element    Element to visit.
+     * @param   mixed                &$handle    Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitClass ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitClass ( Hoa_Visitor_Element $element,
+                                 &$handle = null,
+                                  $eldnah = null ) {
 
         $ifirst     = true;
         $interfaces = null;
@@ -116,27 +121,27 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Class extends Hoa_Pom_Token_Util_Vi
             else
                 $ifirst      = false;
 
-            $interfaces .= $interface->accept($this->getVisitor(), $handle);
+            $interfaces .= $interface->accept($this->getVisitor(), $handle, $eldnah);
         }
 
         $constants  = null;
 
         foreach($element->getConstants() as $i => $constant)
-            $constants .= $constant->accept($this->getVisitor(), $handle) . "\n\n";
+            $constants .= $constant->accept($this->getVisitor(), $handle, $eldnah) . "\n\n";
 
         $attributes = null;
 
         foreach($element->getAttributes() as $i => $attribute)
-            $attributes .= $attribute->accept($this->getVisitor(), $handle) . "\n\n";
+            $attributes .= $attribute->accept($this->getVisitor(), $handle, $eldnah) . "\n\n";
 
         $methods    = null;
 
         foreach($element->getMethods() as $i => $method)
-            $methods .= $method->accept($this->getVisitor(), $handle);
+            $methods .= $method->accept($this->getVisitor(), $handle, $eldnah);
 
         return
             (true === $element->hasComment()
-                 ? $element->getComment()->accept($this->getVisitor(), $handle) . "\n\n"
+                 ? $element->getComment()->accept($this->getVisitor(), $handle, $eldnah) . "\n\n"
                  : ''
             ) .
             (true === $element->isAbstract()
@@ -148,11 +153,11 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Class extends Hoa_Pom_Token_Util_Vi
                  : ''
             ) .
             'class ' .
-            $element->getName()->accept($this->getVisitor(), $handle) .
+            $element->getName()->accept($this->getVisitor(), $handle, $eldnah) .
             ' ' .
             (true === $element->hasParent()
                  ? 'extends ' .
-                   $element->getParent()->accept($this->getVisitor(), $handle)
+                   $element->getParent()->accept($this->getVisitor(), $handle, $eldnah)
                    . ' '
                  : ''
             ) .
@@ -172,9 +177,14 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Class extends Hoa_Pom_Token_Util_Vi
      * Visit a class access.
      *
      * @access  public
+	 * @param   Hoa_Visitor_Element  $element    Element to visit.
+     * @param   mixed                &$handle    Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitClassAccess ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitClassAccess ( Hoa_Visitor_Element $element,
+                                       &$handle = null,
+                                        $eldnah = null ) {
 
         return $element->getAccess();
     }
@@ -183,25 +193,30 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Class extends Hoa_Pom_Token_Util_Vi
      * Visit a class attribute.
      *
      * @access  public
+	 * @param   Hoa_Visitor_Element  $element    Element to visit.
+     * @param   mixed                &$handle    Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitClassAttribute ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitClassAttribute ( Hoa_Visitor_Element $element,
+                                          &$handle = null,
+                                           $eldnah = null ) {
 
         return $this->indent(
             (true === $element->hasComment()
-                 ? $element->getComment()->accept($this->getVisitor(), $handle) . "\n"
+                 ? $element->getComment()->accept($this->getVisitor(), $handle, $eldnah) . "\n"
                  : ''
             ) .
-            $element->getAccess()->accept($this->getVisitor(), $handle) .
+            $element->getAccess()->accept($this->getVisitor(), $handle, $eldnah) .
             ' ' .
             (true === $element->isStatic()
                  ? 'static '
                  : ''
             ) .
-            $element->getName()->accept($this->getVisitor(), $handle) .
+            $element->getName()->accept($this->getVisitor(), $handle, $eldnah) .
             (true === $element->hasValue()
-                ? $element->getOperator()->accept($this->getVisitor(), $handle) .
-                  $element->getValue()->accept($this->getVisitor(), $handle)
+                ? $element->getOperator()->accept($this->getVisitor(), $handle, $eldnah) .
+                  $element->getValue()->accept($this->getVisitor(), $handle, $eldnah)
                 : ''
             ) .
             ';'
@@ -212,9 +227,14 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Class extends Hoa_Pom_Token_Util_Vi
      * Visit a class constant.
      *
      * @access  public
+	 * @param   Hoa_Visitor_Element  $element    Element to visit.
+     * @param   mixed                &$handle    Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitClassConstant ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitClassConstant ( Hoa_Visitor_Element $element,
+                                         &$handle = null,
+                                          $eldnah = null ) {
 
         if(false === $element->hasValue())
             throw new Hoa_Pom_Token_Util_Exception(
@@ -222,13 +242,13 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Class extends Hoa_Pom_Token_Util_Vi
 
         return $this->indent(
             (true === $element->hasComment()
-                 ? $element->getComment()->accept($this->getVisitor(), $handle) . "\n"
+                 ? $element->getComment()->accept($this->getVisitor(), $handle, $eldnah) . "\n"
                  : ''
             ) .
             'const ' .
-            $element->getName()->accept($this->getVisitor(), $handle) .
-            $element->getOperator()->accept($this->getVisitor(), $handle) .
-            $element->getValue()->accept($this->getVisitor(), $handle) . ';'
+            $element->getName()->accept($this->getVisitor(), $handle, $eldnah) .
+            $element->getOperator()->accept($this->getVisitor(), $handle, $eldnah) .
+            $element->getValue()->accept($this->getVisitor(), $handle, $eldnah) . ';'
         );
     }
 
@@ -236,13 +256,18 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Class extends Hoa_Pom_Token_Util_Vi
      * Visit a class method.
      *
      * @access  public
+	 * @param   Hoa_Visitor_Element  $element    Element to visit.
+     * @param   mixed                &$handle    Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitClassMethod ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitClassMethod ( Hoa_Visitor_Element $element,
+                                       &$handle = null,
+                                        $eldnah = null ) {
 
         return $this->indent(
             (true === $element->hasComment()
-                 ? $element->getComment()->accept($this->getVisitor(), $handle) . "\n"
+                 ? $element->getComment()->accept($this->getVisitor(), $handle, $eldnah) . "\n"
                  : ''
             ) .
             (true === $element->isFinal()
@@ -253,7 +278,7 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Class extends Hoa_Pom_Token_Util_Vi
                  ? 'abstract '
                  : ''
             ) .
-            $element->getAccess()->accept($this->getVisitor(), $handle) .
+            $element->getAccess()->accept($this->getVisitor(), $handle, $eldnah) .
             ' ' .
             (true === $element->isStatic()
                  ? 'static '

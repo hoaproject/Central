@@ -99,9 +99,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_String extends Hoa_Visitor_Registry_Ag
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitString ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitString ( Hoa_Visitor_Element $element,
+                                  &$handle = null,
+                                   $eldnah = null ) {
 
         return array(array(
             0 => Hoa_Pom::_STRING,
@@ -116,9 +119,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_String extends Hoa_Visitor_Registry_Ag
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitStringEncapsedConstant ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitStringEncapsedConstant ( Hoa_Visitor_Element $element,
+                                                  &$handle = null,
+                                                   $eldnah = null ) {
 
         return array(array(
             0 => Hoa_Pom::_CONSTANT_ENCAPSED_STRING,

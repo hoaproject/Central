@@ -79,9 +79,12 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_LateParsing extends Hoa_Pom_Token_U
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitLateParsing ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitLateParsing ( Hoa_Visitor_Element $element,
+                                       &$handle = null,
+                                        $eldnah = null ) {
 
         $out = null;
 

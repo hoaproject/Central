@@ -79,9 +79,12 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Php extends Hoa_Pom_Token_Util_Visi
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitPhp ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitPhp ( Hoa_Visitor_Element $element,
+                               &$handle = null,
+                                $eldnah = null ) {
 
         $out = $element->getTag();
 

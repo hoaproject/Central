@@ -79,9 +79,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Cast extends Hoa_Visitor_Registry_Aggr
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitCast ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitCast ( Hoa_Visitor_Element $element,
+                                &$handle = null,
+                                 $eldnah = null ) {
 
         return array(
             array(

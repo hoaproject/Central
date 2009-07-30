@@ -79,9 +79,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Comment extends Hoa_Visitor_Registry_A
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitComment ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitComment ( Hoa_Visitor_Element $element,
+                                   &$handle = null,
+                                    $eldnah = null ) {
 
         return array(array(
             0 => Hoa_Pom_Token_Comment::TYPE_DOCUMENTATION === $element->getType()

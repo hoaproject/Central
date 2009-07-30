@@ -174,9 +174,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitControlStructureBreak ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureBreak ( Hoa_Visitor_Element $element,
+                                                 &$handle = null,
+                                                  $eldnah = null ) {
 
         return array_merge(
             array(array(
@@ -185,7 +188,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
                 2 => -1
             )),
             (true === $element->hasLevel()
-                 ? $element->getLevel()->accept($this->getVisitor(), $handle)
+                 ? $element->getLevel()->accept($this->getVisitor(), $handle, $eldnah)
                  : array()
             ),
             array(array(
@@ -202,19 +205,22 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitControlStructureConditionalIf ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureConditionalIf ( Hoa_Visitor_Element $element,
+                                                         &$handle = null,
+                                                          $eldnah = null ) {
 
-        $if     = $element->getIf()->accept($this->getVisitor(), $handle);
+        $if     = $element->getIf()->accept($this->getVisitor(), $handle, $eldnah);
         $elseif = array();
 
         foreach($elemen->getElseifs() as $i => $ei)
-            foreach($ei->accept($this->getVisitor(), $handle) as $key => $value)
+            foreach($ei->accept($this->getVisitor(), $handle, $eldnah) as $key => $value)
                 $elseif[] = $value;
 
         $else   = true === $element->hasElse()
-                      ? $element->getElse()->accept($this->getVisitor(), $handle)
+                      ? $element->getElse()->accept($this->getVisitor(), $handle, $eldnah)
                       : array();
 
         return array_merge(
@@ -230,9 +236,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitControlStructureConditionalIfIf ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureConditionalIfIf ( Hoa_Visitor_Element $element,
+                                                           &$handle = null,
+                                                            $eldnah = null ) {
 
         return array_merge(
             array(array(
@@ -245,14 +254,14 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
                 1 => '(',
                 2 => -1
             )),
-            $element->getExpression()->accept($this->getVisitor(), $handle),
+            $element->getExpression()->accept($this->getVisitor(), $handle, $eldnah),
             array(array(
                 0 => Hoa_Pom::_CLOSE_PARENTHESES,
                 1 => ')',
                 2 => -1
             )),
             $this->getVisitor()
-                 ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle)
+                 ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle, $eldnah)
         );
     }
 
@@ -262,9 +271,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitControlStructureConditionalIfElse ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureConditionalIfElse ( Hoa_Visitor_Element $element,
+                                                             &$handle = null,
+                                                              $eldnah = null ) {
 
         return array_merge(
             array(array(
@@ -273,7 +285,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
                 2 => -1
             )),
             $this->getVisitor()
-                 ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle)
+                 ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle, $eldnah)
         );
     }
 
@@ -283,9 +295,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitControlStructureConditionalIfElseif ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureConditionalIfElseif ( Hoa_Visitor_Element $element,
+                                                               &$handle = null,
+                                                                $eldnah = null ) {
 
         return array_merge(
             array(array(
@@ -298,14 +313,14 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
                 1 => '(',
                 2 => -1
             )),
-            $element->getExpression()->accept($this->getVisitor(), $handle),
+            $element->getExpression()->accept($this->getVisitor(), $handle, $eldnah),
             array(array(
                 0 => Hoa_Pom::_CLOSE_PARENTHESES,
                 1 => ')',
                 2 => -1
             )),
             $this->getVisitor()
-                 ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle)
+                 ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle, $eldnah)
         );
     }
 
@@ -315,19 +330,22 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitControlStructureConditionalSwitch ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureConditionalSwitch ( Hoa_Visitor_Element $element,
+                                                             &$handle = null,
+                                                              $eldnah = null ) {
 
-        $expression  = $element->getExpression()->accept($this->getVisitor(), $handle);
+        $expression  = $element->getExpression()->accept($this->getVisitor(), $handle, $eldnah);
         $cases       = array();
 
         foreach($element->getCases() as $i => $case)
-            foreach($case->accept($this->getVisitor(), $handle) as $key => $value)
+            foreach($case->accept($this->getVisitor(), $handle, $eldnah) as $key => $value)
                 $cases[] = $value;
 
         $default     = true === $element->hasDefault()
-                           ? $element->getDefault()->accept($this->getVisitor(), $handle)
+                           ? $element->getDefault()->accept($this->getVisitor(), $handle, $eldnah)
                            : array();
 
         return array_merge(
@@ -367,10 +385,13 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
      *
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
+     * @param   mixed                $eldnah     Handle (not reference).
 	 * @param   mixed                $handle     Handle (reference).
      * @return  array
      */
-    public function visitControlStructureConditionalSwitchCase ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureConditionalSwitchCase ( Hoa_Visitor_Element $element,
+                                                                 &$handle = null,
+                                                                  $eldnah = null ) {
 
         return array_merge(
             array(array(
@@ -378,14 +399,14 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
                 1 => 'case',
                 2 => -1
             )),
-            $element->getExpression()->accept($this->getVisitor(), $handle),
+            $element->getExpression()->accept($this->getVisitor(), $handle, $eldnah),
             array(array(
                 0 => Hoa_Pom::_COLON,
                 1 => ':',
                 2 => -1
             )),
             $this->getVisitor()
-                 ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle)
+                 ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle, $eldnah)
         );
     }
 
@@ -395,9 +416,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitControlStructureConditionalSwitchDefault ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureConditionalSwitchDefault ( Hoa_Visitor_Element $element,
+                                                                    &$handle = null,
+                                                                     $eldnah = null ) {
 
         return array_merge(
             array(array(
@@ -411,7 +435,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
                 2 => -1
             )),
             $this->getVisitor()
-                 ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle)
+                 ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle, $eldnah)
         );
     }
 
@@ -421,9 +445,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitControlStructureContinue ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureContinue ( Hoa_Visitor_Element $element,
+                                                    &$handle = null,
+                                                     $eldnah = null ) {
 
         return array_merge(
             array(array(
@@ -432,7 +459,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
                 2 => -1
             )),
             (true === $element->hasLevel()
-                 ? $element->getLevel()->accept($this->getVisitor(), $handle)
+                 ? $element->getLevel()->accept($this->getVisitor(), $handle, $eldnah)
                  : array()
             ),
             array(array(
@@ -449,9 +476,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitControlStructureImportInclude ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureImportInclude ( Hoa_Visitor_Element $element,
+                                                         &$handle = null,
+                                                          $eldnah = null ) {
 
         return array_merge(
             array(array(
@@ -459,7 +489,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
                 1 => 'include',
                 2 => -1
             )),
-            $element->getValue()->accept($this->getVisitor(), $handle)
+            $element->getValue()->accept($this->getVisitor(), $handle, $eldnah)
         );
     }
 
@@ -469,9 +499,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitControlStructureImportIncludeOnce ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureImportIncludeOnce ( Hoa_Visitor_Element $element,
+                                                             &$handle = null,
+                                                              $eldnah = null ) {
 
         return array_merge(
             array(array(
@@ -479,7 +512,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
                 1 => 'include_once',
                 2 => -1
             )),
-            $element->getValue()->accept($this->getVisitor(), $handle)
+            $element->getValue()->accept($this->getVisitor(), $handle, $eldnah)
         );
     }
 
@@ -489,9 +522,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitControlStructureImportRequire ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureImportRequire ( Hoa_Visitor_Element $element,
+                                                         &$handle = null,
+                                                          $eldnah = null ) {
 
         return array_merge(
             array(array(
@@ -499,7 +535,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
                 1 => 'require',
                 2 => -1
             )),
-            $element->getValue()->accept($this->getVisitor(), $handle)
+            $element->getValue()->accept($this->getVisitor(), $handle, $eldnah)
         );
     }
 
@@ -509,9 +545,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitControlStructureImportRequireOnce ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureImportRequireOnce ( Hoa_Visitor_Element $element,
+                                                             &$handle = null,
+                                                              $eldnah = null ) {
 
         return array_merge(
             array(array(
@@ -519,7 +558,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
                 1 => 'require_once',
                 2 => -1
             )),
-            $element->getValue()->accept($this->getVisitor(), $handle)
+            $element->getValue()->accept($this->getVisitor(), $handle, $eldnah)
         );
     }
 
@@ -529,9 +568,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitControlStructureLoopDoWhile ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureLoopDoWhile ( Hoa_Visitor_Element $element,
+                                                       &$handle = null,
+                                                        $eldnah = null ) {
 
         return array_merge(
             array(array(
@@ -540,7 +582,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
                 2 => -1
             )),
             $this->getVisitor()
-                 ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle),
+                 ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle, $eldnah),
             array(array(
                 0 => Hoa_Pom::_WHILE,
                 1 => 'while',
@@ -551,7 +593,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
                 1 => '(',
                 2 => -1
             )),
-            $element->getExpression()->accept($this->getVisitor(), $handle),
+            $element->getExpression()->accept($this->getVisitor(), $handle, $eldnah),
             array(array(
                 0 => Hoa_Pom::_CLOSE_PARENTHESES,
                 1 => ')',
@@ -571,9 +613,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitControlStructureLoopFor ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureLoopFor ( Hoa_Visitor_Element $element,
+                                                   &$handle = null,
+                                                    $eldnah = null ) {
 
         $fi   = false;
         $fn   = false;
@@ -591,7 +636,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
             else
                 $fi = true;
 
-            foreach($iniExpression->accept($this->getVisitor(), $handle) as $key => $value)
+            foreach($iniExpression->accept($this->getVisitor(), $handle, $eldnah) as $key => $value)
                 $ini[] = $value;
         }
 
@@ -606,7 +651,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
             else
                 $fn = true;
 
-            foreach($nextExpression->accept($this->getVisitor(), $handle) as $key => $value)
+            foreach($nextExpression->accept($this->getVisitor(), $handle, $eldnah) as $key => $value)
                 $next[] = $value;
         }
 
@@ -644,7 +689,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
                 2 => -1
             )),
             $this->getVisitor()
-                 ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle)
+                 ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle, $eldnah)
         );
     }
 
@@ -654,9 +699,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitControlStructureLoopForeach ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureLoopForeach ( Hoa_Visitor_Element $element,
+                                                       &$handle = null,
+                                                        $eldnah = null ) {
 
         if(false === $element->valueExists())
             throw new Hoa_Pom_Token_Util_Exception(
@@ -673,7 +721,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
                 1 => '(',
                 2 => -1
             )),
-            $element->getArrayExpression()->accept($this->getVisitor(), $handle),
+            $element->getArrayExpression()->accept($this->getVisitor(), $handle, $eldnah),
             array(array(
                 0 => Hoa_Pom::_AS,
                 1 => 'as',
@@ -681,7 +729,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
             )),
             (true === $element->keyExists()
                  ? array_merge(
-                       $element->getKey()->accept($this->getVisitor(), $handle),
+                       $element->getKey()->accept($this->getVisitor(), $handle, $eldnah),
                        array(array(
                            0 => Hoa_Pom::_DOUBLE_ARROW,
                            1 => '=>',
@@ -690,14 +738,14 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
                    )
                  : array()
             ),
-            $element->getValue()->accept($this->getVisitor(), $handle),
+            $element->getValue()->accept($this->getVisitor(), $handle, $eldnah),
             array(array(
                 0 => Hoa_Pom::_CLOSE_PARENTHESES,
                 1 => ')',
                 2 => -1
             )),
             $this->getVisitor()
-                 ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle)
+                 ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle, $eldnah)
         );
     }
 
@@ -707,9 +755,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitControlStructureLoopWhile ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureLoopWhile ( Hoa_Visitor_Element $element,
+                                                     &$handle = null,
+                                                      $eldnah = null ) {
 
         return array_merge(
             array(array(
@@ -722,14 +773,14 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
                 1 => '(',
                 2 => -1
             )),
-            $element->getExpression()->accept($this->getVisitor(), $handle),
+            $element->getExpression()->accept($this->getVisitor(), $handle, $eldnah),
             array(array(
                 0 => Hoa_Pom::_CLOSE_PARENTHESES,
                 1 => ')',
                 2 => -1
             )),
             $this->getVisitor()
-                 ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle)
+                 ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle, $eldnah)
         );
     }
 
@@ -739,9 +790,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitControlStructureReturn ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureReturn ( Hoa_Visitor_Element $element,
+                                                  &$handle = null,
+                                                   $eldnah = null ) {
 
         return array_merge(
             array(array(
@@ -750,7 +804,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
                 2 => -1
             )),
             (true === $element->hasValue()
-                 ? $element->getValue()->accept($this->getVisitor(), $handle)
+                 ? $element->getValue()->accept($this->getVisitor(), $handle, $eldnah)
                  : array()
             ),
             array(array(
@@ -767,9 +821,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitControlStructureTryCatchCatch ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureTryCatchCatch ( Hoa_Visitor_Element $element,
+                                                         &$handle = null,
+                                                          $eldnah = null ) {
 
         return array_merge(
             array(array(
@@ -782,15 +839,15 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
                 1 => '(',
                 2 => -1
             )),
-            $element->getType()->accept($this->getVisitor(), $handle),
-            $element->getVariable()->accept($this->getVisitor(), $handle),
+            $element->getType()->accept($this->getVisitor(), $handle, $eldnah),
+            $element->getVariable()->accept($this->getVisitor(), $handle, $eldnah),
             array(array(
                 0 => Hoa_Pom::_CLOSE_PARENTHESES,
                 1 => ')',
                 2 => -1
             )),
             $this->getVisitor()
-                 ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle)
+                 ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle, $eldnah)
         );
     }
 
@@ -800,9 +857,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitControlStructureTryCatchTry ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitControlStructureTryCatchTry ( Hoa_Visitor_Element $element,
+                                                       &$handle = null,
+                                                        $eldnah = null ) {
 
         if(false === $element->hasCatch())
             throw new Hoa_Pom_Token_Util_Exception(
@@ -812,7 +872,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
         $catchs = array();
 
         foreach($element->getCatchs() as $i => $catch)
-            foreach($element->accept($this->getVisitor(), $handle) as $key => $value)
+            foreach($element->accept($this->getVisitor(), $handle, $eldnah) as $key => $value)
                 $catchs[] = $value;
 
         return array_merge(
@@ -822,7 +882,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_ControlStructure extends Hoa_Visitor_R
                 2 => -1
             )),
             $this->getVisitor()
-                 ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle),
+                 ->visitEntry('Hoa_Pom_Token_Instruction_Block', $element, $handle, $eldnah),
             $catchs
         );
     }

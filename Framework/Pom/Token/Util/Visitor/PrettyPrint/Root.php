@@ -79,14 +79,17 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Root extends Hoa_Pom_Token_Util_Vis
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitRoot ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitRoot ( Hoa_Visitor_Element $element,
+                                &$handle = null,
+                                 $eldnah = null ) {
 
         $return = null;
 
         foreach($element->getElements() as $i => $el)
-            $return .= $el->accept($this->getVisitor(), $handle);
+            $return .= $el->accept($this->getVisitor(), $handle, $eldnah);
 
         return $return;
     }

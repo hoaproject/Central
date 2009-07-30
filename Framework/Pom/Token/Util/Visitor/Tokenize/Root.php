@@ -79,14 +79,17 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Root extends Hoa_Visitor_Registry_Aggr
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitRoot ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitRoot ( Hoa_Visitor_Element $element,
+                                &$handle = null,
+                                 $eldnah = null ) {
 
         $return = array();
 
         foreach($element->getElements() as $i => $el)
-            foreach($el->accept($this->getVisitor(), $handle) as $key => $value)
+            foreach($el->accept($this->getVisitor(), $handle, $eldnah) as $key => $value)
                 $return[] = $value;
 
         return $return;

@@ -84,9 +84,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Function extends Hoa_Visitor_Registry_
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitFunctionArgument ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitFunctionArgument ( Hoa_Visitor_Element $element,
+                                            &$handle = null,
+                                             $eldnah = null ) {
 
         return array_merge(
             (true === $element->isTyped()
@@ -96,7 +99,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Function extends Hoa_Visitor_Registry_
                               1 => $element->getType()->getString(),
                               2 => -1
                           ))
-                        : $element->getType()->accept($this->getVisitor(), $handle)
+                        : $element->getType()->accept($this->getVisitor(), $handle, $eldnah)
                    )
                  : array()
             ),
@@ -108,11 +111,11 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Function extends Hoa_Visitor_Registry_
                    ))
                  : array()
             ),
-            $element->getName()->accept($this->getVisitor(), $handle),
+            $element->getName()->accept($this->getVisitor(), $handle, $eldnah),
             (true === $element->hasDefaultValue()
                  ? array_merge(
-                       $element->getOperator()->accept($this->getVisitor(), $handle),
-                       $element->getDefaultValue()->accept($this->getVisitor(), $handle)
+                       $element->getOperator()->accept($this->getVisitor(), $handle, $eldnah),
+                       $element->getDefaultValue()->accept($this->getVisitor(), $handle, $eldnah)
                    )
                  : array()
             )
@@ -125,9 +128,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Function extends Hoa_Visitor_Registry_
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitFunctionNamed ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitFunctionNamed ( Hoa_Visitor_Element $element,
+                                         &$handle = null,
+                                          $eldnah = null ) {
 
         $argSet    = false;
         $arguments = array();
@@ -144,17 +150,17 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Function extends Hoa_Visitor_Registry_
             else
                 $argSet      = true;
 
-            foreach($argument->accept($this->getVisitor(), $handle) as $key => $value)
+            foreach($argument->accept($this->getVisitor(), $handle, $eldnah) as $key => $value)
                 $arguments[] = $value;
         }
 
         foreach($element->getBody() as $i => $b)
-            foreach($b->accept($this->getVisitor(), $handle) as $key => $value)
+            foreach($b->accept($this->getVisitor(), $handle, $eldnah) as $key => $value)
                 $body[] = $value;
 
         return array_merge(
             (true === $element->hasComment() && true === $element->isCommentEnabled()
-                 ? $element->getComment()->accept($this->getVisitor(), $handle)
+                 ? $element->getComment()->accept($this->getVisitor(), $handle, $eldnah)
                  : array()
             ),
             array(array(
@@ -170,7 +176,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Function extends Hoa_Visitor_Registry_
                    ))
                  : array()
             ),
-            $element->getName()->accept($this->getVisitor(), $handle),
+            $element->getName()->accept($this->getVisitor(), $handle, $eldnah),
             array(array(
                 0 => Hoa_Pom::_OPEN_PARENTHESES,
                 1 => '(',

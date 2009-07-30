@@ -89,9 +89,12 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Number extends Hoa_Pom_Token_Util_V
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitNumberDNumber ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitNumberDNumber ( Hoa_Visitor_Element $element,
+                                         &$handle = null,
+                                          $eldnah = null ) {
 
         return $element->getNumber();
     }
@@ -102,9 +105,12 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Number extends Hoa_Pom_Token_Util_V
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitNumberLNumber ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitNumberLNumber ( Hoa_Visitor_Element $element,
+                                         &$handle = null,
+                                          $eldnah = null ) {
 
         return $element->getNumber();
     }

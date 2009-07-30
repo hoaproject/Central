@@ -104,13 +104,16 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Call extends Hoa_Pom_Token_Util_Vis
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitCallAttribute ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitCallAttribute ( Hoa_Visitor_Element $element,
+                                         &$handle = null,
+                                          $eldnah = null ) {
 
-        return $element->getObject()->accept($this->getVisitor(), $handle) .
+        return $element->getObject()->accept($this->getVisitor(), $handle, $eldnah) .
                '->' .
-               $element->getAttribute()->accept($this->getVisitor(), $handle);
+               $element->getAttribute()->accept($this->getVisitor(), $handle, $eldnah);
     }
 
     /**
@@ -119,13 +122,16 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Call extends Hoa_Pom_Token_Util_Vis
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitCallClassConstant ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitCallClassConstant ( Hoa_Visitor_Element $element,
+                                             &$handle = null,
+                                              $eldnah = null ) {
 
-        return $element->getClass()->accept($this->getVisitor(), $handle) .
+        return $element->getClass()->accept($this->getVisitor(), $handle, $eldnah) .
                '::' .
-               $element->getConstant()->accept($this->getVisitor(), $handle);
+               $element->getConstant()->accept($this->getVisitor(), $handle, $eldnah);
     }
 
     /**
@@ -134,9 +140,12 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Call extends Hoa_Pom_Token_Util_Vis
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitCallFunction ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitCallFunction ( Hoa_Visitor_Element $element,
+                                        &$handle = null,
+                                         $eldnah = null ) {
 
         $arguments = null;
         $argSet    = false;
@@ -148,10 +157,10 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Call extends Hoa_Pom_Token_Util_Vis
             else
                 $argSet     = true;
 
-            $arguments .= $argument->accept($this->getVisitor(), $handle);
+            $arguments .= $argument->accept($this->getVisitor(), $handle, $eldnah);
         }
 
-        return $element->getName()->accept($this->getVisitor(), $handle) .
+        return $element->getName()->accept($this->getVisitor(), $handle, $eldnah) .
                '(' .
                $arguments .
                ')';
@@ -163,14 +172,17 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Call extends Hoa_Pom_Token_Util_Vis
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitCallMethod ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitCallMethod ( Hoa_Visitor_Element $element,
+                                      &$handle = null,
+                                       $eldnah = null ) {
 
-        return $element->getObject()->accept($this->getVisitor(), $handle) .
+        return $element->getObject()->accept($this->getVisitor(), $handle, $eldnah) .
                '->' .
                $this->getVisitor()
-                    ->visitEntry('Hoa_Pom_Token_Call_Function', $element, $handle);
+                    ->visitEntry('Hoa_Pom_Token_Call_Function', $element, $handle, $eldnah);
     }
 
     /**
@@ -179,13 +191,16 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Call extends Hoa_Pom_Token_Util_Vis
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitCallStaticAttribute ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitCallStaticAttribute ( Hoa_Visitor_Element $element,
+                                               &$handle = null,
+                                                $eldnah = null ) {
 
-        return $element->getClass()->accept($this->getVisitor(), $handle) .
+        return $element->getClass()->accept($this->getVisitor(), $handle, $eldnah) .
                '::' .
-               $element->getAttribute()->accept($this->getVisitor(), $handle);
+               $element->getAttribute()->accept($this->getVisitor(), $handle, $eldnah);
     }
 
     /**
@@ -194,12 +209,15 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Call extends Hoa_Pom_Token_Util_Vis
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visitCallStaticMethod ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitCallStaticMethod ( Hoa_Visitor_Element $element,
+                                            &$handle = null,
+                                             $eldnah = null ) {
 
-        return $element->getClass()->accept($this->getVisitor(), $handle) .
+        return $element->getClass()->accept($this->getVisitor(), $handle, $eldnah) .
                '::' .
-               $element->getMethod()->accept($this->getVisitor(), $handle);
+               $element->getMethod()->accept($this->getVisitor(), $handle, $eldnah);
     }
 }

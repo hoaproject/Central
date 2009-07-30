@@ -78,10 +78,13 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Array extends Hoa_Pom_Token_Util_Vi
      *
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
-	 * @param   mixed                $handle     Handle (reference).
-     * @return  string
+     * @param   mixed                &$handle    Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
+     * @return  mixed
      */
-    public function visitArray ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitArray ( Hoa_Visitor_Visit $visitor,
+                                 &$handle = null,
+                                  $eldnah = null ) {
 
         $first = true;
         $array = null;
@@ -97,14 +100,16 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Array extends Hoa_Pom_Token_Util_Vi
                 (null !== $a[Hoa_Pom_Token_Array::KEY]
                      ? $a[Hoa_Pom_Token_Array::KEY]->accept(
                            $this->getVisitor(),
-                           $handle
+                           $handle,
+                           $eldnah
                        ) .
                        ' => '
                      : ''
                 ) .
                 $a[Hoa_Pom_Token_Array::VALUE]->accept(
                     $this->getVisitor(),
-                    $handle
+                    $handle,
+                    $eldnah
                 );
         }
 

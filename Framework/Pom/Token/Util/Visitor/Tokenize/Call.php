@@ -104,18 +104,21 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Call extends Hoa_Visitor_Registry_Aggr
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitCallAttribute ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitCallAttribute ( Hoa_Visitor_Element $element,
+                                         &$handle = null,
+                                          $eldnah = null ) {
 
         return array_merge(
-            $element->getObject()->accept($this->getVisitor(), $handle),
+            $element->getObject()->accept($this->getVisitor(), $handle, $eldnah),
             array(array(
                 0 => Hoa_Pom::_OBJECT_OPERATOR,
                 1 => '->',
                 2 => -1
             )),
-            $element->getAttribute()->accept($this->getVisitor(), $handle)
+            $element->getAttribute()->accept($this->getVisitor(), $handle, $eldnah)
         );
     }
 
@@ -125,18 +128,21 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Call extends Hoa_Visitor_Registry_Aggr
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitCallClassConstant ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitCallClassConstant ( Hoa_Visitor_Element $element,
+                                             &$handle = null,
+                                              $eldnah = null ) {
 
         return array_merge(
-            $element->getClass()->accept($this->getVisitor(), $handle),
+            $element->getClass()->accept($this->getVisitor(), $handle, $eldnah),
             array(array(
                 0 => Hoa_Pom::_DOUBLE_COLON,
                 1 => '::',
                 2 => -1
             )),
-            $element->getConstant()->accept($this->getVisitor(), $handle)
+            $element->getConstant()->accept($this->getVisitor(), $handle, $eldnah)
         );
     }
 
@@ -146,9 +152,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Call extends Hoa_Visitor_Registry_Aggr
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitCallFunction ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitCallFunction ( Hoa_Visitor_Element $element,
+                                        &$handle = null,
+                                         $eldnah = null ) {
 
         $arguments = array();
         $argSet    = false;
@@ -166,12 +175,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Call extends Hoa_Visitor_Registry_Aggr
             else
                 $argSet = true;
 
-            foreach($argument->accept($this->getVisitor(), $handle) as $key => $value)
+            foreach($argument->accept($this->getVisitor(), $handle, $eldnah) as $key => $value)
                 $arguments[] = $value;
         }
 
         return array_merge(
-            $element->getName()->accept($this->getVisitor(), $handle),
+            $element->getName()->accept($this->getVisitor(), $handle, $eldnah),
             array(array(
                 0 => Hoa_Pom::_OPEN_PARENTHESES,
                 1 => '(',
@@ -192,19 +201,22 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Call extends Hoa_Visitor_Registry_Aggr
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitCallMethod ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitCallMethod ( Hoa_Visitor_Element $element,
+                                      &$handle = null,
+                                       $eldnah = null ) {
 
         return array_merge(
-            $element->getObject()->accept($this->getVisitor(), $handle),
+            $element->getObject()->accept($this->getVisitor(), $handle, $eldnah),
             array(array(
                 0 => Hoa_Pom::_OBJECT_OPERATOR,
                 1 => '->',
                 2 => -1
             )),
             $this->getVisitor()
-                 ->visitEntry('Hoa_Pom_Token_Call_Function', $element, $handle)
+                 ->visitEntry('Hoa_Pom_Token_Call_Function', $element, $handle, $eldnah)
         );
     }
 
@@ -214,18 +226,21 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Call extends Hoa_Visitor_Registry_Aggr
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitCallStaticAttribute ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitCallStaticAttribute ( Hoa_Visitor_Element $element,
+                                               &$handle = null,
+                                                $eldnah = null ) {
 
         return array_merge(
-            $element->getClass()->accept($this->getVisitor(), $handle),
+            $element->getClass()->accept($this->getVisitor(), $handle, $eldnah),
             array(array(
                 0 => Hoa_Pom::_DOUBLE_COLON,
                 1 => '::',
                 2 => -1
             )),
-            $element->getAttribute()->accept($this->getVisitor(), $handle)
+            $element->getAttribute()->accept($this->getVisitor(), $handle, $eldnah)
         );
     }
 
@@ -235,18 +250,21 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Call extends Hoa_Visitor_Registry_Aggr
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitCallStaticMethod ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitCallStaticMethod ( Hoa_Visitor_Element $element,
+                                            &$handle = null,
+                                             $eldnah = null ) {
 
         return array_merge(
-            $element->getClass()->accept($this->getVisitor(), $handle),
+            $element->getClass()->accept($this->getVisitor(), $handle, $eldnah),
             array(array(
                 0 => Hoa_Pom::_DOUBLE_COLON,
                 1 => '::',
                 2 => -1
             )),
-            $element->getMethod()->accept($this->getVisitor(), $handle)
+            $element->getMethod()->accept($this->getVisitor(), $handle, $eldnah)
         );
     }
 }

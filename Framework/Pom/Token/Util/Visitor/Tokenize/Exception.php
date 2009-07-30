@@ -79,9 +79,12 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Exception extends Hoa_Visitor_Registry
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitException ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitException ( Hoa_Visitor_Element $element,
+                                     &$handle = null,
+                                      $eldnah = null ) {
 
         return array_merge(
             array(array(
@@ -89,7 +92,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Exception extends Hoa_Visitor_Registry
                 1 => 'throw',
                 2 => -1
             )),
-            $element->getException()->accept($this->getVisitor(), $handle)
+            $element->getException()->accept($this->getVisitor(), $handle, $eldnah)
         );
     }
 }

@@ -79,14 +79,17 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Operation extends Hoa_Visitor_Registry
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitOperation ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitOperation ( Hoa_Visitor_Element $element,
+                                     &$handle = null
+                                      $eldnah = null ) {
 
         $out = array();
 
         foreach($element->getSequence() as $i => $operation)
-            foreach($operation->accept($element, $handle) as $key => $value)
+            foreach($operation->accept($element, $handle, $eldnah) as $key => $value)
                 $out[] = $value;
 
         return $out;

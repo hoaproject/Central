@@ -84,12 +84,15 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Instruction extends Hoa_Visitor_Regist
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitInstruction ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitInstruction ( Hoa_Visitor_Element $element,
+                                       &$handle = null,
+                                        $eldnah = null ) {
 
         return array_merge(
-            $element->getInstruction()->accept($this->getVisitor(), $handle),
+            $element->getInstruction()->accept($this->getVisitor(), $handle, $eldnah),
             array(array(
                 0 => Hoa_Pom::_SEMI_COLON,
                 1 => ';',
@@ -104,14 +107,17 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Instruction extends Hoa_Visitor_Regist
      * @access  public
 	 * @param   Hoa_Visitor_Element  $element    Element to visit.
 	 * @param   mixed                $handle     Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  array
      */
-    public function visitInstructionBlock ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visitInstructionBlock ( Hoa_Visitor_Element $element,
+                                            &$handle = null,
+                                             $eldnah = null ) {
 
         $array = array();
 
         foreach($element->getInstructions() as $i => $instruction)
-            foreach($instruction->accept($this->getVisitor(), $handle) as $key => $value)
+            foreach($instruction->accept($this->getVisitor(), $handle, $eldnah) as $key => $value)
                 $array[] = $value;
 
         $braces = true;
