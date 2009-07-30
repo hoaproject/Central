@@ -38,6 +38,21 @@
 require_once 'Framework.php';
 
 /**
+ * Hoa_Tree
+ */
+import('Tree.~');
+
+/**
+ * Hoa_Tree_Node_SimpleNode
+ */
+import('Tree.Node.SimpleNode');
+
+/**
+ * Hoa_Tree_Visitor_Dot
+ */
+import('Tree.Visitor.Dot');
+
+/**
  * Class Hoa_Log_Backtrace.
  *
  * Build a backtrace tree. Please, read the API documentation of the class
@@ -56,77 +71,60 @@ require_once 'Framework.php';
 class Hoa_Log_Backtrace {
 
     /**
-     * The backtrace tree.
-     * The root is the bootstrap, and each node is a function or method call.
-     * The tree is descending, i.e. leafs represent deepest functions or methods
-     * calls.
+     * Backtrace tree.
      *
-     * @var Hoa_Log_Backtrace array
+     * @var Hoa_Tree object
      */
-    private $_tree        = array();
-
-    /**
-     * The backtrace hashes is built with hashes.
-     * Its structure is:
-     *     hash =>
-     *         checkpoint => trace
-     * The hash is made with trace and md5.
-     * It allows to retrieve a trace, for a given checkpoint, for a given hash.
-     *
-     * @var Hoa_Log_Backtrace array
-     */
-    private $_hashes      = array();
-
-    /**
-     * List of checkpoints.
-     * A checkpoint (formatted as a hash) is the trace that ran the debug
-     * method, i.e. that ran a new computing of the backtrace tree.
-     *
-     * @var Hoa_Log_Backtrace array
-     */
-    private $_checkpoints = array();
-
-    /**
-     * Current checkpoint.
-     *
-     * @var Hoa_Log_Backtrace string
-     */
-    private $_checkpoint  = null;
+    protected $_tree = null;
 
 
 
     /**
-     * Compute the backtrace tree.
+     * Build an empty backtrace tree, and set the root.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function __construct ( ) {
+
+        $this->_tree = new Hoa_Tree(
+            new Hoa_Tree_Node_SimpleNode('root', 'root')
+        );
+
+        return;
+    }
+
+    /**
+     * Compute the tree with a backtrace stack.
      *
      * @access  protected
-     * @param   array      $trace    Current trace stack.
-     * @param   array      &$tree    The tree itself or a branche of the tree.
-     * @return  array
+     * @param   array      $array    Backtrace stack.
+     * @return  void
      */
-    protected function computeTree ( $array, &$tree ) {
+    protected function computeTree ( Array $array = array() ) {
 
-        $trace = array_pop($array);
-        $hash  = md5(serialize($trace));
+        $node        = null;
+        $child       = null;
+        $currentNode = $this->_tree;
 
-        $this->_hashes[$hash][$this->_checkpoint] = $trace;
+        foreach($array as $i => $trace) {
 
-        if(empty($array)) {
+            $node = new Hoa_Tree_Node_SimpleNode(
+                md5(serialize($trace)),
+                @$trace['class'] . @$trace['type'] . @$trace['function']
+            );
 
-            if(!isset($tree[$hash]))
-                $tree[$hash] = null;
+            if(true === $currentNode->childExists($node->getId()))
+                $currentNode = $currentNode->getChild($node->getId());
+            else {
 
-            return $tree;
+                $child       = new Hoa_Tree($node);
+                $currentNode->insert($child);
+                $currentNode = $child;
+            }
         }
 
-        if(isset($tree[$hash]))
-            $handle  = &$tree[$hash];
-        else
-            $handle  = array();
-
-        $tree[$hash] = $this->computeTree($array, $handle);
-        unset($handle);
-
-        return $tree;
+        return;
     }
 
     /**
@@ -146,8 +144,7 @@ class Hoa_Log_Backtrace {
         if(isset($array[0]['function']) && $array[0]['function'] == 'hlog')
             array_shift($array); // hlog().
 
-        $this->_checkpoints[] = $this->_checkpoint = md5(serialize($array[0]));
-        $this->_tree          = $this->computeTree($array, $this->_tree);
+        $this->computeTree(array_reverse($array));
 
         return;
     }
@@ -164,100 +161,6 @@ class Hoa_Log_Backtrace {
     }
 
     /**
-     * Get the hashes array.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function getHashes ( ) {
-
-        return $this->_hashes;
-    }
-
-    /**
-     * Get the trace for a specific hash and for a specific checkpoint
-     * (optional).
-     *
-     * @access  public
-     * @param   string  $hash          Hash.
-     * @param   string  $checkpoint    Checkpoint hash.
-     * @return  array
-     */
-    public function getTrace ( $hash, $checkpoint = null ) {
-
-        if(!isset($this->_hashes[$hash]))
-            throw new Hoa_Log_Exception(
-                'Cannot reach trace from hash %s, because it does not exist.',
-                0, $hash);
-
-        if(null !== $checkpoint) {
-
-            if(!isset($this->_hashes[$hash][$checkpoint]))
-                throw new Hoa_Log_Exception(
-                    'Cannot reach trace from hash %s for the checkpoint %s, ' .
-                    'because the checkpoint does not exist.',
-                    1, array($hash, $checkpoint));
-
-            return $this->_hashes[$hash][$checkpoint];
-        }
-
-        reset($this->_hashes[$hash]);
-
-        return current($this->_hashes[$hash]);
-    }
-
-    /**
-     * Get the checkpoints array.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function getCheckpoints ( ) {
-
-        return $this->_checkpoints;
-    }
-
-    /**
-     * Check if a hash is a checkpoint or not.
-     *
-     * @access  public
-     * @param   string  $hash    Hash.
-     * @return  bool
-     */
-    public function isCheckpoint ( $hash ) {
-
-        return in_array($hash, $this->getCheckpoints());
-    }
-
-    /**
-     * Linearize the backtrace tree in DOT language.
-     *
-     * @access  private
-     * @param   array    $node    Current node.
-     * @return  string
-     */
-    private function linearizeTree ( $node ) {
-
-        $out = null;
-
-        foreach($node as $sibling => $childs) {
-
-            if(empty($childs))
-                continue;
-
-            $out .= "\n" . '    "' . $sibling . '"';
-
-            foreach($childs as $k => $v)
-                $out .= "\n" . '    -> "' . $k . '"';
-
-            $out .= ';' . "\n" .
-                    $this->linearizeTree($childs);
-        }
-
-        return $out;
-    }
-
-    /**
      * Print the tree in DOT language.
      *
      * @access  public
@@ -265,22 +168,8 @@ class Hoa_Log_Backtrace {
      */
     public function __toString ( ) {
 
-        $out = 'digraph {' .
-               $this->linearizeTree($this->getTree()) . "\n";
+        $out = new Hoa_Tree_Visitor_Dot();
 
-        foreach($this->getHashes() as $hash => $checkpoints) {
-
-            $t = $this->getTrace($hash);
-
-            $out .= '    "' . $hash . '" [label="' .
-                    @$t['class'] . @$t['type'] . @$t['function'] .
-                    (true === $this->isCheckpoint($hash)
-                        ? '", style="setlinewidth(3)'
-                        : ''
-                    ) .
-                    '"];' . "\n";
-        }
-
-        return $out . '}';
+        return $out->visit($this->getTree());
     }
 }

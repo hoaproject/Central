@@ -307,28 +307,6 @@ class Hoa_Log {
         return $this->_backtrace->getTree();
     }
 
-    /**
-     * Get the backtrace hashes array.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function getBacktraceHashes ( ) {
-
-        return $this->_backtrace->getHashes();
-    }
-
-    /**
-     * Get the backtrace checkpoints array.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function getBacktraceCheckpoints ( ) {
-
-        return $this->_backtrace->getCheckpoints();
-    }
-
     public function __toString ( ) {
 
         return $this->_backtrace->__toString();
