@@ -85,9 +85,12 @@ class          Hoa_Tree_Visitor_Dot
      * @access  public
      * @param   Hoa_Visitor_Element  $element    Element to visit.
      * @param   mixed                &$handle    Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visit ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visit ( Hoa_Visitor_Element $element,
+                            &$handle = null,
+                             $eldnah = null ) {
 
         $ou  = null;
         $t   = null;
@@ -98,14 +101,26 @@ class          Hoa_Tree_Visitor_Dot
             $t   = '}' . "\n";
         }
 
-        $foo = '    ' . $element->getValue();
+        $foo = $element->getValue();
         $bar = null;
         $this->_i++;
 
+        if(null == $eldnah) {
+
+            $eldnah  = $foo;
+            $ou     .= '    "' . md5($foo) . '" [label = "' . $foo . '"];' . "\n";
+        }
+
         foreach($element->getChilds() as $i => $child) {
 
-            $ou  .= $foo . ' -> ' . $child->getValue() . ";\n";
-            $bar .= $child->accept($this, $handle);
+            $left  = md5($eldnah);
+            $right = md5($eldnah . '.' . $child->getValue());
+
+            $ou  .= '    "' . $left  . '" -> "' . $right . '";' . "\n";
+            $ou  .= '    "' . $right . '" [label = "' .
+                    $child->getValue()
+                    . '"];' . "\n";
+            $bar .= $child->accept($this, $handle, $eldnah . '.' . $child->getValue());
         }
 
         $ou .= $bar;
