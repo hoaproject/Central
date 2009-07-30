@@ -99,7 +99,7 @@ abstract class Hoa_Tree_Abstract
      * @param   mixed   $value    Node value.
      * @return  void
      */
-    public function __construct ( $value ) {
+    public function __construct ( $value = null ) {
 
         $this->setValue($value);
 
@@ -319,10 +319,13 @@ abstract class Hoa_Tree_Abstract
      * @access  public
      * @param   Hoa_Visitor_Visit  $visitor    Visitor.
      * @param   mixed              &$handle    Handle (reference).
+     * @param   mixed              $eldnah     Handle (not reference).
      * @return  mixed
      */
-    public function accept ( Hoa_Visitor_Visit $visitor, &$handle = null ) {
+    public function accept ( Hoa_Visitor_Visit $visitor,
+                             &$handle = null,
+                              $eldnah = null ) {
 
-        return $visitor->visit($this);
+        return $visitor->visit($this, $handle, $eldnah);
     }
 }

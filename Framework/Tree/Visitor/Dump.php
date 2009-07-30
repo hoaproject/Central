@@ -98,9 +98,12 @@ class          Hoa_Tree_Visitor_Dump
      * @access  public
      * @param   Hoa_Visitor_Element  $element    Element to visit.
      * @param   mixed                &$handle    Handle (reference).
+     * @param   mixed                $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visit ( Hoa_Visitor_Element $element, &$handle = null ) {
+    public function visit ( Hoa_Visitor_Element $element,
+                            &$handle = null,
+                             $eldnah = null ) {
 
         $pre      = null;
         $in       = '> ' . str_repeat('  ', $this->_i) .
@@ -115,9 +118,9 @@ class          Hoa_Tree_Visitor_Dump
         foreach($childs as $id => $child) {
 
             if($i++ < $max)
-                $pre  .= $child->accept($this, $handle);
+                $pre  .= $child->accept($this, $handle, $eldnah);
             else
-                $post .= $child->accept($this, $handle);
+                $post .= $child->accept($this, $handle, $eldnah);
         }
 
         $this->_i--;
