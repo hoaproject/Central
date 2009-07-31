@@ -47,6 +47,11 @@ import('Log.Exception');
 import('Log.Backtrace');
 
 /**
+ * Hoa_Tree_Visitor_Dump
+ */
+import('Tree.Visitor.Dump');
+
+/**
  * Hoa_Stream
  */
 import('Stream.~');
@@ -78,56 +83,56 @@ class Hoa_Log {
      *
      * @const int
      */
-    const EMERGENCY     =  0;
+    const EMERGENCY         =  0;
 
     /**
      * Priority: alert, action must be taken immediately.
      *
      * @const int
      */
-    const ALERT         =  1;
+    const ALERT             =  1;
 
     /**
      * Priority: critical, critical conditions.
      *
      * @const int
      */
-    const CRITICAL      =  2;
+    const CRITICAL          =  2;
 
     /**
      * Priority: error, error conditions.
      *
      * @const int
      */
-    const ERROR         =  4;
+    const ERROR             =  4;
 
     /**
      * Priority: warning, warning conditions.
      *
      * @const int
      */
-    const WARNING       =  8;
+    const WARNING           =  8;
 
     /**
      * Priority: notice, normal but significant condition.
      *
      * @const int
      */
-    const NOTICE        = 16;
+    const NOTICE            = 16;
 
     /**
      * Priority: informational messages.
      *
      * @const int
      */
-    const INFORMATIONAL = 32;
+    const INFORMATIONAL     = 32;
 
     /**
      * Priority: debut-level messages.
      *
      * @const int
      */
-    const DEBUG         = 64;
+    const DEBUG             = 64;
 
     /**
      * Stack index: timestamp.
@@ -165,69 +170,92 @@ class Hoa_Log {
     const STACK_MEMORY_PEAK = 4;
 
     /**
-     * Singleton.
-     *
-     * @var Hoa_Log object
-     */
-    private static $_instance = null;
-
-    /**
-     * Logs stack. The structure is:
-     *     * timestamp;
-     *     * message;
-     *     * priority;
-     *     * memory;
-     *     * memoryPeak.
+     * Multiton.
      *
      * @var Hoa_Log array
      */
-    protected $_stack         = array();
+    private static $_instances = null;
+
+    /**
+     * Current singleton index.
+     *
+     * @var Hoa_Log string
+     */
+    private static $_currentId = null;
+
+    /**
+     * Logs stack.
+     *
+     * @var Hoa_Log array
+     */
+    protected $_stack          = array();
 
     /**
      * Backtrace.
      *
      * @var Hoa_Log_Backtrace object
      */
-    protected $_backtrace     = null;
+    protected $_backtrace      = null;
 
     /**
      * Output stream array.
      *
      * @var Hoa_Log array
      */
-    protected $_output        = array();
+    protected $_output         = array();
 
     /**
      * Filters (combination of priorities constants, null means all).
      *
      * @var Hoa_Log int
      */
-    protected $_filter        = null;
+    protected $_filter         = null;
 
 
 
     /**
+     * Build a new log system.
      *
+     * @access  private
+     * @param   Hoa_Stream  $stream    Output stream (can be null).
+     * @return  void
      */
-    private function __construct ( $stream ) {
+    private function __construct ( $stream = null ) {
 
         $this->addOutputStreams($stream);
         $this->_backtrace = new Hoa_Log_Backtrace();
     }
 
     /**
+     * Make a multiton.
      *
+     * @access  public
+     * @param   string      $id        Singleton ID.
+     * @param   Hoa_Stream  $stream    Output stream (can be null).
+     * @return  Hoa_Log
+     * @throw   Hoa_Log_Exception
      */
-    public static function getInstance ( $stream = null ) {
+    public static function getInstance ( $id = null, $stream = null ) {
 
-        if(null === self::$_instance)
-            self::$_instance = new self($stream);
+        if(null === self::$_currentId && null === $id)
+            throw new Hoa_Log_Exception(
+                'Must precise a singleton index once.', 0);
 
-        return self::$_instance;
+        if(!isset(self::$_instances[$id]))
+            self::$_instances[$id] = new self($stream);
+
+        if(null !== $id)
+            self::$_currentId = $id;
+
+        return self::$_instances[self::$_currentId];
     }
 
     /**
+     * Add many output streams.
      *
+     * @access  public
+     * @param   array   $streams    Array of output streams.
+     * @return  array
      */
     public function addOutputStreams ( $streams ) {
 
@@ -241,7 +269,8 @@ class Hoa_Log {
     }
 
     /**
-     *
+     * Add an output stream. Must be a Hoa_Stream object but must also implement
+     * the Hoa_Stream_Io_Out interface.
      *
      * @access  public
      * @param   Hoa_Stream  $stream    A stream (must implement the
@@ -267,7 +296,13 @@ class Hoa_Log {
     }
 
     /**
+     * Log a message with a type.
      *
+     * @access  public
+     * @param   string  $message    The log message.
+     * @param   int     $type       Type of message (please, see the class
+     *                              constants).
+     * @return  void
      */
     public function log ( $message, $type = self::DEBUG ) {
 
@@ -282,7 +317,10 @@ class Hoa_Log {
         foreach($this->getOutputStack() as $i => $output)
             $output->writeAll($message . "\n");
 
-        $this->_backtrace->debug();
+        if($type & self::DEBUG)
+            $this->_backtrace->debug();
+
+        return;
     }
 
     /**
@@ -302,20 +340,91 @@ class Hoa_Log {
      * @access  public
      * @return  array
      */
-    public function getBacktraceTree ( ) {
+    public function getBacktrace ( ) {
 
-        return $this->_backtrace->getTree();
+        return $this->_backtrace;
     }
 
+    /**
+     * Get the log stack.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getLogStack ( ) {
+
+        return $this->_stack;
+    }
+
+    /**
+     * Transform a log type into a string.
+     *
+     * @access  public
+     * @param   int     $type    Log type (please, see the class constants).
+     * @return  string
+     */
+    public function typeAsString ( $type ) {
+
+        switch($type) {
+
+            case self::EMERGENCY:
+                return 'EMERGENCY';
+              break;
+
+            case self::ALERT:
+                return 'ALERT';
+              break;
+
+            case self::CRITICAL:
+                return 'CRITICAL';
+              break;
+
+            case self::ERROR:
+                return 'ERROR';
+              break;
+
+            case self::WARNING:
+                return 'WARNING';
+              break;
+
+            case self::NOTICE:
+                return 'NOTICE';
+              break;
+
+            case self::INFORMATIONAL:
+                return 'INFORMATIONAL';
+              break;
+
+            case self::DEBUG:
+                return 'DEBUG';
+              break;
+
+            default:
+                return 'unknown';
+        }
+    }
+
+    /**
+     * Transform the log into a string.
+     *
+     * @access  public
+     * @return  string
+     */
     public function __toString ( ) {
 
-        return $this->_backtrace->__toString();
+        return $this->getBacktrace()->__toString();
     }
 }
 
 
 /**
+ * Alias of Hoa_Log::getInstance()->log().
  *
+ * @access  public
+ * @param   string  $message    The log message.
+ * @param   int     $type       Type of message (please, see the class
+ *                              constants).
+ * @return  void
  */
 function hlog ( $message, $type = Hoa_Log::DEBUG ) {
 
