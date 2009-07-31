@@ -43,9 +43,9 @@ require_once 'Framework.php';
 import('Tree.~');
 
 /**
- * Hoa_Tree_Node_SimpleNode
+ * Hoa_Log_Backtrace_Node
  */
-import('Tree.Node.SimpleNode');
+import('Log.Backtrace.Node');
 
 /**
  * Hoa_Tree_Visitor_Dot
@@ -88,7 +88,15 @@ class Hoa_Log_Backtrace {
     public function __construct ( ) {
 
         $this->_tree = new Hoa_Tree(
-            new Hoa_Tree_Node_SimpleNode('root', 'root')
+            new Hoa_Log_Backtrace_Node(array(
+                'function' => 'Bootstrap',
+                'line'     => 42,
+                'file'     => 'BigBlackHole',
+                'class'    => null,
+                'object'   => null,
+                'type'     => null,
+                'args'     => null
+            ))
         );
 
         return;
@@ -109,10 +117,7 @@ class Hoa_Log_Backtrace {
 
         foreach($array as $i => $trace) {
 
-            $node = new Hoa_Tree_Node_SimpleNode(
-                md5(serialize($trace)),
-                @$trace['class'] . @$trace['type'] . @$trace['function']
-            );
+            $node = new Hoa_Log_Backtrace_Node($trace);
 
             if(true === $currentNode->childExists($node->getId()))
                 $currentNode = $currentNode->getChild($node->getId());
