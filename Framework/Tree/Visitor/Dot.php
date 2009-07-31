@@ -116,8 +116,8 @@ class          Hoa_Tree_Visitor_Dot
             $left  = md5($eldnah);
             $right = md5($eldnah . '.' . $child->getValue());
 
-            $ou  .= '    "' . $left  . '" -> "' . $right . '";' . "\n";
-            $ou  .= '    "' . $right . '" [label = "' .
+            $ou  .= '    "' . $left  . '" -> "' . $right . '";' . "\n" .
+                    '    "' . $right . '" [label = "' .
                     $child->getValue()
                     . '"];' . "\n";
             $bar .= $child->accept($this, $handle, $eldnah . '.' . $child->getValue());
