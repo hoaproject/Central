@@ -4,10 +4,547 @@
 Informations             :
     - repository path    : /Users/hywan/Development/Hoa/Svn/Repository ;
     - path in repository : /Framework/Trunk/ ;
-    - generated at       : 2009-06-11T19:02:22.000000Z.
+    - generated at       : 2009-08-06T10:42:06.000000Z.
 -->
 
 <log>
+  <logentry revision="446">
+    <author>hywan</author>
+    <date>2009-08-06T10:42:06.469592Z</date>
+    <msg>Tidy up the Data/ directory.</msg>
+    <paths>
+      <path action="D">Data/Database</path>
+      <path action="D">Data/Local</path>
+      <path action="D">Data/Log</path>
+      <path action="A">Data/Private</path>
+    </paths>
+  </logentry>
+  <logentry revision="445">
+    <author>hywan</author>
+    <date>2009-08-06T09:55:33.485267Z</date>
+    <msg>Welcome to the new Hoa_Serialize package!</msg>
+    <paths>
+      <path action="A">Framework/Serialize</path>
+      <path action="A">Framework/Serialize/Cryonicable.php</path>
+      <path action="A">Framework/Serialize/Exception.php</path>
+      <path action="A">Framework/Serialize/Serializable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="444">
+    <author>hywan</author>
+    <date>2009-08-06T09:54:11.374265Z</date>
+    <msg>Reformat the code.</msg>
+    <paths>
+      <path action="M">Framework/Tree/Visitor/Dump.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="443">
+    <author>hywan</author>
+    <date>2009-08-06T09:53:37.926107Z</date>
+    <msg>Edit the API documentation and reformat the code.</msg>
+    <paths>
+      <path action="M">Framework/Tree/Visitor/Dot.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="442">
+    <author>hywan</author>
+    <date>2009-08-06T09:52:53.696336Z</date>
+    <msg>Change the notifications system, but it is not yet good.</msg>
+    <paths>
+      <path action="M">Framework/Stream/Notification.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="441">
+    <author>hywan</author>
+    <date>2009-08-06T09:51:37.477573Z</date>
+    <msg>Correct a typo in the API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Stream/Notification/Interface.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="440">
+    <author>hywan</author>
+    <date>2009-08-06T09:50:19.348009Z</date>
+    <msg>Add constants, reformat code, minor edits.</msg>
+    <paths>
+      <path action="M">Framework/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="439">
+    <author>hywan</author>
+    <date>2009-08-04T17:14:53.061604Z</date>
+    <msg>Typo in a parameter.</msg>
+    <paths>
+      <path action="M">Framework/Stream/Wrapper/Interface/Stream.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="438">
+    <author>hywan</author>
+    <date>2009-07-31T15:46:04.624291Z</date>
+    <msg>Simplify a concatenation.</msg>
+    <paths>
+      <path action="M">Framework/Tree/Visitor/Dot.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="437">
+    <author>hywan</author>
+    <date>2009-07-31T15:42:14.259404Z</date>
+    <msg>Complete the API documentation, edit the code and add a multiton support.
+</msg>
+    <paths>
+      <path action="M">Framework/Log/Log.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="436">
+    <author>hywan</author>
+    <date>2009-07-31T15:41:49.660344Z</date>
+    <msg>Add the backtrace node (instead of the default simple node Hoa_Tree_Node_SimpleNode), and adapt the code in consequence.</msg>
+    <paths>
+      <path action="A">Framework/Log/Backtrace</path>
+      <path action="M">Framework/Log/Backtrace.php</path>
+      <path action="A">Framework/Log/Backtrace/Node.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="435">
+    <author>hywan</author>
+    <date>2009-07-31T15:38:32.017126Z</date>
+    <msg>Oops, parse error!</msg>
+    <paths>
+      <path action="M">Framework/Stream/Context.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="434">
+    <author>hywan</author>
+    <date>2009-07-31T15:37:53.568540Z</date>
+    <msg>Better multiton support.</msg>
+    <paths>
+      <path action="M">Framework/Stream/Context.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="433">
+    <author>hywan</author>
+    <date>2009-07-31T15:37:40.845074Z</date>
+    <msg>Complete API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Stream/Notification.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="432">
+    <author>hywan</author>
+    <date>2009-07-30T17:20:47.259822Z</date>
+    <msg>Adapt the code to Hoa_Tree.</msg>
+    <paths>
+      <path action="M">Framework/Log/Backtrace.php</path>
+      <path action="M">Framework/Log/Log.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="431">
+    <author>hywan</author>
+    <date>2009-07-30T17:16:13.970079Z</date>
+    <msg>Ah, good version for visiting a tree and getting the associated DOT language.</msg>
+    <paths>
+      <path action="M">Framework/Tree/Visitor/Dot.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="430">
+    <author>hywan</author>
+    <date>2009-07-30T17:12:20.706452Z</date>
+    <msg>Correct a bug when inserting more than two nodes.
+</msg>
+    <paths>
+      <path action="M">Framework/Tree/Binary.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="429">
+    <author>hywan</author>
+    <date>2009-07-30T17:06:51.786213Z</date>
+    <msg>Apply the previous revision.</msg>
+    <paths>
+      <path action="M">Framework/Tree/Abstract.php</path>
+      <path action="M">Framework/Tree/Visitor/Dump.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="428">
+    <author>hywan</author>
+    <date>2009-07-30T16:30:05.734510Z</date>
+    <msg>Apply the previous revision.</msg>
+    <paths>
+      <path action="M">Framework/Pom/Token/Array.php</path>
+      <path action="M">Framework/Pom/Token/Call/Attribute.php</path>
+      <path action="M">Framework/Pom/Token/Call/ClassConstant.php</path>
+      <path action="M">Framework/Pom/Token/Call/Function.php</path>
+      <path action="M">Framework/Pom/Token/Call/Method.php</path>
+      <path action="M">Framework/Pom/Token/Call/StaticAttribute.php</path>
+      <path action="M">Framework/Pom/Token/Call/StaticMethod.php</path>
+      <path action="M">Framework/Pom/Token/Cast.php</path>
+      <path action="M">Framework/Pom/Token/Class.php</path>
+      <path action="M">Framework/Pom/Token/Class/Access.php</path>
+      <path action="M">Framework/Pom/Token/Class/Attribute.php</path>
+      <path action="M">Framework/Pom/Token/Class/Constant.php</path>
+      <path action="M">Framework/Pom/Token/Class/Method.php</path>
+      <path action="M">Framework/Pom/Token/Clone.php</path>
+      <path action="M">Framework/Pom/Token/Comment.php</path>
+      <path action="M">Framework/Pom/Token/ControlStructure.php</path>
+      <path action="M">Framework/Pom/Token/ControlStructure/Break.php</path>
+      <path action="M">Framework/Pom/Token/Exception.php</path>
+      <path action="M">Framework/Pom/Token/Function.php</path>
+      <path action="M">Framework/Pom/Token/Function/Argument.php</path>
+      <path action="M">Framework/Pom/Token/Instruction.php</path>
+      <path action="M">Framework/Pom/Token/Instruction/Block.php</path>
+      <path action="M">Framework/Pom/Token/Interface.php</path>
+      <path action="M">Framework/Pom/Token/LateParsing.php</path>
+      <path action="M">Framework/Pom/Token/Number.php</path>
+      <path action="M">Framework/Pom/Token/Operation.php</path>
+      <path action="M">Framework/Pom/Token/Operator.php</path>
+      <path action="M">Framework/Pom/Token/OutterPhp.php</path>
+      <path action="M">Framework/Pom/Token/Php.php</path>
+      <path action="M">Framework/Pom/Token/Root.php</path>
+      <path action="M">Framework/Pom/Token/String.php</path>
+      <path action="M">Framework/Pom/Token/Util/Interface/SuperScalar.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/PrettyPrint/Array.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/PrettyPrint/Call.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/PrettyPrint/Cast.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/PrettyPrint/Class.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/PrettyPrint/Clone.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/PrettyPrint/Comment.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/PrettyPrint/ControlStructure.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/PrettyPrint/Exception.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/PrettyPrint/Function.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/PrettyPrint/Instruction.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/PrettyPrint/Interface.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/PrettyPrint/LateParsing.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/PrettyPrint/New.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/PrettyPrint/Number.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/PrettyPrint/Operation.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/PrettyPrint/Operator.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/PrettyPrint/OutterPhp.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/PrettyPrint/Php.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/PrettyPrint/Root.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/PrettyPrint/String.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/PrettyPrint/Variable.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/PrettyPrint/Whitespace.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/Tokenize/Array.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/Tokenize/Call.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/Tokenize/Cast.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/Tokenize/Class.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/Tokenize/Clone.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/Tokenize/Comment.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/Tokenize/ControlStructure.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/Tokenize/Exception.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/Tokenize/Function.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/Tokenize/Instruction.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/Tokenize/Interface.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/Tokenize/LateParsing.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/Tokenize/New.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/Tokenize/Number.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/Tokenize/Operation.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/Tokenize/Operator.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/Tokenize/OutterPhp.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/Tokenize/Php.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/Tokenize/Root.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/Tokenize/String.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/Tokenize/Variable.php</path>
+      <path action="M">Framework/Pom/Token/Util/Visitor/Tokenize/Whitespace.php</path>
+      <path action="M">Framework/Pom/Token/Variable.php</path>
+      <path action="M">Framework/Pom/Token/Whitespace.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="427">
+    <author>hywan</author>
+    <date>2009-07-30T16:28:05.212692Z</date>
+    <msg>Add the $eldnah argument; it is like the $handle argument but without reference.
+</msg>
+    <paths>
+      <path action="M">Framework/Visitor/Element.php</path>
+      <path action="M">Framework/Visitor/Registry.php</path>
+      <path action="M">Framework/Visitor/Visit.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="426">
+    <author>hywan</author>
+    <date>2009-07-27T17:09:18.153154Z</date>
+    <msg>Change the childs management. It is not an array with indexed key, it is now an hashmap.</msg>
+    <paths>
+      <path action="M">Framework/Tree/Abstract.php</path>
+      <path action="M">Framework/Tree/Binary.php</path>
+      <path action="M">Framework/Tree/Tree.php</path>
+      <path action="M">Framework/Tree/Visitor/Dot.php</path>
+      <path action="M">Framework/Tree/Visitor/Dump.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="425">
+    <author>hywan</author>
+    <date>2009-07-27T17:06:47.497959Z</date>
+    <msg>Add a node interface and a simple node class.</msg>
+    <paths>
+      <path action="A">Framework/Tree/Node</path>
+      <path action="A">Framework/Tree/Node/Interface.php</path>
+      <path action="A">Framework/Tree/Node/SimpleNode.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="424">
+    <author>hywan</author>
+    <date>2009-07-27T15:33:42.444053Z</date>
+    <msg>Edit API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Graph/Node/Interface.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="423">
+    <author>hywan</author>
+    <date>2009-07-25T20:06:58.791198Z</date>
+    <msg>Write the DOT tree visitor.</msg>
+    <paths>
+      <path action="M">Framework/Tree/Visitor/Dot.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="422">
+    <author>hywan</author>
+    <date>2009-07-25T20:06:41.699307Z</date>
+    <msg>Change the default traversal order value (PRE_ORDER to IN_ORDER).</msg>
+    <paths>
+      <path action="M">Framework/Tree/Visitor/Dump.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="421">
+    <author>hywan</author>
+    <date>2009-07-25T20:05:49.290344Z</date>
+    <msg>Oops, replace the rewind() function by reset().</msg>
+    <paths>
+      <path action="M">Framework/Tree/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="420">
+    <author>hywan</author>
+    <date>2009-07-25T19:35:42.046232Z</date>
+    <msg>Welcome to the new package Hoa_Tree!</msg>
+    <paths>
+      <path action="A">Framework/Tree</path>
+      <path action="A">Framework/Tree/Abstract.php</path>
+      <path action="A">Framework/Tree/Binary.php</path>
+      <path action="A">Framework/Tree/Exception.php</path>
+      <path action="A">Framework/Tree/Tree.php</path>
+      <path action="A">Framework/Tree/Visitor</path>
+      <path action="A">Framework/Tree/Visitor/Abstract.php</path>
+      <path action="A">Framework/Tree/Visitor/Dot.php</path>
+      <path action="A">Framework/Tree/Visitor/Dump.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="419">
+    <author>hywan</author>
+    <date>2009-07-25T19:35:07.643002Z</date>
+    <msg>Edit API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Visitor/Element.php</path>
+      <path action="M">Framework/Visitor/Visit.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="418">
+    <author>hywan</author>
+    <date>2009-07-25T19:33:40.947402Z</date>
+    <msg>Simplify the code.</msg>
+    <paths>
+      <path action="M">Framework/Iterator/Iterator.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="417">
+    <author>hywan</author>
+    <date>2009-07-22T15:28:33.116110Z</date>
+    <msg>Use PHP_VERSION* constants instead of version_compare(phpversion(), …, …).</msg>
+    <paths>
+      <path action="M">Framework/File/Abstract.php</path>
+      <path action="M">Framework/File/File.php</path>
+      <path action="M">Framework/File/Temporary.php</path>
+      <path action="M">Framework/File/Upload.php</path>
+      <path action="M">Framework/Filter/HtmlEntities.php</path>
+      <path action="M">Framework/Json/Json.php</path>
+      <path action="M">Framework/Mail/Mime.php</path>
+      <path action="M">Framework/Memory/GarbageCollector.php</path>
+      <path action="M">Framework/Php/Io/In.php</path>
+      <path action="M">Framework/Pom/Parser/Lexer.php</path>
+      <path action="M">Framework/Session/Session.php</path>
+      <path action="M">Framework/StdClass/StdClass.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="416">
+    <author>hywan</author>
+    <date>2009-07-22T15:17:41.125617Z</date>
+    <msg>Emulate the PHP_VERSION_ID constant if the PHP version is lower than 5.2.7.</msg>
+    <paths>
+      <path action="M">Framework/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="415">
+    <author>hywan</author>
+    <date>2009-07-21T10:55:50.175105Z</date>
+    <msg>Format API documentation and set the last argument of stream_open() as a reference.</msg>
+    <paths>
+      <path action="M">Framework/Stream/Wrapper/Interface/Stream.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="414">
+    <author>hywan</author>
+    <date>2009-07-21T10:53:58.225434Z</date>
+    <msg>Add two constants: SUCCEED and FAILED, respectively for true and false.</msg>
+    <paths>
+      <path action="M">Framework/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="413">
+    <author>hywan</author>
+    <date>2009-07-21T10:53:15.766575Z</date>
+    <msg>Format API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Json/Json.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="412">
+    <author>hywan</author>
+    <date>2009-07-17T18:54:00.380350Z</date>
+    <msg>Export to DOT language is available.</msg>
+    <paths>
+      <path action="M">Framework/Log/Backtrace.php</path>
+      <path action="M">Framework/Log/Log.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="411">
+    <author>hywan</author>
+    <date>2009-07-16T18:48:25.188068Z</date>
+    <msg>Add the “log repository”.</msg>
+    <paths>
+      <path action="A">Data/Log</path>
+    </paths>
+  </logentry>
+  <logentry revision="410">
+    <author>hywan</author>
+    <date>2009-07-16T18:46:31.240137Z</date>
+    <msg>Need a backup. Go further!</msg>
+    <paths>
+      <path action="M">Framework/Log/Backtrace.php</path>
+      <path action="M">Framework/Log/Log.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="409">
+    <author>hywan</author>
+    <date>2009-07-16T18:45:25.780372Z</date>
+    <msg>Add the readArray() and writeArray() methods on stream IO interfaces, and adapt dependencies.</msg>
+    <paths>
+      <path action="M">Framework/File/File.php</path>
+      <path action="M">Framework/Php/Io/In.php</path>
+      <path action="M">Framework/Php/Io/Out.php</path>
+      <path action="M">Framework/Socket/Connection.php</path>
+      <path action="M">Framework/Stream/Io/In.php</path>
+      <path action="M">Framework/Stream/Io/Out.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="408">
+    <author>hywan</author>
+    <date>2009-07-16T18:40:57.005791Z</date>
+    <msg>Solve a bug on case-sensitive operating system.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Main/Changelog.php</path>
+      <path action="M">Data/Bin/Command/Main/Dependency.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="407">
+    <author>hywan</author>
+    <date>2009-07-16T13:58:04.562103Z</date>
+    <msg>Oops, bad interface name.</msg>
+    <paths>
+      <path action="M">Framework/Stream/Wrapper/Interface.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="406">
+    <author>hywan</author>
+    <date>2009-07-16T13:56:54.615445Z</date>
+    <msg>Welcome to the new pachage Hoa_Log (early draft, but need a backup).</msg>
+    <paths>
+      <path action="A">Framework/Log</path>
+      <path action="A">Framework/Log/Backtrace.php</path>
+      <path action="A">Framework/Log/Exception.php</path>
+      <path action="A">Framework/Log/Log.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="405">
+    <author>hywan</author>
+    <date>2009-07-15T15:43:47.455976Z</date>
+    <msg>Move the Hoa_Swap package (which is not yet written actually) to Hoa_Memory_Swap subpackage.</msg>
+    <paths>
+      <path action="A">Framework/Memory/Swap.php</path>
+      <path action="D">Framework/Swap</path>
+    </paths>
+  </logentry>
+  <logentry revision="404">
+    <author>hywan</author>
+    <date>2009-07-15T15:32:22.963800Z</date>
+    <msg>Add the isOpened() method, to know if the stream is opened or not (it checks if the stream bucket contains a valid resource).</msg>
+    <paths>
+      <path action="M">Framework/Stream/Stream.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="403">
+    <author>hywan</author>
+    <date>2009-07-15T15:30:40.674935Z</date>
+    <msg>Welcome to the new package Hoa_Php (first draft to only manage stdio, not filter, memory and temp streams).</msg>
+    <paths>
+      <path action="A">Framework/Php</path>
+      <path action="A">Framework/Php/Exception.php</path>
+      <path action="A">Framework/Php/Filter.php</path>
+      <path action="A">Framework/Php/Io</path>
+      <path action="A">Framework/Php/Io/Error.php</path>
+      <path action="A">Framework/Php/Io/Exception.php</path>
+      <path action="A">Framework/Php/Io/In.php</path>
+      <path action="A">Framework/Php/Io/Out.php</path>
+      <path action="A">Framework/Php/Memory.php</path>
+      <path action="A">Framework/Php/Temp.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="402">
+    <author>hywan</author>
+    <date>2009-07-15T15:28:54.753414Z</date>
+    <msg>Welcome to the new package Hoa_Memory!</msg>
+    <paths>
+      <path action="A">Framework/Memory</path>
+      <path action="A">Framework/Memory/Exception.php</path>
+      <path action="A">Framework/Memory/GarbageCollector.php</path>
+      <path action="A">Framework/Memory/Memory.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="401">
+    <author>hywan</author>
+    <date>2009-06-26T13:25:30.360792Z</date>
+    <msg>The session_start() function now returns false, instead of a warning, in PHP 5.3.x. Take care about it.</msg>
+    <paths>
+      <path action="M">Framework/Session/Session.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="400">
+    <author>hywan</author>
+    <date>2009-06-26T13:11:10.199026Z</date>
+    <msg>Add the $depth parameter in the constructor. Enable only with a PHP 5.3.x version.</msg>
+    <paths>
+      <path action="M">Framework/Json/Json.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="399">
+    <author>hywan</author>
+    <date>2009-06-26T13:04:22.480539Z</date>
+    <msg>The split() function is deprecated in PHP 5.3.x. Replace by the preg_split() function that is more faster in Perl-compatible regular expression cases. It is already used elsewhere in the framework.</msg>
+    <paths>
+      <path action="M">Framework/Locale/Locale.php</path>
+      <path action="M">Framework/XmlRpc/Server.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="398">
+    <author>hywan</author>
+    <date>2009-06-16T09:17:36.284728Z</date>
+    <msg>Tagging the 0.4.3b.</msg>
+    <paths>
+      <path action="M">Data/Etc/CHANGELOG</path>
+      <path action="M">Data/Etc/CHANGELOG.echo</path>
+      <path action="M">Data/Etc/CHANGELOG.xml</path>
+    </paths>
+  </logentry>
   <logentry revision="397">
     <author>hywan</author>
     <date>2009-06-11T19:02:21.966577Z</date>

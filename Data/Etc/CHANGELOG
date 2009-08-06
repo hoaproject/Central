@@ -5,8 +5,420 @@
 \e[31mInformations\e[0m             :
     - repository path    : /Users/hywan/Development/Hoa/Svn/Repository ;
     - path in repository : /Framework/Trunk/ ;
-    - generated at       : 2009-06-11T19:02:22.000000Z.
+    - generated at       : 2009-08-06T10:42:06.000000Z.
 
+
+\e[33mRev. 446          \e[0m\e[34mTidy up the Data/ directory.\e[0m
+    At            2009-08-06T08:42:06.469592Z
+    By            hywan
+    \e[31mDeleted\e[0m       Data/Database
+    \e[31mDeleted\e[0m       Data/Local
+    \e[31mDeleted\e[0m       Data/Log
+    \e[32mAdded\e[0m         Data/Private
+
+\e[33mRev. 445          \e[0m\e[34mWelcome to the new Hoa_Serialize package!\e[0m
+    At            2009-08-06T07:55:33.485267Z
+    By            hywan
+    \e[32mAdded\e[0m         Framework/Serialize
+    \e[32mAdded\e[0m         Framework/Serialize/Cryonicable.php
+    \e[32mAdded\e[0m         Framework/Serialize/Exception.php
+    \e[32mAdded\e[0m         Framework/Serialize/Serializable.php
+
+\e[33mRev. 444          \e[0m\e[34mReformat the code.\e[0m
+    At            2009-08-06T07:54:11.374265Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Tree/Visitor/Dump.php
+
+\e[33mRev. 443          \e[0m\e[34mEdit the API documentation and reformat the code.\e[0m
+    At            2009-08-06T07:53:37.926107Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Tree/Visitor/Dot.php
+
+\e[33mRev. 442          \e[0m\e[34mChange the notifications system, but it is not yet good.\e[0m
+    At            2009-08-06T07:52:53.696336Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Notification.php
+
+\e[33mRev. 441          \e[0m\e[34mCorrect a typo in the API documentation.\e[0m
+    At            2009-08-06T07:51:37.477573Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Notification/Interface.php
+
+\e[33mRev. 440          \e[0m\e[34mAdd constants, reformat code, minor edits.\e[0m
+    At            2009-08-06T07:50:19.348009Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Framework.php
+
+\e[33mRev. 439          \e[0m\e[34mTypo in a parameter.\e[0m
+    At            2009-08-04T15:14:53.061604Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Wrapper/Interface/Stream.php
+
+\e[33mRev. 438          \e[0m\e[34mSimplify a concatenation.\e[0m
+    At            2009-07-31T13:46:04.624291Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Tree/Visitor/Dot.php
+
+\e[33mRev. 437          \e[0m\e[34mComplete the API documentation, edit the code and add a
+                  multiton support.
+                  \e[0m
+    At            2009-07-31T13:42:14.259404Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Log/Log.php
+
+\e[33mRev. 436          \e[0m\e[34mAdd the backtrace node (instead of the default simple node
+                  Hoa_Tree_Node_SimpleNode), and adapt the code in
+                  consequence.\e[0m
+    At            2009-07-31T13:41:49.660344Z
+    By            hywan
+    \e[32mAdded\e[0m         Framework/Log/Backtrace
+    \e[34mModified\e[0m      Framework/Log/Backtrace.php
+    \e[32mAdded\e[0m         Framework/Log/Backtrace/Node.php
+
+\e[33mRev. 435          \e[0m\e[34mOops, parse error!\e[0m
+    At            2009-07-31T13:38:32.017126Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Context.php
+
+\e[33mRev. 434          \e[0m\e[34mBetter multiton support.\e[0m
+    At            2009-07-31T13:37:53.568540Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Context.php
+
+\e[33mRev. 433          \e[0m\e[34mComplete API documentation.\e[0m
+    At            2009-07-31T13:37:40.845074Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Notification.php
+
+\e[33mRev. 432          \e[0m\e[34mAdapt the code to Hoa_Tree.\e[0m
+    At            2009-07-30T15:20:47.259822Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Log/Backtrace.php
+    \e[34mModified\e[0m      Framework/Log/Log.php
+
+\e[33mRev. 431          \e[0m\e[34mAh, good version for visiting a tree and getting the
+                  associated DOT language.\e[0m
+    At            2009-07-30T15:16:13.970079Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Tree/Visitor/Dot.php
+
+\e[33mRev. 430          \e[0m\e[34mCorrect a bug when inserting more than two nodes.
+                  \e[0m
+    At            2009-07-30T15:12:20.706452Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Tree/Binary.php
+
+\e[33mRev. 429          \e[0m\e[34mApply the previous revision.\e[0m
+    At            2009-07-30T15:06:51.786213Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Tree/Abstract.php
+    \e[34mModified\e[0m      Framework/Tree/Visitor/Dump.php
+
+\e[33mRev. 428          \e[0m\e[34mApply the previous revision.\e[0m
+    At            2009-07-30T14:30:05.734510Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Pom/Token/Array.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Call/Attribute.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Call/ClassConstant.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Call/Function.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Call/Method.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Call/StaticAttribute.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Call/StaticMethod.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Cast.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Class.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Class/Access.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Class/Attribute.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Class/Constant.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Class/Method.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Clone.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Comment.php
+    \e[34mModified\e[0m      Framework/Pom/Token/ControlStructure.php
+    \e[34mModified\e[0m      Framework/Pom/Token/ControlStructure/Break.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Exception.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Function.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Function/Argument.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Instruction.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Instruction/Block.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Interface.php
+    \e[34mModified\e[0m      Framework/Pom/Token/LateParsing.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Number.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Operation.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Operator.php
+    \e[34mModified\e[0m      Framework/Pom/Token/OutterPhp.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Php.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Root.php
+    \e[34mModified\e[0m      Framework/Pom/Token/String.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Interface/SuperScalar.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/PrettyPrint/Array.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/PrettyPrint/Call.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/PrettyPrint/Cast.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/PrettyPrint/Class.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/PrettyPrint/Clone.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/PrettyPrint/Comment.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/PrettyPrint/ControlStructure.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/PrettyPrint/Exception.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/PrettyPrint/Function.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/PrettyPrint/Instruction.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/PrettyPrint/Interface.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/PrettyPrint/LateParsing.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/PrettyPrint/New.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/PrettyPrint/Number.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/PrettyPrint/Operation.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/PrettyPrint/Operator.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/PrettyPrint/OutterPhp.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/PrettyPrint/Php.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/PrettyPrint/Root.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/PrettyPrint/String.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/PrettyPrint/Variable.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/PrettyPrint/Whitespace.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/Tokenize/Array.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/Tokenize/Call.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/Tokenize/Cast.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/Tokenize/Class.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/Tokenize/Clone.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/Tokenize/Comment.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/Tokenize/ControlStructure.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/Tokenize/Exception.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/Tokenize/Function.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/Tokenize/Instruction.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/Tokenize/Interface.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/Tokenize/LateParsing.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/Tokenize/New.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/Tokenize/Number.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/Tokenize/Operation.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/Tokenize/Operator.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/Tokenize/OutterPhp.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/Tokenize/Php.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/Tokenize/Root.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/Tokenize/String.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/Tokenize/Variable.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Util/Visitor/Tokenize/Whitespace.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Variable.php
+    \e[34mModified\e[0m      Framework/Pom/Token/Whitespace.php
+
+\e[33mRev. 427          \e[0m\e[34mAdd the $eldnah argument; it is like the $handle argument
+                  but without reference.
+                  \e[0m
+    At            2009-07-30T14:28:05.212692Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Visitor/Element.php
+    \e[34mModified\e[0m      Framework/Visitor/Registry.php
+    \e[34mModified\e[0m      Framework/Visitor/Visit.php
+
+\e[33mRev. 426          \e[0m\e[34mChange the childs management. It is not an array with
+                  indexed key, it is now an hashmap.\e[0m
+    At            2009-07-27T15:09:18.153154Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Tree/Abstract.php
+    \e[34mModified\e[0m      Framework/Tree/Binary.php
+    \e[34mModified\e[0m      Framework/Tree/Tree.php
+    \e[34mModified\e[0m      Framework/Tree/Visitor/Dot.php
+    \e[34mModified\e[0m      Framework/Tree/Visitor/Dump.php
+
+\e[33mRev. 425          \e[0m\e[34mAdd a node interface and a simple node class.\e[0m
+    At            2009-07-27T15:06:47.497959Z
+    By            hywan
+    \e[32mAdded\e[0m         Framework/Tree/Node
+    \e[32mAdded\e[0m         Framework/Tree/Node/Interface.php
+    \e[32mAdded\e[0m         Framework/Tree/Node/SimpleNode.php
+
+\e[33mRev. 424          \e[0m\e[34mEdit API documentation.\e[0m
+    At            2009-07-27T13:33:42.444053Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Graph/Node/Interface.php
+
+\e[33mRev. 423          \e[0m\e[34mWrite the DOT tree visitor.\e[0m
+    At            2009-07-25T18:06:58.791198Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Tree/Visitor/Dot.php
+
+\e[33mRev. 422          \e[0m\e[34mChange the default traversal order value (PRE_ORDER to
+                  IN_ORDER).\e[0m
+    At            2009-07-25T18:06:41.699307Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Tree/Visitor/Dump.php
+
+\e[33mRev. 421          \e[0m\e[34mOops, replace the rewind() function by reset().\e[0m
+    At            2009-07-25T18:05:49.290344Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Tree/Abstract.php
+
+\e[33mRev. 420          \e[0m\e[34mWelcome to the new package Hoa_Tree!\e[0m
+    At            2009-07-25T17:35:42.046232Z
+    By            hywan
+    \e[32mAdded\e[0m         Framework/Tree
+    \e[32mAdded\e[0m         Framework/Tree/Abstract.php
+    \e[32mAdded\e[0m         Framework/Tree/Binary.php
+    \e[32mAdded\e[0m         Framework/Tree/Exception.php
+    \e[32mAdded\e[0m         Framework/Tree/Tree.php
+    \e[32mAdded\e[0m         Framework/Tree/Visitor
+    \e[32mAdded\e[0m         Framework/Tree/Visitor/Abstract.php
+    \e[32mAdded\e[0m         Framework/Tree/Visitor/Dot.php
+    \e[32mAdded\e[0m         Framework/Tree/Visitor/Dump.php
+
+\e[33mRev. 419          \e[0m\e[34mEdit API documentation.\e[0m
+    At            2009-07-25T17:35:07.643002Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Visitor/Element.php
+    \e[34mModified\e[0m      Framework/Visitor/Visit.php
+
+\e[33mRev. 418          \e[0m\e[34mSimplify the code.\e[0m
+    At            2009-07-25T17:33:40.947402Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Iterator/Iterator.php
+
+\e[33mRev. 417          \e[0m\e[34mUse PHP_VERSION* constants instead of
+                  version_compare(phpversion(), …, …).\e[0m
+    At            2009-07-22T13:28:33.116110Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/File/Abstract.php
+    \e[34mModified\e[0m      Framework/File/File.php
+    \e[34mModified\e[0m      Framework/File/Temporary.php
+    \e[34mModified\e[0m      Framework/File/Upload.php
+    \e[34mModified\e[0m      Framework/Filter/HtmlEntities.php
+    \e[34mModified\e[0m      Framework/Json/Json.php
+    \e[34mModified\e[0m      Framework/Mail/Mime.php
+    \e[34mModified\e[0m      Framework/Memory/GarbageCollector.php
+    \e[34mModified\e[0m      Framework/Php/Io/In.php
+    \e[34mModified\e[0m      Framework/Pom/Parser/Lexer.php
+    \e[34mModified\e[0m      Framework/Session/Session.php
+    \e[34mModified\e[0m      Framework/StdClass/StdClass.php
+
+\e[33mRev. 416          \e[0m\e[34mEmulate the PHP_VERSION_ID constant if the PHP version is
+                  lower than 5.2.7.\e[0m
+    At            2009-07-22T13:17:41.125617Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Framework.php
+
+\e[33mRev. 415          \e[0m\e[34mFormat API documentation and set the last argument of
+                  stream_open() as a reference.\e[0m
+    At            2009-07-21T08:55:50.175105Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Wrapper/Interface/Stream.php
+
+\e[33mRev. 414          \e[0m\e[34mAdd two constants: SUCCEED and FAILED, respectively for true
+                  and false.\e[0m
+    At            2009-07-21T08:53:58.225434Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Framework.php
+
+\e[33mRev. 413          \e[0m\e[34mFormat API documentation.\e[0m
+    At            2009-07-21T08:53:15.766575Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Json/Json.php
+
+\e[33mRev. 412          \e[0m\e[34mExport to DOT language is available.\e[0m
+    At            2009-07-17T16:54:00.380350Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Log/Backtrace.php
+    \e[34mModified\e[0m      Framework/Log/Log.php
+
+\e[33mRev. 411          \e[0m\e[34mAdd the “log repository”.\e[0m
+    At            2009-07-16T16:48:25.188068Z
+    By            hywan
+    \e[32mAdded\e[0m         Data/Log
+
+\e[33mRev. 410          \e[0m\e[34mNeed a backup. Go further!\e[0m
+    At            2009-07-16T16:46:31.240137Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Log/Backtrace.php
+    \e[34mModified\e[0m      Framework/Log/Log.php
+
+\e[33mRev. 409          \e[0m\e[34mAdd the readArray() and writeArray() methods on stream IO
+                  interfaces, and adapt dependencies.\e[0m
+    At            2009-07-16T16:45:25.780372Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/File/File.php
+    \e[34mModified\e[0m      Framework/Php/Io/In.php
+    \e[34mModified\e[0m      Framework/Php/Io/Out.php
+    \e[34mModified\e[0m      Framework/Socket/Connection.php
+    \e[34mModified\e[0m      Framework/Stream/Io/In.php
+    \e[34mModified\e[0m      Framework/Stream/Io/Out.php
+
+\e[33mRev. 408          \e[0m\e[34mSolve a bug on case-sensitive operating system.\e[0m
+    At            2009-07-16T16:40:57.005791Z
+    By            hywan
+    \e[34mModified\e[0m      Data/Bin/Command/Main/Changelog.php
+    \e[34mModified\e[0m      Data/Bin/Command/Main/Dependency.php
+
+\e[33mRev. 407          \e[0m\e[34mOops, bad interface name.\e[0m
+    At            2009-07-16T11:58:04.562103Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Wrapper/Interface.php
+
+\e[33mRev. 406          \e[0m\e[34mWelcome to the new pachage Hoa_Log (early draft, but need a
+                  backup).\e[0m
+    At            2009-07-16T11:56:54.615445Z
+    By            hywan
+    \e[32mAdded\e[0m         Framework/Log
+    \e[32mAdded\e[0m         Framework/Log/Backtrace.php
+    \e[32mAdded\e[0m         Framework/Log/Exception.php
+    \e[32mAdded\e[0m         Framework/Log/Log.php
+
+\e[33mRev. 405          \e[0m\e[34mMove the Hoa_Swap package (which is not yet written
+                  actually) to Hoa_Memory_Swap subpackage.\e[0m
+    At            2009-07-15T13:43:47.455976Z
+    By            hywan
+    \e[32mAdded\e[0m         Framework/Memory/Swap.php
+    \e[31mDeleted\e[0m       Framework/Swap
+
+\e[33mRev. 404          \e[0m\e[34mAdd the isOpened() method, to know if the stream is opened
+                  or not (it checks if the stream bucket contains a valid
+                  resource).\e[0m
+    At            2009-07-15T13:32:22.963800Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Stream.php
+
+\e[33mRev. 403          \e[0m\e[34mWelcome to the new package Hoa_Php (first draft to only
+                  manage stdio, not filter, memory and temp streams).\e[0m
+    At            2009-07-15T13:30:40.674935Z
+    By            hywan
+    \e[32mAdded\e[0m         Framework/Php
+    \e[32mAdded\e[0m         Framework/Php/Exception.php
+    \e[32mAdded\e[0m         Framework/Php/Filter.php
+    \e[32mAdded\e[0m         Framework/Php/Io
+    \e[32mAdded\e[0m         Framework/Php/Io/Error.php
+    \e[32mAdded\e[0m         Framework/Php/Io/Exception.php
+    \e[32mAdded\e[0m         Framework/Php/Io/In.php
+    \e[32mAdded\e[0m         Framework/Php/Io/Out.php
+    \e[32mAdded\e[0m         Framework/Php/Memory.php
+    \e[32mAdded\e[0m         Framework/Php/Temp.php
+
+\e[33mRev. 402          \e[0m\e[34mWelcome to the new package Hoa_Memory!\e[0m
+    At            2009-07-15T13:28:54.753414Z
+    By            hywan
+    \e[32mAdded\e[0m         Framework/Memory
+    \e[32mAdded\e[0m         Framework/Memory/Exception.php
+    \e[32mAdded\e[0m         Framework/Memory/GarbageCollector.php
+    \e[32mAdded\e[0m         Framework/Memory/Memory.php
+
+\e[33mRev. 401          \e[0m\e[34mThe session_start() function now returns false, instead of a
+                  warning, in PHP 5.3.x. Take care about it.\e[0m
+    At            2009-06-26T11:25:30.360792Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Session/Session.php
+
+\e[33mRev. 400          \e[0m\e[34mAdd the $depth parameter in the constructor. Enable only
+                  with a PHP 5.3.x version.\e[0m
+    At            2009-06-26T11:11:10.199026Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Json/Json.php
+
+\e[33mRev. 399          \e[0m\e[34mThe split() function is deprecated in PHP 5.3.x. Replace by
+                  the preg_split() function that is more faster in
+                  Perl-compatible regular expression cases. It is already used
+                  elsewhere in the framework.\e[0m
+    At            2009-06-26T11:04:22.480539Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Locale/Locale.php
+    \e[34mModified\e[0m      Framework/XmlRpc/Server.php
+
+\e[33mRev. 398          \e[0m\e[34mTagging the 0.4.3b.\e[0m
+    At            2009-06-16T07:17:36.284728Z
+    By            hywan
+    \e[34mModified\e[0m      Data/Etc/CHANGELOG
+    \e[34mModified\e[0m      Data/Etc/CHANGELOG.echo
+    \e[34mModified\e[0m      Data/Etc/CHANGELOG.xml
 
 \e[33mRev. 397          \e[0m\e[34mPrepare the coming out of Hoa 0.4.3!\e[0m
     At            2009-06-11T17:02:21.966577Z

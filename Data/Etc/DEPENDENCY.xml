@@ -2,7 +2,7 @@
 
 <!--
 Informations       :
-    - generated at : 2009-06-11T19:01:03.000000Z.
+    - generated at : 2009-08-06T09:57:29.000000Z.
 -->
 
 <dependency>
@@ -52,16 +52,25 @@ Informations       :
     <dependent on="StdClass" />
   </package>
   <package name="Locale" />
+  <package name="Log">
+    <dependent on="Tree" />
+    <dependent on="Stream" />
+  </package>
   <package name="Mail">
     <dependent on="Socket" />
   </package>
+  <package name="Memory" />
   <package name="Mime" />
   <package name="Observer" />
+  <package name="Php">
+    <dependent on="Stream" />
+  </package>
   <package name="Pom">
     <dependent on="Visitor" />
   </package>
   <package name="Prototype" />
   <package name="Registry" />
+  <package name="Serialize" />
   <package name="Service">
     <dependent on="Xml" />
   </package>
@@ -71,7 +80,6 @@ Informations       :
   </package>
   <package name="StdClass" />
   <package name="Stream" />
-  <package name="Swap" />
   <package name="Test">
     <dependent on="Pom" />
   </package>
@@ -79,6 +87,9 @@ Informations       :
     <dependent on="File" />
     <dependent on="Registry" />
     <dependent on="Factory" />
+  </package>
+  <package name="Tree">
+    <dependent on="Visitor" />
   </package>
   <package name="Uri" />
   <package name="Validate">
