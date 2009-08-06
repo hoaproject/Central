@@ -105,13 +105,13 @@ class          Hoa_Tree_Visitor_Dump
                             &$handle = null,
                              $eldnah = null ) {
 
-        $pre      = null;
-        $in       = '> ' . str_repeat('  ', $this->_i) .
-                    $element->getValue() . "\n";
-        $post     = null;
-        $childs   = $element->getChilds();
-        $i        = 0;
-        $max      = floor(count($childs) / 2);
+        $pre    = null;
+        $in     = '> ' . str_repeat('  ', $this->_i) .
+                  $element->getValue() . "\n";
+        $post   = null;
+        $childs = $element->getChilds();
+        $i      = 0;
+        $max    = floor(count($childs) / 2);
 
         $this->_i++;
 
