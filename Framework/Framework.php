@@ -51,17 +51,19 @@ require_once 'Exception.php';
                            and define('PHP_VERSION_ID',   $v{0} * 10000
                                                         + $v{2} * 100
                                                         + $v{4});
+!defined('SUCCEED')        and define('SUCCEED',   true);
+!defined('FAILED')         and define('FAILED',    false);
 
 /**
  * … and type.
  */
-!defined('void')   and define('void'  , (unset) null);
+!defined('void')           and define('void'  , (unset) null);
 
 /**
  * Check if Hoa was well-included.
  */
 !(
-    !defined('HOA_FRAMEWORK') and define('HOA_FRAMEWORK', true)
+    !defined('HOA')        and define('HOA', true)
 )
 and
     exit('The Hoa framework main file (Framework.php) must be included once.');
@@ -77,6 +79,7 @@ define('HOA_DATA_CONFIGURATION',       HOA_DATA_BASE . DS . 'Configuration');
 define('HOA_DATA_CONFIGURATION_CACHE', HOA_DATA_CONFIGURATION . DS . 'Cache');
 define('HOA_DATA_ETC',                 HOA_DATA_BASE . DS . 'Etc');
 define('HOA_DATA_LOSTFOUND',           HOA_DATA_BASE . DS . 'Lost+found');
+define('HOA_DATA_PRIVATE',             HOA_DATA_BASE . DS . 'Private');
 define('HOA_DATA_TEMPLATE',            HOA_DATA_BASE . DS . 'Template');
 
 /**
@@ -138,21 +141,21 @@ class Hoa_Framework {
      *
      * @var Hoa_Framework array
      */
-    private static   $importStack             = array();
+    private static   $importStack           = array();
 
     /**
      * Stack of all registered shutdown function.
      *
      * @var Hoa_Framework array
      */
-    private static   $rsdf                    = array();
+    private static   $rsdf                  = array();
 
     /**
      * Current linearized configuration.
      *
      * @var Hoa_Framework array
      */
-    protected static $linearizedConfiguration = array();
+    private static $linearizedConfiguration = array();
 
 
 
@@ -471,10 +474,10 @@ class Hoa_Framework {
      * Return the last linearized array.
      * Please, see the self::linearizeConfiguration() method.
      *
-     * @access  protected
+     * @access  private
      * @return  array
      */
-    protected static function getLinearizedConfiguration ( ) {
+    private static function getLinearizedConfiguration ( ) {
 
         return self::$linearizedConfiguration;
     }
