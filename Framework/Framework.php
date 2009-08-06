@@ -169,6 +169,27 @@ class Hoa_Framework {
      */
     private static $_root                    = null;
 
+    /**
+     * Opened stream.
+     *
+     * @var Hoa_Framework resource
+     */
+    private $_stream                         = null;
+
+    /**
+     * Stream name (filename).
+     *
+     * @var Hoa_Framework string
+     */
+    private $_streamName                     = null;
+
+    /**
+     * Stream context (given by the streamWrapper class).
+     *
+     * @var Hoa_Framework resource
+     */
+    public $context                          = null;
+
 
 
     /**
@@ -199,30 +220,397 @@ class Hoa_Framework {
     }
 
     /**
-     * Bla bla.
+     * Close a resource.
+     * This method is called in response to fclose().
+     * All resources that were locked, or allocated, by the wrapper should be
+     * released.
      *
      * @access  public
-     * @param   ...
+     * @return  void
+     */
+    public function stream_close ( ) {
+
+        fclose($this->getStream());
+
+        return;
+    }
+
+    /**
+     * Tests for end-of-file on a file pointer.
+     * This method is called in response to feof().
+     *
+     * access   public
      * @return  bool
      */
-    public function stream_open ( $path, $mode, $optins, &$openedPath ) {
+    public function stream_eof ( ) {
+
+        return feof($this->getStream());
+    }
+
+    /**
+     * Flush the output.
+     * This method is called in respond to fflush().
+     * If we have cached data in our stream but not yet stored it into the
+     * underlying storage, we should do so now.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function stream_flush ( ) {
+
+        return fflush($this->getStream());
+    }
+
+    /**
+     * Advisory file locking.
+     * This method is called in response to flock(), when file_put_contents()
+     * (when flags contains LOCK_EX), stream_set_blocking() and when closing the
+     * stream (LOCK_UN).
+     *
+     * @access  public
+     * @param   int     $operation    Operation is one the following:
+     *                                  * LOCK_SH to acquire a shared lock (reader) ;
+     *                                  * LOCK_EX to acquire an exclusive lock (writer) ;
+     *                                  * LOCK_UN to release a lock (shared or exclusive) ;
+     *                                  * LOCK_NB if we don't want flock() to
+     *                                    block while locking (not supported on
+     *                                    Windows).
+     * @return  bool
+     */
+    public function stream_lock ( $operation ) {
+
+        return flock($this->getStream(), $operation);
+    }
+
+    /**
+     * Open file or URL.
+     * This method is called immediately after the wrapper is initialized (f.e.
+     * by fopen() and file_get_contents()).
+     *
+     * @access  public
+     * @param   string  $path           Specifies the URL that was passed to the
+     *                                  original function.
+     * @param   string  $mode           The mode used to open the file, as
+     *                                  detailed for fopen().
+     * @param   int     $options        Holds additional flags set by the
+     *                                  streams API. It can hold one or more of
+     *                                  the following values OR'd together:
+     *                                    * STREAM_USE_PATH, if path is relative,
+     *                                      search for the resource using the
+     *                                      include_path;
+     *                                    * STREAM_REPORT_ERRORS, if this is
+     *                                    set, you are responsible for raising
+     *                                    errors using trigger_error during
+     *                                    opening the stream. If this is not
+     *                                    set, you should not raise any errors.
+     *                                    @param   string  &$openedPath    If
+     *                                    the $path is opened successfully, and
+     *                                    STREAM_USE_PATH is set in $options,
+     *                                    $openedPath should be set to the full
+     *                                    path of the file/resource that was
+     *                                    actually opened.  @return  bool
+     * @return  bool
+     */
+    public function stream_open ( $path, $mode, $options, &$openedPath ) {
+
+        // context
 
         var_dump('Mode: ' . $mode);
-        $r = $this->realPath($path);
+        $p = $this->realPath($path);
 
-        var_dump('real path: ' . $r);
+        var_dump('real path: ' . $p);
 
-        $openedPath = fopen($r, 'r');
-        
+        if(false === $p)
+            return false;
+
+        if(null === $this->context)
+            $openedPath = fopen(
+                $p,
+                $mode,
+                $options & STREAM_USE_PATH
+            );
+        else
+            $openedPath = fopen(
+                $p,
+                $mode,
+                $options & STREAM_USE_PATH,
+                $this->context
+            );
+
         return true;
     }
 
     /**
+     * Read from stream. 
+     * This method is called in response to fread() and fgets().
      *
+     * @access  public
+     * @param   int     $count    How many bytes of data from the current
+     *                            position should be returned.
+     * @return  string
      */
-    public function url_stat ( ) {
+    public function stream_read ( $count ) {
 
-        return array();
+        return fread($this->getStream(), $count);
+    }
+
+    /**
+     * Seek to specific location in a stream.
+     * This method is called in response to fseek().
+     * The read/write position of the stream should be updated according to the
+     * $offset and $whence.
+     *
+     * @access  public
+     * @param   int     $offset    The stream offset to seek to.
+     * @param   int     $whence    Possible values:
+     *                               * SEEK_SET to set position equal to $offset
+     *                                 bytes ;
+     *                               * SEEK_CUR to set position to current
+     *                                 location plus $offsete ;
+     *                               * SEEK_END to set position to end-of-file
+     *                                 plus $offset.
+     * @return  bool
+     */
+    public function stream_seek ( $offset, $whence = SEEK_SET ) {
+
+        return fseek($this->getStream(), $offset, $whence);
+    }
+
+    /**
+     * Retrieve information about a file resource.
+     * This method is called in response to fstat().
+     *
+     * @access  public
+     * @return  array
+     */
+    public function stream_stat ( ) {
+
+        return fstat($this->getStream());
+    }
+
+    /**
+     * Retrieve the current position of a stream.
+     * This method is called in response to ftell().
+     *
+     * @access  public
+     * @return  int
+     */
+    public function stream_tell ( ) {
+
+        return ftell($this->getStream());
+    }
+
+    /**
+     * Write to stream.
+     * This method is called in response to fwrite().
+     *
+     * @access  public
+     * @param   string  $data    Should be stored into the underlying stream.
+     * @return  int
+     */
+    public function stream_write ( $data ) {
+
+        return fwrite($this->getStream(), $data);
+    }
+
+    /**
+     * Close directory handle.
+     * This method is called in to closedir().
+     * Any resources which were locked, or allocated, during opening and use of
+     * the directory stream should be released.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function dir_closedir ( ) {
+
+        return closedir($this->getStream());
+    }
+
+    /**
+     * Open directory handle.
+     * This method is called in response to opendir().
+     *
+     * @access  public
+     * @param   string  $path       Specifies the URL that was passed to opendir().
+     * @param   int     $options    Whether or not to enforce safe_mode (0x04).
+     * @return  bool
+     */
+    public function dir_opendir ( $path, $options ) {
+
+        // context
+
+        // resolve path and opendir.
+    }
+
+    /**
+     * Read entry from directory handle.
+     * This method is called in response to readdir().
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function dir_readdir ( ) {
+
+        return readdir($this->getStream());
+    }
+
+    /**
+     * Rewind directory handle.
+     * This method is called in response to rewinddir().
+     * Should reset the output generated by self::dir_readdir, i.e. the next
+     * call to self::dir_readdir should return the first entry in the location
+     * returned by self::dir_opendir.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function dir_rewinddir ( ) {
+
+        return rewinddir($this->getStream());
+    }
+
+    /**
+     * Create a directory.
+     * This method is called in response to mkdir().
+     *
+     * @access  public
+     * @param   string  $path       Directory which should be created.
+     * @param   int     $mode       The value passed to mkdir().
+     * @param   int     $options    A bitwise mask of values.
+     * @return  bool
+     */
+    public function mkdir ( $path, $mode, $options ) {
+
+        if(null === $this->context)
+            return mkdir(
+                $path,
+                $mode,
+                $option === STREAM_MKDIR_RECURSIVE
+            );
+        else
+            return mkdir(
+                $path,
+                $mode,
+                $option === STREAM_MKDIR_RECURSIVE,
+                $this->context
+            );
+    }
+
+    /**
+     * Rename a file or directory.
+     * This method is called in response to rename().
+     * Should attempt to rename $from to $to.
+     *
+     * @access  public
+     * @param   string  $from    The URL to current file.
+     * @param   string  $to      The URL which $from should be renamed to.
+     * @return  bool
+     */
+    public function rename ( $from, $to ) {
+
+        if(null === $this->context)
+            return rename($from, $to);
+        else
+            return rename($from, $to, $this->context);
+    }
+
+    /**
+     * Remove a directory.
+     * This method is called in response to rmdir().
+     *
+     * @access  public
+     * @param   string  $path       The directory URL which should be removed.
+     * @param   int     $options    A bitwise mask of values. It is not used
+     *                              here.
+     * @return  bool
+     */
+    public function rmdir ( $path, $options ) {
+
+        if(null === $this->context)
+            return rmdir($path);
+        else
+            return rmdir($path, $this->context);
+    }
+
+    /**
+     * Delete a file.
+     * This method is called in response to unlink().
+     *
+     * @access  public
+     * @param   string  $path    The file URL which should be deleted.
+     * @return  bool
+     */
+    public function unlink ( $path ) {
+
+        if(null === $this->context)
+            return unlink($path);
+        else
+            return unlink($path, $this->context);
+    }
+
+    /**
+     * Retrieve information about a file.
+     * This method is called in response to all stat() related functions.
+     *
+     * @access  public
+     * @param   string  $path     The file URL which should be retrieve
+     *                            information about.
+     * @param   int     $flags    Holds additional flags set by the streams API.
+     *                            It can hold one or more of the following
+     *                            values OR'd together.
+     *                            STREAM_URL_STAT_LINK: for resource with the
+     *                            ability to link to other resource (such as an
+     *                            HTTP location: forward, or a filesystem
+     *                            symlink). This flag specified that only
+     *                            information about the link itself should be
+     *                            returned, not the resource pointed to by the
+     *                            link. This flag is set in response to calls to
+     *                            lstat(), is_link(), or filetype().
+     *                            STREAM_URL_STAT_QUIET: if this flag is set,
+     *                            our wrapper should not raise any errors. If
+     *                            this flag is not set, we are responsible for
+     *                            reporting errors using the trigger_error()
+     *                            function during stating of the path.
+     * @return  array
+     */
+    public function url_stat ( $path, $flags ) {
+
+        if(false === $p = self::getProtocol()->resolve($path))
+            if($flags & STREAM_URL_STAT_QUIET)
+                return array(); // Not sure…
+            else
+                return trigger_error(
+                    'Path ' . $path . ' cannot be resolved.',
+                    E_WARNING
+                );
+
+        if($flags & STREAM_URL_STAT_LINK)
+            return lstat($p);
+        else
+            return stat($p);
+    }
+
+    /**
+     * Get stream resource.
+     *
+     * @access  protected
+     * @return  resource
+     */
+    protected function getStream ( ) {
+
+        return $this->_stream;
+    }
+
+    /**
+     * Get stream name.
+     *
+     * @access  protected
+     * @return  resource
+     */
+    protected function getStreamName ( ) {
+
+        return $this->_streamName;
     }
 
     /**
