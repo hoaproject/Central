@@ -55,7 +55,7 @@ import('Visitor.Visit');
 /**
  * Class Hoa_Tree_Visitor_Dot.
  *
- * Dump a tree.
+ * Transform a tree in DOT language.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -113,14 +113,14 @@ class          Hoa_Tree_Visitor_Dot
 
         foreach($element->getChilds() as $i => $child) {
 
-            $left  = md5($eldnah);
-            $right = md5($eldnah . '.' . $child->getValue());
+            $left   = md5($eldnah);
+            $right  = md5($eldnah . '.' . $child->getValue());
 
-            $ou  .= '    "' . $left  . '" -> "' . $right . '";' . "\n" .
-                    '    "' . $right . '" [label = "' .
-                    $child->getValue()
-                    . '"];' . "\n";
-            $bar .= $child->accept($this, $handle, $eldnah . '.' . $child->getValue());
+            $ou    .= '    "' . $left  . '" -> "' . $right . '";' . "\n" .
+                      '    "' . $right . '" [label = "' .
+                      $child->getValue()
+                      . '"];' . "\n";
+            $bar   .= $child->accept($this, $handle, $eldnah . '.' . $child->getValue());
         }
 
         $ou .= $bar;
