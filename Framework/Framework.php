@@ -57,7 +57,7 @@ require_once 'Exception.php';
 /**
  * … and type.
  */
-!defined('void')           and define('void'  , (unset) null);
+!defined('void')           and define('void',      (unset) null);
 
 /**
  * Check if Hoa was well-included.
@@ -72,7 +72,7 @@ and
  * Some other framework constants.
  */
 define('HOA_BASE',                     dirname(dirname(__FILE__)));
-define('HOA_FRAMEWORK_BASE',           dirname(__FILE__));
+define('HOA_FRAMEWORK_BASE',           HOA_BASE . DS . 'Framework');
 define('HOA_DATA_BASE',                HOA_BASE . DS . 'Data');
 define('HOA_DATA_BIN',                 HOA_DATA_BASE . DS . 'Bin');
 define('HOA_DATA_CONFIGURATION',       HOA_DATA_BASE . DS . 'Configuration');
@@ -80,6 +80,10 @@ define('HOA_DATA_CONFIGURATION_CACHE', HOA_DATA_CONFIGURATION . DS . 'Cache');
 define('HOA_DATA_ETC',                 HOA_DATA_BASE . DS . 'Etc');
 define('HOA_DATA_LOSTFOUND',           HOA_DATA_BASE . DS . 'Lost+found');
 define('HOA_DATA_PRIVATE',             HOA_DATA_BASE . DS . 'Private');
+define('HOA_DATA_PRIVATE_DATABASE',    HOA_DATA_PRIVATE . DS . 'Database');
+define('HOA_DATA_PRIVATE_LOCAL',       HOA_DATA_PRIVATE . DS . 'Local');
+define('HOA_DATA_PRIVATE_LOG',         HOA_DATA_PRIVATE . DS . 'Log');
+define('HOA_DATA_PRIVATE_TEST',        HOA_DATA_PRIVATE . DS . 'Test');
 define('HOA_DATA_TEMPLATE',            HOA_DATA_BASE . DS . 'Template');
 
 /**
@@ -88,12 +92,13 @@ define('HOA_DATA_TEMPLATE',            HOA_DATA_BASE . DS . 'Template');
  * Hoa_Framework is the framework package manager.
  * Each package must include Hoa_Framework, because it is the “taproot” of the
  * framework.
+ * And build the hoa:// protocol.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP5
- * @version     0.2
+ * @version     0.3
  * @package     Hoa_Framework
  */
 
@@ -141,24 +146,84 @@ class Hoa_Framework {
      *
      * @var Hoa_Framework array
      */
-    private static   $importStack           = array();
+    private static $_importStack             = array();
 
     /**
      * Stack of all registered shutdown function.
      *
      * @var Hoa_Framework array
      */
-    private static   $rsdf                  = array();
+    private static $_rsdf                    = array();
 
     /**
      * Current linearized configuration.
      *
      * @var Hoa_Framework array
      */
-    private static $linearizedConfiguration = array();
+    private static $_linearizedConfiguration = array();
+
+    /**
+     * Tree of components, starts by the root.
+     *
+     * @var Hoa_Framework_Protocol_Root object
+     */
+    private static $_root                    = null;
 
 
 
+    /**
+     * Get protocol's root.
+     *
+     * @access  public
+     * @return  Hoa_Framework_Protocol_Root
+     */
+    public static function getProtocol ( ) {
+
+        if(null === self::$_root)
+            self::$_root = new Hoa_Framework_Protocol_Root();
+
+        return self::$_root;
+    }
+
+    /**
+     * Get the real path of the given URL.
+     * Could return false if the path cannot be reached.
+     *
+     * @access  public
+     * @param   string  $path    Path (or URL).
+     * @return  mixed
+     */
+    public function realPath ( $path ) {
+
+        return self::getProtocol()->resolve($path);
+    }
+
+    /**
+     * Bla bla.
+     *
+     * @access  public
+     * @param   ...
+     * @return  bool
+     */
+    public function stream_open ( $path, $mode, $optins, &$openedPath ) {
+
+        var_dump('Mode: ' . $mode);
+        $r = $this->realPath($path);
+
+        var_dump('real path: ' . $r);
+
+        $openedPath = fopen($r, 'r');
+        
+        return true;
+    }
+
+    /**
+     *
+     */
+    public function url_stat ( ) {
+
+        return array();
+    }
 
     /**
      * Check if a constant is already defined.
@@ -188,10 +253,11 @@ class Hoa_Framework {
      *
      * @access  public
      * @param   string  $path    Path.
+     * @param   bool    $load    Load file when over.
      * @return  void
      * @throw   Hoa_Exception
      */
-    public static function import ( $path = null ) {
+    public static function import ( $path = null, $load = false ) {
 
         static $back = HOA_FRAMEWORK_BASE;
         static $last = null;
@@ -209,7 +275,7 @@ class Hoa_Framework {
 
                 if(   (is_dir($back)           && !empty($path))
                    || (is_file($back . '.php') &&  empty($path)))
-                    import($path);
+                    self::import($path, $load);
               break;
 
             default:
@@ -230,12 +296,12 @@ class Hoa_Framework {
 
                             if(   (is_dir($found)  && !empty($foo))
                                || (is_file($found) &&  empty($foo)))
-                                import(substr($path, strlen($handle) + 1));
+                                self::import(substr($path, strlen($handle) + 1), $load);
 
                             elseif(is_file($found . '.php')) {
 
                                 $back = $found . '\.php';
-                                import(null);
+                                self::import(null, $load);
                             }
 
                             $back = $tmp;
@@ -244,33 +310,40 @@ class Hoa_Framework {
                     else {
 
                         $back .= DS . $handle;
-                        import(null);
+                        self::import(null, $load);
                     }
                 }
                 else {
 
                     $last  = null;
                     $final = str_replace('\\.', '.', $back);
+                    $back  = HOA_FRAMEWORK_BASE;
 
                     if(!file_exists($final))
                         $final .= '.php';
 
-                    if(!file_exists($final))
+                    if(!file_exists($final)) {
+
+                        print_r(debug_backtrace());
                         throw new Hoa_Exception(
                             'File %s is not found.', 0, $final);
+                    }
 
                     if(false === OS_WIN)
                         $inode = fileinode($final);
                     else
                         $inode = md5($final);
 
-                    if(isset(self::$importStack[$inode]))
+                    if(isset(self::$_importStack[$inode]))
                         return;
 
-                    self::$importStack[$inode] = array(
+                    self::$_importStack[$inode] = array(
                         self::IMPORT_PATH => $final,
-                        self::IMPORT_LOAD => false
+                        self::IMPORT_LOAD => $load
                     );
+
+                    if(true === $load)
+                        require $final;
                 }
         }
 
@@ -318,14 +391,14 @@ class Hoa_Framework {
         else
             $inode = md5($classPath);
 
-        if(!isset(self::$importStack[$inode]))
+        if(!isset(self::$_importStack[$inode]))
             return;
 
-        if(true === self::$importStack[$inode][self::IMPORT_LOAD])
+        if(true === self::$_importStack[$inode][self::IMPORT_LOAD])
             return;
 
-        require self::$importStack[$inode][self::IMPORT_PATH];
-        self::$importStack[$inode][self::IMPORT_LOAD] = true;
+        require self::$_importStack[$inode][self::IMPORT_PATH];
+        self::$_importStack[$inode][self::IMPORT_LOAD] = true;
 
         return;
     }
@@ -447,7 +520,7 @@ class Hoa_Framework {
         $out = null;
 
         if(null === $prev)
-            self::$linearizedConfiguration = array();
+            self::$_linearizedConfiguration = array();
 
         foreach($configuration as $key => $value) {
 
@@ -461,7 +534,7 @@ class Hoa_Framework {
             else {
 
                 $out  = $pprev . $key . "\n";
-                self::$linearizedConfiguration[
+                self::$_linearizedConfiguration[
                     substr($out, strrpos(substr($out, -1), "\n"), -1)
                 ] = $value;
             }
@@ -479,7 +552,7 @@ class Hoa_Framework {
      */
     private static function getLinearizedConfiguration ( ) {
 
-        return self::$linearizedConfiguration;
+        return self::$_linearizedConfiguration;
     }
 
     /**
@@ -526,13 +599,260 @@ class Hoa_Framework {
      */
     public static function registerShutdownFunction ( $class = '', $method = '' ) {
 
-        if(!isset(self::$rsdf[$class][$method])) {
+        if(!isset(self::$_rsdf[$class][$method])) {
 
-            self::$rsdf[$class][$method] = true;
+            self::$_rsdf[$class][$method] = true;
             return register_shutdown_function(array($class, $method));
         }
 
         return false;
+    }
+}
+
+
+/**
+ * Class Hoa_Framework_Protocol.
+ *
+ * Abstract class for all hoa://'s components.
+ *
+ * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
+ * @license     http://gnu.org/licenses/gpl.txt GNU GPL
+ * @since       PHP5
+ * @version     0.1
+ * @package     Hoa_Framework_Protocol
+ */
+
+abstract class Hoa_Framework_Protocol {
+
+    /**
+     * Component name.
+     *
+     * @var Hoa_Framework_Protocol string
+     */
+    protected $_name     = null;
+
+    /**
+     * Collections of sub-components.
+     *
+     * @var Hoa_Framework_Protocol array
+     */
+    private $_components = array();
+
+    /**
+     * Static indentation for the __toString() method.
+     *
+     * @var Hoa_Framework_Protocol int
+     */
+    private static $i    = 0;
+
+
+
+    /**
+     * Add a component.
+     *
+     * @access  public
+     * @param   Hoa_Framework_Protocol  $component    Component to add.
+     * @return  array
+     */
+    public function addComponent ( Hoa_Framework_Protocol $component ) {
+
+        $this->_components[$component->getName()] = $component;
+
+        return $this->_components;
+    }
+
+    /**
+     * Get a specific component.
+     *
+     * @access  public
+     * @param   string  $component    Component name.
+     * @return  Hoa_Framework_Protocol
+     * @throw   Hoa_Exception
+     */
+    public function getComponent ( $component ) {
+
+        if(false === $this->componentExists($component))
+            throw new Hoa_Exception(
+                'Component %s does not exist.', 0, $component);
+
+        return $this->_components[$component];
+    }
+
+    /**
+     * Check if a component exists.
+     *
+     * @access  public
+     * @param   string  $component    Component name.
+     * @return  bool
+     */
+    public function componentExists ( $component ) {
+
+        return array_key_exists($component, $this->_components);
+    }
+
+    /**
+     * Resolve a path, i.e. iterate the components tree and reach the queue of
+     * the path.
+     *
+     * @access  public
+     * @param   string  $path    Path to resolve.
+     * @return  string
+     */
+    public function resolve ( $path ) {
+
+        if(substr($path, 0, 6) == 'hoa://')
+            $path = substr($path, 6);
+
+        $pos  = strpos($path, '/');
+
+        if($pos !== false)
+            $next = substr($path, 0, $pos);
+        else
+            $next = $path;
+
+        if(true === $this->componentExists($next))
+            return $this->getComponent($next)->resolve(substr($path, $pos + 1));
+
+        return $this->reach($path);
+    }
+
+    /**
+     * Queue of the component. Must be overload in childs classes.
+     *
+     * @access  public
+     * @param   string  $queue    Queue of the component (generally, a filename,
+     *                            with probably a query).
+     * @return  mixed
+     */
+    public function reach ( $queue ) {
+
+        switch($queue) {
+
+            case 'NEW':
+                return date('YmdHis');
+              break;
+        }
+
+        return false;
+    }
+
+    /**
+     * Get component's name.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getName ( ) {
+
+        return $this->_name;
+    }
+
+    /**
+     * Print a tree of component.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function __toString ( ) {
+
+        $out = null;
+
+        foreach($this->_components as $foo => $component) {
+
+            $out .= str_repeat('  ', self::$i) . $component->getName() . "\n";
+
+            self::$i++;
+            $out .= $component->__toString();
+            self::$i--;
+        }
+
+        return $out;
+    }
+}
+
+/**
+ * Class Hoa_Framework_Protocol_*.
+ *
+ * hoa:// protocol's components.
+ *
+ * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
+ * @license     http://gnu.org/licenses/gpl.txt GNU GPL
+ * @since       PHP5
+ * @version     0.1
+ * @package     Hoa_Framework_Protocol
+ * @subpackage  Hoa_Framework_Protocol_*
+ */
+
+class Hoa_Framework_Protocol_Application extends Hoa_Framework_Protocol {
+
+    /**
+     * Component name.
+     *
+     * @var Hoa_Framework_Protocol_Application string
+     */
+    protected $_name = 'Application';
+}
+
+class Hoa_Framework_Protocol_Framework_Package extends Hoa_Framework_Protocol {
+
+    /**
+     * Component name.
+     *
+     * @var Hoa_Framework_Protocol_Framework_Package string
+     */
+    protected $_name = 'Package';
+}
+
+class Hoa_Framework_Protocol_Framework extends Hoa_Framework_Protocol {
+
+    /**
+     * Component name.
+     *
+     * @var Hoa_Framework_Protocol_Framework string
+     */
+    protected $_name = 'Framework';
+
+
+
+    /**
+     * Add components.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function __construct ( ) {
+
+        $this->addComponent(new Hoa_Framework_Protocol_Framework_Package());
+
+        return;
+    }
+}
+
+class Hoa_Framework_Protocol_Root extends Hoa_Framework_Protocol {
+
+    /**
+     * Component name.
+     *
+     * @var Hoa_Framework_Protocol_Root string
+     */
+    protected $_name = '/';
+
+
+
+    /**
+     * Add components.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function __construct ( ) {
+
+        $this->addComponent(new Hoa_Framework_Protocol_Application());
+        $this->addComponent(new Hoa_Framework_Protocol_Framework());
+
+        return;
     }
 }
 
@@ -556,14 +876,20 @@ function _define ( $name = '', $value = '', $case = false ) {
  *
  * @access  public
  * @param   string  $path    Path.
+ * @param   bool    $load    Load file when over.
  * @return  bool
  */
-function import ( $fp ) {
+function import ( $path, $load = false ) {
 
-    return Hoa_Framework::import($fp);
+    return Hoa_Framework::import($path, $load);
 }
 
 
+/**
+ * Register the hoa:// protocol.
+ */
+
+stream_wrapper_register('hoa', 'Hoa_Framework', 0);
 /**
  * Set the default autoload.
  */
