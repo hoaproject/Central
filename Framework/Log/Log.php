@@ -69,7 +69,7 @@ import('Stream.Io.Out');
 /**
  * Class Hoa_Log.
  *
- * .
+ * Propose a log system.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -207,14 +207,14 @@ class Hoa_Log {
      *
      * @var Hoa_Log array
      */
-    protected $_output         = array();
+    protected $_outputs        = array();
 
     /**
      * Filters (combination of priorities constants, null means all).
      *
      * @var Hoa_Log int
      */
-    protected $_filter         = null;
+    protected $_filters        = null;
 
 
 
@@ -235,12 +235,12 @@ class Hoa_Log {
      * Make a multiton.
      *
      * @access  public
-     * @param   string      $id        Singleton ID.
+     * @param   string      $id        Channel ID (i.e. singleton ID)
      * @param   Hoa_Stream  $stream    Output stream (can be null).
      * @return  Hoa_Log
      * @throw   Hoa_Log_Exception
      */
-    public static function getInstance ( $id = null, $stream = null ) {
+    public static function getChannel ( $id = null, $stream = null ) {
 
         if(null === self::$_currentId && null === $id)
             throw new Hoa_Log_Exception(
@@ -270,7 +270,7 @@ class Hoa_Log {
         foreach($streams as $i => $stream)
             $this->addOutputStream($stream);
 
-        return $this->getOutputStack();
+        return $this->getOutputsStack();
     }
 
     /**
@@ -295,9 +295,89 @@ class Hoa_Log {
             throw new Hoa_Log_Exception(
                 'Stream log is not opened, maybe it failed.', 1);
 
-        $this->_output[$stream->__toString()] = $stream;
+        $this->_outputs[$stream->__toString()] = $stream;
 
-        return $this->getOutputStack();
+        return $this->getOutputsStack();
+    }
+
+    /**
+     * Accept a type of log on the outputstream.
+     *
+     * @access  public
+     * @param   int     $filter    A filter (please, see the class constants).
+     * @return  int
+     */
+    public function accept ( $filter ) {
+
+        $old            = $this->_filters;
+        $this->_filters = $old | $filter;
+
+        return $old;
+    }
+
+    /**
+     * Accept all types of logs on the outputstream.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function acceptAll ( ) {
+
+        $old            = $this->_filters;
+        $this->_filters = null;
+
+        return $old;
+    }
+
+    /**
+     * Set filters directly.
+     *
+     * @access  public
+     * @param   int     $filter    A filter (please, see the class constants).
+     * @return  int
+     */
+    public function setFilter ( $filter ) {
+
+        $old            = $this->_filters;
+        $this->_filters = $filter;
+
+        return $old;
+    }
+
+    /**
+     * Drop a type of log on the outputstream.
+     *
+     * @access  public
+     * @param   int     $filter    A filter (please, see the class constants).
+     * @return  int
+     */
+    public function drop ( $filter ) {
+
+        $old            = $this->_filters;
+        $this->_filters = $old & ~$filter;
+
+        return $old;
+    }
+
+    /**
+     * Drop all type of logs on the outputstreams.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function dropAll ( ) {
+
+        $old            = $this->_filters;
+        $this->_filters =   self::EMERGENCY
+                          & self::ALERT
+                          & self::CRITICAL
+                          & self::ERROR
+                          & self::WARNING
+                          & self::NOTICE
+                          & self::INFORMATIONAL
+                          & self::DEBUG;
+
+        return $old;
     }
 
     /**
@@ -319,8 +399,11 @@ class Hoa_Log {
             self::STACK_MEMORY_PEAK => memory_get_peak_usage()
         );
 
-        foreach($this->getOutputStack() as $i => $output)
-            $output->writeAll($message . "\n");
+        $filters = $this->getFilters();
+
+        foreach($this->getOutputsStack() as $i => $output)
+            if($type & $filters || null === $filters)
+                $output->writeAll($message . "\n");
 
         if($type & self::DEBUG)
             $this->_backtrace->debug();
@@ -329,14 +412,25 @@ class Hoa_Log {
     }
 
     /**
-     * Get output stack.
+     * Get outputs stack.
      *
      * @access  protected
      * @return  array
      */
-    protected function getOutputStack ( ) {
+    protected function getOutputsStack ( ) {
 
-        return $this->_output;
+        return $this->_outputs;
+    }
+
+    /**
+     * Get filters.
+     *
+     * @access  protected
+     * @return  int
+     */
+    public function getFilters ( ) {
+
+        return $this->_filters;
     }
 
     /**
@@ -433,5 +527,5 @@ class Hoa_Log {
  */
 function hlog ( $message, $type = Hoa_Log::DEBUG ) {
 
-    return Hoa_Log::getInstance()->log($message, $type);
+    return Hoa_Log::getChannel()->log($message, $type);
 }
