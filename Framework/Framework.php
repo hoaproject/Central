@@ -214,7 +214,7 @@ class Hoa_Framework {
      * @param   string  $path    Path (or URL).
      * @return  mixed
      */
-    public function realPath ( $path ) {
+    public static function realPath ( $path ) {
 
         return self::getProtocol()->resolve($path);
     }
@@ -230,7 +230,11 @@ class Hoa_Framework {
      */
     public function stream_close ( ) {
 
-        fclose($this->getStream());
+        if(true === @fclose($this->getStream())) {
+
+            $this->_stream     = null;
+            $this->_streamName = null;
+        }
 
         return;
     }
@@ -303,22 +307,16 @@ class Hoa_Framework {
      *                                    errors using trigger_error during
      *                                    opening the stream. If this is not
      *                                    set, you should not raise any errors.
-     *                                    @param   string  &$openedPath    If
-     *                                    the $path is opened successfully, and
-     *                                    STREAM_USE_PATH is set in $options,
-     *                                    $openedPath should be set to the full
-     *                                    path of the file/resource that was
-     *                                    actually opened.  @return  bool
+     * @param   string  &$openedPath    If the $path is opened successfully, and
+     *                                  STREAM_USE_PATH is set in $options,
+     *                                  $openedPath should be set to the full
+     *                                  path of the file/resource that was
+     *                                  actually opened.
      * @return  bool
      */
     public function stream_open ( $path, $mode, $options, &$openedPath ) {
 
-        // context
-
-        var_dump('Mode: ' . $mode);
-        $p = $this->realPath($path);
-
-        var_dump('real path: ' . $p);
+        $p = self::realPath($path);
 
         if(false === $p)
             return false;
@@ -336,6 +334,9 @@ class Hoa_Framework {
                 $options & STREAM_USE_PATH,
                 $this->context
             );
+
+        $this->_stream     = $openedPath;
+        $this->_streamName = $p;
 
         return true;
     }
@@ -424,7 +425,13 @@ class Hoa_Framework {
      */
     public function dir_closedir ( ) {
 
-        return closedir($this->getStream());
+        if(true === $handle = @closedir($this->getStream())) {
+
+            $this->_stream     = null;
+            $this->_streamName = null;
+        }
+
+        return $handle;
     }
 
     /**
@@ -434,13 +441,26 @@ class Hoa_Framework {
      * @access  public
      * @param   string  $path       Specifies the URL that was passed to opendir().
      * @param   int     $options    Whether or not to enforce safe_mode (0x04).
+     *                              It is not used here.
      * @return  bool
      */
     public function dir_opendir ( $path, $options ) {
 
-        // context
+        $p      = self::realPath($path);
+        $handle = null;
 
-        // resolve path and opendir.
+        if(null === $this->context)
+            $handle = @opendir($p, $this->context);
+        else
+            $handle = @opendir($p);
+
+        if(false === $handle)
+            return false;
+
+        $this->_stream     = $handle;
+        $this->_streamName = $p;
+
+        return true;
     }
 
     /**
@@ -576,7 +596,7 @@ class Hoa_Framework {
      */
     public function url_stat ( $path, $flags ) {
 
-        if(false === $p = self::getProtocol()->resolve($path))
+        if(false === $p = self::realPath($path))
             if($flags & STREAM_URL_STAT_QUIET)
                 return array(); // Not sure…
             else
@@ -1276,8 +1296,8 @@ function import ( $path, $load = false ) {
 /**
  * Register the hoa:// protocol.
  */
-
 stream_wrapper_register('hoa', 'Hoa_Framework', 0);
+
 /**
  * Set the default autoload.
  */
