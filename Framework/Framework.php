@@ -1034,7 +1034,7 @@ class Hoa_Framework {
 abstract class Hoa_Framework_Protocol {
 
     /**
-     * Component name.
+     * Component's name.
      *
      * @var Hoa_Framework_Protocol string
      */
@@ -1126,7 +1126,7 @@ abstract class Hoa_Framework_Protocol {
     }
 
     /**
-     * Queue of the component. Must be overload in childs classes.
+     * Queue of the component. Should be overload in childs classes.
      *
      * @access  public
      * @param   string  $queue    Queue of the component (generally, a filename,
@@ -1196,7 +1196,7 @@ abstract class Hoa_Framework_Protocol {
 class Hoa_Framework_Protocol_Application extends Hoa_Framework_Protocol {
 
     /**
-     * Component name.
+     * Component's name.
      *
      * @var Hoa_Framework_Protocol_Application string
      */
@@ -1206,7 +1206,7 @@ class Hoa_Framework_Protocol_Application extends Hoa_Framework_Protocol {
 class Hoa_Framework_Protocol_Framework_Package extends Hoa_Framework_Protocol {
 
     /**
-     * Component name.
+     * Component's name.
      *
      * @var Hoa_Framework_Protocol_Framework_Package string
      */
@@ -1216,7 +1216,7 @@ class Hoa_Framework_Protocol_Framework_Package extends Hoa_Framework_Protocol {
 class Hoa_Framework_Protocol_Framework extends Hoa_Framework_Protocol {
 
     /**
-     * Component name.
+     * Component's name.
      *
      * @var Hoa_Framework_Protocol_Framework string
      */
@@ -1241,7 +1241,7 @@ class Hoa_Framework_Protocol_Framework extends Hoa_Framework_Protocol {
 class Hoa_Framework_Protocol_Root extends Hoa_Framework_Protocol {
 
     /**
-     * Component name.
+     * Component's name.
      *
      * @var Hoa_Framework_Protocol_Root string
      */
