@@ -42,6 +42,11 @@ require_once 'Framework.php';
 import('Log.Exception');
 
 /**
+ * Hoa_Framework_Protocol_Framework_Package_Log
+ */
+import('Log._Protocol', true);
+
+/**
  * Hoa_Log_Backtrace
  */
 import('Log.Backtrace');
