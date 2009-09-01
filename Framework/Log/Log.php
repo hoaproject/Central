@@ -391,7 +391,7 @@ class Hoa_Log {
      */
     public function log ( $message, $type = self::DEBUG ) {
 
-        $this->_stack[] = array(
+        $handle  = $this->_stack[] = array(
             self::STACK_TIMESTAMP   => microtime(true),
             self::STACK_MESSAGE     => $message,
             self::STACK_PRIORITY    => $type,
@@ -403,7 +403,7 @@ class Hoa_Log {
 
         foreach($this->getOutputsStack() as $i => $output)
             if($type & $filters || null === $filters)
-                $output->writeAll($message . "\n");
+                $output->writeArray($handle . "\n");
 
         if($type & self::DEBUG)
             $this->_backtrace->debug();
