@@ -79,7 +79,7 @@ class Hoa_Configuration_Json extends Hoa_Configuration {
      * @param   string  $file       Filename (ou filepath) of YAML document.
      * @param   string  $convert    Convert into a Hoa_StdClass object or not.
      */
-    public function __construct ( $file    = null, $convert = parent::CONVERT_TO_OBJECT ) {
+    public function __construct ( $file = null, $convert = parent::CONVERT_TO_OBJECT ) {
 
         if(null == $file)
             $file = $this->_file;
