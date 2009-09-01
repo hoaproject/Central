@@ -1112,7 +1112,7 @@ abstract class Hoa_Framework_Protocol {
         if(substr($path, 0, 6) == 'hoa://')
             $path = substr($path, 6);
 
-        $pos  = strpos($path, '/');
+        $pos = strpos($path, '/');
 
         if($pos !== false)
             $next = substr($path, 0, $pos);
@@ -1135,14 +1135,7 @@ abstract class Hoa_Framework_Protocol {
      */
     public function reach ( $queue ) {
 
-        switch($queue) {
-
-            case 'NEW':
-                return date('YmdHis');
-              break;
-        }
-
-        return false;
+        return $queue;
     }
 
     /**
