@@ -1,0 +1,40 @@
+{
+    "system": {
+        "group": {
+            "default":   "Main",
+        },
+        "command": {
+            "default":   "Welcome",
+        }
+    },
+    "route": {
+        "directory":     "Command/",
+        "grpcmd": {
+            "separator": ":"
+        }
+    },
+    "pattern": {
+        "group":         "(:Group)",
+        "command": {
+            "name":      "(:Command)",
+            "file":      "(:Command)",
+            "class":     "(:Command)Command"
+        }
+    },
+    "prompt": {
+        "prefix":        "",
+        "symbol":        "> "
+    },
+    "cli": {
+        "longonly":      true
+    },
+    "interface": {
+        "style": {
+            "directory": "Style/"
+        }
+    },
+    "command": {
+        "php":           "php",
+        "browser":       "open"
+    }
+}

@@ -1,0 +1,32 @@
+{
+    "base": {
+        "classname":  "(:Base)Base",
+        "filename":   "_(:Base).php",
+        "directory":  "Data/Database/Model/(:Base)/"
+    },
+    "table": {
+        "classname":  "(:Table)Table",
+        "filename":   "(:Table).php",
+        "pkname":     "Pk(:Table)",
+        "fkname":     "Fk(:Field)",
+    },
+    "collection": {
+        "classname":  "(:Table)Collection"
+    },
+    "cache": {
+        "enable":     true,
+        "filename": {
+            "table":  "(:Table).cache",
+            "query":  "(:Table)Query.cache"
+        },
+        "directory":  "Data/Database/Cache/(:Base)/"
+    },
+    "constraint": {
+        "methodname": "user(:Field)Constraint"
+    },
+    "schema": {
+        "filename":   "(:Schema).xml",
+        "directory":  "Data/Database/Schema/"
+    },
+    "connection":     ""
+}

@@ -51,6 +51,11 @@ import('File.Undefined');
 import('Configuration.Ini');
 
 /**
+ * Hoa_Configuration_Json
+ */
+import('Configuration.Json');
+
+/**
  * Hoa_Configuration_Xml
  */
 import('Configuration.Xml');
@@ -94,11 +99,12 @@ class CacheCommand extends Hoa_Console_Command_Abstract {
      * @var VersionCommand array
      */
     protected $options     = array(
-        array('xml',  parent::NO_ARGUMENT, 'x'),
-        array('yaml', parent::NO_ARGUMENT, 'y'),
-        array('yml',  parent::NO_ARGUMENT, 'y'),
-        array('ini',  parent::NO_ARGUMENT, 'i'),
         array('php',  parent::NO_ARGUMENT, 'p'),
+        array('ini',  parent::NO_ARGUMENT, 'i'),
+        array('json', parent::NO_ARGUMENT, 'j'),
+        array('yml',  parent::NO_ARGUMENT, 'y'),
+        array('yaml', parent::NO_ARGUMENT, 'y'),
+        array('xml',  parent::NO_ARGUMENT, 'x'),
         array('help', parent::NO_ARGUMENT, 'h'),
         array('help', parent::NO_ARGUMENT, '?')
     );
@@ -131,8 +137,16 @@ class CacheCommand extends Hoa_Console_Command_Abstract {
 
             switch($c) {
 
-                case 'x':
-                    $this->addType('xml');
+                case 'p':
+                    $this->addType('php');
+                  break;
+
+                case 'i':
+                    $this->addType('ini');
+                  break;
+
+                case 'j':
+                    $this->addType('json');
                   break;
 
                 case 'y':
@@ -140,12 +154,8 @@ class CacheCommand extends Hoa_Console_Command_Abstract {
                     $this->addType('yaml');
                   break;
 
-                case 'i':
-                    $this->addType('ini');
-                  break;
-
-                case 'p':
-                    $this->addType('php');
+                case 'x':
+                    $this->addType('xml');
                   break;
 
                 case 'h':
@@ -169,18 +179,19 @@ class CacheCommand extends Hoa_Console_Command_Abstract {
      */
     public function usage ( ) {
 
-        cout('Usage   : maintenance:cache [-x] [-y] [-i] [-p]');
+        cout('Usage   : maintenance:cache [-p] [-i] [-j] [-y] [-x]');
         cout('Options :');
         cout(parent::makeUsageOptionsList(array(
-            'x'    => 'Generate the cache of XML configuration.',
+            'p'    => 'Generate the cache of PHP configuration.',
+            'i'    => 'Generate the cache of INI configuration.',
+            'j'    => 'Generate the cache of JSON configuration.',
             'y'    => 'Generate the cache of YAML configuration.',
-            'i'    => 'Generate the cache of PHP configuration.',
-            'p'    => 'Generate the cache of INI configuration.',
+            'x'    => 'Generate the cache of XML configuration.',
             'help' => 'This help.'
         )));
         cout(
             'If file is ommitted, it will be replaced by “*.<type>”, ' .
-            'where <type> is given by -x, -y, -i, or -p, or * by default.'
+            'where <type> is given by -p, -i, -j, -y or -x, or * by default.'
         );
         cout();
 
@@ -232,7 +243,8 @@ class CacheCommand extends Hoa_Console_Command_Abstract {
 
         if(empty($this->file)) {
 
-            cout(parent::stylize('No configuration to cache', 'error'));
+            throw new Hoa_Console_Command_Exception(
+                'No configuration to cache.', 0);
             return;
         }
 
@@ -248,13 +260,12 @@ class CacheCommand extends Hoa_Console_Command_Abstract {
 
             switch($ffile->getExtension()) {
 
-                case 'ini':
-                  break;
-
-                case 'php':
-                  break;
-
-                case 'xml':
+                case 'json':
+                    $json = new Hoa_Configuration_Json(
+                        $file,
+                        Hoa_Configuration::CONVERT_TO_ARRAY
+                    );
+                    $array = $json->get();
                   break;
 
                 case 'yml':
@@ -264,6 +275,11 @@ class CacheCommand extends Hoa_Console_Command_Abstract {
                                  Hoa_Configuration::CONVERT_TO_ARRAY
                              );
                     $array = $yml->get();
+                  break;
+
+                default:
+                    throw new Hoa_Console_Command_Exception(
+                        'This configuration format is not yet supported.', 1);
                   break;
             }
 
