@@ -90,12 +90,12 @@ class Hoa_Configuration_Json extends Hoa_Configuration {
 
         parent::__construct($file, $convert);
 
-        $yaml = new Hoa_Json(file_get_contents($file));
+        $json = new Hoa_Json(file_get_contents($file));
 
         if(parent::CONVERT_TO_ARRAY === $convert)
-            $configuration = $yaml->toArray();
+            $configuration = $json->toArray();
         else
-            $configuration = $yaml;
+            $configuration = $json;
 
         parent::set($configuration);
     }
