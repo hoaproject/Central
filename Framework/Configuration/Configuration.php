@@ -108,7 +108,7 @@ class Hoa_Configuration {
                                      $convert = self::CONVERT_TO_OBJECT ) {
 
         $this->setId($id);
-        $_configs[$id] = array();
+        $this->_configs[$id] = array();
         $this->setConvert($convert);
     }
 
