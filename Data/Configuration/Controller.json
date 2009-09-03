@@ -1,15 +1,16 @@
 {
     "route": {
-        "type":           "Get"
+        "type":           "Get",
         "parameter": {
-            "default":
+            "default": {
                 "module": "index",
                 "action": "index"
+            }
         },
         "controller": {
             "key":        "module"
         },
-        "action": {
+        "action": {
             "key":        "action"
         },
         "directory":      "Application/Controller/"

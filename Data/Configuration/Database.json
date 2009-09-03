@@ -8,7 +8,7 @@
         "classname":  "(:Table)Table",
         "filename":   "(:Table).php",
         "pkname":     "Pk(:Table)",
-        "fkname":     "Fk(:Field)",
+        "fkname":     "Fk(:Field)"
     },
     "collection": {
         "classname":  "(:Table)Collection"

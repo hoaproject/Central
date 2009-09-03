@@ -1,14 +1,7 @@
 <?php 
 
 /**
- * Generated the 2009-09-01T18:34:33.000000Z.
- */
-
-return array (
-);<?php 
-
-/**
- * Generated the 2009-09-01T18:34:33.000000Z.
+ * Generated the 2009-09-03T11:42:13.000000Z.
  */
 
 return array (
@@ -48,5 +41,5 @@ return array (
     'filename' => '(:Schema).xml',
     'directory' => 'Data/Database/Schema/',
   ),
-  'connection' => NULL,
+  'connection' => '',
 );

@@ -1,10 +1,10 @@
 {
-    "system": {
+    "system": {
         "group": {
-            "default":   "Main",
+            "default":   "Main"
         },
-        "command": {
-            "default":   "Welcome",
+        "command": {
+            "default":   "Welcome"
         }
     },
     "route": {
