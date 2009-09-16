@@ -87,6 +87,12 @@ define('HOA_DATA_PRIVATE_TEST',        HOA_DATA_PRIVATE . DS . 'Test');
 define('HOA_DATA_TEMPLATE',            HOA_DATA_BASE . DS . 'Template');
 
 /**
+ * Trunk.
+ */
+define('HOA_FRAMEWORK', dirname(__FILE__));
+define('HOA_DATA',      dirname(dirname(__FILE__)) . DS . 'Data');
+
+/**
  * Class Hoa_Framework.
  *
  * Hoa_Framework is the framework package manager.
@@ -1196,6 +1202,56 @@ class Hoa_Framework_Protocol_Application extends Hoa_Framework_Protocol {
     protected $_name = 'Application';
 }
 
+class Hoa_Framework_Protocol_Data_Configuration extends Hoa_Framework_Protocol {
+
+    /**
+     * Component's name.
+     *
+     * @var Hoa_Framework_Protocol_Data_Configuration string
+     */
+    protected $_name = 'Configuration';
+
+
+
+    /**
+     * Queue of the component.
+     *
+     * @access  public
+     * @param   stirng  $queue    Queue of the component (generally, a filename,
+     *                            with probably a query; here it is a path).
+     * @return  mixed
+     */
+    public function reach ( $queue ) {
+
+        return HOA_DATA . DS . 'Configuration' . DS . 'Cache' . DS . $queue;
+    }
+}
+
+class Hoa_Framework_Protocol_Data extends Hoa_Framework_Protocol {
+
+    /**
+     * Component's name.
+     *
+     * @var Hoa_Framework_Protocol_Data string
+     */
+    protected $_name = 'Data';
+
+
+
+    /**
+     * Add components.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function __construct ( ) {
+
+        $this->addComponent(new Hoa_Framework_Protocol_Data_Configuration());
+
+        return;
+    }
+}
+
 class Hoa_Framework_Protocol_Framework_Package extends Hoa_Framework_Protocol {
 
     /**
@@ -1251,6 +1307,7 @@ class Hoa_Framework_Protocol_Root extends Hoa_Framework_Protocol {
     public function __construct ( ) {
 
         $this->addComponent(new Hoa_Framework_Protocol_Application());
+        $this->addComponent(new Hoa_Framework_Protocol_Data());
         $this->addComponent(new Hoa_Framework_Protocol_Framework());
 
         return;
