@@ -69,28 +69,10 @@ and
     exit('The Hoa framework main file (Framework.php) must be included once.');
 
 /**
- * Some other framework constants.
+ * Environment constants.
  */
-define('HOA_BASE',                     dirname(dirname(__FILE__)));
-define('HOA_FRAMEWORK_BASE',           HOA_BASE . DS . 'Framework');
-define('HOA_DATA_BASE',                HOA_BASE . DS . 'Data');
-define('HOA_DATA_BIN',                 HOA_DATA_BASE . DS . 'Bin');
-define('HOA_DATA_CONFIGURATION',       HOA_DATA_BASE . DS . 'Configuration');
-define('HOA_DATA_CONFIGURATION_CACHE', HOA_DATA_CONFIGURATION . DS . 'Cache');
-define('HOA_DATA_ETC',                 HOA_DATA_BASE . DS . 'Etc');
-define('HOA_DATA_LOSTFOUND',           HOA_DATA_BASE . DS . 'Lost+found');
-define('HOA_DATA_PRIVATE',             HOA_DATA_BASE . DS . 'Private');
-define('HOA_DATA_PRIVATE_DATABASE',    HOA_DATA_PRIVATE . DS . 'Database');
-define('HOA_DATA_PRIVATE_LOCAL',       HOA_DATA_PRIVATE . DS . 'Local');
-define('HOA_DATA_PRIVATE_LOG',         HOA_DATA_PRIVATE . DS . 'Log');
-define('HOA_DATA_PRIVATE_TEST',        HOA_DATA_PRIVATE . DS . 'Test');
-define('HOA_DATA_TEMPLATE',            HOA_DATA_BASE . DS . 'Template');
-
-/**
- * Trunk.
- */
-define('HOA_FRAMEWORK', dirname(__FILE__));
-define('HOA_DATA',      dirname(dirname(__FILE__)) . DS . 'Data');
+!defined('HOA_FRAMEWORK')  and define('HOA_FRAMEWORK', dirname(__FILE__));
+!defined('HOA_DATA')       and define('HOA_DATA',      dirname(dirname(__FILE__)) . DS . 'Data');
 
 /**
  * Class Hoa_Framework.
@@ -125,78 +107,733 @@ class Hoa_Framework {
     const IMPORT_LOAD         = 1;
 
     /**
-     * Configuration constant : load configurations into a simple array.
-     *
-     * @const int
-     */
-    const CONFIGURATION_ARRAY = 0;
-
-    /**
-     * Configuration constant : load configurations into a dotted array, i.e. a
-     * linearized array.
-     *
-     * @const int
-     */
-    const CONFIGURATION_DOT   = 1;
-
-    /**
-     * Configuration constant : load configurations into a simple and a dotted
-     * array.
-     *
-     * @const int
-     */
-    const CONFIGURATION_MIXE  = 2;
-
-    /**
      * Stack of all files that might be imported.
      *
      * @var Hoa_Framework array
      */
-    private static $_importStack             = array();
+    private static $_importStack = array();
+
+    /**
+     * Collection of package's parameters.
+     *
+     * @var Hoa_Framework array
+     */
+    private static $_parameters  = array();
+
+    /**
+     * Collcetion of package's keywords.
+     *
+     * @var Hoa_Framework array
+     */
+    private static $_keywords    = array();
 
     /**
      * Stack of all registered shutdown function.
      *
      * @var Hoa_Framework array
      */
-    private static $_rsdf                    = array();
-
-    /**
-     * Current linearized configuration.
-     *
-     * @var Hoa_Framework array
-     */
-    private static $_linearizedConfiguration = array();
+    private static $_rsdf        = array();
 
     /**
      * Tree of components, starts by the root.
      *
      * @var Hoa_Framework_Protocol_Root object
      */
-    private static $_root                    = null;
+    private static $_root        = null;
 
     /**
      * Opened stream.
      *
      * @var Hoa_Framework resource
      */
-    private $_stream                         = null;
+    private $_stream             = null;
 
     /**
      * Stream name (filename).
      *
      * @var Hoa_Framework string
      */
-    private $_streamName                     = null;
+    private $_streamName         = null;
 
     /**
      * Stream context (given by the streamWrapper class).
      *
      * @var Hoa_Framework resource
      */
-    public $context                          = null;
+    public $context              = null;
 
 
+
+    /**
+     * Check if a constant is already defined.
+     * If the constant is defined, this method returns false.
+     * Else this method declares the constant.
+     *
+     * @access  public
+     * @param   string  $name     The name of the constant.
+     * @param   string  $value    The value of the constant.
+     * @param   bool    $case     True set the case-insensitive.
+     * @return  bool
+     */
+    public static function _define ( $name = '', $value = '', $case = false) {
+
+        if(!defined($name))
+            return define($name, $value, $case);
+        else
+            return false;
+    }
+
+    /**
+     * Import a file or a directory.
+     * This method find file, and write some informations (inode, path, and
+     * already imported or not) into an “import register”. If a file is not in
+     * this register, the autoload will return an error.
+     * This method is dependent of include_path (ini_set).
+     *
+     * @access  public
+     * @param   string  $path    Path.
+     * @param   bool    $load    Load file when over.
+     * @return  void
+     * @throw   Hoa_Exception
+     */
+    public static function import ( $path = null, $load = false ) {
+
+        static $back = HOA_FRAMEWORK_BASE;
+        static $last = null;
+
+        preg_match('#(?:(.*?)(?<!\\\)\.)|(.*)#', $path, $matches);
+
+        $handle = !isset($matches[2]) ? $matches[1] : $matches[2];
+
+        switch($handle) {
+
+            case '~':
+
+                $back .= DS . $last;
+                $path  = substr($path, 2);
+
+                if(   (is_dir($back)           && !empty($path))
+                   || (is_file($back . '.php') &&  empty($path)))
+                    self::import($path, $load);
+              break;
+
+            default:
+
+                if(!empty($path)) {
+
+                    $glob = glob($back . DS . $handle);
+
+                    if(!empty($glob)) {
+
+                        foreach($glob as $i => $found) {
+
+                            $last  = str_replace('.', '\\.', $found);
+                            $last  = substr($last, strrpos($last, DS) + 1);
+                            $tmp   = $back;
+                            $back .= DS . $last;
+                            $foo   = substr($path, strlen($handle) + 1);
+
+                            if(   (is_dir($found)  && !empty($foo))
+                               || (is_file($found) &&  empty($foo)))
+                                self::import(substr($path, strlen($handle) + 1), $load);
+
+                            elseif(is_file($found . '.php')) {
+
+                                $back = $found . '\.php';
+                                self::import(null, $load);
+                            }
+
+                            $back = $tmp;
+                        }
+                    }
+                    else {
+
+                        $back .= DS . $handle;
+                        self::import(null, $load);
+                    }
+                }
+                else {
+
+                    $last  = null;
+                    $final = str_replace('\\.', '.', $back);
+                    $back  = HOA_FRAMEWORK_BASE;
+
+                    if(!file_exists($final))
+                        $final .= '.php';
+
+                    if(!file_exists($final))
+                        throw new Hoa_Exception(
+                            'File %s is not found.', 0, $final);
+
+                    if(false === OS_WIN)
+                        $inode = fileinode($final);
+                    else
+                        $inode = md5($final);
+
+                    if(isset(self::$_importStack[$inode]))
+                        return;
+
+                    self::$_importStack[$inode] = array(
+                        self::IMPORT_PATH => $final,
+                        self::IMPORT_LOAD => $load
+                    );
+
+                    if(true === $load)
+                        require $final;
+                }
+        }
+
+        return;
+    }
+
+    /**
+     * If file is imported (via self::import()), the autoload method will
+     * load the file that contains the class $className.
+     *
+     * @access  public
+     * @param   string  $className    Class name.
+     * @return  void
+     */
+    public static function autoload ( $className ) {
+
+        $hoa = substr($className, 0, 3);
+
+        if($hoa != 'Hoa')
+            return;
+
+        // Skip “Hoa_”.
+        $className = substr($className, 4);
+        $classPath = HOA_FRAMEWORK_BASE . DS .
+                     str_replace('_', DS, $className) . '.php';
+
+        // If it is an entry class.
+        if(!file_exists($classPath)) {
+
+            if(false !== strpos($className, '_'))
+                $className .= substr($className, strrpos($className, '_')); 
+            else
+                $className .= '_' . $className;
+
+            $classPath = HOA_FRAMEWORK_BASE . DS .
+                         str_replace('_', DS, $className) . '.php';
+        }
+
+        if(!file_exists($classPath))
+            return;
+
+
+        if(false === OS_WIN)
+            $inode = fileinode($classPath);
+        else
+            $inode = md5($classPath);
+
+        if(!isset(self::$_importStack[$inode]))
+            return;
+
+        if(true === self::$_importStack[$inode][self::IMPORT_LOAD])
+            return;
+
+        require self::$_importStack[$inode][self::IMPORT_PATH];
+        self::$_importStack[$inode][self::IMPORT_LOAD] = true;
+
+        return;
+    }
+
+    /**
+     * Set default parameters to a class.
+     *
+     * @access  public
+     * @param   string  $id            Class ID, i.e. class name.
+     * @param   array   $parameters    Parameters to set.
+     * @return  void
+     */
+    public static function setDefaultParameters ( $id, Array $parameters = array() ) {
+
+        self::$_parameters[$id] = $parameters;
+
+        // Before assigning, check if a file does not exist. It has a higher
+        // priority.
+
+        return;
+    }
+
+    /**
+     * Get default parameters from a class.
+     *
+     * @access  public
+     * @param   mixed   $id    Class ID, i.e. class name or class instance.
+     * @return  array
+     */
+    public static function getDefaultParameters ( $id ) {
+
+        if($id instanceof Hoa_Framework_Parameterizable)
+            $id = get_class($id);
+
+        return array_key_exists($id, self::$_parameters)
+                 ? self::$_parameters[$id]
+                 : array();
+    }
+
+    /**
+     * Set many parameters to a class.
+     *
+     * @access  public
+     * @param   Hoa_Framework_Parameterizable  $id      Class ID, i.e. class
+     *                                                  instance.
+     * @param   array                          $in      Parameters to set.
+     * @param   array                          &$out    Parameters that will be
+     *                                                  touched (intern
+     *                                                  parameters).
+     * @return  void
+     */
+    public static function setParameters ( Hoa_Framework_Parameterizable $id,
+                                           Array $in, Array &$out ) {
+
+        if(empty($out))
+            $out = self::getDefaultParameters(get_class($id));
+
+        foreach($in as $key => $value)
+            if(array_key_exists($key, $out))
+                self::setParameter($id, $key, $value, $out);
+
+        return;
+    }
+
+    /**
+     * Get many parameters from a class.
+     *
+     * @access  public
+     * @param   Hoa_Framework_Parameterizable  $id      Class ID, i.e. class
+     *                                                  instance.
+     * @param   array                          &$out    Intern parameters.
+     * @return  array
+     */
+    public static function getParameters ( Hoa_Framework_Parameterizable $id,
+                                           Array &$out ) {
+
+        if(!empty($out))
+            return $out;
+
+        return self::getDefaultParameters($id);
+    }
+
+    /**
+     * Set a parameter to a class.
+     *
+     * @access  public
+     * @param   Hoa_Framework_Parameterizable  $id       Class ID, i.e. class
+     *                                                   instance.
+     * @param   string                         $key      Key.
+     * @param   mixed                          $value    Value.
+     * @param   array                          &$out     Parameters that will be
+     *                                                   touched (intern
+     *                                                   parameters).
+     * @return  mixed
+     */
+    public static function setParameter ( Hoa_Framework_Parameterizable $id,
+                                          $key, $value, Array &$out ) {
+
+        $old       = $out[$key];
+        $out[$key] = $value;
+
+        return $old;
+    }
+
+    /**
+     * Get a parameter from a class.
+     *
+     * @access  public
+     * @param   Hoa_Framework_Parameterizable  $id       Class ID, i.e. class
+     *                                                   instance.
+     * @param   string                         $key      Key.
+     * @param   array                          &$out     Parameters that will be
+     *                                                   touched (intern
+     *                                                   parameters).
+     * @return  mixed
+     */
+    public static function getParameter ( Hoa_Framework_Parameterizable $id,
+                                          $key, Array &$out ) {
+
+        $parameters = self::getParameters($id, $out);
+
+        if(array_key_exists($key, $parameters))
+            return $parameters[$key];
+
+        return null;
+    }
+
+    /**
+     * Get a formatted parameter from a class (i.e. zFormat with keywords and
+     * other parameters).
+     *
+     * @access  public
+     * @param   Hoa_Framework_Parameterizable  $id       Class ID, i.e. class
+     *                                                   instance.
+     * @param   string                         $key      Key.
+     * @param   array                          &$out     Parameters that will be
+     *                                                   touched (intern
+     *                                                   parameters).
+     * @return  mxied
+     */
+    public static function getFormattedParameter ( Hoa_Framework_Parameterizable $id,
+                                                   $key, Array &$out ) {
+
+        $parameter = self::getParameter($id, $key, $out);
+
+        if(null === $parameter)
+            return null;
+
+        return self::zFormat(
+            $parameter,
+            self::getKeywords($id),
+            self::getParameters($id, $out)
+        );
+    }
+
+    /**
+     * Set many keywords to a class.
+     *
+     * @access  public
+     * @param   string  $id          Class ID, i.e. class name.
+     * @param   array   $keywords    Keywords to set.
+     * @return  void
+     */
+    public static function setKeywords ( $id, Array $keywords = array() ) {
+
+        if($id instanceof Hoa_Framework_Parameterizable)
+            $id = get_class($id);
+
+        self::$_keywords[$id] = $keywords;
+
+        return;
+    }
+
+    /**
+     * Get many keywords from a class.
+     *
+     * @access  public
+     * @param   string  $id    Class ID, i.e. class name.
+     * @return  array
+     */
+    public static function getKeywords ( $id ) {
+
+        if($id instanceof Hoa_Framework_Parameterizable)
+            $id = get_class($id);
+
+        return array_key_exists($id, self::$_keywords)
+                 ? self::$_keywords[$id]
+                 : array();
+    }
+
+    /**
+     * Set a keyword to a class.
+     *
+     * @access  public
+     * @param   Hoa_Framework_Parameterizable  $id       Class ID, i.e. class
+     *                                                   instance.
+     * @param   string                         $key      Key.
+     * @param   mixed                          $value    Value.
+     * @return  mixed
+     */
+    public static function setKeyword ( Hoa_Framework_Parameterizable $id,
+                                        $key, $word ) {
+
+        $id = get_class($id);
+
+        if(false === array_key_exists($id, self::$_keywords))
+            return null;
+
+        $old                        = self::$_keywords[$id][$key];
+        self::$_keywords[$id][$key] = $word;
+
+        return $old;
+    }
+
+    /**
+     * Get a keyword from a class.
+     *
+     * @access  public
+     * @param   Hoa_Framework_Parameterizable  $id         Class ID, i.e. class
+     *                                                     instance.
+     * @param   string                         $keyword    Keyword.
+     * @return  mixed
+     */
+    public static function getKeyword ( Hoa_Framework_Parameterizable $id,
+                                        $keyword ) {
+
+        $id = get_class($id);
+
+        if(true === array_key_exists($id, self::$_keywords))
+            return self::$_keywords[$id][$key];
+
+        return null;
+    }
+
+    /**
+     * ZFormat a string.
+     * ZFormat is inspired from the famous Zsh (please, take a look at
+     * http://zsh.org), and specifically from ZStyle.
+     *
+     * ZFormat has the following pattern:
+     *     (:subject:format:)
+     *
+     * where subject could be a:
+     *   * keyword, i.e. a simple string: foo;
+     *   * reference to an existing parameter, i.e. a simple string prefixed by
+     *     a %: %bar;
+     *   * constant, i.e. a combination of chars, first is prefixed by a _: _Ymd
+     *     will given the current year, followed by the current month and
+     *     finally the current day.
+     *
+     * or where the format is a combination of chars, that apply functions on
+     * the subject:
+     *   * h: to get the head of a path (equivalent to dirname);
+     *   * t: to get the tail of a path (equivalent to basename);
+     *   * r: to get the path without extension;
+     *   * e: to get the extension;
+     *   * l: to get the result in lowercase;
+     *   * u: to get the result in uppercase;
+     *   * U: to get the result with the first letter in uppercase;
+     *   * s/<foo>/<bar>/: to replace all matches <foo> by <bar> (the last / is
+     *     optional, only if more options are given after);
+     *   * s%<foo>%<bar>%: to replace the prefix <foo> by <bar> (the last % is
+     *     also optional);
+     *   * s#<foo>#<bar>#: to replace the suffix <foo> by <bar> (the last # is
+     *     also optional).
+     *
+     * Known constants are:
+     *   * d: day of the month, 2 digits with leading zeros;
+     *   * j: day of the month without leading zeros;
+     *   * N: ISO-8601 numeric representation of the day of the week;
+     *   * w: numeric representation of the day of the week;
+     *   * z: the day of the year (starting from 0);
+     *   * W: ISO-8601 week number of year, weeks starting on Monday;
+     *   * m: numeric representation of a month, with leading zeros;
+     *   * n: numeric representation of a month, without leading zeros;
+     *   * Y: a full numeric representation of a year, 4 digits;
+     *   * y: a two digit representation of a year;
+     *   * g: 12-hour format of an hour without leading zeros;
+     *   * G: 24-hour format of an hour without leading zeros;
+     *   * h: 12-hour format of an hour with leading zeros;
+     *   * H: 24-hour format of an hour with leading zeros;
+     *   * i: minutes with leading zeros;
+     *   * s: seconds with leading zeros;
+     *   * u: microseconds;
+     *   * O: difference to Greenwich time (GMT) in hours;
+     *   * T: timezone abbreviation;
+     *   * U: seconds since the Unix Epoch (a timestamp).
+     * There are very usefull for dynamic cache paths for example.
+     *
+     *
+     * Examples:
+     *   Let keywords $k and parameters $p:
+     *     $k = array(
+     *         'foo'      => 'bar',
+     *         'car'      => 'DeLoReAN',
+     *         'power'    => 2.21,
+     *         'answerTo' => 'life_universe_everything_else',
+     *         'answerIs' => 42,
+     *         'hello'    => 'wor.l.d'
+     *     );
+     *     $p = array(
+     *         'plpl'        => '(:foo:U:)',
+     *         'foo'         => 'ar(:%plpl:)',
+     *         'favoriteCar' => 'A (:car:l:)!',
+     *         'truth'       => 'To (:answerTo:ls/_/ /U:) is (:answerIs:).',
+     *         'file'        => '/a/file/(:_Ymd:)/(:hello:trr:).(:power:e:)',
+     *         'recursion'   => 'oof(:%foo:s#ar#az:)'
+     *     );
+     *   Then, after applying the zFormat, we get:
+     *     * plpl:        'Bar', put the first letter in uppercase;
+     *     * foo:         'arBar', call the parameter plpl;
+     *     * favoriteCar: 'A delorean!', all is in lowercase;
+     *     * truth:       'To Life universe everything else is 42', all is in
+     *                    lowercase, then replace underscores by spaces, and
+     *                    finally put the first letter in uppercase; and no
+     *                    transformation for 42;
+     *     * file:        '/a/file/20090505/wor.21', get date constants, then
+     *                    get the tail of the path and remove extension twice,
+     *                    and add the extension of power;
+     *     * recursion:   'oofarbaz', get 'arbar' first, and then, replace the
+     *                    suffix 'ar' by 'az'.
+     *
+     * @access  public
+     * @param   string    $parameter     Parameter.
+     * @param   array     $keywords      Keywords.
+     * @param   array     $parameters    Parameters.
+     * @return  string
+     * @throw   Hoa_Exception
+     *
+     * @todo
+     *   Add the cast. Maybe like this: (:subject:format[:cast]:) where cast
+     * could be integer, float, array etc.
+     */
+    public static function zFormat ( $parameter,
+                                     Array $keywords   = array(),
+                                     Array $parameters = array() ) {
+
+        preg_match_all(
+            '#([^\(]+)?(?:\(:(.*?):\))?#',
+            $parameter,
+            $matches,
+            PREG_SET_ORDER
+        );
+        array_pop($matches);
+
+        $out = null;
+
+        foreach($matches as $i => $match) {
+
+            $out .= $match[1];
+
+            if(!isset($match[2]))
+                continue;
+
+            preg_match(
+                '#([^:]+)(?::(.*))?#',
+                $match[2],
+                $submatch
+            );
+
+            if(!isset($submatch[1]))
+                continue;
+
+            $key    = $submatch[1];
+            $word   = substr($key, 1);
+            $handle = null;
+
+            // Call a parameter.
+            if($key[0] == '%') {
+
+                if(false === array_key_exists($word, $parameters))
+                    throw new Hoa_Exception(
+                        'Parameter %s is not found in the parameter rule %s.',
+                        0, array($word, $parameter));
+
+                $newParameters = $parameters;
+                unset($newParameters[$word]);
+
+                $handle = self::zFormat(
+                    $parameters[$word],
+                    $keywords,
+                    $newParameters
+                );
+
+                unset($newParameters);
+            }
+            // Call a constant (only date constants for now).
+            elseif($key[0] == '_') {
+
+                preg_match_all(
+                    '#(d|j|N|w|z|W|m|n|Y|y|g|G|h|H|i|s|u|O|T|U)#',
+                    $word,
+                    $constants
+                );
+
+                if(!isset($constants[1]))
+                    throw new Hoa_Exception(
+                        'An invalid constant char is found in the parameter ' .
+                        'rule %s.', 1, $parameter);
+
+                $handle = date(implode('', $constants[1]));
+            }
+            // Call a keyword.
+            else {
+
+                if(false === array_key_exists($key, $keywords))
+                    throw new Hoa_Exception(
+                        'Keyword %s is not found in the parameter rule %s.', 2,
+                        array($key, $parameter));
+
+                $handle = $keywords[$key];
+            }
+
+            if(!isset($submatch[2])) {
+
+                $out .= $handle;
+                continue;
+            }
+
+            preg_match_all(
+                '#(h|t|r|e|l|u|U|s(/|%|\#)(.*?)(?<!\\\)\2(.*?)(?:(?<!\\\)\2|$))#',
+                $submatch[2],
+                $flags
+            );
+
+            if(empty($flags))
+                continue;
+
+            foreach($flags[1] as $i => $flag)
+                switch($flag) {
+
+                    case 'h':
+                        $handle = dirname($handle);
+                      break;
+
+                    case 't':
+                        $handle = basename($handle);
+                      break;
+
+                    case 'r':
+                        if(false !== $position = strrpos($handle, '.', 1))
+                            $handle = substr($handle, 0, $position);
+                      break;
+
+                    case 'e':
+                        if(false !== $position = strrpos($handle, '.', 1))
+                            $handle = substr($handle, $position + 1);
+                      break;
+
+                    case 'l':
+                        $handle = strtolower($handle);
+                      break;
+
+                    case 'u':
+                        $handle = strtoupper($handle);
+                      break;
+
+                    case 'U':
+                        $handle = ucfirst($handle);
+                      break;
+
+                    default:
+                        if(!isset($flags[3]) && !isset($flags[4]))
+                            throw new Hoa_Exception(
+                                'Unrecognized format pattern in the parameter %s.',
+                                3, $parameter);
+
+                        if(isset($flags[3][1]) && isset($flags[3][1])) {
+
+                            $l = $flags[3][1];
+                            $r = $flags[4][1];
+                        }
+                        else {
+
+                            $l = $flags[3][0];
+                            $r = $flags[4][0];
+                        }
+
+                        $l     = preg_quote($l, '#');
+
+                        switch($flags[2][0]) {
+
+                            case '%':
+                                $l  = '^' . $l;
+                              break;
+
+                            case '#':
+                                $l .= '$';
+                              break;
+                        }
+
+                        $handle = preg_replace('#' . $l . '#', $r, $handle);
+                }
+
+            $out .= $handle;
+        }
+
+        return $out;
+    }
 
     /**
      * Get protocol's root.
@@ -640,368 +1277,6 @@ class Hoa_Framework {
     }
 
     /**
-     * Check if a constant is already defined.
-     * If the constant is defined, this method returns false.
-     * Else this method declares the constant.
-     *
-     * @access  public
-     * @param   string  $name     The name of the constant.
-     * @param   string  $value    The value of the constant.
-     * @param   bool    $case     True set the case-insensitive.
-     * @return  bool
-     */
-    public static function _define ( $name = '', $value = '', $case = false) {
-
-        if(!defined($name))
-            return define($name, $value, $case);
-        else
-            return false;
-    }
-
-    /**
-     * Import a file or a directory.
-     * This method find file, and write some informations (inode, path, and
-     * already imported or not) into an “import register”. If a file is not in
-     * this register, the autoload will return an error.
-     * This method is dependent of include_path (ini_set).
-     *
-     * @access  public
-     * @param   string  $path    Path.
-     * @param   bool    $load    Load file when over.
-     * @return  void
-     * @throw   Hoa_Exception
-     */
-    public static function import ( $path = null, $load = false ) {
-
-        static $back = HOA_FRAMEWORK_BASE;
-        static $last = null;
-
-        preg_match('#(?:(.*?)(?<!\\\)\.)|(.*)#', $path, $matches);
-
-        $handle = !isset($matches[2]) ? $matches[1] : $matches[2];
-
-        switch($handle) {
-
-            case '~':
-
-                $back .= DS . $last;
-                $path  = substr($path, 2);
-
-                if(   (is_dir($back)           && !empty($path))
-                   || (is_file($back . '.php') &&  empty($path)))
-                    self::import($path, $load);
-              break;
-
-            default:
-
-                if(!empty($path)) {
-
-                    $glob = glob($back . DS . $handle);
-
-                    if(!empty($glob)) {
-
-                        foreach($glob as $i => $found) {
-
-                            $last  = str_replace('.', '\\.', $found);
-                            $last  = substr($last, strrpos($last, DS) + 1);
-                            $tmp   = $back;
-                            $back .= DS . $last;
-                            $foo   = substr($path, strlen($handle) + 1);
-
-                            if(   (is_dir($found)  && !empty($foo))
-                               || (is_file($found) &&  empty($foo)))
-                                self::import(substr($path, strlen($handle) + 1), $load);
-
-                            elseif(is_file($found . '.php')) {
-
-                                $back = $found . '\.php';
-                                self::import(null, $load);
-                            }
-
-                            $back = $tmp;
-                        }
-                    }
-                    else {
-
-                        $back .= DS . $handle;
-                        self::import(null, $load);
-                    }
-                }
-                else {
-
-                    $last  = null;
-                    $final = str_replace('\\.', '.', $back);
-                    $back  = HOA_FRAMEWORK_BASE;
-
-                    if(!file_exists($final))
-                        $final .= '.php';
-
-                    if(!file_exists($final)) {
-
-                        print_r(debug_backtrace());
-                        throw new Hoa_Exception(
-                            'File %s is not found.', 0, $final);
-                    }
-
-                    if(false === OS_WIN)
-                        $inode = fileinode($final);
-                    else
-                        $inode = md5($final);
-
-                    if(isset(self::$_importStack[$inode]))
-                        return;
-
-                    self::$_importStack[$inode] = array(
-                        self::IMPORT_PATH => $final,
-                        self::IMPORT_LOAD => $load
-                    );
-
-                    if(true === $load)
-                        require $final;
-                }
-        }
-
-        return;
-    }
-
-    /**
-     * If file is imported (via self::import()), the autoload method will
-     * load the file that contains the class $className.
-     *
-     * @access  public
-     * @param   string  $className    Class name.
-     * @return  void
-     */
-    public static function autoload ( $className ) {
-
-        $hoa = substr($className, 0, 3);
-
-        if($hoa != 'Hoa')
-            return;
-
-        // Skip “Hoa_”.
-        $className = substr($className, 4);
-        $classPath = HOA_FRAMEWORK_BASE . DS .
-                     str_replace('_', DS, $className) . '.php';
-
-        // If it is an entry class.
-        if(!file_exists($classPath)) {
-
-            if(false !== strpos($className, '_'))
-                $className .= substr($className, strrpos($className, '_')); 
-            else
-                $className .= '_' . $className;
-
-            $classPath = HOA_FRAMEWORK_BASE . DS .
-                         str_replace('_', DS, $className) . '.php';
-        }
-
-        if(!file_exists($classPath))
-            return;
-
-
-        if(false === OS_WIN)
-            $inode = fileinode($classPath);
-        else
-            $inode = md5($classPath);
-
-        if(!isset(self::$_importStack[$inode]))
-            return;
-
-        if(true === self::$_importStack[$inode][self::IMPORT_LOAD])
-            return;
-
-        require self::$_importStack[$inode][self::IMPORT_PATH];
-        self::$_importStack[$inode][self::IMPORT_LOAD] = true;
-
-        return;
-    }
-
-    /**
-     * If Hoa is in standalone mode, the default package configuration is given
-     * by the Data/Configuration/ files.
-     * This method try to find the configuration cache, and return a well-formed
-     * array.
-     * The array can have three forms :
-     *     * array, i.e. an associative array : key => value ;
-     *     * dot,   i.e. a linearized array : key.subkey.subsubkey => value ;
-     *     * mixe,  i.e. a mixe of array and dot form ; in this case, a list of
-     *       parameters that should be transform from dot to array, should be
-     *       given.
-     * No error occured, only an empty array is given to $configuration. A
-     * boolean is return : true if the configuration was succeed, else false.
-     * This method must be used with many precautions. Hoa must run with or
-     * without configuration files, and the user must already have the
-     * possibility to overwrite the package configuration.
-     *
-     * @access  public
-     * @param   string  $packageName      The package name, i.e. the cache
-     *                                    filename to read.
-     * @param   array   $configuration    Variable that will receive the
-     *                                    configuration array.
-     * @param   int     $type             Configuration type. Given by
-     *                                    constants CONFIGURATION_*.
-     * @param   array   $except           List of linearized keys that must be
-     *                                    transform in array if the
-     *                                    configuration type is mixe.
-     * @return  bool
-     */
-    public static function configurePackage ( $packageName,
-                                              &$configuration = null,
-                                              $type           = self::CONFIGURATION_DOT,
-                                              Array $except   = array() ) {
-
-        $path = HOA_DATA_CONFIGURATION_CACHE . DS . $packageName . '.php';
-
-        if(!file_exists($path)) {
-
-            $configuration = array();
-            return false;
-        }
-
-        if($type === self::CONFIGURATION_ARRAY) {
-
-            $configuration = require $path;
-            return true;
-        }
-
-        if($type === self::CONFIGURATION_DOT) {
-
-            self::linearizeConfiguration(require $path);
-            $configuration = self::getLinearizedConfiguration();
-            return true;
-        }
-
-        if($type !== self::CONFIGURATION_MIXE) {
-
-            $configuration = array();
-            return false;
-        }
-
-        self::linearizeConfiguration(require $path);
-        $configuration = self::getLinearizedConfiguration();
-
-        foreach($except as $foo => $category) {
-
-            foreach($configuration as $key => $value) {
-
-                if(0 === preg_match('#^' . $category . '\.(.*)#', $key, $match))
-                    continue;
-
-                if(!isset($configuration[$category]))
-                    $configuration[$category] = array();
-
-                $configuration[$category] = array_merge_recursive(
-                    $configuration[$category],
-                    self::unlinearizeConfiguration($match[1], $value)
-                );
-                unset($configuration[$key]);
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Linearize an array, i.e. transform :
-     *     array(
-     *         'a' => array(
-     *             'b' => array(
-     *                 'c' => 'd',
-     *                 'e' => 'f'
-     *             ),
-     *             'g' => 'h'
-     *         ),
-     *         'x => 'y'
-     *     )
-     *  in
-     *     array(
-     *         'a.b.c' => 'd',
-     *         'a.b.e' => 'f',
-     *         'a.g'   => 'h',
-     *         'x'     => 'y'
-     *     )
-     * The method returns a string, and not the array. To get the array, please,
-     * see the self::getLinearizedConfiguration() method.
-     *
-     * @access  protected
-     * @param   array      $configuration      The array to linearize.
-     * @param   string     $prev               Only for recursion.
-     * @return  string
-     */
-    protected static function linearizeConfiguration ( $configuration, $prev = null ) {
-
-        $out = null;
-
-        if(null === $prev)
-            self::$_linearizedConfiguration = array();
-
-        foreach($configuration as $key => $value) {
-
-            $pprev = null !== $prev ? $prev . '.' : null;
-
-            if(is_array($value)) {
-
-                $key  = str_replace('.', '\\.', $key);
-                $out .= $pprev . self::linearizeConfiguration($value, $pprev . $key);
-            }
-            else {
-
-                $out  = $pprev . $key . "\n";
-                self::$_linearizedConfiguration[
-                    substr($out, strrpos(substr($out, -1), "\n"), -1)
-                ] = $value;
-            }
-        }
-
-        return $out;
-    }
-
-    /**
-     * Return the last linearized array.
-     * Please, see the self::linearizeConfiguration() method.
-     *
-     * @access  private
-     * @return  array
-     */
-    private static function getLinearizedConfiguration ( ) {
-
-        return self::$_linearizedConfiguration;
-    }
-
-    /**
-     * Unlinearize an array (just a part of an array).
-     * Please, see the self::linearizeConfiguration() method, it is the
-     * inverse.
-     *
-     * @access  protected
-     * @param   string     $key      The linearize key, e.g. : a.b.c.d.
-     * @param   mixed      $value    The $key value.
-     * @return  array
-     */
-    protected static function unlinearizeConfiguration ( $key, $value ) {
-
-        $out     = array();
-        $explode = preg_split('#((?<!\\\)\.)#', $key, -1, PREG_SPLIT_NO_EMPTY);
-        $end     = count($explode) - 1;
-        $i       = $end;
-
-        while($i >= 0) {
-
-            $explode[$i] = str_replace('\\.', '.', $explode[$i]);
-
-            if($i != $end)
-                $out = array($explode[$i] => $out);
-            else
-                $out = array($explode[$i] => $value);
-
-            $i--;
-        }
-
-        return $out;
-    }
-
-    /**
      * Apply and save a register shutdown function.
      * It may be analogous to a static __destruct, but it allows us to make more
      * that a __destruct method.
@@ -1023,6 +1298,65 @@ class Hoa_Framework {
     }
 }
 
+/**
+ * Interface Hoa_Framework_Parameterizable.
+ *
+ * Interface for all classes or packages that are parameterizable.
+ *
+ * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
+ * @license     http://gnu.org/licenses/gpl.txt GNU GPL
+ * @since       PHP5
+ * @version     0.1
+ * @package     Hoa_Framework_Parameterizable
+ */
+interface Hoa_Framework_Parameterizable {
+
+    /**
+     * Set parameters.
+     *
+     * @access  public
+     * @param   array   $parameters    Parameters.
+     * @return  void
+     */
+    public function setParameters ( Array $parameters = array() );
+
+    /**
+     * Get parameters.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getParameters ( );
+
+    /**
+     * Set a parameter.
+     *
+     * @access  public
+     * @param   string  $key      Key.
+     * @param   mixed   $value    Value.
+     * @return  mixed
+     */
+    public function setParameter ( $key, $value );
+
+    /**
+     * Get a parameter.
+     *
+     * @access  public
+     * @param   string  $key    Key.
+     * @return  mixed
+     */
+    public function getParameter ( $key );
+
+    /**
+     * Get a parameter, after being zFormatted.
+     *
+     * @access  public
+     * @param   string  $key    Key.
+     * @return  mixed
+     */
+    public function getFormattedParameter ( $key );
+}
 
 /**
  * Class Hoa_Framework_Protocol.
