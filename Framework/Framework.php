@@ -97,14 +97,14 @@ class Hoa_Framework {
      *
      * @const int
      */
-    const IMPORT_PATH         = 0;
+    const IMPORT_PATH = 0;
 
     /**
      * Import constant : load flag collection index.
      *
      * @const int
      */
-    const IMPORT_LOAD         = 1;
+    const IMPORT_LOAD = 1;
 
     /**
      * Stack of all files that might be imported.
@@ -112,20 +112,6 @@ class Hoa_Framework {
      * @var Hoa_Framework array
      */
     private static $_importStack = array();
-
-    /**
-     * Collection of package's parameters.
-     *
-     * @var Hoa_Framework array
-     */
-    private static $_parameters  = array();
-
-    /**
-     * Collcetion of package's keywords.
-     *
-     * @var Hoa_Framework array
-     */
-    private static $_keywords    = array();
 
     /**
      * Stack of all registered shutdown function.
@@ -179,8 +165,8 @@ class Hoa_Framework {
 
         if(!defined($name))
             return define($name, $value, $case);
-        else
-            return false;
+
+        return false;
     }
 
     /**
@@ -198,7 +184,7 @@ class Hoa_Framework {
      */
     public static function import ( $path = null, $load = false ) {
 
-        static $back = HOA_FRAMEWORK_BASE;
+        static $back = HOA_FRAMEWORK;
         static $last = null;
 
         preg_match('#(?:(.*?)(?<!\\\)\.)|(.*)#', $path, $matches);
@@ -256,7 +242,7 @@ class Hoa_Framework {
 
                     $last  = null;
                     $final = str_replace('\\.', '.', $back);
-                    $back  = HOA_FRAMEWORK_BASE;
+                    $back  = HOA_FRAMEWORK;
 
                     if(!file_exists($final))
                         $final .= '.php';
@@ -303,7 +289,7 @@ class Hoa_Framework {
 
         // Skip “Hoa_”.
         $className = substr($className, 4);
-        $classPath = HOA_FRAMEWORK_BASE . DS .
+        $classPath = HOA_FRAMEWORK . DS .
                      str_replace('_', DS, $className) . '.php';
 
         // If it is an entry class.
@@ -314,7 +300,7 @@ class Hoa_Framework {
             else
                 $className .= '_' . $className;
 
-            $classPath = HOA_FRAMEWORK_BASE . DS .
+            $classPath = HOA_FRAMEWORK . DS .
                          str_replace('_', DS, $className) . '.php';
         }
 
@@ -337,502 +323,6 @@ class Hoa_Framework {
         self::$_importStack[$inode][self::IMPORT_LOAD] = true;
 
         return;
-    }
-
-    /**
-     * Set default parameters to a class.
-     *
-     * @access  public
-     * @param   string  $id            Class ID, i.e. class name.
-     * @param   array   $parameters    Parameters to set.
-     * @return  void
-     */
-    public static function setDefaultParameters ( $id, Array $parameters = array() ) {
-
-        self::$_parameters[$id] = $parameters;
-
-        // Before assigning, check if a file does not exist. It has a higher
-        // priority.
-
-        return;
-    }
-
-    /**
-     * Get default parameters from a class.
-     *
-     * @access  public
-     * @param   mixed   $id    Class ID, i.e. class name or class instance.
-     * @return  array
-     */
-    public static function getDefaultParameters ( $id ) {
-
-        if($id instanceof Hoa_Framework_Parameterizable)
-            $id = get_class($id);
-
-        return array_key_exists($id, self::$_parameters)
-                 ? self::$_parameters[$id]
-                 : array();
-    }
-
-    /**
-     * Set many parameters to a class.
-     *
-     * @access  public
-     * @param   Hoa_Framework_Parameterizable  $id      Class ID, i.e. class
-     *                                                  instance.
-     * @param   array                          $in      Parameters to set.
-     * @param   array                          &$out    Parameters that will be
-     *                                                  touched (intern
-     *                                                  parameters).
-     * @return  void
-     */
-    public static function setParameters ( Hoa_Framework_Parameterizable $id,
-                                           Array $in, Array &$out ) {
-
-        if(empty($out))
-            $out = self::getDefaultParameters(get_class($id));
-
-        foreach($in as $key => $value)
-            if(array_key_exists($key, $out))
-                self::setParameter($id, $key, $value, $out);
-
-        return;
-    }
-
-    /**
-     * Get many parameters from a class.
-     *
-     * @access  public
-     * @param   Hoa_Framework_Parameterizable  $id      Class ID, i.e. class
-     *                                                  instance.
-     * @param   array                          &$out    Intern parameters.
-     * @return  array
-     */
-    public static function getParameters ( Hoa_Framework_Parameterizable $id,
-                                           Array &$out ) {
-
-        if(!empty($out))
-            return $out;
-
-        return self::getDefaultParameters($id);
-    }
-
-    /**
-     * Set a parameter to a class.
-     *
-     * @access  public
-     * @param   Hoa_Framework_Parameterizable  $id       Class ID, i.e. class
-     *                                                   instance.
-     * @param   string                         $key      Key.
-     * @param   mixed                          $value    Value.
-     * @param   array                          &$out     Parameters that will be
-     *                                                   touched (intern
-     *                                                   parameters).
-     * @return  mixed
-     */
-    public static function setParameter ( Hoa_Framework_Parameterizable $id,
-                                          $key, $value, Array &$out ) {
-
-        $old       = $out[$key];
-        $out[$key] = $value;
-
-        return $old;
-    }
-
-    /**
-     * Get a parameter from a class.
-     *
-     * @access  public
-     * @param   Hoa_Framework_Parameterizable  $id       Class ID, i.e. class
-     *                                                   instance.
-     * @param   string                         $key      Key.
-     * @param   array                          &$out     Parameters that will be
-     *                                                   touched (intern
-     *                                                   parameters).
-     * @return  mixed
-     */
-    public static function getParameter ( Hoa_Framework_Parameterizable $id,
-                                          $key, Array &$out ) {
-
-        $parameters = self::getParameters($id, $out);
-
-        if(array_key_exists($key, $parameters))
-            return $parameters[$key];
-
-        return null;
-    }
-
-    /**
-     * Get a formatted parameter from a class (i.e. zFormat with keywords and
-     * other parameters).
-     *
-     * @access  public
-     * @param   Hoa_Framework_Parameterizable  $id       Class ID, i.e. class
-     *                                                   instance.
-     * @param   string                         $key      Key.
-     * @param   array                          &$out     Parameters that will be
-     *                                                   touched (intern
-     *                                                   parameters).
-     * @return  mxied
-     */
-    public static function getFormattedParameter ( Hoa_Framework_Parameterizable $id,
-                                                   $key, Array &$out ) {
-
-        $parameter = self::getParameter($id, $key, $out);
-
-        if(null === $parameter)
-            return null;
-
-        return self::zFormat(
-            $parameter,
-            self::getKeywords($id),
-            self::getParameters($id, $out)
-        );
-    }
-
-    /**
-     * Set many keywords to a class.
-     *
-     * @access  public
-     * @param   string  $id          Class ID, i.e. class name.
-     * @param   array   $keywords    Keywords to set.
-     * @return  void
-     */
-    public static function setKeywords ( $id, Array $keywords = array() ) {
-
-        if($id instanceof Hoa_Framework_Parameterizable)
-            $id = get_class($id);
-
-        self::$_keywords[$id] = $keywords;
-
-        return;
-    }
-
-    /**
-     * Get many keywords from a class.
-     *
-     * @access  public
-     * @param   string  $id    Class ID, i.e. class name.
-     * @return  array
-     */
-    public static function getKeywords ( $id ) {
-
-        if($id instanceof Hoa_Framework_Parameterizable)
-            $id = get_class($id);
-
-        return array_key_exists($id, self::$_keywords)
-                 ? self::$_keywords[$id]
-                 : array();
-    }
-
-    /**
-     * Set a keyword to a class.
-     *
-     * @access  public
-     * @param   Hoa_Framework_Parameterizable  $id       Class ID, i.e. class
-     *                                                   instance.
-     * @param   string                         $key      Key.
-     * @param   mixed                          $value    Value.
-     * @return  mixed
-     */
-    public static function setKeyword ( Hoa_Framework_Parameterizable $id,
-                                        $key, $word ) {
-
-        $id = get_class($id);
-
-        if(false === array_key_exists($id, self::$_keywords))
-            return null;
-
-        $old                        = self::$_keywords[$id][$key];
-        self::$_keywords[$id][$key] = $word;
-
-        return $old;
-    }
-
-    /**
-     * Get a keyword from a class.
-     *
-     * @access  public
-     * @param   Hoa_Framework_Parameterizable  $id         Class ID, i.e. class
-     *                                                     instance.
-     * @param   string                         $keyword    Keyword.
-     * @return  mixed
-     */
-    public static function getKeyword ( Hoa_Framework_Parameterizable $id,
-                                        $keyword ) {
-
-        $id = get_class($id);
-
-        if(true === array_key_exists($id, self::$_keywords))
-            return self::$_keywords[$id][$key];
-
-        return null;
-    }
-
-    /**
-     * ZFormat a string.
-     * ZFormat is inspired from the famous Zsh (please, take a look at
-     * http://zsh.org), and specifically from ZStyle.
-     *
-     * ZFormat has the following pattern:
-     *     (:subject:format:)
-     *
-     * where subject could be a:
-     *   * keyword, i.e. a simple string: foo;
-     *   * reference to an existing parameter, i.e. a simple string prefixed by
-     *     a %: %bar;
-     *   * constant, i.e. a combination of chars, first is prefixed by a _: _Ymd
-     *     will given the current year, followed by the current month and
-     *     finally the current day.
-     *
-     * or where the format is a combination of chars, that apply functions on
-     * the subject:
-     *   * h: to get the head of a path (equivalent to dirname);
-     *   * t: to get the tail of a path (equivalent to basename);
-     *   * r: to get the path without extension;
-     *   * e: to get the extension;
-     *   * l: to get the result in lowercase;
-     *   * u: to get the result in uppercase;
-     *   * U: to get the result with the first letter in uppercase;
-     *   * s/<foo>/<bar>/: to replace all matches <foo> by <bar> (the last / is
-     *     optional, only if more options are given after);
-     *   * s%<foo>%<bar>%: to replace the prefix <foo> by <bar> (the last % is
-     *     also optional);
-     *   * s#<foo>#<bar>#: to replace the suffix <foo> by <bar> (the last # is
-     *     also optional).
-     *
-     * Known constants are:
-     *   * d: day of the month, 2 digits with leading zeros;
-     *   * j: day of the month without leading zeros;
-     *   * N: ISO-8601 numeric representation of the day of the week;
-     *   * w: numeric representation of the day of the week;
-     *   * z: the day of the year (starting from 0);
-     *   * W: ISO-8601 week number of year, weeks starting on Monday;
-     *   * m: numeric representation of a month, with leading zeros;
-     *   * n: numeric representation of a month, without leading zeros;
-     *   * Y: a full numeric representation of a year, 4 digits;
-     *   * y: a two digit representation of a year;
-     *   * g: 12-hour format of an hour without leading zeros;
-     *   * G: 24-hour format of an hour without leading zeros;
-     *   * h: 12-hour format of an hour with leading zeros;
-     *   * H: 24-hour format of an hour with leading zeros;
-     *   * i: minutes with leading zeros;
-     *   * s: seconds with leading zeros;
-     *   * u: microseconds;
-     *   * O: difference to Greenwich time (GMT) in hours;
-     *   * T: timezone abbreviation;
-     *   * U: seconds since the Unix Epoch (a timestamp).
-     * There are very usefull for dynamic cache paths for example.
-     *
-     *
-     * Examples:
-     *   Let keywords $k and parameters $p:
-     *     $k = array(
-     *         'foo'      => 'bar',
-     *         'car'      => 'DeLoReAN',
-     *         'power'    => 2.21,
-     *         'answerTo' => 'life_universe_everything_else',
-     *         'answerIs' => 42,
-     *         'hello'    => 'wor.l.d'
-     *     );
-     *     $p = array(
-     *         'plpl'        => '(:foo:U:)',
-     *         'foo'         => 'ar(:%plpl:)',
-     *         'favoriteCar' => 'A (:car:l:)!',
-     *         'truth'       => 'To (:answerTo:ls/_/ /U:) is (:answerIs:).',
-     *         'file'        => '/a/file/(:_Ymd:)/(:hello:trr:).(:power:e:)',
-     *         'recursion'   => 'oof(:%foo:s#ar#az:)'
-     *     );
-     *   Then, after applying the zFormat, we get:
-     *     * plpl:        'Bar', put the first letter in uppercase;
-     *     * foo:         'arBar', call the parameter plpl;
-     *     * favoriteCar: 'A delorean!', all is in lowercase;
-     *     * truth:       'To Life universe everything else is 42', all is in
-     *                    lowercase, then replace underscores by spaces, and
-     *                    finally put the first letter in uppercase; and no
-     *                    transformation for 42;
-     *     * file:        '/a/file/20090505/wor.21', get date constants, then
-     *                    get the tail of the path and remove extension twice,
-     *                    and add the extension of power;
-     *     * recursion:   'oofarbaz', get 'arbar' first, and then, replace the
-     *                    suffix 'ar' by 'az'.
-     *
-     * @access  public
-     * @param   string    $parameter     Parameter.
-     * @param   array     $keywords      Keywords.
-     * @param   array     $parameters    Parameters.
-     * @return  string
-     * @throw   Hoa_Exception
-     *
-     * @todo
-     *   Add the cast. Maybe like this: (:subject:format[:cast]:) where cast
-     * could be integer, float, array etc.
-     */
-    public static function zFormat ( $parameter,
-                                     Array $keywords   = array(),
-                                     Array $parameters = array() ) {
-
-        preg_match_all(
-            '#([^\(]+)?(?:\(:(.*?):\))?#',
-            $parameter,
-            $matches,
-            PREG_SET_ORDER
-        );
-        array_pop($matches);
-
-        $out = null;
-
-        foreach($matches as $i => $match) {
-
-            $out .= $match[1];
-
-            if(!isset($match[2]))
-                continue;
-
-            preg_match(
-                '#([^:]+)(?::(.*))?#',
-                $match[2],
-                $submatch
-            );
-
-            if(!isset($submatch[1]))
-                continue;
-
-            $key    = $submatch[1];
-            $word   = substr($key, 1);
-            $handle = null;
-
-            // Call a parameter.
-            if($key[0] == '%') {
-
-                if(false === array_key_exists($word, $parameters))
-                    throw new Hoa_Exception(
-                        'Parameter %s is not found in the parameter rule %s.',
-                        0, array($word, $parameter));
-
-                $newParameters = $parameters;
-                unset($newParameters[$word]);
-
-                $handle = self::zFormat(
-                    $parameters[$word],
-                    $keywords,
-                    $newParameters
-                );
-
-                unset($newParameters);
-            }
-            // Call a constant (only date constants for now).
-            elseif($key[0] == '_') {
-
-                preg_match_all(
-                    '#(d|j|N|w|z|W|m|n|Y|y|g|G|h|H|i|s|u|O|T|U)#',
-                    $word,
-                    $constants
-                );
-
-                if(!isset($constants[1]))
-                    throw new Hoa_Exception(
-                        'An invalid constant char is found in the parameter ' .
-                        'rule %s.', 1, $parameter);
-
-                $handle = date(implode('', $constants[1]));
-            }
-            // Call a keyword.
-            else {
-
-                if(false === array_key_exists($key, $keywords))
-                    throw new Hoa_Exception(
-                        'Keyword %s is not found in the parameter rule %s.', 2,
-                        array($key, $parameter));
-
-                $handle = $keywords[$key];
-            }
-
-            if(!isset($submatch[2])) {
-
-                $out .= $handle;
-                continue;
-            }
-
-            preg_match_all(
-                '#(h|t|r|e|l|u|U|s(/|%|\#)(.*?)(?<!\\\)\2(.*?)(?:(?<!\\\)\2|$))#',
-                $submatch[2],
-                $flags
-            );
-
-            if(empty($flags))
-                continue;
-
-            foreach($flags[1] as $i => $flag)
-                switch($flag) {
-
-                    case 'h':
-                        $handle = dirname($handle);
-                      break;
-
-                    case 't':
-                        $handle = basename($handle);
-                      break;
-
-                    case 'r':
-                        if(false !== $position = strrpos($handle, '.', 1))
-                            $handle = substr($handle, 0, $position);
-                      break;
-
-                    case 'e':
-                        if(false !== $position = strrpos($handle, '.', 1))
-                            $handle = substr($handle, $position + 1);
-                      break;
-
-                    case 'l':
-                        $handle = strtolower($handle);
-                      break;
-
-                    case 'u':
-                        $handle = strtoupper($handle);
-                      break;
-
-                    case 'U':
-                        $handle = ucfirst($handle);
-                      break;
-
-                    default:
-                        if(!isset($flags[3]) && !isset($flags[4]))
-                            throw new Hoa_Exception(
-                                'Unrecognized format pattern in the parameter %s.',
-                                3, $parameter);
-
-                        if(isset($flags[3][1]) && isset($flags[3][1])) {
-
-                            $l = $flags[3][1];
-                            $r = $flags[4][1];
-                        }
-                        else {
-
-                            $l = $flags[3][0];
-                            $r = $flags[4][0];
-                        }
-
-                        $l     = preg_quote($l, '#');
-
-                        switch($flags[2][0]) {
-
-                            case '%':
-                                $l  = '^' . $l;
-                              break;
-
-                            case '#':
-                                $l .= '$';
-                              break;
-                        }
-
-                        $handle = preg_replace('#' . $l . '#', $r, $handle);
-                }
-
-            $out .= $handle;
-        }
-
-        return $out;
     }
 
     /**
@@ -1310,52 +800,688 @@ class Hoa_Framework {
  * @version     0.1
  * @package     Hoa_Framework_Parameterizable
  */
+
 interface Hoa_Framework_Parameterizable {
 
     /**
-     * Set parameters.
+     * Set many parameters to a class.
      *
      * @access  public
-     * @param   array   $parameters    Parameters.
+     * @param   array     $in      Parameters to set.
      * @return  void
+     * @throw   Hoa_Exception
      */
-    public function setParameters ( Array $parameters = array() );
+    public function setParameters ( Array $in );
 
     /**
-     * Get parameters.
+     * Get many parameters from a class.
      *
      * @access  public
      * @return  array
+     * @throw   Hoa_Exception
      */
     public function getParameters ( );
 
     /**
-     * Set a parameter.
+     * Set a parameter to a class.
      *
      * @access  public
-     * @param   string  $key      Key.
-     * @param   mixed   $value    Value.
+     * @param   string    $key      Key.
+     * @param   mixed     $value    Value.
      * @return  mixed
+     * @throw   Hoa_Exception
      */
     public function setParameter ( $key, $value );
 
     /**
-     * Get a parameter.
+     * Get a parameter from a class.
      *
      * @access  public
-     * @param   string  $key    Key.
+     * @param   string    $key      Key.
      * @return  mixed
+     * @throw   Hoa_Exception
      */
     public function getParameter ( $key );
 
     /**
-     * Get a parameter, after being zFormatted.
+     * Get a formatted parameter from a class (i.e. zFormat with keywords and
+     * other parameters).
      *
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
+     * @throw   Hoa_Exception
      */
     public function getFormattedParameter ( $key );
+}
+
+/**
+ * Class Hoa_Framework_Parameter.
+ *
+ * The parameter object, contains a set of parameter. It can be shared with
+ * other class with permissions (read, write or both).
+ *
+ * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
+ * @license     http://gnu.org/licenses/gpl.txt GNU GPL
+ * @since       PHP5
+ * @version     0.1
+ * @package     Hoa_Framework_Protocol
+ */
+
+class Hoa_Framework_Parameter {
+
+    /**
+     * Permission to read.
+     *
+     * @const int
+     */
+    const PERMISSION_READ  = 1;
+
+    /**
+     * Permission to write.
+     *
+     * @const int
+     */
+    const PERMISSION_WRITE = 2;
+
+    /**
+     * Collection of package's parameters.
+     *
+     * @var Hoa_Framework_Parameter array
+     */
+    private $_parameters = array();
+
+    /**
+     * Collection of package's keywords.
+     *
+     * @var Hoa_Framework_Parameter array
+     */
+    private $_keywords   = array();
+
+    /**
+     * Parameters' owner.
+     *
+     * @var Hoa_Framework_Parameter string
+     */
+    private $_owner      = null;
+
+    /**
+     * Owner's friends with associated permissions.
+     *
+     * @var Hoa_Framework_Parameter array
+     */
+    private $_friends    = array();
+
+
+
+    /**
+     * Construct a new set of parameters.
+     *
+     * @access  public
+     * @param   Hoa_Framework_Parameterizable  $owner         Owner.
+     * @param   array                          $parameters    Parameters.
+     * @return  void
+     */
+    public function __construct ( Hoa_Framework_Parameterizable $owner,
+                                  Array $parameters = array() ) {
+
+        $this->_owner = get_class($owner);
+
+        if(!empty($parameters))
+            $this->setDefaultParameters($owner, $parameters);
+
+        return;
+    }
+
+    /**
+     * Set default parameters to a class.
+     *
+     * @access  public
+     * @param   Hoa_Framework_Parameterizable  $id            Owner or friends.
+     * @param   array                          $parameters    Parameters to set.
+     * @return  void
+     * @throw   Hoa_Exception
+     */
+    public function setDefaultParameters ( Hoa_Framework_Parameterizable $id,
+                                           Array $parameters ) {
+
+        $this->check($id, self::PERMISSION_WRITE);
+
+        $this->_parameters = $parameters;
+
+        // Before assigning, check if a file does not exist. It has a higher
+        // priority.
+
+        return;
+    }
+
+    /**
+     * Get default parameters from a class.
+     *
+     * @access  public
+     * @param   Hoa_Framework_Parameterizable   $id    Owner or friends.
+     * @return  array
+     * @throw   Hoa_Exception
+     */
+    public function getDefaultParameters ( Hoa_Framework_Parameterizable $id ) {
+
+        return $this->getParameters($id);
+    }
+
+    /**
+     * Set many parameters to a class.
+     *
+     * @access  public
+     * @param   Hoa_Framework_Parameterizable  $id      Owner or friends.
+     * @param   array                          $in      Parameters to set.
+     * @return  void
+     * @throw   Hoa_Exception
+     */
+    public function setParameters ( Hoa_Framework_Parameterizable $id,
+                                    Array $in ) {
+
+        foreach($in as $key => $value)
+            $this->setParameter($id, $key, $value);
+
+        return;
+    }
+
+    /**
+     * Get many parameters from a class.
+     *
+     * @access  public
+     * @param   Hoa_Framework_Parameterizable  $id      Owner or friends.
+     * @return  array
+     * @throw   Hoa_Exception
+     */
+    public function getParameters ( Hoa_Framework_Parameterizable $id ) {
+
+        $this->check($id, self::PERMISSION_READ);
+
+        return $this->_parameters;
+    }
+
+    /**
+     * Set a parameter to a class.
+     *
+     * @access  public
+     * @param   Hoa_Framework_Parameterizable  $id       Owner or friends.
+     * @param   string                         $key      Key.
+     * @param   mixed                          $value    Value.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function setParameter ( Hoa_Framework_Parameterizable $id,
+                                   $key, $value ) {
+
+        $this->check($id, self::PERMISSION_WRITE);
+
+        $old = null;
+
+        if(true === array_key_exists($key, $this->_parameters))
+            $old = $this->_parameters[$key];
+
+        $this->_parameters[$key] = $value;
+
+        return $old;
+    }
+
+    /**
+     * Get a parameter from a class.
+     *
+     * @access  public
+     * @param   Hoa_Framework_Parameterizable  $id       Owner or friends.
+     * @param   string                         $key      Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getParameter ( Hoa_Framework_Parameterizable $id, $key ) {
+
+        $parameters = $this->getParameters($id);
+
+        if(array_key_exists($key, $parameters))
+            return $parameters[$key];
+
+        return null;
+    }
+
+    /**
+     * Get a formatted parameter from a class (i.e. zFormat with keywords and
+     * other parameters).
+     *
+     * @access  public
+     * @param   Hoa_Framework_Parameterizable  $id       Owner or friends.
+     * @param   string                         $key      Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getFormattedParameter ( Hoa_Framework_Parameterizable $id,
+                                            $key ) {
+
+        $parameter = $this->getParameter($id, $key);
+
+        if(null === $parameter)
+            return null;
+
+        return self::zFormat(
+            $parameter,
+            $this->getKeywords($id),
+            $this->getParameters($id)
+        );
+    }
+
+    /**
+     * Set many keywords to a class.
+     *
+     * @access  public
+     * @param   Hoa_Framework_Parameterizable  $id    Owner or friends.
+     * @param   array                          $in    Keywords to set.
+     * @return  void
+     * @throw   Hoa_Exception
+     */
+    public function setKeywords ( Hoa_Framework_Parameterizable $id,
+                                  Array $in = array() ) {
+
+        foreach($in as $key => $value)
+            $this->setKeyword($id, $key, $value);
+
+        return;
+    }
+
+    /**
+     * Get many keywords from a class.
+     *
+     * @access  public
+     * @param   Hoa_Framework_Parameterizable  $id    Owner or friends.
+     * @return  array
+     * @throw   Hoa_Exception
+     */
+    public function getKeywords ( Hoa_Framework_Parameterizable $id ) {
+
+        $this->check(id, self::PERMISSION_READ);
+
+        return $this->_keywords;
+    }
+
+    /**
+     * Set a keyword to a class.
+     *
+     * @access  public
+     * @param   Hoa_Framework_Parameterizable  $id       Owner or friends.
+     * @param   string                         $key      Key.
+     * @param   mixed                          $value    Value.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public static function setKeyword ( Hoa_Framework_Parameterizable $id,
+                                        $key, $word ) {
+
+        $this->check($id, self::PERMISSION_WRITE);
+
+        $old = null;
+
+        if(true === array_key_exists($key, $this->_keywords))
+            $old = $this->_keywords[$key];
+
+        $this->_keywords[$key] = $value;
+
+        return $old;
+    }
+
+    /**
+     * Get a keyword from a class.
+     *
+     * @access  public
+     * @param   Hoa_Framework_Parameterizable  $id         Owner or friends.
+     * @param   string                         $keyword    Keyword.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public static function getKeyword ( Hoa_Framework_Parameterizable $id,
+                                        $keyword ) {
+
+        $keywords = $this->getKeywords($id);
+
+        if(true === array_key_exists($id, $keywords))
+            return $keywords[$id][$key];
+
+        return null;
+    }
+
+    /**
+     * ZFormat a string.
+     * ZFormat is inspired from the famous Zsh (please, take a look at
+     * http://zsh.org), and specifically from ZStyle.
+     *
+     * ZFormat has the following pattern:
+     *     (:subject[:format]:)
+     *
+     * where subject could be a:
+     *   * keyword, i.e. a simple string: foo;
+     *   * reference to an existing parameter, i.e. a simple string prefixed by
+     *     a %: %bar;
+     *   * constant, i.e. a combination of chars, first is prefixed by a _: _Ymd
+     *     will given the current year, followed by the current month and
+     *     finally the current day.
+     *
+     * and where the format is a combination of chars, that apply functions on
+     * the subject:
+     *   * h: to get the head of a path (equivalent to dirname);
+     *   * t: to get the tail of a path (equivalent to basename);
+     *   * r: to get the path without extension;
+     *   * e: to get the extension;
+     *   * l: to get the result in lowercase;
+     *   * u: to get the result in uppercase;
+     *   * U: to get the result with the first letter in uppercase;
+     *   * s/<foo>/<bar>/: to replace all matches <foo> by <bar> (the last / is
+     *     optional, only if more options are given after);
+     *   * s%<foo>%<bar>%: to replace the prefix <foo> by <bar> (the last % is
+     *     also optional);
+     *   * s#<foo>#<bar>#: to replace the suffix <foo> by <bar> (the last # is
+     *     also optional).
+     *
+     * Known constants are:
+     *   * d: day of the month, 2 digits with leading zeros;
+     *   * j: day of the month without leading zeros;
+     *   * N: ISO-8601 numeric representation of the day of the week;
+     *   * w: numeric representation of the day of the week;
+     *   * z: the day of the year (starting from 0);
+     *   * W: ISO-8601 week number of year, weeks starting on Monday;
+     *   * m: numeric representation of a month, with leading zeros;
+     *   * n: numeric representation of a month, without leading zeros;
+     *   * Y: a full numeric representation of a year, 4 digits;
+     *   * y: a two digit representation of a year;
+     *   * g: 12-hour format of an hour without leading zeros;
+     *   * G: 24-hour format of an hour without leading zeros;
+     *   * h: 12-hour format of an hour with leading zeros;
+     *   * H: 24-hour format of an hour with leading zeros;
+     *   * i: minutes with leading zeros;
+     *   * s: seconds with leading zeros;
+     *   * u: microseconds;
+     *   * O: difference to Greenwich time (GMT) in hours;
+     *   * T: timezone abbreviation;
+     *   * U: seconds since the Unix Epoch (a timestamp).
+     * There are very usefull for dynamic cache paths for example.
+     *
+     * Examples:
+     *   Let keywords $k and parameters $p:
+     *     $k = array(
+     *         'foo'      => 'bar',
+     *         'car'      => 'DeLoReAN',
+     *         'power'    => 2.21,
+     *         'answerTo' => 'life_universe_everything_else',
+     *         'answerIs' => 42,
+     *         'hello'    => 'wor.l.d'
+     *     );
+     *     $p = array(
+     *         'plpl'        => '(:foo:U:)',
+     *         'foo'         => 'ar(:%plpl:)',
+     *         'favoriteCar' => 'A (:car:l:)!',
+     *         'truth'       => 'To (:answerTo:ls/_/ /U:) is (:answerIs:).',
+     *         'file'        => '/a/file/(:_Ymd:)/(:hello:trr:).(:power:e:)',
+     *         'recursion'   => 'oof(:%foo:s#ar#az:)'
+     *     );
+     *   Then, after applying the zFormat, we get:
+     *     * plpl:        'Bar', put the first letter in uppercase;
+     *     * foo:         'arBar', call the parameter plpl;
+     *     * favoriteCar: 'A delorean!', all is in lowercase;
+     *     * truth:       'To Life universe everything else is 42', all is in
+     *                    lowercase, then replace underscores by spaces, and
+     *                    finally put the first letter in uppercase; and no
+     *                    transformation for 42;
+     *     * file:        '/a/file/20090505/wor.21', get date constants, then
+     *                    get the tail of the path and remove extension twice,
+     *                    and add the extension of power;
+     *     * recursion:   'oofarbaz', get 'arbar' first, and then, replace the
+     *                    suffix 'ar' by 'az'.
+     *
+     * @access  public
+     * @param   string    $parameter     Parameter.
+     * @param   array     $keywords      Keywords.
+     * @param   array     $parameters    Parameters.
+     * @return  string
+     * @throw   Hoa_Exception
+     *
+     * @todo
+     *   Add the cast. Maybe like this: (:subject:format[:cast]:) where cast
+     * could be integer, float, array etc.
+     */
+    public static function zFormat ( $parameter,
+                                     Array $keywords   = array(),
+                                     Array $parameters = array() ) {
+
+        preg_match_all(
+            '#([^\(]+)?(?:\(:(.*?):\))?#',
+            $parameter,
+            $matches,
+            PREG_SET_ORDER
+        );
+        array_pop($matches);
+
+        $out = null;
+
+        foreach($matches as $i => $match) {
+
+            $out .= $match[1];
+
+            if(!isset($match[2]))
+                continue;
+
+            preg_match(
+                '#([^:]+)(?::(.*))?#',
+                $match[2],
+                $submatch
+            );
+
+            if(!isset($submatch[1]))
+                continue;
+
+            $key    = $submatch[1];
+            $word   = substr($key, 1);
+            $handle = null;
+
+            // Call a parameter.
+            if($key[0] == '%') {
+
+                if(false === array_key_exists($word, $parameters))
+                    throw new Hoa_Exception(
+                        'Parameter %s is not found in the parameter rule %s.',
+                        0, array($word, $parameter));
+
+                $newParameters = $parameters;
+                unset($newParameters[$word]);
+
+                $handle = self::zFormat(
+                    $parameters[$word],
+                    $keywords,
+                    $newParameters
+                );
+
+                unset($newParameters);
+            }
+            // Call a constant (only date constants for now).
+            elseif($key[0] == '_') {
+
+                preg_match_all(
+                    '#(d|j|N|w|z|W|m|n|Y|y|g|G|h|H|i|s|u|O|T|U)#',
+                    $word,
+                    $constants
+                );
+
+                if(!isset($constants[1]))
+                    throw new Hoa_Exception(
+                        'An invalid constant char is found in the parameter ' .
+                        'rule %s.', 1, $parameter);
+
+                $handle = date(implode('', $constants[1]));
+            }
+            // Call a keyword.
+            else {
+
+                if(false === array_key_exists($key, $keywords))
+                    throw new Hoa_Exception(
+                        'Keyword %s is not found in the parameter rule %s.', 2,
+                        array($key, $parameter));
+
+                $handle = $keywords[$key];
+            }
+
+            if(!isset($submatch[2])) {
+
+                $out .= $handle;
+                continue;
+            }
+
+            preg_match_all(
+                '#(h|t|r|e|l|u|U|s(/|%|\#)(.*?)(?<!\\\)\2(.*?)(?:(?<!\\\)\2|$))#',
+                $submatch[2],
+                $flags
+            );
+
+            if(empty($flags))
+                continue;
+
+            foreach($flags[1] as $i => $flag)
+                switch($flag) {
+
+                    case 'h':
+                        $handle = dirname($handle);
+                      break;
+
+                    case 't':
+                        $handle = basename($handle);
+                      break;
+
+                    case 'r':
+                        if(false !== $position = strrpos($handle, '.', 1))
+                            $handle = substr($handle, 0, $position);
+                      break;
+
+                    case 'e':
+                        if(false !== $position = strrpos($handle, '.', 1))
+                            $handle = substr($handle, $position + 1);
+                      break;
+
+                    case 'l':
+                        $handle = strtolower($handle);
+                      break;
+
+                    case 'u':
+                        $handle = strtoupper($handle);
+                      break;
+
+                    case 'U':
+                        $handle = ucfirst($handle);
+                      break;
+
+                    default:
+                        if(!isset($flags[3]) && !isset($flags[4]))
+                            throw new Hoa_Exception(
+                                'Unrecognized format pattern in the parameter %s.',
+                                0, $parameter);
+
+                        if(isset($flags[3][1]) && isset($flags[3][1])) {
+
+                            $l = $flags[3][1];
+                            $r = $flags[4][1];
+                        }
+                        else {
+
+                            $l = $flags[3][0];
+                            $r = $flags[4][0];
+                        }
+
+                        $l     = preg_quote($l, '#');
+
+                        switch($flags[2][0]) {
+
+                            case '%':
+                                $l  = '^' . $l;
+                              break;
+
+                            case '#':
+                                $l .= '$';
+                              break;
+                        }
+
+                        $handle = preg_replace('#' . $l . '#', $r, $handle);
+                }
+
+            $out .= $handle;
+        }
+
+        return $out;
+    }
+
+    /**
+     * Check if an object has permissions to read or write into this set of
+     * parameters.
+     *
+     * @access  public
+     * @param   Hoa_Framework_Parameterizable  $id             Owner or friends.
+     * @param   int                            $permissions    Permissions
+     *                                                         (please, see the
+     *                                                         self::PERMISSION_*
+     *                                                         constants).
+     * @return  bool
+     * @throw   Hoa_Exception
+     */
+    public function check ( Hoa_Framework_Parameterizable $id, $permissions ) {
+
+        $iid = get_class($id);
+
+        if($this->_owner == $iid)
+            return true;
+
+        if(!array_key_exists($iid, $this->_friends))
+            throw new Hoa_Exception(
+                'Class %s is not friend of %s and cannot share its parameters.',
+                0, array($iid, $this->_owner));
+
+        $p = $this->_friends[$iid];
+
+        if(0 == $permissions & $p)
+            if(1 == $permissions & self::PERMISSION_READ)
+                throw new Hoa_Exception(
+                    'Class %s does not have permission to read parameters ' .
+                    'from %s.', 1, array($iid, $this->_owner));
+            else
+                throw new Hoa_Exception(
+                    'Class %s does not have permission to write parameters ' .
+                    'from %s.', 2, array($iid, $this->_owner));
+
+        return true;
+    }
+
+    /**
+     * Share this set of parameters of another class.
+     * Only owner can share its set of parameters with someone else; it is more
+     * simple like this… (because of changing permissions cascade effect).
+     *
+     * @access  public
+     * @param   Hoa_Framework_Parameterizable  $owner          Owner.
+     * @param   Hoa_Framework_Parameterizable  $friend         Friend.
+     * @param   int                            $permissions    Permissions
+     *                                                         (please, see the
+     *                                                         self::PERMISSION_*
+     *                                                         constants).
+     * @return  void
+     * @throw   Hoa_Exception
+     */
+    public function shareWith ( Hoa_Framework_Parameterizable $owner,
+                                Hoa_Framework_Parameterizable $friend,
+                                $permissions ) {
+
+        if($this->_owner != get_class($owner))
+            throw new Hoa_Exception(
+                'Only owner (here %s) can share its parameters; try with %s.',
+                3, array($this->_owner, get_class($owner)));
+
+        $this->_friends[get_class($friend)] = $permissions;
+
+        return;
+    }
 }
 
 /**
