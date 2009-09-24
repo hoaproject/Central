@@ -75,7 +75,7 @@ import('Stream.Io.Out');
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
- * @version     0.1
+ * @version     12.1
  * @package     Hoa_Log
  */
 
@@ -88,91 +88,91 @@ class Hoa_Log {
      *
      * @const int
      */
-    const EMERGENCY         =  0;
+    const EMERGENCY         =   1;
 
     /**
      * Priority: alert, action must be taken immediately.
      *
      * @const int
      */
-    const ALERT             =  1;
+    const ALERT             =   2;
 
     /**
      * Priority: critical, critical conditions.
      *
      * @const int
      */
-    const CRITICAL          =  2;
+    const CRITICAL          =   4;
 
     /**
      * Priority: error, error conditions.
      *
      * @const int
      */
-    const ERROR             =  4;
+    const ERROR             =   8;
 
     /**
      * Priority: warning, warning conditions.
      *
      * @const int
      */
-    const WARNING           =  8;
+    const WARNING           =  16;
 
     /**
      * Priority: notice, normal but significant condition.
      *
      * @const int
      */
-    const NOTICE            = 16;
+    const NOTICE            =  32;
 
     /**
      * Priority: informational messages.
      *
      * @const int
      */
-    const INFORMATIONAL     = 32;
+    const INFORMATIONAL     =  64;
 
     /**
      * Priority: debut-level messages.
      *
      * @const int
      */
-    const DEBUG             = 64;
+    const DEBUG             = 128;
 
     /**
      * Stack index: timestamp.
      *
      * @const int
      */
-    const STACK_TIMESTAMP   = 0;
+    const STACK_TIMESTAMP   =   0;
 
     /**
      * Stack index: message.
      *
      * @const int
      */
-    const STACK_MESSAGE     = 1;
+    const STACK_MESSAGE     =   1;
 
     /**
      * Stack index: priority.
      *
      * @const int
      */
-    const STACK_PRIORITY    = 2;
+    const STACK_PRIORITY    =   2;
 
     /**
      * Stack index: memory.
      *
      * @const int
      */
-    const STACK_MEMORY      = 3;
+    const STACK_MEMORY      =   3;
 
     /**
      * Stack index: memory peak.
      *
      * @const int
      */
-    const STACK_MEMORY_PEAK = 4;
+    const STACK_MEMORY_PEAK =   4;
 
     /**
      * Multiton.
