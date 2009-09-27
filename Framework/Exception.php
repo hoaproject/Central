@@ -123,7 +123,6 @@ class Hoa_Exception extends Exception {
 
         $message = @vsprintf($this->getMessage(), $this->_arg);
         $trace   = $this->getTrace();
-        $pre     = null;
 
         if(!empty($trace))
             $pre .= $trace[0]['class'] . '::' . $trace[0]['function'] . ' : ';
