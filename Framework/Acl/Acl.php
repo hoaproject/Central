@@ -219,7 +219,7 @@ class Hoa_Acl {
         }
         catch ( Hoa_Graph_Exception $e ) {
 
-            throw new Hoa_Acl_Exception($e->getMessage(), $e->getCode(), $group->getId());
+            throw new Hoa_Acl_Exception($e->getFormattedMessage(), $e->getCode());
         }
     }
 
@@ -243,7 +243,7 @@ class Hoa_Acl {
         }
         catch ( Hoa_Graph_Exception $e ) {
 
-            throw new Hoa_Acl_Exception($e->getMessage(), $e->getCode(), $groupId);
+            throw new Hoa_Acl_Exception($e->getFormattedMessage(), $e->getCode());
         }
 
         foreach($this->getUsers() as $userId => $user)
@@ -401,7 +401,7 @@ class Hoa_Acl {
                 'Group %s does not exist.', 6, $group);
 
         return $this->getGroups()->getNode($group)
-               ->permissionExists($permission);
+                   ->permissionExists($permission);
     }
 
     /**
