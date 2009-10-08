@@ -4,10 +4,357 @@
 Informations             :
     - repository path    : /Users/hywan/Development/Hoa/Svn/Repository ;
     - path in repository : /Framework/Trunk/ ;
-    - generated at       : 2009-08-06T10:42:06.000000Z.
+    - generated at       : 2009-10-08T20:21:07.000000Z.
 -->
 
 <log>
+  <logentry revision="484">
+    <author>hywan</author>
+    <date>2009-10-08T20:21:07.227565Z</date>
+    <msg>Add the Twitter command!</msg>
+    <paths>
+      <path action="A">Data/Bin/Command/Service</path>
+      <path action="A">Data/Bin/Command/Service/Twitter.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="483">
+    <author>hywan</author>
+    <date>2009-10-08T20:17:25.427867Z</date>
+    <msg>Remove the call of the HOA_BASE constant (which no longer exists).</msg>
+    <paths>
+      <path action="M">Framework/Version/Version.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="482">
+    <author>hywan</author>
+    <date>2009-10-08T20:16:14.076645Z</date>
+    <msg>Ameliorate the new parameters system, and clean a bit the code.</msg>
+    <paths>
+      <path action="M">Framework/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="481">
+    <author>hywan</author>
+    <date>2009-10-08T20:14:51.611640Z</date>
+    <msg>Oops, forget the “Hoa_” prefix!</msg>
+    <paths>
+      <path action="M">Framework/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="480">
+    <author>hywan</author>
+    <date>2009-10-08T20:12:27.317569Z</date>
+    <msg>Format the code.</msg>
+    <paths>
+      <path action="M">Framework/Exception.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="479">
+    <author>hywan</author>
+    <date>2009-10-08T20:12:14.916836Z</date>
+    <msg>Very small correction, not important.</msg>
+    <paths>
+      <path action="M">Framework/View/View.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="478">
+    <author>hywan</author>
+    <date>2009-10-08T20:10:52.766421Z</date>
+    <msg>Adapt Hoa_Controller to the new package parameters system.</msg>
+    <paths>
+      <path action="M">Framework/Controller/Action/Standard.php</path>
+      <path action="M">Framework/Controller/Dispatcher/Abstract.php</path>
+      <path action="M">Framework/Controller/Dispatcher/Action.php</path>
+      <path action="D">Framework/Controller/Exception/RouterFactory.php</path>
+      <path action="M">Framework/Controller/Front.php</path>
+      <path action="M">Framework/Controller/Plugin/Interface.php</path>
+      <path action="M">Framework/Controller/Plugin/Standard.php</path>
+      <path action="D">Framework/Controller/Request</path>
+      <path action="M">Framework/Controller/Response/Standard.php</path>
+      <path action="M">Framework/Controller/Router/Get.php</path>
+      <path action="D">Framework/Controller/Router/Pattern.php</path>
+      <path action="M">Framework/Controller/Router/Rewrite.php</path>
+      <path action="M">Framework/Controller/Router/Standard.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="477">
+    <author>hywan</author>
+    <date>2009-10-07T19:52:35.427431Z</date>
+    <msg>Adapt Hoa_Console to the new package parameters system.</msg>
+    <paths>
+      <path action="M">Framework/Console/Command/Abstract.php</path>
+      <path action="M">Framework/Console/Console.php</path>
+      <path action="M">Framework/Console/Core/Cli.php</path>
+      <path action="M">Framework/Console/Dispatcher.php</path>
+      <path action="D">Framework/Console/Request.php</path>
+      <path action="D">Framework/Console/Router.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="476">
+    <author>hywan</author>
+    <date>2009-10-07T18:52:38.582957Z</date>
+    <msg>Clean the code.</msg>
+    <paths>
+      <path action="M">Framework/Acl/Acl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="475">
+    <author>hywan</author>
+    <date>2009-10-05T02:00:14.072615Z</date>
+    <msg>Check if a file exits only if it's a physical file (i.e. if stream name starts by file:// or is a basic path). And correct a bug when calling fopen() with a context: forget the include_path argument.</msg>
+    <paths>
+      <path action="M">Framework/File/File.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="474">
+    <author>hywan</author>
+    <date>2009-09-28T11:21:33.243109Z</date>
+    <msg>Remove a print_r debug…</msg>
+    <paths>
+      <path action="M">Framework/Exception.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="473">
+    <author>hywan</author>
+    <date>2009-09-27T17:56:39.530597Z</date>
+    <msg>Remove an idiot index error when exception is thrown from out of a class context.</msg>
+    <paths>
+      <path action="M">Framework/Exception.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="472">
+    <author>hywan</author>
+    <date>2009-09-27T17:54:06.496909Z</date>
+    <msg>Remove the initialization of the prefix ($pre), it's a parameter!</msg>
+    <paths>
+      <path action="M">Framework/Exception.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="471">
+    <author>hywan</author>
+    <date>2009-09-24T19:02:29.230601Z</date>
+    <msg>Again a new parameters system: sharing parameter (with permissions) enable!</msg>
+    <paths>
+      <path action="M">Framework/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="470">
+    <author>hywan</author>
+    <date>2009-09-24T17:06:41.898485Z</date>
+    <msg>Change constants value: shift all to right (to remove the 0 value, it could be a cause of a bug).</msg>
+    <paths>
+      <path action="M">Framework/Log/Log.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="469">
+    <author>hywan</author>
+    <date>2009-09-24T15:50:24.167776Z</date>
+    <msg>Add an exception when $length is lower or equal to zero.</msg>
+    <paths>
+      <path action="M">Framework/File/File.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="468">
+    <author>hywan</author>
+    <date>2009-09-16T21:35:31.059777Z</date>
+    <msg>Remove the HOA_* constants, just keep two of them. Write the new package configuration system with the zFormat and parameters/keywords principle!</msg>
+    <paths>
+      <path action="M">Framework/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="467">
+    <author>hywan</author>
+    <date>2009-09-16T19:19:15.548901Z</date>
+    <msg>Prepare the framework to a big change.</msg>
+    <paths>
+      <path action="M">Framework/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="466">
+    <author>hywan</author>
+    <date>2009-09-03T11:43:09.244052Z</date>
+    <msg>Correct JSON syntax error…</msg>
+    <paths>
+      <path action="M">Data/Configuration/Cache/Cache.php</path>
+      <path action="M">Data/Configuration/Cache/Console.php</path>
+      <path action="M">Data/Configuration/Cache/Controller.php</path>
+      <path action="M">Data/Configuration/Cache/Database.php</path>
+      <path action="M">Data/Configuration/Console.json</path>
+      <path action="M">Data/Configuration/Controller.json</path>
+      <path action="M">Data/Configuration/Database.json</path>
+    </paths>
+  </logentry>
+  <logentry revision="465">
+    <author>hywan</author>
+    <date>2009-09-01T18:50:11.792839Z</date>
+    <msg>Better stacks output management.</msg>
+    <paths>
+      <path action="M">Framework/Log/Log.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="464">
+    <author>hywan</author>
+    <date>2009-09-01T18:48:59.943364Z</date>
+    <msg>Format and remove useless code.</msg>
+    <paths>
+      <path action="M">Framework/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="463">
+    <author>hywan</author>
+    <date>2009-09-01T18:45:27.116471Z</date>
+    <msg>Oops, forget to rename a local variable after copy/paste the code.</msg>
+    <paths>
+      <path action="M">Framework/Configuration/Json.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="462">
+    <author>hywan</author>
+    <date>2009-09-01T18:37:43.109665Z</date>
+    <msg>Change the configuration package format from YAML to JSON (for a further compatibility).</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Maintenance/Cache.php</path>
+      <path action="A">Data/Configuration/Cache.json</path>
+      <path action="D">Data/Configuration/Cache.yml</path>
+      <path action="M">Data/Configuration/Cache/Cache.php</path>
+      <path action="M">Data/Configuration/Cache/Console.php</path>
+      <path action="M">Data/Configuration/Cache/Controller.php</path>
+      <path action="M">Data/Configuration/Cache/Database.php</path>
+      <path action="D">Data/Configuration/Cache/Hoa.php</path>
+      <path action="A">Data/Configuration/Console.json</path>
+      <path action="D">Data/Configuration/Console.yml</path>
+      <path action="A">Data/Configuration/Controller.json</path>
+      <path action="D">Data/Configuration/Controller.yml</path>
+      <path action="A">Data/Configuration/Database.json</path>
+      <path action="D">Data/Configuration/Database.yml</path>
+      <path action="D">Data/Configuration/Hoa.yml</path>
+    </paths>
+  </logentry>
+  <logentry revision="461">
+    <author>hywan</author>
+    <date>2009-09-01T15:00:58.516873Z</date>
+    <msg>Fix a bug: call an attribute instead of a local variable.
+</msg>
+    <paths>
+      <path action="M">Framework/Configuration/Configuration.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="460">
+    <author>hywan</author>
+    <date>2009-09-01T15:00:12.234456Z</date>
+    <msg>Format code: remove useless spaces.</msg>
+    <paths>
+      <path action="M">Framework/Configuration/Json.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="458">
+    <author>hywan</author>
+    <date>2009-08-07T16:41:58.220599Z</date>
+    <msg>Change getInstance() for getChannel(), it is more explicit. Write the filter system. And complete API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Log/Log.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="457">
+    <author>hywan</author>
+    <date>2009-08-07T14:47:15.911408Z</date>
+    <msg>Early draft for the hoa://Framework/Package/Log component (a test).</msg>
+    <paths>
+      <path action="M">Framework/Log/Log.php</path>
+      <path action="A">Framework/Log/_Protocol.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="456">
+    <author>hywan</author>
+    <date>2009-08-07T14:46:36.156425Z</date>
+    <msg>Format API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="455">
+    <author>hywan</author>
+    <date>2009-08-07T14:15:47.684798Z</date>
+    <msg>Complete the hoa:// protocol.</msg>
+    <paths>
+      <path action="M">Framework/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="454">
+    <author>hywan</author>
+    <date>2009-08-07T13:22:15.945563Z</date>
+    <msg>Format API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Stream/Wrapper/Interface/Stream.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="453">
+    <author>hywan</author>
+    <date>2009-08-06T17:44:34.325597Z</date>
+    <msg>Complete API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Stream/Wrapper/Interface/Stream.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="452">
+    <author>hywan</author>
+    <date>2009-08-06T17:40:51.110697Z</date>
+    <msg>Early draft for the hoa:// protocol implementation.
+</msg>
+    <paths>
+      <path action="M">Framework/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="451">
+    <author>hywan</author>
+    <date>2009-08-06T17:36:40.521267Z</date>
+    <msg>Format API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Stream/Wrapper/Interface/Stream.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="450">
+    <author>hywan</author>
+    <date>2009-08-06T14:44:31.331946Z</date>
+    <msg>Force the load the Hoa_Console_Core_Io class.</msg>
+    <paths>
+      <path action="M">Framework/Console/Console.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="449">
+    <author>hywan</author>
+    <date>2009-08-06T14:35:36.874081Z</date>
+    <msg>Replace the tricky load by using the new prototype of the import() function.</msg>
+    <paths>
+      <path action="M">Framework/Console/Command/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="448">
+    <author>hywan</author>
+    <date>2009-08-06T14:34:52.212131Z</date>
+    <msg>Add the $load argument at the import() method: allows user to load the file after being imported without using the autoload. And add the first fruits of the hoa:// protocol!</msg>
+    <paths>
+      <path action="M">Framework/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="447">
+    <author>hywan</author>
+    <date>2009-08-06T10:43:33.012959Z</date>
+    <msg>Tidy up again.</msg>
+    <paths>
+      <path action="M">Data/Etc/CHANGELOG</path>
+      <path action="M">Data/Etc/CHANGELOG.echo</path>
+      <path action="M">Data/Etc/CHANGELOG.xml</path>
+      <path action="M">Data/Etc/DEPENDENCY</path>
+      <path action="M">Data/Etc/DEPENDENCY.echo</path>
+      <path action="M">Data/Etc/DEPENDENCY.xml</path>
+      <path action="A">Data/Private/Database</path>
+      <path action="A">Data/Private/Local</path>
+      <path action="A">Data/Private/Log</path>
+      <path action="A">Data/Private/Test</path>
+      <path action="D">Data/Test</path>
+    </paths>
+  </logentry>
   <logentry revision="446">
     <author>hywan</author>
     <date>2009-08-06T10:42:06.469592Z</date>

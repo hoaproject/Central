@@ -82,7 +82,7 @@ class RootCommand extends Hoa_Console_Command_Abstract {
      */
     public function main ( ) {
 
-        $root  = HOA_BASE;
+        $root  = dirname(HOA_DATA);
         $check = false;
 
         while(false !== $c = parent::getOption($v)) {
@@ -90,11 +90,11 @@ class RootCommand extends Hoa_Console_Command_Abstract {
             switch($c) {
 
                 case 'f':
-                    $root = HOA_FRAMEWORK_BASE;
+                    $root = HOA_FRAMEWORK;
                   break;
 
                 case 'd':
-                    $root = HOA_DATA_BASE;
+                    $root = HOA_DATA;
                   break;
 
                 case 'c':
@@ -108,7 +108,6 @@ class RootCommand extends Hoa_Console_Command_Abstract {
 
                 case 'm':
                 default:
-                    $root = HOA_BASE;
             }
         }
 

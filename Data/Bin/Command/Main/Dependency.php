@@ -89,12 +89,13 @@ class DependencyCommand extends Hoa_Console_Command_Abstract {
         $packages   = array();
         $textPlain  = false;
         $withColour = false;
+        $file       = 'hoa://Data/Etc/DEPENDENCY.xml';
 
-        if(!file_exists(HOA_DATA_ETC . DS . 'DEPENDENCY.xml'))
+        if(!file_exists($file))
             throw new Hoa_Console_Command_Exception(
-                'File %s does not exist.', 0, HOA_DATA_ETC . DS . 'DEPENDENCY.xml');
+                'File %s does not exist.', 0, $file);
 
-        $xml = simplexml_load_file(HOA_DATA_ETC . DS . 'DEPENDENCY.xml');
+        $xml = simplexml_load_file($file);
 
         while(false !== $c = parent::getOption($v)) {
 

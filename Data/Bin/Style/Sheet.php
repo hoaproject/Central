@@ -41,7 +41,7 @@ require_once 'Framework.php';
 import('Console.Interface.Style');
 
 /**
- * Class Sheet.
+ * Class SheetStyle.
  *
  * This sheet declares the main style.
  *
@@ -52,7 +52,7 @@ import('Console.Interface.Style');
  * @version     0.1
  */
 
-class Sheet extends Hoa_Console_Interface_Style {
+class SheetStyle extends Hoa_Console_Interface_Style {
 
     /**
      * Import the style.

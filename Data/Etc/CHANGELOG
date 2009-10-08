@@ -5,8 +5,262 @@
 \e[31mInformations\e[0m             :
     - repository path    : /Users/hywan/Development/Hoa/Svn/Repository ;
     - path in repository : /Framework/Trunk/ ;
-    - generated at       : 2009-08-06T10:42:06.000000Z.
+    - generated at       : 2009-10-08T20:21:07.000000Z.
 
+
+\e[33mRev. 484          \e[0m\e[34mAdd the Twitter command!\e[0m
+    At            2009-10-08T18:21:07.227565Z
+    By            hywan
+    \e[32mAdded\e[0m         Data/Bin/Command/Service
+    \e[32mAdded\e[0m         Data/Bin/Command/Service/Twitter.php
+
+\e[33mRev. 483          \e[0m\e[34mRemove the call of the HOA_BASE constant (which no longer
+                  exists).\e[0m
+    At            2009-10-08T18:17:25.427867Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Version/Version.php
+
+\e[33mRev. 482          \e[0m\e[34mAmeliorate the new parameters system, and clean a bit the
+                  code.\e[0m
+    At            2009-10-08T18:16:14.076645Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Framework.php
+
+\e[33mRev. 481          \e[0m\e[34mOops, forget the “Hoa_” prefix!\e[0m
+    At            2009-10-08T18:14:51.611640Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Xml/Xml.php
+
+\e[33mRev. 480          \e[0m\e[34mFormat the code.\e[0m
+    At            2009-10-08T18:12:27.317569Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Exception.php
+
+\e[33mRev. 479          \e[0m\e[34mVery small correction, not important.\e[0m
+    At            2009-10-08T18:12:14.916836Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/View/View.php
+
+\e[33mRev. 478          \e[0m\e[34mAdapt Hoa_Controller to the new package parameters system.\e[0m
+    At            2009-10-08T18:10:52.766421Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Controller/Action/Standard.php
+    \e[34mModified\e[0m      Framework/Controller/Dispatcher/Abstract.php
+    \e[34mModified\e[0m      Framework/Controller/Dispatcher/Action.php
+    \e[31mDeleted\e[0m       Framework/Controller/Exception/RouterFactory.php
+    \e[34mModified\e[0m      Framework/Controller/Front.php
+    \e[34mModified\e[0m      Framework/Controller/Plugin/Interface.php
+    \e[34mModified\e[0m      Framework/Controller/Plugin/Standard.php
+    \e[31mDeleted\e[0m       Framework/Controller/Request
+    \e[34mModified\e[0m      Framework/Controller/Response/Standard.php
+    \e[34mModified\e[0m      Framework/Controller/Router/Get.php
+    \e[31mDeleted\e[0m       Framework/Controller/Router/Pattern.php
+    \e[34mModified\e[0m      Framework/Controller/Router/Rewrite.php
+    \e[34mModified\e[0m      Framework/Controller/Router/Standard.php
+
+\e[33mRev. 477          \e[0m\e[34mAdapt Hoa_Console to the new package parameters system.\e[0m
+    At            2009-10-07T17:52:35.427431Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Console/Command/Abstract.php
+    \e[34mModified\e[0m      Framework/Console/Console.php
+    \e[34mModified\e[0m      Framework/Console/Core/Cli.php
+    \e[34mModified\e[0m      Framework/Console/Dispatcher.php
+    \e[31mDeleted\e[0m       Framework/Console/Request.php
+    \e[31mDeleted\e[0m       Framework/Console/Router.php
+
+\e[33mRev. 476          \e[0m\e[34mClean the code.\e[0m
+    At            2009-10-07T16:52:38.582957Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Acl/Acl.php
+
+\e[33mRev. 475          \e[0m\e[34mCheck if a file exits only if it's a physical file (i.e. if
+                  stream name starts by file:// or is a basic path). And
+                  correct a bug when calling fopen() with a context: forget
+                  the include_path argument.\e[0m
+    At            2009-10-05T00:00:14.072615Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/File/File.php
+
+\e[33mRev. 474          \e[0m\e[34mRemove a print_r debug…\e[0m
+    At            2009-09-28T09:21:33.243109Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Exception.php
+
+\e[33mRev. 473          \e[0m\e[34mRemove an idiot index error when exception is thrown from
+                  out of a class context.\e[0m
+    At            2009-09-27T15:56:39.530597Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Exception.php
+
+\e[33mRev. 472          \e[0m\e[34mRemove the initialization of the prefix ($pre), it's a
+                  parameter!\e[0m
+    At            2009-09-27T15:54:06.496909Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Exception.php
+
+\e[33mRev. 471          \e[0m\e[34mAgain a new parameters system: sharing parameter (with
+                  permissions) enable!\e[0m
+    At            2009-09-24T17:02:29.230601Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Framework.php
+
+\e[33mRev. 470          \e[0m\e[34mChange constants value: shift all to right (to remove the 0
+                  value, it could be a cause of a bug).\e[0m
+    At            2009-09-24T15:06:41.898485Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Log/Log.php
+
+\e[33mRev. 469          \e[0m\e[34mAdd an exception when $length is lower or equal to zero.\e[0m
+    At            2009-09-24T13:50:24.167776Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/File/File.php
+
+\e[33mRev. 468          \e[0m\e[34mRemove the HOA_* constants, just keep two of them. Write the
+                  new package configuration system with the zFormat and
+                  parameters/keywords principle!\e[0m
+    At            2009-09-16T19:35:31.059777Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Framework.php
+
+\e[33mRev. 467          \e[0m\e[34mPrepare the framework to a big change.\e[0m
+    At            2009-09-16T17:19:15.548901Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Framework.php
+
+\e[33mRev. 466          \e[0m\e[34mCorrect JSON syntax error…\e[0m
+    At            2009-09-03T09:43:09.244052Z
+    By            hywan
+    \e[34mModified\e[0m      Data/Configuration/Cache/Cache.php
+    \e[34mModified\e[0m      Data/Configuration/Cache/Console.php
+    \e[34mModified\e[0m      Data/Configuration/Cache/Controller.php
+    \e[34mModified\e[0m      Data/Configuration/Cache/Database.php
+    \e[34mModified\e[0m      Data/Configuration/Console.json
+    \e[34mModified\e[0m      Data/Configuration/Controller.json
+    \e[34mModified\e[0m      Data/Configuration/Database.json
+
+\e[33mRev. 465          \e[0m\e[34mBetter stacks output management.\e[0m
+    At            2009-09-01T16:50:11.792839Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Log/Log.php
+
+\e[33mRev. 464          \e[0m\e[34mFormat and remove useless code.\e[0m
+    At            2009-09-01T16:48:59.943364Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Framework.php
+
+\e[33mRev. 463          \e[0m\e[34mOops, forget to rename a local variable after copy/paste the
+                  code.\e[0m
+    At            2009-09-01T16:45:27.116471Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Configuration/Json.php
+
+\e[33mRev. 462          \e[0m\e[34mChange the configuration package format from YAML to JSON
+                  (for a further compatibility).\e[0m
+    At            2009-09-01T16:37:43.109665Z
+    By            hywan
+    \e[34mModified\e[0m      Data/Bin/Command/Maintenance/Cache.php
+    \e[32mAdded\e[0m         Data/Configuration/Cache.json
+    \e[31mDeleted\e[0m       Data/Configuration/Cache.yml
+    \e[34mModified\e[0m      Data/Configuration/Cache/Cache.php
+    \e[34mModified\e[0m      Data/Configuration/Cache/Console.php
+    \e[34mModified\e[0m      Data/Configuration/Cache/Controller.php
+    \e[34mModified\e[0m      Data/Configuration/Cache/Database.php
+    \e[31mDeleted\e[0m       Data/Configuration/Cache/Hoa.php
+    \e[32mAdded\e[0m         Data/Configuration/Console.json
+    \e[31mDeleted\e[0m       Data/Configuration/Console.yml
+    \e[32mAdded\e[0m         Data/Configuration/Controller.json
+    \e[31mDeleted\e[0m       Data/Configuration/Controller.yml
+    \e[32mAdded\e[0m         Data/Configuration/Database.json
+    \e[31mDeleted\e[0m       Data/Configuration/Database.yml
+    \e[31mDeleted\e[0m       Data/Configuration/Hoa.yml
+
+\e[33mRev. 461          \e[0m\e[34mFix a bug: call an attribute instead of a local variable.
+                  \e[0m
+    At            2009-09-01T13:00:58.516873Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Configuration/Configuration.php
+
+\e[33mRev. 460          \e[0m\e[34mFormat code: remove useless spaces.\e[0m
+    At            2009-09-01T13:00:12.234456Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Configuration/Json.php
+
+\e[33mRev. 458          \e[0m\e[34mChange getInstance() for getChannel(), it is more explicit.
+                  Write the filter system. And complete API documentation.\e[0m
+    At            2009-08-07T14:41:58.220599Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Log/Log.php
+
+\e[33mRev. 457          \e[0m\e[34mEarly draft for the hoa://Framework/Package/Log component (a
+                  test).\e[0m
+    At            2009-08-07T12:47:15.911408Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Log/Log.php
+    \e[32mAdded\e[0m         Framework/Log/_Protocol.php
+
+\e[33mRev. 456          \e[0m\e[34mFormat API documentation.\e[0m
+    At            2009-08-07T12:46:36.156425Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Framework.php
+
+\e[33mRev. 455          \e[0m\e[34mComplete the hoa:// protocol.\e[0m
+    At            2009-08-07T12:15:47.684798Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Framework.php
+
+\e[33mRev. 454          \e[0m\e[34mFormat API documentation.\e[0m
+    At            2009-08-07T11:22:15.945563Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Wrapper/Interface/Stream.php
+
+\e[33mRev. 453          \e[0m\e[34mComplete API documentation.\e[0m
+    At            2009-08-06T15:44:34.325597Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Wrapper/Interface/Stream.php
+
+\e[33mRev. 452          \e[0m\e[34mEarly draft for the hoa:// protocol implementation.
+                  \e[0m
+    At            2009-08-06T15:40:51.110697Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Framework.php
+
+\e[33mRev. 451          \e[0m\e[34mFormat API documentation.\e[0m
+    At            2009-08-06T15:36:40.521267Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Stream/Wrapper/Interface/Stream.php
+
+\e[33mRev. 450          \e[0m\e[34mForce the load the Hoa_Console_Core_Io class.\e[0m
+    At            2009-08-06T12:44:31.331946Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Console/Console.php
+
+\e[33mRev. 449          \e[0m\e[34mReplace the tricky load by using the new prototype of the
+                  import() function.\e[0m
+    At            2009-08-06T12:35:36.874081Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Console/Command/Abstract.php
+
+\e[33mRev. 448          \e[0m\e[34mAdd the $load argument at the import() method: allows user
+                  to load the file after being imported without using the
+                  autoload. And add the first fruits of the hoa:// protocol!\e[0m
+    At            2009-08-06T12:34:52.212131Z
+    By            hywan
+    \e[34mModified\e[0m      Framework/Framework.php
+
+\e[33mRev. 447          \e[0m\e[34mTidy up again.\e[0m
+    At            2009-08-06T08:43:33.012959Z
+    By            hywan
+    \e[34mModified\e[0m      Data/Etc/CHANGELOG
+    \e[34mModified\e[0m      Data/Etc/CHANGELOG.echo
+    \e[34mModified\e[0m      Data/Etc/CHANGELOG.xml
+    \e[34mModified\e[0m      Data/Etc/DEPENDENCY
+    \e[34mModified\e[0m      Data/Etc/DEPENDENCY.echo
+    \e[34mModified\e[0m      Data/Etc/DEPENDENCY.xml
+    \e[32mAdded\e[0m         Data/Private/Database
+    \e[32mAdded\e[0m         Data/Private/Local
+    \e[32mAdded\e[0m         Data/Private/Log
+    \e[32mAdded\e[0m         Data/Private/Test
+    \e[31mDeleted\e[0m       Data/Test
 
 \e[33mRev. 446          \e[0m\e[34mTidy up the Data/ directory.\e[0m
     At            2009-08-06T08:42:06.469592Z

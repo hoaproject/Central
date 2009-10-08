@@ -51,10 +51,32 @@ ini_set('include_path', dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATO
  */
 ini_set('date.timezone', 'Europe/Paris');
 
-/**
- * Hoa_Framework
- */
 require_once 'Framework.php';
+
+class Hoa_Framework_Protocol_Data_Etc extends Hoa_Framework_Protocol {
+
+    protected $_name = 'Etc';
+
+    public function reach ( $queue ) {
+
+        return HOA_DATA . '/Etc/' . $queue;
+    }
+}
+
+class Hoa_Framework_Protocol_Data_Bin extends Hoa_Framework_Protocol {
+
+    protected $_name = 'Bin';
+
+    public function reach ( $queue ) {
+
+        return HOA_DATA . '/Bin/' . $queue;
+    }
+}
+
+Hoa_Framework::getProtocol()
+    ->getComponent('Data')
+    ->addComponent(new Hoa_Framework_Protocol_Data_Bin())
+    ->addComponent(new Hoa_Framework_Protocol_Data_Etc());
 
 /**
  * Hoa_Console
@@ -62,15 +84,8 @@ require_once 'Framework.php';
 import('Console.~');
 
 /**
- * Edit the default parameter to get the interface everywhere on the disk.
- */
-$parameter = array(
-    'route.directory' => HOA_DATA_BIN . DS . 'Command/'
-);
-
-/**
  * Here we go …
  */
-Hoa_Console::getInstance($parameter)
-    ->importStyle('Sheet')
+Hoa_Console::getInstance()
+    ->importStyle('sheet')
     ->dispatch();

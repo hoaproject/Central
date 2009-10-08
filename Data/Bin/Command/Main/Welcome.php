@@ -186,6 +186,12 @@ class WelcomeCommand extends Hoa_Console_Command_Abstract {
                 'Build a model from a schema.'
             ),
 
+            array('Service'),
+            array(
+                '    ' . parent::stylize('twitter', 'command'),
+                'Send a tweet!'
+            )
+
             // Tool.
             /*
             array('Tool'),

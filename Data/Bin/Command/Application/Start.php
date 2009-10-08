@@ -97,6 +97,8 @@ class StartCommand extends Hoa_Console_Command_Abstract {
 
         $withBootstrap = false;
         $withLayout    = false;
+        $file          = 'hoa://Data/Configuration/Controller.php';
+        $base          = dirname(HOA_DATA);
 
         while(false !== $c = parent::getOption($v)) {
 
@@ -116,30 +118,30 @@ class StartCommand extends Hoa_Console_Command_Abstract {
             }
         }
 
-        if(!file_exists(HOA_DATA_CONFIGURATION_CACHE . DS . 'Controller.php'))
+        if(!file_exists($file))
             throw new Hoa_Console_Command_Exception(
-                'The cache “Controller” is not found in %s. Must generate it.',
-                0, HOA_DATA_CONFIGURATION_CACHE);
+                'The Controller cache is not found in %s. Must generate it.',
+                0, $file);
 
-        $options    = require HOA_DATA_CONFIGURATION_CACHE . DS . 'Controller.php';
+        $options    = require $file;
         $router     = new Hoa_Controller_Router_Pattern();
 
-        $controller = HOA_BASE . DS .
+        $controller = $base . DS .
                       $options['route']['directory'];
 
-        $viewTheme  = HOA_BASE . DS .
+        $viewTheme  = $base . DS .
                       $router->transform($options['view']['directory'], $options['view']['theme']);
 
-        $viewHelper = HOA_BASE . DS .
+        $viewHelper = $base . DS .
                       $options['view']['helper']['directory'];
 
         $viewLayout = $viewTheme . DS .
                       $router->transform($options['pattern']['view']['layout'], $options['view']['layout']);
 
-        $model      = HOA_BASE . DS .
+        $model      = $base . DS .
                       $router->transform($options['model']['directory'], null);
 
-        $bootstrap  = HOA_BASE . DS . 'index.php';
+        $bootstrap  = $base . DS . 'index.php';
 
         if(file_exists($controller))
             throw new Hoa_Console_Command_Exception(
