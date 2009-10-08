@@ -57,50 +57,48 @@ interface Hoa_Controller_Plugin_Interface {
      * preRouter notification.
      *
      * @access  public
-     * @param   Hoa_Controller_Request_Abstract  $request    The request object.
+     * @param   Hoa_Framework_Parameter  $parameters    Parameters.
      * @return  mixed
      * @throw   Hoa_Controller_Exception
      */
-    public function preRouter ( Hoa_Controller_Request_Abstract $request );
+    public function preRouter ( Hoa_Framework_Parameter $parameters );
 
     /**
      * postRouter notification.
      *
      * @access  public
-     * @param   Hoa_Controller_Request_Abstract  $request    The request object.
-     * @param   Hoa_Controller_Router_Standard   $router     The router object.
+     * @param   Hoa_Framework_Parameter          $parameters    Parameters.
+     * @param   Hoa_Controller_Router_Standard   $router        Router.
      * @return  mixed
      * @throw   Hoa_Controller_Exception
      */
-    public function postRouter ( Hoa_Controller_Request_Abstract $request,
-                                 Hoa_Controller_Router_Standard  $router );
+    public function postRouter ( Hoa_Framework_Parameter        $parameters,
+                                 Hoa_Controller_Router_Standard $router );
 
     /**
      * preDispatcher notification.
      *
      * @access  public
-     * @param   Hoa_Controller_Request_Abstract  $request    The request object.
-     * @param   Hoa_Controller_Router_Standard   $router     The router object.
+     * @param   Hoa_Framework_Parameter          $parameters    Parameters.
+     * @param   Hoa_Controller_Router_Standard   $router        Router
      * @return  mixed
      * @throw   Hoa_Controller_Exception
      */
-    public function preDispatcher ( Hoa_Controller_Request_Abstract $request,
-                                    Hoa_Controller_Router_Standard  $router );
+    public function preDispatcher ( Hoa_Framework_Parameter        $parameters,
+                                    Hoa_Controller_Router_Standard $router );
 
     /**
      * postDispatcher notification.
      *
      * @access  public
-     * @param   Hoa_Controller_Request_Abstract     $request       The request
-     *                                                             object.
-     * @param   Hoa_Controller_Dispatcher_Abstract  $dispatcher    The dispatcher
-     *                                                             object.
+     * @param   Hoa_Framework_Parameter             $parameters    Parameters.
+     * @param   Hoa_Controller_Dispatcher_Abstract  $dispatcher    Dispatcher.
      * @param   string                              $dispatch      Dispatch
      *                                                             result.
      * @return  mixed
      * @throw   Hoa_Controller_Exception
      */
-    public function postDispatcher ( Hoa_Controller_Request_Abstract    $request,
+    public function postDispatcher ( Hoa_Framework_Parameter            $parameters,
                                      Hoa_Controller_Dispatcher_Abstract $dispatcher,
                                      $dispatch );
 }

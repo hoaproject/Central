@@ -248,12 +248,12 @@ class Hoa_Controller_Router_Rewrite implements Hoa_Controller_Router_Interface {
 
         // Prepare the patterns.
         $withRegularPatterns = array();
-        foreach($candidates as $name => $pattern) {
-
-            $withRegularPatterns[$name] = preg_replace('#(\(:[^\)]+\)(.))#e',
-                                          "'([^' .  preg_quote('\\2') . ']+)' . preg_quote('\\2')",
-                                          $pattern);
-        }
+        foreach($candidates as $name => $pattern)
+            $withRegularPatterns[$name] = preg_replace(
+                '#(\(:[^\)]+\)(.))#e',
+                "'([^' .  preg_quote('\\2') . ']+)' . preg_quote('\\2')",
+                $pattern
+            );
 
         $found = array();
         foreach($withRegularPatterns as $name => $newPattern) {
@@ -284,7 +284,7 @@ class Hoa_Controller_Router_Rewrite implements Hoa_Controller_Router_Interface {
                       0 === preg_match('#^' . implode('', $this->myImplode($handle)) . '$#',
                                        $this->getUrl(), $matches))
 
-                    array_pop($handle);
+                array_pop($handle);
             }
 
             array_shift($matches);
@@ -294,12 +294,10 @@ class Hoa_Controller_Router_Rewrite implements Hoa_Controller_Router_Interface {
                            $patternName, PREG_PATTERN_ORDER);
             $patternName = $patternName[1];
 
-            foreach($patternName as $key => $pname) {
-
+            foreach($patternName as $key => $pname)
                 $found[$name][$pname] = isset($matches[$key])
                                             ? $matches[$key]
                                             : null;
-            }
         }
 
         if(count($found) == 1)
@@ -311,10 +309,13 @@ class Hoa_Controller_Router_Rewrite implements Hoa_Controller_Router_Interface {
         foreach($found as $name => $result) {
 
             end($result);
+
             if(current($result) !== null) {
+
                 $full[$name] = $result;
                 unset($found[$name]);
             }
+
             reset($result);
         }
 

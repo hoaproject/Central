@@ -76,11 +76,9 @@ class Hoa_Controller_Router_Get implements Hoa_Controller_Router_Interface {
         if(!isset($parameters['default']))
             return $_GET;
 
-        foreach($parameters['default'] as $key => $value) {
-
+        foreach($parameters['default'] as $key => $value)
             if(!isset($_GET[$key]))
                 $_GET[$key] = $value;
-        }
 
         return $_GET;
     }

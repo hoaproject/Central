@@ -62,39 +62,11 @@ import('Controller.Dispatcher.Action');
 class Hoa_Controller_Action_Standard extends Hoa_Controller_Dispatcher_Action {
 
     /**
-     * View directory.
+     * Magics variables (but used for attached objects).
      *
-     * @var Hoa_Controller_Action_Standard string
+     * @var Hoa_Controller_Action_Standard array
      */
-    protected $viewDirectory       = null;
-
-    /**
-     * View layout filename.
-     *
-     * @var Hoa_Controller_Action_Standard string
-     */
-    protected $viewLayout          = null;
-
-    /**
-     * View enable layout.
-     *
-     * @var Hoa_Controller_Action_Standard string
-     */
-    protected $viewEnableLayout    = null;
-
-    /**
-     * View filename.
-     *
-     * @var Hoa_Controller_Action_Standard string
-     */
-    protected $viewFile            = null;
-
-    /**
-     * View helper directory.
-     *
-     * @var Hoa_Controller_Action_Standard string
-     */
-    protected $viewHelperDirectory = null;
+    private $_properties = array();
 
 
 
@@ -103,36 +75,26 @@ class Hoa_Controller_Action_Standard extends Hoa_Controller_Dispatcher_Action {
      * Prepare autoload model, and set view parameters.
      *
      * @access  public
-     * @param   Hoa_Controller_Request_Abstract     $request            Request.
+     * @param   Hoa_Framework_Parameter             $parameter          Parameter.
      * @param   Hoa_Controller_Dispatcher_Abstract  $dispatcher         Dispatcher.
      * @param   Hoa_Controller_Response_Standard    $response           Response.
      * @param   Hoa_View                            $view               View.
-     * @param   ArrayObject                         $attachedObjects    Attached
+     * @param   array                               $attachedObjects    Attached
      *                                                                  objects.
      * @return  void
      */
-    public function __construct ( Hoa_Controller_Request_Abstract    $request,
+    public function __construct ( Hoa_Framework_Parameter            $parameters,
                                   Hoa_Controller_Dispatcher_Abstract $dispatcher,
                                   Hoa_Controller_Response_Standard   $response,
                                   Hoa_View                           $view,
-                                  ArrayObject                        $attachedObject) {
+                                  Array                              $attachedObjects) {
 
-        parent::__construct($request, $dispatcher, $response, $view, $attachedObject);
+        parent::__construct($parameters, $dispatcher, $response, $view);
+
+        foreach($attachedObjects as $key => $value)
+            $this->__set($key, $value);
 
         spl_autoload_register(array($this, 'autoloadModel'));
-
-        $viewDirectory       = $this->getViewDirectory();
-        $viewLayout          = $this->getViewLayout();
-        $viewEnableLayout    = $this->getViewEnableLayout();
-        $viewFile            = $this->getViewFile();
-        $viewHelperDirectory = $this->getViewHelperDirectory();
-
-        $this->view = $view;
-        $this->view->setDirectory($viewDirectory);
-        $this->view->setLayout($viewLayout);
-        $this->view->enableLayout($viewEnableLayout);
-        $this->view->setView($viewFile);
-        $this->view->setHelperDirectory($viewHelperDirectory);
     }
 
     /**
@@ -144,17 +106,17 @@ class Hoa_Controller_Action_Standard extends Hoa_Controller_Dispatcher_Action {
      */
     public function autoloadModel ( $classname ) {
 
-        $routerPattern = new Hoa_Controller_Router_Pattern();
-        $controller    = $this->requestGetParameter('controller.value');
-        $pattern       = $this->requestGetParameter('pattern.model.directory');
-        $pattern       = $routerPattern->transform($pattern, $controller);
-        $directory     = $this->requestGetParameter('model.directory');
-        $directory     = $routerPattern->transform($directory, $pattern);
+        $path = $this->getFormattedParameter('model.directory') .
+                $classname . '.php';
 
-        $path          = $directory . $classname . '.php';
+        if(!file_exists($path)) {
 
-        if(!file_exists($path))
-            return false;
+            $path = $this->getFormattedParameter('model.share.directory') .
+                    $classname . '.php';
+
+            if(!file_exists($path))
+                return false;
+        }
 
         require_once $path;
 
@@ -162,161 +124,50 @@ class Hoa_Controller_Action_Standard extends Hoa_Controller_Dispatcher_Action {
     }
 
     /**
-     * Set view directory.
+     * Overloading property.
      *
-     * @access  private
-     * @return  string
+     * @access  public
+     * @param   string  $name     Name.
+     * @param   string  $value    Value.
+     * @return  mixed
      */
-    private function setViewDirectory ( ) {
+    public function __set ( $name, $value ) {
 
-        $directory           = $this->requestGetParameter('view.directory');
-        $theme               = $this->requestGetParameter('view.theme');
-        $directory           = $this->_pattern->transform($directory, $theme);
+        $old = null;
 
-        $old                 = $this->viewDirectory;
-        $this->viewDirectory = $directory;
+        if(isset($this->_properties[$name]))
+            $old = $this->_properties[$name];
+
+        $this->_properties[$name] = $value;
 
         return $old;
     }
 
     /**
-     * Get view directory.
+     * Overloading property.
      *
      * @access  public
-     * @return  string
+     * @param   string  $name    Name.
+     * @return  mixed
      */
-    public function getViewDirectory ( ) {
+    public function __get ( $name ) {
 
-        if(null === $this->viewDirectory)
-            $this->setViewDirectory();
+        if(!isset($this->_properties[$name]))
+            return null;
 
-        return $this->viewDirectory;
-    }
+        $cast = gettype($this->_properties[$name]);
 
-    /**
-     * Set view layout filename.
-     *
-     * @access  private
-     * @return  string
-     */
-    private function setViewLayout ( ) {
+        switch($cast) {
 
-        $pattern          = $this->requestGetParameter('pattern.view.layout');
-        $layout           = $this->requestGetParameter('view.layout');
-        $layout           = $this->_pattern->transform($pattern, $layout);
+            // A bug from the first releases of PHP 5 (maybe corrected since PHP
+            // 5.3).
+            case 'array':
+                return (array) $this->_properties[$name];
+              break;
 
-        $old              = $this->viewLayout;
-        $this->viewLayout = $layout;
-
-        return $old;
-    }
-
-    /**
-     * Get view layout filename.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getViewLayout ( ) {
-
-        if(null === $this->viewLayout)
-            $this->setViewLayout();
-
-        return $this->viewLayout;
-    }
-
-    /**
-     * Set view enable layout.
-     *
-     * @access  private
-     * @return  string
-     */
-    private function setViewEnableLayout ( ) {
-
-        $enableLayout           = $this->requestGetParameter('view.enable.layout');
-
-        $old                    = $this->viewEnableLayout;
-        $this->viewEnableLayout = $enableLayout;
-
-        return $old;
-    }
-
-    /**
-     * Get view enable layout.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getViewEnableLayout ( ) {
-
-        if(null === $this->viewEnableLayout)
-            $this->setViewEnableLayout();
-
-        return $this->viewEnableLayout;
-    }
-
-    /**
-     * Set view filename.
-     *
-     * @access  private
-     * @return  string
-     */
-    private function setViewFile ( ) {
-
-        $pattern        = $this->requestGetParameter('pattern.view.directory');
-        $directory      = $this->requestGetParameter('controller.value');
-        $directory      = $this->_pattern->transform($pattern, $directory);
-
-        $pattern        = $this->requestGetParameter('pattern.view.file');
-        $file           = $this->requestGetParameter('action.value');
-        $file           = $this->_pattern->transform($pattern, $file);
-
-        $old            = $this->viewFile;
-        $this->viewFile = $directory . $file;
-
-        return $old;
-    }
-
-    /**
-     * Get view filename.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getViewFile ( ) {
-
-        if(null === $this->viewFile)
-            $this->setViewFile();
-
-        return $this->viewFile;
-    }
-
-    /**
-     * Set view helper directory.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function setViewHelperDirectory ( ) {
-
-        $old                       = $this->viewHelperDirectory;
-        $this->viewHelperDirectory = $this->requestGetParameter('view.helper.directory');
-
-        return $old;
-    }
-
-    /**
-     * Get view helper directory.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getViewHelperDirectory ( ) {
-
-        if(null === $this->viewHelperDirectory)
-            $this->setViewHelperDirectory();
-
-        return $this->viewHelperDirectory;
+            default:
+                return $this->_properties[$name];
+        }
     }
 
     /**

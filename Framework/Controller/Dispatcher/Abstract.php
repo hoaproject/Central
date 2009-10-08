@@ -38,11 +38,6 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Controller_Dispatcher_Action
- */
-import('Controller.Dispatcher.Action');
-
-/**
  * Hoa_Controller_Exception_ControllerIsNotFound
  */
 import('Controller.Exception.ControllerIsNotFound');
@@ -63,6 +58,11 @@ import('Controller.Exception.ControllerNotExtendsActionStandard');
 import('Controller.Exception.Reflection');
 
 /**
+ * Hoa_Controller_Dispatcher_Action
+ */
+import('Controller.Dispatcher.Action');
+
+/**
  * Class Hoa_Controller_Dispatcher_Abstract.
  *
  * Core of front controller.
@@ -80,14 +80,15 @@ import('Controller.Exception.Reflection');
  * @subpackage  Hoa_Controller_Dispatcher_Abstract
  */
 
-class Hoa_Controller_Dispatcher_Abstract {
+class          Hoa_Controller_Dispatcher_Abstract
+    implements Hoa_Framework_Parameterizable {
 
     /**
-     * Request.
+     * Parameters of current controller.
      *
-     * @var Hoa_Controller_Request_Abstract object
+     * @var Hoa_Framework_Parameter object
      */
-    protected $_request        = null;
+    protected $_parameters     = null;
 
     /**
      * Response.
@@ -111,17 +112,96 @@ class Hoa_Controller_Dispatcher_Abstract {
     protected $_view           = null;
 
     /**
-     * Dispatch.
+     * Dispatch, i.e. result of the dispatcher.
      *
-     * @var Hoa_Controller_Dispatcher_Abstract mixed
+     * @var Hoa_Controller_Dispatcher_Abstract string
      */
     protected $_dispatch       = '';
 
 
 
     /**
-     * Set response to Hoa_Controller_Dispatcher_Abstract.
-     * Return $this for fluide interface.
+     * Set parameter of current controller.
+     *
+     * @access  public
+     * @param   Hoa_Framework_Parameter  $parameters    Parameters.
+     * @return  Hoa_Controller_Dispatcher_Abstract
+     */
+    public function setRequest ( Hoa_Framework_Parameter $parameters ) {
+
+        $this->_parameters = $parameters;
+
+        return $this;
+    }
+
+    /**
+     * Set many parameters to a class.
+     *
+     * @access  public
+     * @param   array   $in      Parameters to set.
+     * @return  void
+     * @throw   Hoa_Exception
+     */
+    public function setParameters ( Array $in ) {
+
+        return $this->_parameters->setParameters($this, $in);
+    }
+
+    /**
+     * Get many parameters from a class.
+     *
+     * @access  public
+     * @return  array
+     * @throw   Hoa_Exception
+     */
+    public function getParameters ( ) {
+
+        return $this->_parameters->getParameters($this);
+    }
+
+    /**
+     * Set a parameter to a class.
+     *
+     * @access  public
+     * @param   string  $key      Key.
+     * @param   mixed   $value    Value.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function setParameter ( $key, $value ) {
+
+        return $this->_parameters->setParameter($this, $key, $value);
+    }
+
+    /**
+     * Get a parameter from a class.
+     *
+     * @access  public
+     * @param   string  $key      Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getParameter ( $key ) {
+
+        return $this->_parameters->getParameter($this, $key);
+    }
+
+    /**
+     * Get a formatted parameter from a class (i.e. zFormat with keywords and
+     * other parameters).
+     *
+     * @access  public
+     * @param   string  $key    Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getFormattedParameter ( $key ) {
+
+        return $this->_parameters->getFormattedParameter($this, $key);
+    }
+
+    /**
+     * Set response.
      *
      * @access  public
      * @param   Hoa_Controller_Response_Standard  $response    Response.
@@ -153,26 +233,12 @@ class Hoa_Controller_Dispatcher_Abstract {
      * Set attached objects.
      *
      * @access  public
-     * @param   ArrayObject  $objects    Attached objects.
+     * @param   array   $objects    Attached objects.
      * @return  Hoa_Controller_Dispatcher_Abstract
      */
-    public function setAttachedObject ( ArrayObject $objects ) {
+    public function setAttachedObject ( Array $objects ) {
 
         $this->_attachedObject = $objects;
-
-        return $this;
-    }
-
-    /**
-     * Set request to Hoa_Controller_Dispatcher_Abstract.
-     *
-     * @access  public
-     * @param   Hoa_Controller_Request_Abstract  $request    Request.
-     * @return  Hoa_Controller_Dispatcher_Abstract
-     */
-    public function setRequest ( Hoa_Controller_Request_Abstract $request ) {
-
-        $this->_request = $request;
 
         return $this;
     }
@@ -207,26 +273,34 @@ class Hoa_Controller_Dispatcher_Abstract {
         /**
          * Get controller and action names.
          */
-        $controllerClass = $this->getControllerClass();
-        $actionMethod    = $this->getActionMethod();
+        $controllerClass = $this->getFormattedParameter('controller.class');
+        $actionMethod    = $this->getFormattedParameter('action.method');
 
         /**
          * Get controller path.
          */
-        $directory       = $this->getDirectory();
-        $controllerFile  = $this->getControllerFile();
+        $directory       = $this->getFormattedParameter('controller.directory');
+        $controllerFile  = $this->getFormattedParameter('controller.file');
 
         /**
          * Load primary controller.
          */
-        $this->load($directory . $controllerFile);
+        $file            = $directory . $controllerFile;
+        if(!file_exists($file))
+            throw new Hoa_Controller_Exception_ControllerIsNotFound(
+                'Primary controller %s should be in the file %s, ' .
+                'but this last is not found.',
+                0, array($controllerClass, $file));
+
+        require_once $file;
 
         $gcm = get_class_methods($controllerClass);
 
         if(!is_array($gcm))
             throw new Hoa_Controller_Exception_ControllerIsNotFound(
-                'Class %s is not found in %s file.', 0,
-                array($controllerClass, $controllerFile));
+                'Peek in the primary controller file %s ' .
+                'and the class %s is not found.',
+                1, array($file, $controllerClass));
 
         /**
          * Action is in primary controller.
@@ -244,15 +318,21 @@ class Hoa_Controller_Dispatcher_Abstract {
             /**
              * Get action path.
              */
-            $controllerDirectory = $this->getControllerDirectory();
-            $actionFile          = $this->getActionFile();
-            $class               = $this->getActionClass();
-            $action              = $actionMethod;
+            $actionDirectory = $this->getFormattedParameter('action.directory');
+            $actionFile      = $this->getFormattedParameter('action.file');
+            $class           = $this->getFormattedParameter('action.class');
+            $action          = $actionMethod;
 
             /**
              * Load secondary controller.
              */
-            $this->load($directory . $controllerDirectory . $actionFile);
+            $file            = $directory . $actionDirectory . $actionFile;
+            if(!file_exists($file))
+                throw new Hoa_Controller_Exception_ControllerIsNotFound(
+                    'Secondary controller %s should be in the file %s, ' .
+                    'but this last is not found.', 3, array($class, $file));
+
+            require_once $file;
         }
 
         /**
@@ -270,7 +350,7 @@ class Hoa_Controller_Dispatcher_Abstract {
              * controller.
              */
             $arguments  = array(
-                $this->_request,
+                $this->_parameters,
                 $this,
                 $this->_response,
                 $this->_view,
@@ -283,6 +363,17 @@ class Hoa_Controller_Dispatcher_Abstract {
             $object = $reflection->newInstanceArgs($arguments);
 
             if($object instanceof Hoa_Controller_Action_Standard) {
+
+                $this->_parameters->shareWith(
+                    $this,
+                    $object,
+                    Hoa_Framework_Parameter::PERMISSION_READ
+                );
+
+                $this->_view->setDirectory($this->getFormattedParameter('view.directory'));
+                $this->_view->setLayout($this->getFormattedParameter('view.layout.file'));
+                $this->_view->enableLayout($this->getFormattedParameter('view.layout.enable'));
+                $this->_view->setView($this->getFormattedParameter('view.action'));
 
                 /**
                  * Bufferize result.
@@ -297,7 +388,6 @@ class Hoa_Controller_Dispatcher_Abstract {
                 $actionInit  = $reflection->hasMethod('init')
                                    ? $object->init()
                                    : null;
-
 
                 if(!method_exists($object, $action))
                     throw new Hoa_Controller_Exception_ActionIsNotFound(
@@ -318,7 +408,6 @@ class Hoa_Controller_Dispatcher_Abstract {
             }
             else {
 
-                $object      = null;
                 throw new Hoa_Controller_Exception_ControllerNotExtendsActionStandard(
                     'Class %s must be extend Hoa_Controller_Action_Standard.',
                     1, $class);
@@ -326,7 +415,10 @@ class Hoa_Controller_Dispatcher_Abstract {
         }
         catch ( ReflectionException $e ) {
 
-            throw new Hoa_Controller_Exception_Reflection($e->getMessage(), $e->getCode());
+            throw new Hoa_Controller_Exception_Reflection(
+                $e->getMessage(),
+                $e->getCode()
+            );
         }
         catch ( Hoa_Controller_Exception $e ) {
 
@@ -365,99 +457,5 @@ class Hoa_Controller_Dispatcher_Abstract {
     public function getDispatch ( ) {
 
         return $this->_dispatch;
-    }
-
-    /**
-     * Get directory to controller.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getDirectory ( ) {
-
-        return $this->_request->getParameter('directory');
-    }
-
-    /**
-     * Get controller class name.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getControllerClass ( ) {
-
-        return $this->_request->getParameter('controller.class');
-    }
-
-    /**
-     * Get controller file name.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getControllerFile ( ) {
-
-        return $this->_request->getParameter('controller.file');
-    }
-
-    /**
-     * Get controller directory.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getControllerDirectory ( ) {
-
-        return $this->_request->getParameter('controller.directory');
-    }
-
-    /**
-     * Get action class.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getActionClass ( ) {
-
-        return $this->_request->getParameter('action.class');
-    }
-
-    /**
-     * Get action method.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getActionMethod ( ) {
-
-        return $this->_request->getParameter('action.method');
-    }
-
-    /**
-     * Get action file.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getActionFile ( ) {
-
-        return $this->_request->getParameter('action.file');
-    }
-
-    /**
-     * Load file.
-     *
-     * @access  private
-     * @param   string   $file    File to load.
-     * @return  void
-     * @throw   Hoa_Controller_Exception_ControllerIsNotFound
-     */
-    private function load ( $file = '' ) {
-
-        if(!file_exists($file))
-            throw new Hoa_Controller_Exception_ControllerIsNotFound(
-                'File %s is not found.', 2, $file);
-
-        require_once $file;
     }
 }

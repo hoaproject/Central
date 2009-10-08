@@ -51,49 +51,36 @@ require_once 'Framework.php';
  * @subpackage  Hoa_Controller_Dispacher_Action
  */
 
-class Hoa_Controller_Dispatcher_Action {
+class          Hoa_Controller_Dispatcher_Action
+    implements Hoa_Framework_Parameterizable_Readable {
 
     /**
-     * Response.
+     * Parameters of the current controller.
      *
-     * @var Hoa_Controller_Response_Standard object
+     * @var Hoa_Framework_Parameter object
      */
-    protected $response    = null;
-
-    /**
-     * View.
-     *
-     * @var Hoa_View object
-     */
-    protected $view        = null;
-
-    /**
-     * Request.
-     *
-     * @var Hoa_Controller_Request_Abstract object
-     */
-    private $_request      = null;
+    private $_parameters = null;
 
     /**
      * Dispatcher.
      *
      * @var Hoa_Controller_Dispatcher_Abstract object
      */
-    private $_dispatcher   = null;
+    private $_dispatcher = null;
 
     /**
-     * Router pattern.
+     * Response.
      *
-     * @var Hoa_Controller_Router_Pattern object
+     * @var Hoa_Controller_Response_Standard object
      */
-    protected $_pattern    = null;
+    protected $response  = null;
 
     /**
-     * Magics variables (but used for attached objects).
+     * View.
      *
-     * @var Hoa_Controler_Dispatcher_Action array
+     * @var Hoa_View object
      */
-    protected $_properties = array();
+    protected $view      = null;
 
 
 
@@ -101,121 +88,59 @@ class Hoa_Controller_Dispatcher_Action {
      * Set objects.
      *
      * @access  public
-     * @param   Hoa_Controller_Request_Abstract     $request            Request.
-     * @param   Hoa_Controller_Dispatcher_Abstract  $dispatcher         Dispatcher.
-     * @param   Hoa_Controller_Response_Standard    $response           Response.
-     * @param   Hoa_View                            $view               View.
-     * @param   ArrayObject                         $attachedObjects    Attached
-     *                                                                  objects.
+     * @param   Hoa_Framewor_Parameter              $parameters    Parameters.
+     * @param   Hoa_Controller_Dispatcher_Abstract  $dispatcher    Dispatcher.
+     * @param   Hoa_Controller_Response_Standard    $response      Response.
+     * @param   Hoa_View                            $view          View.
      * @return  void
      */
-    public function __construct ( Hoa_Controller_Request_Abstract    $request,
+    public function __construct ( Hoa_Framework_Parameter            $parameters,
                                   Hoa_Controller_Dispatcher_Abstract $dispatcher,
                                   Hoa_Controller_Response_Standard   $response,
-                                  Hoa_View                           $view,
-                                  ArrayObject                        $attachedObject) {
+                                  Hoa_View                           $view ) {
 
-        $this->_request    = $request;
+        $this->_parameters = $parameters;
         $this->_dispatcher = $dispatcher;
-        $this->_pattern    = new Hoa_Controller_Router_Pattern();
         $this->response    = $response;
         $this->view        = $view;
-
-        $iterator = $attachedObject->getIterator();
-        while($iterator->valid()) {
-
-            $this->__set($iterator->key(), $iterator->current());
-            $iterator->next();
-        }
     }
 
     /**
-     * Overloading property.
-     *
-     * @access  public
-     * @param   string  $name     Name.
-     * @param   string  $value    Value.
-     * @return  mixed
-     */
-    public function __set ( $name, $value ) {
-
-        $old = null;
-
-        if(isset($this->_properties[$name]))
-            $old = $this->_properties[$name];
-
-        $this->_properties[$name] = $value;
-
-        return $old;
-    }
-
-    /**
-     * Overloading property.
-     *
-     * @access  public
-     * @param   string  $name    Name.
-     * @return  mixed
-     */
-    public function __get ( $name ) {
-
-        if(!isset($this->_properties[$name]))
-            return null;
-
-        $cast = gettype($this->_properties[$name]);
-
-        switch($cast) {
-
-            // A bug from the first releases of PHP 5 (maybe corrected since PHP
-            // 5.3).
-            case 'array':
-                return (array) $this->_properties[$name];
-              break;
-
-            default:
-                return $this->_properties[$name];
-        }
-    }
-
-    /**
-     * Protect request setter for main and secondary controllers.
-     *
-     * @access  public
-     * @param   string  $request    Request.
-     * @return  mixed
-     */
-    public function requestGetParameter ( $request = '' ) {
-
-        return $this->_request->getParameter($request);
-    }
-
-    /**
-     * Protect request setter for main and secondary controllers.
+     * Get many parameters.
      *
      * @access  public
      * @return  array
+     * @throw   Hoa_Exception
      */
-    public function requestGetParameters ( ) {
+    public function getParameters ( ) {
 
-        return $this->_request->getParameters();
+        return $this->_parameters->getParameters($this);
     }
 
     /**
-     * Return a parameter parsed by the routeur (from URL e.g.).
+     * Get a parameter.
      *
      * @access  public
-     * @param   string  $param       Parameter to recover.
-     * @param   bool    $personal    Recover from data.array.personal or not ?
-     * @return  string
+     * @param   string  $key    Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
      */
-    public function getParam ( $param = null, $personal = false ) {
+    public function getParameter ( $key ) {
 
-        $request = 'data.array' . (false !== $personal ? '.personal' : '');
-        $array   = $this->_request->getParameter($request);
+        return $this->_parameters->getParameter($this, $key);
+    }
 
-        if(isset($array[$param]))
-            $param = $array[$param];
+    /**
+     * Get a formatted parameter.
+     *
+     * @access  public
+     * @param   string  $key    Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getFormattedParameter ( $key ) {
 
-        return $param;
+        return $this->_parameters->getFormattedParameter($this, $key);
     }
 
     /**
@@ -227,6 +152,6 @@ class Hoa_Controller_Dispatcher_Action {
      */
     public function isCalledAutomatically ( ) {
 
-        return null === $this->requestGetParameter('data.array.personal');
+        return null === $this->getParameter('data.array.personal');
     }
 }

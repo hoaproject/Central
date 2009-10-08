@@ -112,11 +112,11 @@ class Hoa_Controller_Plugin_Standard {
      * Notify preRouter.
      *
      * @access  public
-     * @param   object  $request    Hoa_Controller_Request_Abstract.
+     * @param   Hoa_Framework_Parameter  $parameters    Parameters.
      * @return  array
      * @throw   Hoa_Controller_Exception
      */
-    public function notifyPreRouter ( Hoa_Controller_Request_Abstract $request ) {
+    public function notifyPreRouter ( Hoa_Framework_Parameter $parameters ) {
 
         $return = array();
 
@@ -130,13 +130,13 @@ class Hoa_Controller_Plugin_Standard {
      * Notify postRouter.
      *
      * @access  public
-     * @param   object  $request    Hoa_Controller_Request_Abstract.
-     * @param   object  $router     Hoa_Controller_Router_Standard.
+     * @param   Hoa_Framework_Parameter         $parameters    Parameters.
+     * @param   Hoa_Controller_Router_Standard  $router        Router.
      * @return  array
      * @throw   Hoa_Controller_Exception
      */
-    public function notifyPostRouter ( Hoa_Controller_Request_Abstract $request,
-                                       Hoa_Controller_Router_Standard  $router) {
+    public function notifyPostRouter ( Hoa_Framework_Parameter        $parameters,
+                                       Hoa_Controller_Router_Standard $router) {
 
         $return = array();
 
@@ -150,13 +150,13 @@ class Hoa_Controller_Plugin_Standard {
      * Notify preDispatcher.
      *
      * @access  public
-     * @param   object  $request    Hoa_Controller_Request_Abstract.
-     * @param   object  $router     Hoa_Controller_Router_Standard.
+     * @param   Hoa_Framework_Parameter         $parameters    Parameters.
+     * @param   Hoa_Controller_Router_Standard  $router        Router.
      * @return  array
      * @throw   Hoa_Controller_Exception
      */
-    public function notifyPreDispatcher ( Hoa_Controller_Request_Abstract $request,
-                                          Hoa_Controller_Router_Standard  $router) {
+    public function notifyPreDispatcher ( Hoa_Framework_Parameter        $parameters,
+                                          Hoa_Controller_Router_Standard $router) {
 
         $return = array();
 
@@ -170,13 +170,14 @@ class Hoa_Controller_Plugin_Standard {
      * Notify postDispatcher.
      *
      * @access  public
-     * @param   object  $request       Hoa_Controller_Request_Abstract.
-     * @param   object  $dispatcher    Hoa_Controller_Dispatcher_Abstract.
-     * @param   mixed   $dispatch      Dispatch result.
+     * @param   Hoa_Framework_Parameter             $parameters    Parameters.
+     * @param   Hoa_Controller_Dispatcher_Abstract  $dispatcher    Dispatcher.
+     * @param   string                              $dispatch      Dispatch
+     *                                                             result.
      * @return  array
      * @throw   Hoa_Controller_Exception
      */
-    public function notifyPostDispatcher ( Hoa_Controller_Request_Abstract    $request,
+    public function notifyPostDispatcher ( Hoa_Framework_Parameter            $parameters,
                                            Hoa_Controller_Dispatcher_Abstract $dispatcher,
                                            $dispatch) {
 

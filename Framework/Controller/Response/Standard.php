@@ -173,7 +173,7 @@ class Hoa_Controller_Response_Standard {
         if(true !== $print)
             return $out;
 
-        foreach((array)$out as $key => $value)
+        foreach((array) $out as $key => $value)
             echo $value;
     }
 

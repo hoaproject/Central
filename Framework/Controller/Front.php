@@ -48,11 +48,6 @@ import('Controller.Exception');
 import('Controller.Plugin.Standard');
 
 /**
- * Hoa_Controller_Request_Abstract
- */
-import('Controller.Request.Abstract');
-
-/**
  * Hoa_Controller_Router_Standard
  */
 import('Controller.Router.Standard');
@@ -97,14 +92,14 @@ import('View.~');
  * @subpackage  Hoa_Controller_Front
  */
 
-class Hoa_Controller_Front {
+class Hoa_Controller_Front implements Hoa_Framework_Parameterizable {
 
     /**
      * Hoa_Controller_Front instance.
      *
      * @var Hoa_Controller_Front object
      */
-    private static $_instance          = null;
+    private static $_instance  = null;
 
     /**
      * If exception should be thrown out from controller, this parameter should
@@ -112,91 +107,35 @@ class Hoa_Controller_Front {
      *
      * @var Hoa_Controller_Front bool
      */
-    protected $throwException          = false;
+    protected $throwException  = false;
 
     /**
      * Hoa_Controller_Plugin_Standard instance.
      *
-     * @var Hoa_Controller_Plugin_Standard string
+     * @var Hoa_Controller_Plugin_Standard object
      */
-    protected $_plugin                 = null;
+    protected $_plugin         = null;
 
     /**
      * List of requests for each controller.
      *
-     * @var Hoa_Controller_Front oject
+     * @var Hoa_Controller_Front array
      */
-    protected $_request                = null;
+    protected $_requests       = array();
 
     /**
      * Attached objects.
      *
-     * @var Hoa_Controller_Front object
-     */
-    protected $_attachedObject         = null;
-
-    /**
-     * Default parameters.
-     *
-     * @var Hoa_Controler_Front array
-     */
-    private $defaultParameters         = array(
-        'data.array'                   => array(),
-        'data.array.personal'          => null,
-
-        'route.type'                   => 'Get',
-        'route.parameter'              => array(
-            'default'                  => array(
-                'module'               => 'index',
-                'action'               => 'index'
-            )
-        ),
-        /* Example of parameter for route.type = Rewrite.
-        'route.parameter'              => array(
-            'base'                     => '/MyBase',
-            'rules'                    => array(
-                'default'              => array(
-                    'pattern'          => '/(:module)/(:action).html',
-                    'default'          => array(
-                        'module'       => 'index',
-                        'action'       => 'index'
-                    )
-                )
-            )
-        ),
-        */
-        'route.controller.key'         => 'module',
-        'route.controller.value'       => null,
-        'route.action.key'             => 'action',
-        'route.action.value'           => null,
-        'route.directory'              => 'Application/Controller/',
-
-        'view.theme'                   => 'MyTheme',
-        'view.directory'               => 'Application/View/(:Theme)/',
-        'view.layout'                  => 'Front',
-        'view.enable.layout'           => true,
-        'view.helper.directory'        => 'Application/View/Helper/',
-
-        'model.directory'              => 'Application/Model/(:Controller)/',
-
-        'pattern.controller.class'     => '(:Controller)Controller',
-        'pattern.controller.file'      => '(:Controller)Controller.php',
-        'pattern.controller.directory' => '(:Controller)Controller/',
-        'pattern.action.class'         => '(:Action)Controller',
-        'pattern.action.method'        => '(:Action)Action',
-        'pattern.action.file'          => '(:Action)Controller.php',
-        'pattern.view.layout'          => '(:Layout)Layout.phtml',
-        'pattern.view.file'            => '(:Action)Action.phtml',
-        'pattern.view.directory'       => '(:Controller)View/',
-        'pattern.model.directory'      => '(:Controller)Model/'
-    );
-
-    /**
-     * Current request parameters (by default, it is a copy of defautParameters).
-     *
      * @var Hoa_Controller_Front array
      */
-    protected $parameters              = array();
+    protected $_attachedObject = array();
+
+    /**
+     * The Hoa_Controller parameters.
+     *
+     * @var Hoa_Framework_Parameter object
+     */
+    private $_parameters       = null;
 
 
 
@@ -206,24 +145,61 @@ class Hoa_Controller_Front {
      * This constructor is private because of singleton design pattern.
      *
      * @access  private
-     * @param   array    $parameters      Parameters (set to false if you do not
-     *                                    want to add request automatically).
+     * @param   array    $parameters      Parameters.
      * @param   bool     $autodispatch    Auto dispatch.
      * @return  void
      */
     private function __construct ( $parameters   = array(),
                                    $autoDispatch = false) {
 
-        $this->_request = new ArrayObject(
-            array(), ArrayObject::ARRAY_AS_PROPS, 'ArrayIterator');
+        $this->_parameters = new Hoa_Framework_Parameter(
+            $this,
+            array(
+                'controller'  => 'index',
+                'action'      => 'index',
+                'view'        => 'hend',
+                'view.layout' => 'front'
+            ),
+            array(
+                'data.array'          => array(),
+                'data.array.personal' => null,
 
-        $this->_attachedObject = new ArrayObject(
-            array(), ArrayObject::ARRAY_AS_PROPS, 'ArrayIterator');
+                'route.type'          => 'Get',
+                'route.parameter.default.module' => '(:controller:)',
+                'route.parameter.default.action' => '(:action:)',
 
-        $this->_plugin  = new Hoa_Controller_Plugin_Standard();
+                /* Example of parameter for route.type = Rewrite.
+                'route.type'           => 'Rewrite',
+                'route.parameter.base' => '/MyBase',
+                'route.parameter.rules.default.pattern' => '/(:module)/(:action).html',
+                'route.parameter.rules.default.default.module' => '(:controller:)',
+                'route.parameter.rules.default.default.action' => '(:action:)',
+                */
 
-        if(false !== $parameters)
-            $this->addRequest(0, $parameters);
+                'controller.class'      => '(:controller:U:)Controller',
+                'controller.file'       => '(:controller:U:).php',
+                'controller.directory'  => 'hoa://Application/Controller/',
+
+                'action.class'          => '(:action:U:)Controller',
+                'action.method'         => '(:action:U:)Action',
+                'action.file'           => '(:action:U:).php',
+                'action.directory'      => '(:%controller.directory:)(:%controller.file:r:)/',
+
+                'model.share.directory' => 'hoa://Application/Model/',
+                'model.directory'       => '(:%model.share.directory:)(:%controller.file:r:)/',
+
+                'view.theme'            => '(:view:U:)Theme',
+                'view.directory'        => 'hoa://Application/View/(:%view.theme:)/',
+                'view.layout.file'      => '(:view.layout:U:).phtml',
+                'view.layout.enable'    => true,
+                'view.action'           => '(:controller:U:)/(:action:U:).phtml',
+            )
+        );
+
+        $this->_attachedObject = array();
+        $this->_plugin         = new Hoa_Controller_Plugin_Standard();
+
+        $this->addRequest(0, $parameters);
 
         if(false !== $autoDispatch)
             $this->dispatch();
@@ -234,13 +210,12 @@ class Hoa_Controller_Front {
      * See the Singleton design pattern.
      *
      * @access  public
-     * @param   array   $parameters      Parameters (set to false if you do not
-     *                                   want to add request automatically).
+     * @param   array   $parameters      Parameters.
      * @param   bool    $autodispatch    Auto dispatch.
      * @return  object
      */
     public static function getInstance ( $parameters   = array(),
-                                         $autoDispatch = false) {
+                                         $autoDispatch = false ) {
 
         if(null === self::$_instance)
             self::$_instance = new self($parameters, $autoDispatch);
@@ -249,8 +224,74 @@ class Hoa_Controller_Front {
     }
 
     /**
+     * Set many parameters to a class.
+     *
+     * @access  public
+     * @param   array   $in      Parameters to set.
+     * @return  void
+     * @throw   Hoa_Exception
+     */
+    public function setParameters ( Array $in ) {
+
+        return $this->_parameters->setParameters($this, $in);
+    }
+
+    /**
+     * Get many parameters from a class.
+     *
+     * @access  public
+     * @return  array
+     * @throw   Hoa_Exception
+     */
+    public function getParameters ( ) {
+
+        return $this->_parameters->getParameters($this);
+    }
+
+    /**
+     * Set a parameter to a class.
+     *
+     * @access  public
+     * @param   string  $key      Key.
+     * @param   mixed   $value    Value.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function setParameter ( $key, $value ) {
+
+        return $this->_parameters->setParameter($this, $key, $value);
+    }
+
+    /**
+     * Get a parameter from a class.
+     *
+     * @access  public
+     * @param   string  $key      Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getParameter ( $key ) {
+
+        return $this->_parameters->getParameter($this, $key);
+    }
+
+    /**
+     * Get a formatted parameter from a class (i.e. zFormat with keywords and
+     * other parameters).
+     *
+     * @access  public
+     * @param   string  $key    Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getFormattedParameter ( $key ) {
+
+        return $this->_parameters->getFormattedParameter($this, $key);
+    }
+
+    /**
      * Add a request.
-     * In a loop of controllers, each controller has his own request object.
+     * In a loop of controllers, each controller has its own request object.
      *
      * @access  public
      * @param   int     $index         Request index.
@@ -263,23 +304,8 @@ class Hoa_Controller_Front {
             throw new Hoa_Controller_Exception('Index %s could be an integer.',
                 0, $index);
 
-        #IF_DEFINED HOA_STANDALONE
-        if(empty($parameters))
-            Hoa_Framework::configurePackage(
-                'Controller', $parameters, Hoa_Framework::CONFIGURATION_MIXE,
-                array('route.parameter'));
-        #END_IF
-
-        // Reset $this->parameters to $this->defaultParameters.
-        $this->parameters = $this->defaultParameters;
-        $this->setParameters($parameters);
-
-        $this->_request->offsetSet(
-            $index,
-            new Hoa_Controller_Request_Abstract(
-                $this->getParameters()
-            )
-        );
+        $this->_requests[$index] = clone $this->_parameters;
+        $this->_requests[$index]->setParameters($this, $parameters);
 
         return $this;
     }
@@ -304,70 +330,9 @@ class Hoa_Controller_Front {
         if(!is_object($object))
             throw new Hoa_Controller_Exception('Object must be an object.', 2);
 
-        $this->_attachedObject->offsetSet($variable, $object);
+        $this->_attachedObject[$variable] = $object;
 
         return $this;
-    }
-
-    /**
-     * Set parameters.
-     *
-     * @access  protected
-     * @param   array      $parameters    Parameters.
-     * @param   array      $recursive     Used for recursive parameters.
-     * @return  array
-     */
-    protected function setParameters ( Array $parameters = array(),
-                                             $recursive  = array()  ) {
-
-        if($recursive === array()) {
-
-            $array       =& $this->parameters;
-            $recursivity = false;
-        }
-        else {
-
-            $array       =& $recursive;
-            $recursivity = true;
-        }
-
-        if(empty($parameters))
-            return $array;
-
-        foreach($parameters as $option => $value) {
-
-            if($option == 'route.parameter') {
-
-                $array[$option] = $value;
-                continue;
-            }
-
-            if(empty($option) || (empty($value) && !is_bool($value)))
-                continue;
-
-            if(is_array($value))
-                $array[$option] = $this->setParameters($value, $array[$option]);
-
-            else
-                $array[$option] = $value;
-        }
-
-        return $array;
-    }
-
-    /**
-     * Get parameters.
-     *
-     * @access  protected
-     * @param   string     $category    Category.
-     * @return  array
-     */
-    protected function getParameters ( $category = null ) {
-
-        if(!isset($this->parameters[$category]))
-            return $this->parameters;
-
-        return $this->parameters[$category];
     }
 
     /**
@@ -387,58 +352,66 @@ class Hoa_Controller_Front {
         /**
          * Instance router.
          */
-        $router     = $this->getRouter();
+        $router     = new Hoa_Controller_Router_Standard();
 
         /**
          * Instance response, and create a new output.
          */
-        $response   = $this->getResponse()->newOutput();
+        $response   = new Hoa_Controller_Response_Standard();
+        $response->newOutput();
 
         /**
          * Instance router, set response and view.
          */
-        $dispatcher = $this->getDispatcher()
-                           ->setResponse($response)
-                           ->setView(new Hoa_View())
-                           ->setAttachedObject($this->_attachedObject);
+        $dispatcher = new Hoa_Controller_Dispatcher_Abstract();
+        $dispatcher->setResponse($response)
+                   ->setView(new Hoa_View())
+                   ->setAttachedObject($this->_attachedObject);
 
         try {
 
-            // Loop of controllers.
-            $this->_request->ksort();
-            $controller = $this->_request->getIterator();
-
-            do {
-
-                /**
-                 * Current request object.
-                 */
-                $request        = $controller->current();
+            /**
+             * Loop of controllers.
+             */
+            foreach($this->_requests as $i => $parameters) {
 
                 /**
                  * Notify pre router.
                  */
-                $preRouter      = $this->_plugin->notifyPreRouter($request);
+                $preRouter      = $this->_plugin->notifyPreRouter($parameters);
 
                 /**
                  * Set request to router, and run route.
                  */
-                $route          = $router->setRequest($request)->route();
+                $parameters->shareWith(
+                    $this,
+                    $router,
+                    Hoa_Framework_Parameter::PERMISSION_READ |
+                    Hoa_Framework_Parameter::PERMISSION_WRITE
+                );
+                $route          = $router->setRequest($parameters)->route();
 
                 /**
                  * Notify post router.
                  */
-                $postRouter     = $this->_plugin->notifyPostRouter($request, $router);
+                $postRouter     = $this->_plugin->notifyPostRouter($parameters, $router);
 
                 /**
                  * Notify pre dispatcher.
                  */
-                $preDispatcher  = $this->_plugin->notifyPreDispatcher($request, $router);
+                $preDispatcher  = $this->_plugin->notifyPreDispatcher($parameters, $router);
 
                 /**
                  * Set request to dispatch, and run dispatch.
                  */
-                $dispatch       = $dispatcher->setRequest($request)
+                $parameters->shareWith(
+                    $this,
+                    $dispatcher,
+                    Hoa_Framework_Parameter::PERMISSION_READ  |
+                    Hoa_Framework_Parameter::PERMISSION_WRITE |
+                    Hoa_Framework_Parameter::PERMISSION_SHARE
+                );
+                $dispatch       = $dispatcher->setRequest($parameters)
                                              ->setRouterToView($router)
                                              ->dispatch();
 
@@ -446,7 +419,7 @@ class Hoa_Controller_Front {
                  * Notify post dispatcher.
                  */
                 $postDispatcher = $this->_plugin->notifyPostDispatcher(
-                                      $request,
+                                      $parameters,
                                       $dispatcher,
                                       $dispatch
                                   );
@@ -454,10 +427,7 @@ class Hoa_Controller_Front {
                 $response->appendOutput($dispatch);
 
                 unset($request);
-
-                $controller->next();
-
-            } while($controller->valid());
+            }
         }
         catch ( Hoa_Controller_Exception $e ) {
 
@@ -472,39 +442,6 @@ class Hoa_Controller_Front {
          */
         $response->sendHeaders();
         $response->output();
-    }
-
-    /**
-     * Get router object.
-     *
-     * @access  protected
-     * @return  object
-     */
-    protected function getRouter ( ) {
-
-        return new Hoa_Controller_Router_Standard();
-    }
-
-    /**
-     * Get dispatcher object.
-     *
-     * @access  protected
-     * @return  object
-     */
-    protected function getDispatcher ( ) {
-
-        return new Hoa_Controller_Dispatcher_Abstract();
-    }
-
-    /**
-     * Get response object.
-     *
-     * @access  protected
-     * @return  object
-     */
-    protected function getResponse ( ) {
-
-        return new Hoa_Controller_Response_Standard();
     }
 
     /**
@@ -539,14 +476,14 @@ class Hoa_Controller_Front {
      *
      * @access  public
      * @param   bool    $throw    Throw exception or not ?
-     * @return  bool
+     * @return  Hoa_Controller_Front
      */
     public function setThrowException ( $throw = false ) {
 
         $old                  = $this->throwException;
         $this->throwException = $throw;
 
-        return $old;
+        return $this;
     }
 
     /**
