@@ -163,6 +163,6 @@ class Hoa_Version {
                ' (' . self::getRevision() . ').' . "\n" .
                'Copyright (c) 2007, 2008 Ivan ENDERLIN. All rights reserved.' . "\n" .
                'License GNU GPL <http://gnu.org/licenses/gpl.txt> ' .
-               'or ' .  HOA_BASE . DS . 'LICENSE.';
+               'or /LICENSE.';
     }
 }
