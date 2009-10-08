@@ -119,7 +119,9 @@ class Hoa_Exception extends Exception {
      * @param   string  $pre       Prepend text to error.
      * @return  mixed
      */
-    public function raiseError ( $output = self::ERROR_PRINT, $opt = E_USER_WARNING, $pre = '' ) {
+    public function raiseError ( $output = self::ERROR_PRINT,
+                                 $opt    = E_USER_WARNING,
+                                 $pre    = '' ) {
 
         $message = @vsprintf($this->getMessage(), $this->_arg);
         $trace   = $this->getTrace();
