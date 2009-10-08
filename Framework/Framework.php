@@ -39,31 +39,29 @@ require_once 'Exception.php';
 /**
  * Some usefull constants, …
  */
-!defined('DS')             and define('DS'    ,    DIRECTORY_SEPARATOR);
-!defined('PS')             and define('PS'    ,    PATH_SEPARATOR);
-!defined('CRLF')           and define('CRLF'  ,    "\r\n");
-!defined('OS_WIN')         and define('OS_WIN',    !strncasecmp(PHP_OS, 'win', 3));
-!defined('S_64_BITS')      and define('S_64_BITS', PHP_INT_SIZE == 8);
-!defined('S_32_BITS')      and define('S_32_BITS', !S_64_BITS);
-!defined('SUCCEED')        and define('SUCCEED',   true);
-!defined('FAILED')         and define('FAILED',    false);
-!defined('PHP_VERSION_ID') and $v = PHP_VERSION
-                           and define('PHP_VERSION_ID',   $v{0} * 10000
-                                                        + $v{2} * 100
-                                                        + $v{4});
-!defined('SUCCEED')        and define('SUCCEED',   true);
-!defined('FAILED')         and define('FAILED',    false);
+!defined('DS')              and define('DS'    ,    DIRECTORY_SEPARATOR);
+!defined('PS')              and define('PS'    ,    PATH_SEPARATOR);
+!defined('CRLF')            and define('CRLF'  ,    "\r\n");
+!defined('OS_WIN')          and define('OS_WIN',    !strncasecmp(PHP_OS, 'win', 3));
+!defined('S_64_BITS')       and define('S_64_BITS', PHP_INT_SIZE == 8);
+!defined('S_32_BITS')       and define('S_32_BITS', !S_64_BITS);
+!defined('SUCCEED')         and define('SUCCEED',   true);
+!defined('FAILED')          and define('FAILED',    false);
+!defined('PHP_VERSION_ID')  and $v = PHP_VERSION
+                            and define('PHP_VERSION_ID',   $v{0} * 10000
+                                                         + $v{2} * 100
+                                                         + $v{4});
 
 /**
  * … and type.
  */
-!defined('void')           and define('void',      (unset) null);
+!defined('void')            and define('void',      (unset) null);
 
 /**
  * Check if Hoa was well-included.
  */
 !(
-    !defined('HOA')        and define('HOA', true)
+    !defined('HOA')         and define('HOA', true)
 )
 and
     exit('The Hoa framework main file (Framework.php) must be included once.');
@@ -71,8 +69,11 @@ and
 /**
  * Environment constants.
  */
-!defined('HOA_FRAMEWORK')  and define('HOA_FRAMEWORK', dirname(__FILE__));
-!defined('HOA_DATA')       and define('HOA_DATA',      dirname(dirname(__FILE__)) . DS . 'Data');
+!defined('HOA_FRAMEWORK')   and define('HOA_FRAMEWORK',   dirname(__FILE__));
+!defined('HOA_DATA')        and define('HOA_DATA',        dirname(dirname(__FILE__)) .
+                                                          DS . 'Data');
+!defined('HOA_APPLICATION') and define('HOA_APPLICATION', dirname(dirname(__FILE__)) .
+                                                          DS . 'Application');
 
 /**
  * Class Hoa_Framework.
@@ -306,7 +307,6 @@ class Hoa_Framework {
 
         if(!file_exists($classPath))
             return;
-
 
         if(false === OS_WIN)
             $inode = fileinode($classPath);
@@ -739,9 +739,9 @@ class Hoa_Framework {
                 );
 
         if($flags & STREAM_URL_STAT_LINK)
-            return lstat($p);
+            return @lstat($p);
         else
-            return stat($p);
+            return @stat($p);
     }
 
     /**
@@ -801,17 +801,25 @@ class Hoa_Framework {
  * @package     Hoa_Framework_Parameterizable
  */
 
-interface Hoa_Framework_Parameterizable {
+interface   Hoa_Framework_Parameterizable
+    extends Hoa_Framework_Parameterizable_Readable,
+            Hoa_Framework_Parameterizable_Writable { }
 
-    /**
-     * Set many parameters to a class.
-     *
-     * @access  public
-     * @param   array     $in      Parameters to set.
-     * @return  void
-     * @throw   Hoa_Exception
-     */
-    public function setParameters ( Array $in );
+/**
+ * Interface Hoa_Framework_Parameterizable_Readable.
+ *
+ * Interface for all classes or packages which parameters are readable.
+ *
+ * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
+ * @license     http://gnu.org/licenses/gpl.txt GNU GPL
+ * @since       PHP5
+ * @version     0.1
+ * @package     Hoa_Framework_Parameterizable
+ * @subpackage  Hoa_Framework_Parameterizable_Readable
+ */
+
+interface Hoa_Framework_Parameterizable_Readable {
 
     /**
      * Get many parameters from a class.
@@ -823,21 +831,10 @@ interface Hoa_Framework_Parameterizable {
     public function getParameters ( );
 
     /**
-     * Set a parameter to a class.
-     *
-     * @access  public
-     * @param   string    $key      Key.
-     * @param   mixed     $value    Value.
-     * @return  mixed
-     * @throw   Hoa_Exception
-     */
-    public function setParameter ( $key, $value );
-
-    /**
      * Get a parameter from a class.
      *
      * @access  public
-     * @param   string    $key      Key.
+     * @param   string  $key      Key.
      * @return  mixed
      * @throw   Hoa_Exception
      */
@@ -853,6 +850,44 @@ interface Hoa_Framework_Parameterizable {
      * @throw   Hoa_Exception
      */
     public function getFormattedParameter ( $key );
+}
+
+/**
+ * Interface Hoa_Framework_Parameterizable_Writable.
+ *
+ * Interface for all classes or packages which parameters are writable.
+ *
+ * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
+ * @license     http://gnu.org/licenses/gpl.txt GNU GPL
+ * @since       PHP5
+ * @version     0.1
+ * @package     Hoa_Framework_Parameterizable
+ * @subpackage  Hoa_Framework_Parameterizable_Writable
+ */
+
+interface Hoa_Framework_Parameterizable_Writable {
+
+    /**
+     * Set many parameters to a class.
+     *
+     * @access  public
+     * @param   array   $in      Parameters to set.
+     * @return  void
+     * @throw   Hoa_Exception
+     */
+    public function setParameters ( Array $in );
+
+    /**
+     * Set a parameter to a class.
+     *
+     * @access  public
+     * @param   string  $key      Key.
+     * @param   mixed   $value    Value.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function setParameter ( $key, $value );
 }
 
 /**
@@ -884,6 +919,13 @@ class Hoa_Framework_Parameter {
      * @const int
      */
     const PERMISSION_WRITE = 2;
+
+    /**
+     * Permission to share.
+     *
+     * @const int
+     */
+    const PERMISSION_SHARE = 4;
 
     /**
      * Collection of package's parameters.
@@ -920,13 +962,18 @@ class Hoa_Framework_Parameter {
      *
      * @access  public
      * @param   Hoa_Framework_Parameterizable  $owner         Owner.
+     * @param   array                          $keywords      Keywords.
      * @param   array                          $parameters    Parameters.
      * @return  void
      */
     public function __construct ( Hoa_Framework_Parameterizable $owner,
+                                  Array $keywords   = array(),
                                   Array $parameters = array() ) {
 
         $this->_owner = get_class($owner);
+
+        if(!empty($keywords))
+            $this->setKeywords($owner, $keywords);
 
         if(!empty($parameters))
             $this->setDefaultParameters($owner, $parameters);
@@ -938,13 +985,12 @@ class Hoa_Framework_Parameter {
      * Set default parameters to a class.
      *
      * @access  public
-     * @param   Hoa_Framework_Parameterizable  $id            Owner or friends.
-     * @param   array                          $parameters    Parameters to set.
+     * @param   object  $id            Owner or friends.
+     * @param   array   $parameters    Parameters to set.
      * @return  void
      * @throw   Hoa_Exception
      */
-    public function setDefaultParameters ( Hoa_Framework_Parameterizable $id,
-                                           Array $parameters ) {
+    public function setDefaultParameters ( $id, Array $parameters ) {
 
         $this->check($id, self::PERMISSION_WRITE);
 
@@ -960,11 +1006,11 @@ class Hoa_Framework_Parameter {
      * Get default parameters from a class.
      *
      * @access  public
-     * @param   Hoa_Framework_Parameterizable   $id    Owner or friends.
+     * @param   object  $id    Owner or friends.
      * @return  array
      * @throw   Hoa_Exception
      */
-    public function getDefaultParameters ( Hoa_Framework_Parameterizable $id ) {
+    public function getDefaultParameters ( $id ) {
 
         return $this->getParameters($id);
     }
@@ -973,13 +1019,12 @@ class Hoa_Framework_Parameter {
      * Set many parameters to a class.
      *
      * @access  public
-     * @param   Hoa_Framework_Parameterizable  $id      Owner or friends.
-     * @param   array                          $in      Parameters to set.
+     * @param   object  $id      Owner or friends.
+     * @param   array   $in      Parameters to set.
      * @return  void
      * @throw   Hoa_Exception
      */
-    public function setParameters ( Hoa_Framework_Parameterizable $id,
-                                    Array $in ) {
+    public function setParameters ( $id, Array $in ) {
 
         foreach($in as $key => $value)
             $this->setParameter($id, $key, $value);
@@ -991,11 +1036,11 @@ class Hoa_Framework_Parameter {
      * Get many parameters from a class.
      *
      * @access  public
-     * @param   Hoa_Framework_Parameterizable  $id      Owner or friends.
+     * @param   object  $id      Owner or friends.
      * @return  array
      * @throw   Hoa_Exception
      */
-    public function getParameters ( Hoa_Framework_Parameterizable $id ) {
+    public function getParameters ( $id ) {
 
         $this->check($id, self::PERMISSION_READ);
 
@@ -1006,14 +1051,13 @@ class Hoa_Framework_Parameter {
      * Set a parameter to a class.
      *
      * @access  public
-     * @param   Hoa_Framework_Parameterizable  $id       Owner or friends.
-     * @param   string                         $key      Key.
-     * @param   mixed                          $value    Value.
+     * @param   object  $id       Owner or friends.
+     * @param   string  $key      Key.
+     * @param   mixed   $value    Value.
      * @return  mixed
      * @throw   Hoa_Exception
      */
-    public function setParameter ( Hoa_Framework_Parameterizable $id,
-                                   $key, $value ) {
+    public function setParameter ( $id, $key, $value ) {
 
         $this->check($id, self::PERMISSION_WRITE);
 
@@ -1031,12 +1075,12 @@ class Hoa_Framework_Parameter {
      * Get a parameter from a class.
      *
      * @access  public
-     * @param   Hoa_Framework_Parameterizable  $id       Owner or friends.
-     * @param   string                         $key      Key.
+     * @param   object  $id       Owner or friends.
+     * @param   string  $key      Key.
      * @return  mixed
      * @throw   Hoa_Exception
      */
-    public function getParameter ( Hoa_Framework_Parameterizable $id, $key ) {
+    public function getParameter ( $id, $key ) {
 
         $parameters = $this->getParameters($id);
 
@@ -1051,13 +1095,12 @@ class Hoa_Framework_Parameter {
      * other parameters).
      *
      * @access  public
-     * @param   Hoa_Framework_Parameterizable  $id       Owner or friends.
-     * @param   string                         $key      Key.
+     * @param   object  $id       Owner or friends.
+     * @param   string  $key      Key.
      * @return  mixed
      * @throw   Hoa_Exception
      */
-    public function getFormattedParameter ( Hoa_Framework_Parameterizable $id,
-                                            $key ) {
+    public function getFormattedParameter ( $id, $key ) {
 
         $parameter = $this->getParameter($id, $key);
 
@@ -1072,16 +1115,67 @@ class Hoa_Framework_Parameter {
     }
 
     /**
+     * Unlinearize a branche to an array.
+     *
+     * @access  public
+     * @param   object  $id         Owner of friends.
+     * @param   string  $branche    Branche.
+     * @return  array
+     */
+    public function unlinearizeBranche ( $id, $branche ) {
+
+        $parameters = $this->getParameters($id);
+        $keywords   = $this->getKeywords($id);
+        $out        = array();
+        $qBranche   = preg_quote($branche);
+
+        foreach($parameters as $key => $value) {
+
+            if(0 === preg_match('#^' . $qBranche . '(.*)?#', $key, $match))
+                continue;
+
+            $handle  = array();
+            $explode = preg_split(
+                '#((?<!\\\)\.)#',
+                $match[1],
+                -1,
+                PREG_SPLIT_NO_EMPTY
+            );
+            $end     = count($explode) - 1;
+            $i       = $end;
+
+            while($i >= 0) {
+
+                $explode[$i] = str_replace('\\.', '.', $explode[$i]);
+
+                if($i != $end)
+                    $handle = array($explode[$i] => $handle);
+                else
+                    $handle = array($explode[$i] => self::zFormat(
+                        $value,
+                        $keywords,
+                        $parameters
+                    ));
+
+                $i--;
+            }
+
+            $out = array_merge_recursive($out, $handle);
+        }
+
+        return $out;
+    } 
+
+    /**
      * Set many keywords to a class.
      *
      * @access  public
-     * @param   Hoa_Framework_Parameterizable  $id    Owner or friends.
-     * @param   array                          $in    Keywords to set.
+     * @param   object  $id    Owner or friends.
+     * @param   array   $in    Keywords to set.
      * @return  void
      * @throw   Hoa_Exception
      */
-    public function setKeywords ( Hoa_Framework_Parameterizable $id,
-                                  Array $in = array() ) {
+    public function setKeywords ( $id, Array $in = array() ) {
 
         foreach($in as $key => $value)
             $this->setKeyword($id, $key, $value);
@@ -1093,13 +1187,13 @@ class Hoa_Framework_Parameter {
      * Get many keywords from a class.
      *
      * @access  public
-     * @param   Hoa_Framework_Parameterizable  $id    Owner or friends.
+     * @param   object  $id    Owner or friends.
      * @return  array
      * @throw   Hoa_Exception
      */
-    public function getKeywords ( Hoa_Framework_Parameterizable $id ) {
+    public function getKeywords ( $id ) {
 
-        $this->check(id, self::PERMISSION_READ);
+        $this->check($id, self::PERMISSION_READ);
 
         return $this->_keywords;
     }
@@ -1108,14 +1202,13 @@ class Hoa_Framework_Parameter {
      * Set a keyword to a class.
      *
      * @access  public
-     * @param   Hoa_Framework_Parameterizable  $id       Owner or friends.
-     * @param   string                         $key      Key.
-     * @param   mixed                          $value    Value.
+     * @param   object  $id       Owner or friends.
+     * @param   string  $key      Key.
+     * @param   mixed   $value    Value.
      * @return  mixed
      * @throw   Hoa_Exception
      */
-    public static function setKeyword ( Hoa_Framework_Parameterizable $id,
-                                        $key, $word ) {
+    public function setKeyword ( $id, $key, $value ) {
 
         $this->check($id, self::PERMISSION_WRITE);
 
@@ -1133,18 +1226,17 @@ class Hoa_Framework_Parameter {
      * Get a keyword from a class.
      *
      * @access  public
-     * @param   Hoa_Framework_Parameterizable  $id         Owner or friends.
-     * @param   string                         $keyword    Keyword.
+     * @param   object  $id         Owner or friends.
+     * @param   string  $keyword    Keyword.
      * @return  mixed
      * @throw   Hoa_Exception
      */
-    public static function getKeyword ( Hoa_Framework_Parameterizable $id,
-                                        $keyword ) {
+    public function getKeyword ( $id, $keyword ) {
 
         $keywords = $this->getKeywords($id);
 
-        if(true === array_key_exists($id, $keywords))
-            return $keywords[$id][$key];
+        if(true === array_key_exists($keyword, $keywords))
+            return $keywords[$keyword];
 
         return null;
     }
@@ -1237,7 +1329,7 @@ class Hoa_Framework_Parameter {
      *                    suffix 'ar' by 'az'.
      *
      * @access  public
-     * @param   string    $parameter     Parameter.
+     * @param   string    $value         Parameter value.
      * @param   array     $keywords      Keywords.
      * @param   array     $parameters    Parameters.
      * @return  string
@@ -1247,13 +1339,13 @@ class Hoa_Framework_Parameter {
      *   Add the cast. Maybe like this: (:subject:format[:cast]:) where cast
      * could be integer, float, array etc.
      */
-    public static function zFormat ( $parameter,
+    public static function zFormat ( $value,
                                      Array $keywords   = array(),
                                      Array $parameters = array() ) {
 
         preg_match_all(
             '#([^\(]+)?(?:\(:(.*?):\))?#',
-            $parameter,
+            $value,
             $matches,
             PREG_SET_ORDER
         );
@@ -1419,15 +1511,24 @@ class Hoa_Framework_Parameter {
      * parameters.
      *
      * @access  public
-     * @param   Hoa_Framework_Parameterizable  $id             Owner or friends.
-     * @param   int                            $permissions    Permissions
-     *                                                         (please, see the
-     *                                                         self::PERMISSION_*
-     *                                                         constants).
+     * @param   object  $id             Owner or friends.
+     * @param   int     $permissions    Permissions (please, see the
+     *                                  self::PERMISSION_* constants).
      * @return  bool
      * @throw   Hoa_Exception
      */
-    public function check ( Hoa_Framework_Parameterizable $id, $permissions ) {
+    public function check ( $id, $permissions ) {
+
+        if(!(   $id instanceof Hoa_Framework_Parameterizable
+             || $id instanceof Hoa_Framework_Parameterizable_Readable
+             || $id instanceof Hoa_Framework_Parameterizable_Writable))
+            throw new Hoa_Exception(
+                'Class %s is not valid. ' .
+                'Parameterizable classes must extend ' .
+                'Hoa_Framework_Parameterizable, ' .
+                'Hoa_Framework_Parameterizable_Readable or ' .
+                'Hoa_Framework_Parameterizable_Writable interfaces.',
+                0, $id);
 
         $iid = get_class($id);
 
@@ -1441,15 +1542,19 @@ class Hoa_Framework_Parameter {
 
         $p = $this->_friends[$iid];
 
-        if(0 == $permissions & $p)
-            if(1 == $permissions & self::PERMISSION_READ)
+        if(0 === ($permissions & $p))
+            if(0 !== $permissions & self::PERMISSION_READ)
                 throw new Hoa_Exception(
                     'Class %s does not have permission to read parameters ' .
                     'from %s.', 1, array($iid, $this->_owner));
-            else
+            elseif(0 !== $permissions & self::PERMISSION_WRITE)
                 throw new Hoa_Exception(
                     'Class %s does not have permission to write parameters ' .
                     'from %s.', 2, array($iid, $this->_owner));
+            else
+                throw new Hoa_Exception(
+                    'Class %s does not have permission to share parameters ' .
+                    'from %s.', 3, array($iid, $this->_owner));
 
         return true;
     }
@@ -1460,23 +1565,16 @@ class Hoa_Framework_Parameter {
      * simple like this… (because of changing permissions cascade effect).
      *
      * @access  public
-     * @param   Hoa_Framework_Parameterizable  $owner          Owner.
-     * @param   Hoa_Framework_Parameterizable  $friend         Friend.
-     * @param   int                            $permissions    Permissions
-     *                                                         (please, see the
-     *                                                         self::PERMISSION_*
-     *                                                         constants).
+     * @param   object  $owner          Owner or friend.
+     * @param   object  $friend         Friend.
+     * @param   int     $permissions    Permissions (please, see the
+     *                                  self::PERMISSION_* constants).
      * @return  void
      * @throw   Hoa_Exception
      */
-    public function shareWith ( Hoa_Framework_Parameterizable $owner,
-                                Hoa_Framework_Parameterizable $friend,
-                                $permissions ) {
+    public function shareWith ( $owner, $friend, $permissions ) {
 
-        if($this->_owner != get_class($owner))
-            throw new Hoa_Exception(
-                'Only owner (here %s) can share its parameters; try with %s.',
-                3, array($this->_owner, get_class($owner)));
+        $this->check($owner, self::PERMISSION_SHARE);
 
         $this->_friends[get_class($friend)] = $permissions;
 
@@ -1527,13 +1625,13 @@ abstract class Hoa_Framework_Protocol {
      *
      * @access  public
      * @param   Hoa_Framework_Protocol  $component    Component to add.
-     * @return  array
+     * @return  Hoa_Framework_Protocol
      */
     public function addComponent ( Hoa_Framework_Protocol $component ) {
 
         $this->_components[$component->getName()] = $component;
 
-        return $this->_components;
+        return $this;
     }
 
     /**
@@ -1660,6 +1758,21 @@ class Hoa_Framework_Protocol_Application extends Hoa_Framework_Protocol {
      * @var Hoa_Framework_Protocol_Application string
      */
     protected $_name = 'Application';
+
+
+
+    /**
+     * Queue of the component.
+     *
+     * @access  public
+     * @param   stirng  $queue    Queue of the component (generally, a filename,
+     *                            with probably a query; here it is a path).
+     * @return  mixed
+     */
+    public function reach ( $queue ) {
+
+        return HOA_APPLICATION . DS . $queue;
+    }
 }
 
 class Hoa_Framework_Protocol_Data_Configuration extends Hoa_Framework_Protocol {
