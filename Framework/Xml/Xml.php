@@ -97,7 +97,7 @@ class Hoa_Xml {
 	public function dump ( $parsed, $handlerTag = 'global', $hdrftr = true,
                            $encoding = 'utf-8', $handlerAttr = null ) {
 
-		$dumper = new Xml_Dumper($parsed, $handlerAttr);
+		$dumper = new Hoa_Xml_Dumper($parsed, $handlerAttr);
 
 		return $dumper->get($handlerTag, $encoding, $hdrftr);
 	}
