@@ -414,7 +414,7 @@ class Hoa_View {
         $className = $name . 'Helper';
 
         $app = $this->helperDirectory . $className . '.php';
-        $fw  = dirname(__FILE__) . '/helper/' . $className . '.php';
+        $fw  = dirname(__FILE__) . '/Helper/' . $className . '.php';
 
         if(!file_exists($app))
             if(!file_exists($fw))
