@@ -75,65 +75,28 @@ import('Database.Cache.Table');
  * @package     Hoa_Database
  */
 
-class Hoa_Database {
+class Hoa_Database extends Hoa_Framework_Parameterizable {
 
     /**
      * Singleton.
      *
      * @var Hoa_Database object
      */
-    private static $_instance   = null;
+    private static $_instance = null;
 
     /**
      * Collections of table caches.
      *
      * @var Hoa_Database array
      */
-    protected $cache            = array();
+    protected $cache          = array();
 
     /**
-     * The Hoa_Database parameters.
+     * Parameters of Hoa_Database.
      *
-     * @var Hoa_Database array
+     * @var Hoa_Framework_Parameter object
      */
-    protected $parameters       = array(
-        'base.classname'        => '(:Base)Base',
-        'base.filename'         => '_(:Base).php',
-        'base.directory'        => 'Data/Database/Model/(:Base)/',
-
-        'table.classname'       => '(:Table)Table',
-        'table.filename'        => '(:Table).php',
-        'table.pkname'          => 'Pk(:Table)',
-        'table.fkname'          => 'Fk(:Field)',
-
-        'collection.classname'  => '(:Table)Collection',
-
-        'cache.enable'          => true,
-        'cache.filename.table'  => '(:Table).cache',
-        'cache.filename.query'  => '(:Table)Query.cache',
-        'cache.directory'       => 'Data/Database/Cache/(:Base)/',
-
-        'constraint.methodname' => 'user(:Field)Constraint',
-
-        'schema.filename'       => '(:Schema).xml',
-        'schema.directory'      => 'Data/Database/Schema/',
-
-        'connection.list'       => array(
-            /**
-             * An example.
-             *
-             *  'default'      => array(
-             *      'dal'      => 'Pdo',
-             *      'dsn'      => 'mysql:host=localhost;dbname=application',
-             *      'username' => 'root',
-             *      'password' => ''
-             *      'options'  => true
-             *  ),
-             *  …
-             */
-        ),
-        'connection.autoload'   => null // or connection ID, e.g. 'default'
-    );
+    protected $_parameters    = null;
 
 
 
@@ -147,12 +110,44 @@ class Hoa_Database {
      */
     private function __construct ( Array $parameters = array() ) {
 
-        #IF_DEFINED HOA_STANDALONE
-        if(empty($parameters))
-            Hoa_Framework::configurePackage(
-                'Database', $parameters, Hoa_Framework::CONFIGURATION_MIXE,
-                array('connection.list'));
-        #END_IF
+        $this->_parameters = new Hoa_Framework_Parameter(
+            $this,
+            array(
+                'base'   => null,
+                'table'  => null,
+                'field'  => null,
+                'schema' => null
+            ),
+            array(
+                'base.class'        => '(:base:U:)Base',
+                'base.file'         => '_(:base:U:).php',
+                'base.directory'    => 'hoa://Data/Etc/Database/Model/(:base:U:)/',
+
+                'table.class'       => '(:table:U:)Table',
+                'table.file'        => '(:table:U:).php',
+                'table.primaryKey'  => 'Pk(:table:U:)',
+                'table.foreignKey'  => 'Fk(:field:U:)',
+
+                'collection.class'  => '(:table:U:)Collection',
+
+                'cache.enable'      => true,
+                'cache.file.table'  => '(:table:U:)Table.cache',
+                'cache.file.query'  => '(:table:U:)Query.cache',
+                'cache.directory'   => 'hoa://Data/Var/Private/Database/Cache/(:base:U:)/',
+
+                'constraint.method' => 'user(:field:U:)Constraint',
+
+                'schema.file'       => '(:schema:U:).xml',
+                'schema.directory'  => 'Data/Database/Schema/',
+
+                'connection.list.default.dal'      => Hoa_Database_Dal::PDO,
+                'connection.list.default.dsn'      => 'mysql:host=localhost;dbname=foobar',
+                'connection.list.default.username' => 'root',
+                'connection.list.default.passowrd' => '',
+                'connection.list.default.options'  => true,
+                'connection.autoload'              => null // or connection ID, e.g. 'default'
+            )
+        );
 
         $this->setParameters($parameters);
     }
@@ -168,7 +163,7 @@ class Hoa_Database {
 
         if(null === self::$_instance) {
 
-            self::$_instance      = new self($parameters);
+            self::$_instance = new self($parameters);
 
             if(null === $autoload = self::$_instance->parameters['connection.autoload'])
                 return;
@@ -180,125 +175,92 @@ class Hoa_Database {
     }
 
     /**
-     * Set parameters.
+     * Tricky method to centralize and share parameters only with specific
+     * choosen class (as the DAL layer).
      *
-     * @access  protected
-     * @param   array      $parameters    Parameters.
-     * @param   array      $recursive     Used for recursive parameters.
-     * @return  array
+     * @access  public
+     * @param   Hoa_Database_Dal  $dal    DAL layer.
+     * @return  void
      */
-    protected function setParameters ( Array $parameters = array(),
-                                             $recursive  = array() ) {
+    public function shareParametersWithMe ( Hoa_Database_Dal $dal ) {
 
-        if($recursive === array()) {
-            $array       =& $this->parameters;
-            $recursivity = false;
-        }
-        else {
-            $array       =& $recursive;
-            $recursivity = true;
-        }
+        if(get_class($dal) !== 'Hoa_Database_Dal')
+            throw new Hoa_Database_Exception(
+                'You shoud not used this method :-).', 0);
 
-        if(empty($parameters))
-            return $array;
+        $this->_parameters->shareWith(
+            $this,
+            $dal,
+            Hoa_Framework_Parameter::PERMISSION_READ
+        );
 
-        foreach($parameters as $option => $value) {
-
-            if($option == 'connection.list') {
-
-                $array[$option] = $value;
-                continue;
-            }
-
-            if(empty($option) || (empty($value) && !is_bool($value)))
-                continue;
-
-            if(is_array($value))
-                $array[$option] = $this->setParameters($value, $array[$option]);
-
-            else
-                $array[$option] = $value;
-        }
-
-        return $array;
+        return $this->_parameters;
     }
 
     /**
-     * Get all parameters.
+     * Set many parameters to a class.
+     *
+     * @access  public
+     * @param   array   $in      Parameters to set.
+     * @return  void
+     * @throw   Hoa_Exception
+     */
+    public function setParameters ( Array $in ) {
+
+        return $this->_parameters->setParameters($this, $in);
+    }
+
+    /**
+     * Get many parameters from a class.
      *
      * @access  public
      * @return  array
+     * @throw   Hoa_Exception
      */
     public function getParameters ( ) {
 
-        return $this->parameters;
+        return $this->_parameters->getParameters($this);
     }
 
     /**
-     * Get a specific parameter.
+     * Set a parameter to a class.
      *
      * @access  public
-     * @param   string  $parameter    The parameter name.
-     * @param   string  $variable     The parameter variable value.
-     * @param   bool    $transform    Transform the parameter or not.
+     * @param   string  $key      Key.
+     * @param   mixed   $value    Value.
      * @return  mixed
-     * @throw   Hoa_Database_Exception
+     * @throw   Hoa_Exception
      */
-    public function getParameter ( $parameter, $variable = null,
-                                   $transform = true ) {
+    public function setParameter ( $key, $value ) {
 
-        if(!isset($this->parameters[$parameter]))
-            throw new Hoa_Database_Exception(
-                'The parameter %s does not exists.', 0, $parameter);
-
-        if(true === $transform)
-            $return = $this->transform($this->parameters[$parameter], $variable);
-        else
-            $return = $this->parameters[$parameter];
-
-        return $return;
+        return $this->_parameters->setParameter($this, $key, $value);
     }
 
     /**
-     * Verify if first letter is in upper case.
+     * Get a parameter from a class.
      *
      * @access  public
-     * @param   string  $string    String.
-     * @return  bool
+     * @param   string  $key      Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
      */
-    public function isUcFirst ( $string = '' ) {
+    public function getParameter ( $key ) {
 
-        return $string == ucfirst($string);
+        return $this->_parameters->getParameter($this, $key);
     }
 
     /**
-     * Match a string.
+     * Get a formatted parameter from a class (i.e. zFormat with keywords and
+     * other parameters).
      *
      * @access  public
-     * @param   string  $pattern        Pattern.
-     * @param   string  $replacement    Replacement string.
-     * @return  string
+     * @param   string  $key    Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
      */
-    public function transform ( $pattern = '', $replacement = '' ) {
+    public function getFormattedParameter ( $key ) {
 
-        if(empty($pattern))
-            return false;
-
-        preg_match('#^([^\(]+)?(?:\(:([\w]+)\))?(.*)?$#', $pattern, $matches);
-
-        list(, $pre, $var, $post) = $matches;
-
-        if(!empty($var)) {
-
-            if($this->isUcFirst($var))
-                $replacement = ucfirst($replacement);
-
-            $return = $pre . $replacement . $post;
-        }
-        else
-            $return = $pattern;
-
-        return $return;
+        return $this->_parameters->getFormattedParameter($this, $key);
     }
 
     /**
@@ -311,27 +273,23 @@ class Hoa_Database {
      */
     public function getBase ( $name ) {
 
-        $directory = $this->getParameter('base.directory', $name);
+        $oldBase = $this->getKeyword('base');
 
-        if(!is_dir($directory))
-            throw new Hoa_Database_Exception(
-                'Cannot find the base directory %s.', 1, $directory);
+        $this->setKeyword($name);
 
-        $file = $this->getParameter('base.filename', $name);
+        $directory = $this->getFormattedParameter('base.directory');
+        $file      = $this->getFormattedParameter('base.file');
 
-        if(!file_exists($directory . DS . $file))
-            throw new Hoa_Database_Exception(
-                'Cannot find the base file %s.',
-                2, $directory . DS . $file);
+        require_once $directory . $file;
 
-        $class = $this->getParameter('base.classname', $name);
-
-        require_once $directory . DS . $file;
+        $class     = $this->getFormattedParameter('base.class');
 
         if(!class_exists($class))
             throw new Hoa_Database_Exception(
                 'Cannot find the base class %s in %s.',
-                3, array($class, $directory . DS . $file));
+                2, array($class, $directory . $file));
+
+        $this->setKeyword($oldBase);
 
         return new $class();
     }
@@ -354,36 +312,35 @@ class Hoa_Database {
 
         if(false === strpos($name, '.'))
             throw new Hoa_Database_Exception(
-                'The table name must match with <base>.<table> ; given %s.',
+                'The table name must match with <base>.<table>; given %s.',
                 4, $name);
 
         list($base, $name) = explode('.', $name);
 
-        $directory = $this->getParameter('base.directory', $base);
+        $oldBase   = $this->getKeyword('base');
+        $oldTable  = $this->getKeyword('table');
 
-        if(!is_dir($directory))
-            throw new Hoa_Database_Exception(
-                'Cannot find the base directory %s.', 4, $directory);
+        $this->setKeyword('base',  $base);
+        $this->setKeyword('table', $table);
 
-        $file = $this->getParameter('table.filename', $name);
+        $directory = $this->getFormattedParameter('base.directory');
+        $file      = $this->getFormattedParameter('table.file');
 
-        if(!file_exists($directory . DS . $file))
-            throw new Hoa_Database_Exception(
-                'Cannot find the table file %s.',
-                6, $directory . DS . $file);
+        require_once $directory . $file;
 
-        $class = $this->getParameter('table.classname', $name);
-
-        require_once $directory . DS . $file;
+        $class     = $this->getFormattedParameter('table.class');
 
         if(!class_exists($class))
             throw new Hoa_Database_Exception(
                 'Cannot find the table class %s in %s.',
-                7, array($class, $directory . DS . $file));
+                7, array($class, $directory . $file));
 
         $instance = new $class();
 
         $cache->set($name, $instance);
+
+        $this->setKeyword('base',  $oldBase);
+        $this->setKeyword('table', $oldTable);
 
         return $instance;
     }
