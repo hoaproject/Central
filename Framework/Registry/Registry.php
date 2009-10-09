@@ -88,7 +88,7 @@ class Hoa_Registry extends ArrayObject {
     protected static function getInstance ( ) {
 
         if(null === self::$_instance)
-            self::$_instance = new parent;
+            self::$_instance = new parent();
 
         return self::$_instance;
     }
@@ -103,8 +103,7 @@ class Hoa_Registry extends ArrayObject {
      */
     public static function set ( $index, $value ) {
 
-        $registry = self::getInstance();
-        $registry->offsetSet($index, $value);
+        self::getInstance()->offsetSet($index, $value);
     }
 
     /**
@@ -135,9 +134,7 @@ class Hoa_Registry extends ArrayObject {
      */
     public static function isRegistered ( $index ) {
 
-        $registry = self::getInstance();
-
-        return $registry->offsetExists($index);
+        return self::getInstance()->offsetExists($index);
     }
 
     /**
@@ -149,20 +146,6 @@ class Hoa_Registry extends ArrayObject {
      */
     public static function delete ( $index ) {
 
-        $registry = self::getInstance();
-        $registry->offsetUnset($index);
-    }
-
-    /**
-     * OffsetExists has a bug (http://bugs.php.net/bug.php?id=40442).
-     * So make our own offsetExists method.
-     *
-     * @access  public
-     * @param   mixed   $index    Index of registry.
-     * @return  bool
-     */
-    public function offsetExists ( $index ) {
-
-        return array_key_exists($index, $this);
+        self::getInstance()->offsetUnset($index);
     }
 }
