@@ -139,9 +139,18 @@ class Hoa_Database_Dal_DalStatement {
             return $this->getStatement()->bindParameter($parameter, $value);
 
         if(null === $length)
-            return $this->getStatement()->bindParameter($parameter, $value, $type);
+            return $this->getStatement()->bindParameter(
+                $parameter,
+                $value,
+                $type
+            );
 
-        return $this->getStatement()->bindParameter($parameter, $value, $type, $length);
+        return $this->getStatement()->bindParameter(
+            $parameter,
+            $value,
+            $type,
+            $length
+        );
     }
 
     /**

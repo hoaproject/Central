@@ -66,7 +66,7 @@ import('Database.~');
  * @subpackage  Hoa_Database_Dal
  */
 
-class Hoa_Database_Dal {
+class Hoa_Database_Dal implements Hoa_Framework_Parameterizable {
 
     /**
      * Abstract layer : DBA.
@@ -101,21 +101,28 @@ class Hoa_Database_Dal {
      *
      * @var Hoa_Database_Dal array
      */
-    private static $_instance     = array();
+    private static $_instance = array();
 
     /**
      * Current singleton ID.
      *
      * @var Hoa_Database_Dal string
      */
-    private static $_id           = null;
+    private static $_id       = null;
 
     /**
      * The abstract layer instance.
      *
      * @var Hoa_Database_Dal_Interface_Wrapper object
      */
-    protected      $abstractLayer = null;
+    protected $abstractLayer  = null;
+
+    /**
+     * Parameter of Hoa_Database.
+     *
+     * @var Hoa_Framework_Parameter object
+     */
+    protected $_parameters    = null;
 
 
 
@@ -134,6 +141,57 @@ class Hoa_Database_Dal {
      */
     private function __construct ( $dalName, $dsn, $username, $password,
                                    Array $driverOption = array() ) {
+
+        $this->_parameters = Hoa_Database::getInstance()
+                                 ->shareParametersWithMe($this);
+
+        if(   !isset($dalName)
+           && !isset($dsn)
+           && !isset($username)
+           && !isset($password)
+           && empty($driverOption)) {
+
+            $parameters = $this->_parameters->unlinearizeBranche(
+                $this,
+                'connection.list'
+            );
+
+            if(!isset($parameters[$id]))
+                throw new Hoa_Database_Exception(
+                    'Cannot load the %s connection, because parameters are not ' .
+                    'found.', 0, $id);
+
+            $profile = $parameters[$id];
+
+            if(!array_key_exists('dal', $profile))
+                throw new Hoa_Database_Exception(
+                    'The connection profile of %s need the “dal” information.',
+                    1, $id);
+
+            if(!array_key_exists('dsn', $profile))
+                throw new Hoa_Database_Exception(
+                    'The connection profile of %s need the “dsn” information.',
+                    2, $id);
+
+            if(!array_key_exists('username', $profile))
+                throw new Hoa_Database_Exception(
+                    'The connection profile of %s need the “username” information.',
+                    3, $id);
+
+            if(!array_key_exists('password', $profile))
+                throw new Hoa_Database_Exception(
+                    'The connection profile of %s need the “password” information.',
+                    4, $id);
+
+            if(!isset($profile['options']))
+                $profile['options'] = array();
+
+            $dalName      = $profile['dal'];
+            $dsn          = $profile['dsn'];
+            $username     = $profile['username'];
+            $password     = $profile['password'];
+            $driverOption = $profile['options'];
+        }
 
         // Our own factory (to be more independant).
         import('Database.Dal.AbstractLayer.' . $dalName . '.~');
@@ -167,57 +225,13 @@ class Hoa_Database_Dal {
         if(isset(self::$_instance[$id]))
             return self::$_instance[$id];
 
-        if(   !isset($dalName)
-           && !isset($dsn)
-           && !isset($username)
-           && !isset($password)
-           && empty($driverOption)) {
-
-            $parameters = Hoa_Database::getInstance()->getParameters();
-
-            if(!isset($parameters['connection.list'][$id]))
-                throw new Hoa_Database_Exception(
-                    'Cannot load the %s connection, because parameters are not ' .
-                    'found.', 0, $id);
-
-            $profile = $parameters['connection.list'][$id];
-
-            if(!array_key_exists('dal', $profile))
-                throw new Hoa_Database_Exception(
-                    'The connection profile of %s need the “dal” information.',
-                    1, $id);
-
-            if(!array_key_exists('dsn', $profile))
-                throw new Hoa_Database_Exception(
-                    'The connection profile of %s need the “dsn” information.',
-                    2, $id);
-
-            if(!array_key_exists('username', $profile))
-                throw new Hoa_Database_Exception(
-                    'The connection profile of %s need the “username” information.',
-                    3, $id);
-
-            if(!array_key_exists('password', $profile))
-                throw new Hoa_Database_Exception(
-                    'The connection profile of %s need the “password” information.',
-                    4, $id);
-
-            if(!isset($profile['options']))
-                $profile['options'] = array();
-
-            $dalName      = $profile['dal'];
-            $dsn          = $profile['dsn'];
-            $username     = $profile['username'];
-            $password     = $profile['password'];
-            $driverOption = $profile['options'];
-        }
-
-        self::$_instance[$id] = new self(
-                                    $dalName, $dsn, $username,
-                                    $password, $driverOption
-                                );
-
-        return self::$_instance[self::$_id];
+        return self::$_instance[$id] = new self(
+            $dalName,
+            $dsn,
+            $username,
+            $password,
+            $driverOption
+        );
     }
 
     /**
@@ -330,10 +344,10 @@ class Hoa_Database_Dal {
     public function prepare ( $statement, Array $options = array() ) {
 
         return new Hoa_Database_Dal_DalStatement(
-                   $this->getDal()->prepare(
-                       $statement, $options
-                   )
-               );
+            $this->getDal()->prepare(
+                $statement, $options
+            )
+        );
     }
 
     /**
@@ -366,8 +380,8 @@ class Hoa_Database_Dal {
     public function query ( $statement ) {
 
         return new Hoa_Database_Dal_DalStatement(
-                   $this->getDal()->query($statement)
-               );
+            $this->getDal()->query($statement)
+        );
     }
 
     /**
