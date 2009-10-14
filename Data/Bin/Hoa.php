@@ -41,7 +41,8 @@
 /**
  * Set inlucde path.
  */
-ini_set('include_path', '../../Framework/Core/' .
+ini_set('include_path', dirname(dirname(dirname(__FILE__))) .
+                        '/Framework/Core/' .
                         PATH_SEPARATOR .
                         get_include_path());
 
