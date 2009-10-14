@@ -42,11 +42,6 @@ require_once 'Framework.php';
 import('Test.Exception');
 
 /**
- * Hoa_Test_Request
- */
-import('Test.Request');
-
-/**
  * Hoa_Test_Oracle
  */
 import('Test.Oracle.~');
@@ -59,7 +54,7 @@ import('Test.Praspel.~');
 /**
  * Class Hoa_Test.
  *
- *
+ * Make tests.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
@@ -69,43 +64,21 @@ import('Test.Praspel.~');
  * @package     Hoa_Test
  */
 
-class Hoa_Test {
+class Hoa_Test implements Hoa_Framework_Parameterizable {
 
     /**
      * Singleton.
      *
      * @var Hoa_Test object
      */
-    private static $_instance      = null;
+    private static $_instance = null;
 
     /**
-     * The request object.
+     * Parameters of Hoa_Test.
      *
-     * @var Hoa_Test_Request object
+     * @var Hoa_Framework_Parameter object
      */
-    protected $_request            = null;
-
-    /**
-     * The Hoa_Test parameters.
-     *
-     * @var Hoa_Test array
-     */
-    protected $parameters          = array(
-        'convict.directory'        => null,
-        'convict.recursive'        => true,
-        'convict.result'           => array(),
-
-        'test.incubator'           => 'Data/Test/Incubator/',
-        'test.ordeal.oracle'       => 'Data/Test/Ordeal/Oracle/',
-        'test.ordeal.battleground' => 'Data/Test/Ordeal/Battleground/',
-        'test.ordeal.methodPrefix' => '__hoa_',
-        'test.dictionary'          => 'Data/Test/Dictionary/',
-        'test.maxtry'              => 64,
-
-        'user.type'                => null,
-
-        'report'                   => 'Test/Report/'
-    );
+    protected $_parameters    = null;
 
 
 
@@ -118,19 +91,28 @@ class Hoa_Test {
      */
     private function __construct ( Array $parameters = array() ) {
 
-        #IF_DEFINED HOA_STANDALONE
-        if(empty($parameters))
-            Hoa_Framework::configurePackage(
-                'Test', $parameters, Hoa_Framework::CONFIGURATION_DOT);
-        #END_IF
+        $this->_parameters = new Hoa_Framework_Parameter(
+            $this,
+            array(),
+            array(
+                'convict.directory'        => null,
+                'convict.recursive'        => true,
+                'convict.result'           => array(),
 
-        $this->parameters = $this->setParameters($parameters);
-        $userType         = $this->getParameter('user.type');
+                'test.incubator'           => 'hoa://Data/Var/Test/Incubator/',
+                'test.ordeal.oracle'       => 'hoa://Data/Var/Test/Ordeal/Oracle/',
+                'test.ordeal.battleground' => 'hoa://Data/Var/Test/Ordeal/Battleground/',
+                'test.ordeal.methodPrefix' => '__hoa_',
+                'test.dictionary'          => 'hoa://Data/Var/Test/Dictionary/',
+                'test.maxtry'              => 64,
 
-        if(null === $userType)
-            $this->setParameters(array(
-                'user.type' => dirname(__FILE__) . DS . 'Urg' . DS . 'Type'
-            ));
+                'user.type'                => null, // Path to user's types.
+
+                'report'                   => 'hoa://Data/Var/Test/Report/'
+            )
+        );
+
+        $this->setParameters($parameters);
     }
 
     /**
@@ -149,41 +131,69 @@ class Hoa_Test {
     }
 
     /**
-     * Set parameters.
+     * Set many parameters to a class.
      *
-     * @access  protected
-     * @param   array      $parameters    Parameters.
-     * @param   array      $recursive     Used for recursive parameters.
-     * @return  array
+     * @access  public
+     * @param   array   $in      Parameters to set.
+     * @return  void
+     * @throw   Hoa_Exception
      */
-    protected function setParameters ( Array $parameters = array(),
-                                             $recursive  = array() ) {
+    public function setParameters ( Array $in ) {
 
-        if($recursive === array()) {
-            $array       =& $this->parameters;
-            $recursivity = false;
-        }
-        else {
-            $array       =& $recursive;
-            $recursivity = true;
-        }
+        return $this->_parameters->setParameters($this, $in);
+    }
 
-        if(empty($parameters))
-            return $array;
+    /**
+     * Get many parameters from a class.
+     *
+     * @access  public
+     * @return  array
+     * @throw   Hoa_Exception
+     */
+    public function getParameters ( ) {
 
-        foreach($parameters as $option => $value) {
+        return $this->_parameters->getParameters($this);
+    }
 
-            if(empty($option) || (empty($value) && !is_bool($value)))
-                continue;
+    /**
+     * Set a parameter to a class.
+     *
+     * @access  public
+     * @param   string  $key      Key.
+     * @param   mixed   $value    Value.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function setParameter ( $key, $value ) {
 
-            if(is_array($value))
-                $array[$option] = $this->setParameters($value, $array[$option]);
+        return $this->_parameters->setParameter($this, $key, $value);
+    }
 
-            else
-                $array[$option] = $value;
-        }
+    /**
+     * Get a parameter from a class.
+     *
+     * @access  public
+     * @param   string  $key      Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getParameter ( $key ) {
 
-        return $array;
+        return $this->_parameters->getParameter($this, $key);
+    }
+
+    /**
+     * Get a formatted parameter from a class (i.e. zFormat with keywords and
+     * other parameters).
+     *
+     * @access  public
+     * @param   string  $key    Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getFormattedParameter ( $key ) {
+
+        return $this->_parameters->getFormattedParameter($this, $key);
     }
 
     /**
@@ -194,65 +204,15 @@ class Hoa_Test {
      */
     public function run ( ) {
 
-        $this->setRequest();
-
         $oracle = new Hoa_Test_Oracle();
-        $oracle->setRequest($this->getRequest());
+        $this->_parameters->shareWith(
+            $this,
+            $oracle,
+            Hoa_Framework_Parameter::PERMISSION_READ  |
+            Hoa_Framework_Parameter::PERMISSION_WRITE |
+            Hoa_Framework_Parameter::PERMISSION_SHARE
+        );
+        $oracle->setRequest($this->_parameters);
         $oracle->predict();
-    }
-
-    /**
-     * Get all parameters.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function getParameters ( ) {
-
-        return $this->parameters;
-    }
-
-    /**
-     * Get a specific parameter.
-     *
-     * @access  public
-     * @param   string  $parameter    The parameter name.
-     * @return  mixed
-     * @throw   Hoa_Test_Exception
-     */
-    public function getParameter ( $parameter ) {
-
-        if(!array_key_exists($parameter, $this->parameters))
-            throw new Hoa_Test_Exception(
-                'The parameter %s does not exists.', 0, $parameter);
-
-        return $this->parameters[$parameter];
-    }
-
-    /**
-     * Set the request object, with parameters.
-     *
-     * @access  protected
-     * @return  Hoa_Test_Request
-     */
-    protected function setRequest ( ) {
-
-        $old            = $this->_request;
-        $this->_request = new Hoa_Test_Request(
-                              $this->getParameters()
-                          );
-
-        return $old;
-    }
-
-    /**
-     * Get the request object.
-     *
-     * @access  protected
-     * @return  Hoa_Test_Request
-     */
-    protected function getRequest ( ) {
-
-        return $this->_request;
     }
 }

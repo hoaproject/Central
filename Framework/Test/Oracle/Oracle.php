@@ -106,30 +106,95 @@ import('Pom.Token.Array');
  * @subpackage  Hoa_Test_Oracle
  */
 
-class Hoa_Test_Oracle {
+class Hoa_Test_Oracle implements Hoa_Framework_Parameterizable {
 
     /**
-     * The request object.
+     * Parameters of Hoa_Test.
      *
-     * @var Hoa_Test_Request object
+     * @var Hoa_Framework_Parameter object
      */
-    protected $_request = null;
+    protected $_parameters = null;
 
 
 
     /**
-     * Set the request object.
+     * Set the parameters of this package from Hoa_Test.
      *
      * @access  public
-     * @param   Hoa_Test_Request  $request    The request object.
-     * @return  Hoa_Test_Request
+     * @param   Hoa_Framework_Parameter  $parameters    Parameters.
+     * @return  Hoa_Test_Oracle
      */
-    public function setRequest ( Hoa_Test_Request $request ) {
+    public function setRequest ( Hoa_Framework_Parameter $parameters ) {
 
-        $old            = $this->_request;
-        $this->_request = $request;
+        $this->_parameters = $parameters;
 
-        return $old;
+        return $this;
+    }
+
+    /**
+     * Set many parameters to a class.
+     *
+     * @access  public
+     * @param   array   $in      Parameters to set.
+     * @return  void
+     * @throw   Hoa_Exception
+     */
+    public function setParameters ( Array $in ) {
+
+        return $this->_parameters->setParameters($this, $in);
+    }
+
+    /**
+     * Get many parameters from a class.
+     *
+     * @access  public
+     * @return  array
+     * @throw   Hoa_Exception
+     */
+    public function getParameters ( ) {
+
+        return $this->_parameters->getParameters($this);
+    }
+
+    /**
+     * Set a parameter to a class.
+     *
+     * @access  public
+     * @param   string  $key      Key.
+     * @param   mixed   $value    Value.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function setParameter ( $key, $value ) {
+
+        return $this->_parameters->setParameter($this, $key, $value);
+    }
+
+    /**
+     * Get a parameter from a class.
+     *
+     * @access  public
+     * @param   string  $key      Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getParameter ( $key ) {
+
+        return $this->_parameters->getParameter($this, $key);
+    }
+
+    /**
+     * Get a formatted parameter from a class (i.e. zFormat with keywords and
+     * other parameters).
+     *
+     * @access  public
+     * @param   string  $key    Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getFormattedParameter ( $key ) {
+
+        return $this->_parameters->getFormattedParameter($this, $key);
     }
 
     /**
@@ -155,9 +220,9 @@ class Hoa_Test_Oracle {
      */
     protected function prepareIncubator ( ) {
 
-        $convict   = $this->getRequest()->getParameter('convict.directory');
-        $recursive = $this->getRequest()->getParameter('convict.recursive');
-        $incubator = $this->getRequest()->getParameter('test.incubator');
+        $convict   = $this->getFormattedParameter('convict.directory');
+        $recursive = $this->getFormattedParameter('convict.recursive');
+        $incubator = $this->getFormattedParameter('test.incubator');
 
         if(null === $convict)
             throw new Hoa_Test_Oracle_Exception(
@@ -222,7 +287,7 @@ class Hoa_Test_Oracle {
                     array($convict . $file, $incubator . $file));
         }
 
-        $this->getRequest()->setParameter('convict.result', $files);
+        $this->setParameter('convict.result', $files);
 
         return;
     }
@@ -236,10 +301,10 @@ class Hoa_Test_Oracle {
      */
     protected function prepareOrdealOracle ( ) {
 
-        $convict   = $this->getRequest()->getParameter('convict.result');
-        $incubator = $this->getRequest()->getParameter('test.incubator');
-        $oracle    = $this->getRequest()->getParameter('test.ordeal.oracle');
-        $prefix    = $this->getRequest()->getParameter('test.ordeal.methodPrefix');
+        $convict   = $this->getFormattedParameter('convict.result');
+        $incubator = $this->getFormattedParameter('test.incubator');
+        $oracle    = $this->getFormattedParameter('test.ordeal.oracle');
+        $prefix    = $this->getFormattedParameter('test.ordeal.methodPrefix');
 
         if(null === $oracle)
             throw new Hoa_Test_Oracle_Exception(
@@ -406,7 +471,7 @@ class Hoa_Test_Oracle {
      */
     protected function prepareOrdealBattleground ( ) {
 
-        $battleground = $this->getRequest()->getParameter('test.ordeal.battleground');
+        $battleground = $this->getFormattedParameter('test.ordeal.battleground');
 
         if(null === $battleground)
             throw new Hoa_Test_Oracle_Exception(
@@ -443,18 +508,13 @@ class Hoa_Test_Oracle {
     protected function prepareEyes ( ) {
 
         $eyes = new Hoa_Test_Oracle_Eyes();
-        $eyes->setRequest($this->getRequest());
+        $this->_parameters->shareWith(
+            $this,
+            $eyes,
+            Hoa_Framework_Parameter::PERMISSION_READ |
+            Hoa_Framework_Parameter::PERMISSION_WRITE
+        );
+        $eyes->setRequest($this->_parameters);
         $eyes->open();
-    }
-
-    /**
-     * Get the request object.
-     *
-     * @access  public
-     * @return  Hoa_Test_Request
-     */
-    public function getRequest ( ) {
-
-        return $this->_request;
     }
 }
