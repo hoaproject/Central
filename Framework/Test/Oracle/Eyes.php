@@ -131,30 +131,95 @@ import('Pom.Parser.Lexer');
  * @subpackage  Hoa_Test_Oracle_Eyes
  */
 
-class Hoa_Test_Oracle_Eyes {
+class Hoa_Test_Oracle_Eyes implements Hoa_Framework_Parameterizable {
 
     /**
-     * The request object.
+     * Parameters of Hoa_Test.
      *
-     * @var Hoa_Test_Request object
+     * @var Hoa_Framework_Parameter object
      */
-    protected static $_request = null;
+    protected $_parameters = null;
 
 
 
     /**
-     * Set the request object.
+     * Set the parameters of this package from Hoa_Test.
      *
      * @access  public
-     * @param   Hoa_Test_Request  $request    The request object.
-     * @return  Hoa_Test_Request
+     * @param   Hoa_Framework_Parameter  $parameters    Parameters.
+     * @return  Hoa_Test_Oracle
      */
-    public function setRequest ( Hoa_Test_Request $request ) {
+    public function setRequest ( Hoa_Framework_Parameter $parameters ) {
 
-        $old            = self::$_request;
-        self::$_request = $request;
+        $this->_parameters = $parameters;
 
-        return $old;
+        return $this;
+    }
+
+    /**
+     * Set many parameters to a class.
+     *
+     * @access  public
+     * @param   array   $in      Parameters to set.
+     * @return  void
+     * @throw   Hoa_Exception
+     */
+    public function setParameters ( Array $in ) {
+
+        return $this->_parameters->setParameters($this, $in);
+    }
+
+    /**
+     * Get many parameters from a class.
+     *
+     * @access  public
+     * @return  array
+     * @throw   Hoa_Exception
+     */
+    public function getParameters ( ) {
+
+        return $this->_parameters->getParameters($this);
+    }
+
+    /**
+     * Set a parameter to a class.
+     *
+     * @access  public
+     * @param   string  $key      Key.
+     * @param   mixed   $value    Value.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function setParameter ( $key, $value ) {
+
+        return $this->_parameters->setParameter($this, $key, $value);
+    }
+
+    /**
+     * Get a parameter from a class.
+     *
+     * @access  public
+     * @param   string  $key      Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getParameter ( $key ) {
+
+        return $this->_parameters->getParameter($this, $key);
+    }
+
+    /**
+     * Get a formatted parameter from a class (i.e. zFormat with keywords and
+     * other parameters).
+     *
+     * @access  public
+     * @param   string  $key    Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getFormattedParameter ( $key ) {
+
+        return $this->_parameters->getFormattedParameter($this, $key);
     }
 
     /**
@@ -169,6 +234,11 @@ class Hoa_Test_Oracle_Eyes {
         $battleground = self::getRequest()->getParameter('test.ordeal.battleground');
         $files        = self::getRequest()->getParameter('convict.result');
         $prefix       = self::getRequest()->getParameter('test.ordeal.methodPrefix');
+
+        $incubator    = $this->getFormattedParameter('test.incubator');
+        $battleground = $this->getFormattedParameter('test.ordeal.battleground');
+        $files        = $this->getFormattedParameter('convict.result');
+        $prefeix      = $this->getFormattedParameter('test.ordeal.methodPrefix');
 
         foreach($files as $i => $file) {
 
@@ -290,16 +360,5 @@ class Hoa_Test_Oracle_Eyes {
 
             file_put_contents($battleground . $file, Hoa_Pom::dump($root));
         }
-    }
-
-    /**
-     * Get the request object.
-     *
-     * @access  protected
-     * @return  Hoa_Test_Request
-     */
-    protected static function getRequest ( ) {
-
-        return self::$_request;
     }
 }
