@@ -188,6 +188,10 @@ class WelcomeCommand extends Hoa_Console_Command_Abstract {
 
             array('Service'),
             array(
+                '    ' . parent::stylize('identica', 'command'),
+                'Send a tweet!'
+            ),
+            array(
                 '    ' . parent::stylize('twitter', 'command'),
                 'Send a tweet!'
             )
