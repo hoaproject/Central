@@ -67,728 +67,6 @@ and
     exit('The Hoa framework main file (Framework.php) must be included once.');
 
 /**
- * Environment constants.
- */
-!defined('HOA_FRAMEWORK')   and define('HOA_FRAMEWORK',   dirname(__FILE__));
-!defined('HOA_DATA')        and define('HOA_DATA',        dirname(dirname(__FILE__)) .
-                                                          DS . 'Data');
-!defined('HOA_APPLICATION') and define('HOA_APPLICATION', dirname(dirname(__FILE__)) .
-                                                          DS . 'Application');
-
-/**
- * Class Hoa_Framework.
- *
- * Hoa_Framework is the framework package manager.
- * Each package must include Hoa_Framework, because it is the “taproot” of the
- * framework.
- * And build the hoa:// protocol.
- *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP5
- * @version     0.3
- * @package     Hoa_Framework
- */
-
-class Hoa_Framework {
-
-    /**
-     * Import constant : path collection index.
-     *
-     * @const int
-     */
-    const IMPORT_PATH = 0;
-
-    /**
-     * Import constant : load flag collection index.
-     *
-     * @const int
-     */
-    const IMPORT_LOAD = 1;
-
-    /**
-     * Stack of all files that might be imported.
-     *
-     * @var Hoa_Framework array
-     */
-    private static $_importStack = array();
-
-    /**
-     * Stack of all registered shutdown function.
-     *
-     * @var Hoa_Framework array
-     */
-    private static $_rsdf        = array();
-
-    /**
-     * Tree of components, starts by the root.
-     *
-     * @var Hoa_Framework_Protocol_Root object
-     */
-    private static $_root        = null;
-
-    /**
-     * Opened stream.
-     *
-     * @var Hoa_Framework resource
-     */
-    private $_stream             = null;
-
-    /**
-     * Stream name (filename).
-     *
-     * @var Hoa_Framework string
-     */
-    private $_streamName         = null;
-
-    /**
-     * Stream context (given by the streamWrapper class).
-     *
-     * @var Hoa_Framework resource
-     */
-    public $context              = null;
-
-
-
-    /**
-     * Check if a constant is already defined.
-     * If the constant is defined, this method returns false.
-     * Else this method declares the constant.
-     *
-     * @access  public
-     * @param   string  $name     The name of the constant.
-     * @param   string  $value    The value of the constant.
-     * @param   bool    $case     True set the case-insensitive.
-     * @return  bool
-     */
-    public static function _define ( $name = '', $value = '', $case = false) {
-
-        if(!defined($name))
-            return define($name, $value, $case);
-
-        return false;
-    }
-
-    /**
-     * Import a file or a directory.
-     * This method find file, and write some informations (inode, path, and
-     * already imported or not) into an “import register”. If a file is not in
-     * this register, the autoload will return an error.
-     * This method is dependent of include_path (ini_set).
-     *
-     * @access  public
-     * @param   string  $path    Path.
-     * @param   bool    $load    Load file when over.
-     * @return  void
-     * @throw   Hoa_Exception
-     */
-    public static function import ( $path = null, $load = false ) {
-
-        static $back = HOA_FRAMEWORK;
-        static $last = null;
-
-        preg_match('#(?:(.*?)(?<!\\\)\.)|(.*)#', $path, $matches);
-
-        $handle = !isset($matches[2]) ? $matches[1] : $matches[2];
-
-        switch($handle) {
-
-            case '~':
-
-                $back .= DS . $last;
-                $path  = substr($path, 2);
-
-                if(   (is_dir($back)           && !empty($path))
-                   || (is_file($back . '.php') &&  empty($path)))
-                    self::import($path, $load);
-              break;
-
-            default:
-
-                if(!empty($path)) {
-
-                    $glob = glob($back . DS . $handle);
-
-                    if(!empty($glob)) {
-
-                        foreach($glob as $i => $found) {
-
-                            $last  = str_replace('.', '\\.', $found);
-                            $last  = substr($last, strrpos($last, DS) + 1);
-                            $tmp   = $back;
-                            $back .= DS . $last;
-                            $foo   = substr($path, strlen($handle) + 1);
-
-                            if(   (is_dir($found)  && !empty($foo))
-                               || (is_file($found) &&  empty($foo)))
-                                self::import(substr($path, strlen($handle) + 1), $load);
-
-                            elseif(is_file($found . '.php')) {
-
-                                $back = $found . '\.php';
-                                self::import(null, $load);
-                            }
-
-                            $back = $tmp;
-                        }
-                    }
-                    else {
-
-                        $back .= DS . $handle;
-                        self::import(null, $load);
-                    }
-                }
-                else {
-
-                    $last  = null;
-                    $final = str_replace('\\.', '.', $back);
-                    $back  = HOA_FRAMEWORK;
-
-                    if(!file_exists($final))
-                        $final .= '.php';
-
-                    if(!file_exists($final))
-                        throw new Hoa_Exception(
-                            'File %s is not found.', 0, $final);
-
-                    if(false === OS_WIN)
-                        $inode = fileinode($final);
-                    else
-                        $inode = md5($final);
-
-                    if(isset(self::$_importStack[$inode]))
-                        return;
-
-                    self::$_importStack[$inode] = array(
-                        self::IMPORT_PATH => $final,
-                        self::IMPORT_LOAD => $load
-                    );
-
-                    if(true === $load)
-                        require $final;
-                }
-        }
-
-        return;
-    }
-
-    /**
-     * If file is imported (via self::import()), the autoload method will
-     * load the file that contains the class $className.
-     *
-     * @access  public
-     * @param   string  $className    Class name.
-     * @return  void
-     */
-    public static function autoload ( $className ) {
-
-        $hoa = substr($className, 0, 3);
-
-        if($hoa != 'Hoa')
-            return;
-
-        // Skip “Hoa_”.
-        $className = substr($className, 4);
-        $classPath = HOA_FRAMEWORK . DS .
-                     str_replace('_', DS, $className) . '.php';
-
-        // If it is an entry class.
-        if(!file_exists($classPath)) {
-
-            if(false !== strpos($className, '_'))
-                $className .= substr($className, strrpos($className, '_')); 
-            else
-                $className .= '_' . $className;
-
-            $classPath = HOA_FRAMEWORK . DS .
-                         str_replace('_', DS, $className) . '.php';
-        }
-
-        if(!file_exists($classPath))
-            return;
-
-        if(false === OS_WIN)
-            $inode = fileinode($classPath);
-        else
-            $inode = md5($classPath);
-
-        if(!isset(self::$_importStack[$inode]))
-            return;
-
-        if(true === self::$_importStack[$inode][self::IMPORT_LOAD])
-            return;
-
-        require self::$_importStack[$inode][self::IMPORT_PATH];
-        self::$_importStack[$inode][self::IMPORT_LOAD] = true;
-
-        return;
-    }
-
-    /**
-     * Get protocol's root.
-     *
-     * @access  public
-     * @return  Hoa_Framework_Protocol_Root
-     */
-    public static function getProtocol ( ) {
-
-        if(null === self::$_root)
-            self::$_root = new Hoa_Framework_Protocol_Root();
-
-        return self::$_root;
-    }
-
-    /**
-     * Get the real path of the given URL.
-     * Could return false if the path cannot be reached.
-     *
-     * @access  public
-     * @param   string  $path    Path (or URL).
-     * @return  mixed
-     */
-    public static function realPath ( $path ) {
-
-        return self::getProtocol()->resolve($path);
-    }
-
-    /**
-     * Close a resource.
-     * This method is called in response to fclose().
-     * All resources that were locked, or allocated, by the wrapper should be
-     * released.
-     *
-     * @access  public
-     * @return  void
-     */
-    public function stream_close ( ) {
-
-        if(true === @fclose($this->getStream())) {
-
-            $this->_stream     = null;
-            $this->_streamName = null;
-        }
-
-        return;
-    }
-
-    /**
-     * Tests for end-of-file on a file pointer.
-     * This method is called in response to feof().
-     *
-     * access   public
-     * @return  bool
-     */
-    public function stream_eof ( ) {
-
-        return feof($this->getStream());
-    }
-
-    /**
-     * Flush the output.
-     * This method is called in respond to fflush().
-     * If we have cached data in our stream but not yet stored it into the
-     * underlying storage, we should do so now.
-     *
-     * @access  public
-     * @return  bool
-     */
-    public function stream_flush ( ) {
-
-        return fflush($this->getStream());
-    }
-
-    /**
-     * Advisory file locking.
-     * This method is called in response to flock(), when file_put_contents()
-     * (when flags contains LOCK_EX), stream_set_blocking() and when closing the
-     * stream (LOCK_UN).
-     *
-     * @access  public
-     * @param   int     $operation    Operation is one the following:
-     *                                  * LOCK_SH to acquire a shared lock (reader) ;
-     *                                  * LOCK_EX to acquire an exclusive lock (writer) ;
-     *                                  * LOCK_UN to release a lock (shared or exclusive) ;
-     *                                  * LOCK_NB if we don't want flock() to
-     *                                    block while locking (not supported on
-     *                                    Windows).
-     * @return  bool
-     */
-    public function stream_lock ( $operation ) {
-
-        return flock($this->getStream(), $operation);
-    }
-
-    /**
-     * Open file or URL.
-     * This method is called immediately after the wrapper is initialized (f.e.
-     * by fopen() and file_get_contents()).
-     *
-     * @access  public
-     * @param   string  $path           Specifies the URL that was passed to the
-     *                                  original function.
-     * @param   string  $mode           The mode used to open the file, as
-     *                                  detailed for fopen().
-     * @param   int     $options        Holds additional flags set by the
-     *                                  streams API. It can hold one or more of
-     *                                  the following values OR'd together:
-     *                                    * STREAM_USE_PATH, if path is relative,
-     *                                      search for the resource using the
-     *                                      include_path;
-     *                                    * STREAM_REPORT_ERRORS, if this is
-     *                                    set, you are responsible for raising
-     *                                    errors using trigger_error during
-     *                                    opening the stream. If this is not
-     *                                    set, you should not raise any errors.
-     * @param   string  &$openedPath    If the $path is opened successfully, and
-     *                                  STREAM_USE_PATH is set in $options,
-     *                                  $openedPath should be set to the full
-     *                                  path of the file/resource that was
-     *                                  actually opened.
-     * @return  bool
-     */
-    public function stream_open ( $path, $mode, $options, &$openedPath ) {
-
-        $p = self::realPath($path);
-
-        if(false === $p)
-            return false;
-
-        if(null === $this->context)
-            $openedPath = fopen(
-                $p,
-                $mode,
-                $options & STREAM_USE_PATH
-            );
-        else
-            $openedPath = fopen(
-                $p,
-                $mode,
-                $options & STREAM_USE_PATH,
-                $this->context
-            );
-
-        $this->_stream     = $openedPath;
-        $this->_streamName = $p;
-
-        return true;
-    }
-
-    /**
-     * Read from stream. 
-     * This method is called in response to fread() and fgets().
-     *
-     * @access  public
-     * @param   int     $count    How many bytes of data from the current
-     *                            position should be returned.
-     * @return  string
-     */
-    public function stream_read ( $count ) {
-
-        return fread($this->getStream(), $count);
-    }
-
-    /**
-     * Seek to specific location in a stream.
-     * This method is called in response to fseek().
-     * The read/write position of the stream should be updated according to the
-     * $offset and $whence.
-     *
-     * @access  public
-     * @param   int     $offset    The stream offset to seek to.
-     * @param   int     $whence    Possible values:
-     *                               * SEEK_SET to set position equal to $offset
-     *                                 bytes ;
-     *                               * SEEK_CUR to set position to current
-     *                                 location plus $offsete ;
-     *                               * SEEK_END to set position to end-of-file
-     *                                 plus $offset.
-     * @return  bool
-     */
-    public function stream_seek ( $offset, $whence = SEEK_SET ) {
-
-        return fseek($this->getStream(), $offset, $whence);
-    }
-
-    /**
-     * Retrieve information about a file resource.
-     * This method is called in response to fstat().
-     *
-     * @access  public
-     * @return  array
-     */
-    public function stream_stat ( ) {
-
-        return fstat($this->getStream());
-    }
-
-    /**
-     * Retrieve the current position of a stream.
-     * This method is called in response to ftell().
-     *
-     * @access  public
-     * @return  int
-     */
-    public function stream_tell ( ) {
-
-        return ftell($this->getStream());
-    }
-
-    /**
-     * Write to stream.
-     * This method is called in response to fwrite().
-     *
-     * @access  public
-     * @param   string  $data    Should be stored into the underlying stream.
-     * @return  int
-     */
-    public function stream_write ( $data ) {
-
-        return fwrite($this->getStream(), $data);
-    }
-
-    /**
-     * Close directory handle.
-     * This method is called in to closedir().
-     * Any resources which were locked, or allocated, during opening and use of
-     * the directory stream should be released.
-     *
-     * @access  public
-     * @return  bool
-     */
-    public function dir_closedir ( ) {
-
-        if(true === $handle = @closedir($this->getStream())) {
-
-            $this->_stream     = null;
-            $this->_streamName = null;
-        }
-
-        return $handle;
-    }
-
-    /**
-     * Open directory handle.
-     * This method is called in response to opendir().
-     *
-     * @access  public
-     * @param   string  $path       Specifies the URL that was passed to opendir().
-     * @param   int     $options    Whether or not to enforce safe_mode (0x04).
-     *                              It is not used here.
-     * @return  bool
-     */
-    public function dir_opendir ( $path, $options ) {
-
-        $p      = self::realPath($path);
-        $handle = null;
-
-        if(null === $this->context)
-            $handle = @opendir($p, $this->context);
-        else
-            $handle = @opendir($p);
-
-        if(false === $handle)
-            return false;
-
-        $this->_stream     = $handle;
-        $this->_streamName = $p;
-
-        return true;
-    }
-
-    /**
-     * Read entry from directory handle.
-     * This method is called in response to readdir().
-     *
-     * @access  public
-     * @return  mixed
-     */
-    public function dir_readdir ( ) {
-
-        return readdir($this->getStream());
-    }
-
-    /**
-     * Rewind directory handle.
-     * This method is called in response to rewinddir().
-     * Should reset the output generated by self::dir_readdir, i.e. the next
-     * call to self::dir_readdir should return the first entry in the location
-     * returned by self::dir_opendir.
-     *
-     * @access  public
-     * @return  bool
-     */
-    public function dir_rewinddir ( ) {
-
-        return rewinddir($this->getStream());
-    }
-
-    /**
-     * Create a directory.
-     * This method is called in response to mkdir().
-     *
-     * @access  public
-     * @param   string  $path       Directory which should be created.
-     * @param   int     $mode       The value passed to mkdir().
-     * @param   int     $options    A bitwise mask of values.
-     * @return  bool
-     */
-    public function mkdir ( $path, $mode, $options ) {
-
-        if(null === $this->context)
-            return mkdir(
-                $path,
-                $mode,
-                $option === STREAM_MKDIR_RECURSIVE
-            );
-        else
-            return mkdir(
-                $path,
-                $mode,
-                $option === STREAM_MKDIR_RECURSIVE,
-                $this->context
-            );
-    }
-
-    /**
-     * Rename a file or directory.
-     * This method is called in response to rename().
-     * Should attempt to rename $from to $to.
-     *
-     * @access  public
-     * @param   string  $from    The URL to current file.
-     * @param   string  $to      The URL which $from should be renamed to.
-     * @return  bool
-     */
-    public function rename ( $from, $to ) {
-
-        if(null === $this->context)
-            return rename($from, $to);
-        else
-            return rename($from, $to, $this->context);
-    }
-
-    /**
-     * Remove a directory.
-     * This method is called in response to rmdir().
-     *
-     * @access  public
-     * @param   string  $path       The directory URL which should be removed.
-     * @param   int     $options    A bitwise mask of values. It is not used
-     *                              here.
-     * @return  bool
-     */
-    public function rmdir ( $path, $options ) {
-
-        if(null === $this->context)
-            return rmdir($path);
-        else
-            return rmdir($path, $this->context);
-    }
-
-    /**
-     * Delete a file.
-     * This method is called in response to unlink().
-     *
-     * @access  public
-     * @param   string  $path    The file URL which should be deleted.
-     * @return  bool
-     */
-    public function unlink ( $path ) {
-
-        if(null === $this->context)
-            return unlink($path);
-        else
-            return unlink($path, $this->context);
-    }
-
-    /**
-     * Retrieve information about a file.
-     * This method is called in response to all stat() related functions.
-     *
-     * @access  public
-     * @param   string  $path     The file URL which should be retrieve
-     *                            information about.
-     * @param   int     $flags    Holds additional flags set by the streams API.
-     *                            It can hold one or more of the following
-     *                            values OR'd together.
-     *                            STREAM_URL_STAT_LINK: for resource with the
-     *                            ability to link to other resource (such as an
-     *                            HTTP location: forward, or a filesystem
-     *                            symlink). This flag specified that only
-     *                            information about the link itself should be
-     *                            returned, not the resource pointed to by the
-     *                            link. This flag is set in response to calls to
-     *                            lstat(), is_link(), or filetype().
-     *                            STREAM_URL_STAT_QUIET: if this flag is set,
-     *                            our wrapper should not raise any errors. If
-     *                            this flag is not set, we are responsible for
-     *                            reporting errors using the trigger_error()
-     *                            function during stating of the path.
-     * @return  array
-     */
-    public function url_stat ( $path, $flags ) {
-
-        if(false === $p = self::realPath($path))
-            if($flags & STREAM_URL_STAT_QUIET)
-                return array(); // Not sure…
-            else
-                return trigger_error(
-                    'Path ' . $path . ' cannot be resolved.',
-                    E_WARNING
-                );
-
-        if($flags & STREAM_URL_STAT_LINK)
-            return @lstat($p);
-        else
-            return @stat($p);
-    }
-
-    /**
-     * Get stream resource.
-     *
-     * @access  protected
-     * @return  resource
-     */
-    protected function getStream ( ) {
-
-        return $this->_stream;
-    }
-
-    /**
-     * Get stream name.
-     *
-     * @access  protected
-     * @return  resource
-     */
-    protected function getStreamName ( ) {
-
-        return $this->_streamName;
-    }
-
-    /**
-     * Apply and save a register shutdown function.
-     * It may be analogous to a static __destruct, but it allows us to make more
-     * that a __destruct method.
-     *
-     * @access  public
-     * @param   string  $class     Class.
-     * @param   string  $method    Method.
-     * @return  bool
-     */
-    public static function registerShutdownFunction ( $class = '', $method = '' ) {
-
-        if(!isset(self::$_rsdf[$class][$method])) {
-
-            self::$_rsdf[$class][$method] = true;
-            return register_shutdown_function(array($class, $method));
-        }
-
-        return false;
-    }
-}
-
-/**
  * Interface Hoa_Framework_Parameterizable.
  *
  * Interface for all classes or packages that are parameterizable.
@@ -1583,6 +861,866 @@ class Hoa_Framework_Parameter {
 }
 
 /**
+ * Class Hoa_Framework.
+ *
+ * Hoa_Framework is the framework package manager.
+ * Each package must include Hoa_Framework, because it is the “taproot” of the
+ * framework.
+ * And build the hoa:// protocol.
+ *
+ * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
+ * @license     http://gnu.org/licenses/gpl.txt GNU GPL
+ * @since       PHP5
+ * @version     0.3
+ * @package     Hoa_Framework
+ */
+
+class Hoa_Framework implements Hoa_Framework_Parameterizable {
+
+    /**
+     * Import constant : path collection index.
+     *
+     * @const int
+     */
+    const IMPORT_PATH = 0;
+
+    /**
+     * Import constant : load flag collection index.
+     *
+     * @const int
+     */
+    const IMPORT_LOAD = 1;
+
+    /**
+     * Stack of all files that might be imported.
+     *
+     * @var Hoa_Framework array
+     */
+    private static $_importStack  = array();
+
+    /**
+     * Stack of all registered shutdown function.
+     *
+     * @var Hoa_Framework array
+     */
+    private static $_rsdf         = array();
+
+    /**
+     * Tree of components, starts by the root.
+     *
+     * @var Hoa_Framework_Protocol_Root object
+     */
+    private static $_root         = null;
+
+    /**
+     * Opened stream.
+     *
+     * @var Hoa_Framework resource
+     */
+    private $_stream              = null;
+
+    /**
+     * Stream name (filename).
+     *
+     * @var Hoa_Framework string
+     */
+    private $_streamName          = null;
+
+    /**
+     * Stream context (given by the streamWrapper class).
+     *
+     * @var Hoa_Framework resource
+     */
+    public $context               = null;
+
+    /**
+     * Parameters of Hoa_Framework.
+     *
+     * @var Hoa_Framework_Parameter object
+     */
+    protected $_parameters = null;
+
+    private static $_instance = null;
+
+
+
+    public static function getInstance ( ) {
+
+        if(null === self::$_instance)
+            self::$_instance = new self();
+
+        return self::$_instance;
+    }
+
+    public function initialize ( Array $parameters = array() ) {
+
+        $root              = dirname(dirname(__FILE__));
+        $this->_parameters = new Hoa_Framework_Parameter(
+            $this,
+            array(),
+            array(
+                'root.framework'     => $root,
+                'root.data'          => dirname($root) . DS . 'Data',
+                'root.application'   => dirname($root) . DS . 'Application',
+
+                'framework.core'     => '(:%root.framework:)' . DS . 'Core',
+                'framework.library'  => '(:%root.framework:)' . DS . 'Library',
+                'framework.module'   => '(:%root.framework:)' . DS . 'Module',
+                'framework.optional' => '(:%root.framework:)' . DS . 'Optional',
+
+                'data.module'        => '(:%root.data:)' . DS . 'Module',
+                'data.optional'      => '(:%root.data:)' . DS . 'Optional',
+            )
+        );
+
+        $this->setParameters($parameters);
+
+        return;
+    }
+
+    /**
+     * Set many parameters to a class.
+     *
+     * @access  public
+     * @param   array   $in      Parameters to set.
+     * @return  void
+     * @throw   Hoa_Exception
+     */
+    public function setParameters ( Array $in ) {
+
+        return $this->_parameters->setParameters($this, $in);
+    }
+
+    /**
+     * Get many parameters from a class.
+     *
+     * @access  public
+     * @return  array
+     * @throw   Hoa_Exception
+     */
+    public function getParameters ( ) {
+
+        return $this->_parameters->getParameters($this);
+    }
+
+    /**
+     * Set a parameter to a class.
+     *
+     * @access  public
+     * @param   string  $key      Key.
+     * @param   mixed   $value    Value.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function setParameter ( $key, $value ) {
+
+        return $this->_parameters->setParameter($this, $key, $value);
+    }
+
+    /**
+     * Get a parameter from a class.
+     *
+     * @access  public
+     * @param   string  $key      Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getParameter ( $key ) {
+
+        return $this->_parameters->getParameter($this, $key);
+    }
+
+    /**
+     * Get a formatted parameter from a class (i.e. zFormat with keywords and
+     * other parameters).
+     *
+     * @access  public
+     * @param   string  $key    Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getFormattedParameter ( $key ) {
+
+        return $this->_parameters->getFormattedParameter($this, $key);
+    }
+
+    /**
+     * Check if a constant is already defined.
+     * If the constant is defined, this method returns false.
+     * Else this method declares the constant.
+     *
+     * @access  public
+     * @param   string  $name     The name of the constant.
+     * @param   string  $value    The value of the constant.
+     * @param   bool    $case     True set the case-insensitive.
+     * @return  bool
+     */
+    public static function _define ( $name = '', $value = '', $case = false) {
+
+        if(!defined($name))
+            return define($name, $value, $case);
+
+        return false;
+    }
+
+    /**
+     * Import a file or a directory.
+     * This method find file, and write some informations (inode, path, and
+     * already imported or not) into an “import register”. If a file is not in
+     * this register, the autoload will return an error.
+     * This method is dependent of include_path (ini_set).
+     *
+     * @access  public
+     * @param   string  $path    Path.
+     * @param   bool    $load    Load file when over.
+     * @param   string  $root    Root.
+     * @return  void
+     * @throw   Hoa_Exception
+     */
+    public static function import ( $path = null, $load = false, $root = null ) {
+
+        static $back = null;
+        static $last = null;
+
+        if(null === $back)
+            if(null === $root)
+                $back = self::getInstance()
+                            ->getFormattedParameter('framework.library');
+            else
+                $back = $root;
+
+        preg_match('#(?:(.*?)(?<!\\\)\.)|(.*)#', $path, $matches);
+
+        $handle = !isset($matches[2]) ? $matches[1] : $matches[2];
+
+        switch($handle) {
+
+            case '~':
+
+                $back .= DS . $last;
+                $path  = substr($path, 2);
+
+                if(   (is_dir($back)           && !empty($path))
+                   || (is_file($back . '.php') &&  empty($path)))
+                    self::import($path, $load);
+              break;
+
+            default:
+
+                if(!empty($path)) {
+
+                    $glob = glob($back . DS . $handle);
+
+                    if(!empty($glob)) {
+
+                        foreach($glob as $i => $found) {
+
+                            $last  = str_replace('.', '\\.', $found);
+                            $last  = substr($last, strrpos($last, DS) + 1);
+                            $tmp   = $back;
+                            $back .= DS . $last;
+                            $foo   = substr($path, strlen($handle) + 1);
+
+                            if(   (is_dir($found)  && !empty($foo))
+                               || (is_file($found) &&  empty($foo)))
+                                self::import(substr($path, strlen($handle) + 1), $load);
+
+                            elseif(is_file($found . '.php')) {
+
+                                $back = $found . '\.php';
+                                self::import(null, $load);
+                            }
+
+                            $back = $tmp;
+                        }
+                    }
+                    else {
+
+                        $back .= DS . $handle;
+                        self::import(null, $load);
+                    }
+                }
+                else {
+
+                    $final = str_replace('\\.', '.', $back);
+                    $back  = null;
+                    $last  = null;
+
+                    if(!file_exists($final))
+                        $final .= '.php';
+
+                    if(!file_exists($final))
+                        throw new Hoa_Exception(
+                            'File %s is not found.', 0, $final);
+
+                    if(false === OS_WIN)
+                        $inode = fileinode($final);
+                    else
+                        $inode = md5($final);
+
+                    if(isset(self::$_importStack[$inode]))
+                        return;
+
+                    self::$_importStack[$inode] = array(
+                        self::IMPORT_PATH => $final,
+                        self::IMPORT_LOAD => $load
+                    );
+
+                    if(true === $load)
+                        require $final;
+                }
+        }
+
+        return;
+    }
+
+    public static function importModule ( $path, $load = false ) {
+
+        $i               = Hoa_Framework::getInstance();
+        $frameworkModule = $i->getFormattedParameter('framework.module');
+        $dataModule      = $i->getFormattedParameter('data.module');
+
+        try {
+
+            self::import($path, $load, $dataModule);
+        }
+        catch ( Hoa_Exception $e ) {
+
+            self::import($path, $load, $frameworkModule);
+        }
+
+        return;
+    }
+
+    /**
+     * If file is imported (via self::import()), the autoload method will
+     * load the file that contains the class $className.
+     *
+     * @access  public
+     * @param   string  $className    Class name.
+     * @return  void
+     */
+    public static function autoload ( $className ) {
+
+        $pos = strpos($className, '_');
+
+        switch(substr($className, 0, $pos)) {
+
+            case 'Hoa':
+                $root = self::getInstance()
+                            ->getFormattedParameter('framework.library');
+              break;
+
+            case 'Hoathis':
+                $root = self::getInstance()
+                            ->getFormattedParameter('module.library');
+              break;
+
+            default:
+                return;
+        }
+
+        // Too bad, because for Hoathis, we could have 2 possible paths.
+
+        $className = substr($className, $pos + 1);
+        $classPath = $root . DS . str_replace('_', DS, $className) . '.php';
+
+        // If it is an entry class.
+        if(!file_exists($classPath)) {
+
+            if(false !== strpos($className, '_'))
+                $className .= substr($className, strrpos($className, '_')); 
+            else
+                $className .= '_' . $className;
+
+            $classPath = $root . DS . str_replace('_', DS, $className) . '.php';
+        }
+
+        if(!file_exists($classPath))
+            return;
+
+        if(false === OS_WIN)
+            $inode = fileinode($classPath);
+        else
+            $inode = md5($classPath);
+
+        if(!isset(self::$_importStack[$inode]))
+            return;
+
+        if(true === self::$_importStack[$inode][self::IMPORT_LOAD])
+            return;
+
+        require self::$_importStack[$inode][self::IMPORT_PATH];
+        self::$_importStack[$inode][self::IMPORT_LOAD] = true;
+
+        return;
+    }
+
+    /**
+     * Get protocol's root.
+     *
+     * @access  public
+     * @return  Hoa_Framework_Protocol_Root
+     */
+    public static function getProtocol ( ) {
+
+        if(null === self::$_root)
+            self::$_root = new Hoa_Framework_Protocol_Root();
+
+        return self::$_root;
+    }
+
+    /**
+     * Get the real path of the given URL.
+     * Could return false if the path cannot be reached.
+     *
+     * @access  public
+     * @param   string  $path    Path (or URL).
+     * @return  mixed
+     */
+    public static function realPath ( $path ) {
+
+        return self::getProtocol()->resolve($path);
+    }
+
+    /**
+     * Close a resource.
+     * This method is called in response to fclose().
+     * All resources that were locked, or allocated, by the wrapper should be
+     * released.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function stream_close ( ) {
+
+        if(true === @fclose($this->getStream())) {
+
+            $this->_stream     = null;
+            $this->_streamName = null;
+        }
+
+        return;
+    }
+
+    /**
+     * Tests for end-of-file on a file pointer.
+     * This method is called in response to feof().
+     *
+     * access   public
+     * @return  bool
+     */
+    public function stream_eof ( ) {
+
+        return feof($this->getStream());
+    }
+
+    /**
+     * Flush the output.
+     * This method is called in respond to fflush().
+     * If we have cached data in our stream but not yet stored it into the
+     * underlying storage, we should do so now.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function stream_flush ( ) {
+
+        return fflush($this->getStream());
+    }
+
+    /**
+     * Advisory file locking.
+     * This method is called in response to flock(), when file_put_contents()
+     * (when flags contains LOCK_EX), stream_set_blocking() and when closing the
+     * stream (LOCK_UN).
+     *
+     * @access  public
+     * @param   int     $operation    Operation is one the following:
+     *                                  * LOCK_SH to acquire a shared lock (reader) ;
+     *                                  * LOCK_EX to acquire an exclusive lock (writer) ;
+     *                                  * LOCK_UN to release a lock (shared or exclusive) ;
+     *                                  * LOCK_NB if we don't want flock() to
+     *                                    block while locking (not supported on
+     *                                    Windows).
+     * @return  bool
+     */
+    public function stream_lock ( $operation ) {
+
+        return flock($this->getStream(), $operation);
+    }
+
+    /**
+     * Open file or URL.
+     * This method is called immediately after the wrapper is initialized (f.e.
+     * by fopen() and file_get_contents()).
+     *
+     * @access  public
+     * @param   string  $path           Specifies the URL that was passed to the
+     *                                  original function.
+     * @param   string  $mode           The mode used to open the file, as
+     *                                  detailed for fopen().
+     * @param   int     $options        Holds additional flags set by the
+     *                                  streams API. It can hold one or more of
+     *                                  the following values OR'd together:
+     *                                    * STREAM_USE_PATH, if path is relative,
+     *                                      search for the resource using the
+     *                                      include_path;
+     *                                    * STREAM_REPORT_ERRORS, if this is
+     *                                    set, you are responsible for raising
+     *                                    errors using trigger_error during
+     *                                    opening the stream. If this is not
+     *                                    set, you should not raise any errors.
+     * @param   string  &$openedPath    If the $path is opened successfully, and
+     *                                  STREAM_USE_PATH is set in $options,
+     *                                  $openedPath should be set to the full
+     *                                  path of the file/resource that was
+     *                                  actually opened.
+     * @return  bool
+     */
+    public function stream_open ( $path, $mode, $options, &$openedPath ) {
+
+        $p = self::realPath($path);
+
+        if(false === $p)
+            return false;
+
+        if(null === $this->context)
+            $openedPath = fopen(
+                $p,
+                $mode,
+                $options & STREAM_USE_PATH
+            );
+        else
+            $openedPath = fopen(
+                $p,
+                $mode,
+                $options & STREAM_USE_PATH,
+                $this->context
+            );
+
+        $this->_stream     = $openedPath;
+        $this->_streamName = $p;
+
+        return true;
+    }
+
+    /**
+     * Read from stream. 
+     * This method is called in response to fread() and fgets().
+     *
+     * @access  public
+     * @param   int     $count    How many bytes of data from the current
+     *                            position should be returned.
+     * @return  string
+     */
+    public function stream_read ( $count ) {
+
+        return fread($this->getStream(), $count);
+    }
+
+    /**
+     * Seek to specific location in a stream.
+     * This method is called in response to fseek().
+     * The read/write position of the stream should be updated according to the
+     * $offset and $whence.
+     *
+     * @access  public
+     * @param   int     $offset    The stream offset to seek to.
+     * @param   int     $whence    Possible values:
+     *                               * SEEK_SET to set position equal to $offset
+     *                                 bytes ;
+     *                               * SEEK_CUR to set position to current
+     *                                 location plus $offsete ;
+     *                               * SEEK_END to set position to end-of-file
+     *                                 plus $offset.
+     * @return  bool
+     */
+    public function stream_seek ( $offset, $whence = SEEK_SET ) {
+
+        return fseek($this->getStream(), $offset, $whence);
+    }
+
+    /**
+     * Retrieve information about a file resource.
+     * This method is called in response to fstat().
+     *
+     * @access  public
+     * @return  array
+     */
+    public function stream_stat ( ) {
+
+        return fstat($this->getStream());
+    }
+
+    /**
+     * Retrieve the current position of a stream.
+     * This method is called in response to ftell().
+     *
+     * @access  public
+     * @return  int
+     */
+    public function stream_tell ( ) {
+
+        return ftell($this->getStream());
+    }
+
+    /**
+     * Write to stream.
+     * This method is called in response to fwrite().
+     *
+     * @access  public
+     * @param   string  $data    Should be stored into the underlying stream.
+     * @return  int
+     */
+    public function stream_write ( $data ) {
+
+        return fwrite($this->getStream(), $data);
+    }
+
+    /**
+     * Close directory handle.
+     * This method is called in to closedir().
+     * Any resources which were locked, or allocated, during opening and use of
+     * the directory stream should be released.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function dir_closedir ( ) {
+
+        if(true === $handle = @closedir($this->getStream())) {
+
+            $this->_stream     = null;
+            $this->_streamName = null;
+        }
+
+        return $handle;
+    }
+
+    /**
+     * Open directory handle.
+     * This method is called in response to opendir().
+     *
+     * @access  public
+     * @param   string  $path       Specifies the URL that was passed to opendir().
+     * @param   int     $options    Whether or not to enforce safe_mode (0x04).
+     *                              It is not used here.
+     * @return  bool
+     */
+    public function dir_opendir ( $path, $options ) {
+
+        $p      = self::realPath($path);
+        $handle = null;
+
+        if(null === $this->context)
+            $handle = @opendir($p, $this->context);
+        else
+            $handle = @opendir($p);
+
+        if(false === $handle)
+            return false;
+
+        $this->_stream     = $handle;
+        $this->_streamName = $p;
+
+        return true;
+    }
+
+    /**
+     * Read entry from directory handle.
+     * This method is called in response to readdir().
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function dir_readdir ( ) {
+
+        return readdir($this->getStream());
+    }
+
+    /**
+     * Rewind directory handle.
+     * This method is called in response to rewinddir().
+     * Should reset the output generated by self::dir_readdir, i.e. the next
+     * call to self::dir_readdir should return the first entry in the location
+     * returned by self::dir_opendir.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function dir_rewinddir ( ) {
+
+        return rewinddir($this->getStream());
+    }
+
+    /**
+     * Create a directory.
+     * This method is called in response to mkdir().
+     *
+     * @access  public
+     * @param   string  $path       Directory which should be created.
+     * @param   int     $mode       The value passed to mkdir().
+     * @param   int     $options    A bitwise mask of values.
+     * @return  bool
+     */
+    public function mkdir ( $path, $mode, $options ) {
+
+        if(null === $this->context)
+            return mkdir(
+                $path,
+                $mode,
+                $option === STREAM_MKDIR_RECURSIVE
+            );
+        else
+            return mkdir(
+                $path,
+                $mode,
+                $option === STREAM_MKDIR_RECURSIVE,
+                $this->context
+            );
+    }
+
+    /**
+     * Rename a file or directory.
+     * This method is called in response to rename().
+     * Should attempt to rename $from to $to.
+     *
+     * @access  public
+     * @param   string  $from    The URL to current file.
+     * @param   string  $to      The URL which $from should be renamed to.
+     * @return  bool
+     */
+    public function rename ( $from, $to ) {
+
+        if(null === $this->context)
+            return rename($from, $to);
+        else
+            return rename($from, $to, $this->context);
+    }
+
+    /**
+     * Remove a directory.
+     * This method is called in response to rmdir().
+     *
+     * @access  public
+     * @param   string  $path       The directory URL which should be removed.
+     * @param   int     $options    A bitwise mask of values. It is not used
+     *                              here.
+     * @return  bool
+     */
+    public function rmdir ( $path, $options ) {
+
+        if(null === $this->context)
+            return rmdir($path);
+        else
+            return rmdir($path, $this->context);
+    }
+
+    /**
+     * Delete a file.
+     * This method is called in response to unlink().
+     *
+     * @access  public
+     * @param   string  $path    The file URL which should be deleted.
+     * @return  bool
+     */
+    public function unlink ( $path ) {
+
+        if(null === $this->context)
+            return unlink($path);
+        else
+            return unlink($path, $this->context);
+    }
+
+    /**
+     * Retrieve information about a file.
+     * This method is called in response to all stat() related functions.
+     *
+     * @access  public
+     * @param   string  $path     The file URL which should be retrieve
+     *                            information about.
+     * @param   int     $flags    Holds additional flags set by the streams API.
+     *                            It can hold one or more of the following
+     *                            values OR'd together.
+     *                            STREAM_URL_STAT_LINK: for resource with the
+     *                            ability to link to other resource (such as an
+     *                            HTTP location: forward, or a filesystem
+     *                            symlink). This flag specified that only
+     *                            information about the link itself should be
+     *                            returned, not the resource pointed to by the
+     *                            link. This flag is set in response to calls to
+     *                            lstat(), is_link(), or filetype().
+     *                            STREAM_URL_STAT_QUIET: if this flag is set,
+     *                            our wrapper should not raise any errors. If
+     *                            this flag is not set, we are responsible for
+     *                            reporting errors using the trigger_error()
+     *                            function during stating of the path.
+     * @return  array
+     */
+    public function url_stat ( $path, $flags ) {
+
+        if(false === $p = self::realPath($path))
+            if($flags & STREAM_URL_STAT_QUIET)
+                return array(); // Not sure…
+            else
+                return trigger_error(
+                    'Path ' . $path . ' cannot be resolved.',
+                    E_WARNING
+                );
+
+        if($flags & STREAM_URL_STAT_LINK)
+            return @lstat($p);
+        else
+            return @stat($p);
+    }
+
+    /**
+     * Get stream resource.
+     *
+     * @access  protected
+     * @return  resource
+     */
+    protected function getStream ( ) {
+
+        return $this->_stream;
+    }
+
+    /**
+     * Get stream name.
+     *
+     * @access  protected
+     * @return  resource
+     */
+    protected function getStreamName ( ) {
+
+        return $this->_streamName;
+    }
+
+    /**
+     * Apply and save a register shutdown function.
+     * It may be analogous to a static __destruct, but it allows us to make more
+     * that a __destruct method.
+     *
+     * @access  public
+     * @param   string  $class     Class.
+     * @param   string  $method    Method.
+     * @return  bool
+     */
+    public static function registerShutdownFunction ( $class = '', $method = '' ) {
+
+        if(!isset(self::$_rsdf[$class][$method])) {
+
+            self::$_rsdf[$class][$method] = true;
+            return register_shutdown_function(array($class, $method));
+        }
+
+        return false;
+    }
+}
+
+/**
  * Class Hoa_Framework_Protocol.
  *
  * Abstract class for all hoa://'s components.
@@ -1915,6 +2053,11 @@ function import ( $path, $load = false ) {
     return Hoa_Framework::import($path, $load);
 }
 
+function importModule ( $path, $load = false ) {
+
+    return Hoa_Framework::importModule($path, $load);
+}
+
 
 /**
  * Register the hoa:// protocol.
@@ -1930,3 +2073,8 @@ spl_autoload_register(array('Hoa_Framework', 'autoload'));
  * Catch uncaught exception.
  */
 set_exception_handler(array('Hoa_Exception', 'handler'));
+
+/**
+ * Then, initialize Hoa.
+ */
+Hoa_Framework::getInstance()->initialize();
