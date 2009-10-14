@@ -4,10 +4,225 @@
 Informations             :
     - repository path    : /Users/hywan/Development/Hoa/Svn/Repository ;
     - path in repository : /Framework/Trunk/ ;
-    - generated at       : 2009-10-08T20:21:07.000000Z.
+    - generated at       : 2009-10-14T23:04:56.000000Z.
 -->
 
 <log>
+  <logentry revision="500">
+    <author>hywan</author>
+    <date>2009-10-14T22:58:52.126108Z</date>
+    <msg>Create the new architecture.</msg>
+    <paths>
+      <path action="A">CHANGELOG.xml</path>
+      <path action="D">Data/Etc/CHANGELOG</path>
+      <path action="D">Data/Etc/CHANGELOG.echo</path>
+      <path action="D">Data/Etc/CHANGELOG.xml</path>
+      <path action="D">Data/Etc/DEPENDENCY</path>
+      <path action="D">Data/Etc/DEPENDENCY.echo</path>
+      <path action="D">Data/Etc/DEPENDENCY.xml</path>
+    </paths>
+  </logentry>
+  <logentry revision="499">
+    <author>hywan</author>
+    <date>2009-10-14T22:57:36.536626Z</date>
+    <msg>Create the new architecture.</msg>
+    <paths>
+      <path action="A">Data/Temporary</path>
+    </paths>
+  </logentry>
+  <logentry revision="498">
+    <author>hywan</author>
+    <date>2009-10-14T22:56:15.758961Z</date>
+    <msg>Create the new architecture.</msg>
+    <paths>
+      <path action="A">Data/Variable/ApplicationSupport</path>
+      <path action="A">Data/Variable/Cache</path>
+      <path action="A">Data/Variable/Database</path>
+      <path action="A">Data/Variable/Log</path>
+      <path action="A">Data/Variable/Private</path>
+      <path action="A">Data/Variable/Private/Acl</path>
+      <path action="A">Data/Variable/Private/Archive</path>
+      <path action="A">Data/Variable/Private/Bench</path>
+      <path action="A">Data/Variable/Private/Cache</path>
+      <path action="A">Data/Variable/Private/Compress</path>
+      <path action="A">Data/Variable/Private/Configuration</path>
+      <path action="A">Data/Variable/Private/Console</path>
+      <path action="A">Data/Variable/Private/Controller</path>
+      <path action="A">Data/Variable/Private/Database</path>
+      <path action="A">Data/Variable/Private/Factory</path>
+      <path action="A">Data/Variable/Private/File</path>
+      <path action="A">Data/Variable/Private/Filter</path>
+      <path action="A">Data/Variable/Private/Form</path>
+      <path action="A">Data/Variable/Private/Graph</path>
+      <path action="A">Data/Variable/Private/I18n</path>
+      <path action="A">Data/Variable/Private/Iterator</path>
+      <path action="A">Data/Variable/Private/Json</path>
+      <path action="A">Data/Variable/Private/Locale</path>
+      <path action="A">Data/Variable/Private/Log</path>
+      <path action="A">Data/Variable/Private/Mail</path>
+      <path action="A">Data/Variable/Private/Memory</path>
+      <path action="A">Data/Variable/Private/Mime</path>
+      <path action="A">Data/Variable/Private/Observer</path>
+      <path action="A">Data/Variable/Private/Php</path>
+      <path action="A">Data/Variable/Private/Pom</path>
+      <path action="A">Data/Variable/Private/Prototype</path>
+      <path action="A">Data/Variable/Private/Registry</path>
+      <path action="A">Data/Variable/Private/Serialize</path>
+      <path action="A">Data/Variable/Private/Service</path>
+      <path action="A">Data/Variable/Private/Session</path>
+      <path action="A">Data/Variable/Private/Socket</path>
+      <path action="A">Data/Variable/Private/StdClass</path>
+      <path action="A">Data/Variable/Private/Stream</path>
+      <path action="A">Data/Variable/Private/Test</path>
+      <path action="A">Data/Variable/Private/Translate</path>
+      <path action="A">Data/Variable/Private/Tree</path>
+      <path action="A">Data/Variable/Private/Uri</path>
+      <path action="A">Data/Variable/Private/Validate</path>
+      <path action="A">Data/Variable/Private/Version</path>
+      <path action="A">Data/Variable/Private/View</path>
+      <path action="A">Data/Variable/Private/Visitor</path>
+      <path action="A">Data/Variable/Private/Xml</path>
+      <path action="A">Data/Variable/Private/XmlRpc</path>
+      <path action="A">Data/Variable/Private/Yaml</path>
+      <path action="A">Data/Variable/Test</path>
+    </paths>
+  </logentry>
+  <logentry revision="497">
+    <author>hywan</author>
+    <date>2009-10-14T22:55:39.805832Z</date>
+    <msg>Create the new architecture.</msg>
+    <paths>
+      <path action="D">Data/Configuration</path>
+      <path action="A">Data/Etc/Cache</path>
+      <path action="A">Data/Etc/Configuration</path>
+      <path action="A">Data/Etc/Locale</path>
+    </paths>
+  </logentry>
+  <logentry revision="496">
+    <author>hywan</author>
+    <date>2009-10-14T22:54:32.922828Z</date>
+    <msg>Create the new architecture.</msg>
+    <paths>
+      <path action="A">Data/Module</path>
+      <path action="A">Data/Optional</path>
+      <path action="D">Data/Private</path>
+      <path action="D">Data/Template</path>
+      <path action="A">Data/Variable</path>
+    </paths>
+  </logentry>
+  <logentry revision="495">
+    <author>hywan</author>
+    <date>2009-10-14T22:52:28.606105Z</date>
+    <msg>Create the new architecture.</msg>
+    <paths>
+      <path action="A">Framework/Core/Exception.php</path>
+      <path action="A">Framework/Core/Framework.php</path>
+      <path action="D">Framework/Library/Exception.php</path>
+      <path action="D">Framework/Library/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="494">
+    <author>hywan</author>
+    <date>2009-10-14T22:51:48.067873Z</date>
+    <msg>Create the new architecture.</msg>
+    <paths>
+      <path action="A">Framework/Core</path>
+      <path action="A">Framework/Module</path>
+      <path action="A">Framework/Optional</path>
+    </paths>
+  </logentry>
+  <logentry revision="493">
+    <author>hywan</author>
+    <date>2009-10-14T22:51:20.017907Z</date>
+    <msg>Create the new architecture.</msg>
+    <paths>
+      <path action="A">Framework/Library</path>
+      <path action="D">Library</path>
+    </paths>
+  </logentry>
+  <logentry revision="492">
+    <author>hywan</author>
+    <date>2009-10-14T22:51:05.801010Z</date>
+    <msg>Create the new architecture.</msg>
+    <paths>
+      <path action="A">Framework</path>
+    </paths>
+  </logentry>
+  <logentry revision="491">
+    <author>hywan</author>
+    <date>2009-10-14T22:50:43.498142Z</date>
+    <msg>Create the new architecture.</msg>
+    <paths>
+      <path action="D">Framework</path>
+      <path action="A">Library</path>
+    </paths>
+  </logentry>
+  <logentry revision="490">
+    <author>hywan</author>
+    <date>2009-10-14T17:41:08.074252Z</date>
+    <msg>Adapt the Hoa_Test package to the new parameters system.</msg>
+    <paths>
+      <path action="M">Framework/Test/Oracle/Eyes.php</path>
+      <path action="M">Framework/Test/Oracle/Oracle.php</path>
+      <path action="D">Framework/Test/Request.php</path>
+      <path action="M">Framework/Test/Test.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="489">
+    <author>hywan</author>
+    <date>2009-10-14T15:54:26.363236Z</date>
+    <msg>Change interface implementation and add needed methods.</msg>
+    <paths>
+      <path action="M">Framework/Database/Dal/Dal.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="488">
+    <author>hywan</author>
+    <date>2009-10-14T15:37:02.071377Z</date>
+    <msg>Add the Identi.ca support in service.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Main/Welcome.php</path>
+      <path action="A">Data/Bin/Command/Service/Identica.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="487">
+    <author>hywan</author>
+    <date>2009-10-09T20:30:49.254058Z</date>
+    <msg>The PHP's bug 40442 is fixed! Remove the “surgical offsetExists() method” ;-). And take the opportunity to clean a bit the code.</msg>
+    <paths>
+      <path action="M">Framework/Registry/Registry.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="486">
+    <author>hywan</author>
+    <date>2009-10-09T20:20:10.851014Z</date>
+    <msg>Adapt the Hoa_Database (and the Hoa_Databse_Dal subpackage) to the new parameters system.</msg>
+    <paths>
+      <path action="M">Framework/Database/Dal/Dal.php</path>
+      <path action="M">Framework/Database/Dal/DalStatement.php</path>
+      <path action="M">Framework/Database/Database.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="485">
+    <author>hywan</author>
+    <date>2009-10-08T20:22:30.953460Z</date>
+    <msg>Temporary commit. Just rewrite a part of the CLI system to be compatible with the recent Hoa changes.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Application/Start.php</path>
+      <path action="M">Data/Bin/Command/Main/Changelog.php</path>
+      <path action="M">Data/Bin/Command/Main/Dependency.php</path>
+      <path action="M">Data/Bin/Command/Main/Root.php</path>
+      <path action="M">Data/Bin/Command/Main/Welcome.php</path>
+      <path action="M">Data/Bin/Hoa.php</path>
+      <path action="M">Data/Bin/Style/Sheet.php</path>
+      <path action="M">Data/Etc/CHANGELOG</path>
+      <path action="M">Data/Etc/CHANGELOG.echo</path>
+      <path action="M">Data/Etc/CHANGELOG.xml</path>
+      <path action="M">Data/Etc/DEPENDENCY</path>
+      <path action="M">Data/Etc/DEPENDENCY.echo</path>
+      <path action="M">Data/Etc/DEPENDENCY.xml</path>
+    </paths>
+  </logentry>
   <logentry revision="484">
     <author>hywan</author>
     <date>2009-10-08T20:21:07.227565Z</date>
