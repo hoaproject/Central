@@ -41,8 +41,7 @@
 /**
  * Set inlucde path.
  */
-ini_set('include_path', dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR .
-                        'Framework' . DIRECTORY_SEPARATOR .
+ini_set('include_path', '../../Framework/Core/' .
                         PATH_SEPARATOR .
                         get_include_path());
 
@@ -52,6 +51,8 @@ ini_set('include_path', dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATO
 ini_set('date.timezone', 'Europe/Paris');
 
 require_once 'Framework.php';
+
+define('HOA_DATA', Hoa_Framework::getInstance()->getFormattedParameter('root.data'));
 
 class Hoa_Framework_Protocol_Data_Etc extends Hoa_Framework_Protocol {
 
