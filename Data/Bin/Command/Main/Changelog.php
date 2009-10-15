@@ -90,6 +90,9 @@ class ChangelogCommand extends Hoa_Console_Command_Abstract {
         $textPlain  = false;
         $withColour = false;
         $file       = 'hoa://Data/Etc/CHANGELOG.xml';
+        $file       = Hoa_Framework::getInstance()
+                        ->getFormattedParameter('root.data')
+                        . '/../CHANGELOG.xml';
 
         if(!file_exists($file))
             throw new Hoa_Console_Command_Exception(
