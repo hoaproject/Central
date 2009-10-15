@@ -1101,9 +1101,24 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
                 $back .= DS . $last;
                 $path  = substr($path, 2);
 
-                if(   (is_dir($back)           && !empty($path))
-                   || (is_file($back . '.php') &&  empty($path)))
+                if(   ($a = is_dir($back)           && !empty($path))
+                   || ($b = is_file($back . '.php') &&  empty($path)))
                     self::import($path, $load);
+                else {
+
+                    $back = null;
+                    $last = null;
+
+                    if(false === $a) {
+                        if(null !== $back)
+                            throw new Hoa_Exception(
+                                'Directory %s is not found, cannot look in it.',
+                                0, $back);
+                    }
+                    else
+                        throw new Hoa_Exception(
+                            'File %s is not found.', 1, $back . '.php');
+                }
               break;
 
             default:
@@ -1140,19 +1155,23 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
                         $back .= DS . $handle;
                         self::import(null, $load);
                     }
+
+                    $back = null;
+                    $last = null;
                 }
                 else {
 
                     $final = str_replace('\\.', '.', $back);
-                    $back  = null;
-                    $last  = null;
+
+                    $back = null;
+                    $last = null;
 
                     if(!file_exists($final))
                         $final .= '.php';
 
                     if(!file_exists($final))
                         throw new Hoa_Exception(
-                            'File %s is not found.', 0, $final);
+                            'File %s is not found.', 2, $final);
 
                     if(false === OS_WIN)
                         $inode = fileinode($final);
@@ -1203,41 +1222,54 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
      */
     public static function autoload ( $className ) {
 
-        $pos = strpos($className, '_');
+        $pos   = strpos($className, '_');
+        $roots = array();
 
         switch(substr($className, 0, $pos)) {
 
             case 'Hoa':
-                $root = self::getInstance()
-                            ->getFormattedParameter('framework.library');
+                $roots[] = self::getInstance()
+                               ->getFormattedParameter('framework.library');
               break;
 
             case 'Hoathis':
-                $root = self::getInstance()
-                            ->getFormattedParameter('module.library');
+                $roots[] = self::getInstance()
+                               ->getFormattedParameter('data.module');
+                $roots[] = self::getInstance()
+                               ->getFormattedParameter('framework.module');
               break;
 
             default:
                 return;
         }
 
-        // Too bad, because for Hoathis, we could have 2 possible paths.
-
         $className = substr($className, $pos + 1);
-        $classPath = $root . DS . str_replace('_', DS, $className) . '.php';
+        $gotcha    = null;
 
-        // If it is an entry class.
-        if(!file_exists($classPath)) {
+        foreach($roots as $i => $root) {
 
-            if(false !== strpos($className, '_'))
-                $className .= substr($className, strrpos($className, '_')); 
-            else
-                $className .= '_' . $className;
+            $handle    = $className;
+            $classPath = $root . DS . str_replace('_', DS, $handle) . '.php';
 
-            $classPath = $root . DS . str_replace('_', DS, $className) . '.php';
+            // If it is an entry class.
+            if(!file_exists($classPath)) {
+
+                if(false !== strpos($handle, '_'))
+                    $handle .= substr($handle, strrpos($handle, '_')); 
+                else
+                    $handle .= '_' . $handle;
+
+                $classPath = $root . DS . str_replace('_', DS, $handle) . '.php';
+            }
+
+            if(file_exists($classPath)) {
+
+                $gotcha = $classPath;
+                break;
+            }
         }
 
-        if(!file_exists($classPath))
+        if(null === $gotcha)
             return;
 
         if(false === OS_WIN)
