@@ -123,6 +123,10 @@ class TwitterCommand extends Hoa_Console_Command_Abstract {
                 'Message length must be lesser than 140 (given %d).',
                 1, strlen($message));
 
+        if(null === $username)
+            throw new Hoa_Console_Exception(
+                'Username cannot be null.', 2);
+
         if(null === $password)
             $password = cin('Password:', Hoa_Console_Core_Io::TYPE_PASSWORD);
 
