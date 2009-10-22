@@ -114,33 +114,44 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
      *
      * @var Hoa_Framework array
      */
-    private static $_importStack  = array();
+    private static $_importStack = array();
 
     /**
      * Stack of all registered shutdown function.
      *
      * @var Hoa_Framework array
      */
-    private static $_rsdf         = array();
+    private static $_rsdf        = array();
 
     /**
      * Tree of components, starts by the root.
      *
      * @var Hoa_Framework_Protocol_Root object
      */
-    private static $_root         = null;
+    private static $_root        = null;
 
     /**
      * Parameters of Hoa_Framework.
      *
      * @var Hoa_Framework_Parameter object
      */
-    protected $_parameters = null;
+    protected $_parameters       = null;
 
-    private static $_instance = null;
+    /**
+     * Singleton.
+     *
+     * @var Hoa_Framework object
+     */
+    private static $_instance    = null;
 
 
 
+    /**
+     * Singleton.
+     *
+     * @access  public
+     * @return  Hoa_Framework
+     */
     public static function getInstance ( ) {
 
         if(null === self::$_instance)
@@ -149,6 +160,13 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
         return self::$_instance;
     }
 
+    /**
+     * Initialize the framework.
+     *
+     * @access  public
+     * @param   array   $parameters    Parameters of Hoa_Framework.
+     * @return  Hoa_Framework
+     */
     public function initialize ( Array $parameters = array() ) {
 
         $root              = dirname(dirname(__FILE__));
@@ -167,12 +185,39 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
 
                 'data.module'        => '(:%root.data:)' . DS . 'Module',
                 'data.optional'      => '(:%root.data:)' . DS . 'Optional',
+
+                'protocol.Application'            => '(:%root.application:)' . DS,
+                'protocol.Data'                   => '(:%root.data:)' . DS,
+                'protocol.Data/Etc'               => '(:%protocol.Data:)' . DS .
+                                                     'Etc' . DS,
+                'protocol.Data/Etc/Configuration' => '(:%protocol.Data/Etc:)' . DS .
+                                                     'Configuration' . DS,
+                'protocol.Data/Etc/Locale'        => '(:%protocol.Data/Etc:)' . DS .
+                                                     'Locale' . DS,
+                'protocol.Data/Lost+found'        => '(:%protocol.Data:)' . DS .
+                                                     'Lost+found' . DS,
+                'protocol.Data/Module'            => '(:%data.module:)' . DS,
+                'protocol.Data/Optional'          => '(:%data.module:)' . DS,
+                'protocol.Data/Variable'          => '(:%protocol.Data:)' . DS .
+                                                     'Variable' . DS,
+                'protocol.Data/Variable/Cache'    => '(:%protocol.Data/Variable:)' . DS .
+                                                     'Cache' . DS,
+                'protocol.Data/Variable/Database' => '(:%protocol.Data/Variable:)' . DS .
+                                                     'Database' . DS,
+                'protocol.Data/Variable/Log'      => '(:%protocol.Data/Variable:)' . DS .
+                                                     'Log' . DS,
+                'protocol.Data/Variable/Private'  => '(:%protocol.Data/Variable:)' . DS .
+                                                     'Private' . DS,
+                'protocol.Data/Variable/Test'     => '(:%protocol.Data/Variable:)' . DS .
+                                                     'Test' . DS,
+                'protocol.Data'                   => '(:%root.data:)' . DS,
+                'protocol.Framework'              => '(:%root.framework:)' . DS
             )
         );
 
         $this->setParameters($parameters);
 
-        return;
+        return $this;
     }
 
     /**
@@ -185,7 +230,12 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
      */
     public function setParameters ( Array $in ) {
 
-        return $this->_parameters->setParameters($this, $in);
+        $handle = $this->_parameters->setParameters($this, $in);
+
+        if(true === $this->_parameters->brancheExists($this, 'protocol', $in))
+            $this->setProtocol();
+
+        return $handle;
     }
 
     /**
@@ -211,7 +261,9 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
      */
     public function setParameter ( $key, $value ) {
 
-        return $this->_parameters->setParameter($this, $key, $value);
+        $handle = $this->_parameters->setParameter($this, $key, $value);
+
+        return $handle;
     }
 
     /**
@@ -239,6 +291,23 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
     public function getFormattedParameter ( $key ) {
 
         return $this->_parameters->getFormattedParameter($this, $key);
+    }
+
+    /**
+     * Set protocol according to the current parameter.
+     *
+     * @access  protected
+     * @return  void
+     */
+    protected function setProtocol ( ) {
+
+        $protocol     = $this->_parameters->unlinearizeBranche($this, 'protocol');
+        $protocolRoot = self::getProtocol();
+
+        foreach($protocol as $path => $reach)
+            $protocolRoot->addComponentHelper($path, $reach);
+
+        return;
     }
 
     /**
