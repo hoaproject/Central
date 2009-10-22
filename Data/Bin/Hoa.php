@@ -51,34 +51,17 @@ ini_set('include_path', dirname(dirname(dirname(__FILE__))) .
  */
 ini_set('date.timezone', 'Europe/Paris');
 
+/**
+ * Hoa_Framework
+ */
 require_once 'Framework.php';
 
-define('HOA_DATA', Hoa_Framework::getInstance()->getFormattedParameter('root.data'));
-
-class Hoa_Framework_Protocol_Data_Etc extends Hoa_Framework_Protocol {
-
-    protected $_name = 'Etc';
-
-    public function reach ( $queue ) {
-
-        return HOA_DATA . '/Etc/' . $queue;
-    }
-}
-
-class Hoa_Framework_Protocol_Data_Bin extends Hoa_Framework_Protocol {
-
-    protected $_name = 'Bin';
-
-    public function reach ( $queue ) {
-
-        return HOA_DATA . '/Bin/' . $queue;
-    }
-}
-
-Hoa_Framework::getProtocol()
-    ->getComponent('Data')
-    ->addComponent(new Hoa_Framework_Protocol_Data_Bin())
-    ->addComponent(new Hoa_Framework_Protocol_Data_Etc());
+/**
+ * Add some components the the hoa://'s protocol.
+ */
+Hoa_Framework::getInstance()->setParameters(array(
+    'protocol.Data/Bin' => '(:%protocol.Data:)' . DS . 'Bin' . DS,
+));
 
 /**
  * Hoa_Console
