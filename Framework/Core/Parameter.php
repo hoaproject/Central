@@ -242,10 +242,32 @@ class Hoa_Framework_Parameter {
 
         $this->check($id, self::PERMISSION_WRITE);
 
-        $this->_parameters = $parameters;
+        $class = str_replace('_', '', get_class($id));
+        $path  = 'hoa://Data/Etc/Configuration/Cache/' . $class . '.php';
 
-        // Before assigning, check if a file does not exist. It has a higher
-        // priority.
+        // FIX ME
+        if(file_exists($path) && $class != 'HoaFramework') {
+
+            $handle = require $path;
+
+            if(!is_array($handle))
+                throw new Hoa_Exception(
+                    'Strange though it may appear, the configuration cache ' .
+                    'file %s appears to be corrupted.', 0, $path);
+
+            if(!array_key_exists('keywords', $handle))
+                throw new Hoa_Exception(
+                    'Need keywords in the configuration cache %s.', 0, $path);
+
+            if(!array_key_exists('parameters', $handle))
+                throw new Hoa_Exception(
+                    'Need parameters in the configuration cache %s.', 0, $path);
+
+            $this->_keywords   = $handle['keywords'];
+            $this->_parameters = $handle['parameters'];
+        }
+        else
+            $this->_parameters = $parameters;
 
         return;
     }
@@ -360,6 +382,34 @@ class Hoa_Framework_Parameter {
             $this->getKeywords($id),
             $this->getParameters($id)
         );
+    }
+
+    /**
+     * Check a branche exists.
+     *
+     * @access  public
+     * @param   object  $id         Owner of friends.
+     * @param   string  $branche    Branche.
+     * @param   array   $tree       Specify a tree if you don't want that the
+     *                              method check in its own parameters.
+     * @return  bool
+     */
+    public function brancheExists ( $id, $branche, Array $tree = array() ) {
+
+        $handle = null;
+
+        if(empty($tree))
+            $handle = $this->getParameters($id);
+        else
+            $handle = $tree;
+
+        $qBranche = preg_quote($branche);
+
+        foreach($handle as $key => $value)
+            if(0 !== preg_match('#^' . $qBranche . '(.*)?#', $key))
+                return true;
+
+        return false;
     }
 
     /**
@@ -626,8 +676,8 @@ class Hoa_Framework_Parameter {
 
                 if(false === array_key_exists($word, $parameters))
                     throw new Hoa_Exception(
-                        'Parameter %s is not found in the parameter rule %s.',
-                        0, array($word, $parameter));
+                        'Parameter %s is not found in parameters.',
+                        0, $word);
 
                 $newParameters = $parameters;
                 unset($newParameters[$word]);
