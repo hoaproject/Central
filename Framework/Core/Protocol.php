@@ -54,6 +54,13 @@ abstract class Hoa_Framework_Protocol {
     protected $_name     = null;
 
     /**
+     * Path for the reach() method.
+     *
+     * @var Hoa_Framework_Protocol string
+     */
+    protected $_reach    = null;
+
+    /**
      * Collections of sub-components.
      *
      * @var Hoa_Framework_Protocol array
@@ -76,15 +83,55 @@ abstract class Hoa_Framework_Protocol {
      * dynamically. So usefull to create components on the fly…
      *
      * @access  public
-     * @param   string  $name    Component's name.
+     * @param   string  $name     Component's name.
+     * @param   string  $reach    Path for the reach() method (usefull for the
+     *                            helper).
      * @return  void
      */
-    public function __construct ( $name = null ) {
+    public function __construct ( $name = null, $reach = null ) {
 
-        if($this->_name == null)
+        if(null === $this->_name)
             $this->_name = $name;
 
+        if(null === $this->_reach)
+            $this->_reach = $reach;
+
         return;
+    }
+
+    /**
+     * Helper for adding component easily.
+     *
+     * @access  public
+     * @param   string  $path     hoa:// path.
+     * @param   string  $reach    Path for the reach() method.
+     * @return  Hoa_Framework_Protocol
+     */
+    public function addComponentHelper ( $path, $reach ) {
+
+        $components = explode('/', $path);
+        $current    = Hoa_Framework::getProtocol();
+        $handle     = null;
+        $max        = count($components) - 1;
+
+        foreach($components as $i => $component) {
+
+            if($current->componentExists($component)) {
+
+                $current = $current->getComponent($component);
+                continue;
+            }
+
+            if($i != $max)
+                $handle = new Hoa_Framework_Protocol_Generic($component);
+            else
+                $handle = new Hoa_Framework_Protocol_Generic($component, $reach);
+
+            $current->addComponent($handle);
+            $current = $handle;
+        }
+
+        return $this;
     }
 
     /**
@@ -93,8 +140,15 @@ abstract class Hoa_Framework_Protocol {
      * @access  public
      * @param   Hoa_Framework_Protocol  $component    Component to add.
      * @return  Hoa_Framework_Protocol
+     * @throws  Hoa_Exception
      */
     public function addComponent ( Hoa_Framework_Protocol $component ) {
+
+        $name = $component->getName();
+
+        if(empty($name))
+            throw new Hoa_Exception(
+                'Cannot add a component to the protocol hoa:// with an name.', 0);
 
         $this->_components[$component->getName()] = $component;
 
@@ -150,8 +204,15 @@ abstract class Hoa_Framework_Protocol {
         else
             $next = $path;
 
-        if(true === $this->componentExists($next))
-            return $this->getComponent($next)->resolve(substr($path, $pos + 1));
+        if(true === $this->componentExists($next)) {
+
+            $handle = substr($path, $pos + 1);
+
+            if(false === $handle)
+                return $this->reach($path);
+
+            return $this->getComponent($next)->resolve($handle);
+        }
 
         return $this->reach($path);
     }
@@ -167,7 +228,7 @@ abstract class Hoa_Framework_Protocol {
      */
     public function reach ( $queue ) {
 
-        return $queue;
+        return $this->_reach . $queue;
     }
 
     /**
@@ -203,6 +264,22 @@ abstract class Hoa_Framework_Protocol {
         return $out;
     }
 }
+
+/**
+ * Class Hoa_Framework_Protocol_Generic.
+ *
+ * hoa://'s protocol's generic component.
+ *
+ * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
+ * @license     http://gnu.org/licenses/gpl.txt GNU GPL
+ * @since       PHP5
+ * @version     0.3
+ * @package     Hoa_Framework_Protocol
+ * @subpackage  Hoa_Framework_Protocol_Generic
+ */
+
+class Hoa_Framework_Protocol_Generic extends Hoa_Framework_Protocol { }
 
 /**
  * Class Hoa_Framework_Protocol_Root.
