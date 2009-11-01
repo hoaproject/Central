@@ -623,7 +623,7 @@ class Hoa_Framework_Parameter {
      *     * file:        '/a/file/20090505/wor.21', get date constants, then
      *                    get the tail of the path and remove extension twice,
      *                    and add the extension of power;
-     *     * recursion:   'oofarbaz', get 'arbar' first, and then, replace the
+     *     * recursion:   'oofarBaz', get 'arbar' first, and then, replace the
      *                    suffix 'ar' by 'az'.
      *
      * @access  public
