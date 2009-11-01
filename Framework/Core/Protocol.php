@@ -47,6 +47,20 @@
 abstract class Hoa_Framework_Protocol {
 
     /**
+     * Overwrite components if already exists.
+     *
+     * @const bool
+     */
+    const OVERWRITE        = true;
+
+    /**
+     * Do not overwrite components if already exists.
+     *
+     * @const bool
+     */
+    const DO_NOT_OVERWRITE = false;
+
+    /**
      * Component's name.
      *
      * @var Hoa_Framework_Protocol string
@@ -103,11 +117,14 @@ abstract class Hoa_Framework_Protocol {
      * Helper for adding component easily.
      *
      * @access  public
-     * @param   string  $path     hoa:// path.
-     * @param   string  $reach    Path for the reach() method.
+     * @param   string  $path         hoa:// path.
+     * @param   string  $reach        Path for the reach() method.
+     * @param   bool    $overwrite    Overwrite existing components (please, see
+     *                                self::*_OVERWRITE constants).
      * @return  Hoa_Framework_Protocol
      */
-    public function addComponentHelper ( $path, $reach ) {
+    public function addComponentHelper ( $path, $reach,
+                                         $overwrite = self::DO_NOT_OVERWRITE ) {
 
         $components = explode('/', $path);
         $current    = Hoa_Framework::getProtocol();
@@ -116,7 +133,8 @@ abstract class Hoa_Framework_Protocol {
 
         foreach($components as $i => $component) {
 
-            if($current->componentExists($component)) {
+            if(   $current->componentExists($component)
+               && self::DO_NOT_OVERWRITE === $overwrite) {
 
                 $current = $current->getComponent($component);
                 continue;

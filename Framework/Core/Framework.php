@@ -303,7 +303,11 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
         $protocolRoot = self::getProtocol();
 
         foreach($protocol as $path => $reach)
-            $protocolRoot->addComponentHelper($path, $reach);
+            $protocolRoot->addComponentHelper(
+                $path,
+                $reach,
+                Hoa_Framework_Protocol::OVERWRITE
+            );
 
         return;
     }
