@@ -75,7 +75,7 @@ import('Database.Cache.Table');
  * @package     Hoa_Database
  */
 
-class Hoa_Database extends Hoa_Framework_Parameterizable {
+class Hoa_Database implements Hoa_Framework_Parameterizable {
 
     /**
      * Singleton.
