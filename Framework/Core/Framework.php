@@ -230,12 +230,7 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
      */
     public function setParameters ( Array $in ) {
 
-        $handle = $this->_parameters->setParameters($this, $in);
-
-        if(true === $this->_parameters->brancheExists($this, 'protocol', $in))
-            $this->setProtocol();
-
-        return $handle;
+        return $this->_parameters->setParameters($this, $in);
     }
 
     /**
