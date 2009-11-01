@@ -260,6 +260,7 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
     public function setParameter ( $key, $value ) {
 
         $handle = $this->_parameters->setParameter($this, $key, $value);
+        $this->setProtocol();
 
         return $handle;
     }
