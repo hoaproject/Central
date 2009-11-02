@@ -104,10 +104,10 @@ abstract class Hoa_Framework_Protocol {
      */
     public function __construct ( $name = null, $reach = null ) {
 
-        if(null === $this->_name)
+        if(null !== $name)
             $this->_name = $name;
 
-        if(null === $this->_reach)
+        if(null !== $reach)
             $this->_reach = $reach;
 
         return;
@@ -133,8 +133,9 @@ abstract class Hoa_Framework_Protocol {
 
         foreach($components as $i => $component) {
 
-            if(   $current->componentExists($component)
-               && self::DO_NOT_OVERWRITE === $overwrite) {
+            if(    $current->componentExists($component)
+               && (self::DO_NOT_OVERWRITE === $overwrite
+               ||  $i != $max)) {
 
                 $current = $current->getComponent($component);
                 continue;
