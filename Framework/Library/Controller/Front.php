@@ -192,7 +192,7 @@ class Hoa_Controller_Front implements Hoa_Framework_Parameterizable {
                 'view.directory'        => 'hoa://Application/View/(:%view.theme:)/',
                 'view.layout.file'      => '(:view.layout:U:).phtml',
                 'view.layout.enable'    => true,
-                'view.action'           => '(:controller:U:)/(:action:U:).phtml',
+                'view.action'           => '(:controller:U:)/(:action:U:).phtml'
             )
         );
 
