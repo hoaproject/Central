@@ -188,27 +188,27 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
 
                 'protocol.Application'            => '(:%root.application:)' . DS,
                 'protocol.Data'                   => '(:%root.data:)' . DS,
-                'protocol.Data/Etc'               => '(:%protocol.Data:)' . DS .
+                'protocol.Data/Etc'               => '(:%protocol.Data:)' .
                                                      'Etc' . DS,
-                'protocol.Data/Etc/Configuration' => '(:%protocol.Data/Etc:)' . DS .
+                'protocol.Data/Etc/Configuration' => '(:%protocol.Data/Etc:)' .
                                                      'Configuration' . DS,
-                'protocol.Data/Etc/Locale'        => '(:%protocol.Data/Etc:)' . DS .
+                'protocol.Data/Etc/Locale'        => '(:%protocol.Data/Etc:)' .
                                                      'Locale' . DS,
-                'protocol.Data/Lost+found'        => '(:%protocol.Data:)' . DS .
+                'protocol.Data/Lost+found'        => '(:%protocol.Data:)' .
                                                      'Lost+found' . DS,
                 'protocol.Data/Module'            => '(:%data.module:)' . DS,
                 'protocol.Data/Optional'          => '(:%data.module:)' . DS,
-                'protocol.Data/Variable'          => '(:%protocol.Data:)' . DS .
+                'protocol.Data/Variable'          => '(:%protocol.Data:)' .
                                                      'Variable' . DS,
-                'protocol.Data/Variable/Cache'    => '(:%protocol.Data/Variable:)' . DS .
+                'protocol.Data/Variable/Cache'    => '(:%protocol.Data/Variable:)' .
                                                      'Cache' . DS,
-                'protocol.Data/Variable/Database' => '(:%protocol.Data/Variable:)' . DS .
+                'protocol.Data/Variable/Database' => '(:%protocol.Data/Variable:)' .
                                                      'Database' . DS,
-                'protocol.Data/Variable/Log'      => '(:%protocol.Data/Variable:)' . DS .
+                'protocol.Data/Variable/Log'      => '(:%protocol.Data/Variable:)' .
                                                      'Log' . DS,
-                'protocol.Data/Variable/Private'  => '(:%protocol.Data/Variable:)' . DS .
+                'protocol.Data/Variable/Private'  => '(:%protocol.Data/Variable:)' .
                                                      'Private' . DS,
-                'protocol.Data/Variable/Test'     => '(:%protocol.Data/Variable:)' . DS .
+                'protocol.Data/Variable/Test'     => '(:%protocol.Data/Variable:)' .
                                                      'Test' . DS,
                 'protocol.Data'                   => '(:%root.data:)' . DS,
                 'protocol.Framework'              => '(:%root.framework:)' . DS
