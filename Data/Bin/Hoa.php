@@ -59,9 +59,9 @@ require_once 'Framework.php';
 /**
  * Add some components the the hoa://'s protocol.
  */
-Hoa_Framework::getInstance()->setParameters(array(
-    'protocol.Data/Bin' => '(:%protocol.Data:)' . DS . 'Bin' . DS,
-));
+Hoa_Framework::getInstance()->setParameter(
+    'protocol.Data/Bin', '(:%protocol.Data:)' . 'Bin' . DS
+);
 
 /**
  * Hoa_Console
