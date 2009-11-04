@@ -172,11 +172,14 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
         $root              = dirname(dirname(__FILE__));
         $this->_parameters = new Hoa_Framework_Parameter(
             $this,
-            array(),
             array(
-                'root.framework'     => $root,
-                'root.data'          => dirname($root) . DS . 'Data',
-                'root.application'   => dirname($root) . DS . 'Application',
+                'root.ofFrameworkDirectory' => $root
+            ),
+            array(
+                'root'               => '(:root.ofFrameworkDirectory:)',
+                'root.framework'     => '(:%root:)',
+                'root.data'          => '(:%root:h:)' . DS . 'Data',
+                'root.application'   => '(:%root:h:)' . DS . 'Application',
 
                 'framework.core'     => '(:%root.framework:)' . DS . 'Core',
                 'framework.library'  => '(:%root.framework:)' . DS . 'Library',
@@ -213,6 +216,12 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
                 'protocol.Data'                   => '(:%root.data:)' . DS,
                 'protocol.Framework'              => '(:%root.framework:)' . DS
             )
+        );
+
+        $this->_parameters->setKeyword(
+            $this,
+            'root.ofFrameworkDirectory',
+            $root
         );
 
         $this->setParameters($parameters);
@@ -334,7 +343,7 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
 
     /**
      * Import a file or a directory.
-     * This method find file, and write some informations (inode, path, and
+     * This method finds file, and write some informations (inode, path and
      * already imported or not) into an “import register”. If a file is not in
      * this register, the autoload will return an error.
      * This method is dependent of include_path (ini_set).
@@ -346,7 +355,7 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
      * @return  void
      * @throw   Hoa_Exception
      */
-    public static function import ( $path = null, $load = false, $root = null ) {
+    protected static function _import ( $path = null, $load = false, $root = null ) {
 
         static $back = null;
         static $last = null;
@@ -371,7 +380,7 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
 
                 if(   ($a = is_dir($back)           && !empty($path))
                    || ($b = is_file($back . '.php') &&  empty($path)))
-                    self::import($path, $load);
+                    self::_import($path, $load);
                 else {
 
                     $back = null;
@@ -407,12 +416,12 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
 
                             if(   (is_dir($found)  && !empty($foo))
                                || (is_file($found) &&  empty($foo)))
-                                self::import(substr($path, strlen($handle) + 1), $load);
+                                self::_import(substr($path, strlen($handle) + 1), $load);
 
                             elseif(is_file($found . '.php')) {
 
                                 $back = $found . '\.php';
-                                self::import(null, $load);
+                                self::_import(null, $load);
                             }
 
                             $back = $tmp;
@@ -421,7 +430,7 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
                     else {
 
                         $back .= DS . $handle;
-                        self::import(null, $load);
+                        self::_import(null, $load);
                     }
 
                     $back = null;
@@ -462,6 +471,29 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
         return;
     }
 
+    /**
+     * Import a class of a package (it words like the self::_import() method).
+     *
+     * @access  public
+     * @param   string  $path    Path.
+     * @param   bool    $load    Load file when over.
+     * @return  void
+     * @throw   Hoa_Exception
+     */
+    public static function import ( $path, $load = false ) {
+
+        return self::_import($path, $load);
+    }
+
+    /**
+     * Import a module (it works like the self::_import() method).
+     *
+     * @access  public
+     * @param   string  $path    Path.
+     * @param   bool    $load    Load file when over.
+     * @return  void
+     * @throw   Hoa_Exception
+     */
     public static function importModule ( $path, $load = false ) {
 
         $i               = Hoa_Framework::getInstance();
@@ -470,11 +502,11 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
 
         try {
 
-            self::import($path, $load, $dataModule);
+            self::_import($path, $load, $dataModule);
         }
         catch ( Hoa_Exception $e ) {
 
-            self::import($path, $load, $frameworkModule);
+            self::_import($path, $load, $frameworkModule);
         }
 
         return;
