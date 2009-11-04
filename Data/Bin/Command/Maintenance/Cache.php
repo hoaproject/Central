@@ -93,7 +93,7 @@ class CacheCommand extends Hoa_Console_Command_Abstract {
             'hoa://Data/Etc/Configuration/'
         );
         $files         = glob($configuration . DS . '*.json');
-        $cache         = $configuration . DS . 'Cache' . DS;
+        $cache         = $configuration . DS . '.Cache' . DS;
 
         foreach($files as $i => $file)
             parent::status(
