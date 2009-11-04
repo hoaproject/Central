@@ -92,13 +92,11 @@ class Hoa_Filter_Array extends Hoa_Filter_Abstract {
         $filters    = $this->getFilterArgument('filters');
         $lastFilter = current($filters);
 
-        foreach($filters as $key => &$filter) {
-
+        foreach($filters as $key => &$filter)
             if($filter === null)
                 $filter     = $lastFilter;
             else
                 $lastFilter = $filters[$key];
-        }
 
         foreach($string as $key => &$value) {
 

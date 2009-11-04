@@ -63,7 +63,7 @@ abstract class Hoa_Filter_Abstract {
      *
      * @var Hoa_Filter_Abstract array
      */
-    protected $arguments = array();
+    protected $arguments     = array();
 
     /**
      * The filter arguments.
@@ -109,7 +109,7 @@ abstract class Hoa_Filter_Abstract {
         $message = get_class($this) . ' needs parameters :' . "\n  - " .
                    implode("\n" . '  - ', $needed);
 
-        throw new Hoa_Filter_Exception($message, 2);
+        throw new Hoa_Filter_Exception($message, 0);
 
         return false;
     }
@@ -145,7 +145,7 @@ abstract class Hoa_Filter_Abstract {
         if(   null !== $this->filterArguments[$name]
            && !isset($this->filterArguments[$name]))
             throw new Hoa_Filter_Exception(
-                'The argument %s does not exit.', 3, $name);
+                'The argument %s does not exit.', 1, $name);
 
         return $this->filterArguments[$name];
     }
