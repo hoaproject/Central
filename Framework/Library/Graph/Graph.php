@@ -52,7 +52,7 @@ import('Factory.~');
  * Get instance of different graph type.
  * When getting an instance of a type of a graph, the graph type (e.g.
  * Hoa_Graph_AdjacencyList) extends this class. It is like an abstract
- * factory …
+ * factory…
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
