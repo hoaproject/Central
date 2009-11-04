@@ -92,7 +92,7 @@ abstract class Hoa_Framework_Protocol {
 
     /**
      * Construct a protocol's component.
-     * If it is not a data object (i.e. if it is extends this class to overload
+     * If it is not a data object (i.e. if it is not extend this class to overload
      * the $this->_name property), we can set the $this->_name property
      * dynamically. So usefull to create components on the fly…
      *
@@ -186,7 +186,7 @@ abstract class Hoa_Framework_Protocol {
 
         if(false === $this->componentExists($component))
             throw new Hoa_Exception(
-                'Component %s does not exist.', 0, $component);
+                'Component %s does not exist.', 1, $component);
 
         return $this->_components[$component];
     }

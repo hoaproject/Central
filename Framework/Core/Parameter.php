@@ -28,6 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Framework
+ * @subpackage  Hoa_Framework_Parameter
  *
  */
 
@@ -35,23 +36,6 @@
  * Hoa_Exception
  */
 require_once 'Exception.php';
-
-/**
- * Interface Hoa_Framework_Parameterizable.
- *
- * Interface for all classes or packages that are parameterizable.
- *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP5
- * @version     0.1
- * @package     Hoa_Framework_Parameterizable
- */
-
-interface   Hoa_Framework_Parameterizable
-    extends Hoa_Framework_Parameterizable_Readable,
-            Hoa_Framework_Parameterizable_Writable { }
 
 /**
  * Interface Hoa_Framework_Parameterizable_Readable.
@@ -63,7 +47,7 @@ interface   Hoa_Framework_Parameterizable
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP5
  * @version     0.1
- * @package     Hoa_Framework_Parameterizable
+ * @package     Hoa_Framework_Parameter
  * @subpackage  Hoa_Framework_Parameterizable_Readable
  */
 
@@ -82,7 +66,7 @@ interface Hoa_Framework_Parameterizable_Readable {
      * Get a parameter from a class.
      *
      * @access  public
-     * @param   string  $key      Key.
+     * @param   string  $key    Key.
      * @return  mixed
      * @throw   Hoa_Exception
      */
@@ -110,7 +94,7 @@ interface Hoa_Framework_Parameterizable_Readable {
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP5
  * @version     0.1
- * @package     Hoa_Framework_Parameterizable
+ * @package     Hoa_Framework_Parameter
  * @subpackage  Hoa_Framework_Parameterizable_Writable
  */
 
@@ -120,7 +104,7 @@ interface Hoa_Framework_Parameterizable_Writable {
      * Set many parameters to a class.
      *
      * @access  public
-     * @param   array   $in      Parameters to set.
+     * @param   array   $in    Parameters to set.
      * @return  void
      * @throw   Hoa_Exception
      */
@@ -139,17 +123,36 @@ interface Hoa_Framework_Parameterizable_Writable {
 }
 
 /**
- * Class Hoa_Framework_Parameter.
+ * Interface Hoa_Framework_Parameterizable.
  *
- * The parameter object, contains a set of parameter. It can be shared with
- * other class with permissions (read, write or both).
+ * Interface for all classes or packages that are parameterizable.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP5
  * @version     0.1
- * @package     Hoa_Framework_Protocol
+ * @package     Hoa_Framework_Parameter
+ * @subpackage  Hoa_Framework_Parameterizable
+ */
+
+interface   Hoa_Framework_Parameterizable
+    extends Hoa_Framework_Parameterizable_Readable,
+            Hoa_Framework_Parameterizable_Writable { }
+
+/**
+ * Class Hoa_Framework_Parameter.
+ *
+ * The parameter object, contains a set of parameters. It can be shared with
+ * other class with permissions (read, write, shared or combinations of these
+ * ones).
+ *
+ * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
+ * @license     http://gnu.org/licenses/gpl.txt GNU GPL
+ * @since       PHP5
+ * @version     0.1
+ * @package     Hoa_Framework_Parameter
  */
 
 class Hoa_Framework_Parameter {
@@ -243,14 +246,14 @@ class Hoa_Framework_Parameter {
         $this->check($id, self::PERMISSION_WRITE);
 
         $class = str_replace('_', '', get_class($id));
-        $path  = 'hoa://Data/Etc/Configuration/Cache/' . $class . '.php';
+        $path  = 'hoa://Data/Etc/Configuration/.Cache/' . $class . '.php';
 
         if($class == 'HoaFramework')
             $path = self::zFormat(
                 $parameters['protocol.Data/Etc/Configuration'],
                 $this->getKeywords($id),
                 $parameters
-            ) . DS . 'Cache' . DS . $class . '.php';
+            ) . DS . '.Cache' . DS . $class . '.php';
 
         if(file_exists($path)) {
 
@@ -295,8 +298,8 @@ class Hoa_Framework_Parameter {
      * Set many parameters to a class.
      *
      * @access  public
-     * @param   object  $id      Owner or friends.
-     * @param   array   $in      Parameters to set.
+     * @param   object  $id    Owner or friends.
+     * @param   array   $in    Parameters to set.
      * @return  void
      * @throw   Hoa_Exception
      */
@@ -312,7 +315,7 @@ class Hoa_Framework_Parameter {
      * Get many parameters from a class.
      *
      * @access  public
-     * @param   object  $id      Owner or friends.
+     * @param   object  $id    Owner or friends.
      * @return  array
      * @throw   Hoa_Exception
      */
@@ -351,8 +354,8 @@ class Hoa_Framework_Parameter {
      * Get a parameter from a class.
      *
      * @access  public
-     * @param   object  $id       Owner or friends.
-     * @param   string  $key      Key.
+     * @param   object  $id     Owner or friends.
+     * @param   string  $key    Key.
      * @return  mixed
      * @throw   Hoa_Exception
      */
@@ -371,8 +374,8 @@ class Hoa_Framework_Parameter {
      * other parameters).
      *
      * @access  public
-     * @param   object  $id       Owner or friends.
-     * @param   string  $key      Key.
+     * @param   object  $id     Owner or friends.
+     * @param   string  $key    Key.
      * @return  mixed
      * @throw   Hoa_Exception
      */
@@ -832,7 +835,7 @@ class Hoa_Framework_Parameter {
                 'Hoa_Framework_Parameterizable, ' .
                 'Hoa_Framework_Parameterizable_Readable or ' .
                 'Hoa_Framework_Parameterizable_Writable interfaces.',
-                0, $id);
+                3, $id);
 
         $iid = get_class($id);
 
@@ -842,7 +845,7 @@ class Hoa_Framework_Parameter {
         if(!array_key_exists($iid, $this->_friends))
             throw new Hoa_Exception(
                 'Class %s is not friend of %s and cannot share its parameters.',
-                0, array($iid, $this->_owner));
+                4, array($iid, $this->_owner));
 
         $p = $this->_friends[$iid];
 
@@ -850,15 +853,15 @@ class Hoa_Framework_Parameter {
             if(0 !== $permissions & self::PERMISSION_READ)
                 throw new Hoa_Exception(
                     'Class %s does not have permission to read parameters ' .
-                    'from %s.', 1, array($iid, $this->_owner));
+                    'from %s.', 5, array($iid, $this->_owner));
             elseif(0 !== $permissions & self::PERMISSION_WRITE)
                 throw new Hoa_Exception(
                     'Class %s does not have permission to write parameters ' .
-                    'from %s.', 2, array($iid, $this->_owner));
+                    'from %s.', 6, array($iid, $this->_owner));
             else
                 throw new Hoa_Exception(
                     'Class %s does not have permission to share parameters ' .
-                    'from %s.', 3, array($iid, $this->_owner));
+                    'from %s.', 7, array($iid, $this->_owner));
 
         return true;
     }

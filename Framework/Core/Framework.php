@@ -71,7 +71,7 @@ require_once 'Protocol.php';
  * Check if Hoa was well-included.
  */
 !(
-    !defined('HOA')         and define('HOA', true)
+    !defined('HOA')         and define('HOA',       true)
 )
 and
     exit('The Hoa framework main file (Framework.php) must be included once.');
@@ -83,13 +83,12 @@ and
  * Hoa_Framework is the framework package manager.
  * Each package must include Hoa_Framework, because it is the “taproot” of the
  * framework.
- * And build the hoa:// protocol.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP5
- * @version     0.3
+ * @version     0.5
  * @package     Hoa_Framework
  */
 
@@ -233,7 +232,7 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
      * Set many parameters to a class.
      *
      * @access  public
-     * @param   array   $in      Parameters to set.
+     * @param   array   $in    Parameters to set.
      * @return  void
      * @throw   Hoa_Exception
      */
@@ -278,7 +277,7 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
      * Get a parameter from a class.
      *
      * @access  public
-     * @param   string  $key      Key.
+     * @param   string  $key    Key.
      * @return  mixed
      * @throw   Hoa_Exception
      */
@@ -513,7 +512,7 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
     }
 
     /**
-     * If file is imported (via self::import()), the autoload method will
+     * If file is imported (via self::_import()), the autoload method will
      * load the file that contains the class $className.
      *
      * @access  public
@@ -653,6 +652,14 @@ function import ( $path, $load = false ) {
     return Hoa_Framework::import($path, $load);
 }
 
+/**
+ * Alias of Hoa_Framework::importModule().
+ *
+ * @access  public
+ * @param   string  $path    Path.
+ * @param   bool    $load    Load file when over.
+ * @return  bool
+ */
 function importModule ( $path, $load = false ) {
 
     return Hoa_Framework::importModule($path, $load);
@@ -663,11 +670,6 @@ function importModule ( $path, $load = false ) {
  * Set the default autoload.
  */
 spl_autoload_register(array('Hoa_Framework', 'autoload'));
-
-/**
- * Catch uncaught exception.
- */
-set_exception_handler(array('Hoa_Exception', 'handler'));
 
 /**
  * Then, initialize Hoa.

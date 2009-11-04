@@ -42,8 +42,8 @@
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Exception
- * @subpackage  Exception
+ * @package     Hoa_Framework
+ * @subpackage  Hoa_Framework_Exception
  */
 
 class Hoa_Exception extends Exception {
@@ -192,3 +192,9 @@ class Hoa_Exception extends Exception {
         return $this->raiseError(self::ERROR_RETURN);
     }
 }
+
+
+/**
+ * Catch uncaught exception.
+ */
+set_exception_handler(array('Hoa_Exception', 'handler'));
