@@ -166,7 +166,7 @@ class Hoa_Database implements Hoa_Framework_Parameterizable {
             self::$_instance = new self($parameters);
 
             if(null === $autoload = self::$_instance->getParameter('connection.autoload'))
-                return;
+                return self::$_instance;
 
             Hoa_Database_Dal::getInstance($autoload);
         }
