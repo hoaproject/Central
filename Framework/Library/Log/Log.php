@@ -42,11 +42,6 @@ require_once 'Framework.php';
 import('Log.Exception');
 
 /**
- * Hoa_Framework_Protocol_Framework_Package_Log
- */
-import('Log._Protocol', true);
-
-/**
  * Hoa_Log_Backtrace
  */
 import('Log.Backtrace');
@@ -216,6 +211,13 @@ class Hoa_Log {
      */
     protected $_filters        = null;
 
+    /**
+     * Extra stack informations.
+     *
+     * @var Hoa_Log array
+     */
+    protected $_stackInfos     = array();
+
 
 
     /**
@@ -227,7 +229,11 @@ class Hoa_Log {
      */
     private function __construct ( $stream = null ) {
 
-        $this->addOutputStreams($stream);
+        if(!is_array($stream))
+            $this->addOutputStream($stream);
+        else
+            $this->addOutputStreams($stream);
+
         $this->_backtrace = new Hoa_Log_Backtrace();
     }
 
@@ -262,10 +268,7 @@ class Hoa_Log {
      * @param   array   $streams    Array of output streams.
      * @return  array
      */
-    public function addOutputStreams ( $streams ) {
-
-        if(!is_array($streams))
-            $streams = array($streams);
+    public function addOutputStreams ( Array $streams ) {
 
         foreach($streams as $i => $stream)
             $this->addOutputStream($stream);
@@ -381,6 +384,47 @@ class Hoa_Log {
     }
 
     /**
+     * Add extra stack informations.
+     *
+     * @access  public
+     * @param   array   $stackInfos    Stack informations.
+     * @return  array
+     */
+    public function addStackInformations ( Array $stackInfos ) {
+
+        foreach($stackInfos as $key => $value)
+            $this->addStackInformation($key, $value);
+
+        return $this->getAddedStackInformations();
+    }
+
+    /**
+     * Add an extra stack information.
+     *
+     * @access  public
+     * @param   string  $key      Information name.
+     * @param   string  $value    Information value.
+     * @return  array
+     */
+    public function addStackInformation ( $key, $value ) {
+
+        $this->_stackInfos[$key] = $value;
+
+        return $this->getAddedStackInformations();
+    }
+
+    /**
+     * Get extra stack informations.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getAddedStackInformations ( ) {
+
+        return $this->_stackInfos;
+    }
+
+    /**
      * Log a message with a type.
      *
      * @access  public
@@ -391,19 +435,22 @@ class Hoa_Log {
      */
     public function log ( $message, $type = self::DEBUG ) {
 
-        $handle  = $this->_stack[] = array(
+        $handle = $this->_stack[] = array(
             self::STACK_TIMESTAMP   => microtime(true),
             self::STACK_MESSAGE     => $message,
             self::STACK_PRIORITY    => $type,
             self::STACK_MEMORY      => memory_get_usage(),
             self::STACK_MEMORY_PEAK => memory_get_peak_usage()
-        );
+        ) + $this->getAddedStackInformations();
 
         $filters = $this->getFilters();
 
         foreach($this->getOutputsStack() as $i => $output)
-            if($type & $filters || null === $filters)
-                $output->writeArray($handle . "\n");
+            if($type & $filters || null === $filters) {
+
+                $output->writeArray($handle);
+                $output->writeAll("\n");
+            }
 
         if($type & self::DEBUG)
             $this->_backtrace->debug();
