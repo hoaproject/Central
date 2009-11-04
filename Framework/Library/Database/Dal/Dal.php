@@ -269,7 +269,7 @@ class Hoa_Database_Dal implements Hoa_Framework_Parameterizable_Readable {
      * Get a parameter from a class.
      *
      * @access  public
-     * @param   string  $key      Key.
+     * @param   string  $key    Key.
      * @return  mixed
      * @throw   Hoa_Exception
      */

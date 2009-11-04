@@ -201,7 +201,7 @@ class Hoa_Database implements Hoa_Framework_Parameterizable {
      * Set many parameters to a class.
      *
      * @access  public
-     * @param   array   $in      Parameters to set.
+     * @param   array   $in    Parameters to set.
      * @return  void
      * @throw   Hoa_Exception
      */
@@ -240,7 +240,7 @@ class Hoa_Database implements Hoa_Framework_Parameterizable {
      * Get a parameter from a class.
      *
      * @access  public
-     * @param   string  $key      Key.
+     * @param   string  $key    Key.
      * @return  mixed
      * @throw   Hoa_Exception
      */
@@ -287,7 +287,7 @@ class Hoa_Database implements Hoa_Framework_Parameterizable {
         if(!class_exists($class))
             throw new Hoa_Database_Exception(
                 'Cannot find the base class %s in %s.',
-                2, array($class, $directory . $file));
+                1, array($class, $directory . $file));
 
         $this->setKeyword($oldBase);
 
@@ -313,7 +313,7 @@ class Hoa_Database implements Hoa_Framework_Parameterizable {
         if(false === strpos($name, '.'))
             throw new Hoa_Database_Exception(
                 'The table name must match with <base>.<table>; given %s.',
-                4, $name);
+                2, $name);
 
         list($base, $name) = explode('.', $name);
 
@@ -333,7 +333,7 @@ class Hoa_Database implements Hoa_Framework_Parameterizable {
         if(!class_exists($class))
             throw new Hoa_Database_Exception(
                 'Cannot find the table class %s in %s.',
-                7, array($class, $directory . $file));
+                3, array($class, $directory . $file));
 
         $instance = new $class();
 
