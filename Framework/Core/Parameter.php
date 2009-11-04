@@ -245,8 +245,14 @@ class Hoa_Framework_Parameter {
         $class = str_replace('_', '', get_class($id));
         $path  = 'hoa://Data/Etc/Configuration/Cache/' . $class . '.php';
 
-        // FIX ME
-        if(file_exists($path) && $class != 'HoaFramework') {
+        if($class == 'HoaFramework')
+            $path = self::zFormat(
+                $parameters['protocol.Data/Etc/Configuration'],
+                $this->getKeywords($id),
+                $parameters
+            ) . DS . 'Cache' . DS . $class . '.php';
+
+        if(file_exists($path)) {
 
             $handle = require $path;
 
@@ -257,11 +263,11 @@ class Hoa_Framework_Parameter {
 
             if(!array_key_exists('keywords', $handle))
                 throw new Hoa_Exception(
-                    'Need keywords in the configuration cache %s.', 0, $path);
+                    'Need keywords in the configuration cache %s.', 1, $path);
 
             if(!array_key_exists('parameters', $handle))
                 throw new Hoa_Exception(
-                    'Need parameters in the configuration cache %s.', 0, $path);
+                    'Need parameters in the configuration cache %s.', 2, $path);
 
             $this->_keywords   = $handle['keywords'];
             $this->_parameters = $handle['parameters'];
