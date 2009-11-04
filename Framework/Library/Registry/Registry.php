@@ -77,6 +77,8 @@ class Hoa_Registry extends ArrayObject {
         throw new Hoa_Registry_Exception(
             'Cannot instance the Hoa_Registry object. Use set, get and ' .
             'isRegistered static methods.', 0);
+
+        return;
     }
 
     /**
@@ -104,6 +106,8 @@ class Hoa_Registry extends ArrayObject {
     public static function set ( $index, $value ) {
 
         self::getInstance()->offsetSet($index, $value);
+
+        return;
     }
 
     /**
@@ -147,5 +151,7 @@ class Hoa_Registry extends ArrayObject {
     public static function delete ( $index ) {
 
         self::getInstance()->offsetUnset($index);
+
+        return;
     }
 }
