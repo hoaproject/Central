@@ -49,13 +49,31 @@
 class Hoa_Exception extends Exception {
 
     /**
-     * Error type for self::raiseError().
+     * Error type: return the message.
      *
      * @const int
      */
     const ERROR_RETURN  = 1;
+
+    /**
+     * Error type: print the message.
+     *
+     * @const int
+     */
     const ERROR_PRINT   = 2;
+
+    /**
+     * Error type: trigger the message.
+     *
+     * @const int
+     */
     const ERROR_TRIGGER = 4;
+
+    /**
+     * Error type: print the message and exit the program.
+     *
+     * @const int
+     */
     const ERROR_DIE     = 8;
 
     /**
@@ -83,17 +101,6 @@ class Hoa_Exception extends Exception {
         $this->_arg = $arg;
 
         parent::__construct($message, $code);
-    }
-
-    /**
-     * String representation of object.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function __toString ( ) {
-
-        return $this->raiseError(self::ERROR_RETURN);
     }
 
     /**
@@ -129,14 +136,10 @@ class Hoa_Exception extends Exception {
         if(!empty($trace))
             $pre .= @$trace[0]['class'] . '::' . @$trace[0]['function'] . ': ';
 
-        $out =  $pre . '(' . $this->getCode() . ') ' . $message . "\n" .
-                'in ' . $this->getFile() . ' at ' . $this->getLine() . '.' . "\n\n";
+        $out = $pre . '(' . $this->getCode() . ') ' . $message . "\n" .
+               'in ' . $this->getFile() . ' at ' . $this->getLine() . '.' . "\n\n";
 
         switch($output) {
-
-            case self::ERROR_RETURN:
-                return $out;
-              break;
 
             case self::ERROR_PRINT:
                 echo $out;
@@ -150,6 +153,7 @@ class Hoa_Exception extends Exception {
                 return exit($out);
               break;
 
+            case self::ERROR_RETURN:
             default:
                 return $out;
         }
@@ -160,7 +164,8 @@ class Hoa_Exception extends Exception {
     /**
      * Catch uncaught exception.
      * Each uncaught exception is redirected to self::raiseError method with a
-     * prepend text (e.g. "Uncaught exception :").
+     * prepend text (e.g. "Uncaught exception:").
+     * Catch only Hoa's exceptions!
      *
      * @access  public
      * @param   object  $exception    The exception.
@@ -172,8 +177,18 @@ class Hoa_Exception extends Exception {
         if($exception instanceof Hoa_Exception)
             return $exception->raiseError(self::ERROR_PRINT,
                                           E_USER_WARNING,
-                                          'Uncaught exception :' . "\n");
-        else
-            throw $exception;
+                                          'Uncaught exception:' . "\n");
+        throw $exception;
     } 
+
+    /**
+     * String representation of object.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function __toString ( ) {
+
+        return $this->raiseError(self::ERROR_RETURN);
+    }
 }
