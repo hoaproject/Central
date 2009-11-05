@@ -31,11 +31,6 @@
  */
 
 /**
- * Hoa_Controller_Router_Pattern
- */
-import('Controller.Router.Pattern');
-
-/**
  * Hoa_File
  */
 import('File.~');
@@ -95,6 +90,9 @@ class DeleteCommand extends Hoa_Console_Command_Abstract {
      * @return  int
      */
     public function main ( ) {
+
+        throw new Hoa_Console_Command_Exception(
+            'Disable temporary.', -1);
 
         $isSecondary = false;
         $primary     = null;

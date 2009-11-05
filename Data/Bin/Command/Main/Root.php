@@ -31,7 +31,7 @@
  */
 
 /**
- * Class VersionCommand.
+ * Class RootCommand.
  *
  * This command allow to know some roots.
  *
@@ -64,12 +64,12 @@ class RootCommand extends Hoa_Console_Command_Abstract {
      * @var VersionCommand array
      */
     protected $options     = array(
-        array('main',      parent::NO_ARGUMENT, 'm'),
-        array('framework', parent::NO_ARGUMENT, 'f'),
-        array('data',      parent::NO_ARGUMENT, 'd'),
-        array('check',     parent::NO_ARGUMENT, 'c'),
-        array('help',      parent::NO_ARGUMENT, 'h'),
-        array('help',      parent::NO_ARGUMENT, '?')
+        array('framework',   parent::NO_ARGUMENT, 'f'),
+        array('data',        parent::NO_ARGUMENT, 'd'),
+        array('application', parent::NO_ARGUMENT, 'a'),
+        array('check',       parent::NO_ARGUMENT, 'c'),
+        array('help',        parent::NO_ARGUMENT, 'h'),
+        array('help',        parent::NO_ARGUMENT, '?')
     );
 
 
@@ -82,19 +82,24 @@ class RootCommand extends Hoa_Console_Command_Abstract {
      */
     public function main ( ) {
 
-        $root  = dirname(HOA_DATA);
-        $check = false;
+        $framework = Hoa_Framework::getInstance();
+        $check     = false;
+        $root      = $framework->getFormattedParameter('root.framework');
 
         while(false !== $c = parent::getOption($v)) {
 
             switch($c) {
 
                 case 'f':
-                    $root = HOA_FRAMEWORK;
+                    $root = $framework->getFormattedParameter('root.framework');
                   break;
 
                 case 'd':
-                    $root = HOA_DATA;
+                    $root = $framework->getFormattedParameter('root.data');
+                  break;
+
+                case 'a':
+                    $root = $framework->getFormattedParameter('root.application');
                   break;
 
                 case 'c':
@@ -130,14 +135,14 @@ class RootCommand extends Hoa_Console_Command_Abstract {
      */
     public function usage ( ) {
 
-        cout('Usage   : main:root [-m] [-f] [-d]');
+        cout('Usage   : main:root [-f] [-d] [-a]');
         cout('Options :');
         cout(parent::makeUsageOptionsList(array(
-            'main'      => 'The main root, i.e. the highest.',
-            'framework' => 'The framework root.',
-            'data'      => 'The data root.',
-            'check'     => 'Check with the current path if it matches.',
-            'help'      => 'This help.'
+            'framework'   => 'The framework root.',
+            'data'        => 'The data root.',
+            'application' => 'The application root.',
+            'check'       => 'Check with the current path if it matches.',
+            'help'        => 'This help.'
         )));
 
         return HC_SUCCESS;

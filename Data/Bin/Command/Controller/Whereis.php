@@ -31,11 +31,6 @@
  */
 
 /**
- * Hoa_Controller_Router_Pattern
- */
-import('Controller.Router.Pattern');
-
-/**
  * Class WhereisCommand.
  *
  * Find a controller and return his path, according to controller parameters.
@@ -90,6 +85,9 @@ class WhereisCommand extends Hoa_Console_Command_Abstract {
      * @return  int
      */
     public function main ( ) {
+
+        throw new Hoa_Console_Command_Exception(
+            'Disable temporary.', -1);
 
         $isSecondary = false;
         $primary     = null;

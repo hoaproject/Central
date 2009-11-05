@@ -90,9 +90,6 @@ class ChangelogCommand extends Hoa_Console_Command_Abstract {
         $textPlain  = false;
         $withColour = false;
         $file       = 'hoa://Data/Etc/CHANGELOG.xml';
-        $file       = Hoa_Framework::getInstance()
-                        ->getFormattedParameter('root.data')
-                        . '/../CHANGELOG.xml';
 
         if(!file_exists($file))
             throw new Hoa_Console_Command_Exception(
@@ -197,7 +194,7 @@ class ChangelogCommand extends Hoa_Console_Command_Abstract {
             $text .= $hndl . "\n";
         }
 
-        if(false === $withColour)
+        if(false === $withColour || OS_WIN || !function_exists('posix_isatty'))
             $text = preg_replace('#\\\e\[[0-9]+m#', '',      $text);
         else
             $text = preg_replace('#\\\e\[#',        "\033[", $text);
@@ -247,7 +244,7 @@ class ChangelogCommand extends Hoa_Console_Command_Abstract {
             ),
             array(
                 '    -r HEAD:-10',
-                'Select the ten latest revisions.'
+                'Select the eleven latest revisions.'
             ),
             array(
                 '    -r HEAD:PREV',

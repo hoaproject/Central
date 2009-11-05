@@ -36,14 +36,9 @@
 import('File.~');
 
 /**
- * Hoa_File_Directoryectory
+ * Hoa_File_Directory
  */
 import('File.Directory');
-
-/**
- * Hoa_Controller_Router_Pattern
- */
-import('Controller.Router.Pattern');
 
 /**
  * Class StartCommand.
@@ -94,6 +89,9 @@ class StartCommand extends Hoa_Console_Command_Abstract {
      * @return  int
      */
     public function main ( ) {
+
+        throw new Hoa_Console_Command_Exception(
+            'Disable temporary.', -1);
 
         $withBootstrap = false;
         $withLayout    = false;

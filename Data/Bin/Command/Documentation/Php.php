@@ -88,21 +88,21 @@ class PhpCommand extends Hoa_Console_Command_Abstract {
      */
     public function main ( ) {
 
-        $path = HOA_DATA_CONFIGURATION_CACHE . DS . 'Console.php';
+        $path = 'hoa://Data/Etc/Configuration/.Cache/HoaConsole.php';
 
         if(!file_exists($path))
             throw new Hoa_Console_Command_Exception(
                 'The cache “Console” is not found in %s. Must generate it.',
-                0, HOA_DATA_CONFIGURATION_CACHE);
+                0, $path);
 
         parent::listInputs($name);
 
         if(null === $name)
             return $this->usage();
 
-        $cache   = require HOA_DATA_CONFIGURATION_CACHE . DS . 'Console.php';
-        $php     = $cache['command']['php'];
-        $browser = $cache['command']['browser'];
+        $cache   = require $path;
+        $php     = $cache['parameters']['command.php'];
+        $browser = $cache['parameters']['command.browser'];
         $out     = null;
 
         while(false !== $c = parent::getOption($v)) {

@@ -41,11 +41,6 @@ import('File.~');
 import('File.Directory');
 
 /**
- * Hoa_Controller_Router_Pattern
- */
-import('Controller.Router.Pattern');
-
-/**
  * Class CreateCommand.
  *
  * Create a controller according to controller parameters.
@@ -100,6 +95,9 @@ class CreateCommand extends Hoa_Console_Command_Abstract {
      * @return  int
      */
     public function main ( ) {
+
+        throw new Hoa_Console_Command_Exception(
+            'Disable temporary.', -1);
 
         $isSecondary = false;
         $primary     = null;
