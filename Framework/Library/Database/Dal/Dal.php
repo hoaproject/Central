@@ -156,32 +156,32 @@ class Hoa_Database_Dal implements Hoa_Framework_Parameterizable_Readable {
                 'connection.list'
             );
 
-            if(!isset($parameters[$id]))
+            if(!isset($parameters[self::$_id]))
                 throw new Hoa_Database_Exception(
                     'Cannot load the %s connection, because parameters are not ' .
-                    'found.', 0, $id);
+                    'found.', 0, self::$_id);
 
-            $profile = $parameters[$id];
+            $profile = $parameters[self::$_id];
 
             if(!array_key_exists('dal', $profile))
                 throw new Hoa_Database_Exception(
                     'The connection profile of %s need the “dal” information.',
-                    1, $id);
+                    1, self::$_id);
 
             if(!array_key_exists('dsn', $profile))
                 throw new Hoa_Database_Exception(
                     'The connection profile of %s need the “dsn” information.',
-                    2, $id);
+                    2, self::$_id);
 
             if(!array_key_exists('username', $profile))
                 throw new Hoa_Database_Exception(
                     'The connection profile of %s need the “username” information.',
-                    3, $id);
+                    3, self::$_id);
 
             if(!array_key_exists('password', $profile))
                 throw new Hoa_Database_Exception(
                     'The connection profile of %s need the “password” information.',
-                    4, $id);
+                    4, self::$_id);
 
             if(!isset($profile['options']))
                 $profile['options'] = array();
