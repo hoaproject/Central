@@ -103,14 +103,14 @@ class VersionCommand extends Hoa_Console_Command_Abstract {
                     );
                   break;
 
-                case 'h':
-                case '?':
-                    $this->usage();
+                case 's':
+                    cout(Hoa_Version::getSignature());
                   break;
 
-                case 's':
-                default:
-                    cout(Hoa_Version::getSignature());
+                case 'h':
+                case '?':
+                    return $this->usage();
+                  break;
             }
         }
 
