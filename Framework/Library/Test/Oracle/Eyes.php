@@ -230,15 +230,10 @@ class Hoa_Test_Oracle_Eyes implements Hoa_Framework_Parameterizable {
      */
     public function open ( ) {
 
-        $incubator    = self::getRequest()->getParameter('test.incubator');
-        $battleground = self::getRequest()->getParameter('test.ordeal.battleground');
-        $files        = self::getRequest()->getParameter('convict.result');
-        $prefix       = self::getRequest()->getParameter('test.ordeal.methodPrefix');
-
         $incubator    = $this->getFormattedParameter('test.incubator');
         $battleground = $this->getFormattedParameter('test.ordeal.battleground');
         $files        = $this->getFormattedParameter('convict.result');
-        $prefeix      = $this->getFormattedParameter('test.ordeal.methodPrefix');
+        $prefix       = $this->getFormattedParameter('test.ordeal.methodPrefix');
 
         foreach($files as $i => $file) {
 
