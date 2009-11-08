@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('XmlRpc.MethodAbstract');
 
 /**
- * Hoa_File
- */
-import('File.~');
-
-/**
  * Hoa_File_Finder
  */
 import('File.Finder');
