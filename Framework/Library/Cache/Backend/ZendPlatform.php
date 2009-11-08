@@ -53,19 +53,14 @@ import('Cache.Exception');
 import('Cache.Backend.Abstract');
 
 /**
- * Hoa_File
+ * Hoa_File_Finder
  */
-import('File.~');
-
-/**
- * Hoa_File_Dir
- */
-import('File.Dir');
+import('File.Finder');
 
 /**
  * Class Hoa_Cache_Backend_ZendPlatform.
  *
- * ZendPlatform backend manager (yes, Zend :)).
+ * ZendPlatform backend manager (yes yes, Zend :-)).
  * Inspiration from Zend_Cache_Backend_ZendPlatform class for making this class.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
@@ -210,18 +205,24 @@ class Hoa_Cache_Backend_ZendPlatform extends Hoa_Cache_Backend_Abstract {
 
             $directory = ini_get('zend_accelerator.output_cache_dir') . DS .
                          '.php_cache_api';
-            $cacheDir  = Hoa_File_Dir::scan($directory);
-            $fileStack = array();
+
+            $cacheDir  = new Hoa_File_Finder(
+                $directory,
+                Hoa_File_Finder::LIST_FILE |
+                Hoa_File_Finder::LIST_NO_DOT,
+                Hoa_File_Finder::SORT_INAME
+            );
 
             foreach($cacheDir as $i => $fileinfo)
-                if($fileinfo['mtime'] + $lifetime <= time())
-                    $fileStack[] = $directory . DS . $fileinfo['name'];
-
-            $delete = Hoa_File::delete($fileStack);
+                if($fileinfo->getMTime() + $lifetime <= time())
+                    $fileinfo->delete();
         }
         catch ( Hoa_File_Exception $e ) {
 
-            throw new Hoa_Cache_Exception($e->getMessage(), $e->getCode());
+            throw new Hoa_Cache_Exception(
+                $e->getFormattedMessage(),
+                $e->getCode()
+            );
         }
 
         return $delete;

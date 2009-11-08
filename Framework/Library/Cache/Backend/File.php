@@ -53,9 +53,14 @@ import('Cache.Exception');
 import('Cache.Backend.Abstract');
 
 /**
- * Hoa_File
+ * Hoa_File_Read
  */
-import('File.~');
+import('File.Read');
+
+/**
+ * Hoa_File_Write
+ */
+import('File.Write');
 
 /**
  * Hoa_File_Directory
@@ -107,7 +112,7 @@ class Hoa_Cache_Backend_File extends Hoa_Cache_Backend_Abstract {
 
         try {
 
-            $file    = new Hoa_File($filePath, Hoa_File::MODE_READ);
+            $file    = new Hoa_File_Read($filePath);
             $content = $file->readAll();
         }
         catch ( Hoa_File_Exception $e ) {
@@ -155,12 +160,10 @@ class Hoa_Cache_Backend_File extends Hoa_Cache_Backend_Abstract {
 
         try {
 
-            $file = new Hoa_File($filePath, Hoa_File::MODE_TRUNCATE_WRITE);
+            $file = new Hoa_File_Write($filePath, Hoa_File::MODE_TRUNCATE_WRITE);
             $out  = $file->writeAll($data);
         }
         catch ( Hoa_File_Exception $e ) {
-
-            var_dump('plplpl');
 
             throw new Hoa_Cache_Exception(
                 $e->getFormattedMessage(),
@@ -212,17 +215,10 @@ class Hoa_Cache_Backend_File extends Hoa_Cache_Backend_Abstract {
                 Hoa_File_Finder::LIST_NO_DOT,
                 Hoa_File_Finder::SORT_INAME
             );
-            $fileStack = array();
 
             foreach($cacheDir as $i => $fileinfo)
                 if($fileinfo->getMTime() + $lifetime <= time())
-                    $fileStack[] = $fileinfo->__toString();
-
-            foreach($fileStack as $foo => $bar) {
-
-                $file    = new Hoa_File($bar); 
-                $delete |= $file->delete();
-            }
+                    $fileinfo->delete();
         }
         catch ( Hoa_File_Exception $e ) {
 
@@ -247,7 +243,7 @@ class Hoa_Cache_Backend_File extends Hoa_Cache_Backend_Abstract {
 
         try {
 
-            $file = new Hoa_File($this->getFilePath($id_md5));
+            $file = new Hoa_File_Read($this->getFilePath($id_md5));
             $file->delete();
         }
         catch ( Hoa_File_Exception $e ) {
