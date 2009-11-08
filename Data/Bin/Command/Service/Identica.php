@@ -36,9 +36,9 @@
 import('Stream.Context');
 
 /**
- * Hoa_File
+ * Hoa_File_Read
  */
-import('File.~');
+import('File.Read');
 
 /**
  * Class IdenticaCommand.
@@ -141,7 +141,7 @@ class IdenticaCommand extends Hoa_Console_Command_Abstract {
 
         try {
 
-            new Hoa_File(
+            new Hoa_File_Read(
                 'http://identi.ca/api/statuses/update.xml',
                 Hoa_File::MODE_READ,
                 'identica'
