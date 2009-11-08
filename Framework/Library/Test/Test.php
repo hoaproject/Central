@@ -99,16 +99,18 @@ class Hoa_Test implements Hoa_Framework_Parameterizable {
                 'convict.recursive'        => true,
                 'convict.result'           => array(),
 
-                'test.incubator'           => 'hoa://Data/Var/Test/Incubator/',
-                'test.ordeal.oracle'       => 'hoa://Data/Var/Test/Ordeal/Oracle/',
-                'test.ordeal.battleground' => 'hoa://Data/Var/Test/Ordeal/Battleground/',
+                'current.root'             => 'hoa://Data/Variable/Test/(:_Ymds:)/',
+
+                'test.incubator'           => '(:%current.root:)Incubator/',
+                'test.ordeal.oracle'       => '(:%current.root:)Ordeal/Oracle/',
+                'test.ordeal.battleground' => '(:%current.root:)Ordeal/Battleground/',
                 'test.ordeal.methodPrefix' => '__hoa_',
-                'test.dictionary'          => 'hoa://Data/Var/Test/Dictionary/',
+                'test.dictionary'          => 'hoa://Data/Variable/Test/Dictionary/',
                 'test.maxtry'              => 64,
 
-                'user.type'                => null, // Path to user's types.
+                'user.type'                => 'hoa://Data/Variable/Test/UserType/',
 
-                'report'                   => 'hoa://Data/Var/Test/Report/'
+                'report'                   => '(:%current.root:)Report/'
             )
         );
 

@@ -261,18 +261,16 @@ class Hoa_Test_Oracle implements Hoa_Framework_Parameterizable {
             foreach(new RecursiveIteratorIterator(
                         new RecursiveDirectoryIterator($incubator),
                         RecursiveIteratorIterator::CHILD_FIRST
-                    ) as $name => $splFileInfo) {
-
+                    ) as $name => $splFileInfo)
                 if(is_dir($name))
                     rmdir($name);
                 elseif(is_file($name))
                     unlink($name);
-            }
 
             rmdir($incubator);
         }
 
-        if(false === @mkdir($incubator, 0777, true))
+        if(false === mkdir($incubator, 0777, true))
             throw new Hoa_Test_Oracle_Exception(
                 'Cannot create the incubator in %s.', 2, $incubator);
 
