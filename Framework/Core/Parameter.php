@@ -650,6 +650,9 @@ class Hoa_Framework_Parameter {
                                      Array $keywords   = array(),
                                      Array $parameters = array() ) {
 
+        if(!is_string($value))
+            return $value;
+
         preg_match_all(
             '#([^\(]+)?(?:\(:(.*?):\))?#',
             $value,
