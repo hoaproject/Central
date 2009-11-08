@@ -127,6 +127,17 @@ class WelcomeCommand extends Hoa_Console_Command_Abstract {
                 'Return the path of a controller.'
             ),
 
+            // Controller.
+            array('Test'),
+            array(
+                '    ' . parent::stylize('initialize', 'command'),
+                'Initialize tests.'
+            ),
+            array(
+                '    ' . parent::stylize('launch', 'command'),
+                'Launch initialized tests.',
+            ),
+
             // Action.
             /*
             array('Action'),
