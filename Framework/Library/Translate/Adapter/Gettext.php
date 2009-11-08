@@ -43,9 +43,9 @@ require_once 'Framework.php';
 import('Translate.Adapter.Abstract');
 
 /**
- * Hoa_File
+ * Hoa_File_Read
  */
-import('File.~');
+import('File.Read');
 
 /**
  * Class Hoa_Translate_Adapter_Gettext.
@@ -115,7 +115,7 @@ class Hoa_Translate_Adapter_Gettext extends Hoa_Translate_Adapter_Abstract {
                 1, $filename);
 
         $old              = $this->filename;
-        $this->filename   = new Hoa_File($filename, Hoa_File::MODE_READ);
+        $this->filename   = new Hoa_File_Read($filename);
         $this->_translate = $this->unpackData($header);
 
         return $old;
