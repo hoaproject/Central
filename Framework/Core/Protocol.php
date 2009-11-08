@@ -659,17 +659,17 @@ class Hoa_Framework_Protocol_Wrapper {
 
         if(null === $this->context)
             return mkdir(
-                $path,
+                self::realPath($path),
                 $mode,
-                $option === STREAM_MKDIR_RECURSIVE
+                $options | STREAM_MKDIR_RECURSIVE
             );
-        else
-            return mkdir(
-                $path,
-                $mode,
-                $option === STREAM_MKDIR_RECURSIVE,
-                $this->context
-            );
+
+        return mkdir(
+            self::realPath($path),
+            $mode,
+            $options | STREAM_MKDIR_RECURSIVE,
+            $this->context
+        );
     }
 
     /**
@@ -685,9 +685,9 @@ class Hoa_Framework_Protocol_Wrapper {
     public function rename ( $from, $to ) {
 
         if(null === $this->context)
-            return rename($from, $to);
-        else
-            return rename($from, $to, $this->context);
+            return rename(self::realPath($from), self::realPath($to));
+
+        return rename(self::realPath($from), self::realPath($to), $this->context);
     }
 
     /**
@@ -703,9 +703,9 @@ class Hoa_Framework_Protocol_Wrapper {
     public function rmdir ( $path, $options ) {
 
         if(null === $this->context)
-            return rmdir($path);
+            return rmdir(self::realPath($path));
         else
-            return rmdir($path, $this->context);
+            return rmdir(self::realPath($path), $this->context);
     }
 
     /**
@@ -719,9 +719,9 @@ class Hoa_Framework_Protocol_Wrapper {
     public function unlink ( $path ) {
 
         if(null === $this->context)
-            return unlink($path);
+            return unlink(self::realPath($path));
         else
-            return unlink($path, $this->context);
+            return unlink(self::realPath($path), $this->context);
     }
 
     /**
