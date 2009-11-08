@@ -82,7 +82,7 @@ class Hoa_Pom_Token_Util_Visitor_PrettyPrint_Array extends Hoa_Pom_Token_Util_Vi
      * @param   mixed                $eldnah     Handle (not reference).
      * @return  mixed
      */
-    public function visitArray ( Hoa_Visitor_Visit $visitor,
+    public function visitArray ( Hoa_Visitor_Element $element,
                                  &$handle = null,
                                   $eldnah = null ) {
 
