@@ -128,11 +128,18 @@ class Hoa_Log {
     const INFORMATIONAL     =  64;
 
     /**
-     * Priority: debut-level messages.
+     * Priority: debug-level messages.
      *
      * @const int
      */
     const DEBUG             = 128;
+
+    /**
+     * Priority: test messages.
+     *
+     * @const int
+     */
+    const TEST              = 256;
 
     /**
      * Stack index: timestamp.
@@ -285,7 +292,7 @@ class Hoa_Log {
      *                                 Hoa_Stream_Io_Out).
      * @return  array
      */
-    public function addOutputStream ( Hoa_Stream $stream = null ) {
+    public function addOutputStream ( Hoa_Stream $stream ) {
 
         if(null === $stream)
             return;
@@ -378,7 +385,8 @@ class Hoa_Log {
                           & self::WARNING
                           & self::NOTICE
                           & self::INFORMATIONAL
-                          & self::DEBUG;
+                          & self::DEBUG
+                          & self::TEST;
 
         return $old;
     }
@@ -449,7 +457,6 @@ class Hoa_Log {
             if($type & $filters || null === $filters) {
 
                 $output->writeArray($handle);
-                $output->writeAll("\n");
             }
 
         if($type & self::DEBUG)
