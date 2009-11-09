@@ -38,6 +38,11 @@
 require_once 'Framework.php';
 
 /**
+ * Hoa_Test
+ */
+import('Test.~');
+
+/**
  * Hoa_Test_Praspel_Exception
  */
 import('Test.Praspel.Exception');
@@ -78,9 +83,9 @@ import('Test.Praspel.Type');
 import('Test.Praspel.Call');
 
 /**
- * Hoa_Test_Log
+ * Hoa_Log
  */
-import('Test.Log');
+import('Log.~');
 
 /**
  * Class Hoa_Test_Praspel.
@@ -99,6 +104,11 @@ import('Test.Log');
 class Hoa_Test_Praspel {
 
     /**
+     *
+     */
+    const LOG_CHANNEL = '@hoa/Framework/Library/Test/Praspel';
+
+    /**
      * Collection of clauses.
      *
      * @var Hoa_Test_Praspel array
@@ -112,6 +122,11 @@ class Hoa_Test_Praspel {
      */
     protected $_call    = null;
 
+    /**
+     *
+     */
+    protected $_log     = null;
+
 
 
     /**
@@ -122,6 +137,10 @@ class Hoa_Test_Praspel {
      */
     public function __construct ( ) {
 
+        $this->_log = Hoa_Log::getChannel(
+            self::LOG_CHANNEL,
+            Hoa_Test::getInstance()->getLogStreams()
+        );
         $this->clause('requires');
     }
 
@@ -289,8 +308,7 @@ class Hoa_Test_Praspel {
 
             foreach($types as $i => $type) {
 
-                $tmp[] = get_class($type);
-
+                $tmp[]  = get_class($type);
                 $valid |= $type->predicate($call->getResult());
             }
 
@@ -314,23 +332,25 @@ class Hoa_Test_Praspel {
 
         $out = (bool) $out;
 
-        print_r($table);
+        //print_r($table);
 
         if(true === $out) {
 
             //throw new Hoa_Test_Praspel_Exception(
             //    'Test succeed.', 4);
-            var_dump('Test succeed');
-            var_dump($call->getResult());
-            echo "\n";
+            //var_dump('Test succeed');
+            //var_dump($call->getResult());
+            //echo "\n";
+            $this->_log->log(true, Hoa_Log::TEST);
         }
         else {
 
             //throw new Hoa_Test_Praspel_Exception(
             //    'Test failed.', 5);
-            var_dump('Test failed.');
-            var_dump($call->getResult());
-            echo "\n";
+            //var_dump('Test failed.');
+            //var_dump($call->getResult());
+            //echo "\n";
+            $this->_log->log(false, Hoa_Log::TEST);
         }
     }
 

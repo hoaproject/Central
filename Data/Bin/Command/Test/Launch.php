@@ -31,9 +31,111 @@
  */
 
 /**
+ * Hoa_Test
+ */
+import('Test.~');
+
+/**
  * Hoa_Test_Praspel
  */
 import('Test.Praspel.~');
+
+/**
+ * Hoa_Stream
+ */
+import('Stream.~');
+
+/**
+ * Hoa_Stream_Io_Out
+ */
+import('Stream.Io.Out');
+
+
+class My extends Hoa_Stream implements Hoa_Stream_Io_Out {
+
+    protected $self = null;
+
+    public function __construct ( $self ) {
+
+        $this->self = $self;
+
+        parent::__construct(null);
+    }
+
+    protected function &open ( $streamName, Hoa_Stream_Context $context = null ) {
+
+        $out = null;
+
+        return $out;
+    }
+
+    public function close ( ) {
+
+        return true;
+    }
+
+    public function isOpened ( ) {
+
+        return true;
+    }
+
+    public function write ( $string, $length ) {
+
+        cout($string);
+
+        return $length;
+    }
+
+    public function writeString ( $string ) {
+
+        return $this->write($string, strlen($string));
+    }
+
+    public function writeCharacter ( $char ) {
+
+        return $this->write((string) $char[0], 1);
+    }
+
+    public function writeInteger ( $integer ) {
+
+        $integer = (string) (int) $integer;
+
+        return $this->write($integer, strlen($integer));
+    }
+
+    public function writeFloat ( $float ) {
+
+        $float = (string) (float) $float;
+
+        return $this->write($float, strlen($float));
+    }
+
+    public function writeArray ( Array $array ) {
+
+        $this->self->status(
+            'foo',
+            $array[1]
+        );
+    }
+
+    public function writeLine ( $line ) {
+
+        if(false === $n = strpos($line, "\n"))
+            return $this->write($line, strlen($line));
+
+        return $this->write(substr($line, 0, $n), $n);
+    }
+
+    public function writeAll ( $string ) {
+
+        return $this->write($string, strlen($string));
+    }
+
+    public function truncate ( $size ) {
+
+        return false;
+    }
+}
 
 /**
  * Class LaunchCommand.
@@ -100,22 +202,34 @@ class LaunchCommand extends Hoa_Console_Command_Abstract {
             throw new Hoa_Console_Exception(
                 'ID cannot be null.', 0);
 
+        import('File.ReadWrite');
+        $my = new My($this);
+        Hoa_Test::getInstance()->addOutputStreams(array(
+            new Hoa_File_ReadWrite('hoa://Data/Temporary/Foo'),
+            $my
+        ));
+
         $directory = Hoa_Framework::getProtocol()->resolve($directory);
 
         $oracle       = glob($directory . DS . 'Ordeal' . DS . 'Oracle' . DS . '*');
         $battleground = glob($directory . DS . 'Ordeal' . DS . 'Battleground' . DS . '*');
 
-        foreach($battleground as $i => $file) {
+        foreach($oracle as $i => $file)
+            require_once $file;
 
-            require_once $oracle[$i];
+        foreach($battleground as $i => $file) {
 
             try {
 
+                $my->writeAll($file);
                 require_once $file;
             }
             catch( Exception $e ) {
 
-                var_dump(' ... ' . $e->getFormattedMessage());
+                throw new Hoa_Console_Exception(
+                    $e->getFormattedMessage(),
+                    $e->getCode()
+                );
             }
         }
 
