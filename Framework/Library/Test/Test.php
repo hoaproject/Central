@@ -80,6 +80,13 @@ class Hoa_Test implements Hoa_Framework_Parameterizable {
      */
     protected $_parameters    = null;
 
+    /**
+     * Stream's log for the Praspel output.
+     *
+     * @var Hoa_Framework_Stream array
+     */
+    protected $_logs          = array();
+
 
 
     /**
@@ -216,5 +223,45 @@ class Hoa_Test implements Hoa_Framework_Parameterizable {
         );
         $oracle->setRequest($this->_parameters);
         $oracle->predict();
+    }
+
+    /**
+     *
+     */
+    public function addOutputStreams ( Array $streams ) {
+
+        foreach($streams as $i => $stream)
+            $this->addOutputStream($stream);
+
+        return $this->getLogStreams();
+    }
+
+    /**
+     *
+     */
+    public function addOutputStream ( Hoa_Stream $stream ) {
+
+        if(null === $stream)
+            return;
+
+        if(!($stream instanceof Hoa_Stream_Io_Out))
+            throw new Hoa_Test_Exception(
+                'Stream log must implement the Hoa_Stream_Io_Out interface.', 0);
+
+        if(false === $stream->isOpened())
+            throw new Hoa_Test_Exception(
+                'Stream log is not opened, maybe it failed.', 1);
+
+        $this->_logs[$stream->__toString()] = $stream;
+
+        return $this->getLogStreams();
+    }
+
+    /**
+     *
+     */
+    public function getLogStreams ( ) {
+
+        return $this->_logs;
     }
 }
