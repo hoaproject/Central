@@ -4,36 +4,63 @@
 Summary
 -------
 
-  Introduction  ............................................................  19
-  Release informations  ....................................................  27
-  Special notices for upgrading  ...........................................  34
-    0.4.3b to 0.4.3b  ......................................................
-    0.3.7b to 0.4.0b  ......................................................  
-  New features in 0.4.3b  ..................................................  44
-  Installation  ............................................................  55
-  Project  .................................................................  58
-    Site, manuals, download, communauty etc.  ..............................  61
-    License  ...............................................................  67
+  Introduction  ...........................................................   20
+  Release informations  ...................................................   33
+  Special notices for upgrading  ..........................................   40
+    0.4.3b to 0.5.0b  .....................................................   44
+    0.4.0b to 0.4.3b  .....................................................   66
+    0.3.7b to 0.4.0b  .....................................................   84
+  New features in 0.5.0b  .................................................   91 
+  Installation  ...........................................................  105 
+  Project  ................................................................  111
+    Site, manuals, download, communauty etc.  .............................  114
+    License  ..............................................................  121
 
 
 
 Introduction
 ------------
 
-Welcome  to  Hoa  Framework  0.4.3b.  This is the maintenance release of the Hoa
+Welcome  to  Hoa  Framework  0.5.0b.  This is the maintenance release of the Hoa
 Framework   0.x  series  since  the  0.3.7b  version.  Please,  read  with  much
 attention special notices.
+
+WARNING:   This  version  is  very  different  of  the  previous  versions. Some
+compatibility  problems  should  appear.  Please,  take  care.  The community is
+still opened and will be glad to help you!
 
 
 Release informations
 --------------------
 
-Hoa Framework 0.4.3b (397).
-Released on 15 june 2009.
+Hoa Framework 0.5.0b (582).
+Released on 10 november 2009.
 
 
 Special notices for upgrading
 -----------------------------
+
+  0.4.3b to 0.5.0b
+
+All  packages  configurations system were modified according to the new rules of
+hoa:// and zFormat. No backward-compatibility was possible, so take care to your
+configuration files.
+
+The  Hoa_Stream_Notification  has  a totally new behavior. Take care about that.
+Its behavior is very close to Hoa_Stream_Context.
+
+Prefere  to use PHP_VERSION* constantes instead of version_compare(phpversion(),
+…).
+
+import()  and importModule() methods now throw exception in all cases (except if
+file is found, or files are found ;-)).
+
+The  Data/ architecture was totally recasted. Please, you should used the hoa://
+to  access  in.  It is a  higher  abstract-level of the architecture and allow a
+better portability.
+
+The   Hoa_File  class  was  splitted  into  three  new  classes:  Hoa_File_Read,
+Hoa_File_Write and Hoa_File_ReadWrite. Please, change it in your code :-).
 
   0.4.0b to 0.4.3b
 
@@ -60,18 +87,19 @@ because  they  were not following Hoa naming conventions. Please, read revisions
 301, 300, and 225, thank you :
     /Data/Bin $ ./hoa changelog -r 301,300,225 -t -c
 
-New features in 0.4.3b
+New features in 0.5.0b
 ----------------------
 
 Please,  read  the  changelog  from  the previous revision number to the current
 prevision number :
     /Data/Bin $ ./hoa changelog -r HEAD:PREV -t -c
 
-We  can notice new packages, like Hoa_Json, Hoa_Observer, Hoa_Pom, Hoa_Protoype,
-Hoa_Stream, Hoa_Test and Hoa_Visitor.
-The package Hoa_File and Hoa_Socket were totally rewrited. We have a real stream
-support now.
+We can notice new packages, like Hoa_Memory, Hoa_Php, Hoa_Lo and Hoa_Tree.
 
+But  definitively,  hoa://  and  zFormat  are  the two bigs new features of this
+version.  On  these  ones, the new package pararameter system is based, and also
+the  new  framework  architecture.  It  is  now  a real hybrid of frameworks and
+libraries.
 
 Installation
 ------------

@@ -9,7 +9,7 @@
  * GNU General Public License
  *
  * This file is part of HOA Open Accessibility.
- * Copyright (c) 2007, 2008 Ivan ENDERLIN. All rights reserved.
+ * Copyright (c) 2007, 2009 Ivan ENDERLIN. All rights reserved.
  *
  * HOA Open Accessibility is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@ import('Controller.Dispatcher.Action');
  * components.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
+ * @copyright   Copyright (c) 2007, 2009 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.2

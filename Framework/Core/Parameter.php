@@ -9,7 +9,7 @@
  * GNU General Public License
  *
  * This file is part of HOA Open Accessibility.
- * Copyright (c) 2007, 2008 Ivan ENDERLIN. All rights reserved.
+ * Copyright (c) 2007, 2009 Ivan ENDERLIN. All rights reserved.
  *
  * HOA Open Accessibility is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ require_once 'Exception.php';
  * Interface for all classes or packages which parameters are readable.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
+ * @copyright   Copyright (c) 2007, 2009 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP5
  * @version     0.1
@@ -90,7 +90,7 @@ interface Hoa_Framework_Parameterizable_Readable {
  * Interface for all classes or packages which parameters are writable.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
+ * @copyright   Copyright (c) 2007, 2009 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP5
  * @version     0.1
@@ -128,7 +128,7 @@ interface Hoa_Framework_Parameterizable_Writable {
  * Interface for all classes or packages that are parameterizable.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
+ * @copyright   Copyright (c) 2007, 2009 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP5
  * @version     0.1
@@ -148,7 +148,7 @@ interface   Hoa_Framework_Parameterizable
  * ones).
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
+ * @copyright   Copyright (c) 2007, 2009 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP5
  * @version     0.1
