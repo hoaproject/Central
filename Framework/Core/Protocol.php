@@ -605,9 +605,9 @@ class Hoa_Framework_Protocol_Wrapper {
         $handle = null;
 
         if(null === $this->context)
-            $handle = @opendir($p, $this->context);
-        else
             $handle = @opendir($p);
+        else
+            $handle = @opendir($p, $this->context);
 
         if(false === $handle)
             return false;
@@ -788,6 +788,7 @@ class Hoa_Framework_Protocol_Wrapper {
         return $this->_streamName;
     }
 }
+
 
 /**
  * Register the hoa:// protocol.
