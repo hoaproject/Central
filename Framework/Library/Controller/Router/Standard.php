@@ -119,7 +119,7 @@ class Hoa_Controller_Router_Standard implements Hoa_Framework_Parameterizable {
 
         if(!is_array($array))
             throw new Hoa_Controller_Exception_RouterDoesNotReturnAnArray(
-                'Router %s does not return an array, given %s..', 0,
+                'Router %s does not return an array, given %s.', 0,
                 array($this->getParameter('route.type'), gettype($array)));
 
         $this->setParameter('data.array', $array);
