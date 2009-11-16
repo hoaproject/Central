@@ -106,7 +106,7 @@ class Hoa_Test implements Hoa_Framework_Parameterizable {
                 'convict.recursive'        => true,
                 'convict.result'           => array(),
 
-                'current.root'             => 'hoa://Data/Variable/Test/(:_Ymds:)/',
+                'current.root'             => 'hoa://Data/Variable/Test/(:_YmdHis:)/',
 
                 'test.incubator'           => '(:%current.root:)Incubator/',
                 'test.ordeal.oracle'       => '(:%current.root:)Ordeal/Oracle/',
