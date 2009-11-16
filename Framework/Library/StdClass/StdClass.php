@@ -96,11 +96,8 @@ class Hoa_StdClass implements Iterator, Countable, Serializable, ArrayAccess {
             return;
         }
 
-        foreach($array as $key => $value) {
-
-            $key               = str_replace('.', '_', $key);
+        foreach($array as $key => $value)
             $this->_data[$key] = new Hoa_StdClass($value);
-        }
 
         return;
     }
