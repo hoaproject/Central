@@ -183,28 +183,35 @@ class Hoa_Framework_Parameter {
      *
      * @var Hoa_Framework_Parameter array
      */
-    private $_parameters = array();
+    private $_parameters       = array();
 
     /**
      * Collection of package's keywords.
      *
      * @var Hoa_Framework_Parameter array
      */
-    private $_keywords   = array();
+    private $_keywords         = array();
 
     /**
      * Parameters' owner.
      *
      * @var Hoa_Framework_Parameter string
      */
-    private $_owner      = null;
+    private $_owner            = null;
 
     /**
      * Owner's friends with associated permissions.
      *
      * @var Hoa_Framework_Parameter array
      */
-    private $_friends    = array();
+    private $_friends          = array();
+
+    /**
+     * Constants values.
+     *
+     * @var Hoa_Framework_Parameter array
+     */
+    private static $_constants = array();
 
 
 
@@ -222,12 +229,47 @@ class Hoa_Framework_Parameter {
                                   Array $parameters = array() ) {
 
         $this->_owner = get_class($owner);
+        self::initializeConstants();
 
         if(!empty($keywords))
             $this->setKeywords($owner, $keywords);
 
         if(!empty($parameters))
             $this->setDefaultParameters($owner, $parameters);
+
+        return;
+    }
+
+    /**
+     * Initialize constants.
+     *
+     * @access  public
+     * @return  void
+     */
+    public static function initializeConstants ( ) {
+
+        self::$_constants = array(
+            'd' => date('d'),
+            'j' => date('j'),
+            'N' => date('N'),
+            'w' => date('w'),
+            'z' => date('z'),
+            'W' => date('W'),
+            'm' => date('m'),
+            'n' => date('n'),
+            'Y' => date('Y'),
+            'y' => date('y'),
+            'g' => date('g'),
+            'G' => date('G'),
+            'h' => date('h'),
+            'H' => date('H'),
+            'i' => date('i'),
+            's' => date('s'),
+            'u' => date('u'),
+            'O' => date('O'),
+            'T' => date('T'),
+            'U' => date('U')
+        );
 
         return;
     }
@@ -253,7 +295,7 @@ class Hoa_Framework_Parameter {
                 $parameters['protocol.Data/Etc/Configuration'],
                 $this->getKeywords($id),
                 $parameters
-            ) . DS . '.Cache' . DS . $class . '.php';
+            ) . '.Cache' . DS . $class . '.php';
 
         if(file_exists($path)) {
 
@@ -653,6 +695,9 @@ class Hoa_Framework_Parameter {
         if(!is_string($value))
             return $value;
 
+        if(empty(self::$_constants))
+            self::initializeConstants();
+
         preg_match_all(
             '#([^\(]+)?(?:\(:(.*?):\))?#',
             $value,
@@ -705,18 +750,14 @@ class Hoa_Framework_Parameter {
             // Call a constant (only date constants for now).
             elseif($key[0] == '_') {
 
-                preg_match_all(
-                    '#(d|j|N|w|z|W|m|n|Y|y|g|G|h|H|i|s|u|O|T|U)#',
-                    $word,
-                    $constants
-                );
-
-                if(!isset($constants[1]))
-                    throw new Hoa_Exception(
-                        'An invalid constant char is found in the parameter ' .
-                        'rule %s.', 1, $parameter);
-
-                $handle = date(implode('', $constants[1]));
+                foreach(str_split($word) as $k => $v)
+                    if(isset(self::$_constants[$v]))
+                        $handle .= self::$_constants[$v];
+                    else
+                        throw new Hoa_Exception(
+                            'Constant char %s is not supported in the ' .
+                            'parameter rule %s.',
+                            1, array($v, $parameter));
             }
             // Call a keyword.
             else {
