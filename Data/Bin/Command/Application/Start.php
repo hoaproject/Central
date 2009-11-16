@@ -31,14 +31,19 @@
  */
 
 /**
- * Hoa_File
+ * Hoa_Controller_Front
  */
-import('File.~');
+import('Controller.Front');
 
 /**
  * Hoa_File_Directory
  */
 import('File.Directory');
+
+/**
+ * Hoa_File_Write
+ */
+import('File.Write');
 
 /**
  * Class StartCommand.
@@ -74,10 +79,10 @@ class StartCommand extends Hoa_Console_Command_Abstract {
      * @var VersionCommand array
      */
     protected $options     = array(
-        array('with-bootstrap', parent::NO_ARGUMENT, 'b'),
-        array('with-layout',    parent::NO_ARGUMENT, 'l'),
-        array('help',           parent::NO_ARGUMENT, 'h'),
-        array('help',           parent::NO_ARGUMENT, '?')
+        array('bootstrap', parent::REQUIRED_ARGUMENT, 'b'),
+        array('view',      parent::REQUIRED_ARGUMENT, 'v'),
+        array('help',      parent::NO_ARGUMENT,       'h'),
+        array('help',      parent::NO_ARGUMENT,       '?')
     );
 
 
@@ -90,24 +95,19 @@ class StartCommand extends Hoa_Console_Command_Abstract {
      */
     public function main ( ) {
 
-        throw new Hoa_Console_Command_Exception(
-            'Disable temporary.', -1);
-
-        $withBootstrap = false;
-        $withLayout    = false;
-        $file          = 'hoa://Data/Configuration/Controller.php';
-        $base          = dirname(HOA_DATA);
+        $bootstrap = null;
+        $view      = null;
 
         while(false !== $c = parent::getOption($v)) {
 
             switch($c) {
 
                 case 'b':
-                    $withBootstrap = true;
+                    $bootstrap = $v;
                   break;
 
-                case 'l':
-                    $withLayout    = true;
+                case 'v':
+                    $view = $v;
                   break;
 
                 case 'h':
@@ -116,83 +116,77 @@ class StartCommand extends Hoa_Console_Command_Abstract {
             }
         }
 
-        if(!file_exists($file))
+        parent::listInputs($bootstrap);
+
+        $path = 'hoa://Data/Etc/Configuration/.Cache/HoaController.php';
+
+        if(!file_exists($path))
             throw new Hoa_Console_Command_Exception(
                 'The Controller cache is not found in %s. Must generate it.',
-                0, $file);
+                0, $path);
 
-        $options    = require $file;
-        $router     = new Hoa_Controller_Router_Pattern();
+        $configurations = require $path;
 
-        $controller = $base . DS .
-                      $options['route']['directory'];
-
-        $viewTheme  = $base . DS .
-                      $router->transform($options['view']['directory'], $options['view']['theme']);
-
-        $viewHelper = $base . DS .
-                      $options['view']['helper']['directory'];
-
-        $viewLayout = $viewTheme . DS .
-                      $router->transform($options['pattern']['view']['layout'], $options['view']['layout']);
-
-        $model      = $base . DS .
-                      $router->transform($options['model']['directory'], null);
-
-        $bootstrap  = $base . DS . 'index.php';
-
-        if(file_exists($controller))
+        if(   !is_array($configurations)
+           || !isset($configurations['keywords'])
+           || !isset($configurations['parameters']))
             throw new Hoa_Console_Command_Exception(
-                'Cannot create the application, because it is already exist.', 1);
+                'Configuration cache filse %s appears corrupted.', 1, $path);
 
-        cout(parent::stylize('Directories', 'info'));
+        if(null !== $view)
+            $configurations['keywords']['view'] = $view;
 
-        parent::status(
-            'Create the controller directory.',
-            Hoa_File_Directory::create($controller)
+        $cd = Hoa_Framework_Parameter::zFormat(
+            $configurations['parameters']['controller.directory'],
+            $configurations['keywords'],
+            $configurations['parameters']
+        );
+        $md = Hoa_Framework_Parameter::zFormat(
+            $configurations['parameters']['model.share.directory'],
+            $configurations['keywords'],
+            $configurations['parameters']
+        );
+        $vd = Hoa_Framework_Parameter::zFormat(
+            $configurations['parameters']['view.directory'],
+            $configurations['keywords'],
+            $configurations['parameters']
         );
 
         parent::status(
-            'Create the model directory.',
-            Hoa_File_Directory::create($model)
+            'Create ' .
+            parent::stylize('controller', 'info') .
+            ' directory at ' .
+            parent::stylize($cd, 'info') . '.',
+            Hoa_File_Directory::create($cd)
+        );
+        parent::status(
+            'Create ' .
+            parent::stylize('model', 'info') .
+            ' directory at ' .
+            parent::stylize($md, 'info') . '.',
+            Hoa_File_Directory::create($md)
+        );
+        parent::status(
+            'Create ' .
+            parent::stylize('view', 'info') .
+            ' directory at ' .
+            parent::stylize($vd, 'info') . '.',
+            Hoa_File_Directory::create($vd)
         );
 
-        parent::status(
-            'Create the view theme directory.',
-            Hoa_File_Directory::create($viewTheme)
-        );
+        if(null === $bootstrap)
+            return HC_SUCCESS;
+
+        $p = 'hoa://Application/Public/' . $bootstrap . '.php';
 
         parent::status(
-            'Create the view helper directory.',
-            Hoa_File_Directory::create($viewHelper)
-        );
-
-        cout(parent::stylize('Files', 'info'));
-
-        $l = new Hoa_File($viewLayout, Hoa_File::MODE_TRUNCATE_WRITE);
-        $b = new Hoa_File($bootstrap,  Hoa_File::MODE_TRUNCATE_WRITE);
-        $h = null;
-
-        if(true === $withLayout)
-            $h = new Hoa_File(HOA_DATA_TEMPLATE . DS . 'ViewLayout.tpl', Hoa_File::MODE_READ);
-        else
-            $h = new Hoa_File(HOA_DATA_TEMPLATE . DS . 'ViewLayoutSimple.tpl', Hoa_File::MODE_READ);
-
-        parent::status(
-            'Create the default view layout file.',
-            false !== $l->writeAll($h->readAll())
-        );
-
-        unset($h);
-
-        if(true === $withBootstrap)
-            $h = new Hoa_File(HOA_DATA_TEMPLATE . DS . 'Bootstrap.tpl', Hoa_File::MODE_READ);
-        else
-            $h = new Hoa_File(HOA_DATA_TEMPLATE . DS . 'BootstrapSimple.tpl', Hoa_File::MODE_READ);
-
-        parent::status(
-            'Create the bootstrap file.',
-            false !== $b->writeAll($h->readAll())
+            'Create ' .
+            parent::stylize($bootstrap, 'info') .
+            ' bootstrap file at ' .
+            parent::stylize($p, 'info') . '.',
+            Hoa_File_Directory::create(dirname($p))
+            &&
+            new Hoa_File_Write($p)
         );
 
         return HC_SUCCESS;
@@ -206,11 +200,11 @@ class StartCommand extends Hoa_Console_Command_Abstract {
      */
     public function usage ( ) {
 
-        cout('Usage   : application:start [-b] [-l]');
+        cout('Usage   : application:start <options>');
         cout('Options :');
         cout(parent::makeUsageOptionsList(array(
-            'b'    => 'Write the template when creating the bootstrap file.',
-            'l'    => 'Write the template when creating the default view layout file.',
+            'b'    => 'Bootstrap name.',
+            'v'    => 'View theme name.',
             'help' => 'This help.'
         )));
 

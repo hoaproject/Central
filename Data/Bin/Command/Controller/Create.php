@@ -31,14 +31,19 @@
  */
 
 /**
- * Hoa_File
+ * Hoa_Controller_Front
  */
-import('File.~');
+import('Controller.Front');
 
 /**
- * Hoa_File_Directoryectory
+ * Hoa_File_Directory
  */
 import('File.Directory');
+
+/**
+ * Hoa_File_Write
+ */
+import('File.Write');
 
 /**
  * Class CreateCommand.
@@ -96,86 +101,128 @@ class CreateCommand extends Hoa_Console_Command_Abstract {
      */
     public function main ( ) {
 
-        throw new Hoa_Console_Command_Exception(
-            'Disable temporary.', -1);
-
-        $isSecondary = false;
-        $primary     = null;
+        $primary = null;
 
         while(false !== $c = parent::getOption($v)) {
 
             switch($c) {
 
                 case 'p':
-                    $isSecondary = true;
-                    $primary     = $v;
+                    $primary = $v;
                   break;
 
                 case 'h':
                 case '?':
                     return $this->usage();
+                  break;
             }
         }
 
-        if(!file_exists(HOA_DATA_CONFIGURATION_CACHE . DS . 'Controller.php'))
+        parent::listInputs($controllerName);
+
+        if(null === $controllerName)
+            return $this->usage();
+
+        $path = 'hoa://Data/Etc/Configuration/.Cache/HoaController.php';
+
+        if(!file_exists($path))
             throw new Hoa_Console_Command_Exception(
-                'The cache “Controller” is not found in %s. Must generate it.',
-                0, HOA_DAT_CONFIGURATION_CACHE);
+                'Configuration cache file %s does not exist.', 0, $path);
 
-        $options      = require HOA_DATA_CONFIGURATION_CACHE . DS . 'Controller.php';
-        $this->router = new Hoa_Controller_Router_Pattern();
+        $configurations = require $path;
 
-        parent::listInputs($name);
-
-        if(!file_exists(HOA_BASE . DS . $options['route']['directory']))
+        if(   !is_array($configurations)
+           || !isset($configurations['keywords'])
+           || !isset($configurations['parameters']))
             throw new Hoa_Console_Command_Exception(
-                'Cannot create the controller, because the application does not ' .
-                'exist. Must create it before.', 1);
+                'Configuration cache files %s appears corrupted.', 1, $path);
 
-        if(null === $name)
-            throw new Hoa_Console_Command_Exception(
-                'Must precise the controller name in input (see the usage).', 2);
+        $configurations['keywords']['controller'] = $controllerName;
+        $configurations['keywords']['action']     = 'index';
 
-        $directory       = HOA_BASE . DS . $options['route']['directory'];
-        $primaryName     = true === $isSecondary ? $primary : $name;
-        $secondaryName   = true === $isSecondary ? $name    : null;
+        if(null !== $primary) {
 
-        $controllerClass = $this->router->transform(
-                               $options['pattern']['controller']['class'],
-                               $primaryName
-                           );
-        $controllerFile  = $this->router->transform(
-                               $options['pattern']['controller']['file'],
-                               $primaryName
-                           );
-        $controllerDir   = $this->router->transform(
-                               $options['pattern']['controller']['directory'],
-                               $primaryName
-                           );
-        $actionClass     = $this->router->transform(
-                               $options['pattern']['action']['class'],
-                               $secondaryName
-                           );
-        $actionFile      = $this->router->transform(
-                               $options['pattern']['action']['file'],
-                               $secondaryName
-                           );
+            $configurations['keywords']['controller'] = $primary;
+            $configurations['keywords']['action']     = $controllerName;
+        }
 
-        if(false === $isSecondary)
-            return $this->createPrimary(
-                $directory,
-                $controllerFile,
-                $controllerClass
+        $directory = Hoa_Framework_Parameter::zFormat(
+            $configurations['parameters']['controller.directory'],
+            $configurations['keywords'],
+            $configurations['parameters']
+        );
+        $file      = Hoa_Framework_Parameter::zFormat(
+            $configurations['parameters']['controller.file'],
+            $configurations['keywords'],
+            $configurations['parameters']
+        );
+        $class     = Hoa_Framework_Parameter::zFormat(
+            $configurations['parameters']['controller.class'],
+            $configurations['keywords'],
+            $configurations['parameters']
+        );
+        $method    = null;
+        $extends   = 'Hoa_Controller_Action_Standard';
+
+        if(null !== $primary) {
+
+            $extends   = $class;
+            $directory = Hoa_Framework_Parameter::zFormat(
+                $configurations['parameters']['action.directory'],
+                $configurations['keywords'],
+                $configurations['parameters']
             );
-        else
-            return $this->createSecondary(
-                $directory,
-                $controllerFile,
-                $controllerDir,
-                $controllerClass,
-                $actionFile,
-                $actionClass
+            $file      = Hoa_Framework_Parameter::zFormat(
+                $configurations['parameters']['action.file'],
+                $configurations['keywords'],
+                $configurations['parameters']
             );
+            $class     = Hoa_Framework_Parameter::zFormat(
+                $configurations['parameters']['action.class'],
+                $configurations['keywords'],
+                $configurations['parameters']
+            );
+            $method    = Hoa_Framework_Parameter::zFormat(
+                $configurations['parameters']['action.method'],
+                $configurations['keywords'],
+                $configurations['parameters']
+            );
+        }
+
+        $model = Hoa_Framework_Parameter::zFormat(
+            $configurations['parameters']['model.directory'],
+            $configurations['keywords'],
+            $configurations['parameters']
+        );
+
+        if(!is_dir($directory))
+            cout(
+                'Create ' .
+                parent::stylize('controller', 'info') .
+                ' directory at ' .
+                parent::stylize($directory, 'info') . '.',
+                Hoa_File_Directory::create($directory)
+            );
+
+        $s = true;
+        $f = new Hoa_File_Write($directory . $file);
+        $s &= $f->writeAll(
+            '<?php' . "\n\n" .
+            'class ' . $class  . ' extends ' . $extends . ' {' . "\n\n" .
+            (null !== $method
+                ? '    public function ' . $method . ' ( ) {' . "\n\n" .
+                  '    }' . "\n"
+                : '') .
+            '}'
+        );
+
+        cout(
+            'Create ' .
+            parent::stylize('controller', 'info') .
+            ' file and class at ' .
+            parent::stylize($file, 'info') . '.',
+            (bool) $s
+        );
 
 		return HC_SUCCESS;
     }
@@ -188,86 +235,13 @@ class CreateCommand extends Hoa_Console_Command_Abstract {
      */
     public function usage ( ) {
 
-        cout('Usage   : controller:create [-p] <controller name>');
+        cout('Usage   : controller:create <options> controllerName');
         cout('Options :');
         cout(parent::makeUsageOptionsList(array(
             'p'    => 'Specify the primary controller name when creating a ' .
                       'secondary controller.',
             'help' => 'This help.'
         )));
-
-        return HC_SUCCESS;
-    }
-
-    /**
-     * Create a primary controller.
-     *
-     * @acccess  public
-     * @param    string    $directory    The controller directory.
-     * @param    string    $file         The filename.
-     * @param    string    $class        The classname.
-     * @return   int
-     */
-    public function createPrimary ( $directory, $file, $class ) {
-
-        if(file_exists($directory . DS . $file))
-            throw new Hoa_Console_Command_Exception(
-                'Cannot create the %s controller, because it already exists.',
-                3, $class);
-
-        $c = new Hoa_File($directory . DS . $file, Hoa_File::MODE_TRUNCATE_WRITE);
-        $p = new Hoa_File(HOA_DATA_TEMPLATE . DS . 'PrimaryController.tpl', Hoa_File::MODE_READ);
-
-        parent::status(
-            'Create the controller file.',
-            false !== $c->writeAll(sprintf($p->readAll(), $class))
-        );
-        parent::status(
-            'Create the controller class.',
-            true
-        );
-
-        return HC_SUCCESS;
-    }
-
-    /**
-     * Create a secondary controller.
-     *
-     * @access  public
-     * @param   string    $directory    The controller directory.
-     * @param   string    $cFile        The primary controller filename.
-     * @param   string    $subdir       The secondary controller directory.
-     * @param   string    $pClass       The primary controller classname.
-     * @param   string    $file         The filename
-     * @param   string    $class        The classname.
-     * @return  int
-     */
-    public function createSecondary ( $directory, $cFile, $subdir,
-                                      $pClass,    $file,  $class ) {
-
-        if(!file_exists($directory . DS . $cFile))
-            throw new Hoa_Console_Command_Exception(
-                'Cannot create the %s controller, because the primary controller ' .
-                '%s dose not exist.', 4, array($class, $pClass));
-
-        if(file_exists($directory . DS . $subdir . DS . $file))
-            throw new Hoa_Console_Command_Exception(
-                'Cannot create the %s controller, because it already exists.',
-                5, $class);
-
-        Hoa_File_Directory::create($directory . DS . $subdir);
-        $c = new Hoa_File($directory . DS . $subdir . DS . $file, Hoa_File::MODE_TRUNCATE_WRITE);
-        $s = new Hoa_File(HOA_DATA_TEMPLATE . DS . 'SecondaryController.tpl', Hoa_File::MODE_READ);
-
-        parent::status(
-            'Create the secondary controller file.',
-            false !== $c->writeAll(sprintf($s->readAll(), $class, $pClass))
-        );
-
-        parent::status(
-            'Create the secondary controller class.',
-            true
-        );
 
         return HC_SUCCESS;
     }

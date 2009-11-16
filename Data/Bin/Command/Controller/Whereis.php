@@ -64,17 +64,11 @@ class WhereisCommand extends Hoa_Console_Command_Abstract {
      * @var VersionCommand array
      */
     protected $options     = array(
-        array('primary', parent::REQUIRED_ARGUMENT, 'p'),
-        array('help',    parent::NO_ARGUMENT,       'h'),
-        array('help',    parent::NO_ARGUMENT,       '?')
+        array('primary',    parent::REQUIRED_ARGUMENT, 'p'),
+        array('no-verbose', parent::NO_ARGUMENT,       'V'),
+        array('help',       parent::NO_ARGUMENT,       'h'),
+        array('help',       parent::NO_ARGUMENT,       '?')
     );
-
-    /**
-     * The router instance.
-     *
-     * @var Hoa_Controller_Router_Pattern object
-     */
-    protected $router      = null;
 
 
 
@@ -86,62 +80,96 @@ class WhereisCommand extends Hoa_Console_Command_Abstract {
      */
     public function main ( ) {
 
-        throw new Hoa_Console_Command_Exception(
-            'Disable temporary.', -1);
-
-        $isSecondary = false;
-        $primary     = null;
+        $verbose = true;
+        $primary = null;
 
         while(false !== $c = parent::getOption($v)) {
 
             switch($c) {
 
                 case 'p':
-                    $isSecondary = true;
-                    $primary     = $v;
+                    $primary = $v;
+                  break;
+
+                case 'V':
+                    $verbose = false;
                   break;
 
                 case 'h':
                 case '?':
                     return $this->usage();
+                  break;
             }
         }
 
-        if(!file_exists(HOA_DATA_CONFIGURATION_CACHE . DS . 'Controller.php'))
+        parent::listInputs($controllerName);
+
+        if(null === $controllerName)
+            return $this->usage();
+
+        $path = 'hoa://Data/Etc/Configuration/.Cache/HoaController.php';
+
+        if(!file_exists($path))
             throw new Hoa_Console_Command_Exception(
-                'The cache “Controller” is not found in %s. Must generate it.',
-                0, HOA_DATA_CONFIGURATION_CACHE);
+                'Configuration cache file %s does not exist.', 0, $path);
 
-        $options      = require HOA_DATA_CONFIGURATION_CACHE . DS . 'Controller.php';
-        $this->router = new Hoa_Controller_Router_Pattern();
+        $configurations = require $path;
 
-        parent::listInputs($name);
-
-        if(null === $name)
+        if(   !is_array($configurations)
+           || !isset($configurations['keywords'])
+           || !isset($configurations['parameters']))
             throw new Hoa_Console_Command_Exception(
-                'Must precise the controller name in input (see the usage)', 1);
+                'Configuration cache files %s appears corrupted.', 1, $path);
 
-        $directory       = HOA_BASE . DS . $options['route']['directory'];
-        $primaryName     = true === $isSecondary ? $primary : $name;
-        $secondaryName   = true === $isSecondary ? $name    : null;
+        $configurations['keywords']['controller'] = $controllerName;
+        $configurations['keywords']['action']     = 'index';
 
-        $controllerFile  = $this->router->transform(
-                               $options['pattern']['controller']['file'],
-                               $primaryName
-                           );
-        $controllerDir   = $this->router->transform(
-                               $options['pattern']['controller']['directory'],
-                               $primaryName
-                           );
-        $actionFile      = $this->router->transform(
-                               $options['pattern']['action']['file'],
-                               $secondaryName
-                           );
+        if(null !== $primary) {
 
-        if(false === $isSecondary)
-            cout($directory . $controllerFile);
+            $configurations['keywords']['controller'] = $primary;
+            $configurations['keywords']['action']     = $controllerName;
+        }
+
+        $directory = Hoa_Framework_Parameter::zFormat(
+            $configurations['parameters']['controller.directory'],
+            $configurations['keywords'],
+            $configurations['parameters']
+        );
+        $file      = Hoa_Framework_Parameter::zFormat(
+            $configurations['parameters']['controller.file'],
+            $configurations['keywords'],
+            $configurations['parameters']
+        );
+
+        if(null !== $primary) {
+
+            $directory = Hoa_Framework_Parameter::zFormat(
+                $configurations['parameters']['action.directory'],
+                $configurations['keywords'],
+                $configurations['parameters']
+            );
+            $file      = Hoa_Framework_Parameter::zFormat(
+                $configurations['parameters']['action.file'],
+                $configurations['keywords'],
+                $configurations['parameters']
+            );
+        }
+
+        $model = Hoa_Framework_Parameter::zFormat(
+            $configurations['parameters']['model.directory'],
+            $configurations['keywords'],
+            $configurations['parameters']
+        );
+
+        if(true === $verbose)
+            cout(
+                'Controller ' .
+                parent::stylize($controllerName, 'info') .
+                ' has been found at ' .
+                parent::stylize($directory . $file, 'info') . '.'
+            );
         else
-            cout($directory . $controllerDir . $actionFile);
+            cout($directory . $file);
 
 		return HC_SUCCESS;
     }
@@ -154,11 +182,13 @@ class WhereisCommand extends Hoa_Console_Command_Abstract {
      */
     public function usage ( ) {
 
-        cout('Usage   : controller:whereis [-p] <controller name>');
+        cout('Usage   : controller:whereis <options> controllerName');
         cout('Options :');
         cout(parent::makeUsageOptionsList(array(
             'p'    => 'Specify the primary controller name when searching a ' .
                       'secondary controller.',
+            'V'    => 'No-verbose, i.e. be as quiet as possible, just print ' .
+                      'essential informations.',
             'help' => 'This help.'
         )));
 

@@ -63,7 +63,10 @@ class WelcomeCommand extends Hoa_Console_Command_Abstract {
      *
      * @var HelpCommand array
      */
-    protected $options     = array();
+    protected $options     = array(
+        array('help', parent::NO_ARGUMENT, 'h'),
+        array('help', parent::NO_ARGUMENT, '?'),
+    );
 
 
 
@@ -74,6 +77,17 @@ class WelcomeCommand extends Hoa_Console_Command_Abstract {
      * @return  int
      */
     public function main ( ) {
+
+        while(false !== $c = parent::getOption($v)) {
+
+            switch($c) {
+
+                case 'h':
+                case '?':
+                    return $this->usage();
+                  break;
+            }
+        }
 
         cout(parent::align(
             parent::stylize('Hoa Framework', 'h1'),
@@ -104,6 +118,10 @@ class WelcomeCommand extends Hoa_Console_Command_Abstract {
                 '    ' . parent::stylize('root', 'command'),
                 'To know some roots.'
             ),
+            array(
+                '    ' . parent::stylize('tree', 'command'),
+                'Print contents of a directory.'
+            ),
 
             // Application.
             array('Application'),
@@ -119,15 +137,22 @@ class WelcomeCommand extends Hoa_Console_Command_Abstract {
                 'Create a new controller.'
             ),
             array(
-                '    ' . parent::stylize('delete', 'command'),
-                'Delete a controller.',
-            ),
-            array(
                 '    ' . parent::stylize('whereis', 'command'),
                 'Return the path of a controller.'
             ),
 
-            // Controller.
+            // Configuration.
+            array('Configuration'),
+            array(
+                '    ' . parent::stylize('view', 'command'),
+                'View a package configuration.'
+            ),
+            array(
+                '    ' . parent::stylize('cache', 'command'),
+                'Cache the package configurations.'
+            ),
+
+            // Test.
             array('Test'),
             array(
                 '    ' . parent::stylize('initialize', 'command'),
@@ -136,43 +161,6 @@ class WelcomeCommand extends Hoa_Console_Command_Abstract {
             array(
                 '    ' . parent::stylize('launch', 'command'),
                 'Launch initialized tests.',
-            ),
-
-            // Action.
-            /*
-            array('Action'),
-            array(
-                '    ' . parent::stylize('create', 'command'),
-                'Create a new action in a controller.'
-            ),
-            array(
-                '    ' . parent::stylize('delete', 'command'),
-                'Delete an action in a controller.'
-            ),
-            array(
-                '    ' . parent::stylize('whereis', 'command'),
-                'Return the path of an action.'
-            ),
-            */
-
-            // View.
-            /*
-            array('View'),
-            array(
-                '    ' . parent::stylize('theme', 'command'),
-                'Manage theme for the view layer.'
-            ),
-            array(
-                '    ' . parent::stylize('layout', 'command'),
-                'Manage layout for the view layer.'
-            ),
-            */
-
-            // Maintenance.
-            array('Maintenance'),
-            array(
-                '    ' . parent::stylize('cache', 'command'),
-                'Manage the framework package configuration caches.'
             ),
 
             // Documentation.
@@ -202,22 +190,7 @@ class WelcomeCommand extends Hoa_Console_Command_Abstract {
                 '    ' . parent::stylize('twitter', 'command'),
                 'Send a tweet!'
             )
-
-            // Tool.
-            /*
-            array('Tool'),
-            array(
-                '    ' . parent::stylize('form', 'command'),
-                'An helper to built a form.'
-            ),
-            array(
-                '    ' . parent::stylize('gettext', 'command'),
-                'An helper to compile the .po to .mo.'
-            )
-            */
         )));
-
-        cout();
 
         return HC_SUCCESS;
     }
@@ -229,6 +202,30 @@ class WelcomeCommand extends Hoa_Console_Command_Abstract {
      * @return  int
      */
     public function usage ( ) {
+
+        cout('Usage   : main:welcome <options>');
+        cout('Options :');
+        cout(parent::makeUsageOptionsList(array(
+            'help' => 'This help.'
+        )));
+        cout(
+            'A command line is made up of a ' .
+            parent::stylize('group', 'info') .
+            ' and a ' .
+            parent::stylize('command name', 'info') .
+            '. Both are separated by the symbol ' .
+            parent::stylize(':', 'info') .
+            '. If the group is ' .
+            parent::stylize('main', 'info') .
+            ' then, it could be ommited.' . "\n" . 'Thus:' . "\n" .
+            '    hoa main:version' . "\n" .
+            'is equivalent to:' . "\n" .
+            '    hoa version' . "\n" .
+            'But, no equivalence exists for:' . "\n" .
+            '    hoa application:start' . "\n\n" .
+            'All commands have a help page accessibles via options ' .
+            '-h, -? or --help.'
+        );
 
         return HC_SUCCESS;
     }

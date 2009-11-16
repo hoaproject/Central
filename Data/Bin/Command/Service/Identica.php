@@ -115,8 +115,7 @@ class IdenticaCommand extends Hoa_Console_Command_Abstract {
         parent::listInputs($message);
 
         if(null === $message)
-            throw new Hoa_Console_Exception(
-                'Message cannot be null.', 0);
+            return $this->usage();
 
         if(strlen($message) > 140)
             throw new Hoa_Console_Exception(
@@ -124,8 +123,7 @@ class IdenticaCommand extends Hoa_Console_Command_Abstract {
                 1, strlen($message));
 
         if(null === $username)
-            throw new Hoa_Console_Exception(
-                'Username cannot be null.', 2);
+            return $this->usage();
 
         if(null === $password)
             $password = cin('Password:', Hoa_Console_Core_Io::TYPE_PASSWORD);
@@ -166,10 +164,10 @@ class IdenticaCommand extends Hoa_Console_Command_Abstract {
      */
     public function usage ( ) {
 
-        cout('Usage   : service:identica -u <username> [-p <password>] <message>');
+        cout('Usage   : service:identica <options> message');
         cout('Options :');
         cout(parent::makeUsageOptionsList(array(
-            'u'    => 'Username.',
+            'u'    => 'Username (required).',
             'p'    => 'Password.',
             'help' => 'This help.'
         )));

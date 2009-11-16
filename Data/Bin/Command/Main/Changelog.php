@@ -216,23 +216,23 @@ class ChangelogCommand extends Hoa_Console_Command_Abstract {
      */
     public function usage ( ) {
 
-        cout('Usage   : main:changelog [-r] [-t] [-c]');
+        cout('Usage   : main:changelog <options>');
         cout('Options :');
         cout(parent::makeUsageOptionsList(array(
             'r'    => 'Specify the revision (can be a range min:max of ' .
-                      'revisions) :' . "\n" .
-                      '    [number] for a specified revision number ;' . "\n" .
-                      '    HEAD     for the latest revision number ;' . "\n" .
+                      'revisions):' . "\n" .
+                      '    [number] for a specified revision number;' . "\n" .
+                      '    HEAD     for the latest revision number;' . "\n" .
                       '    PREV     for the previous revision number.' . "\n" .
                       'Revisions can be separated by a comma.' . "\n" .
                       'And finally, negative numbers should be given.',
-            't'    => 'Do not print the changelog as an XML document, but in ' .
+            't'    => 'Do not print the changelog as a XML document, but in ' .
                       'plain text.',
-            'c'    => 'Print the plain text with colour (only on tty terminal).',
+            'c'    => 'Print the plain text with colour (only on TTY terminal).',
             'help' => 'This help.'
         )));
 
-        cout('Example with revisions');
+        cout('Example with revisions:');
         cout(parent::columnize(array(
             array(
                 '    -r 1,3,7',

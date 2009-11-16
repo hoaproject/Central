@@ -163,7 +163,7 @@ class LaunchCommand extends Hoa_Console_Command_Abstract {
      *
      * @var LaunchCommand string
      */
-    protected $programName = 'Version';
+    protected $programName = 'Launch';
 
     /**
      * Options description.
@@ -199,8 +199,7 @@ class LaunchCommand extends Hoa_Console_Command_Abstract {
         parent::listInputs($directory);
 
         if(null === $directory)
-            throw new Hoa_Console_Exception(
-                'ID cannot be null.', 0);
+            return $this->usage();
 
         import('File.ReadWrite');
         $my = new My($this);
@@ -209,8 +208,7 @@ class LaunchCommand extends Hoa_Console_Command_Abstract {
             $my
         ));
 
-        $directory = Hoa_Framework::getProtocol()->resolve($directory);
-
+        $directory    = Hoa_Framework::getProtocol()->resolve($directory);
         $oracle       = glob($directory . DS . 'Ordeal' . DS . 'Oracle' . DS . '*');
         $battleground = glob($directory . DS . 'Ordeal' . DS . 'Battleground' . DS . '*');
 
@@ -244,7 +242,7 @@ class LaunchCommand extends Hoa_Console_Command_Abstract {
      */
     public function usage ( ) {
 
-        cout('Usage   : test:launch directory');
+        cout('Usage   : test:launch <options> path');
         cout('Options :');
         cout(parent::makeUsageOptionsList(array(
             'help' => 'This help.'

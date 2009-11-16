@@ -31,14 +31,9 @@
  */
 
 /**
- * Hoa_Version
- */
-import('Version.~');
-
-/**
- * Class VersionCommand.
+ * Class CacheCommand.
  *
- * This command allows to know version and revision of the framework.
+ * This command allows to generate caches of the package configurations.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2009 Ivan ENDERLIN.
@@ -47,7 +42,7 @@ import('Version.~');
  * @version     0.1
  */
 
-class VersionCommand extends Hoa_Console_Command_Abstract {
+class CacheCommand extends Hoa_Console_Command_Abstract {
 
     /**
      * Author name.
@@ -61,7 +56,7 @@ class VersionCommand extends Hoa_Console_Command_Abstract {
      *
      * @var VersionCommand string
      */
-    protected $programName = 'Version';
+    protected $programName = 'Cache';
 
     /**
      * Options description.
@@ -69,12 +64,8 @@ class VersionCommand extends Hoa_Console_Command_Abstract {
      * @var VersionCommand array
      */
     protected $options     = array(
-        array('version',    parent::NO_ARGUMENT, 'v'),
-        array('revision',   parent::NO_ARGUMENT, 'r'),
-        array('signature',  parent::NO_ARGUMENT, 's'),
-        array('no-verbose', parent::NO_ARGUMENT, 'V'),
-        array('help',       parent::NO_ARGUMENT, 'h'),
-        array('help',       parent::NO_ARGUMENT, '?')
+        array('help', parent::NO_ARGUMENT, 'h'),
+        array('help', parent::NO_ARGUMENT, '?')
     );
 
 
@@ -87,46 +78,41 @@ class VersionCommand extends Hoa_Console_Command_Abstract {
      */
     public function main ( ) {
 
-        $verbose = true;
-        $message = null;
-        $info    = null;
-
         while(false !== $c = parent::getOption($v)) {
 
             switch($c) {
-
-                case 'r':
-                    $info    = Hoa_Version::getRevision();
-                    $message = 'Framework revision number: ' .
-                               parent::stylize($info, 'info') . '.';
-                  break;
-
-                case 'v':
-                    $info    = Hoa_Version::getVersion();
-                    $message = 'Framework version: ' .
-                               parent::stylize($info, 'info') . '.';
-                  break;
-
-                case 'V':
-                    $verbose = false;
-                  break;
 
                 case 'h':
                 case '?':
                     return $this->usage();
                   break;
-
-                case 's':
-                default:
-                    $info = $message = Hoa_Version::getSignature();
-                  break;
             }
         }
 
-        if(true === $verbose)
-            cout($message);
-        else
-            cout($info);
+        $configuration = Hoa_Framework::getProtocol()->resolve(
+            'hoa://Data/Etc/Configuration/'
+        );
+        $files         = glob($configuration . DS . '*.json');
+        $cache         = $configuration . DS . '.Cache' . DS;
+
+        foreach($files as $i => $file)
+            parent::status(
+                'Cache ' . parent::stylize(basename($file), 'info') . ' file.',
+                false !== file_put_contents(
+                    $cache . substr(basename($file), 0, -5) . '.php',
+                    '<?php' . "\n\n" .
+                    '/**' . "\n" .
+                    ' * Generated the ' . date('Y-m-d\TH:i:s.000000\Z') . "\n" .
+                    ' */' . "\n\n" .
+                    'return ' . var_export(
+                        json_decode(
+                            file_get_contents($file),
+                            true
+                        ),
+                        true
+                    ) . ';'
+                )
+            );
 
         return HC_SUCCESS;
     }
@@ -139,16 +125,12 @@ class VersionCommand extends Hoa_Console_Command_Abstract {
      */
     public function usage ( ) {
 
-        cout('Usage   : main:version <options>');
+        cout('Usage   : configuration:cache <options>');
         cout('Options :');
         cout(parent::makeUsageOptionsList(array(
-            'v'    => 'Get the framework version.',
-            'r'    => 'Get the framework revision number.',
-            's'    => 'Get the complete framework signature.',
-            'V'    => 'No-verbose, i.e. be as quiet as possible, just print ' .
-                      'essential informations.',
             'help' => 'This help.'
         )));
+        cout();
 
         return HC_SUCCESS;
     }

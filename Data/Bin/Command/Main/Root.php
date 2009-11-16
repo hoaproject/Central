@@ -33,7 +33,7 @@
 /**
  * Class RootCommand.
  *
- * This command allow to know some roots.
+ * This command allows to know some roots.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2009 Ivan ENDERLIN.
@@ -68,6 +68,7 @@ class RootCommand extends Hoa_Console_Command_Abstract {
         array('data',        parent::NO_ARGUMENT, 'd'),
         array('application', parent::NO_ARGUMENT, 'a'),
         array('check',       parent::NO_ARGUMENT, 'c'),
+        array('no-verbose',  parent::NO_ARGUMENT, 'V'),
         array('help',        parent::NO_ARGUMENT, 'h'),
         array('help',        parent::NO_ARGUMENT, '?')
     );
@@ -83,46 +84,65 @@ class RootCommand extends Hoa_Console_Command_Abstract {
     public function main ( ) {
 
         $framework = Hoa_Framework::getInstance();
+        $verbose   = true;
+        $message   = null;
+        $info      = null;
         $check     = false;
-        $root      = $framework->getFormattedParameter('root.framework');
 
         while(false !== $c = parent::getOption($v)) {
 
             switch($c) {
 
-                case 'f':
-                    $root = $framework->getFormattedParameter('root.framework');
-                  break;
-
                 case 'd':
-                    $root = $framework->getFormattedParameter('root.data');
+                    $info    = $framework->getFormattedParameter('root.data');
+                    $message = 'Data\'s root: ' .
+                               parent::stylize($info, 'info') . '.';
                   break;
 
                 case 'a':
-                    $root = $framework->getFormattedParameter('root.application');
+                    $info    = $framework->getFormattedParameter('root.application');
+                    $message = 'Application\'s root: ' .
+                               parent::stylize($info, 'info') . '.';
                   break;
 
                 case 'c':
                     $check = $v;
                   break;
 
-                case 'h':
-                case '?':
-                    $this->usage();
+                case 'V':
+                    $verbose = false;
                   break;
 
-                case 'm':
+                case 'h':
+                case '?':
+                    return $this->usage();
+                  break;
+
+                case 'f':
                 default:
+                    $info    = $framework->getFormattedParameter('root.framework');
+                    $message = 'Framework\'s root: ' .
+                               parent::stylize($info, 'info') . '.';
+                  break;
             }
         }
 
-        if(true  === $check)
-            if($root ==  getcwd())
-                cout('You are at the right place!');
+        if(true === $check)
+            if($info == getcwd())
+                if(true === $verbose)
+                    cout('You are at the right place!');
+                else
+                    cout('1');
             else
-                cout('You are not at the right place :-(.');
+                if(true === $verbose)
+                    cout('You are not at the right place :-(.');
+                else
+                    cout('0');
 
-        cout($root);
+        if(true === $verbose)
+            cout($message);
+        else
+            cout($info);
 
         return HC_SUCCESS;
     }
@@ -135,14 +155,16 @@ class RootCommand extends Hoa_Console_Command_Abstract {
      */
     public function usage ( ) {
 
-        cout('Usage   : main:root [-f] [-d] [-a]');
+        cout('Usage   : main:root <options>');
         cout('Options :');
         cout(parent::makeUsageOptionsList(array(
-            'framework'   => 'The framework root.',
-            'data'        => 'The data root.',
-            'application' => 'The application root.',
-            'check'       => 'Check with the current path if it matches.',
-            'help'        => 'This help.'
+            'f'    => 'The framework root.',
+            'd'    => 'The data root.',
+            'a'    => 'The application root.',
+            'c'    => 'Check with the current path if it matches.',
+            'V'    => 'No-verbose, i.e. be as quiet as possible, just print ' .
+                      'essential informations.',
+            'help' => 'This help.'
         )));
 
         return HC_SUCCESS;

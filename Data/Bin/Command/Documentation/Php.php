@@ -156,13 +156,13 @@ class PhpCommand extends Hoa_Console_Command_Abstract {
      */
     public function usage ( ) {
 
-        cout('Usage   : documentation:php [-f] [-c] [-e] [-i] [-d] <name>');
+        cout('Usage   : documentation:php <options> name');
         cout('Options :');
         cout(parent::makeUsageOptionsList(array(
             'f'    => 'Show information about function <name>.',
             'c'    => 'Show information about class <name>.',
             'e'    => 'Show information about extension <name>.',
-            'i'    => 'Show configuration about extension <name>.',
+            'i'    => 'Show configuration about configuration <name>.',
             'd'    => 'Open the online documentation on the <name> page.',
             'help' => 'This help.'
         )));

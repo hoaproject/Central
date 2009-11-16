@@ -75,7 +75,7 @@ class MysqlCommand extends Hoa_Console_Command_Abstract {
         array('ref5',              parent::NO_ARGUMENT, '5'),
         array('ref6',              parent::NO_ARGUMENT, '6'),
         array('administrator',     parent::NO_ARGUMENT, 'a'),
-        array('query-broswer',     parent::NO_ARGUMENT, 'q'),
+        array('query-browser',     parent::NO_ARGUMENT, 'q'),
         array('migration-toolkit', parent::NO_ARGUMENT, 'm'),
         array('workbench',         parent::NO_ARGUMENT, 'w'),
         array('help',              parent::NO_ARGUMENT, 'h'),

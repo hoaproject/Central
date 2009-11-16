@@ -61,7 +61,7 @@ class InitializeCommand extends Hoa_Console_Command_Abstract {
      *
      * @var InitializeCommand string
      */
-    protected $programName = 'Version';
+    protected $programName = 'Initialize';
 
     /**
      * Options description.
@@ -71,6 +71,7 @@ class InitializeCommand extends Hoa_Console_Command_Abstract {
     protected $options     = array(
         array('no-recursive', parent::NO_ARGUMENT,       'R'),
         array('test-root',    parent::REQUIRED_ARGUMENT, 't'),
+        array('no-verbose',   parent::NO_ARGUMENT,       'V'),
         array('help',         parent::NO_ARGUMENT,       'h'),
         array('help',         parent::NO_ARGUMENT,       '?')
     );
@@ -85,6 +86,7 @@ class InitializeCommand extends Hoa_Console_Command_Abstract {
      */
     public function main ( ) {
 
+        $verbose   = true;
         $recursive = true;
         $root      = null;
 
@@ -100,6 +102,10 @@ class InitializeCommand extends Hoa_Console_Command_Abstract {
                     $root = $v;
                   break;
 
+                case 'V':
+                    $verbose = false;
+                  break;
+
                 case 'h':
                 case '?':
                     return $this->usage();
@@ -110,8 +116,7 @@ class InitializeCommand extends Hoa_Console_Command_Abstract {
         parent::listInputs($directory);
 
         if(null === $directory)
-            throw new Hoa_Console_Exception(
-                'Directory cannot be null.', 0);
+            return $this->usage();
 
         $parameters = array(
             'convict.directory' => $directory,
@@ -135,10 +140,15 @@ class InitializeCommand extends Hoa_Console_Command_Abstract {
             );
         }
 
-        parent::status('Initialize incubator from ' . $directory . '.', true);
-        parent::status('Initialize ordeal/oracle.', true);
-        parent::status('Initialize ordeal/battleground.', true);
-        cout('Root is ' . parent::stylize($root, 'info'));
+        if(true === $verbose) {
+
+            parent::status('Initialize incubator from ' . $directory . '.', true);
+            parent::status('Initialize ordeal/oracle.', true);
+            parent::status('Initialize ordeal/battleground.', true);
+            cout('Root is ' . parent::stylize($root, 'info'));
+        }
+        else
+            cout($root);
 
         return HC_SUCCESS;
     }
@@ -151,11 +161,13 @@ class InitializeCommand extends Hoa_Console_Command_Abstract {
      */
     public function usage ( ) {
 
-        cout('Usage   : test:initialize [-R] [-t] directory');
+        cout('Usage   : test:initialize <options> directory');
         cout('Options :');
         cout(parent::makeUsageOptionsList(array(
             'R'    => 'Just initialize the first level of the root.',
             't'    => 'Precise a special test-root, i.e. where the tests will be placed.',
+            'V'    => 'No-verbose, i.e. be as quiet as possible, just print ' .  
+                      'essential informations.',
             'help' => 'This help.'
         )));
 
