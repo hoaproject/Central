@@ -94,7 +94,7 @@ Please,  read  the  changelog  from  the previous revision number to the current
 prevision number :
     /Data/Bin $ ./hoa changelog -r HEAD:PREV -t -c
 
-We can notice new packages, like Hoa_Memory, Hoa_Php, Hoa_Lo and Hoa_Tree.
+We can notice new packages, like Hoa_Memory, Hoa_Php, Hoa_Log and Hoa_Tree.
 
 But  definitively,  hoa://  and  zFormat  are  the two bigs new features of this
 version.  On  these  ones, the new package pararameter system is based, and also
