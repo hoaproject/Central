@@ -119,7 +119,7 @@ class Hoa_Test_Praspel_Type {
      */
     protected function factory ( $name, Array $arguments ) {
 
-        $name  = ucfirst(strtolower($name));
+        $name  = ucfirst($name);
         $class = 'Hoa_Test_Urg_Type_' . $name;
 
         import('Test.Urg.Type.' . $name);
