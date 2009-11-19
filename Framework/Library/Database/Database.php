@@ -143,7 +143,7 @@ class Hoa_Database implements Hoa_Framework_Parameterizable {
                 'connection.list.default.dal'      => Hoa_Database_Dal::PDO,
                 'connection.list.default.dsn'      => 'mysql:host=localhost;dbname=foobar',
                 'connection.list.default.username' => 'root',
-                'connection.list.default.passowrd' => '',
+                'connection.list.default.password' => '',
                 'connection.list.default.options'  => true,
                 'connection.autoload'              => null // or connection ID, e.g. 'default'
             )

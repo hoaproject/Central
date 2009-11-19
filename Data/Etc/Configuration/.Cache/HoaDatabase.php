@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Generated the 2009-11-16T17:34:31.000000Z
+ * Generated the 2009-11-19T01:15:55.000000Z
  */
 
 return array (
@@ -32,7 +32,7 @@ return array (
     'connection.list.default.dal' => 'Pdo',
     'connection.list.default.dsn' => 'mysql:host=localhost;dbname=foobar',
     'connection.list.default.username' => 'root',
-    'connection.list.default.passowrd' => '',
+    'connection.list.default.password' => '',
     'connection.list.default.options' => true,
     'connection.autoload' => NULL,
   ),

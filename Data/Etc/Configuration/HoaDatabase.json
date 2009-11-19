@@ -30,7 +30,7 @@
         "connection.list.default.dal"     : "Pdo",
         "connection.list.default.dsn"     : "mysql:host=localhost;dbname=foobar",
         "connection.list.default.username": "root",
-        "connection.list.default.passowrd": "",
+        "connection.list.default.password": "",
         "connection.list.default.options" : true,
         "connection.autoload"             : null
     }

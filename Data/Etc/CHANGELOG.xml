@@ -4,10 +4,139 @@
 Informations             :
     - repository path    : /Users/hywan/Development/Hoa/Svn/Repository ;
     - path in repository : /Framework/Trunk/ ;
-    - generated at       : 2009-11-10T10:17:41.000000Z.
+    - generated at       : 2009-11-16T17:41:38.000000Z.
 -->
 
 <log>
+  <logentry revision="595">
+    <author>hywan</author>
+    <date>2009-11-16T17:39:55.246996Z</date>
+    <msg>Refresh changelog, readme and install files.</msg>
+    <paths>
+      <path action="M">Data/Etc/CHANGELOG.xml</path>
+      <path action="M">INSTALL</path>
+      <path action="M">README</path>
+    </paths>
+  </logentry>
+  <logentry revision="594">
+    <author>hywan</author>
+    <date>2009-11-16T17:39:27.543991Z</date>
+    <msg>Grr.</msg>
+    <paths>
+      <path action="D">Data/Bin/Command/Maintenance</path>
+    </paths>
+  </logentry>
+  <logentry revision="593">
+    <author>hywan</author>
+    <date>2009-11-16T17:38:14.993008Z</date>
+    <msg>Remove the maintenance commands group.</msg>
+    <paths>
+      <path action="D">Data/Bin/Command/Maintenance/Cache.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="592">
+    <author>hywan</author>
+    <date>2009-11-16T17:36:42.585146Z</date>
+    <msg>Reset up all commands :-).</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Application/Start.php</path>
+      <path action="A">Data/Bin/Command/Configuration</path>
+      <path action="A">Data/Bin/Command/Configuration/Cache.php</path>
+      <path action="A">Data/Bin/Command/Configuration/View.php</path>
+      <path action="M">Data/Bin/Command/Controller/Create.php</path>
+      <path action="D">Data/Bin/Command/Controller/Delete.php</path>
+      <path action="M">Data/Bin/Command/Controller/Whereis.php</path>
+      <path action="M">Data/Bin/Command/Documentation/Mysql.php</path>
+      <path action="M">Data/Bin/Command/Documentation/Php.php</path>
+      <path action="M">Data/Bin/Command/Main/Changelog.php</path>
+      <path action="M">Data/Bin/Command/Main/Root.php</path>
+      <path action="A">Data/Bin/Command/Main/Tree.php</path>
+      <path action="M">Data/Bin/Command/Main/Version.php</path>
+      <path action="M">Data/Bin/Command/Main/Welcome.php</path>
+      <path action="M">Data/Bin/Command/Service/Identica.php</path>
+      <path action="M">Data/Bin/Command/Service/Twitter.php</path>
+      <path action="M">Data/Bin/Command/Test/Initialize.php</path>
+      <path action="M">Data/Bin/Command/Test/Launch.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="591">
+    <author>hywan</author>
+    <date>2009-11-16T17:35:17.381464Z</date>
+    <msg>Add the Hoa_Test configuration file and refresh others.</msg>
+    <paths>
+      <path action="M">Data/Etc/Configuration/.Cache/Cache.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaConsole.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaController.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaDatabase.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaFramework.php</path>
+      <path action="A">Data/Etc/Configuration/.Cache/HoaTest.php</path>
+      <path action="A">Data/Etc/Configuration/HoaTest.json</path>
+    </paths>
+  </logentry>
+  <logentry revision="590">
+    <author>hywan</author>
+    <date>2009-11-16T17:34:16.737068Z</date>
+    <msg>Correct an exception message.</msg>
+    <paths>
+      <path action="M">Framework/Library/Controller/Router/Standard.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="589">
+    <author>hywan</author>
+    <date>2009-11-16T17:33:59.367645Z</date>
+    <msg>Remove the transformation of a dot to an underscore.</msg>
+    <paths>
+      <path action="M">Framework/Library/StdClass/StdClass.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="588">
+    <author>hywan</author>
+    <date>2009-11-16T17:33:26.469486Z</date>
+    <msg>Ameliorate the usage &amp; options helper look.</msg>
+    <paths>
+      <path action="M">Framework/Library/Console/Command/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="587">
+    <author>hywan</author>
+    <date>2009-11-16T17:32:53.840060Z</date>
+    <msg>Change the “current.root” parameter value.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Test.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="586">
+    <author>hywan</author>
+    <date>2009-11-16T17:32:25.533660Z</date>
+    <msg>Correct API documentation and correct a bug when reversing the sort.</msg>
+    <paths>
+      <path action="M">Framework/Library/File/Finder.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="585">
+    <author>hywan</author>
+    <date>2009-11-16T17:31:53.593412Z</date>
+    <msg>Forget to import the Hoa_File class to call the MODE_* constants.</msg>
+    <paths>
+      <path action="M">Framework/Library/File/Undefined.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="584">
+    <author>hywan</author>
+    <date>2009-11-16T17:31:17.251075Z</date>
+    <msg>Correct a bug with date constants in the zFormat. Yes, we speak about constants, so store temporary constants values.</msg>
+    <paths>
+      <path action="M">Framework/Core/Parameter.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="583">
+    <author>hywan</author>
+    <date>2009-11-16T17:30:12.529530Z</date>
+    <msg>Oops, need to reverse then-blocks.</msg>
+    <paths>
+      <path action="M">Framework/Core/Protocol.php</path>
+    </paths>
+  </logentry>
   <logentry revision="581">
     <author>hywan</author>
     <date>2009-11-10T09:47:59.977095Z</date>
