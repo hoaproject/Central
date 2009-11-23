@@ -100,11 +100,11 @@
   </xsd:complexType>
 
   <xsd:complexType name="comment">
-    <xsd:element   name="author"      type="formattedStr" use="required" />
-    <xsd:element   name="mail"        type="formattedStr" use="optional" />
-    <xsd:element   name="copyright"   type="formattedStr" use="optional" />
-    <xsd:element   name="license"     type="formattedStr" use="optional" />
-    <xsd:element   name="version"     type="formattedStr" use="optional" />
+    <xsd:element   name="author"      type="formattedStr" minOccurs="1" maxOccurs="unbounded" />
+    <xsd:element   name="mail"        type="formattedStr" minOccurs="0" maxOccurs="unbounded" />
+    <xsd:element   name="copyright"   type="formattedStr" minOccurs="0" maxOccurs="unbounded" />
+    <xsd:element   name="license"     type="formattedStr" minOccurs="0" maxOccurs="unbounded" />
+    <xsd:element   name="version"     type="formattedStr" minOccurs="0" maxOccurs="1" />
   </xsd:complexType>
 
   <xsd:element     name="database"    type="base" />
