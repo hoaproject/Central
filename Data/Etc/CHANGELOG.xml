@@ -4,10 +4,50 @@
 Informations             :
     - repository path    : /Users/hywan/Development/Hoa/Svn/Repository ;
     - path in repository : /Framework/Trunk/ ;
-    - generated at       : 2009-11-16T17:41:38.000000Z.
+    - generated at       : 2009-11-26T00:17:00.000000Z.
 -->
 
 <log>
+  <logentry revision="599">
+    <author>hywan</author>
+    <date>2009-11-23T19:17:19.551673Z</date>
+    <msg>The XSD wasn't valid.</msg>
+    <paths>
+      <path action="M">Framework/Library/Database/Schema/Xsd/0.1</path>
+    </paths>
+  </logentry>
+  <logentry revision="598">
+    <author>hywan</author>
+    <date>2009-11-23T18:49:36.706758Z</date>
+    <msg>Oops, forget to close some element.</msg>
+    <paths>
+      <path action="M">Framework/Library/Database/Schema/Xsd/0.1</path>
+    </paths>
+  </logentry>
+  <logentry revision="597">
+    <author>hywan</author>
+    <date>2009-11-19T01:16:20.778335Z</date>
+    <msg>Edit a typo in a parameter.</msg>
+    <paths>
+      <path action="M">Data/Etc/CHANGELOG.xml</path>
+      <path action="M">Data/Etc/Configuration/.Cache/Cache.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaConsole.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaController.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaDatabase.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaFramework.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaTest.php</path>
+      <path action="M">Data/Etc/Configuration/HoaDatabase.json</path>
+      <path action="M">Framework/Library/Database/Database.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="596">
+    <author>hywan</author>
+    <date>2009-11-17T10:43:42.550994Z</date>
+    <msg>Fix the case-sensitivity for some filesystems (e.g. ext3 and ext4).</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Type.php</path>
+    </paths>
+  </logentry>
   <logentry revision="595">
     <author>hywan</author>
     <date>2009-11-16T17:39:55.246996Z</date>

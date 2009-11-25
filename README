@@ -7,21 +7,22 @@ Summary
   Introduction  ...........................................................   20
   Release informations  ...................................................   33
   Special notices for upgrading  ..........................................   40
-    0.4.3b to 0.5.0b  .....................................................   44
-    0.4.0b to 0.4.3b  .....................................................   66
-    0.3.7b to 0.4.0b  .....................................................   84
-  New features in 0.5.0b  .................................................   91 
-  Installation  ...........................................................  105 
-  Project  ................................................................  111
-    Site, manuals, download, communauty etc.  .............................  114
-    License  ..............................................................  121
+    0.5.0b to 0.5.1b  .....................................................   44
+    0.4.3b to 0.5.0b  .....................................................   48
+    0.4.0b to 0.4.3b  .....................................................   70
+    0.3.7b to 0.4.0b  .....................................................   88
+  New features in 0.5.0b  .................................................   95 
+  Installation  ...........................................................  109 
+  Project  ................................................................  115
+    Site, manuals, download, communauty etc.  .............................  118
+    License  ..............................................................  126
 
 
 
 Introduction
 ------------
 
-Welcome  to  Hoa  Framework  0.5.0b.  This is the maintenance release of the Hoa
+Welcome  to  Hoa  Framework  0.5.1b.  This is the maintenance release of the Hoa
 Framework   0.x  series  since  the  0.3.7b  version.  Please,  read  with  much
 attention special notices.
 
@@ -33,12 +34,16 @@ still opened and will be glad to help you!
 Release informations
 --------------------
 
-Hoa Framework 0.5.0b (582).
-Released on 10 november 2009.
+Hoa Framework 0.5.1b (600).
+Released on 26 november 2009.
 
 
 Special notices for upgrading
 -----------------------------
+
+  0.5.0b to 0.5.1b
+
+Nothing particular.
 
   0.4.3b to 0.5.0b
 

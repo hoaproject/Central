@@ -263,7 +263,7 @@ class Hoa_Controller_Router_Rewrite implements Hoa_Controller_Router_Interface {
                                     $newPattern, $foo,
                                     PREG_SET_ORDER))
                 throw new Hoa_Controller_Exception(
-                    'Cannot split the new pattern : %s.', 4, $newPattern);
+                    'Cannot split the new pattern: %s.', 4, $newPattern);
 
             $handle = array();
             foreach($foo as $key => $splitted) {
