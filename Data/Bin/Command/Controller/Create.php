@@ -84,13 +84,6 @@ class CreateCommand extends Hoa_Console_Command_Abstract {
         array('help',    parent::NO_ARGUMENT,       '?')
     );
 
-    /**
-     * The router instance.
-     *
-     * @var Hoa_Controller_Router_Pattern object
-     */
-    protected $router      = null;
-
 
 
     /**
