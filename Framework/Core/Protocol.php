@@ -793,4 +793,4 @@ class Hoa_Framework_Protocol_Wrapper {
 /**
  * Register the hoa:// protocol.
  */
-stream_wrapper_register('hoa', 'Hoa_Framework_Protocol_Wrapper', 0);
+stream_wrapper_register('hoa', 'Hoa_Framework_Protocol_Wrapper');
