@@ -199,17 +199,17 @@ class CreateCommand extends Hoa_Console_Command_Abstract {
 
         $s = true;
         $f = new Hoa_File_Write($directory . $file);
-        $s &= $f->writeAll(
-            '<?php' . "\n\n" .
-            'class ' . $class  . ' extends ' . $extends . ' {' . "\n\n" .
-            (null !== $method
-                ? '    public function ' . $method . ' ( ) {' . "\n\n" .
-                  '    }' . "\n"
-                : '') .
-            '}'
+        $s = $f->writeAll(
+           '<?php' . "\n\n" .
+           'class ' . $class  . ' extends ' . $extends . ' {' . "\n\n" .
+           (null !== $method
+               ? '    public function ' . $method . ' ( ) {' . "\n\n" .
+                 '    }' . "\n"
+               : '') .
+           '}'
         );
 
-        cout(
+        parent::status(
             'Create ' .
             parent::stylize('controller', 'info') .
             ' file and class at ' .
