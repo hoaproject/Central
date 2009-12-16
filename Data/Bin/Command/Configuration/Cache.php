@@ -130,7 +130,6 @@ class CacheCommand extends Hoa_Console_Command_Abstract {
         cout(parent::makeUsageOptionsList(array(
             'help' => 'This help.'
         )));
-        cout();
 
         return HC_SUCCESS;
     }
