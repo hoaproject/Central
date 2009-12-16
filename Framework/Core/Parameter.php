@@ -699,7 +699,7 @@ class Hoa_Framework_Parameter {
             self::initializeConstants();
 
         preg_match_all(
-            '#([^\(]+)?(?:\(:(.*?):\))?#',
+            '#([^\(]+)?(?:(?:\(:(.*?):\))|(?:\(:(.*?)\)))?#',
             $value,
             $matches,
             PREG_SET_ORDER
@@ -714,6 +714,13 @@ class Hoa_Framework_Parameter {
 
             if(!isset($match[2]))
                 continue;
+
+            if(isset($match[3])) {
+
+                $out .= '(:' . $match[3] . ')';
+
+                continue;
+            }
 
             preg_match(
                 '#([^:]+)(?::(.*))?#',
