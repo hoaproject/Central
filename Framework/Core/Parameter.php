@@ -831,20 +831,10 @@ class Hoa_Framework_Parameter {
                                 'Unrecognized format pattern in the parameter %s.',
                                 0, $parameter);
 
-                        if(isset($flags[3][1]) && isset($flags[3][1])) {
+                        $l = preg_quote($flags[3][$i], '#');
+                        $r = $flags[4][$i];
 
-                            $l = $flags[3][1];
-                            $r = $flags[4][1];
-                        }
-                        else {
-
-                            $l = $flags[3][0];
-                            $r = $flags[4][0];
-                        }
-
-                        $l     = preg_quote($l, '#');
-
-                        switch($flags[2][0]) {
+                        switch($flags[2][$i]) {
 
                             case '%':
                                 $l  = '^' . $l;
