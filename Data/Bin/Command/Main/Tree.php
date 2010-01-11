@@ -197,7 +197,7 @@ class TreeCommand extends Hoa_Console_Command_Abstract {
         if(null === $path)
             $path = getcwd();
 
-        cout($path . DS);
+        cout(trim($path, DS) . DS);
         $this->find(
             new Hoa_File_Finder(
                 $path,
@@ -287,7 +287,7 @@ class TreeCommand extends Hoa_Console_Command_Abstract {
             'V'    => 'List hidden entries.',
             'f'    => 'List files.',
             'F'    => 'List directories.',
-            'l'    => 'List link.',
+            'l'    => 'List links.',
             'O'    => 'Do not list current and parent.',
             'o'    => 'List current and parent.',
             'a'    => 'Sort by access time.',
