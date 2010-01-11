@@ -216,19 +216,23 @@ abstract class Hoa_Framework_Protocol {
         if(substr($path, 0, 6) == 'hoa://')
             $path = substr($path, 6);
 
-        $pos = strpos($path, '/');
+        if(empty($path))
+            return null;
 
-        if($pos !== false)
+        $path = trim($path, '/');
+        $pos  = strpos($path, '/');
+
+        if(false !== $pos)
             $next = substr($path, 0, $pos);
         else
             $next = $path;
 
         if(true === $this->componentExists($next)) {
 
-            $handle = substr($path, $pos + 1);
-
-            if(false === $handle)
-                return $this->reach($path);
+            if(false !== $pos)
+                $handle = substr($path, $pos + 1);
+            else
+                return $this->getComponent($next)->reach(null);
 
             return $this->getComponent($next)->resolve($handle);
         }
@@ -262,6 +266,17 @@ abstract class Hoa_Framework_Protocol {
     }
 
     /**
+     * Get reach's root.
+     *
+     * @access  protected
+     * @return  string
+     */
+    protected function getReach ( ) {
+
+        return $this->_reach;
+    }
+
+    /**
      * Print a tree of component.
      *
      * @access  public
@@ -269,11 +284,9 @@ abstract class Hoa_Framework_Protocol {
      */
     public function __toString ( ) {
 
-        $out = null;
+        $out = str_repeat('  ', self::$i) . $this->getName() . "\n";
 
         foreach($this->_components as $foo => $component) {
-
-            $out .= str_repeat('  ', self::$i) . $component->getName() . "\n";
 
             self::$i++;
             $out .= $component->__toString();
@@ -321,7 +334,7 @@ class Hoa_Framework_Protocol_Root extends Hoa_Framework_Protocol {
      *
      * @var Hoa_Framework_Protocol_Root string
      */
-    protected $_name = '/';
+    protected $_name = 'hoa://';
 }
 
 /**
