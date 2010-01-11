@@ -123,6 +123,17 @@ class WelcomeCommand extends Hoa_Console_Command_Abstract {
                 'Print contents of a directory.'
             ),
 
+            // Protocol.
+            array('Protocol'),
+            array(
+                '    ' . parent::stylize('resolve', 'command'),
+                'Resolve some hoa:// paths.'
+            ),
+            array(
+                '    ' . parent::stylize('print', 'command'),
+                'Print the protocol tree.'
+            ),
+
             // Application.
             array('Application'),
             array(
