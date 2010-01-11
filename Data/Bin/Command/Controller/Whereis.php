@@ -121,27 +121,38 @@ class WhereisCommand extends Hoa_Console_Command_Abstract {
             throw new Hoa_Console_Command_Exception(
                 'Configuration cache files %s appears corrupted.', 1, $path);
 
-        $configurations['keywords']['controller'] = $controllerName;
-        $configurations['keywords']['action']     = 'index';
 
-        if(null !== $primary) {
+        if(null === $primary) {
+
+            $configurations['keywords']['controller'] = $controllerName;
+            $configurations['keywords']['action']     = 'index';
+        }
+        else {
 
             $configurations['keywords']['controller'] = $primary;
             $configurations['keywords']['action']     = $controllerName;
         }
 
-        $directory = Hoa_Framework_Parameter::zFormat(
-            $configurations['parameters']['controller.directory'],
-            $configurations['keywords'],
-            $configurations['parameters']
-        );
-        $file      = Hoa_Framework_Parameter::zFormat(
-            $configurations['parameters']['controller.file'],
+        $class     = Hoa_Framework_Parameter::zFormat(
+            $configurations['parameters']['controller.class'],
             $configurations['keywords'],
             $configurations['parameters']
         );
 
-        if(null !== $primary) {
+        if(null === $primary) {
+
+            $directory = Hoa_Framework_Parameter::zFormat(
+                $configurations['parameters']['controller.directory'],
+                $configurations['keywords'],
+                $configurations['parameters']
+            );
+            $file      = Hoa_Framework_Parameter::zFormat(
+                $configurations['parameters']['controller.file'],
+                $configurations['keywords'],
+                $configurations['parameters']
+            );
+        }
+        else {
 
             $directory = Hoa_Framework_Parameter::zFormat(
                 $configurations['parameters']['action.directory'],
@@ -164,7 +175,7 @@ class WhereisCommand extends Hoa_Console_Command_Abstract {
         if(true === $verbose)
             cout(
                 'Controller ' .
-                parent::stylize($controllerName, 'info') .
+                parent::stylize($class, 'info') .
                 ' has been found at ' .
                 parent::stylize($directory . $file, 'info') . '.'
             );

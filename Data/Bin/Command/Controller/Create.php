@@ -130,34 +130,40 @@ class CreateCommand extends Hoa_Console_Command_Abstract {
             throw new Hoa_Console_Command_Exception(
                 'Configuration cache files %s appears corrupted.', 1, $path);
 
-        $configurations['keywords']['controller'] = $controllerName;
-        $configurations['keywords']['action']     = 'index';
 
-        if(null !== $primary) {
+        if(null === $primary) {
+
+            $configurations['keywords']['controller'] = $controllerName;
+            $configurations['keywords']['action']     = 'index';
+        }
+        else {
 
             $configurations['keywords']['controller'] = $primary;
             $configurations['keywords']['action']     = $controllerName;
         }
 
-        $directory = Hoa_Framework_Parameter::zFormat(
-            $configurations['parameters']['controller.directory'],
-            $configurations['keywords'],
-            $configurations['parameters']
-        );
-        $file      = Hoa_Framework_Parameter::zFormat(
-            $configurations['parameters']['controller.file'],
-            $configurations['keywords'],
-            $configurations['parameters']
-        );
-        $class     = Hoa_Framework_Parameter::zFormat(
+        $class = Hoa_Framework_Parameter::zFormat(
             $configurations['parameters']['controller.class'],
             $configurations['keywords'],
             $configurations['parameters']
         );
-        $method    = null;
-        $extends   = 'Hoa_Controller_Action_Standard';
 
-        if(null !== $primary) {
+        if(null === $primary) {
+
+            $directory = Hoa_Framework_Parameter::zFormat(
+                $configurations['parameters']['controller.directory'],
+                $configurations['keywords'],
+                $configurations['parameters']
+            );
+            $file      = Hoa_Framework_Parameter::zFormat(
+                $configurations['parameters']['controller.file'],
+                $configurations['keywords'],
+                $configurations['parameters']
+            );
+            $method    = null;
+            $extends   = 'Hoa_Controller_Action_Standard';
+        }
+        else {
 
             $extends   = $class;
             $directory = Hoa_Framework_Parameter::zFormat(
@@ -188,8 +194,13 @@ class CreateCommand extends Hoa_Console_Command_Abstract {
             $configurations['parameters']
         );
 
+        if(file_exists($directory . $file))
+            throw new Hoa_Console_Command_Exception(
+                'Controller %s already exists at %s.',
+                2, array($class, $directory . $file));
+
         if(!is_dir($directory))
-            cout(
+            parent::status(
                 'Create ' .
                 parent::stylize('controller', 'info') .
                 ' directory at ' .
