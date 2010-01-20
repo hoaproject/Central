@@ -164,6 +164,8 @@ class Hoa_Test_Urg_Type_Array implements Hoa_Test_Urg_Type_Interface_Type {
         if($length instanceof Hoa_Test_Urg_Type_Integer)
             $length = $length->getValue();
 
+        $length = abs($length);
+
         do {
 
             $random = array();
