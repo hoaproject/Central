@@ -128,6 +128,14 @@ class Hoa_Json extends Hoa_StdClass {
                 throw new Hoa_Json_Exception(
                     'JSON extension is disabled.', 1);
 
+        // Comments support.
+        $json = preg_replace_callback(
+            '#(?<!\\\)".*?(?<!\\\)"#',
+            array($this, 'backslash'),
+            $json
+        );
+        $json = preg_replace('#(//[^\n]+)|(/\*.*?\*/)#s', '', $json);
+
         if(PHP_VERSION_ID < 50300)
             $json = json_decode($json, true);
         else
@@ -138,6 +146,22 @@ class Hoa_Json extends Hoa_StdClass {
                 $this->getLastError(true), 2);
 
         parent::__construct($json);
+    }
+
+    /**
+     * Usefull for removing comments in a JSON document.
+     *
+     * @access  private
+     * @param   array    $matches    Matches (from a callback).
+     * @return  string
+     */
+    private function backslash ( Array $matches ) {
+
+        $handle = str_replace('//', '\\/\\/', $matches[0]);
+        $handle = str_replace('/*', '/\*',    $handle);
+        $handle = str_replace('*/', '*\/',    $handle);
+
+        return $handle;
     }
 
     /**
