@@ -1,10 +1,17 @@
 {
+    /**
+     * Keywords.
+     */
     "keywords": {
-        "controller":  "index",
-        "action":      "index",
-        "view":        "hend",
+        "controller" : "index",
+        "action"     : "index",
+        "view"       : "hend",
         "view.layout": "front"
     },
+
+    /**
+     * Parameters.
+     */
     "parameters": {
         "data.array"                    : {},
         "data.array.personal"           : null,
@@ -12,6 +19,15 @@
         "route.type"                    : "Get",
         "route.parameter.default.module": "(:controller:)",
         "route.parameter.default.action": "(:action:)",
+
+        /**
+         * Example of parameters for route.type = Rewrite.
+         * "route.type"                                  : "Rewrite",
+         * "route.parameter.base"                        : "/MyBase",
+         * "route.parameter.rules.default.pattern"       : "/(:module)/(:action).html",
+         * "route.parameter.rules.default.default.module": "(:controller:)",
+         * "route.parameter.rules.default.default.module": "(:action:)",
+         */
 
         "controller.class"              : "(:controller:U:)Controller",
         "controller.file"               : "(:controller:U:).php",

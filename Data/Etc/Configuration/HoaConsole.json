@@ -1,25 +1,32 @@
 {
+    /**
+     * Keywords.
+     */
     "keywords": {
-        "group":   "main",
+        "group"  : "main",
         "command": "welcome",
-        "style":   "default"
+        "style"  : "default"
     },
+
+    /**
+     * Parameters.
+     */
     "parameters": {
-        "command.class":     "(:command:U:)Command",
-        "command.file":      "(:command:U:).php",
+        "command.class"    : "(:command:U:)Command",
+        "command.file"     : "(:command:U:).php",
         "command.directory": "hoa://Data/Bin/Command/(:group:U:)",
 
-        "cli.separator":     ":",
-        "cli.longonly":      false,
+        "cli.separator"    : ":",
+        "cli.longonly"     : false,
 
-        "prompt.prefix":     "",
-        "prompt.symbol":     "> ",
+        "prompt.prefix"    : "",
+        "prompt.symbol"    : "> ",
 
-        "style.class":       "(:style:U:)Style",
-        "style.file":        "(:style:U:).php",
-        "style.directory":   "hoa://Data/Bin/Style",
+        "style.class"      : "(:style:U:)Style",
+        "style.file"       : "(:style:U:).php",
+        "style.directory"  : "hoa://Data/Bin/Style",
 
-        "command.php":       "php",
-        "command.browser":   "open"
+        "command.php"      : "php",
+        "command.browser"  : "open"
     }
 }

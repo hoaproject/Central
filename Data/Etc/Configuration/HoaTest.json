@@ -1,5 +1,12 @@
 {
+    /**
+     * Keywords.
+     */
     "keywords": {},
+
+    /**
+     * Parameters.
+     */
     "parameters": {
         "convict.directory"       : null,
         "convict.recursive"       : true,

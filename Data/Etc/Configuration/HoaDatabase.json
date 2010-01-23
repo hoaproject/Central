@@ -1,10 +1,17 @@
 {
+    /**
+     * Keywords.
+     */
     "keywords": {
-        "base":   null,
-        "table":  null,
-        "field":  null,
+        "base"  : null,
+        "table" : null,
+        "field" : null,
         "schema": null
     },
+
+    /**
+     * Parameters.
+     */
     "parameters": {
         "base.class"                      : "(:base:U:)Base",
         "base.file"                       : "_(:base:U:).php",
@@ -32,6 +39,6 @@
         "connection.list.default.username": "root",
         "connection.list.default.password": "",
         "connection.list.default.options" : true,
-        "connection.autoload"             : null
+        "connection.autoload"             : null // or connection ID, e.g. "default"
     }
 }
