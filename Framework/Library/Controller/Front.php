@@ -168,7 +168,7 @@ class Hoa_Controller_Front implements Hoa_Framework_Parameterizable {
                 'route.parameter.default.module' => '(:controller:)',
                 'route.parameter.default.action' => '(:action:)',
 
-                /* Example of parameter for route.type = Rewrite.
+                /* Example of parameters for route.type = Rewrite.
                 'route.type'           => 'Rewrite',
                 'route.parameter.base' => '/MyBase',
                 'route.parameter.rules.default.pattern' => '/(:module)/(:action).html',
