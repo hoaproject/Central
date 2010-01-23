@@ -31,6 +31,12 @@
  */
 
 /**
+ * Hoa_Json
+ */
+import('Json.~');
+
+
+/**
  * Class CacheCommand.
  *
  * This command allows to generate caches of the package configurations.
@@ -94,25 +100,38 @@ class CacheCommand extends Hoa_Console_Command_Abstract {
         );
         $files         = glob($configuration . DS . '*.json');
         $cache         = $configuration . DS . '.Cache' . DS;
+        $handle        = null;
 
-        foreach($files as $i => $file)
-            parent::status(
-                'Cache ' . parent::stylize(basename($file), 'info') . ' file.',
-                false !== file_put_contents(
-                    $cache . substr(basename($file), 0, -5) . '.php',
-                    '<?php' . "\n\n" .
-                    '/**' . "\n" .
-                    ' * Generated the ' . date('Y-m-d\TH:i:s.000000\Z') . "\n" .
-                    ' */' . "\n\n" .
-                    'return ' . var_export(
-                        json_decode(
-                            file_get_contents($file),
+        foreach($files as $i => $file) {
+
+            try {
+
+                $handle    = new Hoa_Json(file_get_contents($file));
+
+                parent::status(
+                    'Cache ' . parent::stylize(basename($file), 'info') . ' file.',
+                    false !== file_put_contents(
+                        $cache . substr(basename($file), 0, -5) . '.php',
+                        '<?php' . "\n\n" .
+                        '/**' . "\n" .
+                        ' * Generated the ' . date('Y-m-d\TH:i:s.000000\Z') . "\n" .
+                        ' */' . "\n\n" .
+                        'return ' . var_export(
+                            $handle->toArray(),
                             true
-                        ),
-                        true
-                    ) . ';'
-                )
-            );
+                        ) . ';'
+                    )
+                );
+            }
+            catch ( Hoa_Json_Exception $e ) {
+
+                parent::status(
+                    'Cache ' . parent::stylize(basename($file), 'info') . ' file.',
+                    false
+                );
+                cout('    ' . parent::stylize($e->getFormattedMessage(), 'error'));
+            }
+        }
 
         return HC_SUCCESS;
     }
