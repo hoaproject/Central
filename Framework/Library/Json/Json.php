@@ -77,8 +77,8 @@ class Hoa_Json extends Hoa_StdClass {
 
     /**
      * Error: state mismatch (in parser).
-     * It is not officially in documentation, but it is declared
-     * in /php5.3-dev/ext/json/JSON_parser.h (dev = 200901251130).
+     * It is not officially in the documentation, but it is declared
+     * since the revision number 271582.
      *
      * @const int
      */
@@ -97,6 +97,15 @@ class Hoa_Json extends Hoa_StdClass {
      * @const int
      */
     const ERROR_SYNTAX         = 4;
+
+    /**
+     * Error: UTF-8 error.
+     * It is not officially in the documentation, but it is declared
+     * since the revision number 284625.
+     *
+     * @const int
+     */
+    const ERROR_UTF8           = 5;
 
 
 
@@ -126,7 +135,7 @@ class Hoa_Json extends Hoa_StdClass {
 
         if(true === $this->hasError())
             throw new Hoa_Json_Exception(
-                $this->getLastError(), 2);
+                $this->getLastError(true), 2);
 
         parent::__construct($json);
     }
@@ -140,7 +149,7 @@ class Hoa_Json extends Hoa_StdClass {
     public function hasError ( ) {
 
         if(PHP_VERSION_ID < 50300)
-            return false; // cannot find if an error has occured.
+            return false; // Cannot find if an error has occured.
 
         return json_last_error() != self::ERROR_NONE;
     }
@@ -171,9 +180,9 @@ class Hoa_Json extends Hoa_StdClass {
                 $message = 'No error has occured.';
               break;
 
-            case self::ERROR_DEPT:
+            case self::ERROR_DEPTH:
                 $message = 'The maximum stack depth has been exceeded.';
-                $code    = self::ERROR_DEPT;
+                $code    = self::ERROR_DEPTH;
               break;
 
             case self::ERROR_STATE_MISMATCH:
@@ -190,23 +199,16 @@ class Hoa_Json extends Hoa_StdClass {
                 $message = 'Syntax error.';
                 $code    = self::ERROR_SYNTAX;
               break;
+
+            case self::ERROR_UTF8:
+                $message = 'UTF-8 error.';
+                $code    = self::ERROR_UTF8;
         }
 
         if(true === $verbose)
             return $message;
 
         return $code;
-    }
-
-    /**
-     * Overload the parent::__toString() method to produce a JSON string.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function __toString ( ) {
-
-        return $this->toJson();
     }
 
     /**
@@ -227,5 +229,16 @@ class Hoa_Json extends Hoa_StdClass {
             return parent::toJson();
 
         return json_encode($value);
+    }
+
+    /**
+     * Overload the parent::__toString() method to produce a JSON string.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function __toString ( ) {
+
+        return $this->toJson();
     }
 }
