@@ -74,9 +74,6 @@ class Hoa_StdClass implements Iterator, Countable, Serializable, ArrayAccess {
      */
     public function __construct ( $array = array() ) {
 
-        if(null === $array)
-            $array = array();
-
         $this->transform($array);
     }
 
@@ -183,8 +180,8 @@ class Hoa_StdClass implements Iterator, Countable, Serializable, ArrayAccess {
 
         if(false === $this->isRecursive()) {
 
-            if(false === $this->current())
-                return 'Hoa_StdClass (' . "\n" . ')';
+            if(empty($this->_data))
+                return 'array()';
 
             $handle = $this->current();
 
@@ -201,9 +198,6 @@ class Hoa_StdClass implements Iterator, Countable, Serializable, ArrayAccess {
         $out = 'Hoa_StdClass (' . "\n";
 
         foreach($this->_data as $key => $value) {
-
-            var_dump($value);
-
 
             $i++;
             $out .= str_repeat('    ', $i) . '[' . $key . '] => ' . $value . "\n";
@@ -227,8 +221,8 @@ class Hoa_StdClass implements Iterator, Countable, Serializable, ArrayAccess {
 
         if(false === $this->isRecursive()) {
 
-            if(false === $this->current())
-                return array();
+            if(empty($this->_data))
+                return $this->_data;
 
             return $this->current();
         }
@@ -250,9 +244,6 @@ class Hoa_StdClass implements Iterator, Countable, Serializable, ArrayAccess {
      * @return  string
      */
     public function toString ( ) {
-
-        if(false === $this->isRecursive())
-            return (string) $this->current();
 
         return $this->__toString();
     }
