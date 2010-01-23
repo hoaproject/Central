@@ -186,19 +186,31 @@ class Hoa_StdClass implements Iterator, Countable, Serializable, ArrayAccess {
             if(false === $this->current())
                 return 'Hoa_StdClass (' . "\n" . ')';
 
-            return '' . $this->current();
+            $handle = $this->current();
+
+            if(true === $handle)
+                $handle = 'true';
+            elseif(false === $handle)
+                $handle = 'false';
+            elseif(null === $handle)
+                $handle = 'null';
+
+            return '' . $handle;
         }
 
         $out = 'Hoa_StdClass (' . "\n";
 
         foreach($this->_data as $key => $value) {
 
+            var_dump($value);
+
+
             $i++;
-            $out .= str_repeat("\t", $i) . '[' . $key . '] => ' . $value . "\n";
+            $out .= str_repeat('    ', $i) . '[' . $key . '] => ' . $value . "\n";
             $i--;
         }
 
-        $out .= str_repeat("\t", $i) . ')';
+        $out .= str_repeat('    ', $i) . ')';
 
         $this->rewind();
 
