@@ -228,8 +228,11 @@ class Hoa_Test_Urg_Type_String extends    Hoa_Test_Urg_Type_SuperString
                 $charPos = Hoa_Test_Urg::Ud(0, $fileLength);
                 $char    = mb_substr($file, $charPos - 1, 1, 'utf-8');
 
-                if(in_array($char, $skip))
+                if(in_array($char, $skip)) {
+
+                    $maxtry--;
                     continue;
+                }
 
                 $random .= $char;
                 $i++;
