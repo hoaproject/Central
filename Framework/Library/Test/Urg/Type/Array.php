@@ -177,8 +177,11 @@ class Hoa_Test_Urg_Type_Array implements Hoa_Test_Urg_Type_Interface_Type {
                 $this->_types[$e][0]->randomize();
                 $this->_types[$e][1]->randomize();
 
-                if(isset($random[$this->_types[$e][0]->getValue()]))
+                if(isset($random[$this->_types[$e][0]->getValue()])) {
+
+                    $maxtry--;
                     continue;
+                }
 
                 $random[$this->_types[$e][0]->getValue()] =
                         $this->_types[$e][1]->getValue();
