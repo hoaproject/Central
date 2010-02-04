@@ -126,6 +126,7 @@ class Hoa_Factory {
                 }
             }
             catch ( ReflectionException $e ) {
+
                 throw new Hoa_Factory_Exception($e->getMessage(), $e->getCode());
             }
 
@@ -137,6 +138,7 @@ class Hoa_Factory {
             $reflection = new ReflectionClass(get_class($object));
 
             if(false !== $implements) {
+
                 if($reflection->implementsInterface($implements))
                     return $object;
 
