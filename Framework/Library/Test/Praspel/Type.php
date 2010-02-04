@@ -128,7 +128,9 @@ class Hoa_Test_Praspel_Type {
         try {
 
             $reflection  = new ReflectionClass($class);
-            $this->_type = $reflection->newInstanceArgs($arguments);
+
+            if(true === $reflection->hasMethod('__construct'))
+                $this->_type = $reflection->newInstanceArgs($arguments);
         }
         catch ( ReflectionException $e ) {
 
