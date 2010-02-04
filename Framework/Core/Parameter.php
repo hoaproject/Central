@@ -183,35 +183,56 @@ class Hoa_Framework_Parameter {
      *
      * @var Hoa_Framework_Parameter array
      */
-    private $_parameters       = array();
+    private $_parameters               = array();
 
     /**
      * Collection of package's keywords.
      *
      * @var Hoa_Framework_Parameter array
      */
-    private $_keywords         = array();
+    private $_keywords                 = array();
+
+    /**
+     * Current analyzed parameters.
+     *
+     * @var Hoa_Framework_Parameter array
+     */
+    private static $_currentParameters = null;
+
+    /**
+     * Current analyzed parameter.
+     *
+     * @var Hoa_Framework_Parameter string
+     */
+    private static $_currentParameter  = null;
+
+    /**
+     * Current analyzed keywords.
+     *
+     * @var Hoa_Framework_Parameter array
+     */
+    private static $_currentKeywords   = null;
 
     /**
      * Parameters' owner.
      *
      * @var Hoa_Framework_Parameter string
      */
-    private $_owner            = null;
+    private $_owner                    = null;
 
     /**
      * Owner's friends with associated permissions.
      *
      * @var Hoa_Framework_Parameter array
      */
-    private $_friends          = array();
+    private $_friends                  = array();
 
     /**
      * Constants values.
      *
      * @var Hoa_Framework_Parameter array
      */
-    private static $_constants = array();
+    private static $_constants         = array();
 
 
 
@@ -682,7 +703,6 @@ class Hoa_Framework_Parameter {
      * @param   array     $keywords      Keywords.
      * @param   array     $parameters    Parameters.
      * @return  string
-     * @throw   Hoa_Exception
      *
      * @todo
      *   Add the cast. Maybe like this: (:subject:format[:cast]:) where cast
@@ -698,158 +718,157 @@ class Hoa_Framework_Parameter {
         if(empty(self::$_constants))
             self::initializeConstants();
 
-        preg_match_all(
-            '#([^\(]+)?(?:(?:\(:(.*?):\))|(?:\(:(.*?)\)))?#',
-            $value,
-            $matches,
-            PREG_SET_ORDER
+        self::$_currentParameters = $parameters;
+        self::$_currentParameter  = $value;
+        self::$_currentKeywords   = $keywords;
+
+        $out = preg_replace_callback(
+            '#\(:(.*?):\)#',
+            array(__CLASS__, '_zFormat'),
+            $value
         );
-        array_pop($matches);
 
-        $out = null;
+        self::$_currentParameters = null;
+        self::$_currentParameter  = null;
+        self::$_currentKeywords   = null;
 
-        foreach($matches as $i => $match) {
+        return $out;
+    }
 
-            $out .= $match[1];
+    /**
+     * Resolve zFormat atomically.
+     *
+     * @access  private
+     * @param   array    $match    Match (from a regular expression).
+     * @return  string
+     * @throw   Hoa_Exception
+     */
+    private static function _zFormat ( $match ) {
 
-            if(!isset($match[2]))
-                continue;
+        preg_match(
+            '#([^:]+)(?::(.*))?#',
+            $match[1],
+            $submatch
+        );
 
-            if(isset($match[3])) {
+        if(!isset($submatch[1]))
+            return '';
 
-                $out .= '(:' . $match[3] . ')';
+        $out  = null;
+        $key  = $submatch[1];
+        $word = substr($key, 1);
 
-                continue;
-            }
+        // Call a parameter.
+        if($key[0] == '%') {
 
-            preg_match(
-                '#([^:]+)(?::(.*))?#',
-                $match[2],
-                $submatch
+            if(false === array_key_exists($word, self::$_currentParameters))
+                throw new Hoa_Exception(
+                    'Parameter %s is not found in parameters.',
+                    0, $word);
+
+            $newParameters = self::$_currentParameters;
+            unset($newParameters[$word]);
+
+            $out = self::zFormat(
+                self::$_currentParameters[$word],
+                self::$_currentKeywords,
+                $newParameters
             );
 
-            if(!isset($submatch[1]))
-                continue;
-
-            $key    = $submatch[1];
-            $word   = substr($key, 1);
-            $handle = null;
-
-            // Call a parameter.
-            if($key[0] == '%') {
-
-                if(false === array_key_exists($word, $parameters))
-                    throw new Hoa_Exception(
-                        'Parameter %s is not found in parameters.',
-                        0, $word);
-
-                $newParameters = $parameters;
-                unset($newParameters[$word]);
-
-                $handle = self::zFormat(
-                    $parameters[$word],
-                    $keywords,
-                    $newParameters
-                );
-
-                unset($newParameters);
-            }
-            // Call a constant (only date constants for now).
-            elseif($key[0] == '_') {
-
-                foreach(str_split($word) as $k => $v)
-                    if(isset(self::$_constants[$v]))
-                        $handle .= self::$_constants[$v];
-                    else
-                        throw new Hoa_Exception(
-                            'Constant char %s is not supported in the ' .
-                            'parameter rule %s.',
-                            1, array($v, $parameter));
-            }
-            // Call a keyword.
-            else {
-
-                if(false === array_key_exists($key, $keywords))
-                    throw new Hoa_Exception(
-                        'Keyword %s is not found in the parameter rule %s.', 2,
-                        array($key, $parameter));
-
-                $handle = $keywords[$key];
-            }
-
-            if(!isset($submatch[2])) {
-
-                $out .= $handle;
-                continue;
-            }
-
-            preg_match_all(
-                '#(h|t|r|e|l|u|U|s(/|%|\#)(.*?)(?<!\\\)\2(.*?)(?:(?<!\\\)\2|$))#',
-                $submatch[2],
-                $flags
-            );
-
-            if(empty($flags))
-                continue;
-
-            foreach($flags[1] as $i => $flag)
-                switch($flag) {
-
-                    case 'h':
-                        $handle = dirname($handle);
-                      break;
-
-                    case 't':
-                        $handle = basename($handle);
-                      break;
-
-                    case 'r':
-                        if(false !== $position = strrpos($handle, '.', 1))
-                            $handle = substr($handle, 0, $position);
-                      break;
-
-                    case 'e':
-                        if(false !== $position = strrpos($handle, '.', 1))
-                            $handle = substr($handle, $position + 1);
-                      break;
-
-                    case 'l':
-                        $handle = strtolower($handle);
-                      break;
-
-                    case 'u':
-                        $handle = strtoupper($handle);
-                      break;
-
-                    case 'U':
-                        $handle = ucfirst($handle);
-                      break;
-
-                    default:
-                        if(!isset($flags[3]) && !isset($flags[4]))
-                            throw new Hoa_Exception(
-                                'Unrecognized format pattern in the parameter %s.',
-                                0, $parameter);
-
-                        $l = preg_quote($flags[3][$i], '#');
-                        $r = $flags[4][$i];
-
-                        switch($flags[2][$i]) {
-
-                            case '%':
-                                $l  = '^' . $l;
-                              break;
-
-                            case '#':
-                                $l .= '$';
-                              break;
-                        }
-
-                        $handle = preg_replace('#' . $l . '#', $r, $handle);
-                }
-
-            $out .= $handle;
+            unset($newParameters);
         }
+        // Call a constant (only date constants for now).
+        elseif($key[0] == '_') {
+
+            foreach(str_split($word) as $k => $v)
+                if(isset(self::$_constants[$v]))
+                    $out .= self::$_constants[$v];
+                else
+                    throw new Hoa_Exception(
+                        'Constant char %s is not supported in the ' .
+                        'parameter rule %s.',
+                        1, array($v, self::$_currentParameter));
+        }
+        // Call a keyword.
+        else {
+
+            if(false === array_key_exists($key, self::$_currentKeywords))
+                throw new Hoa_Exception(
+                    'Keyword %s is not found in the parameter rule %s.', 2,
+                    array($key, self::$_currentParameter));
+
+            $out = self::$_currentKeywords[$key];
+        }
+
+        if(!isset($submatch[2]))
+            return $out;
+
+        preg_match_all(
+            '#(h|t|r|e|l|u|U|s(/|%|\#)(.*?)(?<!\\\)\2(.*?)(?:(?<!\\\)\2|$))#',
+            $submatch[2],
+            $flags
+        );
+
+        if(empty($flags) || empty($flags[1]))
+            throw new Hoa_Exception(
+                'Unrecognized format pattern %s in the parameter %s.',
+                0, array($match[0], self::$_currentParameter));
+
+        foreach($flags[1] as $i => $flag)
+            switch($flag) {
+
+                case 'h':
+                    $out = dirname($out);
+                  break;
+
+                case 't':
+                    $out = basename($out);
+                  break;
+
+                case 'r':
+                    if(false !== $position = strrpos($out, '.', 1))
+                        $out = substr($out, 0, $position);
+                  break;
+
+                case 'e':
+                    if(false !== $position = strrpos($out, '.', 1))
+                        $out = substr($out, $position + 1);
+                  break;
+
+                case 'l':
+                    $out = strtolower($out);
+                  break;
+
+                case 'u':
+                    $out = strtoupper($out);
+                  break;
+
+                case 'U':
+                    $out = ucfirst($out);
+                  break;
+
+                default:
+                    if(!isset($flags[3]) && !isset($flags[4]))
+                        throw new Hoa_Exception(
+                            'Unrecognized format pattern in the parameter %s.',
+                            0, self::$_currentParameter);
+
+                    $l = preg_quote($flags[3][$i], '#');
+                    $r = $flags[4][$i];
+
+                    switch($flags[2][$i]) {
+
+                        case '%':
+                            $l  = '^' . $l;
+                          break;
+
+                        case '#':
+                            $l .= '$';
+                          break;
+                    }
+
+                    $out = preg_replace('#' . $l . '#', $r, $out);
+            }
 
         return $out;
     }
