@@ -228,6 +228,13 @@ class Hoa_Test_Praspel_Call {
             while(ob_get_level() >= $obLevel)
                 ob_end_clean();
         }
+        catch ( ReflectionException $e ) {
+
+            $this->_exception = new Hoa_Test_Praspel_Exception(
+                $e->getMessage(),
+                $e->getCode()
+            );
+        }
         catch ( Exception $e ) {
 
             $this->_exception = $e;
