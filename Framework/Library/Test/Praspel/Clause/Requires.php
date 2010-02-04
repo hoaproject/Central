@@ -81,7 +81,7 @@ class Hoa_Test_Praspel_Clause_Requires extends    Hoa_Test_Praspel_Clause_Contra
 
         if($name[0] == '\\')
             throw new Hoa_Test_Praspel_Exception(
-                'Constructors are not allowed in “ensures” clause, given %s.',
+                'Constructors are not allowed in “requires” clause, given %s.',
                 0, $name);
 
         return parent::declareFreeVariable($name);
