@@ -103,6 +103,20 @@ class Hoa_Test_Praspel_FreeVariable {
      */
     protected $_choosen = null;
 
+    /**
+     * Old value.
+     *
+     * @var Hoa_Test_Praspel_FreeVariable mixed
+     */
+    private $_oldValue  = null;
+
+    /**
+     * New value.
+     *
+     * @var Hoa_Test_Praspel_FreeVariable mixed
+     */
+    private $_newValue  = null;
+
 
 
     /**
@@ -170,6 +184,56 @@ class Hoa_Test_Praspel_FreeVariable {
             $this->chooseOneType();
 
         return $this->_choosen;
+    }
+
+    /**
+     * Set old value.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function setOldValue ( $value ) {
+
+        $old             = $this->_oldValue;
+        $this->_oldValue = $value;
+
+        return $old;
+    }
+
+    /**
+     * Get old value.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function getOldValue ( ) {
+
+        return $this->_oldValue;
+    }
+
+    /**
+     * Set new value.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function setNewValue ( $value ) {
+
+        $old             = $this->_newValue;
+        $this->_newValue = $value;
+
+        return $old;
+    }
+
+    /**
+     * Get new value.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function getNewValue ( ) {
+
+        return $this->_newValue;
     }
 
     /**
