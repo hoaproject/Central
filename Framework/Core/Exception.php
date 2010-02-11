@@ -91,8 +91,8 @@ class Hoa_Exception extends Exception {
      * array that contains the list of formatted string for the message.
      *
      * @access  public
-     * @param   string  $message    The formatted message.
-     * @param   int     $code       The code (the ID).
+     * @param   string  $message    Formatted message.
+     * @param   int     $code       Code (the ID).
      * @param   array   $arg        RaiseError string arguments.
      * @return  void
      */
@@ -101,6 +101,8 @@ class Hoa_Exception extends Exception {
         $this->_arg = $arg;
 
         parent::__construct($message, $code);
+
+        return;
     }
 
     /**
