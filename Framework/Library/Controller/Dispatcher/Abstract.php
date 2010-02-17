@@ -326,7 +326,7 @@ class          Hoa_Controller_Dispatcher_Abstract
             /**
              * Load secondary controller.
              */
-            $file            = $directory . $actionDirectory . $actionFile;
+            $file            = $actionDirectory . $actionFile;
             if(!file_exists($file))
                 throw new Hoa_Controller_Exception_ControllerIsNotFound(
                     'Secondary controller %s should be in the file %s, ' .
