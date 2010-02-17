@@ -728,10 +728,6 @@ class Hoa_Framework_Parameter {
             $value
         );
 
-        self::$_currentParameters = null;
-        self::$_currentParameter  = null;
-        self::$_currentKeywords   = null;
-
         return $out;
     }
 
