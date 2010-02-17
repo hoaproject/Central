@@ -762,16 +762,14 @@ class Hoa_Framework_Parameter {
                     'Parameter %s is not found in parameters.',
                     0, $word);
 
-            $newParameters = self::$_currentParameters;
-            unset($newParameters[$word]);
+            $handle = self::$_currentParameters[$word];
+            unset(self::$_currentParameters[$word]);
 
             $out = self::zFormat(
-                self::$_currentParameters[$word],
+                $handle,
                 self::$_currentKeywords,
-                $newParameters
+                self::$_currentParameters
             );
-
-            unset($newParameters);
         }
         // Call a constant (only date constants for now).
         elseif($key[0] == '_') {
