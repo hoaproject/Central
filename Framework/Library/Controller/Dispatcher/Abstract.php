@@ -329,8 +329,11 @@ class          Hoa_Controller_Dispatcher_Abstract
             $file            = $actionDirectory . $actionFile;
             if(!file_exists($file))
                 throw new Hoa_Controller_Exception_ControllerIsNotFound(
-                    'Secondary controller %s should be in the file %s, ' .
-                    'but this last is not found.', 3, array($class, $file));
+                    'We did not found the primary controller %s and its ' .
+                    'associated action %s, so we have tried the secondary ' .
+                    'controller %s. It should be in the file %s, ' .
+                    'but this last is not found.',
+                    3, array($controllerClass, $actionMethod, $class, $file));
 
             require_once $file;
         }
