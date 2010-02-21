@@ -89,7 +89,6 @@ class Hoa_Cache {
     const FRONTEND         = 'frontend';
     const BACKEND          = 'backend';
 
-
     /**
      * Backend object.
      *
@@ -176,11 +175,9 @@ class Hoa_Cache {
         $backendObject  = new $backendClass();
         $frontendObject->setBackend($backendObject);
 
-        #IF_DEFINED HOA_STANDALONE
         if(empty($frontendOptions) || empty($backendOptions)) {
 
-            Hoa_Framework::configurationPackage(
-                'Cache', $options, Hoa_Framework::CONFIGURATION_ARRAY);
+            $options = require 'hoa://Data/Etc/Configuration/.Cache/Cache.php';
 
             if(empty($frontendOptions) && isset($options['frontend']))
                 $frontendOptions = $options['frontend'];
@@ -188,7 +185,6 @@ class Hoa_Cache {
             if(empty($backendOptions) && isset($options['backend']))
                 $backendOptions  = $options['backend'];
         }
-        #END_IF
 
         if(empty($frontendOptions))
             $frontendOptions = $frontendObject->getOptions('frontend');
