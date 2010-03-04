@@ -177,9 +177,12 @@ class Hoa_Exception extends Exception {
     public static function handler ( $exception ) {
 
         if($exception instanceof Hoa_Exception)
-            return $exception->raiseError(self::ERROR_PRINT,
-                                          E_USER_WARNING,
-                                          'Uncaught exception:' . "\n");
+            return $exception->raiseError(
+                self::ERROR_PRINT,
+                E_USER_WARNING,
+                'Uncaught exception (' . get_class($exception) . '):' . "\n"
+            );
+
         throw $exception;
     } 
 
