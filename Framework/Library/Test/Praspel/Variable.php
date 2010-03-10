@@ -136,7 +136,7 @@ class Hoa_Test_Praspel_Variable {
      */
     public function __construct ( Hoa_Test_Praspel_Clause $parent, $name ) {
 
-        $this->seParent($parent);
+        $this->setParent($parent);
         $this->setName($name);
         $this->_or  = $this;
         $this->_and = $this->getParent();
@@ -217,8 +217,10 @@ class Hoa_Test_Praspel_Variable {
                 1, array($name, $this->getName()));
         }
 
+        // /!\ FIX ME /!\
+        // $this->_types[$type->getName()].
         foreach($variable->getTypes() as $i => $type)
-            $this->_types[$type->getName()] = $type;
+            $this->_types[get_class($type)] = $type;
 
         return $this;
     }
@@ -348,5 +350,25 @@ class Hoa_Test_Praspel_Variable {
     public function getParent ( ) {
 
         return $this->_parent;
+    }
+
+    /**
+     * Transform this object model into a string.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function __toString ( ) {
+
+        $out = '        ' . $this->getName() . "\n";
+
+        foreach($this->getTypes() as $i => $type) {
+
+            $gc   = get_class($type);
+            $out .= '            ' .
+                    strtolower(substr($gc, strrpos($gc, '_') + 1)) . "\n";
+        }
+
+        return $out;
     }
 }
