@@ -70,20 +70,19 @@ class Hoa_Test_Praspel_Clause_Requires extends    Hoa_Test_Praspel_Clause_Contra
                                        implements Hoa_Test_Praspel_Clause {
 
     /**
-     * Declare a free variable.
+     * Declare a variable, or get it.
      *
      * @access  public
-     * @param   string  $name    Free variable name.
-     * @return  Hoa_Test_Praspel_FreeVariable
-     * @throws  Hoa_Test_Praspel_Exception
+     * @param   string  $name    Variable name.
+     * @return  Hoa_Test_Praspel_Variable
      */
-    public function declareFreeVariable ( $name ) {
+    public function variable ( $name ) {
 
         if($name[0] == '\\')
             throw new Hoa_Test_Praspel_Exception(
                 'Constructors are not allowed in “requires” clause, given %s.',
                 0, $name);
 
-        return parent::declareFreeVariable($name);
+        return parent::variable($name);
     }
 }

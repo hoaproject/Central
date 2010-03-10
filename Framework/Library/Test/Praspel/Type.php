@@ -71,7 +71,7 @@ class Hoa_Test_Praspel_Type {
     protected $_root = null;
 
     /**
-     * Type found.
+     * Type.
      *
      * @var Hoa_Test_Urg_Type_Interface_Type object
      */
@@ -95,14 +95,14 @@ class Hoa_Test_Praspel_Type {
 
         $this->setRoot($root);
 
-        foreach($arguments as $i => &$argument) {
-
+        /*
+        foreach($arguments as $i => &$argument)
             if(0 !== preg_match('#\\\old\s*\(\s*([a-z]+)\s*\)#i', $argument, $matches))
                 $argument = $this->getRoot()
                                  ->getFreeVariable($matches[1])
                                  ->getChoosenType()
                                  ->getValue();
-        }
+        */
 
         $this->factory($name, $arguments);
 

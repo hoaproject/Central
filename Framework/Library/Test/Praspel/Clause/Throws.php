@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_Clause_Throws
+ * @subpackage  Hoa_Test_Praspel_Clause_Throwable
  *
  */
 
@@ -48,7 +48,7 @@ import('Test.Praspel.Exception');
 import('Test.Praspel.Clause');
 
 /**
- * Class Hoa_Test_Praspel_Clause_Throws.
+ * Class Hoa_Test_Praspel_Clause_Throwable.
  *
  * .
  *
@@ -58,45 +58,65 @@ import('Test.Praspel.Clause');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_Clause_Throws
+ * @subpackage  Hoa_Test_Praspel_Clause_Throwable
  */
 
-class Hoa_Test_Praspel_Clause_Throws implements Hoa_Test_Praspel_Clause {
+class Hoa_Test_Praspel_Clause_Throwable implements Hoa_Test_Praspel_Clause {
 
     /**
      * List of exception names.
      *
-     * @var Hoa_Test_Praspel_Clause_Throws array
+     * @var Hoa_Test_Praspel_Clause_Throwable array
      */
     protected $_list = array();
+
+    /**
+     * Make a conjunction between two exception name declarations.
+     *
+     * @var Hoa_Test_Praspel_Clause_Throwable object
+     */
+    public $_and     = null;
 
 
 
     /**
-     * Declare a list of exception.
+     * Constructor.
      *
      * @access  public
-     * @param   array   $list    List of exception.
-     * @return  array
+     * @return  void
      */
-    public function lists ( Array $list ) {
+    public function __construct ( ) {
 
-        $old         = $this->_list;
-        $this->_list = $list;
+        $this->_and = $this;
 
-        return $old;
+        return;
+    }
+
+    /**
+     * Add an exception name that could be thrown.
+     *
+     * @access  public
+     * @param   string  $name    Exception name.
+     * @return  Hoa_Test_Praspel_Clause_Throwable
+     */
+    public function couldThrow ( $name ) {
+
+        if(false === $this->exceptionExists($name))
+            $this->_list[] = $name;
+
+        return $this;
     }
 
     /**
      * Check if an exception is declared in the list.
      *
      * @access  public
-     * @param   string    $exception    Exception name.
+     * @param   string  $name    Exception name.
      * @return  bool
      */
-    public function exceptionExists ( $exception ) {
+    public function exceptionExists ( $name ) {
 
-        return false !== array_search($exception, $this->getList());
+        return true === in_array($name, $this->getList());
     }
 
     /**
