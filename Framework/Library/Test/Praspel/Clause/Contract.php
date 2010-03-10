@@ -43,9 +43,9 @@ require_once 'Framework.php';
 import('Test.Praspel.Exception');
 
 /**
- * Hoa_Test_Praspel_FreeVariable
+ * Hoa_Test_Praspel_Variable
  */
-import('Test.Praspel.FreeVariable');
+import('Test.Praspel.Variable');
 
 /**
  * Class Hoa_Test_Praspel_Clause_Contract.
@@ -64,116 +64,116 @@ import('Test.Praspel.FreeVariable');
 abstract class Hoa_Test_Praspel_Clause_Contract {
 
     /**
-     * Praspel's root.
+     * Parent (here: the root).
      *
      * @var Hoa_Test_Praspel object
      */
-    protected $_root          = null;
+    protected $_parent    = null;
 
     /**
-     * Collection of free variables.
+     * Collection of variables.
      *
      * @var Hoa_Test_Praspel_Clause_Contract array
      */
-    protected $_freeVariables = array();
+    protected $_variables = array();
 
 
 
     /**
      * Constructor.
-     * Set the Praspel's root.
      *
      * @access  public
-     * @param   Hoa_Test_Praspel  $root    Praspel's root.
+     * @param   Hoa_Test_Praspel  $parent    Parent (here: the root).
      * @return  void
      */
-    public function __construct ( Hoa_Test_Praspel $root ) {
+    public function __construct ( Hoa_Test_Praspel $parent ) {
 
-        $this->setRoot($root);
+        $this->setParent($parent);
+
+        return;
     }
 
     /**
-     * Declare a free variable.
+     * Declare a variable, or get it.
      *
      * @access  public
-     * @param   string  $name    Free variable name.
-     * @return  Hoa_Test_Praspel_FreeVariable
+     * @param   string  $name    Variable name.
+     * @return  Hoa_Test_Praspel_Variable
      */
-    public function declareFreeVariable ( $name ) {
+    public function variable ( $name ) {
 
-        if(true === $this->freeVariableExists($name))
-            return $this->_freeVariables[$name];
+        if(true === $this->variableExists($name))
+            return $this->_variables[$name];
 
-        return $this->_freeVariables[$name] = new Hoa_Test_Praspel_FreeVariable(
-            $this->getRoot(),
+        return $this->_variables[$name] = new Hoa_Test_Praspel_Variable(
             $this,
             $name
         );
     }
 
     /**
-     * Check if a free variable already exists or not.
+     * Check if a variable already exists or not.
      *
      * @access  public
-     * @param   string  $name    Free variable name.
-     * @return  Hoa_Test_Praspel_FreeVariable
+     * @param   string  $name    Variable name.
+     * @return  Hoa_Test_Praspel_Variable
      */
-    public function freeVariableExists ( $name ) {
+    public function variableExists ( $name ) {
 
-        return isset($this->_freeVariables[$name]);
+        return true === array_key_exists($name, $this->getVariables());
     }
 
     /**
-     * Get a specific free variable.
+     * Get a specific variable.
      *
      * @access  public
-     * @param   string  $name    Free variable name.
-     * @return  Hoa_Test_Praspel_FreeVariable
+     * @param   string  $name    Variable name.
+     * @return  Hoa_Test_Praspel_Variable
      * @throw   Hoa_Test_Praspel_Exception
      */
-    public function getFreeVariable ( $name ) {
+    public function getVariable ( $name ) {
 
-        if(false === $this->freeVariableExists($name))
+        if(false === $this->variableExists($name))
             throw new Hoa_Test_Praspel_Exception(
-                'Free variable %s is not found.', 0, $name);
+                'Variable %s is not found.', 0, $name);
 
-        return $this->_freeVariables[$name];
+        return $this->_variables[$name];
     }
 
     /**
-     * Get all free variables.
+     * Get all variables.
      *
      * @access  public
      * @return  array
      */
-    public function getFreeVariables ( ) {
+    public function getVariables ( ) {
 
-        return $this->_freeVariables;
+        return $this->_variables;
     }
 
     /**
-     * Set the Praspel's root.
+     * Set the parent (here: the root).
      *
      * @access  protected
-     * @param   Hoa_Test_Praspel  $root    Praspel's root.
+     * @param   Hoa_Test_Praspel  $parent    Parent (here: the root).
      * @return  Hoa_Test_Praspel
      */
-    protected function setRoot ( Hoa_Test_Praspel $root ) {
+    protected function setParent ( Hoa_Test_Praspel $parent ) {
 
-        $old         = $this->_root;
-        $this->_root = $root;
+        $old           = $this->_parent;
+        $this->_parent = $parent;
 
         return $old;
     }
 
     /**
-     * Get the Praspel's root.
+     * Get the parent (here: the root).
      *
      * @access  public
      * @return  Hoa_Test_Praspel
      */
-    public function getRoot ( ) {
+    public function getParent ( ) {
 
-        return $this->_root;
+        return $this->_parent;
     }
 }

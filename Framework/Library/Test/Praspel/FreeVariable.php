@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_FreeVariable
+ * @subpackage  Hoa_Test_Praspel_Variable
  *
  */
 
@@ -53,7 +53,7 @@ import('Test.Praspel.Type');
 import('Test.Urg.~');
 
 /**
- * Class Hoa_Test_Praspel_FreeVariable.
+ * Class Hoa_Test_Praspel_Variable.
  *
  * .
  *
@@ -63,36 +63,29 @@ import('Test.Urg.~');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_FreeVariable
+ * @subpackage  Hoa_Test_Praspel_Variable
  */
 
-class Hoa_Test_Praspel_FreeVariable {
+class Hoa_Test_Praspel_Variable {
 
     /**
-     * Praspel's root.
-     *
-     * @var Hoa_Test_Praspel object
-     */
-    protected $_root    = null;
-
-    /**
-     * Clause where free variable is declared.
+     * Parent (here: clause).
      *
      * @var Hoa_Test_Praspel_Clause object
      */
-    protected $_clause  = null;
+    protected $_parent  = null;
 
     /**
-     * Free variable name.
+     * Variable name.
      *
-     * @var Hoa_Test_Praspel_FreeVariable string
+     * @var Hoa_Test_Praspel_Variable string
      */
     protected $_name    = null;
 
     /**
      * Collection of types.
      *
-     * @var Hoa_Test_Praspel_FreeVariable array
+     * @var Hoa_Test_Praspel_Variable array
      */
     protected $_types   = array();
 
@@ -106,70 +99,154 @@ class Hoa_Test_Praspel_FreeVariable {
     /**
      * Old value.
      *
-     * @var Hoa_Test_Praspel_FreeVariable mixed
+     * @var Hoa_Test_Praspel_Variable mixed
      */
     private $_oldValue  = null;
 
     /**
      * New value.
      *
-     * @var Hoa_Test_Praspel_FreeVariable mixed
+     * @var Hoa_Test_Praspel_Variable mixed
      */
     private $_newValue  = null;
+
+    /**
+     * Make a disjunction between two variables.
+     *
+     * @var Hoa_Test_Praspel_Variable object
+     */
+    public $_or         = null;
+
+    /**
+     * Make a conjunction between two variables.
+     *
+     * @var Hoa_Test_Praspel_Clause object
+     */
+    public $_and        = null;
 
 
 
     /**
-     * Set the free variable name.
+     * Set the variable name.
      *
      * @access  public
-     * @param   Hoa_Test_Praspel         $root      Praspel's root.
-     * @param   Hoa_Test_Praspel_Clause  $clause    Clause.
-     * @param   string                   $name      Free variable name.
+     * @param   Hoa_Test_Praspel_Clause  $parent    Parent (here: the clause).
+     * @param   string                   $name      Variable name.
      * @return  void
      */
-    public function __construct ( Hoa_Test_Praspel        $root,
-                                  Hoa_Test_Praspel_Clause $clause,
-                                                          $name ) {
+    public function __construct ( Hoa_Test_Praspel_Clause $parent, $name ) {
 
-        $this->setRoot($root);
-        $this->setClause($clause);
+        $this->seParent($parent);
         $this->setName($name);
+        $this->_or  = $this;
+        $this->_and = $this->getParent();
 
         return;
     }
 
     /**
-     * Type the free variable.
+     * Type the variable.
      *
      * @access  public
      * @param   string  $name    Type name.
      * @param   ...     ...      Type arguments.
-     * @return  Hoa_Test_Urg_Type_Interface_Type
+     * @return  Hoa_Test_Praspel_Variable
      */
-    public function hasType ( $name ) {
+    public function isTypedAs ( $name ) {
+
+        if(true === $this->isTypeDeclared($name))
+            return $this->_types[$name];
 
         $arguments = func_get_args();
         array_shift($arguments);
         $type      = new Hoa_Test_Praspel_Type(
-            $this->getRoot(),
+            $this->getParent()->getParent(),
             $name,
             $arguments
         );
 
-        return $this->_types[] = $type->getType();
+        $this->_types[$name] = $type->getType();
+
+        return $this;
+    }
+
+    /**
+     * Check if the variable has a specific declared type.
+     *
+     * @access  public
+     * @param   string  $name    Type name.
+     * @return  bool
+     */
+    public function isTypeDeclared ( $name ) {
+
+        return true === array_key_exists($name, $this->_types);
     }
 
     /**
      * Choose one type.
      *
-     * @access  public
+     * @access  protected
      * @return  Hoa_Test_Urg_Type_Interface_Type
      */
-    public function chooseOneType ( ) {
+    protected function chooseOneType ( ) {
 
         return $this->_choosen =
                    $this->_types[Hoa_Test_Urg::Ud(0, count($this->_types) - 1)];
+    }
+
+    /**
+     * Declare a dependence.
+     *
+     * @access  public
+     * @param   string  $name    Variable name.
+     * @return  Hoa_Test_Praspel_Variable
+     * @throws  Hoa_Test_Praspel_Exception
+     */
+    public function hasTheSameTypeAs ( $name ) {
+
+        try {
+
+            $variable = $this->getParent()->getParent()->getClause('requires')
+                            ->getVariable($name);
+        }
+        catch ( Hoa_Test_Praspel_Exception $e ) {
+
+            throw new Hoa_Test_Praspel_Exception(
+                'Cannot found variable %s on the requires clause for making a ' .
+                'dependence from %s.',
+                1, array($name, $this->getName()));
+        }
+
+        foreach($variable->getTypes() as $i => $type)
+            $this->_types[$type->getName()] = $type;
+
+        return $this;
+    }
+
+    /**
+     * Set the variable name.
+     *
+     * @access  public
+     * @param   string  $name    Variable name.
+     * @return  string
+     */
+    protected function setName ( $name ) {
+
+        $old         = $this->_name;
+        $this->_name = $name;
+
+        return $old;
+    }
+
+    /**
+     * Get the variable name.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getName ( ) {
+
+        return $this->_name;
     }
 
     /**
@@ -237,92 +314,6 @@ class Hoa_Test_Praspel_FreeVariable {
     }
 
     /**
-     * Declare a dependence.
-     *
-     * @access  public
-     * @param   string  $name    Free variable name.
-     * @return  Hoa_Test_Praspel_FreeVariable
-     * @throws  Hoa_Test_Praspel_Exception
-     */
-    public function depends ( $name ) {
-
-        if(!($this->getClause() instanceof Hoa_Test_Praspel_Clause_Requires))
-            throw new Hoa_Test_Praspel_Exception(
-                'Only “requires” clause should have a dependence. ' .
-                'So %s cannot be dependent of %s.',
-                0, array($this->getName(), $name));
-
-        try {
-
-            $freeVar = $this->getClause()->getRoot()->getClause('requires')
-                            ->getFreeVariable($name);
-        }
-        catch ( Hoa_Test_Praspel_Exception $e ) {
-
-            throw new Hoa_Test_Praspel_Exception(
-                'Cannot found free variable %s for making a dependence from %s.',
-                1, array($name, $this->getName()));
-        }
-
-        foreach($freeVar->getTypes() as $i => $type)
-            $this->_types[] = $type;
-
-        return $freeVar;
-    }
-
-    /**
-     * Set the clause.
-     *
-     * @access  protected
-     * @param   Hoa_Test_Praspel_Clause  $clause    Clause.
-     * @return  Hoa_Test_Praspel_Clause
-     */
-    protected function setClause ( Hoa_Test_Praspel_Clause $clause ) {
-
-        $old           = $this->_clause;
-        $this->_clause = $clause;
-
-        return $old;
-    }
-
-    /**
-     * Get the clause.
-     *
-     * @access  public
-     * @return  Hoa_Test_Praspel_Clause
-     */
-    public function getClause ( ) {
-
-        return $this->_clause;
-    }
-
-    /**
-     * Set the free variable name.
-     *
-     * @access  public
-     * @param   string  $name    Free variable name.
-     * @return  string
-     */
-    protected function setName ( $name ) {
-
-        $old         = $this->_name;
-        $this->_name = $name;
-
-        return $old;
-    }
-
-    /**
-     * Get the free variable name.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getName ( ) {
-
-        return $this->_name;
-    }
-
-    /**
      * Get all types.
      *
      * @access  public
@@ -334,28 +325,28 @@ class Hoa_Test_Praspel_FreeVariable {
     }
 
     /**
-     * Set the Praspel's root.
+     * Set the parent (here: the clause).
      *
      * @access  protected
-     * @param   Hoa_Test_Praspel  $root    Praspel's root.
-     * @return  Hoa_Test_Praspel
+     * @param   Hoa_Test_Praspel_Clause  $parent    Parent (here: the clause).
+     * @return  Hoa_Test_Praspel_Clause
      */
-    protected function setRoot ( Hoa_Test_Praspel $root ) {
+    protected function setParent ( Hoa_Test_Praspel_Clause $parent ) {
 
-        $old         = $this->_root;
-        $this->_root = $root;
+        $old           = $this->_parent;
+        $this->_parent = $parent;
 
         return $old;
     }
 
     /**
-     * Get the Praspel's root.
+     * Get the parent (here: the clause).
      *
      * @access  public
-     * @return  Hoa_Test_Praspel
+     * @return  Hoa_Test_Praspel_Clause
      */
-    public function getRoot ( ) {
+    public function getParent ( ) {
 
-        return $this->_root;
+        return $this->_parent;
     }
 }

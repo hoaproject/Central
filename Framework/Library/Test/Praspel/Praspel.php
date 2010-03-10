@@ -68,9 +68,9 @@ import('Test.Praspel.Clause.Predicate');
 import('Test.Praspel.Clause.Requires');
 
 /**
- * Hoa_Test_Praspel_Clause_Throws
+ * Hoa_Test_Praspel_Clause_Throwable
  */
-import('Test.Praspel.Clause.Throws');
+import('Test.Praspel.Clause.Throwable');
 
 /**
  * Hoa_Test_Praspel_Type
@@ -141,7 +141,6 @@ class Hoa_Test_Praspel {
             self::LOG_CHANNEL,
             Hoa_Test::getInstance()->getLogStreams()
         );
-        $this->clause('requires');
     }
 
     /**
@@ -170,15 +169,16 @@ class Hoa_Test_Praspel {
               break;
 
             case 'predicate':
-                $clause = new Hoa_Test_Praspel_Clause_Predicate();
+                throw new Hoa_Test_Praspel_Exception(
+                    'The predicate clause is not yet supported.', 0);
               break;
 
             case 'requires':
                 $clause = new Hoa_Test_Praspel_Clause_Requires($this);
               break;
 
-            case 'throws':
-                $clause = new Hoa_Test_Praspel_Clause_Throws();
+            case 'throwable':
+                $clause = new Hoa_Test_Praspel_Clause_Throwable($this);
               break;
 
             default:
