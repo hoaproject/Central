@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('Test.Urg.Type.Exception');
 
 /**
- * Hoa_Test_Urg_Type_Interface_Type
- */
-import('Test.Urg.Type.Interface.Type');
-
-/**
  * Hoa_Test_Urg
  */
 import('Test.Urg.~');
@@ -82,8 +77,16 @@ import('Test.Urg.Type.Integerpp');
  * @subpackage  Hoa_Test_Urg_Type_ArrayInteger
  */
 
-class Hoa_Test_Urg_Type_ArrayInteger extends    Hoa_Test_Urg_Type_Array
-                                     implements Hoa_Test_Urg_Type_Interface_Type {
+class Hoa_Test_Urg_Type_ArrayInteger extends Hoa_Test_Urg_Type_Array {
+
+    /**
+     * Name of type.
+     *
+     * @var Hoa_Test_Urg_Type_Interface_Type string
+     */
+    protected $_name = 'arrayInteger';
+
+
 
     /**
      * Constructor.

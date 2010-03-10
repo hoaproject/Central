@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Test
- * @subpackage  Hoa_Test_Urg_Type_Void
+ * @subpackage  Hoa_Test_Urg_Type_Undefined
  *
  */
 
@@ -43,9 +43,9 @@ require_once 'Framework.php';
 import('Test.Urg.Type.Exception');
 
 /**
- * Hoa_Test_Urg_Type_Undefined
+ * Hoa_Test_Urg_Interface_Type
  */
-import('Test.Urg.Type.Undefined');
+import('Test.Urg.Type.Interface.Type');
 
 /**
  * Hoa_Test_Urg
@@ -53,9 +53,9 @@ import('Test.Urg.Type.Undefined');
 import('Test.Urg.~');
 
 /**
- * Class Hoa_Test_Urg_Type_Void.
+ * Class Hoa_Test_Urg_Type_Undefined.
  *
- * Represent a null value.
+ * Represent the absolute super-type.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2009 Ivan ENDERLIN.
@@ -63,24 +63,24 @@ import('Test.Urg.~');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Test
- * @subpackage  Hoa_Test_Urg_Type_Void
+ * @subpackage  Hoa_Test_Urg_Type_Undefined
  */
 
-class Hoa_Test_Urg_Type_Void extends Hoa_Test_Urg_Type_Undefined {
+class Hoa_Test_Urg_Type_Undefined implements Hoa_Test_Urg_Type_Interface_Type {
 
     /**
      * Name of type.
      *
      * @var Hoa_Test_Urg_Type_Interface_Type string
      */
-    protected $_name  = 'void';
+    protected $_name  = 'undefined';
 
     /**
      * Random value.
      *
-     * @var Hoa_Test_Urg_Type_Void null
+     * @var Hoa_Test_Urg_Type_Undefined null
      */
-    protected $_value = void;
+    protected $_value = null;
 
 
 
@@ -93,10 +93,7 @@ class Hoa_Test_Urg_Type_Void extends Hoa_Test_Urg_Type_Undefined {
      */
     public function predicate ( $q = null ) {
 
-        if(null === $q)
-            $q = $this->getValue();
-
-        return void === $q;
+        return true;
     }
 
     /**
@@ -107,17 +104,28 @@ class Hoa_Test_Urg_Type_Void extends Hoa_Test_Urg_Type_Undefined {
      */
     public function randomize ( ) {
 
-        return;
+        return; // TODO
     }
 
     /**
      * Get the random value.
      *
-     * @access  protected
-     * @return  void
+     * @access  public
+     * @return  mixed
      */
     public function getValue ( ) {
 
-        return void;
+        return $this->_value;
+    }
+
+    /**
+     * Get the name of type.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function getName ( ) {
+
+        return $this->_name;
     }
 }

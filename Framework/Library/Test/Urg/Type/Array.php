@@ -48,9 +48,9 @@ import('Test.Urg.Type.Exception');
 import('Test.Urg.Type.Exception.Maxtry');
 
 /**
- * Hoa_Test_Urg_Type_Interface_Type
+ * Hoa_Test_Urg_Type_Undefined
  */
-import('Test.Urg.Type.Interface.Type');
+import('Test.Urg.Type.Undefined');
 
 /**
  * Hoa_Test_Urg
@@ -77,7 +77,14 @@ import('Test.~');
  * @subpackage  Hoa_Test_Urg_Type_Array
  */
 
-class Hoa_Test_Urg_Type_Array implements Hoa_Test_Urg_Type_Interface_Type {
+class Hoa_Test_Urg_Type_Array extends Hoa_Test_Urg_Type_Undefined {
+
+    /**
+     * Name of type.
+     *
+     * @var Hoa_Test_Urg_Type_Interface_Type string
+     */
+    protected $_name   = 'array';
 
     /**
      * Random value.

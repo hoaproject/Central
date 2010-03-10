@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('Test.Urg.Type.Exception');
 
 /**
- * Hoa_Test_Urg_Type_Interface_Type
- */
-import('Test.Urg.Type.Interface.Type');
-
-/**
  * Hoa_Test_Urg_Type_BoundFloat
  */
 import('Test.Urg.Type.BoundFloat');
@@ -67,8 +62,16 @@ import('Test.Urg.Type.BoundFloat');
  * @subpackage  Hoa_Test_Urg_Type_NegativeFloat
  */
 
-class Hoa_Test_Urg_Type_NegativeFloat extends    Hoa_Test_Urg_Type_BoundFloat
-                                      implements Hoa_Test_Urg_Type_Interface_Type {
+class Hoa_Test_Urg_Type_NegativeFloat extends Hoa_Test_Urg_Type_BoundFloat {
+
+    /**
+     * Name of type.
+     *
+     * @var Hoa_Test_Urg_Type_Interface_Type string
+     */
+    protected $_name = 'negativeFloat';
+
+
 
     /**
      * Build a negative float.

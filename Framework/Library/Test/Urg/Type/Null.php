@@ -43,9 +43,9 @@ require_once 'Framework.php';
 import('Test.Urg.Type.Exception');
 
 /**
- * Hoa_Test_Urg_Interface_Type
+ * Hoa_Test_Urg_Undefined
  */
-import('Test.Urg.Type.Interface.Type');
+import('Test.Urg.Type.Undefined');
 
 /**
  * Hoa_Test_Urg
@@ -66,7 +66,14 @@ import('Test.Urg.~');
  * @subpackage  Hoa_Test_Urg_Type_Null
  */
 
-class Hoa_Test_Urg_Type_Null implements Hoa_Test_Urg_Type_Interface_Type {
+class Hoa_Test_Urg_Type_Null extends Hoa_Test_Urg_Type_Undefined {
+
+    /**
+     * Name of type.
+     *
+     * @var Hoa_Test_Urg_Type_Interface_Type string
+     */
+    protected $_name  = 'null';
 
     /**
      * Random value.
@@ -76,14 +83,6 @@ class Hoa_Test_Urg_Type_Null implements Hoa_Test_Urg_Type_Interface_Type {
     protected $_value = null;
 
 
-
-    /**
-     * Constructor.
-     *
-     * @access  public
-     * @return  void
-     */
-    public function __construct ( ) { }
 
     /**
      * A predicate.

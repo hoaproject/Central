@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('Test.Urg.Type.Exception');
 
 /**
- * Hoa_Test_Urg_Type_Interface_Type
- */
-import('Test.Urg.Type.Interface.Type');
-
-/**
  * Hoa_Test_Urg_Type_Float
  */
 import('Test.Urg.Type.Float');
@@ -67,8 +62,15 @@ import('Test.Urg.Type.Float');
  * @subpackage  Hoa_Test_Urg_Type_BoundFloat
  */
 
-class Hoa_Test_Urg_Type_BoundFloat extends    Hoa_Test_Urg_Type_Float
-                                   implements Hoa_Test_Urg_Type_Interface_Type {
+class Hoa_Test_Urg_Type_BoundFloat extends Hoa_Test_Urg_Type_Float {
+
+    /**
+     * Name of type.
+     *
+     * @var Hoa_Test_Urg_Type_Interface_Type string
+     */
+    protected $_name                = 'boundFloat';
+
 
     /**
      * Lower bound statement (given by parent::BOUND_* constants).

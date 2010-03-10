@@ -43,9 +43,9 @@ require_once 'Framework.php';
 import('Test.Urg.Type.Exception');
 
 /**
- * Hoa_Test_Urg_Type_Interface_Type
+ * Hoa_Test_Urg_Type_Undefined
  */
-import('Test.Urg.Type.Interface.Type');
+import('Test.Urg.Type.Undefined');
 
 /**
  * Class Hoa_Test_Urg_Type_Number.
@@ -62,7 +62,7 @@ import('Test.Urg.Type.Interface.Type');
  * @subpackage  Hoa_Test_Urg_Type_Number
  */
 
-abstract class Hoa_Test_Urg_Type_Number implements Hoa_Test_Urg_Type_Interface_Type {
+abstract class Hoa_Test_Urg_Type_Number extends Hoa_Test_Urg_Type_Undefined {
 
     /**
      * Whether bound is open.
@@ -77,6 +77,13 @@ abstract class Hoa_Test_Urg_Type_Number implements Hoa_Test_Urg_Type_Interface_T
      * @const bool
      */
     const BOUND_CLOSE = false;
+
+    /**
+     * Name of type.
+     *
+     * @var Hoa_Test_Urg_Type_Interface_Type string
+     */
+    protected $_name            = 'number';
 
     /**
      * Lower bound value.
@@ -144,17 +151,6 @@ abstract class Hoa_Test_Urg_Type_Number implements Hoa_Test_Urg_Type_Interface_T
         $this->_upperBoundValue = $value;
 
         return $old;
-    }
-
-    /**
-     * Get the random value.
-     *
-     * @access  public
-     * @return  mixed
-     */
-    public function getValue ( ) {
-
-        return $this->_value;
     }
 
     /**

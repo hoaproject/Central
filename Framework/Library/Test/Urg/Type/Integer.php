@@ -48,11 +48,6 @@ import('Test.Urg.Type.Exception');
 import('Test.Urg.Type.Exception.Maxtry');
 
 /**
- * Hoa_Test_Urg_Type_Interface_Type
- */
-import('Test.Urg.Type.Interface.Type');
-
-/**
  * Hoa_Test_Urg_Type_Number
  */
 import('Test.Urg.Type.Number');
@@ -82,8 +77,7 @@ import('Test.~');
  * @subpackage  Hoa_Test_Urg_Type_Integer
  */
 
-class Hoa_Test_Urg_Type_Integer extends    Hoa_Test_Urg_Type_Number
-                                implements Hoa_Test_Urg_Type_Interface_Type {
+class Hoa_Test_Urg_Type_Integer extends Hoa_Test_Urg_Type_Number {
 
     /**
      * Zero.
@@ -105,6 +99,13 @@ class Hoa_Test_Urg_Type_Integer extends    Hoa_Test_Urg_Type_Number
      * @const int
      */
     const INFINITY     = PHP_INT_MAX;
+
+    /**
+     * Name of type.
+     *
+     * @var Hoa_Test_Urg_Type_Interface_Type string
+     */
+    protected $_name = 'integer';
 
 
 
