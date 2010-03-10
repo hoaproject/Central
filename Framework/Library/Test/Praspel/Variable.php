@@ -154,10 +154,8 @@ class Hoa_Test_Praspel_Variable {
      */
     public function isTypedAs ( $name ) {
 
-        /*
         if(true === $this->isTypeDeclared($name))
-            return $this->_types[$name];
-        */
+            return $this;
 
         $arguments = func_get_args();
         array_shift($arguments);
@@ -181,7 +179,7 @@ class Hoa_Test_Praspel_Variable {
      */
     public function isTypeDeclared ( $name ) {
 
-        //return true === array_key_exists($name, $this->_types);
+        return true === array_key_exists($name, $this->_types);
     }
 
     /**
@@ -192,8 +190,14 @@ class Hoa_Test_Praspel_Variable {
      */
     protected function chooseOneType ( ) {
 
-        return $this->_choosen =
-                   $this->_types[Hoa_Test_Urg::Ud(0, count($this->_types) - 1)];
+        $i = Hoa_Test_Urg::Ud(0, count($this->_types) - 1);
+        reset($this->_types);
+
+        foreach($this->_types as $name => $type)
+            if(0 === $i--)
+                break;
+
+        return $this->_choosen = $type;
     }
 
     /**
@@ -220,9 +224,8 @@ class Hoa_Test_Praspel_Variable {
                 1, array($name, $this->getName()));
         }
 
-        // /!\ FIX ME /!\
-        // check if type already exists.
-        $this->_types[] = $type;
+        if(false === $this->isTypeDeclared($type->getName()))
+            $this->_types[$type->getName()] = $type;
 
         return $this;
     }
@@ -364,12 +367,8 @@ class Hoa_Test_Praspel_Variable {
 
         $out = '        ' . $this->getName() . "\n";
 
-        foreach($this->getTypes() as $i => $type) {
-
-            $gc   = get_class($type);
-            $out .= '            ' .
-                    strtolower(substr($gc, strrpos($gc, '_') + 1)) . "\n";
-        }
+        foreach($this->getTypes() as $i => $type)
+            $out .= '            ' . $type->getName() . "\n";
 
         return $out;
     }
