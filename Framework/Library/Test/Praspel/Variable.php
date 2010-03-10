@@ -154,8 +154,10 @@ class Hoa_Test_Praspel_Variable {
      */
     public function isTypedAs ( $name ) {
 
+        /*
         if(true === $this->isTypeDeclared($name))
             return $this->_types[$name];
+        */
 
         $arguments = func_get_args();
         array_shift($arguments);
@@ -165,7 +167,7 @@ class Hoa_Test_Praspel_Variable {
             $arguments
         );
 
-        $this->_types[$name] = $type->getType();
+        $this->_types[] = $type->getType();
 
         return $this;
     }
@@ -179,7 +181,7 @@ class Hoa_Test_Praspel_Variable {
      */
     public function isTypeDeclared ( $name ) {
 
-        return true === array_key_exists($name, $this->_types);
+        //return true === array_key_exists($name, $this->_types);
     }
 
     /**
@@ -206,8 +208,9 @@ class Hoa_Test_Praspel_Variable {
 
         try {
 
-            $variable = $this->getParent()->getParent()->getClause('requires')
-                            ->getVariable($name);
+            $type = $this->getParent()->getParent()->getClause('requires')
+                        ->getVariable($name)
+                        ->getChoosenType();
         }
         catch ( Hoa_Test_Praspel_Exception $e ) {
 
@@ -218,9 +221,8 @@ class Hoa_Test_Praspel_Variable {
         }
 
         // /!\ FIX ME /!\
-        // $this->_types[$type->getName()].
-        foreach($variable->getTypes() as $i => $type)
-            $this->_types[get_class($type)] = $type;
+        // check if type already exists.
+        $this->_types[] = $type;
 
         return $this;
     }
