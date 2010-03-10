@@ -48,11 +48,6 @@ import('Test.Urg.Type.Exception');
 import('Test.Urg.Type.Exception.Maxtry');
 
 /**
- * Hoa_Test_Urg_Type_Interface_Type
- */
-import('Test.Urg.Type.Interface.Type');
-
-/**
  * Hoa_Test_Urg_Type_Number
  */
 import('Test.Urg.Type.Number');
@@ -82,8 +77,7 @@ import('Test.~');
  * @subpackage  Hoa_Test_Urg_Type_Float
  */
 
-class Hoa_Test_Urg_Type_Float extends    Hoa_Test_Urg_Type_Number
-                              implements Hoa_Test_Urg_Type_Interface_Type {
+class Hoa_Test_Urg_Type_Float extends Hoa_Test_Urg_Type_Number {
 
     /**
      * Zero.
@@ -119,6 +113,13 @@ class Hoa_Test_Urg_Type_Float extends    Hoa_Test_Urg_Type_Number
      * @const float
      */
     const INFINITY_64     = 1.7976931348623157e308;
+
+    /**
+     * Name of type.
+     *
+     * @var Hoa_Test_Urg_Type_Interface_Type string
+     */
+    protected $_name = 'float';
 
 
 

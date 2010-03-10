@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('Test.Urg.Type.Exception');
 
 /**
- * Hoa_Test_Urg_Type_Interface_Type
- */
-import('Test.Urg.Type.Interface.Type');
-
-/**
  * Hoa_Test_Urg
  */
 import('Test.Urg.~');
@@ -72,8 +67,16 @@ import('Test.Urg.Type.Xn');
  * @subpackage  Hoa_Test_Urg_Type_2n
  */
 
-class Hoa_Test_Urg_Type_2n extends    Hoa_Test_Urg_Type_Xn
-                           implements Hoa_Test_Urg_Type_Interface_Type {
+class Hoa_Test_Urg_Type_2n extends Hoa_Test_Urg_Type_Xn {
+
+    /**
+     * Name of type.
+     *
+     * @var Hoa_Test_Urg_Type_Interface_Type string
+     */
+    protected $_name = '2n';
+
+
 
     /**
      * Constructor.

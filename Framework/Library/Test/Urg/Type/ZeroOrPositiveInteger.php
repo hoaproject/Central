@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('Test.Urg.Type.Exception');
 
 /**
- * Hoa_Test_Urg_Type_Interface_Type
- */
-import('Test.Urg.Type.Interface.Type');
-
-/**
  * Hoa_Test_Urg_Type_BoundInteger
  */
 import('Test.Urg.Type.BoundInteger');
@@ -67,8 +62,16 @@ import('Test.Urg.Type.BoundInteger');
  * @subpackage  Hoa_Test_Urg_Type_ZeroOrPositiveInteger
  */
 
-class Hoa_Test_Urg_Type_ZeroOrPositiveInteger extends    Hoa_Test_Urg_Type_BoundInteger
-                                              implements Hoa_Test_Urg_Type_Interface_Type {
+class Hoa_Test_Urg_Type_ZeroOrPositiveInteger extends Hoa_Test_Urg_Type_BoundInteger {
+
+    /**
+     * Name of type.
+     *
+     * @var Hoa_Test_Urg_Type_Interface_Type string
+     */
+    protected $_name = 'zeroOrPositiveInteger';
+
+
 
     /**
      * Build a zero or positive integer.

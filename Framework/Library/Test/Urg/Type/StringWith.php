@@ -48,11 +48,6 @@ import('Test.Urg.Type.Exception');
 import('Test.Urg.Type.Exception.Maxtry');
 
 /**
- * Hoa_Test_Urg_Type_Interface_Type
- */
-import('Test.Urg.Type.Interface.Type');
-
-/**
  * Hoa_Test_Urg
  */
 import('Test.Urg.~');
@@ -82,8 +77,14 @@ import('Test.Urg.Type.SuperString');
  * @subpackage  Hoa_Test_Urg_Type_StringWith
  */
 
-class Hoa_Test_Urg_Type_StringWith extends    Hoa_Test_Urg_Type_SuperString
-                                   implements Hoa_Test_Urg_Type_Interface_Type {
+class Hoa_Test_Urg_Type_StringWith extends Hoa_Test_Urg_Type_SuperString {
+
+    /**
+     * Name of type.
+     *
+     * @var Hoa_Test_Urg_Type_Interface_Type string
+     */
+    protected $_name       = 'stringWith';
 
     /**
      * Characters that constitute the string.

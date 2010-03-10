@@ -48,16 +48,6 @@ import('Test.Urg.Type.Exception');
 import('Test.Urg.Type.Exception.Maxtry');
 
 /**
- * Hoa_Test_Urg_Type_Interface_Type
- */
-import('Test.Urg.Type.Interface.Type');
-
-/**
- * Hoa_Test_Urg
- */
-import('Test.Urg.~');
-
-/**
  * Hoa_Test_Urg_Type_ZeroOrPositiveInteger
  */
 import('Test.Urg.Type.ZeroOrPositiveInteger');
@@ -82,8 +72,16 @@ import('Test.~');
  * @subpackage  Hoa_Test_Urg_Type_Integerpp
  */
 
-class Hoa_Test_Urg_Type_Integerpp extends    Hoa_Test_Urg_Type_ZeroOrPositiveInteger
-                                  implements Hoa_Test_Urg_Type_Interface_Type {
+class Hoa_Test_Urg_Type_Integerpp extends Hoa_Test_Urg_Type_ZeroOrPositiveInteger {
+
+    /**
+     * Name of type.
+     *
+     * @var Hoa_Test_Urg_Type_Interface_Type string
+     */
+    protected $_name = 'integerpp';
+
+
 
     /**
      * Constructor.
