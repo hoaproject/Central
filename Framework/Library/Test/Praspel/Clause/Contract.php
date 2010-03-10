@@ -176,4 +176,21 @@ abstract class Hoa_Test_Praspel_Clause_Contract {
 
         return $this->_parent;
     }
+
+    /**
+     * Transform this object model into a string.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function __toString ( ) {
+
+        $gc  = get_class($this);
+        $out = '    ' . strtolower(substr($gc, strrpos($gc, '_') + 1)) . "\n";
+
+        foreach($this->getVariables() as $i => $variable)
+            $out .= $variable->__toString();
+
+        return $out;
+    }
 }

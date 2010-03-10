@@ -367,7 +367,7 @@ class Hoa_Test_Praspel {
     }
 
     /**
-     * Get all clauses.
+     * Get a specific clause.
      *
      * @access  public
      * @param   string     $name    Clause name.
@@ -384,6 +384,17 @@ class Hoa_Test_Praspel {
     }
 
     /**
+     * Get all clauses.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getClauses ( ) {
+
+        return $this->_clauses;
+    }
+
+    /**
      * Get the call.
      *
      * @access  public
@@ -392,5 +403,21 @@ class Hoa_Test_Praspel {
     public function getCall ( ) {
 
         return $this->_call;
+    }
+
+    /**
+     * Transform this object model into a string.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function __toString ( ) {
+
+        $out = 'Praspel' . "\n";
+
+        foreach($this->getClauses() as $i => $clause)
+            $out .= $clause->__toString();
+
+        return $out;
     }
 }

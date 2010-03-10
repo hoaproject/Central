@@ -129,4 +129,21 @@ class Hoa_Test_Praspel_Clause_Throwable implements Hoa_Test_Praspel_Clause {
 
         return $this->_list;
     }
+
+    /**
+     * Transform this object model into a string.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function __toString ( ) {
+
+        $gc  = get_class($this);
+        $out = '    ' . strtolower(substr($gc, strrpos($gc, '_') + 1)) . "\n";
+
+        foreach($this->getList() as $i => $exception)
+            $out .= '        ' . $exception . "\n";
+
+        return $out;
+    }
 }
