@@ -61,4 +61,33 @@ import('Test.Praspel.Clause.Contract');
  * @subpackage  Hoa_Test_Praspel_Clause_Ensures
  */
 
-class Hoa_Test_Praspel_Clause_Ensures extends Hoa_Test_Praspel_Clause_Contract { }
+class Hoa_Test_Praspel_Clause_Ensures extends Hoa_Test_Praspel_Clause_Contract {
+
+    /**
+     * Declare a variable, or get it.
+     *
+     * @access  public
+     * @param   string  $name    Variable name.
+     * @return  Hoa_Test_Praspel_Variable
+     */
+    public function variable ( $name ) {
+
+        if($name == '\result')
+            return parent::variable($name);
+
+        $realname = $name;
+
+        if(0 !== preg_match('#\\\old\(\s*(\w+)\s*\)#i', $name, $matches))
+            $realname = $matches[1];
+
+        $parent = $this->getParent();
+
+        if(   false === $parent->clauseExists('requires')
+           || false === $parent->getClause('requires')->variableExists($realname))
+           throw new Hoa_Test_Praspel_Exception(
+            'Cannot ensure a property on the non-existing variable %s.',
+            0, $name);
+
+        return parent::variable($name);
+    }
+}
