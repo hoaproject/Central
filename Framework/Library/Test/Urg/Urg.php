@@ -58,6 +58,7 @@ import('Test.Urg.Type.Float');
  * Some usefull uniform random generator methods.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ *              Abdallah BEN OTHMAN <ben_othman@live.fr>
  * @copyright   Copyright (c) 2007, 2009 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
@@ -85,7 +86,10 @@ class Hoa_Test_Urg {
         if(null === $upper)
             $upper = Hoa_Test_Urg_Type_Integer::getPositiveInfinity();
 
-        return mt_rand($lower, $upper);
+        if($upper !== Hoa_Test_Urg_Type_Integer::getPositiveInfinity())
+            $upper++;
+
+        return (int) self::Uc($lower, $upper);
     }
 
     /**
