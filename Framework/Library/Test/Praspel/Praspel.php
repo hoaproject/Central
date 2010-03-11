@@ -141,6 +141,8 @@ class Hoa_Test_Praspel {
             self::LOG_CHANNEL,
             Hoa_Test::getInstance()->getLogStreams()
         );
+
+        return;
     }
 
     /**
