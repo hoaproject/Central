@@ -210,19 +210,44 @@ class Hoa_Test_Praspel_Variable {
      */
     public function hasTheSameTypeAs ( $name ) {
 
-        try {
+        $context = $this->getParent();
 
-            $type = $this->getParent()->getParent()->getClause('requires')
-                        ->getVariable($name)
-                        ->getChoosenType();
+        if($this->getParent() instanceof Hoa_Test_Praspel_Clause_Requires) {
+
+            if($name[0] == '\\')
+                throw new Hoa_Test_Praspel_Exception(
+                    'Constructors are not allowed in “requires” clause, given %s.',
+                    0, $name);
+
+            $context = $this->getParent();
         }
-        catch ( Hoa_Test_Praspel_Exception $e ) {
+        elseif($this->getParent() instanceof Hoa_Test_Praspel_Clause_Ensures) {
 
+            if($name == '\result')
+                throw new Hoa_Test_Praspel_Exception(
+                    'The operator “typeof” is not commutative. ' .
+                    '\result must be in the left position.', 1);
+
+            if(0 !== preg_match('#\\\old\(\s*(\w+)\s*\)#i', $name, $matches)) {
+
+                $context = $this->getParent()->getParent();
+
+                if(false === $context->clauseExists('requires'))
+                    throw new Hoa_Test_Praspel_Exception(
+                        'Foobar %s',
+                        2, $name);
+
+                $name    = $matches[1];
+                $context = $context->getClause('requires');
+            }
+        }
+
+        if(false === $context->variableExists($name))
             throw new Hoa_Test_Praspel_Exception(
-                'Cannot found variable %s on the requires clause for making a ' .
-                'dependence from %s.',
-                1, array($name, $this->getName()));
-        }
+                'Cannot ensure a property on the non-existing variable %s.',
+                3, $name);
+
+        $type = $context->getVariable($name)->getChoosenType();
 
         if(false === $this->isTypeDeclared($type->getName()))
             $this->_types[$type->getName()] = $type;
