@@ -164,8 +164,9 @@ class Hoa_Test_Praspel_Variable {
             $name,
             $arguments
         );
+        $type      = $type->getType();
 
-        $this->_types[] = $type->getType();
+        $this->_types[$type->getName()] = $type;
 
         return $this;
     }
