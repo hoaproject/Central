@@ -43,11 +43,6 @@ require_once 'Framework.php';
 import('Test.Praspel.Exception');
 
 /**
- * Hoa_Test_Praspel_Clause
- */
-import('Test.Praspel.Clause');
-
-/**
  * Hoa_Test_Praspel_Clause_Contract
  */
 import('Test.Praspel.Clause.Contract');
@@ -66,8 +61,7 @@ import('Test.Praspel.Clause.Contract');
  * @subpackage  Hoa_Test_Praspel_Clause_Requires
  */
 
-class Hoa_Test_Praspel_Clause_Requires extends    Hoa_Test_Praspel_Clause_Contract
-                                       implements Hoa_Test_Praspel_Clause {
+class Hoa_Test_Praspel_Clause_Requires extends Hoa_Test_Praspel_Clause_Contract {
 
     /**
      * Declare a variable, or get it.
