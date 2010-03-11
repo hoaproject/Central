@@ -194,6 +194,8 @@ class Hoa_Test_Praspel_Variable {
         $i = Hoa_Test_Urg::Ud(0, count($this->_types) - 1);
         reset($this->_types);
 
+        $type = null;
+
         foreach($this->_types as $name => $type)
             if(0 === $i--)
                 break;
@@ -249,6 +251,9 @@ class Hoa_Test_Praspel_Variable {
                 3, $name);
 
         $type = $context->getVariable($name)->getChoosenType();
+
+        if(null === $type)
+            return $this;
 
         if(false === $this->isTypeDeclared($type->getName()))
             $this->_types[$type->getName()] = $type;
