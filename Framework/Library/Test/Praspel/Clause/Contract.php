@@ -43,9 +43,24 @@ require_once 'Framework.php';
 import('Test.Praspel.Exception');
 
 /**
+ * Hoa_Test_Praspel_Clause
+ */
+import('Test.Praspel.Clause');
+
+/**
  * Hoa_Test_Praspel_Variable
  */
 import('Test.Praspel.Variable');
+
+/**
+ * Hoa_Test_Praspel_Constructor_Old
+ */
+import('Test.Praspel.Constructor.Old');
+
+/**
+ * Hoa_Test_Praspel_Constructor_Result
+ */
+import('Test.Praspel.Constructor.Result');
 
 /**
  * Class Hoa_Test_Praspel_Clause_Contract.
@@ -61,7 +76,7 @@ import('Test.Praspel.Variable');
  * @subpackage  Hoa_Test_Praspel_Clause_Contract
  */
 
-abstract class Hoa_Test_Praspel_Clause_Contract {
+abstract class Hoa_Test_Praspel_Clause_Contract implements Hoa_Test_Praspel_Clause {
 
     /**
      * Parent (here: the root).
@@ -104,6 +119,17 @@ abstract class Hoa_Test_Praspel_Clause_Contract {
 
         if(true === $this->variableExists($name))
             return $this->_variables[$name];
+
+        if(0 !== preg_match('#\\\old\(\s*(\w+)\s*\)#i', $name, $matches))
+            return $this->_variables[$name] = new Hoa_Test_Praspel_Constructor_Old(
+                $this,
+                $matches[1]
+            );
+        elseif($name == '\result')
+            return $this->_variables[$name] = new Hoa_Test_Praspel_Constructor_Result(
+                $this,
+                $name
+            );
 
         return $this->_variables[$name] = new Hoa_Test_Praspel_Variable(
             $this,
