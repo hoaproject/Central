@@ -162,21 +162,28 @@ class Hoa_Framework_Parameter {
      *
      * @const int
      */
-    const PERMISSION_READ  = 1;
+    const PERMISSION_READ    = 1;
 
     /**
      * Permission to write.
      *
      * @const int
      */
-    const PERMISSION_WRITE = 2;
+    const PERMISSION_WRITE   = 2;
+
+    /**
+     * Permission could be inherited.
+     *
+     * @const int
+     */
+    const PERMISSION_INHERIT = 4;
 
     /**
      * Permission to share.
      *
      * @const int
      */
-    const PERMISSION_SHARE = 4;
+    const PERMISSION_SHARE   = 8;
 
     /**
      * Collection of package's parameters.
@@ -240,16 +247,34 @@ class Hoa_Framework_Parameter {
      * Construct a new set of parameters.
      *
      * @access  public
-     * @param   Hoa_Framework_Parameterizable  $owner         Owner.
-     * @param   array                          $keywords      Keywords.
-     * @param   array                          $parameters    Parameters.
+     * @param   Hoa_Framework_Parameterizable  $owner          Owner.
+     * @param   array                          $keywords       Keywords.
+     * @param   array                          $parameters     Parameters.
+     * @param   string                         $ownerParent    Owner parent.
      * @return  void
      */
     public function __construct ( Hoa_Framework_Parameterizable $owner,
                                   Array $keywords   = array(),
-                                  Array $parameters = array() ) {
+                                  Array $parameters = array(),
+                                  $ownerParent      = null ) {
 
-        $this->_owner = get_class($owner);
+        if(null === $ownerParent)
+            $this->_owner = get_class($owner);
+        else
+            if($owner instanceof $ownerParent) {
+
+                $this->_owner = $ownerParent;
+                $this->_friends[$ownerParent] =
+                    self::PERMISSION_READ    |
+                    self::PERMISSION_WRITE   |
+                    self::PERMISSION_INHERIT |
+                    self::PERMISSION_SHARE;
+            }
+            else
+                throw new Hoa_Exception(
+                    'Cannot load configurations from the owner parent %s.',
+                    0, $ownerParent);
+
         self::initializeConstants();
 
         if(!empty($keywords))
@@ -298,17 +323,17 @@ class Hoa_Framework_Parameter {
     /**
      * Set default parameters to a class.
      *
-     * @access  public
+     * @access  protected
      * @param   object  $id            Owner or friends.
      * @param   array   $parameters    Parameters to set.
      * @return  void
      * @throw   Hoa_Exception
      */
-    public function setDefaultParameters ( $id, Array $parameters ) {
+    private function setDefaultParameters ( $id, Array $parameters ) {
 
         $this->check($id, self::PERMISSION_WRITE);
 
-        $class = str_replace('_', '', get_class($id));
+        $class = str_replace('_', '', $this->_owner);
         $path  = 'hoa://Data/Etc/Configuration/.Cache/' . $class . '.php';
 
         if($class == 'HoaFramework')
@@ -896,12 +921,22 @@ class Hoa_Framework_Parameter {
         if($this->_owner == $iid)
             return true;
 
-        if(!array_key_exists($iid, $this->_friends))
-            throw new Hoa_Exception(
-                'Class %s is not friend of %s and cannot share its parameters.',
-                4, array($iid, $this->_owner));
+        if(!array_key_exists($iid, $this->_friends)) {
 
-        $p = $this->_friends[$iid];
+            $p = -1;
+
+            foreach($this->_friends as $friend => $p)
+                if(   is_subclass_of($id, $friend)
+                   && $p & self::PERMISSION_INHERIT)
+                    break;
+
+            if(-1 === $p)
+                throw new Hoa_Exception(
+                    'Class %s is not friend of %s and cannot share its parameters.',
+                    4, array($iid, $this->_owner));
+        }
+        else
+            $p = $this->_friends[$iid];
 
         if(0 === ($permissions & $p))
             if(0 !== $permissions & self::PERMISSION_READ)
