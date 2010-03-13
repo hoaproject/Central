@@ -149,8 +149,8 @@ class Hoa_Controller_Front implements Hoa_Framework_Parameterizable {
      * @param   bool     $autodispatch    Auto dispatch.
      * @return  void
      */
-    private function __construct ( $parameters   = array(),
-                                   $autoDispatch = false) {
+    private function __construct ( Array $parameters   = array(),
+                                         $autoDispatch = false) {
 
         $this->_parameters = new Hoa_Framework_Parameter(
             $this,
@@ -203,6 +203,8 @@ class Hoa_Controller_Front implements Hoa_Framework_Parameterizable {
 
         if(false !== $autoDispatch)
             $this->dispatch();
+
+        return;
     }
 
     /**
@@ -442,6 +444,8 @@ class Hoa_Controller_Front implements Hoa_Framework_Parameterizable {
          */
         $response->sendHeaders();
         $response->output();
+
+        return;
     }
 
     /**
@@ -455,6 +459,8 @@ class Hoa_Controller_Front implements Hoa_Framework_Parameterizable {
     public function registerPlugin ( Hoa_Controller_Plugin_Interface $plugin ) {
 
         $this->_plugin->register($plugin);
+
+        return;
     }
 
     /**
@@ -467,6 +473,8 @@ class Hoa_Controller_Front implements Hoa_Framework_Parameterizable {
     public function unregisterPlugin ( $pluginIndex = '' ) {
 
         $this->_plugin->unregister($pluginIndex);
+
+        return;
     }
 
     /**
