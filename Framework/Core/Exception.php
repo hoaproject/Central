@@ -93,12 +93,19 @@ class Hoa_Exception extends Exception {
      * @access  public
      * @param   string  $message    Formatted message.
      * @param   int     $code       Code (the ID).
-     * @param   array   $arg        RaiseError string arguments.
+     * @param   array   $args       RaiseError string arguments.
      * @return  void
      */
-    public function __construct ( $message, $code = 0, $arg = array() ) {
+    public function __construct ( $message, $code = 0, $args = array() ) {
 
-        $this->_arg = $arg;
+        if(!is_array($args))
+            $args = array($args);
+
+        foreach($args as $key => &$value)
+            if(null === $value)
+                $value = '(null)';
+
+        $this->_arg = $args;
 
         parent::__construct($message, $code);
 
