@@ -1,7 +1,14 @@
 {
+    /**
+     * Keywords.
+     */
     "keywords": {
         "root.ofFrameworkDirectory"      : null
     },
+
+    /**
+     * Parameters.
+     */
     "parameters": {
         "root"                           : "(:root.ofFrameworkDirectory:)",
         "root.framework"                 : "(:%root:)",
