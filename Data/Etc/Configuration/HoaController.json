@@ -21,7 +21,8 @@
         "route.parameter.default.action": "(:action:)",
 
         /**
-         * Example of parameters for route.type = Rewrite.
+         * Example of parameters for route.type = Rewrite:
+         *
          * "route.type"                                  : "Rewrite",
          * "route.parameter.base"                        : "/MyBase",
          * "route.parameter.rules.default.pattern"       : "/(:module)/(:action).html",
