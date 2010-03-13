@@ -10,7 +10,7 @@
      * Parameters.
      */
     "parameters": {
-        "lifetime"                    : 5,
+        "lifetime"                    : 3600,
         "serialize_content"           : true,
         "make_id_with.get"            : true,
         "make_id_with.post"           : true,
@@ -24,7 +24,7 @@
 
         "file.cache.directory"        : "hoa://Data/Variable/Cache/",
         "file.cache.file"             : "(:id:).ca",
-        "file.compress.active"        : false,
+        "file.compress.active"        : true,
         "file.compress.level"         : 9,
 
         "memcache.compress.active"    : true,
