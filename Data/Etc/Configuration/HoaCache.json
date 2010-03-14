@@ -32,12 +32,14 @@
         "memcache.database.port"      : 11211,
         "memcache.database.persistent": true,
 
-        "sqlite.cache.file"           : "hoa://Data/Variable/Cache/Cache.db",
+        "sqlite.cache.directory"      : "hoa://Data/Variable/Cache/",
         /**
          * Example with a SQLite database loaded in memory:
          *
          * "sqlite.cache_directory"   : ":memory:",
+         * "sqlite.cache.file"        : null,
          */
+        "sqlite.cache.file"           : "Cache.db",
         "sqlite.database.host"        : "127.0.0.1",
 
         "xcache"                      : "",
