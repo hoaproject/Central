@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Generated the 2010-03-13T19:56:16.000000Z
+ * Generated the 2010-03-14T17:03:52.000000Z
  */
 
 return array (
@@ -28,7 +28,8 @@ return array (
     'memcache.database.host' => '127.0.0.1',
     'memcache.database.port' => 11211,
     'memcache.database.persistent' => true,
-    'sqlite.cache.file' => 'hoa://Data/Variable/Cache/Cache.db',
+    'sqlite.cache.directory' => 'hoa://Data/Variable/Cache/',
+    'sqlite.cache.file' => 'Cache.db',
     'sqlite.database.host' => '127.0.0.1',
     'xcache' => '',
     'zendplatform' => '',
