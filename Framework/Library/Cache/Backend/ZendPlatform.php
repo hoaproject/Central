@@ -38,19 +38,14 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Cache
- */
-import('Cache.~');
-
-/**
  * Hoa_Cache_Exception
  */
 import('Cache.Exception');
 
 /**
- * Hoa_Cache_Backend_Abstract
+ * Hoa_Cache_Backend
  */
-import('Cache.Backend.Abstract');
+import('Cache.Backend');
 
 /**
  * Hoa_File_Finder
@@ -74,7 +69,7 @@ import('File.Finder');
  *              make the test myself.
  */
 
-class Hoa_Cache_Backend_ZendPlatform extends Hoa_Cache_Backend_Abstract {
+class Hoa_Cache_Backend_ZendPlatform extends Hoa_Cache_Backend {
 
     /**
      * Internal ZendPlatform prefix.
@@ -89,10 +84,11 @@ class Hoa_Cache_Backend_ZendPlatform extends Hoa_Cache_Backend_Abstract {
      * Validate that the Zend Platform is loaded and licensed.
      *
      * @access  public
+     * @param   array  $parameters    Parameters.
      * @return  void
      * @throw   Hoa_Cache_Exception
      */
-    public function __construct ( ) {
+    public function __construct ( Array $parameters = array() ) {
 
         if(!function_exists('accelerator_license_info'))
             throw new Hoa_Cache_Exception(
@@ -123,77 +119,77 @@ class Hoa_Cache_Backend_ZendPlatform extends Hoa_Cache_Backend_Abstract {
             throw new Hoa_Cache_Exception(
                 'The cache copies directory %s must be writable.',
                 4, $configuration['output_cache_dir']);
+
+        parent::__construct($parameters);
+
+        return;
+    }
+
+    /**
+     * Save cache content into the ZendPlatform storage.
+     * Data is already serialized.
+     *
+     * @access  public
+     * @param   string  $data    Data to store.
+     * @return  void
+     */
+    public function store ( $data ) {
+
+        $this->clean();
+
+        output_cache_put(
+            $this->getIdMd5(),
+            array($data, time())
+        );
+
+        return;
     }
 
     /**
      * Load a cache file.
-     * The $unserialize argument is not used here.
      *
      * @access  public
-     * @param   string  $id_md5         ID encoded in MD5.
-     * @param   bool    $unserialize    Enable unserializing of content (not
-     *                                  used here).
-     * @param   bool    $exists         Test if cache exists or not.
      * @return  mixed
      */
-    public function load ( $id_md5, $unserialize = true, $exists = false ) {
+    public function load ( ) {
 
         $this->clean();
 
-        $lifetime = $this->_frontendOptions['lifetime'];
-
-        if(true === $exists)
-            $lifetime = 0;
-
-        $return   = output_cache_get($id_md5, $lifetime);
+        $content = output_cache_get(
+            $this->getIdMd5(),
+            $this->getParameter('lifetime')
+        );
 
         if(isset($return[0]))
             return $return[0];
-        else
-            return false;
-    }
 
-    /**
-     * Save cache content into a file.
-     * Note : the core auto-serializes the $data, so the serialize_content
-     * parameter does not have any importance.
-     *
-     * @access  public
-     * @param   string  $id      Cache ID encoded in MD5.
-     * @param   string  $data    Cache content.
-     * @return  bool
-     */
-    public function save ( $id_md5, $data ) {
-
-        $this->clean();
-
-        return output_cache_put($id_md5, array($data, time()));
+        return false;
     }
 
     /**
      * Clean expired cache files.
-     * Note : Hoa_Cache::CLEANING_USER is not supported, it's reserved for APC
+     * Note : Hoa_Cache::CLEAN_USER is not supported, it's reserved for APC
      * backend.
      *
      * @access  public
      * @param   string  $lifetime    Lifetime of caches.
-     * @return  mixed
+     * @return  void
      * @throw   Hoa_Cache_Exception
      */
-    public function clean ( $lifetime = Hoa_Cache::CLEANING_EXPIRED ) {
+    public function clean ( $lifetime = Hoa_Cache::CLEAN_EXPIRED ) {
 
         switch($lifetime) {
 
-            case Hoa_Cache::CLEANING_ALL:
+            case Hoa_Cache::CLEAN_ALL:
               break;
 
-            case Hoa_Cache::CLEANING_EXPIRED:
-                $lifetime = $this->_frontendOptions['lifetime'];
+            case Hoa_Cache::CLEAN_EXPIRED:
+                $lifetime = $this->getParameter('lifetime');
               break;
 
-            case Hoa_Cache::CLEANING_USER:
+            case Hoa_Cache::CLEAN_USER:
                 throw new Hoa_Cache_Exception(
-                    'Hoa_Cache::CLEANING_USER constant is not supported by ' .
+                    'Hoa_Cache::CLEAN_USER constant is not supported by ' .
                     'ZendPlatform cache backend.', 3);
               break;
 
@@ -201,12 +197,12 @@ class Hoa_Cache_Backend_ZendPlatform extends Hoa_Cache_Backend_Abstract {
                 $lifetime = $lifetime;
         }
 
+        $directory = ini_get('zend_accelerator.output_cache_dir') . DS .
+                     '.php_cache_api';
+
         try {
 
-            $directory = ini_get('zend_accelerator.output_cache_dir') . DS .
-                         '.php_cache_api';
-
-            $cacheDir  = new Hoa_File_Finder(
+            $cacheDir = new Hoa_File_Finder(
                 $directory,
                 Hoa_File_Finder::LIST_FILE |
                 Hoa_File_Finder::LIST_NO_DOT,
@@ -217,26 +213,21 @@ class Hoa_Cache_Backend_ZendPlatform extends Hoa_Cache_Backend_Abstract {
                 if($fileinfo->getMTime() + $lifetime <= time())
                     $fileinfo->delete();
         }
-        catch ( Hoa_File_Exception $e ) {
+        catch ( Hoa_File_Exception_FileDoesNotExist $e ) { }
 
-            throw new Hoa_Cache_Exception(
-                $e->getFormattedMessage(),
-                $e->getCode()
-            );
-        }
-
-        return $delete;
+        return;
     }
 
     /**
      * Remove a cache file.
      *
      * @access  public
-     * @param   string  $id_md5    ID of cache to remove (encoded in MD5).
-     * @return  mixed
+     * @return  void
      */
-    public function remove ( $id_md5 ) {
+    public function remove ( ) {
 
-        return output_cache_remove_key($id_md5);
+        output_cache_remove_key($this->getIdMd5());
+
+        return;
     }
 }

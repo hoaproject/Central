@@ -38,19 +38,14 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Cache
- */
-import('Cache.~');
-
-/**
  * Hoa_Cache_Exception
  */
 import('Cache.Exception');
 
 /**
- * Hoa_Cache_Backend_Abstract
+ * Hoa_Cache_Backend
  */
-import('Cache.Backend.Abstract');
+import('Cache.Backend');
 
 /**
  * Class Hoa_Cache_Backend_Xcache.
@@ -67,81 +62,84 @@ import('Cache.Backend.Abstract');
  * @subpackage  Hoa_Cache_Backend_Xcache
  */
 
-class Hoa_Cache_Backend_Xcache extends Hoa_Cache_Backend_Abstract {
+class Hoa_Cache_Backend_Xcache extends Hoa_Cache_Backend {
 
     /**
      * Check if XCache is loaded, else an exception is thrown.
      *
      * @access  public
+     * @param   array  $parameters    Parameters.
      * @return  void
      * @throw   Hoa_Cache_Exception
      */
-    public function __construct ( ) {
+    public function __construct ( Array $parameters = array() ) {
 
         if(!extension_loaded('xcache'))
             throw new Hoa_Cache_Exception(
                 'XCache is not loaded on server.', 0);
-    }
 
-    /**
-     * Load data from XCache cache.
-     *
-     * @access  public
-     * @param   string  $id_md5         ID encoded in MD5.
-     * @param   bool    $unserialize    Enable unserializing of content.
-     * @param   bool    $exists         Test if cache exists or not.
-     * @return  mixed
-     */
-    public function load ( $id_md5, $unserialize = true, $exists = false ) {
+        parent::__construct($parameters);
 
-        $this->clean();
-
-        if($exists === true)
-            return xcache_isset($id_md5);
-
-        $return = xcache_get($id_md5);
-
-        if(   false !== $unserialize
-           && false !== $this->_frontendOptions['serialize_content'])
-            $return = unserialize($return);
-
-        return $return;
+        return;
     }
 
     /**
      * Save cache content in XCache store.
      *
      * @access  public
-     * @param   string  $id_md5    Cache ID encoded in MD5.
-     * @param   string  $data      Cache content.
-     * @return  string
+     * @param   string  $data    Data to store.
+     * @return  void
      * @throw   Hoa_Cache_Exception
      */
-    public function save ( $id_md5, $data ) {
+    public function store ( $data ) {
 
         $this->clean();
 
-        if(false !== $this->_frontendOptions['serialize_content'])
+        if(true === $this->getParameter('serialize_content'))
             $data = serialize($data);
 
-        return xcache_set($id_md5, $data, $this->_frontendOptions['lifetime']);
+        xcache_set(
+            $this->getIdMd5(),
+            $data,
+            $this->getParameter('lifetime')
+        );
+
+        return;
+    }
+
+    /**
+     * Load data from XCache cache.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function load ( ) {
+
+        $this->clean();
+
+        $content = xcache_get($this->getIdMd5());
+
+        if(true === $this->getParameter('serialize_content'))
+            $content = unserialize($content);
+
+        return $content;
     }
 
     /**
      * Clean expired cache.
-     * Note : Hoa_Cache::CLEANING_USER is not supported, it's reserved for APC
+     * Note : Hoa_Cache::CLEAN_USER is not supported, it's reserved for APC
      * backend.
      *
      * @access  public
-     * @param   string  $lifetime    Lifetime of caches.
-     * @return  mixed
+     * @param   int  $lifetime    Lifetime of caches.
+     * @return  void
      * @throw   Hoa_Cache_Exception
      */
-    public function clean ( $lifetime = Hoa_Cache::CLEANING_EXPIRED ) {
+    public function clean ( $lifetime = Hoa_Cache::CLEAN_EXPIRED ) {
 
         switch($lifetime) {
 
-            case Hoa_Cache::CLEANING_ALL:
+            case Hoa_Cache::CLEAN_ALL:
                 for($i = 0, $n = xcache_count(XC_TYPE_VAR); $i < $n; $i++)
                     if(false !== xcache_clear_cache(XC_TYPE_VAR, $i))
                         throw new Hoa_Cache_Exception(
@@ -150,33 +148,33 @@ class Hoa_Cache_Backend_Xcache extends Hoa_Cache_Backend_Abstract {
                             1, $i);
               break;
 
-            case Hoa_Cache::CLEANING_EXPIRED:
+            case Hoa_Cache::CLEAN_EXPIRED:
                 // Manage by XCache.
               break;
 
-            case Hoa_Cache::CLEANING_USER:
+            case Hoa_Cache::CLEAN_USER:
                 throw new Hoa_Cache_Exception(
-                    'Hoa_Cache::CLEANING_USER constant is not supported by ' .
+                    'Hoa_Cache::CLEAN_USER constant is not supported by ' .
                     'XCache backend.', 2);
 
             default:
-                return false;
+                return;
         }
 
-        return true;
+        return;
     }
 
     /**
      * Remove a cache data.
-     * Attention : $id is an integer, not a md5 string.
      *
      * @access  public
-     * @param   string  $id    ID of cache to remove (_not_ encoded in MD5).
-     * @return  mixed
+     * @return  void
      * @throw   Hoa_Cache_Exception
      */
-    public function remove ( $id ) {
+    public function remove ( ) {
 
-        return xcache_clear_cache(XC_TYPE_VAR, $id);
+        xcache_clear_cache(XC_TYPE_VAR, $this->getId());
+
+        return;
     }
 }

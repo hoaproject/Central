@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Cache
- * @subpackage  Hoa_Cache_Frontend_Output
+ * @subpackage  Hoa_Cache_Backend
  *
  */
 
@@ -38,14 +38,19 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Cache_Frontend
+ * Hoa_Cache_Exception
  */
-import('Cache.Frontend');
+import('Cache.Exception');
 
 /**
- * Class Hoa_Cache_Frontend_Output.
+ * Hoa_Cache
+ */
+import('Cache.~');
+
+/**
+ * Class Hoa_Cache_Backend.
  *
- * Ouput catching system for frontend cache.
+ *
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2009 Ivan ENDERLIN.
@@ -53,66 +58,43 @@ import('Cache.Frontend');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Cache
- * @subpackage  Hoa_Cache_Frontend_Output
+ * @subpackage  Hoa_Cache_Backend
+ *
  */
 
-class Hoa_Cache_Frontend_Output extends Hoa_Cache_Frontend {
+abstract class Hoa_Cache_Backend extends Hoa_Cache {
 
     /**
-     * Output buffer level.
-     *
-     * @var Hoa_Cache_Frontend_Output array
-     */
-    protected $_level = array();
-
-
-
-    /**
-     * Start an output buffering.
+     * Save data.
      *
      * @access  public
-     * @param   string  id    ID of cache.
-     * @return  bool
+     * @param   mixed  $data    Data to store.
+     * @return  void
      */
-    public function start ( $id ) {
-
-        $this->makeId($id);
-        $md5 = $this->getIdMd5();
-        $out = $this->_backend->load();
-
-        if(false !== $out) {
-
-            echo $out;
-
-            return false;
-        }
-
-        ob_start();
-        ob_implicit_flush(false);
-        $this->_level[$md5] = ob_get_level();
-
-        return true;
-    }
+    abstract public function store ( $data );
 
     /**
-     * End an output buffering.
+     * Load data.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    abstract public function load ( );
+
+    /**
+     * Clean data.
+     *
+     * @access  public
+     * @param   int  $lifetime    Lifetime of caches.
+     * @return  void
+     */
+    abstract public function clean ( $lifetime = Hoa_Cache::CLEAN_EXPIRED );
+
+    /**
+     * Remove data.
      *
      * @access  public
      * @return  void
      */
-    public function end ( ) {
-
-        $content = '';
-        $md5     = $this->getIdMd5();
-
-        while(ob_get_level() >= $this->_level[$md5])
-            $content .= ob_get_clean();
-
-        $this->_backend->store($content);
-        $this->removeId();
-
-        echo $content;
-
-        return;
-    }
+    abstract public function remove ( );
 }
