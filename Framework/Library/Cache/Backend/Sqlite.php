@@ -38,19 +38,19 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Cache
- */
-import('Cache.~');
-
-/**
  * Hoa_Cache_Exception
  */
 import('Cache.Exception');
 
 /**
- * Hoa_Cache_Backend_Abstract
+ * Hoa_Cache_Backend
  */
-import('Cache.Backend.Abstract');
+import('Cache.Backend');
+
+/**
+ * Hoa_File_Directory
+ */
+import('File.Directory');
 
 /**
  * Class Hoa_Cache_Backend_Sqlite.
@@ -67,7 +67,7 @@ import('Cache.Backend.Abstract');
  * @subpackage  Hoa_Cache_Backend_Sqlite
  */
 
-class Hoa_Cache_Backend_Sqlite extends Hoa_Cache_Backend_Abstract {
+class Hoa_Cache_Backend_Sqlite extends Hoa_Cache_Backend {
 
     /**
      * SQLite connexion.
@@ -82,85 +82,87 @@ class Hoa_Cache_Backend_Sqlite extends Hoa_Cache_Backend_Abstract {
      * Check if SQLite is loaded, else an exception is thrown.
      *
      * @access  public
+     * @param   array  $parameters    Parameters.
      * @return  void
      * @throw   Hoa_Cache_Exception
      */
-    public function __construct ( ) {
+    public function __construct ( Array $parameters = array() ) {
 
         if(!extension_loaded('sqlite'))
             throw new Hoa_Cache_Exception(
                 'SQLite is not loaded on server.', 0);
-    }
 
-    /**
-     * Load data from SQLite database.
-     *
-     * @access  public
-     * @param   string  $id_md5         ID encoded in MD5.
-     * @param   bool    $unserialize    Enable unserializing of content.
-     * @param   bool    $exists         Test if cache exists or not.
-     * @return  mixed
-     */
-    public function load ( $id_md5, $unserialize = true, $exists = false ) {
+        parent::__construct($parameters);
 
-        $this->setSqlite();
-        $this->clean();
-
-        $statement = 'SELECT data FROM hoa_cache ' . "\n" .
-                     'WHERE  id = \'' . sqlite_escape_string($id_md5) . '\'';
-        $query     = sqlite_query($statement, $this->getSqlite());
-
-        if(0     === $num = sqlite_num_rows($query))
-            return false;
-
-        if(true  === $exists)
-            return 0 !== $num;
-
-        $return    = sqlite_fetch_single($query);
-
-        if(   $unserialize !== false
-           && $this->_frontendOptions['serialize_content'] !== false)
-            $return = unserialize($return);
-
-        return $return;
+        return;
     }
 
     /**
      * Save cache content in SQLite database.
      *
      * @access  public
-     * @param   string  $id_md5    Cache ID encoded in MD5.
-     * @param   string  $data      Cache content.
-     * @return  string
+     * @param   mixed  $data    Data to store.
+     * @return  void
      */
-    public function save ( $id_md5, $data ) {
+    public function store ( $data ) {
 
         $this->setSqlite();
         $this->clean();
 
-        if($this->_frontendOptions['serialize_content'] !== false)
-            $data = serialize($data);
+        if(true  === $this->getParameter('serialize_content'))
+            $data  = serialize($data);
 
-        $lifetime = $this->_frontendOptions['lifetime'];
+        $lifetime  = $this->getParameter('lifetime');
+        $md5       = $this->getIdMd5();
 
-        if(false === $this->load($id_md5, true, true))
+        $statement = 'SELECT data FROM hoa_cache ' . "\n" .
+                     'WHERE  id = \'' . sqlite_escape_string($this->getIdMd5()) . '\'';
+        $query     = sqlite_query($statement, $this->getSqlite());
+
+        if(0     === sqlite_num_rows($query))
             $statement = 'INSERT INTO hoa_cache (' . "\n" .
-                         '       id, ' . "\n" .
-                         '       data, ' . "\n" .
-                         '       will_expire_at ' . "\n" .
-                         ')' . "\n" .
-                         'VALUES (' . "\n" .
-                         '       \'' . sqlite_escape_string($id_md5) . '\', ' . "\n" .
-                         '       \'' . sqlite_escape_string($data) . '\', ' . "\n" .
-                         '       \'' . (time() + $lifetime) . '\' ' . "\n" .
+                         '       id, '             . "\n" .
+                         '       data, '           . "\n" .
+                         '       will_expire_at '  . "\n" .
+                         ')'                       . "\n" .
+                         'VALUES ('                . "\n" .
+                         '       \'' . sqlite_escape_string($md5) . '\', ' . "\n" .
+                         '       \'' . sqlite_escape_string($data) . '\', '   . "\n" .
+                         '       \'' . (time() + $lifetime) . '\' '           . "\n" .
                          ')';
         else
             $statement = 'UPDATE hoa_cache ' . "\n" .
                          'SET    data           = \'' . sqlite_escape_string($data)  . '\', ' . "\n" .
-                         '       will_expire_at = \'' . (time() + $lifetime) . '\' ' . "\n" .
-                         'WHERE  id             = \'' . sqlite_escape_string($id_md5) . '\'';
+                         '       will_expire_at = \'' . (time() + $lifetime) . '\' '          . "\n" .
+                         'WHERE  id             = \'' . sqlite_escape_string($md5) . '\'';
 
         return sqlite_query($statement, $this->getSqlite());
+    }
+
+    /**
+     * Load data from SQLite database.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function load ( ) {
+
+        $this->setSqlite();
+        $this->clean();
+
+        $statement = 'SELECT data FROM hoa_cache ' . "\n" .
+                     'WHERE  id = \'' . sqlite_escape_string($this->getIdMd5()) . '\'';
+        $query     = sqlite_query($statement, $this->getSqlite());
+
+        if(0     === $num = sqlite_num_rows($query))
+            return false;
+
+        $content   = sqlite_fetch_single($query);
+
+        if(true === $this->getParameter('serialize_content'))
+            $content = unserialize($content);
+
+        return $content;
     }
 
     /**
@@ -168,33 +170,32 @@ class Hoa_Cache_Backend_Sqlite extends Hoa_Cache_Backend_Abstract {
      *
      * @access  public
      * @param   string  $lifetime    Lifetime of caches.
-     * @return  mixed
+     * @return  void
      * @throw   Hoa_Cache_Exception
      */
-    public function clean ( $lifetime = Hoa_Cache::CLEANING_EXPIRED ) {
+    public function clean ( $lifetime = Hoa_Cache::CLEAN_EXPIRED ) {
 
         $this->setSqlite();
 
         switch($lifetime) {
 
-            case Hoa_Cache::CLEANING_ALL:
+            case Hoa_Cache::CLEAN_ALL:
                 $statement = 'DELETE FROM hoa_cache';
               break;
 
-            case Hoa_Cache::CLEANING_EXPIRED:
+            case Hoa_Cache::CLEAN_EXPIRED:
                 $statement = 'DELETE FROM hoa_cache ' . "\n" .
                              'WHERE  will_expire_at < ' . sqlite_escape_string(time());
               break;
 
-            case Hoa_Cache::CLEANING_USER:
+            case Hoa_Cache::CLEAN_USER:
                 throw new Hoa_Cache_Exception(
-                    'Hoa_Cache::CLEANING_USER constant is not supported by ' .
+                    'Hoa_Cache::CLEAN_USER constant is not supported by ' .
                     'SQLite cache backend.', 1);
               break;
         }
 
-        if(0 === $num = sqlite_num_rows(sqlite_query($statement, $this->getSqlite())))
-            return false;
+        sqlite_query($statement, $this->getSqlite());
 
         return $num;
     }
@@ -203,17 +204,18 @@ class Hoa_Cache_Backend_Sqlite extends Hoa_Cache_Backend_Abstract {
      * Remove a cache data.
      *
      * @access  public
-     * @param   string  $id_md5    ID of cache to remove (encoded in MD5).
-     * @return  mixed
+     * @return  void
      */
-    public function remove ( $id_md5 ) {
+    public function remove ( ) {
 
         $this->setSqlite();
 
         $statement = 'DELETE FROM hoa_cache ' . "\n" .
                      'WHERE  id = \'' . sqlite_escape_string($id_md5) . '\'';
 
-        return sqlite_query($statement, $this->getSqlite());
+        sqlite_query($statement, $this->getSqlite());
+
+        return;
     }
 
     /**
@@ -233,24 +235,23 @@ class Hoa_Cache_Backend_Sqlite extends Hoa_Cache_Backend_Abstract {
         if(null !== $this->_sqlite)
             return;
 
-        $database     = $this->_backendOptions['database']['host'];
+        $database     = $this->getParameter('sqlite.database.host');
 
         if(empty($database))
-            $database = $this->_backendOptions['cache_directory'];
+            $database = $this->getParameter('sqlite.cache.directory');
 
         $new = false;
+
         if($database == ':memory:')
             $new = true;
-        elseif(!is_file($database)) {
+
+        else {
 
             $new  = true;
-            $dir  = dirname($database);
-            $mask = umask(0000);
-            if(!is_dir($dir))
-                @mkdir($dir, 0777, true);
-
-            touch($database);
-            umask($mask);
+            Hoa_File_Directory::create(
+                $database,
+                Hoa_File_Directory::MODE_CREATE_RECURSIVE
+            );
         }
 
         if(false === $this->_sqlite = @sqlite_open($database, 0644, $error))
@@ -284,9 +285,9 @@ class Hoa_Cache_Backend_Sqlite extends Hoa_Cache_Backend_Abstract {
     protected function createSchema ( ) {
 
         $statements   = array(
-            'table'   => 'CREATE TABLE hoa_cache (' . "\n" .
-                         '    id VARCHAR(32), ' . "\n" .
-                         '    data LONGVARCHAR, ' . "\n" .
+            'table'   => 'CREATE TABLE hoa_cache ('     . "\n" .
+                         '    id VARCHAR(32), '         . "\n" .
+                         '    data LONGVARCHAR, '       . "\n" .
                          '    will_expire_at TIMESTAMP' . "\n" .
                          ')',
             'index'   => 'CREATE UNIQUE INDEX hoa_cache_unique ON hoa_cache (' . "\n" .
@@ -294,15 +295,10 @@ class Hoa_Cache_Backend_Sqlite extends Hoa_Cache_Backend_Abstract {
                          ')'
         );
 
-        $database     = $this->_backendOptions['database'];
-
-        if(empty($database))
-            $database = $this->_backendOptions['cache_directory'];
-
         foreach($statements as $name => $statement)
             if(false === sqlite_query($statement, $this->getSqlite()))
                 throw new Hoa_Cache_Exception(
-                    sqlite_error_string(sqlite_last_error($database)), 3);
+                    sqlite_error_string(sqlite_last_error($this->getSqlite())), 3);
 
         return;
     }
@@ -316,5 +312,7 @@ class Hoa_Cache_Backend_Sqlite extends Hoa_Cache_Backend_Abstract {
     public function __destruct ( ) {
 
         sqlite_close($this->getSqlite());
+
+        return;
     }
 }

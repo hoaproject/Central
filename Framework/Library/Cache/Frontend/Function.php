@@ -38,9 +38,9 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Cache
+ * Hoa_Cache_Frontend
  */
-import('Cache.~');
+import('Cache.Frontend');
 
 /**
  * Class Hoa_Cache_Frontend_Function.
@@ -56,14 +56,14 @@ import('Cache.~');
  * @subpackage  Hoa_Cache_Frontend_Function
  */
 
-class Hoa_Cache_Frontend_Function extends Hoa_Cache {
+class Hoa_Cache_Frontend_Function extends Hoa_Cache_Frontend {
 
     /**
-     * Method arguments.
+     * Function arguments.
      *
-     * @var Hoa_Cache_Frontend_Class array
+     * @var Hoa_Cache_Frontend_Funtion array
      */
-    protected $arguments = array();
+    protected $_arguments = array();
 
 
 
@@ -82,13 +82,15 @@ class Hoa_Cache_Frontend_Function extends Hoa_Cache {
             throw new Hoa_Cache_Exception('Function %s does not exists.',
                 0, $function);
 
-        $this->arguments = $this->ksort($arguments);
+        $this->_arguments = $this->ksort($arguments);
+        $idExtra          = serialize($this->_arguments);
+        $this->makeId($function . '/' . $idExtra);
+        $content          = $this->_backend->load();
 
-        $id = $function;
-        $this->makeId($id);
+        if(false !== $content) {
 
-        if(false !== $content = $this->load($this->getId(Hoa_Cache::GET_ID_MD5, $id))) {
             echo $content[0];   // output
+
             return $content[1]; // return
         }
 
@@ -98,26 +100,11 @@ class Hoa_Cache_Frontend_Function extends Hoa_Cache {
         $output = ob_get_contents();
         ob_end_clean();
 
-        $this->save($this->getId(Hoa_Cache::GET_ID_MD5), array($output, $return));
+        $this->_backend->store(array($output, $return));
         $this->removeId();
 
         echo $output;
+
         return $return;
-    }
-
-    /**
-     * Own _makeId class method.
-     *
-     * @access  public
-     * @param   string  $id    ID.
-     * @return  string
-     * @throw   Hoa_Cache_Exception
-     */
-    public function _makeId ( $id = null ) {
-
-        if(!preg_match('#([a-zA-Z0-9]+)#', $id))
-            throw new Hoa_Cache_Exception('%s is not a valid ID.', 1, $id);
-
-        return serialize($this->arguments);
     }
 }

@@ -38,19 +38,14 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Cache
- */
-import('Cache.~');
-
-/**
  * Hoa_Cache_Exception
  */
 import('Cache.Exception');
 
 /**
- * Hoa_Cache_Backend_Abstract
+ * Hoa_Cache_Backend
  */
-import('Cache.Backend.Abstract');
+import('Cache.Backend');
 
 /**
  * Class Hoa_Cache_Backend_Memcache.
@@ -68,7 +63,7 @@ import('Cache.Backend.Abstract');
  * @subpackage  Hoa_Cache_Backend_Memcache
  */
 
-class Hoa_Cache_Backend_Memcache extends Hoa_Cache_Backend_Abstract {
+class Hoa_Cache_Backend_Memcache extends Hoa_Cache_Backend {
 
     /**
      * Memcache object.
@@ -83,86 +78,87 @@ class Hoa_Cache_Backend_Memcache extends Hoa_Cache_Backend_Abstract {
      * Check if Memcache is loaded and prepare variables.
      *
      * @access  public
+     * @param   array  $parameters    Parameters.
      * @return  void
      * @throw   Hoa_Cache_Exception
      */
-    public function __construct ( ) {
+    public function __construct ( Array $parameters = array() ) {
 
         if(!extension_loaded('memcache'))
             throw new Hoa_Cache_Exception(
                 'Memcache module extension is not loaded on server.', 0);
-    }
 
-    /**
-     * Load a Memcache items.
-     *
-     * @access  public
-     * @param   string  $id_md5         ID encoded in MD5.
-     * @param   bool    $unserialize    Enable unserializing of content.
-     * @param   bool    $exists         Test if cache exists or not.
-     * @return  mixed
-     */
-    public function load ( $id_md5, $unserialize = true, $exists = false ) {
+        parent::__construct($parameters);
 
-        $this->setMemcache();
-        $this->clean();
-
-        $return = $this->_memcache->get($id_md5);
-
-        if(true === $exists)
-            return is_bool($return);
-
-        if(   false === is_bool($return)
-           && false !== $unserialize
-           && false !== $this->_frontendOptions['serialize_content'])
-            $return = unserialize($return);
-
-        return $return;
+        return;
     }
 
     /**
      * Save cache content into a Memcache items.
      *
      * @access  public
-     * @param   string  $id_md5    Cache ID encoded in MD5.
-     * @param   string  $data      Cache content.
-     * @return  string
+     * @param   mixed  $data    Data to store.
+     * @return  void
      */
-    public function save ( $id_md5, $data ) {
+    public function store ( $data ) {
 
         $this->setMemcache();
         $this->clean();
 
-        if(false !== $this->_frontendOptions['serialize_content'])
+        if(true === $this->getParameter('serialize_content'))
             $data = serialize($data);
 
-        $flag = $this->_backendOptions['compress']['active']
-                    ? MEMCACHE_COMPRESSED
-                    : 0;
+        $flag     = $this->getParameter('memcache.compress.active')
+                        ? MEMCACHE_COMPRESSED
+                        : 0;
+        $lifetime = $this->getParameter('lifetime');
 
-        $lifetime = $this->_frontendOptions['lifetime'] > 2592000 // 30 days
-                        ? 2592000
-                        : $this->_frontendOptions['lifetime'];
+        if($lifetime > 2592000) // 30 days.
+            $lifetime = 2592000;
 
-        return $this->_memcache->set($id_md5, $data, $flag, $lifetime);
+        return $this->_memcache->set(
+            $this->getIdMd5(),
+            $data,
+            $flag,
+            $lifetime
+        );
+    }
+
+    /**
+     * Load a Memcache items.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function load ( ) {
+
+        $this->setMemcache();
+        $this->clean();
+
+        $content = $this->_memcache->get($this->getIdMd5());
+
+        if(true === $this->getParameter('serialize_content'))
+            $content = unserialize($content);
+
+        return $content;
     }
 
     /**
      * Flush all existing items on Memcache server.
-     * Note : only Hoa_Cache::CLEANING_ALL is supported by Memcache.
+     * Note : only Hoa_Cache::CLEAN_ALL is supported by Memcache.
      *
      * @access  public
-     * @param   string  $lifetime    Specific lifetime.
-     * @return  bool
+     * @param   int  $lifetime    Specific lifetime.
+     * @return  void
      * @throw   Hoa_Cache_Exception
      */
-    public function clean ( $lifetime = Hoa_Cache::CLEANING_ALL ) {
+    public function clean ( $lifetime = Hoa_Cache::CLEAN_ALL ) {
 
         $this->setMemcache();
 
-        if($lifetime != Hoa_Cache::CLEANING_ALL)
+        if($lifetime != Hoa_Cache::CLEAN_ALL)
             throw new Hoa_Cache_Exception(
-                'Only Hoa_Cache::CLEANING_ALL constant is supported by ' .
+                'Only Hoa_Cache::CLEAN_ALL constant is supported by ' .
                 'Memcache backend.', 1);
 
         if(false === @$this->_memcache->flush())
@@ -170,21 +166,21 @@ class Hoa_Cache_Backend_Memcache extends Hoa_Cache_Backend_Abstract {
                 'Flush all existing items on Memcache server %s failed.',
                 2, $this->_backendOptions['database']['host']);
 
-        return true;
+        return;
     }
 
     /**
      * Remove a memcache items.
      *
      * @access  public
-     * @param   string  $id_md5    ID of cache to remove (encoded in MD5).
-     * @return  mixed
+     * @return  void
      */
-    public function remove ( $id_md5 ) {
+    public function remove ( ) {
 
         $this->setMemcache();
+        $this->_memcache->delete($this->getIdMd5());
 
-        return $this->_memcache->delete($id_md5);
+        return;
     }
 
     /**
@@ -199,20 +195,29 @@ class Hoa_Cache_Backend_Memcache extends Hoa_Cache_Backend_Abstract {
             return true;
 
         $this->_memcache = new Memcache();
-        $this->_memcache->addServer($this->_backendOptions['database']['host'],
-                                    $this->_backendOptions['database']['port'],
-                                    $this->_backendOptions['database']['persistent']);
+        $this->_memcache->addServer(
+            $this->getParameter('memcache.database.host'),
+            $this->getParameter('memcache.database.port'),
+            $this->getParameter('memcache.database.persistent')
+        );
+
+        return true;
     }
 
     /**
      * Close connection to Memcache.
      *
      * @access  public
-     * @return  bool
+     * @return  void
      */
     public function __destruct ( ) {
 
-        if($this->_memcache !== null)
-            return $this->_memcache->close();
+        if($this->_memcache !== null) {
+
+            $this->_memcache->close();
+            unset($this->_memcache);
+        }
+
+        return;
     }
 }

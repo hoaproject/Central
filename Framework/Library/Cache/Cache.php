@@ -44,9 +44,6 @@ import('Cache.Exception');
 /**
  * Class Hoa_Cache.
  *
- * Cache system for frontend and backend parts.
- * It allows you to capture output data, class and function data and
- * return, and save it into file, and save it with APC, or Memcache.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2009 Ivan ENDERLIN.
@@ -56,232 +53,165 @@ import('Cache.Exception');
  * @package     Hoa_Cache
  */
 
-class Hoa_Cache {
+abstract class Hoa_Cache implements Hoa_Framework_Parameterizable {
 
     /**
-     * Cleaning file constants.
+     * Clean all entries.
      *
      * @const int
      */
-    const CLEANING_ALL     = -1;
-    const CLEANING_EXPIRED =  0;
+    const CLEAN_ALL     = -1;
 
     /**
-     * Cleaning APC constants.
+     * Clean expired entries.
      *
      * @const int
      */
-    const CLEANING_USER    =  1;
+    const CLEAN_EXPIRED =  0;
 
     /**
-     * Get ID in original form or in MD5 ?
+     * Clean (only for the APC backend).
      *
-     * @const string
+     * @const int
      */
-    const GET_ID           = 'id';
-    const GET_ID_MD5       = 'id_md5';
+    const CLEAN_USER    =  1;
 
     /**
-     * Usefull for first parameter of setOptions methods.
+     * The Hoa_Controller parameters.
      *
-     * @const string
+     * @var Hoa_Framework_Parameter object
      */
-    const FRONTEND         = 'frontend';
-    const BACKEND          = 'backend';
-
-    /**
-     * Backend object.
-     *
-     * @var Hoa_Cache object
-     */
-    protected $_backend         = null;
-
-    /**
-     * Frontend options.
-     *
-     * @var Hoa_Cache array
-     */
-    protected $_frontendOptions = array(
-        'lifetime'              => 3600,
-        'serialize_content'     => true,
-        'make_id_with'          => array(
-            'get'               => true,
-            'post'              => true,
-            'cookie'            => true,
-            'session'           => true,
-            'files'             => true
-        )
-    );
-
-    /**
-     * Backend options.
-     *
-     * @var Hoa_Cache array
-     */
-    protected $_backendOptions  = array(
-        'cache_directory'       => '/tmp/',
-        'compress'              => array(
-            'active'            => true,
-            'level'             => 9
-        ),
-        'database'              => array(
-            'host'              => '127.0.0.1',
-            // 'host'           => ':memory:' or '/tmp/sqlite.db' when using SQLite,
-            'port'              => 11211,
-            'persistent'        => true
-        )
-    );
+    private $_parameters  = null;
 
     /**
      * Current ID (key : id, value : id_md5).
      *
      * @var Hoa_Cache array
      */
-    protected $_id              = array();
+    protected static $_id = array();
 
 
 
     /**
-     * Create frontend and backend object,
-     * and set backend object for frontend interface.
+     * Constructor.
      *
      * @access  public
-     * @param   string  $frontend           Frontend name.
-     * @param   string  $backend            Backend name.
-     * @param   array   $frontendOptions    Frontend options.
-     * @param   array   $backendOptions     Backend options.
-     * @return  object
-     * @throw   Hoa_Cache_Exception
+     * @param   array   $parameters    Parameters.
+     * @return  void
      */
-    public static function factory ( $frontend, $backend,
-                                     Array $frontendOptions = array(),
-                                     Array $backendOptions  = array()) {
+    public function __construct ( Array $parameters = array() ) {
 
-        if(empty($frontend))
-            throw new Hoa_Cache_Exception('Frontend could not be empty.', 0);
-        if(empty($backend))
-            throw new Hoa_Cache_Exception('Backend could not be empty.' , 1);
+        $this->_parameters = new Hoa_Framework_Parameter(
+            $this,
+            array(
+                'id' => null
+            ),
+            array(
+                'lifetime'                     => 3600,
+                'serialize_content'            => true,
+                'make_id_with.get'             => true,
+                'make_id_with.post'            => true,
+                'make_id_with.cookie'          => true,
+                'make_id_with.session'         => true,
+                'make_id_with.files'           => true,
 
-        $frontend       = ucfirst(strtolower($frontend));
-        $backend        = ucfirst(strtolower($backend));
+                'apc'                          => '',
 
-        $frontendClass  = 'Hoa_Cache_Frontend_' . $frontend;
-        $backendClass   = 'Hoa_Cache_Backend_'  . $backend;
+                'eaccelerator'                 => '',
 
-        import('Cache.Frontend.' . $frontend);
-        import('Cache.Backend.'  . $backend);
+                'file.cache_directory'         => 'hoa://Data/Variable/Cache/(:id:).ca',
+                'file.compress.active'         => true,
+                'file.compress.level'          => true,
 
-        $frontendObject = new $frontendClass();
-        $backendObject  = new $backendClass();
-        $frontendObject->setBackend($backendObject);
+                'memcache.compress.active'     => true,
+                'memcache.database.host'       => '127.0.0.1',
+                'memcache.database.port'       => 11211,
+                'memcache.database.persistent' => true,
 
-        if(empty($frontendOptions) || empty($backendOptions)) {
+                'sqlite.cache_directory'       => 'hoa://Data/Variable/Cache/Cache.db',
+                /**
+                 * Example with a SQLite database loaded in memory:
+                 *
+                 * 'sqlite.cache_directory'    => ':memory:',
+                 */
+                'sqlite.database.host'         => '127.0.0.1',
 
-            $options = require 'hoa://Data/Etc/Configuration/.Cache/Cache.php';
+                'xcache'                       => '',
 
-            if(empty($frontendOptions) && isset($options['frontend']))
-                $frontendOptions = $options['frontend'];
+                'zendplatform'                 => ''
+            ),
+            'Hoa_Cache'
+        );
 
-            if(empty($backendOptions) && isset($options['backend']))
-                $backendOptions  = $options['backend'];
-        }
+        $this->setParameters($parameters);
 
-        if(empty($frontendOptions))
-            $frontendOptions = $frontendObject->getOptions('frontend');
-        if(empty($backendOptions))
-            $backendOptions  = $frontendObject->getOptions('backend');
-
-        $frontendObject->setOptions('frontend', $frontendOptions);
-        $frontendObject->setOptions('backend',  $backendOptions);
-
-        return $frontendObject;
+        return;
     }
 
     /**
-     * Set/attach backend object.
+     * Set many parameters to a class.
      *
      * @access  public
-     * @param   object  $backend    Backend to set.
-     * @return  object
+     * @param   array   $in    Parameters to set.
+     * @return  void
+     * @throw   Hoa_Exception
      */
-    public function setBackend ( Hoa_Cache_Backend_Abstract $backend ) {
+    public function setParameters ( Array $in ) {
 
-        return $this->_backend = $backend;
+        return $this->_parameters->setParameters($this, $in);
     }
 
     /**
-     * Set options of frontend and backend.
-     * If options array is not totally filled, array will be filled with default
-     * options.
+     * Get many parameters from a class.
      *
      * @access  public
-     * @param   string  $end             Frontend or backend options ?
-     * @param   array   $options         Options to apply.
-     * @param   array   $recursiveEnd    Used for recursive options, do not be
-     *                                   initialized.
      * @return  array
-     * @throw   Hoa_Cache_Exception
+     * @throw   Hoa_Exception
      */
-    public function setOptions ( $end, Array $options = array(),
-                                 Array $recursiveEnd  = array() ) {
+    public function getParameters ( ) {
 
-        if($end != self::FRONTEND && $end != self::BACKEND)
-            throw new Hoa_Cache_Exception('%s is not valid options group, must ' .
-                'be Hoa_Cache::FRONTEND or Hoa_Cache::BACKEND.', 2, $end);
-
-        if(empty($recursiveEnd)) {
-
-            $array       =& $this->{'_' . $end . 'Options'};
-            $recursivity = false;
-        }
-        else {
-
-            $array       =& $recursiveEnd;
-            $recursivity = true;
-        }
-
-        if(empty($options))
-            return $array;
-
-        foreach($options as $option => $value) {
-
-            if(is_array($value))
-                if(!isset($array[$option]))
-                    throw new Hoa_Cache_Exception(
-                        '%s is not a valid option in %s options group.',
-                        3, array($option, $end));
-                else
-                    $array[$option] = $this->setOptions($end, $value, $array[$option]);
-            else
-                if(!isset($array[$option]))
-                    throw new Hoa_Cache_Exception(
-                        '%s is not a valid option in %s options group.',
-                        4, array($option, $end));
-                else
-                    $array[$option] = $value;
-        }
-
-        if($recursivity === false)
-            $this->_backend->setOptions($end, $array);
-
-        return $array;
+        return $this->_parameters->getParameters($this);
     }
 
     /**
-     * Get options of frontend or backend.
+     * Set a parameter to a class.
      *
      * @access  public
-     * @param   string  $end       Frontend or backend.
-     * @return  array
-     * @throw   Hoa_Cache_Exception
+     * @param   string  $key      Key.
+     * @param   mixed   $value    Value.
+     * @return  mixed
+     * @throw   Hoa_Exception
      */
-    public function getOptions ( $end ) {
+    public function setParameter ( $key, $value ) {
 
-        if($end != 'frontend' && $end != 'backend')
-            throw new Hoa_Cache_Exception('%s is not valid options group.',
-                5, $end);
+        return $this->_parameters->setParameter($this, $key, $value);
+    }
 
-        return $this->{'_' . $end . 'Options'};
+    /**
+     * Get a parameter from a class.
+     *
+     * @access  public
+     * @param   string  $key    Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getParameter ( $key ) {
+
+        return $this->_parameters->getParameter($this, $key);
+    }
+
+    /**
+     * Get a formatted parameter from a class (i.e. zFormat with keywords and
+     * other parameters).
+     *
+     * @access  public
+     * @param   string  $key    Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getFormattedParameter ( $key ) {
+
+        return $this->_parameters->getFormattedParameter($this, $key);
     }
 
     /**
@@ -297,80 +227,72 @@ class Hoa_Cache {
      */
     protected function makeId ( $id = null ) {
 
-        if(!preg_match('#([a-zA-Z0-9]+)#', $id))
-            throw new Hoa_Cache_Exception('%s is not a valid ID.', 6, $id);
+        $_id = $id;
 
-        if(method_exists($this, '_makeId'))
-            $_id     = $this->_makeId($id);
+        if(   true === $this->getParameter('make_id_with.get')
+           && isset($_GET))
+            $_id .= serialize($this->ksort($_GET));
 
-        else {
+        if(   true === $this->getParameter('make_id_with.post')
+           && isset($_POST))
+            $_id .= serialize($this->ksort($_POST));
 
-            $options = $this->_frontendOptions['make_id_with'];
+        if(   true === $this->getParameter('make_id_with.cookie')
+           && isset($_COOKIE))
+            $_id .= serialize($this->ksort($_COOKIE));
 
-            $_id     = $options['get']     !== false && isset($_GET)
-                           ? serialize($this->ksort($_GET))
-                           : '';
-            $_id    .= $options['post']    !== false && isset($_POST)
-                           ? serialize($this->ksort($_POST))
-                           : '';
-            $_id    .= $options['cookie']  !== false && isset($_COOKIE)
-                           ? serialize($this->ksort($_COOKIE))
-                           : '';
-            $_id    .= $options['session'] !== false && isset($_SESSION)
-                           ? serialize($this->ksort($_SESSION))
-                           : '';
-            $_id    .= $options['files']   !== false && isset($_FILES)
-                           ? serialize($this->ksort($_FILES))
-                           : '';
-        }
+        if(   true === $this->getParameter('make_id_with.session')
+           && isset($_SESSION))
+            $_id .= serialize($this->ksort($_SESSION));
 
-        $this->_id[$id] = md5($id . $_id);
+        if(   true === $this->getParameter('make_id_with.files')
+           && isset($_FILES))
+            $_id .= serialize($this->ksort($_FILES));
 
-        return $this->_id;
+        return self::$_id[$id] = md5($id . $_id);
     }
 
     /**
-     * Get current couple ID/ID_MD5.
+     * Set the current ID.
      *
      * @access  protected
-     * @param   string     $element     Returns ID or ID in MD5 ?
-     * @param   string     $specific    Get a specific ID.
-     * @return  array
+     * @param   string  $id    ID.
+     * @return  string
+     */
+    protected function setId ( $id ) {
+
+        $old = $this->_parameters->getKeyword($this, 'id');
+        $this->_parameters->setKeyword($this, 'id', $id);
+
+        return $old;
+    }
+
+    /**
+     * Get last ID.
+     *
+     * @access  protected
+     * @return  string
      * @throw   Hoa_Cache_Exception
      */
-    protected function getId ( $element = self::GET_ID, $specific = null ) {
+    protected function getId ( ) {
 
-        end($this->_id);
+        end(self::$_id);
 
-        if($element != self::GET_ID && $element != self::GET_ID_MD5)
-            throw new Hoa_Cache_Exception(
-                'Element could not be different of Hoa_Cache::GET_ID and ' .
-                'Hoa_Cache::GET_ID_MD5.', 7);
+        return key(self::$_id);
+    }
 
-        if($element == 'id') {
+    /**
+     * Get last ID in MD5 format.
+     *
+     * @access  protected
+     * @return  string
+     * @throw   Hoa_Cache_Exception
+     */
+    protected function getIdMd5 ( ) {
 
-            if($specific !== null) {
+        end(self::$_id);
 
-                if(false === $out = array_search($specific, $this->_id))
-                    throw new Hoa_Cache_Exception(
-                        'ID encoded in MD5 %s is not found.', 8, $specific);
-
-                return $out;
-            }
-            else
-                return key($this->_id);
-        }
-        else {
-
-            if($specific !== null)
-                if(!isset($this->_id[$specific]))
-                    throw new Hoa_Cache_Exception('ID %s is not found.',
-                        9, $specific);
-                else    
-                    return $this->_id[$specific];
-            else
-                return current($this->_id);
-        }
+        return current(self::$_id);
     }
 
     /**
@@ -378,14 +300,13 @@ class Hoa_Cache {
      * By default, the last ID is removed.
      *
      * @access  protected
-     * @param   string     $specific    Remove a specific ID.
      * @return  void
      */
-    protected function removeId ( $specific = null ) {
+    protected function removeId  () {
 
-        $id = $this->getId(self::GET_ID, $specific);
+        unset(self::$_id[$this->getId()]);
 
-        unset($this->_id[$id]);
+        return;
     }
 
     /**
@@ -403,66 +324,5 @@ class Hoa_Cache {
                 $array[$key] = $this->ksort($value);
 
         return $array;
-    }
-
-
-    /**
-     * Backend methods.
-     */
-
-
-    /**
-     * Load a file.
-     *
-     * @access  protected
-     * @param   string     $id_md5         File ID encoded in MD5.
-     * @param   bool       $unserialize    Enable unserializing of content.
-     * @param   bool       $exists         Test if file exists or not.
-     * @return  mixed
-     * @throw   Hoa_Cache_Exception
-     */
-    protected function load ( $id_md5, $unserialize = true, $exists = false ) {
-
-        return $this->_backend->load($id_md5, $unserialize, $exists);
-    }
-
-    /**
-     * Save cache content into a file.
-     *
-     * @access  public
-     * @param   string  $id        Cache ID.
-     * @param   string  $data      Cache content.
-     * @return  string
-     * @throw   Hoa_Cache_Exception
-     */
-    protected function save ( $id_md5, $data ) {
-
-        return $this->_backend->save($id_md5, $data);
-    }
-
-    /**
-     * Clean expired cache files.
-     *
-     * @access  public
-     * @param   string  $lifetime    Specific lifetime.
-     * @return  mixed
-     * @throw   Hoa_Cache_Exception
-     */
-    public function clean ( $lifetime = null ) {
-
-        return $this->_backend->clean($lifetime);
-    }
-
-    /**
-     * Remove a cache file.
-     *
-     * @access  public
-     * @param   string  $id    Cache file ID.
-     * @return  mixed
-     * @throw   Hoa_Cache_Exception
-     */
-    public function remove ( $id ) {
-
-        return $this->_backend->remove($id);
     }
 }

@@ -38,19 +38,14 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Cache
- */
-import('Cache.~');
-
-/**
  * Hoa_Cache_Exception
  */
 import('Cache.Exception');
 
 /**
- * Hoa_Cache_Backend_Abstract
+ * Hoa_Cache_Backend
  */
-import('Cache.Backend.Abstract');
+import('Cache.Backend');
 
 /**
  * Class Hoa_Cache_Backend_Apc.
@@ -68,106 +63,107 @@ import('Cache.Backend.Abstract');
  * @subpackage  Hoa_Cache_Backend_Apc
  */
 
-class Hoa_Cache_Backend_Apc extends Hoa_Cache_Backend_Abstract {
+class Hoa_Cache_Backend_Apc extends Hoa_Cache_Backend {
 
     /**
      * Check if APC is loaded, else an exception is thrown.
      *
      * @access  public
+     * @param   array   $parameters    Parameters.
      * @return  void
      * @throw   Hoa_Cache_Exception
      */
-    public function __construct ( ) {
+    public function __construct ( Array $parameters = array() ) {
 
         if(!extension_loaded('apc'))
             throw new Hoa_Cache_Exception(
                 'APC (PECL extension) is not loaded on server.', 0);
-    }
 
-    /**
-     * Load data from APC cache.
-     *
-     * @access  public
-     * @param   string  $id_md5         ID encoded in MD5.
-     * @param   bool    $unserialize    Enable unserializing of content.
-     * @param   bool    $exists         Test if cache exists or not.
-     * @return  mixed
-     */
-    public function load ( $id_md5, $unserialize = true, $exists = false ) {
+        parent::__construct($parameters);
 
-        $this->clean();
-
-        $return = apc_fetch($id_md5);
-
-        if(true === $exists)
-            return false !== $return;
-
-        if(   false !== $unserialize
-           && false !== $this->_frontendOptions['serialize_content'])
-            $return   = unserialize($return);
-
-        return $return;
+        return;
     }
 
     /**
      * Save cache content in APC store.
      *
      * @access  public
-     * @param   string  $id_md5    Cache ID encoded in MD5.
-     * @param   string  $data      Cache content.
-     * @return  string
+     * @param   mixed  $data    Data to store.
+     * @return  mixed
      */
-    public function save ( $id_md5, $data ) {
+    public function store ( $data ) {
 
         $this->clean();
 
-        if(false !== $this->_frontendOptions['serialize_content'])
+        if(false !== $this->getParameter('serialize_content'))
             $data  = serialize($data);
 
-        return apc_store($id_md5, $data, $this->_frontendOptions['lifetime']);
+        return apc_store(
+            $this->getIdMd5(),
+            $data,
+            $this->getParameter('lifetime')
+        );
+    }
+
+    /**
+     * Load data from APC cache.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function load ( ) {
+
+        $this->clean();
+
+        $content = apc_fetch($this->getIdMd5());
+
+        if(true === $this->getParameter('serialize_content'))
+            $content = unserialize($content);
+
+        return $content;
     }
 
     /**
      * Clean expired cache.
-     * Note : Hoa_Cache::CLEANING_EXPIRED is not supported with APC.
+     * Note : Hoa_Cache::CLEAN_EXPIRED is not supported with APC.
      *
      * @access  public
-     * @param   string  $lifetime    Lifetime of caches.
-     * @return  mixed
+     * @param   int  $lifetime    Lifetime of caches.
+     * @return  void
      * @throw   Hoa_Cache_Exception
      */
-    public function clean ( $lifetime = Hoa_Cache::CLEANING_USER ) {
+    public function clean ( $lifetime = Hoa_Cache::CLEAN_USER ) {
 
         switch($lifetime) {
 
-            case Hoa_Cache::CLEANING_ALL:
+            case Hoa_Cache::CLEAN_ALL:
                 return apc_clear_cache();
               break;
 
-            case Hoa_Cache::CLEANING_EXPIRED:
+            case Hoa_Cache::CLEAN_EXPIRED:
                 throw new Hoa_Cache_Exception(
-                    'Hoa_Cache::CLEANING_EXPIRED constant is not supported by ' .
+                    'Hoa_Cache::CLEAN_EXPIRED constant is not supported by ' .
                     'APC cache backend.', 1);
               break;
 
-            case Hoa_Cache::CLEANING_USER:
-                return apc_clear_cache('user');
-              break;
-
+            case Hoa_Cache::CLEAN_USER:
             default:
                 return apc_clear_cache('user');
         }
+
+        return;
     }
 
     /**
      * Remove a cache data.
      *
      * @access  public
-     * @param   string  $id_md5    ID of cache to remove (encoded in MD5).
-     * @return  mixed
+     * @return  void
      */
-    public function remove ( $id_md5 ) {
+    public function remove ( ) {
 
-        return apc_delete($id_md5);
+        apc_delete($this->getIdMd5());
+
+        return;
     }
 }

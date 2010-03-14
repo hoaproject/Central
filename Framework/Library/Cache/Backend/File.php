@@ -38,19 +38,14 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Cache
- */
-import('Cache.~');
-
-/**
  * Hoa_Cache_Exception
  */
 import('Cache.Exception');
 
 /**
- * Hoa_Cache_Backend_Abstract
+ * Hoa_Cache_Backend
  */
-import('Cache.Backend.Abstract');
+import('Cache.Backend');
 
 /**
  * Hoa_File_Read
@@ -63,14 +58,14 @@ import('File.Read');
 import('File.Write');
 
 /**
- * Hoa_File_Directory
- */
-import('File.Directory');
-
-/**
  * Hoa_File_Finder
  */
 import('File.Finder');
+
+/**
+ * Hoa_File_Directory
+ */
+import('File.Directory');
 
 /**
  * Class Hoa_Cache_Backend_File.
@@ -86,191 +81,145 @@ import('File.Finder');
  * @subpackage  Hoa_Cache_Backend_File
  */
 
-class Hoa_Cache_Backend_File extends Hoa_Cache_Backend_Abstract {
-
-    /**
-     * Load a cache file.
-     *
-     * @access  public
-     * @param   string  $id_md5         ID encoded in MD5.
-     * @param   bool    $unserialize    Enable unserializing of content.
-     * @param   bool    $exists         Test if cache exists or not.
-     * @return  mixed
-     * @throw   Hoa_Cache_Exception
-     */
-    public function load ( $id_md5, $unserialize = true, $exists = false ) {
-
-        $this->clean();
-
-        $filePath = $this->getFilePath($id_md5);
-
-        if(false === $file_exists = file_exists($filePath))
-            return false;
-
-        if(true  === $exists)
-            return $file_exists;
-
-        try {
-
-            $file    = new Hoa_File_Read($filePath);
-            $content = $file->readAll();
-        }
-        catch ( Hoa_File_Exception $e ) {
-
-            throw new Hoa_Cache_Exception(
-                $e->getFormattedMessage(), $e->getCode()
-            );
-        }
-
-        if($this->_backendOptions['compress']['active'] === true)
-            $content = gzuncompress($content);
-
-        if($unserialize !== false
-           && $this->_frontendOptions['serialize_content'] !== false)
-            $content = unserialize($content);
-
-
-        return $content;
-    }
+class Hoa_Cache_Backend_File extends Hoa_Cache_Backend {
 
     /**
      * Save cache content into a file.
      *
      * @access  public
-     * @param   string  $id      Cache ID encoded in MD5.
-     * @param   string  $data    Cache content.
-     * @return  string
-     * @throw   Hoa_Cache_Exception
+     * @param   mixed  $data    Data to store.
+     * @return  void
      */
-    public function save ( $id_md5, $data ) {
+    public function store ( $data ) {
 
         $this->clean();
 
-        if($this->_frontendOptions['serialize_content'] !== false)
+        if(true === $this->getParameter('serialize_content'))
             $data = serialize($data);
 
-        if(!is_dir($this->_backendOptions['cache_directory']))
-            throw new Hoa_Cache_Exception('%s directory is not found.',
-                1, $this->_backendOptions['cache_directory']);
-
-        $filePath = $this->getFilePath($id_md5);
-
-        if($this->_backendOptions['compress']['active'] === true)
-            $data = gzcompress($data, $this->_backendOptions['compress']['level']);
-
-        try {
-
-            $file = new Hoa_File_Write($filePath, Hoa_File::MODE_TRUNCATE_WRITE);
-            $out  = $file->writeAll($data);
-        }
-        catch ( Hoa_File_Exception $e ) {
-
-            throw new Hoa_Cache_Exception(
-                $e->getFormattedMessage(),
-                $e->getCode()
+        if(true === $this->getParameter('file.compress.active'))
+            $data = gzcompress(
+                $data,
+                $this->getParameter('file.compress.level')
             );
-        }
 
-        return $out;
+        $this->setId($this->getIdMd5());
+
+        $directory = $this->getFormattedParameter('file.cache.directory');
+
+        Hoa_File_Directory::create(
+            $directory,
+            Hoa_File_Directory::MODE_CREATE_RECURSIVE
+        );
+
+        $filename  = $directory .
+                     $this->getFormattedParameter('file.cache.file');
+        $file      = new Hoa_File_Write($filename, Hoa_File::MODE_TRUNCATE_WRITE);
+        $out       = $file->writeAll($data);
+        $file->close();
+
+        return;
+    }
+
+    /**
+     * Load a cache file.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function load ( ) {
+
+        $this->clean();
+        $this->setId($this->getIdMd5());
+
+        $filename = $this->getFormattedParameter('file.cache.directory') .
+                    $this->getFormattedParameter('file.cache.file');
+
+        if(false === $file_exists = file_exists($filename))
+            return false;
+
+        $file    = new Hoa_File_Read($filename);
+        $content = $file->readAll();
+        $file->close();
+
+        if(true === $this->getParameter('file.compress.active'))
+            $content = gzuncompress($content);
+
+        if(true === $this->getParameter('serialize_content'))
+            $content = unserialize($content);
+
+        return $content;
     }
 
     /**
      * Clean expired cache files.
-     * Note : Hoa_Cache::CLEANING_USER is not supported, it's reserved for APC
+     * Note : Hoa_Cache::CLEAN_USER is not supported, it's reserved for APC
      * backend.
      *
      * @access  public
-     * @param   string  $lifetime    Lifetime of caches.
-     * @return  mixed
+     * @param   int  $lifetime    Lifetime of caches.
+     * @return  void
      * @throw   Hoa_Cache_Exception
      */
-    public function clean ( $lifetime = Hoa_Cache::CLEANING_EXPIRED ) {
+    public function clean ( $lifetime = Hoa_Cache::CLEAN_EXPIRED ) {
 
         switch($lifetime) {
 
-            case Hoa_Cache::CLEANING_ALL:
+            case Hoa_Cache::CLEAN_ALL:
               break;
 
-            case Hoa_Cache::CLEANING_EXPIRED:
-                $lifetime = $this->_frontendOptions['lifetime'];
+            case Hoa_Cache::CLEAN_EXPIRED:
+                $lifetime = $this->getParameter('lifetime');
               break;
 
-            case Hoa_Cache::CLEANING_USER:
+            case Hoa_Cache::CLEAN_USER:
                 throw new Hoa_Cache_Exception(
-                    'Hoa_Cache::CLEANING_USER constant is not supported by ' .
-                    'File cache backend.', 2);
+                    'Hoa_Cache::CLEAN_USER constant is not supported by %s.' .
+                    2, __CLASS__);
               break;
 
             default:
                 $lifetime = $lifetime;
         }
 
-        $delete = false;
+        $this->setId($this->getIdMd5());
+        $time = time();
 
         try {
 
             $cacheDir  = new Hoa_File_Finder(
-                $this->_backendOptions['cache_directory'],
+                $this->getFormattedParameter('file.cache.directory'),
                 Hoa_File_Finder::LIST_FILE |
                 Hoa_File_Finder::LIST_NO_DOT,
                 Hoa_File_Finder::SORT_INAME
             );
 
             foreach($cacheDir as $i => $fileinfo)
-                if($fileinfo->getMTime() + $lifetime <= time())
+                if($fileinfo->getMTime() + $lifetime <= $time)
                     $fileinfo->delete();
         }
-        catch ( Hoa_File_Exception $e ) {
+        catch ( Hoa_File_Exception_FileDoesNotExist $e ) { }
 
-            throw new Hoa_Cache_Exception(
-                $e->getFormattedMessage(),
-                $e->getCode()
-            );
-        }
-
-        return (bool) $delete;
+        return;
     }
 
     /**
      * Remove a cache file.
      *
      * @access  public
-     * @param   string  $id_md5    ID of cache to remove (encoded in MD5).
-     * @return  mixed
-     * @throw   Hoa_Cache_Exception
+     * @return  void
      */
-    public function remove ( $id_md5 ) {
+    public function remove ( ) {
 
-        try {
+        $this->setId($this->getIdMd5());
 
-            $file = new Hoa_File_Read($this->getFilePath($id_md5));
-            $file->delete();
-        }
-        catch ( Hoa_File_Exception $e ) {
+        $filename = $this->getFormattedParameter('file.cache.directory') .
+                    $this->getFormattedParameter('file.cache.file');
 
-            throw new Hoa_Cache_Exception(
-                $e->getFormattedMessage(),
-                $e->getCode()
-            );
-        }
+        $file = new Hoa_File_Read($filename);
+        $file->delete();
+        $file->close();
 
-        return $delete;
-    }
-
-    /**
-     * Get cache file extension.
-     *
-     * @access  protected
-     * @param   string     $filename     Filename.
-     * @return  string
-     */
-    protected function getFilePath ( $filename ) {
-
-        return $this->_backendOptions['cache_directory'] .
-               $filename .
-               (true === $this->_backendOptions['compress']['active']
-                    ? '.gz'
-                    : '') .
-               '.cache';
+        return;
     }
 }
