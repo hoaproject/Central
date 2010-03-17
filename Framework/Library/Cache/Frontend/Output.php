@@ -74,7 +74,7 @@ class Hoa_Cache_Frontend_Output extends Hoa_Cache_Frontend {
      * @param   string  id    ID of cache.
      * @return  bool
      */
-    public function start ( $id ) {
+    public function start ( $id = null ) {
 
         $this->makeId($id);
         $md5 = $this->getIdMd5();
