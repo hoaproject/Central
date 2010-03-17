@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Generated the 2010-03-14T17:03:52.000000Z
+ * Generated the 2010-03-17T15:48:46.000000Z
  */
 
 return array (
@@ -13,11 +13,12 @@ return array (
   array (
     'lifetime' => 3600,
     'serialize_content' => true,
+    'make_id_with.cookie' => true,
+    'make_id_with.files' => true,
     'make_id_with.get' => true,
     'make_id_with.post' => true,
-    'make_id_with.cookie' => true,
+    'make_id_with.server' => true,
     'make_id_with.session' => true,
-    'make_id_with.files' => true,
     'apc' => '',
     'eaccelerator' => '',
     'file.cache.directory' => 'hoa://Data/Variable/Cache/',

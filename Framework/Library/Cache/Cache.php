@@ -109,11 +109,12 @@ abstract class Hoa_Cache implements Hoa_Framework_Parameterizable {
             array(
                 'lifetime'                     => 3600,
                 'serialize_content'            => true,
+                'make_id_with.cookie'          => true,
+                'make_id_with.files'           => true,
                 'make_id_with.get'             => true,
                 'make_id_with.post'            => true,
-                'make_id_with.cookie'          => true,
+                'make_id_with.server'          => true,
                 'make_id_with.session'         => true,
-                'make_id_with.files'           => true,
 
                 'apc'                          => '',
 
@@ -229,6 +230,14 @@ abstract class Hoa_Cache implements Hoa_Framework_Parameterizable {
 
         $_id = $id;
 
+        if(   true === $this->getParameter('make_id_with.cookie')
+           && isset($_COOKIE))
+            $_id .= serialize($this->ksort($_COOKIE));
+
+        if(   true === $this->getParameter('make_id_with.files')
+           && isset($_FILES))
+            $_id .= serialize($this->ksort($_FILES));
+
         if(   true === $this->getParameter('make_id_with.get')
            && isset($_GET))
             $_id .= serialize($this->ksort($_GET));
@@ -237,17 +246,13 @@ abstract class Hoa_Cache implements Hoa_Framework_Parameterizable {
            && isset($_POST))
             $_id .= serialize($this->ksort($_POST));
 
-        if(   true === $this->getParameter('make_id_with.cookie')
-           && isset($_COOKIE))
-            $_id .= serialize($this->ksort($_COOKIE));
+        if(   true === $this->getParameter('make_id_with.server')
+           && isset($_SERVER))
+            $_id .= serialize($this->ksort($_SERVER));
 
         if(   true === $this->getParameter('make_id_with.session')
            && isset($_SESSION))
             $_id .= serialize($this->ksort($_SESSION));
-
-        if(   true === $this->getParameter('make_id_with.files')
-           && isset($_FILES))
-            $_id .= serialize($this->ksort($_FILES));
 
         return self::$_id[$id] = md5($id . $_id);
     }
