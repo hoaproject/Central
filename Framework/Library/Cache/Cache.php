@@ -113,7 +113,7 @@ abstract class Hoa_Cache implements Hoa_Framework_Parameterizable {
                 'make_id_with.files'           => true,
                 'make_id_with.get'             => true,
                 'make_id_with.post'            => true,
-                'make_id_with.server'          => true,
+                'make_id_with.server'          => false,
                 'make_id_with.session'         => true,
 
                 'apc'                          => '',
