@@ -124,6 +124,14 @@ class Hoa_Test_Praspel_Variable {
      */
     public $_and        = null;
 
+    /**
+     * Go forward to set the next argument on the current type (and carry the
+     * current used type).
+     *
+     * @var Hoa_Test_Praspel_Type object
+     */
+    public $_comma      = null;
+
 
 
     /**
@@ -149,22 +157,29 @@ class Hoa_Test_Praspel_Variable {
      *
      * @access  public
      * @param   string  $name    Type name.
-     * @param   ...     ...      Type arguments.
-     * @return  Hoa_Test_Praspel_Variable
+     * @return  Hoa_Test_Praspel_Type
      */
     public function isTypedAs ( $name ) {
 
         if(true === $this->isTypeDeclared($name))
             return $this;
 
-        $arguments = func_get_args();
-        array_shift($arguments);
-        $type      = new Hoa_Test_Praspel_Type(
-            $this->getParent()->getParent(),
-            $name,
-            $arguments
-        );
-        $type      = $type->getType();
+        return $this->_comma = new Hoa_Test_Praspel_Type($this, $name);
+    }
+
+    /**
+     * Close the current defining type.
+     *
+     * @access  public
+     * @return  Hoa_Test_Praspel_Variable
+     */
+    public function _ok ( ) {
+
+        if(null === $this->_comma)
+            return $this;
+
+        $type         = $this->_comma->getType();
+        $this->_comma = null;
 
         $this->_types[$type->getName()] = $type;
 

@@ -64,18 +64,32 @@ import('Test.Praspel.~');
 class Hoa_Test_Praspel_Type {
 
     /**
-     * Praspel's root.
+     * Parent (here: variable most of the time, type else).
      *
-     * @var Hoa_Test_Praspel object
+     * @var Hoa_Test_Praspel_Variable object
      */
-    protected $_root = null;
+    protected $_parent    = null;
 
     /**
      * Type.
      *
      * @var Hoa_Test_Urg_Type_Interface_Type object
      */
-    protected $_type = null;
+    protected $_type      = null;
+
+    /**
+     * Type's name.
+     *
+     * @var Hoa_Test_Praspel_Type string
+     */
+    protected $_name      = null;
+
+    /**
+     * Arguments.
+     *
+     * @var Hoa_Test_Praspel_Type array
+     */
+    protected $_arguments = array();
 
 
 
@@ -83,30 +97,56 @@ class Hoa_Test_Praspel_Type {
      * Find and build the type.
      *
      * @access  public
-     * @param   Hoa_Test_Praspel  $root         Praspel's root.
-     * @param   string            $name         Type name.
-     * @param   array             $arguments    Type arguments.
+     * @param   Hoa_Test_Praspel_Variable  $parent         Parent (here:
+     *                                                     variable most of the
+     *                                                     time).
+     * @param   string                     $name           Type name.
      * @return  void
      * @throws  Hoa_Test_Praspel_Exception
      */
-    public function __construct ( Hoa_Test_Praspel $root,
-                                                   $name,
-                                  Array            $arguments = array() ) {
+    public function __construct ( Hoa_Test_Praspel_Variable $parent, $name ) {
 
-        $this->setRoot($root);
-
-        /*
-        foreach($arguments as $i => &$argument)
-            if(0 !== preg_match('#\\\old\s*\(\s*([a-z]+)\s*\)#i', $argument, $matches))
-                $argument = $this->getRoot()
-                                 ->getFreeVariable($matches[1])
-                                 ->getChoosenType()
-                                 ->getValue();
-        */
-
-        $this->factory($name, $arguments);
+        $this->setParent($parent);
+        $this->setName($name);
 
         return;
+    }
+
+    /**
+     * Add an argument to the current defining type.
+     *
+     * @access  public
+     * @param   mixed  $argument    Argument.
+     * @return  Hoa_Test_Praspel_Variable
+     */
+    public function with ( $argument ) {
+
+        $this->_arguments[] = $argument;
+
+        return $this->_parent;
+    }
+
+    /**
+     * Add an argument, as a type, to the current defining type.
+     *
+     * @access  public
+     * @param   string  $name    Type name.
+     * @return  Hoa_Test_Praspel_Variable
+     */
+    public function withType ( $name ) {
+
+        // TODO.
+    }
+
+    /**
+     * Call the parent _ok() method.
+     *
+     * @access  public
+     * @return  Hoa_Test_Praspel_Variable
+     */
+    public function _ok ( ) {
+
+        return $this->_parent->_ok();
     }
 
     /**
@@ -118,7 +158,7 @@ class Hoa_Test_Praspel_Type {
      * @return  void
      * @throws  Hoa_Exception
      */
-    protected function factory ( $name, Array $arguments ) {
+    protected function _factory ( $name, Array $arguments ) {
 
         $name  = ucfirst($name);
         $class = 'Hoa_Test_Urg_Type_' . $name;
@@ -153,32 +193,75 @@ class Hoa_Test_Praspel_Type {
      */
     public function getType ( ) {
 
+        if(null !== $this->_type)
+            return $this->_type;
+
+        $this->_factory($this->getName(), $this->getArguments());
+
         return $this->_type;
     }
 
     /**
-     * Set the Praspel's root.
+     * Set the parent (here: the variable most of the time).
      *
      * @access  protected
-     * @param   Hoa_Test_Praspel  $root    Praspel's root.
-     * @return  Hoa_Test_Praspel
+     * @param   Hoa_Test_Praspel_Variable  $parent    Parent (here: the variable
+     *                                                most of the time).
+     * @return  Hoa_Test_Praspel_Variable
      */
-    protected function setRoot ( Hoa_Test_Praspel $root ) {
+    protected function setParent ( Hoa_Test_Praspel_Variable $parent ) {
 
-        $old         = $this->_root;
-        $this->_root = $root;
+        $old           = $this->_parent;
+        $this->_parent = $parent;
 
         return $old;
     }
 
     /**
-     * Get the Praspel's root.
+     * Get the parent (here: the variable most of the time).
      *
      * @access  public
-     * @return  Hoa_Test_Praspel
+     * @return  Hoa_Test_Praspel_Variable
      */
-    public function getRoot ( ) {
+    public function getParent ( ) {
 
-        return $this->_root;
+        return $this->_parent;
+    }
+
+    /**
+     * Set the type's name.
+     *
+     * @access  protected
+     * @param   string  $name    Type's name.
+     * @return  string
+     */
+    protected function setName ( $name ) {
+
+        $old         = $this->_name;
+        $this->_name = $name;
+
+        return $old;
+    }
+
+    /**
+     * Get the type's name.
+     *
+     * @access  protected
+     * @return  string
+     */
+    protected function getName ( ) {
+
+        return $this->_name;
+    }
+
+    /**
+     * Get type's arguments.
+     *
+     * @access  protected
+     * @return  array
+     */
+    protected function getArguments ( ) {
+
+        return $this->_arguments;
     }
 }
