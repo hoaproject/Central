@@ -64,32 +64,47 @@ import('Test.Praspel.~');
 class Hoa_Test_Praspel_Type {
 
     /**
-     * Parent (here: variable most of the time, type else).
+     * Parent (here: variable or type).
      *
      * @var Hoa_Test_Praspel_Variable object
      */
-    protected $_parent    = null;
+    protected $_parent        = null;
 
     /**
      * Type.
      *
      * @var Hoa_Test_Urg_Type_Interface_Type object
      */
-    protected $_type      = null;
+    protected $_type          = null;
 
     /**
      * Type's name.
      *
      * @var Hoa_Test_Praspel_Type string
      */
-    protected $_name      = null;
+    protected $_name          = null;
 
     /**
      * Arguments.
      *
      * @var Hoa_Test_Praspel_Type array
      */
-    protected $_arguments = array();
+    protected $_arguments     = array();
+
+    /**
+     * Current defining argument.
+     *
+     * @var Hoa_Test_Praspel_Type mixed
+     */
+    private $_currentArgument = null;
+
+    /**
+     * Go forward to set the next argument on the current type (and carry the
+     * current used type).
+     *
+     * @var Hoa_Test_Praspel_Type object
+     */
+    public $_comma            = null;
 
 
 
@@ -97,17 +112,16 @@ class Hoa_Test_Praspel_Type {
      * Find and build the type.
      *
      * @access  public
-     * @param   Hoa_Test_Praspel_Variable  $parent         Parent (here:
-     *                                                     variable most of the
-     *                                                     time).
-     * @param   string                     $name           Type name.
+     * @param   mixed   $parent    Parent (here: variable or type).
+     * @param   string  $name      Type name.
      * @return  void
      * @throws  Hoa_Test_Praspel_Exception
      */
-    public function __construct ( Hoa_Test_Praspel_Variable $parent, $name ) {
+    public function __construct ( $parent, $name ) {
 
         $this->setParent($parent);
         $this->setName($name);
+        $this->_comma = $this;
 
         return;
     }
@@ -121,9 +135,9 @@ class Hoa_Test_Praspel_Type {
      */
     public function with ( $argument ) {
 
-        $this->_arguments[] = $argument;
+        $this->_currentArgument = $this->_arguments[] = $argument;
 
-        return $this->_parent;
+        return $this;
     }
 
     /**
@@ -135,7 +149,10 @@ class Hoa_Test_Praspel_Type {
      */
     public function withType ( $name ) {
 
-        // TODO.
+        $this->_currentArgument = new self($this, $name);
+        $this->_arguments[]     = &$this->_currentArgument;
+
+        return $this->_currentArgument;
     }
 
     /**
@@ -146,7 +163,15 @@ class Hoa_Test_Praspel_Type {
      */
     public function _ok ( ) {
 
-        return $this->_parent->_ok();
+        if($this->_parent instanceof Hoa_Test_Praspel_Variable)
+            return $this->_parent->_ok();
+
+        $this->_parent->_currentArgument = $this->getType();
+
+        // break the reference.
+        unset($this->_parent->_currentArgument);
+
+        return $this->_parent;
     }
 
     /**
@@ -202,14 +227,19 @@ class Hoa_Test_Praspel_Type {
     }
 
     /**
-     * Set the parent (here: the variable most of the time).
+     * Set the parent (here: variable or type).
      *
      * @access  protected
-     * @param   Hoa_Test_Praspel_Variable  $parent    Parent (here: the variable
-     *                                                most of the time).
+     * @param   mixed  $parent    Parent (here: variable or type).
      * @return  Hoa_Test_Praspel_Variable
      */
-    protected function setParent ( Hoa_Test_Praspel_Variable $parent ) {
+    protected function setParent ( $parent ) {
+
+        if(   !($parent instanceof Hoa_Test_Praspel_Variable)
+           && !($parent instanceof Hoa_Test_Praspel_Type))
+           throw new Hoa_Test_Praspel_Exception(
+                'Parent of a type must be a variable or an integer, given %s.',
+                0, get_class($parent));
 
         $old           = $this->_parent;
         $this->_parent = $parent;
@@ -218,7 +248,7 @@ class Hoa_Test_Praspel_Type {
     }
 
     /**
-     * Get the parent (here: the variable most of the time).
+     * Get the parent (here: variable or type).
      *
      * @access  public
      * @return  Hoa_Test_Praspel_Variable
