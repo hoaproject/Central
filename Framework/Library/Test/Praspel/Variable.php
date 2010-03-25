@@ -90,6 +90,13 @@ class Hoa_Test_Praspel_Variable {
     protected $_types   = array();
 
     /**
+     * Current defining type.
+     *
+     * @var Hoa_Test_Praspel_Type object
+     */
+    protected $_type    = null;
+
+    /**
      * Choosen type.
      *
      * @var Hoa_Test_Urg_Type_Interface_Type object
@@ -124,14 +131,6 @@ class Hoa_Test_Praspel_Variable {
      */
     public $_and        = null;
 
-    /**
-     * Go forward to set the next argument on the current type (and carry the
-     * current used type).
-     *
-     * @var Hoa_Test_Praspel_Type object
-     */
-    public $_comma      = null;
-
 
 
     /**
@@ -164,7 +163,7 @@ class Hoa_Test_Praspel_Variable {
         if(true === $this->isTypeDeclared($name))
             return $this;
 
-        return $this->_comma = new Hoa_Test_Praspel_Type($this, $name);
+        return $this->_type = new Hoa_Test_Praspel_Type($this, $name);
     }
 
     /**
@@ -175,12 +174,11 @@ class Hoa_Test_Praspel_Variable {
      */
     public function _ok ( ) {
 
-        if(null === $this->_comma)
+        if(null === $this->_type)
             return $this;
 
-        $type         = $this->_comma->getType();
-        $this->_comma = null;
-
+        $type                           = $this->_type->getType();
+        $this->_type                    = null;
         $this->_types[$type->getName()] = $type;
 
         return $this;
