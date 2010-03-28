@@ -118,7 +118,7 @@ class StartCommand extends Hoa_Console_Command_Abstract {
 
         parent::listInputs($bootstrap);
 
-        $path = 'hoa://Data/Etc/Configuration/.Cache/HoaController.php';
+        $path = 'hoa://Data/Etc/Configuration/.Cache/HoaControllerFront.php';
 
         if(!file_exists($path))
             throw new Hoa_Console_Command_Exception(

@@ -116,7 +116,7 @@ class CreateCommand extends Hoa_Console_Command_Abstract {
         if(null === $controllerName)
             return $this->usage();
 
-        $path = 'hoa://Data/Etc/Configuration/.Cache/HoaController.php';
+        $path = 'hoa://Data/Etc/Configuration/.Cache/HoaControllerFront.php';
 
         if(!file_exists($path))
             throw new Hoa_Console_Command_Exception(
