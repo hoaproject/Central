@@ -136,7 +136,7 @@ class Hoa_Session_Namespace {
 
         if($this->isExpiredSecond())
             throw new Hoa_Session_Exception_NamespaceIsExpired(
-                'Namespace %s is expired.', 3, $this->getNamespace());
+                'Namespace %s is expired.', 3, $this->getNamespaceName());
     }
 
     /**
