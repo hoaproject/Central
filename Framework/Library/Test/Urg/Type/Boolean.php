@@ -96,6 +96,17 @@ class Hoa_Test_Urg_Type_Boolean extends Hoa_Test_Urg_Type_Undefined {
 
 
     /**
+     * Constructor.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function __construct ( ) {
+
+        return;
+    }
+
+    /**
      * A predicate.
      *
      * @access  public
