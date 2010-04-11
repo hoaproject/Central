@@ -167,7 +167,7 @@ class Hoa_Test_Urg_Type_Undefined implements Hoa_Test_Urg_Type_Interface_Type {
      *
      * @var Hoa_Test_Urg_Type_Interface_Type object
      */
-    protected $_undefinedObject = null;
+    private $_undefinedObject   = null;
 
     /**
      * Depth in an array of undefined
