@@ -48,6 +48,11 @@ import('Test.Praspel.Exception');
 import('Test.Praspel.~');
 
 /**
+ * Hoa_Test_Praspel_TypeArray
+ */
+import('Test.Praspel.TypeArray');
+
+/**
  * Class Hoa_Test_Praspel_Type.
  *
  * .
@@ -93,10 +98,11 @@ class Hoa_Test_Praspel_Type {
 
     /**
      * Current defining argument.
+     * Yes, it is a public access, but we have no choice…
      *
      * @var Hoa_Test_Praspel_Type mixed
      */
-    private $_currentArgument = null;
+    public $_currentArgument = null;
 
     /**
      * Go forward to set the next argument on the current type (and carry the
@@ -141,6 +147,17 @@ class Hoa_Test_Praspel_Type {
     }
 
     /**
+     *
+     */
+    public function withArray ( ) {
+
+        $this->_currentArgument = new Hoa_Test_Praspel_TypeArray($this);
+        $this->_arguments[]     = &$this->_currentArgument;
+
+        return $this->_currentArgument;
+    }
+
+    /**
      * Add an argument, as a type, to the current defining type.
      *
      * @access  public
@@ -156,14 +173,14 @@ class Hoa_Test_Praspel_Type {
     }
 
     /**
-     * Call the parent _ok() method.
+     * Close a session/context and return the parent.
      *
      * @access  public
      * @return  Hoa_Test_Praspel_Variable
      */
     public function _ok ( ) {
 
-        if($this->_parent instanceof Hoa_Test_Praspel_Variable)
+        if(!($this->_parent instanceof self))
             return $this->_parent->_ok();
 
         $this->_parent->_currentArgument = $this->getType();
@@ -236,9 +253,11 @@ class Hoa_Test_Praspel_Type {
     protected function setParent ( $parent ) {
 
         if(   !($parent instanceof Hoa_Test_Praspel_Variable)
-           && !($parent instanceof Hoa_Test_Praspel_Type))
+           && !($parent instanceof Hoa_Test_Praspel_Type)
+           && !($parent instanceof Hoa_Test_Praspel_TypeArray))
            throw new Hoa_Test_Praspel_Exception(
-                'Parent of a type must be a variable or an integer, given %s.',
+                'Parent of a type must be a variable, a type or a typeArray, ' .
+                'given %s.',
                 0, get_class($parent));
 
         $old           = $this->_parent;

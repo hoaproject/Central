@@ -43,9 +43,9 @@ require_once 'Framework.php';
 import('Test.Praspel.Exception');
 
 /**
- * Hoa_Test_Praspel_Type
+ * Hoa_Test_Praspel_TypeDisjunction
  */
-import('Test.Praspel.Type');
+import('Test.Praspel.TypeDisjunction');
 
 /**
  * Hoa_Test_Urg
@@ -66,7 +66,7 @@ import('Test.Urg.~');
  * @subpackage  Hoa_Test_Praspel_Variable
  */
 
-class Hoa_Test_Praspel_Variable {
+class Hoa_Test_Praspel_Variable extends Hoa_Test_Praspel_TypeDisjunction {
 
     /**
      * Parent (here: clause).
@@ -81,20 +81,6 @@ class Hoa_Test_Praspel_Variable {
      * @var Hoa_Test_Praspel_Variable string
      */
     protected $_name    = null;
-
-    /**
-     * Collection of types.
-     *
-     * @var Hoa_Test_Praspel_Variable array
-     */
-    protected $_types   = array();
-
-    /**
-     * Current defining type.
-     *
-     * @var Hoa_Test_Praspel_Type object
-     */
-    protected $_type    = null;
 
     /**
      * Choosen type.
@@ -118,13 +104,6 @@ class Hoa_Test_Praspel_Variable {
     private $_newValue  = null;
 
     /**
-     * Make a disjunction between two variables.
-     *
-     * @var Hoa_Test_Praspel_Variable object
-     */
-    public $_or         = null;
-
-    /**
      * Make a conjunction between two variables.
      *
      * @var Hoa_Test_Praspel_Clause object
@@ -143,57 +122,13 @@ class Hoa_Test_Praspel_Variable {
      */
     public function __construct ( Hoa_Test_Praspel_Clause $parent, $name ) {
 
+        parent::__construct();
+
         $this->setParent($parent);
         $this->setName($name);
-        $this->_or  = $this;
         $this->_and = $this->getParent();
 
         return;
-    }
-
-    /**
-     * Type the variable.
-     *
-     * @access  public
-     * @param   string  $name    Type name.
-     * @return  Hoa_Test_Praspel_Type
-     */
-    public function isTypedAs ( $name ) {
-
-        if(true === $this->isTypeDeclared($name))
-            return $this;
-
-        return $this->_type = new Hoa_Test_Praspel_Type($this, $name);
-    }
-
-    /**
-     * Close the current defining type.
-     *
-     * @access  public
-     * @return  Hoa_Test_Praspel_Variable
-     */
-    public function _ok ( ) {
-
-        if(null === $this->_type)
-            return $this;
-
-        $type                           = $this->_type->getType();
-        $this->_type                    = null;
-        $this->_types[$type->getName()] = $type;
-
-        return $this;
-    }
-
-    /**
-     * Check if the variable has a specific declared type.
-     *
-     * @access  public
-     * @param   string  $name    Type name.
-     * @return  bool
-     */
-    public function isTypeDeclared ( $name ) {
-
-        return true === array_key_exists($name, $this->_types);
     }
 
     /**
@@ -365,17 +300,6 @@ class Hoa_Test_Praspel_Variable {
     }
 
     /**
-     * Get all types.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function getTypes ( ) {
-
-        return $this->_types;
-    }
-
-    /**
      * Set the parent (here: the clause).
      *
      * @access  protected
@@ -399,21 +323,5 @@ class Hoa_Test_Praspel_Variable {
     public function getParent ( ) {
 
         return $this->_parent;
-    }
-
-    /**
-     * Transform this object model into a string.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function __toString ( ) {
-
-        $out = '        ' . $this->getName() . "\n";
-
-        foreach($this->getTypes() as $i => $type)
-            $out .= '            ' . $type->getName() . "\n";
-
-        return $out;
     }
 }
