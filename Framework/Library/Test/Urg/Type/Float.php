@@ -131,8 +131,8 @@ class Hoa_Test_Urg_Type_Float extends Hoa_Test_Urg_Type_Number {
      */
     public function __construct ( ) {
 
-        $this->setUpperBoundValue($this->getPositiveInfinity());
-        $this->setLowerBoundValue($this->getNegativeInfinity());
+        $this->setUpperBoundValue(self::getPositiveInfinity());
+        $this->setLowerBoundValue(self::getNegativeInfinity());
 
         return;
     }
