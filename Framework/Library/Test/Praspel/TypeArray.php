@@ -79,7 +79,7 @@ class Hoa_Test_Praspel_TypeArray extends Hoa_Test_Praspel_TypeDisjunction {
 
     protected $_key   = null;
     protected $_value = null;
-    protected $_array = null;
+    protected $_array = array();
 
     public $_comma = null;
 
