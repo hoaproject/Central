@@ -43,35 +43,19 @@ require_once 'Framework.php';
 import('Test.Praspel.Exception');
 
 /**
+ * Hoa_Test_Praspel
+ */
+import('Test.Praspel.~');
+
+/**
+ * Hoa_Compiler_Ll1
+ */
+import('Compiler.Ll1');
+
+/**
  * Class Hoa_Test_Praspel_Compiler.
  *
- * Compile Praspel to PHP.
- *
- * Contract grammar is :
- *
- *         annotation ::= clause*
- *             clause ::= (requires-clause | ensures-clause   |
- *                    ::=  throws-clause   | predicate-clause |
- *                    ::=  invariant-clause) <;;>
- *    requires-clause ::= <@requires>  expressions
- *     ensures-clause ::= <@ensures>   expressions
- *      throws-clause ::= <@throws>    lists
- *   predicate-clause ::= <@predicate> extended
- *   invariant-clause ::= <@invariant> expressions
- *        expressions ::= expression (<∧> expressions)*
- *         expression ::= (free-variable <:> types) | dependence
- *      free-variable ::= constructors | identifier
- *         dependence ::= identifier <⟺> identifier
- *              types ::= type (<∨> type)*
- *               type ::= identifier <(> arguments <)>
- *          arguments ::= argument (<,> argument)*
- *           argument ::= number | string | type | array | constructors
- *              array ::= <[> pairs | values <]>
- *              pairs ::= types <→> types (<;> pairs | values)*
- *             values ::= types (<;> pairs | values)*
- *              lists ::= identifier (<∨> identifier)*
- *           extended ::= identifier <←> identifier <:> php
- *       constructors ::= <\old(> identifier <)> | <\result>
+ * The Praspel compiler.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2009 Ivan ENDERLIN.
@@ -82,350 +66,570 @@ import('Test.Praspel.Exception');
  * @subpackage  Hoa_Test_Praspel_Compiler
  */
 
-class Hoa_Test_Praspel_Compiler {
+class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
 
     /**
-     * Buffer stack.
+     * The Praspel's object model root.
      *
-     * @var Hoa_Test_Praspel_Compiler array
+     * @var Hoa_Test_Praspel object
      */
-    protected $buffer = array();
-
-
+    protected $_praspel = null;
 
     /**
-     * Constructor. Start the grammar.
+     * The current node in the Praspel's object model.
      *
-     * @access  private
-     * @param   string  $praspel    Praspel.
-     * @return  void
+     * @var Hoa_Test_Praspel object
      */
-    private function __construct ( $praspel ) {
+    private $_current   = null;
 
-        $this->axiom($praspel);
-    }
+
 
     /**
-     * Annotation.
-     *
-     * @access  protected
-     * @param   string     $clauses    Many clauses.
-     * @return  void
-     */
-    protected function axiom ( $clauses ) {
-
-        preg_match_all('#@(.*?);;#s', $clauses, $matches, PREG_PATTERN_ORDER);
-        $matches = $matches[1];
-
-        foreach($matches as $i => $clause)
-            $this->clause($clause);
-    }
-
-    /**
-     * Clause.
-     *
-     * @access  protected
-     * @param   string     $clause    A clause.
-     * @return  void
-     */
-    protected function clause ( $clause ) {
-
-        preg_match('#([a-z]+)\s+(.*)#si', $clause, $matches);
-        list(, $name, $expressions) = $matches;
-
-        $result = array();
-
-        switch($name) {
-
-            case 'requires':
-            case 'ensures':
-            case 'invariant':
-                $result = $this->expressions($expressions);
-              break;
-
-            case 'throws':
-                $result = $this->lists($expressions);
-              break;
-
-            case 'predicate':
-                $result = $this->extended($expressions);
-              break;
-
-            default:
-                throw new Exception('Error : ' . $name);
-        }
-
-        $this->buffer[$name] = $result;
-    }
-
-    /**
-     * Expressions.
-     *
-     * @access  protected
-     * @param   string     $expressions    Many expressions.
-     * @return  array
-     */
-    protected function expressions ( $expressions ) {
-
-        $expressions = explode('∧', $expressions);
-        $expressions = array_map('trim', $expressions);
-        $result      = array();
-
-        foreach($expressions as $e => $expression)
-            $result = array_merge($result, $this->expression($expression));
-
-        return $result;
-    }
-
-    /**
-     * Expression.
-     *
-     * @access  protected
-     * @param   string     $expression    An expression.
-     * @return  array
-     */
-    protected function expression ( $expression ) {
-
-        $a = preg_match_all(
-            '#(\\\?[a-z]+(?:\s*\(\s*[a-z]+\s*\))?)\s*:\s?(.*)#i',
-            $expression,
-            $matches,
-            PREG_SET_ORDER
-        );
-
-        if(0 !== $a) {
-
-            list(, $fv, $types) = $matches[0];
-
-            return array($fv => $this->types($types));
-        }
-
-        preg_match(
-            '#(\\\?[a-z]+)\s*⟺\s*(\\\?[a-z]+)#iu',
-            $expression,
-            $matches
-        );
-        list(, $left, $right) = $matches;
-
-        return array($left => $right);
-    }
-
-    /**
-     * Types.
-     *
-     * @access  protected
-     * @param   string     $types    Many types.
-     * @return  array
-     */
-    protected function types ( $types ) {
-
-        preg_match_all(
-            '#([^∨]+)(?:\s*∨\s*(.*))?#msu',
-            $types,
-            $matches,
-            PREG_SET_ORDER
-        );
-        $matches = $matches[0];
-        array_shift($matches);
-        $matches = array_map('trim', $matches);
-        $result  = array();
-
-        foreach($matches as $i => $type)
-            $result[] = $this->type($type);
-
-        return $result;
-    }
-
-    /**
-     * Type.
-     *
-     * @access  protected
-     * @param   string     $type    Type.
-     * @return  array
-     */
-    protected function type ( $type ) {
-
-        preg_match('#^([a-z]+)\((.*)?\)$#si', $type, $matches);
-        list(, $type, $arguments) = $matches;
-
-        return array($type => $arguments);
-    }
-
-    /**
-     * Lists.
-     *
-     * @access  protected
-     * @param   string     $list    A list.
-     * @return  array
-     */
-    protected function lists ( $list ) {
-
-        $result = explode('∨', $lists);
-        $result = array_map('trim', $result);
-
-        return $result;
-    }
-
-    /**
-     * Extended.
-     *
-     * @access  protected
-     * @param   string     $extended    An extended expression.
-     * @return  array
-     */
-    protected function extended ( $extended ) {
-
-        preg_match(
-            '#([a-z]+)\s*←\s*([a-z]+)\s*:\s?(.*)#usi',
-            $extended,
-            $matches
-        );
-        list(, $name, $extends, $predicate) = $matches;
-
-        return array($name => array($extends, $predicate . ';'));
-    }
-
-    /**
-     * Array.
-     *
-     * @access  protected
-     * @param   string     $array    An array.
-     * @return  string
-     */
-    protected function arr ( $array ) {
-
-        if(empty($array[0]))
-            return '';
-
-        $array  = preg_replace_callback('#(\[(.*)\])?#', array($this, 'arr'), $array[2]);
-        $hop    = explode(';', $array);
-        $out    = 'array(';
-        $handle = array();
-
-        foreach($hop as $i => $entry)
-            if(preg_match('#(.*)\s*→\s*(.*)#s', $entry, $matches)) {
-
-                list(, $key, $value) = array_map('trim', $matches);
-                $handle[] = 'array(' . $key . ', ' . $value . ')';
-            }
-            else
-                $handle[] = 'array(' . trim($entry) . ')';
-
-        $out .= implode(', ' . "\n", $handle) . ')';
-        $out  = str_replace('***', '', $out);
-
-        return $out;
-    }
-
-    /**
-     * Argument.
-     *
-     * @access  protected
-     * @param   string     $argument    An argument.
-     * @return  string
-     */
-    protected function arg ( $argument ) {
-
-        $argument[2] = preg_replace_callback('#([a-z]+)\s*\(([^\)]*)#is',
-                                             array($this, 'arg'),
-                                             $argument[2]);
-
-        if(empty($argument[0]))
-            return '';
-
-        if(trim($argument[2]) == '')
-            return '$praspel->type(\'' . $argument[1] . '\')';
-
-        return '$praspel->type(\'' . $argument[1] . '\', ' . $argument[2] . '***';
-    }
-
-    /**
-     * Return the buffer.
+     * Set the compiler.
      *
      * @access  public
-     * @return  array
+     * @return  void
      */
-    public function getBuffer ( ) {
+    public function __construct ( ) {
 
-        return $this->buffer;
+        parent::__construct(
+            // Skip.
+            array(
+                '#\s+',          // white spaces
+                '#//.*',         // inline comment
+                '#/\*(.|\n)*\*/' // block comment
+            ),
+
+            // Tokens.
+            array(
+                // 1. Clauses.
+                array(
+                    '#@requires',  // r
+                    '#@ensures',   // e
+                    '#@throwable', // t
+                    '#@invariant', // i
+                    '#@predicate', // p
+                    ';'
+                ),
+
+                // 2. Expressions.
+                array(
+                    '#and',        // &
+                    ':',           // :
+                    '#typeof'      // to
+                ),
+
+                // 3. List.
+                array(
+                    '#\w+',        // id
+                    ','            // ,
+                ),
+
+                // 4. Extend.
+                array(
+
+                ),
+
+                // 5. Variable.
+                array(
+                    '#\w+',        // id
+                    '#\\\result',  // \r
+                    '#\\\old\(',   // \o
+                    ')'            // )
+                ),
+
+                // 6. Types.
+                array(
+                    '#or',         // or
+                    '#\w+',        // id
+                    '(',           // (
+                    ')'            // )
+                ),
+
+                // 7. Arguments.
+                array(
+                    ',',           // ,
+                    '#\d+',        // 09
+                    '(',           // (
+                    ')',           // )
+                    '[',           // [
+                    '\'',          // '
+                    '#\w+'         // id
+                ),
+
+                // 8. Array.
+                array(
+                    ']'            // ]
+                ),
+
+                // 9. Pairs.
+                array(
+                    ',',           // ,
+                    '#->'          // ->
+                ),
+
+                // 10. String.
+                array(
+                    '#[\w|\s]+',   // st
+                    '\''           // '
+                ),
+            ),
+
+            // States.
+            array(
+                // 1. Clauses.
+                array(
+                     __ , // error
+                    'GO', // start
+                    'EX', // expressions
+                    'LI', // list
+                    'IN', // extend/inheritance
+                ),
+
+                // 2. Expressions.
+                array(
+                     __ , // error
+                    'GO', // start
+                    'TY', // type
+                    'TO'  // typeof
+                ),
+
+                // 3. List.
+                array(
+                     __ , // error
+                    'GO', // start
+                    'CO'  // comma
+                ),
+
+                // 4. Extend.
+                array(
+
+                ),
+
+                // 5. Variable.
+                array(
+                     __ , // error
+                    'GO', // start
+                    'OL', // old(
+                    'D)', // )
+                    'OK'  // terminal
+                ),
+
+                // 6. Types.
+                array(
+                     __ , // error
+                    'GO', // start
+                    'ID', // id
+                    'AR', // arguments
+                    'OK'  // terminal
+                ),
+
+                // 7. Arguments.
+                array(
+                     __ , // error
+                    'GO', // start
+                    'ID', // id
+                    'AR', // arguments
+                    '[]', // array
+                    'ST', // string
+                    'OK'  // terminal
+                ),
+
+                // 8. Array.
+                array(
+                     __ , // error
+                    'GO', // start
+                    'OK'  // terminal
+                ),
+
+                // 9. Pairs.
+                array(
+                     __ , // error
+                    'GO', // start
+                    'VA', // value
+                    'OK'  // terminal
+                ),
+
+                // 10. String.
+                array(
+                     __ , // error
+                    'GO', // start
+                    'ST', // string
+                    'OK'  // terminal
+                ),
+            ),
+
+            // Terminal.
+            array(
+                // 1. Clauses.
+                array('GO'),
+
+                // 2. Expressions.
+                array('GO', 'TY', 'TO'),
+
+                // 3. List.
+                array('GO', 'CO'),
+
+                // 4. Extend.
+                array(),
+
+                // 5. Variable.
+                array('OK'),
+
+                // 6. Types.
+                array('GO', 'OK'),
+
+                // 7. Arguments.
+                array('GO', '[]', 'ST', 'OK'),
+
+                // 8. Array.
+                array('OK'),
+
+                // 9. Pairs.
+                array('GO', 'VA', 'OK'),
+
+                // 10. String.
+                array('OK'),
+            ),
+
+            // Transitions.
+            array(
+                // 1. Clauses.
+                array(
+                    /*               r     e     t     i     p     ;
+                    /* __ */ array( __ ,  __ ,  __ ,  __ ,  __ ,  __ ),
+                    /* GO */ array('EX', 'EX', 'LI', 'EX', 'IN',  __ ),
+                    /* EX */ array( __ ,  __ ,  __ ,  __ ,  __ , 'GO'),
+                    /* LI */ array( __ ,  __ ,  __ ,  __ ,  __ , 'GO'),
+                    /* IN */ array( __ ,  __ ,  __ ,  __ ,  __ , 'GO')
+                ),
+
+                // 2. Expressions.
+                array(
+                    /*               &     :    to
+                    /* __ */ array( __ ,  __ ,  __ ),
+                    /* GO */ array( __ , 'TY', 'TO'),
+                    /* TY */ array('GO',  __ ,  __ ),
+                    /* TO */ array('GO',  __ ,  __ )
+                ),
+
+                // 3. List.
+                array(
+                    /*              \w     ,
+                    /* __ */ array( __ ,  __ ),
+                    /* GO */ array('CO',  __ ),
+                    /* CO */ array( __ , 'GO')
+                ),
+
+                // 4. Extend.
+                array(
+                ),
+
+                // 5. Variable.
+                array(
+                    /*              id    \r    \o    )
+                    /* __ */ array( __ ,  __ ,  __ ,  __ ),
+                    /* GO */ array('OK', 'OK', 'OL',  __ ),
+                    /* OL */ array('D)',  __ ,  __ ,  __ ),
+                    /* D) */ array( __ ,  __ ,  __ , 'OK'),
+                    /* OK */ array( __ ,  __ ,  __ ,  __ )
+                ),
+
+                // 6. Types.
+                array(
+                    /*              or    id     (    )
+                    /* __ */ array( __ ,  __ ,  __ ,  __ ),
+                    /* GO */ array( __ , 'ID',  __ ,  __ ),
+                    /* ID */ array( __ ,  __ , 'AR',  __ ),
+                    /* AR */ array( __ ,  __ ,  __ , 'OK'),
+                    /* OK */ array('GO',  __ ,  __ ,  __ )
+                ),
+
+                // 7. Arguments.
+                array(
+                    /*               ,    09     (     )     [     '    id 
+                    /* __ */ array( __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ),
+                    /* GO */ array( __ , 'OK',  __ ,  __ , '[]', 'ST', 'ID'),
+                    /* ID */ array( __ ,  __ , 'AR',  __ ,  __ ,  __ ,  __ ),
+                    /* AR */ array( __ ,  __ ,  __ , 'OK',  __ ,  __ ,  __ ),
+                    /* [] */ array('GO',  __ ,  __ ,  __ ,  __ ,  __ ,  __ ),
+                    /* ST */ array('GO',  __ ,  __ ,  __ ,  __ ,  __ ,  __ ),
+                    /* OK */ array('GO',  __ ,  __ ,  __ ,  __ ,  __ ,  __ )
+                ),
+
+                // 8. Array.
+                array(
+                    /*               ]
+                    /* __ */ array( __ ),
+                    /* GO */ array('OK'),
+                    /* OK */ array( __ )
+                ),
+
+                // 9. Pairs.
+                array(
+                    /*               ,    ->
+                    /* __ */ array( __ ,  __ ),
+                    /* GO */ array('OK', 'VA'),
+                    /* VA */ array('OK',  __ ),
+                    /* OK */ array( __ ,  __ )
+                ),
+
+                // 10. String.
+                array(
+                    /*              id     '
+                    /* __ */ array( __ ,  __ ),
+                    /* GO */ array('ST', 'OK'),
+                    /* ST */ array( __ , 'OK'),
+                    /* OK */ array( __ ,  __ )
+                ),
+            ),
+
+            // Actions.
+            array(
+                // 1. Clauses.
+                array(
+                    /*              r    e    t    i    p    ;
+                    /* __ */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ),
+                    /* GO */ array('r', 'e', 't',  0 ,  0 ,  0 ),
+                    /* EX */ array( 2 ,  2 ,  0 ,  2 ,  0 , 'D'),
+                    /* LI */ array( 0 ,  0 ,  3 ,  0 ,  0 , 'l'),
+                    /* IN */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 )
+                ),
+
+                // 2. Expressions.
+                array(
+                    /*              &    :   to
+                    /* __ */ array( 0 ,  0 ,  0 ),
+                    /* GO */ array( 5 , ':', 'd'),
+                    /* TY */ array('&',  6 ,  0 ),
+                    /* TO */ array('D',  0 ,  5 )
+                ),
+
+                // 3. List.
+                array(
+                    /*             id    ,
+                    /* __ */ array( 0 ,  0 ),
+                    /* GO */ array(-5 ,  0 ),
+                    /* CO */ array( 0 , 'l')
+                ),
+
+                // 4. Extend.
+                array(
+
+                ),
+
+                // 5. Variable.
+                array(
+                    /*             id   \r   \o    )
+                    /* __ */ array( 0 ,  0 ,  0 ,  0 ),
+                    /* GO */ array(-1 , -1 , -1 ,  0 ),
+                    /* OL */ array(-1 ,  0 ,  0 ,  0 ),
+                    /* D) */ array( 0 ,  0 ,  0 , -1 ),
+                    /* OK */ array( 0 ,  0 ,  0 ,  0 )
+                ),
+
+                // 6. Types.
+                array(
+                    /*             or   id    (    )
+                    /* __ */ array( 0 ,  0 ,  0 ,  0 ),
+                    /* GO */ array('|', -3,   0 ,  0 ),
+                    /* ID */ array( 0 ,  0 , 'y',  0 ),
+                    /* AR */ array( 0 ,  0 ,  7 , 'Y'),
+                    /* OK */ array( 0 ,  0 ,  0 ,  0 )
+                ),
+
+                // 7. Arguments.
+                array(
+                    /*              ,   09    (    )    [    '   id
+                    /* __ */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ),
+                    /* GO */ array( 0 , -7 ,  0 ,  0 , '[',  0 ,  0 ),
+                    /* ID */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ),
+                    /* AR */ array( 0 ,  0 ,  7 ,  0 ,  0 ,  0 ,  0 ),
+                    /* [] */ array( 0 ,  0 ,  0 ,  0 ,  8 ,  0 ,  0 ),
+                    /* ST */ array( 0 ,  0 ,  0 ,  0 ,  0 , 10 ,  0 ),
+                    /* OK */ array('c',  0 ,  0 ,  0 ,  0 ,  0 ,  0 )
+                ),
+
+                // 8. Array.
+                array(
+                    /*              ]
+                    /* __ */ array( 0   ),
+                    /* GO */ array('9,]'),
+                    /* OK */ array( 0   )
+                ),
+
+                // 9. Pairs.
+                array(
+                    /*              ,     ->
+                    /* __ */ array( 0 ,    0    ),
+                    /* GO */ array('6,,', '6,->'),
+                    /* VA */ array(',',    6    ),
+                    /* OK */ array( 9 ,    0    )
+                ),
+
+                // 10. String
+                array(
+                    /*             st    ' 
+                    /* __ */ array( 0 ,  0 ),
+                    /* GO */ array( 0 ,  0 ),
+                    /* ST */ array( 0 ,  0 ),
+                    /* OK */ array( 0 ,  0 )
+                ),
+            )
+        );
+
+        $this->_praspel = new Hoa_Test_Praspel();
     }
 
     /**
-     * Compile.
+     * Consume actions.
+     * Please, see the actions table definition to learn more.
+     *
+     * @access  protected
+     * @param   int        $action    Action.
+     * @return  void
+     */
+    protected function consume ( $action ) {
+
+        switch($action) {
+
+            // @requires
+            case 'r':
+                $this->_current = $this->_praspel->clause('requires');
+              break;
+
+            // @ensures
+            case 'e':
+                $this->_current = $this->_praspel->clause('ensures');
+              break;
+
+            // @throwable
+            case 't':
+                $this->_current = $this->_praspel->clause('throwable');
+              break;
+
+            // variable:
+            // variable typeof
+            case ':':
+            case 'd':
+                $this->_current = $this->_current->variable(
+                    $this->buffers[0]
+                );
+                unset($this->buffers[0]);
+              break;
+
+            // variable: type(
+            case 'y':
+                $this->_current = $this->_current->isTypedAs(
+                    $this->buffers[1]
+                );
+                unset($this->buffers[1]);
+              break;
+
+            // variable: type(…)
+            case 'Y':
+                if(isset($this->buffers[3])) {
+
+                    $this->_current = $this->_current->with(
+                        $this->buffers[3]
+                    );
+                    unset($this->buffers[3]);
+                }
+
+                $this->_current = $this->_current->_ok();
+              break;
+
+            // variable: type([
+            case '[':
+                $this->_current = $this->_current->withArray()->from();
+              break;
+
+            // variable: type([…,
+            case ',':
+                $this->_current = $this->_current->from();
+              break;
+
+            // variable: type([… ->
+            case '->':
+                $this->_current = $this->_current->to();
+              break;
+
+            // variable: type([…]
+            case ']':
+                $this->_current = $this->_current->end();
+              break;
+
+            // variable: type(…,
+            case 'c':
+                $this->_current = $this->_current->with(
+                    $this->buffers[3]
+                )->_comma;
+                unset($this->buffers[3]);
+              break;
+
+            // variable: type() or
+            case '|':
+                $this->_current = $this->_current->_or;
+              break;
+
+            // variable: type() and
+            case '&':
+                $this->_current = $this->_current->_and;
+              break;
+
+            // variable typeof variable and
+            // variable typeof variable;
+            case 'D':
+                if(!isset($this->buffers[0]))
+                    break;
+
+                $this->_current = $this->_current->hasTheSameTypeAs(
+                    $this->buffers[0]
+                );
+                $this->_current = $this->_current->_and;
+                unset($this->buffers[0]);
+              break;
+
+            // @throwable T_1,
+            // @throwable T_1;
+            case 'l':
+                if(!isset($this->buffers[2]))
+                    break;
+
+                $this->_current = $this->_current->couldThrow(
+                    $this->buffers[2]
+                );
+                $this->_current = $this->_current->_and;
+                unset($this->buffers[2]);
+              break;
+        }
+    }
+
+    /**
+     * Compute source code before compiling it.
+     *
+     * @access  protected
+     * @param   string  &$in    Source code.
+     * @return  void
+     */
+    protected function pre ( &$in ) {
+
+        $search  = array('&&',  '∧',  '||',  '∨');
+        $replace = array('and', 'and', 'or', 'or');
+
+        $in      = str_replace($search, $replace, $in);
+
+        return;
+    }
+
+    /**
+     * Get the Praspel's objet model root.
      *
      * @access  public
-     * @param   string  $praspel    Praspel.
-     * @return  string
+     * @return  Hoa_Test_Praspel
      */
-    public static function compile ( $praspel ) {
+    public function getRoot ( ) {
 
-        $compiler = new self($praspel);
-        $out      = '$praspel = new Hoa_Test_Praspel();' . "\n\n";
-
-        foreach($compiler->getBuffer() as $clauseName => $expressions) {
-
-            $oout = '$praspel->clause(\'' . $clauseName . '\')' . "\n"; 
-
-            switch($clauseName) {
-
-                case 'requires':
-                case 'ensures':
-                case 'invariant':
-                    foreach($expressions as $freeVariable => $types) {
-
-                        $ooout = $oout .
-                                 '        ->declareFreeVariable(\'' . $freeVariable . '\')' . "\n";
-
-                        if(!is_array($types)) {
-
-                            $out .= $ooout .
-                                    '        ->depends(\'' . $types . '\');' . "\n\n";
-
-                            continue;
-                        }
-
-                        foreach($types as $i => $type) {
-
-                            $t = key($type);
-                            $a = current($type);
-
-                            $a = preg_replace_callback('#([a-z]+)\s*\(([^\)]*)\)#',
-                                                       array($compiler, 'arg'),
-                                                       $a);
-                            $a = preg_replace_callback('#(\[(.*)\])?#', array($compiler, 'arr'), $a);
-                            $a = str_replace('***', ')', $a);
-
-                            $out .= $ooout .
-                                    '        ->hasType(\'' . $t . '\'' .
-                                    (!empty($a)
-                                        ? ', ' . $a
-                                        : ''
-                                    ) .');' . "\n\n";
-                        }
-                    }
-                  break;
-
-                case 'throws':
-                    $out .= $oout .
-                            '        ->lists(array(\'' .
-                            implode('\', \'', $expressions) .
-                            '\'));' . "\n\n";
-                  break;
-
-                case 'predicate':
-
-                    $n = key($expressions);
-                    $f = $expressions[$n][0];
-                    $d = stripslashes($expressions[$n][1]);
-
-                    $out .= $oout .
-                            '        ->new(\'' . $n . '\')' . "\n" .
-                            '        ->from(\'' . $f . '\')' . "\n" .
-                            '        ->defines(\'' . $d . '\');' . "\n\n";
-                  break;
-            }
-        }
-
-        return $out;
+        return $this->_praspel;
     }
 }
