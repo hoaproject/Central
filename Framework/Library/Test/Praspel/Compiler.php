@@ -475,6 +475,20 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                     /* ST */ array( 0 ,  0 ),
                     /* OK */ array( 0 ,  0 )
                 ),
+            ),
+
+            // Names.
+            array(
+                'Clauses',
+                'Expressions',
+                'List',
+                'Extend',
+                'Variable',
+                'Types',
+                'Arguments',
+                'Array',
+                'Pairs',
+                'String'
             )
         );
 
