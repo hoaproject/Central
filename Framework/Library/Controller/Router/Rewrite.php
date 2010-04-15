@@ -259,7 +259,7 @@ class Hoa_Controller_Router_Rewrite implements Hoa_Controller_Router_Interface {
         foreach($withRegularPatterns as $name => $newPattern) {
 
             // Refine the search pattern.
-            if(0 === preg_match_all('#([^\(]+)(\(\[\^(.{1,2})\]\+\))#',
+            if(0 === preg_match_all('#([^\(]*)(\(\[\^(.{1,2})\]\+\))#',
                                     $newPattern, $foo,
                                     PREG_SET_ORDER))
                 throw new Hoa_Controller_Exception(
