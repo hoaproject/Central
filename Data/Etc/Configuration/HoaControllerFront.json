@@ -27,7 +27,7 @@
          * "route.parameter.base"                        : "/MyBase",
          * "route.parameter.rules.default.pattern"       : "/(:module)/(:action).html",
          * "route.parameter.rules.default.default.module": "(:controller:)",
-         * "route.parameter.rules.default.default.module": "(:action:)",
+         * "route.parameter.rules.default.default.action": "(:action:)",
          */
 
         "controller.class"              : "(:controller:U:)Controller",
