@@ -407,7 +407,8 @@ class Hoa_Controller_Router_Rewrite implements Hoa_Controller_Router_Interface {
         $default  = $default['rules'][$ruleName]['default'];
 
         foreach($default as $key => $value)
-            if(!array_key_exists($key, $theRule[$ruleName]))
+            if(   !array_key_exists($key, $theRule[$ruleName])
+               ||  empty($theRule[$ruleName][$key]))
                 $theRule[$ruleName][$key] = $value;
 
         return $theRule;
