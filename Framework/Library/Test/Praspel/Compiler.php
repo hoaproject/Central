@@ -165,7 +165,8 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                 // 9. Pairs.
                 array(
                     ',',           // ,
-                    '#->'          // ->
+                    '#from',       // fr
+                    '#to'          // to
                 ),
 
                 // 10. String.
@@ -246,7 +247,8 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                 array(
                      __ , // error
                     'GO', // start
-                    'VA', // value
+                    'FR', // from
+                    'TO', // to
                     'OK'  // terminal
                 ),
 
@@ -286,7 +288,7 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                 array('OK'),
 
                 // 9. Pairs.
-                array('GO', 'VA', 'OK'),
+                array('GO', 'TO', 'OK'),
 
                 // 10. String.
                 array('OK'),
@@ -367,11 +369,12 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
 
                 // 9. Pairs.
                 array(
-                    /*               ,    ->
-                    /* __ */ array( __ ,  __ ),
-                    /* GO */ array('OK', 'VA'),
-                    /* VA */ array('OK',  __ ),
-                    /* OK */ array( __ ,  __ )
+                    /*               ,    fr    to
+                    /* __ */ array( __ ,  __ ,  __ ),
+                    /* GO */ array( __ , 'FR', 'TO'),
+                    /* FR */ array( __ ,  __ , 'TO'),
+                    /* TO */ array('OK',  __ ,  __ ),
+                    /* OK */ array( __ ,  __ ,  __ )
                 ),
 
                 // 10. String.
@@ -460,11 +463,12 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
 
                 // 9. Pairs.
                 array(
-                    /*              ,     ->
-                    /* __ */ array( 0 ,    0    ),
-                    /* GO */ array('6,,', '6,->'),
-                    /* VA */ array(',',    6    ),
-                    /* OK */ array( 9 ,    0    )
+                    /*              ,   fr  to
+                    /* __ */ array( 0 ,  0,  0  ),
+                    /* GO */ array( 0 ,  0,  0  ),
+                    /* FR */ array( 0 ,  6, 'to'),
+                    /* TO */ array(',',  0,  6  ),
+                    /* OK */ array( 9 ,  0,  0  )
                 ),
 
                 // 10. String
@@ -563,8 +567,8 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                 $this->_current = $this->_current->from();
               break;
 
-            // variable: type([… ->
-            case '->':
+            // variable: type([… to
+            case 'to':
                 $this->_current = $this->_current->to();
               break;
 
@@ -628,9 +632,8 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
      */
     protected function pre ( &$in ) {
 
-        $search  = array('&&',  '∧',  '||',  '∨');
+        $search  = array('&&',  '∧',   '||', '∨' );
         $replace = array('and', 'and', 'or', 'or');
-
         $in      = str_replace($search, $replace, $in);
 
         return;
