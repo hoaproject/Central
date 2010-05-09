@@ -38,7 +38,7 @@
         "connection.list.default.dsn"     : "mysql:host=localhost;dbname=foobar",
         "connection.list.default.username": "root",
         "connection.list.default.password": "",
-        "connection.list.default.options" : true,
+        "connection.list.default.options" : {},
         "connection.autoload"             : null // or connection ID, e.g. "default"
     }
 }

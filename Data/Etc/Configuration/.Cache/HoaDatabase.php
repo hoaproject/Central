@@ -33,7 +33,8 @@ return array (
     'connection.list.default.dsn' => 'mysql:host=localhost;dbname=foobar',
     'connection.list.default.username' => 'root',
     'connection.list.default.password' => '',
-    'connection.list.default.options' => true,
+    'connection.list.default.options' => array (
+    ),
     'connection.autoload' => NULL,
   ),
 );
