@@ -113,7 +113,7 @@ class Hoa_Test_Urg_Type_OddInteger extends Hoa_Test_Urg_Type_BoundInteger {
         if(null === $q)
             $q = $this->getValue();
 
-        return $q % 2 != 0;
+        return ($q & 1) == 1;
     }
 
     /**
