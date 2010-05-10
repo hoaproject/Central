@@ -80,7 +80,7 @@ class Hoa_Test_Urg_Type_SmallFloat extends Hoa_Test_Urg_Type_BoundFloat {
      */
     public function __construct ( ) {
 
-        parent::__construct(-127.0, 128.0, parent::BOUND_OPEN, parent::BOUND_OPEN);
+        parent::__construct(-128.0, 127.0, parent::BOUND_OPEN, parent::BOUND_OPEN);
 
         return;
     }
