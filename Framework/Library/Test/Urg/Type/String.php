@@ -120,6 +120,9 @@ class Hoa_Test_Urg_Type_String extends Hoa_Test_Urg_Type_SuperString {
      */
     public function __construct ( $category, $length, $skip ) {
 
+        throw new Hoa_Test_Urg_Type_Exception(
+            'Temporary disabled.', 0);
+
         parent::setArguments($category, $length, $skip);
 
         $this->setCategory($category);
