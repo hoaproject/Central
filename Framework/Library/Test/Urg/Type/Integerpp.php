@@ -122,4 +122,15 @@ class Hoa_Test_Urg_Type_Integerpp extends Hoa_Test_Urg_Type_ZeroOrPositiveIntege
 
         return;
     }
+
+    /**
+     * Disable clearing.
+     *
+     * @access  public
+     * @return  Hoa_Test_Urg_Type_Integerpp
+     */
+    public function clear ( ) {
+
+        return $this;
+    }
 }

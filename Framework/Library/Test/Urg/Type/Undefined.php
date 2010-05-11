@@ -209,6 +209,19 @@ class Hoa_Test_Urg_Type_Undefined implements Hoa_Test_Urg_Type_Interface_Type {
     }
 
     /**
+     * Clear the current value.
+     *
+     * @access  public
+     * @return  Hoa_Test_Urg_Type_Undefined
+     */
+    public function clear ( ) {
+
+        $this->_value = null;
+
+        return $this;
+    }
+
+    /**
      * Get the random value.
      *
      * @access  public

@@ -53,6 +53,11 @@ import('Test.Urg.Type.Exception.Maxtry');
 import('Test.Urg.Type.Undefined');
 
 /**
+ * Hoa_Test_Urg_Type_Integerpp
+ */
+import('Test.Urg.Type.Integerpp');
+
+/**
  * Hoa_Test_Urg
  */
 import('Test.Urg.~');
@@ -141,6 +146,7 @@ class Hoa_Test_Urg_Type_Array extends Hoa_Test_Urg_Type_Undefined {
 
         $types = $this->getTypes();
 
+        /*
         for($i = 0, $max = count($types); $i < $max; $i++) {
 
             $count = 0;
@@ -150,9 +156,10 @@ class Hoa_Test_Urg_Type_Array extends Hoa_Test_Urg_Type_Undefined {
                     && true === $types[$i][1]->predicate($value))
                     $count++;
 
-            if(0 == $count)
+            if(
                 return false;
         }
+        */
 
         return true;
     }
@@ -167,11 +174,15 @@ class Hoa_Test_Urg_Type_Array extends Hoa_Test_Urg_Type_Undefined {
     public function randomize ( ) {
 
         $maxtry = Hoa_Test::getInstance()->getParameter('test.maxtry');
-        $cTypes = count($this->_types) - 1;
+        $types  = $this->getTypes();
+        $cTypes = count($types) - 1;
         $length = $this->getLength();
 
-        if($length instanceof Hoa_Test_Urg_Type_Integer)
+        if($length instanceof Hoa_Test_Urg_Type_Integer) {
+
+            $length = $length->clear()->randomize();
             $length = $length->getValue();
+        }
 
         $length = abs($length);
 
@@ -179,22 +190,17 @@ class Hoa_Test_Urg_Type_Array extends Hoa_Test_Urg_Type_Undefined {
 
             $random = array();
 
-            for($i = 0; $i < $length;) {
+            for($i = 0; $i < $length; $i++) {
 
                 $e = Hoa_Test_Urg::Ud(0, $cTypes);
+                $x = Hoa_Test_urg::Ud(0, count($types[$e][0]) - 1);
+                $y = Hoa_Test_urg::Ud(0, count($types[$e][1]) - 1);
 
-                $this->_types[$e][0]->randomize();
-                $this->_types[$e][1]->randomize();
+                $types[$e][0][$x]->clear()->randomize();
+                $types[$e][1][$y]->clear()->randomize();
 
-                if(isset($random[$this->_types[$e][0]->getValue()])) {
-
-                    $maxtry--;
-                    continue;
-                }
-
-                $random[$this->_types[$e][0]->getValue()] =
-                        $this->_types[$e][1]->getValue();
-                $i++;
+                $random[$types[$e][0][$x]->getValue()] =
+                        $types[$e][1][$y]->getValue();
             }
 
         } while(false === $this->predicate($random) && $maxtry-- > 0);
@@ -232,6 +238,10 @@ class Hoa_Test_Urg_Type_Array extends Hoa_Test_Urg_Type_Undefined {
      * @return  array
      */
     protected function setTypes ( Array $types ) {
+
+        foreach($types as $e => $pairs)
+            if(empty($pairs[0]))
+                $types[$e][0] = array(new Hoa_Test_Urg_Type_Integerpp());
 
         $old          = $this->_types;
         $this->_types = $types;
