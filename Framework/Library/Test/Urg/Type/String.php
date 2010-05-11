@@ -120,6 +120,8 @@ class Hoa_Test_Urg_Type_String extends Hoa_Test_Urg_Type_SuperString {
      */
     public function __construct ( $category, $length, $skip ) {
 
+        parent::setArguments($category, $length, $skip);
+
         $this->setCategory($category);
         $this->setLength($length);
         $this->setSkip($skip);

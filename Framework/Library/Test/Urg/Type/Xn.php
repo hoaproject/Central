@@ -103,6 +103,8 @@ class Hoa_Test_Urg_Type_Xn extends Hoa_Test_Urg_Type_BoundInteger {
         $bound = (int) floor(log(parent::getPositiveInfinity(), $base));
         parent::__construct(-$bound, $bound, parent::BOUND_CLOSE, parent::BOUND_CLOSE);
 
+        parent::setArguments($base);
+
         return;
     }
 

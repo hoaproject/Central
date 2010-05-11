@@ -127,9 +127,16 @@ class Hoa_Test_Urg_Type_Float extends Hoa_Test_Urg_Type_Number {
      * Build a float.
      *
      * @access  public
+     * @param   int     $value    Default value (usefull for manual unit test).
      * @return  void
      */
-    public function __construct ( ) {
+    public function __construct ( $value = null ) {
+
+        if(null !== $value && true === $this->predicate($value)) {
+
+            parent::setArguments($value);
+            $this->_value = $value;
+        }
 
         $this->setUpperBoundValue(self::getPositiveInfinity());
         $this->setLowerBoundValue(self::getNegativeInfinity());
@@ -160,6 +167,9 @@ class Hoa_Test_Urg_Type_Float extends Hoa_Test_Urg_Type_Number {
      * @throws  Hoa_Test_Urg_Type_Exception_Maxtry
      */
     public function randomize ( ) {
+
+        if(null !== $this->_value)
+            return $this->_value;
 
         $maxtry = Hoa_Test::getInstance()->getParameter('test.maxtry');
         $lower  = $this->getLowerBoundValue();

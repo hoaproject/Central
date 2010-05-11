@@ -104,5 +104,7 @@ class Hoa_Test_Urg_Type_ArrayInteger extends Hoa_Test_Urg_Type_Array {
             )),
             $length
         );
+
+        parent::setArguments($length);
     }
 }

@@ -92,6 +92,7 @@ class Hoa_Test_Urg_Type_Integerpp extends Hoa_Test_Urg_Type_ZeroOrPositiveIntege
     public function __construct ( ) {
 
         parent::__construct();
+        parent::setArguments();
         $this->setValue(-1);
     }
 

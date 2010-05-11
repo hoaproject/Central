@@ -81,6 +81,7 @@ class Hoa_Test_Urg_Type_SmallInteger extends Hoa_Test_Urg_Type_BoundInteger {
     public function __construct ( ) {
 
         parent::__construct(-128, 127, parent::BOUND_OPEN, parent::BOUND_OPEN);
+        parent::setArguments();
 
         return;
     }

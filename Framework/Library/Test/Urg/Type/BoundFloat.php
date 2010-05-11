@@ -71,7 +71,6 @@ class Hoa_Test_Urg_Type_BoundFloat extends Hoa_Test_Urg_Type_Float {
      */
     protected $_name                = 'boundFloat';
 
-
     /**
      * Lower bound statement (given by parent::BOUND_* constants).
      *
@@ -101,6 +100,13 @@ class Hoa_Test_Urg_Type_BoundFloat extends Hoa_Test_Urg_Type_Float {
     public function __construct ( $lowerValue, $upperValue,
                                   $lowerStatement = parent::BOUND_CLOSE,
                                   $upperStatement = parent::BOUND_CLOSE ) {
+
+        parent::setArguments(
+            $lowerValue,
+            $upperValue,
+            $lowerStatement,
+            $upperStatement
+        );
 
         if($lowerValue > $upperValue) {
 

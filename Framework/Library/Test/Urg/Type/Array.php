@@ -119,6 +119,8 @@ class Hoa_Test_Urg_Type_Array extends Hoa_Test_Urg_Type_Undefined {
      */
     public function __construct ( Array $types, $length = 20 ) {
 
+        parent::setArguments($types, $length);
+
         $this->setTypes($types);
         $this->setLength($length);
 

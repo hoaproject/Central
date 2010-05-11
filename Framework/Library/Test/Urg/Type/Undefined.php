@@ -100,55 +100,6 @@ import('Test.Urg.~');
 class Hoa_Test_Urg_Type_Undefined implements Hoa_Test_Urg_Type_Interface_Type {
 
     /**
-     * Number of the first choice
-     *
-     * @const int
-     */
-    const CHOICE_FIRST   = 1;
-
-    /**
-     * Number of the last choice
-     *
-     * @const int
-     */
-    const CHOICE_LAST    = 5;
-
-    /**
-     * Choice for Integer
-     *
-     * @const int
-     */
-    const CHOICE_INTEGER = 1;
-
-    /**
-     * Choice for Float
-     *
-     * @const int
-     */
-    const CHOICE_FLOAT   = 2;
-
-    /**
-     * Choice for Boolean
-     *
-     * @const int
-     */
-    const CHOICE_BOOLEAN = 3;
-
-    /**
-     * Choice for String
-     *
-     * @const int
-     */
-    const CHOICE_STRING  = 4;
-    
-    /**
-     * Choice for Array
-     *
-     * @const int
-     */
-    const CHOICE_ARRAY   = 5;
-
-    /**
      * Name of type.
      *
      * @var Hoa_Test_Urg_Type_Interface_Type string
@@ -163,25 +114,18 @@ class Hoa_Test_Urg_Type_Undefined implements Hoa_Test_Urg_Type_Interface_Type {
     protected $_value           = null;
 
     /**
-     * The real object generated (Integer, Float, etc.)
+     * Type's arguments.
+     *
+     * @var Hoa_Test_Urg_Type_Undefined
+     */
+    protected $_arguments       = array();
+
+    /**
+     * The real object generated (integer, float etc.)
      *
      * @var Hoa_Test_Urg_Type_Interface_Type object
      */
     private $_undefinedObject   = null;
-
-    /**
-     * Depth in an array of undefined
-     *
-     * @var Hoa_Test_Urg_Type_Undefined int
-     */
-    protected $_depth           = 0;
-
-    /**
-     * Depth max for an array of undefined
-     *
-     * @var Hoa_Test_Urg_Type_Undefined int
-     */
-    protected $_maxDepth        = 0;
 
 
 
@@ -189,48 +133,50 @@ class Hoa_Test_Urg_Type_Undefined implements Hoa_Test_Urg_Type_Interface_Type {
      * Constructor.
      *
      * @access  public
-     * @param   int  $depth       Depth.
-     * @param   int  $maxDepth    Max depth.
      * @return  void
      */
-    public function __construct ( $depth = 0, $maxDepth = 3 ) {
+    public function __construct ( ) {
 
-        $this->_maxDepth = $maxDepth;
-        $this->_depth    = $depth;
-        $maxBound        = self::CHOICE_LAST;
-
-        if($this->_depth == $this->_maxDepth)
-            $maxBound--;
-
-        $choice          = Hoa_Test_Urg::Ud(self::CHOICE_FIRST, $maxBound);
+        $choice = Hoa_Test_Urg::Ud(0, 4);
 
         switch($choice) {
+
+            case 0:
+                $this->_undefinedObject = new Hoa_Test_Urg_Type_Boolean();
+              break;
             
-            case self::CHOICE_INTEGER:
+            case 1:
                 $this->_undefinedObject = new Hoa_Test_Urg_Type_Integer();
               break;
 
-            case self::CHOICE_FLOAT:
+            case 2:
                 $this->_undefinedObject = new Hoa_Test_Urg_Type_Float();
               break;
 
-            case self::CHOICE_BOOLEAN:
-                $this->_undefinedObject = new Hoa_Test_Urg_Type_Boolean();
+            case 3:
+                throw new Hoa_Test_Urg_Type_Exception(
+                    'TODO', 42);
               break;
 
-            //TODO revoir generation de string
-            case self::CHOICE_STRING:
-                $this->_undefinedObject = new Hoa_Test_Urg_Type_Integer();
-              break;
+            case 4:
+                $result = array();
+                $choice = Hoa_Test_Urg::Ud(0, 1);
+                
+                if(0 === $choice)
+                    $key = new Hoa_Test_Urg_Type_Integer();
 
-            case self::CHOICE_ARRAY:
-                $types = $this->getRandomizeTypes();
-                $length = Hoa_Test_Urg::Ud(0, 20);
-                $this->_undefinedObject = new Hoa_Test_Urg_Type_Array($types, $length);
-              break;
+                if(1 === $choice)
+                    $key = new Hoa_Test_Urg_Type_Integer();
 
-            default:
-                $_undefinedObject = new Hoa_Test_Urg_Type_Integer();
+                $value = new Hoa_Test_Urg_Type_Undefined($this->_depth + 1, $this->_maxDepth);
+
+                $result[0][0] = $key;
+                $result[0][1] = $value;
+
+                $this->_undefinedObject = new Hoa_Test_Urg_Type_Array(
+                    $result,
+                    Hoa_Test_Urg::Ud(0, 16)
+                );
               break;
         }
 
@@ -285,27 +231,27 @@ class Hoa_Test_Urg_Type_Undefined implements Hoa_Test_Urg_Type_Interface_Type {
     }
 
     /**
-     * Get a randomize array for the argument types of the constructor.
+     * Set type's arguments.
      *
-     * @access private
-     * @return array
+     * @access  protected
+     * @param   ...
+     * @return  void
      */
-    private function getRandomizeTypes ( ) {
+    protected function setArguments ( ) {
 
-        $result = array();
-        $choice = Hoa_Test_Urg::Ud(0, 1);
-        
-        if(0 === $choice)
-            $key = new Hoa_Test_Urg_Type_Integer();
+        $this->_arguments = func_get_args();
 
-        if(1 === $choice)
-            $key = new Hoa_Test_Urg_Type_Integer();
+        return;
+    }
 
-        $value = new Hoa_Test_Urg_Type_Undefined($this->_depth + 1, $this->_maxDepth);
+    /**
+     * Get type's argument.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getArguments ( ) {
 
-        $result[0][0] = $key;
-        $result[0][1] = $value;
-
-        return $result;
+        return $this->_arguments;
     }
 }
