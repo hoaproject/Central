@@ -408,6 +408,22 @@ class Hoa_Test_Praspel {
     }
 
     /**
+     * Transform this object model into Praspel.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function __toPraspel ( ) {
+
+        $out = null;
+
+        foreach($this->getClauses() as $i => $clause)
+            $out .= $clause->__toPraspel();
+
+        return $out;
+    }
+
+    /**
      * Transform this object model into a string.
      *
      * @access  public
@@ -415,10 +431,10 @@ class Hoa_Test_Praspel {
      */
     public function __toString ( ) {
 
-        $out = 'Praspel' . "\n";
+        $out = null;
 
         foreach($this->getClauses() as $i => $clause)
-            $out .= $clause->__toString();
+            $out .= $clause->__toString() . "\n";
 
         return $out;
     }
