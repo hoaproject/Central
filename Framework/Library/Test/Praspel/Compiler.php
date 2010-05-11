@@ -495,8 +495,6 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                 'String'
             )
         );
-
-        $this->_praspel = new Hoa_Test_Praspel();
     }
 
     /**
@@ -548,6 +546,9 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
             case 'Y':
                 if(isset($this->buffers[3])) {
 
+                    if(ctype_digit($this->buffers[3]))
+                        $this->buffers[3] = (int) $this->buffers[3];
+
                     $this->_current = $this->_current->with(
                         $this->buffers[3]
                     );
@@ -579,6 +580,9 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
 
             // variable: type(…,
             case 'c':
+                if(ctype_digit($this->buffers[3]))
+                    $this->buffers[3] = (int) $this->buffers[3];
+
                 $this->_current = $this->_current->with(
                     $this->buffers[3]
                 )->_comma;
@@ -631,6 +635,8 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
      * @return  void
      */
     protected function pre ( &$in ) {
+
+        $this->_praspel = new Hoa_Test_Praspel();
 
         $search  = array('&&',  '∧',   '||', '∨' );
         $replace = array('and', 'and', 'or', 'or');

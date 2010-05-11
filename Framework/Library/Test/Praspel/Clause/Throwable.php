@@ -131,6 +131,20 @@ class Hoa_Test_Praspel_Clause_Throwable implements Hoa_Test_Praspel_Clause {
     }
 
     /**
+     * Transform this object model into Praspel.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function __toPraspel ( ) {
+
+        $gc  = get_class($this);
+        $out = '@' . strtolower(substr($gc, strrpos($gc, '_') + 1));
+
+        return $out . ' ' . implode(', ', $this->getList()) . ";\n";
+    }
+
+    /**
      * Transform this object model into a string.
      *
      * @access  public
@@ -139,11 +153,14 @@ class Hoa_Test_Praspel_Clause_Throwable implements Hoa_Test_Praspel_Clause {
     public function __toString ( ) {
 
         $gc  = get_class($this);
-        $out = '    ' . strtolower(substr($gc, strrpos($gc, '_') + 1)) . "\n";
+        $out = strtolower(substr($gc, strrpos($gc, '_') + 1));
 
-        foreach($this->getList() as $i => $exception)
-            $out .= '        ' . $exception . "\n";
-
-        return $out;
+        return '$praspel' . "\n" .
+               '    ->clause(\'' . $out . '\')'  . "\n" .
+               '    ->couldThrow(\'' .
+               implode(
+                   '\')' . "\n" . '    ->_and' . "\n" . '    ->couldThrow(\'',
+                   $this->getList()
+               ) . '\')' . "\n;";
     }
 }

@@ -204,6 +204,27 @@ abstract class Hoa_Test_Praspel_Clause_Contract implements Hoa_Test_Praspel_Clau
     }
 
     /**
+     * Transform this object model into Praspel.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function __toPraspel ( ) {
+
+        $gc     = get_class($this);
+        $out    = sprintf(
+                      '%-11s',
+                      '@' . strtolower(substr($gc, strrpos($gc, '_') + 1))
+                  );
+        $handle = array();
+
+        foreach($this->getVariables() as $i => $variable)
+            $handle[] = $variable->__toPraspel();
+
+        return $out . implode("\n" . '       and ', $handle) . ";\n";
+    }
+
+    /**
      * Transform this object model into a string.
      *
      * @access  public
@@ -211,12 +232,16 @@ abstract class Hoa_Test_Praspel_Clause_Contract implements Hoa_Test_Praspel_Clau
      */
     public function __toString ( ) {
 
-        $gc  = get_class($this);
-        $out = '    ' . strtolower(substr($gc, strrpos($gc, '_') + 1)) . "\n";
+        $gc     = get_class($this);
+        $out    = '$praspel' . "\n" .
+                  '    ->clause(\'' .
+                       strtolower(substr($gc, strrpos($gc, '_') + 1)) .
+                      '\')' . "\n";
+        $handle = array();
 
         foreach($this->getVariables() as $i => $variable)
-            $out .= $variable->__toString();
+            $handle[] = $variable->__toString();
 
-        return $out;
+        return $out . implode('    ->_and' . "\n", $handle) . ';';
     }
 }
