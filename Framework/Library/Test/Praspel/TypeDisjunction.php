@@ -187,6 +187,9 @@ abstract class Hoa_Test_Praspel_TypeDisjunction {
 
                 foreach($argument as $e => $domran) {
 
+                    if(null !== $handle)
+                        $handle .= ',';
+
                     if(!empty($domran[0]))
                         $handle .= "\n" . '               from ' .
                                    implode(
@@ -257,6 +260,8 @@ abstract class Hoa_Test_Praspel_TypeDisjunction {
                                        $spaces . '            ->_or' . "\n",
                                        $this->formatArguments($domran[0], true)
                                    );
+                    else
+                        $handle .= $spaces . '        ->from()' . "\n";
 
                     if(!empty($domran[1]))
                         $handle .= $spaces . '        ->to()' . "\n" .
