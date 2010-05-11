@@ -43,9 +43,9 @@ require_once 'Framework.php';
 import('Test.Urg.Type.Exception');
 
 /**
- * Hoa_Test_Urg_Type_BoundInteger
+ * Hoa_Test_Urg_Type_BoundFloat
  */
-import('Test.Urg.Type.BoundInteger');
+import('Test.Urg.Type.BoundFloat');
 
 /**
  * Class Hoa_Test_Urg_Type_SmallFloat.
