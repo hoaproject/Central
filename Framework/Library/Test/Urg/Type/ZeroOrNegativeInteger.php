@@ -89,6 +89,7 @@ class Hoa_Test_Urg_Type_ZeroOrNegativeInteger extends Hoa_Test_Urg_Type_BoundInt
             $lowerValue = $this->getNegativeInfinity();
 
         parent::__construct($lowerValue, 0, $lowerStatement, parent::BOUND_CLOSE);
+        parent::setArguments($lowerValue, $lowerStatement);
 
         return;
     }

@@ -89,6 +89,7 @@ class Hoa_Test_Urg_Type_ZeroOrPositiveFloat extends Hoa_Test_Urg_Type_BoundFloat
             $upperValue = $this->getPositiveInfinity();
 
         parent::__construct(0, $upperValue, parent::BOUND_CLOSE, $upperStatement);
+        parent::setArguments($upperValue, $upperStatement);
 
         return;
     }

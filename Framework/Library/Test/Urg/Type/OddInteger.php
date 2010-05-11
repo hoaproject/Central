@@ -97,6 +97,7 @@ class Hoa_Test_Urg_Type_OddInteger extends Hoa_Test_Urg_Type_BoundInteger {
             parent::BOUND_CLOSE,
             parent::BOUND_CLOSE
         );
+        parent::setArguments();
 
         return;
     }

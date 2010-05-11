@@ -112,6 +112,8 @@ class Hoa_Test_Urg_Type_StringWith extends Hoa_Test_Urg_Type_SuperString {
      */
     public function __construct ( $characters, $length ) {
 
+        parent::setArguments($characters, $length);
+
         $this->setCharacters($characters);
         $this->setLength($length);
 

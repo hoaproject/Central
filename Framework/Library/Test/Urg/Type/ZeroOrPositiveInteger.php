@@ -89,6 +89,7 @@ class Hoa_Test_Urg_Type_ZeroOrPositiveInteger extends Hoa_Test_Urg_Type_BoundInt
             $upperValue = $this->getPositiveInfinity();
 
         parent::__construct(0, $upperValue, parent::BOUND_CLOSE, $upperStatement);
+        parent::setArguments($upperValue, $upperStatement);
 
         return;
     }

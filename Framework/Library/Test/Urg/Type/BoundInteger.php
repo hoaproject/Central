@@ -101,6 +101,13 @@ class Hoa_Test_Urg_Type_BoundInteger extends Hoa_Test_Urg_Type_Integer {
                                   $lowerStatement = parent::BOUND_CLOSE,
                                   $upperStatement = parent::BOUND_CLOSE ) {
 
+        parent::setArguments(
+            $lowerValue,
+            $upperValue,
+            $lowerStatement,
+            $upperStatement
+        );
+
         if($lowerValue > $upperValue) {
 
             $this->setLowerBoundValue($upperValue);
