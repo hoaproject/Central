@@ -134,10 +134,10 @@ class Hoa_Test_Praspel_Variable extends Hoa_Test_Praspel_TypeDisjunction {
     /**
      * Choose one type.
      *
-     * @access  protected
+     * @access  public
      * @return  Hoa_Test_Urg_Type_Interface_Type
      */
-    protected function chooseOneType ( ) {
+    public function chooseOneType ( ) {
 
         $i = Hoa_Test_Urg::Ud(0, count($this->_types) - 1);
         reset($this->_types);
