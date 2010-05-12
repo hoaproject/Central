@@ -173,6 +173,10 @@ class WelcomeCommand extends Hoa_Console_Command_Abstract {
                 '    ' . parent::stylize('launch', 'command'),
                 'Launch initialized tests.',
             ),
+            array(
+                '    ' . parent::stylize('praspel', 'command'),
+                'Start the interactive interpreter for Praspel code.',
+            ),
 
             // Documentation.
             array('Documentation'),
