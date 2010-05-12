@@ -36,9 +36,9 @@
 import('Test.Praspel.Compiler');
 
 /**
- * Class InteractiveCommand.
+ * Class PraspelCommand.
  *
- * Interactive interpreter for Praspel.
+ * Praspel interpreter for Praspel.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2009 Ivan ENDERLIN.
@@ -47,26 +47,26 @@ import('Test.Praspel.Compiler');
  * @version     0.1
  */
 
-class InteractiveCommand extends Hoa_Console_Command_Abstract {
+class PraspelCommand extends Hoa_Console_Command_Abstract {
 
     /**
      * Author name.
      *
-     * @var InteractiveCommand string
+     * @var PraspelCommand string
      */
     protected $author      = 'Ivan Enderlin';
 
     /**
      * Program name.
      *
-     * @var InteractiveCommand string
+     * @var PraspelCommand string
      */
-    protected $programName = 'Interactive';
+    protected $programName = 'Praspel';
 
     /**
      * Options description.
      *
-     * @var InteractiveCommand array
+     * @var PraspelCommand array
      */
     protected $options     = array(
         array('file', parent::REQUIRED_ARGUMENT, 'f'),
@@ -195,7 +195,7 @@ class InteractiveCommand extends Hoa_Console_Command_Abstract {
      */
     public function usage ( ) {
 
-        cout('Usage   : praspel:interactive <options> [code]');
+        cout('Usage   : test:praspel <options> [code]');
         cout('Options :');
         cout(parent::makeUsageOptionsList(array(
             'f'    => 'Read a file to initialize the interpreter.',
