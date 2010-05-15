@@ -41,6 +41,11 @@ import('Test.~');
 import('Test.Praspel.~');
 
 /**
+ * Hoa_Log
+ */
+import('Log.~');
+
+/**
  * Hoa_Stream
  */
 import('Stream.~');
@@ -50,8 +55,19 @@ import('Stream.~');
  */
 import('Stream.Io.Out');
 
+/**
+ * Class RunCommand.
+ *
+ * .
+ *
+ * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright   Copyright (c) 2007, 2009 Ivan ENDERLIN.
+ * @license     http://gnu.org/licenses/gpl.txt GNU GPL
+ * @since       PHP 5
+ * @version     0.1
+ */
 
-class My extends Hoa_Stream implements Hoa_Stream_Io_Out {
+class Trivial extends Hoa_Stream implements Hoa_Stream_Io_Out {
 
     protected $self = null;
 
@@ -113,9 +129,15 @@ class My extends Hoa_Stream implements Hoa_Stream_Io_Out {
     public function writeArray ( Array $array ) {
 
         $this->self->status(
-            'foo',
-            $array[1]
+            $array['class'] . '::' . $array['method'] . '(' .
+            implode(', ', $array['arguments']) . ') -> ' . $array['result'],
+            $array['status']
         );
+        cout('    ' . $array['message']);
+        cout('    ' . $array['file'] . ' from ' . $array['startLine'] .
+             ' to ' . $array['endLine'] . '.');
+
+        cout();
     }
 
     public function writeLine ( $line ) {
@@ -137,42 +159,35 @@ class My extends Hoa_Stream implements Hoa_Stream_Io_Out {
     }
 }
 
-/**
- * Class LaunchCommand.
- *
- * .
- *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2009 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- */
-
-class LaunchCommand extends Hoa_Console_Command_Abstract {
+class RunCommand extends Hoa_Console_Command_Abstract {
 
     /**
      * Author name.
      *
-     * @var LaunchCommand string
+     * @var RunCommand string
      */
     protected $author      = 'Ivan Enderlin';
 
     /**
      * Program name.
      *
-     * @var LaunchCommand string
+     * @var RunCommand string
      */
-    protected $programName = 'Launch';
+    protected $programName = 'Run';
 
     /**
      * Options description.
      *
-     * @var LaunchCommand array
+     * @var RunCommand array
      */
     protected $options     = array(
-        array('help', parent::NO_ARGUMENT, 'h'),
-        array('help', parent::NO_ARGUMENT, '?')
+        array('repository',  parent::REQUIRED_ARGUMENT, 'r'),
+        array('file',        parent::REQUIRED_ARGUMENT, 'f'),
+        array('class',       parent::REQUIRED_ARGUMENT, 'c'),
+        array('method',      parent::REQUIRED_ARGUMENT, 'm'),
+        array('iteration',   parent::REQUIRED_ARGUMENT, 'i'),
+        array('help',        parent::NO_ARGUMENT,       'h'),
+        array('help',        parent::NO_ARGUMENT,       '?')
     );
 
 
@@ -185,9 +200,35 @@ class LaunchCommand extends Hoa_Console_Command_Abstract {
      */
     public function main ( ) {
 
+        $repository = null;
+        $file       = null;
+        $class      = null;
+        $method     = null;
+        $iteration  = 1;
+
         while(false !== $c = parent::getOption($v)) {
 
             switch($c) {
+
+                case 'r':
+                    $repository = $v;
+                  break;
+
+                case 'f':
+                    $file = $v;
+                  break;
+
+                case 'c':
+                    $class = $v;
+                  break;
+
+                case 'm':
+                    $method = $v;
+                  break;
+
+                case 'i':
+                    $iteration = (int) $v;
+                  break;
 
                 case 'h':
                 case '?':
@@ -196,39 +237,48 @@ class LaunchCommand extends Hoa_Console_Command_Abstract {
             }
         }
 
-        parent::listInputs($directory);
-
-        if(null === $directory)
+        if(null === $repository || null === $file)
             return $this->usage();
 
-        import('File.ReadWrite');
-        $my = new My($this);
-        Hoa_Test::getInstance()->addOutputStreams(array(
-            new Hoa_File_ReadWrite('hoa://Data/Temporary/Foo'),
-            $my
-        ));
+        Hoa_Log::getChannel(
+            Hoa_Test_Praspel::LOG_CHANNEL
+        )->addOutputStream(new Trivial($this));
 
-        $directory    = Hoa_Framework::getProtocol()->resolve($directory);
-        $oracle       = glob($directory . DS . 'Ordeal' . DS . 'Oracle' . DS . '*');
-        $battleground = glob($directory . DS . 'Ordeal' . DS . 'Battleground' . DS . '*');
+        require_once $repository . '/Ordeal/Oracle/' . $file;
+        require_once $repository . '/Ordeal/Battleground/' . $file;
 
-        foreach($oracle as $i => $file)
-            require_once $file;
+        if(null !== $class) {
 
-        foreach($battleground as $i => $file) {
+            $exportTests = array_intersect_key(
+                $exportTests,
+                array($class => 0)
+            );
 
-            try {
+            if(null !== $method) {
 
-                $my->writeAll($file);
-                require_once $file;
+                foreach($exportTests as $c => &$methods)
+                    $methods = array_intersect(
+                        $methods,
+                        array(0 => $method)
+                    );
             }
-            catch( Exception $e ) {
+        }
 
-                throw new Hoa_Console_Exception(
-                    $e->getFormattedMessage(),
-                    $e->getCode()
-                );
+        for($i = $iteration; $i > 0; $i--) {
+
+            cout(parent::underline('Iteration ' . ($iteration - $i + 1)));
+            cout();
+
+            foreach($exportTests as $classname => $methods) {
+
+                $classname = 'Hoatest_' . $classname;
+                $class = new $classname();
+
+                foreach($methods as $j => $method)
+                    $class->{'__test_' . $method}();
             }
+
+            cout();
         }
 
         return HC_SUCCESS;
@@ -242,9 +292,13 @@ class LaunchCommand extends Hoa_Console_Command_Abstract {
      */
     public function usage ( ) {
 
-        cout('Usage   : test:launch <options> path');
+        cout('Usage   : test:run <options>');
         cout('Options :');
         cout(parent::makeUsageOptionsList(array(
+            'r'    => 'Repository of tests.',
+            'f'    => 'File to test in the repository.',
+            'c'    => 'Class to test in the file.',
+            'm'    => 'Method to test in the class.',
             'help' => 'This help.'
         )));
 
