@@ -99,6 +99,13 @@ class Hoa_Test_Praspel_Call {
     protected $_method      = null;
 
     /**
+     * Method arguments value.
+     *
+     * @var Hoa_Test_Praspel_Call array
+     */
+    protected $_values      = array();
+
+    /**
      * Call result.
      *
      * @var Hoa_Test_Praspel_Call mixed
@@ -155,6 +162,8 @@ class Hoa_Test_Praspel_Call {
             $freeVariable->chooseOneType()->clear()->randomize();
             $values[] = $freeVariable->getChoosenType()->getValue();
         }
+
+        $this->setValues($values);
 
         $convict = &$this->getConvict();
 
@@ -263,6 +272,23 @@ class Hoa_Test_Praspel_Call {
     }
 
     /**
+     * Set the method arguments values.
+     *
+     * @access  protected
+     * @param   array     $values    Values.
+     * @return  array
+     */
+    public function setValues ( $values ) {
+
+        array_shift($values);
+
+        $old           = $this->_values;
+        $this->_values = $values;
+
+        return $old;
+    }
+
+    /**
      * Get the root.
      *
      * @access  protected
@@ -315,6 +341,17 @@ class Hoa_Test_Praspel_Call {
     protected function getMethod ( ) {
 
         return $this->_method;
+    }
+
+    /**
+     * Get the method arguments values.
+     *
+     * @access  protected
+     * @return  array
+     */
+    public function getValues ( ) {
+
+        return $this->_values;
     }
 
     /**
