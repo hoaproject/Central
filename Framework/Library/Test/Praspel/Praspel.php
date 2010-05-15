@@ -175,7 +175,8 @@ class Hoa_Test_Praspel {
      * @param   int     $endLine      Line where the method ends.
      * @return  void
      */
-    public function __construct ( $class, $method, $file, $startLine, $endLine ) {
+    public function __construct ( $class = null, $method = null, $file = null,
+                                  $startLine = -1, $endLine = -1 ) {
 
         $this->_class     = $class;
         $this->_method    = $method;
