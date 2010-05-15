@@ -585,9 +585,10 @@ class Hoa_Log {
  * @param   string  $message    The log message.
  * @param   int     $type       Type of message (please, see the class
  *                              constants).
+ * @param   array   $extra      Extra dynamic informations.
  * @return  void
  */
-function hlog ( $message, $type = Hoa_Log::DEBUG ) {
+function hlog ( $message, $type = Hoa_Log::DEBUG, $extra = array() ) {
 
-    return Hoa_Log::getChannel()->log($message, $type);
+    return Hoa_Log::getChannel()->log($message, $type, $extra);
 }
