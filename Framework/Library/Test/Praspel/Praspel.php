@@ -431,7 +431,13 @@ class Hoa_Test_Praspel {
      */
     public function __toString ( ) {
 
-        $out = '$praspel = new ' . get_class() . '();' . "\n\n";
+        $out = '$praspel   = new ' . get_class() . '(' . "\n" .
+               '    $class,' . "\n" .
+               '    $method,' . "\n" .
+               '    $file,' . "\n" .
+               '    $startLine,' . "\n" .
+               '    $endLine' . "\n" .
+               ');' . "\n\n";
 
         foreach($this->getClauses() as $i => $clause)
             $out .= $clause->__toString() . "\n";

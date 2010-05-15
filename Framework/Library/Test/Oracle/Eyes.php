@@ -198,8 +198,8 @@ class Hoa_Test_Oracle_Eyes implements Hoa_Framework_Parameterizable {
                 );
                 $out     .= "\n\n" .
                             '/**' . "\n" .
-                            ' * Test class for ' . $class . ' in:' . "\n" .
-                            ' * ' . $incubator . $file . ".\n" .
+                            ' * Test class ' . $class . "\n" .
+                            ' * in ' . $incubator . $file . ".\n" .
                             ' */' . "\n" .
                             'class Hoatest_' . $class . ' {' . "\n\n" .
                             '    /**' . "\n" .
@@ -219,8 +219,20 @@ class Hoa_Test_Oracle_Eyes implements Hoa_Framework_Parameterizable {
                     $praspel  = $compiler->getRoot()->__toString();
                     $praspel  = str_replace("\n", "\n        ", $praspel);
                     $out     .= "\n\n" .
+                                '    /**' . "\n" .
+                                '     * Test method ' . $class . '::' .
+                                $method->getName() . "()\n" .
+                                '     * in file ' . $incubator . $file . "\n" .
+                                '     * from line ' . $method->getStartLine() .
+                                ' to ' . $method->getEndLine() . ".\n" .
+                                '     */' . "\n" .
                                 '    public function __test_' . $method->getName() .
                                 ' ( ) {' . "\n\n" .
+                                '        $class     = \'' . $class . '\';' . "\n" .
+                                '        $method    = \'' . $method->getName() . '\';' . "\n" .
+                                '        $file      = \'' . $incubator . $file . '\';' . "\n" .
+                                '        $startLine = ' . $method->getStartLine() . ";\n" .
+                                '        $endLine   = ' . $method->getEndLine() . ";\n" .
                                 '        ' . $praspel . "\n" .
                                 '    }';
                 }
