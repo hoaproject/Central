@@ -183,6 +183,9 @@ class Hoa_Test_Praspel {
             self::LOG_CHANNEL
         );
 
+        $this->clause('requires');
+        $this->clause('ensures');
+
         return;
     }
 
@@ -288,6 +291,8 @@ class Hoa_Test_Praspel {
         $log       = array(
             'class'     => $this->getClass(),
             'method'    => $this->getMethod(),
+            'arguments' => $call->getValues(),
+            'result'    => $call->getResult(),
             'file'      => $this->getFile(),
             'startLine' => $this->getStartLine(),
             'endLine'   => $this->getEndLine(),
