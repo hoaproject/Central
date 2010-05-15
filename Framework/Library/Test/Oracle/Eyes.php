@@ -185,6 +185,8 @@ class Hoa_Test_Oracle_Eyes implements Hoa_Framework_Parameterizable {
             $handle  = explode("\n", $handle);
             $classes = $matches[1];
             $out     = '<?php';
+            $foot    = "\n\n" .
+                       '$exportTests = array(' . "\n";
 
             foreach($classes as $i => $class) {
 
@@ -206,6 +208,7 @@ class Hoa_Test_Oracle_Eyes implements Hoa_Framework_Parameterizable {
                             '     * Memorize the instance.' . "\n" .
                             '     */' . "\n" .
                             '    public $_convict = null;' . "\n\n";
+                $foot    .= '    \'' . $class . '\' => array(' . "\n";
 
                 foreach($methods as $j => $method) {
 
@@ -235,12 +238,16 @@ class Hoa_Test_Oracle_Eyes implements Hoa_Framework_Parameterizable {
                                 '        $endLine   = ' . $method->getEndLine() . ";\n" .
                                 '        ' . $praspel . "\n" .
                                 '    }';
+                    $foot    .= '        ' . $j . ' => \'' . $method->getName() . '\',' . "\n";
                 }
 
                 $out     .= "\n" . '}';
+                $foot    .= '    ),' . "\n";
             }
 
-            file_put_contents($battleground . $file, $out);
+            $foot .= ');';
+
+            file_put_contents($battleground . $file, $out . $foot);
         }
 
         return;
