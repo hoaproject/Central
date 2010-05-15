@@ -85,8 +85,14 @@ class Hoa_Test_Urg_Type_ZeroOrNegativeFloat extends Hoa_Test_Urg_Type_BoundFloat
     public function __construct ( $lowerValue     = null,
                                   $lowerStatement = parent::BOUND_OPEN ) {
 
-        if(null === $lowerValue)
+        if(null === $upperValue) {
+
             $lowerValue = $this->getNegativeInfinity();
+            parent::__construct($lowerValue, 0, $lowerStatement, parent::BOUND_CLOSE);
+            parent::setArguments(null $lowerStatement);
+
+            return;
+        }
 
         parent::__construct($lowerValue, 0, $lowerStatement, parent::BOUND_CLOSE);
         parent::setArguments($lowerValue, $lowerStatement);
