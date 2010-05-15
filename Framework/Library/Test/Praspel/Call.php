@@ -71,11 +71,11 @@ class Hoa_Test_Praspel_Call {
     protected $_root        = null;
 
     /**
-     * Object to call.
+     * Convict.
      *
      * @var mixed object
      */
-    protected $_object      = null;
+    protected $_convict     = null;
 
     /**
      * Magic caller name.
@@ -85,7 +85,14 @@ class Hoa_Test_Praspel_Call {
     protected $_magicCaller = null;
 
     /**
-     * Method to call.
+     * Class name.
+     *
+     * @var Hoa_Test_Praspel_Call string
+     */
+    protected $_class       = null;
+
+    /**
+     * Method name.
      *
      * @var Hoa_Test_Praspel_Call string
      */
@@ -112,18 +119,72 @@ class Hoa_Test_Praspel_Call {
      *
      * @access  public
      * @param   Hoa_Test_Praspel  $root           Root of this object model.
-     * @param   object            $object         Object where method is.
+     * @param   object            &$convict       Convict.
      * @param   string            $magicCaller    Magic caller name.
+     * @param   string            $class          Class name.
      * @param   string            $method         Method name.
      * @return  void
      */
-    public function __construct ( Hoa_Test_Praspel $root, $object, $magicCaller, $method ) {
+    public function __construct ( Hoa_Test_Praspel $root, &$convict,
+                                  $magicCaller, $class, $method ) {
 
         $this->setRoot($root);
-        $this->setObject($object);
+        $this->setConvict($convict);
         $this->setMagicCaller($magicCaller);
+        $this->setClass($class);
         $this->setMethod($method);
         $this->call();
+    }
+
+    /**
+     * Call the method.
+     *
+     * @access  protected
+     * @return  void
+     * @throws  Hoa_Test_Praspel_Exception
+     */
+    protected function call ( ) {
+
+        $freeVariables = $this->getRoot()
+                              ->getClause('requires')
+                              ->getVariables();
+        $values        = array($this->getMethod());
+
+        foreach($freeVariables as $i => $freeVariable) {
+
+            $freeVariable->chooseOneType()->clear()->randomize();
+            $values[] = $freeVariable->getChoosenType()->getValue();
+        }
+
+        $convict = &$this->getConvict();
+
+        if(null === $convict) {
+
+            $reflection = new ReflectionClass($this->getClass());
+            $convict    = $reflection->newInstance();
+            $this->setConvict($convict);
+        }
+
+        try {
+
+            ob_start();
+            ob_implicit_flush(false);
+            $obLevel = ob_get_level();
+
+            $this->_result = call_user_func_array(
+                array($convict, $this->getMagicCaller()),
+                $values
+            );
+
+            while(ob_get_level() >= $obLevel)
+                ob_end_clean();
+        }
+        catch ( Exception $e ) {
+
+            $this->_exception = $e;
+        }
+
+        return;
     }
 
     /**
@@ -142,16 +203,16 @@ class Hoa_Test_Praspel_Call {
     }
 
     /**
-     * Set the object to call.
+     * Set the convict.
      *
      * @access  protected
-     * @param   object     $object    Object where method is.
+     * @param   object     $convict    Convict.
      * @return  object
      */
-    protected function setObject ( $object ) {
+    protected function setConvict ( &$convict ) {
 
-        $old           = $this->_object;
-        $this->_object = $object;
+        $old            = $this->_convict;
+        $this->_convict = &$convict;
 
         return $old;
     }
@@ -172,6 +233,21 @@ class Hoa_Test_Praspel_Call {
     }
 
     /**
+     * Set the class name.
+     *
+     * @access  protected
+     * @param   string     $class    Class name.
+     * @return  string
+     */
+    public function setClass ( $class ) {
+
+        $old          = $this->_class;
+        $this->_class = $class;
+
+        return $old;
+    }
+
+    /**
      * Set the method name.
      *
      * @access  protected
@@ -187,63 +263,6 @@ class Hoa_Test_Praspel_Call {
     }
 
     /**
-     * Call the method.
-     *
-     * @access  protected
-     * @return  void
-     * @throws  Hoa_Test_Praspel_Exception
-     */
-    protected function call ( ) {
-
-        $freeVariables = $this->getRoot()
-                              ->getClause('requires')
-                              ->getFreeVariables();
-        $values        = array($this->getMethod());
-
-        foreach($freeVariables as $i => $freeVariable) {
-
-            $freeVariable->chooseOneType()->randomize();
-            $values[] = $freeVariable->getChoosenType()->getValue();
-        }
-
-        try {
-
-            ob_start();
-            ob_implicit_flush(false);
-            $obLevel = ob_get_level();
-
-            if(is_string($this->getObject())) {
-
-                array_shift($values);
-                $reflection    = new ReflectionClass($this->getObject());
-                $this->_result = null;
-                $this->setObject($reflection->newInstanceArgs($values));
-            }
-            else
-                $this->_result = call_user_func_array(
-                    array($this->getObject(), $this->getMagicCaller()),
-                    $values
-                );
-
-            while(ob_get_level() >= $obLevel)
-                ob_end_clean();
-        }
-        catch ( ReflectionException $e ) {
-
-            $this->_exception = new Hoa_Test_Praspel_Exception(
-                $e->getMessage(),
-                $e->getCode()
-            );
-        }
-        catch ( Exception $e ) {
-
-            $this->_exception = $e;
-        }
-
-        return $this->getObject();
-    }
-
-    /**
      * Get the root.
      *
      * @access  protected
@@ -255,14 +274,14 @@ class Hoa_Test_Praspel_Call {
     }
 
     /**
-     * Get the object.
+     * Get the convict.
      *
      * @access  public
      * @return  object
      */
-    public function getObject ( ) {
+    public function &getConvict ( ) {
 
-        return $this->_object;
+        return $this->_convict;
     }
 
     /**
@@ -274,6 +293,17 @@ class Hoa_Test_Praspel_Call {
     protected function getMagicCaller ( ) {
 
         return $this->_magicCaller;
+    }
+
+    /**
+     * Get the class name.
+     *
+     * @access  protected
+     * @return  string
+     */
+    protected function getClass ( ) {
+
+        return $this->_class;
     }
 
     /**
