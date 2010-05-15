@@ -85,8 +85,14 @@ class Hoa_Test_Urg_Type_ZeroOrPositiveInteger extends Hoa_Test_Urg_Type_BoundInt
     public function __construct ( $upperValue     = parent::INFINITY,
                                   $upperStatement = parent::BOUND_CLOSE ) {
 
-        if(null === $upperValue)
+        if(null === $upperValue) {
+
             $upperValue = $this->getPositiveInfinity();
+            parent::__construct(0, $upperValue, parent::BOUND_CLOSE, $upperStatement);
+            parent::setArguments(null, $upperStatement);
+
+            return;
+        }
 
         parent::__construct(0, $upperValue, parent::BOUND_CLOSE, $upperStatement);
         parent::setArguments($upperValue, $upperStatement);
