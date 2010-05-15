@@ -38,11 +38,6 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Test
- */
-import('Test.~');
-
-/**
  * Hoa_Test_Praspel_Exception
  */
 import('Test.Praspel.Exception');
@@ -185,8 +180,7 @@ class Hoa_Test_Praspel {
         $this->_endLine   = $endLine;
 
         $this->_log = Hoa_Log::getChannel(
-            self::LOG_CHANNEL,
-            Hoa_Test::getInstance()->getLogStreams()
+            self::LOG_CHANNEL
         );
 
         return;
@@ -259,22 +253,24 @@ class Hoa_Test_Praspel {
      * Call a method.
      *
      * @access  public
-     * @param   object  $object         Object where method is.
+     * @param   object  &$convict       Object where method is.
      * @param   string  $magicCaller    Magic caller name.
+     * @param   string  $class          Class name.
      * @param   string  $method         Method name.
-     * @return  Hoa_Test_Praspel_Call
+     * @return  void
      */
-    public function call ( $object, $magicCaller, $method ) {
+    public function call ( &$convict, $magicCaller, $class, $method ) {
 
         $old         = $this->_call;
         $this->_call = new Hoa_Test_Praspel_Call(
             $this,
-            $object,
+            $convict,
             $magicCaller,
+            $class,
             $method
         );
 
-        return $this->_call->getObject();
+        return;
     }
 
     /**
@@ -285,122 +281,77 @@ class Hoa_Test_Praspel {
      */
     public function verify ( ) {
 
-        $requires = $this->getClause('requires');
-        $ensures  = $this->getClause('ensures');
-        $call     = $this->getCall();
-        $table    = array();
+        $requires  = $this->getClause('requires');
+        $ensures   = $this->getClause('ensures');
+        $call      = $this->getCall();
 
-        $table['@requires'] = array();
-        foreach($requires->getFreeVariables() as $fvName => $fvInstance) {
-
-            $tmp = array();
-
-            foreach($fvInstance->getTypes() as $i => $type)
-                $tmp[] = get_class($type);
-
-            $table['@requires'][$fvName] = implode(' ∧ ', $tmp);
-        }
+        $log       = array(
+            'class'     => $this->getClass(),
+            'method'    => $this->getMethod(),
+            'file'      => $this->getFile(),
+            'startLine' => $this->getStartLine(),
+            'endLine'   => $this->getEndLine(),
+            'status'    => FAILED
+        );
 
         if(true === $call->hasException()) {
 
             $exception = $call->getException();
 
-            if(true === $this->clauseExists('throws')) {
+            if(false === $this->clauseExists('throwable')) {
 
-                $table['@throws'] = implode(' ∧ ', $throws->getList());
-                $table['throws']  = get_class($exception);
-
-                $throws = $this->getClause('throws');
-
-                if(false === $throws->exceptionExists($exception))
-                    // LOG : exception not captured/declared + message.
-                    throw new Hoa_Test_Praspel_Exception(
-                        'Exception %s (with message %s) was thrown and not ' .
-                        'declared in the clause “throws”, only given %s', 0,
-                        array(
-                            get_class($exception),
-                            $exception->getMessage(),
-                            implode(' ∧ ', $throws->getList())
-                        ));
-            }
-            else
-                // LOG : exception not captured/declared + message.
-                throw new Hoa_Test_Praspel_Exception(
-                    'Exception %s (with message %s) was thrown and no ' .
-                    'clause “throws” was declared.', 1,
-                    array(get_class($exception), $exception->getMessage()));
-        }
-
-        $validations = array();
-
-        $table['@ensures'] = array();
-
-        foreach($ensures->getFreeVariables() as $fvName => $fvInstance) {
-
-            $valid = false;
-
-            if(0 !== preg_match('#\\\old\s*\(\s*([a-z]+)\s*\)#i', $fvName, $matches)) {
-
-                if(true === $requires->freeVariableExists($matches[1]))
-                    $types = $requires->getFreeVariable($matches[1])->getTypes();
-                else
-                    // LOG : cannot verify ensures clause (old(__)).
-                    throw new Hoa_Test_Praspel_Exception(
-                        'Try to touch the “%1$s” free-variable through “%2$s”, ' .
-                        'but “%1$s” is not declared in the “requires” clause.', 2,
-                        array($matcges[1], $fvName));
-            }
-            else
-                $types = $fvInstance->getTypes();
-
-            $tmp = array();
-
-            foreach($types as $i => $type) {
-
-                $tmp[]  = get_class($type);
-                $valid |= $type->predicate($call->getResult());
+                $message = sprintf(
+                    'An exception (%s) occured and no @throwable was declared.',
+                    get_class($exception)
+                );
+                $this->getLog()->log($message, Hoa_Log::TEST, $log);
+                return;
             }
 
-            $table['@ensures'][$fvName] = implode(' ∧ ', $tmp);
+            $throwable = $this->getClause('throwable');
 
-            $validations[$fvName] = (bool) $valid;
+            if(false === $throwable->exceptionExists(get_class($exception))) {
+
+                $message = sprintf(
+                    'The exception %s was thrown but not declared in the ' .
+                    '@throwable clause.',
+                    get_class($exception)
+                );
+                $this->getLog()->log($message, Hoa_Log::TEST, $log);
+                return;
+            }
+
+            $message = sprintf(
+                'The exception %s was thrown and it is normal.',
+                get_class($exception)
+            );
+            $log['status'] = SUCCEED;
+            $this->getLog()->log($message, Hoa_Log::TEST, $log);
+
+            return;
         }
 
-        $table['result'] = gettype($call->getResult()) . ' : ' . $call->getResult();
+        foreach($ensures->getVariables() as $e => $variable) {
 
-        if(!isset($validations['\result']))
-            // LOG : \result must be declared.
-            throw new Hoa_Test_Praspel_Exception(
-                'Test cannot be evaluated because no “\result” free-variable ' .
-                'in the “ensures” clause was declared.', 3);
+            if('\result' == $variable->getName()) {
 
-        $out = true;
+                $handle = $variable->getChoosenType()->predicate(
+                    $call->getResult()
+                );
 
-        foreach($validations as $i => $valid)
-            $out &= $valid;
+                if(false === $handle) {
 
-        $out = (bool) $out;
-
-        //print_r($table);
-
-        if(true === $out) {
-
-            //throw new Hoa_Test_Praspel_Exception(
-            //    'Test succeed.', 4);
-            //var_dump('Test succeed');
-            //var_dump($call->getResult());
-            //echo "\n";
-            $this->_log->log(true, Hoa_Log::TEST);
+                    $message = 'Returned ' . $call->getResult();
+                    $this->getLog()->log($message, Hoa_Log::TEST, $log);
+                    return;
+                }
+            }
         }
-        else {
 
-            //throw new Hoa_Test_Praspel_Exception(
-            //    'Test failed.', 5);
-            //var_dump('Test failed.');
-            //var_dump($call->getResult());
-            //echo "\n";
-            $this->_log->log(false, Hoa_Log::TEST);
-        }
+        $log['status'] = SUCCEED;
+        $this->getLog()->log('Bingo!', Hoa_Log::TEST, $log);
+
+        return;
     }
 
     /**
@@ -460,7 +411,7 @@ class Hoa_Test_Praspel {
      * @access  public
      * @return  string
      */
-    public function getClassName ( ) {
+    public function getClass ( ) {
 
         return $this->_class;
     }
@@ -471,7 +422,7 @@ class Hoa_Test_Praspel {
      * @access  public
      * @return  string
      */
-    public function getMethodName ( ) {
+    public function getMethod ( ) {
 
         return $this->_method;
     }
@@ -482,9 +433,9 @@ class Hoa_Test_Praspel {
      * @access  public
      * @return  string
      */
-    public function getFilename ( ) {
+    public function getFile ( ) {
 
-        return $this->_method;
+        return $this->_file;
     }
 
     /**
@@ -507,6 +458,17 @@ class Hoa_Test_Praspel {
     public function getEndLine ( ) {
 
         return $this->_endLine;
+    }
+
+    /**
+     * Get log.
+     *
+     * @access  public
+     * @return  Hoa_Log
+     */
+    public function getLog ( ) {
+
+        return $this->_log;
     }
 
     /**

@@ -236,7 +236,14 @@ class Hoa_Test_Oracle_Eyes implements Hoa_Framework_Parameterizable {
                                 '        $file      = \'' . $incubator . $file . '\';' . "\n" .
                                 '        $startLine = ' . $method->getStartLine() . ";\n" .
                                 '        $endLine   = ' . $method->getEndLine() . ";\n" .
-                                '        ' . $praspel . "\n" .
+                                '        ' . $praspel .
+                                '$praspel->call(' . "\n" .
+                                '            $this->_convict,' . "\n" .
+                                '            \'__hoa_magicCaller\',' . "\n" .
+                                '            \'' . $class . '\',' . "\n" .
+                                '            \'' . $method->getName() . '\'' . "\n" .
+                                '        );' . "\n" .
+                                '        $praspel->verify();' . "\n" .
                                 '    }';
                     $foot    .= '        ' . $j . ' => \'' . $method->getName() . '\',' . "\n";
                 }
