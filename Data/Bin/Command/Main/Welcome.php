@@ -122,6 +122,10 @@ class WelcomeCommand extends Hoa_Console_Command_Abstract {
                 '    ' . parent::stylize('tree', 'command'),
                 'Print contents of a directory.'
             ),
+            array(
+                '    ' . parent::stylize('uuid', 'command'),
+                'Generate an universally unique identifier.'
+            ),
 
             // Protocol.
             array('Protocol'),
