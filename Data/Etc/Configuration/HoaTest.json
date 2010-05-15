@@ -12,7 +12,7 @@
         "convict.recursive"       : true,
         "convict.result"          : {},
 
-        "current.root"            : "hoa://Data/Variable/Test/(:_YmdHis:)/",
+        "current.root"            : "hoa://Data/Variable/Test/Repository/(:_YmdHis:)/",
 
         "test.incubator"          : "(:%current.root:)Incubator/",
         "test.ordeal.oracle"      : "(:%current.root:)Ordeal/Oracle/",

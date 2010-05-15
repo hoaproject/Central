@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Generated the 2010-03-14T17:03:52.000000Z
+ * Generated the 2010-05-15T19:49:15.000000Z
  */
 
 return array (
@@ -15,7 +15,7 @@ return array (
     'convict.result' => 
     array (
     ),
-    'current.root' => 'hoa://Data/Variable/Test/(:_YmdHis:)/',
+    'current.root' => 'hoa://Data/Variable/Test/Repository/(:_YmdHis:)/',
     'test.incubator' => '(:%current.root:)Incubator/',
     'test.ordeal.oracle' => '(:%current.root:)Ordeal/Oracle/',
     'test.ordeal.battleground' => '(:%current.root:)Ordeal/Battleground/',
