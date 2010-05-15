@@ -113,19 +113,54 @@ class Hoa_Test_Praspel {
      *
      * @var Hoa_Test_Praspel array
      */
-    protected $_clauses = array();
+    protected $_clauses   = array();
 
     /**
      * The call object.
      *
      * @var Hoa_Test_Praspel_Call object
      */
-    protected $_call    = null;
+    protected $_call      = null;
 
     /**
      *
      */
-    protected $_log     = null;
+    protected $_log       = null;
+
+    /**
+     * Class name that contains the method.
+     *
+     * @var Hoa_Test_Praspel string
+     */
+    protected $_class     = null;
+
+    /**
+     * Method name that is tested.
+     *
+     * @var Hoa_Test_Praspel string
+     */
+    protected $_method    = null;
+
+    /**
+     * File where the method is.
+     *
+     * @var Hoa_Test_Praspel string
+     */
+    protected $_file      = null;
+
+    /**
+     * Line where the method starts.
+     *
+     * @var Hoa_Test_Praspel int
+     */
+    protected $_startLine = null;
+
+    /**
+     * Line where the method ends.
+     *
+     * @var Hoa_Test_Praspel int
+     */
+    protected $_endLine   = null;
 
 
 
@@ -133,9 +168,20 @@ class Hoa_Test_Praspel {
      * Constructor. Create a default “requires” clause.
      *
      * @access  public
+     * @param   string  $class        Class that contains the method.
+     * @param   string  $method       Method name that is tested.
+     * @param   string  $file         File where the method is.
+     * @param   int     $startLine    Line where the method starts.
+     * @param   int     $endLine      Line where the method ends.
      * @return  void
      */
-    public function __construct ( ) {
+    public function __construct ( $class, $method, $file, $startLine, $endLine ) {
+
+        $this->_class     = $class;
+        $this->_method    = $method;
+        $this->_file      = $file;
+        $this->_startLine = $startLine;
+        $this->_endLine   = $endLine;
 
         $this->_log = Hoa_Log::getChannel(
             self::LOG_CHANNEL,
@@ -405,6 +451,61 @@ class Hoa_Test_Praspel {
     public function getCall ( ) {
 
         return $this->_call;
+    }
+
+    /**
+     * Get class name that contains the method.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getClassName ( ) {
+
+        return $this->_class;
+    }
+
+    /**
+     * Get method name that is tested.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getMethodName ( ) {
+
+        return $this->_method;
+    }
+
+    /**
+     * Get file name where the method is.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getFilename ( ) {
+
+        return $this->_method;
+    }
+
+    /**
+     * Get line where the method starts.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getStartLine ( ) {
+
+        return $this->_startLine;
+    }
+
+    /**
+     * Get line where the method ends.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getEndLine ( ) {
+
+        return $this->_endLine;
     }
 
     /**
