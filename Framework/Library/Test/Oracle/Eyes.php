@@ -48,76 +48,6 @@ import('Test.Oracle.Exception');
 import('Test.Praspel.Compiler');
 
 /**
- * Hoa_Pom
- */
-import('Pom.~');
-
-/**
- * Hoa_Pom_Token_Root
- */
-import('Pom.Token.Root');
-
-/**
- * Hoa_Pom_Token_New
- */
-import('Pom.Token.New');
-
-/**
- * Hoa_Pom_Token_String
- */
-import('Pom.Token.String');
-
-/**
- * Hoa_Pom_Token_String_Null
- */
-import('Pom.Token.String.Null');
-
-/**
- * Hoa_Pom_Token_Class
- */
-import('Pom.Token.Class');
-
-/**
- * Hoa_Pom_Token_Instruction
- */
-import('Pom.Token.Instruction');
-
-/**
- * Hoa_Pom_Token_LateParsing
- */
-import('Pom.Token.LateParsing');
-
-/**
- * Hoa_Pom_Token_Variable
- */
-import('Pom.Token.Variable');
-
-/**
- * Hoa_Pom_Token_Operation
- */
-import('Pom.Token.Operation');
-
-/**
- * Hoa_Pom_Token_Operator_Assignement
- */
-import('Pom.Token.Operator.Assignement');
-
-/**
- * Hoa_Pom_Token_Whitespace
- */
-import('Pom.Token.Whitespace');
-
-/**
- * Hoa_Pom_Token_Php
- */
-import('Pom.Token.Php');
-
-/**
- * Hoa_Pom_Parser_Lexer
- */
-import('Pom.Parser.Lexer');
-
-/**
  * Class Hoa_Test_Oracle_Eyes.
  *
  * .
@@ -234,126 +164,73 @@ class Hoa_Test_Oracle_Eyes implements Hoa_Framework_Parameterizable {
         $battleground = $this->getFormattedParameter('test.ordeal.battleground');
         $files        = $this->getFormattedParameter('convict.result');
         $prefix       = $this->getFormattedParameter('test.ordeal.methodPrefix');
+        $compiler     = new Hoa_Test_Praspel_Compiler();
 
-        foreach($files as $i => $file) {
+        foreach($files as $e => $file) {
 
-            $parser  = Hoa_Pom::parse($incubator . $file, Hoa_Pom::TOKENIZE_FILE);
-            $root    = new Hoa_Pom_Token_Root();
-            $out     = null;
-            $classes = array(); // only classes names.
+            if(   !is_dir(dirname($battleground . $file))
+               && false === @mkdir(dirname($battleground . $file), 0777, true))
+                throw new Hoa_Test_Oracle_Exception(
+                    'Cannot create the ordeal.battleground in %s.',
+                    0, dirname($battleground . $file));
 
-            $root->addElement(new Hoa_Pom_Token_Php('<?php'));
+            require_once $incubator . $file;
 
-            foreach($parser->getElements() as $i => $element)
-                if($element instanceof Hoa_Pom_Token_Class) {
+            preg_match_all(
+                '#@class\s+([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*);#',
+                $handle = file_get_contents($incubator . $file),
+                $matches
+            );
 
-                    $classes[] = 'Test_' . $element->getName()->getString();
+            $handle  = explode("\n", $handle);
+            $classes = $matches[1];
+            $out     = '<?php';
 
-                    $out = new Hoa_Pom_Token_Class(
-                        new Hoa_Pom_Token_String(
-                            'Test_' . $element->getName()->getString()
-                        )
-                    );
-                    $out->addAttribute(
-                        new Hoa_Pom_Token_Class_Attribute(
-                            new Hoa_Pom_Token_Variable(
-                                new Hoa_Pom_Token_String('_convict')
-                            ),
-                            new Hoa_Pom_Token_String_Null('null')
-                        )
-                    );
+            foreach($classes as $i => $class) {
 
-                    $setup = new Hoa_Pom_Token_Class_Method(
-                        new Hoa_Pom_Token_String('setUp')
-                    );
+                $rClass   = new ReflectionClass($class);
+                $methods  = $rClass->getMethods(
+                    ReflectionMethod::IS_STATIC    |
+                    ReflectionMethod::IS_PUBLIC    |
+                    ReflectionMethod::IS_PROTECTED |
+                    ReflectionMethod::IS_PRIVATE   |
+                    ReflectionMethod::IS_FINAL
+                );
+                $out     .= "\n\n" .
+                            '/**' . "\n" .
+                            ' * Test class for ' . $class . ' in:' . "\n" .
+                            ' * ' . $incubator . $file . ".\n" .
+                            ' */' . "\n" .
+                            'class Hoatest_' . $class . ' {' . "\n\n" .
+                            '    /**' . "\n" .
+                            '     * Memorize the instance.' . "\n" .
+                            '     */' . "\n" .
+                            '    public $_convict = null;' . "\n\n";
 
-                    if(true === $element->isAbstract()) {
+                foreach($methods as $j => $method) {
 
-                        $out->addMethod($setup);
-                        continue;
-                    }
+                    $comment  = $method->getDocComment();
+                    $comment  = preg_replace('#^(\s*/\*\*\s*)#', '', $comment);
+                    $comment  = preg_replace('#(\s*\*/)$#',      '', $comment);
+                    $comment  = preg_replace('#^(\s*\*\s*)#m',   '', $comment);
 
-                    foreach($element->getMethods() as $e => $method) {
+                    $compiler->compile($comment);
 
-                        $construct = strtolower($method->getName()->getString()) == '__construct';
-
-                        $praspel  = Hoa_Test_Praspel_Compiler::compile(
-                            $method->getComment()->getComment()
-                        );
-                        $praspel .= "\n" .
-                                    (true === $construct
-                                         ? '$this->_convict = '
-                                         : ''
-                                    ) .
-                                    '$praspel->call(' . "\n" .
-                                    (true === $construct
-                                         ? '    \'' . $element->getName()->getString() . "',\n"
-                                         : '    $this->_convict,' . "\n"
-                                    ) .
-                                    '    \'' . $prefix . 'magicCaller\',' . "\n" .
-                                    '    \'' . $method->getName()->getString() . '\'' . "\n" .
-                                    ');' . "\n\n" .
-                                    '$praspel->verify();' . "\n";
-                        $praspel  = '        ' .
-                                    str_replace("\n", "\n        ", trim($praspel));
-                        $praspel  = "\n\n" . $praspel . "\n    ";
-
-                        $praspel  = array(array(
-                            0 => -1,
-                            1 => $praspel,
-                            2 => -1,
-                        ));
-
-                        $name = new Hoa_Pom_Token_String(
-                            '__test_' . $method->getName()->getString()
-                        );
-                        $meth = new Hoa_Pom_Token_Class_Method($name);
-                        $meth->addBody(new Hoa_Pom_Token_LateParsing($praspel));
-
-                        $setup->addBody(
-                            new Hoa_Pom_Token_Instruction(
-                                new Hoa_Pom_Token_Call_Method(
-                                    new Hoa_Pom_Token_Variable(
-                                        new Hoa_Pom_Token_String('this')
-                                    ),
-                                    $name
-                                )
-                            )
-                        );
-                        $out->addMethod($meth);
-                    }
-
-                    $out->addMethod($setup);
-                    $root->addElement($out);
+                    $praspel  = $compiler->getRoot()->__toString();
+                    $praspel  = str_replace("\n", "\n        ", $praspel);
+                    $out     .= "\n\n" .
+                                '    public function __test_' . $method->getName() .
+                                ' ( ) {' . "\n\n" .
+                                '        ' . $praspel . "\n" .
+                                '    }';
                 }
 
-            $root->addElement(new Hoa_Pom_Token_Whitespace("\n"));
+                $out     .= "\n" . '}';
+            }
 
-            foreach($classes as $i => $class)
-                $root->addElements(array(
-                    new Hoa_Pom_Token_Whitespace("\n"),
-                    new Hoa_Pom_Token_Instruction(
-                        new Hoa_Pom_Token_Operation(array(
-                            new Hoa_Pom_Token_Variable(
-                                new Hoa_Pom_Token_String('bootstrap')
-                            ),
-                            new Hoa_Pom_Token_Operator_Assignement('='),
-                            new Hoa_Pom_Token_New(
-                                new Hoa_Pom_Token_String($class)
-                            )
-                        ))
-                    ),
-                    new Hoa_Pom_Token_Instruction(
-                        new Hoa_Pom_Token_Call_Method(
-                            new Hoa_Pom_Token_Variable(
-                                new Hoa_Pom_Token_String('bootstrap')
-                            ),
-                            new Hoa_Pom_Token_String('setUp')
-                        )
-                    )
-                ));
-
-            file_put_contents($battleground . $file, Hoa_Pom::dump($root));
+            file_put_contents($battleground . $file, $out);
         }
+
+        return;
     }
 }
