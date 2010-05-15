@@ -144,37 +144,37 @@ class Hoa_Log {
     /**
      * Stack index: timestamp.
      *
-     * @const int
+     * @const string
      */
-    const STACK_TIMESTAMP   =   0;
+    const STACK_TIMESTAMP   =   'timestamp';
 
     /**
      * Stack index: message.
      *
-     * @const int
+     * @const string
      */
-    const STACK_MESSAGE     =   1;
+    const STACK_MESSAGE     =   'message';
 
     /**
      * Stack index: priority.
      *
-     * @const int
+     * @const string
      */
-    const STACK_PRIORITY    =   2;
+    const STACK_PRIORITY    =   'priority';
 
     /**
      * Stack index: memory.
      *
-     * @const int
+     * @const string
      */
-    const STACK_MEMORY      =   3;
+    const STACK_MEMORY      =   'memory';
 
     /**
      * Stack index: memory peak.
      *
-     * @const int
+     * @const string
      */
-    const STACK_MEMORY_PEAK =   4;
+    const STACK_MEMORY_PEAK =   'memory_peak';
 
     /**
      * Multiton.
@@ -236,10 +236,13 @@ class Hoa_Log {
      */
     private function __construct ( $stream = null ) {
 
-        if(!is_array($stream))
-            $this->addOutputStream($stream);
-        else
-            $this->addOutputStreams($stream);
+        if(null !== $stream) {
+
+            if(!is_array($stream))
+                $this->addOutputStream($stream);
+            else
+                $this->addOutputStreams($stream);
+        }
 
         $this->_backtrace = new Hoa_Log_Backtrace();
     }
@@ -439,17 +442,22 @@ class Hoa_Log {
      * @param   string  $message    The log message.
      * @param   int     $type       Type of message (please, see the class
      *                              constants).
+     * @param   array   $extra      Extra dynamic informations.
      * @return  void
      */
-    public function log ( $message, $type = self::DEBUG ) {
+    public function log ( $message, $type = self::DEBUG, $extra = array() ) {
 
-        $handle = $this->_stack[] = array(
-            self::STACK_TIMESTAMP   => microtime(true),
-            self::STACK_MESSAGE     => $message,
-            self::STACK_PRIORITY    => $type,
-            self::STACK_MEMORY      => memory_get_usage(),
-            self::STACK_MEMORY_PEAK => memory_get_peak_usage()
-        ) + $this->getAddedStackInformations();
+        $handle = $this->_stack[] = array_merge(
+            array(
+                self::STACK_TIMESTAMP   => microtime(true),
+                self::STACK_MESSAGE     => $message,
+                self::STACK_PRIORITY    => $type,
+                self::STACK_MEMORY      => memory_get_usage(),
+                self::STACK_MEMORY_PEAK => memory_get_peak_usage()
+            ),
+            $this->getAddedStackInformations(),
+            $extra
+        );
 
         $filters = $this->getFilters();
 
