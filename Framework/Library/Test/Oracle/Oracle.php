@@ -48,51 +48,6 @@ import('Test.Oracle.Exception');
 import('Test.Oracle.Eyes');
 
 /**
- * Hoa_Pom
- */
-import('Pom.~');
-
-/**
- * Hoa_Pom_Token_Class_Method
- */
-import('Pom.Token.Class.Method');
-
-/**
- * Hoa_Pom_Token_Call_Attribute
- */
-import('Pom.Token.Call.Attribute');
-
-/**
- * Hoa_Pom_Token_Call_Function
- */
-import('Pom.Token.Call.Function');
-
-/**
- * Hoa_Pom_Token_Instruction
- */
-import('Pom.Token.Instruction');
-
-/**
- * Hoa_Pom_Token_Operation
- */
-import('Pom.Token.Operation');
-
-/**
- * Hoa_Pom_Token_Operator_Assignement
- */
-import('Pom.Token.Operator.Assignement');
-
-/**
- * Hoa_Pom_Token_ControlStructure_Return
- */
-import('Pom.Token.ControlStructure.Return');
-
-/**
- * Hoa_Pom_Token_Array
- */
-import('Pom.Token.Array');
-
-/**
  * Class Hoa_Test_Oracle.
  *
  * .
@@ -209,6 +164,8 @@ class Hoa_Test_Oracle implements Hoa_Framework_Parameterizable {
         $this->prepareOrdealOracle();
         $this->prepareOrdealBattleground();
         $this->prepareEyes();
+
+        return;
     }
 
     /**
@@ -328,136 +285,77 @@ class Hoa_Test_Oracle implements Hoa_Framework_Parameterizable {
             throw new Hoa_Test_Oracle_Exception(
                 'Cannot create the ordeal.oracle in %s.', 5, $oracle);
 
-        $magicSetter = new Hoa_Pom_Token_Class_Method(
-            new Hoa_Pom_Token_String($prefix . 'magicSetter')
-        );
-        $magicSetter->referenceMe(false);
-        $magicSetter->addArguments(array(
-            new Hoa_Pom_Token_Function_Argument(
-                new Hoa_Pom_Token_Variable(
-                    new Hoa_Pom_Token_String('attribut')
-                )
-            ),
-            new Hoa_Pom_Token_Function_Argument(
-                new Hoa_Pom_Token_Variable(
-                    new Hoa_Pom_Token_String('value')
-                )
-            )
-        ));
-        $magicSetter->addBody(
-            new Hoa_Pom_Token_Instruction(
-                new Hoa_Pom_Token_Operation(array(
-                    new Hoa_Pom_Token_Call_Attribute(
-                        new Hoa_Pom_Token_Variable(
-                            new Hoa_Pom_Token_String('this')
-                        ),
-                        new Hoa_Pom_Token_Variable(
-                            new Hoa_Pom_Token_String('attribut')
-                        )
-                    ),
-                    new Hoa_Pom_Token_Operator_Assignement('='),
-                    new Hoa_Pom_Token_Variable(
-                        new Hoa_Pom_Token_String('value')
-                    )
-                ))
-            )
-        );
+        $magic = explode(
+                     "\n",
+                     '    public function ' . $prefix . 'magicSetter ( ' .
+                     '$attribut, $value ) {' . "\n\n" .
+                     '        $old             = $this->$attribut;' . "\n" .
+                     '        $this->$attribut = $value;' . "\n\n" .
+                     '        return $old;' . "\n" .
+                     '    }' . "\n\n" .
+                     '    public function ' . $prefix . 'magicGetter ( ' .
+                     '$attribut ) {' . "\n\n" .
+                     '        return $this->$attribut;' . "\n" .
+                     '    }' . "\n\n" .
+                     '    public function ' . $prefix . 'magicCaller ( ' .
+                     '$method ) {' . "\n\n" .
+                     '        $arguments = func_get_args();' . "\n" .
+                     '        array_shift($arguments);' . "\n" .
+                     '        return call_user_func_array(' . "\n" .
+                     '            array($this, $method),' . "\n" .
+                     '            $arguments' . "\n" .
+                     '        );' . "\n" .
+                     '    }' . "\n" .
+                     '}'
+                 );
 
-        $magicGetter = new Hoa_Pom_Token_Class_Method(
-            new Hoa_Pom_Token_String($prefix . 'magicGetter')
-        );
-        $magicGetter->referenceMe(false);
-        $magicGetter->addArguments(array(
-            new Hoa_Pom_Token_Function_Argument(
-                new Hoa_Pom_Token_Variable(
-                    new Hoa_Pom_Token_String('attribut')
-                )
-            )
-        ));
-        $magicGetter->addBody(
-            new Hoa_Pom_Token_ControlStructure_Return(
-                new Hoa_Pom_Token_Call_Attribute(
-                    new Hoa_Pom_Token_Variable(
-                        new Hoa_Pom_Token_String('this')
-                    ),
-                    new Hoa_Pom_Token_Variable(
-                        new Hoa_Pom_Token_String('attribut')
-                    )
-                )
-            )
-        );
+        foreach($convict as $e => $file) {
 
-        $magicCaller = new Hoa_Pom_Token_Class_Method(
-            new Hoa_Pom_Token_String($prefix . 'magicCaller')
-        );
-        $magicCaller->referenceMe(false);
-        $magicCaller->addArguments(array(
-            new Hoa_Pom_Token_Function_Argument(
-                new Hoa_Pom_Token_Variable(
-                    new Hoa_Pom_Token_String('method')
-                )
-            )
-        ));
-        $magicCaller->addBody(
-            new Hoa_Pom_Token_Instruction(
-                new Hoa_Pom_Token_Operation(array(
-                    new Hoa_Pom_Token_Variable(
-                        new Hoa_Pom_Token_String('arguments')
-                    ),
-                    new Hoa_Pom_Token_Operator_Assignement('='),
-                    new Hoa_Pom_Token_Call_Function(
-                        new Hoa_Pom_Token_String('func_get_args')
-                    )
-                ))
-            )
-        );
-        $magicCaller->addBody(
-            new Hoa_Pom_Token_Instruction(
-                new Hoa_Pom_Token_Call_Function(
-                    new Hoa_Pom_Token_String('array_shift'),
-                    array(
-                        new Hoa_Pom_Token_Variable(
-                            new Hoa_Pom_Token_String('arguments')
-                        )
-                    )
-                )
-            )
-        );
-        $magicCaller->addBody(
-            new Hoa_Pom_Token_ControlStructure_Return(
-                new Hoa_Pom_Token_Call_Function(
-                    new Hoa_Pom_Token_String('call_user_func_array'),
-                    array(
-                        new Hoa_Pom_Token_Array(array(
-                            new Hoa_Pom_Token_Variable(
-                                new Hoa_Pom_Token_String('this')
-                            ),
-                            new Hoa_Pom_Token_Variable(
-                                new Hoa_Pom_Token_String('method')
-                            )
-                        )),
-                        new Hoa_Pom_Token_Variable(
-                            new Hoa_Pom_Token_String('arguments')
-                        )
-                    )
-                )
-            )
-        );
+            if(   !is_dir(dirname($oracle . $file))
+               && false === @mkdir(dirname($oracle . $file), 0777, true))
+                throw new Hoa_Test_Oracle_Exception(
+                    'Cannot create the ordeal.oracle in %s.',
+                    6, dirname($oracle . $file));
 
-        foreach($convict as $i => $file) {
+            require_once $incubator . $file;
 
-            $root = Hoa_Pom::parse($incubator . $file, Hoa_Pom::TOKENIZE_FILE);
+            preg_match_all(
+                '#@class\s+([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*);#',
+                $handle = file_get_contents($incubator . $file),
+                $matches
+            );
 
-            foreach($root->getElements() as $i => $element)
-                if($element instanceof Hoa_Pom_Token_Class)
-                    $element->addMethods(array(
-                        $magicSetter,
-                        $magicGetter,
-                        $magicCaller
-                    ));
+            $handle  = explode("\n", $handle);
+            $classes = $matches[1];
 
-            file_put_contents($oracle . $file, Hoa_Pom::dump($root));
+            if(empty($classes))
+                throw new Hoa_Test_Oracle_Exception(
+                    'Classes in %s is not marked for testing. ' .
+                    'Maybe you forget to add the @class tag.',
+                    42, $incubator . $file);
+
+            foreach($classes as $i => $class) {
+
+                $c    = new ReflectionClass($class);
+                $line = $handle[$c->getEndLine() - 1];
+
+                for($end = strlen($line) - 1; $line[$end] != '}'; $end--);
+
+                $line[$end]                   = ' ';
+                $handle[$c->getEndLine() - 1] = $line;
+
+                array_splice(
+                    $handle,
+                    $c->getEndLine(),
+                    0,
+                    $magic
+                );
+            }
+
+            file_put_contents($oracle . $file, implode("\n", $handle));
         }
+
+        return;
     }
 
     /**
@@ -473,7 +371,7 @@ class Hoa_Test_Oracle implements Hoa_Framework_Parameterizable {
 
         if(null === $battleground)
             throw new Hoa_Test_Oracle_Exception(
-                'A directory for ordeal.battleground must be specified.', 6);
+                'A directory for ordeal.battleground must be specified.', 7);
 
         if(is_dir($battleground)) {
 
@@ -493,7 +391,9 @@ class Hoa_Test_Oracle implements Hoa_Framework_Parameterizable {
 
         if(false === @mkdir($battleground, 0777, true))
             throw new Hoa_Test_Oracle_Exception(
-                'Cannot create the ordeal.battleground in %s.', 7, $battleground);
+                'Cannot create the ordeal.battleground in %s.', 8, $battleground);
+
+        return;
     }
 
     /**

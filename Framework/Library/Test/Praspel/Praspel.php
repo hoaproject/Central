@@ -431,7 +431,7 @@ class Hoa_Test_Praspel {
      */
     public function __toString ( ) {
 
-        $out = null;
+        $out = '$praspel = new ' . get_class() . '();' . "\n\n";
 
         foreach($this->getClauses() as $i => $clause)
             $out .= $clause->__toString() . "\n";
