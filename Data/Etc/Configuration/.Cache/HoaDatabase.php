@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Generated the 2010-05-15T19:49:15.000000Z
+ * Generated the 2010-05-16T11:06:07.000000Z
  */
 
 return array (
@@ -33,7 +33,8 @@ return array (
     'connection.list.default.dsn' => 'mysql:host=localhost;dbname=foobar',
     'connection.list.default.username' => 'root',
     'connection.list.default.password' => '',
-    'connection.list.default.options' => array (
+    'connection.list.default.options' => 
+    array (
     ),
     'connection.autoload' => NULL,
   ),

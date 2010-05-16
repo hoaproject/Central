@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Generated the 2010-05-15T19:49:15.000000Z
+ * Generated the 2010-05-16T11:06:07.000000Z
  */
 
 return array (
@@ -15,14 +15,14 @@ return array (
     'convict.result' => 
     array (
     ),
-    'current.root' => 'hoa://Data/Variable/Test/Repository/(:_YmdHis:)/',
-    'test.incubator' => '(:%current.root:)Incubator/',
-    'test.ordeal.oracle' => '(:%current.root:)Ordeal/Oracle/',
-    'test.ordeal.battleground' => '(:%current.root:)Ordeal/Battleground/',
-    'test.ordeal.methodPrefix' => '__hoa_',
-    'test.dictionary' => 'hoa://Data/Variable/Test/Dictionary/',
-    'test.maxtry' => 64,
-    'user.type' => 'hoa://Data/Variable/Test/UserType/',
-    'report' => '(:%current.root:)Report/',
+    'root' => 'hoa://Data/Variable/Test/',
+    'repository' => '(:%root:)Repository/',
+    'revision' => '(:_YmdHis:)/',
+    'incubator' => '(:%repository:)(:%revision:)Incubator/',
+    'ordeal.oracle' => '(:%repository:)(:%revision:)Ordeal/Oracle/',
+    'ordeal.battleground' => '(:%repository:)(:%revision:)Ordeal/Battleground/',
+    'oracle.eyes.methodPrefix' => '__hoa_',
+    'dictionary' => '(:%root:)Dictionary/',
+    'maxtry' => 64,
   ),
 );
