@@ -349,7 +349,9 @@ class RunCommand extends Hoa_Console_Command_Abstract {
         cout('Usage   : test:run <options>');
         cout('Options :');
         cout(parent::makeUsageOptionsList(array(
-            'r'    => 'Revision of the repository tests.',
+            'r'    => 'Revision of the repository tests:' . "\n" .
+                      '    [revision name] for a specified revision;' . "\n" .
+                      '    HEAD            for the latest revision.',
             'f'    => 'File to test in the repository.',
             'c'    => 'Class to test in the file.',
             'm'    => 'Method to test in the class.',
