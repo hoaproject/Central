@@ -56,6 +56,11 @@ import('Stream.~');
 import('Stream.Io.Out');
 
 /**
+ * Hoa_File_Finder
+ */
+import('File.Finder');
+
+/**
  * Class RunCommand.
  *
  * .
@@ -181,13 +186,13 @@ class RunCommand extends Hoa_Console_Command_Abstract {
      * @var RunCommand array
      */
     protected $options     = array(
-        array('repository',  parent::REQUIRED_ARGUMENT, 'r'),
-        array('file',        parent::REQUIRED_ARGUMENT, 'f'),
-        array('class',       parent::REQUIRED_ARGUMENT, 'c'),
-        array('method',      parent::REQUIRED_ARGUMENT, 'm'),
-        array('iteration',   parent::REQUIRED_ARGUMENT, 'i'),
-        array('help',        parent::NO_ARGUMENT,       'h'),
-        array('help',        parent::NO_ARGUMENT,       '?')
+        array('revision',  parent::REQUIRED_ARGUMENT, 'r'),
+        array('file',      parent::REQUIRED_ARGUMENT, 'f'),
+        array('class',     parent::REQUIRED_ARGUMENT, 'c'),
+        array('method',    parent::REQUIRED_ARGUMENT, 'm'),
+        array('iteration', parent::REQUIRED_ARGUMENT, 'i'),
+        array('help',      parent::NO_ARGUMENT,       'h'),
+        array('help',      parent::NO_ARGUMENT,       '?')
     );
 
 
@@ -206,12 +211,36 @@ class RunCommand extends Hoa_Console_Command_Abstract {
         $method     = null;
         $iteration  = 1;
 
+        $path = 'hoa://Data/Etc/Configuration/.Cache/HoaTest.php';
+
+        if(!file_exists($path))
+            throw new Hoa_Console_Command_Exception(
+                'Configuration cache file %s does not exists.', 0, $path);
+
+        $configurations = require $path;
+        $repos          = Hoa_Framework_Parameter::zFormat(
+            $configurations['parameters']['repository'],
+            $configurations['keywords'],
+            $configurations['parameters']
+        );
+        $finder         = new Hoa_File_Finder(
+            $repos,
+            Hoa_File_Finder::LIST_DIRECTORY,
+            Hoa_File_Finder::SORT_MTIME |
+            Hoa_File_Finder::SORT_REVERSE
+        );
+        $revision       = basename($finder->getIterator()->current());
+
         while(false !== $c = parent::getOption($v)) {
 
             switch($c) {
 
                 case 'r':
-                    $repository = $v;
+                    $handle   = parent::parseSpecialValue(
+                        $v,
+                        array('HEAD' => $revision)
+                    );
+                    $revision = $handle[0];
                   break;
 
                 case 'f':
@@ -237,15 +266,40 @@ class RunCommand extends Hoa_Console_Command_Abstract {
             }
         }
 
-        if(null === $repository || null === $file)
+        $repository = $repos . $revision;
+
+        if(!is_dir($repository))
+            throw new Hoa_Console_Command_Exception(
+                'Repository %s does not exist.', 1, $repository);
+
+        // Yup, berk.
+        $configurations['parameters']['revision'] = $revision . '/';
+
+        if(null === $file)
             return $this->usage();
 
         Hoa_Log::getChannel(
             Hoa_Test_Praspel::LOG_CHANNEL
         )->addOutputStream(new Trivial($this));
 
-        require_once $repository . '/Ordeal/Oracle/' . $file;
-        require_once $repository . '/Ordeal/Battleground/' . $file;
+        $oracle       = Hoa_Framework_Parameter::zFormat(
+            $configurations['parameters']['ordeal.oracle'],
+            $configurations['keywords'],
+            $configurations['parameters']
+        );
+        $battleground = Hoa_Framework_Parameter::zFormat(
+            $configurations['parameters']['ordeal.battleground'],
+            $configurations['keywords'],
+            $configurations['parameters']
+        );
+
+        if(!file_exists($oracle . $file))
+            throw new Hoa_Console_Command_Exception(
+                'File %s does not exist in repository %s.',
+                2, array($file, $repository));
+
+        require_once $oracle . $file;
+        require_once $battleground . $file;
 
         if(null !== $class) {
 
@@ -295,7 +349,7 @@ class RunCommand extends Hoa_Console_Command_Abstract {
         cout('Usage   : test:run <options>');
         cout('Options :');
         cout(parent::makeUsageOptionsList(array(
-            'r'    => 'Repository of tests.',
+            'r'    => 'Revision of the repository tests.',
             'f'    => 'File to test in the repository.',
             'c'    => 'Class to test in the file.',
             'm'    => 'Method to test in the class.',
