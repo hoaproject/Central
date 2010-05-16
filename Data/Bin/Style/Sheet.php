@@ -98,8 +98,13 @@ class SheetStyle extends Hoa_Console_Interface_Style {
 
             'command' => array(
                 parent::COLOR_FOREGROUND_BLUE
-            )
+            ),
 
+            'attention' => array(
+                parent::COLOR_FOREGROUND_WHITE,
+                parent::COLOR_BACKGROUND_RED,
+                parent::TEXT_BOLD
+            ),
         ));
 
         return;
