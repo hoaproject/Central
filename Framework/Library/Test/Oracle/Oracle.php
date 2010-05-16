@@ -179,7 +179,7 @@ class Hoa_Test_Oracle implements Hoa_Framework_Parameterizable {
 
         $convict   = $this->getFormattedParameter('convict.directory');
         $recursive = $this->getFormattedParameter('convict.recursive');
-        $incubator = $this->getFormattedParameter('test.incubator');
+        $incubator = $this->getFormattedParameter('incubator');
 
         if(null === $convict)
             throw new Hoa_Test_Oracle_Exception(
@@ -257,9 +257,9 @@ class Hoa_Test_Oracle implements Hoa_Framework_Parameterizable {
     protected function prepareOrdealOracle ( ) {
 
         $convict   = $this->getFormattedParameter('convict.result');
-        $incubator = $this->getFormattedParameter('test.incubator');
-        $oracle    = $this->getFormattedParameter('test.ordeal.oracle');
-        $prefix    = $this->getFormattedParameter('test.ordeal.methodPrefix');
+        $incubator = $this->getFormattedParameter('incubator');
+        $oracle    = $this->getFormattedParameter('ordeal.oracle');
+        $prefix    = $this->getFormattedParameter('oracle.eyes.methodPrefix');
 
         if(null === $oracle)
             throw new Hoa_Test_Oracle_Exception(
@@ -367,7 +367,7 @@ class Hoa_Test_Oracle implements Hoa_Framework_Parameterizable {
      */
     protected function prepareOrdealBattleground ( ) {
 
-        $battleground = $this->getFormattedParameter('test.ordeal.battleground');
+        $battleground = $this->getFormattedParameter('ordeal.battleground');
 
         if(null === $battleground)
             throw new Hoa_Test_Oracle_Exception(
