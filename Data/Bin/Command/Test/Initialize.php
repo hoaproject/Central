@@ -124,13 +124,14 @@ class InitializeCommand extends Hoa_Console_Command_Abstract {
         );
 
         if(null !== $root)
-            $parameters['current.root'] = $root;
+            $parameters['root'] = $root;
 
         try {
 
             $test = Hoa_Test::getInstance($parameters);
             $test->run();
-            $root = $test->getFormattedParameter('current.root');
+            $revision = $test->getFormattedParameter('repository') .
+                        $test->getFormattedParameter('revision');
         }
         catch ( Hoa_Test_Exception $e ) {
 
@@ -145,7 +146,7 @@ class InitializeCommand extends Hoa_Console_Command_Abstract {
             parent::status('Initialize incubator from ' . $directory . '.', true);
             parent::status('Initialize ordeal/oracle.', true);
             parent::status('Initialize ordeal/battleground.', true);
-            cout('Root is ' . parent::stylize($root, 'info'));
+            cout('Root is ' . parent::stylize($revision, 'info'));
         }
         else
             cout($root);
