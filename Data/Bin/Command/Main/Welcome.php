@@ -178,6 +178,10 @@ class WelcomeCommand extends Hoa_Console_Command_Abstract {
                 'Run tests.',
             ),
             array(
+                '    ' . parent::stylize('remove', 'command'),
+                'Remove revisions in the tests repository.',
+            ),
+            array(
                 '    ' . parent::stylize('praspel', 'command'),
                 'Start the interactive interpreter for Praspel code.',
             ),
