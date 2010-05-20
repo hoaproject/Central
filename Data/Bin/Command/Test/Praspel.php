@@ -38,7 +38,7 @@ import('Test.Praspel.Compiler');
 /**
  * Class PraspelCommand.
  *
- * Praspel interpreter for Praspel.
+ * Interactive interpreter for Praspel.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2009 Ivan ENDERLIN.
