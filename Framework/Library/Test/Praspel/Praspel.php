@@ -305,11 +305,13 @@ class Hoa_Test_Praspel {
 
             if(false === $this->clauseExists('throwable')) {
 
-                $message = sprintf(
-                    'An exception (%s) occured and no @throwable was declared.',
-                    get_class($exception)
+                $this->getLog()->log(
+                    'An exception (' . get_class($exception) .
+                    ') occured and no @throwable was declared.',
+                    Hoa_Log::TEST,
+                    $log
                 );
-                $this->getLog()->log($message, Hoa_Log::TEST, $log);
+
                 return;
             }
 
@@ -317,21 +319,23 @@ class Hoa_Test_Praspel {
 
             if(false === $throwable->exceptionExists(get_class($exception))) {
 
-                $message = sprintf(
-                    'The exception %s was thrown but not declared in the ' .
-                    '@throwable clause.',
-                    get_class($exception)
+                $this->getLog()->log(
+                    'The exception ' . get_class($exception) .
+                    ' was thrown but not declared in the @throwable clause.',
+                    Hoa_Log::TEST,
+                    $log
                 );
-                $this->getLog()->log($message, Hoa_Log::TEST, $log);
+
                 return;
             }
 
-            $message = sprintf(
-                'The exception %s was thrown and it is normal.',
-                get_class($exception)
-            );
             $log['status'] = SUCCEED;
-            $this->getLog()->log($message, Hoa_Log::TEST, $log);
+            $this->getLog()->log(
+                'The exception ' . get_class($exception) .
+                ' was thrown and it is normal.',
+                Hoa_Log::TEST,
+                $log
+            );
 
             return;
         }
@@ -346,8 +350,12 @@ class Hoa_Test_Praspel {
 
                 if(false === $handle) {
 
-                    $message = 'Returned ' . $call->getResult();
-                    $this->getLog()->log($message, Hoa_Log::TEST, $log);
+                    $this->getLog()->log(
+                        'Returned ' . $call->getResult(),
+                        Hoa_Log::TEST,
+                        $log
+                    );
+
                     return;
                 }
             }
