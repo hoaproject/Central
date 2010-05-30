@@ -4,10 +4,1542 @@
 Informations             :
     - repository path    : /Users/hywan/Development/Hoa/Svn/Repository ;
     - path in repository : /Framework/Trunk/ ;
-    - generated at       : 2009-11-26T00:17:00.000000Z.
+    - generated at       : 2010-05-30T13:08:01.000000Z.
 -->
 
 <log>
+  <logentry revision="983">
+    <author>hywan</author>
+    <date>2010-05-29T21:04:03.711068Z</date>
+    <msg>Add auto-buffering in buffer -1.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="982">
+    <author>hywan</author>
+    <date>2010-05-29T11:10:31.838938Z</date>
+    <msg>Reset buffers when compile again.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="979">
+    <author>hywan</author>
+    <date>2010-05-24T18:44:24.898135Z</date>
+    <msg>Change initial value for $nextToken: enable to have an epsilon-transition on the first state on the first automate.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="978">
+    <author>hywan</author>
+    <date>2010-05-24T16:56:54.810364Z</date>
+    <msg>Bad variable case :-).</msg>
+    <paths>
+      <path action="M">Framework/Library/File/Read.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="960">
+    <author>hywan</author>
+    <date>2010-05-20T23:07:02.493851Z</date>
+    <msg>Rewrite API documentation.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Test/Praspel.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="959">
+    <author>hywan</author>
+    <date>2010-05-20T22:18:54.083417Z</date>
+    <msg>Just simplify the code.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Praspel.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="942">
+    <author>hywan</author>
+    <date>2010-05-16T18:15:16.923969Z</date>
+    <msg>Oops, forget to commit the special directory, that the tests repository.</msg>
+    <paths>
+      <path action="A">Data/Variable/Test/Repository</path>
+    </paths>
+  </logentry>
+  <logentry revision="941">
+    <author>hywan</author>
+    <date>2010-05-16T18:14:10.737530Z</date>
+    <msg>Add a style.</msg>
+    <paths>
+      <path action="M">Data/Bin/Style/Sheet.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="940">
+    <author>hywan</author>
+    <date>2010-05-16T18:08:57.454439Z</date>
+    <msg>Fix a bug when opening a file.</msg>
+    <paths>
+      <path action="M">Framework/Library/File/Link/Read.php</path>
+      <path action="M">Framework/Library/File/Link/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Link/Write.php</path>
+      <path action="M">Framework/Library/File/Read.php</path>
+      <path action="M">Framework/Library/File/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Temporary/Read.php</path>
+      <path action="M">Framework/Library/File/Temporary/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Temporary/Write.php</path>
+      <path action="M">Framework/Library/File/Write.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="937">
+    <author>hywan</author>
+    <date>2010-05-16T12:46:28.978545Z</date>
+    <msg>Add the test:remove command.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Main/Welcome.php</path>
+      <path action="A">Data/Bin/Command/Test/Remove.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="936">
+    <author>hywan</author>
+    <date>2010-05-16T12:45:56.232670Z</date>
+    <msg>Complete the usage.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Test/Run.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="935">
+    <author>hywan</author>
+    <date>2010-05-16T11:58:01.995597Z</date>
+    <msg>The --repository option is now --revision option, with the special keyword HEAD to get the latest built test revision.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Test/Run.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="934">
+    <author>hywan</author>
+    <date>2010-05-16T11:56:26.642767Z</date>
+    <msg>Just a little maintenance.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Test/Initialize.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="933">
+    <author>hywan</author>
+    <date>2010-05-16T11:50:51.904478Z</date>
+    <msg>Remake the Hoa_Test configurations.</msg>
+    <paths>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaCache.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaConsole.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaControllerFront.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaDatabase.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaFramework.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaTest.php</path>
+      <path action="M">Data/Etc/Configuration/HoaTest.json</path>
+    </paths>
+  </logentry>
+  <logentry revision="932">
+    <author>hywan</author>
+    <date>2010-05-16T11:07:38.711648Z</date>
+    <msg>Change package parameters/configurations.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Oracle/Eyes.php</path>
+      <path action="M">Framework/Library/Test/Oracle/Oracle.php</path>
+      <path action="M">Framework/Library/Test/Test.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="931">
+    <author>hywan</author>
+    <date>2010-05-15T20:32:07.781728Z</date>
+    <msg>Change the homescreen according to the new command.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Main/Welcome.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="930">
+    <author>hywan</author>
+    <date>2010-05-15T20:26:47.915160Z</date>
+    <msg>See previous revision about changing configuration of Hoa_Test.</msg>
+    <paths>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaCache.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaConsole.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaControllerFront.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaDatabase.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaFramework.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaTest.php</path>
+      <path action="M">Data/Etc/Configuration/HoaTest.json</path>
+    </paths>
+  </logentry>
+  <logentry revision="929">
+    <author>hywan</author>
+    <date>2010-05-15T20:14:58.839056Z</date>
+    <msg>New test:run command.</msg>
+    <paths>
+      <path action="D">Data/Bin/Command/Test/Launch.php</path>
+      <path action="A">Data/Bin/Command/Test/Run.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="928">
+    <author>hywan</author>
+    <date>2010-05-15T20:07:25.171201Z</date>
+    <msg>Enable to get arguments and result after a call.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Call.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Praspel.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="927">
+    <author>hywan</author>
+    <date>2010-05-15T20:07:03.666066Z</date>
+    <msg>Change the repository path.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Test.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="926">
+    <author>hywan</author>
+    <date>2010-05-15T19:30:33.648344Z</date>
+    <msg>And to the hlog() function :-).</msg>
+    <paths>
+      <path action="M">Framework/Library/Log/Log.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="925">
+    <author>hywan</author>
+    <date>2010-05-15T19:30:05.495141Z</date>
+    <msg>Change the stack constants value and add extra dynamic informations to the log() method.</msg>
+    <paths>
+      <path action="M">Framework/Library/Log/Log.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="924">
+    <author>hywan</author>
+    <date>2010-05-15T19:28:44.245098Z</date>
+    <msg>Remake the generator.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Oracle/Eyes.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Call.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Praspel.php</path>
+      <path action="M">Framework/Library/Test/Test.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="923">
+    <author>hywan</author>
+    <date>2010-05-15T15:24:58.478700Z</date>
+    <msg>Set default value for new informations.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Praspel.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="922">
+    <author>hywan</author>
+    <date>2010-05-15T15:24:44.481542Z</date>
+    <msg>Export classes and methods.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Oracle/Eyes.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="921">
+    <author>hywan</author>
+    <date>2010-05-15T15:04:02.831238Z</date>
+    <msg>Add support of new informations from the battleground.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Praspel.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="920">
+    <author>hywan</author>
+    <date>2010-05-15T14:56:10.678521Z</date>
+    <msg>Add informations to the battleground.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Oracle/Eyes.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Praspel.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="919">
+    <author>hywan</author>
+    <date>2010-05-15T14:55:43.069257Z</date>
+    <msg>Better memoryzing of arguments.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Urg/Type/PositiveFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/PositiveInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/ZeroOrNegativeFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/ZeroOrNegativeInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/ZeroOrPositiveFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/ZeroOrPositiveInteger.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="911">
+    <author>hywan</author>
+    <date>2010-05-15T02:21:10.659925Z</date>
+    <msg>Add the main:uuid command, enable to generate an universally unique identifier.</msg>
+    <paths>
+      <path action="A">Data/Bin/Command/Main/Uuid.php</path>
+      <path action="M">Data/Bin/Command/Main/Welcome.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="910">
+    <author>hywan</author>
+    <date>2010-05-15T02:19:40.195428Z</date>
+    <msg>Remove the POM dependency and rewrite the oracle: better code, better quality, faster, memory less etc.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Oracle/Eyes.php</path>
+      <path action="M">Framework/Library/Test/Oracle/Oracle.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Praspel.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="903">
+    <author>hywan</author>
+    <date>2010-05-12T02:20:17.594966Z</date>
+    <msg></msg>
+    <paths>
+      <path action="D">Data/Bin/Command/Praspel</path>
+    </paths>
+  </logentry>
+  <logentry revision="902">
+    <author>hywan</author>
+    <date>2010-05-12T02:18:35.692284Z</date>
+    <msg>And rename it :-).</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Test/Praspel.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="901">
+    <author>hywan</author>
+    <date>2010-05-12T02:18:08.923851Z</date>
+    <msg>Just move praspel:interactive to test:praspel.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Main/Welcome.php</path>
+      <path action="D">Data/Bin/Command/Praspel/Interactive.php</path>
+      <path action="A">Data/Bin/Command/Test/Praspel.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="900">
+    <author>hywan</author>
+    <date>2010-05-12T01:42:10.293897Z</date>
+    <msg>Rewrite the array type.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Urg/Type/Array.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Integerpp.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Undefined.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="899">
+    <author>hywan</author>
+    <date>2010-05-12T01:41:58.931883Z</date>
+    <msg>Disable for a moment.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Urg/Type/String.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="898">
+    <author>hywan</author>
+    <date>2010-05-12T01:41:44.959093Z</date>
+    <msg>Oops, forget to import the boundfloat type.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Urg/Type/SmallFloat.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="897">
+    <author>hywan</author>
+    <date>2010-05-12T01:40:58.758661Z</date>
+    <msg>Change visibility of the method chooseOneType() from protected to public.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Variable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="896">
+    <author>hywan</author>
+    <date>2010-05-12T01:40:30.281520Z</date>
+    <msg>Add a $ln paramter to cin().</msg>
+    <paths>
+      <path action="M">Framework/Library/Console/Core/Io.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="895">
+    <author>hywan</author>
+    <date>2010-05-12T01:39:42.751795Z</date>
+    <msg>Welcome to new command group dedicaded to Praspel!</msg>
+    <paths>
+      <path action="A">Data/Bin/Command/Praspel</path>
+      <path action="A">Data/Bin/Command/Praspel/Interactive.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="885">
+    <author>hywan</author>
+    <date>2010-05-11T02:31:37.619333Z</date>
+    <msg>Oops, forget to manage if an array have only a co-domain without a domain when mirror compiling.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/TypeDisjunction.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="884">
+    <author>hywan</author>
+    <date>2010-05-11T02:20:28.049216Z</date>
+    <msg>Add arguments managment.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Urg/Type/Array.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/ArrayInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Boolean.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/BoundFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/BoundInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/EvenInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Float.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Integer.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Integerpp.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/NegativeFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/NegativeInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/OddInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/PositiveFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/PositiveInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/SmallFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/SmallInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/String.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/StringWith.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Undefined.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Xn.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/ZeroOrNegativeFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/ZeroOrNegativeInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/ZeroOrPositiveFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/ZeroOrPositiveInteger.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="883">
+    <author>hywan</author>
+    <date>2010-05-11T02:19:57.136443Z</date>
+    <msg>Compile the object model to a PHP code that instanciates this object model (kind of mirror compiling :-p).</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Contract.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Throwable.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Compiler.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Praspel.php</path>
+      <path action="M">Framework/Library/Test/Praspel/TypeDisjunction.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="882">
+    <author>hywan</author>
+    <date>2010-05-10T23:59:43.855390Z</date>
+    <msg>Change bounds from -127*;128* to -128*;127.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Urg/Type/SmallFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/SmallInteger.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="881">
+    <author>hywan</author>
+    <date>2010-05-10T23:58:28.091693Z</date>
+    <msg>Update the predicate. Use &amp; instead of %.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Urg/Type/EvenInteger.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="880">
+    <author>hywan</author>
+    <date>2010-05-10T23:57:38.899866Z</date>
+    <msg>Update the predicate. Use &amp; instead of %.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Urg/Type/OddInteger.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="861">
+    <author>hywan</author>
+    <date>2010-05-09T11:15:44.351887Z</date>
+    <msg>Correct a parameter :-).</msg>
+    <paths>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaDatabase.php</path>
+      <path action="M">Data/Etc/Configuration/HoaDatabase.json</path>
+    </paths>
+  </logentry>
+  <logentry revision="800">
+    <author>hywan</author>
+    <date>2010-04-20T20:41:29.461500Z</date>
+    <msg>Forget a space into an exception message.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="798">
+    <author>hywan</author>
+    <date>2010-04-19T22:10:14.651702Z</date>
+    <msg>New array form: from types() to types(), instead of types() -&amp;gt; types().</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Compiler.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="797">
+    <author>hywan</author>
+    <date>2010-04-18T14:00:59.247787Z</date>
+    <msg>Forget one case when we should use the default value.</msg>
+    <paths>
+      <path action="M">Framework/Library/Controller/Router/Rewrite.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="796">
+    <author>hywan</author>
+    <date>2010-04-15T20:59:05.243082Z</date>
+    <msg>Mania: format code. And rewrite the completeWithDefaultValue (faster than before).</msg>
+    <paths>
+      <path action="M">Framework/Library/Controller/Router/Rewrite.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="795">
+    <author>hywan</author>
+    <date>2010-04-15T20:57:40.254745Z</date>
+    <msg>It might fix some problem with very short URL.</msg>
+    <paths>
+      <path action="M">Framework/Library/Controller/Router/Rewrite.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="794">
+    <author>hywan</author>
+    <date>2010-04-15T20:56:43.911614Z</date>
+    <msg>Oops, bad parameter end-name.</msg>
+    <paths>
+      <path action="M">Data/Etc/Configuration/HoaControllerFront.json</path>
+    </paths>
+  </logentry>
+  <logentry revision="793">
+    <author>hywan</author>
+    <date>2010-04-13T21:05:21.158541Z</date>
+    <msg>Complete API documentation according to the latest revisions.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="792">
+    <author>hywan</author>
+    <date>2010-04-13T20:57:35.659960Z</date>
+    <msg>More consistence DOT (epsilon-transitions are marked in the node label, not as an empty-arrow from this node).</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="791">
+    <author>hywan</author>
+    <date>2010-04-13T19:56:56.882472Z</date>
+    <msg>Add names to automata.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Compiler.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="790">
+    <author>hywan</author>
+    <date>2010-04-13T19:56:52.977383Z</date>
+    <msg>Set the end() and pre() methods to concrete. Add names support, for the __toString() method that export the compiler/automata to the DOT language.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="789">
+    <author>hywan</author>
+    <date>2010-04-13T11:52:02.120004Z</date>
+    <msg>Welcome to the new Praspel compiler (build with Hoa_Compiler_Ll1!).</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Compiler.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="788">
+    <author>hywan</author>
+    <date>2010-04-13T11:35:53.436445Z</date>
+    <msg>By default, an array is empty, not null.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/TypeArray.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="787">
+    <author>hywan</author>
+    <date>2010-04-13T11:34:55.495069Z</date>
+    <msg>Add the possibility to set two actions for one state with the format: \d,.*, e.g.: '7,f'.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="786">
+    <author>hywan</author>
+    <date>2010-04-11T18:12:00.772033Z</date>
+    <msg>Now, array is supported.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Type.php</path>
+      <path action="A">Framework/Library/Test/Praspel/TypeArray.php</path>
+      <path action="A">Framework/Library/Test/Praspel/TypeDisjunction.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Variable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="785">
+    <author>hywan</author>
+    <date>2010-04-11T18:09:13.578991Z</date>
+    <msg>Change the visibility of the _undefinedObject attribute from protected to private.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Urg/Type/Undefined.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="784">
+    <author>hywan</author>
+    <date>2010-04-11T18:08:12.836190Z</date>
+    <msg>Use static call instead of dynamic call.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Urg/Type/Float.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="783">
+    <author>hywan</author>
+    <date>2010-04-11T18:07:21.933308Z</date>
+    <msg>Add constructor to overload to Undefined constructor.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Urg/Type/Boolean.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Null.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Void.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="782">
+    <author>hywan</author>
+    <date>2010-04-11T18:06:07.402801Z</date>
+    <msg>New types in the standard library of Praspel :-).</msg>
+    <paths>
+      <path action="A">Framework/Library/Test/Urg/Type/SmallFloat.php</path>
+      <path action="A">Framework/Library/Test/Urg/Type/SmallInteger.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="773">
+    <author>hywan</author>
+    <date>2010-03-31T19:42:13.234827Z</date>
+    <msg>Oops, call bad method.</msg>
+    <paths>
+      <path action="M">Framework/Library/Session/Namespace.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="768">
+    <author>hywan</author>
+    <date>2010-03-28T21:11:39.484931Z</date>
+    <msg>Oops…</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Application/Start.php</path>
+      <path action="M">Data/Bin/Command/Controller/Create.php</path>
+      <path action="M">Data/Bin/Command/Controller/Whereis.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="767">
+    <author>hywan</author>
+    <date>2010-03-25T21:08:34.207502Z</date>
+    <msg>Now arguments of type could be another types: i: type(type(…), …).</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Type.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Variable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="766">
+    <author>hywan</author>
+    <date>2010-03-23T23:19:45.919289Z</date>
+    <msg>Add the possibility to set arguments to a type with a really fluid interface.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Type.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Variable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="765">
+    <author>hywan</author>
+    <date>2010-03-21T18:06:48.674215Z</date>
+    <msg>Let an empty column after status.</msg>
+    <paths>
+      <path action="M">Framework/Library/Console/Command/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="763">
+    <author>hywan</author>
+    <date>2010-03-21T12:29:48.319494Z</date>
+    <msg>Wouhaoo! Really a big fail. Hoa_Controller_Front has never use its own parameters file…</msg>
+    <paths>
+      <path action="D">Data/Etc/Configuration/.Cache/HoaController.php</path>
+      <path action="A">Data/Etc/Configuration/.Cache/HoaControllerFront.php</path>
+      <path action="D">Data/Etc/Configuration/HoaController.json</path>
+      <path action="A">Data/Etc/Configuration/HoaControllerFront.json</path>
+    </paths>
+  </logentry>
+  <logentry revision="752">
+    <author>hywan</author>
+    <date>2010-03-18T12:12:17.016456Z</date>
+    <msg>Set the “make_id_with.server” parameter to false by default (because of the REQUEST_TIME entry which create a new cache at each request).</msg>
+    <paths>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaCache.php</path>
+      <path action="M">Data/Etc/Configuration/HoaCache.json</path>
+      <path action="M">Framework/Library/Cache/Cache.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="751">
+    <author>hywan</author>
+    <date>2010-03-17T20:05:19.835409Z</date>
+    <msg>Write the undefined type.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Urg/Type/Undefined.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="744">
+    <author>hywan</author>
+    <date>2010-03-17T15:50:19.758786Z</date>
+    <msg>Add  support in “make_id_with” parameter, and ordering the “make_id_with” branch according the alphanumeric order.</msg>
+    <paths>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaCache.php</path>
+      <path action="M">Data/Etc/Configuration/HoaCache.json</path>
+      <path action="M">Framework/Library/Cache/Cache.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="743">
+    <author>hywan</author>
+    <date>2010-03-17T15:45:50.207421Z</date>
+    <msg>Allow user to give an empty (null) ID.</msg>
+    <paths>
+      <path action="M">Framework/Library/Cache/Frontend/Output.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="740">
+    <author>hywan</author>
+    <date>2010-03-14T17:12:22.479255Z</date>
+    <msg>Oops, forget a condition.</msg>
+    <paths>
+      <path action="M">Framework/Library/File/File.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="739">
+    <author>hywan</author>
+    <date>2010-03-14T17:04:54.652638Z</date>
+    <msg>Delete old Hoa_Cache configurations and update cache.</msg>
+    <paths>
+      <path action="D">Data/Etc/Configuration/.Cache/Cache.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaCache.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaConsole.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaController.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaDatabase.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaFramework.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaTest.php</path>
+      <path action="D">Data/Etc/Configuration/Cache.json</path>
+    </paths>
+  </logentry>
+  <logentry revision="738">
+    <author>hywan</author>
+    <date>2010-03-14T17:03:40.079655Z</date>
+    <msg>Add parameters to Hoa_Cache (especially for SQLite).</msg>
+    <paths>
+      <path action="M">Data/Etc/Configuration/HoaCache.json</path>
+    </paths>
+  </logentry>
+  <logentry revision="737">
+    <author>hywan</author>
+    <date>2010-03-14T16:56:50.020416Z</date>
+    <msg>Welcome to the new version of Hoa_Cache :-). Looks like a quick lifting ;-).</msg>
+    <paths>
+      <path action="A">Framework/Library/Cache/Backend.php</path>
+      <path action="D">Framework/Library/Cache/Backend/Abstract.php</path>
+      <path action="M">Framework/Library/Cache/Backend/Apc.php</path>
+      <path action="M">Framework/Library/Cache/Backend/Eaccelerator.php</path>
+      <path action="M">Framework/Library/Cache/Backend/File.php</path>
+      <path action="M">Framework/Library/Cache/Backend/Memcache.php</path>
+      <path action="M">Framework/Library/Cache/Backend/Sqlite.php</path>
+      <path action="M">Framework/Library/Cache/Backend/Xcache.php</path>
+      <path action="M">Framework/Library/Cache/Backend/ZendPlatform.php</path>
+      <path action="M">Framework/Library/Cache/Cache.php</path>
+      <path action="A">Framework/Library/Cache/Frontend.php</path>
+      <path action="M">Framework/Library/Cache/Frontend/Class.php</path>
+      <path action="M">Framework/Library/Cache/Frontend/Function.php</path>
+      <path action="M">Framework/Library/Cache/Frontend/Output.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="736">
+    <author>hywan</author>
+    <date>2010-03-14T11:32:19.292168Z</date>
+    <msg>Manage error if trying to open a file in a non-existing directory.</msg>
+    <paths>
+      <path action="M">Framework/Library/File/File.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="735">
+    <author>hywan</author>
+    <date>2010-03-13T20:00:08.966709Z</date>
+    <msg>The tell() method is now supported with file_get_contets() optimization.</msg>
+    <paths>
+      <path action="M">Framework/Library/File/File.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="734">
+    <author>hywan</author>
+    <date>2010-03-13T19:59:13.478955Z</date>
+    <msg>Mania: reformat code.</msg>
+    <paths>
+      <path action="M">Framework/Library/Controller/Front.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="733">
+    <author>hywan</author>
+    <date>2010-03-13T19:58:59.383278Z</date>
+    <msg>Prevent if a stream is closed before the end of the execution. It will be re-open again.</msg>
+    <paths>
+      <path action="M">Framework/Library/Stream/Stream.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="732">
+    <author>hywan</author>
+    <date>2010-03-13T19:58:03.977395Z</date>
+    <msg>Class now supports inherited parameters.</msg>
+    <paths>
+      <path action="M">Framework/Core/Parameter.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="731">
+    <author>hywan</author>
+    <date>2010-03-13T19:57:37.942813Z</date>
+    <msg>Manage null arguments.</msg>
+    <paths>
+      <path action="M">Framework/Core/Exception.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="730">
+    <author>hywan</author>
+    <date>2010-03-13T19:56:46.278196Z</date>
+    <msg>Reload cache configuration files.</msg>
+    <paths>
+      <path action="M">Data/Etc/Configuration/.Cache/Cache.php</path>
+      <path action="A">Data/Etc/Configuration/.Cache/HoaCache.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaConsole.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaController.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaDatabase.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaFramework.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaTest.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="729">
+    <author>hywan</author>
+    <date>2010-03-13T19:56:13.247202Z</date>
+    <msg>Oops, forget to reset default parameters :-).</msg>
+    <paths>
+      <path action="M">Data/Etc/Configuration/HoaCache.json</path>
+    </paths>
+  </logentry>
+  <logentry revision="728">
+    <author>hywan</author>
+    <date>2010-03-13T19:55:27.495086Z</date>
+    <msg>Just edit the comment.</msg>
+    <paths>
+      <path action="M">Data/Etc/Configuration/HoaController.json</path>
+    </paths>
+  </logentry>
+  <logentry revision="727">
+    <author>hywan</author>
+    <date>2010-03-13T19:55:01.418997Z</date>
+    <msg>Add Hoa_Cache configuration.</msg>
+    <paths>
+      <path action="A">Data/Etc/Configuration/HoaCache.json</path>
+    </paths>
+  </logentry>
+  <logentry revision="726">
+    <author>hywan</author>
+    <date>2010-03-13T15:48:41.083002Z</date>
+    <msg>Forget to add comments.</msg>
+    <paths>
+      <path action="M">Data/Etc/Configuration/HoaFramework.json</path>
+    </paths>
+  </logentry>
+  <logentry revision="725">
+    <author>hywan</author>
+    <date>2010-03-11T20:11:48.103173Z</date>
+    <msg>Prevent if a variable has no type.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Variable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="724">
+    <author>hywan</author>
+    <date>2010-03-11T19:01:59.271177Z</date>
+    <msg>Oops, forget to store correctly type in isTypedAs() method.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Variable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="723">
+    <author>hywan</author>
+    <date>2010-03-11T18:26:47.882034Z</date>
+    <msg>Fix a bug: remove mt_rand and replace it by our own Uc() method.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Urg/Urg.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="722">
+    <author>hywan</author>
+    <date>2010-03-11T18:05:12.314709Z</date>
+    <msg>Add the grouchy smurf!</msg>
+    <paths>
+      <path action="A">Framework/Library/Test/Urg/Type/GrouchySmurf.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="721">
+    <author>hywan</author>
+    <date>2010-03-11T17:57:51.967023Z</date>
+    <msg>Formalize the “typeof” operator.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Variable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="720">
+    <author>hywan</author>
+    <date>2010-03-11T17:22:14.012820Z</date>
+    <msg>Redefining types of an old variable in an ensures clause has no sens.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Ensures.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="719">
+    <author>hywan</author>
+    <date>2010-03-11T16:41:49.104355Z</date>
+    <msg>Verify if the ensure clause holds only existing variables.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Ensures.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="718">
+    <author>hywan</author>
+    <date>2010-03-11T16:41:23.707506Z</date>
+    <msg>Just add the return; statement.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Praspel.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="717">
+    <author>hywan</author>
+    <date>2010-03-11T16:27:36.703666Z</date>
+    <msg>Write constructors (\old(e) and \result) and implement them.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Contract.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Constructor/Old.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Constructor/Result.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="716">
+    <author>hywan</author>
+    <date>2010-03-11T16:27:11.144935Z</date>
+    <msg>Unimplement the clause interface because they already extend the contract class.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Ensures.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Requires.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="714">
+    <author>hywan</author>
+    <date>2010-03-10T23:16:13.661012Z</date>
+    <msg>Fix the issue with type's name.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Variable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="713">
+    <author>hywan</author>
+    <date>2010-03-10T23:10:08.974595Z</date>
+    <msg>Add the “name” property to types and clean the code.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Urg/Type/2n.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Array.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/ArrayInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Boolean.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/BoundFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/BoundInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/EvenInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Float.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Integer.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Integerpp.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/NegativeFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/NegativeInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Null.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Number.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/OddInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/PositiveFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/PositiveInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/String.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/StringWith.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/SuperString.php</path>
+      <path action="A">Framework/Library/Test/Urg/Type/Undefined.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Void.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Xn.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/ZeroOrNegativeFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/ZeroOrNegativeInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/ZeroOrPositiveFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/ZeroOrPositiveInteger.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="712">
+    <author>hywan</author>
+    <date>2010-03-10T22:15:40.300736Z</date>
+    <msg>Rewrite the dependance type system (temporary fixed).</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Variable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="711">
+    <author>hywan</author>
+    <date>2010-03-10T22:01:29.541699Z</date>
+    <msg>Add the __toString() method to print the tree of the object model of Praspel, and correct some bugs.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Contract.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Throwable.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Praspel.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Variable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="710">
+    <author>hywan</author>
+    <date>2010-03-10T21:41:22.472566Z</date>
+    <msg>Change the clause: @throws to @throwable.</msg>
+    <paths>
+      <path action="A">Framework/Library/Test/Praspel/Clause/Throwable.php</path>
+      <path action="D">Framework/Library/Test/Praspel/Clause/Throws.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="709">
+    <author>hywan</author>
+    <date>2010-03-10T21:40:50.227796Z</date>
+    <msg>FreeVariable is not really a free-variable, it's just a variable.</msg>
+    <paths>
+      <path action="D">Framework/Library/Test/Praspel/FreeVariable.php</path>
+      <path action="A">Framework/Library/Test/Praspel/Variable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="708">
+    <author>hywan</author>
+    <date>2010-03-10T21:40:24.747305Z</date>
+    <msg>Build the new Object Model of Praspel.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Contract.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Requires.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Throws.php</path>
+      <path action="M">Framework/Library/Test/Praspel/FreeVariable.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Praspel.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Type.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="707">
+    <author>hywan</author>
+    <date>2010-03-08T21:17:01.709113Z</date>
+    <msg>Now an initial state (GO) can have an epsilon-transition to a sub-automata, and cascad of epsilon-transitions is now supported!</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="706">
+    <author>hywan</author>
+    <date>2010-03-08T20:32:57.055641Z</date>
+    <msg>When back to a previous (parent) automata, rewind i (the Index) of length of nextChar instead of token.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="705">
+    <author>hywan</author>
+    <date>2010-03-08T18:55:20.160178Z</date>
+    <msg>The next token is unknown at this step of the parsing.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="697">
+    <author>hywan</author>
+    <date>2010-03-04T11:36:19.044069Z</date>
+    <msg>Better end of code detection. Complete/Rewrite the API documentation. And add the pre() method to compute source code before compiling.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="696">
+    <author>hywan</author>
+    <date>2010-03-04T09:52:27.724846Z</date>
+    <msg>Add class name in uncaught exception message (comfortable).</msg>
+    <paths>
+      <path action="M">Framework/Core/Exception.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="695">
+    <author>hywan</author>
+    <date>2010-03-01T21:14:57.251939Z</date>
+    <msg>Remove old line and column error system and replace it by a new line and column system for all tokens! Fix the lastest known bug with an infinite loop. Finally, simplify a bit the code. Fiou, seems like it's the end of this class :-).</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="694">
+    <author>hywan</author>
+    <date>2010-03-01T01:44:55.106928Z</date>
+    <msg>Mania: clean a bit the code.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="693">
+    <author>hywan</author>
+    <date>2010-03-01T01:44:13.651921Z</date>
+    <msg>Simplify skip system: only one array of tokens to skip, it's plenty.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="692">
+    <author>hywan</author>
+    <date>2010-03-01T01:39:22.473815Z</date>
+    <msg>Rebuilding the error system.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="691">
+    <author>hywan</author>
+    <date>2010-03-01T00:38:11.336597Z</date>
+    <msg>Call the consume() method if and only if it's necessary.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="685">
+    <author>hywan</author>
+    <date>2010-02-21T14:41:16.545204Z</date>
+    <msg>Temporary fix.</msg>
+    <paths>
+      <path action="M">Framework/Library/Cache/Cache.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="684">
+    <author>hywan</author>
+    <date>2010-02-18T17:52:25.070318Z</date>
+    <msg>Oops, the regular expression didn't compiled.</msg>
+    <paths>
+      <path action="M">Framework/Library/Console/Environment/Window.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="683">
+    <author>hywan</author>
+    <date>2010-02-18T17:16:18.782190Z</date>
+    <msg>ToutMessenger is dead and Skype will be moved to a Hoathis' module.</msg>
+    <paths>
+      <path action="D">Framework/Library/Service</path>
+    </paths>
+  </logentry>
+  <logentry revision="682">
+    <author>hywan</author>
+    <date>2010-02-18T17:07:34.680153Z</date>
+    <msg>Better epsilon-transition support: faster, less memory used, less operations executed etc. Really better. Rest to fix error report and some bugs with skip tokens.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="681">
+    <author>hywan</author>
+    <date>2010-02-18T15:12:44.677329Z</date>
+    <msg>Simplify skip and token chooser.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="680">
+    <author>hywan</author>
+    <date>2010-02-18T15:06:48.867672Z</date>
+    <msg>Oops, a type without constructor wasn't added to a free-variable…</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Type.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="679">
+    <author>hywan</author>
+    <date>2010-02-18T13:58:54.832662Z</date>
+    <msg>Add multi-automata support! Fiou, good job :-).</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="678">
+    <author>hywan</author>
+    <date>2010-02-17T11:11:03.365463Z</date>
+    <msg>More explicite exception message :-).</msg>
+    <paths>
+      <path action="M">Framework/Library/Controller/Dispatcher/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="677">
+    <author>hywan</author>
+    <date>2010-02-17T11:08:12.489293Z</date>
+    <msg>Fix a bug with the secondary controller path. It has never been found.</msg>
+    <paths>
+      <path action="M">Framework/Library/Controller/Dispatcher/Abstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="676">
+    <author>hywan</author>
+    <date>2010-02-17T10:51:58.304079Z</date>
+    <msg>Performance and memory: donot copy current parameters in the _zFormat() method, just use a third-hand variable.</msg>
+    <paths>
+      <path action="M">Framework/Core/Parameter.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="675">
+    <author>hywan</author>
+    <date>2010-02-17T10:45:27.813027Z</date>
+    <msg>Fix a bug with _zFormat and static calls stack.</msg>
+    <paths>
+      <path action="M">Framework/Core/Parameter.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="674">
+    <author>hywan</author>
+    <date>2010-02-11T21:27:33.645262Z</date>
+    <msg>Correct an exception message.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="673">
+    <author>hywan</author>
+    <date>2010-02-11T19:56:22.769764Z</date>
+    <msg>Simplify the code.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="672">
+    <author>hywan</author>
+    <date>2010-02-11T18:04:26.430310Z</date>
+    <msg>Add the end() method.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="671">
+    <author>hywan</author>
+    <date>2010-02-11T16:19:35.524228Z</date>
+    <msg>Complete the API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="670">
+    <author>hywan</author>
+    <date>2010-02-11T15:29:42.218816Z</date>
+    <msg>Write the API documentation, add the initial line support and two constants: __ and GO, respectively for error and initial states.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="669">
+    <author>hywan</author>
+    <date>2010-02-11T15:28:34.402141Z</date>
+    <msg>Add IllegalToken and FinalStateHasNotBeenReached exceptions.</msg>
+    <paths>
+      <path action="A">Framework/Library/Compiler/Exception</path>
+      <path action="A">Framework/Library/Compiler/Exception/FinalStateHasNotBeenReached.php</path>
+      <path action="A">Framework/Library/Compiler/Exception/IllegalToken.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="668">
+    <author>hywan</author>
+    <date>2010-02-11T15:00:34.794875Z</date>
+    <msg>Fix a bug in Ubuntu. stty -a does not follow to output standard.</msg>
+    <paths>
+      <path action="M">Framework/Library/Console/Environment/Window.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="667">
+    <author>hywan</author>
+    <date>2010-02-11T13:24:20.186071Z</date>
+    <msg>Rewrite the API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Core/Exception.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="666">
+    <author>hywan</author>
+    <date>2010-02-11T10:19:18.186955Z</date>
+    <msg>Now a free variable can store old and new value.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/FreeVariable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="663">
+    <author>hywan</author>
+    <date>2010-02-08T10:52:18.845206Z</date>
+    <msg>Start buffers stack to 0 instead of 1.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="662">
+    <author>hywan</author>
+    <date>2010-02-04T19:28:35.925362Z</date>
+    <msg>Hello Hoa_Compiler :-).</msg>
+    <paths>
+      <path action="A">Framework/Library/Compiler</path>
+      <path action="A">Framework/Library/Compiler/Exception.php</path>
+      <path action="A">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="661">
+    <author>hywan</author>
+    <date>2010-02-04T19:28:18.511773Z</date>
+    <msg>Mania: format the code.</msg>
+    <paths>
+      <path action="M">Framework/Library/Factory/Factory.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="660">
+    <author>hywan</author>
+    <date>2010-02-04T18:24:33.694818Z</date>
+    <msg>Users are not obligated to write an empty constructor in their types.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Type.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="659">
+    <author>hywan</author>
+    <date>2010-02-04T18:17:58.673907Z</date>
+    <msg>Forget to catch a ReflectionException exception.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Type.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="658">
+    <author>hywan</author>
+    <date>2010-02-04T18:11:06.614913Z</date>
+    <msg>Forget to catch a ReflectionException.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Call.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="657">
+    <author>hywan</author>
+    <date>2010-02-04T16:04:00.971059Z</date>
+    <msg>Oops, correct a typo in a message exception.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Requires.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="656">
+    <author>hywan</author>
+    <date>2010-02-04T14:01:26.911993Z</date>
+    <msg>Fix many bugs in the zFormat. It goes right!</msg>
+    <paths>
+      <path action="M">Framework/Core/Parameter.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="655">
+    <author>hywan</author>
+    <date>2010-02-04T09:47:31.104592Z</date>
+    <msg>Mania: format code.</msg>
+    <paths>
+      <path action="M">Framework/Library/Console/Core/Cli/Parser.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="654">
+    <author>hywan</author>
+    <date>2010-02-02T17:46:18.023988Z</date>
+    <msg>Prevent a possible infinite loop.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Urg/Type/String.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="653">
+    <author>hywan</author>
+    <date>2010-02-02T17:42:32.767843Z</date>
+    <msg>Prevent a possible infinite loop.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Urg/Type/Array.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="652">
+    <author>hywan</author>
+    <date>2010-01-28T16:03:22.885724Z</date>
+    <msg>Correct a typo in the API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Library/File/File.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="651">
+    <author>hywan</author>
+    <date>2010-01-23T19:35:55.431879Z</date>
+    <msg>Correct a typo in a comment.</msg>
+    <paths>
+      <path action="M">Framework/Library/Controller/Front.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="650">
+    <author>hywan</author>
+    <date>2010-01-23T19:35:02.813749Z</date>
+    <msg>Refresh cache.</msg>
+    <paths>
+      <path action="M">Data/Etc/Configuration/.Cache/Cache.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaConsole.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaController.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaDatabase.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaFramework.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaTest.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="649">
+    <author>hywan</author>
+    <date>2010-01-23T19:34:06.441026Z</date>
+    <msg>Wow, fixe many bugs! Issues were encountered with booleans, null values or empty arrays.</msg>
+    <paths>
+      <path action="M">Framework/Library/StdClass/StdClass.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="648">
+    <author>hywan</author>
+    <date>2010-01-23T19:05:51.329625Z</date>
+    <msg>Better toString() render.</msg>
+    <paths>
+      <path action="M">Framework/Library/StdClass/StdClass.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="647">
+    <author>hywan</author>
+    <date>2010-01-23T18:55:29.089234Z</date>
+    <msg>Add comments and reformat the code.</msg>
+    <paths>
+      <path action="M">Data/Etc/Configuration/HoaConsole.json</path>
+      <path action="M">Data/Etc/Configuration/HoaController.json</path>
+      <path action="M">Data/Etc/Configuration/HoaDatabase.json</path>
+      <path action="M">Data/Etc/Configuration/HoaTest.json</path>
+    </paths>
+  </logentry>
+  <logentry revision="646">
+    <author>hywan</author>
+    <date>2010-01-23T18:32:22.638291Z</date>
+    <msg>Use Hoa_Json package to ensure comments in configuration files.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Configuration/Cache.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="645">
+    <author>hywan</author>
+    <date>2010-01-23T17:56:58.244442Z</date>
+    <msg>Add the comments support: // and /* */ (like Javascript).</msg>
+    <paths>
+      <path action="M">Framework/Library/Json/Json.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="644">
+    <author>hywan</author>
+    <date>2010-01-23T17:55:32.318099Z</date>
+    <msg>Add the ERROR_UTF8 constant (appeared with the revision number 284625), correct a bad constant call (ERROR_DEPT instead of ERROR_DEPTH), move the __toString() method at the end of the class, and correct an exception message from the getLastError() method.</msg>
+    <paths>
+      <path action="M">Framework/Library/Json/Json.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="643">
+    <author>hywan</author>
+    <date>2010-01-20T20:19:29.292223Z</date>
+    <msg>Use only positive length.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Urg/Type/Array.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="627">
+    <author>hywan</author>
+    <date>2010-01-11T21:24:23.842214Z</date>
+    <msg>Add the protocol:* commands.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Main/Welcome.php</path>
+      <path action="A">Data/Bin/Command/Protocol</path>
+      <path action="A">Data/Bin/Command/Protocol/Print.php</path>
+      <path action="A">Data/Bin/Command/Protocol/Resolve.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="626">
+    <author>hywan</author>
+    <date>2010-01-11T21:17:37.926156Z</date>
+    <msg>Solve a bug with an useless trail slash (hoa://Data gave different results of hoa://Data/). Ameliorate the __toString() algorithm and set a name to the protocol root.</msg>
+    <paths>
+      <path action="M">Framework/Core/Protocol.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="625">
+    <author>hywan</author>
+    <date>2010-01-11T21:13:57.278721Z</date>
+    <msg>Better result.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Main/Tree.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="624">
+    <author>hywan</author>
+    <date>2010-01-11T21:12:01.033556Z</date>
+    <msg>Reorganize the code and update the screen message.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Controller/Create.php</path>
+      <path action="M">Data/Bin/Command/Controller/Whereis.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="623">
+    <author>hywan</author>
+    <date>2010-01-11T21:07:48.661223Z</date>
+    <msg>Mania: formatting code and complete API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Library/File/Finder.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="608">
+    <author>hywan</author>
+    <date>2009-12-21T11:56:14.635364Z</date>
+    <msg>Fix a big bug with the search/replace format in the zFormat.</msg>
+    <paths>
+      <path action="M">Framework/Core/Parameter.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="607">
+    <author>hywan</author>
+    <date>2009-12-16T18:06:21.372243Z</date>
+    <msg>Fix a bug: it was a collision between controller's rewrite router format: (:foobar) and zFormat (:foo[:bar]:). It's an ugly fix but it works :-).</msg>
+    <paths>
+      <path action="M">Framework/Core/Parameter.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="606">
+    <author>hywan</author>
+    <date>2009-12-16T16:09:08.337548Z</date>
+    <msg>Remove a useless printed newline.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Configuration/Cache.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="605">
+    <author>hywan</author>
+    <date>2009-12-16T16:08:45.595566Z</date>
+    <msg>Remove a reference of a variable and update the message printing.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Controller/Create.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="604">
+    <author>hywan</author>
+    <date>2009-12-01T21:50:05.982608Z</date>
+    <msg>Remove old code.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Controller/Create.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="603">
+    <author>hywan</author>
+    <date>2009-12-01T21:25:49.229566Z</date>
+    <msg>To be compatible with PHP 5.2.0 to 5.2.3.</msg>
+    <paths>
+      <path action="M">Framework/Core/Protocol.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="602">
+    <author>hywan</author>
+    <date>2009-11-26T20:44:20.216479Z</date>
+    <msg>Correct a bad preg_match return.</msg>
+    <paths>
+      <path action="M">Framework/Library/Console/Environment/Window.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="600">
+    <author>hywan</author>
+    <date>2009-11-26T00:21:53.285022Z</date>
+    <msg>Prepare the 0.5.1b!</msg>
+    <paths>
+      <path action="M">Data/Etc/CHANGELOG.xml</path>
+      <path action="M">Framework/Library/Controller/Router/Rewrite.php</path>
+      <path action="M">Framework/Library/Version/Version.php</path>
+      <path action="M">README</path>
+    </paths>
+  </logentry>
   <logentry revision="599">
     <author>hywan</author>
     <date>2009-11-23T19:17:19.551673Z</date>
