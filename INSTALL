@@ -44,7 +44,7 @@ Hoa is used like a frame for working… a framework !
 System requirement
 ------------------
 
-Hoa Framework requires PHP 5.2.x or later. A PHP 5.2.3+ version is adviced!
+Hoa Framework requires PHP 5.2.x or later. A PHP 5.2.3+ version is advised!
 Hoa Framework uses some SPL libraries, they must all be present.
 Note that PHP 5.3 is well-supported.
 

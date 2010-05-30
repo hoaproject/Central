@@ -9,7 +9,7 @@
  * GNU General Public License
  *
  * This file is part of HOA Open Accessibility.
- * Copyright (c) 2007, 2009 Ivan ENDERLIN. All rights reserved.
+ * Copyright (c) 2007, 2010 Ivan ENDERLIN. All rights reserved.
  *
  * HOA Open Accessibility is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@
  * Abstract class for all hoa://'s components.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2009 Ivan ENDERLIN.
+ * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP5
  * @version     0.1
@@ -303,7 +303,7 @@ abstract class Hoa_Framework_Protocol {
  * hoa://'s protocol's generic component.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2009 Ivan ENDERLIN.
+ * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP5
  * @version     0.3
@@ -319,7 +319,7 @@ class Hoa_Framework_Protocol_Generic extends Hoa_Framework_Protocol { }
  * hoa://'s protocol's root.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2009 Ivan ENDERLIN.
+ * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP5
  * @version     0.3
@@ -343,7 +343,7 @@ class Hoa_Framework_Protocol_Root extends Hoa_Framework_Protocol {
  * Wrapper for hoa://'s protocol.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2009 Ivan ENDERLIN.
+ * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP5
  * @version     0.3

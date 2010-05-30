@@ -9,7 +9,7 @@
  * GNU General Public License
  *
  * This file is part of Hoa Open Accessibility.
- * Copyright (c) 2007, 2009 Ivan ENDERLIN. All rights reserved.
+ * Copyright (c) 2007, 2010 Ivan ENDERLIN. All rights reserved.
  *
  * HOA Open Accessibility is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ require_once 'Framework.php';
  * Get version of the framework.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2009 Ivan ENDERLIN.
+ * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.2
@@ -161,7 +161,7 @@ class Hoa_Version {
 
         return 'Hoa Framework ' . self::getVersion() .
                ' (' . self::getRevision() . ').' . "\n" .
-               'Copyright (c) 2007, 2009 Ivan ENDERLIN. All rights reserved.' . "\n" .
+               'Copyright (c) 2007, 2010 Ivan ENDERLIN. All rights reserved.' . "\n" .
                'License GNU GPL <http://gnu.org/licenses/gpl.txt> ' .
                'or /LICENSE.';
     }

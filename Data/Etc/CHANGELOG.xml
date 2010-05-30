@@ -4,10 +4,20 @@
 Informations             :
     - repository path    : /Users/hywan/Development/Hoa/Svn/Repository ;
     - path in repository : /Framework/Trunk/ ;
-    - generated at       : 2010-05-30T13:08:01.000000Z.
+    - generated at       : 2010-05-30T13:11:41.000000Z.
 -->
 
 <log>
+  <logentry revision="984">
+    <author>hywan</author>
+    <date>2010-05-30T13:09:31.721132Z</date>
+    <msg>Prepare the 0.5.5b!</msg>
+    <paths>
+      <path action="M">Data/Etc/CHANGELOG.xml</path>
+      <path action="M">Framework/Library/Version/Version.php</path>
+      <path action="M">README</path>
+    </paths>
+  </logentry>
   <logentry revision="983">
     <author>hywan</author>
     <date>2010-05-29T21:04:03.711068Z</date>
