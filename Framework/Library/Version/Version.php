@@ -70,7 +70,7 @@ class Hoa_Version {
      *
      * @const int
      */
-    const REVISION          = 984;
+    const REVISION          = 988;
 
     /**
      * Hoa Framework previous revision number.
