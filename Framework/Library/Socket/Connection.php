@@ -388,6 +388,17 @@ abstract class Hoa_Socket_Connection
     }
 
     /**
+     * Read a boolean.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function readBoolean ( ) {
+
+        return (bool) $this->read(1);
+    }
+
+    /**
      * Read an integer.
      *
      * @access  public
