@@ -285,7 +285,7 @@ class Hoa_Bench implements Iterator, Countable {
     public function drawStatistic ( $width = 70 ) {
 
         if(empty(self::$_mark))
-            return null;
+            return '';
 
         if($width < 1)
             throw new Hoa_Bench_Exception(
