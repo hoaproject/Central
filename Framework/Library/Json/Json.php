@@ -195,8 +195,8 @@ class Hoa_Json extends Hoa_StdClass {
             return 'No error has occured.';
         }
 
-        $message  = null;
-        $code     = self::ERROR_NONE;
+        $message = null;
+        $code    = self::ERROR_NONE;
 
         switch(json_last_error()) {
 
