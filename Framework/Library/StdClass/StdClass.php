@@ -44,7 +44,7 @@ import('StdClass.Exception');
 /**
  * Class Hoa_StdClass.
  *
- * Alternative to StdClass : more possibilities in manipulation.
+ * Alternative to StdClass: more possibilities in manipulation.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
@@ -254,7 +254,7 @@ class Hoa_StdClass implements Iterator, Countable, Serializable, ArrayAccess {
      * @access  public
      * @return  int
      */
-    public function toInt ( ) {
+    public function toInteger ( ) {
 
         if(false === $this->isRecursive())
             return (int) $this->current();
@@ -282,7 +282,7 @@ class Hoa_StdClass implements Iterator, Countable, Serializable, ArrayAccess {
      * @access  public
      * @return  bool
      */
-    public function toBool ( ) {
+    public function toBoolean ( ) {
 
         if(false === $this->isRecursive())
             return (bool) $this->current();
