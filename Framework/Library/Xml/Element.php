@@ -65,7 +65,7 @@ import('Stream.Io.Structural');
 /**
  * Class Hoa_Xml_Element.
  *
- * File handler.
+ * This class represents a XML element in a XML tree.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
