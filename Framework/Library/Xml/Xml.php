@@ -60,6 +60,8 @@ abstract class Hoa_Xml extends Hoa_Stream_Composite {
 
         parent::__construct($innerStream);
         $this->setStream($stream);
-        $this->getStream()->open($this->getInnerStream()->getStreamName());
+        $this->getStream()->open(
+            $this->getInnerStream()->getStreamName()
+        );
     }
 }
