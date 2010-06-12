@@ -38,24 +38,9 @@
 require_once 'Framework.php';
 
 /**
- * Hoa_Xml_Exception
- */
-import('Xml.Exception');
-
-/**
- * Hoa_Xml
- */
-import('Xml.~');
-
-/**
  * Hoa_Xml_CssToXPath
  */
 import('Xml.CssToXPath');
-
-/**
- * Hoa_Stream_Io_In
- */
-import('Stream.Io.In');
 
 /**
  * Hoa_Stream_Io_Structural
@@ -215,5 +200,16 @@ class          Hoa_Xml_Element
 
         self::$_cssToXPath->compile($query);
         return $this->xpath(self::$_cssToXPath->getXPath());
+    }
+
+    /**
+     * Transform this object to a string.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function __toString ( ) {
+
+        return (string) $this;
     }
 }
