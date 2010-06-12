@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Xml
- * @subpackage  Hoa_Xml_Read
+ * @subpackage  Hoa_Xml_Element_Read
  *
  */
 
@@ -43,9 +43,9 @@ require_once 'Framework.php';
 import('Xml.Exception');
 
 /**
- * Hoa_Xml
+ * Hoa_Xml_Element
  */
-import('Xml.~');
+import('Xml.Element');
 
 /**
  * Hoa_Stream_Io_In
@@ -53,12 +53,7 @@ import('Xml.~');
 import('Stream.Io.In');
 
 /**
- * Hoa_Xml_Element_Read
- */
-import('Xml.Element.Read');
-
-/**
- * Class Hoa_Xml_Read.
+ * Class Hoa_Xml_Element_Read.
  *
  * File handler.
  *
@@ -68,22 +63,12 @@ import('Xml.Element.Read');
  * @since       PHP 5
  * @version     0.3
  * @package     Hoa_Xml
- * @subpackage  Hoa_Xml_Read
+ * @subpackage  Hoa_Xml_Element_Read
  */
 
-class          Hoa_Xml_Read
-    extends    Hoa_Xml
+class          Hoa_Xml_Element_Read
+    extends    Hoa_Xml_Element
     implements Hoa_Stream_Io_In {
-
-    /**
-     *
-     */
-    public function __construct ( Hoa_Stream_Io_In $stream ) {
-
-        parent::__construct('Hoa_Xml_Element_Read', $stream);
-
-        return;
-    }
 
     /**
      * Test for end-of-file.
@@ -93,7 +78,7 @@ class          Hoa_Xml_Read
      */
     public function eof ( ) {
 
-        return $this->getStream()->eof();
+        return $this->_eof;
     }
 
     /**
@@ -106,7 +91,11 @@ class          Hoa_Xml_Read
      */
     public function read ( $length ) {
 
-        return $this->getStream()->read($length);
+        if($length <= 0)
+            throw new Hoa_Xml_Exception(
+                'Length must be greather than 0, given %d.', 0, $length);
+
+        return /* TODO */;
     }
 
     /**
@@ -118,7 +107,7 @@ class          Hoa_Xml_Read
      */
     public function readString ( $length ) {
 
-        return $this->getStream()->readString($length);
+        return $this->read($length);
     }
 
     /**
@@ -129,7 +118,7 @@ class          Hoa_Xml_Read
      */
     public function readCharacter ( ) {
 
-        return $this->getStream()->readCharacter();
+        return $this->read(1);
     }
 
     /**
@@ -140,7 +129,7 @@ class          Hoa_Xml_Read
      */
     public function readBoolean ( ) {
 
-        return $this->getStream()->readBoolean();
+        return (bool) $this->read(1);
     }
 
     /**
@@ -152,7 +141,7 @@ class          Hoa_Xml_Read
      */
     public function readInteger ( $length = 1 ) {
 
-        return $this->getStream()->readInteger($length);
+        return (int) $this->read($length);
     }
 
     /**
@@ -164,7 +153,7 @@ class          Hoa_Xml_Read
      */
     public function readFloat ( $length = 1 ) {
 
-        return $this->getStream()->readFloat($length);
+        return (float) $this->read($length);
     }
 
     /**
@@ -177,7 +166,7 @@ class          Hoa_Xml_Read
      */
     public function readArray ( $format ) {
 
-        return $this->getStream()->readArray($format);
+        return /* TODO */;
     }
 
     /**
@@ -188,7 +177,13 @@ class          Hoa_Xml_Read
      */
     public function readLine ( ) {
 
-        return $this->getStream()->readLine();
+        $handle = $this->readAll();
+        $n      = strpos($handle, "\n");
+
+        if(false === $n)
+            return $handle;
+
+        return substr($handle, 0, $n);
     }
 
     /**
@@ -199,7 +194,7 @@ class          Hoa_Xml_Read
      */
     public function readAll ( ) {
 
-        return $this->getStream()->readAll();
+        return $this->__toString();
     }
 
     /**
@@ -211,21 +206,26 @@ class          Hoa_Xml_Read
      */
     public function scanf ( $format ) {
 
-        return $this->getStream()->scanf($format);
+        return sscanf($this->readAll(), $format);
     }
 
     public function readDOM ( ) {
 
-        return $this->getStream()->readDOM();
+        return dom_import_simplexml($this);
     }
 
     public function readAttribute ( $name ) {
 
-        return $this->getStream()->readAttribute($name);;
+        $attributes = $this->readAttributes();
+
+        if(false === array_key_exists($name, $attributes))
+            return null;
+
+        return $attributes[$name];
     }
 
     public function readAttributes ( ) {
 
-        return $this->getStream()->readAttributes();
+        return $this->attributes();
     }
 }
