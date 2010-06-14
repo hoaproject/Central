@@ -47,31 +47,35 @@ require_once 'Parameter.php';
 require_once 'Protocol.php';
 
 /**
- * Some usefull constants, …
+ * Some usefull constants.
  */
+!defined('SUCCEED')         and define('SUCCEED',   true);
+!defined('FAILED')          and define('FAILED',    false);
 !defined('DS')              and define('DS'    ,    DIRECTORY_SEPARATOR);
 !defined('PS')              and define('PS'    ,    PATH_SEPARATOR);
 !defined('CRLF')            and define('CRLF'  ,    "\r\n");
 !defined('OS_WIN')          and define('OS_WIN',    !strncasecmp(PHP_OS, 'win', 3));
 !defined('S_64_BITS')       and define('S_64_BITS', PHP_INT_SIZE == 8);
 !defined('S_32_BITS')       and define('S_32_BITS', !S_64_BITS);
-!defined('SUCCEED')         and define('SUCCEED',   true);
-!defined('FAILED')          and define('FAILED',    false);
 !defined('PHP_VERSION_ID')  and $v = PHP_VERSION
                             and define('PHP_VERSION_ID',   $v{0} * 10000
                                                          + $v{2} * 100
                                                          + $v{4});
+!defined('void')            and define('void',      (unset) null);
 
 /**
- * … and type.
+ * Hoa constants.
  */
-!defined('void')            and define('void',      (unset) null);
+!defined('HOA_VERSION_MAJOR')   and define('HOA_VERSION_MAJOR',   0);
+!defined('HOA_VERSION_MINOR')   and define('HOA_VERSION_MINOR',   5);
+!defined('HOA_VERSION_RELEASE') and define('HOA_VERSION_RELEASE', 5);
+!defined('HOA_VERSION_STATUS')  and define('HOA_VERSION_STATUS',  'b');
 
 /**
  * Check if Hoa was well-included.
  */
 !(
-    !defined('HOA')         and define('HOA',       true)
+    !defined('HOA') and define('HOA', true)
 )
 and
     exit('The Hoa framework main file (Framework.php) must be included once.');
