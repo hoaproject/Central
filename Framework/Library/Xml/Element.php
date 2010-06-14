@@ -87,7 +87,7 @@ class          Hoa_Xml_Element
      */
     public function selectAnyElement ( ) {
 
-        return $this->xpath('descendant-or-self::' . $this->getName() . '//*');
+        return $this->xpath('//*');
     }
 
     /**
@@ -99,10 +99,10 @@ class          Hoa_Xml_Element
      */
     public function selectElement ( $E = null ) {
 
-        if(null === $E || '*' == $E)
+        if(null === $E)
             return $this->selectAnyElement();
 
-        return $this->xpath('descendant-or-self::' . $this->getName() . '//' . $E);
+        return $this->xpath('//' . $E);
     }
 
     /**
