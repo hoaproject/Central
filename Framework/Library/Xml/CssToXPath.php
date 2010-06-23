@@ -315,6 +315,15 @@ class Hoa_Xml_CssToXPath extends Hoa_Compiler_Ll1 {
 
         switch($action) {
 
+            case '__init':
+                $_element  = '*';
+                $element   = '*';
+                $selector  = array();
+                $pseudo    = null;
+                $attribute = null;
+                $operator  = null;
+              break;
+
             case '__flush':
                 $this->_current .= $this->flush($element, $selector, $pseudo);
                 $element         = null;
@@ -617,6 +626,7 @@ class Hoa_Xml_CssToXPath extends Hoa_Compiler_Ll1 {
 
         $this->_root    = 'descendant-or-self::';
         $this->_current = null;
+        $this->consume('__init');
 
         return;
     }
