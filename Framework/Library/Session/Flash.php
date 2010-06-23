@@ -116,6 +116,8 @@ class Hoa_Session_Flash extends Hoa_Session_Namespace {
     public function setMessage ( $message ) {
 
         parent::__set('message', $message);
+
+        return;
     }
 
     /**
