@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Exception
- */
-require_once 'Exception.php';
-
-/**
  * Interface Hoa_Framework_Parameterizable_Readable.
  *
  * Interface for all classes or packages which parameters are readable.
