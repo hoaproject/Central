@@ -130,6 +130,8 @@ class Hoa_Bench implements Iterator, Countable {
     public function __unset ( $id ) {
 
         unset(self::$_mark[$id]);
+
+        return;
     }
 
     /**
@@ -141,6 +143,8 @@ class Hoa_Bench implements Iterator, Countable {
     public function unsetAll ( ) {
 
         self::$_mark = array();
+
+        return;
     }
 
     /**
