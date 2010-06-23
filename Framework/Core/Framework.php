@@ -49,19 +49,19 @@ require_once 'Protocol.php';
 /**
  * Some usefull constants.
  */
-!defined('SUCCEED')         and define('SUCCEED',   true);
-!defined('FAILED')          and define('FAILED',    false);
-!defined('DS')              and define('DS'    ,    DIRECTORY_SEPARATOR);
-!defined('PS')              and define('PS'    ,    PATH_SEPARATOR);
-!defined('CRLF')            and define('CRLF'  ,    "\r\n");
-!defined('OS_WIN')          and define('OS_WIN',    !strncasecmp(PHP_OS, 'win', 3));
-!defined('S_64_BITS')       and define('S_64_BITS', PHP_INT_SIZE == 8);
-!defined('S_32_BITS')       and define('S_32_BITS', !S_64_BITS);
-!defined('PHP_VERSION_ID')  and $v = PHP_VERSION
-                            and define('PHP_VERSION_ID',   $v{0} * 10000
-                                                         + $v{2} * 100
-                                                         + $v{4});
-!defined('void')            and define('void',      (unset) null);
+!defined('SUCCEED')        and define('SUCCEED',   true);
+!defined('FAILED')         and define('FAILED',    false);
+!defined('DS')             and define('DS'    ,    DIRECTORY_SEPARATOR);
+!defined('PS')             and define('PS'    ,    PATH_SEPARATOR);
+!defined('CRLF')           and define('CRLF'  ,    "\r\n");
+!defined('OS_WIN')         and define('OS_WIN',    !strncasecmp(PHP_OS, 'win', 3));
+!defined('S_64_BITS')      and define('S_64_BITS', PHP_INT_SIZE == 8);
+!defined('S_32_BITS')      and define('S_32_BITS', !S_64_BITS);
+!defined('PHP_VERSION_ID') and $v = PHP_VERSION
+                           and define('PHP_VERSION_ID',   $v{0} * 10000
+                                                        + $v{2} * 100
+                                                        + $v{4});
+!defined('void')           and define('void',      (unset) null);
 
 /**
  * Hoa constants.
@@ -146,6 +146,13 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
      * @var Hoa_Framework object
      */
     private static $_instance    = null;
+
+    /**
+     * Last imported file path.
+     *
+     * @var Hoa_Framework array
+     */
+    private static $_lastImport  = array();
 
 
 
@@ -353,22 +360,25 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
      *
      * @access  public
      * @param   string  $path    Path.
-     * @param   bool    $load    Load file when over.
      * @param   string  $root    Root.
-     * @return  void
+     * @return  bool
      * @throw   Hoa_Exception
      */
-    protected static function _import ( $path = null, $load = false, $root = null ) {
+    protected static function _import ( $path = null, $root = null ) {
 
         static $back = null;
         static $last = null;
 
-        if(null === $back)
+        if(null === $back) {
+
+            self::$_lastImport = array();
+
             if(null === $root)
                 $back = self::getInstance()
                             ->getFormattedParameter('framework.library');
             else
                 $back = $root;
+        }
 
         preg_match('#(?:(.*?)(?<!\\\)\.)|(.*)#', $path, $matches);
 
@@ -383,7 +393,7 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
 
                 if(   ($a = is_dir($back)           && !empty($path))
                    || ($b = is_file($back . '.php') &&  empty($path)))
-                    self::_import($path, $load);
+                    self::_import($path);
                 else {
 
                     $back = null;
@@ -419,12 +429,12 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
 
                             if(   (is_dir($found)  && !empty($foo))
                                || (is_file($found) &&  empty($foo)))
-                                self::_import(substr($path, strlen($handle) + 1), $load);
+                                self::_import(substr($path, strlen($handle) + 1));
 
                             elseif(is_file($found . '.php')) {
 
                                 $back = $found . '\.php';
-                                self::_import(null, $load);
+                                self::_import(null);
                             }
 
                             $back = $tmp;
@@ -433,7 +443,7 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
                     else {
 
                         $back .= DS . $handle;
-                        self::_import(null, $load);
+                        self::_import(null);
                     }
 
                     $back = null;
@@ -459,19 +469,17 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
                         $inode = md5($final);
 
                     if(isset(self::$_importStack[$inode]))
-                        return;
+                        return true;
 
+                    self::$_lastImport[$inode]  = $final;
                     self::$_importStack[$inode] = array(
                         self::IMPORT_PATH => $final,
-                        self::IMPORT_LOAD => $load
+                        self::IMPORT_LOAD => false
                     );
-
-                    if(true === $load)
-                        require $final;
                 }
         }
 
-        return;
+        return true;
     }
 
     /**
@@ -479,13 +487,12 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
      *
      * @access  public
      * @param   string  $path    Path.
-     * @param   bool    $load    Load file when over.
-     * @return  void
+     * @return  bool
      * @throw   Hoa_Exception
      */
-    public static function import ( $path, $load = false ) {
+    public static function import ( $path ) {
 
-        return self::_import($path, $load);
+        return self::_import($path);
     }
 
     /**
@@ -493,11 +500,10 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
      *
      * @access  public
      * @param   string  $path    Path.
-     * @param   bool    $load    Load file when over.
-     * @return  void
+     * @return  bool
      * @throw   Hoa_Exception
      */
-    public static function importModule ( $path, $load = false ) {
+    public static function importModule ( $path ) {
 
         $i               = Hoa_Framework::getInstance();
         $frameworkModule = $i->getFormattedParameter('framework.module');
@@ -505,12 +511,32 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
 
         try {
 
-            self::_import($path, $load, $dataModule);
+            return self::_import($path, $dataModule);
         }
         catch ( Hoa_Exception $e ) {
 
-            self::_import($path, $load, $frameworkModule);
+            return self::_import($path, $frameworkModule);
         }
+    }
+
+    /**
+     * Load lastest imported files.
+     *
+     * @access  public
+     * @return  void
+     */
+    public static function load ( ) {
+
+        if(empty(self::$_lastImport))
+            return;
+
+        foreach(self::$_lastImport as $inode => $import) {
+
+            require $import;
+            self::$_importStack[self::IMPORT_LOAD] = true;
+        }
+
+        self::$_lastImport = array();
 
         return;
     }
@@ -648,12 +674,12 @@ function _define ( $name = '', $value = '', $case = false ) {
  *
  * @access  public
  * @param   string  $path    Path.
- * @param   bool    $load    Load file when over.
  * @return  bool
+ * @throw   Hoa_Exception
  */
-function import ( $path, $load = false ) {
+function import ( $path ) {
 
-    return Hoa_Framework::import($path, $load);
+    return Hoa_Framework::import($path);
 }
 
 /**
@@ -661,12 +687,23 @@ function import ( $path, $load = false ) {
  *
  * @access  public
  * @param   string  $path    Path.
- * @param   bool    $load    Load file when over.
  * @return  bool
+ * @throw   Hoa_Exception
  */
-function importModule ( $path, $load = false ) {
+function importModule ( $path ) {
 
-    return Hoa_Framework::importModule($path, $load);
+    return Hoa_Framework::importModule($path);
+}
+
+/**
+ * Alias of Hoa_Framework::load().
+ *
+ * @access  public
+ * @return  void
+ */
+function load ( ) {
+
+    return Hoa_Framework::load();
 }
 
 
