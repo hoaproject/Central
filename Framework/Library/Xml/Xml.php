@@ -73,20 +73,40 @@ abstract class Hoa_Xml
      */
     public function __construct ( $stream, Hoa_Stream $innerStream ) {
 
-        $this->setStream(simplexml_load_file(
-            $innerStream->getStreamName(),
-            $stream
-        ));
+        if(!function_exists('simplexml_load_file'))
+            throw new Hoa_Xml_Exception(
+                'SimpleXML must be enable for using %s.', 0, __CLASS__);
+
+        $root = simplexml_load_file($innerStream->getStreamName(), $stream);
+        $root->setRoot($root);
+        $this->setStream($root);
         $this->setInnerStream($innerStream);
 
         return;
     }
 
+    /**
+     * Set an attribute value.
+     *
+     * @access  public
+     * @param   string  $name     Attribute name.
+     * @param   mixed   $value    Attribute value.
+     * @return  void
+     */
     public function __set ( $name, $value ) {
 
         $this->getStream()->$name = $value;
+
+        return;
     }
 
+    /**
+     * Get an attribute value.
+     *
+     * @access  public
+     * @param   string  $name    Attribute value.
+     * @return  mixed
+     */
     public function __get ( $name ) {
 
         return $this->getStream()->$name;
