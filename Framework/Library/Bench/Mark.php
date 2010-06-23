@@ -185,13 +185,13 @@ class Hoa_Bench_Mark {
      */
     public function stop ( $silent = false ) {
 
-        if(false === $this->isRunning() && false === $silent)
-            throw new Hoa_Bench_Exception(
-                'Cannot stop the %s mark, because it is not running.',
-                1, $this->getId());
-
         if(false === $this->isRunning())
-            return $this;
+            if(false === $silent)
+                throw new Hoa_Bench_Exception(
+                    'Cannot stop the %s mark, because it is not running.',
+                    1, $this->getId());
+            else
+                return $this;
 
         $this->stop     = microtime(true);
         $this->_running = false;
@@ -231,21 +231,21 @@ class Hoa_Bench_Mark {
      */
     public function pause ( $silent = false ) {
 
-        if(false === $this->isRunning() && false === $silent)
-            throw new Hoa_Bench_Exception(
-                'Cannot stop the %s mark, because it is not running.',
-                2, $this->getId());
-
         if(false === $this->isRunning())
-            return $this;
-
-        if(true  === $this->isPause()   && false === $silent)
-            throw new Hoa_Bench_Exception(
-                'The %s mark is still in pause. Cannot pause it again.',
-                3, $this->getId());
+            if(false === $silent)
+                throw new Hoa_Bench_Exception(
+                    'Cannot stop the %s mark, because it is not running.',
+                    2, $this->getId());
+            else
+                return $this;
 
         if(true  === $this->isPause())
-            return $this;
+            if(false === $silent)
+                throw new Hoa_Bench_Exception(
+                    'The %s mark is still in pause. Cannot pause it again.',
+                    3, $this->getId());
+            else
+                return $this;
 
         $this->stop   = microtime(true);
         $this->_pause = true;
