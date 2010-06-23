@@ -226,7 +226,6 @@ class          Hoa_Xml_Element
             self::$_cssToXPath = new Hoa_Xml_CssToXPath();
 
         self::$_cssToXPath->compile($query);
-        var_dump(self::$_cssToXPath->getXPath());
         return $this->xpath(self::$_cssToXPath->getXPath());
     }
 
