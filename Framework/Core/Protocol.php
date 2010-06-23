@@ -65,28 +65,35 @@ abstract class Hoa_Framework_Protocol {
      *
      * @var Hoa_Framework_Protocol string
      */
-    protected $_name     = null;
+    protected $_name       = null;
 
     /**
      * Path for the reach() method.
      *
      * @var Hoa_Framework_Protocol string
      */
-    protected $_reach    = null;
+    protected $_reach      = null;
 
     /**
      * Collections of sub-components.
      *
      * @var Hoa_Framework_Protocol array
      */
-    private $_components = array();
+    private $_components   = array();
+
+    /**
+     * Cache of resolver.
+     *
+     * @var Hoa_Framework_Protocol array
+     */
+    private static $_cache = array();
 
     /**
      * Static indentation for the __toString() method.
      *
      * @var Hoa_Framework_Protocol int
      */
-    private static $i    = 0;
+    private static $i      = 0;
 
 
 
@@ -204,6 +211,25 @@ abstract class Hoa_Framework_Protocol {
     }
 
     /**
+     * Front method for resolving a path. Please, look the $this->_resolve()
+     * method.
+     *
+     * @access  public
+     * @param   string  $path    Path to resolve.
+     * @return  string
+     */
+    public function resolve ( $path ) {
+
+        if(isset(self::$_cache[$path]))
+            return self::$_cache[$path];
+
+        $handle = $this->_resolve($path);
+        self::$_cache[$path] = $handle;
+
+        return $handle;
+    }
+
+    /**
      * Resolve a path, i.e. iterate the components tree and reach the queue of
      * the path.
      *
@@ -211,7 +237,7 @@ abstract class Hoa_Framework_Protocol {
      * @param   string  $path    Path to resolve.
      * @return  string
      */
-    public function resolve ( $path ) {
+    protected function _resolve ( $path ) {
 
         if(substr($path, 0, 6) == 'hoa://')
             $path = substr($path, 6);
@@ -234,7 +260,7 @@ abstract class Hoa_Framework_Protocol {
             else
                 return $this->getComponent($next)->reach(null);
 
-            return $this->getComponent($next)->resolve($handle);
+            return $this->getComponent($next)->_resolve($handle);
         }
 
         return $this->reach($path);
