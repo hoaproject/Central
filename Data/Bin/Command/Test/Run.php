@@ -117,6 +117,11 @@ class Trivial extends Hoa_Stream implements Hoa_Stream_Io_Out {
         return $this->write((string) $char[0], 1);
     }
 
+    public function writeBoolean ( $boolean ) {
+
+        return $this->write((string) (bool) $boolean, 1);
+    }
+
     public function writeInteger ( $integer ) {
 
         $integer = (string) (int) $integer;
@@ -355,6 +360,7 @@ class RunCommand extends Hoa_Console_Command_Abstract {
             'f'    => 'File to test in the repository.',
             'c'    => 'Class to test in the file.',
             'm'    => 'Method to test in the class.',
+            'i'    => 'Number of iterations.',
             'help' => 'This help.'
         )));
 
