@@ -104,6 +104,8 @@ abstract class Hoa_Tree_Visitor_Abstract extends Hoa_Visitor_Registry {
     public function __construct ( $order = self::PRE_ORDER ) {
 
         $this->setOrder($order);
+
+        return;
     }
 
     /**

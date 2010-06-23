@@ -90,6 +90,8 @@ class          Hoa_Tree_Visitor_Dump
     public function __construct ( $order = parent::IN_ORDER ) {
 
         parent::__construct($order);
+
+        return;
     }
 
     /**
@@ -115,13 +117,11 @@ class          Hoa_Tree_Visitor_Dump
 
         $this->_i++;
 
-        foreach($childs as $id => $child) {
-
+        foreach($childs as $id => $child)
             if($i++ < $max)
                 $pre  .= $child->accept($this, $handle, $eldnah);
             else
                 $post .= $child->accept($this, $handle, $eldnah);
-        }
 
         $this->_i--;
 
