@@ -209,7 +209,9 @@ class Hoa_Php_Io_Out extends Hoa_Stream implements Hoa_Stream_Io_Out {
     public function writeLine ( $line ) {
 
         if(false === $n = strpos($line, "\n"))
-            return $this->write($line, strlen($line));
+            return $this->write($line . "\n", strlen($line) + 1);
+
+        $n++;
 
         return $this->write(substr($line, 0, $n), $n);
     }
