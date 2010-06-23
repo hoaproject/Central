@@ -65,8 +65,35 @@ class          Hoa_Xml_Element
     extends    SimpleXMLElement
     implements Hoa_Stream_Io_Structural {
 
+    /**
+     * Root of XML tree.
+     *
+     * @var Hoa_Xml_Element object
+     */
     protected static $_root       = null;
+
+    /**
+     * CssToXPath instance.
+     *
+     * @var Hoa_Xml_CssToXPath object
+     */
     protected static $_cssToXPath = null;
+
+
+
+    /**
+     * Set root.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function setRoot ( $root ) {
+
+        $old         = self::$_root;
+        self::$_root = $root;
+
+        return $old;
+    }
 
     /**
      * Select root of the document: :root.
@@ -76,7 +103,7 @@ class          Hoa_Xml_Element
      */
     public function selectRoot ( ) {
 
-        return $this->_root;
+        return self::$_root;
     }
 
     /**
@@ -199,6 +226,7 @@ class          Hoa_Xml_Element
             self::$_cssToXPath = new Hoa_Xml_CssToXPath();
 
         self::$_cssToXPath->compile($query);
+        var_dump(self::$_cssToXPath->getXPath());
         return $this->xpath(self::$_cssToXPath->getXPath());
     }
 
