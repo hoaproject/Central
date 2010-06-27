@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Xml
- * @subpackage  Hoa_Xml_Write
+ * @subpackage  Hoa_Xml_Element_Write
  *
  */
 
@@ -43,9 +43,9 @@ require_once 'Core.php';
 import('Xml.Exception');
 
 /**
- * Hoa_Xml
+ * Hoa_Xml_Element
  */
-import('Xml.~');
+import('Xml.Element');
 
 /**
  * Hoa_Stream_Io_Out
@@ -53,12 +53,12 @@ import('Xml.~');
 import('Stream.Io.Out');
 
 /**
- * Hoa_Xml_Element_Write
+ * Hoa_StringBuffer_Write
  */
-import('Xml.Element.Write');
+import('StringBuffer.Write');
 
 /**
- * Class Hoa_Xml_Write.
+ * Class Hoa_Xml_Element_Write.
  *
  * Write into a XML element.
  *
@@ -68,22 +68,12 @@ import('Xml.Element.Write');
  * @since       PHP 5
  * @version     0.3
  * @package     Hoa_Xml
- * @subpackage  Hoa_Xml_Write
+ * @subpackage  Hoa_Xml_Element_Write
  */
 
-class          Hoa_Xml_Write
-    extends    Hoa_Xml
+class          Hoa_Xml_Element_Write
+    extends    Hoa_Xml_Element
     implements Hoa_Stream_Io_Out {
-
-    /**
-     *
-     */
-    public function __construct ( Hoa_Stream_Io_Out $stream ) {
-
-        parent::__construct('Hoa_Xml_Element_Write', $stream);
-
-        return;
-    }
 
     /**
      * Write n characters.
@@ -96,7 +86,17 @@ class          Hoa_Xml_Write
      */
     public function write ( $string, $length ) {
 
-        return $this->getStream()->write($string, $length);
+        if($length <= 0)
+            throw new Hoa_Xml_Exception(
+                'Length must be greather than 0, given %d.', 0, $length);
+
+        if(null === parent::$_buffer) {
+
+            parent::$_buffer = new Hoa_StringBuffer_Write();
+            parent::$_buffer->initializeWith($this->_toString());
+        }
+
+        return parent::$_buffer->write($length);
     }
 
     /**
@@ -108,7 +108,9 @@ class          Hoa_Xml_Write
      */
     public function writeString ( $string ) {
 
-        return $this->getStream()->writeString($string);
+        $string = (string) $string;
+
+        return $this->write($string, strlen($string));
     }
 
     /**
@@ -120,7 +122,7 @@ class          Hoa_Xml_Write
      */
     public function writeCharacter ( $char ) {
 
-        return $this->getStream()->writeCharacter($char);
+        return $this->write((string) $char[0], 1);
     }
 
     /**
@@ -132,7 +134,7 @@ class          Hoa_Xml_Write
      */
     public function writeBoolean ( $boolean ) {
 
-        return $this->getStream()->writeBoolean($boolean);
+        return $this->write((string) (bool) $boolean, 1);
     }
 
     /**
@@ -144,7 +146,9 @@ class          Hoa_Xml_Write
      */
     public function writeInteger ( $integer ) {
 
-        return $this->getStream()->writeInteger($integer);
+        $integer = (string) (int) $integer;
+
+        return $this->write($integer, strlen($integer));
     }
 
     /**
@@ -156,7 +160,9 @@ class          Hoa_Xml_Write
      */
     public function writeFloat ( $float ) {
 
-        return $this->getStream()->writeFloat($float);
+        $float = (string) (float) $float;
+
+        return $this->write($float, strlen($float));
     }
 
     /**
@@ -168,7 +174,7 @@ class          Hoa_Xml_Write
      */
     public function writeArray ( Array $array ) {
 
-        return $this->getStream()->writeArray($array);
+        return $this->write($array, strlen($array));
     }
 
     /**
@@ -180,7 +186,12 @@ class          Hoa_Xml_Write
      */
     public function writeLine ( $line ) {
 
-        return $this->getStream()->writeLine($line);
+        if(false === $n = strpos($line, "\n"))
+            return $this->write($line . "\n", strlen($line) + 1);
+
+        $n++;
+
+        return $this->write(substr($line, 0, $n), $n);
     }
 
     /**
@@ -192,7 +203,7 @@ class          Hoa_Xml_Write
      */
     public function writeAll ( $string ) {
 
-        return $this->getStream()->writeAll($string);
+        return $this->write($string, strlen($string));
     }
 
     /**
@@ -204,7 +215,7 @@ class          Hoa_Xml_Write
      */
     public function truncate ( $size ) {
 
-        return $this->getStream()->truncate($size);
+        return /* TODO */;
     }
 
     /**
@@ -216,7 +227,7 @@ class          Hoa_Xml_Write
      */
     public function writeDOM ( DOMElement $dom ) {
 
-        return $this->getStream()->writeDOM($dom);
+        return /* TODO */;
     }
 
     /**
@@ -228,7 +239,10 @@ class          Hoa_Xml_Write
      */
     public function writeAttributes ( Array $attributes ) {
 
-        return $this->getStream()->writeAttributes($attributes);
+        foreach($attributes as $name => $value)
+            $this->writeAttribute($name, $value);
+
+        return;
     }
 
     /**
@@ -241,6 +255,8 @@ class          Hoa_Xml_Write
      */
     public function writeAttribute ( $name, $value ) {
 
-        return $this->getStream()->writeAttribute($name, $value);
+        $this[$name] = $value;
+
+        return;
     }
 }

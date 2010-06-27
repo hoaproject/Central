@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Xml
- * @subpackage  Hoa_Xml_Element_Read
+ * @subpackage  Hoa_Xml_Element_ReadWrite
  *
  */
 
@@ -48,19 +48,19 @@ import('Xml.Exception');
 import('Xml.Element');
 
 /**
- * Hoa_Stream_Io_In
+ * Hoa_Stream_Io
  */
-import('Stream.Io.In');
+import('Stream.Io');
 
 /**
- * Hoa_StringBuffer_Read
+ * Hoa_StringBuffer_ReadWrite
  */
-import('StringBuffer.Read');
+import('StringBuffer.ReadWrite');
 
 /**
- * Class Hoa_Xml_Element_Read.
+ * Class Hoa_Xml_Element_ReadWrite.
  *
- * Read a XML element.
+ * Read/write a XML element.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
@@ -68,12 +68,12 @@ import('StringBuffer.Read');
  * @since       PHP 5
  * @version     0.3
  * @package     Hoa_Xml
- * @subpackage  Hoa_Xml_Element_Read
+ * @subpackage  Hoa_Xml_Element_ReadWrite
  */
 
-class          Hoa_Xml_Element_Read
+class          Hoa_Xml_Element_ReadWrite
     extends    Hoa_Xml_Element
-    implements Hoa_Stream_Io_In {
+    implements Hoa_Stream_Io {
 
     /**
      * Test for end-of-file.
@@ -259,5 +259,190 @@ class          Hoa_Xml_Element_Read
             return null;
 
         return $attributes[$name];
+    }
+
+    /**
+     * Write n characters.
+     *
+     * @access  public
+     * @param   string  $string    String.
+     * @param   int     $length    Length.
+     * @return  mixed
+     * @throw   Hoa_Xml_Exception
+     */
+    public function write ( $string, $length ) {
+
+        if($length <= 0)
+            throw new Hoa_Xml_Exception(
+                'Length must be greather than 0, given %d.', 0, $length);
+
+        if(null === parent::$_buffer) {
+
+            parent::$_buffer = new Hoa_StringBuffer_Write();
+            parent::$_buffer->initializeWith($this->_toString());
+        }
+
+        return parent::$_buffer->write($length);
+    }
+
+    /**
+     * Write a string.
+     *
+     * @access  public
+     * @param   string  $string    String.
+     * @return  mixed
+     */
+    public function writeString ( $string ) {
+
+        $string = (string) $string;
+
+        return $this->write($string, strlen($string));
+    }
+
+    /**
+     * Write a character.
+     *
+     * @access  public
+     * @param   string  $char    Character.
+     * @return  mixed
+     */
+    public function writeCharacter ( $char ) {
+
+        return $this->write((string) $char[0], 1);
+    }
+
+    /**
+     * Write a boolean.
+     *
+     * @access  public
+     * @param   bool    $boolean    Boolean.
+     * @return  mixed
+     */
+    public function writeBoolean ( $boolean ) {
+
+        return $this->write((string) (bool) $boolean, 1);
+    }
+
+    /**
+     * Write an integer.
+     *
+     * @access  public
+     * @param   int     $integer    Integer.
+     * @return  mixed
+     */
+    public function writeInteger ( $integer ) {
+
+        $integer = (string) (int) $integer;
+
+        return $this->write($integer, strlen($integer));
+    }
+
+    /**
+     * Write a float.
+     *
+     * @access  public
+     * @param   float   $float    Float.
+     * @return  mixed
+     */
+    public function writeFloat ( $float ) {
+
+        $float = (string) (float) $float;
+
+        return $this->write($float, strlen($float));
+    }
+
+    /**
+     * Write an array.
+     *
+     * @access  public
+     * @param   array   $array    Array.
+     * @return  mixed
+     */
+    public function writeArray ( Array $array ) {
+
+        return $this->write($array, strlen($array));
+    }
+
+    /**
+     * Write a line.
+     *
+     * @access  public
+     * @param   string  $line    Line.
+     * @return  mixed
+     */
+    public function writeLine ( $line ) {
+
+        if(false === $n = strpos($line, "\n"))
+            return $this->write($line . "\n", strlen($line) + 1);
+
+        $n++;
+
+        return $this->write(substr($line, 0, $n), $n);
+    }
+
+    /**
+     * Write all, i.e. as much as possible.
+     *
+     * @access  public
+     * @param   string  $string    String.
+     * @return  mixed
+     */
+    public function writeAll ( $string ) {
+
+        return $this->write($string, strlen($string));
+    }
+
+    /**
+     * Truncate to a given length.
+     *
+     * @access  public
+     * @param   int     $size    Size.
+     * @return  bool
+     */
+    public function truncate ( $size ) {
+
+        return /* TODO */;
+    }
+
+    /**
+     * Write a DOM tree.
+     *
+     * @access  public
+     * @param   DOMElement  $dom    DOM tree.
+     * @return  mixed
+     */
+    public function writeDOM ( DOMElement $dom ) {
+
+        return /* TODO */;
+    }
+
+    /**
+     * Write attributes.
+     *
+     * @access  public
+     * @param   array   $attributes    Attributes.
+     * @return  void
+     */
+    public function writeAttributes ( Array $attributes ) {
+
+        foreach($attributes as $name => $value)
+            $this->writeAttribute($name, $value);
+
+        return;
+    }
+
+    /**
+     * Write an attribute.
+     *
+     * @access  public
+     * @param   string  $name     Name.
+     * @param   string  $value    Value.
+     * @return  void
+     */
+    public function writeAttribute ( $name, $value ) {
+
+        $this[$name] = $value;
+
+        return;
     }
 }
