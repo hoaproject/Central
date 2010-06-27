@@ -74,7 +74,7 @@ import('Stream.Io.Out');
  * @package     Hoa_Log
  */
 
-class Hoa_Log {
+class Hoa_Log implements Hoa_Core_Event_Source {
 
     /**
      * Priority: emergency, system is unusable.
@@ -205,13 +205,6 @@ class Hoa_Log {
     protected $_backtrace      = null;
 
     /**
-     * Output stream array.
-     *
-     * @var Hoa_Log array
-     */
-    protected $_outputs        = array();
-
-    /**
      * Filters (combination of priorities constants, null means all).
      *
      * @var Hoa_Log int
@@ -231,20 +224,11 @@ class Hoa_Log {
      * Build a new log system.
      *
      * @access  private
-     * @param   Hoa_Stream  $stream    Output stream (can be null).
      * @return  void
      */
-    private function __construct ( $stream = null ) {
+    private function __construct ( ) {
 
-        if(null !== $stream) {
-
-            if(!is_array($stream))
-                $this->addOutputStream($stream);
-            else
-                $this->addOutputStreams($stream);
-        }
-
-        $this->_backtrace = new Hoa_Log_Backtrace();
+        return;
     }
 
     /**
@@ -252,65 +236,44 @@ class Hoa_Log {
      *
      * @access  public
      * @param   string      $id        Channel ID (i.e. singleton ID)
-     * @param   Hoa_Stream  $stream    Output stream (can be null).
      * @return  Hoa_Log
      * @throw   Hoa_Log_Exception
      */
-    public static function getChannel ( $id = null, $stream = null ) {
+    public static function getChannel ( $id = null ) {
+
+        import('Bench.~') and load();
+
+        $b = new Hoa_Bench();
+
+        $b->aaa->start();
 
         if(null === self::$_currentId && null === $id)
             throw new Hoa_Log_Exception(
                 'Must precise a singleton index once.', 0);
 
-        if(!isset(self::$_instances[$id]))
-            self::$_instances[$id] = new self($stream);
+        $b->aaa->stop();
+        $b->bbb->start();
+
+        if(!isset(self::$_instances[$id])) {
+
+            self::$_instances[$id] = new self();
+            Hoa_Core_Event::register(
+                'hoa://Event/Log/' . $id,
+                self::$_instances[$id]
+            );
+        }
 
         if(null !== $id)
             self::$_currentId = $id;
 
-        return self::$_instances[self::$_currentId];
-    }
+        $b->bbb->stop();
+        $b->ccc->start();
 
-    /**
-     * Add many output streams.
-     *
-     * @access  public
-     * @param   array   $streams    Array of output streams.
-     * @return  array
-     */
-    public function addOutputStreams ( Array $streams ) {
+        $handle = self::$_instances[self::$_currentId];
 
-        foreach($streams as $i => $stream)
-            $this->addOutputStream($stream);
+        $b->ccc->stop();
 
-        return $this->getOutputsStack();
-    }
-
-    /**
-     * Add an output stream. Must be a Hoa_Stream object but must also implement
-     * the Hoa_Stream_Io_Out interface.
-     *
-     * @access  public
-     * @param   Hoa_Stream  $stream    A stream (must implement the
-     *                                 Hoa_Stream_Io_Out).
-     * @return  array
-     */
-    public function addOutputStream ( Hoa_Stream $stream ) {
-
-        if(null === $stream)
-            return;
-
-        if(!($stream instanceof Hoa_Stream_Io_Out))
-            throw new Hoa_Log_Exception(
-                'Stream log must implement the Hoa_Stream_Io_Out interface.', 0);
-
-        if(false === $stream->isOpened())
-            throw new Hoa_Log_Exception(
-                'Stream log is not opened, maybe it failed.', 1);
-
-        $this->_outputs[$stream->__toString()] = $stream;
-
-        return $this->getOutputsStack();
+        return $handle;
     }
 
     /**
@@ -321,6 +284,9 @@ class Hoa_Log {
      * @return  int
      */
     public function accept ( $filter ) {
+
+        if(null === $this->_filters)
+            return $this->_filters = $filter;
 
         $old            = $this->_filters;
         $this->_filters = $old | $filter;
@@ -461,27 +427,23 @@ class Hoa_Log {
 
         $filters = $this->getFilters();
 
-        foreach($this->getOutputsStack() as $i => $output)
-            if($type & $filters || null === $filters) {
+        if($type & $filters || null === $filters)
+            Hoa_Core_Event::notify(
+                'hoa://Event/Log/' . self::$_currentId,
+                $this,
+                new Hoa_Core_Event_Bucket($handle)
+            );
 
-                $output->writeArray($handle);
-            }
+        if($type & self::DEBUG) {
 
-        if($type & self::DEBUG)
+            if(null === $this->_backtrace)
+                $this->_backtrace = new Hoa_Log_Backtrace();
+
             $this->_backtrace->debug();
+        }
+
 
         return;
-    }
-
-    /**
-     * Get outputs stack.
-     *
-     * @access  protected
-     * @return  array
-     */
-    protected function getOutputsStack ( ) {
-
-        return $this->_outputs;
     }
 
     /**
