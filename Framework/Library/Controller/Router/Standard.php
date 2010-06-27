@@ -33,9 +33,9 @@
  */
 
 /**
- * Hoa_Framework
+ * Hoa_Core
  */
-require_once 'Framework.php';
+require_once 'Core.php';
 
 /**
  * Hoa_Controller_Exception_RouterDoesNotReturnAnArray
@@ -77,12 +77,12 @@ import('Controller.Router.Rewrite');
  * @subpackage  Hoa_Controller_Router_Standard
  */
 
-class Hoa_Controller_Router_Standard implements Hoa_Framework_Parameterizable {
+class Hoa_Controller_Router_Standard implements Hoa_Core_Parameterizable {
 
     /**
      * Parameters from Hoa_Controller (i.e. a request).
      *
-     * @var Hoa_Framework_Parameter object
+     * @var Hoa_Core_Parameter object
      */
     private $_parameters = null;
 
@@ -166,10 +166,10 @@ class Hoa_Controller_Router_Standard implements Hoa_Framework_Parameterizable {
      * Set the current parameter (i.e. the current request).
      *
      * @access  public
-     * @param   Hoa_Framework_Parameter  $parameters    Parameters.
+     * @param   Hoa_Core_Parameter  $parameters    Parameters.
      * @return  Hoa_Controller_Router_Standard
      */
-    public function setRequest ( Hoa_Framework_Parameter $parameters ) {
+    public function setRequest ( Hoa_Core_Parameter $parameters ) {
 
         $this->_parameters = $parameters;
         $this->_router     = null;

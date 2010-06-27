@@ -33,9 +33,9 @@
  */
 
 /**
- * Hoa_Framework
+ * Hoa_Core
  */
-require_once 'Framework.php';
+require_once 'Core.php';
 
 /**
  * Class Hoa_Controller_Hoa_Controller_AbstractInterface.
@@ -52,12 +52,12 @@ require_once 'Framework.php';
  */
 
 class          Hoa_Controller_Dispatcher_Action
-    implements Hoa_Framework_Parameterizable_Readable {
+    implements Hoa_Core_Parameterizable_Readable {
 
     /**
      * Parameters of the current controller.
      *
-     * @var Hoa_Framework_Parameter object
+     * @var Hoa_Core_Parameter object
      */
     private $_parameters = null;
 
@@ -94,7 +94,7 @@ class          Hoa_Controller_Dispatcher_Action
      * @param   Hoa_View                            $view          View.
      * @return  void
      */
-    public function __construct ( Hoa_Framework_Parameter            $parameters,
+    public function __construct ( Hoa_Core_Parameter            $parameters,
                                   Hoa_Controller_Dispatcher_Abstract $dispatcher,
                                   Hoa_Controller_Response_Standard   $response,
                                   Hoa_View                           $view ) {

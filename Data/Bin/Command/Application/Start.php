@@ -136,17 +136,17 @@ class StartCommand extends Hoa_Console_Command_Abstract {
         if(null !== $view)
             $configurations['keywords']['view'] = $view;
 
-        $cd = Hoa_Framework_Parameter::zFormat(
+        $cd = Hoa_Core_Parameter::zFormat(
             $configurations['parameters']['controller.directory'],
             $configurations['keywords'],
             $configurations['parameters']
         );
-        $md = Hoa_Framework_Parameter::zFormat(
+        $md = Hoa_Core_Parameter::zFormat(
             $configurations['parameters']['model.share.directory'],
             $configurations['keywords'],
             $configurations['parameters']
         );
-        $vd = Hoa_Framework_Parameter::zFormat(
+        $vd = Hoa_Core_Parameter::zFormat(
             $configurations['parameters']['view.directory'],
             $configurations['keywords'],
             $configurations['parameters']

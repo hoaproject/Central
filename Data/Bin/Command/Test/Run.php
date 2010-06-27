@@ -223,7 +223,7 @@ class RunCommand extends Hoa_Console_Command_Abstract {
                 'Configuration cache file %s does not exists.', 0, $path);
 
         $configurations = require $path;
-        $repos          = Hoa_Framework_Parameter::zFormat(
+        $repos          = Hoa_Core_Parameter::zFormat(
             $configurations['parameters']['repository'],
             $configurations['keywords'],
             $configurations['parameters']
@@ -287,12 +287,12 @@ class RunCommand extends Hoa_Console_Command_Abstract {
             Hoa_Test_Praspel::LOG_CHANNEL
         )->addOutputStream(new Trivial($this));
 
-        $oracle       = Hoa_Framework_Parameter::zFormat(
+        $oracle       = Hoa_Core_Parameter::zFormat(
             $configurations['parameters']['ordeal.oracle'],
             $configurations['keywords'],
             $configurations['parameters']
         );
-        $battleground = Hoa_Framework_Parameter::zFormat(
+        $battleground = Hoa_Core_Parameter::zFormat(
             $configurations['parameters']['ordeal.battleground'],
             $configurations['keywords'],
             $configurations['parameters']

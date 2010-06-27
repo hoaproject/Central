@@ -92,7 +92,7 @@ class RemoveCommand extends Hoa_Console_Command_Abstract {
                 'Configuration cache file %s does not exists.', 0, $path);
 
         $configurations = require $path;
-        $repos          = Hoa_Framework_Parameter::zFormat(
+        $repos          = Hoa_Core_Parameter::zFormat(
             $configurations['parameters']['repository'],
             $configurations['keywords'],
             $configurations['parameters']

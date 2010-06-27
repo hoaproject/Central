@@ -52,14 +52,14 @@ ini_set('include_path', dirname(dirname(dirname(__FILE__))) .
 ini_set('date.timezone', 'Europe/Paris');
 
 /**
- * Hoa_Framework
+ * Hoa_Core
  */
-require_once 'Framework.php';
+require_once 'Core.php';
 
 /**
  * Add some components the the hoa://'s protocol.
  */
-Hoa_Framework::getInstance()->setParameter(
+Hoa_Core::getInstance()->setParameter(
     'protocol.Data/Bin', '(:%protocol.Data:)' . 'Bin' . DS
 );
 

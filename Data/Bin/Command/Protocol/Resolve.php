@@ -103,7 +103,7 @@ class ResolveCommand extends Hoa_Console_Command_Abstract {
             if(true === $verbose)
                 cout(parent::stylize($path, 'info') . ' is equivalent to: ');
 
-            cout(Hoa_Framework::getProtocol()->resolve($path));
+            cout(Hoa_Core::getProtocol()->resolve($path));
         }
 
 

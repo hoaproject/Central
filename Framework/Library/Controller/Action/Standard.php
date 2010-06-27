@@ -33,9 +33,9 @@
  */
 
 /**
- * Hoa_Framework
+ * Hoa_Core
  */
-require_once 'Framework.php';
+require_once 'Core.php';
 
 /**
  * Hoa_Controller_Dispatcher_Action
@@ -75,7 +75,7 @@ class Hoa_Controller_Action_Standard extends Hoa_Controller_Dispatcher_Action {
      * Prepare autoload model, and set view parameters.
      *
      * @access  public
-     * @param   Hoa_Framework_Parameter             $parameter          Parameter.
+     * @param   Hoa_Core_Parameter             $parameter          Parameter.
      * @param   Hoa_Controller_Dispatcher_Abstract  $dispatcher         Dispatcher.
      * @param   Hoa_Controller_Response_Standard    $response           Response.
      * @param   Hoa_View                            $view               View.
@@ -83,7 +83,7 @@ class Hoa_Controller_Action_Standard extends Hoa_Controller_Dispatcher_Action {
      *                                                                  objects.
      * @return  void
      */
-    public function __construct ( Hoa_Framework_Parameter            $parameters,
+    public function __construct ( Hoa_Core_Parameter            $parameters,
                                   Hoa_Controller_Dispatcher_Abstract $dispatcher,
                                   Hoa_Controller_Response_Standard   $response,
                                   Hoa_View                           $view,

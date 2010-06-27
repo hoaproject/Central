@@ -133,7 +133,7 @@ class WhereisCommand extends Hoa_Console_Command_Abstract {
             $configurations['keywords']['action']     = $controllerName;
         }
 
-        $class     = Hoa_Framework_Parameter::zFormat(
+        $class     = Hoa_Core_Parameter::zFormat(
             $configurations['parameters']['controller.class'],
             $configurations['keywords'],
             $configurations['parameters']
@@ -141,12 +141,12 @@ class WhereisCommand extends Hoa_Console_Command_Abstract {
 
         if(null === $primary) {
 
-            $directory = Hoa_Framework_Parameter::zFormat(
+            $directory = Hoa_Core_Parameter::zFormat(
                 $configurations['parameters']['controller.directory'],
                 $configurations['keywords'],
                 $configurations['parameters']
             );
-            $file      = Hoa_Framework_Parameter::zFormat(
+            $file      = Hoa_Core_Parameter::zFormat(
                 $configurations['parameters']['controller.file'],
                 $configurations['keywords'],
                 $configurations['parameters']
@@ -154,19 +154,19 @@ class WhereisCommand extends Hoa_Console_Command_Abstract {
         }
         else {
 
-            $directory = Hoa_Framework_Parameter::zFormat(
+            $directory = Hoa_Core_Parameter::zFormat(
                 $configurations['parameters']['action.directory'],
                 $configurations['keywords'],
                 $configurations['parameters']
             );
-            $file      = Hoa_Framework_Parameter::zFormat(
+            $file      = Hoa_Core_Parameter::zFormat(
                 $configurations['parameters']['action.file'],
                 $configurations['keywords'],
                 $configurations['parameters']
             );
         }
 
-        $model = Hoa_Framework_Parameter::zFormat(
+        $model = Hoa_Core_Parameter::zFormat(
             $configurations['parameters']['model.directory'],
             $configurations['keywords'],
             $configurations['parameters']

@@ -42,8 +42,8 @@
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
  * @version     0.1
- * @package     Hoa_Framework
- * @subpackage  Hoa_Framework_Exception
+ * @package     Hoa_Core
+ * @subpackage  Hoa_Core_Exception
  */
 
 class Hoa_Exception extends Exception {

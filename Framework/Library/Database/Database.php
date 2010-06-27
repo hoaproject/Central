@@ -32,9 +32,9 @@
  */
 
 /**
- * Hoa_Framework
+ * Hoa_Core
  */
-require_once 'Framework.php';
+require_once 'Core.php';
 
 /**
  * Hoa_Database_Exception
@@ -75,7 +75,7 @@ import('Database.Cache.Table');
  * @package     Hoa_Database
  */
 
-class Hoa_Database implements Hoa_Framework_Parameterizable {
+class Hoa_Database implements Hoa_Core_Parameterizable {
 
     /**
      * Singleton.
@@ -94,7 +94,7 @@ class Hoa_Database implements Hoa_Framework_Parameterizable {
     /**
      * Parameters of Hoa_Database.
      *
-     * @var Hoa_Framework_Parameter object
+     * @var Hoa_Core_Parameter object
      */
     protected $_parameters    = null;
 
@@ -110,7 +110,7 @@ class Hoa_Database implements Hoa_Framework_Parameterizable {
      */
     private function __construct ( Array $parameters = array() ) {
 
-        $this->_parameters = new Hoa_Framework_Parameter(
+        $this->_parameters = new Hoa_Core_Parameter(
             $this,
             array(
                 'base'   => null,
@@ -191,7 +191,7 @@ class Hoa_Database implements Hoa_Framework_Parameterizable {
         $this->_parameters->shareWith(
             $this,
             $dal,
-            Hoa_Framework_Parameter::PERMISSION_READ
+            Hoa_Core_Parameter::PERMISSION_READ
         );
 
         return $this->_parameters;

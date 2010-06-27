@@ -33,9 +33,9 @@
  */
 
 /**
- * Hoa_Framework
+ * Hoa_Core
  */
-require_once 'Framework.php';
+require_once 'Core.php';
 
 /**
  * Hoa_Database_Dal_Exception
@@ -66,7 +66,7 @@ import('Database.~');
  * @subpackage  Hoa_Database_Dal
  */
 
-class Hoa_Database_Dal implements Hoa_Framework_Parameterizable_Readable {
+class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
 
     /**
      * Abstract layer : DBA.
@@ -120,7 +120,7 @@ class Hoa_Database_Dal implements Hoa_Framework_Parameterizable_Readable {
     /**
      * Parameter of Hoa_Database.
      *
-     * @var Hoa_Framework_Parameter object
+     * @var Hoa_Core_Parameter object
      */
     protected $_parameters    = null;
 

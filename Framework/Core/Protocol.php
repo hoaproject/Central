@@ -27,12 +27,12 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Framework_Protocol
+ * @package     Hoa_Core_Protocol
  *
  */
 
 /**
- * Class Hoa_Framework_Protocol.
+ * Class Hoa_Core_Protocol.
  *
  * Abstract class for all hoa://'s components.
  *
@@ -41,10 +41,10 @@
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP5
  * @version     0.1
- * @package     Hoa_Framework_Protocol
+ * @package     Hoa_Core_Protocol
  */
 
-abstract class Hoa_Framework_Protocol {
+abstract class Hoa_Core_Protocol {
 
     /**
      * Overwrite components if already exists.
@@ -63,35 +63,35 @@ abstract class Hoa_Framework_Protocol {
     /**
      * Component's name.
      *
-     * @var Hoa_Framework_Protocol string
+     * @var Hoa_Core_Protocol string
      */
     protected $_name       = null;
 
     /**
      * Path for the reach() method.
      *
-     * @var Hoa_Framework_Protocol string
+     * @var Hoa_Core_Protocol string
      */
     protected $_reach      = null;
 
     /**
      * Collections of sub-components.
      *
-     * @var Hoa_Framework_Protocol array
+     * @var Hoa_Core_Protocol array
      */
     private $_components   = array();
 
     /**
      * Cache of resolver.
      *
-     * @var Hoa_Framework_Protocol array
+     * @var Hoa_Core_Protocol array
      */
     private static $_cache = array();
 
     /**
      * Static indentation for the __toString() method.
      *
-     * @var Hoa_Framework_Protocol int
+     * @var Hoa_Core_Protocol int
      */
     private static $i      = 0;
 
@@ -128,13 +128,13 @@ abstract class Hoa_Framework_Protocol {
      * @param   string  $reach        Path for the reach() method.
      * @param   bool    $overwrite    Overwrite existing components (please, see
      *                                self::*_OVERWRITE constants).
-     * @return  Hoa_Framework_Protocol
+     * @return  Hoa_Core_Protocol
      */
     public function addComponentHelper ( $path, $reach,
                                          $overwrite = self::DO_NOT_OVERWRITE ) {
 
         $components = explode('/', $path);
-        $current    = Hoa_Framework::getProtocol();
+        $current    = Hoa_Core::getProtocol();
         $handle     = null;
         $max        = count($components) - 1;
 
@@ -149,9 +149,9 @@ abstract class Hoa_Framework_Protocol {
             }
 
             if($i != $max)
-                $handle = new Hoa_Framework_Protocol_Generic($component);
+                $handle = new Hoa_Core_Protocol_Generic($component);
             else
-                $handle = new Hoa_Framework_Protocol_Generic($component, $reach);
+                $handle = new Hoa_Core_Protocol_Generic($component, $reach);
 
             $current->addComponent($handle);
             $current = $handle;
@@ -164,11 +164,11 @@ abstract class Hoa_Framework_Protocol {
      * Add a component.
      *
      * @access  public
-     * @param   Hoa_Framework_Protocol  $component    Component to add.
-     * @return  Hoa_Framework_Protocol
+     * @param   Hoa_Core_Protocol  $component    Component to add.
+     * @return  Hoa_Core_Protocol
      * @throws  Hoa_Exception
      */
-    public function addComponent ( Hoa_Framework_Protocol $component ) {
+    public function addComponent ( Hoa_Core_Protocol $component ) {
 
         $name = $component->getName();
 
@@ -186,7 +186,7 @@ abstract class Hoa_Framework_Protocol {
      *
      * @access  public
      * @param   string  $component    Component name.
-     * @return  Hoa_Framework_Protocol
+     * @return  Hoa_Core_Protocol
      * @throw   Hoa_Exception
      */
     public function getComponent ( $component ) {
@@ -324,7 +324,7 @@ abstract class Hoa_Framework_Protocol {
 }
 
 /**
- * Class Hoa_Framework_Protocol_Generic.
+ * Class Hoa_Core_Protocol_Generic.
  *
  * hoa://'s protocol's generic component.
  *
@@ -333,14 +333,14 @@ abstract class Hoa_Framework_Protocol {
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP5
  * @version     0.3
- * @package     Hoa_Framework_Protocol
- * @subpackage  Hoa_Framework_Protocol_Generic
+ * @package     Hoa_Core_Protocol
+ * @subpackage  Hoa_Core_Protocol_Generic
  */
 
-class Hoa_Framework_Protocol_Generic extends Hoa_Framework_Protocol { }
+class Hoa_Core_Protocol_Generic extends Hoa_Core_Protocol { }
 
 /**
- * Class Hoa_Framework_Protocol_Root.
+ * Class Hoa_Core_Protocol_Root.
  *
  * hoa://'s protocol's root.
  *
@@ -349,22 +349,22 @@ class Hoa_Framework_Protocol_Generic extends Hoa_Framework_Protocol { }
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP5
  * @version     0.3
- * @package     Hoa_Framework_Protocol
- * @subpackage  Hoa_Framework_Protocol_Root
+ * @package     Hoa_Core_Protocol
+ * @subpackage  Hoa_Core_Protocol_Root
  */
 
-class Hoa_Framework_Protocol_Root extends Hoa_Framework_Protocol {
+class Hoa_Core_Protocol_Root extends Hoa_Core_Protocol {
 
     /**
      * Component's name.
      *
-     * @var Hoa_Framework_Protocol_Root string
+     * @var Hoa_Core_Protocol_Root string
      */
     protected $_name = 'hoa://';
 }
 
 /**
- * Class Hoa_Framework_Protocol_Wrapper.
+ * Class Hoa_Core_Protocol_Wrapper.
  *
  * Wrapper for hoa://'s protocol.
  *
@@ -373,30 +373,30 @@ class Hoa_Framework_Protocol_Root extends Hoa_Framework_Protocol {
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP5
  * @version     0.3
- * @package     Hoa_Framework_Protocol
- * @subpackage  Hoa_Framework_Protocol_Wrapper
+ * @package     Hoa_Core_Protocol
+ * @subpackage  Hoa_Core_Protocol_Wrapper
  */
 
-class Hoa_Framework_Protocol_Wrapper {
+class Hoa_Core_Protocol_Wrapper {
 
     /**
      * Opened stream.
      *
-     * @var Hoa_Framework resource
+     * @var Hoa_Core resource
      */
     private $_stream     = null;
 
     /**
      * Stream name (filename).
      *
-     * @var Hoa_Framework string
+     * @var Hoa_Core string
      */
     private $_streamName = null;
 
     /**
      * Stream context (given by the streamWrapper class).
      *
-     * @var Hoa_Framework resource
+     * @var Hoa_Core resource
      */
     public $context      = null;
 
@@ -410,7 +410,7 @@ class Hoa_Framework_Protocol_Wrapper {
      */
     public static function realPath ( $path ) {
 
-        return Hoa_Framework::getProtocol()->resolve($path);
+        return Hoa_Core::getProtocol()->resolve($path);
     }
 
     /**
@@ -832,4 +832,4 @@ class Hoa_Framework_Protocol_Wrapper {
 /**
  * Register the hoa:// protocol.
  */
-stream_wrapper_register('hoa', 'Hoa_Framework_Protocol_Wrapper');
+stream_wrapper_register('hoa', 'Hoa_Core_Protocol_Wrapper');

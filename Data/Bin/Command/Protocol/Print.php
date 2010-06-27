@@ -88,7 +88,7 @@ class PrintCommand extends Hoa_Console_Command_Abstract {
                   break;
             }
 
-            cout(Hoa_Framework::getProtocol()->__toString());
+            cout(Hoa_Core::getProtocol()->__toString());
         }
 
 

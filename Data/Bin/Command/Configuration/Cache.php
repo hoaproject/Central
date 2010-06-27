@@ -95,7 +95,7 @@ class CacheCommand extends Hoa_Console_Command_Abstract {
             }
         }
 
-        $configuration = Hoa_Framework::getProtocol()->resolve(
+        $configuration = Hoa_Core::getProtocol()->resolve(
             'hoa://Data/Etc/Configuration/'
         );
         $files         = glob($configuration . DS . '*.json');

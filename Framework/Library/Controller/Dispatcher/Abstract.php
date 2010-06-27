@@ -33,9 +33,9 @@
  */
 
 /**
- * Hoa_Framework
+ * Hoa_Core
  */
-require_once 'Framework.php';
+require_once 'Core.php';
 
 /**
  * Hoa_Controller_Exception_ControllerIsNotFound
@@ -81,12 +81,12 @@ import('Controller.Dispatcher.Action');
  */
 
 class          Hoa_Controller_Dispatcher_Abstract
-    implements Hoa_Framework_Parameterizable {
+    implements Hoa_Core_Parameterizable {
 
     /**
      * Parameters of current controller.
      *
-     * @var Hoa_Framework_Parameter object
+     * @var Hoa_Core_Parameter object
      */
     protected $_parameters     = null;
 
@@ -124,10 +124,10 @@ class          Hoa_Controller_Dispatcher_Abstract
      * Set parameter of current controller.
      *
      * @access  public
-     * @param   Hoa_Framework_Parameter  $parameters    Parameters.
+     * @param   Hoa_Core_Parameter  $parameters    Parameters.
      * @return  Hoa_Controller_Dispatcher_Abstract
      */
-    public function setRequest ( Hoa_Framework_Parameter $parameters ) {
+    public function setRequest ( Hoa_Core_Parameter $parameters ) {
 
         $this->_parameters = $parameters;
 
@@ -370,7 +370,7 @@ class          Hoa_Controller_Dispatcher_Abstract
                 $this->_parameters->shareWith(
                     $this,
                     $object,
-                    Hoa_Framework_Parameter::PERMISSION_READ
+                    Hoa_Core_Parameter::PERMISSION_READ
                 );
 
                 $this->_view->setDirectory($this->getFormattedParameter('view.directory'));

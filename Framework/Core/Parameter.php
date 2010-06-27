@@ -27,13 +27,13 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Framework
- * @subpackage  Hoa_Framework_Parameter
+ * @package     Hoa_Core
+ * @subpackage  Hoa_Core_Parameter
  *
  */
 
 /**
- * Interface Hoa_Framework_Parameterizable_Readable.
+ * Interface Hoa_Core_Parameterizable_Readable.
  *
  * Interface for all classes or packages which parameters are readable.
  *
@@ -42,11 +42,11 @@
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP5
  * @version     0.1
- * @package     Hoa_Framework_Parameter
- * @subpackage  Hoa_Framework_Parameterizable_Readable
+ * @package     Hoa_Core_Parameter
+ * @subpackage  Hoa_Core_Parameterizable_Readable
  */
 
-interface Hoa_Framework_Parameterizable_Readable {
+interface Hoa_Core_Parameterizable_Readable {
 
     /**
      * Get many parameters from a class.
@@ -80,7 +80,7 @@ interface Hoa_Framework_Parameterizable_Readable {
 }
 
 /**
- * Interface Hoa_Framework_Parameterizable_Writable.
+ * Interface Hoa_Core_Parameterizable_Writable.
  *
  * Interface for all classes or packages which parameters are writable.
  *
@@ -89,11 +89,11 @@ interface Hoa_Framework_Parameterizable_Readable {
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP5
  * @version     0.1
- * @package     Hoa_Framework_Parameter
- * @subpackage  Hoa_Framework_Parameterizable_Writable
+ * @package     Hoa_Core_Parameter
+ * @subpackage  Hoa_Core_Parameterizable_Writable
  */
 
-interface Hoa_Framework_Parameterizable_Writable {
+interface Hoa_Core_Parameterizable_Writable {
 
     /**
      * Set many parameters to a class.
@@ -118,7 +118,7 @@ interface Hoa_Framework_Parameterizable_Writable {
 }
 
 /**
- * Interface Hoa_Framework_Parameterizable.
+ * Interface Hoa_Core_Parameterizable.
  *
  * Interface for all classes or packages that are parameterizable.
  *
@@ -127,16 +127,16 @@ interface Hoa_Framework_Parameterizable_Writable {
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP5
  * @version     0.1
- * @package     Hoa_Framework_Parameter
- * @subpackage  Hoa_Framework_Parameterizable
+ * @package     Hoa_Core_Parameter
+ * @subpackage  Hoa_Core_Parameterizable
  */
 
-interface   Hoa_Framework_Parameterizable
-    extends Hoa_Framework_Parameterizable_Readable,
-            Hoa_Framework_Parameterizable_Writable { }
+interface   Hoa_Core_Parameterizable
+    extends Hoa_Core_Parameterizable_Readable,
+            Hoa_Core_Parameterizable_Writable { }
 
 /**
- * Class Hoa_Framework_Parameter.
+ * Class Hoa_Core_Parameter.
  *
  * The parameter object, contains a set of parameters. It can be shared with
  * other class with permissions (read, write, shared or combinations of these
@@ -147,10 +147,10 @@ interface   Hoa_Framework_Parameterizable
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP5
  * @version     0.1
- * @package     Hoa_Framework_Parameter
+ * @package     Hoa_Core_Parameter
  */
 
-class Hoa_Framework_Parameter {
+class Hoa_Core_Parameter {
 
     /**
      * Permission to read.
@@ -183,56 +183,56 @@ class Hoa_Framework_Parameter {
     /**
      * Collection of package's parameters.
      *
-     * @var Hoa_Framework_Parameter array
+     * @var Hoa_Core_Parameter array
      */
     private $_parameters               = array();
 
     /**
      * Collection of package's keywords.
      *
-     * @var Hoa_Framework_Parameter array
+     * @var Hoa_Core_Parameter array
      */
     private $_keywords                 = array();
 
     /**
      * Current analyzed parameters.
      *
-     * @var Hoa_Framework_Parameter array
+     * @var Hoa_Core_Parameter array
      */
     private static $_currentParameters = null;
 
     /**
      * Current analyzed parameter.
      *
-     * @var Hoa_Framework_Parameter string
+     * @var Hoa_Core_Parameter string
      */
     private static $_currentParameter  = null;
 
     /**
      * Current analyzed keywords.
      *
-     * @var Hoa_Framework_Parameter array
+     * @var Hoa_Core_Parameter array
      */
     private static $_currentKeywords   = null;
 
     /**
      * Parameters' owner.
      *
-     * @var Hoa_Framework_Parameter string
+     * @var Hoa_Core_Parameter string
      */
     private $_owner                    = null;
 
     /**
      * Owner's friends with associated permissions.
      *
-     * @var Hoa_Framework_Parameter array
+     * @var Hoa_Core_Parameter array
      */
     private $_friends                  = array();
 
     /**
      * Constants values.
      *
-     * @var Hoa_Framework_Parameter array
+     * @var Hoa_Core_Parameter array
      */
     private static $_constants         = array();
 
@@ -242,13 +242,13 @@ class Hoa_Framework_Parameter {
      * Construct a new set of parameters.
      *
      * @access  public
-     * @param   Hoa_Framework_Parameterizable  $owner          Owner.
+     * @param   Hoa_Core_Parameterizable  $owner          Owner.
      * @param   array                          $keywords       Keywords.
      * @param   array                          $parameters     Parameters.
      * @param   string                         $ownerParent    Owner parent.
      * @return  void
      */
-    public function __construct ( Hoa_Framework_Parameterizable $owner,
+    public function __construct ( Hoa_Core_Parameterizable $owner,
                                   Array $keywords   = array(),
                                   Array $parameters = array(),
                                   $ownerParent      = null ) {
@@ -900,15 +900,15 @@ class Hoa_Framework_Parameter {
      */
     public function check ( $id, $permissions ) {
 
-        if(!(   $id instanceof Hoa_Framework_Parameterizable
-             || $id instanceof Hoa_Framework_Parameterizable_Readable
-             || $id instanceof Hoa_Framework_Parameterizable_Writable))
+        if(!(   $id instanceof Hoa_Core_Parameterizable
+             || $id instanceof Hoa_Core_Parameterizable_Readable
+             || $id instanceof Hoa_Core_Parameterizable_Writable))
             throw new Hoa_Exception(
                 'Class %s is not valid. ' .
                 'Parameterizable classes must extend ' .
-                'Hoa_Framework_Parameterizable, ' .
-                'Hoa_Framework_Parameterizable_Readable or ' .
-                'Hoa_Framework_Parameterizable_Writable interfaces.',
+                'Hoa_Core_Parameterizable, ' .
+                'Hoa_Core_Parameterizable_Readable or ' .
+                'Hoa_Core_Parameterizable_Writable interfaces.',
                 3, $id);
 
         $iid = get_class($id);

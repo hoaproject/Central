@@ -83,7 +83,7 @@ class RootCommand extends Hoa_Console_Command_Abstract {
      */
     public function main ( ) {
 
-        $framework = Hoa_Framework::getInstance();
+        $framework = Hoa_Core::getInstance();
         $verbose   = true;
         $info      = $framework->getFormattedParameter('root.framework');
         $message   = 'Framework\'s root: ' .

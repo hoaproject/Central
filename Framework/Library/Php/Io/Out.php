@@ -33,9 +33,9 @@
  */
 
 /**
- * Hoa_Framework
+ * Hoa_Core
  */
-require_once 'Framework.php';
+require_once 'Core.php';
 
 /**
  * Hoa_Php_Io_Exception
@@ -125,8 +125,13 @@ class Hoa_Php_Io_Out extends Hoa_Stream implements Hoa_Stream_Io_Out {
      * @param   string  $string    String.
      * @param   int     $length    Length.
      * @return  mixed
+     * @throw   Hoa_Php_Exception
      */
     public function write ( $string, $length ) {
+
+        if($length <= 0)
+            throw new Hoa_Php_Exception(
+                'Length must be greather than 0, given %d.', 0, $length);
 
         return fwrite($this->getStream(), $string, $length);
     }

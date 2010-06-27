@@ -27,24 +27,18 @@
  *
  *
  * @category    Framework
- * @package     Hoa_Framework
+ * @package     Hoa_Core
  *
  */
 
 /**
- * Hoa_Exception
+ * Check if Hoa was well-included.
  */
-require_once 'Exception.php';
-
-/**
- * Hoa_Framework_Parameter
- */
-require_once 'Parameter.php';
-
-/**
- * Hoa_Framework_Protocol
- */
-require_once 'Protocol.php';
+!(
+    !defined('HOA') and define('HOA', true)
+)
+and
+    exit('The Hoa framework main file (Framework.php) must be included once.');
 
 /**
  * Some usefull constants.
@@ -72,20 +66,31 @@ require_once 'Protocol.php';
 !defined('HOA_VERSION_STATUS')  and define('HOA_VERSION_STATUS',  'b');
 
 /**
- * Check if Hoa was well-included.
+ * Hoa_Exception
  */
-!(
-    !defined('HOA') and define('HOA', true)
-)
-and
-    exit('The Hoa framework main file (Framework.php) must be included once.');
+require_once 'Exception.php';
+
+/**
+ * Hoa_Core_Parameter
+ */
+require_once 'Parameter.php';
+
+/**
+ * Hoa_Core_Protocol
+ */
+require_once 'Protocol.php';
+
+/**
+ * Hoa_Core_Event
+ */
+require_once 'Event.php';
 
 
 /**
- * Class Hoa_Framework.
+ * Class Hoa_Core.
  *
- * Hoa_Framework is the framework package manager.
- * Each package must include Hoa_Framework, because it is the “taproot” of the
+ * Hoa_Core is the framework package manager.
+ * Each package must include Hoa_Core, because it is the “taproot” of the
  * framework.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
@@ -93,10 +98,10 @@ and
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP5
  * @version     0.5
- * @package     Hoa_Framework
+ * @package     Hoa_Core
  */
 
-class Hoa_Framework implements Hoa_Framework_Parameterizable {
+class Hoa_Core implements Hoa_Core_Parameterizable {
 
     /**
      * Import constant : path collection index.
@@ -115,42 +120,42 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
     /**
      * Stack of all files that might be imported.
      *
-     * @var Hoa_Framework array
+     * @var Hoa_Core array
      */
     private static $_importStack = array();
 
     /**
      * Stack of all registered shutdown function.
      *
-     * @var Hoa_Framework array
+     * @var Hoa_Core array
      */
     private static $_rsdf        = array();
 
     /**
      * Tree of components, starts by the root.
      *
-     * @var Hoa_Framework_Protocol_Root object
+     * @var Hoa_Core_Protocol_Root object
      */
     private static $_root        = null;
 
     /**
-     * Parameters of Hoa_Framework.
+     * Parameters of Hoa_Core.
      *
-     * @var Hoa_Framework_Parameter object
+     * @var Hoa_Core_Parameter object
      */
     protected $_parameters       = null;
 
     /**
      * Singleton.
      *
-     * @var Hoa_Framework object
+     * @var Hoa_Core object
      */
     private static $_instance    = null;
 
     /**
      * Last imported file path.
      *
-     * @var Hoa_Framework array
+     * @var Hoa_Core array
      */
     private static $_lastImport  = array();
 
@@ -160,7 +165,7 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
      * Singleton.
      *
      * @access  public
-     * @return  Hoa_Framework
+     * @return  Hoa_Core
      */
     public static function getInstance ( ) {
 
@@ -174,13 +179,13 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
      * Initialize the framework.
      *
      * @access  public
-     * @param   array   $parameters    Parameters of Hoa_Framework.
-     * @return  Hoa_Framework
+     * @param   array   $parameters    Parameters of Hoa_Core.
+     * @return  Hoa_Core
      */
     public function initialize ( Array $parameters = array() ) {
 
         $root              = dirname(dirname(__FILE__));
-        $this->_parameters = new Hoa_Framework_Parameter(
+        $this->_parameters = new Hoa_Core_Parameter(
             $this,
             array(
                 'root.ofFrameworkDirectory' => $root
@@ -326,7 +331,7 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
             $protocolRoot->addComponentHelper(
                 $path,
                 $reach,
-                Hoa_Framework_Protocol::OVERWRITE
+                Hoa_Core_Protocol::OVERWRITE
             );
 
         return;
@@ -505,7 +510,7 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
      */
     public static function importModule ( $path ) {
 
-        $i               = Hoa_Framework::getInstance();
+        $i               = Hoa_Core::getInstance();
         $frameworkModule = $i->getFormattedParameter('framework.module');
         $dataModule      = $i->getFormattedParameter('data.module');
 
@@ -622,12 +627,12 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
      * Get protocol's root.
      *
      * @access  public
-     * @return  Hoa_Framework_Protocol_Root
+     * @return  Hoa_Core_Protocol_Root
      */
     public static function getProtocol ( ) {
 
         if(null === self::$_root)
-            self::$_root = new Hoa_Framework_Protocol_Root();
+            self::$_root = new Hoa_Core_Protocol_Root();
 
         return self::$_root;
     }
@@ -656,7 +661,7 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
 
 
 /**
- * Alias of Hoa_Framework::_define().
+ * Alias of Hoa_Core::_define().
  *
  * @access  public
  * @param   string  $name     The name of the constant.
@@ -666,11 +671,11 @@ class Hoa_Framework implements Hoa_Framework_Parameterizable {
  */
 function _define ( $name = '', $value = '', $case = false ) {
 
-    return Hoa_Framework::_define($name, $value, $case);
+    return Hoa_Core::_define($name, $value, $case);
 }
 
 /**
- * Alias of Hoa_Framework::import().
+ * Alias of Hoa_Core::import().
  *
  * @access  public
  * @param   string  $path    Path.
@@ -679,11 +684,11 @@ function _define ( $name = '', $value = '', $case = false ) {
  */
 function import ( $path ) {
 
-    return Hoa_Framework::import($path);
+    return Hoa_Core::import($path);
 }
 
 /**
- * Alias of Hoa_Framework::importModule().
+ * Alias of Hoa_Core::importModule().
  *
  * @access  public
  * @param   string  $path    Path.
@@ -692,27 +697,27 @@ function import ( $path ) {
  */
 function importModule ( $path ) {
 
-    return Hoa_Framework::importModule($path);
+    return Hoa_Core::importModule($path);
 }
 
 /**
- * Alias of Hoa_Framework::load().
+ * Alias of Hoa_Core::load().
  *
  * @access  public
  * @return  void
  */
 function load ( ) {
 
-    return Hoa_Framework::load();
+    return Hoa_Core::load();
 }
 
 
 /**
  * Set the default autoload.
  */
-spl_autoload_register(array('Hoa_Framework', 'autoload'));
+spl_autoload_register(array('Hoa_Core', 'autoload'));
 
 /**
  * Then, initialize Hoa.
  */
-Hoa_Framework::getInstance()->initialize();
+Hoa_Core::getInstance()->initialize();

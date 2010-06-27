@@ -33,9 +33,9 @@
  */
 
 /**
- * Hoa_Framework
+ * Hoa_Core
  */
-require_once 'Framework.php';
+require_once 'Core.php';
 
 /**
  * Hoa_Controller_Exception
@@ -92,7 +92,7 @@ import('View.~');
  * @subpackage  Hoa_Controller_Front
  */
 
-class Hoa_Controller_Front implements Hoa_Framework_Parameterizable {
+class Hoa_Controller_Front implements Hoa_Core_Parameterizable {
 
     /**
      * Hoa_Controller_Front instance.
@@ -133,7 +133,7 @@ class Hoa_Controller_Front implements Hoa_Framework_Parameterizable {
     /**
      * The Hoa_Controller parameters.
      *
-     * @var Hoa_Framework_Parameter object
+     * @var Hoa_Core_Parameter object
      */
     private $_parameters       = null;
 
@@ -152,7 +152,7 @@ class Hoa_Controller_Front implements Hoa_Framework_Parameterizable {
     private function __construct ( Array $parameters   = array(),
                                          $autoDispatch = false) {
 
-        $this->_parameters = new Hoa_Framework_Parameter(
+        $this->_parameters = new Hoa_Core_Parameter(
             $this,
             array(
                 'controller'  => 'index',
@@ -388,8 +388,8 @@ class Hoa_Controller_Front implements Hoa_Framework_Parameterizable {
                 $parameters->shareWith(
                     $this,
                     $router,
-                    Hoa_Framework_Parameter::PERMISSION_READ |
-                    Hoa_Framework_Parameter::PERMISSION_WRITE
+                    Hoa_Core_Parameter::PERMISSION_READ |
+                    Hoa_Core_Parameter::PERMISSION_WRITE
                 );
                 $route          = $router->setRequest($parameters)->route();
 
@@ -409,9 +409,9 @@ class Hoa_Controller_Front implements Hoa_Framework_Parameterizable {
                 $parameters->shareWith(
                     $this,
                     $dispatcher,
-                    Hoa_Framework_Parameter::PERMISSION_READ  |
-                    Hoa_Framework_Parameter::PERMISSION_WRITE |
-                    Hoa_Framework_Parameter::PERMISSION_SHARE
+                    Hoa_Core_Parameter::PERMISSION_READ  |
+                    Hoa_Core_Parameter::PERMISSION_WRITE |
+                    Hoa_Core_Parameter::PERMISSION_SHARE
                 );
                 $dispatch       = $dispatcher->setRequest($parameters)
                                              ->setRouterToView($router)

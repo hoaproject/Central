@@ -33,9 +33,9 @@
  */
 
 /**
- * Hoa_Framework
+ * Hoa_Core
  */
-require_once 'Framework.php';
+require_once 'Core.php';
 
 /**
  * Hoa_Controller_Plugin_Interface
@@ -112,11 +112,11 @@ class Hoa_Controller_Plugin_Standard {
      * Notify preRouter.
      *
      * @access  public
-     * @param   Hoa_Framework_Parameter  $parameters    Parameters.
+     * @param   Hoa_Core_Parameter  $parameters    Parameters.
      * @return  array
      * @throw   Hoa_Controller_Exception
      */
-    public function notifyPreRouter ( Hoa_Framework_Parameter $parameters ) {
+    public function notifyPreRouter ( Hoa_Core_Parameter $parameters ) {
 
         $return = array();
 
@@ -130,12 +130,12 @@ class Hoa_Controller_Plugin_Standard {
      * Notify postRouter.
      *
      * @access  public
-     * @param   Hoa_Framework_Parameter         $parameters    Parameters.
+     * @param   Hoa_Core_Parameter         $parameters    Parameters.
      * @param   Hoa_Controller_Router_Standard  $router        Router.
      * @return  array
      * @throw   Hoa_Controller_Exception
      */
-    public function notifyPostRouter ( Hoa_Framework_Parameter        $parameters,
+    public function notifyPostRouter ( Hoa_Core_Parameter        $parameters,
                                        Hoa_Controller_Router_Standard $router) {
 
         $return = array();
@@ -150,12 +150,12 @@ class Hoa_Controller_Plugin_Standard {
      * Notify preDispatcher.
      *
      * @access  public
-     * @param   Hoa_Framework_Parameter         $parameters    Parameters.
+     * @param   Hoa_Core_Parameter         $parameters    Parameters.
      * @param   Hoa_Controller_Router_Standard  $router        Router.
      * @return  array
      * @throw   Hoa_Controller_Exception
      */
-    public function notifyPreDispatcher ( Hoa_Framework_Parameter        $parameters,
+    public function notifyPreDispatcher ( Hoa_Core_Parameter        $parameters,
                                           Hoa_Controller_Router_Standard $router) {
 
         $return = array();
@@ -170,14 +170,14 @@ class Hoa_Controller_Plugin_Standard {
      * Notify postDispatcher.
      *
      * @access  public
-     * @param   Hoa_Framework_Parameter             $parameters    Parameters.
+     * @param   Hoa_Core_Parameter             $parameters    Parameters.
      * @param   Hoa_Controller_Dispatcher_Abstract  $dispatcher    Dispatcher.
      * @param   string                              $dispatch      Dispatch
      *                                                             result.
      * @return  array
      * @throw   Hoa_Controller_Exception
      */
-    public function notifyPostDispatcher ( Hoa_Framework_Parameter            $parameters,
+    public function notifyPostDispatcher ( Hoa_Core_Parameter            $parameters,
                                            Hoa_Controller_Dispatcher_Abstract $dispatcher,
                                            $dispatch) {
 
