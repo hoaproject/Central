@@ -33,9 +33,9 @@
  */
 
 /**
- * Hoa_Framework
+ * Hoa_Core
  */
-require_once 'Framework.php';
+require_once 'Core.php';
 
 /**
  * Hoa_Xml_CssToXPath
@@ -79,6 +79,13 @@ class          Hoa_Xml_Element
      */
     protected static $_cssToXPath = null;
 
+    /**
+     * String buffer (nodeValue).
+     *
+     * @var Hoa_StringBuffer object
+     */
+    protected static $_buffer     = null;
+
 
 
     /**
@@ -103,6 +110,8 @@ class          Hoa_Xml_Element
      */
     public function selectRoot ( ) {
 
+        self::$_buffer = null;
+
         return self::$_root;
     }
 
@@ -113,6 +122,8 @@ class          Hoa_Xml_Element
      * @return  array
      */
     public function selectAnyElement ( ) {
+
+        self::$_buffer = null;
 
         return $this->xpath('//*');
     }
@@ -128,6 +139,8 @@ class          Hoa_Xml_Element
 
         if(null === $E)
             return $this->selectAnyElement();
+
+        self::$_buffer = null;
 
         return $this->xpath('//' . $E);
     }
@@ -153,6 +166,8 @@ class          Hoa_Xml_Element
      */
     public function selectChildElement ( $F = null ) {
 
+        self::$_buffer = null;
+
         if(null === $F || '*' == $F)
             return $this->children();
 
@@ -168,7 +183,8 @@ class          Hoa_Xml_Element
      */
     public function selectAdjacentSiblingElement ( $F ) {
 
-        $handle = $this->xpath('following-sibling::*[1]/self::' . $F);
+        self::$_buffer = null;
+        $handle        = $this->xpath('following-sibling::*[1]/self::' . $F);
 
         if(false === $handle)
             return false;
@@ -190,6 +206,8 @@ class          Hoa_Xml_Element
 
         if(null === $F)
             $F = '*';
+
+        self::$_buffer = null;
 
         return $this->xpath('following-sibling::' . $F);
     }
@@ -225,6 +243,7 @@ class          Hoa_Xml_Element
         if(null === self::$_cssToXPath)
             self::$_cssToXPath = new Hoa_Xml_CssToXPath();
 
+        self::$_buffer = null;
         self::$_cssToXPath->compile($query);
         return $this->xpath(self::$_cssToXPath->getXPath());
     }

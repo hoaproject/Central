@@ -33,9 +33,9 @@
  */
 
 /**
- * Hoa_Framework
+ * Hoa_Core
  */
-require_once 'Framework.php';
+require_once 'Core.php';
 
 /**
  * Hoa_Xml_Exception
@@ -60,7 +60,7 @@ import('Xml.Element.Read');
 /**
  * Class Hoa_Xml_Read.
  *
- * File handler.
+ * Read a XML element.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
@@ -214,18 +214,37 @@ class          Hoa_Xml_Read
         return $this->getStream()->scanf($format);
     }
 
+    /**
+     * Read content as a DOM tree.
+     *
+     * @access  public
+     * @return  DOMElement
+     */
     public function readDOM ( ) {
 
         return $this->getStream()->readDOM();
     }
 
-    public function readAttribute ( $name ) {
-
-        return $this->getStream()->readAttribute($name);;
-    }
-
+    /**
+     * Read all attributes.
+     *
+     * @access  public
+     * @return  array
+     */
     public function readAttributes ( ) {
 
         return $this->getStream()->readAttributes();
+    }
+
+    /**
+     * Read a specific attribute.
+     *
+     * @access  public
+     * @param   string  $name    Attribute's name.
+     * @return  string
+     */
+    public function readAttribute ( $name ) {
+
+        return $this->getStream()->readAttribute($name);;
     }
 }
