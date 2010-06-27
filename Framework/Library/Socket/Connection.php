@@ -33,9 +33,9 @@
  */
 
 /**
- * Hoa_Framework
+ * Hoa_Core
  */
-require_once 'Framework.php';
+require_once 'Core.php';
 
 /**
  * Hoa_Socket_Exception
@@ -496,6 +496,10 @@ abstract class Hoa_Socket_Connection
             throw new Hoa_Socket_Exception(
                 'Cannot write because socket is not established, ' .
                 'i.e. not connected.', 1);
+
+        if($length <= 0)
+            throw new Hoa_Socket_Exception(
+                'Length must be greather than 0, given %d.', 0, $length);
 
         if(strlen($string) > $length)
             $string = substr($string, 0, $length);
