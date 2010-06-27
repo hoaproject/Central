@@ -163,6 +163,18 @@ class Hoa_Php_Io_Out extends Hoa_Stream implements Hoa_Stream_Io_Out {
     }
 
     /**
+     * Write a boolean.
+     *
+     * @access  public
+     * @param   bool    $boolean    Boolean.
+     * @return  mixed
+     */
+    public function writeBoolean ( $boolean ) {
+
+        return $this->write((string) (bool) $boolean, 1);
+    }
+
+    /**
      * Write an integer.
      *
      * @access  public
