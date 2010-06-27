@@ -33,9 +33,9 @@
  */
 
 /**
- * Hoa_Framework
+ * Hoa_Core
  */
-require_once 'Framework.php';
+require_once 'Core.php';
 
 /**
  * Hoa_Test_Oracle_Exception
@@ -61,12 +61,12 @@ import('Test.Praspel.Compiler');
  * @subpackage  Hoa_Test_Oracle_Eyes
  */
 
-class Hoa_Test_Oracle_Eyes implements Hoa_Framework_Parameterizable {
+class Hoa_Test_Oracle_Eyes implements Hoa_Core_Parameterizable {
 
     /**
      * Parameters of Hoa_Test.
      *
-     * @var Hoa_Framework_Parameter object
+     * @var Hoa_Core_Parameter object
      */
     protected $_parameters = null;
 
@@ -76,10 +76,10 @@ class Hoa_Test_Oracle_Eyes implements Hoa_Framework_Parameterizable {
      * Set the parameters of this package from Hoa_Test.
      *
      * @access  public
-     * @param   Hoa_Framework_Parameter  $parameters    Parameters.
+     * @param   Hoa_Core_Parameter  $parameters    Parameters.
      * @return  Hoa_Test_Oracle
      */
-    public function setRequest ( Hoa_Framework_Parameter $parameters ) {
+    public function setRequest ( Hoa_Core_Parameter $parameters ) {
 
         $this->_parameters = $parameters;
 

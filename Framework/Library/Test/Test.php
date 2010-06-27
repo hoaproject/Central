@@ -32,9 +32,9 @@
  */
 
 /**
- * Hoa_Framework
+ * Hoa_Core
  */
-require_once 'Framework.php';
+require_once 'Core.php';
 
 /**
  * Hoa_Test_Exception
@@ -64,7 +64,7 @@ import('Test.Praspel.~');
  * @package     Hoa_Test
  */
 
-class Hoa_Test implements Hoa_Framework_Parameterizable {
+class Hoa_Test implements Hoa_Core_Parameterizable {
 
     /**
      * Singleton.
@@ -76,14 +76,14 @@ class Hoa_Test implements Hoa_Framework_Parameterizable {
     /**
      * Parameters of Hoa_Test.
      *
-     * @var Hoa_Framework_Parameter object
+     * @var Hoa_Core_Parameter object
      */
     protected $_parameters    = null;
 
     /**
      * Stream's log for the Praspel output.
      *
-     * @var Hoa_Framework_Stream array
+     * @var Hoa_Core_Stream array
      */
     protected $_logs          = array();
 
@@ -98,7 +98,7 @@ class Hoa_Test implements Hoa_Framework_Parameterizable {
      */
     private function __construct ( Array $parameters = array() ) {
 
-        $this->_parameters = new Hoa_Framework_Parameter(
+        $this->_parameters = new Hoa_Core_Parameter(
             $this,
             array(),
             array(
@@ -216,9 +216,9 @@ class Hoa_Test implements Hoa_Framework_Parameterizable {
         $this->_parameters->shareWith(
             $this,
             $oracle,
-            Hoa_Framework_Parameter::PERMISSION_READ  |
-            Hoa_Framework_Parameter::PERMISSION_WRITE |
-            Hoa_Framework_Parameter::PERMISSION_SHARE
+            Hoa_Core_Parameter::PERMISSION_READ  |
+            Hoa_Core_Parameter::PERMISSION_WRITE |
+            Hoa_Core_Parameter::PERMISSION_SHARE
         );
         $oracle->setRequest($this->_parameters);
         $oracle->predict();
