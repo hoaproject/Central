@@ -32,9 +32,9 @@
  */
 
 /**
- * Hoa_Framework
+ * Hoa_Core
  */
-require_once 'Framework.php';
+require_once 'Core.php';
 
 /**
  * Hoa_Cache_Exception
@@ -53,7 +53,7 @@ import('Cache.Exception');
  * @package     Hoa_Cache
  */
 
-abstract class Hoa_Cache implements Hoa_Framework_Parameterizable {
+abstract class Hoa_Cache implements Hoa_Core_Parameterizable {
 
     /**
      * Clean all entries.
@@ -79,7 +79,7 @@ abstract class Hoa_Cache implements Hoa_Framework_Parameterizable {
     /**
      * The Hoa_Controller parameters.
      *
-     * @var Hoa_Framework_Parameter object
+     * @var Hoa_Core_Parameter object
      */
     private $_parameters  = null;
 
@@ -101,7 +101,7 @@ abstract class Hoa_Cache implements Hoa_Framework_Parameterizable {
      */
     public function __construct ( Array $parameters = array() ) {
 
-        $this->_parameters = new Hoa_Framework_Parameter(
+        $this->_parameters = new Hoa_Core_Parameter(
             $this,
             array(
                 'id' => null
