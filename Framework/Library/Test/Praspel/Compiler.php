@@ -33,9 +33,9 @@
  */
 
 /**
- * Hoa_Framework
+ * Hoa_Core
  */
-require_once 'Framework.php';
+require_once 'Core.php';
 
 /**
  * Hoa_Test_Praspel_Exception
@@ -495,6 +495,10 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                 'String'
             )
         );
+
+        parent::disableCache();
+
+        return;
     }
 
     /**
@@ -643,6 +647,17 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
         $in      = str_replace($search, $replace, $in);
 
         return;
+    }
+
+    /**
+     * Get the result of the compiling.
+     *
+     * @access  public
+     * @return  Hoa_Test_Praspel
+     */
+    public function getResult ( ) {
+
+        return $this->getRoot();
     }
 
     /**

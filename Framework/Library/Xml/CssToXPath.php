@@ -33,9 +33,9 @@
  */
 
 /**
- * Hoa_Framework
+ * Hoa_Core
  */
-require_once 'Framework.php';
+require_once 'Core.php';
 
 /**
  * Hoa_Compiler_Ll1
@@ -643,6 +643,17 @@ class Hoa_Xml_CssToXPath extends Hoa_Compiler_Ll1 {
         $this->_current = $this->_root . $this->_current;
 
         return true;
+    }
+
+    /**
+     * Get the result of the compiling.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getResult ( ) {
+
+        return $this->getXPath();
     }
 
     /**
