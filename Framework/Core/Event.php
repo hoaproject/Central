@@ -100,13 +100,48 @@ class Hoa_Core_Event_Bucket {
 
 class Hoa_Core_Event {
 
+    /**
+     * Attachement constant: index for object.
+     *
+     * @const int
+     */
     const CALLBACK_OBJECT = 0;
+
+    /**
+     * Attachement constant: index for method (if needed).
+     *
+     * @const int
+     */
     const CALLBACK_METHOD = 1;
 
+    /**
+     * Static register of all observable objects, i.e. Hoa_Core_Event_Source
+     * object, i.e. object that can send event.
+     *
+     * @var Hoa_Core_Event array
+     */
     private static $_register    = array();
 
+    /**
+     * Static attachements, i.e. oberserver objects, for all objects in the
+     * register.
+     *
+     * @var Hoa_Core_Event array
+     */
     private static $_attachement = array();
 
+
+
+    /**
+     * Declare a new object in the observable collection.
+     * Note: Hoa's libraries use hoa://Event/AnID for their observable objects;
+     *
+     * @access  public
+     * @param   string                   $eventId    Event ID.
+     * @param   Hoa_Core_Event_Source    $source     Obversable object.
+     * @return  void
+     * @throws  Hoa_Exception
+     */
     public static function register ( $eventId, Hoa_Core_Event_Source $source ) {
 
         if(true === self::eventExists($eventId))
@@ -119,6 +154,13 @@ class Hoa_Core_Event {
         return;
     }
 
+    /**
+     * Undeclare an object in the observable collection.
+     *
+     * @access  public
+     * @param   string  $eventId    Event ID.
+     * @return  void
+     */
     public static function unregister ( $eventId ) {
 
         unset(self::$_register[$eventId]);
@@ -130,8 +172,14 @@ class Hoa_Core_Event {
 
         if(false === self::eventExists($eventId))
             throw new Hoa_Exception(
-                'Event ID does not exist, cannot attach something to it.',
+                'Event ID %s does not exist, cannot attach something to it.',
                 1, $eventId);
+
+        return self::attachAsynchronously($eventId, $class, $method);
+    }
+
+    public static function attachAsynchronously ( $eventId, $class,
+                                                  $method = null ) {
 
         $index = (is_object($class) ? get_class($class) : $class) .
                  '::' . $method;
@@ -166,16 +214,45 @@ class Hoa_Core_Event {
                 'Event ID does not exist, cannot send notification.',
                 2, $eventId);
 
+        // TODO
+        // verify if the source is already affected to the eventId.
+
         $data->setSource($source);
+        $handle = $data->getValue();
+        $method = 'writeAll';
+
+        switch($type = gettype($handle)) {
+
+            case 'string':
+                if(1 === strlen($handle))
+                    $method = 'writeCharacter';
+                else
+                    $method = 'writeString';
+              break;
+
+            case 'boolean':
+            case 'integer':
+            case 'array':
+                $method = 'write' . ucfirst($type);
+              break;
+
+            case 'double':
+                $method = 'writeFloat';
+              break;
+        }
 
         foreach(self::$_attachement[$eventId] as $index => $callback)
-            call_user_func_array(
-                array(
-                    $callback[self::CALLBACK_OBJECT],
-                    $callback[self::CALLBACK_METHOD]
-                ),
-                array($data)
-            );
+            if(     null === $callback[self::CALLBACK_METHOD]
+                && ($callback[self::CALLBACK_OBJECT] instanceof Hoa_Stream_Io_Out))
+                $callback[self::CALLBACK_OBJECT]->$method($handle);
+            else
+                call_user_func_array(
+                    array(
+                        $callback[self::CALLBACK_OBJECT],
+                        $callback[self::CALLBACK_METHOD]
+                    ),
+                    array($data)
+                );
 
         return;
     }
