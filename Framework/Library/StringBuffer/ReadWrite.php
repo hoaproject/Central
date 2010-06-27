@@ -33,9 +33,9 @@
  */
 
 /**
- * Hoa_Framework
+ * Hoa_Core
  */
-require_once 'Framework.php';
+require_once 'Core.php';
 
 /**
  * Hoa_StringBuffer_Exception
@@ -48,14 +48,9 @@ import('StringBuffer.Exception');
 import('StringBuffer.~');
 
 /**
- * Hoa_Stream_Io_In
+ * Hoa_Stream_Io
  */
-import('Stream.Io.In');
-
-/**
- * Hoa_Stream_Io_Out
- */
-import('Stream.Io.Out');
+import('Stream.Io');
 
 /**
  * Class Hoa_StringBuffer_ReadWrite.
@@ -73,8 +68,7 @@ import('Stream.Io.Out');
 
 class          Hoa_StringBuffer_ReadWrite
     extends    Hoa_StringBuffer
-    implements Hoa_Stream_Io_In,
-               Hoa_Stream_Io_Out {
+    implements Hoa_Stream_Io {
 
     /**
      * Test for end-of-file.
@@ -226,8 +220,13 @@ class          Hoa_StringBuffer_ReadWrite
      * @param   string  $string    String.
      * @param   int     $length    Length.
      * @return  mixed
+     * @throw   Hoa_StringBuffer_Exception
      */
     public function write ( $string, $length ) {
+
+        if($length <= 0)
+            throw new Hoa_StringBuffer_Exception(
+                'Length must be greather than 0, given %d.', 0, $length);
 
         return fwrite($this->getStream(), $string, $length);
     }
