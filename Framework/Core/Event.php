@@ -120,17 +120,46 @@ class Hoa_Core_Event {
      *
      * @var Hoa_Core_Event array
      */
-    private static $_register    = array();
+    private static $_register = array();
 
     /**
-     * Static attachements, i.e. oberserver objects, for all objects in the
+     * Attachements, i.e. oberserver objects, for all objects in the
      * register.
      *
      * @var Hoa_Core_Event array
      */
-    private static $_attachement = array();
+    private $_attachement     = array();
 
 
+
+    /**
+     * Privatize the constructor.
+     *
+     * @access  private
+     * @return  void
+     */
+    private function __construct ( ) {
+
+        return;
+    }
+
+    /**
+     * Manage multiton of events, with the principle of asynchronous attachements.
+     *
+     * @access  public
+     * @param   string  $eventId    Event ID.
+     * @return  Hoa_Core_Event
+     */
+    public static function getEvent ( $eventId ) {
+
+        if(false === self::eventExists($eventId))
+            self::$_register[$eventId] = array(
+                0 => new self(),
+                1 => null
+            );
+
+        return self::$_register[$eventId][0];
+    }
 
     /**
      * Declare a new object in the observable collection.
@@ -149,7 +178,10 @@ class Hoa_Core_Event {
                 'Cannot redeclare an event with the same ID, i.e. the event ' .
                 'ID %s already exists.', 0, $eventId);
 
-        self::$_register[$eventId] = $source;
+        if(!isset(self::$_register[$eventId][0]))
+            self::$_register[$eventId][0] = new self();
+
+        self::$_register[$eventId][1] = $source;
 
         return;
     }
@@ -168,43 +200,59 @@ class Hoa_Core_Event {
         return;
     }
 
-    public static function attach ( $eventId, $class, $method = null ) {
-
-        if(false === self::eventExists($eventId))
-            throw new Hoa_Exception(
-                'Event ID %s does not exist, cannot attach something to it.',
-                1, $eventId);
-
-        return self::attachAsynchronously($eventId, $class, $method);
-    }
-
-    public static function attachAsynchronously ( $eventId, $class,
-                                                  $method = null ) {
+    /**
+     * Attach an object to an event.
+     * The object can be a class with a method or an object with a method, or a
+     * stream name or instance with or without a method (if without, the type of
+     * the event data will decide of the method to call), or a closure.
+     *
+     * @access  public
+     * @param   mixed   $class     Class name or instance, or a closure.
+     * @param   string  $method    Method on the object (if $class is a class).
+     * @return  Hoa_Core_Event
+     */
+    public function attach ( $class, $method = null ) {
 
         $index = (is_object($class) ? get_class($class) : $class) .
                  '::' . $method;
 
-        self::$_attachement[$eventId][$index] = array(
+        $this->_attachement[$index] = array(
             self::CALLBACK_OBJECT => $class,
             self::CALLBACK_METHOD => $method
         );
 
-        return;
+        return $this;
     }
 
-    public static function detach ( $eventId, $class, $method = null ) {
-
-        if(false === self::eventExists($eventId))
-            return;
+    /**
+     * Detach an object to an event.
+     * Please see $this->attach() method.
+     *
+     * @access  public
+     * @param   mixed   $class     Class name or instance, or a closure.
+     * @param   string  $method    Method on the object (if $class is a class).
+     * @return  Hoa_Core_Event
+     */
+    public function detach ( $class, $method = null ) {
 
         $index = (is_object($class) ? get_class($class) : $class) .
                  '::' . $method;
 
-        unset(self::$_attachement[$eventId][$index]);
+        unset($this->_attachement[$index]);
 
-        return;
+        return $this;
     }
 
+    /**
+     * Notify, i.e. send data to observers.
+     *
+     * @access  public
+     * @param   string                            Event ID.
+     * @param   Hoa_Core_Event_Bucket  $source    Source.
+     * @param   Hoa_Core_Event_Bucket  $data      Data.
+     * @return  void
+     * @throws  Hoa_Exception
+     */
     public static function notify ( $eventId,
                                     Hoa_Core_Event_Source $source,
                                     Hoa_Core_Event_Bucket $data ) {
@@ -241,7 +289,9 @@ class Hoa_Core_Event {
               break;
         }
 
-        foreach(self::$_attachement[$eventId] as $index => $callback)
+        $event = self::getEvent($eventId);
+
+        foreach($event->_attachement as $index => $callback)
             if(     null === $callback[self::CALLBACK_METHOD]
                 && ($callback[self::CALLBACK_OBJECT] instanceof Hoa_Stream_Io_Out))
                 $callback[self::CALLBACK_OBJECT]->$method($handle);
@@ -257,8 +307,29 @@ class Hoa_Core_Event {
         return;
     }
 
+    /**
+     * Check whether an event exists.
+     *
+     * @access  public
+     * @param   string  $eventId    Event ID.
+     * @return  bool
+     */
     public static function eventExists ( $eventId ) {
 
-        return array_key_exists($eventId, self::$_register);
+        return    array_key_exists($eventId, self::$_register)
+               && self::$_register[$eventId][1] !== null;
     }
+}
+
+
+/**
+ * Alias of the Hoa_Core_Event::getEvent() method.
+ *
+ * @access  public
+ * @param   string  $eventId    Event ID.
+ * @return  void
+ */
+function event ( $eventId ) {
+
+    return Hoa_Core_Event::getEvent($eventId);
 }
