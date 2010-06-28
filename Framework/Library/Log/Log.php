@@ -241,18 +241,9 @@ class Hoa_Log implements Hoa_Core_Event_Source {
      */
     public static function getChannel ( $id = null ) {
 
-        import('Bench.~') and load();
-
-        $b = new Hoa_Bench();
-
-        $b->aaa->start();
-
         if(null === self::$_currentId && null === $id)
             throw new Hoa_Log_Exception(
                 'Must precise a singleton index once.', 0);
-
-        $b->aaa->stop();
-        $b->bbb->start();
 
         if(!isset(self::$_instances[$id])) {
 
@@ -266,12 +257,7 @@ class Hoa_Log implements Hoa_Core_Event_Source {
         if(null !== $id)
             self::$_currentId = $id;
 
-        $b->bbb->stop();
-        $b->ccc->start();
-
         $handle = self::$_instances[self::$_currentId];
-
-        $b->ccc->stop();
 
         return $handle;
     }
@@ -413,6 +399,11 @@ class Hoa_Log implements Hoa_Core_Event_Source {
      */
     public function log ( $message, $type = self::DEBUG, $extra = array() ) {
 
+        $filters = $this->getFilters();
+
+        if(null !== $filters && !($type & $filters))
+            return;
+
         $handle = $this->_stack[] = array_merge(
             array(
                 self::STACK_TIMESTAMP   => microtime(true),
@@ -425,14 +416,11 @@ class Hoa_Log implements Hoa_Core_Event_Source {
             $extra
         );
 
-        $filters = $this->getFilters();
-
-        if($type & $filters || null === $filters)
-            Hoa_Core_Event::notify(
-                'hoa://Event/Log/' . self::$_currentId,
-                $this,
-                new Hoa_Core_Event_Bucket($handle)
-            );
+        Hoa_Core_Event::notify(
+            'hoa://Event/Log/' . self::$_currentId,
+            $this,
+            new Hoa_Core_Event_Bucket(array('log' => $handle))
+        );
 
         if($type & self::DEBUG) {
 
@@ -441,7 +429,6 @@ class Hoa_Log implements Hoa_Core_Event_Source {
 
             $this->_backtrace->debug();
         }
-
 
         return;
     }
