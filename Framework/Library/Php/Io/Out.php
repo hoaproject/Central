@@ -99,7 +99,7 @@ class Hoa_Php_Io_Out extends Hoa_Stream implements Hoa_Stream_Io_Out {
      * @param   Hoa_Stream_Context  $context       Context.
      * @return  resource
      */
-    protected function &open ( $streamName, Hoa_Stream_Context $context = null ) {
+    protected function &_open ( $streamName, Hoa_Stream_Context $context = null ) {
 
         $out = STDOUT;
 
@@ -113,7 +113,7 @@ class Hoa_Php_Io_Out extends Hoa_Stream implements Hoa_Stream_Io_Out {
      * @access  public
      * @return  bool
      */
-    public function close ( ) {
+    public function _close ( ) {
 
         return true;
     }

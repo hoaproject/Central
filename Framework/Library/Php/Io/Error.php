@@ -89,7 +89,7 @@ class Hoa_Php_Io_Error extends Hoa_Php_Io_Out {
      * @param   Hoa_Stream_Context  $context       Context.
      * @return  resource
      */
-    protected function &open ( $streamName, Hoa_Stream_Context $context = null ) {
+    protected function &_open ( $streamName, Hoa_Stream_Context $context = null ) {
 
         $out = STDERR;
 
@@ -100,10 +100,10 @@ class Hoa_Php_Io_Error extends Hoa_Php_Io_Out {
      * Close the current stream.
      * Do not want to close the STDIN stream.
      *
-     * @access  public
+     * @access  protected
      * @return  bool
      */
-    public function close ( ) {
+    protected function _close ( ) {
 
         return true;
     }
