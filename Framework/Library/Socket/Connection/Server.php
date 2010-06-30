@@ -140,7 +140,7 @@ class Hoa_Socket_Connection_Server extends Hoa_Socket_Connection {
      * @return  resource
      * @throw   Hoa_Socket_Connection_Exception
      */
-    protected function &open ( $streamName, Hoa_Stream_Context $context = null ) {
+    protected function &_open ( $streamName, Hoa_Stream_Context $context = null ) {
 
         if(null === $context)
             $this->_server = @stream_socket_server(
@@ -182,7 +182,7 @@ class Hoa_Socket_Connection_Server extends Hoa_Socket_Connection {
      * @access  protected
      * @return  bool
      */
-    public function close ( ) {
+    protected function _close ( ) {
 
         return (bool) (@fclose($this->_server) + @fclose($this->getStream()));
     }

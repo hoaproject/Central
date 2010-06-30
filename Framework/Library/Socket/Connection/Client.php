@@ -120,7 +120,7 @@ class Hoa_Socket_Connection_Client extends Hoa_Socket_Connection {
      * @return  resource
      * @throw   Hoa_Socket_Connection_Exception
      */
-    protected function &open ( $streamName, Hoa_Stream_Context $context = null ) {
+    protected function &_open ( $streamName, Hoa_Stream_Context $context = null ) {
 
         if(null === $context)
             $connection = @stream_socket_client(
@@ -158,7 +158,7 @@ class Hoa_Socket_Connection_Client extends Hoa_Socket_Connection {
      * @access  protected
      * @return  bool
      */
-    protected function close ( ) {
+    protected function _close ( ) {
 
         if(true === $this->isPersistent())
             return false;
