@@ -224,7 +224,7 @@ class          Hoa_Xml_Element
 
         $handle = $this->querySelectorAll($query);
 
-        if(false === $handle)
+        if(empty($handle))
             return false;
 
         return $handle[0];
