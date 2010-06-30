@@ -82,6 +82,19 @@ class          Hoa_Xml_ReadWrite
 
         parent::__construct('Hoa_Xml_Element_ReadWrite', $stream);
 
+        event('hoa://Event/Stream/' . $stream->getStreamName() . ':close-before')
+            ->attach($this, '_close');
+
+        return;
+    }
+
+    public function _close ( ) {
+
+        $handle = $this->getStream()->selectRoot()->asXML();
+
+        if(true === $this->getInnerStream()->truncate(0))
+            $this->getInnerStream()->writeAll($handle);
+
         return;
     }
 
