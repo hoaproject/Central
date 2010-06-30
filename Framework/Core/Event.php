@@ -33,31 +33,88 @@
  */
 
 /**
+ * Interface Hoa_Core_Event_Source.
  *
+ * Each object which is observable must implement this interface.
+ *
+ * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license     http://gnu.org/licenses/gpl.txt GNU GPL
+ * @since       PHP5
+ * @version     0.1
+ * @package     Hoa_Core_Event
+ * @subpackage  Hoa_Core_Event_Source
  */
+
 interface Hoa_Core_Event_Source { }
 
 /**
+ * Class Hoa_Core_Event_Bucket.
  *
+ * This class is the object which is transmit through event channels.
+ *
+ * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license     http://gnu.org/licenses/gpl.txt GNU GPL
+ * @since       PHP5
+ * @version     0.1
+ * @package     Hoa_Core_Event
+ * @subpackage  Hoa_Core_Event_Bucket
  */
+
 class Hoa_Core_Event_Bucket {
 
+    /**
+     * Source object.
+     *
+     * @var Hoa_Core_Event_Source object
+     */
     protected $_source = null;
 
+    /**
+     * Value.
+     *
+     * @var Hoa_Core_Event_Bucket mixed
+     */
     protected $_value  = null;
 
-    public function __construct ( $value ) {
+
+
+    /**
+     * Set value.
+     *
+     * @access  public
+     * @param   mixed   $value    Value.
+     * @return  void
+     */
+    public function __construct ( $value = null ) {
 
         $this->setValue($value);
 
         return;
     }
 
+    /**
+     * Send this object on the event channel.
+     *
+     * @access  public
+     * @param   string                 $eventId    Event ID.
+     * @param   Hoa_Core_Event_Source  $source     Source.
+     * @return  void
+     * @throws  Hoa_Exception
+     */
     public function send ( $eventId, Hoa_Core_Event_Source $source) {
 
         return Hoa_Core_Event::notify($eventId, $source, $this);
     }
 
+    /**
+     * Set source.
+     *
+     * @access  public
+     * @param   Hoa_Core_Event_Source  $source    Source.
+     * @return  Hoa_Core_Event_Source
+     */
     public function setSource ( Hoa_Core_Event_Source $source ) {
 
         $old           = $this->_source;
@@ -66,11 +123,24 @@ class Hoa_Core_Event_Bucket {
         return $old;
     }
 
+    /**
+     * Get source.
+     *
+     * @access  public
+     * @return  Hoa_Core_Event_Source
+     */
     public function getSource ( ) {
 
         return $this->_source;
     }
 
+    /**
+     * Set value.
+     *
+     * @access  public
+     * @param   mixed   $value    Value.
+     * @return  mixed
+     */
     public function setValue ( $value ) {
 
         $old          = $this->_value;
@@ -79,6 +149,12 @@ class Hoa_Core_Event_Bucket {
         return $old;
     }
 
+    /**
+     * Get value.
+     *
+     * @access  public
+     * @return  mixed
+     */
     public function getValue ( ) {
 
         return $this->_value;
@@ -88,7 +164,8 @@ class Hoa_Core_Event_Bucket {
 /**
  * Class Hoa_Core_Event.
  *
- * Foobar.
+ * Manage events. It is simply an observer design-pattern, except that we have a
+ * multiton of events.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
@@ -262,9 +339,6 @@ class Hoa_Core_Event {
                 'Event ID does not exist, cannot send notification.',
                 2, $eventId);
 
-        // TODO
-        // verify if the source is already affected to the eventId.
-
         $data->setSource($source);
         $handle = $data->getValue();
         $method = 'writeAll';
@@ -327,7 +401,7 @@ class Hoa_Core_Event {
  *
  * @access  public
  * @param   string  $eventId    Event ID.
- * @return  void
+ * @return  Hoa_Core_Event
  */
 function event ( $eventId ) {
 
