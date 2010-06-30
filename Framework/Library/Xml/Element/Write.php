@@ -165,6 +165,54 @@ class          Hoa_Xml_Element_Write
         return $this->write($float, strlen($float));
     }
 
+    public function arrayToXmlAttributes ( $array ) {
+
+        $out = null;
+
+        foreach($array as $attribute => $value)
+            $out .= ' ' . $attribute . '="' . str_replace('"', '\"', $value) . '"';
+
+        return $out;
+    }
+
+    public function arrayToXml ( $array ) {
+
+        static $i = 0;
+
+        if(!is_array($array))
+            return $array;
+
+        $out = null;
+
+        foreach($array as $element => $value) {
+
+            if('@attributes' == $element)
+                continue;
+
+            $space = str_repeat('  ', $i);
+
+            if(is_array($value)) {
+
+                $out .= $space .
+                        '<' . $element .
+                        (array_key_exists('@attributes', $value)
+                           ? $this->arrayToXmlAttributes($value['@attributes'])
+                           : '') . '>' . "\n";
+                $i++;
+                $out .= $this->arrayToXml($value);
+                $i--;
+                $out .= $space . '</' . $element . '>' . "\n";
+            }
+            else
+                $out .= $space .
+                        '<' . $element . '>' .
+                        $value .
+                        '</' . $element . '>' . "\n";
+        }
+
+        return $out;
+    }
+
     /**
      * Write an array.
      *
@@ -174,7 +222,7 @@ class          Hoa_Xml_Element_Write
      */
     public function writeArray ( Array $array ) {
 
-        return $this->write($array, strlen($array));
+        var_dump($this->arrayToXml($array));
     }
 
     /**

@@ -77,7 +77,27 @@ abstract class Hoa_Xml
             throw new Hoa_Xml_Exception(
                 'SimpleXML must be enable for using %s.', 0, __CLASS__);
 
-        $root = simplexml_load_file($innerStream->getStreamName(), $stream);
+        $streamName = $innerStream->getStreamName();
+        $root       = @simplexml_load_file($streamName, $stream);
+
+        if(false === $root) {
+
+            if($innerStream instanceof Hoa_Stream_Io_In)
+                $root = @simplexml_load_string($streamName, $stream);
+
+            if(false === $root)
+                $root = simplexml_load_string(
+                    '<?xml version="1.0" encoding="utf-8"?' . ">\n\n" .
+                    '<header>' . "\n\n" . '</header>',
+                    $stream
+                );
+        }
+
+        if(null === $root)
+            throw new Hoa_Xml_Exception(
+                'Failed to understand %s as a XML stream.',
+                1, $streamName);
+
         $root->setRoot($root);
         $this->setStream($root);
         $this->setInnerStream($innerStream);
@@ -110,6 +130,11 @@ abstract class Hoa_Xml
     public function __get ( $name ) {
 
         return $this->getStream()->$name;
+    }
+
+    public function asXML ( ) {
+
+        return $this->getStream()->asXML();
     }
 
     /**
