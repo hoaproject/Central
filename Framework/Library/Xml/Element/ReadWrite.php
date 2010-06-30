@@ -278,8 +278,8 @@ class          Hoa_Xml_Element_ReadWrite
 
         if(null === parent::$_buffer) {
 
-            parent::$_buffer = new Hoa_StringBuffer_Write();
-            parent::$_buffer->initializeWith($this->_toString());
+            parent::$_buffer = new Hoa_StringBuffer_ReadWrite();
+            parent::$_buffer->initializeWith($this->__toString());
         }
 
         return parent::$_buffer->write($length);
