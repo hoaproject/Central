@@ -113,7 +113,7 @@ abstract class Hoa_StringBuffer
      * @return  resource
      * @throw   Hoa_StringBuffer_Exception
      */
-    protected function &open ( $streamName, Hoa_Stream_Context $context = null ) {
+    protected function &_open ( $streamName, Hoa_Stream_Context $context = null ) {
 
         if(false === $out = @tmpfile())
             throw new Hoa_StringBuffer_Exception(
@@ -125,10 +125,10 @@ abstract class Hoa_StringBuffer
     /**
      * Close the current stream.
      *
-     * @access  public
+     * @access  protected
      * @return  bool
      */
-    public function close ( ) {
+    protected function _close ( ) {
 
         return @fclose($this->getStream());
     }
