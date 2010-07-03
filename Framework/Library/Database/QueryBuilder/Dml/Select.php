@@ -245,8 +245,6 @@ class Hoa_Database_QueryBuilder_Dml_Select implements Hoa_Database_QueryBuilder_
 
         $this->query = trim($out);
 
-        var_dump(trim($out));
-
         return $this->getQuery();
     }
 
