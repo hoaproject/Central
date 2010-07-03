@@ -76,7 +76,11 @@ class          Hoa_Xml_ReadWrite
     implements Hoa_Stream_Io {
 
     /**
+     * Start the stream reader/writer as if it is a XML document.
      *
+     * @access  public
+     * @param   Hoa_Stream_Io  $stream    Stream to read/write.
+     * @return  void
      */
     public function __construct ( Hoa_Stream_Io $stream ) {
 
@@ -88,7 +92,17 @@ class          Hoa_Xml_ReadWrite
         return;
     }
 
-    public function _close ( ) {
+    /**
+     * Do not use this method. It is called from the
+     * hoa://Event/Stream/...:close-before event.
+     * It transforms the XML tree as a XML string, truncates the stream to zero
+     * and writes all this string into the stream.
+     *
+     * @access  public
+     * @param   Hoa_Core_Event_Bucket  $bucket    Event's bucket.
+     * @return  void
+     */
+    public function _close ( Hoa_Core_Event_Bucket $bucket ) {
 
         $handle = $this->getStream()->selectRoot()->asXML();
 
@@ -181,16 +195,15 @@ class          Hoa_Xml_ReadWrite
     }
 
     /**
-     * Read an array.
-     * Alias of the $this->scanf() method.
+     * Read the XML tree as an array.
      *
      * @access  public
-     * @param   string  $format    Format (see printf's formats).
+     * @param   string  $argument    Not use here.
      * @return  array
      */
-    public function readArray ( $format ) {
+    public function readArray ( $argument = null ) {
 
-        return $this->getStream()->readArray($format);
+        return $this->getStream()->readArray($argument);
     }
 
     /**
@@ -259,6 +272,17 @@ class          Hoa_Xml_ReadWrite
     public function readAttribute ( $name ) {
 
         return $this->getStream()->readAttribute($name);;
+    }
+
+    /**
+     * Read all with XML node.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function readXML ( ) {
+
+        return $this->getStream()->readXML();
     }
 
     /**
@@ -387,10 +411,10 @@ class          Hoa_Xml_ReadWrite
      * Write a DOM tree.
      *
      * @access  public
-     * @param   DOMElement  $dom    DOM tree.
+     * @param   DOMNode  $dom    DOM tree.
      * @return  mixed
      */
-    public function writeDOM ( DOMElement $dom ) {
+    public function writeDOM ( DOMNode $dom ) {
 
         return $this->getStream()->writeDOM($dom);
     }

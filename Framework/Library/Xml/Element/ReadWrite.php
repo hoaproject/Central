@@ -102,8 +102,8 @@ class          Hoa_Xml_Element_ReadWrite
 
         if(null === parent::$_buffer) {
 
-            parent::$_buffer = new Hoa_StringBuffer_Read();
-            parent::$_buffer->initializeWith($this->readAll());
+            parent::$_buffer = new Hoa_StringBuffer_ReadWrite();
+            parent::$_buffer->initializeWith($this->__toString());
         }
 
         return parent::$_buffer->read($length);
@@ -168,16 +168,15 @@ class          Hoa_Xml_Element_ReadWrite
     }
 
     /**
-     * Read an array.
-     * Alias of the $this->scanf() method.
+     * Read the XML tree as an array.
      *
      * @access  public
-     * @param   string  $format    Format (see printf's formats).
+     * @param   string  $argument    Not use here.
      * @return  array
      */
-    public function readArray ( $format ) {
+    public function readArray ( $argument = null ) {
 
-        return /* TODO */;
+        return (array) $this;
     }
 
     /**
@@ -205,7 +204,13 @@ class          Hoa_Xml_Element_ReadWrite
      */
     public function readAll ( ) {
 
-        return $this->__toString();
+        if(null === parent::$_buffer) {
+
+            parent::$_buffer = new Hoa_StringBuffer_ReadWrite();
+            parent::$_buffer->initializeWith($this->__toString());
+        }
+
+        return parent::$_buffer->readAll();
     }
 
     /**
@@ -262,6 +267,17 @@ class          Hoa_Xml_Element_ReadWrite
     }
 
     /**
+     * Read all with XML node.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function readXML ( ) {
+
+        return $this->asXML();
+    }
+
+    /**
      * Write n characters.
      *
      * @access  public
@@ -282,7 +298,14 @@ class          Hoa_Xml_Element_ReadWrite
             parent::$_buffer->initializeWith($this->__toString());
         }
 
-        return parent::$_buffer->write($length);
+        $l = parent::$_buffer->write($string, $length);
+
+        if($l !== $length)
+            return false;
+
+        $this[0] = parent::$_buffer->readAll();
+
+        return $l;
     }
 
     /**
@@ -360,7 +383,25 @@ class          Hoa_Xml_Element_ReadWrite
      */
     public function writeArray ( Array $array ) {
 
-        return $this->write($array, strlen($array));
+        foreach($array as $element => $value)
+            if(is_array($value)) {
+
+                foreach($value as $i => $in)
+                    if(is_array($in) && is_int($i)) {
+                        
+                        $handle = $this->addChild($element);
+                        $handle->writeArray($in);
+                    }
+                    elseif(is_int($i))
+                        $handle = $this->addChild($element, $in);
+
+                if(array_key_exists('@attributes', $value))
+                    $handle->writeAttributes($value['@attributes']);
+            }
+            else
+                $this->addChild($element, $value);
+
+        return;
     }
 
     /**
@@ -401,23 +442,29 @@ class          Hoa_Xml_Element_ReadWrite
      */
     public function truncate ( $size ) {
 
-        return /* TODO */;
+        return parent::$_buffer->truncate($size);
     }
 
     /**
      * Write a DOM tree.
      *
      * @access  public
-     * @param   DOMElement  $dom    DOM tree.
+     * @param   DOMNode  $dom    DOM tree.
      * @return  mixed
      */
-    public function writeDOM ( DOMElement $dom ) {
+    public function writeDOM ( DOMNode $dom ) {
 
-        return /* TODO */;
+        $sx = simplexml_import_dom($dom, __CLASS__);
+
+        throw new Hoa_Xml_Exception(
+            'Hmm, TODO?', 42);
+
+        return true;
     }
 
     /**
      * Write attributes.
+     * If an attribute does not exist, it will be created.
      *
      * @access  public
      * @param   array   $attributes    Attributes.
@@ -433,6 +480,7 @@ class          Hoa_Xml_Element_ReadWrite
 
     /**
      * Write an attribute.
+     * If the attribute does not exist, it will be created.
      *
      * @access  public
      * @param   string  $name     Name.

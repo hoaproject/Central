@@ -186,9 +186,6 @@ class          Hoa_Xml_Element
         self::$_buffer = null;
         $handle        = $this->xpath('following-sibling::*[1]/self::' . $F);
 
-        if(false === $handle)
-            return false;
-
         if(empty($handle))
             return false;
 

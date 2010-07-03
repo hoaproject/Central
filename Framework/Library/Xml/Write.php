@@ -76,11 +76,38 @@ class          Hoa_Xml_Write
     implements Hoa_Stream_Io_Out {
 
     /**
+     * Start the stream reader/writer as if it is a XML document.
      *
+     * @access  public
+     * @param   Hoa_Stream_Io_Out  $stream    Stream to read/write.
+     * @return  void
      */
     public function __construct ( Hoa_Stream_Io_Out $stream ) {
 
         parent::__construct('Hoa_Xml_Element_Write', $stream);
+
+        event('hoa://Event/Stream/' . $stream->getStreamName() . ':close-before')
+            ->attach($this, '_close');
+
+        return;
+    }
+
+    /**
+     * Do not use this method. It is called from the
+     * hoa://Event/Stream/...:close-before event.
+     * It transforms the XML tree as a XML string, truncates the stream to zero
+     * and writes all this string into the stream.
+     *
+     * @access  public
+     * @param   Hoa_Core_Event_Bucket  $bucket    Event's bucket.
+     * @return  void
+     */
+    public function _close ( Hoa_Core_Event_Bucket $bucket ) {
+
+        $handle = $this->getStream()->selectRoot()->asXML();
+
+        if(true === $this->getInnerStream()->truncate(0))
+            $this->getInnerStream()->writeAll($handle);
 
         return;
     }

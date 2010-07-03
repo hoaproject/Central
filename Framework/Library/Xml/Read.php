@@ -76,7 +76,11 @@ class          Hoa_Xml_Read
     implements Hoa_Stream_Io_In {
 
     /**
+     * Start the stream reader as if it is a XML document.
      *
+     * @access  public
+     * @param   Hoa_Stream_Io_In  $stream    Stream to read.
+     * @return  void
      */
     public function __construct ( Hoa_Stream_Io_In $stream ) {
 
@@ -168,16 +172,15 @@ class          Hoa_Xml_Read
     }
 
     /**
-     * Read an array.
-     * Alias of the $this->scanf() method.
+     * Read the XML tree as an array.
      *
      * @access  public
-     * @param   string  $format    Format (see printf's formats).
+     * @param   string  $argument    Not use here.
      * @return  array
      */
-    public function readArray ( $format ) {
+    public function readArray ( $argument = null ) {
 
-        return $this->getStream()->readArray($format);
+        return $this->getStream()->readArray($argument);
     }
 
     /**
