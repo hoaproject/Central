@@ -207,19 +207,8 @@ abstract class Hoa_StringBuffer
      */
     public function initializeWith ( $string ) {
 
-        $current = $this->tell();
-        $this->seek(0, Hoa_Stream_Io_Pointable::SEEK_END);
-        $end     = $this->tell();
-
-        if(0 !== $end) {
-
-            $this->seek($current, Hoa_Stream_Io_Pointable::SEEK_SET);
-
-            return false;
-        }
-
+        ftruncate($this->getStream(), 0);
         fwrite($this->getStream(), $string, strlen($string));
-        $this->seek(0, Hoa_Stream_Io_Pointable::SEEK_SET);
 
         return true;
     }
