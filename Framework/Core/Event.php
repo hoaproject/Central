@@ -72,24 +72,24 @@ class Hoa_Core_Event_Bucket {
     protected $_source = null;
 
     /**
-     * Value.
+     * Data.
      *
      * @var Hoa_Core_Event_Bucket mixed
      */
-    protected $_value  = null;
+    protected $_data   = null;
 
 
 
     /**
-     * Set value.
+     * Set data.
      *
      * @access  public
-     * @param   mixed   $value    Value.
+     * @param   mixed   $data    Data.
      * @return  void
      */
-    public function __construct ( $value = null ) {
+    public function __construct ( $data = null ) {
 
-        $this->setValue($value);
+        $this->setData($data);
 
         return;
     }
@@ -135,29 +135,29 @@ class Hoa_Core_Event_Bucket {
     }
 
     /**
-     * Set value.
+     * Set data.
      *
      * @access  public
-     * @param   mixed   $value    Value.
+     * @param   mixed   $data    Data.
      * @return  mixed
      */
-    public function setValue ( $value ) {
+    public function setData ( $data ) {
 
-        $old          = $this->_value;
-        $this->_value = $value;
+        $old          = $this->_data;
+        $this->_data = $data;
 
         return $old;
     }
 
     /**
-     * Get value.
+     * Get data.
      *
      * @access  public
      * @return  mixed
      */
-    public function getValue ( ) {
+    public function getData ( ) {
 
-        return $this->_value;
+        return $this->_data;
     }
 }
 
@@ -340,7 +340,7 @@ class Hoa_Core_Event {
                 2, $eventId);
 
         $data->setSource($source);
-        $handle = $data->getValue();
+        $handle = $data->getData();
         $method = 'writeAll';
 
         switch($type = gettype($handle)) {
