@@ -53,14 +53,14 @@ import('Xml.Element');
 import('Stream.Io.Out');
 
 /**
- * Hoa_StringBuffer_Write
+ * Hoa_StringBuffer_ReadWrite
  */
-import('StringBuffer.Write');
+import('StringBuffer.ReadWrite');
 
 /**
  * Class Hoa_Xml_Element_Write.
  *
- * Write into a XML element.
+ * Write a XML element.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
@@ -92,11 +92,18 @@ class          Hoa_Xml_Element_Write
 
         if(null === parent::$_buffer) {
 
-            parent::$_buffer = new Hoa_StringBuffer_Write();
-            parent::$_buffer->initializeWith($this->_toString());
+            parent::$_buffer = new Hoa_StringBuffer_ReadWrite();
+            parent::$_buffer->initializeWith($this->__toString());
         }
 
-        return parent::$_buffer->write($length);
+        $l = parent::$_buffer->write($string, $length);
+
+        if($l !== $length)
+            return false;
+
+        $this[0] = parent::$_buffer->readAll();
+
+        return $l;
     }
 
     /**
@@ -165,54 +172,6 @@ class          Hoa_Xml_Element_Write
         return $this->write($float, strlen($float));
     }
 
-    public function arrayToXmlAttributes ( $array ) {
-
-        $out = null;
-
-        foreach($array as $attribute => $value)
-            $out .= ' ' . $attribute . '="' . str_replace('"', '\"', $value) . '"';
-
-        return $out;
-    }
-
-    public function arrayToXml ( $array ) {
-
-        static $i = 0;
-
-        if(!is_array($array))
-            return $array;
-
-        $out = null;
-
-        foreach($array as $element => $value) {
-
-            if('@attributes' == $element)
-                continue;
-
-            $space = str_repeat('  ', $i);
-
-            if(is_array($value)) {
-
-                $out .= $space .
-                        '<' . $element .
-                        (array_key_exists('@attributes', $value)
-                           ? $this->arrayToXmlAttributes($value['@attributes'])
-                           : '') . '>' . "\n";
-                $i++;
-                $out .= $this->arrayToXml($value);
-                $i--;
-                $out .= $space . '</' . $element . '>' . "\n";
-            }
-            else
-                $out .= $space .
-                        '<' . $element . '>' .
-                        $value .
-                        '</' . $element . '>' . "\n";
-        }
-
-        return $out;
-    }
-
     /**
      * Write an array.
      *
@@ -222,7 +181,25 @@ class          Hoa_Xml_Element_Write
      */
     public function writeArray ( Array $array ) {
 
-        var_dump($this->arrayToXml($array));
+        foreach($array as $element => $value)
+            if(is_array($value)) {
+
+                foreach($value as $i => $in)
+                    if(is_array($in) && is_int($i)) {
+                        
+                        $handle = $this->addChild($element);
+                        $handle->writeArray($in);
+                    }
+                    elseif(is_int($i))
+                        $handle = $this->addChild($element, $in);
+
+                if(array_key_exists('@attributes', $value))
+                    $handle->writeAttributes($value['@attributes']);
+            }
+            else
+                $this->addChild($element, $value);
+
+        return;
     }
 
     /**
@@ -263,23 +240,29 @@ class          Hoa_Xml_Element_Write
      */
     public function truncate ( $size ) {
 
-        return /* TODO */;
+        return parent::$_buffer->truncate($size);
     }
 
     /**
      * Write a DOM tree.
      *
      * @access  public
-     * @param   DOMElement  $dom    DOM tree.
+     * @param   DOMNode  $dom    DOM tree.
      * @return  mixed
      */
-    public function writeDOM ( DOMElement $dom ) {
+    public function writeDOM ( DOMNode $dom ) {
 
-        return /* TODO */;
+        $sx = simplexml_import_dom($dom, __CLASS__);
+
+        throw new Hoa_Xml_Exception(
+            'Hmm, TODO?', 42);
+
+        return true;
     }
 
     /**
      * Write attributes.
+     * If an attribute does not exist, it will be created.
      *
      * @access  public
      * @param   array   $attributes    Attributes.
@@ -295,6 +278,7 @@ class          Hoa_Xml_Element_Write
 
     /**
      * Write an attribute.
+     * If the attribute does not exist, it will be created.
      *
      * @access  public
      * @param   string  $name     Name.

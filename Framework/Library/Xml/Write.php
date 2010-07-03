@@ -238,10 +238,10 @@ class          Hoa_Xml_Write
      * Write a DOM tree.
      *
      * @access  public
-     * @param   DOMElement  $dom    DOM tree.
+     * @param   DOMNode  $dom    DOM tree.
      * @return  mixed
      */
-    public function writeDOM ( DOMElement $dom ) {
+    public function writeDOM ( DOMNode $dom ) {
 
         return $this->getStream()->writeDOM($dom);
     }
