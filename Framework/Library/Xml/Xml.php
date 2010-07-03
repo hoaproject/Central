@@ -69,13 +69,25 @@ abstract class Hoa_Xml
     implements Hoa_Stream_Io_Structural {
 
     /**
+     * Constructor. Load the inner stream as a XML tree. If the inner stream is
+     * empty (e.g. an empty new file), the XML tree will represent the following
+     * XML code:
+     *     <?xml version="1.0" encoding="utf-8"?>
      *
+     *     <handler>
+     *     </handler>
+     *
+     * @access  public
+     * @param   string      $stream         Stream name to use.
+     * @param   Hoa_Stream  $innerStream    Inner stream.
+     * @return  void
+     * @throw   Hoa_Xml_Exception
      */
     public function __construct ( $stream, Hoa_Stream $innerStream ) {
 
         if(!function_exists('simplexml_load_file'))
             throw new Hoa_Xml_Exception(
-                'SimpleXML must be enable for using %s.', 0, __CLASS__);
+                'SimpleXML must be enable for using %s.', 0, get_class($this));
 
         $streamName = $innerStream->getStreamName();
         $root       = @simplexml_load_file($streamName, $stream);
@@ -83,12 +95,12 @@ abstract class Hoa_Xml
         if(false === $root) {
 
             if($innerStream instanceof Hoa_Stream_Io_In)
-                $root = @simplexml_load_string($streamName, $stream);
+                $root = @simplexml_load_string($innerStream->readAll(), $stream);
 
             if(false === $root)
                 $root = simplexml_load_string(
                     '<?xml version="1.0" encoding="utf-8"?' . ">\n\n" .
-                    '<header>' . "\n\n" . '</header>',
+                    '<handler>' . "\n" . '</handler>',
                     $stream
                 );
         }
@@ -135,6 +147,51 @@ abstract class Hoa_Xml
     public function asXML ( ) {
 
         return $this->getStream()->asXML();
+    }
+
+    public function xpath ( $path ) {
+
+        return $this->getStream()->xpath($path);
+    }
+
+    public function registerXPathNamespace ( ) {
+
+        return /* TODO */;
+    }
+
+    public function attributes ( ) {
+
+        return /* TODO */;
+    }
+
+    public function children ( ) {
+
+        return /* TODO */;
+    }
+
+    public function getNamespaces ( ) {
+
+        return /* TODO */;
+    }
+
+    public function getDocNamespaces ( ) {
+
+        return /* TODO */;
+    }
+
+    public function getName ( ) {
+
+        return /* TODO */;
+    }
+
+    public function addChild ( ) {
+
+        return /* TODO */;
+    }
+
+    public function addAttribute ( ) {
+
+        return /* TODO */;
     }
 
     /**
