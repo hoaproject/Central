@@ -250,4 +250,15 @@ class          Hoa_Xml_Read
 
         return $this->getStream()->readAttribute($name);;
     }
+
+    /**
+     * Read all with XML node.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function readXML ( ) {
+
+        return $this->getStream()->readXML();
+    }
 }

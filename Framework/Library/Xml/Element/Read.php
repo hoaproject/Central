@@ -53,9 +53,9 @@ import('Xml.Element');
 import('Stream.Io.In');
 
 /**
- * Hoa_StringBuffer_Read
+ * Hoa_StringBuffer_ReadWrite
  */
-import('StringBuffer.Read');
+import('StringBuffer.ReadWrite');
 
 /**
  * Class Hoa_Xml_Element_Read.
@@ -102,8 +102,8 @@ class          Hoa_Xml_Element_Read
 
         if(null === parent::$_buffer) {
 
-            parent::$_buffer = new Hoa_StringBuffer_Read();
-            parent::$_buffer->initializeWith($this->readAll());
+            parent::$_buffer = new Hoa_StringBuffer_ReadWrite();
+            parent::$_buffer->initializeWith($this->__toString());
         }
 
         return parent::$_buffer->read($length);
@@ -168,16 +168,15 @@ class          Hoa_Xml_Element_Read
     }
 
     /**
-     * Read an array.
-     * Alias of the $this->scanf() method.
+     * Read the XML tree as an array.
      *
      * @access  public
-     * @param   string  $format    Format (see printf's formats).
+     * @param   string  $argument    Not use here.
      * @return  array
      */
-    public function readArray ( $format ) {
+    public function readArray ( $argument = null ) {
 
-        return /* TODO */;
+        return (array) $this;
     }
 
     /**
@@ -205,7 +204,13 @@ class          Hoa_Xml_Element_Read
      */
     public function readAll ( ) {
 
-        return $this->__toString();
+        if(null === parent::$_buffer) {
+
+            parent::$_buffer = new Hoa_StringBuffer_ReadWrite();
+            parent::$_buffer->initializeWith($this->__toString());
+        }
+
+        return parent::$_buffer->readAll();
     }
 
     /**
@@ -259,5 +264,16 @@ class          Hoa_Xml_Element_Read
             return null;
 
         return $attributes[$name];
+    }
+
+    /**
+     * Read all with XML node.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function readXML ( ) {
+
+        return $this->asXML();
     }
 }
