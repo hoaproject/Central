@@ -210,6 +210,8 @@ abstract class Hoa_StringBuffer
         ftruncate($this->getStream(), 0);
         fwrite($this->getStream(), $string, strlen($string));
 
+        $this->seek(0, Hoa_Stream_Io_Pointable::SEEK_SET);
+
         return true;
     }
 }
