@@ -204,13 +204,7 @@ class          Hoa_Xml_Element_Read
      */
     public function readAll ( ) {
 
-        if(null === parent::$_buffer) {
-
-            parent::$_buffer = new Hoa_StringBuffer_ReadWrite();
-            parent::$_buffer->initializeWith($this->__toString());
-        }
-
-        return parent::$_buffer->readAll();
+        return $this->__toString();
     }
 
     /**
