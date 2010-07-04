@@ -144,56 +144,6 @@ abstract class Hoa_Xml
         return $this->getStream()->$name;
     }
 
-    public function asXML ( ) {
-
-        return $this->getStream()->asXML();
-    }
-
-    public function xpath ( $path ) {
-
-        return $this->getStream()->xpath($path);
-    }
-
-    public function registerXPathNamespace ( ) {
-
-        return /* TODO */;
-    }
-
-    public function attributes ( ) {
-
-        return /* TODO */;
-    }
-
-    public function children ( ) {
-
-        return /* TODO */;
-    }
-
-    public function getNamespaces ( ) {
-
-        return /* TODO */;
-    }
-
-    public function getDocNamespaces ( ) {
-
-        return /* TODO */;
-    }
-
-    public function getName ( ) {
-
-        return /* TODO */;
-    }
-
-    public function addChild ( ) {
-
-        return /* TODO */;
-    }
-
-    public function addAttribute ( ) {
-
-        return /* TODO */;
-    }
-
     /**
      * Select root of the document: :root.
      *
@@ -300,6 +250,18 @@ abstract class Hoa_Xml
     public function querySelectorAll ( $query ) {
 
         return $this->getStream()->querySelectorAll($query);
+    }
+
+    /**
+     * Run a XPath query on this tree.
+     *
+     * @access  public
+     * @param   string  $path    XPath query.
+     * @return  array
+     */
+    public function xpath ( $path ) {
+
+        return $this->getStream()->xpath($path);
     }
 
     /**
