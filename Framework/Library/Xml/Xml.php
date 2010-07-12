@@ -71,7 +71,8 @@ import('Stream.Io.Structural');
 
 abstract class Hoa_Xml
     extends    Hoa_Stream_Composite
-    implements Hoa_Stream_Io_Structural {
+    implements Hoa_Stream_Io_Structural,
+               Countable {
 
     /**
      * Constructor. Load the inner stream as a XML tree. If the inner stream is
@@ -278,5 +279,27 @@ abstract class Hoa_Xml
     public function __toString ( ) {
 
         return $this->getStream()->__toString();
+    }
+
+    /**
+     * Get the name of the XML element.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getName ( ) {
+
+        return $this->getStream()->getName();
+    }
+
+    /**
+     * Count children number.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function count ( ) {
+
+        return $this->getStream()->count();
     }
 }
