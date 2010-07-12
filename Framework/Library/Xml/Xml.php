@@ -37,6 +37,11 @@
 require_once 'Core.php';
 
 /**
+ * Hoa_Xml_Exception
+ */
+import('Xml.Exception');
+
+/**
  * Hoa_Xml_Element
  */
 import('Xml.Element');
