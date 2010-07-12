@@ -448,7 +448,7 @@ class          Hoa_Xml_Element_ReadWrite
      */
     public function writeDOM ( DOMNode $dom ) {
 
-        $sx = simplexml_import_dom($dom, __CLASS__);
+        $sx = simplexml_import_dom($dom, get_class($this));
 
         throw new Hoa_Xml_Exception(
             'Hmm, TODO?', 42);
