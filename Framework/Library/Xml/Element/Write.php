@@ -192,6 +192,8 @@ class          Hoa_Xml_Element_Write
                     }
                     elseif(is_int($i))
                         $handle = $this->addChild($element, $in);
+                    else
+                        $handle = $this->addChild($i, $in);
 
                 if(array_key_exists('@attributes', $value))
                     $handle->writeAttributes($value['@attributes']);
