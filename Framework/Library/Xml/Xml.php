@@ -71,7 +71,8 @@ import('Stream.Io.Structural');
 
 abstract class Hoa_Xml
     extends    Hoa_Stream_Composite
-    implements Hoa_Stream_Io_Structural,
+    implements Hoa_Xml_Element,
+               Hoa_Stream_Io_Structural,
                Countable,
                IteratorAggregate {
 

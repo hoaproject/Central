@@ -43,9 +43,9 @@ require_once 'Core.php';
 import('Xml.Exception');
 
 /**
- * Hoa_Xml_Element
+ * Hoa_Xml_Element_Basic
  */
-import('Xml.Element');
+import('Xml.Element.Basic');
 
 /**
  * Hoa_Stream_Io_In
@@ -72,7 +72,7 @@ import('StringBuffer.ReadWrite');
  */
 
 class          Hoa_Xml_Element_Read
-    extends    Hoa_Xml_Element
+    extends    Hoa_Xml_Element_Basic
     implements Hoa_Stream_Io_In {
 
     /**
