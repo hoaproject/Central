@@ -72,7 +72,8 @@ import('Stream.Io.Structural');
 abstract class Hoa_Xml
     extends    Hoa_Stream_Composite
     implements Hoa_Stream_Io_Structural,
-               Countable {
+               Countable,
+               IteratorAggregate {
 
     /**
      * Constructor. Load the inner stream as a XML tree. If the inner stream is
@@ -301,5 +302,16 @@ abstract class Hoa_Xml
     public function count ( ) {
 
         return $this->getStream()->count();
+    }
+
+    /**
+     * Get the iterator.
+     *
+     * @access  public
+     * @return  Hoa_Xml_Element
+     */
+    public function getIterator ( ) {
+
+        return $this->getStream();
     }
 }
