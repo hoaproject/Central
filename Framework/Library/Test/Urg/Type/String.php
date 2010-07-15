@@ -148,7 +148,7 @@ class Hoa_Test_Urg_Type_String extends Hoa_Test_Urg_Type_SuperString {
             return false;
 
         $q          = $this->stringToArray($q);
-        $dictionary = Hoa_Test::getInstance()->getParameter('test.dictionary');
+        $dictionary = Hoa_Test::getInstance()->getParameter('dictionary');
         $category   = $dictionary . DS . $this->getCategory();
 
         if(strtolower(substr($category, -4)) != '.txt')
