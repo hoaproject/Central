@@ -83,14 +83,14 @@ class Trivial extends Hoa_Stream implements Hoa_Stream_Io_Out {
         parent::__construct(null);
     }
 
-    protected function &open ( $streamName, Hoa_Stream_Context $context = null ) {
+    protected function &_open ( $streamName, Hoa_Stream_Context $context = null ) {
 
         $out = null;
 
         return $out;
     }
 
-    public function close ( ) {
+    public function _close ( ) {
 
         return true;
     }
@@ -138,6 +138,7 @@ class Trivial extends Hoa_Stream implements Hoa_Stream_Io_Out {
 
     public function writeArray ( Array $array ) {
 
+        $array = $array['log'];
         $this->self->status(
             $array['class'] . '::' . $array['method'] . '(' .
             implode(', ', $array['arguments']) . ') -> ' . $array['result'],
@@ -283,9 +284,8 @@ class RunCommand extends Hoa_Console_Command_Abstract {
         if(null === $file)
             return $this->usage();
 
-        Hoa_Log::getChannel(
-            Hoa_Test_Praspel::LOG_CHANNEL
-        )->addOutputStream(new Trivial($this));
+        event('hoa://Event/Log/' . Hoa_Test_Praspel::LOG_CHANNEL)
+            ->attach(new Trivial($this));
 
         $oracle       = Hoa_Core_Parameter::zFormat(
             $configurations['parameters']['ordeal.oracle'],
