@@ -178,8 +178,7 @@ class Hoa_Test_Praspel {
         $this->_file      = $file;
         $this->_startLine = $startLine;
         $this->_endLine   = $endLine;
-
-        $this->_log = Hoa_Log::getChannel(
+        $this->_log       = Hoa_Log::getChannel(
             self::LOG_CHANNEL
         );
 
@@ -301,12 +300,12 @@ class Hoa_Test_Praspel {
 
         if(true === $call->hasException()) {
 
-            $exception = $call->getException();
+            $exception = get_class($call->getException());
 
             if(false === $this->clauseExists('throwable')) {
 
                 $this->getLog()->log(
-                    'An exception (' . get_class($exception) .
+                    'An exception (' . $exception .
                     ') occured and no @throwable was declared.',
                     Hoa_Log::TEST,
                     $log
@@ -317,10 +316,10 @@ class Hoa_Test_Praspel {
 
             $throwable = $this->getClause('throwable');
 
-            if(false === $throwable->exceptionExists(get_class($exception))) {
+            if(false === $throwable->exceptionExists($exception)) {
 
                 $this->getLog()->log(
-                    'The exception ' . get_class($exception) .
+                    'The exception ' . $exception .
                     ' was thrown but not declared in the @throwable clause.',
                     Hoa_Log::TEST,
                     $log
@@ -331,7 +330,7 @@ class Hoa_Test_Praspel {
 
             $log['status'] = SUCCEED;
             $this->getLog()->log(
-                'The exception ' . get_class($exception) .
+                'The exception ' . $exception .
                 ' was thrown and it is normal.',
                 Hoa_Log::TEST,
                 $log
