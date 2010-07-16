@@ -231,47 +231,6 @@ class          Hoa_Xml_Element_ReadWrite
     }
 
     /**
-     * Read all attributes.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function readAttributes ( ) {
-
-        $handle = (array) $this->attributes();
-
-        return $handle['@attributes'];
-    }
-
-    /**
-     * Read a specific attribute.
-     *
-     * @access  public
-     * @param   string  $name    Attribute's name.
-     * @return  string
-     */
-    public function readAttribute ( $name ) {
-
-        $attributes = $this->readAttributes();
-
-        if(false === array_key_exists($name, $attributes))
-            return null;
-
-        return $attributes[$name];
-    }
-
-    /**
-     * Read all with XML node.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function readXML ( ) {
-
-        return $this->asXML();
-    }
-
-    /**
      * Write n characters.
      *
      * @access  public

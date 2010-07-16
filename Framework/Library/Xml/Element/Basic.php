@@ -259,6 +259,77 @@ class          Hoa_Xml_Element_Basic
      */
     public function __toString ( ) {
 
+        var_dump('lplplp');
+
         return (string) $this;
+    }
+
+    /**
+     * Read all attributes.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function readAttributes ( ) {
+
+        $handle = (array) $this->attributes();
+
+        return $handle['@attributes'];
+    }
+
+    /**
+     * Read a specific attribute.
+     *
+     * @access  public
+     * @param   string  $name    Attribute's name.
+     * @return  string
+     */
+    public function readAttribute ( $name ) {
+
+        $attributes = $this->readAttributes();
+
+        if(false === array_key_exists($name, $attributes))
+            return null;
+
+        return $attributes[$name];
+    }
+
+    /**
+     * Read attributes value as a list.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function readAttributesAsList ( ) {
+
+        $attributes = $this->readAttributes();
+
+        foreach($attributes as $name => &$value)
+            $value = explode(' ', $value);
+
+        return $attributes;
+    }
+
+    /**
+     * Read a attribute value as a list.
+     *
+     * @access  public
+     * @param   string  $name    Attribute's name.
+     * @return  array
+     */
+    public function readAttributeAsList ( $name ) {
+
+        return explode(' ', $this->readAttribute($name));
+    }
+
+    /**
+     * Read all with XML node.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function readXML ( ) {
+
+        return $this->asXML();
     }
 }

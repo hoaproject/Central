@@ -227,38 +227,4 @@ class          Hoa_Xml_Read
 
         return $this->getStream()->readDOM();
     }
-
-    /**
-     * Read all attributes.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function readAttributes ( ) {
-
-        return $this->getStream()->readAttributes();
-    }
-
-    /**
-     * Read a specific attribute.
-     *
-     * @access  public
-     * @param   string  $name    Attribute's name.
-     * @return  string
-     */
-    public function readAttribute ( $name ) {
-
-        return $this->getStream()->readAttribute($name);;
-    }
-
-    /**
-     * Read all with XML node.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function readXML ( ) {
-
-        return $this->getStream()->readXML();
-    }
 }
