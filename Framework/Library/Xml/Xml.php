@@ -74,7 +74,8 @@ abstract class Hoa_Xml
     implements Hoa_Xml_Element,
                Hoa_Stream_Io_Structural,
                Countable,
-               IteratorAggregate {
+               IteratorAggregate,
+               ArrayAccess {
 
     /**
      * Constructor. Load the inner stream as a XML tree. If the inner stream is
@@ -123,33 +124,6 @@ abstract class Hoa_Xml
         $this->setInnerStream($innerStream);
 
         return;
-    }
-
-    /**
-     * Set an attribute value.
-     *
-     * @access  public
-     * @param   string  $name     Attribute name.
-     * @param   mixed   $value    Attribute value.
-     * @return  void
-     */
-    public function __set ( $name, $value ) {
-
-        $this->getStream()->$name = $value;
-
-        return;
-    }
-
-    /**
-     * Get an attribute value.
-     *
-     * @access  public
-     * @param   string  $name    Attribute value.
-     * @return  mixed
-     */
-    public function __get ( $name ) {
-
-        return $this->getStream()->$name;
     }
 
     /**
@@ -284,6 +258,75 @@ abstract class Hoa_Xml
     }
 
     /**
+     * Read all attributes.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function readAttributes ( ) {
+
+        $handle = (array) $this->getStream()->attributes();
+
+        return $handle['@attributes'];
+    }
+
+    /**
+     * Read a specific attribute.
+     *
+     * @access  public
+     * @param   string  $name    Attribute's name.
+     * @return  string
+     */
+    public function readAttribute ( $name ) {
+
+        $attributes = $this->readAttributes();
+
+        if(false === array_key_exists($name, $attributes))
+            return null;
+
+        return $attributes[$name];
+    }
+
+    /**
+     * Read attributes value as a list.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function readAttributesAsList ( ) {
+
+        $attributes = $this->readAttributes();
+
+        foreach($attributes as $name => &$value)
+            $value = explode(' ', $value);
+
+        return $attributes;
+    }
+
+    /**
+     * Read a attribute value as a list.
+     *
+     * @access  public
+     * @param   string  $name    Attribute's name.
+     * @return  array
+     */
+    public function readAttributeAsList ( $name ) {
+
+        return explode(' ', $this->readAttribute($name));
+    }
+
+    /**
+     * Read all with XML node.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function readXML ( ) {
+
+        return $this->getStream()->asXML();
+    }
+
+    /**
      * Get the name of the XML element.
      *
      * @access  public
@@ -314,5 +357,87 @@ abstract class Hoa_Xml
     public function getIterator ( ) {
 
         return $this->getStream();
+    }
+
+    /**
+     * Set a child.
+     *
+     * @access  public
+     * @param   string  $name     Child name.
+     * @param   mixed   $value    Child value.
+     * @return  void
+     */
+    public function __set ( $name, $value ) {
+
+        $this->getStream()->$name = $value;
+
+        return;
+    }
+
+    /**
+     * Get a child.
+     *
+     * @access  public
+     * @param   string  $name    Child value.
+     * @return  mixed
+     */
+    public function __get ( $name ) {
+
+        return $this->getStream()->$name;
+    }
+
+    /**
+     * Check if an attribute exists.
+     *
+     * @access  public
+     * @param   string  $offset    Attribute name.
+     * @return  bool
+     */
+    public function offsetExists ( $offset ) {
+
+        return null !== $this->readAttribute($offset);
+    }
+
+    /**
+     * Get an attribute.
+     *
+     * @access  public
+     * @param   string  $offset    Attribute name.
+     * @return  array
+     */
+    public function offsetGet ( $offset ) {
+
+        return $this->readAttribute($offset);
+    }
+
+    /**
+     * Set a value to the attribute.
+     *
+     * @access  public
+     * @param   string  $offset    Attribute name.
+     * @param   string  $value     Attribute value.
+     * @return  void
+     */
+    public function offsetSet ( $offset, $value ) {
+
+        $handle = $this->getStream();
+        $handle[$offset] = $value;
+
+        return;
+    }
+
+    /**
+     * Remove an attribute.
+     *
+     * @access  public
+     * @param   string  $offset    Attribute name.
+     * @return  void
+     */
+    public function offsetUnset ( $offset ) {
+
+        $handle = $this->getStream();
+        unset($handle[$offset]);
+
+        return;
     }
 }
