@@ -72,6 +72,13 @@ class          Hoa_Xml_Element_Basic
                Hoa_Stream_Io_Structural {
 
     /**
+     * Super root of XML tree.
+     *
+     * @var Hoa_Xml_Element_Basic object
+     */
+    protected static $_sroot      = null;
+
+    /**
      * Root of XML tree.
      *
      * @var Hoa_Xml_Element_Basic object
@@ -95,9 +102,25 @@ class          Hoa_Xml_Element_Basic
 
 
     /**
+     * Set super root.
+     *
+     * @access  public
+     * @param   Hoa_Xml  $sroot    Super root of XML tree.
+     * @return  void
+     */
+    public function setSuperRoot ( $sroot ) {
+
+        $old          = self::$_sroot;
+        self::$_sroot = $sroot;
+
+        return $old;
+    }
+
+    /**
      * Set root.
      *
      * @access  public
+     * @param   Hoa_Xml_Element_Basic  $root    Root of XML tree.
      * @return  void
      */
     public function setRoot ( $root ) {
@@ -106,6 +129,17 @@ class          Hoa_Xml_Element_Basic
         self::$_root = $root;
 
         return $old;
+    }
+
+    /**
+     * Select super root.
+     *
+     * @access  public
+     * @return  Hoa_Xml
+     */
+    public function selectSuperRoot ( ) {
+
+        return self::$_sroot;
     }
 
     /**
@@ -274,6 +308,9 @@ class          Hoa_Xml_Element_Basic
 
         $handle = (array) $this->attributes();
 
+        if(!isset($handle['@attributes']))
+            return array();
+
         return $handle['@attributes'];
     }
 
@@ -292,6 +329,18 @@ class          Hoa_Xml_Element_Basic
             return null;
 
         return $attributes[$name];
+    }
+
+    /**
+     * Whether an attribute exists.
+     *
+     * @access  public
+     * @param   string  $name    Attribute's name.
+     * @return  bool
+     */
+    public function attributeExists ( $name ) {
+
+        return array_key_exists($name, $this->readAttributes());
     }
 
     /**

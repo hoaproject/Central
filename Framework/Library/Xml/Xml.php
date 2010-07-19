@@ -119,11 +119,23 @@ abstract class Hoa_Xml
                 'Failed to understand %s as a XML stream.',
                 1, $streamName);
 
+        $root->setSuperRoot($this);
         $root->setRoot($root);
         $this->setStream($root);
         $this->setInnerStream($innerStream);
 
         return;
+    }
+
+    /**
+     * Select super root.
+     *
+     * @access  public
+     * @return  Hoa_Xml
+     */
+    public function selectSuperRoot ( ) {
+
+        return $this;
     }
 
     /**
@@ -267,6 +279,9 @@ abstract class Hoa_Xml
 
         $handle = (array) $this->getStream()->attributes();
 
+        if(!isset($handle['@attributes']))
+            return array();
+
         return $handle['@attributes'];
     }
 
@@ -285,6 +300,18 @@ abstract class Hoa_Xml
             return null;
 
         return $attributes[$name];
+    }
+
+    /**
+     * Whether an attribute exists.
+     *
+     * @access  public
+     * @param   string  $name    Attribute's name.
+     * @return  bool
+     */
+    public function attributeExists ( $name ) {
+
+        return array_key_exists($name, $this->readAttributes());
     }
 
     /**
