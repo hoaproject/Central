@@ -58,16 +58,9 @@ import('Xyl.Renderer');
 
 class Hoa_Xyl_Renderer_Html5 extends Hoa_Xyl_Renderer {
 
-    /**
-     * Early draft of renderer (for test).
-     */
-    public function render ( Hoa_Xyl_Element $element ) {
+    protected function getRendererClass ( $elementName ) {
 
-        $elementName = ucfirst(strtolower($element->getName()));
         import('Xyl.Renderer.Html5.' . $elementName) and load();
-        $classname   = 'Hoa_Xyl_Renderer_Html5_' . $elementName;
-        $foobar      = new $classname($this, $element);
-
-        return $foobar->paint();
+        return 'Hoa_Xyl_Renderer_Html5_' . $elementName;
     }
 }

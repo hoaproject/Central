@@ -8,10 +8,11 @@ class Hoa_Xyl_Renderer_Html5_Page extends Hoa_Xyl_Element_Render {
 
         $out = '<!DOCTYPE html>' . "\n\n" .
                '<html>' . "\n" .
-               '<body>' . "\n";
+               '<body>';
 
         foreach($this->getElement() as $name => $child)
-            $out .= $this->getRenderer()->render($child) . "\n";
+            $out .= "\n" .
+                    $this->getRenderer()->render($child);
 
         return $out .
                '</body>' . "\n" .

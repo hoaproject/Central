@@ -56,4 +56,25 @@ import('Xyl.Exception');
  * @subpackage  Hoa_Xyl_Renderer
  */
 
-abstract class Hoa_Xyl_Renderer { }
+abstract class Hoa_Xyl_Renderer {
+
+    abstract protected function getRendererClass ( $elementName );
+
+    public function render ( Hoa_Xyl_Element $element ) {
+
+        $class    = $this->getRendererClass(
+            ucfirst(strtolower($element->getName()))
+        );
+        $renderer = new $class($this, $element);
+        $data     = &$element->getData();
+        $out      = null;
+
+        do {
+
+            $out .= $renderer->paint() . "\n";
+
+        } while(false !== next($data));
+
+        return $out;
+    }
+}
