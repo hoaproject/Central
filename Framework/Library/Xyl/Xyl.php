@@ -146,7 +146,7 @@ class          Hoa_Xyl
      */
     public function addData ( Array $data ) {
 
-        return $this->_data = array_merge($this->_data, $data);
+        return $this->_data = array_merge_recursive($this->_data, $data);
     }
 
     /**
@@ -167,8 +167,19 @@ class          Hoa_Xyl
      * @access  public
      * @return  array
      */
-    public function getData ( ) {
+    public function &getData ( ) {
 
         return $this->getStream()->getData();
+    }
+
+    /**
+     * Get current data of this element.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function getCurrentData ( ) {
+
+        return current($this->getData());
     }
 }
