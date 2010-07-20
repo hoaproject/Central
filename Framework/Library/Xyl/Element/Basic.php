@@ -82,10 +82,15 @@ class          Hoa_Xyl_Element_Basic
             return;
         }
 
-        $source        = $this->readAttribute('value');
-        $branche       = substr($source, 1);
-        $store         = &$this->selectSuperRoot()->_getStore($this);
-        $store['data'] = &$data[$branche];
+        $source  = $this->readAttribute('value');
+        $branche = substr($source, 1);
+        $store   = &$this->selectSuperRoot()->_getStore($this);
+
+        if(!isset($data[0]))
+            $store['data'][] = &$data[$branche];
+        else
+            foreach($data as $i => $deep)
+                $store['data'][$i] = &$data[$i][$branche];
 
         foreach($this as $element)
             $element->linkData($data[$branche]);
@@ -101,7 +106,7 @@ class          Hoa_Xyl_Element_Basic
      */
     public function &getData ( ) {
 
-        $store = $this->selectSuperRoot()->_getStore($this);
+        $store = &$this->selectSuperRoot()->_getStore($this);
 
         return $store['data'];
     }
