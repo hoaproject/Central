@@ -99,10 +99,21 @@ class          Hoa_Xyl_Element_Basic
      * @access  public
      * @return  array
      */
-    public function getData ( ) {
+    public function &getData ( ) {
 
         $store = $this->selectSuperRoot()->_getStore($this);
 
         return $store['data'];
+    }
+
+    /**
+     * Get current data of this element.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function getCurrentData ( ) {
+
+        return current($this->getData());
     }
 }
