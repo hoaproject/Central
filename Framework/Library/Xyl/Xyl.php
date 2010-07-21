@@ -80,6 +80,8 @@ class          Hoa_Xyl
      */
     protected $_data  = array();
 
+    protected $_yield = array();
+
     /**
      * Map and store index.
      *
@@ -131,7 +133,7 @@ class          Hoa_Xyl
 
             $id                = $this->_i++;
             $this->_map[$id]   = $element;
-            $this->_store[$id] = array();
+            $this->_store[$id] = null;
         }
 
         return $this->_store[$id];
@@ -180,6 +182,28 @@ class          Hoa_Xyl
      */
     public function getCurrentData ( ) {
 
-        return current($this->getData());
+        return $this->getStream()->getCurrentData();
+    }
+
+    public function getCurrentCurr ( ) {
+
+        return $this->getStream()->getCurrentCurr();
+    }
+
+    public function firstUpdate ( ) {
+
+        return $this->getStream()->firstUpdate();
+    }
+
+    public function update ( ) {
+
+        return $this->getStream()->update();
+    }
+
+    public function addYield ( Hoa_Xyl_Element $yield ) {
+
+        $this->_yield[$yield->readAttribute('name')] = $yield;
+
+        return;
     }
 }

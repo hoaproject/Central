@@ -66,14 +66,24 @@ abstract class Hoa_Xyl_Renderer {
             ucfirst(strtolower($element->getName()))
         );
         $renderer = new $class($this, $element);
+
+        $element->firstUpdate();
         $data     = &$element->getData();
         $out      = null;
+
 
         do {
 
             $out .= $renderer->paint() . "\n";
 
-        } while(false !== next($data));
+            if(is_array($data))
+                $next = next($data);
+            else
+                $next = false;
+
+            $element->update();
+
+        } while(false !== $next);
 
         return $out;
     }
