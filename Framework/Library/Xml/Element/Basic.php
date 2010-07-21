@@ -293,8 +293,6 @@ class          Hoa_Xml_Element_Basic
      */
     public function __toString ( ) {
 
-        var_dump('lplplp');
-
         return (string) $this;
     }
 
