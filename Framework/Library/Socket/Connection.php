@@ -597,7 +597,7 @@ abstract class Hoa_Socket_Connection
      * @param   array   $array    Array.
      * @return  mixed
      */
-    public function writeArray ( $array) {
+    public function writeArray ( Array $array) {
 
         $array = serialize($array);
 
