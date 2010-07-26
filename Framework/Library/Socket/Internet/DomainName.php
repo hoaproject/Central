@@ -73,7 +73,7 @@ class Hoa_Socket_Internet_DomainName extends Hoa_Socket_Internet {
      */
     public function setAddress ( $address ) {
 
-        if(0 == preg_match('#^[0-9a-z_\-\.]+\.[a-z]{2,4}$#', strtolower($address)))
+        if(0 == preg_match('#^[0-9a-z_\-\.]+(\.[a-z]{2,4})?$#', strtolower($address)))
             throw new Hoa_Socket_Exception(
                 'Address %s is not a valid domain name.', 0, $address);
 
