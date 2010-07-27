@@ -86,10 +86,10 @@ class          Hoa_Xyl_Element_Basic
         $branche = substr($source, 1);
         $store   = &$this->selectSuperRoot()->_getStore($this);
         $store   = array(
-            'data'    =>  null
+            'data'    =>  null,
             'parent'  => &$parent,
             'current' =>  0,
-            'branche' =>  $branche,
+            'branche' =>  $branche
         );
 
         if(isset($data[$branche])) {
