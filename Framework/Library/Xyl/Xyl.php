@@ -185,11 +185,6 @@ class          Hoa_Xyl
         return $this->getStream()->getCurrentData();
     }
 
-    public function getCurrentCurr ( ) {
-
-        return $this->getStream()->getCurrentCurr();
-    }
-
     public function firstUpdate ( ) {
 
         return $this->getStream()->firstUpdate();
