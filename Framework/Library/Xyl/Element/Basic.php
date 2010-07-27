@@ -85,73 +85,30 @@ class          Hoa_Xyl_Element_Basic
         $source  = $this->readAttribute('value');
         $branche = substr($source, 1);
         $store   = &$this->selectSuperRoot()->_getStore($this);
-        $store   = array();
+        $store   = array(
+            'data'    =>  null
+            'parent'  => &$parent,
+            'current' =>  0,
+            'branche' =>  $branche,
+        );
 
-        if(!isset($data[0][$branche])) {
+        if(isset($data[$branche])) {
 
-            var_dump('fuck off :-)');
+            if(null === $parent)
+                $store['data'] = array(0 => &$data);
 
-            exit;
-
-            /*
-            $store['data'][] = &$data[$branche];
-            $store['child']  = &$data[$branche][0];
-
-            /*
-            foreach($this as $element)
-                $element->linkData($data[$branche][0]);
-            */
+            if(is_array($data[$branche]))
+                foreach($this as $element)
+                    $element->linkData($data[$branche], $store);
         }
-        else {
+        elseif(isset($data[0][$branche])) {
 
-            $store['branche'] = $branche;
+            if(null === $parent)
+                $store['data'] = &$data;
 
-            if(is_array($data[0][$branche])) {
-
-                if(null === $parent) {
-
-                    $store['data']    = &$data;
-                    $store['current'] = 0;
-                }
-                else {
-
-                    $store['data']    = null;
-                    $store['current'] = 0;
-                }
-
-                $store['parent'] = &$parent;
-
-                //print_r($store);
-
+            if(is_array($data[0][$branche]))
                 foreach($this as $element)
                     $element->linkData($data[0][$branche], $store);
-            }
-            else {
-
-                if(null === $parent) {
-
-                    $store['data']    = &$data;
-                    $store['current'] = 0;
-                }
-                else {
-
-                    $store['data']    = null;
-                    $store['current'] = 0;
-                }
-
-                $store['parent'] = &$parent;
-
-                //print_r($store);
-
-                /*
-                $store['data'][] = &$data[0][$branche];
-
-                if(null === $parent)
-                    $store['curr'] = &$store['data'];
-                else
-                    $store['curr'] = &$parent['curr'][$branche];
-                */
-            }
         }
 
         return;
@@ -178,20 +135,10 @@ class          Hoa_Xyl_Element_Basic
      */
     public function getCurrentData ( ) {
 
-        $store = &$this->selectSuperRoot()->_getStore($this);
-        $current = current($store['data']);
+        $store   = &$this->selectSuperRoot()->_getStore($this);
+        $current =  current($store['data']);
 
         return $current[$store['branche']];
-    }
-
-    public function getCurrentCurr ( ) {
-
-        $store = &$this->selectSuperRoot()->_getStore($this);
-
-        if(!isset($store['curr']))
-            $store['curr'] = array();
-
-        return $store['curr'];
     }
 
     public function firstUpdate ( ) {
