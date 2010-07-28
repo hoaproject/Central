@@ -6,12 +6,11 @@ class Hoa_Xyl_Renderer_Html5_Ul extends Hoa_Xyl_Element_Render {
 
     public function paint ( ) {
 
-        $out = '  <ul>';
+        $out = '  <ul>' . "\n";
 
         foreach($this->getElement() as $name => $child)
-            $out .= "\n" .
-                    $this->getRenderer()->render($child);
+            $out .= $this->getRenderer()->render($child);
 
-        return $out . '  </ul>';
+        return $out . '  </ul>' . "\n";
     }
 }

@@ -12,6 +12,6 @@ class Hoa_Xyl_Renderer_Html5_P extends Hoa_Xyl_Element_Render {
             $out .= "\n" .
                     $this->getRenderer()->render($child);
 
-        return $out . '</p>';
+        return $out . '</p>' . "\n";
     }
 }

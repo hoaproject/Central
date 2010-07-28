@@ -74,7 +74,7 @@ abstract class Hoa_Xyl_Renderer {
 
         do {
 
-            $out .= $renderer->paint() . "\n";
+            $out .= $renderer->paint();
 
             if(is_array($data))
                 $next = next($data);
