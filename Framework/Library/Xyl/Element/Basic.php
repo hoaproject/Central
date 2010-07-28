@@ -79,7 +79,7 @@ class          Hoa_Xyl_Element_Basic
      */
     public function linkData ( Array &$data, Array &$parent = null ) {
 
-        if(false === $this->attributeExists('value')) {
+        if(false === $this->attributeExists('bind')) {
 
             foreach($this as $element)
                 $element->linkData($data, $parent);
@@ -87,7 +87,7 @@ class          Hoa_Xyl_Element_Basic
             return;
         }
 
-        $source = $this->readAttribute('value');
+        $source = $this->readAttribute('bind');
         $handle = $data;
 
         if('?' == $source[0]) {
