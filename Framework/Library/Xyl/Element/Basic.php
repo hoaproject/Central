@@ -38,6 +38,11 @@
 require_once 'Core.php';
 
 /**
+ * Hoa_Xyl_Exception
+ */
+import('Xyl.Exception');
+
+/**
  * Hoa_Xyl_Element
  */
 import('Xyl.Element') and load();
@@ -82,8 +87,26 @@ class          Hoa_Xyl_Element_Basic
             return;
         }
 
-        $source  = $this->readAttribute('value');
-        $branche = substr($source, 1);
+        $source = $this->readAttribute('value');
+        $handle = $data;
+
+        if('?' == $source[0]) {
+
+            $source  = trim(substr($source, 1), '/');
+            $explode = explode('/', $source);
+            $branche = $explode[count($explode) - 1];
+            array_pop($explode);
+
+            foreach($explode as $i => $part)
+                if(isset($handle[0][$part]))
+                    $handle = &$handle[0][$part];
+                elseif(isset($handle[$part]))
+                    $handle = &$handle[$part];
+        }
+        else
+            throw new Hoa_Xyl_Exception(
+                'Huh?', 0);
+
         $store   = &$this->selectSuperRoot()->_getStore($this);
         $store   = array(
             'data'    =>  null,
@@ -92,23 +115,23 @@ class          Hoa_Xyl_Element_Basic
             'branche' =>  $branche
         );
 
-        if(isset($data[$branche])) {
+        if(isset($handle[$branche])) {
 
             if(null === $parent)
-                $store['data'] = array(0 => &$data);
+                $store['data'] = array(0 => &$handle);
 
-            if(is_array($data[$branche]))
+            if(is_array($handle[$branche]))
                 foreach($this as $element)
-                    $element->linkData($data[$branche], $store);
+                    $element->linkData($handle[$branche], $store);
         }
-        elseif(isset($data[0][$branche])) {
+        elseif(isset($handle[0][$branche])) {
 
             if(null === $parent)
-                $store['data'] = &$data;
+                $store['data'] = &$handle;
 
-            if(is_array($data[0][$branche]))
+            if(is_array($handle[0][$branche]))
                 foreach($this as $element)
-                    $element->linkData($data[0][$branche], $store);
+                    $element->linkData($handle[0][$branche], $store);
         }
 
         return;
