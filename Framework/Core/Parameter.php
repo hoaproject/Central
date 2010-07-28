@@ -331,7 +331,7 @@ class Hoa_Core_Parameter {
         $class = str_replace('_', '', $this->_owner);
         $path  = 'hoa://Data/Etc/Configuration/.Cache/' . $class . '.php';
 
-        if($class == 'HoaFramework')
+        if($class == 'HoaCore')
             $path = self::zFormat(
                 $parameters['protocol.Data/Etc/Configuration'],
                 $this->getKeywords($id),
