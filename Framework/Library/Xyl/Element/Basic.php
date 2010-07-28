@@ -77,12 +77,12 @@ class          Hoa_Xyl_Element_Basic
      * @access  public
      * @return  void
      */
-    public function linkData ( Array &$data, Array &$parent = null ) {
+    public function computeDataBinding ( Array &$data, Array &$parent = null ) {
 
         if(false === $this->attributeExists('bind')) {
 
             foreach($this as $element)
-                $element->linkData($data, $parent);
+                $element->computeDataBinding($data, $parent);
 
             return;
         }
@@ -122,7 +122,7 @@ class          Hoa_Xyl_Element_Basic
 
             if(is_array($handle[$branche]))
                 foreach($this as $element)
-                    $element->linkData($handle[$branche], $store);
+                    $element->computeDataBinding($handle[$branche], $store);
         }
         elseif(isset($handle[0][$branche])) {
 
@@ -131,7 +131,7 @@ class          Hoa_Xyl_Element_Basic
 
             if(is_array($handle[0][$branche]))
                 foreach($this as $element)
-                    $element->linkData($handle[0][$branche], $store);
+                    $element->computeDataBinding($handle[0][$branche], $store);
         }
 
         return;

@@ -151,6 +151,20 @@ class          Hoa_Xyl
         return $this->_data = array_merge_recursive($this->_data, $data);
     }
 
+    public function computeYielder ( ) {
+
+        $yielders = array();
+
+        foreach($this->getStream()->xpath('//yield[@name]') as $i => $yield) {
+
+            $dom = $yield->readDOM();
+            $dom->parentNode->removeChild($dom);
+            $yielders[$yield->readAttribute('name')] = $yield;
+        }
+
+        print_r($yielders);
+    }
+
     /**
      * Distribute data into the XYL tree. Data are linked to element through a
      * reference to the data bucket in this object.
@@ -158,9 +172,9 @@ class          Hoa_Xyl
      * @access  public
      * @return  void
      */
-    public function linkData ( ) {
+    public function computeDataBinding ( ) {
 
-        return $this->getStream()->linkData($this->_data);
+        return $this->getStream()->computeDataBinding($this->_data);
     }
 
     /**
