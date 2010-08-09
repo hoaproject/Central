@@ -398,8 +398,6 @@ class Hoa_Locale {
                 'Variables _locale, _language, _region, _country and _alpha3 ' .
                 'could not be empty.', 2);
 
-        print_r($this->contCityToRegion);
-
         if(!empty($this->_tz))
             date_default_timezone_set($this->_tz);
 
