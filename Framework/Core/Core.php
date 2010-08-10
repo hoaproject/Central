@@ -52,9 +52,9 @@ and
 !defined('S_64_BITS')      and define('S_64_BITS', PHP_INT_SIZE == 8);
 !defined('S_32_BITS')      and define('S_32_BITS', !S_64_BITS);
 !defined('PHP_VERSION_ID') and $v = PHP_VERSION
-                           and define('PHP_VERSION_ID',   $v{0} * 10000
-                                                        + $v{2} * 100
-                                                        + $v{4});
+                           and define('PHP_VERSION_ID',   $v[0] * 10000
+                                                        + $v[2] * 100
+                                                        + $v[4]);
 !defined('void')           and define('void',      (unset) null);
 
 /**
