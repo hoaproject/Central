@@ -90,7 +90,14 @@ class          Hoa_Xyl_Element_Basic
         $source = $this->readAttribute('bind');
         $handle = $data;
 
-        if('?' == $source[0]) {
+        if('?' == $source) {
+
+            foreach($this as $element)
+                $element->computeDataBinding($handle, $parent);
+
+            return;
+        }
+        elseif('?' == $source[0]) {
 
             $source  = trim(substr($source, 1), '/');
             $explode = explode('/', $source);
