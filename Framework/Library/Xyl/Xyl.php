@@ -162,7 +162,28 @@ class          Hoa_Xyl
             $yielders[$yield->readAttribute('name')] = $yield;
         }
 
-        print_r($yielders);
+        foreach($yielders as $name => $yielder) {
+
+            $yielderdomized = $yielder->readDOM();
+            $yielderdomized->removeAttribute('name');
+
+            foreach($this->getStream()->xpath('//' . $name) as $i => $ciao) {
+
+                $dom    = $ciao->readDOM();
+                $parent = $dom->parentNode;
+
+                if(true === $dom->hasAttribute('bind'))
+                    $yielderdomized->setAttribute(
+                        'bind',
+                        $dom->getAttribute('bind')
+                    );
+
+                $parent->removeChild($dom);
+                $parent->appendChild($yielderdomized);
+            }
+        }
+
+        unset($yielders);
     }
 
     /**
