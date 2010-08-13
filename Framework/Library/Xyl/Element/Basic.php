@@ -114,8 +114,8 @@ class          Hoa_Xyl_Element_Basic
             throw new Hoa_Xyl_Exception(
                 'Huh?', 0);
 
-        $store   = &$this->selectSuperRoot()->_getStore($this);
-        $store   = array(
+        $store = &$this->selectSuperRoot()->_getStore($this);
+        $store = array(
             'data'    =>  null,
             'parent'  => &$parent,
             'current' =>  0,
@@ -178,9 +178,15 @@ class          Hoa_Xyl_Element_Basic
         if(!isset($store['parent']))
             return;
 
-        $parent = &$store['parent'];
-        $store['data'] = &$parent['data'][$parent['current']][$parent['branche']];
+        $parent           = &$store['parent'];
+        $store['data']    = &$parent['data'][$parent['current']][$parent['branche']];
         $store['current'] = 0;
+
+        if(!isset($store['data'][0])) {
+
+            unset($store['data']);
+            $store['data'] = array(&$parent['data'][$parent['current']][$parent['branche']]);
+        }
 
         return $store;
     }
