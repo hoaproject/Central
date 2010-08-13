@@ -153,37 +153,30 @@ class          Hoa_Xyl
 
     public function computeYielder ( ) {
 
-        $yielders = array();
-
         foreach($this->getStream()->xpath('//yield[@name]') as $i => $yield) {
 
-            $dom = $yield->readDOM();
-            $dom->parentNode->removeChild($dom);
-            $yielders[$yield->readAttribute('name')] = $yield;
-        }
+            $name        = $yield->readAttribute('name');
+            $yieldomized = $yield->readDOM();
 
-        foreach($yielders as $name => $yielder) {
+            $yieldomized->removeAttribute('name');
+            $yieldomized->parentNode->removeChild($yieldomized);
 
-            $yielderdomized = $yielder->readDOM();
-            $yielderdomized->removeAttribute('name');
+            foreach($this->getStream()->selectElement($name) as $i => $ciao) {
 
-            foreach($this->getStream()->xpath('//' . $name) as $i => $ciao) {
+                $placeholder = $ciao->readDOM();
+                $parent      = $placeholder->parentNode;
 
-                $dom    = $ciao->readDOM();
-                $parent = $dom->parentNode;
-
-                if(true === $dom->hasAttribute('bind'))
-                    $yielderdomized->setAttribute(
+                if(true === $placeholder->hasAttribute('bind'))
+                    $yieldomized->setAttribute(
                         'bind',
-                        $dom->getAttribute('bind')
+                        $placeholder->getAttribute('bind')
                     );
 
-                $parent->removeChild($dom);
-                $parent->appendChild($yielderdomized);
+                $parent->replaceChild($yieldomized, $placeholder);
             }
         }
 
-        unset($yielders);
+        return;
     }
 
     /**
