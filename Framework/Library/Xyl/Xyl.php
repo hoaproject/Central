@@ -256,6 +256,10 @@ class          Hoa_Xyl
 
             $href = $usedomized->getAttribute('href');
 
+            if(false === file_exists($href))
+                throw new Hoa_Xyl_Exception(
+                    'File %s is not found, cannot use it.', 1, $href);
+
             if(true === in_array($href, $hrefs))
                 continue;
 
@@ -265,7 +269,7 @@ class          Hoa_Xyl
             if('definition' !== $fragment->getName())
                 throw new Hoa_Xyl_Exception(
                     '%s must only contain <definition> of <yield> (and some ' .
-                    '<use />) elements.', 1, $href);
+                    '<use />) elements.', 2, $href);
 
             foreach($fragment->xpath('//yield[@name]') as $yield)
                 $mowgli->documentElement->appendChild(
