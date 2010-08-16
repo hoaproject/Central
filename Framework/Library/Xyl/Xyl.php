@@ -151,9 +151,47 @@ class          Hoa_Xyl
         return $this->_data = array_merge_recursive($this->_data, $data);
     }
 
+    public function computeUse ( ) {
+
+        // Mowgli c'est le p'tit DOM (euh, p'tit homme !)
+        $mowgli      = $this->getStream()->readDOM()->ownerDocument;
+        $streamClass = get_class($this->getInnerStream());
+        $uses        = $this->getStream()->selectElement('use');
+        $hrefs       = array();
+
+        do {
+
+            $use        = array_pop($uses);
+            $usedomized = $use->readDOM();
+
+            if(false === $usedomized->hasAttribute('href'))
+                continue;
+
+            $href = $usedomized->getAttribute('href');
+
+            if(true === in_array($href, $hrefs))
+                continue;
+
+            $hrefs[]  = $href;
+            $fragment = new Hoa_Xyl(new $streamClass($href));
+
+            foreach($fragment->xpath('//yield[@name]') as $yield)
+                $mowgli->documentElement->appendChild(
+                    $mowgli->importNode($yield->readDOM(), true)
+                );
+
+            $usedomized->parentNode->removeChild($usedomized);
+
+            $uses += $fragment->selectElement('use');
+
+        } while(!empty($uses));
+        
+        return;
+    }
+
     public function computeYielder ( ) {
 
-        foreach($this->getStream()->xpath('//yield[@name]') as $i => $yield) {
+        foreach($this->getStream()->xpath('//yield[@name]') as $yield) {
 
             $name        = $yield->readAttribute('name');
             $yieldomized = $yield->readDOM();
@@ -161,7 +199,7 @@ class          Hoa_Xyl
             $yieldomized->removeAttribute('name');
             $yieldomized->parentNode->removeChild($yieldomized);
 
-            foreach($this->getStream()->selectElement($name) as $i => $ciao) {
+            foreach($this->getStream()->selectElement($name) as $ciao) {
 
                 $placeholder = $ciao->readDOM();
                 $parent      = $placeholder->parentNode;
@@ -171,8 +209,10 @@ class          Hoa_Xyl
                         'bind',
                         $placeholder->getAttribute('bind')
                     );
+                else
+                    $yieldomized->removeAttribute('bind');
 
-                $parent->replaceChild($yieldomized, $placeholder);
+                $parent->replaceChild($yieldomized->cloneNode(true), $placeholder);
             }
         }
 
