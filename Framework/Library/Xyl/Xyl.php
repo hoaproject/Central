@@ -80,8 +80,6 @@ class          Hoa_Xyl
      */
     protected $_data  = array();
 
-    protected $_yield = array();
-
     /**
      * Map and store index.
      *
@@ -186,7 +184,6 @@ class          Hoa_Xyl
                 );
 
             $usedomized->parentNode->removeChild($usedomized);
-
             $uses += $fragment->selectElement('use');
 
         } while(!empty($uses));
@@ -266,12 +263,5 @@ class          Hoa_Xyl
     public function update ( ) {
 
         return $this->getStream()->update();
-    }
-
-    public function addYield ( Hoa_Xyl_Element $yield ) {
-
-        $this->_yield[$yield->readAttribute('name')] = $yield;
-
-        return;
     }
 }
