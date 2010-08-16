@@ -195,26 +195,25 @@ class          Hoa_Xyl
 
         foreach($this->getStream()->xpath('//yield[@name]') as $yield) {
 
-            $name        = $yield->readAttribute('name');
             $yieldomized = $yield->readDOM();
-
+            $name        = $yieldomized->getAttribute('name');
             $yieldomized->removeAttribute('name');
+            $yieldomized->removeAttribute('bind');
             $yieldomized->parentNode->removeChild($yieldomized);
 
             foreach($this->getStream()->selectElement($name) as $ciao) {
 
                 $placeholder = $ciao->readDOM();
                 $parent      = $placeholder->parentNode;
+                $handle      = $yieldomized->cloneNode(true);
 
                 if(true === $placeholder->hasAttribute('bind'))
-                    $yieldomized->setAttribute(
+                    $handle->setAttribute(
                         'bind',
                         $placeholder->getAttribute('bind')
                     );
-                else
-                    $yieldomized->removeAttribute('bind');
 
-                $parent->replaceChild($yieldomized->cloneNode(true), $placeholder);
+                $parent->replaceChild($handle, $placeholder);
             }
         }
 
