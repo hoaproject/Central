@@ -149,6 +149,13 @@ class          Hoa_Xyl
         return $this->_data = array_merge_recursive($this->_data, $data);
     }
 
+    /**
+     * Compute <use /> tags.
+     *
+     * @access  public
+     * @return  void
+     * @throw   Hoa_Xml_Exception
+     */
     public function computeUse ( ) {
 
         // Mowgli c'est le p'tit DOM (euh, p'tit homme !)
@@ -193,6 +200,12 @@ class          Hoa_Xyl
         return;
     }
 
+    /**
+     * Compute <yield /> tags.
+     *
+     * @access  public
+     * @return  void
+     */
     public function computeYielder ( ) {
 
         foreach($this->getStream()->xpath('//yield[@name]') as $yield) {
