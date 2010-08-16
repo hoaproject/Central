@@ -184,6 +184,8 @@ class          Hoa_Xyl
                 );
 
             $usedomized->parentNode->removeChild($usedomized);
+            unset($usedomized);
+
             $uses += $fragment->selectElement('use');
 
         } while(!empty($uses));
