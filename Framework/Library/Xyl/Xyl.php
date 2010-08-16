@@ -175,6 +175,11 @@ class          Hoa_Xyl
             $hrefs[]  = $href;
             $fragment = new Hoa_Xyl(new $streamClass($href));
 
+            if('definition' !== $fragment->getName())
+                throw new Hoa_Xyl_Exception(
+                    '%s must only contain <definition> of <yield> (and some ' .
+                    '<use />) elements.', 1, $href);
+
             foreach($fragment->xpath('//yield[@name]') as $yield)
                 $mowgli->documentElement->appendChild(
                     $mowgli->importNode($yield->readDOM(), true)
