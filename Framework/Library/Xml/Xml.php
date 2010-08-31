@@ -343,6 +343,31 @@ abstract class Hoa_Xml
     }
 
     /**
+     *
+     */
+    public static function parseAttributes ( $string, $class = __CLASS__ ) {
+
+        $out = preg_match_all(
+            '#(\w+)\s*(=\s*(?<!\\\)(?:("|\')|)(?(3)(.*?)(?<!\\\)\3|(\w+))\s*)?#',
+            trim($string),
+            $attributes
+        );
+
+        if(0 === $out)
+            return null;
+
+        /**
+         * $class must be child of Hoa_Xml_Element.
+         * $object = new $class(…);
+         *
+         * foreach($attributes …)
+         *     $object[…] = …;
+         *
+         * return $object;
+         */
+    }
+
+    /**
      * Read all with XML node.
      *
      * @access  public
