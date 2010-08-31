@@ -370,14 +370,6 @@ class          Hoa_Xml_Element_Basic
     }
 
     /**
-     *
-     */
-    public static function parseAttributes ( $string, $class = __CLASS__ ) {
-
-        return Hoa_Xml::parseAttributes($string, $class);
-    }
-
-    /**
      * Read all with XML node.
      *
      * @access  public
