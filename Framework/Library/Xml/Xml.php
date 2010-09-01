@@ -354,6 +354,17 @@ abstract class Hoa_Xml
     }
 
     /**
+     * Read content as a DOM tree.
+     *
+     * @access  public
+     * @return  DOMElement
+     */
+    public function readDOM ( ) {
+
+        return dom_import_simplexml($this);
+    }
+
+    /**
      * Get the name of the XML element.
      *
      * @access  public
