@@ -379,4 +379,15 @@ class          Hoa_Xml_Element_Basic
 
         return $this->asXML();
     }
+
+    /**
+     * Read content as a DOM tree.
+     *
+     * @access  public
+     * @return  DOMElement
+     */
+    public function readDOM ( ) {
+
+        return dom_import_simplexml($this);
+    }
 }

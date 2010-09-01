@@ -218,15 +218,4 @@ class          Hoa_Xml_Element_Read
 
         return sscanf($this->readAll(), $format);
     }
-
-    /**
-     * Read content as a DOM tree.
-     *
-     * @access  public
-     * @return  DOMElement
-     */
-    public function readDOM ( ) {
-
-        return dom_import_simplexml($this);
-    }
 }
