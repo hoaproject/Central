@@ -361,7 +361,7 @@ abstract class Hoa_Xml
      */
     public function readDOM ( ) {
 
-        return dom_import_simplexml($this);
+        return dom_import_simplexml($this->getStream());
     }
 
     /**
