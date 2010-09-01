@@ -75,7 +75,7 @@ class Hoa_Test_Praspel_Clause_Throwable implements Hoa_Test_Praspel_Clause {
      *
      * @var Hoa_Test_Praspel_Clause_Throwable object
      */
-    public $_and     = null;
+    public $_comma   = null;
 
 
 
@@ -87,7 +87,7 @@ class Hoa_Test_Praspel_Clause_Throwable implements Hoa_Test_Praspel_Clause {
      */
     public function __construct ( ) {
 
-        $this->_and = $this;
+        $this->_comma = $this;
 
         return;
     }
@@ -159,7 +159,7 @@ class Hoa_Test_Praspel_Clause_Throwable implements Hoa_Test_Praspel_Clause {
                '    ->clause(\'' . $out . '\')'  . "\n" .
                '    ->couldThrow(\'' .
                implode(
-                   '\')' . "\n" . '    ->_and' . "\n" . '    ->couldThrow(\'',
+                   '\')' . "\n" . '    ->_comma' . "\n" . '    ->couldThrow(\'',
                    $this->getList()
                ) . '\')' . "\n;";
     }
