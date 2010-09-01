@@ -625,7 +625,7 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                 $this->_current = $this->_current->couldThrow(
                     $this->buffers[2]
                 );
-                $this->_current = $this->_current->_and;
+                $this->_current = $this->_current->_comma;
                 unset($this->buffers[2]);
               break;
         }
