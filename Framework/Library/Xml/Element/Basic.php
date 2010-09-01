@@ -338,7 +338,7 @@ class          Hoa_Xml_Element_Basic
      */
     public function attributeExists ( $name ) {
 
-        return array_key_exists($name, $this->readAttributes());
+        return true === array_key_exists($name, $this->readAttributes());
     }
 
     /**
