@@ -57,6 +57,11 @@ import('Xyl.Element.Basic');
 import('Xml.~') and load();
 
 /**
+ * Hoa_Xml_Attribute
+ */
+import('Xml.Attribute');
+
+/**
  * Class Hoa_Xyl.
  *
  * 
@@ -243,18 +248,25 @@ class          Hoa_Xyl
         // Mowgli c'est le p'tit DOM (euh, p'tit homme !)
         $mowgli      = $this->getStream()->readDOM()->ownerDocument;
         $streamClass = get_class($this->getInnerStream());
-        $uses        = $this->getStream()->selectElement('use');
         $hrefs       = array();
+        $uses        = array();
+        $xpath       = new DOMXPath($mowgli);
+        $xyl_use     = $xpath->query('//processing-instruction(\'xyl-use\')');
+        unset($xpath);
+
+        for($i = 0, $c = $xyl_use->length; $i < $c; $i++)
+            $uses[] = $xyl_use->item($i);
 
         do {
 
-            $use        = array_pop($uses);
-            $usedomized = $use->readDOM();
+            $use       = array_pop($uses);
+            $useParsed = new Hoa_Xml_Attribute($use->data);
 
-            if(false === $usedomized->hasAttribute('href'))
+            if(false === $useParsed->attributeExists('href'))
                 continue;
 
-            $href = $usedomized->getAttribute('href');
+            $href = $useParsed->readAttribute('href');
+            unset($useParsed);
 
             if(false === file_exists($href))
                 throw new Hoa_Xyl_Exception(
@@ -276,10 +288,15 @@ class          Hoa_Xyl
                     $mowgli->importNode($yield->readDOM(), true)
                 );
 
-            $usedomized->parentNode->removeChild($usedomized);
-            unset($usedomized);
+            $use->parentNode->removeChild($use);
+            unset($use);
 
-            $uses += $fragment->selectElement('use');
+            $xpath   = new DOMXPath($fragment->readDOM()->ownerDocument);
+            $xyl_use = $xpath->query('//processing-instruction(\'xyl-use\')');
+            unset($xpath);
+
+            for($i = 0, $c = $xyl_use->length; $i < $c; $i++)
+                $uses[] = $xyl_use->item($i);
 
         } while(!empty($uses));
         
