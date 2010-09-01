@@ -311,7 +311,7 @@ abstract class Hoa_Xml
      */
     public function attributeExists ( $name ) {
 
-        return array_key_exists($name, $this->readAttributes());
+        return true === array_key_exists($name, $this->readAttributes());
     }
 
     /**
