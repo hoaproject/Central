@@ -38,7 +38,7 @@
     !defined('HOA') and define('HOA', true)
 )
 and
-    exit('The Hoa framework main file (Framework.php) must be included once.');
+    exit('The Hoa framework main file (Core.php) must be included once.');
 
 /**
  * Some usefull constants.
