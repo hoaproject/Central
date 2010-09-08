@@ -257,6 +257,9 @@ class          Hoa_Xyl
         for($i = 0, $c = $xyl_use->length; $i < $c; $i++)
             $uses[] = $xyl_use->item($i);
 
+        if(empty($uses))
+            return;
+
         do {
 
             $use       = array_pop($uses);
@@ -281,7 +284,7 @@ class          Hoa_Xyl
             if('definition' !== $fragment->getName())
                 throw new Hoa_Xyl_Exception(
                     '%s must only contain <definition> of <yield> (and some ' .
-                    '<use />) elements.', 2, $href);
+                    '<?xyl-use) elements.', 2, $href);
 
             foreach($fragment->xpath('//yield[@name]') as $yield)
                 $mowgli->documentElement->appendChild(
@@ -335,6 +338,78 @@ class          Hoa_Xyl
             }
         }
 
+        return;
+    }
+
+    /**
+     * Compute <?xyl-overlay?> processing-instruction.
+     *
+     * @access  public
+     * @return  void
+     * @throw   Hoa_Xml_Exception
+     */
+    public function computeOverlay ( ) {
+
+        // Mowgli c'est le p'tit DOM (euh, p'tit homme !)
+        $mowgli      = $this->getStream()->readDOM()->ownerDocument;
+        $streamClass = get_class($this->getInnerStream());
+        $hrefs       = array();
+        $overlays    = array();
+        $xpath       = new DOMXPath($mowgli);
+        $xyl_overlay = $xpath->query('/processing-instruction(\'xyl-overlay\')');
+        unset($xpath);
+
+        for($i = 0, $c = $xyl_overlay->length; $i < $c; $i++)
+            $overlays[] = $xyl_overlay->item($i);
+
+        if(empty($overlays))
+            return;
+
+        do {
+
+            $overlay       = array_pop($overlays);
+            $overlayParsed = new Hoa_Xml_Attribute($overlay->data);
+
+            if(false === $overlayParsed->attributeExists('href'))
+                continue;
+
+            $href = $overlayParsed->readAttribute('href');
+            unset($overlayParsed);
+
+            if(false === file_exists($href))
+                throw new Hoa_Xyl_Exception(
+                    'File %s is not found, cannot use it.', 2, $href);
+
+            if(true === in_array($href, $hrefs))
+                continue;
+
+            $hrefs[]  = $href;
+            $fragment = new Hoa_Xyl(new $streamClass($href));
+
+            if('definition' !== $fragment->getName())
+                throw new Hoa_Xyl_Exception(
+                    '%s must only contain <definition> of <overlay> (and some ' .
+                    '<?xyl-use) elements.', 2, $href);
+
+            /*
+            foreach($fragment->xpath('//yield[@name]') as $yield)
+                $mowgli->documentElement->appendChild(
+                    $mowgli->importNode($yield->readDOM(), true)
+                );
+
+            unset($overlay);
+            unset($xyl_overlay);
+
+            $xpath       = new DOMXPath($fragment->readDOM()->ownerDocument);
+            $xyl_overlay = $xpath->query('/processing-instruction(\'xyl-overlay\')');
+            unset($xpath);
+
+            for($i = 0, $c = $xyl_overlay->length; $i < $c; $i++)
+                $overlays[] = $xyl_overlay->item($i);
+            */
+
+        } while(!empty($overlays));
+        
         return;
     }
 
