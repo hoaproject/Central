@@ -237,7 +237,7 @@ class          Hoa_Xyl
     }
 
     /**
-     * Compute <use /> tags.
+     * Compute <?xyl-use?> processing-instruction.
      *
      * @access  public
      * @return  void
