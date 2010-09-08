@@ -251,7 +251,7 @@ class          Hoa_Xyl
         $hrefs       = array();
         $uses        = array();
         $xpath       = new DOMXPath($mowgli);
-        $xyl_use     = $xpath->query('//processing-instruction(\'xyl-use\')');
+        $xyl_use     = $xpath->query('/processing-instruction(\'xyl-use\')');
         unset($xpath);
 
         for($i = 0, $c = $xyl_use->length; $i < $c; $i++)
@@ -288,11 +288,11 @@ class          Hoa_Xyl
                     $mowgli->importNode($yield->readDOM(), true)
                 );
 
-            $use->parentNode->removeChild($use);
             unset($use);
+            unset($xyl_use);
 
             $xpath   = new DOMXPath($fragment->readDOM()->ownerDocument);
-            $xyl_use = $xpath->query('//processing-instruction(\'xyl-use\')');
+            $xyl_use = $xpath->query('/processing-instruction(\'xyl-use\')');
             unset($xpath);
 
             for($i = 0, $c = $xyl_use->length; $i < $c; $i++)
