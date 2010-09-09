@@ -114,6 +114,13 @@ class          Hoa_Xyl
      */
     private $_store      = array();
 
+    /**
+     * Evaluate XPath expression.
+     *
+     * @var DOMXPath object
+     */
+    private $_xe         = null;
+
 
 
     /**
@@ -135,6 +142,7 @@ class          Hoa_Xyl
             array(),
             array()
         );
+        $this->_xe         = new DOMXPath(new DOMDocument());
 
         return;
     }
@@ -216,7 +224,7 @@ class          Hoa_Xyl
 
         if(false === $id = array_search($element, $this->_map)) {
 
-            $id                = $this->_i++;
+            $id                = ++$this->_i;
             $this->_map[$id]   = $element;
             $this->_store[$id] = null;
         }
@@ -240,8 +248,9 @@ class          Hoa_Xyl
      * Compute <?xyl-use?> processing-instruction.
      *
      * @access  public
-     * @return  void
+     * @return  bool
      * @throw   Hoa_Xml_Exception
+     * @TODO    Maybe overlay should support <?xyl-use?>?
      */
     public function computeUse ( ) {
 
@@ -254,11 +263,11 @@ class          Hoa_Xyl
         $xyl_use     = $xpath->query('/processing-instruction(\'xyl-use\')');
         unset($xpath);
 
-        for($i = 0, $c = $xyl_use->length; $i < $c; $i++)
-            $uses[] = $xyl_use->item($i);
+        if(0 === $xyl_use->length)
+            return false;
 
-        if(empty($uses))
-            return;
+        for($i = 0, $m = $xyl_use->length; $i < $m; ++$i)
+            $uses[] = $xyl_use->item($i);
 
         do {
 
@@ -298,12 +307,12 @@ class          Hoa_Xyl
             $xyl_use = $xpath->query('/processing-instruction(\'xyl-use\')');
             unset($xpath);
 
-            for($i = 0, $c = $xyl_use->length; $i < $c; $i++)
+            for($i = 0, $m = $xyl_use->length; $i < $m; ++$i)
                 $uses[] = $xyl_use->item($i);
 
         } while(!empty($uses));
         
-        return;
+        return true;
     }
 
     /**
@@ -345,7 +354,7 @@ class          Hoa_Xyl
      * Compute <?xyl-overlay?> processing-instruction.
      *
      * @access  public
-     * @return  void
+     * @return  bool
      * @throw   Hoa_Xml_Exception
      */
     public function computeOverlay ( ) {
@@ -359,15 +368,12 @@ class          Hoa_Xyl
         $xyl_overlay = $xpath->query('/processing-instruction(\'xyl-overlay\')');
         unset($xpath);
 
-        for($i = 0, $c = $xyl_overlay->length; $i < $c; $i++)
-            $overlays[] = $xyl_overlay->item($i);
+        if(0 === $xyl_overlay->length)
+            return false;
 
-        if(empty($overlays))
-            return;
+        for($i = 0, $m = $xyl_overlay->length; $i < $m; ++$i) {
 
-        do {
-
-            $overlay       = array_pop($overlays);
+            $overlay       = $xyl_overlay->item($i);
             $overlayParsed = new Hoa_Xml_Attribute($overlay->data);
 
             if(false === $overlayParsed->attributeExists('href'))
@@ -386,30 +392,141 @@ class          Hoa_Xyl
             $hrefs[]  = $href;
             $fragment = new Hoa_Xyl(new $streamClass($href));
 
-            if('definition' !== $fragment->getName())
+            if('overlay' !== $fragment->getName())
                 throw new Hoa_Xyl_Exception(
-                    '%s must only contain <definition> of <overlay> (and some ' .
-                    '<?xyl-use) elements.', 2, $href);
+                    '%s must only contain <overlay> (and some <?xyl-overlay ' .
+                    'and <?xyl-use) elements.', 2, $href);
 
-            /*
-            foreach($fragment->xpath('//yield[@name]') as $yield)
-                $mowgli->documentElement->appendChild(
-                    $mowgli->importNode($yield->readDOM(), true)
+
+            $fragment->computeUse();
+
+            foreach($fragment->selectChildElement() as $e => $element)
+                $this->_computeOverlay(
+                    $mowgli->documentElement,
+                    $mowgli->importNode($element->readDOM(), true)
                 );
+        }
 
-            unset($overlay);
-            unset($xyl_overlay);
+        return true;
+    }
 
-            $xpath       = new DOMXPath($fragment->readDOM()->ownerDocument);
-            $xyl_overlay = $xpath->query('/processing-instruction(\'xyl-overlay\')');
-            unset($xpath);
+    /**
+     * Next step for computing overlay.
+     *
+     * @access  private
+     * @param   DOMElement  $from    Receiver fragment.
+     * @param   DOMElement  $to      Overlay fragment.
+     * @return  void
+     */
+    private function _computeOverlay ( DOMElement $from, DOMElement $to ) {
 
-            for($i = 0, $c = $xyl_overlay->length; $i < $c; $i++)
-                $overlays[] = $xyl_overlay->item($i);
-            */
+        if(false === $to->hasAttribute('id'))
+            return $this->_computeOverlayPosition($from, $to);
 
-        } while(!empty($overlays));
-        
+        $xpath = new DOMXPath($from->ownerDocument);
+        $query = $xpath->query('//*[@id="' . $to->getAttribute('id') . '"]');
+
+        if(0 === $query->length)
+            return $this->_computeOverlayPosition($from, $to);
+
+        $from  = $query->item(0);
+
+        foreach($to->attributes as $name => $node)
+            switch($name) {
+
+                case 'id':
+                    break;
+
+                case 'class':
+                    if(false === $from->hasAttribute('class')) {
+
+                        $from->setAttribute('class', $node->value);
+
+                        break;
+                    }
+
+                    $classListTo   = explode(' ', $node->value);
+                    $classListFrom = explode(' ', $from->getAttribute('class'));
+
+                    $from->setAttribute(
+                        'class',
+                        implode(
+                            ' ',
+                            array_unique(
+                                array_merge($classListFrom, $classListTo)
+                            )
+                        )
+                    );
+                  break;
+
+                default:
+                    $from->setAttribute($name, $node->value);
+            }
+
+        $children = array();
+
+        for($h = $to->childNodes, $i = 0, $m = $h->length; $i < $m; ++$i) {
+
+            $element = $h->item($i);
+
+            if(XML_ELEMENT_NODE != $element->nodeType)
+                continue;
+
+            $children[] = $element;
+        }
+
+        foreach($children as $i => $child)
+            $this->_computeOverlay($from, $child);
+
+        return;
+    }
+
+    /**
+     * Compute position while computing overlay.
+     *
+     * @access  private
+     * @param   DOMElement  $from    Receiver fragment.
+     * @param   DOMElement  $to      Overlay fragment.
+     * @return  void
+     */
+    private function _computeOverlayPosition ( DOMElement $from,
+                                               DOMElement $to ) {
+
+        $children  = $from->childNodes;
+        $positions = array();
+
+        for($i = 0, $m = $children->length; $i < $m; $i++) {
+
+            if(XML_ELEMENT_NODE != $children->item($i)->nodeType)
+                continue;
+
+            $positions[] = $i;
+        }
+
+        $last = count($positions);
+
+        if(true === $to->hasAttribute('position')) {
+
+            $position = max(
+                0,
+                (int) $this->_xe->evaluate(
+                    str_replace('last()', $last, $to->getAttribute('position'))
+                )
+            );
+
+            if($position < $last)
+                $from->insertBefore(
+                    $to,
+                    $from->childNodes->item($positions[$position])
+                );
+            else
+                $from->appendChild($to);
+
+            return;
+        }
+
+        $from->appendChild($to);
+
         return;
     }
 
@@ -423,7 +540,7 @@ class          Hoa_Xyl
     public function computeDataBinding ( ) {
 
         return $this->getStream()->computeDataBinding($this->_data);
-    }
+    } 
 
     /**
      * Get data of this element.
