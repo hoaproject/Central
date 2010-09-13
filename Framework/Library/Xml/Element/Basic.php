@@ -79,13 +79,6 @@ class          Hoa_Xml_Element_Basic
     protected static $_sroot      = null;
 
     /**
-     * Root of XML tree.
-     *
-     * @var Hoa_Xml_Element_Basic object
-     */
-    protected static $_root       = null;
-
-    /**
      * CssToXPath instance.
      *
      * @var Hoa_Xml_CssToXPath object
@@ -117,21 +110,6 @@ class          Hoa_Xml_Element_Basic
     }
 
     /**
-     * Set root.
-     *
-     * @access  public
-     * @param   Hoa_Xml_Element_Basic  $root    Root of XML tree.
-     * @return  void
-     */
-    public function setRoot ( $root ) {
-
-        $old         = self::$_root;
-        self::$_root = $root;
-
-        return $old;
-    }
-
-    /**
      * Select super root.
      *
      * @access  public
@@ -152,7 +130,10 @@ class          Hoa_Xml_Element_Basic
 
         self::$_buffer = null;
 
-        return self::$_root;
+        return simplexml_import_dom(
+            $this->readDOM()->ownerDocument->documentElement,
+            __CLASS__
+        );
     }
 
     /**
