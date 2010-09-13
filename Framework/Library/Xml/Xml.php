@@ -120,7 +120,6 @@ abstract class Hoa_Xml
                 1, $streamName);
 
         $root->setSuperRoot($this);
-        $root->setRoot($root);
         $this->setStream($root);
         $this->setInnerStream($innerStream);
 
