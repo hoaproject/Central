@@ -370,6 +370,22 @@ class          Hoa_Xml_Element_Basic
     }
 
     /**
+     * Read attributes as a string.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function readAttributesAsString ( ) {
+
+        $out = null;
+
+        foreach($this->readAttributes() as $name => $value)
+            $out .= ' ' . $name . '="' . str_replace('"', '\"', $value) . '"';
+
+        return $out;
+    }
+
+    /**
      * Read all with XML node.
      *
      * @access  public
