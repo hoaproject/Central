@@ -503,42 +503,53 @@ class          Hoa_Xyl
     private function _computeOverlayPosition ( DOMElement $from,
                                                DOMElement $to ) {
 
-        $children  = $from->childNodes;
-        $positions = array();
+        if(false === $to->hasAttribute('position')) {
 
-        for($i = 0, $m = $children->length; $i < $m; $i++) {
-
-            if(XML_ELEMENT_NODE != $children->item($i)->nodeType)
-                continue;
-
-            $positions[] = $i;
-        }
-
-        $last = count($positions);
-
-        if(true === $to->hasAttribute('position')) {
-
-            $position = max(
-                0,
-                (int) $this->_xe->evaluate(
-                    str_replace('last()', $last, $to->getAttribute('position'))
-                )
-            );
-
-            if($position < $last)
-                $from->insertBefore(
-                    $to,
-                    $from->childNodes->item($positions[$position])
-                );
-            else
-                $from->appendChild($to);
-
-            $to->removeAttribute('position');
+            $from->appendChild($to);
 
             return;
         }
 
-        $from->appendChild($to);
+        $children  = $from->childNodes;
+        $positions = array();
+        $e         = 0;
+        $search    = array();
+        $replace   = array();
+        $child     = null;
+
+        for($i = 0, $m = $children->length; $i < $m; $i++) {
+
+            $child = $children->item($i);
+
+            if(XML_ELEMENT_NODE != $child->nodeType)
+                continue;
+
+            $positions[$e] = $i;
+
+            if($child->hasAttribute('id')) {
+
+                $search[]  = 'element(#' . $child->getAttribute('id') . ')';
+                $replace[] = $e + 1;
+            }
+
+            ++$e;
+        }
+
+        $last      = count($positions);
+        $search[]  = 'last()';
+        $replace[] = $last;
+        $handle    = str_replace($search, $replace, $to->getAttribute('position'));
+        $position  = max(0, (int) $this->_xe->evaluate($handle));
+
+        if($position < $last)
+            $from->insertBefore(
+                $to,
+                $from->childNodes->item($positions[$position])
+            );
+        else
+            $from->appendChild($to);
+
+        $to->removeAttribute('position');
 
         return;
     }
