@@ -371,9 +371,12 @@ class          Hoa_Xyl
         if(0 === $xyl_overlay->length)
             return false;
 
-        for($i = 0, $m = $xyl_overlay->length; $i < $m; ++$i) {
+        for($i = 0, $m = $xyl_overlay->length; $i < $m; ++$i)
+            $overlays[] = $xyl_overlay->item($i);
 
-            $overlay       = $xyl_overlay->item($i);
+        do {
+
+            $overlay       = array_pop($overlays);
             $overlayParsed = new Hoa_Xml_Attribute($overlay->data);
 
             if(false === $overlayParsed->attributeExists('href'))
@@ -394,18 +397,26 @@ class          Hoa_Xyl
 
             if('overlay' !== $fragment->getName())
                 throw new Hoa_Xyl_Exception(
-                    '%s must only contain <overlay> (and some <?xyl-overlay ' .
-                    'and <?xyl-use) elements.', 2, $href);
-
-
-            $fragment->computeUse();
+                    '%s must only contain <overlay> (and some <?xyl-overlay) ' .
+                    'elements.', 2, $href);
 
             foreach($fragment->selectChildElement() as $e => $element)
                 $this->_computeOverlay(
                     $mowgli->documentElement,
                     $mowgli->importNode($element->readDOM(), true)
                 );
-        }
+
+            unset($overlay);
+            unset($xyl_overlay);
+
+            $xpath       = new DOMXPath($fragment->readDOM()->ownerDocument);
+            $xyl_overlay = $xpath->query('/processing-instruction(\'xyl-overlay\')');
+            unset($xpath);
+
+            for($i = 0, $m = $xyl_overlay->length; $i < $m; ++$i)
+                $overlays[] = $xyl_overlay->item($i);
+
+        } while(!empty($overlays));
 
         return true;
     }
@@ -521,6 +532,8 @@ class          Hoa_Xyl
                 );
             else
                 $from->appendChild($to);
+
+            $to->removeAttribute('position');
 
             return;
         }
