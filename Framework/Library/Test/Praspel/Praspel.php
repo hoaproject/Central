@@ -101,7 +101,7 @@ class Hoa_Test_Praspel {
     /**
      *
      */
-    const LOG_CHANNEL = '@hoa/Framework/Library/Test/Praspel';
+    const LOG_CHANNEL = 'Test/Praspel';
 
     /**
      * Collection of clauses.
