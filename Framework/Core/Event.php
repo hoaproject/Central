@@ -243,8 +243,8 @@ class Hoa_Core_Event {
      * Note: Hoa's libraries use hoa://Event/AnID for their observable objects;
      *
      * @access  public
-     * @param   string                   $eventId    Event ID.
-     * @param   Hoa_Core_Event_Source    $source     Obversable object.
+     * @param   string                 $eventId    Event ID.
+     * @param   Hoa_Core_Event_Source  $source     Obversable object.
      * @return  void
      * @throws  Hoa_Exception
      */
