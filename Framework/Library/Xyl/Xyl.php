@@ -127,13 +127,13 @@ class          Hoa_Xyl
      * Interprete a stream as XYL.
      *
      * @access  public
-     * @param   Hoa_Stream  $stream          Stream to interprete as XYL.
-     * @param   array       $parameters      Parameters.
+     * @param   Hoa_Stream_Io_In  $stream          Stream to interprete as XYL.
+     * @param   array             $parameters      Parameters.
      * @return  void
      * @throw   Hoa_Xml_Exception
      */
-    public function __construct ( Hoa_Stream $stream,
-                                  Array      $parameters = array() ) {
+    public function __construct ( Hoa_Stream_Io_In $stream,
+                                  Array            $parameters = array() ) {
 
         parent::__construct('Hoa_Xyl_Element_Basic', $stream);
 
