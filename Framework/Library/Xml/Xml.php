@@ -119,22 +119,10 @@ abstract class Hoa_Xml
                 'Failed to understand %s as a XML stream.',
                 1, $streamName);
 
-        $root->setSuperRoot($this);
         $this->setStream($root);
         $this->setInnerStream($innerStream);
 
         return;
-    }
-
-    /**
-     * Select super root.
-     *
-     * @access  public
-     * @return  Hoa_Xml
-     */
-    public function selectSuperRoot ( ) {
-
-        return $this;
     }
 
     /**
