@@ -47,9 +47,9 @@ import('Xml.Exception');
 import('Xml.Element');
 
 /**
- * Hoa_Element_Concrete
+ * Hoa_Xml_Element_Concrete
  */
-import('Element.Concrete');
+import('Xml.Element.Concrete');
 
 /**
  * Hoa_Stream_Composite
