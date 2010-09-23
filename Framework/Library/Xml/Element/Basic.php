@@ -95,32 +95,6 @@ class          Hoa_Xml_Element_Basic
 
 
     /**
-     * Set super root.
-     *
-     * @access  public
-     * @param   Hoa_Xml  $sroot    Super root of XML tree.
-     * @return  void
-     */
-    public function setSuperRoot ( $sroot ) {
-
-        $old          = self::$_sroot;
-        self::$_sroot = $sroot;
-
-        return $old;
-    }
-
-    /**
-     * Select super root.
-     *
-     * @access  public
-     * @return  Hoa_Xml
-     */
-    public function selectSuperRoot ( ) {
-
-        return self::$_sroot;
-    }
-
-    /**
      * Select root of the document: :root.
      *
      * @access  public
