@@ -123,10 +123,13 @@ class          Hoa_Xml_Element_Concrete
      * @access  public
      * @param   Hoa_Xml_Element  $element      Abstract element.
      * @param   Hoa_Xml_Element  $superRoot    Super root.
+     * @param   Array            $rank         Rank: abstract elements to
+     *                                         concrete elements.
      * @return  void
      */
     public function __construct ( Hoa_Xml_Element $element,
-                                  Hoa_Xml_Element $superRoot ) {
+                                  Hoa_Xml_Element $superRoot,
+                                  Array           $rank = array()) {
 
         self::$_store[]      = $element;
         self::$_superRoots[] = $superRoot;
@@ -145,7 +148,14 @@ class          Hoa_Xml_Element_Concrete
 
         foreach($element as $name => $child) {
 
-            $h                                = new self($child, $superRoot);
+            if(isset($rank[$name])) {
+
+                $c = $rank[$name];
+                $h = new $c($child, $superRoot, $rank);
+            }
+            else
+                $h = new self($child, $superRoot, $rank);
+
             $this->_children[$h->getName()][] = $h;
         }
 
