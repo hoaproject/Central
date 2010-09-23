@@ -47,11 +47,6 @@ import('Xml.Exception');
 import('Xml.Element');
 
 /**
- * Hoa_Xml_Element_Concrete
- */
-import('Xml.Element.Concrete');
-
-/**
  * Hoa_Stream_Composite
  */
 import('Stream.Composite');
@@ -129,20 +124,6 @@ abstract class Hoa_Xml
         $this->setInnerStream($innerStream);
 
         return;
-    }
-
-    /**
-     * Interprete the abstract tree as a concrete tree.
-     *
-     * @access  public
-     * @return  Hoa_Xml_Element_Concrete
-     */
-    public function interprete ( ) {
-
-        return new Hoa_Xml_Element_Concrete(
-            $this->selectRoot(),
-            $this
-        );
     }
 
     /**
