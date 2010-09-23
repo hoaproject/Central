@@ -148,14 +148,12 @@ class          Hoa_Xml_Element_Concrete
 
         foreach($element as $name => $child) {
 
-            if(isset($rank[$name])) {
-
+            if(isset($rank[$name]))
                 $c = $rank[$name];
-                $h = new $c($child, $superRoot, $rank);
-            }
             else
-                $h = new self($child, $superRoot, $rank);
+                $c = get_class($this);
 
+            $h = new $c($child, $superRoot, $rank);
             $this->_children[$h->getName()][] = $h;
         }
 
@@ -195,7 +193,7 @@ class          Hoa_Xml_Element_Concrete
      */
     public static function getConcreteElement ( Hoa_Xml_Element $element ) {
 
-        if(false === $id = self::getElementId($element))
+        if(false === $id = self::getAbstractElementId($element))
             throw new Hoa_Xml_Exception(
                 '…', 1);
 
@@ -223,7 +221,7 @@ class          Hoa_Xml_Element_Concrete
      */
     public static function getAbstractElementSuperRootOf ( Hoa_Xml_Element $element ) {
 
-        if(false === $id = self::getElementId($element))
+        if(false === $id = self::getAbstractElementId($element))
             throw new Hoa_Xml_Exception(
                 '…', 0);
 
