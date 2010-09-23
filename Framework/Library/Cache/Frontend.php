@@ -67,7 +67,7 @@ abstract class Hoa_Cache_Frontend extends Hoa_Cache {
     /**
      * Backend object.
      *
-     * @var Hoa_Cache object
+     * @var Hoa_Cache_Backend object
      */
     protected $_backend = null;
 
@@ -102,5 +102,16 @@ abstract class Hoa_Cache_Frontend extends Hoa_Cache {
             return;
 
         return $this->_backend->clean($lifetime);
+    }
+
+    /**
+     * Get the backend.
+     *
+     * @access  public
+     * @return  Hoa_Cache_Backend
+     */
+    public function getBackend ( ) {
+
+        return $this->_backend;
     }
 }
