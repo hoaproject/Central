@@ -43,11 +43,6 @@ require_once 'Core.php';
 import('Xml.Element');
 
 /**
- * Hoa_Xml_Iterator_Element
- */
-import('Xml.Iterator.Element');
-
-/**
  * Class Hoa_Xml_Element_Concrete.
  *
  * This class represents a XML element in a XML tree.
@@ -102,6 +97,13 @@ class          Hoa_Xml_Element_Concrete
     protected $_children          = array();
 
     /**
+     * Concrete children for the iterator.
+     *
+     * @var Hoa_Xml_Element_Concrete array
+     */
+    protected $_iterator          = array();
+
+    /**
      * Abstract element.
      *
      * @var Hoa_Xml_Element object
@@ -123,7 +125,7 @@ class          Hoa_Xml_Element_Concrete
      * @access  public
      * @param   Hoa_Xml_Element  $element      Abstract element.
      * @param   Hoa_Xml_Element  $superRoot    Super root.
-     * @param   Array            $rank         Rank: abstract elements to
+     * @param   array            $rank         Rank: abstract elements to
      *                                         concrete elements.
      * @return  void
      */
@@ -155,6 +157,7 @@ class          Hoa_Xml_Element_Concrete
 
             $h = new $c($child, $superRoot, $rank);
             $this->_children[$h->getName()][] = $h;
+            $this->_iterator[]                = $h;
         }
 
         return;
@@ -254,13 +257,11 @@ class          Hoa_Xml_Element_Concrete
      * Get the iterator.
      *
      * @access  public
-     * @return  array
+     * @return  ArrayIterator
      */
     public function getIterator ( ) {
 
-        return new RecursiveIteratorIterator(
-            new Hoa_Xml_Iterator_Element($this->_children)
-        );
+        return new ArrayIterator($this->_iterator);
     }
 
     /**
