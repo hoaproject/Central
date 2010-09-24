@@ -38,9 +38,9 @@
 require_once 'Core.php';
 
 /**
- * Hoa_Xyl_Exception
+ * Hoa_Xyl_Element_Concrete
  */
-import('Xyl.Exception');
+import('Xyl.Element.Concrete') and load();
 
 /**
  * Class Hoa_Xyl_Interpreter.
@@ -59,97 +59,22 @@ import('Xyl.Exception');
 abstract class Hoa_Xyl_Interpreter {
 
     /**
-     * Cache interpreter instance.
+     * Rank: abstract elements to concrete elements.
      *
      * @var Hoa_Xyl_Interpreter array
      */
-    private static $_interpreterClassCache = array();
-
-    /**
-     * Current element (for a given interpreter).
-     *
-     * @var Hoa_Xyl_Element object
-     */
-    protected $_element                    = null;
+    protected $_rank = array();
 
 
 
     /**
-     * Get interpreter class.
-     *
-     * @access  protected
-     * @param   string  $elementName    Element name.
-     * @return  Hoa_Xyl_Interpreter
-     */
-    abstract protected function getInterpreterClass ( $elementName );
-
-    /**
-     * Paint an element.
-     *
-     * @access  protected
-     * @return  string
-     */
-    //abstract protected function paint ( );
-
-    /**
-     * Render an element.
+     * Get rank.
      *
      * @access  public
-     * @param   Hoa_Xyl_Element  $element    Element to render.
-     * @return  string
+     * @return  array
      */
-    public function render ( Hoa_Xyl_Element $element ) {
+    public function getRank ( ) {
 
-        $tagName = ucfirst(strtolower($element->getName()));
-
-        if(!isset(self::$_interpreterClassCache[$tagName])) {
-
-            $class = $this->getInterpreterClass($tagName);
-            self::$_interpreterClassCache[$tagName] = $class;
-        }
-        else
-            $class = self::$_interpreterClassCache[$tagName];
-
-        $element->firstUpdate();
-        $data     = &$element->getData();
-        $out      = null;
-        $renderer = new $class();
-        $renderer->setElement($element);
-
-        do {
-
-            $out  .= $renderer->paint();
-            $next  = is_array($data) ? next($data) : false;
-            $element->update();
-
-        } while(false !== $next);
-
-        return $out;
-    }
-
-    /**
-     * Set current element (for a given intepreter).
-     *
-     * @access  private
-     * @param   Hoa_Xyl_Element  $element    Element.
-     * @return  Hoa_Xyl_Element
-     */
-    private function setElement ( Hoa_Xyl_Element $element ) {
-
-        $odl            = $this->_element;
-        $this->_element = $element;
-
-        return;
-    }
-
-    /**
-     * Get current element.
-     *
-     * @access  protected
-     * @return  Hoa_Xyl_Element
-     */
-    protected function getElement ( ) {
-
-        return $this->_element;
+        return $this->_rank;
     }
 }

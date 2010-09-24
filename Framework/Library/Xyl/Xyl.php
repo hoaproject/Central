@@ -49,7 +49,7 @@ import('Xyl.Element') and load();
 /**
  * Hoa_Xyl_Element_Basic
  */
-import('Xyl.Element.Basic');
+import('Xyl.Element.Basic') and load();
 
 /**
  * Hoa_Xml
@@ -59,7 +59,7 @@ import('Xml.~') and load();
 /**
  * Hoa_Xml_Attribute
  */
-import('Xml.Attribute');
+import('Xml.Attribute') and load();
 
 /**
  * Class Hoa_Xyl.
@@ -94,25 +94,11 @@ class          Hoa_Xyl
     protected $_data     = array();
 
     /**
-     * Map and store index.
+     * Concrete tree.
      *
-     * @var Hoa_Xyl array
+     * @var Hoa_Xyl_Element_Concrete object
      */
-    private $_i          = 0;
-
-    /**
-     * Map index to XYL element.
-     *
-     * @var Hoa_Xyl array
-     */
-    private $_map        = array();
-
-    /**
-     * Store data of XYL element.
-     *
-     * @var Hoa_Xyl array
-     */
-    private $_store      = array();
+    protected $_concrete = null;
 
     /**
      * Evaluate XPath expression.
@@ -214,25 +200,6 @@ class          Hoa_Xyl
     }
 
     /**
-     * Get element store.
-     *
-     * @access  public
-     * @param   Hoa_Xyl_Element  $element    Element as identifier.
-     * @return  array
-     */
-    final public function &_getStore ( Hoa_Xyl_Element $element ) {
-
-        if(false === $id = array_search($element, $this->_map)) {
-
-            $id                = ++$this->_i;
-            $this->_map[$id]   = $element;
-            $this->_store[$id] = null;
-        }
-
-        return $this->_store[$id];
-    }
-
-    /**
      * Add data to the data bucket.
      *
      * @access  public
@@ -247,12 +214,12 @@ class          Hoa_Xyl
     /**
      * Compute <?xyl-use?> processing-instruction.
      *
-     * @access  public
+     * @access  protected
      * @return  bool
      * @throw   Hoa_Xml_Exception
      * @TODO    Maybe overlay should support <?xyl-use?>?
      */
-    public function computeUse ( ) {
+    protected function computeUse ( ) {
 
         // Mowgli c'est le p'tit DOM (euh, p'tit homme !)
         $mowgli      = $this->getStream()->readDOM()->ownerDocument;
@@ -318,10 +285,10 @@ class          Hoa_Xyl
     /**
      * Compute <yield /> tags.
      *
-     * @access  public
+     * @access  protected
      * @return  void
      */
-    public function computeYielder ( ) {
+    protected function computeYielder ( ) {
 
         foreach($this->getStream()->xpath('//yield[@name]') as $yield) {
 
@@ -353,11 +320,11 @@ class          Hoa_Xyl
     /**
      * Compute <?xyl-overlay?> processing-instruction.
      *
-     * @access  public
+     * @access  protected
      * @return  bool
      * @throw   Hoa_Xml_Exception
      */
-    public function computeOverlay ( ) {
+    protected function computeOverlay ( ) {
 
         // Mowgli c'est le p'tit DOM (euh, p'tit homme !)
         $mowgli      = $this->getStream()->readDOM()->ownerDocument;
@@ -558,43 +525,56 @@ class          Hoa_Xyl
      * Distribute data into the XYL tree. Data are linked to element through a
      * reference to the data bucket in this object.
      *
-     * @access  public
+     * @access  protected
      * @return  void
      */
-    public function computeDataBinding ( ) {
+    protected function computeDataBinding ( ) {
 
-        return $this->getStream()->computeDataBinding($this->_data);
+        if(null === $this->_concrete)
+            throw new Hoa_Xyl_Exception(
+                '…', 41);
+
+        return $this->_concrete->computeDataBinding($this->_data);
     } 
 
     /**
-     * Get data of this element.
+     * Interprete XYL as…
      *
      * @access  public
-     * @return  array
+     * @param   Hoa_Xyl_Interpreter  $interpreter    Interpreter.
+     * @return  void
+     * @throws  Hoa_Xyl_Exception
      */
-    public function &getData ( ) {
+    public function interpreteAs ( Hoa_Xyl_Interpreter $interpreter ) {
 
-        return $this->getStream()->getData();
+        $this->computeUse();
+        $this->computeYielder();
+        $this->computeOverlay();
+
+        $rank = $interpreter->getRank();
+        $root = $this->selectRoot();
+        $name = strtolower($root->getName());
+
+        if(false === array_key_exists($name, $rank))
+            throw new Hoa_Xyl_Exception(
+                '…', 42);
+
+        $class           = $rank[$name];
+        $this->_concrete = new $class($root, $this, $rank);
+
+        $this->computeDataBinding();
+
+        return;
     }
 
     /**
-     * Get current data of this element.
+     * Run the render.
      *
      * @access  public
-     * @return  mixed
+     * @return  string
      */
-    public function getCurrentData ( ) {
+    public function render ( ) {
 
-        return $this->getStream()->getCurrentData();
-    }
-
-    public function firstUpdate ( ) {
-
-        return $this->getStream()->firstUpdate();
-    }
-
-    public function update ( ) {
-
-        return $this->getStream()->update();
+        return $this->_concrete->render();
     }
 }
