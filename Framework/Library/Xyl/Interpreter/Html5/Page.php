@@ -1,8 +1,6 @@
 <?php
 
-import('Xyl.Interpreter.Html5');
-
-class Hoa_Xyl_Interpreter_Html5_Page extends Hoa_Xyl_Interpreter_Html5 {
+class Hoa_Xyl_Interpreter_Html5_Page extends Hoa_Xyl_Element_Concrete {
 
     public function paint ( ) {
 
@@ -10,9 +8,9 @@ class Hoa_Xyl_Interpreter_Html5_Page extends Hoa_Xyl_Interpreter_Html5 {
                '<html>' . "\n" .
                '<body>';
 
-        foreach($this->getElement() as $name => $child)
+        foreach($this as $name => $child)
             $out .= "\n" .
-                    $this->render($child);
+                    $child->render();
 
         return $out .
                '</body>' . "\n" .

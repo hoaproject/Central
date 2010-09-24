@@ -1,15 +1,13 @@
 <?php
 
-import('Xyl.Interpreter.Html5');
-
-class Hoa_Xyl_Interpreter_Html5_Ul extends Hoa_Xyl_Interpreter_Html5 {
+class Hoa_Xyl_Interpreter_Html5_Ul extends Hoa_Xyl_Element_Concrete {
 
     public function paint ( ) {
 
-        $out = '  <ul' . $this->getElement()->readAttributesAsString() . '>' . "\n";
+        $out = '  <ul' . $this->getAbstractElement()->readAttributesAsString() . '>' . "\n";
 
-        foreach($this->getElement() as $name => $child)
-            $out .= $this->render($child);
+        foreach($this as $name => $child)
+            $out .= $child->render();
 
         return $out . '  </ul>' . "\n";
     }

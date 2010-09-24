@@ -1,17 +1,14 @@
 <?php
 
-import('Xyl.Interpreter.Html5');
-
-class Hoa_Xyl_Interpreter_Html5_Li extends Hoa_Xyl_Interpreter_Html5 {
+class Hoa_Xyl_Interpreter_Html5_Li extends Hoa_Xyl_Element_Concrete {
 
     public function paint ( ) {
 
-        $e = $this->getElement();
+        $e = $this->getAbstractElement();
 
         if($e->attributeExists('bind'))
-            return '    <li>' . $e->getCurrentData() . '</li>' . "\n";
+            return '    <li>' . $this->getCurrentData() . '</li>' . "\n";
 
-        return '    <li' . $e->readAttributesAsString() . '>' .
-                           $this->getElement() . '</li>' . "\n";
+        return '    <li' . $e->readAttributesAsString() . '>' . $e . '</li>' . "\n";
     }
 }

@@ -40,7 +40,12 @@ require_once 'Core.php';
 /**
  * Hoa_Xyl_Interpreter
  */
-import('Xyl.Interpreter');
+import('Xyl.Interpreter') and load();
+
+/**
+ * Hoa_Xyl_Interpreter_Html5_*
+ */
+import('Xyl.Interpreter.Html5.*');
 
 /**
  * Class Hoa_Xyl_Interpreter_Html5.
@@ -56,19 +61,19 @@ import('Xyl.Interpreter');
  * @subpackage  Hoa_Xyl_Interpreter_Html5
  */
 
-class Hoa_Xyl_Interpreter_Html5 extends Hoa_Xyl_Interpreter {
+class Hoa_Xyl_Interpreter_Html5 extends Hoa_Xyl_Interpreter { 
 
     /**
-     * Get interpreter class.
+     * Rank: abstract elements to concrete elements.
      *
-     * @access  protected
-     * @param   string  $elementName    Element name.
-     * @return  Hoa_Xyl_Interpreter
+     * @var Hoa_Xyl_Interpreter_Html5 array
      */
-    protected function getInterpreterClass ( $elementName ) {
-
-        import('Xyl.Interpreter.Html5.' . $elementName) and load();
-
-        return 'Hoa_Xyl_Interpreter_Html5_' . $elementName;
-    }
+    protected $_rank = array(
+        'page'     => 'Hoa_Xyl_Interpreter_Html5_Page',
+        'ul'       => 'Hoa_Xyl_Interpreter_Html5_Ul',
+        'li'       => 'Hoa_Xyl_Interpreter_Html5_Li',
+        'yield'    => 'Hoa_Xyl_Interpreter_Html5_Yield',
+        'section1' => 'Hoa_Xyl_Interpreter_Html5_Section1',
+        'p'        => 'Hoa_Xyl_Interpreter_Html5_P'
+    );
 }
