@@ -76,8 +76,7 @@ import('Xml.Attribute') and load();
 
 class          Hoa_Xyl
     extends    Hoa_Xml
-    implements Hoa_Xyl_Element,
-               Hoa_Core_Parameterizable {
+    implements Hoa_Xyl_Element {
 
     /**
      * The Hoa_Xyl parameters.
@@ -113,90 +112,17 @@ class          Hoa_Xyl
      * Interprete a stream as XYL.
      *
      * @access  public
-     * @param   Hoa_Stream_Io_In  $stream          Stream to interprete as XYL.
-     * @param   array             $parameters      Parameters.
+     * @param   Hoa_Stream_Io_In  $stream    Stream to interprete as XYL.
      * @return  void
      * @throw   Hoa_Xml_Exception
      */
-    public function __construct ( Hoa_Stream_Io_In $stream,
-                                  Array            $parameters = array() ) {
+    public function __construct ( Hoa_Stream_Io_In $stream ) {
 
         parent::__construct('Hoa_Xyl_Element_Basic', $stream);
 
-        $this->_parameters = new Hoa_Core_Parameter(
-            $this,
-            array(),
-            array()
-        );
-        $this->_xe         = new DOMXPath(new DOMDocument());
+        $this->_xe = new DOMXPath(new DOMDocument());
 
         return;
-    }
-
-    /**
-     * Set many parameters to a class.
-     *
-     * @access  public
-     * @param   array   $in    Parameters to set.
-     * @return  void
-     * @throw   Hoa_Exception
-     */
-    public function setParameters ( Array $in ) {
-
-        return $this->_parameters->setParameters($this, $in);
-    }
-
-    /**
-     * Get many parameters from a class.
-     *
-     * @access  public
-     * @return  array
-     * @throw   Hoa_Exception
-     */
-    public function getParameters ( ) {
-
-        return $this->_parameters->getParameters($this);
-    }
-
-    /**
-     * Set a parameter to a class.
-     *
-     * @access  public
-     * @param   string  $key      Key.
-     * @param   mixed   $value    Value.
-     * @return  mixed
-     * @throw   Hoa_Exception
-     */
-    public function setParameter ( $key, $value ) {
-
-        return $this->_parameters->setParameter($this, $key, $value);
-    }
-
-    /**
-     * Get a parameter from a class.
-     *
-     * @access  public
-     * @param   string  $key    Key.
-     * @return  mixed
-     * @throw   Hoa_Exception
-     */
-    public function getParameter ( $key ) {
-
-        return $this->_parameters->getParameter($this, $key);
-    }
-
-    /**
-     * Get a formatted parameter from a class (i.e. zFormat with keywords and
-     * other parameters).
-     *
-     * @access  public
-     * @param   string  $key    Key.
-     * @return  mixed
-     * @throw   Hoa_Exception
-     */
-    public function getFormattedParameter ( $key ) {
-
-        return $this->_parameters->getFormattedParameter($this, $key);
     }
 
     /**
