@@ -58,7 +58,15 @@ import('Xml.Exception');
 
 class Hoa_Xml_Attribute {
 
+    /**
+     * List of attributes.
+     *
+     * @var Hoa_Xml_Attribute array
+     */
     protected $_attributes = array();
+
+
+
 
     /**
      * Parse a string as attributes.
