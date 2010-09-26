@@ -275,6 +275,7 @@ class          Hoa_Xml_Element_Concrete
     public function __set ( $name, Hoa_Xml_Element_Concrete $value ) {
 
         $this->_children[$name][] = $value;
+        $this->_iterator[]        = $value;
 
         return;
     }
