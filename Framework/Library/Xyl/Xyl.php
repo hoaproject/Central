@@ -175,7 +175,7 @@ class          Hoa_Xyl
 
             if(false === file_exists($href))
                 throw new Hoa_Xyl_Exception(
-                    'File %s is not found, cannot use it.', 1, $href);
+                    'File %s is not found, cannot use it.', 0, $href);
 
             if(true === in_array($href, $hrefs))
                 continue;
@@ -186,7 +186,7 @@ class          Hoa_Xyl
             if('definition' !== $fragment->getName())
                 throw new Hoa_Xyl_Exception(
                     '%s must only contain <definition> of <yield> (and some ' .
-                    '<?xyl-use) elements.', 2, $href);
+                    '<?xyl-use) elements.', 1, $href);
 
             foreach($fragment->xpath('//yield[@name]') as $yield)
                 $mowgli->documentElement->appendChild(
@@ -291,7 +291,7 @@ class          Hoa_Xyl
             if('overlay' !== $fragment->getName())
                 throw new Hoa_Xyl_Exception(
                     '%s must only contain <overlay> (and some <?xyl-overlay) ' .
-                    'elements.', 2, $href);
+                    'elements.', 3, $href);
 
             foreach($fragment->selectChildElement() as $e => $element)
                 $this->_computeOverlay(
@@ -458,7 +458,8 @@ class          Hoa_Xyl
 
         if(null === $this->_concrete)
             throw new Hoa_Xyl_Exception(
-                '…', 41);
+                'Cannot compute the data binding before building the ' .
+                'concrete tree.', 4);
 
         return $this->_concrete->computeDataBinding($this->_data);
     } 
@@ -483,7 +484,8 @@ class          Hoa_Xyl
 
         if(false === array_key_exists($name, $rank))
             throw new Hoa_Xyl_Exception(
-                '…', 42);
+                'Cannot create the concrete tree because the root <%s> is ' .
+                'unknown from the rank.', 5, $name);
 
         $class           = $rank[$name];
         $this->_concrete = new $class($root, $this, $rank);
