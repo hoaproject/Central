@@ -106,7 +106,7 @@ class          Hoa_Xml_Element_Basic
 
         return simplexml_import_dom(
             $this->readDOM()->ownerDocument->documentElement,
-            __CLASS__
+            get_class($this)
         );
     }
 
