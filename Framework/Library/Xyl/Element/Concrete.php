@@ -75,7 +75,8 @@ abstract class Hoa_Xyl_Element_Concrete
      *
      * @var Hoa_Xyl_Element_Concrete array
      */
-    private $_bucket = array();
+    private $_bucket = array('data' => null);
+
 
 
     /**
@@ -94,6 +95,8 @@ abstract class Hoa_Xyl_Element_Concrete
             foreach($this as $element)
                 $element->computeDataBinding($data, $parent);
 
+            $this->execute();
+
             return;
         }
 
@@ -104,6 +107,8 @@ abstract class Hoa_Xyl_Element_Concrete
 
             foreach($this as $element)
                 $element->computeDataBinding($handle, $parent);
+
+            $this->execute();
 
             return;
         }
@@ -124,12 +129,9 @@ abstract class Hoa_Xyl_Element_Concrete
             throw new Hoa_Xyl_Exception(
                 'Huh?', 0);
 
-        $this->_bucket = array(
-            'data'    =>  null,
-            'parent'  => &$parent,
-            'current' =>  0,
-            'branche' =>  $branche
-        );
+        $this->_bucket['parent']  = &$parent;
+        $this->_bucket['current'] = 0;
+        $this->_bucket['branche'] = $branche;
 
         if(isset($handle[$branche])) {
 
@@ -149,6 +151,8 @@ abstract class Hoa_Xyl_Element_Concrete
                 foreach($this as $element)
                     $element->computeDataBinding($handle[0][$branche], $this->_bucket);
         }
+
+        $this->execute();
 
         return;
     }
@@ -252,4 +256,15 @@ abstract class Hoa_Xyl_Element_Concrete
      * @return  string
      */
     abstract protected function paint ( );
+
+    /**
+     * Execute an element.
+     *
+     * @access  protected
+     * @return  void
+     */
+    protected function execute ( ) {
+
+        return;
+    }
 }
