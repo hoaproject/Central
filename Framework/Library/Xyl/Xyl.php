@@ -403,7 +403,7 @@ class          Hoa_Xyl
         $replace   = array();
         $child     = null;
 
-        for($i = 0, $m = $children->length; $i < $m; $i++) {
+        for($i = 0, $m = $children->length; $i < $m; ++$i) {
 
             $child = $children->item($i);
 
