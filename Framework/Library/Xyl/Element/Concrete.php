@@ -215,9 +215,6 @@ abstract class Hoa_Xyl_Element_Concrete
      */
     private function update ( ) {
 
-        if(empty($this->_bucket))
-            return;
-
         if(!is_array($this->_bucket['data']))
             return;
 
