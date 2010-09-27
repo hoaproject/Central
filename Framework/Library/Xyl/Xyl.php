@@ -79,13 +79,6 @@ class          Hoa_Xyl
     implements Hoa_Xyl_Element {
 
     /**
-     * The Hoa_Xyl parameters.
-     *
-     * @var Hoa_Core_Parameter object
-     */
-    private $_parameters = null;
-
-    /**
      * Data bucket.
      *
      * @var Hoa_Xyl array
