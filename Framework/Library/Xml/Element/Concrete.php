@@ -150,11 +150,12 @@ class          Hoa_Xml_Element_Concrete
 
         foreach($element as $name => $child) {
 
-            if(isset($rank[$name]))
-                $c = $rank[$name];
-            else
-                $c = get_class($this);
+            if(!isset($rank[$name]))
+                throw new Hoa_Xml_Exception(
+                    'Cannot build the concrete tree because the abstract ' .
+                    'element <%s> has no ranked concrete element.', 0, $name);
 
+            $c = $rank[$name];
             $h = new $c($child, $superRoot, $rank);
             $this->_children[$h->getName()][] = $h;
             $this->_iterator[]                = $h;
@@ -226,7 +227,7 @@ class          Hoa_Xml_Element_Concrete
 
         if(false === $id = self::getAbstractElementId($element))
             throw new Hoa_Xml_Exception(
-                '…', 0);
+                '…', 2);
 
         return self::$_superRoots[$id];
     }
