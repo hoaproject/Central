@@ -114,6 +114,20 @@ class          Hoa_Xyl
         parent::__construct('Hoa_Xyl_Element_Basic', $stream);
 
         $this->_xe = new DOMXPath(new DOMDocument());
+        $nss       = $this->getStream()->getNamespaces(true);
+
+        if(empty($nss))
+            throw new Hoa_Xyl_Exception(
+                'The XYL file %s has no XYL namespace declared.',
+                0, $stream->getStreamName());
+
+        foreach($nss as $prefix => $ns) {
+
+            if('' === $prefix)
+                $prefix = '__default_ns';
+
+            $this->getStream()->registerXPathNamespace($prefix, $ns);
+        }
 
         return;
     }
@@ -181,7 +195,7 @@ class          Hoa_Xyl
                     '%s must only contain <definition> of <yield> (and some ' .
                     '<?xyl-use) elements.', 1, $href);
 
-            foreach($fragment->xpath('//yield[@name]') as $yield)
+            foreach($fragment->xpath('//__default_ns:yield[@name]') as $yield)
                 $mowgli->documentElement->appendChild(
                     $mowgli->importNode($yield->readDOM(), true)
                 );
@@ -197,7 +211,7 @@ class          Hoa_Xyl
                 $uses[] = $xyl_use->item($i);
 
         } while(!empty($uses));
-        
+
         return true;
     }
 
@@ -209,7 +223,7 @@ class          Hoa_Xyl
      */
     protected function computeYielder ( ) {
 
-        foreach($this->getStream()->xpath('//yield[@name]') as $yield) {
+        foreach($this->getStream()->xpath('//__default_ns:yield[@name]') as $yield) {
 
             $yieldomized = $yield->readDOM();
             $name        = $yieldomized->getAttribute('name');
@@ -217,7 +231,7 @@ class          Hoa_Xyl
             $yieldomized->removeAttribute('bind');
             $yieldomized->parentNode->removeChild($yieldomized);
 
-            foreach($this->getStream()->selectElement($name) as $ciao) {
+            foreach($this->getStream()->xpath('//__default_ns:' . $name) as $ciao) {
 
                 $placeholder = $ciao->readDOM();
                 $parent      = $placeholder->parentNode;
