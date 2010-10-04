@@ -219,7 +219,7 @@ abstract class Hoa_Xyl_Element_Concrete
      * Continue to update the data bucket while iterating.
      *
      * @access  private
-     * @return  void
+     * @return  boolean
      */
     private function update ( ) {
 
@@ -227,8 +227,9 @@ abstract class Hoa_Xyl_Element_Concrete
             return;
 
         $this->_bucket['current'] = key($this->_bucket['data']);
+        $handle                   = current($this->_bucket['data']);
 
-        return $this->_bucket;
+        return isset($handle[$this->_bucket['branche']]);
     }
 
     /**
@@ -247,7 +248,7 @@ abstract class Hoa_Xyl_Element_Concrete
 
             $out  .= $this->paint();
             $next  = is_array($data) ? next($data) : false;
-            $this->update();
+            $next  = $next && $this->update();
 
         } while(false !== $next);
 
