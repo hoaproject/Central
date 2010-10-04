@@ -53,6 +53,11 @@ import('Xml.Element.Concrete') and load();
 import('Xyl.Element') and load();
 
 /**
+ * Hoa_Xyl_Element_Executable
+ */
+import('Xyl.Element.Executable');
+
+/**
  * Class Hoa_Xyl_Element_Concrete.
  *
  * 
@@ -95,7 +100,8 @@ abstract class Hoa_Xyl_Element_Concrete
             foreach($this as $element)
                 $element->computeDataBinding($data, $parent);
 
-            $this->execute();
+            if($this instanceof Hoa_Xyl_Element_Executable)
+                $this->execute();
 
             return;
         }
@@ -108,7 +114,8 @@ abstract class Hoa_Xyl_Element_Concrete
             foreach($this as $element)
                 $element->computeDataBinding($handle, $parent);
 
-            $this->execute();
+            if($this instanceof Hoa_Xyl_Element_Executable)
+                $this->execute();
 
             return;
         }
@@ -152,7 +159,8 @@ abstract class Hoa_Xyl_Element_Concrete
                     $element->computeDataBinding($handle[0][$branche], $this->_bucket);
         }
 
-        $this->execute();
+        if($this instanceof Hoa_Xyl_Element_Executable)
+            $this->execute();
 
         return;
     }
@@ -253,15 +261,4 @@ abstract class Hoa_Xyl_Element_Concrete
      * @return  string
      */
     abstract protected function paint ( );
-
-    /**
-     * Execute an element.
-     *
-     * @access  protected
-     * @return  void
-     */
-    protected function execute ( ) {
-
-        return;
-    }
 }
