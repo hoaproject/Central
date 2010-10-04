@@ -97,7 +97,7 @@ class          Hoa_Xyl
      *
      * @var DOMXPath object
      */
-    private $_xe         = null;
+    protected $_xe       = null;
 
 
 
