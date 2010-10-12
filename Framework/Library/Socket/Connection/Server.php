@@ -106,6 +106,13 @@ class          Hoa_Socket_Connection_Server
     protected $_nodes    = array();
 
     /**
+     * Node name.
+     *
+     * @var Hoa_Socket_Connection_Server string
+     */
+    protected $_nodeName = null;
+
+    /**
      * Temporize selected connections when selecting.
      *
      * @var Hoa_Socket_Connection_Server array
@@ -234,15 +241,15 @@ class          Hoa_Socket_Connection_Server
      * Select connections.
      *
      * @access  public
-     * @param   string  $nodeClass    Node class.
      * @return  Hoa_Socket_Connection_Server
      * @throw   Hoa_Socket_Connection_Exception
      */
-    public function select ( $nodeClass = 'Hoa_Socket_Connection_Node' ) {
+    public function select ( ) {
 
-        $read   = $this->_stack;
-        $write  = null;
-        $except = null;
+        $read      = $this->_stack;
+        $write     = null;
+        $except    = null;
+        $nodeClass = $this->getNodeName();
 
         stream_select($read, $write, $except, $this->getTimeout());
 
@@ -386,5 +393,42 @@ class          Hoa_Socket_Connection_Server
     public function isListening ( ) {
 
         return (bool) $this->getFlag() & self::LISTEN;
+    }
+
+    /**
+     * Set node name.
+     *
+     * @access  public
+     * @param   string  $node    Node name.
+     * @return  string
+     */
+    public function setNodeName ( $node ) {
+
+        $old             = $this->_nodeName;
+        $this->_nodeName = $node;
+
+        return $old;
+    }
+
+    /**
+     * Get node name.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getNodeName ( ) {
+
+        return $this->_nodeName;
+    }
+
+    /**
+     * Get nodes list.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getNodes ( ) {
+
+        return $this->_nodes;
     }
 }
