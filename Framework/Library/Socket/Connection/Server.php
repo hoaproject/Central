@@ -48,9 +48,9 @@ import('Socket.Connection.Exception');
 import('Socket.Connection');
 
 /**
- * Hoa_Socket_Interface
+ * Hoa_Socket_Connection_Node
  */
-import('Socket.Interface');
+import('Socket.Connection.Node');
 
 /**
  * Class Hoa_Socket_Connection_Server.
@@ -66,7 +66,9 @@ import('Socket.Interface');
  * @subpackage  Hoa_Socket_Connection_Server
  */
 
-class Hoa_Socket_Connection_Server extends Hoa_Socket_Connection {
+class          Hoa_Socket_Connection_Server
+    extends    Hoa_Socket_Connection
+    implements Iterator {
 
     /**
      * Tell a stream to bind to the specified target.
@@ -83,11 +85,32 @@ class Hoa_Socket_Connection_Server extends Hoa_Socket_Connection {
     const LISTEN = STREAM_SERVER_LISTEN;
 
     /**
-     * Server.
+     * Master connection.
      *
      * @var Hoa_Socket_Connection_Server resource
      */
-    protected $_server = null;
+    protected $_master   = null;
+
+    /**
+     * Stack of connections.
+     *
+     * @var Hoa_Socket_Connection_Server array
+     */
+    protected $_stack    = null;
+
+    /**
+     * List of nodes (connections) when selecting.
+     *
+     * @var Hoa_Socket_Connection_Server array
+     */
+    protected $_nodes    = array();
+
+    /**
+     * Temporize selected connections when selecting.
+     *
+     * @var Hoa_Socket_Connection_Server array
+     */
+    protected $_iterator = array();
 
 
 
@@ -143,14 +166,14 @@ class Hoa_Socket_Connection_Server extends Hoa_Socket_Connection {
     protected function &_open ( $streamName, Hoa_Stream_Context $context = null ) {
 
         if(null === $context)
-            $this->_server = @stream_socket_server(
+            $this->_master = @stream_socket_server(
                 $streamName,
                 $errno,
                 $errstr,
                 $this->getFlag()
             );
         else
-            $this->_server = @stream_socket_server(
+            $this->_master = @stream_socket_server(
                 $streamName,
                 $errno,
                 $errstr,
@@ -158,7 +181,7 @@ class Hoa_Socket_Connection_Server extends Hoa_Socket_Connection {
                 $context->getContext()
             );
 
-        if(false === $this->_server)
+        if(false === $this->_master)
             if($errno == 0)
                 throw new Hoa_Socket_Connection_Exception(
                     'Server cannot join %s.', 0, $streamName);
@@ -167,13 +190,167 @@ class Hoa_Socket_Connection_Server extends Hoa_Socket_Connection {
                     'Server returns an error (number %d): %s.',
                     1, array($errno, $errstr));
 
-        $connection = @stream_socket_accept($this->_server);
+        $this->_stack[] = $this->_master;
 
-        if(false === $connection)
+        return $this->_master;
+    }
+
+    /**
+     * Connect and accept the first connection.
+     *
+     * @access  public
+     * @return  void
+     * @throw   Hoa_Socket_Connection_Exception
+     */
+    public function connect ( ) {
+
+        parent::connect();
+
+        $client = @stream_socket_accept($this->_master);
+
+        if(false === $client)
             throw new Hoa_Socket_Connection_Exception(
                 'Operation timed out (nothing to accept).', 2);
 
-        return $connection;
+        $this->_setStream($client);
+
+        return;
+    }
+
+    /**
+     * Connect but wait for select and accept new connections.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function connectAndWait ( ) {
+
+        parent::connect();
+
+        return;
+    }
+
+    /**
+     * Select connections.
+     *
+     * @access  public
+     * @param   string  $nodeClass    Node class.
+     * @return  Hoa_Socket_Connection_Server
+     * @throw   Hoa_Socket_Connection_Exception
+     */
+    public function select ( $nodeClass = 'Hoa_Socket_Connection_Node' ) {
+
+        $read   = $this->_stack;
+        $write  = null;
+        $except = null;
+
+        stream_select($read, $write, $except, $this->getTimeout());
+
+        foreach($read as $i => $socket) {
+
+            if($this->_master == $socket) {
+
+                $client = @stream_socket_accept($this->_master);
+
+                if(false === $client)
+                    throw new Hoa_Socket_Connection_Exception(
+                        'Operation timed out (nothing to accept).', 3);
+
+                ob_start();
+                var_dump($client);
+                $id = md5(ob_get_contents());
+                ob_end_clean();
+                $node              = new $nodeClass($id, $client);
+                $this->_nodes[$id] = $node;
+                $this->_stack[]    = $client;
+                $this->_setStream($socket);
+            }
+            else
+                $this->_iterator[] = $socket;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set and get the current selected connection.
+     *
+     * @access  public
+     * @return  Hoa_Socket_Connection_Server
+     */
+    public function current ( ) {
+
+        $current = current($this->_iterator);
+        $this->_setStream($current);
+
+        ob_start();
+        var_dump($current);
+        $id = md5(ob_get_contents());
+        ob_end_clean();
+
+        return $this->_nodes[$id];
+    }
+
+    /**
+     * Get the current selected connection index.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function key ( ) {
+
+        return key($this->_iterator);
+    }
+
+    /**
+     * Advance the internal pointer of the connection iterator and return the
+     * current selected connection.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function next ( ) {
+
+        return next($this->_iterator);
+    }
+
+    /**
+     * Rewind the internal iterator pointer and the first connection.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function rewind ( ) {
+
+        return reset($this->_iterator);
+    }
+
+    /**
+     * Check if there is a current connection after calls to the rewind() or the
+     * next() methods.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function valid ( ) {
+
+        if(empty($this->_iterator))
+            return false;
+
+        $key    = key($this->_iterator);
+        $return = (bool) next($this->_iterator);
+        prev($this->_iterator);
+
+        if(false === $return) {
+
+            end($this->_iterator);
+            if($key === key($this->_iterator))
+                $return = true;
+            else
+                $this->_iterator = array();
+        }
+
+        return $return;
     }
 
     /**
@@ -184,7 +361,9 @@ class Hoa_Socket_Connection_Server extends Hoa_Socket_Connection {
      */
     protected function _close ( ) {
 
-        return (bool) (@fclose($this->_server) + @fclose($this->getStream()));
+        // re-TODO.
+
+        return (bool) (@fclose($this->_master) + @fclose($this->getStream()));
     }
 
     /**
