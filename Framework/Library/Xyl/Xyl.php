@@ -114,20 +114,11 @@ class          Hoa_Xyl
         parent::__construct('Hoa_Xyl_Element_Basic', $stream);
 
         $this->_xe = new DOMXPath(new DOMDocument());
-        $nss       = $this->getStream()->getNamespaces(true);
 
-        if(empty($nss))
+        if(false === $this->namespaceExists('http://hoa-project.net/ns/xyl'))
             throw new Hoa_Xyl_Exception(
                 'The XYL file %s has no XYL namespace declared.',
                 0, $stream->getStreamName());
-
-        foreach($nss as $prefix => $ns) {
-
-            if('' === $prefix)
-                $prefix = '__default_ns';
-
-            $this->getStream()->registerXPathNamespace($prefix, $ns);
-        }
 
         return;
     }
