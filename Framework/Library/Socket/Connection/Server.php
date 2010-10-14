@@ -198,13 +198,7 @@ class          Hoa_Socket_Connection_Server
                     'Server returns an error (number %d): %s.',
                     1, array($errno, $errstr));
 
-        /*
-        $nodeClass         = $this->getNodeName();
-        $id                = $this->getNodeId($this->_master);
-        $node              = new $nodeClass($id, $this->_master);
-        $this->_nodes[$id] = $node;
-        */
-        $this->_stack[]    = $this->_master;
+        $this->_stack[] = $this->_master;
 
         return $this->_master;
     }
