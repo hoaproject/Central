@@ -78,6 +78,15 @@ abstract class Hoa_Xml
                ArrayAccess {
 
     /**
+     * Cache of namespaces.
+     *
+     * @var Hoa_Xml array
+     */
+    protected $_namespaces = null;
+
+
+
+    /**
      * Constructor. Load the inner stream as a XML tree. If the inner stream is
      * empty (e.g. an empty new file), the XML tree will represent the following
      * XML code:
@@ -121,8 +130,80 @@ abstract class Hoa_Xml
 
         $this->setStream($root);
         $this->setInnerStream($innerStream);
+        $this->initializeNamespaces();
 
         return;
+    }
+
+    /**
+     * Initialize namespaces.
+     *
+     * @access  protected
+     * @return  void
+     */
+    public function initializeNamespaces ( ) {
+
+        $stream            = $this->getStream();
+        $this->_namespaces = $stream->getDocNamespaces();
+
+        foreach($this->_namespaces as $prefix => $namespace) {
+
+            if('' == $prefix)
+                $prefix = '__current_ns';
+
+            $stream->registerXPathNamespace($prefix, $namespace);
+        }
+
+        return;
+    }
+
+    /**
+     * Whether a namespace exists.
+     *
+     * @access  public
+     * @param   string  $namespace    Namespace.
+     * @return  bool
+     */
+    public function namespaceExists ( $namespace ) {
+
+        return false !== array_search($namespace, $this->_namespaces);
+    }
+
+    /**
+     * Use a specific namespace.
+     *
+     * @access  public
+     * @param   string  $namespace    Namespace.
+     * @return  Hoa_Xml
+     * @throw   Hoa_Xml_Exception
+     */
+    public function useNamespace ( $namespace ) {
+
+        if(null === $this->_namespaces)
+            $this->initializeNamespaces();
+
+        if(false === $prefix = array_search($namespace, $this->_namespaces))
+            throw new Hoa_Xml_Exception(
+                'The namespace %s does not exist in the document %s.',
+                2, array($namespace, $this->getInnerStream()->getStreamName()));
+
+        $this->getStream()->registerXPathNamespace('__current_ns', $namespace);
+
+        return $this;
+    }
+
+    /**
+     * Get declared namespaces.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getNamespaces ( ) {
+
+        if(null === $this->_namespaces)
+            $this->initializeNamespaces();
+
+        return $this->_namespaces;
     }
 
     /**

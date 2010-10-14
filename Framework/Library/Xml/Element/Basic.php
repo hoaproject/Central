@@ -72,13 +72,6 @@ class          Hoa_Xml_Element_Basic
                Hoa_Stream_Io_Structural {
 
     /**
-     * Super root of XML tree.
-     *
-     * @var Hoa_Xml_Element_Basic object
-     */
-    protected static $_sroot      = null;
-
-    /**
      * CssToXPath instance.
      *
      * @var Hoa_Xml_CssToXPath object
@@ -120,7 +113,7 @@ class          Hoa_Xml_Element_Basic
 
         self::$_buffer = null;
 
-        return $this->xpath('//*');
+        return $this->xpath('//__current_ns:*');
     }
 
     /**
@@ -137,7 +130,7 @@ class          Hoa_Xml_Element_Basic
 
         self::$_buffer = null;
 
-        return $this->xpath('//' . $E);
+        return $this->xpath('//__current_ns:' . $E);
     }
 
     /**
@@ -164,7 +157,7 @@ class          Hoa_Xml_Element_Basic
         self::$_buffer = null;
 
         if(null === $F || '*' == $F)
-            return $this->children();
+            return $this->xpath('child::__current_ns:' . $F);
 
         return $this->$F;
     }
@@ -179,7 +172,9 @@ class          Hoa_Xml_Element_Basic
     public function selectAdjacentSiblingElement ( $F ) {
 
         self::$_buffer = null;
-        $handle        = $this->xpath('following-sibling::*[1]/self::' . $F);
+        $handle        = $this->xpath(
+            'following-sibling::__current_ns:*[1]/self::__current_ns:' . $F
+        );
 
         if(empty($handle))
             return false;
@@ -201,7 +196,7 @@ class          Hoa_Xml_Element_Basic
 
         self::$_buffer = null;
 
-        return $this->xpath('following-sibling::' . $F);
+        return $this->xpath('following-sibling::__current_ns:' . $F);
     }
 
     /**
@@ -237,6 +232,7 @@ class          Hoa_Xml_Element_Basic
 
         self::$_buffer = null;
         self::$_cssToXPath->compile($query);
+
         return $this->xpath(self::$_cssToXPath->getXPath());
     }
 
@@ -360,5 +356,21 @@ class          Hoa_Xml_Element_Basic
     public function readDOM ( ) {
 
         return dom_import_simplexml($this);
+    }
+
+    /**
+     * Use a specific namespace.
+     * For performance reason, we did not test if the namespace exists in the
+     * document. Please, see the Hoa_Xml::namespaceExists() method to do that.
+     *
+     * @access  public
+     * @param   string  $namespace    Namespace.
+     * @return  Hoa_Xml_Element
+     */
+    public function useNamespace ( $namespace ) {
+
+        $this->registerXPathNamespace('__current_ns', $namespace);
+
+        return $this;
     }
 }
