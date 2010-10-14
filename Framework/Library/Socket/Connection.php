@@ -360,7 +360,12 @@ abstract class Hoa_Socket_Connection
                 'Cannot read because socket is not established, ' .
                 'i.e. not connected.', 0);
 
-        return stream_socket_recvfrom($this->getStream(), $length);
+        $out = @stream_socket_recvfrom($this->getStream(), $length);
+
+        if('' == $out)
+            $this->disconnect();
+
+        return $out;
     }
 
     /**
