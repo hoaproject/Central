@@ -186,7 +186,7 @@ class          Hoa_Xyl
                     '%s must only contain <definition> of <yield> (and some ' .
                     '<?xyl-use) elements.', 1, $href);
 
-            foreach($fragment->xpath('//__default_ns:yield[@name]') as $yield)
+            foreach($fragment->xpath('//__current_ns:yield[@name]') as $yield)
                 $mowgli->documentElement->appendChild(
                     $mowgli->importNode($yield->readDOM(), true)
                 );
@@ -214,7 +214,7 @@ class          Hoa_Xyl
      */
     protected function computeYielder ( ) {
 
-        foreach($this->getStream()->xpath('//__default_ns:yield[@name]') as $yield) {
+        foreach($this->getStream()->xpath('//__current_ns:yield[@name]') as $yield) {
 
             $yieldomized = $yield->readDOM();
             $name        = $yieldomized->getAttribute('name');
@@ -222,7 +222,7 @@ class          Hoa_Xyl
             $yieldomized->removeAttribute('bind');
             $yieldomized->parentNode->removeChild($yieldomized);
 
-            foreach($this->getStream()->xpath('//__default_ns:' . $name) as $ciao) {
+            foreach($this->getStream()->xpath('//__current_ns:' . $name) as $ciao) {
 
                 $placeholder = $ciao->readDOM();
                 $parent      = $placeholder->parentNode;
