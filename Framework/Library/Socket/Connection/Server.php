@@ -157,6 +157,7 @@ class          Hoa_Socket_Connection_Server
             }
 
         parent::__construct($socket, $timeout, $flag, $context);
+        $this->setNodeName('Hoa_Socket_Connection_Node');
 
         return;
     }
@@ -197,7 +198,13 @@ class          Hoa_Socket_Connection_Server
                     'Server returns an error (number %d): %s.',
                     1, array($errno, $errstr));
 
-        $this->_stack[] = $this->_master;
+        /*
+        $nodeClass         = $this->getNodeName();
+        $id                = $this->getNodeId($this->_master);
+        $node              = new $nodeClass($id, $this->_master);
+        $this->_nodes[$id] = $node;
+        */
+        $this->_stack[]    = $this->_master;
 
         return $this->_master;
     }
@@ -263,10 +270,7 @@ class          Hoa_Socket_Connection_Server
                     throw new Hoa_Socket_Connection_Exception(
                         'Operation timed out (nothing to accept).', 3);
 
-                ob_start();
-                var_dump($client);
-                $id = md5(ob_get_contents());
-                ob_end_clean();
+                $id                = $this->getNodeId($client);
                 $node              = new $nodeClass($id, $client);
                 $this->_nodes[$id] = $node;
                 $this->_stack[]    = $client;
@@ -290,12 +294,7 @@ class          Hoa_Socket_Connection_Server
         $current = current($this->_iterator);
         $this->_setStream($current);
 
-        ob_start();
-        var_dump($current);
-        $id = md5(ob_get_contents());
-        ob_end_clean();
-
-        return $this->_nodes[$id];
+        return $this->_nodes[$this->getNodeId($current)];
     }
 
     /**
@@ -368,9 +367,19 @@ class          Hoa_Socket_Connection_Server
      */
     protected function _close ( ) {
 
-        // re-TODO.
+        $current = $this->getStream();
+
+        if($current != $this->_master) {
+
+            $i = array_search($current, $this->_stack);
+            unset($this->_stack[$i]);
+            unset($this->_nodes[$this->getNodeId($current)]);
+
+            return @fclose($current);
+        }
 
         return (bool) (@fclose($this->_master) + @fclose($this->getStream()));
+
     }
 
     /**
@@ -430,5 +439,22 @@ class          Hoa_Socket_Connection_Server
     public function getNodes ( ) {
 
         return $this->_nodes;
+    }
+
+    /**
+     * Get node ID.
+     *
+     * @access  private
+     * @param   resource  $resource    Resource.
+     * @return  string
+     */
+    private function getNodeId ( $resource ) {
+
+        ob_start();
+        var_dump($resource);
+        $id = md5(ob_get_contents());
+        ob_end_clean();
+
+        return $id;
     }
 }
