@@ -146,6 +146,11 @@ abstract class Hoa_Xml
         $stream            = $this->getStream();
         $this->_namespaces = $stream->getDocNamespaces();
 
+        if(empty($this->_namespaces))
+            throw new Hoa_Xml_Exception(
+                'The XML document %s must have a default namespace at least.',
+                2, $this->getInnerStream()->getStreamName());
+
         foreach($this->_namespaces as $prefix => $namespace) {
 
             if('' == $prefix)
