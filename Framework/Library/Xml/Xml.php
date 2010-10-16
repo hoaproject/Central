@@ -198,6 +198,18 @@ abstract class Hoa_Xml
     }
 
     /**
+     * Get namespace prefix.
+     *
+     * @access  public
+     * @param   string  $namespace    Namespace.
+     * @return  string
+     */
+    public function getPrefix ( $namespace ) {
+
+        return array_search($namespace, $this->_namespaces);
+    }
+
+    /**
      * Get declared namespaces.
      *
      * @access  public
