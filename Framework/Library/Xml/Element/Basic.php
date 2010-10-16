@@ -157,9 +157,9 @@ class          Hoa_Xml_Element_Basic
         self::$_buffer = null;
 
         if(null === $F || '*' == $F)
-            return $this->xpath('child::__current_ns:' . $F);
+            return $this->xpath('child::__current_ns:*');
 
-        return $this->$F;
+        return $this->xpath('child::__current_ns:' . $F);
     }
 
     /**
