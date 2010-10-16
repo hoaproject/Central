@@ -83,7 +83,7 @@ class          Hoa_Xyl
      *
      * @const string
      */
-    const NAMESPACE = 'http://hoa-project.net/ns/xyl';
+    const NAMESPACE_ID = 'http://hoa-project.net/ns/xyl';
 
     /**
      * Data bucket.
@@ -122,12 +122,12 @@ class          Hoa_Xyl
         
         $this->_xe = new DOMXPath(new DOMDocument());
 
-        if(false === $this->namespaceExists(self::NAMESPACE))
+        if(false === $this->namespaceExists(self::NAMESPACE_ID))
             throw new Hoa_Xyl_Exception(
                 'The XYL file %s has no XYL namespace declared.',
                 0, $stream->getStreamName());
 
-        $this->useNamespace(self::NAMESPACE);
+        $this->useNamespace(self::NAMESPACE_ID);
 
         return;
     }
@@ -496,7 +496,7 @@ class          Hoa_Xyl
                 'unknown from the rank.', 5, $name);
 
         $class           = $rank[$name];
-        $this->_concrete = new $class($root, $this, $rank, self::NAMESPACE);
+        $this->_concrete = new $class($root, $this, $rank, self::NAMESPACE_ID);
 
         $this->computeDataBinding();
 
