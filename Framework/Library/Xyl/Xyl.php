@@ -79,6 +79,13 @@ class          Hoa_Xyl
     implements Hoa_Xyl_Element {
 
     /**
+     * XYL's namespace.
+     *
+     * @const string
+     */
+    const NAMESPACE = 'http://hoa-project.net/ns/xyl';
+
+    /**
      * Data bucket.
      *
      * @var Hoa_Xyl array
@@ -112,13 +119,15 @@ class          Hoa_Xyl
     public function __construct ( Hoa_Stream_Io_In $stream ) {
 
         parent::__construct('Hoa_Xyl_Element_Basic', $stream);
-
+        
         $this->_xe = new DOMXPath(new DOMDocument());
 
-        if(false === $this->namespaceExists('http://hoa-project.net/ns/xyl'))
+        if(false === $this->namespaceExists(self::NAMESPACE))
             throw new Hoa_Xyl_Exception(
                 'The XYL file %s has no XYL namespace declared.',
                 0, $stream->getStreamName());
+
+        $this->useNamespace(self::NAMESPACE);
 
         return;
     }
@@ -220,7 +229,6 @@ class          Hoa_Xyl
             $name        = $yieldomized->getAttribute('name');
             $yieldomized->removeAttribute('name');
             $yieldomized->removeAttribute('bind');
-            $yieldomized->parentNode->removeChild($yieldomized);
 
             foreach($this->getStream()->xpath('//__current_ns:' . $name) as $ciao) {
 
@@ -236,6 +244,8 @@ class          Hoa_Xyl
 
                 $parent->replaceChild($handle, $placeholder);
             }
+
+            $yieldomized->parentNode->removeChild($yieldomized);
         }
 
         return;
@@ -477,7 +487,7 @@ class          Hoa_Xyl
         $this->computeOverlay();
 
         $rank = $interpreter->getRank();
-        $root = $this->selectRoot();
+        $root = $this->getStream();
         $name = strtolower($root->getName());
 
         if(false === array_key_exists($name, $rank))
@@ -486,7 +496,7 @@ class          Hoa_Xyl
                 'unknown from the rank.', 5, $name);
 
         $class           = $rank[$name];
-        $this->_concrete = new $class($root, $this, $rank);
+        $this->_concrete = new $class($root, $this, $rank, self::NAMESPACE);
 
         $this->computeDataBinding();
 
