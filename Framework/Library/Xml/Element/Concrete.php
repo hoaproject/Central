@@ -127,15 +127,20 @@ class          Hoa_Xml_Element_Concrete
      * @param   Hoa_Xml_Element  $superRoot    Super root.
      * @param   array            $rank         Rank: abstract elements to
      *                                         concrete elements.
+     * @param   string           $namespace    Namespace.
      * @return  void
      */
     public function __construct ( Hoa_Xml_Element $element,
                                   Hoa_Xml_Element $superRoot,
-                                  Array           $rank = array()) {
+                                  Array           $rank = array(),
+                                  $namespace            = null ) {
 
         self::$_store[]      = $element;
         self::$_superRoots[] = $superRoot;
         self::$_multiton[]   = $this;
+
+        if(null !== $namespace)
+            $element->useNamespace($namespace);
 
         if(null === $this->_name) {
 
@@ -148,7 +153,9 @@ class          Hoa_Xml_Element_Concrete
         $this->_element      = $element;
         $this->_superRoot    = $superRoot;
 
-        foreach($element as $name => $child) {
+        foreach($element->selectChildElement() as $child) {
+
+            $name = $child->getName();
 
             if(!isset($rank[$name]))
                 throw new Hoa_Xml_Exception(
@@ -156,7 +163,7 @@ class          Hoa_Xml_Element_Concrete
                     'element <%s> has no ranked concrete element.', 0, $name);
 
             $c = $rank[$name];
-            $h = new $c($child, $superRoot, $rank);
+            $h = new $c($child, $superRoot, $rank, $namespace);
             $this->_children[$h->getName()][] = $h;
             $this->_iterator[]                = $h;
         }
