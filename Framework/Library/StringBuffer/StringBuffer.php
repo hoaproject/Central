@@ -203,7 +203,7 @@ abstract class Hoa_StringBuffer
      *
      * @access  public
      * @param   string  $string    String.
-     * @return  bool
+     * @return  Hoa_StringBuffer
      */
     public function initializeWith ( $string ) {
 
@@ -212,6 +212,6 @@ abstract class Hoa_StringBuffer
 
         $this->seek(0, Hoa_Stream_Io_Pointable::SEEK_SET);
 
-        return true;
+        return $this;
     }
 }
