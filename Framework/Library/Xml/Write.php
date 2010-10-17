@@ -45,17 +45,17 @@ import('Xml.Exception');
 /**
  * Hoa_Xml
  */
-import('Xml.~');
+import('Xml.~') and load();
 
 /**
  * Hoa_Stream_Io_Out
  */
-import('Stream.Io.Out');
+import('Stream.Io.Out') and load();
 
 /**
  * Hoa_Xml_Element_Write
  */
-import('Xml.Element.Write');
+import('Xml.Element.Write') and load();
 
 /**
  * Class Hoa_Xml_Write.

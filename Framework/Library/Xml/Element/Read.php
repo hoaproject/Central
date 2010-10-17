@@ -45,12 +45,12 @@ import('Xml.Exception');
 /**
  * Hoa_Xml_Element_Basic
  */
-import('Xml.Element.Basic');
+import('Xml.Element.Basic') and load();
 
 /**
  * Hoa_Stream_Io_In
  */
-import('Stream.Io.In');
+import('Stream.Io.In') and load();
 
 /**
  * Hoa_StringBuffer_ReadWrite
@@ -83,7 +83,10 @@ class          Hoa_Xml_Element_Read
      */
     public function eof ( ) {
 
-        return $this->_eof;
+        if(null === parent::$_buffer)
+            return true;
+
+        return parent::$_buffer->eof();
     }
 
     /**

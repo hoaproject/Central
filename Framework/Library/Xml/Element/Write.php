@@ -45,12 +45,12 @@ import('Xml.Exception');
 /**
  * Hoa_Xml_Element_Basic
  */
-import('Xml.Element.Basic');
+import('Xml.Element.Basic') and load();
 
 /**
  * Hoa_Stream_Io_Out
  */
-import('Stream.Io.Out');
+import('Stream.Io.Out') and load();
 
 /**
  * Hoa_StringBuffer_ReadWrite

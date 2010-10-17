@@ -45,12 +45,12 @@ import('Xml.Exception');
 /**
  * Hoa_Xml_Element_Basic
  */
-import('Xml.Element.Basic');
+import('Xml.Element.Basic') and load();
 
 /**
  * Hoa_Stream_Io
  */
-import('Stream.Io');
+import('Stream.Io') and load();
 
 /**
  * Hoa_StringBuffer_ReadWrite
@@ -83,7 +83,10 @@ class          Hoa_Xml_Element_ReadWrite
      */
     public function eof ( ) {
 
-        return $this->_eof;
+        if(null === parent::$_buffer)
+            return true;
+
+        return parent::$_buffer->eof();
     }
 
     /**
@@ -243,7 +246,7 @@ class          Hoa_Xml_Element_ReadWrite
 
         if($length <= 0)
             throw new Hoa_Xml_Exception(
-                'Length must be greather than 0, given %d.', 0, $length);
+                'Length must be greather than 0, given %d.', 1, $length);
 
         if(null === parent::$_buffer) {
 
