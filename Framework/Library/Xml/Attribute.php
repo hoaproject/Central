@@ -74,6 +74,7 @@ class Hoa_Xml_Attribute {
      * @access  public
      * @param   string  $string    String that might represent attributes.
      * @return  void
+     * @throw   Hoa_Xml_Exception
      */
     public function __construct ( $string ) {
 

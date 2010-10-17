@@ -40,7 +40,7 @@ require_once 'Core.php';
 /**
  * Hoa_Xml_Element
  */
-import('Xml.Element');
+import('Xml.Element') and load();
 
 /**
  * Hoa_Xml_CssToXPath
@@ -50,7 +50,7 @@ import('Xml.CssToXPath');
 /**
  * Hoa_Stream_Io_Structural
  */
-import('Stream.Io.Structural');
+import('Stream.Io.Structural') and load();
 
 /**
  * Class Hoa_Xml_Element_Basic.

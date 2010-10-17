@@ -38,9 +38,14 @@
 require_once 'Core.php';
 
 /**
+ * Hoa_Xml_Exception
+ */
+import('Xml.Exception');
+
+/**
  * Hoa_Xml_Element
  */
-import('Xml.Element');
+import('Xml.Element') and load();
 
 /**
  * Class Hoa_Xml_Element_Concrete.
@@ -200,13 +205,14 @@ class          Hoa_Xml_Element_Concrete
      * @access  public
      * @param   Hoa_Xml_Element  $element    Abstract element.
      * @return  Hoa_Xml_Element_Concrete
-     * @throws  Hoa_Xml_Exception
+     * @throw   Hoa_Xml_Exception
      */
     public static function getConcreteElement ( Hoa_Xml_Element $element ) {
 
         if(false === $id = self::getAbstractElementId($element))
             throw new Hoa_Xml_Exception(
-                '…', 1);
+                'The concrete element %s has no concrete equivalent.',
+                1, $element->getName());
 
         return self::$_multiton[$id];
     }
@@ -234,7 +240,8 @@ class          Hoa_Xml_Element_Concrete
 
         if(false === $id = self::getAbstractElementId($element))
             throw new Hoa_Xml_Exception(
-                '…', 2);
+                'The concrete element %s has no concrete equivalent and we ' .
+                'cannot retrieve the super-root.', 2, $element->getName());
 
         return self::$_superRoots[$id];
     }
@@ -297,7 +304,7 @@ class          Hoa_Xml_Element_Concrete
      */
     public function __get ( $name ) {
 
-        if(false === array_key_exists($name, $this->_children))
+        if(!isset($this->_children[$name]))
             return null;
 
         return $this->_children[$name];

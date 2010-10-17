@@ -44,17 +44,17 @@ import('Xml.Exception');
 /**
  * Hoa_Xml_Element
  */
-import('Xml.Element');
+import('Xml.Element') and load();
 
 /**
  * Hoa_Stream_Composite
  */
-import('Stream.Composite');
+import('Stream.Composite') and load();
 
 /**
  * Hoa_Stream_Io_Structural
  */
-import('Stream.Io.Structural');
+import('Stream.Io.Structural') and load();
 
 /**
  * Class Hoa_Xml.
@@ -116,17 +116,22 @@ abstract class Hoa_Xml
                 $root = @simplexml_load_string($innerStream->readAll(), $stream);
 
             if(false === $root)
-                $root = simplexml_load_string(
-                    '<?xml version="1.0" encoding="utf-8"?' . ">\n\n" .
-                    '<handler>' . "\n" . '</handler>',
-                    $stream
-                );
+                if(!($innerStream instanceof Hoa_Stream_Io_Out))
+                    throw new Hoa_Xml_Exception(
+                        'Failed to open the XML document %s.',
+                        1, $innerStream->getStreamName());
+                else
+                    $root = simplexml_load_string(
+                        '<?xml version="1.0" encoding="utf-8"?' . ">\n\n" .
+                        '<handler>' . "\n" . '</handler>',
+                        $stream
+                    );
         }
 
         if(null === $root)
             throw new Hoa_Xml_Exception(
                 'Failed to understand %s as a XML stream.',
-                1, $streamName);
+                2, $streamName);
 
         $this->setStream($root);
         $this->setInnerStream($innerStream);
@@ -149,7 +154,7 @@ abstract class Hoa_Xml
         if(empty($this->_namespaces))
             throw new Hoa_Xml_Exception(
                 'The XML document %s must have a default namespace at least.',
-                2, $this->getInnerStream()->getStreamName());
+                3, $this->getInnerStream()->getStreamName());
 
         foreach($this->_namespaces as $prefix => $namespace) {
 
@@ -190,7 +195,7 @@ abstract class Hoa_Xml
         if(false === $prefix = array_search($namespace, $this->_namespaces))
             throw new Hoa_Xml_Exception(
                 'The namespace %s does not exist in the document %s.',
-                2, array($namespace, $this->getInnerStream()->getStreamName()));
+                4, array($namespace, $this->getInnerStream()->getStreamName()));
 
         $this->getStream()->registerXPathNamespace('__current_ns', $namespace);
 
@@ -203,10 +208,16 @@ abstract class Hoa_Xml
      * @access  public
      * @param   string  $namespace    Namespace.
      * @return  string
+     * @throw   Hoa_Xml_Exception
      */
     public function getPrefix ( $namespace ) {
 
-        return array_search($namespace, $this->_namespaces);
+        if(false === $prefix = array_search($namespace, $this->_namespaces))
+            throw new Hoa_Xml_Exception(
+                'The namespace %s does not exist in the document %s.',
+                5, array($namespace, $this->getInnerStream()->getStreamName()));
+
+        return $prefix;
     }
 
     /**
