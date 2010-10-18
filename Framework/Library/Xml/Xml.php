@@ -156,13 +156,19 @@ abstract class Hoa_Xml
                 'The XML document %s must have a default namespace at least.',
                 3, $this->getInnerStream()->getStreamName());
 
-        foreach($this->_namespaces as $prefix => $namespace) {
+        if(1 == count($this->_namespaces))
+            $stream->registerXPathNamespace(
+                '__current_ns',
+                current($this->_namespaces)
+            );
+        else
+            foreach($this->_namespaces as $prefix => $namespace) {
 
-            if('' == $prefix)
-                $prefix = '__current_ns';
+                if('' == $prefix)
+                    $prefix = '__current_ns';
 
-            $stream->registerXPathNamespace($prefix, $namespace);
-        }
+                $stream->registerXPathNamespace($prefix, $namespace);
+            }
 
         return;
     }
