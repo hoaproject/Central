@@ -216,7 +216,7 @@ class          Hoa_Xml_Element_Write
         if(false === $n = strpos($line, "\n"))
             return $this->write($line . "\n", strlen($line) + 1);
 
-        $n++;
+        ++$n;
 
         return $this->write(substr($line, 0, $n), $n);
     }
