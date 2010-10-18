@@ -81,6 +81,11 @@ require_once 'Parameter.php';
 require_once 'Protocol.php';
 
 /**
+ * Hoa_Core_Data
+ */
+require_once 'Data.php';
+
+/**
  * Hoa_Core_Event
  */
 require_once 'Event.php';
