@@ -90,7 +90,7 @@ class          Hoa_Xyl
      *
      * @var Hoa_Xyl array
      */
-    protected $_data     = array();
+    protected $_data     = null;
 
     /**
      * Concrete tree.
@@ -128,20 +128,20 @@ class          Hoa_Xyl
                 0, $stream->getStreamName());
 
         $this->useNamespace(self::NAMESPACE_ID);
+        $this->_data = new Hoa_Core_Data();
 
         return;
     }
 
     /**
-     * Add data to the data bucket.
+     * Get data.
      *
      * @access  public
-     * @param   array  $data    Data to add.
-     * @return  array
+     * @return  Hoa_Core_Data
      */
-    public function addData ( Array $data ) {
+    public function getData ( ) {
 
-        return $this->_data = array_merge_recursive($this->_data, $data);
+        return $this->_data;
     }
 
     /**
@@ -469,7 +469,9 @@ class          Hoa_Xyl
                 'Cannot compute the data binding before building the ' .
                 'concrete tree.', 4);
 
-        return $this->_concrete->computeDataBinding($this->_data);
+        $data = $this->getData()->toArray();
+
+        return $this->_concrete->computeDataBinding($data);
     } 
 
     /**

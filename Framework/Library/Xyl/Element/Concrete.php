@@ -127,10 +127,7 @@ abstract class Hoa_Xyl_Element_Concrete
             array_pop($explode);
 
             foreach($explode as $i => $part)
-                if(isset($handle[0][$part]))
-                    $handle = &$handle[0][$part];
-                elseif(isset($handle[$part]))
-                    $handle = &$handle[$part];
+                $handle = &$handle[0][$part];
         }
         else
             throw new Hoa_Xyl_Exception(
@@ -140,24 +137,11 @@ abstract class Hoa_Xyl_Element_Concrete
         $this->_bucket['current'] = 0;
         $this->_bucket['branche'] = $branche;
 
-        if(isset($handle[$branche])) {
+        if(null === $parent)
+            $this->_bucket['data'] = &$handle;
 
-            if(null === $parent)
-                $this->_bucket['data'] = array(0 => &$handle);
-
-            if(is_array($handle[$branche]))
-                foreach($this as $element)
-                    $element->computeDataBinding($handle[$branche], $this->_bucket);
-        }
-        elseif(isset($handle[0][$branche])) {
-
-            if(null === $parent)
-                $this->_bucket['data'] = &$handle;
-
-            if(is_array($handle[0][$branche]))
-                foreach($this as $element)
-                    $element->computeDataBinding($handle[0][$branche], $this->_bucket);
-        }
+        foreach($this as $element)
+            $element->computeDataBinding($handle[0][$branche], $this->_bucket);
 
         if($this instanceof Hoa_Xyl_Element_Executable)
             $this->execute();
@@ -184,9 +168,9 @@ abstract class Hoa_Xyl_Element_Concrete
      */
     public function getCurrentData ( ) {
 
-        $current = current($this->_bucket['data']);
-
-        return $current[$this->_bucket['branche']];
+        return $this->_bucket['data']
+                             [$this->_bucket['current']]
+                             [$this->_bucket['branche']];
     }
 
     /**
