@@ -79,6 +79,22 @@ class Hoa_Core_Data implements ArrayAccess {
     }
 
     /**
+     * Set a branch.
+     * Notice that it will always reach the (n+1)-th branch.
+     *
+     * @access  public
+     * @param   string  $name     Branch name.
+     * @param   mixed   $value    Branch value (scalar or array value).
+     * @return  Hoa_Core_Data
+     */
+    public function __set ( $name, $value ) {
+
+        $this->_temp = $name;
+
+        return $this->offsetSet(null, $value);
+    }
+
+    /**
      * Check if the n-th branch exists.
      *
      * @access  public
@@ -139,19 +155,6 @@ class Hoa_Core_Data implements ArrayAccess {
 
         if(null === $this->_temp)
             return;
-
-        if(true === is_array($value)) {
-
-            $handle = $this->_data[$this->_temp][$offset] = new self();
-
-            foreach($value as $key => $ii)
-                foreach($ii as $i => $value)
-                    $handle->__get($key)->offsetSet($i, $value);
-
-            $this->_temp = null;
-
-            return;
-        }
 
         if(null === $offset)
             $this->_data[$this->_temp][]        = $value;
