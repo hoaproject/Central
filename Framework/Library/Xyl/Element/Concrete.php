@@ -184,8 +184,9 @@ abstract class Hoa_Xyl_Element_Concrete
         if(!isset($this->_bucket['parent']))
             return;
 
-        $parent                  = &$this->_bucket['parent'];
-        $this->_bucket['data']    = &$parent['data'][$parent['current']][$parent['branche']];
+        $parent                   = &$this->_bucket['parent'];
+        $this->_bucket['data']    = &$parent['data'][$parent['current']]
+                                            [$parent['branche']];
         $this->_bucket['current'] = 0;
 
         if(!isset($this->_bucket['data'][0])) {
