@@ -119,7 +119,8 @@ class Hoa_Core_Data implements ArrayAccess {
             return $this->_data[$handle][$offset] = new self();
         }
 
-        if(null === $offset)
+        if(  null === $offset
+          || false === array_key_exists($offset, $this->_data[$handle]))
             return $this->_data[$handle][] = new self();
 
         return $this->_data[$handle][$offset];
