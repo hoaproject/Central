@@ -104,12 +104,12 @@ class          Hoa_Xml_Element_Basic
     }
 
     /**
-     * Select any element: *.
+     * Select any elements: *.
      *
      * @access  public
      * @return  array
      */
-    public function selectAnyElement ( ) {
+    public function selectAnyElements ( ) {
 
         self::$_buffer = null;
 
@@ -117,16 +117,16 @@ class          Hoa_Xml_Element_Basic
     }
 
     /**
-     * Select an element of type E: E.
+     * Select elements of type E: E.
      *
      * @access  public
      * @param   string  $E    Element E.
      * @return  array
      */
-    public function selectElement ( $E = null ) {
+    public function selectElements ( $E = null ) {
 
         if(null === $E)
-            return $this->selectAnyElement();
+            return $this->selectAnyElements();
 
         self::$_buffer = null;
 
@@ -134,25 +134,25 @@ class          Hoa_Xml_Element_Basic
     }
 
     /**
-     * Select an F element descendant of an E element: E F.
+     * Select F elements descendant of an E element: E F.
      *
      * @access  public
      * @param   string  $F    Element F.
      * @return  array
      */
-    public function selectDescendantElement ( $F = null ) {
+    public function selectDescendantElements ( $F = null ) {
 
-        return $this->selectElement($F);
+        return $this->selectElements($F);
     }
 
     /**
-     * Select an F element child of an E element: E > F.
+     * Select F elements children of an E element: E > F.
      *
      * @access  public
      * @param   string  $F    Element F.
      * @return  array
      */
-    public function selectChildElement ( $F = null ) {
+    public function selectChildElements ( $F = null ) {
 
         self::$_buffer = null;
 
@@ -183,13 +183,13 @@ class          Hoa_Xml_Element_Basic
     }
 
     /**
-     * Select an F element preceded by an E element: E ~ F.
+     * Select F elements preceded by an E element: E ~ F.
      *
      * @access  public
      * @param   string  $F    Element F.
      * @return  array
      */
-    public function selectSiblingElement ( $F = null ) {
+    public function selectSiblingElements ( $F = null ) {
 
         if(null === $F)
             $F = '*';
