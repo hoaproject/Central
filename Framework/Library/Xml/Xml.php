@@ -123,13 +123,13 @@ abstract class Hoa_Xml
 
                     $errors   = $this->getErrors();
                     $first    = array_shift($errors);
-                    $message  = '  * ' . trim(ucfirst($first->message)) .
+                    $message  = '  • ' . trim(ucfirst($first->message)) .
                                 ' (at line ' . $first->line .
                                 ', column ' . $first->column . ')';
 
                     foreach($errors as $error)
                         $message .= ';' . "\n" .
-                                    '  * ' . trim(ucfirst($error->message)) .
+                                    '  • ' . trim(ucfirst($error->message)) .
                                     ' (at line ' . $error->line .
                                     ', column ' . $error->column . ')';
 
@@ -148,7 +148,7 @@ abstract class Hoa_Xml
                             $i <= $m;
                             ++$i) {
 
-                            $message .= sprintf('%' . $foo . 'd', $i) . ' ';
+                            $message .= sprintf('%' . $foo . 'd', $i) . '. ';
 
                             if($i == $line)
                                 $message .= '➜ ';
@@ -168,7 +168,7 @@ abstract class Hoa_Xml
                 if(!($innerStream instanceof Hoa_Stream_Io_Out))
                     throw new Hoa_Xml_Exception(
                         'Failed to open the XML document %s.',
-                        1, $innerStream->getStreamName());
+                        2, $innerStream->getStreamName());
                 else
                     $root = simplexml_load_string(
                         '<?xml version="1.0" encoding="utf-8"?' . ">\n\n" .
@@ -181,7 +181,7 @@ abstract class Hoa_Xml
         if(null === $root)
             throw new Hoa_Xml_Exception(
                 'Failed to understand %s as a XML stream.',
-                2, $streamName);
+                3, $streamName);
 
         $this->setStream($root);
         $this->setInnerStream($innerStream);
@@ -204,7 +204,7 @@ abstract class Hoa_Xml
         if(empty($this->_namespaces))
             throw new Hoa_Xml_Exception(
                 'The XML document %s must have a default namespace at least.',
-                3, $this->getInnerStream()->getStreamName());
+                4, $this->getInnerStream()->getStreamName());
 
         if(1 == count($this->_namespaces))
             $stream->registerXPathNamespace(
@@ -251,7 +251,7 @@ abstract class Hoa_Xml
         if(false === $prefix = array_search($namespace, $this->_namespaces))
             throw new Hoa_Xml_Exception(
                 'The namespace %s does not exist in the document %s.',
-                4, array($namespace, $this->getInnerStream()->getStreamName()));
+                5, array($namespace, $this->getInnerStream()->getStreamName()));
 
         $this->getStream()->registerXPathNamespace('__current_ns', $namespace);
 
@@ -271,7 +271,7 @@ abstract class Hoa_Xml
         if(false === $prefix = array_search($namespace, $this->_namespaces))
             throw new Hoa_Xml_Exception(
                 'The namespace %s does not exist in the document %s.',
-                5, array($namespace, $this->getInnerStream()->getStreamName()));
+                6, array($namespace, $this->getInnerStream()->getStreamName()));
 
         return $prefix;
     }
