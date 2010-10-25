@@ -150,7 +150,6 @@ class          Hoa_Xyl
      * @access  protected
      * @return  bool
      * @throw   Hoa_Xml_Exception
-     * @TODO    Maybe overlay should support <?xyl-use?>?
      */
     protected function computeUse ( ) {
 
@@ -301,7 +300,7 @@ class          Hoa_Xyl
                     '%s must only contain <overlay> (and some <?xyl-overlay) ' .
                     'elements.', 3, $href);
 
-            foreach($fragment->selectChildElement() as $e => $element)
+            foreach($fragment->selectChildElements() as $e => $element)
                 $this->_computeOverlay(
                     $mowgli->documentElement,
                     $mowgli->importNode($element->readDOM(), true)
