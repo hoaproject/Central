@@ -107,6 +107,8 @@ abstract class Hoa_Xml
             throw new Hoa_Xml_Exception(
                 'SimpleXML must be enable for using %s.', 0, get_class($this));
 
+        libxml_use_internal_errors(true);
+
         $streamName = $innerStream->getStreamName();
         $root       = @simplexml_load_file($streamName, $stream);
 
@@ -115,7 +117,54 @@ abstract class Hoa_Xml
             if($innerStream instanceof Hoa_Stream_Io_In)
                 $root = @simplexml_load_string($innerStream->readAll(), $stream);
 
-            if(false === $root)
+            if(false === $root) {
+
+                if(true === $this->hasError()) {
+
+                    $errors   = $this->getErrors();
+                    $first    = array_shift($errors);
+                    $message  = '  * ' . trim(ucfirst($first->message)) .
+                                ' (at line ' . $first->line .
+                                ', column ' . $first->column . ')';
+
+                    foreach($errors as $error)
+                        $message .= ';' . "\n" .
+                                    '  * ' . trim(ucfirst($error->message)) .
+                                    ' (at line ' . $error->line .
+                                    ', column ' . $error->column . ')';
+
+                    $message .= '.' . "\n";
+                    $xml      = explode("\n", $innerStream->readAll());
+
+                    if(!empty($xml[0])) {
+
+                        $message .= "\n" . 'You should take a look at this ' .
+                                    'piece of code: ' . "\n";
+                        $lines    = count($xml) - 1;
+                        $line     = $first->line;
+                        $foo      = strlen((string) ($line + 3));
+
+                        for($i = max(1, $line - 3), $m = min($lines, $line + 3);
+                            $i <= $m;
+                            ++$i) {
+
+                            $message .= sprintf('%' . $foo . 'd', $i) . ' ';
+
+                            if($i == $line)
+                                $message .= '➜ ';
+                            else
+                                $message .= '  ';
+
+                            $message .= $xml[$i - 1] . "\n";
+                        }
+                    }
+
+                    throw new Hoa_Xml_Exception(
+                        'Errors occured while parsing the XML document %s:' .
+                        "\n" . '%s',
+                        1, array($innerStream->getStreamName(), $message));
+                }
+
                 if(!($innerStream instanceof Hoa_Stream_Io_Out))
                     throw new Hoa_Xml_Exception(
                         'Failed to open the XML document %s.',
@@ -126,6 +175,7 @@ abstract class Hoa_Xml
                         '<handler>' . "\n" . '</handler>',
                         $stream
                     );
+            }
         }
 
         if(null === $root)
@@ -595,5 +645,29 @@ abstract class Hoa_Xml
         unset($handle[$offset]);
 
         return;
+    }
+
+    /**
+     * Whether an error occured or not.
+     *
+     * @access  public
+     * @return  boolean
+     */
+    public function hasError ( ) {
+
+        $errors = $this->getErrors();
+
+        return !empty($errors);
+    }
+
+    /**
+     * Get all errors (as an array of libXMLError structures).
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getErrors ( ) {
+
+        return libxml_get_errors();
     }
 }
