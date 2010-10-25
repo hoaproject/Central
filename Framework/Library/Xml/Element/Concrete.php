@@ -158,7 +158,7 @@ class          Hoa_Xml_Element_Concrete
         $this->_element      = $element;
         $this->_superRoot    = $superRoot;
 
-        foreach($element->selectChildElement() as $child) {
+        foreach($element->selectChildElements() as $child) {
 
             $name = $child->getName();
 

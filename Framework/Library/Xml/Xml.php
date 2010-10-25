@@ -252,50 +252,50 @@ abstract class Hoa_Xml
     }
 
     /**
-     * Select any element: *.
+     * Select any elements: *.
      *
      * @access  public
      * @return  array
      */
-    public function selectAnyElement ( ) {
+    public function selectAnyElements ( ) {
 
-        return $this->getStream()->selectAnyElement();
+        return $this->getStream()->selectAnyElements();
     }
 
     /**
-     * Select an element of type E: E.
+     * Select elements of type E: E.
      *
      * @access  public
      * @param   string  $E    Element E.
      * @return  array
      */
-    public function selectElement ( $E = null ) {
+    public function selectElements ( $E = null ) {
 
-        return $this->getStream()->selectElement($E);
+        return $this->getStream()->selectElements($E);
     }
 
     /**
-     * Select an F element descendant of an E element: E F.
+     * Select F elements descendant of an E element: E F.
      *
      * @access  public
      * @param   string  $F    Element F.
      * @return  array
      */
-    public function selectDescendantElement ( $F = null ) {
+    public function selectDescendantElements ( $F = null ) {
 
-        return $this->getStream()->selectDescendantElement($F);
+        return $this->getStream()->selectDescendantElements($F);
     }
 
     /**
-     * Select an F element child of an E element: E > F.
+     * Select F elements children of an E element: E > F.
      *
      * @access  public
      * @param   string  $F    Element F.
      * @return  array
      */
-    public function selectChildElement ( $F = null ) {
+    public function selectChildElements ( $F = null ) {
 
-        return $this->getStream()->selectChildElement($F);
+        return $this->getStream()->selectChildElements($F);
     }
 
     /**
@@ -311,15 +311,15 @@ abstract class Hoa_Xml
     }
 
     /**
-     * Select an F element preceded by an E element: E ~ F.
+     * Select F elements preceded by an E element: E ~ F.
      *
      * @access  public
      * @param   string  $F    Element F.
      * @return  array
      */
-    public function selectSiblingElement ( $F = null ) {
+    public function selectSiblingElements ( $F = null ) {
 
-        return $this->getStream()->selectSiblingElement($F);
+        return $this->getStream()->selectSiblingElements($F);
     }
 
     /**
