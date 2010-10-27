@@ -429,12 +429,7 @@ abstract class Hoa_Xml
      */
     public function readAttributes ( ) {
 
-        $handle = (array) $this->getStream()->attributes();
-
-        if(!isset($handle['@attributes']))
-            return array();
-
-        return $handle['@attributes'];
+        return $this->getStream()->readAttributes();
     }
 
     /**
@@ -446,12 +441,7 @@ abstract class Hoa_Xml
      */
     public function readAttribute ( $name ) {
 
-        $attributes = $this->readAttributes();
-
-        if(false === array_key_exists($name, $attributes))
-            return null;
-
-        return $attributes[$name];
+        return $this->getStream()->readAttribute($name);
     }
 
     /**
@@ -463,7 +453,7 @@ abstract class Hoa_Xml
      */
     public function attributeExists ( $name ) {
 
-        return true === array_key_exists($name, $this->readAttributes());
+        return $this->getStream()->attributeExists($name);
     }
 
     /**
@@ -474,12 +464,7 @@ abstract class Hoa_Xml
      */
     public function readAttributesAsList ( ) {
 
-        $attributes = $this->readAttributes();
-
-        foreach($attributes as $name => &$value)
-            $value = explode(' ', $value);
-
-        return $attributes;
+        return $this->getStream()->readAttributesAsList();
     }
 
     /**
@@ -491,7 +476,7 @@ abstract class Hoa_Xml
      */
     public function readAttributeAsList ( $name ) {
 
-        return explode(' ', $this->readAttribute($name));
+        return $this->getStream()->readAttributeAsList($name);
     }
 
     /**
@@ -502,12 +487,7 @@ abstract class Hoa_Xml
      */
     public function readAttributesAsString ( ) {
 
-        $out = null;
-
-        foreach($this->readAttributes() as $name => $value)
-            $out .= ' ' . $name . '="' . str_replace('"', '\"', $value) . '"';
-
-        return $out;
+        return $this->getStream()->readAttributesAsString();
     }
 
     /**
@@ -529,7 +509,7 @@ abstract class Hoa_Xml
      */
     public function readDOM ( ) {
 
-        return dom_import_simplexml($this->getStream());
+        return $this->getStream()->readDOM();
     }
 
     /**
