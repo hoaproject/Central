@@ -43,19 +43,30 @@ and
 /**
  * Some usefull constants.
  */
-!defined('SUCCEED')        and define('SUCCEED',   true);
-!defined('FAILED')         and define('FAILED',    false);
-!defined('DS')             and define('DS'    ,    DIRECTORY_SEPARATOR);
-!defined('PS')             and define('PS'    ,    PATH_SEPARATOR);
-!defined('CRLF')           and define('CRLF'  ,    "\r\n");
-!defined('OS_WIN')         and define('OS_WIN',    !strncasecmp(PHP_OS, 'win', 3));
-!defined('S_64_BITS')      and define('S_64_BITS', PHP_INT_SIZE == 8);
-!defined('S_32_BITS')      and define('S_32_BITS', !S_64_BITS);
+!defined('SUCCEED')      and define('SUCCEED',      true);
+!defined('FAILED')       and define('FAILED',       false);
+!defined('DS')           and define('DS',           DIRECTORY_SEPARATOR);
+!defined('PS')           and define('PS',           PATH_SEPARATOR);
+!defined('CRLF')         and define('CRLF',         "\r\n");
+!defined('OS_WIN')       and define('OS_WIN',       !strncasecmp(PHP_OS, 'win', 3));
+!defined('S_64_BITS')    and define('S_64_BITS',    PHP_INT_SIZE == 8);
+!defined('S_32_BITS')    and define('S_32_BITS',    !S_64_BITS);
+!defined('void')         and define('void',         (unset) null);
+!defined('_public')      and define('_public',      1);
+!defined('_protected')   and define('_protected',   2);
+!defined('_private')     and define('_private',     4);
+!defined('_static')      and define('_static',      8);
+!defined('_abstract')    and define('_abstract',    16);
+!defined('_pure')        and define('_pure',        32);
+!defined('_final')       and define('_final',       64);
+!defined('_dynamic')     and define('_dynamic',     ~_static);
+!defined('_concrete')    and define('_concrete',    ~_abstract);
+!defined('_overridable') and define('_overridable', ~_final);
+
 !defined('PHP_VERSION_ID') and $v = explode('.', PHP_VERSION)
                            and define('PHP_VERSION_ID',   $v[0] * 10000
                                                         + $v[1] * 100
                                                         + $v[2]);
-!defined('void')           and define('void',      (unset) null);
 
 /**
  * Hoa constants.
