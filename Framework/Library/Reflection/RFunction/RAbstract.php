@@ -53,6 +53,11 @@ import('Reflection.Wrapper');
 import('Reflection.RParameter');
 
 /**
+ * Hoa_Visitor_Element
+ */
+import('Visitor.Element');
+
+/**
  * Class Hoa_Reflection_RFunction_RAbstract.
  *
  * Extending ReflectionMethod and ReflectionFunction capacities.
@@ -67,7 +72,8 @@ import('Reflection.RParameter');
  */
 
 abstract class Hoa_Reflection_RFunction_RAbstract
-    extends    Hoa_Reflection_Wrapper {
+    extends    Hoa_Reflection_Wrapper
+    implements Hoa_Visitor_Element {
 
     /**
      * Function file.
@@ -351,5 +357,20 @@ abstract class Hoa_Reflection_RFunction_RAbstract
                 0, get_class($fragment));
 
         return;
+    }
+
+    /**
+     * Accept a visitor.
+     *
+     * @access  public
+     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   mixed              &$handle    Handle (reference).
+     * @param   mixed              $eldnah     Handle (no reference).
+     * @return  mixed
+     */
+    public function accept ( Hoa_Visitor_Visit $visitor,
+                             &$handle = null, $eldnah = null ) {
+
+        return $visitor->visit($this, $handle, $eldnah);
     }
 }

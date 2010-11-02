@@ -53,6 +53,11 @@ import('Reflection.Wrapper');
 import('Reflection.RFunction.RMethod');
 
 /**
+ * Hoa_Visitor_Element
+ */
+import('Visitor.Element');
+
+/**
  * Class Hoa_Reflection_RClass.
  *
  * Extending ReflectionClass capacities.
@@ -66,7 +71,9 @@ import('Reflection.RFunction.RMethod');
  * @subpackage  Hoa_Reflection_RClass
  */
 
-class Hoa_Reflection_RClass extends Hoa_Reflection_Wrapper {
+class          Hoa_Reflection_RClass
+    extends    Hoa_Reflection_Wrapper
+    implements Hoa_Visitor_Element {
 
     /**
      * Class file.
@@ -188,48 +195,17 @@ class Hoa_Reflection_RClass extends Hoa_Reflection_Wrapper {
     }
 
     /**
-     * Pretty-printer.
+     * Accept a visitor.
      *
      * @access  public
-     * @return  string
+     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   mixed              &$handle    Handle (reference).
+     * @param   mixed              $eldnah     Handle (no reference).
+     * @return  mixed
      */
-    public function __toString ( ) {
+    public function accept ( Hoa_Visitor_Visit $visitor,
+                             &$handle = null, $eldnah = null ) {
 
-        $out = $this->getDocComment() . "\n";
-
-        if(true === $this->isFinal())
-            $out .= 'final ';
-
-        if(true === $this->isAbstract())
-            $out .= 'abstract ';
-
-        if(true === $this->isInterface())
-            $out .= 'interface ';
-        else
-            $out .= 'class ';
-
-        $out        .= $this->getName() . ' ';
-        $parent      = $this->getParentClass();
-        $interfaces  = $this->getInterfaceNames();
-
-        if(!empty($parent))
-            $out .= 'extends ' . $parent . ' ';
-
-        if(!empty($interfaces))
-            $out .= 'implements ' . implode($interface, ', ') . ' ';
-
-        $out .= '{' . "\n";
-
-        // We lost API documentation of constants :-(.
-        foreach($this->getConstants() as $name => $value)
-            $out .= '    const ' . $name . ' = ' .
-                    var_export($value, true) . ";\n";
-
-        // PROPERTIES!!
-
-        foreach($this->getMethods() as $name => $method)
-            $out .= $method . "\n";
-
-        return $out . '}';
+        return $visitor->visit($this, $handle, $eldnah);
     }
 }

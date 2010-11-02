@@ -48,6 +48,11 @@ import('Reflection.Wrapper');
 import('Reflection.RClass');
 
 /**
+ * Hoa_Visitor_Element
+ */
+import('Visitor.Element');
+
+/**
  * Class Hoa_Reflection_RParameter.
  *
  * Extending ReflectionParameter capacities.
@@ -61,7 +66,9 @@ import('Reflection.RClass');
  * @subpackage  Hoa_Reflection_RParameter
  */
 
-class Hoa_Reflection_RParameter extends Hoa_Reflection_Wrapper {
+class          Hoa_Reflection_RParameter
+    extends    Hoa_Reflection_Wrapper
+    implements Hoa_Visitor_Element {
 
     /**
      * Parameter type (a string or an object).
@@ -361,26 +368,17 @@ class Hoa_Reflection_RParameter extends Hoa_Reflection_Wrapper {
     }
 
     /**
-     * Pretty-printer.
+     * Accept a visitor.
      *
      * @access  public
-     * @return  string
+     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   mixed              &$handle    Handle (reference).
+     * @param   mixed              $eldnah     Handle (no reference).
+     * @return  mixed
      */
-    public function __toString ( ) {
+    public function accept ( Hoa_Visitor_Visit $visitor,
+                             &$handle = null, $eldnah = null ) {
 
-        $out = null;
-
-        if(true === $this->hasType())
-            $out .= $this->getTypeAsString() . ' ';
-
-        if(true === $this->getReference())
-            $out .= '&';
-
-        $out .= '$' . $this->getName();
-
-        if(true === $this->isOptional())
-            $out .= ' = ' . var_export($this->getDefaultValue(), true);
-
-        return $out;
+        return $visitor->visit($this, $handle, $eldnah);
     }
 }
