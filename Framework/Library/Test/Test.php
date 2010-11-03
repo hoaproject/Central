@@ -96,15 +96,18 @@ class Hoa_Test implements Hoa_Core_Parameterizable {
      * @param   array    $parameters    Parameters.
      * @return  void
      */
-    private function __construct ( Array $parameters = array() ) {
+    public function __construct ( Array $parameters = array() ) {
 
         $this->_parameters = new Hoa_Core_Parameter(
             $this,
             array(),
             array(
+                'convict' => null,
+                /*
                 'convict.directory'        => null,
                 'convict.recursive'        => true,
                 'convict.result'           => array(),
+                */
 
                 'root'                     => 'hoa://Data/Variable/Test/',
 
@@ -112,8 +115,13 @@ class Hoa_Test implements Hoa_Core_Parameterizable {
                 'revision'                 => '(:_YmdHis:)/',
 
                 'incubator'                => '(:%repository:)(:%revision:)Incubator/',
+                'instrumented'             => '(:%repository:)(:%revision:)Instrumented/',
+                'sampler'                  => '(:%repository:)(:%revision:)Sampler/',
+
+                /*
                 'ordeal.oracle'            => '(:%repository:)(:%revision:)Ordeal/Oracle/',
                 'ordeal.battleground'      => '(:%repository:)(:%revision:)Ordeal/Battleground/',
+                */
                 'oracle.eyes.methodPrefix' => '__hoa_',
                 'dictionary'               => '(:%root:)Dictionary/',
                 'maxtry'                   => 64
@@ -121,6 +129,22 @@ class Hoa_Test implements Hoa_Core_Parameterizable {
         );
 
         $this->setParameters($parameters);
+    }
+
+    public function hopla ( $p ) {
+
+        import('Test.Orchestrate');
+        $this->setParameter('convict', $p);
+        $orchestrate = new Hoa_Test_Orchestrate($this->_parameters);
+        $this->_parameters->shareWith(
+            $this,
+            $orchestrate,
+            Hoa_Core_Parameter::PERMISSION_READ
+        );
+
+        $orchestrate->compute();
+
+        return;
     }
 
     /**
