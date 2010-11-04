@@ -144,7 +144,7 @@ class PraspelCommand extends Hoa_Console_Command_Abstract {
                         break;
                     }
 
-                    $type = $variable->chooseOneType();
+                    $type = $variable->chooseOneDomain();
                     $type->clear()->randomize();
                     var_dump($type->getValue());
                   break;
@@ -172,7 +172,7 @@ class PraspelCommand extends Hoa_Console_Command_Abstract {
                     }
 
                     $variable = $praspel->getClause('requires')->getVariable('i');
-                    $type     = $variable->chooseOneType();
+                    $type     = $variable->chooseOneDomain();
                     $type->randomize();
                     var_dump($type->getValue());
             }
