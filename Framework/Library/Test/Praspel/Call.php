@@ -159,8 +159,8 @@ class Hoa_Test_Praspel_Call {
 
         foreach($freeVariables as $i => $freeVariable) {
 
-            $freeVariable->chooseOneType()->clear()->randomize();
-            $values[] = $freeVariable->getChoosenType()->getValue();
+            $freeVariable->chooseOneDomain()->clear()->randomize();
+            $values[] = $freeVariable->getChoosenDomain()->getValue();
         }
 
         $this->setValues($values);

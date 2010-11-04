@@ -50,7 +50,7 @@ import('Test.Praspel.~');
 /**
  * Hoa_Compiler_Ll1
  */
-import('Compiler.Ll1');
+import('Compiler.Ll1') and load();
 
 /**
  * Class Hoa_Test_Praspel_Compiler.
@@ -116,7 +116,7 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                 array(
                     '#and',        // &
                     ':',           // :
-                    '#typeof'      // to
+                    '#domainof'    // do
                 ),
 
                 // 3. List.
@@ -138,7 +138,7 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                     ')'            // )
                 ),
 
-                // 6. Types.
+                // 6. Domains.
                 array(
                     '#or',         // or
                     '#\w+',        // id
@@ -191,8 +191,8 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                 array(
                      __ , // error
                     'GO', // start
-                    'TY', // type
-                    'TO'  // typeof
+                    'DM', // domain
+                    'DO'  // domainof
                 ),
 
                 // 3. List.
@@ -216,7 +216,7 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                     'OK'  // terminal
                 ),
 
-                // 6. Types.
+                // 6. Domains.
                 array(
                      __ , // error
                     'GO', // start
@@ -267,7 +267,7 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                 array('GO'),
 
                 // 2. Expressions.
-                array('GO', 'TY', 'TO'),
+                array('GO', 'DM', 'DO'),
 
                 // 3. List.
                 array('GO', 'CO'),
@@ -278,7 +278,7 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                 // 5. Variable.
                 array('OK'),
 
-                // 6. Types.
+                // 6. Domains
                 array('GO', 'OK'),
 
                 // 7. Arguments.
@@ -308,11 +308,11 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
 
                 // 2. Expressions.
                 array(
-                    /*               &     :    to
+                    /*               &     :    do
                     /* __ */ array( __ ,  __ ,  __ ),
-                    /* GO */ array( __ , 'TY', 'TO'),
-                    /* TY */ array('GO',  __ ,  __ ),
-                    /* TO */ array('GO',  __ ,  __ )
+                    /* GO */ array( __ , 'DM', 'DO'),
+                    /* DM */ array('GO',  __ ,  __ ),
+                    /* DO */ array('GO',  __ ,  __ )
                 ),
 
                 // 3. List.
@@ -337,7 +337,7 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                     /* OK */ array( __ ,  __ ,  __ ,  __ )
                 ),
 
-                // 6. Types.
+                // 6. Domains.
                 array(
                     /*              or    id     (    )
                     /* __ */ array( __ ,  __ ,  __ ,  __ ),
@@ -401,11 +401,11 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
 
                 // 2. Expressions.
                 array(
-                    /*              &    :   to
+                    /*              &    :   do
                     /* __ */ array( 0 ,  0 ,  0 ),
                     /* GO */ array( 5 , ':', 'd'),
-                    /* TY */ array('&',  6 ,  0 ),
-                    /* TO */ array('D',  0 ,  5 )
+                    /* DM */ array('&',  6 ,  0 ),
+                    /* DO */ array('D',  0 ,  5 )
                 ),
 
                 // 3. List.
@@ -431,7 +431,7 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                     /* OK */ array( 0 ,  0 ,  0 ,  0 )
                 ),
 
-                // 6. Types.
+                // 6. Domains.
                 array(
                     /*             or   id    (    )
                     /* __ */ array( 0 ,  0 ,  0 ,  0 ),
@@ -488,7 +488,7 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                 'List',
                 'Extend',
                 'Variable',
-                'Types',
+                'Domains',
                 'Arguments',
                 'Array',
                 'Pairs',
@@ -529,7 +529,7 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
               break;
 
             // variable:
-            // variable typeof
+            // variable domainof
             case ':':
             case 'd':
                 $this->_current = $this->_current->variable(
@@ -538,15 +538,15 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                 unset($this->buffers[0]);
               break;
 
-            // variable: type(
+            // variable: domain(
             case 'y':
-                $this->_current = $this->_current->isTypedAs(
+                $this->_current = $this->_current->belongsTo(
                     $this->buffers[1]
                 );
                 unset($this->buffers[1]);
               break;
 
-            // variable: type(…)
+            // variable: domain(…)
             case 'Y':
                 if(isset($this->buffers[3])) {
 
@@ -562,27 +562,27 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                 $this->_current = $this->_current->_ok();
               break;
 
-            // variable: type([
+            // variable: domain([
             case '[':
                 $this->_current = $this->_current->withArray()->from();
               break;
 
-            // variable: type([…,
+            // variable: domain([…,
             case ',':
                 $this->_current = $this->_current->from();
               break;
 
-            // variable: type([… to
+            // variable: domain([… to
             case 'to':
                 $this->_current = $this->_current->to();
               break;
 
-            // variable: type([…]
+            // variable: domain([…]
             case ']':
                 $this->_current = $this->_current->end();
               break;
 
-            // variable: type(…,
+            // variable: domain(…,
             case 'c':
                 if(ctype_digit($this->buffers[3]))
                     $this->buffers[3] = (int) $this->buffers[3];
@@ -593,23 +593,23 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                 unset($this->buffers[3]);
               break;
 
-            // variable: type() or
+            // variable: domain() or
             case '|':
                 $this->_current = $this->_current->_or;
               break;
 
-            // variable: type() and
+            // variable: domain() and
             case '&':
                 $this->_current = $this->_current->_and;
               break;
 
-            // variable typeof variable and
-            // variable typeof variable;
+            // variable domainof variable and
+            // variable domainof variable;
             case 'D':
                 if(!isset($this->buffers[0]))
                     break;
 
-                $this->_current = $this->_current->hasTheSameTypeAs(
+                $this->_current = $this->_current->hasTheSameDomainAs(
                     $this->buffers[0]
                 );
                 $this->_current = $this->_current->_and;

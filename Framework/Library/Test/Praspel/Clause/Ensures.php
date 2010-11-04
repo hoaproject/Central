@@ -45,7 +45,7 @@ import('Test.Praspel.Exception');
 /**
  * Hoa_Test_Praspel_Clause_Contract
  */
-import('Test.Praspel.Clause.Contract');
+import('Test.Praspel.Clause.Contract') and load();
 
 /**
  * Class Hoa_Test_Praspel_Clause_Ensures.
@@ -77,7 +77,7 @@ class Hoa_Test_Praspel_Clause_Ensures extends Hoa_Test_Praspel_Clause_Contract {
 
         if(0 !== preg_match('#\\\old\(\s*\w+\s*\)#i', $name, $matches))
             throw new Hoa_Test_Praspel_Exception(
-                'Redefining types of an old variable (%s) in an ensures ' .
+                'Redefining domains of an old variable (%s) in an @ensures ' .
                 'clause has no sens.',
                 0, $name);
 
@@ -87,7 +87,7 @@ class Hoa_Test_Praspel_Clause_Ensures extends Hoa_Test_Praspel_Clause_Contract {
            || false === $parent->getClause('requires')->variableExists($name))
            throw new Hoa_Test_Praspel_Exception(
             'Cannot ensure a property on the non-existing variable %s.',
-            0, $name);
+            1, $name);
 
         return parent::variable($name);
     }

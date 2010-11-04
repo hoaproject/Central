@@ -45,7 +45,7 @@ import('Test.Praspel.Exception');
 /**
  * Hoa_Test_Praspel_Clause
  */
-import('Test.Praspel.Clause');
+import('Test.Praspel.Clause') and load();
 
 /**
  * Class Hoa_Test_Praspel_Clause_Throwable.

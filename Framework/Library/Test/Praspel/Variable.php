@@ -43,9 +43,9 @@ require_once 'Core.php';
 import('Test.Praspel.Exception');
 
 /**
- * Hoa_Test_Praspel_TypeDisjunction
+ * Hoa_Test_Praspel_DomainDisjunction
  */
-import('Test.Praspel.TypeDisjunction');
+import('Test.Praspel.DomainDisjunction') and load();
 
 /**
  * Hoa_Test_Urg
@@ -66,7 +66,7 @@ import('Test.Urg.~');
  * @subpackage  Hoa_Test_Praspel_Variable
  */
 
-class Hoa_Test_Praspel_Variable extends Hoa_Test_Praspel_TypeDisjunction {
+class Hoa_Test_Praspel_Variable extends Hoa_Test_Praspel_DomainDisjunction {
 
     /**
      * Parent (here: clause).
@@ -83,7 +83,7 @@ class Hoa_Test_Praspel_Variable extends Hoa_Test_Praspel_TypeDisjunction {
     protected $_name    = null;
 
     /**
-     * Choosen type.
+     * Choosen domain.
      *
      * @var Hoa_Test_Urg_Type_Interface_Type object
      */
@@ -132,23 +132,23 @@ class Hoa_Test_Praspel_Variable extends Hoa_Test_Praspel_TypeDisjunction {
     }
 
     /**
-     * Choose one type.
+     * Choose one domain.
      *
      * @access  public
      * @return  Hoa_Test_Urg_Type_Interface_Type
      */
-    public function chooseOneType ( ) {
+    public function chooseOneDomain ( ) {
 
-        $i = Hoa_Test_Urg::Ud(0, count($this->_types) - 1);
-        reset($this->_types);
+        $i = Hoa_Test_Urg::Ud(0, count($this->_domains) - 1);
+        reset($this->_domains);
 
-        $type = null;
+        $domain = null;
 
-        foreach($this->_types as $name => $type)
+        foreach($this->_domains as $name => $domain)
             if(0 === $i--)
                 break;
 
-        return $this->_choosen = $type;
+        return $this->_choosen = $domain;
     }
 
     /**
@@ -159,7 +159,7 @@ class Hoa_Test_Praspel_Variable extends Hoa_Test_Praspel_TypeDisjunction {
      * @return  Hoa_Test_Praspel_Variable
      * @throws  Hoa_Test_Praspel_Exception
      */
-    public function hasTheSameTypeAs ( $name ) {
+    public function hasTheSameDomainAs ( $name ) {
 
         $context = $this->getParent();
 
@@ -167,7 +167,7 @@ class Hoa_Test_Praspel_Variable extends Hoa_Test_Praspel_TypeDisjunction {
 
             if($name[0] == '\\')
                 throw new Hoa_Test_Praspel_Exception(
-                    'Constructors are not allowed in “requires” clause, given %s.',
+                    'Constructors are not allowed in a @requires clause, given %s.',
                     0, $name);
 
             $context = $this->getParent();
@@ -176,7 +176,7 @@ class Hoa_Test_Praspel_Variable extends Hoa_Test_Praspel_TypeDisjunction {
 
             if($name == '\result')
                 throw new Hoa_Test_Praspel_Exception(
-                    'The operator “typeof” is not commutative. ' .
+                    'The operator “domainof” is not commutative. ' .
                     '\result must be in the left position.', 1);
 
             if(0 !== preg_match('#\\\old\(\s*(\w+)\s*\)#i', $name, $matches)) {
@@ -198,13 +198,13 @@ class Hoa_Test_Praspel_Variable extends Hoa_Test_Praspel_TypeDisjunction {
                 'Cannot ensure a property on the non-existing variable %s.',
                 3, $name);
 
-        $type = $context->getVariable($name)->getChoosenType();
+        $domain = $context->getVariable($name)->getChoosenDomain();
 
-        if(null === $type)
+        if(null === $domain)
             return $this;
 
-        if(false === $this->isTypeDeclared($type->getName()))
-            $this->_types[$type->getName()] = $type;
+        if(false === $this->isBelongingTo($domain->getName()))
+            $this->_domains[$domain->getName()] = $domain;
 
         return $this;
     }
@@ -236,15 +236,15 @@ class Hoa_Test_Praspel_Variable extends Hoa_Test_Praspel_TypeDisjunction {
     }
 
     /**
-     * Get choosen type.
+     * Get choosen domain.
      *
      * @access  public
      * @return  Hoa_Test_Urg_Type_Interface_Type
      */
-    public function getChoosenType ( ) {
+    public function getChoosenDomain ( ) {
 
         if(null === $this->_choosen)
-            $this->chooseOneType();
+            $this->chooseOneDomain();
 
         return $this->_choosen;
     }

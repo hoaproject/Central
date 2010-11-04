@@ -45,7 +45,7 @@ import('Test.Praspel.Exception');
 /**
  * Hoa_Test_Praspel_Variable
  */
-import('Test.Praspel.Variable');
+import('Test.Praspel.Variable') and load();
 
 /**
  * Class Hoa_Test_Praspel_Constructor_Old.
@@ -73,8 +73,8 @@ class Hoa_Test_Praspel_Constructor_Old extends Hoa_Test_Praspel_Variable {
 
         $out = '        \old(' . $this->getName() . ")\n";
 
-        foreach($this->getTypes() as $i => $type)
-            $out .= '            ' . $type->getName() . "\n";
+        foreach($this->getDomains() as $i => $domain)
+            $out .= '            ' . $domain->getName() . "\n";
 
         return $out;
     }

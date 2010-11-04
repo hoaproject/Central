@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_Type
+ * @subpackage  Hoa_Test_Praspel_Domain
  *
  */
 
@@ -43,17 +43,12 @@ require_once 'Core.php';
 import('Test.Praspel.Exception');
 
 /**
- * Hoa_Test_Praspel
+ * Hoa_Test_Praspel_ArrayDescription
  */
-import('Test.Praspel.~');
+import('Test.Praspel.ArrayDescription');
 
 /**
- * Hoa_Test_Praspel_TypeArray
- */
-import('Test.Praspel.TypeArray');
-
-/**
- * Class Hoa_Test_Praspel_Type.
+ * Class Hoa_Test_Praspel_Domain.
  *
  * .
  *
@@ -63,63 +58,63 @@ import('Test.Praspel.TypeArray');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_Type
+ * @subpackage  Hoa_Test_Praspel_Domain
  */
 
-class Hoa_Test_Praspel_Type {
+class Hoa_Test_Praspel_Domain {
 
     /**
-     * Parent (here: variable or type).
+     * Parent (here: variable or edomain).
      *
      * @var Hoa_Test_Praspel_Variable object
      */
     protected $_parent        = null;
 
     /**
-     * Type.
+     * Domain.
      *
      * @var Hoa_Test_Urg_Type_Interface_Type object
      */
-    protected $_type          = null;
+    protected $_domain        = null;
 
     /**
      * Type's name.
      *
-     * @var Hoa_Test_Praspel_Type string
+     * @var Hoa_Test_Praspel_Domain string
      */
     protected $_name          = null;
 
     /**
      * Arguments.
      *
-     * @var Hoa_Test_Praspel_Type array
+     * @var Hoa_Test_Praspel_Domain array
      */
     protected $_arguments     = array();
 
     /**
      * Current defining argument.
-     * Yes, it is a public access, but we have no choice…
+     * Yes, it is a public access, but we have no choice… It should be friend.
      *
-     * @var Hoa_Test_Praspel_Type mixed
+     * @var Hoa_Test_Praspel_Domain mixed
      */
     public $_currentArgument = null;
 
     /**
-     * Go forward to set the next argument on the current type (and carry the
-     * current used type).
+     * Go forward to set the next argument on the current domain (and carry the
+     * current used domain).
      *
-     * @var Hoa_Test_Praspel_Type object
+     * @var Hoa_Test_Praspel_Domain object
      */
     public $_comma            = null;
 
 
 
     /**
-     * Find and build the type.
+     * Find and build the domain.
      *
      * @access  public
-     * @param   mixed   $parent    Parent (here: variable or type).
-     * @param   string  $name      Type name.
+     * @param   mixed   $parent    Parent (here: variable or domain).
+     * @param   string  $name      Domain name.
      * @return  void
      * @throws  Hoa_Test_Praspel_Exception
      */
@@ -133,7 +128,7 @@ class Hoa_Test_Praspel_Type {
     }
 
     /**
-     * Add an argument to the current defining type.
+     * Add an argument to the current defining domain.
      *
      * @access  public
      * @param   mixed  $argument    Argument.
@@ -151,20 +146,20 @@ class Hoa_Test_Praspel_Type {
      */
     public function withArray ( ) {
 
-        $this->_currentArgument = new Hoa_Test_Praspel_TypeArray($this);
+        $this->_currentArgument = new Hoa_Test_Praspel_ArrayDescription($this);
         $this->_arguments[]     = &$this->_currentArgument;
 
         return $this->_currentArgument;
     }
 
     /**
-     * Add an argument, as a type, to the current defining type.
+     * Add an argument, as a domain, to the current defining domain.
      *
      * @access  public
-     * @param   string  $name    Type name.
+     * @param   string  $name    Domain name.
      * @return  Hoa_Test_Praspel_Variable
      */
-    public function withType ( $name ) {
+    public function withDomain ( $name ) {
 
         $this->_currentArgument = new self($this, $name);
         $this->_arguments[]     = &$this->_currentArgument;
@@ -183,7 +178,7 @@ class Hoa_Test_Praspel_Type {
         if(!($this->_parent instanceof self))
             return $this->_parent->_ok();
 
-        $this->_parent->_currentArgument = $this->getType();
+        $this->_parent->_currentArgument = $this->getDomain();
 
         // break the reference.
         unset($this->_parent->_currentArgument);
@@ -192,11 +187,11 @@ class Hoa_Test_Praspel_Type {
     }
 
     /**
-     * Factory of types.
+     * Factory of domain.
      *
      * @access  public
-     * @param   string  $name         Type name.
-     * @param   array   $arguments    Type arguments.
+     * @param   string  $name         Domain name.
+     * @param   array   $arguments    Domain arguments.
      * @return  void
      * @throws  Hoa_Exception
      */
@@ -212,9 +207,9 @@ class Hoa_Test_Praspel_Type {
             $reflection  = new ReflectionClass($class);
 
             if(true === $reflection->hasMethod('__construct'))
-                $this->_type = $reflection->newInstanceArgs($arguments);
+                $this->_domain = $reflection->newInstanceArgs($arguments);
             else
-                $this->_type = $reflection->newInstance();
+                $this->_domain = $reflection->newInstance();
         }
         catch ( ReflectionException $e ) {
 
@@ -228,36 +223,36 @@ class Hoa_Test_Praspel_Type {
     }
 
     /**
-     * Get the found type.
+     * Get the found edomain.
      *
      * @access  public
      * @return  Hoa_Test_Urg_Type_Interface_Type
      */
-    public function getType ( ) {
+    public function getDomain ( ) {
 
-        if(null !== $this->_type)
-            return $this->_type;
+        if(null !== $this->_domain)
+            return $this->_domain;
 
         $this->_factory($this->getName(), $this->getArguments());
 
-        return $this->_type;
+        return $this->_domain;
     }
 
     /**
-     * Set the parent (here: variable or type).
+     * Set the parent (here: variable or domain).
      *
      * @access  protected
-     * @param   mixed  $parent    Parent (here: variable or type).
+     * @param   mixed  $parent    Parent (here: variable or domain).
      * @return  Hoa_Test_Praspel_Variable
      */
     protected function setParent ( $parent ) {
 
         if(   !($parent instanceof Hoa_Test_Praspel_Variable)
-           && !($parent instanceof Hoa_Test_Praspel_Type)
-           && !($parent instanceof Hoa_Test_Praspel_TypeArray))
+           && !($parent instanceof Hoa_Test_Praspel_Domain)
+           && !($parent instanceof Hoa_Test_Praspel_ArrayDescription))
            throw new Hoa_Test_Praspel_Exception(
-                'Parent of a type must be a variable, a type or a typeArray, ' .
-                'given %s.',
+                'Parent of a domain must be a variable, a domain or an array ' .
+                'description, given %s.',
                 0, get_class($parent));
 
         $old           = $this->_parent;
@@ -267,7 +262,7 @@ class Hoa_Test_Praspel_Type {
     }
 
     /**
-     * Get the parent (here: variable or type).
+     * Get the parent (here: variable or domain).
      *
      * @access  public
      * @return  Hoa_Test_Praspel_Variable
@@ -278,10 +273,10 @@ class Hoa_Test_Praspel_Type {
     }
 
     /**
-     * Set the type's name.
+     * Set the domain's name.
      *
      * @access  protected
-     * @param   string  $name    Type's name.
+     * @param   string  $name    Domain's name.
      * @return  string
      */
     protected function setName ( $name ) {
@@ -293,7 +288,7 @@ class Hoa_Test_Praspel_Type {
     }
 
     /**
-     * Get the type's name.
+     * Get the domain's name.
      *
      * @access  protected
      * @return  string
@@ -304,7 +299,7 @@ class Hoa_Test_Praspel_Type {
     }
 
     /**
-     * Get type's arguments.
+     * Get domain's arguments.
      *
      * @access  protected
      * @return  array
