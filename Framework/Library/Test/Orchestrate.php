@@ -73,6 +73,11 @@ import('Reflection.Fragment.RParameter');
 import('Reflection.Visitor.Prettyprinter');
 
 /**
+ * Hoa_Test_Praspel_Compiler
+ */
+import('Test.Praspel.Compiler');
+
+/**
  * Class Hoa_Test_Orchestrate.
  *
  * .
@@ -94,6 +99,8 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
      * @var Hoa_Core_Parameter object
      */
     protected $_parameters    = null;
+
+    protected $_compiler      = null;
 
     /**
      * Pretty-printer.
@@ -118,6 +125,7 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
     public function __construct ( Hoa_Core_Parameter $parameters ) {
 
         $this->_parameters = $parameters;
+        $this->_compiler   = new Hoa_Test_Praspel_Compiler();
         $this->setPrettyPrinter(new Hoa_Reflection_Visitor_Prettyprinter());
 
         return;
@@ -273,14 +281,16 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
             '        );'
         );
 
-        $from = $this->getFormattedParameter('convict');
-        $to   = $this->getFormattedParameter('instrumented');
+        $from      = $this->getFormattedParameter('convict');
+        $to        = $this->getFormattedParameter('instrumented');
+        $incubator = $this->getFormattedParameter('incubator');
         Hoa_File_Directory::create($to);
 
-        return $this->_instrumentation($finder, $from, $to);
+        return $this->_instrumentation($finder, $from, $to, $incubator);
     }
 
-    private function _instrumentation ( Hoa_File_Finder $finder, $from, $to ) {
+    private function _instrumentation ( Hoa_File_Finder $finder, $from, $to,
+                                        $incubator ) {
 
         foreach($finder as $i => $file) {
 
@@ -297,7 +307,8 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                         Hoa_File_Finder::LIST_VISIBLE
                     ),
                     $from . DS . $basename,
-                    $path
+                    $path,
+                    $incubator . DS . $basename
                 );
             }
 
@@ -315,11 +326,41 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                 foreach($class->getMethods() as $method) {
 
                     $name = $method->getName();
+                    $id   = $classname . '::' . $name;
                     $method->setName('__hoa_' . $name . '_body');
+                    $this->_compiler->compile($method->getCommentContent());
 
-                    $main = new Hoa_Reflection_Fragment_RMethod($name);
-                    $main->setCommentContent('The new ' . $name . ' method.');
+                    $contract = $this->_compiler->getRoot()->__toString();
+                    $contract = str_replace("\n", "\n        ", $contract);
+                    $cont     = new Hoa_Reflection_Fragment_RMethod(
+                        '__hoa_' . $name . '_contract'
+                    );
+                    $cont->setCommentContent('Create contract of the ' . $name . ' method');
+                    $cont->setBody(
+                        '        $praspel = Hoa_Test_Praspel::getInstance();' . "\n\n" .
+                        '        if(true === $praspel->contractExists(\'' . $id . '\'))' . "\n" .
+                        '            return;' . "\n\n" .
+                        '        $class     = \'' . $classname . '\';' . "\n" .
+                        '        $method    = \'' . $name . '\';' . "\n" .
+                        '        $file      = \'' . $incubator . $basename . '\';' . "\n" .
+                        '        $startLine = '   . $method->getStartLine() . ';' . "\n" .
+                        '        $endLine   = '   . $method->getEndLine() . ';' . "\n" .
+                        '        ' . $contract . "\n" .
+                        '        Hoa_Test_Praspel::getInstance()->addContract($contract);' . "\n\n" .
+                        '        return;'
+                    );
+                    $cont->setVisibility(_protected);
+                    $class->importFragment($cont);
+
+                    $main     = new Hoa_Reflection_Fragment_RMethod($name);
+                    $main->setCommentContent(
+                        'Test method ' . $classname . '::' . $name . '()' . "\n" .
+                        'in file ' . $incubator . $basename . "\n" .
+                        'from line ' . $method->getStartLine() .
+                        ' to ' . $method->getEndLine()
+                    );
                     $main->setBody(
+                        '        $this->__hoa_' . $name . '_contract();' . "\n" .
                         '        $this->__hoa_' . $name . '_pre();' . "\n" .
                         '        $return = $this->__hoa_' . $name . '_body();' . "\n" .
                         '        $this->__hoa_' . $name . '_post();' . "\n\n" .
@@ -354,7 +395,7 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                 $class->importFragment($this->_magicSetter);
                 $class->importFragment($this->_magicGetter);
                 $class->importFragment($this->_magicCaller);
-                $handle->writeAll('<?php' . "\n\n");
+                $handle->writeAll('<?php' . "\n");
                 $handle->writeAll($class->accept($this->getPrettyPrinter()));
             }
 
