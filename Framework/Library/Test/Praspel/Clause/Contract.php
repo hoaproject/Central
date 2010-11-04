@@ -81,7 +81,7 @@ abstract class Hoa_Test_Praspel_Clause_Contract implements Hoa_Test_Praspel_Clau
     /**
      * Parent (here: the root).
      *
-     * @var Hoa_Test_Praspel object
+     * @var Hoa_Test_Praspel_Contract object
      */
     protected $_parent    = null;
 
@@ -98,10 +98,10 @@ abstract class Hoa_Test_Praspel_Clause_Contract implements Hoa_Test_Praspel_Clau
      * Constructor.
      *
      * @access  public
-     * @param   Hoa_Test_Praspel  $parent    Parent (here: the root).
+     * @param   Hoa_Test_Praspel_Contract  $parent    Parent (here: the root).
      * @return  void
      */
-    public function __construct ( Hoa_Test_Praspel $parent ) {
+    public function __construct ( Hoa_Test_Praspel_Contract $parent ) {
 
         $this->setParent($parent);
 
@@ -181,10 +181,10 @@ abstract class Hoa_Test_Praspel_Clause_Contract implements Hoa_Test_Praspel_Clau
      * Set the parent (here: the root).
      *
      * @access  protected
-     * @param   Hoa_Test_Praspel  $parent    Parent (here: the root).
-     * @return  Hoa_Test_Praspel
+     * @param   Hoa_Test_Praspel_Contract  $parent    Parent (here: the root).
+     * @return  Hoa_Test_Praspel_Contract
      */
-    protected function setParent ( Hoa_Test_Praspel $parent ) {
+    protected function setParent ( Hoa_Test_Praspel_Contract $parent ) {
 
         $old           = $this->_parent;
         $this->_parent = $parent;
@@ -196,7 +196,7 @@ abstract class Hoa_Test_Praspel_Clause_Contract implements Hoa_Test_Praspel_Clau
      * Get the parent (here: the root).
      *
      * @access  public
-     * @return  Hoa_Test_Praspel
+     * @return  Hoa_Test_Praspel_Contract
      */
     public function getParent ( ) {
 
@@ -233,7 +233,7 @@ abstract class Hoa_Test_Praspel_Clause_Contract implements Hoa_Test_Praspel_Clau
     public function __toString ( ) {
 
         $gc     = get_class($this);
-        $out    = '$praspel' . "\n" .
+        $out    = '$contract' . "\n" .
                   '    ->clause(\'' .
                        strtolower(substr($gc, strrpos($gc, '_') + 1)) .
                       '\')' . "\n";
