@@ -45,12 +45,12 @@ import('Test.Praspel.Exception');
 /**
  * Hoa_Test_Praspel_Clause
  */
-import('Test.Praspel.Clause');
+import('Test.Praspel.Clause') and load();
 
 /**
  * Hoa_Test_Praspel_Clause_Contract
  */
-import('Test.Praspel.Clause.Contract');
+import('Test.Praspel.Clause.Contract') and load();
 
 /**
  * Class Hoa_Test_Praspel_Clause_Invariant.
@@ -81,7 +81,7 @@ class Hoa_Test_Praspel_Clause_Invariant extends    Hoa_Test_Praspel_Clause_Contr
 
         if($name[0] == '\\')
             throw new Hoa_Test_Praspel_Exception(
-                'Constructors are not allowed in “ensures” clause, given %s.',
+                'Constructors are not allowed in an @invariant clause, given %s.',
                 0, $name);
 
         parent::declareFreeVariable($name);

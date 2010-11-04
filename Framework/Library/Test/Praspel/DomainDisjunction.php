@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_TypeDisjunction
+ * @subpackage  Hoa_Test_Praspel_DomainDisjunction
  *
  */
 
@@ -43,12 +43,12 @@ require_once 'Core.php';
 import('Test.Praspel.Exception');
 
 /**
- * Hoa_Test_Praspel_Type
+ * Hoa_Test_Praspel_Domain
  */
-import('Test.Praspel.Type');
+import('Test.Praspel.Domain') and load();
 
 /**
- * Class Hoa_Test_Praspel_TypeDisjunction.
+ * Class Hoa_Test_Praspel_DomainDisjunction.
  *
  * .
  *
@@ -58,38 +58,36 @@ import('Test.Praspel.Type');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_TypeDisjunction
+ * @subpackage  Hoa_Test_Praspel_DomainDisjunction
  */
 
-abstract class Hoa_Test_Praspel_TypeDisjunction {
+abstract class Hoa_Test_Praspel_DomainDisjunction {
 
     /**
-     * Collection of types.
+     * Collection of domains.
      *
-     * @var Hoa_Test_Praspel_TypeDisjunction array
+     * @var Hoa_Test_Praspel_DomainDisjunction array
      */
-    protected $_types  = array();
+    protected $_domains = array();
 
     /**
-     * Current defining type.
+     * Current defining domain.
      *
-     * @var Hoa_Test_Praspel_Type object
+     * @var Hoa_Test_Praspel_Domain object
      */
-    protected $_type   = null;
+    protected $_domain  = null;
 
     /**
      * Make a disjunction between two variables.
      *
-     * @var Hoa_Test_Praspel_TypeDisjunction object
+     * @var Hoa_Test_Praspel_DomainDisjunction object
      */
-    public $_or        = null;
+    public $_or         = null;
 
     /**
      * 
-     *
-     * 
      */
-    protected $_i      = 0;
+    protected $_i       = 0;
 
 
 
@@ -107,56 +105,57 @@ abstract class Hoa_Test_Praspel_TypeDisjunction {
     }
 
     /**
-     * Type the variable.
+     * Set a domain to the variable.
      *
      * @access  public
-     * @param   string  $name    Type name.
-     * @return  Hoa_Test_Praspel_Type
+     * @param   string  $name    Domain name.
+     * @return  Hoa_Test_Praspel_Domain
      */
-    public function isTypedAs ( $name ) {
+    public function belongsTo ( $name ) {
 
-        return $this->_type = new Hoa_Test_Praspel_Type($this, $name);
+        return $this->_domain = new Hoa_Test_Praspel_Domain($this, $name);
     }
 
     /**
-     * Close the current defining type.
+     * Close the current defining domain.
      *
      * @access  public
-     * @return  Hoa_Test_Praspel_TypeDisjunction
+     * @return  Hoa_Test_Praspel_DomainDisjunction
      */
     public function _ok ( ) {
 
-        if(null === $this->_type)
+        if(null === $this->_domain)
             return $this;
 
-        $type                                         = $this->_type->getType();
-        $this->_type                                  = null;
-        $this->_types[$this->_i++ . $type->getName()] = $type;
+        $domain                  = $this->_domain->getDomain();
+        $this->_domain           = null;
+        $handle                  = $this->_i++ . $domain->getName();
+        $this->_domains[$handle] = $domain;
 
         return $this;
     }
 
     /**
-     * Check if the variable has a specific declared type.
+     * Check if the variable has a specific declared domain.
      *
      * @access  public
-     * @param   string  $name    Type name.
+     * @param   string  $name    Domain name.
      * @return  bool
      */
-    public function isTypeDeclared ( $name ) {
+    public function isBelongingTo ( $name ) {
 
-        return true === array_key_exists($name, $this->_types);
+        return true === array_key_exists($name, $this->_domains);
     }
 
     /**
-     * Get all types.
+     * Get all domains.
      *
      * @access  public
      * @return  array
      */
-    public function getTypes ( ) {
+    public function getDomains ( ) {
 
-        return $this->_types;
+        return $this->_domains;
     }
 
     /**
@@ -283,13 +282,14 @@ abstract class Hoa_Test_Praspel_TypeDisjunction {
 
                 $out[] = $spaces . '    ->' .
                          (true === $f
-                             ? 'isTypedAs'
-                             : 'withType'
+                             ? 'belongsTo'
+                             : 'withDomain'
                          ) . '(\'' . $argument->getName() . '\')' . "\n" .
                          implode(
                             $spaces . '        ->_comma' . "\n",
                             $this->formatArguments($argument->getArguments(), false)
-                         ) . $spaces . '        ->_ok()' . "\n";
+                         ) .
+                         $spaces . '        ->_ok()' . "\n";
 
                 $d--;
             }
@@ -307,7 +307,7 @@ abstract class Hoa_Test_Praspel_TypeDisjunction {
     public function __toPraspel ( ) {
 
         return $this->getName() . ': ' .
-               implode(' or ', $this->formatArgumentsAsPraspel($this->getTypes()));
+               implode(' or ', $this->formatArgumentsAsPraspel($this->getDomains()));
     }
 
     /**
@@ -321,7 +321,7 @@ abstract class Hoa_Test_Praspel_TypeDisjunction {
         return '    ->variable(\'' . $this->getName() . '\')' . "\n" .
                implode(
                    '        ->_or' . "\n",
-                   $this->formatArguments($this->getTypes(), true)
+                   $this->formatArguments($this->getDomains(), true)
                );
     }
 }

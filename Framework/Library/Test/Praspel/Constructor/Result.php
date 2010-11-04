@@ -45,7 +45,7 @@ import('Test.Praspel.Exception');
 /**
  * Hoa_Test_Praspel_Variable
  */
-import('Test.Praspel.Variable');
+import('Test.Praspel.Variable') and load();
 
 /**
  * Class Hoa_Test_Praspel_Constructor_Result.

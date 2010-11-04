@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_TypeArray
+ * @subpackage  Hoa_Test_Praspel_ArrayDescription
  *
  */
 
@@ -43,12 +43,12 @@ require_once 'Core.php';
 import('Test.Praspel.Exception');
 
 /**
- * Hoa_Test_Praspel_TypeDisjunction
+ * Hoa_Test_Praspel_DomainDisjunction
  */
-import('Test.Praspel.TypeDisjunction');
+import('Test.Praspel.DomainDisjunction') and load();
 
 /**
- * Class Hoa_Test_Praspel_TypeArray.
+ * Class Hoa_Test_Praspel_ArrayDescription.
  *
  * .
  *
@@ -58,10 +58,11 @@ import('Test.Praspel.TypeDisjunction');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_TypeArray
+ * @subpackage  Hoa_Test_Praspel_ArrayDescription
  */
 
-class Hoa_Test_Praspel_TypeArray extends Hoa_Test_Praspel_TypeDisjunction {
+class       Hoa_Test_Praspel_ArrayDescription
+    extends Hoa_Test_Praspel_DomainDisjunction {
 
     protected $_parent = null;
 
@@ -85,7 +86,7 @@ class Hoa_Test_Praspel_TypeArray extends Hoa_Test_Praspel_TypeDisjunction {
 
 
 
-    public function __construct ( Hoa_Test_Praspel_Type $parent ) {
+    public function __construct ( Hoa_Test_Praspel_Domain $parent ) {
 
         parent::__construct();
 
@@ -101,7 +102,7 @@ class Hoa_Test_Praspel_TypeArray extends Hoa_Test_Praspel_TypeDisjunction {
             throw new Hoa_Test_Praspel_Exception(
                 'Array not well-formed.', 0);
 
-        if(empty($this->_types))
+        if(empty($this->_domains))
             return $this;
 
         return $this;
@@ -110,9 +111,9 @@ class Hoa_Test_Praspel_TypeArray extends Hoa_Test_Praspel_TypeDisjunction {
     protected function _from ( ) {
 
         $this->_ok();
-        $this->_key   = array_values($this->getTypes());
-        $this->_types = array();
-        $this->_state = 1;
+        $this->_key     = array_values($this->getDomains());
+        $this->_domains = array();
+        $this->_state   = 1;
 
         return;
     }
@@ -126,12 +127,12 @@ class Hoa_Test_Praspel_TypeArray extends Hoa_Test_Praspel_TypeDisjunction {
 
     protected function _to ( ) {
 
-        if(empty($this->_types))
+        if(empty($this->_domains))
             return;
 
         $this->_ok();
-        $this->_value   = array_values($this->getTypes());
-        $this->_types   = array();
+        $this->_value   = array_values($this->getDomains());
+        $this->_domains = array();
         $this->_state   = 0;
         $this->_array[] = array($this->_key, $this->_value);
 
@@ -153,14 +154,7 @@ class Hoa_Test_Praspel_TypeArray extends Hoa_Test_Praspel_TypeDisjunction {
         return $this->_parent;
     }
 
-    /**
-     * Set the parent (here: the clause).
-     *
-     * @access  protected
-     * @param   Hoa_Test_Praspel_Type  $parent    Parent (here: the type).
-     * @return  Hoa_Test_Praspel_Type
-     */
-    protected function setParent ( Hoa_Test_Praspel_Type $parent ) {
+    protected function setParent ( Hoa_Test_Praspel_Domain $parent ) {
 
         $old           = $this->_parent;
         $this->_parent = $parent;
@@ -168,12 +162,6 @@ class Hoa_Test_Praspel_TypeArray extends Hoa_Test_Praspel_TypeDisjunction {
         return $old;
     }
 
-    /**
-     * Get the parent (here: the clause).
-     *
-     * @access  public
-     * @return  Hoa_Test_Praspel_Type
-     */
     public function getParent ( ) {
 
         return $this->_parent;

@@ -68,9 +68,9 @@ import('Test.Praspel.Clause.Requires');
 import('Test.Praspel.Clause.Throwable');
 
 /**
- * Hoa_Test_Praspel_Type
+ * Hoa_Test_Praspel_Domain
  */
-import('Test.Praspel.Type');
+import('Test.Praspel.Domain');
 
 /**
  * Hoa_Test_Praspel_Call
@@ -235,20 +235,20 @@ class Hoa_Test_Praspel {
     }
 
     /**
-     * Create a type.
+     * Create a domain.
      *
      * @access  public
-     * @param   string  $name    Type name.
-     * @param   ...     ...      Type arguments.
+     * @param   string  $name    Domain name.
+     * @param   ...     ...      Domain arguments.
      * @return  Hoa_Test_Urg_Type_Interface_Type
      */
-    public function type ( $name ) {
+    public function domain ( $name ) {
 
         $arguments = func_get_args();
         array_shift($arguments);
-        $type      = new Hoa_Test_Praspel_Type($name, $arguments);
+        $domain    = new Hoa_Test_Praspel_Domain($name, $arguments);
 
-        return $type->getType();
+        return $domain->getDomain();
     }
 
     /**
@@ -343,7 +343,7 @@ class Hoa_Test_Praspel {
 
             if('\result' == $variable->getName()) {
 
-                $handle = $variable->getChoosenType()->predicate(
+                $handle = $variable->getChoosenDomain()->predicate(
                     $call->getResult()
                 );
 

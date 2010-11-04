@@ -45,7 +45,7 @@ import('Test.Praspel.Exception');
 /**
  * Hoa_Test_Praspel_Clause_Contract
  */
-import('Test.Praspel.Clause.Contract');
+import('Test.Praspel.Clause.Contract') and load();
 
 /**
  * Class Hoa_Test_Praspel_Clause_Requires.
@@ -74,7 +74,7 @@ class Hoa_Test_Praspel_Clause_Requires extends Hoa_Test_Praspel_Clause_Contract 
 
         if($name[0] == '\\')
             throw new Hoa_Test_Praspel_Exception(
-                'Constructors are not allowed in “requires” clause, given %s.',
+                'Constructors are not allowed in a @requires clause, given %s.',
                 0, $name);
 
         return parent::variable($name);
