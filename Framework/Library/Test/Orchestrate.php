@@ -307,7 +307,6 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
             require_once $from . DS . $basename;
 
             $classes = array_diff(get_declared_classes(), $classes);
-            $handle->truncate(0);
 
             foreach($classes as $classname) {
 
