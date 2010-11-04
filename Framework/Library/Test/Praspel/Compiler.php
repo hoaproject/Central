@@ -43,9 +43,9 @@ require_once 'Core.php';
 import('Test.Praspel.Exception');
 
 /**
- * Hoa_Test_Praspel
+ * Hoa_Test_Praspel_Contract
  */
-import('Test.Praspel.~');
+import('Test.Praspel.Contract');
 
 /**
  * Hoa_Compiler_Ll1
@@ -640,7 +640,7 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
      */
     protected function pre ( &$in ) {
 
-        $this->_praspel = new Hoa_Test_Praspel();
+        $this->_praspel = new Hoa_Test_Praspel_Contract();
 
         $search  = array('&&',  '∧',   '||', '∨' );
         $replace = array('and', 'and', 'or', 'or');

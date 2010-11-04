@@ -66,7 +66,7 @@ class Hoa_Test_Praspel_Call {
     /**
      * Root of Praspel's object model.
      *
-     * @var Hoa_Test_Praspel object
+     * @var Hoa_Test_Praspel_Contract object
      */
     protected $_root        = null;
 
@@ -125,14 +125,14 @@ class Hoa_Test_Praspel_Call {
      * Prepare and run a call.
      *
      * @access  public
-     * @param   Hoa_Test_Praspel  $root           Root of this object model.
-     * @param   object            &$convict       Convict.
-     * @param   string            $magicCaller    Magic caller name.
-     * @param   string            $class          Class name.
-     * @param   string            $method         Method name.
+     * @param   Hoa_Test_Praspel_Contract  $root           Root of this object model.
+     * @param   object                     &$convict       Convict.
+     * @param   string                     $magicCaller    Magic caller name.
+     * @param   string                     $class          Class name.
+     * @param   string                     $method         Method name.
      * @return  void
      */
-    public function __construct ( Hoa_Test_Praspel $root, &$convict,
+    public function __construct ( Hoa_Test_Praspel_Contract $root, &$convict,
                                   $magicCaller, $class, $method ) {
 
         $this->setRoot($root);
@@ -200,10 +200,10 @@ class Hoa_Test_Praspel_Call {
      * Set the root of Praspel's object model.
      *
      * @access  protected
-     * @param   Hoa_Test_Praspel  $root    Root of this object model.
-     * @return  Hoa_Test_Praspel
+     * @param   Hoa_Test_Praspel_Contract  $root    Root of this object model.
+     * @return  Hoa_Test_Praspel_Contract
      */
-    protected function setRoot ( Hoa_Test_Praspel $root ) {
+    protected function setRoot ( Hoa_Test_Praspel_Contract $root ) {
 
         $old         = $this->_root;
         $this->_root = $root;
@@ -292,7 +292,7 @@ class Hoa_Test_Praspel_Call {
      * Get the root.
      *
      * @access  protected
-     * @return  Hoa_Test_Praspel
+     * @return  Hoa_Test_Praspel_Contract
      */
     protected function getRoot ( ) {
 
