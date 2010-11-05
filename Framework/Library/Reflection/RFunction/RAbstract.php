@@ -349,7 +349,8 @@ abstract class Hoa_Reflection_RFunction_RAbstract
      */
     public function importFragment ( $fragment ) {
 
-        if($fragment instanceof Hoa_Reflection_Fragment_RParameter)
+        if(   ($fragment instanceof Hoa_Reflection_RParameter)
+           || ($fragment instanceof Hoa_Reflection_Fragment_RParameter))
             $this->_parameters[] = $fragment;
         else
             throw new Hoa_Reflection_Exception(

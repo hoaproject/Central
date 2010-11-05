@@ -184,7 +184,8 @@ class          Hoa_Reflection_RClass
      */
     public function importFragment ( $fragment ) {
 
-        if($fragment instanceof Hoa_Reflection_Fragment_RMethod)
+        if(   ($fragment instanceof Hoa_Reflection_RMethod)
+           || ($fragment instanceof Hoa_Reflection_Fragment_RMethod))
             $this->_methods[] = $fragment;
         else
             throw new Hoa_Reflection_Exception(
