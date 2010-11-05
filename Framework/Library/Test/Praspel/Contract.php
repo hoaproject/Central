@@ -276,6 +276,87 @@ class Hoa_Test_Praspel_Contract {
     }
 
     /**
+     * Verify the pre-condition.
+     *
+     * @access  public
+     * @param   mixed   ...    Parameters passed to the method.
+     * @return  bool
+     */
+    public function verifyPreCondition ( ) {
+
+        $args     = func_get_args();
+        $i        = 0;
+        $out      = true;
+        $requires = $this->getClause('requires');
+
+        foreach($requires->getVariables() as $variable) {
+
+            $o = false;
+
+            foreach($variable->getDomains() as $domain)
+                $o = $o || $domain->predicate($args[$i]);
+
+            $out = $out && $o;
+
+            if(false === $out) {
+
+                var_dump($this->getId() . ' (pre):  failed.');
+
+                return FAILED;
+            }
+
+            ++$i;
+        }
+
+        var_dump($this->getId() . ' (pre):  succeed.');
+
+        return SUCCEED;
+    }
+
+    /**
+     * Verify the post-condition.
+     *
+     * @access  public
+     * @param   mixed   $result    Result of the method-call.
+     * @param   mixed   ...        Parameters passed to the method.
+     * @return  bool
+     */
+    public function verifyPostCondition ( $result ) {
+
+        $args    = func_get_args();
+        $result  = array_shift($args);
+        $i       = 0;
+        $out     = true;
+        $ensures = $this->getClause('ensures');
+
+        foreach($ensures->getVariables() as $variable) {
+
+            if('\result' == $variable->getName())
+                $arg = $result;
+            else
+                $arg = $args[$i++];
+
+            $o = false;
+
+            foreach($variable->getDomains() as $domain)
+                $o = $o || $domain->predicate($arg);
+
+            $out = $out && $o;
+
+            if(false === $out) {
+
+                var_dump($this->getId() . ' (post): failed.');
+
+                return FAILED;
+            }
+        }
+
+        var_dump($this->getId() . ' (post): succeed.');
+
+        return SUCCEED;
+    }
+
+    /**
      * Verify clauses.
      *
      * @access  public
@@ -489,7 +570,7 @@ class Hoa_Test_Praspel_Contract {
      * @access  public
      * @return  string
      */
-    public function getContractId ( ) {
+    public function getId ( ) {
 
         return $this->getClass() . '::' . $this->getMethod();
     }
