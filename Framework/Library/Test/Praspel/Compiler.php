@@ -445,9 +445,9 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                 array(
                     /*              ,   09    (    )    [    '   id
                     /* __ */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ),
-                    /* GO */ array( 0 , -7 ,  0 ,  0 , '[',  0 ,  0 ),
-                    /* ID */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ),
-                    /* AR */ array( 0 ,  0 ,  7 ,  0 ,  0 ,  0 ,  0 ),
+                    /* GO */ array( 0 , -7 ,  0 ,  0 , '[',  0 , -3 ),
+                    /* ID */ array( 0 ,  0 , 'z',  0 ,  0 ,  0 ,  0 ),
+                    /* AR */ array( 0 ,  0 ,  7 , 'Y',  0 ,  0 ,  0 ),
                     /* [] */ array( 0 ,  0 ,  0 ,  0 ,  8 ,  0 ,  0 ),
                     /* ST */ array( 0 ,  0 ,  0 ,  0 ,  0 , 10 ,  0 ),
                     /* OK */ array('c',  0 ,  0 ,  0 ,  0 ,  0 ,  0 )
@@ -464,11 +464,11 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                 // 9. Pairs.
                 array(
                     /*              ,   fr  to
-                    /* __ */ array( 0 ,  0,  0  ),
-                    /* GO */ array( 0 ,  0,  0  ),
+                    /* __ */ array( 0 ,  0,   0 ),
+                    /* GO */ array( 0 ,  0,   0 ),
                     /* FR */ array( 0 ,  6, 'to'),
-                    /* TO */ array(',',  0,  6  ),
-                    /* OK */ array( 9 ,  0,  0  )
+                    /* TO */ array(',',  0,   6 ),
+                    /* OK */ array( 9 ,  0,   0 )
                 ),
 
                 // 10. String
@@ -546,6 +546,14 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                 unset($this->buffers[1]);
               break;
 
+            // variable: domain(…, domain(
+            case 'z':
+                $this->_current = $this->_current->withDomain(
+                    $this->buffers[1]
+                );
+                unset($this->buffers[1]);
+              break;
+
             // variable: domain(…)
             case 'Y':
                 if(isset($this->buffers[3])) {
@@ -611,8 +619,7 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
 
                 $this->_current = $this->_current->hasTheSameDomainAs(
                     $this->buffers[0]
-                );
-                $this->_current = $this->_current->_and;
+                )->_and;
                 unset($this->buffers[0]);
               break;
 
@@ -624,8 +631,7 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
 
                 $this->_current = $this->_current->couldThrow(
                     $this->buffers[2]
-                );
-                $this->_current = $this->_current->_comma;
+                )->_comma;
                 unset($this->buffers[2]);
               break;
         }
