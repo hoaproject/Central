@@ -313,6 +313,7 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
             }
 
             $handle  = $file->define($path);
+            $lines   = explode("\n", $file->define()->readAll());
             $classes = get_declared_classes();
 
             require_once $from . DS . $basename;
@@ -325,16 +326,29 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
 
                 foreach($class->getMethods() as $method) {
 
-                    $name = $method->getName();
-                    $id   = $classname . '::' . $name;
-                    $method->setName('__hoa_' . $name . '_body');
+                    $name         = $method->getName();
+                    $id           = $classname . '::' . $name;
+                    $mainName     = $name;
+                    $originalName = '__hoa_' . $name . '_body';
+                    $contractName = '__hoa_' . $name . '_contract';
+                    $preName      = '__hoa_' . $name . '_pre';
+                    $postName     = '__hoa_' . $name . '_post';
+
+                    $main = new Hoa_Reflection_Fragment_RMethod($mainName);
+                    $cont = new Hoa_Reflection_Fragment_RMethod($contractName);
+                    $pre  = new Hoa_Reflection_Fragment_RMethod($preName);
+                    $post = new Hoa_Reflection_Fragment_RMethod($postName);
+
+
+                    // Original.
+                    $method->setName($originalName);
                     $this->_compiler->compile($method->getCommentContent());
 
+
+                    // Contract.
                     $contract = $this->_compiler->getRoot()->__toString();
                     $contract = str_replace("\n", "\n        ", $contract);
-                    $cont     = new Hoa_Reflection_Fragment_RMethod(
-                        '__hoa_' . $name . '_contract'
-                    );
+
                     $cont->setCommentContent('Create contract of the ' . $name . ' method');
                     $cont->setBody(
                         '        $praspel = Hoa_Test_Praspel::getInstance();' . "\n\n" .
@@ -352,7 +366,28 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                     $cont->setVisibility(_protected);
                     $class->importFragment($cont);
 
-                    $main     = new Hoa_Reflection_Fragment_RMethod($name);
+
+                    // Parameters.
+                    $post->importFragment(
+                        new Hoa_Reflection_Fragment_RParameter('result')
+                    );
+                    $p  = null;
+                    $pp = '$result';
+
+                    foreach($method->getParameters() as $parameter) {
+
+                        if(null !== $p)
+                            $p  .= ', ';
+
+                        $p  .= '$' . $parameter->getName();
+                        $pp .= ', $' . $parameter->getName();
+                        $main->importFragment($parameter);
+                        $pre->importFragment($parameter);
+                        $post->importFragment($parameter);
+                    }
+
+
+                    // Fake original.
                     $main->setCommentContent(
                         'Test method ' . $classname . '::' . $name . '()' . "\n" .
                         'in file ' . $incubator . $basename . "\n" .
@@ -361,19 +396,17 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                     );
                     $main->setBody(
                         '        $this->__hoa_' . $name . '_contract();' . "\n" .
-                        '        $this->__hoa_' . $name . '_pre();' . "\n" .
-                        '        $return = $this->__hoa_' . $name . '_body();' . "\n" .
-                        '        $this->__hoa_' . $name . '_post();' . "\n\n" .
-                        '        return $return;'
+                        '        $this->__hoa_' . $name . '_pre(' . $p . ');' . "\n" .
+                        '        $result = $this->__hoa_' . $name . '_body(' . $p . ');' . "\n" .
+                        '        $this->__hoa_' . $name . '_post(' . $pp . ');' . "\n\n" .
+                        '        return $result;'
                     );
                     $main->setVisibility($method->getVisibility());
                     $class->importFragment($main);
-
                     $method->setVisibility(_protected);
 
-                    $pre = new Hoa_Reflection_Fragment_RMethod(
-                        '__hoa_' . $name . '_pre'
-                    );
+
+                    // Pre-condition.
                     $pre->setCommentContent(
                         'Pre-condition of the ' . $name . ' method.'
                     );
@@ -381,9 +414,8 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                     $pre->setVisibility(_protected);
                     $class->importFragment($pre);
 
-                    $post = new Hoa_Reflection_Fragment_RMethod(
-                        '__hoa_' . $name . '_post'
-                    );
+
+                    // Post-condition.
                     $post->setCommentContent(
                         'Post-condition of the ' . $name . ' method.'
                     );
@@ -395,10 +427,25 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                 $class->importFragment($this->_magicSetter);
                 $class->importFragment($this->_magicGetter);
                 $class->importFragment($this->_magicCaller);
-                $handle->writeAll('<?php' . "\n");
-                $handle->writeAll($class->accept($this->getPrettyPrinter()));
+
+                $startLine = $class->getStartLine() - 1;
+                $endLine   = $class->getEndLine() - 1;
+                $line      = $lines[$endLine];
+
+                for($end = strlen($line) - 1; '}' != $line[$end]; --$end);
+
+                $line[$end]      = ' ';
+                $lines[$endLine] = $line;
+
+                array_splice(
+                    $lines,
+                    $startLine,
+                    $endLine - $startLine,
+                    $class->accept($this->getPrettyPrinter())
+                );
             }
 
+            $handle->writeAll(implode("\n", $lines));
             $handle->close();
             unset($handle);
         }
