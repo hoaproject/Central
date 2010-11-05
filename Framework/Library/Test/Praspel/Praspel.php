@@ -43,6 +43,11 @@ require_once 'Core.php';
 import('Test.Praspel.Exception');
 
 /**
+ * Hoa_Test_Praspel_Contract
+ */
+import('Test.Praspel.Contract');
+
+/**
  * Class Hoa_Test_Praspel.
  *
  * .
@@ -108,7 +113,7 @@ class Hoa_Test_Praspel {
      */
     public function addContract ( Hoa_Test_Praspel_Contract $contract ) {
 
-        $this->_register[$contract->getContractId()] = $contract;
+        $this->_register[$contract->getId()] = $contract;
 
         return;
     }
