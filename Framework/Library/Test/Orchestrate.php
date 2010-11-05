@@ -410,7 +410,11 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                     $pre->setCommentContent(
                         'Pre-condition of the ' . $name . ' method.'
                     );
-                    $pre->setBody('        // pre-condition.');
+                    $pre->setBody(
+                        '        $praspel  = Hoa_Test_Praspel::getInstance();' . "\n" .
+                        '        $contract = $praspel->getContract(\'' . $id . '\');' . "\n\n" .
+                        '        return $contract->verifyPreCondition(' . $p . ');' 
+                    );
                     $pre->setVisibility(_protected);
                     $class->importFragment($pre);
 
@@ -419,7 +423,11 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                     $post->setCommentContent(
                         'Post-condition of the ' . $name . ' method.'
                     );
-                    $post->setBody('        // post-condition.');
+                    $post->setBody(
+                        '        $praspel  = Hoa_Test_Praspel::getInstance();' . "\n" .
+                        '        $contract = $praspel->getContract(\'' . $id . '\');' . "\n\n" .
+                        '        return $contract->verifyPostCondition(' . $pp . ');' 
+                    );
                     $post->setVisibility(_protected);
                     $class->importFragment($post);
                 }
