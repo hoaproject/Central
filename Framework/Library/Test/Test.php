@@ -80,13 +80,6 @@ class Hoa_Test implements Hoa_Core_Parameterizable {
      */
     protected $_parameters    = null;
 
-    /**
-     * Stream's log for the Praspel output.
-     *
-     * @var Hoa_Core_Stream array
-     */
-    protected $_logs          = array();
-
 
 
     /**
