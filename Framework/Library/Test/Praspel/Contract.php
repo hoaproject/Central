@@ -43,6 +43,11 @@ require_once 'Core.php';
 import('Test.Praspel.Exception');
 
 /**
+ * Hoa_Test_Praspel
+ */
+import('Test.Praspel.~');
+
+/**
  * Hoa_Test_Praspel_Clause_Ensures
  */
 import('Test.Praspel.Clause.Ensures');
@@ -99,63 +104,67 @@ import('Log.~');
 class Hoa_Test_Praspel_Contract {
 
     /**
-     *
-     */
-    const LOG_CHANNEL = 'Test/Praspel';
-
-    /**
      * Collection of clauses.
      *
      * @var Hoa_Test_Praspel_Contract array
      */
-    protected $_clauses   = array();
+    protected $_clauses      = array();
 
     /**
      * The call object.
      *
      * @var Hoa_Test_Praspel_Call object
      */
-    protected $_call      = null;
+    protected $_call         = null;
 
     /**
+     * Log channel.
      *
+     * @var Hoa_Log object
      */
-    protected $_log       = null;
+    protected $_log          = null;
 
     /**
      * Class name that contains the method.
      *
      * @var Hoa_Test_Praspel_Contract string
      */
-    protected $_class     = null;
+    protected $_class        = null;
 
     /**
      * Method name that is tested.
      *
      * @var Hoa_Test_Praspel_Contract string
      */
-    protected $_method    = null;
+    protected $_method       = null;
 
     /**
      * File where the method is.
      *
      * @var Hoa_Test_Praspel_Contract string
      */
-    protected $_file      = null;
+    protected $_file         = null;
 
     /**
      * Line where the method starts.
      *
      * @var Hoa_Test_Praspel_Contract int
      */
-    protected $_startLine = null;
+    protected $_startLine    = null;
 
     /**
      * Line where the method ends.
      *
      * @var Hoa_Test_Praspel_Contract int
      */
-    protected $_endLine   = null;
+    protected $_endLine      = null;
+
+    /**
+     * Depth of the contract when calling it dynamically.
+     *
+     * @var Hoa_Test_Praspel_Contract int
+     */
+    protected static $_depth = -1;
 
 
 
@@ -179,7 +188,7 @@ class Hoa_Test_Praspel_Contract {
         $this->_startLine = $startLine;
         $this->_endLine   = $endLine;
         $this->_log       = Hoa_Log::getChannel(
-            self::LOG_CHANNEL
+            Hoa_Test_Praspel::LOG_CHANNEL
         );
 
         $this->clause('requires');
@@ -288,6 +297,16 @@ class Hoa_Test_Praspel_Contract {
         $i        = 0;
         $out      = true;
         $requires = $this->getClause('requires');
+        $log      = array(
+            'class'     => $this->getClass(),
+            'method'    => $this->getMethod(),
+            'arguments' => $args,
+            'file'      => $this->getFile(),
+            'startLine' => $this->getStartLine(),
+            'endLine'   => $this->getEndLine(),
+            'status'    => FAILED,
+            'depth'     => $this->getDepth()
+        );
 
         foreach($requires->getVariables() as $variable) {
 
@@ -300,7 +319,11 @@ class Hoa_Test_Praspel_Contract {
 
             if(false === $out) {
 
-                var_dump($this->getId() . ' (pre):  failed.');
+                $this->getLog()->log(
+                    'The pre-condition failed.',
+                    Hoa_Log::TEST,
+                    $log
+                );
 
                 return FAILED;
             }
@@ -308,7 +331,12 @@ class Hoa_Test_Praspel_Contract {
             ++$i;
         }
 
-        var_dump($this->getId() . ' (pre):  succeed.');
+        $log['status'] = SUCCEED;
+        $this->getLog()->log(
+            'The pre-condition succeed.',
+            Hoa_Log::TEST,
+            $log
+        );
 
         return SUCCEED;
     }
@@ -328,6 +356,17 @@ class Hoa_Test_Praspel_Contract {
         $i       = 0;
         $out     = true;
         $ensures = $this->getClause('ensures');
+        $log      = array(
+            'class'     => $this->getClass(),
+            'method'    => $this->getMethod(),
+            'arguments' => $args,
+            'result'    => $result,
+            'file'      => $this->getFile(),
+            'startLine' => $this->getStartLine(),
+            'endLine'   => $this->getEndLine(),
+            'status'    => FAILED,
+            'depth'     => $this->getDepth()
+        );
 
         foreach($ensures->getVariables() as $variable) {
 
@@ -345,15 +384,57 @@ class Hoa_Test_Praspel_Contract {
 
             if(false === $out) {
 
-                var_dump($this->getId() . ' (post): failed.');
+                $this->getLog()->log(
+                    'The post-condition failed.',
+                    Hoa_Log::TEST,
+                    $log
+                );
 
                 return FAILED;
             }
         }
 
-        var_dump($this->getId() . ' (post): succeed.');
+        $log['status'] = SUCCEED;
+        $this->getLog()->log(
+            'The post-condition succeed.',
+            Hoa_Log::TEST,
+            $log
+        );
 
         return SUCCEED;
+    }
+
+    /**
+     * Increment 1 to the depth.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function setDepthInc ( ) {
+
+        return ++self::$_depth;
+    }
+
+    /**
+     * Decrement 1 to the depth.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function setDepthDec ( ) {
+
+        return --self::$_depth;
+    }
+
+    /**
+     * Get the current depth.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getDepth ( ) {
+
+        return self::$_depth;
     }
 
     /**
