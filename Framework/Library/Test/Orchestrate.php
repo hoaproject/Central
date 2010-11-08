@@ -219,7 +219,6 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
 
         $this->incubator($finder);
         $this->instrumentation($finder);
-        $this->sampler($finder);
 
         return;
     }
@@ -363,7 +362,7 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                         '        Hoa_Test_Praspel::getInstance()->addContract($contract);' . "\n\n" .
                         '        return;'
                     );
-                    $cont->setVisibility(_protected);
+                    $cont->setVisibility(_public);
                     $class->importFragment($cont);
 
 
@@ -412,10 +411,11 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                     );
                     $pre->setBody(
                         '        $praspel  = Hoa_Test_Praspel::getInstance();' . "\n" .
-                        '        $contract = $praspel->getContract(\'' . $id . '\');' . "\n\n" .
+                        '        $contract = $praspel->getContract(\'' . $id . '\');' . "\n" .
+                        '        $contract->setDepthInc(); ' . "\n\n" .
                         '        return $contract->verifyPreCondition(' . $p . ');' 
                     );
-                    $pre->setVisibility(_protected);
+                    $pre->setVisibility(_public);
                     $class->importFragment($pre);
 
 
@@ -425,10 +425,12 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                     );
                     $post->setBody(
                         '        $praspel  = Hoa_Test_Praspel::getInstance();' . "\n" .
-                        '        $contract = $praspel->getContract(\'' . $id . '\');' . "\n\n" .
-                        '        return $contract->verifyPostCondition(' . $pp . ');' 
+                        '        $contract = $praspel->getContract(\'' . $id . '\');' . "\n" .
+                        '        $return   = $contract->verifyPostCondition(' . $pp . ');' . "\n" .
+                        '        $contract->setDepthDec(); ' . "\n\n" .
+                        '        return $return;'
                     );
-                    $post->setVisibility(_protected);
+                    $post->setVisibility(_public);
                     $class->importFragment($post);
                 }
 
@@ -457,20 +459,6 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
             $handle->close();
             unset($handle);
         }
-
-        return;
-    }
-
-    protected function sampler ( Hoa_File_Finder $finder ) {
-
-        /*
-        $sampler = $this->getFormattedParameter('sampler');
-
-        Hoa_File_Directory::create($sampler);
-
-        foreach($finder as $i => $file)
-            $file->define()->copy($sampler . $file->getBasename());
-        */
 
         return;
     }
