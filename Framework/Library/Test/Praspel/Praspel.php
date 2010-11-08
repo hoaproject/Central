@@ -64,6 +64,13 @@ import('Test.Praspel.Contract');
 class Hoa_Test_Praspel {
 
     /**
+     * Log channel ID.
+     *
+     * @const string
+     */
+    const LOG_CHANNEL = 'Test/Praspel';
+
+    /**
      * Registry of contracts.
      *
      * @var Hoa_Test_Praspel array
