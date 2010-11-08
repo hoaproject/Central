@@ -69,11 +69,9 @@ class InitializeCommand extends Hoa_Console_Command_Abstract {
      * @var InitializeCommand array
      */
     protected $options     = array(
-        array('no-recursive', parent::NO_ARGUMENT,       'R'),
-        array('test-root',    parent::REQUIRED_ARGUMENT, 't'),
-        array('no-verbose',   parent::NO_ARGUMENT,       'V'),
-        array('help',         parent::NO_ARGUMENT,       'h'),
-        array('help',         parent::NO_ARGUMENT,       '?')
+        array('no-verbose', parent::NO_ARGUMENT, 'V'),
+        array('help',       parent::NO_ARGUMENT, 'h'),
+        array('help',       parent::NO_ARGUMENT, '?')
     );
 
 
@@ -86,21 +84,11 @@ class InitializeCommand extends Hoa_Console_Command_Abstract {
      */
     public function main ( ) {
 
-        $verbose   = true;
-        $recursive = true;
-        $root      = null;
+        $verbose = true;
 
         while(false !== $c = parent::getOption($v)) {
 
             switch($c) {
-
-                case 'R':
-                    $recursive = false;
-                  break;
-
-                case 't':
-                    $root = $v;
-                  break;
 
                 case 'V':
                     $verbose = false;
@@ -118,18 +106,10 @@ class InitializeCommand extends Hoa_Console_Command_Abstract {
         if(null === $directory)
             return $this->usage();
 
-        $parameters = array(
-            'convict.directory' => $directory,
-            'convict.recursive' => true
-        );
-
-        if(null !== $root)
-            $parameters['root'] = $root;
-
         try {
 
-            $test = Hoa_Test::getInstance($parameters);
-            $test->run();
+            $test = new Hoa_Test();
+            $test->initialize($directory);
             $revision = $test->getFormattedParameter('repository') .
                         $test->getFormattedParameter('revision');
         }
@@ -143,13 +123,14 @@ class InitializeCommand extends Hoa_Console_Command_Abstract {
 
         if(true === $verbose) {
 
-            parent::status('Initialize incubator from ' . $directory . '.', true);
-            parent::status('Initialize ordeal/oracle.', true);
-            parent::status('Initialize ordeal/battleground.', true);
-            cout('Root is ' . parent::stylize($revision, 'info'));
+            cout('Initializing a new test revision in the repository:');
+            parent::status('incubator from ' . $directory . '.', true);
+            parent::status('instrumented code.', true);
+            cout();
+            cout('Repository root: ' . parent::stylize($revision, 'info'));
         }
         else
-            cout($root);
+            cout($revision);
 
         return HC_SUCCESS;
     }
@@ -165,8 +146,6 @@ class InitializeCommand extends Hoa_Console_Command_Abstract {
         cout('Usage   : test:initialize <options> directory');
         cout('Options :');
         cout(parent::makeUsageOptionsList(array(
-            'R'    => 'Just initialize the first level of the root.',
-            't'    => 'Precise a special test-root, i.e. where the tests will be placed.',
             'V'    => 'No-verbose, i.e. be as quiet as possible, just print ' .  
                       'essential informations.',
             'help' => 'This help.'

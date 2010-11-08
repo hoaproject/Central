@@ -36,6 +36,11 @@
 import('Test.Praspel.Compiler');
 
 /**
+ * Hoa_File_Read
+ */
+import('File.Read');
+
+/**
  * Class PraspelCommand.
  *
  * Interactive interpreter for Praspel.
@@ -84,14 +89,14 @@ class PraspelCommand extends Hoa_Console_Command_Abstract {
      */
     public function main ( ) {
 
-        $file = null;
+        $filename = null;
 
         while(false !== $c = parent::getOption($v)) {
 
             switch($c) {
 
                 case 'f':
-                    $file = $v;
+                    $filename = $v;
                   break;
 
                 case 'h':
@@ -101,8 +106,11 @@ class PraspelCommand extends Hoa_Console_Command_Abstract {
             }
         }
 
-        if(null !== $file)
-            $code = file_get_contents($file);
+        if(null !== $filename) {
+
+            $file = new Hoa_File_Read($filename);
+            $code = $file->readAll();
+        }
         else
             parent::listInputs($code);
 
@@ -168,6 +176,7 @@ class PraspelCommand extends Hoa_Console_Command_Abstract {
                     catch ( Hoa_Exception $e ) {
 
                         $e->raiseError();
+
                         continue;
                     }
 
@@ -178,6 +187,7 @@ class PraspelCommand extends Hoa_Console_Command_Abstract {
             }
 
             cout();
+
         } while('quit' != $code = cin(
                                       '> ',
                                       Hoa_Console_Core_Io::TYPE_NORMAL,

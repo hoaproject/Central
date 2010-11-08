@@ -41,24 +41,14 @@ import('Test.~');
 import('Test.Praspel.~');
 
 /**
- * Hoa_Log
- */
-import('Log.~');
-
-/**
- * Hoa_Stream
- */
-import('Stream.~');
-
-/**
- * Hoa_Stream_Io_Out
- */
-import('Stream.Io.Out');
-
-/**
  * Hoa_File_Finder
  */
 import('File.Finder');
+
+/**
+ * Hoa_Php_Io_Out
+ */
+import('Php.Io.Out');
 
 /**
  * Class RunCommand.
@@ -72,101 +62,38 @@ import('File.Finder');
  * @version     0.1
  */
 
-class Trivial extends Hoa_Stream implements Hoa_Stream_Io_Out {
+class Out extends Hoa_Php_Io_Out {
 
-    protected $self = null;
-
-    public function __construct ( $self ) {
-
-        $this->self = $self;
-
-        parent::__construct(null);
-    }
-
-    protected function &_open ( $streamName, Hoa_Stream_Context $context = null ) {
-
-        $out = null;
-
-        return $out;
-    }
-
-    public function _close ( ) {
-
-        return true;
-    }
-
-    public function isOpened ( ) {
-
-        return true;
-    }
-
-    public function write ( $string, $length ) {
-
-        cout($string);
-
-        return $length;
-    }
-
-    public function writeString ( $string ) {
-
-        return $this->write($string, strlen($string));
-    }
-
-    public function writeCharacter ( $char ) {
-
-        return $this->write((string) $char[0], 1);
-    }
-
-    public function writeBoolean ( $boolean ) {
-
-        return $this->write((string) (bool) $boolean, 1);
-    }
-
-    public function writeInteger ( $integer ) {
-
-        $integer = (string) (int) $integer;
-
-        return $this->write($integer, strlen($integer));
-    }
-
-    public function writeFloat ( $float ) {
-
-        $float = (string) (float) $float;
-
-        return $this->write($float, strlen($float));
-    }
+    public $self = null;
 
     public function writeArray ( Array $array ) {
 
-        $array = $array['log'];
+        $_    = $array['log'];
+        $args = null;
+        $res  = null;
+
+        foreach($_['arguments'] as $argument) {
+
+            if(null !== $args)
+                $args .= ', ';
+
+            if(is_array($argument))
+                $args .= 'array(…)';
+            elseif(is_object($argument))
+                $args .= get_class($argument);
+            else
+                $args .= var_export($argument, true);
+        }
+
+        if(isset($_['result']))
+            $res = ' -> ' . var_export($_['result'], true);
+
         $this->self->status(
-            $array['class'] . '::' . $array['method'] . '(' .
-            implode(', ', $array['arguments']) . ') -> ' . $array['result'],
-            $array['status']
+            str_repeat('  ', $_['depth']) .
+            $_['class'] . '::' . $_['method'] . '(' . $args . ')' .
+            $res . ': ' . $this->self->stylize($_['message'], 'info'),
+            $_['status']
         );
-        cout('    ' . $array['message']);
-        cout('    ' . $array['file'] . ' from ' . $array['startLine'] .
-             ' to ' . $array['endLine'] . '.');
-
-        cout();
-    }
-
-    public function writeLine ( $line ) {
-
-        if(false === $n = strpos($line, "\n"))
-            return $this->write($line, strlen($line));
-
-        return $this->write(substr($line, 0, $n), $n);
-    }
-
-    public function writeAll ( $string ) {
-
-        return $this->write($string, strlen($string));
-    }
-
-    public function truncate ( $size ) {
-
-        return false;
     }
 }
 
@@ -197,6 +124,7 @@ class RunCommand extends Hoa_Console_Command_Abstract {
         array('class',     parent::REQUIRED_ARGUMENT, 'c'),
         array('method',    parent::REQUIRED_ARGUMENT, 'm'),
         array('iteration', parent::REQUIRED_ARGUMENT, 'i'),
+        array('sampler',   parent::REQUIRED_ARGUMENT, 's'),
         array('help',      parent::NO_ARGUMENT,       'h'),
         array('help',      parent::NO_ARGUMENT,       '?')
     );
@@ -216,26 +144,18 @@ class RunCommand extends Hoa_Console_Command_Abstract {
         $class      = null;
         $method     = null;
         $iteration  = 1;
+        $sampler    = true;
 
-        $path = 'hoa://Data/Etc/Configuration/.Cache/HoaTest.php';
-
-        if(!file_exists($path))
-            throw new Hoa_Console_Command_Exception(
-                'Configuration cache file %s does not exists.', 0, $path);
-
-        $configurations = require $path;
-        $repos          = Hoa_Core_Parameter::zFormat(
-            $configurations['parameters']['repository'],
-            $configurations['keywords'],
-            $configurations['parameters']
-        );
-        $finder         = new Hoa_File_Finder(
+        $test       = new Hoa_Test();
+        $repos      = $test->getFormattedParameter('repository');
+        $finder     = new Hoa_File_Finder(
             $repos,
             Hoa_File_Finder::LIST_DIRECTORY,
             Hoa_File_Finder::SORT_MTIME |
             Hoa_File_Finder::SORT_REVERSE
         );
-        $revision       = basename($finder->getIterator()->current());
+        $revision   = basename($finder->getIterator()->current());
+        $rev        = false;
 
         while(false !== $c = parent::getOption($v)) {
 
@@ -247,6 +167,7 @@ class RunCommand extends Hoa_Console_Command_Abstract {
                         array('HEAD' => $revision)
                     );
                     $revision = $handle[0];
+                    $rev      = true;
                   break;
 
                 case 'f':
@@ -272,70 +193,51 @@ class RunCommand extends Hoa_Console_Command_Abstract {
             }
         }
 
+        if(false === $rev) {
+
+            cout('No revision was given; assuming ' .
+                 parent::stylize('HEAD', 'info') . ', i.e ' .
+                 parent::stylize($revision, 'info') . '.');
+            cout();
+        }
+
         $repository = $repos . $revision;
 
         if(!is_dir($repository))
             throw new Hoa_Console_Command_Exception(
-                'Repository %s does not exist.', 1, $repository);
+                'Repository %s does not exist.', 0, $repository);
 
-        // Yup, berk.
-        $configurations['parameters']['revision'] = $revision . '/';
+        $test->setParameter('revision', $revision . DS);
 
         if(null === $file)
             return $this->usage();
 
-        event('hoa://Event/Log/' . Hoa_Test_Praspel::LOG_CHANNEL)
-            ->attach(new Trivial($this));
+        $instrumented = $test->getFormattedParameter('instrumented');
 
-        $oracle       = Hoa_Core_Parameter::zFormat(
-            $configurations['parameters']['ordeal.oracle'],
-            $configurations['keywords'],
-            $configurations['parameters']
-        );
-        $battleground = Hoa_Core_Parameter::zFormat(
-            $configurations['parameters']['ordeal.battleground'],
-            $configurations['keywords'],
-            $configurations['parameters']
-        );
-
-        if(!file_exists($oracle . $file))
+        if(!file_exists($instrumented . $file))
             throw new Hoa_Console_Command_Exception(
                 'File %s does not exist in repository %s.',
-                2, array($file, $repository));
+                1, array($file, $repository));
 
-        require_once $oracle . $file;
-        require_once $battleground . $file;
+        require_once $instrumented . $file;
 
-        if(null !== $class) {
+        if(false === $sampler)
+            return HC_SUCCESS;
 
-            $exportTests = array_intersect_key(
-                $exportTests,
-                array($class => 0)
-            );
+        if(   null === $class
+           || null === $method)
+            return $this->usage();
 
-            if(null !== $method) {
+        $out = new Out();
+        $out->self = $this; // berk…
 
-                foreach($exportTests as $c => &$methods)
-                    $methods = array_intersect(
-                        $methods,
-                        array(0 => $method)
-                    );
-            }
-        }
+        event('hoa://Event/Log/' . Hoa_Test_Praspel::LOG_CHANNEL)
+            ->attach($out);
 
-        for($i = $iteration; $i > 0; $i--) {
+        for($i = 1; $iteration > 0; --$iteration, ++$i) {
 
-            cout(parent::underline('Iteration ' . ($iteration - $i + 1)));
-            cout();
-
-            foreach($exportTests as $classname => $methods) {
-
-                $classname = 'Hoatest_' . $classname;
-                $class = new $classname();
-
-                foreach($methods as $j => $method)
-                    $class->{'__test_' . $method}();
-            }
+            cout(parent::underline('Iteration #' . $i));
+            $test->sample($class . '::' . $method, $class, $method);
 
             cout();
         }
@@ -361,6 +263,7 @@ class RunCommand extends Hoa_Console_Command_Abstract {
             'c'    => 'Class to test in the file.',
             'm'    => 'Method to test in the class.',
             'i'    => 'Number of iterations.',
+            's'    => 'Which sampler to use.',
             'help' => 'This help.'
         )));
 
