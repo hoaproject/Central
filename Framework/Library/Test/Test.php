@@ -42,9 +42,9 @@ require_once 'Core.php';
 import('Test.Exception');
 
 /**
- * Hoa_Test_Oracle
+ * Hoa_Test_Orchestrate
  */
-import('Test.Oracle.~');
+import('Test.Orchestrate');
 
 /**
  * Hoa_Test_Praspel
@@ -102,64 +102,89 @@ class Hoa_Test implements Hoa_Core_Parameterizable {
             $this,
             array(),
             array(
-                'convict' => null,
-                /*
-                'convict.directory'        => null,
-                'convict.recursive'        => true,
-                'convict.result'           => array(),
-                */
+                'convict'      => null,
 
-                'root'                     => 'hoa://Data/Variable/Test/',
+                'root'         => 'hoa://Data/Variable/Test/',
 
-                'repository'               => '(:%root:)Repository/',
-                'revision'                 => '(:_YmdHis:)/',
+                'repository'   => '(:%root:)Repository/',
+                'revision'     => '(:_YmdHis:)/',
 
-                'incubator'                => '(:%repository:)(:%revision:)Incubator/',
-                'instrumented'             => '(:%repository:)(:%revision:)Instrumented/',
-                'sampler'                  => '(:%repository:)(:%revision:)Sampler/',
+                'incubator'    => '(:%repository:)(:%revision:)Incubator/',
+                'instrumented' => '(:%repository:)(:%revision:)Instrumented/',
+                'sampler'      => '(:%repository:)(:%revision:)Sampler/',
 
-                /*
-                'ordeal.oracle'            => '(:%repository:)(:%revision:)Ordeal/Oracle/',
-                'ordeal.battleground'      => '(:%repository:)(:%revision:)Ordeal/Battleground/',
-                */
-                'oracle.eyes.methodPrefix' => '__hoa_',
-                'dictionary'               => '(:%root:)Dictionary/',
-                'maxtry'                   => 64
+                'dictionary'   => '(:%root:)Dictionary/',
+                'maxtry'       => 64
             )
         );
 
         $this->setParameters($parameters);
     }
 
-    public function hopla ( $p ) {
+    /**
+     * For a temporary retro-compatibility. Will be deleted.
+     */
+    public static function getInstance ( ) {
 
-        import('Test.Orchestrate');
-        $this->setParameter('convict', $p);
+        return new self();
+    }
+
+    /**
+     * Initialize tests, i.e. create a new revision in the repository of test:
+     * incubator + instrumented.
+     *
+     * @access  public
+     * @param   string  $directory    Directory of the SUT (System Under Test).
+     * @return  void
+     */
+    public function initialize ( $directory ) {
+
+        $this->setParameter('convict', $directory);
         $orchestrate = new Hoa_Test_Orchestrate($this->_parameters);
         $this->_parameters->shareWith(
             $this,
             $orchestrate,
             Hoa_Core_Parameter::PERMISSION_READ
         );
-
         $orchestrate->compute();
 
         return;
     }
 
     /**
-     * Singleton : get instance of Hoa_Test.
+     * Use sampler to call a method.
      *
      * @access  public
-     * @param   array   $parameters    Parameters.
+     * @param   string  $contractId    Contract ID.
+     * @param   string  $class         Class to call.
+     * @param   string  $method        Method to call.
      * @return  void
      */
-    public static function getInstance ( Array $parameters = array() ) {
+    public function sample ( $contractId, $class, $method ) {
 
-        if(null === self::$_instance)
-            self::$_instance = new self($parameters);
+        $cut        = new $class();
+        $hop        = '__hoa_' . $method . '_contract';
+        $cut->$hop();
+        $praspel    = Hoa_Test_Praspel::getInstance();
+        $contract   = $praspel->getContract($contractId);
+        $requires   = $contract->getClause('requires');
+        $parameters = array(0 => $method);
+        $handle     = null;
 
-        return self::$_instance;
+        foreach($requires->getVariables() as $variable) {
+
+            $handle = $variable->getChoosenDomain();
+            $handle->clear()->randomize();
+
+            $parameters[] = $handle->getValue();
+        }
+
+        call_user_func_array(
+            array($cut, '__hoa_magicCaller'),
+            $parameters
+        );
+
+        return;
     }
 
     /**
@@ -226,25 +251,5 @@ class Hoa_Test implements Hoa_Core_Parameterizable {
     public function getFormattedParameter ( $key ) {
 
         return $this->_parameters->getFormattedParameter($this, $key);
-    }
-
-    /**
-     * Run test.
-     *
-     * @access  public
-     * @return  void
-     */
-    public function run ( ) {
-
-        $oracle = new Hoa_Test_Oracle();
-        $this->_parameters->shareWith(
-            $this,
-            $oracle,
-            Hoa_Core_Parameter::PERMISSION_READ  |
-            Hoa_Core_Parameter::PERMISSION_WRITE |
-            Hoa_Core_Parameter::PERMISSION_SHARE
-        );
-        $oracle->setRequest($this->_parameters);
-        $oracle->predict();
     }
 }
