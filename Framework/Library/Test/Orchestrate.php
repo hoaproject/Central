@@ -332,11 +332,13 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                     $contractName = '__hoa_' . $name . '_contract';
                     $preName      = '__hoa_' . $name . '_pre';
                     $postName     = '__hoa_' . $name . '_post';
+                    $excepName    = '__hoa_' . $name . '_exception';
 
-                    $main = new Hoa_Reflection_Fragment_RMethod($mainName);
-                    $cont = new Hoa_Reflection_Fragment_RMethod($contractName);
-                    $pre  = new Hoa_Reflection_Fragment_RMethod($preName);
-                    $post = new Hoa_Reflection_Fragment_RMethod($postName);
+                    $main  = new Hoa_Reflection_Fragment_RMethod($mainName);
+                    $cont  = new Hoa_Reflection_Fragment_RMethod($contractName);
+                    $pre   = new Hoa_Reflection_Fragment_RMethod($preName);
+                    $post  = new Hoa_Reflection_Fragment_RMethod($postName);
+                    $excep = new Hoa_Reflection_Fragment_RMethod($excepName);
 
 
                     // Original.
@@ -385,6 +387,10 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                         $post->importFragment($parameter);
                     }
 
+                    $excep->importFragment(
+                        new Hoa_Reflection_Fragment_RParameter('exception')
+                    );
+
 
                     // Fake original.
                     $main->setCommentContent(
@@ -395,8 +401,13 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                     );
                     $main->setBody(
                         '        $this->__hoa_' . $name . '_contract();' . "\n" .
-                        '        $this->__hoa_' . $name . '_pre(' . $p . ');' . "\n" .
-                        '        $result = $this->__hoa_' . $name . '_body(' . $p . ');' . "\n" .
+                        '        $this->__hoa_' . $name . '_pre(' . $p . ');' . "\n\n" .
+                        '        try {' . "\n\n" .
+                        '            $result = $this->__hoa_' . $name . '_body(' . $p . ');' . "\n" .
+                        '        }' . "\n" .
+                        '        catch ( Exception $e ) {' . "\n\n" .
+                        '            return $this->__hoa_' . $name . '_exception($e);' . "\n" .
+                        '        }' . "\n\n" .
                         '        $this->__hoa_' . $name . '_post(' . $pp . ');' . "\n\n" .
                         '        return $result;'
                     );
@@ -412,7 +423,6 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                     $pre->setBody(
                         '        $praspel  = Hoa_Test_Praspel::getInstance();' . "\n" .
                         '        $contract = $praspel->getContract(\'' . $id . '\');' . "\n" .
-                        '        $contract->setDepthInc(); ' . "\n\n" .
                         '        return $contract->verifyPreCondition(' . $p . ');' 
                     );
                     $pre->setVisibility(_public);
@@ -425,13 +435,24 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                     );
                     $post->setBody(
                         '        $praspel  = Hoa_Test_Praspel::getInstance();' . "\n" .
-                        '        $contract = $praspel->getContract(\'' . $id . '\');' . "\n" .
-                        '        $return   = $contract->verifyPostCondition(' . $pp . ');' . "\n" .
-                        '        $contract->setDepthDec(); ' . "\n\n" .
-                        '        return $return;'
+                        '        $contract = $praspel->getContract(\'' . $id . '\');' . "\n\n" .
+                        '        return $contract->verifyPostCondition(' . $pp . ');'
                     );
                     $post->setVisibility(_public);
                     $class->importFragment($post);
+
+
+                    // Exception.
+                    $excep->setCommentContent(
+                        'Exceptional condition of the ' . $name . ' method.'
+                    );
+                    $excep->setBody(
+                        '        $praspel  = Hoa_Test_Praspel::getInstance();' . "\n" .
+                        '        $contract = $praspel->getContract(\'' . $id . '\');' . "\n\n" .
+                        '        return $contract->verifyException($exception);'
+                    );
+                    $excep->setVisibility(_public);
+                    $class->importFragment($excep);
                 }
 
                 $class->importFragment($this->_magicSetter);
