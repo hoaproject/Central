@@ -165,6 +165,7 @@ class Hoa_Test_Praspel_Contract {
      * @var Hoa_Test_Praspel_Contract int
      */
     protected static $_depth = -1;
+    protected $_args = null;
 
 
 
@@ -293,19 +294,22 @@ class Hoa_Test_Praspel_Contract {
      */
     public function verifyPreCondition ( ) {
 
-        $args     = func_get_args();
+        $args     = $this->_args = func_get_args();
         $i        = 0;
         $out      = true;
         $requires = $this->getClause('requires');
         $log      = array(
+            'type'      => Hoa_Test_Praspel::LOG_TYPE_PRE,
             'class'     => $this->getClass(),
             'method'    => $this->getMethod(),
             'arguments' => $args,
+            'result'    => null,
+            'exception' => null,
             'file'      => $this->getFile(),
             'startLine' => $this->getStartLine(),
             'endLine'   => $this->getEndLine(),
             'status'    => FAILED,
-            'depth'     => $this->getDepth()
+            'depth'     => ++self::$_depth
         );
 
         foreach($requires->getVariables() as $variable) {
@@ -357,15 +361,17 @@ class Hoa_Test_Praspel_Contract {
         $out     = true;
         $ensures = $this->getClause('ensures');
         $log      = array(
+            'type'      => Hoa_Test_Praspel::LOG_TYPE_POST,
             'class'     => $this->getClass(),
             'method'    => $this->getMethod(),
             'arguments' => $args,
             'result'    => $result,
+            'exception' => null,
             'file'      => $this->getFile(),
             'startLine' => $this->getStartLine(),
             'endLine'   => $this->getEndLine(),
             'status'    => FAILED,
-            'depth'     => $this->getDepth()
+            'depth'     => self::$_depth--
         );
 
         foreach($ensures->getVariables() as $variable) {
@@ -405,25 +411,65 @@ class Hoa_Test_Praspel_Contract {
     }
 
     /**
-     * Increment 1 to the depth.
+     * Verify the throwable.
      *
      * @access  public
-     * @return  int
+     * @param   Exception  $exception    Exception.
+     * @return  bool
      */
-    public function setDepthInc ( ) {
+    public function verifyException ( Exception $exception ) {
 
-        return ++self::$_depth;
-    }
+        $i         = 0;
+        $out       = true;
+        $log       = array(
+            'type'      => Hoa_Test_Praspel::LOG_TYPE_EXCEPTION,
+            'class'     => $this->getClass(),
+            'method'    => $this->getMethod(),
+            'arguments' => $this->_args,
+            'result'    => null,
+            'exception' => $exception,
+            'file'      => $this->getFile(),
+            'startLine' => $this->getStartLine(),
+            'endLine'   => $this->getEndLine(),
+            'status'    => FAILED,
+            'depth'     => self::$_depth--
+        );
 
-    /**
-     * Decrement 1 to the depth.
-     *
-     * @access  public
-     * @return  int
-     */
-    public function setDepthDec ( ) {
+        if(false === $this->clauseExists('throwable')) {
 
-        return --self::$_depth;
+            $this->getLog()->log(
+                'An exception (' . get_class($exception) . ') was thrown ' .
+                'and no @throwable clause was declared.',
+                Hoa_Log::TEST,
+                $log
+            );
+
+            return FAILED;
+        }
+
+        $throwable = $this->getClause('throwable');
+
+        if(false === $throwable->exceptionExists(get_class($exception))) {
+
+            $this->getLog()->log(
+                'Undeclared thrown exception (' . get_class($exception) . ') ' .
+                'in the @throwable clause.',
+                Hoa_Log::TEST,
+                $log
+            );
+
+            return FAILED;
+        }
+
+        $log['status'] = SUCCEED;
+        $this->getLog()->log(
+            'The exceptional clause succeed (' . get_class($exception) .
+            ' was thrown).',
+            Hoa_Log::TEST,
+            $log
+        );
+
+        return SUCCEED;
     }
 
     /**
