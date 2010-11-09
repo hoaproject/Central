@@ -155,7 +155,7 @@ class Hoa_Test_Praspel_Clause_Throwable implements Hoa_Test_Praspel_Clause {
         $gc  = get_class($this);
         $out = strtolower(substr($gc, strrpos($gc, '_') + 1));
 
-        return '$praspel' . "\n" .
+        return '$contract' . "\n" .
                '    ->clause(\'' . $out . '\')'  . "\n" .
                '    ->couldThrow(\'' .
                implode(
