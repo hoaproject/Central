@@ -70,6 +70,10 @@ class Hoa_Test_Praspel {
      */
     const LOG_CHANNEL = 'Test/Praspel';
 
+    const LOG_TYPE_PRE       = 0;
+    const LOG_TYPE_POST      = 1;
+    const LOG_TYPE_EXCEPTION = 2;
+
     /**
      * Registry of contracts.
      *
