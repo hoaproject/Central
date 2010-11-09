@@ -111,13 +111,6 @@ class Hoa_Test_Praspel_Contract {
     protected $_clauses      = array();
 
     /**
-     * The call object.
-     *
-     * @var Hoa_Test_Praspel_Call object
-     */
-    protected $_call         = null;
-
-    /**
      * Log channel.
      *
      * @var Hoa_Log object
@@ -165,7 +158,27 @@ class Hoa_Test_Praspel_Contract {
      * @var Hoa_Test_Praspel_Contract int
      */
     protected static $_depth = -1;
-    protected $_args = null;
+
+    /**
+     * Arguments.
+     *
+     * @var Hoa_Test_Praspel_Contract array
+     */
+    protected $_arguments    = array();
+
+    /**
+     * Result of the method call.
+     *
+     * @var Hoa_Test_Praspel_Contract mixed
+     */
+    protected $_result       = null;
+
+    /**
+     * Exception thrown by the method call.
+     *
+     * @var Exception object
+     */
+    protected $_exception    = null;
 
 
 
@@ -262,30 +275,6 @@ class Hoa_Test_Praspel_Contract {
     }
 
     /**
-     * Call a method.
-     *
-     * @access  public
-     * @param   object  &$convict       Object where method is.
-     * @param   string  $magicCaller    Magic caller name.
-     * @param   string  $class          Class name.
-     * @param   string  $method         Method name.
-     * @return  void
-     */
-    public function call ( &$convict, $magicCaller, $class, $method ) {
-
-        $old         = $this->_call;
-        $this->_call = new Hoa_Test_Praspel_Call(
-            $this,
-            $convict,
-            $magicCaller,
-            $class,
-            $method
-        );
-
-        return;
-    }
-
-    /**
      * Verify the pre-condition.
      *
      * @access  public
@@ -294,17 +283,17 @@ class Hoa_Test_Praspel_Contract {
      */
     public function verifyPreCondition ( ) {
 
-        $args     = $this->_args = func_get_args();
-        $i        = 0;
-        $out      = true;
-        $requires = $this->getClause('requires');
-        $log      = array(
+        $this->_arguments = func_get_args();
+        $i                = 0;
+        $out              = true;
+        $requires         = $this->getClause('requires');
+        $log              = array(
             'type'      => Hoa_Test_Praspel::LOG_TYPE_PRE,
             'class'     => $this->getClass(),
             'method'    => $this->getMethod(),
-            'arguments' => $args,
-            'result'    => null,
-            'exception' => null,
+            'arguments' => $this->getArguments(),
+            'result'    => $this->getResult(),
+            'exception' => $this->getException(),
             'file'      => $this->getFile(),
             'startLine' => $this->getStartLine(),
             'endLine'   => $this->getEndLine(),
@@ -317,7 +306,7 @@ class Hoa_Test_Praspel_Contract {
             $o = false;
 
             foreach($variable->getDomains() as $domain)
-                $o = $o || $domain->predicate($args[$i]);
+                $o = $o || $domain->predicate($this->_arguments[$i]);
 
             $out = $out && $o;
 
@@ -355,18 +344,18 @@ class Hoa_Test_Praspel_Contract {
      */
     public function verifyPostCondition ( $result ) {
 
-        $args    = func_get_args();
-        $result  = array_shift($args);
-        $i       = 0;
-        $out     = true;
-        $ensures = $this->getClause('ensures');
-        $log      = array(
+        $args          = func_get_args();
+        $this->_result = array_shift($args);
+        $i             = 0;
+        $out           = true;
+        $ensures       = $this->getClause('ensures');
+        $log           = array(
             'type'      => Hoa_Test_Praspel::LOG_TYPE_POST,
             'class'     => $this->getClass(),
             'method'    => $this->getMethod(),
             'arguments' => $args,
-            'result'    => $result,
-            'exception' => null,
+            'result'    => $this->getResult(),
+            'exception' => $this->getException(),
             'file'      => $this->getFile(),
             'startLine' => $this->getStartLine(),
             'endLine'   => $this->getEndLine(),
@@ -377,7 +366,7 @@ class Hoa_Test_Praspel_Contract {
         foreach($ensures->getVariables() as $variable) {
 
             if('\result' == $variable->getName())
-                $arg = $result;
+                $arg = $this->getResult();
             else
                 $arg = $args[$i++];
 
@@ -419,15 +408,17 @@ class Hoa_Test_Praspel_Contract {
      */
     public function verifyException ( Exception $exception ) {
 
-        $i         = 0;
-        $out       = true;
-        $log       = array(
+        $this->_exception = $exception;
+        $i                = 0;
+        $out              = true;
+        $name             = get_class($exception);
+        $log              = array(
             'type'      => Hoa_Test_Praspel::LOG_TYPE_EXCEPTION,
             'class'     => $this->getClass(),
             'method'    => $this->getMethod(),
-            'arguments' => $this->_args,
-            'result'    => null,
-            'exception' => $exception,
+            'arguments' => $this->getArguments(),
+            'result'    => $this->getResult(),
+            'exception' => $this->getException(),
             'file'      => $this->getFile(),
             'startLine' => $this->getStartLine(),
             'endLine'   => $this->getEndLine(),
@@ -438,7 +429,7 @@ class Hoa_Test_Praspel_Contract {
         if(false === $this->clauseExists('throwable')) {
 
             $this->getLog()->log(
-                'An exception (' . get_class($exception) . ') was thrown ' .
+                'An exception (' . $name . ') was thrown ' .
                 'and no @throwable clause was declared.',
                 Hoa_Log::TEST,
                 $log
@@ -449,10 +440,10 @@ class Hoa_Test_Praspel_Contract {
 
         $throwable = $this->getClause('throwable');
 
-        if(false === $throwable->exceptionExists(get_class($exception))) {
+        if(false === $throwable->exceptionExists($name)) {
 
             $this->getLog()->log(
-                'Undeclared thrown exception (' . get_class($exception) . ') ' .
+                'Undeclared thrown exception (' . $name . ') ' .
                 'in the @throwable clause.',
                 Hoa_Log::TEST,
                 $log
@@ -463,8 +454,7 @@ class Hoa_Test_Praspel_Contract {
 
         $log['status'] = SUCCEED;
         $this->getLog()->log(
-            'The exceptional clause succeed (' . get_class($exception) .
-            ' was thrown).',
+            'The exceptional clause succeed (' . $name . ' was thrown).',
             Hoa_Log::TEST,
             $log
         );
@@ -481,97 +471,6 @@ class Hoa_Test_Praspel_Contract {
     public function getDepth ( ) {
 
         return self::$_depth;
-    }
-
-    /**
-     * Verify clauses.
-     *
-     * @access  public
-     * @return  void
-     */
-    public function verify ( ) {
-
-        $requires  = $this->getClause('requires');
-        $ensures   = $this->getClause('ensures');
-        $call      = $this->getCall();
-
-        $log       = array(
-            'class'     => $this->getClass(),
-            'method'    => $this->getMethod(),
-            'arguments' => $call->getValues(),
-            'result'    => $call->getResult(),
-            'file'      => $this->getFile(),
-            'startLine' => $this->getStartLine(),
-            'endLine'   => $this->getEndLine(),
-            'status'    => FAILED
-        );
-
-        if(true === $call->hasException()) {
-
-            $exception = get_class($call->getException());
-
-            if(false === $this->clauseExists('throwable')) {
-
-                $this->getLog()->log(
-                    'An exception (' . $exception .
-                    ') occured and no @throwable was declared.',
-                    Hoa_Log::TEST,
-                    $log
-                );
-
-                return;
-            }
-
-            $throwable = $this->getClause('throwable');
-
-            if(false === $throwable->exceptionExists($exception)) {
-
-                $this->getLog()->log(
-                    'The exception ' . $exception .
-                    ' was thrown but not declared in the @throwable clause.',
-                    Hoa_Log::TEST,
-                    $log
-                );
-
-                return;
-            }
-
-            $log['status'] = SUCCEED;
-            $this->getLog()->log(
-                'The exception ' . $exception .
-                ' was thrown and it is normal.',
-                Hoa_Log::TEST,
-                $log
-            );
-
-            return;
-        }
-
-        foreach($ensures->getVariables() as $e => $variable) {
-
-            if('\result' == $variable->getName()) {
-
-                $handle = $variable->getChoosenDomain()->predicate(
-                    $call->getResult()
-                );
-
-                if(false === $handle) {
-
-                    $this->getLog()->log(
-                        'Returned ' . $call->getResult(),
-                        Hoa_Log::TEST,
-                        $log
-                    );
-
-                    return;
-                }
-            }
-        }
-
-        $log['status'] = SUCCEED;
-        $this->getLog()->log('Bingo!', Hoa_Log::TEST, $log);
-
-        return;
     }
 
     /**
@@ -612,17 +511,6 @@ class Hoa_Test_Praspel_Contract {
     public function getClauses ( ) {
 
         return $this->_clauses;
-    }
-
-    /**
-     * Get the call.
-     *
-     * @access  public
-     * @return  Hoa_Test_Praspel_Call
-     */
-    public function getCall ( ) {
-
-        return $this->_call;
     }
 
     /**
@@ -689,6 +577,39 @@ class Hoa_Test_Praspel_Contract {
     public function getLog ( ) {
 
         return $this->_log;
+    }
+
+    /**
+     * Get arguments given to the method call.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getArguments ( ) {
+
+        return $this->_arguments;
+    }
+
+    /**
+     * Get the result given by the method call.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function getResult ( ) {
+
+        return $this->_result;
+    }
+
+    /**
+     * Get the exception thrown by the method call.
+     *
+     * @access  public
+     * @return  Exception
+     */
+    public function getException ( ) {
+
+        return $this->_exception;
     }
 
     /**
