@@ -78,11 +78,6 @@ import('Test.Praspel.Clause.Throwable');
 import('Test.Praspel.Domain');
 
 /**
- * Hoa_Test_Praspel_Call
- */
-import('Test.Praspel.Call');
-
-/**
  * Hoa_Log
  */
 import('Log.~');
