@@ -366,6 +366,10 @@ class          Hoa_Socket_Connection_Server
         if($current != $this->_master) {
 
             $i = array_search($current, $this->_stack);
+
+            if(false === $i)
+                return @fclose($current);
+
             unset($this->_stack[$i]);
             unset($this->_nodes[$this->getNodeId($current)]);
 
@@ -373,7 +377,6 @@ class          Hoa_Socket_Connection_Server
         }
 
         return (bool) (@fclose($this->_master) + @fclose($this->getStream()));
-
     }
 
     /**
