@@ -43,6 +43,11 @@ require_once 'Core.php';
 import('Xyl.Interpreter') and load();
 
 /**
+ * Hoa_Xyl_Interpreter_Common_*
+ */
+import('Xyl.Interpreter.Common.*');
+
+/**
  * Hoa_Xyl_Interpreter_Html5_*
  */
 import('Xyl.Interpreter.Html5.*');
@@ -69,10 +74,10 @@ class Hoa_Xyl_Interpreter_Html5 extends Hoa_Xyl_Interpreter {
      * @var Hoa_Xyl_Interpreter_Html5 array
      */
     protected $_rank = array(
+        'yield'    => 'Hoa_Xyl_Interpreter_Common_Yield',
         'page'     => 'Hoa_Xyl_Interpreter_Html5_Page',
         'ul'       => 'Hoa_Xyl_Interpreter_Html5_Ul',
         'li'       => 'Hoa_Xyl_Interpreter_Html5_Li',
-        'yield'    => 'Hoa_Xyl_Interpreter_Html5_Yield',
         'section1' => 'Hoa_Xyl_Interpreter_Html5_Section1',
         'p'        => 'Hoa_Xyl_Interpreter_Html5_P'
     );
