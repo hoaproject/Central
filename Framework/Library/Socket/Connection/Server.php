@@ -367,10 +367,9 @@ class          Hoa_Socket_Connection_Server
 
             $i = array_search($current, $this->_stack);
 
-            if(false === $i)
-                return @fclose($current);
+            if(false !== $i)
+                unset($this->_stack[$i]);
 
-            unset($this->_stack[$i]);
             unset($this->_nodes[$this->getNodeId($current)]);
 
             return @fclose($current);
