@@ -44,7 +44,7 @@ import('Bench.Exception');
 /**
  * Hoa_Bench_Mark
  */
-import('Bench.Mark');
+import('Bench.Mark') and load();
 
 /**
  * Class Hoa_Bench.
