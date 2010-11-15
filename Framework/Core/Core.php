@@ -387,12 +387,18 @@ class Hoa_Core implements Hoa_Core_Parameterizable {
      */
     protected static function _import ( $path = null, $root = null ) {
 
-        static $back = null;
-        static $last = null;
+        static $back   = null;
+        static $last   = null;
+        static $_cache = null;
 
         if(null === $back) {
 
             self::$_lastImport = array();
+
+            if(isset($_cache[$path]))
+                return true;
+
+            $_cache[$path] = true;
 
             if(null === $root)
                 $back = self::getInstance()
