@@ -396,7 +396,7 @@ class Hoa_Core implements Hoa_Core_Parameterizable {
             self::$_lastImport = array();
 
             if(isset($_cache[$path]))
-                return true;
+                return false;
 
             $_cache[$path] = true;
 
