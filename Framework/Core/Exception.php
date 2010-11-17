@@ -124,6 +124,31 @@ class Hoa_Exception extends Exception {
     }
 
     /**
+     * Get the hoa:// path if possible.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getAbstractFile ( ) {
+
+        $app  = Hoa_Core::getInstance()->getProtocol()->resolve('hoa://Application/');
+        $data = Hoa_Core::getInstance()->getProtocol()->resolve('hoa://Data/');
+        $fw   = Hoa_Core::getInstance()->getProtocol()->resolve('hoa://Framework/');
+        $file = $this->getFile();
+
+        if($app == substr($file, 0, strlen($app)))
+            $file = 'hoa://Application/' . substr($file, strlen($app));
+
+        elseif($data == substr($file, 0, strlen($data)))
+            $file = 'hoa://Data/' . substr($file, strlen($data));
+
+        elseif($fw == substr($file, 0, strlen($fw)))
+            $file = 'hoa://Framework/' . substr($file, strlen($fw));
+
+        return $file;
+    }
+
+    /**
      * Raise an error.
      * An exception is transformed to a string message, that could be returned,
      * printed, throw with trigger_error user function, or killed with die/exit
@@ -145,8 +170,9 @@ class Hoa_Exception extends Exception {
         if(!empty($trace))
             $pre .= @$trace[0]['class'] . '::' . @$trace[0]['function'] . ': ';
 
-        $out = $pre . '(' . $this->getCode() . ') ' . $message . "\n" .
-               'in ' . $this->getFile() . ' at ' . $this->getLine() . '.' . "\n\n";
+        $out  = $pre . '(' . $this->getCode() . ') ' . $message . "\n" .
+                'in ' . $this->getAbstractFile() . ' at ' . $this->getLine() .
+                '.' . "\n\n";
 
         switch($output) {
 
