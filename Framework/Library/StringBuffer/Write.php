@@ -48,9 +48,9 @@ import('StringBuffer.Exception');
 import('StringBuffer.~');
 
 /**
- * Hoa_Stream_Io_Out
+ * Hoa_Stream_Interface_Out
  */
-import('Stream.Io.Out');
+import('Stream.Interface.Out');
 
 /**
  * Class Hoa_StringBuffer_Write.
@@ -68,7 +68,7 @@ import('Stream.Io.Out');
 
 class          Hoa_StringBuffer_Write
     extends    Hoa_StringBuffer
-    implements Hoa_Stream_Io_Out {
+    implements Hoa_Stream_Interface_Out {
 
     /**
      * Write n characters.

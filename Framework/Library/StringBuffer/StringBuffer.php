@@ -42,19 +42,19 @@ require_once 'Core.php';
 import('Stream.~');
 
 /**
- * Hoa_Stream_Io_Bufferable
+ * Hoa_Stream_Interface_Bufferable
  */
-import('Stream.Io.Bufferable');
+import('Stream.Interface.Bufferable');
 
 /**
- * Hoa_Stream_Io_Lockable
+ * Hoa_Stream_Interface_Lockable
  */
-import('Stream.Io.Lockable');
+import('Stream.Interface.Lockable');
 
 /**
- * Hoa_Stream_Io_Pointable
+ * Hoa_Stream_Interface_Pointable
  */
-import('Stream.Io.Pointable');
+import('Stream.Interface.Pointable');
 
 /**
  * Class Hoa_StringBuffer.
@@ -71,9 +71,9 @@ import('Stream.Io.Pointable');
 
 abstract class Hoa_StringBuffer
     extends    Hoa_Stream
-    implements Hoa_Stream_Io_Bufferable,
-               Hoa_Stream_Io_Lockable,
-               Hoa_Stream_Io_Pointable {
+    implements Hoa_Stream_Interface_Bufferable,
+               Hoa_Stream_Interface_Lockable,
+               Hoa_Stream_Interface_Pointable {
 
     /**
      * String buffer index.
@@ -149,7 +149,7 @@ abstract class Hoa_StringBuffer
      *
      * @access  public
      * @param   int     $operation    Operation, use the
-     *                                Hoa_Stream_Io_Lockable::LOCK_* constants.
+     *                                Hoa_Stream_Interface_Lockable::LOCK_* constants.
      * @return  bool
      */
     public function lock ( $operation ) {
@@ -173,11 +173,11 @@ abstract class Hoa_StringBuffer
      *
      * @access  public
      * @param   int     $offset    Offset (negative value should be supported).
-     * @param   int     $whence    When, use the Hoa_Stream_Io_Pointable::SEEK_*
+     * @param   int     $whence    When, use the Hoa_Stream_Interface_Pointable::SEEK_*
      *                             constants.
      * @return  int
      */
-    public function seek ( $offset, $whence = Hoa_Stream_Io_Pointable::SEEK_SET ) {
+    public function seek ( $offset, $whence = Hoa_Stream_Interface_Pointable::SEEK_SET ) {
 
         return fseek($this->getStream(), $offset, $whence);
     }
@@ -210,7 +210,7 @@ abstract class Hoa_StringBuffer
         ftruncate($this->getStream(), 0);
         fwrite($this->getStream(), $string, strlen($string));
 
-        $this->seek(0, Hoa_Stream_Io_Pointable::SEEK_SET);
+        $this->seek(0, Hoa_Stream_Interface_Pointable::SEEK_SET);
 
         return $this;
     }
