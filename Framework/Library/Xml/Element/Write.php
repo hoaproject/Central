@@ -48,9 +48,9 @@ import('Xml.Exception');
 import('Xml.Element.Basic') and load();
 
 /**
- * Hoa_Stream_Io_Out
+ * Hoa_Stream_Interface_Out
  */
-import('Stream.Io.Out') and load();
+import('Stream.Interface.Out') and load();
 
 /**
  * Hoa_StringBuffer_ReadWrite
@@ -73,7 +73,7 @@ import('StringBuffer.ReadWrite');
 
 class          Hoa_Xml_Element_Write
     extends    Hoa_Xml_Element_Basic
-    implements Hoa_Stream_Io_Out {
+    implements Hoa_Stream_Interface_Out {
 
     /**
      * Write n characters.

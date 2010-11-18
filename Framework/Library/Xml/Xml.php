@@ -52,9 +52,9 @@ import('Xml.Element') and load();
 import('Stream.Composite') and load();
 
 /**
- * Hoa_Stream_Io_Structural
+ * Hoa_Stream_Interface_Structural
  */
-import('Stream.Io.Structural') and load();
+import('Stream.Interface.Structural') and load();
 
 /**
  * Class Hoa_Xml.
@@ -72,7 +72,7 @@ import('Stream.Io.Structural') and load();
 abstract class Hoa_Xml
     extends    Hoa_Stream_Composite
     implements Hoa_Xml_Element,
-               Hoa_Stream_Io_Structural,
+               Hoa_Stream_Interface_Structural,
                Countable,
                IteratorAggregate,
                ArrayAccess {
@@ -114,7 +114,7 @@ abstract class Hoa_Xml
 
         if(false === $root) {
 
-            if($innerStream instanceof Hoa_Stream_Io_In)
+            if($innerStream instanceof Hoa_Stream_Interface_In)
                 $root = @simplexml_load_string($innerStream->readAll(), $stream);
 
             if(false === $root) {
@@ -165,7 +165,7 @@ abstract class Hoa_Xml
                         1, array($innerStream->getStreamName(), $message));
                 }
 
-                if(!($innerStream instanceof Hoa_Stream_Io_Out))
+                if(!($innerStream instanceof Hoa_Stream_Interface_Out))
                     throw new Hoa_Xml_Exception(
                         'Failed to open the XML document %s.',
                         2, $innerStream->getStreamName());

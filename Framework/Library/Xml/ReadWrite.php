@@ -48,9 +48,14 @@ import('Xml.Exception');
 import('Xml.~') and load();
 
 /**
- * Hoa_Stream_Io
+ * Hoa_Stream_Interface_In
  */
-import('Stream.Io') and load();
+import('Stream.Interface.In');
+
+/**
+ * Hoa_Stream_Interface_Out
+ */
+import('Stream.Interface.Out');
 
 /**
  * Hoa_Xml_Element_ReadWrite
@@ -73,16 +78,23 @@ import('Xml.Element.ReadWrite') and load();
 
 class          Hoa_Xml_ReadWrite
     extends    Hoa_Xml
-    implements Hoa_Stream_Io {
+    implements Hoa_Stream_Interface_In,
+               Hoa_Stream_Interface_Out {
 
     /**
      * Start the stream reader/writer as if it is a XML document.
      *
      * @access  public
-     * @param   Hoa_Stream_Io  $stream    Stream to read/write.
+     * @param   Hoa_Stream_Interface_In  $stream    Stream to read/write.
      * @return  void
+     * @throw   Hoa_Xml_Exception
      */
-    public function __construct ( Hoa_Stream_Io $stream ) {
+    public function __construct ( Hoa_Stream_Interface_In $stream ) {
+
+        if(!($stream instanceof Hoa_Stream_Interface_Out))
+            throw new Hoa_Xml_Exception(
+                'The stream must implement Hoa_Stream_Interface_In and ' .
+                'Hoa_Stream_Interface_Out interfaces.', 0);
 
         parent::__construct('Hoa_Xml_Element_ReadWrite', $stream);
 
