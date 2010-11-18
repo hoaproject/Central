@@ -367,7 +367,7 @@ class Hoa_Core_Event {
 
         foreach($event->_attachement as $index => $callback)
             if(     null === $callback[self::CALLBACK_METHOD]
-                && ($callback[self::CALLBACK_OBJECT] instanceof Hoa_Stream_Io_Out))
+                && ($callback[self::CALLBACK_OBJECT] instanceof Hoa_Stream_Interface_Out))
                 $callback[self::CALLBACK_OBJECT]->$method($handle);
             elseif($callback[self::CALLBACK_OBJECT] instanceof Closure)
                 $callback[self::CALLBACK_OBJECT]($data);
