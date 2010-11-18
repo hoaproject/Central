@@ -125,12 +125,12 @@ class Hoa_Php_Io_Out extends Hoa_Stream implements Hoa_Stream_Interface_Out {
      * @param   string  $string    String.
      * @param   int     $length    Length.
      * @return  mixed
-     * @throw   Hoa_Php_Exception
+     * @throw   Hoa_Php_Io_Exception
      */
     public function write ( $string, $length ) {
 
         if($length <= 0)
-            throw new Hoa_Php_Exception(
+            throw new Hoa_Php_Io_Exception(
                 'Length must be greather than 0, given %d.', 0, $length);
 
         return fwrite($this->getStream(), $string, $length);
