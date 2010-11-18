@@ -48,9 +48,19 @@ import('Socket.Exception');
 import('Stream.~');
 
 /**
- * Hoa_Stream_Io
+ * Hoa_Stream_Interface_In
  */
-import('Stream.Io');
+import('Stream.Interface.In');
+
+/**
+ * Hoa_Stream_Interface_Out
+ */
+import('Stream.Interface.Out');
+
+/**
+ * Hoa_Stream_Interface_Pathable
+ */
+import('Stream.Interface.Pathable');
 
 /**
  * Class Hoa_Socket_Connection.
@@ -68,7 +78,9 @@ import('Stream.Io');
 
 abstract class Hoa_Socket_Connection
     extends    Hoa_Stream
-    implements Hoa_Stream_Io {
+    implements Hoa_Stream_Interface_In,
+               Hoa_Stream_Interface_Out,
+               Hoa_Stream_Interface_Pathable {
 
     /**
      * Socket.
@@ -664,16 +676,5 @@ abstract class Hoa_Socket_Connection
     public function getDirname ( ) {
 
         return dirname($this->getSocket()->__toString());
-    }
-
-    /**
-     * Get size.
-     *
-     * @access  public
-     * @return  int
-     */
-    public function getSize ( ) {
-
-        return Hoa_Stream_Io::SIZE_UNDEFINED;
     }
 }
