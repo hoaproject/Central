@@ -48,9 +48,9 @@ import('Php.Io.Exception');
 import('Stream.~');
 
 /**
- * Hoa_Stream_Io_Out
+ * Hoa_Stream_Interface_Out
  */
-import('Stream.Io.Out');
+import('Stream.Interface.Out');
 
 /**
  * Whether it is not defined.
@@ -71,7 +71,7 @@ _define('STDOUT', fopen('php://stdout', 'wb'));
  * @subpackage  Hoa_Php_Io_Out
  */
 
-class Hoa_Php_Io_Out extends Hoa_Stream implements Hoa_Stream_Io_Out {
+class Hoa_Php_Io_Out extends Hoa_Stream implements Hoa_Stream_Interface_Out {
 
     /**
      * Open a stream to php://stdout.

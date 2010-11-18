@@ -48,9 +48,9 @@ import('Xml.Element') and load();
 import('Xml.CssToXPath');
 
 /**
- * Hoa_Stream_Io_Structural
+ * Hoa_Stream_Interface_Structural
  */
-import('Stream.Io.Structural') and load();
+import('Stream.Interface.Structural') and load();
 
 /**
  * Class Hoa_Xml_Element_Basic.
@@ -69,7 +69,7 @@ import('Stream.Io.Structural') and load();
 class          Hoa_Xml_Element_Basic
     extends    SimpleXMLElement
     implements Hoa_Xml_Element,
-               Hoa_Stream_Io_Structural {
+               Hoa_Stream_Interface_Structural {
 
     /**
      * CssToXPath instance.

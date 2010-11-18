@@ -57,9 +57,9 @@ import('Tree.Visitor.Dump');
 import('Stream.~');
 
 /**
- * Hoa_Stream_Io_Out
+ * Hoa_Stream_Interface_Out
  */
-import('Stream.Io.Out');
+import('Stream.Interface.Out');
 
 /**
  * Class Hoa_Log.

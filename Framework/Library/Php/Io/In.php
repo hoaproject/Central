@@ -48,9 +48,9 @@ import('Php.Io.Exception');
 import('Stream.~');
 
 /**
- * Hoa_Stream_Io_In
+ * Hoa_Stream_Interface_In
  */
-import('Stream.Io.In');
+import('Stream.Interface.In');
 
 /**
  * Whether it is not defined.
@@ -71,7 +71,7 @@ _define('STDIN', fopen('php://stdin', 'rb'));
  * @subpackage  Hoa_Php_Io_In
  */
 
-class Hoa_Php_Io_In extends Hoa_Stream implements Hoa_Stream_Io_In {
+class Hoa_Php_Io_In extends Hoa_Stream implements Hoa_Stream_Interface_In {
 
     /**
      * Open a stream to php://stdin.

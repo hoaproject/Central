@@ -48,9 +48,9 @@ import('Xml.Exception');
 import('Xml.~') and load();
 
 /**
- * Hoa_Stream_Io_In
+ * Hoa_Stream_Interface_In
  */
-import('Stream.Io.In') and load();
+import('Stream.Interface.In') and load();
 
 /**
  * Hoa_Xml_Element_Read
@@ -73,16 +73,16 @@ import('Xml.Element.Read') and load();
 
 class          Hoa_Xml_Read
     extends    Hoa_Xml
-    implements Hoa_Stream_Io_In {
+    implements Hoa_Stream_Interface_In {
 
     /**
      * Start the stream reader as if it is a XML document.
      *
      * @access  public
-     * @param   Hoa_Stream_Io_In  $stream    Stream to read.
+     * @param   Hoa_Stream_Interface_In  $stream    Stream to read.
      * @return  void
      */
-    public function __construct ( Hoa_Stream_Io_In $stream ) {
+    public function __construct ( Hoa_Stream_Interface_In $stream ) {
 
         parent::__construct('Hoa_Xml_Element_Read', $stream);
 
