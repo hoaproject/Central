@@ -48,24 +48,9 @@ import('Cache.Exception');
 import('Cache.Backend');
 
 /**
- * Hoa_File_Read
- */
-import('File.Read');
-
-/**
- * Hoa_File_Write
- */
-import('File.Write');
-
-/**
  * Hoa_File_Finder
  */
 import('File.Finder');
-
-/**
- * Hoa_File_Directory
- */
-import('File.Directory');
 
 /**
  * Class Hoa_Cache_Backend_File.
@@ -104,19 +89,14 @@ class Hoa_Cache_Backend_File extends Hoa_Cache_Backend {
             );
 
         $this->setId($this->getIdMd5());
-
         $directory = $this->getFormattedParameter('file.cache.directory');
 
-        Hoa_File_Directory::create(
-            $directory,
-            Hoa_File_Directory::MODE_CREATE_RECURSIVE
-        );
+        @mkdir($directory, 0755, true);
 
-        $filename  = $directory .
-                     $this->getFormattedParameter('file.cache.file');
-        $file      = new Hoa_File_Write($filename, Hoa_File::MODE_TRUNCATE_WRITE);
-        $out       = $file->writeAll($data);
-        $file->close();
+        file_put_contents(
+            $directory . $this->getFormattedParameter('file.cache.file'),
+            $data
+        );
 
         return;
     }
@@ -135,12 +115,10 @@ class Hoa_Cache_Backend_File extends Hoa_Cache_Backend {
         $filename = $this->getFormattedParameter('file.cache.directory') .
                     $this->getFormattedParameter('file.cache.file');
 
-        if(false === $file_exists = file_exists($filename))
+        if(false === file_exists($filename))
             return false;
 
-        $file    = new Hoa_File_Read($filename);
-        $content = $file->readAll();
-        $file->close();
+        $content = file_get_contents($filename);
 
         if(true === $this->getParameter('file.compress.active'))
             $content = gzuncompress($content);
