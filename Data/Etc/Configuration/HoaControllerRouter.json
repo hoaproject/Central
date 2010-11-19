@@ -1,0 +1,17 @@
+{
+    /**
+     * Keywords.
+     */
+    "keywords": {},
+
+    /**
+     * Parameters.
+     */
+    "parameters": {
+        "base"    : "/",
+        "rewrited": false,
+        "rules"   : [
+            ["^foo/(?<act>.{2})(?<foo>.)/?$", "gordon", "freeman"]
+        ]
+    }
+}
