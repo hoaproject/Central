@@ -52,6 +52,11 @@ import('Xyl.Element') and load();
 import('Xyl.Element.Basic') and load();
 
 /**
+ * Hoa_Xyl_Element_Executable
+ */
+import('Xyl.Element.Executable');
+
+/**
  * Hoa_Xml
  */
 import('Xml.~') and load();
@@ -59,7 +64,7 @@ import('Xml.~') and load();
 /**
  * Hoa_Xml_Attribute
  */
-import('Xml.Attribute') and load();
+import('Xml.Attribute');
 
 /**
  * Class Hoa_Xyl.
@@ -90,21 +95,35 @@ class          Hoa_Xyl
      *
      * @var Hoa_Xyl array
      */
-    protected $_data     = null;
+    protected $_data        = null;
 
     /**
      * Concrete tree.
      *
      * @var Hoa_Xyl_Element_Concrete object
      */
-    protected $_concrete = null;
+    protected $_concrete    = null;
 
     /**
      * Evaluate XPath expression.
      *
      * @var DOMXPath object
      */
-    protected $_xe       = null;
+    protected $_xe          = null;
+
+    /**
+     * Output stream.
+     *
+     * @var Hoa_Stream_Interface_Out object
+     */
+    protected $_out         = null;
+
+    /**
+     * Interpreter.
+     *
+     * @var Hoa_Xyl_Interpreter object
+     */
+    protected $_interpreter = null;
 
 
 
@@ -112,13 +131,18 @@ class          Hoa_Xyl
      * Interprete a stream as XYL.
      *
      * @access  public
-     * @param   Hoa_Stream_Interface_In  $stream    Stream to interprete as XYL.
+     * @param   Hoa_Stream_Interface_In   $in             Stream to interprete
+     *                                                    as XYL.
+     * @param   Hoa_Stream_Interface_Out  $out            Stream for rendering.
+     * @param   Hoa_Xyl_Interpreter       $interpreter    Interpreter.
      * @return  void
      * @throw   Hoa_Xml_Exception
      */
-    public function __construct ( Hoa_Stream_Interface_In $stream ) {
+    public function __construct ( Hoa_Stream_Interface_In  $in,
+                                  Hoa_Stream_Interface_Out $out,
+                                  Hoa_Xyl_Interpreter      $interpreter = null ) {
 
-        parent::__construct('Hoa_Xyl_Element_Basic', $stream);
+        parent::__construct('Hoa_Xyl_Element_Basic', $in);
         
         $this->_xe = new DOMXPath(new DOMDocument());
 
@@ -128,7 +152,9 @@ class          Hoa_Xyl
                 0, $stream->getStreamName());
 
         $this->useNamespace(self::NAMESPACE_ID);
-        $this->_data = new Hoa_Core_Data();
+        $this->_data        = new Hoa_Core_Data();
+        $this->_out         = $out;
+        $this->_interpreter = $interpreter;
 
         return;
     }
@@ -187,7 +213,7 @@ class          Hoa_Xyl
                 continue;
 
             $hrefs[]  = $href;
-            $fragment = new Hoa_Xyl(new $streamClass($href));
+            $fragment = new Hoa_Xyl(new $streamClass($href), $this->_out);
 
             if('definition' !== $fragment->getName())
                 throw new Hoa_Xyl_Exception(
@@ -293,7 +319,7 @@ class          Hoa_Xyl
                 continue;
 
             $hrefs[]  = $href;
-            $fragment = new Hoa_Xyl(new $streamClass($href));
+            $fragment = new Hoa_Xyl(new $streamClass($href), $this->_out);
 
             if('overlay' !== $fragment->getName())
                 throw new Hoa_Xyl_Exception(
@@ -512,6 +538,9 @@ class          Hoa_Xyl
      */
     public function render ( ) {
 
-        return $this->_concrete->render();
+        if(null === $this->_concrete)
+            $this->interpreteAs($this->_interpreter);
+
+        return $this->_concrete->render($this->_out);
     }
 }
