@@ -67,6 +67,11 @@ import('Xml.~') and load();
 import('Xml.Attribute');
 
 /**
+ * Hoa_View_Viewable
+ */
+import('View.Viewable');
+
+/**
  * Class Hoa_Xyl.
  *
  * 
@@ -81,7 +86,8 @@ import('Xml.Attribute');
 
 class          Hoa_Xyl
     extends    Hoa_Xml
-    implements Hoa_Xyl_Element {
+    implements Hoa_Xyl_Element,
+               Hoa_View_Viewable {
 
     /**
      * XYL's namespace.
@@ -168,6 +174,17 @@ class          Hoa_Xyl
     public function getData ( ) {
 
         return $this->_data;
+    }
+
+    /**
+     * Get output stream.
+     *
+     * @access  public
+     * @return  Hoa_Stream_Interface_Out
+     */
+    public function getOutputStream ( ) {
+
+        return $this->_out;
     }
 
     /**
