@@ -237,13 +237,11 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
         $route     = ltrim($matches[1],  '/');
         $bootstrap = ltrim($matchees[1], '/');
 
-        if(false === $rewrited) {
-
+        if(false === $rewrited)
             if(0 === preg_match('#^' . $bootstrap . '\?(.*?)$#', $route, $matches))
                 $route = '';
             else
                 $route = ltrim($matches[1], '/');
-        }
 
         $gotcha = false;
 
