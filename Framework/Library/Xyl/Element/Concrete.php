@@ -53,11 +53,6 @@ import('Xml.Element.Concrete') and load();
 import('Xyl.Element') and load();
 
 /**
- * Hoa_Xyl_Element_Executable
- */
-import('Xyl.Element.Executable');
-
-/**
  * Class Hoa_Xyl_Element_Concrete.
  *
  * 
@@ -221,30 +216,31 @@ abstract class Hoa_Xyl_Element_Concrete
      * Make the render of the XYL tree.
      *
      * @access  public
-     * @return  string
+     * @param   Hoa_Stream_Interface_Out  $out    Out stream.
+     * @return  void
      */
-    public function render ( ) {
+    public function render ( Hoa_Stream_Interface_Out $out ) {
 
         $this->firstUpdate();
         $data = &$this->getData();
-        $out  = null;
 
         do {
 
-            $out  .= $this->paint();
+            $this->paint($out);
             $next  = is_array($data) ? next($data) : false;
             $next  = $next && $this->update();
 
         } while(false !== $next);
 
-        return $out;
+        return;
     }
 
     /**
      * Paint the element.
      *
      * @access  protected
-     * @return  string
+     * @param   Hoa_Stream_Interface_Out  $out    Out stream.
+     * @return  void
      */
-    abstract protected function paint ( );
+    abstract protected function paint ( Hoa_Stream_Interface_Out $out );
 }
