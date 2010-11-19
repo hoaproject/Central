@@ -560,7 +560,7 @@ class Hoa_Core implements Hoa_Core_Parameterizable {
         foreach(self::$_lastImport as $inode => $import) {
 
             require $import;
-            self::$_importStack[self::IMPORT_LOAD] = true;
+            self::$_importStack[$inode][self::IMPORT_LOAD] = true;
         }
 
         self::$_lastImport = array();
