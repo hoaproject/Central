@@ -400,6 +400,8 @@ class Hoa_Core_Protocol_Wrapper {
      */
     public $context      = null;
 
+
+
     /**
      * Get the real path of the given URL.
      * Could return false if the path cannot be reached.
