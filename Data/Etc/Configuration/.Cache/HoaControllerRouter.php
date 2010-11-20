@@ -14,12 +14,6 @@ return array (
     'rewrited' => false,
     'rules' => 
     array (
-      0 => 
-      array (
-        0 => '^foo/(?<act>.{2})(?<foo>.)/?$',
-        1 => 'gordon',
-        2 => 'freeman',
-      ),
     ),
   ),
 );
