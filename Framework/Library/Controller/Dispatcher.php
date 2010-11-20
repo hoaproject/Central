@@ -255,7 +255,7 @@ class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
                         'The closured action for the rule with pattern %s needs ' .
                         'a value for the parameter $%s and this value does not ' .
                         'exist.',
-                        0, array($rule[Hoa_Controller_Router::RULE_PATTERN],
+                        1, array($rule[Hoa_Controller_Router::RULE_PATTERN],
                                  $parameter->getName()));
             }
         }
@@ -283,7 +283,7 @@ class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
                         'The functional action for the rule with pattern %s needs ' .
                         'a value for the parameter $%s and this value does not ' .
                         'exist.',
-                        1, array($rule[Hoa_Controller_Router::RULE_PATTERN],
+                        2, array($rule[Hoa_Controller_Router::RULE_PATTERN],
                                  $parameter->getName()));
             }
         }
@@ -301,7 +301,7 @@ class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
                 if(!file_exists($file))
                     throw new Hoa_Controller_Exception(
                         'File %s is not found (method: %s, asynchronous: %s).',
-                        2, array($file, $method,
+                        3, array($file, $method,
                                  true === $async ? 'true': 'false'));
 
                 require_once $file;
@@ -310,7 +310,7 @@ class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
                     throw new Hoa_Controller_Exception(
                         'Controller %s is not found in the file %s ' .
                         '(method: %s, asynchronous: %s).',
-                        3, array($controller, $file, $method,
+                        4, array($controller, $file, $method,
                                  true === $async ? 'true': 'false'));
 
                 $controller = new $controller($router, $this, $view);
@@ -326,7 +326,7 @@ class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
                 throw new Hoa_Controller_Exception(
                     'Action %s does not exist on the controller %s ' .
                     '(method: %s, asynchronous: %s).',
-                    5, array($action, get_class($controller), $method,
+                    6, array($action, get_class($controller), $method,
                              true === $async ? 'true': 'false'));
 
             $called     = $controller;
@@ -347,7 +347,7 @@ class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
                     throw new Hoa_Controller_Exception(
                         'The action %s on the controller %s needs a value for ' .
                         'the parameter $%s and this value does not exist.',
-                        6, array($action, get_class($controller),
+                        7, array($action, get_class($controller),
                                  $parameter->getName()));
             }
         }
