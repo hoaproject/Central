@@ -60,12 +60,19 @@ class Hoa_Controller_Application {
 
     final public function __construct ( Hoa_Controller_Router     $router,
                                         Hoa_Controller_Dispatcher $dispatcher,
-                                        $view ) {
+                                        Hoa_View_Viewable         $view = null ) {
 
         $this->router     = $router;
         $this->dispatcher = $dispatcher;
         $this->view       = $view;
-        $this->data       = $view->getData();
+
+        if(null !== $view)
+            $this->data   = $view->getData();
+
+        return;
+    }
+
+    public function construct ( ) {
 
         return;
     }
