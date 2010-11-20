@@ -40,7 +40,7 @@ require_once 'Core.php';
 /**
  * Interface Hoa_View_Viewable.
  *
- * .
+ * Describe what a view could be.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
@@ -53,9 +53,27 @@ require_once 'Core.php';
 
 interface Hoa_View_Viewable {
 
+    /**
+     * Get the output stream.
+     *
+     * @access  public
+     * @return  Hoa_Stream_Interface_Out
+     */
     public function getOutputStream ( );
 
+    /**
+     * Get the data holded by the view.
+     *
+     * @access  public
+     * @return  Hoa_Core_Data
+     */
     public function getData ( );
 
+    /**
+     * Make a render of the view.
+     *
+     * @access  public
+     * @return  void
+     */
     public function render ( );
 }
