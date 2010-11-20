@@ -70,19 +70,28 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
     private $_parameters = null;
 
     /**
+     * All rules.
      *
+     * @var Hoa_Controller_Router array
      */
     protected $_rules    = array();
 
     /**
+     * The selected rule after routing.
      *
+     * @var Hoa_Controller_Router array
      */
     protected $_theRule  = null;
 
 
 
     /**
+     * Build a router.
      *
+     * @access  public
+     * @param   array   $parameters    Parameters.
+     * @return  void
+     * @throw   Hoa_Controller_Exception
      */
     public function __construct ( Array $parameters = array() ) {
 
@@ -184,15 +193,31 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
         return $this->_parameters->getFormattedParameter($this, $key);
     }
 
+    /**
+     * Add a rule to the router.
+     *
+     * @access  public
+     * @param   string
+     * @param   string
+     * @param   string
+     * @param   array
+     * @return  Hoa_Controller_Router
+     */
     public function addRule ( $pattern, $controller, $action,
                               Array $extra = array() ) {
+
+        if(is_string($controller))
+            $controller = strtolower($controller);
+
+        if(is_string($action))
+            $action     = strtolower($action);
 
         $this->_rules[] = array(
             self::RULE_PATTERN   => str_replace('#', '\#', $pattern),
             self::RULE_COMPONENT => array_merge(
                 array(
-                    'controller' => strtolower($controller),
-                    'action'     => strtolower($action)
+                    'controller' => $controller,
+                    'action'     => $action
                 ),
                 $extra
             ),
@@ -202,11 +227,28 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
         return $this;
     }
 
+    /**
+     * Get all rules.
+     *
+     * @access  public
+     * @return  array
+     */
     public function getRules ( ) {
 
         return $this->_rules;
     }
 
+    /**
+     * Find the appropriated rule.
+     *
+     * @access  public
+     * @param   string  $uri          URI to route (if null, use the
+     *                                $_SERVER['REQUEST_URI'] will be used).
+     * @param   string  $bootstrap    Bootstrap that runs the route (if null,
+     *                                $_SERVER['SCRIPT_NAME'] will be used).
+     * @return  Hoa_Controller_Router
+     * @throw   Hoa_Controller_Exception
+     */
     public function route ( $uri = null, $bootstrap = null ) {
 
         if(null === $uri) {
@@ -261,7 +303,6 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
                 'Cannot found an appropriated rules to route %s.', 3, $route);
 
         $rule[self::RULE_ON] = $route;
-
         array_shift($matches);
         $i = 0;
 
@@ -283,6 +324,12 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
         return $this;
     }
 
+    /**
+     * Get the selected rule after routing.
+     *
+     * @access  public
+     * @return  array
+     */
     public function getTheRule ( ) {
 
         return $this->_theRule;
