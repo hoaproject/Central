@@ -53,10 +53,10 @@ require_once 'Core.php';
 
 class Hoa_Controller_Application {
 
-    protected $router     = null;
-    protected $dispatcher = null;
-    protected $view       = null;
-    protected $data       = null;
+     public $router     = null;
+     public $dispatcher = null;
+     public $view       = null;
+     public $data       = null;
 
     final public function __construct ( Hoa_Controller_Router     $router,
                                         Hoa_Controller_Dispatcher $dispatcher,
