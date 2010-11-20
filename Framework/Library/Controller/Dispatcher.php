@@ -73,12 +73,23 @@ class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
      *
      * @var Hoa_Core_Parameter object
      */
-    private $_parameters = null;
+    private $_parameters    = null;
+
+    /**
+     * Current view.
+     *
+     * @var Hoa_View_Viewable object
+     */
+    protected $_currentView = null;
 
 
 
     /**
+     * Build a new dispatcher.
      *
+     * @access  public
+     * @param   array   $parameters    Parameters.
+     * @return  void
      */
     public function __construct ( Array $parameters = array() ) {
 
@@ -169,6 +180,15 @@ class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
         return $this->_parameters->getFormattedParameter($this, $key);
     }
 
+    /**
+     * Dispatch a router rule to a controller and an action (could be a class, a
+     * stream, a closure, a function etc.).
+     *
+     * @access  public
+     * @param   Hoa_Controller_Router  $router    Router.
+     * @param   Hoa_View_Viewable      $view      View.
+     * @return  void
+     */
     public function dispatch ( Hoa_Controller_Router $router,
                                Hoa_View_Viewable     $view = null ) {
 
@@ -176,6 +196,11 @@ class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
 
         if(null === $rule)
             $rule   = $router->route()->getTheRule();
+
+        if(null === $view)
+            $view   = $this->_currentView;
+        else
+            $this->_currentView = $view;
 
         $components = $rule[Hoa_Controller_Router::RULE_COMPONENT];
         $controller = $components['controller'];
@@ -242,6 +267,8 @@ class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
                 throw new Hoa_Controller_Exception(
                     'The controller must extend the Hoa_Controller_Application.', 3);
 
+            $controller->construct();
+
             if(!method_exists($controller, $action))
                 throw new Hoa_Controller_Exception(
                     'Action %s does not exist on the controller %s ' .
@@ -276,8 +303,16 @@ class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
             $return = $reflection->invokeArgs($arguments);
         elseif($reflection instanceof ReflectionMethod)
             $return = $reflection->invokeArgs($called, $arguments);
+
+        return;
     }
 
+    /**
+     * Try to know if the dispatcher is called asynchronously.
+     *
+     * @access  public
+     * @return  bool
+     */
     public function isCalledAsynchronously ( ) {
 
         if(!isset($_SERVER['HTTP_X_REQUESTED_WITH']))
