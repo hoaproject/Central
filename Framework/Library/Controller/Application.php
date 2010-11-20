@@ -53,11 +53,45 @@ require_once 'Core.php';
 
 class Hoa_Controller_Application {
 
-     public $router     = null;
-     public $dispatcher = null;
-     public $view       = null;
-     public $data       = null;
+    /**
+     * The router.
+     *
+     * @var Hoa_Controller_Router object
+     */
+    public $router     = null;
 
+    /**
+     * The dispatcher.
+     *
+     * @var Hoa_Controller_Dispatcher object
+     */
+    public $dispatcher = null;
+
+    /**
+     * The view.
+     *
+     * @var Hoa_View_Viewable object
+     */
+    public $view       = null;
+
+    /**
+     * Data from the view.
+     *
+     * @var Hoa_Controller_Application mixed
+     */
+    public $data       = null;
+
+
+
+    /**
+     * Build an application controller.
+     *
+     * @access  public
+     * @param   Hoa_Controller_Router      $router        The router.
+     * @param   Hoa_Controller_Dispatcher  $dispatcher    The dispatcher.
+     * @param   Hoa_View_Viewable          $view          The view.
+     * @return  void
+     */
     final public function __construct ( Hoa_Controller_Router     $router,
                                         Hoa_Controller_Dispatcher $dispatcher,
                                         Hoa_View_Viewable         $view = null ) {
@@ -72,6 +106,13 @@ class Hoa_Controller_Application {
         return;
     }
 
+    /**
+     * This method is called just after the __construct() method. You can
+     * override it to initialize/construct your controller.
+     *
+     * @access  public
+     * @return  void
+     */
     public function construct ( ) {
 
         return;
