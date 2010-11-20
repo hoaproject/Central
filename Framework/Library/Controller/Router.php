@@ -197,13 +197,14 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
      * Add a rule to the router.
      *
      * @access  public
-     * @param   string
-     * @param   string
-     * @param   string
-     * @param   array
+     * @param   string  $pattern       A regular expression.
+     * @param   string  $controller    A class name, an instance  or null.
+     * @param   string  $action        A method name, a function name, a
+     *                                 closure or null.
+     * @param   array   $extra         Extra data.
      * @return  Hoa_Controller_Router
      */
-    public function addRule ( $pattern, $controller, $action,
+    public function addRule ( $pattern, $controller = null, $action = null,
                               Array $extra = array() ) {
 
         if(is_string($controller))
