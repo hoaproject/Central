@@ -131,6 +131,14 @@ class          Hoa_Xyl
      */
     protected $_interpreter = null;
 
+    /**
+     * Mowgli c'est le p'tit DOM (euh, p'tit homme !)
+     * Well, it's the document root.
+     *
+     * @var DOMDocument object
+     */
+    protected $_mowgli      = null;
+
 
 
     /**
@@ -161,6 +169,7 @@ class          Hoa_Xyl
         $this->_data        = new Hoa_Core_Data();
         $this->_out         = $out;
         $this->_interpreter = $interpreter;
+        $this->_mowgli      = $this->getStream()->readDOM()->ownerDocument;
 
         return;
     }
@@ -188,6 +197,25 @@ class          Hoa_Xyl
     }
 
     /**
+     * Add a <?xyl-use?> processing-instruction (only that).
+     *
+     * @access  public
+     * @return  void
+     */
+    public function addUse ( $href ) {
+
+        $this->_mowgli->insertBefore(
+            new DOMProcessingInstruction(
+                'xyl-use',
+                'href="' . str_replace('"', '\"', $href) . '"'
+            ),
+            $this->_mowgli->firstChild
+        );
+
+        return;
+    }
+
+    /**
      * Compute <?xyl-use?> processing-instruction.
      *
      * @access  protected
@@ -196,20 +224,22 @@ class          Hoa_Xyl
      */
     protected function computeUse ( ) {
 
-        // Mowgli c'est le p'tit DOM (euh, p'tit homme !)
-        $mowgli      = $this->getStream()->readDOM()->ownerDocument;
         $streamClass = get_class($this->getInnerStream());
         $hrefs       = array();
         $uses        = array();
-        $xpath       = new DOMXPath($mowgli);
+        $xpath       = new DOMXPath($this->_mowgli);
         $xyl_use     = $xpath->query('/processing-instruction(\'xyl-use\')');
         unset($xpath);
 
         if(0 === $xyl_use->length)
             return false;
 
-        for($i = 0, $m = $xyl_use->length; $i < $m; ++$i)
-            $uses[] = $xyl_use->item($i);
+        for($i = 0, $m = $xyl_use->length; $i < $m; ++$i) {
+
+            $item   = $xyl_use->item($i);
+            $uses[] = $item;
+            $this->_mowgli->removeChild($item);
+        }
 
         do {
 
@@ -238,8 +268,8 @@ class          Hoa_Xyl
                     '<?xyl-use) elements.', 1, $href);
 
             foreach($fragment->xpath('//__current_ns:yield[@name]') as $yield)
-                $mowgli->documentElement->appendChild(
-                    $mowgli->importNode($yield->readDOM(), true)
+                $this->_mowgli->documentElement->appendChild(
+                    $this->_mowgli->importNode($yield->readDOM(), true)
                 );
 
             unset($use);
@@ -294,6 +324,25 @@ class          Hoa_Xyl
     }
 
     /**
+     * Add a <?xyl-overlay?> processing-instruction (only that).
+     *
+     * @access  public
+     * @return  void
+     */
+    public function addOverlay ( $href ) {
+
+        $this->_mowgli->insertBefore(
+            new DOMProcessingInstruction(
+                'xyl-overlay',
+                'href="' . str_replace('"', '\"', $href) . '"'
+            ),
+            $this->_mowgli->firstChild
+        );
+
+        return;
+    }
+
+    /**
      * Compute <?xyl-overlay?> processing-instruction.
      *
      * @access  protected
@@ -302,12 +351,10 @@ class          Hoa_Xyl
      */
     protected function computeOverlay ( ) {
 
-        // Mowgli c'est le p'tit DOM (euh, p'tit homme !)
-        $mowgli      = $this->getStream()->readDOM()->ownerDocument;
         $streamClass = get_class($this->getInnerStream());
         $hrefs       = array();
         $overlays    = array();
-        $xpath       = new DOMXPath($mowgli);
+        $xpath       = new DOMXPath($this->_mowgli);
         $xyl_overlay = $xpath->query('/processing-instruction(\'xyl-overlay\')');
         unset($xpath);
 
@@ -345,8 +392,8 @@ class          Hoa_Xyl
 
             foreach($fragment->selectChildElements() as $e => $element)
                 $this->_computeOverlay(
-                    $mowgli->documentElement,
-                    $mowgli->importNode($element->readDOM(), true)
+                    $this->_mowgli->documentElement,
+                    $this->_mowgli->importNode($element->readDOM(), true)
                 );
 
             unset($overlay);
