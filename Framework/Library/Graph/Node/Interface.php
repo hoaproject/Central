@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Interface Hoa_Graph_Node_Interface.
  *
  * Force to implement a method: getNodeId.

@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Hoa_Graph_Node_Interface
  */
 import('Graph.Node.Interface');
