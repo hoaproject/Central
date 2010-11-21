@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Hoa_Controller_Exception
  */
 import('Controller.Exception');

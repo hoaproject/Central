@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Interface Hoa_Observer_Interface_Observer.
  *
  * Interface for observer classes.

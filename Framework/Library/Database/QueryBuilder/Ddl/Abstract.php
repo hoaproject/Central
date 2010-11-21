@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Class Hoa_Database_QueryBuilder_Ddl_Abstract.
  *
  * Abstract class for DDL query builder.

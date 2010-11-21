@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Hoa_Test_Praspel_Exception
  */
 import('Test.Praspel.Exception');

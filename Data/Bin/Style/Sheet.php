@@ -31,11 +31,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Hoa_Console_Interface_Style
  */
 import('Console.Interface.Style');

@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Hoa_Xyl_Element_Concrete
  */
 import('Xyl.Element.Concrete') and load();

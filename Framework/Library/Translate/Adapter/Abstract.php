@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Class Hoa_Translate_Adapter_Abstract.
  *
  * Abstract layer for adapters.

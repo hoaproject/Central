@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Class Hoa_Mail_Mime.
  *
  * Write an email with Multipurpose Internet Mail Extensions.

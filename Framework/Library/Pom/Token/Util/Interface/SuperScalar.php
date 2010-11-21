@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Interface Hoa_Pom_Token_Util_Interface_SuperScalar.
  *
  * Whether a data is (uniform or not) super-scalar.

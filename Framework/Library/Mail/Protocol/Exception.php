@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Class Hoa_Mail_Protocol_Exception.
  *
  * Extending the Hoa_Exception class.

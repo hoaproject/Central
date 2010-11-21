@@ -32,11 +32,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Hoa_XmlRpc_Exception
  */
 import('XmlRpc.Exception');

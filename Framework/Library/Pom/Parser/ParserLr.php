@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Hoa_Pom_Parser_Exception
  */
 import('Pom.Parser.Exception');

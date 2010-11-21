@@ -4,10 +4,3688 @@
 Informations             :
     - repository path    : /Users/hywan/Development/Hoa/Svn/Repository ;
     - path in repository : /Framework/Trunk/ ;
-    - generated at       : 2010-05-30T13:11:41.000000Z.
+    - generated at       : 2010-11-20T21:32:15.000000Z.
 -->
 
 <log>
+  <logentry revision="1345">
+    <author>hywan</author>
+    <date>2010-11-20T21:31:39.248768Z</date>
+    <msg>Reorganize exception codes.</msg>
+    <paths>
+      <path action="M">Framework/Library/Controller/Dispatcher.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1344">
+    <author>hywan</author>
+    <date>2010-11-20T21:26:15.687208Z</date>
+    <msg>Forget to remove a test/demo.</msg>
+    <paths>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaControllerRouter.php</path>
+      <path action="M">Data/Etc/Configuration/HoaControllerRouter.json</path>
+    </paths>
+  </logentry>
+  <logentry revision="1343">
+    <author>hywan</author>
+    <date>2010-11-20T21:24:36.045218Z</date>
+    <msg>Complete API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Library/Controller/Router.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1342">
+    <author>hywan</author>
+    <date>2010-11-20T20:05:12.198527Z</date>
+    <msg>Add closure and function support.</msg>
+    <paths>
+      <path action="M">Framework/Library/Controller/Dispatcher.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1341">
+    <author>hywan</author>
+    <date>2010-11-20T20:04:24.111555Z</date>
+    <msg>Write API documentation and fix a bug when adding a rule with a closure.</msg>
+    <paths>
+      <path action="M">Framework/Library/Controller/Router.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1340">
+    <author>hywan</author>
+    <date>2010-11-20T20:03:11.562229Z</date>
+    <msg>Set router, dispatcher, view &amp; data as public.</msg>
+    <paths>
+      <path action="M">Framework/Library/Controller/Application.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1339">
+    <author>hywan</author>
+    <date>2010-11-20T18:08:06.577027Z</date>
+    <msg>Temporize the DOMDocument to save computing time, and add the addUse() and addOverlay() methods to insert new xyl-use and xyl-overlay PIs.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1338">
+    <author>hywan</author>
+    <date>2010-11-20T13:03:20.262066Z</date>
+    <msg>Write API documentation and re-use the last view when redirecting from a controller to another.</msg>
+    <paths>
+      <path action="M">Framework/Library/Controller/Dispatcher.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1337">
+    <author>hywan</author>
+    <date>2010-11-20T12:57:00.161177Z</date>
+    <msg>Write API documenation.</msg>
+    <paths>
+      <path action="M">Framework/Library/View/Viewable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1336">
+    <author>hywan</author>
+    <date>2010-11-20T12:50:00.612777Z</date>
+    <msg>Add the construct() method and prevent of a null view.</msg>
+    <paths>
+      <path action="M">Framework/Library/Controller/Application.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1335">
+    <author>hywan</author>
+    <date>2010-11-19T18:35:57.890820Z</date>
+    <msg>Mania: reformat the code.</msg>
+    <paths>
+      <path action="M">Framework/Library/Controller/Router.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1334">
+    <author>hywan</author>
+    <date>2010-11-19T18:12:34.749726Z</date>
+    <msg>Refresh configuration caches.</msg>
+    <paths>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaCache.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaConsole.php</path>
+      <path action="A">Data/Etc/Configuration/.Cache/HoaControllerDispatcher.php</path>
+      <path action="D">Data/Etc/Configuration/.Cache/HoaControllerFront.php</path>
+      <path action="A">Data/Etc/Configuration/.Cache/HoaControllerRouter.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaCore.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaDatabase.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaTest.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1333">
+    <author>hywan</author>
+    <date>2010-11-19T18:11:55.407159Z</date>
+    <msg>Instaure new Hoa_Controller configurations.</msg>
+    <paths>
+      <path action="A">Data/Etc/Configuration/HoaControllerDispatcher.json</path>
+      <path action="D">Data/Etc/Configuration/HoaControllerFront.json</path>
+      <path action="A">Data/Etc/Configuration/HoaControllerRouter.json</path>
+    </paths>
+  </logentry>
+  <logentry revision="1332">
+    <author>hywan</author>
+    <date>2010-11-19T18:06:09.704800Z</date>
+    <msg>Hoa_Xyl is now a viewable class, it means that it can be used as a view.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1331">
+    <author>hywan</author>
+    <date>2010-11-19T18:04:59.273106Z</date>
+    <msg>Welcome to the new package Hoa_Http (very very early draft).</msg>
+    <paths>
+      <path action="A">Framework/Library/Http</path>
+      <path action="A">Framework/Library/Http/Exception.php</path>
+      <path action="A">Framework/Library/Http/Request.php</path>
+      <path action="A">Framework/Library/Http/Response.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1330">
+    <author>hywan</author>
+    <date>2010-11-19T18:04:19.282563Z</date>
+    <msg>Reboth of the Hoa_View package.</msg>
+    <paths>
+      <path action="A">Framework/Library/View</path>
+      <path action="A">Framework/Library/View/Viewable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1329">
+    <author>hywan</author>
+    <date>2010-11-19T18:04:07.027509Z</date>
+    <msg>Reboth of the Hoa_View package.</msg>
+    <paths>
+      <path action="D">Framework/Library/View</path>
+    </paths>
+  </logentry>
+  <logentry revision="1328">
+    <author>hywan</author>
+    <date>2010-11-19T18:02:38.160861Z</date>
+    <msg>Reboth of the Hoa_Controller package.</msg>
+    <paths>
+      <path action="A">Framework/Library/Controller</path>
+      <path action="A">Framework/Library/Controller/Application.php</path>
+      <path action="A">Framework/Library/Controller/Dispatcher.php</path>
+      <path action="A">Framework/Library/Controller/Exception.php</path>
+      <path action="A">Framework/Library/Controller/Router.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1327">
+    <author>hywan</author>
+    <date>2010-11-19T18:02:24.088801Z</date>
+    <msg>Reboth of the Hoa_Controller package.</msg>
+    <paths>
+      <path action="D">Framework/Library/Controller</path>
+    </paths>
+  </logentry>
+  <logentry revision="1326">
+    <author>hywan</author>
+    <date>2010-11-19T15:56:14.522508Z</date>
+    <msg>Move up output stream and interpreter to the constructor.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1325">
+    <author>hywan</author>
+    <date>2010-11-19T15:52:06.846822Z</date>
+    <msg>Inject a Hoa_Stream_Interface_Out stream into the render&amp;painter.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Element/Concrete.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1324">
+    <author>hywan</author>
+    <date>2010-11-19T15:46:18.434970Z</date>
+    <msg>Remove Hoa_File_Read and Hoa_File_Write dependencies to save disk access time.</msg>
+    <paths>
+      <path action="M">Framework/Library/Cache/Backend/File.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1323">
+    <author>hywan</author>
+    <date>2010-11-19T15:23:23.955911Z</date>
+    <msg>Bug when tagging a file as loaded.</msg>
+    <paths>
+      <path action="M">Framework/Core/Core.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1322">
+    <author>hywan</author>
+    <date>2010-11-18T19:55:37.010168Z</date>
+    <msg>Called a bad exception.</msg>
+    <paths>
+      <path action="M">Framework/Library/Php/Io/Out.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1321">
+    <author>hywan</author>
+    <date>2010-11-18T19:29:53.044683Z</date>
+    <msg>Change Hoa_Stream_Io for Hoa_Stream_Interface.</msg>
+    <paths>
+      <path action="M">Framework/Core/Event.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1320">
+    <author>hywan</author>
+    <date>2010-11-18T19:28:36.617230Z</date>
+    <msg>Change Hoa_Stream_Io for Hoa_Stream_Interface.</msg>
+    <paths>
+      <path action="M">Framework/Library/Socket/Connection.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1319">
+    <author>hywan</author>
+    <date>2010-11-18T19:28:01.981521Z</date>
+    <msg>Change Hoa_Stream_Io for Hoa_Stream_Interface.</msg>
+    <paths>
+      <path action="M">Framework/Library/File/Abstract.php</path>
+      <path action="M">Framework/Library/File/Directory.php</path>
+      <path action="M">Framework/Library/File/File.php</path>
+      <path action="M">Framework/Library/File/Link/Read.php</path>
+      <path action="M">Framework/Library/File/Link/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Link/Write.php</path>
+      <path action="M">Framework/Library/File/Read.php</path>
+      <path action="M">Framework/Library/File/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Temporary/Read.php</path>
+      <path action="M">Framework/Library/File/Temporary/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Temporary/Write.php</path>
+      <path action="M">Framework/Library/File/Write.php</path>
+      <path action="M">Framework/Library/Log/Log.php</path>
+      <path action="M">Framework/Library/Php/Io/In.php</path>
+      <path action="M">Framework/Library/Php/Io/Out.php</path>
+      <path action="A">Framework/Library/Stream/Interface</path>
+      <path action="A">Framework/Library/Stream/Interface/Bufferable.php</path>
+      <path action="A">Framework/Library/Stream/Interface/In.php</path>
+      <path action="A">Framework/Library/Stream/Interface/Lockable.php</path>
+      <path action="A">Framework/Library/Stream/Interface/Out.php</path>
+      <path action="A">Framework/Library/Stream/Interface/Pathable.php</path>
+      <path action="A">Framework/Library/Stream/Interface/Pointable.php</path>
+      <path action="A">Framework/Library/Stream/Interface/Statable.php</path>
+      <path action="A">Framework/Library/Stream/Interface/Structural.php</path>
+      <path action="A">Framework/Library/Stream/Interface/Touchable.php</path>
+      <path action="D">Framework/Library/Stream/Io</path>
+      <path action="D">Framework/Library/Stream/Io.php</path>
+      <path action="M">Framework/Library/StringBuffer/Read.php</path>
+      <path action="M">Framework/Library/StringBuffer/ReadWrite.php</path>
+      <path action="M">Framework/Library/StringBuffer/StringBuffer.php</path>
+      <path action="M">Framework/Library/StringBuffer/Write.php</path>
+      <path action="M">Framework/Library/Xml/Element/Basic.php</path>
+      <path action="M">Framework/Library/Xml/Element/Read.php</path>
+      <path action="M">Framework/Library/Xml/Element/ReadWrite.php</path>
+      <path action="M">Framework/Library/Xml/Element/Write.php</path>
+      <path action="M">Framework/Library/Xml/Read.php</path>
+      <path action="M">Framework/Library/Xml/ReadWrite.php</path>
+      <path action="M">Framework/Library/Xml/Write.php</path>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1318">
+    <author>hywan</author>
+    <date>2010-11-17T18:52:21.008975Z</date>
+    <msg>Hidden the complete path by the hoa:// path if possible.</msg>
+    <paths>
+      <path action="M">Framework/Core/Exception.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1317">
+    <author>hywan</author>
+    <date>2010-11-15T18:22:51.803787Z</date>
+    <msg>Avoid to call the Hoa_Core::load() method when the light cache captures an already-computed import.</msg>
+    <paths>
+      <path action="M">Framework/Core/Core.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1316">
+    <author>hywan</author>
+    <date>2010-11-15T17:34:51.946325Z</date>
+    <msg>Force to load Hoa_Bench_Mark directly after importing it.</msg>
+    <paths>
+      <path action="M">Framework/Library/Bench/Bench.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1315">
+    <author>hywan</author>
+    <date>2010-11-15T08:24:35.005503Z</date>
+    <msg>Add a light cache to the _import() method to avoid useless disk access.</msg>
+    <paths>
+      <path action="M">Framework/Core/Core.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1314">
+    <author>hywan</author>
+    <date>2010-11-12T17:44:48.300507Z</date>
+    <msg>Better&amp;nicer way to solve the problem.</msg>
+    <paths>
+      <path action="M">Framework/Library/Socket/Connection/Server.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1313">
+    <author>hywan</author>
+    <date>2010-11-12T17:43:27.184224Z</date>
+    <msg>Prevent against closing the master socket by error.</msg>
+    <paths>
+      <path action="M">Framework/Library/Socket/Connection/Server.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1312">
+    <author>hywan</author>
+    <date>2010-11-12T16:56:41.122653Z</date>
+    <msg>Mania: format code.</msg>
+    <paths>
+      <path action="M">Framework/Library/Console/Core/Cli/Parser.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1311">
+    <author>hywan</author>
+    <date>2010-11-12T10:39:09.625231Z</date>
+    <msg>Just a test.</msg>
+    <paths>
+      <path action="A">Framework/Library/Xyl/Interpreter/Common</path>
+      <path action="A">Framework/Library/Xyl/Interpreter/Common/Yield.php</path>
+      <path action="M">Framework/Library/Xyl/Interpreter/Html5.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1310">
+    <author>hywan</author>
+    <date>2010-11-12T10:36:33.341868Z</date>
+    <msg>Remove the old oracle.</msg>
+    <paths>
+      <path action="D">Framework/Library/Test/Oracle</path>
+    </paths>
+  </logentry>
+  <logentry revision="1309">
+    <author>hywan</author>
+    <date>2010-11-10T14:04:22.991650Z</date>
+    <msg>Pre-increment instead of post-increment.</msg>
+    <paths>
+      <path action="M">Framework/Library/Websocket/Server.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1308">
+    <author>hywan</author>
+    <date>2010-11-10T10:55:22.094914Z</date>
+    <msg>Delete the call system.</msg>
+    <paths>
+      <path action="D">Framework/Library/Test/Praspel/Call.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Contract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1307">
+    <author>hywan</author>
+    <date>2010-11-09T16:18:39.406284Z</date>
+    <msg>Clean the call system.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Contract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1306">
+    <author>hywan</author>
+    <date>2010-11-09T12:28:49.361877Z</date>
+    <msg>Add the verifyException() method.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Orchestrate.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1305">
+    <author>hywan</author>
+    <date>2010-11-09T10:47:39.359565Z</date>
+    <msg>Add the verifyException().</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Contract.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Praspel.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1304">
+    <author>hywan</author>
+    <date>2010-11-09T10:47:08.702726Z</date>
+    <msg>Update the post-compiling part.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Throwable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1303">
+    <author>hywan</author>
+    <date>2010-11-08T09:32:24.907977Z</date>
+    <msg>Update test:* commands to be more compliant with the new Hoa_Test package.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Test/Initialize.php</path>
+      <path action="M">Data/Bin/Command/Test/Praspel.php</path>
+      <path action="M">Data/Bin/Command/Test/Remove.php</path>
+      <path action="M">Data/Bin/Command/Test/Run.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1302">
+    <author>hywan</author>
+    <date>2010-11-08T09:31:22.101195Z</date>
+    <msg>Remove a useless attribute.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Test.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1301">
+    <author>hywan</author>
+    <date>2010-11-08T09:30:44.965758Z</date>
+    <msg>Update cache.</msg>
+    <paths>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaCache.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaConsole.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaControllerFront.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaCore.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaDatabase.php</path>
+      <path action="M">Data/Etc/Configuration/.Cache/HoaTest.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1300">
+    <author>hywan</author>
+    <date>2010-11-08T09:29:30.083687Z</date>
+    <msg>Update configurations according to the new package.</msg>
+    <paths>
+      <path action="M">Data/Etc/Configuration/HoaTest.json</path>
+    </paths>
+  </logentry>
+  <logentry revision="1299">
+    <author>hywan</author>
+    <date>2010-11-08T09:28:48.927156Z</date>
+    <msg>Add the sample() method and remove the old run() for initialize().</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Test.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1298">
+    <author>hywan</author>
+    <date>2010-11-08T09:27:46.354720Z</date>
+    <msg>Remove var_dump() for Hoa_Log::log(), add set/getDepth* methods.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Contract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1297">
+    <author>hywan</author>
+    <date>2010-11-08T09:25:14.158425Z</date>
+    <msg>Add the LOG_CHANNEL constant.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Praspel.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1296">
+    <author>hywan</author>
+    <date>2010-11-08T09:24:46.067004Z</date>
+    <msg>Remove the sample() method and add depth inc/dec when calling methods.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Orchestrate.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1295">
+    <author>hywan</author>
+    <date>2010-11-05T19:20:42.785972Z</date>
+    <msg>Remove a useless instruction.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1294">
+    <author>hywan</author>
+    <date>2010-11-05T19:20:22.469667Z</date>
+    <msg>Fixe a bug (a miss in fact…) when declaring domains in domains.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Compiler.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1293">
+    <author>hywan</author>
+    <date>2010-11-05T10:35:10.606788Z</date>
+    <msg>Import Hoa_Test_Praspel_Contract for facilities and update code according to the previous revision.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Praspel.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1292">
+    <author>hywan</author>
+    <date>2010-11-05T10:34:27.159203Z</date>
+    <msg>Rename getContractId() to getId() and add verifyPre/PostCondtion() methods.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Contract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1291">
+    <author>hywan</author>
+    <date>2010-11-05T10:33:40.503472Z</date>
+    <msg>Add pre- and post-condition verification.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Orchestrate.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1290">
+    <author>hywan</author>
+    <date>2010-11-05T09:24:54.046672Z</date>
+    <msg>Reconstitute the entire file, manage parameters and reorganize the code.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Orchestrate.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1289">
+    <author>hywan</author>
+    <date>2010-11-05T09:23:55.610280Z</date>
+    <msg>Allow importing fragment parent.</msg>
+    <paths>
+      <path action="M">Framework/Library/Reflection/RClass.php</path>
+      <path action="M">Framework/Library/Reflection/RFunction/RAbstract.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1288">
+    <author>hywan</author>
+    <date>2010-11-04T18:54:29.311839Z</date>
+    <msg>Compile, create and manipulate contracts.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Orchestrate.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1287">
+    <author>hywan</author>
+    <date>2010-11-04T18:53:57.947326Z</date>
+    <msg>Change Hoa_Test_Praspel as Hoa_Test_Praspel_Contract and the first as a contracts registrer.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Call.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Contract.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Compiler.php</path>
+      <path action="A">Framework/Library/Test/Praspel/Contract.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Praspel.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1286">
+    <author>hywan</author>
+    <date>2010-11-04T08:55:08.971407Z</date>
+    <msg>It is useless to truncate an empty file aye…?</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Orchestrate.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1285">
+    <author>hywan</author>
+    <date>2010-11-04T08:53:25.543071Z</date>
+    <msg>Update according to the new semantics: not type, only domain.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Test/Praspel.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1284">
+    <author>hywan</author>
+    <date>2010-11-04T08:51:45.133328Z</date>
+    <msg>New semantics: not type, only domain.</msg>
+    <paths>
+      <path action="A">Framework/Library/Test/Praspel/ArrayDescription.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Call.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Contract.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Ensures.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Invariant.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Requires.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Throwable.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Compiler.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Constructor/Old.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Constructor/Result.php</path>
+      <path action="A">Framework/Library/Test/Praspel/Domain.php</path>
+      <path action="A">Framework/Library/Test/Praspel/DomainDisjunction.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Praspel.php</path>
+      <path action="D">Framework/Library/Test/Praspel/Type.php</path>
+      <path action="D">Framework/Library/Test/Praspel/TypeArray.php</path>
+      <path action="D">Framework/Library/Test/Praspel/TypeDisjunction.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Variable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1283">
+    <author>hywan</author>
+    <date>2010-11-04T00:16:37.273093Z</date>
+    <msg>Need a backup.</msg>
+    <paths>
+      <path action="A">Framework/Library/Test/Orchestrate.php</path>
+      <path action="M">Framework/Library/Test/Test.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1282">
+    <author>hywan</author>
+    <date>2010-11-04T00:15:28.339781Z</date>
+    <msg>Update the define() method: return read-write objects and support a new path and a new context.</msg>
+    <paths>
+      <path action="M">Framework/Library/File/Undefined.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1281">
+    <author>hywan</author>
+    <date>2010-11-03T22:44:11.717414Z</date>
+    <msg>Add an empty return statement and edit API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Library/File/Socket.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1280">
+    <author>hywan</author>
+    <date>2010-11-03T22:43:29.057475Z</date>
+    <msg>Add an empty return statement.</msg>
+    <paths>
+      <path action="M">Framework/Library/File/Read.php</path>
+      <path action="M">Framework/Library/File/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Write.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1279">
+    <author>hywan</author>
+    <date>2010-11-02T09:03:37.742832Z</date>
+    <msg>Export pretty-printer as a visitor.</msg>
+    <paths>
+      <path action="M">Framework/Library/Reflection/RClass.php</path>
+      <path action="M">Framework/Library/Reflection/RFunction/RAbstract.php</path>
+      <path action="M">Framework/Library/Reflection/RFunction/RMethod.php</path>
+      <path action="M">Framework/Library/Reflection/RParameter.php</path>
+      <path action="A">Framework/Library/Reflection/Visitor</path>
+      <path action="A">Framework/Library/Reflection/Visitor/Prettyprinter.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1278">
+    <author>hywan</author>
+    <date>2010-11-01T18:21:00.831513Z</date>
+    <msg>Welcome to the new package: Hoa_Reflection :-).</msg>
+    <paths>
+      <path action="A">Framework/Library/Reflection</path>
+      <path action="A">Framework/Library/Reflection/Exception.php</path>
+      <path action="A">Framework/Library/Reflection/Fragment</path>
+      <path action="A">Framework/Library/Reflection/Fragment/RMethod.php</path>
+      <path action="A">Framework/Library/Reflection/Fragment/RParameter.php</path>
+      <path action="A">Framework/Library/Reflection/RClass.php</path>
+      <path action="A">Framework/Library/Reflection/RFunction</path>
+      <path action="A">Framework/Library/Reflection/RFunction/RAbstract.php</path>
+      <path action="A">Framework/Library/Reflection/RFunction/RMethod.php</path>
+      <path action="A">Framework/Library/Reflection/RParameter.php</path>
+      <path action="A">Framework/Library/Reflection/Wrapper.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1277">
+    <author>hywan</author>
+    <date>2010-11-01T12:04:21.305321Z</date>
+    <msg>Add some usefull constants (_public, _static etc.) and reorganize constants.</msg>
+    <paths>
+      <path action="M">Framework/Core/Core.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1276">
+    <author>hywan</author>
+    <date>2010-10-27T19:39:52.161667Z</date>
+    <msg>Update copyright.</msg>
+    <paths>
+      <path action="M">Framework/Core/Data.php</path>
+      <path action="M">Framework/Library/Database/Schema/Xsd/0.1</path>
+    </paths>
+  </logentry>
+  <logentry revision="1275">
+    <author>hywan</author>
+    <date>2010-10-27T11:26:13.747513Z</date>
+    <msg>Redirect the maximum of methods to Hoa_Xml_Element_Basic when possible.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1274">
+    <author>hywan</author>
+    <date>2010-10-25T15:03:56.864944Z</date>
+    <msg>Change error format and reorganize exceptions number.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1273">
+    <author>hywan</author>
+    <date>2010-10-25T13:19:00.536743Z</date>
+    <msg>Add support of XML errors.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1272">
+    <author>hywan</author>
+    <date>2010-10-25T11:18:46.582260Z</date>
+    <msg>Change some Hoa_Stream_Io_Structural methods' names for a better semantics.</msg>
+    <paths>
+      <path action="M">Framework/Library/Stream/Io/Structural.php</path>
+      <path action="M">Framework/Library/Xml/Element/Basic.php</path>
+      <path action="M">Framework/Library/Xml/Element/Concrete.php</path>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1271">
+    <author>hywan</author>
+    <date>2010-10-21T22:15:24.165075Z</date>
+    <msg>Complete API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Library/Stream/Stream.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1270">
+    <author>hywan</author>
+    <date>2010-10-21T22:14:42.351144Z</date>
+    <msg>Mania: format code.</msg>
+    <paths>
+      <path action="M">Framework/Library/Stream/Stream.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1269">
+    <author>hywan</author>
+    <date>2010-10-20T19:57:13.942515Z</date>
+    <msg>Remove array case in offsetSet() and simplify node setting with __set().</msg>
+    <paths>
+      <path action="M">Framework/Core/Data.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1268">
+    <author>hywan</author>
+    <date>2010-10-20T19:39:23.810293Z</date>
+    <msg>Mania: format code.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Element/Concrete.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1267">
+    <author>hywan</author>
+    <date>2010-10-20T19:35:32.238879Z</date>
+    <msg>Adapt XYL to Hoa_Core_Data.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Element/Concrete.php</path>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1266">
+    <author>hywan</author>
+    <date>2010-10-20T19:15:57.571784Z</date>
+    <msg>Miss a case when getting/reaching a branch with a new offset.</msg>
+    <paths>
+      <path action="M">Framework/Core/Data.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1265">
+    <author>hywan</author>
+    <date>2010-10-18T22:58:03.095340Z</date>
+    <msg>A very little optimisation.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/Write.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1264">
+    <author>hywan</author>
+    <date>2010-10-18T22:57:52.020785Z</date>
+    <msg>Use a default namespace if no precised.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1263">
+    <author>hywan</author>
+    <date>2010-10-18T22:56:59.600345Z</date>
+    <msg>Fix a typo in the API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1262">
+    <author>hywan</author>
+    <date>2010-10-18T22:54:47.280601Z</date>
+    <msg>Add universal data as Hoa_Core_Data.</msg>
+    <paths>
+      <path action="M">Framework/Core/Core.php</path>
+      <path action="A">Framework/Core/Data.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1261">
+    <author>hywan</author>
+    <date>2010-10-17T15:21:14.665060Z</date>
+    <msg>The initializeWith() method returns $this instead of true.</msg>
+    <paths>
+      <path action="M">Framework/Library/StringBuffer/StringBuffer.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1260">
+    <author>hywan</author>
+    <date>2010-10-17T14:26:55.566232Z</date>
+    <msg>Global review: exceptions, load, possible bugs etc.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Attribute.php</path>
+      <path action="M">Framework/Library/Xml/Element/Basic.php</path>
+      <path action="M">Framework/Library/Xml/Element/Concrete.php</path>
+      <path action="M">Framework/Library/Xml/Element/Read.php</path>
+      <path action="M">Framework/Library/Xml/Element/ReadWrite.php</path>
+      <path action="M">Framework/Library/Xml/Element/Write.php</path>
+      <path action="M">Framework/Library/Xml/Read.php</path>
+      <path action="M">Framework/Library/Xml/ReadWrite.php</path>
+      <path action="M">Framework/Library/Xml/Write.php</path>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1259">
+    <author>hywan</author>
+    <date>2010-10-16T18:01:38.831219Z</date>
+    <msg>Use the constant name NAMESPACE_ID instead of NAMESPACE, that is a keyword in PHP5.3.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1258">
+    <author>hywan</author>
+    <date>2010-10-16T18:00:00.907357Z</date>
+    <msg>Add namespace support in the selectChildElement() method.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/Basic.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1257">
+    <author>hywan</author>
+    <date>2010-10-16T17:59:07.887227Z</date>
+    <msg>Complete the namespace support.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/Concrete.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1256">
+    <author>hywan</author>
+    <date>2010-10-16T17:57:41.271298Z</date>
+    <msg>Add the getPrefix() method.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1255">
+    <author>hywan</author>
+    <date>2010-10-16T17:57:15.322834Z</date>
+    <msg>Add complete namespace support.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1254">
+    <author>hywan</author>
+    <date>2010-10-14T22:02:54.991562Z</date>
+    <msg>Fix namespaces while computing XYL.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1253">
+    <author>hywan</author>
+    <date>2010-10-14T21:55:29.864063Z</date>
+    <msg>Deleguate namespaces management to the parent class.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1252">
+    <author>hywan</author>
+    <date>2010-10-14T21:54:01.914616Z</date>
+    <msg>Force XML document to have a default namespace at least (better).</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1251">
+    <author>hywan</author>
+    <date>2010-10-14T21:50:37.191347Z</date>
+    <msg>Manage namespaces.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/Basic.php</path>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1250">
+    <author>hywan</author>
+    <date>2010-10-14T19:57:06.351274Z</date>
+    <msg>Remove comments.</msg>
+    <paths>
+      <path action="M">Framework/Library/Socket/Connection/Server.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1249">
+    <author>hywan</author>
+    <date>2010-10-14T17:35:34.461596Z</date>
+    <msg>Disconnect websocket when socket closed.</msg>
+    <paths>
+      <path action="M">Framework/Library/Websocket/Server.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1248">
+    <author>hywan</author>
+    <date>2010-10-14T17:35:11.658492Z</date>
+    <msg>Support auto-disconnect and better disconnecting when using select().</msg>
+    <paths>
+      <path action="M">Framework/Library/Socket/Connection.php</path>
+      <path action="M">Framework/Library/Socket/Connection/Server.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1247">
+    <author>hywan</author>
+    <date>2010-10-14T13:04:02.357896Z</date>
+    <msg>Change process() to compute().</msg>
+    <paths>
+      <path action="M">Framework/Library/Websocket/Server.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1246">
+    <author>hywan</author>
+    <date>2010-10-12T18:42:45.294909Z</date>
+    <msg>Add a reference to the specificitation of WebSocekt.</msg>
+    <paths>
+      <path action="M">Framework/Library/Websocket/Server.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1245">
+    <author>hywan</author>
+    <date>2010-10-12T18:06:33.247076Z</date>
+    <msg>Add API documentation and replace true/false by SUCCEED/FAILED when need a better semantics.</msg>
+    <paths>
+      <path action="M">Framework/Library/Websocket/Node.php</path>
+      <path action="M">Framework/Library/Websocket/Server.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1244">
+    <author>hywan</author>
+    <date>2010-10-12T15:52:41.451135Z</date>
+    <msg>Welcome to Hoa_Websocket!</msg>
+    <paths>
+      <path action="A">Framework/Library/Websocket</path>
+      <path action="A">Framework/Library/Websocket/Exception.php</path>
+      <path action="A">Framework/Library/Websocket/Node.php</path>
+      <path action="A">Framework/Library/Websocket/Server.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1243">
+    <author>hywan</author>
+    <date>2010-10-12T15:40:08.503488Z</date>
+    <msg>Move node name from the select() method argument to set/get- NodeName() method. Add the getNodes() methods.</msg>
+    <paths>
+      <path action="M">Framework/Library/Socket/Connection/Server.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1242">
+    <author>hywan</author>
+    <date>2010-10-12T12:14:18.849236Z</date>
+    <msg>Add the _setStream() method. Useful for socket and select.</msg>
+    <paths>
+      <path action="M">Framework/Library/Stream/Stream.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1241">
+    <author>hywan</author>
+    <date>2010-10-12T12:01:11.211204Z</date>
+    <msg>Add select() support (with node notion).</msg>
+    <paths>
+      <path action="A">Framework/Library/Socket/Connection/Node.php</path>
+      <path action="M">Framework/Library/Socket/Connection/Server.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1240">
+    <author>hywan</author>
+    <date>2010-10-04T20:54:47.247146Z</date>
+    <msg>Now, we are able to have different branches cardinality (new process of manipulating data).</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Element/Concrete.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1239">
+    <author>hywan</author>
+    <date>2010-10-04T20:29:51.336864Z</date>
+    <msg>Add the interface Hoa_Xyl_Element_Executable to describe executable element.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Element/Concrete.php</path>
+      <path action="A">Framework/Library/Xyl/Element/Executable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1238">
+    <author>hywan</author>
+    <date>2010-10-04T20:15:25.907736Z</date>
+    <msg>Change visibility of the XPath compiler.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1227">
+    <author>hywan</author>
+    <date>2010-09-30T12:37:08.999274Z</date>
+    <msg>Try something with namespaces :-).</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1226">
+    <author>hywan</author>
+    <date>2010-09-30T12:34:49.432292Z</date>
+    <msg>Throw exception instead of choosing a default concrete element when an abstract one is unranked..</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/Concrete.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1215">
+    <author>hywan</author>
+    <date>2010-09-28T02:01:59.083141Z</date>
+    <msg>I said, I disable this class.</msg>
+    <paths>
+      <path action="M">Framework/Library/File/Upload.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1214">
+    <author>hywan</author>
+    <date>2010-09-28T02:01:33.971787Z</date>
+    <msg>Disable this class temporary.</msg>
+    <paths>
+      <path action="M">Framework/Library/File/Upload.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1213">
+    <author>hywan</author>
+    <date>2010-09-28T01:59:49.074674Z</date>
+    <msg>Remove a useless test.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Element/Concrete.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1212">
+    <author>hywan</author>
+    <date>2010-09-28T01:53:22.604455Z</date>
+    <msg>Change $i++ for ++$i.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1211">
+    <author>hywan</author>
+    <date>2010-09-28T01:49:12.739220Z</date>
+    <msg>Delete all parameters ;-).</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1209">
+    <author>hywan</author>
+    <date>2010-09-26T21:22:59.078189Z</date>
+    <msg>Complete API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Attribute.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1208">
+    <author>hywan</author>
+    <date>2010-09-26T17:52:54.390609Z</date>
+    <msg>Replace __CLASS__ by get_class($this). It is better :-).</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/Basic.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1207">
+    <author>hywan</author>
+    <date>2010-09-26T16:25:42.381904Z</date>
+    <msg>Allow an element to be executed.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Element/Concrete.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1206">
+    <author>hywan</author>
+    <date>2010-09-26T15:32:54.623394Z</date>
+    <msg>Forget to update iterator collection when adding/setting a new child.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/Concrete.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1205">
+    <author>hywan</author>
+    <date>2010-09-26T14:44:26.823392Z</date>
+    <msg>Reorganize exceptions.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1204">
+    <author>hywan</author>
+    <date>2010-09-26T14:41:11.708688Z</date>
+    <msg>Hoa_Xyl is no longer parameterizable.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1201">
+    <author>hywan</author>
+    <date>2010-09-24T15:54:27.875024Z</date>
+    <msg>Review the iterator system because it did not support the children order.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/Concrete.php</path>
+      <path action="D">Framework/Library/Xml/Iterator</path>
+    </paths>
+  </logentry>
+  <logentry revision="1200">
+    <author>hywan</author>
+    <date>2010-09-24T15:53:30.558209Z</date>
+    <msg>New XYL interpreting system (and the last).</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Element/Basic.php</path>
+      <path action="A">Framework/Library/Xyl/Element/Concrete.php</path>
+      <path action="D">Framework/Library/Xyl/Element/Render.php</path>
+      <path action="M">Framework/Library/Xyl/Interpreter.php</path>
+      <path action="M">Framework/Library/Xyl/Interpreter/Html5.php</path>
+      <path action="M">Framework/Library/Xyl/Interpreter/Html5/Li.php</path>
+      <path action="M">Framework/Library/Xyl/Interpreter/Html5/P.php</path>
+      <path action="M">Framework/Library/Xyl/Interpreter/Html5/Page.php</path>
+      <path action="M">Framework/Library/Xyl/Interpreter/Html5/Section1.php</path>
+      <path action="M">Framework/Library/Xyl/Interpreter/Html5/Ul.php</path>
+      <path action="M">Framework/Library/Xyl/Interpreter/Html5/Yield.php</path>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1198">
+    <author>hywan</author>
+    <date>2010-09-23T16:03:46.779348Z</date>
+    <msg>Remove the set/select- superRoot() methods.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/Basic.php</path>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1197">
+    <author>hywan</author>
+    <date>2010-09-23T16:00:28.476459Z</date>
+    <msg>Correct two bugs and use the current object as default node instead of the super-parent class.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/Concrete.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1195">
+    <author>hywan</author>
+    <date>2010-09-23T15:32:53.334688Z</date>
+    <msg>Add rank: abstract to concrete elements array.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/Concrete.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1194">
+    <author>hywan</author>
+    <date>2010-09-23T15:32:36.498457Z</date>
+    <msg>Remove the interprete() method. Useless.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1193">
+    <author>hywan</author>
+    <date>2010-09-23T12:22:17.201905Z</date>
+    <msg>Edit API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Library/Iterator/Basic.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1192">
+    <author>hywan</author>
+    <date>2010-09-23T12:18:33.277687Z</date>
+    <msg>Oops, bad import.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1191">
+    <author>hywan</author>
+    <date>2010-09-23T12:17:53.128979Z</date>
+    <msg>Add concrete element structure: it enables to interprete the abstract XML tree.</msg>
+    <paths>
+      <path action="A">Framework/Library/Xml/Element/Concrete.php</path>
+      <path action="A">Framework/Library/Xml/Iterator</path>
+      <path action="A">Framework/Library/Xml/Iterator/Element.php</path>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1190">
+    <author>hywan</author>
+    <date>2010-09-23T09:35:06.490769Z</date>
+    <msg>Add the getBackend() method.</msg>
+    <paths>
+      <path action="M">Framework/Library/Cache/Frontend.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1181">
+    <author>hywan</author>
+    <date>2010-09-22T10:17:56.244245Z</date>
+    <msg>Stream to interpreter as XYL must be readable.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1176">
+    <author>hywan</author>
+    <date>2010-09-19T09:39:57.610464Z</date>
+    <msg>Format API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Core/Event.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1175">
+    <author>hywan</author>
+    <date>2010-09-16T09:47:21.080970Z</date>
+    <msg>Change the LOG_CHANNEL constant value.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Praspel.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1174">
+    <author>hywan</author>
+    <date>2010-09-13T18:27:49.597676Z</date>
+    <msg>Remove old layer.</msg>
+    <paths>
+      <path action="D">Framework/Library/Xyl/Renderer</path>
+      <path action="D">Framework/Library/Xyl/Renderer.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1173">
+    <author>hywan</author>
+    <date>2010-09-13T18:26:40.131084Z</date>
+    <msg>New layer for interpreting XYL.</msg>
+    <paths>
+      <path action="A">Framework/Library/Xyl/Interpreter</path>
+      <path action="A">Framework/Library/Xyl/Interpreter.php</path>
+      <path action="A">Framework/Library/Xyl/Interpreter/Html5</path>
+      <path action="A">Framework/Library/Xyl/Interpreter/Html5.php</path>
+      <path action="A">Framework/Library/Xyl/Interpreter/Html5/Li.php</path>
+      <path action="A">Framework/Library/Xyl/Interpreter/Html5/P.php</path>
+      <path action="A">Framework/Library/Xyl/Interpreter/Html5/Page.php</path>
+      <path action="A">Framework/Library/Xyl/Interpreter/Html5/Section1.php</path>
+      <path action="A">Framework/Library/Xyl/Interpreter/Html5/Ul.php</path>
+      <path action="A">Framework/Library/Xyl/Interpreter/Html5/Yield.php</path>
+      <path action="A">Framework/Library/Xyl/Interpreter/Pdf</path>
+      <path action="A">Framework/Library/Xyl/Interpreter/Text</path>
+    </paths>
+  </logentry>
+  <logentry revision="1172">
+    <author>hywan</author>
+    <date>2010-09-13T17:20:35.130652Z</date>
+    <msg>Change the selectRoot() method; use a static attribute was a big error.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/Basic.php</path>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1171">
+    <author>hywan</author>
+    <date>2010-09-13T16:15:57.939146Z</date>
+    <msg>Add the element() function to the @position attribute of overlay.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1170">
+    <author>hywan</author>
+    <date>2010-09-13T15:47:03.320632Z</date>
+    <msg>Now &amp;lt;overlay&amp;gt; support &amp;lt;?xyl-oevrlay?&amp;gt; PI: allows to include overlays from an overlay.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1169">
+    <author>hywan</author>
+    <date>2010-09-13T15:28:45.795861Z</date>
+    <msg>Add the readAttributesAsString() method.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/Basic.php</path>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1168">
+    <author>hywan</author>
+    <date>2010-09-09T16:29:16.522764Z</date>
+    <msg>Nearly a complete support of overlay: &amp;lt;overlay&amp;gt; with @position attribute are set up. Also update some performance.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1167">
+    <author>hywan</author>
+    <date>2010-09-08T11:00:22.958291Z</date>
+    <msg>Early draft of &amp;lt;?xyl-overlay?&amp;gt; support.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1166">
+    <author>hywan</author>
+    <date>2010-09-08T10:53:00.276019Z</date>
+    <msg>Change API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1165">
+    <author>hywan</author>
+    <date>2010-09-08T10:21:31.433045Z</date>
+    <msg>&amp;lt;?xyl-use?&amp;gt; processing-instruction must be in header.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1164">
+    <author>hywan</author>
+    <date>2010-09-07T20:13:29.631072Z</date>
+    <msg>Change an error message :-).</msg>
+    <paths>
+      <path action="M">Framework/Core/Core.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1154">
+    <author>hywan</author>
+    <date>2010-09-01T18:03:00.836654Z</date>
+    <msg>Change the link-keyword _and for _comma; it is more semantically right.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Throwable.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Compiler.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1153">
+    <author>hywan</author>
+    <date>2010-09-01T16:32:07.911895Z</date>
+    <msg>Use &amp;lt;?xyl-use ?&amp;gt; PI instead of &amp;lt;use /&amp;gt; tag.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1152">
+    <author>hywan</author>
+    <date>2010-09-01T16:20:01.914566Z</date>
+    <msg>Add attribute parser.</msg>
+    <paths>
+      <path action="A">Framework/Library/Xml/Attribute.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1151">
+    <author>hywan</author>
+    <date>2010-09-01T16:19:15.314917Z</date>
+    <msg>Forget to redirect DOM importation to the stream.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1150">
+    <author>hywan</author>
+    <date>2010-09-01T16:17:57.458760Z</date>
+    <msg>Move up the readDOM() method from Hoa_Xml_Element_Read to Hoa_Xml and Hoa_Xml_Element_Basic.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/Basic.php</path>
+      <path action="M">Framework/Library/Xml/Element/Read.php</path>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1149">
+    <author>hywan</author>
+    <date>2010-09-01T15:39:17.743815Z</date>
+    <msg>Strictly compare with a boolean.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/Basic.php</path>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1148">
+    <author>hywan</author>
+    <date>2010-08-31T19:32:39.936147Z</date>
+    <msg>Remove from here to a specific class (will be commited soon).</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/Basic.php</path>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1147">
+    <author>hywan</author>
+    <date>2010-08-31T16:31:57.604847Z</date>
+    <msg>First draft for the new parseAttributes() static method.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/Basic.php</path>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1132">
+    <author>hywan</author>
+    <date>2010-08-16T18:00:50.285514Z</date>
+    <msg>Check if file exists when using it (&amp;lt;use href=… /&amp;gt;).</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1131">
+    <author>hywan</author>
+    <date>2010-08-16T17:59:07.003472Z</date>
+    <msg>Prepare parameters.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1130">
+    <author>hywan</author>
+    <date>2010-08-16T17:48:30.056298Z</date>
+    <msg>Maybe it's useless.</msg>
+    <paths>
+      <path action="D">Data/Variable/Private/Acl</path>
+      <path action="D">Data/Variable/Private/Application</path>
+      <path action="D">Data/Variable/Private/Archive</path>
+      <path action="D">Data/Variable/Private/Bench</path>
+      <path action="D">Data/Variable/Private/Cache</path>
+      <path action="D">Data/Variable/Private/Compress</path>
+      <path action="D">Data/Variable/Private/Configuration</path>
+      <path action="D">Data/Variable/Private/Console</path>
+      <path action="D">Data/Variable/Private/Controller</path>
+      <path action="D">Data/Variable/Private/Database</path>
+      <path action="D">Data/Variable/Private/Factory</path>
+      <path action="D">Data/Variable/Private/File</path>
+      <path action="D">Data/Variable/Private/Filter</path>
+      <path action="D">Data/Variable/Private/Form</path>
+      <path action="D">Data/Variable/Private/Graph</path>
+      <path action="D">Data/Variable/Private/I18n</path>
+      <path action="D">Data/Variable/Private/Iterator</path>
+      <path action="D">Data/Variable/Private/Json</path>
+      <path action="D">Data/Variable/Private/Locale</path>
+      <path action="D">Data/Variable/Private/Log</path>
+      <path action="D">Data/Variable/Private/Mail</path>
+      <path action="D">Data/Variable/Private/Memory</path>
+      <path action="D">Data/Variable/Private/Mime</path>
+      <path action="D">Data/Variable/Private/Observer</path>
+      <path action="D">Data/Variable/Private/Php</path>
+      <path action="D">Data/Variable/Private/Pom</path>
+      <path action="D">Data/Variable/Private/Prototype</path>
+      <path action="D">Data/Variable/Private/Registry</path>
+      <path action="D">Data/Variable/Private/Serialize</path>
+      <path action="D">Data/Variable/Private/Service</path>
+      <path action="D">Data/Variable/Private/Session</path>
+      <path action="D">Data/Variable/Private/Socket</path>
+      <path action="D">Data/Variable/Private/StdClass</path>
+      <path action="D">Data/Variable/Private/Stream</path>
+      <path action="D">Data/Variable/Private/Test</path>
+      <path action="D">Data/Variable/Private/Translate</path>
+      <path action="D">Data/Variable/Private/Tree</path>
+      <path action="D">Data/Variable/Private/Uri</path>
+      <path action="D">Data/Variable/Private/Validate</path>
+      <path action="D">Data/Variable/Private/Version</path>
+      <path action="D">Data/Variable/Private/View</path>
+      <path action="D">Data/Variable/Private/Visitor</path>
+      <path action="D">Data/Variable/Private/Xml</path>
+      <path action="D">Data/Variable/Private/XmlRpc</path>
+      <path action="D">Data/Variable/Private/Yaml</path>
+    </paths>
+  </logentry>
+  <logentry revision="1129">
+    <author>hywan</author>
+    <date>2010-08-16T17:41:07.290056Z</date>
+    <msg>Write API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1128">
+    <author>hywan</author>
+    <date>2010-08-16T17:33:34.322426Z</date>
+    <msg>Force to free memory just after each &amp;lt;use /&amp;gt; computed.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1127">
+    <author>hywan</author>
+    <date>2010-08-16T17:32:24.454874Z</date>
+    <msg>Better computing of &amp;lt;yield /&amp;gt;.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1126">
+    <author>hywan</author>
+    <date>2010-08-16T16:31:39.891005Z</date>
+    <msg>Clean a bit the code.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1125">
+    <author>hywan</author>
+    <date>2010-08-16T11:45:25.983407Z</date>
+    <msg>Add contraint: &amp;lt;use /&amp;gt; must open a &amp;lt;definition&amp;gt; XYL file.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1124">
+    <author>hywan</author>
+    <date>2010-08-16T11:24:25.214585Z</date>
+    <msg>Compute &amp;lt;use /&amp;gt; :-).</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1123">
+    <author>hywan</author>
+    <date>2010-08-13T15:38:49.049047Z</date>
+    <msg>Update to support yielder calling inside a yielder definition. Simplify code. Faster.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1122">
+    <author>hywan</author>
+    <date>2010-08-13T11:09:15.455379Z</date>
+    <msg>Fix a bug when data bucket has a group as leaf.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Element/Basic.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1121">
+    <author>hywan</author>
+    <date>2010-08-12T15:26:54.951163Z</date>
+    <msg>Add support of named yielder: &amp;lt;yield name="foo"&amp;gt;…&amp;lt;/yield&amp;gt;…&amp;lt;foo … /&amp;gt;.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1120">
+    <author>hywan</author>
+    <date>2010-08-12T15:26:10.495085Z</date>
+    <msg>Add support of “empty” binding, i.e. @bind="?".</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Element/Basic.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1119">
+    <author>hywan</author>
+    <date>2010-08-11T09:21:45.786178Z</date>
+    <msg>Fix the method to calculate the PHP_VERSION_ID constant value.</msg>
+    <paths>
+      <path action="M">Framework/Core/Core.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1118">
+    <author>hywan</author>
+    <date>2010-08-10T10:15:04.811045Z</date>
+    <msg>Replace {} by [] in PHP_VERSION_ID.</msg>
+    <paths>
+      <path action="M">Framework/Core/Core.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1117">
+    <author>hywan</author>
+    <date>2010-08-09T09:58:04.559098Z</date>
+    <msg>Forget to remove a print_r.</msg>
+    <paths>
+      <path action="M">Framework/Library/Locale/Locale.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1116">
+    <author>hywan</author>
+    <date>2010-07-28T17:30:37.948191Z</date>
+    <msg>Add the anoynymous yielder render.</msg>
+    <paths>
+      <path action="A">Framework/Library/Xyl/Renderer/Html5/Yield.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1115">
+    <author>hywan</author>
+    <date>2010-07-28T17:30:18.608431Z</date>
+    <msg>Start support of &amp;lt;yield&amp;gt;. Anonymous yielders: ok.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Element/Basic.php</path>
+      <path action="M">Framework/Library/Xyl/Renderer.php</path>
+      <path action="M">Framework/Library/Xyl/Renderer/Html5/Li.php</path>
+      <path action="M">Framework/Library/Xyl/Renderer/Html5/P.php</path>
+      <path action="M">Framework/Library/Xyl/Renderer/Html5/Ul.php</path>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1114">
+    <author>hywan</author>
+    <date>2010-07-28T16:23:57.492624Z</date>
+    <msg>Change @value for @bind for binding data bucket.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Element/Basic.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1113">
+    <author>hywan</author>
+    <date>2010-07-28T16:22:07.039758Z</date>
+    <msg>Support path in data bucket binding.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Element/Basic.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1112">
+    <author>hywan</author>
+    <date>2010-07-28T10:43:01.450789Z</date>
+    <msg>Forget to change HoaFramework to HoaCore.</msg>
+    <paths>
+      <path action="M">Framework/Core/Parameter.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1111">
+    <author>hywan</author>
+    <date>2010-07-28T10:10:47.743658Z</date>
+    <msg>Forget to rename these configuration files…</msg>
+    <paths>
+      <path action="A">Data/Etc/Configuration/.Cache/HoaCore.php</path>
+      <path action="D">Data/Etc/Configuration/.Cache/HoaFramework.php</path>
+      <path action="A">Data/Etc/Configuration/HoaCore.json</path>
+      <path action="D">Data/Etc/Configuration/HoaFramework.json</path>
+    </paths>
+  </logentry>
+  <logentry revision="1110">
+    <author>hywan</author>
+    <date>2010-07-27T16:51:26.783498Z</date>
+    <msg>Fix a parse error…</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Element/Basic.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1109">
+    <author>hywan</author>
+    <date>2010-07-27T16:48:49.650969Z</date>
+    <msg>Allow a simplified-structure for data buckets. And remove a debug method.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Element/Basic.php</path>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1108">
+    <author>hywan</author>
+    <date>2010-07-26T15:43:53.975904Z</date>
+    <msg>Support /etc/hosts shortcut.</msg>
+    <paths>
+      <path action="M">Framework/Library/Socket/Internet/DomainName.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1107">
+    <author>hywan</author>
+    <date>2010-07-26T15:27:27.394078Z</date>
+    <msg>Set writeArray() compatibles with the Hoa_Stream_Io_Out interface.</msg>
+    <paths>
+      <path action="M">Framework/Library/Socket/Connection.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1106">
+    <author>hywan</author>
+    <date>2010-07-21T17:24:58.478768Z</date>
+    <msg>Remove a var_dump().</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/Basic.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1105">
+    <author>hywan</author>
+    <date>2010-07-21T17:15:10.320223Z</date>
+    <msg>New data manager system. Allow deep recursion binding. Very hard…</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Element/Basic.php</path>
+      <path action="M">Framework/Library/Xyl/Renderer.php</path>
+      <path action="A">Framework/Library/Xyl/Renderer/Html5/Li.php</path>
+      <path action="M">Framework/Library/Xyl/Renderer/Html5/P.php</path>
+      <path action="A">Framework/Library/Xyl/Renderer/Html5/Ul.php</path>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1100">
+    <author>hywan</author>
+    <date>2010-07-20T17:23:15.596613Z</date>
+    <msg>Update data manager. Now we can have multi same node (I don't know how to explain it…).</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Element/Basic.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1099">
+    <author>hywan</author>
+    <date>2010-07-20T15:53:17.004072Z</date>
+    <msg>Reorganize renderers system to automatically manage stack of data.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Renderer.php</path>
+      <path action="M">Framework/Library/Xyl/Renderer/Html5.php</path>
+      <path action="M">Framework/Library/Xyl/Renderer/Html5/P.php</path>
+      <path action="M">Framework/Library/Xyl/Renderer/Html5/Page.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1098">
+    <author>hywan</author>
+    <date>2010-07-20T15:52:14.547170Z</date>
+    <msg>getData() now returns a reference. And add the getCurrentData(), if an element holds/is linked to many data.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xyl/Element/Basic.php</path>
+      <path action="M">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1097">
+    <author>hywan</author>
+    <date>2010-07-19T16:54:32.092899Z</date>
+    <msg>Early draft of Hoa_Xyl :-).</msg>
+    <paths>
+      <path action="A">Framework/Library/Xyl</path>
+      <path action="A">Framework/Library/Xyl/.Mime</path>
+      <path action="A">Framework/Library/Xyl/Element</path>
+      <path action="A">Framework/Library/Xyl/Element.php</path>
+      <path action="A">Framework/Library/Xyl/Element/Basic.php</path>
+      <path action="A">Framework/Library/Xyl/Element/Render.php</path>
+      <path action="A">Framework/Library/Xyl/Exception.php</path>
+      <path action="A">Framework/Library/Xyl/Renderer</path>
+      <path action="A">Framework/Library/Xyl/Renderer.php</path>
+      <path action="A">Framework/Library/Xyl/Renderer/Html5</path>
+      <path action="A">Framework/Library/Xyl/Renderer/Html5.php</path>
+      <path action="A">Framework/Library/Xyl/Renderer/Html5/P.php</path>
+      <path action="A">Framework/Library/Xyl/Renderer/Html5/Page.php</path>
+      <path action="A">Framework/Library/Xyl/Renderer/Pdf</path>
+      <path action="A">Framework/Library/Xyl/Renderer/Text</path>
+      <path action="A">Framework/Library/Xyl/Xyl.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1096">
+    <author>hywan</author>
+    <date>2010-07-19T16:54:05.411254Z</date>
+    <msg>Add the attributeExists() method and the notion of super-root (object that create the tree, a fake root).</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/Basic.php</path>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1095">
+    <author>hywan</author>
+    <date>2010-07-19T16:22:39.410686Z</date>
+    <msg>Change a variable name (cause a undefined variable notice…).</msg>
+    <paths>
+      <path action="M">Framework/Library/File/Link/Read.php</path>
+      <path action="M">Framework/Library/File/Link/Write.php</path>
+      <path action="M">Framework/Library/File/Temporary/Read.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1093">
+    <author>hywan</author>
+    <date>2010-07-16T18:43:10.956589Z</date>
+    <msg>Move attribute manipulation methods to parent element.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/Basic.php</path>
+      <path action="M">Framework/Library/Xml/Element/Read.php</path>
+      <path action="M">Framework/Library/Xml/Element/ReadWrite.php</path>
+      <path action="M">Framework/Library/Xml/Read.php</path>
+      <path action="M">Framework/Library/Xml/ReadWrite.php</path>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1092">
+    <author>hywan</author>
+    <date>2010-07-16T11:34:17.486209Z</date>
+    <msg>Add mime of .ppl files.</msg>
+    <paths>
+      <path action="A">Framework/Library/Test/.Mime</path>
+    </paths>
+  </logentry>
+  <logentry revision="1090">
+    <author>hywan</author>
+    <date>2010-07-15T17:34:59.783747Z</date>
+    <msg>Adapt to the new Hoa_Iterator package.</msg>
+    <paths>
+      <path action="M">Framework/Library/File/Finder.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1089">
+    <author>hywan</author>
+    <date>2010-07-15T17:26:53.056644Z</date>
+    <msg>Remove this old folder.</msg>
+    <paths>
+      <path action="D">Framework/Library/Iterator/Interface</path>
+    </paths>
+  </logentry>
+  <logentry revision="1088">
+    <author>hywan</author>
+    <date>2010-07-15T17:25:51.574808Z</date>
+    <msg>Remake the Hoa_Iterator package :-).</msg>
+    <paths>
+      <path action="A">Framework/Library/Iterator/Aggregate.php</path>
+      <path action="A">Framework/Library/Iterator/Append.php</path>
+      <path action="A">Framework/Library/Iterator/Basic.php</path>
+      <path action="A">Framework/Library/Iterator/Caching.php</path>
+      <path action="A">Framework/Library/Iterator/Filter.php</path>
+      <path action="D">Framework/Library/Iterator/Interface/Aggregate.php</path>
+      <path action="D">Framework/Library/Iterator/Interface/Iterator.php</path>
+      <path action="D">Framework/Library/Iterator/Interface/Seekable.php</path>
+      <path action="M">Framework/Library/Iterator/Iterator.php</path>
+      <path action="A">Framework/Library/Iterator/Limit.php</path>
+      <path action="A">Framework/Library/Iterator/Parent.php</path>
+      <path action="A">Framework/Library/Iterator/Recursive.php</path>
+      <path action="A">Framework/Library/Iterator/RegularExpression.php</path>
+      <path action="A">Framework/Library/Iterator/Seekable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1087">
+    <author>hywan</author>
+    <date>2010-07-15T16:51:10.014814Z</date>
+    <msg>Correct API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Library/Iterator/Interface/Aggregate.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1086">
+    <author>hywan</author>
+    <date>2010-07-15T16:15:12.147807Z</date>
+    <msg>Simplifying the code.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Praspel.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1083">
+    <author>hywan</author>
+    <date>2010-07-15T15:42:15.537239Z</date>
+    <msg>Change a parameter name.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Urg/Type/String.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1082">
+    <author>hywan</author>
+    <date>2010-07-15T15:34:14.359855Z</date>
+    <msg>Adapt test:run to the last revisions :-).</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Test/Run.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1079">
+    <author>hywan</author>
+    <date>2010-07-13T16:28:34.182588Z</date>
+    <msg>Hmm, add an array case. Must be tested!</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/Write.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1078">
+    <author>hywan</author>
+    <date>2010-07-13T15:36:32.917513Z</date>
+    <msg>Add support of Closure :-).</msg>
+    <paths>
+      <path action="M">Framework/Core/Event.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1077">
+    <author>hywan</author>
+    <date>2010-07-13T14:48:12.578943Z</date>
+    <msg>Move Hoa_Xml_Element to Hoa_Xml_Element_Basic. Now Hoa_Xml_Element is an interface that represents all XML element.</msg>
+    <paths>
+      <path action="A">Framework/Library/Xml/Element/Basic.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1076">
+    <author>hywan</author>
+    <date>2010-07-13T14:48:02.642425Z</date>
+    <msg>Move Hoa_Xml_Element to Hoa_Xml_Element_Basic. Now Hoa_Xml_Element is an interface that represents all XML element.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/CssToXPath.php</path>
+      <path action="M">Framework/Library/Xml/Element.php</path>
+      <path action="M">Framework/Library/Xml/Element/Read.php</path>
+      <path action="M">Framework/Library/Xml/Element/ReadWrite.php</path>
+      <path action="M">Framework/Library/Xml/Element/Write.php</path>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1075">
+    <author>hywan</author>
+    <date>2010-07-13T14:33:22.355441Z</date>
+    <msg>Add the IteratorAggregate interface to match more SimpleXML.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1074">
+    <author>hywan</author>
+    <date>2010-07-12T16:51:21.014525Z</date>
+    <msg>Add the Countable interface (to match more the Hoa_Xml_Element), and add the getName() and count() methods.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1073">
+    <author>hywan</author>
+    <date>2010-07-12T15:00:01.018654Z</date>
+    <msg>Use get_class($this) instead of __CLASS__; it's better :-).</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/ReadWrite.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1072">
+    <author>hywan</author>
+    <date>2010-07-12T14:59:37.651491Z</date>
+    <msg>Import Hoa_Xml_Exception.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1071">
+    <author>hywan</author>
+    <date>2010-07-04T17:35:36.503313Z</date>
+    <msg>Optimizing the readAll() method.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/Read.php</path>
+      <path action="M">Framework/Library/Xml/Element/ReadWrite.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1070">
+    <author>hywan</author>
+    <date>2010-07-04T17:33:15.110677Z</date>
+    <msg>Forget to reset the internal pointer to 0 after initializing a string buffer.</msg>
+    <paths>
+      <path action="M">Framework/Library/StringBuffer/StringBuffer.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1069">
+    <author>hywan</author>
+    <date>2010-07-04T17:14:15.811091Z</date>
+    <msg>Remove drafts of method to do (got alternatives) and add the xpath() method.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1068">
+    <author>hywan</author>
+    <date>2010-07-03T19:35:13.218166Z</date>
+    <msg>Change 'value' for 'data'. Semantic matters :-).</msg>
+    <paths>
+      <path action="M">Framework/Core/Event.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1067">
+    <author>hywan</author>
+    <date>2010-07-03T19:33:52.016654Z</date>
+    <msg>Uniformize interfaces (i.e. dispatch ReadWrite to Read and Write).</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/Read.php</path>
+      <path action="M">Framework/Library/Xml/Element/Write.php</path>
+      <path action="M">Framework/Library/Xml/Read.php</path>
+      <path action="M">Framework/Library/Xml/Write.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1066">
+    <author>hywan</author>
+    <date>2010-07-03T19:29:25.672229Z</date>
+    <msg>Goes on :-).</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element.php</path>
+      <path action="M">Framework/Library/Xml/Element/ReadWrite.php</path>
+      <path action="M">Framework/Library/Xml/Read.php</path>
+      <path action="M">Framework/Library/Xml/ReadWrite.php</path>
+      <path action="M">Framework/Library/Xml/Write.php</path>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1065">
+    <author>hywan</author>
+    <date>2010-07-03T18:17:55.010779Z</date>
+    <msg>Forget to remove a var_dump.</msg>
+    <paths>
+      <path action="M">Framework/Library/Database/QueryBuilder/Dml/Select.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1064">
+    <author>hywan</author>
+    <date>2010-07-03T17:46:27.430099Z</date>
+    <msg>Add a default value to the first parameter of the readArray() method. Now it is null by default.</msg>
+    <paths>
+      <path action="M">Framework/Library/File/Link/Read.php</path>
+      <path action="M">Framework/Library/File/Link/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Read.php</path>
+      <path action="M">Framework/Library/File/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Temporary/Read.php</path>
+      <path action="M">Framework/Library/File/Temporary/ReadWrite.php</path>
+      <path action="M">Framework/Library/Php/Io/In.php</path>
+      <path action="M">Framework/Library/Socket/Connection.php</path>
+      <path action="M">Framework/Library/Stream/Io/In.php</path>
+      <path action="M">Framework/Library/StringBuffer/Read.php</path>
+      <path action="M">Framework/Library/StringBuffer/ReadWrite.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1063">
+    <author>hywan</author>
+    <date>2010-07-03T17:44:26.230984Z</date>
+    <msg>Simplify the initializeWith() method.</msg>
+    <paths>
+      <path action="M">Framework/Library/StringBuffer/StringBuffer.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1062">
+    <author>hywan</author>
+    <date>2010-07-01T00:45:52.255552Z</date>
+    <msg>Save XML before closing the inner stream, i.e. observe the hoa://Event/Stream/...:close-before event.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/Write.php</path>
+      <path action="M">Framework/Library/Xml/ReadWrite.php</path>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1061">
+    <author>hywan</author>
+    <date>2010-07-01T00:45:11.329980Z</date>
+    <msg>Use the right class ;-).</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element/ReadWrite.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1060">
+    <author>hywan</author>
+    <date>2010-07-01T00:44:39.395707Z</date>
+    <msg>Fix a bug with querySelectorAll() in querySelector().</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1059">
+    <author>hywan</author>
+    <date>2010-07-01T00:43:50.214620Z</date>
+    <msg>Adapt code to the previous revision (open() to _open() and close() to _close()).</msg>
+    <paths>
+      <path action="M">Framework/Library/File/Directory.php</path>
+      <path action="M">Framework/Library/File/File.php</path>
+      <path action="M">Framework/Library/File/Link/Read.php</path>
+      <path action="M">Framework/Library/File/Link/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Link/Write.php</path>
+      <path action="M">Framework/Library/File/Read.php</path>
+      <path action="M">Framework/Library/File/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Temporary.php</path>
+      <path action="M">Framework/Library/File/Temporary/Read.php</path>
+      <path action="M">Framework/Library/File/Temporary/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Temporary/Write.php</path>
+      <path action="M">Framework/Library/File/Undefined.php</path>
+      <path action="M">Framework/Library/File/Write.php</path>
+      <path action="M">Framework/Library/Php/Io/Error.php</path>
+      <path action="M">Framework/Library/Php/Io/In.php</path>
+      <path action="M">Framework/Library/Php/Io/Out.php</path>
+      <path action="M">Framework/Library/Socket/Connection/Client.php</path>
+      <path action="M">Framework/Library/Socket/Connection/Server.php</path>
+      <path action="M">Framework/Library/StringBuffer/StringBuffer.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1058">
+    <author>hywan</author>
+    <date>2010-07-01T00:43:06.530863Z</date>
+    <msg>Change open() for _open() and close() for _close(). It enables to add the event :close-before. And add the hoa://Event/Stream/... event.</msg>
+    <paths>
+      <path action="M">Framework/Library/Stream/Stream.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1057">
+    <author>hywan</author>
+    <date>2010-07-01T00:41:06.207336Z</date>
+    <msg>Complete API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Core/Event.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1056">
+    <author>hywan</author>
+    <date>2010-06-28T16:44:35.081845Z</date>
+    <msg>Delete old bench. Update performances. And adapt event data.</msg>
+    <paths>
+      <path action="M">Framework/Library/Log/Log.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1055">
+    <author>hywan</author>
+    <date>2010-06-28T16:43:13.682080Z</date>
+    <msg>Merge principle of a/synchronous de/attachement. Now we have a multiton of events and an event() function as an alias. Easy to use :-). And complete API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Core/Event.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1054">
+    <author>hywan</author>
+    <date>2010-06-27T19:42:20.475078Z</date>
+    <msg>Adapt Hoa_Log to Hoa_Core_Event. Love simplifying :-). And update performance.</msg>
+    <paths>
+      <path action="M">Framework/Library/Log/Log.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1053">
+    <author>hywan</author>
+    <date>2010-06-27T19:41:38.139467Z</date>
+    <msg>Forget to write an abstract method: writeBoolean().</msg>
+    <paths>
+      <path action="M">Framework/Library/Php/Io/Out.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1052">
+    <author>hywan</author>
+    <date>2010-06-27T19:41:06.381571Z</date>
+    <msg>Start API documentation. Add the stream auto-support (with Hoa_Stream_Io_Out). And add the attachAsynchronously() method.</msg>
+    <paths>
+      <path action="M">Framework/Core/Event.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1051">
+    <author>hywan</author>
+    <date>2010-06-27T16:06:49.647898Z</date>
+    <msg>Add Event to the core. A new paradigme in Hoa (inspired from Hoa_Observer) :-).</msg>
+    <paths>
+      <path action="A">Framework/Core/Event.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1050">
+    <author>hywan</author>
+    <date>2010-06-27T16:06:09.680189Z</date>
+    <msg>End of big change: Hoa_Framework to Hoa_Core.</msg>
+    <paths>
+      <path action="A">Framework/Core/Core.php</path>
+      <path action="D">Framework/Core/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1049">
+    <author>hywan</author>
+    <date>2010-06-27T16:04:46.842000Z</date>
+    <msg>Change Hoa_Framework for Hoa_Core.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Application/Start.php</path>
+      <path action="M">Data/Bin/Command/Configuration/Cache.php</path>
+      <path action="M">Data/Bin/Command/Controller/Create.php</path>
+      <path action="M">Data/Bin/Command/Controller/Whereis.php</path>
+      <path action="M">Data/Bin/Command/Main/Root.php</path>
+      <path action="M">Data/Bin/Command/Protocol/Print.php</path>
+      <path action="M">Data/Bin/Command/Protocol/Resolve.php</path>
+      <path action="M">Data/Bin/Command/Test/Remove.php</path>
+      <path action="M">Data/Bin/Command/Test/Run.php</path>
+      <path action="M">Data/Bin/Hoa.php</path>
+      <path action="M">Data/Bin/Style/Sheet.php</path>
+      <path action="M">Framework/Core/Exception.php</path>
+      <path action="M">Framework/Core/Framework.php</path>
+      <path action="M">Framework/Core/Parameter.php</path>
+      <path action="M">Framework/Core/Protocol.php</path>
+      <path action="M">Framework/Library/Acl/Acl.php</path>
+      <path action="M">Framework/Library/Acl/Assert/Interface.php</path>
+      <path action="M">Framework/Library/Acl/Exception.php</path>
+      <path action="M">Framework/Library/Acl/Group.php</path>
+      <path action="M">Framework/Library/Acl/Permission.php</path>
+      <path action="M">Framework/Library/Acl/Resource.php</path>
+      <path action="M">Framework/Library/Acl/User.php</path>
+      <path action="M">Framework/Library/Bench/Bench.php</path>
+      <path action="M">Framework/Library/Bench/Exception.php</path>
+      <path action="M">Framework/Library/Bench/Mark.php</path>
+      <path action="M">Framework/Library/Cache/Backend.php</path>
+      <path action="M">Framework/Library/Cache/Backend/Apc.php</path>
+      <path action="M">Framework/Library/Cache/Backend/Eaccelerator.php</path>
+      <path action="M">Framework/Library/Cache/Backend/File.php</path>
+      <path action="M">Framework/Library/Cache/Backend/Memcache.php</path>
+      <path action="M">Framework/Library/Cache/Backend/Sqlite.php</path>
+      <path action="M">Framework/Library/Cache/Backend/Xcache.php</path>
+      <path action="M">Framework/Library/Cache/Backend/ZendPlatform.php</path>
+      <path action="M">Framework/Library/Cache/Cache.php</path>
+      <path action="M">Framework/Library/Cache/Exception.php</path>
+      <path action="M">Framework/Library/Cache/Frontend.php</path>
+      <path action="M">Framework/Library/Cache/Frontend/Class.php</path>
+      <path action="M">Framework/Library/Cache/Frontend/Function.php</path>
+      <path action="M">Framework/Library/Cache/Frontend/Output.php</path>
+      <path action="M">Framework/Library/Compiler/Exception.php</path>
+      <path action="M">Framework/Library/Compiler/Exception/FinalStateHasNotBeenReached.php</path>
+      <path action="M">Framework/Library/Compiler/Exception/IllegalToken.php</path>
+      <path action="M">Framework/Library/Console/Command/Abstract.php</path>
+      <path action="M">Framework/Library/Console/Command/Exception.php</path>
+      <path action="M">Framework/Library/Console/Console.php</path>
+      <path action="M">Framework/Library/Console/Core/Cli.php</path>
+      <path action="M">Framework/Library/Console/Core/Cli/Exception.php</path>
+      <path action="M">Framework/Library/Console/Core/Cli/Parser.php</path>
+      <path action="M">Framework/Library/Console/Core/Exception.php</path>
+      <path action="M">Framework/Library/Console/Core/GetOption.php</path>
+      <path action="M">Framework/Library/Console/Core/Io.php</path>
+      <path action="M">Framework/Library/Console/Dispatcher.php</path>
+      <path action="M">Framework/Library/Console/Environment/Environment.php</path>
+      <path action="M">Framework/Library/Console/Environment/Exception.php</path>
+      <path action="M">Framework/Library/Console/Environment/Interface.php</path>
+      <path action="M">Framework/Library/Console/Environment/System.php</path>
+      <path action="M">Framework/Library/Console/Environment/User.php</path>
+      <path action="M">Framework/Library/Console/Environment/Window.php</path>
+      <path action="M">Framework/Library/Console/Exception.php</path>
+      <path action="M">Framework/Library/Console/Interface/Animation.php</path>
+      <path action="M">Framework/Library/Console/Interface/Exception.php</path>
+      <path action="M">Framework/Library/Console/Interface/Sound.php</path>
+      <path action="M">Framework/Library/Console/Interface/Style.php</path>
+      <path action="M">Framework/Library/Console/Interface/Text.php</path>
+      <path action="M">Framework/Library/Console/System/Exception.php</path>
+      <path action="M">Framework/Library/Console/System/System.php</path>
+      <path action="M">Framework/Library/Controller/Action/Standard.php</path>
+      <path action="M">Framework/Library/Controller/Dispatcher/Abstract.php</path>
+      <path action="M">Framework/Library/Controller/Dispatcher/Action.php</path>
+      <path action="M">Framework/Library/Controller/Exception.php</path>
+      <path action="M">Framework/Library/Controller/Exception/ActionIsNotFound.php</path>
+      <path action="M">Framework/Library/Controller/Exception/ControllerIsNotFound.php</path>
+      <path action="M">Framework/Library/Controller/Exception/ControllerNotExtendsActionStandard.php</path>
+      <path action="M">Framework/Library/Controller/Exception/PluginIsAlreadyRegistered.php</path>
+      <path action="M">Framework/Library/Controller/Exception/Reflection.php</path>
+      <path action="M">Framework/Library/Controller/Exception/ResponsePointerAlreadyExists.php</path>
+      <path action="M">Framework/Library/Controller/Exception/RouterDoesNotReturnAString.php</path>
+      <path action="M">Framework/Library/Controller/Exception/RouterDoesNotReturnAnArray.php</path>
+      <path action="M">Framework/Library/Controller/Front.php</path>
+      <path action="M">Framework/Library/Controller/Plugin/Interface.php</path>
+      <path action="M">Framework/Library/Controller/Plugin/Standard.php</path>
+      <path action="M">Framework/Library/Controller/Response/Standard.php</path>
+      <path action="M">Framework/Library/Controller/Router/Get.php</path>
+      <path action="M">Framework/Library/Controller/Router/Interface.php</path>
+      <path action="M">Framework/Library/Controller/Router/Rewrite.php</path>
+      <path action="M">Framework/Library/Controller/Router/Standard.php</path>
+      <path action="M">Framework/Library/Database/Cache/Abstract.php</path>
+      <path action="M">Framework/Library/Database/Cache/Exception.php</path>
+      <path action="M">Framework/Library/Database/Cache/Query.php</path>
+      <path action="M">Framework/Library/Database/Cache/Table.php</path>
+      <path action="M">Framework/Library/Database/Constraint/Abstract.php</path>
+      <path action="M">Framework/Library/Database/Constraint/Exception.php</path>
+      <path action="M">Framework/Library/Database/Constraint/Field.php</path>
+      <path action="M">Framework/Library/Database/Constraint/Table.php</path>
+      <path action="M">Framework/Library/Database/Constraint/User/Exception.php</path>
+      <path action="M">Framework/Library/Database/Criterion/Abstract.php</path>
+      <path action="M">Framework/Library/Database/Criterion/Exception.php</path>
+      <path action="M">Framework/Library/Database/Criterion/Predicate.php</path>
+      <path action="M">Framework/Library/Database/Dal/AbstractLayer/Pdo/Pdo.php</path>
+      <path action="M">Framework/Library/Database/Dal/AbstractLayer/Pdo/PdoStatement.php</path>
+      <path action="M">Framework/Library/Database/Dal/Dal.php</path>
+      <path action="M">Framework/Library/Database/Dal/DalStatement.php</path>
+      <path action="M">Framework/Library/Database/Dal/Exception.php</path>
+      <path action="M">Framework/Library/Database/Dal/Interface/Wrapper.php</path>
+      <path action="M">Framework/Library/Database/Dal/Interface/WrapperStatement.php</path>
+      <path action="M">Framework/Library/Database/Database.php</path>
+      <path action="M">Framework/Library/Database/Exception.php</path>
+      <path action="M">Framework/Library/Database/Model/Base.php</path>
+      <path action="M">Framework/Library/Database/Model/Collection.php</path>
+      <path action="M">Framework/Library/Database/Model/Exception.php</path>
+      <path action="M">Framework/Library/Database/Model/Field.php</path>
+      <path action="M">Framework/Library/Database/Model/Join.php</path>
+      <path action="M">Framework/Library/Database/Model/Table.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Criterion/Exception.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Criterion/GroupBy.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Criterion/OrderBy.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Criterion/SearchCondition.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Ddl/Abstract.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Ddl/Create.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Ddl/Exception.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Dml/Delete.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Dml/Exception.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Dml/Insert.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Dml/Interface.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Dml/Select.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Dml/Update.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Exception.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Field.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Function/Abstract.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Function/Common.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Function/Exception.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Interface.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Table.php</path>
+      <path action="M">Framework/Library/Database/Schema/Exception.php</path>
+      <path action="M">Framework/Library/Database/Schema/Schema.php</path>
+      <path action="M">Framework/Library/Factory/Exception.php</path>
+      <path action="M">Framework/Library/Factory/Factory.php</path>
+      <path action="M">Framework/Library/File/Abstract.php</path>
+      <path action="M">Framework/Library/File/Directory.php</path>
+      <path action="M">Framework/Library/File/Exception.php</path>
+      <path action="M">Framework/Library/File/Exception/FileDoesNotExist.php</path>
+      <path action="M">Framework/Library/File/Exception/UploadExtension.php</path>
+      <path action="M">Framework/Library/File/File.php</path>
+      <path action="M">Framework/Library/File/Finder.php</path>
+      <path action="M">Framework/Library/File/Link.php</path>
+      <path action="M">Framework/Library/File/Link/Read.php</path>
+      <path action="M">Framework/Library/File/Link/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Link/Write.php</path>
+      <path action="M">Framework/Library/File/Read.php</path>
+      <path action="M">Framework/Library/File/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Socket.php</path>
+      <path action="M">Framework/Library/File/Temporary.php</path>
+      <path action="M">Framework/Library/File/Temporary/Read.php</path>
+      <path action="M">Framework/Library/File/Temporary/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Temporary/Write.php</path>
+      <path action="M">Framework/Library/File/Undefined.php</path>
+      <path action="M">Framework/Library/File/Upload.php</path>
+      <path action="M">Framework/Library/File/Write.php</path>
+      <path action="M">Framework/Library/Filter/Abstract.php</path>
+      <path action="M">Framework/Library/Filter/Alpha.php</path>
+      <path action="M">Framework/Library/Filter/AlphaNumeric.php</path>
+      <path action="M">Framework/Library/Filter/Array.php</path>
+      <path action="M">Framework/Library/Filter/Blank.php</path>
+      <path action="M">Framework/Library/Filter/Exception.php</path>
+      <path action="M">Framework/Library/Filter/Filter.php</path>
+      <path action="M">Framework/Library/Filter/HtmlEntities.php</path>
+      <path action="M">Framework/Library/Filter/Integer.php</path>
+      <path action="M">Framework/Library/Filter/Lower.php</path>
+      <path action="M">Framework/Library/Filter/Null.php</path>
+      <path action="M">Framework/Library/Filter/Space.php</path>
+      <path action="M">Framework/Library/Filter/Tag.php</path>
+      <path action="M">Framework/Library/Filter/Upper.php</path>
+      <path action="M">Framework/Library/Form/Decorator/Abstract.php</path>
+      <path action="M">Framework/Library/Form/Decorator/Fieldset.php</path>
+      <path action="M">Framework/Library/Form/Decorator/InputButton.php</path>
+      <path action="M">Framework/Library/Form/Decorator/InputCheckbox.php</path>
+      <path action="M">Framework/Library/Form/Decorator/InputFile.php</path>
+      <path action="M">Framework/Library/Form/Decorator/InputHidden.php</path>
+      <path action="M">Framework/Library/Form/Decorator/InputImage.php</path>
+      <path action="M">Framework/Library/Form/Decorator/InputPassword.php</path>
+      <path action="M">Framework/Library/Form/Decorator/InputRadio.php</path>
+      <path action="M">Framework/Library/Form/Decorator/InputReset.php</path>
+      <path action="M">Framework/Library/Form/Decorator/InputSubmit.php</path>
+      <path action="M">Framework/Library/Form/Decorator/InputText.php</path>
+      <path action="M">Framework/Library/Form/Decorator/Select.php</path>
+      <path action="M">Framework/Library/Form/Decorator/SelectOptgroup.php</path>
+      <path action="M">Framework/Library/Form/Decorator/SelectOption.php</path>
+      <path action="M">Framework/Library/Form/Decorator/Textarea.php</path>
+      <path action="M">Framework/Library/Form/Element/Abstract.php</path>
+      <path action="M">Framework/Library/Form/Element/Fieldset.php</path>
+      <path action="M">Framework/Library/Form/Element/Form.php</path>
+      <path action="M">Framework/Library/Form/Element/InputButton.php</path>
+      <path action="M">Framework/Library/Form/Element/InputCheckbox.php</path>
+      <path action="M">Framework/Library/Form/Element/InputFile.php</path>
+      <path action="M">Framework/Library/Form/Element/InputHidden.php</path>
+      <path action="M">Framework/Library/Form/Element/InputImage.php</path>
+      <path action="M">Framework/Library/Form/Element/InputPassword.php</path>
+      <path action="M">Framework/Library/Form/Element/InputRadio.php</path>
+      <path action="M">Framework/Library/Form/Element/InputReset.php</path>
+      <path action="M">Framework/Library/Form/Element/InputSubmit.php</path>
+      <path action="M">Framework/Library/Form/Element/InputText.php</path>
+      <path action="M">Framework/Library/Form/Element/Label.php</path>
+      <path action="M">Framework/Library/Form/Element/Legend.php</path>
+      <path action="M">Framework/Library/Form/Element/Select.php</path>
+      <path action="M">Framework/Library/Form/Element/SelectOptgroup.php</path>
+      <path action="M">Framework/Library/Form/Element/SelectOption.php</path>
+      <path action="M">Framework/Library/Form/Element/Textarea.php</path>
+      <path action="M">Framework/Library/Form/Exception.php</path>
+      <path action="M">Framework/Library/Form/Form.php</path>
+      <path action="M">Framework/Library/Graph/AdjacencyList.php</path>
+      <path action="M">Framework/Library/Graph/Exception.php</path>
+      <path action="M">Framework/Library/Graph/Graph.php</path>
+      <path action="M">Framework/Library/Graph/Node/Interface.php</path>
+      <path action="M">Framework/Library/Graph/Node/SimpleNode.php</path>
+      <path action="M">Framework/Library/Iterator/Exception.php</path>
+      <path action="M">Framework/Library/Iterator/Interface/Aggregate.php</path>
+      <path action="M">Framework/Library/Iterator/Interface/Iterator.php</path>
+      <path action="M">Framework/Library/Iterator/Interface/Seekable.php</path>
+      <path action="M">Framework/Library/Iterator/Iterator.php</path>
+      <path action="M">Framework/Library/Json/Exception.php</path>
+      <path action="M">Framework/Library/Json/Json.php</path>
+      <path action="M">Framework/Library/Locale/Exception.php</path>
+      <path action="M">Framework/Library/Locale/Locale.php</path>
+      <path action="M">Framework/Library/Log/Backtrace.php</path>
+      <path action="M">Framework/Library/Log/Backtrace/Node.php</path>
+      <path action="M">Framework/Library/Log/Exception.php</path>
+      <path action="M">Framework/Library/Log/Log.php</path>
+      <path action="M">Framework/Library/Mail/Antispam.php</path>
+      <path action="M">Framework/Library/Mail/Exception.php</path>
+      <path action="M">Framework/Library/Mail/Mail.php</path>
+      <path action="M">Framework/Library/Mail/Mime.php</path>
+      <path action="M">Framework/Library/Mail/Protocol/Abstract.php</path>
+      <path action="M">Framework/Library/Mail/Protocol/Exception.php</path>
+      <path action="M">Framework/Library/Mail/Protocol/Smtp.php</path>
+      <path action="M">Framework/Library/Mail/Rfc882.php</path>
+      <path action="M">Framework/Library/Mail/Transport/Abstract.php</path>
+      <path action="M">Framework/Library/Mail/Transport/Exception.php</path>
+      <path action="M">Framework/Library/Mail/Transport/Sendmail.php</path>
+      <path action="M">Framework/Library/Mail/Transport/Smtp.php</path>
+      <path action="M">Framework/Library/Memory/Exception.php</path>
+      <path action="M">Framework/Library/Memory/GarbageCollector.php</path>
+      <path action="M">Framework/Library/Memory/Memory.php</path>
+      <path action="M">Framework/Library/Mime/Exception.php</path>
+      <path action="M">Framework/Library/Mime/Mime.php</path>
+      <path action="M">Framework/Library/Mime/Parameter.php</path>
+      <path action="M">Framework/Library/Observer/Exception.php</path>
+      <path action="M">Framework/Library/Observer/Interface/Observable.php</path>
+      <path action="M">Framework/Library/Observer/Interface/Observer.php</path>
+      <path action="M">Framework/Library/Observer/Observer.php</path>
+      <path action="M">Framework/Library/Php/Exception.php</path>
+      <path action="M">Framework/Library/Php/Io/Error.php</path>
+      <path action="M">Framework/Library/Php/Io/Exception.php</path>
+      <path action="M">Framework/Library/Php/Io/In.php</path>
+      <path action="M">Framework/Library/Php/Io/Out.php</path>
+      <path action="M">Framework/Library/Pom/Exception.php</path>
+      <path action="M">Framework/Library/Pom/Parser.php</path>
+      <path action="M">Framework/Library/Pom/Parser/Exception.php</path>
+      <path action="M">Framework/Library/Pom/Parser/Lexer.php</path>
+      <path action="M">Framework/Library/Pom/Parser/ParserLr.php</path>
+      <path action="M">Framework/Library/Pom/Pom.php</path>
+      <path action="M">Framework/Library/Pom/Token/Array.php</path>
+      <path action="M">Framework/Library/Pom/Token/Call.php</path>
+      <path action="M">Framework/Library/Pom/Token/Call/Attribute.php</path>
+      <path action="M">Framework/Library/Pom/Token/Call/ClassConstant.php</path>
+      <path action="M">Framework/Library/Pom/Token/Call/Function.php</path>
+      <path action="M">Framework/Library/Pom/Token/Call/Method.php</path>
+      <path action="M">Framework/Library/Pom/Token/Call/StaticAttribute.php</path>
+      <path action="M">Framework/Library/Pom/Token/Call/StaticMethod.php</path>
+      <path action="M">Framework/Library/Pom/Token/Cast.php</path>
+      <path action="M">Framework/Library/Pom/Token/Class.php</path>
+      <path action="M">Framework/Library/Pom/Token/Class/Access.php</path>
+      <path action="M">Framework/Library/Pom/Token/Class/Attribute.php</path>
+      <path action="M">Framework/Library/Pom/Token/Class/Constant.php</path>
+      <path action="M">Framework/Library/Pom/Token/Class/Method.php</path>
+      <path action="M">Framework/Library/Pom/Token/Clone.php</path>
+      <path action="M">Framework/Library/Pom/Token/Comment.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Break.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Conditional.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Conditional/If.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Conditional/If/Else.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Conditional/If/Elseif.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Conditional/If/If.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Conditional/Switch.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Conditional/Switch/Case.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Conditional/Switch/Default.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Continue.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Import.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Import/Include.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Import/IncludeOnce.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Import/Require.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Import/RequireOnce.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Loop.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Loop/DoWhile.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Loop/For.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Loop/Foreach.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Loop/While.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Return.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/TryCatch.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/TryCatch/Catch.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/TryCatch/Try.php</path>
+      <path action="M">Framework/Library/Pom/Token/Exception.php</path>
+      <path action="M">Framework/Library/Pom/Token/Function.php</path>
+      <path action="M">Framework/Library/Pom/Token/Function/Argument.php</path>
+      <path action="M">Framework/Library/Pom/Token/Function/Named.php</path>
+      <path action="M">Framework/Library/Pom/Token/Instruction.php</path>
+      <path action="M">Framework/Library/Pom/Token/Instruction/Block.php</path>
+      <path action="M">Framework/Library/Pom/Token/Interface.php</path>
+      <path action="M">Framework/Library/Pom/Token/LateParsing.php</path>
+      <path action="M">Framework/Library/Pom/Token/New.php</path>
+      <path action="M">Framework/Library/Pom/Token/Number.php</path>
+      <path action="M">Framework/Library/Pom/Token/Number/DNumber.php</path>
+      <path action="M">Framework/Library/Pom/Token/Number/LNumber.php</path>
+      <path action="M">Framework/Library/Pom/Token/Operation.php</path>
+      <path action="M">Framework/Library/Pom/Token/Operator.php</path>
+      <path action="M">Framework/Library/Pom/Token/Operator/Arithmetical.php</path>
+      <path action="M">Framework/Library/Pom/Token/Operator/Assignement.php</path>
+      <path action="M">Framework/Library/Pom/Token/Operator/Bitwise.php</path>
+      <path action="M">Framework/Library/Pom/Token/Operator/Comparison.php</path>
+      <path action="M">Framework/Library/Pom/Token/Operator/ErrorControl.php</path>
+      <path action="M">Framework/Library/Pom/Token/Operator/Execution.php</path>
+      <path action="M">Framework/Library/Pom/Token/Operator/InDeCrementing.php</path>
+      <path action="M">Framework/Library/Pom/Token/Operator/Logical.php</path>
+      <path action="M">Framework/Library/Pom/Token/Operator/String.php</path>
+      <path action="M">Framework/Library/Pom/Token/Operator/Type.php</path>
+      <path action="M">Framework/Library/Pom/Token/OutterPhp.php</path>
+      <path action="M">Framework/Library/Pom/Token/Php.php</path>
+      <path action="M">Framework/Library/Pom/Token/Root.php</path>
+      <path action="M">Framework/Library/Pom/Token/String.php</path>
+      <path action="M">Framework/Library/Pom/Token/String/Boolean.php</path>
+      <path action="M">Framework/Library/Pom/Token/String/Constant.php</path>
+      <path action="M">Framework/Library/Pom/Token/String/EncapsedConstant.php</path>
+      <path action="M">Framework/Library/Pom/Token/String/Null.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Exception.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Interface/Scalar.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Interface/SuperScalar.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Interface/Type.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Aggregate.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Array.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Call.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Cast.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Class.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Clone.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Comment.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/ControlStructure.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Exception.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Function.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Instruction.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Interface.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/LateParsing.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/New.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Number.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Operation.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Operator.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/OutterPhp.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Php.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Root.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/String.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Variable.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Whitespace.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Array.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Call.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Cast.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Class.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Clone.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Comment.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/ControlStructure.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Exception.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Function.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Instruction.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Interface.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/LateParsing.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/New.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Number.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Operation.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Operator.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/OutterPhp.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Php.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Root.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/String.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Variable.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Whitespace.php</path>
+      <path action="M">Framework/Library/Pom/Token/Variable.php</path>
+      <path action="M">Framework/Library/Pom/Token/Whitespace.php</path>
+      <path action="M">Framework/Library/Prototype/Exception.php</path>
+      <path action="M">Framework/Library/Prototype/Prototype.php</path>
+      <path action="M">Framework/Library/Registry/Exception.php</path>
+      <path action="M">Framework/Library/Registry/Registry.php</path>
+      <path action="M">Framework/Library/Serialize/Cryonicable.php</path>
+      <path action="M">Framework/Library/Serialize/Exception.php</path>
+      <path action="M">Framework/Library/Serialize/Serializable.php</path>
+      <path action="M">Framework/Library/Session/Exception.php</path>
+      <path action="M">Framework/Library/Session/Exception/NamespaceIsExpired.php</path>
+      <path action="M">Framework/Library/Session/Exception/SessionIsExpired.php</path>
+      <path action="M">Framework/Library/Session/Flash.php</path>
+      <path action="M">Framework/Library/Session/Namespace.php</path>
+      <path action="M">Framework/Library/Session/Option.php</path>
+      <path action="M">Framework/Library/Session/SaveHandler/Interface.php</path>
+      <path action="M">Framework/Library/Session/Session.php</path>
+      <path action="M">Framework/Library/Socket/Connection.php</path>
+      <path action="M">Framework/Library/Socket/Connection/Client.php</path>
+      <path action="M">Framework/Library/Socket/Connection/Exception.php</path>
+      <path action="M">Framework/Library/Socket/Connection/Server.php</path>
+      <path action="M">Framework/Library/Socket/Exception.php</path>
+      <path action="M">Framework/Library/Socket/Interface.php</path>
+      <path action="M">Framework/Library/Socket/Internet.php</path>
+      <path action="M">Framework/Library/Socket/Internet/DomainName.php</path>
+      <path action="M">Framework/Library/Socket/Internet/Ipv4.php</path>
+      <path action="M">Framework/Library/Socket/Internet/Ipv6.php</path>
+      <path action="M">Framework/Library/Socket/Transport.php</path>
+      <path action="M">Framework/Library/Socket/Unix.php</path>
+      <path action="M">Framework/Library/StdClass/Exception.php</path>
+      <path action="M">Framework/Library/StdClass/StdClass.php</path>
+      <path action="M">Framework/Library/StdClass/Util.php</path>
+      <path action="M">Framework/Library/Stream/Bucket.php</path>
+      <path action="M">Framework/Library/Stream/Composite.php</path>
+      <path action="M">Framework/Library/Stream/Context.php</path>
+      <path action="M">Framework/Library/Stream/Exception.php</path>
+      <path action="M">Framework/Library/Stream/Filter.php</path>
+      <path action="M">Framework/Library/Stream/Filter/Default.php</path>
+      <path action="M">Framework/Library/Stream/Filter/Exception.php</path>
+      <path action="M">Framework/Library/Stream/Io.php</path>
+      <path action="M">Framework/Library/Stream/Io/Bufferable.php</path>
+      <path action="M">Framework/Library/Stream/Io/In.php</path>
+      <path action="M">Framework/Library/Stream/Io/Lockable.php</path>
+      <path action="M">Framework/Library/Stream/Io/Out.php</path>
+      <path action="M">Framework/Library/Stream/Io/Pathable.php</path>
+      <path action="M">Framework/Library/Stream/Io/Pointable.php</path>
+      <path action="M">Framework/Library/Stream/Io/Statable.php</path>
+      <path action="M">Framework/Library/Stream/Io/Structural.php</path>
+      <path action="M">Framework/Library/Stream/Io/Touchable.php</path>
+      <path action="M">Framework/Library/Stream/Notification.php</path>
+      <path action="M">Framework/Library/Stream/Notification/Exception.php</path>
+      <path action="M">Framework/Library/Stream/Notification/Interface.php</path>
+      <path action="M">Framework/Library/Stream/Stream.php</path>
+      <path action="M">Framework/Library/Stream/Wrapper.php</path>
+      <path action="M">Framework/Library/Stream/Wrapper/Exception.php</path>
+      <path action="M">Framework/Library/Stream/Wrapper/Interface.php</path>
+      <path action="M">Framework/Library/Stream/Wrapper/Interface/File.php</path>
+      <path action="M">Framework/Library/Stream/Wrapper/Interface/Stream.php</path>
+      <path action="M">Framework/Library/StringBuffer/Exception.php</path>
+      <path action="M">Framework/Library/StringBuffer/Read.php</path>
+      <path action="M">Framework/Library/StringBuffer/ReadWrite.php</path>
+      <path action="M">Framework/Library/StringBuffer/StringBuffer.php</path>
+      <path action="M">Framework/Library/StringBuffer/Write.php</path>
+      <path action="M">Framework/Library/Test/Exception.php</path>
+      <path action="M">Framework/Library/Test/Oracle/Exception.php</path>
+      <path action="M">Framework/Library/Test/Oracle/Eyes.php</path>
+      <path action="M">Framework/Library/Test/Oracle/Oracle.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Call.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Clause.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Contract.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Ensures.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Invariant.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Predicate.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Requires.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Throwable.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Constructor/Old.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Constructor/Result.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Exception.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Praspel.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Type.php</path>
+      <path action="M">Framework/Library/Test/Praspel/TypeArray.php</path>
+      <path action="M">Framework/Library/Test/Praspel/TypeDisjunction.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Variable.php</path>
+      <path action="M">Framework/Library/Test/Test.php</path>
+      <path action="M">Framework/Library/Test/Urg/Exception.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/2n.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Array.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/ArrayInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Boolean.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/BoundFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/BoundInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/EvenInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Exception.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Exception/Maxtry.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Float.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/GrouchySmurf.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Integer.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Integerpp.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Interface/Predicable.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Interface/Randomizable.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Interface/Type.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/NegativeFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/NegativeInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Null.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Number.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/OddInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/PositiveFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/PositiveInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/SmallFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/SmallInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/String.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/StringWith.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/SuperString.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Undefined.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Void.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Xn.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/ZeroOrNegativeFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/ZeroOrNegativeInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/ZeroOrPositiveFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/ZeroOrPositiveInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Urg.php</path>
+      <path action="M">Framework/Library/Translate/Adapter/Abstract.php</path>
+      <path action="M">Framework/Library/Translate/Adapter/Gettext.php</path>
+      <path action="M">Framework/Library/Translate/Exception.php</path>
+      <path action="M">Framework/Library/Translate/Translate.php</path>
+      <path action="M">Framework/Library/Tree/Abstract.php</path>
+      <path action="M">Framework/Library/Tree/Binary.php</path>
+      <path action="M">Framework/Library/Tree/Exception.php</path>
+      <path action="M">Framework/Library/Tree/Node/Interface.php</path>
+      <path action="M">Framework/Library/Tree/Node/SimpleNode.php</path>
+      <path action="M">Framework/Library/Tree/Tree.php</path>
+      <path action="M">Framework/Library/Tree/Visitor/Abstract.php</path>
+      <path action="M">Framework/Library/Tree/Visitor/Dot.php</path>
+      <path action="M">Framework/Library/Tree/Visitor/Dump.php</path>
+      <path action="M">Framework/Library/Uri/Exception.php</path>
+      <path action="M">Framework/Library/Uri/Http.php</path>
+      <path action="M">Framework/Library/Uri/Uri.php</path>
+      <path action="M">Framework/Library/Validate/Abstract.php</path>
+      <path action="M">Framework/Library/Validate/Alpha.php</path>
+      <path action="M">Framework/Library/Validate/AlphaNumeric.php</path>
+      <path action="M">Framework/Library/Validate/Array.php</path>
+      <path action="M">Framework/Library/Validate/Email.php</path>
+      <path action="M">Framework/Library/Validate/Empty.php</path>
+      <path action="M">Framework/Library/Validate/Exception.php</path>
+      <path action="M">Framework/Library/Validate/Float.php</path>
+      <path action="M">Framework/Library/Validate/GreaterThan.php</path>
+      <path action="M">Framework/Library/Validate/Hexa.php</path>
+      <path action="M">Framework/Library/Validate/Integer.php</path>
+      <path action="M">Framework/Library/Validate/Ip.php</path>
+      <path action="M">Framework/Library/Validate/LessThan.php</path>
+      <path action="M">Framework/Library/Validate/Lower.php</path>
+      <path action="M">Framework/Library/Validate/Null.php</path>
+      <path action="M">Framework/Library/Validate/StringLength.php</path>
+      <path action="M">Framework/Library/Validate/Upper.php</path>
+      <path action="M">Framework/Library/Validate/Validate.php</path>
+      <path action="M">Framework/Library/Version/Version.php</path>
+      <path action="M">Framework/Library/View/Exception.php</path>
+      <path action="M">Framework/Library/View/Helper/Abstract.php</path>
+      <path action="M">Framework/Library/View/Helper/Exception.php</path>
+      <path action="M">Framework/Library/View/View.php</path>
+      <path action="M">Framework/Library/Visitor/Element.php</path>
+      <path action="M">Framework/Library/Visitor/Exception.php</path>
+      <path action="M">Framework/Library/Visitor/Registry.php</path>
+      <path action="M">Framework/Library/Visitor/Registry/Aggregate.php</path>
+      <path action="M">Framework/Library/Visitor/Registry/Exception.php</path>
+      <path action="M">Framework/Library/Visitor/Visit.php</path>
+      <path action="M">Framework/Library/XmlRpc/Client.php</path>
+      <path action="M">Framework/Library/XmlRpc/Exception.php</path>
+      <path action="M">Framework/Library/XmlRpc/Message.php</path>
+      <path action="M">Framework/Library/XmlRpc/Method/system.listMethods.php</path>
+      <path action="M">Framework/Library/XmlRpc/MethodAbstract.php</path>
+      <path action="M">Framework/Library/XmlRpc/Server.php</path>
+      <path action="M">Framework/Library/XmlRpc/Value.php</path>
+      <path action="M">Framework/Library/XmlRpc/XmlRpc.php</path>
+      <path action="M">Framework/Library/Yaml/Dumper.php</path>
+      <path action="M">Framework/Library/Yaml/Exception.php</path>
+      <path action="M">Framework/Library/Yaml/Node.php</path>
+      <path action="M">Framework/Library/Yaml/Parser.php</path>
+      <path action="M">Framework/Library/Yaml/Yaml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1048">
+    <author>hywan</author>
+    <date>2010-06-27T16:01:31.599498Z</date>
+    <msg>Continue this package :-).</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element.php</path>
+      <path action="M">Framework/Library/Xml/Element/Read.php</path>
+      <path action="A">Framework/Library/Xml/Element/ReadWrite.php</path>
+      <path action="A">Framework/Library/Xml/Element/Write.php</path>
+      <path action="M">Framework/Library/Xml/Exception.php</path>
+      <path action="M">Framework/Library/Xml/Read.php</path>
+      <path action="M">Framework/Library/Xml/ReadWrite.php</path>
+      <path action="M">Framework/Library/Xml/Write.php</path>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1047">
+    <author>hywan</author>
+    <date>2010-06-27T16:00:23.767315Z</date>
+    <msg>Adapt code to previous modification of Hoa_Compiler_Ll1.</msg>
+    <paths>
+      <path action="M">Framework/Library/Test/Praspel/Compiler.php</path>
+      <path action="M">Framework/Library/Xml/CssToXPath.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1046">
+    <author>hywan</author>
+    <date>2010-06-27T15:59:35.629923Z</date>
+    <msg>Add a light cache.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1044">
+    <author>hywan</author>
+    <date>2010-06-23T20:54:31.678995Z</date>
+    <msg>Oops, forget to remove a var_dump :-).</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1043">
+    <author>hywan</author>
+    <date>2010-06-23T20:53:59.807533Z</date>
+    <msg>Complete API documentation and set XML root for all elements.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element.php</path>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1042">
+    <author>hywan</author>
+    <date>2010-06-23T20:53:11.505780Z</date>
+    <msg>Add the __init action to the consume() method. It fixes a bug ;-).</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/CssToXPath.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1037">
+    <author>hywan</author>
+    <date>2010-06-23T12:05:31.661052Z</date>
+    <msg>Better default behavior.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Main/Root.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1036">
+    <author>hywan</author>
+    <date>2010-06-23T12:05:17.711918Z</date>
+    <msg>Forget a help description.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Test/Run.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1035">
+    <author>hywan</author>
+    <date>2010-06-23T12:04:46.117311Z</date>
+    <msg>Welcome to the new package StringBuffer :-).</msg>
+    <paths>
+      <path action="A">Framework/Library/StringBuffer</path>
+      <path action="A">Framework/Library/StringBuffer/Exception.php</path>
+      <path action="A">Framework/Library/StringBuffer/Read.php</path>
+      <path action="A">Framework/Library/StringBuffer/ReadWrite.php</path>
+      <path action="A">Framework/Library/StringBuffer/StringBuffer.php</path>
+      <path action="A">Framework/Library/StringBuffer/Write.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1034">
+    <author>hywan</author>
+    <date>2010-06-23T12:04:26.138052Z</date>
+    <msg>Update streams. Now readAll() reads from 0/SET to 0/END strictly. Update performance in the global code. writeLine() adds a newline etc.</msg>
+    <paths>
+      <path action="M">Framework/Library/File/File.php</path>
+      <path action="M">Framework/Library/File/Link/Read.php</path>
+      <path action="M">Framework/Library/File/Link/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Link/Write.php</path>
+      <path action="M">Framework/Library/File/Read.php</path>
+      <path action="M">Framework/Library/File/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Temporary.php</path>
+      <path action="M">Framework/Library/File/Temporary/Read.php</path>
+      <path action="M">Framework/Library/File/Temporary/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Temporary/Write.php</path>
+      <path action="M">Framework/Library/File/Write.php</path>
+      <path action="M">Framework/Library/Php/Io/Out.php</path>
+      <path action="M">Framework/Library/Socket/Connection.php</path>
+      <path action="M">Framework/Library/Stream/Stream.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1033">
+    <author>hywan</author>
+    <date>2010-06-23T12:02:29.651839Z</date>
+    <msg>Add the new feature import(...) and load().</msg>
+    <paths>
+      <path action="M">Framework/Library/Console/Command/Abstract.php</path>
+      <path action="M">Framework/Library/Console/Console.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1032">
+    <author>hywan</author>
+    <date>2010-06-23T12:02:06.738659Z</date>
+    <msg>Mania: format code.</msg>
+    <paths>
+      <path action="M">Framework/Library/Session/Flash.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1031">
+    <author>hywan</author>
+    <date>2010-06-23T12:01:50.950929Z</date>
+    <msg>Update speed of bench marks/points. Measures are more realistic.</msg>
+    <paths>
+      <path action="M">Framework/Library/Bench/Bench.php</path>
+      <path action="M">Framework/Library/Bench/Mark.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1030">
+    <author>hywan</author>
+    <date>2010-06-23T12:00:59.234111Z</date>
+    <msg>Mania: format code.</msg>
+    <paths>
+      <path action="M">Framework/Library/Tree/Visitor/Abstract.php</path>
+      <path action="M">Framework/Library/Tree/Visitor/Dump.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1029">
+    <author>hywan</author>
+    <date>2010-06-23T12:00:34.891482Z</date>
+    <msg>Constants GO and __ must exist and not be defined before.</msg>
+    <paths>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1028">
+    <author>hywan</author>
+    <date>2010-06-23T11:59:55.466378Z</date>
+    <msg>Bye useless package.</msg>
+    <paths>
+      <path action="D">Framework/Library/I18n</path>
+    </paths>
+  </logentry>
+  <logentry revision="1027">
+    <author>hywan</author>
+    <date>2010-06-23T11:59:29.114884Z</date>
+    <msg>Add cache to protocol resolver. Speed speed speed :-).</msg>
+    <paths>
+      <path action="M">Framework/Core/Protocol.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1026">
+    <author>hywan</author>
+    <date>2010-06-23T11:58:56.286754Z</date>
+    <msg>Remove a useless require.</msg>
+    <paths>
+      <path action="M">Framework/Core/Parameter.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1025">
+    <author>hywan</author>
+    <date>2010-06-23T11:58:35.971376Z</date>
+    <msg>Add the 'and load()' features for importing file without autoloading.</msg>
+    <paths>
+      <path action="M">Framework/Core/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1021">
+    <author>hywan</author>
+    <date>2010-06-14T19:40:11.398787Z</date>
+    <msg>Optimized XPath query.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1020">
+    <author>hywan</author>
+    <date>2010-06-14T09:50:51.610428Z</date>
+    <msg>Reorganize or add constants and reformat the code.</msg>
+    <paths>
+      <path action="M">Framework/Core/Framework.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1013">
+    <author>hywan</author>
+    <date>2010-06-12T18:07:25.131225Z</date>
+    <msg>Hmm, bad way. Kinda rollback.</msg>
+    <paths>
+      <path action="M">Framework/Library/Stream/Composite.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1012">
+    <author>hywan</author>
+    <date>2010-06-12T18:07:09.747125Z</date>
+    <msg>Continue the early draft.</msg>
+    <paths>
+      <path action="A">Framework/Library/Xml/Element</path>
+      <path action="M">Framework/Library/Xml/Element.php</path>
+      <path action="A">Framework/Library/Xml/Element/Read.php</path>
+      <path action="M">Framework/Library/Xml/Read.php</path>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1011">
+    <author>hywan</author>
+    <date>2010-06-11T19:47:31.802082Z</date>
+    <msg>Change the composite from a class to an interface. More flexible for implementation.</msg>
+    <paths>
+      <path action="M">Framework/Library/Stream/Composite.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1010">
+    <author>hywan</author>
+    <date>2010-06-10T18:56:36.238579Z</date>
+    <msg>Correct API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Element.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1009">
+    <author>hywan</author>
+    <date>2010-06-10T12:09:18.402753Z</date>
+    <msg>Mania: format code.</msg>
+    <paths>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1008">
+    <author>hywan</author>
+    <date>2010-06-10T12:07:32.807072Z</date>
+    <msg>Add the Hoa_Xml_Element class that represents a XML element in a XML tree.</msg>
+    <paths>
+      <path action="A">Framework/Library/Xml/Element.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1007">
+    <author>hywan</author>
+    <date>2010-06-10T11:57:26.902949Z</date>
+    <msg>Fix the API. Add details.</msg>
+    <paths>
+      <path action="M">Framework/Library/Stream/Io/Structural.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1006">
+    <author>hywan</author>
+    <date>2010-06-09T21:02:17.358724Z</date>
+    <msg>First step for structural stream interface.</msg>
+    <paths>
+      <path action="A">Framework/Library/Stream/Io/Structural.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1005">
+    <author>hywan</author>
+    <date>2010-06-09T20:45:03.878321Z</date>
+    <msg>Replace null by ''. Better for __toString() :-).</msg>
+    <paths>
+      <path action="M">Framework/Library/Bench/Bench.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1004">
+    <author>hywan</author>
+    <date>2010-06-09T19:09:33.215831Z</date>
+    <msg>Edit API documentation.</msg>
+    <paths>
+      <path action="M">Framework/Library/Stream/Io/Pathable.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1003">
+    <author>hywan</author>
+    <date>2010-06-09T13:09:42.274326Z</date>
+    <msg>Now we can make composite streams.</msg>
+    <paths>
+      <path action="A">Framework/Library/Stream/Composite.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1002">
+    <author>hywan</author>
+    <date>2010-06-09T13:09:08.614245Z</date>
+    <msg>Mania: remove useless space.</msg>
+    <paths>
+      <path action="M">Framework/Library/Json/Json.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1001">
+    <author>hywan</author>
+    <date>2010-06-09T13:08:44.852374Z</date>
+    <msg>Rename methods: toInt() to toInteger() and toBool() to toBoolean().</msg>
+    <paths>
+      <path action="M">Framework/Library/StdClass/StdClass.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="1000">
+    <author>hywan</author>
+    <date>2010-06-09T13:08:02.188312Z</date>
+    <msg>Hopla.</msg>
+    <paths>
+      <path action="A">Framework/Library/Xml/CssToXPath.php</path>
+      <path action="A">Framework/Library/Xml/Exception.php</path>
+      <path action="A">Framework/Library/Xml/Read.php</path>
+      <path action="A">Framework/Library/Xml/ReadWrite.php</path>
+      <path action="A">Framework/Library/Xml/Write.php</path>
+      <path action="A">Framework/Library/Xml/Xml.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="999">
+    <author>hywan</author>
+    <date>2010-06-09T13:07:43.972872Z</date>
+    <msg>And restart this package :-).</msg>
+    <paths>
+      <path action="D">Framework/Library/Xml/Dumper.php</path>
+      <path action="D">Framework/Library/Xml/Exception.php</path>
+      <path action="D">Framework/Library/Xml/Parser.php</path>
+      <path action="D">Framework/Library/Xml/Xml.php</path>
+      <path action="D">Framework/Library/Xml/Xpath.php</path>
+      <path action="D">Framework/Library/Xml/Xslt.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="998">
+    <author>hywan</author>
+    <date>2010-06-03T14:10:19.117343Z</date>
+    <msg>Add the writeBoolean() method.</msg>
+    <paths>
+      <path action="M">Framework/Library/File/Link/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Link/Write.php</path>
+      <path action="M">Framework/Library/File/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Temporary/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Temporary/Write.php</path>
+      <path action="M">Framework/Library/File/Write.php</path>
+      <path action="M">Framework/Library/Socket/Connection.php</path>
+      <path action="M">Framework/Library/Stream/Io/Out.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="997">
+    <author>hywan</author>
+    <date>2010-06-03T14:05:04.060386Z</date>
+    <msg>Add the readBoolean() method.</msg>
+    <paths>
+      <path action="M">Framework/Library/File/Link/Read.php</path>
+      <path action="M">Framework/Library/File/Link/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Read.php</path>
+      <path action="M">Framework/Library/File/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Temporary/Read.php</path>
+      <path action="M">Framework/Library/File/Temporary/ReadWrite.php</path>
+      <path action="M">Framework/Library/Socket/Connection.php</path>
+      <path action="M">Framework/Library/Stream/Io/In.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="996">
+    <author>hywan</author>
+    <date>2010-06-03T14:04:26.060818Z</date>
+    <msg>Change visibility of the getStreamName() method from protected to public.</msg>
+    <paths>
+      <path action="M">Framework/Library/Stream/Stream.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="995">
+    <author>hywan</author>
+    <date>2010-06-02T18:09:26.298944Z</date>
+    <msg>Mania: format code.</msg>
+    <paths>
+      <path action="M">Framework/Library/Stream/Io.php</path>
+    </paths>
+  </logentry>
+  <logentry revision="989">
+    <author>hywan</author>
+    <date>2010-05-30T13:34:30.470606Z</date>
+    <msg>Ok, the real 0.5.5b version :-).</msg>
+    <paths>
+      <path action="M">Framework/Library/Version/Version.php</path>
+      <path action="M">README</path>
+    </paths>
+  </logentry>
+  <logentry revision="987">
+    <author>hywan</author>
+    <date>2010-05-30T13:31:06.966135Z</date>
+    <msg>Bye bye Hoa_Configuration :-).</msg>
+    <paths>
+      <path action="D">Framework/Library/Configuration</path>
+    </paths>
+  </logentry>
+  <logentry revision="986">
+    <author>hywan</author>
+    <date>2010-05-30T13:22:39.753283Z</date>
+    <msg>Change copyright year.</msg>
+    <paths>
+      <path action="M">Data/Bin/Command/Application/Start.php</path>
+      <path action="M">Data/Bin/Command/Configuration/Cache.php</path>
+      <path action="M">Data/Bin/Command/Configuration/View.php</path>
+      <path action="M">Data/Bin/Command/Controller/Create.php</path>
+      <path action="M">Data/Bin/Command/Controller/Whereis.php</path>
+      <path action="M">Data/Bin/Command/Database/BuildModel.php</path>
+      <path action="M">Data/Bin/Command/Documentation/Mysql.php</path>
+      <path action="M">Data/Bin/Command/Documentation/Php.php</path>
+      <path action="M">Data/Bin/Command/Main/Changelog.php</path>
+      <path action="M">Data/Bin/Command/Main/Root.php</path>
+      <path action="M">Data/Bin/Command/Main/Tree.php</path>
+      <path action="M">Data/Bin/Command/Main/Uuid.php</path>
+      <path action="M">Data/Bin/Command/Main/Version.php</path>
+      <path action="M">Data/Bin/Command/Main/Welcome.php</path>
+      <path action="M">Data/Bin/Command/Protocol/Print.php</path>
+      <path action="M">Data/Bin/Command/Protocol/Resolve.php</path>
+      <path action="M">Data/Bin/Command/Service/Identica.php</path>
+      <path action="M">Data/Bin/Command/Service/Twitter.php</path>
+      <path action="M">Data/Bin/Command/Test/Initialize.php</path>
+      <path action="M">Data/Bin/Command/Test/Praspel.php</path>
+      <path action="M">Data/Bin/Command/Test/Remove.php</path>
+      <path action="M">Data/Bin/Command/Test/Run.php</path>
+      <path action="M">Data/Bin/Hoa.php</path>
+      <path action="M">Data/Bin/Style/Sheet.php</path>
+      <path action="M">Data/Etc/CHANGELOG.xml</path>
+      <path action="M">Framework/Core/Exception.php</path>
+      <path action="M">Framework/Core/Framework.php</path>
+      <path action="M">Framework/Core/Parameter.php</path>
+      <path action="M">Framework/Core/Protocol.php</path>
+      <path action="M">Framework/Library/Acl/Acl.php</path>
+      <path action="M">Framework/Library/Acl/Assert/Interface.php</path>
+      <path action="M">Framework/Library/Acl/Exception.php</path>
+      <path action="M">Framework/Library/Acl/Group.php</path>
+      <path action="M">Framework/Library/Acl/Permission.php</path>
+      <path action="M">Framework/Library/Acl/Resource.php</path>
+      <path action="M">Framework/Library/Acl/User.php</path>
+      <path action="M">Framework/Library/Bench/Bench.php</path>
+      <path action="M">Framework/Library/Bench/Exception.php</path>
+      <path action="M">Framework/Library/Bench/Mark.php</path>
+      <path action="M">Framework/Library/Cache/Backend.php</path>
+      <path action="M">Framework/Library/Cache/Backend/Apc.php</path>
+      <path action="M">Framework/Library/Cache/Backend/Eaccelerator.php</path>
+      <path action="M">Framework/Library/Cache/Backend/File.php</path>
+      <path action="M">Framework/Library/Cache/Backend/Memcache.php</path>
+      <path action="M">Framework/Library/Cache/Backend/Sqlite.php</path>
+      <path action="M">Framework/Library/Cache/Backend/Xcache.php</path>
+      <path action="M">Framework/Library/Cache/Backend/ZendPlatform.php</path>
+      <path action="M">Framework/Library/Cache/Cache.php</path>
+      <path action="M">Framework/Library/Cache/Exception.php</path>
+      <path action="M">Framework/Library/Cache/Frontend.php</path>
+      <path action="M">Framework/Library/Cache/Frontend/Class.php</path>
+      <path action="M">Framework/Library/Cache/Frontend/Function.php</path>
+      <path action="M">Framework/Library/Cache/Frontend/Output.php</path>
+      <path action="M">Framework/Library/Compiler/Exception.php</path>
+      <path action="M">Framework/Library/Compiler/Exception/FinalStateHasNotBeenReached.php</path>
+      <path action="M">Framework/Library/Compiler/Exception/IllegalToken.php</path>
+      <path action="M">Framework/Library/Compiler/Ll1.php</path>
+      <path action="M">Framework/Library/Configuration/Array.php</path>
+      <path action="M">Framework/Library/Configuration/Configuration.php</path>
+      <path action="M">Framework/Library/Configuration/Exception.php</path>
+      <path action="M">Framework/Library/Configuration/Ini.php</path>
+      <path action="M">Framework/Library/Configuration/Json.php</path>
+      <path action="M">Framework/Library/Configuration/Xml.php</path>
+      <path action="M">Framework/Library/Configuration/Yaml.php</path>
+      <path action="M">Framework/Library/Console/Command/Abstract.php</path>
+      <path action="M">Framework/Library/Console/Command/Exception.php</path>
+      <path action="M">Framework/Library/Console/Console.php</path>
+      <path action="M">Framework/Library/Console/Core/Cli.php</path>
+      <path action="M">Framework/Library/Console/Core/Cli/Exception.php</path>
+      <path action="M">Framework/Library/Console/Core/Cli/Parser.php</path>
+      <path action="M">Framework/Library/Console/Core/Exception.php</path>
+      <path action="M">Framework/Library/Console/Core/GetOption.php</path>
+      <path action="M">Framework/Library/Console/Core/Io.php</path>
+      <path action="M">Framework/Library/Console/Dispatcher.php</path>
+      <path action="M">Framework/Library/Console/Environment/Environment.php</path>
+      <path action="M">Framework/Library/Console/Environment/Exception.php</path>
+      <path action="M">Framework/Library/Console/Environment/Interface.php</path>
+      <path action="M">Framework/Library/Console/Environment/System.php</path>
+      <path action="M">Framework/Library/Console/Environment/User.php</path>
+      <path action="M">Framework/Library/Console/Environment/Window.php</path>
+      <path action="M">Framework/Library/Console/Exception.php</path>
+      <path action="M">Framework/Library/Console/Interface/Animation.php</path>
+      <path action="M">Framework/Library/Console/Interface/Exception.php</path>
+      <path action="M">Framework/Library/Console/Interface/Sound.php</path>
+      <path action="M">Framework/Library/Console/Interface/Style.php</path>
+      <path action="M">Framework/Library/Console/Interface/Text.php</path>
+      <path action="M">Framework/Library/Console/System/Exception.php</path>
+      <path action="M">Framework/Library/Console/System/System.php</path>
+      <path action="M">Framework/Library/Controller/Action/Standard.php</path>
+      <path action="M">Framework/Library/Controller/Dispatcher/Abstract.php</path>
+      <path action="M">Framework/Library/Controller/Dispatcher/Action.php</path>
+      <path action="M">Framework/Library/Controller/Exception.php</path>
+      <path action="M">Framework/Library/Controller/Exception/ActionIsNotFound.php</path>
+      <path action="M">Framework/Library/Controller/Exception/ControllerIsNotFound.php</path>
+      <path action="M">Framework/Library/Controller/Exception/ControllerNotExtendsActionStandard.php</path>
+      <path action="M">Framework/Library/Controller/Exception/PluginIsAlreadyRegistered.php</path>
+      <path action="M">Framework/Library/Controller/Exception/Reflection.php</path>
+      <path action="M">Framework/Library/Controller/Exception/ResponsePointerAlreadyExists.php</path>
+      <path action="M">Framework/Library/Controller/Exception/RouterDoesNotReturnAString.php</path>
+      <path action="M">Framework/Library/Controller/Exception/RouterDoesNotReturnAnArray.php</path>
+      <path action="M">Framework/Library/Controller/Front.php</path>
+      <path action="M">Framework/Library/Controller/Plugin/Interface.php</path>
+      <path action="M">Framework/Library/Controller/Plugin/Standard.php</path>
+      <path action="M">Framework/Library/Controller/Response/Standard.php</path>
+      <path action="M">Framework/Library/Controller/Router/Get.php</path>
+      <path action="M">Framework/Library/Controller/Router/Interface.php</path>
+      <path action="M">Framework/Library/Controller/Router/Rewrite.php</path>
+      <path action="M">Framework/Library/Controller/Router/Standard.php</path>
+      <path action="M">Framework/Library/Database/Cache/Abstract.php</path>
+      <path action="M">Framework/Library/Database/Cache/Exception.php</path>
+      <path action="M">Framework/Library/Database/Cache/Query.php</path>
+      <path action="M">Framework/Library/Database/Cache/Table.php</path>
+      <path action="M">Framework/Library/Database/Constraint/Abstract.php</path>
+      <path action="M">Framework/Library/Database/Constraint/Exception.php</path>
+      <path action="M">Framework/Library/Database/Constraint/Field.php</path>
+      <path action="M">Framework/Library/Database/Constraint/Table.php</path>
+      <path action="M">Framework/Library/Database/Constraint/User/Exception.php</path>
+      <path action="M">Framework/Library/Database/Criterion/Abstract.php</path>
+      <path action="M">Framework/Library/Database/Criterion/Exception.php</path>
+      <path action="M">Framework/Library/Database/Criterion/Predicate.php</path>
+      <path action="M">Framework/Library/Database/Dal/AbstractLayer/Pdo/Pdo.php</path>
+      <path action="M">Framework/Library/Database/Dal/AbstractLayer/Pdo/PdoStatement.php</path>
+      <path action="M">Framework/Library/Database/Dal/Dal.php</path>
+      <path action="M">Framework/Library/Database/Dal/DalStatement.php</path>
+      <path action="M">Framework/Library/Database/Dal/Exception.php</path>
+      <path action="M">Framework/Library/Database/Dal/Interface/Wrapper.php</path>
+      <path action="M">Framework/Library/Database/Dal/Interface/WrapperStatement.php</path>
+      <path action="M">Framework/Library/Database/Database.php</path>
+      <path action="M">Framework/Library/Database/Exception.php</path>
+      <path action="M">Framework/Library/Database/Model/Base.php</path>
+      <path action="M">Framework/Library/Database/Model/Collection.php</path>
+      <path action="M">Framework/Library/Database/Model/Exception.php</path>
+      <path action="M">Framework/Library/Database/Model/Field.php</path>
+      <path action="M">Framework/Library/Database/Model/Join.php</path>
+      <path action="M">Framework/Library/Database/Model/Table.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Criterion/Exception.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Criterion/GroupBy.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Criterion/OrderBy.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Criterion/SearchCondition.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Ddl/Abstract.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Ddl/Create.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Ddl/Exception.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Dml/Delete.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Dml/Exception.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Dml/Insert.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Dml/Interface.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Dml/Select.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Dml/Update.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Exception.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Field.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Function/Abstract.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Function/Common.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Function/Exception.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Interface.php</path>
+      <path action="M">Framework/Library/Database/QueryBuilder/Table.php</path>
+      <path action="M">Framework/Library/Database/Schema/Exception.php</path>
+      <path action="M">Framework/Library/Database/Schema/Schema.php</path>
+      <path action="M">Framework/Library/Factory/Exception.php</path>
+      <path action="M">Framework/Library/Factory/Factory.php</path>
+      <path action="M">Framework/Library/File/Abstract.php</path>
+      <path action="M">Framework/Library/File/Directory.php</path>
+      <path action="M">Framework/Library/File/Exception.php</path>
+      <path action="M">Framework/Library/File/Exception/FileDoesNotExist.php</path>
+      <path action="M">Framework/Library/File/Exception/UploadExtension.php</path>
+      <path action="M">Framework/Library/File/File.php</path>
+      <path action="M">Framework/Library/File/Finder.php</path>
+      <path action="M">Framework/Library/File/Link.php</path>
+      <path action="M">Framework/Library/File/Link/Read.php</path>
+      <path action="M">Framework/Library/File/Link/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Link/Write.php</path>
+      <path action="M">Framework/Library/File/Read.php</path>
+      <path action="M">Framework/Library/File/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Socket.php</path>
+      <path action="M">Framework/Library/File/Temporary.php</path>
+      <path action="M">Framework/Library/File/Temporary/Read.php</path>
+      <path action="M">Framework/Library/File/Temporary/ReadWrite.php</path>
+      <path action="M">Framework/Library/File/Temporary/Write.php</path>
+      <path action="M">Framework/Library/File/Undefined.php</path>
+      <path action="M">Framework/Library/File/Upload.php</path>
+      <path action="M">Framework/Library/File/Write.php</path>
+      <path action="M">Framework/Library/Filter/Abstract.php</path>
+      <path action="M">Framework/Library/Filter/Alpha.php</path>
+      <path action="M">Framework/Library/Filter/AlphaNumeric.php</path>
+      <path action="M">Framework/Library/Filter/Array.php</path>
+      <path action="M">Framework/Library/Filter/Blank.php</path>
+      <path action="M">Framework/Library/Filter/Exception.php</path>
+      <path action="M">Framework/Library/Filter/Filter.php</path>
+      <path action="M">Framework/Library/Filter/HtmlEntities.php</path>
+      <path action="M">Framework/Library/Filter/Integer.php</path>
+      <path action="M">Framework/Library/Filter/Lower.php</path>
+      <path action="M">Framework/Library/Filter/Null.php</path>
+      <path action="M">Framework/Library/Filter/Space.php</path>
+      <path action="M">Framework/Library/Filter/Tag.php</path>
+      <path action="M">Framework/Library/Filter/Upper.php</path>
+      <path action="M">Framework/Library/Form/Decorator/Abstract.php</path>
+      <path action="M">Framework/Library/Form/Decorator/Fieldset.php</path>
+      <path action="M">Framework/Library/Form/Decorator/InputButton.php</path>
+      <path action="M">Framework/Library/Form/Decorator/InputCheckbox.php</path>
+      <path action="M">Framework/Library/Form/Decorator/InputFile.php</path>
+      <path action="M">Framework/Library/Form/Decorator/InputHidden.php</path>
+      <path action="M">Framework/Library/Form/Decorator/InputImage.php</path>
+      <path action="M">Framework/Library/Form/Decorator/InputPassword.php</path>
+      <path action="M">Framework/Library/Form/Decorator/InputRadio.php</path>
+      <path action="M">Framework/Library/Form/Decorator/InputReset.php</path>
+      <path action="M">Framework/Library/Form/Decorator/InputSubmit.php</path>
+      <path action="M">Framework/Library/Form/Decorator/InputText.php</path>
+      <path action="M">Framework/Library/Form/Decorator/Select.php</path>
+      <path action="M">Framework/Library/Form/Decorator/SelectOptgroup.php</path>
+      <path action="M">Framework/Library/Form/Decorator/SelectOption.php</path>
+      <path action="M">Framework/Library/Form/Decorator/Textarea.php</path>
+      <path action="M">Framework/Library/Form/Element/Abstract.php</path>
+      <path action="M">Framework/Library/Form/Element/Fieldset.php</path>
+      <path action="M">Framework/Library/Form/Element/Form.php</path>
+      <path action="M">Framework/Library/Form/Element/InputButton.php</path>
+      <path action="M">Framework/Library/Form/Element/InputCheckbox.php</path>
+      <path action="M">Framework/Library/Form/Element/InputFile.php</path>
+      <path action="M">Framework/Library/Form/Element/InputHidden.php</path>
+      <path action="M">Framework/Library/Form/Element/InputImage.php</path>
+      <path action="M">Framework/Library/Form/Element/InputPassword.php</path>
+      <path action="M">Framework/Library/Form/Element/InputRadio.php</path>
+      <path action="M">Framework/Library/Form/Element/InputReset.php</path>
+      <path action="M">Framework/Library/Form/Element/InputSubmit.php</path>
+      <path action="M">Framework/Library/Form/Element/InputText.php</path>
+      <path action="M">Framework/Library/Form/Element/Label.php</path>
+      <path action="M">Framework/Library/Form/Element/Legend.php</path>
+      <path action="M">Framework/Library/Form/Element/Select.php</path>
+      <path action="M">Framework/Library/Form/Element/SelectOptgroup.php</path>
+      <path action="M">Framework/Library/Form/Element/SelectOption.php</path>
+      <path action="M">Framework/Library/Form/Element/Textarea.php</path>
+      <path action="M">Framework/Library/Form/Exception.php</path>
+      <path action="M">Framework/Library/Form/Form.php</path>
+      <path action="M">Framework/Library/Graph/AdjacencyList.php</path>
+      <path action="M">Framework/Library/Graph/Exception.php</path>
+      <path action="M">Framework/Library/Graph/Graph.php</path>
+      <path action="M">Framework/Library/Graph/Node/Interface.php</path>
+      <path action="M">Framework/Library/Graph/Node/SimpleNode.php</path>
+      <path action="M">Framework/Library/Iterator/Exception.php</path>
+      <path action="M">Framework/Library/Iterator/Interface/Aggregate.php</path>
+      <path action="M">Framework/Library/Iterator/Interface/Iterator.php</path>
+      <path action="M">Framework/Library/Iterator/Interface/Seekable.php</path>
+      <path action="M">Framework/Library/Iterator/Iterator.php</path>
+      <path action="M">Framework/Library/Json/Exception.php</path>
+      <path action="M">Framework/Library/Json/Json.php</path>
+      <path action="M">Framework/Library/Locale/Exception.php</path>
+      <path action="M">Framework/Library/Locale/Locale.php</path>
+      <path action="M">Framework/Library/Log/Backtrace.php</path>
+      <path action="M">Framework/Library/Log/Backtrace/Node.php</path>
+      <path action="M">Framework/Library/Log/Exception.php</path>
+      <path action="M">Framework/Library/Log/Log.php</path>
+      <path action="M">Framework/Library/Mail/Antispam.php</path>
+      <path action="M">Framework/Library/Mail/Exception.php</path>
+      <path action="M">Framework/Library/Mail/Mail.php</path>
+      <path action="M">Framework/Library/Mail/Mime.php</path>
+      <path action="M">Framework/Library/Mail/Protocol/Abstract.php</path>
+      <path action="M">Framework/Library/Mail/Protocol/Exception.php</path>
+      <path action="M">Framework/Library/Mail/Protocol/Smtp.php</path>
+      <path action="M">Framework/Library/Mail/Rfc882.php</path>
+      <path action="M">Framework/Library/Mail/Transport/Abstract.php</path>
+      <path action="M">Framework/Library/Mail/Transport/Exception.php</path>
+      <path action="M">Framework/Library/Mail/Transport/Sendmail.php</path>
+      <path action="M">Framework/Library/Mail/Transport/Smtp.php</path>
+      <path action="M">Framework/Library/Memory/Exception.php</path>
+      <path action="M">Framework/Library/Memory/GarbageCollector.php</path>
+      <path action="M">Framework/Library/Memory/Memory.php</path>
+      <path action="M">Framework/Library/Mime/Exception.php</path>
+      <path action="M">Framework/Library/Mime/Mime.php</path>
+      <path action="M">Framework/Library/Mime/Parameter.php</path>
+      <path action="M">Framework/Library/Observer/Exception.php</path>
+      <path action="M">Framework/Library/Observer/Interface/Observable.php</path>
+      <path action="M">Framework/Library/Observer/Interface/Observer.php</path>
+      <path action="M">Framework/Library/Observer/Observer.php</path>
+      <path action="M">Framework/Library/Php/Exception.php</path>
+      <path action="M">Framework/Library/Php/Io/Error.php</path>
+      <path action="M">Framework/Library/Php/Io/Exception.php</path>
+      <path action="M">Framework/Library/Php/Io/In.php</path>
+      <path action="M">Framework/Library/Php/Io/Out.php</path>
+      <path action="M">Framework/Library/Pom/Exception.php</path>
+      <path action="M">Framework/Library/Pom/Parser.php</path>
+      <path action="M">Framework/Library/Pom/Parser/Exception.php</path>
+      <path action="M">Framework/Library/Pom/Parser/Lexer.php</path>
+      <path action="M">Framework/Library/Pom/Parser/ParserLr.php</path>
+      <path action="M">Framework/Library/Pom/Pom.php</path>
+      <path action="M">Framework/Library/Pom/Token/Array.php</path>
+      <path action="M">Framework/Library/Pom/Token/Call.php</path>
+      <path action="M">Framework/Library/Pom/Token/Call/Attribute.php</path>
+      <path action="M">Framework/Library/Pom/Token/Call/ClassConstant.php</path>
+      <path action="M">Framework/Library/Pom/Token/Call/Function.php</path>
+      <path action="M">Framework/Library/Pom/Token/Call/Method.php</path>
+      <path action="M">Framework/Library/Pom/Token/Call/StaticAttribute.php</path>
+      <path action="M">Framework/Library/Pom/Token/Call/StaticMethod.php</path>
+      <path action="M">Framework/Library/Pom/Token/Cast.php</path>
+      <path action="M">Framework/Library/Pom/Token/Class.php</path>
+      <path action="M">Framework/Library/Pom/Token/Class/Access.php</path>
+      <path action="M">Framework/Library/Pom/Token/Class/Attribute.php</path>
+      <path action="M">Framework/Library/Pom/Token/Class/Constant.php</path>
+      <path action="M">Framework/Library/Pom/Token/Class/Method.php</path>
+      <path action="M">Framework/Library/Pom/Token/Clone.php</path>
+      <path action="M">Framework/Library/Pom/Token/Comment.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Break.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Conditional.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Conditional/If.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Conditional/If/Else.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Conditional/If/Elseif.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Conditional/If/If.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Conditional/Switch.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Conditional/Switch/Case.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Conditional/Switch/Default.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Continue.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Import.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Import/Include.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Import/IncludeOnce.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Import/Require.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Import/RequireOnce.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Loop.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Loop/DoWhile.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Loop/For.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Loop/Foreach.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Loop/While.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/Return.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/TryCatch.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/TryCatch/Catch.php</path>
+      <path action="M">Framework/Library/Pom/Token/ControlStructure/TryCatch/Try.php</path>
+      <path action="M">Framework/Library/Pom/Token/Exception.php</path>
+      <path action="M">Framework/Library/Pom/Token/Function.php</path>
+      <path action="M">Framework/Library/Pom/Token/Function/Argument.php</path>
+      <path action="M">Framework/Library/Pom/Token/Function/Named.php</path>
+      <path action="M">Framework/Library/Pom/Token/Instruction.php</path>
+      <path action="M">Framework/Library/Pom/Token/Instruction/Block.php</path>
+      <path action="M">Framework/Library/Pom/Token/Interface.php</path>
+      <path action="M">Framework/Library/Pom/Token/LateParsing.php</path>
+      <path action="M">Framework/Library/Pom/Token/New.php</path>
+      <path action="M">Framework/Library/Pom/Token/Number.php</path>
+      <path action="M">Framework/Library/Pom/Token/Number/DNumber.php</path>
+      <path action="M">Framework/Library/Pom/Token/Number/LNumber.php</path>
+      <path action="M">Framework/Library/Pom/Token/Operation.php</path>
+      <path action="M">Framework/Library/Pom/Token/Operator.php</path>
+      <path action="M">Framework/Library/Pom/Token/Operator/Arithmetical.php</path>
+      <path action="M">Framework/Library/Pom/Token/Operator/Assignement.php</path>
+      <path action="M">Framework/Library/Pom/Token/Operator/Bitwise.php</path>
+      <path action="M">Framework/Library/Pom/Token/Operator/Comparison.php</path>
+      <path action="M">Framework/Library/Pom/Token/Operator/ErrorControl.php</path>
+      <path action="M">Framework/Library/Pom/Token/Operator/Execution.php</path>
+      <path action="M">Framework/Library/Pom/Token/Operator/InDeCrementing.php</path>
+      <path action="M">Framework/Library/Pom/Token/Operator/Logical.php</path>
+      <path action="M">Framework/Library/Pom/Token/Operator/String.php</path>
+      <path action="M">Framework/Library/Pom/Token/Operator/Type.php</path>
+      <path action="M">Framework/Library/Pom/Token/OutterPhp.php</path>
+      <path action="M">Framework/Library/Pom/Token/Php.php</path>
+      <path action="M">Framework/Library/Pom/Token/Root.php</path>
+      <path action="M">Framework/Library/Pom/Token/String.php</path>
+      <path action="M">Framework/Library/Pom/Token/String/Boolean.php</path>
+      <path action="M">Framework/Library/Pom/Token/String/Constant.php</path>
+      <path action="M">Framework/Library/Pom/Token/String/EncapsedConstant.php</path>
+      <path action="M">Framework/Library/Pom/Token/String/Null.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Exception.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Interface/Scalar.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Interface/SuperScalar.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Interface/Type.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Aggregate.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Array.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Call.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Cast.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Class.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Clone.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Comment.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/ControlStructure.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Exception.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Function.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Instruction.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Interface.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/LateParsing.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/New.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Number.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Operation.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Operator.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/OutterPhp.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Php.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Root.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/String.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Variable.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/PrettyPrint/Whitespace.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Array.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Call.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Cast.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Class.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Clone.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Comment.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/ControlStructure.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Exception.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Function.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Instruction.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Interface.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/LateParsing.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/New.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Number.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Operation.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Operator.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/OutterPhp.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Php.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Root.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/String.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Variable.php</path>
+      <path action="M">Framework/Library/Pom/Token/Util/Visitor/Tokenize/Whitespace.php</path>
+      <path action="M">Framework/Library/Pom/Token/Variable.php</path>
+      <path action="M">Framework/Library/Pom/Token/Whitespace.php</path>
+      <path action="M">Framework/Library/Prototype/Exception.php</path>
+      <path action="M">Framework/Library/Prototype/Prototype.php</path>
+      <path action="M">Framework/Library/Registry/Exception.php</path>
+      <path action="M">Framework/Library/Registry/Registry.php</path>
+      <path action="M">Framework/Library/Serialize/Cryonicable.php</path>
+      <path action="M">Framework/Library/Serialize/Exception.php</path>
+      <path action="M">Framework/Library/Serialize/Serializable.php</path>
+      <path action="M">Framework/Library/Session/Exception.php</path>
+      <path action="M">Framework/Library/Session/Exception/NamespaceIsExpired.php</path>
+      <path action="M">Framework/Library/Session/Exception/SessionIsExpired.php</path>
+      <path action="M">Framework/Library/Session/Flash.php</path>
+      <path action="M">Framework/Library/Session/Namespace.php</path>
+      <path action="M">Framework/Library/Session/Option.php</path>
+      <path action="M">Framework/Library/Session/SaveHandler/Interface.php</path>
+      <path action="M">Framework/Library/Session/Session.php</path>
+      <path action="M">Framework/Library/Socket/Connection.php</path>
+      <path action="M">Framework/Library/Socket/Connection/Client.php</path>
+      <path action="M">Framework/Library/Socket/Connection/Exception.php</path>
+      <path action="M">Framework/Library/Socket/Connection/Server.php</path>
+      <path action="M">Framework/Library/Socket/Exception.php</path>
+      <path action="M">Framework/Library/Socket/Interface.php</path>
+      <path action="M">Framework/Library/Socket/Internet.php</path>
+      <path action="M">Framework/Library/Socket/Internet/DomainName.php</path>
+      <path action="M">Framework/Library/Socket/Internet/Ipv4.php</path>
+      <path action="M">Framework/Library/Socket/Internet/Ipv6.php</path>
+      <path action="M">Framework/Library/Socket/Transport.php</path>
+      <path action="M">Framework/Library/Socket/Unix.php</path>
+      <path action="M">Framework/Library/StdClass/Exception.php</path>
+      <path action="M">Framework/Library/StdClass/StdClass.php</path>
+      <path action="M">Framework/Library/StdClass/Util.php</path>
+      <path action="M">Framework/Library/Stream/Bucket.php</path>
+      <path action="M">Framework/Library/Stream/Context.php</path>
+      <path action="M">Framework/Library/Stream/Exception.php</path>
+      <path action="M">Framework/Library/Stream/Filter.php</path>
+      <path action="M">Framework/Library/Stream/Filter/Default.php</path>
+      <path action="M">Framework/Library/Stream/Filter/Exception.php</path>
+      <path action="M">Framework/Library/Stream/Io.php</path>
+      <path action="M">Framework/Library/Stream/Io/Bufferable.php</path>
+      <path action="M">Framework/Library/Stream/Io/In.php</path>
+      <path action="M">Framework/Library/Stream/Io/Lockable.php</path>
+      <path action="M">Framework/Library/Stream/Io/Out.php</path>
+      <path action="M">Framework/Library/Stream/Io/Pathable.php</path>
+      <path action="M">Framework/Library/Stream/Io/Pointable.php</path>
+      <path action="M">Framework/Library/Stream/Io/Statable.php</path>
+      <path action="M">Framework/Library/Stream/Io/Touchable.php</path>
+      <path action="M">Framework/Library/Stream/Notification.php</path>
+      <path action="M">Framework/Library/Stream/Notification/Exception.php</path>
+      <path action="M">Framework/Library/Stream/Notification/Interface.php</path>
+      <path action="M">Framework/Library/Stream/Stream.php</path>
+      <path action="M">Framework/Library/Stream/Wrapper.php</path>
+      <path action="M">Framework/Library/Stream/Wrapper/Exception.php</path>
+      <path action="M">Framework/Library/Stream/Wrapper/Interface.php</path>
+      <path action="M">Framework/Library/Stream/Wrapper/Interface/File.php</path>
+      <path action="M">Framework/Library/Stream/Wrapper/Interface/Stream.php</path>
+      <path action="M">Framework/Library/Test/Exception.php</path>
+      <path action="M">Framework/Library/Test/Oracle/Exception.php</path>
+      <path action="M">Framework/Library/Test/Oracle/Eyes.php</path>
+      <path action="M">Framework/Library/Test/Oracle/Oracle.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Call.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Clause.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Contract.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Ensures.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Invariant.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Predicate.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Requires.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Clause/Throwable.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Compiler.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Constructor/Old.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Constructor/Result.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Exception.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Praspel.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Type.php</path>
+      <path action="M">Framework/Library/Test/Praspel/TypeArray.php</path>
+      <path action="M">Framework/Library/Test/Praspel/TypeDisjunction.php</path>
+      <path action="M">Framework/Library/Test/Praspel/Variable.php</path>
+      <path action="M">Framework/Library/Test/Test.php</path>
+      <path action="M">Framework/Library/Test/Urg/Exception.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/2n.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Array.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/ArrayInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Boolean.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/BoundFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/BoundInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/EvenInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Exception.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Exception/Maxtry.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Float.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/GrouchySmurf.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Integer.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Integerpp.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Interface/Predicable.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Interface/Randomizable.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Interface/Type.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/NegativeFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/NegativeInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Null.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Number.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/OddInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/PositiveFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/PositiveInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/SmallFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/SmallInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/String.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/StringWith.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/SuperString.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Undefined.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Void.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/Xn.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/ZeroOrNegativeFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/ZeroOrNegativeInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/ZeroOrPositiveFloat.php</path>
+      <path action="M">Framework/Library/Test/Urg/Type/ZeroOrPositiveInteger.php</path>
+      <path action="M">Framework/Library/Test/Urg/Urg.php</path>
+      <path action="M">Framework/Library/Translate/Adapter/Abstract.php</path>
+      <path action="M">Framework/Library/Translate/Adapter/Gettext.php</path>
+      <path action="M">Framework/Library/Translate/Exception.php</path>
+      <path action="M">Framework/Library/Translate/Translate.php</path>
+      <path action="M">Framework/Library/Tree/Abstract.php</path>
+      <path action="M">Framework/Library/Tree/Binary.php</path>
+      <path action="M">Framework/Library/Tree/Exception.php</path>
+      <path action="M">Framework/Library/Tree/Node/Interface.php</path>
+      <path action="M">Framework/Library/Tree/Node/SimpleNode.php</path>
+      <path action="M">Framework/Library/Tree/Tree.php</path>
+      <path action="M">Framework/Library/Tree/Visitor/Abstract.php</path>
+      <path action="M">Framework/Library/Tree/Visitor/Dot.php</path>
+      <path action="M">Framework/Library/Tree/Visitor/Dump.php</path>
+      <path action="M">Framework/Library/Uri/Exception.php</path>
+      <path action="M">Framework/Library/Uri/Http.php</path>
+      <path action="M">Framework/Library/Uri/Uri.php</path>
+      <path action="M">Framework/Library/Validate/Abstract.php</path>
+      <path action="M">Framework/Library/Validate/Alpha.php</path>
+      <path action="M">Framework/Library/Validate/AlphaNumeric.php</path>
+      <path action="M">Framework/Library/Validate/Array.php</path>
+      <path action="M">Framework/Library/Validate/Email.php</path>
+      <path action="M">Framework/Library/Validate/Empty.php</path>
+      <path action="M">Framework/Library/Validate/Exception.php</path>
+      <path action="M">Framework/Library/Validate/Float.php</path>
+      <path action="M">Framework/Library/Validate/GreaterThan.php</path>
+      <path action="M">Framework/Library/Validate/Hexa.php</path>
+      <path action="M">Framework/Library/Validate/Integer.php</path>
+      <path action="M">Framework/Library/Validate/Ip.php</path>
+      <path action="M">Framework/Library/Validate/LessThan.php</path>
+      <path action="M">Framework/Library/Validate/Lower.php</path>
+      <path action="M">Framework/Library/Validate/Null.php</path>
+      <path action="M">Framework/Library/Validate/StringLength.php</path>
+      <path action="M">Framework/Library/Validate/Upper.php</path>
+      <path action="M">Framework/Library/Validate/Validate.php</path>
+      <path action="M">Framework/Library/Version/Version.php</path>
+      <path action="M">Framework/Library/View/Exception.php</path>
+      <path action="M">Framework/Library/View/Helper/Abstract.php</path>
+      <path action="M">Framework/Library/View/Helper/Exception.php</path>
+      <path action="M">Framework/Library/View/View.php</path>
+      <path action="M">Framework/Library/Visitor/Element.php</path>
+      <path action="M">Framework/Library/Visitor/Exception.php</path>
+      <path action="M">Framework/Library/Visitor/Registry.php</path>
+      <path action="M">Framework/Library/Visitor/Registry/Aggregate.php</path>
+      <path action="M">Framework/Library/Visitor/Registry/Exception.php</path>
+      <path action="M">Framework/Library/Visitor/Visit.php</path>
+      <path action="M">Framework/Library/Xml/Dumper.php</path>
+      <path action="M">Framework/Library/Xml/Exception.php</path>
+      <path action="M">Framework/Library/Xml/Parser.php</path>
+      <path action="M">Framework/Library/Xml/Xml.php</path>
+      <path action="M">Framework/Library/Xml/Xslt.php</path>
+      <path action="M">Framework/Library/XmlRpc/Client.php</path>
+      <path action="M">Framework/Library/XmlRpc/Exception.php</path>
+      <path action="M">Framework/Library/XmlRpc/Message.php</path>
+      <path action="M">Framework/Library/XmlRpc/Method/system.listMethods.php</path>
+      <path action="M">Framework/Library/XmlRpc/MethodAbstract.php</path>
+      <path action="M">Framework/Library/XmlRpc/Server.php</path>
+      <path action="M">Framework/Library/XmlRpc/Value.php</path>
+      <path action="M">Framework/Library/XmlRpc/XmlRpc.php</path>
+      <path action="M">Framework/Library/Yaml/Dumper.php</path>
+      <path action="M">Framework/Library/Yaml/Exception.php</path>
+      <path action="M">Framework/Library/Yaml/Node.php</path>
+      <path action="M">Framework/Library/Yaml/Parser.php</path>
+      <path action="M">Framework/Library/Yaml/Yaml.php</path>
+      <path action="M">INSTALL</path>
+      <path action="M">README</path>
+    </paths>
+  </logentry>
   <logentry revision="984">
     <author>hywan</author>
     <date>2010-05-30T13:09:31.721132Z</date>

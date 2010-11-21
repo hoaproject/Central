@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Hoa_Reflection_RFunction_RAbstract
  */
 import('Reflection.RFunction.RAbstract');

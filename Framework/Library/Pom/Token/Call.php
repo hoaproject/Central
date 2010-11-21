@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Hoa_Pom_Token_Util_Exception
  */
 import('Pom.Token.Util.Exception');

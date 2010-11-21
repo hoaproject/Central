@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Hoa_Pom_Token_Util_Exception
  */
 import('Pom.Token.Util.Exception');
@@ -83,7 +78,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_New extends Hoa_Visitor_Registry_Aggre
      * @return  array
      */
     public function visitNew ( Hoa_Visitor_Element $element,
-                               &$handle = null
+                               &$handle = null,
                                 $eldnah = null ) {
 
         return array_merge(

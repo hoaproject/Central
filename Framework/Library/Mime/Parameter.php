@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Class Hoa_Mime_Parameter.
  *
  * Manipulaite Mime-type parameter.

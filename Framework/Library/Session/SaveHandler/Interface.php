@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Interface Hoa_Session_SaveHandler_Interface.
  *
  * Force some methods to be implemented by a class.

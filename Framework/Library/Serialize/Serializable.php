@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Interface Hoa_Serialize_Serializable.
  *
  * Interface indicates that an objet could be serialize.

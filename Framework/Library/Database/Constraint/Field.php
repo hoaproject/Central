@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Hoa_Database_Constraint_Exception
  */
 import('Database.Constraint.Exception');

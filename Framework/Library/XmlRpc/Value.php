@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Class Hoa_XmlRpc_Value.
  *
  * Built parameters in Xml format for payload.

@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Class Hoa_XmlRpc_Message.
  *
  * Create payload to send to RPC server, and treat the response.

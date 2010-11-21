@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Hoa_Pom_Token_Util_Exception
  */
 import('Pom.Token.Util.Exception');
@@ -128,7 +123,7 @@ class Hoa_Pom_Token_Util_Visitor_Tokenize_Operator extends Hoa_Visitor_Registry_
      * @return  array
      */
     public function visitOperators ( Hoa_Visitor_Element $element,
-                                     &$handle = null
+                                     &$handle = null,
                                       $eldnah = null ) {
 
         return array(array(
