@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Hoa_Tree_Node_Interface
  */
 import('Tree.Node.Interface');
