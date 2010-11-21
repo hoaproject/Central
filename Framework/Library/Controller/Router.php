@@ -252,14 +252,17 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
      */
     public function route ( $uri = null, $bootstrap = null ) {
 
-        if(null === $uri) {
+        if(null === $uri)
+            if(!isset($_SERVER['REQUEST_URI'])) {
 
-            if(!isset($_SERVER['REQUEST_URI']))
-                throw new Hoa_Controller_Exception(
-                    'Cannot find the URI.', 0);
+                if(!isset($_SERVER['argv'][1]))
+                    throw new Hoa_Controller_Exception(
+                        'Cannot find the URI.', 0);
 
-            $uri = ltrim($_SERVER['REQUEST_URI'], '/');
-        }
+                $uri = $_SERVER['argv'][0] . '?' . ltrim($_SERVER['argv'][1], '?');
+            }
+            else
+                $uri = ltrim($_SERVER['REQUEST_URI'], '/');
 
         if(null === $bootstrap)
             $bootstrap = ltrim($_SERVER['SCRIPT_NAME'], '/');

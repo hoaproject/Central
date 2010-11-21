@@ -209,6 +209,7 @@ class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
         $arguments  = array();
         $reflection = null;
         $async      = $this->isCalledAsynchronously();
+        $method     = null;
 
         if(false === $async) {
 
@@ -223,11 +224,15 @@ class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
             $_action     = 'asynchronous.action';
         }
 
-        if(!isset($_SERVER['REQUEST_METHOD']))
-            throw new Hoa_Controller_Exception(
-                'Cannot identified the request method.', 0);
+        if(!isset($_SERVER['REQUEST_METHOD'])) {
 
-        $method = strtoupper($_SERVER['REQUEST_METHOD']);
+            if(!isset($_SERVER['argv']))
+                throw new Hoa_Controller_Exception(
+                    'Cannot identified the request method.', 0);
+        }
+        else
+            $method = strtoupper($_SERVER['REQUEST_METHOD']);
+
         $this->_parameters->setKeyword($this, 'method', strtolower($method));
 
         if($action instanceof Closure) {
