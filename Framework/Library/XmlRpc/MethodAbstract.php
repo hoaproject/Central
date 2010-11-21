@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Class Hoa_XmlRpc_Method_Abstract.
  *
  * Abstract class for RPC methods.
