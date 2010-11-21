@@ -108,6 +108,18 @@ class Hoa_Test_Urg_Type_BoundInteger extends Hoa_Test_Urg_Type_Integer {
             $upperStatement
         );
 
+        if($lowerValue instanceof Hoa_Test_Urg_Type_Integer) {
+
+            $lowerValue->randomize();
+            $lowerValue = $lowerValue->getValue();
+        }
+
+        if($upperValue instanceof Hoa_Test_Urg_Type_Integer) {
+
+            $upperValue->randomize();
+            $upperValue = $upperValue->getValue();
+        }
+
         if($lowerValue > $upperValue) {
 
             $this->setLowerBoundValue($upperValue);
@@ -136,6 +148,9 @@ class Hoa_Test_Urg_Type_BoundInteger extends Hoa_Test_Urg_Type_Integer {
 
         if(null === $q)
             $q = $this->getValue();
+
+        if(false === parent::predicate($q))
+            return false;
 
         $lower = $this->getLowerBoundValue();
         $upper = $this->getUpperBoundValue();
