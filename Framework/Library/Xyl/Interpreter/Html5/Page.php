@@ -2,18 +2,20 @@
 
 class Hoa_Xyl_Interpreter_Html5_Page extends Hoa_Xyl_Element_Concrete {
 
-    public function paint ( ) {
+    public function paint ( Hoa_Stream_Interface_Out $out ) {
 
-        $out = '<!DOCTYPE html>' . "\n\n" .
-               '<html>' . "\n" .
-               '<body>';
+        $out->writeAll('<!DOCTYPE html>' . "\n\n" .
+                       '<html>' . "\n" .
+                       '<body>');
 
-        foreach($this as $name => $child)
-            $out .= "\n" .
-                    $child->render();
+        foreach($this as $name => $child) {
 
-        return $out .
-               '</body>' . "\n" .
-               '</html>';
+            $out->writeAll("\n");
+            $child->render($out);
+        }
+
+        $out->writeAll('</body>' . "\n" . '</html>');
+
+        return;
     }
 }

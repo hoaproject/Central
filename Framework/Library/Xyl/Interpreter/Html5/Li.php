@@ -2,13 +2,21 @@
 
 class Hoa_Xyl_Interpreter_Html5_Li extends Hoa_Xyl_Element_Concrete {
 
-    public function paint ( ) {
+    public function paint ( Hoa_Stream_Interface_Out $out ) {
 
         $e = $this->getAbstractElement();
 
-        if($e->attributeExists('bind'))
-            return '    <li>' . $this->getCurrentData() . '</li>' . "\n";
+        if($e->attributeExists('bind')) {
 
-        return '    <li' . $e->readAttributesAsString() . '>' . $e . '</li>' . "\n";
+            $out->writeAll( '    <li>' . $this->getCurrentData() .
+                            '</li>' . "\n");
+
+            return;
+        }
+
+        $out->writeAll('    <li' . $e->readAttributesAsString() . '>' .
+                       $e . '</li>' . "\n");
+
+        return;
     }
 }

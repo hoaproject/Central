@@ -2,8 +2,19 @@
 
 class Hoa_Xyl_Interpreter_Html5_Section1 extends Hoa_Xyl_Element_Concrete {
 
-    public function paint ( ) {
+    public function paint ( Hoa_Stream_Interface_Out $out ) {
 
-        return '<h1>' . $this->getAbstractElement() . '</h1>' . "\n";
+        $e = $this->getAbstractElement();
+
+        if($e->attributeExists('bind')) {
+
+            $out->writeAll('<h1>' . $this->getCurrentData() . '</h1>'.  "\n");
+
+            return;
+        }
+
+        $out->writeAll('<h1>' . $e . '</h1>' . "\n");
+
+        return;
     }
 }
