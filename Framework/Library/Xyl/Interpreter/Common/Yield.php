@@ -2,13 +2,11 @@
 
 class Hoa_Xyl_Interpreter_Common_Yield extends Hoa_Xyl_Element_Concrete {
 
-    public function paint ( ) {
-
-        $out = null;
+    public function paint ( Hoa_Stream_Interface_Out $out ) {
 
         foreach($this as $name => $child)
-            $out .= $child->render();
+            $child->render($out);
 
-        return $out;
+        return;
     }
 }
