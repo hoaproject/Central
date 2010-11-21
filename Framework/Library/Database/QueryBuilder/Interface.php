@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Interface Hoa_Database_QueryBuilder_Interface.
  *
  * Interface for all classes that produce query.

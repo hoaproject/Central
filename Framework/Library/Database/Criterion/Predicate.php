@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Hoa_Database_Criterion_Abstract
  */
 import('Database.Criterion.Abstract');

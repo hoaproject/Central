@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Hoa_Database_Cache_Exception
  */
 import('Database.Cache.Exception');

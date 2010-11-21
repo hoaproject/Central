@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Interface Hoa_Database_QueryBuilder_Dml_Interface.
  *
  * Interface for the Data Modeling Language, i.e. delete, insert, select and

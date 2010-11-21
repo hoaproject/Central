@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Interface Hoa_Database_Dal_Interface_Wrapper.
  *
  * Interface a DAL wrapper.

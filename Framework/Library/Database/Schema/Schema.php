@@ -34,11 +34,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Hoa_Database_Schema_Exception
  */
 import('Database.Schema.Exception');

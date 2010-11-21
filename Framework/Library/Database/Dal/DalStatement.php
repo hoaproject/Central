@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Class Hoa_Database_Dal_DalStatement.
  *
  * The heigher class that represents a DAL statement.
