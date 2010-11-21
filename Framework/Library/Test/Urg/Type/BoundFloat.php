@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Hoa_Test_Urg_Type_Exception
  */
 import('Test.Urg.Type.Exception');
