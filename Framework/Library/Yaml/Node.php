@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Class Hoa_Yaml_Node.
  *
  * Manage Yaml nodes (like a tree).
