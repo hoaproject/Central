@@ -115,6 +115,9 @@ class Hoa_Test_Urg_Type_EvenInteger extends Hoa_Test_Urg_Type_BoundInteger {
         if(null === $q)
             $q = $this->getValue();
 
+        if(false === parent::predicate($q))
+            return false;
+
         return ($q & 1) == 0;
     }
 

@@ -180,7 +180,7 @@ class Hoa_Test_Urg_Type_Array extends Hoa_Test_Urg_Type_Undefined {
 
         if($length instanceof Hoa_Test_Urg_Type_Integer) {
 
-            $length = $length->clear()->randomize();
+            $length->clear()->randomize();
             $length = $length->getValue();
         }
 
