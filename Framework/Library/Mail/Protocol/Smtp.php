@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Hoa_Mail_Protocol_Exception
  */
 import('Mail.Protocol.Exception');

@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Hoa_Mail_Transport_Abstract
  */
 import('Mail.Transport.Abstract');
