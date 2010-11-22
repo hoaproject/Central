@@ -510,7 +510,7 @@ class Hoa_Core implements Hoa_Core_Parameterizable {
     }
 
     /**
-     * Import a class of a package (it words like the self::_import() method).
+     * Import a class of a package (it works like the self::_import() method).
      *
      * @access  public
      * @param   string  $path    Path.
