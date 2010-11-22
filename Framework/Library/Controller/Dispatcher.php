@@ -357,7 +357,7 @@ class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
         elseif($reflection instanceof ReflectionMethod)
             $return = $reflection->invokeArgs($called, $arguments);
 
-        return;
+        return $return;
     }
 
     /**
