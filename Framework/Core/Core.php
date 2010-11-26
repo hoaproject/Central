@@ -120,14 +120,14 @@ require_once 'Event.php';
 class Hoa_Core implements Hoa_Core_Parameterizable {
 
     /**
-     * Import constant : path collection index.
+     * Import constant: path collection index.
      *
      * @const int
      */
     const IMPORT_PATH = 0;
 
     /**
-     * Import constant : load flag collection index.
+     * Import constant: load flag collection index.
      *
      * @const int
      */
@@ -374,10 +374,9 @@ class Hoa_Core implements Hoa_Core_Parameterizable {
 
     /**
      * Import a file or a directory.
-     * This method finds file, and write some informations (inode, path and
+     * This method finds file, and writes some informations (inode, path and
      * already imported or not) into an “import register”. If a file is not in
      * this register, the autoload will return an error.
-     * This method is dependent of include_path (ini_set).
      *
      * @access  public
      * @param   string  $path    Path.
