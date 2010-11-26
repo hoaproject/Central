@@ -684,7 +684,7 @@ class Hoa_Core_Parameter {
      *   * O: difference to Greenwich time (GMT) in hours;
      *   * T: timezone abbreviation;
      *   * U: seconds since the Unix Epoch (a timestamp).
-     * There are very usefull for dynamic cache paths for example.
+     * They are very usefull for dynamic cache paths for example.
      *
      * Examples:
      *   Let keywords $k and parameters $p:
