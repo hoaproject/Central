@@ -933,19 +933,22 @@ class Hoa_Core_Parameter {
         else
             $p = $this->_friends[$iid];
 
-        if(0 === ($permissions & $p))
+        if(0 === ($permissions & $p)) {
+
             if(0 !== $permissions & self::PERMISSION_READ)
                 throw new Hoa_Exception(
                     'Class %s does not have permission to read parameters ' .
                     'from %s.', 5, array($iid, $this->_owner));
+
             elseif(0 !== $permissions & self::PERMISSION_WRITE)
                 throw new Hoa_Exception(
                     'Class %s does not have permission to write parameters ' .
                     'from %s.', 6, array($iid, $this->_owner));
-            else
-                throw new Hoa_Exception(
-                    'Class %s does not have permission to share parameters ' .
-                    'from %s.', 7, array($iid, $this->_owner));
+
+            throw new Hoa_Exception(
+                'Class %s does not have permission to share parameters ' .
+                'from %s.', 7, array($iid, $this->_owner));
+        }
 
         return true;
     }
