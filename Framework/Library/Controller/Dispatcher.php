@@ -38,11 +38,6 @@
 import('Controller.Exception');
 
 /**
- * Hoa_Controller_Router
- */
-import('Controller.Router') and load();
-
-/**
  * Hoa_Controller_Application
  */
 import('Controller.Application');
@@ -61,14 +56,14 @@ import('Controller.Application');
  * @subpackage  Hoa_Controller_Dispatcher
  */
 
-class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
+abstract class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
 
     /**
      * The Hoa_Controller_Dispatcher parameters.
      *
      * @var Hoa_Core_Parameter object
      */
-    private $_parameters    = null;
+    protected $_parameters  = null;
 
     /**
      * Current view.
@@ -182,183 +177,57 @@ class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   Hoa_Controller_Router  $router    Router.
      * @param   Hoa_View_Viewable      $view      View.
-     * @return  void
+     * @return  mixed
+     * @throw   Hoa_Controller_Exception
      */
     public function dispatch ( Hoa_Controller_Router $router,
                                Hoa_View_Viewable     $view = null ) {
 
-        $rule       = $router->getTheRule();
+        $rule     = $router->getTheRule();
 
         if(null === $rule)
-            $rule   = $router->route()->getTheRule();
+            $rule = $router->route()->getTheRule();
 
         if(null === $view)
-            $view   = $this->_currentView;
+            $view = $this->_currentView;
         else
             $this->_currentView = $view;
 
-        $components = $rule[Hoa_Controller_Router::RULE_COMPONENT];
-        $controller = $components['controller'];
-        $action     = $components['action'];
-        $called     = null;
-        $arguments  = array();
-        $reflection = null;
-        $async      = $this->isCalledAsynchronously();
-        $method     = null;
-
-        if(false === $async) {
-
-            $_file       = 'synchronous.file';
-            $_controller = 'synchronous.controller';
-            $_action     = 'synchronous.action';
-        }
-        else {
-
-            $_file       = 'asynchronous.file';
-            $_controller = 'asynchronous.controller';
-            $_action     = 'asynchronous.action';
-        }
+        $rule[Hoa_Controller_Router::RULE_COMPONENT]['_this'] = new Hoa_Controller_Application(
+            $router,
+            $this,
+            $view
+        );
 
         if(!isset($_SERVER['REQUEST_METHOD'])) {
 
             if(!isset($_SERVER['argv']))
                 throw new Hoa_Controller_Exception(
                     'Cannot identified the request method.', 0);
+
+            $method = null;
         }
         else
             $method = strtoupper($_SERVER['REQUEST_METHOD']);
 
         $this->_parameters->setKeyword($this, 'method', strtolower($method));
 
-        if($action instanceof Closure) {
-
-            $called               = $action;
-            $reflection          = new ReflectionMethod($action, '__invoke');
-            $components['_this'] = new Hoa_Controller_Application(
-                $router,
-                $this,
-                $view
-            );
-
-            foreach($reflection->getParameters() as $i => $parameter) {
-
-                $name = $parameter->getName();
-
-                if(isset($components[$name])) {
-
-                    $arguments[$name] = $components[$name];
-                    continue;
-                }
-
-                if(false === $parameter->isOptional())
-                    throw new Hoa_Controller_Exception(
-                        'The closured action for the rule with pattern %s needs ' .
-                        'a value for the parameter $%s and this value does not ' .
-                        'exist.',
-                        1, array($rule[Hoa_Controller_Router::RULE_PATTERN],
-                                 $parameter->getName()));
-            }
-        }
-        elseif(null === $controller && is_string($action)) {
-
-            $reflection          = new ReflectionFunction($action);
-            $components['_this'] = new Hoa_Controller_Application(
-                $router,
-                $this,
-                $view
-            );
-
-            foreach($reflection->getParameters() as $i => $parameter) {
-
-                $name = $parameter->getName();
-
-                if(isset($components[$name])) {
-
-                    $arguments[$name] = $components[$name];
-                    continue;
-                }
-
-                if(false === $parameter->isOptional())
-                    throw new Hoa_Controller_Exception(
-                        'The functional action for the rule with pattern %s needs ' .
-                        'a value for the parameter $%s and this value does not ' .
-                        'exist.',
-                        2, array($rule[Hoa_Controller_Router::RULE_PATTERN],
-                                 $parameter->getName()));
-            }
-        }
-        else {
-
-            if(!is_object($controller)) {
-
-                $this->_parameters->setKeyword($this, 'controller', $controller);
-                $this->_parameters->setKeyword($this, 'action',     $action);
-
-                $file       = $this->getFormattedParameter($_file);
-                $controller = $this->getFormattedParameter($_controller);
-                $action     = $this->getFormattedParameter($_action);
-
-                if(!file_exists($file))
-                    throw new Hoa_Controller_Exception(
-                        'File %s is not found (method: %s, asynchronous: %s).',
-                        3, array($file, $method,
-                                 true === $async ? 'true': 'false'));
-
-                require_once $file;
-
-                if(!class_exists($controller))
-                    throw new Hoa_Controller_Exception(
-                        'Controller %s is not found in the file %s ' .
-                        '(method: %s, asynchronous: %s).',
-                        4, array($controller, $file, $method,
-                                 true === $async ? 'true': 'false'));
-
-                $controller = new $controller($router, $this, $view);
-            }
-
-            if(!($controller instanceof Hoa_Controller_Application))
-                throw new Hoa_Controller_Exception(
-                    'The controller must extend the Hoa_Controller_Application.', 4);
-
-            $controller->construct();
-
-            if(!method_exists($controller, $action))
-                throw new Hoa_Controller_Exception(
-                    'Action %s does not exist on the controller %s ' .
-                    '(method: %s, asynchronous: %s).',
-                    6, array($action, get_class($controller), $method,
-                             true === $async ? 'true': 'false'));
-
-            $called     = $controller;
-            $reflection = new ReflectionMethod($controller, $action);
-
-            foreach($reflection->getParameters() as $i => $parameter) {
-
-                $name = $parameter->getName();
-
-                if(isset($components[$name])) {
-
-                    $arguments[$name] = $components[$name];
-
-                    continue;
-                }
-
-                if(false === $parameter->isOptional())
-                    throw new Hoa_Controller_Exception(
-                        'The action %s on the controller %s needs a value for ' .
-                        'the parameter $%s and this value does not exist.',
-                        7, array($action, get_class($controller),
-                                 $parameter->getName()));
-            }
-        }
-
-        if($reflection instanceof ReflectionFunction)
-            $return = $reflection->invokeArgs($arguments);
-        elseif($reflection instanceof ReflectionMethod)
-            $return = $reflection->invokeArgs($called, $arguments);
-
-        return $return;
+        return $this->resolve(
+            $rule[Hoa_Controller_Router::RULE_COMPONENT],
+            $rule[Hoa_Controller_Router::RULE_PATTERN]
+        );
     }
+
+    /**
+     * Resolve the dispatch call.
+     *
+     * @access  protected
+     * @param   array      $components    All components from the router.
+     * @param   string     $pattern       Pattern (can of ID).
+     * @return  mixed
+     * @throw   Hoa_Controller_Exception
+     */
+    abstract protected function resolve ( Array $components, $pattern );
 
     /**
      * Try to know if the dispatcher is called asynchronously.

@@ -53,30 +53,36 @@ import('Controller.Exception');
 
 class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
 
-    const RULE_PATTERN   = 0;
-    const RULE_COMPONENT = 1;
-    const RULE_ON        = 2;
+    const RULE_PATTERN    = 0;
+    const RULE_COMPONENT  = 1;
+    const RULE_ON         = 2;
+    const RULE_DISPATCHER = 3;
 
     /**
      * The Hoa_Controller_Router parameters.
      *
      * @var Hoa_Core_Parameter object
      */
-    private $_parameters = null;
+    private $_parameters    = null;
 
     /**
      * All rules.
      *
      * @var Hoa_Controller_Router array
      */
-    protected $_rules    = array();
+    protected $_rules       = array();
 
     /**
      * The selected rule after routing.
      *
      * @var Hoa_Controller_Router array
      */
-    protected $_theRule  = null;
+    protected $_theRule     = null;
+
+    /**
+     *
+     */
+    protected $_dispatchers = array();
 
 
 
@@ -111,12 +117,12 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
                     'configuration file.',
                     0, array($name, count($rule)));
 
-            @list($pattern, $controller, $action, $extra) = $rule;
+            @list($pattern, $controller, $action, $extra, $caller) = $rule;
 
             if(null === $extra)
                 $extra = array();
 
-            $this->addRule($pattern, $controller, $action, $extra);
+            $this->addRule($pattern, $controller, $action, $extra, $caller);
         }
 
         return;
@@ -197,10 +203,11 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
      * @param   string  $action        A method name, a function name, a
      *                                 closure or null.
      * @param   array   $extra         Extra data.
+     * @param   string  $dispatcher    Dispatcher ID.
      * @return  Hoa_Controller_Router
      */
     public function addRule ( $pattern, $controller = null, $action = null,
-                              Array $extra = array() ) {
+                              Array $extra = array(), $dispatcher = null ) {
 
         if(is_string($controller))
             $controller = strtolower($controller);
@@ -209,16 +216,38 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
             $action     = strtolower($action);
 
         $this->_rules[] = array(
-            self::RULE_PATTERN   => str_replace('#', '\#', $pattern),
-            self::RULE_COMPONENT => array_merge(
+            self::RULE_PATTERN    => str_replace('#', '\#', $pattern),
+            self::RULE_COMPONENT  => array_merge(
                 array(
-                    'controller' => $controller,
-                    'action'     => $action
+                    'controller'  => $controller,
+                    'action'      => $action
                 ),
                 $extra
             ),
-            self::RULE_ON        => null
+            self::RULE_ON         => null,
+            self::RULE_DISPATCHER => $dispatcher
         );
+
+        return $this;
+    }
+
+    /**
+     *
+     */
+    public function addDispatchers ( Array $dispatchers ) {
+
+        foreach($dispatchers as $id => $dispatcher)
+            $this->addDispatcher($id, $dispatcher);
+
+        return $this;
+    }
+
+    /**
+     *
+     */
+    public function addDispatcher ( $id, Hoa_Controller_Dispatcher $dispatcher ) {
+
+        $this->_dispatchers[$id] = $dispatcher;
 
         return $this;
     }
@@ -232,6 +261,17 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
     public function getRules ( ) {
 
         return $this->_rules;
+    }
+
+    /**
+     * Get the selected rule after routing.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getTheRule ( ) {
+
+        return $this->_theRule;
     }
 
     /**
@@ -324,13 +364,27 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
     }
 
     /**
-     * Get the selected rule after routing.
      *
      * @access  public
-     * @return  array
+     * @param   Hoa_View_Viewable  $view      View.
+     * @return  void
      */
-    public function getTheRule ( ) {
+    public function dispatch ( Hoa_View_Viewable $view = null ) {
 
-        return $this->_theRule;
+        $rule     = $this->getTheRule();
+
+        if(null === $rule)
+            $rule = $this->route()->getTheRule();
+
+        $dispatcherName = $rule[self::RULE_DISPATCHER];
+
+        if(!isset($this->_dispatchers[$dispatcherName]))
+            throw new Hoa_Controller_Exception(
+                'Cannot find the dispatcher %s associated to the rule %s.',
+                4, array($dispatcherName, $rule[self::RULE_PATTERN]));
+
+        $dispatcher = $this->_dispatchers[$dispatcherName];
+
+        return $dispatcher->dispatch($this, $view);
     }
 }
