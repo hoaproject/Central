@@ -117,12 +117,12 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
                     'configuration file.',
                     0, array($name, count($rule)));
 
-            @list($pattern, $controller, $action, $extra, $caller) = $rule;
+            @list($pattern, $controller, $action, $extra, $dispatcher) = $rule;
 
             if(null === $extra)
                 $extra = array();
 
-            $this->addRule($pattern, $controller, $action, $extra, $caller);
+            $this->addRule($pattern, $controller, $action, $extra, $dispatcher);
         }
 
         return;
