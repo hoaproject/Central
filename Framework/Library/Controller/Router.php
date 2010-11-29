@@ -207,7 +207,7 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
      * @return  Hoa_Controller_Router
      */
     public function addRule ( $pattern, $controller = null, $action = null,
-                              Array $extra = array(), $dispatcher = null ) {
+                              Array $extra = array(), $dispatcher = '_default' ) {
 
         if(is_string($controller))
             $controller = strtolower($controller);
@@ -376,14 +376,22 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
         if(null === $rule)
             $rule = $this->route()->getTheRule();
 
-        $dispatcherName = $rule[self::RULE_DISPATCHER];
+        $dispatcher = $rule[self::RULE_DISPATCHER];
 
-        if(!isset($this->_dispatchers[$dispatcherName]))
+        if(is_string($dispatcher)) {
+
+            if(!isset($this->_dispatchers[$dispatcher]))
+                throw new Hoa_Controller_Exception(
+                    'Cannot find the dispatcher %s associated to the rule %s.',
+                    4, array($dispatcher, $rule[self::RULE_PATTERN]));
+
+            $dispatcher = $this->_dispatchers[$dispatcher];
+        }
+
+        if(!is_object($dispatcher))
             throw new Hoa_Controller_Exception(
                 'Cannot find the dispatcher %s associated to the rule %s.',
-                4, array($dispatcherName, $rule[self::RULE_PATTERN]));
-
-        $dispatcher = $this->_dispatchers[$dispatcherName];
+                5, array($dispatcher, $rule[self::RULE_PATTERN]));
 
         return $dispatcher->dispatch($this, $view);
     }
