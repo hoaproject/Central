@@ -58,7 +58,7 @@ class Hoa_Controller_Dispatcher_Basic extends Hoa_Controller_Dispatcher {
      *
      * @access  protected
      * @param   array      $components    All components from the router.
-     * @param   string     $pattern       Pattern (can of ID).
+     * @param   string     $pattern       Pattern (kind of ID).
      * @return  mixed
      * @throw   Hoa_Controller_Exception
      */
