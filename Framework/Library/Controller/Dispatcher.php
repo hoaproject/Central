@@ -100,6 +100,7 @@ abstract class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
                 'asynchronous.action'     => '(:%synchronous.action:)Async'
             )
         );
+        $this->setParameters($parameters);
 
         return;
     }
