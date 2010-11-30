@@ -232,7 +232,11 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
     }
 
     /**
+     * Add dispatchers.
      *
+     * @access  public
+     * @param   array   $dispatchers    From ID to dispatcher.
+     * @return  Hoa_Controller_Router
      */
     public function addDispatchers ( Array $dispatchers ) {
 
@@ -243,7 +247,12 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
     }
 
     /**
+     * Add a dispatcher.
      *
+     * @access  public
+     * @param   string                     $id            ID.
+     * @param   Hoa_Controller_Dispatcher  $dispatcher    Dispatcher.
+     * @return  Hoa_Controller_Router
      */
     public function addDispatcher ( $id, Hoa_Controller_Dispatcher $dispatcher ) {
 
