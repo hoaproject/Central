@@ -75,6 +75,8 @@ and
 !defined('HOA_VERSION_MINOR')   and define('HOA_VERSION_MINOR',   5);
 !defined('HOA_VERSION_RELEASE') and define('HOA_VERSION_RELEASE', 5);
 !defined('HOA_VERSION_STATUS')  and define('HOA_VERSION_STATUS',  'b');
+!defined('HOA_REVISION')        and define('HOA_REVISION',        998);
+!defined('HOA_REVISION_PREV')   and define('HOA_REVISION_PREV',   600);
 
 /**
  * Hoa_Exception
@@ -232,6 +234,8 @@ class Hoa_Core implements Hoa_Core_Parameterizable {
                                                      'Lost+found' . DS,
                 'protocol.Data/Module'            => '(:%data.module:)' . DS,
                 'protocol.Data/Optional'          => '(:%data.module:)' . DS,
+                'protocol.Data/Temporary'         => '(:%protocol.Data:)' .
+                                                     'Temporary' . DS,
                 'protocol.Data/Variable'          => '(:%protocol.Data:)' .
                                                      'Variable' . DS,
                 'protocol.Data/Variable/Cache'    => '(:%protocol.Data/Variable:)' .
@@ -245,7 +249,7 @@ class Hoa_Core implements Hoa_Core_Parameterizable {
                 'protocol.Data/Variable/Test'     => '(:%protocol.Data/Variable:)' .
                                                      'Test' . DS,
                 'protocol.Data'                   => '(:%root.data:)' . DS,
-                'protocol.Framework'              => '(:%root.framework:)' . DS
+                'protocol.Library'                => '(:%framework.library:)' . DS
             )
         );
 
@@ -678,8 +682,32 @@ class Hoa_Core implements Hoa_Core_Parameterizable {
 
         return false;
     }
+
+    /**
+     * Return the copyright and license of Hoa.
+     *
+     * @access  public
+     * @return  string
+     */
+    public static function © ( ) {
+
+        return 'Copyright © 2007, 2010 Ivan Enderlin. All rights reserved.' . "\n" .
+               'License GNU GPL <http://gnu.org/licenses.txt>.';
+    }
 }
 
+
+/**
+ * Alias of function_exists.
+ *
+ * @access  public
+ * @param   string  $name    Name.
+ * @return  bool
+ */
+function ƒ ( $name ) {
+
+    return function_exists($name);
+}
 
 /**
  * Alias of Hoa_Core::_define().
@@ -690,10 +718,11 @@ class Hoa_Core implements Hoa_Core_Parameterizable {
  * @param   bool    $case     True set the case-insentisitve.
  * @return  bool
  */
+if(!ƒ('_define')) {
 function _define ( $name = '', $value = '', $case = false ) {
 
     return Hoa_Core::_define($name, $value, $case);
-}
+}}
 
 /**
  * Alias of Hoa_Core::import().
@@ -703,10 +732,11 @@ function _define ( $name = '', $value = '', $case = false ) {
  * @return  bool
  * @throw   Hoa_Exception
  */
+if(!ƒ('import')) {
 function import ( $path ) {
 
     return Hoa_Core::import($path);
-}
+}}
 
 /**
  * Alias of Hoa_Core::importModule().
@@ -716,10 +746,11 @@ function import ( $path ) {
  * @return  bool
  * @throw   Hoa_Exception
  */
+if(!ƒ('importModule')) {
 function importModule ( $path ) {
 
     return Hoa_Core::importModule($path);
-}
+}}
 
 /**
  * Alias of Hoa_Core::load().
@@ -727,11 +758,11 @@ function importModule ( $path ) {
  * @access  public
  * @return  void
  */
+if(!ƒ('load')) {
 function load ( ) {
 
     return Hoa_Core::load();
-}
-
+}}
 
 /**
  * Set the default autoload.

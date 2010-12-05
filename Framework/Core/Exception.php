@@ -133,7 +133,7 @@ class Hoa_Exception extends Exception {
 
         $app  = Hoa_Core::getInstance()->getProtocol()->resolve('hoa://Application/');
         $data = Hoa_Core::getInstance()->getProtocol()->resolve('hoa://Data/');
-        $fw   = Hoa_Core::getInstance()->getProtocol()->resolve('hoa://Framework/');
+        $lib  = Hoa_Core::getInstance()->getProtocol()->resolve('hoa://Library/');
         $file = $this->getFile();
 
         if($app == substr($file, 0, strlen($app)))
@@ -142,8 +142,8 @@ class Hoa_Exception extends Exception {
         elseif($data == substr($file, 0, strlen($data)))
             $file = 'hoa://Data/' . substr($file, strlen($data));
 
-        elseif($fw == substr($file, 0, strlen($fw)))
-            $file = 'hoa://Framework/' . substr($file, strlen($fw));
+        elseif($lib == substr($file, 0, strlen($lib)))
+            $file = 'hoa://Library/' . substr($file, strlen($lib));
 
         return $file;
     }

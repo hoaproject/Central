@@ -405,7 +405,8 @@ class Hoa_Core_Event {
  * @param   string  $eventId    Event ID.
  * @return  Hoa_Core_Event
  */
+if(!ƒ('event')) {
 function event ( $eventId ) {
 
     return Hoa_Core_Event::getEvent($eventId);
-}
+}}

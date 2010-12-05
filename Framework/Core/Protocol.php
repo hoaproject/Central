@@ -174,7 +174,7 @@ abstract class Hoa_Core_Protocol {
 
         if(empty($name))
             throw new Hoa_Exception(
-                'Cannot add a component to the protocol hoa:// with an name.', 0);
+                'Cannot add a component to the protocol hoa:// without a name.', 0);
 
         $this->_components[$component->getName()] = $component;
 
@@ -216,7 +216,7 @@ abstract class Hoa_Core_Protocol {
      *
      * @access  public
      * @param   string  $path    Path to resolve.
-     * @return  string
+     * @return  mixed
      */
     public function resolve ( $path ) {
 
@@ -235,7 +235,7 @@ abstract class Hoa_Core_Protocol {
      *
      * @access  public
      * @param   string  $path    Path to resolve.
-     * @return  string
+     * @return  mixed
      */
     protected function _resolve ( $path ) {
 
@@ -250,15 +250,25 @@ abstract class Hoa_Core_Protocol {
 
         if(false !== $pos)
             $next = substr($path, 0, $pos);
-        else
-            $next = $path;
+        else {
+
+            $pos = strpos($path, '#');
+
+            if(false !== $pos)
+                $next = substr($path, 0, $pos);
+            else
+                $next = $path;
+        }
 
         if(true === $this->componentExists($next)) {
 
-            if(false !== $pos)
-                $handle = substr($path, $pos + 1);
-            else
+            if(false === $pos)
                 return $this->getComponent($next)->reach(null);
+
+            $handle = substr($path, $pos + 1);
+
+            if('#' == $path[$pos])
+                return $this->getComponent($next)->reachId($handle);
 
             return $this->getComponent($next)->_resolve($handle);
         }
@@ -278,6 +288,22 @@ abstract class Hoa_Core_Protocol {
     public function reach ( $queue ) {
 
         return $this->_reach . $queue;
+    }
+
+    /**
+     * ID of the component.
+     * Generic one. Should be overload in childs classes.
+     *
+     * @access  public
+     * @param   string  $id    ID of the component.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function reachId ( $id ) {
+
+        throw new Hoa_Exception(
+            'The component %s has no ID support (try to reach #%s).',
+            0, array($this->getName(), $id));
     }
 
     /**
@@ -835,3 +861,17 @@ class Hoa_Core_Protocol_Wrapper {
  * Register the hoa:// protocol.
  */
 stream_wrapper_register('hoa', 'Hoa_Core_Protocol_Wrapper');
+
+/**
+ * Alias of the Hoa_Core::getInstance()->getProtocol()->resolve() method.
+ * method.
+ *
+ * @access  public
+ * @param   string  $path    Path to resolve.
+ * @return  mixed
+ */
+if(!ƒ('resolve')) {
+function resolve ( $path ) {
+
+    return Hoa_Core::getInstance()->getProtocol()->resolve($path);
+}}
