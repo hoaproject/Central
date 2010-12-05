@@ -56,16 +56,23 @@ class Hoa_Xml_CssToXPath extends Hoa_Compiler_Ll1 {
     /**
      * XPath root.
      *
-     * @var Hoa_Xml_CssToXpath string
+     * @var Hoa_Xml_CssToXPath string
      */
     protected $_root    = null;
 
     /**
      * XPath current path part.
      *
-     * @var Hoa_Xml_CssToXpath string
+     * @var Hoa_Xml_CssToXPath string
      */
     protected $_current = null;
+
+    /**
+     * Set a default namespace prefix.
+     *
+     * @var Hoa_Xml_CssToXPath string
+     */
+    protected $_prefix  = null;
 
 
 
@@ -304,7 +311,14 @@ class Hoa_Xml_CssToXPath extends Hoa_Compiler_Ll1 {
 
         if(isset($this->buffers[0])) {
 
-            $_element = $element = str_replace('|', ':', $this->buffers[0]);
+            if(false !== strpos($this->buffers[0], '|'))
+                $_element = $element = str_replace('|', ':', $this->buffers[0]);
+            else
+                if(null !== $p = $this->getDefaultNamespacePrefix())
+                    $_element = $element = $p . ':' . $this->buffers[0];
+                else
+                    $_element = $element = $this->buffers[0];
+
             unset($this->buffers[0]);
         }
 
@@ -724,5 +738,31 @@ class Hoa_Xml_CssToXPath extends Hoa_Compiler_Ll1 {
             'The pseudo-element function %s on the element %s is unknown.',
             0, array($function, $element)
         );
+    }
+
+    /**
+     * Set the default namespace prefix (e.g. __current_ns).
+     *
+     * @access  public
+     * @param   string  $prefix    Default prefix.
+     * @return  string
+     */
+    public function setDefaultNamespacePrefix ( $prefix ) {
+
+        $old           = $this->_prefix;
+        $this->_prefix = $prefix;
+
+        return $old;
+    }
+
+    /**
+     * Get the default namespace prefix.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getDefaultNamespacePrefix ( ) {
+
+        return $this->_prefix;
     }
 }
