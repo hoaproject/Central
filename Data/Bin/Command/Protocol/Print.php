@@ -91,7 +91,6 @@ class PrintCommand extends Hoa_Console_Command_Abstract {
             cout(Hoa_Core::getProtocol()->__toString());
         }
 
-
         return HC_SUCCESS;
     }
 
