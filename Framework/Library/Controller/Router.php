@@ -53,9 +53,32 @@ import('Controller.Exception');
 
 class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
 
+    /**
+     * Rule: pattern index.
+     *
+     * @const int
+     */
     const RULE_PATTERN    = 0;
+
+    /**
+     * Rule: component index.
+     *
+     * @const int
+     */
     const RULE_COMPONENT  = 1;
+
+    /**
+     * Rule: on index.
+     *
+     * @const int
+     */
     const RULE_ON         = 2;
+
+    /**
+     * Rule: dispatcher index.
+     *
+     * @const int
+     */
     const RULE_DISPATCHER = 3;
 
     /**
@@ -80,7 +103,9 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
     protected $_theRule     = null;
 
     /**
+     * Many dispatchers: from id to dispatch.
      *
+     * @var Hoa_Controller_Router array
      */
     protected $_dispatchers = array();
 
@@ -112,7 +137,7 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
 
             if(2 > count($rule))
                 throw new Hoa_Controller_Exception(
-                    'Rule %s must be at least a 3-uplet: [pattern, controller, ' . 
+                    'Rule %s must be at least a 3-uplet: [pattern, controller, ' .
                     'action(, {extra})?]. We have a %d-uplet in the ' .
                     'configuration file.',
                     0, array($name, count($rule)));
@@ -373,14 +398,16 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
     }
 
     /**
+     * Auto-dispatch, i.e. find the appropriate dispatcher according to the
+     * selected rule from this router.
      *
      * @access  public
-     * @param   Hoa_View_Viewable  $view      View.
+     * @param   Hoa_View_Viewable  $view    View.
      * @return  void
      */
-    public function dispatch ( Hoa_View_Viewable $view = null ) {
+    public function autoDispatch ( Hoa_View_Viewable $view = null ) {
 
-        $rule     = $this->getTheRule();
+        $rule = $this->getTheRule();
 
         if(null === $rule)
             $rule = $this->route()->getTheRule();

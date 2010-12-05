@@ -35,7 +35,7 @@
 /**
  * Class Hoa_Controller_Application.
  *
- * .
+ * A structure, given to action, that holds some important data.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
