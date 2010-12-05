@@ -532,7 +532,8 @@ class Hoa_Log implements Hoa_Core_Event_Source {
  * @param   array   $extra      Extra dynamic informations.
  * @return  void
  */
+if(!ƒ('hlog')) {
 function hlog ( $message, $type = Hoa_Log::DEBUG, $extra = array() ) {
 
     return Hoa_Log::getChannel()->log($message, $type, $extra);
-}
+}}
