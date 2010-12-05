@@ -143,10 +143,59 @@ class Hoa_Registry extends ArrayObject {
      * @param   mixed   $index    Index of registry.
      * @return  void
      */
-    public static function delete ( $index ) {
+    public static function remote ( $index ) {
 
         self::getInstance()->offsetUnset($index);
 
         return;
     }
 }
+
+/**
+ * Class Hoa_Registry__Protocol.
+ *
+ * hoa://Library/Registry component.
+ *
+ * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license     http://gnu.org/licenses/gpl.txt GNU GPL
+ * @since       PHP5
+ * @version     0.3
+ * @package     Hoa_Registry
+ * @subpackage  Hoa_Registry__Protocol
+ */
+
+class Hoa_Registry__Protocol extends Hoa_Core_Protocol {
+
+    /**
+     * Component's name.
+     *
+     * @var Hoa_Core_Protocol string
+     */
+    protected $_name = 'Registry';
+
+
+
+    /**
+     * ID of the component.
+     * Generic one. Should be overload in childs classes.
+     *
+     * @access  public
+     * @param   string  $id    ID of the component.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function reachId ( $id ) {
+
+        return Hoa_Registry::get($id);
+    }
+}
+
+/**
+ * Add the hoa://Library/Registry component. Should be use to reach/get an entry
+ * in the Hoa_Registry, e.g.: resolve('hoa://Library/Registry#AnID').
+ */
+Hoa_Core::getInstance()
+        ->getProtocol()
+        ->getComponent('Library')
+        ->addComponent(new Hoa_Registry__Protocol());
