@@ -222,8 +222,11 @@ class          Hoa_Xml_Element_Basic
      */
     public function querySelectorAll ( $query ) {
 
-        if(null === self::$_cssToXPath)
+        if(null === self::$_cssToXPath) {
+
             self::$_cssToXPath = new Hoa_Xml_CssToXPath();
+            self::$_cssToXPath->setDefaultNamespacePrefix('__current_ns');
+        }
 
         self::$_buffer = null;
         self::$_cssToXPath->compile($query);
