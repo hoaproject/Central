@@ -31,11 +31,6 @@
  */
 
 /**
- * Hoa_Version
- */
-import('Version.~');
-
-/**
  * Class VersionCommand.
  *
  * This command allows to know version and revision of the framework.
@@ -87,22 +82,25 @@ class VersionCommand extends Hoa_Console_Command_Abstract {
      */
     public function main ( ) {
 
-        $verbose = true;
-        $message = null;
-        $info    = null;
+        $version  = HOA_VERSION_MAJOR . '.' . HOA_VERSION_MINOR . '.' .
+                    HOA_VERSION_RELEASE . HOA_VERSION_STATUS;
+        $revision = HOA_REVISION;
+        $verbose  = true;
+        $message  = null;
+        $info     = null;
 
         while(false !== $c = parent::getOption($v)) {
 
             switch($c) {
 
                 case 'r':
-                    $info    = Hoa_Version::getRevision();
+                    $info    = $revision;
                     $message = 'Framework revision number: ' .
                                parent::stylize($info, 'info') . '.';
                   break;
 
                 case 'v':
-                    $info    = Hoa_Version::getVersion();
+                    $info    = $version;
                     $message = 'Framework version: ' .
                                parent::stylize($info, 'info') . '.';
                   break;
@@ -118,7 +116,9 @@ class VersionCommand extends Hoa_Console_Command_Abstract {
 
                 case 's':
                 default:
-                    $info = $message = Hoa_Version::getSignature();
+                    $info = $message = 'Hoa Framework ' . $version . ' (' .
+                                       $revision . ').' . "\n" .
+                                       Hoa_Core::©();
                   break;
             }
         }

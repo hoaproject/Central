@@ -31,11 +31,6 @@
  */
 
 /**
- * Hoa_Version
- */
-import('Version.~');
-
-/**
  * Class ChangelogCommand.
  *
  * Manipule the changelog.
@@ -108,7 +103,7 @@ class ChangelogCommand extends Hoa_Console_Command_Abstract {
                             $v,
                             array(
                                 'HEAD' => $xml->logentry[0]['revision'] . '',
-                                'PREV' => Hoa_Version::getPreviousRevision()
+                                'PREV' => HOA_REVISION_PREV
                             )
                         )
                     );
