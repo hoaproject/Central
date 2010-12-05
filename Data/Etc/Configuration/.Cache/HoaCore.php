@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Generated the 2010-11-19T18:11:06.000000Z
+ * Generated the 2010-12-04T14:37:53.000000Z
  */
 
 return array (
@@ -29,12 +29,13 @@ return array (
     'protocol.Data/Lost+found' => '(:%protocol.Data:)Lost+found/',
     'protocol.Data/Module' => '(:%data.module:)/',
     'protocol.Data/Optional' => '(:%data.module:)/',
+    'protocol.Data/Temporary' => '(:%protocol.Data:)Temporary/',
     'protocol.Data/Variable' => '(:%protocol.Data:)Variable/',
     'protocol.Data/Variable/Cache' => '(:%protocol.Data/Variable:)Cache/',
     'protocol.Data/Variable/Database' => '(:%protocol.Data/Variable:)Database/',
     'protocol.Data/Variable/Log' => '(:%protocol.Data/Variable:)Log/',
     'protocol.Data/Variable/Private' => '(:%protocol.Data/Variable:)Private/',
     'protocol.Data/Variable/Test' => '(:%protocol.Data/Variable:)Test/',
-    'protocol.Framework' => '(:%root.framework:)/',
+    'protocol.Library' => '(:%framework.library:)/',
   ),
 );

@@ -31,6 +31,7 @@
         "protocol.Data/Lost+found"       : "(:%protocol.Data:)Lost+found/",
         "protocol.Data/Module"           : "(:%data.module:)/",
         "protocol.Data/Optional"         : "(:%data.module:)/",
+        "protocol.Data/Temporary"        : "(:%protocol.Data:)Temporary/",
         "protocol.Data/Variable"         : "(:%protocol.Data:)Variable/",
         "protocol.Data/Variable/Cache"   : "(:%protocol.Data/Variable:)Cache/",
         "protocol.Data/Variable/Database": "(:%protocol.Data/Variable:)Database/",
@@ -38,6 +39,6 @@
         "protocol.Data/Variable/Private" : "(:%protocol.Data/Variable:)Private/",
         "protocol.Data/Variable/Test"    : "(:%protocol.Data/Variable:)Test/",
         "protocol.Data"                  : "(:%root.data:)/",
-        "protocol.Framework"             : "(:%root.framework:)/"
+        "protocol.Library"               : "(:%framework.library:)/"
     }
 }
