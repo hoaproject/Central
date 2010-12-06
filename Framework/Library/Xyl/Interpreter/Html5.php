@@ -69,11 +69,26 @@ class Hoa_Xyl_Interpreter_Html5 extends Hoa_Xyl_Interpreter {
      * @var Hoa_Xyl_Interpreter_Html5 array
      */
     protected $_rank = array(
-        'yield'    => 'Hoa_Xyl_Interpreter_Common_Yield',
-        'page'     => 'Hoa_Xyl_Interpreter_Html5_Page',
-        'ul'       => 'Hoa_Xyl_Interpreter_Html5_Ul',
-        'li'       => 'Hoa_Xyl_Interpreter_Html5_Li',
-        'section1' => 'Hoa_Xyl_Interpreter_Html5_Section1',
-        'p'        => 'Hoa_Xyl_Interpreter_Html5_P'
+        // Layout.
+        'document'     => 'Hoa_Xyl_Interpreter_Html5_Document',
+        'yield'        => 'Hoa_Xyl_Interpreter_Common_Yield',
+
+        // Section.
+        'section1'     => 'Hoa_Xyl_Interpreter_Html5_Section1',
+        'section2'     => 'Hoa_Xyl_Interpreter_Html5_Section2',
+        'section3'     => 'Hoa_Xyl_Interpreter_Html5_Section3',
+        'section4'     => 'Hoa_Xyl_Interpreter_Html5_Section4',
+        'section5'     => 'Hoa_Xyl_Interpreter_Html5_Section5',
+        'section6'     => 'Hoa_Xyl_Interpreter_Html5_Section6',
+        'navigation'   => 'Hoa_Xyl_Interpreter_Html5_Navigation',
+        'header'       => 'Hoa_Xyl_Interpreter_Html5_Header',
+        'content'      => 'Hoa_Xyl_Interpreter_Html5_Content',
+        'footer'       => 'Hoa_Xyl_Interpreter_Html5_Footer',
+
+        // Grouping content.
+        'p'            => 'Hoa_Xyl_Interpreter_Html5_P',
+        'ulist'        => 'Hoa_Xyl_Interpreter_Html5_Ulist',
+        'olist'        => 'Hoa_Xyl_Interpreter_Html5_Olist',
+        'item'         => 'Hoa_Xyl_Interpreter_Html5_Item'
     );
 }
