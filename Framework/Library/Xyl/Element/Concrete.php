@@ -238,4 +238,43 @@ abstract class Hoa_Xyl_Element_Concrete
      * @return  void
      */
     abstract protected function paint ( Hoa_Stream_Interface_Out $out );
+
+    /**
+     * Get value. If the @bind attribute existss, returns the current data, else
+     * return the abstract element casted as string.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getValue ( Hoa_Stream_Interface_Out $out = null ) {
+
+        if($this->getAbstractElement()->attributeExists('bind'))
+            return $this->getCurrentData();
+
+        if(null === $out || 0 == count($this))
+            return $this->getAbstractElement()->__toString();
+
+        foreach($this as $name => $child)
+            $child->render($out);
+
+        return;
+    }
+
+    /**
+     * Read attributes as a string.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function readAttributesAsString ( ) {
+
+        $out        = null;
+        $attributes = $this->getAbstractElement()->readAttributes();
+        unset($attributes['bind']);
+
+        foreach($attributes as $name => $value)
+            $out .= ' ' . $name . '="' . str_replace('"', '\"', $value) . '"';
+
+        return $out;
+    }
 }
