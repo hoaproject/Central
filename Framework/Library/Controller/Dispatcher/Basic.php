@@ -69,6 +69,7 @@ class Hoa_Controller_Dispatcher_Basic extends Hoa_Controller_Dispatcher {
         $action     = $components['action'];
         $arguments  = array();
         $reflection = null;
+        $method     = strtoupper($this->_parameters->getKeyword($this, 'method'));
 
         if($action instanceof Closure) {
 
