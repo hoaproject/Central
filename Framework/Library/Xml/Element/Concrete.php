@@ -206,7 +206,7 @@ class          Hoa_Xml_Element_Concrete
 
         if(false === $id = self::getAbstractElementId($element))
             throw new Hoa_Xml_Exception(
-                'The concrete element %s has no concrete equivalent.',
+                'The basic element %s has no concrete equivalent.',
                 1, $element->getName());
 
         return self::$_multiton[$id];
