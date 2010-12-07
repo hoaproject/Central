@@ -70,6 +70,10 @@ class Hoa_Reflection_Visitor_Prettyprinter extends Hoa_Visitor_Registry {
             array($this, 'visitParameter')
         );
         $this->addEntry(
+            'Hoa_Reflection_RProperty',
+            array($this, 'visitProperty')
+        );
+        $this->addEntry(
             'Hoa_Reflection_RFunction_RMethod',
             array($this, 'visitMethod')
         );
@@ -128,7 +132,8 @@ class Hoa_Reflection_Visitor_Prettyprinter extends Hoa_Visitor_Registry {
             $out .= '    const ' . $name . ' = ' .
                     var_export($value, true) . ";\n";
 
-        // PROPERTIES!!
+        foreach($element->getProperties() as $name => $property)
+            $out .= $property->accept($this, $handle, $eldnah) . "\n";
 
         foreach($element->getMethods() as $name => $method)
             $out .= $method->accept($this, $handle, $eldnah) . "\n";
@@ -160,6 +165,40 @@ class Hoa_Reflection_Visitor_Prettyprinter extends Hoa_Visitor_Registry {
 
         if(true === $element->isOptional())
             $out .= ' = ' . var_export($element->getDefaultValue(), true);
+
+        return $out;
+    }
+
+    /**
+     * Visit an element.
+     *
+     * @access  public
+     * @param   Hoa_Visitor_Element  $element    Element to visit.
+     * @param   mixed                &$handle    Handle (reference).
+     * @param   mixed                $eldnah     Handle (no reference).
+     * @return  mixed
+     */
+    public function visitProperty ( Hoa_Visitor_Element $element,
+                                    &$handle = null, $eldnah = null) {
+
+        $out = '    ' .
+               str_replace("\n", "\n" . '    ', $element->getComment()) .
+               "\n" . '    ';
+
+        if(true === $element->isPublic())
+            $out .= 'public ';
+        elseif(true === $element->isProtected())
+            $out .= 'protected ';
+        elseif(true === $element->isPrivate())
+            $out .= 'private ';
+
+        if(true === $element->isStatic())
+            $out .= 'static ';
+
+        $out .= '$' . $element->getName();
+
+        if(true === $element->isDefault())
+            $out .= ' = ' . $element->getDefaultValue() . ';';
 
         return $out;
     }
