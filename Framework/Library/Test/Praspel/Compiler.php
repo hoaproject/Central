@@ -388,7 +388,7 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                 array(
                     /*              r    e    t    i    p    ;
                     /* __ */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ),
-                    /* GO */ array('r', 'e', 't',  0 ,  0 ,  0 ),
+                    /* GO */ array('r', 'e', 't', 'i',  0 ,  0 ),
                     /* EX */ array( 2 ,  2 ,  0 ,  2 ,  0 , 'D'),
                     /* LI */ array( 0 ,  0 ,  3 ,  0 ,  0 , 'l'),
                     /* IN */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 )
@@ -521,6 +521,11 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
             // @throwable
             case 't':
                 $this->_current = $this->_praspel->clause('throwable');
+              break;
+
+            // @invariant
+            case 'i':
+                $this->_current = $this->_praspel->clause('invariant');
               break;
 
             // variable:

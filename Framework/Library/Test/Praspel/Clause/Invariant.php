@@ -38,11 +38,6 @@
 import('Test.Praspel.Exception');
 
 /**
- * Hoa_Test_Praspel_Clause
- */
-import('Test.Praspel.Clause') and load();
-
-/**
  * Hoa_Test_Praspel_Clause_Contract
  */
 import('Test.Praspel.Clause.Contract') and load();
@@ -61,24 +56,37 @@ import('Test.Praspel.Clause.Contract') and load();
  * @subpackage  Hoa_Test_Praspel_Clause_Invariant
  */
 
-class Hoa_Test_Praspel_Clause_Invariant extends    Hoa_Test_Praspel_Clause_Contract
-                                        implements Hoa_Test_Praspel_Clause {
+class Hoa_Test_Praspel_Clause_Invariant extends Hoa_Test_Praspel_Clause_Contract {
 
     /**
-     * Declare a free variable.
+     * Declare a variable, or get it.
      *
      * @access  public
-     * @param   string  $name    Free variable name.
-     * @return  Hoa_Test_Praspel_FreeVariable
-     * @throws  Hoa_Test_Praspel_Exception
+     * @param   string  $name    Variable name.
+     * @return  Hoa_Test_Praspel_Variable
      */
-    public function declareFreeVariable ( $name ) {
+    public function variable ( $name ) {
 
         if($name[0] == '\\')
             throw new Hoa_Test_Praspel_Exception(
-                'Constructors are not allowed in an @invariant clause, given %s.',
+                'Constructors are not allowed in a @requires clause, given %s.',
                 0, $name);
 
-        parent::declareFreeVariable($name);
+        return parent::variable($name);
+    }
+
+    /**
+     * Use an external variable.
+     *
+     * @access  public
+     * @param   string                     $name        Name.
+     * @param   Hoa_Test_Praspel_Variable  $variable    Variable.
+     * @return  void
+     */
+    public function useVariable ( $name, Hoa_Test_Praspel_Variable $variable ) {
+
+        $this->_variables[$name] = $variable;
+
+        return;
     }
 }

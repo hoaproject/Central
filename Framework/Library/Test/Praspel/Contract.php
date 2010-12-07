@@ -53,11 +53,6 @@ import('Test.Praspel.Clause.Ensures');
 import('Test.Praspel.Clause.Invariant');
 
 /**
- * Hoa_Test_Praspel_Clause_Predicate
- */
-import('Test.Praspel.Clause.Predicate');
-
-/**
  * Hoa_Test_Praspel_Clause_Requires
  */
 import('Test.Praspel.Clause.Requires');
@@ -224,11 +219,6 @@ class Hoa_Test_Praspel_Contract {
 
             case 'invariant':
                 $clause = new Hoa_Test_Praspel_Clause_Invariant($this);
-              break;
-
-            case 'predicate':
-                throw new Hoa_Test_Praspel_Exception(
-                    'The predicate clause is not yet supported.', 0);
               break;
 
             case 'requires':
@@ -453,6 +443,59 @@ class Hoa_Test_Praspel_Contract {
     }
 
     /**
+     * Verify invariants.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function verifyInvariants ( Array $invariants ) {
+
+        $invariant     = $this->getClause('invariant');
+        $log           = array(
+            'type'      => Hoa_Test_Praspel::LOG_TYPE_INVARIANT,
+            'class'     => $this->getClass(),
+            'method'    => $this->getMethod(),
+            'arguments' => $this->getArguments(),
+            'result'    => $this->getResult(),
+            'exception' => $this->getException(),
+            'file'      => $this->getFile(),
+            'startLine' => $this->getStartLine(),
+            'endLine'   => $this->getEndLine(),
+            'status'    => FAILED,
+            'depth'     => 0
+        );
+
+        foreach($invariant->getVariables() as $variable) {
+
+            $out   = false;
+            $value = $invariants[$variable->getName()];
+
+            foreach($variable->getDomains() as $domain)
+                $out = $out || $domain->predicate($value);
+
+            if(false === $out) {
+
+                $this->getLog()->log(
+                    'The invariant ' . $variable->getName() . ' failed.',
+                    Hoa_Log::TEST,
+                    $log
+                );
+
+                return FAILED;
+            }
+        }
+
+        $log['status'] = SUCCEED;
+        $this->getLog()->log(
+            'All invariants succeed.',
+            Hoa_Log::TEST,
+            $log
+        );
+
+        return SUCCEED;
+    }
+
+    /**
      * Get the current depth.
      *
      * @access  public
@@ -487,7 +530,7 @@ class Hoa_Test_Praspel_Contract {
 
         if(false === $this->clauseExists($name))
             throw new Hoa_Test_Praspel_Exception(
-                'Clause %s is not defined.', 1, $name);
+                'Clause %s is not defined.', 2, $name);
 
         return $this->_clauses[$name];
     }

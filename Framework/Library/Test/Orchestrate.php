@@ -318,6 +318,64 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
 
                 $class = new Hoa_Reflection_RClass($classname);
 
+                // Invariants.
+                $inv   = new Hoa_Reflection_Fragment_RMethod('__hoa_invariants');
+                $invG  = new Hoa_Reflection_Fragment_RMethod('__hoa_getInvariantsValues');
+                $invBd = 'false and' . "\n";
+                $invCc = null;
+                $invT  = '    ';
+
+                if(false !== $class->getParentClass()) {
+
+                    $invBg = 'return array_merge(' . "\n" .
+                            '    parent::__hoa_getInvariantsValues(),' . "\n" .
+                            '    array(' . "\n";
+                    $invT  = '        ';
+                }
+                else
+                    $invBg = 'return array(' . "\n";
+
+                foreach($class->getProperties() as $property) {
+
+                    $invCc .= $property->getCommentContent() . "\n";
+                    $invBg .= $invT . '\'' . $property->getName() . '\' => ' .
+                              (false === $property->isStatic()
+                                   ? '$this->'
+                                   : 'self::$') .
+                              $property->getName() . ',' . "\n";
+                }
+
+                if(false !== $class->getParentClass())
+                    $invBg .= '    )' . "\n";
+
+                $invBg .= ');';
+
+                $inv->importFragment(
+                    new Hoa_Reflection_Fragment_RParameter('contract')
+                );
+                $inv->setCommentContent('Invariants.');
+                $this->_compiler->compile($invCc);
+                $inv->setBody(
+                    '        ' .
+                    str_replace(
+                        "\n",
+                        "\n" . '        ',
+                        $invBd . $this->_compiler->getRoot()->__toString()
+                    ) .
+                    (false !== $class->getParentClass()
+                        ? "\n" . '        parent::__hoa_invariants($contract);' . "\n"
+                        : '') . "\n" .
+                    '        return;'
+                );
+                $inv->setVisibility(_protected);
+
+                $invG->setCommentContent('Get all invariants values.');
+                $invG->setBody(
+                    '        ' .
+                    str_replace("\n", "\n" . '        ', $invBg)
+                );
+                $invG->setVisibility(_protected);
+
                 foreach($class->getMethods() as $method) {
 
                     $name         = $method->getName();
@@ -343,7 +401,7 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
 
                     // Contract.
                     $contract = $this->_compiler->getRoot()->__toString();
-                    $contract = str_replace("\n", "\n        ", $contract);
+                    $contract = str_replace("\n", "\n" . '        ', $contract);
 
                     $cont->setCommentContent('Create contract of the ' . $name . ' method');
                     $cont->setBody(
@@ -356,6 +414,7 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                         '        $startLine = '   . $method->getStartLine() . ';' . "\n" .
                         '        $endLine   = '   . $method->getEndLine() . ';' . "\n" .
                         '        ' . $contract . "\n" .
+                        '        $this->__hoa_invariants($contract); '. "\n" .
                         '        Hoa_Test_Praspel::getInstance()->addContract($contract);' . "\n\n" .
                         '        return;'
                     );
@@ -417,8 +476,11 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                     );
                     $pre->setBody(
                         '        $praspel  = Hoa_Test_Praspel::getInstance();' . "\n" .
-                        '        $contract = $praspel->getContract(\'' . $id . '\');' . "\n" .
-                        '        return $contract->verifyPreCondition(' . $p . ');' 
+                        '        $contract = $praspel->getContract(\'' . $id . '\');' . "\n\n" .
+                        '        return    $contract->verifyInvariants(' . "\n" .
+                        '                      $this->__hoa_getInvariantsValues()' . "\n" .
+                        '                  )' . "\n" .
+                        '               && $contract->verifyPreCondition(' . $p . ');' 
                     );
                     $pre->setVisibility(_public);
                     $class->importFragment($pre);
@@ -431,7 +493,10 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                     $post->setBody(
                         '        $praspel  = Hoa_Test_Praspel::getInstance();' . "\n" .
                         '        $contract = $praspel->getContract(\'' . $id . '\');' . "\n\n" .
-                        '        return $contract->verifyPostCondition(' . $pp . ');'
+                        '        return    $contract->verifyPostCondition(' . $pp . ')' . "\n" .
+                        '               && $contract->verifyInvariants(' . "\n" .
+                        '                      $this->__hoa_getInvariantsValues()' . "\n" .
+                        '                  );'
                     );
                     $post->setVisibility(_public);
                     $class->importFragment($post);
@@ -450,6 +515,8 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                     $class->importFragment($excep);
                 }
 
+                $class->importFragment($inv);
+                $class->importFragment($invG);
                 $class->importFragment($this->_magicSetter);
                 $class->importFragment($this->_magicGetter);
                 $class->importFragment($this->_magicCaller);
