@@ -99,7 +99,7 @@ abstract class Hoa_Reflection_RFunction_RAbstract
     protected $_name             = null;
 
     /**
-     * Whether parameteres were already transformed or not.
+     * Whether parameters were already transformed or not.
      *
      * @var Hoa_Reflection_RFunction_RAbstract bool
      */
