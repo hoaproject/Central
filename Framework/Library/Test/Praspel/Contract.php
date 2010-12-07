@@ -530,7 +530,7 @@ class Hoa_Test_Praspel_Contract {
 
         if(false === $this->clauseExists($name))
             throw new Hoa_Test_Praspel_Exception(
-                'Clause %s is not defined.', 2, $name);
+                'Clause %s is not defined.', 1, $name);
 
         return $this->_clauses[$name];
     }
