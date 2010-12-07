@@ -1,7 +1,7 @@
 <?php
 
 class       Hoa_Xyl_Interpreter_Html5_Section6
-    extends Hoa_Xyl_Interpreter_Html5_Generic {
+    extends Hoa_Xyl_Interpreter_Html5_Section {
 
-    protected $_map = 'h6';
+    protected $_n = 6;
 }
