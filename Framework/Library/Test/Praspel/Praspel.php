@@ -68,6 +68,7 @@ class Hoa_Test_Praspel {
     const LOG_TYPE_PRE       = 0;
     const LOG_TYPE_POST      = 1;
     const LOG_TYPE_EXCEPTION = 2;
+    const LOG_TYPE_INVARIANT = 3;
 
     /**
      * Registry of contracts.
