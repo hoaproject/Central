@@ -72,6 +72,20 @@ class Out extends Hoa_Php_Io_Out {
         $args = null;
         $res  = null;
 
+        if(Hoa_Test_Praspel::LOG_TYPE_INVARIANT === $_['type']) {
+
+           if(SUCCEED === $_['status'])
+               return;
+
+            $this->self->status(
+                str_repeat('  ', $_['depth']) . $_['class'] . ': ' .
+                $this->self->stylize($_['message'], 'info'),
+                $_['status']
+            );
+
+            return;
+        }
+
         foreach($_['arguments'] as $argument) {
 
             if(null !== $args)
@@ -94,6 +108,8 @@ class Out extends Hoa_Php_Io_Out {
             $res . ': ' . $this->self->stylize($_['message'], 'info'),
             $_['status']
         );
+
+        return;
     }
 }
 
