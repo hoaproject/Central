@@ -38,23 +38,12 @@
  * @version     0.1
  */
 
-/**
- * Set inlucde path.
- */
-ini_set('include_path', dirname(dirname(dirname(__FILE__))) .
-                        '/Framework/Core/' .
-                        PATH_SEPARATOR .
-                        get_include_path());
-
-/**
- * Set the default timezone.
- */
 ini_set('date.timezone', 'Europe/Paris');
 
 /**
  * Hoa_Core
  */
-require_once 'Core.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/Framework/Core/Core.php';
 
 /**
  * Add some components the the hoa://'s protocol.
