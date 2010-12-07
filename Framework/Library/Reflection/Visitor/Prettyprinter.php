@@ -119,8 +119,8 @@ class Hoa_Reflection_Visitor_Prettyprinter extends Hoa_Visitor_Registry {
         $parent      = $element->getParentClass();
         $interfaces  = $element->getInterfaceNames();
 
-        if(!empty($parent))
-            $out .= 'extends ' . $parent . ' ';
+        if(false !== $parent)
+            $out .= 'extends ' . $parent->getName() . ' ';
 
         if(!empty($interfaces))
             $out .= 'implements ' . implode($interface, ', ') . ' ';
