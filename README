@@ -15,7 +15,7 @@ Summary
   New features in 0.5.5b  .................................................   95 
   Installation  ...........................................................  109 
   Project  ................................................................  115
-    Site, manuals, download, communauty etc.  .............................  118
+    Site, manuals, download, community etc.  ..............................  118
     License  ..............................................................  126
 
 
@@ -28,7 +28,7 @@ Framework   0.x  series  since  the  0.3.7b  version.  Please,  read  with  much
 attention special notices.
 
 NOTICE:  This  version  is just a reference for a research report written at the
-LIFC  (Laboratoire Informatique de Franche-Comté), where Hoa_Test is developped.
+LIFC  (Laboratoire Informatique de Franche-Comté), where Hoa_Test is developed.
 
 
 Release informations
@@ -117,7 +117,7 @@ Please, read /INSTALL.
 Project
 -------
 
-  Site, manuals, download, communauty etc.
+  Site, manuals, download, community etc.
 
 Hoa Framework web site should be found at the following address:
   <http://hoa-project.net>
