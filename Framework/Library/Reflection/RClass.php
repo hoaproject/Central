@@ -43,6 +43,11 @@ import('Reflection.Exception');
 import('Reflection.Wrapper');
 
 /**
+ * Hoa_Reflection_RProperty
+ */
+import('Reflection.RProperty');
+
+/**
  * Hoa_Reflection_RFunction_RMethod
  */
 import('Reflection.RFunction.RMethod');
@@ -73,30 +78,44 @@ class          Hoa_Reflection_RClass
     /**
      * Class file.
      *
-     * @var Hoa_Reflection_Rclass string
+     * @var Hoa_Reflection_RClass string
      */
-    protected $_file    = null;
+    protected $_file       = null;
 
     /**
      * Class name.
      *
-     * @var Hoa_Reflection_Rclass string
+     * @var Hoa_Reflection_RClass string
      */
-    protected $_name    = null;
+    protected $_name       = null;
 
     /**
      * Whether methods were already transformed or not.
      *
-     * @var Hoa_Reflection_Rclass bool
+     * @var Hoa_Reflection_RClass bool
      */
-    protected $_firstM  = true;
+    protected $_firstM     = true;
+
+    /**
+     * Whether properties were already transformed or not.
+     *
+     * @var Hoa_Reflection_RProperty bool
+     */
+    protected $_firstP     = true;
 
     /**
      * All methods.
      *
-     * @var Hoa_Reflection_Rclass array
+     * @var Hoa_Reflection_RClass array
      */
-    protected $_methods = array();
+    protected $_methods    = array();
+
+    /**
+     * All properties.
+     *
+     * @var Hoa_Reflection_RProperty array
+     */
+    protected $_properties = array();
 
 
 
@@ -142,6 +161,31 @@ class          Hoa_Reflection_RClass
     public function getName ( ) {
 
         return $this->_name;
+    }
+
+    /**
+     * Get all properties.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getProperties ( ) {
+
+        if(false === $this->_firstP)
+            return $this->_properties;
+
+        $handle = null;
+
+        foreach($this->getWrapped()->getProperties() as $i => $property) {
+
+            $handle = new Hoa_Reflection_RProperty($property);
+            $handle->_setDefaultValue($this->getFileName());
+            $this->_properties[] = $handle;
+        }
+
+        $this->_firstP = false;
+
+        return $this->_properties;
     }
 
     /**
