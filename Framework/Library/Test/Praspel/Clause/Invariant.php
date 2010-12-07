@@ -74,19 +74,4 @@ class Hoa_Test_Praspel_Clause_Invariant extends Hoa_Test_Praspel_Clause_Contract
 
         return parent::variable($name);
     }
-
-    /**
-     * Use an external variable.
-     *
-     * @access  public
-     * @param   string                     $name        Name.
-     * @param   Hoa_Test_Praspel_Variable  $variable    Variable.
-     * @return  void
-     */
-    public function useVariable ( $name, Hoa_Test_Praspel_Variable $variable ) {
-
-        $this->_variables[$name] = $variable;
-
-        return;
-    }
 }
