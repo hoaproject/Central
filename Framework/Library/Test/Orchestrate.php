@@ -574,7 +574,10 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                     $excep->setBody(
                         '        $praspel  = Hoa_Test_Praspel::getInstance();' . "\n" .
                         '        $contract = $praspel->getContract(\'' . $id . '\');' . "\n\n" .
-                        '        return $contract->verifyException($exception);'
+                        '        return    $contract->verifyException($exception)' . "\n" .
+                        '               && $contract->verifyInvariants(' . "\n" .
+                        '                      $this->__hoa_getInvariantsValues()' . "\n" .
+                        '                  );'
                     );
                     $excep->setVisibility(_public);
                     $class->importFragment($excep);
