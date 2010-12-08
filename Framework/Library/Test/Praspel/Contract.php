@@ -75,7 +75,7 @@ import('Log.~');
 /**
  * Class Hoa_Test_Praspel.
  *
- * .
+ * Root of a Praspel contract.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
@@ -190,9 +190,6 @@ class Hoa_Test_Praspel_Contract {
             Hoa_Test_Praspel::LOG_CHANNEL
         );
 
-        $this->clause('requires');
-        $this->clause('ensures');
-
         return;
     }
 
@@ -263,11 +260,7 @@ class Hoa_Test_Praspel_Contract {
      */
     public function verifyPreCondition ( ) {
 
-        $this->_arguments = func_get_args();
-        $i                = 0;
-        $out              = true;
-        $requires         = $this->getClause('requires');
-        $log              = array(
+        $log = array(
             'type'      => Hoa_Test_Praspel::LOG_TYPE_PRE,
             'class'     => $this->getClass(),
             'method'    => $this->getMethod(),
@@ -280,6 +273,23 @@ class Hoa_Test_Praspel_Contract {
             'status'    => FAILED,
             'depth'     => ++self::$_depth
         );
+
+        if(false === $this->clauseExists('requires')) {
+
+            $log['status'] = SUCCEED;
+            $this->getLog()->log(
+                'There is no pre-condition, so it succeed.',
+                Hoa_Log::TEST,
+                $log
+            );
+
+            return SUCCEED;
+        }
+
+        $this->_arguments = func_get_args();
+        $i                = 0;
+        $out              = true;
+        $requires         = $this->getClause('requires');
 
         foreach($requires->getVariables() as $variable) {
 
@@ -326,9 +336,6 @@ class Hoa_Test_Praspel_Contract {
 
         $args          = func_get_args();
         $this->_result = array_shift($args);
-        $i             = 0;
-        $out           = true;
-        $ensures       = $this->getClause('ensures');
         $log           = array(
             'type'      => Hoa_Test_Praspel::LOG_TYPE_POST,
             'class'     => $this->getClass(),
@@ -342,6 +349,22 @@ class Hoa_Test_Praspel_Contract {
             'status'    => FAILED,
             'depth'     => self::$_depth--
         );
+
+        if(false === $this->clauseExists('ensures')) {
+
+            $log['status'] = SUCCEED;
+            $this->getLog()->log(
+                'There is no post-condition, so it succeed.',
+                Hoa_Log::TEST,
+                $log
+            );
+
+            return SUCCEED;
+        }
+
+        $i       = 0;
+        $out     = true;
+        $ensures = $this->getClause('ensures');
 
         foreach($ensures->getVariables() as $variable) {
 
@@ -450,8 +473,7 @@ class Hoa_Test_Praspel_Contract {
      */
     public function verifyInvariants ( Array $invariants ) {
 
-        $invariant     = $this->getClause('invariant');
-        $log           = array(
+        $log = array(
             'type'      => Hoa_Test_Praspel::LOG_TYPE_INVARIANT,
             'class'     => $this->getClass(),
             'method'    => $this->getMethod(),
@@ -464,6 +486,20 @@ class Hoa_Test_Praspel_Contract {
             'status'    => FAILED,
             'depth'     => 0
         );
+
+        if(false === $this->clauseExists('ensures')) {
+
+            $log['status'] = SUCCEED;
+            $this->getLog()->log(
+                'There is no invariant, so it succeed.',
+                Hoa_Log::TEST,
+                $log
+            );
+
+            return SUCCEED;
+        }
+
+        $invariant = $this->getClause('invariant');
 
         foreach($invariant->getVariables() as $variable) {
 
