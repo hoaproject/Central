@@ -95,6 +95,11 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
      */
     protected $_parameters    = null;
 
+    /**
+     * Praspel' compiler.
+     *
+     * @var Hoa_Test_Praspel_Compiler object
+     */
     protected $_compiler      = null;
 
     /**
@@ -104,8 +109,25 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
      */
     protected $_prettyPrinter = null;
 
+    /**
+     * Temporize magic setter.
+     *
+     * @var Hoa_Reflection_Fragment_RMethod object
+     */
     private $_magicSetter     = null;
+
+    /**
+     * Temporize magic getter.
+     *
+     * @var Hoa_Reflection_Fragment_RMethod object
+     */
     private $_magicGetter     = null;
+
+    /**
+     * Temporize magic caller.
+     *
+     * @var Hoa_Reflection_Fragment_RMethod object
+     */
     private $_magicCaller     = null;
 
 
@@ -130,7 +152,7 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
      * Set many parameters to a class.
      *
      * @access  public
-     * @param   array   $in      Parameters to set.
+     * @param   array   $in    Parameters to set.
      * @return  void
      * @throw   Hoa_Exception
      */
@@ -169,7 +191,7 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
      * Get a parameter from a class.
      *
      * @access  public
-     * @param   string  $key      Key.
+     * @param   string  $key    Key.
      * @return  mixed
      * @throw   Hoa_Exception
      */
@@ -192,6 +214,13 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
         return $this->_parameters->getFormattedParameter($this, $key);
     }
 
+    /**
+     * Set pretty printer.
+     *
+     * @access  public
+     * @param   object  $printer    Pretty-printer.
+     * @return  object
+     */
     public function setPrettyPrinter ( $printer ) {
 
         $old                  = $this->_prettyPrinter;
@@ -200,11 +229,23 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
         return $old;
     }
 
+    /**
+     * Get pretty printer.
+     *
+     * @access  public
+     * @return  object
+     */
     public function getPrettyPrinter ( ) {
 
         return $this->_prettyPrinter;
     }
 
+    /**
+     * Compute, i.e. start to orchestrate!
+     *
+     * @access  public
+     * @return  void
+     */
     public function compute ( ) {
 
         $finder = new Hoa_File_Finder(
@@ -218,6 +259,13 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
         return;
     }
 
+    /**
+     * Prepare the incubator.
+     *
+     * @access  protected
+     * @param   Hoa_File_Finder  $finder    Finder.
+     * @return  void
+     */
     protected function incubator ( Hoa_File_Finder $finder ) {
 
         $incubator = $this->getFormattedParameter('incubator');
@@ -230,6 +278,13 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
         return;
     }
 
+    /**
+     * Prepare the instrumentation.
+     *
+     * @access  protected
+     * @param   Hoa_File_Finder  $finder    Finder.
+     * @return  void
+     */
     protected function instrumentation ( Hoa_File_Finder $finder ) {
 
         $this->_magicSetter = new Hoa_Reflection_Fragment_RMethod(
@@ -283,6 +338,16 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
         return $this->_instrumentation($finder, $from, $to, $incubator);
     }
 
+    /**
+     * Recursive instrumentation.
+     *
+     * @access  private
+     * @param   Hoa_File_Finder  $finder       Finder.
+     * @param   string           $from         From.
+     * @param   string           $to           To.
+     * @param   string           $incubator    Incubator path.
+     * @return  void
+     */
     private function _instrumentation ( Hoa_File_Finder $finder, $from, $to,
                                         $incubator ) {
 
