@@ -45,7 +45,7 @@ import('Test.Praspel.Contract');
 /**
  * Class Hoa_Test_Praspel.
  *
- * .
+ * Useful to manage different contracts, it's like a multiton of contracts.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
@@ -65,9 +65,32 @@ class Hoa_Test_Praspel {
      */
     const LOG_CHANNEL = 'Test/Praspel';
 
+    /**
+     * Log type: pre-condition.
+     *
+     * @const int
+     */
     const LOG_TYPE_PRE       = 0;
+
+    /**
+     * Log type: post-condition.
+     *
+     * @const int
+     */
     const LOG_TYPE_POST      = 1;
+
+    /**
+     * Log type: exceptional condition.
+     *
+     * @const int
+     */
     const LOG_TYPE_EXCEPTION = 2;
+
+    /**
+     * Log type: invariant.
+     *
+     * @const int
+     */
     const LOG_TYPE_INVARIANT = 3;
 
     /**

@@ -45,7 +45,7 @@ import('Test.Praspel.Variable') and load();
 /**
  * Class Hoa_Test_Praspel_Constructor_Old.
  *
- * .
+ * Represents the \old(e) constructor, the value of e in pre-state.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.

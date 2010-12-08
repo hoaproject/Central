@@ -45,7 +45,7 @@ import('Test.Praspel.Variable') and load();
 /**
  * Class Hoa_Test_Praspel_Constructor_Result.
  *
- * .
+ * Represents the \result constructor, i.e. the result of the method.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
