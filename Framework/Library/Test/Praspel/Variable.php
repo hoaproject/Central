@@ -50,7 +50,7 @@ import('Test.Urg.~');
 /**
  * Class Hoa_Test_Praspel_Variable.
  *
- * .
+ * Represents a variable.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.

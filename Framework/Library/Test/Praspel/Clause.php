@@ -40,7 +40,7 @@ import('Test.Praspel.Exception');
 /**
  * Interface Hoa_Test_Praspel_Clause.
  *
- * .
+ * Represents clauses.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.

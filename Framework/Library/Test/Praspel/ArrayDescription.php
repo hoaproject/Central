@@ -45,7 +45,7 @@ import('Test.Praspel.DomainDisjunction') and load();
 /**
  * Class Hoa_Test_Praspel_ArrayDescription.
  *
- * .
+ * Represents an array description.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
@@ -59,6 +59,11 @@ import('Test.Praspel.DomainDisjunction') and load();
 class       Hoa_Test_Praspel_ArrayDescription
     extends Hoa_Test_Praspel_DomainDisjunction {
 
+    /**
+     * Parent (here: domain).
+     *
+     * @var Hoa_Test_Praspel_Domain
+     */
     protected $_parent = null;
 
     /**
@@ -73,22 +78,60 @@ class       Hoa_Test_Praspel_ArrayDescription
      */
     private $_state    = 0;
 
+    /**
+     * Current key.
+     *
+     * @var Hoa_Test_Praspel_DomainDisjunction
+     */
     protected $_key   = null;
+
+    /**
+     * Current value.
+     *
+     * @var Hoa_Test_Praspel_DomainDisjunction
+     */
     protected $_value = null;
+
+    /**
+     * Array of keys/values.
+     *
+     * @var Hoa_Test_Praspel_ArrayDescription array
+     */
     protected $_array = array();
 
+    /**
+     * Go forward to set the next key/value pair.
+     *
+     * @var Hoa_Test_Praspel_ArrayDescription object
+     */
     public $_comma = null;
 
 
 
+    /**
+     * Build an array description.
+     *
+     * @access  public
+     * @param   Hoa_Test_Praspel_Domain  $parent    Parent (here: domain).
+     * @return  void
+     */
     public function __construct ( Hoa_Test_Praspel_Domain $parent ) {
 
         parent::__construct();
 
         $this->_comma = $this;
         $this->setParent($parent);
+
+        return;
     }
 
+    /**
+     * Start a key declaration.
+     *
+     * @access  public
+     * @return  Hoa_Test_Praspel_ArrayDescription
+     * @throws  Hoa_Test_Praspel_Exception
+     */
     public function from ( ) {
 
         $this->_to();
@@ -103,6 +146,12 @@ class       Hoa_Test_Praspel_ArrayDescription
         return $this;
     }
 
+    /**
+     * Close a key declaration.
+     *
+     * @access  protected
+     * @return  void
+     */
     protected function _from ( ) {
 
         $this->_ok();
@@ -113,6 +162,12 @@ class       Hoa_Test_Praspel_ArrayDescription
         return;
     }
 
+    /**
+     * Start a value declaration.
+     *
+     * @access  public
+     * @return  Hoa_Test_Praspel_ArrayDescription
+     */
     public function to ( ) {
 
         $this->_from();
@@ -120,6 +175,12 @@ class       Hoa_Test_Praspel_ArrayDescription
         return $this;
     }
 
+    /**
+     * Close a value declaration.
+     *
+     * @access  protected
+     * @return  void
+     */
     protected function _to ( ) {
 
         if(empty($this->_domains))
@@ -137,6 +198,12 @@ class       Hoa_Test_Praspel_ArrayDescription
         return;
     }
 
+    /**
+     * Close an array description.
+     *
+     * @access  public
+     * @return  Hoa_Test_Praspel_Domain
+     */
     public function end ( ) {
 
         $this->_to();
@@ -149,6 +216,13 @@ class       Hoa_Test_Praspel_ArrayDescription
         return $this->_parent;
     }
 
+    /**
+     * Set the parent (here: domain).
+     *
+     * @access  protected
+     * @param   Hoa_Test_Praspel_Domain  $parent    Parent (here: domain).
+     * @return  Hoa_Test_Praspel_Domain
+     */
     protected function setParent ( Hoa_Test_Praspel_Domain $parent ) {
 
         $old           = $this->_parent;
@@ -157,11 +231,23 @@ class       Hoa_Test_Praspel_ArrayDescription
         return $old;
     }
 
+    /**
+     * Get the parent (here: domain).
+     *
+     * @access  public
+     * @return  Hoa_Test_Praspel_Domain
+     */
     public function getParent ( ) {
 
         return $this->_parent;
     }
 
+    /**
+     * Get the fresh built array.
+     *
+     * @access  public
+     * @return  array
+     */
     public function getArray ( ) {
 
         return $this->_array;

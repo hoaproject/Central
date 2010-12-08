@@ -45,7 +45,7 @@ import('Test.Praspel.ArrayDescription');
 /**
  * Class Hoa_Test_Praspel_Domain.
  *
- * .
+ * Represents a domain.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
@@ -59,32 +59,32 @@ import('Test.Praspel.ArrayDescription');
 class Hoa_Test_Praspel_Domain {
 
     /**
-     * Parent (here: variable or edomain).
+     * Parent (here: variable or domain).
      *
      * @var Hoa_Test_Praspel_Variable object
      */
-    protected $_parent        = null;
+    protected $_parent       = null;
 
     /**
      * Domain.
      *
      * @var Hoa_Test_Urg_Type_Interface_Type object
      */
-    protected $_domain        = null;
+    protected $_domain       = null;
 
     /**
      * Type's name.
      *
      * @var Hoa_Test_Praspel_Domain string
      */
-    protected $_name          = null;
+    protected $_name         = null;
 
     /**
      * Arguments.
      *
      * @var Hoa_Test_Praspel_Domain array
      */
-    protected $_arguments     = array();
+    protected $_arguments    = array();
 
     /**
      * Current defining argument.
@@ -100,7 +100,7 @@ class Hoa_Test_Praspel_Domain {
      *
      * @var Hoa_Test_Praspel_Domain object
      */
-    public $_comma            = null;
+    public $_comma           = null;
 
 
 
@@ -137,7 +137,10 @@ class Hoa_Test_Praspel_Domain {
     }
 
     /**
+     * Add an array argument to the current defining domain.
      *
+     * @access  public
+     * @return  Hoa_Test_Praspel_ArrayDescription
      */
     public function withArray ( ) {
 
@@ -148,7 +151,7 @@ class Hoa_Test_Praspel_Domain {
     }
 
     /**
-     * Add an argument, as a domain, to the current defining domain.
+     * Add a domain argument to the current defining domain.
      *
      * @access  public
      * @param   string  $name    Domain name.
@@ -218,7 +221,7 @@ class Hoa_Test_Praspel_Domain {
     }
 
     /**
-     * Get the found edomain.
+     * Get the found domain.
      *
      * @access  public
      * @return  Hoa_Test_Urg_Type_Interface_Type

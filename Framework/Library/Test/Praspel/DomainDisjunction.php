@@ -45,7 +45,7 @@ import('Test.Praspel.Domain') and load();
 /**
  * Class Hoa_Test_Praspel_DomainDisjunction.
  *
- * .
+ * Represent a domains disjunction.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
@@ -80,7 +80,9 @@ abstract class Hoa_Test_Praspel_DomainDisjunction {
     public $_or         = null;
 
     /**
-     * 
+     * Prefix of domain.
+     *
+     * @var Hoa_Test_Praspel_DomainDisjunction int
      */
     protected $_i       = 0;
 
