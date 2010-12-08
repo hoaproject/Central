@@ -75,7 +75,7 @@ import('Test.Praspel.Compiler');
 /**
  * Class Hoa_Test_Orchestrate.
  *
- * .
+ * Orchestrate the repository and the code.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
