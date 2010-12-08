@@ -103,7 +103,7 @@ class Out extends Hoa_Php_Io_Out {
             $res = ' -> ' . var_export($_['result'], true);
 
         $this->self->status(
-            str_repeat('  ', $_['depth']) .
+            str_repeat('  ', max(0, $_['depth'])) .
             $_['class'] . '::' . $_['method'] . '(' . $args . ')' .
             $res . ': ' . $this->self->stylize($_['message'], 'info'),
             $_['status']
