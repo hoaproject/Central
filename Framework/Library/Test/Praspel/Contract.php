@@ -492,7 +492,7 @@ class Hoa_Test_Praspel_Contract implements Hoa_Visitor_Element {
             'depth'     => 0
         );
 
-        if(false === $this->clauseExists('ensures')) {
+        if(false === $this->clauseExists('invariant')) {
 
             $log['status'] = SUCCEED;
             $this->getLog()->log(
