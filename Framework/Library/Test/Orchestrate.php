@@ -73,6 +73,11 @@ import('Reflection.Visitor.Prettyprinter');
 import('Test.Praspel.Compiler');
 
 /**
+ * Hoa_Test_Praspel_Visitor_Php
+ */
+import('Test.Praspel.Visitor.Php');
+
+/**
  * Class Hoa_Test_Orchestrate.
  *
  * Orchestrate the repository and the code.
@@ -425,7 +430,9 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                     str_replace(
                         "\n",
                         "\n" . '        ',
-                        $invBd . $this->_compiler->getRoot()->__toString()
+                        $invBd . $this->_compiler->getResult()->accept(
+                            new Hoa_Test_Praspel_Visitor_Php()
+                        )
                     ) .
                     (false !== $class->getParentClass()
                         ? "\n" . '        parent::__hoa_invariants($contract);' . "\n"
@@ -465,7 +472,9 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
 
 
                     // Contract.
-                    $contract = $this->_compiler->getRoot()->__toString();
+                    $contract = $this->_compiler->getResult()->accept(
+                        new Hoa_Test_Praspel_Visitor_Php()
+                    );
                     $contract = str_replace("\n", "\n" . '        ', $contract);
 
                     $cont->setCommentContent('Create contract of the ' . $name . ' method');
