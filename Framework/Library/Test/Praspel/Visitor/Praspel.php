@@ -172,11 +172,11 @@ class Hoa_Test_Praspel_Visitor_Praspel extends Hoa_Visitor_Registry {
     /**
      * Format arguments to produce a Praspel string.
      *
-     * @access  private
-     * @param   array    $arguments    Arguments to format.
+     * @access  protected
+     * @param   array      $arguments    Arguments to format.
      * @return  array
      */
-    private function formatArguments ( Array $arguments ) {
+    protected function formatArguments ( Array $arguments ) {
 
         $out = array();
 

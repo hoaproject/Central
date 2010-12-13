@@ -210,11 +210,11 @@ class Hoa_Test_Praspel_Visitor_Php extends Hoa_Visitor_Registry {
     /**
      * Format arguments to produce a string.
      *
-     * @access  private
-     * @param   array    $arguments    Arguments to format.
+     * @access  protected
+     * @param   array      $arguments    Arguments to format.
      * @return  array
      */
-    private function formatArguments ( Array $arguments, $f ) {
+    protected function formatArguments ( Array $arguments, $f ) {
 
         static $d = 1;
 
