@@ -81,27 +81,27 @@ and
 /**
  * Hoa_Exception
  */
-require_once 'Exception.php';
+require_once dirname(__FILE__) . DS .'Exception.php';
 
 /**
  * Hoa_Core_Parameter
  */
-require_once 'Parameter.php';
+require_once dirname(__FILE__) . DS .'Parameter.php';
 
 /**
  * Hoa_Core_Protocol
  */
-require_once 'Protocol.php';
+require_once dirname(__FILE__) . DS .'Protocol.php';
 
 /**
  * Hoa_Core_Data
  */
-require_once 'Data.php';
+require_once dirname(__FILE__) . DS .'Data.php';
 
 /**
  * Hoa_Core_Event
  */
-require_once 'Event.php';
+require_once dirname(__FILE__) . DS .'Event.php';
 
 
 /**
