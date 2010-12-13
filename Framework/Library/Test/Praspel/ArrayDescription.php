@@ -81,14 +81,14 @@ class       Hoa_Test_Praspel_ArrayDescription
     /**
      * Current key.
      *
-     * @var Hoa_Test_Praspel_DomainDisjunction
+     * @var Hoa_Test_Praspel_DomainDisjunction array
      */
     protected $_key   = null;
 
     /**
      * Current value.
      *
-     * @var Hoa_Test_Praspel_DomainDisjunction
+     * @var Hoa_Test_Praspel_DomainDisjunction array
      */
     protected $_value = null;
 
