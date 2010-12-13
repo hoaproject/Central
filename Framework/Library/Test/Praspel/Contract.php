@@ -73,6 +73,11 @@ import('Test.Praspel.Domain');
 import('Log.~');
 
 /**
+ * Hoa_Visitor_Element
+ */
+import('Visitor.Element');
+
+/**
  * Class Hoa_Test_Praspel.
  *
  * Root of a Praspel contract.
@@ -86,7 +91,7 @@ import('Log.~');
  * @subpackage  Hoa_Test_Praspel
  */
 
-class Hoa_Test_Praspel_Contract {
+class Hoa_Test_Praspel_Contract implements Hoa_Visitor_Element {
 
     /**
      * Collection of clauses.
@@ -693,40 +698,17 @@ class Hoa_Test_Praspel_Contract {
     }
 
     /**
-     * Transform this object model into Praspel.
+     * Accept a visitor.
      *
      * @access  public
-     * @return  string
+     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   mixed              &$handle    Handle (reference).
+     * @param   mixed              $eldnah     Handle (no reference).
+     * @return  mixed
      */
-    public function __toPraspel ( ) {
+    public function accept ( Hoa_Visitor_Visit $visitor,
+                             &$handle = null, $eldnah = null ) {
 
-        $out = null;
-
-        foreach($this->getClauses() as $i => $clause)
-            $out .= $clause->__toPraspel();
-
-        return $out;
-    }
-
-    /**
-     * Transform this object model into a string.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function __toString ( ) {
-
-        $out = '$contract  = new ' . get_class($this) . '(' . "\n" .
-               '    $class,' . "\n" .
-               '    $method,' . "\n" .
-               '    $file,' . "\n" .
-               '    $startLine,' . "\n" .
-               '    $endLine' . "\n" .
-               ');' . "\n\n";
-
-        foreach($this->getClauses() as $i => $clause)
-            $out .= $clause->__toString() . "\n";
-
-        return $out;
+        return $visitor->visit($this, $handle, $eldnah);
     }
 }

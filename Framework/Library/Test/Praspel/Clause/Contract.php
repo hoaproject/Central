@@ -58,6 +58,11 @@ import('Test.Praspel.Constructor.Old');
 import('Test.Praspel.Constructor.Result');
 
 /**
+ * Hoa_Visitor_Element
+ */
+import('Visitor.Element') and load();
+
+/**
  * Class Hoa_Test_Praspel_Clause_Contract.
  *
  * .
@@ -71,7 +76,9 @@ import('Test.Praspel.Constructor.Result');
  * @subpackage  Hoa_Test_Praspel_Clause_Contract
  */
 
-abstract class Hoa_Test_Praspel_Clause_Contract implements Hoa_Test_Praspel_Clause {
+abstract class Hoa_Test_Praspel_Clause_Contract
+    implements Hoa_Test_Praspel_Clause,
+               Hoa_Visitor_Element {
 
     /**
      * Parent (here: the root).
@@ -199,44 +206,17 @@ abstract class Hoa_Test_Praspel_Clause_Contract implements Hoa_Test_Praspel_Clau
     }
 
     /**
-     * Transform this object model into Praspel.
+     * Accept a visitor.
      *
      * @access  public
-     * @return  string
+     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   mixed              &$handle    Handle (reference).
+     * @param   mixed              $eldnah     Handle (no reference).
+     * @return  mixed
      */
-    public function __toPraspel ( ) {
+    public function accept ( Hoa_Visitor_Visit $visitor,
+                             &$handle = null, $eldnah = null ) {
 
-        $gc     = get_class($this);
-        $out    = sprintf(
-                      '%-11s',
-                      '@' . strtolower(substr($gc, strrpos($gc, '_') + 1))
-                  );
-        $handle = array();
-
-        foreach($this->getVariables() as $i => $variable)
-            $handle[] = $variable->__toPraspel();
-
-        return $out . implode("\n" . '       and ', $handle) . ";\n";
-    }
-
-    /**
-     * Transform this object model into a string.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function __toString ( ) {
-
-        $gc     = get_class($this);
-        $out    = '$contract' . "\n" .
-                  '    ->clause(\'' .
-                       strtolower(substr($gc, strrpos($gc, '_') + 1)) .
-                      '\')' . "\n";
-        $handle = array();
-
-        foreach($this->getVariables() as $i => $variable)
-            $handle[] = $variable->__toString();
-
-        return $out . implode('    ->_and' . "\n", $handle) . ';';
+        return $visitor->visit($this, $handle, $eldnah);
     }
 }

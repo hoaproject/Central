@@ -43,6 +43,11 @@ import('Test.Praspel.Exception');
 import('Test.Praspel.Clause') and load();
 
 /**
+ * Hoa_Visitor_Element
+ */
+import('Visitor.Element') and load();
+
+/**
  * Class Hoa_Test_Praspel_Clause_Throwable.
  *
  * .
@@ -56,7 +61,9 @@ import('Test.Praspel.Clause') and load();
  * @subpackage  Hoa_Test_Praspel_Clause_Throwable
  */
 
-class Hoa_Test_Praspel_Clause_Throwable implements Hoa_Test_Praspel_Clause {
+class          Hoa_Test_Praspel_Clause_Throwable
+    implements Hoa_Test_Praspel_Clause,
+               Hoa_Visitor_Element {
 
     /**
      * List of exception names.
@@ -126,36 +133,17 @@ class Hoa_Test_Praspel_Clause_Throwable implements Hoa_Test_Praspel_Clause {
     }
 
     /**
-     * Transform this object model into Praspel.
+     * Accept a visitor.
      *
      * @access  public
-     * @return  string
+     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   mixed              &$handle    Handle (reference).
+     * @param   mixed              $eldnah     Handle (no reference).
+     * @return  mixed
      */
-    public function __toPraspel ( ) {
+    public function accept ( Hoa_Visitor_Visit $visitor,
+                             &$handle = null, $eldnah = null ) {
 
-        $gc  = get_class($this);
-        $out = '@' . strtolower(substr($gc, strrpos($gc, '_') + 1));
-
-        return $out . ' ' . implode(', ', $this->getList()) . ";\n";
-    }
-
-    /**
-     * Transform this object model into a string.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function __toString ( ) {
-
-        $gc  = get_class($this);
-        $out = strtolower(substr($gc, strrpos($gc, '_') + 1));
-
-        return '$contract' . "\n" .
-               '    ->clause(\'' . $out . '\')'  . "\n" .
-               '    ->couldThrow(\'' .
-               implode(
-                   '\')' . "\n" . '    ->_comma' . "\n" . '    ->couldThrow(\'',
-                   $this->getList()
-               ) . '\')' . "\n;";
+        return $visitor->visit($this, $handle, $eldnah);
     }
 }
