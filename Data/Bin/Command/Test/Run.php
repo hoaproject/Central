@@ -41,6 +41,11 @@ import('Test.~');
 import('Test.Praspel.~');
 
 /**
+ * Hoa_Test_Praspel_Visitor_Praspel
+ */
+import('Test.Praspel.Visitor.Praspel');
+
+/**
  * Hoa_File_Finder
  */
 import('File.Finder');
@@ -110,6 +115,38 @@ class Out extends Hoa_Php_Io_Out {
         );
 
         return;
+    }
+}
+
+class ContractCovering extends Hoa_Test_Praspel_Visitor_Praspel {
+
+    public function visitDomainDisjunction ( Hoa_Visitor_Element $element,
+                                             &$handle = null, $eldnah = null ) {
+
+        if(!($element instanceof Hoa_Test_Praspel_Variable))
+            return parent::visitDomainDisjunction($element, $handle, $eldnah);
+
+        $domains = $this->formatArguments($element->getDomains());
+        $domain  = $element->getChoosenDomain();
+        $i       = 0;
+
+        foreach($element->getDomains() as $d) {
+
+            if($d === $domain)
+                $domains[$i] = Hoa_Console_Interface_Style::stylize(
+                    $domains[$i],
+                    Hoa_Console_Interface_Style::COLOR_FOREGROUND_YELLOW
+                );
+            else
+                $domains[$i] = Hoa_Console_Interface_Style::stylize(
+                    $domains[$i],
+                    Hoa_Console_Interface_Style::COLOR_FOREGROUND_RED
+                );
+
+            ++$i;
+        }
+
+        return $element->getName() . ': ' . implode(' or ', $domains);
     }
 }
 
@@ -252,11 +289,26 @@ class RunCommand extends Hoa_Console_Command_Abstract {
 
         for($i = 1; $iteration > 0; --$iteration, ++$i) {
 
-            cout(parent::underline('Iteration #' . $i));
+            cout(parent::stylize('Iteration #' . $i, 'h2'));
+            cout();
 
             try {
 
-                $test->sample($class . '::' . $method, $class, $method);
+                cout(parent::stylize('Runtime', 'info'));
+
+                $contractId = $class . '::' . $method;
+                $test->sample($contractId, $class, $method);
+                $contract   = Hoa_Test_Praspel::getInstance()->getContract(
+                    $contractId
+                );
+
+                cout();
+                cout(parent::stylize('Contract-covering', 'info'));
+                cout('    ' . str_replace(
+                    "\n",
+                    "\n    ",
+                    $contract->accept(new ContractCovering())
+                ));
             }
             catch ( Hoa_Test_Exception $e ) {
 
