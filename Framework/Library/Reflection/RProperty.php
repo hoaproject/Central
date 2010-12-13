@@ -33,19 +33,14 @@
  */
 
 /**
- * Hoa_Reflection_Exception
- */
-import('Reflection.Exception');
-
-/**
  * Hoa_Reflection_Wrapper
  */
-import('Reflection.Wrapper');
+import('Reflection.Wrapper') and load();
 
 /**
  * Hoa_Visitor_Element
  */
-import('Visitor.Element');
+import('Visitor.Element') and load();
 
 /**
  * Class Hoa_Reflection_RProperty.

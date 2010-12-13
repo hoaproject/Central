@@ -35,7 +35,7 @@
 /**
  * Hoa_Reflection_RParameter
  */
-import('Reflection.RParameter');
+import('Reflection.RParameter') and load();
 
 /**
  * Class Hoa_Reflection_Fragment_RParameter.

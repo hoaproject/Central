@@ -35,7 +35,7 @@
 /**
  * Hoa_Reflection_RFunction_RAbstract
  */
-import('Reflection.RFunction.RAbstract');
+import('Reflection.RFunction.RAbstract') and load();
 
 /**
  * Class Hoa_Reflection_RFunction.

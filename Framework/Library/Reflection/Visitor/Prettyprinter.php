@@ -35,7 +35,7 @@
 /**
  * Hoa_Visitor_Registry
  */
-import('Visitor.Registry');
+import('Visitor.Registry') and load();
 
 /**
  * Class Hoa_Reflection_Visitor_Prettyprinter.
