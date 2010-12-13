@@ -150,6 +150,10 @@ class Hoa_Test implements Hoa_Core_Parameterizable {
      */
     public function sample ( $contractId, $class, $method ) {
 
+        if(!class_exists($class))
+            throw new Hoa_Test_Exception(
+                'Class %s does not exist and cannot be tested.', 0, $class);
+
         $cut        = new $class();
         $hop        = '__hoa_' . $method . '_contract';
         $cut->$hop();
