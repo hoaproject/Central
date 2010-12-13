@@ -35,7 +35,7 @@
 /**
  * Hoa_Reflection_RFunction_RMethod
  */
-import('Reflection.RFunction.RMethod');
+import('Reflection.RFunction.RMethod') and load();
 
 /**
  * Class Hoa_Reflection_Fragment_RMethod.
