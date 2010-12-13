@@ -253,7 +253,16 @@ class RunCommand extends Hoa_Console_Command_Abstract {
         for($i = 1; $iteration > 0; --$iteration, ++$i) {
 
             cout(parent::underline('Iteration #' . $i));
-            $test->sample($class . '::' . $method, $class, $method);
+
+            try {
+
+                $test->sample($class . '::' . $method, $class, $method);
+            }
+            catch ( Hoa_Test_Exception $e ) {
+
+                throw new Hoa_Console_Command_Exception(
+                    $e->getFormattedMessage(), $e->getCode());
+            }
 
             cout();
         }
