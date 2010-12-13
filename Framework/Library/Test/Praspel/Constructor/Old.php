@@ -43,6 +43,11 @@ import('Test.Praspel.Exception');
 import('Test.Praspel.Variable') and load();
 
 /**
+ * Hoa_Visitor_Element
+ */
+import('Visitor.Element') and load();
+
+/**
  * Class Hoa_Test_Praspel_Constructor_Old.
  *
  * Represents the \old(e) constructor, the value of e in pre-state.
@@ -56,21 +61,22 @@ import('Test.Praspel.Variable') and load();
  * @subpackage  Hoa_Test_Praspel_Constructor_Old
  */
 
-class Hoa_Test_Praspel_Constructor_Old extends Hoa_Test_Praspel_Variable {
+class          Hoa_Test_Praspel_Constructor_Old
+    extends    Hoa_Test_Praspel_Variable
+    implements Hoa_Visitor_Element {
 
     /**
-     * Transform this object model into a string.
+     * Accept a visitor.
      *
      * @access  public
-     * @return  string
+     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   mixed              &$handle    Handle (reference).
+     * @param   mixed              $eldnah     Handle (no reference).
+     * @return  mixed
      */
-    public function __toString ( ) {
+    public function accept ( Hoa_Visitor_Visit $visitor,
+                             &$handle = null, $eldnah = null ) {
 
-        $out = '        \old(' . $this->getName() . ")\n";
-
-        foreach($this->getDomains() as $i => $domain)
-            $out .= '            ' . $domain->getName() . "\n";
-
-        return $out;
+        return $visitor->visit($this, $handle, $eldnah);
     }
 }

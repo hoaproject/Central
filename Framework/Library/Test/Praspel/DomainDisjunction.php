@@ -43,6 +43,11 @@ import('Test.Praspel.Exception');
 import('Test.Praspel.Domain') and load();
 
 /**
+ * Hoa_Visitor_Element
+ */
+import('Visitor.Element');
+
+/**
  * Class Hoa_Test_Praspel_DomainDisjunction.
  *
  * Represent a domains disjunction.
@@ -56,7 +61,8 @@ import('Test.Praspel.Domain') and load();
  * @subpackage  Hoa_Test_Praspel_DomainDisjunction
  */
 
-abstract class Hoa_Test_Praspel_DomainDisjunction {
+abstract class Hoa_Test_Praspel_DomainDisjunction
+    implements Hoa_Visitor_Element {
 
     /**
      * Collection of domains.
@@ -156,169 +162,17 @@ abstract class Hoa_Test_Praspel_DomainDisjunction {
     }
 
     /**
-     * Format arguments to produce a Praspel string.
-     *
-     * @access  private
-     * @param   array    $arguments    Arguments to format.
-     * @return  array
-     */
-    private function formatArgumentsAsPraspel ( Array $arguments ) {
-
-        $out = array();
-
-        foreach($arguments as $i => $argument) {
-
-            if(is_bool($arguments))
-                $out[] = (string) $argument;
-
-            elseif(is_int($argument) || is_float($argument))
-                $out[] = (string) $argument;
-
-            elseif(is_string($argument)) 
-                $out[] = '\'' . str_replace("'", "\\'", $argument) . '\'';
-
-            elseif(is_array($argument)) {
-
-                $handle = null;
-
-                foreach($argument as $e => $domran) {
-
-                    if(null !== $handle)
-                        $handle .= ',';
-
-                    if(!empty($domran[0]))
-                        $handle .= "\n" . '               from ' .
-                                   implode(
-                                       ' or ',
-                                       $this->formatArgumentsAsPraspel($domran[0])
-                                   ) . ' ';
-
-                    if(!empty($domran[1]))
-                        $handle .= "\n" . '               to ' .
-                                   implode(
-                                       ' or ',
-                                       $this->formatArgumentsAsPraspel($domran[1])
-                                   );
-                }
-
-                $out[] = '[' . $handle . "\n" . '           ]';
-            }
-            elseif(is_object($argument)) {
-
-                $out[] = $argument->getName() . '(' .
-                         implode(
-                            ', ',
-                            $this->formatArgumentsAsPraspel($argument->getArguments())
-                         ) . ')';
-            }
-        }
-
-        return $out;
-    }
-
-    /**
-     * Format arguments to produce a string.
-     *
-     * @access  private
-     * @param   array    $arguments    Arguments to format.
-     * @return  array
-     */
-    private function formatArguments ( Array $arguments, $f ) {
-
-        static $d = 1;
-
-        $out    = array();
-        $spaces = str_repeat('    ', $d);
-
-        foreach($arguments as $i => $argument) {
-
-            if(is_bool($arguments))
-                $out[] = $spaces . '    ->with(' . $argument . ')' . "\n";
-
-            elseif(is_int($argument) || is_float($argument))
-                $out[] = $spaces . '    ->with(' . $argument . ')' . "\n";
-
-            elseif(is_string($argument)) 
-                $out[] = $spaces . '    ->with(\'' .
-                         str_replace("'", "\\'", $argument) . '\')' . "\n";
-
-            elseif(is_array($argument)) {
-
-                $handle = null;
-
-                foreach($argument as $e => $domran) {
-
-                    $d += 2;
-
-                    if(!empty($domran[0]))
-                        $handle .= $spaces . '        ->from()' . "\n" .
-                                   implode(
-                                       $spaces . '            ->_or' . "\n",
-                                       $this->formatArguments($domran[0], true)
-                                   );
-                    else
-                        $handle .= $spaces . '        ->from()' . "\n";
-
-                    if(!empty($domran[1]))
-                        $handle .= $spaces . '        ->to()' . "\n" .
-                                   implode(
-                                       $spaces . '            ->_or' . "\n",
-                                       $this->formatArguments($domran[1], true)
-                                   );
-
-                    $d -= 2;
-                }
-
-                $out[] = $spaces . '    ->withArray()' . "\n" .
-                         $handle .
-                         $spaces . '            ->end()' . "\n";
-            }
-            elseif(is_object($argument)) {
-
-                $d++;
-
-                $out[] = $spaces . '    ->' .
-                         (true === $f
-                             ? 'belongsTo'
-                             : 'withDomain'
-                         ) . '(\'' . $argument->getName() . '\')' . "\n" .
-                         implode(
-                            $spaces . '        ->_comma' . "\n",
-                            $this->formatArguments($argument->getArguments(), false)
-                         ) .
-                         $spaces . '        ->_ok()' . "\n";
-
-                $d--;
-            }
-        }
-
-        return $out;
-    }
-
-    /**
-     * Transform this object model into Praspel.
+     * Accept a visitor.
      *
      * @access  public
-     * @return  string
+     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   mixed              &$handle    Handle (reference).
+     * @param   mixed              $eldnah     Handle (no reference).
+     * @return  mixed
      */
-    public function __toPraspel ( ) {
+    public function accept ( Hoa_Visitor_Visit $visitor,
+                             &$handle = null, $eldnah = null ) {
 
-        return $this->getName() . ': ' .
-               implode(' or ', $this->formatArgumentsAsPraspel($this->getDomains()));
-    }
-
-    /**
-     * Transform this object model into a string.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function __toString ( ) {
-
-        return '    ->variable(\'' . $this->getName() . '\')' . "\n" .
-               implode(
-                   '        ->_or' . "\n",
-                   $this->formatArguments($this->getDomains(), true)
-               );
+        return $visitor->visit($this, $handle, $eldnah);
     }
 }

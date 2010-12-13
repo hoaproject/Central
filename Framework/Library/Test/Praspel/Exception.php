@@ -35,7 +35,7 @@
 /**
  * Hoa_Test_Exception
  */
-import('Test.Exception');
+import('Test.Exception') and load();
 
 /**
  * Class Hoa_Test_Praspel_Exception.
