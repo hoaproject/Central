@@ -120,10 +120,7 @@ class Hoa_Realdom_Boundinteger extends Hoa_Realdom_Integer {
      */
     protected function _sample ( Hoa_Test_Sampler $sampler ) {
 
-        return $sampler->getInteger(
-            $this->getLower(),
-            $this->getUpper()
-        );
+        return $sampler->getInteger($this->getLower(), $this->getUpper());
     }
 
     /**
