@@ -83,6 +83,7 @@ class Hoa_Realdom_Array extends Hoa_Realdom {
      * @param   array   $domains    Domains.
      * @param   mixed   $length     Length.
      * @return  void
+     * @throw   Hoa_Realdom_Exception
      */
     public function construct ( Array $domains = array(), $length = 7 ) {
 
@@ -135,6 +136,7 @@ class Hoa_Realdom_Array extends Hoa_Realdom {
      *
      * @access  protected
      * @return  mixed
+     * @throw   Hoa_Realdom_Exception
      */
     protected function _sample ( Hoa_Test_Sampler $sampler ) {
 
@@ -144,6 +146,11 @@ class Hoa_Realdom_Array extends Hoa_Realdom {
 
         if($length instanceof Hoa_Realdom)
             $length = $length->sample($sampler);
+
+        if(0 > $length)
+            throw new Hoa_Realdom_Exception(
+                'Cannot sample an array with a negative length; got %d.',
+                1, $length);
 
         $domL       = count($pair[0]) - 1;
         $ranL       = count($pair[1]) - 1;
