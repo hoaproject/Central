@@ -80,8 +80,8 @@ class Hoa_Realdom_Boundfloat extends Hoa_Realdom_Float {
      * Construct a realistic domain.
      *
      * @access  public
-     * @param   int     $lower    Lower bound value.
-     * @param   int     $upper    Upper bound value.
+     * @param   float   $lower    Lower bound value.
+     * @param   float   $upper    Upper bound value.
      * @return  void
      */
     public function construct ( $lower = null, $upper = null ) {
