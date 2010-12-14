@@ -38,6 +38,11 @@
 import('Realdom.~') and load();
 
 /**
+ * Hoa_Realdom_Number
+ */
+import('Realdom.Number') and load();
+
+/**
  * Class Hoa_Realdom_Integer.
  *
  * Realistic domain: integer.
@@ -51,7 +56,7 @@ import('Realdom.~') and load();
  * @subpackage  Hoa_Realdom_Integer
  */
 
-class Hoa_Realdom_Integer extends Hoa_Realdom {
+class Hoa_Realdom_Integer extends Hoa_Realdom implements Hoa_Realdom_Number {
 
     /**
      * Realistic domain name.
