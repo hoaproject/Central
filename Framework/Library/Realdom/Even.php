@@ -33,14 +33,9 @@
  */
 
 /**
- * Hoa_Realdom
- */
-import('Realdom.~') and load();
-
-/**
  * Hoa_Realdom_Integer
  */
-import('Realdom.Integer');
+import('Realdom.Integer') and load();
 
 /**
  * Class Hoa_Realdom_Even.
@@ -56,7 +51,7 @@ import('Realdom.Integer');
  * @subpackage  Hoa_Realdom_Even
  */
 
-class Hoa_Realdom_Even extends Hoa_Realdom {
+class Hoa_Realdom_Even extends Hoa_Realdom_Integer {
 
     /**
      * Realistic domain name.
