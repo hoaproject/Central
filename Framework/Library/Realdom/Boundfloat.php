@@ -120,10 +120,7 @@ class Hoa_Realdom_Boundfloat extends Hoa_Realdom_Float {
      */
     protected function _sample ( Hoa_Test_Sampler $sampler ) {
 
-        return $sampler->getFloat(
-            $this->getLower(),
-            $this->getUpper()
-        );
+        return $sampler->getFloat($this->getLower(), $this->getUpper());
     }
 
     /**
