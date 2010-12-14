@@ -119,6 +119,8 @@ class Hoa_Realdom_Array extends Hoa_Realdom {
                 if(isset($pairs[0]))
                     foreach($pairs[0] as $i => $domain)
                         $dom = $dom || $domain->predicate($key);
+                else
+                    $dom = true;
 
                 foreach($pairs[1] as $i => $domain)
                     $ran = $ran || $domain->predicate($value);
@@ -166,6 +168,8 @@ class Hoa_Realdom_Array extends Hoa_Realdom {
                     ->sample($sampler)] =
                      $pair[1][$sampler->getInteger(0, $ranL)]
                           ->sample($sampler);
+
+        print_r($out);
 
         return $out;
     }
