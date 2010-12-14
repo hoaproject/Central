@@ -54,7 +54,14 @@ import('Test.Sampler.~');
  * @package     Hoa_Realdom
  */
 
-abstract class Hoa_Realdom {
+abstract class Hoa_Realdom implements Hoa_Core_Parameterizable {
+
+    /**
+     * The Hoa_Realdom parameters.
+     *
+     * @var Hoa_Core_Parameter object
+     */
+    protected $_parameters     = null;
 
     /**
      * Realistic domain name.
@@ -101,7 +108,13 @@ abstract class Hoa_Realdom {
      */
     final public function __construct ( ) {
 
-        $arguments = func_get_args();
+        $this->_parameters = new Hoa_Core_Parameter(
+            $this,
+            array(),
+            array()
+        );
+        $arguments         = func_get_args();
+
         $this->setArguments($arguments);
         $this->setName($this->_name);
 
@@ -122,6 +135,72 @@ abstract class Hoa_Realdom {
     public function construct ( ) {
 
         return;
+    }
+
+    /**
+     * Set many parameters to a class.
+     *
+     * @access  public
+     * @param   array   $in    Parameters to set.
+     * @return  void
+     * @throw   Hoa_Exception
+     */
+    public function setParameters ( Array $in ) {
+
+        return $this->_parameters->setParameters($this, $in);
+    }
+
+    /**
+     * Get many parameters from a class.
+     *
+     * @access  public
+     * @return  array
+     * @throw   Hoa_Exception
+     */
+    public function getParameters ( ) {
+
+        return $this->_parameters->getParameters($this);
+    }
+
+    /**
+     * Set a parameter to a class.
+     *
+     * @access  public
+     * @param   string  $key      Key.
+     * @param   mixed   $value    Value.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function setParameter ( $key, $value ) {
+
+        return $this->_parameters->setParameter($this, $key, $value);
+    }
+
+    /**
+     * Get a parameter from a class.
+     *
+     * @access  public
+     * @param   string  $key    Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getParameter ( $key ) {
+
+        return $this->_parameters->getParameter($this, $key);
+    }
+
+    /**
+     * Get a formatted parameter from a class (i.e. zFormat with keywords and
+     * other parameters).
+     *
+     * @access  public
+     * @param   string  $key    Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getFormattedParameter ( $key ) {
+
+        return $this->_parameters->getFormattedParameter($this, $key);
     }
 
     /**
