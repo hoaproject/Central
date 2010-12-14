@@ -80,6 +80,8 @@ class Hoa_Realdom_Array extends Hoa_Realdom {
      * Construct a realistic domain.
      *
      * @access  public
+     * @param   array   $domains    Domains.
+     * @param   mixed   $length     Length.
      * @return  void
      */
     public function construct ( Array $domains = array(), $length = 7 ) {
