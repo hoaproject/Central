@@ -169,8 +169,6 @@ class Hoa_Realdom_Array extends Hoa_Realdom {
                      $pair[1][$sampler->getInteger(0, $ranL)]
                           ->sample($sampler);
 
-        print_r($out);
-
         return $out;
     }
 
