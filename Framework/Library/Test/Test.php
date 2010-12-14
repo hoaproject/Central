@@ -47,6 +47,16 @@ import('Test.Orchestrate');
 import('Test.Praspel.~');
 
 /**
+ * Hoa_Test_Sampler_Random
+ */
+import('Test.Sampler.Random');
+
+/**
+ * Hoa_Realdom
+ */
+import('Realdom.~');
+
+/**
  * Class Hoa_Test.
  *
  * Make tests.
@@ -154,6 +164,8 @@ class Hoa_Test implements Hoa_Core_Parameterizable {
             throw new Hoa_Test_Exception(
                 'Class %s does not exist and cannot be tested.', 0, $class);
 
+        Hoa_Realdom::setSampler(new Hoa_Test_Sampler_Random());
+
         $cut        = new $class();
         $hop        = '__hoa_' . $method . '_contract';
         $cut->$hop();
@@ -166,9 +178,7 @@ class Hoa_Test implements Hoa_Core_Parameterizable {
         foreach($requires->getVariables() as $variable) {
 
             $handle = $variable->getChoosenDomain();
-            $handle->clear()->randomize();
-
-            $parameters[] = $handle->getValue();
+            $parameters[] = $handle->sample();
         }
 
         call_user_func_array(
