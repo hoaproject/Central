@@ -28,24 +28,14 @@
  *
  * @category    Framework
  * @package     Hoa_Realdom
- * @subpackage  Hoa_Realdom_Float
+ * @subpackage  Hoa_Realdom_Number
  *
  */
 
 /**
- * Hoa_Realdom
- */
-import('Realdom.~') and load();
-
-/**
- * Hoa_Realdom_Number
- */
-import('Realdom.Number') and load();
-
-/**
- * Class Hoa_Realdom_Float.
+ * Interface Hoa_Realdom_Number.
  *
- * Realistic domain: float.
+ * Realistic domain interface: number.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
@@ -53,40 +43,7 @@ import('Realdom.Number') and load();
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Realdom
- * @subpackage  Hoa_Realdom_Float
+ * @subpackage  Hoa_Realdom_Number
  */
 
-class Hoa_Realdom_Float extends Hoa_Realdom implements Hoa_Realdom_Number {
-
-    /**
-     * Realistic domain name.
-     *
-     * @var Hoa_Realdom string
-     */
-    protected $_name = 'float';
-
-
-
-    /**
-     * Predicate whether the sampled value belongs to the realistic domains.
-     *
-     * @access  public
-     * @param   mixed  $q    Sampled value.
-     * @return  boolean
-     */
-    public function predicate ( $q ) {
-
-        return is_float($q);
-    }
-
-    /**
-     * Sample one new value.
-     *
-     * @access  protected
-     * @return  mixed
-     */
-    protected function _sample ( Hoa_Test_Sampler $sampler ) {
-
-        return $sampler->getFloat();
-    }
-}
+interface Hoa_Realdom_Number { }
