@@ -108,8 +108,8 @@ class Hoa_Realdom_Boundinteger extends Hoa_Realdom_Integer {
     public function predicate ( $q ) {
 
         return    parent::predicate($q)
-               && $q > $this->getLower()
-               && $q < $this->getUpper();
+               && $q >= $this->getLower()
+               && $q <= $this->getUpper();
     }
 
     /**

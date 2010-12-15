@@ -108,8 +108,8 @@ class Hoa_Realdom_Boundfloat extends Hoa_Realdom_Float {
     public function predicate ( $q ) {
 
         return    parent::predicate($q)
-               && $q > $this->getLower()
-               && $q < $this->getUpper();
+               && $q >= $this->getLower()
+               && $q <= $this->getUpper();
     }
 
     /**
