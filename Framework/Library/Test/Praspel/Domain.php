@@ -195,7 +195,7 @@ class Hoa_Test_Praspel_Domain {
      */
     protected function _factory ( $name, Array $arguments ) {
 
-        $name  = ucfirst($name);
+        $name  = ucfirst(strtolower($name));
         $class = 'Hoa_Realdom_' . $name;
 
         import('Realdom.' . $name);
