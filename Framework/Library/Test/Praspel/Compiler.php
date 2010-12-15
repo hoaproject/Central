@@ -144,7 +144,10 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                 // 7. Arguments.
                 array(
                     ',',           // ,
-                    '#\d+',        // 09
+                    '#([+-]?0[xX][0-9a-fA-F]+)',                 // 0x
+                    '#([+-]?0[0-7]+)',                           // 07
+                    '#([+-]?([0-9]*\.[0-9]+)|([0-9]+\.[0-9]*))', // 0.
+                    '#([+-]?[1-9][0-9]*|0)',                     // 09
                     '(',           // (
                     ')',           // )
                     '[',           // [
@@ -344,14 +347,14 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
 
                 // 7. Arguments.
                 array(
-                    /*               ,    09     (     )     [     '    id 
-                    /* __ */ array( __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ),
-                    /* GO */ array( __ , 'OK',  __ ,  __ , '[]', 'ST', 'ID'),
-                    /* ID */ array( __ ,  __ , 'AR',  __ ,  __ ,  __ ,  __ ),
-                    /* AR */ array( __ ,  __ ,  __ , 'OK',  __ ,  __ ,  __ ),
-                    /* [] */ array('GO',  __ ,  __ ,  __ ,  __ ,  __ ,  __ ),
-                    /* ST */ array('GO',  __ ,  __ ,  __ ,  __ ,  __ ,  __ ),
-                    /* OK */ array('GO',  __ ,  __ ,  __ ,  __ ,  __ ,  __ )
+                    /*               ,    0x    07    0.    09     (     )     [     '    id 
+                    /* __ */ array( __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ),
+                    /* GO */ array( __ , 'OK', 'OK', 'OK', 'OK',  __ ,  __ , '[]', 'ST', 'ID'),
+                    /* ID */ array( __ ,  __ ,  __ ,  __ ,  __ , 'AR',  __ ,  __ ,  __ ,  __ ),
+                    /* AR */ array( __ ,  __ ,  __ ,  __ ,  __ ,  __ , 'OK',  __ ,  __ ,  __ ),
+                    /* [] */ array('GO',  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ),
+                    /* ST */ array('GO',  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ),
+                    /* OK */ array('GO',  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ )
                 ),
 
                 // 8. Array.
@@ -438,14 +441,14 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
 
                 // 7. Arguments.
                 array(
-                    /*              ,   09    (    )    [    '   id
-                    /* __ */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ),
-                    /* GO */ array( 0 , -7 ,  0 ,  0 , '[',  0 , -3 ),
-                    /* ID */ array( 0 ,  0 , 'z',  0 ,  0 ,  0 ,  0 ),
-                    /* AR */ array( 0 ,  0 ,  7 , 'Y',  0 ,  0 ,  0 ),
-                    /* [] */ array( 0 ,  0 ,  0 ,  0 ,  8 ,  0 ,  0 ),
-                    /* ST */ array( 0 ,  0 ,  0 ,  0 ,  0 , 10 ,  0 ),
-                    /* OK */ array('c',  0 ,  0 ,  0 ,  0 ,  0 ,  0 )
+                    /*              ,   0x   07   0.   09    (    )    [    '   id
+                    /* __ */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ),
+                    /* GO */ array( 0 , 'x', '7', '.', '9',  0 ,  0 , '[',  0 , -3 ),
+                    /* ID */ array( 0 ,  0 ,  0 ,  0 ,  0 , 'z',  0 ,  0 ,  0 ,  0 ),
+                    /* AR */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  7 , 'Y',  0 ,  0 ,  0 ),
+                    /* [] */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  8 ,  0 ,  0 ),
+                    /* ST */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 , 10 ,  0 ),
+                    /* OK */ array('c',  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 )
                 ),
 
                 // 8. Array.
@@ -558,9 +561,6 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
             case 'Y':
                 if(isset($this->buffers[3])) {
 
-                    if(ctype_digit($this->buffers[3]))
-                        $this->buffers[3] = (int) $this->buffers[3];
-
                     $this->_current = $this->_current->with(
                         $this->buffers[3]
                     );
@@ -592,9 +592,6 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
 
             // variable: domain(…,
             case 'c':
-                if(ctype_digit($this->buffers[3]))
-                    $this->buffers[3] = (int) $this->buffers[3];
-
                 $this->_current = $this->_current->with(
                     $this->buffers[3]
                 )->_comma;
@@ -633,6 +630,26 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                     $this->buffers[2]
                 )->_comma;
                 unset($this->buffers[2]);
+              break;
+
+            // Number: hexadecimal.
+            case 'x':
+                $this->buffers[3] = hexdec(substr($this->buffers[-1], 2));
+              break;
+
+            // Number: octal.
+            case '7':
+                $this->buffers[3] = intval($this->buffers[-1], 8);
+              break;
+
+            // Number: float.
+            case '.':
+                $this->buffers[3] = floatval($this->buffers[-1]);
+              break;
+
+            // Number: decimal.
+            case '9':
+                $this->buffers[3] = intval($this->buffers[-1], 10);
               break;
         }
     }
