@@ -90,34 +90,34 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
         parent::__construct(
             // Skip.
             array(
-                '#\s+',          // white spaces
-                '#//.*',         // inline comment
-                '#/\*(.|\n)*\*/' // block comment
+                '#\s+',                // white spaces
+                '#//.*',               // inline comment
+                '#/\*(.|\n)*\*/'       // block comment
             ),
 
             // Tokens.
             array(
                 // 1. Clauses.
                 array(
-                    '#@requires',  // r
-                    '#@ensures',   // e
-                    '#@throwable', // t
-                    '#@invariant', // i
-                    '#@predicate', // p
+                    '#@requires',       // r
+                    '#@ensures',        // e
+                    '#@throwable',      // t
+                    '#@invariant',      // i
+                    '#@predicate',      // p
                     ';'
                 ),
 
                 // 2. Expressions.
                 array(
-                    '#and',        // &
-                    ':',           // :
-                    '#domainof'    // do
+                    '#and',             // &
+                    ':',                // :
+                    '#domainof'         // do
                 ),
 
                 // 3. List.
                 array(
-                    '#\w+',        // id
-                    ','            // ,
+                    '#\w+',             // id
+                    ','                 // ,
                 ),
 
                 // 4. Extend.
@@ -127,51 +127,45 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
 
                 // 5. Variable.
                 array(
-                    '#\w+',        // id
-                    '#\\\result',  // \r
-                    '#\\\old\(',   // \o
-                    ')'            // )
+                    '#\w+',             // id
+                    '#\\\result',       // \r
+                    '#\\\old\(',        // \o
+                    ')'                 // )
                 ),
 
                 // 6. Domains.
                 array(
-                    '#or',         // or
-                    '#\w+',        // id
-                    '(',           // (
-                    ')'            // )
+                    '#or',              // or
+                    '#\w+',             // id
+                    '(',                // (
+                    ')'                 // )
                 ),
 
                 // 7. Arguments.
                 array(
-                    ',',           // ,
+                    ',',                // ,
                     '#([+-]?0[xX][0-9a-fA-F]+)',                 // 0x
                     '#([+-]?0[0-7]+)',                           // 07
                     '#([+-]?([0-9]*\.[0-9]+)|([0-9]+\.[0-9]*))', // 0.
                     '#([+-]?[1-9][0-9]*|0)',                     // 09
-                    '(',           // (
-                    ')',           // )
-                    '[',           // [
-                    '\'',          // '
-                    '#\w+'         // id
+                    '(',                // (
+                    ')',                // )
+                    '[',                // [
+                    '#\'.*?(?<!\\\)\'', // s
+                    '#\w+'              // id
                 ),
 
                 // 8. Array.
                 array(
-                    ']'            // ]
+                    ']'                 // ]
                 ),
 
                 // 9. Pairs.
                 array(
-                    ',',           // ,
-                    '#from',       // fr
-                    '#to'          // to
-                ),
-
-                // 10. String.
-                array(
-                    '#[\w|\s]+',   // st
-                    '\''           // '
-                ),
+                    ',',                // ,
+                    '#from',            // fr
+                    '#to'               // to
+                )
             ),
 
             // States.
@@ -230,7 +224,6 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                     'ID', // id
                     'AR', // arguments
                     '[]', // array
-                    'ST', // string
                     'OK'  // terminal
                 ),
 
@@ -248,15 +241,7 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                     'FR', // from
                     'TO', // to
                     'OK'  // terminal
-                ),
-
-                // 10. String.
-                array(
-                     __ , // error
-                    'GO', // start
-                    'ST', // string
-                    'OK'  // terminal
-                ),
+                )
             ),
 
             // Terminal.
@@ -280,16 +265,13 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                 array('GO', 'OK'),
 
                 // 7. Arguments.
-                array('GO', '[]', 'ST', 'OK'),
+                array('GO', '[]', 'OK'),
 
                 // 8. Array.
                 array('OK'),
 
                 // 9. Pairs.
-                array('GO', 'TO', 'OK'),
-
-                // 10. String.
-                array('OK'),
+                array('GO', 'TO', 'OK')
             ),
 
             // Transitions.
@@ -347,13 +329,12 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
 
                 // 7. Arguments.
                 array(
-                    /*               ,    0x    07    0.    09     (     )     [     '    id 
+                    /*               ,    0x    07    0.    09     (     )     [     s    id
                     /* __ */ array( __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ),
-                    /* GO */ array( __ , 'OK', 'OK', 'OK', 'OK',  __ ,  __ , '[]', 'ST', 'ID'),
+                    /* GO */ array( __ , 'OK', 'OK', 'OK', 'OK',  __ ,  __ , '[]', 'OK', 'ID'),
                     /* ID */ array( __ ,  __ ,  __ ,  __ ,  __ , 'AR',  __ ,  __ ,  __ ,  __ ),
                     /* AR */ array( __ ,  __ ,  __ ,  __ ,  __ ,  __ , 'OK',  __ ,  __ ,  __ ),
                     /* [] */ array('GO',  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ),
-                    /* ST */ array('GO',  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ),
                     /* OK */ array('GO',  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ )
                 ),
 
@@ -373,16 +354,7 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                     /* FR */ array( __ ,  __ , 'TO'),
                     /* TO */ array('OK',  __ ,  __ ),
                     /* OK */ array( __ ,  __ ,  __ )
-                ),
-
-                // 10. String.
-                array(
-                    /*              id     '
-                    /* __ */ array( __ ,  __ ),
-                    /* GO */ array('ST', 'OK'),
-                    /* ST */ array( __ , 'OK'),
-                    /* OK */ array( __ ,  __ )
-                ),
+                )
             ),
 
             // Actions.
@@ -441,13 +413,12 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
 
                 // 7. Arguments.
                 array(
-                    /*              ,   0x   07   0.   09    (    )    [    '   id
+                    /*              ,   0x   07   0.   09    (    )    [    s   id
                     /* __ */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ),
-                    /* GO */ array( 0 , 'x', '7', '.', '9',  0 ,  0 , '[',  0 , -3 ),
+                    /* GO */ array( 0 , 'x', '7', '.', '9',  0 ,  0 , '[', 's', -3 ),
                     /* ID */ array( 0 ,  0 ,  0 ,  0 ,  0 , 'z',  0 ,  0 ,  0 ,  0 ),
                     /* AR */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  7 , 'Y',  0 ,  0 ,  0 ),
                     /* [] */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  8 ,  0 ,  0 ),
-                    /* ST */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 , 10 ,  0 ),
                     /* OK */ array('c',  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 )
                 ),
 
@@ -467,16 +438,7 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                     /* FR */ array( 0 ,  6, 'to'),
                     /* TO */ array(',',  0,   6 ),
                     /* OK */ array( 9 ,  0,   0 )
-                ),
-
-                // 10. String
-                array(
-                    /*             st    ' 
-                    /* __ */ array( 0 ,  0 ),
-                    /* GO */ array( 0 ,  0 ),
-                    /* ST */ array( 0 ,  0 ),
-                    /* OK */ array( 0 ,  0 )
-                ),
+                )
             ),
 
             // Names.
@@ -489,8 +451,7 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
                 'Domains',
                 'Arguments',
                 'Array',
-                'Pairs',
-                'String'
+                'Pairs'
             )
         );
 
@@ -650,6 +611,15 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
             // Number: decimal.
             case '9':
                 $this->buffers[3] = intval($this->buffers[-1], 10);
+              break;
+
+            // String.
+            case 's':
+                $this->buffers[3] = str_replace(
+                    "\'",
+                    "'",
+                    substr($this->buffers[-1], 1, -1)
+                );
               break;
         }
     }
