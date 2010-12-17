@@ -65,7 +65,7 @@ class Hoa_Realdom_Bag extends Hoa_Realdom {
      *
      * @var Hoa_Realdom_Bag array
      */
-    protected $_list = array();
+    protected $_bag  = array();
 
     /**
      * List's length.
@@ -85,8 +85,8 @@ class Hoa_Realdom_Bag extends Hoa_Realdom {
      */
     public function construct ( ) {
 
-        $this->_list   = func_get_args();
-        $this->_length = count($this->_list) - 1;
+        $this->_bag    = func_get_args();
+        $this->_length = count($this->_bag) - 1;
 
         return;
     }
@@ -100,7 +100,12 @@ class Hoa_Realdom_Bag extends Hoa_Realdom {
      */
     public function predicate ( $q ) {
 
-        return in_array($q, $this->_list);
+        $out = false;
+
+        foreach($this->getBag() as $i => $domain)
+            $out = $out || $domain->predicate($q);
+
+        return $out;
     }
 
     /**
@@ -111,17 +116,18 @@ class Hoa_Realdom_Bag extends Hoa_Realdom {
      */
     protected function _sample ( Hoa_Test_Sampler $sampler ) {
 
-        return $this->_list[$sampler->getInteger(0, $this->_length)];
+        return $this->_bag[$sampler->getInteger(0, $this->_length)]
+                    ->sample($sampler);
     }
 
     /**
-     * Get list.
+     * Get bag.
      *
      * @access  public
      * @return  mixed
      */
-    public function getList ( ) {
+    public function getBag ( ) {
 
-        return $this->_list;
+        return $this->_bag;
     }
 }
