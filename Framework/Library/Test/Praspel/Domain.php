@@ -131,7 +131,27 @@ class Hoa_Test_Praspel_Domain {
      */
     public function with ( $argument ) {
 
-        $this->_currentArgument = $this->_arguments[] = $argument;
+        switch(gettype($argument)) {
+
+            case 'boolean':
+            case 'integer':
+            case 'string':
+                $type = gettype($argument);
+              break;
+
+            case 'double':
+                $type = 'float';
+              break;
+
+            default:
+                throw new Hoa_Test_Praspel_Exception(
+                    'The with() method does not support the type %s.',
+                    0, gettype($argument));
+        }
+
+        $this->_currentArgument
+            = $this->_arguments[]
+            = $this->_factory('const' . $type, array($argument));;
 
         return $this;
     }
@@ -205,9 +225,9 @@ class Hoa_Test_Praspel_Domain {
             $reflection  = new ReflectionClass($class);
 
             if(true === $reflection->hasMethod('__construct'))
-                $this->_domain = $reflection->newInstanceArgs($arguments);
+                return $reflection->newInstanceArgs($arguments);
             else
-                $this->_domain = $reflection->newInstance();
+                return $reflection->newInstance();
         }
         catch ( ReflectionException $e ) {
 
@@ -231,9 +251,10 @@ class Hoa_Test_Praspel_Domain {
         if(null !== $this->_domain)
             return $this->_domain;
 
-        $this->_factory($this->getName(), $this->getArguments());
-
-        return $this->_domain;
+        return $this->_domain = $this->_factory(
+            $this->getName(),
+            $this->getArguments()
+        );
     }
 
     /**
@@ -251,7 +272,7 @@ class Hoa_Test_Praspel_Domain {
            throw new Hoa_Test_Praspel_Exception(
                 'Parent of a domain must be a variable, a domain or an array ' .
                 'description, given %s.',
-                0, get_class($parent));
+                1, get_class($parent));
 
         $old           = $this->_parent;
         $this->_parent = $parent;

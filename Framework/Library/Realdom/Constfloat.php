@@ -28,19 +28,19 @@
  *
  * @category    Framework
  * @package     Hoa_Realdom
- * @subpackage  Hoa_Realdom_Boundinteger
+ * @subpackage  Hoa_Realdom_Constfloat
  *
  */
 
 /**
- * Hoa_Realdom_Integer
+ * Hoa_Realdom_Float
  */
-import('Realdom.Integer') and load();
+import('Realdom.Float') and load();
 
 /**
- * Class Hoa_Realdom_Boundinteger.
+ * Class Hoa_Realdom_Constfloat.
  *
- * Realistic domain: boundinteger.
+ * Realistic domain: constfloat.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
@@ -48,31 +48,24 @@ import('Realdom.Integer') and load();
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Realdom
- * @subpackage  Hoa_Realdom_Boundinteger
+ * @subpackage  Hoa_Realdom_Constfloat
  */
 
-class Hoa_Realdom_Boundinteger extends Hoa_Realdom_Integer {
+class Hoa_Realdom_Constfloat extends Hoa_Realdom_Float {
 
     /**
      * Realistic domain name.
      *
      * @var Hoa_Realdom string
      */
-    protected $_name = 'boundinteger';
+    protected $_name  = 'constfloat';
 
     /**
-     * Lower bound value.
+     * Constant value.
      *
-     * @var Hoa_Realdom_Integer object
+     * @var Hoa_Realdom float
      */
-    protected $_lower = 0;
-
-    /**
-     * Upper bound value.
-     *
-     * @var Hoa_Realdom_Integer object
-     */
-    protected $_upper = 0;
+    protected $_value = 0.0;
 
 
 
@@ -80,21 +73,13 @@ class Hoa_Realdom_Boundinteger extends Hoa_Realdom_Integer {
      * Construct a realistic domain.
      *
      * @access  public
-     * @param   Hoa_Realdom_Integer  $lower    Lower bound value.
-     * @param   Hoa_Realdom_Integer  $upper    Upper bound value.
+     * @param   float  $float    Float.
      * @return  void
+     * @throw   Hoa_Realdom_Exception
      */
-    public function construct ( Hoa_Realdom_Integer $lower = null,
-                                Hoa_Realdom_Integer $upper = null ) {
+    public function construct ( $float ) {
 
-        if(null === $lower)
-            $lower = ~PHP_INT_MAX;
-
-        if(null === $upper)
-            $upper =  PHP_INT_MAX;
-
-        $this->_lower = $lower;
-        $this->_upper = $upper;
+        $this->_value = $float;
 
         return;
     }
@@ -103,14 +88,12 @@ class Hoa_Realdom_Boundinteger extends Hoa_Realdom_Integer {
      * Predicate whether the sampled value belongs to the realistic domains.
      *
      * @access  public
-     * @param   mixed   $q    Sampled value.
+     * @param   mixed  $q    Sampled value.
      * @return  boolean
      */
     public function predicate ( $q ) {
 
-        return    parent::predicate($q)
-               && $q >= $this->getLower()->getValue()
-               && $q <= $this->getUpper()->getValue();
+        return $this->_value === (float) $q;
     }
 
     /**
@@ -121,31 +104,6 @@ class Hoa_Realdom_Boundinteger extends Hoa_Realdom_Integer {
      */
     protected function _sample ( Hoa_Test_Sampler $sampler ) {
 
-        return $sampler->getInteger(
-            $this->getLower()->sample($sampler),
-            $this->getUpper()->sample($sampler)
-        );
-    }
-
-    /**
-     * Get the lower bound value.
-     *
-     * @access  public
-     * @return  Hoa_Realdom_Integer
-     */
-    public function getLower ( ) {
-
-        return $this->_lower;
-    }
-
-    /**
-     * Get the upper bound value.
-     *
-     * @access  public
-     * @return  Hoa_Realdom_Integer
-     */
-    public function getUpper ( ) {
-
-        return $this->_upper;
+        return $this->_value;
     }
 }
