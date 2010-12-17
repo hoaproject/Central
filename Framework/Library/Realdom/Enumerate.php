@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_Realdom
- * @subpackage  Hoa_Realdom_Enumerate
+ * @subpackage  Hoa_Realdom_Bag
  *
  */
 
@@ -38,9 +38,9 @@
 import('Realdom.~') and load();
 
 /**
- * Class Hoa_Realdom_Enumerate.
+ * Class Hoa_Realdom_Bag.
  *
- * Realistic domain: enumerate.
+ * Realistic domain: bag.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
@@ -48,29 +48,29 @@ import('Realdom.~') and load();
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Realdom
- * @subpackage  Hoa_Realdom_Enumerate
+ * @subpackage  Hoa_Realdom_Bag
  */
 
-class Hoa_Realdom_Enumerate extends Hoa_Realdom {
+class Hoa_Realdom_Bag extends Hoa_Realdom {
 
     /**
      * Realistic domain name.
      *
      * @var Hoa_Realdom string
      */
-    protected $_name = 'enumerate';
+    protected $_name = 'bag';
 
     /**
      * List.
      *
-     * @var Hoa_Realdom_Enumerate array
+     * @var Hoa_Realdom_Bag array
      */
     protected $_list = array();
 
     /**
      * List's length.
      *
-     * @var Hoa_Realdom_Enumerate int
+     * @var Hoa_Realdom_Bag int
      */
     private $_length = 0;
 
