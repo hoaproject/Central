@@ -68,12 +68,12 @@ class Hoa_Test_Praspel_Domain {
     /**
      * Domain.
      *
-     * @var Hoa_Test_Urg_Type_Interface_Type object
+     * @var Hoa_Realdom object
      */
     protected $_domain       = null;
 
     /**
-     * Type's name.
+     * Domain's name.
      *
      * @var Hoa_Test_Praspel_Domain string
      */
@@ -131,27 +131,40 @@ class Hoa_Test_Praspel_Domain {
      */
     public function with ( $argument ) {
 
-        switch(gettype($argument)) {
+        $name = $this->getName();
 
-            case 'boolean':
-            case 'integer':
-            case 'string':
-                $type = gettype($argument);
-              break;
+        switch(strtolower($this->getName())) {
 
-            case 'double':
-                $type = 'float';
+            case 'constboolean':
+            case 'constfloat':
+            case 'constinteger':
+            case 'conststring':
+                $this->_currentArgument = $this->_arguments[] = $argument;
               break;
 
             default:
-                throw new Hoa_Test_Praspel_Exception(
-                    'The with() method does not support the type %s.',
-                    0, gettype($argument));
-        }
+                switch(gettype($argument)) {
 
-        $this->_currentArgument
-            = $this->_arguments[]
-            = $this->_factory('const' . $type, array($argument));;
+                    case 'boolean':
+                    case 'integer':
+                    case 'string':
+                        $type = gettype($argument);
+                      break;
+
+                    case 'double':
+                        $type = 'float';
+                      break;
+
+                    default:
+                        throw new Hoa_Test_Praspel_Exception(
+                            'The with() method does not support the type %s.',
+                            0, gettype($argument));
+                }
+
+                $this->_currentArgument
+                    = $this->_arguments[]
+                    = $this->_factory('const' . $type, array($argument));;
+        }
 
         return $this;
     }
@@ -244,7 +257,7 @@ class Hoa_Test_Praspel_Domain {
      * Get the found domain.
      *
      * @access  public
-     * @return  Hoa_Test_Urg_Type_Interface_Type
+     * @return  Hoa_Realdom
      */
     public function getDomain ( ) {
 
