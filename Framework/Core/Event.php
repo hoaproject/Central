@@ -336,7 +336,7 @@ class Hoa_Core_Event {
 
         if(false === self::eventExists($eventId))
             throw new Hoa_Exception(
-                'Event ID does not exist, cannot send notification.',
+                'Event ID %s does not exist, cannot send notification.',
                 2, $eventId);
 
         $data->setSource($source);
