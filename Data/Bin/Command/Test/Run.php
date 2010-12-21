@@ -116,6 +116,32 @@ class Out extends Hoa_Php_Io_Out {
 
         return;
     }
+
+    public function writeOpenIteration ( Hoa_Core_Event_Bucket $event ) {
+
+        $data = $event->getData();
+
+        cout($this->self->stylize('Iteration #' . $data['iteration'], 'h2'));
+        cout();
+        cout($this->self->stylize('Runtime', 'info'));
+
+        return;
+    }
+
+    public function writeCloseIteration ( Hoa_Core_Event_Bucket $event ) {
+
+        $data = $event->getData();
+
+        cout();
+        cout($this->self->stylize('Contract-covering', 'info'));
+        cout('    ' . str_replace(
+            "\n",
+            "\n    ",
+            $data['contract']->accept(new ContractCovering())
+        ));
+
+        return;
+    }
 }
 
 class ContractCovering extends Hoa_Test_Praspel_Visitor_Praspel {
@@ -127,7 +153,9 @@ class ContractCovering extends Hoa_Test_Praspel_Visitor_Praspel {
             return parent::visitDomainDisjunction($element, $handle, $eldnah);
 
         $domains = $this->formatArguments($element->getDomains());
-        $domain  = $element->getChoosenDomain();
+        $domain  = $element->hasChoosenDomain()
+                       ? $element->getChoosenDomain()
+                       : null;
         $i       = 0;
 
         foreach($element->getDomains() as $d) {
@@ -138,10 +166,7 @@ class ContractCovering extends Hoa_Test_Praspel_Visitor_Praspel {
                     Hoa_Console_Interface_Style::COLOR_FOREGROUND_YELLOW
                 );
             else
-                $domains[$i] = Hoa_Console_Interface_Style::stylize(
-                    $domains[$i],
-                    Hoa_Console_Interface_Style::COLOR_FOREGROUND_RED
-                );
+                $domains[$i] = $domains[$i];
 
             ++$i;
         }
@@ -286,29 +311,20 @@ class RunCommand extends Hoa_Console_Command_Abstract {
 
         event('hoa://Event/Log/' . Hoa_Test_Praspel::LOG_CHANNEL)
             ->attach($out);
+        event('hoa://Event/Test/Sample:open-iteration')
+            ->attach($out, 'writeOpenIteration');
+        event('hoa://Event/Test/Sample:close-iteration')
+            ->attach($out, 'writeCloseIteration');
 
         for($i = 1; $iteration > 0; --$iteration, ++$i) {
 
-            cout(parent::stylize('Iteration #' . $i, 'h2'));
-            cout();
-
             try {
-
-                cout(parent::stylize('Runtime', 'info'));
 
                 $contractId = $class . '::' . $method;
                 $test->sample($contractId, $class, $method);
                 $contract   = Hoa_Test_Praspel::getInstance()->getContract(
                     $contractId
                 );
-
-                cout();
-                cout(parent::stylize('Contract-covering', 'info'));
-                cout('    ' . str_replace(
-                    "\n",
-                    "\n    ",
-                    $contract->accept(new ContractCovering())
-                ));
             }
             catch ( Hoa_Test_Exception $e ) {
 
