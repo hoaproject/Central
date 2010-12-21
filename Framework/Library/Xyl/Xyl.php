@@ -89,7 +89,7 @@ class          Hoa_Xyl
      *
      * @const string
      */
-    const NAMESPACE_ID = 'http://hoa-project.net/ns/xyl';
+    const NAMESPACE_ID = 'http://hoa-project.net/xyl/xylophone';
 
     /**
      * Data bucket.
