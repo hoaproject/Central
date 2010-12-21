@@ -38,6 +38,11 @@
 import('Realdom.Boundfloat') and load();
 
 /**
+ * Hoa_Realdom_Constfloat
+ */
+import('Realdom.Constfloat') and load();
+
+/**
  * Class Hoa_Realdom_Smallfloat.
  *
  * Realistic domain: smallfloat.
@@ -66,35 +71,18 @@ class Hoa_Realdom_Smallfloat extends Hoa_Realdom_Boundfloat {
      * Construct a realistic domain.
      *
      * @access  public
+     * @param   Hoa_Realdom_Constfloat  $lower    Lower bound value.
+     * @param   Hoa_Realdom_Constfloat  $upper    Upper bound value.
      * @return  void
      */
-    public function construct ( $lower = null, $upper = null ) {
+    public function construct ( Hoa_Realdom_Constfloat $lower = null,
+                                Hoa_Realdom_Constfloat $upper = null ) {
 
-        parent::construct(-128.0, 127.0);
+        parent::construct(
+            new Hoa_Realdom_Constfloat(-128.0),
+            new Hoa_Realdom_Constfloat( 127.0)
+        );
 
         return;
-    }
-
-    /**
-     * Predicate whether the sampled value belongs to the realistic domains.
-     *
-     * @access  public
-     * @param   mixed   $q    Sampled value.
-     * @return  boolean
-     */
-    public function predicate ( $q ) {
-
-        return parent::predicate($q);
-    }
-
-    /**
-     * Sample one new value.
-     *
-     * @access  protected
-     * @return  mixed
-     */
-    protected function _sample ( Hoa_Test_Sampler $sampler ) {
-
-        return parent::_sample($sampler);
     }
 }

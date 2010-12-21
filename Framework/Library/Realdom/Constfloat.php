@@ -77,7 +77,7 @@ class Hoa_Realdom_Constfloat extends Hoa_Realdom_Float {
      * @return  void
      * @throw   Hoa_Realdom_Exception
      */
-    public function construct ( $float ) {
+    public function construct ( $float = 0.0 ) {
 
         $this->_value = $float;
 

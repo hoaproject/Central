@@ -38,9 +38,9 @@
 import('Realdom.~') and load();
 
 /**
- * Hoa_Realdom_Number
+ * Hoa_Realdom_Constinteger
  */
-import('Realdom.Number') and load();
+import('Realdom.Constinteger');
 
 /**
  * Class Hoa_Realdom_String.
@@ -56,14 +56,14 @@ import('Realdom.Number') and load();
  * @subpackage  Hoa_Realdom_String
  */
 
-class Hoa_Realdom_String extends Hoa_Realdom implements Hoa_Realdom_Number {
+class Hoa_Realdom_String extends Hoa_Realdom {
 
     /**
      * Realistic domain name.
      *
      * @var Hoa_Realdom string
      */
-    protected $_name  = 'string';
+    protected $_name         = 'string';
 
     /**
      * Minimum code point.
@@ -82,9 +82,9 @@ class Hoa_Realdom_String extends Hoa_Realdom implements Hoa_Realdom_Number {
     /**
      * String's length.
      *
-     * @var Hoa_Realdom_String int
+     * @var Hoa_Realdom_Integer object
      */
-    protected $_length       = 0;
+    protected $_length       = null;
 
     /**
      * All generated letters.
@@ -99,22 +99,28 @@ class Hoa_Realdom_String extends Hoa_Realdom implements Hoa_Realdom_Number {
      * Construct a realistic domain.
      *
      * @access  public
-     * @param   mixed   $length          Length.
-     * @param   int     $codepointMin    Minimum code point.
-     * @param   int     $codepointMax    Maximum code point.
+     * @param   Hoa_Realdom_Integer       $length          Length.
+     * @param   Hoa_Realdom_Constinteger  $codepointMin    Minimum code point.
+     * @param   Hoa_Realdom_Constinteger  $codepointMax    Maximum code point.
      * @throw   Hoa_Realdom_Integer
      * @return  void
      */
-    public function construct ( $length = 13, $codepointMin = 0x20,
-                                $codepointMax = 0x7E ) {
+    public function construct ( Hoa_Realdom_Integer      $length       = null,
+                                Hoa_Realdom_Constinteger $codepointMin = null,
+                                Hoa_Realdom_Constinteger $codepointMax = null ) {
+
+        if(null === $length)
+            $length = new Hoa_Realdom_Constinteger(13);
+
+        if(null === $codepointMin)
+            $codepointMin = new Hoa_Realdom_Constinteger(0x20);
+
+        if(null === $codepointMax)
+            $codepointMax = new Hoa_Realdom_Constinteger(0x7E);
 
         $this->_length       = $length;
-        $this->_codepointMin = min($codepointMin, $codepointMax);
-        $this->_codepointMax = max($codepointMin, $codepointMax);
-
-        if(!is_int($length) && !($length instanceof Hoa_Realdom_Integer))
-            throw new Hoa_Realdom_Exception(
-                'String needs an integer in first parameter.', 0);
+        $this->_codepointMin = $codepointMin->getValue();
+        $this->_codepointMax = $codepointMax->getValue();
 
         for($i = $this->getCodepointMin(), $j = $this->getCodepointMax();
             $i <= $j;
@@ -134,6 +140,9 @@ class Hoa_Realdom_String extends Hoa_Realdom implements Hoa_Realdom_Number {
     public function predicate ( $q ) {
 
         if(!is_string($q))
+            return false;
+
+        if(false === $this->getLength()->predicate(mb_strlen($q)))
             return false;
 
         $split  = preg_split('#(?<!^)(?!$)#u', $q);
@@ -162,15 +171,10 @@ class Hoa_Realdom_String extends Hoa_Realdom implements Hoa_Realdom_Number {
         $string  = null;
         $letters = array();
         $count   = count($this->_letters) - 1;
-        $length  = $this->getLength();
-
-        if($length instanceof Hoa_Realdom_Integer)
-            $length = $length->sample($sampler);
+        $length  = $this->getLength()->sample($sampler);
 
         if(0 > $length)
-            throw new Hoa_Realdom_Exception(
-                'Cannot sample a string with a negative length; got %d.',
-                1, $length);
+            return false;
 
         for($i = 0; $i < $length; ++$i)
             $string .= $this->_letters[$sampler->getInteger(0, $count)];
@@ -204,7 +208,7 @@ class Hoa_Realdom_String extends Hoa_Realdom implements Hoa_Realdom_Number {
      * Get the string's length.
      *
      * @access  public
-     * @return  int
+     * @return  Hoa_Realdom_Integer
      */
     public function getLength ( ) {
 

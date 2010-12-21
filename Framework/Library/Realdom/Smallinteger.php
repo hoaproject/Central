@@ -38,6 +38,11 @@
 import('Realdom.Boundinteger') and load();
 
 /**
+ * Hoa_Realdom_Constinteger
+ */
+import('Realdom.Constinteger') and load();
+
+/**
  * Class Hoa_Realdom_Smallinteger.
  *
  * Realistic domain: smallinteger.
@@ -66,35 +71,18 @@ class Hoa_Realdom_Smallinteger extends Hoa_Realdom_Boundinteger {
      * Construct a realistic domain.
      *
      * @access  public
+     * @param   Hoa_Realdom_Constinteger  $lower    Lower bound value.
+     * @param   Hoa_Realdom_Constinteger  $upper    Upper bound value.
      * @return  void
      */
-    public function construct ( $lower = null, $upper = null ) {
+    public function construct ( Hoa_Realdom_Constinteger $lower = null,
+                                Hoa_Realdom_Constinteger $upper = null ) {
 
-        parent::construct(-128, 127);
+        parent::construct(
+            new Hoa_Realdom_Constinteger(-128),
+            new Hoa_Realdom_Constinteger( 127)
+        );
 
         return;
-    }
-
-    /**
-     * Predicate whether the sampled value belongs to the realistic domains.
-     *
-     * @access  public
-     * @param   mixed   $q    Sampled value.
-     * @return  boolean
-     */
-    public function predicate ( $q ) {
-
-        return parent::predicate($q);
-    }
-
-    /**
-     * Sample one new value.
-     *
-     * @access  protected
-     * @return  mixed
-     */
-    protected function _sample ( Hoa_Test_Sampler $sampler ) {
-
-        return parent::_sample($sampler);
     }
 }
