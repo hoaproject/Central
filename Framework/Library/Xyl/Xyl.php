@@ -82,7 +82,8 @@ import('View.Viewable');
 class          Hoa_Xyl
     extends    Hoa_Xml
     implements Hoa_Xyl_Element,
-               Hoa_View_Viewable {
+               Hoa_View_Viewable,
+               Hoa_Core_Parameterizable {
 
     /**
      * XYL's namespace.
@@ -90,6 +91,12 @@ class          Hoa_Xyl
      * @const string
      */
     const NAMESPACE_ID = 'http://hoa-project.net/xyl/xylophone';
+    /**
+     * The Hoa_Controller_Dispatcher parameters.
+     *
+     * @var Hoa_Core_Parameter object
+     */
+    protected $_parameters  = null;
 
     /**
      * Data bucket.
@@ -165,12 +172,14 @@ class          Hoa_Xyl
      *                                                    as XYL.
      * @param   Hoa_Stream_Interface_Out  $out            Stream for rendering.
      * @param   Hoa_Xyl_Interpreter       $interpreter    Interpreter.
+     * @param   array                     $parameters     Parameters.
      * @return  void
      * @throw   Hoa_Xml_Exception
      */
     public function __construct ( Hoa_Stream_Interface_In  $in,
                                   Hoa_Stream_Interface_Out $out,
-                                  Hoa_Xyl_Interpreter      $interpreter = null ) {
+                                  Hoa_Xyl_Interpreter      $interpreter = null,
+                                  Array                    $parameters = array() ) {
 
         parent::__construct('Hoa_Xyl_Element_Basic', $in);
 
@@ -178,6 +187,21 @@ class          Hoa_Xyl
             throw new Hoa_Xyl_Exception(
                 'The XYL file %s has no XYL namespace declared.',
                 0, $in->getStreamName());
+
+        $this->_parameters = new Hoa_Core_Parameter(
+            $this,
+            array(
+                'theme' => 'Classic'
+            ),
+            array(
+                'html5.css'        => 'hoa://Application/Public/(:theme:)/Css/',
+                'html5.font'       => 'hoa://Application/Public/(:theme:)/Font/',
+                'html5.image'      => 'hoa://Application/Public/(:theme:)/Image/',
+                'html5.javascript' => 'hoa://Application/Public/(:theme:)/Javascript/',
+                'html5.video'      => 'hoa://Application/Public/(:theme:)/Video/'
+            )
+        );
+        $this->setParameters($parameters);
 
         $this->_i           = self::$_ci++;
         $this->_xe          = new DOMXPath(new DOMDocument());
@@ -196,6 +220,72 @@ class          Hoa_Xyl
                 ));
 
         return;
+    }
+
+    /**
+     * Set many parameters to a class.
+     *
+     * @access  public
+     * @param   array   $in    Parameters to set.
+     * @return  void
+     * @throw   Hoa_Exception
+     */
+    public function setParameters ( Array $in ) {
+
+        return $this->_parameters->setParameters($this, $in);
+    }
+
+    /**
+     * Get many parameters from a class.
+     *
+     * @access  public
+     * @return  array
+     * @throw   Hoa_Exception
+     */
+    public function getParameters ( ) {
+
+        return $this->_parameters->getParameters($this);
+    }
+
+    /**
+     * Set a parameter to a class.
+     *
+     * @access  public
+     * @param   string  $key      Key.
+     * @param   mixed   $value    Value.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function setParameter ( $key, $value ) {
+
+        return $this->_parameters->setParameter($this, $key, $value);
+    }
+
+    /**
+     * Get a parameter from a class.
+     *
+     * @access  public
+     * @param   string  $key    Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getParameter ( $key ) {
+
+        return $this->_parameters->getParameter($this, $key);
+    }
+
+    /**
+     * Get a formatted parameter from a class (i.e. zFormat with keywords and
+     * other parameters).
+     *
+     * @access  public
+     * @param   string  $key    Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getFormattedParameter ( $key ) {
+
+        return $this->_parameters->getFormattedParameter($this, $key);
     }
 
     /**
@@ -680,6 +770,32 @@ class          Hoa_Xyl
     }
 
     /**
+     * Set theme.
+     *
+     * @access  public
+     * @param   string  $theme    Theme.
+     * @return  string
+     */
+    public function setTheme ( $theme ) {
+
+        $old = $this->getTheme();
+        $this->_parameters->setKeyword($this, 'theme', $theme);
+
+        return $old;
+    }
+
+    /**
+     * Get theme.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getTheme ( ) {
+        
+        return $this->_parameters->getKeyword($this, 'theme');
+    }
+
+    /**
      * Get all stylesheets in <?xyl-stylesheet?>
      *
      * @access  public
@@ -691,7 +807,9 @@ class          Hoa_Xyl
     }
 
     /**
-     * Resolve hoa://Library/Xyl/ path according to the current instance.
+     * Resolve some hoa:// pathes:
+     *     * hoa://Library/Xyl/ to hoa://Library/Xyl[i];
+     *     * hoa://Application/Public/ to hoa://Application/Public/<theme>/.
      *
      * @access  public
      * @param   string  $hoa    hoa:// path.
@@ -699,11 +817,17 @@ class          Hoa_Xyl
      */
     public function resolve ( $hoa ) {
 
-        return resolve(str_replace(
-            'hoa://Library/Xyl',
-            'hoa://Library/Xyl[' . $this->_i . ']',
-            $hoa
-        ));
+        if(0 !== preg_match('#hoa://Library/Xyl(/.*|$)#', $hoa, $matches))
+            return resolve(
+                'hoa://Library/Xyl[' . $this->_i . ']' . $matches[1]
+            );
+
+        if(0 !== preg_match('#hoa://Application/Public(/.*)#', $hoa, $matches))
+            return resolve(
+                'hoa://Application/Public/' . $this->getTheme() . $matches[1]
+            );
+
+        return resolve($hoa);
     }
 
     /**
