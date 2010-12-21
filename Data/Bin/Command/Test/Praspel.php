@@ -41,6 +41,11 @@ import('Test.Praspel.Compiler');
 import('Test.Sampler.Random');
 
 /**
+ * Hoa_Test_Selector_Random
+ */
+import('Test.Selector.Random');
+
+/**
  * Hoa_Realdom
  */
 import('Realdom.~');
@@ -132,6 +137,7 @@ class PraspelCommand extends Hoa_Console_Command_Abstract {
         $ccode    = null;
         $variable = null;
         $domain   = null;
+        $selector = 
 
         Hoa_Realdom::setSampler(new Hoa_Test_Sampler_Random());
 
@@ -164,8 +170,10 @@ class PraspelCommand extends Hoa_Console_Command_Abstract {
                         break;
                     }
 
-                    $domain = $variable->chooseOneDomain();
-                    var_dump($domain->sample());
+                    $selection = new Hoa_Test_Selector_Random(
+                        $praspel->getClause('requires')->getVariables()
+                    );
+                    var_dump($variable->selectDomain($selection->current())->sample());
                   break;
 
                 case 'q':
@@ -191,9 +199,11 @@ class PraspelCommand extends Hoa_Console_Command_Abstract {
                         continue;
                     }
 
-                    $variable = $praspel->getClause('requires')->getVariable('i');
-                    $domain     = $variable->chooseOneDomain();
-                    var_dump($domain->sample());
+                    $variable  = $praspel->getClause('requires')->getVariable('i');
+                    $selection = new Hoa_Test_Selector_Random(
+                        $praspel->getClause('requires')->getVariables()
+                    );
+                    var_dump($variable->selectDomain($selection->current())->sample());
             }
 
             cout();
