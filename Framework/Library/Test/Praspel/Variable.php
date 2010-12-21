@@ -43,11 +43,6 @@ import('Test.Praspel.Exception');
 import('Test.Praspel.DomainDisjunction') and load();
 
 /**
- * Hoa_Test_Urg
- */
-import('Test.Urg.~');
-
-/**
  * Class Hoa_Test_Praspel_Variable.
  *
  * Represents a variable.
@@ -80,7 +75,7 @@ class Hoa_Test_Praspel_Variable extends Hoa_Test_Praspel_DomainDisjunction {
     /**
      * Choosen domain.
      *
-     * @var Hoa_Test_Urg_Type_Interface_Type object
+     * @var Hoa_Realdom object
      */
     protected $_choosen = null;
 
@@ -127,23 +122,26 @@ class Hoa_Test_Praspel_Variable extends Hoa_Test_Praspel_DomainDisjunction {
     }
 
     /**
-     * Choose one domain.
+     * Select a domain (e.g. from a Hoa_Test_Selector object).
      *
-     * @access  public
-     * @return  Hoa_Test_Urg_Type_Interface_Type
+     * @access  pulic
+     * @param   mixed  $selection    From variables to domains, or domain.
+     * @return  Hoa_Realdom
+     * @throw   Hoa_Test_Praspel_Exception
      */
-    public function chooseOneDomain ( ) {
+    public function selectDomain ( $selection ) {
 
-        $i = Hoa_Test_Urg::Ud(0, count($this->_domains) - 1);
-        reset($this->_domains);
+        if($selection instanceof Hoa_Realdom)
+            return $this->_choosen = $selection;
 
-        $domain = null;
+        $name = $this->getName();
 
-        foreach($this->_domains as $name => $domain)
-            if(0 === $i--)
-                break;
+        if(!isset($selection[$name]))
+            throw new Hoa_Test_Praspel_Exception(
+                'Cannot choose a domain (from a selection) for the variable %s.',
+                0, $name);
 
-        return $this->_choosen = $domain;
+        return $this->_choosen = $selection[$name];
     }
 
     /**
@@ -231,15 +229,29 @@ class Hoa_Test_Praspel_Variable extends Hoa_Test_Praspel_DomainDisjunction {
     }
 
     /**
+     * Whether a domain has been choosen.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function hasChoosenDomain ( ) {
+
+        return null !== $this->_choosen;
+    }
+
+    /**
      * Get choosen domain.
      *
      * @access  public
-     * @return  Hoa_Test_Urg_Type_Interface_Type
+     * @return  Hoa_Realdom
+     * @throw   Hoa_Test_Praspel_Exception
      */
     public function getChoosenDomain ( ) {
 
-        if(null === $this->_choosen)
-            $this->chooseOneDomain();
+        if(false === $this->hasChoosenDomain())
+            throw new Hoa_Test_Praspel_Exception(
+                'No domain has been choosen for the variable %s.',
+                2, $this->getName());
 
         return $this->_choosen;
     }
@@ -307,6 +319,21 @@ class Hoa_Test_Praspel_Variable extends Hoa_Test_Praspel_DomainDisjunction {
         $this->_parent = $parent;
 
         return $old;
+    }
+
+    /**
+     * Reset the contract for a new runtime.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function reset ( ) {
+
+        $this->_choosen  = null;
+        $this->_oldValue = null;
+        $this->_newValue = null;
+
+        return;
     }
 
     /**

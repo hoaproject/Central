@@ -78,6 +78,16 @@ import('Log.~');
 import('Visitor.Element');
 
 /**
+ * Hoa_Iterator_Basic
+ */
+import('Iterator.Basic');
+
+/**
+ * Hoa_Iterator_Aggregate
+ */
+import('Iterator.Aggregate') and load();
+
+/**
  * Class Hoa_Test_Praspel.
  *
  * Root of a Praspel contract.
@@ -91,7 +101,9 @@ import('Visitor.Element');
  * @subpackage  Hoa_Test_Praspel
  */
 
-class Hoa_Test_Praspel_Contract implements Hoa_Visitor_Element {
+class          Hoa_Test_Praspel_Contract
+    implements Hoa_Visitor_Element,
+               Hoa_Iterator_Aggregate {
 
     /**
      * Collection of clauses.
@@ -213,7 +225,7 @@ class Hoa_Test_Praspel_Contract implements Hoa_Visitor_Element {
 
         $clause = null;
 
-        switch($name) {
+        switch(strtolower($name)) {
 
             case 'ensures':
                 $clause = new Hoa_Test_Praspel_Clause_Ensures($this);
@@ -245,7 +257,7 @@ class Hoa_Test_Praspel_Contract implements Hoa_Visitor_Element {
      * @access  public
      * @param   string  $name    Domain name.
      * @param   ...     ...      Domain arguments.
-     * @return  Hoa_Test_Urg_Type_Interface_Type
+     * @return  Hoa_Realdom
      */
     public function domain ( $name ) {
 
@@ -379,9 +391,15 @@ class Hoa_Test_Praspel_Contract implements Hoa_Visitor_Element {
                 $arg = $args[$i++];
 
             $o = false;
+            $p = false;
 
-            foreach($variable->getDomains() as $domain)
-                $o = $o || $domain->predicate($arg);
+            foreach($variable->getDomains() as $domain) {
+
+                if(true === $p = $domain->predicate($arg))
+                    $variable->selectDomain($domain);
+
+                $o = $o || $p;
+            }
 
             $out = $out && $o;
 
@@ -509,10 +527,16 @@ class Hoa_Test_Praspel_Contract implements Hoa_Visitor_Element {
         foreach($invariant->getVariables() as $variable) {
 
             $out   = false;
+            $p     = false;
             $value = $invariants[$variable->getName()];
 
-            foreach($variable->getDomains() as $domain)
-                $out = $out || $domain->predicate($value);
+            foreach($variable->getDomains() as $domain) {
+
+                if(true === $p = $domain->predicate($value))
+                    $variable->selectDomain($domain);
+
+                $out = $out || $p;
+            }
 
             if(false === $out) {
 
@@ -695,6 +719,36 @@ class Hoa_Test_Praspel_Contract implements Hoa_Visitor_Element {
     public function getId ( ) {
 
         return $this->getClass() . '::' . $this->getMethod();
+    }
+
+    /**
+     * Get iterator (through clauses).
+     *
+     * @access  public
+     * @return  Hoa_Iterator_Basic
+     */
+    public function getIterator ( ) {
+
+        return new Hoa_Iterator_Basic($this->_clauses);
+    }
+
+    /**
+     * Reset the contract for a new runtime.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function reset ( ) {
+
+        $this->_arguments = array();
+        $this->_result    = null;
+        $this->_exception = null;
+
+        foreach($this as $clause)
+            foreach($clause->getVariables() as $variable)
+                $variable->reset();
+
+        return;
     }
 
     /**
