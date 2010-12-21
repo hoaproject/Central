@@ -182,6 +182,23 @@ abstract class Hoa_Core_Protocol {
     }
 
     /**
+     * Remove a component.
+     *
+     * @access  public
+     * @param   string  $component    Component name to remove.
+     * @return  Hoa_Core_Protocol
+     */
+    public function removeComponent ( $component ) {
+
+        if(false === $this->componentExists($component))
+            return $this;
+
+        unset($this->_components[$component]);
+
+        return $this;
+    }
+
+    /**
      * Get a specific component.
      *
      * @access  public
