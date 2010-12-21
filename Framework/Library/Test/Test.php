@@ -52,6 +52,11 @@ import('Test.Praspel.~');
 import('Test.Sampler.Random');
 
 /**
+ * Hoa_Test_Selector_Random
+ */
+import('Test.Selector.Random');
+
+/**
  * Hoa_Realdom
  */
 import('Realdom.~');
@@ -69,7 +74,9 @@ import('Realdom.~');
  * @package     Hoa_Test
  */
 
-class Hoa_Test implements Hoa_Core_Parameterizable {
+class          Hoa_Test
+    implements Hoa_Core_Parameterizable,
+               Hoa_Core_Event_Source {
 
     /**
      * Singleton.
@@ -117,14 +124,16 @@ class Hoa_Test implements Hoa_Core_Parameterizable {
         );
 
         $this->setParameters($parameters);
-    }
+        Hoa_Core_Event::register(
+            'hoa://Event/Test/Sample:open-iteration', 
+            $this
+        );
+        Hoa_Core_Event::register(
+            'hoa://Event/Test/Sample:close-iteration', 
+            $this
+        );
 
-    /**
-     * For a temporary retro-compatibility. Will be deleted.
-     */
-    public static function getInstance ( ) {
-
-        return new self();
+        return;
     }
 
     /**
@@ -166,25 +175,78 @@ class Hoa_Test implements Hoa_Core_Parameterizable {
 
         Hoa_Realdom::setSampler(new Hoa_Test_Sampler_Random());
 
-        $cut        = new $class();
-        $hop        = '__hoa_' . $method . '_contract';
+        $cut       = new $class();
+        $hop       = '__hoa_' . $method . '_contract';
         $cut->$hop();
-        $praspel    = Hoa_Test_Praspel::getInstance();
-        $contract   = $praspel->getContract($contractId);
-        $requires   = $contract->getClause('requires');
-        $parameters = array(0 => $method);
-        $handle     = null;
+        $praspel   = Hoa_Test_Praspel::getInstance();
+        $contract  = $praspel->getContract($contractId);
+        $i         = 0;
 
-        foreach($requires->getVariables() as $variable) {
+        if(false === $contract->clauseExists('requires')) {
 
-            $handle = $variable->getChoosenDomain();
-            $parameters[] = $handle->sample();
+            Hoa_Core_Event::notify(
+                'hoa://Event/Test/Sample:open-iteration',
+                $this,
+                new Hoa_Core_Event_Bucket(array('iteration' => $i))
+            );
+            call_user_func_array(
+                array($cut, '__hoa_magicCaller'),
+                array(0 => $method)
+            );
+            Hoa_Core_Event::notify(
+                'hoa://Event/Test/Sample:close-iteration',
+                $this,
+                new Hoa_Core_Event_Bucket(array(
+                    'iteration' => $i,
+                    'contract'  => $contract
+                ))
+            );
+            $contract->reset();
+
+            return;
         }
 
-        call_user_func_array(
-            array($cut, '__hoa_magicCaller'),
-            $parameters
-        );
+        $variables = $contract->getClause('requires')->getVariables();
+        $selector  = new Hoa_Test_Selector_Random($variables);
+
+        foreach($selector as $e => $selection) {
+
+            Hoa_Core_Event::notify(
+                'hoa://Event/Test/Sample:open-iteration',
+                $this,
+                new Hoa_Core_Event_Bucket(array('iteration' => $i))
+            );
+
+            $parameters = array(0 => $method);
+
+            foreach($variables as $variable)
+                $parameters[] = $variable->selectDomain($selection)
+                                         ->sample();
+
+            call_user_func_array(
+                array($cut, '__hoa_magicCaller'),
+                $parameters
+            );
+            Hoa_Core_Event::notify(
+                'hoa://Event/Test/Sample:close-iteration',
+                $this,
+                new Hoa_Core_Event_Bucket(array(
+                    'iteration' => $i,
+                    'contract'  => $contract
+                ))
+            );
+            $contract->reset();
+            ++$i;
+        }
+
+        return;
+    }
+
+    /**
+     *
+     */
+    private function _sample ( Array $variables ) {
+
 
         return;
     }
