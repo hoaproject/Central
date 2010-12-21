@@ -221,19 +221,8 @@ class Hoa_Test_Praspel_Visitor_Php extends Hoa_Visitor_Registry {
         $out    = array();
         $spaces = str_repeat('    ', $d);
 
-        foreach($arguments as $i => $argument) {
-
-            if(is_bool($arguments))
-                $out[] = $spaces . '    ->with(' . $argument . ')' . "\n";
-
-            elseif(is_int($argument) || is_float($argument))
-                $out[] = $spaces . '    ->with(' . $argument . ')' . "\n";
-
-            elseif(is_string($argument)) 
-                $out[] = $spaces . '    ->with(\'' .
-                         str_replace("'", "\\'", $argument) . '\')' . "\n";
-
-            elseif(is_array($argument)) {
+        foreach($arguments as $i => $argument)
+            if(is_array($argument)) {
 
                 $handle = null;
 
@@ -268,20 +257,45 @@ class Hoa_Test_Praspel_Visitor_Php extends Hoa_Visitor_Registry {
 
                 $d++;
 
-                $out[] = $spaces . '    ->' .
-                         (true === $f
-                             ? 'belongsTo'
-                             : 'withDomain'
-                         ) . '(\'' . $argument->getName() . '\')' . "\n" .
-                         implode(
-                            $spaces . '        ->_comma' . "\n",
-                            $this->formatArguments($argument->getArguments(), false)
-                         ) .
-                         $spaces . '        ->_ok()' . "\n";
+                switch(strtolower($argument->getName())) {
+
+                    case 'constboolean':
+                        $out[] = $spaces . '    ->with(' .
+                                 ($argument->getValue() ? 'true' : 'false') .
+                                 ')' . "\n";
+                      break;
+
+                    case 'constfloat':
+                    case 'constinteger':
+                        $out[] = $spaces . '    ->with(' .
+                                 (string) $argument->getValue() .
+                                 ')' . "\n";
+                      break;
+
+                    case 'conststring':
+                        $out[] = $spaces . '    ->with(\'' .
+                                 str_replace("'", "\'", $argument->getValue()) .
+                                 '\')' . "\n";
+                      break;
+
+                    default:
+                        $out[] = $spaces . '    ->' .
+                                 (true === $f
+                                     ? 'belongsTo'
+                                     : 'withDomain'
+                                 ) . '(\'' . $argument->getName() . '\')' . "\n" .
+                                 implode(
+                                    $spaces . '        ->_comma' . "\n",
+                                    $this->formatArguments(
+                                        $argument->getArguments(),
+                                        false
+                                    )
+                                 ) .
+                                 $spaces . '        ->_ok()' . "\n";
+                }
 
                 $d--;
             }
-        }
 
         return $out;
     }
