@@ -141,6 +141,20 @@ class          Hoa_Xyl
      */
     protected $_stylesheets = array();
 
+    /**
+     * Get ID of the instance.
+     *
+     * @var Hoa_Xyl int
+     */
+    private $_i             = 0;
+
+    /**
+     * Get last ID of instances.
+     *
+     * @var Hoa_Xyl int
+     */
+    private static $_ci     = 0;
+
 
 
     /**
@@ -159,19 +173,27 @@ class          Hoa_Xyl
                                   Hoa_Xyl_Interpreter      $interpreter = null ) {
 
         parent::__construct('Hoa_Xyl_Element_Basic', $in);
-        
-        $this->_xe = new DOMXPath(new DOMDocument());
 
         if(false === $this->namespaceExists(self::NAMESPACE_ID))
             throw new Hoa_Xyl_Exception(
                 'The XYL file %s has no XYL namespace declared.',
                 0, $in->getStreamName());
 
-        $this->useNamespace(self::NAMESPACE_ID);
+        $this->_i           = self::$_ci++;
+        $this->_xe          = new DOMXPath(new DOMDocument());
         $this->_data        = new Hoa_Core_Data();
         $this->_out         = $out;
         $this->_interpreter = $interpreter;
         $this->_mowgli      = $this->getStream()->readDOM()->ownerDocument;
+
+        $this->useNamespace(self::NAMESPACE_ID);
+        Hoa_Core::getInstance()
+                ->getProtocol()
+                ->getComponent('Library')
+                ->addComponent(new Hoa_Xyl__Protocol(
+                    'Xyl[' . $this->_i . ']',
+                    'Interpreter' . DS .$this->_interpreter->getResourcePath()
+                ));
 
         return;
     }
@@ -666,5 +688,91 @@ class          Hoa_Xyl
     public function getStylesheets ( ) {
 
         return $this->_stylesheets;
+    }
+
+    /**
+     * Resolve hoa://Library/Xyl/ path according to the current instance.
+     *
+     * @access  public
+     * @param   string  $hoa    hoa:// path.
+     * @return  string
+     */
+    public function resolve ( $hoa ) {
+
+        return resolve(str_replace(
+            'hoa://Library/Xyl',
+            'hoa://Library/Xyl[' . $this->_i . ']',
+            $hoa
+        ));
+    }
+
+    /**
+     * Destruct XYL object.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function __destruct ( ) {
+
+        Hoa_Core::getInstance()
+                ->getProtocol()
+                ->getComponent('Library')
+                ->removeComponent('Xyl[' . $this->_i . ']');
+
+        return;
+    }
+}
+
+/**
+ * Class Hoa_Xyl__Protocol.
+ *
+ * hoa://Library/Xyl component.
+ *
+ * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license     http://gnu.org/licenses/gpl.txt GNU GPL
+ * @since       PHP 5
+ * @version     0.1
+ * @package     Hoa_Xyl
+ */
+
+class Hoa_Xyl__Protocol extends Hoa_Core_Protocol {
+
+    /**
+     * Fragment to insert in the path.
+     *
+     * @var Hoa_Xyl__Protocol string
+     */
+    protected $_fragment = null;
+
+
+
+    /**
+     * Construct a hoa://Library/Xyl component.
+     *
+     * @access  public
+     * @param   string  $name        Component name (normally, Xyl[i]).
+     * @param   string  $fragment    Fragment to insert in the path (normally,
+     *                               the resource path).
+     * @return  void
+     */
+    public function __construct ( $name, $fragment ) {
+
+        parent::__construct($name);
+        $this->_fragment = $fragment;
+
+        return;
+    }
+
+    /**
+     * Queue of the component.
+     *
+     * @access  public
+     * @param   string  $queue    Queue of the component.
+     * @return  string
+     */
+    public function reach ( $queue ) {
+
+        return dirname(__FILE__) . DS . $this->_fragment . $queue;
     }
 }

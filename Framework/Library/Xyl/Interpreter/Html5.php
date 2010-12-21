@@ -68,7 +68,7 @@ class Hoa_Xyl_Interpreter_Html5 extends Hoa_Xyl_Interpreter {
      *
      * @var Hoa_Xyl_Interpreter_Html5 array
      */
-    protected $_rank = array(
+    protected $_rank         = array(
         // Layout.
         'document'        => 'Hoa_Xyl_Interpreter_Html5_Document',
         'yield'           => 'Hoa_Xyl_Interpreter_Common_Yield',
@@ -92,4 +92,11 @@ class Hoa_Xyl_Interpreter_Html5 extends Hoa_Xyl_Interpreter {
         'olist'        => 'Hoa_Xyl_Interpreter_Html5_Olist',
         'item'         => 'Hoa_Xyl_Interpreter_Html5_Item'
     );
+
+    /**
+     * Resource path.
+     *
+     * @var Hoa_Xyl_Interpreter_Html5 string
+     */
+    protected $_resourcePath = 'Html5/Resource/';
 }

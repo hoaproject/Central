@@ -58,7 +58,14 @@ abstract class Hoa_Xyl_Interpreter {
      *
      * @var Hoa_Xyl_Interpreter array
      */
-    protected $_rank = array();
+    protected $_rank         = array();
+
+    /**
+     * Resource path.
+     *
+     * @var Hoa_Xyl_Interpreter string
+     */
+    protected $_resourcePath = null;
 
 
 
@@ -71,5 +78,16 @@ abstract class Hoa_Xyl_Interpreter {
     public function getRank ( ) {
 
         return $this->_rank;
+    }
+
+    /**
+     * Get resource path.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getResourcePath ( ) {
+
+        return $this->_resourcePath;
     }
 }
