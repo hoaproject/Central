@@ -134,6 +134,13 @@ class          Hoa_Xyl
      */
     protected $_mowgli      = null;
 
+    /**
+     * Temporize stylesheets.
+     *
+     * @var Hoa_Xyl array
+     */
+    protected $_stylesheets = array();
+
 
 
     /**
@@ -226,6 +233,8 @@ class          Hoa_Xyl
         $xyl_use     = $xpath->query('/processing-instruction(\'xyl-use\')');
         unset($xpath);
 
+        $this->computeStylesheet($this->_mowgli);
+
         if(0 === $xyl_use->length)
             return false;
 
@@ -241,8 +250,12 @@ class          Hoa_Xyl
             $use       = array_pop($uses);
             $useParsed = new Hoa_Xml_Attribute($use->data);
 
-            if(false === $useParsed->attributeExists('href'))
+            if(false === $useParsed->attributeExists('href')) {
+
+                unset($useParsed);
+
                 continue;
+            }
 
             $href = $useParsed->readAttribute('href');
             unset($useParsed);
@@ -270,12 +283,15 @@ class          Hoa_Xyl
             unset($use);
             unset($xyl_use);
 
-            $xpath   = new DOMXPath($fragment->readDOM()->ownerDocument);
+            $fod     = $fragment->readDOM()->ownerDocument;
+            $xpath   = new DOMXPath($fod);
             $xyl_use = $xpath->query('/processing-instruction(\'xyl-use\')');
             unset($xpath);
 
             for($i = 0, $m = $xyl_use->length; $i < $m; ++$i)
                 $uses[] = $xyl_use->item($i);
+
+            $this->computeStylesheet($fod);
 
         } while(!empty($uses));
 
@@ -364,8 +380,12 @@ class          Hoa_Xyl
             $overlay       = array_pop($overlays);
             $overlayParsed = new Hoa_Xml_Attribute($overlay->data);
 
-            if(false === $overlayParsed->attributeExists('href'))
+            if(false === $overlayParsed->attributeExists('href')) {
+
+                unset($overlayParsed);
+
                 continue;
+            }
 
             $href = $overlayParsed->readAttribute('href');
             unset($overlayParsed);
@@ -394,12 +414,15 @@ class          Hoa_Xyl
             unset($overlay);
             unset($xyl_overlay);
 
-            $xpath       = new DOMXPath($fragment->readDOM()->ownerDocument);
+            $fod         = $fragment->readDOM()->ownerDocument;
+            $xpath       = new DOMXPath($fod);
             $xyl_overlay = $xpath->query('/processing-instruction(\'xyl-overlay\')');
             unset($xpath);
 
             for($i = 0, $m = $xyl_overlay->length; $i < $m; ++$i)
                 $overlays[] = $xyl_overlay->item($i);
+
+            $this->computeStylesheet($fod);
 
         } while(!empty($overlays));
 
@@ -540,6 +563,37 @@ class          Hoa_Xyl
     }
 
     /**
+     * Compute <?xyl-stylesheet?> processing-instruction.
+     *
+     * @access  protected
+     * @param   DOMDocument  $ownerDocument    Document that ownes PIs.
+     * @return  void
+     */
+    protected function computeStylesheet ( DOMDocument $ownerDocument ) {
+
+        $xpath     = new DOMXPath($ownerDocument);
+        $xyl_style = $xpath->query('/processing-instruction(\'xyl-stylesheet\')');
+        unset($xpath);
+
+        if(0 === $xyl_style->length)
+            return;
+
+        for($i = 0, $m = $xyl_style->length; $i < $m; ++$i) {
+
+            $styleParsed = new Hoa_Xml_Attribute(
+                $xyl_style->item($i)->data
+            );
+
+            if(true === $styleParsed->attributeExists('href'))
+                $this->_stylesheets[] = $styleParsed->readAttribute('href');
+
+            unset($styleParsed);
+        }
+
+        return;
+    }
+
+    /**
      * Distribute data into the XYL tree. Data are linked to element through a
      * reference to the data bucket in this object.
      *
@@ -601,5 +655,16 @@ class          Hoa_Xyl
             $this->interpreteAs($this->_interpreter);
 
         return $this->_concrete->render($this->_out);
+    }
+
+    /**
+     * Get all stylesheets in <?xyl-stylesheet?>
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getStylesheets ( ) {
+
+        return $this->_stylesheets;
     }
 }
