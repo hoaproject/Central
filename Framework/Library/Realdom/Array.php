@@ -38,6 +38,11 @@
 import('Realdom.~') and load();
 
 /**
+ * Hoa_Realdom_Constinteger
+ */
+import('Realdom.Constinteger');
+
+/**
  * Class Hoa_Realdom_Array.
  *
  * Realistic domain: array.
@@ -70,9 +75,9 @@ class Hoa_Realdom_Array extends Hoa_Realdom {
     /**
      * Length.
      *
-     * @var mixed mixed
+     * @var Hoa_Realdom_Constinteger object
      */
-    protected $_length  = 7;
+    protected $_length  = null;
 
 
 
@@ -80,19 +85,19 @@ class Hoa_Realdom_Array extends Hoa_Realdom {
      * Construct a realistic domain.
      *
      * @access  public
-     * @param   array   $domains    Domains.
-     * @param   mixed   $length     Length.
+     * @param   array                $domains    Domains.
+     * @param   Hoa_Realdom_Integer  $length     Length.
      * @return  void
      * @throw   Hoa_Realdom_Exception
      */
-    public function construct ( Array $domains = array(), $length = 7 ) {
+    public function construct ( Array               $domains = array(),
+                                Hoa_Realdom_Integer $length  = null ) {
+
+        if(null === $length)
+            $length = new Hoa_Realdom_Constinteger(7);
 
         $this->_domains = $domains;
         $this->_length  = $length;
-
-        if(!is_int($length) && !($length instanceof Hoa_Realdom_Integer))
-            throw new Hoa_Realdom_Exception(
-                'Array needs an integer in second parameter.', 0);
 
         return;
     }
@@ -107,6 +112,9 @@ class Hoa_Realdom_Array extends Hoa_Realdom {
     public function predicate ( $q ) {
 
         if(!is_array($q))
+            return false;
+
+        if(false === $this->getLength()->predicate(count($q)))
             return false;
 
         foreach($this->getDomains() as $e => $pairs) {
@@ -142,21 +150,16 @@ class Hoa_Realdom_Array extends Hoa_Realdom {
      */
     protected function _sample ( Hoa_Test_Sampler $sampler ) {
 
-        $domains    = $this->getDomains();
-        $pair       = $domains[$sampler->getInteger(0, count($domains) - 1)];
-        $length     = $this->getLength();
-
-        if($length instanceof Hoa_Realdom)
-            $length = $length->sample($sampler);
+        $domains = $this->getDomains();
+        $pair    = $domains[$sampler->getInteger(0, count($domains) - 1)];
+        $length  = $this->getLength()->sample($sampler);
 
         if(0 > $length)
-            throw new Hoa_Realdom_Exception(
-                'Cannot sample an array with a negative length; got %d.',
-                1, $length);
+            return false;
 
-        $domL       = count($pair[0]) - 1;
-        $ranL       = count($pair[1]) - 1;
-        $out        = array();
+        $domL    = count($pair[0]) - 1;
+        $ranL    = count($pair[1]) - 1;
+        $out     = array();
 
         if(!isset($pair[0]) || empty($pair[0]))
             for($i = 0; $i < $length; ++$i)
@@ -187,7 +190,7 @@ class Hoa_Realdom_Array extends Hoa_Realdom {
      * Get length.
      *
      * @access  public
-     * @return  mixed
+     * @return  Hoa_Realdom_Constinteger
      */
     public function getLength ( ) {
 

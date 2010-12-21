@@ -77,7 +77,7 @@ class Hoa_Realdom_Constinteger extends Hoa_Realdom_Integer {
      * @return  void
      * @throw   Hoa_Realdom_Exception
      */
-    public function construct ( $integer ) {
+    public function construct ( $integer = 0 ) {
 
         $this->_value = $integer;
 

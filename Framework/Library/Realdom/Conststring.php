@@ -77,7 +77,7 @@ class Hoa_Realdom_Conststring extends Hoa_Realdom_String {
      * @return  void
      * @throw   Hoa_Realdom_Exception
      */
-    public function construct ( $string ) {
+    public function construct ( $string  = '' ) {
 
         $this->_value = $string;
 

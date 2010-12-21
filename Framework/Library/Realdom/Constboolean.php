@@ -77,7 +77,7 @@ class Hoa_Realdom_Constboolean extends Hoa_Realdom_Boolean {
      * @return  void
      * @throw   Hoa_Realdom_Exception
      */
-    public function construct ( $boolean ) {
+    public function construct ( $boolean = false ) {
 
         $this->_value = $boolean;
 

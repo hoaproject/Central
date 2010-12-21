@@ -63,14 +63,14 @@ class Hoa_Realdom_Boundinteger extends Hoa_Realdom_Integer {
     /**
      * Lower bound value.
      *
-     * @var Hoa_Realdom_Integer object
+     * @var Hoa_Realdom_Constinteger object
      */
     protected $_lower = 0;
 
     /**
      * Upper bound value.
      *
-     * @var Hoa_Realdom_Integer object
+     * @var Hoa_Realdom_Constinteger object
      */
     protected $_upper = 0;
 
@@ -80,12 +80,12 @@ class Hoa_Realdom_Boundinteger extends Hoa_Realdom_Integer {
      * Construct a realistic domain.
      *
      * @access  public
-     * @param   Hoa_Realdom_Integer  $lower    Lower bound value.
-     * @param   Hoa_Realdom_Integer  $upper    Upper bound value.
+     * @param   Hoa_Realdom_Constinteger  $lower    Lower bound value.
+     * @param   Hoa_Realdom_Constinteger  $upper    Upper bound value.
      * @return  void
      */
-    public function construct ( Hoa_Realdom_Integer $lower = null,
-                                Hoa_Realdom_Integer $upper = null ) {
+    public function construct ( Hoa_Realdom_Constinteger $lower = null,
+                                Hoa_Realdom_Constinteger $upper = null ) {
 
         if(null === $lower)
             $lower = ~PHP_INT_MAX;
@@ -131,7 +131,7 @@ class Hoa_Realdom_Boundinteger extends Hoa_Realdom_Integer {
      * Get the lower bound value.
      *
      * @access  public
-     * @return  Hoa_Realdom_Integer
+     * @return  Hoa_Realdom_Constinteger
      */
     public function getLower ( ) {
 
@@ -142,7 +142,7 @@ class Hoa_Realdom_Boundinteger extends Hoa_Realdom_Integer {
      * Get the upper bound value.
      *
      * @access  public
-     * @return  Hoa_Realdom_Integer
+     * @return  Hoa_Realdom_Constinteger
      */
     public function getUpper ( ) {
 
