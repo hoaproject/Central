@@ -180,18 +180,8 @@ class Hoa_Test_Praspel_Visitor_Praspel extends Hoa_Visitor_Registry {
 
         $out = array();
 
-        foreach($arguments as $i => $argument) {
-
-            if(is_bool($arguments))
-                $out[] = (string) $argument;
-
-            elseif(is_int($argument) || is_float($argument))
-                $out[] = (string) $argument;
-
-            elseif(is_string($argument)) 
-                $out[] = '\'' . str_replace("'", "\\'", $argument) . '\'';
-
-            elseif(is_array($argument)) {
+        foreach($arguments as $i => $argument)
+            if(is_array($argument)) {
 
                 $handle = null;
 
@@ -219,13 +209,35 @@ class Hoa_Test_Praspel_Visitor_Praspel extends Hoa_Visitor_Registry {
             }
             elseif(is_object($argument)) {
 
-                $out[] = $argument->getName() . '(' .
-                         implode(
-                            ', ',
-                            $this->formatArguments($argument->getArguments())
-                         ) . ')';
+                switch(strtolower($argument->getName())) {
+
+                    case 'constboolean':
+                        $out[] = $argument->getValue()
+                                   ? 'true'
+                                   : 'false';
+                      break;
+
+                    case 'constfloat':
+                    case 'constinteger':
+                        $out[] = (string) $argument->getValue();
+                      break;
+
+                    case 'conststring':
+                        $out[] = '\'' .
+                                 str_replace("'", "\'", $argument->getValue()) .
+                                 '\'';
+                      break;
+
+                    default:
+                        $out[] = $argument->getName() . '(' .
+                                 implode(
+                                    ', ',
+                                    $this->formatArguments(
+                                        $argument->getArguments()
+                                    )
+                                 ) . ')';
+                }
             }
-        }
 
         return $out;
     }
