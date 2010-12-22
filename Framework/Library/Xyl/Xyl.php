@@ -191,14 +191,15 @@ class          Hoa_Xyl
         $this->_parameters = new Hoa_Core_Parameter(
             $this,
             array(
-                'theme' => 'Classic'
+                'theme' => 'classic'
             ),
             array(
-                'html5.css'        => 'hoa://Application/Public/(:theme:)/Css/',
-                'html5.font'       => 'hoa://Application/Public/(:theme:)/Font/',
-                'html5.image'      => 'hoa://Application/Public/(:theme:)/Image/',
-                'html5.javascript' => 'hoa://Application/Public/(:theme:)/Javascript/',
-                'html5.video'      => 'hoa://Application/Public/(:theme:)/Video/'
+                'theme'            => '(:theme:lU:)',
+                'html5.css'        => 'hoa://Application/Public/(:%theme:)/Css/',
+                'html5.font'       => 'hoa://Application/Public/(:%theme:)/Font/',
+                'html5.image'      => 'hoa://Application/Public/(:%theme:)/Image/',
+                'html5.javascript' => 'hoa://Application/Public/(:%theme:)/Javascript/',
+                'html5.video'      => 'hoa://Application/Public/(:%theme:)/Video/'
             )
         );
         $this->setParameters($parameters);
@@ -824,7 +825,8 @@ class          Hoa_Xyl
 
         if(0 !== preg_match('#hoa://Application/Public(/.*)#', $hoa, $matches))
             return resolve(
-                'hoa://Application/Public/' . $this->getTheme() . $matches[1]
+                'hoa://Application/Public/' .
+                $this->getFormattedParameter('theme') . $matches[1]
             );
 
         return resolve($hoa);
