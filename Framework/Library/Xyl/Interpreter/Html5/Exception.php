@@ -35,7 +35,7 @@
 /**
  * Hoa_Xyl_Interpreter_Exception
  */
-import('Xyl.Interpreter.Exception');
+import('Xyl.Interpreter.Exception') and load();
 
 /**
  * Class Hoa_Xyl_Interpreter_Html5_Exception.
