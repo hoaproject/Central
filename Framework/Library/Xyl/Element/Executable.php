@@ -51,7 +51,7 @@ interface Hoa_Xyl_Element_Executable {
     /**
      * Execute an element.
      *
-     * @access  protected
+     * @access  public
      * @return  void
      */
     public function execute ( );
