@@ -50,7 +50,7 @@ import('Xyl.Interpreter.Html5.*');
 /**
  * Class Hoa_Xyl_Interpreter_Html5.
  *
- * 
+ * HTML5 intepreter.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
