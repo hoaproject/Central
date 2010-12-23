@@ -25,5 +25,5 @@
  */
 
 @charset   "utf-8";
-@namespace "http://www.w3.org/1999/xhtml";
+@namespace url("http://www.w3.org/1999/xhtml");
 
