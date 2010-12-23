@@ -85,6 +85,7 @@ class Hoa_Xyl_Interpreter_Html5 extends Hoa_Xyl_Interpreter {
         'header'          => 'Hoa_Xyl_Interpreter_Html5_Header',
         'content'         => 'Hoa_Xyl_Interpreter_Html5_Content',
         'footer'          => 'Hoa_Xyl_Interpreter_Html5_Footer',
+        'title'           => 'Hoa_Xyl_Interpreter_Html5_Title',
 
         // Grouping content.
         'p'            => 'Hoa_Xyl_Interpreter_Html5_P',
