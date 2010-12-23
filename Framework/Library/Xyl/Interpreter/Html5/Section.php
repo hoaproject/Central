@@ -94,13 +94,11 @@ abstract class Hoa_Xyl_Interpreter_Html5_Section
      */
     public function execute ( ) {
 
-        $ae = $this->getAbstractElement();
-
-        if(false === $ae->attributeExists('for'))
+        if(false === $this->attributeExists('for'))
             return;
 
-        $for = $ae->readAttribute('for');
-        $toc = $ae->xpath(
+        $for = $this->readAttribute('for');
+        $toc = $this->xpath(
             '//__current_ns:tableofcontents[@id = "' . $for . '"]'
         );
 
