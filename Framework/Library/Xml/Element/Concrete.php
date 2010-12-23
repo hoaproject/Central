@@ -108,7 +108,7 @@ class          Hoa_Xml_Element_Concrete
      *
      * @var Hoa_Xml_Element object
      */
-    protected $_element           = null;
+    protected $_abstract          = null;
 
     /**
      * Super root of the abstract element.
@@ -123,24 +123,24 @@ class          Hoa_Xml_Element_Concrete
      * Build a concrete tree.
      *
      * @access  public
-     * @param   Hoa_Xml_Element  $element      Abstract element.
+     * @param   Hoa_Xml_Element  $abstract     Abstract element.
      * @param   Hoa_Xml_Element  $superRoot    Super root.
      * @param   array            $rank         Rank: abstract elements to
      *                                         concrete elements.
      * @param   string           $namespace    Namespace.
      * @return  void
      */
-    public function __construct ( Hoa_Xml_Element $element,
+    public function __construct ( Hoa_Xml_Element $abstract,
                                   Hoa_Xml_Element $superRoot,
                                   Array           $rank = array(),
                                   $namespace            = null ) {
 
-        self::$_store[]      = $element;
+        self::$_store[]      = $abstract;
         self::$_superRoots[] = $superRoot;
         self::$_multiton[]   = $this;
 
         if(null !== $namespace)
-            $element->useNamespace($namespace);
+            $abstract->useNamespace($namespace);
 
         if(null === $this->_name) {
 
@@ -150,10 +150,10 @@ class          Hoa_Xml_Element_Concrete
                 $this->_name = substr($this->_name, $po + 1);
         }
 
-        $this->_element      = $element;
+        $this->_abstract     = $abstract;
         $this->_superRoot    = $superRoot;
 
-        foreach($element->selectChildElements() as $child) {
+        foreach($abstract->selectChildElements() as $child) {
 
             $name = $child->getName();
 
@@ -191,7 +191,7 @@ class          Hoa_Xml_Element_Concrete
      */
     public function getAbstractElement ( ) {
 
-        return $this->_element;
+        return $this->_abstract;
     }
 
     /**
@@ -316,7 +316,7 @@ class          Hoa_Xml_Element_Concrete
     public function __call ( $name, Array $arguments = array() ) {
 
         return call_user_func_array(
-            array($this->_element, $name),
+            array($this->_abstract, $name),
             $arguments
         );
     }
