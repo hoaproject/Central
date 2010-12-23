@@ -35,7 +35,7 @@
 /**
  * Hoa_Xyl_Element_Concret
  */
-import('Xyl.Element.Concret');
+import('Xyl.Element.Concrete') and load();
 
 /**
  * Class Hoa_Xyl_Interpreter_Common_Yield.
