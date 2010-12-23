@@ -61,6 +61,13 @@ class          Hoa_Xyl_Interpreter_Html5_Document
     implements Hoa_Xyl_Element_Executable {
 
     /**
+     * Title.
+     *
+     * @var Hoa_Xyl_Interpreter_Html5_Document string
+     */
+    protected $_title     = null;
+
+    /**
      * All document resources.
      *
      * @var Hoa_Xyl_Interpreter_Html5_Document array
@@ -83,7 +90,8 @@ class          Hoa_Xyl_Interpreter_Html5_Document
         $out->writeAll(
             '<!DOCTYPE html>' . "\n\n" .
             '<html>' . "\n" .
-            '<head>' . "\n"
+            '<head>' . "\n" .
+            '  <title>' . $this->_title . '</title>' . "\n"
         );
 
         if(isset($this->_resources['css']))
@@ -116,6 +124,41 @@ class          Hoa_Xyl_Interpreter_Html5_Document
      * @return  void
      */
     public function execute ( ) {
+
+        $this->computeTitle();
+        $this->computeStylesheet();
+    }
+
+    /**
+     * Compute title.
+     *
+     * @access  protected
+     * @return  void
+     */
+    protected function computeTitle ( ) {
+
+        $xpath = $this->xpath('./*[1]');
+
+        if(empty($xpath))
+            return;
+
+        $title = $this->getConcreteElement($xpath[0]);
+
+        if(!($title instanceof Hoa_Xyl_Interpreter_Html5_Title))
+            return;
+
+        $this->_title = $title->getValue();
+
+        return;
+    }
+
+    /**
+     * Compute stylesheet.
+     *
+     * @access  protected
+     * @return  void
+     */
+    protected function computeStylesheet ( ) {
 
         $root                    = $this->getAbstractElementSuperRoot();
         $styles                  = $root->getStylesheets();
