@@ -304,4 +304,20 @@ class          Hoa_Xml_Element_Concrete
 
         return $this->_children[$name];
     }
+
+    /**
+     * Redirect unknown call on the abstract element.
+     *
+     * @access  public
+     * @param   string  $name         Name.
+     * @param   array   $arguments    Arguments.
+     * @return  mixed
+     */
+    public function __call ( $name, Array $arguments = array() ) {
+
+        return call_user_func_array(
+            array($this->_element, $name),
+            $arguments
+        );
+    }
 }
