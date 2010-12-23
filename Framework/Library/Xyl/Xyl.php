@@ -179,7 +179,7 @@ class          Hoa_Xyl
      */
     public function __construct ( Hoa_Stream_Interface_In  $in,
                                   Hoa_Stream_Interface_Out $out,
-                                  Hoa_Xyl_Interpreter      $interpreter = null,
+                                  Hoa_Xyl_Interpreter      $interpreter,
                                   Array                    $parameters = array() ) {
 
         parent::__construct('Hoa_Xyl_Element_Basic', $in);
@@ -382,7 +382,11 @@ class          Hoa_Xyl
                 continue;
 
             $hrefs[]  = $href;
-            $fragment = new Hoa_Xyl(new $streamClass($href), $this->_out);
+            $fragment = new Hoa_Xyl(
+                new $streamClass($href),
+                $this->_out,
+                $this->_interpreter
+            );
 
             if('definition' !== $fragment->getName())
                 throw new Hoa_Xyl_Exception(
@@ -512,7 +516,11 @@ class          Hoa_Xyl
                 continue;
 
             $hrefs[]  = $href;
-            $fragment = new Hoa_Xyl(new $streamClass($href), $this->_out);
+            $fragment = new Hoa_Xyl(
+                new $streamClass($href),
+                $this->_out,
+                $this->_interpreter
+            );
 
             if('overlay' !== $fragment->getName())
                 throw new Hoa_Xyl_Exception(
