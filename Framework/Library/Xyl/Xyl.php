@@ -186,8 +186,8 @@ class          Hoa_Xyl
 
         if(false === $this->namespaceExists(self::NAMESPACE_ID))
             throw new Hoa_Xyl_Exception(
-                'The XYL file %s has no XYL namespace declared.',
-                0, $in->getStreamName());
+                'The XYL file %s has no XYL namespace (%s) declared.',
+                0, array($in->getStreamName(), self::NAMESPACE_ID));
 
         $this->_parameters = new Hoa_Core_Parameter(
             $this,
