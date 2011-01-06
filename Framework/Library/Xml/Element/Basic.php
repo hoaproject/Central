@@ -357,6 +357,51 @@ class          Hoa_Xml_Element_Basic
     }
 
     /**
+     * Read children as a phrasing model, i.e. transform:
+     *     <foo>abc<bar>def</bar>ghi</foo>
+     * into
+     *     <foo><???>abc</???><bar>def</bar><???>ghi</???></foo>
+     * where <???> is the value of the $element argument, i.e. the inter-text
+     * element name. Please, see the Hoa_Xml_Element_Model_Phrasing interface.
+     *
+     * @access  public
+     * @param   string  $namespace    Namespace to use ('' if none).
+     * @param   string  $element      Inter-text element name.
+     * @return  array
+     */
+    public function readAsPhrasingModel ( $namespace = '', $element = '__text' ) {
+
+        $out   = array();
+        $list  = $this->readDOM()->childNodes;
+        $class = get_class($this);
+
+        for($i = 0, $max = $list->length; $i < $max; ++$i) {
+
+            $node = $list->item($i);
+
+            switch($node->nodeType) {
+
+                case XML_ELEMENT_NODE:
+                    $out[] = simplexml_import_dom($node, $class);
+                  break;
+
+                case XML_TEXT_NODE:
+                    $out[] = new $class(
+                        '<' . $element . '>' . $node->nodeValue .
+                        '</' . $element . '>',
+                        LIBXML_NOXMLDECL,
+                        false,
+                        $namespace,
+                        false
+                    );
+                  break;
+            }
+        }
+
+        return $out;
+    }
+
+    /**
      * Use a specific namespace.
      * For performance reason, we did not test if the namespace exists in the
      * document. Please, see the Hoa_Xml::namespaceExists() method to do that.

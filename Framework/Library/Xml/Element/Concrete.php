@@ -43,6 +43,11 @@ import('Xml.Exception');
 import('Xml.Element') and load();
 
 /**
+ * Hoa_Xml_Element_Model_Phrasing
+ */
+import('Xml.Element.Model.Phrasing');
+
+/**
  * Class Hoa_Xml_Element_Concrete.
  *
  * This class represents a XML element in a XML tree.
@@ -153,7 +158,12 @@ class          Hoa_Xml_Element_Concrete
         $this->_abstract     = $abstract;
         $this->_superRoot    = $superRoot;
 
-        foreach($abstract->selectChildElements() as $child) {
+        if($this instanceof Hoa_Xml_Element_Model_Phrasing)
+            $iterator = $abstract->readAsPhrasingModel($namespace);
+        else
+            $iterator = $abstract->selectChildElements();
+
+        foreach($iterator as $child) {
 
             $name = $child->getName();
 
