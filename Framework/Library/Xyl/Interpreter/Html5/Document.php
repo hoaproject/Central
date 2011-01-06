@@ -127,6 +127,8 @@ class          Hoa_Xyl_Interpreter_Html5_Document
 
         $this->computeTitle();
         $this->computeStylesheet();
+
+        return;
     }
 
     /**
