@@ -95,7 +95,7 @@ class       Hoa_Xyl_Interpreter_Html5_Tableofcontents
      */
     public function addEntry ( Hoa_Xyl_Interpreter_Html5_Section $section ) {
 
-        $this->_entry[] = $section->getValue();
+        $this->_entry[] = $section->computeValue();
 
         return;
     }

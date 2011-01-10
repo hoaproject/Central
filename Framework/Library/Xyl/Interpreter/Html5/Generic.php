@@ -74,7 +74,7 @@ abstract class Hoa_Xyl_Interpreter_Html5_Generic
 
         $out->writeAll('<' . $this->_map .
                        $this->readAttributesAsString() . '>');
-        $out->writeAll($this->getValue($out));
+        $this->computeValue($out);
         $out->writeAll('</' . $this->_map . '>' . "\n");
 
         return;
