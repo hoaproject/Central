@@ -28,19 +28,19 @@
  *
  * @category    Framework
  * @package     Hoa_Xyl
- * @subpackage  Hoa_Xyl_Interpreter_Html5_Title
+ * @subpackage  Hoa_Xyl_Interpreter_Html5_Small
  *
  */
 
 /**
- * Hoa_Xyl_Element_Concrete
+ * Hoa_Xyl_Interpreter_Html5_Generic
  */
-import('Xyl.Element.Concrete') and load();
+import('Xyl.Interpreter.Html5.Generic') and load();
 
 /**
- * Class Hoa_Xyl_Interpreter_Html5_Title.
+ * Class Hoa_Xyl_Interpreter_Html5_Small.
  *
- * The <title /> component.
+ * The <small /> component.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
@@ -48,22 +48,17 @@ import('Xyl.Element.Concrete') and load();
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Xyl
- * @subpackage  Hoa_Xyl_Interpreter_Html5_Title
+ * @subpackage  Hoa_Xyl_Interpreter_Html5_Small
  */
 
-class          Hoa_Xyl_Interpreter_Html5_Title
-    extends    Hoa_Xyl_Element_Concrete
+class          Hoa_Xyl_Interpreter_Html5_Small
+    extends    Hoa_Xyl_Interpreter_Html5_Generic
     implements Hoa_Xml_Element_Model_Phrasing {
 
     /**
-     * Paint the element.
+     * Map.
      *
-     * @access  protected
-     * @param   Hoa_Stream_Interface_Out  $out    Out stream.
-     * @return  void
+     * @var Hoa_Xyl_Interpreter_Html5_Generic string
      */
-    protected function paint ( Hoa_Stream_Interface_Out $out ) {
-
-        return;
-    }
+    protected $_map = 'small';
 }
