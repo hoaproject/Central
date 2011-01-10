@@ -51,8 +51,9 @@ import('Xyl.Interpreter.Html5.Generic') and load();
  * @subpackage  Hoa_Xyl_Interpreter_Html5_Strong
  */
 
-class       Hoa_Xyl_Interpreter_Html5_Strong
-    extends Hoa_Xyl_Interpreter_Html5_Generic {
+class          Hoa_Xyl_Interpreter_Html5_Strong
+    extends    Hoa_Xyl_Interpreter_Html5_Generic
+    implements Hoa_Xml_Element_Model_Phrasing {
 
     /**
      * Map.
