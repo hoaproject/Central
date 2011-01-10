@@ -63,7 +63,7 @@ class          Hoa_Xyl_Interpreter_Html5_Document
     /**
      * Title.
      *
-     * @var Hoa_Xyl_Interpreter_Html5_Document string
+     * @var Hoa_Xyl_Interpreter_Html5_Title object
      */
     protected $_title     = null;
 
@@ -91,8 +91,10 @@ class          Hoa_Xyl_Interpreter_Html5_Document
             '<!DOCTYPE html>' . "\n\n" .
             '<html>' . "\n" .
             '<head>' . "\n" .
-            '  <title>' . $this->_title . '</title>' . "\n"
+            '  <title>'
         );
+        $this->_title->computeValue($out);
+        $out->writeAll('</title>' . "\n");
 
         if(isset($this->_resources['css']))
             foreach($this->_resources['css'] as $href)
@@ -149,7 +151,7 @@ class          Hoa_Xyl_Interpreter_Html5_Document
         if(!($title instanceof Hoa_Xyl_Interpreter_Html5_Title))
             return;
 
-        $this->_title = $title->getValue();
+        $this->_title = $title;
 
         return;
     }
