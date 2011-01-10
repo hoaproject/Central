@@ -80,7 +80,7 @@ abstract class Hoa_Xyl_Interpreter_Html5_Section
 
         $out->writeAll('<h' . $this->_n .
                        $this->readAttributesAsString() . '>');
-        $out->writeAll($this->getValue($out));
+        $out->writeAll($this->computeValue($out));
         $out->writeAll('</h' . $this->_n . '>' . "\n");
 
         return;
