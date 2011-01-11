@@ -75,7 +75,7 @@ import('Log.~');
 /**
  * Hoa_Visitor_Element
  */
-import('Visitor.Element');
+import('Visitor.Element') and load();
 
 /**
  * Hoa_Iterator_Basic
