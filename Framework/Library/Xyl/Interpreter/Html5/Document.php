@@ -141,7 +141,7 @@ class          Hoa_Xyl_Interpreter_Html5_Document
      */
     protected function computeTitle ( ) {
 
-        $xpath = $this->xpath('./*[1]');
+        $xpath = $this->xpath('./__current_ns:*[1]');
 
         if(empty($xpath))
             return;
