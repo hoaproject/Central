@@ -319,6 +319,29 @@ class          Hoa_Xml_Element_Basic
     }
 
     /**
+     * Read custom attributes (as a set).
+     * For example:
+     *     <component data-abc="def" data-uvw="xyz" />
+     * “data” is a custom attribute, so the $set.
+     *
+     * @access  public
+     * @param   string  $set    Set name.
+     * @return  array
+     */
+    public function readCustomAttributes ( $set ) {
+
+        $out     = array();
+        $set    .= '-';
+        $strlen  = strlen($set);
+
+        foreach($this->readAttributes() as $name => $value)
+            if($set === substr($name, 0, $strlen))
+                $out[substr($name, $strlen)] = $value;
+
+        return $out;
+    }
+
+    /**
      * Read attributes as a string.
      *
      * @access  public
