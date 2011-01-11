@@ -38,6 +38,11 @@
 import('Xyl.Interpreter.Html5.Generic') and load();
 
 /**
+ * Hoa_Xml_Element_Model_Phrasing
+ */
+import('Xml.Element.Model.Phrasing') and load();
+
+/**
  * Class Hoa_Xyl_Interpreter_Html5_Em.
  *
  * The <em /> component.

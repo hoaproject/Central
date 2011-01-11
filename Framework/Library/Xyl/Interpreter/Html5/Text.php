@@ -38,11 +38,6 @@
 import('Xyl.Element.Concrete') and load();
 
 /**
- * Hoa_Xyl_Element_Executable
- */
-import('Xyl.Element.Executable') and load();
-
-/**
  * Class Hoa_Xyl_Interpreter_Html5_Text.
  *
  * The <__text /> component (inter-text, please see the
@@ -57,7 +52,8 @@ import('Xyl.Element.Executable') and load();
  * @subpackage  Hoa_Xyl_Interpreter_Html5_Text
  */
 
-class Hoa_Xyl_Interpreter_Html5_Text extends Hoa_Xyl_Element_Concrete {
+class       Hoa_Xyl_Interpreter_Html5_Text
+    extends Hoa_Xyl_Element_Concrete {
 
     /**
      * Paint the element.
