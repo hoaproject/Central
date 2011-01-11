@@ -93,7 +93,10 @@ class          Hoa_Xyl_Interpreter_Html5_Document
             '<head>' . "\n" .
             '  <title>'
         );
-        $this->_title->computeValue($out);
+
+        if(null !== $this->_title)
+            $this->_title->computeValue($out);
+
         $out->writeAll('</title>' . "\n");
 
         if(isset($this->_resources['css']))
