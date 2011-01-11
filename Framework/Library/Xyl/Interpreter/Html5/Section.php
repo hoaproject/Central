@@ -65,7 +65,14 @@ abstract class Hoa_Xyl_Interpreter_Html5_Section
      *
      * @var Hoa_Xyl_Interpreter_Html5_Section int
      */
-    protected $_n = 0;
+    protected $_n     = 0;
+
+    /**
+     * Title.
+     *
+     * @var Hoa_Xyl_Interpreter_Html5_Title object
+     */
+    protected $_title = null;
 
 
 
@@ -80,8 +87,12 @@ abstract class Hoa_Xyl_Interpreter_Html5_Section
 
         $out->writeAll('<h' . $this->_n .
                        $this->readAttributesAsString() . '>');
-        $out->writeAll($this->computeValue($out));
+        $this->_title->computeValue($out);
         $out->writeAll('</h' . $this->_n . '>' . "\n");
+
+        foreach($this as $name => $child)
+            if('title' != $name)
+                $child->render($out);
 
         return;
     }
@@ -93,6 +104,20 @@ abstract class Hoa_Xyl_Interpreter_Html5_Section
      * @return  void
      */
     public function execute ( ) {
+
+        $this->computeFor();
+        $this->computeTitle();
+
+        return;
+    }
+
+    /**
+     * Compute @for.
+     *
+     * @access  protected
+     * @return  void
+     */
+    protected function computeFor ( ) {
 
         if(false === $this->attributeExists('for'))
             return;
@@ -106,6 +131,29 @@ abstract class Hoa_Xyl_Interpreter_Html5_Section
             return;
 
         $this->getConcreteElement($toc[0])->addEntry($this);
+
+        return;
+    }
+
+    /**
+     * Compute title.
+     *
+     * @access  protected
+     * @return  void
+     */
+    protected function computeTitle ( ) {
+
+        $xpath = $this->xpath('./*[1]');
+
+        if(empty($xpath))
+            return;
+
+        $title = $this->getConcreteElement($xpath[0]);
+
+        if(!($title instanceof Hoa_Xyl_Interpreter_Html5_Title))
+            return;
+
+        $this->_title = $title;
 
         return;
     }
