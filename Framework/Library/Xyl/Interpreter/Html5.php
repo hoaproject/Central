@@ -92,15 +92,21 @@ class Hoa_Xyl_Interpreter_Html5 extends Hoa_Xyl_Interpreter {
         'ulist'           => 'Hoa_Xyl_Interpreter_Html5_Ulist',
         'olist'           => 'Hoa_Xyl_Interpreter_Html5_Olist',
         'item'            => 'Hoa_Xyl_Interpreter_Html5_Item',
+        'error'           => 'Hoa_Xyl_Interpreter_Html5_Error',
 
         // Text-level semantics.
         'big'             => 'Hoa_Xyl_Interpreter_Html5_Big',
+        'break'           => 'Hoa_Xyl_Interpreter_Html5_Break',
         'em'              => 'Hoa_Xyl_Interpreter_Html5_Em',
         'mark'            => 'Hoa_Xyl_Interpreter_Html5_Mark',
         'small'           => 'Hoa_Xyl_Interpreter_Html5_Small',
         'strong'          => 'Hoa_Xyl_Interpreter_Html5_Strong',
         'sub'             => 'Hoa_Xyl_Interpreter_Html5_Sub',
         'sup'             => 'Hoa_Xyl_Interpreter_Html5_Sup',
+
+        // Form.
+        'form'            => 'Hoa_Xyl_Interpreter_Html5_Form',
+        'input'           => 'Hoa_Xyl_Interpreter_Html5_Input',
 
         // Phrasing model.
         '__text'          => 'Hoa_Xyl_Interpreter_Html5_Text'
