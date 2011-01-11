@@ -742,7 +742,10 @@ class          Hoa_Xyl
      * @return  void
      * @throws  Hoa_Xyl_Exception
      */
-    public function interpreteAs ( Hoa_Xyl_Interpreter $interpreter ) {
+    public function interprete ( Hoa_Xyl_Interpreter $interpreter = null ) {
+
+        if(null === $interpreter)
+            $interpreter = $this->_interpreter;
 
         $this->computeUse();
         $this->computeYielder();
@@ -774,7 +777,7 @@ class          Hoa_Xyl
     public function render ( ) {
 
         if(null === $this->_concrete)
-            $this->interpreteAs($this->_interpreter);
+            $this->interprete();
 
         return $this->_concrete->render($this->_out);
     }
