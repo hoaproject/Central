@@ -38,6 +38,11 @@
 import('Xyl.Interpreter.Html5.Generic') and load();
 
 /**
+ * Hoa_Xml_Element_Model_Phrasing
+ */
+import('Xml.Element.Model.Phrasing') and load();
+
+/**
  * Class Hoa_Xyl_Interpreter_Html5_Item.
  *
  * The <item /> component.
@@ -51,8 +56,9 @@ import('Xyl.Interpreter.Html5.Generic') and load();
  * @subpackage  Hoa_Xyl_Interpreter_Html5_Item
  */
 
-class       Hoa_Xyl_Interpreter_Html5_Item
-    extends Hoa_Xyl_Interpreter_Html5_Generic {
+class          Hoa_Xyl_Interpreter_Html5_Item
+    extends    Hoa_Xyl_Interpreter_Html5_Generic
+    implements Hoa_Xml_Element_Model_Phrasing {
 
     /**
      * Map.
