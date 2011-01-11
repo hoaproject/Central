@@ -84,7 +84,7 @@ class          Hoa_Xyl_Interpreter_Html5_Error
     protected function paint ( Hoa_Stream_Interface_Out $out ) {
 
         $out->writeAll('<div class="error"' .
-                       $this->readAttributesAsString() . '>');
+                       $this->readAttributesAsString() . '>' . "\n");
 
         foreach($this as $child)
             $child->render($out);
