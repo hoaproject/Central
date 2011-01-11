@@ -70,7 +70,14 @@ abstract class Hoa_Xyl_Element_Concrete
      *
      * @var Hoa_Xyl_Element_Concrete array
      */
-    private $_bucket = array('data' => null);
+    private $_bucket       = array('data' => null);
+
+    /**
+     * Visibility.
+     *
+     * @var Hoa_Xyl_Element_Concrete bool
+     */
+    protected $_visibility = true;
 
 
 
@@ -216,6 +223,9 @@ abstract class Hoa_Xyl_Element_Concrete
      */
     public function render ( Hoa_Stream_Interface_Out $out ) {
 
+        if(false === $this->getVisibility())
+            return;
+
         $this->firstUpdate();
         $data = &$this->getData();
 
@@ -284,5 +294,31 @@ abstract class Hoa_Xyl_Element_Concrete
             $out .= ' ' . $name . '="' . str_replace('"', '\"', $value) . '"';
 
         return $out;
+    }
+
+    /**
+     * Set visibility.
+     *
+     * @access  public
+     * @param   bool    $visibility    Visibility.
+     * @return  bool
+     */
+    public function setVisibility ( $visibility ) {
+
+        $old               = $this->_visibility;
+        $this->_visibility = $visibility;
+
+        return $old;
+    }
+
+    /**
+     * Get visibility.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function getVisibility ( ) {
+
+        return $this->_visibility;
     }
 }
