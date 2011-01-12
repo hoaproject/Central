@@ -142,8 +142,13 @@ class Hoa_Realdom_String extends Hoa_Realdom {
         if(!is_string($q))
             return false;
 
-        if(false === $this->getLength()->predicate(mb_strlen($q)))
+        $length = mb_strlen($q);
+
+        if(false === $this->getLength()->predicate($length))
             return false;
+
+        if(0 === $length)
+            return true;
 
         $split  = preg_split('#(?<!^)(?!$)#u', $q);
         $out    = true;
