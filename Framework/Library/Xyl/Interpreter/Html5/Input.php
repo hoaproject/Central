@@ -72,7 +72,7 @@ class          Hoa_Xyl_Interpreter_Html5_Input
      *
      * @var Hoa_Xyl_Interpreter_Html5_Input string
      */
-    protected $_type = null;
+    protected $_type            = null;
 
     /**
      * Praspel compiler, to interprete the validate attribute.
@@ -86,7 +86,7 @@ class          Hoa_Xyl_Interpreter_Html5_Input
      *
      * @var Hoa_Xyl_Interpreter_Html5_Input bool
      */
-    protected $_validity = true;
+    protected $_validity        = true;
 
 
 
