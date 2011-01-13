@@ -69,6 +69,8 @@ class          Hoa_Xyl_Interpreter_Html5_Title
      */
     protected function paint ( Hoa_Stream_Interface_Out $out ) {
 
+        $this->computeValue($out);
+
         return;
     }
 }

@@ -95,7 +95,7 @@ class          Hoa_Xyl_Interpreter_Html5_Document
         );
 
         if(null !== $this->_title)
-            $this->_title->computeValue($out);
+            $this->_title->render($out);
 
         $out->writeAll('</title>' . "\n");
 
@@ -113,7 +113,8 @@ class          Hoa_Xyl_Interpreter_Html5_Document
         );
 
         foreach($this as $name => $child)
-            $child->render($out);
+            if('title' != $name)
+                $child->render($out);
 
         $out->writeAll(
             "\n" . '</body>' . "\n" . '</html>'
@@ -195,5 +196,16 @@ class          Hoa_Xyl_Interpreter_Html5_Document
         }
 
         return;
+    }
+
+    /**
+     * Get the <title /> component.
+     *
+     * @access  public
+     * @return  Hoa_Xyl_Interpreter_Html5_Title
+     */
+    public function getTitle ( ) {
+
+        return $this->_title;
     }
 }
