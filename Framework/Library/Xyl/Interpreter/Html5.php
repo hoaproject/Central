@@ -110,6 +110,7 @@ class Hoa_Xyl_Interpreter_Html5 extends Hoa_Xyl_Interpreter {
         'select'          => 'Hoa_Xyl_Interpreter_Html5_Select',
         'optgroup'        => 'Hoa_Xyl_Interpreter_Html5_Optgroup',
         'option'          => 'Hoa_Xyl_Interpreter_Html5_Option',
+        'textarea'        => 'Hoa_Xyl_Interpreter_Html5_Textarea',
 
         // Phrasing model.
         '__text'          => 'Hoa_Xyl_Interpreter_Html5_Text'
