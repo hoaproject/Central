@@ -60,7 +60,19 @@ class          Hoa_Xyl_Interpreter_Html5_Form
     extends    Hoa_Xyl_Element_Concrete
     implements Hoa_Xyl_Element_Executable {
 
-    protected $_postData = array();
+    /**
+     * Form data.
+     *
+     * @var Hoa_Xyl_Interpreter_Html5_Form array
+     */
+    protected $_formData = array();
+
+    /**
+     * Whether the form is valid or not.
+     *
+     * @var Hoa_Xyl_Interpreter_Html5_Form bool
+     */
+    protected $_validity = true;
 
 
 
@@ -95,39 +107,25 @@ class          Hoa_Xyl_Interpreter_Html5_Form
      */
     public function execute ( ) {
 
-        $this->computePostData();
-
-        return;
-    }
-
-    /**
-     * Compute post data.
-     *
-     * @access  public
-     * @return  void
-     */
-    protected function computePostData ( ) {
-
-        switch(strtolower($this->readAttribute('method'))) {
+        switch($this->getMethod()) {
 
             case 'post':
-                $this->_postData = $_POST;
+                $this->_formData = $_POST;
               break;
 
             default:
-                $this->_postData = $_GET;
+                $this->_formData = $_GET;
         }
 
         $inputs = array_merge(
             $this->xpath('descendant-or-self::__current_ns:input'),
-            array()
+            $this->xpath('descendant-or-self::__current_ns:select')
             /*
             $this->xpath('descendant-or-self::__current_ns:textarea'),
-            $this->xpath('descendant-or-self::__current_ns:select')
             */
         );
 
-        if(empty($this->_postData))
+        if(empty($this->_formData))
             return;
 
         foreach($inputs as $input) {
@@ -135,15 +133,61 @@ class          Hoa_Xyl_Interpreter_Html5_Form
             $input = $this->getConcreteElement($input);
             $name  = $input->readAttribute('name');
 
-            if(!isset($this->_postData[$name])) {
+            if(!isset($this->_formData[$name])) {
 
                 $input->unsetValue();
+                $input->checkValidity();
+                $this->_validity = $input->isValid() && $this->_validity;
 
                 continue;
             }
 
-            $input->setValue($this->_postData[$name]);
-            $input->checkValidity();
+            $value = $this->_formData[$name];
+            $input->setValue($value);
+            $input->checkValidity($value);
+            $this->_validity = $input->isValid() && $this->_validity;
         }
+
+        return;
+    }
+
+    /**
+     * Whether the form is valid or not.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isValid ( ) {
+
+        return $this->_validity;
+    }
+
+    /**
+     * Get a data from the form.
+     *
+     * @access  public
+     * @param   string  $index    Index (if null, return all data).
+     * @return  mixed
+     */
+    public function getFormData ( $index = null ) {
+
+        if(null === $index)
+            return $this->_formData;
+
+        if(!isset($this->_formData[$index]))
+            return null;
+
+        return $this->_formData[$index];
+    }
+
+    /**
+     * Get form HTTP method.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getMethod ( ) {
+
+        return strtolower($this->readAttribute('method'));
     }
 }
