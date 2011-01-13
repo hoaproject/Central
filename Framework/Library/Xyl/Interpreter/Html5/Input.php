@@ -184,6 +184,24 @@ class          Hoa_Xyl_Interpreter_Html5_Input
     }
 
     /**
+     * Get the input value.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getValue ( ) {
+
+        $value = $this->readAttribute('value');
+
+        if(ctype_digit($value))
+            $value = (int) $value;
+        elseif(is_numeric($value))
+            $value = (float) $value;
+
+        return $value;
+    }
+
+    /**
      * Unset the input value.
      *
      * @access  public
@@ -204,23 +222,26 @@ class          Hoa_Xyl_Interpreter_Html5_Input
     }
 
     /**
-     * Get the input value.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getValue ( ) {
-
-        return $this->readAttribute('value');
-    }
-
-    /**
      * Check the input validity.
      *
      * @access  public
-     * @return  void
+     * @param   mixed  $value    Value (if null, will find the value).
+     * @return  bool
      */
-    public function checkValidity ( ) {
+    public function checkValidity ( $value = null ) {
+
+        $type = $this->getType();
+
+        if('submit' === $type || 'reset' === $type) {
+
+            $this->_validity = false;
+
+            if(   null   === $value
+               || $value ==  $this->getValue())
+                $this->_validity = true;
+
+            return $this->_validity;
+        }
 
         $validates = array();
 
@@ -233,7 +254,7 @@ class          Hoa_Xyl_Interpreter_Html5_Input
         );
 
         if(empty($validates))
-            return;
+            return true;
 
         $onerrors = array();
 
@@ -245,39 +266,36 @@ class          Hoa_Xyl_Interpreter_Html5_Input
             $this->readCustomAttributes('onerror')
         );
 
-
-        $value = $this->getValue();
-
-        if(ctype_digit($value))
-            $value = (int) $value;
-        elseif(is_numeric($value))
-            $value = (float) $value;
+        if(null === $value)
+            $value = $this->getValue();
+        else
+            if(ctype_digit($value))
+                $value = (int) $value;
+            elseif(is_numeric($value))
+                $value = (float) $value;
 
         if(null === self::$_compiler)
             self::$_compiler = new Hoa_Test_Praspel_Compiler();
 
-        $this->_validity = false;
+        $this->_validity = true;
 
         foreach($validates as $name => $realdom) {
 
             self::$_compiler->compile('@requires i:' .$realdom . ';');
-            $praspel = self::$_compiler->getRoot();
-
+            $praspel  = self::$_compiler->getRoot();
             $variable = $praspel->getClause('requires')->getVariable('i');
             $decision = false;
 
             foreach($variable->getDomains() as $domain)
                 $decision = $decision || $domain->predicate($value);
 
-            if(true === $decision) {
+            $this->_validity = $this->_validity && $decision;
 
-                $this->_validity = false;
-
-                break;
-            }
+            if(true === $decision)
+                continue;
 
             if(!isset($onerrors[$name]))
-                return;
+                continue;
 
             $errors = $this->xpath(
                 '//__current_ns:error[@id="' .
@@ -289,7 +307,7 @@ class          Hoa_Xyl_Interpreter_Html5_Input
                 $this->getConcreteElement($error)->setVisibility(true);
         }
 
-        return;
+        return $this->_validity;
     }
 
     /**
