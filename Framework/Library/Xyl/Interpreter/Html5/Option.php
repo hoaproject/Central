@@ -81,9 +81,8 @@ class       Hoa_Xyl_Interpreter_Html5_Option
      */
     public function setValue ( $value ) {
 
-        $old            = $this->getValue();
-        $ae             = $this->getAbstractElement();
-        $ae['selected'] = 'selected';
+        $old = $this->getValue();
+        $this->writeAttribute('selected', 'selected');
 
         return $old;
     }
@@ -96,8 +95,7 @@ class       Hoa_Xyl_Interpreter_Html5_Option
      */
     public function unsetValue ( ) {
 
-        $ae = $this->getAbstractElement();
-        unset($ae['selected']);
+        $this->removeAttribute('selected');
 
         return;
     }

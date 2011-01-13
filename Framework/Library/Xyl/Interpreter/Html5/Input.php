@@ -161,23 +161,22 @@ class          Hoa_Xyl_Interpreter_Html5_Input
     public function setValue ( $value ) {
 
         $old = $this->getValue();
-        $ae  = $this->getAbstractElement();
 
         switch($this->getType()) {
 
             case 'checkbox':
-                $ae['checked'] = 'checked';
+                $this->writeAttribute('checked', 'checked');
               break;
 
             case 'radio':
                 if($value == $this->readAttribute('value'))
-                    $ae['checked'] = 'checked';
+                    $this->writeAttribute('checked', 'checked');
                 else
-                    unset($ae['checked']);
+                    $this->removeAttribute('checked');
               break;
 
             default:
-                $ae['value'] = $value;
+                $this->writeAttribute('value', $value);
         }
 
         return $old;
@@ -213,8 +212,7 @@ class          Hoa_Xyl_Interpreter_Html5_Input
 
             case 'checkbox':
             case 'radio':
-                $ae = $this->getAbstractElement();
-                unset($ae['checked']);
+                $this->removeAttribute('checked');
               break;
         }
 
