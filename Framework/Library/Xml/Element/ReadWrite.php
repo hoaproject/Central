@@ -399,6 +399,12 @@ class          Hoa_Xml_Element_ReadWrite
      */
     public function truncate ( $size ) {
 
+        if(null === parent::$_buffer) {
+
+            parent::$_buffer = new Hoa_StringBuffer_ReadWrite();
+            parent::$_buffer->initializeWith($this->__toString());
+        }
+
         return parent::$_buffer->truncate($size);
     }
 
