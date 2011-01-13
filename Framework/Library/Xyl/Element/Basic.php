@@ -38,9 +38,9 @@
 import('Xyl.Element') and load();
 
 /**
- * Hoa_Xml_Element_Read
+ * Hoa_Xml_Element_ReadWrite
  */
-import('Xml.Element.Read') and load();
+import('Xml.Element.ReadWrite') and load();
 
 /**
  * Class Hoa_Xyl_Element_Basic.
@@ -57,5 +57,5 @@ import('Xml.Element.Read') and load();
  */
 
 class          Hoa_Xyl_Element_Basic
-    extends    Hoa_Xml_Element_Read
+    extends    Hoa_Xml_Element_ReadWrite
     implements Hoa_Xyl_Element { }
