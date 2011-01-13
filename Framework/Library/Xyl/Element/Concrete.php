@@ -70,14 +70,21 @@ abstract class Hoa_Xyl_Element_Concrete
      *
      * @var Hoa_Xyl_Element_Concrete array
      */
-    private $_bucket       = array('data' => null);
+    private $_bucket           = array('data' => null);
 
     /**
      * Visibility.
      *
      * @var Hoa_Xyl_Element_Concrete bool
      */
-    protected $_visibility = true;
+    protected $_visibility     = true;
+
+    /**
+     * Transient value.
+     *
+     * @var Hoa_Xyl_Element_Concrete string
+     */
+    protected $_transientValue = null;
 
 
 
@@ -259,21 +266,44 @@ abstract class Hoa_Xyl_Element_Concrete
      */
     public function computeValue ( Hoa_Stream_Interface_Out $out = null ) {
 
-        if($this->getAbstractElement()->attributeExists('bind'))
-            if(null === $out)
-                return $this->getCurrentData();
-            else {
+        $data = false;
 
-                $out->writeAll($this->getCurrentData());
+        if(null !== $this->_transientValue)
+            $data = $this->_transientValue;
 
-                return;
-            }
+        elseif($this->getAbstractElement()->attributeExists('bind'))
+            $data = $this->_transientValue
+                  = $this->getCurrentData();
 
-        if(null === $out || 0 == count($this))
-            return $this->getAbstractElement()->__toString();
+        elseif(0 == count($this))
+            $data = $this->_transientValue
+                  = $this->getAbstractElement()->readAll();
 
-        foreach($this as $name => $child)
+        if(null === $out)
+            return $data;
+
+        if(false !== $data) {
+
+            $out->writeAll($data);
+
+            return;
+        }
+
+        foreach($this as $child)
             $child->render($out);
+
+        return;
+    }
+
+    /**
+     * Clean transient value.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function cleanTransientValue ( ) {
+
+        $this->_transientValue = null;
 
         return;
     }
