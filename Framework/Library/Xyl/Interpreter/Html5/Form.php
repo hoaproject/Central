@@ -110,10 +110,8 @@ class          Hoa_Xyl_Interpreter_Html5_Form
         $this->_formData = $_REQUEST;
         $inputs          = array_merge(
             $this->xpath('descendant-or-self::__current_ns:input'),
-            $this->xpath('descendant-or-self::__current_ns:select')
-            /*
-            $this->xpath('descendant-or-self::__current_ns:textarea'),
-            */
+            $this->xpath('descendant-or-self::__current_ns:select'),
+            $this->xpath('descendant-or-self::__current_ns:textarea')
         );
 
         if(empty($this->_formData))
