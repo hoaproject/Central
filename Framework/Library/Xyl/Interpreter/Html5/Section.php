@@ -87,7 +87,7 @@ abstract class Hoa_Xyl_Interpreter_Html5_Section
 
         $out->writeAll('<h' . $this->_n .
                        $this->readAttributesAsString() . '>');
-        $this->_title->computeValue($out);
+        $this->getTitle()->render($out);
         $out->writeAll('</h' . $this->_n . '>' . "\n");
 
         foreach($this as $name => $child)
@@ -124,7 +124,7 @@ abstract class Hoa_Xyl_Interpreter_Html5_Section
 
         $for = $this->readAttribute('for');
         $toc = $this->xpath(
-            '//__current_ns:tableofcontents[@id = "' . $for . '"]'
+            '//__current_ns:tableofcontents[@id="' . $for . '"]'
         );
 
         if(!isset($toc[0]))
@@ -156,5 +156,16 @@ abstract class Hoa_Xyl_Interpreter_Html5_Section
         $this->_title = $title;
 
         return;
+    }
+
+    /**
+     * Get the <title /> component.
+     *
+     * @access  pubic
+     * @return  Hoa_Xyl_Interpreter_Html5_Title
+     */
+    public function getTitle ( ) {
+
+        return $this->_title;
     }
 }

@@ -75,11 +75,12 @@ class       Hoa_Xyl_Interpreter_Html5_Tableofcontents
         $out->writeAll('<ul class="toc"' .
                        $this->readAttributesAsString() . '>' . "\n");
 
-        foreach($this->_entry as $entry)
-            $out->writeAll(
-                '  <li>' . $entry . '</li>' .
-                "\n"
-            );
+        foreach($this->_entry as $entry) {
+
+            $out->writeAll('  <li>');
+            $entry->getTitle()->render($out);
+            $out->writeAll('</li>' . "\n");
+        }
 
         $out->writeAll('</ul>' . "\n");
 
@@ -95,7 +96,7 @@ class       Hoa_Xyl_Interpreter_Html5_Tableofcontents
      */
     public function addEntry ( Hoa_Xyl_Interpreter_Html5_Section $section ) {
 
-        $this->_entry[] = $section->computeValue();
+        $this->_entry[] = $section;
 
         return;
     }
