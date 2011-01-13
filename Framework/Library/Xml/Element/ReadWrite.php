@@ -450,4 +450,18 @@ class          Hoa_Xml_Element_ReadWrite
 
         return;
     }
+
+    /**
+     * Remove an attribute.
+     *
+     * @access  public
+     * @param   string  $name    Name.
+     * @return  void
+     */
+    public function removeAttribute ( $name ) {
+
+        unset($this[$name]);
+
+        return;
+    }
 }
