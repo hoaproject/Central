@@ -107,17 +107,8 @@ class          Hoa_Xyl_Interpreter_Html5_Form
      */
     public function execute ( ) {
 
-        switch($this->getMethod()) {
-
-            case 'post':
-                $this->_formData = $_POST;
-              break;
-
-            default:
-                $this->_formData = $_GET;
-        }
-
-        $inputs = array_merge(
+        $this->_formData = $_REQUEST;
+        $inputs          = array_merge(
             $this->xpath('descendant-or-self::__current_ns:input'),
             $this->xpath('descendant-or-self::__current_ns:select')
             /*
@@ -189,5 +180,33 @@ class          Hoa_Xyl_Interpreter_Html5_Form
     public function getMethod ( ) {
 
         return strtolower($this->readAttribute('method'));
+    }
+
+    /**
+     * Read attributes as a string.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function readAttributesAsString ( ) {
+
+        $out        = null;
+        $attributes = $this->getAbstractElement()->readAttributes();
+        unset($attributes['bind']);
+
+        foreach($attributes as $name => $value) {
+
+            if('method' == $name) {
+
+                $value = strtolower($value);
+
+                if('put' == $value || 'delete' == $value)
+                    $value = 'post';
+            }
+
+            $out .= ' ' . $name . '="' . str_replace('"', '\"', $value) . '"';
+        }
+
+        return $out;
     }
 }
