@@ -51,4 +51,5 @@ import('Xyl.Interpreter.Exception') and load();
  * @subpackage  Hoa_Xyl_Interpreter_Html5_Exception
  */
 
-class Hoa_Xyl_Interpreter_Html5_Exception extends Hoa_Xyl_Interpreter_Exception { }
+class       Hoa_Xyl_Interpreter_Html5_Exception
+    extends Hoa_Xyl_Interpreter_Exception { }
