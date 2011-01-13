@@ -71,7 +71,7 @@ class       Hoa_Xyl_Interpreter_Html5_Textarea
 
 
     /**
-     * Set (or restore) the input value.
+     * Set (or restore) the textarea value.
      *
      * @access  public
      * @param   string  $value    Value.
@@ -79,33 +79,38 @@ class       Hoa_Xyl_Interpreter_Html5_Textarea
      */
     public function setValue ( $value ) {
 
+        $this->truncate(0);
+        $this->writeAll($value);
+
         return;
     }
 
     /**
-     * Get the input value.
+     * Get the textarea value.
      *
      * @access  public
      * @return  string
      */
     public function getValue ( ) {
 
-        return;
+        return $this->readAll();
     }
 
     /**
-     * Unset the input value.
+     * Unset the textarea value.
      *
      * @access  public
      * @return  void
      */
     public function unsetValue ( ) {
 
+        $this->truncate(0);
+
         return;
     }
 
     /**
-     * Check the input validity.
+     * Check the textarea validity.
      *
      * @access  public
      * @param   mixed  $value    Value (if null, will find the value).
@@ -117,7 +122,7 @@ class       Hoa_Xyl_Interpreter_Html5_Textarea
     }
 
     /**
-     * Whether the input is valid or not.
+     * Whether the textarea is valid or not.
      *
      * @access  public
      * @return  bool
