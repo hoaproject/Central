@@ -74,7 +74,7 @@ class       Hoa_Xyl_Interpreter_Html5_Select
 
         $out->writeAll('<select' . $this->readAttributesAsString() . '>' . "\n");
 
-        foreach($this as $name => $child)
+        foreach($this as $child)
             $child->render($out);
 
         $out->writeAll('</select>');

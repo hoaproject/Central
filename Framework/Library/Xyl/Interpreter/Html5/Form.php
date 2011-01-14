@@ -89,7 +89,7 @@ class          Hoa_Xyl_Interpreter_Html5_Form
             '<form' . $this->readAttributesAsString() . '>' . "\n"
         );
 
-        foreach($this as $name => $child)
+        foreach($this as $child)
             $child->render($out);
 
         $out->writeAll(
