@@ -268,6 +268,8 @@ class TreeCommand extends Hoa_Console_Command_Abstract {
 
             $max--;
         }
+
+        return;
     }
 
     /**
