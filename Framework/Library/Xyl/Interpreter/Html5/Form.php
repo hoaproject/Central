@@ -122,6 +122,9 @@ class          Hoa_Xyl_Interpreter_Html5_Form
             $input = $this->getConcreteElement($input);
             $name  = $input->readAttribute('name');
 
+            if('[]' == substr($name, -2))
+                $name = substr($name, 0, -2);
+
             if(!isset($this->_formData[$name])) {
 
                 $input->unsetValue();
@@ -131,7 +134,12 @@ class          Hoa_Xyl_Interpreter_Html5_Form
                 continue;
             }
 
-            $value = $this->_formData[$name];
+            if(is_array($this->_formData[$name]))
+                $value = array_shift($this->_formData[$name]);
+            else
+                $value = $this->_formData[$name];
+
+
             $input->setValue($value);
             $input->checkValidity($value);
             $this->_validity = $input->isValid() && $this->_validity;
