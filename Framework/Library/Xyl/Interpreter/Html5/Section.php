@@ -90,8 +90,8 @@ abstract class Hoa_Xyl_Interpreter_Html5_Section
         $this->getTitle()->render($out);
         $out->writeAll('</h' . $this->_n . '>' . "\n");
 
-        foreach($this as $name => $child)
-            if('title' != $name)
+        foreach($this as $child)
+            if('title' != $child->getName())
                 $child->render($out);
 
         return;

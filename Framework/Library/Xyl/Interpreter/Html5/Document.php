@@ -112,8 +112,8 @@ class          Hoa_Xyl_Interpreter_Html5_Document
             '<body>' . "\n\n"
         );
 
-        foreach($this as $name => $child)
-            if('title' != $name)
+        foreach($this as $child)
+            if('title' != $child->getName())
                 $child->render($out);
 
         $out->writeAll(
