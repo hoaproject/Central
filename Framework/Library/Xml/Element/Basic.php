@@ -342,6 +342,23 @@ class          Hoa_Xml_Element_Basic
     }
 
     /**
+     * Read custom attributes values as a list.
+     *
+     * @access  public
+     * @param   string  $set    Set name.
+     * @return  array
+     */
+    public function readCustomAttributesAsList ( $set ) {
+
+        $out = array();
+
+        foreach($this->readCustomAttributes($set) as $name => $value)
+            $out[$name] = explode(' ', $value);
+
+        return $out;
+    }
+
+    /**
      * Read attributes as a string.
      *
      * @access  public
