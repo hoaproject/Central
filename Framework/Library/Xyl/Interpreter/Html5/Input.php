@@ -257,11 +257,11 @@ class          Hoa_Xyl_Interpreter_Html5_Input
         $onerrors = array();
 
         if(true === $this->attributeExists('onerror'))
-            $onerrors['@'] = $this->readAttribute('onerror');
+            $onerrors['@'] = $this->readAttributeAsList('onerror');
 
         $onerrors = array_merge(
             $onerrors,
-            $this->readCustomAttributes('onerror')
+            $this->readCustomAttributesAsList('onerror')
         );
 
         if(null === $value)
@@ -297,7 +297,7 @@ class          Hoa_Xyl_Interpreter_Html5_Input
 
             $errors = $this->xpath(
                 '//__current_ns:error[@id="' .
-                implode('" or @id="', explode(' ', $onerrors[$name])) .
+                implode('" or @id="', $onerrors[$name]) .
                 '"]'
             );
 
