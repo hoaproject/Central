@@ -38,6 +38,11 @@
 import('Xyl.Interpreter.Html5.Generic') and load();
 
 /**
+ * Hoa_Test_Praspel_Compiler
+ */
+import('Test.Praspel.Compiler');
+
+/**
  * Class Hoa_Xyl_Interpreter_Html5_Textarea.
  *
  * The <textarea /> component.
@@ -59,14 +64,21 @@ class       Hoa_Xyl_Interpreter_Html5_Textarea
      *
      * @var Hoa_Xyl_Interpreter_Html5_Generic string
      */
-    protected $_map      = 'textarea';
+    protected $_map             = 'textarea';
+
+    /**
+     * Praspel compiler, to interprete the validate attribute.
+     *
+     * @var Hoa_Test_Praspel_Compiler object
+     */
+    protected static $_compiler = null;
 
     /**
      * Whether the textarea is valid or not.
      *
      * @var Hoa_Xyl_Interpreter_Html5_Textarea bool
      */
-    protected $_validity = true;
+    protected $_validity        = true;
 
 
 
@@ -117,6 +129,65 @@ class       Hoa_Xyl_Interpreter_Html5_Textarea
      * @return  bool
      */
     public function checkValidity ( $value = null ) {
+
+        $validates = array();
+
+        if(true === $this->attributeExists('validate'))
+            $validates['@'] = $this->readAttribute('validate');
+
+        $validates = array_merge(
+            $validates,
+            $this->readCustomAttributes('validate')
+        );
+
+        if(empty($validates))
+            return true;
+
+        $onerrors = array();
+
+        if(true === $this->attributeExists('onerror'))
+            $onerrors['@'] = $this->readAttributeAsList('onerror');
+
+        $onerrors = array_merge(
+            $onerrors,
+            $this->readCustomAttributesAsList('onerror')
+        );
+
+        if(null === $value)
+            $value = $this->getValue();
+
+        if(null === self::$_compiler)
+            self::$_compiler = new Hoa_Test_Praspel_Compiler();
+
+        $this->_validity = true;
+
+        foreach($validates as $name => $realdom) {
+
+            self::$_compiler->compile('@requires i:' .$realdom . ';');
+            $praspel  = self::$_compiler->getRoot();
+            $variable = $praspel->getClause('requires')->getVariable('i');
+            $decision = false;
+
+            foreach($variable->getDomains() as $domain)
+                $decision = $decision || $domain->predicate($value);
+
+            $this->_validity = $this->_validity && $decision;
+
+            if(true === $decision)
+                continue;
+
+            if(!isset($onerrors[$name]))
+                continue;
+
+            $errors = $this->xpath(
+                '//__current_ns:error[@id="' .
+                implode('" or @id="', $onerrors[$name]) .
+                '"]'
+            );
+
+            foreach($errors as $error)
+                $this->getConcreteElement($error)->setVisibility(true);
+        }
 
         return $this->_validity;
     }
