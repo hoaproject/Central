@@ -137,6 +137,18 @@ class          Hoa_Xyl_Interpreter_Html5_Form
             $this->_validity = $input->isValid() && $this->_validity;
         }
 
+        if(true === $this->_validity)
+            return;
+
+        $errors = $this->xpath(
+            '//__current_ns:error[@id="' .
+            implode('" or @id="', $this->readAttributeAsList('onerror')) .
+            '"]'
+        );
+
+        foreach($errors as $error)
+            $this->getConcreteElement($error)->setVisibility(true);
+
         return;
     }
 
