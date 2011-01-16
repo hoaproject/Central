@@ -38,11 +38,6 @@
 import('Xyl.Element.Concrete') and load();
 
 /**
- * Hoa_Xyl_Element_Executable
- */
-import('Xyl.Element.Executable') and load();
-
-/**
  * Hoa_Xml_Element_Model_Phrasing
  */
 import('Xml.Element.Model.Phrasing') and load();
