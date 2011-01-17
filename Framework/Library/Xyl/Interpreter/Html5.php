@@ -69,9 +69,16 @@ class Hoa_Xyl_Interpreter_Html5 extends Hoa_Xyl_Interpreter {
      * @var Hoa_Xyl_Interpreter_Html5 array
      */
     protected $_rank         = array(
-        // Layout.
+        // XYL.
         'document'        => 'Hoa_Xyl_Interpreter_Html5_Document',
         'yield'           => 'Hoa_Xyl_Interpreter_Common_Yield',
+
+        // Layout.
+        'hbox'            => 'Hoa_Xyl_Interpreter_Html5_Hbox',
+        'vbox'            => 'Hoa_Xyl_Interpreter_Html5_Vbox',
+        'grid'            => 'Hoa_Xyl_Interpreter_Html5_Grid',
+        'grows'           => 'Hoa_Xyl_Interpreter_Html5_Grows',
+        'grow'            => 'Hoa_Xyl_Interpreter_Html5_Grow',
 
         // Section.
         'section1'        => 'Hoa_Xyl_Interpreter_Html5_Section1',
