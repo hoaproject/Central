@@ -27,3 +27,124 @@
 @charset   "utf-8";
 @namespace url("http://www.w3.org/1999/xhtml");
 
+
+[dir=ltr] .start {
+    /* */
+}
+
+[dir=ltr] .end {
+    /* */
+}
+
+[dir=rtl] .start {
+    /* */
+}
+
+[dir=rtl] .end {
+    /* */
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%
+}
+
+body {
+    display: -moz-box;
+    display: -webkit-box;
+    display: box;
+
+    -moz-box-orient: horizontal;
+    -webkit-box-orient: horizontal;
+    box-orient: horizontal;
+
+    -moz-box-pack: center;
+    -webkit-box-pack: center;
+    box-pack: center
+}
+
+#body {
+    height: 100%;
+
+    display: -moz-box;
+    display: -webkit-box;
+    display: box;
+
+    -moz-box-orient: vertical;
+    -webkit-box-orient: vertical;
+    box-orient: vertical;
+
+    -moz-box-direction: normal;
+    -webkit-box-direction: normal;
+    box-direction: normal;
+}
+
+.vbox {
+    display: -moz-box;
+    display: -webkit-box;
+    display: box;
+
+    -moz-box-orient: vertical;
+    -webkit-box-orient: vertical;
+    box-orient: vertical;
+
+    -moz-box-direction: normal;
+    -webkit-box-direction: normal;
+    box-direction: normal;
+
+    -moz-box-flex: 1;
+    -webkit-box-flex: 1;
+    box-flex: 1;
+}
+
+.hbox {
+    display: -moz-box;
+    display: -webkit-box;
+    display: box;
+
+    -moz-box-orient: horizontal;
+    -webkit-box-orient: horizontal;
+    box-orient:horizontal;
+
+    -moz-box-direction: normal;
+    -webkit-box-direction: normal;
+    box-direction: normal;
+
+    -moz-box-flex: 1;
+    -webkit-box-flex: 1;
+    box-flex: 1;
+}
+
+.rbox {
+    -moz-box-direction: reverse;
+    -webkit-box-direction: reverse;
+    box-direction: reverse;
+}
+
+.box {
+    display: block;
+}
+
+.grid {
+    display: table;
+}
+
+    .grow {
+        display: table-row;
+    }
+
+    .gcell {
+        display: table-cell;
+    }
+
+
+
+
+
+/* misc-temp */
+
+label {
+    display: block;
+}
