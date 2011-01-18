@@ -40,68 +40,31 @@
 and
     exit('The Hoa framework main file (Core.php) must be included once.');
 
-/**
- * Some usefull constants.
- */
-!defined('SUCCEED')      and define('SUCCEED',      true);
-!defined('FAILED')       and define('FAILED',       false);
-!defined('DS')           and define('DS',           DIRECTORY_SEPARATOR);
-!defined('PS')           and define('PS',           PATH_SEPARATOR);
-!defined('CRLF')         and define('CRLF',         "\r\n");
-!defined('OS_WIN')       and define('OS_WIN',       !strncasecmp(PHP_OS, 'win', 3));
-!defined('S_64_BITS')    and define('S_64_BITS',    PHP_INT_SIZE == 8);
-!defined('S_32_BITS')    and define('S_32_BITS',    !S_64_BITS);
-!defined('void')         and define('void',         (unset) null);
-!defined('_public')      and define('_public',      1);
-!defined('_protected')   and define('_protected',   2);
-!defined('_private')     and define('_private',     4);
-!defined('_static')      and define('_static',      8);
-!defined('_abstract')    and define('_abstract',    16);
-!defined('_pure')        and define('_pure',        32);
-!defined('_final')       and define('_final',       64);
-!defined('_dynamic')     and define('_dynamic',     ~_static);
-!defined('_concrete')    and define('_concrete',    ~_abstract);
-!defined('_overridable') and define('_overridable', ~_final);
-
-!defined('PHP_VERSION_ID') and $v = explode('.', PHP_VERSION)
-                           and define('PHP_VERSION_ID',   $v[0] * 10000
-                                                        + $v[1] * 100
-                                                        + $v[2]);
-
-/**
- * Hoa constants.
- */
-!defined('HOA_VERSION_MAJOR')   and define('HOA_VERSION_MAJOR',   0);
-!defined('HOA_VERSION_MINOR')   and define('HOA_VERSION_MINOR',   5);
-!defined('HOA_VERSION_RELEASE') and define('HOA_VERSION_RELEASE', 5);
-!defined('HOA_VERSION_STATUS')  and define('HOA_VERSION_STATUS',  'b');
-!defined('HOA_REVISION')        and define('HOA_REVISION',        998);
-!defined('HOA_REVISION_PREV')   and define('HOA_REVISION_PREV',   600);
 
 /**
  * Hoa_Exception
  */
-require_once dirname(__FILE__) . DS . 'Exception.php';
+require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Exception.php';
 
 /**
  * Hoa_Core_Parameter
  */
-require_once dirname(__FILE__) . DS . 'Parameter.php';
+require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Parameter.php';
 
 /**
  * Hoa_Core_Protocol
  */
-require_once dirname(__FILE__) . DS . 'Protocol.php';
+require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Protocol.php';
 
 /**
  * Hoa_Core_Data
  */
-require_once dirname(__FILE__) . DS . 'Data.php';
+require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Data.php';
 
 /**
  * Hoa_Core_Event
  */
-require_once dirname(__FILE__) . DS . 'Event.php';
+require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Event.php';
 
 
 /**
@@ -178,6 +141,47 @@ class Hoa_Core implements Hoa_Core_Parameterizable {
     private static $_lastImport  = array();
 
 
+
+    /**
+     * Singleton.
+     *
+     * @access  private
+     * @return  void
+     */
+    private function __construct ( ) {
+
+        !defined('SUCCEED') and define('SUCCEED', true);
+        !defined('FAILED')  and define('FAILED', false);
+        !defined('DS')        and define('DS', DIRECTORY_SEPARATOR);
+        !defined('PS')        and define('PS', PATH_SEPARATOR);
+        !defined('CRLF')      and define('CRLF', "\r\n");
+        !defined('OS_WIN')    and define('OS_WIN', !strncasecmp(PHP_OS, 'win', 3));
+        !defined('S_64_BITS') and define('S_64_BITS', PHP_INT_SIZE == 8);
+        !defined('S_32_BITS') and define('S_32_BITS', !S_64_BITS);
+        !defined('void')         and define('void', (unset) null);
+        !defined('_public')      and define('_public', 1);
+        !defined('_protected')   and define('_protected', 2);
+        !defined('_private')     and define('_private', 4);
+        !defined('_static')      and define('_static', 8);
+        !defined('_abstract')    and define('_abstract', 16);
+        !defined('_pure')        and define('_pure', 32);
+        !defined('_final')       and define('_final', 64);
+        !defined('_dynamic')     and define('_dynamic', ~_static);
+        !defined('_concrete')    and define('_concrete',~_abstract);
+        !defined('_overridable') and define('_overridable', ~_final);
+        !defined('PHP_VERSION_ID') and $v = explode('.', PHP_VERSION)
+                                   and define('PHP_VERSION_ID',   $v[0] * 10000
+                                                                + $v[1] * 100
+                                                                + $v[2]);
+        !defined('HOA_VERSION_MAJOR')   and define('HOA_VERSION_MAJOR',   0);
+        !defined('HOA_VERSION_MINOR')   and define('HOA_VERSION_MINOR',   5);
+        !defined('HOA_VERSION_RELEASE') and define('HOA_VERSION_RELEASE', 5);
+        !defined('HOA_VERSION_STATUS')  and define('HOA_VERSION_STATUS',  'b');
+        !defined('HOA_REVISION')        and define('HOA_REVISION',        998);
+        !defined('HOA_REVISION_PREV')   and define('HOA_REVISION_PREV',   600);
+
+        return;
+    }
 
     /**
      * Singleton.
