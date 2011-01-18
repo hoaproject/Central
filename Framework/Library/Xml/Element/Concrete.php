@@ -270,7 +270,7 @@ class          Hoa_Xml_Element_Concrete
      */
     public function count ( ) {
 
-        return count($this->_children);
+        return count($this->_iterator);
     }
 
     /**
