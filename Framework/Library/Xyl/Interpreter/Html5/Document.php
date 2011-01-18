@@ -89,7 +89,12 @@ class          Hoa_Xyl_Interpreter_Html5_Document
 
         $out->writeAll(
             '<!DOCTYPE html>' . "\n\n" .
+            '<!--[if lt IE 7]><html class="ie6"><![endif]-->' . "\n" .
+            '<!--[if    IE 7]><html class="ie7"><![endif]-->' . "\n" .
+            '<!--[if    IE 8]><html class="ie8"><![endif]-->' . "\n" .
+            '<!--[if (gte IE 9)|!(IE)]>' . "\n" .
             '<html>' . "\n" .
+            '<![endif]-->' . "\n" .
             '<head>' . "\n" .
             '  <title>'
         );
