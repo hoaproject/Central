@@ -66,9 +66,8 @@ class       Hoa_Xyl_Interpreter_Html5_Grid
         $out->writeAll('<div class="grid"' .
                        $this->readAttributesAsString() . '>' . "\n");
 
-        $children = $this->getIterator();
-        $grows    = $children[0];
-        $axis     = true;
+        $grows = $this[0];
+        $axis  = true;
 
         if(true === $this->attributeExists('axis'))
             $axis = 'normal' === $this->readAttribute('axis')
@@ -78,6 +77,7 @@ class       Hoa_Xyl_Interpreter_Html5_Grid
 
         if(false === $axis) {
 
+            // Kick me…
             $matrix = array();
 
             foreach($grows as $grow) {
@@ -90,26 +90,33 @@ class       Hoa_Xyl_Interpreter_Html5_Grid
                 $matrix[] = $submatrix;
             }
 
-            $x = count($matrix);
-            $y = count($matrix[0]);
+            $x = count($grows);
+            $y = count($grows[0]);
 
-            for($e = 0; $e < $y; ++$e) {
-
-                $out->writeAll('<div class="grow">' . "\n");
-
+            for($e = 0; $e < $y; ++$e)
                 for($i = 0; $i < $x; ++$i) {
 
-                    $out->writeAll('<div class="gcell">' . "\n");
-                    $matrix[$i][$e]->render($out);
-                    $out->writeAll('</div>' . "\n");
+                    $h = $this[0][$e];
+
+                    if(null === $h) {
+
+                        $this[0]->offsetSet($e, clone $this[0][$e - 1]);
+                        $h = $this[0][$e];
+                    }
+
+                    $h->offsetSet($i, $matrix[$i][$e]);
                 }
 
-                $out->writeAll('</div>' . "\n");
-            }
+            for($e = 0; $e < $y; ++$e)
+                for($i = $x; $i < $y; ++$i)
+                    unset($this[0][$e][$i]);
+
+            for($e = $y; $e < $x; ++$e)
+                unset($this[0][$e]);
         }
-        else
-            foreach($children as $child)
-                $child->render($out);
+
+        foreach($this as $child)
+            $child->render($out);
 
         $out->writeAll('</div>' . "\n");
 
