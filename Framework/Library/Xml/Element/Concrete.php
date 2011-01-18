@@ -64,7 +64,8 @@ import('Xml.Element.Model.Phrasing');
 class          Hoa_Xml_Element_Concrete
     implements Hoa_Xml_Element,
                Countable,
-               IteratorAggregate {
+               IteratorAggregate,
+               ArrayAccess {
 
     /**
      * Store all elements of the abstract tree.
@@ -313,6 +314,79 @@ class          Hoa_Xml_Element_Concrete
             return null;
 
         return $this->_children[$name];
+    }
+
+    /**
+     * Check if an element exists.
+     *
+     * @access  public
+     * @param   int     $offset    Element index.
+     * @return  bool
+     */
+    public function offsetExists ( $offset ) {
+
+        return isset($this->_iterator[$offset]);
+    }
+
+    /**
+     * Get an element.
+     *
+     * @access  public
+     * @param   int     $offset    Element index.
+     * @return  Hoa_Xyl_Element_Concrete
+     */
+    public function offsetGet ( $offset ) {
+
+        if(false === $this->offsetExists($offset))
+            return null;
+
+        return $this->_iterator[$offset];
+    }
+
+    /**
+     * Set an element to an index.
+     *
+     * @access  public
+     * @param   string                    $offset    Element index.
+     * @param   Hoa_Xyl_Element_Concrete  $value     Element.
+     * @return  void
+     */
+    public function offsetSet ( $offset, $element ) {
+
+        if(is_string($element))
+            $name = $element;
+        else
+            $name = $element->getName();
+
+        if(!isset($this->_children[$name]))
+            $this->_children[$name] = array();
+
+        $this->_children[$name][$offset] = $element;
+        $this->_iterator[$offset]        = $element;
+
+        return;
+    }
+
+    /**
+     * Remove an element.
+     *
+     * @access  public
+     * @param   string  $offset    Element index.
+     * @return  void
+     */
+    public function offsetUnset ( $offset ) {
+
+        if(!isset($this->_iterator[$offset]))
+            return;
+
+        $element = $this->_iterator[$offset];
+        $name    = $element->getName();
+        $i       = array_search($element, $this->_children[$name]);
+
+        unset($this->_children[$name][$i]);
+        unset($this->_iterator[$offset]);
+
+        return;
     }
 
     /**
