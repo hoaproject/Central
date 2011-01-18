@@ -180,6 +180,17 @@ class Hoa_Core implements Hoa_Core_Parameterizable {
         !defined('HOA_REVISION')        and define('HOA_REVISION',        998);
         !defined('HOA_REVISION_PREV')   and define('HOA_REVISION_PREV',   600);
 
+        if(false !== $wl = ini_get('suhosin.executor.include.whitelist'))
+            if(false === in_array('hoa', explode(',', $wl)))
+                throw new Hoa_Exception(
+                    'The URL scheme hoa:// is not authorized by Suhosin. ' .
+                    'You must add this to your php.ini: ' .
+                    'suhosin.executor.include.whitelist="%s", thanks :-).',
+                    0, implode(',', array_merge(
+                        preg_split('#,#', $wl, -1, PREG_SPLIT_NO_EMPTY),
+                        array('hoa')
+                    )));
+
         return;
     }
 
