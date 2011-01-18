@@ -178,14 +178,14 @@ class Hoa_Exception extends Exception {
 
         try {
 
-            $out  = $pre . '(' . $this->getCode() . ') ' . $message . "\n" .
-                    'in ' . $this->getAbstractFile() . ' at ' . $this->getLine() .
-                    '.' . "\n\n";
+            $out = $pre . '(' . $this->getCode() . ') ' . $message . "\n" .
+                   'in ' . $this->getAbstractFile() . ' at line ' .
+                   $this->getLine() . '.' . "\n\n";
         }
         catch ( Exception $e ) {
 
-            $out  = $pre . '(' . $this->getCode() . ') ' . $message . "\n" .
-                    'in ' . $file . ' around line ' . $line . '.' . "\n\n";
+            $out = $pre . '(' . $this->getCode() . ') ' . $message . "\n" .
+                   'in ' . $file . ' around line ' . $line . '.' . "\n\n";
         }
 
         switch($output) {
