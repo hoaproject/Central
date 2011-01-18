@@ -166,13 +166,27 @@ class Hoa_Exception extends Exception {
 
         $message = @vsprintf($this->getMessage(), $this->_arg);
         $trace   = $this->getTrace();
+        $file    = '/dev/null';
+        $line    = -1;
 
-        if(!empty($trace))
-            $pre .= @$trace[0]['class'] . '::' . @$trace[0]['function'] . ': ';
+        if(!empty($trace)) {
 
-        $out  = $pre . '(' . $this->getCode() . ') ' . $message . "\n" .
-                'in ' . $this->getAbstractFile() . ' at ' . $this->getLine() .
-                '.' . "\n\n";
+            $pre  .= @$trace[0]['class'] . '::' . @$trace[0]['function'] . ': ';
+            $file  = $trace[0]['file'];
+            $line  = $trace[0]['line'];
+        }
+
+        try {
+
+            $out  = $pre . '(' . $this->getCode() . ') ' . $message . "\n" .
+                    'in ' . $this->getAbstractFile() . ' at ' . $this->getLine() .
+                    '.' . "\n\n";
+        }
+        catch ( Exception $e ) {
+
+            $out  = $pre . '(' . $this->getCode() . ') ' . $message . "\n" .
+                    'in ' . $file . ' around line ' . $line . '.' . "\n\n";
+        }
 
         switch($output) {
 
