@@ -184,7 +184,7 @@ class Hoa_Core implements Hoa_Core_Parameterizable {
             if(false === in_array('hoa', explode(',', $wl)))
                 throw new Hoa_Exception(
                     'The URL scheme hoa:// is not authorized by Suhosin. ' .
-                    'You must add this to your php.ini: ' .
+                    'You must add this to your php.ini or suhosin.ini: ' .
                     'suhosin.executor.include.whitelist="%s", thanks :-).',
                     0, implode(',', array_merge(
                         preg_split('#,#', $wl, -1, PREG_SPLIT_NO_EMPTY),
