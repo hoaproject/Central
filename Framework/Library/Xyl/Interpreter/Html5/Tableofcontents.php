@@ -78,7 +78,7 @@ class       Hoa_Xyl_Interpreter_Html5_Tableofcontents
         foreach($this->_entry as $entry) {
 
             $out->writeAll('  <li>');
-            $entry->getTitle()->render($out);
+            $entry->getTitle()->computeTransientValue($out);
             $out->writeAll('</li>' . "\n");
         }
 
