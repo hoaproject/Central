@@ -268,10 +268,7 @@ abstract class Hoa_Xyl_Element_Concrete
 
         $data = false;
 
-        if(null !== $this->_transientValue)
-            $data = $this->_transientValue;
-
-        elseif($this->getAbstractElement()->attributeExists('bind'))
+        if($this->getAbstractElement()->attributeExists('bind'))
             $data = $this->_transientValue
                   = $this->getCurrentData();
 
@@ -291,6 +288,28 @@ abstract class Hoa_Xyl_Element_Concrete
 
         foreach($this as $child)
             $child->render($out);
+
+        return;
+    }
+
+    /**
+     * Get transient value, i.e. get the last compute value if exists (if no
+     * exists, compute right now).
+     *
+     * @access  public
+     * @return  string
+     */
+    public function computeTransientValue ( Hoa_Stream_Interface_Out $out = null ) {
+
+        $data = $this->_transientValue;
+
+        if(null === $data)
+            return $this->computeValue($out);
+
+        if(null === $out)
+            return $data;
+
+        $out->writeAll($data);
 
         return;
     }
