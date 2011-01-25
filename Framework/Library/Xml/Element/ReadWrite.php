@@ -340,23 +340,8 @@ class          Hoa_Xml_Element_ReadWrite
      */
     public function writeArray ( Array $array ) {
 
-        foreach($array as $element => $value)
-            if(is_array($value)) {
-
-                foreach($value as $i => $in)
-                    if(is_array($in) && is_int($i)) {
-                        
-                        $handle = $this->addChild($element);
-                        $handle->writeArray($in);
-                    }
-                    elseif(is_int($i))
-                        $handle = $this->addChild($element, $in);
-
-                if(array_key_exists('@attributes', $value))
-                    $handle->writeAttributes($value['@attributes']);
-            }
-            else
-                $this->addChild($element, $value);
+        throw new Hoa_Xml_Exception(
+            'Hmm, TODO?', 42);
 
         return;
     }
