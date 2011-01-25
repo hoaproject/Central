@@ -337,11 +337,29 @@ class          Hoa_Xml_Element_ReadWrite
      * @access  public
      * @param   array   $array    Array.
      * @return  mixed
+     * @TODO    readArray does not return attributes and so…
      */
     public function writeArray ( Array $array ) {
 
-        throw new Hoa_Xml_Exception(
-            'Hmm, TODO?', 42);
+        $document = $this->readDOM()->ownerDocument;
+
+        foreach($array as $name => $value) {
+
+            $dom = $this->{$name}->readDOM();
+
+            if(is_object($value))
+                $dom->parentNode->appendChild(
+                    $document->importNode(clone $value->readDOM(), true)
+                );
+            elseif(is_array($value))
+                foreach($value as $subvalue)
+                    if(is_object($subvalue))
+                        $dom->parentNode->appendChild(
+                            $document->importNode(clone $subvalue->readDOM(), true)
+                        );
+                    elseif(is_string($subvalue))
+                        $this->addChild($name, $subvalue);
+        }
 
         return;
     }
