@@ -45,12 +45,12 @@ import('Xml.Element.Basic') and load();
 /**
  * Hoa_Stream_Interface_In
  */
-import('Stream.Interface.In');
+import('Stream.Interface.In') and load();
 
 /**
  * Hoa_Stream_Interface_Out
  */
-import('Stream.Interface.Out');
+import('Stream.Interface.Out') and load();
 
 /**
  * Hoa_StringBuffer_ReadWrite
