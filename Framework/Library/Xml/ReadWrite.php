@@ -88,8 +88,9 @@ class          Hoa_Xml_ReadWrite
 
         if(!($stream instanceof Hoa_Stream_Interface_Out))
             throw new Hoa_Xml_Exception(
-                'The stream must implement Hoa_Stream_Interface_In and ' .
-                'Hoa_Stream_Interface_Out interfaces.', 0);
+                'The stream %s (that opened %s) must implement ' .
+                'Hoa_Stream_Interface_In and Hoa_Stream_Interface_Out interfaces.',
+                0, array(get_class($stream), $stream->getStreamName()));
 
         parent::__construct('Hoa_Xml_Element_ReadWrite', $stream);
 
