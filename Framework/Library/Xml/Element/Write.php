@@ -176,25 +176,25 @@ class          Hoa_Xml_Element_Write
      */
     public function writeArray ( Array $array ) {
 
-        foreach($array as $element => $value)
-            if(is_array($value)) {
+        $document = $this->readDOM()->ownerDocument;
 
-                foreach($value as $i => $in)
-                    if(is_array($in) && is_int($i)) {
-                        
-                        $handle = $this->addChild($element);
-                        $handle->writeArray($in);
-                    }
-                    elseif(is_int($i))
-                        $handle = $this->addChild($element, $in);
-                    else
-                        $handle = $this->addChild($i, $in);
+        foreach($array as $name => $value) {
 
-                if(array_key_exists('@attributes', $value))
-                    $handle->writeAttributes($value['@attributes']);
-            }
-            else
-                $this->addChild($element, $value);
+            $dom = $this->{$name}->readDOM();
+
+            if(is_object($value))
+                $dom->parentNode->appendChild(
+                    $document->importNode(clone $value->readDOM(), true)
+                );
+            elseif(is_array($value))
+                foreach($value as $subvalue)
+                    if(is_object($subvalue))
+                        $dom->parentNode->appendChild(
+                            $document->importNode(clone $subvalue->readDOM(), true)
+                        );
+                    elseif(is_string($subvalue))
+                        $this->addChild($name, $subvalue);
+        }
 
         return;
     }
