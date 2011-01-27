@@ -116,7 +116,6 @@ class          Hoa_Test
 
                 'incubator'    => '(:%repository:)(:%revision:)Incubator/',
                 'instrumented' => '(:%repository:)(:%revision:)Instrumented/',
-                'sampler'      => '(:%repository:)(:%revision:)Sampler/',
 
                 'dictionary'   => '(:%root:)Dictionary/',
                 'maxtry'       => 64

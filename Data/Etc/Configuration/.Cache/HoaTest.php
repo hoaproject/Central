@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Generated the 2010-11-19T18:11:06.000000Z
+ * Generated the 2011-01-27T16:50:26.000000Z
  */
 
 return array (
@@ -16,7 +16,6 @@ return array (
     'revision' => '(:_YmdHis:)/',
     'incubator' => '(:%repository:)(:%revision:)Incubator/',
     'instrumented' => '(:%repository:)(:%revision:)Instrumented/',
-    'sampler' => '(:%repository:)(:%revision:)Sampler/',
     'dictionary' => '(:%root:)Dictionary/',
     'maxtry' => 64,
   ),
