@@ -188,10 +188,17 @@ class          Hoa_Test
                 $this,
                 new Hoa_Core_Event_Bucket(array('iteration' => $i))
             );
-            call_user_func_array(
-                array($cut, '__hoa_magicCaller'),
-                array(0 => $method)
-            );
+
+            // Prevent if an exception is thrown from the called method.
+            try {
+
+                call_user_func_array(
+                    array($cut, '__hoa_magicCaller'),
+                    array(0 => $method)
+                );
+            }
+            catch ( Exception $e ) { }
+
             Hoa_Core_Event::notify(
                 'hoa://Event/Test/Sample:close-iteration',
                 $this,
@@ -222,10 +229,16 @@ class          Hoa_Test
                 $parameters[] = $variable->selectDomain($selection)
                                          ->sample();
 
-            call_user_func_array(
-                array($cut, '__hoa_magicCaller'),
-                $parameters
-            );
+            // Prevent if an exception is thrown from the called method.
+            try {
+
+                call_user_func_array(
+                    array($cut, '__hoa_magicCaller'),
+                    $parameters
+                );
+            }
+            catch ( Exception $e ) { }
+
             Hoa_Core_Event::notify(
                 'hoa://Event/Test/Sample:close-iteration',
                 $this,
