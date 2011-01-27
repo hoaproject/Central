@@ -103,7 +103,7 @@ class          Hoa_Test_Praspel_Clause_Throwable
      */
     public function couldThrow ( $name ) {
 
-        if(false === $this->exceptionExists($name))
+        if(false === in_array($name, $this->getList()))
             $this->_list[] = $name;
 
         return $this;
@@ -118,7 +118,14 @@ class          Hoa_Test_Praspel_Clause_Throwable
      */
     public function exceptionExists ( $name ) {
 
-        return true === in_array($name, $this->getList());
+        if(true === in_array($name, $this->getList()))
+            return true;
+
+        foreach($this->getList() as $classname)
+            if(true === is_subclass_of($name, $classname))
+                return true;
+
+        return false;
     }
 
     /**
