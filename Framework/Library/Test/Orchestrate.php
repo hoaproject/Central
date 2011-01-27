@@ -534,7 +534,8 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                         '            $result = $this->__hoa_' . $name . '_body(' . $p . ');' . "\n" .
                         '        }' . "\n" .
                         '        catch ( Exception $e ) {' . "\n\n" .
-                        '            return $this->__hoa_' . $name . '_exception($e);' . "\n" .
+                        '            $this->__hoa_' . $name . '_exception($e);' . "\n\n" .
+                        '            throw $e;' . "\n" .
                         '        }' . "\n\n" .
                         '        $this->__hoa_' . $name . '_post(' . $pp . ');' . "\n\n" .
                         '        return $result;'
