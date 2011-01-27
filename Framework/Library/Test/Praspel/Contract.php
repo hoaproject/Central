@@ -745,8 +745,9 @@ class          Hoa_Test_Praspel_Contract
         $this->_exception = null;
 
         foreach($this as $clause)
-            foreach($clause->getVariables() as $variable)
-                $variable->reset();
+            if($clause instanceof Hoa_Test_Praspel_Clause_Contract)
+                foreach($clause->getVariables() as $variable)
+                    $variable->reset();
 
         return;
     }
