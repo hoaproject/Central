@@ -553,6 +553,9 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
 
             // variable: domain(…,
             case 'c':
+                if(!isset($this->buffers[3]))
+                    break;
+
                 $this->_current = $this->_current->with(
                     $this->buffers[3]
                 )->_comma;
