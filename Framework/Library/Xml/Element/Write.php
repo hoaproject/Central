@@ -180,20 +180,52 @@ class          Hoa_Xml_Element_Write
 
         foreach($array as $name => $value) {
 
-            $dom = $this->{$name}->readDOM();
+            if(is_object($value)) {
 
-            if(is_object($value))
-                $dom->parentNode->appendChild(
+                if(!isset($this->{$name}))
+                    $this->addChild($name);
+
+                $this->{$name}->readDOM()->parentNode->appendChild(
                     $document->importNode(clone $value->readDOM(), true)
                 );
-            elseif(is_array($value))
-                foreach($value as $subvalue)
-                    if(is_object($subvalue))
-                        $dom->parentNode->appendChild(
+            }
+            elseif(is_array($value) && !empty($value)) {
+
+                if(!isset($value[0]))
+                    $handle = $this->addChild($name);
+
+                foreach($value as $subname => $subvalue)
+                    if(is_object($subvalue)) {
+
+                        if(!isset($this->{$name}))
+                            $this->addChild($name);
+
+                        $this->{$name}->readDOM()->parentNode->appendChild(
                             $document->importNode(clone $subvalue->readDOM(), true)
                         );
-                    elseif(is_string($subvalue))
-                        $this->addChild($name, $subvalue);
+                    }
+                    else {
+
+                        if(!isset($this->{$name}))
+                            $this->addChild($name);
+
+                        if(is_array($subvalue)) {
+
+                            $handle->addChild($subname, null)
+                                   ->writeArray($subvalue);
+
+                            continue;
+                        }
+
+                        if(is_bool($subvalue))
+                            $subvalue = $subvalue ? 'true' : 'false';
+
+                        if(is_string($subname))
+                            $handle->addChild($subname, $subvalue);
+                        else
+                            $this->addChild($name, $subvalue);
+                    }
+            }
         }
 
         return;
