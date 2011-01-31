@@ -788,8 +788,8 @@ class Hoa_Core_Protocol_Wrapper {
 
         if(null === $this->context)
             return rmdir(self::realPath($path));
-        else
-            return rmdir(self::realPath($path), $this->context);
+
+        return rmdir(self::realPath($path), $this->context);
     }
 
     /**
@@ -804,8 +804,8 @@ class Hoa_Core_Protocol_Wrapper {
 
         if(null === $this->context)
             return unlink(self::realPath($path));
-        else
-            return unlink(self::realPath($path), $this->context);
+
+        return unlink(self::realPath($path), $this->context);
     }
 
     /**
@@ -846,8 +846,8 @@ class Hoa_Core_Protocol_Wrapper {
 
         if($flags & STREAM_URL_STAT_LINK)
             return @lstat($p);
-        else
-            return @stat($p);
+
+        return @stat($p);
     }
 
     /**
