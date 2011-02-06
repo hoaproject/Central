@@ -80,20 +80,21 @@ class Hoa_Realdom_Boundfloat extends Hoa_Realdom_Float {
      * Construct a realistic domain.
      *
      * @access  public
-     * @param   float   $lower    Lower bound value.
-     * @param   float   $upper    Upper bound value.
+     * @param   Hoa_Realdom_Constinteger  $lower    Lower bound value.
+     * @param   Hoa_Realdom_Constinteger  $upper    Upper bound value.
      * @return  void
      */
-    public function construct ( $lower = null, $upper = null ) {
+    public function construct ( Hoa_Realdom_Constinteger $lower = null,
+                                Hoa_Realdom_Constinteger $upper = null ) {
 
         if(null === $lower)
-            $lower = (float) ~PHP_INT_MAX;
+            $lower = ~PHP_INT_MAX;
 
         if(null === $upper)
-            $upper = (float)  PHP_INT_MAX;
+            $upper =  PHP_INT_MAX;
 
-        $this->_lower = (float) min($lower, $upper);
-        $this->_upper = (float) max($lower, $upper);
+        $this->_lower = $lower;
+        $this->_upper = $upper;
 
         return;
     }
@@ -108,8 +109,8 @@ class Hoa_Realdom_Boundfloat extends Hoa_Realdom_Float {
     public function predicate ( $q ) {
 
         return    parent::predicate($q)
-               && $q >= $this->getLower()
-               && $q <= $this->getUpper();
+               && $q >= $this->getLower()->getValue()
+               && $q <= $this->getUpper()->getValue();
     }
 
     /**
@@ -120,7 +121,10 @@ class Hoa_Realdom_Boundfloat extends Hoa_Realdom_Float {
      */
     protected function _sample ( Hoa_Test_Sampler $sampler ) {
 
-        return $sampler->getFloat($this->getLower(), $this->getUpper());
+        return $sampler->getFloat(
+            $this->getLower()->sample($sampler),
+            $this->getUpper()->sample($sampler)
+        );
     }
 
     /**
