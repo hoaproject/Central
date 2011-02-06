@@ -33,9 +33,19 @@
  */
 
 /**
+ * Hoa_Realdom
+ */
+import('Realdom.~');
+
+/**
+ * Hoa_Realdom_Number
+ */
+import('Realdom.Number') and load();
+
+/**
  * Hoa_Realdom_Integer
  */
-import('Realdom.Integer') and load();
+import('Realdom.Integer');
 
 /**
  * Class Hoa_Realdom_Even.
@@ -51,7 +61,7 @@ import('Realdom.Integer') and load();
  * @subpackage  Hoa_Realdom_Even
  */
 
-class Hoa_Realdom_Even extends Hoa_Realdom_Integer {
+class Hoa_Realdom_Even extends Hoa_Realdom implements Hoa_Realdom_Number {
 
     /**
      * Realistic domain name.
@@ -63,7 +73,7 @@ class Hoa_Realdom_Even extends Hoa_Realdom_Integer {
     /**
      * Subject.
      *
-     * @var Hoa_Realdom_Integer object
+     * @var Hoa_Realdom_Number object
      */
     protected $_subject = null;
 
@@ -73,10 +83,10 @@ class Hoa_Realdom_Even extends Hoa_Realdom_Integer {
      * Construct a realistic domain.
      *
      * @access  public
-     * @param   Hoa_Realdom_Integer  $subject    Subject.
+     * @param   Hoa_Realdom_Number  $subject    Subject.
      * @return  void
      */
-    public function construct ( Hoa_Realdom_Integer $subject = null ) {
+    public function construct ( Hoa_Realdom_Number $subject = null ) {
 
         if(null === $subject)
             $subject = new Hoa_Realdom_Integer();
