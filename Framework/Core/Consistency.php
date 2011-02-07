@@ -218,16 +218,14 @@ class Consistency {
         return true;
     }
 
-    public static function dnew ( $classname ) {
+    public static function dnew ( $classname, Array $arguments = array() ) {
 
         if(!class_exists($classname))
             if(false === self::autoload($classname))
                 self::from('')
                     ->import(str_replace('\\', '.', $classname), true);
 
-        $arguments = func_get_args();
-        array_shift($arguments);
-        $class     = new \ReflectionClass($classname);
+        $class = new \ReflectionClass($classname);
 
         return $class->newInstanceArgs($arguments);
     }
@@ -248,12 +246,9 @@ function from ( $namespace ) {
 /**
  *
  */
-function dnew ( $classname ) {
+function dnew ( $classname, Array $arguments = array() ) {
 
-    return call_user_func_array(
-        array('\Hoa\Core\Consistency', 'dnew'),
-        func_get_args()
-    );
+    return \Hoa\Core\Consistency::dnew($classname, $arguments);
 }
 
 /**
