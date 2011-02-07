@@ -35,7 +35,7 @@
 /**
  * Class Hoa_Session_Exception.
  *
- * Extending the Hoa_Exception class.
+ * Extending the Hoa_Core_Exception class.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
@@ -46,7 +46,7 @@
  * @subpackage  Hoa_Session_Exception
  */
 
-class Hoa_Session_Exception extends Hoa_Exception {
+class Hoa_Session_Exception extends Hoa_Core_Exception {
 
     /**
      * Whether an error has occured when trying to start a session.
