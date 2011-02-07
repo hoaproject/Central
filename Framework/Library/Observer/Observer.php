@@ -24,32 +24,32 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Observer
- *
  */
 
-/**
- * Hoa_Observer_Exception
- */
-import('Observer.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Observer.
+ * \Hoa\Observer\Exception
+ */
+-> import('Observer.Exception');
+
+}
+
+namespace Hoa\Observer {
+
+/**
+ * Class \Hoa\Observer.
  *
  * Create an observer.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Observer
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Observer {
+class Observer {
 
     /**
      * Be silent.
@@ -68,7 +68,7 @@ class Hoa_Observer {
     /**
      * Registered services.
      *
-     * @var Hoa_Observer array
+     * @var \Hoa\Observer array
      */
     protected static $_register = array();
 
@@ -86,12 +86,12 @@ class Hoa_Observer {
      * @param   bool    $verbose    Verbosity mode, given with self::VERBOSE and
      *                              self::SILENT constants.
      * @return  void
-     * @throw   Hoa_Observer_Exception
+     * @throw   \Hoa\Observer\Exception
      */
     public static function register ( $service, $index, $verbose = self::VERBOSE ) {
 
-        if(   ($service instanceof Hoa_Observer_Interface_Observable)
-           && ($service instanceof Hoa_Observer_Interface_Observer)) {
+        if(   ($service instanceof \Hoa\Observer\IObserver\Observable)
+           && ($service instanceof \Hoa\Observer\IObserver\Observer)) {
 
             if(false === self::isRegistered($index))
                 self::$_register[$index]   = array();
@@ -101,11 +101,11 @@ class Hoa_Observer {
             return;
         }
 
-        if($service instanceof Hoa_Observer_Interface_Observable) {
+        if($service instanceof \Hoa\Observer\IObserver\Observable) {
 
             if(true === self::isRegistered($index))
                 if(self::VERBOSE === $verbose)
-                    throw new Hoa_Observer_Exception(
+                    throw new Exception(
                         'Observable service %s is already registered.', 0, $index);
                 else
                     return;
@@ -115,11 +115,11 @@ class Hoa_Observer {
             return;
         }
 
-        if($service instanceof Hoa_Observer_Interface_Observer) {
+        if($service instanceof \Hoa\Observer\IObserver\Observer) {
 
             if(false === self::isRegistered($index))
                 if(self::VERBOSE === $verbose)
-                    throw new Hoa_Observer_Exception(
+                    throw new Exception(
                         'Observer service %s cannot listen the observable ' .
                         'service %s because it is not registered.', 1,
                         array(get_class($service), $index));
@@ -131,9 +131,9 @@ class Hoa_Observer {
             return;
         }
 
-        throw new Hoa_Observer_Exception(
-            'Service %s must implement Hoa_Observer_Interface_Observer or ' .
-            'Hoa_Observer_Interface_Observable interface.',
+        throw new Exception(
+            'Service %s must implement \Hoa\Observer\IObserver\Observer or ' .
+            '\Hoa\Observer\IObserver\Observable interface.',
             2, get_class($service));
 
         return;
@@ -153,11 +153,11 @@ class Hoa_Observer {
      */
     public static function unregister ( $service, $index ) {
 
-        if($service instanceof Hoa_Observer_Interface_Observable)
+        if($service instanceof \Hoa\Observer\IObserver\Observable)
             if(true === self::isRegistered($index))
                 unset(self::$_register[$index]);
 
-        if($service instanceof Hoa_Observer_Interface_Observer) {
+        if($service instanceof \Hoa\Observer\IObserver\Observer) {
 
             $handle = get_class($service);
 
@@ -195,19 +195,19 @@ class Hoa_Observer {
      * @access  public
      * @param   string  $index        Service name/index.
      * @param   array   $arguments    Arguments to give to the
-     *                                Hoa_Observer_Interface_Observable::update()
+     *                                \Hoa\Observer\IObserver\Observable::update()
      *                                method.
      * @param   bool    $verbose      Verbosity mode, given with self::VERBOSE and
      *                                self::SILENT constants.
      * @return  void
-     * @throw   Hoa_Observer_Exception
+     * @throw   \Hoa\Observer\Exception
      */
     public static function notify ( $index, Array $arguments = array(),
                                     $verbose = self::VERBOSE ) {
 
         if(false === self::isRegistered($index))
             if(self::VERBOSE === $verbose)
-                throw new Hoa_Observer_Exception(
+                throw new Exception(
                     'Cannot notify the observable service %s, ' .
                     'because it is not found.', 3, $index);
             else
@@ -224,4 +224,6 @@ class Hoa_Observer {
 
         return;
     }
+}
+
 }
