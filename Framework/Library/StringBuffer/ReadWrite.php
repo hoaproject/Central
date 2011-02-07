@@ -24,52 +24,50 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_StringBuffer
- * @subpackage  Hoa_StringBuffer_ReadWrite
- *
  */
 
-/**
- * Hoa_StringBuffer_Exception
- */
-import('StringBuffer.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_StringBuffer
+ * \Hoa\StringBuffer\Exception
  */
-import('StringBuffer.~');
+-> import('StringBuffer.Exception')
 
 /**
- * Hoa_Stream_Interface_In
+ * \Hoa\StringBuffer
  */
-import('Stream.Interface.In');
+-> import('StringBuffer.~')
 
 /**
- * Hoa_Stream_Interface_Out
+ * \Hoa\Stream\IStream\In
  */
-import('Stream.Interface.Out');
+-> import('Stream.I~.In')
 
 /**
- * Class Hoa_StringBuffer_ReadWrite.
+ * \Hoa\Stream\IStream\Out
+ */
+-> import('Stream.I~.Out');
+
+}
+
+namespace Hoa\StringBuffer {
+
+/**
+ * Class \Hoa\StringBuffer\ReadWrite.
  *
  * Read/write a string buffer.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.3
- * @package     Hoa_StringBuffer
- * @subpackage  Hoa_StringBuffer_ReadWrite
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class          Hoa_StringBuffer_ReadWrite
-    extends    Hoa_StringBuffer
-    implements Hoa_Stream_Interface_In,
-               Hoa_Stream_Interface_Out {
+class          ReadWrite
+    extends    StringBuffer
+    implements \Hoa\Stream\IStream\In,
+               \Hoa\Stream\IStream\Out {
 
     /**
      * Test for end-of-file.
@@ -88,12 +86,12 @@ class          Hoa_StringBuffer_ReadWrite
      * @access  public
      * @param   int     $length    Length.
      * @return  string
-     * @throw   Hoa_StringBuffer_Exception
+     * @throw   \Hoa\StringBuffer\Exception
      */
     public function read ( $length ) {
 
         if($length <= 0)
-            throw new Hoa_StringBuffer_Exception(
+            throw new Exception(
                 'Length must be greather than 0, given %d.', 0, $length);
 
         return fread($this->getStream(), $length);
@@ -191,13 +189,13 @@ class          Hoa_StringBuffer_ReadWrite
 
         $current = $this->tell();
 
-        $this->seek(0, Hoa_Stream_Interface_Pointable::SEEK_END);
+        $this->seek(0, \Hoa\Stream\IStream\Pointable::SEEK_END);
         $end     = $this->tell();
 
-        $this->seek(0, Hoa_Stream_Interface_Pointable::SEEK_SET);
+        $this->seek(0, \Hoa\Stream\IStream\Pointable::SEEK_SET);
         $handle  = $this->read($end);
 
-        $this->seek($current, Hoa_Stream_Interface_Pointable::SEEK_SET);
+        $this->seek($current, \Hoa\Stream\IStream\Pointable::SEEK_SET);
 
         return $handle;
     }
@@ -221,12 +219,12 @@ class          Hoa_StringBuffer_ReadWrite
      * @param   string  $string    String.
      * @param   int     $length    Length.
      * @return  mixed
-     * @throw   Hoa_StringBuffer_Exception
+     * @throw   \Hoa\StringBuffer\Exception
      */
     public function write ( $string, $length ) {
 
         if($length <= 0)
-            throw new Hoa_StringBuffer_Exception(
+            throw new Exception(
                 'Length must be greather than 0, given %d.', 0, $length);
 
         return fwrite($this->getStream(), $string, $length);
@@ -324,7 +322,7 @@ class          Hoa_StringBuffer_ReadWrite
         if(false === $n = strpos($line, "\n"))
             return $this->write($line . "\n", strlen($line) + 1);
 
-        $n++;
+        ++$n;
 
         return $this->write(substr($line, 0, $n), $n);
     }
@@ -363,4 +361,6 @@ class          Hoa_StringBuffer_ReadWrite
 
         return $this->readAll();
     }
+}
+
 }

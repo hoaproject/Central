@@ -24,46 +24,42 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_StringBuffer
- * @subpackage  Hoa_StringBuffer_Read
- *
  */
 
-/**
- * Hoa_StringBuffer_Exception
- */
-import('StringBuffer.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_StringBuffer
+ * \Hoa\StringBuffer\Exception
  */
-import('StringBuffer.~');
+-> import('StringBuffer.Exception')
 
 /**
- * Hoa_Stream_Interface_In
+ * \Hoa\StringBuffer
  */
-import('Stream.Interface.In');
+-> import('StringBuffer.~')
 
 /**
- * Class Hoa_StringBuffer_Read.
+ * \Hoa\Stream\IStream\In
+ */
+-> import('Stream.I~.In');
+
+}
+
+namespace Hoa\StringBuffer {
+
+/**
+ * Class \Hoa\StringBuffer\Read.
  *
  * Read a string buffer.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.3
- * @package     Hoa_StringBuffer
- * @subpackage  Hoa_StringBuffer_Read
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class          Hoa_StringBuffer_Read
-    extends    Hoa_StringBuffer
-    implements Hoa_Stream_Interface_In {
+class Read extends StringBuffer implements \Hoa\Stream\IStream\In {
 
     /**
      * Test for end-of-file.
@@ -82,12 +78,12 @@ class          Hoa_StringBuffer_Read
      * @access  public
      * @param   int     $length    Length.
      * @return  string
-     * @throw   Hoa_StringBuffer_Exception
+     * @throw   \Hoa\StringBuffer\Exception
      */
     public function read ( $length ) {
 
         if($length <= 0)
-            throw new Hoa_StringBuffer_Exception(
+            throw new Exception(
                 'Length must be greather than 0, given %d.', 0, $length);
 
         return fread($this->getStream(), $length);
@@ -185,13 +181,13 @@ class          Hoa_StringBuffer_Read
 
         $current = $this->tell();
 
-        $this->seek(0, Hoa_Stream_Interface_Pointable::SEEK_END);
+        $this->seek(0, \Hoa\Stream\IStream\Pointable::SEEK_END);
         $end     = $this->tell();
 
-        $this->seek(0, Hoa_Stream_Interface_Pointable::SEEK_SET);
+        $this->seek(0, \Hoa\Stream\IStream\Pointable::SEEK_SET);
         $handle  = $this->read($end);
 
-        $this->seek($current, Hoa_Stream_Interface_Pointable::SEEK_SET);
+        $this->seek($current, \Hoa\Stream\IStream\Pointable::SEEK_SET);
 
         return $handle;
     }
@@ -218,4 +214,6 @@ class          Hoa_StringBuffer_Read
 
         return $this->readAll();
     }
+}
+
 }
