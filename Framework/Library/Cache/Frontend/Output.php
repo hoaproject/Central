@@ -24,39 +24,37 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Cache
- * @subpackage  Hoa_Cache_Frontend_Output
- *
  */
 
-/**
- * Hoa_Cache_Frontend
- */
-import('Cache.Frontend');
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Cache_Frontend_Output.
+ * \Hoa\Cache\Frontend
+ */
+-> import('Cache.Frontend.~');
+
+}
+
+namespace Hoa\Cache\Frontend {
+
+/**
+ * Class \Hoa\Cache\Frontend\Output.
  *
  * Ouput catching system for frontend cache.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Cache
- * @subpackage  Hoa_Cache_Frontend_Output
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Cache_Frontend_Output extends Hoa_Cache_Frontend {
+class Output extends Frontend {
 
     /**
      * Output buffer level.
      *
-     * @var Hoa_Cache_Frontend_Output array
+     * @var \Hoa\Cache\Frontend\Output array
      */
     protected $_level = array();
 
@@ -110,4 +108,6 @@ class Hoa_Cache_Frontend_Output extends Hoa_Cache_Frontend {
 
         return;
     }
+}
+
 }

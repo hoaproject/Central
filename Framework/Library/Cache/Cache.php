@@ -24,31 +24,31 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Cache
- *
  */
+
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Cache_Exception
+ * \Hoa\Cache\Exception
  */
-import('Cache.Exception');
+-> import('Cache.Exception');
+
+}
+
+namespace Hoa\Cache {
 
 /**
- * Class Hoa_Cache.
+ * Class \Hoa\Cache.
  *
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Cache
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-abstract class Hoa_Cache implements Hoa_Core_Parameterizable {
+abstract class Cache implements \Hoa\Core\Parameterizable {
 
     /**
      * Clean all entries.
@@ -72,16 +72,16 @@ abstract class Hoa_Cache implements Hoa_Core_Parameterizable {
     const CLEAN_USER    =  1;
 
     /**
-     * The Hoa_Controller parameters.
+     * The \Hoa\Controller parameters.
      *
-     * @var Hoa_Core_Parameter object
+     * @var \Hoa\Core\Parameter object
      */
     private $_parameters  = null;
 
     /**
      * Current ID (key : id, value : id_md5).
      *
-     * @var Hoa_Cache array
+     * @var \Hoa\Cache array
      */
     protected static $_id = array();
 
@@ -96,7 +96,7 @@ abstract class Hoa_Cache implements Hoa_Core_Parameterizable {
      */
     public function __construct ( Array $parameters = array() ) {
 
-        $this->_parameters = new Hoa_Core_Parameter(
+        $this->_parameters = new \Hoa\Core\Parameter(
             $this,
             array(
                 'id' => null
@@ -136,7 +136,7 @@ abstract class Hoa_Cache implements Hoa_Core_Parameterizable {
 
                 'zendplatform'                 => ''
             ),
-            'Hoa_Cache'
+            '\Hoa\Cache'
         );
 
         $this->setParameters($parameters);
@@ -150,7 +150,7 @@ abstract class Hoa_Cache implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   array   $in    Parameters to set.
      * @return  void
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setParameters ( Array $in ) {
 
@@ -162,7 +162,7 @@ abstract class Hoa_Cache implements Hoa_Core_Parameterizable {
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameters ( ) {
 
@@ -176,7 +176,7 @@ abstract class Hoa_Cache implements Hoa_Core_Parameterizable {
      * @param   string  $key      Key.
      * @param   mixed   $value    Value.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setParameter ( $key, $value ) {
 
@@ -189,7 +189,7 @@ abstract class Hoa_Cache implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameter ( $key ) {
 
@@ -203,7 +203,7 @@ abstract class Hoa_Cache implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getFormattedParameter ( $key ) {
 
@@ -219,7 +219,7 @@ abstract class Hoa_Cache implements Hoa_Core_Parameterizable {
      * @access  protected
      * @param   string    $id    Identifier.
      * @return  string
-     * @throw   Hoa_Cache_Exception
+     * @throw   \Hoa\Cache\Exception
      */
     protected function makeId ( $id = null ) {
 
@@ -272,7 +272,7 @@ abstract class Hoa_Cache implements Hoa_Core_Parameterizable {
      *
      * @access  protected
      * @return  string
-     * @throw   Hoa_Cache_Exception
+     * @throw   \Hoa\Cache\Exception
      */
     protected function getId ( ) {
 
@@ -286,7 +286,7 @@ abstract class Hoa_Cache implements Hoa_Core_Parameterizable {
      *
      * @access  protected
      * @return  string
-     * @throw   Hoa_Cache_Exception
+     * @throw   \Hoa\Cache\Exception
      */
     protected function getIdMd5 ( ) {
 
@@ -325,4 +325,6 @@ abstract class Hoa_Cache implements Hoa_Core_Parameterizable {
 
         return $array;
     }
+}
+
 }

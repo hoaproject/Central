@@ -24,40 +24,38 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Cache
- * @subpackage  Hoa_Cache_Backend_Xcache
- *
  */
 
-/**
- * Hoa_Cache_Exception
- */
-import('Cache.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Cache_Backend
+ * \Hoa\Cache\Exception
  */
-import('Cache.Backend');
+-> import('Cache.Exception')
 
 /**
- * Class Hoa_Cache_Backend_Xcache.
+ * \Hoa\Cache\Backend
+ */
+-> import('Cache.Backend.~');
+
+}
+
+namespace Hoa\Cache\Backend {
+
+/**
+ * Class \Hoa\Cache\Backend\Xcache.
  *
  * Xcache manager.
  * XCache is an extension, take care that XCache is loaded.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Cache
- * @subpackage  Hoa_Cache_Backend_Xcache
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Cache_Backend_Xcache extends Hoa_Cache_Backend {
+class Xcache extends Backend {
 
     /**
      * Check if XCache is loaded, else an exception is thrown.
@@ -65,12 +63,12 @@ class Hoa_Cache_Backend_Xcache extends Hoa_Cache_Backend {
      * @access  public
      * @param   array  $parameters    Parameters.
      * @return  void
-     * @throw   Hoa_Cache_Exception
+     * @throw   \Hoa\Cache\Exception
      */
     public function __construct ( Array $parameters = array() ) {
 
         if(!extension_loaded('xcache'))
-            throw new Hoa_Cache_Exception(
+            throw new \Hoa\Cache\Exception(
                 'XCache is not loaded on server.', 0);
 
         parent::__construct($parameters);
@@ -84,7 +82,7 @@ class Hoa_Cache_Backend_Xcache extends Hoa_Cache_Backend {
      * @access  public
      * @param   string  $data    Data to store.
      * @return  void
-     * @throw   Hoa_Cache_Exception
+     * @throw   \Hoa\Cache\Exception
      */
     public function store ( $data ) {
 
@@ -122,34 +120,34 @@ class Hoa_Cache_Backend_Xcache extends Hoa_Cache_Backend {
 
     /**
      * Clean expired cache.
-     * Note : Hoa_Cache::CLEAN_USER is not supported, it's reserved for APC
+     * Note : \Hoa\Cache::CLEAN_USER is not supported, it's reserved for APC
      * backend.
      *
      * @access  public
      * @param   int  $lifetime    Lifetime of caches.
      * @return  void
-     * @throw   Hoa_Cache_Exception
+     * @throw   \Hoa\Cache\Exception
      */
-    public function clean ( $lifetime = Hoa_Cache::CLEAN_EXPIRED ) {
+    public function clean ( $lifetime = \Hoa\Cache::CLEAN_EXPIRED ) {
 
         switch($lifetime) {
 
-            case Hoa_Cache::CLEAN_ALL:
+            case \Hoa\Cache::CLEAN_ALL:
                 for($i = 0, $n = xcache_count(XC_TYPE_VAR); $i < $n; $i++)
                     if(false !== xcache_clear_cache(XC_TYPE_VAR, $i))
-                        throw new Hoa_Cache_Exception(
+                        throw new \Hoa\Cache\Exception(
                             'Clear all cache of XCache failed '. 
                             '(maybe for the cache number %s).',
                             1, $i);
               break;
 
-            case Hoa_Cache::CLEAN_EXPIRED:
+            case \Hoa\Cache::CLEAN_EXPIRED:
                 // Manage by XCache.
               break;
 
-            case Hoa_Cache::CLEAN_USER:
-                throw new Hoa_Cache_Exception(
-                    'Hoa_Cache::CLEAN_USER constant is not supported by ' .
+            case \Hoa\Cache::CLEAN_USER:
+                throw new \Hoa\Cache\Exception(
+                    '\Hoa\Cache::CLEAN_USER constant is not supported by ' .
                     'XCache backend.', 2);
 
             default:
@@ -164,7 +162,7 @@ class Hoa_Cache_Backend_Xcache extends Hoa_Cache_Backend {
      *
      * @access  public
      * @return  void
-     * @throw   Hoa_Cache_Exception
+     * @throw   \Hoa\Cache\Exception
      */
     public function remove ( ) {
 
@@ -172,4 +170,6 @@ class Hoa_Cache_Backend_Xcache extends Hoa_Cache_Backend {
 
         return;
     }
+}
+
 }

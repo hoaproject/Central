@@ -24,41 +24,39 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Cache
- * @subpackage  Hoa_Cache_Backend_Apc
- *
  */
 
-/**
- * Hoa_Cache_Exception
- */
-import('Cache.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Cache_Backend
+ * \Hoa\Cache\Exception
  */
-import('Cache.Backend');
+-> import('Cache.Exception')
 
 /**
- * Class Hoa_Cache_Backend_Apc.
+ * \Hoa\Cache\Backend
+ */
+-> import('Cache.Backend.~');
+
+}
+
+namespace Hoa\Cache\Backend {
+
+/**
+ * Class \Hoa\Cache\Backend\Apc.
  *
  * Alternative PHP Cache backend manager.
  * APC is a PECL extension, so it's not installed in PHP. Take care that APC
  * module is loaded.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Cache
- * @subpackage  Hoa_Cache_Backend_Apc
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Cache_Backend_Apc extends Hoa_Cache_Backend {
+class Apc extends Backend {
 
     /**
      * Check if APC is loaded, else an exception is thrown.
@@ -66,12 +64,12 @@ class Hoa_Cache_Backend_Apc extends Hoa_Cache_Backend {
      * @access  public
      * @param   array   $parameters    Parameters.
      * @return  void
-     * @throw   Hoa_Cache_Exception
+     * @throw   \Hoa\Cache\Exception
      */
     public function __construct ( Array $parameters = array() ) {
 
         if(!extension_loaded('apc'))
-            throw new Hoa_Cache_Exception(
+            throw new \Hoa\Cache\Exception(
                 'APC (PECL extension) is not loaded on server.', 0);
 
         parent::__construct($parameters);
@@ -120,28 +118,28 @@ class Hoa_Cache_Backend_Apc extends Hoa_Cache_Backend {
 
     /**
      * Clean expired cache.
-     * Note : Hoa_Cache::CLEAN_EXPIRED is not supported with APC.
+     * Note : \Hoa\Cache::CLEAN_EXPIRED is not supported with APC.
      *
      * @access  public
      * @param   int  $lifetime    Lifetime of caches.
      * @return  void
-     * @throw   Hoa_Cache_Exception
+     * @throw   \Hoa\Cache\Exception
      */
-    public function clean ( $lifetime = Hoa_Cache::CLEAN_USER ) {
+    public function clean ( $lifetime = \Hoa\Cache::CLEAN_USER ) {
 
         switch($lifetime) {
 
-            case Hoa_Cache::CLEAN_ALL:
+            case \Hoa\Cache::CLEAN_ALL:
                 return apc_clear_cache();
               break;
 
-            case Hoa_Cache::CLEAN_EXPIRED:
-                throw new Hoa_Cache_Exception(
-                    'Hoa_Cache::CLEAN_EXPIRED constant is not supported by ' .
+            case \Hoa\Cache::CLEAN_EXPIRED:
+                throw new \Hoa\Cache\Exception(
+                    '\Hoa\Cache::CLEAN_EXPIRED constant is not supported by ' .
                     'APC cache backend.', 1);
               break;
 
-            case Hoa_Cache::CLEAN_USER:
+            case \Hoa\Cache::CLEAN_USER:
             default:
                 return apc_clear_cache('user');
         }
@@ -161,4 +159,6 @@ class Hoa_Cache_Backend_Apc extends Hoa_Cache_Backend {
 
         return;
     }
+}
+
 }

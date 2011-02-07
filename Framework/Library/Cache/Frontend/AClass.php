@@ -24,46 +24,44 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Cache
- * @subpackage  Hoa_Cache_Frontend_Class
- *
  */
 
-/**
- * Hoa_Cache_Frontend
- */
-import('Cache.Frontend');
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Cache_Frontend_Class.
+ * \Hoa\Cache\Frontend
+ */
+-> import('Cache.Frontend.~');
+
+}
+
+namespace Hoa\Cache\Frontend {
+
+/**
+ * Class \Hoa\Cache\Frontend\AClass.
  *
  * Class catching system for frontend cache.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Cache
- * @subpackage  Hoa_Cache_Frontend_Class
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Cache_Frontend_Class extends Hoa_Cache_Frontend {
+class AClass extends Frontend {
 
     /**
      * Object to cache.
      *
-     * @var Hoa_Cache_Frontend_Class mixed
+     * @var \Hoa\Cache\Frontend\AClass mixed
      */
     protected $_object    = null;
 
     /**
      * Method arguments.
      *
-     * @var Hoa_Cache_Frontend_Class array
+     * @var \Hoa\Cache\Frontend\AClass array
      */
     protected $_arguments = array();
 
@@ -98,7 +96,7 @@ class Hoa_Cache_Frontend_Class extends Hoa_Cache_Frontend {
      * @param   string  $method       Method called.
      * @param   array   $arguments    Arguments of method.
      * @return  mixed
-     * @throw   Hoa_Cache_Exception
+     * @throw   \Hoa\Cache\Exception
      */
     public function __call ( $method, Array $arguments ) {
 
@@ -107,7 +105,7 @@ class Hoa_Cache_Frontend_Class extends Hoa_Cache_Frontend {
                   : get_class($this->_object);
 
         if(!method_exists($this->_object, $method))
-            throw new Hoa_Cache_Exception(
+            throw new \Hoa\Cache\Exception(
                 'Method %s of %s object does not exists.',
                 0, array($method, $gc));
 
@@ -128,10 +126,10 @@ class Hoa_Cache_Frontend_Class extends Hoa_Cache_Frontend {
 
         if(is_string($this->_object) && $method == '__construct') {
 
-            $reflection = new ReflectionClass($this->_object);
+            $reflection = new \ReflectionClass($this->_object);
 
             if(!$reflection->isInstantiable())
-                throw new Hoa_Cache_Exception(
+                throw new \Hoa\Cache\Exception(
                     'Class %s is not instanciable.', 1, $this->_object);
 
             $this->_object = $reflection->newInstanceArgs($arguments);
@@ -160,7 +158,7 @@ class Hoa_Cache_Frontend_Class extends Hoa_Cache_Frontend {
      * @access  public
      * @param   mixed  $object    Could be an instance or a string for static call.
      * @return  ojbect
-     * @throw   Hoa_Cache_Exception
+     * @throw   \Hoa\Cache\Exception
      */
     public function setCacheObject ( $object = null ) {
 
@@ -171,7 +169,9 @@ class Hoa_Cache_Frontend_Class extends Hoa_Cache_Frontend {
             return $this;
         }
 
-        throw new Hoa_Cache_Exception('%s could be a string or a object.',
+        throw new \Hoa\Cache\Exception('%s could be a string or a object.',
             2, $object);
     }
+}
+
 }

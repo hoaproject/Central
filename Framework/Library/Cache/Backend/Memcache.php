@@ -24,41 +24,39 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Cache
- * @subpackage  Hoa_Cache_Backend_Memcache
- *
  */
 
-/**
- * Hoa_Cache_Exception
- */
-import('Cache.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Cache_Backend
+ * \Hoa\Cache\Exception
  */
-import('Cache.Backend');
+-> import('Cache.Exception')
 
 /**
- * Class Hoa_Cache_Backend_Memcache.
+ * \Hoa\Cache\Backend
+ */
+-> import('Cache.Backend.~');
+
+}
+
+namespace Hoa\Cache\Backend {
+
+/**
+ * Class \Hoa\Cache\Backend\Memcache.
  *
  * Memcache backend manager.
  * Memcache is PECL extension, so it's not installed in PHP. Take care
  * that Memcache module is loaded.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Cache
- * @subpackage  Hoa_Cache_Backend_Memcache
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Cache_Backend_Memcache extends Hoa_Cache_Backend {
+class Memcache extends Backend {
 
     /**
      * Memcache object.
@@ -75,12 +73,12 @@ class Hoa_Cache_Backend_Memcache extends Hoa_Cache_Backend {
      * @access  public
      * @param   array  $parameters    Parameters.
      * @return  void
-     * @throw   Hoa_Cache_Exception
+     * @throw   \Hoa\Cache\Exception
      */
     public function __construct ( Array $parameters = array() ) {
 
         if(!extension_loaded('memcache'))
-            throw new Hoa_Cache_Exception(
+            throw new \Hoa\Cache\Exception(
                 'Memcache module extension is not loaded on server.', 0);
 
         parent::__construct($parameters);
@@ -140,24 +138,24 @@ class Hoa_Cache_Backend_Memcache extends Hoa_Cache_Backend {
 
     /**
      * Flush all existing items on Memcache server.
-     * Note : only Hoa_Cache::CLEAN_ALL is supported by Memcache.
+     * Note : only \Hoa\Cache::CLEAN_ALL is supported by Memcache.
      *
      * @access  public
      * @param   int  $lifetime    Specific lifetime.
      * @return  void
-     * @throw   Hoa_Cache_Exception
+     * @throw   \Hoa\Cache\Exception
      */
-    public function clean ( $lifetime = Hoa_Cache::CLEAN_ALL ) {
+    public function clean ( $lifetime = \Hoa\Cache::CLEAN_ALL ) {
 
         $this->setMemcache();
 
-        if($lifetime != Hoa_Cache::CLEAN_ALL)
-            throw new Hoa_Cache_Exception(
-                'Only Hoa_Cache::CLEAN_ALL constant is supported by ' .
+        if($lifetime != \Hoa\Cache::CLEAN_ALL)
+            throw new \Hoa\Cache\Exception(
+                'Only \Hoa\Cache::CLEAN_ALL constant is supported by ' .
                 'Memcache backend.', 1);
 
         if(false === @$this->_memcache->flush())
-            throw new Hoa_Cache_Exception(
+            throw new \Hoa\Cache\Exception(
                 'Flush all existing items on Memcache server %s failed.',
                 2, $this->_backendOptions['database']['host']);
 
@@ -215,4 +213,6 @@ class Hoa_Cache_Backend_Memcache extends Hoa_Cache_Backend {
 
         return;
     }
+}
+
 }
