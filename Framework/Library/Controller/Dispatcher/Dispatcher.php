@@ -24,51 +24,49 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Controller
- * @subpackage  Hoa_Controller_Dispatcher
- *
  */
 
-/**
- * Hoa_Controller_Exception
- */
-import('Controller.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Controller_Application
+ * \Hoa\Controller\Exception
  */
-import('Controller.Application');
+-> import('Controller.Exception')
 
 /**
- * Class Hoa_Controller_Dispatcher.
+ * \Hoa\Controller\Application
+ */
+-> import('Controller.Application');
+
+}
+
+namespace Hoa\Controller\Dispatcher {
+
+/**
+ * Class \Hoa\Controller\Dispatcher.
  *
  * .
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Controller
- * @subpackage  Hoa_Controller_Dispatcher
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-abstract class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
+abstract class Dispatcher implements \Hoa\Core\Parameterizable {
 
     /**
-     * The Hoa_Controller_Dispatcher parameters.
+     * The \Hoa\Controller\Dispatcher parameters.
      *
-     * @var Hoa_Core_Parameter object
+     * @var \Hoa\Core\Parameter object
      */
     protected $_parameters  = null;
 
     /**
      * Current view.
      *
-     * @var Hoa_View_Viewable object
+     * @var \Hoa\View\Viewable object
      */
     protected $_currentView = null;
 
@@ -83,7 +81,7 @@ abstract class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
      */
     public function __construct ( Array $parameters = array() ) {
 
-        $this->_parameters = new Hoa_Core_Parameter(
+        $this->_parameters = new \Hoa\Core\Parameter(
             $this,
             array(
                 'controller' => 'main',
@@ -111,7 +109,7 @@ abstract class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   array   $in    Parameters to set.
      * @return  void
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setParameters ( Array $in ) {
 
@@ -123,7 +121,7 @@ abstract class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameters ( ) {
 
@@ -137,7 +135,7 @@ abstract class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
      * @param   string  $key      Key.
      * @param   mixed   $value    Value.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setParameter ( $key, $value ) {
 
@@ -150,7 +148,7 @@ abstract class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameter ( $key ) {
 
@@ -164,7 +162,7 @@ abstract class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getFormattedParameter ( $key ) {
 
@@ -176,13 +174,13 @@ abstract class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
      * stream, a closure, a function etc.).
      *
      * @access  public
-     * @param   Hoa_Controller_Router  $router    Router.
-     * @param   Hoa_View_Viewable      $view      View.
+     * @param   \Hoa\Controller\Router  $router    Router.
+     * @param   \Hoa\View\Viewable      $view      View.
      * @return  mixed
-     * @throw   Hoa_Controller_Exception
+     * @throw   \Hoa\Controller\Exception
      */
-    public function dispatch ( Hoa_Controller_Router $router,
-                               Hoa_View_Viewable     $view = null ) {
+    public function dispatch ( \Hoa\Controller\Router $router,
+                               \Hoa\View\Viewable     $view = null ) {
 
         $rule     = $router->getTheRule();
 
@@ -194,16 +192,17 @@ abstract class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
         else
             $this->_currentView = $view;
 
-        $rule[Hoa_Controller_Router::RULE_COMPONENT]['_this'] = new Hoa_Controller_Application(
-            $router,
-            $this,
-            $view
-        );
+        $rule[\Hoa\Controller\Router::RULE_COMPONENT]['_this']
+            = new \Hoa\Controller\Application(
+                $router,
+                $this,
+                $view
+            );
 
         if(!isset($_SERVER['REQUEST_METHOD'])) {
 
             if(!isset($_SERVER['argv']))
-                throw new Hoa_Controller_Exception(
+                throw new \Hoa\Controller\Exception(
                     'Cannot identified the request method.', 0);
 
             $method = null;
@@ -214,8 +213,8 @@ abstract class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
         $this->_parameters->setKeyword($this, 'method', strtolower($method));
 
         return $this->resolve(
-            $rule[Hoa_Controller_Router::RULE_COMPONENT],
-            $rule[Hoa_Controller_Router::RULE_PATTERN]
+            $rule[\Hoa\Controller\Router::RULE_COMPONENT],
+            $rule[\Hoa\Controller\Router::RULE_PATTERN]
         );
     }
 
@@ -226,7 +225,7 @@ abstract class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
      * @param   array      $components    All components from the router.
      * @param   string     $pattern       Pattern (kind of ID).
      * @return  mixed
-     * @throw   Hoa_Controller_Exception
+     * @throw   \Hoa\Controller\Exception
      */
     abstract protected function resolve ( Array $components, $pattern );
 
@@ -243,4 +242,6 @@ abstract class Hoa_Controller_Dispatcher implements Hoa_Core_Parameterizable {
 
         return 'xmlhttprequest' == strtolower($_SERVER['HTTP_X_REQUESTED_WITH']);
     }
+}
+
 }

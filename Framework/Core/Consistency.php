@@ -42,7 +42,7 @@ class Consistency {
 
     private static $_multiton = array();
     protected $_from          = 'Hoa';
-    protected $_root          = './Hoa';
+    protected $_root          = '/Users/hywan/Development/Hoa/Project/Framework/Library/';
     protected static $_cache  = array();
     protected static $_class  = array();
     protected $__class        = array();

@@ -24,55 +24,47 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Controller
- * @subpackage  Hoa_Controller_Application
- *
  */
 
+namespace Hoa\Controller {
+
 /**
- * Class Hoa_Controller_Application.
+ * Class \Hoa\Controller\Application.
  *
  * A structure, given to action, that holds some important data.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Controller
- * @subpackage  Hoa_Controller_Application
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Controller_Application {
+class Application {
 
     /**
      * The router.
      *
-     * @var Hoa_Controller_Router object
+     * @var \Hoa\Controller\Router object
      */
     public $router     = null;
 
     /**
      * The dispatcher.
      *
-     * @var Hoa_Controller_Dispatcher object
+     * @var \Hoa\Controller\Dispatcher object
      */
     public $dispatcher = null;
 
     /**
      * The view.
      *
-     * @var Hoa_View_Viewable object
+     * @var \Hoa\View\Viewable object
      */
     public $view       = null;
 
     /**
      * Data from the view.
      *
-     * @var Hoa_Controller_Application mixed
+     * @var \Hoa\Controller\Application mixed
      */
     public $data       = null;
 
@@ -82,14 +74,14 @@ class Hoa_Controller_Application {
      * Build an application controller.
      *
      * @access  public
-     * @param   Hoa_Controller_Router      $router        The router.
-     * @param   Hoa_Controller_Dispatcher  $dispatcher    The dispatcher.
-     * @param   Hoa_View_Viewable          $view          The view.
+     * @param   \Hoa\Controller\Router      $router        The router.
+     * @param   \Hoa\Controller\Dispatcher  $dispatcher    The dispatcher.
+     * @param   \Hoa\View\Viewable          $view          The view.
      * @return  void
      */
-    final public function __construct ( Hoa_Controller_Router     $router,
-                                        Hoa_Controller_Dispatcher $dispatcher,
-                                        Hoa_View_Viewable         $view = null ) {
+    final public function __construct ( Router             $router,
+                                        Dispatcher         $dispatcher,
+                                        \Hoa\View\Viewable $view = null ) {
 
         $this->router     = $router;
         $this->dispatcher = $dispatcher;
@@ -112,4 +104,6 @@ class Hoa_Controller_Application {
 
         return;
     }
+}
+
 }

@@ -316,6 +316,14 @@ class RunCommand extends Hoa_Console_Command_Abstract {
         event('hoa://Event/Test/Sample:close-iteration')
             ->attach($out, 'writeCloseIteration');
 
+        import('File.Write') and load();
+
+        $f = new Hoa_File_Write('hoa://Data/Temporary/Test.txt');
+        $f->writeAll('foobar2' . "\n");
+        $f->truncate(4);
+
+        return;
+
         for($i = 1; $iteration > 0; --$iteration, ++$i) {
 
             try {

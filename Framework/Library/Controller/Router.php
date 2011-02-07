@@ -24,34 +24,32 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Controller
- * @subpackage  Hoa_Controller_Router
- *
  */
 
-/**
- * Hoa_Controller_Exception
- */
-import('Controller.Exception');
+namespace Hoa\Controller {
+
+from('Hoa')
 
 /**
- * Class Hoa_Controller_Router.
+ * \Hoa\Controller\Exception
+ */
+-> import('Controller.Exception');
+
+}
+
+namespace Hoa\Controller {
+
+/**
+ * Class \Hoa\Controller\Router.
  *
  * .
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Controller
- * @subpackage  Hoa_Controller_Router
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
+class Router implements \Hoa\Core\Parameterizable {
 
     /**
      * Rule: pattern index.
@@ -82,30 +80,30 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
     const RULE_DISPATCHER = 3;
 
     /**
-     * The Hoa_Controller_Router parameters.
+     * The \Hoa\Controller\Router parameters.
      *
-     * @var Hoa_Core_Parameter object
+     * @var \Hoa\Core\Parameter object
      */
     private $_parameters    = null;
 
     /**
      * All rules.
      *
-     * @var Hoa_Controller_Router array
+     * @var \Hoa\Controller\Router array
      */
     protected $_rules       = array();
 
     /**
      * The selected rule after routing.
      *
-     * @var Hoa_Controller_Router array
+     * @var \Hoa\Controller\Router array
      */
     protected $_theRule     = null;
 
     /**
      * Many dispatchers: from id to dispatch.
      *
-     * @var Hoa_Controller_Router array
+     * @var \Hoa\Controller\Router array
      */
     protected $_dispatchers = array();
 
@@ -117,11 +115,11 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   array   $parameters    Parameters.
      * @return  void
-     * @throw   Hoa_Controller_Exception
+     * @throw   \Hoa\Controller\Exception
      */
     public function __construct ( Array $parameters = array() ) {
 
-        $this->_parameters = new Hoa_Core_Parameter(
+        $this->_parameters = new \Hoa\Core\Parameter(
             $this,
             array(
             ),
@@ -136,7 +134,7 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
         foreach($this->getParameter('rules') as $name => $rule) {
 
             if(2 > count($rule))
-                throw new Hoa_Controller_Exception(
+                throw new Exception(
                     'Rule %s must be at least a 3-uplet: [pattern, controller, ' .
                     'action(, {extra})?]. We have a %d-uplet in the ' .
                     'configuration file.',
@@ -159,7 +157,7 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   array   $in    Parameters to set.
      * @return  void
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setParameters ( Array $in ) {
 
@@ -171,7 +169,7 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameters ( ) {
 
@@ -185,7 +183,7 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
      * @param   string  $key      Key.
      * @param   mixed   $value    Value.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setParameter ( $key, $value ) {
 
@@ -198,7 +196,7 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameter ( $key ) {
 
@@ -212,7 +210,7 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getFormattedParameter ( $key ) {
 
@@ -229,7 +227,7 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
      *                                 closure or null.
      * @param   array   $extra         Extra data.
      * @param   string  $dispatcher    Dispatcher ID.
-     * @return  Hoa_Controller_Router
+     * @return  \Hoa\Controller\Router
      */
     public function addRule ( $pattern, $controller = null, $action = null,
                               Array $extra = array(), $dispatcher = '_default' ) {
@@ -261,7 +259,7 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
      *
      * @access  public
      * @param   array   $dispatchers    From ID to dispatcher.
-     * @return  Hoa_Controller_Router
+     * @return  \Hoa\Controller\Router
      */
     public function addDispatchers ( Array $dispatchers ) {
 
@@ -276,10 +274,10 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
      *
      * @access  public
      * @param   string                     $id            ID.
-     * @param   Hoa_Controller_Dispatcher  $dispatcher    Dispatcher.
-     * @return  Hoa_Controller_Router
+     * @param   \Hoa\Controller\Dispatcher  $dispatcher    Dispatcher.
+     * @return  \Hoa\Controller\Router
      */
-    public function addDispatcher ( $id, Hoa_Controller_Dispatcher $dispatcher ) {
+    public function addDispatcher ( $id, Dispatcher $dispatcher ) {
 
         $this->_dispatchers[$id] = $dispatcher;
 
@@ -316,8 +314,8 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
      *                                $_SERVER['REQUEST_URI'] will be used).
      * @param   string  $bootstrap    Bootstrap that runs the route (if null,
      *                                $_SERVER['SCRIPT_NAME'] will be used).
-     * @return  Hoa_Controller_Router
-     * @throw   Hoa_Controller_Exception
+     * @return  \Hoa\Controller\Router
+     * @throw   \Hoa\Controller\Exception
      */
     public function route ( $uri = null, $bootstrap = null ) {
 
@@ -325,7 +323,7 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
             if(!isset($_SERVER['REQUEST_URI'])) {
 
                 if(!isset($_SERVER['argv'][1]))
-                    throw new Hoa_Controller_Exception(
+                    throw new \Hoa\Controller\Exception(
                         'Cannot find the URI.', 0);
 
                 $uri = $_SERVER['argv'][0] . '?' . ltrim($_SERVER['argv'][1], '?');
@@ -340,12 +338,12 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
         $base     = ltrim($this->getFormattedParameter('base'), '/');
 
         if(0 === preg_match('#^' . $base . '(.*)?$#', $uri, $matches))
-            throw new Hoa_Controller_Exception(
+            throw new Exception(
                 'Cannot match the base %s in the URI %s.',
                 1, array($base, $uri));
 
         if(0 === preg_match('#^' . $base . '(.*)?$#', $bootstrap, $matchees))
-            throw new Hoa_Controller_Exception(
+            throw new Exception(
                 'Cannot match the base %s in the script name %s.',
                 2, array($base, $bootstrap));
 
@@ -372,7 +370,7 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
         }
 
         if(false === $gotcha)
-            throw new Hoa_Controller_Exception(
+            throw new Exception(
                 'Cannot found an appropriated rules to route %s.', 3, $route);
 
         $rule[self::RULE_ON] = $route;
@@ -402,10 +400,10 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
      * selected rule from this router.
      *
      * @access  public
-     * @param   Hoa_View_Viewable  $view    View.
+     * @param   \Hoa\View\Viewable  $view    View.
      * @return  void
      */
-    public function autoDispatch ( Hoa_View_Viewable $view = null ) {
+    public function autoDispatch ( \Hoa\View\Viewable $view = null ) {
 
         $rule = $this->getTheRule();
 
@@ -417,7 +415,7 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
         if(is_string($dispatcher)) {
 
             if(!isset($this->_dispatchers[$dispatcher]))
-                throw new Hoa_Controller_Exception(
+                throw new Exception(
                     'Cannot find the dispatcher %s associated to the rule %s.',
                     4, array($dispatcher, $rule[self::RULE_PATTERN]));
 
@@ -425,10 +423,12 @@ class Hoa_Controller_Router implements Hoa_Core_Parameterizable {
         }
 
         if(!is_object($dispatcher))
-            throw new Hoa_Controller_Exception(
+            throw new Exception(
                 'Cannot find the dispatcher %s associated to the rule %s.',
                 5, array($dispatcher, $rule[self::RULE_PATTERN]));
 
         return $dispatcher->dispatch($this, $view);
     }
+}
+
 }
