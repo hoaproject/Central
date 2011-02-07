@@ -183,7 +183,7 @@ class Hoa_Registry__Protocol extends Hoa_Core_Protocol {
      * @access  public
      * @param   string  $id    ID of the component.
      * @return  mixed
-     * @throw   Hoa_Exception
+     * @throw   Hoa_Core_Exception
      */
     public function reachId ( $id ) {
 
