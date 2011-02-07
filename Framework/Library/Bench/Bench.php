@@ -24,40 +24,40 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Bench
- *
  */
 
-/**
- * Hoa_Bench_Exception
- */
-import('Bench.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Bench_Mark
+ * \Hoa\Bench\Exception
  */
-import('Bench.Mark') and load();
+-> import('Bench.Exception')
 
 /**
- * Class Hoa_Bench.
+ * \Hoa\Bench\Mark
+ */
+-> import('Bench.Mark');
+
+}
+
+namespace Hoa\Bench {
+
+/**
+ * Class \Hoa\Bench.
  *
- * The Hoa_Bench class allows to manage marks easily, and to make some
+ * The \Hoa\Bench class allows to manage marks easily, and to make some
  * statistics.
- * The Hoa_Bench class implements Iterator and Countable interfaces to iterate
+ * The \Hoa\Bench class implements Iterator and Countable interfaces to iterate
  * marks, or count the number of marks.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Bench
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Bench implements Iterator, Countable {
+class Bench implements \Iterator, \Countable {
 
     /**
      * Statistic : get the result.
@@ -76,7 +76,7 @@ class Hoa_Bench implements Iterator, Countable {
     /**
      * Collection of marks.
      *
-     * @var Hoa_Bench array
+     * @var \Hoa\Bench array
      */
     protected static $_mark = array();
 
@@ -88,15 +88,15 @@ class Hoa_Bench implements Iterator, Countable {
      *
      * @access  public
      * @param   string  $id    The mark ID.
-     * @return  Hoa_Bench_Mark
-     * @throw   Hoa_Bench_Exception
+     * @return  \Hoa\Bench\Mark
+     * @throw   \Hoa\Bench\Exception
      */
     public function __get ( $id ) {
 
         if(true === $this->markExists($id))
             return self::$_mark[$id];
 
-        $mark = new Hoa_Bench_Mark($id);
+        $mark = new \Hoa\Bench\Mark($id);
         self::$_mark[$id] = $mark;
 
         return $mark;
@@ -158,7 +158,7 @@ class Hoa_Bench implements Iterator, Countable {
      * Get the current mark for the iterator.
      *
      * @access  public
-     * @return  Hoa_Bench_Mark
+     * @return  \Hoa\Bench\Mark
      */
     public function current ( ) {
 
@@ -181,7 +181,7 @@ class Hoa_Bench implements Iterator, Countable {
      * mark.
      *
      * @access  public
-     * @return  Hoa_Bench_Mark
+     * @return  \Hoa\Bench\Mark
      */
     public function next ( ) {
 
@@ -192,7 +192,7 @@ class Hoa_Bench implements Iterator, Countable {
      * Rewind the internal mark collection pointer, and return the first mark.
      *
      * @access  public
-     * @return  Hoa_Bench_Mark
+     * @return  \Hoa\Bench\Mark
      */
     public function rewind ( ) {
 
@@ -255,7 +255,7 @@ class Hoa_Bench implements Iterator, Countable {
      * Get the maximum, i.e. the longest mark in time.
      *
      * @access  public
-     * @return  Hoa_Bench_Mark
+     * @return  \Hoa\Bench\Mark
      */
     public function getLongest ( ) {
 
@@ -279,7 +279,7 @@ class Hoa_Bench implements Iterator, Countable {
      * @access  public
      * @param   int     $width    The graphic width.
      * @return  string
-     * @throw   Hoa_Bench_Exception
+     * @throw   \Hoa\Bench\Exception
      */
     public function drawStatistic ( $width = 70 ) {
 
@@ -287,7 +287,7 @@ class Hoa_Bench implements Iterator, Countable {
             return '';
 
         if($width < 1)
-            throw new Hoa_Bench_Exception(
+            throw new Exception(
                 'The graphic width must be positive, given %d.', 0, $width);
 
         $out         = null;
@@ -337,4 +337,6 @@ class Hoa_Bench implements Iterator, Countable {
 
         return $this->drawStatistic();
     }
+}
+
 }
