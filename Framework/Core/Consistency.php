@@ -84,12 +84,9 @@ class Consistency {
 
             foreach($explode as $value)
                 if(false !== strpos($value, '~'))
-                    $parts[] = str_replace('~', $handle, $value);
-                else {
-
-                    $parts[] = $value;
-                    $handle  = $value;
-                }
+                    $parts[] = $handle = str_replace('~', $handle, $value);
+                else
+                    $parts[] = $handle = $value;
 
             $all     = implode('.', $parts);
             $explode = $parts;
