@@ -24,62 +24,58 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Xml
- * @subpackage  Hoa_Xml_Read
- *
  */
 
-/**
- * Hoa_Xml_Exception
- */
-import('Xml.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Xml
+ * \Hoa\Xml\Exception
  */
-import('Xml.~') and load();
+-> import('Xml.Exception')
 
 /**
- * Hoa_Stream_Interface_In
+ * \Hoa\Xml
  */
-import('Stream.Interface.In') and load();
+-> import('Xml.~')
 
 /**
- * Hoa_Xml_Element_Read
+ * \Hoa\Stream\IStream\In
  */
-import('Xml.Element.Read') and load();
+-> import('Stream.I~.In')
 
 /**
- * Class Hoa_Xml_Read.
+ * \Hoa\Xml\Element\Read
+ */
+-> import('Xml.Element.Read');
+
+}
+
+namespace Hoa\Xml {
+
+/**
+ * Class \Hoa\Xml\Read.
  *
  * Read a XML element.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.3
- * @package     Hoa_Xml
- * @subpackage  Hoa_Xml_Read
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class          Hoa_Xml_Read
-    extends    Hoa_Xml
-    implements Hoa_Stream_Interface_In {
+class Read extends Xml implements \Hoa\Stream\IStream\In {
 
     /**
      * Start the stream reader as if it is a XML document.
      *
      * @access  public
-     * @param   Hoa_Stream_Interface_In  $stream    Stream to read.
+     * @param   \Hoa\Stream\IStream\In  $stream    Stream to read.
      * @return  void
      */
-    public function __construct ( Hoa_Stream_Interface_In $stream ) {
+    public function __construct ( \Hoa\Stream\IStream\In $stream ) {
 
-        parent::__construct('Hoa_Xml_Element_Read', $stream);
+        parent::__construct('\Hoa\Xml\Element\Read', $stream);
 
         return;
     }
@@ -101,7 +97,7 @@ class          Hoa_Xml_Read
      * @access  public
      * @param   int     $length    Length.
      * @return  string
-     * @throw   Hoa_Xml_Exception
+     * @throw   \Hoa\Xml\Exception
      */
     public function read ( $length ) {
 
@@ -216,10 +212,12 @@ class          Hoa_Xml_Read
      * Read content as a DOM tree.
      *
      * @access  public
-     * @return  DOMElement
+     * @return  \DOMElement
      */
     public function readDOM ( ) {
 
         return $this->getStream()->readDOM();
     }
+}
+
 }

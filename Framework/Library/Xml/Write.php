@@ -24,62 +24,58 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Xml
- * @subpackage  Hoa_Xml_Write
- *
  */
 
-/**
- * Hoa_Xml_Exception
- */
-import('Xml.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Xml
+ * \Hoa\Xml\Exception
  */
-import('Xml.~') and load();
+-> import('Xml.Exception')
 
 /**
- * Hoa_Stream_Interface_Out
+ * \Hoa\Xml
  */
-import('Stream.Interface.Out') and load();
+-> import('Xml.~')
 
 /**
- * Hoa_Xml_Element_Write
+ * \Hoa\Stream\IStream\Out
  */
-import('Xml.Element.Write') and load();
+-> import('Stream.I~.Out')
 
 /**
- * Class Hoa_Xml_Write.
+ * \Hoa\Xml\Element\Write
+ */
+-> import('Xml.Element.Write');
+
+}
+
+namespace Hoa\Xml {
+
+/**
+ * Class \Hoa\Xml\Write.
  *
  * Write into a XML element.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.3
- * @package     Hoa_Xml
- * @subpackage  Hoa_Xml_Write
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class          Hoa_Xml_Write
-    extends    Hoa_Xml
-    implements Hoa_Stream_Interface_Out {
+class Write extends Xml implements \Hoa\Stream\IStream\Out {
 
     /**
      * Start the stream reader/writer as if it is a XML document.
      *
      * @access  public
-     * @param   Hoa_Stream_Interface_Out  $stream    Stream to read/write.
+     * @param   \Hoa\Stream\IStream\Out  $stream    Stream to read/write.
      * @return  void
      */
-    public function __construct ( Hoa_Stream_Interface_Out $stream ) {
+    public function __construct ( \Hoa\Stream\IStream\Out $stream ) {
 
-        parent::__construct('Hoa_Xml_Element_Write', $stream);
+        parent::__construct('\Hoa\Xml\Element\Write', $stream);
 
         event('hoa://Event/Stream/' . $stream->getStreamName() . ':close-before')
             ->attach($this, '_close');
@@ -94,10 +90,10 @@ class          Hoa_Xml_Write
      * and writes all this string into the stream.
      *
      * @access  public
-     * @param   Hoa_Core_Event_Bucket  $bucket    Event's bucket.
+     * @param   \Hoa\Core\Event\Bucket  $bucket    Event's bucket.
      * @return  void
      */
-    public function _close ( Hoa_Core_Event_Bucket $bucket ) {
+    public function _close ( \Hoa\Core\Event\Bucket $bucket ) {
 
         $handle = $this->getStream()->selectRoot()->asXML();
 
@@ -114,7 +110,7 @@ class          Hoa_Xml_Write
      * @param   string  $string    String.
      * @param   int     $length    Length.
      * @return  mixed
-     * @throw   Hoa_Xml_Exception
+     * @throw   \Hoa\Xml\Exception
      */
     public function write ( $string, $length ) {
 
@@ -233,10 +229,10 @@ class          Hoa_Xml_Write
      * Write a DOM tree.
      *
      * @access  public
-     * @param   DOMNode  $dom    DOM tree.
+     * @param   \DOMNode  $dom    DOM tree.
      * @return  mixed
      */
-    public function writeDOM ( DOMNode $dom ) {
+    public function writeDOM ( \DOMNode $dom ) {
 
         return $this->getStream()->writeDOM($dom);
     }
@@ -265,4 +261,6 @@ class          Hoa_Xml_Write
 
         return $this->getStream()->writeAttribute($name, $value);
     }
+}
+
 }

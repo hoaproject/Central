@@ -24,59 +24,57 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Xml
- * @subpackage  Hoa_Xml_Element_Basic
- *
  */
 
-/**
- * Hoa_Xml_Element
- */
-import('Xml.Element') and load();
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Xml_CssToXPath
+ * \Hoa\Xml\Element
  */
-import('Xml.CssToXPath');
+-> import('Xml.Element.~')
 
 /**
- * Hoa_Stream_Interface_Structural
+ * \Hoa\Xml\CssToXPath
  */
-import('Stream.Interface.Structural') and load();
+-> import('Xml.CssToXPath')
 
 /**
- * Class Hoa_Xml_Element_Basic.
+ * \Hoa\Stream\IStream\Structural
+ */
+-> import('Stream.I~.Structural');
+
+}
+
+namespace Hoa\Xml\Element {
+
+/**
+ * Class \Hoa\Xml\Element\Basic.
  *
  * This class represents a XML element in a XML tree.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.3
- * @package     Hoa_Xml
- * @subpackage  Hoa_Xml_Element_Basic
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class          Hoa_Xml_Element_Basic
-    extends    SimpleXMLElement
-    implements Hoa_Xml_Element,
-               Hoa_Stream_Interface_Structural {
+class          Basic
+    extends    \SimpleXMLElement
+    implements Element,
+               \Hoa\Stream\IStream\Structural {
 
     /**
      * CssToXPath instance.
      *
-     * @var Hoa_Xml_CssToXPath object
+     * @var \Hoa\Xml\CssToXPath object
      */
     protected static $_cssToXPath = null;
 
     /**
      * String buffer (nodeValue).
      *
-     * @var Hoa_StringBuffer object
+     * @var \Hoa\StringBuffer object
      */
     protected static $_buffer     = null;
 
@@ -86,7 +84,7 @@ class          Hoa_Xml_Element_Basic
      * Select root of the document: :root.
      *
      * @access  public
-     * @return  Hoa_Xml_Element_Basic
+     * @return  \Hoa\Xml\Element\Basic
      */
     public function selectRoot ( ) {
 
@@ -162,7 +160,7 @@ class          Hoa_Xml_Element_Basic
      *
      * @access  public
      * @param   string  $F    Element F.
-     * @return  Hoa_Xml_Element_Basic
+     * @return  \Hoa\Xml\Element\Basic
      */
     public function selectAdjacentSiblingElement ( $F ) {
 
@@ -199,8 +197,8 @@ class          Hoa_Xml_Element_Basic
      *
      * @access  public
      * @param   string  $query    Query.
-     * @return  Hoa_Xml_Element_Basic
-     * @throw   Hoa_Compiler_Exception
+     * @return  \Hoa\Xml\Element\Basic
+     * @throw   \Hoa\Compiler\Exception
      */
     public function querySelector ( $query ) {
 
@@ -217,14 +215,14 @@ class          Hoa_Xml_Element_Basic
      *
      * @access  public
      * @param   string  $query    Query.
-     * @return  Hoa_Xml_Element_Basic
+     * @return  \Hoa\Xml\Element\Basic
      * @throw   array
      */
     public function querySelectorAll ( $query ) {
 
         if(null === self::$_cssToXPath) {
 
-            self::$_cssToXPath = new Hoa_Xml_CssToXPath();
+            self::$_cssToXPath = new \Hoa\Xml\CssToXPath();
             self::$_cssToXPath->setDefaultNamespacePrefix('__current_ns');
         }
 
@@ -389,7 +387,7 @@ class          Hoa_Xml_Element_Basic
      * Read content as a DOM tree.
      *
      * @access  public
-     * @return  DOMElement
+     * @return  \DOMElement
      */
     public function readDOM ( ) {
 
@@ -402,7 +400,7 @@ class          Hoa_Xml_Element_Basic
      * into
      *     <foo><???>abc</???><bar>def</bar><???>ghi</???></foo>
      * where <???> is the value of the $element argument, i.e. the inter-text
-     * element name. Please, see the Hoa_Xml_Element_Model_Phrasing interface.
+     * element name. Please, see the \Hoa\Xml\Element\Model\Phrasing interface.
      *
      * @access  public
      * @param   string  $namespace    Namespace to use ('' if none).
@@ -444,11 +442,11 @@ class          Hoa_Xml_Element_Basic
     /**
      * Use a specific namespace.
      * For performance reason, we did not test if the namespace exists in the
-     * document. Please, see the Hoa_Xml::namespaceExists() method to do that.
+     * document. Please, see the \Hoa\Xml::namespaceExists() method to do that.
      *
      * @access  public
      * @param   string  $namespace    Namespace.
-     * @return  Hoa_Xml_Element
+     * @return  \Hoa\Xml\Element
      */
     public function useNamespace ( $namespace ) {
 
@@ -456,4 +454,6 @@ class          Hoa_Xml_Element_Basic
 
         return $this;
     }
+}
+
 }

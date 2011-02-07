@@ -24,39 +24,37 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Xml
- * @subpackage  Hoa_Xml_Attribute
- *
  */
 
-/**
- * Hoa_Xml_Exception
- */
-import('Xml.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Xml_Attribute.
+ * \Hoa\Xml\Exception
+ */
+-> import('Xml.Exception');
+
+}
+
+namespace Hoa\Xml {
+
+/**
+ * Class \Hoa\Xml\Attribute.
  *
  * Parse and manipulate attributes.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Xml
- * @subpackage  Hoa_Xml_Attribute
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Xml_Attribute {
+class Attribute {
 
     /**
      * List of attributes.
      *
-     * @var Hoa_Xml_Attribute array
+     * @var \Hoa\Xml\Attribute array
      */
     protected $_attributes = array();
 
@@ -69,7 +67,7 @@ class Hoa_Xml_Attribute {
      * @access  public
      * @param   string  $string    String that might represent attributes.
      * @return  void
-     * @throw   Hoa_Xml_Exception
+     * @throw   \Hoa\Xml\Exception
      */
     public function __construct ( $string ) {
 
@@ -81,7 +79,7 @@ class Hoa_Xml_Attribute {
         );
 
         if(0 === $out)
-            throw new Hoa_Xml_Exception(
+            throw new Exception(
                 'The string %s does not represent attributes.', 0, $string);
 
         foreach($attributes as $i => $attribute)
@@ -183,4 +181,6 @@ class Hoa_Xml_Attribute {
 
         return substr($out, 0, -1);
     }
+}
+
 }
