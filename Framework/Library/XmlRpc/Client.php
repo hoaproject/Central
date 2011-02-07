@@ -200,7 +200,7 @@ class Hoa_XmlRpc_Client extends Hoa_XmlRpc {
             $remote .= $this->scheme . '://';
         $remote .= $this->domain . ':' . $this->port . $this->abs_path;
 
-        throw new Hoa_Exception(
+        throw new Hoa_Core_Exception(
             'This package is depreciated!!', 0);
 
         $this->connection = new Hoa_Socket($remote, null, $this->timeout);
