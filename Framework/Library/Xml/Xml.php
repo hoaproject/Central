@@ -24,58 +24,58 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Xml
- *
  */
 
-/**
- * Hoa_Xml_Exception
- */
-import('Xml.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Xml_Element
+ * \Hoa\Xml\Exception
  */
-import('Xml.Element') and load();
+-> import('Xml.Exception')
 
 /**
- * Hoa_Stream_Composite
+ * \Hoa\Xml\Element
  */
-import('Stream.Composite') and load();
+-> import('Xml.Element.~')
 
 /**
- * Hoa_Stream_Interface_Structural
+ * \Hoa\Stream\Composite
  */
-import('Stream.Interface.Structural') and load();
+-> import('Stream.Composite')
 
 /**
- * Class Hoa_Xml.
+ * \Hoa\Stream\I~\Structural
+ */
+-> import('Stream.I~.Structural');
+
+}
+
+namespace Hoa\Xml {
+
+/**
+ * Class \Hoa\Xml.
  *
  * 
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Xml
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-abstract class Hoa_Xml
-    extends    Hoa_Stream_Composite
-    implements Hoa_Xml_Element,
-               Hoa_Stream_Interface_Structural,
-               Countable,
-               IteratorAggregate,
-               ArrayAccess {
+abstract class Xml
+    extends    \Hoa\Stream\Composite
+    implements Element,
+               \Hoa\Stream\IStream\Structural,
+               \Countable,
+               \IteratorAggregate,
+               \ArrayAccess {
 
     /**
      * Cache of namespaces.
      *
-     * @var Hoa_Xml array
+     * @var \Hoa\Xml array
      */
     protected $_namespaces = null;
 
@@ -92,24 +92,24 @@ abstract class Hoa_Xml
      *
      * @access  public
      * @param   string      $stream         Stream name to use.
-     * @param   Hoa_Stream  $innerStream    Inner stream.
+     * @param   \Hoa\Stream  $innerStream    Inner stream.
      * @return  void
-     * @throw   Hoa_Xml_Exception
+     * @throw   \Hoa\Xml\Exception
      */
-    public function __construct ( $stream, Hoa_Stream $innerStream ) {
+    public function __construct ( $stream, \Hoa\Stream $innerStream ) {
 
         if(!function_exists('simplexml_load_file'))
-            throw new Hoa_Xml_Exception(
+            throw new Exception(
                 'SimpleXML must be enable for using %s.', 0, get_class($this));
 
         libxml_use_internal_errors(true);
 
         $streamName = $innerStream->getStreamName();
-        $root       = @simplexml_load_file($streamName, $stream);
+        $root       = simplexml_load_file($streamName, $stream);
 
         if(false === $root) {
 
-            if($innerStream instanceof Hoa_Stream_Interface_In)
+            if($innerStream instanceof \Hoa\Stream\IStream\In)
                 $root = @simplexml_load_string($innerStream->readAll(), $stream);
 
             if(false === $root) {
@@ -154,14 +154,14 @@ abstract class Hoa_Xml
                         }
                     }
 
-                    throw new Hoa_Xml_Exception(
+                    throw new Exception(
                         'Errors occured while parsing the XML document %s:' .
                         "\n" . '%s',
                         1, array($innerStream->getStreamName(), $message));
                 }
 
-                if(!($innerStream instanceof Hoa_Stream_Interface_Out))
-                    throw new Hoa_Xml_Exception(
+                if(!($innerStream instanceof \Hoa\Stream\IStream\Out))
+                    throw new Exception(
                         'Failed to open the XML document %s.',
                         2, $innerStream->getStreamName());
                 else
@@ -174,7 +174,7 @@ abstract class Hoa_Xml
         }
 
         if(null === $root)
-            throw new Hoa_Xml_Exception(
+            throw new Exception(
                 'Failed to understand %s as a XML stream.',
                 3, $streamName);
 
@@ -197,7 +197,7 @@ abstract class Hoa_Xml
         $this->_namespaces = $stream->getDocNamespaces();
 
         if(empty($this->_namespaces))
-            throw new Hoa_Xml_Exception(
+            throw new Exception(
                 'The XML document %s must have a default namespace at least.',
                 4, $this->getInnerStream()->getStreamName());
 
@@ -235,8 +235,8 @@ abstract class Hoa_Xml
      *
      * @access  public
      * @param   string  $namespace    Namespace.
-     * @return  Hoa_Xml
-     * @throw   Hoa_Xml_Exception
+     * @return  \Hoa\Xml
+     * @throw   \Hoa\Xml\Exception
      */
     public function useNamespace ( $namespace ) {
 
@@ -244,7 +244,7 @@ abstract class Hoa_Xml
             $this->initializeNamespaces();
 
         if(false === $prefix = array_search($namespace, $this->_namespaces))
-            throw new Hoa_Xml_Exception(
+            throw new Exception(
                 'The namespace %s does not exist in the document %s.',
                 5, array($namespace, $this->getInnerStream()->getStreamName()));
 
@@ -259,12 +259,12 @@ abstract class Hoa_Xml
      * @access  public
      * @param   string  $namespace    Namespace.
      * @return  string
-     * @throw   Hoa_Xml_Exception
+     * @throw   \Hoa\Xml\Exception
      */
     public function getPrefix ( $namespace ) {
 
         if(false === $prefix = array_search($namespace, $this->_namespaces))
-            throw new Hoa_Xml_Exception(
+            throw new Exception(
                 'The namespace %s does not exist in the document %s.',
                 6, array($namespace, $this->getInnerStream()->getStreamName()));
 
@@ -289,7 +289,7 @@ abstract class Hoa_Xml
      * Select root of the document: :root.
      *
      * @access  public
-     * @return  Hoa_Xml_Element
+     * @return  \Hoa\Xml\Element
      */
     public function selectRoot ( ) {
 
@@ -348,7 +348,7 @@ abstract class Hoa_Xml
      *
      * @access  public
      * @param   string  $F    Element F.
-     * @return  Hoa_Xml_Element
+     * @return  \Hoa\Xml\Element
      */
     public function selectAdjacentSiblingElement ( $F ) {
 
@@ -372,8 +372,8 @@ abstract class Hoa_Xml
      *
      * @access  public
      * @param   string  $query    Query.
-     * @return  Hoa_Xml_Element
-     * @throw   Hoa_Compiler_Exception
+     * @return  \Hoa\Xml\Element
+     * @throw   \Hoa\Compiler\Exception
      */
     public function querySelector ( $query ) {
 
@@ -385,7 +385,7 @@ abstract class Hoa_Xml
      *
      * @access  public
      * @param   string  $query    Query.
-     * @return  Hoa_Xml_Element
+     * @return  \Hoa\Xml\Element
      * @throw   array
      */
     public function querySelectorAll ( $query ) {
@@ -500,7 +500,7 @@ abstract class Hoa_Xml
      * Read content as a DOM tree.
      *
      * @access  public
-     * @return  DOMElement
+     * @return  \DOMElement
      */
     public function readDOM ( ) {
 
@@ -533,7 +533,7 @@ abstract class Hoa_Xml
      * Get the iterator.
      *
      * @access  public
-     * @return  Hoa_Xml_Element
+     * @return  \Hoa\Xml\Element
      */
     public function getIterator ( ) {
 
@@ -645,4 +645,6 @@ abstract class Hoa_Xml
 
         return libxml_get_errors();
     }
+}
+
 }

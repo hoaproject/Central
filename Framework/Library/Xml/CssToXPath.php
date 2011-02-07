@@ -24,53 +24,51 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Xml
- * @subpackage  Hoa_Xml_CssToXPath
- *
  */
 
-/**
- * Hoa_Compiler_Ll1
- */
-import('Compiler.Ll1');
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Xml_CssToXPath.
+ * \Hoa\Compiler\Ll1
+ */
+-> import('Compiler.Ll1');
+
+}
+
+namespace Hoa\Xml {
+
+/**
+ * Class \Hoa\Xml\CssToXPath.
  *
  * Compiler CSS3 to XPath2.0.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Xml
- * @subpackage  Hoa_Xml_CssToXPath
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Xml_CssToXPath extends Hoa_Compiler_Ll1 {
+class CssToXPath extends \Hoa\Compiler\Ll1 {
 
     /**
      * XPath root.
      *
-     * @var Hoa_Xml_CssToXPath string
+     * @var \Hoa\Xml\CssToXPath string
      */
     protected $_root    = null;
 
     /**
      * XPath current path part.
      *
-     * @var Hoa_Xml_CssToXPath string
+     * @var \Hoa\Xml\CssToXPath string
      */
     protected $_current = null;
 
     /**
      * Set a default namespace prefix.
      *
-     * @var Hoa_Xml_CssToXPath string
+     * @var \Hoa\Xml\CssToXPath string
      */
     protected $_prefix  = null;
 
@@ -460,7 +458,7 @@ class Hoa_Xml_CssToXPath extends Hoa_Compiler_Ll1 {
 
                     case 'first-of-type':
                         if('*' == $_element)
-                            throw new Hoa_Compiler_Exception(
+                            throw new \Hoa\Compiler\Exception(
                                 'Cannot have a :first-of-type without element.', 0);
 
                         $selector[] = 'position() = 1';
@@ -468,7 +466,7 @@ class Hoa_Xml_CssToXPath extends Hoa_Compiler_Ll1 {
 
                     case 'last-of-type':
                         if('*' == $_element)
-                            throw new Hoa_Compiler_Exception(
+                            throw new \Hoa\Compiler\Exception(
                                 'Cannot have a :last-of-type without element.', 0);
 
                         $selector[] = 'position() = last()';
@@ -485,7 +483,7 @@ class Hoa_Xml_CssToXPath extends Hoa_Compiler_Ll1 {
 
                     case 'only-of-type':
                         if('*' == $_element)
-                            throw new Hoa_Compiler_Exception(
+                            throw new \Hoa\Compiler\Exception(
                                 'Cannot have a :only-of-type without element.', 0);
 
                         $selector[] = 'last() = 1';
@@ -544,7 +542,7 @@ class Hoa_Xml_CssToXPath extends Hoa_Compiler_Ll1 {
                             $selector[] = 'name() = "' . $_element . '"';
                         }
                         elseif('nth-of-type' == $pcf && '*' == $_element)
-                            throw new Hoa_Compiler_Exception(
+                            throw new \Hoa\Compiler\Exception(
                                 'Cannot have a :nth-of-type without element.', 0);
 
                         if(0 != (int) $group) {
@@ -597,7 +595,7 @@ class Hoa_Xml_CssToXPath extends Hoa_Compiler_Ll1 {
                             $selector[] = 'name() = "' . $_element . '"';
                         }
                         elseif('nth-last-of-type' == $pcf && '*' == $_element)
-                            throw new Hoa_Compiler_Exception(
+                            throw new \Hoa\Compiler\Exception(
                                 'Cannot have a :nth-last-of-type without element.', 0);
 
                         if(0 != (int) $group) {
@@ -686,7 +684,7 @@ class Hoa_Xml_CssToXPath extends Hoa_Compiler_Ll1 {
      */
     protected function callPseudoClass ( $element, $pseudoClass ) {
 
-        throw new Hoa_Compiler_Exception(
+        throw new \Hoa\Compiler\Exception(
             'The pseudo-class %s on the element %s is unknown.',
             0, array($pseudoClass, $element)
         );
@@ -702,7 +700,7 @@ class Hoa_Xml_CssToXPath extends Hoa_Compiler_Ll1 {
      */
     protected function callPseudoElement ( $element, $pseudoElement ) {
 
-        throw new Hoa_Compiler_Exception(
+        throw new \Hoa\Compiler\Exception(
             'The pseudo-element %s on the element %s is unknown.',
             0, array($pseudoElement, $element)
         );
@@ -718,7 +716,7 @@ class Hoa_Xml_CssToXPath extends Hoa_Compiler_Ll1 {
      */
     protected function callPseudoClassFunction ( $element, $function ) {
 
-        throw new Hoa_Compiler_Exception(
+        throw new \Hoa\Compiler\Exception(
             'The pseudo-class function %s on the element %s is unknown.',
             0, array($function, $element)
         );
@@ -734,7 +732,7 @@ class Hoa_Xml_CssToXPath extends Hoa_Compiler_Ll1 {
      */
     protected function callPseudoElementFunction ( $element, $function ) {
 
-        throw new Hoa_Compiler_Exception(
+        throw new \Hoa\Compiler\Exception(
             'The pseudo-element function %s on the element %s is unknown.',
             0, array($function, $element)
         );
@@ -765,4 +763,6 @@ class Hoa_Xml_CssToXPath extends Hoa_Compiler_Ll1 {
 
         return $this->_prefix;
     }
+}
+
 }

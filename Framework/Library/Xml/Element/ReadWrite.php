@@ -24,57 +24,55 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Xml
- * @subpackage  Hoa_Xml_Element_ReadWrite
- *
  */
 
-/**
- * Hoa_Xml_Exception
- */
-import('Xml.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Xml_Element_Basic
+ * \Hoa\Xml\Exception
  */
-import('Xml.Element.Basic') and load();
+-> import('Xml.Exception')
 
 /**
- * Hoa_Stream_Interface_In
+ * \Hoa\Xml\Element\Basic
  */
-import('Stream.Interface.In') and load();
+-> import('Xml.Element.Basic')
 
 /**
- * Hoa_Stream_Interface_Out
+ * \Hoa\Stream\IStream\In
  */
-import('Stream.Interface.Out') and load();
+-> import('Stream.I~.In')
 
 /**
- * Hoa_StringBuffer_ReadWrite
+ * \Hoa\Stream\IStream\Out
  */
-import('StringBuffer.ReadWrite');
+-> import('Stream.I~.Out')
 
 /**
- * Class Hoa_Xml_Element_ReadWrite.
+ * \Hoa\StringBuffer\ReadWrite
+ */
+-> import('StringBuffer.ReadWrite');
+
+}
+
+namespace Hoa\Xml\Element {
+
+/**
+ * Class \Hoa\Xml\Element\ReadWrite.
  *
  * Read/write a XML element.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.3
- * @package     Hoa_Xml
- * @subpackage  Hoa_Xml_Element_ReadWrite
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class          Hoa_Xml_Element_ReadWrite
-    extends    Hoa_Xml_Element_Basic
-    implements Hoa_Stream_Interface_In,
-               Hoa_Stream_Interface_Out {
+class          ReadWrite
+    extends    Basic
+    implements \Hoa\Stream\IStream\In,
+               \Hoa\Stream\IStream\Out {
 
     /**
      * Test for end-of-file.
@@ -96,17 +94,17 @@ class          Hoa_Xml_Element_ReadWrite
      * @access  public
      * @param   int     $length    Length.
      * @return  string
-     * @throw   Hoa_Xml_Exception
+     * @throw   \Hoa\Xml\Exception
      */
     public function read ( $length ) {
 
         if($length <= 0)
-            throw new Hoa_Xml_Exception(
+            throw new \Hoa\Xml\Exception(
                 'Length must be greather than 0, given %d.', 0, $length);
 
         if(null === parent::$_buffer) {
 
-            parent::$_buffer = new Hoa_StringBuffer_ReadWrite();
+            parent::$_buffer = new \Hoa\StringBuffer\ReadWrite();
             parent::$_buffer->initializeWith($this->__toString());
         }
 
@@ -241,17 +239,17 @@ class          Hoa_Xml_Element_ReadWrite
      * @param   string  $string    String.
      * @param   int     $length    Length.
      * @return  mixed
-     * @throw   Hoa_Xml_Exception
+     * @throw   \Hoa\Xml\Exception
      */
     public function write ( $string, $length ) {
 
         if($length <= 0)
-            throw new Hoa_Xml_Exception(
+            throw new \Hoa\Xml\Exception(
                 'Length must be greather than 0, given %d.', 1, $length);
 
         if(null === parent::$_buffer) {
 
-            parent::$_buffer = new Hoa_StringBuffer_ReadWrite();
+            parent::$_buffer = new \Hoa\StringBuffer\ReadWrite();
             parent::$_buffer->initializeWith($this->__toString());
         }
 
@@ -408,7 +406,7 @@ class          Hoa_Xml_Element_ReadWrite
         if(false === $n = strpos($line, "\n"))
             return $this->write($line . "\n", strlen($line) + 1);
 
-        $n++;
+        ++$n;
 
         return $this->write(substr($line, 0, $n), $n);
     }
@@ -436,7 +434,7 @@ class          Hoa_Xml_Element_ReadWrite
 
         if(null === parent::$_buffer) {
 
-            parent::$_buffer = new Hoa_StringBuffer_ReadWrite();
+            parent::$_buffer = new \Hoa\StringBuffer\ReadWrite();
             parent::$_buffer->initializeWith($this->__toString());
         }
 
@@ -447,14 +445,14 @@ class          Hoa_Xml_Element_ReadWrite
      * Write a DOM tree.
      *
      * @access  public
-     * @param   DOMNode  $dom    DOM tree.
+     * @param   \DOMNode  $dom    DOM tree.
      * @return  mixed
      */
-    public function writeDOM ( DOMNode $dom ) {
+    public function writeDOM ( \DOMNode $dom ) {
 
         $sx = simplexml_import_dom($dom, get_class($this));
 
-        throw new Hoa_Xml_Exception(
+        throw new \Hoa\Xml\Exception(
             'Hmm, TODO?', 42);
 
         return true;
@@ -505,4 +503,6 @@ class          Hoa_Xml_Element_ReadWrite
 
         return;
     }
+}
+
 }

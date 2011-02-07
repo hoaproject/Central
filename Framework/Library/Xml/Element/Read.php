@@ -24,51 +24,47 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Xml
- * @subpackage  Hoa_Xml_Element_Read
- *
  */
 
-/**
- * Hoa_Xml_Exception
- */
-import('Xml.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Xml_Element_Basic
+ * \Hoa\Xml\Exception
  */
-import('Xml.Element.Basic') and load();
+-> import('Xml.Exception')
 
 /**
- * Hoa_Stream_Interface_In
+ * \Hoa\Xml\Element\Basic
  */
-import('Stream.Interface.In') and load();
+-> import('Xml.Element.Basic')
 
 /**
- * Hoa_StringBuffer_ReadWrite
+ * \Hoa\Stream\IStream\In
  */
-import('StringBuffer.ReadWrite');
+-> import('Stream.I~.In')
 
 /**
- * Class Hoa_Xml_Element_Read.
+ * \Hoa\StringBuffer\ReadWrite
+ */
+-> import('StringBuffer.ReadWrite');
+
+}
+
+namespace Hoa\Xml\Element {
+
+/**
+ * Class \Hoa\Xml\Element\Read.
  *
  * Read a XML element.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.3
- * @package     Hoa_Xml
- * @subpackage  Hoa_Xml_Element_Read
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class          Hoa_Xml_Element_Read
-    extends    Hoa_Xml_Element_Basic
-    implements Hoa_Stream_Interface_In {
+class Read extends Basic implements \Hoa\Stream\IStream\In {
 
     /**
      * Test for end-of-file.
@@ -90,17 +86,17 @@ class          Hoa_Xml_Element_Read
      * @access  public
      * @param   int     $length    Length.
      * @return  string
-     * @throw   Hoa_Xml_Exception
+     * @throw   \Hoa\Xml\Exception
      */
     public function read ( $length ) {
 
         if($length <= 0)
-            throw new Hoa_Xml_Exception(
+            throw new \Hoa\Xml\Exception(
                 'Length must be greather than 0, given %d.', 0, $length);
 
         if(null === parent::$_buffer) {
 
-            parent::$_buffer = new Hoa_StringBuffer_ReadWrite();
+            parent::$_buffer = new \Hoa\StringBuffer\ReadWrite();
             parent::$_buffer->initializeWith($this->__toString());
         }
 
@@ -216,4 +212,6 @@ class          Hoa_Xml_Element_Read
 
         return sscanf($this->readAll(), $format);
     }
+}
+
 }

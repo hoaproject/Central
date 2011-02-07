@@ -24,102 +24,96 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Xml
- * @subpackage  Hoa_Xml_Element_Concrete
- *
  */
 
-/**
- * Hoa_Xml_Exception
- */
-import('Xml.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Xml_Element
+ * \Hoa\Xml\Exception
  */
-import('Xml.Element') and load();
+-> import('Xml.Exception')
 
 /**
- * Hoa_Xml_Element_Model_Phrasing
+ * \Hoa\Xml\Element
  */
-import('Xml.Element.Model.Phrasing');
+-> import('Xml.Element.~')
 
 /**
- * Class Hoa_Xml_Element_Concrete.
+ * \Hoa\Xml\Element\Model\Phrasing
+ */
+-> import('Xml.Element.Model.Phrasing');
+
+}
+
+namespace Hoa\Xml\Element {
+
+/**
+ * Class \Hoa\Xml\Element\Concrete.
  *
  * This class represents a XML element in a XML tree.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.3
- * @package     Hoa_Xml
- * @subpackage  Hoa_Xml_Element_Concrete
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class          Hoa_Xml_Element_Concrete
-    implements Hoa_Xml_Element,
-               Countable,
-               IteratorAggregate,
-               ArrayAccess {
+class Concrete implements Element, \Countable, \IteratorAggregate, \ArrayAccess {
 
     /**
      * Store all elements of the abstract tree.
      *
-     * @var Hoa_Xml_Element_Concrete array
+     * @var \Hoa\Xml\Element\Concrete array
      */
     protected static $_store      = array();
 
     /**
      * Super roots of each abstract elements.
      *
-     * @var Hoa_Xml_Element_Concrete array
+     * @var \Hoa\Xml\Element\Concrete array
      */
     protected static $_superRoots = array();
 
     /**
      * Instances of conrete elements of each abstract element.
      *
-     * @var Hoa_Xml_Element_Concrete array
+     * @var \Hoa\Xml\Element\Concrete array
      */
     protected static $_multiton   = array();
 
     /**
      * Name of the concrete element.
      *
-     * @var Hoa_Xml_Element_Concrete string
+     * @var \Hoa\Xml\Element\Concrete string
      */
     protected $_name              = null;
 
     /**
      * Concrete children.
      *
-     * @var Hoa_Xml_Element_Concrete array
+     * @var \Hoa\Xml\Element\Concrete array
      */
     protected $_children          = array();
 
     /**
      * Concrete children for the iterator.
      *
-     * @var Hoa_Xml_Element_Concrete array
+     * @var \Hoa\Xml\Element\Concrete array
      */
     protected $_iterator          = array();
 
     /**
      * Abstract element.
      *
-     * @var Hoa_Xml_Element object
+     * @var \Hoa\Xml\Element object
      */
     protected $_abstract          = null;
 
     /**
      * Super root of the abstract element.
      *
-     * @var Hoa_Xml_Element object
+     * @var \Hoa\Xml\Element object
      */
     protected $_superRoot         = null;
 
@@ -129,17 +123,17 @@ class          Hoa_Xml_Element_Concrete
      * Build a concrete tree.
      *
      * @access  public
-     * @param   Hoa_Xml_Element  $abstract     Abstract element.
-     * @param   Hoa_Xml_Element  $superRoot    Super root.
-     * @param   array            $rank         Rank: abstract elements to
-     *                                         concrete elements.
-     * @param   string           $namespace    Namespace.
+     * @param   \Hoa\Xml\Element  $abstract     Abstract element.
+     * @param   \Hoa\Xml\Element  $superRoot    Super root.
+     * @param   array             $rank         Rank: abstract elements to
+     *                                          concrete elements.
+     * @param   string            $namespace    Namespace.
      * @return  void
      */
-    public function __construct ( Hoa_Xml_Element $abstract,
-                                  Hoa_Xml_Element $superRoot,
-                                  Array           $rank = array(),
-                                  $namespace            = null ) {
+    public function __construct ( \Hoa\Xml\Element $abstract,
+                                  \Hoa\Xml\Element $superRoot,
+                                  Array            $rank = array(),
+                                  $namespace             = null ) {
 
         self::$_store[]      = $abstract;
         self::$_superRoots[] = $superRoot;
@@ -159,7 +153,7 @@ class          Hoa_Xml_Element_Concrete
         $this->_abstract     = $abstract;
         $this->_superRoot    = $superRoot;
 
-        if($this instanceof Hoa_Xml_Element_Model_Phrasing)
+        if($this instanceof \Hoa\Xml\Element\Model\Phrasing)
             $iterator = $abstract->readAsPhrasingModel($namespace);
         else
             $iterator = $abstract->selectChildElements();
@@ -169,7 +163,7 @@ class          Hoa_Xml_Element_Concrete
             $name = $child->getName();
 
             if(!isset($rank[$name]))
-                throw new Hoa_Xml_Exception(
+                throw new \Hoa\Xml\Exception(
                     'Cannot build the concrete tree because the abstract ' .
                     'element <%s> has no ranked concrete element.', 0, $name);
 
@@ -186,10 +180,10 @@ class          Hoa_Xml_Element_Concrete
      * Get the abstract element ID.
      *
      * @access  public
-     * @param   Hoa_Xml_Element  $element    Abstract element.
+     * @param   \Hoa\Xml\Element  $element    Abstract element.
      * @return  mixed
      */
-    public static function getAbstractElementId ( Hoa_Xml_Element $element ) {
+    public static function getAbstractElementId ( \Hoa\Xml\Element $element ) {
 
         return array_search($element, self::$_store);
     }
@@ -198,7 +192,7 @@ class          Hoa_Xml_Element_Concrete
      * Get the abstract element.
      *
      * @access  public
-     * @return  Hoa_Xml_Element
+     * @return  \Hoa\Xml\Element
      */
     public function getAbstractElement ( ) {
 
@@ -209,14 +203,14 @@ class          Hoa_Xml_Element_Concrete
      * Get the associated concrete element of an abstract element.
      *
      * @access  public
-     * @param   Hoa_Xml_Element  $element    Abstract element.
-     * @return  Hoa_Xml_Element_Concrete
-     * @throw   Hoa_Xml_Exception
+     * @param   \Hoa\Xml\Element  $element    Abstract element.
+     * @return  \Hoa\Xml\Element\Concrete
+     * @throw   \Hoa\Xml\Exception
      */
-    public static function getConcreteElement ( Hoa_Xml_Element $element ) {
+    public static function getConcreteElement ( \Hoa\Xml\Element $element ) {
 
         if(false === $id = self::getAbstractElementId($element))
-            throw new Hoa_Xml_Exception(
+            throw new \Hoa\Xml\Exception(
                 'The basic element %s has no concrete equivalent.',
                 1, $element->getName());
 
@@ -227,7 +221,7 @@ class          Hoa_Xml_Element_Concrete
      * Get the super-root of the abstract element.
      *
      * @access  public
-     * @return  Hoa_Xml_Element
+     * @return  \Hoa\Xml\Element
      */
     public function getAbstractElementSuperRoot ( ) {
 
@@ -238,14 +232,14 @@ class          Hoa_Xml_Element_Concrete
      * Get the super-root of an abstract element.
      *
      * @access  public
-     * @param   Hoa_Xml_Element  $element    Abstract element.
-     * @return  Hoa_Xml_Element
-     * @throws  Hoa_Xml_Exception
+     * @param   \Hoa\Xml\Element  $element    Abstract element.
+     * @return  \Hoa\Xml\Element
+     * @throws  \Hoa\Xml\Exception
      */
-    public static function getAbstractElementSuperRootOf ( Hoa_Xml_Element $element ) {
+    public static function getAbstractElementSuperRootOf ( \Hoa\Xml\Element $element ) {
 
         if(false === $id = self::getAbstractElementId($element))
-            throw new Hoa_Xml_Exception(
+            throw new \Hoa\Xml\Exception(
                 'The concrete element %s has no concrete equivalent and we ' .
                 'cannot retrieve the super-root.', 2, $element->getName());
 
@@ -290,10 +284,10 @@ class          Hoa_Xml_Element_Concrete
      *
      * @access  public
      * @param   string                    $name     Child name.
-     * @param   Hoa_Xml_Element_Concrete  $value    Value.
+     * @param   \Hoa\Xml\Element\Concrete  $value    Value.
      * @return  void
      */
-    public function __set ( $name, Hoa_Xml_Element_Concrete $value ) {
+    public function __set ( $name, Concrete $value ) {
 
         $this->_children[$name][] = $value;
         $this->_iterator[]        = $value;
@@ -333,7 +327,7 @@ class          Hoa_Xml_Element_Concrete
      *
      * @access  public
      * @param   int     $offset    Element index.
-     * @return  Hoa_Xyl_Element_Concrete
+     * @return  \Hoa\Xyl\Element\Concrete
      */
     public function offsetGet ( $offset ) {
 
@@ -348,7 +342,7 @@ class          Hoa_Xml_Element_Concrete
      *
      * @access  public
      * @param   string                    $offset    Element index.
-     * @param   Hoa_Xyl_Element_Concrete  $value     Element.
+     * @param   \Hoa\Xyl\Element\Concrete  $value     Element.
      * @return  void
      */
     public function offsetSet ( $offset, $element ) {
@@ -404,4 +398,6 @@ class          Hoa_Xml_Element_Concrete
             $arguments
         );
     }
+}
+
 }

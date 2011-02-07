@@ -24,75 +24,73 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Xml
- * @subpackage  Hoa_Xml_ReadWrite
- *
  */
 
-/**
- * Hoa_Xml_Exception
- */
-import('Xml.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Xml
+ * \Hoa\Xml\Exception
  */
-import('Xml.~') and load();
+-> import('Xml.Exception')
 
 /**
- * Hoa_Stream_Interface_In
+ * \Hoa\Xml
  */
-import('Stream.Interface.In');
+-> import('Xml.~')
 
 /**
- * Hoa_Stream_Interface_Out
+ * \Hoa\Stream\IStream\In
  */
-import('Stream.Interface.Out');
+-> import('Stream.Interface.In')
 
 /**
- * Hoa_Xml_Element_ReadWrite
+ * \Hoa\Stream\IStream\Out
  */
-import('Xml.Element.ReadWrite') and load();
+-> import('Stream.I~.Out')
 
 /**
- * Class Hoa_Xml_ReadWrite.
+ * \Hoa\Xml\Element\ReadWrite
+ */
+-> import('Xml.Element.ReadWrite');
+
+}
+
+namespace Hoa\Xml {
+
+/**
+ * Class \Hoa\Xml\ReadWrite.
  *
  * Read/write a XML element.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.3
- * @package     Hoa_Xml
- * @subpackage  Hoa_Xml_ReadWrite
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class          Hoa_Xml_ReadWrite
-    extends    Hoa_Xml
-    implements Hoa_Stream_Interface_In,
-               Hoa_Stream_Interface_Out {
+class          ReadWrite
+    extends    Xml
+    implements \Hoa\Stream\IStream\In,
+               \Hoa\Stream\IStream\Out {
 
     /**
      * Start the stream reader/writer as if it is a XML document.
      *
      * @access  public
-     * @param   Hoa_Stream_Interface_In  $stream    Stream to read/write.
+     * @param   \Hoa\Stream\IStream\In  $stream    Stream to read/write.
      * @return  void
-     * @throw   Hoa_Xml_Exception
+     * @throw   \Hoa\Xml\Exception
      */
-    public function __construct ( Hoa_Stream_Interface_In $stream ) {
+    public function __construct ( \Hoa\Stream\IStream\In $stream ) {
 
-        if(!($stream instanceof Hoa_Stream_Interface_Out))
-            throw new Hoa_Xml_Exception(
+        if(!($stream instanceof \Hoa\Stream\IStream\Out))
+            throw new Exception(
                 'The stream %s (that opened %s) must implement ' .
-                'Hoa_Stream_Interface_In and Hoa_Stream_Interface_Out interfaces.',
+                '\Hoa\Stream\IStream\In and \Hoa\Stream\IStream\Out interfaces.',
                 0, array(get_class($stream), $stream->getStreamName()));
 
-        parent::__construct('Hoa_Xml_Element_ReadWrite', $stream);
+        parent::__construct('\Hoa\Xml\Element\ReadWrite', $stream);
 
         event('hoa://Event/Stream/' . $stream->getStreamName() . ':close-before')
             ->attach($this, '_close');
@@ -107,10 +105,10 @@ class          Hoa_Xml_ReadWrite
      * and writes all this string into the stream.
      *
      * @access  public
-     * @param   Hoa_Core_Event_Bucket  $bucket    Event's bucket.
+     * @param   \Hoa\Core\Event\Bucket  $bucket    Event's bucket.
      * @return  void
      */
-    public function _close ( Hoa_Core_Event_Bucket $bucket ) {
+    public function _close ( \Hoa\Core\Event\Bucket $bucket ) {
 
         $handle = $this->getStream()->selectRoot()->asXML();
 
@@ -137,7 +135,7 @@ class          Hoa_Xml_ReadWrite
      * @access  public
      * @param   int     $length    Length.
      * @return  string
-     * @throw   Hoa_Xml_Exception
+     * @throw   \Hoa\Xml\Exception
      */
     public function read ( $length ) {
 
@@ -252,7 +250,7 @@ class          Hoa_Xml_ReadWrite
      * Read content as a DOM tree.
      *
      * @access  public
-     * @return  DOMElement
+     * @return  \DOMElement
      */
     public function readDOM ( ) {
 
@@ -266,7 +264,7 @@ class          Hoa_Xml_ReadWrite
      * @param   string  $string    String.
      * @param   int     $length    Length.
      * @return  mixed
-     * @throw   Hoa_Xml_Exception
+     * @throw   \Hoa\Xml\Exception
      */
     public function write ( $string, $length ) {
 
@@ -385,10 +383,10 @@ class          Hoa_Xml_ReadWrite
      * Write a DOM tree.
      *
      * @access  public
-     * @param   DOMNode  $dom    DOM tree.
+     * @param   \DOMNode  $dom    DOM tree.
      * @return  mixed
      */
-    public function writeDOM ( DOMNode $dom ) {
+    public function writeDOM ( \DOMNode $dom ) {
 
         return $this->getStream()->writeDOM($dom);
     }
@@ -417,4 +415,6 @@ class          Hoa_Xml_ReadWrite
 
         return $this->getStream()->writeAttribute($name, $value);
     }
+}
+
 }
