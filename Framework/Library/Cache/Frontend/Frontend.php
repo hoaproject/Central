@@ -24,45 +24,43 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Cache
- * @subpackage  Hoa_Cache_Frontend
- *
  */
+
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Cache_Exception
+ * \Hoa\Cache\Exception
  */
-import('Cache.Exception');
+-> import('Cache.Exception')
 
 /**
- * Hoa_Cache
+ * \Hoa\Cache
  */
-import('Cache.~');
+-> import('Cache.~');
+
+}
+
+namespace Hoa\Cache\Frontend {
 
 /**
- * Class Hoa_Cache_Frontend.
+ * Class \Hoa\Cache\Frontend.
  *
  *
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Cache
- * @subpackage  Hoa_Cache_Frontend
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  *
  */
 
-abstract class Hoa_Cache_Frontend extends Hoa_Cache {
+abstract class Frontend extends \Hoa\Cache {
 
     /**
      * Backend object.
      *
-     * @var Hoa_Cache_Backend object
+     * @var \Hoa\Cache\Backend object
      */
     protected $_backend = null;
 
@@ -72,10 +70,10 @@ abstract class Hoa_Cache_Frontend extends Hoa_Cache {
      * Constructor.
      *
      * @access  public
-     * @param   Hoa_Cache_Backend  $backend    Backend instance.
+     * @param   \Hoa\Cache\Backend  $backend    Backend instance.
      * @return  void
      */
-    public function __construct ( Hoa_Cache_Backend $backend ) {
+    public function __construct ( \Hoa\Cache\Backend $backend ) {
 
         parent::__construct();
 
@@ -91,7 +89,7 @@ abstract class Hoa_Cache_Frontend extends Hoa_Cache {
      * @param   int  $lifetime    Lifetime of caches.
      * @return  void
      */
-    public function cleanCache ( $lifetime = Hoa_Cache::CLEAN_EXPIRED ) {
+    public function cleanCache ( $lifetime = \Hoa\Cache::CLEAN_EXPIRED ) {
 
         if(null === $this->_backend)
             return;
@@ -103,10 +101,12 @@ abstract class Hoa_Cache_Frontend extends Hoa_Cache {
      * Get the backend.
      *
      * @access  public
-     * @return  Hoa_Cache_Backend
+     * @return  \Hoa\Cache\Backend
      */
     public function getBackend ( ) {
 
         return $this->_backend;
     }
+}
+
 }

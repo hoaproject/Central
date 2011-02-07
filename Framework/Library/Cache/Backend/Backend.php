@@ -24,40 +24,33 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Cache
- * @subpackage  Hoa_Cache_Backend
- *
  */
+
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Cache_Exception
+ * \Hoa\Cache
  */
-import('Cache.Exception');
+-> import('Cache.~');
+
+}
+
+namespace Hoa\Cache\Backend {
 
 /**
- * Hoa_Cache
- */
-import('Cache.~');
-
-/**
- * Class Hoa_Cache_Backend.
+ * Class \Hoa\Cache\Backend.
  *
  *
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Cache
- * @subpackage  Hoa_Cache_Backend
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  *
  */
 
-abstract class Hoa_Cache_Backend extends Hoa_Cache {
+abstract class Backend extends \Hoa\Cache {
 
     /**
      * Save data.
@@ -83,7 +76,7 @@ abstract class Hoa_Cache_Backend extends Hoa_Cache {
      * @param   int  $lifetime    Lifetime of caches.
      * @return  void
      */
-    abstract public function clean ( $lifetime = Hoa_Cache::CLEAN_EXPIRED );
+    abstract public function clean ( $lifetime = \Hoa\Cache::CLEAN_EXPIRED );
 
     /**
      * Remove data.
@@ -92,4 +85,6 @@ abstract class Hoa_Cache_Backend extends Hoa_Cache {
      * @return  void
      */
     abstract public function remove ( );
+}
+
 }

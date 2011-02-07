@@ -24,54 +24,52 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Cache
- * @subpackage  Hoa_Cache_Backend_ZendPlatform
- *
  */
 
-/**
- * Hoa_Cache_Exception
- */
-import('Cache.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Cache_Backend
+ * \Hoa\Cache\Exception
  */
-import('Cache.Backend');
+-> import('Cache.Exception')
 
 /**
- * Hoa_File_Finder
+ * \Hoa\Cache\Backend
  */
-import('File.Finder');
+-> import('Cache.Backend.~')
 
 /**
- * Class Hoa_Cache_Backend_ZendPlatform.
+ * \Hoa\File\Finder
+ */
+-> import('File.Finder');
+
+}
+
+namespace Hoa\Cache\Backend {
+
+/**
+ * Class \Hoa\Cache\Backend\ZendPlatform.
  *
  * ZendPlatform backend manager (yes yes, Zend :-)).
- * Inspiration from Zend_Cache_Backend_ZendPlatform class for making this class.
+ * Inspiration from Zend\Cache\Backend\ZendPlatform class for making this class.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Cache
- * @subpackage  Hoa_Cache_Backend_ZendPlatform
- * @todo        Need to be tested. I do not have the Zend Platform, I cannot
- *              make the test myself.
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
+ * @todo       Need to be tested. I do not have the Zend Platform, I cannot
+ *             make the test myself.
  */
 
-class Hoa_Cache_Backend_ZendPlatform extends Hoa_Cache_Backend {
+class ZendPlatform extends Backend {
 
     /**
      * Internal ZendPlatform prefix.
      *
      * @const string
      */
-    const INTERNAL_ZP_PREFIX = 'internal_ZPtag:';
+    const INTERNAL_ZP_PREFIX = 'internal\ZPtag:';
 
 
 
@@ -81,18 +79,18 @@ class Hoa_Cache_Backend_ZendPlatform extends Hoa_Cache_Backend {
      * @access  public
      * @param   array  $parameters    Parameters.
      * @return  void
-     * @throw   Hoa_Cache_Exception
+     * @throw   \Hoa\Cache\Exception
      */
     public function __construct ( Array $parameters = array() ) {
 
         if(!function_exists('accelerator_license_info'))
-            throw new Hoa_Cache_Exception(
+            throw new \Hoa\Cache\Exception(
                 'The Zend Platform extension must be loaded for using this backend.', 0);
 
         if(!function_exists('accelerator_get_configuration')) {
 
             $licenseInfos = accelerator_license_info();
-            throw new Hoa_Cache_Exception(
+            throw new \Hoa\Cache\Exception(
                 'The Zend Platform extension is not loaded correctly : %s.',
                 1, $licenseInfos['failure_reason']);
         }
@@ -100,18 +98,18 @@ class Hoa_Cache_Backend_ZendPlatform extends Hoa_Cache_Backend {
         $configurations = accelerator_get_configuration();
 
         if(@!$configurations['output_cache_licensed'])
-            throw new Hoa_Cache_Exception(
+            throw new \Hoa\Cache\Exception(
                 'The Zend Platform extension does not have the proper license ' .
                 'to use content caching features.', 2);
 
         if(@!$configurations['output_cache_enabled'])
-            throw new Hoa_Cache_Exception(
+            throw new \Hoa\Cache\Exception(
                 'The Zend Platform content caching feature must be enabled for ' .
                 'using this backend, set the ' .
                 'zend_accelerator.output_cache_enabled directive to on.', 3);
 
         if(!is_writable($configuration['output_cache_dir']))
-            throw new Hoa_Cache_Exception(
+            throw new \Hoa\Cache\Exception(
                 'The cache copies directory %s must be writable.',
                 4, $configuration['output_cache_dir']);
 
@@ -163,28 +161,28 @@ class Hoa_Cache_Backend_ZendPlatform extends Hoa_Cache_Backend {
 
     /**
      * Clean expired cache files.
-     * Note : Hoa_Cache::CLEAN_USER is not supported, it's reserved for APC
+     * Note : \Hoa\Cache::CLEAN_USER is not supported, it's reserved for APC
      * backend.
      *
      * @access  public
      * @param   string  $lifetime    Lifetime of caches.
      * @return  void
-     * @throw   Hoa_Cache_Exception
+     * @throw   \Hoa\Cache\Exception
      */
-    public function clean ( $lifetime = Hoa_Cache::CLEAN_EXPIRED ) {
+    public function clean ( $lifetime = \Hoa\Cache::CLEAN_EXPIRED ) {
 
         switch($lifetime) {
 
-            case Hoa_Cache::CLEAN_ALL:
+            case \Hoa\Cache::CLEAN_ALL:
               break;
 
-            case Hoa_Cache::CLEAN_EXPIRED:
+            case \Hoa\Cache::CLEAN_EXPIRED:
                 $lifetime = $this->getParameter('lifetime');
               break;
 
-            case Hoa_Cache::CLEAN_USER:
-                throw new Hoa_Cache_Exception(
-                    'Hoa_Cache::CLEAN_USER constant is not supported by ' .
+            case \Hoa\Cache::CLEAN_USER:
+                throw new \Hoa\Cache\Exception(
+                    '\Hoa\Cache::CLEAN_USER constant is not supported by ' .
                     'ZendPlatform cache backend.', 3);
               break;
 
@@ -197,18 +195,18 @@ class Hoa_Cache_Backend_ZendPlatform extends Hoa_Cache_Backend {
 
         try {
 
-            $cacheDir = new Hoa_File_Finder(
+            $cacheDir = new \Hoa\File\Finder(
                 $directory,
-                Hoa_File_Finder::LIST_FILE |
-                Hoa_File_Finder::LIST_NO_DOT,
-                Hoa_File_Finder::SORT_INAME
+                \Hoa\File\Finder::LIST_FILE |
+                \Hoa\File\Finder::LIST_NO_DOT,
+                \Hoa\File\Finder::SORT_INAME
             );
 
             foreach($cacheDir as $i => $fileinfo)
                 if($fileinfo->getMTime() + $lifetime <= time())
                     $fileinfo->delete();
         }
-        catch ( Hoa_File_Exception_FileDoesNotExist $e ) { }
+        catch ( \Hoa\File\Exception\FileDoesNotExist $e ) { }
 
         return;
     }
@@ -225,4 +223,6 @@ class Hoa_Cache_Backend_ZendPlatform extends Hoa_Cache_Backend {
 
         return;
     }
+}
+
 }

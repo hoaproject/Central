@@ -24,50 +24,48 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Cache
- * @subpackage  Hoa_Cache_Backend_Sqlite
- *
  */
 
-/**
- * Hoa_Cache_Exception
- */
-import('Cache.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Cache_Backend
+ * \Hoa\Cache\Exception
  */
-import('Cache.Backend');
+-> import('Cache.Exception')
 
 /**
- * Hoa_File_Directory
+ * \Hoa\Cache\Backend
  */
-import('File.Directory');
+-> import('Cache.Backend.~')
 
 /**
- * Class Hoa_Cache_Backend_Sqlite.
+ * \Hoa\File\Directory
+ */
+-> import('File.Directory');
+
+}
+
+namespace Hoa\Cache\Backend {
+
+/**
+ * Class \Hoa\Cache\Backend\Sqlite.
  *
  * SQLite backend manager.
  * SQLite is an extension, take care that SQLite is loaded.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Cache
- * @subpackage  Hoa_Cache_Backend_Sqlite
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Cache_Backend_Sqlite extends Hoa_Cache_Backend {
+class Sqlite extends Backend {
 
     /**
      * SQLite connexion.
      *
-     * @var Hoa_Cache_Backend_Sqlite resource
+     * @var \Hoa\Cache\Backend\Sqlite resource
      */
     protected $_sqlite = null;
 
@@ -79,12 +77,12 @@ class Hoa_Cache_Backend_Sqlite extends Hoa_Cache_Backend {
      * @access  public
      * @param   array  $parameters    Parameters.
      * @return  void
-     * @throw   Hoa_Cache_Exception
+     * @throw   \Hoa\Cache\Exception
      */
     public function __construct ( Array $parameters = array() ) {
 
         if(!extension_loaded('sqlite'))
-            throw new Hoa_Cache_Exception(
+            throw new \Hoa\Cache\Exception(
                 'SQLite is not loaded on server.', 0);
 
         parent::__construct($parameters);
@@ -166,26 +164,26 @@ class Hoa_Cache_Backend_Sqlite extends Hoa_Cache_Backend {
      * @access  public
      * @param   string  $lifetime    Lifetime of caches.
      * @return  void
-     * @throw   Hoa_Cache_Exception
+     * @throw   \Hoa\Cache\Exception
      */
-    public function clean ( $lifetime = Hoa_Cache::CLEAN_EXPIRED ) {
+    public function clean ( $lifetime = \Hoa\Cache::CLEAN_EXPIRED ) {
 
         $this->setSqlite();
 
         switch($lifetime) {
 
-            case Hoa_Cache::CLEAN_ALL:
+            case \Hoa\Cache::CLEAN_ALL:
                 $statement = 'DELETE FROM hoa_cache';
               break;
 
-            case Hoa_Cache::CLEAN_EXPIRED:
+            case \Hoa\Cache::CLEAN_EXPIRED:
                 $statement = 'DELETE FROM hoa_cache ' . "\n" .
                              'WHERE  will_expire_at < ' . sqlite_escape_string(time());
               break;
 
-            case Hoa_Cache::CLEAN_USER:
-                throw new Hoa_Cache_Exception(
-                    'Hoa_Cache::CLEAN_USER constant is not supported by ' .
+            case \Hoa\Cache::CLEAN_USER:
+                throw new \Hoa\Cache\Exception(
+                    '\Hoa\Cache::CLEAN_USER constant is not supported by ' .
                     'SQLite cache backend.', 1);
               break;
         }
@@ -223,7 +221,7 @@ class Hoa_Cache_Backend_Sqlite extends Hoa_Cache_Backend {
      *
      * @access  protected
      * @return  void
-     * @throw   Hoa_Cache_Exception
+     * @throw   \Hoa\Cache\Exception
      */
     protected function setSqlite ( ) {
 
@@ -243,14 +241,14 @@ class Hoa_Cache_Backend_Sqlite extends Hoa_Cache_Backend {
         else {
 
             $new  = true;
-            Hoa_File_Directory::create(
+            \Hoa\File\Directory::create(
                 $database,
-                Hoa_File_Directory::MODE_CREATE_RECURSIVE
+                \Hoa\File\Directory::MODE_CREATE_RECURSIVE
             );
         }
 
         if(false === $this->_sqlite = @sqlite_open($database, 0644, $error))
-            throw new Hoa_Cache_Exception(
+            throw new \Hoa\Cache\Exception(
                 'Unable to connect to SQLite database : %s.', 2, $error);
 
         $new and $this->createSchema();
@@ -275,7 +273,7 @@ class Hoa_Cache_Backend_Sqlite extends Hoa_Cache_Backend {
      *
      * @access  protected
      * @return  void
-     * @throw   Hoa_Cache_Exception
+     * @throw   \Hoa\Cache\Exception
      */
     protected function createSchema ( ) {
 
@@ -292,7 +290,7 @@ class Hoa_Cache_Backend_Sqlite extends Hoa_Cache_Backend {
 
         foreach($statements as $name => $statement)
             if(false === sqlite_query($statement, $this->getSqlite()))
-                throw new Hoa_Cache_Exception(
+                throw new \Hoa\Cache\Exception(
                     sqlite_error_string(sqlite_last_error($this->getSqlite())), 3);
 
         return;
@@ -310,4 +308,6 @@ class Hoa_Cache_Backend_Sqlite extends Hoa_Cache_Backend {
 
         return;
     }
+}
+
 }

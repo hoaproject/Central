@@ -24,44 +24,42 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Cache
- * @subpackage  Hoa_Cache_Backend_File
- *
  */
 
-/**
- * Hoa_Cache_Exception
- */
-import('Cache.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Cache_Backend
+ * \Hoa\Cache\Exception
  */
-import('Cache.Backend');
+-> import('Cache.Exception')
 
 /**
- * Hoa_File_Finder
+ * \Hoa\Cache\Backend
  */
-import('File.Finder');
+-> import('Cache.Backend.~')
 
 /**
- * Class Hoa_Cache_Backend_File.
+ * \Hoa\File\Finder
+ */
+-> import('File.Finder');
+
+}
+
+namespace Hoa\Cache\Backend {
+
+/**
+ * Class \Hoa\Cache\Backend\File.
  *
  * File backend manager.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Cache
- * @subpackage  Hoa_Cache_Backend_File
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Cache_Backend_File extends Hoa_Cache_Backend {
+class File extends Backend {
 
     /**
      * Save cache content into a file.
@@ -126,28 +124,28 @@ class Hoa_Cache_Backend_File extends Hoa_Cache_Backend {
 
     /**
      * Clean expired cache files.
-     * Note : Hoa_Cache::CLEAN_USER is not supported, it's reserved for APC
+     * Note : \Hoa\Cache::CLEAN_USER is not supported, it's reserved for APC
      * backend.
      *
      * @access  public
      * @param   int  $lifetime    Lifetime of caches.
      * @return  void
-     * @throw   Hoa_Cache_Exception
+     * @throw   \Hoa\Cache\Exception
      */
-    public function clean ( $lifetime = Hoa_Cache::CLEAN_EXPIRED ) {
+    public function clean ( $lifetime = \Hoa\Cache::CLEAN_EXPIRED ) {
 
         switch($lifetime) {
 
-            case Hoa_Cache::CLEAN_ALL:
+            case \Hoa\Cache::CLEAN_ALL:
               break;
 
-            case Hoa_Cache::CLEAN_EXPIRED:
+            case \Hoa\Cache::CLEAN_EXPIRED:
                 $lifetime = $this->getParameter('lifetime');
               break;
 
-            case Hoa_Cache::CLEAN_USER:
-                throw new Hoa_Cache_Exception(
-                    'Hoa_Cache::CLEAN_USER constant is not supported by %s.' .
+            case \Hoa\Cache::CLEAN_USER:
+                throw new \Hoa\Cache\Exception(
+                    '\Hoa\Cache::CLEAN_USER constant is not supported by %s.' .
                     2, __CLASS__);
               break;
 
@@ -160,18 +158,18 @@ class Hoa_Cache_Backend_File extends Hoa_Cache_Backend {
 
         try {
 
-            $cacheDir  = new Hoa_File_Finder(
+            $cacheDir  = new \Hoa\File\Finder(
                 $this->getFormattedParameter('file.cache.directory'),
-                Hoa_File_Finder::LIST_FILE |
-                Hoa_File_Finder::LIST_NO_DOT,
-                Hoa_File_Finder::SORT_INAME
+                \Hoa\File\Finder::LIST_FILE |
+                \Hoa\File\Finder::LIST_NO_DOT,
+                \Hoa\File\Finder::SORT_INAME
             );
 
             foreach($cacheDir as $i => $fileinfo)
                 if($fileinfo->getMTime() + $lifetime <= $time)
                     $fileinfo->delete();
         }
-        catch ( Hoa_File_Exception_FileDoesNotExist $e ) { }
+        catch ( \Hoa\File\Exception\FileDoesNotExist $e ) { }
 
         return;
     }
@@ -189,10 +187,12 @@ class Hoa_Cache_Backend_File extends Hoa_Cache_Backend {
         $filename = $this->getFormattedParameter('file.cache.directory') .
                     $this->getFormattedParameter('file.cache.file');
 
-        $file = new Hoa_File_Read($filename);
+        $file = new \Hoa\File\Read($filename);
         $file->delete();
         $file->close();
 
         return;
     }
+}
+
 }

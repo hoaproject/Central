@@ -24,40 +24,38 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Cache
- * @subpackage  Hoa_Cache_Backend_Eaccelerator
- *
  */
 
-/**
- * Hoa_Cache_Exception
- */
-import('Cache.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Cache_Backend
+ * \Hoa\Cache\Exception
  */
-import('Cache.Backend');
+-> import('Cache.Exception')
 
 /**
- * Class Hoa_Cache_Backend_Eaccelerator.
+ * \Hoa\Cache\Backend
+ */
+-> import('Cache.Backend.~');
+
+}
+
+namespace Hoa\Cache\Backend {
+
+/**
+ * Class \Hoa\Cache\Backend\Eaccelerator.
  *
  * Eaccelerator backend manager.
  * EAccelerator is an extension, take care that EAccelerator is loaded.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Cache
- * @subpackage  Hoa_Cache_Backend_Eaccelerator
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Cache_Backend_Eaccelerator extends Hoa_Cache_Backend {
+class Eaccelerator extends Backend {
 
     /**
      * Check if EAccelerator is loaded, else an exception is thrown.
@@ -65,12 +63,12 @@ class Hoa_Cache_Backend_Eaccelerator extends Hoa_Cache_Backend {
      * @access  public
      * @param   array   $parameters    Parameters.
      * @return  void
-     * @throw   Hoa_Cache_Exception
+     * @throw   \Hoa\Cache\Exception
      */
     public function __construct ( Array $parameters = array() ) {
 
         if(!extension_loaded('eaccelerator'))
-            throw new Hoa_Cache_Exception(
+            throw new \Hoa\Cache\Exception(
                 'EAccelerator is not loaded on server.', 0);
 
         parent::__construct($parameters);
@@ -115,19 +113,19 @@ class Hoa_Cache_Backend_Eaccelerator extends Hoa_Cache_Backend {
 
     /**
      * Clean expired cache.
-     * Note : Hoa_Cache::CLEAN_USER is not supported, it's reserved for APC
+     * Note : \Hoa\Cache::CLEAN_USER is not supported, it's reserved for APC
      * backend.
      *
      * @access  public
      * @param   int  $lifetime    Lifetime of caches.
      * @return  void
-     * @throw   Hoa_Cache_Exception
+     * @throw   \Hoa\Cache\Exception
      */
-    public function clean ( $lifetime = Hoa_Cache::CLEAN_EXPIRED ) {
+    public function clean ( $lifetime = \Hoa\Cache::CLEAN_EXPIRED ) {
 
         switch($lifetime) {
 
-            case Hoa_Cache::CLEAN_ALL:
+            case \Hoa\Cache::CLEAN_ALL:
                 $infos = eaccelerator_list_keys();
 
                 // EAccelerator bug (http://eaccelerator.net/ticket/287).
@@ -138,19 +136,19 @@ class Hoa_Cache_Backend_Eaccelerator extends Hoa_Cache_Backend {
                                : $info['name'];
 
                     if(false === eaccelerator_rm($key))
-                        throw new Hoa_Cache_Exception(
+                        throw new \Hoa\Cache\Exception(
                             'Remove all existing cache file failed (maybe for the %s cache).',
                             1, $key);
                 }
               break;
 
-            case Hoa_Cache::CLEAN_EXPIRED:
+            case \Hoa\Cache::CLEAN_EXPIRED:
                 // Manage by EAccelerator.
               break;
 
-            case Hoa_Cache::CLEAN_USER:
-                throw new Hoa_Cache_Exception(
-                    'Hoa_Cache::CLEAN_USER constant is not supported by ' .
+            case \Hoa\Cache::CLEAN_USER:
+                throw new \Hoa\Cache\Exception(
+                    '\Hoa\Cache::CLEAN_USER constant is not supported by ' .
                     'EAccelerator backend.', 2);
 
             default:
@@ -172,4 +170,6 @@ class Hoa_Cache_Backend_Eaccelerator extends Hoa_Cache_Backend {
 
         return;
     }
+}
+
 }
