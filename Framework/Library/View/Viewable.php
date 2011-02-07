@@ -24,35 +24,27 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_View
- * @subpackage  Hoa_View_Viewable
- *
  */
 
+namespace Hoa\View {
+
 /**
- * Interface Hoa_View_Viewable.
+ * Interface \Hoa\View\Viewable.
  *
  * Describe what a view could be.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_View
- * @subpackage  Hoa_View_Viewable
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-interface Hoa_View_Viewable {
+interface Viewable {
 
     /**
      * Get the output stream.
      *
      * @access  public
-     * @return  Hoa_Stream_Interface_Out
+     * @return  \Hoa\Stream\IStream\Out
      */
     public function getOutputStream ( );
 
@@ -60,7 +52,7 @@ interface Hoa_View_Viewable {
      * Get the data holded by the view.
      *
      * @access  public
-     * @return  Hoa_Core_Data
+     * @return  \Hoa\Core\Data
      */
     public function getData ( );
 
@@ -71,4 +63,6 @@ interface Hoa_View_Viewable {
      * @return  void
      */
     public function render ( );
+}
+
 }
