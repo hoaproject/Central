@@ -147,7 +147,7 @@ class Exception extends \Exception {
         try {
 
             $out = $pre . '(' . $this->getCode() . ') ' . $message . "\n" .
-                   'in ' . $this->getAbstractFile() . ' at line ' .
+                   'in ' . $this->getFile() . ' at line ' .
                    $this->getLine() . '.' . "\n\n";
         }
         catch ( Exception $e ) {
