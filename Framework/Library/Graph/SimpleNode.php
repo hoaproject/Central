@@ -24,46 +24,44 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Graph
- * @subpackage  Hoa_Graph_Node_SimpleNode
- *
  */
 
-/**
- * Hoa_Graph_Node_Interface
- */
-import('Graph.Node.Interface');
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Graph_Node_SimpleNode.
+ * \Hoa\Graph\IGraph\Node
+ */
+-> import('Graph.I~.Node');
+
+}
+
+namespace Hoa\Graph {
+
+/**
+ * Class \Hoa\Graph\SimpleNode.
  *
  * It's just a simple node demo (may be used for example and test).
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Graph
- * @subpackage  Hoa_Graph_Node_SimpleNode
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Graph_Node_SimpleNode implements Hoa_Graph_Node_Interface {
+class SimpleNode implements IGraph\Node {
 
     /**
      * Node ID.
      *
-     * @var Hoa_Graph_Node_SimpleNode string
+     * @var \Hoa\Graph\SimpleNode string
      */
     protected $nodeId = null;
 
     /**
      * Node value.
      *
-     * @var Hoa_Graph_Node_SimpleNode string
+     * @var \Hoa\Graph\SimpleNode string
      */
     protected $nodeValue = null;
 
@@ -134,4 +132,6 @@ class Hoa_Graph_Node_SimpleNode implements Hoa_Graph_Node_Interface {
 
         return $this->nodeValue;
     }
+}
+
 }
