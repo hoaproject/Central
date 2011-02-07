@@ -24,52 +24,52 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Log
- *
  */
 
-/**
- * Hoa_Log_Exception
- */
-import('Log.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Log_Backtrace
+ * \Hoa\Log\Exception
  */
-import('Log.Backtrace');
+-> import('Log.Exception')
 
 /**
- * Hoa_Tree_Visitor_Dump
+ * \Hoa\Log\Backtrace
  */
-import('Tree.Visitor.Dump');
+-> import('Log.Backtrace.~')
 
 /**
- * Hoa_Stream
+ * \Hoa\Tree\Visitor\Dump
  */
-import('Stream.~');
+-> import('Tree.Visitor.Dump')
 
 /**
- * Hoa_Stream_Interface_Out
+ * \Hoa\Stream
  */
-import('Stream.Interface.Out');
+-> import('Stream.~')
 
 /**
- * Class Hoa_Log.
+ * \Hoa\Stream\IStream\Out
+ */
+-> import('Stream.I~.Out');
+
+}
+
+namespace Hoa\Log {
+
+/**
+ * Class \Hoa\Log.
  *
  * Propose a log system.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     12.1
- * @package     Hoa_Log
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Log implements Hoa_Core_Event_Source {
+class Log implements \Hoa\Core\Event\Source {
 
     /**
      * Priority: emergency, system is unusable.
@@ -174,42 +174,42 @@ class Hoa_Log implements Hoa_Core_Event_Source {
     /**
      * Multiton.
      *
-     * @var Hoa_Log array
+     * @var \Hoa\Log array
      */
     private static $_instances = null;
 
     /**
      * Current singleton index.
      *
-     * @var Hoa_Log string
+     * @var \Hoa\Log string
      */
     private static $_currentId = null;
 
     /**
      * Logs stack.
      *
-     * @var Hoa_Log array
+     * @var \Hoa\Log array
      */
     protected $_stack          = array();
 
     /**
      * Backtrace.
      *
-     * @var Hoa_Log_Backtrace object
+     * @var \Hoa\Log\Backtrace object
      */
     protected $_backtrace      = null;
 
     /**
      * Filters (combination of priorities constants, null means all).
      *
-     * @var Hoa_Log int
+     * @var \Hoa\Log int
      */
     protected $_filters        = null;
 
     /**
      * Extra stack informations.
      *
-     * @var Hoa_Log array
+     * @var \Hoa\Log array
      */
     protected $_stackInfos     = array();
 
@@ -231,19 +231,19 @@ class Hoa_Log implements Hoa_Core_Event_Source {
      *
      * @access  public
      * @param   string      $id        Channel ID (i.e. singleton ID)
-     * @return  Hoa_Log
-     * @throw   Hoa_Log_Exception
+     * @return  \Hoa\Log
+     * @throw   \Hoa\Log\Exception
      */
     public static function getChannel ( $id = null ) {
 
         if(null === self::$_currentId && null === $id)
-            throw new Hoa_Log_Exception(
+            throw new Exception(
                 'Must precise a singleton index once.', 0);
 
         if(!isset(self::$_instances[$id])) {
 
             self::$_instances[$id] = new self();
-            Hoa_Core_Event::register(
+            \Hoa\Core\Event::register(
                 'hoa://Event/Log/' . $id,
                 self::$_instances[$id]
             );
@@ -411,16 +411,16 @@ class Hoa_Log implements Hoa_Core_Event_Source {
             $extra
         );
 
-        Hoa_Core_Event::notify(
+        \Hoa\Core\Event::notify(
             'hoa://Event/Log/' . self::$_currentId,
             $this,
-            new Hoa_Core_Event_Bucket(array('log' => $handle))
+            new \Hoa\Core\Event\Bucket(array('log' => $handle))
         );
 
         if($type & self::DEBUG) {
 
             if(null === $this->_backtrace)
-                $this->_backtrace = new Hoa_Log_Backtrace();
+                $this->_backtrace = new Backtrace();
 
             $this->_backtrace->debug();
         }
@@ -521,9 +521,12 @@ class Hoa_Log implements Hoa_Core_Event_Source {
     }
 }
 
+}
+
+namespace {
 
 /**
- * Alias of Hoa_Log::getInstance()->log().
+ * Alias of \Hoa\Log::getInstance()->log().
  *
  * @access  public
  * @param   string  $message    The log message.
@@ -533,7 +536,9 @@ class Hoa_Log implements Hoa_Core_Event_Source {
  * @return  void
  */
 if(!ƒ('hlog')) {
-function hlog ( $message, $type = Hoa_Log::DEBUG, $extra = array() ) {
+function hlog ( $message, $type = \Hoa\Log::DEBUG, $extra = array() ) {
 
-    return Hoa_Log::getChannel()->log($message, $type, $extra);
+    return \Hoa\Log::getChannel()->log($message, $type, $extra);
 }}
+
+}

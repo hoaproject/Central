@@ -24,51 +24,49 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Log
- * @subpackage  Hoa_Log_Backtrace
- *
  */
 
-/**
- * Hoa_Tree
- */
-import('Tree.~');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Log_Backtrace_Node
+ * \Hoa\Tree
  */
-import('Log.Backtrace.Node');
+-> import('Tree.~')
 
 /**
- * Hoa_Tree_Visitor_Dot
+ * \Hoa\Log\Backtrace\Node
  */
-import('Tree.Visitor.Dot');
+-> import('Log.Backtrace.Node')
 
 /**
- * Class Hoa_Log_Backtrace.
+ * \Hoa\Tree\Visitor\Dot
+ */
+-> import('Tree.Visitor.Dot');
+
+}
+
+namespace Hoa\Log\Backtrace {
+
+/**
+ * Class \Hoa\Log\Backtrace.
  *
  * Build a backtrace tree. Please, read the API documentation of the class
  * attributes to well-understand.
  * A DOT output is available.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Log
- * @subpackage  Hoa_Log_Backtrace
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Log_Backtrace {
+class Backtrace {
 
     /**
      * Backtrace tree.
      *
-     * @var Hoa_Tree object
+     * @var \Hoa\Tree object
      */
     protected $_tree = null;
 
@@ -82,8 +80,8 @@ class Hoa_Log_Backtrace {
      */
     public function __construct ( ) {
 
-        $this->_tree = new Hoa_Tree(
-            new Hoa_Log_Backtrace_Node(array(
+        $this->_tree = new \Hoa\Tree(
+            new Node(array(
                 'function' => 'Bootstrap',
                 'line'     => 42,
                 'file'     => 'BigBlackHole',
@@ -112,13 +110,13 @@ class Hoa_Log_Backtrace {
 
         foreach($array as $i => $trace) {
 
-            $node = new Hoa_Log_Backtrace_Node($trace);
+            $node = new Node($trace);
 
             if(true === $currentNode->childExists($node->getId()))
                 $currentNode = $currentNode->getChild($node->getId());
             else {
 
-                $child       = new Hoa_Tree($node);
+                $child       = new \Hoa\Tree($node);
                 $currentNode->insert($child);
                 $currentNode = $child;
             }
@@ -136,10 +134,10 @@ class Hoa_Log_Backtrace {
     public function debug ( ) {
 
         $array = debug_backtrace();
-        array_shift($array); // Hoa_Log_Backtrace::debug().
+        array_shift($array); // \Hoa\Log\Backtrace::debug().
 
-        if(isset($array[0]['class']) && $array[0]['class'] == 'Hoa_Log')
-            array_shift($array); // Hoa_Log::log().
+        if(isset($array[0]['class']) && $array[0]['class'] == '\Hoa\Log')
+            array_shift($array); // \Hoa\Log::log().
 
         if(isset($array[0]['function']) && $array[0]['function'] == 'hlog')
             array_shift($array); // hlog().
@@ -168,8 +166,10 @@ class Hoa_Log_Backtrace {
      */
     public function __toString ( ) {
 
-        $out = new Hoa_Tree_Visitor_Dot();
+        $out = new \Hoa\Tree\Visitor\Dot();
 
         return $out->visit($this->getTree());
     }
+}
+
 }

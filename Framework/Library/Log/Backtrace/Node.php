@@ -24,46 +24,44 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Tree
- * @subpackage  Hoa_Log_Backtrace_Node
- *
  */
 
-/**
- * Hoa_Tree_Node_Interface
- */
-import('Tree.Node.Interface');
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Log_Backtrace_Node.
+ * \Hoa\Tree\ITree\Node
+ */
+-> import('Tree.I~.Node');
+
+}
+
+namespace Hoa\Log\Backtrace {
+
+/**
+ * Class \Hoa\Log\Backtrace\Node.
  *
  * Node for the backtrace tree.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Tree
- * @subpackage  Hoa_Log_Backtrace_Node
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Log_Backtrace_Node implements Hoa_Tree_Node_Interface {
+class Node implements \Hoa\Tree\ITree\Node {
 
     /**
      * Node ID.
      *
-     * @var Hoa_Log_Backtrace_Node string
+     * @var \Hoa\Log\Backtrace\Node string
      */
     protected $_id    = null;
 
     /**
      * Node value.
      *
-     * @var Hoa_Log_Backtrace_Node array
+     * @var \Hoa\Log\Backtrace\Node array
      */
     protected $_value = null;
 
@@ -212,4 +210,6 @@ class Hoa_Log_Backtrace_Node implements Hoa_Tree_Node_Interface {
                $this->getType() .
                $this->getFunction();
     }
+}
+
 }
