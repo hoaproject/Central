@@ -24,35 +24,33 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Serialize
- * @subpackage  Hoa_Serialize_Cryonicable
- *
  */
 
-/**
- * Hoa_Serialize_Serializable
- */
-import('Serialize.Serializable');
+namespace {
+
+from('Hoa')
 
 /**
- * Interface Hoa_Serialize_Cryonicable.
+ * \Hoa\Serialize\Serializable
+ */
+-> import('Serialize.Serializable');
+
+}
+
+namespace Hoa\Serialize {
+
+/**
+ * Interface \Hoa\Serialize\Cryonicable.
  *
  * Force to implement __wakeup() and __sleep() method, in addition to the
  * serialize common methods.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Serialize
- * @subpackage  Hoa_Serialize_Cryonicable
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-interface Hoa_Serialize_Cryonicable extends Hoa_Serialize_Serializable {
+interface Cryonicable extends Serializable {
 
     /**
      * Try to reestablish the object statement and behavior before it is slept.
@@ -73,4 +71,6 @@ interface Hoa_Serialize_Cryonicable extends Hoa_Serialize_Serializable {
      * @return  mixed
      */
     public function __sleep ( );
+}
+
 }

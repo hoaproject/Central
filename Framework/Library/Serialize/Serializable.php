@@ -24,26 +24,20 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Serialize
- * @subpackage  Hoa_Serialize_Serializable
- *
  */
 
+namespace Hoa\Serialize {
+
 /**
- * Interface Hoa_Serialize_Serializable.
+ * Interface \Hoa\Serialize\Serializable.
  *
  * Interface indicates that an objet could be serialize.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Serialize
- * @subpackage  Hoa_Serialize_Serializable
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-interface Hoa_Serialize_Serializable extends Serializable { }
+interface Serializable extends \Serializable { }
+
+}
