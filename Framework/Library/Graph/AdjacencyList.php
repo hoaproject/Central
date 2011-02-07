@@ -24,44 +24,42 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Graph
- * @subpackage  Hoa_Graph_AdjacencyList
- *
  */
 
-/**
- * Hoa_Graph
- */
-import('Graph.~');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Graph_Exception
+ * \Hoa\Graph
  */
-import('Graph.Exception');
+-> import('Graph.~')
 
 /**
- * Hoa_Graph_Node_Interface
+ * \Hoa\Graph\Exception
  */
-import('Graph.Node.Interface');
+-> import('Graph.Exception')
 
 /**
- * Class Hoa_Graph_AdjacencyList.
+ * \Hoa\Graph\IGraph\Node
+ */
+-> import('Graph.I~.Node');
+
+}
+
+namespace Hoa\Graph {
+
+/**
+ * Class \Hoa\Graph\AdjacencyList.
  *
  * Code an adjacency list graph.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Graph
- * @subpackage  Hoa_Graph_AdjacencyList
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Graph_AdjacencyList extends Hoa_Graph {
+class AdjacencyList extends Graph {
 
     /**
      * Node value index.
@@ -97,11 +95,11 @@ class Hoa_Graph_AdjacencyList extends Hoa_Graph {
      * @access  public
      * @param   string  $type    Type of graph needed.
      * @return  void
-     * @throw   Hoa_Graph_Exception
+     * @throw   \Hoa\Graph\Exception
      */
     public static function getInstance ( $type = parent::TYPE_ADJACENCYLIST ) {
 
-        throw new Hoa_Graph_Exception(
+        throw new Exception(
             'Cannot get a new from a typped graph.', 0);
     }
 
@@ -109,12 +107,12 @@ class Hoa_Graph_AdjacencyList extends Hoa_Graph {
      * Add a node.
      *
      * @access  public
-     * @param   Hoa_Graph_Node_Interface  $node      Node to add.
-     * @param   mixed                     $parent    Parent of node.
+     * @param   \Hoa\Graph\IGraph\Node  $node      Node to add.
+     * @param   mixed                   $parent    Parent of node.
      * @return  void
-     * @throw   Hoa_Graph_Exception
+     * @throw   \Hoa\Graph\Exception
      */
-    public function addNode ( Hoa_Graph_Node_Interface $node,
+    public function addNode ( IGraph\Node $node,
                               $parent = array() ) {
 
         if(!is_array($parent))
@@ -123,11 +121,11 @@ class Hoa_Graph_AdjacencyList extends Hoa_Graph {
         if(parent::DISALLOW_LOOP === $this->isLoopAllow()) {
 
             if(true === $this->nodeExists($node->getNodeId()))
-                throw new Hoa_Graph_Exception(
+                throw new Exception(
                     'Node %s already exists.', 1, $node->getNodeId());
 
             if(in_array($node->getNodeId(), $parent))
-                throw new Hoa_Graph_Exception(
+                throw new Exception(
                     'Node %s cannot define itself in parent.', 2,
                     $node->getNodeId());
         }
@@ -139,12 +137,12 @@ class Hoa_Graph_AdjacencyList extends Hoa_Graph {
 
         foreach($parent as $foo => $nodeId) {
 
-            if($nodeId instanceof Hoa_Graph_Node_Interface)
+            if($nodeId instanceof IGraph\Node)
                 $nodeId = $nodeId->getNodeId();
 
             if(parent::DISALLOW_LOOP === $this->isLoopAllow())
                 if(false === $this->nodeExists($nodeId))
-                    throw new Hoa_Graph_Exception(
+                    throw new Exception(
                         'Node %s does not exist.', 3, $nodeId);
 
             $this->nodes[$nodeId][self::NODE_CHILD][] = $node->getNodeId();
@@ -160,7 +158,7 @@ class Hoa_Graph_AdjacencyList extends Hoa_Graph {
      */
     public function nodeExists ( $nodeId ) {
 
-        if($nodeId instanceof Hoa_Graph_Node_Interface)
+        if($nodeId instanceof IGraph\Node)
             $nodeId = $nodeId->getNodeId();
 
         return isset($this->nodes[$nodeId]);
@@ -172,15 +170,15 @@ class Hoa_Graph_AdjacencyList extends Hoa_Graph {
      * @access  public
      * @param   mixed   $nodeId    The node ID or the node instance.
      * @return  object
-     * @throw   Hoa_Graph_Exception
+     * @throw   \Hoa\Graph\Exception
      */
     public function getNode ( $nodeId ) {
 
-        if($nodeId instanceof Hoa_Graph_Node_Interface)
+        if($nodeId instanceof IGraph\Node)
             $nodeId = $nodeId->getNodeId();
 
         if(false === $this->nodeExists($nodeId))
-            throw new Hoa_Graph_Exception(
+            throw new Exception(
                 'Node %s does not exist.', 4, $nodeId);
 
         return $this->nodes[$nodeId][self::NODE_VALUE];
@@ -192,19 +190,19 @@ class Hoa_Graph_AdjacencyList extends Hoa_Graph {
      * @access  public
      * @param   mixed   $nodeId    The node ID or the node instance.
      * @return  object
-     * @throw   Hoa_Graph_Exception
+     * @throw   \Hoa\Graph\Exception
      */
     public function getParent ( $nodeId ) {
 
-        if($nodeId instanceof Hoa_Graph_Node_Interface)
+        if($nodeId instanceof IGraph\Node)
             $nodeId = $nodeId->getNodeId();
 
         if(false === $this->nodeExists($nodeId))
-            throw new Hoa_Graph_Exception(
+            throw new Exception(
                 'Node %s does not exist.', 5, $nodeId);
 
-        $parent = new ArrayObject(
-            array(), ArrayObject::ARRAY_AS_PROPS, 'ArrayIterator');
+        $parent = new \ArrayObject(
+            array(), \ArrayObject::ARRAY_AS_PROPS, 'ArrayIterator');
 
         foreach($this->getNodes() as $id => $values ) {
 
@@ -228,19 +226,19 @@ class Hoa_Graph_AdjacencyList extends Hoa_Graph {
      * @access  public
      * @param   mixed   $nodeId    The node ID or the node instance.
      * @return  object
-     * @throw   Hoa_Graph_Exception
+     * @throw   \Hoa\Graph\Exception
      */
     public function getChild ( $nodeId ) {
 
-        if($nodeId instanceof Hoa_Graph_Node_Interface)
+        if($nodeId instanceof IGraph\Node)
             $nodeId = $nodeId->getNodeId();
 
         if(false === $this->nodeExists($nodeId))
-            throw new Hoa_Graph_Exception(
+            throw new Exception(
                 'Node %s does not exist.', 6, $nodeId);
 
-        $child = new ArrayObject(
-            array(), ArrayObject::ARRAY_AS_PROPS, 'ArrayIterator');
+        $child = new \ArrayObject(
+            array(), \ArrayObject::ARRAY_AS_PROPS, 'ArrayIterator');
 
         foreach($this->nodes[$nodeId][self::NODE_CHILD] as $foo => $id)
             $child->offsetSet(
@@ -258,11 +256,11 @@ class Hoa_Graph_AdjacencyList extends Hoa_Graph {
      * @param   mixed   $nodeId       The node ID or the node instance.
      * @param   bool    $propagate    Propagate the erasure.
      * @return  void
-     * @throw   Hoa_Graph_Exception
+     * @throw   \Hoa\Graph\Exception
      */
     public function deleteNode ( $nodeId, $propagate = parent::DELETE_RESTRICT ) {
 
-        if($nodeId instanceof Hoa_Graph_Node_Interface)
+        if($nodeId instanceof IGraph\Node)
             $nodeId = $nodeId->getNodeId();
 
         if(false === $this->nodeExists($nodeId))
@@ -279,7 +277,7 @@ class Hoa_Graph_AdjacencyList extends Hoa_Graph {
                         unset($this->nodes[$id][self::NODE_CHILD][$key]);
             }
             else
-                throw new Hoa_Graph_Exception(
+                throw new Exception(
                     'Cannot delete %s node in restrict delete mode, because ' .
                     'it has one or more children.', 7, $nodeId);
         else {
@@ -297,15 +295,15 @@ class Hoa_Graph_AdjacencyList extends Hoa_Graph {
      * @access  public
      * @param   mixed   $nodeId    The node ID or the node instance.
      * @return  bool
-     * @throw   Hoa_Graph_Exception
+     * @throw   \Hoa\Graph\Exception
      */
     public function isLeaf ( $nodeId ) {
 
-        if($nodeId instanceof Hoa_Graph_Node_Interface)
+        if($nodeId instanceof IGraph\Node)
             $nodeId = $nodeId->getNodeId();
 
         if(false === $this->nodeExists($nodeId))
-            throw new Hoa_Graph_Exception(
+            throw new Exception(
                 'Node %s does not exist.', 8, $nodeId);
 
         return empty($this->nodes[$nodeId][self::NODE_CHILD]);
@@ -317,15 +315,15 @@ class Hoa_Graph_AdjacencyList extends Hoa_Graph {
      * @access  public
      * @param   mixed   $nodeId    The node ID or the node instance.
      * @return  bool
-     * @throw   Hoa_Graph_Exception
+     * @throw   \Hoa\Graph\Exception
      */
     public function isRoot ( $nodeId ) {
 
-        if($nodeId instanceof Hoa_Graph_Node_Interface)
+        if($nodeId instanceof IGraph\Node)
             $nodeId = $nodeId->getNodeId();
 
         if(false === $this->nodeExists($nodeId))
-            throw new Hoa_Graph_Exception(
+            throw new Exception(
                 'Node %s does not exist.', 9, $nodeId);
 
         return count($this->getParent($nodeId)) == 0;
@@ -352,4 +350,6 @@ class Hoa_Graph_AdjacencyList extends Hoa_Graph {
 
         return $out;
     }
+}
+
 }

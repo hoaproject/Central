@@ -24,40 +24,35 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Graph
- *
  */
 
-/**
- * Hoa_Graph_Exception
- */
-import('Graph.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Factory
+ * \Hoa\Graph\Exception
  */
-import('Factory.~');
+-> import('Graph.Exception');
+
+}
+
+namespace Hoa\Graph {
 
 /**
- * Class Hoa_Graph.
+ * Class \Hoa\Graph.
  *
  * Get instance of different graph type.
  * When getting an instance of a type of a graph, the graph type (e.g.
- * Hoa_Graph_AdjacencyList) extends this class. It is like an abstract
+ * \Hoa\Graph\AdjacencyList) extends this class. It is like an abstract
  * factory…
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Graph
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-abstract class Hoa_Graph {
+abstract class Graph {
 
     /**
      * Graph type.
@@ -97,7 +92,7 @@ abstract class Hoa_Graph {
     /**
      * All nodes.
      *
-     * @var Hoa_Graph array
+     * @var \Hoa\Graph array
      */
     protected $nodes = array();
 
@@ -105,7 +100,7 @@ abstract class Hoa_Graph {
      * If allow loop when building graph, it is set to ALLOW_LOOP (true),
      * DISALLOW_LOOP (false) else.
      *
-     * @var Hoa_Graph bool
+     * @var \Hoa\Graph bool
      */
     protected $loop  = self::DISALLOW_LOOP;
 
@@ -129,42 +124,31 @@ abstract class Hoa_Graph {
      * @access  public
      * @param   string  $type    Type of graph needed.
      * @return  void
-     * @throw   Hoa_Graph_Exception
+     * @throw   \Hoa\Graph\Exception
      */
     public static function getInstance ( $type = self::TYPE_ADJACENCYLIST ) {
 
         if($type != self::TYPE_ADJACENCYLIST)
-            throw new Hoa_Graph_Exception(
+            throw new Exception(
                 'Type %s is not supported. Only self:TYPE_ADJACENCYLIST is ' .
                 'supported.', 0, $type);
 
-        $args = func_get_args();
-        array_shift($args);
+        $arguments = func_get_args();
+        array_shift($arguments);
 
-        $handler = null;
-
-        try {
-
-            $handler = Hoa_Factory::get('Graph', $type, $args);
-        }
-        catch ( Hoa_Factory_Exception $e ) {
-
-            throw new Hoa_Graph_Exception($e->getMessage(), $e->getCode());
-        }
-
-        return $handler;
+        return dnew('Hoa.Graph.' . $type, $arguments);
     }
 
     /**
      * Add a node.
      *
      * @access  public
-     * @param   Hoa_Graph_Node_Interface  $node      Node to add.
-     * @param   mixed                     $parent    Parent of node.
+     * @param   \Hoa\Graph\IGraph\Node  $node      Node to add.
+     * @param   mixed                   $parent    Parent of node.
      * @return  void
-     * @throw   Hoa_Graph_Exception
+     * @throw   \Hoa\Graph\Exception
      */
-    abstract public function addNode ( Hoa_Graph_Node_Interface $node,
+    abstract public function addNode ( \Hoa\Graph\IGraph\Node $node,
                                        $parent = array() );
 
     /**
@@ -182,7 +166,7 @@ abstract class Hoa_Graph {
      * @access  public
      * @param   mixed   $nodeId    The node ID or the node instance.
      * @return  object
-     * @throw   Hoa_Graph_Exception
+     * @throw   \Hoa\Graph\Exception
      */
     abstract public function getNode ( $nodeId );
 
@@ -203,7 +187,7 @@ abstract class Hoa_Graph {
      * @access  public
      * @param   mixed   $nodeId    The node ID or the node instance.
      * @return  object
-     * @throw   Hoa_Graph_Exception
+     * @throw   \Hoa\Graph\Exception
      */
     abstract public function getParent ( $nodeId );
 
@@ -213,7 +197,7 @@ abstract class Hoa_Graph {
      * @access  public
      * @param   mixed   $nodeId    The node ID or the node instance.
      * @return  object
-     * @throw   Hoa_Graph_Exception
+     * @throw   \Hoa\Graph\Exception
      */
     abstract public function getChild ( $nodeId );
 
@@ -224,7 +208,7 @@ abstract class Hoa_Graph {
      * @param   mixed   $nodeId       The node ID or the node instance.
      * @param   bool    $propagate    Propagate the erasure.
      * @return  void
-     * @throw   Hoa_Graph_Exception
+     * @throw   \Hoa\Graph\Exception
      */
     abstract public function deleteNode ( $nodeId, $propagate = self::DELETE_RESTRICT );
 
@@ -234,7 +218,7 @@ abstract class Hoa_Graph {
      * @access  public
      * @param   mixed   $nodeId    The node ID or the node instance.
      * @return  bool
-     * @throw   Hoa_Graph_Exception
+     * @throw   \Hoa\Graph\Exception
      */
     abstract public function isLeaf ( $nodeId );
 
@@ -244,7 +228,7 @@ abstract class Hoa_Graph {
      * @access  public
      * @param   mixed   $nodeId    The node ID or the node instance.
      * @return  bool
-     * @throw   Hoa_Graph_Exception
+     * @throw   \Hoa\Graph\Exception
      */
     abstract public function isRoot ( $nodeId );
 
@@ -281,4 +265,6 @@ abstract class Hoa_Graph {
      * @return  string
      */
     abstract public function __toString ( );
+}
+
 }
