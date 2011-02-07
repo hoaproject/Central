@@ -136,8 +136,8 @@ class Backtrace {
         $array = debug_backtrace();
         array_shift($array); // \Hoa\Log\Backtrace::debug().
 
-        if(isset($array[0]['class']) && $array[0]['class'] == '\Hoa\Log')
-            array_shift($array); // \Hoa\Log::log().
+        if(isset($array[0]['class']) && $array[0]['class'] == 'Hoa\Log\Log')
+            array_shift($array); // Hoa\Log::log().
 
         if(isset($array[0]['function']) && $array[0]['function'] == 'hlog')
             array_shift($array); // hlog().
