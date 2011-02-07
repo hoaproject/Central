@@ -24,46 +24,42 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_StringBuffer
- * @subpackage  Hoa_StringBuffer_Write
- *
  */
 
-/**
- * Hoa_StringBuffer_Exception
- */
-import('StringBuffer.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_StringBuffer
+ * \Hoa\StringBuffer\Exception
  */
-import('StringBuffer.~');
+-> import('StringBuffer.Exception')
 
 /**
- * Hoa_Stream_Interface_Out
+ * \Hoa\StringBuffer
  */
-import('Stream.Interface.Out');
+-> import('StringBuffer.~')
 
 /**
- * Class Hoa_StringBuffer_Write.
+ * \Hoa\Stream\IStream\Out
+ */
+-> import('Stream.I~.Out');
+
+}
+
+namespace Hoa\StringBuffer {
+
+/**
+ * Class \Hoa\StringBuffer\Write.
  *
  * Write into a string buffer.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.3
- * @package     Hoa_StringBuffer
- * @subpackage  Hoa_StringBuffer_Write
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class          Hoa_StringBuffer_Write
-    extends    Hoa_StringBuffer
-    implements Hoa_Stream_Interface_Out {
+class Write extends StringBuffer implements \Hoa\Stream\IStream\Out {
 
     /**
      * Write n characters.
@@ -72,12 +68,12 @@ class          Hoa_StringBuffer_Write
      * @param   string  $string    String.
      * @param   int     $length    Length.
      * @return  mixed
-     * @throw   Hoa_StringBuffer_Exception
+     * @throw   \Hoa\StringBuffer\Exception
      */
     public function write ( $string, $length ) {
 
         if($length <= 0)
-            throw new Hoa_StringBuffer_Exception(
+            throw new Exception(
                 'Length must be greather than 0, given %d.', 0, $length);
 
         return fwrite($this->getStream(), $string, $length);
@@ -175,7 +171,7 @@ class          Hoa_StringBuffer_Write
         if(false === $n = strpos($line, "\n"))
             return $this->write($line . "\n", strlen($line) + 1);
 
-        $n++;
+        ++$n;
 
         return $this->write(substr($line, 0, $n), $n);
     }
@@ -203,4 +199,6 @@ class          Hoa_StringBuffer_Write
 
         return ftruncate($this->getStream(), $size);
     }
+}
+
 }

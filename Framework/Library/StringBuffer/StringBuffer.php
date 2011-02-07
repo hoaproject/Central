@@ -24,56 +24,56 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_StringBuffer
- *
  */
 
-/**
- * Hoa_Stream
- */
-import('Stream.~');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Stream_Interface_Bufferable
+ * \Hoa\Stream
  */
-import('Stream.Interface.Bufferable');
+-> import('Stream.~')
 
 /**
- * Hoa_Stream_Interface_Lockable
+ * \Hoa\Stream\IStream\Bufferable
  */
-import('Stream.Interface.Lockable');
+-> import('Stream.I~.Bufferable')
 
 /**
- * Hoa_Stream_Interface_Pointable
+ * \Hoa\Stream\IStream\Lockable
  */
-import('Stream.Interface.Pointable');
+-> import('Stream.I~.Lockable')
 
 /**
- * Class Hoa_StringBuffer.
+ * \Hoa\Stream\IStream\Pointable
+ */
+-> import('Stream.I~.Pointable');
+
+}
+
+namespace Hoa\StringBuffer {
+
+/**
+ * Class \Hoa\StringBuffer.
  *
  * 
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_StringBuffer
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-abstract class Hoa_StringBuffer
-    extends    Hoa_Stream
-    implements Hoa_Stream_Interface_Bufferable,
-               Hoa_Stream_Interface_Lockable,
-               Hoa_Stream_Interface_Pointable {
+abstract class StringBuffer
+    extends    \Hoa\Stream
+    implements \Hoa\Stream\IStream\Bufferable,
+               \Hoa\Stream\IStream\Lockable,
+               \Hoa\Stream\IStream\Pointable {
 
     /**
      * String buffer index.
      *
-     * @var Hoa_StringBuffer int
+     * @var \Hoa\StringBuffer int
      */
     private static $_i = 0;
 
@@ -85,7 +85,7 @@ abstract class Hoa_StringBuffer
      * @access  public
      * @param   string  $streamName    Stream name.
      * @return  void
-     * @throw   Hoa_Stream_Exception
+     * @throw   \Hoa\Stream\Exception
      */
     public function __construct ( $streamName = null ) {
 
@@ -104,14 +104,14 @@ abstract class Hoa_StringBuffer
      * @access  protected
      * @param   string              $streamName    Stream name (here, it is
      *                                             null).
-     * @param   Hoa_Stream_Context  $context       Context.
+     * @param   \Hoa\Stream\Context  $context       Context.
      * @return  resource
-     * @throw   Hoa_StringBuffer_Exception
+     * @throw   \Hoa\StringBuffer\Exception
      */
-    protected function &_open ( $streamName, Hoa_Stream_Context $context = null ) {
+    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
 
         if(false === $out = @tmpfile())
-            throw new Hoa_StringBuffer_Exception(
+            throw new Exception(
                 'Failed to open a string buffer.', 0);
 
         return $out;
@@ -144,7 +144,7 @@ abstract class Hoa_StringBuffer
      *
      * @access  public
      * @param   int     $operation    Operation, use the
-     *                                Hoa_Stream_Interface_Lockable::LOCK_* constants.
+     *                                \Hoa\Stream\IStream\Lockable::LOCK_* constants.
      * @return  bool
      */
     public function lock ( $operation ) {
@@ -168,11 +168,11 @@ abstract class Hoa_StringBuffer
      *
      * @access  public
      * @param   int     $offset    Offset (negative value should be supported).
-     * @param   int     $whence    When, use the Hoa_Stream_Interface_Pointable::SEEK_*
+     * @param   int     $whence    When, use the \Hoa\Stream\IStream\Pointable::SEEK_*
      *                             constants.
      * @return  int
      */
-    public function seek ( $offset, $whence = Hoa_Stream_Interface_Pointable::SEEK_SET ) {
+    public function seek ( $offset, $whence = \Hoa\Stream\IStream\Pointable::SEEK_SET ) {
 
         return fseek($this->getStream(), $offset, $whence);
     }
@@ -198,15 +198,17 @@ abstract class Hoa_StringBuffer
      *
      * @access  public
      * @param   string  $string    String.
-     * @return  Hoa_StringBuffer
+     * @return  \Hoa\StringBuffer
      */
     public function initializeWith ( $string ) {
 
         ftruncate($this->getStream(), 0);
         fwrite($this->getStream(), $string, strlen($string));
 
-        $this->seek(0, Hoa_Stream_Interface_Pointable::SEEK_SET);
+        $this->seek(0, \Hoa\Stream\IStream\Pointable::SEEK_SET);
 
         return $this;
     }
+}
+
 }
