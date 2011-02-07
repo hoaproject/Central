@@ -24,51 +24,47 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Tree
- * @subpackage  Hoa_Tree_Visitor_Dump
- *
  */
 
-/**
- * Hoa_Tree_Exception
- */
-import('Tree.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Tree_Visitor_Abstract
+ * \Hoa\Tree\Exception
  */
-import('Tree.Visitor.Abstract');
+-> import('Tree.Exception')
 
 /**
- * Hoa_Visitor_Visit
+ * \Hoa\Tree\Visitor\Generic
  */
-import('Visitor.Visit');
+-> import('Tree.Visitor.Generic')
 
 /**
- * Class Hoa_Tree_Visitor_Dump.
+ * \Hoa\Visitor\Visit
+ */
+-> import('Visitor.Visit');
+
+}
+
+namespace Hoa\Tree\Visitor {
+
+/**
+ * Class \Hoa\Tree\Visitor\Dump.
  *
  * Dump a tree.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Tree
- * @subpackage  Hoa_Tree_Visitor_Dump
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class          Hoa_Tree_Visitor_Dump
-    extends    Hoa_Tree_Visitor_Abstract
-    implements Hoa_Visitor_Visit {
+class Dump extends Generic implements \Hoa\Visitor\Visit {
 
     /**
      * Tree deep.
      *
-     * @var Hoa_Tree_Visitor_Dump int
+     * @var \Hoa\Tree\Visitor\Dump int
      */
     protected $_i = 0;
 
@@ -93,12 +89,12 @@ class          Hoa_Tree_Visitor_Dump
      * Visit an element.
      *
      * @access  public
-     * @param   Hoa_Visitor_Element  $element    Element to visit.
-     * @param   mixed                &$handle    Handle (reference).
-     * @param   mixed                $eldnah     Handle (not reference).
+     * @param   \Hoa\Visitor\Element  $element    Element to visit.
+     * @param   mixed                 &$handle    Handle (reference).
+     * @param   mixed                 $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visit ( Hoa_Visitor_Element $element,
+    public function visit ( \Hoa\Visitor\Element $element,
                             &$handle = null,
                              $eldnah = null ) {
 
@@ -110,7 +106,7 @@ class          Hoa_Tree_Visitor_Dump
         $i      = 0;
         $max    = floor(count($childs) / 2);
 
-        $this->_i++;
+        ++$this->_i;
 
         foreach($childs as $id => $child)
             if($i++ < $max)
@@ -118,7 +114,7 @@ class          Hoa_Tree_Visitor_Dump
             else
                 $post .= $child->accept($this, $handle, $eldnah);
 
-        $this->_i--;
+        --$this->_i;
 
         switch($this->getOrder()) {
 
@@ -135,4 +131,6 @@ class          Hoa_Tree_Visitor_Dump
               break;
         }
     }
+}
+
 }

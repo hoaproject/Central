@@ -24,58 +24,56 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Tree
- * @subpackage  Hoa_Tree_Binary
- *
  */
 
-/**
- * Hoa_Tree_Exception
- */
-import('Tree.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Tree_Abstract
+ * \Hoa\Tree\Exception
  */
-import('Tree.Abstract');
+-> import('Tree.Exception')
 
 /**
- * Class Hoa_Tree_Binary.
+ * \Hoa\Tree\Generic
+ */
+-> import('Tree.Abstract');
+
+}
+
+namespace Hoa\Tree {
+
+/**
+ * Class \Hoa\Tree\Binary.
  *
  * Manipulate a binary tree.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Tree
- * @subpackage  Hoa_Tree_Binary
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Tree_Binary extends Hoa_Tree_Abstract {
+class Binary extends Generic {
 
     /**
      * Insert a child.
      * Fill the child list from left to right.
      *
      * @access  public
-     * @param   Hoa_Tree_Binary  $child    Child to insert.
-     * @return  Hoa_Tree_Binary
-     * @throw   Hoa_Tree_Exception
+     * @param   \Hoa\Tree\Generic  $child    Child to insert.
+     * @return  \Hoa\Tree\Generic
+     * @throw   \Hoa\Tree\Exception
      */
-    public function insert ( Hoa_Tree_Abstract $child ) {
+    public function insert ( Generic $child ) {
 
-        if(!($child instanceof Hoa_Tree_Binary))
-            throw new Hoa_Tree_Exception(
-                'Child must be an instance of Hoa_Tree_Binary; given %s.',
+        if(!($child instanceof Binary))
+            throw new Exception(
+                'Child must be an instance of Binary; given %s.',
                 0, get_class($child));
 
         if(true === $this->isDouble())
-            throw new Hoa_Tree_Exception(
+            throw new Exception(
                 'Cannot insert a new element: left and right child are ' .
                 'already set.', 1);
 
@@ -98,14 +96,14 @@ class Hoa_Tree_Binary extends Hoa_Tree_Abstract {
      * Insert the left child.
      *
      * @access  public
-     * @param   Hoa_Tree_Binary  $child    Child to insert.
-     * @return  Hoa_Tree_Binary
-     * @throw   Hoa_Tree_Exception
+     * @param   \Hoa\Tree\Binary  $child    Child to insert.
+     * @return  \Hoa\Tree\Binary
+     * @throw   \Hoa\Tree\Exception
      */
-    public function insertLeft ( Hoa_Tree_Binary $child ) {
+    public function insertLeft ( Binary $child ) {
 
         if(false === $this->isSimpleLeft())
-            throw new Hoa_Tree_Exception(
+            throw new Exception(
                 'Left child is already set.', 2);
 
         $this->_childs[0] = $child;
@@ -117,14 +115,14 @@ class Hoa_Tree_Binary extends Hoa_Tree_Abstract {
      * Insert the right child.
      *
      * @access  public
-     * @param   Hoa_Tree_Binary  $child    Child to insert.
-     * @return  Hoa_Tree_Binary
-     * @throw   Hoa_Tree_Exception
+     * @param   \Hoa\Tree\Binary  $child    Child to insert.
+     * @return  \Hoa\Tree\Binary
+     * @throw   \Hoa\Tree\Exception
      */
-    public function insertRight ( Hoa_Tree_Binary $child ) {
+    public function insertRight ( Binary $child ) {
 
         if(true === $this->isSimpleRight())
-            throw new Hoa_Tree_Exception(
+            throw new Exception(
                 'Right child is already set.', 3);
 
         $this->_childs[1] = $child;
@@ -137,7 +135,7 @@ class Hoa_Tree_Binary extends Hoa_Tree_Abstract {
      *
      * @access  public
      * @param   int     $i    Child index.
-     * @return  Hoa_Tree_Binary
+     * @return  \Hoa\Tree\Binary
      */
     public function delete ( $i ) {
 
@@ -145,7 +143,7 @@ class Hoa_Tree_Binary extends Hoa_Tree_Abstract {
 
             $this->_childs[0] = null;
 
-            return;
+            return $this;
         }
 
         $this->_childs[1] = null;
@@ -157,7 +155,7 @@ class Hoa_Tree_Binary extends Hoa_Tree_Abstract {
      * Delete the left child.
      *
      * @access  public
-     * @return  Hoa_Tree_Binary
+     * @return  \Hoa\Tree\Binary
      */
     public function deleteLeft ( ) {
 
@@ -168,7 +166,7 @@ class Hoa_Tree_Binary extends Hoa_Tree_Abstract {
      * Delete the right child.
      *
      * @access  public
-     * @return  Hoa_Tree_Binary
+     * @return  \Hoa\Tree\Binary
      */
     public function deleteRight ( ) {
 
@@ -241,7 +239,7 @@ class Hoa_Tree_Binary extends Hoa_Tree_Abstract {
      * Get the left child.
      *
      * @access  public
-     * @return  Hoa_Tree_Binary
+     * @return  \Hoa\Tree\Binary
      */
     public function getLeft ( ) {
 
@@ -255,7 +253,7 @@ class Hoa_Tree_Binary extends Hoa_Tree_Abstract {
      * Get the right child.
      *
      * @access  public
-     * @return  Hoa_Tree_Binary
+     * @return  \Hoa\Tree\Binary
      */
     public function getRight ( ) {
 
@@ -270,13 +268,13 @@ class Hoa_Tree_Binary extends Hoa_Tree_Abstract {
      *
      * @access  public
      * @param   mixed   $nodeId    Node ID.
-     * @return  Hoa_Tree_Binary
-     * @throw   Hoa_Tree_Exception
+     * @return  \Hoa\Tree\Binary
+     * @throw   \Hoa\Tree\Exception
      */
     public function getChild ( $nodeId ) {
 
         if(false === $i = $this->_childExists($nodeId))
-            throw new Hoa_Tree_Exception(
+            throw new Exception(
                 'Child %s does not exist.', 0, $nodeId);
 
         return $this->_childs[$i];
@@ -314,4 +312,6 @@ class Hoa_Tree_Binary extends Hoa_Tree_Abstract {
 
         return false;
     }
+}
+
 }

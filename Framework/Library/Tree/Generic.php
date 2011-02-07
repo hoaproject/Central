@@ -24,65 +24,63 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Tree
- * @subpackage  Hoa_Tree_Abstract
- *
  */
 
-/**
- * Hoa_Tree_Exception
- */
-import('Tree.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Tree_Node_Interface
+ * \Hoa\Tree\Exception
  */
-import('Tree.Node.Interface');
+-> import('Tree.Exception')
 
 /**
- * Hoa_Tree_Node_SimpleNode
+ * \Hoa\Tree\ITree\Node
  */
-import('Tree.Node.SimpleNode');
+-> import('Tree.I~.Node')
 
 /**
- * Hoa_Visitor_Element
+ * \Hoa\Tree\SimpleNode
  */
-import('Visitor.Element');
+-> import('Tree.SimpleNode')
 
 /**
- * Class Hoa_Tree_Abstract.
+ * \Hoa\Visitor\Element
+ */
+-> import('Visitor.Element');
+
+}
+
+namespace Hoa\Tree {
+
+/**
+ * Class \Hoa\Tree\Generic.
  *
  * Here is an abstract tree.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Tree
- * @subpackage  Hoa_Tree_Abstract
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-abstract class Hoa_Tree_Abstract
-    implements Hoa_Visitor_Element,
-               Iterator,
-               SeekableIterator,
-               Countable {
+abstract class Generic
+    implements \Hoa\Visitor\Element,
+               \Iterator,
+               \SeekableIterator,
+               \Countable {
 
     /**
      * Node value.
      *
-     * @var Hoa_Tree_Node_Interface object
+     * @var \Hoa\Tree\ITree\Node object
      */
     protected $_value  = null;
 
     /**
      * List of childs.
      *
-     * @var Hoa_Tree_Abstract array
+     * @var \Hoa\Tree\Generic array
      */
     protected $_childs = array();
 
@@ -110,8 +108,8 @@ abstract class Hoa_Tree_Abstract
      */
     public function setValue ( $value ) {
 
-        if(!($value instanceof Hoa_Tree_Node_Interface))
-            $value    = new Hoa_Tree_Node_SimpleNode(md5($value), $value);
+        if(!($value instanceof \Hoa\Tree\ITree\Node))
+            $value    = new \Hoa\Tree\SimpleNode(md5($value), $value);
 
         $old          = $this->_value;
         $this->_value = $value;
@@ -123,7 +121,7 @@ abstract class Hoa_Tree_Abstract
      * Get the node value.
      *
      * @access  public
-     * @return  Hoa_Tree_Node_Interface
+     * @return  \Hoa\Tree\ITree\Node
      */
     public function getValue ( ) {
 
@@ -134,7 +132,7 @@ abstract class Hoa_Tree_Abstract
      * Get the current child for the iterator.
      *
      * @access  public
-     * @return  Hoa_Tree_Abstract
+     * @return  \Hoa\Tree\Generic
      */
     public function current ( ) {
 
@@ -156,7 +154,7 @@ abstract class Hoa_Tree_Abstract
      * Advance the internal child pointer, and return the current child.
      *
      * @access  public
-     * @return  Hoa_Tree_Abstract
+     * @return  \Hoa\Tree\Generic
      */
     public function next ( ) {
 
@@ -167,7 +165,7 @@ abstract class Hoa_Tree_Abstract
      * Rewind the internal child pointer, and return the first child.
      *
      * @access  public
-     * @return  Hoa_Tree_Abstract
+     * @return  \Hoa\Tree\Generic
      */
     public function rewind ( ) {
 
@@ -236,13 +234,13 @@ abstract class Hoa_Tree_Abstract
      *
      * @access  public
      * @param   mixed   $nodeId    Node ID.
-     * @return  Hoa_Tree_Abstract
-     * @throw   Hoa_Tree_Exception
+     * @return  \Hoa\Tree\Generic
+     * @throw   \Hoa\Tree\Exception
      */
     public function getChild ( $nodeId ) {
 
         if(false === $this->childExists($nodeId))
-            throw new Hoa_Tree_Exception(
+            throw new Exception(
                 'Child %s does not exist.', 0, $nodeId);
 
         return $this->_childs[$nodeId];
@@ -276,19 +274,19 @@ abstract class Hoa_Tree_Abstract
      * Fill the child list from left to right.
      *
      * @access  public
-     * @param   Hoa_Tree_Abstract  $child    Child to insert.
-     * @return  Hoa_Tree_Abstract
-     * @throw   Hoa_Tree_Exception
+     * @param   \Hoa\Tree\Generic  $child    Child to insert.
+     * @return  \Hoa\Tree\Generic
+     * @throw   \Hoa\Tree\Exception
      */
-    abstract public function insert ( Hoa_Tree_Abstract $child );
+    abstract public function insert ( \Hoa\Tree\Generic $child );
 
     /**
      * Delete a child.
      *
      * @access  public
      * @param   int     $i    Child index.
-     * @return  Hoa_Tree_Abstract
-     * @throw   Hoa_Tree_Exception
+     * @return  \Hoa\Tree\Generic
+     * @throw   \Hoa\Tree\Exception
      */
     abstract public function delete ( $i );
 
@@ -312,15 +310,17 @@ abstract class Hoa_Tree_Abstract
      * Accept a visitor.
      *
      * @access  public
-     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   \Hoa\Visitor\Visit  $visitor    Visitor.
      * @param   mixed              &$handle    Handle (reference).
      * @param   mixed              $eldnah     Handle (not reference).
      * @return  mixed
      */
-    public function accept ( Hoa_Visitor_Visit $visitor,
+    public function accept ( \Hoa\Visitor\Visit $visitor,
                              &$handle = null,
                               $eldnah = null ) {
 
         return $visitor->visit($this, $handle, $eldnah);
     }
+}
+
 }

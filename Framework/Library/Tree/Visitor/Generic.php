@@ -24,39 +24,37 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Tree
- * @subpackage  Hoa_Tree_Visitor_Abstract
- *
  */
 
-/**
- * Hoa_Tree_Exception
- */
-import('Tree.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Visitor_Registry
+ * \Hoa\Tree\Exception
  */
-import('Visitor.Registry');
+-> import('Tree.Exception')
 
 /**
- * Class Hoa_Tree_Visitor_Abstract.
+ * \Hoa\Visitor\Registry
+ */
+-> import('Visitor.Registry');
+
+}
+
+namespace Hoa\Tree\Visitor {
+
+/**
+ * Class \Hoa\Tree\Visitor\Generic.
  *
  * Abstract tree visitor.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Tree
- * @subpackage  Hoa_Tree_Visitor_Abstract
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-abstract class Hoa_Tree_Visitor_Abstract extends Hoa_Visitor_Registry {
+abstract class Generic extends \Hoa\Visitor\Registry {
 
     /**
      * Pre-order traversal.
@@ -82,7 +80,7 @@ abstract class Hoa_Tree_Visitor_Abstract extends Hoa_Visitor_Registry {
     /**
      * Traversal order.
      *
-     * @var Hoa_Tree_Visitor_Abstract int
+     * @var \Hoa\Tree\Visitor\Abstract int
      */
     protected $_order = self::PRE_ORDER;
 
@@ -129,4 +127,6 @@ abstract class Hoa_Tree_Visitor_Abstract extends Hoa_Visitor_Registry {
 
         return $this->_order;
     }
+}
+
 }

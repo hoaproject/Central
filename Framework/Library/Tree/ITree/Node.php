@@ -24,29 +24,21 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Tree
- * @subpackage  Hoa_Tree_Node_Interface
- *
  */
 
+namespace Hoa\Tree\ITree {
+
 /**
- * Interface Hoa_Tree_Node_Interface.
+ * Interface \Hoa\Tree\ITree\Node.
  *
  * Interface for tree nodes.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Tree
- * @subpackage  Hoa_Tree_Node_Interface
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-interface Hoa_Tree_Node_Interface {
+interface Node {
 
     /**
      * Get the node ID.
@@ -63,4 +55,6 @@ interface Hoa_Tree_Node_Interface {
      * @return  string
      */
     public function __toString ( );
+}
+
 }
