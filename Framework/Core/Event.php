@@ -24,57 +24,45 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Core
- * @subpackage  Hoa_Core_Event
- *
  */
 
+namespace Hoa\Core\Event {
+
 /**
- * Interface Hoa_Core_Event_Source.
+ * Interface \Hoa\Core\Event\Source.
  *
  * Each object which is observable must implement this interface.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP5
- * @version     0.1
- * @package     Hoa_Core_Event
- * @subpackage  Hoa_Core_Event_Source
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-interface Hoa_Core_Event_Source { }
+interface Source { }
 
 /**
- * Class Hoa_Core_Event_Bucket.
+ * Class \Hoa\Core\Event\Bucket.
  *
  * This class is the object which is transmit through event channels.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP5
- * @version     0.1
- * @package     Hoa_Core_Event
- * @subpackage  Hoa_Core_Event_Bucket
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Core_Event_Bucket {
+class Bucket {
 
     /**
      * Source object.
      *
-     * @var Hoa_Core_Event_Source object
+     * @var \Hoa\Core\Event\Source object
      */
     protected $_source = null;
 
     /**
      * Data.
      *
-     * @var Hoa_Core_Event_Bucket mixed
+     * @var \Hoa\Core\Event\Bucket mixed
      */
     protected $_data   = null;
 
@@ -98,24 +86,24 @@ class Hoa_Core_Event_Bucket {
      * Send this object on the event channel.
      *
      * @access  public
-     * @param   string                 $eventId    Event ID.
-     * @param   Hoa_Core_Event_Source  $source     Source.
+     * @param   string                  $eventId    Event ID.
+     * @param   \Hoa\Core\Event\Source  $source     Source.
      * @return  void
-     * @throws  Hoa_Exception
+     * @throws  \Hoa\Core\Exception
      */
-    public function send ( $eventId, Hoa_Core_Event_Source $source) {
+    public function send ( $eventId, \Hoa\Core\Event\Source $source) {
 
-        return Hoa_Core_Event::notify($eventId, $source, $this);
+        return \Hoa\Core\Event::notify($eventId, $source, $this);
     }
 
     /**
      * Set source.
      *
      * @access  public
-     * @param   Hoa_Core_Event_Source  $source    Source.
-     * @return  Hoa_Core_Event_Source
+     * @param   \Hoa\Core\Event\Source  $source    Source.
+     * @return  \Hoa\Core\Event\Source
      */
-    public function setSource ( Hoa_Core_Event_Source $source ) {
+    public function setSource ( \Hoa\Core\Event\Source $source ) {
 
         $old           = $this->_source;
         $this->_source = $source;
@@ -127,7 +115,7 @@ class Hoa_Core_Event_Bucket {
      * Get source.
      *
      * @access  public
-     * @return  Hoa_Core_Event_Source
+     * @return  \Hoa\Core\Event\Source
      */
     public function getSource ( ) {
 
@@ -161,21 +149,22 @@ class Hoa_Core_Event_Bucket {
     }
 }
 
+}
+
+namespace Hoa\Core {
+
 /**
- * Class Hoa_Core_Event.
+ * Class \Hoa\Core\Event.
  *
  * Manage events. It is simply an observer design-pattern, except that we have a
  * multiton of events.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP5
- * @version     0.1
- * @package     Hoa_Core_Event
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Core_Event {
+class Event {
 
     /**
      * Attachement constant: index for object.
@@ -192,10 +181,10 @@ class Hoa_Core_Event {
     const CALLBACK_METHOD = 1;
 
     /**
-     * Static register of all observable objects, i.e. Hoa_Core_Event_Source
+     * Static register of all observable objects, i.e. \Hoa\Core\Event\Source
      * object, i.e. object that can send event.
      *
-     * @var Hoa_Core_Event array
+     * @var \Hoa\Core\Event array
      */
     private static $_register = array();
 
@@ -203,7 +192,7 @@ class Hoa_Core_Event {
      * Attachements, i.e. oberserver objects, for all objects in the
      * register.
      *
-     * @var Hoa_Core_Event array
+     * @var \Hoa\Core\Event array
      */
     private $_attachement     = array();
 
@@ -225,7 +214,7 @@ class Hoa_Core_Event {
      *
      * @access  public
      * @param   string  $eventId    Event ID.
-     * @return  Hoa_Core_Event
+     * @return  \Hoa\Core\Event
      */
     public static function getEvent ( $eventId ) {
 
@@ -243,15 +232,15 @@ class Hoa_Core_Event {
      * Note: Hoa's libraries use hoa://Event/AnID for their observable objects;
      *
      * @access  public
-     * @param   string                 $eventId    Event ID.
-     * @param   Hoa_Core_Event_Source  $source     Obversable object.
+     * @param   string                  $eventId    Event ID.
+     * @param   \Hoa\Core\Event\Source  $source     Obversable object.
      * @return  void
-     * @throws  Hoa_Exception
+     * @throws  \Hoa\Core\Exception
      */
-    public static function register ( $eventId, Hoa_Core_Event_Source $source ) {
+    public static function register ( $eventId, \Hoa\Core\Event\Source $source ) {
 
         if(true === self::eventExists($eventId))
-            throw new Hoa_Exception(
+            throw new \Hoa\Core\Exception(
                 'Cannot redeclare an event with the same ID, i.e. the event ' .
                 'ID %s already exists.', 0, $eventId);
 
@@ -286,7 +275,7 @@ class Hoa_Core_Event {
      * @access  public
      * @param   mixed   $class     Class name or instance, or a closure.
      * @param   string  $method    Method on the object (if $class is a class).
-     * @return  Hoa_Core_Event
+     * @return  \Hoa\Core\Event
      */
     public function attach ( $class, $method = null ) {
 
@@ -308,7 +297,7 @@ class Hoa_Core_Event {
      * @access  public
      * @param   mixed   $class     Class name or instance, or a closure.
      * @param   string  $method    Method on the object (if $class is a class).
-     * @return  Hoa_Core_Event
+     * @return  \Hoa\Core\Event
      */
     public function detach ( $class, $method = null ) {
 
@@ -324,18 +313,18 @@ class Hoa_Core_Event {
      * Notify, i.e. send data to observers.
      *
      * @access  public
-     * @param   string                            Event ID.
-     * @param   Hoa_Core_Event_Bucket  $source    Source.
-     * @param   Hoa_Core_Event_Bucket  $data      Data.
+     * @param   string                             Event ID.
+     * @param   \Hoa\Core\Event\Source  $source    Source.
+     * @param   \Hoa\Core\Event\Bucket  $data      Data.
      * @return  void
-     * @throws  Hoa_Exception
+     * @throws  \Hoa\Core\Exception
      */
     public static function notify ( $eventId,
-                                    Hoa_Core_Event_Source $source,
-                                    Hoa_Core_Event_Bucket $data ) {
+                                    \Hoa\Core\Event\Source $source,
+                                    \Hoa\Core\Event\Bucket $data ) {
 
         if(false === self::eventExists($eventId))
-            throw new Hoa_Exception(
+            throw new \Hoa\Core\Exception(
                 'Event ID %s does not exist, cannot send notification.',
                 2, $eventId);
 
@@ -367,9 +356,9 @@ class Hoa_Core_Event {
 
         foreach($event->_attachement as $index => $callback)
             if(     null === $callback[self::CALLBACK_METHOD]
-                && ($callback[self::CALLBACK_OBJECT] instanceof Hoa_Stream_Interface_Out))
+                && ($callback[self::CALLBACK_OBJECT] instanceof \Hoa\Stream\IStream\Out))
                 $callback[self::CALLBACK_OBJECT]->$method($handle);
-            elseif($callback[self::CALLBACK_OBJECT] instanceof Closure)
+            elseif($callback[self::CALLBACK_OBJECT] instanceof \Closure)
                 $callback[self::CALLBACK_OBJECT]($data);
             else
                 call_user_func_array(
@@ -397,16 +386,20 @@ class Hoa_Core_Event {
     }
 }
 
+}
+
+namespace {
 
 /**
- * Alias of the Hoa_Core_Event::getEvent() method.
+ * Alias of the \Hoa\Core\Event::getEvent() method.
  *
  * @access  public
  * @param   string  $eventId    Event ID.
- * @return  Hoa_Core_Event
+ * @return  \Hoa\Core\Event
  */
-if(!ƒ('event')) {
 function event ( $eventId ) {
 
-    return Hoa_Core_Event::getEvent($eventId);
-}}
+    return \Hoa\Core\Event::getEvent($eventId);
+}
+
+}

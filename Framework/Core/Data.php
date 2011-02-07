@@ -24,41 +24,33 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Core
- * @subpackage  Hoa_Core_Data
- *
  */
 
+namespace Hoa\Core {
+
 /**
- * Class Hoa_Core_Data.
+ * Class \Hoa\Core\Data.
  *
  * Universel data structure.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Core
- * @subpackage  Hoa_Core_Data
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Core_Data implements ArrayAccess {
+class Data implements \ArrayAccess {
 
     /**
      * Data as intuitive structure.
      *
-     * @var Hoa_Core_Data array
+     * @var \Hoa\Core\Data array
      */
     protected $_data = array();
 
     /**
      * Temporize the branch name.
      *
-     * @var Hoa_Core_Data string
+     * @var \Hoa\Core\Data string
      */
     protected $_temp = null;
 
@@ -69,7 +61,7 @@ class Hoa_Core_Data implements ArrayAccess {
      *
      * @access  public
      * @param   string  $name    Branch name.
-     * @return  Hoa_Core_Data
+     * @return  \Hoa\Core\Data
      */
     public function __get ( $name ) {
 
@@ -85,7 +77,7 @@ class Hoa_Core_Data implements ArrayAccess {
      * @access  public
      * @param   string  $name     Branch name.
      * @param   mixed   $value    Branch value (scalar or array value).
-     * @return  Hoa_Core_Data
+     * @return  \Hoa\Core\Data
      */
     public function __set ( $name, $value ) {
 
@@ -115,7 +107,7 @@ class Hoa_Core_Data implements ArrayAccess {
      * @access  public
      * @param   mixed   $offset    Branch index. Could be null to
      *                             auto-increment.
-     * @return  Hoa_Core_Data
+     * @return  \Hoa\Core\Data
      */
     public function offsetGet ( $offset ) {
 
@@ -135,8 +127,8 @@ class Hoa_Core_Data implements ArrayAccess {
             return $this->_data[$handle][$offset] = new self();
         }
 
-        if(  null === $offset
-          || false === array_key_exists($offset, $this->_data[$handle]))
+        if(   null  === $offset
+           || false === array_key_exists($offset, $this->_data[$handle]))
             return $this->_data[$handle][] = new self();
 
         return $this->_data[$handle][$offset];
@@ -149,7 +141,7 @@ class Hoa_Core_Data implements ArrayAccess {
      * @param   mixed   $offset    Branch index. Could be null to
      *                             auto-increment.
      * @param   mixed   $value     Branche value (scalar or array value).
-     * @return  Hoa_Core_Data
+     * @return  \Hoa\Core\Data
      */
     public function offsetSet ( $offset, $value ) {
 
@@ -171,7 +163,7 @@ class Hoa_Core_Data implements ArrayAccess {
      *
      * @access  public
      * @param   mixed   $offset    Branch index.
-     * @return  Hoa_Core_Data
+     * @return  \Hoa\Core\Data
      */
     public function offsetUnset ( $offset ) {
 
@@ -206,4 +198,6 @@ class Hoa_Core_Data implements ArrayAccess {
 
         return $out;
     }
+}
+
 }

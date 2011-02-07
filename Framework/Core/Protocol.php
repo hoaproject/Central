@@ -24,27 +24,21 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Core_Protocol
- *
  */
 
+namespace Hoa\Core {
+
 /**
- * Class Hoa_Core_Protocol.
+ * Class \Hoa\Core\Protocol.
  *
  * Abstract class for all hoa://'s components.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP5
- * @version     0.1
- * @package     Hoa_Core_Protocol
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-abstract class Hoa_Core_Protocol {
+abstract class Protocol {
 
     /**
      * Overwrite components if already exists.
@@ -63,35 +57,35 @@ abstract class Hoa_Core_Protocol {
     /**
      * Component's name.
      *
-     * @var Hoa_Core_Protocol string
+     * @var \Hoa\Core\Protocol string
      */
     protected $_name       = null;
 
     /**
      * Path for the reach() method.
      *
-     * @var Hoa_Core_Protocol string
+     * @var \Hoa\Core\Protocol string
      */
     protected $_reach      = null;
 
     /**
      * Collections of sub-components.
      *
-     * @var Hoa_Core_Protocol array
+     * @var \Hoa\Core\Protocol array
      */
     private $_components   = array();
 
     /**
      * Cache of resolver.
      *
-     * @var Hoa_Core_Protocol array
+     * @var \Hoa\Core\Protocol array
      */
     private static $_cache = array();
 
     /**
      * Static indentation for the __toString() method.
      *
-     * @var Hoa_Core_Protocol int
+     * @var \Hoa\Core\Protocol int
      */
     private static $i      = 0;
 
@@ -128,13 +122,13 @@ abstract class Hoa_Core_Protocol {
      * @param   string  $reach        Path for the reach() method.
      * @param   bool    $overwrite    Overwrite existing components (please, see
      *                                self::*_OVERWRITE constants).
-     * @return  Hoa_Core_Protocol
+     * @return  \Hoa\Core\Protocol
      */
     public function addComponentHelper ( $path, $reach,
                                          $overwrite = self::DO_NOT_OVERWRITE ) {
 
         $components = explode('/', $path);
-        $current    = Hoa_Core::getProtocol();
+        $current    = \Hoa\Core::getProtocol();
         $handle     = null;
         $max        = count($components) - 1;
 
@@ -149,9 +143,9 @@ abstract class Hoa_Core_Protocol {
             }
 
             if($i != $max)
-                $handle = new Hoa_Core_Protocol_Generic($component);
+                $handle = new \Hoa\Core\Protocol\Generic($component);
             else
-                $handle = new Hoa_Core_Protocol_Generic($component, $reach);
+                $handle = new \Hoa\Core\Protocol\Generic($component, $reach);
 
             $current->addComponent($handle);
             $current = $handle;
@@ -164,16 +158,16 @@ abstract class Hoa_Core_Protocol {
      * Add a component.
      *
      * @access  public
-     * @param   Hoa_Core_Protocol  $component    Component to add.
-     * @return  Hoa_Core_Protocol
-     * @throws  Hoa_Exception
+     * @param   \Hoa\Core\Protocol  $component    Component to add.
+     * @return  \Hoa\Core\Protocol
+     * @throws  \Hoa\Core\Exception
      */
-    public function addComponent ( Hoa_Core_Protocol $component ) {
+    public function addComponent ( \Hoa\Core\Protocol $component ) {
 
         $name = $component->getName();
 
         if(empty($name))
-            throw new Hoa_Exception(
+            throw new \Hoa\Core\Exception(
                 'Cannot add a component to the protocol hoa:// without a name.', 0);
 
         $this->_components[$component->getName()] = $component;
@@ -186,7 +180,7 @@ abstract class Hoa_Core_Protocol {
      *
      * @access  public
      * @param   string  $component    Component name to remove.
-     * @return  Hoa_Core_Protocol
+     * @return  \Hoa\Core\Protocol
      */
     public function removeComponent ( $component ) {
 
@@ -203,13 +197,13 @@ abstract class Hoa_Core_Protocol {
      *
      * @access  public
      * @param   string  $component    Component name.
-     * @return  Hoa_Core_Protocol
-     * @throw   Hoa_Exception
+     * @return  \Hoa\Core\Protocol
+     * @throw   \Hoa\Core\Exception
      */
     public function getComponent ( $component ) {
 
         if(false === $this->componentExists($component))
-            throw new Hoa_Exception(
+            throw new \Hoa\Core\Exception(
                 'Component %s does not exist.', 1, $component);
 
         return $this->_components[$component];
@@ -314,12 +308,12 @@ abstract class Hoa_Core_Protocol {
      * @access  public
      * @param   string  $id    ID of the component.
      * @return  mixed
-     * @throw   Hoa_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function reachId ( $id ) {
 
-        throw new Hoa_Exception(
-            'The component %s has no ID support (try to reach #%s).',
+        throw new \Hoa\Core\Exception(
+            'The component %s has no ID support (tried to reach #%s).',
             0, array($this->getName(), $id));
     }
 
@@ -366,80 +360,72 @@ abstract class Hoa_Core_Protocol {
     }
 }
 
+}
+
+namespace Hoa\Core\Protocol {
+
 /**
- * Class Hoa_Core_Protocol_Generic.
+ * Class \Hoa\Core\Protocol\Generic.
  *
  * hoa://'s protocol's generic component.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP5
- * @version     0.3
- * @package     Hoa_Core_Protocol
- * @subpackage  Hoa_Core_Protocol_Generic
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Core_Protocol_Generic extends Hoa_Core_Protocol { }
+class Generic extends \Hoa\Core\Protocol { }
 
 /**
- * Class Hoa_Core_Protocol_Root.
+ * Class \Hoa\Core\Protocol\Root.
  *
  * hoa://'s protocol's root.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP5
- * @version     0.3
- * @package     Hoa_Core_Protocol
- * @subpackage  Hoa_Core_Protocol_Root
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Core_Protocol_Root extends Hoa_Core_Protocol {
+class Root extends \Hoa\Core\Protocol {
 
     /**
      * Component's name.
      *
-     * @var Hoa_Core_Protocol_Root string
+     * @var \Hoa\Core\Protocol\Root string
      */
     protected $_name = 'hoa://';
 }
 
 /**
- * Class Hoa_Core_Protocol_Wrapper.
+ * Class \Hoa\Core\Protocol\Wrapper.
  *
  * Wrapper for hoa://'s protocol.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP5
- * @version     0.3
- * @package     Hoa_Core_Protocol
- * @subpackage  Hoa_Core_Protocol_Wrapper
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Core_Protocol_Wrapper {
+class Wrapper {
 
     /**
      * Opened stream.
      *
-     * @var Hoa_Core resource
+     * @var \Hoa\Core\Protocol\Wrapper resource
      */
     private $_stream     = null;
 
     /**
      * Stream name (filename).
      *
-     * @var Hoa_Core string
+     * @var \Hoa\Core\Protocol\Wrapper string
      */
     private $_streamName = null;
 
     /**
      * Stream context (given by the streamWrapper class).
      *
-     * @var Hoa_Core resource
+     * @var \Hoa\Core\Protocol\Wrapper resource
      */
     public $context      = null;
 
@@ -455,7 +441,7 @@ class Hoa_Core_Protocol_Wrapper {
      */
     public static function realPath ( $path ) {
 
-        return Hoa_Core::getProtocol()->resolve($path);
+        return \Hoa\Core::getProtocol()->resolve($path);
     }
 
     /**
@@ -873,22 +859,26 @@ class Hoa_Core_Protocol_Wrapper {
     }
 }
 
+}
+
+namespace {
 
 /**
  * Register the hoa:// protocol.
  */
-stream_wrapper_register('hoa', 'Hoa_Core_Protocol_Wrapper');
+stream_wrapper_register('hoa', '\Hoa\Core\Protocol\Wrapper');
 
 /**
- * Alias of the Hoa_Core::getInstance()->getProtocol()->resolve() method.
+ * Alias of the \Hoa\Core::getInstance()->getProtocol()->resolve() method.
  * method.
  *
  * @access  public
  * @param   string  $path    Path to resolve.
  * @return  mixed
  */
-if(!ƒ('resolve')) {
 function resolve ( $path ) {
 
-    return Hoa_Core::getInstance()->getProtocol()->resolve($path);
-}}
+    return \Hoa\Core::getInstance()->getProtocol()->resolve($path);
+}
+
+}

@@ -24,29 +24,22 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Exception
- *
  */
+
+namespace Hoa\Core {
 
 /**
- * Class Hoa_Exception.
+ * Class \Hoa\Core\Exception.
  *
- * Hoa_Exception is the mother exception class of the framework. Each exception
- * must extend Hoa_Exception, itself extends PHP Exception class.
+ * \Hoa\Exception is the mother exception class of the framework. Each exception
+ * must extend \Hoa\Exception, itself extends PHP Exception class.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Core
- * @subpackage  Hoa_Core_Exception
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Exception extends Exception {
+class Exception extends \Exception {
 
     /**
      * Error type: return the message.
@@ -79,7 +72,7 @@ class Hoa_Exception extends Exception {
     /**
      * RaiseError string arguments.
      *
-     * @var Hoa_Exception array
+     * @var \Hoa\Exception array
      */
     protected $_arg = array();
 
@@ -121,31 +114,6 @@ class Hoa_Exception extends Exception {
     public function getFormattedMessage ( ) {
 
         return @vsprintf($this->getMessage(), $this->_arg);
-    }
-
-    /**
-     * Get the hoa:// path if possible.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getAbstractFile ( ) {
-
-        $app  = Hoa_Core::getInstance()->getProtocol()->resolve('hoa://Application/');
-        $data = Hoa_Core::getInstance()->getProtocol()->resolve('hoa://Data/');
-        $lib  = Hoa_Core::getInstance()->getProtocol()->resolve('hoa://Library/');
-        $file = $this->getFile();
-
-        if($app == substr($file, 0, strlen($app)))
-            $file = 'hoa://Application/' . substr($file, strlen($app));
-
-        elseif($data == substr($file, 0, strlen($data)))
-            $file = 'hoa://Data/' . substr($file, strlen($data));
-
-        elseif($lib == substr($file, 0, strlen($lib)))
-            $file = 'hoa://Library/' . substr($file, strlen($lib));
-
-        return $file;
     }
 
     /**
@@ -219,11 +187,11 @@ class Hoa_Exception extends Exception {
      * @access  public
      * @param   object  $exception    The exception.
      * @return  mixed
-     * @throw   Exception
+     * @throw   \Exception
      */
     public static function handler ( $exception ) {
 
-        if($exception instanceof Hoa_Exception)
+        if($exception instanceof \Hoa\Core\Exception)
             return $exception->raiseError(
                 self::ERROR_PRINT,
                 E_USER_WARNING,
@@ -245,8 +213,13 @@ class Hoa_Exception extends Exception {
     }
 }
 
+}
+
+namespace {
 
 /**
  * Catch uncaught exception.
  */
-set_exception_handler(array('Hoa_Exception', 'handler'));
+set_exception_handler(array('\Hoa\Core\Exception', 'handler'));
+
+}

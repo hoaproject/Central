@@ -24,12 +24,9 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Core
- *
  */
+
+namespace {
 
 /**
  * Check if Hoa was well-included.
@@ -42,47 +39,52 @@ and
 
 
 /**
- * Hoa_Exception
+ * \Hoa\Core\Exception
  */
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Exception.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'Exception.php';
 
 /**
- * Hoa_Core_Parameter
+ * \Hoa\Core\Consistency
  */
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Parameter.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'Consistency.php';
 
 /**
- * Hoa_Core_Protocol
+ * \Hoa\Core\Parameter
  */
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Protocol.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'Parameter.php';
 
 /**
- * Hoa_Core_Data
+ * \Hoa\Core\Protocol
  */
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Data.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'Protocol.php';
 
 /**
- * Hoa_Core_Event
+ * \Hoa\Core\Data
  */
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Event.php';
-
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'Data.php';
 
 /**
- * Class Hoa_Core.
+ * \Hoa\Core\Event
+ */
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'Event.php';
+
+}
+
+namespace Hoa\Core {
+
+/**
+ * Class \Hoa\Core.
  *
- * Hoa_Core is the framework package manager.
- * Each package must include Hoa_Core, because it is the “taproot” of the
+ * \Hoa\Core is the framework package manager.
+ * Each package must include \Hoa\Core, because it is the “taproot” of the
  * framework.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP5
- * @version     0.5
- * @package     Hoa_Core
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Core implements Hoa_Core_Parameterizable {
+class Core implements \Hoa\Core\Parameterizable {
 
     /**
      * Import constant: path collection index.
@@ -101,42 +103,42 @@ class Hoa_Core implements Hoa_Core_Parameterizable {
     /**
      * Stack of all files that might be imported.
      *
-     * @var Hoa_Core array
+     * @var \Hoa\Core array
      */
     private static $_importStack = array();
 
     /**
      * Stack of all registered shutdown function.
      *
-     * @var Hoa_Core array
+     * @var \Hoa\Core array
      */
     private static $_rsdf        = array();
 
     /**
      * Tree of components, starts by the root.
      *
-     * @var Hoa_Core_Protocol_Root object
+     * @var \Hoa\Core\Protocol\Root object
      */
     private static $_root        = null;
 
     /**
-     * Parameters of Hoa_Core.
+     * Parameters of \Hoa\Core.
      *
-     * @var Hoa_Core_Parameter object
+     * @var \Hoa\Core\Parameter object
      */
     protected $_parameters       = null;
 
     /**
      * Singleton.
      *
-     * @var Hoa_Core object
+     * @var \Hoa\Core object
      */
     private static $_instance    = null;
 
     /**
      * Last imported file path.
      *
-     * @var Hoa_Core array
+     * @var \Hoa\Core array
      */
     private static $_lastImport  = array();
 
@@ -169,10 +171,6 @@ class Hoa_Core implements Hoa_Core_Parameterizable {
         !defined('_dynamic')     and define('_dynamic', ~_static);
         !defined('_concrete')    and define('_concrete',~_abstract);
         !defined('_overridable') and define('_overridable', ~_final);
-        !defined('PHP_VERSION_ID') and $v = explode('.', PHP_VERSION)
-                                   and define('PHP_VERSION_ID',   $v[0] * 10000
-                                                                + $v[1] * 100
-                                                                + $v[2]);
         !defined('HOA_VERSION_MAJOR')   and define('HOA_VERSION_MAJOR',   0);
         !defined('HOA_VERSION_MINOR')   and define('HOA_VERSION_MINOR',   5);
         !defined('HOA_VERSION_RELEASE') and define('HOA_VERSION_RELEASE', 5);
@@ -182,7 +180,7 @@ class Hoa_Core implements Hoa_Core_Parameterizable {
 
         if(false !== $wl = ini_get('suhosin.executor.include.whitelist'))
             if(false === in_array('hoa', explode(',', $wl)))
-                throw new Hoa_Exception(
+                throw new \Hoa\Exception(
                     'The URL scheme hoa:// is not authorized by Suhosin. ' .
                     'You must add this to your php.ini or suhosin.ini: ' .
                     'suhosin.executor.include.whitelist="%s", thanks :-).',
@@ -198,27 +196,27 @@ class Hoa_Core implements Hoa_Core_Parameterizable {
      * Singleton.
      *
      * @access  public
-     * @return  Hoa_Core
+     * @return  \Hoa\Core
      */
     public static function getInstance ( ) {
 
-        if(null === self::$_instance)
-            self::$_instance = new self();
+        if(null === static::$_instance)
+            static::$_instance = new self();
 
-        return self::$_instance;
+        return static::$_instance;
     }
 
     /**
      * Initialize the framework.
      *
      * @access  public
-     * @param   array   $parameters    Parameters of Hoa_Core.
-     * @return  Hoa_Core
+     * @param   array   $parameters    Parameters of \Hoa\Core.
+     * @return  \Hoa\Core
      */
     public function initialize ( Array $parameters = array() ) {
 
         $root              = dirname(dirname(__FILE__));
-        $this->_parameters = new Hoa_Core_Parameter(
+        $this->_parameters = new \Hoa\Core\Parameter(
             $this,
             array(
                 'root.ofFrameworkDirectory' => $root
@@ -285,7 +283,7 @@ class Hoa_Core implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   array   $in    Parameters to set.
      * @return  void
-     * @throw   Hoa_Exception
+     * @throw   \Hoa\Exception
      */
     public function setParameters ( Array $in ) {
 
@@ -300,7 +298,7 @@ class Hoa_Core implements Hoa_Core_Parameterizable {
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Exception
+     * @throw   \Hoa\Exception
      */
     public function getParameters ( ) {
 
@@ -314,7 +312,7 @@ class Hoa_Core implements Hoa_Core_Parameterizable {
      * @param   string  $key      Key.
      * @param   mixed   $value    Value.
      * @return  mixed
-     * @throw   Hoa_Exception
+     * @throw   \Hoa\Exception
      */
     public function setParameter ( $key, $value ) {
 
@@ -330,7 +328,7 @@ class Hoa_Core implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Exception
+     * @throw   \Hoa\Exception
      */
     public function getParameter ( $key ) {
 
@@ -344,7 +342,7 @@ class Hoa_Core implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Exception
+     * @throw   \Hoa\Exception
      */
     public function getFormattedParameter ( $key ) {
 
@@ -366,7 +364,7 @@ class Hoa_Core implements Hoa_Core_Parameterizable {
             $protocolRoot->addComponentHelper(
                 $path,
                 $reach,
-                Hoa_Core_Protocol::OVERWRITE
+                \Hoa\Core\Protocol::OVERWRITE
             );
 
         return;
@@ -392,287 +390,15 @@ class Hoa_Core implements Hoa_Core_Parameterizable {
     }
 
     /**
-     * Import a file or a directory.
-     * This method finds file, and writes some informations (inode, path and
-     * already imported or not) into an “import register”. If a file is not in
-     * this register, the autoload will return an error.
-     *
-     * @access  public
-     * @param   string  $path    Path.
-     * @param   string  $root    Root.
-     * @return  bool
-     * @throw   Hoa_Exception
-     */
-    protected static function _import ( $path = null, $root = null ) {
-
-        static $back   = null;
-        static $last   = null;
-        static $_cache = null;
-
-        if(null === $back) {
-
-            self::$_lastImport = array();
-
-            if(isset($_cache[$path]))
-                return false;
-
-            $_cache[$path] = true;
-
-            if(null === $root)
-                $back = self::getInstance()
-                            ->getFormattedParameter('framework.library');
-            else
-                $back = $root;
-        }
-
-        preg_match('#(?:(.*?)(?<!\\\)\.)|(.*)#', $path, $matches);
-
-        $handle = !isset($matches[2]) ? $matches[1] : $matches[2];
-
-        switch($handle) {
-
-            case '~':
-
-                $back .= DS . $last;
-                $path  = substr($path, 2);
-
-                if(   ($a = is_dir($back)           && !empty($path))
-                   || ($b = is_file($back . '.php') &&  empty($path)))
-                    self::_import($path);
-                else {
-
-                    $back = null;
-                    $last = null;
-
-                    if(false === $a) {
-                        if(null !== $back)
-                            throw new Hoa_Exception(
-                                'Directory %s is not found, cannot look in it.',
-                                0, $back);
-                    }
-                    else
-                        throw new Hoa_Exception(
-                            'File %s is not found.', 1, $back . '.php');
-                }
-              break;
-
-            default:
-
-                if(!empty($path)) {
-
-                    $glob = glob($back . DS . $handle);
-
-                    if(!empty($glob)) {
-
-                        foreach($glob as $i => $found) {
-
-                            $last  = str_replace('.', '\\.', $found);
-                            $last  = substr($last, strrpos($last, DS) + 1);
-                            $tmp   = $back;
-                            $back .= DS . $last;
-                            $foo   = substr($path, strlen($handle) + 1);
-
-                            if(   (is_dir($found)  && !empty($foo))
-                               || (is_file($found) &&  empty($foo)))
-                                self::_import(substr($path, strlen($handle) + 1));
-
-                            elseif(is_file($found . '.php')) {
-
-                                $back = $found . '\.php';
-                                self::_import(null);
-                            }
-
-                            $back = $tmp;
-                        }
-                    }
-                    else {
-
-                        $back .= DS . $handle;
-                        self::_import(null);
-                    }
-
-                    $back = null;
-                    $last = null;
-                }
-                else {
-
-                    $final = str_replace('\\.', '.', $back);
-
-                    $back = null;
-                    $last = null;
-
-                    if(!file_exists($final))
-                        $final .= '.php';
-
-                    if(!file_exists($final))
-                        throw new Hoa_Exception(
-                            'File %s is not found.', 2, $final);
-
-                    if(false === OS_WIN)
-                        $inode = fileinode($final);
-                    else
-                        $inode = md5($final);
-
-                    if(isset(self::$_importStack[$inode]))
-                        return true;
-
-                    self::$_lastImport[$inode]  = $final;
-                    self::$_importStack[$inode] = array(
-                        self::IMPORT_PATH => $final,
-                        self::IMPORT_LOAD => false
-                    );
-                }
-        }
-
-        return true;
-    }
-
-    /**
-     * Import a class of a package (it works like the self::_import() method).
-     *
-     * @access  public
-     * @param   string  $path    Path.
-     * @return  bool
-     * @throw   Hoa_Exception
-     */
-    public static function import ( $path ) {
-
-        return self::_import($path);
-    }
-
-    /**
-     * Import a module (it works like the self::_import() method).
-     *
-     * @access  public
-     * @param   string  $path    Path.
-     * @return  bool
-     * @throw   Hoa_Exception
-     */
-    public static function importModule ( $path ) {
-
-        $i               = Hoa_Core::getInstance();
-        $frameworkModule = $i->getFormattedParameter('framework.module');
-        $dataModule      = $i->getFormattedParameter('data.module');
-
-        try {
-
-            return self::_import($path, $dataModule);
-        }
-        catch ( Hoa_Exception $e ) {
-
-            return self::_import($path, $frameworkModule);
-        }
-    }
-
-    /**
-     * Load lastest imported files.
-     *
-     * @access  public
-     * @return  void
-     */
-    public static function load ( ) {
-
-        if(empty(self::$_lastImport))
-            return;
-
-        foreach(self::$_lastImport as $inode => $import) {
-
-            require $import;
-            self::$_importStack[$inode][self::IMPORT_LOAD] = true;
-        }
-
-        self::$_lastImport = array();
-
-        return;
-    }
-
-    /**
-     * If file is imported (via self::_import()), the autoload method will
-     * load the file that contains the class $className.
-     *
-     * @access  public
-     * @param   string  $className    Class name.
-     * @return  void
-     */
-    public static function autoload ( $className ) {
-
-        $pos   = strpos($className, '_');
-        $roots = array();
-
-        switch(substr($className, 0, $pos)) {
-
-            case 'Hoa':
-                $roots[] = self::getInstance()
-                               ->getFormattedParameter('framework.library');
-              break;
-
-            case 'Hoathis':
-                $roots[] = self::getInstance()
-                               ->getFormattedParameter('data.module');
-                $roots[] = self::getInstance()
-                               ->getFormattedParameter('framework.module');
-              break;
-
-            default:
-                return;
-        }
-
-        $className = substr($className, $pos + 1);
-        $gotcha    = null;
-
-        foreach($roots as $i => $root) {
-
-            $handle    = $className;
-            $classPath = $root . DS . str_replace('_', DS, $handle) . '.php';
-
-            // If it is an entry class.
-            if(!file_exists($classPath)) {
-
-                if(false !== strpos($handle, '_'))
-                    $handle .= substr($handle, strrpos($handle, '_')); 
-                else
-                    $handle .= '_' . $handle;
-
-                $classPath = $root . DS . str_replace('_', DS, $handle) . '.php';
-            }
-
-            if(file_exists($classPath)) {
-
-                $gotcha = $classPath;
-                break;
-            }
-        }
-
-        if(null === $gotcha)
-            return;
-
-        if(false === OS_WIN)
-            $inode = fileinode($classPath);
-        else
-            $inode = md5($classPath);
-
-        if(!isset(self::$_importStack[$inode]))
-            return;
-
-        if(true === self::$_importStack[$inode][self::IMPORT_LOAD])
-            return;
-
-        require self::$_importStack[$inode][self::IMPORT_PATH];
-        self::$_importStack[$inode][self::IMPORT_LOAD] = true;
-
-        return;
-    }
-
-    /**
      * Get protocol's root.
      *
      * @access  public
-     * @return  Hoa_Core_Protocol_Root
+     * @return  \Hoa\Core\Protocol\Root
      */
     public static function getProtocol ( ) {
 
         if(null === self::$_root)
-            self::$_root = new Hoa_Core_Protocol_Root();
+            self::$_root = new \Hoa\Core\Protocol\Root();
 
         return self::$_root;
     }
@@ -711,6 +437,9 @@ class Hoa_Core implements Hoa_Core_Parameterizable {
     }
 }
 
+}
+
+namespace {
 
 /**
  * Alias of function_exists.
@@ -725,7 +454,7 @@ function ƒ ( $name ) {
 }
 
 /**
- * Alias of Hoa_Core::_define().
+ * Alias of \Hoa\Core::_define().
  *
  * @access  public
  * @param   string  $name     The name of the constant.
@@ -736,55 +465,17 @@ function ƒ ( $name ) {
 if(!ƒ('_define')) {
 function _define ( $name = '', $value = '', $case = false ) {
 
-    return Hoa_Core::_define($name, $value, $case);
+    return \Hoa\Core::_define($name, $value, $case);
 }}
 
 /**
- * Alias of Hoa_Core::import().
- *
- * @access  public
- * @param   string  $path    Path.
- * @return  bool
- * @throw   Hoa_Exception
+ * Alias.
  */
-if(!ƒ('import')) {
-function import ( $path ) {
-
-    return Hoa_Core::import($path);
-}}
-
-/**
- * Alias of Hoa_Core::importModule().
- *
- * @access  public
- * @param   string  $path    Path.
- * @return  bool
- * @throw   Hoa_Exception
- */
-if(!ƒ('importModule')) {
-function importModule ( $path ) {
-
-    return Hoa_Core::importModule($path);
-}}
-
-/**
- * Alias of Hoa_Core::load().
- *
- * @access  public
- * @return  void
- */
-if(!ƒ('load')) {
-function load ( ) {
-
-    return Hoa_Core::load();
-}}
-
-/**
- * Set the default autoload.
- */
-spl_autoload_register(array('Hoa_Core', 'autoload'));
+class_alias('Hoa\Core\Core', 'Hoa\Core');
 
 /**
  * Then, initialize Hoa.
  */
-Hoa_Core::getInstance()->initialize();
+\Hoa\Core::getInstance()->initialize();
+
+}

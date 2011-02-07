@@ -24,36 +24,28 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Core
- * @subpackage  Hoa_Core_Parameter
- *
  */
 
+namespace Hoa\Core\Parameterizable {
+
 /**
- * Interface Hoa_Core_Parameterizable_Readable.
+ * Interface \Hoa\Core\Parameterizable\Readable.
  *
  * Interface for all classes or packages which parameters are readable.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP5
- * @version     0.1
- * @package     Hoa_Core_Parameter
- * @subpackage  Hoa_Core_Parameterizable_Readable
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-interface Hoa_Core_Parameterizable_Readable {
+interface Readable {
 
     /**
      * Get many parameters from a class.
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameters ( );
 
@@ -63,7 +55,7 @@ interface Hoa_Core_Parameterizable_Readable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameter ( $key );
 
@@ -74,26 +66,22 @@ interface Hoa_Core_Parameterizable_Readable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getFormattedParameter ( $key );
 }
 
 /**
- * Interface Hoa_Core_Parameterizable_Writable.
+ * Interface \Hoa\Core\Parameterizable\Writable.
  *
  * Interface for all classes or packages which parameters are writable.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP5
- * @version     0.1
- * @package     Hoa_Core_Parameter
- * @subpackage  Hoa_Core_Parameterizable_Writable
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-interface Hoa_Core_Parameterizable_Writable {
+interface Writable {
 
     /**
      * Set many parameters to a class.
@@ -101,7 +89,7 @@ interface Hoa_Core_Parameterizable_Writable {
      * @access  public
      * @param   array   $in    Parameters to set.
      * @return  void
-     * @throw   Hoa_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setParameters ( Array $in );
 
@@ -112,45 +100,42 @@ interface Hoa_Core_Parameterizable_Writable {
      * @param   string  $key      Key.
      * @param   mixed   $value    Value.
      * @return  mixed
-     * @throw   Hoa_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setParameter ( $key, $value );
 }
 
+}
+
+namespace Hoa\Core {
+
 /**
- * Interface Hoa_Core_Parameterizable.
+ * Interface \Hoa\Core\Parameterizable.
  *
  * Interface for all classes or packages that are parameterizable.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP5
- * @version     0.1
- * @package     Hoa_Core_Parameter
- * @subpackage  Hoa_Core_Parameterizable
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-interface   Hoa_Core_Parameterizable
-    extends Hoa_Core_Parameterizable_Readable,
-            Hoa_Core_Parameterizable_Writable { }
+interface   Parameterizable
+    extends \Hoa\Core\Parameterizable\Readable,
+            \Hoa\Core\Parameterizable\Writable { }
 
 /**
- * Class Hoa_Core_Parameter.
+ * Class \Hoa\Core\Parameter.
  *
  * The parameter object, contains a set of parameters. It can be shared with
  * other class with permissions (read, write, shared or combinations of these
  * ones).
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP5
- * @version     0.1
- * @package     Hoa_Core_Parameter
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Core_Parameter {
+class Parameter {
 
     /**
      * Permission to read.
@@ -183,56 +168,56 @@ class Hoa_Core_Parameter {
     /**
      * Collection of package's parameters.
      *
-     * @var Hoa_Core_Parameter array
+     * @var \Hoa\Core\Parameter array
      */
     private $_parameters               = array();
 
     /**
      * Collection of package's keywords.
      *
-     * @var Hoa_Core_Parameter array
+     * @var \Hoa\Core\Parameter array
      */
     private $_keywords                 = array();
 
     /**
      * Current analyzed parameters.
      *
-     * @var Hoa_Core_Parameter array
+     * @var \Hoa\Core\Parameter array
      */
     private static $_currentParameters = null;
 
     /**
      * Current analyzed parameter.
      *
-     * @var Hoa_Core_Parameter string
+     * @var \Hoa\Core\Parameter string
      */
     private static $_currentParameter  = null;
 
     /**
      * Current analyzed keywords.
      *
-     * @var Hoa_Core_Parameter array
+     * @var \Hoa\Core\Parameter array
      */
     private static $_currentKeywords   = null;
 
     /**
      * Parameters' owner.
      *
-     * @var Hoa_Core_Parameter string
+     * @var \Hoa\Core\Parameter string
      */
     private $_owner                    = null;
 
     /**
      * Owner's friends with associated permissions.
      *
-     * @var Hoa_Core_Parameter array
+     * @var \Hoa\Core\Parameter array
      */
     private $_friends                  = array();
 
     /**
      * Constants values.
      *
-     * @var Hoa_Core_Parameter array
+     * @var \Hoa\Core\Parameter array
      */
     private static $_constants         = array();
 
@@ -242,13 +227,13 @@ class Hoa_Core_Parameter {
      * Construct a new set of parameters.
      *
      * @access  public
-     * @param   Hoa_Core_Parameterizable  $owner          Owner.
-     * @param   array                          $keywords       Keywords.
-     * @param   array                          $parameters     Parameters.
-     * @param   string                         $ownerParent    Owner parent.
+     * @param   \Hoa\Core\Parameterizable  $owner          Owner.
+     * @param   array                      $keywords       Keywords.
+     * @param   array                      $parameters     Parameters.
+     * @param   string                     $ownerParent    Owner parent.
      * @return  void
      */
-    public function __construct ( Hoa_Core_Parameterizable $owner,
+    public function __construct ( \Hoa\Core\Parameterizable $owner,
                                   Array $keywords   = array(),
                                   Array $parameters = array(),
                                   $ownerParent      = null ) {
@@ -266,7 +251,7 @@ class Hoa_Core_Parameter {
                     self::PERMISSION_SHARE;
             }
             else
-                throw new Hoa_Exception(
+                throw new \Hoa\Core\Exception(
                     'Cannot load configurations from the owner parent %s.',
                     0, $ownerParent);
 
@@ -322,7 +307,7 @@ class Hoa_Core_Parameter {
      * @param   object  $id            Owner or friends.
      * @param   array   $parameters    Parameters to set.
      * @return  void
-     * @throw   Hoa_Exception
+     * @throw   \Hoa\Core\Exception
      */
     private function setDefaultParameters ( $id, Array $parameters ) {
 
@@ -343,16 +328,16 @@ class Hoa_Core_Parameter {
             $handle = require $path;
 
             if(!is_array($handle))
-                throw new Hoa_Exception(
+                throw new \Hoa\Core\Exception(
                     'Strange though it may appear, the configuration cache ' .
                     'file %s appears to be corrupted.', 0, $path);
 
             if(!array_key_exists('keywords', $handle))
-                throw new Hoa_Exception(
+                throw new \Hoa\Core\Exception(
                     'Need keywords in the configuration cache %s.', 1, $path);
 
             if(!array_key_exists('parameters', $handle))
-                throw new Hoa_Exception(
+                throw new \Hoa\Core\Exception(
                     'Need parameters in the configuration cache %s.', 2, $path);
 
             $this->_keywords   = $handle['keywords'];
@@ -370,7 +355,7 @@ class Hoa_Core_Parameter {
      * @access  public
      * @param   object  $id    Owner or friends.
      * @return  array
-     * @throw   Hoa_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getDefaultParameters ( $id ) {
 
@@ -384,7 +369,7 @@ class Hoa_Core_Parameter {
      * @param   object  $id    Owner or friends.
      * @param   array   $in    Parameters to set.
      * @return  void
-     * @throw   Hoa_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setParameters ( $id, Array $in ) {
 
@@ -400,7 +385,7 @@ class Hoa_Core_Parameter {
      * @access  public
      * @param   object  $id    Owner or friends.
      * @return  array
-     * @throw   Hoa_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameters ( $id ) {
 
@@ -417,7 +402,7 @@ class Hoa_Core_Parameter {
      * @param   string  $key      Key.
      * @param   mixed   $value    Value.
      * @return  mixed
-     * @throw   Hoa_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setParameter ( $id, $key, $value ) {
 
@@ -440,7 +425,7 @@ class Hoa_Core_Parameter {
      * @param   object  $id     Owner or friends.
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameter ( $id, $key ) {
 
@@ -460,7 +445,7 @@ class Hoa_Core_Parameter {
      * @param   object  $id     Owner or friends.
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getFormattedParameter ( $id, $key ) {
 
@@ -547,7 +532,7 @@ class Hoa_Core_Parameter {
                         $parameters
                     ));
 
-                $i--;
+                --$i;
             }
 
             $out = array_merge_recursive($out, $handle);
@@ -563,7 +548,7 @@ class Hoa_Core_Parameter {
      * @param   object  $id    Owner or friends.
      * @param   array   $in    Keywords to set.
      * @return  void
-     * @throw   Hoa_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setKeywords ( $id, Array $in = array() ) {
 
@@ -579,7 +564,7 @@ class Hoa_Core_Parameter {
      * @access  public
      * @param   object  $id    Owner or friends.
      * @return  array
-     * @throw   Hoa_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getKeywords ( $id ) {
 
@@ -596,7 +581,7 @@ class Hoa_Core_Parameter {
      * @param   string  $key      Key.
      * @param   mixed   $value    Value.
      * @return  mixed
-     * @throw   Hoa_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setKeyword ( $id, $key, $value ) {
 
@@ -619,7 +604,7 @@ class Hoa_Core_Parameter {
      * @param   object  $id         Owner or friends.
      * @param   string  $keyword    Keyword.
      * @return  mixed
-     * @throw   Hoa_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getKeyword ( $id, $keyword ) {
 
@@ -757,7 +742,7 @@ class Hoa_Core_Parameter {
      * @access  private
      * @param   array    $match    Match (from a regular expression).
      * @return  string
-     * @throw   Hoa_Exception
+     * @throw   \Hoa\Core\Exception
      */
     private static function _zFormat ( $match ) {
 
@@ -778,7 +763,7 @@ class Hoa_Core_Parameter {
         if($key[0] == '%') {
 
             if(false === array_key_exists($word, self::$_currentParameters))
-                throw new Hoa_Exception(
+                throw new \Hoa\Core\Exception(
                     'Parameter %s is not found in parameters.',
                     0, $word);
 
@@ -798,7 +783,7 @@ class Hoa_Core_Parameter {
                 if(isset(self::$_constants[$v]))
                     $out .= self::$_constants[$v];
                 else
-                    throw new Hoa_Exception(
+                    throw new \Hoa\Core\Exception(
                         'Constant char %s is not supported in the ' .
                         'parameter rule %s.',
                         1, array($v, self::$_currentParameter));
@@ -807,7 +792,7 @@ class Hoa_Core_Parameter {
         else {
 
             if(false === array_key_exists($key, self::$_currentKeywords))
-                throw new Hoa_Exception(
+                throw new \Hoa\Core\Exception(
                     'Keyword %s is not found in the parameter rule %s.', 2,
                     array($key, self::$_currentParameter));
 
@@ -824,7 +809,7 @@ class Hoa_Core_Parameter {
         );
 
         if(empty($flags) || empty($flags[1]))
-            throw new Hoa_Exception(
+            throw new \Hoa\Core\Exception(
                 'Unrecognized format pattern %s in the parameter %s.',
                 0, array($match[0], self::$_currentParameter));
 
@@ -863,7 +848,7 @@ class Hoa_Core_Parameter {
 
                 default:
                     if(!isset($flags[3]) && !isset($flags[4]))
-                        throw new Hoa_Exception(
+                        throw new \Hoa\Core\Exception(
                             'Unrecognized format pattern in the parameter %s.',
                             0, self::$_currentParameter);
 
@@ -896,19 +881,19 @@ class Hoa_Core_Parameter {
      * @param   int     $permissions    Permissions (please, see the
      *                                  self::PERMISSION_* constants).
      * @return  bool
-     * @throw   Hoa_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function check ( $id, $permissions ) {
 
-        if(!(   $id instanceof Hoa_Core_Parameterizable
-             || $id instanceof Hoa_Core_Parameterizable_Readable
-             || $id instanceof Hoa_Core_Parameterizable_Writable))
-            throw new Hoa_Exception(
+        if(!(   $id instanceof \Hoa\Core\Parameterizable
+             || $id instanceof \Hoa\Core\Parameterizable\Readable
+             || $id instanceof \Hoa\Core\Parameterizable\Writable))
+            throw new \Hoa\Core\Exception(
                 'Class %s is not valid. ' .
                 'Parameterizable classes must extend ' .
-                'Hoa_Core_Parameterizable, ' .
-                'Hoa_Core_Parameterizable_Readable or ' .
-                'Hoa_Core_Parameterizable_Writable interfaces.',
+                '\Hoa\Core\Parameterizable, ' .
+                '\Hoa\Core\Parameterizable\Readable or ' .
+                '\Hoa\Core\Parameterizable\Writable interfaces.',
                 3, $id);
 
         $iid = get_class($id);
@@ -926,7 +911,7 @@ class Hoa_Core_Parameter {
                     break;
 
             if(-1 === $p)
-                throw new Hoa_Exception(
+                throw new \Hoa\Core\Exception(
                     'Class %s is not friend of %s and cannot share its parameters.',
                     4, array($iid, $this->_owner));
         }
@@ -936,16 +921,16 @@ class Hoa_Core_Parameter {
         if(0 === ($permissions & $p)) {
 
             if(0 !== $permissions & self::PERMISSION_READ)
-                throw new Hoa_Exception(
+                throw new \Hoa\Core\Exception(
                     'Class %s does not have permission to read parameters ' .
                     'from %s.', 5, array($iid, $this->_owner));
 
             elseif(0 !== $permissions & self::PERMISSION_WRITE)
-                throw new Hoa_Exception(
+                throw new \Hoa\Core\Exception(
                     'Class %s does not have permission to write parameters ' .
                     'from %s.', 6, array($iid, $this->_owner));
 
-            throw new Hoa_Exception(
+            throw new \Hoa\Core\Exception(
                 'Class %s does not have permission to share parameters ' .
                 'from %s.', 7, array($iid, $this->_owner));
         }
@@ -964,7 +949,7 @@ class Hoa_Core_Parameter {
      * @param   int     $permissions    Permissions (please, see the
      *                                  self::PERMISSION_* constants).
      * @return  void
-     * @throw   Hoa_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function shareWith ( $owner, $friend, $permissions ) {
 
@@ -974,4 +959,6 @@ class Hoa_Core_Parameter {
 
         return;
     }
+}
+
 }
