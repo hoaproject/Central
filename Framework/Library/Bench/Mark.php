@@ -24,75 +24,73 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Bench
- * @subpackage  Hoa_Bench_Mark
- *
  */
 
-/**
- * Hoa_Bench_Exception
- */
-import('Bench.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Bench_Mark.
+ * \Hoa\Bench\Exception
+ */
+-> import('Bench.Exception');
+
+}
+
+namespace Hoa\Bench {
+
+/**
+ * Class \Hoa\Bench\Mark.
  *
- * The Hoa_Bench class contains a collection of Hoa_Bench_Mark.
+ * The \Hoa\Bench class contains a collection of \Hoa\Bench\Mark.
  * Each mark can be start, pause, stop, reset, or compare to an other mark.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Bench
- * @subpackage  Hoa_Bench_Mark
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Bench_Mark {
+class Mark {
 
     /**
      * Mark ID.
      *
-     * @var Hoa_Bench_Mark string
+     * @var \Hoa\Bench\Mark string
      */
     protected $_id      = null;
 
     /**
      * Start time.
      *
-     * @var Hoa_Bench_Mark float
+     * @var \Hoa\Bench\Mark float
      */
     protected $start    = 0.0;
 
     /**
      * Stop time.
      *
-     * @var Hoa_Bench_Mark float
+     * @var \Hoa\Bench\Mark float
      */
     protected $stop     = 0.0;
 
     /**
      * Addition of pause time.
      *
-     * @var Hoa_Bench_Mark float
+     * @var \Hoa\Bench\Mark float
      */
     protected $pause    = 0.0;
 
     /**
      * Whether the mark is running.
      *
-     * @var Hoa_Bench_Mark bool
+     * @var \Hoa\Bench\Mark bool
      */
     protected $_running = false;
 
     /**
      * Whether the mark is in pause.
      *
-     * @var Hoa_Bench_Mark bool
+     * @var \Hoa\Bench\Mark bool
      */
     protected $_pause   = false;
 
@@ -142,14 +140,14 @@ class Hoa_Bench_Mark {
      * Else, an exception will be thrown.
      *
      * @access  public
-     * @return  Hoa_Bench_Mark
-     * @throw   Hoa_Bench_Exception
+     * @return  \Hoa\Bench\Mark
+     * @throw   \Hoa\Bench\Exception
      */
     public function start ( ) {
 
         if(true === $this->isRunning())
             if(false === $this->isPause())
-                throw new Hoa_Bench_Exception(
+                throw new Exception(
                     'Cannot start the %s mark, because it is running.',
                     0, $this->getId());
 
@@ -175,14 +173,14 @@ class Hoa_Bench_Mark {
      * @access  public
      * @param   bool    $silent    If set to true and if the mark is not running,
      *                             no exception will be thrown.
-     * @return  Hoa_Bench_Mark
-     * @throw   Hoa_Bench_Exception
+     * @return  \Hoa\Bench\Mark
+     * @throw   \Hoa\Bench\Exception
      */
     public function stop ( $silent = false ) {
 
         if(false === $this->isRunning())
             if(false === $silent)
-                throw new Hoa_Bench_Exception(
+                throw new Exception(
                     'Cannot stop the %s mark, because it is not running.',
                     1, $this->getId());
             else
@@ -199,7 +197,7 @@ class Hoa_Bench_Mark {
      * Reset the mark.
      *
      * @access  public
-     * @return  Hoa_Bench_Mark
+     * @return  \Hoa\Bench\Mark
      */
     public function reset ( ) {
 
@@ -221,14 +219,14 @@ class Hoa_Bench_Mark {
      * @param   bool    $silent    If set to true and the mark is not running,
      *                             no exception will be throw. Idem if the mark
      *                             is in pause.
-     * @return  Hoa_Bench_Mark
-     * @throw   Hoa_Bench_Exception
+     * @return  \Hoa\Bench\Mark
+     * @throw   \Hoa\Bench\Exception
      */
     public function pause ( $silent = false ) {
 
         if(false === $this->isRunning())
             if(false === $silent)
-                throw new Hoa_Bench_Exception(
+                throw new Exception(
                     'Cannot stop the %s mark, because it is not running.',
                     2, $this->getId());
             else
@@ -236,7 +234,7 @@ class Hoa_Bench_Mark {
 
         if(true  === $this->isPause())
             if(false === $silent)
-                throw new Hoa_Bench_Exception(
+                throw new Exception(
                     'The %s mark is still in pause. Cannot pause it again.',
                     3, $this->getId());
             else
@@ -271,10 +269,10 @@ class Hoa_Bench_Mark {
      * method.
      *
      * @access  public
-     * @param   Hoa_Bench_Mark  $mark    The mark to compare to.
+     * @param   \Hoa\Bench\Mark  $mark    The mark to compare to.
      * @return  int
      */
-    public function compareTo ( Hoa_Bench_Mark $mark ) {
+    public function compareTo ( \Hoa\Bench\Mark $mark ) {
 
         $a = $this->diff();
         $b = $mark->diff();
@@ -321,4 +319,6 @@ class Hoa_Bench_Mark {
 
         return (string) $this->diff();
     }
+}
+
 }
