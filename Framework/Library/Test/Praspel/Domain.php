@@ -224,7 +224,7 @@ class Hoa_Test_Praspel_Domain {
      * @param   string  $name         Domain name.
      * @param   array   $arguments    Domain arguments.
      * @return  void
-     * @throws  Hoa_Exception
+     * @throws  Hoa_Core_Exception
      */
     protected function _factory ( $name, Array $arguments ) {
 

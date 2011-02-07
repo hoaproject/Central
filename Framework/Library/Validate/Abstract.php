@@ -133,7 +133,7 @@ abstract class Hoa_Validate_Abstract {
 
             $message = $this->getErrorMessage($type, $data);
         }
-        catch ( Hoa_Exception_Validate $e ) {
+        catch ( Hoa_Core_Exception_Validate $e ) {
 
             throw $e;
         }

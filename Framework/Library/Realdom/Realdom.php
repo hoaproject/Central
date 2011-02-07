@@ -143,7 +143,7 @@ abstract class Hoa_Realdom implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   array   $in    Parameters to set.
      * @return  void
-     * @throw   Hoa_Exception
+     * @throw   Hoa_Core_Exception
      */
     public function setParameters ( Array $in ) {
 
@@ -155,7 +155,7 @@ abstract class Hoa_Realdom implements Hoa_Core_Parameterizable {
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Exception
+     * @throw   Hoa_Core_Exception
      */
     public function getParameters ( ) {
 
@@ -169,7 +169,7 @@ abstract class Hoa_Realdom implements Hoa_Core_Parameterizable {
      * @param   string  $key      Key.
      * @param   mixed   $value    Value.
      * @return  mixed
-     * @throw   Hoa_Exception
+     * @throw   Hoa_Core_Exception
      */
     public function setParameter ( $key, $value ) {
 
@@ -182,7 +182,7 @@ abstract class Hoa_Realdom implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Exception
+     * @throw   Hoa_Core_Exception
      */
     public function getParameter ( $key ) {
 
@@ -196,7 +196,7 @@ abstract class Hoa_Realdom implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Exception
+     * @throw   Hoa_Core_Exception
      */
     public function getFormattedParameter ( $key ) {
 
