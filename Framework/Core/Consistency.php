@@ -70,7 +70,7 @@ class Consistency {
             $all = $path;
 
         if(isset(self::$_cache[$all]))
-            return;
+            return $this;
 
         self::$_cache[$all] = true;
         $edited             = false;
