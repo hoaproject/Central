@@ -24,46 +24,44 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Tree
- * @subpackage  Hoa_Tree_Node_SimpleNode
- *
  */
 
-/**
- * Hoa_Tree_Node_Interface
- */
-import('Tree.Node.Interface');
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Tree_Node_SimpleNode.
+ * \Hoa\Tree\ITree\Node
+ */
+-> import('Tree.I~.Node');
+
+}
+
+namespace Hoa\Tree {
+
+/**
+ * Class \Hoa\Tree\SimpleNode.
  *
  * It's just a simple node demo (may be used for example and test).
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Tree
- * @subpackage  Hoa_Tree_Node_SimpleNode
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Tree_Node_SimpleNode implements Hoa_Tree_Node_Interface {
+class SimpleNode implements ITree\Node {
 
     /**
      * Node ID.
      *
-     * @var Hoa_Tree_Node_SimpleNode string
+     * @var \Hoa\Tree\SimpleNode string
      */
     protected $_id    = null;
 
     /**
      * Node value.
      *
-     * @var Hoa_Tree_Node_SimpleNode string
+     * @var \Hoa\Tree\SimpleNode string
      */
     protected $_value = null;
 
@@ -145,4 +143,6 @@ class Hoa_Tree_Node_SimpleNode implements Hoa_Tree_Node_Interface {
 
         return (string) $this->getValue();
     }
+}
+
 }
