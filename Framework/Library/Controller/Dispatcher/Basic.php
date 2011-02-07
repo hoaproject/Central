@@ -24,34 +24,37 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Controller
- * @subpackage  Hoa_Controller_Dispatcher_Basic
- *
  */
 
-/**
- * Hoa_Controller_Dispatcher
- */
-import('Controller.Dispatcher') and load();
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Controller_Dispatcher_Basic.
+ * \Hoa\Controller\Exception
+ */
+-> import('Controller.Exception')
+
+/**
+ * \Hoa\Controller\Dispatcher
+ */
+-> import('Controller.Dispatcher.~');
+
+}
+
+namespace Hoa\Controller\Dispatcher {
+
+/**
+ * Class \Hoa\Controller\Dispatcher\Basic.
  *
  * .
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Controller
- * @subpackage  Hoa_Controller_Dispatcher_Basic
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Controller_Dispatcher_Basic extends Hoa_Controller_Dispatcher {
+class Basic extends Dispatcher {
 
     /**
      * Resolve the dispatch call.
@@ -60,7 +63,7 @@ class Hoa_Controller_Dispatcher_Basic extends Hoa_Controller_Dispatcher {
      * @param   array      $components    All components from the router.
      * @param   string     $pattern       Pattern (kind of ID).
      * @return  mixed
-     * @throw   Hoa_Controller_Exception
+     * @throw   \Hoa\Controller\Exception
      */
     protected function resolve ( Array $components, $pattern ) {
 
@@ -71,10 +74,10 @@ class Hoa_Controller_Dispatcher_Basic extends Hoa_Controller_Dispatcher {
         $reflection = null;
         $method     = strtoupper($this->_parameters->getKeyword($this, 'method'));
 
-        if($action instanceof Closure) {
+        if($action instanceof \Closure) {
 
             $called     = $action;
-            $reflection = new ReflectionMethod($action, '__invoke');
+            $reflection = new \ReflectionMethod($action, '__invoke');
 
             foreach($reflection->getParameters() as $i => $parameter) {
 
@@ -87,7 +90,7 @@ class Hoa_Controller_Dispatcher_Basic extends Hoa_Controller_Dispatcher {
                 }
 
                 if(false === $parameter->isOptional())
-                    throw new Hoa_Controller_Exception(
+                    throw new \Hoa\Controller\Exception(
                         'The closured action for the rule with pattern %s needs ' .
                         'a value for the parameter $%s and this value does not ' .
                         'exist.',
@@ -96,7 +99,7 @@ class Hoa_Controller_Dispatcher_Basic extends Hoa_Controller_Dispatcher {
         }
         elseif(null === $controller && is_string($action)) {
 
-            $reflection = new ReflectionFunction($action);
+            $reflection = new \ReflectionFunction($action);
 
             foreach($reflection->getParameters() as $i => $parameter) {
 
@@ -109,7 +112,7 @@ class Hoa_Controller_Dispatcher_Basic extends Hoa_Controller_Dispatcher {
                 }
 
                 if(false === $parameter->isOptional())
-                    throw new Hoa_Controller_Exception(
+                    throw new \Hoa\Controller\Exception(
                         'The functional action for the rule with pattern %s needs ' .
                         'a value for the parameter $%s and this value does not ' .
                         'exist.',
@@ -143,7 +146,7 @@ class Hoa_Controller_Dispatcher_Basic extends Hoa_Controller_Dispatcher {
                 $action     = $this->getFormattedParameter($_action);
 
                 if(!file_exists($file))
-                    throw new Hoa_Controller_Exception(
+                    throw new \Hoa\Controller\Exception(
                         'File %s is not found (method: %s, asynchronous: %s).',
                         2, array($file, $method,
                                  true === $async ? 'true': 'false'));
@@ -151,13 +154,13 @@ class Hoa_Controller_Dispatcher_Basic extends Hoa_Controller_Dispatcher {
                 require_once $file;
 
                 if(!class_exists($controller))
-                    throw new Hoa_Controller_Exception(
+                    throw new \Hoa\Controller\Exception(
                         'Controller %s is not found in the file %s ' .
                         '(method: %s, asynchronous: %s).',
                         3, array($controller, $file, $method,
                                  true === $async ? 'true': 'false'));
 
-                if(is_subclass_of($controller, 'Hoa_Controller_Application')) {
+                if(is_subclass_of($controller, '\Hoa\Controller\Application')) {
 
                     $application = $components['_this'];
                     $controller  = new $controller(
@@ -172,14 +175,14 @@ class Hoa_Controller_Dispatcher_Basic extends Hoa_Controller_Dispatcher {
             }
 
             if(!method_exists($controller, $action))
-                throw new Hoa_Controller_Exception(
+                throw new \Hoa\Controller\Exception(
                     'Action %s does not exist on the controller %s ' .
                     '(method: %s, asynchronous: %s).',
                     5, array($action, get_class($controller), $method,
                              true === $async ? 'true': 'false'));
 
             $called     = $controller;
-            $reflection = new ReflectionMethod($controller, $action);
+            $reflection = new \ReflectionMethod($controller, $action);
 
             foreach($reflection->getParameters() as $i => $parameter) {
 
@@ -193,7 +196,7 @@ class Hoa_Controller_Dispatcher_Basic extends Hoa_Controller_Dispatcher {
                 }
 
                 if(false === $parameter->isOptional())
-                    throw new Hoa_Controller_Exception(
+                    throw new \Hoa\Controller\Exception(
                         'The action %s on the controller %s needs a value for ' .
                         'the parameter $%s and this value does not exist.',
                         6, array($action, get_class($controller),
@@ -201,11 +204,13 @@ class Hoa_Controller_Dispatcher_Basic extends Hoa_Controller_Dispatcher {
             }
         }
 
-        if($reflection instanceof ReflectionFunction)
+        if($reflection instanceof \ReflectionFunction)
             $return = $reflection->invokeArgs($arguments);
-        elseif($reflection instanceof ReflectionMethod)
+        elseif($reflection instanceof \ReflectionMethod)
             $return = $reflection->invokeArgs($called, $arguments);
 
         return $return;
     }
+}
+
 }
