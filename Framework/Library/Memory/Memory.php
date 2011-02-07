@@ -24,32 +24,32 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Memory
- *
  */
 
-/**
- * Hoa_Memory_Exception
- */
-import('Memory.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Memory.
+ * \Hoa\Memory\Exception
+ */
+-> import('Memory.Exception');
+
+}
+
+namespace Hoa\Memory {
+
+/**
+ * Class \Hoa\Memory.
  *
  * Work with memory.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Memory
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Memory {
+class Memory {
 
     /**
      * Get the amount of memory allocated to PHP.
@@ -135,14 +135,16 @@ class Hoa_Memory {
      * @param   int     $who    If set to 1, it will be called with
      *                          RUSAGE_CHILDREN.
      * @return  array
-     * @throw   Hoa_Memory_Exception
+     * @throw   \Hoa\Memory\Exception
      */
     public static function getRUsage ( $who = 0 ) {
 
         if(OS_WIN)
-            throw new Hoa_Memory_Exception(
+            throw new Exception(
                 'Cannot get the current resource usages on Windows.', 0);
 
         return getrusage($who);
     }
+}
+
 }

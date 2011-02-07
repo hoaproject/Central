@@ -24,56 +24,42 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Memory
- * @subpackage  Hoa_Memory_GarbageCollector
- *
  */
 
-/**
- * Hoa_Memory_Exception
- */
-import('Memory.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Memory_GarbageCollector.
+ * \Hoa\Memory\Exception
+ */
+-> import('Memory.Exception');
+
+}
+
+namespace Hoa\Memory {
+
+/**
+ * Class \Hoa\Memory\GarbageCollector.
  *
  * Manage the PHP Garbage Collector.
  * Please, read http://www.research.ibm.com/people/d/dfb/papers/Bacon03Pure.pdf
  * to know more about its behavior.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Memory
- * @subpackage  Hoa_Memory_GarbageCollector
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Memory_GarbageCollector {
-
-    /**
-     * Whether version is ok.
-     *
-     * @var Hoa_Memory_GarbageCollector bool
-     */
-    protected static $_isVersionOk = false;
-
-
+class GarbageCollector {
 
     /**
      * Active the garbage collector.
      *
      * @access  public
      * @return  void
-     * @throw   Hoa_Memory_Exception
      */
     public static function enable ( ) {
-
-        self::checkCompatibility(true);
 
         return gc_enable();
     }
@@ -83,11 +69,8 @@ class Hoa_Memory_GarbageCollector {
      *
      * @access  public
      * @return  void
-     * @throw   Hoa_Memory_Exception
      */
     public static function disable ( ) {
-
-        self::checkCompatibility(true);
 
         return gc_disable();
     }
@@ -97,11 +80,8 @@ class Hoa_Memory_GarbageCollector {
      *
      * @access  public
      * @return  bool
-     * @throw   Hoa_Memory_Exception
      */
     public static function isEnabled ( ) {
-
-        self::checkCompatibility(true);
 
         return gc_enabled();
     }
@@ -114,33 +94,8 @@ class Hoa_Memory_GarbageCollector {
      */
     public static function collect ( ) {
 
-        self::checkCompatibility(true);
-
         return gc_collect_cycles();
     }
+}
 
-    /**
-     * Check version.
-     *
-     * @access  public
-     * @param   bool    $exception    Throw exception is set to true, else
-     *                                return false.
-     * @return  bool
-     * @throw   Hoa_Memory_Exception
-     */
-    public static function checkCompatibility ( $exception = false ) {
-
-        if(true === self::$_isVersionOk)
-            return true;
-
-        if(PHP_VERSION_ID < 50300)
-            if(true === $exception)
-                throw new Hoa_Memory_Exception(
-                    'PHP 5.3.0 must be installed to use this package; ' .
-                    'the current version is: %s.', 0, PHP_VERSION);
-            else
-                return false;
-
-        return self::$_isVersionOk = true;
-    }
 }
