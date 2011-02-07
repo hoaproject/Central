@@ -24,37 +24,37 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Registry
- *
  */
 
-/**
- * Hoa_Registry_Exception
- */
-import('Registry.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Registry.
+ * \Hoa\Registry\Exception
+ */
+-> import('Registry.Exception');
+
+}
+
+namespace Hoa\Registry {
+
+/**
+ * Class \Hoa\Registry.
  *
  * Hold a register of objects.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.2
- * @package     Hoa_Registry
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Registry extends ArrayObject {
+class Registry extends \ArrayObject {
 
     /**
      * Instance.
      *
-     * @var Hoa_Registry object
+     * @var \Hoa\Registry object
      */
     private static $_instance = null;
 
@@ -65,19 +65,19 @@ class Hoa_Registry extends ArrayObject {
      *
      * @access  public
      * @return  void
-     * @throw   Hoa_Registry_Exception
+     * @throw   \Hoa\Registry\Exception
      */
     public function __construct ( ) {
 
-        throw new Hoa_Registry_Exception(
-            'Cannot instance the Hoa_Registry object. Use set, get and ' .
+        throw new Exception(
+            'Cannot instance the \Hoa\Registry object. Use set, get and ' .
             'isRegistered static methods.', 0);
 
         return;
     }
 
     /**
-     * Get instance of Hoa_Registry.
+     * Get instance of \Hoa\Registry.
      *
      * @access  protected
      * @return  object
@@ -111,14 +111,14 @@ class Hoa_Registry extends ArrayObject {
      * @access  public
      * @param   mixed   $index     Index of registry.
      * @return  mixed
-     * @throw   Hoa_Registry_Exception
+     * @throw   \Hoa\Registry\Exception
      */
     public static function get ( $index ) {
 
         $registry = self::getInstance();
 
         if(!$registry->offsetExists($index))
-            throw new Hoa_Registry_Exception('Registry %s does not exist.',
+            throw new Exception('Registry %s does not exist.',
                 1, $index);
 
         return $registry->offsetGet($index);
@@ -152,25 +152,21 @@ class Hoa_Registry extends ArrayObject {
 }
 
 /**
- * Class Hoa_Registry__Protocol.
+ * Class \Hoa\Registry\_Protocol.
  *
  * hoa://Library/Registry component.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP5
- * @version     0.3
- * @package     Hoa_Registry
- * @subpackage  Hoa_Registry__Protocol
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Registry__Protocol extends Hoa_Core_Protocol {
+class _Protocol extends \Hoa\Core\Protocol {
 
     /**
      * Component's name.
      *
-     * @var Hoa_Core_Protocol string
+     * @var \Hoa\Core\Protocol string
      */
     protected $_name = 'Registry';
 
@@ -183,19 +179,25 @@ class Hoa_Registry__Protocol extends Hoa_Core_Protocol {
      * @access  public
      * @param   string  $id    ID of the component.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function reachId ( $id ) {
 
-        return Hoa_Registry::get($id);
+        return \Hoa\Registry::get($id);
     }
 }
 
+}
+
+namespace {
+
 /**
  * Add the hoa://Library/Registry component. Should be use to reach/get an entry
- * in the Hoa_Registry, e.g.: resolve('hoa://Library/Registry#AnID').
+ * in the \Hoa\Registry, e.g.: resolve('hoa://Library/Registry#AnID').
  */
-Hoa_Core::getInstance()
-        ->getProtocol()
-        ->getComponent('Library')
-        ->addComponent(new Hoa_Registry__Protocol());
+\Hoa\Core::getInstance()
+    ->getProtocol()
+    ->getComponent('Library')
+    ->addComponent(new \Hoa\Registry\_Protocol());
+
+}
