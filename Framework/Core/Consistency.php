@@ -69,7 +69,7 @@ class Consistency {
         else
             $all = $path;
 
-        if(isset(self::$_cache[$all]))
+        if(isset(self::$_cache[$all]) && false === $load)
             return $this;
 
         self::$_cache[$all] = true;
@@ -92,7 +92,7 @@ class Consistency {
             $explode = $parts;
             $edited  = true;
 
-            if(isset(self::$_cache[$all]))
+            if(isset(self::$_cache[$all]) && false === $load)
                 return $this;
 
             self::$_cache[$all] = true;
@@ -161,7 +161,7 @@ class Consistency {
         if(false === $load)
             return $this;
 
-        require_once $path;
+        require $path;
 
         self::$_class[$class]['imported'] = true;
 
