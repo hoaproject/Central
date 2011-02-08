@@ -51,8 +51,6 @@ class Consistency {
 
         $this->_from = $from;
 
-        print_r(\Hoa\Core::getInstance()->getParameters());
-
         return;
     }
 
