@@ -397,9 +397,10 @@ namespace {
  * @param   string  $eventId    Event ID.
  * @return  \Hoa\Core\Event
  */
+if(!ƒ('event')) {
 function event ( $eventId ) {
 
     return \Hoa\Core\Event::getEvent($eventId);
-}
+}}
 
 }

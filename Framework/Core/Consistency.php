@@ -238,18 +238,20 @@ namespace {
 /**
  *
  */
+if(!ƒ('from')) {
 function from ( $namespace ) {
 
     return \Hoa\Core\Consistency::from($namespace);
-}
+}}
 
 /**
  *
  */
+if(!ƒ('dnew')) {
 function dnew ( $classname, Array $arguments = array() ) {
 
     return \Hoa\Core\Consistency::dnew($classname, $arguments);
-}
+}}
 
 /**
  * Set autoloader.

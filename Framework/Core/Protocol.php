@@ -864,11 +864,6 @@ class Wrapper {
 namespace {
 
 /**
- * Register the hoa:// protocol.
- */
-stream_wrapper_register('hoa', '\Hoa\Core\Protocol\Wrapper');
-
-/**
  * Alias of the \Hoa\Core::getInstance()->getProtocol()->resolve() method.
  * method.
  *
@@ -876,9 +871,15 @@ stream_wrapper_register('hoa', '\Hoa\Core\Protocol\Wrapper');
  * @param   string  $path    Path to resolve.
  * @return  mixed
  */
+if(!ƒ('resolve')) {
 function resolve ( $path ) {
 
     return \Hoa\Core::getInstance()->getProtocol()->resolve($path);
-}
+}}
+
+/**
+ * Register the hoa:// protocol.
+ */
+stream_wrapper_register('hoa', '\Hoa\Core\Protocol\Wrapper');
 
 }
