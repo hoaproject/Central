@@ -24,66 +24,66 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Xyl
- *
  */
 
-/**
- * Hoa_Xyl_Exception
- */
-import('Xyl.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Xyl_Element
+ * \Hoa\Xyl\Exception
  */
-import('Xyl.Element') and load();
+-> import('Xyl.Exception')
 
 /**
- * Hoa_Xyl_Element_Basic
+ * \Hoa\Xyl\Element
  */
-import('Xyl.Element.Basic') and load();
+-> import('Xyl.Element.~')
 
 /**
- * Hoa_Xyl_Element_Executable
+ * \Hoa\Xyl\Element\Basic
  */
-import('Xyl.Element.Executable');
+-> import('Xyl.Element.Basic')
 
 /**
- * Hoa_Xml
+ * \Hoa\Xyl\Element\Executable
  */
-import('Xml.~') and load();
+-> import('Xyl.Element.Executable')
 
 /**
- * Hoa_Xml_Attribute
+ * \Hoa\Xml
  */
-import('Xml.Attribute');
+-> import('Xml.~')
 
 /**
- * Hoa_View_Viewable
+ * \Hoa\Xml\Attribute
  */
-import('View.Viewable');
+-> import('Xml.Attribute')
 
 /**
- * Class Hoa_Xyl.
+ * \Hoa\View\Viewable
+ */
+-> import('View.Viewable');
+
+}
+
+namespace Hoa\Xyl {
+
+/**
+ * Class \Hoa\Xyl.
  *
  * 
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Xyl
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class          Hoa_Xyl
-    extends    Hoa_Xml
-    implements Hoa_Xyl_Element,
-               Hoa_View_Viewable,
-               Hoa_Core_Parameterizable {
+class          Xyl
+    extends    \Hoa\Xml
+    implements Element,
+               \Hoa\View\Viewable,
+               \Hoa\Core\Parameterizable {
 
     /**
      * XYL's namespace.
@@ -93,23 +93,23 @@ class          Hoa_Xyl
     const NAMESPACE_ID = 'http://hoa-project.net/xyl/xylophone';
 
     /**
-     * The Hoa_Controller_Dispatcher parameters.
+     * The \Hoa\Controller\Dispatcher parameters.
      *
-     * @var Hoa_Core_Parameter object
+     * @var \Hoa\Core\Parameter object
      */
     protected $_parameters  = null;
 
     /**
      * Data bucket.
      *
-     * @var Hoa_Xyl array
+     * @var \Hoa\Xyl array
      */
     protected $_data        = null;
 
     /**
      * Concrete tree.
      *
-     * @var Hoa_Xyl_Element_Concrete object
+     * @var \Hoa\Xyl\Element\Concrete object
      */
     protected $_concrete    = null;
 
@@ -123,14 +123,14 @@ class          Hoa_Xyl
     /**
      * Output stream.
      *
-     * @var Hoa_Stream_Interface_Out object
+     * @var \Hoa\Stream\IStream\Out object
      */
     protected $_out         = null;
 
     /**
      * Interpreter.
      *
-     * @var Hoa_Xyl_Interpreter object
+     * @var \Hoa\Xyl\Interpreter object
      */
     protected $_interpreter = null;
 
@@ -145,21 +145,21 @@ class          Hoa_Xyl
     /**
      * Temporize stylesheets.
      *
-     * @var Hoa_Xyl array
+     * @var \Hoa\Xyl array
      */
     protected $_stylesheets = array();
 
     /**
      * Get ID of the instance.
      *
-     * @var Hoa_Xyl int
+     * @var \Hoa\Xyl int
      */
     private $_i             = 0;
 
     /**
      * Get last ID of instances.
      *
-     * @var Hoa_Xyl int
+     * @var \Hoa\Xyl int
      */
     private static $_ci     = 0;
 
@@ -169,27 +169,27 @@ class          Hoa_Xyl
      * Interprete a stream as XYL.
      *
      * @access  public
-     * @param   Hoa_Stream_Interface_In   $in             Stream to interprete
+     * @param   \Hoa\Stream\IStream\In   $in             Stream to interprete
      *                                                    as XYL.
-     * @param   Hoa_Stream_Interface_Out  $out            Stream for rendering.
-     * @param   Hoa_Xyl_Interpreter       $interpreter    Interpreter.
+     * @param   \Hoa\Stream\IStream\Out  $out            Stream for rendering.
+     * @param   \Hoa\Xyl\Interpreter       $interpreter    Interpreter.
      * @param   array                     $parameters     Parameters.
      * @return  void
-     * @throw   Hoa_Xml_Exception
+     * @throw   \Hoa\Xml\Exception
      */
-    public function __construct ( Hoa_Stream_Interface_In  $in,
-                                  Hoa_Stream_Interface_Out $out,
-                                  Hoa_Xyl_Interpreter      $interpreter,
-                                  Array                    $parameters = array() ) {
+    public function __construct ( \Hoa\Stream\IStream\In  $in,
+                                  \Hoa\Stream\IStream\Out $out,
+                                  Interpreter             $interpreter,
+                                  Array                   $parameters = array() ) {
 
-        parent::__construct('Hoa_Xyl_Element_Basic', $in);
+        parent::__construct('\Hoa\Xyl\Element\Basic', $in);
 
         if(false === $this->namespaceExists(self::NAMESPACE_ID))
-            throw new Hoa_Xyl_Exception(
+            throw new Exception(
                 'The XYL file %s has no XYL namespace (%s) declared.',
                 0, array($in->getStreamName(), self::NAMESPACE_ID));
 
-        $this->_parameters = new Hoa_Core_Parameter(
+        $this->_parameters = new \Hoa\Core\Parameter(
             $this,
             array(
                 'theme' => 'classic'
@@ -206,17 +206,17 @@ class          Hoa_Xyl
         $this->setParameters($parameters);
 
         $this->_i           = self::$_ci++;
-        $this->_xe          = new DOMXPath(new DOMDocument());
-        $this->_data        = new Hoa_Core_Data();
+        $this->_xe          = new \DOMXPath(new \DOMDocument());
+        $this->_data        = new \Hoa\Core\Data();
         $this->_out         = $out;
         $this->_interpreter = $interpreter;
         $this->_mowgli      = $this->getStream()->readDOM()->ownerDocument;
 
         $this->useNamespace(self::NAMESPACE_ID);
-        Hoa_Core::getInstance()
+        \Hoa\Core::getInstance()
                 ->getProtocol()
                 ->getComponent('Library')
-                ->addComponent(new Hoa_Xyl__Protocol(
+                ->addComponent(new _Protocol(
                     'Xyl[' . $this->_i . ']',
                     'Interpreter' . DS .$this->_interpreter->getResourcePath()
                 ));
@@ -230,7 +230,7 @@ class          Hoa_Xyl
      * @access  public
      * @param   array   $in    Parameters to set.
      * @return  void
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setParameters ( Array $in ) {
 
@@ -242,7 +242,7 @@ class          Hoa_Xyl
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameters ( ) {
 
@@ -256,7 +256,7 @@ class          Hoa_Xyl
      * @param   string  $key      Key.
      * @param   mixed   $value    Value.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setParameter ( $key, $value ) {
 
@@ -269,7 +269,7 @@ class          Hoa_Xyl
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameter ( $key ) {
 
@@ -283,7 +283,7 @@ class          Hoa_Xyl
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getFormattedParameter ( $key ) {
 
@@ -294,7 +294,7 @@ class          Hoa_Xyl
      * Get data.
      *
      * @access  public
-     * @return  Hoa_Core_Data
+     * @return  \Hoa\Core\Data
      */
     public function getData ( ) {
 
@@ -305,7 +305,7 @@ class          Hoa_Xyl
      * Get output stream.
      *
      * @access  public
-     * @return  Hoa_Stream_Interface_Out
+     * @return  \Hoa\Stream\IStream\Out
      */
     public function getOutputStream ( ) {
 
@@ -321,7 +321,7 @@ class          Hoa_Xyl
     public function addUse ( $href ) {
 
         $this->_mowgli->insertBefore(
-            new DOMProcessingInstruction(
+            new \DOMProcessingInstruction(
                 'xyl-use',
                 'href="' . str_replace('"', '\"', $href) . '"'
             ),
@@ -336,14 +336,14 @@ class          Hoa_Xyl
      *
      * @access  protected
      * @return  bool
-     * @throw   Hoa_Xml_Exception
+     * @throw   \Hoa\Xml\Exception
      */
     protected function computeUse ( ) {
 
         $streamClass = get_class($this->getInnerStream());
         $hrefs       = array();
         $uses        = array();
-        $xpath       = new DOMXPath($this->_mowgli);
+        $xpath       = new \DOMXPath($this->_mowgli);
         $xyl_use     = $xpath->query('/processing-instruction(\'xyl-use\')');
         unset($xpath);
 
@@ -362,7 +362,7 @@ class          Hoa_Xyl
         do {
 
             $use       = array_pop($uses);
-            $useParsed = new Hoa_Xml_Attribute($use->data);
+            $useParsed = new \Hoa\Xml\Attribute($use->data);
 
             if(false === $useParsed->attributeExists('href')) {
 
@@ -375,21 +375,21 @@ class          Hoa_Xyl
             unset($useParsed);
 
             if(false === file_exists($href))
-                throw new Hoa_Xyl_Exception(
+                throw new Exception(
                     'File %s is not found, cannot use it.', 0, $href);
 
             if(true === in_array($href, $hrefs))
                 continue;
 
             $hrefs[]  = $href;
-            $fragment = new Hoa_Xyl(
+            $fragment = new self(
                 new $streamClass($href),
                 $this->_out,
                 $this->_interpreter
             );
 
             if('definition' !== $fragment->getName())
-                throw new Hoa_Xyl_Exception(
+                throw new Exception(
                     '%s must only contain <definition> of <yield> (and some ' .
                     '<?xyl-use) elements.', 1, $href);
 
@@ -402,7 +402,7 @@ class          Hoa_Xyl
             unset($xyl_use);
 
             $fod     = $fragment->readDOM()->ownerDocument;
-            $xpath   = new DOMXPath($fod);
+            $xpath   = new \DOMXPath($fod);
             $xyl_use = $xpath->query('/processing-instruction(\'xyl-use\')');
             unset($xpath);
 
@@ -461,7 +461,7 @@ class          Hoa_Xyl
     public function addOverlay ( $href ) {
 
         $this->_mowgli->insertBefore(
-            new DOMProcessingInstruction(
+            new \DOMProcessingInstruction(
                 'xyl-overlay',
                 'href="' . str_replace('"', '\"', $href) . '"'
             ),
@@ -476,14 +476,14 @@ class          Hoa_Xyl
      *
      * @access  protected
      * @return  bool
-     * @throw   Hoa_Xml_Exception
+     * @throw   \Hoa\Xml\Exception
      */
     protected function computeOverlay ( ) {
 
         $streamClass = get_class($this->getInnerStream());
         $hrefs       = array();
         $overlays    = array();
-        $xpath       = new DOMXPath($this->_mowgli);
+        $xpath       = new \DOMXPath($this->_mowgli);
         $xyl_overlay = $xpath->query('/processing-instruction(\'xyl-overlay\')');
         unset($xpath);
 
@@ -496,7 +496,7 @@ class          Hoa_Xyl
         do {
 
             $overlay       = array_pop($overlays);
-            $overlayParsed = new Hoa_Xml_Attribute($overlay->data);
+            $overlayParsed = new \Hoa\Xml\Attribute($overlay->data);
 
             if(false === $overlayParsed->attributeExists('href')) {
 
@@ -509,21 +509,21 @@ class          Hoa_Xyl
             unset($overlayParsed);
 
             if(false === file_exists($href))
-                throw new Hoa_Xyl_Exception(
+                throw new Exception(
                     'File %s is not found, cannot use it.', 2, $href);
 
             if(true === in_array($href, $hrefs))
                 continue;
 
             $hrefs[]  = $href;
-            $fragment = new Hoa_Xyl(
+            $fragment = new self(
                 new $streamClass($href),
                 $this->_out,
                 $this->_interpreter
             );
 
             if('overlay' !== $fragment->getName())
-                throw new Hoa_Xyl_Exception(
+                throw new Exception(
                     '%s must only contain <overlay> (and some <?xyl-overlay) ' .
                     'elements.', 3, $href);
 
@@ -537,7 +537,7 @@ class          Hoa_Xyl
             unset($xyl_overlay);
 
             $fod         = $fragment->readDOM()->ownerDocument;
-            $xpath       = new DOMXPath($fod);
+            $xpath       = new \DOMXPath($fod);
             $xyl_overlay = $xpath->query('/processing-instruction(\'xyl-overlay\')');
             unset($xpath);
 
@@ -555,16 +555,16 @@ class          Hoa_Xyl
      * Next step for computing overlay.
      *
      * @access  private
-     * @param   DOMElement  $from    Receiver fragment.
-     * @param   DOMElement  $to      Overlay fragment.
+     * @param   \DOMElement  $from    Receiver fragment.
+     * @param   \DOMElement  $to      Overlay fragment.
      * @return  void
      */
-    private function _computeOverlay ( DOMElement $from, DOMElement $to ) {
+    private function _computeOverlay ( \DOMElement $from, \DOMElement $to ) {
 
         if(false === $to->hasAttribute('id'))
             return $this->_computeOverlayPosition($from, $to);
 
-        $xpath = new DOMXPath($from->ownerDocument);
+        $xpath = new \DOMXPath($from->ownerDocument);
         $query = $xpath->query('//*[@id="' . $to->getAttribute('id') . '"]');
 
         if(0 === $query->length)
@@ -626,12 +626,12 @@ class          Hoa_Xyl
      * Compute position while computing overlay.
      *
      * @access  private
-     * @param   DOMElement  $from    Receiver fragment.
-     * @param   DOMElement  $to      Overlay fragment.
+     * @param   \DOMElement  $from    Receiver fragment.
+     * @param   \DOMElement  $to      Overlay fragment.
      * @return  void
      */
-    private function _computeOverlayPosition ( DOMElement $from,
-                                               DOMElement $to ) {
+    private function _computeOverlayPosition ( \DOMElement $from,
+                                               \DOMElement $to ) {
 
         if(false === $to->hasAttribute('position')) {
 
@@ -688,12 +688,12 @@ class          Hoa_Xyl
      * Compute <?xyl-stylesheet?> processing-instruction.
      *
      * @access  protected
-     * @param   DOMDocument  $ownerDocument    Document that ownes PIs.
+     * @param   \DOMDocument  $ownerDocument    Document that ownes PIs.
      * @return  void
      */
-    protected function computeStylesheet ( DOMDocument $ownerDocument ) {
+    protected function computeStylesheet ( \DOMDocument $ownerDocument ) {
 
-        $xpath     = new DOMXPath($ownerDocument);
+        $xpath     = new \DOMXPath($ownerDocument);
         $xyl_style = $xpath->query('/processing-instruction(\'xyl-stylesheet\')');
         unset($xpath);
 
@@ -702,7 +702,7 @@ class          Hoa_Xyl
 
         for($i = 0, $m = $xyl_style->length; $i < $m; ++$i) {
 
-            $styleParsed = new Hoa_Xml_Attribute(
+            $styleParsed = new \Hoa\Xml\Attribute(
                 $xyl_style->item($i)->data
             );
 
@@ -725,7 +725,7 @@ class          Hoa_Xyl
     protected function computeDataBinding ( ) {
 
         if(null === $this->_concrete)
-            throw new Hoa_Xyl_Exception(
+            throw new Exception(
                 'Cannot compute the data binding before building the ' .
                 'concrete tree.', 4);
 
@@ -738,11 +738,11 @@ class          Hoa_Xyl
      * Interprete XYL as…
      *
      * @access  public
-     * @param   Hoa_Xyl_Interpreter  $interpreter    Interpreter.
+     * @param   \Hoa\Xyl\Interpreter  $interpreter    Interpreter.
      * @return  void
-     * @throws  Hoa_Xyl_Exception
+     * @throws  \Hoa\Xyl\Exception
      */
-    public function interprete ( Hoa_Xyl_Interpreter $interpreter = null ) {
+    public function interprete ( Interpreter $interpreter = null ) {
 
         if(null === $interpreter)
             $interpreter = $this->_interpreter;
@@ -756,7 +756,7 @@ class          Hoa_Xyl
         $name = strtolower($root->getName());
 
         if(false === array_key_exists($name, $rank))
-            throw new Hoa_Xyl_Exception(
+            throw new Exception(
                 'Cannot create the concrete tree because the root <%s> is ' .
                 'unknown from the rank.', 5, $name);
 
@@ -852,34 +852,31 @@ class          Hoa_Xyl
      */
     public function __destruct ( ) {
 
-        Hoa_Core::getInstance()
-                ->getProtocol()
-                ->getComponent('Library')
-                ->removeComponent('Xyl[' . $this->_i . ']');
+        \Hoa\Core::getInstance()
+            ->getProtocol()
+            ->getComponent('Library')
+            ->removeComponent('Xyl[' . $this->_i . ']');
 
         return;
     }
 }
 
 /**
- * Class Hoa_Xyl__Protocol.
+ * Class \Hoa\Xyl\_Protocol.
  *
  * hoa://Library/Xyl component.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Xyl
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Xyl__Protocol extends Hoa_Core_Protocol {
+class _Protocol extends \Hoa\Core\Protocol {
 
     /**
      * Fragment to insert in the path.
      *
-     * @var Hoa_Xyl__Protocol string
+     * @var \Hoa\Xyl\_Protocol string
      */
     protected $_fragment = null;
 
@@ -911,6 +908,8 @@ class Hoa_Xyl__Protocol extends Hoa_Core_Protocol {
      */
     public function reach ( $queue ) {
 
-        return dirname(__FILE__) . DS . $this->_fragment . $queue;
+        return __DIR__ . DS . $this->_fragment . $queue;
     }
+}
+
 }

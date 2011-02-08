@@ -24,38 +24,36 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Xyl
- * @subpackage  Hoa_Xyl_Element_Basic
- *
  */
 
-/**
- * Hoa_Xyl_Element
- */
-import('Xyl.Element') and load();
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Xml_Element_ReadWrite
+ * \Hoa\Xyl\Element
  */
-import('Xml.Element.ReadWrite') and load();
+-> import('Xyl.Element.~')
 
 /**
- * Class Hoa_Xyl_Element_Basic.
+ * \Hoa\Xml\Element\ReadWrite
+ */
+-> import('Xml.Element.ReadWrite');
+
+}
+
+namespace Hoa\Xyl\Element {
+
+/**
+ * Class \Hoa\Xyl\Element\Basic.
  *
  * 
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Xyl
- * @subpackage  Hoa_Xyl_Element_Basic
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class          Hoa_Xyl_Element_Basic
-    extends    Hoa_Xml_Element_ReadWrite
-    implements Hoa_Xyl_Element { }
+class Basic extends \Hoa\Xml\Element\ReadWrite implements Element { }
+
+}

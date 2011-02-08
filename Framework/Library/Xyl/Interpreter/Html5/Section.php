@@ -24,53 +24,51 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Xyl
- * @subpackage  Hoa_Xyl_Interpreter_Html5_Section
- *
  */
 
-/**
- * Hoa_Xyl_Element_Concrete
- */
-import('Xyl.Element.Concrete') and load();
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Xyl_Element_Executable
+ * \Hoa\Xyl\Element\Concrete
  */
-import('Xyl.Element.Executable') and load();
+-> import('Xyl.Element.Concrete')
 
 /**
- * Class Hoa_Xyl_Interpreter_Html5_Section.
+ * \Hoa\Xyl\Element\Executable
+ */
+-> import('Xyl.Element.Executable');
+
+}
+
+namespace Hoa\Xyl\Interpreter\Html5 {
+
+/**
+ * Class \Hoa\Xyl\Interpreter\Html5\Section.
  *
  * Abstract component for <section* /> components.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Xyl
- * @subpackage  Hoa_Xyl_Interpreter_Html5_Section
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-abstract class Hoa_Xyl_Interpreter_Html5_Section
-    extends    Hoa_Xyl_Element_Concrete
-    implements Hoa_Xyl_Element_Executable {
+abstract class Section
+    extends    \Hoa\Xyl\Element\Concrete
+    implements \Hoa\Xyl\Element\Executable {
 
     /**
      * Depth.
      *
-     * @var Hoa_Xyl_Interpreter_Html5_Section int
+     * @var \Hoa\Xyl\Interpreter\Html5\Section int
      */
     protected $_n     = 0;
 
     /**
      * Title.
      *
-     * @var Hoa_Xyl_Interpreter_Html5_Title object
+     * @var \Hoa\Xyl\Interpreter\Html5\Title object
      */
     protected $_title = null;
 
@@ -80,10 +78,10 @@ abstract class Hoa_Xyl_Interpreter_Html5_Section
      * Paint the element.
      *
      * @access  protected
-     * @param   Hoa_Stream_Interface_Out  $out    Out stream.
+     * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
      * @return  void
      */
-    protected function paint ( Hoa_Stream_Interface_Out $out ) {
+    protected function paint ( \Hoa\Stream\IStream\Out $out ) {
 
         $out->writeAll('<h' . $this->_n .
                        $this->readAttributesAsString() . '>');
@@ -150,7 +148,7 @@ abstract class Hoa_Xyl_Interpreter_Html5_Section
 
         $title = $this->getConcreteElement($xpath[0]);
 
-        if(!($title instanceof Hoa_Xyl_Interpreter_Html5_Title))
+        if(!($title instanceof Title))
             return;
 
         $this->_title = $title;
@@ -162,10 +160,12 @@ abstract class Hoa_Xyl_Interpreter_Html5_Section
      * Get the <title /> component.
      *
      * @access  pubic
-     * @return  Hoa_Xyl_Interpreter_Html5_Title
+     * @return  \Hoa\Xyl\Interpreter\Html5\Title
      */
     public function getTitle ( ) {
 
         return $this->_title;
     }
+}
+
 }

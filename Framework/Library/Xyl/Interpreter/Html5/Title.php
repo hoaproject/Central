@@ -24,53 +24,53 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Xyl
- * @subpackage  Hoa_Xyl_Interpreter_Html5_Title
- *
  */
 
-/**
- * Hoa_Xyl_Element_Concrete
- */
-import('Xyl.Element.Concrete') and load();
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Xml_Element_Model_Phrasing
+ * \Hoa\Xyl\Element\Concrete
  */
-import('Xml.Element.Model.Phrasing') and load();
+-> import('Xyl.Element.Concrete')
 
 /**
- * Class Hoa_Xyl_Interpreter_Html5_Title.
+ * \Hoa\Xml\Element\Model\Phrasing
+ */
+-> import('Xml.Element.Model.Phrasing');
+
+}
+
+namespace Hoa\Xyl\Interpreter\Html5 {
+
+/**
+ * Class \Hoa\Xyl\Interpreter\Html5\Title.
  *
  * The <title /> component.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Xyl
- * @subpackage  Hoa_Xyl_Interpreter_Html5_Title
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class          Hoa_Xyl_Interpreter_Html5_Title
-    extends    Hoa_Xyl_Element_Concrete
-    implements Hoa_Xml_Element_Model_Phrasing {
+class          Title
+    extends    \Hoa\Xyl\Element\Concrete
+    implements \Hoa\Xml\Element\Model\Phrasing {
 
     /**
      * Paint the element.
      *
      * @access  protected
-     * @param   Hoa_Stream_Interface_Out  $out    Out stream.
+     * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
      * @return  void
      */
-    protected function paint ( Hoa_Stream_Interface_Out $out ) {
+    protected function paint ( \Hoa\Stream\IStream\Out $out ) {
 
         $this->computeValue($out);
 
         return;
     }
+}
+
 }

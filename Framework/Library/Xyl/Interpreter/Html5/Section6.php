@@ -24,40 +24,39 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Xyl
- * @subpackage  Hoa_Xyl_Interpreter_Html5_Section6
- *
  */
 
-/**
- * Hoa_Xyl_Interpreter_Html5_Section
- */
-import('Xyl.Interpreter.Html5.Section') and load();
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Xyl_Interpreter_Html5_Section6.
+ * \Hoa\Xyl\Interpreter\Html5\Section
+ */
+-> import('Xyl.Interpreter.Html5.Section');
+
+}
+
+namespace Hoa\Xyl\Interpreter\Html5 {
+
+/**
+ * Class \Hoa\Xyl\Interpreter\Html5\Section6.
  *
  * The <section6 /> component.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Xyl
- * @subpackage  Hoa_Xyl_Interpreter_Html5_Section6
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class       Hoa_Xyl_Interpreter_Html5_Section6
-    extends Hoa_Xyl_Interpreter_Html5_Section {
+class Section6 extends Section {
 
     /**
      * Depth.
      *
-     * @var Hoa_Xyl_Interpreter_Html5_Section int
+     * @var \Hoa\Xyl\Interpreter\Html5\Section int
      */
     protected $_n = 6;
+}
+
 }

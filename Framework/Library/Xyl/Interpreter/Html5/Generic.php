@@ -24,40 +24,37 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Xyl
- * @subpackage  Hoa_Xyl_Interpreter_Html5_Generic
- *
  */
 
-/**
- * Hoa_Xyl_Element_Concrete
- */
-import('Xyl.Element.Concrete') and load();
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Xyl_Interpreter_Html5_Generic.
+ * \Hoa\Xyl\Element\Concrete
+ */
+-> import('Xyl.Element.Concrete');
+
+}
+
+namespace Hoa\Xyl\Interpreter\Html5 {
+
+/**
+ * Class \Hoa\Xyl\Interpreter\Html5\Generic.
  *
  * Abstract/generic component.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Xyl
- * @subpackage  Hoa_Xyl_Interpreter_Html5_Generic
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-abstract class Hoa_Xyl_Interpreter_Html5_Generic
-    extends    Hoa_Xyl_Element_Concrete {
+abstract class Generic extends \Hoa\Xyl\Element\Concrete {
 
     /**
      * Map.
      *
-     * @var Hoa_Xyl_Interpreter_Html5_Generic string
+     * @var \Hoa\Xyl\Interpreter\Html5\Generic string
      */
     protected $_map = null;
 
@@ -67,10 +64,10 @@ abstract class Hoa_Xyl_Interpreter_Html5_Generic
      * Paint the element.
      *
      * @access  protected
-     * @param   Hoa_Stream_Interface_Out  $out    Out stream.
+     * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
      * @return  void
      */
-    protected function paint ( Hoa_Stream_Interface_Out $out ) {
+    protected function paint ( \Hoa\Stream\IStream\Out $out ) {
 
         $out->writeAll('<' . $this->_map .
                        $this->readAttributesAsString() . '>');
@@ -79,4 +76,6 @@ abstract class Hoa_Xyl_Interpreter_Html5_Generic
 
         return;
     }
+}
+
 }
