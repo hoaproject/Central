@@ -24,85 +24,85 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Session
- *
  */
 
-/**
- * Hoa_Session_Exception
- */
-import('Session.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Session_Exception_SessionIsExpired
+ * \Hoa\Session\Exception
  */
-import('Session.Exception.SessionIsExpired');
+-> import('Session.Exception.~')
 
 /**
- * Hoa_Session_Namespace;
+ * \Hoa\Session\Exception\SessionIsExpired
  */
-import('Session.Namespace');
+-> import('Session.Exception.SessionIsExpired')
 
 /**
- * Hoa_Session_Option
+ * \Hoa\Session\QNamespace;
  */
-import('Session.Option');
+-> import('Session.QNamespace')
 
 /**
- * Hoa_Session_Flash
+ * \Hoa\Session\Option
  */
-import('Session.Flash');
+-> import('Session.Option')
 
 /**
- * Hoa_Session_SaveHandler_Interface
+ * \Hoa\Session\Flash
  */
-import('Session.SaveHandler.Interface');
+-> import('Session.Flash')
 
 /**
- * Class Hoa_Session.
+ * \Hoa\Session\ISession\SaveHandler
+ */
+-> import('Session.I~.SaveHandler');
+
+}
+
+namespace Hoa\Session {
+
+/**
+ * Class \Hoa\Session.
  *
  * This class allows to do different action on session (start, close, identify,
  * expire etc.).
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Session
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-abstract class Hoa_Session {
+abstract class Session {
 
     /**
      * Whether session is stared or not.
      *
-     * @var Hoa_Session bool
+     * @var \Hoa\Session bool
      */
     protected static $_start    = false;
 
     /**
-     * Whether session is in strict mode, i.e. Hoa_Session::start must be
+     * Whether session is in strict mode, i.e. \Hoa\Session::start must be
      * called before all new namespace declaration.
      *
-     * @var Hoa_Session bool
+     * @var \Hoa\Session bool
      */
     protected static $_strict   = false;
 
     /**
      * Whether session is writable or not.
      *
-     * @var Hoa_Session bool
+     * @var \Hoa\Session bool
      */
     protected static $_writable = false;
 
     /**
      * Whether session is readable or not.
      *
-     * @var Hoa_Session bool
+     * @var \Hoa\Session bool
      */
     protected static $_readable = false;
 
@@ -112,10 +112,10 @@ abstract class Hoa_Session {
      * Start a session.
      *
      * @access  public
-     * @param   array   $option     Option for Session_Option.
+     * @param   array   $option     Option for Session\Option.
      * @return  bool
-     * @throw   Hoa_Session_Exception
-     * @throw   Hoa_Session_Exception_SessionIsExpired
+     * @throw   \Hoa\Session\Exception
+     * @throw   \Hoa\Session\Exception\SessionIsExpired
      */
     public static function start ( Array $option = array() ) {
 
@@ -123,8 +123,8 @@ abstract class Hoa_Session {
             if(true === self::isStarted())
                 return;
             else
-                throw new Hoa_Session_Exception(
-                    'A session must be started by Hoa_Session::start() before ' .
+                throw new Exception(
+                    'A session must be started by \Hoa\Session::start() before ' .
                     'declare a new namespace.', 0);
         else
             if(true === self::isStarted())
@@ -132,40 +132,22 @@ abstract class Hoa_Session {
 
 
         if(headers_sent($filename, $line))
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Session must be started before any output ; ' .
                 'output started in %s at line %d.', 1,
                 array($filename, $line));
 
         if(defined('SID'))
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Session has been already auto or manually started (by ' .
                 'session.auto_start or session_start()).', 2);
 
-        Hoa_Session_Option::set($option);
+        Option::set($option);
 
-        if(PHP_VERSION_ID < 50300) {
-
-            set_error_handler(array('Hoa_Session_Exception', 'handleStartError'),
-                              E_ALL);
-            @session_start();
-            restore_error_handler();
-
-            if(true === Hoa_Session_Exception::hasStartError()) {
-
-                set_error_handler(array('Hoa_Session_Exception', 'handleNull'),
-                                  E_ALL);
-                @session_write_close();
-                restore_error_handler();
-                throw new Hoa_Session_Exception(
-                    Hoa_Session_Exception::getStartErrorMessage());
-            }
-        }
-        else
-            if(false === session_start())
-                throw new Hoa_Session_Exception(
-                    'Error when starting session. Cannot send session cookie. ' .
-                    'Headers already sent.', 3);
+        if(false === session_start())
+            throw new \Hoa\Session\Exception(
+                'Error when starting session. Cannot send session cookie. ' .
+                'Headers already sent.', 3);
 
         self::setStart(true);
         self::setWritable(true);
@@ -175,7 +157,10 @@ abstract class Hoa_Session {
         self::identifyMe();
 
         if(self::isExpiredSecond())
-            throw new Hoa_Session_Exception_SessionIsExpired('Session is expired.', 4);
+            throw new Exception\SessionIsExpired(
+                'Session is expired.', 4);
+
+        return;
     }
 
     /**
@@ -183,7 +168,7 @@ abstract class Hoa_Session {
      *
      * @access  protected
      * @return  void
-     * @throw   Hoa_Session_Exception
+     * @throw   \Hoa\Session\Exception
      */
     protected static function prepareSecretPart ( ) {
 
@@ -191,19 +176,21 @@ abstract class Hoa_Session {
             return;
 
         if(!isset($_SERVER['REMOTE_ADDR']))
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Cannot prepare the session identity, because the ' .
                 '$_SERVER[\'REMOTE_ADDR\'] variable is not found.', 5);
 
         $_SESSION['__Hoa'] = array(
-            'namespace'      => array(),
-            'expire_second'  => null,   // should be parameterizable, aye ?
-            'flash'          => array(),
-            'identity'       => array(
-                'id'         => md5(session_id()),
-                'ip'         => md5($_SERVER['REMOTE_ADDR'])
+            'namespace'     => array(),
+            'expire_second' => null,   // should be parameterizable, aye?
+            'flash'         => array(),
+            'identity'      => array(
+                'id'        => md5(session_id()),
+                'ip'        => md5($_SERVER['REMOTE_ADDR'])
             )
         );
+
+        return;
     }
 
     /**
@@ -213,18 +200,18 @@ abstract class Hoa_Session {
      * @param   bool    $getNew    Whether the method returns the new session ID
      *                             (false) or the new session ID (true).
      * @return  string
-     * @throw   Hoa_Session_Exception
+     * @throw   \Hoa\Session\Exception
      */
     public static function regenerateId ( $getNew = false ) {
 
         if(headers_sent($filename, $line))
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Cannot regenerate session ID ; headers already sent in %s ' .
                 'on line %d.', 6,
                 array($filename, $line));
 
         if(true !== self::isNamespaceSet('__Hoa'))
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Cannot regenerate ID, because the session was not ' .
                 'well-started.', 7);
 
@@ -242,35 +229,35 @@ abstract class Hoa_Session {
      *
      * @access  public
      * @return  bool
-     * @throw   Hoa_Session_Exception
+     * @throw   \Hoa\Session\Exception
      */
     public static function identifyMe ( ) {
 
         if(false === self::isStarted())
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Cannot identify a no-started session.', 8);
 
         if(!isset($_SESSION['__Hoa']['identity']))
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Cannot identify the current session.', 9);
 
         $identity = $_SESSION['__Hoa']['identity'];
 
         if(!isset($identity['id']))
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Cannot identify the current session ; session ID missing.', 10);
 
         if(!isset($identity['ip']))
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Cannot identify the current session ; session IP missing.', 11);
 
         if($identity['id'] !== md5(session_id()))
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Session is not well-identify ; session ID is not the right ' .
                 'ID.', 12);
 
         if($identity['ip'] !== md5($_SERVER['REMOTE_ADDR']))
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Session is not well-identify ; IP is not the right IP.', 13);
 
         return true;
@@ -285,7 +272,7 @@ abstract class Hoa_Session {
      */
     public static function isNamespaceSet ( $namespace ) {
 
-        if($namespace instanceof Hoa_Session_Namespace)
+        if($namespace instanceof QNamespace)
             $namespace = $namespace->getNamespaceName();
 
         return isset($_SESSION[$namespace]);
@@ -297,25 +284,27 @@ abstract class Hoa_Session {
      * @access  public
      * @param   mixed   $namespace    The namespace name or instance.
      * @return  void
-     * @throw   Hoa_Session_Exception
+     * @throw   \Hoa\Session\Exception
      */
     public static function unsetNamespace ( $namespace ) {
 
         if(false === self::isStarted())
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Cannot unset a namespace on a no-starded session.', 14);
 
         $name     = $namespace;
-        if($namespace instanceof Hoa_Session_Namespace)
+        if($namespace instanceof QNamespace)
             $name = $namespace->getNamespaceName();
 
         if(true === $_SESSION['__Hoa']['namespace'][$name]['lock'])
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Namespace %s is locked.', 15, $name);
 
         unset($_SESSION[$name]);
         unset($_SESSION['__Hoa']['namespace'][$name]);
         $namespace = null;
+
+        return;
     }
 
     /**
@@ -323,12 +312,12 @@ abstract class Hoa_Session {
      *
      * @access  public
      * @return  void
-     * @throw   Hoa_Session_Exception
+     * @throw   \Hoa\Session\Exception
      */
     public static function unsetAllNamespaces ( ) {
 
         if(false === self::isStarted())
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Cannot unset namespaces on a no-starded session.', 16);
 
         $nsidList = $_SESSION['__Hoa']['namespace'];
@@ -339,12 +328,14 @@ abstract class Hoa_Session {
         foreach($nsidList as $id => $foo) {
 
             if(true === $foo['lock'])
-                throw new Hoa_Session_Exception(
+                throw new Exception(
                     'Namespace %s is locked.', 17, $flash);
 
             unset($_SESSION[$id]);
             unset($_SESSION['__Hoa']['namespace'][$id]);
         }
+
+        return;
     }
 
     /**
@@ -367,23 +358,25 @@ abstract class Hoa_Session {
      * @access  public
      * @param   string  $flash    The flash message ID.
      * @return  void
-     * @throw   Hoa_Session_Exception
+     * @throw   \Hoa\Session\Exception
      */
     public static function unsetFlash ( $flash ) {
 
         if(false === self::isStarted())
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Cannot unset a flash on a no-starded session.', 18);
 
         $flashId = '_flashMessage_' . md5($flash);
 
         if(true === $_SESSION['__Hoa']['namespace'][$flashId]['lock'])
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Namespace %s is locked.', 19, $flash);
 
         unset($_SESSION[$flashId]);
         unset($_SESSION['__Hoa']['namespace'][$flashId]);
         unset($_SESSION['__Hoa']['flash'][$flashId]);
+
+        return;
     }
 
     /**
@@ -391,12 +384,12 @@ abstract class Hoa_Session {
      *
      * @access  public
      * @return  void
-     * @throw   Hoa_Session_Exception
+     * @throw   \Hoa\Session\Exception
      */
     public static function unsetAllFlashes ( ) {
 
         if(false === self::isStarted())
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Cannot unset flashes on a no-starded session.', 20);
 
         $fidList = $_SESSION['__Hoa']['flash'];
@@ -405,12 +398,14 @@ abstract class Hoa_Session {
         foreach($fidList as $id => $foo) {
 
             if(true === $_SESSION['__Hoa']['namespace'][$id]['lock'])
-                throw new Hoa_Session_Exception(
+                throw new \Hoa\Session\Exception(
                     'Namespace %s is locked.', 21, $flash);
 
             unset($_SESSION[$id]);
             unset($_SESSION['__Hoa']['namespace'][$id]);
         }
+
+        return;
     }
 
     /**
@@ -429,25 +424,27 @@ abstract class Hoa_Session {
      *
      * @access  public
      * @return  void
-     * @throw   Hoa_Session_Exception
+     * @throw   \Hoa\Session\Exception
      */
     public static function writeAndClose ( ) {
 
         if(false === self::isWritable())
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Cannot write and close the session, because it is not ' .
                 'writable.', 22);
 
-        set_error_handler(array('Hoa_Session_Exception', 'handleWriteAndCloseError'),
+        set_error_handler(array('\Hoa\Session\Exception', 'handleWriteAndCloseError'),
                           E_ALL);
         @session_write_close();
         restore_error_handler();
 
-        if(true === Hoa_Session_Exception::hasWriteAndCloseError())
-            throw new Hoa_Session_Exception(
-                Hoa_Session_Exception::getWriteAndCloseErrorMessage());
+        if(true === Exception::hasWriteAndCloseError())
+            throw new Exception(
+                Exception::getWriteAndCloseErrorMessage());
 
         self::$_writable = false;
+
+        return;
     }
 
     /**
@@ -489,31 +486,31 @@ abstract class Hoa_Session {
      *
      * @access  public
      * @return  void
-     * @throw   Hoa_Session_Exception
+     * @throw   \Hoa\Session\Exception
      */
     public static function destroy ( ) {
 
         if(true === self::isOnlyReadable())
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Trying to destroy uninitialized session.', 23);
 
-        set_error_handler(array('Hoa_Session_Exception', 'handleDestroyError'),
+        set_error_handler(array('\Hoa\Session\Exception', 'handleDestroyError'),
                           E_ALL);
         @session_destroy();
         restore_error_handler();
 
-        if(true === Hoa_Session_Exception::hasDestroyError())
-            throw new Hoa_Session_Exception(
-                Hoa_Session_Exception::getDestroyErrorMessage());
+        if(true === Exception::hasDestroyError())
+            throw new Exception(
+                Exception::getDestroyErrorMessage());
 
         self::setWritable(false);
         self::setReadable(true);
         self::setStart(false);
 
-        if(true !== Hoa_Session_Option::isUsingCookie())
+        if(true !== Option::isUsingCookie())
             return;
 
-        if(true !== Hoa_Session_Option::isCookieSet())
+        if(true !== Option::isCookieSet())
             return;
 
         $cookieParams = session_get_cookie_params();
@@ -606,16 +603,16 @@ abstract class Hoa_Session {
      * @access  public
      * @param   int     $time    Time before expire.
      * @return  int
-     * @throw   Hoa_Session_Exception
+     * @throw   \Hoa\Session\Exception
      */
     public static function setExpireSecond ( $time ) {
 
         if(false === self::isStarted())
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Cannot force a no-started session to expire.', 24);
 
         if(!is_int($time))
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'The expiration time must be an int, that represents seconds. ' .
                 'Given %s.', 25, gettype($time));
 
@@ -625,10 +622,10 @@ abstract class Hoa_Session {
         $old                                = $_SESSION['__Hoa']['expire_second'];
         $_SESSION['__Hoa']['expire_second'] = time() + $time;
 
-        if(true !== Hoa_Session_Option::isUsingCookie())
+        if(true !== Option::isUsingCookie())
             return $old;
 
-        if(true !== Hoa_Session_Option::isCookieSet())
+        if(true !== Option::isCookieSet())
             return $old;
 
         $cookieParams = session_get_cookie_params();
@@ -647,12 +644,12 @@ abstract class Hoa_Session {
      *
      * @access  public
      * @return  int
-     * @throw   Hoa_Session_Exception
+     * @throw   \Hoa\Session\Exception
      */
     public static function getExpireSecond ( ) {
 
         if(false === self::isStarted())
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Cannot get the expiration time for a no-started session.', 26);
 
         return $_SESSION['__Hoa']['expire_second'];
@@ -663,12 +660,12 @@ abstract class Hoa_Session {
      *
      * @access  public
      * @return  int
-     * @throw   Hoa_Session_Exception
+     * @throw   \Hoa\Session\Exception
      */
     public static function getSecondBeforeExpiring ( ) {
 
         if(false === self::isStarted())
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Cannot get the expiration time for a no-started session.', 27);
 
         return self::getExpireSecond() - time();
@@ -679,7 +676,7 @@ abstract class Hoa_Session {
      *
      * @access  public
      * @return  bool
-     * @throw   Hoa_Session_Exception
+     * @throw   \Hoa\Session\Exception
      */
     public static function isExpiredSecond ( ) {
 
@@ -695,12 +692,12 @@ abstract class Hoa_Session {
      * @access  public
      * @param   bool    $overwrite    Force to overwrite previous expire time.
      * @return  bool
-     * @throw   Hoa_Session_Exception
+     * @throw   \Hoa\Session\Exception
      */
     public static function rememberMe ( $overwrite = false ) {
 
         if(false === self::isStarted())
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Cannot remember a no-started session.', 28);
 
         if(   false !== $overwrite
@@ -718,12 +715,12 @@ abstract class Hoa_Session {
      *
      * @access  public
      * @return  void
-     * @throw   Hoa_Session_Exception
+     * @throw   \Hoa\Session\Exception
      */
     public static function forgetMe ( ) {
 
         if(false === self::isStarted())
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Cannot forget a no-started session.', 29);
 
         $_SESSION['__Hoa']['expire_second'] = time() - 1;
@@ -733,12 +730,12 @@ abstract class Hoa_Session {
      * Add a save handler interface.
      *
      * @access  public
-     * @param   Hoa_Session_SaveHandler_Interface  $savehandler    The save
+     * @param   \Hoa\Session\ISession\SaveHandler  $savehandler    The save
      *                                                             handler
      *                                                             interface.
      * @return  void
      */
-    public static function setSaveHandler ( Hoa_Session_SaveHandler_Interface $savehandler ) {
+    public static function setSaveHandler ( ISession\SaveHandler $savehandler ) {
 
         return session_set_save_handler(
             array(&$savehandler, 'open'),
@@ -787,15 +784,18 @@ abstract class Hoa_Session {
     public static function getIterator ( ) {
 
         if(false === self::isStarted())
-            return new ArrayObject();
+            return new \ArrayObject();
 
         $array = $_SESSION;
         unset($array['__Hoa']);
         foreach($_SESSION['__Hoa']['flash'] as $id => $foo)
             unset($array[$id]);
 
-        return new ArrayObject($array,
-                               ArrayObject::ARRAY_AS_PROPS,
-                               'ArrayIterator');
+        return new \ArrayObject(
+            $array,
+            ArrayObject::ARRAY_AS_PROPS
+        );
     }
+}
+
 }

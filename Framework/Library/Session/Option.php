@@ -24,39 +24,37 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Session
- * @subpackage  Hoa_Session_Option
- *
  */
 
-/**
- * Hoa_Session
- */
-import('Session.~');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Session_Exception
+ * \Hoa\Session
  */
-import('Session.Exception');
+-> import('Session.~')
 
 /**
- * Class Hoa_Session_Option.
+ * \Hoa\Session\Exception
+ */
+-> import('Session.Exception.~');
+
+}
+
+namespace Hoa\Session {
+
+/**
+ * Class \Hoa\Session\Option.
  *
  * This class allows to manage all natives sessions options in PHP.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Session
- * @subpackage  Hoa_Session_Option
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Session_Option {
+class Option {
 
     /**
      * Serialize handler type.
@@ -110,7 +108,7 @@ class Hoa_Session_Option {
     /**
      * All options for session.
      *
-     * @var Hoa_Session_Option array
+     * @var \Hoa\Session\Option array
      */
     protected static $options = array(
         'save_path'               => '',
@@ -125,7 +123,7 @@ class Hoa_Session_Option {
         'entropy_length'          => self::ENTROPY_DESACTIVE,
         'use_cookies'             => 1,
         'use_only_cookies'        => 1,
-        // Set up in Hoa_Session::setExpireSecond.
+        // Set up in \Hoa\Session::setExpireSecond.
         //'cookie_lifetime'        => 0,
         'cookie_path'             => '/',
         'cookie_domain'           => '',
@@ -156,7 +154,7 @@ class Hoa_Session_Option {
         foreach($option as $name => $value) {
 
             if(false === self::optionExists($name))
-                throw new Hoa_Session_Exception(
+                throw new Exception(
                     'Option %d does not exist.', 0, $name);
 
             self::setOption($name, $value);
@@ -164,6 +162,8 @@ class Hoa_Session_Option {
 
         foreach(self::getOptions() as $name => $value)
             ini_set('session.' . $name, $value);
+
+        return;
     }
 
     /**
@@ -186,7 +186,7 @@ class Hoa_Session_Option {
     public static function isCookieSet ( ) {
 
         return    self::isUsingCookie()
-               && isset($_COOKIE[Hoa_Session::getName()]);
+               && isset($_COOKIE[\Hoa\Session::getName()]);
     }
 
     /**
@@ -208,12 +208,12 @@ class Hoa_Session_Option {
      * @param   string  $name     Option name.
      * @param   string  $value    Option value.
      * @return  mixed
-     * @throw   Hoa_Session_Exception
+     * @throw   \Hoa\Session\Exception
      */
     public static function setOption ( $name, $value ) {
 
         if(false === self::optionExists($name))
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Option %s does not exist.', 1, $name);
 
         $old                  = self::getOption($name);
@@ -228,12 +228,12 @@ class Hoa_Session_Option {
      * @access  public
      * @param   string  $name    Option name.
      * @return  mixed
-     * @throw   Hoa_Session_Exception
+     * @throw   \Hoa\Session\Exception
      */
     public static function getOption ( $name ) {
 
         if(false === self::optionExists($name))
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Option %s does not exist.', 2, $name);
 
         return self::$options[$name];
@@ -249,4 +249,6 @@ class Hoa_Session_Option {
 
         return self::$options;
     }
+}
+
 }

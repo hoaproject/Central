@@ -24,31 +24,31 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Session
- * @subpackage  Hoa_Session_Exception_SessionIsExpired
- *
  */
+
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Session_Exception
+ * \Hoa\Session\Exception
  */
-import('Session.Exception');
+-> import('Session.Exception.~');
+
+}
+
+namespace Hoa\Session\Êxception {
 
 /**
- * Class Hoa_Session_Exception_SessionIsExpired.
+ * Class \Hoa\Session\Exception\SessionIsExpired.
  *
- * Extending the Hoa_Session_Exception class.
+ * Extending the \Hoa\Session\Exception class.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Session
- * @subpackage  Hoa_Session_Exception_SessionIsExpired
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Session_Exception_SessionIsExpired extends Hoa_Session_Exception { }
+class SessionIsExpired extends Exception { }
+
+}
