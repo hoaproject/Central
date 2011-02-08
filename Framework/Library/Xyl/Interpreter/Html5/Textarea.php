@@ -24,59 +24,56 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Xyl
- * @subpackage  Hoa_Xyl_Interpreter_Html5_Textarea
- *
  */
 
-/**
- * Hoa_Xyl_Interpreter_Html5_Generic
- */
-import('Xyl.Interpreter.Html5.Generic') and load();
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Test_Praspel_Compiler
+ * \Hoa\Xyl\Interpreter\Html5\Generic
  */
-import('Test.Praspel.Compiler');
+-> import('Xyl.Interpreter.Html5.Generic')
 
 /**
- * Class Hoa_Xyl_Interpreter_Html5_Textarea.
+ * \Hoa\Test\Praspel\Compiler
+ */
+-> import('Test.Praspel.Compiler');
+
+}
+
+namespace Hoa\Xyl\Interpreter\Html5 {
+
+/**
+ * Class \Hoa\Xyl\Interpreter\Html5\Textarea.
  *
  * The <textarea /> component.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Xyl
- * @subpackage  Hoa_Xyl_Interpreter_Html5_Textarea
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class       Hoa_Xyl_Interpreter_Html5_Textarea
-    extends Hoa_Xyl_Interpreter_Html5_Generic {
+class Textarea extends Generic {
 
     /**
      * Map.
      *
-     * @var Hoa_Xyl_Interpreter_Html5_Generic string
+     * @var \Hoa\Xyl\Interpreter\Html5\Generic string
      */
     protected $_map             = 'textarea';
 
     /**
      * Praspel compiler, to interprete the validate attribute.
      *
-     * @var Hoa_Test_Praspel_Compiler object
+     * @var \Hoa\Test\Praspel\Compiler object
      */
     protected static $_compiler = null;
 
     /**
      * Whether the textarea is valid or not.
      *
-     * @var Hoa_Xyl_Interpreter_Html5_Textarea bool
+     * @var \Hoa\Xyl\Interpreter\Html5\Textarea bool
      */
     protected $_validity        = true;
 
@@ -157,7 +154,7 @@ class       Hoa_Xyl_Interpreter_Html5_Textarea
             $value = $this->getValue();
 
         if(null === self::$_compiler)
-            self::$_compiler = new Hoa_Test_Praspel_Compiler();
+            self::$_compiler = new \Hoa\Test\Praspel\Compiler();
 
         $this->_validity = true;
 
@@ -202,4 +199,6 @@ class       Hoa_Xyl_Interpreter_Html5_Textarea
 
         return $this->_validity;
     }
+}
+
 }

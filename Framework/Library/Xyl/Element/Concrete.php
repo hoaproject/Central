@@ -24,65 +24,61 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Xyl
- * @subpackage  Hoa_Xyl_Element_Concrete
- *
  */
 
-/**
- * Hoa_Xyl_Exception
- */
-import('Xyl.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Xml_Element_Concrete
+ * \Hoa\Xyl\Exception
  */
-import('Xml.Element.Concrete') and load();
+-> import('Xyl.Exception')
 
 /**
- * Hoa_Xyl_Element
+ * \Hoa\Xml\Element\Concrete
  */
-import('Xyl.Element') and load();
+-> import('Xml.Element.Concrete')
 
 /**
- * Class Hoa_Xyl_Element_Concrete.
+ * \Hoa\Xyl\Element
+ */
+-> import('Xyl.Element.~');
+
+}
+
+namespace Hoa\Xyl\Element {
+
+/**
+ * Class \Hoa\Xyl\Element\Concrete.
  *
  * 
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Xyl
- * @subpackage  Hoa_Xyl_Element_Concrete
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-abstract class Hoa_Xyl_Element_Concrete
-    extends    Hoa_Xml_Element_Concrete
-    implements Hoa_Xyl_Element {
+abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
 
     /**
      * Data bucket.
      *
-     * @var Hoa_Xyl_Element_Concrete array
+     * @var \Hoa\Xyl\Element\Concrete array
      */
     private $_bucket           = array('data' => null);
 
     /**
      * Visibility.
      *
-     * @var Hoa_Xyl_Element_Concrete bool
+     * @var \Hoa\Xyl\Element\Concrete bool
      */
     protected $_visibility     = true;
 
     /**
      * Transient value.
      *
-     * @var Hoa_Xyl_Element_Concrete string
+     * @var \Hoa\Xyl\Element\Concrete string
      */
     protected $_transientValue = null;
 
@@ -104,7 +100,7 @@ abstract class Hoa_Xyl_Element_Concrete
             foreach($this as $element)
                 $element->computeDataBinding($data, $parent);
 
-            if($this instanceof Hoa_Xyl_Element_Executable)
+            if($this instanceof \Hoa\Xyl\Element\Executable)
                 $this->execute();
 
             return;
@@ -118,7 +114,7 @@ abstract class Hoa_Xyl_Element_Concrete
             foreach($this as $element)
                 $element->computeDataBinding($handle, $parent);
 
-            if($this instanceof Hoa_Xyl_Element_Executable)
+            if($this instanceof \Hoa\Xyl\Element\Executable)
                 $this->execute();
 
             return;
@@ -134,7 +130,7 @@ abstract class Hoa_Xyl_Element_Concrete
                 $handle = &$handle[0][$part];
         }
         else
-            throw new Hoa_Xyl_Exception(
+            throw new \Hoa\Xyl\Exception(
                 'Huh?', 0);
 
         $this->_bucket['parent']  = &$parent;
@@ -147,7 +143,7 @@ abstract class Hoa_Xyl_Element_Concrete
         foreach($this as $element)
             $element->computeDataBinding($handle[0][$branche], $this->_bucket);
 
-        if($this instanceof Hoa_Xyl_Element_Executable)
+        if($this instanceof \Hoa\Xyl\Element\Executable)
             $this->execute();
 
         return;
@@ -225,10 +221,10 @@ abstract class Hoa_Xyl_Element_Concrete
      * Make the render of the XYL tree.
      *
      * @access  public
-     * @param   Hoa_Stream_Interface_Out  $out    Out stream.
+     * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
      * @return  void
      */
-    public function render ( Hoa_Stream_Interface_Out $out ) {
+    public function render ( \Hoa\Stream\IStream\Out $out ) {
 
         if(false === $this->getVisibility())
             return;
@@ -251,10 +247,10 @@ abstract class Hoa_Xyl_Element_Concrete
      * Paint the element.
      *
      * @access  protected
-     * @param   Hoa_Stream_Interface_Out  $out    Out stream.
+     * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
      * @return  void
      */
-    abstract protected function paint ( Hoa_Stream_Interface_Out $out );
+    abstract protected function paint ( \Hoa\Stream\IStream\Out $out );
 
     /**
      * Compute value. If the @bind attribute existss, compute the current data,
@@ -264,7 +260,7 @@ abstract class Hoa_Xyl_Element_Concrete
      * @access  public
      * @return  string
      */
-    public function computeValue ( Hoa_Stream_Interface_Out $out = null ) {
+    public function computeValue ( \Hoa\Stream\IStream\Out $out = null ) {
 
         $data = false;
 
@@ -299,7 +295,7 @@ abstract class Hoa_Xyl_Element_Concrete
      * @access  public
      * @return  string
      */
-    public function computeTransientValue ( Hoa_Stream_Interface_Out $out = null ) {
+    public function computeTransientValue ( \Hoa\Stream\IStream\Out $out = null ) {
 
         $data = $this->_transientValue;
 
@@ -370,4 +366,6 @@ abstract class Hoa_Xyl_Element_Concrete
 
         return $this->_visibility;
     }
+}
+
 }

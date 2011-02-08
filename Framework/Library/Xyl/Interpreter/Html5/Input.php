@@ -24,67 +24,65 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Xyl
- * @subpackage  Hoa_Xyl_Interpreter_Html5_Input
- *
  */
 
-/**
- * Hoa_Xyl_Element_Concrete
- */
-import('Xyl.Element.Concrete') and load();
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Xyl_Element_Executable
+ * \Hoa\Xyl\Element\Concrete
  */
-import('Xyl.Element.Executable') and load();
+-> import('Xyl.Element.Concrete')
 
 /**
- * Hoa_Test_Praspel_Compiler
+ * \Hoa\Xyl\Element\Executable
  */
-import('Test.Praspel.Compiler');
+-> import('Xyl.Element.Executable')
 
 /**
- * Class Hoa_Xyl_Interpreter_Html5_Input.
+ * \Hoa\Test\Praspel\Compiler
+ */
+-> import('Test.Praspel.Compiler');
+
+}
+
+namespace Hoa\Xyl\Interpreter\Html5 {
+
+/**
+ * Class \Hoa\Xyl\Interpreter\Html5\Input.
  *
  * The <input /> component.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Xyl
- * @subpackage  Hoa_Xyl_Interpreter_Html5_Input
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class          Hoa_Xyl_Interpreter_Html5_Input
-    extends    Hoa_Xyl_Element_Concrete
-    implements Hoa_Xyl_Element_Executable {
+class          Input
+    extends    \Hoa\Xyl\Element\Concrete
+    implements \Hoa\Xyl\Element\Executable {
 
     /**
      * Type of input: button, checkbox, color, date, datetime, datetime-local,
      * email, file, hidden, image, month, number, password, radio, range, reset,
      * search, submit, tel, text, time, url and week.
      *
-     * @var Hoa_Xyl_Interpreter_Html5_Input string
+     * @var \Hoa\Xyl\Interpreter\Html5\Input string
      */
     protected $_type            = null;
 
     /**
      * Praspel compiler, to interprete the validate attribute.
      *
-     * @var Hoa_Test_Praspel_Compiler object
+     * @var \Hoa\Test\Praspel\Compiler object
      */
     protected static $_compiler = null;
 
     /**
      * Whether the input is valid or not.
      *
-     * @var Hoa_Xyl_Interpreter_Html5_Input bool
+     * @var \Hoa\Xyl\Interpreter\Html5\Input bool
      */
     protected $_validity        = true;
 
@@ -94,10 +92,10 @@ class          Hoa_Xyl_Interpreter_Html5_Input
      * Paint the element.
      *
      * @access  protected
-     * @param   Hoa_Stream_Interface_Out  $out    Out stream.
+     * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
      * @return  void
      */
-    protected function paint ( Hoa_Stream_Interface_Out $out ) {
+    protected function paint ( \Hoa\Stream\IStream\Out $out ) {
 
         $out->writeAll(
             '<input' . $this->readAttributesAsString() . ' />'
@@ -273,7 +271,7 @@ class          Hoa_Xyl_Interpreter_Html5_Input
                 $value = (float) $value;
 
         if(null === self::$_compiler)
-            self::$_compiler = new Hoa_Test_Praspel_Compiler();
+            self::$_compiler = new \Hoa\Test\Praspel\Compiler();
 
         $this->_validity = true;
 
@@ -355,4 +353,6 @@ class          Hoa_Xyl_Interpreter_Html5_Input
 
         return $out;
     }
+}
+
 }

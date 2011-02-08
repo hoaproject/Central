@@ -24,44 +24,41 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Xyl
- * @subpackage  Hoa_Xyl_Interpreter_Html5_Option
- *
  */
 
-/**
- * Hoa_Xyl_Element_Concrete
- */
-import('Xyl.Element.Concrete') and load();
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Xyl_Interpreter_Html5_Option.
+ * \Hoa\Xyl\Element\Concrete
+ */
+-> import('Xyl.Element.Concrete');
+
+}
+
+namespace Hoa\Xyl\Interpreter\Html5 {
+
+/**
+ * Class \Hoa\Xyl\Interpreter\Html5\Option.
  *
  * The <option /> component.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Xyl
- * @subpackage  Hoa_Xyl_Interpreter_Html5_Option
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class       Hoa_Xyl_Interpreter_Html5_Option
-    extends Hoa_Xyl_Element_Concrete {
+class Option extends \Hoa\Xyl\Element\Concrete {
 
     /**
      * Paint the element.
      *
      * @access  protected
-     * @param   Hoa_Stream_Interface_Out  $out    Out stream.
+     * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
      * @return  void
      */
-    protected function paint ( Hoa_Stream_Interface_Out $out ) {
+    protected function paint ( \Hoa\Stream\IStream\Out $out ) {
 
         $out->writeAll(
             '<option' . $this->readAttributesAsString() . '>' .
@@ -121,4 +118,6 @@ class       Hoa_Xyl_Interpreter_Html5_Option
 
         return true === $this->attributeExists('selected');
     }
+}
+
 }
