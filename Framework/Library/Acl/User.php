@@ -24,63 +24,40 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Acl
- * @subpackage  Hoa_Acl_User
- *
  */
 
-/**
- * Hoa_Acl
- */
-import('Acl.~');
+namespace Hoa\Acl {
 
 /**
- * Hoa_Acl_Group
- */
-import('Acl.Group');
-
-/**
- * Hoa_Acl_Exception
- */
-import('Acl.Exception');
-
-/**
- * Class Hoa_Acl_User.
+ * Class \Hoa\Acl\User.
  *
  * Describe a user.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Acl
- * @subpackage  Hoa_Acl_User
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Acl_User {
+class User {
 
     /**
      * User ID.
      *
-     * @var Hoa_Acl_User mixed
+     * @var \Hoa\Acl\User mixed
      */
     protected $userId    = null;
 
     /**
      * User label.
      *
-     * @var Hoa_Acl_User string
+     * @var \Hoa\Acl\User string
      */
     protected $userLabel = null;
 
     /**
      * Collections of all groups ID.
      *
-     * @var Hoa_Acl_User array
+     * @var \Hoa\Acl\User array
      */
     protected $groups    = array();
 
@@ -98,6 +75,8 @@ class Hoa_Acl_User {
 
         $this->setId($id);
         $this->setLabel($label);
+
+        return;
     }
 
     /**
@@ -114,7 +93,7 @@ class Hoa_Acl_User {
 
         foreach($groups as $foo => $group) {
 
-            if($group instanceof Hoa_Acl_Group)
+            if($group instanceof Group)
                 $group = $group->getId();
 
             if(true === $this->groupExists($group))
@@ -140,7 +119,7 @@ class Hoa_Acl_User {
 
         foreach($groups as $foo => $group) {
 
-            if($group instanceof Hoa_Acl_Group)
+            if($group instanceof Group)
                 $group = $group->getId();
 
             if(false === $this->groupExists($group))
@@ -161,7 +140,7 @@ class Hoa_Acl_User {
      */
     public function groupExists ( $groupId ) {
 
-        if($groupId instanceof Hoa_Acl_Group)
+        if($groupId instanceof Group)
             $groupId = $groupId->getId();
 
         return isset($this->groups[$groupId]);
@@ -229,4 +208,6 @@ class Hoa_Acl_User {
 
         return $this->userLabel;
     }
+}
+
 }

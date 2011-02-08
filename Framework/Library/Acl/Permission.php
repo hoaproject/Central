@@ -24,51 +24,33 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Acl
- * @subpackage  Hoa_Acl_Permission
- *
  */
 
-/**
- * Hoa_Acl
- */
-import('Acl.~');
+namespace Hoa\Acl {
 
 /**
- * Hoa_Acl_Exception
- */
-import('Acl.Exception');
-
-/**
- * Class Hoa_Acl_Permission.
+ * Class \Hoa\Acl\Permission.
  *
  * Describe a permission profil.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Acl
- * @subpackage  Hoa_Acl_Permission
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Acl_Permission {
+class Permission {
 
     /**
      * Permission ID.
      *
-     * @var Hoa_Acl_Permission mixed
+     * @var \Hoa\Acl\Permission mixed
      */
     protected $permissionId    = null;
 
     /**
      * Permission label.
      *
-     * @var Hoa_Acl_Permission string
+     * @var \Hoa\Acl\Permission string
      */
     protected $permissionLabel = null;
 
@@ -86,6 +68,8 @@ class Hoa_Acl_Permission {
 
         $this->setId($id);
         $this->setLabel($label);
+
+        return;
     }
 
     /**
@@ -139,4 +123,6 @@ class Hoa_Acl_Permission {
 
         return $this->permissionLabel;
     }
+}
+
 }

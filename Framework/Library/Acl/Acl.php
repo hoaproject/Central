@@ -24,59 +24,59 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Acl
- *
  */
 
-/**
- * Hoa_Acl_Exception
- */
-import('Acl.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Acl_User
+ * \Hoa\Acl\Exception
  */
-import('Acl.User');
+-> import('Acl.Exception')
 
 /**
- * Hoa_Acl_Group
+ * \Hoa\Acl\User
  */
-import('Acl.Group');
+-> import('Acl.User')
 
 /**
- * Hoa_Acl_Permission
+ * \Hoa\Acl\Group
  */
-import('Acl.Permission');
+-> import('Acl.Group')
 
 /**
- * Hoa_Acl_Resource
+ * \Hoa\Acl\Permission
  */
-import('Acl.Resource');
+-> import('Acl.Permission')
 
 /**
- * Hoa_Graph
+ * \Hoa\Acl\Resource
  */
-import('Graph.~');
+-> import('Acl.Resource')
 
 /**
- * Class Hoa_Alc.
+ * \Hoa\Graph
+ */
+-> import('Graph.~');
+
+}
+
+namespace Hoa\Acl {
+
+/**
+ * Class \Hoa\Alc.
  *
  * The ACL main class. It contains all users, groups, and resources collections.
  * It also proposes to check if a user is allow or not to do an action according
  * to its groups, and resources.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Acl
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Acl {
+class Acl {
 
     /**
      * Propagate delete.
@@ -93,30 +93,30 @@ class Hoa_Acl {
     const DELETE_RESTRICT = false;
 
     /**
-     * Instance of Hoa_Acl, make a singleton.
+     * Instance of \Hoa\Acl, make a singleton.
      *
-     * @var Hoa_Acl object
+     * @var \Hoa\Acl object
      */
     private static $_instance = null;
 
     /**
      * Array of all users.
      *
-     * @var Hoa_Acl array
+     * @var \Hoa\Acl array
      */
     protected $users          = array();
 
     /**
      * Graph of groups.
      *
-     * @var Hoa_Acl Hoa_Graph
+     * @var \Hoa\Acl \Hoa\Graph
      */
     protected $groups         = null;
 
     /**
      * Array of all resources.
      *
-     * @var Hoa_Acl array
+     * @var \Hoa\Acl array
      */
     protected $resources      = array();
 
@@ -126,27 +126,27 @@ class Hoa_Acl {
      * Built an access control list.
      *
      * @access  private
-     * @param   bool     $loop    Allow or not loop. Please, see the Hoa_Graph
+     * @param   bool     $loop    Allow or not loop. Please, see the \Hoa\Graph
      *                            class.
      * @return  void
      */
-    private function __construct ( $loop = Hoa_Graph::DISALLOW_LOOP ) {
+    private function __construct ( $loop = \Hoa\Graph::DISALLOW_LOOP ) {
 
-        $this->groups = Hoa_Graph::getInstance(
-            Hoa_Graph::TYPE_ADJACENCYLIST,
+        $this->groups = \Hoa\Graph::getInstance(
+            \Hoa\Graph::TYPE_ADJACENCYLIST,
             $loop
         );
     }
 
     /**
-     * Get the instance of Hoa_Acl, make a singleton.
+     * Get the instance of \Hoa\Acl, make a singleton.
      *
      * @access  public
-     * @param   bool     $loop    Allow or not loop. Please, see the Hoa_Graph
+     * @param   bool     $loop    Allow or not loop. Please, see the \Hoa\Graph
      *                            class.
      * @return  object
      */
-    public static function getInstance ( $loop = Hoa_Graph::DISALLOW_LOOP ) {
+    public static function getInstance ( $loop = \Hoa\Graph::DISALLOW_LOOP ) {
 
         if(null === self::$_instance)
             self::$_instance = new self($loop);
@@ -158,14 +158,14 @@ class Hoa_Acl {
      * Add a user.
      *
      * @access  public
-     * @param   Hoa_Acl_User  $user    User to add.
+     * @param   \Hoa\Acl\User  $user    User to add.
      * @return  void
-     * @throw   Hoa_Acl_Exception
+     * @throw   \Hoa\Acl\Exception
      */
-    public function addUser ( Hoa_Acl_User $user ) {
+    public function addUser ( User $user ) {
 
         if($this->userExists($user->getId()))
-            throw new Hoa_Acl_Exception(
+            throw new Exception(
                 'User %s is already registried.', 0, $user->getId());
 
         $this->users[$user->getId()] = $user;
@@ -182,40 +182,44 @@ class Hoa_Acl {
      */
     public function deleteUser ( $user ) {
 
-        if($user instanceof Hoa_Acl_User)
+        if($user instanceof User)
             $user = $user->getId();
 
         unset($this->users[$user]);
+
+        return;
     }
 
     /**
      * Add a group.
      *
      * @access  public
-     * @param   Hoa_Acl_Group  $group      Group to add.
-     * @param   mixed          $inherit    Group inherit permission from (should
-     *                                     be the group ID or the group
-     *                                     instance).
+     * @param   \Hoa\Acl\Group  $group      Group to add.
+     * @param   mixed           $inherit    Group inherit permission from (should
+     *                                      be the group ID or the group
+     *                                      instance).
      * @return  void
-     * @throw   Hoa_Acl_Exception
+     * @throw   \Hoa\Acl\Exception
      */
-    public function addGroup ( Hoa_Acl_Group $group, $inherit = array() ) {
+    public function addGroup ( Group $group, $inherit = array() ) {
 
         if(!is_array($inherit))
             $inherit = array($inherit);
 
         foreach($inherit as $foo => &$in)
-            if($in instanceof Hoa_Acl_Group)
+            if($in instanceof Group)
                 $in = $in->getId();
 
         try {
 
             $this->getGroups()->addNode($group, $inherit);
         }
-        catch ( Hoa_Graph_Exception $e ) {
+        catch ( \Hoa\Graph\Exception $e ) {
 
-            throw new Hoa_Acl_Exception($e->getFormattedMessage(), $e->getCode());
+            throw new Exception($e->getFormattedMessage(), $e->getCode());
         }
+
+        return;
     }
 
     /**
@@ -225,38 +229,40 @@ class Hoa_Acl {
      * @param   mixed   $groupId       The group ID.
      * @param   bool    $propagate     Propagate the erasure.
      * @return  void
-     * @throw   Hoa_Acl_Exception
+     * @throw   \Hoa\Acl\Exception
      */
     public function deleteGroup ( $groupId, $propagate = self::DELETE_RESTRICT ) {
 
-        if($groupId instanceof Hoa_Acl_Group)
+        if($groupId instanceof Group)
             $groupId = $groupId->getId();
 
         try {
 
             $this->getGroups()->deleteNode($groupId, $propagate);
         }
-        catch ( Hoa_Graph_Exception $e ) {
+        catch ( \Hoa\Graph\Exception $e ) {
 
-            throw new Hoa_Acl_Exception($e->getFormattedMessage(), $e->getCode());
+            throw new Exception($e->getFormattedMessage(), $e->getCode());
         }
 
         foreach($this->getUsers() as $userId => $user)
             $user->deleteGroup($groupId);
+
+        return;
     }
 
     /**
      * Add a resource.
      *
      * @access  public
-     * @param   Hoa_Acl_Resource  $resource    Resource to add.
+     * @param   \Hoa\Acl\Resource  $resource    Resource to add.
      * @return  void
-     * @throw   Hoa_Acl_Exception
+     * @throw   \Hoa\Acl\Exception
      */
-    public function addResource ( Hoa_Acl_Resource $resource ) {
+    public function addResource ( Resource $resource ) {
 
         if($this->resourceExists($resource->getId()))
-            throw new Hoa_Acl_Exception(
+            throw new Exception(
                 'Resource %s is already registried.', 1, $resource->getId());
 
         $this->resources[$resource->getId()] = $resource;
@@ -273,10 +279,12 @@ class Hoa_Acl {
      */
     public function deleteResource ( $resource ) {
 
-        if($resource instanceof Hoa_Acl_Resource)
+        if($resource instanceof Resource)
             $resource = $resource->getId();
 
         unset($this->resources[$resource]);
+
+        return;
     }
 
     /**
@@ -286,18 +294,20 @@ class Hoa_Acl {
      * @param   mixed   $groupId        The group ID.
      * @param   array   $permissions    Collection of permissions.
      * @return  bool
-     * @throw   Hoa_Acl_Exception
+     * @throw   \Hoa\Acl\Exception
      */
     public function allow ( $groupId, $permissions = array() ) {
 
         if(false === $this->groupExists($groupId))
-            throw new Hoa_Acl_Exception(
+            throw new Exception(
                 'Group %s does not exist.', 2, $groupId);
 
         $this->getGroups()->getNode($groupId)->addPermission($permissions);
 
         foreach($this->getGroups()->getChild($groupId) as $subGroupId => $group)
             $this->allow($subGroupId, $permissions);
+
+        return;
     }
 
     /**
@@ -307,21 +317,23 @@ class Hoa_Acl {
      * @param   mixed   $groupId        The group ID.
      * @param   array   $permissions    Collection of permissions.
      * @return  bool
-     * @throw   Hoa_Acl_Exception
+     * @throw   \Hoa\Acl\Exception
      */
     public function deny ( $groupId, $permissions = array() ) {
 
-        if($groupId instanceof Hoa_Acl_Group)
+        if($groupId instanceof Group)
             $groupId = $groupId->getId();
 
         if(false === $this->groupExists($groupId))
-            throw new Hoa_Acl_Exception(
+            throw new Exception(
                 'Group %s does not exist.', 3, $groupId);
 
         $this->getGroups()->getNode($groupId)->deletePermission($permissions);
 
         foreach($this->getGroups()->getChild($groupId) as $subGroupId => $group)
             $this->deny($subGroupId, $permissions);
+
+        return;
     }
 
     /**
@@ -333,28 +345,30 @@ class Hoa_Acl {
      * @param   mixed   $permission    List of permission (should be permission
      *                                 ID, permission instance).
      * @return  bool
-     * @throw   Hoa_Acl_Exception
+     * @throw   \Hoa\Acl\Exception
      */
     public function isAllowed ( $user, $permission, $resource = null,
-                                Hoa_Acl_Assert_Interface $assert = null ) {
+                                IAcl\Assert $assert = null ) {
 
-        if($user instanceof Hoa_Acl_User)
+        if($user instanceof User)
             $user       = $user->getId();
 
-        if($permission instanceof Hoa_Acl_Permission)
+        if($permission instanceof Permission)
             $permission = $permission->getId();
 
         if(is_array($permission))
-            throw new Hoa_Acl_Exception(
+            throw new Exception(
                 'Should check one permission, not a list of permissions.', 4);
 
-        if(null !== $resource && !($resource instanceof Hoa_Acl_Resource))
+        if(   null !== $resource
+           && !($resource instanceof Resource))
             $resource = $this->getResource($resource);
 
         $user = $this->getUser($user);
         $out  = false;
 
-        if(null !== $resource && false === $resource->userExists($user->getId()))
+        if(    null !== $resource
+           && false === $resource->userExists($user->getId()))
             return false;
 
         foreach($user->getGroups() as $foo => $groupId)
@@ -377,26 +391,27 @@ class Hoa_Acl {
      * @param   mixed   $permission    List of permission (should be permission
      *                                 ID, permission instance).
      * @return  bool
-     * @throw   Hoa_Acl_Exception
+     * @throw   \Hoa\Acl\Exception
      */
     public function isGroupAllowed ( $group, $permission ) {
 
-        if($group instanceof Hoa_Acl_Group)
+        if($group instanceof Group)
             $group      = $group->getId();
 
-        if($permission instanceof Hoa_Acl_Permission)
+        if($permission instanceof Permission)
             $permission = $permission->getId();
 
         if(is_array($permission))
-            throw new Hoa_Acl_Exception(
+            throw new \Exception(
                 'Should check one permission, not a list of permissions.', 5);
 
         if(false === $this->groupExists($group))
-            throw new Hoa_Acl_Exception(
+            throw new Exception(
                 'Group %s does not exist.', 6, $group);
 
-        return $this->getGroups()->getNode($group)
-                   ->permissionExists($permission);
+        return $this->getGroups()
+                    ->getNode($group)
+                    ->permissionExists($permission);
     }
 
     /**
@@ -408,7 +423,7 @@ class Hoa_Acl {
      */
     public function userExists ( $userId ) {
 
-        if($userId instanceof Hoa_Acl_User)
+        if($userId instanceof User)
             $userId = $userId->getId();
 
         return isset($this->users[$userId]);
@@ -423,7 +438,7 @@ class Hoa_Acl {
      */
     public function groupExists ( $groupId ) {
 
-        if($groupId instanceof Hoa_Acl_Group)
+        if($groupId instanceof Group)
             $groupId = $groupId->getId();
 
         return $this->getGroups()->nodeExists($groupId);
@@ -438,7 +453,7 @@ class Hoa_Acl {
      */
     public function resourceExists ( $resourceId ) {
 
-        if($resourceId instanceof Hoa_Acl_Resource)
+        if($resourceId instanceof Resource)
             $resourceId = $resourceId->getId();
 
         return isset($this->resources[$resourceId]);
@@ -449,13 +464,13 @@ class Hoa_Acl {
      *
      * @access  public
      * @param   string  $userId    The user ID.
-     * @return  Hoa_Acl_User
-     * @throw   Hoa_Acl_Exception
+     * @return  \Hoa\Acl\User
+     * @throw   \Hoa\Acl\Exception
      */
     public function getUser ( $userId ) {
 
         if(false === $this->userExists($userId))
-            throw new Hoa_Acl_Exception(
+            throw new Exception(
                 'User %s does not exist.', 7, $userId);
 
         return $this->users[$userId];
@@ -477,13 +492,13 @@ class Hoa_Acl {
      *
      * @access  public
      * @param   string  $groupId    The group ID.
-     * @return  Hoa_Acl_Group
-     * @throw   Hoa_Acl_Exception
+     * @return  \Hoa\Acl\Group
+     * @throw   \Hoa\Acl\Exception
      */
     public function getGroup ( $groupId ) {
 
         if(false === $this->groupExists($groupId))
-            throw new Hoa_Acl_Exception(
+            throw new Exception(
                 'Group %s does not exist.', 8, $groupId);
 
         return $this->getGroups()->getNode($groupId);
@@ -493,7 +508,7 @@ class Hoa_Acl {
      * Get all groups, i.e. get the groups graph.
      *
      * @access  protected
-     * @return  Hoa_Graph
+     * @return  \Hoa\Graph
      */
     protected function getGroups ( ) {
 
@@ -505,13 +520,13 @@ class Hoa_Acl {
      *
      * @access  public
      * @param   string  $resourceId    The resource ID.
-     * @return  Hoa_Acl_Resource
-     * @throw   Hoa_Acl_Exception
+     * @return  \Hoa\Acl\Resource
+     * @throw   \Hoa\Acl\Exception
      */
     public function getResource ( $resourceId ) {
 
         if(false === $this->resourceExists($resourceId))
-            throw new Hoa_Acl_Exception(
+            throw new Exception(
                 'Resource %s does not exist.', 9, $resourceId);
 
         return $this->resources[$resourceId];
@@ -538,4 +553,6 @@ class Hoa_Acl {
 
         return $this->getGroups()->__toString();
     }
+}
+
 }
