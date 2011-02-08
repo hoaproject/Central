@@ -24,35 +24,33 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Http
- * @subpackage  Hoa_Http_Request
- *
  */
 
-/**
- * Hoa_Http_Exception
- */
-import('Http.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Http_Request.
+ * \Hoa\Http\Exception
+ */
+-> import('Http.Exception');
+
+}
+
+namespace Hoa\Http {
+
+/**
+ * Class \Hoa\Http\Request.
  *
  * Parse HTTP headers.
  * Please, see the RFC 2616.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Http
- * @subpackage  Hoa_Http_Request
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Http_Request {
+class Request {
 
     const METHOD_CONNECT  =   0;
     const METHOD_DELETE   =   1;
@@ -105,7 +103,7 @@ class Hoa_Http_Request {
         array_pop($headers);
 
         if(0 === preg_match('#^(\w+)\s*([^\s*]+)\s*HTTP/(1\..?)$#', $http, $matches))
-            throw new Hoa_Http_Exception(
+            throw new Exception(
                 'HTTP headers are not well-formed: %', 0, $http);
 
         switch(strtolower($matches[1])) {
@@ -561,4 +559,6 @@ class Hoa_Http_Request {
 
         return $this->_userAgent;
     }
+}
+
 }
