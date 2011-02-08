@@ -24,40 +24,38 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Http
- * @subpackage  Hoa_Http_Response
- *
  */
 
-/**
- * Hoa_Http_Exception
- */
-import('Http.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Stream_Interface_Out
+ * \Hoa\Http\Exception
  */
-import('Stream.Interface.Out');
+-> import('Http.Exception')
 
 /**
- * Class Hoa_Http_Response.
+ * \Hoa\Stream\IStream\Out
+ */
+-> import('Stream.I~.Out');
+
+}
+
+namespace Hoa\Http {
+
+/**
+ * Class \Hoa\Http\Response.
  *
  * Parse HTTP headers.
  * Please, see the RFC 2616.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Http
- * @subpackage  Hoa_Http_Response
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Http_Response implements Hoa_Stream_Interface_Out {
+class Response implements \Hoa\Stream\IStream\Out {
 
     /**
      * Continue.
@@ -534,4 +532,6 @@ class Hoa_Http_Response implements Hoa_Stream_Interface_Out {
 
         echo $size;
     }
+}
+
 }
