@@ -251,7 +251,7 @@ class Parameter {
                     self::PERMISSION_SHARE;
             }
             else
-                throw new \Hoa\Core\Exception(
+                throw new Exception(
                     'Cannot load configurations from the owner parent %s.',
                     0, $ownerParent);
 
@@ -313,19 +313,28 @@ class Parameter {
 
         $this->check($id, self::PERMISSION_WRITE);
 
-        $class = str_replace('\\', '', $this->_owner);
-        $path  = 'hoa://Data/Etc/Configuration/.Cache/' . $class . '.php';
+        if($this->_owner == 'Hoa\Core\Core') {
 
-        if($class == 'HoaCore')
-            $path = self::zFormat(
+            $class = 'HoaCoreCore';
+            $path  = self::zFormat(
                 $parameters['protocol.Data/Etc/Configuration'],
                 $this->getKeywords($id),
                 $parameters
-            ) . '.Cache' . DS . $class . '.php';
+            ) . '.Cache' . DS . 'HoaCoreCore.php';
+        }
+        else {
+
+            $class = str_replace(
+                '\\',
+                '',
+                Consistency::getClassShortestName($this->_owner)
+            );
+            $path  = 'hoa://Data/Etc/Configuration/.Cache/' . $class . '.php';
+        }
 
         if(file_exists($path)) {
 
-            $handle = require $path;
+            $handle = require_once $path;
 
             if(!is_array($handle))
                 throw new \Hoa\Core\Exception(
