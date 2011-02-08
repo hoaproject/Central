@@ -31,7 +31,7 @@ namespace Hoa\Core {
 /**
  * Class Hoa\Core\Consistency.
  *
- * ...
+ * This class manages all classes, importations etc.
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
@@ -50,6 +50,8 @@ class Consistency {
     private function __construct ( $from ) {
 
         $this->_from = $from;
+
+        print_r(\Hoa\Core::getInstance()->getParameters());
 
         return;
     }
@@ -191,6 +193,18 @@ class Consistency {
     public static function getAllImportedClasses ( ) {
 
         return self::$_class;
+    }
+
+    public static function getClassShortestName ( $class ) {
+
+        if(!isset(self::$_class[$class]))
+            throw new Exception(
+                'Class %s does not exist.', 0, $class);
+
+        if(is_string(self::$_class[$class]))
+            return $class;
+
+        return self::$_class[$class]['alias'] ?: '';
     }
 
     public static function autoload ( $classname ) {
