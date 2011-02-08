@@ -24,32 +24,32 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Prototype
- *
  */
 
-/**
- * Hoa_Prototype_Exception
- */
-import('Prototype.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Prototype.
+ * \Hoa\Prototype\Exception
+ */
+-> import('Prototype.Exception');
+
+}
+
+namespace Hoa\Prototype {
+
+/**
+ * Class \Hoa\Prototype.
  *
  * Enable to do a Prototype-based programming.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Prototype
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Prototype {
+class Prototype {
 
     /**
      * Where user believes to set its prototype.
@@ -59,21 +59,21 @@ class Hoa_Prototype {
     /**
      * Prototype instance.
      *
-     * @var Hoa_Prototype object
+     * @var \Hoa\Prototype object
      */
     private  $_prototype   = null;
 
     /**
      * Prototype class type.
      *
-     * @var Hoa_Prototype string
+     * @var \Hoa\Prototype string
      */
     protected $_classType  = '';
 
     /**
      * Prototype object type.
      *
-     * @var Hoa_Prototype string
+     * @var \Hoa\Prototype string
      */
     protected $_objectType = '';
 
@@ -87,12 +87,12 @@ class Hoa_Prototype {
      *                            slot name else.
      * @param   mixed   $value    The prototype object or the slot value.
      * @return  mixed
-     * @throw   Hoa_Prototype_Exception
+     * @throw   \Hoa\Prototype\Exception
      */
     public function __set ( $name, $value ) {
 
         if(true === property_exists($this, 'prototype'))
-            throw new Hoa_Prototype_Exception(
+            throw new Exception(
                 'You must not have a prototype attribute declared in your ' .
                 'class.', 0);
 
@@ -108,7 +108,7 @@ class Hoa_Prototype {
                         == strtolower($this->_classType);
 
             if(false === (bool) $out)
-                throw new Hoa_Prototype_Exception(
+                throw new Exception(
                     'Cannot set the prototype %s; it must be an object of ' .
                     'type %s and a class of type %s.',
                     1, array(
@@ -121,7 +121,7 @@ class Hoa_Prototype {
         }
 
         if(null === $this->_prototype)
-            throw new Hoa_Prototype_Exception(
+            throw new Exception(
                 'Undefined property: %s::%s.',
                 2, array(get_class($this), $name));
 
@@ -134,27 +134,27 @@ class Hoa_Prototype {
      * @access  public
      * @param   string  $name    Slot name.
      * @return  mixed
-     * @throw   Hoa_Prototype_Exception
+     * @throw   \Hoa\Prototype\Exception
      */
     public function __get ( $name ) {
 
         if(true === property_exists($this, 'prototype'))
-            throw new Hoa_Prototype_Exception(
+            throw new Exception(
                 'You must not have a prototype attribute declared in your ' .
                 'class.', 3);
 
         if(null === $this->_prototype)
-            throw new Hoa_Prototype_Exception(
+            throw new Exception(
                 'Undefined property: %s::%s.',
                 4, array(get_class($this), $name));
 
         if(true === property_exists($this->_prototype, $name))
             return $this->_prototype->$name;
 
-        if($this->_prototype instanceof Hoa_Prototype)
+        if($this->_prototype instanceof Prototype)
             return $this->_prototype->__get($name);
 
-        throw new Hoa_Prototype_Exception(
+        throw new Exception(
             'Undefined property: %s::%s.',
             5, array(get_class($this), $name));
     }
@@ -169,12 +169,12 @@ class Hoa_Prototype {
      * @param   string  $name         Slot name.
      * @param   array   $arguments    Slot arguments.
      * @return  mixed
-     * @throw   Hoa_Prototype_Exception
+     * @throw   \Hoa\Prototype\Exception
      */
     public function __call ( $name, Array $arguments ) {
 
         if(null === $this->_prototype)
-            throw new Hoa_Prototype_Exception(
+            throw new Exception(
                 'Call to undefined property: %s::%s().',
                 6, array(get_class($this), $name));
 
@@ -183,10 +183,10 @@ class Hoa_Prototype {
         if(is_callable($callback))
             return call_user_func_array($callback, $arguments);
 
-        if($this->_prototype instanceof Hoa_Prototype)
+        if($this->_prototype instanceof Prototype)
             return $this->_prototype->__call($name, $arguments);
 
-        throw new Hoa_Prototype_Exception(
+        throw new Exception(
             'Call to uncallable method %s::%s().', 7,
             array(get_class($this), $name));
     }
@@ -242,4 +242,6 @@ class Hoa_Prototype {
 
         return $this->setPrototypeObjectType(null);
     }
+}
+
 }
