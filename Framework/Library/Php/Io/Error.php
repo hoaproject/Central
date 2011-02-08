@@ -24,44 +24,42 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Php
- * @subpackage  Hoa_Php_Io_Error
- *
  */
 
-/**
- * Hoa_Php_Io_Exception
- */
-import('Php.Io.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Php_Io_Out
+ * \Hoa\Php\Io\Exception
  */
-import('Php.Io.Out');
+-> import('Php.Io.Exception')
+
+/**
+ * \Hoa\Php\Io\Out
+ */
+-> import('Php.Io.Out');
 
 /**
  * Whether it is not defined.
  */
 _define('STDERR', fopen('php://stderr', 'wb'));
 
+}
+
+namespace Hoa\Php\Io {
+
 /**
- * Class Hoa_Php_Io_Error.
+ * Class \Hoa\Php\Io\Error.
  *
  * Manage the php://stderr stream.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Php
- * @subpackage  Hoa_Php_Io_Error
  */
 
-class Hoa_Php_Io_Error extends Hoa_Php_Io_Out {
+class Error extends Out {
 
     /**
      * Open a stream to php://stderr.
@@ -74,6 +72,8 @@ class Hoa_Php_Io_Error extends Hoa_Php_Io_Out {
     public function __construct ( ) {
 
         parent::__construct('php://stderr', null);
+
+        return;
     }
 
     /**
@@ -81,10 +81,10 @@ class Hoa_Php_Io_Error extends Hoa_Php_Io_Out {
      *
      * @access  protected
      * @param   string              $streamName    Stream name (e.g. path or URL).
-     * @param   Hoa_Stream_Context  $context       Context.
+     * @param   \Hoa\Stream\Context  $context       Context.
      * @return  resource
      */
-    protected function &_open ( $streamName, Hoa_Stream_Context $context = null ) {
+    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
 
         $out = STDERR;
 
@@ -102,4 +102,6 @@ class Hoa_Php_Io_Error extends Hoa_Php_Io_Out {
 
         return true;
     }
+}
+
 }

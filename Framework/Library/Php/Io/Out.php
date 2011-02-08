@@ -24,49 +24,47 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Php
- * @subpackage  Hoa_Php_Io_Out
- *
  */
 
-/**
- * Hoa_Php_Io_Exception
- */
-import('Php.Io.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Stream
+ * \Hoa\Php\Io\Exception
  */
-import('Stream.~');
+-> import('Php.Io.Exception')
 
 /**
- * Hoa_Stream_Interface_Out
+ * \Hoa\Stream
  */
-import('Stream.Interface.Out');
+-> import('Stream.~')
+
+/**
+ * \Hoa\Stream\IStream\Out
+ */
+-> import('Stream.I~.Out');
 
 /**
  * Whether it is not defined.
  */
 _define('STDOUT', fopen('php://stdout', 'wb'));
 
+}
+
+namespace Hoa\Php\Io {
+
 /**
- * Class Hoa_Php_Io_Out.
+ * Class \Hoa\Php\Io\Out.
  *
  * Manage the php://stdout stream.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Php
- * @subpackage  Hoa_Php_Io_Out
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Php_Io_Out extends Hoa_Stream implements Hoa_Stream_Interface_Out {
+class Out extends \Hoa\Stream implements \Hoa\Stream\IStream\Out {
 
     /**
      * Open a stream to php://stdout.
@@ -74,7 +72,7 @@ class Hoa_Php_Io_Out extends Hoa_Stream implements Hoa_Stream_Interface_Out {
      * defined in the STDOUT constant.
      *
      * @access  public
-     * @param   string    $streamName    Only for Hoa_Php_Io_Error, do not use
+     * @param   string    $streamName    Only for \Hoa\Php\Io\Error, do not use
      *                                   it!
      * @return  void
      */
@@ -90,11 +88,11 @@ class Hoa_Php_Io_Out extends Hoa_Stream implements Hoa_Stream_Interface_Out {
      * Open the stream and return the associated resource.
      *
      * @access  protected
-     * @param   string              $streamName    Stream name (e.g. path or URL).
-     * @param   Hoa_Stream_Context  $context       Context.
+     * @param   string               $streamName    Stream name (e.g. path or URL).
+     * @param   \Hoa\Stream\Context  $context       Context.
      * @return  resource
      */
-    protected function &_open ( $streamName, Hoa_Stream_Context $context = null ) {
+    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
 
         $out = STDOUT;
 
@@ -120,12 +118,12 @@ class Hoa_Php_Io_Out extends Hoa_Stream implements Hoa_Stream_Interface_Out {
      * @param   string  $string    String.
      * @param   int     $length    Length.
      * @return  mixed
-     * @throw   Hoa_Php_Io_Exception
+     * @throw   \Hoa\Php\Io\Exception
      */
     public function write ( $string, $length ) {
 
         if($length <= 0)
-            throw new Hoa_Php_Io_Exception(
+            throw new Exception(
                 'Length must be greather than 0, given %d.', 0, $length);
 
         return fwrite($this->getStream(), $string, $length);
@@ -223,7 +221,7 @@ class Hoa_Php_Io_Out extends Hoa_Stream implements Hoa_Stream_Interface_Out {
         if(false === $n = strpos($line, "\n"))
             return $this->write($line . "\n", strlen($line) + 1);
 
-        $n++;
+        ++$n;
 
         return $this->write(substr($line, 0, $n), $n);
     }
@@ -251,4 +249,6 @@ class Hoa_Php_Io_Out extends Hoa_Stream implements Hoa_Stream_Interface_Out {
 
         return false;
     }
+}
+
 }

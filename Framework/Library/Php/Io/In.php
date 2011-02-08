@@ -24,49 +24,47 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Php
- * @subpackage  Hoa_Php_Io_In
- *
  */
 
-/**
- * Hoa_Php_Io_Exception
- */
-import('Php.Io.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Stream
+ * \Hoa\Php\Io\Exception
  */
-import('Stream.~');
+-> import('Php.Io.Exception')
 
 /**
- * Hoa_Stream_Interface_In
+ * \Hoa\Stream
  */
-import('Stream.Interface.In');
+-> import('Stream.~')
+
+/**
+ * \Hoa\Stream\IStream\In
+ */
+-> import('Stream.I~.In');
 
 /**
  * Whether it is not defined.
  */
 _define('STDIN', fopen('php://stdin', 'rb'));
 
+}
+
+namespace Hoa\Php\Io {
+
 /**
- * Class Hoa_Php_Io_In.
+ * Class \Hoa\Php\Io\In.
  *
  * Manage the php://stdin stream.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Php
- * @subpackage  Hoa_Php_Io_In
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Php_Io_In extends Hoa_Stream implements Hoa_Stream_Interface_In {
+class In extends \Hoa\Stream implements \Hoa\Stream\IStream\In {
 
     /**
      * Open a stream to php://stdin.
@@ -86,11 +84,11 @@ class Hoa_Php_Io_In extends Hoa_Stream implements Hoa_Stream_Interface_In {
      * Open the stream and return the associated resource.
      *
      * @access  protected
-     * @param   string              $streamName    Stream name (e.g. path or URL).
-     * @param   Hoa_Stream_Context  $context       Context.
+     * @param   string               $streamName    Stream name (e.g. path or URL).
+     * @param   \Hoa\Stream\Context  $context       Context.
      * @return  resource
      */
-    protected function &_open ( $streamName, Hoa_Stream_Context $context = null ) {
+    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
 
         $out = STDIN;
 
@@ -110,13 +108,29 @@ class Hoa_Php_Io_In extends Hoa_Stream implements Hoa_Stream_Interface_In {
     }
 
     /**
+     * Test for end-of-file.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function eof ( ) {
+
+        return feof($this->getStream());
+    }
+
+    /**
      * Read n characters.
      *
      * @access  public
      * @param   int     $length    Length.
      * @return  string
+     * @throw   \Hoa\File\Exception
      */
     public function read ( $length ) {
+
+        if($length <= 0)
+            throw new Exception(
+                'Length must be greather than 0, given %d.', 3, $length);
 
         return fread($this->getStream(), $length);
     }
@@ -142,6 +156,17 @@ class Hoa_Php_Io_In extends Hoa_Stream implements Hoa_Stream_Interface_In {
     public function readCharacter ( ) {
 
         return fgetc($this->getStream());
+    }
+
+    /**
+     * Read a boolean.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function readBoolean ( ) {
+
+        return (bool) $this->read(1);
     }
 
     /**
@@ -232,4 +257,6 @@ class Hoa_Php_Io_In extends Hoa_Stream implements Hoa_Stream_Interface_In {
 
         return fscanf($this->getStream(), $format);
     }
+}
+
 }

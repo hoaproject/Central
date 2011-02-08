@@ -24,31 +24,31 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Php
- * @subpackage  Hoa_Php_Io_Exception
- *
  */
+
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Php_Exception
+ * \Hoa\Php\Exception
  */
-import('Php.Exception');
+-> import('Php.Exception');
+
+}
+
+namespace Hoa\Php\Io {
 
 /**
- * Class Hoa_Php_Io_Exception.
+ * Class \Hoa\Php\Io\Exception.
  *
- * Extending the Hoa_Php_Exception class.
+ * Extending the \Hoa\Php\Exception class.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Php
- * @subpackage  Hoa_Php_Io_Exception
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Php_Io_Exception extends Hoa_Php_Exception { }
+class Exception extends \Hoa\Php\Exception { }
+
+}
