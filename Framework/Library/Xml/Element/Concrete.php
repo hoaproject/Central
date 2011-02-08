@@ -146,14 +146,14 @@ class Concrete implements Element, \Countable, \IteratorAggregate, \ArrayAccess 
 
             $this->_name     = strtolower(get_class($this));
 
-            if(false !== $po = strrpos($this->_name, '_'))
+            if(false !== $po = strrpos($this->_name, '\\'))
                 $this->_name = substr($this->_name, $po + 1);
         }
 
         $this->_abstract     = $abstract;
         $this->_superRoot    = $superRoot;
 
-        if($this instanceof \Hoa\Xml\Element\Model\Phrasing)
+        if($this instanceof Model\Phrasing)
             $iterator = $abstract->readAsPhrasingModel($namespace);
         else
             $iterator = $abstract->selectChildElements();
