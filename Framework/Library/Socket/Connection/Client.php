@@ -24,44 +24,42 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Socket
- * @subpackage  Hoa_Socket_Connection_Client
- *
  */
 
-/**
- * Hoa_Socket_Connection_Exception
- */
-import('Socket.Connection.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Socket_Connection
+ * \Hoa\Socket\Connection\Exception
  */
-import('Socket.Connection');
+-> import('Socket.Connection.Exception')
 
 /**
- * Hoa_Socket_Interface
+ * \Hoa\Socket\Connection
  */
-import('Socket.Interface');
+-> import('Socket.Connection')
 
 /**
- * Class Hoa_Socket_Connection_Client.
+ * \Hoa\Socket\Socketable
+ */
+-> import('Socket.Socketable');
+
+}
+
+namespace Hoa\Socket\Connection {
+
+/**
+ * Class \Hoa\Socket\Connection\Client.
  *
  * Established a client connection.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Socket
- * @subpackage  Hoa_Socket_Connection_Client
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Socket_Connection_Client extends Hoa_Socket_Connection {
+class Client extends Connection {
 
     /**
      * Open client socket asynchronously.
@@ -91,14 +89,14 @@ class Hoa_Socket_Connection_Client extends Hoa_Socket_Connection {
      * Configure a socket.
      *
      * @access  public
-     * @param   Hoa_Socket_Interface  $socket     Socket.
-     * @param   int                   $timeout    Timeout.
-     * @param   int                   $flag       Flag, see the self::* constants.
-     * @param   string                $context    Context ID (please, see the
-     *                                            Hoa_Stream_Context class).
+     * @param   \Hoa\Socket\Socketable  $socket     Socket.
+     * @param   int                     $timeout    Timeout.
+     * @param   int                     $flag       Flag, see the self::* constants.
+     * @param   string                  $context    Context ID (please, see the
+     *                                              \Hoa\Stream\Context class).
      * @return  void
      */
-    public function __construct ( Hoa_Socket_Interface $socket, $timeout = 30,
+    public function __construct ( \Hoa\Socket\Socketable $socket, $timeout = 30,
                                   $flag = self::CONNECT, $context = null ) {
 
         parent::__construct($socket, $timeout, self::CONNECT & $flag, $context);
@@ -110,12 +108,12 @@ class Hoa_Socket_Connection_Client extends Hoa_Socket_Connection {
      * Open the stream and return the associated resource.
      *
      * @access  protected
-     * @param   string              $streamName    Socket name (e.g. path or URL).
-     * @param   Hoa_Stream_Context  $context       Context.
+     * @param   string               $streamName    Socket name (e.g. path or URL).
+     * @param   \Hoa\Stream\Context  $context       Context.
      * @return  resource
-     * @throw   Hoa_Socket_Connection_Exception
+     * @throw   \Hoa\Socket\Connection\Exception
      */
-    protected function &_open ( $streamName, Hoa_Stream_Context $context = null ) {
+    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
 
         if(null === $context)
             $connection = @stream_socket_client(
@@ -137,10 +135,10 @@ class Hoa_Socket_Connection_Client extends Hoa_Socket_Connection {
 
         if(false === $connection)
             if($errno == 0)
-                throw new Hoa_Socket_Connection_Exception(
+                throw new Exception(
                     'Client cannot join %s.', 0, $streamName);
             else
-                throw new Hoa_Socket_Connection_Exception(
+                throw new Exception(
                     'Client returns an error (number %d): %s.',
                     1, array($errno, $errstr));
 
@@ -193,4 +191,6 @@ class Hoa_Socket_Connection_Client extends Hoa_Socket_Connection {
 
         return (bool) $this->getFlag() & self::PERSISTENT;
     }
+}
+
 }

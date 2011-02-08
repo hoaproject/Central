@@ -24,105 +24,103 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Socket
- * @subpackage  Hoa_Socket_Connection
- *
  */
 
-/**
- * Hoa_Socket_Exception
- */
-import('Socket.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Stream
+ * \Hoa\Socket\Connection\Exception
  */
-import('Stream.~');
+-> import('Socket.Connection.Exception')
 
 /**
- * Hoa_Stream_Interface_In
+ * \Hoa\Stream
  */
-import('Stream.Interface.In');
+-> import('Stream.~')
 
 /**
- * Hoa_Stream_Interface_Out
+ * \Hoa\Stream\IStream\In
  */
-import('Stream.Interface.Out');
+-> import('Stream.I~.In')
 
 /**
- * Hoa_Stream_Interface_Pathable
+ * \Hoa\Stream\IStream\Out
  */
-import('Stream.Interface.Pathable');
+-> import('Stream.I~.Out')
 
 /**
- * Class Hoa_Socket_Connection.
+ * \Hoa\Stream\IStream\Pathable
+ */
+-> import('Stream.I~.Pathable');
+
+}
+
+namespace Hoa\Socket\Connection {
+
+/**
+ * Class \Hoa\Socket\Connection.
  *
  * Abstract connection, usefull for client and server.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Socket
- * @subpackage  Hoa_Socket_Connection
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-abstract class Hoa_Socket_Connection
-    extends    Hoa_Stream
-    implements Hoa_Stream_Interface_In,
-               Hoa_Stream_Interface_Out,
-               Hoa_Stream_Interface_Pathable {
+abstract class Connection
+    extends    \Hoa\Stream
+    implements \Hoa\Stream\IStream\In,
+               \Hoa\Stream\IStream\Out,
+               \Hoa\Stream\IStream\Pathable {
 
     /**
      * Socket.
      *
-     * @var Hoa_Socket_Interface object
+     * @var \Hoa\Socket\Socketable object
      */
     protected $_socket     = null;
 
     /**
      * Timeout.
      *
-     * @var Hoa_Socket_Connection int
+     * @var \Hoa\Socket\Connection int
      */
     protected $_timeout    = 30;
 
     /**
      * Flag.
      *
-     * @var Hoa_Socket_Connection int
+     * @var \Hoa\Socket\Connection int
      */
     protected $_flag       = 0;
 
     /**
      * Context ID.
      *
-     * @var Hoa_Socket_Connection string
+     * @var \Hoa\Socket\Connection string
      */
     protected $_context    = null;
 
     /**
      * Whether the stream is quiet.
      *
-     * @var Hoa_Socket_Connection bool
+     * @var \Hoa\Socket\Connection bool
      */
     protected $_quiet      = false;
 
     /**
      * Whether the stream is mute.
      *
-     * @var Hoa_Socket_Connection bool
+     * @var \Hoa\Socket\Connection bool
      */
     protected $_mute       = false;
 
     /**
      * Whether the stream is disconnected.
      *
-     * @var Hoa_Socket_Connection bool
+     * @var \Hoa\Socket\Connection bool
      */
     protected $_disconnect = false;
 
@@ -133,14 +131,14 @@ abstract class Hoa_Socket_Connection
      * Configure a socket.
      *
      * @access  public
-     * @param   Hoa_Socket_Interface  $socket     Socket.
-     * @param   int                   $timeout    Timeout.
-     * @param   int                   $flag       Flag, see the child::* constants.
-     * @param   string                $context    Context ID (please, see the
-     *                                Hoa_Stream_Context class).
+     * @param   \Hoa\Socket\Socketable  $socket     Socket.
+     * @param   int                     $timeout    Timeout.
+     * @param   int                     $flag       Flag, see the child::* constants.
+     * @param   string                  $context    Context ID (please, see the
+     *                                              \Hoa\Stream\Context class).
      * @return  void
      */
-    public function __construct ( Hoa_Socket_Interface $socket, $timeout, $flag,
+    public function __construct ( \Hoa\Socket\Socketable $socket, $timeout, $flag,
                                   $context = null ) {
 
         $this->setSocket($socket);
@@ -220,10 +218,10 @@ abstract class Hoa_Socket_Connection
      * Set socket.
      *
      * @access  protected
-     * @param   Hoa_Socket_Interface  $socket     Socket.
-     * @return  Hoa_Socket_Interface
+     * @param   \Hoa\Socket\Socketable  $socket     Socket.
+     * @return  \Hoa\Socket\Socketable
      */
-    protected function setSocket ( Hoa_Socket_Interface $socket ) {
+    protected function setSocket ( \Hoa\Socket\Socketable $socket ) {
 
         $old           = $this->_socket;
         $this->_socket = $socket;
@@ -280,7 +278,7 @@ abstract class Hoa_Socket_Connection
      * Get socket.
      *
      * @access  public
-     * @return  Hoa_Socket_Socket
+     * @return  \Hoa\Socket\Socket
      */
     public function getSocket ( ) {
 
@@ -359,11 +357,12 @@ abstract class Hoa_Socket_Connection
      * @access  public
      * @param   int     $length    Length.
      * @return  string
+     * @throw   \Hoa\Socket\Connection\Exception
      */
     public function read ( $length ) {
 
         if(null === $this->getStream())
-            throw new Hoa_Socket_Exception(
+            throw new Exception(
                 'Cannot read because socket is not established, ' .
                 'i.e. not connected.', 0);
 
@@ -500,17 +499,17 @@ abstract class Hoa_Socket_Connection
      * @param   string  $string    String.
      * @param   int     $length    Length.
      * @return  mixed
-     * @throw   Hoa_Socket_Exception
+     * @throw   \Hoa\Socket\Connection\Exception
      */
     public function write ( $string, $length ) {
 
         if(null === $this->getStream())
-            throw new Hoa_Socket_Exception(
+            throw new Exception(
                 'Cannot write because socket is not established, ' .
                 'i.e. not connected.', 1);
 
         if($length <= 0)
-            throw new Hoa_Socket_Exception(
+            throw new Exception(
                 'Length must be greather than 0, given %d.', 0, $length);
 
         if(strlen($string) > $length)
@@ -597,7 +596,7 @@ abstract class Hoa_Socket_Connection
         if(false === $n = strpos($line, "\n"))
             return $this->write($line . "\n", strlen($line) + 1);
 
-        $n++;
+        ++$n;
 
         return $this->write(substr($line, 0, $n), $n);
     }
@@ -672,4 +671,6 @@ abstract class Hoa_Socket_Connection
 
         return dirname($this->getSocket()->__toString());
     }
+}
+
 }

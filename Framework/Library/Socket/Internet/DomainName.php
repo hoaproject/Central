@@ -24,39 +24,37 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Socket
- * @subpackage  Hoa_Socket_Internet_DomainName
- *
  */
 
-/**
- * Hoa_Socket_Exception
- */
-import('Socket.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Socket_Internet
+ * \Hoa\Socket\Exception
  */
-import('Socket.Internet');
+-> import('Socket.Exception')
 
 /**
- * Class Hoa_Socket_Internet_DomainName.
+ * \Hoa\Socket\Internet
+ */
+-> import('Socket.Internet.~');
+
+}
+
+namespace Hoa\Socket\Internet {
+
+/**
+ * Class \Hoa\Socket\Internet\DomainName.
  *
  * Handle a domain name.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Socket
- * @subpackage  Hoa_Socket_Internet_DomainName
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Socket_Internet_DomainName extends Hoa_Socket_Internet {
+class DomainName extends Internet {
 
     /**
      * Set address.
@@ -64,12 +62,12 @@ class Hoa_Socket_Internet_DomainName extends Hoa_Socket_Internet {
      * @access  public
      * @param   string  $address    Address.
      * @return  string
-     * @throw   Hoa_Socket_Exception
+     * @throw   \Hoa\Socket\Exception
      */
     public function setAddress ( $address ) {
 
         if(0 == preg_match('#^[0-9a-z_\-\.]+(\.[a-z]{2,4})?$#', strtolower($address)))
-            throw new Hoa_Socket_Exception(
+            throw new \Hoa\Socket\Exception(
                 'Address %s is not a valid domain name.', 0, $address);
 
         $old            = $this->_address;
@@ -77,4 +75,6 @@ class Hoa_Socket_Internet_DomainName extends Hoa_Socket_Internet {
 
         return $old;
     }
+}
+
 }
