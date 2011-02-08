@@ -122,7 +122,7 @@ class ViewCommand extends \Hoa\Console\Command\Generic {
         if(null === $package)
             return $this->usage();
 
-        $package   = str_replace('_', '', $package);
+        $package   = str_replace('\\', '', $package);
         $path      = 'hoa://Data/Etc/Configuration/.Cache/' . $package . '.php';
 
         if(!file_exists($path))

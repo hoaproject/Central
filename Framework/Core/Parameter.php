@@ -313,7 +313,7 @@ class Parameter {
 
         $this->check($id, self::PERMISSION_WRITE);
 
-        $class = str_replace('_', '', $this->_owner);
+        $class = str_replace('\\', '', $this->_owner);
         $path  = 'hoa://Data/Etc/Configuration/.Cache/' . $class . '.php';
 
         if($class == 'HoaCore')

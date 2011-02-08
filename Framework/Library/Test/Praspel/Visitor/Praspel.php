@@ -128,7 +128,7 @@ class Hoa_Test_Praspel_Visitor_Praspel extends Hoa_Visitor_Registry {
         $gc     = get_class($element);
         $out    = sprintf(
                       '%-11s',
-                      '@' . strtolower(substr($gc, strrpos($gc, '_') + 1))
+                      '@' . strtolower(substr($gc, strrpos($gc, '\\') + 1))
                   );
         $handle = array();
 

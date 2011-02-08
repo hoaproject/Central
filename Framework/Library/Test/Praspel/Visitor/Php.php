@@ -138,7 +138,7 @@ class Hoa_Test_Praspel_Visitor_Php extends Hoa_Visitor_Registry {
         $gc     = get_class($element);
         $out    = '$contract' . "\n" .
                   '    ->clause(\'' .
-                       strtolower(substr($gc, strrpos($gc, '_') + 1)) .
+                       strtolower(substr($gc, strrpos($gc, '\\') + 1)) .
                       '\')' . "\n";
         $handle = array();
 
