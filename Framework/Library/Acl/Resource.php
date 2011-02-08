@@ -24,63 +24,40 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Acl
- * @subpackage  Hoa_Acl_Resource
- *
  */
 
-/**
- * Hoa_Acl
- */
-import('Acl.~');
+namespace Hoa\Acl {
 
 /**
- * Hoa_Acl_User
- */
-import('Acl.User');
-
-/**
- * Hoa_Acl_Exception
- */
-import('Acl.Exception');
-
-/**
- * Class Hoa_Acl_Resource.
+ * Class \Hoa\Acl\Resource.
  *
  * Describe a resource.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Acl
- * @subpackage  Hoa_Acl_Resource
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Acl_Resource {
+class Resource {
 
     /**
      * Resource ID.
      *
-     * @var Hoa_Acl_Resource mixed
+     * @var \Hoa\Acl\Resource mixed
      */
     protected $resourceId    = null;
 
     /**
      * Resource label.
      *
-     * @var Hoa_Acl_Resource string
+     * @var \Hoa\Acl\Resource string
      */
     protected $resourceLabel = null;
 
     /**
      * Collections of all users ID.
      *
-     * @var Hoa_Acl_Resource array
+     * @var \Hoa\Acl\Resource array
      */
     protected $users         = array();
 
@@ -98,6 +75,8 @@ class Hoa_Acl_Resource {
 
         $this->setId($id);
         $this->setLabel($label);
+
+        return;
     }
 
     /**
@@ -114,7 +93,7 @@ class Hoa_Acl_Resource {
 
         foreach($users as $foo => $user) {
 
-            if($user instanceof Hoa_Acl_User)
+            if($user instanceof User)
                 $user = $user->getId();
 
             if(true === $this->userExists($user))
@@ -132,7 +111,7 @@ class Hoa_Acl_Resource {
      * @access  public
      * @param   array   $users    User to add.
      * @return  array
-     * @throw   Hoa_Acl_Exception
+     * @throw   \Hoa\Acl\Exception
      */
     public function deleteUser ( $users = array() ) {
 
@@ -140,7 +119,7 @@ class Hoa_Acl_Resource {
 
         foreach($users as $foo => $user) {
 
-            if($user instanceof Hoa_Acl_User)
+            if($user instanceof User)
                 $user = $user->getId();
 
             if(false === $this->userExists($user))
@@ -161,7 +140,7 @@ class Hoa_Acl_Resource {
      */
     public function userExists ( $userId ) {
 
-        if($userId instanceof Hoa_Acl_User)
+        if($userId instanceof User)
             $userId = $userId->getId();
 
         return isset($this->users[$userId]);
@@ -229,4 +208,6 @@ class Hoa_Acl_Resource {
 
         return $this->resourceLabel;
     }
+}
+
 }

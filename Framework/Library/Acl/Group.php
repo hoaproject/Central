@@ -24,69 +24,57 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Acl
- * @subpackage  Hoa_Acl_Group
- *
  */
 
-/**
- * Hoa_Acl
- */
-import('Acl.~');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Acl_Exception
+ * \Hoa\Acl\Exception
  */
-import('Acl.Exception');
+-> import('Acl.Exception')
 
 /**
- * Hoa_Acl_Permission
+ * \Hoa\Graph\IGraph\Node
  */
-import('Acl.Permission');
+-> import('Graph.I~.Node');
+
+}
+
+namespace Hoa\Acl {
 
 /**
- * Hoa_Graph_Node_Interface
- */
-import('Graph.Node.Interface');
-
-/**
- * Class Hoa_Acl_Group.
+ * Class \Hoa\Acl\Group.
  *
  * Describe a group. A group is based on a graph (coding by adjacency list) to
  * set up the multi-inheritance of the group.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Acl
- * @subpackage  Hoa_Acl_Group
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Acl_Group implements Hoa_Graph_Node_Interface {
+class Group implements \Hoa\Graph\IGraph\Node {
 
     /**
      * Group ID.
      *
-     * @var Hoa_Acl_Group mixed
+     * @var \Hoa\Acl\Group mixed
      */
     protected $groupId     = null;
 
     /**
      * Group label.
      *
-     * @var Hoa_Acl_Group string
+     * @var \Hoa\Acl\Group string
      */
     protected $groupLabel  = null;
 
     /**
      * Collections of all permissions.
      *
-     * @var Hoa_Acl_Group array
+     * @var \Hoa\Acl\Group array
      */
     protected $permissions = array();
 
@@ -104,6 +92,8 @@ class Hoa_Acl_Group implements Hoa_Graph_Node_Interface {
 
         $this->setId($id);
         $this->setLabel($label);
+
+        return;
     }
 
     /**
@@ -112,7 +102,7 @@ class Hoa_Acl_Group implements Hoa_Graph_Node_Interface {
      * @access  public
      * @param   array   $permissions    Permission to add.
      * @return  array
-     * @throw   Hoa_Acl_Exception
+     * @throw   \Hoa\Acl\Exception
      */
     public function addPermission ( $permissions = array() ) {
 
@@ -121,9 +111,9 @@ class Hoa_Acl_Group implements Hoa_Graph_Node_Interface {
 
         foreach($permissions as $foo => $permission) {
 
-            if(!($permission instanceof Hoa_Acl_Permission))
-                throw new Hoa_Acl_Exception(
-                    'Permission %s must be an instance of Hoa_Acl_Permission',
+            if(!($permission instanceof Permission))
+                throw new Exception(
+                    'Permission %s must be an instance of \Hoa\Acl\Permission',
                     0, $permission);
 
             if(true === $this->permissionExists($permission->getId()))
@@ -141,7 +131,7 @@ class Hoa_Acl_Group implements Hoa_Graph_Node_Interface {
      * @access  public
      * @param   array   $permissions    Permission to add.
      * @return  array
-     * @throw   Hoa_Acl_Exception
+     * @throw   \Hoa\Acl\Exception
      */
     public function deletePermission ( $permissions = array() ) {
 
@@ -150,7 +140,7 @@ class Hoa_Acl_Group implements Hoa_Graph_Node_Interface {
 
         foreach($permissions as $foo => $permission) {
 
-            if($permission instanceof Hoa_Acl_Permission)
+            if($permission instanceof Permission)
                 $permission = $permission->getId();
 
             if(false === $this->permissionExists($permission))
@@ -239,7 +229,7 @@ class Hoa_Acl_Group implements Hoa_Graph_Node_Interface {
 
     /**
      * Get node ID, i.e. group ID as well (see
-     * Hoa_Graph_Node_Interface).
+     * \Hoa\Graph\IGraph\Node).
      *
      * @access  public
      * @return  mixed
@@ -248,4 +238,6 @@ class Hoa_Acl_Group implements Hoa_Graph_Node_Interface {
 
         return $this->getId();
     }
+}
+
 }
