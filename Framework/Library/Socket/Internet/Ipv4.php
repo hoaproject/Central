@@ -24,39 +24,37 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Socket
- * @subpackage  Hoa_Socket_Internet_Ipv4
- *
  */
 
-/**
- * Hoa_Socket_Exception
- */
-import('Socket.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Socket_Internet
+ * \Hoa\Socket\Exception
  */
-import('Socket.Internet');
+-> import('Socket.Exception')
 
 /**
- * Class Hoa_Socket_Internet_Ipv4.
+ * \Hoa\Socket\Internet
+ */
+-> import('Socket.Internet.~');
+
+}
+
+namespace Hoa\Socket\Internet {
+
+/**
+ * Class \Hoa\Socket\Internet\Ipv4.
  *
  * Handle IPv4.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Socket
- * @subpackage  Hoa_Socket_Internet_Ipv4
  */
 
-class Hoa_Socket_Internet_Ipv4 extends Hoa_Socket_Internet {
+class Ipv4 extends Internet {
 
     /**
      * Set address.
@@ -64,13 +62,13 @@ class Hoa_Socket_Internet_Ipv4 extends Hoa_Socket_Internet {
      * @access  public
      * @param   string  $address    Address.
      * @return  string
-     * @throw   Hoa_Socket_Exception
+     * @throw   \Hoa\Socket\Exception
      */
     public function setAddress ( $address ) {
 
         if(!(   substr_count($address, '.')  == 3
              && ip2long($address)           !== false))
-            throw new Hoa_Socket_Exception(
+            throw new \Hoa\Socket\Exception(
                 'Address %s is not a valid IPv4 address.', 0, $address);
 
         $old            = $this->_address;
@@ -78,4 +76,6 @@ class Hoa_Socket_Internet_Ipv4 extends Hoa_Socket_Internet {
 
         return $old;
     }
+}
+
 }

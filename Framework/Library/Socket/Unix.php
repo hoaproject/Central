@@ -24,56 +24,54 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Socket
- * @subpackage  Hoa_Socket_Unix
- *
  */
 
-/**
- * Hoa_Socket_Exception
- */
-import('Socket.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Socket_Interface
+ * \Hoa\Socket\Exception
  */
-import('Socket.Interface');
+-> import('Socket.Exception')
 
 /**
- * Hoa_Socket_Transport
+ * \Hoa\Socket\Socketable
  */
-import('Socket.Transport');
+-> import('Socket.Socketable')
 
 /**
- * Class Hoa_Socket_Unix.
+ * \Hoa\Socket\Transport
+ */
+-> import('Socket.Transport');
+
+}
+
+namespace Hoa\Socket {
+
+/**
+ * Class \Hoa\Socket\Unix.
  *
  * Handle Unix sockets.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Socket
- * @subpackage  Hoa_Socket_Unix
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Socket_Unix implements Hoa_Socket_Interface {
+class Unix implements Socketable {
 
     /**
      * Socket path.
      *
-     * @var Hoa_socket_Unix string
+     * @var Hoa_socket\Unix string
      */
     protected $_address   = null;
 
     /**
      * Transport.
      *
-     * @var Hoa_Socket_Internet string
+     * @var \Hoa\Socket\Internet string
      */
     protected $_transport = null;
 
@@ -116,14 +114,14 @@ class Hoa_Socket_Unix implements Hoa_Socket_Interface {
      * @access  public
      * @param   string  $transport    Transport (Unix, UDG…).
      * @return  string
-     * @throw   Hoa_Socket_Exception
+     * @throw   \Hoa\Socket\Exception
      */
     public function setTransport ( $transport ) {
 
         $transport = strtolower($transport);
 
-        if(false === Hoa_Socket_Transport::exists($transport))
-            throw new Hoa_Socket_Exception(
+        if(false === Transport::exists($transport))
+            throw new Exception(
                 'Transport %s is not enabled on this machin.', 0, $transport);
 
         $old              = $this->_transport;
@@ -178,4 +176,6 @@ class Hoa_Socket_Unix implements Hoa_Socket_Interface {
                   : '') .
                $this->getAddress();
     }
+}
+
 }

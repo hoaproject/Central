@@ -24,46 +24,42 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Socket
- * @subpackage  Hoa_Socket_Connection_Server
- *
  */
 
-/**
- * Hoa_Socket_Connection_Exception
- */
-import('Socket.Connection.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Socket_Connection
+ * \Hoa\Socket\Connection\Exception
  */
-import('Socket.Connection');
+-> import('Socket.Connection.Exception')
 
 /**
- * Hoa_Socket_Connection_Node
+ * \Hoa\Socket\Connection
  */
-import('Socket.Connection.Node');
+-> import('Socket.Connection.~')
 
 /**
- * Class Hoa_Socket_Connection_Server.
+ * \Hoa\Socket\Connection\Node
+ */
+-> import('Socket.Connection.Node');
+
+}
+
+namespace Hoa\Socket\Connection {
+
+/**
+ * Class \Hoa\Socket\Connection\Server.
  *
  * Established a server connection.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Socket
- * @subpackage  Hoa_Socket_Connection_Server
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class          Hoa_Socket_Connection_Server
-    extends    Hoa_Socket_Connection
-    implements Iterator {
+class Server extends Connection implements \Iterator {
 
     /**
      * Tell a stream to bind to the specified target.
@@ -82,35 +78,35 @@ class          Hoa_Socket_Connection_Server
     /**
      * Master connection.
      *
-     * @var Hoa_Socket_Connection_Server resource
+     * @var \Hoa\Socket\Connection\Server resource
      */
     protected $_master   = null;
 
     /**
      * Stack of connections.
      *
-     * @var Hoa_Socket_Connection_Server array
+     * @var \Hoa\Socket\Connection\Server array
      */
     protected $_stack    = null;
 
     /**
      * List of nodes (connections) when selecting.
      *
-     * @var Hoa_Socket_Connection_Server array
+     * @var \Hoa\Socket\Connection\Server array
      */
     protected $_nodes    = array();
 
     /**
      * Node name.
      *
-     * @var Hoa_Socket_Connection_Server string
+     * @var \Hoa\Socket\Connection\Server string
      */
     protected $_nodeName = null;
 
     /**
      * Temporize selected connections when selecting.
      *
-     * @var Hoa_Socket_Connection_Server array
+     * @var \Hoa\Socket\Connection\Server array
      */
     protected $_iterator = array();
 
@@ -121,15 +117,15 @@ class          Hoa_Socket_Connection_Server
      * Configure a socket.
      *
      * @access  public
-     * @param   Hoa_Socket_Interface  $socket     Socket.
-     * @param   int                   $timeout    Timeout.
-     * @param   int                   $flag       Flag, see the self::* constants.
-     * @param   string                $context    Context ID (please, see the
-     *                                            Hoa_Stream_Context class).
+     * @param   \Hoa\Socket\Socketable  $socket     Socket.
+     * @param   int                     $timeout    Timeout.
+     * @param   int                     $flag       Flag, see the self::* constants.
+     * @param   string                  $context    Context ID (please, see the
+     *                                              \Hoa\Stream\Context class).
      * @return  void
-     * @throw   Hoa_Socket_Connection_Exception
+     * @throw   \Hoa\Socket\Connection\Exception
      */
-    public function __construct ( Hoa_Socket_Interface $socket, $timeout = 30,
+    public function __construct ( \Hoa\Socket\Socketable $socket, $timeout = 30,
                                   $flag = -1, $context = null ) {
 
         if($flag == -1)
@@ -143,8 +139,9 @@ class          Hoa_Socket_Connection_Server
 
                 case 'udp':
                     if($flag & self::LISTEN)
-                        throw new Hoa_Socket_Connection_Exception(
-                            'Cannot use the flag Hoa_Socket_Connection_Server::LISTEN ' .
+                        throw new Exception(
+                            'Cannot use the flag ' .
+                            '\Hoa\Socket\Connection\Server::LISTEN ' .
                             'for connect-less transports (such as UDP).', 0);
 
                     $flag &= self::BIND;
@@ -152,7 +149,7 @@ class          Hoa_Socket_Connection_Server
             }
 
         parent::__construct($socket, $timeout, $flag, $context);
-        $this->setNodeName('Hoa_Socket_Connection_Node');
+        $this->setNodeName('\Hoa\Socket\Connection\Node');
 
         return;
     }
@@ -161,12 +158,12 @@ class          Hoa_Socket_Connection_Server
      * Open the stream and return the associated resource.
      *
      * @access  protected
-     * @param   string              $streamName    Stream name (e.g. path or URL).
-     * @param   Hoa_Stream_Context  $context       Context.
+     * @param   string               $streamName    Stream name (e.g. path or URL).
+     * @param   \Hoa\Stream\Context  $context       Context.
      * @return  resource
-     * @throw   Hoa_Socket_Connection_Exception
+     * @throw   \Hoa\Socket\Connection\Exception
      */
-    protected function &_open ( $streamName, Hoa_Stream_Context $context = null ) {
+    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
 
         if(null === $context)
             $this->_master = @stream_socket_server(
@@ -186,10 +183,10 @@ class          Hoa_Socket_Connection_Server
 
         if(false === $this->_master)
             if($errno == 0)
-                throw new Hoa_Socket_Connection_Exception(
+                throw new Exception(
                     'Server cannot join %s.', 0, $streamName);
             else
-                throw new Hoa_Socket_Connection_Exception(
+                throw new Exception(
                     'Server returns an error (number %d): %s.',
                     1, array($errno, $errstr));
 
@@ -203,7 +200,7 @@ class          Hoa_Socket_Connection_Server
      *
      * @access  public
      * @return  void
-     * @throw   Hoa_Socket_Connection_Exception
+     * @throw   \Hoa\Socket\Connection\Exception
      */
     public function connect ( ) {
 
@@ -212,7 +209,7 @@ class          Hoa_Socket_Connection_Server
         $client = @stream_socket_accept($this->_master);
 
         if(false === $client)
-            throw new Hoa_Socket_Connection_Exception(
+            throw new Exception(
                 'Operation timed out (nothing to accept).', 2);
 
         $this->_setStream($client);
@@ -237,8 +234,8 @@ class          Hoa_Socket_Connection_Server
      * Select connections.
      *
      * @access  public
-     * @return  Hoa_Socket_Connection_Server
-     * @throw   Hoa_Socket_Connection_Exception
+     * @return  \Hoa\Socket\Connection\Server
+     * @throw   \Hoa\Socket\Connection\Exception
      */
     public function select ( ) {
 
@@ -256,7 +253,7 @@ class          Hoa_Socket_Connection_Server
                 $client = @stream_socket_accept($this->_master);
 
                 if(false === $client)
-                    throw new Hoa_Socket_Connection_Exception(
+                    throw new Exception(
                         'Operation timed out (nothing to accept).', 3);
 
                 $id                = $this->getNodeId($client);
@@ -276,7 +273,7 @@ class          Hoa_Socket_Connection_Server
      * Set and get the current selected connection.
      *
      * @access  public
-     * @return  Hoa_Socket_Connection_Server
+     * @return  \Hoa\Socket\Connection\Server
      */
     public function current ( ) {
 
@@ -448,4 +445,6 @@ class          Hoa_Socket_Connection_Server
 
         return $id;
     }
+}
+
 }

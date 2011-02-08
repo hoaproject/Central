@@ -24,63 +24,61 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Socket
- * @subpackage  Hoa_Socket_Internet
- *
  */
 
-/**
- * Hoa_Socket_Exception
- */
-import('Socket.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Socket_Interface
+ * \Hoa\Socket\Exception
  */
-import('Socket.Interface');
+-> import('Socket.Exception')
 
 /**
- * Hoa_Socket_Transport
+ * \Hoa\Socket\Socketable
  */
-import('Socket.Transport');
+-> import('Socket.Socketable')
 
 /**
- * Class Hoa_Socket_Internet.
+ * \Hoa\Socket\Transport
+ */
+-> import('Socket.Transport');
+
+}
+
+namespace Hoa\Socket\Internet {
+
+/**
+ * Class \Hoa\Socket\Internet.
  *
  * Mother class for Internet sockets.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Socket
- * @subpackage  Hoa_Socket_Internet
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-abstract class Hoa_Socket_Internet implements Hoa_Socket_Interface {
+abstract class Internet implements \Hoa\Socket\Socketable {
 
     /**
      * Address.
      *
-     * @var Hoa_Socket_Internet string
+     * @var \Hoa\Socket\Internet string
      */
     protected $_address   = null;
 
     /**
      * Port.
      *
-     * @var Hoa_Socket_Internet int
+     * @var \Hoa\Socket\Internet int
      */
     protected $_port      = -1;
 
     /**
      * Transport.
      *
-     * @var Hoa_Socket_Internet string
+     * @var \Hoa\Socket\Internet string
      */
     protected $_transport = null;
 
@@ -110,7 +108,7 @@ abstract class Hoa_Socket_Internet implements Hoa_Socket_Interface {
      * @access  public
      * @param   string  $address    Address.
      * @return  string
-     * @throw   Hoa_Socket_Exception
+     * @throw   \Hoa\Socket\Exception
      */
     abstract public function setAddress ( $address );
 
@@ -120,12 +118,12 @@ abstract class Hoa_Socket_Internet implements Hoa_Socket_Interface {
      * @access  public
      * @param   int     $port    Port.
      * @return  int
-     * @throw   Hoa_Socket_Exception
+     * @throw   \Hoa\Socket\Exception
      */
     public function setPort ( $port ) {
 
         if($port < 0)
-            throw new Hoa_Socket_Exception(
+            throw new \Hoa\Socket\Exception(
                 'Port must be greater or equal than zero, given %d.', 0, $port);
 
         $old         = $this->_port;
@@ -140,14 +138,14 @@ abstract class Hoa_Socket_Internet implements Hoa_Socket_Interface {
      * @access  public
      * @param   string  $transport    Transport (TCP, UDP etc.).
      * @return  string
-     * @throw   Hoa_Socket_Exception
+     * @throw   \Hoa\Socket\Exception
      */
     public function setTransport ( $transport ) {
 
         $transport = strtolower($transport);
 
-        if(false === Hoa_Socket_Transport::exists($transport))
-            throw new Hoa_Socket_Exception(
+        if(false === \Hoa\Socket\Transport::exists($transport))
+            throw new \Hoa\Socket\Exception(
                 'Transport %s is not enabled on this machin.', 1, $transport);
 
         $old              = $this->_transport;
@@ -227,4 +225,6 @@ abstract class Hoa_Socket_Internet implements Hoa_Socket_Interface {
                   ? ':' . $this->getPort()
                   : '');
     }
+}
+
 }

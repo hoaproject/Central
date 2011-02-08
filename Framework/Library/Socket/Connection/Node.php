@@ -24,41 +24,33 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Socket
- * @subpackage  Hoa_Socket_Connection_Node
- *
  */
 
+namespace Hoa\Socket\Connection {
+
 /**
- * Class Hoa_Socket_Connection_Node.
+ * Class \Hoa\Socket\Connection\Node.
  *
  * Represent a generic node.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Socket
- * @subpackage  Hoa_Socket_Connection_Node
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Socket_Connection_Node {
+class Node {
 
     /**
      * Node's ID.
      *
-     * @var Hoa_Socket_Connection_Node string
+     * @var \Hoa\Socket\Connection\Node string
      */
     protected $_id   = null;
 
     /**
      * Node's socket resource.
      *
-     * @var Hoa_Socket_Connection_Node resource
+     * @var \Hoa\Socket\Connection\Node resource
      */
     private $_socket = null;
 
@@ -101,4 +93,6 @@ class Hoa_Socket_Connection_Node {
 
         return $this->_socket;
     }
+}
+
 }
