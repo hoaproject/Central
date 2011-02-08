@@ -52,7 +52,7 @@ import('File.Finder');
  * @version     0.1
  */
 
-class RemoveCommand extends Hoa_Console_Command_Abstract {
+class RemoveCommand extends Hoa_Console_Command_Generic {
 
     /**
      * Author name.

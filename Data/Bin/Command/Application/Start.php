@@ -24,26 +24,26 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Data
- *
  */
 
-/**
- * Hoa_Controller_Front
- */
-import('Controller.Front');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_File_Directory
+ * \Hoa\Controller\Front
  */
-import('File.Directory');
+-> import('Controller.Front')
 
 /**
- * Hoa_File_Write
+ * \Hoa\File\Directory
  */
-import('File.Write');
+-> import('File.Directory')
+
+/**
+ * \Hoa\File\Write
+ */
+-> import('File.Write');
 
 /**
  * Class StartCommand.
@@ -57,7 +57,7 @@ import('File.Write');
  * @version     0.1
  */
 
-class StartCommand extends Hoa_Console_Command_Abstract {
+class StartCommand extends \Hoa\Console\Command\Generic {
 
     /**
      * Author name.
@@ -121,7 +121,7 @@ class StartCommand extends Hoa_Console_Command_Abstract {
         $path = 'hoa://Data/Etc/Configuration/.Cache/HoaControllerFront.php';
 
         if(!file_exists($path))
-            throw new Hoa_Console_Command_Exception(
+            throw new \Hoa\Console\Command\Exception(
                 'The Controller cache is not found in %s. Must generate it.',
                 0, $path);
 
@@ -130,23 +130,23 @@ class StartCommand extends Hoa_Console_Command_Abstract {
         if(   !is_array($configurations)
            || !isset($configurations['keywords'])
            || !isset($configurations['parameters']))
-            throw new Hoa_Console_Command_Exception(
+            throw new \Hoa\Console\Command\Exception(
                 'Configuration cache filse %s appears corrupted.', 1, $path);
 
         if(null !== $view)
             $configurations['keywords']['view'] = $view;
 
-        $cd = Hoa_Core_Parameter::zFormat(
+        $cd = \Hoa\Core\Parameter::zFormat(
             $configurations['parameters']['controller.directory'],
             $configurations['keywords'],
             $configurations['parameters']
         );
-        $md = Hoa_Core_Parameter::zFormat(
+        $md = \Hoa\Core\Parameter::zFormat(
             $configurations['parameters']['model.share.directory'],
             $configurations['keywords'],
             $configurations['parameters']
         );
-        $vd = Hoa_Core_Parameter::zFormat(
+        $vd = \Hoa\Core\Parameter::zFormat(
             $configurations['parameters']['view.directory'],
             $configurations['keywords'],
             $configurations['parameters']
@@ -157,21 +157,21 @@ class StartCommand extends Hoa_Console_Command_Abstract {
             parent::stylize('controller', 'info') .
             ' directory at ' .
             parent::stylize($cd, 'info') . '.',
-            Hoa_File_Directory::create($cd)
+            \Hoa\File\Directory::create($cd)
         );
         parent::status(
             'Create ' .
             parent::stylize('model', 'info') .
             ' directory at ' .
             parent::stylize($md, 'info') . '.',
-            Hoa_File_Directory::create($md)
+            \Hoa\File\Directory::create($md)
         );
         parent::status(
             'Create ' .
             parent::stylize('view', 'info') .
             ' directory at ' .
             parent::stylize($vd, 'info') . '.',
-            Hoa_File_Directory::create($vd)
+            \Hoa\File\Directory::create($vd)
         );
 
         if(null === $bootstrap)
@@ -184,9 +184,9 @@ class StartCommand extends Hoa_Console_Command_Abstract {
             parent::stylize($bootstrap, 'info') .
             ' bootstrap file at ' .
             parent::stylize($p, 'info') . '.',
-            Hoa_File_Directory::create(dirname($p))
+            \Hoa\File\Directory::create(dirname($p))
             &&
-            new Hoa_File_Write($p)
+            new \Hoa\File\Write($p)
         );
 
         return HC_SUCCESS;
@@ -210,4 +210,6 @@ class StartCommand extends Hoa_Console_Command_Abstract {
 
         return HC_SUCCESS;
     }
+}
+
 }

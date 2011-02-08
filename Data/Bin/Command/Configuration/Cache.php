@@ -24,16 +24,16 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Data
- *
  */
 
+namespace {
+
+from('Hoa')
+
 /**
- * Hoa_Json
+ * \Hoa\Json
  */
-import('Json.~');
+-> import('Json.~');
 
 
 /**
@@ -48,7 +48,7 @@ import('Json.~');
  * @version     0.1
  */
 
-class CacheCommand extends Hoa_Console_Command_Abstract {
+class CacheCommand extends \Hoa\Console\Command\Generic {
 
     /**
      * Author name.
@@ -95,7 +95,7 @@ class CacheCommand extends Hoa_Console_Command_Abstract {
             }
         }
 
-        $configuration = Hoa_Core::getProtocol()->resolve(
+        $configuration = \Hoa\Core::getProtocol()->resolve(
             'hoa://Data/Etc/Configuration/'
         );
         $files         = glob($configuration . DS . '*.json');
@@ -106,7 +106,7 @@ class CacheCommand extends Hoa_Console_Command_Abstract {
 
             try {
 
-                $handle    = new Hoa_Json(file_get_contents($file));
+                $handle    = new \Hoa\Json(file_get_contents($file));
 
                 parent::status(
                     'Cache ' . parent::stylize(basename($file), 'info') . ' file.',
@@ -123,7 +123,7 @@ class CacheCommand extends Hoa_Console_Command_Abstract {
                     )
                 );
             }
-            catch ( Hoa_Json_Exception $e ) {
+            catch ( \Hoa\Json\Exception $e ) {
 
                 parent::status(
                     'Cache ' . parent::stylize(basename($file), 'info') . ' file.',
@@ -152,4 +152,6 @@ class CacheCommand extends Hoa_Console_Command_Abstract {
 
         return HC_SUCCESS;
     }
+}
+
 }

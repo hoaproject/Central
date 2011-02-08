@@ -24,21 +24,21 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Data
- *
  */
 
-/**
- * Hoa_Stream_Context
- */
-import('Stream.Context');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_File_Read
+ * \Hoa\Stream\Context
  */
-import('File.Read');
+-> import('Stream.Context')
+
+/**
+ * \Hoa\File\Read
+ */
+-> import('File.Read');
 
 /**
  * Class TwitterCommand.
@@ -52,7 +52,7 @@ import('File.Read');
  * @version     0.1
  */
 
-class TwitterCommand extends Hoa_Console_Command_Abstract {
+class TwitterCommand extends \Hoa\Console\Command\Generic {
 
     /**
      * Author name.
@@ -118,7 +118,7 @@ class TwitterCommand extends Hoa_Console_Command_Abstract {
             return $this->usage();
 
         if(strlen($message) > 140)
-            throw new Hoa_Console_Exception(
+            throw new \Hoa\Console\Exception(
                 'Message length must be lesser than 140 (given %d).',
                 1, strlen($message));
 
@@ -126,9 +126,9 @@ class TwitterCommand extends Hoa_Console_Command_Abstract {
             return $this->usage();
 
         if(null === $password)
-            $password = cin('Password:', Hoa_Console_Core_Io::TYPE_PASSWORD);
+            $password = cin('Password:', \Hoa\Console\Core\Io::TYPE_PASSWORD);
 
-        Hoa_Stream_Context::getInstance('twitter', 'http')->addOptions(array(
+        \Hoa\Stream\Context::getInstance('twitter', 'http')->addOptions(array(
             'method'  => 'POST',
             'header'  => 'Authorization: Basic ' .
                          base64_encode($username . ':' . $password) . "\r\n" .
@@ -139,15 +139,15 @@ class TwitterCommand extends Hoa_Console_Command_Abstract {
 
         try {
 
-            new Hoa_File_Read(
+            new \Hoa\File\Read(
                 'http://twitter.com/statuses/update.xml',
-                Hoa_File::MODE_READ,
+                \Hoa\File::MODE_READ,
                 'twitter'
             );
         }
-        catch ( Hoa_File_Exception $e ) {
+        catch ( \Hoa\File\Exception $e ) {
 
-            throw new Hoa_Console_Exception(
+            throw new \Hoa\Console\Exception(
                 $e->getFormattedMessage(),
                 $e->getCode()
             );
@@ -174,4 +174,6 @@ class TwitterCommand extends Hoa_Console_Command_Abstract {
 
         return HC_SUCCESS;
     }
+}
+
 }

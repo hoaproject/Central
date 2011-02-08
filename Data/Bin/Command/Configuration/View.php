@@ -24,25 +24,21 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Data
- *
  */
+
+namespace {
 
 /**
  * Class ViewCommand.
  *
  * This command allows to view a package configuration.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class ViewCommand extends Hoa_Console_Command_Abstract {
+class ViewCommand extends \Hoa\Console\Command\Generic {
 
     /**
      * Author name.
@@ -130,7 +126,7 @@ class ViewCommand extends Hoa_Console_Command_Abstract {
         $path      = 'hoa://Data/Etc/Configuration/.Cache/' . $package . '.php';
 
         if(!file_exists($path))
-            throw new Hoa_Console_Command_Exception(
+            throw new \Hoa\Console\Command\Exception(
                 'Cannot find the package configuration at %s.', 0, $path);
 
         $configurations = require $path;
@@ -138,7 +134,7 @@ class ViewCommand extends Hoa_Console_Command_Abstract {
         if(   !is_array($configurations)
            || !isset($configurations['keywords'])
            || !isset($configurations['parameters']))
-            throw new Hoa_Console_Command_Exception(
+            throw new \Hoa\Console\Command\Exception(
                 'File %s appears corrupted.', 1, $path);
 
         if(null !== $keyword) {
@@ -147,7 +143,7 @@ class ViewCommand extends Hoa_Console_Command_Abstract {
             $parameters     = false;
 
             if(!isset($configurations['keywords'][$keyword]))
-                throw new Hoa_Console_Command_Exception(
+                throw new \Hoa\Console\Command\Exception(
                     'Keyword %s is not found in configuration %s.',
                     1, array($keyword, $path));
 
@@ -162,7 +158,7 @@ class ViewCommand extends Hoa_Console_Command_Abstract {
             $parameters     = true;
 
             if(!isset($configurations['parameters'][$parameter]))
-                throw new Hoa_Console_Command_Exception(
+                throw new \Hoa\Console\Command\Exception(
                     'Parameter %s is not found in configuration %s.',
                     1, array($keyword, $path));
 
@@ -187,7 +183,7 @@ class ViewCommand extends Hoa_Console_Command_Abstract {
 
             cout(parent::columnize(
                 $handle,
-                Hoa_Console_Interface_Text::ALIGN_LEFT,
+                \Hoa\Console\Chrome\Text::ALIGN_LEFT,
                 .5,
                 0,
                 '|=> '
@@ -210,7 +206,7 @@ class ViewCommand extends Hoa_Console_Command_Abstract {
 
             cout(parent::columnize(
                 $handle,
-                Hoa_Console_Interface_Text::ALIGN_LEFT,
+                \Hoa\Console\Chrome\Text::ALIGN_LEFT,
                 .5,
                 0,
                 '|=> '
@@ -240,4 +236,6 @@ class ViewCommand extends Hoa_Console_Command_Abstract {
 
         return HC_SUCCESS;
     }
+}
+
 }

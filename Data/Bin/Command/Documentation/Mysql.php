@@ -24,30 +24,28 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Data
- *
  */
 
+namespace {
+
+from('Hoa')
+
 /**
- * Hoa_Console_System
+ * \Hoa\Console\System
  */
-import('Console.System.~');
+-> import('Console.System.~');
 
 /**
  * Class MysqlCommand.
  *
  * Search in different MySQL reference manuals.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class MysqlCommand extends Hoa_Console_Command_Abstract {
+class MysqlCommand extends \Hoa\Console\Command\Generic {
 
     /**
      * Author name.
@@ -95,7 +93,7 @@ class MysqlCommand extends Hoa_Console_Command_Abstract {
         $path = 'hoa://Data/Etc/Configuration/.Cache/HoaConsole.php';
 
         if(!file_exists($path))
-            throw new Hoa_Console_Command_Exception(
+            throw new \Hoa\Console\Command\Exception(
                 'The cache “Console” is not found in %s. Must generate it.',
                 0, $path);
 
@@ -165,8 +163,8 @@ class MysqlCommand extends Hoa_Console_Command_Abstract {
             $url = 'http://search.mysql.com/search?q=' . $search .
                    '&site=' . $type;
 
-            $out = Hoa_Console_System::execute($browser . ' ' .
-                       Hoa_Console_System::escapeArgument($url));
+            $out = \Hoa\Console\System::execute($browser . ' ' .
+                       \Hoa\Console\System::escapeArgument($url));
 
             empty($out)
             and
@@ -201,4 +199,6 @@ class MysqlCommand extends Hoa_Console_Command_Abstract {
 
         return HC_SUCCESS;
     }
+}
+
 }

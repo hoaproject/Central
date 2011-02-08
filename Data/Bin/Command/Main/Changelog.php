@@ -24,25 +24,21 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Data
- *
  */
+
+namespace {
 
 /**
  * Class ChangelogCommand.
  *
  * Manipule the changelog.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class ChangelogCommand extends Hoa_Console_Command_Abstract {
+class ChangelogCommand extends \Hoa\Console\Command\Generic {
 
     /**
      * Author name.
@@ -87,7 +83,7 @@ class ChangelogCommand extends Hoa_Console_Command_Abstract {
         $file       = 'hoa://Data/Etc/CHANGELOG.xml';
 
         if(!file_exists($file))
-            throw new Hoa_Console_Command_Exception(
+            throw new \Hoa\Console\Command\Exception(
                 'File %s does not exist.', 0, $file);
 
         $xml = simplexml_load_file($file);
@@ -139,7 +135,7 @@ class ChangelogCommand extends Hoa_Console_Command_Abstract {
                         $out[] = $node;
 
         if(empty($out))
-            throw new Hoa_Console_Command_Exception(
+            throw new \Hoa\Console\Command\Exception(
                 'No revision was found, given : %s.',
                 3, implode(',', $revisions));
 
@@ -196,8 +192,8 @@ class ChangelogCommand extends Hoa_Console_Command_Abstract {
 
         cout(
             $text,
-            Hoa_Console_Core_Io::NO_NEW_LINE,
-            Hoa_Console_Core_Io::NO_WORDWRAP
+            \Hoa\Console\Core\Io::NO_NEW_LINE,
+            \Hoa\Console\Core\Io::NO_WORDWRAP
         );
 
         return HC_SUCCESS;
@@ -253,4 +249,6 @@ class ChangelogCommand extends Hoa_Console_Command_Abstract {
 
         return HC_SUCCESS;
     }
+}
+
 }

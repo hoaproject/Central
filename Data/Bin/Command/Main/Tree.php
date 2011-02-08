@@ -24,16 +24,16 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Data
- *
  */
 
+namespace {
+
+from('Hoa')
+
 /**
- * Hoa_File_Finder
+ * \Hoa\File\Finder
  */
-import('File.Finder');
+-> import('File.Finder');
 
 /**
  * Class TreeCommand.
@@ -47,7 +47,7 @@ import('File.Finder');
  * @version     0.1
  */
 
-class TreeCommand extends Hoa_Console_Command_Abstract {
+class TreeCommand extends \Hoa\Console\Command\Generic {
 
     /**
      * Author name.
@@ -103,7 +103,7 @@ class TreeCommand extends Hoa_Console_Command_Abstract {
 
         $depth = -1;
         $list  = 0;
-        $sort  = Hoa_File_Finder::SORT_INAME;
+        $sort  = \Hoa\File\Finder::SORT_INAME;
 
         while(false !== $c = parent::getOption($v)) {
 
@@ -114,71 +114,71 @@ class TreeCommand extends Hoa_Console_Command_Abstract {
                   break;
 
                 case 'v':
-                    $list |= Hoa_File_Finder::LIST_VISIBLE;
+                    $list |= \Hoa\File\Finder::LIST_VISIBLE;
                   break;
 
                 case 'V':
-                    $list |= Hoa_File_Finder::LIST_HIDDEN;
+                    $list |= \Hoa\File\Finder::LIST_HIDDEN;
                   break;
 
                 case 'f':
-                    $list |= Hoa_File_Finder::LIST_FILE;
+                    $list |= \Hoa\File\Finder::LIST_FILE;
                   break;
 
                 case 'F':
-                    $list |= Hoa_File_Finder::LIST_DIRECTORY;
+                    $list |= \Hoa\File\Finder::LIST_DIRECTORY;
                   break;
 
                 case 'l':
-                    $list |= Hoa_File_Finder::LIST_LINK;
+                    $list |= \Hoa\File\Finder::LIST_LINK;
                   break;
 
                 case 'O':
-                    $list |= Hoa_File_Finder::LIST_NO_DOT;
+                    $list |= \Hoa\File\Finder::LIST_NO_DOT;
                   break;
 
                 case 'o':
-                    $list |= Hoa_File_Finder::LIST_DOT;
+                    $list |= \Hoa\File\Finder::LIST_DOT;
                   break;
 
                 case 'a':
-                    $sort  = Hoa_File_Finder::SORT_ATIME;
+                    $sort  = \Hoa\File\Finder::SORT_ATIME;
                   break;
 
                 case 'c':
-                    $sort  = Hoa_File_Finder::SORT_CTIME;
+                    $sort  = \Hoa\File\Finder::SORT_CTIME;
                   break;
 
                 case 'm':
-                    $sort  = Hoa_File_Finder::SORT_MTIME;
+                    $sort  = \Hoa\File\Finder::SORT_MTIME;
                   break;
 
                 case 'g':
-                    $sort  = Hoa_File_Finder::SORT_GROUP;
+                    $sort  = \Hoa\File\Finder::SORT_GROUP;
                   break;
 
                 case 'w':
-                    $sort  = Hoa_File_Finder::SORT_OWNER;
+                    $sort  = \Hoa\File\Finder::SORT_OWNER;
                   break;
 
                 case 'p':
-                    $sort  = Hoa_File_Finder::SORT_PERMISSIONS;
+                    $sort  = \Hoa\File\Finder::SORT_PERMISSIONS;
                   break;
 
                 case 'N':
-                    $sort  = Hoa_File_Finder::SORT_NAME;
+                    $sort  = \Hoa\File\Finder::SORT_NAME;
                   break;
 
                 case 'n':
-                    $sort  = Hoa_File_Finder::SORT_INAME;
+                    $sort  = \Hoa\File\Finder::SORT_INAME;
                   break;
 
                 case 'r':
-                    $sort |= Hoa_File_Finder::SORT_REVERSE;
+                    $sort |= \Hoa\File\Finder::SORT_REVERSE;
                   break;
 
                 case 'u':
-                    $sort  = Hoa_File_Finder::SORT_RANDOM;
+                    $sort  = \Hoa\File\Finder::SORT_RANDOM;
                   break;
 
                 case 'h':
@@ -189,8 +189,8 @@ class TreeCommand extends Hoa_Console_Command_Abstract {
         }
 
         if(0 === $list)
-            $list = Hoa_File_Finder::LIST_VISIBLE |
-                    Hoa_File_Finder::LIST_NO_DOT;
+            $list = \Hoa\File\Finder::LIST_VISIBLE |
+                    \Hoa\File\Finder::LIST_NO_DOT;
 
         parent::listInputs($path);
 
@@ -199,7 +199,7 @@ class TreeCommand extends Hoa_Console_Command_Abstract {
 
         cout(trim($path, DS) . DS);
         $this->find(
-            new Hoa_File_Finder(
+            new \Hoa\File\Finder(
                 $path,
                 $list,
                 $sort
@@ -216,15 +216,15 @@ class TreeCommand extends Hoa_Console_Command_Abstract {
      * Print the tree.
      *
      * @access  protected
-     * @param   Hoa_File_Finder  $finder     Finder object.
+     * @param   \Hoa\File\Finder  $finder     Finder object.
      * @param   int              $depth      Depth.
      * @param   int              $list       Combination of
-     *                                       Hoa_File_Finder::LIST_* constants.
+     *                                       \Hoa\File\Finder::LIST_* constants.
      * @param   int              $sort       Combination of
-     *                                       Hoa_File_Finder::SORT_* constants.
+     *                                       \Hoa\File\Finder::SORT_* constants.
      * @return  void
      */
-    protected function find ( Hoa_File_Finder $finder, $depth, $list, $sort) {
+    protected function find ( \Hoa\File\Finder $finder, $depth, $list, $sort) {
 
         static $i = 0;
 
@@ -235,16 +235,16 @@ class TreeCommand extends Hoa_Console_Command_Abstract {
 
         foreach($finder as $key => $file) {
 
-            cout(str_repeat('|   ', $i), Hoa_Console_Core_Io::NO_NEW_LINE);
+            cout(str_repeat('|   ', $i), \Hoa\Console\Core\Io::NO_NEW_LINE);
 
             $basename = $file->getBasename();
 
-            cout('|-- ' . $basename, Hoa_Console_Core_Io::NO_NEW_LINE);
+            cout('|-- ' . $basename, \Hoa\Console\Core\Io::NO_NEW_LINE);
 
             if($file->isLink())
                 cout(
                     ' -> ' . $file->define()->getTargetName(),
-                    Hoa_Console_Core_Io::NO_NEW_LINE
+                    \Hoa\Console\Core\Io::NO_NEW_LINE
                 );
             elseif($file->isDirectory()) {
 
@@ -252,7 +252,7 @@ class TreeCommand extends Hoa_Console_Command_Abstract {
 
                 $i++;
                 $this->find(
-                    new Hoa_File_Finder(
+                    new \Hoa\File\Finder(
                         $file->getRealPath(),
                         $list,
                         $sort
@@ -307,4 +307,6 @@ class TreeCommand extends Hoa_Console_Command_Abstract {
 
         return HC_SUCCESS;
     }
+}
+
 }

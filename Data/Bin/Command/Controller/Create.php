@@ -57,7 +57,7 @@ import('File.Write');
  * @version     0.1
  */
 
-class CreateCommand extends Hoa_Console_Command_Abstract {
+class CreateCommand extends Hoa_Console_Command_Generic {
 
     /**
      * Author name.

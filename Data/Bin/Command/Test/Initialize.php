@@ -47,7 +47,7 @@ import('Test.~');
  * @version     0.1
  */
 
-class InitializeCommand extends Hoa_Console_Command_Abstract {
+class InitializeCommand extends Hoa_Console_Command_Generic {
 
     /**
      * Author name.

@@ -24,30 +24,27 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Data
- *
  */
 
+namespace {
+
+from('Hoa')
+
 /**
- * Hoa_Console_Interface_Style
+ * \Hoa\Console\Chrome\Style
  */
-import('Console.Interface.Style');
+-> import('Console.Chrome.Style');
 
 /**
  * Class SheetStyle.
  *
  * This sheet declares the main style.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
  */
 
-class SheetStyle extends Hoa_Console_Interface_Style {
+class SheetStyle extends \Hoa\Console\Chrome\Style {
 
     /**
      * Import the style.
@@ -104,4 +101,6 @@ class SheetStyle extends Hoa_Console_Interface_Style {
 
         return;
     }
+}
+
 }

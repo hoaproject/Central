@@ -24,25 +24,21 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Data
- *
  */
+
+namespace {
 
 /**
  * Class VersionCommand.
  *
  * This command allows to know version and revision of the framework.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class VersionCommand extends Hoa_Console_Command_Abstract {
+class VersionCommand extends \Hoa\Console\Command\Generic {
 
     /**
      * Author name.
@@ -118,7 +114,7 @@ class VersionCommand extends Hoa_Console_Command_Abstract {
                 default:
                     $info = $message = 'Hoa Framework ' . $version . ' (' .
                                        $revision . ').' . "\n" .
-                                       Hoa_Core::©();
+                                       \Hoa\Core::©();
                   break;
             }
         }
@@ -152,4 +148,6 @@ class VersionCommand extends Hoa_Console_Command_Abstract {
 
         return HC_SUCCESS;
     }
+}
+
 }

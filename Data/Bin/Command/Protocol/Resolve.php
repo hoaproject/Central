@@ -24,11 +24,9 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Data
- *
  */
+
+namespace {
 
 /**
  * Class ResolveCommand.
@@ -42,7 +40,7 @@
  * @version     0.1
  */
 
-class ResolveCommand extends Hoa_Console_Command_Abstract {
+class ResolveCommand extends \Hoa\Console\Command\Generic {
 
     /**
      * Author name.
@@ -103,7 +101,7 @@ class ResolveCommand extends Hoa_Console_Command_Abstract {
             if(true === $verbose)
                 cout(parent::stylize($path, 'info') . ' is equivalent to: ');
 
-            cout(Hoa_Core::getProtocol()->resolve($path));
+            cout(\Hoa\Core::getProtocol()->resolve($path));
         }
 
 
@@ -128,4 +126,6 @@ class ResolveCommand extends Hoa_Console_Command_Abstract {
 
         return HC_SUCCESS;
     }
+}
+
 }

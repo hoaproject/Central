@@ -67,7 +67,7 @@ import('File.Read');
  * @version     0.1
  */
 
-class PraspelCommand extends Hoa_Console_Command_Abstract {
+class PraspelCommand extends Hoa_Console_Command_Generic {
 
     /**
      * Author name.

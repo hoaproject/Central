@@ -24,16 +24,16 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Data
- *
  */
 
+namespace {
+
+from('Hoa')
+
 /**
- * Hoa_Console_System
+ * \Hoa\Console\System
  */
-import('Console.System.~');
+-> import('Console.System.~');
 
 /**
  * Class PhpCommand.
@@ -47,7 +47,7 @@ import('Console.System.~');
  * @version     0.1
  */
 
-class PhpCommand extends Hoa_Console_Command_Abstract {
+class PhpCommand extends \Hoa\Console\Command\Generic {
 
     /**
      * Author name.
@@ -91,7 +91,7 @@ class PhpCommand extends Hoa_Console_Command_Abstract {
         $path = 'hoa://Data/Etc/Configuration/.Cache/HoaConsole.php';
 
         if(!file_exists($path))
-            throw new Hoa_Console_Command_Exception(
+            throw new \Hoa\Console\Command\Exception(
                 'The cache “Console” is not found in %s. Must generate it.',
                 0, $path);
 
@@ -110,19 +110,19 @@ class PhpCommand extends Hoa_Console_Command_Abstract {
             switch($c) {
 
                 case 'f':
-                    $out = Hoa_Console_System::execute($php . ' --rf ' . $name);
+                    $out = \Hoa\Console\System::execute($php . ' --rf ' . $name);
                   break;
 
                 case 'c':
-                    $out = Hoa_Console_System::execute($php . ' --rc ' . $name);
+                    $out = \Hoa\Console\System::execute($php . ' --rc ' . $name);
                   break;
 
                 case 'e':
-                    $out = Hoa_Console_System::execute($php . ' --re ' . $name);
+                    $out = \Hoa\Console\System::execute($php . ' --re ' . $name);
                   break;
 
                 case 'i':
-                    $out = Hoa_Console_System::execute($php . ' --ri ' . $name);
+                    $out = \Hoa\Console\System::execute($php . ' --ri ' . $name);
                   break;
 
                 case 'h':
@@ -132,7 +132,7 @@ class PhpCommand extends Hoa_Console_Command_Abstract {
 
                 case 'd':
                 default:
-                    $out = Hoa_Console_System::execute($browser . ' http://php.net/' . $name);
+                    $out = \Hoa\Console\System::execute($browser . ' http://php.net/' . $name);
                     empty($out)
                     and
                     $out = 'Open ' .
@@ -169,4 +169,6 @@ class PhpCommand extends Hoa_Console_Command_Abstract {
 
         return HC_SUCCESS;
     }
+}
+
 }

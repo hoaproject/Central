@@ -24,11 +24,9 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Data
- *
  */
+
+namespace {
 
 /**
  * Class PrintCommand.
@@ -42,7 +40,7 @@
  * @version     0.1
  */
 
-class PrintCommand extends Hoa_Console_Command_Abstract {
+class PrintCommand extends \Hoa\Console\Command\Generic {
 
     /**
      * Author name.
@@ -88,7 +86,7 @@ class PrintCommand extends Hoa_Console_Command_Abstract {
                   break;
             }
 
-            cout(Hoa_Core::getProtocol()->__toString());
+            cout(\Hoa\Core::getProtocol()->__toString());
         }
 
         return HC_SUCCESS;
@@ -110,4 +108,6 @@ class PrintCommand extends Hoa_Console_Command_Abstract {
 
         return HC_SUCCESS;
     }
+}
+
 }

@@ -175,7 +175,7 @@ class ContractCovering extends Hoa_Test_Praspel_Visitor_Praspel {
     }
 }
 
-class RunCommand extends Hoa_Console_Command_Abstract {
+class RunCommand extends Hoa_Console_Command_Generic {
 
     /**
      * Author name.
