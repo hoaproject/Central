@@ -24,45 +24,43 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Session
- * @subpackage  Hoa_Session_Flash
- *
  */
 
-/**
- * Hoa_Session
- */
-import('Session.~');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Session_Namespace
+ * \Hoa\Session
  */
-import('Session.Namespace');
+-> import('Session.~')
 
 /**
- * Hoa_Session_Exception
+ * \Hoa\Session\QNamespace
  */
-import('Session.Exception');
+-> import('Session.QNamespace')
 
 /**
- * Class Hoa_Session_Flash.
+ * \Hoa\Session\Exception
+ */
+-> import('Session.Exception.~');
+
+}
+
+namespace Hoa\Session {
+
+/**
+ * Class \Hoa\Session\Flash.
  *
  * A flash is a temporary message transported in session.
  * Actually, it is a special namespace (reserved namespace).
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Session
- * @subpackage  Hoa_Session_Flash
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Session_Flash extends Hoa_Session_Namespace {
+class Flash extends QNamespace {
 
     /**
      * Built a new session flash message.
@@ -71,17 +69,19 @@ class Hoa_Session_Flash extends Hoa_Session_Namespace {
      * @param   string  $id         The flash message ID.
      * @param   string  $message    The flash message value.
      * @return  void
-     * @throw   Hoa_Session_Exception
+     * @throw   \Hoa\Session\Exception
      */
     public function __construct ( $id, $message = null ) {
 
-        Hoa_Session::setStrictMode(true);
-        Hoa_Session::start();
+        Session::setStrictMode(true);
+        Session::start();
 
         $id = '_flashMessage_' . md5($id);
 
         parent::setNewNamespace($id);
         $this->setNewFlash($id, $message);
+
+        return;
     }
 
     /**
@@ -91,7 +91,7 @@ class Hoa_Session_Flash extends Hoa_Session_Namespace {
      * @param   string     $id         The flash message ID.
      * @param   string     $message    The flash message value.
      * @return  void
-     * @throw   Hoa_Session_Exception
+     * @throw   \Hoa\Session\Exception
      */
     protected function setNewFlash ( $id, $message = null ) {
 
@@ -99,6 +99,8 @@ class Hoa_Session_Flash extends Hoa_Session_Namespace {
 
         if(null === $this->getMessage())
             $_SESSION[$this->getNamespaceName()]['message'] = $message;
+
+        return;
     }
 
     /**
@@ -185,4 +187,6 @@ class Hoa_Session_Flash extends Hoa_Session_Namespace {
 
         return $this->getMessage();
     }
+}
+
 }

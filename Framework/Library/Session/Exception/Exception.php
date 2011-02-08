@@ -24,71 +24,63 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Session
- * @subpackage  Hoa_Session_Exception
- *
  */
 
+namespace Hoa\Session\Exception {
+
 /**
- * Class Hoa_Session_Exception.
+ * Class \Hoa\Session\Exception.
  *
- * Extending the Hoa_Core_Exception class.
+ * Extending the \Hoa\Core\Exception class.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Session
- * @subpackage  Hoa_Session_Exception
  */
 
-class Hoa_Session_Exception extends Hoa_Core_Exception {
+class Exception extends \Hoa\Core\Exception {
 
     /**
      * Whether an error has occured when trying to start a session.
      *
-     * @var Hoa_Session_Exception bool
+     * @var \Hoa\Session\Exception bool
      */
-    protected static $startError = false;
+    protected static $startError                = false;
 
     /**
      * Whether an error has occured when trying to write and close a session.
      *
-     * @var Hoa_Session_Exception bool
+     * @var \Hoa\Session\Exception bool
      */
-    protected static $writeAndCloseError = false;
+    protected static $writeAndCloseError        = false;
 
     /**
      * Whether an error has occured when trying to destroy a session.
      *
-     * @var Hoa_Session_Exception bool
+     * @var \Hoa\Session\Exception bool
      */
-    protected static $destroyError = false;
+    protected static $destroyError              = false;
 
     /**
      * Start error message.
      * 
-     * @var Hoa_Session_Exception string
+     * @var \Hoa\Session\Exception string
      */
-    protected static $startErrorMessage = null;
+    protected static $startErrorMessage         = null;
 
     /**
      * Write and close error message.
      * 
-     * @var Hoa_Session_Exception string
+     * @var \Hoa\Session\Exception string
      */
     protected static $writeAndCloseErrorMessage = null;
 
     /**
      * Destroy error message.
      *
-     * @var Hoa_Session_Exception string
+     * @var \Hoa\Session\Exception string
      */
-    protected static $destroyErrorMessage = null;
+    protected static $destroyErrorMessage       = null;
 
 
 
@@ -341,4 +333,6 @@ class Hoa_Session_Exception extends Hoa_Core_Exception {
 
         return self::$destroyErrorMessage;
     }
+}
+
 }

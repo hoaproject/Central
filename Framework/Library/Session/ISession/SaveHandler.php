@@ -24,31 +24,23 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Session
- * @subpackage  Hoa_Session_SaveHandler_Interface
- *
  */
 
+namespace Hoa\Session\ISession {
+
 /**
- * Interface Hoa_Session_SaveHandler_Interface.
+ * Interface \Hoa\Session\ISession\SaveHandler.
  *
  * Force some methods to be implemented by a class.
  * Theses methods must be implemented for the PHP function
  * session_set_save_handler. Please, see the manuel for more informations.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Session
- * @subpackage  Hoa_Session_SaveHandler_Interface
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-interface Hoa_Session_SaveHandler_Interface {
+interface SaveHandler {
 
     /**
      * Open a session.
@@ -105,4 +97,6 @@ interface Hoa_Session_SaveHandler_Interface {
      * @return  bool
      */
     public function gc ( $maxlifetime );
+}
+
 }

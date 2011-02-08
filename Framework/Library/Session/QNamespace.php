@@ -24,51 +24,49 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Session
- * @subpackage  Hoa_Session_Namespace
- *
  */
 
-/**
- * Hoa_Session
- */
-import('Session.~');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Session_Exception
+ * \Hoa\Session
  */
-import('Session.Exception');
+-> import('Session.~')
 
 /**
- * Hoa_Session_Exception_NamespaceIsExpired
+ * \Hoa\Session\Exception
  */
-import('Session.Exception.NamespaceIsExpired');
+-> import('Session.Exception.~')
 
 /**
- * Class Hoa_Session_Namespace.
+ * \Hoa\Session\Exception\NamespaceIsExpired
+ */
+-> import('Session.Exception.NamespaceIsExpired');
+
+}
+
+namespace Hoa\Session {
+
+/**
+ * Class \Hoa\Session\QNamespace.
  *
  * A namespace is a variable of a session.
  * This class allows to manage many namespaces (one per instance), and allows to
  * have more access controls, time controls, etc., on namespace.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Session
- * @subpackage  Hoa_Session_Namespace
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Session_Namespace {
+class QNamespace {
 
     /**
      * Namespace value.
      *
-     * @var Hoa_Session_Namespace string
+     * @var \Hoa\Session\QNamespace string
      */
     protected $namespace = null;
 
@@ -80,16 +78,18 @@ class Hoa_Session_Namespace {
      * @access  public
      * @param   string  $namespace    Namespace value.
      * @param   bool    $strict       Whether session must be started by
-     *                                Hoa_Session::start() before declare a new
+     *                                \Hoa\Session::start() before declare a new
      *                                namespace. 
      * @return  void
      */
     public function __construct ( $namespace, $strict = true ) {
 
-        Hoa_Session::setStrictMode($strict);
-        Hoa_Session::start();
+        Session::setStrictMode($strict);
+        Session::start();
 
         $this->setNewNamespace($namespace);
+
+        return;
     }
 
     /**
@@ -98,21 +98,22 @@ class Hoa_Session_Namespace {
      * @access  protected
      * @param   string     $namespace    Namespace value.
      * @return  void
-     * @throw   Hoa_Session_Exception
+     * @throw   \Hoa\Session\Exception
      */
     protected function setNewNamespace ( $namespace ) {
 
         if(empty($namespace))
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Namespace value could not be empty.', 0);
 
         if(0 === preg_match('#^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$#', $namespace))
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'Namespace %s is not well-formed ; must match with ' .
                 '^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]$*', 1, $namespace);
         
         if($namespace == '__Hoa')
-            throw new Hoa_Session_Exception('__Hoa is a reserved namespace.', 2);
+            throw new Exception(
+                '__Hoa is a reserved namespace.', 2);
 
         $this->namespace = $namespace;
 
@@ -121,8 +122,8 @@ class Hoa_Session_Namespace {
 
             $_SESSION[$namespace] = array();
             $_SESSION['__Hoa']['namespace'][$namespace] = array(
-                'lock'          => false,  // per defaut, but should be parametrable.
-                'expire_second' => null,   // idem
+                'lock'          => false, // by defaut, but should be parametrable.
+                'expire_second' => null,  // idem
                 'expire_access' => null
             );
 
@@ -130,8 +131,10 @@ class Hoa_Session_Namespace {
         }
 
         if($this->isExpiredSecond())
-            throw new Hoa_Session_Exception_NamespaceIsExpired(
+            throw new Exception\NamespaceIsExpired(
                 'Namespace %s is expired.', 3, $this->getNamespaceName());
+
+        return;
     }
 
     /**
@@ -152,21 +155,22 @@ class Hoa_Session_Namespace {
      * @param   string  $name     Variable name.
      * @param   mixed   $value    Vaariable value.
      * @return  mixed
-     * @throw   Hoa_Session_Exception
+     * @throw   \Hoa\Session\Exception
      */
     public function __set ( $name, $value ) {
 
-        if(false === Hoa_Session::isWritable())
-            throw new Hoa_Session_Exception(
+        if(false === Session::isWritable())
+            throw new Exception(
                 'Session is closed, cannot write data.', 4);
 
-        if(false === Hoa_Session::isNamespaceSet($this->getNamespaceName()))
-            throw new Hoa_Session_Exception(
+        if(false === Session::isNamespaceSet($this->getNamespaceName()))
+            throw new Exception(
                 'Namespace %s is not set. Should not be used.',
                 5, $this->getNamespaceName());
 
         if($this->isLocked())
-            throw new Hoa_Session_Exception('Namespace is locked.', 6);
+            throw new Exception(
+                'Namespace is locked.', 6);
 
         $old = null;
 
@@ -184,8 +188,8 @@ class Hoa_Session_Namespace {
      * @access  public
      * @param   string  $name    Variable name.
      * @return  mixed
-     * @throw   Hoa_Session_Exception
-     * @throw   Hoa_Session_Exception_NamespaceIsExpired
+     * @throw   \Hoa\Session\Exception
+     * @throw   \Hoa\Session\Exception\NamespaceIsExpired
      */
     public function __get ( $name ) {
 
@@ -193,10 +197,10 @@ class Hoa_Session_Namespace {
             return null;
 
         if($this->isLocked())
-            throw new Hoa_Session_Exception('Namespace %s is locked.', 7, $name);
+            throw new Exception('Namespace %s is locked.', 7, $name);
 
         if($this->isExpiredAccess())
-            throw new Hoa_Session_Exception_NamespaceIsExpired(
+            throw new Exception\NamespaceIsExpired(
                 'Namespace %s has no more access.', 8, $name);
 
         $_SESSION['__Hoa']['namespace'][$this->getNamespaceName()]['expire_access']--;
@@ -237,7 +241,8 @@ class Hoa_Session_Namespace {
     public function __unset ( $name ) {
 
         if($this->isLocked())
-            throw new Hoa_Session_Exception('Namespace %s is locked.', 9, $name);
+            throw new Exception(
+                'Namespace %s is locked.', 9, $name);
 
         unset($_SESSION[$this->getNamespaceName()][$name]);
     }
@@ -250,8 +255,8 @@ class Hoa_Session_Namespace {
      */
     public function lock ( ) {
 
-        if(false === Hoa_Session::isNamespaceSet($this->getNamespaceName()))
-            throw new Hoa_Session_Exception(
+        if(false === Session::isNamespaceSet($this->getNamespaceName()))
+            throw new Exception(
                 'Namespace %s is not set. Should not be used.',
                 10, $this->getNamespaceName());
 
@@ -269,8 +274,8 @@ class Hoa_Session_Namespace {
      */
     public function isLocked ( ) {
 
-        if(false === Hoa_Session::isNamespaceSet($this->getNamespaceName()))
-            throw new Hoa_Session_Exception(
+        if(false === Session::isNamespaceSet($this->getNamespaceName()))
+            throw new Exception(
                 'Namespace %s is not set. Should not be used.',
                 11, $this->getNamespaceName());
 
@@ -285,8 +290,8 @@ class Hoa_Session_Namespace {
      */
     public function unlock ( ) {
 
-        if(false === Hoa_Session::isNamespaceSet($this->getNamespaceName()))
-            throw new Hoa_Session_Exception(
+        if(false === Session::isNamespaceSet($this->getNamespaceName()))
+            throw new Exception(
                 'Namespace %s is not set. Should not be used.',
                 12, $this->getNamespaceName());
 
@@ -305,8 +310,8 @@ class Hoa_Session_Namespace {
      */
     public function setExpireSecond ( $time ) {
 
-        if(false === Hoa_Session::isNamespaceSet($this->getNamespaceName()))
-            throw new Hoa_Session_Exception(
+        if(false === Session::isNamespaceSet($this->getNamespaceName()))
+            throw new Exception(
                 'Namespace %s is not set. Should not be used.',
                 13, $this->getNamespaceName());
 
@@ -315,7 +320,7 @@ class Hoa_Session_Namespace {
             return;
 
         if(!is_int($time))
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'The expiration time must be an int, that represents seconds. ' .
                 'Given %s.', 14, gettype($time));
 
@@ -334,8 +339,8 @@ class Hoa_Session_Namespace {
      */
     public function getExpireSecond ( ) {
 
-        if(false === Hoa_Session::isNamespaceSet($this->getNamespaceName()))
-            throw new Hoa_Session_Exception(
+        if(false === Session::isNamespaceSet($this->getNamespaceName()))
+            throw new Exception(
                 'Namespace %s is not set. Should not be used.',
                 15, $this->getNamespaceName());
 
@@ -350,8 +355,8 @@ class Hoa_Session_Namespace {
      */
     public function isExpiredSecond ( ) {
 
-        if(false === Hoa_Session::isNamespaceSet($this->getNamespaceName()))
-            throw new Hoa_Session_Exception(
+        if(false === Session::isNamespaceSet($this->getNamespaceName()))
+            throw new Exception(
                 'Namespace %s is not set. Should not be used.',
                 16, $this->getNamespaceName());
 
@@ -370,8 +375,8 @@ class Hoa_Session_Namespace {
      */
     public function setExpireAccess ( $access ) {
 
-        if(false === Hoa_Session::isNamespaceSet($this->getNamespaceName()))
-            throw new Hoa_Session_Exception(
+        if(false === Session::isNamespaceSet($this->getNamespaceName()))
+            throw new Exception(
                 'Namespace %s is not set. Should not be used.',
                 17, $this->getNamespaceName());
 
@@ -380,7 +385,7 @@ class Hoa_Session_Namespace {
             return;
 
         if(!is_int($access))
-            throw new Hoa_Session_Exception(
+            throw new Exception(
                 'The expiration access must be an int. ' .
                 'Given %s.', 18, gettype($access));
 
@@ -399,8 +404,8 @@ class Hoa_Session_Namespace {
      */
     public function getExpireAccess ( ) {
 
-        if(false === Hoa_Session::isNamespaceSet($this->getNamespaceName()))
-            throw new Hoa_Session_Exception(
+        if(false === Session::isNamespaceSet($this->getNamespaceName()))
+            throw new Exception(
                 'Namespace %s is not set. Should not be used.',
                 19, $this->getNamespaceName());
 
@@ -415,8 +420,8 @@ class Hoa_Session_Namespace {
      */
     public function isExpiredAccess ( ) {
 
-        if(false === Hoa_Session::isNamespaceSet($this->getNamespaceName()))
-            throw new Hoa_Session_Exception(
+        if(false === Session::isNamespaceSet($this->getNamespaceName()))
+            throw new Exception(
                 'Namespace %s is not set. Should not be used.',
                 20, $this->getNamespaceName());
 
@@ -425,4 +430,6 @@ class Hoa_Session_Namespace {
 
         return $this->getExpireAccess() <= 0;
     }
+}
+
 }
