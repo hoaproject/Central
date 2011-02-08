@@ -272,11 +272,11 @@ class Concrete implements Element, \Countable, \IteratorAggregate, \ArrayAccess 
      * Get the iterator.
      *
      * @access  public
-     * @return  ArrayIterator
+     * @return  \ArrayIterator
      */
     public function getIterator ( ) {
 
-        return new ArrayIterator($this->_iterator);
+        return new \ArrayIterator($this->_iterator);
     }
 
     /**
