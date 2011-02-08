@@ -136,7 +136,7 @@ abstract class Graph {
         $arguments = func_get_args();
         array_shift($arguments);
 
-        return dnew('Hoa.Graph.' . $type, $arguments);
+        return dnew('Hoa\Graph\\' . $type, $arguments);
     }
 
     /**
