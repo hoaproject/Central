@@ -84,28 +84,7 @@ namespace Hoa\Core {
  * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Core implements \Hoa\Core\Parameterizable {
-
-    /**
-     * Import constant: path collection index.
-     *
-     * @const int
-     */
-    const IMPORT_PATH = 0;
-
-    /**
-     * Import constant: load flag collection index.
-     *
-     * @const int
-     */
-    const IMPORT_LOAD = 1;
-
-    /**
-     * Stack of all files that might be imported.
-     *
-     * @var \Hoa\Core array
-     */
-    private static $_importStack = array();
+class Core implements Parameterizable {
 
     /**
      * Stack of all registered shutdown function.
@@ -134,13 +113,6 @@ class Core implements \Hoa\Core\Parameterizable {
      * @var \Hoa\Core object
      */
     private static $_instance    = null;
-
-    /**
-     * Last imported file path.
-     *
-     * @var \Hoa\Core array
-     */
-    private static $_lastImport  = array();
 
 
 
@@ -215,11 +187,11 @@ class Core implements \Hoa\Core\Parameterizable {
      */
     public function initialize ( Array $parameters = array() ) {
 
-        $root              = dirname(dirname(__FILE__));
-        $this->_parameters = new \Hoa\Core\Parameter(
+        $root              = dirname(__DIR__);
+        $this->_parameters = new Parameter(
             $this,
             array(
-                'root.ofFrameworkDirectory' => $root
+                'root.ofFrameworkDirectory' => null
             ),
             array(
                 'root'               => '(:root.ofFrameworkDirectory:)',
@@ -262,10 +234,12 @@ class Core implements \Hoa\Core\Parameterizable {
                 'protocol.Data/Variable/Test'     => '(:%protocol.Data/Variable:)' .
                                                      'Test' . DS,
                 'protocol.Data'                   => '(:%root.data:)' . DS,
-                'protocol.Library'                => '(:%framework.library:)' . DS
+                'protocol.Library'                => '(:%framework.library:)' . DS,
+
+                'namespace.prefix.Hoa'     => '(:%framework.library:)',
+                'namespace.prefix.Hoathis' => '(:%framework.module:)'
             )
         );
-
         $this->_parameters->setKeyword(
             $this,
             'root.ofFrameworkDirectory',
@@ -364,7 +338,7 @@ class Core implements \Hoa\Core\Parameterizable {
             $protocolRoot->addComponentHelper(
                 $path,
                 $reach,
-                \Hoa\Core\Protocol::OVERWRITE
+                Protocol::OVERWRITE
             );
 
         return;
@@ -398,7 +372,7 @@ class Core implements \Hoa\Core\Parameterizable {
     public static function getProtocol ( ) {
 
         if(null === self::$_root)
-            self::$_root = new \Hoa\Core\Protocol\Root();
+            self::$_root = new Protocol\Root();
 
         return self::$_root;
     }
