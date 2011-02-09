@@ -191,7 +191,7 @@ class Exception extends \Exception {
      */
     public static function handler ( $exception ) {
 
-        if($exception instanceof \Hoa\Core\Exception)
+        if($exception instanceof Exception)
             return $exception->raiseError(
                 self::ERROR_PRINT,
                 E_USER_WARNING,
