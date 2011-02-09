@@ -355,7 +355,7 @@ class Core implements Parameterizable {
      * @param   bool    $case     True set the case-insensitive.
      * @return  bool
      */
-    public static function _define ( $name = '', $value = '', $case = false) {
+    public static function _define ( $name, $value, $case = false) {
 
         if(!defined($name))
             return define($name, $value, $case);
@@ -437,7 +437,7 @@ function ƒ ( $name ) {
  * @return  bool
  */
 if(!ƒ('_define')) {
-function _define ( $name = '', $value = '', $case = false ) {
+function _define ( $name, $value, $case = false ) {
 
     return \Hoa\Core::_define($name, $value, $case);
 }}
