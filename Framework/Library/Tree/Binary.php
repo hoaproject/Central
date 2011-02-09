@@ -38,7 +38,7 @@ from('Hoa')
 /**
  * \Hoa\Tree\Generic
  */
--> import('Tree.Abstract');
+-> import('Tree.Generic');
 
 }
 
