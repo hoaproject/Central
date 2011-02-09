@@ -105,10 +105,6 @@ interface Writable {
     public function setParameter ( $key, $value );
 }
 
-}
-
-namespace Hoa\Core {
-
 /**
  * Interface \Hoa\Core\Parameterizable.
  *
@@ -119,9 +115,11 @@ namespace Hoa\Core {
  * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-interface   Parameterizable
-    extends \Hoa\Core\Parameterizable\Readable,
-            \Hoa\Core\Parameterizable\Writable { }
+interface Parameterizable extends Readable, Writable { }
+
+}
+
+namespace Hoa\Core {
 
 /**
  * Class \Hoa\Core\Parameter.
@@ -233,7 +231,7 @@ class Parameter {
      * @param   string                     $ownerParent    Owner parent.
      * @return  void
      */
-    public function __construct ( \Hoa\Core\Parameterizable $owner,
+    public function __construct ( Parameterizable $owner,
                                   Array $keywords   = array(),
                                   Array $parameters = array(),
                                   $ownerParent      = null ) {
@@ -337,16 +335,16 @@ class Parameter {
             $handle = require_once $path;
 
             if(!is_array($handle))
-                throw new \Hoa\Core\Exception(
+                throw new Exception(
                     'Strange though it may appear, the configuration cache ' .
                     'file %s appears to be corrupted.', 0, $path);
 
             if(!array_key_exists('keywords', $handle))
-                throw new \Hoa\Core\Exception(
+                throw new Exception(
                     'Need keywords in the configuration cache %s.', 1, $path);
 
             if(!array_key_exists('parameters', $handle))
-                throw new \Hoa\Core\Exception(
+                throw new Exception(
                     'Need parameters in the configuration cache %s.', 2, $path);
 
             $this->_keywords   = $handle['keywords'];
@@ -772,7 +770,7 @@ class Parameter {
         if($key[0] == '%') {
 
             if(false === array_key_exists($word, self::$_currentParameters))
-                throw new \Hoa\Core\Exception(
+                throw new Exception(
                     'Parameter %s is not found in parameters.',
                     0, $word);
 
@@ -792,7 +790,7 @@ class Parameter {
                 if(isset(self::$_constants[$v]))
                     $out .= self::$_constants[$v];
                 else
-                    throw new \Hoa\Core\Exception(
+                    throw new Exception(
                         'Constant char %s is not supported in the ' .
                         'parameter rule %s.',
                         1, array($v, self::$_currentParameter));
@@ -801,7 +799,7 @@ class Parameter {
         else {
 
             if(false === array_key_exists($key, self::$_currentKeywords))
-                throw new \Hoa\Core\Exception(
+                throw new Exception(
                     'Keyword %s is not found in the parameter rule %s.', 2,
                     array($key, self::$_currentParameter));
 
@@ -818,7 +816,7 @@ class Parameter {
         );
 
         if(empty($flags) || empty($flags[1]))
-            throw new \Hoa\Core\Exception(
+            throw new Exception(
                 'Unrecognized format pattern %s in the parameter %s.',
                 0, array($match[0], self::$_currentParameter));
 
@@ -857,7 +855,7 @@ class Parameter {
 
                 default:
                     if(!isset($flags[3]) && !isset($flags[4]))
-                        throw new \Hoa\Core\Exception(
+                        throw new Exception(
                             'Unrecognized format pattern in the parameter %s.',
                             0, self::$_currentParameter);
 
@@ -894,9 +892,9 @@ class Parameter {
      */
     public function check ( $id, $permissions ) {
 
-        if(!(   $id instanceof \Hoa\Core\Parameterizable
-             || $id instanceof \Hoa\Core\Parameterizable\Readable
-             || $id instanceof \Hoa\Core\Parameterizable\Writable))
+        if(!(   $id instanceof Parameterizable
+             || $id instanceof Parameterizable\Readable
+             || $id instanceof Parameterizable\Writable))
             throw new \Hoa\Core\Exception(
                 'Class %s is not valid. ' .
                 'Parameterizable classes must extend ' .
@@ -920,7 +918,7 @@ class Parameter {
                     break;
 
             if(-1 === $p)
-                throw new \Hoa\Core\Exception(
+                throw new Exception(
                     'Class %s is not friend of %s and cannot share its parameters.',
                     4, array($iid, $this->_owner));
         }
@@ -930,16 +928,16 @@ class Parameter {
         if(0 === ($permissions & $p)) {
 
             if(0 !== $permissions & self::PERMISSION_READ)
-                throw new \Hoa\Core\Exception(
+                throw new Exception(
                     'Class %s does not have permission to read parameters ' .
                     'from %s.', 5, array($iid, $this->_owner));
 
             elseif(0 !== $permissions & self::PERMISSION_WRITE)
-                throw new \Hoa\Core\Exception(
+                throw new Exception(
                     'Class %s does not have permission to write parameters ' .
                     'from %s.', 6, array($iid, $this->_owner));
 
-            throw new \Hoa\Core\Exception(
+            throw new Exception(
                 'Class %s does not have permission to share parameters ' .
                 'from %s.', 7, array($iid, $this->_owner));
         }
@@ -969,5 +967,15 @@ class Parameter {
         return;
     }
 }
+
+}
+
+namespace {
+
+/**
+ * Make the alias automatically (because it's not imported with the import()
+ * function).
+ */
+class_alias('Hoa\Core\Parameterizable\Parameterizable', 'Hoa\Core\Parameterizable');
 
 }

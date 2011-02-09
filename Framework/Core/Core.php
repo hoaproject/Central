@@ -91,28 +91,28 @@ class Core implements Parameterizable {
      *
      * @var \Hoa\Core array
      */
-    private static $_rsdf        = array();
+    private static $_rsdf     = array();
 
     /**
      * Tree of components, starts by the root.
      *
      * @var \Hoa\Core\Protocol\Root object
      */
-    private static $_root        = null;
+    private static $_root     = null;
 
     /**
      * Parameters of \Hoa\Core.
      *
      * @var \Hoa\Core\Parameter object
      */
-    protected $_parameters       = null;
+    protected $_parameters    = null;
 
     /**
      * Singleton.
      *
      * @var \Hoa\Core object
      */
-    private static $_instance    = null;
+    private static $_instance = null;
 
 
 

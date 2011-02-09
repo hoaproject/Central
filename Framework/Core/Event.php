@@ -401,7 +401,7 @@ function event ( $eventId ) {
 
 /**
  * Make the alias automatically (because it's not imported with the import()
- * function.
+ * function).
  */
 class_alias('Hoa\Core\Event\Event', 'Hoa\Core\Event');
 

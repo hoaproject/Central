@@ -31,7 +31,7 @@ namespace Hoa\Core {
 /**
  * Class \Hoa\Core\Data.
  *
- * Universel data structure.
+ * Universal data structure.
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
