@@ -31,8 +31,8 @@ namespace Hoa\Core {
 /**
  * Class \Hoa\Core\Exception.
  *
- * \Hoa\Exception is the mother exception class of the framework. Each exception
- * must extend \Hoa\Exception, itself extends PHP Exception class.
+ * \Hoa\Core\Exception is the mother exception class of the framework. Each
+ * exception must extend \Hoa\Core\Exception, itself extends PHP Exception class.
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
@@ -72,7 +72,7 @@ class Exception extends \Exception {
     /**
      * RaiseError string arguments.
      *
-     * @var \Hoa\Exception array
+     * @var \Hoa\Core\Exception array
      */
     protected $_arg = array();
 

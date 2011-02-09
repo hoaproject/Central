@@ -152,7 +152,7 @@ class Core implements Parameterizable {
 
         if(false !== $wl = ini_get('suhosin.executor.include.whitelist'))
             if(false === in_array('hoa', explode(',', $wl)))
-                throw new \Hoa\Exception(
+                throw new Exception(
                     'The URL scheme hoa:// is not authorized by Suhosin. ' .
                     'You must add this to your php.ini or suhosin.ini: ' .
                     'suhosin.executor.include.whitelist="%s", thanks :-).',
@@ -257,7 +257,7 @@ class Core implements Parameterizable {
      * @access  public
      * @param   array   $in    Parameters to set.
      * @return  void
-     * @throw   \Hoa\Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setParameters ( Array $in ) {
 
@@ -272,7 +272,7 @@ class Core implements Parameterizable {
      *
      * @access  public
      * @return  array
-     * @throw   \Hoa\Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameters ( ) {
 
@@ -286,7 +286,7 @@ class Core implements Parameterizable {
      * @param   string  $key      Key.
      * @param   mixed   $value    Value.
      * @return  mixed
-     * @throw   \Hoa\Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setParameter ( $key, $value ) {
 
@@ -302,7 +302,7 @@ class Core implements Parameterizable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   \Hoa\Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameter ( $key ) {
 
@@ -316,7 +316,7 @@ class Core implements Parameterizable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   \Hoa\Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getFormattedParameter ( $key ) {
 
