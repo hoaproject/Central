@@ -31,11 +31,6 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Tree\Exception
- */
--> import('Tree.Exception')
-
-/**
  * \Hoa\Tree\Visitor\Generic
  */
 -> import('Tree.Visitor.Generic')
