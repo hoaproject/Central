@@ -40,13 +40,58 @@ namespace Hoa\Core {
 
 class Consistency {
 
+    /**
+     * One singleton by library family.
+     *
+     * @var \Hoa\Consistency array
+     */
     private static $_multiton = array();
+
+    /**
+     * Library to considere.
+     *
+     * @var \Hoa\Consistency string
+     */
     protected $_from          = 'Hoa';
+
+    /**
+     * Library's root to considere.
+     *
+     * @var \Hoa\Consistency string
+     */
     protected $_root          = null;
+
+    /**
+     * Cache all imports.
+     *
+     * @var \Hoa\Consistency array
+     */
     protected static $_cache  = array();
+
+    /**
+     * Cache all classes informations: path, alias and imported.
+     *
+     * @var \Hoa\Consistency array
+     */
     protected static $_class  = array();
+
+    /**
+     * Cache all classes from the current library family.
+     * It contains references to self:$_class.
+     *
+     * @var \Hoa\Consistency array
+     */
     protected $__class        = array();
 
+
+
+    /**
+     * Singleton to manage a library family.
+     *
+     * @access  public
+     * @param   string  $from    Library family's name.
+     * @return  void
+     */
     private function __construct ( $from ) {
 
         $this->_from = $from;
@@ -57,6 +102,13 @@ class Consistency {
         return;
     }
 
+    /**
+     * Get the library family's singleton.
+     *
+     * @access  public
+     * @param   string  $from    Library family's name.
+     * @return  \Hoa\Consistency
+     */
     public static function from ( $namespace ) {
 
         if(!isset(self::$_multiton[$namespace]))
@@ -65,6 +117,15 @@ class Consistency {
         return self::$_multiton[$namespace];
     }
 
+    /**
+     * Import, i.e. pre-load, one or many classes. If $load parameters is set
+     * to true, then pre-load is turned to direct-load.
+     *
+     * @access  public
+     * @param   string  $path    Path.
+     * @param   bool    $load    Whether loading directly or not.
+     * @return  \Hoa\Consistency
+     */
     public function import ( $path, $load = false ) {
 
         if(!empty($this->_from))
@@ -135,9 +196,8 @@ class Consistency {
             if(!file_exists($path)) {
 
                 array_pop($parts);
-                var_dump('FILE DOES NOT EXIST! ' . implode('/', $parts) . '.php');
-
-                return;
+                throw new Exception(
+                    'File %s does not exist.', 0, implode('/', $parts) . '.php');
             }
         }
 
@@ -174,6 +234,13 @@ class Consistency {
         return $this;
     }
 
+    /**
+     * Set the root of the current library family.
+     *
+     * @access  public
+     * @param   bool    $root    Root.
+     * @return  \Hoa\Consistency
+     */
     public function setRoot ( $root ) {
 
         $this->_root = $root;
@@ -181,33 +248,67 @@ class Consistency {
         return $this;
     }
 
+    /**
+     * Get the root of the current library family.
+     *
+     * @access  public
+     * @return  string
+     */
     public function getRoot ( ) {
 
         return $this->_root;
     }
 
+    /**
+     * Get imported classes from the current library family.
+     *
+     * @access  public
+     * @return  array
+     */
     public function getImportedClasses ( ) {
 
         return $this->__class;
     }
 
+    /**
+     * Get imported classes from all library families.
+     *
+     * @access  public
+     * @return  array
+     */
     public static function getAllImportedClasses ( ) {
 
         return self::$_class;
     }
 
-    public static function getClassShortestName ( $class ) {
+    /**
+     * Get the shortest name for a class, i.e. if an alias exists, return it,
+     * else return the normal classname.
+     *
+     * @access  public
+     * @param   string  $classname    Classname.
+     * @return  string
+     * @throw   \Hoa\Core\Exception
+     */
+    public static function getClassShortestName ( $classname ) {
 
-        if(!isset(self::$_class[$class]))
+        if(!isset(self::$_class[$classname]))
             throw new Exception(
-                'Class %s does not exist.', 0, $class);
+                'Class %s does not exist.', 1, $classname);
 
-        if(is_string(self::$_class[$class]))
-            return $class;
+        if(is_string(self::$_class[$classname]))
+            return $classname;
 
-        return self::$_class[$class]['alias'] ?: '';
+        return self::$_class[$classname]['alias'] ?: '';
     }
 
+    /**
+     * Autoloader.
+     *
+     * @access  public
+     * @param   string  $classname    Classname.
+     * @return  bool
+     */
     public static function autoload ( $classname ) {
 
         $classes = self::getAllImportedClasses();
@@ -223,7 +324,7 @@ class Consistency {
             $class     = &$classes[$class];
         }
 
-        require_once $class['path'];
+        require $class['path'];
 
         $class['imported'] = true;
 
@@ -233,6 +334,14 @@ class Consistency {
         return true;
     }
 
+    /**
+     * Dynamic new, i.e. a little native factory (import + load + instance).
+     *
+     * @access  public
+     * @param   string  $classname    Classname.
+     * @param   array   $arguments    Constructor's arguments.
+     * @return  object
+     */
     public static function dnew ( $classname, Array $arguments = array() ) {
 
         if(!class_exists($classname))
@@ -251,7 +360,11 @@ class Consistency {
 namespace {
 
 /**
+ * Alias for \Hoa\Core\Consistency::from().
  *
+ * @access  public
+ * @param   string  $from    Library family's name.
+ * @return  \Hoa\Consistency
  */
 if(!ƒ('from')) {
 function from ( $namespace ) {
@@ -260,7 +373,12 @@ function from ( $namespace ) {
 }}
 
 /**
+ * Alias of \Hoa\Core\Consistency::dnew().
  *
+ * @access  public
+ * @param   string  $classname    Classname.
+ * @param   array   $arguments    Constructor's arguments.
+ * @return  object
  */
 if(!ƒ('dnew')) {
 function dnew ( $classname, Array $arguments = array() ) {

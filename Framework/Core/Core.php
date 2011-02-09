@@ -416,7 +416,7 @@ class Core implements Parameterizable {
 namespace {
 
 /**
- * Alias of function_exists.
+ * Alias of function_exists().
  *
  * @access  public
  * @param   string  $name    Name.
