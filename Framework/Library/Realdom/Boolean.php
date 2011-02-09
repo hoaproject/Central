@@ -24,39 +24,37 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Realdom
- * @subpackage  Hoa_Realdom_Boolean
- *
  */
 
-/**
- * Hoa_Realdom
- */
-import('Realdom.~') and load();
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Realdom_Boolean.
+ * \Hoa\Realdom
+ */
+-> import('Realdom.~');
+
+}
+
+namespace Hoa\Realdom {
+
+/**
+ * Class \Hoa\Realdom\Boolean.
  *
  * Realistic domain: boolean.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Realdom
- * @subpackage  Hoa_Realdom_Boolean
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Realdom_Boolean extends Hoa_Realdom {
+class Boolean extends Realdom {
 
     /**
      * Realistic domain name.
      *
-     * @var Hoa_Realdom string
+     * @var \Hoa\Realdom string
      */
     protected $_name = 'boolean';
 
@@ -80,8 +78,10 @@ class Hoa_Realdom_Boolean extends Hoa_Realdom {
      * @access  protected
      * @return  mixed
      */
-    protected function _sample ( Hoa_Test_Sampler $sampler ) {
+    protected function _sample ( \Hoa\Test\Sampler $sampler ) {
 
         return (bool) $sampler->getInteger(0, 1);
     }
+}
+
 }

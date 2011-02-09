@@ -24,77 +24,77 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Realdom
- *
  */
 
-/**
- * Hoa_Realdom_Exception
- */
-import('Realdom.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Test_Sampler
+ * \Hoa\Realdom\Exception
  */
-import('Test.Sampler.~');
+-> import('Realdom.Exception')
 
 /**
- * Class Hoa_Realdom.
+ * \Hoa\Test\Sampler
+ */
+-> import('Test.Sampler.~');
+
+}
+
+namespace Hoa\Realdom {
+
+/**
+ * Class \Hoa\Realdom.
  *
  * Abstract-top-super realistic domain :-).
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Realdom
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-abstract class Hoa_Realdom implements Hoa_Core_Parameterizable {
+abstract class Realdom implements \Hoa\Core\Parameterizable {
 
     /**
-     * The Hoa_Realdom parameters.
+     * The \Hoa\Realdom parameters.
      *
-     * @var Hoa_Core_Parameter object
+     * @var \Hoa\Core\Parameter object
      */
     protected $_parameters     = null;
 
     /**
      * Realistic domain name.
      *
-     * @var Hoa_Realdom string
+     * @var \Hoa\Realdom string
      */
     protected $_name           = null;
 
     /**
      * Realistic domain given arguments.
      *
-     * @var Hoa_Realdom array
+     * @var \Hoa\Realdom array
      */
     protected $_arguments      = null;
 
     /**
      * Choosen sampler.
      *
-     * @var Hoa_Test_Sampler object
+     * @var \Hoa\Test\Sampler object
      */
     protected static $_sampler = null;
 
     /**
      * Sampled value.
      *
-     * @var Hoa_Realdom mixed
+     * @var \Hoa\Realdom mixed
      */
     protected $_value          = null;
 
     /**
      * Number of max try when sampling a new value.
      *
-     * @var Hoa_Realdom int
+     * @var \Hoa\Realdom int
      */
     protected static $_maxtry  = 64;
 
@@ -108,7 +108,7 @@ abstract class Hoa_Realdom implements Hoa_Core_Parameterizable {
      */
     final public function __construct ( ) {
 
-        $this->_parameters = new Hoa_Core_Parameter(
+        $this->_parameters = new \Hoa\Core\Parameter(
             $this,
             array(),
             array()
@@ -143,7 +143,7 @@ abstract class Hoa_Realdom implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   array   $in    Parameters to set.
      * @return  void
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setParameters ( Array $in ) {
 
@@ -155,7 +155,7 @@ abstract class Hoa_Realdom implements Hoa_Core_Parameterizable {
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameters ( ) {
 
@@ -169,7 +169,7 @@ abstract class Hoa_Realdom implements Hoa_Core_Parameterizable {
      * @param   string  $key      Key.
      * @param   mixed   $value    Value.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setParameter ( $key, $value ) {
 
@@ -182,7 +182,7 @@ abstract class Hoa_Realdom implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameter ( $key ) {
 
@@ -196,7 +196,7 @@ abstract class Hoa_Realdom implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getFormattedParameter ( $key ) {
 
@@ -259,10 +259,10 @@ abstract class Hoa_Realdom implements Hoa_Core_Parameterizable {
      * Set the sampler.
      *
      * @access  public
-     * @param   Hoa_Test_Sampler  $sampler    Sampler.
-     * @return  Hoa_Test_Sampler
+     * @param   \Hoa\Test\Sampler  $sampler    Sampler.
+     * @return  \Hoa\Test\Sampler
      */
-    public static function setSampler ( Hoa_Test_Sampler $sampler ) {
+    public static function setSampler ( \Hoa\Test\Sampler $sampler ) {
 
         $old            = self::$_sampler;
         self::$_sampler = $sampler;
@@ -274,7 +274,7 @@ abstract class Hoa_Realdom implements Hoa_Core_Parameterizable {
      * Get the sampler.
      *
      * @access  public
-     * @return  Hoa_Test_Sampler
+     * @return  \Hoa\Test\Sampler
      */
     public static function getSampler ( ) {
 
@@ -347,12 +347,12 @@ abstract class Hoa_Realdom implements Hoa_Core_Parameterizable {
      *
      * @access  public
      * @return  mixed
-     * @throw   Hoa_Realdom_Exception
+     * @throw   \Hoa\Realdom\Exception
      */
     public function sample ( ) {
 
         if(null === self::getSampler())
-            throw new Hoa_Realdom_Exception(
+            throw new Exception(
                 'No sampler set. Please, use the %s::setSampler() method.',
                 0, __CLASS__);
 
@@ -366,7 +366,7 @@ abstract class Hoa_Realdom implements Hoa_Core_Parameterizable {
         } while(false === $this->predicate($sampled) && 0 < --$maxtry);
 
         if(0 >= $maxtry)
-            throw new Hoa_Realdom_Exception(
+            throw new Exception(
                 'Cannot sample a value, all tries failed (%d tries) from %s.',
                 0, array($this->getMaxTry(), $this->getName()));
 
@@ -381,5 +381,7 @@ abstract class Hoa_Realdom implements Hoa_Core_Parameterizable {
      * @access  protected
      * @return  mixed
      */
-    abstract protected function _sample ( Hoa_Test_Sampler $sampler );
+    abstract protected function _sample ( \Hoa\Test\Sampler $sampler );
+}
+
 }

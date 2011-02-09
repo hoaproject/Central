@@ -24,72 +24,70 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Realdom
- * @subpackage  Hoa_Realdom_String
- *
  */
 
-/**
- * Hoa_Realdom
- */
-import('Realdom.~') and load();
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Realdom_Constinteger
+ * \Hoa\Realdom
  */
-import('Realdom.Constinteger');
+-> import('Realdom.~')
 
 /**
- * Class Hoa_Realdom_String.
+ * \Hoa\Realdom\Constinteger
+ */
+-> import('Realdom.Constinteger');
+
+}
+
+namespace Hoa\Realdom {
+
+/**
+ * Class \Hoa\Realdom\String.
  *
  * Realistic domain: string.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Realdom
- * @subpackage  Hoa_Realdom_String
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Realdom_String extends Hoa_Realdom {
+class String extends Realdom {
 
     /**
      * Realistic domain name.
      *
-     * @var Hoa_Realdom string
+     * @var \Hoa\Realdom string
      */
     protected $_name         = 'string';
 
     /**
      * Minimum code point.
      *
-     * @var Hoa_Realdom_String int
+     * @var \Hoa\Realdom\String int
      */
     protected $_codepointMin = 0;
 
     /**
      * Maximum code point.
      *
-     * @var Hoa_Realdom_String int
+     * @var \Hoa\Realdom\String int
      */
     protected $_codepointMax = 0;
 
     /**
      * String's length.
      *
-     * @var Hoa_Realdom_Integer object
+     * @var \Hoa\Realdom\Integer object
      */
     protected $_length       = null;
 
     /**
      * All generated letters.
      *
-     * @var Hoa_Realdom_String array
+     * @var \Hoa\Realdom\String array
      */
     protected $_letters      = array();
 
@@ -99,24 +97,24 @@ class Hoa_Realdom_String extends Hoa_Realdom {
      * Construct a realistic domain.
      *
      * @access  public
-     * @param   Hoa_Realdom_Integer       $length          Length.
-     * @param   Hoa_Realdom_Constinteger  $codepointMin    Minimum code point.
-     * @param   Hoa_Realdom_Constinteger  $codepointMax    Maximum code point.
-     * @throw   Hoa_Realdom_Integer
+     * @param   \Hoa\Realdom\Integer       $length          Length.
+     * @param   \Hoa\Realdom\Constinteger  $codepointMin    Minimum code point.
+     * @param   \Hoa\Realdom\Constinteger  $codepointMax    Maximum code point.
+     * @throw   \Hoa\Realdom\Integer
      * @return  void
      */
-    public function construct ( Hoa_Realdom_Integer      $length       = null,
-                                Hoa_Realdom_Constinteger $codepointMin = null,
-                                Hoa_Realdom_Constinteger $codepointMax = null ) {
+    public function construct ( Integer      $length       = null,
+                                Constinteger $codepointMin = null,
+                                Constinteger $codepointMax = null ) {
 
         if(null === $length)
-            $length = new Hoa_Realdom_Constinteger(13);
+            $length = new Constinteger(13);
 
         if(null === $codepointMin)
-            $codepointMin = new Hoa_Realdom_Constinteger(0x20);
+            $codepointMin = new Constinteger(0x20);
 
         if(null === $codepointMax)
-            $codepointMax = new Hoa_Realdom_Constinteger(0x7E);
+            $codepointMax = new Constinteger(0x7E);
 
         $this->_length       = $length;
         $this->_codepointMin = $codepointMin->getValue();
@@ -171,7 +169,7 @@ class Hoa_Realdom_String extends Hoa_Realdom {
      * @access  protected
      * @return  mixed
      */
-    protected function _sample ( Hoa_Test_Sampler $sampler ) {
+    protected function _sample ( \Hoa\Test\Sampler $sampler ) {
 
         $string  = null;
         $letters = array();
@@ -213,10 +211,12 @@ class Hoa_Realdom_String extends Hoa_Realdom {
      * Get the string's length.
      *
      * @access  public
-     * @return  Hoa_Realdom_Integer
+     * @return  \Hoa\Realdom\Integer
      */
     public function getLength ( ) {
 
         return $this->_length;
     }
+}
+
 }

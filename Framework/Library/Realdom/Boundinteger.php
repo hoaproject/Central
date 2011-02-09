@@ -24,53 +24,56 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Realdom
- * @subpackage  Hoa_Realdom_Boundinteger
- *
  */
 
-/**
- * Hoa_Realdom_Integer
- */
-import('Realdom.Integer') and load();
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Realdom_Boundinteger.
+ * \Hoa\Realdom\Constinteger
+ */
+-> import('Realdom.Constinteger')
+
+/**
+ * \Hoa\Realdom\Integer
+ */
+-> import('Realdom.Integer');
+
+}
+
+namespace Hoa\Realdom {
+
+/**
+ * Class \Hoa\Realdom\Boundinteger.
  *
  * Realistic domain: boundinteger.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Realdom
- * @subpackage  Hoa_Realdom_Boundinteger
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Realdom_Boundinteger extends Hoa_Realdom_Integer {
+class Boundinteger extends Integer {
 
     /**
      * Realistic domain name.
      *
-     * @var Hoa_Realdom string
+     * @var \Hoa\Realdom string
      */
     protected $_name = 'boundinteger';
 
     /**
      * Lower bound value.
      *
-     * @var Hoa_Realdom_Constinteger object
+     * @var \Hoa\Realdom\Constinteger object
      */
     protected $_lower = 0;
 
     /**
      * Upper bound value.
      *
-     * @var Hoa_Realdom_Constinteger object
+     * @var \Hoa\Realdom\Constinteger object
      */
     protected $_upper = 0;
 
@@ -80,18 +83,18 @@ class Hoa_Realdom_Boundinteger extends Hoa_Realdom_Integer {
      * Construct a realistic domain.
      *
      * @access  public
-     * @param   Hoa_Realdom_Constinteger  $lower    Lower bound value.
-     * @param   Hoa_Realdom_Constinteger  $upper    Upper bound value.
+     * @param   \Hoa\Realdom\Constinteger  $lower    Lower bound value.
+     * @param   \Hoa\Realdom\Constinteger  $upper    Upper bound value.
      * @return  void
      */
-    public function construct ( Hoa_Realdom_Constinteger $lower = null,
-                                Hoa_Realdom_Constinteger $upper = null ) {
+    public function construct ( Constinteger $lower = null,
+                                Constinteger $upper = null ) {
 
         if(null === $lower)
-            $lower = ~PHP_INT_MAX;
+            $lower = new Constinteger(~PHP_INT_MAX);
 
         if(null === $upper)
-            $upper =  PHP_INT_MAX;
+            $upper = new Constinteger( PHP_INT_MAX);
 
         $this->_lower = $lower;
         $this->_upper = $upper;
@@ -119,7 +122,7 @@ class Hoa_Realdom_Boundinteger extends Hoa_Realdom_Integer {
      * @access  protected
      * @return  mixed
      */
-    protected function _sample ( Hoa_Test_Sampler $sampler ) {
+    protected function _sample ( \Hoa\Test\Sampler $sampler ) {
 
         return $sampler->getInteger(
             $this->getLower()->sample($sampler),
@@ -131,7 +134,7 @@ class Hoa_Realdom_Boundinteger extends Hoa_Realdom_Integer {
      * Get the lower bound value.
      *
      * @access  public
-     * @return  Hoa_Realdom_Constinteger
+     * @return  \Hoa\Realdom\Constinteger
      */
     public function getLower ( ) {
 
@@ -142,10 +145,12 @@ class Hoa_Realdom_Boundinteger extends Hoa_Realdom_Integer {
      * Get the upper bound value.
      *
      * @access  public
-     * @return  Hoa_Realdom_Constinteger
+     * @return  \Hoa\Realdom\Constinteger
      */
     public function getUpper ( ) {
 
         return $this->_upper;
     }
+}
+
 }

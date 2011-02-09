@@ -24,58 +24,56 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Realdom
- * @subpackage  Hoa_Realdom_Array
- *
  */
 
-/**
- * Hoa_Realdom
- */
-import('Realdom.~') and load();
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Realdom_Constinteger
+ * \Hoa\Realdom
  */
-import('Realdom.Constinteger');
+-> import('Realdom.~')
 
 /**
- * Class Hoa_Realdom_Array.
+ * \Hoa\Realdom\Constinteger
+ */
+-> import('Realdom.Constinteger');
+
+}
+
+namespace Hoa\Realdom {
+
+/**
+ * Class \Hoa\Realdom\_Array.
  *
  * Realistic domain: array.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Realdom
- * @subpackage  Hoa_Realdom_Array
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Realdom_Array extends Hoa_Realdom {
+class _Array extends Realdom {
 
     /**
      * Realistic domain name.
      *
-     * @var Hoa_Realdom string
+     * @var \Hoa\Realdom string
      */
     protected $_name    = 'array';
 
     /**
      * Domains (pair => 0 (key), 1 (value) => domain disjunction).
      *
-     * @var Hoa_Realdom_Array array
+     * @var \Hoa\Realdom\_Array array
      */
     protected $_domains = null;
 
     /**
      * Length.
      *
-     * @var Hoa_Realdom_Constinteger object
+     * @var \Hoa\Realdom\Constinteger object
      */
     protected $_length  = null;
 
@@ -85,16 +83,16 @@ class Hoa_Realdom_Array extends Hoa_Realdom {
      * Construct a realistic domain.
      *
      * @access  public
-     * @param   array                $domains    Domains.
-     * @param   Hoa_Realdom_Integer  $length     Length.
+     * @param   array                 $domains    Domains.
+     * @param   \Hoa\Realdom\Integer  $length     Length.
      * @return  void
-     * @throw   Hoa_Realdom_Exception
+     * @throw   \Hoa\Realdom\Exception
      */
-    public function construct ( Array               $domains = array(),
-                                Hoa_Realdom_Integer $length  = null ) {
+    public function construct ( Array   $domains = array(),
+                                Integer $length  = null ) {
 
         if(null === $length)
-            $length = new Hoa_Realdom_Constinteger(7);
+            $length = new Constinteger(7);
 
         $this->_domains = $domains;
         $this->_length  = $length;
@@ -146,9 +144,9 @@ class Hoa_Realdom_Array extends Hoa_Realdom {
      *
      * @access  protected
      * @return  mixed
-     * @throw   Hoa_Realdom_Exception
+     * @throw   \Hoa\Realdom\Exception
      */
-    protected function _sample ( Hoa_Test_Sampler $sampler ) {
+    protected function _sample ( \Hoa\Test\Sampler $sampler ) {
 
         $domains = $this->getDomains();
         $pair    = $domains[$sampler->getInteger(0, count($domains) - 1)];
@@ -190,10 +188,12 @@ class Hoa_Realdom_Array extends Hoa_Realdom {
      * Get length.
      *
      * @access  public
-     * @return  Hoa_Realdom_Constinteger
+     * @return  \Hoa\Realdom\Constinteger
      */
     public function getLength ( ) {
 
         return $this->_length;
     }
+}
+
 }
