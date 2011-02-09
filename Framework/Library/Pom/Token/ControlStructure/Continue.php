@@ -62,7 +62,7 @@ import('Pom.Token.ControlStructure');
  */
 
 class        Hoa_Pom_Token_ControlStructure_Continue
-    extends  Hoa_Pom_Token_ControlStructure {
+    extends  Hoa_Pom_Token_ControlStructure {
 
     /**
      * Level up.

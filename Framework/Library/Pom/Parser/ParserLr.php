@@ -205,7 +205,7 @@ class Hoa_Pom_Parser_ParserLr extends Hoa_Pom_Parser {
 
         parent::__construct($source, $type);
 
-        // Take a deep breath, and here we go …
+        // Take a deep breath, and here we go…
         $this->axiome();
     }
 

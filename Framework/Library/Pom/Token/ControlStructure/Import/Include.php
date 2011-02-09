@@ -62,4 +62,4 @@ import('Pom.Token.ControlStructure.Import');
  */
 
 class       Hoa_Pom_Token_ControlStructure_Import_Include
-    extends Hoa_Pom_Token_ControlStructure_Import { }
+    extends Hoa_Pom_Token_ControlStructure_Import { }
