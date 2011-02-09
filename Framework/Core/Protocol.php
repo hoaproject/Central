@@ -128,7 +128,7 @@ abstract class Protocol {
                                          $overwrite = self::DO_NOT_OVERWRITE ) {
 
         $components = explode('/', $path);
-        $current    = \Hoa\Core::getProtocol();
+        $current    = Core::getProtocol();
         $handle     = null;
         $max        = count($components) - 1;
 
@@ -143,9 +143,9 @@ abstract class Protocol {
             }
 
             if($i != $max)
-                $handle = new \Hoa\Core\Protocol\Generic($component);
+                $handle = new Protocol\Generic($component);
             else
-                $handle = new \Hoa\Core\Protocol\Generic($component, $reach);
+                $handle = new Protocol\Generic($component, $reach);
 
             $current->addComponent($handle);
             $current = $handle;
@@ -162,12 +162,12 @@ abstract class Protocol {
      * @return  \Hoa\Core\Protocol
      * @throws  \Hoa\Core\Exception
      */
-    public function addComponent ( \Hoa\Core\Protocol $component ) {
+    public function addComponent ( Protocol $component ) {
 
         $name = $component->getName();
 
         if(empty($name))
-            throw new \Hoa\Core\Exception(
+            throw new Exception(
                 'Cannot add a component to the protocol hoa:// without a name.', 0);
 
         $this->_components[$component->getName()] = $component;
@@ -203,7 +203,7 @@ abstract class Protocol {
     public function getComponent ( $component ) {
 
         if(false === $this->componentExists($component))
-            throw new \Hoa\Core\Exception(
+            throw new Exception(
                 'Component %s does not exist.', 1, $component);
 
         return $this->_components[$component];
@@ -312,7 +312,7 @@ abstract class Protocol {
      */
     public function reachId ( $id ) {
 
-        throw new \Hoa\Core\Exception(
+        throw new Exception(
             'The component %s has no ID support (tried to reach #%s).',
             0, array($this->getName(), $id));
     }
