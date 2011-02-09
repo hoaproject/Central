@@ -24,34 +24,32 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Reflection_Fragment
- * @subpackage  Hoa_Reflection_Fragment_RMethod
- *
  */
+
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Reflection_RFunction_RMethod
+ * \Hoa\Reflection\RFunction\RMethod
  */
-import('Reflection.RFunction.RMethod') and load();
+-> import('Reflection.RFunction.RMethod');
+
+}
+
+namespace Hoa\Reflection\Fragment {
 
 /**
- * Class Hoa_Reflection_Fragment_RMethod.
+ * Class \Hoa\Reflection\Fragment\RMethod.
  *
- * Fragment of a Hoa_Reflection_RFunction_RMethod class.
+ * Fragment of a \Hoa\Reflection\RFunction\RMethod class.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Reflection_Fragment
- * @subpackage  Hoa_Reflection_Fragment_RMethod
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Reflection_Fragment_RMethod extends Hoa_Reflection_RFunction_RMethod {
+class RMethod extends \Hoa\Reflection\RFunction\RMethod {
 
     /**
      * Reflect a fragment of method.
@@ -111,4 +109,6 @@ class Hoa_Reflection_Fragment_RMethod extends Hoa_Reflection_RFunction_RMethod {
 
         return null;
     }
+}
+
 }

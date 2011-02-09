@@ -24,96 +24,92 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Reflection
- * @subpackage  Hoa_Reflection_RClass
- *
  */
 
-/**
- * Hoa_Reflection_Exception
- */
-import('Reflection.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Reflection_Wrapper
+ * \Hoa\Reflection\Exception
  */
-import('Reflection.Wrapper') and load();
+-> import('Reflection.Exception')
 
 /**
- * Hoa_Reflection_RProperty
+ * \Hoa\Reflection\Wrapper
  */
-import('Reflection.RProperty');
+-> import('Reflection.Wrapper')
 
 /**
- * Hoa_Reflection_RFunction_RMethod
+ * \Hoa\Reflection\RProperty
  */
-import('Reflection.RFunction.RMethod');
+-> import('Reflection.RProperty')
 
 /**
- * Hoa_Visitor_Element
+ * \Hoa\Reflection\RFunction\RMethod
  */
-import('Visitor.Element') and load();
+-> import('Reflection.RFunction.RMethod')
 
 /**
- * Class Hoa_Reflection_RClass.
+ * \Hoa\Visitor\Element
+ */
+-> import('Visitor.Element');
+
+}
+
+namespace Hoa\Reflection {
+
+/**
+ * Class \Hoa\Reflection\RClass.
  *
  * Extending ReflectionClass capacities.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Reflection
- * @subpackage  Hoa_Reflection_RClass
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class          Hoa_Reflection_RClass
-    extends    Hoa_Reflection_Wrapper
-    implements Hoa_Visitor_Element {
+class RClass extends Wrapper implements \Hoa\Visitor\Element {
 
     /**
      * Class file.
      *
-     * @var Hoa_Reflection_RClass string
+     * @var \Hoa\Reflection\RClass string
      */
     protected $_file       = null;
 
     /**
      * Class name.
      *
-     * @var Hoa_Reflection_RClass string
+     * @var \Hoa\Reflection\RClass string
      */
     protected $_name       = null;
 
     /**
      * Whether methods were already transformed or not.
      *
-     * @var Hoa_Reflection_RClass bool
+     * @var \Hoa\Reflection\RClass bool
      */
     protected $_firstM     = true;
 
     /**
      * Whether properties were already transformed or not.
      *
-     * @var Hoa_Reflection_RProperty bool
+     * @var \Hoa\Reflection\RProperty bool
      */
     protected $_firstP     = true;
 
     /**
      * All methods.
      *
-     * @var Hoa_Reflection_RClass array
+     * @var \Hoa\Reflection\RClass array
      */
     protected $_methods    = array();
 
     /**
      * All properties.
      *
-     * @var Hoa_Reflection_RProperty array
+     * @var \Hoa\Reflection\RProperty array
      */
     protected $_properties = array();
 
@@ -128,10 +124,10 @@ class          Hoa_Reflection_RClass
      */
     public function __construct ( $class ) {
 
-        if($class instanceof ReflectionClass)
+        if($class instanceof \ReflectionClass)
             $this->setWrapped($class);
         else
-            $this->setWrapped(new ReflectionClass($class));
+            $this->setWrapped(new \ReflectionClass($class));
 
         $this->setName($this->getWrapped()->getName());
 
@@ -178,7 +174,7 @@ class          Hoa_Reflection_RClass
 
         foreach($this->getWrapped()->getProperties() as $i => $property) {
 
-            $handle = new Hoa_Reflection_RProperty($property);
+            $handle = new RProperty($property);
             $handle->_setDefaultValue($this->getFileName());
             $this->_properties[] = $handle;
         }
@@ -203,7 +199,7 @@ class          Hoa_Reflection_RClass
 
         foreach($this->getWrapped()->getMethods() as $i => $method) {
 
-            $handle = new Hoa_Reflection_RFunction_RMethod($method);
+            $handle = new RFunction\RMethod($method);
             $handle->_setFile($this->_file);
 
             $this->_methods[] = $handle;
@@ -219,15 +215,15 @@ class          Hoa_Reflection_RClass
      *
      * @access  public
      * @return  void
-     * @throw   Hoa_Reflection_Exception
+     * @throw   \Hoa\Reflection\Exception
      */
     public function importFragment ( $fragment ) {
 
-        if(   ($fragment instanceof Hoa_Reflection_RMethod)
-           || ($fragment instanceof Hoa_Reflection_Fragment_RMethod))
+        if(   ($fragment instanceof RMethod)
+           || ($fragment instanceof Fragment\RMethod))
             $this->_methods[] = $fragment;
         else
-            throw new Hoa_Reflection_Exception(
+            throw new Exception(
                 'Unknown fragment %s; cannot import it.',
                 0, get_class($fragment));
 
@@ -238,14 +234,16 @@ class          Hoa_Reflection_RClass
      * Accept a visitor.
      *
      * @access  public
-     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   \Hoa\Visitor\Visit  $visitor    Visitor.
      * @param   mixed              &$handle    Handle (reference).
      * @param   mixed              $eldnah     Handle (no reference).
      * @return  mixed
      */
-    public function accept ( Hoa_Visitor_Visit $visitor,
+    public function accept ( \Hoa\Visitor\Visit $visitor,
                              &$handle = null, $eldnah = null ) {
 
         return $visitor->visit($this, $handle, $eldnah);
     }
+}
+
 }

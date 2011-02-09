@@ -24,34 +24,32 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Reflection
- * @subpackage  Hoa_Reflection_Fragment_RParameter
- *
  */
+
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Reflection_RParameter
+ * \Hoa\Reflection\RParameter
  */
-import('Reflection.RParameter') and load();
+-> import('Reflection.RParameter');
+
+}
+
+namespace Hoa\Reflection\Fragment {
 
 /**
- * Class Hoa_Reflection_Fragment_RParameter.
+ * Class \Hoa\Reflection\Fragment\RParameter.
  *
- * Fragment of a Hoa_Reflection_RParameter class.
+ * Fragment of a \Hoa\Reflection\RParameter class.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Reflection
- * @subpackage  Hoa_Reflection_Fragment_RParameter
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Reflection_Fragment_RParameter extends Hoa_Reflection_RParameter {
+class RParameter extends \Hoa\Reflection\RParameter {
 
     /**
      * Reflect a fragment of parameter.
@@ -99,4 +97,6 @@ class Hoa_Reflection_Fragment_RParameter extends Hoa_Reflection_RParameter {
 
         return null;
     }
+}
+
 }
