@@ -24,53 +24,51 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Realdom
- * @subpackage  Hoa_Realdom_Bag
- *
  */
 
-/**
- * Hoa_Realdom
- */
-import('Realdom.~') and load();
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Realdom_Bag.
+ * \Hoa\Realdom
+ */
+-> import('Realdom.~');
+
+}
+
+namespace Hoa\Realdom {
+
+/**
+ * Class \Hoa\Realdom\Bag.
  *
  * Realistic domain: bag.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Realdom
- * @subpackage  Hoa_Realdom_Bag
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Realdom_Bag extends Hoa_Realdom {
+class Bag extends Realdom {
 
     /**
      * Realistic domain name.
      *
-     * @var Hoa_Realdom string
+     * @var \Hoa\Realdom string
      */
     protected $_name = 'bag';
 
     /**
      * List.
      *
-     * @var Hoa_Realdom_Bag array
+     * @var \Hoa\Realdom\Bag array
      */
     protected $_bag  = array();
 
     /**
      * List's length.
      *
-     * @var Hoa_Realdom_Bag int
+     * @var \Hoa\Realdom\Bag int
      */
     private $_length = 0;
 
@@ -114,7 +112,7 @@ class Hoa_Realdom_Bag extends Hoa_Realdom {
      * @access  protected
      * @return  mixed
      */
-    protected function _sample ( Hoa_Test_Sampler $sampler ) {
+    protected function _sample ( \Hoa\Test\Sampler $sampler ) {
 
         return $this->_bag[$sampler->getInteger(0, $this->_length)]
                     ->sample($sampler);
@@ -130,4 +128,6 @@ class Hoa_Realdom_Bag extends Hoa_Realdom {
 
         return $this->_bag;
     }
+}
+
 }

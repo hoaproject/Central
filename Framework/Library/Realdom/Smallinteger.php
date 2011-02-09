@@ -24,44 +24,42 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Realdom
- * @subpackage  Hoa_Realdom_Smallinteger
- *
  */
 
-/**
- * Hoa_Realdom_Boundinteger
- */
-import('Realdom.Boundinteger') and load();
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Realdom_Constinteger
+ * \Hoa\Realdom\Boundinteger
  */
-import('Realdom.Constinteger') and load();
+-> import('Realdom.Boundinteger')
 
 /**
- * Class Hoa_Realdom_Smallinteger.
+ * \Hoa\Realdom\Constinteger
+ */
+-> import('Realdom.Constinteger');
+
+}
+
+namespace Hoa\Realdom {
+
+/**
+ * Class \Hoa\Realdom\Smallinteger.
  *
  * Realistic domain: smallinteger.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Realdom
- * @subpackage  Hoa_Realdom_Smallinteger
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Realdom_Smallinteger extends Hoa_Realdom_Boundinteger {
+class Smallinteger extends Boundinteger {
 
     /**
      * Realistic domain name.
      *
-     * @var Hoa_Realdom string
+     * @var \Hoa\Realdom string
      */
     protected $_name = 'smallinteger';
 
@@ -71,18 +69,20 @@ class Hoa_Realdom_Smallinteger extends Hoa_Realdom_Boundinteger {
      * Construct a realistic domain.
      *
      * @access  public
-     * @param   Hoa_Realdom_Constinteger  $lower    Lower bound value.
-     * @param   Hoa_Realdom_Constinteger  $upper    Upper bound value.
+     * @param   \Hoa\Realdom\Constinteger  $lower    Lower bound value.
+     * @param   \Hoa\Realdom\Constinteger  $upper    Upper bound value.
      * @return  void
      */
-    public function construct ( Hoa_Realdom_Constinteger $lower = null,
-                                Hoa_Realdom_Constinteger $upper = null ) {
+    public function construct ( Constinteger $lower = null,
+                                Constinteger $upper = null ) {
 
         parent::construct(
-            new Hoa_Realdom_Constinteger(-128),
-            new Hoa_Realdom_Constinteger( 127)
+            new Constinteger(-128),
+            new Constinteger( 127)
         );
 
         return;
     }
+}
+
 }

@@ -24,46 +24,44 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Realdom
- * @subpackage  Hoa_Realdom_Constfloat
- *
  */
 
-/**
- * Hoa_Realdom_Float
- */
-import('Realdom.Float') and load();
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Realdom_Constfloat.
+ * \Hoa\Realdom\Float
+ */
+-> import('Realdom.Float');
+
+}
+
+namespace Hoa\Realdom {
+
+/**
+ * Class \Hoa\Realdom\Constfloat.
  *
  * Realistic domain: constfloat.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Realdom
- * @subpackage  Hoa_Realdom_Constfloat
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Realdom_Constfloat extends Hoa_Realdom_Float {
+class Constfloat extends Float {
 
     /**
      * Realistic domain name.
      *
-     * @var Hoa_Realdom string
+     * @var \Hoa\Realdom string
      */
     protected $_name  = 'constfloat';
 
     /**
      * Constant value.
      *
-     * @var Hoa_Realdom float
+     * @var \Hoa\Realdom float
      */
     protected $_value = 0.0;
 
@@ -75,7 +73,7 @@ class Hoa_Realdom_Constfloat extends Hoa_Realdom_Float {
      * @access  public
      * @param   float  $float    Float.
      * @return  void
-     * @throw   Hoa_Realdom_Exception
+     * @throw   \Hoa\Realdom\Exception
      */
     public function construct ( $float = 0.0 ) {
 
@@ -102,8 +100,10 @@ class Hoa_Realdom_Constfloat extends Hoa_Realdom_Float {
      * @access  protected
      * @return  mixed
      */
-    protected function _sample ( Hoa_Test_Sampler $sampler ) {
+    protected function _sample ( \Hoa\Test\Sampler $sampler ) {
 
         return $this->_value;
     }
+}
+
 }

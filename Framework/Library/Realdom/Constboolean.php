@@ -24,46 +24,44 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Realdom
- * @subpackage  Hoa_Realdom_Constboolean
- *
  */
 
-/**
- * Hoa_Realdom_Boolean
- */
-import('Realdom.Boolean') and load();
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Realdom_Constboolean.
+ * \Hoa\Realdom\Boolean
+ */
+-> import('Realdom.Boolean');
+
+}
+
+namespace Hoa\Realdom {
+
+/**
+ * Class \Hoa\Realdom\Constboolean.
  *
  * Realistic domain: constboolean.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Realdom
- * @subpackage  Hoa_Realdom_Constboolean
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Realdom_Constboolean extends Hoa_Realdom_Boolean {
+class Constboolean extends Boolean {
 
     /**
      * Realistic domain name.
      *
-     * @var Hoa_Realdom string
+     * @var \Hoa\Realdom string
      */
     protected $_name  = 'constboolean';
 
     /**
      * Constant value.
      *
-     * @var Hoa_Realdom bool
+     * @var \Hoa\Realdom bool
      */
     protected $_value = false;
 
@@ -75,7 +73,7 @@ class Hoa_Realdom_Constboolean extends Hoa_Realdom_Boolean {
      * @access  public
      * @param   bool  $boolean    Boolean.
      * @return  void
-     * @throw   Hoa_Realdom_Exception
+     * @throw   \Hoa\Realdom\Exception
      */
     public function construct ( $boolean = false ) {
 
@@ -102,8 +100,10 @@ class Hoa_Realdom_Constboolean extends Hoa_Realdom_Boolean {
      * @access  protected
      * @return  mixed
      */
-    protected function _sample ( Hoa_Test_Sampler $sampler ) {
+    protected function _sample ( \Hoa\Test\Sampler $sampler ) {
 
         return $this->_value;
     }
+}
+
 }
