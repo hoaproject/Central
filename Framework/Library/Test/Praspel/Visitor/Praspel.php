@@ -24,34 +24,32 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_Visitor_Praspel
- *
  */
 
-/**
- * Hoa_Visitor_Registry
- */
-import('Visitor.Registry') and load();
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Test_Praspel_Visitor_Praspel.
+ * \Hoa\Visitor\Registry
+ */
+-> import('Visitor.Registry');
+
+}
+
+namespace Hoa\Test\Praspel\Visitor {
+
+/**
+ * Class \Hoa\Test\Praspel\Visitor\Praspel.
  *
  * .
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_Visitor_Praspel
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Test_Praspel_Visitor_Praspel extends Hoa_Visitor_Registry {
+class Praspel extends \Hoa\Visitor\Registry {
 
     /**
      * Initialize aggregated visitor.
@@ -62,31 +60,35 @@ class Hoa_Test_Praspel_Visitor_Praspel extends Hoa_Visitor_Registry {
     public function __construct ( ) {
 
         $this->addEntry(
-            'Hoa_Test_Praspel_Contract',
+            '\Hoa\Test\Praspel\Contract',
             array($this, 'visitContract')
         );
         $this->addEntry(
-            'Hoa_Test_Praspel_Clause_Ensures',
+            '\Hoa\Test\Praspel\Clause\Ensures',
             array($this, 'visitClauseContract')
         );
         $this->addEntry(
-            'Hoa_Test_Praspel_Clause_Invariant',
+            '\Hoa\Test\Praspel\Clause\Invariant',
             array($this, 'visitClauseContract')
         );
         $this->addEntry(
-            'Hoa_Test_Praspel_Clause_Requires',
+            '\Hoa\Test\Praspel\Clause\Requires',
             array($this, 'visitClauseContract')
         );
         $this->addEntry(
-            'Hoa_Test_Praspel_Clause_Throwable',
+            '\Hoa\Test\Praspel\Clause\Throwable',
             array($this, 'visitClauseThrowable')
         );
         $this->addEntry(
-            'Hoa_Test_Praspel_Variable',
+            '\Hoa\Test\Praspel\Variable',
             array($this, 'visitDomainDisjunction')
         );
         $this->addEntry(
-            'Hoa_Test_Praspel_Constructor_Result',
+            '\Hoa\Test\Praspel\Constructor\Old',
+            array($this, 'visitDomainDisjunction')
+        );
+        $this->addEntry(
+            '\Hoa\Test\Praspel\Constructor\Result',
             array($this, 'visitDomainDisjunction')
         );
 
@@ -97,12 +99,12 @@ class Hoa_Test_Praspel_Visitor_Praspel extends Hoa_Visitor_Registry {
      * Visit an element.
      *
      * @access  public
-     * @param   Hoa_Visitor_Element  $element    Element to visit.
+     * @param   \Hoa\Visitor\Element  $element    Element to visit.
      * @param   mixed                &$handle    Handle (reference).
      * @param   mixed                $eldnah     Handle (no reference).
      * @return  mixed
      */
-    public function visitContract ( Hoa_Visitor_Element $element,
+    public function visitContract ( \Hoa\Visitor\Element $element,
                                     &$handle = null, $eldnah = null ) {
 
         $out = null;
@@ -117,12 +119,12 @@ class Hoa_Test_Praspel_Visitor_Praspel extends Hoa_Visitor_Registry {
      * Visit an element.
      *
      * @access  public
-     * @param   Hoa_Visitor_Element  $element    Element to visit.
+     * @param   \Hoa\Visitor\Element  $element    Element to visit.
      * @param   mixed                &$handle    Handle (reference).
      * @param   mixed                $eldnah     Handle (no reference).
      * @return  mixed
      */
-    public function visitClauseContract ( Hoa_Visitor_Element $element,
+    public function visitClauseContract ( \Hoa\Visitor\Element $element,
                                           &$handle = null, $eldnah = null ) {
 
         $gc     = get_class($element);
@@ -142,12 +144,12 @@ class Hoa_Test_Praspel_Visitor_Praspel extends Hoa_Visitor_Registry {
      * Visit an element.
      *
      * @access  public
-     * @param   Hoa_Visitor_Element  $element    Element to visit.
+     * @param   \Hoa\Visitor\Element  $element    Element to visit.
      * @param   mixed                &$handle    Handle (reference).
      * @param   mixed                $eldnah     Handle (no reference).
      * @return  mixed
      */
-    public function visitClauseThrowable ( Hoa_Visitor_Element $element,
+    public function visitClauseThrowable ( \Hoa\Visitor\Element $element,
                                            &$handle = null, $eldnah = null ) {
 
         return '@throwable ' . implode(', ', $element->getList()) . ";\n";
@@ -157,12 +159,12 @@ class Hoa_Test_Praspel_Visitor_Praspel extends Hoa_Visitor_Registry {
      * Visit an element.
      *
      * @access  public
-     * @param   Hoa_Visitor_Element  $element    Element to visit.
+     * @param   \Hoa\Visitor\Element  $element    Element to visit.
      * @param   mixed                &$handle    Handle (reference).
      * @param   mixed                $eldnah     Handle (no reference).
      * @return  mixed
      */
-    public function visitDomainDisjunction ( Hoa_Visitor_Element $element,
+    public function visitDomainDisjunction ( \Hoa\Visitor\Element $element,
                                             &$handle = null, $eldnah = null ) {
 
         return $element->getName() . ': ' .
@@ -241,4 +243,6 @@ class Hoa_Test_Praspel_Visitor_Praspel extends Hoa_Visitor_Registry {
 
         return $out;
     }
+}
+
 }

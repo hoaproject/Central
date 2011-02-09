@@ -24,73 +24,69 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_Clause_Contract
- *
  */
 
-/**
- * Hoa_Test_Praspel_Exception
- */
-import('Test.Praspel.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Test_Praspel_Clause
+ * \Hoa\Test\Praspel\Exception
  */
-import('Test.Praspel.Clause') and load();
+-> import('Test.Praspel.Exception')
 
 /**
- * Hoa_Test_Praspel_Variable
+ * \Hoa\Test\Praspel\Clause
  */
-import('Test.Praspel.Variable');
+-> import('Test.Praspel.Clause.~')
 
 /**
- * Hoa_Test_Praspel_Constructor_Old
+ * \Hoa\Test\Praspel\Variable
  */
-import('Test.Praspel.Constructor.Old');
+-> import('Test.Praspel.Variable')
 
 /**
- * Hoa_Test_Praspel_Constructor_Result
+ * \Hoa\Test\Praspel\Constructor\Old
  */
-import('Test.Praspel.Constructor.Result');
+-> import('Test.Praspel.Constructor.Old')
 
 /**
- * Hoa_Visitor_Element
+ * \Hoa\Test\Praspel\Constructor\Result
  */
-import('Visitor.Element') and load();
+-> import('Test.Praspel.Constructor.Result')
 
 /**
- * Class Hoa_Test_Praspel_Clause_Contract.
+ * \Hoa\Visitor\Element
+ */
+-> import('Visitor.Element');
+
+}
+
+namespace Hoa\Test\Praspel\Clause {
+
+/**
+ * Class \Hoa\Test\Praspel\Clause\Contract.
  *
  * .
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_Clause_Contract
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-abstract class Hoa_Test_Praspel_Clause_Contract
-    implements Hoa_Test_Praspel_Clause,
-               Hoa_Visitor_Element {
+abstract class Contract implements Clause, \Hoa\Visitor\Element {
 
     /**
      * Parent (here: the root).
      *
-     * @var Hoa_Test_Praspel_Contract object
+     * @var \Hoa\Test\Praspel\Contract object
      */
     protected $_parent    = null;
 
     /**
      * Collection of variables.
      *
-     * @var Hoa_Test_Praspel_Clause_Contract array
+     * @var \Hoa\Test\Praspel\Clause\Contract array
      */
     protected $_variables = array();
 
@@ -100,10 +96,10 @@ abstract class Hoa_Test_Praspel_Clause_Contract
      * Constructor.
      *
      * @access  public
-     * @param   Hoa_Test_Praspel_Contract  $parent    Parent (here: the root).
+     * @param   \Hoa\Test\Praspel\Contract  $parent    Parent (here: the root).
      * @return  void
      */
-    public function __construct ( Hoa_Test_Praspel_Contract $parent ) {
+    public function __construct ( \Hoa\Test\Praspel\Contract $parent ) {
 
         $this->setParent($parent);
 
@@ -115,7 +111,7 @@ abstract class Hoa_Test_Praspel_Clause_Contract
      *
      * @access  public
      * @param   string  $name    Variable name.
-     * @return  Hoa_Test_Praspel_Variable
+     * @return  \Hoa\Test\Praspel\Variable
      */
     public function variable ( $name ) {
 
@@ -123,17 +119,17 @@ abstract class Hoa_Test_Praspel_Clause_Contract
             return $this->_variables[$name];
 
         if(0 !== preg_match('#\\\old\(\s*(\w+)\s*\)#i', $name, $matches))
-            return $this->_variables[$name] = new Hoa_Test_Praspel_Constructor_Old(
+            return $this->_variables[$name] = new \Hoa\Test\Praspel\Constructor\Old(
                 $this,
                 $matches[1]
             );
         elseif($name == '\result')
-            return $this->_variables[$name] = new Hoa_Test_Praspel_Constructor_Result(
+            return $this->_variables[$name] = new \Hoa\Test\Praspel\Constructor\Result(
                 $this,
                 $name
             );
 
-        return $this->_variables[$name] = new Hoa_Test_Praspel_Variable(
+        return $this->_variables[$name] = new \Hoa\Test\Praspel\Variable(
             $this,
             $name
         );
@@ -144,7 +140,7 @@ abstract class Hoa_Test_Praspel_Clause_Contract
      *
      * @access  public
      * @param   string  $name    Variable name.
-     * @return  Hoa_Test_Praspel_Variable
+     * @return  \Hoa\Test\Praspel\Variable
      */
     public function variableExists ( $name ) {
 
@@ -156,13 +152,13 @@ abstract class Hoa_Test_Praspel_Clause_Contract
      *
      * @access  public
      * @param   string  $name    Variable name.
-     * @return  Hoa_Test_Praspel_Variable
-     * @throw   Hoa_Test_Praspel_Exception
+     * @return  \Hoa\Test\Praspel\Variable
+     * @throw   \Hoa\Test\Praspel\Exception
      */
     public function getVariable ( $name ) {
 
         if(false === $this->variableExists($name))
-            throw new Hoa_Test_Praspel_Exception(
+            throw new \Hoa\Test\Praspel\Exception(
                 'Variable %s is not found.', 0, $name);
 
         return $this->_variables[$name];
@@ -183,10 +179,10 @@ abstract class Hoa_Test_Praspel_Clause_Contract
      * Set the parent (here: the root).
      *
      * @access  protected
-     * @param   Hoa_Test_Praspel_Contract  $parent    Parent (here: the root).
-     * @return  Hoa_Test_Praspel_Contract
+     * @param   \Hoa\Test\Praspel\Contract  $parent    Parent (here: the root).
+     * @return  \Hoa\Test\Praspel\Contract
      */
-    protected function setParent ( Hoa_Test_Praspel_Contract $parent ) {
+    protected function setParent ( \Hoa\Test\Praspel\Contract $parent ) {
 
         $old           = $this->_parent;
         $this->_parent = $parent;
@@ -198,7 +194,7 @@ abstract class Hoa_Test_Praspel_Clause_Contract
      * Get the parent (here: the root).
      *
      * @access  public
-     * @return  Hoa_Test_Praspel_Contract
+     * @return  \Hoa\Test\Praspel\Contract
      */
     public function getParent ( ) {
 
@@ -209,14 +205,16 @@ abstract class Hoa_Test_Praspel_Clause_Contract
      * Accept a visitor.
      *
      * @access  public
-     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   \Hoa\Visitor\Visit  $visitor    Visitor.
      * @param   mixed              &$handle    Handle (reference).
      * @param   mixed              $eldnah     Handle (no reference).
      * @return  mixed
      */
-    public function accept ( Hoa_Visitor_Visit $visitor,
+    public function accept ( \Hoa\Visitor\Visit $visitor,
                              &$handle = null, $eldnah = null ) {
 
         return $visitor->visit($this, $handle, $eldnah);
     }
+}
+
 }

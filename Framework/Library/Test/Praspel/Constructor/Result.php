@@ -24,36 +24,31 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_Constructor_Result
- *
  */
 
-/**
- * Hoa_Test_Praspel_Exception
- */
-import('Test.Praspel.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Test_Praspel_Variable
+ * \Hoa\Test\Praspel\Variable
  */
-import('Test.Praspel.Variable') and load();
+-> import('Test.Praspel.Variable');
+
+}
+
+namespace Hoa\Test\Praspel\Constructor {
 
 /**
- * Class Hoa_Test_Praspel_Constructor_Result.
+ * Class \Hoa\Test\Praspel\Constructor\Result.
  *
  * Represents the \result constructor, i.e. the result of the method.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_Constructor_Result
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Test_Praspel_Constructor_Result extends Hoa_Test_Praspel_Variable { }
+class Result extends \Hoa\Test\Praspel\Variable { }
+
+}

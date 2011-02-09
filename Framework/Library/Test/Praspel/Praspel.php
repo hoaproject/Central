@@ -24,46 +24,44 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel
- *
  */
 
-/**
- * Hoa_Test_Praspel_Exception
- */
-import('Test.Praspel.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Test_Praspel_Contract
+ * \Hoa\Test\Praspel\Exception
  */
-import('Test.Praspel.Contract');
+-> import('Test.Praspel.Exception')
 
 /**
- * Class Hoa_Test_Praspel.
+ * \Hoa\Test\Praspel\Contract
+ */
+-> import('Test.Praspel.Contract');
+
+}
+
+namespace Hoa\Test\Praspel {
+
+/**
+ * Class \Hoa\Test\Praspel.
  *
  * Useful to manage different contracts, it's like a multiton of contracts.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Test_Praspel {
+class Praspel {
 
     /**
      * Log channel ID.
      *
      * @const string
      */
-    const LOG_CHANNEL = 'Test/Praspel';
+    const LOG_CHANNEL        = 'Test/Praspel';
 
     /**
      * Log type: pre-condition.
@@ -96,14 +94,14 @@ class Hoa_Test_Praspel {
     /**
      * Registry of contracts.
      *
-     * @var Hoa_Test_Praspel array
+     * @var \Hoa\Test\Praspel array
      */
-    protected $_register = array();
+    protected $_register      = array();
 
     /**
      * Singleton.
      *
-     * @var Hoa_Test_Praspel object
+     * @var \Hoa\Test\Praspel object
      */
     private static $_instance = null;
 
@@ -124,7 +122,7 @@ class Hoa_Test_Praspel {
      * Singleton.
      *
      * @access  public
-     * @return  Hoa_Test_Praspel
+     * @return  \Hoa\Test\Praspel
      */
     public static function getInstance ( ) {
 
@@ -138,10 +136,10 @@ class Hoa_Test_Praspel {
      * Add a contract to the registry.
      *
      * @access  public
-     * @param   Hoa_Test_Praspel_Contract  $contract    Contract to add.
+     * @param   \Hoa\Test\Praspel\Contract  $contract    Contract to add.
      * @return  void
      */
-    public function addContract ( Hoa_Test_Praspel_Contract $contract ) {
+    public function addContract ( Contract $contract ) {
 
         $this->_register[$contract->getId()] = $contract;
 
@@ -165,15 +163,17 @@ class Hoa_Test_Praspel {
      *
      * @access  public
      * @param   string  $contractId    Contract ID.
-     * @return  Hoa_Test_Praspel_Contract
-     * @throw   Hoa_Test_Praspel_Exception
+     * @return  \Hoa\Test\Praspel\Contract
+     * @throw   \Hoa\Test\Praspel\Exception
      */
     public function getContract ( $contractId ) {
 
         if(false === $this->contractExists($contractId))
-            throw new Hoa_Test_Praspel_Exception(
+            throw new Exception(
                 'Contract %s does not exist.', 0, $contractId);
 
         return $this->_register[$contractId];
     }
+}
+
 }

@@ -24,154 +24,137 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_Contract
- *
  */
 
-/**
- * Hoa_Test_Praspel_Exception
- */
-import('Test.Praspel.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Test_Praspel
+ * \Hoa\Test\Praspel\Exception
  */
-import('Test.Praspel.~');
+-> import('Test.Praspel.Exception')
 
 /**
- * Hoa_Test_Praspel_Clause_Ensures
+ * \Hoa\Test\Praspel
  */
-import('Test.Praspel.Clause.Ensures');
+-> import('Test.Praspel.~')
 
 /**
- * Hoa_Test_Praspel_Clause_Invariant
+ * \Hoa\Test\Praspel\Clause\*
  */
-import('Test.Praspel.Clause.Invariant');
+-> import('Test.Praspel.Clause.*')
 
 /**
- * Hoa_Test_Praspel_Clause_Requires
+ * \Hoa\Test\Praspel\Domain
  */
-import('Test.Praspel.Clause.Requires');
+-> import('Test.Praspel.Domain')
 
 /**
- * Hoa_Test_Praspel_Clause_Throwable
+ * \Hoa\Log
  */
-import('Test.Praspel.Clause.Throwable');
+-> import('Log.~')
 
 /**
- * Hoa_Test_Praspel_Domain
+ * \Hoa\Visitor\Element
  */
-import('Test.Praspel.Domain');
+-> import('Visitor.Element')
 
 /**
- * Hoa_Log
+ * \Hoa\Iterator\Basic
  */
-import('Log.~');
+-> import('Iterator.Basic')
 
 /**
- * Hoa_Visitor_Element
+ * \Hoa\Iterator\Aggregate
  */
-import('Visitor.Element') and load();
+-> import('Iterator.Aggregate');
+
+}
+
+namespace Hoa\Test\Praspel {
 
 /**
- * Hoa_Iterator_Basic
- */
-import('Iterator.Basic');
-
-/**
- * Hoa_Iterator_Aggregate
- */
-import('Iterator.Aggregate') and load();
-
-/**
- * Class Hoa_Test_Praspel.
+ * Class \Hoa\Test\Praspel.
  *
  * Root of a Praspel contract.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class          Hoa_Test_Praspel_Contract
-    implements Hoa_Visitor_Element,
-               Hoa_Iterator_Aggregate {
+class          Contract
+    implements \Hoa\Visitor\Element,
+               \Hoa\Iterator\Aggregate {
 
     /**
      * Collection of clauses.
      *
-     * @var Hoa_Test_Praspel_Contract array
+     * @var \Hoa\Test\Praspel\Contract array
      */
     protected $_clauses      = array();
 
     /**
      * Log channel.
      *
-     * @var Hoa_Log object
+     * @var \Hoa\Log object
      */
     protected $_log          = null;
 
     /**
      * Class name that contains the method.
      *
-     * @var Hoa_Test_Praspel_Contract string
+     * @var \Hoa\Test\Praspel\Contract string
      */
     protected $_class        = null;
 
     /**
      * Method name that is tested.
      *
-     * @var Hoa_Test_Praspel_Contract string
+     * @var \Hoa\Test\Praspel\Contract string
      */
     protected $_method       = null;
 
     /**
      * File where the method is.
      *
-     * @var Hoa_Test_Praspel_Contract string
+     * @var \Hoa\Test\Praspel\Contract string
      */
     protected $_file         = null;
 
     /**
      * Line where the method starts.
      *
-     * @var Hoa_Test_Praspel_Contract int
+     * @var \Hoa\Test\Praspel\Contract int
      */
     protected $_startLine    = null;
 
     /**
      * Line where the method ends.
      *
-     * @var Hoa_Test_Praspel_Contract int
+     * @var \Hoa\Test\Praspel\Contract int
      */
     protected $_endLine      = null;
 
     /**
      * Depth of the contract when calling it dynamically.
      *
-     * @var Hoa_Test_Praspel_Contract int
+     * @var \Hoa\Test\Praspel\Contract int
      */
     protected static $_depth = -1;
 
     /**
      * Arguments.
      *
-     * @var Hoa_Test_Praspel_Contract array
+     * @var \Hoa\Test\Praspel\Contract array
      */
     protected $_arguments    = array();
 
     /**
      * Result of the method call.
      *
-     * @var Hoa_Test_Praspel_Contract mixed
+     * @var \Hoa\Test\Praspel\Contract mixed
      */
     protected $_result       = null;
 
@@ -203,8 +186,8 @@ class          Hoa_Test_Praspel_Contract
         $this->_file      = $file;
         $this->_startLine = $startLine;
         $this->_endLine   = $endLine;
-        $this->_log       = Hoa_Log::getChannel(
-            Hoa_Test_Praspel::LOG_CHANNEL
+        $this->_log       = \Hoa\Log::getChannel(
+            Praspel::LOG_CHANNEL
         );
 
         return;
@@ -215,8 +198,8 @@ class          Hoa_Test_Praspel_Contract
      *
      * @access  public
      * @param   string  $name    Clause name.
-     * @return  Hoa_Test_Praspel_Clause
-     * @throws  Hoa_Test_Praspel_Exception
+     * @return  \Hoa\Test\Praspel\Clause
+     * @throws  \Hoa\Test\Praspel\Exception
      */
     public function clause ( $name ) {
 
@@ -228,23 +211,23 @@ class          Hoa_Test_Praspel_Contract
         switch(strtolower($name)) {
 
             case 'ensures':
-                $clause = new Hoa_Test_Praspel_Clause_Ensures($this);
+                $clause = new Clause\Ensures($this);
               break;
 
             case 'invariant':
-                $clause = new Hoa_Test_Praspel_Clause_Invariant($this);
+                $clause = new Clause\Invariant($this);
               break;
 
             case 'requires':
-                $clause = new Hoa_Test_Praspel_Clause_Requires($this);
+                $clause = new Clause\Requires($this);
               break;
 
             case 'throwable':
-                $clause = new Hoa_Test_Praspel_Clause_Throwable($this);
+                $clause = new Clause\Throwable($this);
               break;
 
             default:
-                throw new Hoa_Test_Praspel_Exception(
+                throw new Exception(
                     'Unknown clause %s.', 0, $name);
         }
 
@@ -257,13 +240,13 @@ class          Hoa_Test_Praspel_Contract
      * @access  public
      * @param   string  $name    Domain name.
      * @param   ...     ...      Domain arguments.
-     * @return  Hoa_Realdom
+     * @return  \Hoa\Realdom
      */
     public function domain ( $name ) {
 
         $arguments = func_get_args();
         array_shift($arguments);
-        $domain    = new Hoa_Test_Praspel_Domain($name, $arguments);
+        $domain    = new Domain($name, $arguments);
 
         return $domain->getDomain();
     }
@@ -278,7 +261,7 @@ class          Hoa_Test_Praspel_Contract
     public function verifyPreCondition ( ) {
 
         $log = array(
-            'type'      => Hoa_Test_Praspel::LOG_TYPE_PRE,
+            'type'      => Praspel::LOG_TYPE_PRE,
             'class'     => $this->getClass(),
             'method'    => $this->getMethod(),
             'arguments' => $this->getArguments(),
@@ -296,7 +279,7 @@ class          Hoa_Test_Praspel_Contract
             $log['status'] = SUCCEED;
             $this->getLog()->log(
                 'There is no pre-condition, so it succeed.',
-                Hoa_Log::TEST,
+                \Hoa\Log::TEST,
                 $log
             );
 
@@ -321,7 +304,7 @@ class          Hoa_Test_Praspel_Contract
 
                 $this->getLog()->log(
                     'The pre-condition failed.',
-                    Hoa_Log::TEST,
+                    \Hoa\Log::TEST,
                     $log
                 );
 
@@ -334,7 +317,7 @@ class          Hoa_Test_Praspel_Contract
         $log['status'] = SUCCEED;
         $this->getLog()->log(
             'The pre-condition succeed.',
-            Hoa_Log::TEST,
+            \Hoa\Log::TEST,
             $log
         );
 
@@ -354,7 +337,7 @@ class          Hoa_Test_Praspel_Contract
         $args          = func_get_args();
         $this->_result = array_shift($args);
         $log           = array(
-            'type'      => Hoa_Test_Praspel::LOG_TYPE_POST,
+            'type'      => Praspel::LOG_TYPE_POST,
             'class'     => $this->getClass(),
             'method'    => $this->getMethod(),
             'arguments' => $args,
@@ -372,7 +355,7 @@ class          Hoa_Test_Praspel_Contract
             $log['status'] = SUCCEED;
             $this->getLog()->log(
                 'There is no post-condition, so it succeed.',
-                Hoa_Log::TEST,
+                \Hoa\Log::TEST,
                 $log
             );
 
@@ -407,7 +390,7 @@ class          Hoa_Test_Praspel_Contract
 
                 $this->getLog()->log(
                     'The post-condition failed.',
-                    Hoa_Log::TEST,
+                    \Hoa\Log::TEST,
                     $log
                 );
 
@@ -418,7 +401,7 @@ class          Hoa_Test_Praspel_Contract
         $log['status'] = SUCCEED;
         $this->getLog()->log(
             'The post-condition succeed.',
-            Hoa_Log::TEST,
+            \Hoa\Log::TEST,
             $log
         );
 
@@ -439,7 +422,7 @@ class          Hoa_Test_Praspel_Contract
         $out              = true;
         $name             = get_class($exception);
         $log              = array(
-            'type'      => Hoa_Test_Praspel::LOG_TYPE_EXCEPTION,
+            'type'      => Praspel::LOG_TYPE_EXCEPTION,
             'class'     => $this->getClass(),
             'method'    => $this->getMethod(),
             'arguments' => $this->getArguments(),
@@ -457,7 +440,7 @@ class          Hoa_Test_Praspel_Contract
             $this->getLog()->log(
                 'An exception (' . $name . ') was thrown ' .
                 'and no @throwable clause was declared.',
-                Hoa_Log::TEST,
+                \Hoa\Log::TEST,
                 $log
             );
 
@@ -471,7 +454,7 @@ class          Hoa_Test_Praspel_Contract
             $this->getLog()->log(
                 'Undeclared thrown exception (' . $name . ') ' .
                 'in the @throwable clause.',
-                Hoa_Log::TEST,
+                \Hoa\Log::TEST,
                 $log
             );
 
@@ -481,7 +464,7 @@ class          Hoa_Test_Praspel_Contract
         $log['status'] = SUCCEED;
         $this->getLog()->log(
             'The exceptional clause succeed (' . $name . ' was thrown).',
-            Hoa_Log::TEST,
+            \Hoa\Log::TEST,
             $log
         );
 
@@ -497,7 +480,7 @@ class          Hoa_Test_Praspel_Contract
     public function verifyInvariants ( Array $invariants ) {
 
         $log = array(
-            'type'      => Hoa_Test_Praspel::LOG_TYPE_INVARIANT,
+            'type'      => Praspel::LOG_TYPE_INVARIANT,
             'class'     => $this->getClass(),
             'method'    => $this->getMethod(),
             'arguments' => $this->getArguments(),
@@ -515,7 +498,7 @@ class          Hoa_Test_Praspel_Contract
             $log['status'] = SUCCEED;
             $this->getLog()->log(
                 'There is no invariant, so it succeed.',
-                Hoa_Log::TEST,
+                \Hoa\Log::TEST,
                 $log
             );
 
@@ -542,7 +525,7 @@ class          Hoa_Test_Praspel_Contract
 
                 $this->getLog()->log(
                     'The invariant ' . $variable->getName() . ' failed.',
-                    Hoa_Log::TEST,
+                    \Hoa\Log::TEST,
                     $log
                 );
 
@@ -553,7 +536,7 @@ class          Hoa_Test_Praspel_Contract
         $log['status'] = SUCCEED;
         $this->getLog()->log(
             'All invariants succeed.',
-            Hoa_Log::TEST,
+            \Hoa\Log::TEST,
             $log
         );
 
@@ -588,13 +571,13 @@ class          Hoa_Test_Praspel_Contract
      *
      * @access  public
      * @param   string     $name    Clause name.
-     * @return  Hoa_Test_Praspel_Clause
-     * @throw   Hoa_Test_Praspel_Exception
+     * @return  \Hoa\Test\Praspel\Clause
+     * @throw   \Hoa\Test\Praspel\Exception
      */
     public function getClause ( $name ) {
 
         if(false === $this->clauseExists($name))
-            throw new Hoa_Test_Praspel_Exception(
+            throw new Exception(
                 'Clause %s is not defined.', 1, $name);
 
         return $this->_clauses[$name];
@@ -670,7 +653,7 @@ class          Hoa_Test_Praspel_Contract
      * Get log.
      *
      * @access  public
-     * @return  Hoa_Log
+     * @return  \Hoa\Log
      */
     public function getLog ( ) {
 
@@ -725,11 +708,11 @@ class          Hoa_Test_Praspel_Contract
      * Get iterator (through clauses).
      *
      * @access  public
-     * @return  Hoa_Iterator_Basic
+     * @return  \Hoa\Iterator\Basic
      */
     public function getIterator ( ) {
 
-        return new Hoa_Iterator_Basic($this->_clauses);
+        return new \Hoa\Iterator\Basic($this->_clauses);
     }
 
     /**
@@ -745,7 +728,7 @@ class          Hoa_Test_Praspel_Contract
         $this->_exception = null;
 
         foreach($this as $clause)
-            if($clause instanceof Hoa_Test_Praspel_Clause_Contract)
+            if($clause instanceof Clause\Contract)
                 foreach($clause->getVariables() as $variable)
                     $variable->reset();
 
@@ -756,14 +739,16 @@ class          Hoa_Test_Praspel_Contract
      * Accept a visitor.
      *
      * @access  public
-     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   \Hoa\Visitor\Visit  $visitor    Visitor.
      * @param   mixed              &$handle    Handle (reference).
      * @param   mixed              $eldnah     Handle (no reference).
      * @return  mixed
      */
-    public function accept ( Hoa_Visitor_Visit $visitor,
+    public function accept ( \Hoa\Visitor\Visit $visitor,
                              &$handle = null, $eldnah = null ) {
 
         return $visitor->visit($this, $handle, $eldnah);
     }
+}
+
 }

@@ -24,71 +24,68 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_DomainDisjunction
- *
  */
 
-/**
- * Hoa_Test_Praspel_Exception
- */
-import('Test.Praspel.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Test_Praspel_Domain
+ * \Hoa\Test\Praspel\Exception
  */
-import('Test.Praspel.Domain') and load();
+-> import('Test.Praspel.Exception')
 
 /**
- * Hoa_Visitor_Element
+ * \Hoa\Test\Praspel\Domain
  */
-import('Visitor.Element');
+-> import('Test.Praspel.Domain')
 
 /**
- * Class Hoa_Test_Praspel_DomainDisjunction.
+ * \Hoa\Visitor\Element
+ */
+-> import('Visitor.Element');
+
+}
+
+namespace Hoa\Test\Praspel {
+
+/**
+ * Class \Hoa\Test\Praspel\DomainDisjunction.
  *
  * Represent a domains disjunction.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_DomainDisjunction
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-abstract class Hoa_Test_Praspel_DomainDisjunction
-    implements Hoa_Visitor_Element {
+abstract class DomainDisjunction implements \Hoa\Visitor\Element {
 
     /**
      * Collection of domains.
      *
-     * @var Hoa_Test_Praspel_DomainDisjunction array
+     * @var \Hoa\Test\Praspel\DomainDisjunction array
      */
     protected $_domains = array();
 
     /**
      * Current defining domain.
      *
-     * @var Hoa_Test_Praspel_Domain object
+     * @var \Hoa\Test\Praspel\Domain object
      */
     protected $_domain  = null;
 
     /**
      * Make a disjunction between two variables.
      *
-     * @var Hoa_Test_Praspel_DomainDisjunction object
+     * @var \Hoa\Test\Praspel\DomainDisjunction object
      */
     public $_or         = null;
 
     /**
      * Prefix of domain.
      *
-     * @var Hoa_Test_Praspel_DomainDisjunction int
+     * @var \Hoa\Test\Praspel\DomainDisjunction int
      */
     protected $_i       = 0;
 
@@ -112,18 +109,18 @@ abstract class Hoa_Test_Praspel_DomainDisjunction
      *
      * @access  public
      * @param   string  $name    Domain name.
-     * @return  Hoa_Test_Praspel_Domain
+     * @return  \Hoa\Test\Praspel\Domain
      */
     public function belongsTo ( $name ) {
 
-        return $this->_domain = new Hoa_Test_Praspel_Domain($this, $name);
+        return $this->_domain = new Domain($this, $name);
     }
 
     /**
      * Close the current defining domain.
      *
      * @access  public
-     * @return  Hoa_Test_Praspel_DomainDisjunction
+     * @return  \Hoa\Test\Praspel\DomainDisjunction
      */
     public function _ok ( ) {
 
@@ -165,14 +162,16 @@ abstract class Hoa_Test_Praspel_DomainDisjunction
      * Accept a visitor.
      *
      * @access  public
-     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   \Hoa\Visitor\Visit  $visitor    Visitor.
      * @param   mixed              &$handle    Handle (reference).
      * @param   mixed              $eldnah     Handle (no reference).
      * @return  mixed
      */
-    public function accept ( Hoa_Visitor_Visit $visitor,
+    public function accept ( \Hoa\Visitor\Visit $visitor,
                              &$handle = null, $eldnah = null ) {
 
         return $visitor->visit($this, $handle, $eldnah);
     }
+}
+
 }

@@ -24,58 +24,54 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_Clause_Throwable
- *
  */
 
-/**
- * Hoa_Test_Praspel_Exception
- */
-import('Test.Praspel.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Test_Praspel_Clause
+ * \Hoa\Test\Praspel\Exception
  */
-import('Test.Praspel.Clause') and load();
+-> import('Test.Praspel.Exception')
 
 /**
- * Hoa_Visitor_Element
+ * \Hoa\Test\Praspel\Clause
  */
-import('Visitor.Element') and load();
+-> import('Test.Praspel.Clause.~')
 
 /**
- * Class Hoa_Test_Praspel_Clause_Throwable.
+ * \Hoa\Visitor\Element
+ */
+-> import('Visitor.Element');
+
+}
+
+namespace Hoa\Test\Praspel\Clause {
+
+/**
+ * Class \Hoa\Test\Praspel\Clause\Throwable.
  *
  * .
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_Clause_Throwable
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class          Hoa_Test_Praspel_Clause_Throwable
-    implements Hoa_Test_Praspel_Clause,
-               Hoa_Visitor_Element {
+class Throwable implements Clause, \Hoa\Visitor\Element {
 
     /**
      * List of exception names.
      *
-     * @var Hoa_Test_Praspel_Clause_Throwable array
+     * @var \Hoa\Test\Praspel\Clause\Throwable array
      */
     protected $_list = array();
 
     /**
      * Make a conjunction between two exception name declarations.
      *
-     * @var Hoa_Test_Praspel_Clause_Throwable object
+     * @var \Hoa\Test\Praspel\Clause\Throwable object
      */
     public $_comma   = null;
 
@@ -99,7 +95,7 @@ class          Hoa_Test_Praspel_Clause_Throwable
      *
      * @access  public
      * @param   string  $name    Exception name.
-     * @return  Hoa_Test_Praspel_Clause_Throwable
+     * @return  \Hoa\Test\Praspel\Clause\Throwable
      */
     public function couldThrow ( $name ) {
 
@@ -143,14 +139,16 @@ class          Hoa_Test_Praspel_Clause_Throwable
      * Accept a visitor.
      *
      * @access  public
-     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   \Hoa\Visitor\Visit  $visitor    Visitor.
      * @param   mixed              &$handle    Handle (reference).
      * @param   mixed              $eldnah     Handle (no reference).
      * @return  mixed
      */
-    public function accept ( Hoa_Visitor_Visit $visitor,
+    public function accept ( \Hoa\Visitor\Visit $visitor,
                              &$handle = null, $eldnah = null ) {
 
         return $visitor->visit($this, $handle, $eldnah);
     }
+}
+
 }

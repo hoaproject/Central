@@ -24,79 +24,77 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_Variable
- *
  */
 
-/**
- * Hoa_Test_Praspel_Exception
- */
-import('Test.Praspel.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Test_Praspel_DomainDisjunction
+ * \Hoa\Test\Praspel\Exception
  */
-import('Test.Praspel.DomainDisjunction') and load();
+-> import('Test.Praspel.Exception')
 
 /**
- * Class Hoa_Test_Praspel_Variable.
+ * \Hoa\Test\Praspel\DomainDisjunction
+ */
+-> import('Test.Praspel.DomainDisjunction');
+
+}
+
+namespace Hoa\Test\Praspel {
+
+/**
+ * Class \Hoa\Test\Praspel\Variable.
  *
  * Represents a variable.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_Variable
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Test_Praspel_Variable extends Hoa_Test_Praspel_DomainDisjunction {
+class Variable extends DomainDisjunction {
 
     /**
      * Parent (here: clause).
      *
-     * @var Hoa_Test_Praspel_Clause object
+     * @var \Hoa\Test\Praspel\Clause object
      */
     protected $_parent  = null;
 
     /**
      * Variable name.
      *
-     * @var Hoa_Test_Praspel_Variable string
+     * @var \Hoa\Test\Praspel\Variable string
      */
     protected $_name    = null;
 
     /**
      * Choosen domain.
      *
-     * @var Hoa_Realdom object
+     * @var \Hoa\Realdom object
      */
     protected $_choosen = null;
 
     /**
      * Old value.
      *
-     * @var Hoa_Test_Praspel_Variable mixed
+     * @var \Hoa\Test\Praspel\Variable mixed
      */
     private $_oldValue  = null;
 
     /**
      * New value.
      *
-     * @var Hoa_Test_Praspel_Variable mixed
+     * @var \Hoa\Test\Praspel\Variable mixed
      */
     private $_newValue  = null;
 
     /**
      * Make a conjunction between two variables.
      *
-     * @var Hoa_Test_Praspel_Clause object
+     * @var \Hoa\Test\Praspel\Clause object
      */
     public $_and        = null;
 
@@ -106,11 +104,11 @@ class Hoa_Test_Praspel_Variable extends Hoa_Test_Praspel_DomainDisjunction {
      * Set the variable name.
      *
      * @access  public
-     * @param   Hoa_Test_Praspel_Clause  $parent    Parent (here: the clause).
-     * @param   string                   $name      Variable name.
+     * @param   \Hoa\Test\Praspel\Clause  $parent    Parent (here: the clause).
+     * @param   string                    $name      Variable name.
      * @return  void
      */
-    public function __construct ( Hoa_Test_Praspel_Clause $parent, $name ) {
+    public function __construct ( Clause $parent, $name ) {
 
         parent::__construct();
 
@@ -122,22 +120,22 @@ class Hoa_Test_Praspel_Variable extends Hoa_Test_Praspel_DomainDisjunction {
     }
 
     /**
-     * Select a domain (e.g. from a Hoa_Test_Selector object).
+     * Select a domain (e.g. from a \Hoa\Test\Selector object).
      *
      * @access  pulic
      * @param   mixed  $selection    From variables to domains, or domain.
-     * @return  Hoa_Realdom
-     * @throw   Hoa_Test_Praspel_Exception
+     * @return  \Hoa\Realdom
+     * @throw   \Hoa\Test\Praspel\Exception
      */
     public function selectDomain ( $selection ) {
 
-        if($selection instanceof Hoa_Realdom)
+        if($selection instanceof \Hoa\Realdom)
             return $this->_choosen = $selection;
 
         $name = $this->getName();
 
         if(!isset($selection[$name]))
-            throw new Hoa_Test_Praspel_Exception(
+            throw new Exception(
                 'Cannot choose a domain (from a selection) for the variable %s.',
                 0, $name);
 
@@ -149,26 +147,26 @@ class Hoa_Test_Praspel_Variable extends Hoa_Test_Praspel_DomainDisjunction {
      *
      * @access  public
      * @param   string  $name    Variable name.
-     * @return  Hoa_Test_Praspel_Variable
-     * @throws  Hoa_Test_Praspel_Exception
+     * @return  \Hoa\Test\Praspel\Variable
+     * @throws  \Hoa\Test\Praspel\Exception
      */
     public function hasTheSameDomainAs ( $name ) {
 
         $context = $this->getParent();
 
-        if($this->getParent() instanceof Hoa_Test_Praspel_Clause_Requires) {
+        if($this->getParent() instanceof Clause\Requires) {
 
             if($name[0] == '\\')
-                throw new Hoa_Test_Praspel_Exception(
+                throw new Exception(
                     'Constructors are not allowed in a @requires clause, given %s.',
                     0, $name);
 
             $context = $this->getParent();
         }
-        elseif($this->getParent() instanceof Hoa_Test_Praspel_Clause_Ensures) {
+        elseif($this->getParent() instanceof Clause\Ensures) {
 
             if($name == '\result')
-                throw new Hoa_Test_Praspel_Exception(
+                throw new Exception(
                     'The operator “domainof” is not commutative. ' .
                     '\result must be in the left position.', 1);
 
@@ -177,7 +175,7 @@ class Hoa_Test_Praspel_Variable extends Hoa_Test_Praspel_DomainDisjunction {
                 $context = $this->getParent()->getParent();
 
                 if(false === $context->clauseExists('requires'))
-                    throw new Hoa_Test_Praspel_Exception(
+                    throw new Exception(
                         'Foobar %s',
                         2, $name);
 
@@ -187,7 +185,7 @@ class Hoa_Test_Praspel_Variable extends Hoa_Test_Praspel_DomainDisjunction {
         }
 
         if(false === $context->variableExists($name))
-            throw new Hoa_Test_Praspel_Exception(
+            throw new Exception(
                 'Cannot ensure a property on the non-existing variable %s.',
                 3, $name);
 
@@ -243,13 +241,13 @@ class Hoa_Test_Praspel_Variable extends Hoa_Test_Praspel_DomainDisjunction {
      * Get choosen domain.
      *
      * @access  public
-     * @return  Hoa_Realdom
-     * @throw   Hoa_Test_Praspel_Exception
+     * @return  \Hoa\Realdom
+     * @throw   \Hoa\Test\Praspel\Exception
      */
     public function getChoosenDomain ( ) {
 
         if(false === $this->hasChoosenDomain())
-            throw new Hoa_Test_Praspel_Exception(
+            throw new Exception(
                 'No domain has been choosen for the variable %s.',
                 2, $this->getName());
 
@@ -310,10 +308,10 @@ class Hoa_Test_Praspel_Variable extends Hoa_Test_Praspel_DomainDisjunction {
      * Set the parent (here: the clause).
      *
      * @access  protected
-     * @param   Hoa_Test_Praspel_Clause  $parent    Parent (here: the clause).
-     * @return  Hoa_Test_Praspel_Clause
+     * @param   \Hoa\Test\Praspel\Clause  $parent    Parent (here: the clause).
+     * @return  \Hoa\Test\Praspel\Clause
      */
-    protected function setParent ( Hoa_Test_Praspel_Clause $parent ) {
+    protected function setParent ( Clause $parent ) {
 
         $old           = $this->_parent;
         $this->_parent = $parent;
@@ -340,10 +338,12 @@ class Hoa_Test_Praspel_Variable extends Hoa_Test_Praspel_DomainDisjunction {
      * Get the parent (here: the clause).
      *
      * @access  public
-     * @return  Hoa_Test_Praspel_Clause
+     * @return  \Hoa\Test\Praspel\Clause
      */
     public function getParent ( ) {
 
         return $this->_parent;
     }
+}
+
 }
