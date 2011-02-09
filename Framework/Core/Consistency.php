@@ -42,7 +42,7 @@ class Consistency {
 
     private static $_multiton = array();
     protected $_from          = 'Hoa';
-    protected $_root          = '/Users/hywan/Development/Hoa/Project/Framework/Library/';
+    protected $_root          = null;
     protected static $_cache  = array();
     protected static $_class  = array();
     protected $__class        = array();
@@ -50,6 +50,9 @@ class Consistency {
     private function __construct ( $from ) {
 
         $this->_from = $from;
+        $this->_root = Core::getInstance()->getFormattedParameter(
+                           'namespace.prefix.' . $from
+                       ) ?: '/Flatland';
 
         return;
     }
