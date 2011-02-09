@@ -24,38 +24,43 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_Clause_Predicate
- *
  */
 
-/**
- * Hoa_Test_Praspel_Exception
- */
-import('Test.Praspel.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Test_Praspel_Clause_Predicate.
+ * \Hoa\Test\Praspel\Exception
+ */
+-> import('Test.Praspel.Exception')
+
+/**
+ * \Hoa\Test\Praspel\Clause
+ */
+-> import('Test.Praspel.Clause.~');
+
+}
+
+namespace Hoa\Test\Praspel\Clause {
+
+/**
+ * Class \Hoa\Test\Praspel\Clause\Predicate.
  *
  * .
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_Clause_Predicate
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Test_Praspel_Clause_Predicate {
+class Predicate implements Clause {
 
     public function __construct ( ) {
 
-        throw new Hoa_Test_Praspel_Exception(
+        throw new \Hoa\Test\Praspel\Exception(
             'Not yet supported.', 0);
     }
+}
+
 }

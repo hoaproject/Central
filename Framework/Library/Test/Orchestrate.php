@@ -24,114 +24,107 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Orchestrate
- *
  */
 
-/**
- * Hoa_File_Finder
- */
-import('File.Finder');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_File_Finder
+ * \Hoa\File\Finder
  */
-import('File.Finder');
+-> import('File.Finder')
 
 /**
- * Hoa_File_Directory
+ * \Hoa\File\Directory
  */
-import('File.Directory');
+-> import('File.Directory')
 
 /**
- * Hoa_Reflection_RClass
+ * \Hoa\Reflection\RClass
  */
-import('Reflection.RClass');
+-> import('Reflection.RClass')
 
 /**
- * Hoa_Reflection_Fragment_RMethod
+ * \Hoa\Reflection\Fragment\RMethod
  */
-import('Reflection.Fragment.RMethod');
+-> import('Reflection.Fragment.RMethod')
 
 /**
- * Hoa_Reflection_Fragment_RParameter
+ * \Hoa\Reflection\Fragment\RParameter
  */
-import('Reflection.Fragment.RParameter');
+-> import('Reflection.Fragment.RParameter')
 
 /**
- * Hoa_Reflection_Visitor_Prettyprinter
+ * \Hoa\Reflection\Visitor\Prettyprinter
  */
-import('Reflection.Visitor.Prettyprinter');
+-> import('Reflection.Visitor.Prettyprinter')
 
 /**
- * Hoa_Test_Praspel_Compiler
+ * \Hoa\Test\Praspel\Compiler
  */
-import('Test.Praspel.Compiler');
+-> import('Test.Praspel.Compiler')
 
 /**
- * Hoa_Test_Praspel_Visitor_Php
+ * \Hoa\Test\Praspel\Visitor\Php
  */
-import('Test.Praspel.Visitor.Php');
+-> import('Test.Praspel.Visitor.Php');
+
+}
+
+namespace Hoa\Test {
 
 /**
- * Class Hoa_Test_Orchestrate.
+ * Class \Hoa\Test\Orchestrate.
  *
  * Orchestrate the repository and the code.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Orchestrate
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
+class Orchestrate implements \Hoa\Core\Parameterizable {
 
     /**
-     * Parameters of Hoa_Test_Orchestrate.
+     * Parameters of \Hoa\Test\Orchestrate.
      *
-     * @var Hoa_Core_Parameter object
+     * @var \Hoa\Core\Parameter object
      */
     protected $_parameters    = null;
 
     /**
      * Praspel' compiler.
      *
-     * @var Hoa_Test_Praspel_Compiler object
+     * @var \Hoa\Test\Praspel\Compiler object
      */
     protected $_compiler      = null;
 
     /**
      * Pretty-printer.
      *
-     * @var Hoa_Reflection_Visitor_Prettyprinter object
+     * @var \Hoa\Reflection\Visitor\Prettyprinter object
      */
     protected $_prettyPrinter = null;
 
     /**
      * Temporize magic setter.
      *
-     * @var Hoa_Reflection_Fragment_RMethod object
+     * @var \Hoa\Reflection\Fragment\RMethod object
      */
     private $_magicSetter     = null;
 
     /**
      * Temporize magic getter.
      *
-     * @var Hoa_Reflection_Fragment_RMethod object
+     * @var \Hoa\Reflection\Fragment\RMethod object
      */
     private $_magicGetter     = null;
 
     /**
      * Temporize magic caller.
      *
-     * @var Hoa_Reflection_Fragment_RMethod object
+     * @var \Hoa\Reflection\Fragment\RMethod object
      */
     private $_magicCaller     = null;
 
@@ -141,14 +134,14 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
      * Construct the conductor.
      *
      * @access  public
-     * @param   Hoa_Core_Parameter  $parameters    Parameters of Hoa_Test.
+     * @param   \Hoa\Core\Parameter  $parameters    Parameters of \Hoa\Test.
      * @return  void
      */
-    public function __construct ( Hoa_Core_Parameter $parameters ) {
+    public function __construct ( \Hoa\Core\Parameter $parameters ) {
 
         $this->_parameters = $parameters;
-        $this->_compiler   = new Hoa_Test_Praspel_Compiler();
-        $this->setPrettyPrinter(new Hoa_Reflection_Visitor_Prettyprinter());
+        $this->_compiler   = new Praspel\Compiler();
+        $this->setPrettyPrinter(new \Hoa\Reflection\Visitor\Prettyprinter());
 
         return;
     }
@@ -159,7 +152,7 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   array   $in    Parameters to set.
      * @return  void
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setParameters ( Array $in ) {
 
@@ -171,7 +164,7 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameters ( ) {
 
@@ -185,7 +178,7 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
      * @param   string  $key      Key.
      * @param   mixed   $value    Value.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setParameter ( $key, $value ) {
 
@@ -198,7 +191,7 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameter ( $key ) {
 
@@ -212,7 +205,7 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getFormattedParameter ( $key ) {
 
@@ -253,9 +246,9 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
      */
     public function compute ( ) {
 
-        $finder = new Hoa_File_Finder(
+        $finder = new \Hoa\File\Finder(
             $this->getParameter('convict'),
-            Hoa_File_Finder::LIST_VISIBLE
+            \Hoa\File\Finder::LIST_VISIBLE
         );
 
         $this->incubator($finder);
@@ -268,14 +261,14 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
      * Prepare the incubator.
      *
      * @access  protected
-     * @param   Hoa_File_Finder  $finder    Finder.
+     * @param   \Hoa\File\Finder  $finder    Finder.
      * @return  void
      */
-    protected function incubator ( Hoa_File_Finder $finder ) {
+    protected function incubator ( \Hoa\File\Finder $finder ) {
 
         $incubator = $this->getFormattedParameter('incubator');
 
-        Hoa_File_Directory::create($incubator);
+        \Hoa\File\Directory::create($incubator);
 
         foreach($finder as $i => $file)
             $file->define()->copy($incubator . $file->getBasename());
@@ -287,20 +280,20 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
      * Prepare the instrumentation.
      *
      * @access  protected
-     * @param   Hoa_File_Finder  $finder    Finder.
+     * @param   \Hoa\File\Finder  $finder    Finder.
      * @return  void
      */
-    protected function instrumentation ( Hoa_File_Finder $finder ) {
+    protected function instrumentation ( \Hoa\File\Finder $finder ) {
 
-        $this->_magicSetter = new Hoa_Reflection_Fragment_RMethod(
+        $this->_magicSetter = new \Hoa\Reflection\Fragment\RMethod(
             '__hoa_magicSetter'
         );
         $this->_magicSetter->setCommentContent('Magic setter.');
         $this->_magicSetter->importFragment(
-            new Hoa_Reflection_Fragment_RParameter('attribute')
+            new \Hoa\Reflection\Fragment\RParameter('attribute')
         );
         $this->_magicSetter->importFragment(
-            new Hoa_Reflection_Fragment_RParameter('value')
+            new \Hoa\Reflection\Fragment\RParameter('value')
         );
         $this->_magicSetter->setBody(
             '        $old              = $this->$attribute;' . "\n" .
@@ -308,23 +301,23 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
             '        return $old;'
         );
 
-        $this->_magicGetter = new Hoa_Reflection_Fragment_RMethod(
+        $this->_magicGetter = new \Hoa\Reflection\Fragment\RMethod(
             '__hoa_magicGetter'
         );
         $this->_magicGetter->setCommentContent('Magic getter.');
         $this->_magicGetter->importFragment(
-            new Hoa_Reflection_Fragment_RParameter('attribute')
+            new \Hoa\Reflection\Fragment\RParameter('attribute')
         );
         $this->_magicGetter->setBody(
             '        return $this->$attribute;'
         );
 
-        $this->_magicCaller = new Hoa_Reflection_Fragment_RMethod(
+        $this->_magicCaller = new \Hoa\Reflection\Fragment\RMethod(
             '__hoa_magicCaller'
         );
         $this->_magicCaller->setCommentContent('Magic caller.');
         $this->_magicCaller->importFragment(
-            new Hoa_Reflection_Fragment_RParameter('method')
+            new \Hoa\Reflection\Fragment\RParameter('method')
         );
         $this->_magicCaller->setBody(
             '        $arguments = func_get_args();' . "\n" .
@@ -338,7 +331,7 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
         $from      = $this->getFormattedParameter('convict');
         $to        = $this->getFormattedParameter('instrumented');
         $incubator = $this->getFormattedParameter('incubator');
-        Hoa_File_Directory::create($to);
+        \Hoa\File\Directory::create($to);
 
         return $this->_instrumentation($finder, $from, $to, $incubator);
     }
@@ -347,13 +340,13 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
      * Recursive instrumentation.
      *
      * @access  private
-     * @param   Hoa_File_Finder  $finder       Finder.
+     * @param   \Hoa\File\Finder  $finder       Finder.
      * @param   string           $from         From.
      * @param   string           $to           To.
      * @param   string           $incubator    Incubator path.
      * @return  void
      */
-    private function _instrumentation ( Hoa_File_Finder $finder, $from, $to,
+    private function _instrumentation ( \Hoa\File\Finder $finder, $from, $to,
                                         $incubator ) {
 
         foreach($finder as $i => $file) {
@@ -363,12 +356,12 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
 
             if(true === $file->isDirectory()) {
 
-                Hoa_File_Directory::create($path);
+                \Hoa\File\Directory::create($path);
 
                 return $this->_instrumentation(
-                    new Hoa_File_Finder(
+                    new \Hoa\File\Finder(
                         $file->getStreamName(),
-                        Hoa_File_Finder::LIST_VISIBLE
+                        \Hoa\File\Finder::LIST_VISIBLE
                     ),
                     $from . DS . $basename,
                     $path,
@@ -386,11 +379,11 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
 
             foreach($classes as $classname) {
 
-                $class = new Hoa_Reflection_RClass($classname);
+                $class = new \Hoa\Reflection\RClass($classname);
 
                 // Invariants.
-                $inv   = new Hoa_Reflection_Fragment_RMethod('__hoa_invariants');
-                $invG  = new Hoa_Reflection_Fragment_RMethod('__hoa_getInvariantsValues');
+                $inv   = new \Hoa\Reflection\Fragment\RMethod('__hoa_invariants');
+                $invG  = new \Hoa\Reflection\Fragment\RMethod('__hoa_getInvariantsValues');
                 $invBd = 'false and' . "\n";
                 $invCc = null;
                 $invT  = '    ';
@@ -421,7 +414,7 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                 $invBg .= ');';
 
                 $inv->importFragment(
-                    new Hoa_Reflection_Fragment_RParameter('contract')
+                    new \Hoa\Reflection\Fragment\RParameter('contract')
                 );
                 $inv->setCommentContent('Invariants.');
                 $this->_compiler->compile($invCc);
@@ -431,7 +424,7 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                         "\n",
                         "\n" . '        ',
                         $invBd . $this->_compiler->getResult()->accept(
-                            new Hoa_Test_Praspel_Visitor_Php()
+                            new \Hoa\Test\Praspel\Visitor\Php()
                         )
                     ) .
                     (false !== $class->getParentClass()
@@ -459,11 +452,11 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                     $postName     = '__hoa_' . $name . '_post';
                     $excepName    = '__hoa_' . $name . '_exception';
 
-                    $main  = new Hoa_Reflection_Fragment_RMethod($mainName);
-                    $cont  = new Hoa_Reflection_Fragment_RMethod($contractName);
-                    $pre   = new Hoa_Reflection_Fragment_RMethod($preName);
-                    $post  = new Hoa_Reflection_Fragment_RMethod($postName);
-                    $excep = new Hoa_Reflection_Fragment_RMethod($excepName);
+                    $main  = new \Hoa\Reflection\Fragment\RMethod($mainName);
+                    $cont  = new \Hoa\Reflection\Fragment\RMethod($contractName);
+                    $pre   = new \Hoa\Reflection\Fragment\RMethod($preName);
+                    $post  = new \Hoa\Reflection\Fragment\RMethod($postName);
+                    $excep = new \Hoa\Reflection\Fragment\RMethod($excepName);
 
 
                     // Original.
@@ -473,13 +466,13 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
 
                     // Contract.
                     $contract = $this->_compiler->getResult()->accept(
-                        new Hoa_Test_Praspel_Visitor_Php()
+                        new \Hoa\Test\Praspel\Visitor\Php()
                     );
                     $contract = str_replace("\n", "\n" . '        ', $contract);
 
                     $cont->setCommentContent('Create contract of the ' . $name . ' method');
                     $cont->setBody(
-                        '        $praspel = Hoa_Test_Praspel::getInstance();' . "\n\n" .
+                        '        $praspel = \Hoa\Test\Praspel::getInstance();' . "\n\n" .
                         '        if(true === $praspel->contractExists(\'' . $id . '\'))' . "\n" .
                         '            return;' . "\n\n" .
                         '        $class     = \'' . $classname . '\';' . "\n" .
@@ -489,7 +482,7 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                         '        $endLine   = '   . $method->getEndLine() . ';' . "\n" .
                         '        ' . $contract . "\n" .
                         '        $this->__hoa_invariants($contract); '. "\n" .
-                        '        Hoa_Test_Praspel::getInstance()->addContract($contract);' . "\n\n" .
+                        '        \Hoa\Test\Praspel::getInstance()->addContract($contract);' . "\n\n" .
                         '        return;'
                     );
                     $cont->setVisibility(_public);
@@ -498,7 +491,7 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
 
                     // Parameters.
                     $post->importFragment(
-                        new Hoa_Reflection_Fragment_RParameter('result')
+                        new \Hoa\Reflection\Fragment\RParameter('result')
                     );
                     $p  = null;
                     $pp = '$result';
@@ -516,7 +509,7 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                     }
 
                     $excep->importFragment(
-                        new Hoa_Reflection_Fragment_RParameter('exception')
+                        new \Hoa\Reflection\Fragment\RParameter('exception')
                     );
 
 
@@ -550,7 +543,7 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                         'Pre-condition of the ' . $name . ' method.'
                     );
                     $pre->setBody(
-                        '        $praspel  = Hoa_Test_Praspel::getInstance();' . "\n" .
+                        '        $praspel  = \Hoa\Test\Praspel::getInstance();' . "\n" .
                         '        $contract = $praspel->getContract(\'' . $id . '\');' . "\n\n" .
                         '        return    $contract->verifyInvariants(' . "\n" .
                         '                      $this->__hoa_getInvariantsValues()' . "\n" .
@@ -566,7 +559,7 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                         'Post-condition of the ' . $name . ' method.'
                     );
                     $post->setBody(
-                        '        $praspel  = Hoa_Test_Praspel::getInstance();' . "\n" .
+                        '        $praspel  = \Hoa\Test\Praspel::getInstance();' . "\n" .
                         '        $contract = $praspel->getContract(\'' . $id . '\');' . "\n\n" .
                         '        return    $contract->verifyPostCondition(' . $pp . ')' . "\n" .
                         '               && $contract->verifyInvariants(' . "\n" .
@@ -582,7 +575,7 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
                         'Exceptional condition of the ' . $name . ' method.'
                     );
                     $excep->setBody(
-                        '        $praspel  = Hoa_Test_Praspel::getInstance();' . "\n" .
+                        '        $praspel  = \Hoa\Test\Praspel::getInstance();' . "\n" .
                         '        $contract = $praspel->getContract(\'' . $id . '\');' . "\n\n" .
                         '        return    $contract->verifyException($exception)' . "\n" .
                         '               && $contract->verifyInvariants(' . "\n" .
@@ -623,4 +616,6 @@ class Hoa_Test_Orchestrate implements Hoa_Core_Parameterizable {
 
         return;
     }
+}
+
 }

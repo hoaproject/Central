@@ -24,43 +24,41 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Selector_Random
- *
  */
 
-/**
- * Hoa_Test_Selector
- */
-import('Test.Selector.~') and load();
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Test_Sampler_Random
+ * \Hoa\Test\Selector
  */
-import('Test.Sampler.Random') and load();
+-> import('Test.Selector.~')
 
 /**
- * Class Hoa_Test_Selector_Random.
+ * \Hoa\Test\Sampler\Random
+ */
+-> import('Test.Sampler.Random');
+
+}
+
+namespace Hoa\Test\Selector {
+
+/**
+ * Class \Hoa\Test\Selector\Random.
  *
  * .
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Selector_Random
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Test_Selector_Random extends Hoa_Test_Selector {
+class Random extends Selector {
 
     public function __construct ( Array $variables ) {
 
-        $sampler              = new Hoa_Test_Sampler_Random();
+        $sampler              = new \Hoa\Test\Sampler\Random();
         $this->_selections[0] = array();
 
         foreach($variables as $variable) {
@@ -77,4 +75,6 @@ class Hoa_Test_Selector_Random extends Hoa_Test_Selector {
 
         return;
     }
+}
+
 }

@@ -24,71 +24,69 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Test
- *
  */
 
-/**
- * Hoa_Test_Exception
- */
-import('Test.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Test_Orchestrate
+ * \Hoa\Test\Exception
  */
-import('Test.Orchestrate');
+-> import('Test.Exception')
 
 /**
- * Hoa_Test_Praspel
+ * \Hoa\Test\Orchestrate
  */
-import('Test.Praspel.~');
+-> import('Test.Orchestrate')
 
 /**
- * Hoa_Test_Sampler_Random
+ * \Hoa\Test\Praspel
  */
-import('Test.Sampler.Random');
+-> import('Test.Praspel.~')
 
 /**
- * Hoa_Test_Selector_Random
+ * \Hoa\Test\Sampler\Random
  */
-import('Test.Selector.Random');
+-> import('Test.Sampler.Random')
 
 /**
- * Hoa_Realdom
+ * \Hoa\Test\Selector\Random
  */
-import('Realdom.~');
+-> import('Test.Selector.Random')
 
 /**
- * Class Hoa_Test.
+ * \Hoa\Realdom
+ */
+-> import('Realdom.~');
+
+}
+
+namespace Hoa\Test {
+
+/**
+ * Class \Hoa\Test.
  *
  * Make tests.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Test
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class          Hoa_Test
-    implements Hoa_Core_Parameterizable,
-               Hoa_Core_Event_Source {
+class Test implements \Hoa\Core\Parameterizable, \Hoa\Core\Event\Source {
 
     /**
      * Singleton.
      *
-     * @var Hoa_Test object
+     * @var \Hoa\Test object
      */
     private static $_instance = null;
 
     /**
-     * Parameters of Hoa_Test.
+     * Parameters of \Hoa\Test.
      *
-     * @var Hoa_Core_Parameter object
+     * @var \Hoa\Core\Parameter object
      */
     protected $_parameters    = null;
 
@@ -103,7 +101,7 @@ class          Hoa_Test
      */
     public function __construct ( Array $parameters = array() ) {
 
-        $this->_parameters = new Hoa_Core_Parameter(
+        $this->_parameters = new \Hoa\Core\Parameter(
             $this,
             array(),
             array(
@@ -123,11 +121,11 @@ class          Hoa_Test
         );
 
         $this->setParameters($parameters);
-        Hoa_Core_Event::register(
+        \Hoa\Core\Event::register(
             'hoa://Event/Test/Sample:open-iteration', 
             $this
         );
-        Hoa_Core_Event::register(
+        \Hoa\Core\Event::register(
             'hoa://Event/Test/Sample:close-iteration', 
             $this
         );
@@ -146,11 +144,11 @@ class          Hoa_Test
     public function initialize ( $directory ) {
 
         $this->setParameter('convict', $directory);
-        $orchestrate = new Hoa_Test_Orchestrate($this->_parameters);
+        $orchestrate = new Orchestrate($this->_parameters);
         $this->_parameters->shareWith(
             $this,
             $orchestrate,
-            Hoa_Core_Parameter::PERMISSION_READ
+            \Hoa\Core\Parameter::PERMISSION_READ
         );
         $orchestrate->compute();
 
@@ -165,28 +163,29 @@ class          Hoa_Test
      * @param   string  $class         Class to call.
      * @param   string  $method        Method to call.
      * @return  void
+     * @throw   \Hoa\Test\Exception
      */
     public function sample ( $contractId, $class, $method ) {
 
         if(!class_exists($class))
-            throw new Hoa_Test_Exception(
+            throw new Exception(
                 'Class %s does not exist and cannot be tested.', 0, $class);
 
-        Hoa_Realdom::setSampler(new Hoa_Test_Sampler_Random());
+        \Hoa\Realdom::setSampler(new Sampler\Random());
 
         $cut       = new $class();
         $hop       = '__hoa_' . $method . '_contract';
         $cut->$hop();
-        $praspel   = Hoa_Test_Praspel::getInstance();
+        $praspel   = Praspel::getInstance();
         $contract  = $praspel->getContract($contractId);
         $i         = 0;
 
         if(false === $contract->clauseExists('requires')) {
 
-            Hoa_Core_Event::notify(
+            \Hoa\Core\Event::notify(
                 'hoa://Event/Test/Sample:open-iteration',
                 $this,
-                new Hoa_Core_Event_Bucket(array('iteration' => $i))
+                new \Hoa\Core\Event\Bucket(array('iteration' => $i))
             );
 
             // Prevent if an exception is thrown from the called method.
@@ -199,10 +198,10 @@ class          Hoa_Test
             }
             catch ( Exception $e ) { }
 
-            Hoa_Core_Event::notify(
+            \Hoa\Core\Event::notify(
                 'hoa://Event/Test/Sample:close-iteration',
                 $this,
-                new Hoa_Core_Event_Bucket(array(
+                new \Hoa\Core\Event\Bucket(array(
                     'iteration' => $i,
                     'contract'  => $contract
                 ))
@@ -213,14 +212,14 @@ class          Hoa_Test
         }
 
         $variables = $contract->getClause('requires')->getVariables();
-        $selector  = new Hoa_Test_Selector_Random($variables);
+        $selector  = new Selector\Random($variables);
 
         foreach($selector as $e => $selection) {
 
-            Hoa_Core_Event::notify(
+            \Hoa\Core\Event::notify(
                 'hoa://Event/Test/Sample:open-iteration',
                 $this,
-                new Hoa_Core_Event_Bucket(array('iteration' => $i))
+                new \Hoa\Core\Event\Bucket(array('iteration' => $i))
             );
 
             $parameters = array(0 => $method);
@@ -239,10 +238,10 @@ class          Hoa_Test
             }
             catch ( Exception $e ) { }
 
-            Hoa_Core_Event::notify(
+            \Hoa\Core\Event::notify(
                 'hoa://Event/Test/Sample:close-iteration',
                 $this,
-                new Hoa_Core_Event_Bucket(array(
+                new \Hoa\Core\Event\Bucket(array(
                     'iteration' => $i,
                     'contract'  => $contract
                 ))
@@ -255,21 +254,12 @@ class          Hoa_Test
     }
 
     /**
-     *
-     */
-    private function _sample ( Array $variables ) {
-
-
-        return;
-    }
-
-    /**
      * Set many parameters to a class.
      *
      * @access  public
      * @param   array   $in      Parameters to set.
      * @return  void
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setParameters ( Array $in ) {
 
@@ -281,7 +271,7 @@ class          Hoa_Test
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameters ( ) {
 
@@ -295,7 +285,7 @@ class          Hoa_Test
      * @param   string  $key      Key.
      * @param   mixed   $value    Value.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setParameter ( $key, $value ) {
 
@@ -308,7 +298,7 @@ class          Hoa_Test
      * @access  public
      * @param   string  $key      Key.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameter ( $key ) {
 
@@ -322,10 +312,12 @@ class          Hoa_Test
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getFormattedParameter ( $key ) {
 
         return $this->_parameters->getFormattedParameter($this, $key);
     }
+}
+
 }

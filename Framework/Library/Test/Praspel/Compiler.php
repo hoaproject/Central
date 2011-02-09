@@ -24,56 +24,54 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_Compiler
- *
  */
 
-/**
- * Hoa_Test_Praspel_Exception
- */
-import('Test.Praspel.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Test_Praspel_Contract
+ * \Hoa\Test\Praspel\Exception
  */
-import('Test.Praspel.Contract');
+-> import('Test.Praspel.Exception')
 
 /**
- * Hoa_Compiler_Ll1
+ * \Hoa\Test\Praspel\Contract
  */
-import('Compiler.Ll1') and load();
+-> import('Test.Praspel.Contract')
 
 /**
- * Class Hoa_Test_Praspel_Compiler.
+ * \Hoa\Compiler\Ll1
+ */
+-> import('Compiler.Ll1');
+
+}
+
+namespace Hoa\Test\Praspel {
+
+/**
+ * Class \Hoa\Test\Praspel\Compiler.
  *
  * The Praspel compiler.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_Compiler
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
+class Compiler extends \Hoa\Compiler\Ll1 {
 
     /**
      * The Praspel's object model root.
      *
-     * @var Hoa_Test_Praspel object
+     * @var \Hoa\Test\Praspel object
      */
     protected $_praspel = null;
 
     /**
      * The current node in the Praspel's object model.
      *
-     * @var Hoa_Test_Praspel object
+     * @var \Hoa\Test\Praspel object
      */
     private $_current   = null;
 
@@ -636,7 +634,7 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
      */
     protected function pre ( &$in ) {
 
-        $this->_praspel = new Hoa_Test_Praspel_Contract();
+        $this->_praspel = new Contract();
 
         $search  = array('&&',  '∧',   '||', '∨' );
         $replace = array('and', 'and', 'or', 'or');
@@ -649,7 +647,7 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
      * Get the result of the compiling.
      *
      * @access  public
-     * @return  Hoa_Test_Praspel
+     * @return  \Hoa\Test\Praspel
      */
     public function getResult ( ) {
 
@@ -660,10 +658,12 @@ class Hoa_Test_Praspel_Compiler extends Hoa_Compiler_Ll1 {
      * Get the Praspel's objet model root.
      *
      * @access  public
-     * @return  Hoa_Test_Praspel
+     * @return  \Hoa\Test\Praspel
      */
     public function getRoot ( ) {
 
         return $this->_praspel;
     }
+}
+
 }

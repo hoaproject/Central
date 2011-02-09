@@ -24,54 +24,54 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_Clause_Requires
- *
  */
 
-/**
- * Hoa_Test_Praspel_Exception
- */
-import('Test.Praspel.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Test_Praspel_Clause_Contract
+ * \Hoa\Test\Praspel\Exception
  */
-import('Test.Praspel.Clause.Contract') and load();
+-> import('Test.Praspel.Exception')
 
 /**
- * Class Hoa_Test_Praspel_Clause_Requires.
+ * \Hoa\Test\Praspel\Clause\Contract
+ */
+-> import('Test.Praspel.Clause.Contract');
+
+}
+
+namespace Hoa\Test\Praspel\Clause {
+
+/**
+ * Class \Hoa\Test\Praspel\Clause\Requires.
  *
  * .
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_Clause_Requires
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Test_Praspel_Clause_Requires extends Hoa_Test_Praspel_Clause_Contract {
+class Requires extends Contract {
 
     /**
      * Declare a variable, or get it.
      *
      * @access  public
      * @param   string  $name    Variable name.
-     * @return  Hoa_Test_Praspel_Variable
+     * @return  \Hoa\Test\Praspel\Variable
      */
     public function variable ( $name ) {
 
         if($name[0] == '\\')
-            throw new Hoa_Test_Praspel_Exception(
+            throw new \Hoa\Test\Praspel\Exception(
                 'Constructors are not allowed in a @requires clause, given %s.',
                 0, $name);
 
         return parent::variable($name);
     }
+}
+
 }

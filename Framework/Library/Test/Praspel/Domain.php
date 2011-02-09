@@ -24,65 +24,63 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_Domain
- *
  */
 
-/**
- * Hoa_Test_Praspel_Exception
- */
-import('Test.Praspel.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Test_Praspel_ArrayDescription
+ * \Hoa\Test\Praspel\Exception
  */
-import('Test.Praspel.ArrayDescription');
+-> import('Test.Praspel.Exception')
 
 /**
- * Class Hoa_Test_Praspel_Domain.
+ * \Hoa\Test\Praspel\ArrayDescription
+ */
+-> import('Test.Praspel.ArrayDescription');
+
+}
+
+namespace Hoa\Test\Praspel {
+
+/**
+ * Class \Hoa\Test\Praspel\Domain.
  *
  * Represents a domain.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_Domain
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Test_Praspel_Domain {
+class Domain {
 
     /**
      * Parent (here: variable or domain).
      *
-     * @var Hoa_Test_Praspel_Variable object
+     * @var \Hoa\Test\Praspel\Variable object
      */
     protected $_parent       = null;
 
     /**
      * Domain.
      *
-     * @var Hoa_Realdom object
+     * @var \Hoa\Realdom object
      */
     protected $_domain       = null;
 
     /**
      * Domain's name.
      *
-     * @var Hoa_Test_Praspel_Domain string
+     * @var \Hoa\Test\Praspel\Domain string
      */
     protected $_name         = null;
 
     /**
      * Arguments.
      *
-     * @var Hoa_Test_Praspel_Domain array
+     * @var \Hoa\Test\Praspel\Domain array
      */
     protected $_arguments    = array();
 
@@ -90,7 +88,7 @@ class Hoa_Test_Praspel_Domain {
      * Current defining argument.
      * Yes, it is a public access, but we have no choice… It should be friend.
      *
-     * @var Hoa_Test_Praspel_Domain mixed
+     * @var \Hoa\Test\Praspel\Domain mixed
      */
     public $_currentArgument = null;
 
@@ -98,7 +96,7 @@ class Hoa_Test_Praspel_Domain {
      * Go forward to set the next argument on the current domain (and carry the
      * current used domain).
      *
-     * @var Hoa_Test_Praspel_Domain object
+     * @var \Hoa\Test\Praspel\Domain object
      */
     public $_comma           = null;
 
@@ -111,7 +109,7 @@ class Hoa_Test_Praspel_Domain {
      * @param   mixed   $parent    Parent (here: variable or domain).
      * @param   string  $name      Domain name.
      * @return  void
-     * @throws  Hoa_Test_Praspel_Exception
+     * @throws  \Hoa\Test\Praspel\Exception
      */
     public function __construct ( $parent, $name ) {
 
@@ -127,13 +125,13 @@ class Hoa_Test_Praspel_Domain {
      *
      * @access  public
      * @param   mixed  $argument    Argument.
-     * @return  Hoa_Test_Praspel_Variable
+     * @return  \Hoa\Test\Praspel\Variable
      */
     public function with ( $argument ) {
 
         $name = $this->getName();
 
-        switch(strtolower($this->getName())) {
+        switch($name) {
 
             case 'constboolean':
             case 'constfloat':
@@ -156,7 +154,7 @@ class Hoa_Test_Praspel_Domain {
                       break;
 
                     default:
-                        throw new Hoa_Test_Praspel_Exception(
+                        throw new Exception(
                             'The with() method does not support the type %s.',
                             0, gettype($argument));
                 }
@@ -173,11 +171,11 @@ class Hoa_Test_Praspel_Domain {
      * Add an array argument to the current defining domain.
      *
      * @access  public
-     * @return  Hoa_Test_Praspel_ArrayDescription
+     * @return  \Hoa\Test\Praspel\ArrayDescription
      */
     public function withArray ( ) {
 
-        $this->_currentArgument = new Hoa_Test_Praspel_ArrayDescription($this);
+        $this->_currentArgument = new ArrayDescription($this);
         $this->_arguments[]     = &$this->_currentArgument;
 
         return $this->_currentArgument;
@@ -188,7 +186,7 @@ class Hoa_Test_Praspel_Domain {
      *
      * @access  public
      * @param   string  $name    Domain name.
-     * @return  Hoa_Test_Praspel_Variable
+     * @return  \Hoa\Test\Praspel\Variable
      */
     public function withDomain ( $name ) {
 
@@ -202,7 +200,7 @@ class Hoa_Test_Praspel_Domain {
      * Close a session/context and return the parent.
      *
      * @access  public
-     * @return  Hoa_Test_Praspel_Variable
+     * @return  \Hoa\Test\Praspel\Variable
      */
     public function _ok ( ) {
 
@@ -224,40 +222,18 @@ class Hoa_Test_Praspel_Domain {
      * @param   string  $name         Domain name.
      * @param   array   $arguments    Domain arguments.
      * @return  void
-     * @throws  Hoa_Core_Exception
+     * @throws  \Hoa\Core\Exception
      */
     protected function _factory ( $name, Array $arguments ) {
 
-        $name  = ucfirst(strtolower($name));
-        $class = 'Hoa_Realdom_' . $name;
-
-        import('Realdom.' . $name);
-
-        try {
-
-            $reflection  = new ReflectionClass($class);
-
-            if(true === $reflection->hasMethod('__construct'))
-                return $reflection->newInstanceArgs($arguments);
-            else
-                return $reflection->newInstance();
-        }
-        catch ( ReflectionException $e ) {
-
-            throw new Hoa_Test_Praspel_Exception(
-                $e->getMessage(),
-                $e->getCode()
-            );
-        }
-
-        return;
+        return dnew('Hoa\Realdom\\' . ucfirst($name), $arguments);
     }
 
     /**
      * Get the found domain.
      *
      * @access  public
-     * @return  Hoa_Realdom
+     * @return  \Hoa\Realdom
      */
     public function getDomain ( ) {
 
@@ -275,14 +251,14 @@ class Hoa_Test_Praspel_Domain {
      *
      * @access  protected
      * @param   mixed  $parent    Parent (here: variable or domain).
-     * @return  Hoa_Test_Praspel_Variable
+     * @return  \Hoa\Test\Praspel\Variable
      */
     protected function setParent ( $parent ) {
 
-        if(   !($parent instanceof Hoa_Test_Praspel_Variable)
-           && !($parent instanceof Hoa_Test_Praspel_Domain)
-           && !($parent instanceof Hoa_Test_Praspel_ArrayDescription))
-           throw new Hoa_Test_Praspel_Exception(
+        if(   !($parent instanceof Variable)
+           && !($parent instanceof Domain)
+           && !($parent instanceof ArrayDescription))
+           throw new Exception(
                 'Parent of a domain must be a variable, a domain or an array ' .
                 'description, given %s.',
                 1, get_class($parent));
@@ -297,7 +273,7 @@ class Hoa_Test_Praspel_Domain {
      * Get the parent (here: variable or domain).
      *
      * @access  public
-     * @return  Hoa_Test_Praspel_Variable
+     * @return  \Hoa\Test\Praspel\Variable
      */
     public function getParent ( ) {
 
@@ -312,6 +288,16 @@ class Hoa_Test_Praspel_Domain {
      * @return  string
      */
     protected function setName ( $name ) {
+
+        $name = strtolower($name);
+
+        switch($name) {
+
+            case 'empty':
+            case 'array':
+                $name = '_' . $name;
+              break;
+        }
 
         $old         = $this->_name;
         $this->_name = $name;
@@ -340,4 +326,6 @@ class Hoa_Test_Praspel_Domain {
 
         return $this->_arguments;
     }
+}
+
 }

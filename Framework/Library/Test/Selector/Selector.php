@@ -24,39 +24,37 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Selector
- *
  */
 
-/**
- * Hoa_Iterator
- */
-import('Iterator.~') and load();
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Test_Selector.
+ * \Hoa\Iterator
+ */
+-> import('Iterator.~');
+
+}
+
+namespace Hoa\Test\Selector {
+
+/**
+ * Class \Hoa\Test\Selector.
  *
  * .
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Selector
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2008 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-abstract class Hoa_Test_Selector implements Hoa_Iterator {
+abstract class Selector implements \Hoa\Iterator {
 
     /**
      * Selections of domains for variables.
      *
-     * @var Hoa_Test_Selector array
+     * @var \Hoa\Test\Selector array
      */
     protected $_selections = array();
 
@@ -138,4 +136,6 @@ abstract class Hoa_Test_Selector implements Hoa_Iterator {
 
         return $return;
     }
+}
+
 }

@@ -24,59 +24,31 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_Constructor_Old
- *
  */
 
-/**
- * Hoa_Test_Praspel_Exception
- */
-import('Test.Praspel.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Test_Praspel_Variable
+ * \Hoa\Test\Praspel\Variable
  */
-import('Test.Praspel.Variable') and load();
+-> import('Test.Praspel.Variable');
+
+}
+
+namespace Hoa\Test\Praspel\Constructor {
 
 /**
- * Hoa_Visitor_Element
- */
-import('Visitor.Element') and load();
-
-/**
- * Class Hoa_Test_Praspel_Constructor_Old.
+ * Class \Hoa\Test\Praspel\Constructor\Old.
  *
  * Represents the \old(e) constructor, the value of e in pre-state.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Test
- * @subpackage  Hoa_Test_Praspel_Constructor_Old
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class          Hoa_Test_Praspel_Constructor_Old
-    extends    Hoa_Test_Praspel_Variable
-    implements Hoa_Visitor_Element {
+class Old extends \Hoa\Test\Praspel\Variable { }
 
-    /**
-     * Accept a visitor.
-     *
-     * @access  public
-     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
-     * @param   mixed              &$handle    Handle (reference).
-     * @param   mixed              $eldnah     Handle (no reference).
-     * @return  mixed
-     */
-    public function accept ( Hoa_Visitor_Visit $visitor,
-                             &$handle = null, $eldnah = null ) {
-
-        return $visitor->visit($this, $handle, $eldnah);
-    }
 }
