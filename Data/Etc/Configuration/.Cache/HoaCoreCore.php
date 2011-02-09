@@ -37,6 +37,7 @@ return array (
     'protocol.Data/Variable/Private' => '(:%protocol.Data/Variable:)Private/',
     'protocol.Data/Variable/Test' => '(:%protocol.Data/Variable:)Test/',
     'protocol.Library' => '(:%framework.library:)/',
-    'foo' => 'bar'
+    'namespace.prefix.Hoa' => '(:%framework.library:)',
+    'namespace.prefix.Hoathis' => '(:%framework.module:)',
   ),
 );

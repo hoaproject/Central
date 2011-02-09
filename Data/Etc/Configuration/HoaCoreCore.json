@@ -39,6 +39,9 @@
         "protocol.Data/Variable/Private" : "(:%protocol.Data/Variable:)Private/",
         "protocol.Data/Variable/Test"    : "(:%protocol.Data/Variable:)Test/",
         "protocol.Data"                  : "(:%root.data:)/",
-        "protocol.Library"               : "(:%framework.library:)/"
+        "protocol.Library"               : "(:%framework.library:)/",
+
+        "namespace.prefix.Hoa"           : "(:%framework.library:)",
+        "namespace.prefix.Hoathis"       : "(:%framework.module:)/"
     }
 }
