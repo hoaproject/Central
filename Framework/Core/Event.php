@@ -91,9 +91,9 @@ class Bucket {
      * @return  void
      * @throws  \Hoa\Core\Exception
      */
-    public function send ( $eventId, \Hoa\Core\Event\Source $source) {
+    public function send ( $eventId, Source $source) {
 
-        return \Hoa\Core\Event::notify($eventId, $source, $this);
+        return Event::notify($eventId, $source, $this);
     }
 
     /**
@@ -103,7 +103,7 @@ class Bucket {
      * @param   \Hoa\Core\Event\Source  $source    Source.
      * @return  \Hoa\Core\Event\Source
      */
-    public function setSource ( \Hoa\Core\Event\Source $source ) {
+    public function setSource ( Source $source ) {
 
         $old           = $this->_source;
         $this->_source = $source;
@@ -131,7 +131,7 @@ class Bucket {
      */
     public function setData ( $data ) {
 
-        $old          = $this->_data;
+        $old         = $this->_data;
         $this->_data = $data;
 
         return $old;
@@ -148,10 +148,6 @@ class Bucket {
         return $this->_data;
     }
 }
-
-}
-
-namespace Hoa\Core {
 
 /**
  * Class \Hoa\Core\Event.
@@ -237,7 +233,7 @@ class Event {
      * @return  void
      * @throws  \Hoa\Core\Exception
      */
-    public static function register ( $eventId, \Hoa\Core\Event\Source $source ) {
+    public static function register ( $eventId, Source $source ) {
 
         if(true === self::eventExists($eventId))
             throw new \Hoa\Core\Exception(
@@ -319,9 +315,7 @@ class Event {
      * @return  void
      * @throws  \Hoa\Core\Exception
      */
-    public static function notify ( $eventId,
-                                    \Hoa\Core\Event\Source $source,
-                                    \Hoa\Core\Event\Bucket $data ) {
+    public static function notify ( $eventId, Source $source, Bucket $data ) {
 
         if(false === self::eventExists($eventId))
             throw new \Hoa\Core\Exception(
@@ -358,8 +352,10 @@ class Event {
             if(     null === $callback[self::CALLBACK_METHOD]
                 && ($callback[self::CALLBACK_OBJECT] instanceof \Hoa\Stream\IStream\Out))
                 $callback[self::CALLBACK_OBJECT]->$method($handle);
+
             elseif($callback[self::CALLBACK_OBJECT] instanceof \Closure)
                 $callback[self::CALLBACK_OBJECT]($data);
+
             else
                 call_user_func_array(
                     array(
@@ -402,5 +398,11 @@ function event ( $eventId ) {
 
     return \Hoa\Core\Event::getEvent($eventId);
 }}
+
+/**
+ * Make the alias automatically (because it's not imported with the import()
+ * function.
+ */
+class_alias('Hoa\Core\Event\Event', 'Hoa\Core\Event');
 
 }
