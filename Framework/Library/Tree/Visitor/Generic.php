@@ -26,22 +26,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Tree\Exception
- */
--> import('Tree.Exception')
-
-/**
- * \Hoa\Visitor\Registry
- */
--> import('Visitor.Registry');
-
-}
-
 namespace Hoa\Tree\Visitor {
 
 /**
@@ -54,7 +38,7 @@ namespace Hoa\Tree\Visitor {
  * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-abstract class Generic extends \Hoa\Visitor\Registry {
+abstract class Generic {
 
     /**
      * Pre-order traversal.
@@ -80,7 +64,7 @@ abstract class Generic extends \Hoa\Visitor\Registry {
     /**
      * Traversal order.
      *
-     * @var \Hoa\Tree\Visitor\Abstract int
+     * @var \Hoa\Tree\Visitor\Generic int
      */
     protected $_order = self::PRE_ORDER;
 
