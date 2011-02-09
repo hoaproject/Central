@@ -60,35 +60,35 @@ class Php extends \Hoa\Visitor\Registry {
     public function __construct ( ) {
 
         $this->addEntry(
-            '\Hoa\Test\Praspel\Contract',
+            'Hoa\Test\Praspel\Contract',
             array($this, 'visitContract')
         );
         $this->addEntry(
-            '\Hoa\Test\Praspel\Clause\Ensures',
+            'Hoa\Test\Praspel\Clause\Ensures',
             array($this, 'visitClauseContract')
         );
         $this->addEntry(
-            '\Hoa\Test\Praspel\Clause\Invariant',
+            'Hoa\Test\Praspel\Clause\Invariant',
             array($this, 'visitClauseContract')
         );
         $this->addEntry(
-            '\Hoa\Test\Praspel\Clause\Requires',
+            'Hoa\Test\Praspel\Clause\Requires',
             array($this, 'visitClauseContract')
         );
         $this->addEntry(
-            '\Hoa\Test\Praspel\Clause\Throwable',
+            'Hoa\Test\Praspel\Clause\Throwable',
             array($this, 'visitClauseThrowable')
         );
         $this->addEntry(
-            '\Hoa\Test\Praspel\Variable',
+            'Hoa\Test\Praspel\Variable',
             array($this, 'visitDomainDisjunction')
         );
         $this->addEntry(
-            '\Hoa\Test\Praspel\Constructor\Old',
+            'Hoa\Test\Praspel\Constructor\Old',
             array($this, 'visitConstructorOld')
         );
         $this->addEntry(
-            '\Hoa\Test\Praspel\Constructor\Result',
+            'Hoa\Test\Praspel\Constructor\Result',
             array($this, 'visitDomainDisjunction')
         );
 
