@@ -24,35 +24,33 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Data
- *
  */
 
-/**
- * Hoa_Test
- */
-import('Test.~');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_File_Finder
+ * \Hoa\Test
  */
-import('File.Finder');
+-> import('Test.~')
+
+/**
+ * \Hoa\File\Finder
+ */
+-> import('File.Finder');
 
 /**
  * Class RemoveCommand.
  *
  * .
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class RemoveCommand extends Hoa_Console_Command_Generic {
+class RemoveCommand extends \Hoa\Console\Command\Generic {
 
     /**
      * Author name.
@@ -91,13 +89,13 @@ class RemoveCommand extends Hoa_Console_Command_Generic {
     public function main ( ) {
 
         $repository = null;
-        $test       = new Hoa_Test();
+        $test       = new \Hoa\Test();
         $repos      = $test->getFormattedParameter('repository');
-        $finder     = new Hoa_File_Finder(
+        $finder     = new \Hoa\File\Finder(
             $repos,
-            Hoa_File_Finder::LIST_DIRECTORY,
-            Hoa_File_Finder::SORT_MTIME |
-            Hoa_File_Finder::SORT_REVERSE
+            \Hoa\File\Finder::LIST_DIRECTORY,
+            \Hoa\File\Finder::SORT_MTIME |
+            \Hoa\File\Finder::SORT_REVERSE
         );
         $revision   = basename($finder->getIterator()->current());
         $rev        = false;
@@ -138,7 +136,7 @@ class RemoveCommand extends Hoa_Console_Command_Generic {
         $repository = $repos . $revision;
 
         if(!is_dir($repository))
-            throw new Hoa_Console_Command_Exception(
+            throw new \Hoa\Console\Command\Exception(
                 'Repository %s does not exist.', 0, $repository);
 
         if(false === $finder->getIterator()->current()) {
@@ -153,7 +151,7 @@ class RemoveCommand extends Hoa_Console_Command_Generic {
         cout(parent::stylize('Important', 'attention'));
         $sure = cin(
             'Are you sure to delete ' . parent::stylize($repository, 'info') . '?',
-            Hoa_Console_Core_Io::TYPE_YES_NO
+            \Hoa\Console\Core\Io::TYPE_YES_NO
         );
 
         if(false === $sure && true === $verbose) {
@@ -202,4 +200,6 @@ class RemoveCommand extends Hoa_Console_Command_Generic {
 
         return HC_SUCCESS;
     }
+}
+
 }

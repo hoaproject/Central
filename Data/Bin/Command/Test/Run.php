@@ -24,50 +24,48 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Data
- *
  */
 
-/**
- * Hoa_Test
- */
-import('Test.~');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Test_Praspel
+ * \Hoa\Test
  */
-import('Test.Praspel.~');
+-> import('Test.~')
 
 /**
- * Hoa_Test_Praspel_Visitor_Praspel
+ * \Hoa\Test\Praspel
  */
-import('Test.Praspel.Visitor.Praspel');
+-> import('Test.Praspel.~')
 
 /**
- * Hoa_File_Finder
+ * \Hoa\Test\Praspel\Visitor\Praspel
  */
-import('File.Finder');
+-> import('Test.Praspel.Visitor.Praspel')
 
 /**
- * Hoa_Php_Io_Out
+ * \Hoa\File\Finder
  */
-import('Php.Io.Out');
+-> import('File.Finder')
+
+/**
+ * \Hoa\Php\Io\Out
+ */
+-> import('Php.Io.Out');
 
 /**
  * Class RunCommand.
  *
  * .
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Out extends Hoa_Php_Io_Out {
+class Out extends \Hoa\Php\Io\Out {
 
     public $self = null;
 
@@ -77,7 +75,7 @@ class Out extends Hoa_Php_Io_Out {
         $args = null;
         $res  = null;
 
-        if(Hoa_Test_Praspel::LOG_TYPE_INVARIANT === $_['type']) {
+        if(\Hoa\Test\Praspel::LOG_TYPE_INVARIANT === $_['type']) {
 
            if(SUCCEED === $_['status'])
                return;
@@ -117,7 +115,7 @@ class Out extends Hoa_Php_Io_Out {
         return;
     }
 
-    public function writeOpenIteration ( Hoa_Core_Event_Bucket $event ) {
+    public function writeOpenIteration ( \Hoa\Core\Event\Bucket $event ) {
 
         $data = $event->getData();
 
@@ -128,7 +126,7 @@ class Out extends Hoa_Php_Io_Out {
         return;
     }
 
-    public function writeCloseIteration ( Hoa_Core_Event_Bucket $event ) {
+    public function writeCloseIteration ( \Hoa\Core\Event\Bucket $event ) {
 
         $data = $event->getData();
 
@@ -144,12 +142,12 @@ class Out extends Hoa_Php_Io_Out {
     }
 }
 
-class ContractCovering extends Hoa_Test_Praspel_Visitor_Praspel {
+class ContractCovering extends \Hoa\Test\Praspel\Visitor\Praspel {
 
-    public function visitDomainDisjunction ( Hoa_Visitor_Element $element,
+    public function visitDomainDisjunction ( \Hoa\Visitor\Element $element,
                                              &$handle = null, $eldnah = null ) {
 
-        if(!($element instanceof Hoa_Test_Praspel_Variable))
+        if(!($element instanceof \Hoa\Test\Praspel\Variable))
             return parent::visitDomainDisjunction($element, $handle, $eldnah);
 
         $domains = $this->formatArguments($element->getDomains());
@@ -161,9 +159,9 @@ class ContractCovering extends Hoa_Test_Praspel_Visitor_Praspel {
         foreach($element->getDomains() as $d) {
 
             if($d === $domain)
-                $domains[$i] = Hoa_Console_Interface_Style::stylize(
+                $domains[$i] = \Hoa\Console\Interface\Style::stylize(
                     $domains[$i],
-                    Hoa_Console_Interface_Style::COLOR_FOREGROUND_YELLOW
+                    \Hoa\Console\Interface\Style::COLOR_FOREGROUND_YELLOW
                 );
             else
                 $domains[$i] = $domains[$i];
@@ -175,7 +173,7 @@ class ContractCovering extends Hoa_Test_Praspel_Visitor_Praspel {
     }
 }
 
-class RunCommand extends Hoa_Console_Command_Generic {
+class RunCommand extends \Hoa\Console\Command\Generic {
 
     /**
      * Author name.
@@ -224,13 +222,13 @@ class RunCommand extends Hoa_Console_Command_Generic {
         $iteration  = 1;
         $sampler    = true;
 
-        $test       = new Hoa_Test();
+        $test       = new \Hoa\Test();
         $repos      = $test->getFormattedParameter('repository');
-        $finder     = new Hoa_File_Finder(
+        $finder     = new \Hoa\File\Finder(
             $repos,
-            Hoa_File_Finder::LIST_DIRECTORY,
-            Hoa_File_Finder::SORT_MTIME |
-            Hoa_File_Finder::SORT_REVERSE
+            \Hoa\File\Finder::LIST_DIRECTORY,
+            \Hoa\File\Finder::SORT_MTIME |
+            \Hoa\File\Finder::SORT_REVERSE
         );
         $revision   = basename($finder->getIterator()->current());
         $rev        = false;
@@ -282,7 +280,7 @@ class RunCommand extends Hoa_Console_Command_Generic {
         $repository = $repos . $revision;
 
         if(!is_dir($repository))
-            throw new Hoa_Console_Command_Exception(
+            throw new \Hoa\Console\Command\Exception(
                 'Repository %s does not exist.', 0, $repository);
 
         $test->setParameter('revision', $revision . DS);
@@ -293,7 +291,7 @@ class RunCommand extends Hoa_Console_Command_Generic {
         $instrumented = $test->getFormattedParameter('instrumented');
 
         if(!file_exists($instrumented . $file))
-            throw new Hoa_Console_Command_Exception(
+            throw new \Hoa\Console\Command\Exception(
                 'File %s does not exist in repository %s.',
                 1, array($file, $repository));
 
@@ -309,20 +307,12 @@ class RunCommand extends Hoa_Console_Command_Generic {
         $out = new Out();
         $out->self = $this; // berk…
 
-        event('hoa://Event/Log/' . Hoa_Test_Praspel::LOG_CHANNEL)
+        event('hoa://Event/Log/' . \Hoa\Test\Praspel::LOG_CHANNEL)
             ->attach($out);
         event('hoa://Event/Test/Sample:open-iteration')
             ->attach($out, 'writeOpenIteration');
         event('hoa://Event/Test/Sample:close-iteration')
             ->attach($out, 'writeCloseIteration');
-
-        import('File.Write') and load();
-
-        $f = new Hoa_File_Write('hoa://Data/Temporary/Test.txt');
-        $f->writeAll('foobar2' . "\n");
-        $f->truncate(4);
-
-        return;
 
         for($i = 1; $iteration > 0; --$iteration, ++$i) {
 
@@ -330,13 +320,13 @@ class RunCommand extends Hoa_Console_Command_Generic {
 
                 $contractId = $class . '::' . $method;
                 $test->sample($contractId, $class, $method);
-                $contract   = Hoa_Test_Praspel::getInstance()->getContract(
+                $contract   = \Hoa\Test\Praspel::getInstance()->getContract(
                     $contractId
                 );
             }
-            catch ( Hoa_Test_Exception $e ) {
+            catch ( \Hoa\Test\Exception $e ) {
 
-                throw new Hoa_Console_Command_Exception(
+                throw new \Hoa\Console\Command\Exception(
                     $e->getFormattedMessage(), $e->getCode());
             }
 
@@ -370,4 +360,6 @@ class RunCommand extends Hoa_Console_Command_Generic {
 
         return HC_SUCCESS;
     }
+}
+
 }

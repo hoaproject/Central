@@ -24,50 +24,47 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Data
- *
  */
 
-/**
- * Hoa_Test_Praspel_Compiler
- */
-import('Test.Praspel.Compiler');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Test_Sampler_Random
+ * \Hoa\Test\Praspel\Compiler
  */
-import('Test.Sampler.Random');
+-> import('Test.Praspel.Compiler')
 
 /**
- * Hoa_Test_Selector_Random
+ * \Hoa\Test\Sampler\Random
  */
-import('Test.Selector.Random');
+-> import('Test.Sampler.Random')
 
 /**
- * Hoa_Realdom
+ * \Hoa\Test\Selector\Random
  */
-import('Realdom.~');
+-> import('Test.Selector.Random')
 
 /**
- * Hoa_File_Read
+ * \Hoa\Realdom
  */
-import('File.Read');
+-> import('Realdom.~')
+
+/**
+ * \Hoa\File\Read
+ */
+-> import('File.Read');
 
 /**
  * Class PraspelCommand.
  *
  * Interactive interpreter for Praspel.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
  */
 
-class PraspelCommand extends Hoa_Console_Command_Generic {
+class PraspelCommand extends \Hoa\Console\Command\Generic {
 
     /**
      * Author name.
@@ -123,7 +120,7 @@ class PraspelCommand extends Hoa_Console_Command_Generic {
 
         if(null !== $filename) {
 
-            $file = new Hoa_File_Read($filename);
+            $file = new \Hoa\File\Read($filename);
             $code = $file->readAll();
         }
         else
@@ -132,14 +129,14 @@ class PraspelCommand extends Hoa_Console_Command_Generic {
         if(null === $code)
             $code = 'h';
 
-        $compiler = new Hoa_Test_Praspel_Compiler();
+        $compiler = new \Hoa\Test\Praspel\Compiler();
         $praspel  = null;
         $ccode    = null;
         $variable = null;
         $domain   = null;
         $selector = 
 
-        Hoa_Realdom::setSampler(new Hoa_Test_Sampler_Random());
+        \Hoa\Realdom::setSampler(new \Hoa\Test\Sampler\Random());
 
         do {
 
@@ -170,7 +167,7 @@ class PraspelCommand extends Hoa_Console_Command_Generic {
                         break;
                     }
 
-                    $selection = new Hoa_Test_Selector_Random(
+                    $selection = new \Hoa\Test\Selector\Random(
                         $praspel->getClause('requires')->getVariables()
                     );
                     var_dump($variable->selectDomain($selection->current())->sample());
@@ -187,12 +184,12 @@ class PraspelCommand extends Hoa_Console_Command_Generic {
 
                     try {
 
-                        $compiler = new Hoa_Test_Praspel_Compiler();
+                        $compiler = new \Hoa\Test\Praspel\Compiler();
                         $compiler->compile($code);
 
                         $praspel  = $compiler->getRoot();
                     }
-                    catch ( Hoa_Exception $e ) {
+                    catch ( \Hoa\Core\Exception $e ) {
 
                         $e->raiseError();
 
@@ -200,7 +197,7 @@ class PraspelCommand extends Hoa_Console_Command_Generic {
                     }
 
                     $variable  = $praspel->getClause('requires')->getVariable('i');
-                    $selection = new Hoa_Test_Selector_Random(
+                    $selection = new \Hoa\Test\Selector\Random(
                         $praspel->getClause('requires')->getVariables()
                     );
                     var_dump($variable->selectDomain($selection->current())->sample());
@@ -210,8 +207,8 @@ class PraspelCommand extends Hoa_Console_Command_Generic {
 
         } while('quit' != $code = cin(
                                       '> ',
-                                      Hoa_Console_Core_Io::TYPE_NORMAL,
-                                      Hoa_Console_Core_Io::NO_NEW_LINE
+                                      \Hoa\Console\Core\Io::TYPE_NORMAL,
+                                      \Hoa\Console\Core\Io::NO_NEW_LINE
                                   ));
 
         return HC_SUCCESS;
@@ -234,4 +231,6 @@ class PraspelCommand extends Hoa_Console_Command_Generic {
 
         return HC_SUCCESS;
     }
+}
+
 }
