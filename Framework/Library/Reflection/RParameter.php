@@ -24,86 +24,82 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Reflection
- * @subpackage  Hoa_Reflection_RParameter
- *
  */
 
-/**
- * Hoa_Reflection_Wrapper
- */
-import('Reflection.Wrapper') and load();
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Reflection_RClass
+ * \Hoa\Reflection\Wrapper
  */
-import('Reflection.RClass');
+-> import('Reflection.Wrapper')
 
 /**
- * Hoa_Visitor_Element
+ * \Hoa\Reflection\RClass
  */
-import('Visitor.Element') and load();
+-> import('Reflection.RClass')
 
 /**
- * Class Hoa_Reflection_RParameter.
+ * \Hoa\Visitor\Element
+ */
+-> import('Visitor.Element');
+
+}
+
+namespace Hoa\Reflection {
+
+/**
+ * Class \Hoa\Reflection\RParameter.
  *
  * Extending ReflectionParameter capacities.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Reflection
- * @subpackage  Hoa_Reflection_RParameter
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class          Hoa_Reflection_RParameter
-    extends    Hoa_Reflection_Wrapper
-    implements Hoa_Visitor_Element {
+class RParameter extends Wrapper implements \Hoa\Visitor\Element {
 
     /**
      * Parameter type (a string or an object).
      *
-     * @var Hoa_Reflection_RParameter mixed
+     * @var \Hoa\Reflection\RParameter mixed
      */
     protected $_type         = null;
 
     /**
      * Whether the parameter is passed by reference.
      *
-     * @var Hoa_Reflection_RParameter bool
+     * @var \Hoa\Reflection\RParameter bool
      */
     protected $_byReference  = false;
 
     /**
      * Parameter name.
      *
-     * @var Hoa_Reflection_RParameter string
+     * @var \Hoa\Reflection\RParameter string
      */
     protected $_name         = null;
 
     /**
      * Parameter default value.
      *
-     * @var Hoa_Reflection_RParameter mixed
+     * @var \Hoa\Reflection\RParameter mixed
      */
     protected $_defaultValue = null;
 
     /**
      * Whether the parameter is optional or not.
      *
-     * @var Hoa_Reflection_RParameter bool
+     * @var \Hoa\Reflection\RParameter bool
      */
     protected $_optional     = false;
 
     /**
      * Parameter position.
      *
-     * @var Hoa_Reflection_RParameter int
+     * @var \Hoa\Reflection\RParameter int
      */
     protected $_position     = 0;
 
@@ -120,10 +116,10 @@ class          Hoa_Reflection_RParameter
      */
     public function __construct ( $function, $parameter = null ) {
 
-        if($function instanceof ReflectionParameter)
+        if($function instanceof \ReflectionParameter)
             $p = $function;
         else
-            $p = new ReflectionParameter($function, $parameter);
+            $p = new \ReflectionParameter($function, $parameter);
 
         $this->setWrapped($p);
         $this->setType($p->isArray() ? 'Array' : $p->getClass());
@@ -150,8 +146,8 @@ class          Hoa_Reflection_RParameter
      */
     public function setType ( $type ) {
 
-        if($type instanceof ReflectionClass)
-            $type = new Hoa_Reflection_RClass($type);
+        if($type instanceof \ReflectionClass)
+            $type = new RClass($type);
 
         $old         = $this->_type;
         $this->_type = $type;
@@ -183,8 +179,8 @@ class          Hoa_Reflection_RParameter
         if(!is_object($type))
             return $type;
 
-        if(   ($type instanceof ReflectionClass)
-           || ($type instanceof Hoa_Reflection_RClass))
+        if(   ($type instanceof \ReflectionClass)
+           || ($type instanceof RClass))
             return $type->getName();
 
         return get_class($type);
@@ -366,14 +362,16 @@ class          Hoa_Reflection_RParameter
      * Accept a visitor.
      *
      * @access  public
-     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   \Hoa\Visitor\Visit  $visitor    Visitor.
      * @param   mixed              &$handle    Handle (reference).
      * @param   mixed              $eldnah     Handle (no reference).
      * @return  mixed
      */
-    public function accept ( Hoa_Visitor_Visit $visitor,
+    public function accept ( \Hoa\Visitor\Visit $visitor,
                              &$handle = null, $eldnah = null ) {
 
         return $visitor->visit($this, $handle, $eldnah);
     }
+}
+
 }

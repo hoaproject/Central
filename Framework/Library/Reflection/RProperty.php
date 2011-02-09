@@ -24,74 +24,70 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Reflection
- * @subpackage  Hoa_Reflection_RProperty
- *
  */
 
-/**
- * Hoa_Reflection_Wrapper
- */
-import('Reflection.Wrapper') and load();
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Visitor_Element
+ * \Hoa\Reflection\Wrapper
  */
-import('Visitor.Element') and load();
+-> import('Reflection.Wrapper')
 
 /**
- * Class Hoa_Reflection_RProperty.
+ * \Hoa\Visitor\Element
+ */
+-> import('Visitor.Element');
+
+}
+
+namespace Hoa\Reflection {
+
+/**
+ * Class \Hoa\Reflection\RProperty.
  *
  * Extending ReflectionProperty.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Reflection
- * @subpackage  Hoa_Reflection_RProperty
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class          Hoa_Reflection_RProperty
-    extends    Hoa_Reflection_Wrapper
-    implements Hoa_Visitor_Element {
+class RProperty extends Wrapper implements \Hoa\Visitor\Element {
 
     /**
      * Function comment content.
      *
-     * @var Hoa_Reflection_RProperty string
+     * @var \Hoa\Reflection\RProperty string
      */
     protected $_comment        = null;
 
     /**
      * Function name.
      *
-     * @var Hoa_Reflection_RProperty string
+     * @var \Hoa\Reflection\RProperty string
      */
     protected $_name           = null;
 
     /**
      * Method visibility.
      *
-     * @var Hoa_Reflection_RProperty int
+     * @var \Hoa\Reflection\RProperty int
      */
     protected $_visibility     = _public;
 
     /**
      * Memory stack where the method is declared.
      *
-     * @var Hoa_Reflection_RProperty int
+     * @var \Hoa\Reflection\RProperty int
      */
     protected $_memoryStack    = _dynamic;
 
     /**
      * Default value.
      *
-     * @var Hoa_Reflection_RProperty string
+     * @var \Hoa\Reflection\RProperty string
      */
     protected $_defaultValue   = null;
 
@@ -378,14 +374,16 @@ class          Hoa_Reflection_RProperty
      * Accept a visitor.
      *
      * @access  public
-     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   \Hoa\Visitor\Visit  $visitor    Visitor.
      * @param   mixed              &$handle    Handle (reference).
      * @param   mixed              $eldnah     Handle (no reference).
      * @return  mixed
      */
-    public function accept ( Hoa_Visitor_Visit $visitor,
+    public function accept ( \Hoa\Visitor\Visit $visitor,
                              &$handle = null, $eldnah = null ) {
 
         return $visitor->visit($this, $handle, $eldnah);
     }
+}
+
 }

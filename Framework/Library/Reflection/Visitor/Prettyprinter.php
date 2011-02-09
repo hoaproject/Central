@@ -24,34 +24,32 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Reflection
- * @subpackage  Hoa_Reflection_Visitor_Prettyprinter
- *
  */
 
-/**
- * Hoa_Visitor_Registry
- */
-import('Visitor.Registry') and load();
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Reflection_Visitor_Prettyprinter.
+ * \Hoa\Visitor\Registry
+ */
+-> import('Visitor.Registry');
+
+}
+
+namespace Hoa\Reflection\Visitor {
+
+/**
+ * Class \Hoa\Reflection\Visitor\Prettyprinter.
  *
  * Pretty-print the reflection.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Reflection
- * @subpackage  Hoa_Reflection_Visitor_Prettyprinter
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Reflection_Visitor_Prettyprinter extends Hoa_Visitor_Registry {
+class Prettyprinter extends \Hoa\Visitor\Registry {
 
     /**
      * Initialize aggregated visitor.
@@ -62,28 +60,28 @@ class Hoa_Reflection_Visitor_Prettyprinter extends Hoa_Visitor_Registry {
     public function __construct ( ) {
 
         $this->addEntry(
-            'Hoa_Reflection_RClass',
+            'Hoa\Reflection\RClass',
             array($this, 'visitClass')
         );
         $this->addEntry(
-            'Hoa_Reflection_RParameter',
+            'Hoa\Reflection\RParameter',
             array($this, 'visitParameter')
         );
         $this->addEntry(
-            'Hoa_Reflection_RProperty',
+            'Hoa\Reflection\RProperty',
             array($this, 'visitProperty')
         );
         $this->addEntry(
-            'Hoa_Reflection_RFunction_RMethod',
+            'Hoa\Reflection\RFunction\RMethod',
             array($this, 'visitMethod')
         );
 
         $this->addEntry(
-            'Hoa_Reflection_Fragment_RParameter',
+            'Hoa\Reflection\Fragment\RParameter',
             array($this, 'visitParameter')
         );
         $this->addEntry(
-            'Hoa_Reflection_Fragment_RMethod',
+            'Hoa\Reflection\Fragment\RMethod',
             array($this, 'visitMethod')
         );
 
@@ -94,12 +92,12 @@ class Hoa_Reflection_Visitor_Prettyprinter extends Hoa_Visitor_Registry {
      * Visit an element.
      *
      * @access  public
-     * @param   Hoa_Visitor_Element  $element    Element to visit.
-     * @param   mixed                &$handle    Handle (reference).
-     * @param   mixed                $eldnah     Handle (no reference).
+     * @param   \Hoa\Visitor\Element  $element    Element to visit.
+     * @param   mixed                 &$handle    Handle (reference).
+     * @param   mixed                 $eldnah     Handle (no reference).
      * @return  mixed
      */
-    public function visitClass ( Hoa_Visitor_Element $element,
+    public function visitClass ( \Hoa\Visitor\Element $element,
                                  &$handle = null, $eldnah = null) {
 
         $out = $element->getDocComment() . "\n";
@@ -145,12 +143,12 @@ class Hoa_Reflection_Visitor_Prettyprinter extends Hoa_Visitor_Registry {
      * Visit an element.
      *
      * @access  public
-     * @param   Hoa_Visitor_Element  $element    Element to visit.
+     * @param   \Hoa\Visitor\Element  $element    Element to visit.
      * @param   mixed                &$handle    Handle (reference).
      * @param   mixed                $eldnah     Handle (no reference).
      * @return  mixed
      */
-    public function visitParameter ( Hoa_Visitor_Element $element,
+    public function visitParameter ( \Hoa\Visitor\Element $element,
                                      &$handle = null, $eldnah = null) {
 
         $out = null;
@@ -173,12 +171,12 @@ class Hoa_Reflection_Visitor_Prettyprinter extends Hoa_Visitor_Registry {
      * Visit an element.
      *
      * @access  public
-     * @param   Hoa_Visitor_Element  $element    Element to visit.
+     * @param   \Hoa\Visitor\Element  $element    Element to visit.
      * @param   mixed                &$handle    Handle (reference).
      * @param   mixed                $eldnah     Handle (no reference).
      * @return  mixed
      */
-    public function visitProperty ( Hoa_Visitor_Element $element,
+    public function visitProperty ( \Hoa\Visitor\Element $element,
                                     &$handle = null, $eldnah = null) {
 
         $out = '    ' .
@@ -207,12 +205,12 @@ class Hoa_Reflection_Visitor_Prettyprinter extends Hoa_Visitor_Registry {
      * Visit an element.
      *
      * @access  public
-     * @param   Hoa_Visitor_Element  $element    Element to visit.
+     * @param   \Hoa\Visitor\Element  $element    Element to visit.
      * @param   mixed                &$handle    Handle (reference).
      * @param   mixed                $eldnah     Handle (no reference).
      * @return  mixed
      */
-    public function visitMethod ( Hoa_Visitor_Element $element,
+    public function visitMethod ( \Hoa\Visitor\Element $element,
                                   &$handle = null, $eldnah = null) {
 
         $tab = '    ';
@@ -255,4 +253,6 @@ class Hoa_Reflection_Visitor_Prettyprinter extends Hoa_Visitor_Registry {
 
         return $out;
     }
+}
+
 }

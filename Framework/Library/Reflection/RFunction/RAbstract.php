@@ -24,98 +24,96 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Reflection
- * @subpackage  Hoa_Reflection_RFunction_RAbstract
- *
  */
 
-/**
- * Hoa_Reflection_Exception
- */
-import('Reflection.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Reflection_Wrapper
+ * \Hoa\Reflection\Exception
  */
-import('Reflection.Wrapper') and load();
+-> import('Reflection.Exception')
 
 /**
- * Hoa_Reflection_RParameter
+ * \Hoa\Reflection\Wrapper
  */
-import('Reflection.RParameter');
+-> import('Reflection.Wrapper')
 
 /**
- * Hoa_Visitor_Element
+ * \Hoa\Reflection\RParameter
  */
-import('Visitor.Element') and load();
+-> import('Reflection.RParameter')
 
 /**
- * Class Hoa_Reflection_RFunction_RAbstract.
+ * \Hoa\Visitor\Element
+ */
+-> import('Visitor.Element');
+
+}
+
+namespace Hoa\Reflection\RFunction {
+
+/**
+ * Class \Hoa\Reflection\RFunction\RAbstract.
  *
  * Extending ReflectionMethod and ReflectionFunction capacities.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Reflection
- * @subpackage  Hoa_Reflection_RFunction_RAbstract
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-abstract class Hoa_Reflection_RFunction_RAbstract
-    extends    Hoa_Reflection_Wrapper
-    implements Hoa_Visitor_Element {
+abstract class RAbstract
+    extends    \Hoa\Reflection\Wrapper
+    implements \Hoa\Visitor\Element {
 
     /**
      * Function file.
      *
-     * @var Hoa_Reflection_RFunction_RAbstract string
+     * @var \Hoa\Reflection\RFunction\RAbstract string
      */
     protected $_file             = null;
 
     /**
      * Function comment content.
      *
-     * @var Hoa_Reflection_RFunction_RAbstract string
+     * @var \Hoa\Reflection\RFunction\RAbstract string
      */
     protected $_comment          = null;
 
     /**
      * Whether the function returns a reference or not.
      *
-     * @var Hoa_Reflection_RFunction_RAbstract bool
+     * @var \Hoa\Reflection\RFunction\RAbstract bool
      */
     protected $_returnsReference = false;
 
     /**
      * Function name.
      *
-     * @var Hoa_Reflection_RFunction_RAbstract string
+     * @var \Hoa\Reflection\RFunction\RAbstract string
      */
     protected $_name             = null;
 
     /**
      * Whether parameters were already transformed or not.
      *
-     * @var Hoa_Reflection_RFunction_RAbstract bool
+     * @var \Hoa\Reflection\RFunction\RAbstract bool
      */
     protected   $_firstP         = true;
 
     /**
      * All parameters.
      *
-     * @var Hoa_Reflection_RFunction_RAbstract array
+     * @var \Hoa\Reflection\RFunction\RAbstract array
      */
     protected $_parameters       = array();
 
     /**
      * Function body.
      *
-     * @var Hoa_Reflection_RFunction_RAbstract string
+     * @var \Hoa\Reflection\RFunction\RAbstract string
      */
     protected $_body             = null;
 
@@ -262,7 +260,7 @@ abstract class Hoa_Reflection_RFunction_RAbstract
             return $this->_parameters;
 
         foreach($this->getWrapped()->getParameters() as $i => $parameter)
-            $this->_parameters[] = new Hoa_Reflection_RParameter($parameter);
+            $this->_parameters[] = new \Hoa\Reflection\RParameter($parameter);
 
         $this->_firstP = false;
 
@@ -310,7 +308,7 @@ abstract class Hoa_Reflection_RFunction_RAbstract
     /**
      * Set the file.
      * Do not use this method :-). It should be friend with
-     * Hoa_Reflection_RClass (as C++ meaning).
+     * \Hoa\Reflection\RClass (as C++ meaning).
      *
      * @access  public
      * @return  void
@@ -340,15 +338,15 @@ abstract class Hoa_Reflection_RFunction_RAbstract
      *
      * @access  public
      * @return  void
-     * @throw   Hoa_Reflection_Exception
+     * @throw   \Hoa\Reflection\Exception
      */
     public function importFragment ( $fragment ) {
 
-        if(   ($fragment instanceof Hoa_Reflection_RParameter)
-           || ($fragment instanceof Hoa_Reflection_Fragment_RParameter))
+        if(   ($fragment instanceof \Hoa\Reflection\RParameter)
+           || ($fragment instanceof \Hoa\Reflection\Fragment\RParameter))
             $this->_parameters[] = $fragment;
         else
-            throw new Hoa_Reflection_Exception(
+            throw new \Hoa\Reflection\Exception(
                 'Unknow fragment %s; cannot import it.',
                 0, get_class($fragment));
 
@@ -359,14 +357,16 @@ abstract class Hoa_Reflection_RFunction_RAbstract
      * Accept a visitor.
      *
      * @access  public
-     * @param   Hoa_Visitor_Visit  $visitor    Visitor.
+     * @param   \Hoa\Visitor\Visit  $visitor    Visitor.
      * @param   mixed              &$handle    Handle (reference).
      * @param   mixed              $eldnah     Handle (no reference).
      * @return  mixed
      */
-    public function accept ( Hoa_Visitor_Visit $visitor,
+    public function accept ( \Hoa\Visitor\Visit $visitor,
                              &$handle = null, $eldnah = null ) {
 
         return $visitor->visit($this, $handle, $eldnah);
     }
+}
+
 }
