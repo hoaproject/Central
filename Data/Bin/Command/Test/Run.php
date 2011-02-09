@@ -159,9 +159,9 @@ class ContractCovering extends \Hoa\Test\Praspel\Visitor\Praspel {
         foreach($element->getDomains() as $d) {
 
             if($d === $domain)
-                $domains[$i] = \Hoa\Console\Interface\Style::stylize(
+                $domains[$i] = \Hoa\Console\Chrome\Style::stylize(
                     $domains[$i],
-                    \Hoa\Console\Interface\Style::COLOR_FOREGROUND_YELLOW
+                    \Hoa\Console\Chrome\Style::COLOR_FOREGROUND_YELLOW
                 );
             else
                 $domains[$i] = $domains[$i];
