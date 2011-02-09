@@ -345,9 +345,12 @@ class Consistency {
     public static function dnew ( $classname, Array $arguments = array() ) {
 
         if(!class_exists($classname))
-            if(false === self::autoload($classname))
-                self::from('')
-                    ->import(str_replace('\\', '.', $classname), true);
+            if(false === self::autoload($classname)) {
+
+                $path = str_replace('\\', '.', $classname);
+                self::from(substr($path, 0, strpos($path, '.')))
+                    ->import(substr($path, strpos($path, '.') + 1), true);
+            }
 
         $class = new \ReflectionClass($classname);
 
