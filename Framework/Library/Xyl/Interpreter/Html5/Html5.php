@@ -72,6 +72,7 @@ class Html5 extends \Hoa\Xyl\Interpreter {
         'yield'           => '\Hoa\Xyl\Interpreter\Common\Yield',
 
         // Layout.
+        'box'             => '\Hoa\Xyl\Interpreter\Html5\Box',
         'hbox'            => '\Hoa\Xyl\Interpreter\Html5\Hbox',
         'vbox'            => '\Hoa\Xyl\Interpreter\Html5\Vbox',
         'grid'            => '\Hoa\Xyl\Interpreter\Html5\Grid',
