@@ -299,7 +299,7 @@ class Consistency {
         if(is_string(self::$_class[$classname]))
             return $classname;
 
-        return self::$_class[$classname]['alias'] ?: '';
+        return self::$_class[$classname]['alias'] ?: $classname;
     }
 
     /**
