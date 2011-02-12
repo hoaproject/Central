@@ -136,7 +136,7 @@ class Router implements \Hoa\Core\Parameterizable {
             if(2 > count($rule))
                 throw new Exception(
                     'Rule %s must be at least a 3-uplet: [pattern, controller, ' .
-                    'action(, {extra})?]. We have a %d-uplet in the ' .
+                    'action(, extra(, dispatcher)?)?]. We have a %d-uplet in the ' .
                     'configuration file.',
                     0, array($name, count($rule)));
 
