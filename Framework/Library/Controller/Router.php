@@ -323,7 +323,7 @@ class Router implements \Hoa\Core\Parameterizable {
             if(!isset($_SERVER['REQUEST_URI'])) {
 
                 if(!isset($_SERVER['argv'][1]))
-                    throw new \Hoa\Controller\Exception(
+                    throw new Exception(
                         'Cannot find the URI.', 0);
 
                 $uri = $_SERVER['argv'][0] . '?' . ltrim($_SERVER['argv'][1], '?');
