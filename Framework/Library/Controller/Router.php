@@ -52,32 +52,39 @@ namespace Hoa\Controller {
 class Router implements \Hoa\Core\Parameterizable {
 
     /**
+     * Rule: ID index.
+     *
+     * @const int
+     */
+    const RULE_ID         = 0;
+
+    /**
      * Rule: pattern index.
      *
      * @const int
      */
-    const RULE_PATTERN    = 0;
+    const RULE_PATTERN    = 1;
 
     /**
      * Rule: component index.
      *
      * @const int
      */
-    const RULE_COMPONENT  = 1;
+    const RULE_COMPONENT  = 2;
 
     /**
      * Rule: on index.
      *
      * @const int
      */
-    const RULE_ON         = 2;
+    const RULE_ON         = 3;
 
     /**
      * Rule: dispatcher index.
      *
      * @const int
      */
-    const RULE_DISPATCHER = 3;
+    const RULE_DISPATCHER = 4;
 
     /**
      * The \Hoa\Controller\Router parameters.
@@ -133,19 +140,27 @@ class Router implements \Hoa\Core\Parameterizable {
 
         foreach($this->getParameter('rules') as $name => $rule) {
 
-            if(2 > count($rule))
+            if(3 > count($rule))
                 throw new Exception(
-                    'Rule %s must be at least a 3-uplet: [pattern, controller, ' .
-                    'action(, extra(, dispatcher)?)?]. We have a %d-uplet in the ' .
-                    'configuration file.',
+                    'Rule %s must be at least a 4-uplet: [id, pattern, ' .
+                    'controller, action(, extra(, dispatcher)?)?]. We have ' .
+                    'a %d-uplet in the configuration file.',
                     0, array($name, count($rule)));
 
-            @list($pattern, $controller, $action, $extra, $dispatcher) = $rule;
+            @list($id,     $pattern, $controller,
+                  $action, $extra,   $dispatcher) = $rule;
 
             if(null === $extra)
                 $extra = array();
 
-            $this->addRule($pattern, $controller, $action, $extra, $dispatcher);
+            $this->addRule(
+                $id,
+                $pattern,
+                $controller,
+                $action,
+                $extra,
+                $dispatcher
+            );
         }
 
         return;
@@ -221,6 +236,7 @@ class Router implements \Hoa\Core\Parameterizable {
      * Add a rule to the router.
      *
      * @access  public
+     * @param   string  $id            ID.
      * @param   string  $pattern       A regular expression.
      * @param   string  $controller    A class name, an instance  or null.
      * @param   string  $action        A method name, a function name, a
@@ -229,7 +245,7 @@ class Router implements \Hoa\Core\Parameterizable {
      * @param   string  $dispatcher    Dispatcher ID.
      * @return  \Hoa\Controller\Router
      */
-    public function addRule ( $pattern, $controller = null, $action = null,
+    public function addRule ( $id, $pattern, $controller = null, $action = null,
                               Array $extra = array(), $dispatcher = '_default' ) {
 
         if(is_string($controller))
@@ -238,7 +254,8 @@ class Router implements \Hoa\Core\Parameterizable {
         if(is_string($action))
             $action     = strtolower($action);
 
-        $this->_rules[] = array(
+        $this->_rules[$id] = array(
+            self::RULE_ID         => $id,
             self::RULE_PATTERN    => str_replace('#', '\#', $pattern),
             self::RULE_COMPONENT  => array_merge(
                 array(
@@ -310,10 +327,8 @@ class Router implements \Hoa\Core\Parameterizable {
      * Find the appropriated rule.
      *
      * @access  public
-     * @param   string  $uri          URI to route (if null, use the
-     *                                $_SERVER['REQUEST_URI'] will be used).
-     * @param   string  $bootstrap    Bootstrap that runs the route (if null,
-     *                                $_SERVER['SCRIPT_NAME'] will be used).
+     * @param   string  $uri          URI to route.
+     * @param   string  $bootstrap    Bootstrap that runs the route.
      * @return  \Hoa\Controller\Router
      * @throw   \Hoa\Controller\Exception
      */
@@ -362,7 +377,7 @@ class Router implements \Hoa\Core\Parameterizable {
 
             $pattern = $rule[self::RULE_PATTERN];
 
-            if(0 !== preg_match('#' . $pattern . '#i', $route, $matches)) {
+            if(0 !== preg_match('#^' . $pattern . '$#i', $route, $matches)) {
 
                 $gotcha = true;
                 break;
@@ -393,6 +408,37 @@ class Router implements \Hoa\Core\Parameterizable {
         $this->_theRule              = $rule;
 
         return $this;
+    }
+
+    /**
+     * Unroute a rule (i.e. route()^-1).
+     *
+     * @access  public
+     * @param   string  $id        ID of the rule.
+     * @param   array   $values    Values to fill the rule.
+     * @return  string
+     * @throw   \Hoa\Controller\Exception
+     */
+    public function unroute ( $id, Array $values = array() ) {
+
+        if(!isset($this->_rules[$id]))
+            throw new Exception(
+                'Cannot find the rule %s, its ID does not exist.', 42, $id);
+
+        $rule    = $this->_rules[$id];
+        $pattern = $rule[self::RULE_PATTERN];
+        $values  = array_merge($rule[self::RULE_COMPONENT], $values);
+
+        $out = preg_replace_callback(
+            '#\(\?<([^>]+)>.*\)#',
+            function ( Array $matches ) use ($values) {
+
+                return $values[$matches[1]];
+            },
+            $pattern
+        );
+
+        return $out;
     }
 
     /**
