@@ -101,6 +101,13 @@ class Router implements \Hoa\Core\Parameterizable {
     protected $_rules       = array();
 
     /**
+     * Public rules.
+     *
+     * @var \Hoa\Controller\Router array
+     */
+    protected $_publicRules = array();
+
+    /**
      * The selected rule after routing.
      *
      * @var \Hoa\Controller\Router array
@@ -248,6 +255,37 @@ class Router implements \Hoa\Core\Parameterizable {
     public function addRule ( $id, $pattern, $controller = null, $action = null,
                               Array $extra = array(), $dispatcher = '_default' ) {
 
+        $this->addPrivateRule(
+            $id,
+            $pattern,
+            $controller,
+            $action,
+            $extra,
+            $dispatcher
+        );
+        $this->_publicRules[$id] = &$this->_rules[$id];
+
+        return $this;
+    }
+
+    /**
+     * Add a private rule to the router. A private rule cannot be routed, but
+     * only unrouted.
+     *
+     * @access  public
+     * @param   string  $id            ID.
+     * @param   string  $pattern       A regular expression.
+     * @param   string  $controller    A class name, an instance  or null.
+     * @param   string  $action        A method name, a function name, a
+     *                                 closure or null.
+     * @param   array   $extra         Extra data.
+     * @param   string  $dispatcher    Dispatcher ID.
+     * @return  \Hoa\Controller\Router
+     */
+    public function addPrivateRule ( $id, $pattern, $controller = null,
+                                     $action = null, Array $extra = array(),
+                                     $dispatcher = '_default' ) {
+
         if(is_string($controller))
             $controller = strtolower($controller);
 
@@ -313,6 +351,33 @@ class Router implements \Hoa\Core\Parameterizable {
     }
 
     /**
+     * Get all public rules.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getPublicRules ( ) {
+
+        return $this->_publicRules;
+    }
+
+    /**
+     * Get a specific rule.
+     *
+     * @access  public
+     * @return  array
+     * @throw   \Hoa\Controller\Exception
+     */
+    public function getRule ( $id ) {
+
+        if(false === $this->ruleExists($id))
+            throw new Exception(
+                'Rule %s does not exist.', 0, $id);
+
+        return $this->_rules[$id];
+    }
+
+    /**
      * Get the selected rule after routing.
      *
      * @access  public
@@ -321,6 +386,18 @@ class Router implements \Hoa\Core\Parameterizable {
     public function getTheRule ( ) {
 
         return $this->_theRule;
+    }
+
+    /**
+     * Whether a rule exists.
+     *
+     * @access  public
+     * @param   string  $id    ID.
+     * @return  bool
+     */
+    public function ruleExists ( $id ) {
+
+        return isset($this->_rules[$id]);
     }
 
     /**
@@ -373,7 +450,7 @@ class Router implements \Hoa\Core\Parameterizable {
 
         $gotcha = false;
 
-        foreach($this->getRules() as $rule) {
+        foreach($this->getPublicRules() as $rule) {
 
             $pattern = $rule[self::RULE_PATTERN];
 
@@ -392,17 +469,14 @@ class Router implements \Hoa\Core\Parameterizable {
         array_shift($matches);
         $i = 0;
 
-        foreach($matches as $key => $value) {
-
+        foreach($matches as $key => $value)
             if(is_string($key)) {
 
                 $rule[self::RULE_COMPONENT][strtolower($key)] = strtolower($value);
                 unset($matches[$key]);
                 unset($matches[$i]);
+                ++$i;
             }
-
-            ++$i;
-        }
 
         $rule[self::RULE_COMPONENT] += $matches;
         $this->_theRule              = $rule;
@@ -421,21 +495,29 @@ class Router implements \Hoa\Core\Parameterizable {
      */
     public function unroute ( $id, Array $values = array() ) {
 
-        if(!isset($this->_rules[$id]))
-            throw new Exception(
-                'Cannot find the rule %s, its ID does not exist.', 42, $id);
-
-        $rule    = $this->_rules[$id];
+        $rule    = $this->getRule($id);
         $pattern = $rule[self::RULE_PATTERN];
         $values  = array_merge($rule[self::RULE_COMPONENT], $values);
 
         $out = preg_replace_callback(
-            '#\(\?<([^>]+)>.*\)#',
+            '#\(\?\<([^>]+)>[^\)]*\)#',
             function ( Array $matches ) use ($values) {
 
                 return $values[$matches[1]];
             },
             $pattern
+        );
+
+        $out = str_replace(
+            array(
+                '\.', '\\\\', '\+', '\*', '\?', '\[', '\]', '\^', '\$', '\(',
+                '\)', '\{', '\}', '\=', '\!', '\<', '\>', '\|', '\:', '\-'
+            ),
+            array(
+                '.', '\\', '+', '*', '?', '[', ']', '^', '$', '(',
+                ')', '{', '}', '=', '!', '<', '>', '|', ':', '-'
+            ),
+            $out
         );
 
         return $out;
