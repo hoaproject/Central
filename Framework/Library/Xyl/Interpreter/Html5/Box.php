@@ -60,7 +60,7 @@ class Box extends \Hoa\Xyl\Element\Concrete {
      */
     protected function paint ( \Hoa\Stream\IStream\Out $out ) {
 
-        $out->writeAll('<div ' .
+        $out->writeAll('<div' .
                        $this->readAttributesAsString() . '>' . "\n");
 
         foreach($this as $child)
