@@ -112,7 +112,8 @@ class          Document
 
         $out->writeAll(
             '</head>' . "\n" .
-            '<body>' . "\n\n"
+            '<body>' . "\n\n" .
+            '<div id="body">' . "\n"
         );
 
         foreach($this as $child)
@@ -120,7 +121,7 @@ class          Document
                 $child->render($out);
 
         $out->writeAll(
-            "\n" . '</body>' . "\n" . '</html>'
+            "\n" . '</div>' . "\n\n" . '</body>' . "\n" . '</html>'
         );
 
         return;
@@ -172,31 +173,60 @@ class          Document
     protected function computeStylesheet ( ) {
 
         $root                    = $this->getAbstractElementSuperRoot();
+        $router                  = $root->getRouter();
         $styles                  = $root->getStylesheets();
+        $theme                   = $root->getTheme();
         $this->_resources['css'] = array();
 
-        foreach($styles as $style) {
+        foreach($styles as $style)
+            if('hoa://Library/Xyl/Css/' == substr($style, 0, 22)) {
 
-            $resolved = $root->resolve($style);
+                $resolved = $root->resolve($style);
 
-            if(false === file_exists($resolved))
-                continue;
+                if(false === file_exists($resolved))
+                    continue;
 
-            if('hoa://Library/Xyl/' == substr($style, 0, 18)) {
-
-                $redirect = 'hoa://Application/Public/' . substr($style, 18);
+                $redirect = $root->resolve(
+                    'hoa://Application/Public/' . substr($style, 18)
+                );
 
                 if(false === file_exists($redirect))
                     if(false === copy($resolved, $redirect))
-                        throw new \Hoa\Xyl\Interpreter\Html5\Exception(
+                        throw new Exception(
                             'Failed to copy %s in %s.',
                             0, array($style, $redirect));
 
-                $style    = $redirect;
+                if(null === $router)
+                    $this->_resources['css'][] = $resolved;
+                else
+                    $this->_resources['css'][] = $router->unroute(
+                        '_css',
+                        array(
+                            'theme' => $theme,
+                            'sheet' => substr($style, 22)
+                        )
+                    );
             }
+            elseif('hoa://Application/Public/Css/' == substr($style, 0, 29)) {
 
-            $this->_resources['css'][] = $style;
-        }
+                $resolved = $root->resolve($style);
+
+                if(false === file_exists($resolved))
+                    continue;
+
+                if(null === $router)
+                    $this->_resources['css'][] = $resolved;
+                else
+                    $this->_resources['css'][] = $router->unroute(
+                        '_css',
+                        array(
+                            'theme' => $theme,
+                            'sheet' => substr($style, 29)
+                        )
+                    );
+            }
+            else
+                $this->_resources['css'][] = $style;
 
         return;
     }
