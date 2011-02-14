@@ -63,6 +63,14 @@ interface Viewable {
      * @return  void
      */
     public function render ( );
+
+    /**
+     * Get router.
+     *
+     * @access  public
+     * @return  \Hoa\Controller\Router
+     */
+    public function getRouter ( );
 }
 
 }
