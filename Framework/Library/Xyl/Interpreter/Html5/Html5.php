@@ -36,12 +36,12 @@ from('Hoa')
 -> import('Xyl.Interpreter.~')
 
 /**
- * \Hoa\Xyl\Interpreter\Common_*
+ * \Hoa\Xyl\Interpreter\Common\*
  */
 -> import('Xyl.Interpreter.Common.*')
 
 /**
- * \Hoa\Xyl\Interpreter\Html5_*
+ * \Hoa\Xyl\Interpreter\Html5\*
  */
 -> import('Xyl.Interpreter.Html5.*');
 
@@ -95,6 +95,7 @@ class Html5 extends \Hoa\Xyl\Interpreter {
 
         // Grouping content.
         'p'               => '\Hoa\Xyl\Interpreter\Html5\P',
+        'span'            => '\Hoa\Xyl\Interpreter\Html5\Span',
         'ulist'           => '\Hoa\Xyl\Interpreter\Html5\Ulist',
         'olist'           => '\Hoa\Xyl\Interpreter\Html5\Olist',
         'item'            => '\Hoa\Xyl\Interpreter\Html5\Item',
@@ -118,6 +119,9 @@ class Html5 extends \Hoa\Xyl\Interpreter {
         'option'          => '\Hoa\Xyl\Interpreter\Html5\Option',
         'textarea'        => '\Hoa\Xyl\Interpreter\Html5\Textarea',
         'label'           => '\Hoa\Xyl\Interpreter\Html5\Label',
+
+        // Link.
+        'link'            => '\Hoa\Xyl\Interpreter\Html5\Link',
 
         // Phrasing model.
         '__text'          => '\Hoa\Xyl\Interpreter\Html5\Text'
