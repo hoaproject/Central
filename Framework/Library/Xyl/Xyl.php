@@ -97,42 +97,49 @@ class          Xyl
      *
      * @var \Hoa\Core\Parameter object
      */
-    protected $_parameters  = null;
+    protected static $_parameters = null;
 
     /**
      * Data bucket.
      *
      * @var \Hoa\Xyl array
      */
-    protected $_data        = null;
+    protected $_data              = null;
 
     /**
      * Concrete tree.
      *
      * @var \Hoa\Xyl\Element\Concrete object
      */
-    protected $_concrete    = null;
+    protected $_concrete          = null;
 
     /**
      * Evaluate XPath expression.
      *
      * @var DOMXPath object
      */
-    protected $_xe          = null;
+    protected $_xe                = null;
 
     /**
      * Output stream.
      *
      * @var \Hoa\Stream\IStream\Out object
      */
-    protected $_out         = null;
+    protected $_out               = null;
 
     /**
      * Interpreter.
      *
      * @var \Hoa\Xyl\Interpreter object
      */
-    protected $_interpreter = null;
+    protected $_interpreter       = null;
+
+    /**
+     * Router.
+     *
+     * @var \Hoa\Controller\Router object
+     */
+    protected $_router            = null;
 
     /**
      * Mowgli c'est le p'tit DOM (euh, p'tit homme !)
@@ -140,28 +147,28 @@ class          Xyl
      *
      * @var DOMDocument object
      */
-    protected $_mowgli      = null;
+    protected $_mowgli            = null;
 
     /**
      * Temporize stylesheets.
      *
      * @var \Hoa\Xyl array
      */
-    protected $_stylesheets = array();
+    protected $_stylesheets       = array();
 
     /**
      * Get ID of the instance.
      *
      * @var \Hoa\Xyl int
      */
-    private $_i             = 0;
+    private $_i                   = 0;
 
     /**
      * Get last ID of instances.
      *
      * @var \Hoa\Xyl int
      */
-    private static $_ci     = 0;
+    private static $_ci           = 0;
 
 
 
@@ -169,17 +176,19 @@ class          Xyl
      * Interprete a stream as XYL.
      *
      * @access  public
-     * @param   \Hoa\Stream\IStream\In   $in             Stream to interprete
-     *                                                    as XYL.
-     * @param   \Hoa\Stream\IStream\Out  $out            Stream for rendering.
+     * @param   \Hoa\Stream\IStream\In     $in             Stream to interprete
+     *                                                     as XYL.
+     * @param   \Hoa\Stream\IStream\Out    $out            Stream for rendering.
      * @param   \Hoa\Xyl\Interpreter       $interpreter    Interpreter.
-     * @param   array                     $parameters     Parameters.
+     * @param   \Hoa\Controller\Router     $router         Router.
+     * @param   array                      $parameters     Parameters.
      * @return  void
      * @throw   \Hoa\Xml\Exception
      */
     public function __construct ( \Hoa\Stream\IStream\In  $in,
                                   \Hoa\Stream\IStream\Out $out,
                                   Interpreter             $interpreter,
+                                  \Hoa\Controller\Router  $router = null,
                                   Array                   $parameters = array() ) {
 
         parent::__construct('\Hoa\Xyl\Element\Basic', $in);
@@ -189,27 +198,31 @@ class          Xyl
                 'The XYL file %s has no XYL namespace (%s) declared.',
                 0, array($in->getStreamName(), self::NAMESPACE_ID));
 
-        $this->_parameters = new \Hoa\Core\Parameter(
-            $this,
-            array(
-                'theme' => 'classic'
-            ),
-            array(
-                'theme'            => '(:theme:lU:)',
-                'html5.css'        => 'hoa://Application/Public/(:%theme:)/Css/',
-                'html5.font'       => 'hoa://Application/Public/(:%theme:)/Font/',
-                'html5.image'      => 'hoa://Application/Public/(:%theme:)/Image/',
-                'html5.javascript' => 'hoa://Application/Public/(:%theme:)/Javascript/',
-                'html5.video'      => 'hoa://Application/Public/(:%theme:)/Video/'
-            )
-        );
-        $this->setParameters($parameters);
+        if(null === self::$_parameters) {
+
+            self::$_parameters = new \Hoa\Core\Parameter(
+                $this,
+                array(
+                    'theme' => 'classic'
+                ),
+                array(
+                    'theme'            => '(:theme:lU:)',
+                    'html5.css'        => 'hoa://Application/Public/(:%theme:)/Css/',
+                    'html5.font'       => 'hoa://Application/Public/(:%theme:)/Font/',
+                    'html5.image'      => 'hoa://Application/Public/(:%theme:)/Image/',
+                    'html5.javascript' => 'hoa://Application/Public/(:%theme:)/Javascript/',
+                    'html5.video'      => 'hoa://Application/Public/(:%theme:)/Video/'
+                )
+            );
+            $this->setParameters($parameters);
+        }
 
         $this->_i           = self::$_ci++;
         $this->_xe          = new \DOMXPath(new \DOMDocument());
         $this->_data        = new \Hoa\Core\Data();
         $this->_out         = $out;
         $this->_interpreter = $interpreter;
+        $this->_router      = $router;
         $this->_mowgli      = $this->getStream()->readDOM()->ownerDocument;
 
         $this->useNamespace(self::NAMESPACE_ID);
@@ -220,6 +233,9 @@ class          Xyl
                     'Xyl[' . $this->_i . ']',
                     'Interpreter' . DS .$this->_interpreter->getResourcePath()
                 ));
+
+        if(null !== $router && false === $router->ruleExists('_css'))
+            $router->addPrivateRule('_css', 'Public/Css/(?<theme>.*)/(?<sheet>.*)');
 
         return;
     }
@@ -234,7 +250,7 @@ class          Xyl
      */
     public function setParameters ( Array $in ) {
 
-        return $this->_parameters->setParameters($this, $in);
+        return self::$_parameters->setParameters($this, $in);
     }
 
     /**
@@ -246,7 +262,7 @@ class          Xyl
      */
     public function getParameters ( ) {
 
-        return $this->_parameters->getParameters($this);
+        return self::$_parameters->getParameters($this);
     }
 
     /**
@@ -260,7 +276,7 @@ class          Xyl
      */
     public function setParameter ( $key, $value ) {
 
-        return $this->_parameters->setParameter($this, $key, $value);
+        return self::$_parameters->setParameter($this, $key, $value);
     }
 
     /**
@@ -273,7 +289,7 @@ class          Xyl
      */
     public function getParameter ( $key ) {
 
-        return $this->_parameters->getParameter($this, $key);
+        return self::$_parameters->getParameter($this, $key);
     }
 
     /**
@@ -287,7 +303,7 @@ class          Xyl
      */
     public function getFormattedParameter ( $key ) {
 
-        return $this->_parameters->getFormattedParameter($this, $key);
+        return self::$_parameters->getFormattedParameter($this, $key);
     }
 
     /**
@@ -385,7 +401,9 @@ class          Xyl
             $fragment = new self(
                 new $streamClass($href),
                 $this->_out,
-                $this->_interpreter
+                $this->_interpreter,
+                $this->_router,
+                $this->_parameters
             );
 
             if('definition' !== $fragment->getName())
@@ -519,7 +537,9 @@ class          Xyl
             $fragment = new self(
                 new $streamClass($href),
                 $this->_out,
-                $this->_interpreter
+                $this->_interpreter,
+                $this->_router,
+                $this->_parameters
             );
 
             if('overlay' !== $fragment->getName())
@@ -792,7 +812,7 @@ class          Xyl
     public function setTheme ( $theme ) {
 
         $old = $this->getTheme();
-        $this->_parameters->setKeyword($this, 'theme', $theme);
+        self::$_parameters->setKeyword($this, 'theme', $theme);
 
         return $old;
     }
@@ -805,7 +825,7 @@ class          Xyl
      */
     public function getTheme ( ) {
         
-        return $this->_parameters->getKeyword($this, 'theme');
+        return self::$_parameters->getKeyword($this, 'theme');
     }
 
     /**
@@ -817,6 +837,32 @@ class          Xyl
     public function getStylesheets ( ) {
 
         return $this->_stylesheets;
+    }
+
+    /**
+     * Set router.
+     *
+     * @access  public
+     * @param   \Hoa\Controller\Router  $router    Router.
+     * @return  \Hoa\Controller\Router
+     */
+    public function setRouter ( \Hoa\Controller\Router $router ) {
+
+        $old           = $this->_router;
+        $this->_router = $router;
+
+        return $old;
+    }
+
+    /**
+     * Get router.
+     *
+     * @access  public
+     * @return  \Hoa\Controller\Router
+     */
+    public function getRouter ( ) {
+
+        return $this->_router;
     }
 
     /**
