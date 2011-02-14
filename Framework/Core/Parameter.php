@@ -332,7 +332,7 @@ class Parameter {
 
         if(file_exists($path)) {
 
-            $handle = require_once $path;
+            $handle = require $path;
 
             if(!is_array($handle))
                 throw new Exception(
