@@ -161,6 +161,11 @@ class Core implements Parameterizable {
                         array('hoa')
                     )));
 
+        $date = ini_get('date.timezone');
+
+        if(empty($date))
+            ini_set('date.timezone', 'Europe/Paris');
+
         return;
     }
 
