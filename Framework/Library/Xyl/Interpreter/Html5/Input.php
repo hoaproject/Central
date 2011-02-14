@@ -277,7 +277,7 @@ class          Input
 
         foreach($validates as $name => $realdom) {
 
-            self::$_compiler->compile('@requires i:' .$realdom . ';');
+            self::$_compiler->compile('@requires i: ' .$realdom . ';');
             $praspel  = self::$_compiler->getRoot();
             $variable = $praspel->getClause('requires')->getVariable('i');
             $decision = false;
