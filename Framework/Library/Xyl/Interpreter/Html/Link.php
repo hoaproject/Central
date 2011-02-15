@@ -62,7 +62,7 @@ namespace Hoa\Xyl\Interpreter\Html {
 class          Link
     extends    \Hoa\Xyl\Element\Concrete
     implements \Hoa\Xyl\Element\Executable,
-               \Hoa\Xyl\Element\Model\Phrasing {
+               \Hoa\Xml\Element\Model\Phrasing {
 
     /**
      * Paint the element.
