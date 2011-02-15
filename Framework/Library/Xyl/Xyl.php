@@ -402,8 +402,7 @@ class          Xyl
                 new $streamClass($href),
                 $this->_out,
                 $this->_interpreter,
-                $this->_router,
-                $this->_parameters
+                $this->_router
             );
 
             if('definition' !== $fragment->getName())
@@ -538,8 +537,7 @@ class          Xyl
                 new $streamClass($href),
                 $this->_out,
                 $this->_interpreter,
-                $this->_router,
-                $this->_parameters
+                $this->_router
             );
 
             if('overlay' !== $fragment->getName())
