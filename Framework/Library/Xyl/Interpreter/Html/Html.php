@@ -103,6 +103,7 @@ class Html extends \Hoa\Xyl\Interpreter {
 
         // Text-level semantics.
         'big'             => '\Hoa\Xyl\Interpreter\Html\Big',
+        'code'            => '\Hoa\Xyl\Interpreter\Html\Code',
         'em'              => '\Hoa\Xyl\Interpreter\Html\Em',
         'fbreak'          => '\Hoa\Xyl\Interpreter\Html\Fbreak',
         'mark'            => '\Hoa\Xyl\Interpreter\Html\Mark',
@@ -122,6 +123,9 @@ class Html extends \Hoa\Xyl\Interpreter {
 
         // Link.
         'link'            => '\Hoa\Xyl\Interpreter\Html\Link',
+
+        // Media.
+        'image'           => '\Hoa\Xyl\Interpreter\Html\Image',
 
         // Phrasing model.
         '__text'          => '\Hoa\Xyl\Interpreter\Html\Text'
