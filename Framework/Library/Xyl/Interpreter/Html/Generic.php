@@ -72,7 +72,7 @@ abstract class Generic extends \Hoa\Xyl\Element\Concrete {
         $out->writeAll('<' . $this->_map .
                        $this->readAttributesAsString() . '>');
         $this->computeValue($out);
-        $out->writeAll('</' . $this->_map . '>' . "\n");
+        $out->writeAll('</' . $this->_map . '>');
 
         return;
     }
