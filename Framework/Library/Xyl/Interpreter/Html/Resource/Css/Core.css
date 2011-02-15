@@ -51,6 +51,7 @@ html, body {
     width: 100%
 }
 
+/*
 body {
     display: -moz-box;
     display: -webkit-box;
@@ -126,6 +127,7 @@ body {
 .box {
     display: block;
 }
+*/
 
 .grid {
     display: table;
