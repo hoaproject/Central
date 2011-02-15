@@ -316,6 +316,20 @@ class Write extends Basic implements \Hoa\Stream\IStream\Out {
 
         return;
     }
+
+    /**
+     * Remove an attribute.
+     *
+     * @access  public
+     * @param   string  $name    Name.
+     * @return  void
+     */
+    public function removeAttribute ( $name ) {
+
+        unset($this[$name]);
+
+        return;
+    }
 }
 
 }
