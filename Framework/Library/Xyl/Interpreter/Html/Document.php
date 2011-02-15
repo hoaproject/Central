@@ -100,15 +100,24 @@ class          Document
         if(null !== $this->_title)
             $this->_title->render($out);
 
-        $out->writeAll('</title>' . "\n");
+        $out->writeAll(
+            '</title>' . "\n" .
+            '  <meta http-equiv="content-type" content="text/html; charset=utf-8" />' . "\n" .
+            '  <meta http-equiv="content-type" content="text/javascript; charset=utf-8" />' . "\n" .
+            '  <meta http-equiv="content-type" content="text/css; charset=utf-8" />' . "\n"
+        );
 
-        if(isset($this->_resources['css']))
+        if(isset($this->_resources['css'])) {
+
+            $out->writeAll("\n");
+
             foreach($this->_resources['css'] as $href)
                 $out->writeAll(
                     '  <link type="text/css" href="' .
                     $root->resolve($href) .
                     '" rel="stylesheet" />' . "\n"
                 );
+        }
 
         $out->writeAll(
             '</head>' . "\n" .
