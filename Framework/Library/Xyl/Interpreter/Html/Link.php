@@ -38,7 +38,12 @@ from('Hoa')
 /**
  * \Hoa\Xyl\Element\Executable
  */
--> import('Xyl.Element.Executable');
+-> import('Xyl.Element.Executable')
+
+/**
+ * \Hoa\Xml\Element\Model\Phrasing
+ */
+-> import('Xml.Element.Model.Phrasing');
 
 }
 
@@ -56,7 +61,8 @@ namespace Hoa\Xyl\Interpreter\Html {
 
 class          Link
     extends    \Hoa\Xyl\Element\Concrete
-    implements \Hoa\Xyl\Element\Executable {
+    implements \Hoa\Xyl\Element\Executable,
+               \Hoa\Xyl\Element\Model\Phrasing {
 
     /**
      * Paint the element.
