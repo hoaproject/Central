@@ -73,9 +73,9 @@ class          Link
      */
     protected function paint ( \Hoa\Stream\IStream\Out $out ) {
 
-        $out->writeAll('<a' . $this->readAttributesAsString() . '>' . "\n");
+        $out->writeAll('<a' . $this->readAttributesAsString() . '>');
         $this->computeValue($out);
-        $out->writeAll('</a>' . "\n");
+        $out->writeAll('</a>');
 
         return;
     }
