@@ -33,7 +33,12 @@ from('Hoa')
 /**
  * \Hoa\Xyl\Interpreter\Html\Generic
  */
--> import('Xyl.Interpreter.Html.Generic');
+-> import('Xyl.Interpreter.Html.Generic')
+
+/**
+ * \Hoa\Xml\Element\Model\Phrasing
+ */
+-> import('Xml.Element.Model.Phrasing');
 
 }
 
@@ -49,14 +54,14 @@ namespace Hoa\Xyl\Interpreter\Html {
  * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Code extends Generic {
+class Code extends Generic implements \Hoa\Xml\Element\Model\Phrasing {
 
     /**
      * Map.
      *
      * @var \Hoa\Xyl\Interpreter\Html\Generic string
      */
-    protected $_map = 'pre class="code"';
+    protected $_map = 'pre';
 }
 
 }
