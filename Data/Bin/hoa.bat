@@ -1,7 +1,7 @@
 @echo off
 
 REM **
-REM * Hoa Framework
+REM * Hoa
 REM *
 REM *
 REM * @license

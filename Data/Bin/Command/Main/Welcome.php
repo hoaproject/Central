@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Hoa Framework
+ * Hoa
  *
  *
  * @license
@@ -86,7 +86,7 @@ class WelcomeCommand extends \Hoa\Console\Command\Generic {
         }
 
         cout(parent::align(
-            parent::stylize('Hoa Framework', 'h1'),
+            parent::stylize('Hoa', 'h1'),
             parent::ALIGN_CENTER
         ));
 

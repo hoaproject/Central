@@ -2,7 +2,7 @@
 <?php
 
 /**
- * Hoa Framework
+ * Hoa
  *
  *
  * @license

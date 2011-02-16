@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Hoa Framework
+ * Hoa
  *
  *
  * @license
@@ -112,7 +112,7 @@ class VersionCommand extends \Hoa\Console\Command\Generic {
 
                 case 's':
                 default:
-                    $info = $message = 'Hoa Framework ' . $version . ' (' .
+                    $info = $message = 'Hoa ' . $version . ' (' .
                                        $revision . ').' . "\n" .
                                        \Hoa\Core::©();
                   break;
