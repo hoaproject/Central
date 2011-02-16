@@ -1,117 +1,36 @@
-                                 Hoa Framework
-                                 *************
+                                      Hoa
+                                      ***
 
 Summary
 -------
 
-  Introduction  ...........................................................   20
-  Release informations  ...................................................   33
-  Special notices for upgrading  ..........................................   40
-    0.5.1b to 0.5.5b  .....................................................   44
-    0.5.0b to 0.5.1b  .....................................................   44
-    0.4.3b to 0.5.0b  .....................................................   48
-    0.4.0b to 0.4.3b  .....................................................   70
-    0.3.7b to 0.4.0b  .....................................................   88
-  New features in 0.5.5b  .................................................   95 
-  Installation  ...........................................................  109 
-  Project  ................................................................  115
-    Site, manuals, download, community etc.  ..............................  118
-    License  ..............................................................  126
+  Introduction  ............................................................  16
+  Release informations  ....................................................  23
+  Installation  ............................................................  30
+  Project  .................................................................  35
+    Site, manuals, download, community etc.  ...............................  39
+    License  ...............................................................  46
 
 
 
 Introduction
 ------------
 
-Welcome  to  Hoa  Framework  0.5.5b.  This is the maintenance release of the Hoa
-Framework   0.x  series  since  the  0.3.7b  version.  Please,  read  with  much
-attention special notices.
-
-NOTICE:  This  version  is just a reference for a research report written at the
-LIFC  (Laboratoire Informatique de Franche-Comté), where Hoa_Test is developed.
+Welcome  to Hoa 1.0beta1. This is the first release of the branch 1.0, but still
+a beta :-).
 
 
 Release informations
 --------------------
 
-Hoa Framework 0.5.5b (988).
-Released on 30 may 2010.
-
-
-Special notices for upgrading
------------------------------
-
-  0.5.1b to 0.5.5b
-
-Long to describe. It is just a reference version. Wait the next version to learn
-more about new features :-).
-
-  0.5.0b to 0.5.1b
-
-Nothing particular.
-
-  0.4.3b to 0.5.0b
-
-All  packages  configurations system were modified according to the new rules of
-hoa:// and zFormat. No backward-compatibility was possible, so take care to your
-configuration files.
-
-The  Hoa_Stream_Notification  has  a totally new behavior. Take care about that.
-Its behavior is very close to Hoa_Stream_Context.
-
-Prefere  to use PHP_VERSION* constantes instead of version_compare(phpversion(),
-…).
-
-import()  and importModule() methods now throw exception in all cases (except if
-file is found, or files are found ;-)).
-
-The  Data/ architecture was totally recasted. Please, you should used the hoa://
-to  access  in.  It is a  higher  abstract-level of the architecture and allow a
-better portability.
-
-The   Hoa_File  class  was  splitted  into  three  new  classes:  Hoa_File_Read,
-Hoa_File_Write and Hoa_File_ReadWrite. Please, change it in your code :-).
-
-  0.4.0b to 0.4.3b
-
-The  Hoa_StdClass  has  been  changed.  Take  care of its behavior. Please, read
-revisions 119, 120 and 121:
-    /Data/Bin $ ./hoa changelog -r 121:-2 -t -c
-
-The  Hoa_Stream  is up. Thus, the Hoa_File and Hoa_Socket were totally rewrited.
-Please,  read  revisions  300, 302, 305, 310, 315, 316, 317, 318, 321, 322, 323,
-326,  328, 329, 330, 338, 339, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363,
-364, 365, 367, 372, 383, 384 and 385.
-
-The   Hoa_Session_Exception_*  classes  are  now  well-named  and  have  a  good
-inheritance. You can remove your tricks.
-
-The Hoa_Stack package is dead. Please, see revision 346.
-
-The Hoa_XmlRpc package is temporary depreciated! Please, see revision 389.
-
-  0.3.7b to 0.4.0b
-
-After  remaking  the  importation  system,  certain  packages have to be renamed
-because  they  were not following Hoa naming conventions. Please, read revisions
-301, 300, and 225, thank you :
-    /Data/Bin $ ./hoa changelog -r 301,300,225 -t -c
-
-New features in 0.5.5b
-----------------------
-
-Please,  read  the  changelog  from  the previous revision number to the current
-prevision number :
-    /Data/Bin $ ./hoa changelog -r HEAD:PREV -t -c
-
-Long to describe. It is just a reference version. Wait the next version to learn
-more about new features :-).
+Hoa 1.0beta1 (tag: 1.0b1).
+Released on 16 februar 2011.
 
 
 Installation
 ------------
 
-Please, read /INSTALL.
+Please, read INSTALL.
 
 
 Project
@@ -119,12 +38,11 @@ Project
 
   Site, manuals, download, community etc.
 
-Hoa Framework web site should be found at the following address:
-  <http://hoa-project.net>
+Hoa website should be found at the following address:
+    <http://hoa-project.net>
 At  this  address  is  placed  differents  manuals, download section, communauty
-support etc. The download section is directly accessible at:
-  <http://download.hoa-project.net>.
+support etc.
 
   License
 
-Hoa Framework is under the GNU GPL v3 license. Please, read /LICENSE.
+Hoa is under the GNU GPL v3 license. Please, read LICENSE.

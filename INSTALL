@@ -1,80 +1,34 @@
-                                 Hoa Framework
-                                 *************
+                                      Hoa
+                                      ***
 
 Summary
 -------
 
-  Installation  ............................................................  17
-  One framework, two ways of using  ........................................  25
-    Set of libraries  ......................................................  28
-    Standalone mode  .......................................................  35
-  System requirement  ......................................................  44
-  Development versions  ....................................................  52
-  Configuring the include path  ............................................  62
+  Installation  ............................................................. 13
+  System requirement  ....................................................... 20
+  Development versions  ..................................................... 27
 
 
 
 Installation
 ------------
 
-Hoa  Framework  requires  no  special  installation  steps.  Simply download the
-framework  archive,  extract  it,  and  the  “installation”  is over. If it is a
-SVN checkout, the installation is already done.
-
-
-One framework, two ways of using
---------------------------------
-
-  Set of libraires
-
-Hoa  Framework  can  be  used  partially,  i.e.  you should used just one or two
-packages  (with their dependences), and included them in an other project. Then,
-the    command-line    is    useless,    the    hoa://Data    folder    is   not
-needed. In these conditions, Hoa is used like a set of libraries.
-
-  Standalone mode
-
-Hoa  Framework  can also be used entirely, i.e. with all these packages. In this
-case,    packages    will    search    their    configuration   files   in   the
-hoa://Data/Etc/Configuration  folder  by  default  (and  if exists) for example,
-the  command-line  interface  will  be  operational  etc.  In  these conditions,
-Hoa is used like a frame for working… a framework !
+Hoa requires no special installation steps. Simply download the project archive,
+extract it, or clone the project, and the “installation” is over, or
 
 
 System requirement
 ------------------
 
-Hoa Framework requires PHP 5.2.x or later. A PHP 5.2.3+ version is advised!
-Hoa Framework uses some SPL libraries, they must all be present.
-Note that PHP 5.3 is well-supported.
+Hoa requires PHP 5.3.0 or later. Hoa uses some SPL libraries, they must all be
+present.
 
 
 Development versions
 --------------------
 
-Archived  snapshots  are online; please, go to <http://download.hoa-project.net>
-to  get  more  details.  SVN  is  available at <http://svn.hoa-project.net>. You
-should  look  the  /Framework/Trunk  or /Framework/Tags directories. If you only
-want    to    take   a   look   at   the   SVN   repository,   please,   go   to
-<http://svn-view.hoa-project.net>.
-
-
-Configuring the include path
-----------------------------
-
-Once  a  copy of Hoa Framework is available, the application will need to access
-the  framework  classes.  Though there are several ways to achieve this, the PHP
-include_path  needs  to contains the path to the Hoa Framework classes under the
-/Framework/Core directory.
-You  can  find  out  more  about the PHP include_path configuration directive at
-these addresses:
-    * http://php.net/ini.core;
-    * http://php.net/set_include_path,
-or input:
-    $ php --rf set_include_path
-to get the function prototype.
-
-For example, your bootstrap file should contain:
-    set_include_path('./'               . PATH_SEPARATOR .
-                     './Framework/Core' . PATH_SEPARATOR .
-                     get_include_path())
+Archived   snapshots   are   online;   please,  to  get  more  details,  go  to:
+    <http://download.hoa-project.net/Central>
+Many  archives  are  produced  each days. That's why we recommend you Mercurial.
+Mercurial is available at
+    <http://hg.hoa-project.net/Central>
