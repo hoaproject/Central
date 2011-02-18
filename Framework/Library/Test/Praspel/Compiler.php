@@ -146,6 +146,8 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                     '#([+-]?0[0-7]+)',                           // 07
                     '#([+-]?([0-9]*\.[0-9]+)|([0-9]+\.[0-9]*))', // 0.
                     '#([+-]?[1-9][0-9]*|0)',                     // 09
+                    '#true',            // t
+                    '#false',           // f
                     '(',                // (
                     ')',                // )
                     '[',                // [
@@ -327,13 +329,13 @@ class Compiler extends \Hoa\Compiler\Ll1 {
 
                 // 7. Arguments.
                 array(
-                    /*               ,    0x    07    0.    09     (     )     [     s    id
-                    /* __ */ array( __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ),
-                    /* GO */ array( __ , 'OK', 'OK', 'OK', 'OK',  __ ,  __ , '[]', 'OK', 'ID'),
-                    /* ID */ array( __ ,  __ ,  __ ,  __ ,  __ , 'AR',  __ ,  __ ,  __ ,  __ ),
-                    /* AR */ array( __ ,  __ ,  __ ,  __ ,  __ ,  __ , 'OK',  __ ,  __ ,  __ ),
-                    /* [] */ array('GO',  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ),
-                    /* OK */ array('GO',  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ )
+                    /*               ,    0x    07    0.    09     t     f     (     )     [     s    id
+                    /* __ */ array( __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ),
+                    /* GO */ array( __ , 'OK', 'OK', 'OK', 'OK', 'OK', 'OK',  __ ,  __ , '[]', 'OK', 'ID'),
+                    /* ID */ array( __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ , 'AR',  __ ,  __ ,  __ ,  __ ),
+                    /* AR */ array( __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ , 'OK',  __ ,  __ ,  __ ),
+                    /* [] */ array('GO',  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ),
+                    /* OK */ array('GO',  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ )
                 ),
 
                 // 8. Array.
@@ -411,13 +413,13 @@ class Compiler extends \Hoa\Compiler\Ll1 {
 
                 // 7. Arguments.
                 array(
-                    /*              ,   0x   07   0.   09    (    )    [    s   id
-                    /* __ */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ),
-                    /* GO */ array( 0 , 'x', '7', '.', '9',  0 ,  0 , '[', 's', -3 ),
-                    /* ID */ array( 0 ,  0 ,  0 ,  0 ,  0 , 'z',  0 ,  0 ,  0 ,  0 ),
-                    /* AR */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  7 , 'Y',  0 ,  0 ,  0 ),
-                    /* [] */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  8 ,  0 ,  0 ),
-                    /* OK */ array('c',  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 )
+                    /*              ,   0x   07   0.   09    t    f    (    )    [    s   id
+                    /* __ */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ),
+                    /* GO */ array( 0 , 'x', '7', '.', '9', 'T', 'F',  0 ,  0 , '[', 's', -3 ),
+                    /* ID */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 , 'z',  0 ,  0 ,  0 ,  0 ),
+                    /* AR */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  7 , 'Y',  0 ,  0 ,  0 ),
+                    /* [] */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  8 ,  0 ,  0 ),
+                    /* OK */ array('c',  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 )
                 ),
 
                 // 8. Array.
@@ -612,6 +614,16 @@ class Compiler extends \Hoa\Compiler\Ll1 {
             // Number: decimal.
             case '9':
                 $this->buffers[3] = intval($this->buffers[-1], 10);
+              break;
+
+            // Boolean: true.
+            case 'T':
+                $this->buffers[3] = true;
+              break;
+
+            // Boolean: false.
+            case 'T':
+                $this->buffers[3] = false;
               break;
 
             // String.
