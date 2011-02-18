@@ -295,7 +295,7 @@ class Domain {
 
             case 'empty':
             case 'array':
-                $name = '_' . $name;
+                $name = '_' . ucfirst($name);
               break;
         }
 
