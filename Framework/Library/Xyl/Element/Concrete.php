@@ -97,11 +97,14 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
 
         if(false === $e->attributeExists('bind')) {
 
+            if($this instanceof \Hoa\Xyl\Element\Executable)
+                $this->preExecute();
+
             foreach($this as $element)
                 $element->computeDataBinding($data, $parent);
 
             if($this instanceof \Hoa\Xyl\Element\Executable)
-                $this->execute();
+                $this->postExecute();
 
             return;
         }
@@ -111,11 +114,14 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
 
         if('?' == $source) {
 
+            if($this instanceof \Hoa\Xyl\Element\Executable)
+                $this->preExecute();
+
             foreach($this as $element)
                 $element->computeDataBinding($handle, $parent);
 
             if($this instanceof \Hoa\Xyl\Element\Executable)
-                $this->execute();
+                $this->postExecute();
 
             return;
         }
@@ -140,11 +146,14 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         if(null === $parent)
             $this->_bucket['data'] = &$handle;
 
+        if($this instanceof \Hoa\Xyl\Element\Executable)
+            $this->preExecute();
+
         foreach($this as $element)
             $element->computeDataBinding($handle[0][$branche], $this->_bucket);
 
         if($this instanceof \Hoa\Xyl\Element\Executable)
-            $this->execute();
+            $this->postExecute();
 
         return;
     }

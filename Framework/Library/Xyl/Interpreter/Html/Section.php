@@ -96,14 +96,26 @@ abstract class Section
     }
 
     /**
-     * Execute an element.
+     * Pre-execute an element.
      *
      * @access  public
      * @return  void
      */
-    public function execute ( ) {
+    public function preExecute ( ) {
 
         $this->computeFor();
+
+        return;
+    }
+
+    /**
+     * Post-execute an element.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function postExecute ( ) {
+
         $this->computeTitle();
 
         return;
@@ -165,6 +177,17 @@ abstract class Section
     public function getTitle ( ) {
 
         return $this->_title;
+    }
+
+    /**
+     * Get depth.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getDepth ( ) {
+
+        return $this->_n;
     }
 }
 

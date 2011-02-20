@@ -98,12 +98,23 @@ class          Form
     }
 
     /**
-     * Execute an element.
+     * Pre-execute an element.
      *
      * @access  public
      * @return  void
      */
-    public function execute ( ) {
+    public function preExecute ( ) {
+
+        return;
+    }
+
+    /**
+     * Post-execute an element.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function postExecute ( ) {
 
         $this->_formData = $_REQUEST;
         $inputs          = array_merge(
