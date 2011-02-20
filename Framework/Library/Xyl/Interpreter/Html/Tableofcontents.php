@@ -33,7 +33,12 @@ from('Hoa')
 /**
  * \Hoa\Xyl\Element\Concrete
  */
--> import('Xyl.Element.Concrete');
+-> import('Xyl.Element.Concrete')
+
+/**
+ * \Hoa\Xyl\Element\Executable
+ */
+-> import('Xyl.Element.Executable');
 
 }
 
@@ -49,14 +54,30 @@ namespace Hoa\Xyl\Interpreter\Html {
  * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Tableofcontents extends \Hoa\Xyl\Element\Concrete {
+class          Tableofcontents
+    extends    \Hoa\Xyl\Element\Concrete
+    implements \Hoa\Xyl\Element\Executable {
 
     /**
      * Entries of the table of contents.
      *
      * @var \Hoa\Xyl\Interpreter\Html\Tableofcontents array
      */
-    protected $_entry = array();
+    protected $_entry    = array();
+
+    /**
+     * Depth: minimum.
+     *
+     * @var \Hoa\Xyl\Interpreter\Html\Tableofcontents int
+     */
+    protected $_depthMin = 1;
+
+    /**
+     * Depth: maximum.
+     *
+     * @var \Hoa\Xyl\Interpreter\Html\Tableofcontents int
+     */
+    protected $_depthMax = 6;
 
 
 
@@ -69,17 +90,80 @@ class Tableofcontents extends \Hoa\Xyl\Element\Concrete {
      */
     protected function paint ( \Hoa\Stream\IStream\Out $out ) {
 
-        $out->writeAll('<ul class="toc"' .
+        $this->writeAttribute('class', 'toc');
+        $out->writeAll('<ol' .
                        $this->readAttributesAsString() . '>' . "\n");
+
+        $n     = 1;
+        $first = true;
 
         foreach($this->_entry as $entry) {
 
-            $out->writeAll('  <li>');
-            $entry->getTitle()->computeTransientValue($out);
-            $out->writeAll('</li>' . "\n");
+            $ni = $entry->getDepth();
+
+            if(true === $first)
+                $n = $ni;
+
+            if($n < $ni)
+                for($i = $ni - $n - 1; $i >= 0; --$i)
+                    $out->writeAll("\n" . '<ol class="toc toc-depth-' . $ni . '">' . "\n");
+            elseif($n > $ni) {
+
+                $out->writeAll('</li>' . "\n");
+
+                for($i = $n - $ni - 1; $i >= 0; --$i)
+                    $out->writeAll('</ol>' . "\n" . '</li>' . "\n");
+            }
+            else
+                if(false === $first)
+                    $out->writeAll('</li>' . "\n");
+                else
+                    $first = false;
+
+            $n = $ni;
+
+            $out->writeAll('<li>');
+
+            if(true === $entry->attributeExists('id')) {
+
+                $out->writeAll('<a href="#' . $entry->readAttribute('id') . '">');
+                $entry->getTitle()->computeTransientValue($out);
+                $out->writeAll('</a>');
+            }
+            else
+                $entry->getTitle()->computeTransientValue($out);
         }
 
-        $out->writeAll('</ul>' . "\n");
+        for($i = $n - 1; $i >= 0; --$i)
+            $out->writeAll('</li>' . "\n" . '</ol>' . "\n");
+
+        return;
+    }
+
+    /**
+     * Pre-execute an element.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function preExecute ( ) {
+
+        return;
+    }
+
+    /**
+     * Post-execute an element.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function postExecute ( ) {
+
+        if(true === $this->attributeExists('depth-min'))
+            $this->_depthMin = (int) $this->readAttribute('depth-min');
+
+        if(true === $this->attributeExists('depth-max'))
+            $this->_depthMax = (int) $this->readAttribute('depth-max');
 
         return;
     }
@@ -92,6 +176,11 @@ class Tableofcontents extends \Hoa\Xyl\Element\Concrete {
      * @return  void
      */
     public function addEntry ( Section $section ) {
+
+        $n = $section->getDepth();
+
+        if($n < $this->_depthMin || $n > $this->_depthMax)
+            return;
 
         $this->_entry[] = $section;
 
