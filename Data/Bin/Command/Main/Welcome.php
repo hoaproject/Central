@@ -182,6 +182,13 @@ class WelcomeCommand extends \Hoa\Console\Command\Generic {
                 'Start the interactive interpreter for Praspel code.',
             ),
 
+            // XYL.
+            array('XYL'),
+            array(
+                '    ' . parent::stylize('render', 'command'),
+                'Make a render of a XYL document.'
+            ),
+
             // Documentation.
             array('Documentation'),
             array(
