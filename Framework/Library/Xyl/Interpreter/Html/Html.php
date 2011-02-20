@@ -69,6 +69,7 @@ class Html extends \Hoa\Xyl\Interpreter {
     protected $_rank         = array(
         // XYL.
         'document'        => '\Hoa\Xyl\Interpreter\Html\Document',
+        'value'           => '\Hoa\Xyl\Interpreter\Common\Value',
         'yield'           => '\Hoa\Xyl\Interpreter\Common\Yield',
 
         // Layout.
@@ -94,6 +95,7 @@ class Html extends \Hoa\Xyl\Interpreter {
         'title'           => '\Hoa\Xyl\Interpreter\Html\Title',
 
         // Grouping content.
+        'blockcode'       => '\Hoa\Xyl\Interpreter\Html\Blockcode',
         'p'               => '\Hoa\Xyl\Interpreter\Html\P',
         'span'            => '\Hoa\Xyl\Interpreter\Html\Span',
         'ulist'           => '\Hoa\Xyl\Interpreter\Html\Ulist',
