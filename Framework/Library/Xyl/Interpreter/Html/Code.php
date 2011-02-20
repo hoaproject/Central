@@ -61,7 +61,7 @@ class Code extends Generic implements \Hoa\Xml\Element\Model\Phrasing {
      *
      * @var \Hoa\Xyl\Interpreter\Html\Generic string
      */
-    protected $_map = 'pre';
+    protected $_map = 'code';
 }
 
 }
