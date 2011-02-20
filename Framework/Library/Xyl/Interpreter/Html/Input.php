@@ -105,12 +105,23 @@ class          Input
     }
 
     /**
-     * Execute an element.
+     * Pre-execute an element.
      *
      * @access  public
      * @return  void
      */
-    public function execute ( ) {
+    public function preExecute ( ) {
+
+        return;
+    }
+
+    /**
+     * Post-execute an element.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function postExecute ( ) {
 
         $type = strtolower($this->readAttribute('type'));
 
