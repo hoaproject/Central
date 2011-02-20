@@ -126,7 +126,7 @@ class CssToXPath extends \Hoa\Compiler\Ll1 {
                     '#\|=',             // |=
                     '=',                // =
                     '#\|',              // |
-                    '#\'\w+\'',         // 's
+                    '#(\'|").*?(?<!\\\)\2', // 's
                     '##\w+',            // # (hash)
                     '#\.\w+',           // . (class)
                     ':'                 // :
@@ -384,7 +384,17 @@ class CssToXPath extends \Hoa\Compiler\Ll1 {
               break;
 
             case 'v':
-                $w = trim($this->buffers[-1], '\'');
+                $w = '"' == $this->buffers[-1][0]
+                         ? str_replace(
+                               '\"',
+                               '"',
+                               substr($this->buffers[-1], 1, -1)
+                           )
+                         : str_replace(
+                               '\\\'',
+                               '\'',
+                               substr($this->buffers[-1], 1, -1)
+                           );
 
                 switch($operator) {
 
