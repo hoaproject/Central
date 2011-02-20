@@ -508,9 +508,10 @@ abstract class Connection
                 'Cannot write because socket is not established, ' .
                 'i.e. not connected.', 1);
 
-        if($length <= 0)
+        if($length < 0)
             throw new Exception(
-                'Length must be greather than 0, given %d.', 0, $length);
+                'Length must be greather than or equal to 0, given %d.',
+                0, $length);
 
         if(strlen($string) > $length)
             $string = substr($string, 0, $length);
