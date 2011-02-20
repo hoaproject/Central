@@ -149,11 +149,15 @@ class Data implements \ArrayAccess {
             return;
 
         if(null === $offset)
-            $this->_data[$this->_temp][]        = $value;
+            if(is_array($value))
+                foreach($value as $k => $v)
+                    $this->_data[$this->_temp][] = $v;
+            else
+                $this->_data[$this->_temp][]     = $value;
         else
-            $this->_data[$this->_temp][$offset] = $value;
+            $this->_data[$this->_temp][$offset]  = $value;
 
-        $this->_temp                            = null;
+        $this->_temp                             = null;
 
         return;
     }
