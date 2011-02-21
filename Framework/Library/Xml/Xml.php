@@ -169,12 +169,12 @@ abstract class Xml
                     throw new Exception(
                         'Failed to open the XML document %s.',
                         2, $innerStream->getStreamName());
-                else
-                    $root = simplexml_load_string(
-                        '<?xml version="1.0" encoding="utf-8"?' . ">\n\n" .
-                        '<handler>' . "\n" . '</handler>',
-                        $stream
-                    );
+
+                $root = simplexml_load_string(
+                    '<?xml version="1.0" encoding="utf-8"?' . ">\n\n" .
+                    '<handler>' . "\n" . '</handler>',
+                    $stream
+                );
             }
         }
 
