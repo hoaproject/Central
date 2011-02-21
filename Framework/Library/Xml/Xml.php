@@ -129,28 +129,33 @@ abstract class Xml
                                     ', column ' . $error->column . ')';
 
                     $message .= '.' . "\n";
-                    $xml      = explode("\n", $innerStream->readAll());
 
-                    if(!empty($xml[0])) {
+                    if($innerStream instanceof \Hoa\Stream\IStream\In) {
 
-                        $message .= "\n" . 'You should take a look at this ' .
-                                    'piece of code: ' . "\n";
-                        $lines    = count($xml) - 1;
-                        $line     = $first->line;
-                        $foo      = strlen((string) ($line + 3));
+                        $xml  = explode("\n", $innerStream->readAll());
 
-                        for($i = max(1, $line - 3), $m = min($lines, $line + 3);
-                            $i <= $m;
-                            ++$i) {
+                        if(!empty($xml[0])) {
 
-                            $message .= sprintf('%' . $foo . 'd', $i) . '. ';
+                            $message .= "\n" . 'You should take a look at ' .
+                                        'this piece of code: ' . "\n";
+                            $lines    = count($xml) - 1;
+                            $line     = $first->line;
+                            $foo      = strlen((string) ($line + 3));
 
-                            if($i == $line)
-                                $message .= '➜ ';
-                            else
-                                $message .= '  ';
+                            for($i = max(1, $line - 3),
+                                $m = min($lines, $line + 3);
+                                $i <= $m;
+                                ++$i) {
 
-                            $message .= $xml[$i - 1] . "\n";
+                                $message .= sprintf('%' . $foo . 'd', $i) . '. ';
+
+                                if($i == $line)
+                                    $message .= '➜ ';
+                                else
+                                    $message .= '  ';
+
+                                $message .= $xml[$i - 1] . "\n";
+                            }
                         }
                     }
 
