@@ -101,7 +101,7 @@ class RenderCommand extends \Hoa\Console\Command\Generic {
             switch($c) {
 
                 case 'i':
-                    $interpreter = ucfirst(strtolower($v));
+                    $interpreter = $v;
                   break;
 
                 case 'd':
@@ -124,7 +124,7 @@ class RenderCommand extends \Hoa\Console\Command\Generic {
         $xyl = new \Hoa\Xyl(
             new \Hoa\File\Read($file),
             new \Hoa\Php\Io\Out(),
-            dnew('Hoa\Xyl\Interpreter\\' . $interpreter)
+            dnew('Hoa\Xyl\Interpreter\\' . ucfirst(strtolower($interpreter)))
         );
 
         if(null !== $datafile) {
