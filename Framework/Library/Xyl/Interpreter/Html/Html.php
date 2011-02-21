@@ -71,6 +71,7 @@ class Html extends \Hoa\Xyl\Interpreter {
         'document'        => '\Hoa\Xyl\Interpreter\Html\Document',
         'value'           => '\Hoa\Xyl\Interpreter\Common\Value',
         'yield'           => '\Hoa\Xyl\Interpreter\Common\Yield',
+        'script'          => '\Hoa\Xyl\Interpreter\Html\Script',
 
         // Layout.
         'box'             => '\Hoa\Xyl\Interpreter\Html\Box',
@@ -108,6 +109,7 @@ class Html extends \Hoa\Xyl\Interpreter {
         'code'            => '\Hoa\Xyl\Interpreter\Html\Code',
         'em'              => '\Hoa\Xyl\Interpreter\Html\Em',
         'fbreak'          => '\Hoa\Xyl\Interpreter\Html\Fbreak',
+        'hseparator'      => '\Hoa\Xyl\Interpreter\Html\Hseparator',
         'mark'            => '\Hoa\Xyl\Interpreter\Html\Mark',
         'small'           => '\Hoa\Xyl\Interpreter\Html\Small',
         'strong'          => '\Hoa\Xyl\Interpreter\Html\Strong',
@@ -115,6 +117,7 @@ class Html extends \Hoa\Xyl\Interpreter {
         'sup'             => '\Hoa\Xyl\Interpreter\Html\Sup',
 
         // Form.
+        'button'          => '\Hoa\Xyl\Interpreter\Html\Button',
         'form'            => '\Hoa\Xyl\Interpreter\Html\Form',
         'input'           => '\Hoa\Xyl\Interpreter\Html\Input',
         'select'          => '\Hoa\Xyl\Interpreter\Html\Select',
