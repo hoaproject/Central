@@ -43,7 +43,7 @@ from('Hoa')
 /**
  * \Hoa\Stream\IStream\In
  */
--> import('Stream.I.In')
+-> import('Stream.I~.In')
 
 /**
  * \Hoa\Stream\IStream\Out
