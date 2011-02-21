@@ -354,6 +354,9 @@ class Consistency {
 
         $class = new \ReflectionClass($classname);
 
+        if(empty($arguments))
+            return $class->newInstance();
+
         return $class->newInstanceArgs($arguments);
     }
 }
