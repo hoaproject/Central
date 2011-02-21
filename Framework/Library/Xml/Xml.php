@@ -114,7 +114,14 @@ abstract class Xml
 
             if(false === $root) {
 
-                if(true === $this->hasError()) {
+                if($innerStream instanceof \Hoa\Stream\IStream\Out)
+                    $root = simplexml_load_string(
+                        '<?xml version="1.0" encoding="utf-8"?' . ">\n\n" .
+                        '<handler xmlns="flatland">' . "\n" . '</handler>',
+                        $stream
+                    );
+
+                elseif(true === $this->hasError()) {
 
                     $errors   = $this->getErrors();
                     $first    = array_shift($errors);
@@ -169,12 +176,6 @@ abstract class Xml
                     throw new Exception(
                         'Failed to open the XML document %s.',
                         2, $innerStream->getStreamName());
-
-                $root = simplexml_load_string(
-                    '<?xml version="1.0" encoding="utf-8"?' . ">\n\n" .
-                    '<handler>' . "\n" . '</handler>',
-                    $stream
-                );
             }
         }
 
