@@ -139,7 +139,7 @@ class RenderCommand extends \Hoa\Console\Command\Generic {
             dnew('Hoa\Xyl\Interpreter\\' . ucfirst(strtolower($interpreter)))
         );
 
-        foreach($stylesheet as $s)
+        foreach(array_reverse($stylesheet) as $s)
             $xyl->addStylesheet($s);
 
         foreach($overlay as $o)
