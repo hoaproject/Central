@@ -33,8 +33,6 @@ namespace {
  * @copyright  Copyright (c) 2007, 2011 Ivan ENDERLIN.
  */
 
-ini_set('date.timezone', 'Europe/Paris');
-
 /**
  * \Hoa\Core
  */
