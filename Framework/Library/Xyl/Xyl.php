@@ -473,6 +473,7 @@ class          Xyl
      * Add a <?xyl-overlay?> processing-instruction (only that).
      *
      * @access  public
+     * @param   string  $href    Overlay's path.
      * @return  void
      */
     public function addOverlay ( $href ) {
