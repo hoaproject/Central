@@ -704,6 +704,26 @@ class          Xyl
     }
 
     /**
+     * Add a <?xyl-stylesheet?> processing-instruction (only that).
+     *
+     * @access  public
+     * @param   string  $href    Stylesheet's path.
+     * @return  void
+     */
+    public function addStylesheet ( $href ) {
+
+        $this->_mowgli->insertBefore(
+            new \DOMProcessingInstruction(
+                'xyl-stylesheet',
+                'href="' . str_replace('"', '\"', $href) . '"'
+            ),
+            $this->_mowgli->firstChild
+        );
+
+        return;
+    }
+
+    /**
      * Compute <?xyl-stylesheet?> processing-instruction.
      *
      * @access  protected
