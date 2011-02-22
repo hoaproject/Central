@@ -79,6 +79,8 @@ class RenderCommand extends \Hoa\Console\Command\Generic {
     protected $options     = array(
         array('interpreter', parent::REQUIRED_ARGUMENT, 'i'),
         array('data',        parent::REQUIRED_ARGUMENT, 'd'),
+        array('stylesheet',  parent::REQUIRED_ARGUMENT, 's'),
+        array('overlay',     parent::REQUIRED_ARGUMENT, 'o'),
         array('help',        parent::NO_ARGUMENT,       'h'),
         array('help',        parent::NO_ARGUMENT,       '?')
     );
@@ -95,6 +97,8 @@ class RenderCommand extends \Hoa\Console\Command\Generic {
 
         $interpreter = 'html';
         $datafile    = null;
+        $stylesheet  = array();
+        $overlay     = array();
 
         while(false !== $c = parent::getOption($v)) {
 
@@ -106,6 +110,14 @@ class RenderCommand extends \Hoa\Console\Command\Generic {
 
                 case 'd':
                     $datafile = $v;
+                  break;
+
+                case 's':
+                    $stylesheet[] = $v;
+                  break;
+
+                case 'o':
+                    $overlay[] = $v;
                   break;
 
                 case 'h':
@@ -126,6 +138,12 @@ class RenderCommand extends \Hoa\Console\Command\Generic {
             new \Hoa\Php\Io\Out(),
             dnew('Hoa\Xyl\Interpreter\\' . ucfirst(strtolower($interpreter)))
         );
+
+        foreach($stylesheet as $s)
+            $xyl->addStylesheet($s);
+
+        foreach($overlay as $o)
+            $xyl->addOverlay($o);
 
         if(null !== $datafile) {
 
@@ -155,7 +173,8 @@ class RenderCommand extends \Hoa\Console\Command\Generic {
         cout(parent::makeUsageOptionsList(array(
             'i'    => 'Interpreter name.',
             'd'    => 'Data filename, that adds data to the $data variable.',
-            's'    => 'Which sampler to use.',
+            's'    => 'Stylesheet of the document.',
+            'o'    => 'Overlay of the document.',
             'help' => 'This help.'
         )));
 
