@@ -627,6 +627,18 @@ class Wrapper {
     }
 
     /**
+     * Truncate a stream to a given length.
+     *
+     * @access  public
+     * @param   int     $size    Size.
+     * @return  bool
+     */
+    public function stream_truncate ( $size ) {
+
+        return ftruncate($this->getStream(), $size);
+    }
+
+    /**
      * Write to stream.
      * This method is called in response to fwrite().
      *
