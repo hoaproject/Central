@@ -46,6 +46,16 @@ from('Hoa')
 -> import('Test.Selector.Random')
 
 /**
+ * \Hoa\Test\Praspel\Visitor\Praspel
+ */
+-> import('Test.Praspel.Visitor.Praspel')
+
+/**
+ * \Hoa\Test\Praspel\Visitor\Php
+ */
+-> import('Test.Praspel.Visitor.Php')
+
+/**
  * \Hoa\Realdom
  */
 -> import('Realdom.~')
@@ -134,6 +144,8 @@ class PraspelCommand extends \Hoa\Console\Command\Generic {
         $ccode    = null;
         $variable = null;
         $domain   = null;
+        $vPraspel = new \Hoa\Test\Praspel\Visitor\Praspel();
+        $vPHP     = new \Hoa\Test\Praspel\Visitor\Php();
 
         \Hoa\Realdom::setSampler(new \Hoa\Test\Sampler\Random());
 
@@ -148,6 +160,7 @@ class PraspelCommand extends \Hoa\Console\Command\Generic {
                     cout('    <praspel code> to interprete a Praspel code;');
                     cout('    c[ode]         to print current interpreted Praspel code;');
                     cout('    [r[esample]]   to get a new value;');
+                    cout('    d[ebug]        to print informations about debug;');
                     cout('    q[uit]         to quit.');
                     cout();
                   break;
@@ -170,6 +183,15 @@ class PraspelCommand extends \Hoa\Console\Command\Generic {
                         $praspel->getClause('requires')->getVariables()
                     );
                     var_dump($variable->selectDomain($selection->current())->sample());
+                  break;
+
+                case 'd':
+                case 'debug':
+                    cout('PHP:');
+                    cout($vPHP->visit($praspel));
+                    cout();
+                    cout('Praspel:');
+                    cout($vPraspel->visit($praspel));
                   break;
 
                 case 'q':
