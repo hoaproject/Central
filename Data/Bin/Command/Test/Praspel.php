@@ -187,11 +187,45 @@ class PraspelCommand extends \Hoa\Console\Command\Generic {
 
                 case 'd':
                 case 'debug':
-                    cout('PHP:');
-                    cout($vPHP->visit($praspel));
-                    cout();
-                    cout('Praspel:');
-                    cout($vPraspel->visit($praspel));
+                    $dcode = 'h';
+
+                    do {
+
+                        switch($dcode) {
+
+                            case 'ph':
+                            case 'php':
+                                cout($vPHP->visit($praspel));
+                              break;
+
+                            case 'pr':
+                            case 'praspel':
+                                cout($vPraspel->visit($praspel));
+                              break;
+
+                            case 'q':
+                            case 'quit':
+                              break 2;
+
+                            case 'h':
+                            case 'help':
+                            default:
+                                cout('Usage:');
+                                cout('    h[elp]    to print this help;');
+                                cout('    ph[p]     to print PHP code;');
+                                cout('    pr[aspel] to print Praspel code;');
+                                cout('    q[uit]    to quit.');
+                                cout();
+                              break;
+                        }
+
+                        cout();
+
+                    } while('quit' != $dcode = cin(
+                                                   'debug> ',
+                                                   \Hoa\Console\Core\Io::TYPE_NORMAL,
+                                                   \Hoa\Console\Core\Io::NO_NEW_LINE
+                                               ));
                   break;
 
                 case 'q':
