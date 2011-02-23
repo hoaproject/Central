@@ -134,7 +134,6 @@ class PraspelCommand extends \Hoa\Console\Command\Generic {
         $ccode    = null;
         $variable = null;
         $domain   = null;
-        $selector = 
 
         \Hoa\Realdom::setSampler(new \Hoa\Test\Sampler\Random());
 
