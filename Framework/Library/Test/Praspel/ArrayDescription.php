@@ -152,7 +152,10 @@ class ArrayDescription extends DomainDisjunction {
     protected function _from ( ) {
 
         $this->_ok();
-        $this->_key     = array_values($this->getDomains());
+
+        if(!empty($this->_domains))
+            $this->_key = array_values($this->getDomains());
+
         $this->_domains = array();
         $this->_state   = 1;
 
