@@ -69,9 +69,9 @@ class ArrayDescription extends DomainDisjunction {
      *     I = q_0,            the initial state;
      *     F = {q_0},          the final states;
      *     α = {from, to},     the alphabet;
-     *     Γ = {(0, to,   0),
-     *          (0, from, 1),
-     *          (1, to,   1)}, the transitions.
+     *     Γ = {(q_0, to,   q_0),
+     *          (q_0, from, q_1),
+     *          (q_1, to,   q_1)}, the transitions.
      */
     private $_state    = 0;
 
