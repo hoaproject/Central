@@ -260,7 +260,8 @@ class          Contract
      */
     public function verifyPreCondition ( ) {
 
-        $log = array(
+        $this->_arguments = func_get_args();
+        $log              = array(
             'type'      => Praspel::LOG_TYPE_PRE,
             'class'     => $this->getClass(),
             'method'    => $this->getMethod(),
@@ -286,10 +287,9 @@ class          Contract
             return SUCCEED;
         }
 
-        $this->_arguments = func_get_args();
-        $i                = 0;
-        $out              = true;
-        $requires         = $this->getClause('requires');
+        $i        = 0;
+        $out      = true;
+        $requires = $this->getClause('requires');
 
         foreach($requires->getVariables() as $variable) {
 
