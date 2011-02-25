@@ -100,16 +100,16 @@ class StartCommand extends \Hoa\Console\Command\Generic {
 
         parent::status(
             'Create ' . parent::stylize('hoa://Application/Public.', 'info'),
-            \Hoa\File\Directory::create(resolve('hoa://Application/Public'))
+            \Hoa\File\Directory::create('hoa://Application/Public')
         );
 
-        $index       = resolve('hoa://Application/Public/index.php');
+        $index       = 'hoa://Application/Public/index.php';
         $indexStatus = true;
 
         if(false === file_exists($index)) {
 
             $bootstrap = new \Hoa\File\Write(
-                resolve('hoa://Application/Public/index.php')
+                'hoa://Application/Public/index.php'
             );
             $indexStatus = false !== $bootstrap->writeAll(
                 '<?php' . "\n\n" .
