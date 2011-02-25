@@ -72,6 +72,10 @@ class Blockcode extends \Hoa\Xyl\Element\Concrete {
                     $this->colorizePhp($out);
                   break;
 
+                case 'shell':
+                    $this->colorizeShell($out);
+                  break;
+
                 case 'xml':
                     $this->colorizeXml($out);
                   break;
@@ -142,6 +146,36 @@ class Blockcode extends \Hoa\Xyl\Element\Concrete {
                         '</span>'
                     );
             }
+        }
+
+        return;
+    }
+
+    /**
+     * Colorize Shell command lines.
+     *
+     * @access  protected
+     * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
+     * @return  void
+     */
+    protected function colorizeShell ( \Hoa\Stream\IStream\Out $out ) {
+
+        foreach(explode("\n", $this->computeValue()) as $line) {
+
+            $line = trim($line);
+
+            if(empty($line))
+                $out->writeAll("\n");
+
+            elseif('$' == $line[0])
+                $out->writeAll(
+                    '$ <span class="token-id">' . ltrim($line, '$ ') . '</span>' .
+                    "\n"
+                );
+            else
+                $out->writeAll(
+                    '<span class="token-string">' . $line . '</span>' . "\n"
+                );
         }
 
         return;
