@@ -24,40 +24,33 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Data
- *
  */
 
-/**
- * Hoa_Controller_Front
- */
-import('Controller.Front');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_File_Directory
+ * \Hoa\File\Write
  */
-import('File.Directory');
+-> import('File.Write')
 
 /**
- * Hoa_File_Write
+ * \Hoa\File\Directory
  */
-import('File.Write');
+-> import('File.Directory');
 
 /**
  * Class CreateCommand.
  *
- * Create a controller according to controller parameters.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2011 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
+ *
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2011 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class CreateCommand extends Hoa_Console_Command_Generic {
+class CreateCommand extends \Hoa\Console\Command\Generic {
 
     /**
      * Author name.
@@ -79,9 +72,9 @@ class CreateCommand extends Hoa_Console_Command_Generic {
      * @var VersionCommand array
      */
     protected $options     = array(
-        array('primary', parent::REQUIRED_ARGUMENT, 'p'),
-        array('help',    parent::NO_ARGUMENT,       'h'),
-        array('help',    parent::NO_ARGUMENT,       '?')
+        array('asynchronous', parent::NO_ARGUMENT, 'a'),
+        array('help',         parent::NO_ARGUMENT, 'h'),
+        array('help',         parent::NO_ARGUMENT, '?')
     );
 
 
@@ -94,141 +87,74 @@ class CreateCommand extends Hoa_Console_Command_Generic {
      */
     public function main ( ) {
 
-        $primary = null;
+        $as = 'synchronous';
 
         while(false !== $c = parent::getOption($v)) {
 
             switch($c) {
 
-                case 'p':
-                    $primary = $v;
+                case 'a':
+                    $as = 'asynchronous';
                   break;
 
                 case 'h':
                 case '?':
                     return $this->usage();
-                  break;
             }
         }
 
-        parent::listInputs($controllerName);
+        parent::listInputs($controller);
 
-        if(null === $controllerName)
+        if(null === $controller)
             return $this->usage();
 
-        $path = 'hoa://Data/Etc/Configuration/.Cache/HoaControllerFront.php';
+        cout('Creating ' . parent::stylize($controller, 'info') . ' controller.');
 
-        if(!file_exists($path))
-            throw new Hoa_Console_Command_Exception(
-                'Configuration cache file %s does not exist.', 0, $path);
+        $configuration = require 'hoa://Data/Etc/Configuration/.Cache/HoaControllerDispatcher.php';
+        $keywords      = $configuration['keywords'];
+        $parameters    = $configuration['parameters'];
 
-        $configurations = require $path;
+        $keywords['controller'] = $controller;
 
-        if(   !is_array($configurations)
-           || !isset($configurations['keywords'])
-           || !isset($configurations['parameters']))
-            throw new Hoa_Console_Command_Exception(
-                'Configuration cache files %s appears corrupted.', 1, $path);
-
-
-        if(null === $primary) {
-
-            $configurations['keywords']['controller'] = $controllerName;
-            $configurations['keywords']['action']     = 'index';
-        }
-        else {
-
-            $configurations['keywords']['controller'] = $primary;
-            $configurations['keywords']['action']     = $controllerName;
-        }
-
-        $class = Hoa_Core_Parameter::zFormat(
-            $configurations['parameters']['controller.class'],
-            $configurations['keywords'],
-            $configurations['parameters']
+        $file       = \Hoa\Core\Parameter::zFormat(
+            $parameters[$as . '.file'],
+            $keywords,
+            $parameters
         );
-
-        if(null === $primary) {
-
-            $directory = Hoa_Core_Parameter::zFormat(
-                $configurations['parameters']['controller.directory'],
-                $configurations['keywords'],
-                $configurations['parameters']
-            );
-            $file      = Hoa_Core_Parameter::zFormat(
-                $configurations['parameters']['controller.file'],
-                $configurations['keywords'],
-                $configurations['parameters']
-            );
-            $method    = null;
-            $extends   = 'Hoa_Controller_Action_Standard';
-        }
-        else {
-
-            $extends   = $class;
-            $directory = Hoa_Core_Parameter::zFormat(
-                $configurations['parameters']['action.directory'],
-                $configurations['keywords'],
-                $configurations['parameters']
-            );
-            $file      = Hoa_Core_Parameter::zFormat(
-                $configurations['parameters']['action.file'],
-                $configurations['keywords'],
-                $configurations['parameters']
-            );
-            $class     = Hoa_Core_Parameter::zFormat(
-                $configurations['parameters']['action.class'],
-                $configurations['keywords'],
-                $configurations['parameters']
-            );
-            $method    = Hoa_Core_Parameter::zFormat(
-                $configurations['parameters']['action.method'],
-                $configurations['keywords'],
-                $configurations['parameters']
-            );
-        }
-
-        $model = Hoa_Core_Parameter::zFormat(
-            $configurations['parameters']['model.directory'],
-            $configurations['keywords'],
-            $configurations['parameters']
-        );
-
-        if(file_exists($directory . $file))
-            throw new Hoa_Console_Command_Exception(
-                'Controller %s already exists at %s.',
-                2, array($class, $directory . $file));
-
-        if(!is_dir($directory))
-            parent::status(
-                'Create ' .
-                parent::stylize('controller', 'info') .
-                ' directory at ' .
-                parent::stylize($directory, 'info') . '.',
-                Hoa_File_Directory::create($directory)
-            );
-
-        $s = true;
-        $f = new Hoa_File_Write($directory . $file);
-        $s = $f->writeAll(
-           '<?php' . "\n\n" .
-           'class ' . $class  . ' extends ' . $extends . ' {' . "\n\n" .
-           (null !== $method
-               ? '    public function ' . $method . ' ( ) {' . "\n\n" .
-                 '    }' . "\n"
-               : '') .
-           '}'
+        $controller = \Hoa\Core\Parameter::zFormat(
+            $parameters[$as . '.controller'],
+            $keywords,
+            $parameters
         );
 
         parent::status(
-            'Create ' .
-            parent::stylize('controller', 'info') .
-            ' file and class at ' .
-            parent::stylize($file, 'info') . '.',
-            (bool) $s
+            'Create ' . parent::stylize(dirname($file), 'info') . '.',
+            \Hoa\File\Directory::create(dirname($file))
         );
 
-		return HC_SUCCESS;
+        $controllerStatus = true;
+
+        if(false === file_exists($file)) {
+
+            $handle = new \Hoa\File\Write($file);
+            $controllerStatus = false !== $handle->writeAll(
+                '<?php' . "\n\n" .
+                'class ' . $controller . ' {' . "\n\n" .
+                '}'
+            );
+        }
+
+        parent::status(
+            'Create ' . parent::stylize($file, 'info') . '.',
+            $controllerStatus
+        );
+
+        parent::status(
+            'Create ' . parent::stylize($controller, 'info') . '.',
+            $controllerStatus
+        );
+
+        return HC_SUCCESS;
     }
 
     /**
@@ -239,14 +165,15 @@ class CreateCommand extends Hoa_Console_Command_Generic {
      */
     public function usage ( ) {
 
-        cout('Usage   : controller:create <options> controllerName');
+        cout('Usage   : controller:create <options> controller-name');
         cout('Options :');
         cout(parent::makeUsageOptionsList(array(
-            'p'    => 'Specify the primary controller name when creating a ' .
-                      'secondary controller.',
+            'a'    => 'Whether the controller is asynchronous.',
             'help' => 'This help.'
         )));
 
         return HC_SUCCESS;
     }
+}
+
 }

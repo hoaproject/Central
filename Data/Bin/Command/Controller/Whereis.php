@@ -42,7 +42,7 @@
  * @version     0.1
  */
 
-class WhereisCommand extends Hoa_Console_Command_Generic {
+class WhereisCommand extends \Hoa\Console\Command\Generic {
 
     /**
      * Author name.
@@ -110,7 +110,7 @@ class WhereisCommand extends Hoa_Console_Command_Generic {
         $path = 'hoa://Data/Etc/Configuration/.Cache/HoaControllerFront.php';
 
         if(!file_exists($path))
-            throw new Hoa_Console_Command_Exception(
+            throw new \Hoa\Console\Command\Exception(
                 'Configuration cache file %s does not exist.', 0, $path);
 
         $configurations = require $path;
@@ -118,7 +118,7 @@ class WhereisCommand extends Hoa_Console_Command_Generic {
         if(   !is_array($configurations)
            || !isset($configurations['keywords'])
            || !isset($configurations['parameters']))
-            throw new Hoa_Console_Command_Exception(
+            throw new \Hoa\Console\Command\Exception(
                 'Configuration cache files %s appears corrupted.', 1, $path);
 
 
@@ -133,7 +133,7 @@ class WhereisCommand extends Hoa_Console_Command_Generic {
             $configurations['keywords']['action']     = $controllerName;
         }
 
-        $class     = Hoa_Core_Parameter::zFormat(
+        $class     = \Hoa\Core\Parameter::zFormat(
             $configurations['parameters']['controller.class'],
             $configurations['keywords'],
             $configurations['parameters']
@@ -141,12 +141,12 @@ class WhereisCommand extends Hoa_Console_Command_Generic {
 
         if(null === $primary) {
 
-            $directory = Hoa_Core_Parameter::zFormat(
+            $directory = \Hoa\Core\Parameter::zFormat(
                 $configurations['parameters']['controller.directory'],
                 $configurations['keywords'],
                 $configurations['parameters']
             );
-            $file      = Hoa_Core_Parameter::zFormat(
+            $file      = \Hoa\Core\Parameter::zFormat(
                 $configurations['parameters']['controller.file'],
                 $configurations['keywords'],
                 $configurations['parameters']
@@ -154,19 +154,19 @@ class WhereisCommand extends Hoa_Console_Command_Generic {
         }
         else {
 
-            $directory = Hoa_Core_Parameter::zFormat(
+            $directory = \Hoa\Core\Parameter::zFormat(
                 $configurations['parameters']['action.directory'],
                 $configurations['keywords'],
                 $configurations['parameters']
             );
-            $file      = Hoa_Core_Parameter::zFormat(
+            $file      = \Hoa\Core\Parameter::zFormat(
                 $configurations['parameters']['action.file'],
                 $configurations['keywords'],
                 $configurations['parameters']
             );
         }
 
-        $model = Hoa_Core_Parameter::zFormat(
+        $model = \Hoa\Core\Parameter::zFormat(
             $configurations['parameters']['model.directory'],
             $configurations['keywords'],
             $configurations['parameters']
