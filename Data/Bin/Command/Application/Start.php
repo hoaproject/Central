@@ -31,30 +31,23 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Controller\Front
+ * \Hoa\File\Write
  */
--> import('Controller.Front')
+-> import('File.Write')
 
 /**
  * \Hoa\File\Directory
  */
--> import('File.Directory')
-
-/**
- * \Hoa\File\Write
- */
--> import('File.Write');
+-> import('File.Directory');
 
 /**
  * Class StartCommand.
  *
- * Start the application, i.e. create the MVC structure and the bootstrap.
+ * Start the application.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2011 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2011 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
 class StartCommand extends \Hoa\Console\Command\Generic {
@@ -79,10 +72,8 @@ class StartCommand extends \Hoa\Console\Command\Generic {
      * @var VersionCommand array
      */
     protected $options     = array(
-        array('bootstrap', parent::REQUIRED_ARGUMENT, 'b'),
-        array('view',      parent::REQUIRED_ARGUMENT, 'v'),
-        array('help',      parent::NO_ARGUMENT,       'h'),
-        array('help',      parent::NO_ARGUMENT,       '?')
+        array('help', parent::NO_ARGUMENT, 'h'),
+        array('help', parent::NO_ARGUMENT, '?')
     );
 
 
@@ -95,20 +86,9 @@ class StartCommand extends \Hoa\Console\Command\Generic {
      */
     public function main ( ) {
 
-        $bootstrap = null;
-        $view      = null;
-
         while(false !== $c = parent::getOption($v)) {
 
             switch($c) {
-
-                case 'b':
-                    $bootstrap = $v;
-                  break;
-
-                case 'v':
-                    $view = $v;
-                  break;
 
                 case 'h':
                 case '?':
@@ -116,77 +96,31 @@ class StartCommand extends \Hoa\Console\Command\Generic {
             }
         }
 
-        parent::listInputs($bootstrap);
-
-        $path = 'hoa://Data/Etc/Configuration/.Cache/HoaControllerFront.php';
-
-        if(!file_exists($path))
-            throw new \Hoa\Console\Command\Exception(
-                'The Controller cache is not found in %s. Must generate it.',
-                0, $path);
-
-        $configurations = require $path;
-
-        if(   !is_array($configurations)
-           || !isset($configurations['keywords'])
-           || !isset($configurations['parameters']))
-            throw new \Hoa\Console\Command\Exception(
-                'Configuration cache filse %s appears corrupted.', 1, $path);
-
-        if(null !== $view)
-            $configurations['keywords']['view'] = $view;
-
-        $cd = \Hoa\Core\Parameter::zFormat(
-            $configurations['parameters']['controller.directory'],
-            $configurations['keywords'],
-            $configurations['parameters']
-        );
-        $md = \Hoa\Core\Parameter::zFormat(
-            $configurations['parameters']['model.share.directory'],
-            $configurations['keywords'],
-            $configurations['parameters']
-        );
-        $vd = \Hoa\Core\Parameter::zFormat(
-            $configurations['parameters']['view.directory'],
-            $configurations['keywords'],
-            $configurations['parameters']
-        );
+        cout('Creating the skeleton of our application.');
 
         parent::status(
-            'Create ' .
-            parent::stylize('controller', 'info') .
-            ' directory at ' .
-            parent::stylize($cd, 'info') . '.',
-            \Hoa\File\Directory::create($cd)
-        );
-        parent::status(
-            'Create ' .
-            parent::stylize('model', 'info') .
-            ' directory at ' .
-            parent::stylize($md, 'info') . '.',
-            \Hoa\File\Directory::create($md)
-        );
-        parent::status(
-            'Create ' .
-            parent::stylize('view', 'info') .
-            ' directory at ' .
-            parent::stylize($vd, 'info') . '.',
-            \Hoa\File\Directory::create($vd)
+            'Create ' . parent::stylize('hoa://Application/Public.', 'info'),
+            \Hoa\File\Directory::create(resolve('hoa://Application/Public'))
         );
 
-        if(null === $bootstrap)
-            return HC_SUCCESS;
+        $index       = resolve('hoa://Application/Public/index.php');
+        $indexStatus = true;
 
-        $p = 'hoa://Application/Public/' . $bootstrap . '.php';
+        if(false === file_exists($index)) {
+
+            $bootstrap = new \Hoa\File\Write(
+                resolve('hoa://Application/Public/index.php')
+            );
+            $indexStatus = false !== $bootstrap->writeAll(
+                '<?php' . "\n\n" .
+                'require \'../../Framework/Core/Core.php\';' . "\n\n" .
+                'echo \'Hello world!\' . "\n";'
+            );
+        }
 
         parent::status(
-            'Create ' .
-            parent::stylize($bootstrap, 'info') .
-            ' bootstrap file at ' .
-            parent::stylize($p, 'info') . '.',
-            \Hoa\File\Directory::create(dirname($p))
-            &&
-            new \Hoa\File\Write($p)
+            'Create ' . parent::stylize('hoa://Application/Public/index.php.', 'info'),
+            $indexStatus
         );
 
         return HC_SUCCESS;
@@ -203,8 +137,6 @@ class StartCommand extends \Hoa\Console\Command\Generic {
         cout('Usage   : application:start <options>');
         cout('Options :');
         cout(parent::makeUsageOptionsList(array(
-            'b'    => 'Bootstrap name.',
-            'v'    => 'View theme name.',
             'help' => 'This help.'
         )));
 
