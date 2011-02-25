@@ -147,10 +147,6 @@ class WelcomeCommand extends \Hoa\Console\Command\Generic {
                 '    ' . parent::stylize('create', 'command'),
                 'Create a new controller.'
             ),
-            array(
-                '    ' . parent::stylize('whereis', 'command'),
-                'Return the path of a controller.'
-            ),
 
             // Configuration.
             array('Configuration'),
