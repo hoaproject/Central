@@ -286,7 +286,7 @@ class Router implements \Hoa\Core\Parameterizable {
                                      $action = null, Array $extra = array(),
                                      $dispatcher = '_default' ) {
 
-        if($controller instanceof Closure) {
+        if($controller instanceof \Closure) {
 
             $action     = $controller;
             $controller = null;
