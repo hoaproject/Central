@@ -143,10 +143,10 @@ class Core implements Parameterizable {
         !defined('_dynamic')     and define('_dynamic', ~_static);
         !defined('_concrete')    and define('_concrete',~_abstract);
         !defined('_overridable') and define('_overridable', ~_final);
-        !defined('HOA_VERSION_MAJOR')   and define('HOA_VERSION_MAJOR',   0);
-        !defined('HOA_VERSION_MINOR')   and define('HOA_VERSION_MINOR',   5);
-        !defined('HOA_VERSION_RELEASE') and define('HOA_VERSION_RELEASE', 5);
-        !defined('HOA_VERSION_STATUS')  and define('HOA_VERSION_STATUS',  'b');
+        !defined('HOA_VERSION_MAJOR')   and define('HOA_VERSION_MAJOR',   1);
+        !defined('HOA_VERSION_MINOR')   and define('HOA_VERSION_MINOR',   0);
+        !defined('HOA_VERSION_RELEASE') and define('HOA_VERSION_RELEASE', 0);
+        !defined('HOA_VERSION_STATUS')  and define('HOA_VERSION_STATUS',  'a');
         !defined('HOA_REVISION')        and define('HOA_REVISION',        998);
         !defined('HOA_REVISION_PREV')   and define('HOA_REVISION_PREV',   600);
 

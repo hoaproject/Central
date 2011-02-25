@@ -286,6 +286,12 @@ class Router implements \Hoa\Core\Parameterizable {
                                      $action = null, Array $extra = array(),
                                      $dispatcher = '_default' ) {
 
+        if($controller instanceof Closure) {
+
+            $action     = $controller;
+            $controller = null;
+        }
+
         if(is_string($controller))
             $controller = strtolower($controller);
 
