@@ -99,7 +99,7 @@ class StartCommand extends \Hoa\Console\Command\Generic {
         cout('Creating the skeleton of our application.');
 
         parent::status(
-            'Create ' . parent::stylize('hoa://Application/Public.', 'info'),
+            'Create ' . parent::stylize('hoa://Application/Public', 'info') . '.',
             \Hoa\File\Directory::create('hoa://Application/Public')
         );
 
@@ -119,7 +119,7 @@ class StartCommand extends \Hoa\Console\Command\Generic {
         }
 
         parent::status(
-            'Create ' . parent::stylize('hoa://Application/Public/index.php.', 'info'),
+            'Create ' . parent::stylize($index, 'info') . '.',
             $indexStatus
         );
 
