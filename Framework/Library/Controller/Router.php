@@ -245,7 +245,7 @@ class Router implements \Hoa\Core\Parameterizable {
      * @access  public
      * @param   string  $id            ID.
      * @param   string  $pattern       A regular expression.
-     * @param   string  $controller    A class name, an instance  or null.
+     * @param   string  $controller    A class name, an instance or null.
      * @param   string  $action        A method name, a function name, a
      *                                 closure or null.
      * @param   array   $extra         Extra data.
@@ -275,7 +275,7 @@ class Router implements \Hoa\Core\Parameterizable {
      * @access  public
      * @param   string  $id            ID.
      * @param   string  $pattern       A regular expression.
-     * @param   string  $controller    A class name, an instance  or null.
+     * @param   string  $controller    A class name, an instance or null.
      * @param   string  $action        A method name, a function name, a
      *                                 closure or null.
      * @param   array   $extra         Extra data.
