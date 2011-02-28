@@ -48,7 +48,7 @@ from('Hoa')
 /**
  * \Hoa\Xml\Element\Write
  */
--> import('Xml.Element.Write');
+-> import('Xml.Element.Write', true);
 
 }
 

@@ -53,7 +53,7 @@ from('Hoa')
 /**
  * \Hoa\Xml\Element\ReadWrite
  */
--> import('Xml.Element.ReadWrite');
+-> import('Xml.Element.ReadWrite', true);
 
 }
 
