@@ -91,7 +91,7 @@ abstract class Xml
      *     </handler>
      *
      * @access  public
-     * @param   string      $stream         Stream name to use.
+     * @param   string       $stream         Stream name to use.
      * @param   \Hoa\Stream  $innerStream    Inner stream.
      * @return  void
      * @throw   \Hoa\Xml\Exception
