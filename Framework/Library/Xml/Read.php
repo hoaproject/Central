@@ -48,7 +48,7 @@ from('Hoa')
 /**
  * \Hoa\Xml\Element\Read
  */
--> import('Xml.Element.Read');
+-> import('Xml.Element.Read', true);
 
 }
 

@@ -43,7 +43,7 @@ from('Hoa')
 /**
  * \Hoa\Xyl\Element\Basic
  */
--> import('Xyl.Element.Basic')
+-> import('Xyl.Element.Basic', true)
 
 /**
  * \Hoa\Xyl\Element\Executable
