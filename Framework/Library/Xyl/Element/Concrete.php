@@ -271,20 +271,21 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      */
     public function computeValue ( \Hoa\Stream\IStream\Out $out = null ) {
 
-        $data = false;
+        $data  = false;
+        $count = 0 == count($this);
 
         if($this->getAbstractElement()->attributeExists('bind'))
             $data = $this->_transientValue
                   = $this->getCurrentData();
 
-        elseif(0 == count($this))
+        elseif(true === $count)
             $data = $this->_transientValue
                   = $this->getAbstractElement()->readAll();
 
         if(null === $out)
             return $data;
 
-        if(false !== $data) {
+        if(false !== $data && true === $count) {
 
             $out->writeAll($data);
 
