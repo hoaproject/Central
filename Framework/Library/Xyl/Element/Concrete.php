@@ -177,9 +177,12 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      */
     public function getCurrentData ( ) {
 
-        return $this->_bucket['data']
-                             [$this->_bucket['current']]
-                             [$this->_bucket['branche']];
+        $current = $this->_bucket['data'][$this->_bucket['current']];
+
+        if(!isset($current[$this->_bucket['branche']]))
+            return null;
+
+        return $current[$this->_bucket['branche']];
     }
 
     /**
