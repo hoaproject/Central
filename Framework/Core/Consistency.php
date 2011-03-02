@@ -311,6 +311,9 @@ class Consistency {
      */
     public static function autoload ( $classname ) {
 
+        if('\\' == $classname[0])
+            $classname = substr($classname, 1);
+
         $classes = self::getAllImportedClasses();
 
         if(!isset($classes[$classname]))
