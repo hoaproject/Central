@@ -113,6 +113,9 @@ class RenderCommand extends \Hoa\Console\Command\Generic {
                   break;
 
                 case 's':
+                    if('default' == $v)
+                        $v = 'http://hoa-project.net/Public/Css/Xyl_default.css';
+
                     $stylesheet[] = $v;
                   break;
 
@@ -173,7 +176,9 @@ class RenderCommand extends \Hoa\Console\Command\Generic {
         cout(parent::makeUsageOptionsList(array(
             'i'    => 'Interpreter name.',
             'd'    => 'Data filename, that adds data to the $data variable.',
-            's'    => 'Stylesheet of the document.',
+            's'    => 'Stylesheet of the document:' . "\n" .
+                      '    [URI]   for a specific stylesheet;' . "\n" .
+                      '    default for a default stylsheet.',
             'o'    => 'Overlay of the document.',
             'help' => 'This help.'
         )));
