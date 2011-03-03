@@ -113,8 +113,7 @@ class          Document
 
             foreach($this->_resources['css'] as $href)
                 $out->writeAll(
-                    '  <link type="text/css" href="' .
-                    $root->resolve($href) .
+                    '  <link type="text/css" href="' . $href .
                     '" rel="stylesheet" />' . "\n"
                 );
         }
