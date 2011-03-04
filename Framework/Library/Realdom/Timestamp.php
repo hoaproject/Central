@@ -105,6 +105,7 @@ class Timestamp extends Constinteger {
      * Sample one new value.
      *
      * @access  protected
+     * @param   \Hoa\Test\Sampler  $sampler    Sampler.
      * @return  mixed
      */
     protected function _sample ( \Hoa\Test\Sampler $sampler ) {

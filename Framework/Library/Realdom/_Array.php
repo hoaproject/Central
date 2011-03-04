@@ -143,8 +143,8 @@ class _Array extends Realdom {
      * Sample one new value.
      *
      * @access  protected
+     * @param   \Hoa\Test\Sampler  $sampler    Sampler.
      * @return  mixed
-     * @throw   \Hoa\Realdom\Exception
      */
     protected function _sample ( \Hoa\Test\Sampler $sampler ) {
 
