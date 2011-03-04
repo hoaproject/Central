@@ -33,7 +33,12 @@ from('Hoa')
 /**
  * \Hoa\Realdom\String
  */
--> import('Realdom.String');
+-> import('Realdom.String')
+
+/**
+ * \Hoa\Realdom\Constant
+ */
+-> import('Realdom.Constant');
 
 }
 
@@ -49,7 +54,7 @@ namespace Hoa\Realdom {
  * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Conststring extends String {
+class Conststring extends String implements Constant {
 
     /**
      * Realistic domain name.
@@ -101,6 +106,17 @@ class Conststring extends String {
      * @return  mixed
      */
     protected function _sample ( \Hoa\Test\Sampler $sampler ) {
+
+        return $this->_value;
+    }
+
+    /**
+     * Get constant value.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getConstantValue ( ) {
 
         return $this->_value;
     }

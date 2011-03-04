@@ -33,6 +33,11 @@ from('Hoa')
 /**
  * \Hoa\Realdom\Float
  */
+-> import('Realdom.Float')
+
+/**
+ * \Hoa\Realdom\Constant
+ */
 -> import('Realdom.Float');
 
 }
@@ -49,7 +54,7 @@ namespace Hoa\Realdom {
  * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Constfloat extends Float {
+class Constfloat extends Float implements Constant {
 
     /**
      * Realistic domain name.
@@ -101,6 +106,17 @@ class Constfloat extends Float {
      * @return  mixed
      */
     protected function _sample ( \Hoa\Test\Sampler $sampler ) {
+
+        return $this->_value;
+    }
+
+    /**
+     * Get constant value.
+     *
+     * @access  public
+     * @return  float
+     */
+    public function getConstantValue ( ) {
 
         return $this->_value;
     }
