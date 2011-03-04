@@ -33,7 +33,12 @@ from('Hoa')
 /**
  * \Hoa\Realdom\Integer
  */
--> import('Realdom.Integer');
+-> import('Realdom.Integer')
+
+/**
+ * \Hoa\Realdom\Constant
+ */
+-> import('Realdom.Constant');
 
 }
 
@@ -49,7 +54,7 @@ namespace Hoa\Realdom {
  * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Constinteger extends Integer {
+class Constinteger extends Integer implements Constant {
 
     /**
      * Realistic domain name.
@@ -101,6 +106,17 @@ class Constinteger extends Integer {
      * @return  mixed
      */
     protected function _sample ( \Hoa\Test\Sampler $sampler ) {
+
+        return $this->_value;
+    }
+
+    /**
+     * Get constant value.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getConstantValue ( ) {
 
         return $this->_value;
     }

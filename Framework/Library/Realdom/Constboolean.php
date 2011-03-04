@@ -33,7 +33,12 @@ from('Hoa')
 /**
  * \Hoa\Realdom\Boolean
  */
--> import('Realdom.Boolean');
+-> import('Realdom.Boolean')
+
+/**
+ * \Hoa\Realdom\Constant
+ */
+-> import('Realdom.Constant');
 
 }
 
@@ -49,7 +54,7 @@ namespace Hoa\Realdom {
  * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Constboolean extends Boolean {
+class Constboolean extends Boolean implements Constant {
 
     /**
      * Realistic domain name.
@@ -101,6 +106,17 @@ class Constboolean extends Boolean {
      * @return  mixed
      */
     protected function _sample ( \Hoa\Test\Sampler $sampler ) {
+
+        return $this->_value;
+    }
+
+    /**
+     * Get constant value.
+     *
+     * @access  public
+     * @return  boolean
+     */
+    public function getConstantValue ( ) {
 
         return $this->_value;
     }
