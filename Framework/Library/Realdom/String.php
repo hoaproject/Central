@@ -100,7 +100,6 @@ class String extends Realdom {
      * @param   \Hoa\Realdom\Integer       $length          Length.
      * @param   \Hoa\Realdom\Constinteger  $codepointMin    Minimum code point.
      * @param   \Hoa\Realdom\Constinteger  $codepointMax    Maximum code point.
-     * @throw   \Hoa\Realdom\Integer
      * @return  void
      */
     public function construct ( Integer      $length       = null,
