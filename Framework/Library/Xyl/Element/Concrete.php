@@ -149,8 +149,9 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         if($this instanceof \Hoa\Xyl\Element\Executable)
             $this->preExecute();
 
-        foreach($this as $element)
-            $element->computeDataBinding($handle[0][$branche], $this->_bucket);
+        if(isset($handle[0][$branche]))
+            foreach($this as $element)
+                $element->computeDataBinding($handle[0][$branche], $this->_bucket);
 
         if($this instanceof \Hoa\Xyl\Element\Executable)
             $this->postExecute();
@@ -176,6 +177,9 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      * @return  mixed
      */
     public function getCurrentData ( ) {
+
+        if(!isset($this->_bucket['data']))
+            return;
 
         $current = $this->_bucket['data'][$this->_bucket['current']];
 
