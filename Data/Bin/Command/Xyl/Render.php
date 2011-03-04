@@ -114,7 +114,7 @@ class RenderCommand extends \Hoa\Console\Command\Generic {
 
                 case 's':
                     if('default' == $v)
-                        $v = 'http://hoa-project.net/Public/Css/Xyl_default.css';
+                        $v = 'http://hoa-project.net/Css/Xyl_default.css';
 
                     $stylesheet[] = $v;
                   break;
