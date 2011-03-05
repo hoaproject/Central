@@ -113,8 +113,8 @@ class StartCommand extends \Hoa\Console\Command\Generic {
             );
             $indexStatus = false !== $bootstrap->writeAll(
                 '<?php' . "\n\n" .
-                'require \'../../Framework/Core/Core.php\';' . "\n\n" .
-                'echo \'Hello world!\' . "\n";'
+                'require __DIR__ . \'/../../Framework/Core/Core.php\';' . "\n\n" .
+                'echo \'Hello you! I\\\'m Hoa and I\\\'m installed :-).\' . "\n";'
             );
         }
 
