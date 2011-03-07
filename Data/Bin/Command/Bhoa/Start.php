@@ -153,14 +153,17 @@ class StartCommand extends \Hoa\Console\Command\Generic {
                 $methodAsString = strtoupper($request->getMethodAsString());
                 $url            = $request->getURL();
 
-                cout($methodAsString . ' ' . $url);
+                cout(
+                    '↺ '. $methodAsString . ' ' . $url . ' (wait…)',
+                    \Hoa\Console\Core\Io::NO_NEW_LINE
+                );
 
                 switch($method) {
 
                     case \Hoa\Http\Request::METHOD_GET:
-                        $url = '"' . str_replace('"', '\"', $url) . '"';
+                        $_url = '"' . str_replace('"', '\"', $url) . '"';
                         $process = proc_open(
-                            $php . ' index.php ' . $url,
+                            $php . ' index.php ' . $_url,
                             array(
                                 0 => array('pipe', 'r'),
                                 1 => array('pipe', 'w'),
@@ -197,6 +200,8 @@ class StartCommand extends \Hoa\Console\Command\Generic {
                             $content
                         );
                 }
+
+                cout("\r" . '✓ '. $methodAsString . ' ' . $url . '        ');
             }
 
         return HC_SUCCESS;
