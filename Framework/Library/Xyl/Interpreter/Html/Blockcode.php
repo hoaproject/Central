@@ -194,8 +194,6 @@ class Blockcode extends \Hoa\Xyl\Element\Concrete {
             '#</([^>]+)>|<([^>]+)>#',
             function ( $matches ) {
 
-                //print_r($matches);
-
                 if(!isset($matches[2]))
                     return '<span class="token-keyword">&lt;/' .
                            $matches[1] . '&gt;</span>';
@@ -224,24 +222,22 @@ class Blockcode extends \Hoa\Xyl\Element\Concrete {
 
                 if(!empty($attributes)) {
 
-                    $out .= ' ';
-
                     foreach($attributes as $i => $attribute)
                         // Boolean: abc
                         if(!isset($attribute[2]))
-                            $out .= '<span class="token-id">' . $attribute[1] .
+                            $out .= ' <span class="token-id">' . $attribute[1] .
                                     '</span>';
 
                         // Quote: abc="def" or abc='def'
                         elseif(!isset($attribute[5]))
-                            $out .= '<span class="token-id">' . $attribute[1] .
+                            $out .= ' <span class="token-id">' . $attribute[1] .
                                     '</span>=<span class="token-string">' .
                                     $attribute[3] . $attribute[4] .
                                     $attribute[3] . '</span>';
 
                         // No-quote: abc=def
                         else
-                            $out .= '<span class="token-id">' . $attribute[1] .
+                            $out .= ' <span class="token-id">' . $attribute[1] .
                                     '</span>=<span class="token-string">' .
                                     $attribute[5] . '</span>';
                 }
