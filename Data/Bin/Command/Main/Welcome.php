@@ -199,7 +199,7 @@ class WelcomeCommand extends \Hoa\Console\Command\Generic {
             // Bhoa.
             array('Bhoa'),
             array(
-                '    ' . parent::stylize('render', 'command'),
+                '    ' . parent::stylize('start', 'command'),
                 'Start a damn stupid HTTP server.'
             ),
 
