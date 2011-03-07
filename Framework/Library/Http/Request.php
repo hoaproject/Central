@@ -144,8 +144,8 @@ class Request {
                 $this->_method = self::METHOD_EXTENDED;
         }
 
-        $this->_url         = $this->setURL($matches[2]);
-        $this->_httpVersion = $this->setHTTPVersion((float) $matches[3]);
+        $this->setURL($matches[2]);
+        $this->setHTTPVersion((float) $matches[3]);
 
         foreach($headers as $header) {
 
@@ -259,6 +259,50 @@ class Request {
     public function getMethod ( ) {
 
         return $this->_method;
+    }
+
+    public function getMethodAsString ( ) {
+
+        switch($this->getMethod()) {
+
+            case self::METHOD_CONNECT:
+                return 'connect';
+              break;
+
+            case self::METHOD_DELETE:
+                return 'delete';
+              break;
+
+            case self::METHOD_GET:
+                return 'get';
+              break;
+
+            case self::METHOD_HEAD:
+                return 'head';
+              break;
+
+            case self::METHOD_OPTIONS:
+                return 'options';
+              break;
+
+            case self::METHOD_POST:
+                return 'post';
+              break;
+
+            case self::METHOD_PUT:
+                return 'put';
+              break;
+
+            case self::METHOD_TRACE:
+                return 'trace';
+              break;
+
+            case self::METHOD_EXTENDED:
+            default:
+                return 'extended';
+              break;
+
+        }
     }
 
     public function setAccept ( $accept ) {
@@ -537,9 +581,9 @@ class Request {
     public function setURL ( $url ) {
 
         $old        = $this->_url;
-        $this->_url = $url;
+        $this->_url = ltrim($url, '/');
 
-        return;
+        return $old;
     }
 
     public function getURL ( ) {
