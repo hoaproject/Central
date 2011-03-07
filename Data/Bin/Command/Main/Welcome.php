@@ -175,7 +175,7 @@ class WelcomeCommand extends \Hoa\Console\Command\Generic {
             ),
             array(
                 '    ' . parent::stylize('praspel', 'command'),
-                'Start the interactive interpreter for Praspel code.',
+                'Start the interpreter for Praspel code.',
             ),
 
             // XYL.
@@ -196,13 +196,14 @@ class WelcomeCommand extends \Hoa\Console\Command\Generic {
                 'Get the MySQL documentation.'
             ),
 
-            // Database.
-            array('Database'),
+            // Bhoa.
+            array('Bhoa'),
             array(
-                '    ' . parent::stylize('buildModel', 'command'),
-                'Build a model from a schema.'
+                '    ' . parent::stylize('render', 'command'),
+                'Start a damn stupid HTTP server.'
             ),
 
+            /*
             array('Service'),
             array(
                 '    ' . parent::stylize('identica', 'command'),
@@ -212,6 +213,7 @@ class WelcomeCommand extends \Hoa\Console\Command\Generic {
                 '    ' . parent::stylize('twitter', 'command'),
                 'Send a tweet!'
             )
+            */
         )));
 
         return HC_SUCCESS;
