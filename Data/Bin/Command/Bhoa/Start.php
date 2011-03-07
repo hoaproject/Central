@@ -154,7 +154,7 @@ class StartCommand extends \Hoa\Console\Command\Generic {
                 $url            = $request->getURL();
 
                 cout(
-                    '↺ '. $methodAsString . ' ' . $url . ' (wait…)',
+                    '↺ '. $methodAsString . ' ' . $url . ' (waiting…)',
                     \Hoa\Console\Core\Io::NO_NEW_LINE
                 );
 
@@ -201,7 +201,7 @@ class StartCommand extends \Hoa\Console\Command\Generic {
                         );
                 }
 
-                cout("\r" . '✓ '. $methodAsString . ' ' . $url . '        ');
+                cout("\r" . '✓ '. $methodAsString . ' ' . $url . '           ');
             }
 
         return HC_SUCCESS;
