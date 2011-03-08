@@ -131,6 +131,7 @@ class StartCommand extends \Hoa\Console\Command\Generic {
         $server  = new \Hoa\Socket\Connection\Server($ip);
         $server->connectAndWait();
         $request = new \Hoa\Http\Request();
+        $_root   = resolve($root);
 
         cout('Server is up, on ' . $ip . '!');
         cout('Root: ' . $root);
@@ -170,7 +171,7 @@ class StartCommand extends \Hoa\Console\Command\Generic {
                                 2 => array('pipe', 'w')
                             ),
                             $pipes,
-                            $root,
+                            $_root,
                             $env
                         );
                         $content = stream_get_contents($pipes[1]);
