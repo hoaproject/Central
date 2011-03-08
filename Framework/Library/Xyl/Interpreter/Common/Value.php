@@ -33,7 +33,12 @@ from('Hoa')
 /**
  * \Hoa\Xyl\Element\Concrete
  */
--> import('Xyl.Element.Concrete');
+-> import('Xyl.Element.Concrete')
+
+/**
+ * \Hoa\Xml\Element\Model\Phrasing
+ */
+-> import('Xml.Element.Model.Phrasing');
 
 }
 
@@ -49,7 +54,9 @@ namespace Hoa\Xyl\Interpreter\Common {
  * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Value extends \Hoa\Xyl\Element\Concrete {
+class          Value
+    extends    \Hoa\Xyl\Element\Concrete
+    implements \Hoa\Xml\Element\Model\Phrasing {
 
     /**
      * Paint the element.
