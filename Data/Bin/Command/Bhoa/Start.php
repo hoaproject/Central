@@ -137,7 +137,7 @@ class StartCommand extends \Hoa\Console\Command\Generic {
             $_root = resolve($_root);
 
         cout('Server is up, on ' . $ip . '!');
-        cout('Root: ' . $root);
+        cout('Root: ' . $root . '.');
         cout();
 
         $this->log('Waiting for connection…');
