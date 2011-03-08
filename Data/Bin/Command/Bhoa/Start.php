@@ -100,7 +100,7 @@ class StartCommand extends \Hoa\Console\Command\Generic {
     public function main ( ) {
 
         $domain = 'localhost';
-        $port   = 8080;
+        $port   = 8888;
         $root   = 'hoa://Application/Public/';
         $php    = $this->getParameter('command.php');
 
@@ -131,7 +131,10 @@ class StartCommand extends \Hoa\Console\Command\Generic {
         $server  = new \Hoa\Socket\Connection\Server($ip);
         $server->connectAndWait();
         $request = new \Hoa\Http\Request();
-        $_root   = resolve($root);
+        $_root   = $root;
+
+        if('hoa://' == substr($_root, 0, 6))
+            $_root = resolve($_root);
 
         cout('Server is up, on ' . $ip . '!');
         cout('Root: ' . $root);
