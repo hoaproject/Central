@@ -74,6 +74,7 @@ class Request {
     protected $_connection         = null;
     protected $_except             = null;
     protected $_from               = null;
+    protected $_host               = null;
     protected $_ifMatch            = null;
     protected $_ifModifiedSince    = null;
     protected $_ifNoneMatch        = null;
