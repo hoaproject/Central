@@ -140,6 +140,8 @@ class StartCommand extends \Hoa\Console\Command\Generic {
         cout('Root: ' . $root);
         cout();
 
+        $this->log("\n" . 'Waiting for connection…');
+
         while(true)
             foreach($server->select() as $node) {
 
@@ -157,14 +159,33 @@ class StartCommand extends \Hoa\Console\Command\Generic {
                 $methodAsString = strtoupper($request->getMethodAsString());
                 $url            = $request->getURL();
 
-                cout(
-                    '↺ '. $methodAsString . ' ' . $url . ' (waiting…)',
-                    \Hoa\Console\Core\Io::NO_NEW_LINE
+                $this->log(
+                    "\r" . '↺ '. $methodAsString . ' ' . $url .
+                    ' (waiting…)'
                 );
 
                 switch($method) {
 
                     case \Hoa\Http\Request::METHOD_GET:
+                        $path = $_root . DS . $url;
+
+                        if(file_exists($path)) {
+
+                            // I know, it's deprecated, but it's temporary.
+                            $type    = mime_content_type($path);
+                            $content = file_get_contents($path);
+                            $server->writeAll(
+                                'HTTP/1.1 200 OK' . "\r\n" .
+                                'Date: ' . date('r') . "\r\n" .
+                                'Server: Hoa+Bhoa/0.1' . "\r\n" .
+                                'Content-Type: ' . $type . "\r\n" .
+                                'Content-Length: ' . mb_strlen($content) . "\r\n\r\n" .
+                                $content
+                            );
+
+                            break;
+                        }
+
                         $_url = '"' . str_replace('"', '\"', $url) . '"';
                         $process = proc_open(
                             $php . ' index.php ' . $_url,
@@ -205,10 +226,41 @@ class StartCommand extends \Hoa\Console\Command\Generic {
                         );
                 }
 
-                cout("\r" . '✓ '. $methodAsString . ' ' . $url . '           ');
+                $this->log("\r" . '✓ '. $methodAsString . ' ' . $url);
+
+                $this->log(null);
+                $this->log("\n" . 'Waiting for new connection…');
             }
 
         return HC_SUCCESS;
+    }
+
+    /**
+     * Just a server log :-). For fun only.
+     *
+     * @access  protected
+     * @param   string     $message    Message.
+     * @return  void
+     */
+    protected function log ( $message ) {
+
+        static $l = 0;
+
+        if(null === $message) {
+
+            $l = 0;
+
+            return;
+        }
+
+        $l = max($l, mb_strlen($message));
+
+        cout(
+            str_pad($message, $l, ' ', STR_PAD_RIGHT),
+            \Hoa\Console\Core\Io::NO_NEW_LINE
+        );
+
+        return;
     }
 
     /**
