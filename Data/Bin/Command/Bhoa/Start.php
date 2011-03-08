@@ -140,7 +140,7 @@ class StartCommand extends \Hoa\Console\Command\Generic {
         cout('Root: ' . $root);
         cout();
 
-        $this->log("\n" . 'Waiting for connection…');
+        $this->log('Waiting for connection…');
 
         while(true)
             foreach($server->select() as $node) {
