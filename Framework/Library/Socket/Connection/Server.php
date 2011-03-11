@@ -244,7 +244,7 @@ class Server extends Connection implements \Iterator {
         $except    = null;
         $nodeClass = $this->getNodeName();
 
-        stream_select($read, $write, $except, $this->getTimeout());
+        stream_select($read, $write, $except, $this->getTimeout(), 0);
 
         foreach($read as $i => $socket) {
 
