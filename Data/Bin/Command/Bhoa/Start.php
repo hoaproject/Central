@@ -253,7 +253,7 @@ class StartCommand extends \Hoa\Console\Command\Generic {
             return;
         }
 
-        $l = max($l, mb_strlen($message));
+        $l = max($l, mb_strlen($message) + 1);
 
         cout(
             str_pad($message, $l, ' ', STR_PAD_RIGHT),
