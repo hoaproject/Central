@@ -196,7 +196,7 @@ class StartCommand extends \Hoa\Console\Command\Generic {
                             ),
                             $pipes,
                             $_root,
-                            $env
+                            null
                         );
                         $content = stream_get_contents($pipes[1]);
                         fclose($pipes[1]);
