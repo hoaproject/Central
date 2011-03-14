@@ -168,6 +168,21 @@ class StartCommand extends \Hoa\Console\Command\Generic {
 
                     case \Hoa\Http\Request::METHOD_GET:
                         $path = $_root . DS . $url;
+                        $idx  = file_exists($_root . DS . 'index.php');
+
+                        if(is_dir($path) && false === $idx) {
+
+                            $server->writeAll(
+                                'HTTP/1.1 200 OK' . "\r\n" .
+                                'Date: ' . date('r') . "\r\n" .
+                                'Server: Hoa+Bhoa/0.1' . "\r\n" .
+                                'Content-Type: text/plain' . "\r\n" .
+                                'Content-Length: 1' . "\r\n\r\n" .
+                                'd'
+                            );
+
+                            break;
+                        }
 
                         if(file_exists($path)) {
 
@@ -181,6 +196,20 @@ class StartCommand extends \Hoa\Console\Command\Generic {
                                 'Content-Type: ' . $type . "\r\n" .
                                 'Content-Length: ' . mb_strlen($content) . "\r\n\r\n" .
                                 $content
+                            );
+
+                            break;
+                        }
+
+                        if(false === $idx) {
+
+                            $server->writeAll(
+                                'HTTP/1.1 404 Not Found' . "\r\n" .
+                                'Date: ' . date('r') . "\r\n" .
+                                'Server: Hoa+Bhoa/0.1' . "\r\n" .
+                                'Content-Type: text/plain' . "\r\n" .
+                                'Content-Length: 3' . "\r\n\r\n" .
+                                '404'
                             );
 
                             break;
