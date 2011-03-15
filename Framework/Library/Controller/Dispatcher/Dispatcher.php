@@ -96,7 +96,8 @@ abstract class Dispatcher implements \Hoa\Core\Parameterizable {
                 'asynchronous.file'       => '(:%synchronous.file:)',
                 'asynchronous.controller' => '(:%synchronous.controller:)',
                 'asynchronous.action'     => '(:%synchronous.action:)Async'
-            )
+            ),
+            __CLASS__
         );
         $this->setParameters($parameters);
 
