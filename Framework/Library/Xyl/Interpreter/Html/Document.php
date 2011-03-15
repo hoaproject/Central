@@ -119,6 +119,7 @@ class          Document
         }
 
         $out->writeAll(
+            '  <base href="' . $root->getRouter()->getParameter('base') . '" />' . "\n" .
             '</head>' . "\n" .
             '<body>' . "\n\n" .
             '<div id="body">' . "\n"
