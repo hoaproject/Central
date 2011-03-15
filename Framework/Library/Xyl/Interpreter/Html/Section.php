@@ -132,15 +132,17 @@ abstract class Section
         if(false === $this->attributeExists('for'))
             return;
 
-        $for = $this->readAttribute('for');
-        $toc = $this->xpath(
-            '//__current_ns:tableofcontents[@id="' . $for . '"]'
+        $tocs = $this->xpath(
+            '//__current_ns:tableofcontents[@id="' .
+            implode('" or @id="', $this->readAttributeAsList('for'))
+            . '"]'
         );
 
-        if(!isset($toc[0]))
+        if(empty($tocs))
             return;
 
-        $this->getConcreteElement($toc[0])->addEntry($this);
+        foreach($tocs as $toc)
+            $this->getConcreteElement($toc)->addEntry($this);
 
         return;
     }
