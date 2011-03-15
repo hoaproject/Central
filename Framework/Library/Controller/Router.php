@@ -458,7 +458,7 @@ class Router implements \Hoa\Core\Parameterizable {
 
         foreach($this->getPublicRules() as $rule) {
 
-            $pattern = $rule[self::RULE_PATTERN];
+            $pattern = ltrim($rule[self::RULE_PATTERN], '/');
 
             if(0 !== preg_match('#^' . $pattern . '$#i', $route, $matches)) {
 
