@@ -106,7 +106,14 @@ class          Link
 
         $href = $this->readAttribute('href');
 
-        if(0 != preg_match('#^@([^:]+):(.*)$#', $href, $matches)) {
+        if(0 != preg_match('#^@(?:(?:([^:]+):(.*))|([^$]+))$#', $href, $matches)) {
+
+            if(isset($matches[3])) {
+
+                $this->writeAttribute('href', $router->unroute($matches[3]));
+
+                return;
+            }
 
             $id = $matches[1];
             $kv = array();
