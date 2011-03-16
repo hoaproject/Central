@@ -351,19 +351,20 @@ class          Xyl
      * Compute <?xyl-use?> processing-instruction.
      *
      * @access  protected
+     * @param   \DOMDocument  $ownerDocument    Document that ownes PIs.
      * @return  bool
      * @throw   \Hoa\Xml\Exception
      */
-    protected function computeUse ( ) {
+    protected function computeUse ( \DOMDocument $ownerDocument ) {
 
         $streamClass = get_class($this->getInnerStream());
         $hrefs       = array();
         $uses        = array();
-        $xpath       = new \DOMXPath($this->_mowgli);
+        $xpath       = new \DOMXPath($ownerDocument);
         $xyl_use     = $xpath->query('/processing-instruction(\'xyl-use\')');
         unset($xpath);
 
-        $this->computeStylesheet($this->_mowgli);
+        $this->computeStylesheet($ownerDocument);
 
         if(0 === $xyl_use->length)
             return false;
@@ -372,7 +373,7 @@ class          Xyl
 
             $item   = $xyl_use->item($i);
             $uses[] = $item;
-            $this->_mowgli->removeChild($item);
+            $ownerDocument->removeChild($item);
         }
 
         do {
@@ -493,23 +494,28 @@ class          Xyl
      * Compute <?xyl-overlay?> processing-instruction.
      *
      * @access  protected
+     * @param   \DOMDocument  $ownerDocument    Document that ownes PIs.
      * @return  bool
      * @throw   \Hoa\Xml\Exception
      */
-    protected function computeOverlay ( ) {
+    protected function computeOverlay ( \DOMDocument $ownerDocument ) {
 
         $streamClass = get_class($this->getInnerStream());
         $hrefs       = array();
         $overlays    = array();
-        $xpath       = new \DOMXPath($this->_mowgli);
+        $xpath       = new \DOMXPath($ownerDocument);
         $xyl_overlay = $xpath->query('/processing-instruction(\'xyl-overlay\')');
         unset($xpath);
 
         if(0 === $xyl_overlay->length)
             return false;
 
-        for($i = 0, $m = $xyl_overlay->length; $i < $m; ++$i)
-            $overlays[] = $xyl_overlay->item($i);
+        for($i = 0, $m = $xyl_overlay->length; $i < $m; ++$i) {
+
+            $item       = $xyl_overlay->item($i);
+            $overlays[] = $item;
+            $ownerDocument->removeChild($item);
+        }
 
         do {
 
@@ -564,6 +570,7 @@ class          Xyl
                 $overlays[] = $xyl_overlay->item($i);
 
             $this->computeStylesheet($fod);
+            $this->computeUse($fod);
 
         } while(!empty($overlays));
 
@@ -741,13 +748,13 @@ class          Xyl
 
         for($i = 0, $m = $xyl_style->length; $i < $m; ++$i) {
 
-            $styleParsed = new \Hoa\Xml\Attribute(
-                $xyl_style->item($i)->data
-            );
+            $item        = $xyl_style->item($i);
+            $styleParsed = new \Hoa\Xml\Attribute($item->data);
 
             if(true === $styleParsed->attributeExists('href'))
                 $this->_stylesheets[] = $styleParsed->readAttribute('href');
 
+            $ownerDocument->removeChild($item);
             unset($styleParsed);
         }
 
@@ -786,9 +793,9 @@ class          Xyl
         if(null === $interpreter)
             $interpreter = $this->_interpreter;
 
-        $this->computeUse();
+        $this->computeUse($this->_mowgli);
+        $this->computeOverlay($this->_mowgli);
         $this->computeYielder();
-        $this->computeOverlay();
 
         $rank = $interpreter->getRank();
         $root = $this->getStream();
