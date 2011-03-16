@@ -184,7 +184,7 @@ class StartCommand extends \Hoa\Console\Command\Generic {
                             break;
                         }
 
-                        if(file_exists($path)) {
+                        if(file_exists($path) && !is_dir($path)) {
 
                             // I know, it's deprecated, but it's temporary.
                             $type    = mime_content_type($path);
