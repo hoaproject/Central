@@ -188,6 +188,10 @@ class StartCommand extends \Hoa\Console\Command\Generic {
 
                             // I know, it's deprecated, but it's temporary.
                             $type    = mime_content_type($path);
+
+                            if(substr($path, -3) == 'css')
+                                $type = 'text/css';
+
                             $content = file_get_contents($path);
                             $server->writeAll(
                                 'HTTP/1.1 200 OK' . "\r\n" .
