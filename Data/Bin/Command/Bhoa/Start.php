@@ -132,6 +132,7 @@ class StartCommand extends \Hoa\Console\Command\Generic {
         $server->connectAndWait();
         $request = new \Hoa\Http\Request();
         $_root   = $root;
+        $time    = time();
 
         if('hoa://' == substr($_root, 0, 6))
             $_root = resolve($_root);
@@ -158,11 +159,21 @@ class StartCommand extends \Hoa\Console\Command\Generic {
                 $method         = $request->getMethod();
                 $methodAsString = strtoupper($request->getMethodAsString());
                 $url            = $request->getURL();
+                $ttime          = time();
+                $smartPrint     = "\r";
+
+                if($ttime - $time >= 1) {
+
+                    $this->log("\r");
+                    $smartPrint = "\n";
+                }
 
                 $this->log(
-                    "\r" . '↺ '. $methodAsString . ' ' . $url .
+                    $smartPrint . '↺ '. $methodAsString . ' ' . $url .
                     ' (waiting…)'
                 );
+
+                $time = $ttime;
 
                 switch($method) {
 
