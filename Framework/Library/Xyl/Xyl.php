@@ -355,7 +355,14 @@ class          Xyl
      * @return  bool
      * @throw   \Hoa\Xml\Exception
      */
-    protected function computeUse ( \DOMDocument $ownerDocument ) {
+    protected function computeUse ( \DOMDocument $ownerDocument = null,
+                                    \DOMDocument $receiptDocument = null ) {
+
+        if(null === $ownerDocument)
+            $ownerDocument   = $this->_mowgli;
+
+        if(null === $receiptDocument)
+            $receiptDocument = $this->_mowgli;
 
         $streamClass = get_class($this->getInnerStream());
         $hrefs       = array();
@@ -407,11 +414,14 @@ class          Xyl
                     '<?xyl-use) elements.', 1, $href);
 
             foreach($fragment->xpath('//__current_ns:yield[@name]') as $yield)
-                $this->_mowgli->documentElement->appendChild(
-                    $this->_mowgli->importNode($yield->readDOM(), true)
+                $receiptDocument->documentElement->appendChild(
+                    $receiptDocument->importNode($yield->readDOM(), true)
                 );
 
-            $this->computeUse($fragment->readDOM()->ownerDocument);
+            $fragment->computeUse(
+                $fragment->readDOM()->ownerDocument,
+                $receiptDocument
+            );
         }
 
         return true;
@@ -481,7 +491,14 @@ class          Xyl
      * @return  bool
      * @throw   \Hoa\Xml\Exception
      */
-    protected function computeOverlay ( \DOMDocument $ownerDocument ) {
+    protected function computeOverlay ( \DOMDocument $ownerDocument = null,
+                                        \DOMDocument $receiptDocument = null ) {
+
+        if(null === $ownerDocument)
+            $ownerDocument   = $this->_mowgli;
+
+        if(null === $receiptDocument)
+            $receiptDocument = $this->_mowgli;
 
         $streamClass = get_class($this->getInnerStream());
         $hrefs       = array();
@@ -532,11 +549,14 @@ class          Xyl
 
             foreach($fragment->selectChildElements() as $e => $element)
                 $this->_computeOverlay(
-                    $this->_mowgli->documentElement,
-                    $this->_mowgli->importNode($element->readDOM(), true)
+                    $receiptDocument->documentElement,
+                    $receiptDocument->importNode($element->readDOM(), true)
                 );
 
-            $this->computeUse($fragment->readDOM()->ownerDocument);
+            $fod = $fragment->readDOM()->ownerDocument;
+
+            $this->computeUse    ($fod, $receiptDocument);
+            $this->computeOverlay($fod, $receiptDocument);
         }
 
         return true;
@@ -758,8 +778,8 @@ class          Xyl
         if(null === $interpreter)
             $interpreter = $this->_interpreter;
 
-        $this->computeUse($this->_mowgli);
-        $this->computeOverlay($this->_mowgli);
+        $this->computeUse();
+        $this->computeOverlay();
         $this->computeYielder();
 
         $rank = $interpreter->getRank();
