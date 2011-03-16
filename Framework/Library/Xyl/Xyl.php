@@ -371,14 +371,9 @@ class          Xyl
 
         for($i = 0, $m = $xyl_use->length; $i < $m; ++$i) {
 
-            $item   = $xyl_use->item($i);
-            $uses[] = $item;
+            $item      = $xyl_use->item($i);
+            $use       = $item;
             $ownerDocument->removeChild($item);
-        }
-
-        do {
-
-            $use       = array_pop($uses);
             $useParsed = new \Hoa\Xml\Attribute($use->data);
 
             if(false === $useParsed->attributeExists('href')) {
@@ -416,20 +411,8 @@ class          Xyl
                     $this->_mowgli->importNode($yield->readDOM(), true)
                 );
 
-            unset($use);
-            unset($xyl_use);
-
-            $fod     = $fragment->readDOM()->ownerDocument;
-            $xpath   = new \DOMXPath($fod);
-            $xyl_use = $xpath->query('/processing-instruction(\'xyl-use\')');
-            unset($xpath);
-
-            for($i = 0, $m = $xyl_use->length; $i < $m; ++$i)
-                $uses[] = $xyl_use->item($i);
-
-            $this->computeStylesheet($fod);
-
-        } while(!empty($uses));
+            $this->computeUse($fragment->readDOM()->ownerDocument);
+        }
 
         return true;
     }
@@ -512,14 +495,9 @@ class          Xyl
 
         for($i = 0, $m = $xyl_overlay->length; $i < $m; ++$i) {
 
-            $item       = $xyl_overlay->item($i);
-            $overlays[] = $item;
+            $item          = $xyl_overlay->item($i);
+            $overlay       = $item;
             $ownerDocument->removeChild($item);
-        }
-
-        do {
-
-            $overlay       = array_pop($overlays);
             $overlayParsed = new \Hoa\Xml\Attribute($overlay->data);
 
             if(false === $overlayParsed->attributeExists('href')) {
@@ -558,21 +536,8 @@ class          Xyl
                     $this->_mowgli->importNode($element->readDOM(), true)
                 );
 
-            unset($overlay);
-            unset($xyl_overlay);
-
-            $fod         = $fragment->readDOM()->ownerDocument;
-            $xpath       = new \DOMXPath($fod);
-            $xyl_overlay = $xpath->query('/processing-instruction(\'xyl-overlay\')');
-            unset($xpath);
-
-            for($i = 0, $m = $xyl_overlay->length; $i < $m; ++$i)
-                $overlays[] = $xyl_overlay->item($i);
-
-            $this->computeStylesheet($fod);
-            $this->computeUse($fod);
-
-        } while(!empty($overlays));
+            $this->computeUse($fragment->readDOM()->ownerDocument);
+        }
 
         return true;
     }
