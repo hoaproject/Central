@@ -365,6 +365,7 @@ class          Xyl
             $receiptDocument = $this->_mowgli;
 
         $streamClass = get_class($this->getInnerStream());
+        $dirname     = dirname($this->getInnerStream()->getStreamName());
         $hrefs       = array();
         $uses        = array();
         $xpath       = new \DOMXPath($ownerDocument);
@@ -392,6 +393,9 @@ class          Xyl
 
             $href = $useParsed->readAttribute('href');
             unset($useParsed);
+
+            if(0 === preg_match('#^([^:]+://)|([A-Z]:)|/#', $href))
+                $href = $dirname . DS . $href;
 
             if(false === file_exists($href))
                 throw new Exception(
@@ -501,6 +505,7 @@ class          Xyl
             $receiptDocument = $this->_mowgli;
 
         $streamClass = get_class($this->getInnerStream());
+        $dirname     = dirname($this->getInnerStream()->getStreamName());
         $hrefs       = array();
         $overlays    = array();
         $xpath       = new \DOMXPath($ownerDocument);
@@ -526,6 +531,9 @@ class          Xyl
 
             $href = $overlayParsed->readAttribute('href');
             unset($overlayParsed);
+
+            if(0 === preg_match('#^([^:]+://)|([A-Z]:)|/#', $href))
+                $href = $dirname . DS . $href;
 
             if(false === file_exists($href))
                 throw new Exception(
