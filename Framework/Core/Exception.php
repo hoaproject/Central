@@ -31,78 +31,80 @@ namespace Hoa\Core {
 /**
  * Class \Hoa\Core\Exception.
  *
- * \Hoa\Core\Exception is the mother exception class of the framework. Each
- * exception must extend \Hoa\Core\Exception, itself extends PHP Exception class.
+ * \Hoa\Core\Exception is the mother exception class of libraries. Each
+ * exception must extend \Hoa\Core\Exception, itself extends PHP \Exception
+ * class.
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright (c) 2007, 2011 Ivan ENDERLIN.
  * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Exception extends \Exception {
+class Exception extends \Exception implements Event\Source {
 
     /**
-     * Error type: return the message.
-     *
-     * @const int
-     */
-    const ERROR_RETURN  = 1;
-
-    /**
-     * Error type: print the message.
-     *
-     * @const int
-     */
-    const ERROR_PRINT   = 2;
-
-    /**
-     * Error type: trigger the message.
-     *
-     * @const int
-     */
-    const ERROR_TRIGGER = 4;
-
-    /**
-     * Error type: print the message and exit the program.
-     *
-     * @const int
-     */
-    const ERROR_DIE     = 8;
-
-    /**
-     * RaiseError string arguments.
+     * Arguments to format message.
      *
      * @var \Hoa\Core\Exception array
      */
-    protected $_arg = array();
+    protected $_arguments = array();
 
 
 
     /**
      * Create an exception.
      * An exception is built with a formatted message, a code (an ID), and an
-     * array that contains the list of formatted string for the message.
+     * array that contains the list of formatted string for the message. If
+     * chaining, we can add a previous exception.
      *
      * @access  public
-     * @param   string  $message    Formatted message.
-     * @param   int     $code       Code (the ID).
-     * @param   array   $args       RaiseError string arguments.
+     * @param   string      $message      Formatted message.
+     * @param   int         $code         Code (the ID).
+     * @param   array       $arguments    Arguments to format message.
+     * @param   \Exception  $previous     Previous exception in chaining.
      * @return  void
      */
-    public function __construct ( $message, $code = 0, $args = array() ) {
+    public function __construct ( $message, $code = 0, $arguments = array(),
+                                  \Exception $previous = null ) {
 
-        if(!is_array($args))
-            $args = array($args);
+        if(!is_array($arguments))
+            $arguments = array($arguments);
 
-        foreach($args as $key => &$value)
+        foreach($arguments as $key => &$value)
             if(null === $value)
                 $value = '(null)';
 
-        $this->_arg = $args;
+        $this->_arguments = $arguments;
+        parent::__construct($message, $code, $previous);
 
-        parent::__construct($message, $code);
+        if(false === Event::eventExists('hoa://Event/Exception'))
+            Event::register('hoa://Event/Exception', __CLASS__);
+
+        $this->send();
 
         return;
+    }
+
+    /**
+     * Get the backtrace.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getBacktrace ( ) {
+
+        return $this->getTrace();
+    }
+
+    /**
+     * Get arguments for the message.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getArguments ( ) {
+
+        return $this->_arguments;
     }
 
     /**
@@ -113,93 +115,115 @@ class Exception extends \Exception {
      */
     public function getFormattedMessage ( ) {
 
-        return @vsprintf($this->getMessage(), $this->_arg);
+        return @vsprintf($this->getMessage(), $this->getArguments());
     }
 
     /**
-     * Raise an error.
-     * An exception is transformed to a string message, that could be returned,
-     * printed, throw with trigger_error user function, or killed with die/exit
-     * function.
+     * Raise an exception as a string.
      *
      * @access  public
-     * @param   int     $output    Type of output (given by ERROR_* constants).
-     * @param   int     $opt       Trigger error option.
-     * @param   string  $pre       Prepend text to error.
-     * @return  mixed
+     * @return  string
      */
-    public function raiseError ( $output = self::ERROR_PRINT,
-                                 $opt    = E_USER_WARNING,
-                                 $pre    = '' ) {
+    public function raise ( ) {
 
-        $message = @vsprintf($this->getMessage(), $this->_arg);
-        $trace   = $this->getTrace();
+        $message = @vsprintf($this->getMessage(), $this->getArguments());
+        $trace   = $this->getBacktrace();
         $file    = '/dev/null';
         $line    = -1;
+        $pre     = '{main}';
 
         if(!empty($trace)) {
 
-            $pre  .= @$trace[0]['class'] . '::' . @$trace[0]['function'] . ': ';
-            $file  = $trace[0]['file'];
-            $line  = $trace[0]['line'];
+            $t   = $trace[0];
+            $pre = '';
+
+            if(isset($t['class']))
+                $pre .= $t['class'] . '::';
+
+            if(isset($t['function']))
+                $pre .= $t['function'];
+
+            $file  = @$t['file'];
+            $line  = @$t['line'];
         }
+
+        $pre  .= ': ';
 
         try {
 
             $out = $pre . '(' . $this->getCode() . ') ' . $message . "\n" .
                    'in ' . $this->getFile() . ' at line ' .
-                   $this->getLine() . '.' . "\n\n";
+                   $this->getLine() . '.';
         }
-        catch ( Exception $e ) {
+        catch ( \Exception $e ) {
 
             $out = $pre . '(' . $this->getCode() . ') ' . $message . "\n" .
-                   'in ' . $file . ' around line ' . $line . '.' . "\n\n";
+                   'in ' . $file . ' around line ' . $line . '.';
         }
 
-        switch($output) {
+        return $out;
+    }
 
-            case self::ERROR_PRINT:
-                echo $out;
-              break;
+    /**
+     * Send the exception on hoa://Event/Exception.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function send ( ) {
 
-            case self::ERROR_TRIGGER:
-                trigger_error($out, $opt);
-              break;
-
-            case self::ERROR_DIE:
-                return exit($out);
-              break;
-
-            case self::ERROR_RETURN:
-            default:
-                return $out;
-        }
+        Event::notify(
+            'hoa://Event/Exception',
+            $this,
+            new Event\Bucket($this)
+        );
 
         return;
     }
 
     /**
-     * Catch uncaught exception.
-     * Each uncaught exception is redirected to self::raiseError method with a
-     * prepend text (e.g. "Uncaught exception:").
-     * Catch only Hoa's exceptions!
+     * Catch uncaught exception (only \Hoa\Core\Exception).
      *
      * @access  public
-     * @param   object  $exception    The exception.
-     * @return  mixed
+     * @param   \Exception  $exception    The exception.
+     * @return  void
      * @throw   \Exception
      */
-    public static function handler ( $exception ) {
+    public static function uncaught ( \Exception $exception ) {
 
-        if($exception instanceof Exception)
-            return $exception->raiseError(
-                self::ERROR_PRINT,
-                E_USER_WARNING,
-                'Uncaught exception (' . get_class($exception) . '):' . "\n"
-            );
+        if(!($exception instanceof Exception))
+            throw $exception;
 
-        throw $exception;
-    } 
+        echo 'Uncaught exception (' . get_class($exception) . '):' . "\n\n" .
+             $exception->raise();
+
+        return;
+    }
+
+    /**
+     * Catch PHP (and PHP_USER) errors and transform them into
+     * \Hoa\Core\ErrorException.
+     * Obviously, if code that caused the error is preceeded by @, then we do
+     * not thrown any exception.
+     *
+     * @access  public
+     * @param   int     $errno      Level.
+     * @param   string  $errstr     Message.
+     * @param   string  $errfile    File.
+     * @param   int     $errline    Line.
+     * @return  \Hoa\Core\ErrorException
+     */
+    public static function error ( $errno, $errstr, $errfile, $errline ) {
+
+        // If @.
+        if(0 == error_reporting())
+            return;
+
+        $trace = debug_backtrace();
+        array_shift($trace);
+
+        throw new Error($errstr, -1, $errfile, $errline, $trace);
+    }
 
     /**
      * String representation of object.
@@ -209,7 +233,61 @@ class Exception extends \Exception {
      */
     public function __toString ( ) {
 
-        return $this->raiseError(self::ERROR_RETURN);
+        return $this->raise();
+    }
+}
+
+/**
+ * Class \Hoa\Core\ErrorException.
+ *
+ * This exception is the equivalent representation of PHP errors.
+ *
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2011 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
+ */
+
+class Error extends Exception {
+
+    /**
+     * Backtrace.
+     *
+     * @var \Hoa\Core\Error array
+     */
+    protected $_trace = array();
+
+
+
+    /**
+     * Constructor.
+     *
+     * @access  public
+     * @param   string  $message    Message.
+     * @param   int     $code       Code (the ID).
+     * @param   string  $file       File.
+     * @param   int     $line       Line.
+     * @param   array   $trace      Trace.
+     */
+    public function __construct ( $message, $code, $file, $line, $trace ) {
+
+        $this->file   = $file;
+        $this->line   = $line;
+        $this->_trace = $trace;
+
+        parent::__construct($message, $code);
+
+        return;
+    }
+
+    /**
+     * Get the backtrace.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getBacktrace ( ) {
+
+        return $this->_trace;
     }
 }
 
@@ -220,6 +298,11 @@ namespace {
 /**
  * Catch uncaught exception.
  */
-set_exception_handler(array('\Hoa\Core\Exception', 'handler'));
+set_exception_handler(callback('\Hoa\Core\Exception::uncaught'));
+
+/**
+ * Transform PHP error into \Hoa\Core\ErrorException.
+ */
+set_error_handler(callback('\Hoa\Core\Exception::error'));
 
 }
