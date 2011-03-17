@@ -233,12 +233,26 @@ class Event {
      * @return  void
      * @throws  \Hoa\Core\Exception
      */
-    public static function register ( $eventId, Source $source ) {
+    public static function register ( $eventId, $source ) {
 
         if(true === self::eventExists($eventId))
             throw new \Hoa\Core\Exception(
                 'Cannot redeclare an event with the same ID, i.e. the event ' .
                 'ID %s already exists.', 0, $eventId);
+
+        if(is_object($source) && !($source instanceof Source))
+            throw new \Hoa\Core\Exception(
+                'The source must implement \Hoa\Core\Event\Source ' .
+                'interface; given %s.', 1, get_class($source));
+        else {
+
+            $reflection = new \ReflectionClass($source);
+
+            if(false === $reflection->implementsInterface('\Hoa\Core\Event\Source'))
+                throw new \Hoa\Core\Exception(
+                    'The source must implement \Hoa\Core\Event\Source ' .
+                    'interface; given %s.', 2, $source);
+        }
 
         if(!isset(self::$_register[$eventId][0]))
             self::$_register[$eventId][0] = new self();
