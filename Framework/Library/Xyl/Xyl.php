@@ -895,12 +895,12 @@ class          Xyl
      */
     public function resolve ( $hoa ) {
 
-        if(0 !== preg_match('#hoa://Library/Xyl(/.*|$)#', $hoa, $matches))
+        if(0 !== preg_match('#^hoa://Library/Xyl(/.*|$)#', $hoa, $matches))
             return resolve(
                 'hoa://Library/Xyl[' . $this->_i . ']' . $matches[1]
             );
 
-        if(0 !== preg_match('#hoa://Application/Public(/.*)#', $hoa, $matches))
+        if(0 !== preg_match('#^hoa://Application/Public(/.*)#', $hoa, $matches))
             return resolve(
                 'hoa://Application/Public/' .
                 $this->getFormattedParameter('theme') . $matches[1]
