@@ -360,6 +360,36 @@ class Consistency {
 
         return $class->newInstanceArgs($arguments);
     }
+
+    /**
+     * Build a callback.
+     * Accepted form:
+     *     * callback('function') ;
+     *     * callback('class::method') ;
+     *     * callback('class', 'method') ;
+     *     * callback($object, 'method') ;
+     *     * callback(function ( … ) { … }).
+     *
+     * @access  public
+     * @param   mixed   $first     First parameter.
+     * @param   mixed   $second    Second parameter.
+     * @return  mixed
+     */
+    public static function callback ( $first, $second = null ) {
+
+        if($first instanceof \Closure)
+            return $first;
+
+        if(null === $second) {
+
+            if(false === strpos($first, $second))
+                return $first;
+
+            list($first, $second) = explode('::', $first);
+        }
+
+        return array($first, $second);
+    }
 }
 
 }
@@ -391,6 +421,20 @@ if(!ƒ('dnew')) {
 function dnew ( $classname, Array $arguments = array() ) {
 
     return \Hoa\Core\Consistency::dnew($classname, $arguments);
+}}
+
+/**
+ * Alias of \Hoa\Core\Consistency::callback().
+ *
+ * @access  public
+ * @param   mixed   $first     First parameter.
+ * @param   mixed   $second    Second parameter.
+ * @return  mixed
+ */
+if(!ƒ('callback')) {
+function callback ( $first, $second = null ) {
+
+    return \Hoa\Core\Consistency::callback($first, $second);
 }}
 
 /**
