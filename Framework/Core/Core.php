@@ -39,14 +39,14 @@ and
 
 
 /**
- * \Hoa\Core\Exception
- */
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'Exception.php';
-
-/**
  * \Hoa\Core\Consistency
  */
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Consistency.php';
+
+/**
+ * \Hoa\Core\Exception
+ */
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'Exception.php';
 
 /**
  * \Hoa\Core\Parameter
