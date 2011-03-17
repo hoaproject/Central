@@ -237,6 +237,10 @@ class          Xyl
         if(null !== $router && false === $router->ruleExists('_css'))
             $router->addPrivateRule('_css', 'Public/Css/(?<theme>.*)/(?<sheet>.*)');
 
+        from('Hoa') -> import('Xyl.Interpreter.Common.Debug');
+        event('hoa://Event/Exception')
+            ->attach('\Hoa\Xyl\Interpreter\Common\Debug', 'foo');
+
         return;
     }
 
