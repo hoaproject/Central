@@ -44,6 +44,11 @@ and
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Consistency.php';
 
 /**
+ * \Hoa\Core\Event
+ */
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'Event.php';
+
+/**
  * \Hoa\Core\Exception
  */
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Exception.php';
@@ -62,11 +67,6 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'Protocol.php';
  * \Hoa\Core\Data
  */
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Data.php';
-
-/**
- * \Hoa\Core\Event
- */
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'Event.php';
 
 }
 
