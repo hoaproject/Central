@@ -334,7 +334,18 @@ class Event {
         if(false === self::eventExists($eventId))
             throw new \Hoa\Core\Exception(
                 'Event ID %s does not exist, cannot send notification.',
-                2, $eventId);
+                3, $eventId);
+
+        $sourceRef = self::$_register[$eventId][1];
+
+        if(!($source instanceof $sourceRef))
+            throw new \Hoa\Core\Exception(
+                'Source cannot create a notification because it\'s the ' .
+                'source or source\'s child (source reference: %s, given %s.',
+                4, array(
+                    is_object($sourceRef) ? get_class($sourceRef) : $sourceRef,
+                    get_class($source)
+                ));
 
         $data->setSource($source);
         $handle = $data->getData();
