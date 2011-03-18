@@ -60,7 +60,7 @@ class Blockcode extends \Hoa\Xyl\Element\Concrete {
      */
     protected function paint ( \Hoa\Stream\IStream\Out $out ) {
 
-        $out->writeAll('<pre><code>');
+        $out->writeAll('<pre' . $this->readAttributesAsString() . '><code>');
 
         if(false === $this->attributeExists('language'))
             $this->computeValue($out);
