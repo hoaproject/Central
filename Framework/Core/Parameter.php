@@ -775,9 +775,7 @@ class Parameter {
                     0, $word);
 
             $handle = self::$_currentParameters[$word];
-            unset(self::$_currentParameters[$word]);
-
-            $out = self::zFormat(
+            $out    = self::zFormat(
                 $handle,
                 self::$_currentKeywords,
                 self::$_currentParameters
