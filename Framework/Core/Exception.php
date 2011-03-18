@@ -254,7 +254,7 @@ class Error extends Exception {
      *
      * @var \Hoa\Core\Error array
      */
-    protected $_trace = array();
+    protected $_trace = null;
 
 
 
@@ -268,7 +268,8 @@ class Error extends Exception {
      * @param   int     $line       Line.
      * @param   array   $trace      Trace.
      */
-    public function __construct ( $message, $code, $file, $line, $trace ) {
+    public function __construct ( $message, $code, $file, $line,
+                                  Array $trace = array() ) {
 
         $this->file   = $file;
         $this->line   = $line;
