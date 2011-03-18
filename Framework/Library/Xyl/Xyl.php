@@ -239,7 +239,7 @@ class          Xyl
 
         from('Hoa') -> import('Xyl.Interpreter.Common.Debug');
         event('hoa://Event/Exception')
-            ->attach('\Hoa\Xyl\Interpreter\Common\Debug', 'foo');
+            ->attach('\Hoa\Xyl\Interpreter\Common\Debug', 'receiveException');
 
         return;
     }
