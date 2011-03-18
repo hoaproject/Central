@@ -162,7 +162,7 @@ class StartCommand extends \Hoa\Console\Command\Generic {
                 $ttime          = time();
                 $smartPrint     = "\r";
 
-                if($ttime - $time >= 1) {
+                if($ttime - $time >= 2) {
 
                     $this->log("\r");
                     $smartPrint = "\n";
