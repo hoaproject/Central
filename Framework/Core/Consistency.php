@@ -55,11 +55,11 @@ class Consistency {
     protected $_from          = 'Hoa';
 
     /**
-     * Library's root to considere.
+     * Library's roots to considere.
      *
      * @var \Hoa\Consistency string
      */
-    protected $_root          = null;
+    protected $_roots         = null;
 
     /**
      * Cache all imports.
@@ -95,9 +95,11 @@ class Consistency {
     private function __construct ( $from ) {
 
         $this->_from = $from;
-        $this->_root = Core::getInstance()->getFormattedParameter(
-                           'namespace.prefix.' . $from
-                       ) ?: '/Flatland';
+        $this->setRoot(
+            Core::getInstance()->getFormattedParameter(
+                'namespace.prefix.' . $from
+            ) ?: '/Flatland'
+        );
 
         return;
     }
@@ -125,8 +127,45 @@ class Consistency {
      * @param   string  $path    Path.
      * @param   bool    $load    Whether loading directly or not.
      * @return  \Hoa\Consistency
+     * @throw   \Hoa\Core\Exception
      */
     public function import ( $path, $load = false ) {
+
+        $exception = null;
+        $out       = false;
+
+        foreach($this->_roots as $root) {
+
+            try {
+
+                $out = $this->_import($path, $load, $root);
+
+                break;
+            }
+            catch ( Exception $e ) {
+
+                $exception = $e;
+                $out       = false;
+            }
+        }
+
+        if(false === $out)
+            throw $exception;
+
+        return $out;
+    }
+
+    /**
+     * Real import method for an one specific root.
+     *
+     * @access  protected
+     * @param   string  $path    Path.
+     * @param   bool    $load    Whether loading directly or not.
+     * @param   string  $root    Root.
+     * @return  \Hoa\Consistency
+     * @throw   \Hoa\Core\Exception
+     */
+    protected function _import ( $path, $load, $root ) {
 
         if(!empty($this->_from))
             $all = $this->_from . '.' . $path;
@@ -165,8 +204,8 @@ class Consistency {
         if(false !== strpos($all, '*')) {
 
             $backup     = $explode[0];
-            $explode[0] = $this->_root;
-            $countFrom  = strlen($this->_root) + 1;
+            $explode[0] = $root;
+            $countFrom  = strlen($root) + 1;
 
             foreach(glob(implode('/', $explode) . '.php') as $value)
                 $this->import(substr(
@@ -184,7 +223,7 @@ class Consistency {
 
         $count    = count($parts);
         $backup   = $parts[0];
-        $parts[0] = $this->_root;
+        $parts[0] = $root;
         $path     = implode('/',  $parts) . '.php';
 
         if(!file_exists($path)) {
@@ -243,7 +282,10 @@ class Consistency {
      */
     public function setRoot ( $root ) {
 
-        $this->_root = $root;
+        $this->_roots = preg_split('#(?<!\\\):#', $root);
+
+        foreach($this->_roots as &$freshroot)
+            $freshroot = str_replace('\:', ':', $freshroot);
 
         return $this;
     }
