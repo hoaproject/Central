@@ -246,7 +246,7 @@ class PraspelCommand extends \Hoa\Console\Command\Generic {
                     }
                     catch ( \Hoa\Core\Exception $e ) {
 
-                        $e->raiseError();
+                        cout($e->raise());
 
                         continue;
                     }
