@@ -134,11 +134,10 @@ class Consistency {
      */
     public function import ( $path, $load = false ) {
 
-        foreach($this->_from as $from) {
+        $exception = null;
+        $out       = false;
 
-            $exception = null;
-            $out       = false;
-
+        foreach($this->_from as $from)
             foreach($this->_roots[$from] as $root)
                 try {
 
@@ -151,7 +150,6 @@ class Consistency {
                     $exception = $e;
                     $out       = false;
                 }
-        }
 
         if(false === $out)
             throw $exception;
@@ -180,7 +178,7 @@ class Consistency {
         if(isset(self::$_cache[$all]) && false === $load)
             return $this;
 
-        self::$_cache[$all] = true;
+        //self::$_cache[$all] = true;
         $edited             = false;
         $explode            = explode('.', $all);
         $parts              = array();
@@ -203,7 +201,7 @@ class Consistency {
             if(isset(self::$_cache[$all]) && false === $load)
                 return $this;
 
-            self::$_cache[$all] = true;
+            //self::$_cache[$all] = true;
         }
 
         if(false !== strpos($all, '*')) {
@@ -211,6 +209,11 @@ class Consistency {
             $backup     = $explode[0];
             $explode[0] = $root;
             $countFrom  = strlen($root) + 1;
+            $glob       = glob(implode('/', $explode) . '.php');
+
+            if(empty($glob))
+                throw new Exception(
+                    'File %s does not exist.', 0, implode('/', $explode));
 
             foreach(glob(implode('/', $explode) . '.php') as $value)
                 $this->_import(
@@ -223,7 +226,7 @@ class Consistency {
                     $root
                 );
 
-            self::$_cache[$all] = true;
+            //self::$_cache[$all] = true;
 
             return $this;
         }
@@ -246,7 +249,7 @@ class Consistency {
 
                 array_pop($parts);
                 throw new Exception(
-                    'File %s does not exist.', 0, implode('/', $parts) . '.php');
+                    'File %s does not exist.', 1, implode('/', $parts) . '.php');
             }
         }
 
