@@ -57,7 +57,7 @@ class Consistency {
     /**
      * Library's roots to considere.
      *
-     * @var \Hoa\Consistency string
+     * @var \Hoa\Consistency array
      */
     protected $_roots         = null;
 
