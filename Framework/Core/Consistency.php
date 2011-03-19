@@ -48,18 +48,18 @@ class Consistency {
     private static $_multiton = array();
 
     /**
-     * Library to considere.
+     * Libraries to considere.
      *
-     * @var \Hoa\Consistency string
+     * @var \Hoa\Consistency array
      */
-    protected $_from          = 'Hoa';
+    protected $_from          = null;
 
     /**
      * Library's roots to considere.
      *
      * @var \Hoa\Consistency array
      */
-    protected $_roots         = null;
+    protected $_roots         = array();
 
     /**
      * Cache all imports.
@@ -94,12 +94,15 @@ class Consistency {
      */
     private function __construct ( $from ) {
 
-        $this->_from = $from;
-        $this->setRoot(
-            Core::getInstance()->getFormattedParameter(
-                'namespace.prefix.' . $from
-            ) ?: '/Flatland'
-        );
+        $this->_from = preg_split('#\s*(,|or)\s*#', $from);
+
+        foreach($this->_from as $f)
+            $this->setRoot(
+                Core::getInstance()->getFormattedParameter(
+                    'namespace.prefix.' . $f
+                ) ?: '/Flatland',
+                $f
+            );
 
         return;
     }
@@ -131,22 +134,23 @@ class Consistency {
      */
     public function import ( $path, $load = false ) {
 
-        $exception = null;
-        $out       = false;
+        foreach($this->_from as $from) {
 
-        foreach($this->_roots as $root) {
+            $exception = null;
+            $out       = false;
 
-            try {
+            foreach($this->_roots[$from] as $root)
+                try {
 
-                $out = $this->_import($path, $load, $root);
+                    $out = $this->_import($path, $load, $from, $root);
 
-                break;
-            }
-            catch ( Exception $e ) {
+                    break 2;
+                }
+                catch ( Exception $e ) {
 
-                $exception = $e;
-                $out       = false;
-            }
+                    $exception = $e;
+                    $out       = false;
+                }
         }
 
         if(false === $out)
@@ -161,14 +165,15 @@ class Consistency {
      * @access  protected
      * @param   string  $path    Path.
      * @param   bool    $load    Whether loading directly or not.
+     * @param   string  $from    Library family's name.
      * @param   string  $root    Root.
      * @return  \Hoa\Consistency
      * @throw   \Hoa\Core\Exception
      */
-    protected function _import ( $path, $load, $root ) {
+    protected function _import ( $path, $load, $from, $root ) {
 
-        if(!empty($this->_from))
-            $all = $this->_from . '.' . $path;
+        if(!empty($from))
+            $all = $from . '.' . $path;
         else
             $all = $path;
 
@@ -208,10 +213,15 @@ class Consistency {
             $countFrom  = strlen($root) + 1;
 
             foreach(glob(implode('/', $explode) . '.php') as $value)
-                $this->import(substr(
-                    str_replace('/', '.', substr($value, 0, -4)),
-                    $countFrom
-                ), $load);
+                $this->_import(
+                    substr(
+                        str_replace('/', '.', substr($value, 0, -4)),
+                        $countFrom
+                    ),
+                    $load,
+                    $from,
+                    $root
+                );
 
             self::$_cache[$all] = true;
 
@@ -278,27 +288,32 @@ class Consistency {
      *
      * @access  public
      * @param   bool    $root    Root.
+     * @param   string  $from    Library family's name (if null, first family
+     *                           will be choosen).
      * @return  \Hoa\Consistency
      */
-    public function setRoot ( $root ) {
+    public function setRoot ( $root, $from = null ) {
 
-        $this->_roots = preg_split('#(?<!\\\):#', $root);
+        if(null === $from)
+            $from = $this->_from[0];
 
-        foreach($this->_roots as &$freshroot)
+        $this->_roots[$from] = preg_split('#(?<!\\\):#', $root);
+
+        foreach($this->_roots[$from] as &$freshroot)
             $freshroot = str_replace('\:', ':', $freshroot);
 
         return $this;
     }
 
     /**
-     * Get the root of the current library family.
+     * Get roots of the current library family.
      *
      * @access  public
-     * @return  string
+     * @return  array
      */
     public function getRoot ( ) {
 
-        return $this->_root;
+        return $this->_roots;
     }
 
     /**
