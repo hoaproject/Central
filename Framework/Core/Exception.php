@@ -114,6 +114,32 @@ class Idle extends \Exception {
     }
 
     /**
+     * Get the source of the exception (class, method, function, main etc.).
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getFrom ( ) {
+
+        $trace = $this->getBacktrace();
+        $from  = '{main}';
+
+        if(!empty($trace)) {
+
+            $t    = $trace[0];
+            $from = '';
+
+            if(isset($t['class']))
+                $from .= $t['class'] . '::';
+
+            if(isset($t['function']))
+                $from .= $t['function'] . '()';
+        }
+
+        return $from;
+    }
+
+    /**
      * Raise an exception as a string.
      *
      * @access  public
@@ -125,21 +151,12 @@ class Idle extends \Exception {
         $trace   = $this->getBacktrace();
         $file    = '/dev/null';
         $line    = -1;
-        $pre     = '{main}';
+        $pre     = $this->getFrom();
 
         if(!empty($trace)) {
 
-            $t   = $trace[0];
-            $pre = '';
-
-            if(isset($t['class']))
-                $pre .= $t['class'] . '::';
-
-            if(isset($t['function']))
-                $pre .= $t['function'];
-
-            $file  = @$t['file'];
-            $line  = @$t['line'];
+            $file = @$t['file'];
+            $line = @$t['line'];
         }
 
         $pre  .= ': ';
