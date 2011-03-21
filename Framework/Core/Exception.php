@@ -26,21 +26,21 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-namespace Hoa\Core {
+namespace Hoa\Core\Exception {
 
 /**
- * Class \Hoa\Core\Exception.
+ * Class \Hoa\Core\Exception\Idle.
  *
- * \Hoa\Core\Exception is the mother exception class of libraries. Each
- * exception must extend \Hoa\Core\Exception, itself extends PHP \Exception
- * class.
+ * \Hoa\Core\Exception\Idle is the mother exception class of libraries. The only
+ * difference between \Hoa\Core\Exception\Idle and its directly child
+ * \Hoa\Core\Exception is that the later fires event after beeing constructed.
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright (c) 2007, 2011 Ivan ENDERLIN.
  * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Exception extends \Exception implements Event\Source {
+class Idle extends \Exception {
 
     /**
      * Arguments to format message.
@@ -76,11 +76,6 @@ class Exception extends \Exception implements Event\Source {
 
         $this->_arguments = $arguments;
         parent::__construct($message, $code, $previous);
-
-        if(false === Event::eventExists('hoa://Event/Exception'))
-            Event::register('hoa://Event/Exception', __CLASS__);
-
-        $this->send();
 
         return;
     }
@@ -165,24 +160,7 @@ class Exception extends \Exception implements Event\Source {
     }
 
     /**
-     * Send the exception on hoa://Event/Exception.
-     *
-     * @access  public
-     * @return  void
-     */
-    public function send ( ) {
-
-        Event::notify(
-            'hoa://Event/Exception',
-            $this,
-            new Event\Bucket($this)
-        );
-
-        return;
-    }
-
-    /**
-     * Catch uncaught exception (only \Hoa\Core\Exception).
+     * Catch uncaught exception (only \Hoa\Core\Exception\Core and children).
      *
      * @access  public
      * @param   \Exception  $exception    The exception.
@@ -191,11 +169,18 @@ class Exception extends \Exception implements Event\Source {
      */
     public static function uncaught ( \Exception $exception ) {
 
-        if(!($exception instanceof Exception))
+        if(!($exception instanceof Idle))
             throw $exception;
 
-        echo 'Uncaught exception (' . get_class($exception) . '):' . "\n\n" .
+        echo 'Uncaught exception (' . get_class($exception) . '):' . "\n" .
              $exception->raise();
+
+        if(null !== $previous = $exception->getPrevious()) {
+
+            echo "\n\n" . '⬇' . "\n\n" . 'Nested ';
+
+            $previous::uncaught($previous);
+        }
 
         return;
     }
@@ -234,6 +219,62 @@ class Exception extends \Exception implements Event\Source {
     public function __toString ( ) {
 
         return $this->raise();
+    }
+}
+
+/**
+ * Class \Hoa\Core\Exception\Idle.
+ *
+ * Each exception must extend \Hoa\Core\Exception.
+ *
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2011 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
+ */
+
+class Exception extends Idle implements \Hoa\Core\Event\Source {
+
+    /**
+     * Create an exception.
+     * An exception is built with a formatted message, a code (an ID), and an
+     * array that contains the list of formatted string for the message. If
+     * chaining, we can add a previous exception.
+     *
+     * @access  public
+     * @param   string      $message      Formatted message.
+     * @param   int         $code         Code (the ID).
+     * @param   array       $arguments    Arguments to format message.
+     * @param   \Exception  $previous     Previous exception in chaining.
+     * @return  void
+     */
+    public function __construct ( $message, $code = 0, $arguments = array(),
+                                  \Exception $previous = null ) {
+
+        parent::__construct($message, $code, $arguments, $previous);
+
+        if(false === \Hoa\Core\Event::eventExists('hoa://Event/Exception'))
+            \Hoa\Core\Event::register('hoa://Event/Exception', __CLASS__);
+
+        $this->send();
+
+        return;
+    }
+
+    /**
+     * Send the exception on hoa://Event/Exception.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function send ( ) {
+
+        \Hoa\Core\Event::notify(
+            'hoa://Event/Exception',
+            $this,
+            new \Hoa\Core\Event\Bucket($this)
+        );
+
+        return;
     }
 }
 
@@ -297,13 +338,19 @@ class Error extends Exception {
 namespace {
 
 /**
- * Catch uncaught exception.
+ * Make the alias automatically (because it's not imported with the import()
+ * function).
  */
-set_exception_handler(callback('\Hoa\Core\Exception::uncaught'));
+class_alias('Hoa\Core\Exception\Exception', 'Hoa\Core\Exception');
 
 /**
- * Transform PHP error into \Hoa\Core\ErrorException.
+ * Catch uncaught exception.
  */
-set_error_handler(callback('\Hoa\Core\Exception::error'));
+set_exception_handler(callback('\Hoa\Core\Exception\Idle::uncaught'));
+
+/**
+ * Transform PHP error into \Hoa\Core\Exception\Error.
+ */
+set_error_handler(callback('\Hoa\Core\Exception\Idle::error'));
 
 }
