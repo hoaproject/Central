@@ -136,6 +136,8 @@ class StartCommand extends \Hoa\Console\Command\Generic {
 
         if('hoa://' == substr($_root, 0, 6))
             $_root = resolve($_root);
+        else
+            $_root = $root = realpath($root);
 
         cout('Server is up, on ' . $ip . '!');
         cout('Root: ' . $root . '.');
