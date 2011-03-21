@@ -145,14 +145,19 @@ class Consistency {
 
                     break 2;
                 }
-                catch ( Exception $e ) {
+                catch ( Exception\Idle $e ) {
 
                     $exception = $e;
                     $out       = false;
                 }
 
         if(false === $out)
-            throw $exception;
+            throw new Exception(
+                $exception->getFormattedMessage(),
+                $exception->getCode(),
+                array(),
+                $exception
+            );
 
         return $out;
     }
@@ -166,7 +171,7 @@ class Consistency {
      * @param   string  $from    Library family's name.
      * @param   string  $root    Root.
      * @return  \Hoa\Consistency
-     * @throw   \Hoa\Core\Exception
+     * @throw   \Hoa\Core\Exception\Idle
      */
     protected function _import ( $path, $load, $from, $root ) {
 
@@ -178,7 +183,8 @@ class Consistency {
         if(isset(self::$_cache[$all]) && false === $load)
             return $this;
 
-        //self::$_cache[$all] = true;
+        self::$_cache[$all] = true;
+        $uncache            = array($all);
         $edited             = false;
         $explode            = explode('.', $all);
         $parts              = array();
@@ -201,7 +207,8 @@ class Consistency {
             if(isset(self::$_cache[$all]) && false === $load)
                 return $this;
 
-            //self::$_cache[$all] = true;
+            self::$_cache[$all] = true;
+            $uncache[]          = $all;
         }
 
         if(false !== strpos($all, '*')) {
@@ -211,22 +218,35 @@ class Consistency {
             $countFrom  = strlen($root) + 1;
             $glob       = glob(implode('/', $explode) . '.php');
 
-            if(empty($glob))
-                throw new Exception(
+            if(empty($glob)) {
+
+                foreach($uncache as $un)
+                    unset(self::$_cache[$un]);
+
+                throw new Exception\Idle(
                     'File %s does not exist.', 0, implode('/', $explode));
+            }
 
             foreach(glob(implode('/', $explode) . '.php') as $value)
-                $this->_import(
-                    substr(
-                        str_replace('/', '.', substr($value, 0, -4)),
-                        $countFrom
-                    ),
-                    $load,
-                    $from,
-                    $root
-                );
+                try {
 
-            //self::$_cache[$all] = true;
+                    $this->_import(
+                        substr(
+                            str_replace('/', '.', substr($value, 0, -4)),
+                            $countFrom
+                        ),
+                        $load,
+                        $from,
+                        $root
+                    );
+                }
+                catch ( Exception\Idle $e ) {
+
+                    foreach($uncache as $un)
+                        unset(self::$_cache[$un]);
+
+                    throw $e;
+                }
 
             return $this;
         }
@@ -247,8 +267,11 @@ class Consistency {
 
             if(!file_exists($path)) {
 
+                foreach($uncache as $un)
+                    unset(self::$_cache[$un]);
+
                 array_pop($parts);
-                throw new Exception(
+                throw new Exception\Idle(
                     'File %s does not exist.', 1, implode('/', $parts) . '.php');
             }
         }
@@ -348,12 +371,12 @@ class Consistency {
      * @access  public
      * @param   string  $classname    Classname.
      * @return  string
-     * @throw   \Hoa\Core\Exception
+     * @throw   \Hoa\Core\Exception\Idle
      */
     public static function getClassShortestName ( $classname ) {
 
         if(!isset(self::$_class[$classname]))
-            throw new Exception(
+            throw new Exception\Idle(
                 'Class %s does not exist.', 1, $classname);
 
         if(is_string(self::$_class[$classname]))
@@ -396,22 +419,51 @@ class Consistency {
     }
 
     /**
-     * Dynamic new, i.e. a little native factory (import + load + instance).
+     * Dynamic new, i.e. a native factory (import + load + instance).
      *
      * @access  public
      * @param   string  $classname    Classname.
      * @param   array   $arguments    Constructor's arguments.
      * @return  object
+     * @throw   \Hoa\Core\Exception
      */
     public static function dnew ( $classname, Array $arguments = array() ) {
 
-        if(!class_exists($classname))
-            if(false === self::autoload($classname)) {
+        if(!class_exists($classname)) {
 
-                $path = str_replace('\\', '.', $classname);
-                self::from(substr($path, 0, strpos($path, '.')))
-                    ->import(substr($path, strpos($path, '.') + 1), true);
+            $head   = trim(str_replace(
+                          '\\',
+                          '.',
+                          substr($classname, 0, $pos = strpos($classname, '\\'))
+                      ), '()');
+            $tail   = substr($classname, $pos + 1);
+            $_tail  = str_replace('\\', '.', $tail);
+            $roots  = preg_split('#\s*(,|or)\s*#', $head);
+            $gotcha = false;
+
+            foreach($roots as $root) {
+
+                $classname = $root . '\\' . $tail;
+
+                try {
+
+                    if(false === self::autoload($classname))
+                        self::from($root)
+                            ->import($_tail, true);
+
+                    $gotcha = true;
+                }
+                catch ( Exception $exception ) {
+
+                    continue;
+                }
+
+                break;
             }
+
+            if(false === $gotcha)
+                throw $exception;
+        }
 
         $class = new \ReflectionClass($classname);
 
