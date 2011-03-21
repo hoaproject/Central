@@ -221,12 +221,12 @@ class Domain {
      * @access  public
      * @param   string  $name         Domain name.
      * @param   array   $arguments    Domain arguments.
-     * @return  void
+     * @return  \Hoa\Realdom
      * @throws  \Hoa\Core\Exception
      */
     protected function _factory ( $name, Array $arguments ) {
 
-        return dnew('Hoa\Realdom\\' . ucfirst($name), $arguments);
+        return dnew('(Hoathis or Hoa)\Realdom\\' . ucfirst($name), $arguments);
     }
 
     /**
