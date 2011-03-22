@@ -177,7 +177,7 @@ class Idle extends \Exception {
     }
 
     /**
-     * Catch uncaught exception (only \Hoa\Core\Exception\Core and children).
+     * Catch uncaught exception (only \Hoa\Core\Exception\Idle and children).
      *
      * @access  public
      * @param   \Exception  $exception    The exception.
@@ -204,7 +204,7 @@ class Idle extends \Exception {
 
     /**
      * Catch PHP (and PHP_USER) errors and transform them into
-     * \Hoa\Core\ErrorException.
+     * \Hoa\Core\Error.
      * Obviously, if code that caused the error is preceeded by @, then we do
      * not thrown any exception.
      *
@@ -213,7 +213,8 @@ class Idle extends \Exception {
      * @param   string  $errstr     Message.
      * @param   string  $errfile    File.
      * @param   int     $errline    Line.
-     * @return  \Hoa\Core\ErrorException
+     * @return  void
+     * @throw   \Hoa\Core\Error
      */
     public static function error ( $errno, $errstr, $errfile, $errline ) {
 
@@ -296,7 +297,7 @@ class Exception extends Idle implements \Hoa\Core\Event\Source {
 }
 
 /**
- * Class \Hoa\Core\ErrorException.
+ * Class \Hoa\Core\Error.
  *
  * This exception is the equivalent representation of PHP errors.
  *
