@@ -64,7 +64,7 @@ namespace Hoa\Cache\Backend {
  * Inspiration from Zend\Cache\Backend\ZendPlatform class for making this class.
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright (c) 2007, 2011 Ivan ENDERLIN.
+ * @copyright  Copyright (c) 2007-2011 Ivan ENDERLIN.
  * @license    New BSD License
  * @todo       Need to be tested. I do not have the Zend Platform, I cannot
  *             make the test myself.
