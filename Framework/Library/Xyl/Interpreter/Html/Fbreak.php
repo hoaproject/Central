@@ -53,7 +53,7 @@ namespace Hoa\Xyl\Interpreter\Html {
  * The <fbreak /> component.
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright (c) 2007, 2011 Ivan ENDERLIN.
+ * @copyright  Copyright (c) 2007-2011 Ivan ENDERLIN.
  * @license    New BSD License
  */
 
