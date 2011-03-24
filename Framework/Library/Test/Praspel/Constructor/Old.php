@@ -52,8 +52,8 @@ namespace Hoa\Test\Praspel\Constructor {
  *
  * Represents the \old(e) constructor, the value of e in pre-state.
  *
- * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2011 Ivan ENDERLIN.
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 
