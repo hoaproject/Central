@@ -48,8 +48,8 @@ from('Hoa')
  *
  * This sheet declares the main style.
  *
- * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2011 Ivan ENDERLIN.
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  */
 
 class SheetStyle extends \Hoa\Console\Chrome\Style {

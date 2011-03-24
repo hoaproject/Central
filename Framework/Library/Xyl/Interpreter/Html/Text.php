@@ -53,8 +53,8 @@ namespace Hoa\Xyl\Interpreter\Html {
  * The <__text /> component (inter-text, please see the
  * \Hoa\Xml\Element\Model\Phrasing interface).
  *
- * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2011 Ivan ENDERLIN.
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 

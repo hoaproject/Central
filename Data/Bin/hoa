@@ -40,9 +40,9 @@
  */
 
 /**
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright © 2007-2011 Ivan ENDERLIN.
- * @license     New BSD License
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @license    New BSD License
  */
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Hoa.php';

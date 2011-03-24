@@ -41,8 +41,8 @@ namespace Hoa\Graph\IGraph {
  *
  * Force to implement a method: getNodeId.
  *
- * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2011 Ivan ENDERLIN.
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 

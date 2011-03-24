@@ -41,8 +41,8 @@ namespace Hoa\Core\Parameterizable {
  *
  * Interface for all classes or packages which parameters are readable.
  *
- * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2011 Ivan ENDERLIN.
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 
@@ -84,8 +84,8 @@ interface Readable {
  *
  * Interface for all classes or packages which parameters are writable.
  *
- * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2011 Ivan ENDERLIN.
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 
@@ -118,8 +118,8 @@ interface Writable {
  *
  * Interface for all classes or packages that are parameterizable.
  *
- * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2011 Ivan ENDERLIN.
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 
@@ -136,8 +136,8 @@ namespace Hoa\Core {
  * other class with permissions (read, write, shared or combinations of these
  * ones).
  *
- * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2011 Ivan ENDERLIN.
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 

@@ -54,8 +54,8 @@ namespace Hoa\Memory {
  * Please, read http://www.research.ibm.com/people/d/dfb/papers/Bacon03Pure.pdf
  * to know more about its behavior.
  *
- * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2011 Ivan ENDERLIN.
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 

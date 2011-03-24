@@ -58,8 +58,8 @@ namespace Hoa\Acl {
  * Describe a group. A group is based on a graph (coding by adjacency list) to
  * set up the multi-inheritance of the group.
  *
- * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2011 Ivan ENDERLIN.
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 

@@ -43,8 +43,8 @@ namespace Hoa\Session\ISession {
  * Theses methods must be implemented for the PHP function
  * session_set_save_handler. Please, see the manuel for more informations.
  *
- * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2011 Ivan ENDERLIN.
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 
