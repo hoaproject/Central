@@ -57,7 +57,7 @@ import('Database.Constraint.Abstract');
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2011 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
+ * @license     New BSD License
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_Database
