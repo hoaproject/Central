@@ -54,7 +54,7 @@ namespace Hoa\Test\Selector {
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright (c) 2007, 2008 Ivan ENDERLIN.
- * @license    http://gnu.org/licenses/gpl.txt GNU GPL
+ * @license    New BSD License
  */
 
 abstract class Selector implements \Hoa\Iterator {

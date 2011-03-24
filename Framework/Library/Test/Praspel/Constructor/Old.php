@@ -54,7 +54,7 @@ namespace Hoa\Test\Praspel\Constructor {
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright (c) 2007, 2011 Ivan ENDERLIN.
- * @license    http://gnu.org/licenses/gpl.txt GNU GPL
+ * @license    New BSD License
  */
 
 class Old extends \Hoa\Test\Praspel\Variable { }
