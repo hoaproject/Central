@@ -55,8 +55,8 @@ import('Mail.Mime');
  * Superclass :
  * Send an email with differents methods.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright © 2007-2011 Ivan ENDERLIN.
+ * @author      Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright   Copyright © 2007-2011 Ivan Enderlin.
  * @license     New BSD License
  * @since       PHP 5
  * @version     0.2
