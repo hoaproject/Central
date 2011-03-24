@@ -59,8 +59,8 @@ namespace Hoa\Cache\Backend {
  * Memcache is PECL extension, so it's not installed in PHP. Take care
  * that Memcache module is loaded.
  *
- * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2011 Ivan ENDERLIN.
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 
