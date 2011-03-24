@@ -43,7 +43,7 @@ namespace Hoa\Core\Parameterizable {
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright (c) 2007, 2011 Ivan ENDERLIN.
- * @license    http://gnu.org/licenses/gpl.txt GNU GPL
+ * @license    New BSD License
  */
 
 interface Readable {
@@ -86,7 +86,7 @@ interface Readable {
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright (c) 2007, 2011 Ivan ENDERLIN.
- * @license    http://gnu.org/licenses/gpl.txt GNU GPL
+ * @license    New BSD License
  */
 
 interface Writable {
@@ -120,7 +120,7 @@ interface Writable {
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright (c) 2007, 2011 Ivan ENDERLIN.
- * @license    http://gnu.org/licenses/gpl.txt GNU GPL
+ * @license    New BSD License
  */
 
 interface Parameterizable extends Readable, Writable { }
@@ -138,7 +138,7 @@ namespace Hoa\Core {
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright (c) 2007, 2011 Ivan ENDERLIN.
- * @license    http://gnu.org/licenses/gpl.txt GNU GPL
+ * @license    New BSD License
  */
 
 class Parameter {

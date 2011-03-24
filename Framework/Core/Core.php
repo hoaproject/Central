@@ -89,7 +89,7 @@ namespace Hoa\Core {
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright (c) 2007, 2011 Ivan ENDERLIN.
- * @license    http://gnu.org/licenses/gpl.txt GNU GPL
+ * @license    New BSD License
  */
 
 class Core implements Parameterizable {
@@ -419,8 +419,8 @@ class Core implements Parameterizable {
      */
     public static function © ( ) {
 
-        return 'Copyright © 2007, 2011 Ivan Enderlin. All rights reserved.' . "\n" .
-               'License GNU GPL <http://gnu.org/licenses.txt>.';
+        return 'Copyright © 2007-2011 Ivan Enderlin. All rights reserved.' . "\n" .
+               'New BSD License.';
     }
 }
 

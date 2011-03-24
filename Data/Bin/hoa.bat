@@ -41,7 +41,7 @@ REM
 REM **
 REM * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
 REM * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
-REM * @license     http://gnu.org/licenses/gpl.txt GNU GPL
+REM * @license     New BSD License
 REM * @since       PHP 5
 REM * @version     0.1
 REM **

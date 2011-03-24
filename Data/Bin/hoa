@@ -42,9 +42,7 @@
 /**
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
+ * @license     New BSD License
  */
 
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Hoa.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'Hoa.php';
