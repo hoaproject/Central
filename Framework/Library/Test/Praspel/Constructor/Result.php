@@ -53,7 +53,7 @@ namespace Hoa\Test\Praspel\Constructor {
  * Represents the \result constructor, i.e. the result of the method.
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright (c) 2007, 2011 Ivan ENDERLIN.
+ * @copyright  Copyright (c) 2007-2011 Ivan ENDERLIN.
  * @license    New BSD License
  */
 
