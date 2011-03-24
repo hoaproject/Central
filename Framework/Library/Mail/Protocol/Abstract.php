@@ -66,7 +66,7 @@ import('Socket.Internet.Ipv6');
  * Abstract layer for protocol : manage connection for SMTP etc.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2011 Ivan ENDERLIN.
+ * @copyright   Copyright (c) 2007-2011 Ivan ENDERLIN.
  * @license     New BSD License
  * @since       PHP 5
  * @version     0.1

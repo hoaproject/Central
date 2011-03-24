@@ -49,7 +49,7 @@ from('Hoa')
  * This sheet declares the main style.
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright (c) 2007, 2011 Ivan ENDERLIN.
+ * @copyright  Copyright (c) 2007-2011 Ivan ENDERLIN.
  */
 
 class SheetStyle extends \Hoa\Console\Chrome\Style {

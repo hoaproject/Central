@@ -44,7 +44,7 @@ namespace Hoa\Xml\Element\Model {
  * <foo>abc<bar>def</bar>ghi</foo>.
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright (c) 2007, 2011 Ivan ENDERLIN.
+ * @copyright  Copyright (c) 2007-2011 Ivan ENDERLIN.
  * @license    New BSD License
  */
 

@@ -64,7 +64,7 @@ namespace Hoa\Cache\Backend {
  * SQLite is an extension, take care that SQLite is loaded.
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright (c) 2007, 2011 Ivan ENDERLIN.
+ * @copyright  Copyright (c) 2007-2011 Ivan ENDERLIN.
  * @license    New BSD License
  */
 

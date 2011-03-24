@@ -44,7 +44,7 @@ namespace Hoa\Core\Exception {
  * \Hoa\Core\Exception is that the later fires event after beeing constructed.
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright (c) 2007, 2011 Ivan ENDERLIN.
+ * @copyright  Copyright (c) 2007-2011 Ivan ENDERLIN.
  * @license    New BSD License
  */
 
@@ -254,7 +254,7 @@ class Idle extends \Exception {
  * Each exception must extend \Hoa\Core\Exception.
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright (c) 2007, 2011 Ivan ENDERLIN.
+ * @copyright  Copyright (c) 2007-2011 Ivan ENDERLIN.
  * @license    New BSD License
  */
 
@@ -310,7 +310,7 @@ class Exception extends Idle implements \Hoa\Core\Event\Source {
  * This exception is the equivalent representation of PHP errors.
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright (c) 2007, 2011 Ivan ENDERLIN.
+ * @copyright  Copyright (c) 2007-2011 Ivan ENDERLIN.
  * @license    New BSD License
  */
 
