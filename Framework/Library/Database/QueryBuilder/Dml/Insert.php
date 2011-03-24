@@ -55,8 +55,8 @@ import('Database.QueryBuilder.Interface');
  *
  * Build INSERT query.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright © 2007-2011 Ivan ENDERLIN.
+ * @author      Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright   Copyright © 2007-2011 Ivan Enderlin.
  * @license     New BSD License
  * @since       PHP 5
  * @version     0.1
