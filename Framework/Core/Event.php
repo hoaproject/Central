@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright (c) 2007-2011, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2011, Ivan Enderlin. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -42,7 +42,7 @@ namespace Hoa\Core\Event {
  * Each object which is observable must implement this interface.
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright (c) 2007-2011 Ivan ENDERLIN.
+ * @copyright  Copyright © 2007-2011 Ivan ENDERLIN.
  * @license    New BSD License
  */
 
@@ -54,7 +54,7 @@ interface Source { }
  * This class is the object which is transmit through event channels.
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright (c) 2007-2011 Ivan ENDERLIN.
+ * @copyright  Copyright © 2007-2011 Ivan ENDERLIN.
  * @license    New BSD License
  */
 
@@ -164,7 +164,7 @@ class Bucket {
  * multiton of events.
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright (c) 2007-2011 Ivan ENDERLIN.
+ * @copyright  Copyright © 2007-2011 Ivan ENDERLIN.
  * @license    New BSD License
  */
 
