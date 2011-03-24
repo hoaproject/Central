@@ -55,7 +55,7 @@ import('Locale.Exception');
  *     * http://www.iso.org/iso/en/prods-services/iso3166ma/02iso-3166-code-lists/index.html
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2011 Ivan ENDERLIN.
+ * @copyright   Copyright (c) 2007-2011 Ivan ENDERLIN.
  * @license     New BSD License
  * @since       PHP 5
  * @version     0.1
