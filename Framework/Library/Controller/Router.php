@@ -443,6 +443,9 @@ class Router implements \Hoa\Core\Parameterizable {
         $rewrited = (bool) $this->getParameter('rewrited');
         $base     = ltrim($this->getFormattedParameter('base'), '/');
 
+        if('cli' == php_sapi_name())
+            $rewrited = false;
+
         if(0 === preg_match('#^' . $base . '(.*)?$#', $uri, $matches))
             throw new Exception(
                 'Cannot match the base %s in the URI %s.',
