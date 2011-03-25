@@ -142,7 +142,7 @@ class          Tableofcontents
                 $entry->getTitle()->computeTransientValue($out);
         }
 
-        for($i = $n - 1; $i >= 0; --$i)
+        for($i = $n - 2; $i >= 0; --$i)
             $out->writeAll('</li>' . "\n" . '</ol>' . "\n");
 
         return;
