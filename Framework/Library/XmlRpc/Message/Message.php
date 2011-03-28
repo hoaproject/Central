@@ -32,79 +32,84 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- *
- * @category    Framework
- * @package     Hoa_XmlRpc
- * @subpackage  Hoa_XmlRpc_Method_System_ListMethods
- *
  */
+
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_XmlRpc_Method_Abstract
+ * \Hoa\XmlRpc\Exception
  */
-import('XmlRpc.MethodAbstract');
+-> import('XmlRpc.Exception')
 
 /**
- * Hoa_File_Finder
+ * \Hoa\XmlRpc\Message\Values
  */
-import('File.Finder');
+-> import('XmlRpc.Message.Values');
+
+}
+
+namespace Hoa\XmlRpc\Message {
 
 /**
- * Hoa_File_Undefined
- */
-import('File.Undefined');
-
-/**
- * Class Hoa_XmlRpc_Method_System_ListMethods.
+ * Class \Hoa\XmlRpc\Message\Message.
  *
- * Get list of RPC methods.
+ * 
  *
- * @author      Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright © 2007-2011 Ivan Enderlin.
- * @license     New BSD License
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_XmlRpc
- * @subpackage  Hoa_XmlRpc_Method_System_ListMethods
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @license    New BSD License
  */
 
-class Hoa_XmlRpc_Method_System_ListMethods extends Hoa_XmlRpc_Method_Abstract {
+class Message extends Values {
 
-    /**
-     * __construct
-     * Sets variables.
-     *
-     * @access  public
-     * @param   path        string    Path to RPC methods directory.
-     * @param   parameters  array     RPC parameters.
-     * @return  void
-     */
-    public function __construct ( $path, $parameters ) {
+    protected $_method = null;
 
-        parent::__construct($path, $parameters);
+
+
+    public function __construct ( $method ) {
+
+        $this->_method = $method;
+        parent::__construct(parent::IS_SCALAR, null);
+
+        return;
     }
 
-    /**
-     * get
-     * Get response.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function get ( ) {
+    public function getMethod ( ) {
 
-        $file   = array();
-        $dir    = new Hoa_File_Finder(
-            $this->path,
-            Hoa_File_Finder::LIST_FILE |
-            Hoa_File_Finder::LIST_VISIBLE,
-            Hoa_File_Finder::SORT_INAME
-        );
-
-        foreach($dir as $i => $scan)
-            $file[] = $this->value($scan->getFilename(), 'string');
-
-        return $this->value($file, 'array')->get();
+        return $this->_method;
     }
+
+    public function __toString ( ) {
+
+        $out = '<?xml version="1.0" encoding="utf-8"?' . '>' . "\n" .
+               '<methodCall>' . "\n" .
+               '  <methodName>' . $this->getMethod() . '</methodName>' . "\n";
+
+        $values = $this->getValues();
+
+        if(!empty($values)) {
+
+            $out .= '  <params>' . "\n";
+
+            foreach($this->getValues() as $value)
+                $out .= '    <param>' . "\n" . '      <value>' .
+                        str_replace(
+                            "\n",
+                            "\n      ",
+                            $this->getValueAsString(
+                                $value[self::VALUE],
+                                $value[self::TYPE]
+                            )
+                        ).
+                        '</value>' . "\n" . '    </param>' . "\n";
+
+            $out .= '  </params>' . "\n";
+        }
+
+        return $out . '</methodCall>';
+    }
+}
+
 }
