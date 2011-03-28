@@ -44,7 +44,9 @@ namespace {
 /**
  * \Hoa\Core
  */
+#hoa
 require_once dirname(dirname(dirname(__FILE__))) . '/Framework/Core/Core.php';
+#!hoa
 
 /**
  * Add some components the the hoa://'s protocol.

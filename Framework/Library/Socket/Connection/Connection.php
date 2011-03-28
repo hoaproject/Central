@@ -376,9 +376,6 @@ abstract class Connection
 
         $out = fread($this->getStream(), $length);
 
-        if('' == $out)
-            $this->disconnect();
-
         return $out;
     }
 
@@ -462,7 +459,7 @@ abstract class Connection
      */
     public function readLine ( ) {
 
-        return fgets($this->getStream(), 1024);
+        return fgets($this->getStream());
     }
 
     /**
@@ -473,12 +470,7 @@ abstract class Connection
      */
     public function readAll ( ) {
 
-        $out = null;
-
-        while(!$this->eof())
-            $out .= $this->readLine();
-
-        return $out;
+        return stream_get_contents($this->getStream());
     }
 
     /**

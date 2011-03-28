@@ -32,227 +32,76 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+namespace {
+
+from('Hoa')
+
+/**
+ * \Hoa\XmlRpc\Exception
+ */
+-> import('XmlRpc.Exception')
+
+/**
+ * \Hoa\XmlRpc\Message
+ */
+-> import('XmlRpc.Message');
+
+}
+
+namespace Hoa\XmlRpc {
+
+/**
+ * Class \Hoa\XmlRpc.
  *
+ * 
  *
- * @category    Framework
- * @package     Hoa_XmlRpc
- * @subpackage  Hoa_XmlRpc_Client
- *
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @license    New BSD License
  */
 
-/**
- * Hoa_Uri
- */
-import('Uri.~');
+class Client {
 
-/**
- * Hoa_Socket_Connection_Client
- */
-import('Socket.Connection.Client');
-
-/**
- * Hoa_Socket_Internet_DomainName
- */
-import('Socket.Internet.DomainName');
-
-/**
- * Hoa_Socket_Internet_Ipv4
- */
-import('Socket.Internet.Ipv4');
-
-/**
- * Hoa_Socket_Internet_Ipv6
- */
-import('Socket.Internet.Ipv6');
-
-/**
- * Hoa_XmlRpc
- */
-import('XmlRpc.~');
-
-/**
- * Hoa_XmlRpc_Value
- */
-import('XmlRpc.Value');
-
-/**
- * Hoa_XmlRpc_Message
- */
-import('XmlRpc.Message');
-
-/**
- * Class Hoa_XmlRpc_Client.
- *
- * Prepare and send headers and payload to RPC server.
- *
- * @author      Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright © 2007-2011 Ivan Enderlin.
- * @license     New BSD License
- * @since       PHP 5
- * @version     0.2
- * @package     Hoa_XmlRpc
- * @subpackage  Hoa_XmlRpc_Client
- */
-
-class Hoa_XmlRpc_Client extends Hoa_XmlRpc {
-
-    /**
-     * Uniform Resource Identier object.
-     *
-     * @var Hoa_Uri object
-     */
-    protected $uri = null;
-
-    /**
-     * Connection to RPC server.
-     *
-     * @var Hoa_Socket_Connection_Client object
-     */
-    protected $connection = null;
-
-    /**
-     * URI components.
-     *
-     * @var Hoa_XmlRpc string
-     */
-    protected $scheme   = null;
-    protected $domain   = null;
-    protected $abs_path = null;
-    protected $port     = 80;
-    protected $username = null;
-    protected $password = null;
-
-    /**
-     * Headers to send.
-     *
-     * @var Hoa_XmlRpc string
-     */
-    protected $header = '';
-
-    /**
-     * Connection time out.
-     *
-     * @var Hoa_XmlRpc int;
-     */
-    protected $timeout = 30;
+    protected $_client = null;
+    protected $_script = null;
 
 
 
-    /**
-     * __construct
-     * Assign URI variables.
-     *
-     * @access  public
-     * @param   uri     string    Address to Xml Rpc server.
-     * @return  void
-     * @throw   Hoa_XmlRpc_Exception
-     */
-    public function __construct ( $uri = null ) {
+    public function __construct ( \Hoa\Socket\Connection\Client $client, $script ) {
 
-        $this->uri = Hoa_Uri::factory($uri);
+        $client->connect();
+        $this->_client = $client;
+        $this->_script = $script;
 
-        if(!$this->uri->isValid())
-            throw new Hoa_XmlRpc_Exception('URI %s is not valid.', 0, $uri);
-
-        $this->scheme   = $this->uri->getScheme($uri);
-        $this->domain   = $this->uri->getAuthority();
-        $this->abs_path = $this->uri->getPath();
-        $this->port     = $this->uri->getPort();
-        $this->username = $this->uri->getUsername();
-        $this->password = $this->uri->getPassword();
-
-        if(empty($this->port))
-            $this->port = 80;
-
-        if($this->scheme == 'http')
-            $this->scheme = '';
+        return;
     }
 
-    /**
-     * send
-     * This method is an alias of sendPayload,
-     * sets the timeout and run sendPayload.
-     *
-     * @access  public
-     * @param   message  object    Hoa_XmlRpc_Message.
-     * @param   timeout  int       Time out.
-     * @return  string
-     * @throw   Hoa_XmlRpc_Exception
-     */
-    public function send ( Hoa_XmlRpc_Message $message, $timeout = 30 ) {
+    public function getHeader ( $message ) {
 
-        if($timeout < 0)
-            throw new Hoa_XmlRpc_Exception($this->error[0], 0);
-
-        $this->timeout = $timeout;
-
-        return $this->sendPayload($message);
+        return 'POST /' . $this->getScript() . ' HTTP/1.1' . "\r\n" .
+               'User-Agent: Hoa' . "\r\n" .
+               'Host: ' . $this->_client->getSocket()->getAddress() . "\r\n" .
+               'Content-Type: text/xml' . "\r\n" .
+               'Content-Length: ' . strlen($message) . "\r\n" .
+               "\r\n" .
+               $message . "\r\n";
     }
 
-    /**
-     * sendPayload
-     * This method opens a socket to the RPC server,
-     * sets the time out of socket to $this->timeout,
-     * sends the headers, and the payload,
-     * recovers the response.
-     *
-     * @access  protected
-     * @param   message    object    Hoa_XmlRpc_Message.
-     * @return  string
-     * @throw   Hoa_XmlRpc_Exception
-     */
-    protected function sendPayload ( Hoa_XmlRpc_Message $message ) {
+    public function send ( \Hoa\XmlRpc\Message $message ) {
 
-        $remote = '';
-        if(!empty($this->scheme))
-            $remote .= $this->scheme . '://';
-        $remote .= $this->domain . ':' . $this->port . $this->abs_path;
+        $out = $this->_client->writeAll(
+            $foo = $this->getHeader($message->__toString())
+        );
 
-        throw new Hoa_Core_Exception(
-            'This package is depreciated!!', 0);
-
-        $this->connection = new Hoa_Socket($remote, null, $this->timeout);
-
-        $this->connection->_connect();
-
-        $payload = $message->getPayload();
-
-        if(empty($payload))
-            $payload = $message->createPayload();
-
-        $this->createHeader(strlen($payload));
-
-        $response = $this->connection->send($this->header . CRLF . CRLF . $payload);
-
-        $this->connection->_disconnect();
-
-        return $response;
+        return $this->_client->readAll();
     }
 
-    /**
-     * createHeader
-     * Set the headers, and encode logs (username and password) if it's necessary.
-     *
-     * @access  public
-     * @param   payloadLn  string    Payload length.
-     * @return  void
-     * @throw   Hoa_XmlRpc_Exception
-     */
-    public function createHeader ( $payloadLn ) {
+    public function getScript ( ) {
 
-        if($payloadLn == 0)
-            throw new Hoa_XmlRpc_Exception($this->error[4], 4);
-
-        $this->header  = 'POST /' . $this->abs_path . ' HTTP/1.1' . CRLF .
-                         'User-Agent: HOA XmlRpc' . CRLF .
-                         'Host: ' . $this->domain . CRLF;
-
-        if(!empty($this->username) && !empty($this->password))
-            $this->header .= 'Authorization: Basic ' .
-                             base64_encode($this->username . ' : ' . $this->password) .
-                             CRLF;
-
-        $this->header .= 'Content-Type: text/xml' . CRLF .
-                         'Content-Length: ' . $payloadLn;
+        return $this->_script;
     }
+}
+
 }
