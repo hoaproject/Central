@@ -286,7 +286,7 @@ abstract class Connection
      * Get socket.
      *
      * @access  public
-     * @return  \Hoa\Socket\Socket
+     * @return  \Hoa\Socket\Socketable
      */
     public function getSocket ( ) {
 
@@ -374,7 +374,7 @@ abstract class Connection
                 'Cannot read because socket is not established, ' .
                 'i.e. not connected.', 0);
 
-        $out = @stream_socket_recvfrom($this->getStream(), $length);
+        $out = fread($this->getStream(), $length);
 
         if('' == $out)
             $this->disconnect();
@@ -462,13 +462,7 @@ abstract class Connection
      */
     public function readLine ( ) {
 
-        $out = null;
-        $tmp = null;
-
-        while(('' != $tmp = $this->readCharacter()) && $tmp != "\n")
-            $out .= $tmp;
-
-        return $out;
+        return fgets($this->getStream(), 1024);
     }
 
     /**
@@ -480,10 +474,9 @@ abstract class Connection
     public function readAll ( ) {
 
         $out = null;
-        $tmp = null;
 
-        while('' != $tmp = $this->readCharacter())
-            $out .= $tmp;
+        while(!$this->eof())
+            $out .= $this->readLine();
 
         return $out;
     }
@@ -524,7 +517,7 @@ abstract class Connection
         if(strlen($string) > $length)
             $string = substr($string, 0, $length);
 
-        return stream_socket_sendto($this->getStream(), $string);
+        return fwrite($this->getStream(), $string);
     }
 
     /**
