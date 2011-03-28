@@ -44,9 +44,19 @@ from('Hoa')
 -> import('XmlRpc.Exception')
 
 /**
- * \Hoa\XmlRpc\Message
+ * \Hoa\XmlRpc\Message\Response
  */
--> import('XmlRpc.Message');
+-> import('XmlRpc.Message.Response')
+
+/**
+ * \Hoa\Xml\Read
+ */
+-> import('Xml.Read')
+
+/**
+ * \Hoa\StringBuffer\Read
+ */
+-> import('StringBuffer.Read');
 
 }
 
@@ -86,16 +96,21 @@ class Client {
                'Content-Type: text/xml' . "\r\n" .
                'Content-Length: ' . strlen($message) . "\r\n" .
                "\r\n" .
-               $message . "\r\n";
+               $message;
     }
 
-    public function send ( \Hoa\XmlRpc\Message $message ) {
+    public function send ( Message\Request $message ) {
 
-        $out = $this->_client->writeAll(
-            $foo = $this->getHeader($message->__toString())
-        );
+        $this->_client->writeAll($this->getHeader($message->__toString()));
 
-        return $this->_client->readAll();
+        $response = $this->_client->readAll();
+
+        if(false === $pos = strpos($response, "\r\n\r\n"))
+            throw new Exception('Oops');
+
+        $response = substr($response, $pos + 4);
+
+        return new Message\Response($response);
     }
 
     public function getScript ( ) {
