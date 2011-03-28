@@ -459,7 +459,7 @@ abstract class Connection
      */
     public function readLine ( ) {
 
-        return fgets($this->getStream());
+        return stream_get_line($this->getStream(), 1 << 15, "\n");
     }
 
     /**
