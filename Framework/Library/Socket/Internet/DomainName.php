@@ -74,7 +74,7 @@ class DomainName extends Internet {
      */
     public function setAddress ( $address ) {
 
-        if(0 == preg_match('#^[0-9a-z_\-\.]+(\.[a-z]{2,4})?$#', strtolower($address)))
+        if(0 == preg_match('#^[0-9a-z_\-\.]+(\.[a-z]+)?$#', strtolower($address)))
             throw new \Hoa\Socket\Exception(
                 'Address %s is not a valid domain name.', 0, $address);
 
