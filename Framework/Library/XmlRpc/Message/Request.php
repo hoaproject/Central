@@ -44,9 +44,14 @@ from('Hoa')
 -> import('XmlRpc.Exception')
 
 /**
- * \Hoa\XmlRpc\Message\Values
+ * \Hoa\XmlRpc\Message\Message
  */
--> import('XmlRpc.Message.Values');
+-> import('XmlRpc.Message.~')
+
+/**
+ * \Hoa\XmlRpc\Message\Valued
+ */
+-> import('XmlRpc.Message.Valued');
 
 }
 
@@ -62,7 +67,7 @@ namespace Hoa\XmlRpc\Message {
  * @license    New BSD License
  */
 
-class Request extends Message {
+class Request extends Valued implements Message {
 
     protected $_method = null;
 
