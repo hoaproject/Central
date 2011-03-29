@@ -41,7 +41,7 @@ from('Hoa')
 /**
  * \Hoa\XmlRpc\Exception
  */
--> import('XmlRpc.Exception')
+-> import('XmlRpc.Exception.~')
 
 /**
  * \Hoa\XmlRpc\Message
