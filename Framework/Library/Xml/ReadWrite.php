@@ -86,11 +86,16 @@ class          ReadWrite
      * Start the stream reader/writer as if it is a XML document.
      *
      * @access  public
-     * @param   \Hoa\Stream\IStream\In  $stream    Stream to read/write.
+     * @param   \Hoa\Stream\IStream\In  $stream                 Stream to
+     *                                                          read/write.
+     * @param   bool                    $initializeNamespace    Whether we
+     *                                                          initialize
+     *                                                          namespaces.
      * @return  void
      * @throw   \Hoa\Xml\Exception
      */
-    public function __construct ( \Hoa\Stream\IStream\In $stream ) {
+    public function __construct ( \Hoa\Stream\IStream\In $stream,
+                                  $initializeNamespace = true ) {
 
         if(!($stream instanceof \Hoa\Stream\IStream\Out))
             throw new Exception(
@@ -98,7 +103,11 @@ class          ReadWrite
                 '\Hoa\Stream\IStream\In and \Hoa\Stream\IStream\Out interfaces.',
                 0, array(get_class($stream), $stream->getStreamName()));
 
-        parent::__construct('\Hoa\Xml\Element\ReadWrite', $stream);
+        parent::__construct(
+            '\Hoa\Xml\Element\ReadWrite',
+            $stream,
+            $initializeNamespace
+        );
 
         event('hoa://Event/Stream/' . $stream->getStreamName() . ':close-before')
             ->attach($this, '_close');

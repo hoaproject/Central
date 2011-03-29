@@ -78,12 +78,20 @@ class Read extends Xml implements \Hoa\Stream\IStream\In {
      * Start the stream reader as if it is a XML document.
      *
      * @access  public
-     * @param   \Hoa\Stream\IStream\In  $stream    Stream to read.
+     * @param   \Hoa\Stream\IStream\In  $stream                 Stream to read.
+     * @param   bool                    $initializeNamespace    Whether we
+     *                                                          initialize
+     *                                                          namespaces.
      * @return  void
      */
-    public function __construct ( \Hoa\Stream\IStream\In $stream ) {
+    public function __construct ( \Hoa\Stream\IStream\In $stream,
+                                  $initializeNamespace = true ) {
 
-        parent::__construct('\Hoa\Xml\Element\Read', $stream);
+        parent::__construct(
+            '\Hoa\Xml\Element\Read',
+            $stream,
+            $initializeNamespace
+        );
 
         return;
     }
