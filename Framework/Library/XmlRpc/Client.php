@@ -41,7 +41,12 @@ from('Hoa')
 /**
  * \Hoa\XmlRpc\Exception
  */
--> import('XmlRpc.Exception')
+-> import('XmlRpc.Exception.~')
+
+/**
+ * \Hoa\XmlRpc\Exception\Fault
+ */
+-> import('XmlRpc.Exception.Fault')
 
 /**
  * \Hoa\XmlRpc\Message\Response
@@ -122,17 +127,44 @@ class Client {
      * @access  public
      * @param   \Hoa\XmlRpc\Message\Request  $message    Message.
      * @return  \Hoa\XmlRpc\Message\Response
+     * @throw   \Hoa\XmlRpc\Exception\Fault
      */
     public function send ( Message\Request $message ) {
 
-        $this->_client->writeAll($this->getHeader($message->__toString()));
-
+        $request  = $message->__toString();
+        $this->_client->writeAll($this->getHeader($request));
         $response = $this->_client->readAll();
 
         if(false === $pos = strpos($response, "\r\n\r\n"))
-            throw new Exception('Oops');
+            throw new Exception(
+                'Oops, an unknown error occured. Headers seem to be corrupted.', 0);
 
         $response = substr($response, $pos + 4);
+
+        if(0 !== preg_match('#<methodResponse>(\s|\n)*<fault>#i', $response)) {
+
+            preg_match(
+                '#<(i4|int)>(?:\s|\n)*(\d+)(?:\s|\n)*</\1>#i',
+                $response,
+                $faultCodeMatches
+            );
+            preg_match(
+                '#<string>(?:\s|\n)*(.*)(?:\s|\n)*</string>#i',
+                $response,
+                $faultStringMatches
+            );
+
+            $faultCode   = -1;
+            $faultString = 'An ununderstable fault from the server occured.';
+
+            if(isset($faultCodeMatches[2]))
+                $faultCode   = $faultCodeMatches[2];
+
+            if(isset($faultStringMatches[1]))
+                $faultString = $faultStringMatches[1];
+
+            throw new Exception\Fault($faultString, $faultCode, $request);
+        }
 
         return new Message\Response($response);
     }
