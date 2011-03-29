@@ -160,28 +160,28 @@ class Message {
     /**
      * Values bucket (value, type).
      *
-     * @var \Hoa\XmlRpc\Message\Valued array
+     * @var \Hoa\XmlRpc\Message array
      */
     protected $_values = array();
 
     /**
      * Parent (for nested values).
      *
-     * @var \Hoa\XmlRpc\Message\Valued object
+     * @var \Hoa\XmlRpc\Message object
      */
     protected $_parent = null;
 
     /**
      * Current name for structure.
      *
-     * @var \Hoa\XmlRpc\Message\Valued string
+     * @var \Hoa\XmlRpc\Message string
      */
     protected $_name   = 'undefined';
 
     /**
      * Type of the current value.
      *
-     * @var \Hoa\XmlRpc\Message\Valued int
+     * @var \Hoa\XmlRpc\Message int
      */
     protected $_is     = self::IS_SCALAR;
 
@@ -191,10 +191,10 @@ class Message {
      * Build a new value object.
      *
      * @access  public
-     * @param   int                         $is        Type of object. Please,
-     *                                                 see the self::IS_*
-     *                                                 constants.
-     * @param   \Hoa\XmlRpc\Message\Valued  $parent    Parent.
+     * @param   int                  $is        Type of object. Please,
+     *                                          see the self::IS_*
+     *                                          constants.
+     * @param   \Hoa\XmlRpc\Message  $parent    Parent.
      * @return  void
      */
     public function __construct ( $is = self::IS_SCALAR,
@@ -212,7 +212,7 @@ class Message {
      * @access  protected
      * @param   mixed  $value    Value.
      * @param   int    $type     Type. Please, see the self::TYPE_* constants.
-     * @return  \Hoa\XmlRpc\Message\Valued
+     * @return  \Hoa\XmlRpc\Message
      */
     protected function _with ( $value, $type ) {
 
@@ -228,7 +228,7 @@ class Message {
      * Start an array.
      *
      * @access  public
-     * @return  \Hoa\XmlRpc\Message\Valued
+     * @return  \Hoa\XmlRpc\Message
      */
     public function withArray ( ) {
 
@@ -241,7 +241,7 @@ class Message {
      * Stop an array.
      *
      * @access  public
-     * @return  \Hoa\XmlRpc\Message\Valued
+     * @return  \Hoa\XmlRpc\Message
      */
     public function endArray ( ) {
 
@@ -256,7 +256,7 @@ class Message {
      *
      * @access  public
      * @param   mixed   $data    Data.
-     * @return  \Hoa\XmlRpc\Message\Valued
+     * @return  \Hoa\XmlRpc\Message
      */
     public function withBase64 ( $data ) {
 
@@ -268,7 +268,7 @@ class Message {
      *
      * @access  public
      * @param   mixed   $data    Data.
-     * @return  \Hoa\XmlRpc\Message\Valued
+     * @return  \Hoa\XmlRpc\Message
      */
     public function withBoolean ( $data ) {
 
@@ -280,7 +280,7 @@ class Message {
      *
      * @access  public
      * @param   mixed   $data    Data.
-     * @return  \Hoa\XmlRpc\Message\Valued
+     * @return  \Hoa\XmlRpc\Message
      */
     public function withDateTime ( $timestamp ) {
 
@@ -292,7 +292,7 @@ class Message {
      *
      * @access  public
      * @param   mixed   $data    Data.
-     * @return  \Hoa\XmlRpc\Message\Valued
+     * @return  \Hoa\XmlRpc\Message
      */
     public function withFloat ( $float ) {
 
@@ -304,7 +304,7 @@ class Message {
      *
      * @access  public
      * @param   mixed   $data    Data.
-     * @return  \Hoa\XmlRpc\Message\Valued
+     * @return  \Hoa\XmlRpc\Message
      */
     public function withInteger ( $integer ) {
 
@@ -316,7 +316,7 @@ class Message {
      *
      * @access  public
      * @param   mixed   $data    Data.
-     * @return  \Hoa\XmlRpc\Message\Valued
+     * @return  \Hoa\XmlRpc\Message
      */
     public function withString ( $string ) {
 
@@ -328,7 +328,7 @@ class Message {
      *
      * @access  public
      * @param   mixed   $data    Data.
-     * @return  \Hoa\XmlRpc\Message\Valued
+     * @return  \Hoa\XmlRpc\Message
      */
     public function withStructure ( ) {
 
@@ -342,7 +342,7 @@ class Message {
      *
      * @access  public
      * @param   string  $name    Name.
-     * @return  \Hoa\XmlRpc\Message\Valued
+     * @return  \Hoa\XmlRpc\Message
      */
     public function withName ( $name ) {
 
@@ -358,7 +358,7 @@ class Message {
      * Stop a structure.
      *
      * @access  public
-     * @return  \Hoa\XmlRpc\Message\Valued
+     * @return  \Hoa\XmlRpc\Message
      */
     public function endStructure ( ) {
 
@@ -373,7 +373,7 @@ class Message {
      *
      * @access  public
      * @param   mixed   $data    Data.
-     * @return  \Hoa\XmlRpc\Message\Valued
+     * @return  \Hoa\XmlRpc\Message
      */
     public function withNull ( ) {
 
@@ -384,8 +384,8 @@ class Message {
      * Set current parent.
      *
      * @access  protected
-     * @param   \Hoa\XmlRpc\Message\Valued  $parent    Parent.
-     * @return  \Hoa\XmlRpc\Message\Valued
+     * @param   \Hoa\XmlRpc\Message  $parent    Parent.
+     * @return  \Hoa\XmlRpc\Message
      */
     protected function setParent ( $parent ) {
 
@@ -399,7 +399,7 @@ class Message {
      * Get current parent.
      *
      * @access  public
-     * @return  \Hoa\XmlRpc\Message\Valued
+     * @return  \Hoa\XmlRpc\Message
      */
     public function getParent ( ) {
 
@@ -520,8 +520,8 @@ class Message {
      * Compute XML values into values bucket.
      *
      * @access  protected
-     * @param   array                       $values    Values XML collection.
-     * @param   \Hoa\XmlRpc\Message\Valued  $self      Current valued object.
+     * @param   array                $values    Values XML collection.
+     * @param   \Hoa\XmlRpc\Message  $self      Current valued object.
      * @return  void
      */
     protected function computeValues ( $values, $self = null ) {
