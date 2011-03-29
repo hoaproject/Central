@@ -34,23 +34,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\XmlRpc\Exception
- */
--> import('XmlRpc.Exception');
-
-}
-
 namespace Hoa\XmlRpc\Message {
 
 /**
- * Class \Hoa\XmlRpc\Message.
+ * Interface \Hoa\XmlRpc\Message\Message.
  *
- * 
+ * An interface for all messages.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.

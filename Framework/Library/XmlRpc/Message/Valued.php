@@ -50,7 +50,7 @@ namespace Hoa\XmlRpc\Message {
 /**
  * Class \Hoa\XmlRpc\Message\Valued.
  *
- * 
+ * Write XML-RPC values intuitively.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
@@ -59,29 +59,144 @@ namespace Hoa\XmlRpc\Message {
 
 class Valued {
 
+    /**
+     * Values bucket: value index.
+     *
+     * @const int
+     */
     const VALUE          =  0;
+
+    /**
+     * Values bucket: type index.
+     *
+     * @const int
+     */
     const TYPE           =  1;
+
+    /**
+     * Value type: <array>.
+     *
+     * @const int
+     */
     const TYPE_ARRAY     =  2;
+
+    /**
+     * Value type: <base64>.
+     *
+     * @const int
+     */
     const TYPE_BASE64    =  3;
+
+    /**
+     * Value type: <boolean>.
+     *
+     * @const int
+     */
     const TYPE_BOOLEAN   =  4;
+
+    /**
+     * Value type: <datetime.iso8601>.
+     *
+     * @const int
+     */
     const TYPE_DATETIME  =  5;
+
+    /**
+     * Value type: <double>.
+     *
+     * @const int
+     */
     const TYPE_FLOAT     =  6;
+
+    /**
+     * Value type: <i4> or <integer>.
+     *
+     * @const int
+     */
     const TYPE_INTEGER   =  7;
+
+    /**
+     * Value type: <string>.
+     *
+     * @const int
+     */
     const TYPE_STRING    =  8;
+
+    /**
+     * Value type: <structure>.
+     *
+     * @const int
+     */
     const TYPE_STRUCTURE =  9;
+
+    /**
+     * Value type: <nil>.
+     *
+     * @const int
+     */
     const TYPE_NULL      = 10;
+
+    /**
+     * Whether we manipulate a scalar.
+     *
+     * @const int
+     */
     const IS_SCALAR      = 11;
+
+    /**
+     * Whether we manipulate an array.
+     *
+     * @const int
+     */
     const IS_ARRAY       = 12;
+
+    /**
+     * Whether we manipulate a structure.
+     *
+     * @const int
+     */
     const IS_STRUCTURE   = 13;
 
+    /**
+     * Values bucket (value, type).
+     *
+     * @var \Hoa\XmlRpc\Message\Valued array
+     */
     protected $_values = array();
-    protected $_return = null;
+
+    /**
+     * Parent (for nested values).
+     *
+     * @var \Hoa\XmlRpc\Message\Valued object
+     */
     protected $_parent = null;
+
+    /**
+     * Current name for structure.
+     *
+     * @var \Hoa\XmlRpc\Message\Valued string
+     */
     protected $_name   = 'undefined';
+
+    /**
+     * Type of the current value.
+     *
+     * @var \Hoa\XmlRpc\Message\Valued int
+     */
     protected $_is     = self::IS_SCALAR;
 
 
 
+    /**
+     * Build a new value object.
+     *
+     * @access  public
+     * @param   int                         $is        Type of object. Please,
+     *                                                 see the self::IS_*
+     *                                                 constants.
+     * @param   \Hoa\XmlRpc\Message\Valued  $parent    Parent.
+     * @return  void
+     */
     public function __construct ( $is = self::IS_SCALAR,
                                   $parent = null ) {
 
@@ -91,23 +206,30 @@ class Valued {
         return;
     }
 
+    /**
+     * Generic method to “with” (:-p).
+     *
+     * @access  protected
+     * @param   mixed  $value    Value.
+     * @param   int    $type     Type. Please, see the self::TYPE_* constants.
+     * @return  \Hoa\XmlRpc\Message\Valued
+     */
     protected function _with ( $value, $type ) {
 
-        switch($this->_is) {
-
-            case self::IS_SCALAR:
-            case self::IS_ARRAY:
-                $this->_values[] = array($value, $type);
-              break;
-
-            case self::IS_STRUCTURE:
-                $this->_values[$this->_name] = array($value, $type);
-              break;
-        }
+        if(self::IS_STRUCTURE == $this->_is)
+            $this->_values[$this->_name] = array($value, $type);
+        else
+            $this->_values[]             = array($value, $type);
 
         return $this;
     }
 
+    /**
+     * Start an array.
+     *
+     * @access  public
+     * @return  \Hoa\XmlRpc\Message\Valued
+     */
     public function withArray ( ) {
 
         $self = __CLASS__;
@@ -115,6 +237,12 @@ class Valued {
         return new $self(self::IS_ARRAY, $this);
     }
 
+    /**
+     * Stop an array.
+     *
+     * @access  public
+     * @return  \Hoa\XmlRpc\Message\Valued
+     */
     public function endArray ( ) {
 
         $parent = $this->getParent();
@@ -123,36 +251,85 @@ class Valued {
         return $parent;
     }
 
+    /**
+     * Add a base64 value.
+     *
+     * @access  public
+     * @param   mixed   $data    Data.
+     * @return  \Hoa\XmlRpc\Message\Valued
+     */
     public function withBase64 ( $data ) {
 
         return $this->_with($data, self::TYPE_BASE64);
     }
 
+    /**
+     * Add a boolean value.
+     *
+     * @access  public
+     * @param   mixed   $data    Data.
+     * @return  \Hoa\XmlRpc\Message\Valued
+     */
     public function withBoolean ( $data ) {
 
         return $this->_with($data, self::TYPE_BOOLEAN);
     }
 
+    /**
+     * Add a date/time value.
+     *
+     * @access  public
+     * @param   mixed   $data    Data.
+     * @return  \Hoa\XmlRpc\Message\Valued
+     */
     public function withDateTime ( $timestamp ) {
 
         return $this->_with($timestamp, self::TYPE_DATETIME);
     }
 
+    /**
+     * Add a float value.
+     *
+     * @access  public
+     * @param   mixed   $data    Data.
+     * @return  \Hoa\XmlRpc\Message\Valued
+     */
     public function withFloat ( $float ) {
 
        return $this->_with((float) $float, self::TYPE_FLOAT);
     }
 
+    /**
+     * Add an integer value.
+     *
+     * @access  public
+     * @param   mixed   $data    Data.
+     * @return  \Hoa\XmlRpc\Message\Valued
+     */
     public function withInteger ( $integer ) {
 
         return $this->_with((int) $integer, self::TYPE_INTEGER);
     }
 
+    /**
+     * Add a string value.
+     *
+     * @access  public
+     * @param   mixed   $data    Data.
+     * @return  \Hoa\XmlRpc\Message\Valued
+     */
     public function withString ( $string ) {
 
         return $this->_with((string) $string, self::TYPE_STRING);
     }
 
+    /**
+     * Start a structure.
+     *
+     * @access  public
+     * @param   mixed   $data    Data.
+     * @return  \Hoa\XmlRpc\Message\Valued
+     */
     public function withStructure ( ) {
 
         $self = __CLASS__;
@@ -160,6 +337,13 @@ class Valued {
         return new $self(self::IS_STRUCTURE, $this);
     }
 
+    /**
+     * Add a named value.
+     *
+     * @access  public
+     * @param   string  $name    Name.
+     * @return  \Hoa\XmlRpc\Message\Valued
+     */
     public function withName ( $name ) {
 
         if(self::IS_STRUCTURE !== $this->_is)
@@ -170,6 +354,12 @@ class Valued {
         return $this;
     }
 
+    /**
+     * Stop a structure.
+     *
+     * @access  public
+     * @return  \Hoa\XmlRpc\Message\Valued
+     */
     public function endStructure ( ) {
 
         $parent = $this->getParent();
@@ -178,12 +368,26 @@ class Valued {
         return $parent;
     }
 
+    /**
+     * Add a null value.
+     *
+     * @access  public
+     * @param   mixed   $data    Data.
+     * @return  \Hoa\XmlRpc\Message\Valued
+     */
     public function withNull ( ) {
 
         return $this->_with(null, self::TYPE_NULL);
     }
 
-    public function setParent ( $parent ) {
+    /**
+     * Set current parent.
+     *
+     * @access  protected
+     * @param   \Hoa\XmlRpc\Message\Valued  $parent    Parent.
+     * @return  \Hoa\XmlRpc\Message\Valued
+     */
+    protected function setParent ( $parent ) {
 
         $old           = $this->_parent;
         $this->_parent = $parent;
@@ -191,16 +395,36 @@ class Valued {
         return $old;
     }
 
+    /**
+     * Get current parent.
+     *
+     * @access  public
+     * @return  \Hoa\XmlRpc\Message\Valued
+     */
     public function getParent ( ) {
 
         return $this->_parent;
     }
 
+    /**
+     * Get values bucket.
+     *
+     * @access  public
+     * @return  array
+     */
     public function getValues ( ) {
 
         return $this->_values;
     }
 
+    /**
+     * Get a value as a XML string.
+     *
+     * @access  public
+     * @param   mixed  $value    Value.
+     * @param   int    $type     Type. Please, see the self::TYPE_* constants.
+     * @return  string
+     */
     public function getValueAsString ( $value, $type ) {
 
         switch($type) {
@@ -262,11 +486,23 @@ class Valued {
         }
     }
 
+    /**
+     * Get values formatted (comprehensive array).
+     *
+     * @access  public
+     * @return  array
+     */
     public function getFormattedValues ( ) {
 
         return $this->_getFormattedValues($this->getValues());
     }
 
+    /**
+     * Built formatted values.
+     *
+     * @access  protected
+     * @return  array
+     */
     protected function _getFormattedValues ( $values ) {
 
         if(!is_array($values))
