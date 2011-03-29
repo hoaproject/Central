@@ -34,18 +34,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Xml {
+namespace {
+
+from('Hoa')
 
 /**
- * Class \Hoa\Xml\Exception.
+ * \Hoa\Xml\Excepion
+ */
+-> import('Xml.Exception.~');
+
+}
+
+namespace Hoa\Xml\Exception {
+
+/**
+ * Class \Hoa\Xml\Exception\NamespaceMissing.
  *
- * Extending the \Hoa\Core\Exception class.
+ * Extending the \Hoa\Xml\Exception class.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Exception extends \Hoa\Core\Exception { }
+class NamespaceMissing extends Exception { }
 
 }
