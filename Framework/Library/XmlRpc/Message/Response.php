@@ -44,12 +44,7 @@ from('Hoa')
 -> import('XmlRpc.Exception')
 
 /**
- * \Hoa\XmlRpc\Message\Valued
- */
--> import('XmlRpc.Message.Valued')
-
-/**
- * \Hoa\XmlRpc\Message\Message
+ * \Hoa\XmlRpc\Message
  */
 -> import('XmlRpc.Message.~')
 
@@ -77,7 +72,7 @@ namespace Hoa\XmlRpc\Message {
  * @license    New BSD License
  */
 
-class Response extends Valued implements Message {
+class Response extends Message {
 
     /**
      * Response.
@@ -96,82 +91,9 @@ class Response extends Valued implements Message {
         $buffer = new \Hoa\StringBuffer\Read();
         $buffer->initializeWith($response);
         $this->_response = new \Hoa\Xml\Read($buffer, false);
-        $this->_computeResponse(
-            $this->_response->xpath('/methodResponse/params/param/value/*'),
-            $this
+        $this->computeValues(
+            $this->_response->xpath('/methodResponse/params/param/value/*')
         );
-
-        return;
-    }
-
-    /**
-     * Compute response into values bucket.
-     *
-     * @access  protected
-     * @param   array                       $values    Values XML collection.
-     * @param   \Hoa\XmlRpc\Message\Valued  $self      Current valued object.
-     * @return  void
-     */
-    protected function _computeResponse ( $values, $self ) {
-
-        if(!is_array($values))
-            $values = array($values);
-
-        foreach($values as $value) {
-
-            switch(strtolower($value->getName())) {
-
-                case 'array':
-                    $self = $self->withArray();
-
-                    foreach($value->data as $data)
-                        $this->_computeResponse($data->xpath('./value/*'), $self);
-
-                    $self = $self->endArray();
-                  break;
-
-                case 'base64':
-                    $self->withBase64($value->readAll());
-                  break;
-
-                case 'boolean':
-                    $self->withBoolean((boolean) (int) $value->readAll());
-                  break;
-
-                case 'datetime.iso8601':
-                    $self->withDateTime(strtotime($value->readAll()));
-                  break;
-
-                case 'double':
-                    $self->withFloat((float) $value->readAll());
-                  break;
-
-                case 'i4':
-                case 'int':
-                    $self->withInteger((int) $value->readAll());
-                  break;
-
-                case 'string':
-                    $self->withString($value->readAll());
-                  break;
-
-                case 'struct':
-                    $self = $self->withStructure();
-
-                    foreach($value->member as $member) {
-
-                        $self->withName($member->name->readAll());
-                        $this->_computeResponse($member->xpath('./value/*'), $self);
-                    }
-
-                    $self = $self->endStructure();
-                  break;
-
-                case 'nil':
-                    $self->withNull();
-                  break;
-            }
-        }
 
         return;
     }
