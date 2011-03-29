@@ -546,7 +546,7 @@ class Message {
                   break;
 
                 case 'base64':
-                    $self->withBase64($value->readAll());
+                    $self->withBase64(base64_decode($value->readAll()));
                   break;
 
                 case 'boolean':
