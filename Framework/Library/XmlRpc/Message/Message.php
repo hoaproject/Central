@@ -51,6 +51,7 @@ namespace Hoa\XmlRpc\Message {
  * Class \Hoa\XmlRpc\Message.
  *
  * Write XML-RPC values intuitively on a message.
+ * XML-RPC specification can be found at: http://xmlrpc.com/spec.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
