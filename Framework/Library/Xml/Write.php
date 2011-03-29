@@ -78,12 +78,21 @@ class Write extends Xml implements \Hoa\Stream\IStream\Out {
      * Start the stream reader/writer as if it is a XML document.
      *
      * @access  public
-     * @param   \Hoa\Stream\IStream\Out  $stream    Stream to read/write.
+     * @param   \Hoa\Stream\IStream\Out  $stream                 Stream to
+     *                                                           read/write.
+     * @param   bool                     $initializeNamespace    Whether we
+     *                                                           initialize
+     *                                                           namespaces.
      * @return  void
      */
-    public function __construct ( \Hoa\Stream\IStream\Out $stream ) {
+    public function __construct ( \Hoa\Stream\IStream\Out $stream,
+                                  $initializeNamespace = true ) {
 
-        parent::__construct('\Hoa\Xml\Element\Write', $stream);
+        parent::__construct(
+            '\Hoa\Xml\Element\Write',
+            $stream,
+            $initializeNamespace
+        );
 
         event('hoa://Event/Stream/' . $stream->getStreamName() . ':close-before')
             ->attach($this, '_close');

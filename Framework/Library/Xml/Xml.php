@@ -104,13 +104,16 @@ abstract class Xml
      *     </handler>
      *
      * @access  public
-     * @param   string       $stream         Stream name to use.
-     * @param   \Hoa\Stream  $innerStream    Inner stream.
+     * @param   string       $stream                 Stream name to use.
+     * @param   \Hoa\Stream  $innerStream            Inner stream.
+     * @param   bool         $initializeNamespace    Whether we initialize
+     *                                               namespaces.
      * @return  void
      * @throw   \Hoa\Xml\Exception
      * @throw   \Hoa\Xml\Exception\NamespaceMissing
      */
-    public function __construct ( $stream, \Hoa\Stream $innerStream ) {
+    public function __construct ( $stream, \Hoa\Stream $innerStream,
+                                  $initializeNamespace = true ) {
 
         if(!function_exists('simplexml_load_file'))
             throw new Exception(
@@ -200,13 +203,17 @@ abstract class Xml
 
         $this->setStream($root);
         $this->setInnerStream($innerStream);
-        $this->initializeNamespaces();
+
+        if(true === $initializeNamespace)
+            $this->initializeNamespaces();
 
         return;
     }
 
     /**
      * Initialize namespaces.
+     * If your document has no namespace, some of the Element\Basic::select*()
+     * methods could not work properly.
      *
      * @access  protected
      * @return  void
