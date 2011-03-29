@@ -60,7 +60,7 @@ namespace Hoa\XmlRpc\Message {
 /**
  * Class \Hoa\XmlRpc\Message\Message\Request.
  *
- * 
+ * Represent a request message, with values (through inheritance).
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
@@ -69,10 +69,22 @@ namespace Hoa\XmlRpc\Message {
 
 class Request extends Valued implements Message {
 
+    /**
+     * Method to call.
+     *
+     * @var \Hoa\XmlRpc\Message\Request
+     */
     protected $_method = null;
 
 
 
+    /**
+     * Construct a new request.
+     *
+     * @access  public
+     * @param   string  $method    Method to call.
+     * @return  void
+     */
     public function __construct ( $method ) {
 
         $this->_method = $method;
@@ -81,11 +93,23 @@ class Request extends Valued implements Message {
         return;
     }
 
+    /**
+     * Get method to call.
+     *
+     * @access  public
+     * @return  string
+     */
     public function getMethod ( ) {
 
         return $this->_method;
     }
 
+    /**
+     * Transform the message into a XML string.
+     *
+     * @access  public
+     * @return  string
+     */
     public function __toString ( ) {
 
         $out = '<?xml version="1.0" encoding="utf-8"?' . '>' . "\n" .

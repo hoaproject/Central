@@ -46,26 +46,16 @@ from('Hoa')
 /**
  * \Hoa\XmlRpc\Message\Response
  */
--> import('XmlRpc.Message.Response')
-
-/**
- * \Hoa\Xml\Read
- */
--> import('Xml.Read')
-
-/**
- * \Hoa\StringBuffer\Read
- */
--> import('StringBuffer.Read');
+-> import('XmlRpc.Message.Response');
 
 }
 
 namespace Hoa\XmlRpc {
 
 /**
- * Class \Hoa\XmlRpc.
+ * Class \Hoa\XmlRpc\Client.
  *
- * 
+ * A XML-RPC client.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
@@ -74,12 +64,32 @@ namespace Hoa\XmlRpc {
 
 class Client {
 
+    /**
+     * Client socket connection.
+     *
+     * @var \Hoa\Socket\Connection\Client object
+     */
     protected $_client = null;
+
+    /**
+     * Script to call (e.g. xmlrpc.cgi).
+     *
+     * @var \Hoa\XmlRpc\Client string
+     */
     protected $_script = null;
 
 
 
-    public function __construct ( \Hoa\Socket\Connection\Client $client, $script ) {
+    /**
+     * Constructor.
+     *
+     * @access  public
+     * @param   \Hoa\Socket\Connection\Client  $client    Client connection.
+     * @param   string                         $script    Script.
+     * @return  void
+     */
+    public function __construct ( \Hoa\Socket\Connection\Client $client,
+                                  $script ) {
 
         $client->connect();
         $this->_client = $client;
@@ -88,6 +98,13 @@ class Client {
         return;
     }
 
+    /**
+     * Pack message to HTTP header format.
+     *
+     * @access  public
+     * @param   string  $message    Message.
+     * @return  string
+     */
     public function getHeader ( $message ) {
 
         return 'POST /' . $this->getScript() . ' HTTP/1.1' . "\r\n" .
@@ -99,6 +116,13 @@ class Client {
                $message;
     }
 
+    /**
+     * Send a request and get a response.
+     *
+     * @access  public
+     * @param   \Hoa\XmlRpc\Message\Request  $message    Message.
+     * @return  \Hoa\XmlRpc\Message\Response
+     */
     public function send ( Message\Request $message ) {
 
         $this->_client->writeAll($this->getHeader($message->__toString()));
@@ -113,6 +137,12 @@ class Client {
         return new Message\Response($response);
     }
 
+    /**
+     * Get script.
+     *
+     * @access  public
+     * @return  string
+     */
     public function getScript ( ) {
 
         return $this->_script;
