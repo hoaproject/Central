@@ -59,18 +59,38 @@ namespace Hoa\XmlRpc\Exception {
 
 class Fault extends Exception {
 
+    /**
+     * Request.
+     *
+     * @var \Hoa\XmlRpc\Exception\Fault string
+     */
     protected $request = null;
 
 
 
+    /**
+     * Create an exception.
+     *
+     * @access  public
+     * @param   string  $message    Message (faultString)
+     * @param   int     $code       Code (faultCode).
+     * @param   string  $request    Request.
+     * @return  void
+     */
     public function __construct ( $message, $code, $request ) {
 
         parent::__construct($message, $code);
-        $this->request = $request;
+        $this->_request = $request;
 
         return;
     }
 
+    /**
+     * Get request that caused the fault.
+     *
+     * @access  public
+     * @return  string
+     */
     public function getRequest ( ) {
 
         return $this->_request;
