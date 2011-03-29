@@ -34,18 +34,47 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\XmlRpc {
+namespace {
+
+from('Hoa')
 
 /**
- * Class \Hoa\XmlRpc\Exception.
+ * \Hoa\XmlRpc\Exception
+ */
+-> import('XmlRpc.Exception.~');
+
+}
+
+namespace Hoa\XmlRpc\Exception {
+
+/**
+ * Class \Hoa\XmlRpc\Exception\Fault.
  *
- * Extending the \Hoa\Core\Exception class.
+ * Extending the \Hoa\XmlRpc\Exception class.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Exception extends \Hoa\Core\Exception { }
+class Fault extends Exception {
+
+    protected $request = null;
+
+
+
+    public function __construct ( $message, $code, $request ) {
+
+        parent::__construct($message, $code);
+        $this->request = $request;
+
+        return;
+    }
+
+    public function getRequest ( ) {
+
+        return $this->_request;
+    }
+}
 
 }
