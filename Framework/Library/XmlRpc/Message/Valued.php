@@ -446,7 +446,7 @@ class Valued {
               break;
 
             case self::TYPE_BOOLEAN:
-                return '<boolean>' . true == $value ? '1' : '0' . '</boolean>';
+                return '<boolean>' . (true == $value ? '1' : '0') . '</boolean>';
               break;
 
             case self::TYPE_DATETIME:
