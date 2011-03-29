@@ -65,7 +65,7 @@ namespace Hoa\XmlRpc\Message {
 /**
  * Class \Hoa\XmlRpc\Message\Message\Request.
  *
- * Represent a response message, with values (through inheritance).
+ * Represent a response message.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
