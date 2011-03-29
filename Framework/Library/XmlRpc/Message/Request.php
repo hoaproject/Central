@@ -44,30 +44,25 @@ from('Hoa')
 -> import('XmlRpc.Exception')
 
 /**
- * \Hoa\XmlRpc\Message\Message
+ * \Hoa\XmlRpc\Message
  */
--> import('XmlRpc.Message.~')
-
-/**
- * \Hoa\XmlRpc\Message\Valued
- */
--> import('XmlRpc.Message.Valued');
+-> import('XmlRpc.Message.~');
 
 }
 
 namespace Hoa\XmlRpc\Message {
 
 /**
- * Class \Hoa\XmlRpc\Message\Message\Request.
+ * Class \Hoa\XmlRpc\Message\Request.
  *
- * Represent a request message, with values (through inheritance).
+ * Represent a request message.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Request extends Valued implements Message {
+class Request extends Message {
 
     /**
      * Method to call.
