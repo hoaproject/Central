@@ -95,8 +95,7 @@ class Response extends Valued implements Message {
 
         $buffer = new \Hoa\StringBuffer\Read();
         $buffer->initializeWith($response);
-
-        $this->_response = new \Hoa\Xml\Read($buffer);
+        $this->_response = new \Hoa\Xml\Read($buffer, false);
         $this->_computeResponse(
             $this->_response->xpath('/methodResponse/params/param/value/*'),
             $this
