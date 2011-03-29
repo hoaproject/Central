@@ -147,7 +147,7 @@ class Response extends Valued implements Message {
                   break;
 
                 case 'i4':
-                case 'integer':
+                case 'int':
                     $self->withInteger((int) $value->readAll());
                   break;
 
