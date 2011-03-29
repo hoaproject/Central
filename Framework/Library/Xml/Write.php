@@ -41,7 +41,7 @@ from('Hoa')
 /**
  * \Hoa\Xml\Exception
  */
--> import('Xml.Exception')
+-> import('Xml.Exception.~')
 
 /**
  * \Hoa\Xml

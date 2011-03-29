@@ -41,7 +41,12 @@ from('Hoa')
 /**
  * \Hoa\Xml\Exception
  */
--> import('Xml.Exception')
+-> import('Xml.Exception.~')
+
+/**
+ * \Hoa\Xml\Exception\NamespaceMissing
+ */
+-> import('Xml.Exception.NamespaceMissing')
 
 /**
  * \Hoa\Xml\Element
@@ -103,6 +108,7 @@ abstract class Xml
      * @param   \Hoa\Stream  $innerStream    Inner stream.
      * @return  void
      * @throw   \Hoa\Xml\Exception
+     * @throw   \Hoa\Xml\Exception\NamespaceMissing
      */
     public function __construct ( $stream, \Hoa\Stream $innerStream ) {
 
@@ -204,6 +210,7 @@ abstract class Xml
      *
      * @access  protected
      * @return  void
+     * @throw   \Hoa\Xml\Exception\NamespaceMissing
      */
     public function initializeNamespaces ( ) {
 
@@ -211,7 +218,7 @@ abstract class Xml
         $this->_namespaces = $stream->getDocNamespaces();
 
         if(empty($this->_namespaces))
-            throw new Exception(
+            throw new Exception\NamespaceMissing(
                 'The XML document %s must have a default namespace at least.',
                 4, $this->getInnerStream()->getStreamName());
 
