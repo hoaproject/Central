@@ -44,9 +44,19 @@ from('Hoa')
 -> import('Socket.Connection.Server')
 
 /**
+ * \Hoa\Socket\Connection\Client
+ */
+-> import('Socket.Connection.Client')
+
+/**
  * \Hoa\Socket\Internet\DomainName
  */
 -> import('Socket.Internet.DomainName')
+
+/**
+ * \Hoa\FastCgi\Client
+ */
+-> import('FastCgi.Client')
 
 /**
  * \Hoa\File\Read
@@ -137,6 +147,15 @@ class StartCommand extends \Hoa\Console\Command\Generic {
 
         $ip      = new \Hoa\Socket\Internet\DomainName($domain, $port, 'tcp');
         $server  = new \Hoa\Socket\Connection\Server($ip);
+        $client  = new \Hoa\FastCgi\Client(
+                       new \Hoa\Socket\Connection\Client(
+                           new \Hoa\Socket\Internet\DomainName(
+                               'localhost',
+                               9000,
+                               'tcp'
+                           )
+                       )
+                   );
         $server->connectAndWait();
         $request = new \Hoa\Http\Request();
         $_root   = $root;
@@ -161,8 +180,9 @@ class StartCommand extends \Hoa\Console\Command\Generic {
                 if(empty($buffer)) {
 
                     $server->disconnect();
+                    $this->log("\r" . '⌛ Timeout');
 
-                    continue;
+                    break 2;
                 }
 
                 $request->parse($buffer);
@@ -240,27 +260,35 @@ class StartCommand extends \Hoa\Console\Command\Generic {
                             break;
                         }
 
-                        $_url = '"' . str_replace('"', '\"', $url) . '"';
-                        $process = proc_open(
-                            $php . ' index.php ' . $_url,
-                            array(
-                                0 => array('pipe', 'r'),
-                                1 => array('pipe', 'w'),
-                                2 => array('pipe', 'w')
-                            ),
-                            $pipes,
-                            $_root,
-                            null
-                        );
-                        $content = stream_get_contents($pipes[1]);
-                        fclose($pipes[1]);
-                        proc_close($process);
+                        $content = $client->send(array(
+                            'GATEWAY_INTERFACE' => 'FastCGI/1.0',
+
+                            'SERVER_SOFTWARE'   => 'Hoa+Bhoa/0.1',
+                            'SERVER_PROTOCOL'   => 'HTTP/1.1',
+                            'SERVER_NAME'       => 'localhost',
+                            'SERVER_ADDR'       => '::1',
+                            'SERVER_PORT'       => 8888,
+                            'SERVER_SIGNATURE'  => 'Hoa Bhoa \o/',
+
+                            'HTTP_HOST'         => 'localhost:8888',
+                            'HTTP_USER_AGENT'   => 'Mozilla Firefox',
+
+                            'REQUEST_METHOD'    => 'GET',
+                            'REQUEST_URI'       => '/' . $url,
+
+                            'SCRIPT_FILENAME'   => $_root . DS . 'index.php',
+                            'SCRIPT_NAME'       => '/index.php',
+
+                            'CONTENT_TYPE'      => 'text/html',
+                            'CONTENT_LENGTH'    => 0
+                        ));
+                        $headers = $client->getResponseHeaders();
 
                         $server->writeAll(
                             'HTTP/1.1 200 OK' . "\r\n" .
                             'Date: ' . date('r') . "\r\n" .
                             'Server: Hoa+Bhoa/0.1' . "\r\n" .
-                            'Content-Type: text/html' . "\r\n" .
+                            'Content-Type: ' . $headers['content-type'] . "\r\n" .
                             'Content-Length: ' . strlen($content) . "\r\n\r\n" .
                             $content
                         );
