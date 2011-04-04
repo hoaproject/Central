@@ -78,8 +78,8 @@ class Registry extends \ArrayObject {
     public function __construct ( ) {
 
         throw new Exception(
-            'Cannot instance the \Hoa\Registry object. Use set, get and ' .
-            'isRegistered static methods.', 0);
+            'Cannot instance the \Hoa\Registry object. Use set, get, remove ' .
+            'and isRegistered static methods.', 0);
 
         return;
     }
@@ -151,7 +151,7 @@ class Registry extends \ArrayObject {
      * @param   mixed   $index    Index of registry.
      * @return  void
      */
-    public static function remote ( $index ) {
+    public static function remove ( $index ) {
 
         self::getInstance()->offsetUnset($index);
 
