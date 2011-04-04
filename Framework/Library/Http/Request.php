@@ -159,7 +159,7 @@ class Request {
         foreach($headers as $header) {
 
             $semicolon  = strpos($header, ':');
-            $fieldName  = strtolower(substr($header, 0, $semicolon));
+            $fieldName  = strtolower(trim(substr($header, 0, $semicolon)));
             $fieldValue = trim(substr($header, $semicolon + 1));
 
             switch($fieldName) {
