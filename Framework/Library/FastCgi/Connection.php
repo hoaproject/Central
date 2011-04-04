@@ -116,10 +116,10 @@ abstract class Connection {
 
         return chr(1) .                     // version
                chr($type) .                 // type
-               chr(($id >> 8) & 0xff) .     // ID B1
-               chr($id & 0xff) .            // ID B0
+               chr(($id     >> 8) & 0xff) . // ID B1
+               chr( $id           & 0xff) . // ID B0
                chr(($length >> 8) & 0xff) . // length B1
-               chr($length & 0xff) .        // length b0
+               chr( $length       & 0xff) . // length b0
                chr(0) .                     // padding length
                chr(0) .                     // reserved
                $content;
