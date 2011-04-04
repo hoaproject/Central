@@ -463,7 +463,7 @@ class Message {
               break;
 
             case self::TYPE_STRING:
-                return '<string>' . $value . '</string>';
+                return '<string>' . htmlspecialchars($value) . '</string>';
               break;
 
             case self::TYPE_STRUCTURE:
@@ -568,7 +568,7 @@ class Message {
                   break;
 
                 case 'string':
-                    $self->withString($value->readAll());
+                    $self->withString(htmlspecialchars_decode($value->readAll()));
                   break;
 
                 case 'struct':
