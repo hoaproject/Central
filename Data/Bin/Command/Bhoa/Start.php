@@ -172,147 +172,146 @@ class StartCommand extends \Hoa\Console\Command\Generic {
 
         $this->log('Waiting for connection…');
 
-        while(true)
-            foreach($server->select() as $node) {
+        while(true) foreach($server->select() as $node) {
 
-                $buffer = $server->read(2048);
+            $buffer = $server->read(2048);
 
-                if(empty($buffer)) {
+            if(empty($buffer)) {
 
-                    $server->disconnect();
-                    $this->log("\r" . '⌛ Timeout');
+                $server->disconnect();
+                $this->log("\r" . '⌛ Timeout');
 
-                    break 2;
-                }
-
-                $request->parse($buffer);
-                $method         = $request->getMethod();
-                $methodAsString = strtoupper($request->getMethodAsString());
-                $url            = $request->getURL();
-                $ttime          = time();
-                $smartPrint     = "\r";
-
-                if($ttime - $time >= 2) {
-
-                    $this->log("\r");
-                    $smartPrint = "\n";
-                }
-
-                $this->log(
-                    $smartPrint . '↺ '. $methodAsString . ' ' . $url .
-                    ' (waiting…)'
-                );
-
-                $time = $ttime;
-
-                switch($method) {
-
-                    case \Hoa\Http\Request::METHOD_GET:
-                        $path = $_root . DS . $url;
-                        $idx  = file_exists($_root . DS . 'index.php');
-
-                        if(is_dir($path) && false === $idx) {
-
-                            $server->writeAll(
-                                'HTTP/1.1 200 OK' . "\r\n" .
-                                'Date: ' . date('r') . "\r\n" .
-                                'Server: Hoa+Bhoa/0.1' . "\r\n" .
-                                'Content-Type: text/plain' . "\r\n" .
-                                'Content-Length: 1' . "\r\n\r\n" .
-                                'd'
-                            );
-
-                            break;
-                        }
-
-                        if(file_exists($path) && !is_dir($path)) {
-
-                            // I know, it's deprecated, but it's temporary.
-                            $type    = mime_content_type($path);
-
-                            if(substr($path, -3) == 'css')
-                                $type = 'text/css';
-
-                            $content = file_get_contents($path);
-                            $server->writeAll(
-                                'HTTP/1.1 200 OK' . "\r\n" .
-                                'Date: ' . date('r') . "\r\n" .
-                                'Server: Hoa+Bhoa/0.1' . "\r\n" .
-                                'Content-Type: ' . $type . "\r\n" .
-                                'Content-Length: ' . mb_strlen($content) . "\r\n\r\n" .
-                                $content
-                            );
-
-                            break;
-                        }
-
-                        if(false === $idx) {
-
-                            $server->writeAll(
-                                'HTTP/1.1 404 Not Found' . "\r\n" .
-                                'Date: ' . date('r') . "\r\n" .
-                                'Server: Hoa+Bhoa/0.1' . "\r\n" .
-                                'Content-Type: text/plain' . "\r\n" .
-                                'Content-Length: 3' . "\r\n\r\n" .
-                                '404'
-                            );
-
-                            break;
-                        }
-
-                        $content = $client->send(array(
-                            'GATEWAY_INTERFACE' => 'FastCGI/1.0',
-
-                            'SERVER_SOFTWARE'   => 'Hoa+Bhoa/0.1',
-                            'SERVER_PROTOCOL'   => 'HTTP/1.1',
-                            'SERVER_NAME'       => 'localhost',
-                            'SERVER_ADDR'       => '::1',
-                            'SERVER_PORT'       => 8888,
-                            'SERVER_SIGNATURE'  => 'Hoa Bhoa \o/',
-
-                            'HTTP_HOST'         => 'localhost:8888',
-                            'HTTP_USER_AGENT'   => 'Mozilla Firefox',
-
-                            'REQUEST_METHOD'    => 'GET',
-                            'REQUEST_URI'       => '/' . $url,
-
-                            'SCRIPT_FILENAME'   => $_root . DS . 'index.php',
-                            'SCRIPT_NAME'       => '/index.php',
-
-                            'CONTENT_TYPE'      => 'text/html',
-                            'CONTENT_LENGTH'    => 0
-                        ));
-                        $headers = $client->getResponseHeaders();
-
-                        $server->writeAll(
-                            'HTTP/1.1 200 OK' . "\r\n" .
-                            'Date: ' . date('r') . "\r\n" .
-                            'Server: Hoa+Bhoa/0.1' . "\r\n" .
-                            'Content-Type: ' . $headers['content-type'] . "\r\n" .
-                            'Content-Length: ' . strlen($content) . "\r\n\r\n" .
-                            $content
-                        );
-                      break;
-
-                    default:
-                        $content = 'This server is stupid and does not ' .
-                                   'support ' . $methodAsString . '! ' .
-                                   'Yup, damn stupid…';
-                        $server->writeAll(
-                            'HTTP/1.1 200 OK' . "\r\n" .
-                            'Date: ' . date('r') . "\r\n" .
-                            'Server: Hoa+Bhoa/0.1' . "\r\n" .
-                            'Content-Type: text/html' . "\r\n" .
-                            'Content-Length: ' . strlen($content) . "\r\n\r\n" .
-                            $content
-                        );
-                }
-
-                $this->log("\r" . '✓ '. $methodAsString . ' ' . $url);
-
-                $this->log(null);
-                $this->log("\n" . 'Waiting for new connection…');
+                break 2;
             }
+
+            $request->parse($buffer);
+            $method         = $request->getMethod();
+            $methodAsString = strtoupper($request->getMethodAsString());
+            $url            = $request->getURL();
+            $ttime          = time();
+            $smartPrint     = "\r";
+
+            if($ttime - $time >= 2) {
+
+                $this->log("\r");
+                $smartPrint = "\n";
+            }
+
+            $this->log(
+                $smartPrint . '↺ '. $methodAsString . ' ' . $url .
+                ' (waiting…)'
+            );
+
+            $time = $ttime;
+
+            switch($method) {
+
+                case \Hoa\Http\Request::METHOD_GET:
+                    $path = $_root . DS . $url;
+                    $idx  = file_exists($_root . DS . 'index.php');
+
+                    if(is_dir($path) && false === $idx) {
+
+                        $server->writeAll(
+                            'HTTP/1.1 200 OK' . "\r\n" .
+                            'Date: ' . date('r') . "\r\n" .
+                            'Server: Hoa+Bhoa/0.1' . "\r\n" .
+                            'Content-Type: text/plain' . "\r\n" .
+                            'Content-Length: 1' . "\r\n\r\n" .
+                            'd'
+                        );
+
+                        break;
+                    }
+
+                    if(file_exists($path) && !is_dir($path)) {
+
+                        // I know, it's deprecated, but it's temporary.
+                        $type    = mime_content_type($path);
+
+                        if(substr($path, -3) == 'css')
+                            $type = 'text/css';
+
+                        $content = file_get_contents($path);
+                        $server->writeAll(
+                            'HTTP/1.1 200 OK' . "\r\n" .
+                            'Date: ' . date('r') . "\r\n" .
+                            'Server: Hoa+Bhoa/0.1' . "\r\n" .
+                            'Content-Type: ' . $type . "\r\n" .
+                            'Content-Length: ' . mb_strlen($content) . "\r\n\r\n" .
+                            $content
+                        );
+
+                        break;
+                    }
+
+                    if(false === $idx) {
+
+                        $server->writeAll(
+                            'HTTP/1.1 404 Not Found' . "\r\n" .
+                            'Date: ' . date('r') . "\r\n" .
+                            'Server: Hoa+Bhoa/0.1' . "\r\n" .
+                            'Content-Type: text/plain' . "\r\n" .
+                            'Content-Length: 3' . "\r\n\r\n" .
+                            '404'
+                        );
+
+                        break;
+                    }
+
+                    $content = $client->send(array(
+                        'GATEWAY_INTERFACE' => 'FastCGI/1.0',
+
+                        'SERVER_SOFTWARE'   => 'Hoa+Bhoa/0.1',
+                        'SERVER_PROTOCOL'   => 'HTTP/1.1',
+                        'SERVER_NAME'       => 'localhost',
+                        'SERVER_ADDR'       => '::1',
+                        'SERVER_PORT'       => 8888,
+                        'SERVER_SIGNATURE'  => 'Hoa Bhoa \o/',
+
+                        'HTTP_HOST'         => 'localhost:8888',
+                        'HTTP_USER_AGENT'   => 'Mozilla Firefox',
+
+                        'REQUEST_METHOD'    => 'GET',
+                        'REQUEST_URI'       => '/' . $url,
+
+                        'SCRIPT_FILENAME'   => $_root . DS . 'index.php',
+                        'SCRIPT_NAME'       => '/index.php',
+
+                        'CONTENT_TYPE'      => 'text/html',
+                        'CONTENT_LENGTH'    => 0
+                    ));
+                    $headers = $client->getResponseHeaders();
+
+                    $server->writeAll(
+                        'HTTP/1.1 200 OK' . "\r\n" .
+                        'Date: ' . date('r') . "\r\n" .
+                        'Server: Hoa+Bhoa/0.1' . "\r\n" .
+                        'Content-Type: ' . $headers['content-type'] . "\r\n" .
+                        'Content-Length: ' . strlen($content) . "\r\n\r\n" .
+                        $content
+                    );
+                  break;
+
+                default:
+                    $content = 'This server is stupid and does not ' .
+                               'support ' . $methodAsString . '! ' .
+                               'Yup, damn stupid…';
+                    $server->writeAll(
+                        'HTTP/1.1 200 OK' . "\r\n" .
+                        'Date: ' . date('r') . "\r\n" .
+                        'Server: Hoa+Bhoa/0.1' . "\r\n" .
+                        'Content-Type: text/html' . "\r\n" .
+                        'Content-Length: ' . strlen($content) . "\r\n\r\n" .
+                        $content
+                    );
+            }
+
+            $this->log("\r" . '✓ '. $methodAsString . ' ' . $url);
+
+            $this->log(null);
+            $this->log("\n" . 'Waiting for new connection…');
+        }
 
         return HC_SUCCESS;
     }
