@@ -179,9 +179,8 @@ class StartCommand extends \Hoa\Console\Command\Generic {
             if(empty($buffer)) {
 
                 $server->disconnect();
-                $this->log("\r" . '⌛ Timeout');
 
-                break 2;
+                continue;
             }
 
             $request->parse($buffer);
