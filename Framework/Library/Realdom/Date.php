@@ -44,6 +44,11 @@ from('Hoa')
 -> import('Realdom.~')
 
 /**
+ * \Hoa\Realdom\Conststring
+ */
+-> import('Realdom.Conststring')
+
+/**
  * \Hoa\Realdom\Constinteger
  */
 -> import('Realdom.Constinteger')
@@ -100,13 +105,14 @@ class Date extends Realdom {
      * @param   \Hoa\Realdom\Integer      $timestamp    Timestamp.
      * @return  void
      */
-    public function construct ( \Hoa\Realdom\Conststring $format,
-                                \Hoa\Realdom\Integer     $timestamp = null ) {
+    public function construct ( Conststring $format    = null,
+                                Integer     $timestamp = null ) {
+
+        if(null === $format)
+            $format = new Conststring('c');
 
         if(null === $timestamp)
-            $timestamp = new \Hoa\Realdom\Boundinteger(
-                new \Hoa\Realdom\Constinteger(0)
-            );
+            $timestamp = new Boundinteger(new Constinteger(0));
 
         $this->_format    = $format;
         $this->_timestamp = $timestamp;
