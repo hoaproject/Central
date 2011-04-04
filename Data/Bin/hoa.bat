@@ -32,18 +32,12 @@ REM * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
 REM * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 REM * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 REM * POSSIBILITY OF SUCH DAMAGE.
-REM *
-REM *
-REM * @category    Data
-REM *
 REM **
 REM
 REM **
-REM * @author      Ivan Enderlin <ivan.enderlin@hoa-project.net>
-REM * @copyright   Copyright © 2007-2011 Ivan Enderlin.
-REM * @license     New BSD License
-REM * @since       PHP 5
-REM * @version     0.1
+REM * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+REM * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+REM * @license    New BSD License
 REM **
 
 BREAK=ON
