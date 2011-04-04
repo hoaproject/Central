@@ -372,7 +372,10 @@ class Server extends Connection implements \Iterator {
 
             unset($this->_nodes[$this->getNodeId($current)]);
 
-            return @fclose($current);
+            @fclose($current);
+
+            // Closing slave does not have the same effect that closing master.
+            return false;
         }
 
         return (bool) (@fclose($this->_master) + @fclose($this->getStream()));
