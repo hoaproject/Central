@@ -265,7 +265,7 @@ class Server extends Connection implements \Iterator {
                         'Operation timed out (nothing to accept).', 3);
 
                 $id                = $this->getNodeId($client);
-                $node              = new $nodeClass($id, $client);
+                $node              = dnew($nodeClass, array($id, $client));
                 $this->_nodes[$id] = $node;
                 $this->_stack[]    = $client;
                 $this->_setStream($socket);
