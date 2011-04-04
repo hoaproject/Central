@@ -1,0 +1,249 @@
+<?php
+
+/**
+ * Hoa
+ *
+ *
+ * @license
+ *
+ * New BSD License
+ *
+ * Copyright © 2007-2011, Ivan Enderlin. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Hoa nor the names of its contributors may be
+ *       used to endorse or promote products derived from this software without
+ *       specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS AND CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+namespace Hoa\FastCgi {
+
+/**
+ * Class \Hoa\FastCgi\Connection.
+ *
+ * A FastCGI connection; mainly pack & unpack methods.
+ * Specification can be found here:
+ * http://fastcgi.com/devkit/doc/fcgi-spec.html.
+ *
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @license    New BSD License
+ */
+
+abstract class Connection {
+
+    /**
+     * Header: version.
+     *
+     * @const int
+     */
+    const HEADER_VERSION        = 0;
+
+    /**
+     * Header: type.
+     *
+     * @const int
+     */
+    const HEADER_TYPE           = 1;
+
+    /**
+     * Header: request ID.
+     *
+     * @const int
+     */
+    const HEADER_REQUEST_ID     = 2;
+
+    /**
+     * Header: content length.
+     *
+     * @const int
+     */
+    const HEADER_CONTENT_LENGTH = 3;
+
+    /**
+     * Header: padding length.
+     *
+     * @const int
+     */
+    const HEADER_PADDING_LENGTH = 4;
+
+    /**
+     * Header: reserved.
+     *
+     * @const int
+     */
+    const HEADER_RESERVED       = 5;
+
+    /**
+     * Header: content.
+     *
+     * @const int
+     */
+    const PACK_CONTENT          = 6;
+
+
+
+    /**
+     * Pack data to a packet.
+     *
+     * @access  public
+     * @param   int     $type       Packet's type.
+     * @param   string  $content    Content.
+     * @param   id      $id         Packet's ID.
+     * @return  string
+     */
+    public function pack ( $type, $content, $id = 1 ) {
+
+        $length = strlen($content);
+
+        return chr(1) .                     // version
+               chr($type) .                 // type
+               chr(($id >> 8) & 0xff) .     // ID B1
+               chr($id & 0xff) .            // ID B0
+               chr(($length >> 8) & 0xff) . // length B1
+               chr($length & 0xff) .        // length b0
+               chr(0) .                     // padding length
+               chr(0) .                     // reserved
+               $content;
+    }
+
+    /**
+     * Pack pairs (key/value).
+     *
+     * @access  public
+     * @param   array  $pairs    Keys/values array.
+     * @return  string
+     */
+    public function packPairs ( Array $pairs ) {
+
+        $out = null;
+
+        foreach($pairs as $key => $value) {
+
+            foreach(array($key, $value) as $handle) {
+
+                $length = strlen($handle);
+
+                // B0
+                if($length < 128)
+                    $out .= chr($length);
+                // B3 & B2 & B1 & B0
+                else
+                    $out .= chr(($length >> 24) | 0x80) .
+                            chr(($length >> 16) & 0xff) .
+                            chr(($length >>  8) & 0xff) .
+                            chr( $length        & 0xff);
+            }
+
+            $out .= $key . $value;
+        }
+
+        return $out;
+    }
+
+    /**
+     * Unpack pairs (key/value).
+     *
+     * @access  public
+     * @param   string  $pack    Packet to unpack.
+     * @return  string
+     */
+    public function unpackPairs ( $pack ) {
+
+        if(null === $length)
+            $length = strlen($pack);
+
+        $out = array();
+        $i   = 0;
+
+        for($i = 0; $length >= $i; $i += $keyLength + $valueLength) {
+
+            $keyLength = ord($pack[$i++]);
+
+            if($keyLength >= 128)
+                $keyLength =   ($keyLength & 0x7f << 24)
+                             | (ord($pack[$i++])  << 16)
+                             | (ord($pack[$i++])  <<  8)
+                             |  ord($pack[$i++]);
+
+            $valueLength = ord($pack[$i++]);
+
+            if($valueLength >= 128)
+                $valueLength =   ($valueLength & 0x7f << 24)
+                               | (ord($pack[$i++])    << 16)
+                               | (ord($pack[$i++])    <<  8)
+                               |  ord($pack[$i++]);
+
+            $out[substr($pack, $i, $keyLength)]
+                = substr($pack, $i + $keyLength, $valueLength);
+        }
+
+        return $out;
+    }
+
+    /**
+     * Read a packet.
+     *
+     * @access  public
+     * @return  array
+     */
+    protected function readPack ( ) {
+
+        if(false === $pack = $this->read(8))
+            return false;
+
+        $headers = array(
+            self::HEADER_VERSION        =>  ord($pack[0]),
+            self::HEADER_TYPE           =>  ord($pack[1]),
+            self::HEADER_REQUEST_ID     => (ord($pack[2]) << 8) +
+                                            ord($pack[3]),
+            self::HEADER_CONTENT_LENGTH => (ord($pack[4]) << 8) +
+                                            ord($pack[5]),
+            self::HEADER_PADDING_LENGTH =>  ord($pack[6]),
+            self::HEADER_RESERVED       =>  ord($pack[7]),
+            self::PACK_CONTENT          =>  null
+        );
+        $length  = $headers[self::HEADER_CONTENT_LENGTH] +
+                   $headers[self::HEADER_PADDING_LENGTH];
+
+        if(0 === $length)
+            return $headers;
+
+        $headers[self::PACK_CONTENT] = substr(
+            $this->_client->read($length),
+            0,
+            $headers[self::HEADER_CONTENT_LENGTH]
+        );
+
+        return $headers;
+    }
+
+    /**
+     * Read data.
+     *
+     * @access  protected
+     * @param   int     $length    Length of data to read.
+     * @return  string
+     */
+    abstract protected function read ( $length );
+}
+
+}
