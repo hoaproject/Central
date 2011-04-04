@@ -273,7 +273,7 @@ class Message {
      */
     public function withBoolean ( $data ) {
 
-        return $this->_with($data, self::TYPE_BOOLEAN);
+        return $this->_with((boolean) $data, self::TYPE_BOOLEAN);
     }
 
     /**
