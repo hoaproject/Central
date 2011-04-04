@@ -88,7 +88,7 @@ class Conststring extends String implements Constant {
      * @return  void
      * @throw   \Hoa\Realdom\Exception
      */
-    public function construct ( $string  = '' ) {
+    public function construct ( $string  = '', $compati = null, $bility = null ) {
 
         $this->_value = $string;
 

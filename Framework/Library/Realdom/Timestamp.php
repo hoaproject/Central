@@ -44,6 +44,11 @@ from('Hoa')
 -> import('Realdom.~')
 
 /**
+ * \Hoa\Realdom\Constinteger
+ */
+-> import('Realdom.Constinteger')
+
+/**
  * \Hoa\Realdom\Conststring
  */
 -> import('Realdom.Conststring');
@@ -87,7 +92,7 @@ class Timestamp extends Constinteger {
      * @param   \Hoa\Realdom\Conststring  $date    Date description.
      * @return  void
      */
-    public function construct ( \Hoa\Realdom\Conststring $date = null ) {
+    public function construct ( $date = null ) {
 
         if(null === $date)
             $date = new \Hoa\Realdom\Conststring(date('d/m/Y H:i:s'));

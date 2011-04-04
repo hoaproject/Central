@@ -110,9 +110,9 @@ class String extends Realdom {
      * @param   \Hoa\Realdom\Constinteger  $codepointMax    Maximum code point.
      * @return  void
      */
-    public function construct ( Integer      $length       = null,
-                                Constinteger $codepointMin = null,
-                                Constinteger $codepointMax = null ) {
+    public function construct ( $length       = null,
+                                $codepointMin = null,
+                                $codepointMax = null ) {
 
         if(null === $length)
             $length = new Constinteger(13);
