@@ -453,6 +453,12 @@ class Consistency {
 
                 $classname = $root . '\\' . $tail;
 
+                if(class_exists($classname)) {
+
+                    $gotcha = true;
+                    break;
+                }
+
                 try {
 
                     if(false === self::autoload($classname))
