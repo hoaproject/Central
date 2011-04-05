@@ -372,11 +372,11 @@ class_alias('Hoa\Core\Exception\Exception', 'Hoa\Core\Exception');
 /**
  * Catch uncaught exception.
  */
-set_exception_handler(callback('\Hoa\Core\Exception\Idle::uncaught'));
+set_exception_handler(array('\Hoa\Core\Exception\Idle', 'uncaught'));
 
 /**
  * Transform PHP error into \Hoa\Core\Exception\Error.
  */
-set_error_handler(callback('\Hoa\Core\Exception\Idle::error'));
+set_error_handler(array('\Hoa\Core\Exception\Idle', 'error'));
 
 }
