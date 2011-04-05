@@ -66,7 +66,12 @@ from('Hoa')
 /**
  * \Hoa\Http\Request
  */
--> import('Http.Request');
+-> import('Http.Request')
+
+/**
+ * \Hoa\Mime
+ */
+-> import('Mime.~');
 
 /**
  * Class StartCommand.
@@ -197,7 +202,7 @@ class StartCommand extends \Hoa\Console\Command\Generic {
             }
 
             $this->log(
-                $smartPrint . '↺ '. $methodAsString . ' ' . $url .
+                $smartPrint . '↺ '. $methodAsString . ' /' . $url .
                 ' (waiting…)'
             );
 
@@ -206,90 +211,102 @@ class StartCommand extends \Hoa\Console\Command\Generic {
             switch($method) {
 
                 case \Hoa\Http\Request::METHOD_GET:
-                    $path = $_root . DS . $url;
-                    $idx  = file_exists($_root . DS . 'index.php');
+                    try {
 
-                    if(is_dir($path) && false === $idx) {
+                        $file = new \Hoa\File\Read($_root . DS . $url);
+                        $idx  = file_exists($_root . DS . 'index.php');
 
-                        $server->writeAll(
-                            'HTTP/1.1 200 OK' . "\r\n" .
-                            'Date: ' . date('r') . "\r\n" .
-                            'Server: Hoa+Bhoa/0.1' . "\r\n" .
-                            'Content-Type: text/plain' . "\r\n" .
-                            'Content-Length: 1' . "\r\n\r\n" .
-                            'd'
+                        if(true === $file->isDirectory() && false === $idx) {
+
+                            $server->writeAll(
+                                'HTTP/1.1 200 OK' . "\r\n" .
+                                'Date: ' . date('r') . "\r\n" .
+                                'Server: Hoa+Bhoa/0.1' . "\r\n" .
+                                'Content-Type: text/plain' . "\r\n" .
+                                'Content-Length: 1' . "\r\n\r\n" .
+                                'd'
+                            );
+
+                            break;
+                        }
+
+                        if(true === $file->isFile()) {
+
+                            try {
+
+                                $mime     = new \Hoa\Mime($file);
+                                $mimeType = $mime->getMime();
+                            }
+                            catch ( \Hoa\Mime\Exception\MimeIsNotFound $e ) {
+
+                                $mimeType = 'application/octet-stream';
+                            }
+
+                            $server->writeAll(
+                                'HTTP/1.1 200 OK' . "\r\n" .
+                                'Date: ' . date('r') . "\r\n" .
+                                'Server: Hoa+Bhoa/0.1' . "\r\n" .
+                                'Content-Type: ' . $mimeType . "\r\n" .
+                                'Content-Length: ' . $file->getSize() . "\r\n\r\n" .
+                                $file->readAll()
+                            );
+
+                            break;
+                        }
+
+                        if(false === $idx) {
+
+                            $server->writeAll(
+                                'HTTP/1.1 404 Not Found' . "\r\n" .
+                                'Date: ' . date('r') . "\r\n" .
+                                'Server: Hoa+Bhoa/0.1' . "\r\n" .
+                                'Content-Type: text/plain' . "\r\n" .
+                                'Content-Length: 3' . "\r\n\r\n" .
+                                '404'
+                            );
+
+                            break;
+                        }
+
+                        throw new \Hoa\File\Exception\FileDoesNotExist(
+                            'Yup', 42
                         );
-
-                        break;
                     }
+                    catch ( \Hoa\File\Exception\FileDoesNotExist $e ) {
 
-                    if(file_exists($path) && !is_dir($path)) {
+                        $content = $client->send(array(
+                            'GATEWAY_INTERFACE' => 'FastCGI/1.0',
 
-                        // I know, it's deprecated, but it's temporary.
-                        $type    = mime_content_type($path);
+                            'SERVER_SOFTWARE'   => 'Hoa+Bhoa/0.1',
+                            'SERVER_PROTOCOL'   => 'HTTP/1.1',
+                            'SERVER_NAME'       => 'localhost',
+                            'SERVER_ADDR'       => '::1',
+                            'SERVER_PORT'       => 8888,
+                            'SERVER_SIGNATURE'  => 'Hoa Bhoa \o/',
 
-                        if(substr($path, -3) == 'css')
-                            $type = 'text/css';
+                            'HTTP_HOST'         => 'localhost:8888',
+                            'HTTP_USER_AGENT'   => 'Mozilla Firefox',
 
-                        $content = file_get_contents($path);
+                            'REQUEST_METHOD'    => 'GET',
+                            'REQUEST_URI'       => '/' . $url,
+
+                            'SCRIPT_FILENAME'   => $_root . DS . 'index.php',
+                            'SCRIPT_NAME'       => '/index.php',
+
+                            'CONTENT_TYPE'      => 'text/html',
+                            'CONTENT_LENGTH'    => 0
+                        ));
+                        $headers = $client->getResponseHeaders();
+
                         $server->writeAll(
                             'HTTP/1.1 200 OK' . "\r\n" .
                             'Date: ' . date('r') . "\r\n" .
                             'Server: Hoa+Bhoa/0.1' . "\r\n" .
-                            'Content-Type: ' . $type . "\r\n" .
-                            'Content-Length: ' . mb_strlen($content) . "\r\n\r\n" .
+                            'Content-Type: ' . $headers['content-type'] . "\r\n" .
+                            'Content-Length: ' . strlen($content) . "\r\n\r\n" .
                             $content
                         );
-
-                        break;
                     }
-
-                    if(false === $idx) {
-
-                        $server->writeAll(
-                            'HTTP/1.1 404 Not Found' . "\r\n" .
-                            'Date: ' . date('r') . "\r\n" .
-                            'Server: Hoa+Bhoa/0.1' . "\r\n" .
-                            'Content-Type: text/plain' . "\r\n" .
-                            'Content-Length: 3' . "\r\n\r\n" .
-                            '404'
-                        );
-
-                        break;
-                    }
-
-                    $content = $client->send(array(
-                        'GATEWAY_INTERFACE' => 'FastCGI/1.0',
-
-                        'SERVER_SOFTWARE'   => 'Hoa+Bhoa/0.1',
-                        'SERVER_PROTOCOL'   => 'HTTP/1.1',
-                        'SERVER_NAME'       => 'localhost',
-                        'SERVER_ADDR'       => '::1',
-                        'SERVER_PORT'       => 8888,
-                        'SERVER_SIGNATURE'  => 'Hoa Bhoa \o/',
-
-                        'HTTP_HOST'         => 'localhost:8888',
-                        'HTTP_USER_AGENT'   => 'Mozilla Firefox',
-
-                        'REQUEST_METHOD'    => 'GET',
-                        'REQUEST_URI'       => '/' . $url,
-
-                        'SCRIPT_FILENAME'   => $_root . DS . 'index.php',
-                        'SCRIPT_NAME'       => '/index.php',
-
-                        'CONTENT_TYPE'      => 'text/html',
-                        'CONTENT_LENGTH'    => 0
-                    ));
-                    $headers = $client->getResponseHeaders();
-
-                    $server->writeAll(
-                        'HTTP/1.1 200 OK' . "\r\n" .
-                        'Date: ' . date('r') . "\r\n" .
-                        'Server: Hoa+Bhoa/0.1' . "\r\n" .
-                        'Content-Type: ' . $headers['content-type'] . "\r\n" .
-                        'Content-Length: ' . strlen($content) . "\r\n\r\n" .
-                        $content
-                    );
                   break;
 
                 default:
@@ -306,7 +323,7 @@ class StartCommand extends \Hoa\Console\Command\Generic {
                     );
             }
 
-            $this->log("\r" . '✓ '. $methodAsString . ' ' . $url);
+            $this->log("\r" . '✓ '. $methodAsString . ' /' . $url);
 
             $this->log(null);
             $this->log("\n" . 'Waiting for new connection…');
