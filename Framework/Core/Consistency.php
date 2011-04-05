@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Core {
+namespace Hoa\Core\Consistency {
 
 /**
  * Class Hoa\Core\Consistency.
@@ -106,7 +106,7 @@ class Consistency {
 
         foreach($this->_from as $f)
             $this->setRoot(
-                Core::getInstance()->getFormattedParameter(
+                \Hoa\Core::getInstance()->getFormattedParameter(
                     'namespace.prefix.' . $f
                 ) ?: '/Flatland',
                 $f
@@ -153,14 +153,14 @@ class Consistency {
 
                     break 2;
                 }
-                catch ( Exception\Idle $e ) {
+                catch ( \Hoa\Core\Exception\Idle $e ) {
 
                     $exception = $e;
                     $out       = false;
                 }
 
         if(false === $out)
-            throw new Exception(
+            throw new \Hoa\Core\Exception(
                 $exception->getFormattedMessage(),
                 $exception->getCode(),
                 array(),
@@ -231,7 +231,7 @@ class Consistency {
                 foreach($uncache as $un)
                     unset(self::$_cache[$un]);
 
-                throw new Exception\Idle(
+                throw new \Hoa\Core\Exception\Idle(
                     'File %s does not exist.', 0, implode('/', $explode));
             }
 
@@ -248,7 +248,7 @@ class Consistency {
                         $root
                     );
                 }
-                catch ( Exception\Idle $e ) {
+                catch ( \Hoa\Core\Exception\Idle $e ) {
 
                     foreach($uncache as $un)
                         unset(self::$_cache[$un]);
@@ -279,7 +279,7 @@ class Consistency {
                     unset(self::$_cache[$un]);
 
                 array_pop($parts);
-                throw new Exception\Idle(
+                throw new \Hoa\Core\Exception\Idle(
                     'File %s does not exist.', 1, implode('/', $parts) . '.php');
             }
         }
@@ -384,7 +384,7 @@ class Consistency {
     public static function getClassShortestName ( $classname ) {
 
         if(!isset(self::$_class[$classname]))
-            throw new Exception\Idle(
+            throw new \Hoa\Core\Exception\Idle(
                 'Class %s does not exist.', 1, $classname);
 
         if(is_string(self::$_class[$classname]))
@@ -467,7 +467,7 @@ class Consistency {
 
                     $gotcha = true;
                 }
-                catch ( Exception $exception ) {
+                catch ( \Hoa\Core\Exception $exception ) {
 
                     continue;
                 }
@@ -486,41 +486,216 @@ class Consistency {
 
         return $class->newInstanceArgs($arguments);
     }
+}
+
+/**
+ * Class Hoa\Core\Consistency\Callable.
+ *
+ * Build a callable object, i.e. function, class::method, object->method or
+ * closure, they all have the same behaviour.
+ *
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @license    New BSD License
+ */
+
+class Callable {
+
+    /**
+     * Callback, with the PHP format.
+     *
+     * @var \Hoa\Core\Consistency\Callback mixed
+     */
+    protected $_callback = null;
+
+    /**
+     * Callable hash.
+     *
+     * @var \Hoa\Core\Consistency\Callback string
+     */
+    protected $_hash     = null;
+
+
 
     /**
      * Build a callback.
      * Accepted form:
-     *     * callback('function') ;
-     *     * callback('class::method') ;
-     *     * callback('class', 'method') ;
-     *     * callback($object, 'method') ;
-     *     * callback(function ( … ) { … }).
+     *     * 'function';
+     *     * 'class::method';
+     *     * 'class', 'method';
+     *     * $object, 'method';
+     *     * $object, '';
+     *     * function ( … ) { … }.
      *
      * @access  public
      * @param   mixed   $first     First parameter.
      * @param   mixed   $second    Second parameter.
      * @return  mixed
      */
-    public static function callback ( $first, $second = null ) {
+    public function __construct ( $first, $second = '' ) {
 
-        if($first instanceof \Closure)
-            return $first;
+        if($first instanceof \Closure) {
 
-        if(null === $second) {
+            $this->_callback = $first;
 
-            if(false === strpos($first, $second))
-                return $first;
-
-            list($first, $second) = explode('::', $first);
+            return;
         }
 
-        return array($first, $second);
+        if(!is_string($second))
+            throw new \Hoa\Core\Exception(
+                'Bad callback form.', 0);
+
+        if('' === $second)
+            if(is_string($first)) {
+
+                if(false === strpos($first, '::')) {
+
+                    $this->_callback = $first;
+
+                    return;
+                }
+
+                list($first, $second) = explode('::', $first);
+            }
+            elseif(   is_object($first)
+                   && $first instanceof \Hoa\Stream\IStream\Out)
+                $second = null;
+            else
+                throw new \Hoa\Core\Exception(
+                    'Bad callback form.', 1);
+
+        $this->_callback = array($first, $second);
+
+        return;
+    }
+
+    /**
+     * Call the callable.
+     *
+     * @access  public
+     * @param   ...
+     * @return  mixed
+     */
+    public function __invoke ( ) {
+
+        $arguments = func_get_args();
+        $valid     = $this->getValidCallback($arguments);
+
+        return call_user_func_array($valid, $arguments);
+    }
+
+    /**
+     * Get a valid callback in the PHP meaning.
+     *
+     * @access  public
+     * @param   array   $arguments    Arguments (could determine method on an
+     *                                object if not precised).
+     * @return  mixed
+     */
+    public function getValidCallback ( Array $arguments ) {
+
+        $callback = $this->_callback;
+        $head     = array_shift($arguments);
+
+        // If method is undetermined, we find it (we understand event bucket and
+        // stream).
+        if(   null !== $head
+           && is_array($callback)
+           && null === $callback[1]) {
+
+            if($head instanceof \Hoa\Core\Event\Bucket)
+                $head = $this->getData();
+
+            switch($type = gettype($head)) {
+
+                case 'string':
+                    if(1 === strlen($head))
+                        $method = 'writeCharacter';
+                    else
+                        $method = 'writeString';
+                  break;
+
+                case 'boolean':
+                case 'integer':
+                case 'array':
+                    $method = 'write' . ucfirst($type);
+                  break;
+
+                case 'double':
+                    $method = 'writeFloat';
+                  break;
+
+                default:
+                    $method = 'writeAll';
+            }
+
+            $callback[1] = $method;
+        }
+
+        return $callback;
+    }
+
+    /**
+     * Get hash.
+     * Will produce:
+     *     * function#…;
+     *     * class#…::…;
+     *     * object(…)#…::…;
+     *     * closure(…).
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getHash ( ) {
+
+        if(null !== $this->_hash)
+            return $this->_hash;
+
+        $_ = &$this->_callback;
+
+        if(is_string($_))
+            return $this->_hash = 'function#' . $_;
+
+        if(is_array($_))
+            return $this->_hash =
+                       (is_object($_[0])
+                           ? 'object(' . spl_object_hash($_[0]) . ')' .
+                             '#' . get_class($_[0])
+                           : 'class#' . $_[0]) .
+                       '::' .
+                       (null !== $_[1]
+                           ? $_[1]
+                           : '???');
+
+        return $this->_hash = 'closure(' . spl_object_hash($_) . ')';
+    }
+
+    /**
+     * Return the hash.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function __toString ( ) {
+
+        return $this->getHash();
     }
 }
 
 }
 
 namespace {
+
+/**
+ * Make the alias automatically (because it's not imported with the import()
+ * function).
+ */
+class_alias('Hoa\Core\Consistency\Consistency', 'Hoa\Core\Consistency');
+
+/**
+ * Set autoloader.
+ */
+spl_autoload_register('\Hoa\Core\Consistency::autoload');
 
 /**
  * Alias for \Hoa\Core\Consistency::from().
@@ -550,22 +725,20 @@ function dnew ( $classname, Array $arguments = array() ) {
 }}
 
 /**
- * Alias of \Hoa\Core\Consistency::callback().
+ * Alias of \Hoa\Core\Consistency\Callable.
  *
  * @access  public
  * @param   mixed   $first     First parameter.
  * @param   mixed   $second    Second parameter.
  * @return  mixed
  */
-if(!ƒ('callback')) {
-function callback ( $first, $second = null ) {
+if(!ƒ('callable')) {
+function callable ( $first, $second = '' ) {
 
-    return \Hoa\Core\Consistency::callback($first, $second);
+    if($first instanceof \Hoa\Core\Consistency\Callable)
+        return $first;
+
+    return new \Hoa\Core\Consistency\Callable($first, $second);
 }}
-
-/**
- * Set autoloader.
- */
-spl_autoload_register('\Hoa\Core\Consistency::autoload');
 
 }
