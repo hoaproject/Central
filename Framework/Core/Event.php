@@ -171,20 +171,6 @@ class Bucket {
 class Event {
 
     /**
-     * Attachement constant: index for object.
-     *
-     * @const int
-     */
-    const CALLBACK_OBJECT = 0;
-
-    /**
-     * Attachement constant: index for method (if needed).
-     *
-     * @const int
-     */
-    const CALLBACK_METHOD = 1;
-
-    /**
      * Static register of all observable objects, i.e. \Hoa\Core\Event\Source
      * object, i.e. object that can send event.
      *
@@ -193,12 +179,11 @@ class Event {
     private static $_register = array();
 
     /**
-     * Attachements, i.e. oberserver objects, for all objects in the
-     * register.
+     * Callable, i.e. observer objects.
      *
      * @var \Hoa\Core\Event array
      */
-    private $_attachement     = array();
+    protected $_callable      = array();
 
 
 
@@ -237,7 +222,7 @@ class Event {
      *
      * @access  public
      * @param   string                  $eventId    Event ID.
-     * @param   \Hoa\Core\Event\Source  $source     Obversable object.
+     * @param   \Hoa\Core\Event\Source  $source     Observable object.
      * @return  void
      * @throws  \Hoa\Core\Exception
      */
@@ -286,24 +271,18 @@ class Event {
 
     /**
      * Attach an object to an event.
-     * The object can be a class with a method or an object with a method, or a
-     * stream name or instance with or without a method (if without, the type of
-     * the event data will decide of the method to call), or a closure.
+     * It can be a callable or an accepted callable form (please, see the
+     * \Hoa\Core\Consistency\Callable class).
      *
      * @access  public
-     * @param   mixed   $class     Class name or instance, or a closure.
-     * @param   string  $method    Method on the object (if $class is a class).
+     * @param   mixed  $first     First parameter.
+     * @param   mixed  $second    Second parameter.
      * @return  \Hoa\Core\Event
      */
-    public function attach ( $class, $method = null ) {
+    public function attach ( $first, $second = '' ) {
 
-        $index = (is_object($class) ? get_class($class) : $class) .
-                 '::' . $method;
-
-        $this->_attachement[$index] = array(
-            self::CALLBACK_OBJECT => $class,
-            self::CALLBACK_METHOD => $method
-        );
+        $callable                              = callable($first, $second);
+        $this->_callable[$callable->getHash()] = $callable;
 
         return $this;
     }
@@ -313,16 +292,13 @@ class Event {
      * Please see $this->attach() method.
      *
      * @access  public
-     * @param   mixed   $class     Class name or instance, or a closure.
-     * @param   string  $method    Method on the object (if $class is a class).
+     * @param   mixed  $first     First parameter.
+     * @param   mixed  $second    Second parameter.
      * @return  \Hoa\Core\Event
      */
-    public function detach ( $class, $method = null ) {
+    public function detach ( $first, $second = '' ) {
 
-        $index = (is_object($class) ? get_class($class) : $class) .
-                 '::' . $method;
-
-        unset($this->_attachement[$index]);
+        unset($this->_callable[callable($first, $second)->getHash()]);
 
         return $this;
     }
@@ -356,47 +332,10 @@ class Event {
                 ));
 
         $data->setSource($source);
-        $handle = $data->getData();
-        $method = 'writeAll';
-
-        switch($type = gettype($handle)) {
-
-            case 'string':
-                if(1 === strlen($handle))
-                    $method = 'writeCharacter';
-                else
-                    $method = 'writeString';
-              break;
-
-            case 'boolean':
-            case 'integer':
-            case 'array':
-                $method = 'write' . ucfirst($type);
-              break;
-
-            case 'double':
-                $method = 'writeFloat';
-              break;
-        }
-
         $event = self::getEvent($eventId);
 
-        foreach($event->_attachement as $index => $callback)
-            if(     null === $callback[self::CALLBACK_METHOD]
-                && ($callback[self::CALLBACK_OBJECT] instanceof \Hoa\Stream\IStream\Out))
-                $callback[self::CALLBACK_OBJECT]->$method($handle);
-
-            elseif($callback[self::CALLBACK_OBJECT] instanceof \Closure)
-                $callback[self::CALLBACK_OBJECT]($data);
-
-            else
-                call_user_func_array(
-                    array(
-                        $callback[self::CALLBACK_OBJECT],
-                        $callback[self::CALLBACK_METHOD]
-                    ),
-                    array($data)
-                );
+        foreach($event->_callable as $callable)
+            $callable($data);
 
         return;
     }
