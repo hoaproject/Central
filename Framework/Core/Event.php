@@ -160,8 +160,9 @@ class Bucket {
 /**
  * Class \Hoa\Core\Event.
  *
- * Manage events. It is simply an observer design-pattern, except that we have a
- * multiton of events.
+ * Events are asynchronous at registration, anonymous at use (until we
+ * receive a bucket) and useful to largely spread data through components
+ * without any known connection between them.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
@@ -275,13 +276,13 @@ class Event {
      * \Hoa\Core\Consistency\Callable class).
      *
      * @access  public
-     * @param   mixed  $first     First parameter.
-     * @param   mixed  $second    Second parameter.
+     * @param   mixed   $call    First callable part.
+     * @param   mixed   $able    Second callable part (if needed).
      * @return  \Hoa\Core\Event
      */
-    public function attach ( $first, $second = '' ) {
+    public function attach ( $call, $able = '' ) {
 
-        $callable                              = callable($first, $second);
+        $callable                              = callable($call, $able);
         $this->_callable[$callable->getHash()] = $callable;
 
         return $this;
@@ -292,13 +293,13 @@ class Event {
      * Please see $this->attach() method.
      *
      * @access  public
-     * @param   mixed  $first     First parameter.
-     * @param   mixed  $second    Second parameter.
+     * @param   mixed   $call    First callable part.
+     * @param   mixed   $able    Second callable part (if needed).
      * @return  \Hoa\Core\Event
      */
-    public function detach ( $first, $second = '' ) {
+    public function detach ( $call, $able = '' ) {
 
-        unset($this->_callable[callable($first, $second)->getHash()]);
+        unset($this->_callable[callable($call, $able)->getHash()]);
 
         return $this;
     }
@@ -351,6 +352,152 @@ class Event {
 
         return    array_key_exists($eventId, self::$_register)
                && self::$_register[$eventId][1] !== null;
+    }
+}
+
+/**
+ * Interface \Hoa\Core\Event\Listenable.
+ *
+ * Each object which is listenable must implement this interface.
+ *
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @license    New BSD License
+ */
+
+interface Listenable extends Source {
+
+    /**
+     * Attach a callable to a listenable component.
+     *
+     * @access  public
+     * @param   string  $listenerId    Listener ID.
+     * @param   mixed   $call          First callable part.
+     * @param   mixed   $able          Second callable part (if needed).
+     * @return  \Hoa\Core\Event\Listenable
+     * @throw   \Hoa\Core\Exception
+     */
+    public function on ( $listenerId, $call, $able = '' );
+}
+
+/**
+ * Class \Hoa\Core\Event\Listener.
+ *
+ * A contrario of events, listeners are synchronous, identified at use and
+ * useful for close interactions between one or some components.
+ *
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @license    New BSD License
+ */
+
+class Listener {
+
+    /**
+     * Source of listener (for Bucket).
+     *
+     * @var \Hoa\Core\Event\Listenable object
+     */
+    protected $_source = null;
+
+    /**
+     * All listener IDs and associated listeners.
+     *
+     * @var \Hoa\Core\Event\Listener array
+     */
+    protected $_listen = null;
+
+
+
+    /**
+     * Build a listener.
+     *
+     * @access  public
+     * @param   \Hoa\Core\Event\Listenable  $source    Source (for Bucket).
+     * @param   array                       $ids       Accepted ID.
+     * @return  void
+     */
+    public function __construct ( Listenable $source, Array $ids ) {
+
+        $this->_source = $source;
+
+        foreach($ids as $id)
+            $this->_listen[$id] = array();
+
+        return;
+    }
+
+    /**
+     * Attach a callable to a listenable component.
+     *
+     * @access  public
+     * @param   string  $listenerId    Listener ID.
+     * @param   mixed   $call          First callable part.
+     * @param   mixed   $able          Second callable part (if needed).
+     * @return  \Hoa\Core\Event\Listener
+     * @throw   \Hoa\Core\Exception
+     */
+    public function attach ( $listenerId, $call, $able = '' ) {
+
+        if(false === $this->listenerExists($listenerId))
+            throw new \Hoa\Core\Exception(
+                'Cannot listen %s because it is not defined.', 0);
+
+        $callable = callable($call, $able);
+        $this->_listen[$listenerId][$callable->getHash()] = $callable;
+
+        return $this;
+    }
+
+    /**
+     * Detach a callable from a listenable component.
+     *
+     * @access  public
+     * @param   string  $listenerId    Listener ID.
+     * @param   mixed   $call          First callable part.
+     * @param   mixed   $able          Second callable part (if needed).
+     * @return  \Hoa\Core\Event\Listener
+     */
+    public function detach ( $listenerId, $call, $able = '' ) {
+
+        unset($this->_callable[$listenerId][callable($call, $able)->getHash()]);
+
+        return $this;
+    }
+
+    /**
+     * Check if a listener exists.
+     *
+     * @access  public
+     * @param   string  $listenerId    Listener ID.
+     * @return  bool
+     */
+    public function listenerExists ( $listenerId ) {
+
+        return array_key_exists($listenerId, $this->_listen);
+    }
+
+    /**
+     * Send/fire a bucket to a listener.
+     *
+     * @access  public
+     * @param   string                  $listenerId    Listener ID.
+     * @param   \Hoa\Core\Event\Bucket  $data          Data.
+     * @return  void
+     * @throw   \Hoa\Core\Exception
+     */
+    public function fire ( $listenerId, Bucket $data ) {
+
+        if(false === $this->listenerExists($listenerId))
+            throw new \Hoa\Core\Exception(
+                'Cannot fire on %s because it is not defined.', 1);
+
+        $data->setSource($this->_source);
+
+        foreach($this->_listen[$listenerId] as $callable)
+            $callable($data);
+
+        return;
     }
 }
 
