@@ -519,7 +519,7 @@ class Callable {
 
     /**
      * Build a callback.
-     * Accepted form:
+     * Accepted forms:
      *     * 'function';
      *     * 'class::method';
      *     * 'class', 'method';
@@ -528,43 +528,43 @@ class Callable {
      *     * function ( … ) { … }.
      *
      * @access  public
-     * @param   mixed   $first     First parameter.
-     * @param   mixed   $second    Second parameter.
+     * @param   mixed   $call    First callable part.
+     * @param   mixed   $able    Second callable part (if needed).
      * @return  mixed
      */
-    public function __construct ( $first, $second = '' ) {
+    public function __construct ( $call, $able = '' ) {
 
-        if($first instanceof \Closure) {
+        if($call instanceof \Closure) {
 
-            $this->_callback = $first;
+            $this->_callback = $call;
 
             return;
         }
 
-        if(!is_string($second))
+        if(!is_string($able))
             throw new \Hoa\Core\Exception(
                 'Bad callback form.', 0);
 
-        if('' === $second)
-            if(is_string($first)) {
+        if('' === $able)
+            if(is_string($call)) {
 
-                if(false === strpos($first, '::')) {
+                if(false === strpos($call, '::')) {
 
-                    $this->_callback = $first;
+                    $this->_callback = $call;
 
                     return;
                 }
 
-                list($first, $second) = explode('::', $first);
+                list($call, $able) = explode('::', $call);
             }
-            elseif(   is_object($first)
-                   && $first instanceof \Hoa\Stream\IStream\Out)
-                $second = null;
+            elseif(   is_object($call)
+                   && $call instanceof \Hoa\Stream\IStream\Out)
+                $able = null;
             else
                 throw new \Hoa\Core\Exception(
                     'Bad callback form.', 1);
 
-        $this->_callback = array($first, $second);
+        $this->_callback = array($call, $able);
 
         return;
     }
@@ -728,17 +728,17 @@ function dnew ( $classname, Array $arguments = array() ) {
  * Alias of \Hoa\Core\Consistency\Callable.
  *
  * @access  public
- * @param   mixed   $first     First parameter.
- * @param   mixed   $second    Second parameter.
+ * @param   mixed   $call    First callable part.
+ * @param   mixed   $able    Second callable part (if needed).
  * @return  mixed
  */
 if(!ƒ('callable')) {
-function callable ( $first, $second = '' ) {
+function callable ( $call, $able = '' ) {
 
-    if($first instanceof \Hoa\Core\Consistency\Callable)
-        return $first;
+    if($call instanceof \Hoa\Core\Consistency\Callable)
+        return $call;
 
-    return new \Hoa\Core\Consistency\Callable($first, $second);
+    return new \Hoa\Core\Consistency\Callable($call, $able);
 }}
 
 }
