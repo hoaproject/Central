@@ -412,6 +412,47 @@ class Core implements Parameterizable {
     }
 
     /**
+     * Start the debugger.
+     *
+     * @access  public
+     * @param   \Hoa\Socket\Socketable  $socket    Socket.
+     * @return  void
+     */
+    public static function debug ( \Hoa\Socket\Socketable $socket = null ) {
+
+        from('Hoa')
+        -> import('Socket.Internet.DomainName')
+        -> import('Socket.Connection.Client');
+
+        if(null === $socket)
+            $socket = new \Hoa\Socket\Internet\DomainName(
+                'localhost', 57005, 'tcp'
+            );
+
+        try {
+
+            $client = new \Hoa\Socket\Connection\Client($socket);
+            $client->connect();
+        }
+        catch ( \Hoa\Core\Exception $e ) {
+
+            throw new \Hoa\Core\Exception(
+                'Cannot start the debugger because the server is not ' .
+                'listening.', 0);
+        }
+
+        $client->writeLine('open');
+
+        event('hoa://Event/Exception')
+            ->attach(function ( \Hoa\Core\Event\Bucket $event) use ($client ) {
+
+                $client->writeLine(serialize($event->getData()));
+            });
+
+        return;
+    }
+
+    /**
      * Return the copyright and license of Hoa.
      *
      * @access  public
