@@ -123,7 +123,7 @@ class DebuggerCommand extends \Hoa\Console\Command\Generic {
 
                     if(0 == $exi) {
 
-                        cout(' without any error!' . "\n");
+                        cout(' without any error!');
 
                         continue;
                     }
