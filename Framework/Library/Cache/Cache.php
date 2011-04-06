@@ -144,7 +144,7 @@ abstract class Cache implements \Hoa\Core\Parameterizable {
 
                 'zendplatform'                 => ''
             ),
-            '\Hoa\Cache'
+            __CLASS__
         );
 
         $this->setParameters($parameters);
