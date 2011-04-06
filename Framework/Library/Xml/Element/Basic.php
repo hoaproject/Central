@@ -241,17 +241,6 @@ class          Basic
     }
 
     /**
-     * Transform this object to a string.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function __toString ( ) {
-
-        return (string) $this;
-    }
-
-    /**
      * Read all attributes.
      *
      * @access  public
@@ -461,6 +450,17 @@ class          Basic
         $this->registerXPathNamespace('__current_ns', $namespace);
 
         return $this;
+    }
+
+    /**
+     * Transform this object to a string.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function __toString ( ) {
+
+        return (string) $this;
     }
 }
 
