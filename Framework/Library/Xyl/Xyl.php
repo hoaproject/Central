@@ -242,12 +242,18 @@ class          Xyl
                     'Interpreter' . DS .$this->_interpreter->getResourcePath()
                 ));
 
-        if(null !== $router && false === $router->ruleExists('_css'))
-            $router->addPrivateRule('_css', 'Public/Css/(?<theme>.*)/(?<sheet>.*)');
+        if(1 === self::$_ci) {
 
-        from('Hoa') -> import('Xyl.Interpreter.Common.Debug');
-        event('hoa://Event/Exception')
-            ->attach('\Hoa\Xyl\Interpreter\Common\Debug', 'receiveException');
+            if(null !== $router && false === $router->ruleExists('_css'))
+                $router->addPrivateRule(
+                    '_css',
+                    'Public/Css/(?<theme>.*)/(?<sheet>.*)'
+                );
+
+            from('Hoa') -> import('Xyl.Interpreter.Common.Debug');
+            event('hoa://Event/Exception')
+                ->attach('\Hoa\Xyl\Interpreter\Common\Debug', 'receiveException');
+        }
 
         return;
     }
