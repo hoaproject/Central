@@ -83,7 +83,7 @@ from('Hoa')
  * @license    New BSD License
  */
 
-class StartCommand extends \Hoa\Console\Command\Generic {
+class BhoaCommand extends \Hoa\Console\Command\Generic {
 
     /**
      * Author name.
@@ -97,7 +97,7 @@ class StartCommand extends \Hoa\Console\Command\Generic {
      *
      * @var BhoaCommand string
      */
-    protected $programName = 'Start';
+    protected $programName = 'Bhoa';
 
     /**
      * Options description.
@@ -368,7 +368,7 @@ class StartCommand extends \Hoa\Console\Command\Generic {
      */
     public function usage ( ) {
 
-        cout('Usage   : bhoa:start <options>');
+        cout('Usage   : main:bhoa <options>');
         cout('Options :');
         cout(parent::makeUsageOptionsList(array(
             'd'    => 'Domain name.',
