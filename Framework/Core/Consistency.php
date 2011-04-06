@@ -159,13 +159,22 @@ class Consistency {
                     $out       = false;
                 }
 
-        if(false === $out)
+        if(false === $out) {
+
+            $trace = $exception->getTrace();
+
             throw new \Hoa\Core\Exception(
-                $exception->getFormattedMessage(),
-                $exception->getCode(),
-                array(),
+                'The file %s need the class %s to work properly but this ' .
+                'last one is not found. We have looked for in: %s family(ies).',
+                0,
+                array(
+                    @$trace[1]['file'],
+                    $path,
+                    implode(', ', $this->_from)
+                ),
                 $exception
             );
+        }
 
         return $out;
     }
@@ -232,7 +241,7 @@ class Consistency {
                     unset(self::$_cache[$un]);
 
                 throw new \Hoa\Core\Exception\Idle(
-                    'File %s does not exist.', 0, implode('/', $explode));
+                    'File %s does not exist.', 1, implode('/', $explode));
             }
 
             foreach(glob(implode('/', $explode) . '.php') as $value)
@@ -280,7 +289,7 @@ class Consistency {
 
                 array_pop($parts);
                 throw new \Hoa\Core\Exception\Idle(
-                    'File %s does not exist.', 1, implode('/', $parts) . '.php');
+                    'File %s does not exist.', 2, implode('/', $parts) . '.php');
             }
         }
 
@@ -385,7 +394,7 @@ class Consistency {
 
         if(!isset(self::$_class[$classname]))
             throw new \Hoa\Core\Exception\Idle(
-                'Class %s does not exist.', 1, $classname);
+                'Class %s does not exist.', 3, $classname);
 
         if(is_string(self::$_class[$classname]))
             return $classname;
