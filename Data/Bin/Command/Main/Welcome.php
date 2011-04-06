@@ -130,6 +130,14 @@ class WelcomeCommand extends \Hoa\Console\Command\Generic {
                 '    ' . parent::stylize('uuid', 'command'),
                 'Generate an universally unique identifier.'
             ),
+            array(
+                '    ' . parent::stylize('debugger', 'command'),
+                'Start the debugger client.'
+            ),
+            array(
+                '    ' . parent::stylize('bhoa', 'command'),
+                'Start a damn stupid HTTP server.'
+            ),
 
             // Protocol.
             array('Protocol'),
@@ -202,13 +210,6 @@ class WelcomeCommand extends \Hoa\Console\Command\Generic {
             array(
                 '    ' . parent::stylize('mysql', 'command'),
                 'Get the MySQL documentation.'
-            ),
-
-            // Bhoa.
-            array('Bhoa'),
-            array(
-                '    ' . parent::stylize('start', 'command'),
-                'Start a damn stupid HTTP server.'
             ),
 
             /*
