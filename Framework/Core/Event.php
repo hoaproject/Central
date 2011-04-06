@@ -208,7 +208,7 @@ class Event {
      */
     public static function getEvent ( $eventId ) {
 
-        if(false === self::eventExists($eventId))
+        if(!isset(self::$_register[$eventId][0]))
             self::$_register[$eventId] = array(
                 0 => new self(),
                 1 => null
