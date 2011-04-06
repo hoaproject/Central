@@ -230,6 +230,13 @@ class Idle extends \Exception {
         if(0 == error_reporting())
             return;
 
+        // <tricky>
+        // Please @internals, what the hell is that?
+        if('Redefining already defined constructor for class' ==
+           substr($errstr, 0, 48))
+            return;
+        // </tricky>
+
         $trace = debug_backtrace();
         array_shift($trace);
 
