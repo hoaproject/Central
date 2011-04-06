@@ -204,7 +204,7 @@ class Core implements Parameterizable {
         $this->_parameters = new Parameter(
             $this,
             array(
-                'root.ofFrameworkDirectory' => null
+                'root.ofFrameworkDirectory' => $root
             ),
             array(
                 'root'               => '(:root.ofFrameworkDirectory:)',
