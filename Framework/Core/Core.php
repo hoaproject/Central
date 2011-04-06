@@ -446,7 +446,16 @@ class Core implements Parameterizable {
         event('hoa://Event/Exception')
             ->attach(function ( \Hoa\Core\Event\Bucket $event) use ($client ) {
 
-                $client->writeLine(serialize($event->getData()));
+                $exception = $event->getData();
+
+                try {
+
+                    $client->writeLine(serialize($exception));
+                }
+                catch ( \Exception $e ) {
+
+                    $client->writeLine('error serialize');
+                }
             });
 
         return;
