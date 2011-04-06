@@ -174,9 +174,9 @@ abstract class Xml
                                 $message .= sprintf('%' . $foo . 'd', $i) . '. ';
 
                                 if($i == $line)
-                                    $message .= '➜ ';
+                                    $message .= '➜  ';
                                 else
-                                    $message .= '  ';
+                                    $message .= '   ';
 
                                 $message .= $xml[$i - 1] . "\n";
                             }
