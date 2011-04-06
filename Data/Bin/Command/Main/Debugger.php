@@ -121,12 +121,11 @@ class DebuggerCommand extends \Hoa\Console\Command\Generic {
 
                     $server->disconnect();
 
-                    if(0 == $exi) {
-
+                    if(0 == $exi)
                         cout(' without any error!');
 
+                    if(0 >= $exi)
                         continue;
-                    }
 
                     cout("\n");
                     $this->select($exceptions, $exi);
@@ -141,6 +140,18 @@ class DebuggerCommand extends \Hoa\Console\Command\Generic {
                     cout("\n" . '[' . date('H:i:s') . '] ' .
                          'A new execution is running…',
                          \Hoa\Console\Core\Io::NO_NEW_LINE);
+
+                    continue;
+                }
+
+                if('error serialize' == $buffer) {
+
+                    cout(
+                        "\n" .
+                        'An error occured but it cannot be serialized and ' .
+                        'sent here.'
+                    );
+                    $exi = -1;
 
                     continue;
                 }
@@ -263,17 +274,23 @@ class DebuggerCommand extends \Hoa\Console\Command\Generic {
 
                         $_handle .= sprintf('%' . $_foo . 'd', $_j--) . '. ';
                         $_from    = $this->from($t);
-                        $_file    = $t['file'];
 
                         if(32 <= strlen($_from))
                             $_from = substr($_from, 0, 31) . '…';
 
                         $_handle .= sprintf('%-32s', $_from) . '  ';
 
-                        if(38 <= strlen($_file))
-                            $_file = '…' . substr($_file, -37);
+                        if(isset($t['file'])) {
 
-                        $_handle .= $_file . ' @ ' . $t['line'];
+                            $_file = $t['file'];
+
+                            if(38 <= strlen($_file))
+                                $_file = '…' . substr($_file, -37);
+
+                            $_handle .= $_file . ' @ ' . @$t['line'];
+                        }
+                        else
+                            $_handle .= '<internal>';
 
                         cout($_handle);
                     }
@@ -289,8 +306,16 @@ class DebuggerCommand extends \Hoa\Console\Command\Generic {
                 case 'up':
                     $ti      = max(0, $ti - 1);
                     $trace   = $traces[$ti];
-                    $file    = new \Hoa\File\Read($trace['file']);
-                    $content = explode("\n", $file->readAll());
+                    try {
+
+                        $file    = new \Hoa\File\Read($trace['file']);
+                        $content = explode("\n", $file->readAll());
+                    }
+                    catch ( \Hoa\Core\Exception $e ) {
+
+                        $file    = null;
+                        $content = '(unknown)';
+                    }
                     $line    = $trace['line'];
                     $lines   = count($content) - 1;
                     $in      = 't';
@@ -306,8 +331,16 @@ class DebuggerCommand extends \Hoa\Console\Command\Generic {
                 case 'down':
                     $ti      = min(count($traces) - 1, $ti + 1);
                     $trace   = $traces[$ti];
-                    $file    = new \Hoa\File\Read($trace['file']);
-                    $content = explode("\n", $file->readAll());
+                    try {
+
+                        $file    = new \Hoa\File\Read($trace['file']);
+                        $content = explode("\n", $file->readAll());
+                    }
+                    catch ( \Hoa\Core\Exception $e ) {
+
+                        $file    = null;
+                        $content = '(unknown)';
+                    }
                     $line    = $trace['line'];
                     $lines   = count($content) - 1;
                     $in      = 't';
@@ -333,8 +366,16 @@ class DebuggerCommand extends \Hoa\Console\Command\Generic {
                 default:
                     $iin       = max(1, min($in, count($exceptions))) - 1;
                     $exception = $exceptions[$iin];
-                    $file      = new \Hoa\File\Read($exception->getFile());
-                    $content   = explode("\n", $file->readAll());
+                    try {
+
+                        $file    = new \Hoa\File\Read($exception->getFile());
+                        $content = explode("\n", $file->readAll());
+                    }
+                    catch ( \Hoa\Core\Exception $e ) {
+
+                        $file    = null;
+                        $content = '(unknown)';
+                    }
                     $line      = $exception->getLine();
                     $lines     = count($content) - 1;
                     $traces    = $exception->getBacktrace();
