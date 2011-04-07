@@ -42,6 +42,7 @@ namespace Hoa\FastCgi {
  * A FastCGI connection; mainly pack & unpack methods.
  * Specification can be found here:
  * http://fastcgi.com/devkit/doc/fcgi-spec.html.
+ * Inspired by PHP SAPI code: php://sapi/cgi/fastcgi.*.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
