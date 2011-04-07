@@ -462,7 +462,8 @@ class BhoaCommand extends \Hoa\Console\Command\Generic {
             'r'    => 'Public/document root.',
             'help' => 'This help.'
         )));
-        cout('To start PHP FastCGI:' . "\n" .
+        cout('Bhoa needs PHP FastCGI to communicate with PHP.' . "\n" .
+             'To start PHP FastCGI:' . "\n" .
              '    $ php-cgi -b localhost:9000' . "\n" .
              'or' . "\n" .
              '    $ php-fpm -d listen=localhost:9000');
