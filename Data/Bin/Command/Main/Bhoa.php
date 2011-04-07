@@ -318,15 +318,16 @@ class BhoaCommand extends \Hoa\Console\Command\Generic {
                         }
                         catch ( \Hoa\Socket\Exception $ee ) {
 
-                            $socket = $client->getClient()->getSocket();
+                            $socket  = $client->getClient()->getSocket();
+                            $listen  = $socket->getAddress() . ':' .
+                                       $socket->getPort();
                             $this->log("\r" . '✖ ' . $methodAsString . ' /' .
                                        $url);
                             $this->log("\n" . '  ↳ PHP FastCGI seems to be ' .
                                        'disconnected (tried to reach ' .
                                        $socket . ').' . "\n" .
-                                       '  ↳ Try $ php-cgi -b ' .
-                                       $socket->getAddress() . ':' .
-                                       $socket->getPort() . '.' . "\n");
+                                       '  ↳ Try $ php-cgi -b ' . $listen . "\n" .
+                                       '     or $ php-fpm -d listen=' . $listen);
                             $this->log(null);
 
                             continue 2;
@@ -417,7 +418,7 @@ class BhoaCommand extends \Hoa\Console\Command\Generic {
         cout('To start PHP FastCGI:' . "\n" .
              '    $ php-cgi -b localhost:9000' . "\n" .
              'or' . "\n" .
-             '    $ php-fpm -d listen=127.0.0.1:9000');
+             '    $ php-fpm -d listen=localhost:9000');
 
         return HC_SUCCESS;
     }
