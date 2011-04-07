@@ -95,7 +95,7 @@ class Unix implements Socketable {
      */
     public function __construct ( $address, $transport ) {
 
-        $this->setAdress($address);
+        $this->setAddress($address);
         $this->setTransport($transport);
 
         return;
@@ -108,7 +108,7 @@ class Unix implements Socketable {
      * @param   string  $adress    Address.
      * @return  string
      */
-    public function setAdress ( $address ) {
+    public function setAddress ( $address ) {
 
         $old            = $this->_address;
         $this->_address = $address;
