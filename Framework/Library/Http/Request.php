@@ -70,9 +70,10 @@ class Request {
     const METHOD_TRACE    =  64;
     const METHOD_EXTENDED = 128;
 
-    protected $_method      = null;
-    protected $_url         = null;
-    protected $_httpVersion = null;
+    protected $_method             = null;
+    protected $_url                = null;
+    protected $_httpVersion        = null;
+    protected $_content            = null;
 
     protected $_accept             = null;
     protected $_acceptCharset      = null;
@@ -106,9 +107,10 @@ class Request {
 
     public function parse ( $headers ) {
 
+        $this->reset();
         $headers = explode("\r\n", $headers);
         $http    = array_shift($headers);
-        array_pop($headers);
+        $this->setContent(array_pop($headers));
         array_pop($headers);
 
         if(0 === preg_match('#^(\w+)\s*([^\s*]+)\s*HTTP/(1\..?)$#', $http, $matches))
@@ -257,6 +259,37 @@ class Request {
         return;
     }
 
+    public function reset ( ) {
+
+        $this->_method             = null;
+        $this->_url                = null;
+        $this->_httpVersion        = null;
+        $this->_content            = null;
+        $this->_accept             = null;
+        $this->_acceptCharset      = null;
+        $this->_acceptEncoding     = null;
+        $this->_acceptLanguage     = null;
+        $this->_authorization      = null;
+        $this->_connection         = null;
+        $this->_except             = null;
+        $this->_from               = null;
+        $this->_host               = null;
+        $this->_ifMatch            = null;
+        $this->_ifModifiedSince    = null;
+        $this->_ifNoneMatch        = null;
+        $this->_ifRange            = null;
+        $this->_ifUnmodifiedSince  = null;
+        $this->_keepAlive          = null;
+        $this->_maxForwards        = null;
+        $this->_proxyAuthorization = null;
+        $this->_range              = null;
+        $this->_referer            = null;
+        $this->_te                 = null;
+        $this->_userAgent          = null;
+
+        return;
+    }
+
     public function setMethod ( $method ) {
 
         $old           = $this->_method;
@@ -312,6 +345,22 @@ class Request {
               break;
 
         }
+    }
+
+    public function setContent ( $content ) {
+
+        if(empty($content))
+            $content = null;
+
+        $old            = $this->_content;
+        $this->_content = trim($content);
+
+        return $old;
+    }
+
+    public function getContent ( ) {
+
+        return $this->_content;
     }
 
     public function setAccept ( $accept ) {
