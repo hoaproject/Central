@@ -105,11 +105,13 @@ class BhoaCommand extends \Hoa\Console\Command\Generic {
      * @var BhoaCommand array
      */
     protected $options     = array(
-        array('domain', parent::REQUIRED_ARGUMENT, 'd'),
-        array('port',   parent::REQUIRED_ARGUMENT, 'p'),
-        array('root',   parent::REQUIRED_ARGUMENT, 'r'),
-        array('help',   parent::NO_ARGUMENT,       'h'),
-        array('help',   parent::NO_ARGUMENT,       '?')
+        array('domain',         parent::REQUIRED_ARGUMENT, 'd'),
+        array('port',           parent::REQUIRED_ARGUMENT, 'p'),
+        array('root',           parent::REQUIRED_ARGUMENT, 'r'),
+        array('fastcgi-domain', parent::REQUIRED_ARGUMENT, 'D'),
+        array('fastcgi-port',   parent::REQUIRED_ARGUMENT, 'P'),
+        array('help',           parent::NO_ARGUMENT,       'h'),
+        array('help',           parent::NO_ARGUMENT,       '?')
     );
 
 
@@ -122,10 +124,12 @@ class BhoaCommand extends \Hoa\Console\Command\Generic {
      */
     public function main ( ) {
 
-        $domain = 'localhost';
-        $port   = 8888;
-        $root   = 'hoa://Application/Public/';
-        $php    = $this->getParameter('command.php');
+        $domain  = 'localhost';
+        $port    = 8888;
+        $fdomain = 'localhost';
+        $fport   = 9000;
+        $root    = 'hoa://Application/Public/';
+        $php     = $this->getParameter('command.php');
 
         while(false !== $c = parent::getOption($v)) {
 
@@ -139,6 +143,14 @@ class BhoaCommand extends \Hoa\Console\Command\Generic {
                     $port = (int) $v;
                   break;
 
+                case 'D':
+                    $fdomain = $v;
+                  break;
+
+                case 'P':
+                    $fport = (int) $v;
+                  break;
+
                 case 'r':
                     $root = $v;
                   break;
@@ -150,13 +162,18 @@ class BhoaCommand extends \Hoa\Console\Command\Generic {
             }
         }
 
-        $ip      = new \Hoa\Socket\Internet\DomainName($domain, $port, 'tcp');
-        $server  = new \Hoa\Socket\Connection\Server($ip);
+        $server  = new \Hoa\Socket\Connection\Server(
+                       new \Hoa\Socket\Internet\DomainName(
+                           $domain,
+                           $port,
+                           'tcp'
+                       )
+                   );
         $client  = new \Hoa\FastCgi\Client(
                        new \Hoa\Socket\Connection\Client(
                            new \Hoa\Socket\Internet\DomainName(
-                               'localhost',
-                               9000,
+                               $fdomain,
+                               $fport,
                                'tcp'
                            )
                        )
@@ -171,7 +188,7 @@ class BhoaCommand extends \Hoa\Console\Command\Generic {
         else
             $_root = $root = realpath($root);
 
-        cout('Server is up, on ' . $ip . '!');
+        cout('Server is up, on ' . $server->getSocket() . '!');
         cout('Root: ' . $root . '.');
         cout();
 
@@ -274,28 +291,47 @@ class BhoaCommand extends \Hoa\Console\Command\Generic {
                     }
                     catch ( \Hoa\File\Exception\FileDoesNotExist $e ) {
 
-                        $content = $client->send(array(
-                            'GATEWAY_INTERFACE' => 'FastCGI/1.0',
+                        try {
 
-                            'SERVER_SOFTWARE'   => 'Hoa+Bhoa/0.1',
-                            'SERVER_PROTOCOL'   => 'HTTP/1.1',
-                            'SERVER_NAME'       => 'localhost',
-                            'SERVER_ADDR'       => '::1',
-                            'SERVER_PORT'       => 8888,
-                            'SERVER_SIGNATURE'  => 'Hoa Bhoa \o/',
+                            $content = $client->send(array(
+                                'GATEWAY_INTERFACE' => 'FastCGI/1.0',
 
-                            'HTTP_HOST'         => 'localhost:8888',
-                            'HTTP_USER_AGENT'   => 'Mozilla Firefox',
+                                'SERVER_SOFTWARE'   => 'Hoa+Bhoa/0.1',
+                                'SERVER_PROTOCOL'   => 'HTTP/1.1',
+                                'SERVER_NAME'       => 'localhost',
+                                'SERVER_ADDR'       => '::1',
+                                'SERVER_PORT'       => 8888,
+                                'SERVER_SIGNATURE'  => 'Hoa Bhoa \o/',
 
-                            'REQUEST_METHOD'    => 'GET',
-                            'REQUEST_URI'       => '/' . $url,
+                                'HTTP_HOST'         => 'localhost:8888',
+                                'HTTP_USER_AGENT'   => 'Mozilla Firefox',
 
-                            'SCRIPT_FILENAME'   => $_root . DS . 'index.php',
-                            'SCRIPT_NAME'       => '/index.php',
+                                'REQUEST_METHOD'    => 'GET',
+                                'REQUEST_URI'       => '/' . $url,
 
-                            'CONTENT_TYPE'      => 'text/html',
-                            'CONTENT_LENGTH'    => 0
-                        ));
+                                'SCRIPT_FILENAME'   => $_root . DS . 'index.php',
+                                'SCRIPT_NAME'       => '/index.php',
+
+                                'CONTENT_TYPE'      => 'text/html',
+                                'CONTENT_LENGTH'    => 0
+                            ));
+                        }
+                        catch ( \Hoa\Socket\Exception $ee ) {
+
+                            $socket = $client->getClient()->getSocket();
+                            $this->log("\r" . '✖ ' . $methodAsString . ' /' .
+                                       $url);
+                            $this->log("\n" . '  ↳ PHP FastCGI seems to be ' .
+                                       'disconnected (tried to reach ' .
+                                       $socket . ').' . "\n" .
+                                       '  ↳ Try $ php-cgi -b ' .
+                                       $socket->getAddress() . ':' .
+                                       $socket->getPort() . '.' . "\n");
+                            $this->log(null);
+
+                            continue 2;
+                        }
+
                         $headers = $client->getResponseHeaders();
 
                         $server->writeAll(
@@ -323,7 +359,7 @@ class BhoaCommand extends \Hoa\Console\Command\Generic {
                     );
             }
 
-            $this->log("\r" . '✓ '. $methodAsString . ' /' . $url);
+            $this->log("\r" . '✔ '. $methodAsString . ' /' . $url);
 
             $this->log(null);
             $this->log("\n" . 'Waiting for new connection…');
@@ -371,11 +407,17 @@ class BhoaCommand extends \Hoa\Console\Command\Generic {
         cout('Usage   : main:bhoa <options>');
         cout('Options :');
         cout(parent::makeUsageOptionsList(array(
-            'd'    => 'Domain name.',
-            'p'    => 'Port number.',
+            'd'    => 'Domain name (default: localhost).',
+            'p'    => 'Port number (default: 8888).',
+            'D'    => 'PHP FastCGI or PHP-FPM domain name (default: localhost).',
+            'P'    => 'PHP FastCGI or PHP-FPM port number (default: 9000).',
             'r'    => 'Public/document root.',
             'help' => 'This help.'
         )));
+        cout('To start PHP FastCGI:' . "\n" .
+             '    $ php-cgi -b localhost:9000' . "\n" .
+             'or' . "\n" .
+             '    $ php-fpm -d listen=127.0.0.1:9000');
 
         return HC_SUCCESS;
     }
