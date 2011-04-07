@@ -286,6 +286,8 @@ class DebuggerCommand extends \Hoa\Console\Command\Generic {
 
                             if(38 <= strlen($_file))
                                 $_file = '…' . substr($_file, -37);
+                            else
+                                $_file = sprintf('%-38s', $_file);
 
                             $_handle .= $_file . ' @ ' . @$t['line'];
                         }
