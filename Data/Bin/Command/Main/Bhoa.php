@@ -329,6 +329,11 @@ class BhoaCommand extends \Hoa\Console\Command\Generic {
                         $file->readAll()
                     );
 
+                    $this->log("\r" . '✔ '. $methodAsString . ' /' . $url);
+
+                    $this->log(null);
+                    $this->log("\n" . 'Waiting for new connection…');
+
                     continue;
                 }
             }
@@ -386,7 +391,7 @@ class BhoaCommand extends \Hoa\Console\Command\Generic {
                            'disconnected (tried to reach ' . $socket .
                            ').' . "\n" .
                            '  ↳ Try $ php-cgi -b ' . $listen . "\n" .
-                           '     or $ php-fpm -d listen=' . $listen);
+                           '     or $ php-fpm -d listen=' . $listen . "\n");
                 $this->log(null);
 
                 continue;
