@@ -132,8 +132,8 @@ class Core implements Parameterizable {
      */
     private function __construct ( ) {
 
-        !defined('SUCCEED') and define('SUCCEED', true);
-        !defined('FAILED')  and define('FAILED', false);
+        !defined('SUCCEED')   and define('SUCCEED', true);
+        !defined('FAILED')    and define('FAILED', false);
         !defined('DS')        and define('DS', DIRECTORY_SEPARATOR);
         !defined('PS')        and define('PS', PATH_SEPARATOR);
         !defined('CRLF')      and define('CRLF', "\r\n");
