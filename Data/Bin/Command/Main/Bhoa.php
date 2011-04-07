@@ -64,6 +64,11 @@ from('Hoa')
 -> import('File.Read')
 
 /**
+ * \Hoa\File\Finder
+ */
+-> import('File.Finder')
+
+/**
  * \Hoa\Http\Request
  */
 -> import('Http.Request')
@@ -128,7 +133,7 @@ class BhoaCommand extends \Hoa\Console\Command\Generic {
         $port    = 8888;
         $fdomain = 'localhost';
         $fport   = 9000;
-        $root    = 'hoa://Application/Public/';
+        $root    = '.';
         $php     = $this->getParameter('command.php');
 
         while(false !== $c = parent::getOption($v)) {
@@ -162,26 +167,45 @@ class BhoaCommand extends \Hoa\Console\Command\Generic {
             }
         }
 
-        $server  = new \Hoa\Socket\Connection\Server(
-                       new \Hoa\Socket\Internet\DomainName(
-                           $domain,
-                           $port,
-                           'tcp'
-                       )
-                   );
-        $client  = new \Hoa\FastCgi\Client(
-                       new \Hoa\Socket\Connection\Client(
-                           new \Hoa\Socket\Internet\DomainName(
-                               $fdomain,
-                               $fport,
-                               'tcp'
-                           )
-                       )
-                   );
+        $server   = new \Hoa\Socket\Connection\Server(
+                        new \Hoa\Socket\Internet\DomainName(
+                            $domain,
+                            $port,
+                            'tcp'
+                        )
+                    );
+        $client   = new \Hoa\FastCgi\Client(
+                        new \Hoa\Socket\Connection\Client(
+                            new \Hoa\Socket\Internet\DomainName(
+                                $fdomain,
+                                $fport,
+                                'tcp'
+                            )
+                        )
+                    );
         $server->connectAndWait();
-        $request = new \Hoa\Http\Request();
-        $_root   = $root;
-        $time    = time();
+        $request  = new \Hoa\Http\Request();
+        $_root    = $root;
+        $time     = time();
+        $_headers = array(
+            'GATEWAY_INTERFACE' => 'FastCGI/1.0',
+
+            'SERVER_SOFTWARE'   => 'Hoa+Bhoa/0.1',
+            'SERVER_PROTOCOL'   => 'HTTP/1.1',
+            'SERVER_NAME'       => $server->getSocket()->getAddress(),
+            'SERVER_ADDR'       => $server->getSocket()->getPort(),
+            'SERVER_PORT'       => 8888,
+            'SERVER_SIGNATURE'  => 'Hoa+Bhoa/0.1 \o/, PHP/' . phpversion(),
+            'HTTP_HOST'         => $server->getSocket()->getAddress() . ':' .
+                                   $server->getSocket()->getPort(),
+            'HTTP_USER_AGENT'   => 'Mozilla Firefox',
+
+            'REQUEST_METHOD'    => null,
+            'REQUEST_URI'       => null,
+
+            'SCRIPT_FILENAME'   => null,
+            'SCRIPT_NAME'       => null
+        );
 
         if('hoa://' == substr($_root, 0, 6))
             $_root = resolve($_root);
@@ -223,127 +247,114 @@ class BhoaCommand extends \Hoa\Console\Command\Generic {
                 ' (waiting…)'
             );
 
-            $time = $ttime;
+            $time   = $ttime;
+            $target = $_root . DS . $url;
 
-            switch($method) {
+            if(true === file_exists($target)) {
 
-                case \Hoa\Http\Request::METHOD_GET:
-                    try {
+                $file = new \Hoa\File\Read($target);
 
-                        $file = new \Hoa\File\Read($_root . DS . $url);
-                        $idx  = file_exists($_root . DS . 'index.php');
+                // Listing.
+                if(true === $file->isDirectory()) {
 
-                        if(true === $file->isDirectory() && false === $idx) {
+                    if(file_exists($_root . DS . $url . DS . 'index.php')) {
 
-                            $server->writeAll(
-                                'HTTP/1.1 200 OK' . "\r\n" .
-                                'Date: ' . date('r') . "\r\n" .
-                                'Server: Hoa+Bhoa/0.1' . "\r\n" .
-                                'Content-Type: text/plain' . "\r\n" .
-                                'Content-Length: 1' . "\r\n\r\n" .
-                                'd'
-                            );
-
-                            break;
-                        }
-
-                        if(true === $file->isFile()) {
-
-                            try {
-
-                                $mime     = new \Hoa\Mime($file);
-                                $mimeType = $mime->getMime();
-                            }
-                            catch ( \Hoa\Mime\Exception\MimeIsNotFound $e ) {
-
-                                $mimeType = 'application/octet-stream';
-                            }
-
-                            $server->writeAll(
-                                'HTTP/1.1 200 OK' . "\r\n" .
-                                'Date: ' . date('r') . "\r\n" .
-                                'Server: Hoa+Bhoa/0.1' . "\r\n" .
-                                'Content-Type: ' . $mimeType . "\r\n" .
-                                'Content-Length: ' . $file->getSize() . "\r\n\r\n" .
-                                $file->readAll()
-                            );
-
-                            break;
-                        }
-
-                        if(false === $idx) {
-
-                            $server->writeAll(
-                                'HTTP/1.1 404 Not Found' . "\r\n" .
-                                'Date: ' . date('r') . "\r\n" .
-                                'Server: Hoa+Bhoa/0.1' . "\r\n" .
-                                'Content-Type: text/plain' . "\r\n" .
-                                'Content-Length: 3' . "\r\n\r\n" .
-                                '404'
-                            );
-
-                            break;
-                        }
-
-                        throw new \Hoa\File\Exception\FileDoesNotExist(
-                            'Yup', 42
-                        );
+                        $target = $_root . DS . $url . DS . 'index.php';
+                        $file   = new \Hoa\File\Read($target);
                     }
-                    catch ( \Hoa\File\Exception\FileDoesNotExist $e ) {
+                    elseif(file_exists($_root . DS . $url . DS . 'index.html')) {
 
-                        try {
+                        $target = $_root . DS . $url . DS . 'index.html';
+                        $file   = new \Hoa\File\Read($target);
+                    }
+                    else {
 
-                            $content = $client->send(array(
-                                'GATEWAY_INTERFACE' => 'FastCGI/1.0',
+                        $content = '/' . $url . "\n" .
+                                   str_repeat('*', strlen($url) + 1) . "\n\n";
+                        $finder  = new \Hoa\File\Finder($target);
 
-                                'SERVER_SOFTWARE'   => 'Hoa+Bhoa/0.1',
-                                'SERVER_PROTOCOL'   => 'HTTP/1.1',
-                                'SERVER_NAME'       => 'localhost',
-                                'SERVER_ADDR'       => '::1',
-                                'SERVER_PORT'       => 8888,
-                                'SERVER_SIGNATURE'  => 'Hoa Bhoa \o/',
+                        foreach($finder as $file) {
 
-                                'HTTP_HOST'         => 'localhost:8888',
-                                'HTTP_USER_AGENT'   => 'Mozilla Firefox',
-
-                                'REQUEST_METHOD'    => 'GET',
-                                'REQUEST_URI'       => '/' . $url,
-
-                                'SCRIPT_FILENAME'   => $_root . DS . 'index.php',
-                                'SCRIPT_NAME'       => '/index.php',
-
-                                'CONTENT_TYPE'      => 'text/html',
-                                'CONTENT_LENGTH'    => 0
-                            ));
-                        }
-                        catch ( \Hoa\Socket\Exception $ee ) {
-
-                            $socket  = $client->getClient()->getSocket();
-                            $listen  = $socket->getAddress() . ':' .
-                                       $socket->getPort();
-                            $this->log("\r" . '✖ ' . $methodAsString . ' /' .
-                                       $url);
-                            $this->log("\n" . '  ↳ PHP FastCGI seems to be ' .
-                                       'disconnected (tried to reach ' .
-                                       $socket . ').' . "\n" .
-                                       '  ↳ Try $ php-cgi -b ' . $listen . "\n" .
-                                       '     or $ php-fpm -d listen=' . $listen);
-                            $this->log(null);
-
-                            continue 2;
+                            $defined  = $file->define();
+                            $content .= sprintf(
+                                '%10d %s %s %s  %s',
+                                $defined->getINode(),
+                                $defined->getReadablePermissions(),
+                                $defined->getOwner(),
+                                date('Y-m-d H:i', $file->getMTime()),
+                                $file->getBasename()
+                            ) . "\n";
                         }
 
-                        $headers = $client->getResponseHeaders();
+                        $content .= "\n\n" . str_repeat('_', 42) . "\n\n" .
+                                    $_headers['SERVER_SIGNATURE'];
 
                         $server->writeAll(
                             'HTTP/1.1 200 OK' . "\r\n" .
                             'Date: ' . date('r') . "\r\n" .
                             'Server: Hoa+Bhoa/0.1' . "\r\n" .
-                            'Content-Type: ' . $headers['content-type'] . "\r\n" .
+                            'Content-Type: text/plain' . "\r\n" .
                             'Content-Length: ' . strlen($content) . "\r\n\r\n" .
                             $content
                         );
+
+                        $this->log("\r" . '✔ '. $methodAsString . ' /' . $url);
+
+                        $this->log(null);
+                        $this->log("\n" . 'Waiting for new connection…');
+
+                        continue;
                     }
+                }
+
+                // Static.
+                if('php' !== $file->getExtension()) {
+
+                    try {
+
+                        $mime     = new \Hoa\Mime($file);
+                        $mimeType = $mime->getMime();
+                    }
+                    catch ( \Hoa\Mime\Exception\MimeIsNotFound $e ) {
+
+                        $mimeType = 'application/octet-stream';
+                    }
+
+                    $server->writeAll(
+                        'HTTP/1.1 200 OK' . "\r\n" .
+                        'Date: ' . date('r') . "\r\n" .
+                        'Server: Hoa+Bhoa/0.1' . "\r\n" .
+                        'Content-Type: ' . $mimeType . "\r\n" .
+                        'Content-Length: ' . $file->getSize() . "\r\n\r\n" .
+                        $file->readAll()
+                    );
+
+                    continue;
+                }
+            }
+
+            switch($method) {
+
+                case \Hoa\Http\Request::METHOD_GET:
+                    $data = null;
+                    $headers = array_merge($_headers, array(
+                        'REQUEST_METHOD'  => 'GET',
+                        'REQUEST_URI'     => '/' . $url,
+                        'SCRIPT_FILENAME' => $_root . DS . 'index.php',
+                        'SCRIPT_NAME'     => '/index.php'
+                    ));
+                  break;
+
+                case \Hoa\Http\Request::METHOD_POST:
+                    $data = $request->getContent();
+                    $headers = array_merge($_headers, array(
+                        'REQUEST_METHOD'  => 'POST',
+                        'REQUEST_URI'     => '/' . $url,
+                        'SCRIPT_FILENAME' => $_root . DS . 'index.php',
+                        'SCRIPT_NAME'     => '/index.php',
+                        'CONTENT_TYPE'    => 'application/x-www-form-urlencoded',
+                        'CONTENT_LENGTH'  => strlen($data)
+                    ));
                   break;
 
                 default:
@@ -358,7 +369,38 @@ class BhoaCommand extends \Hoa\Console\Command\Generic {
                         'Content-Length: ' . strlen($content) . "\r\n\r\n" .
                         $content
                     );
+                  continue 2;
             }
+
+            try {
+
+                $content = $client->send($headers, $data);
+            }
+            catch ( \Hoa\Socket\Exception $ee ) {
+
+                $socket  = $client->getClient()->getSocket();
+                $listen  = $socket->getAddress() . ':' .
+                           $socket->getPort();
+                $this->log("\r" . '✖ ' . $methodAsString . ' /' . $url);
+                $this->log("\n" . '  ↳ PHP FastCGI seems to be ' .
+                           'disconnected (tried to reach ' . $socket .
+                           ').' . "\n" .
+                           '  ↳ Try $ php-cgi -b ' . $listen . "\n" .
+                           '     or $ php-fpm -d listen=' . $listen);
+                $this->log(null);
+
+                continue;
+            }
+
+            $response = $client->getResponseHeaders();
+            $server->writeAll(
+                'HTTP/1.1 200 OK' . "\r\n" .
+                'Date: ' . date('r') . "\r\n" .
+                'Server: Hoa+Bhoa/0.1' . "\r\n" .
+                'Content-Type: ' . $response['content-type'] . "\r\n" .
+                'Content-Length: ' . strlen($content) . "\r\n\r\n" .
+                $content
+            );
 
             $this->log("\r" . '✔ '. $methodAsString . ' /' . $url);
 
