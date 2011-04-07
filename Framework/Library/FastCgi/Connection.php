@@ -143,7 +143,7 @@ abstract class Connection {
                 $length = strlen($handle);
 
                 // B0
-                if($length < 128)
+                if($length < 0x80)
                     $out .= chr($length);
                 // B3 & B2 & B1 & B0
                 else
@@ -178,7 +178,7 @@ abstract class Connection {
 
             $keyLength = ord($pack[$i++]);
 
-            if($keyLength >= 128)
+            if($keyLength >= 0x80)
                 $keyLength =   ($keyLength & 0x7f << 24)
                              | (ord($pack[$i++])  << 16)
                              | (ord($pack[$i++])  <<  8)
@@ -186,7 +186,7 @@ abstract class Connection {
 
             $valueLength = ord($pack[$i++]);
 
-            if($valueLength >= 128)
+            if($valueLength >= 0x80)
                 $valueLength =   ($valueLength & 0x7f << 24)
                                | (ord($pack[$i++])    << 16)
                                | (ord($pack[$i++])    <<  8)
