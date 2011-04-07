@@ -64,6 +64,11 @@ from('Hoa')
 -> import('File.Read')
 
 /**
+ * \Hoa\File\Undefined
+ */
+-> import('File.Undefined')
+
+/**
  * \Hoa\File\Finder
  */
 -> import('File.Finder')
@@ -338,6 +343,17 @@ class BhoaCommand extends \Hoa\Console\Command\Generic {
 
                     continue;
                 }
+
+                $script_filename = $target;
+                $script_name     = DS . $url;
+            }
+
+            $file = new \Hoa\File\Undefined($target);
+
+            if('php' != $file->getExtension()) {
+
+                $script_filename = $_root . DS . 'index.php';
+                $script_name     = DS . 'index.php';
             }
 
             switch($method) {
@@ -346,9 +362,9 @@ class BhoaCommand extends \Hoa\Console\Command\Generic {
                     $data = null;
                     $headers = array_merge($_headers, array(
                         'REQUEST_METHOD'  => 'GET',
-                        'REQUEST_URI'     => '/' . $url,
-                        'SCRIPT_FILENAME' => $_root . DS . 'index.php',
-                        'SCRIPT_NAME'     => '/index.php'
+                        'REQUEST_URI'     => DS . $url,
+                        'SCRIPT_FILENAME' => $script_filename,
+                        'SCRIPT_NAME'     => $script_name
                     ));
                   break;
 
@@ -356,9 +372,9 @@ class BhoaCommand extends \Hoa\Console\Command\Generic {
                     $data = $request->getContent();
                     $headers = array_merge($_headers, array(
                         'REQUEST_METHOD'  => 'POST',
-                        'REQUEST_URI'     => '/' . $url,
-                        'SCRIPT_FILENAME' => $_root . DS . 'index.php',
-                        'SCRIPT_NAME'     => '/index.php',
+                        'REQUEST_URI'     => DS . $url,
+                        'SCRIPT_FILENAME' => $script_filename,
+                        'SCRIPT_NAME'     => $script_name,
                         'CONTENT_TYPE'    => 'application/x-www-form-urlencoded',
                         'CONTENT_LENGTH'  => strlen($data)
                     ));
