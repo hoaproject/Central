@@ -97,7 +97,7 @@ class Client extends Connection {
      */
     public function __construct ( \Hoa\Socket\Connection\Client $client ) {
 
-        $this->_client = $client;
+        $this->setClient($client);
 
         return;
     }
@@ -109,16 +109,18 @@ class Client extends Connection {
      * @param   array   $headers    Headers.
      * @param   string  $content    Content (e.g. key=value for POST).
      * @return  string
+     * @throw   \Hoa\Socket\Exception
      */
     public function send ( Array $headers, $content = null ) {
 
-        $this->_client->connect();
+        $client = $this->getClient();
+        $client->connect();
 
         $parameters = null;
         $response   = null;
         $request    = $this->pack(
             1,
-            chr(0) . chr(1) . chr((int) $this->_client->isPersistent()) .
+            chr(0) . chr(1) . chr((int) $client->isPersistent()) .
             chr(0) . chr(0) . chr(0) . chr(0) . chr(0)
         );
 
@@ -134,7 +136,7 @@ class Client extends Connection {
 
         $request .= $this->pack(5, '');
         $handle   = null;
-        $this->_client->writeAll($request);
+        $client->writeAll($request);
 
         do {
 
@@ -147,7 +149,7 @@ class Client extends Connection {
 
         } while(3 !== $handle[self::HEADER_TYPE]);
 
-        $this->_client->disconnect();
+        $client->disconnect();
 
         $pos     = strpos($response, "\r\n\r\n");
         $headers = substr($response, 0, $pos);
@@ -193,7 +195,33 @@ class Client extends Connection {
      */
     protected function read ( $length ) {
 
-        return $this->_client->read($length);
+        return $this->getClient()->read($length);
+    }
+
+    /**
+     * Set client.
+     *
+     * @access  public
+     * @param   \Hoa\Socket\Connection\Client  $client    Client.
+     * @return  \Hoa\Socket\Connection\Client
+     */
+    public function setClient ( \Hoa\Socket\Connection\Client $client ) {
+
+        $old           = $this->_client;
+        $this->_client = $client;
+
+        return $old;
+    }
+
+    /**
+     * Get client.
+     *
+     * @access  public
+     * @return  \Hoa\Socket\Connection\Client
+     */
+    public function getClient ( ) {
+
+        return $this->_client;
     }
 }
 
