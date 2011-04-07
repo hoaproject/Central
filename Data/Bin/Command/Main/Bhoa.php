@@ -259,12 +259,14 @@ class BhoaCommand extends \Hoa\Console\Command\Generic {
 
                     if(file_exists($_root . DS . $url . DS . 'index.php')) {
 
-                        $target = $_root . DS . $url . DS . 'index.php';
+                        $url    = 'index.php';
+                        $target = $_root . DS . $url;
                         $file   = new \Hoa\File\Read($target);
                     }
                     elseif(file_exists($_root . DS . $url . DS . 'index.html')) {
 
-                        $target = $_root . DS . $url . DS . 'index.html';
+                        $url    = 'index.html';
+                        $target = $_root . DS . $url;
                         $file   = new \Hoa\File\Read($target);
                     }
                     else {
