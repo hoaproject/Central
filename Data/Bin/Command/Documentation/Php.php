@@ -79,6 +79,7 @@ class PhpCommand extends \Hoa\Console\Command\Generic {
     protected $options     = array(
         array('function',      parent::NO_ARGUMENT, 'f'),
         array('class',         parent::NO_ARGUMENT, 'c'),
+        array('constant',      parent::NO_ARGUMENT, 'o'),
         array('extension',     parent::NO_ARGUMENT, 'e'),
         array('configuration', parent::NO_ARGUMENT, 'i'),
         array('documentation', parent::NO_ARGUMENT, 'd'),
@@ -125,6 +126,18 @@ class PhpCommand extends \Hoa\Console\Command\Generic {
                     $out = \Hoa\Console\System::execute($php . ' --rc ' . $name);
                   break;
 
+                case 'o':
+                    if(!defined($name))
+                        $out = '(undefined)';
+                    else {
+
+                        ob_start();
+                        var_dump(constant($name));
+                        $out = $name . ': ' . ob_get_contents();
+                        ob_end_clean();
+                    }
+                  break;
+
                 case 'e':
                     $out = \Hoa\Console\System::execute($php . ' --re ' . $name);
                   break;
@@ -151,7 +164,7 @@ class PhpCommand extends \Hoa\Console\Command\Generic {
             }
         }
 
-        cout($out);
+        cout($out, \Hoa\Console\Core\Io::NO_NEW_LINE);
 
         return HC_SUCCESS;
     }
@@ -169,6 +182,7 @@ class PhpCommand extends \Hoa\Console\Command\Generic {
         cout(parent::makeUsageOptionsList(array(
             'f'    => 'Show information about function <name>.',
             'c'    => 'Show information about class <name>.',
+            'o'    => 'Show value of constant <name>.',
             'e'    => 'Show information about extension <name>.',
             'i'    => 'Show configuration about configuration <name>.',
             'd'    => 'Open the online documentation on the <name> page.',
