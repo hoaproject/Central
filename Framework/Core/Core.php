@@ -122,6 +122,13 @@ class Core implements Parameterizable {
      */
     private static $_instance = null;
 
+    /**
+     * Whether the debugger is started or not.
+     *
+     * @var \Hoa\Core bool
+     */
+    private static $_debugger = false;
+
 
 
     /**
@@ -423,6 +430,7 @@ class Core implements Parameterizable {
 
             $client = new \Hoa\Socket\Connection\Client($socket);
             $client->connect();
+            self::$_debugger = true;
         }
         catch ( \Hoa\Core\Exception $e ) {
 
@@ -447,6 +455,35 @@ class Core implements Parameterizable {
                     $client->writeLine('error serialize');
                 }
             });
+
+        return;
+    }
+
+    /**
+     * Dump a data to the debugger.
+     *
+     * @access  public
+     * @param   mixed   $data    Data.
+     * @return  void
+     */
+    public static function dump ( $data ) {
+
+        if(false === self::$_debugger)
+            self::debug();
+
+        try {
+
+            $trace = debug_backtrace();
+
+            ob_start();
+            debug_zval_dump($data);
+            $data = ob_get_contents();
+            ob_end_clean();
+
+            throw new Exception\Error(
+                $data, 0, $trace[0]['file'], $trace[0]['line'], $trace);
+        }
+        catch ( Exception $e ) { }
 
         return;
     }
@@ -493,6 +530,19 @@ if(!ƒ('_define')) {
 function _define ( $name, $value, $case = false ) {
 
     return \Hoa\Core::_define($name, $value, $case);
+}}
+
+/**
+ * Alias of \Hoa\Core::dump().
+ *
+ * @access  public
+ * @param   mixed   $data    Data.
+ * @return  void
+ */
+if(!ƒ('dump')) {
+function dump ( $message ) {
+
+    return \Hoa\Core::dump($message);
 }}
 
 /**
