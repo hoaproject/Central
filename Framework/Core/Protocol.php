@@ -239,6 +239,9 @@ abstract class Protocol {
      */
     public function resolve ( $path ) {
 
+        if(substr($path, 0, 6) !== 'hoa://')
+            return $path;
+
         if(isset(self::$_cache[$path]))
             return self::$_cache[$path];
 
