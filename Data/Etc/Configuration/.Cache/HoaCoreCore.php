@@ -22,6 +22,7 @@ return array (
     'data.module' => '(:%root.data:)/Module',
     'data.optional' => '(:%root.data:)/Optional',
     'protocol.Application' => '(:%root.application:)/',
+    'protocol.Application/Public' => '(:%protocol.Application:)Public/',
     'protocol.Data' => '(:%root.data:)/',
     'protocol.Data/Etc' => '(:%protocol.Data:)Etc/',
     'protocol.Data/Etc/Configuration' => '(:%protocol.Data/Etc:)Configuration/',
