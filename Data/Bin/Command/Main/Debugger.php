@@ -111,69 +111,68 @@ class DebuggerCommand extends \Hoa\Console\Command\Generic {
 
         cout('Debugger is up!');
 
-        while(true) foreach($server->select() as $node) {
+        while(true) foreach($server->select() as $node) try {
 
-            try {
+            $buffer = $server->readLine();
 
-                $buffer = $server->readLine();
+            if(empty($buffer)) {
 
-                if(empty($buffer)) {
+                $server->disconnect();
 
-                    $server->disconnect();
+                if(0 == $exi)
+                    cout(' without any error!');
 
-                    if(0 == $exi)
-                        cout(' without any error!');
-
-                    if(0 >= $exi)
-                        continue;
-
-                    cout("\n");
-                    $this->select($exceptions, $exi);
-
+                if(0 >= $exi)
                     continue;
-                }
 
-                if('open' == $buffer) {
+                cout("\n");
+                $this->select($exceptions, $exi);
 
-                    $exceptions = array();
-                    $exi        = 0;
-                    cout("\n" . '[' . date('H:i:s') . '] ' .
-                         'A new execution is running…',
-                         \Hoa\Console\Core\Io::NO_NEW_LINE);
+                continue;
+            }
 
-                    continue;
-                }
+            if('open' == $buffer) {
 
-                if('error serialize' == $buffer) {
+                unset($exceptions);
+                $exceptions = array();
+                $exi        = 0;
+                cout("\n" . '[' . date('H:i:s') . '] ' .
+                     'A new execution is running…',
+                     \Hoa\Console\Core\Io::NO_NEW_LINE);
 
-                    cout(
-                        "\n" .
-                        'An error occured but it cannot be serialized and ' .
-                        'sent here.'
-                    );
-                    $exi = -1;
+                continue;
+            }
 
-                    continue;
-                }
-
-                $exception          = unserialize($buffer);
-                $exceptions[$exi++] = $exception;
+            if('error serialize' == $buffer) {
 
                 cout(
                     "\n" .
-                    $exi . '. ' .
-                    $exception->getFrom() . ': ' .
-                    $exception->getFormattedMessage(),
-                    \Hoa\Console\Core\Io::NO_NEW_LINE
+                    'An error occured but it cannot be serialized and ' .
+                    'sent here.'
                 );
-            }
-            catch ( Exception $e ) {
+                $exi = -1;
 
-                cout(
-                    "\n\n" . '** Exception **' . "\n" .
-                    $e->raise() . "\n"
-                );
+                continue;
             }
+
+            $exception          = unserialize($buffer);
+            $exceptions[$exi++] = $exception;
+
+            cout(
+                "\n" .
+                $exi . '. ' .
+                $exception->getFrom() . ': ' .
+                $exception->getFormattedMessage(),
+                \Hoa\Console\Core\Io::NO_NEW_LINE
+            );
+        }
+        catch ( Exception $e ) {
+
+            cout(
+                "\n\n" . '** Exception **' . "\n" .
+                $e->raise()
+            );
+            cout('** Buffer **' . "\n" . $buffer . "\n");
         }
 
         return HC_SUCCESS;
@@ -254,7 +253,7 @@ class DebuggerCommand extends \Hoa\Console\Command\Generic {
 
                 case 'm':
                 case 'message':
-                    cout($exception->raise());
+                    cout($exception->getFormattedMessage());
                   break;
 
                 case 't':
@@ -312,14 +311,16 @@ class DebuggerCommand extends \Hoa\Console\Command\Generic {
 
                         $file    = new \Hoa\File\Read($trace['file']);
                         $content = explode("\n", $file->readAll());
+                        $line    = $trace['line'];
+                        $lines   = count($content) - 1;
                     }
                     catch ( \Hoa\Core\Exception $e ) {
 
                         $file    = null;
                         $content = '(unknown)';
+                        $line    = 0;
+                        $lines   = 0;
                     }
-                    $line    = $trace['line'];
-                    $lines   = count($content) - 1;
                     $in      = 't';
                   continue 2;
 
@@ -337,14 +338,16 @@ class DebuggerCommand extends \Hoa\Console\Command\Generic {
 
                         $file    = new \Hoa\File\Read($trace['file']);
                         $content = explode("\n", $file->readAll());
+                        $line    = $trace['line'];
+                        $lines   = count($content) - 1;
                     }
                     catch ( \Hoa\Core\Exception $e ) {
 
                         $file    = null;
                         $content = '(unknown)';
+                        $line    = 0;
+                        $lines   = 0;
                     }
-                    $line    = $trace['line'];
-                    $lines   = count($content) - 1;
                     $in      = 't';
                   continue 2;
 
@@ -372,14 +375,16 @@ class DebuggerCommand extends \Hoa\Console\Command\Generic {
 
                         $file    = new \Hoa\File\Read($exception->getFile());
                         $content = explode("\n", $file->readAll());
+                        $line      = $exception->getLine();
+                        $lines     = count($content) - 1;
                     }
                     catch ( \Hoa\Core\Exception $e ) {
 
                         $file    = null;
                         $content = '(unknown)';
+                        $line    = 0;
+                        $lines   = 0;
                     }
-                    $line      = $exception->getLine();
-                    $lines     = count($content) - 1;
                     $traces    = $exception->getBacktrace();
                     array_unshift(
                         $traces,
