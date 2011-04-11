@@ -209,45 +209,35 @@ class Core implements Parameterizable {
             array(
                 'root'               => '(:root.ofFrameworkDirectory:)',
                 'root.framework'     => '(:%root:)',
-                'root.data'          => '(:%root:h:)' . DS . 'Data',
-                'root.application'   => '(:%root:h:)' . DS . 'Application',
+                'root.data'          => '(:%root:h:)/Data',
+                'root.application'   => '(:%root:h:)/Application',
 
-                'framework.core'     => '(:%root.framework:)' . DS . 'Core',
-                'framework.library'  => '(:%root.framework:)' . DS . 'Library',
-                'framework.module'   => '(:%root.framework:)' . DS . 'Module',
-                'framework.optional' => '(:%root.framework:)' . DS . 'Optional',
+                'framework.core'     => '(:%root.framework:)/Core',
+                'framework.library'  => '(:%root.framework:)/Library',
+                'framework.module'   => '(:%root.framework:)/Module',
+                'framework.optional' => '(:%root.framework:)/Optional',
 
-                'data.module'        => '(:%root.data:)' . DS . 'Module',
-                'data.optional'      => '(:%root.data:)' . DS . 'Optional',
+                'data.module'        => '(:%root.data:)/Module',
+                'data.optional'      => '(:%root.data:)/Optional',
 
-                'protocol.Application'            => '(:%root.application:)' . DS,
-                'protocol.Data'                   => '(:%root.data:)' . DS,
-                'protocol.Data/Etc'               => '(:%protocol.Data:)' .
-                                                     'Etc' . DS,
-                'protocol.Data/Etc/Configuration' => '(:%protocol.Data/Etc:)' .
-                                                     'Configuration' . DS,
-                'protocol.Data/Etc/Locale'        => '(:%protocol.Data/Etc:)' .
-                                                     'Locale' . DS,
-                'protocol.Data/Lost+found'        => '(:%protocol.Data:)' .
-                                                     'Lost+found' . DS,
-                'protocol.Data/Module'            => '(:%data.module:)' . DS,
-                'protocol.Data/Optional'          => '(:%data.module:)' . DS,
-                'protocol.Data/Temporary'         => '(:%protocol.Data:)' .
-                                                     'Temporary' . DS,
-                'protocol.Data/Variable'          => '(:%protocol.Data:)' .
-                                                     'Variable' . DS,
-                'protocol.Data/Variable/Cache'    => '(:%protocol.Data/Variable:)' .
-                                                     'Cache' . DS,
-                'protocol.Data/Variable/Database' => '(:%protocol.Data/Variable:)' .
-                                                     'Database' . DS,
-                'protocol.Data/Variable/Log'      => '(:%protocol.Data/Variable:)' .
-                                                     'Log' . DS,
-                'protocol.Data/Variable/Private'  => '(:%protocol.Data/Variable:)' .
-                                                     'Private' . DS,
-                'protocol.Data/Variable/Test'     => '(:%protocol.Data/Variable:)' .
-                                                     'Test' . DS,
-                'protocol.Data'                   => '(:%root.data:)' . DS,
-                'protocol.Library'                => '(:%framework.library:)' . DS,
+                'protocol.Application'            => '(:%root.application:)/',
+                'protocol.Application/Public'     => '(:%protocol..Application:)Public/',
+                'protocol.Data'                   => '(:%root.data:)/',
+                'protocol.Data/Etc'               => '(:%protocol.Data:)Etc/',
+                'protocol.Data/Etc/Configuration' => '(:%protocol.Data/Etc:)Configuration/',
+                'protocol.Data/Etc/Locale'        => '(:%protocol.Data/Etc:)Locale/',
+                'protocol.Data/Lost+found'        => '(:%protocol.Data:)Lost+found/',
+                'protocol.Data/Module'            => '(:%data.module:)/',
+                'protocol.Data/Optional'          => '(:%data.module:)/',
+                'protocol.Data/Temporary'         => '(:%protocol.Data:)Temporary/',
+                'protocol.Data/Variable'          => '(:%protocol.Data:)Variable/',
+                'protocol.Data/Variable/Cache'    => '(:%protocol.Data/Variable:)Cache/',
+                'protocol.Data/Variable/Database' => '(:%protocol.Data/Variable:)Database/',
+                'protocol.Data/Variable/Log'      => '(:%protocol.Data/Variable:)Log/',
+                'protocol.Data/Variable/Private'  => '(:%protocol.Data/Variable:)Private/',
+                'protocol.Data/Variable/Test'     => '(:%protocol.Data/Variable:)Test/',
+                'protocol.Data'                   => '(:%root.data:)/',
+                'protocol.Library'                => '(:%framework.library:)/',
 
                 'namespace.prefix.Hoa'     => '(:%framework.library:)',
                 'namespace.prefix.Hoathis' => '(:%data.module:):(:%framework.module:)'
