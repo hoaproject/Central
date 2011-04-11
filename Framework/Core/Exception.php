@@ -48,7 +48,7 @@ namespace Hoa\Core\Exception {
  * @license    New BSD License
  */
 
-class Idle extends \Exception {
+class Idle extends \Exception implements \Serializable {
 
     /**
      * Arguments to format message.
@@ -56,6 +56,20 @@ class Idle extends \Exception {
      * @var \Hoa\Core\Exception array
      */
     protected $_arguments = array();
+
+    /**
+     * Backtrace.
+     *
+     * @var \Hoa\Core\Exception\Idle array
+     */
+    protected $_trace     = null;
+
+    /**
+     * Previous.
+     *
+     * @var \Exception object
+     */
+    protected $_previous  = null;
 
 
 
@@ -85,18 +99,35 @@ class Idle extends \Exception {
         $this->_arguments = $arguments;
         parent::__construct($message, $code, $previous);
 
+        // Crapy but we do not have the choice.
+        $this->_trace     = $this->getTrace();
+        $this->_previous  = $this->getPrevious();
+
         return;
     }
 
     /**
      * Get the backtrace.
+     * Do not use \Exception::getTrace() any more.
      *
      * @access  public
      * @return  array
      */
     public function getBacktrace ( ) {
 
-        return $this->getTrace();
+        return $this->_trace;
+    }
+
+    /**
+     * Get previous.
+     * Do not use \Exception::getPrevious() any more.
+     *
+     * @access  public
+     * @return  \Exception
+     */
+    public function getPreviousThrow ( ) {
+
+        return $this->_previous;
     }
 
     /**
@@ -200,7 +231,7 @@ class Idle extends \Exception {
         echo 'Uncaught exception (' . get_class($exception) . '):' . "\n" .
              $exception->raise();
 
-        if(null !== $previous = $exception->getPrevious()) {
+        if(null !== $previous = $exception->getPreviousThrow()) {
 
             echo "\n\n" . '⬇' . "\n\n" . 'Nested ';
 
@@ -212,7 +243,7 @@ class Idle extends \Exception {
 
     /**
      * Catch PHP (and PHP_USER) errors and transform them into
-     * \Hoa\Core\Error.
+     * \Hoa\Core\Exception\Error.
      * Obviously, if code that caused the error is preceeded by @, then we do
      * not thrown any exception.
      *
@@ -222,7 +253,7 @@ class Idle extends \Exception {
      * @param   string  $errfile    File.
      * @param   int     $errline    Line.
      * @return  void
-     * @throw   \Hoa\Core\Error
+     * @throw   \Hoa\Core\Exception\Error
      */
     public static function error ( $errno, $errstr, $errfile, $errline ) {
 
@@ -241,6 +272,113 @@ class Idle extends \Exception {
         array_shift($trace);
 
         throw new Error($errstr, -1, $errfile, $errline, $trace);
+    }
+
+    /**
+     * Serialize exception even if we cannot serialize the backtrace.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function serialize ( ) {
+
+        $name   = get_class($this);
+        $length = strlen($name);
+        $trace  = $this->getBacktrace();
+
+        try {
+
+            $trace = serialize($trace);
+        }
+        catch ( \Exception $e ) {
+
+            foreach($trace as &$t)
+                unset($t['args']);
+
+            $trace = serialize($trace);
+        }
+
+        try { $previous = serialize($this->getPreviousThrow()); }
+        catch ( \Exception $e ) { $previous = serialize(null); }
+
+        return 'O:' . strlen($name) . ':"' . $name . '":7:{' .
+               's:10:"*message";' . serialize(str_replace(
+                   "\n", '', $this->getFormattedMessage()
+               )) .
+               's:17:"Exceptionstring";s:0:"";' .
+               's:7:"*code";' . serialize($this->getCode()) .
+               's:7:"*file";' . serialize($this->getFile()) .
+               's:7:"*line";' . serialize($this->getLine()) .
+               's:16:"Exceptiontrace";' . $trace .
+               's:19:"Exceptionprevious";' . $previous . '}';
+    }
+
+    /**
+     * Unserialize exception.
+     *
+     * @access  public
+     * @param   string  $serialized    Serialized exception.
+     * @return  void
+     */
+    public function unserialize ( $serialized ) {
+
+        $_ = '"(.*?)(?<!\\\")";';
+
+        preg_match(
+            '#^O:(\d+):"([^"]+)":7:{' .
+            's:10:"\*message";s:\d+:' . $_ .
+            's:17:"Exceptionstring";s:0:"";' .
+            's:7:"\*code";i:([^;]+);' .
+            's:7:"\*file";s:\d+:' . $_ .
+            's:7:"\*line";i:([^;]+);' .
+            's:16:"Exceptiontrace";' .
+            '(.*)?}$#s',
+            $serialized,
+            $matches
+        );
+
+        $this->message = $matches[3];
+        $this->code    = $matches[4];
+        $this->file    = $matches[5];
+        $this->line    = $matches[6];
+        $tail          = $matches[7];
+
+        for($i = 0, $m = strlen($tail), $c = 0, $e = false, $ti = $tail[$i];
+            $i < $m && ('}' != $ti || $c != 1);
+            $ti = $tail[++$i]) {
+
+            if('\\' == $ti) {
+
+                ++$i;
+                continue;
+            }
+
+            if('"' == $ti) {
+
+                $e = !$e;
+                continue;
+            }
+
+            if(true === $e)
+                continue;
+
+            if('{' == $ti)
+                ++$c;
+            elseif('}' == $ti)
+                --$c;
+        }
+
+        $this->_trace = unserialize(substr($tail, 0, ++$i));
+
+        preg_match(
+            '#^s:19:"Exceptionprevious";(.*);$#s',
+            substr($tail, $i),
+            $matches
+        );
+
+        $this->_previous = unserialize($matches[1] . ';');
+
+        return;
     }
 
     /**
@@ -312,7 +450,7 @@ class Exception extends Idle implements \Hoa\Core\Event\Source {
 }
 
 /**
- * Class \Hoa\Core\Error.
+ * Class \Hoa\Core\Exception\Error.
  *
  * This exception is the equivalent representation of PHP errors.
  *
@@ -322,15 +460,6 @@ class Exception extends Idle implements \Hoa\Core\Event\Source {
  */
 
 class Error extends Exception {
-
-    /**
-     * Backtrace.
-     *
-     * @var \Hoa\Core\Error array
-     */
-    protected $_trace = null;
-
-
 
     /**
      * Constructor.
@@ -352,17 +481,6 @@ class Error extends Exception {
         parent::__construct($message, $code);
 
         return;
-    }
-
-    /**
-     * Get the backtrace.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function getBacktrace ( ) {
-
-        return $this->_trace;
     }
 }
 
