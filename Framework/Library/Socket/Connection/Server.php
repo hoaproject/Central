@@ -190,13 +190,9 @@ class Server extends Connection implements \Iterator {
             );
 
         if(false === $this->_master)
-            if($errno == 0)
-                throw new Exception(
-                    'Server cannot join %s.', 0, $streamName);
-            else
-                throw new Exception(
-                    'Server returns an error (number %d): %s.',
-                    1, array($errno, $errstr));
+            throw new Exception(
+                'Server cannot join %s and returns an error (number %d): %s.',
+                0, array($streamName, $errno, $errstr));
 
         $this->_stack[] = $this->_master;
 
@@ -218,7 +214,7 @@ class Server extends Connection implements \Iterator {
 
         if(false === $client)
             throw new Exception(
-                'Operation timed out (nothing to accept).', 2);
+                'Operation timed out (nothing to accept).', 1);
 
         $this->_setStream($client);
 
@@ -254,25 +250,22 @@ class Server extends Connection implements \Iterator {
 
         @stream_select($read, $write, $except, $this->getTimeout(), 0);
 
-        foreach($read as $i => $socket) {
-
+        foreach($read as $i => $socket)
             if($this->_master == $socket) {
 
                 $client = @stream_socket_accept($this->_master);
 
                 if(false === $client)
                     throw new Exception(
-                        'Operation timed out (nothing to accept).', 3);
+                        'Operation timed out (nothing to accept).', 2);
 
                 $id                = $this->getNodeId($client);
                 $node              = dnew($nodeClass, array($id, $client));
                 $this->_nodes[$id] = $node;
                 $this->_stack[]    = $client;
-                $this->_setStream($socket);
             }
             else
                 $this->_iterator[] = $socket;
-        }
 
         return $this;
     }
