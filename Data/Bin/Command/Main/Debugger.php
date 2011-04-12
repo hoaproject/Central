@@ -160,8 +160,9 @@ class DebuggerCommand extends \Hoa\Console\Command\Generic {
 
             cout(
                 "\n" .
-                $exi . '. ' .
-                $exception->getFrom() . ': ' .
+                sprintf('%2d', $exi) . '. ' .
+                ('Hoa\Core\Core::dump()' == ($from = $exception->getFrom())
+                    ? '[dump]' : $from) . ': ' .
                 $exception->getFormattedMessage(),
                 \Hoa\Console\Core\Io::NO_NEW_LINE
             );
