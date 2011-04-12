@@ -298,7 +298,7 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
                   = $this->getAbstractElement()->readAll();
 
         if(null === $out)
-            return $data;
+            return $this->readAll();
 
         if(false !== $data && true === $count) {
 
