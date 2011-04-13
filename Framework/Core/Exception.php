@@ -303,7 +303,7 @@ class Idle extends \Exception implements \Serializable {
 
         return 'O:' . strlen($name) . ':"' . $name . '":7:{' .
                's:10:"*message";' . serialize(str_replace(
-                   "\n", '', $this->getFormattedMessage()
+                   "\n", '??\n??', $this->getFormattedMessage()
                )) .
                's:17:"Exceptionstring";s:0:"";' .
                's:7:"*code";' . serialize($this->getCode()) .
@@ -337,7 +337,7 @@ class Idle extends \Exception implements \Serializable {
             $matches
         );
 
-        $this->message = $matches[3];
+        $this->message = str_replace('??\n??', "\n", $matches[3]);
         $this->code    = $matches[4];
         $this->file    = $matches[5];
         $this->line    = $matches[6];
