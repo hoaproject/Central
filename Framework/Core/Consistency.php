@@ -135,12 +135,13 @@ class Consistency {
      * to true, then pre-load is turned to direct-load.
      *
      * @access  public
-     * @param   string  $path    Path.
-     * @param   bool    $load    Whether loading directly or not.
+     * @param   string  $path       Path.
+     * @param   bool    $load       Whether loading directly or not.
+     * @param   string  &$family    Finally choosen family.
      * @return  \Hoa\Consistency
      * @throw   \Hoa\Core\Exception
      */
-    public function import ( $path, $load = false ) {
+    public function import ( $path, $load = false, &$family = null ) {
 
         $exception = null;
         $out       = false;
@@ -148,6 +149,12 @@ class Consistency {
         foreach($this->_from as $from)
             foreach($this->_roots[$from] as $root)
                 try {
+
+                    $classname = $from . '\\' . str_replace('.', '\\', $path);
+                    $family    = $from;
+
+                    if(class_exists($classname))
+                        return $this;
 
                     $out = $this->_import($path, $load, $from, $root);
 
@@ -448,44 +455,17 @@ class Consistency {
 
         if(!class_exists($classname)) {
 
-            $head   = trim(str_replace(
-                          '\\',
-                          '.',
-                          substr($classname, 0, $pos = strpos($classname, '\\'))
-                      ), '()');
-            $tail   = substr($classname, $pos + 1);
-            $_tail  = str_replace('\\', '.', $tail);
-            $roots  = preg_split('#\s*(,|or)\s*#', $head);
-            $gotcha = false;
+            $head = trim(str_replace(
+                        '\\',
+                        '.',
+                        substr($classname, 0, $pos = strpos($classname, '\\'))
+                    ), '()');
+            $tail = substr($classname, $pos + 1);
 
-            foreach($roots as $root) {
+            self::from($head)
+                ->import(str_replace('\\', '.', $tail), true, $family);
 
-                $classname = $root . '\\' . $tail;
-
-                if(class_exists($classname)) {
-
-                    $gotcha = true;
-                    break;
-                }
-
-                try {
-
-                    if(false === self::autoload($classname))
-                        self::from($root)
-                            ->import($_tail, true);
-
-                    $gotcha = true;
-                }
-                catch ( \Hoa\Core\Exception $exception ) {
-
-                    continue;
-                }
-
-                break;
-            }
-
-            if(false === $gotcha)
-                throw $exception;
+            $classname = $family . '\\' . $tail;
         }
 
         $class = new \ReflectionClass($classname);
