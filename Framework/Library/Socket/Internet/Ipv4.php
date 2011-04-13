@@ -74,6 +74,9 @@ class Ipv4 extends Internet {
      */
     public function setAddress ( $address ) {
 
+        if('*' == $address)
+            $address = '0.0.0.0';
+
         if(!(   substr_count($address, '.')  == 3
              && ip2long($address)           !== false))
             throw new \Hoa\Socket\Exception(
