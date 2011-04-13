@@ -138,10 +138,10 @@ class Concrete implements Element, \Countable, \IteratorAggregate, \ArrayAccess 
      * @param   string            $namespace    Namespace.
      * @return  void
      */
-    public function __construct ( \Hoa\Xml\Element $abstract,
-                                  \Hoa\Xml\Element $superRoot,
-                                  Array            $rank = array(),
-                                  $namespace             = null ) {
+    final public function __construct ( \Hoa\Xml\Element $abstract,
+                                        \Hoa\Xml\Element $superRoot,
+                                        Array            $rank = array(),
+                                        $namespace             = null ) {
 
         self::$_store[]      = $abstract;
         self::$_superRoots[] = $superRoot;
@@ -180,6 +180,19 @@ class Concrete implements Element, \Countable, \IteratorAggregate, \ArrayAccess 
             $this->_children[$h->getName()][] = $h;
             $this->_iterator[]                = $h;
         }
+
+        $this->construct();
+
+        return;
+    }
+
+    /**
+     * Simplify overloading of the constructor.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function construct ( ) {
 
         return;
     }
