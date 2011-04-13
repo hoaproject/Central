@@ -60,7 +60,8 @@ namespace Hoa\Xyl\Element {
 /**
  * Class \Hoa\Xyl\Element\Concrete.
  *
- * 
+ * This class represents the top-XYL-element. It manages data binding, value
+ * computing etc.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
@@ -75,6 +76,13 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      * @var \Hoa\Xyl\Element\Concrete array
      */
     private $_bucket           = array('data' => null);
+
+    /**
+     * Attribute data bucket.
+     *
+     * @var \Hoa\Xyl\Element\Concrete array
+     */
+    private $_attributeBucket  = null;
 
     /**
      * Visibility.
@@ -97,94 +105,121 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      * reference to the data bucket in the super root.
      *
      * @access  public
+     * @param   array   &$data      Data.
+     * @param   array   &$parent    Parent.
      * @return  void
      */
     public function computeDataBinding ( Array &$data, Array &$parent = null ) {
 
-        $e = $this->getAbstractElement();
+        $e          = $this->getAbstractElement();
+        $bucket     = $data;
+        $executable = $this instanceof \Hoa\Xyl\Element\Executable;
+        $bindable   = false;
 
-        if(false === $e->attributeExists('bind')) {
+        if(   true === $e->attributeExists('href')
+           && 0 !== preg_match('#\(\?[^\)]+\)#', $e->readAttribute('href')))
+            $bindable = true;
 
-            if($this instanceof \Hoa\Xyl\Element\Executable)
-                $this->preExecute();
+        if(   false === $e->attributeExists('bind')
+           || null  === $bind = $this->selectData(
+                                    $e->readAttribute('bind'),
+                                    $bucket
+                                )) {
+
+            $bindable   and $this->_attributeBucket = &$parent;
+            $executable and $this->preExecute();
 
             foreach($this as $element)
                 $element->computeDataBinding($data, $parent);
 
-            if($this instanceof \Hoa\Xyl\Element\Executable)
-                $this->postExecute();
+            $executable and $this->postExecute();
 
             return;
         }
-
-        $source = $e->readAttribute('bind');
-        $handle = $data;
-
-        if('?' == $source) {
-
-            if($this instanceof \Hoa\Xyl\Element\Executable)
-                $this->preExecute();
-
-            foreach($this as $element)
-                $element->computeDataBinding($handle, $parent);
-
-            if($this instanceof \Hoa\Xyl\Element\Executable)
-                $this->postExecute();
-
-            return;
-        }
-        elseif('?' == $source[0]) {
-
-            $source  = trim(substr($source, 1), '/');
-            $explode = explode('/', $source);
-            $branche = $explode[count($explode) - 1];
-            array_pop($explode);
-
-            foreach($explode as $i => $part)
-                $handle = &$handle[0][$part];
-        }
-        else
-            throw new \Hoa\Xyl\Exception(
-                'Huh?', 0);
 
         $this->_bucket['parent']  = &$parent;
         $this->_bucket['current'] = 0;
-        $this->_bucket['branche'] = $branche;
+        $this->_bucket['branche'] = $bind;
 
         if(null === $parent)
-            $this->_bucket['data'] = &$handle;
+            $this->_bucket['data'] = $bucket;
 
-        if($this instanceof \Hoa\Xyl\Element\Executable)
-            $this->preExecute();
+        $bindable   and $this->_attributeBucket = &$this->_bucket;
+        $executable and $this->preExecute();
 
-        if(isset($handle[0][$branche]))
+        if(isset($bucket[0][$bind]))
             foreach($this as $element)
-                $element->computeDataBinding($handle[0][$branche], $this->_bucket);
+                $element->computeDataBinding($bucket[0][$bind], $this->_bucket);
 
-        if($this instanceof \Hoa\Xyl\Element\Executable)
-            $this->postExecute();
+        $executable and $this->postExecute();
+        unset($bucket);
 
         return;
     }
 
     /**
-     * Get data of this element.
+     * Select data according to an expression into a bucket.
+     * Move pointer into bucket or fill a new bucket and return the last
+     * reachable branche.
      *
-     * @access  public
-     * @return  array
+     * @access  protected
+     * @param   string     $expression    Expression (please, see inline
+     *                                    comments to study all cases).
+     * @param   array      &$bucket       Bucket.
+     * @return  string
      */
-    public function &getData ( ) {
+    protected function selectData ( $expression, Array &$bucket ) {
 
-        return $this->_bucket['data'];
+        if('?' != $expression[0] || '?' == $expression)
+            return null;
+
+        // ?a/b/c
+        // ?p:a/b/c
+        // ?path:a/b/c
+        if(0 !== preg_match('#^\?(?:p(?:ath)?:)?([^:]+)$#i', $expression, $matches)) {
+
+            $split = preg_split(
+                '#(?<!\\\)\/#',
+                $matches[1]
+            );
+
+            foreach($split as &$s)
+                $s = str_replace('\/', '/', $s);
+
+            $branche = array_pop($split);
+
+            foreach($split as $part)
+                $bucket = &$bucket[0][$part];
+
+            return $branche;
+        }
+
+        // ?q:a b c
+        // ?query:a b c
+        elseif(0 !== preg_match('#^\?q(?:uery)?:(.*)?$#i', $expression, $matches)) {
+
+            dump('*** QUERY');
+            dump($matches);
+        }
+
+        // ?x:a/b/c
+        // ?xpath:a/b/c
+        elseif(0 !== preg_match('#^\?x(?:path)?:(.*)?$#i', $expression, $matches)) {
+
+            dump('*** XPATH');
+            dump($matches);
+        }
+
+        return null;
     }
 
     /**
      * Get current data of this element.
      *
-     * @access  public
+     * @access  protected
      * @return  mixed
      */
-    public function getCurrentData ( ) {
+    protected function getCurrentData ( ) {
 
         if(!isset($this->_bucket['data']))
             return;
@@ -228,12 +263,12 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      * Continue to update the data bucket while iterating.
      *
      * @access  private
-     * @return  boolean
+     * @return  bool
      */
     private function update ( ) {
 
         if(!is_array($this->_bucket['data']))
-            return;
+            return false;
 
         $this->_bucket['current'] = key($this->_bucket['data']);
         $handle                   = current($this->_bucket['data']);
@@ -254,13 +289,13 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
             return;
 
         $this->firstUpdate();
-        $data = &$this->getData();
+        $data = &$this->_bucket['data'];
 
         do {
 
             $this->paint($out);
-            $next  = is_array($data) ? next($data) : false;
-            $next  = $next && $this->update();
+            $next = is_array($data) ? next($data) : false;
+            $next = $next && $this->update();
 
         } while(false !== $next);
 
@@ -282,6 +317,8 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      * present, else rendering all children.
      *
      * @access  public
+     * @param   \Hoa\Stream\IStream\Out  $out    Output stream. If null, we
+     *                                           return the result.
      * @return  string
      */
     public function computeValue ( \Hoa\Stream\IStream\Out $out = null ) {
@@ -318,6 +355,8 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      * exists, compute right now).
      *
      * @access  public
+     * @param   \Hoa\Stream\IStream\Out  $out    Output stream. If null, we
+     *                                           return the result.
      * @return  string
      */
     public function computeTransientValue ( \Hoa\Stream\IStream\Out $out = null ) {
@@ -333,6 +372,53 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         $out->writeAll($data);
 
         return;
+    }
+
+    /**
+     * Compute attribute value.
+     *
+     * @access  public
+     * @param   string  $attribute    Attribute name.
+     * @param   array   $variables    Variables.
+     * @return  string
+     */
+    public function computeAttributeValue ( $attribute,
+                                            Array $variables = array() ) {
+
+        if(false === $this->attributeExists($attribute))
+            return null;
+
+        $value = $this->readAttribute($attribute);
+
+        // (!variable).
+        $value = preg_replace_callback(
+            '#\(\!([^\)]+)\)#',
+            function ( Array $matches ) use ( &$variables ) {
+
+                if(!isset($variables[$matches[1]]))
+                    return '';
+
+                return $variables[$matches[1]];
+            },
+            $value
+        );
+
+        // (?inner-bind).
+        $handle = &$this->_attributeBucket;
+        $data   = $handle['data'][$handle['current']][$handle['branche']][0];
+        $value  = preg_replace_callback(
+            '#\(\?([^\)]+)\)#',
+            function ( Array $matches ) use ( &$data ) {
+
+                if(!is_array($data) || !isset($data[$matches[1]]))
+                    return '';
+
+                return $data[$matches[1]];
+            },
+            $value
+        );
+
+        return $value;
     }
 
     /**
