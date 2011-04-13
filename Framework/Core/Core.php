@@ -477,7 +477,7 @@ class Core implements Parameterizable {
 
             ob_start();
             debug_zval_dump($data);
-            $data = ob_get_contents();
+            $data = trim(ob_get_contents());
             ob_end_clean();
 
             throw new Exception\Error(
