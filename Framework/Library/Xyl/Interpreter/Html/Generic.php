@@ -39,9 +39,9 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Xyl\Element\Concrete
+ * \Hoa\Xyl\Interpreter\Html\Concrete
  */
--> import('Xyl.Element.Concrete');
+-> import('Xyl.Interpreter.Html.Concrete');
 
 }
 
@@ -57,7 +57,7 @@ namespace Hoa\Xyl\Interpreter\Html {
  * @license    New BSD License
  */
 
-abstract class Generic extends \Hoa\Xyl\Element\Concrete {
+abstract class Generic extends Concrete {
 
     /**
      * Map.

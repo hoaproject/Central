@@ -39,9 +39,9 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Xyl\Element\Concrete
+ * \Hoa\Xyl\Interpreter\Html\Concrete
  */
--> import('Xyl.Element.Concrete');
+-> import('Xyl.Interpreter.Html.Concrete');
 
 }
 
@@ -57,7 +57,7 @@ namespace Hoa\Xyl\Interpreter\Html {
  * @license    New BSD License
  */
 
-class Select extends \Hoa\Xyl\Element\Concrete {
+class Select extends Concrete {
 
     /**
      * Whether the select is valid or not.

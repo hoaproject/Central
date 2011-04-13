@@ -39,9 +39,9 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Xyl\Element\Concrete
+ * \Hoa\Xyl\Interpreter\Html\Concrete
  */
--> import('Xyl.Element.Concrete');
+-> import('Xyl.Interpreter.Html.Concrete');
 
 }
 
@@ -58,7 +58,7 @@ namespace Hoa\Xyl\Interpreter\Html {
  * @license    New BSD License
  */
 
-class Text extends \Hoa\Xyl\Element\Concrete {
+class Text extends Concrete {
 
     /**
      * Paint the element.

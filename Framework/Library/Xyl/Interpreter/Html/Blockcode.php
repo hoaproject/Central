@@ -39,9 +39,9 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Xyl\Element\Concrete
+ * \Hoa\Xyl\Interpreter\Html\Concrete
  */
--> import('Xyl.Element.Concrete');
+-> import('Xyl.Interpreter.Html.Concrete');
 
 }
 
@@ -57,7 +57,7 @@ namespace Hoa\Xyl\Interpreter\Html {
  * @license    New BSD License
  */
 
-class Blockcode extends \Hoa\Xyl\Element\Concrete {
+class Blockcode extends Concrete {
 
     /**
      * Paint the element.
@@ -68,13 +68,15 @@ class Blockcode extends \Hoa\Xyl\Element\Concrete {
      */
     protected function paint ( \Hoa\Stream\IStream\Out $out ) {
 
+        $e = $this->getAbstractElement();
+
         $out->writeAll('<pre' . $this->readAttributesAsString() . '><code>');
 
-        if(false === $this->attributeExists('language'))
+        if(false === $e->attributeExists('language'))
             $this->computeValue($out);
         else {
 
-            switch(strtolower($this->readAttribute('language'))) {
+            switch(strtolower($e->readAttribute('language'))) {
 
                 case 'php':
                     $this->colorizePhp($out);

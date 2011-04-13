@@ -39,9 +39,9 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Xyl\Element\Concrete
+ * \Hoa\Xyl\Interpreter\Html\Concrete
  */
--> import('Xyl.Element.Concrete')
+-> import('Xyl.Interpreter.Html.Concrete')
 
 /**
  * \Hoa\Xyl\Element\Executable
@@ -62,9 +62,27 @@ namespace Hoa\Xyl\Interpreter\Html {
  * @license    New BSD License
  */
 
-class          Form
-    extends    \Hoa\Xyl\Element\Concrete
-    implements \Hoa\Xyl\Element\Executable {
+class Form extends Concrete implements \Hoa\Xyl\Element\Executable {
+
+    /**
+     * Extra attributes.
+     *
+     * @var \Hoa\Xyl\Interpreter\Html\Concrete array
+     */
+    protected $iAttributes = array(
+        'action' => null,
+        'method' => 'get'
+    );
+
+    /**
+     * Extra attributes mapping.
+     *
+     * @var \Hoa\Xyl\Interpreter\Html\Concrete array
+     */
+    protected $attributesMapping = array(
+        'action' => 'action',
+        'method' => 'method'
+    );
 
     /**
      * Form data.
@@ -156,7 +174,7 @@ class          Form
             else
                 $value = $this->_formData[$name];
 
-
+            dump('here');
             $input->setValue($value);
             $input->checkValidity($value);
             $this->_validity = $input->isValid() && $this->_validity;
@@ -215,34 +233,6 @@ class          Form
     public function getMethod ( ) {
 
         return strtolower($this->readAttribute('method'));
-    }
-
-    /**
-     * Read attributes as a string.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function readAttributesAsString ( ) {
-
-        $out        = null;
-        $attributes = $this->getAbstractElement()->readAttributes();
-        unset($attributes['bind']);
-
-        foreach($attributes as $name => $value) {
-
-            if('method' == $name) {
-
-                $value = strtolower($value);
-
-                if('put' == $value || 'delete' == $value)
-                    $value = 'post';
-            }
-
-            $out .= ' ' . $name . '="' . str_replace('"', '\"', $value) . '"';
-        }
-
-        return $out;
     }
 }
 
