@@ -39,9 +39,9 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Xyl\Element\Concrete
+ * \Hoa\Xyl\Interpreter\Html\Concrete
  */
--> import('Xyl.Element.Concrete')
+-> import('Xyl.Interpreter.Html.Concrete')
 
 /**
  * \Hoa\Xyl\Element\Executable
@@ -62,9 +62,7 @@ namespace Hoa\Xyl\Interpreter\Html {
  * @license    New BSD License
  */
 
-abstract class Section
-    extends    \Hoa\Xyl\Element\Concrete
-    implements \Hoa\Xyl\Element\Executable {
+abstract class Section extends Concrete implements \Hoa\Xyl\Element\Executable {
 
     /**
      * Depth.
@@ -93,7 +91,10 @@ abstract class Section
 
         $out->writeAll('<h' . $this->_n .
                        $this->readAttributesAsString() . '>');
-        $this->getTitle()->render($out);
+
+        if(null !== $title = $this->getTitle())
+            $title->render($out);
+
         $out->writeAll('</h' . $this->_n . '>' . "\n");
 
         foreach($this as $child)
@@ -137,12 +138,14 @@ abstract class Section
      */
     protected function computeFor ( ) {
 
-        if(false === $this->attributeExists('for'))
+        $e = $this->getAbstractElement();
+
+        if(false === $e->attributeExists('for'))
             return;
 
         $tocs = $this->xpath(
             '//__current_ns:tableofcontents[@id="' .
-            implode('" or @id="', $this->readAttributeAsList('for'))
+            implode('" or @id="', $e->readAttributeAsList('for'))
             . '"]'
         );
 

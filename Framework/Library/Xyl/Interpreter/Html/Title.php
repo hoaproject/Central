@@ -39,9 +39,9 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Xyl\Element\Concrete
+ * \Hoa\Xyl\Interpreter\Html\Concrete
  */
--> import('Xyl.Element.Concrete')
+-> import('Xyl.Interpreter.Html.Concrete')
 
 /**
  * \Hoa\Xml\Element\Model\Phrasing
@@ -62,9 +62,7 @@ namespace Hoa\Xyl\Interpreter\Html {
  * @license    New BSD License
  */
 
-class          Title
-    extends    \Hoa\Xyl\Element\Concrete
-    implements \Hoa\Xml\Element\Model\Phrasing {
+class Title extends Concrete implements \Hoa\Xml\Element\Model\Phrasing {
 
     /**
      * Paint the element.

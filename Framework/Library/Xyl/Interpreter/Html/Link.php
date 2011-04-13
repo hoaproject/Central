@@ -39,9 +39,9 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Xyl\Element\Concrete
+ * \Hoa\Xyl\Interpreter\Html\Concrete
  */
--> import('Xyl.Element.Concrete')
+-> import('Xyl.Interpreter.Html.Concrete')
 
 /**
  * \Hoa\Xyl\Element\Executable
@@ -68,9 +68,29 @@ namespace Hoa\Xyl\Interpreter\Html {
  */
 
 class          Link
-    extends    \Hoa\Xyl\Element\Concrete
+    extends    Concrete
     implements \Hoa\Xyl\Element\Executable,
                \Hoa\Xml\Element\Model\Phrasing {
+
+    /**
+     * Extra attributes.
+     *
+     * @var \Hoa\Xyl\Interpreter\Html\Concrete array
+     */
+    protected $iAttributes = array(
+        'href' => null,
+    );
+
+    /**
+     * Extra attributes mapping.
+     *
+     * @var \Hoa\Xyl\Interpreter\Html\Concrete array
+     */
+    protected $attributesMapping = array(
+        'href' => 'href'
+    );
+
+
 
     /**
      * Paint the element.
@@ -82,6 +102,11 @@ class          Link
     protected function paint ( \Hoa\Stream\IStream\Out $out ) {
 
         $out->writeAll('<a' . $this->readAttributesAsString() . '>');
+        /*
+        $out->writeAll('<a href="' .
+            $this->computeAttributeValue('href') .
+        '">');
+        */
         $this->computeValue($out);
         $out->writeAll('</a>');
 
@@ -107,12 +132,25 @@ class          Link
      */
     public function postExecute ( ) {
 
+        $this->computeStaticReference();
+        $this->computeHyperReference();
+
+        return;
+    }
+
+    protected function computeHyperReference ( ) {
+
+        $e = $this->getAbstractElement();
+
+        if(false === $e->attributeExists('href'))
+            return;
+
         $router = $this->getAbstractElementSuperRoot()->getRouter();
 
         if(null === $router)
             return;
 
-        $href = $this->readAttribute('href');
+        $href = $e->readAttribute('href');
 
         if(0 != preg_match('#^@(?:(?:([^:]+):(.*))|([^$]+))$#', $href, $matches)) {
 
@@ -136,6 +174,33 @@ class          Link
         }
 
         return;
+    }
+
+    protected function computeStaticReference ( ) {
+
+        /*
+        if(false === $this->attributeExists('sref'))
+            return;
+
+        $sref     = $this->readAttribute('sref');
+        $new      = $this->getAbstractElementSuperRoot()->open($sref);
+        $concrete = $new->getConcrete();
+        $sref_    = $this->readCustomAttributes('sref');
+
+        foreach($sref_ as &$s) {
+
+            $xpath = $new->xpath($s);
+
+            if(empty($xpath))
+                $s = '';
+            else
+                $s = $concrete->getConcreteElement($xpath[0])->computeValue();
+        }
+
+        $this->writeCustomAttributes('sref', $sref_);
+
+        return;
+        */
     }
 }
 

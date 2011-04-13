@@ -39,9 +39,9 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Xyl\Element\Concrete
+ * \Hoa\Xyl\Interpreter\Html\Concrete
  */
--> import('Xyl.Element.Concrete')
+-> import('Xyl.Interpreter.Html.Concrete')
 
 /**
  * \Hoa\Xyl\Element\Executable
@@ -67,9 +67,31 @@ namespace Hoa\Xyl\Interpreter\Html {
  * @license    New BSD License
  */
 
-class          Input
-    extends    \Hoa\Xyl\Element\Concrete
-    implements \Hoa\Xyl\Element\Executable {
+class Input extends Concrete implements \Hoa\Xyl\Element\Executable {
+
+    /**
+     * Extra attributes.
+     *
+     * @var \Hoa\Xyl\Interpreter\Html\Concrete array
+     */
+    protected $iAttributes = array(
+        'type'      => 'text',
+        'value'     => null,
+        'autofocus' => null,
+        'checked'   => null
+    );
+
+    /**
+     * Extra attributes mapping.
+     *
+     * @var \Hoa\Xyl\Interpreter\Html\Concrete array
+     */
+    protected $attributesMapping = array(
+        'type'      => 'type',
+        'value'     => 'value',
+        'autofocus' => 'autofocus',
+        'checked'   => 'checked'
+    );
 
     /**
      * Type of input: button, checkbox, color, date, datetime, datetime-local,
@@ -131,7 +153,7 @@ class          Input
      */
     public function postExecute ( ) {
 
-        $type = strtolower($this->readAttribute('type'));
+        $type = strtolower($this->getAbstractElement()->readAttribute('type'));
 
         switch($type) {
 
@@ -245,6 +267,7 @@ class          Input
      */
     public function checkValidity ( $value = null ) {
 
+        $e    = $this->getAbstractElement();
         $type = $this->getType();
 
         if('submit' === $type || 'reset' === $type) {
@@ -260,12 +283,12 @@ class          Input
 
         $validates = array();
 
-        if(true === $this->attributeExists('validate'))
-            $validates['@'] = $this->readAttribute('validate');
+        if(true === $e->attributeExists('validate'))
+            $validates['@'] = $e->readAttribute('validate');
 
         $validates = array_merge(
             $validates,
-            $this->readCustomAttributes('validate')
+            $e->readCustomAttributes('validate')
         );
 
         if(empty($validates))
@@ -273,12 +296,12 @@ class          Input
 
         $onerrors = array();
 
-        if(true === $this->attributeExists('onerror'))
-            $onerrors['@'] = $this->readAttributeAsList('onerror');
+        if(true === $e->attributeExists('onerror'))
+            $onerrors['@'] = $e->readAttributeAsList('onerror');
 
         $onerrors = array_merge(
             $onerrors,
-            $this->readCustomAttributesAsList('onerror')
+            $e->readCustomAttributesAsList('onerror')
         );
 
         if(null === $value)
@@ -345,32 +368,6 @@ class          Input
     public function getType ( ) {
 
         return $this->_type;
-    }
-
-    /**
-     * Read attributes as a string.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function readAttributesAsString ( ) {
-
-        $out        = null;
-        $attributes = $this->getAbstractElement()->readAttributes();
-        unset($attributes['bind']);
-
-        foreach($attributes as $name => $value) {
-
-            if('validate' == substr($name, 0, 8))
-                continue;
-
-            if('onerror' == substr($name, 0, 7))
-                continue;
-
-            $out .= ' ' . $name . '="' . str_replace('"', '\"', $value) . '"';
-        }
-
-        return $out;
     }
 }
 

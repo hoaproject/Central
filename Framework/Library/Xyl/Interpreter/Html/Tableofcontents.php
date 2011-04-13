@@ -39,9 +39,9 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Xyl\Element\Concrete
+ * \Hoa\Xyl\Interpreter\Html\Concrete
  */
--> import('Xyl.Element.Concrete')
+-> import('Xyl.Interpreter.Html.Concrete')
 
 /**
  * \Hoa\Xyl\Element\Executable
@@ -62,9 +62,7 @@ namespace Hoa\Xyl\Interpreter\Html {
  * @license    New BSD License
  */
 
-class          Tableofcontents
-    extends    \Hoa\Xyl\Element\Concrete
-    implements \Hoa\Xyl\Element\Executable {
+class Tableofcontents extends Concrete implements \Hoa\Xyl\Element\Executable {
 
     /**
      * Entries of the table of contents.
@@ -173,6 +171,18 @@ class          Tableofcontents
         if(true === $this->attributeExists('depth-max'))
             $this->_depthMax = (int) $this->readAttribute('depth-max');
 
+        $links = $this->selectChildElements('link');
+
+        if(empty($links))
+            return;
+
+        $root = $this->getAbstractElementSuperRoot();
+
+        foreach($links as $link) {
+
+            $cLink = $this->getConcreteElement($link);
+        }
+
         return;
     }
 
@@ -193,6 +203,11 @@ class          Tableofcontents
         $this->_entry[] = $section;
 
         return;
+    }
+
+    public function getEntry ( ) {
+
+        return $this->_entry;
     }
 }
 
