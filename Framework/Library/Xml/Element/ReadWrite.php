@@ -500,6 +500,26 @@ class          ReadWrite
     }
 
     /**
+     * Write custom attributes (as a set).
+     * For example:
+     *     <component data-abc="def" data-uvw="xyz" />
+     * “data” is a custom attribute, so the $set.
+     *
+     * @access  public
+     * @param   string  $set      Set name.
+     * @param   array   $pairs    Pairs of attribute/value (e.g. abc => def,
+     *                            uvw => xyz).
+     * @return  void
+     */
+    public function writeCustomAttributes ( $set, Array $pairs ) {
+
+        foreach($pairs as $attribute => $value)
+            $this->writeAttribute($set . '-' . $attribute, $value);
+
+        return;
+    }
+
+    /**
      * Remove an attribute.
      *
      * @access  public
