@@ -110,12 +110,16 @@ class Request {
         $this->reset();
         $headers = explode("\r\n", $headers);
         $http    = array_shift($headers);
-        $this->setContent(array_pop($headers));
+
+        while(   !empty($headers)
+              && '' == $handle = trim(array_pop($headers)));
+
+        $this->setContent($handle);
         array_pop($headers);
 
-        if(0 === preg_match('#^(\w+)\s*([^\s*]+)\s*HTTP/(1\..?)$#', $http, $matches))
+        if(0 === preg_match('#^([^\s]+)\s+([^\s]+)\s+HTTP/(1\.(0|1))$#', $http, $matches))
             throw new Exception(
-                'HTTP headers are not well-formed: %', 0, $http);
+                'HTTP headers are not well-formed: %s.', 0, $http);
 
         switch(strtolower($matches[1])) {
 
