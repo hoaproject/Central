@@ -153,7 +153,7 @@ class Consistency {
                     $classname = $from . '\\' . str_replace('.', '\\', $path);
                     $family    = $from;
 
-                    if(class_exists($classname))
+                    if(class_exists($classname, false))
                         return $this;
 
                     $out = $this->_import($path, $load, $from, $root);
@@ -453,7 +453,7 @@ class Consistency {
      */
     public static function dnew ( $classname, Array $arguments = array() ) {
 
-        if(!class_exists($classname)) {
+        if(!class_exists($classname, false)) {
 
             $head = trim(str_replace(
                         '\\',
