@@ -234,8 +234,6 @@ class BhoaCommand extends \Hoa\Console\Command\Generic {
                 continue;
             }
 
-            var_dump($buffer);
-
             $request->parse($buffer);
             $method         = $request->getMethod();
             $methodAsString = strtoupper($request->getMethodAsString());
@@ -418,7 +416,6 @@ class BhoaCommand extends \Hoa\Console\Command\Generic {
             }
 
             $response = $client->getResponseHeaders();
-            var_dump($response, $content);
             $server->writeAll($a =
                 'HTTP/1.1 200 OK' . "\r\n" .
                 'Date: ' . date('r') . "\r\n" .
@@ -427,13 +424,8 @@ class BhoaCommand extends \Hoa\Console\Command\Generic {
                 'Content-Length: ' . strlen($content) . "\r\n\r\n" .
                 $content
             );
-            var_dump($a);
-            $b = strlen($a);
-            var_dump($a[$b - 1], $a[$b - 2], $a[$b - 3]);
-            var_dump('**** close');
 
             $this->log("\r" . '✔ '. $methodAsString . ' /' . $url);
-
             $this->log(null);
             $this->log("\n" . 'Waiting for new connection…');
         }
