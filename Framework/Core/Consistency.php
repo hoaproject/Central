@@ -453,6 +453,8 @@ class Consistency {
      */
     public static function dnew ( $classname, Array $arguments = array() ) {
 
+        $classname = ltrim($classname, '\\');
+
         if(!class_exists($classname, false)) {
 
             $head = trim(str_replace(
