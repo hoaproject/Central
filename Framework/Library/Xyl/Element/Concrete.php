@@ -98,6 +98,13 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      */
     protected $_transientValue = null;
 
+    /**
+     * Attributes description.
+     *
+     * @var \Hoa\Xyl\Element\Concrete array
+     */
+    protected $_attributes     = null;
+
 
 
     /**
@@ -111,18 +118,17 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      */
     public function computeDataBinding ( Array &$data, Array &$parent = null ) {
 
-        $e          = $this->getAbstractElement();
         $bucket     = $data;
         $executable = $this instanceof \Hoa\Xyl\Element\Executable;
         $bindable   = false;
 
-        if(   true === $e->attributeExists('href')
-           && 0 !== preg_match('#\(\?[^\)]+\)#', $e->readAttribute('href')))
+        if(   true === $this->abstract->attributeExists('href')
+           && 0 !== preg_match('#\(\?[^\)]+\)#', $this->abstract->readAttribute('href')))
             $bindable = true;
 
-        if(   false === $e->attributeExists('bind')
+        if(   false === $this->abstract->attributeExists('bind')
            || null  === $bind = $this->selectData(
-                                    $e->readAttribute('bind'),
+                                    $this->abstract->readAttribute('bind'),
                                     $bucket
                                 )) {
 
@@ -326,13 +332,13 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         $data  = false;
         $count = 0 == count($this);
 
-        if($this->getAbstractElement()->attributeExists('bind'))
+        if($this->abstract->attributeExists('bind'))
             $data = $this->_transientValue
                   = $this->getCurrentData();
 
         elseif(true === $count)
             $data = $this->_transientValue
-                  = $this->getAbstractElement()->readAll();
+                  = $this->abstract->readAll();
 
         if(null === $out)
             return $this->readAll();
@@ -385,10 +391,10 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
     public function computeAttributeValue ( $attribute,
                                             Array $variables = array() ) {
 
-        if(false === $this->attributeExists($attribute))
+        if(false === $this->abstract->attributeExists($attribute))
             return null;
 
-        $value = $this->readAttribute($attribute);
+        $value = $this->abstract->readAttribute($attribute);
 
         // (!variable).
         $value = preg_replace_callback(
@@ -435,6 +441,40 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
     }
 
     /**
+     * Compute link.
+     *
+     * @access  public
+     * @param   string  $link    Link.
+     * @return  string
+     */
+    public function computeLink ( $link ) {
+
+        $router = $this->getAbstractElementSuperRoot()->getRouter();
+
+        if(null === $router)
+            return $link;
+
+        if(0 != preg_match('#^@(?:(?:([^:]+):(.*))|([^$]+))$#', $link, $matches)) {
+
+            if(isset($matches[3]))
+                return $router->unroute($matches[3]);
+
+            $id = $matches[1];
+            $kv = array();
+
+            foreach(explode('&', $matches[2]) as $value) {
+
+                $handle                    = explode('=', $value);
+                $kv[urldecode($handle[0])] = urldecode($handle[1]);
+            }
+
+            return $router->unroute($id, $kv);
+        }
+
+        return $link;
+    }
+
+    /**
      * Read attributes as a string.
      *
      * @access  public
@@ -443,7 +483,7 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
     public function readAttributesAsString ( ) {
 
         $out        = null;
-        $attributes = $this->getAbstractElement()->readAttributes();
+        $attributes = $this->abstract->readAttributes();
         unset($attributes['bind']);
 
         foreach($attributes as $name => $value)
