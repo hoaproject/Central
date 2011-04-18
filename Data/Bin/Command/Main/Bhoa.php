@@ -416,7 +416,7 @@ class BhoaCommand extends \Hoa\Console\Command\Generic {
             }
 
             $response = $client->getResponseHeaders();
-            $server->writeAll($a =
+            $server->writeAll(
                 'HTTP/1.1 200 OK' . "\r\n" .
                 'Date: ' . date('r') . "\r\n" .
                 'Server: Hoa+Bhoa/0.1' . "\r\n" .
