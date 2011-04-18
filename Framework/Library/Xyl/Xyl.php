@@ -98,7 +98,28 @@ class          Xyl
      *
      * @const string
      */
-    const NAMESPACE_ID = 'http://hoa-project.net/xyl/xylophone';
+    const NAMESPACE_ID    = 'http://hoa-project.net/xyl/xylophone';
+
+    /**
+     * Type: <document>
+     *
+     * @const int
+     */
+    const TYPE_DOCUMENT   = 0;
+
+    /**
+     * Type: <definition>
+     *
+     * @const int
+     */
+    const TYPE_DEFINITION = 1;
+
+    /**
+     * Type: <overlay>
+     *
+     * @const int
+     */
+    const TYPE_OVERLAY    = 2;
 
     /**
      * The \Hoa\Controller\Dispatcher parameters.
@@ -156,6 +177,13 @@ class          Xyl
      * @var DOMDocument object
      */
     protected $_mowgli            = null;
+
+    /**
+     * Type. Please, see self::TYPE_* constants.
+     *
+     * @var \Hoa\Xyl int
+     */
+    protected $_type              = null;
 
     /**
      * Temporize stylesheets.
@@ -233,6 +261,25 @@ class          Xyl
         $this->_router      = $router;
         $this->_mowgli      = $this->getStream()->readDOM()->ownerDocument;
 
+        switch(strtolower($this->getName())) {
+
+            case 'document':
+                $this->_type = self::TYPE_DOCUMENT;
+              break;
+
+            case 'definition':
+                $this->_type = self::TYPE_DEFINITION;
+              break;
+
+            case 'overlay':
+                $this->_type = self::TYPE_OVERLAY;
+              break;
+
+            default:
+                throw new Exception(
+                    'Unknown document <%s>.', 0, $this->getName());
+        }
+
         $this->useNamespace(self::NAMESPACE_ID);
         \Hoa\Core::getInstance()
                 ->getProtocol()
@@ -242,18 +289,11 @@ class          Xyl
                     'Interpreter' . DS .$this->_interpreter->getResourcePath()
                 ));
 
-        if(1 === self::$_ci) {
-
-            if(null !== $router && false === $router->ruleExists('_css'))
-                $router->addPrivateRule(
-                    '_css',
-                    'Public/Css/(?<theme>.*)/(?<sheet>.*)'
-                );
-
-            from('Hoa') -> import('Xyl.Interpreter.Common.Debug');
-            event('hoa://Event/Exception')
-                ->attach('\Hoa\Xyl\Interpreter\Common\Debug', 'receiveException');
-        }
+        if(null !== $router && false === $router->ruleExists('_css'))
+            $router->addPrivateRule(
+                '_css',
+                'Public/Css/(?<theme>.*)/(?<sheet>.*)'
+            );
 
         return;
     }
@@ -347,6 +387,18 @@ class          Xyl
     }
 
     /**
+     * Get type.
+     * Please, see the self::TYPE_* constants.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getType ( ) {
+
+        return $this->_type;
+    }
+
+    /**
      * Add a <?xyl-use?> processing-instruction (only that).
      *
      * @access  public
@@ -384,6 +436,7 @@ class          Xyl
 
         $streamClass = get_class($this->getInnerStream());
         $dirname     = dirname($this->getInnerStream()->getStreamName());
+        $remove      = self::TYPE_DOCUMENT == $this->getType();
         $hrefs       = array();
         $uses        = array();
         $xpath       = new \DOMXPath($ownerDocument);
@@ -399,7 +452,7 @@ class          Xyl
 
             $item      = $xyl_use->item($i);
             $use       = $item;
-            $ownerDocument->removeChild($item);
+            $remove and $ownerDocument->removeChild($item);
             $useParsed = new \Hoa\Xml\Attribute($use->data);
 
             if(false === $useParsed->attributeExists('href')) {
@@ -430,7 +483,7 @@ class          Xyl
                 $this->_router
             );
 
-            if('definition' !== $fragment->getName())
+            if(self::TYPE_DEFINITION != $fragment->getType())
                 throw new Exception(
                     '%s must only contain <definition> of <yield> (and some ' .
                     '<?xyl-use) elements.', 1, $href);
@@ -457,18 +510,30 @@ class          Xyl
      */
     protected function computeYielder ( ) {
 
+        $remove = self::TYPE_DOCUMENT == $this->getType();
+
         foreach($this->getStream()->xpath('//__current_ns:yield[@name]') as $yield) {
 
             $yieldomized = $yield->readDOM();
             $name        = $yieldomized->getAttribute('name');
-            $yieldomized->removeAttribute('name');
-            $yieldomized->removeAttribute('bind');
+
+            if(true === $remove) {
+
+                $yieldomized->removeAttribute('name');
+                $yieldomized->removeAttribute('bind');
+            }
 
             foreach($this->getStream()->xpath('//__current_ns:' . $name) as $ciao) {
 
                 $placeholder = $ciao->readDOM();
                 $parent      = $placeholder->parentNode;
                 $handle      = $yieldomized->cloneNode(true);
+
+                if(false === $remove) {
+
+                    $handle->removeAttribute('name');
+                    $handle->removeAttribute('bind');
+                }
 
                 if(true === $placeholder->hasAttribute('bind'))
                     $handle->setAttribute(
@@ -479,7 +544,7 @@ class          Xyl
                 $parent->replaceChild($handle, $placeholder);
             }
 
-            $yieldomized->parentNode->removeChild($yieldomized);
+            $remove and $yieldomized->parentNode->removeChild($yieldomized);
         }
 
         return;
@@ -524,6 +589,7 @@ class          Xyl
 
         $streamClass = get_class($this->getInnerStream());
         $dirname     = dirname($this->getInnerStream()->getStreamName());
+        $remove      = self::TYPE_DOCUMENT == $this->getType();
         $hrefs       = array();
         $overlays    = array();
         $xpath       = new \DOMXPath($ownerDocument);
@@ -537,7 +603,7 @@ class          Xyl
 
             $item          = $xyl_overlay->item($i);
             $overlay       = $item;
-            $ownerDocument->removeChild($item);
+            $remove and $ownerDocument->removeChild($item);
             $overlayParsed = new \Hoa\Xml\Attribute($overlay->data);
 
             if(false === $overlayParsed->attributeExists('href')) {
@@ -568,7 +634,7 @@ class          Xyl
                 $this->_router
             );
 
-            if('overlay' !== $fragment->getName())
+            if(self::TYPE_OVERLAY != $fragment->getType())
                 throw new Exception(
                     '%s must only contain <overlay> (and some <?xyl-overlay) ' .
                     'elements.', 3, $href);
@@ -613,7 +679,7 @@ class          Xyl
             switch($name) {
 
                 case 'id':
-                    break;
+                  break;
 
                 case 'class':
                     if(false === $from->hasAttribute('class')) {
@@ -772,6 +838,29 @@ class          Xyl
         return;
     }
 
+    protected function computeConcrete ( Interpreter $interpreter = null ) {
+
+        if(null !== $this->_concrete)
+            return;
+
+        if(null === $interpreter)
+            $interpreter = $this->_interpreter;
+
+        $rank = $interpreter->getRank();
+        $root = $this->getStream();
+        $name = strtolower($root->getName());
+
+        if(false === array_key_exists($name, $rank))
+            throw new Exception(
+                'Cannot create the concrete tree because the root <%s> is ' .
+                'unknown from the rank.', 5, $name);
+
+        $class           = $rank[$name];
+        $this->_concrete = new $class($root, $this, $rank, self::NAMESPACE_ID);
+
+        return;
+    }
+
     /**
      * Distribute data into the XYL tree. Data are linked to element through a
      * reference to the data bucket in this object.
@@ -796,33 +885,18 @@ class          Xyl
      *
      * @access  public
      * @param   \Hoa\Xyl\Interpreter  $interpreter    Interpreter.
-     * @return  void
+     * @return  \Hoa\Xyl
      * @throws  \Hoa\Xyl\Exception
      */
     public function interprete ( Interpreter $interpreter = null ) {
 
-        if(null === $interpreter)
-            $interpreter = $this->_interpreter;
-
         $this->computeUse();
         $this->computeOverlay();
         $this->computeYielder();
-
-        $rank = $interpreter->getRank();
-        $root = $this->getStream();
-        $name = strtolower($root->getName());
-
-        if(false === array_key_exists($name, $rank))
-            throw new Exception(
-                'Cannot create the concrete tree because the root <%s> is ' .
-                'unknown from the rank.', 5, $name);
-
-        $class           = $rank[$name];
-        $this->_concrete = new $class($root, $this, $rank, self::NAMESPACE_ID);
-
+        $this->computeConcrete($interpreter);
         $this->computeDataBinding();
 
-        return;
+        return $this;
     }
 
     /**
@@ -837,6 +911,38 @@ class          Xyl
             $this->interprete();
 
         return $this->_concrete->render($this->_out);
+    }
+
+    /**
+     * Open a document with the same context as this one.
+     *
+     * @access  public
+     * @param   string  $streamName    Stream name.
+     * @return  \Hoa\Xyl
+     * @throw   \Hoa\Xyl\Exception
+     */
+    public function open ( $streamName ) {
+
+        $in   = get_class($this->getInnerStream());
+        $new  = new self(
+            new $in($streamName),
+            $this->getStream(),
+            $this->_interpreter,
+            $this->getRouter()
+        );
+
+        return $new->interprete();
+    }
+
+    /**
+     * Get the concrete tree.
+     *
+     * @access  public
+     * @return  \Hoa\Xyl\Element\Concrete
+     */
+    public function getConcrete ( ) {
+
+        return $this->_concrete;
     }
 
     /**
@@ -994,5 +1100,13 @@ class _Protocol extends \Hoa\Core\Protocol {
         return __DIR__ . DS . $this->_fragment . $queue;
     }
 }
+
+}
+
+namespace {
+
+from('Hoa') -> import('Xyl.Interpreter.Common.Debug');
+event('hoa://Event/Exception')
+    ->attach('\Hoa\Xyl\Interpreter\Common\Debug', 'receiveException');
 
 }
