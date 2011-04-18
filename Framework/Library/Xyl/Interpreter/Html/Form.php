@@ -174,7 +174,6 @@ class Form extends Concrete implements \Hoa\Xyl\Element\Executable {
             else
                 $value = $this->_formData[$name];
 
-            dump('here');
             $input->setValue($value);
             $input->checkValidity($value);
             $this->_validity = $input->isValid() && $this->_validity;

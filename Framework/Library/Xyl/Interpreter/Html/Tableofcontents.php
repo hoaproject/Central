@@ -85,6 +85,8 @@ class Tableofcontents extends Concrete implements \Hoa\Xyl\Element\Executable {
      */
     protected $_depthMax = 6;
 
+    protected $_external = false;
+
 
 
     /**
@@ -99,6 +101,27 @@ class Tableofcontents extends Concrete implements \Hoa\Xyl\Element\Executable {
         $this->writeAttribute('class', 'toc');
         $out->writeAll('<ol' .
                        $this->readAttributesAsString() . '>' . "\n");
+
+        if(empty($this->_entry)) {
+
+            $out->writeAll('</ol>' . "\n");
+
+            return;
+        }
+
+        if(true === $this->_external) {
+
+            foreach($this->_entry as $link) {
+
+                $out->writeAll('  <li>');
+                $link->render($out);
+                $out->writeAll('</li>' . "\n");
+            }
+
+            $out->writeAll('</ol>' . "\n");
+
+            return;
+        }
 
         $n     = 1;
         $first = true;
@@ -176,11 +199,28 @@ class Tableofcontents extends Concrete implements \Hoa\Xyl\Element\Executable {
         if(empty($links))
             return;
 
-        $root = $this->getAbstractElementSuperRoot();
+        $this->_external = true;
+        $root            = $this->getAbstractElementSuperRoot();
 
         foreach($links as $link) {
 
-            $cLink = $this->getConcreteElement($link);
+            if(false === $link->attributeExists('sref'))
+                continue;
+
+            $this->_entry[] = $this->getConcreteElement($link);
+            $new            = $root->open($link->readAttribute('sref'));
+            $handle         = $new->xpath($link->readAttribute('sref-title'));
+
+            if(!isset($handle[0]))
+                continue;
+
+            $title  = $this->getConcreteElement($handle[0]);
+            $value  = trim($title->computeValue());
+
+            if(empty($value) && true === $title->attributeExists('id'))
+                $value = $title->readAttribute('id');
+
+            $link->writeAttribute('href-title', $value);
         }
 
         return;
