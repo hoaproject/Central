@@ -76,6 +76,7 @@ class Input extends Concrete implements \Hoa\Xyl\Element\Executable {
      */
     protected $iAttributes = array(
         'type'      => 'text',
+        'name'      => null,
         'value'     => null,
         'autofocus' => null,
         'checked'   => null
@@ -88,6 +89,7 @@ class Input extends Concrete implements \Hoa\Xyl\Element\Executable {
      */
     protected $attributesMapping = array(
         'type'      => 'type',
+        'name'      => 'name',
         'value'     => 'value',
         'autofocus' => 'autofocus',
         'checked'   => 'checked'
@@ -153,7 +155,7 @@ class Input extends Concrete implements \Hoa\Xyl\Element\Executable {
      */
     public function postExecute ( ) {
 
-        $type = strtolower($this->getAbstractElement()->readAttribute('type'));
+        $type = strtolower($this->abstract->readAttribute('type'));
 
         switch($type) {
 
@@ -267,7 +269,6 @@ class Input extends Concrete implements \Hoa\Xyl\Element\Executable {
      */
     public function checkValidity ( $value = null ) {
 
-        $e    = $this->getAbstractElement();
         $type = $this->getType();
 
         if('submit' === $type || 'reset' === $type) {
@@ -283,12 +284,12 @@ class Input extends Concrete implements \Hoa\Xyl\Element\Executable {
 
         $validates = array();
 
-        if(true === $e->attributeExists('validate'))
-            $validates['@'] = $e->readAttribute('validate');
+        if(true === $this->abstract->attributeExists('validate'))
+            $validates['@'] = $this->abstract->readAttribute('validate');
 
         $validates = array_merge(
             $validates,
-            $e->readCustomAttributes('validate')
+            $this->abstract->readCustomAttributes('validate')
         );
 
         if(empty($validates))
@@ -296,12 +297,12 @@ class Input extends Concrete implements \Hoa\Xyl\Element\Executable {
 
         $onerrors = array();
 
-        if(true === $e->attributeExists('onerror'))
-            $onerrors['@'] = $e->readAttributeAsList('onerror');
+        if(true === $this->abstract->attributeExists('onerror'))
+            $onerrors['@'] = $this->abstract->readAttributeAsList('onerror');
 
         $onerrors = array_merge(
             $onerrors,
-            $e->readCustomAttributesAsList('onerror')
+            $this->abstract->readCustomAttributesAsList('onerror')
         );
 
         if(null === $value)
@@ -319,7 +320,7 @@ class Input extends Concrete implements \Hoa\Xyl\Element\Executable {
 
         foreach($validates as $name => $realdom) {
 
-            self::$_compiler->compile('@requires i: ' .$realdom . ';');
+            self::$_compiler->compile('@requires i: ' . $realdom . ';');
             $praspel  = self::$_compiler->getRoot();
             $variable = $praspel->getClause('requires')->getVariable('i');
             $decision = false;

@@ -65,6 +65,28 @@ namespace Hoa\Xyl\Interpreter\Html {
 class Image extends Concrete implements \Hoa\Xyl\Element\Executable {
 
     /**
+     * Extra attributes.
+     *
+     * @var \Hoa\Xyl\Interpreter\Html\Concrete array
+     */
+    protected $iAttributes = array(
+        'src' => null,
+        'alt'  => null,
+    );
+
+    /**
+     * Extra attributes mapping.
+     *
+     * @var \Hoa\Xyl\Interpreter\Html\Concrete array
+     */
+    protected $attributesMapping = array(
+        'href' => 'src',
+        'alt'  => 'alt'
+    );
+
+
+
+    /**
      * Paint the element.
      *
      * @access  protected
@@ -97,8 +119,10 @@ class Image extends Concrete implements \Hoa\Xyl\Element\Executable {
      */
     public function postExecute ( ) {
 
-        $this->writeAttribute('src', resolve($this->readAttribute('href')));
-        $this->removeAttribute('href');
+        $this->writeAttribute(
+            'href',
+            $this->computeLink($this->abstract->readAttribute('href'))
+        );
 
         return;
     }

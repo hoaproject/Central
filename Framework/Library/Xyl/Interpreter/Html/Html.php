@@ -77,10 +77,12 @@ class Html extends \Hoa\Xyl\Interpreter {
     protected $_rank         = array(
         // XYL.
         'document'        => '\Hoa\Xyl\Interpreter\Html\Document',
+        'definition'      => '\Hoa\Xyl\Interpreter\Common\Yield',
         'value'           => '\Hoa\Xyl\Interpreter\Common\Value',
         'yield'           => '\Hoa\Xyl\Interpreter\Common\Yield',
         'debug'           => '\Hoa\Xyl\Interpreter\Common\Debug',
         'script'          => '\Hoa\Xyl\Interpreter\Html\Script',
+        'let'             => '\Hoa\Xyl\Interpreter\Html\Let',
 
         // Layout.
         'box'             => '\Hoa\Xyl\Interpreter\Html\Box',

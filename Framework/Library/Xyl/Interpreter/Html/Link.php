@@ -101,12 +101,14 @@ class          Link
      */
     protected function paint ( \Hoa\Stream\IStream\Out $out ) {
 
+        $this->writeAttribute(
+            'href',
+            $this->computeAttributeValue(
+                'href',
+                $this->abstract->readCustomAttributes('href')
+            )
+        );
         $out->writeAll('<a' . $this->readAttributesAsString() . '>');
-        /*
-        $out->writeAll('<a href="' .
-            $this->computeAttributeValue('href') .
-        '">');
-        */
         $this->computeValue($out);
         $out->writeAll('</a>');
 
@@ -140,67 +142,28 @@ class          Link
 
     protected function computeHyperReference ( ) {
 
-        $e = $this->getAbstractElement();
-
-        if(false === $e->attributeExists('href'))
+        if(false === $this->abstract->attributeExists('href'))
             return;
 
-        $router = $this->getAbstractElementSuperRoot()->getRouter();
-
-        if(null === $router)
-            return;
-
-        $href = $e->readAttribute('href');
-
-        if(0 != preg_match('#^@(?:(?:([^:]+):(.*))|([^$]+))$#', $href, $matches)) {
-
-            if(isset($matches[3])) {
-
-                $this->writeAttribute('href', $router->unroute($matches[3]));
-
-                return;
-            }
-
-            $id = $matches[1];
-            $kv = array();
-
-            foreach(explode('&', $matches[2]) as $value) {
-
-                $handle                    = explode('=', $value);
-                $kv[urldecode($handle[0])] = urldecode($handle[1]);
-            }
-
-            $this->writeAttribute('href', $router->unroute($id, $kv));
-        }
+        $this->abstract->writeAttribute(
+            'href',
+            $this->computeLink($this->abstract->readAttribute('href'))
+        );
 
         return;
     }
 
     protected function computeStaticReference ( ) {
 
-        /*
-        if(false === $this->attributeExists('sref'))
+        if(false === $this->abstract->attributeExists('sref'))
             return;
 
-        $sref     = $this->readAttribute('sref');
-        $new      = $this->getAbstractElementSuperRoot()->open($sref);
-        $concrete = $new->getConcrete();
-        $sref_    = $this->readCustomAttributes('sref');
-
-        foreach($sref_ as &$s) {
-
-            $xpath = $new->xpath($s);
-
-            if(empty($xpath))
-                $s = '';
-            else
-                $s = $concrete->getConcreteElement($xpath[0])->computeValue();
-        }
-
-        $this->writeCustomAttributes('sref', $sref_);
+        $this->abstract->writeAttribute(
+            'sref',
+            $this->computeLink($this->abstract->readAttribute('sref'))
+        );
 
         return;
-        */
     }
 }
 

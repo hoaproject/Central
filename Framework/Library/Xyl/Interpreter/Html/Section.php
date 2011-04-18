@@ -138,14 +138,12 @@ abstract class Section extends Concrete implements \Hoa\Xyl\Element\Executable {
      */
     protected function computeFor ( ) {
 
-        $e = $this->getAbstractElement();
-
-        if(false === $e->attributeExists('for'))
+        if(false === $this->abstract->attributeExists('for'))
             return;
 
         $tocs = $this->xpath(
             '//__current_ns:tableofcontents[@id="' .
-            implode('" or @id="', $e->readAttributeAsList('for'))
+            implode('" or @id="', $this->abstract->readAttributeAsList('for'))
             . '"]'
         );
 

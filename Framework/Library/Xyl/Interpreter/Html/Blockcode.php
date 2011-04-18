@@ -68,15 +68,13 @@ class Blockcode extends Concrete {
      */
     protected function paint ( \Hoa\Stream\IStream\Out $out ) {
 
-        $e = $this->getAbstractElement();
-
         $out->writeAll('<pre' . $this->readAttributesAsString() . '><code>');
 
-        if(false === $e->attributeExists('language'))
+        if(false === $this->abstract->attributeExists('language'))
             $this->computeValue($out);
         else {
 
-            switch(strtolower($e->readAttribute('language'))) {
+            switch(strtolower($this->abstract->readAttribute('language'))) {
 
                 case 'php':
                     $this->colorizePhp($out);

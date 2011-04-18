@@ -119,12 +119,10 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
                 $this->iAttributes
             );
 
-        $e = $this->getAbstractElement();
-
         foreach($this->_attributesMapping as $from => $to)
             $this->writeAttribute(
                 $to,
-                $e->readAttribute($from)
+                $this->abstract->readAttribute($from)
             );
 
         return;
