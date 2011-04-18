@@ -82,7 +82,6 @@ class Html extends \Hoa\Xyl\Interpreter {
         'yield'           => '\Hoa\Xyl\Interpreter\Common\Yield',
         'debug'           => '\Hoa\Xyl\Interpreter\Common\Debug',
         'script'          => '\Hoa\Xyl\Interpreter\Html\Script',
-        'let'             => '\Hoa\Xyl\Interpreter\Html\Let',
 
         // Layout.
         'box'             => '\Hoa\Xyl\Interpreter\Html\Box',
