@@ -116,7 +116,7 @@ class Concrete implements Element, \Countable, \IteratorAggregate, \ArrayAccess 
      *
      * @var \Hoa\Xml\Element object
      */
-    protected $_abstract          = null;
+    protected $abstract           = null;
 
     /**
      * Super root of the abstract element.
@@ -158,7 +158,7 @@ class Concrete implements Element, \Countable, \IteratorAggregate, \ArrayAccess 
                 $this->_name = substr($this->_name, $po + 1);
         }
 
-        $this->_abstract     = $abstract;
+        $this->abstract      = $abstract;
         $this->_superRoot    = $superRoot;
 
         if($this instanceof Model\Phrasing)
@@ -217,7 +217,7 @@ class Concrete implements Element, \Countable, \IteratorAggregate, \ArrayAccess 
      */
     public function getAbstractElement ( ) {
 
-        return $this->_abstract;
+        return $this->abstract;
     }
 
     /**
@@ -415,7 +415,7 @@ class Concrete implements Element, \Countable, \IteratorAggregate, \ArrayAccess 
     public function __call ( $name, Array $arguments = array() ) {
 
         return call_user_func_array(
-            array($this->_abstract, $name),
+            array($this->abstract, $name),
             $arguments
         );
     }
