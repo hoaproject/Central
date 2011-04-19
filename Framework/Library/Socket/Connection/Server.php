@@ -98,18 +98,25 @@ class Server extends Connection implements \Iterator {
     protected $_stack    = null;
 
     /**
-     * List of nodes (connections) when selecting.
-     *
-     * @var \Hoa\Socket\Connection\Server array
-     */
-    protected $_nodes    = array();
-
-    /**
      * Node name.
      *
      * @var \Hoa\Socket\Connection\Server string
      */
     protected $_nodeName = null;
+
+    /**
+     * Current node.
+     *
+     * @var \Hoa\Socket\Connection\Node object
+     */
+    protected $_node     = null;
+
+    /**
+     * List of nodes (connections) when selecting.
+     *
+     * @var \Hoa\Socket\Connection\Server array
+     */
+    protected $_nodes    = array();
 
     /**
      * Temporize selected connections when selecting.
@@ -281,7 +288,7 @@ class Server extends Connection implements \Iterator {
         $current = current($this->_iterator);
         $this->_setStream($current);
 
-        return $this->_nodes[$this->getNodeId($current)];
+        return $this->_node = $this->_nodes[$this->getNodeId($current)];
     }
 
     /**
@@ -420,6 +427,17 @@ class Server extends Connection implements \Iterator {
     public function getNodeName ( ) {
 
         return $this->_nodeName;
+    }
+
+    /**
+     * Get current node.
+     *
+     * @access  public
+     * @return  \Hoa\Socket\Connection\Node
+     */
+    public function getCurrentNode ( ) {
+
+        return $this->_node;
     }
 
     /**
