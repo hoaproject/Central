@@ -161,7 +161,7 @@ class Core implements Parameterizable {
         !defined('HOA_VERSION_MAJOR')   and define('HOA_VERSION_MAJOR',   1);
         !defined('HOA_VERSION_MINOR')   and define('HOA_VERSION_MINOR',   0);
         !defined('HOA_VERSION_RELEASE') and define('HOA_VERSION_RELEASE', 0);
-        !defined('HOA_VERSION_STATUS')  and define('HOA_VERSION_STATUS',  'a');
+        !defined('HOA_VERSION_STATUS')  and define('HOA_VERSION_STATUS',  'b');
         !defined('HOA_REVISION')        and define('HOA_REVISION',        998);
         !defined('HOA_REVISION_PREV')   and define('HOA_REVISION_PREV',   600);
 
@@ -228,7 +228,7 @@ class Core implements Parameterizable {
                 'data.optional'      => '(:%root.data:)/Optional',
 
                 'protocol.Application'            => '(:%root.application:)/',
-                'protocol.Application/Public'     => '(:%protocol..Application:)Public/',
+                'protocol.Application/Public'     => '(:%protocol.Application:)Public/',
                 'protocol.Data'                   => '(:%root.data:)/',
                 'protocol.Data/Etc'               => '(:%protocol.Data:)Etc/',
                 'protocol.Data/Etc/Configuration' => '(:%protocol.Data/Etc:)Configuration/',
@@ -255,7 +255,6 @@ class Core implements Parameterizable {
             'root.ofFrameworkDirectory',
             $root
         );
-
         $this->setParameters($parameters);
 
         return $this;
