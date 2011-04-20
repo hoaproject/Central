@@ -347,7 +347,7 @@ class Consistency {
         if(null === $from)
             $from = $this->_from[0];
 
-        $this->_roots[$from] = preg_split('#(?<!\\\):#', $root);
+        $this->_roots[$from] = preg_split('#(?<!\\\);#', $root);
 
         foreach($this->_roots[$from] as &$freshroot)
             $freshroot = str_replace('\:', ':', $freshroot);
