@@ -247,7 +247,7 @@ class Core implements Parameterizable {
                 'protocol.Library'                => '(:%framework.library:)/',
 
                 'namespace.prefix.Hoa'     => '(:%framework.library:)',
-                'namespace.prefix.Hoathis' => '(:%data.module:):(:%framework.module:)'
+                'namespace.prefix.Hoathis' => '(:%data.module:);(:%framework.module:)'
             )
         );
         $this->_parameters->setKeyword(

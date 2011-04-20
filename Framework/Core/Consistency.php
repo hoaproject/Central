@@ -251,7 +251,7 @@ class Consistency {
                     'File %s does not exist.', 1, implode('/', $explode));
             }
 
-            foreach(glob(implode('/', $explode) . '.php') as $value)
+            foreach($glob as $value)
                 try {
 
                     $this->_import(
