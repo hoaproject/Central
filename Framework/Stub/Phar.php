@@ -56,7 +56,7 @@ if(file_exists($name) && false === unlink($name))
     throw new \Hoa\Core\Exception(
         'Phar %s already exists and we cannot delete it.', 1, $name);
 
-$phar = new \Phar($name);
+$phar = new \Phar(__DIR__ . DS . $name);
 $phar->setMetadata(array(
     'author'          => 'Ivan Enderlin',
     'license'         => 'New BSD License',
