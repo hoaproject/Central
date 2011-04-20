@@ -43,11 +43,14 @@ if('1' === ini_get('phar.readonly'))
         'The directive phar.readonly is set to 1; must be set to 0.' . "\n" .
         'Tips: php -d phar.readonly=0 %s.', 0, @$argv[0] ?: __FILE__);
 
-$name = 'Hoa_v-' .
-        HOA_VERSION_MAJOR   . '.' .
-        HOA_VERSION_MINOR   . '.' .
-        HOA_VERSION_RELEASE .
-        HOA_VERSION_STATUS  . '.phar';
+if(isset($_SERVER['argv'][1]))
+    $name = $_SERVER['argv'][1];
+else
+    $name = 'Hoa_v-' .
+            HOA_VERSION_MAJOR   . '.' .
+            HOA_VERSION_MINOR   . '.' .
+            HOA_VERSION_RELEASE .
+            HOA_VERSION_STATUS  . '.phar';
 
 if(file_exists($name) && false === unlink($name))
     throw new \Hoa\Core\Exception(
