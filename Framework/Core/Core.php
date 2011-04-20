@@ -222,10 +222,8 @@ class Core implements Parameterizable {
                 'framework.core'     => '(:%root.framework:)/Core',
                 'framework.library'  => '(:%root.framework:)/Library',
                 'framework.module'   => '(:%root.framework:)/Module',
-                'framework.optional' => '(:%root.framework:)/Optional',
 
                 'data.module'        => '(:%root.data:)/Module',
-                'data.optional'      => '(:%root.data:)/Optional',
 
                 'protocol.Application'            => '(:%root.application:)/',
                 'protocol.Application/Public'     => '(:%protocol.Application:)Public/',
@@ -235,7 +233,6 @@ class Core implements Parameterizable {
                 'protocol.Data/Etc/Locale'        => '(:%protocol.Data/Etc:)Locale/',
                 'protocol.Data/Lost+found'        => '(:%protocol.Data:)Lost+found/',
                 'protocol.Data/Module'            => '(:%data.module:)/',
-                'protocol.Data/Optional'          => '(:%data.module:)/',
                 'protocol.Data/Temporary'         => '(:%protocol.Data:)Temporary/',
                 'protocol.Data/Variable'          => '(:%protocol.Data:)Variable/',
                 'protocol.Data/Variable/Cache'    => '(:%protocol.Data/Variable:)Cache/',
