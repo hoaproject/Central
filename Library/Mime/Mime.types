@@ -1,4 +1,4 @@
-# This original file is from Apache 2.0.
+# This file is based on the one from Apache 2.0.
 
 # This file controls what Internet media types are sent to the client for
 # given file extension(s).  Sending the correct media type to the client
@@ -248,6 +248,7 @@ application/vnd.mozilla.xul+xml	xul
 application/vnd.ms-artgalry
 application/vnd.ms-asf
 application/vnd.ms-excel	xls
+application/vnd.ms-fontobject	eot
 application/vnd.ms-lrm
 application/vnd.ms-powerpoint	ppt
 application/vnd.ms-project
@@ -350,6 +351,7 @@ application/x-cpio		cpio
 application/x-csh		csh
 application/x-director		dcr dir dxr
 application/x-dvi		dvi
+application/x-font-woff	woff
 application/x-futuresplash	spl
 application/x-gtar		gtar
 application/x-gzip
@@ -414,6 +416,7 @@ audio/mpa
 audio/mpa-robust
 audio/mp4a-latm
 audio/mpeg			mpga mp2 mp3
+audio/audio			ogg
 audio/parityfec
 audio/pcma
 audio/pcmu
@@ -449,6 +452,8 @@ application/vnd.rn-realmedia	rm
 audio/x-wav			wav
 chemical/x-pdb			pdb
 chemical/x-xyz			xyz
+font/truetype		ttf
+font/opentype		otf
 image/bmp			bmp
 image/cgm			cgm
 image/g3fax
@@ -459,7 +464,7 @@ image/naplps
 image/png			png
 image/prs.btif
 image/prs.pti
-image/svg+xml			svg
+image/svg+xml			svg svgz
 image/t38
 image/tiff			tiff tif
 image/tiff-fx
@@ -479,6 +484,7 @@ image/vnd.net-fpx
 image/vnd.svf
 image/vnd.wap.wbmp		wbmp
 image/vnd.xiff
+image/webp			webp
 image/x-cmu-raster		ras
 image/x-icon			ico
 image/x-portable-anymap		pnm
@@ -526,6 +532,7 @@ multipart/signed
 multipart/voice-message
 text/calendar			ics ifb
 text/css			css
+text/cache-manifest			appcache manifest
 text/directory
 text/enriched
 text/html			html htm
@@ -572,21 +579,24 @@ video/jpeg
 video/mp1s
 video/mp2p
 video/mp2t
+video/mp4					mp4
 video/mp4v-es
 video/mpv
-video/mpeg			mpeg mpg mpe
+video/mpeg					mpeg mpg mpe
 video/nv
+video/ogg					ogg
 video/parityfec
 video/pointer
-video/quicktime			qt mov
+video/quicktime				qt mov
 video/smpte292m
 video/vnd.fvt
 video/vnd.motorola.video
 video/vnd.motorola.videop
-video/vnd.mpegurl		mxu m4u
+video/vnd.mpegurl			mxu m4u
 video/vnd.nokia.interleaved-multimedia
 video/vnd.objectvideo
 video/vnd.vivo
-video/x-msvideo			avi
-video/x-sgi-movie		movie
+video/webm					webm
+video/x-msvideo				avi
+video/x-sgi-movie			movie
 x-conference/x-cooltalk		ice
