@@ -56,6 +56,14 @@ if(file_exists($name) && false === unlink($name))
     throw new \Hoa\Core\Exception(
         'Phar %s already exists and we cannot delete it.', 1, $name);
 
+class Filter extends \FilterIterator {
+
+    public function accept ( ) {
+
+        return false === strpos($this->current()->getPathname(), '.hg');
+    }
+}
+
 $phar = new \Phar(__DIR__ . DS . $name);
 $phar->setMetadata(array(
     'author'          => 'Ivan Enderlin',
@@ -70,8 +78,10 @@ $phar->setMetadata(array(
 ));
 $phar->setSignatureAlgorithm(\Phar::SHA1);
 $phar->buildFromIterator(
-    new \RecursiveIteratorIterator(
-        new RecursiveDirectoryIterator($root)
+    new Filter(
+        new \RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($root)
+        )
     ),
     $root
 );
