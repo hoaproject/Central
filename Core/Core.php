@@ -217,7 +217,7 @@ class Core implements Parameterizable {
                 'root'               => '(:root.ofFrameworkDirectory:)',
                 'root.framework'     => '(:%root:)',
                 'root.data'          => '(:%root:h:)/Data',
-                'root.application'   => '(:%root:h:)/Application',
+                'root.application'   => '(:%root.data:)/../Application',
 
                 'framework.core'     => '(:%root.framework:)/Core',
                 'framework.library'  => '(:%root.framework:)/Library',
@@ -411,7 +411,7 @@ class Core implements Parameterizable {
      * @param   \Hoa\Socket\Socketable  $socket    Socket.
      * @return  void
      */
-    public static function debug ( \Hoa\Socket\Socketable $socket = null ) {
+    public static function startDebugger ( \Hoa\Socket\Socketable $socket = null ) {
 
         from('Hoa')
         -> import('Socket.Internet.DomainName')
@@ -465,7 +465,7 @@ class Core implements Parameterizable {
     public static function dump ( $data ) {
 
         if(false === self::$_debugger)
-            self::debug();
+            self::startDebugger();
 
         try {
 
