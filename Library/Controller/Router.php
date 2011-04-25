@@ -147,7 +147,7 @@ class Router implements \Hoa\Core\Parameterizable {
             ),
             array(
                 'base'     => '/',
-                'rewrited' => false,
+                'rewrited' => true,
                 'rules'    => array()
             )
         );
