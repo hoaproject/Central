@@ -81,6 +81,7 @@ class Request {
     protected $_acceptLanguage     = null;
     protected $_authorization      = null;
     protected $_connection         = null;
+    protected $_contentType        = null;
     protected $_except             = null;
     protected $_from               = null;
     protected $_host               = null;
@@ -194,6 +195,10 @@ class Request {
                     $this->setConnection($fieldValue);
                   break;
 
+                case 'content-type':
+                    $this->setContentType($fieldValue);
+                  break;
+
                 case 'except':
                     $this->setExcept($fieldValue);
                   break;
@@ -275,6 +280,7 @@ class Request {
         $this->_acceptLanguage     = null;
         $this->_authorization      = null;
         $this->_connection         = null;
+        $this->_contentType        = null;
         $this->_except             = null;
         $this->_from               = null;
         $this->_host               = null;
@@ -443,6 +449,19 @@ class Request {
     public function getConnection ( ) {
 
         return $this->_connection;
+    }
+
+    public function setContentType ( $contentType ) {
+
+        $old                = $this->_contentType;
+        $this->_contentType = $contentType;
+
+        return $old;
+    }
+
+    public function getContentType ( ) {
+
+        return $this->_contentType;
     }
 
     public function setExcept ( $except ) {
