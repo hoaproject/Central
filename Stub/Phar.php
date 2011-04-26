@@ -93,7 +93,7 @@ require 'phar://Hoa.phar/Core/Core.php';
 
 $phar = new \Phar(__FILE__);
 
-foreach(array_slice($_SERVER['argv'], 1) as $option)
+foreach(array_slice($_SERVER['argv'], 1) ?: array('-h') as $option)
     switch(strtolower($option)) {
 
         case '-m':
