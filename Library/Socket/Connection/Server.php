@@ -144,7 +144,16 @@ class Server extends Connection implements \Iterator {
                                   $flag = -1, $context = null ) {
 
         if($flag == -1)
-            $flag = self::BIND | self::LISTEN;
+            switch($socket->getTransport()) {
+
+                case 'tcp':
+                    $flag = self::BIND | self::LISTEN;
+                  break;
+
+                case 'udp':
+                    $flag = self::BIND;
+                  break;
+            }
         else
             switch($socket->getTransport()) {
 
@@ -159,7 +168,7 @@ class Server extends Connection implements \Iterator {
                             '\Hoa\Socket\Connection\Server::LISTEN ' .
                             'for connect-less transports (such as UDP).', 0);
 
-                    $flag &= self::BIND;
+                    $flag = self::BIND;
                   break;
             }
 
