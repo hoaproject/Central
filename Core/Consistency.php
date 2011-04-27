@@ -175,7 +175,7 @@ class Consistency {
                 'last one is not found. We have looked for in: %s family(ies).',
                 0,
                 array(
-                    @$trace[1]['file'],
+                    @$trace[1]['file'] ?: @$trace[0]['file'],
                     $path,
                     implode(', ', $this->_from)
                 ),
