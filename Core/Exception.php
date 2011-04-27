@@ -182,9 +182,10 @@ class Idle extends \Exception implements \Serializable {
      * Raise an exception as a string.
      *
      * @access  public
+     * @param   bool    $previous    Whether raise previous exception if exists.
      * @return  string
      */
-    public function raise ( ) {
+    public function raise ( $previous = false ) {
 
         $message = @vsprintf($this->getMessage(), $this->getArguments());
         $trace   = $this->getBacktrace();
@@ -211,6 +212,11 @@ class Idle extends \Exception implements \Serializable {
             $out = $pre . '(' . $this->getCode() . ') ' . $message . "\n" .
                    'in ' . $file . ' around line ' . $line . '.';
         }
+
+        if(   true === $previous
+           && null !== $previous = $this->getPreviousThrow())
+            $out .= "\n\n" . '⬇' . "\n\n" . 'Nested ' .
+                    $previous->raise($previous);
 
         return $out;
     }
