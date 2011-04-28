@@ -518,7 +518,7 @@ class Router implements \Hoa\Core\Parameterizable {
 
         $out = preg_replace_callback(
             '#\(\?\<([^>]+)>[^\)]*\)#',
-            function ( Array $matches ) use ($values) {
+            function ( Array $matches ) use ( $values ) {
 
                 return $values[$matches[1]];
             },

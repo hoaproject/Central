@@ -438,7 +438,7 @@ class Core implements Parameterizable {
         $client->writeLine('open');
 
         event('hoa://Event/Exception')
-            ->attach(function ( \Hoa\Core\Event\Bucket $event) use ($client ) {
+            ->attach(function ( \Hoa\Core\Event\Bucket $event) use ( $client ) {
 
                 $exception = $event->getData();
 
