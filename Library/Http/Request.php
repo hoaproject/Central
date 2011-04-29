@@ -112,11 +112,24 @@ class Request {
         $headers = explode("\r\n", $headers);
         $http    = array_shift($headers);
 
-        while(   !empty($headers)
-              && '' == $handle = trim(array_pop($headers)));
+        while(!empty($headers))
+            if('' != trim($handle = array_pop($headers))) {
 
-        $this->setContent($handle);
-        array_pop($headers);
+                $headers[] = $handle;
+                break;
+            }
+
+        if('' == trim($headers[count($headers) - 2])) {
+
+            $this->setContent(array_pop($headers));
+
+            while(!empty($headers))
+                if('' != trim($handle = array_pop($headers))) {
+
+                    $headers[] = $handle;
+                    break;
+                }
+        }
 
         if(0 === preg_match('#^([^\s]+)\s+([^\s]+)\s+HTTP/(1\.(0|1))$#', $http, $matches))
             throw new Exception(
