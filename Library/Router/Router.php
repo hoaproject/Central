@@ -49,6 +49,69 @@ namespace Hoa\Router {
 interface Router {
 
     /**
+     * Rule visibility: public.
+     *
+     * @const int
+     */
+    const VISIBILITY_PUBLIC  = 0;
+
+    /**
+     * Rule visibility: private.
+     *
+     * @const int
+     */
+    const VISIBILITY_PRIVATE = 1;
+
+    /**
+     * Rule bucket: visibility (please, see the self::VISIBILITY_* constants).
+     *
+     * @const int
+     */
+    const RULE_VISIBILITY    = 0;
+
+    /**
+     * Rule bucket: methods.
+     *
+     * @const int
+     */
+    const RULE_METHODS       = 1;
+
+    /**
+     * Rule bucket: ID.
+     *
+     * @const int
+     */
+    const RULE_ID            = 2;
+
+    /**
+     * Rule bucket: pattern (on-subdomain@on-request).
+     *
+     * @const int
+     */
+    const RULE_PATTERN       = 3;
+
+    /**
+     * Rule bucket: call.
+     *
+     * @const int
+     */
+    const RULE_CALL          = 4;
+
+    /**
+     * Rule bucket: able.
+     *
+     * @const int
+     */
+    const RULE_ABLE          = 5;
+
+    /**
+     * Rule bucket: variables (extracted from patterns).
+     *
+     * @const int
+     */
+    const RULE_VARIABLES     = 6;
+
+    /**
      * Get the selected rule after routing.
      *
      * @access  public
@@ -74,6 +137,22 @@ interface Router {
      * @return  string
      */
     public function unroute ( $id, Array $variables = array() );
+
+    /**
+     * Get method or mode where the router is called.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getMethod ( );
+
+    /**
+     * Whether the router is called asynchronously or not.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isAsynchronous ( );
 }
 
 }
