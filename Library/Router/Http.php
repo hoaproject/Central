@@ -289,7 +289,7 @@ class Http implements Router {
 
         if(false === $this->ruleExists($id))
             throw new Exception(
-                'Rule %s does not exist.', 0, $id);
+                'Rule %s does not exist.', 2, $id);
 
         return $this->_rules[$id];
     }
@@ -330,12 +330,12 @@ class Http implements Router {
             if(0 === preg_match('#^' . $base . '(.*)?$#', $uri, $matches))
                 throw new Exception\NotFound(
                     'Cannot match the base %s in the URI %s.',
-                    2, array($base, $uri));
+                    3, array($base, $uri));
 
             if(0 === preg_match('#^' . $base . '(.*)?$', $bootstrap, $matchees))
                 throw new Exception\NotFound(
                     'Cannot match the base %s in the bootstrap %s.',
-                    3, array($base, $bootstrap));
+                    4, array($base, $bootstrap));
 
             $uri       = ltrim($matches[1],  '/');
             $bootstrap = ltrim($matchees[1], '/');
@@ -386,7 +386,7 @@ class Http implements Router {
 
         if(false === $gotcha)
             throw new Exception\NotFound(
-                'Cannot found an appropriated rule to route %s.', 4, $uri);
+                'Cannot found an appropriated rule to route %s.', 5, $uri);
 
         if(false !== $pos)
             preg_match(
@@ -513,7 +513,7 @@ class Http implements Router {
 
         if(!isset($_SERVER['REQUEST_URI']))
             throw new Exception(
-                'Cannot find URI so we cannot route.', 2);
+                'Cannot find URI so we cannot route.', 6);
 
         return ltrim($_SERVER['REQUEST_URI'], '/');
     }
