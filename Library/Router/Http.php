@@ -67,70 +67,7 @@ namespace Hoa\Router {
  * @license    New BSD License
  */
 
-class Http {
-
-    /**
-     * Rule visibility: public.
-     *
-     * @const int
-     */
-    const VISIBILITY_PUBLIC  = 0;
-
-    /**
-     * Rule visibility: private.
-     *
-     * @const int
-     */
-    const VISIBILITY_PRIVATE = 1;
-
-    /**
-     * Rule bucket: visibility (please, see the self::VISIBILITY_* constants).
-     *
-     * @const int
-     */
-    const RULE_VISIBILITY    = 0;
-
-    /**
-     * Rule bucket: methods (please, see the self::$_methods attributes).
-     *
-     * @const int
-     */
-    const RULE_METHODS       = 1;
-
-    /**
-     * Rule bucket: ID.
-     *
-     * @const int
-     */
-    const RULE_ID            = 2;
-
-    /**
-     * Rule bucket: pattern (on-subdomain@on-request).
-     *
-     * @const int
-     */
-    const RULE_PATTERN       = 3;
-
-    /**
-     * Rule bucket: call.
-     *
-     * @const int
-     */
-    const RULE_CALL          = 4;
-
-    /**
-     * Rule bucket: able.
-     *
-     * @const int
-     */
-    const RULE_ABLE          = 5;
-
-    /**
-     * Rule bucket: variables (extracted from patterns).
-     *
-     * @const int
-     */
-    const RULE_VARIABLES     = 6;
+class Http implements Router {
 
     /**
      * All rules buckets.
@@ -185,7 +122,7 @@ class Http {
      *
      * @access  public
      * @param   int     $visibility    Visibility (please, see
-     *                                 self::VISIBILITY_* constants).
+     *                                 Router::VISIBILITY_* constants).
      * @param   array   $methods       HTTP methods allowed by the rule.
      * @param   string  $id            ID.
      * @param   string  $pattern       Pattern (on-subdomain@on-request).
@@ -195,7 +132,7 @@ class Http {
      * @return  \Hoa\Router\Http
      * @throw   \Hoa\Router\Exception
      */
-    protected function _addRule ( $visibility, Array $methods, $id, $pattern,
+    protected function _addRule ( $visibility,  Array $methods, $id, $pattern,
                                   $call, $able, Array $variables ) {
 
         if(true === $this->ruleExists($id))
@@ -211,16 +148,17 @@ class Http {
                     ? 'Method %s is'
                     : 'Methods %s are') .
                 ' invalid for the rule %s (valid methods are: %s).',
-                1, array(implode(', ', $diff), $id, implode(', ', self::$_methods)));
+                1, array(implode(', ', $diff), $id,
+                         implode(', ', self::$_methods)));
 
         $this->_rules[$id] = array(
-            self::RULE_VISIBILITY => $visibility,
-            self::RULE_METHODS    => $methods,
-            self::RULE_ID         => $id,
-            self::RULE_PATTERN    => $pattern,
-            self::RULE_CALL       => $call,
-            self::RULE_ABLE       => $able,
-            self::RULE_VARIABLES  => $variables
+            Router::RULE_VISIBILITY => $visibility,
+            Router::RULE_METHODS    => $methods,
+            Router::RULE_ID         => $id,
+            Router::RULE_PATTERN    => $pattern,
+            Router::RULE_CALL       => $call,
+            Router::RULE_ABLE       => $able,
+            Router::RULE_VARIABLES  => $variables
         );
 
         return $this;
@@ -243,7 +181,7 @@ class Http {
                               $able = null, Array $variables = array() ) {
 
         return $this->_addRule(
-            self::VISIBILITY_PUBLIC,
+            Router::VISIBILITY_PUBLIC,
             $methods,
             $id,
             $pattern,
@@ -270,7 +208,7 @@ class Http {
                                      $able = null, Array $variables = array() ) {
 
         return $this->_addRule(
-            self::VISIBILITY_PRIVATE,
+            Router::VISIBILITY_PRIVATE,
             $methods,
             $id,
             $pattern,
@@ -364,7 +302,7 @@ class Http {
      */
     public function getTheRule ( ) {
 
-        return $this->_theRule;
+        return $this->_rule;
     }
 
     /**
@@ -409,13 +347,13 @@ class Http {
             $this->getRules(),
             function ( $rule ) use ( &$method, &$subdomain ) {
 
-                if(Http::VISIBILITY_PUBLIC != $rule[Http::RULE_VISIBILITY])
+                if(Router::VISIBILITY_PUBLIC != $rule[Router::RULE_VISIBILITY])
                     return false;
 
-                if(false === in_array($method, $rule[Http::RULE_METHODS]))
+                if(false === in_array($method, $rule[Router::RULE_METHODS]))
                     return false;
 
-                if(false !== $pos = strpos($rule[Http::RULE_PATTERN], '@'))
+                if(false !== $pos = strpos($rule[Router::RULE_PATTERN], '@'))
                     if(empty($subdomain))
                         return false;
                     else
@@ -432,7 +370,7 @@ class Http {
 
         foreach($rules as $rule) {
 
-            $pattern = $rule[self::RULE_PATTERN];
+            $pattern = $rule[Router::RULE_PATTERN];
 
             if(false !== $pos = strpos($pattern, '@'))
                 $pattern = substr($pattern, $pos + 1);
@@ -452,7 +390,7 @@ class Http {
 
         if(false !== $pos)
             preg_match(
-                '#^' . substr($rule[self::RULE_PATTERN], 0, $pos) . '$#i',
+                '#^' . substr($rule[Router::RULE_PATTERN], 0, $pos) . '$#i',
                 $subdomain,
                 $msubdomain
             );
@@ -460,15 +398,18 @@ class Http {
             $msubdomain = array();
 
         array_shift($muri);
-        $sub = substr(array_shift($msubdomain), 0, -1) ?: null;
-        $rule[self::RULE_VARIABLES]['_domain']    = $this->getDomain();
-        $rule[self::RULE_VARIABLES]['_subdomain'] = $sub;
+        $sub = array_shift($msubdomain) ?: null;
+        $rule[Router::RULE_VARIABLES]['_domain']    = $this->getDomain();
+        $rule[Router::RULE_VARIABLES]['_subdomain'] = $sub;
+        $rule[Router::RULE_VARIABLES]['_call']      = $rule[Router::RULE_CALL];
+        $rule[Router::RULE_VARIABLES]['_able']      = $rule[Router::RULE_ABLE];
 
         foreach(array_merge($muri, $msubdomain) as $key => $value)
             if(is_string($key))
-                $rule[self::RULE_VARIABLES][strtolower($key)] = strtolower($value);
+                $rule[Router::RULE_VARIABLES][strtolower($key)]
+                    = strtolower($value);
 
-        return $this->_theRule = $rule;
+        return $this->_rule = $rule;
     }
 
     /**
@@ -481,13 +422,13 @@ class Http {
      */
     public function unroute ( $id, Array $variables = array() ) {
 
-        $rule          = $this->getRule($id);
-        $pattern       = $rule[self::RULE_PATTERN];
-        $variables     = array_merge($rule[self::RULE_VARIABLES], $variables);
+        $rule      = $this->getRule($id);
+        $pattern   = $rule[Router::RULE_PATTERN];
+        $variables = array_merge($rule[Router::RULE_VARIABLES], $variables);
 
         if(false !== $pos = strpos($pattern, '@'))
-            return $this->_unroute(substr($pattern, 0, $pos), $variables) . '.' .
-                   $this->getStrictDomain() .
+            return $this->_unroute(substr($pattern, 0, $pos), $variables) .
+                   '.' . $this->getStrictDomain() .
                    $this->_unroute(substr($pattern, $pos + 1), $variables);
 
         return $this->_unroute($pattern, $variables);
@@ -528,6 +469,34 @@ class Http {
             ),
             $out
         );
+    }
+
+    /**
+     * Get HTTP method.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getMethod ( ) {
+
+        if('cli' === php_sapi_name())
+            return 'get';
+
+        return strtolower($_SERVER['REQUEST_METHOD']);
+    }
+
+    /**
+     * Whether the router is called asynchronously or not.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isAsynchronous ( ) {
+
+        if(!isset($_SERVER['HTTP_X_REQUESTED_WITH']))
+            return false;
+
+        return 'xmlhttprequest' == strtolower($_SERVER['HTTP_X_REQUESTED_WITH']);
     }
 
     /**
@@ -602,20 +571,6 @@ class Http {
             return '';
 
         return $_SERVER['SCRIPT_NAME'];
-    }
-
-    /**
-     * Get HTTP method.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getMethod ( ) {
-
-        if('cli' === php_sapi_name())
-            return 'get';
-
-        return strtolower($_SERVER['REQUEST_METHOD']);
     }
 
     /**
