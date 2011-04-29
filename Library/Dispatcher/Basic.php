@@ -93,7 +93,7 @@ class Basic extends Dispatcher {
 
                 $name = strtolower($parameter->getName());
 
-                if(isset($variables[$name])) {
+                if(true === array_key_exists($name, $variables)) {
 
                     $arguments[$name] = $variables[$name];
                     continue;
@@ -115,7 +115,7 @@ class Basic extends Dispatcher {
 
                 $name = strtolower($parameter->getName());
 
-                if(isset($variables[$name])) {
+                if(true === array_key_exists($name, $variables)) {
 
                     $arguments[$name] = $variables[$name];
                     continue;
@@ -200,7 +200,7 @@ class Basic extends Dispatcher {
 
                 $name = strtolower($parameter->getName());
 
-                if(isset($variables[$name])) {
+                if(true === array_key_exists($name, $variables)) {
 
                     $arguments[$name] = $variables[$name];
                     continue;
