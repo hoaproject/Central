@@ -166,7 +166,7 @@ class          Xyl
     /**
      * Router.
      *
-     * @var \Hoa\Controller\Router object
+     * @var \Hoa\Router object
      */
     protected $_router            = null;
 
@@ -216,7 +216,7 @@ class          Xyl
      *                                                     as XYL.
      * @param   \Hoa\Stream\IStream\Out    $out            Stream for rendering.
      * @param   \Hoa\Xyl\Interpreter       $interpreter    Interpreter.
-     * @param   \Hoa\Controller\Router     $router         Router.
+     * @param   \Hoa\Router                $router         Router.
      * @param   array                      $parameters     Parameters.
      * @return  void
      * @throw   \Hoa\Xml\Exception
@@ -224,7 +224,7 @@ class          Xyl
     public function __construct ( \Hoa\Stream\IStream\In  $in,
                                   \Hoa\Stream\IStream\Out $out,
                                   Interpreter             $interpreter,
-                                  \Hoa\Controller\Router  $router = null,
+                                  \Hoa\Router             $router = null,
                                   Array                   $parameters = array() ) {
 
         parent::__construct('\Hoa\Xyl\Element\Basic', $in);
@@ -986,10 +986,10 @@ class          Xyl
      * Set router.
      *
      * @access  public
-     * @param   \Hoa\Controller\Router  $router    Router.
-     * @return  \Hoa\Controller\Router
+     * @param   \Hoa\Router  $router    Router.
+     * @return  \Hoa\Router
      */
-    public function setRouter ( \Hoa\Controller\Router $router ) {
+    public function setRouter ( \Hoa\Router $router ) {
 
         $old           = $this->_router;
         $this->_router = $router;
@@ -1001,7 +1001,7 @@ class          Xyl
      * Get router.
      *
      * @access  public
-     * @return  \Hoa\Controller\Router
+     * @return  \Hoa\Router
      */
     public function getRouter ( ) {
 
