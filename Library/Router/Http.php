@@ -204,7 +204,7 @@ class Http implements Router {
      * @return  \Hoa\Router\Http
      * @throw   \Hoa\Router\Exception
      */
-    public function addPrivateRule ( Array $methods, $id, $pattern, $call,
+    public function addPrivateRule ( Array $methods, $id, $pattern, $call = null,
                                      $able = null, Array $variables = array() ) {
 
         return $this->_addRule(
