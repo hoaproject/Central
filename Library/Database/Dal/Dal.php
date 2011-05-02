@@ -32,44 +32,42 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- *
- * @category    Framework
- * @package     Hoa_Database
- * @subpackage  Hoa_Database_Dal
- *
  */
 
-/**
- * Hoa_Database_Dal_Exception
- */
-import('Database.Dal.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Database_Dal_DalStatement
+ * \Hoa\Database\Dal\Exception
  */
-import('Database.Dal.DalStatement');
+-> import('Database.Dal.Exception')
 
 /**
- * Hoa_Database
+ * \Hoa\Database\Dal\DalStatement
  */
-import('Database.~');
+-> import('Database.Dal.DalStatement')
 
 /**
- * Class Hoa_Database_Dal.
+ * \Hoa\Database
+ */
+-> import('Database.~');
+
+}
+
+namespace Hoa\Database\Dal {
+
+/**
+ * Class \Hoa\Database\Dal.
  *
  * The heigher class of the Database Abstract Layer. It wrappes all DAL.
  *
- * @author      Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright © 2007-2011 Ivan Enderlin.
- * @license     New BSD License
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Database
- * @subpackage  Hoa_Database_Dal
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @license    New BSD License
  */
 
-class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
+class Dal implements \Hoa\Core\Parameterizable\Readable {
 
     /**
      * Abstract layer : DBA.
@@ -102,28 +100,28 @@ class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
     /**
      * Multiton.
      *
-     * @var Hoa_Database_Dal array
+     * @var \Hoa\Database\Dal array
      */
     private static $_instance = array();
 
     /**
      * Current singleton ID.
      *
-     * @var Hoa_Database_Dal string
+     * @var \Hoa\Database\Dal string
      */
     private static $_id       = null;
 
     /**
      * The abstract layer instance.
      *
-     * @var Hoa_Database_Dal_Interface_Wrapper object
+     * @var \Hoa\Database\Dal\IDal\Wrapper object
      */
     protected $abstractLayer  = null;
 
     /**
-     * Parameter of Hoa_Database.
+     * Parameter of \Hoa\Database.
      *
-     * @var Hoa_Core_Parameter object
+     * @var \Hoa\Core\Parameter object
      */
     protected $_parameters    = null;
 
@@ -140,12 +138,12 @@ class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
      * @param   string   $password         The password to connect to database.
      * @param   array    $driverOptions    The driver options.
      * @return  void
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     private function __construct ( $dalName, $dsn, $username, $password,
                                    Array $driverOption = array() ) {
 
-        $this->_parameters = Hoa_Database::getInstance()
+        $this->_parameters = \Hoa\Database::getInstance()
                                  ->shareParametersWithMe($this);
 
         if(   !isset($dalName)
@@ -160,29 +158,29 @@ class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
             );
 
             if(!isset($parameters[self::$_id]))
-                throw new Hoa_Database_Exception(
+                throw new Exception(
                     'Cannot load the %s connection, because parameters are not ' .
                     'found.', 0, self::$_id);
 
             $profile = $parameters[self::$_id];
 
             if(!array_key_exists('dal', $profile))
-                throw new Hoa_Database_Exception(
+                throw new Exception(
                     'The connection profile of %s need the “dal” information.',
                     1, self::$_id);
 
             if(!array_key_exists('dsn', $profile))
-                throw new Hoa_Database_Exception(
+                throw new Exception(
                     'The connection profile of %s need the “dsn” information.',
                     2, self::$_id);
 
             if(!array_key_exists('username', $profile))
-                throw new Hoa_Database_Exception(
+                throw new Exception(
                     'The connection profile of %s need the “username” information.',
                     3, self::$_id);
 
             if(!array_key_exists('password', $profile))
-                throw new Hoa_Database_Exception(
+                throw new Exception(
                     'The connection profile of %s need the “password” information.',
                     4, self::$_id);
 
@@ -196,13 +194,12 @@ class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
             $driverOption = $profile['options'];
         }
 
-        // Our own factory (to be more independant).
-        import('Database.Dal.AbstractLayer.' . $dalName . '.~');
+        $this->setDal(dnew(
+            '\Hoa\Database\Dal\AbstractLayer\\' . $dalName,
+            array($dsn, $username, $password, $driverOption)
+        ));
 
-        $className = 'Hoa_Database_Dal_AbstractLayer_' . $dalName;
-        $dal       = new $className($dsn, $username, $password, $driverOption);
-
-        $this->setDal($dal);
+        return;
     }
 
     /**
@@ -215,8 +212,8 @@ class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
      * @param   string  $username         The username to connect to database.
      * @param   string  $password         The password to connect to database.
      * @param   array   $driverOptions    The driver options.
-     * @return  Hoa_Database_Dal_Interface_Wrapper
-     * @throw   Hoa_Database_Dal_Exception
+     * @return  \Hoa\Database\Dal\IDal\Wrapper
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public static function getInstance ( $id,
                                          $dalName  = null, $dsn      = null,
@@ -241,16 +238,16 @@ class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
      * Get the last instance of a DAL, i.e. the last used singleton.
      *
      * @access  public
-     * @return  Hoa_Database_Dal_Interface_Wrapper
-     * @throw   Hoa_Database_Dal_Exception
+     * @return  \Hoa\Database\Dal\IDal\Wrapper
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public static function getLastInstance ( ) {
 
         if(null === self::$_id)
-            Hoa_Database::getInstance();
+            \Hoa\Database::getInstance();
 
         if(null === self::$_id)
-            throw new Hoa_Database_Dal_Exception(
+            throw new Exception(
                 'No instance was set, cannot return the last instance.', 5);
 
         return self::$_instance[self::$_id];
@@ -261,7 +258,7 @@ class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameters ( ) {
 
@@ -274,7 +271,7 @@ class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameter ( $key ) {
 
@@ -288,7 +285,7 @@ class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getFormattedParameter ( $key ) {
 
@@ -299,10 +296,10 @@ class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
      * Set abstract layer instance.
      *
      * @access  protected
-     * @param   Hoa_Database_Dal_Interface_Wrapper  $dal    The dal instance.
-     * @return  Hoa_Database_Dal_Interface_Wrapper
+     * @param   \Hoa\Database\Dal\IDal\Wrapper  $dal    The dal instance.
+     * @return  \Hoa\Database\Dal\IDal\Wrapper
      */
-    protected function setDal ( Hoa_Database_Dal_Interface_Wrapper $dal ) {
+    protected function setDal ( \Hoa\Database\Dal\IDal\Wrapper $dal ) {
 
         $old                 = $this->abstractLayer;
         $this->abstractLayer = $dal;
@@ -312,7 +309,7 @@ class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
      * Get the abstract layer instance.
      *
      * @access  protected
-     * @return  Hoa_Database_Dal_Interface_Wrapper
+     * @return  \Hoa\Database\Dal\IDal\Wrapper
      */
     protected function getDal ( ) {
 
@@ -324,7 +321,7 @@ class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
      *
      * @access  public
      * @return  bool
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function beginTransaction ( ) {
 
@@ -336,7 +333,7 @@ class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
      *
      * @access  public
      * @return  bool
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function commit ( ) {
 
@@ -348,7 +345,7 @@ class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
      *
      * @access  public
      * @return  bool
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function rollBack ( ) {
 
@@ -362,7 +359,7 @@ class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
      * @param   string  $name    Name of sequence object (needed for some
      *                           driver).
      * @return  string
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function lastInsertId ( $name = null ) {
 
@@ -380,12 +377,12 @@ class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
      *                                target database server.
      * @param   array   $options      Options to set attributes values for the
      *                                AbstractLayer Statement.
-     * @return  Hoa_Database_Dal_DalStatement
-     * @throw   Hoa_Database_Dal_Exception
+     * @return  \Hoa\Database\Dal\DalStatement
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function prepare ( $statement, Array $options = array() ) {
 
-        return new Hoa_Database_Dal_DalStatement(
+        return new \Hoa\Database\Dal\DalStatement(
             $this->getDal()->prepare(
                 $statement, $options
             )
@@ -400,7 +397,7 @@ class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
      * @param   int     $type      Provide a data type hint for drivers that
      *                             have alternate quoting styles.
      * @return  string
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function quote ( $string = null, $type = -1 ) {
 
@@ -412,16 +409,16 @@ class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
 
     /**
      * Execute an SQL statement, returning a result set as a
-     * Hoa_Database_Dal_DalStatement object.
+     * \Hoa\Database\Dal\DalStatement object.
      *
      * @access  public
      * @param   string  $statement    The SQL statement to prepare and execute.
-     * @return  Hoa_Database_Dal_DalStatement
-     * @throw   Hoa_Database_Dal_Exception
+     * @return  \Hoa\Database\Dal\DalStatement
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function query ( $statement ) {
 
-        return new Hoa_Database_Dal_DalStatement(
+        return new \Hoa\Database\Dal\DalStatement(
             $this->getDal()->query($statement)
         );
     }
@@ -432,7 +429,7 @@ class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
      *
      * @access  public
      * @return  string
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function errorCode ( ) {
 
@@ -445,7 +442,7 @@ class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function errorInfo ( ) {
 
@@ -457,7 +454,7 @@ class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Datatase_Dal_Exception
+     * @throw   \Hoa\Datatase\Dal\Exception
      */
     public function getAvailableDrivers ( ) {
 
@@ -470,7 +467,7 @@ class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
      * @access  public
      * @param   array   $attributes    Attributes values.
      * @return  array
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function setAttributes ( Array $attributes ) {
 
@@ -484,7 +481,7 @@ class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
      * @param   mixed   $attribute    Attribute name.
      * @param   mixed   $value        Attribute value.
      * @return  mixed
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function setAttribute ( $attribute, $value ) {
 
@@ -496,7 +493,7 @@ class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function getAttributes ( ) {
 
@@ -509,10 +506,12 @@ class Hoa_Database_Dal implements Hoa_Core_Parameterizable_Readable {
      * @access  public
      * @param   string  $attribute    Attribute name.
      * @return  mixed
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function getAttribute ( $attribute ) {
 
         return $this->getDal()->getAttribute($attribute);
     }
+}
+
 }

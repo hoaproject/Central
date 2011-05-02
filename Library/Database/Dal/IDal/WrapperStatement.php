@@ -32,29 +32,21 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- *
- * @category    Framework
- * @package     Hoa_Database
- * @subpackage  Hoa_Database_Dal_Interface_WrapperStatement
- *
  */
 
+namespace Hoa\Database\Dal\IDal {
+
 /**
- * Interface Hoa_Database_Dal_Interface_WrapperStatement.
+ * Interface \Hoa\Database\Dal\IDal\WrapperStatement.
  *
  * Interface of a DAL statement wrapper.
  *
- * @author      Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright © 2007-2011 Ivan Enderlin.
- * @license     New BSD License
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Database
- * @subpackage  Hoa_Database_Dal_Interface_WrapperStatement
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @license    New BSD License
  */
 
-interface Hoa_Database_Dal_Interface_WrapperStatement {
+interface WrapperStatement {
 
     /**
      * Execute a prepared statement.
@@ -63,7 +55,7 @@ interface Hoa_Database_Dal_Interface_WrapperStatement {
      * @param   array   $bindParameters    Bind parameters values if
      *                                     bindParameter() is not called.
      * @return  bool
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function execute ( Array $bindParameters = array() );
 
@@ -76,7 +68,7 @@ interface Hoa_Database_Dal_Interface_WrapperStatement {
      * @param   int     $type         Type of value.
      * @param   int     $length       Length of data type.
      * @return  bool
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function bindParameter ( $parameter, &$value, $type = null,
                                     $length = null);
@@ -86,7 +78,7 @@ interface Hoa_Database_Dal_Interface_WrapperStatement {
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function fetchAll ( );
 
@@ -95,7 +87,7 @@ interface Hoa_Database_Dal_Interface_WrapperStatement {
      *
      * @access  public
      * @return  bool
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function closeCursor ( );
 
@@ -105,7 +97,7 @@ interface Hoa_Database_Dal_Interface_WrapperStatement {
      *
      * @access  public
      * @return  string
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function errorCode ( );
 
@@ -115,7 +107,9 @@ interface Hoa_Database_Dal_Interface_WrapperStatement {
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function errorInfo ( );
+}
+
 }

@@ -32,34 +32,26 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- *
- * @category    Framework
- * @package     Hoa_Database
- * @subpackage  Hoa_Database_Dal_DalStatement
- *
  */
 
+namespace Hoa\Database\Dal {
+
 /**
- * Class Hoa_Database_Dal_DalStatement.
+ * Class \Hoa\Database\Dal\DalStatement.
  *
  * The heigher class that represents a DAL statement.
  *
- * @author      Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright © 2007-2011 Ivan Enderlin.
- * @license     New BSD License
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Database
- * @subpackage  Hoa_Database_Dal_DalStatement
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @license    New BSD License
  */
 
-class Hoa_Database_Dal_DalStatement {
+class DalStatement {
 
     /**
      * The statement instance.
      *
-     * @var Hoa_Database_Dal_Interface_WrapperStatement object
+     * @var \Hoa\Database\Dal\IDal\WrapperStatement object
      */
     protected $statement = null;
 
@@ -69,12 +61,12 @@ class Hoa_Database_Dal_DalStatement {
      * Create a statement instance.
      *
      * @access  public
-     * @param   Hoa_Database_Dal_Interface_WrapperStatement  $statement    The
-     *                                                                     statement
-     *                                                                     instance.
+     * @param   \Hoa\Database\Dal\IDal\WrapperStatement  $statement    The
+     *                                                                 statement
+     *                                                                 instance.
      * @return  void
      */
-    public function __construct ( Hoa_Database_Dal_Interface_WrapperStatement $statement ) {
+    public function __construct ( IDal\WrapperStatement $statement ) {
 
         $this->setStatement($statement);
     }
@@ -83,12 +75,12 @@ class Hoa_Database_Dal_DalStatement {
      * Set the statement instance.
      *
      * @access  protected
-     * @param   Hoa_Database_Dal_Interface_WrapperStatement  $statement    The
-     *                                                                     statement
-     *                                                                     instance.
-     * @return  Hoa_Database_Dal_Interface_WrapperStatement
+     * @param   \Hoa\Database\Dal\IDal\WrapperStatement  $statement    The
+     *                                                                 statement
+     *                                                                 instance.
+     * @return  \Hoa\Database\Dal\IDal\WrapperStatement
      */
-    protected function setStatement ( Hoa_Database_Dal_Interface_WrapperStatement $statement ) {
+    protected function setStatement ( IDal\WrapperStatement $statement ) {
 
         $old             = $this->statement;
         $this->statement = $statement;
@@ -98,7 +90,7 @@ class Hoa_Database_Dal_DalStatement {
      * Get the statement instance.
      *
      * @access  protected
-     * @return  Hoa_Database_Dal_Interface_WrapperStatement
+     * @return  \Hoa\Database\Dal\IDal\WrapperStatement
      */
     protected function getStatement ( ) {
 
@@ -111,8 +103,8 @@ class Hoa_Database_Dal_DalStatement {
      * @access  public
      * @param   array   $bindParameters    Bind parameters values if bindParam is
      *                                     not called.
-     * @return  Hoa_Database_Dal_DalStatement
-     * @throw   Hoa_Database_Dal_Exception
+     * @return  \Hoa\Database\Dal\DalStatement
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function execute ( Array $bindParameters = array() ) {
 
@@ -133,7 +125,7 @@ class Hoa_Database_Dal_DalStatement {
      * @param   int     $type         Type of value.
      * @param   int     $length       Length of data type.
      * @return  bool
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function bindParameter ( $parameter, &$value, $type = null,
                                     $length = null) {
@@ -161,7 +153,7 @@ class Hoa_Database_Dal_DalStatement {
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function fetchAll ( ) {
 
@@ -173,7 +165,7 @@ class Hoa_Database_Dal_DalStatement {
      *
      * @access  public
      * @return  bool
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function closeCursor ( ) {
 
@@ -186,7 +178,7 @@ class Hoa_Database_Dal_DalStatement {
      *
      * @access  public
      * @return  string
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function errorCode ( ) {
 
@@ -199,10 +191,12 @@ class Hoa_Database_Dal_DalStatement {
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function errorInfo ( ) {
 
         return $this->getStatement()->errorInfo();
     }
+}
+
 }
