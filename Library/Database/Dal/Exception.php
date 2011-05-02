@@ -32,31 +32,31 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- *
- * @category    Framework
- * @package     Hoa_Database
- * @subpackage  Hoa_Database_Dal_Exception
- *
  */
+
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Database_Exception
+ * \Hoa\Database\Exception
  */
-import('Database.Exception');
+-> import('Database.Exception');
+
+}
+
+namespace Hoa\Database\Dal {
 
 /**
- * Class Hoa_Database_Dal_Exception.
+ * Class \Hoa\Database\Dal\Exception.
  *
- * Extending the Hoa_Database_Exception class.
+ * Extending the \Hoa\Database\Exception class.
  *
- * @author      Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright © 2007-2011 Ivan Enderlin.
- * @license     New BSD License
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Database
- * @subpackage  Hoa_Database_Dal_Exception
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @license    New BSD License
  */
 
-class Hoa_Database_Dal_Exception extends Hoa_Database_Exception { }
+class Exception extends \Hoa\Database\Exception { }
+
+}

@@ -32,46 +32,44 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- *
- * @category    Framework
- * @package     Hoa_Database
- * @subpackage  Hoa_Database_Dal_AbstractLayer_Pdo_PdoStatement
- *
  */
 
-/**
- * Hoa_Database_Dal_Exception
- */
-import('Database.Dal.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Database_Dal_Interface_WrapperStatement
+ * \Hoa\Database\Dal\Exception
  */
-import('Database.Dal.Interface.WrapperStatement');
+-> import('Database.Dal.Exception')
 
 /**
- * Class Hoa_Database_Dal_AbstractLayer_Pdo_PdoStatement.
+ * \Hoa\Database\Dal\IDal\WrapperStatement
+ */
+-> import('Database.Dal.I~.WrapperStatement');
+
+}
+
+namespace Hoa\Database\Dal\AbstractLayer\Pdo {
+
+/**
+ * Class \Hoa\Database\Dal\AbstractLayer\Pdo\PdoStatement.
  *
  * Wrap PDOStatement.
  *
- * @author      Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright © 2007-2011 Ivan Enderlin.
- * @license     New BSD License
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Database
- * @subpackage  Hoa_Database_Dal_AbstractLayer_Pdo_PdoStatement
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @license    New BSD License
  */
 
-class Hoa_Database_Dal_AbstractLayer_Pdo_PdoStatement implements Hoa_Database_Dal_Interface_WrapperStatement {
+class PdoStatement implements \Hoa\Database\Dal\IDal\WrapperStatement {
 
     /**
      * The statement instance.
      *
      * @var PDOStatement object
      */
-    protected $statement = null;
+    protected $_statement = null;
 
 
 
@@ -79,25 +77,27 @@ class Hoa_Database_Dal_AbstractLayer_Pdo_PdoStatement implements Hoa_Database_Da
      * Create a statement instance.
      *
      * @access  public
-     * @param   PDOStatement  $statement    The PDOStatement instance.
+     * @param   \PDOStatement  $statement    The PDOStatement instance.
      * @return  void
      */
-    public function __construct ( PDOStatement $statement ) {
+    public function __construct ( \PDOStatement $statement ) {
 
         $this->setStatement($statement);
+
+        return;
     }
 
     /**
      * Set the statement instance.
      *
      * @access  protected
-     * @param   PDOStatement  $statement    The PDOStatement instance.
-     * @return  PDOStatement
+     * @param   \PDOStatement  $statement    The PDOStatement instance.
+     * @return  \PDOStatement
      */
-    protected function setStatement ( PDOStatement $statement ) {
+    protected function setStatement ( \PDOStatement $statement ) {
 
-        $old             = $this->statement;
-        $this->statement = $statement;
+        $old              = $this->_statement;
+        $this->_statement = $statement;
 
         return $old;
     }
@@ -106,11 +106,11 @@ class Hoa_Database_Dal_AbstractLayer_Pdo_PdoStatement implements Hoa_Database_Da
      * Get the statement instance.
      *
      * @access  protected
-     * @return  PDOStatement
+     * @return  \PDOStatement
      */
     protected function getStatement ( ) {
 
-        return $this->statement;
+        return $this->_statement;
     }
 
     /**
@@ -119,8 +119,8 @@ class Hoa_Database_Dal_AbstractLayer_Pdo_PdoStatement implements Hoa_Database_Da
      * @access  public
      * @param   array   $bindParameters    Bind parameters values if bindParam is
      *                                     not called.
-     * @return  Hoa_Database_Dal_Pdo_PdoStatement
-     * @throw   Hoa_Database_Dal_Exception
+     * @return  \Hoa\Database\Dal\Pdo\PdoStatement
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function execute ( Array $bindParameters = array() ) {
 
@@ -132,7 +132,7 @@ class Hoa_Database_Dal_AbstractLayer_Pdo_PdoStatement implements Hoa_Database_Da
         }
 
         if(false === $this->getStatement()->execute($bindParameters))
-            throw new Hoa_Database_Dal_Exception(
+            throw new \Hoa\Database\Dal\Exception(
                 '%3$s (%1$s/%2$d)', 0, $this->errorInfo());
 
         return $this;
@@ -147,7 +147,7 @@ class Hoa_Database_Dal_AbstractLayer_Pdo_PdoStatement implements Hoa_Database_Da
      * @param   int     $type         Type of value.
      * @param   int     $length       Length of data type.
      * @return  bool
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function bindParameter ( $parameter, &$value, $type = null,
                                     $length = null ) {
@@ -166,11 +166,11 @@ class Hoa_Database_Dal_AbstractLayer_Pdo_PdoStatement implements Hoa_Database_Da
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function fetchAll ( ) {
 
-        return $this->getStatement()->fetchAll(PDO::FETCH_ASSOC);
+        return $this->getStatement()->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -178,7 +178,7 @@ class Hoa_Database_Dal_AbstractLayer_Pdo_PdoStatement implements Hoa_Database_Da
      *
      * @access  public
      * @return  bool
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function closeCursor ( ) {
 
@@ -191,7 +191,7 @@ class Hoa_Database_Dal_AbstractLayer_Pdo_PdoStatement implements Hoa_Database_Da
      *
      * @access  public
      * @return  string
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function errorCode ( ) {
 
@@ -204,10 +204,12 @@ class Hoa_Database_Dal_AbstractLayer_Pdo_PdoStatement implements Hoa_Database_Da
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function errorInfo ( ) {
 
         return $this->getStatement()->errorInfo();
     }
+}
+
 }

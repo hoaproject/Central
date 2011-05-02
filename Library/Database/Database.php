@@ -32,72 +32,72 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+namespace {
+
+from('Hoa')
+
+/**
+ * \Hoa\Database\Exception
+ */
+-> import('Database.Exception')
+
+/**
+ * \Hoa\Database\Dal
+ */
+-> import('Database.Dal.~');
+
+/**
+ * \Hoa\Database\Model\Table
+ */
+//-> import('Database.Model.Table')
+
+/**
+ * \Hoa\Database\Model\Collection
+ */
+//-> import('Database.Model.Collection')
+
+/**
+ * \Hoa\Database\Cache\Table
+ */
+//-> import('Database.Cache.Table');
+
+}
+
+namespace Hoa\Database {
+
+/**
+ * Class \Hoa\Database.
  *
- *
- * @category    Framework
- * @package     Hoa_Database
- *
- */
-
-/**
- * Hoa_Database_Exception
- */
-import('Database.Exception');
-
-/**
- * Hoa_Database_Dal
- */
-import('Database.Dal.~');
-
-/**
- * Hoa_Database_Model_Table
- */
-import('Database.Model.Table');
-
-/**
- * Hoa_Database_Model_Collection
- */
-import('Database.Model.Collection');
-
-/**
- * Hoa_Database_Cache_Table
- */
-import('Database.Cache.Table');
-
-/**
- * Class Hoa_Database.
- *
- * Main class of the Hoa_Database package. Manage the autoload connection, all
+ * Main class of the \Hoa\Database package. Manage the autoload connection, all
  * databases parameters, table and base cache etc.
  *
- * @author      Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright © 2007-2011 Ivan Enderlin.
- * @license     New BSD License
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Database
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @license    New BSD License
  */
 
-class Hoa_Database implements Hoa_Core_Parameterizable {
+class Database implements \Hoa\Core\Parameterizable {
 
     /**
      * Singleton.
      *
-     * @var Hoa_Database object
+     * @var \Hoa\Database object
      */
     private static $_instance = null;
 
     /**
      * Collections of table caches.
      *
-     * @var Hoa_Database array
+     * @var \Hoa\Database array
      */
     protected $cache          = array();
 
     /**
-     * Parameters of Hoa_Database.
+     * Parameters of \Hoa\Database.
      *
-     * @var Hoa_Core_Parameter object
+     * @var \Hoa\Core\Parameter object
      */
     protected $_parameters    = null;
 
@@ -109,11 +109,11 @@ class Hoa_Database implements Hoa_Core_Parameterizable {
      * @access  private
      * @param   array    $parameters    Parameters.
      * @return  void
-     * @throw   Hoa_Database_Exception
+     * @throw   \Hoa\Database\Exception
      */
     private function __construct ( Array $parameters = array() ) {
 
-        $this->_parameters = new Hoa_Core_Parameter(
+        $this->_parameters = new \Hoa\Core\Parameter(
             $this,
             array(
                 'base'   => null,
@@ -143,7 +143,7 @@ class Hoa_Database implements Hoa_Core_Parameterizable {
                 'schema.file'       => '(:schema:U:).xml',
                 'schema.directory'  => 'Data/Database/Schema/',
 
-                'connection.list.default.dal'      => Hoa_Database_Dal::PDO,
+                'connection.list.default.dal'      => Dal::PDO,
                 'connection.list.default.dsn'      => 'mysql:host=localhost;dbname=foobar',
                 'connection.list.default.username' => 'root',
                 'connection.list.default.password' => '',
@@ -153,10 +153,12 @@ class Hoa_Database implements Hoa_Core_Parameterizable {
         );
 
         $this->setParameters($parameters);
+
+        return;
     }
 
     /**
-     * Singleton : get instance of Hoa_Database.
+     * Singleton : get instance of \Hoa\Database.
      *
      * @access  public
      * @param   array   $parameters    Parameters.
@@ -171,7 +173,7 @@ class Hoa_Database implements Hoa_Core_Parameterizable {
             if(null === $autoload = self::$_instance->getParameter('connection.autoload'))
                 return self::$_instance;
 
-            Hoa_Database_Dal::getInstance($autoload);
+            Dal::getInstance($autoload);
         }
 
         return self::$_instance;
@@ -182,19 +184,19 @@ class Hoa_Database implements Hoa_Core_Parameterizable {
      * choosen class (as the DAL layer).
      *
      * @access  public
-     * @param   Hoa_Database_Dal  $dal    DAL layer.
+     * @param   \Hoa\Database\Dal  $dal    DAL layer.
      * @return  void
      */
-    public function shareParametersWithMe ( Hoa_Database_Dal $dal ) {
+    public function shareParametersWithMe ( Dal $dal ) {
 
-        if(get_class($dal) !== 'Hoa_Database_Dal')
-            throw new Hoa_Database_Exception(
+        if(get_class($dal) !== 'Hoa\Database\Dal\Dal')
+            throw new Exception(
                 'You shoud not used this method :-).', 0);
 
         $this->_parameters->shareWith(
             $this,
             $dal,
-            Hoa_Core_Parameter::PERMISSION_READ
+            \Hoa\Core\Parameter::PERMISSION_READ
         );
 
         return $this->_parameters;
@@ -206,7 +208,7 @@ class Hoa_Database implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   array   $in    Parameters to set.
      * @return  void
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setParameters ( Array $in ) {
 
@@ -218,7 +220,7 @@ class Hoa_Database implements Hoa_Core_Parameterizable {
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameters ( ) {
 
@@ -232,7 +234,7 @@ class Hoa_Database implements Hoa_Core_Parameterizable {
      * @param   string  $key      Key.
      * @param   mixed   $value    Value.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setParameter ( $key, $value ) {
 
@@ -245,7 +247,7 @@ class Hoa_Database implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameter ( $key ) {
 
@@ -259,7 +261,7 @@ class Hoa_Database implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getFormattedParameter ( $key ) {
 
@@ -271,11 +273,12 @@ class Hoa_Database implements Hoa_Core_Parameterizable {
      *
      * @access  public
      * @param   string  $name    The base name.
-     * @return  Hoa_Database_Model_Base
-     * @throw   Hoa_Database_Exception
+     * @return  \Hoa\Database\Model\Base
+     * @throw   \Hoa\Database\Exception
      */
     public function getBase ( $name ) {
 
+        /*
         $oldBase = $this->getKeyword('base');
 
         $this->setKeyword($name);
@@ -288,13 +291,14 @@ class Hoa_Database implements Hoa_Core_Parameterizable {
         $class     = $this->getFormattedParameter('base.class');
 
         if(!class_exists($class))
-            throw new Hoa_Database_Exception(
+            throw new \Hoa\Database\Exception(
                 'Cannot find the base class %s in %s.',
                 1, array($class, $directory . $file));
 
         $this->setKeyword($oldBase);
 
         return new $class();
+        */
     }
 
     /**
@@ -303,18 +307,19 @@ class Hoa_Database implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   string  $name    The table name, must match with :
      *                           base.table.
-     * @return  Hoa_Database_Model_Table
-     * @throw   Hoa_Database_Exception
+     * @return  \Hoa\Database\Model\Table
+     * @throw   \Hoa\Database\Exception
      */
     public function getTable ( $name ) {
 
+        /*
         $cache = $this->getTableCache($name);
 
         if(false !== $return = $cache->get(null))
             return $return;
 
         if(false === strpos($name, '.'))
-            throw new Hoa_Database_Exception(
+            throw new \Hoa\Database\Exception(
                 'The table name must match with <base>.<table>; given %s.',
                 2, $name);
 
@@ -334,7 +339,7 @@ class Hoa_Database implements Hoa_Core_Parameterizable {
         $class     = $this->getFormattedParameter('table.class');
 
         if(!class_exists($class))
-            throw new Hoa_Database_Exception(
+            throw new \Hoa\Database\Exception(
                 'Cannot find the table class %s in %s.',
                 3, array($class, $directory . $file));
 
@@ -346,6 +351,7 @@ class Hoa_Database implements Hoa_Core_Parameterizable {
         $this->setKeyword('table', $oldTable);
 
         return $instance;
+        */
     }
 
     /**
@@ -358,24 +364,30 @@ class Hoa_Database implements Hoa_Core_Parameterizable {
      */
     public function cleanTableCache ( $name ) {
 
+        /*
         $this->getTableCache($name)->clean(null);
+        */
     }
 
     /**
      * Get a table cache.
      *
      * @access  protected
-     * @return  Hoa_Database_Cache_Table
+     * @return  \Hoa\Database\Cache\Table
      */
     protected function getTableCache ( $name ) {
 
+        /*
         $nameu = strtolower($name);
 
         if(isset($this->cache[$nameu]))
             return $this->cache[$nameu];
 
-        $this->cache[$nameu] = new Hoa_Database_Cache_Table($name);
+        $this->cache[$nameu] = new \Hoa\Database\Cache\Table($name);
 
         return $this->cache[$nameu];
+        */
     }
+}
+
 }

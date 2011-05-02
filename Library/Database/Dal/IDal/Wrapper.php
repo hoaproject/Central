@@ -32,29 +32,21 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- *
- * @category    Framework
- * @package     Hoa_Database
- * @subpackage  Hoa_Database_Dal_Interface_Wrapper
- *
  */
 
+namespace Hoa\Database\Dal\IDal {
+
 /**
- * Interface Hoa_Database_Dal_Interface_Wrapper.
+ * Interface \Hoa\Database\Dal\IDal\Wrapper.
  *
  * Interface a DAL wrapper.
  *
- * @author      Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright © 2007-2011 Ivan Enderlin.
- * @license     New BSD License
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Database
- * @subpackage  Hoa_Database_Dal_Interface_Wrapper
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @license    New BSD License
  */
 
-interface Hoa_Database_Dal_Interface_Wrapper {
+interface Wrapper {
 
     /**
      * Create a DAL instance, representing a connection to a database.
@@ -66,7 +58,7 @@ interface Hoa_Database_Dal_Interface_Wrapper {
      * @param   string  $password         The password to connect to database.
      * @param   array   $driverOptions    The driver options.
      * @return  void
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function __construct ( $dns, $username, $password,
                                   Array $driverOption = array() );
@@ -76,7 +68,7 @@ interface Hoa_Database_Dal_Interface_Wrapper {
      *
      * @access  public
      * @return  bool
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function beginTransaction ( );
 
@@ -85,7 +77,7 @@ interface Hoa_Database_Dal_Interface_Wrapper {
      *
      * @access  public
      * @return  bool
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function commit ( );
 
@@ -94,7 +86,7 @@ interface Hoa_Database_Dal_Interface_Wrapper {
      *
      * @access  public
      * @return  bool
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function rollBack ( );
 
@@ -105,7 +97,7 @@ interface Hoa_Database_Dal_Interface_Wrapper {
      * @param   string  $name    Name of sequence object (needed for some
      *                           driver).
      * @return  string
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function lastInsertId ( $name = null );
 
@@ -117,8 +109,8 @@ interface Hoa_Database_Dal_Interface_Wrapper {
      *                                target database server.
      * @param   array   $options      Options to set attributes values for the
      *                                AbstractLayer Statement.
-     * @return  Hoa_Database_Dal_Interface_WrapperStatement
-     * @throw   Hoa_Database_Dal_Exception
+     * @return  \Hoa\Database\Dal\IDal\WrapperStatement
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function prepare ( $statement, Array $options = array() );
 
@@ -130,18 +122,18 @@ interface Hoa_Database_Dal_Interface_Wrapper {
      * @param   int     $type      Provide a data type hint for drivers that
      *                             have alternate quoting styles.
      * @return  string
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function quote ( $string = null, $type = -1 );
 
     /**
      * Execute an SQL statement, returning a result set as a
-     * Hoa_Database_Dal_Interface_WrapperStatement object.
+     * \Hoa\Database\Dal\IDal\WrapperStatement object.
      *
      * @access  public
      * @param   string  $statement    The SQL statement to prepare and execute.
-     * @return  Hoa_Database_Dal_Interface_WrapperStatement
-     * @throw   Hoa_Database_Dal_Exception
+     * @return  \Hoa\Database\Dal\IDal\WrapperStatement
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function query ( $statement );
 
@@ -151,7 +143,7 @@ interface Hoa_Database_Dal_Interface_Wrapper {
      *
      * @access  public
      * @return  string
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function errorCode ( );
 
@@ -161,7 +153,7 @@ interface Hoa_Database_Dal_Interface_Wrapper {
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function errorInfo ( );
 
@@ -170,7 +162,7 @@ interface Hoa_Database_Dal_Interface_Wrapper {
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Datatase_Dal_Exception
+     * @throw   \Hoa\Datatase\Dal\Exception
      */
     public function getAvailableDrivers ( );
 
@@ -180,7 +172,7 @@ interface Hoa_Database_Dal_Interface_Wrapper {
      * @access  public
      * @param   array   $attributes    Attributes values.
      * @return  array
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function setAttributes ( Array $attributes );
 
@@ -191,7 +183,7 @@ interface Hoa_Database_Dal_Interface_Wrapper {
      * @param   mixed   $attribute    Attribute name.
      * @param   mixed   $value        Attribute value.
      * @return  mixed
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function setAttribute ( $attribute, $value );
 
@@ -200,7 +192,7 @@ interface Hoa_Database_Dal_Interface_Wrapper {
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function getAttributes ( );
 
@@ -210,7 +202,9 @@ interface Hoa_Database_Dal_Interface_Wrapper {
      * @access  public
      * @param   string  $attribute    Attribute name.
      * @return  mixed
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function getAttribute ( $attribute );
+}
+
 }

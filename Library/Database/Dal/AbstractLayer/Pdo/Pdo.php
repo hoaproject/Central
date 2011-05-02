@@ -32,51 +32,49 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- *
- * @category    Framework
- * @package     Hoa_Database
- * @subpackage  Hoa_Database_Dal_AbstractLayer_Pdo
- *
  */
 
-/**
- * Hoa_Database_Dal_Exception
- */
-import('Database.Dal.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Database_Dal_AbstractLayer_Pdo_PdoStatement
+ * \Hoa\Database\Dal\Exception
  */
-import('Database.Dal.AbstractLayer.Pdo.PdoStatement');
+-> import('Database.Dal.Exception')
 
 /**
- * Hoa_Database_Dal_Interface_Wrapper
+ * \Hoa\Database\Dal\AbstractLayer\Pdo\PdoStatement
  */
-import('Database.Dal.Interface.Wrapper');
+-> import('Database.Dal.AbstractLayer.Pdo.PdoStatement')
 
 /**
- * Class Hoa_Database_Dal_AbstractLayer_Pdo.
+ * \Hoa\Database\Dal\IDal\Wrapper
+ */
+-> import('Database.Dal.I~.Wrapper');
+
+}
+
+namespace Hoa\Database\Dal\AbstractLayer\Pdo {
+
+/**
+ * Class \Hoa\Database\Dal\AbstractLayer\Pdo.
  *
  * Wrap PDO.
  *
- * @author      Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright © 2007-2011 Ivan Enderlin.
- * @license     New BSD License
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Database
- * @subpackage  Hoa_Database_Dal_AbstractLayer_Pdo
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @license    New BSD License
  */
 
-class Hoa_Database_Dal_AbstractLayer_Pdo implements Hoa_Database_Dal_Interface_Wrapper {
+class Pdo implements \Hoa\Database\Dal\IDal\Wrapper {
 
     /**
      * Connection to database.
      *
      * @var PDO object
      */
-    protected $connection = null;
+    protected $_connection = null;
 
 
 
@@ -89,42 +87,44 @@ class Hoa_Database_Dal_AbstractLayer_Pdo implements Hoa_Database_Dal_Interface_W
      * @param   string  $password         The password to connect to database.
      * @param   array   $driverOptions    The driver options.
      * @return  void
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function __construct ( $dns, $username, $password,
                                   Array $driverOption = array() ) {
 
         if(false === extension_loaded('pdo'))
-            throw new Hoa_Database_Dal_Exception(
+            throw new \Hoa\Database\Dal\Exception(
                 'The module PDO is not enabled.', 0);
 
         $connection = null;
 
         try {
 
-            $connection = new PDO($dns, $username, $password, $driverOption);
+            $connection = new \PDO($dns, $username, $password, $driverOption);
         }
-        catch ( PDOException $e ) {
+        catch ( \PDOException $e ) {
 
-            throw new Hoa_Database_Dal_Exception(
+            throw new \Hoa\Database\Dal\Exception(
                 $e->getMessage(), $e->getCode()
             );
         }
 
         $this->setConnection($connection);
+
+        return;
     }
 
     /**
      * Set the connection.
      *
      * @access  protected
-     * @param   PDO        $connection    The PDO instance.
-     * @return  PDO
+     * @param   \PDO        $connection    The PDO instance.
+     * @return  \PDO
      */
-    protected function setConnection ( PDO $connection ) {
+    protected function setConnection ( \PDO $connection ) {
 
-        $old              = $this->connection;
-        $this->connection = $connection;
+        $old               = $this->_connection;
+        $this->_connection = $connection;
 
         return $old;
     }
@@ -134,15 +134,15 @@ class Hoa_Database_Dal_AbstractLayer_Pdo implements Hoa_Database_Dal_Interface_W
      *
      * @access  protected
      * @return  PDO
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     protected function getConnection ( ) {
 
-        if(null === $this->connection)
-            throw new Hoa_Database_Dal_Exception(
+        if(null === $this->_connection)
+            throw new \Hoa\Database\Dal\Exception(
                 'Cannot return a null connection.', 1);
 
-        return $this->connection;
+        return $this->_connection;
     }
 
     /**
@@ -150,7 +150,7 @@ class Hoa_Database_Dal_AbstractLayer_Pdo implements Hoa_Database_Dal_Interface_W
      *
      * @access  public
      * @return  bool
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function beginTransaction ( ) {
 
@@ -162,7 +162,7 @@ class Hoa_Database_Dal_AbstractLayer_Pdo implements Hoa_Database_Dal_Interface_W
      *
      * @access  public
      * @return  bool
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function commit ( ) {
 
@@ -174,7 +174,7 @@ class Hoa_Database_Dal_AbstractLayer_Pdo implements Hoa_Database_Dal_Interface_W
      *
      * @access  public
      * @return  bool
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function rollBack ( ) {
 
@@ -188,7 +188,7 @@ class Hoa_Database_Dal_AbstractLayer_Pdo implements Hoa_Database_Dal_Interface_W
      * @param   string  $name    Name of sequence object (needed for some
      *                           driver).
      * @return  string
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function lastInsertId ( $name = null ) {
 
@@ -206,16 +206,16 @@ class Hoa_Database_Dal_AbstractLayer_Pdo implements Hoa_Database_Dal_Interface_W
      *                                target database server.
      * @param   array   $options      Options to set attributes values for the
      *                                AbstractLayer Statement.
-     * @return  Hoa_Database_Dal_AbstractLayer_Pdo_PdoStatement
-     * @throw   Hoa_Database_Dal_Exception
+     * @return  \Hoa\Database\Dal\AbstractLayer\Pdo\PdoStatement
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function prepare ( $statement, Array $options = array() ) {
 
-        return new Hoa_Database_Dal_AbstractLayer_Pdo_PdoStatement(
-                   $this->getConnection()->prepare(
-                       $statement, $options
-                   )
-               );
+        return new PdoStatement(
+            $this->getConnection()->prepare(
+                $statement, $options
+            )
+        );
     }
 
     /**
@@ -226,7 +226,7 @@ class Hoa_Database_Dal_AbstractLayer_Pdo implements Hoa_Database_Dal_Interface_W
      * @param   int     $type      Provide a data type hint for drivers that
      *                             have alternate quoting styles.
      * @return  string
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function quote ( $string = null, $type = -1 ) {
 
@@ -238,22 +238,22 @@ class Hoa_Database_Dal_AbstractLayer_Pdo implements Hoa_Database_Dal_Interface_W
 
     /**
      * Execute an SQL statement, returning a result set as a
-     * Hoa_Database_Dal_AbstractLayer_Pdo_PdoStatement object.
+     * \Hoa\Database\Dal\AbstractLayer\Pdo\PdoStatement object.
      *
      * @access  public
      * @param   string  $statement    The SQL statement to prepare and execute.
-     * @return  Hoa_Database_Dal_AbstractLayer_Pdo_PdoStatement
-     * @throw   Hoa_Database_Dal_Exception
+     * @return  \Hoa\Database\Dal\AbstractLayer\Pdo\PdoStatement
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function query ( $statement ) {
 
         $tmp = $this->getConnection()->query($statement);
 
-        if(!($tmp instanceof PDOStatement))
-            throw new Hoa_Database_Dal_Exception(
+        if(!($tmp instanceof \PDOStatement))
+            throw new \Hoa\Database\Dal\Exception(
                 '%3$s (%1$s/%2$d).', 2, $this->errorInfo());
 
-        return new Hoa_Database_Dal_AbstractLayer_Pdo_PdoStatement($tmp);
+        return new PdoStatement($tmp);
     }
 
     /**
@@ -262,7 +262,7 @@ class Hoa_Database_Dal_AbstractLayer_Pdo implements Hoa_Database_Dal_Interface_W
      *
      * @access  public
      * @return  string
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function errorCode ( ) {
 
@@ -275,7 +275,7 @@ class Hoa_Database_Dal_AbstractLayer_Pdo implements Hoa_Database_Dal_Interface_W
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function errorInfo ( ) {
 
@@ -287,7 +287,7 @@ class Hoa_Database_Dal_AbstractLayer_Pdo implements Hoa_Database_Dal_Interface_W
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Datatase_Dal_Exception
+     * @throw   \Hoa\Datatase\Dal\Exception
      */
     public function getAvailableDrivers ( ) {
 
@@ -300,7 +300,7 @@ class Hoa_Database_Dal_AbstractLayer_Pdo implements Hoa_Database_Dal_Interface_W
      * @access  public
      * @param   array   $attributes    Attributes values.
      * @return  array
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function setAttributes ( Array $attributes ) {
 
@@ -319,7 +319,7 @@ class Hoa_Database_Dal_AbstractLayer_Pdo implements Hoa_Database_Dal_Interface_W
      * @param   mixed   $attribute    Attribute name.
      * @param   mixed   $value        Attribute value.
      * @return  mixed
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function setAttribute ( $attribute, $value ) {
 
@@ -331,7 +331,7 @@ class Hoa_Database_Dal_AbstractLayer_Pdo implements Hoa_Database_Dal_Interface_W
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function getAttributes ( ) {
 
@@ -351,9 +351,10 @@ class Hoa_Database_Dal_AbstractLayer_Pdo implements Hoa_Database_Dal_Interface_W
             11 => 'TIMEOUT'
         );
 
-        foreach($attributes as $i => $suffix)
-            $attributes[constant('PDO::ATTR_' . $suffix)] =
-                $this->getAttribute(constant('PDO::ATTR_' . $suffix));
+        foreach($attributes as $i => $attribute)
+            $out[$attribute] = $this->getAttribute($attribute);
+
+        return $out;
     }
 
     /**
@@ -362,11 +363,13 @@ class Hoa_Database_Dal_AbstractLayer_Pdo implements Hoa_Database_Dal_Interface_W
      * @access  public
      * @param   string  $attribute    Attribute name.
      * @return  mixed
-     * @throw   Hoa_Database_Dal_Exception
+     * @throw   \Hoa\Database\Dal\Exception
      */
     public function getAttribute ( $attribute ) {
 
         return $this->getConnection()
-                    ->getAttribute(constant('PDO::ATTR_' . $attribute ));
+                    ->getAttribute(constant('\PDO::ATTR_' . $attribute ));
     }
+}
+
 }
