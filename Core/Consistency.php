@@ -579,14 +579,17 @@ class Callable {
      * Get a valid callback in the PHP meaning.
      *
      * @access  public
-     * @param   array   $arguments    Arguments (could determine method on an
-     *                                object if not precised).
+     * @param   array   &$arguments    Arguments (could determine method on an
+     *                                 object if not precised).
      * @return  mixed
      */
-    public function getValidCallback ( Array $arguments ) {
+    public function getValidCallback ( Array &$arguments ) {
 
         $callback = $this->_callback;
-        $head     = array_shift($arguments);
+        $head     = null;
+
+        if(isset($arguments[0]))
+            $head = &$arguments[0];
 
         // If method is undetermined, we find it (we understand event bucket and
         // stream).
@@ -595,7 +598,7 @@ class Callable {
            && null === $callback[1]) {
 
             if($head instanceof \Hoa\Core\Event\Bucket)
-                $head = $this->getData();
+                $head = $head->getData();
 
             switch($type = gettype($head)) {
 
@@ -618,6 +621,7 @@ class Callable {
 
                 default:
                     $method = 'writeAll';
+                    $head   = $head . "\n";
             }
 
             $callback[1] = $method;
