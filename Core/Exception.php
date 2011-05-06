@@ -215,8 +215,9 @@ class Idle extends \Exception implements \Serializable {
 
         if(   true === $previous
            && null !== $previous = $this->getPreviousThrow())
-            $out .= "\n\n" . '⬇' . "\n\n" . 'Nested ' .
-                    $previous->raise($previous);
+            $out .= "\n\n" . '⬇' . "\n\n" .
+                    'Nested exception (' . get_class($previous) . '):' . "\n" .
+                    $previous->raise(true);
 
         return $out;
     }
@@ -237,12 +238,10 @@ class Idle extends \Exception implements \Serializable {
         echo 'Uncaught exception (' . get_class($exception) . '):' . "\n" .
              $exception->raise();
 
-        if(null !== $previous = $exception->getPreviousThrow()) {
-
-            echo "\n\n" . '⬇' . "\n\n" . 'Nested ';
-
-            $previous::uncaught($previous);
-        }
+        if(null !== $previous = $exception->getPreviousThrow())
+            echo "\n\n" . '⬇' . "\n\n" .
+                 'Nested exception (' . get_class($previous) . '):' . "\n" .
+                 $previous->raise(true);
 
         return;
     }
