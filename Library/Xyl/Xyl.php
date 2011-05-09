@@ -206,6 +206,14 @@ class          Xyl
      */
     private static $_ci           = 0;
 
+    /**
+     * Whether the document is open from the constructor or from the
+     * self::open() method.
+     *
+     * @var \Hoa\Xyl bool
+     */
+    private $_innerOpen           = false;
+
 
 
     /**
@@ -870,6 +878,9 @@ class          Xyl
      */
     protected function computeDataBinding ( ) {
 
+        if(true === $this->isInnerOpened())
+            return;
+
         if(null === $this->_concrete)
             throw new Exception(
                 'Cannot compute the data binding before building the ' .
@@ -923,13 +934,14 @@ class          Xyl
      */
     public function open ( $streamName ) {
 
-        $in   = get_class($this->getInnerStream());
-        $new  = new self(
+        $in              = get_class($this->getInnerStream());
+        $new             = new self(
             new $in($streamName),
             $this->getStream(),
             $this->_interpreter,
             $this->getRouter()
         );
+        $new->_innerOpen = true;
 
         return $new->interprete();
     }
@@ -1006,6 +1018,18 @@ class          Xyl
     public function getRouter ( ) {
 
         return $this->_router;
+    }
+
+    /**
+     * Whether the document is open from the constructor or from the
+     * self::open() method.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isInnerOpened ( ) {
+
+        return $this->_innerOpen;
     }
 
     /**
