@@ -158,10 +158,28 @@ class          Link
         if(false === $this->abstract->attributeExists('sref'))
             return;
 
-        $this->abstract->writeAttribute(
-            'sref',
-            $this->computeLink($this->abstract->readAttribute('sref'))
-        );
+        $sref   = $this->computeLink($this->abstract->readAttribute('sref'));
+        $this->abstract->writeAttribute('sref', $sref);
+
+        $root   = $this->getAbstractElementSuperRoot();
+        $new    = $root->open($sref);
+        $self   = $new->getConcrete();
+
+        foreach($this->abstract->readCustomAttributes('sref') as $custom => $value) {
+
+            $handle = $new->xpath($value);
+
+            if(!isset($handle[0]))
+                continue;
+
+            $foo    = $self->getConcreteElement($handle[0]);
+            $bar    = trim($foo->computeValue());
+
+            if(empty($bar) && true === $foo->attributeExists('id'))
+                $bar = $foo->readAttribute('id');
+
+            $this->abstract->writeAttribute('href-' . $custom, $bar);
+        }
 
         return;
     }
