@@ -200,28 +200,9 @@ class Tableofcontents extends Concrete implements \Hoa\Xyl\Element\Executable {
             return;
 
         $this->_external = true;
-        $root            = $this->getAbstractElementSuperRoot();
 
-        foreach($links as $link) {
-
-            if(false === $link->attributeExists('sref'))
-                continue;
-
+        foreach($links as $link)
             $this->_entry[] = $this->getConcreteElement($link);
-            $new            = $root->open($link->readAttribute('sref'));
-            $handle         = $new->xpath($link->readAttribute('sref-title'));
-
-            if(!isset($handle[0]))
-                continue;
-
-            $title  = $this->getConcreteElement($handle[0]);
-            $value  = trim($title->computeValue());
-
-            if(empty($value) && true === $title->attributeExists('id'))
-                $value = $title->readAttribute('id');
-
-            $link->writeAttribute('href-title', $value);
-        }
 
         return;
     }
