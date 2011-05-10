@@ -403,6 +403,7 @@ class Http implements Router {
         $rule[Router::RULE_VARIABLES]['_subdomain'] = $sub;
         $rule[Router::RULE_VARIABLES]['_call']      = $rule[Router::RULE_CALL];
         $rule[Router::RULE_VARIABLES]['_able']      = $rule[Router::RULE_ABLE];
+        $rule[Router::RULE_VARIABLES]['_request']   = $_REQUEST;
 
         foreach(array_merge($muri, $msubdomain) as $key => $value)
             if(is_string($key))
