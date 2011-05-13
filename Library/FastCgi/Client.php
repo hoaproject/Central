@@ -41,7 +41,22 @@ from('Hoa')
 /**
  * \Hoa\FastCgi\Exception
  */
--> import('FastCgi.Exception')
+-> import('FastCgi.Exception.~')
+
+/**
+ * \Hoa\FastCgi\Exception\CannotMultiplex
+ */
+-> import('FastCgi.Exception.CannotMultiplex')
+
+/**
+ * \Hoa\FastCgi\Exception\Overloaded
+ */
+-> import('FastCgi.Exception.Overloaded')
+
+/**
+ * \Hoa\FastCgi\Exception\UnknownRole
+ */
+-> import('FastCgi.Exception.UnknownRole')
 
 /**
  * \Hoa\FastCgi\Connection
@@ -64,6 +79,38 @@ namespace Hoa\FastCgi {
  */
 
 class Client extends Connection {
+
+    /**
+     * Request status: normal en of request.
+     *
+     * @const int
+     */
+    const STATUS_COMPLETE         = 0;
+
+    /**
+     * Request status: rejecting a new request; this happens when a Web server
+     * sends concurrent requests over one connection to an application that is
+     * designed to process one request at a time per connection.
+     *
+     * @const int
+     */
+    const STATUS_CANNOT_MULTIPLEX = 1;
+
+    /**
+     * Request status: rejecting a new request; this happens when the
+     * application runs out of some resource, e.g. database connections.
+     *
+     * @const int
+     */
+    const STATUS_OVERLOADED       = 2;
+
+    /**
+     * Request status: rejecting a new request; this happens when the Web server
+     * has specificied a role that is unknown to the application.
+     *
+     * @const int
+     */
+    const STATUS_UNKNOWN_ROLE     = 3;
 
     /**
      * Client socket connection.
@@ -150,6 +197,33 @@ class Client extends Connection {
         } while(3 !== $handle[parent::HEADER_TYPE]);
 
         $client->disconnect();
+
+        switch(ord($handle[parent::HEADER_CONTENT][4])) {
+
+            case self::STATUS_CANNOT_MULTIPLEX:
+                throw new Exception\CannotMultiplex(
+                    'Application %s that you are trying to reach does not ' .
+                    'support multiplexing.',
+                    0, $this->getClient()->getSocket()->__toString());
+              break;
+
+            case self::STATUS_OVERLOADED:
+                throw new Exception\Overloaded(
+                    'Application %s is too busy and rejects your request.',
+                    1, $this->getClient()->getSocket()->__toString());
+              break;
+
+            case self::STATUS_UNKNOWN_ROLE:
+                throw new Exception\UnknownRole(
+                    'Server for the application %s returns an unknown role.',
+                    2, $this->getClient()->getSocket()->__toString());
+              break;
+        }
+
+        /**
+         * default: // self::STATUS_COMPLETE
+         *   break;
+         */
 
         $pos     = strpos($response, "\r\n\r\n");
         $headers = substr($response, 0, $pos);
