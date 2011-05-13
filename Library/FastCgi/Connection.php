@@ -98,7 +98,7 @@ abstract class Connection {
      *
      * @const int
      */
-    const PACK_CONTENT          = 6;
+    const HEADER_CONTENT        = 6;
 
 
 
@@ -220,7 +220,7 @@ abstract class Connection {
                                             ord($pack[5]),
             self::HEADER_PADDING_LENGTH =>  ord($pack[6]),
             self::HEADER_RESERVED       =>  ord($pack[7]),
-            self::PACK_CONTENT          =>  null
+            self::HEADER_CONTENT        =>  null
         );
         $length  = $headers[self::HEADER_CONTENT_LENGTH] +
                    $headers[self::HEADER_PADDING_LENGTH];
@@ -228,7 +228,7 @@ abstract class Connection {
         if(0 === $length)
             return $headers;
 
-        $headers[self::PACK_CONTENT] = substr(
+        $headers[self::HEADER_CONTENT] = substr(
             $this->_client->read($length),
             0,
             $headers[self::HEADER_CONTENT_LENGTH]

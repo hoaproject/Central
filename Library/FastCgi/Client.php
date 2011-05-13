@@ -135,8 +135,8 @@ class Client extends Connection {
             $request .= $this->pack(5, $content);
 
         $request .= $this->pack(5, '');
-        $handle   = null;
         $client->writeAll($request);
+        $handle   = null;
 
         do {
 
@@ -145,7 +145,7 @@ class Client extends Connection {
 
             if(   6 === $handle[self::HEADER_TYPE]
                || 7 === $handle[self::HEADER_TYPE])
-                $response .= $handle[self::PACK_CONTENT];
+                $response .= $handle[self::HEADER_CONTENT];
 
         } while(3 !== $handle[self::HEADER_TYPE]);
 
