@@ -81,6 +81,34 @@ namespace Hoa\FastCgi {
 class Client extends Connection {
 
     /**
+     * Request: begin.
+     *
+     * @const int
+     */
+    const REQUEST_BEGIN           = 1;
+
+    /**
+     * Request: abord.
+     *
+     * @const int
+     */
+    const REQUEST_ABORD           = 2;
+
+    /**
+     * Request: end.
+     *
+     * @const int
+     */
+    const REQUEST_END             = 3;
+
+    /**
+     * Request: parameters.
+     *
+     * @const int
+     */
+    const REQUEST_PARAMETERS      = 4;
+
+    /**
      * Request status: normal en of request.
      *
      * @const int
@@ -166,8 +194,8 @@ class Client extends Connection {
         $parameters = null;
         $response   = null;
         $request    = $this->pack(
-            1,
-            chr(0) . chr(1) . chr((int) $client->isPersistent()) .
+            self::REQUEST_BEGIN,
+            chr(0) . chr(0) . chr((int) $client->isPersistent()) .
             chr(0) . chr(0) . chr(0) . chr(0) . chr(0)
         );
 
@@ -194,7 +222,7 @@ class Client extends Connection {
                || 7 === $handle[parent::HEADER_TYPE])
                 $response .= $handle[parent::HEADER_CONTENT];
 
-        } while(3 !== $handle[parent::HEADER_TYPE]);
+        } while(self::REQUEST_END !== $handle[parent::HEADER_TYPE]);
 
         $client->disconnect();
 
