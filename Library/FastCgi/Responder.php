@@ -109,6 +109,27 @@ class Responder extends Connection {
     const REQUEST_PARAMETERS      = 4;
 
     /**
+     * Stream: stdin.
+     *
+     * @const int
+     */
+    const STREAM_STDIN            = 5;
+
+    /**
+     * Stream: stdout.
+     *
+     * @const int
+     */
+    const STREAM_STDOUT           = 6;
+
+    /**
+     * Stream: stderr.
+     *
+     * @const int
+     */
+    const STREAM_STDERR           = 7;
+
+    /**
      * Request status: normal en of request.
      *
      * @const int
@@ -207,14 +228,14 @@ class Responder extends Connection {
         $parameters .= $this->packPairs($headers);
 
         if(null !== $parameters)
-            $request .= $this->pack(4, $parameters);
+            $request .= $this->pack(self::REQUEST_PARAMETERS, $parameters);
 
-        $request .= $this->pack(4, '');
+        $request .= $this->pack(self::REQUEST_PARAMETERS, '');
 
         if(null !== $content)
-            $request .= $this->pack(5, $content);
+            $request .= $this->pack(self::STREAM_STDIN, $content);
 
-        $request .= $this->pack(5, '');
+        $request .= $this->pack(self::STREAM_STDIN, '');
         $client->writeAll($request);
         $handle   = null;
 
@@ -223,8 +244,8 @@ class Responder extends Connection {
             if(false === $handle = $this->readPack())
                 throw new Exception('Bad request foobar.', 0);
 
-            if(   6 === $handle[parent::HEADER_TYPE]
-               || 7 === $handle[parent::HEADER_TYPE])
+            if(   self::STREAM_STDOUT === $handle[parent::HEADER_TYPE]
+               || self::STREAM_STDERR === $handle[parent::HEADER_TYPE])
                 $response .= $handle[parent::HEADER_CONTENT];
 
         } while(self::REQUEST_END !== $handle[parent::HEADER_TYPE]);
