@@ -143,11 +143,11 @@ class Client extends Connection {
             if(false === $handle = $this->readPack())
                 throw new Exception('Bad request foobar.', 0);
 
-            if(   6 === $handle[self::HEADER_TYPE]
-               || 7 === $handle[self::HEADER_TYPE])
-                $response .= $handle[self::HEADER_CONTENT];
+            if(   6 === $handle[parent::HEADER_TYPE]
+               || 7 === $handle[parent::HEADER_TYPE])
+                $response .= $handle[parent::HEADER_CONTENT];
 
-        } while(3 !== $handle[self::HEADER_TYPE]);
+        } while(3 !== $handle[parent::HEADER_TYPE]);
 
         $client->disconnect();
 
