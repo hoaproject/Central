@@ -147,8 +147,9 @@ class Client extends Connection {
                     'Client cannot join %s.', 0, $streamName);
             else
                 throw new Exception(
-                    'Client returns an error (number %d): %s.',
-                    1, array($errno, $errstr));
+                    'Client returns an error (number %d): %s while trying ' .
+                    'to join %s.',
+                    1, array($errno, $errstr, $streamName));
 
         return $connection;
     }
