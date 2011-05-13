@@ -68,9 +68,9 @@ from('Hoa')
 namespace Hoa\FastCgi {
 
 /**
- * Class \Hoa\FastCgi\Client.
+ * Class \Hoa\FastCgi\Responder.
  *
- * A FastCGI client.
+ * A FastCGI client with a responder role.
  * Inspired by PHP SAPI code: php://sapi/cgi/fastcgi.*.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
@@ -78,7 +78,7 @@ namespace Hoa\FastCgi {
  * @license    New BSD License
  */
 
-class Client extends Connection {
+class Responder extends Connection {
 
     /**
      * Request: begin.
@@ -195,7 +195,12 @@ class Client extends Connection {
         $response   = null;
         $request    = $this->pack(
             self::REQUEST_BEGIN,
-            chr(0) . chr(0) . chr((int) $client->isPersistent()) .
+            //   ___________________
+            //  /                   \
+            //  | “I'm a responder” |
+            //  \_______  __________/
+            //          \/
+            chr(0) . chr(1) . chr((int) $client->isPersistent()) .
             chr(0) . chr(0) . chr(0) . chr(0) . chr(0)
         );
 
