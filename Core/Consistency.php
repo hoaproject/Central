@@ -421,8 +421,25 @@ class Consistency {
         $classname = ltrim($classname, '\\');
         $classes   = self::getAllImportedClasses();
 
-        if(!isset($classes[$classname]))
-            return false;
+        if(!isset($classes[$classname])) {
+
+            $trace = debug_backtrace();
+
+            if('unserialize' !== @$trace[2]['function'])
+                return false;
+
+            $head = trim(str_replace(
+                        '\\',
+                        '.',
+                        substr($classname, 0, $pos = strpos($classname, '\\'))
+                    ), '()');
+            $tail = substr($classname, $pos + 1);
+
+            self::from($head)
+                ->import(str_replace('\\', '.', $tail), true);
+
+            return true;
+        }
 
         $class = &$classes[$classname];
 
