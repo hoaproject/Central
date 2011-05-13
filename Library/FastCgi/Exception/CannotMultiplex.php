@@ -34,18 +34,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\FastCgi {
+namespace {
+
+from('Hoa')
 
 /**
- * Class \Hoa\FastCgi\Exception.
+ * \Hoa\FastCgi\Exception
+ */
+-> import('FastCgi.Exception.~');
+
+}
+
+namespace Hoa\FastCgi\Exception {
+
+/**
+ * Class \Hoa\FastCgi\Exception\CannotMultiplex.
  *
- * Extending the \Hoa\Core\Exception class.
+ * Extending the \Hoa\FastCgi\Exception class.
+ * This happens when a Web server sends concurrent requests over one connection
+ * to an application that is designed to process one request at a time per
+ * connection.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Exception extends \Hoa\Core\Exception { }
+class CannotMultiplex extends Exception { }
 
 }
