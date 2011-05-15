@@ -238,6 +238,7 @@ class Core implements Parameterizable {
                 'protocol.Data/Variable/Cache'    => '(:%protocol.Data/Variable:)Cache/',
                 'protocol.Data/Variable/Database' => '(:%protocol.Data/Variable:)Database/',
                 'protocol.Data/Variable/Log'      => '(:%protocol.Data/Variable:)Log/',
+                'protocol.Data/Variable/Run'      => '(:%protocol.Data/Variable:)Run/',
                 'protocol.Data/Variable/Private'  => '(:%protocol.Data/Variable:)Private/',
                 'protocol.Data/Variable/Test'     => '(:%protocol.Data/Variable:)Test/',
                 'protocol.Data'                   => '(:%root.data:)/',
