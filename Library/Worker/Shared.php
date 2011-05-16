@@ -125,17 +125,36 @@ class Shared {
      */
     public function postMessage ( $message ) {
 
-        $message = serialize($message);
         $this->_client->connect();
-        $this->_client->writeAll(
-            pack('C', Backend\Shared::TYPE_MESSAGE) .
-            pack('N', strlen($message)) .
-            $message .
-            pack('C', 0)
-        );
+        $this->_client->writeAll(Backend\Shared::pack(
+            Backend\Shared::TYPE_MESSAGE,
+            $message
+        ));
         $this->_client->disconnect();
 
         return;
+    }
+
+    /**
+     * Get informations about the shared worker.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getInformations ( ) {
+
+        $this->_client->connect();
+        $this->_client->writeAll(Backend\Shared::pack(
+            Backend\Shared::TYPE_INFORMATIONS,
+            "\0"
+        ));
+        $this->_client->read(2); // skip type.
+        $length  = unpack('Nl', $this->_client->read(4));
+        $message = $this->_client->read($length['l']);
+        $this->_client->read(1); // skip eom.
+        $this->_client->disconnect();
+
+        return unserialize($message);
     }
 }
 
