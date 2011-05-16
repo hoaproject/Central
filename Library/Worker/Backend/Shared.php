@@ -102,44 +102,72 @@ class Shared implements \Hoa\Core\Event\Listenable {
     /**
      * Message type: stop.
      *
-     * @var \Hoa\Worker\Backend\Shared int
+     * @const int
      */
-    const TYPE_STOP    = 0;
+    const TYPE_STOP         = 0;
 
     /**
      * Message type: message (normal).
      *
-     * @var \Hoa\Worker\Backend\Shared int
+     * @const int
      */
-    const TYPE_MESSAGE = 1;
+    const TYPE_MESSAGE      = 1;
+
+    /**
+     * Message type: informations.
+     *
+     * @const int
+     */
+    const TYPE_INFORMATIONS = 2;
 
     /**
      * Socketable object.
      *
      * @var \Hoa\Socket\Socketable object
      */
-    protected $_socket   = null;
+    protected $_socket      = null;
 
     /**
      * Worker ID.
      *
      * @var \Hoa\Worker\Backend\Shared string
      */
-    protected $_wid      = null;
+    protected $_wid         = null;
 
     /**
      * Listeners.
      *
      * @var \Hoa\Core\Event\Listener object
      */
-    protected $_on       = null;
+    protected $_on          = null;
 
     /**
      * Worker's password (needed to stop the worker).
      *
      * @var \Hoa\Worker\Backend\Shared string
      */
-    protected $_password = null;
+    protected $_password    = null;
+
+    /**
+     * Start time.
+     *
+     * @var \Hoa\Worker\Backend\Shared float
+     */
+    protected $_startTime   = 0;
+
+    /**
+     * Number of received messages.
+     *
+     * @var \Hoa\Worker\Backend\Shared float
+     */
+    protected $_messages    = 0;
+
+    /**
+     * Last received message time.
+     *
+     * @var \Hoa\Worker\Backend\Shared float
+     */
+    protected $_lastMessage = 0;
 
 
 
@@ -172,9 +200,10 @@ class Shared implements \Hoa\Core\Event\Listenable {
 
         set_time_limit(0);
 
-        $this->_socket   = $workerId;
-        $this->_on       = new \Hoa\Core\Event\Listener($this, array('message'));
-        $this->_password = sha1($password);
+        $this->_socket    = $workerId;
+        $this->_on        = new \Hoa\Core\Event\Listener($this, array('message'));
+        $this->_password  = sha1($password);
+        $this->_startTime = microtime(true);
 
         return;
     }
@@ -211,13 +240,13 @@ class Shared implements \Hoa\Core\Event\Listenable {
                 'This program (%s) must run behind PHP-FPM.', 1, __FILE__);
 
         fastcgi_finish_request();
-        $_eom   = pack('c', 0);
+        $_eom   = pack('C', 0);
 
         while(true) foreach($server->select() as $node) {
 
-            $request = unpack('Cr', $server->read(1));
+            $request = unpack('nr', $server->read(2));
             $length  = unpack('Nl', $server->read(4));
-            $message = $server->read($length['l']);
+            $message = unserialize($server->read($length['l']));
             $eom     = unpack('Ce', $server->read(1));
 
             if($eom['e'] != $_eom) {
@@ -227,21 +256,44 @@ class Shared implements \Hoa\Core\Event\Listenable {
                 continue;
             }
 
-            $server->disconnect();
-
             switch($request['r']) {
 
                 case self::TYPE_MESSAGE:
                     $this->_on->fire('message', new \Hoa\Core\Event\Bucket(
-                        unserialize($message)
+                        $message
                     ));
+                    ++$this->_messages;
+                    $this->_lastMessage = time();
                   break;
 
                 case self::TYPE_STOP:
-                    if($this->_password === $message)
+                    if($this->_password === $message) {
+
+                        $server->disconnect();
+
                         break 3;
+                    }
+                  break;
+
+                case self::TYPE_INFORMATIONS:
+                    $message = array(
+                        'id'                    => $this->_wid,
+                        'socket'                => $this->_socket,
+                        'start'                 => $this->_startTime,
+                        'pid'                   => getmypid(),
+                        'memory'                => memory_get_usage(true),
+                        'memory_allocated'      => memory_get_usage(),
+                        'memory_peak'           => memory_get_peak_usage(true),
+                        'memory_allocated_peak' => memory_get_usage(),
+                        'messages'              => $this->_messages,
+                        'last_message'          => $this->_lastMessage,
+                        'filename'              => $_SERVER['SCRIPT_FILENAME']
+                    );
+                    $server->writeAll(self::pack(self::TYPE_MESSAGE, $message));
                   break;
             }
+
+            $server->disconnect();
         }
 
         $server->disconnect();
@@ -289,15 +341,28 @@ class Shared implements \Hoa\Core\Event\Listenable {
 
         $client = new \Hoa\Socket\Connection\Client($this->_socket);
         $client->connect();
-        $client->writeAll(
-            pack('C', self::TYPE_STOP) .
-            pack('N', strlen($this->_password)) .
-            $this->_password .
-            pack('C', 0)
-        );
+        $client->writeAll(self::pack(self::TYPE_STOP, $this->_password));
         $client->disconnect();
 
         return true;
+    }
+
+    /**
+     * Pack a message.
+     *
+     * @access  public
+     * @param   int     $type       Please, see self::TYPE_* constants.
+     * @param   mixed   $message    Whatever you want.
+     * @return  string
+     */
+    public static function pack ( $type, $message ) {
+
+        $message = serialize($message);
+
+        return pack('n', $type ) .
+               pack('N', strlen($message)) .
+               $message .
+               pack('C', 0);
     }
 }
 
