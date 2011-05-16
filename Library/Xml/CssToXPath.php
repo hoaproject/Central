@@ -197,7 +197,7 @@ class CssToXPath extends \Hoa\Compiler\Ll1 {
             array(
                 // 1. Selectors group.
                 array(
-                    /*               , 
+                    /*               ,
                     /* __ */ array( __ ),
                     /* GO */ array('GO')
                 ),
@@ -238,7 +238,7 @@ class CssToXPath extends \Hoa\Compiler\Ll1 {
             array(
                 // 1. Selectors group.
                 array(
-                    /*              , 
+                    /*                ,
                     /* __ */ array(   0 ),
                     /* GO */ array('2,,')
                 ),
