@@ -155,6 +155,8 @@ class Shared implements \Hoa\Core\Event\Listenable {
             $workerId   = \Hoa\Worker\Run::get($workerId);
         }
 
+        set_time_limit(0);
+
         $this->_socket   = $workerId;
         $this->_on       = new \Hoa\Core\Event\Listener($this, array('message'));
         $this->_password = sha1($password);
@@ -244,7 +246,8 @@ class Shared implements \Hoa\Core\Event\Listenable {
         $server = new \Hoa\FastCgi\Responder(
             new \Hoa\Socket\Connection\Client($socket)
         );
-        $server->send(array(
+
+        return $server->send(array(
             'GATEWAY_INTERFACE' => 'FastCGI/1.0',
             'SERVER_PROTOCOL'   => 'HTTP/1.1',
             'SERVER_NAME'       => 'localhost',
@@ -255,8 +258,6 @@ class Shared implements \Hoa\Core\Event\Listenable {
             'SCRIPT_FILENAME'   => $workerPath,
             'SCRIPT_NAME'       => DS . dirname($workerPath)
         ));
-
-        return true;
     }
 
     /**
