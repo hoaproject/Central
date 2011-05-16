@@ -100,6 +100,20 @@ namespace Hoa\Worker\Backend {
 class Shared implements \Hoa\Core\Event\Listenable {
 
     /**
+     * Message type: stop.
+     *
+     * @var \Hoa\Worker\Backend\Shared int
+     */
+    const TYPE_STOP    = 0;
+
+    /**
+     * Message type: message (normal).
+     *
+     * @var \Hoa\Worker\Backend\Shared int
+     */
+    const TYPE_MESSAGE = 1;
+
+    /**
      * Socketable object.
      *
      * @var \Hoa\Socket\Socketable object
@@ -208,18 +222,25 @@ class Shared implements \Hoa\Core\Event\Listenable {
             if($eom['e'] != $_eom) {
 
                 $server->disconnect();
+
                 continue;
             }
 
             $server->disconnect();
 
-            if(1 === $request['r']) // message
-                $this->_on->fire('message', new \Hoa\Core\Event\Bucket(
-                    unserialize($message)
-                ));
-            elseif(0 === $request['r']) // stop
-                if($this->_password === $message)
-                    break 2;
+            switch($request['r']) {
+
+                case self::TYPE_MESSAGE:
+                    $this->_on->fire('message', new \Hoa\Core\Event\Bucket(
+                        unserialize($message)
+                    ));
+                  break;
+
+                case self::TYPE_STOP:
+                    if($this->_password === $message)
+                        break 3;
+                  break;
+            }
         }
 
         $server->disconnect();
@@ -250,9 +271,6 @@ class Shared implements \Hoa\Core\Event\Listenable {
         return $server->send(array(
             'GATEWAY_INTERFACE' => 'FastCGI/1.0',
             'SERVER_PROTOCOL'   => 'HTTP/1.1',
-            'SERVER_NAME'       => 'localhost',
-            'SERVER_ADDR'       => 'localhost:8888',
-            'SERVER_PORT'       => 8888,
             'REQUEST_METHOD'    => 'GET',
             'REQUEST_URI'       => $workerPath,
             'SCRIPT_FILENAME'   => $workerPath,
@@ -271,7 +289,7 @@ class Shared implements \Hoa\Core\Event\Listenable {
         $client = new \Hoa\Socket\Connection\Client($this->_socket);
         $client->connect();
         $client->writeAll(
-            pack('C', 0) .
+            pack('C', self::TYPE_STOP) .
             pack('N', strlen($this->_password)) .
             $this->_password .
             pack('C', 0)

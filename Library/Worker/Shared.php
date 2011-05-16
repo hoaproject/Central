@@ -49,6 +49,11 @@ from('Hoa')
 -> import('Worker.Run')
 
 /**
+ * \Hoa\Worker\Backend\Shared
+ */
+-> import('Worker.Backend.Shared')
+
+/**
  * \Hoa\Socket\Connection\Client
  */
 -> import('Socket.Connection.Client');
@@ -113,7 +118,7 @@ class Shared {
     }
 
     /**
-     * Post a message to the worker.
+     * Post a message to the shared worker.
      *
      * @access  public
      * @param   mixed   $message    Message (everything you want).
@@ -124,7 +129,7 @@ class Shared {
         $message = serialize($message);
         $this->_client->connect();
         $this->_client->writeAll(
-            pack('C', 1) .
+            pack('C', Backend\Shared::TYPE_MESSAGE) .
             pack('N', strlen($message)) .
             $message .
             pack('C', 0)
