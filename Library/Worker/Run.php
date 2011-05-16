@@ -75,7 +75,14 @@ class Run {
                 'Worker ID %s already exists, we cannot create it again.',
                 0, $workerId);
 
-        file_put_contents(static::find($workerId), serialize($socket));
+        file_put_contents(
+            static::find($workerId),
+            serialize(array(
+                'id'     => $workerId,
+                'socket' => $socket,
+                'start'  => microtime(true)
+            ))
+        );
 
         return true;
     }

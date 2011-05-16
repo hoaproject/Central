@@ -166,7 +166,8 @@ class Shared implements \Hoa\Core\Event\Listenable {
         if(is_string($workerId)) {
 
             $this->_wid = $workerId;
-            $workerId   = \Hoa\Worker\Run::get($workerId);
+            $handle     = \Hoa\Worker\Run::get($workerId);
+            $workerId   = $handle['socket'];
         }
 
         set_time_limit(0);

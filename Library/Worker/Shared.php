@@ -96,9 +96,8 @@ class Shared {
 
         if(is_string($workerId)) {
 
-            $this->_client = new \Hoa\Socket\Connection\Client(
-                Run::get($workerId)
-            );
+            $wid           = Run::get($workerId);
+            $this->_client = new \Hoa\Socket\Connection\Client($wid['socket']);
 
             return;
         }
