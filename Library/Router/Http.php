@@ -427,10 +427,17 @@ class Http implements Router {
         $pattern   = $rule[Router::RULE_PATTERN];
         $variables = array_merge($rule[Router::RULE_VARIABLES], $variables);
 
-        if(false !== $pos = strpos($pattern, '@'))
-            return $this->_unroute(substr($pattern, 0, $pos), $variables) .
+        if(false !== $pos = strpos($pattern, '@')) {
+
+            $port   = $this->getPort();
+            $secure = $this->isSecure();
+
+            return (true === $secure ? 'https://' : 'http://') .
+                   $this->_unroute(substr($pattern, 0, $pos), $variables) .
                    '.' . $this->getStrictDomain() .
+                   ((80 !== $port && false === $secure) ? ':' . $port : '') .
                    $this->_unroute(substr($pattern, $pos + 1), $variables);
+        }
 
         return $this->_unroute($pattern, $variables);
     }
@@ -530,7 +537,12 @@ class Http implements Router {
         if('cli' === php_sapi_name())
             return '';
 
-        return $_SERVER['HTTP_HOST'];
+        $domain = $_SERVER['HTTP_HOST'];
+
+        if(false !== $pos = strpos($domain, ':'))
+            return substr($domain, 0, $pos);
+
+        return $domain;
     }
 
     /**
@@ -558,6 +570,20 @@ class Http implements Router {
     public function getSubDomain ( ) {
 
         return implode('.', array_slice(explode('.', $this->getDomain()), 0, -2));
+    }
+
+    /**
+     * Get port.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getPort ( ) {
+
+        if('cli' === php_sapi_name())
+            return 80;
+
+        return (int) $_SERVER['SERVER_PORT'];
     }
 
     /**
@@ -598,6 +624,17 @@ class Http implements Router {
     public function getBase ( ) {
 
         return $this->_base;
+    }
+
+    /**
+     * Whether the connection is secure.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isSecure ( ) {
+
+        return 443 === $this->getPort();
     }
 }
 
