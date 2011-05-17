@@ -166,7 +166,7 @@ class          Xyl
     /**
      * Router.
      *
-     * @var \Hoa\Router object
+     * @var \Hoa\Router\Http object
      */
     protected $_router            = null;
 
@@ -224,7 +224,7 @@ class          Xyl
      *                                                     as XYL.
      * @param   \Hoa\Stream\IStream\Out    $out            Stream for rendering.
      * @param   \Hoa\Xyl\Interpreter       $interpreter    Interpreter.
-     * @param   \Hoa\Router                $router         Router.
+     * @param   \Hoa\Router\Http           $router         Router.
      * @param   array                      $parameters     Parameters.
      * @return  void
      * @throw   \Hoa\Xml\Exception
@@ -232,7 +232,7 @@ class          Xyl
     public function __construct ( \Hoa\Stream\IStream\In  $in,
                                   \Hoa\Stream\IStream\Out $out,
                                   Interpreter             $interpreter,
-                                  \Hoa\Router             $router = null,
+                                  \Hoa\Router\Http        $router = null,
                                   Array                   $parameters = array() ) {
 
         parent::__construct('\Hoa\Xyl\Element\Basic', $in);
@@ -298,10 +298,7 @@ class          Xyl
                 ));
 
         if(null !== $router && false === $router->ruleExists('_css'))
-            $router->addPrivateRule(
-                '_css',
-                'Public/Css/(?<theme>.*)/(?<sheet>.*)'
-            );
+            $router->_all('_css', 'Public/Css/(?<theme>.*)/(?<sheet>.*)');
 
         return;
     }
@@ -998,10 +995,10 @@ class          Xyl
      * Set router.
      *
      * @access  public
-     * @param   \Hoa\Router  $router    Router.
-     * @return  \Hoa\Router
+     * @param   \Hoa\Router\Http  $router    Router.
+     * @return  \Hoa\Router\Http
      */
-    public function setRouter ( \Hoa\Router $router ) {
+    public function setRouter ( \Hoa\Router\Http $router ) {
 
         $old           = $this->_router;
         $this->_router = $router;
@@ -1013,7 +1010,7 @@ class          Xyl
      * Get router.
      *
      * @access  public
-     * @return  \Hoa\Router
+     * @return  \Hoa\Router\Http
      */
     public function getRouter ( ) {
 
