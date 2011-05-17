@@ -439,6 +439,19 @@ class Http implements Router {
                    $this->_unroute(substr($pattern, $pos + 1), $variables);
         }
 
+        if(true === array_key_exists('_subdomain', $variables)) {
+
+            $port   = $this->getPort();
+            $secure = $this->isSecure();
+
+            return (true === $secure ? 'https://' : 'http://') .
+                   $variables['_subdomain'] .
+                   (!empty($variables['_subdomain']) ? '.' : '') .
+                   $this->getStrictDomain() .
+                   ((80 !== $port && false === $secure) ? ':' . $port : '') .
+                   $this->_unroute($pattern, $variables);
+        }
+
         return $this->_unroute($pattern, $variables);
     }
 
