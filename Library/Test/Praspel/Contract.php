@@ -748,8 +748,8 @@ class          Contract
      *
      * @access  public
      * @param   \Hoa\Visitor\Visit  $visitor    Visitor.
-     * @param   mixed              &$handle    Handle (reference).
-     * @param   mixed              $eldnah     Handle (no reference).
+     * @param   mixed               &$handle    Handle (reference).
+     * @param   mixed               $eldnah     Handle (no reference).
      * @return  mixed
      */
     public function accept ( \Hoa\Visitor\Visit $visitor,
