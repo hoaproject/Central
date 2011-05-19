@@ -483,7 +483,7 @@ class Listener {
      * @access  public
      * @param   string                  $listenerId    Listener ID.
      * @param   \Hoa\Core\Event\Bucket  $data          Data.
-     * @return  void
+     * @return  array
      * @throw   \Hoa\Core\Exception
      */
     public function fire ( $listenerId, Bucket $data ) {
@@ -493,11 +493,12 @@ class Listener {
                 'Cannot fire on %s because it is not defined.', 1);
 
         $data->setSource($this->_source);
+        $out = array();
 
         foreach($this->_listen[$listenerId] as $callable)
-            $callable($data);
+            $out[] = $callable($data);
 
-        return;
+        return $out;
     }
 }
 
