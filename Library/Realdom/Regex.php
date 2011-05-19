@@ -54,9 +54,9 @@ from('Hoa')
 -> import('Compiler.Llk')
 
 /**
- * \Hoa\Compiler\Visitor\Realdom
+ * \Hoa\Regex\Visitor\Realdom
  */
--> import('Compiler.Visitor.Realdom')
+-> import('Regex.Visitor.Realdom')
 
 /**
  * \Hoa\File\Read
@@ -103,9 +103,16 @@ class Regex extends String {
     /**
      * Regex visitor that use realdom.
      *
-     * @var \Hoa\Compiler\Visitor\Realdom object
+     * @var \Hoa\Regex\Visitor\Realdom object
      */
     protected static $_visitor  = null;
+
+    /**
+     * AST.
+     *
+     * @var \Hoa\Compiler\TreeNode object
+     */
+    protected $_ast             = null;
 
 
 
@@ -124,9 +131,12 @@ class Regex extends String {
             );
 
         if(null === self::$_visitor)
-            self::$_visitor = new \Hoa\Compiler\Visitor\Realdom();
+            self::$_visitor = new \Hoa\Regex\Visitor\Realdom();
 
         $this->_regex = $regex;
+        $this->_ast   = self::$_compiler->parse(
+            $this->_regex->getConstantValue()
+        );
 
         return;
     }
@@ -155,9 +165,7 @@ class Regex extends String {
      */
     protected function _sample ( \Hoa\Test\Sampler $sampler ) {
 
-        $ast = self::$_compiler->parse($this->_regex->getConstantValue());
-
-        return self::$_visitor->visit($ast, $sampler);
+        return self::$_visitor->visit($this->_ast, $sampler);
     }
 }
 
