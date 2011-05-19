@@ -88,49 +88,70 @@ abstract class Connection
      *
      * @var \Hoa\Socket\Socketable object
      */
-    protected $_socket     = null;
+    protected $_socket        = null;
 
     /**
      * Timeout.
      *
      * @var \Hoa\Socket\Connection int
      */
-    protected $_timeout    = 30;
+    protected $_timeout       = 30;
 
     /**
      * Flag.
      *
      * @var \Hoa\Socket\Connection int
      */
-    protected $_flag       = 0;
+    protected $_flag          = 0;
 
     /**
      * Context ID.
      *
      * @var \Hoa\Socket\Connection string
      */
-    protected $_context    = null;
+    protected $_context      = null;
 
     /**
      * Whether the stream is quiet.
      *
      * @var \Hoa\Socket\Connection bool
      */
-    protected $_quiet      = false;
+    protected $_quiet        = false;
 
     /**
      * Whether the stream is mute.
      *
      * @var \Hoa\Socket\Connection bool
      */
-    protected $_mute       = false;
+    protected $_mute          = false;
 
     /**
      * Whether the stream is disconnected.
      *
      * @var \Hoa\Socket\Connection bool
      */
-    protected $_disconnect = false;
+    protected $_disconnect    = false;
+
+    /**
+     * Whether we should consider remote address or not.
+     *
+     * @var \Hoa\Socket\Connection bool
+     */
+    protected $_remoteAddress = false;
+
+    /**
+     * Remote IP (v4 or v6).
+     *
+     * @var \Hoa\Socket\Connection string
+     */
+    protected $_remoteIp      = null;
+
+    /**
+     * Remote port.
+     *
+     * @var \Hoa\Socket\Connection int
+     */
+    protected $_remotePort    = 0;
 
 
 
@@ -283,6 +304,21 @@ abstract class Connection
     }
 
     /**
+     * Whether we should consider remote address or not.
+     *
+     * @access  public
+     * @param   bool  $consider    Should we consider remote address or not.
+     * @return  bool
+     */
+    public function considerRemoteAddress ( $consider ) {
+
+        $old                  = $this->_remoteAddress;
+        $this->_remoteAddress = $consider;
+
+        return $old;
+    }
+
+    /**
      * Get socket.
      *
      * @access  public
@@ -360,6 +396,39 @@ abstract class Connection
     }
 
     /**
+     * Check if we should consider remote address or not.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isRemoteAddressConsidered ( ) {
+
+        return $this->_remoteAddress;
+    }
+
+    /**
+     * Get remote IP.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getRemoteIp ( ) {
+
+        return $this->_remoteIp;
+    }
+
+    /**
+     * Get remote port.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getRemotePort ( ) {
+
+        return $this->_remotePort;
+    }
+
+    /**
      * Read n characters.
      *
      * @access  public
@@ -374,7 +443,19 @@ abstract class Connection
                 'Cannot read because socket is not established, ' .
                 'i.e. not connected.', 0);
 
-        $out = fread($this->getStream(), $length);
+        if(false === $this->isRemoteAddressConsidered())
+            return stream_socket_recvfrom($this->getStream(), $length);
+
+        $out = stream_socket_recvfrom(
+            $this->getStream(),
+            $length,
+            0,
+            $address
+        );
+
+        $explode           = explode(':', $address);
+        $this->_remoteIp   = $explode[0];
+        $this->_remotePort = (int) $explode[1];
 
         return $out;
     }
@@ -509,7 +590,15 @@ abstract class Connection
         if(strlen($string) > $length)
             $string = substr($string, 0, $length);
 
-        return fwrite($this->getStream(), $string);
+        if(false === $this->isRemoteAddressConsidered())
+            return stream_socket_sendto($this->getStream(), $string);
+
+        return stream_socket_sendto(
+            $this->getStream(),
+            $string,
+            0,
+            $this->getRemoteIp() . ':' . $this->getRemotePort()
+        );
     }
 
     /**
