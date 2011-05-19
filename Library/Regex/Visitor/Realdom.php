@@ -39,7 +39,7 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\COmpiler\Visitor\Exception
+ * \Hoa\Compiler\Visitor\Exception
  */
 -> import('Compiler.Visitor.Exception')
 
@@ -50,10 +50,10 @@ from('Hoa')
 
 }
 
-namespace Hoa\Compiler\Visitor {
+namespace Hoa\Regex\Visitor {
 
 /**
- * Class \Hoa\Compiler\Visitor\Realdom.
+ * Class \Hoa\Regex\Visitor\Realdom.
  *
  * Interprete AST as a realdom (with \Hoa\Test\Sampler\*).
  *
@@ -81,14 +81,14 @@ class Realdom implements \Hoa\Visitor\Visit {
     /**
      * Handle (reference).
      *
-     * @var \Hoa\Compiler\Visitor\Realdom mixed
+     * @var \Hoa\Regex\Visitor\Realdom mixed
      */
     protected $_handle  = null;
 
     /**
      * Handle (no reference).
      *
-     * @var \Hoa\Compiler\Visitor\Realdom mixed
+     * @var \Hoa\Regex\Visitor\Realdom mixed
      */
     protected $_eldnah  = null;
 
