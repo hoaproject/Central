@@ -567,7 +567,7 @@ class Parameter {
                 $word = substr($key, 1);
 
                 // Call a parameter.
-                if($key[0] == '%') {
+                if('%' == $key[0]) {
 
                     if(false === array_key_exists($word, $parameters))
                         throw new \Hoa\Core\Exception(
@@ -578,7 +578,7 @@ class Parameter {
                     $out    = $self->zFormat($handle);
                 }
                 // Call a constant.
-                elseif($key[0] == '_') {
+                elseif('_' == $key[0]) {
 
                     foreach(str_split($word) as $k => $v) {
 
