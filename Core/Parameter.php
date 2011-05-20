@@ -533,7 +533,7 @@ class Parameter {
      *                    suffix 'ar' by 'az'.
      *
      * @access  public
-     * @param   string  $value         Parameter value.
+     * @param   string  $value    Parameter value.
      * @return  string
      * @throw   \Hoa\Core\Exception
      */
