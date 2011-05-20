@@ -254,8 +254,6 @@ class Core implements Parameter\Parameterizable {
         $this->_parameters->setParameters($parameters);
         $this->setProtocol();
 
-        print_r($this->_parameters->getParameters());
-
         return $this;
     }
 
