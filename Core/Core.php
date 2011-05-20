@@ -207,17 +207,18 @@ class Core implements Parameter\Parameterizable {
      */
     public function initialize ( Array $parameters = array() ) {
 
-        $root              = dirname(__DIR__);
+        $hoa               = dirname(__DIR__);
+        $cwd               = getcwd();
         $this->_parameters = new Parameter(
             $this,
             array(
-                'root.ofFrameworkDirectory' => $root
+                'hoa'                => $hoa,
+                'cwd'                => $cwd
             ),
             array(
-                'root'               => '(:root.ofFrameworkDirectory:)',
-                'root.framework'     => '(:%root:)',
-                'root.data'          => '(:%root:h:)/Data',
-                'root.application'   => '(:%root.data:)/../Application',
+                'root.framework'     => '(:hoa:)',
+                'root.data'          => '(:%root.application:h:)/Data',
+                'root.application'   => '(:cwd:h:)',
 
                 'framework.core'     => '(:%root.framework:)/Core',
                 'framework.library'  => '(:%root.framework:)/Library',
@@ -238,8 +239,8 @@ class Core implements Parameter\Parameterizable {
                 'protocol.Data/Variable/Cache'    => '(:%protocol.Data/Variable:)Cache/',
                 'protocol.Data/Variable/Database' => '(:%protocol.Data/Variable:)Database/',
                 'protocol.Data/Variable/Log'      => '(:%protocol.Data/Variable:)Log/',
-                'protocol.Data/Variable/Run'      => '(:%protocol.Data/Variable:)Run/',
                 'protocol.Data/Variable/Private'  => '(:%protocol.Data/Variable:)Private/',
+                'protocol.Data/Variable/Run'      => '(:%protocol.Data/Variable:)Run/',
                 'protocol.Data/Variable/Test'     => '(:%protocol.Data/Variable:)Test/',
                 'protocol.Data'                   => '(:%root.data:)/',
                 'protocol.Library'                => '(:%framework.library:)/',
@@ -248,12 +249,12 @@ class Core implements Parameter\Parameterizable {
                 'namespace.prefix.Hoathis' => '(:%data.module:);(:%framework.module:)'
             )
         );
-        $this->_parameters->setKeyword(
-            'root.ofFrameworkDirectory',
-            $root
-        );
+        $this->_parameters->setKeyword('hoa', $hoa);
+        $this->_parameters->setKeyword('cwd', $cwd);
         $this->_parameters->setParameters($parameters);
         $this->setProtocol();
+
+        print_r($this->_parameters->getParameters());
 
         return $this;
     }
