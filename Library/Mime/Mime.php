@@ -63,7 +63,7 @@ namespace Hoa\Mime {
  * @license    New BSD License
  */
 
-class Mime implements \Hoa\Core\Parameterizable {
+class Mime implements \Hoa\Core\Parameter\Parameterizable {
 
     /**
      * Structure: media/type part.
@@ -94,7 +94,7 @@ class Mime implements \Hoa\Core\Parameterizable {
     const MIME_TYPE            = 1;
 
     /**
-     * The \Hoa\Mime parameters.
+     * Parameters.
      *
      * @var \Hoa\Core\Parameter object
      */
@@ -167,8 +167,8 @@ class Mime implements \Hoa\Core\Parameterizable {
                 'magic' => 'foobar'
             )
         );
-        $this->setParameters($parameters);
-        $magic = $this->getParameter('magic');
+        $this->_parameters->setParameters($parameters);
+        $magic = $this->_parameters->getParameter('magic');
 
         if(null === $magic) {
 
@@ -179,8 +179,8 @@ class Mime implements \Hoa\Core\Parameterizable {
              * Found.
              */
 
-            $this->setParameter('magic', $found);
-            $magic = $this->getParameter('magic');
+            $this->_parameters->setParameter('magic', $found);
+            $magic = $this->_parameters->getParameter('magic');
         }
 
         if(null === self::$_computed)
@@ -192,69 +192,14 @@ class Mime implements \Hoa\Core\Parameterizable {
     }
 
     /**
-     * Set many parameters to a class.
+     * Get parameters.
      *
      * @access  public
-     * @param   array   $in    Parameters to set.
-     * @return  void
-     * @throw   \Hoa\Core\Exception
-     */
-    public function setParameters ( Array $in ) {
-
-        return $this->_parameters->setParameters($this, $in);
-    }
-
-    /**
-     * Get many parameters from a class.
-     *
-     * @access  public
-     * @return  array
-     * @throw   \Hoa\Core\Exception
+     * @return  \Hoa\Core\Parameter
      */
     public function getParameters ( ) {
 
-        return $this->_parameters->getParameters($this);
-    }
-
-    /**
-     * Set a parameter to a class.
-     *
-     * @access  public
-     * @param   string  $key      Key.
-     * @param   mixed   $value    Value.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function setParameter ( $key, $value ) {
-
-        return $this->_parameters->setParameter($this, $key, $value);
-    }
-
-    /**
-     * Get a parameter from a class.
-     *
-     * @access  public
-     * @param   string  $key    Key.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function getParameter ( $key ) {
-
-        return $this->_parameters->getParameter($this, $key);
-    }
-
-    /**
-     * Get a formatted parameter from a class (i.e. zFormat with keywords and
-     * other parameters).
-     *
-     * @access  public
-     * @param   string  $key    Key.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function getFormattedParameter ( $key ) {
-
-        return $this->_parameters->getFormattedParameter($this, $key);
+        return $this->_parameters;
     }
 
     /**

@@ -110,10 +110,10 @@ class Sqlite extends Backend {
         $this->setSqlite();
         $this->clean();
 
-        if(true  === $this->getParameter('serialize_content'))
+        if(true  === $this->_parameters->getParameter('serialize_content'))
             $data  = serialize($data);
 
-        $lifetime  = $this->getParameter('lifetime');
+        $lifetime  = $this->_parameters->getParameter('lifetime');
         $md5       = $this->getIdMd5();
 
         $statement = 'SELECT data FROM hoa_cache ' . "\n" .
@@ -127,15 +127,21 @@ class Sqlite extends Backend {
                          '       will_expire_at '  . "\n" .
                          ')'                       . "\n" .
                          'VALUES ('                . "\n" .
-                         '       \'' . sqlite_escape_string($md5) . '\', ' . "\n" .
-                         '       \'' . sqlite_escape_string($data) . '\', '   . "\n" .
-                         '       \'' . (time() + $lifetime) . '\' '           . "\n" .
+                         '       \'' .
+                         sqlite_escape_string($md5) . '\', '  . "\n" .
+                         '       \'' .
+                         sqlite_escape_string($data) . '\', ' . "\n" .
+                         '       \'' .
+                         (time() + $lifetime) . '\' '         . "\n" .
                          ')';
         else
             $statement = 'UPDATE hoa_cache ' . "\n" .
-                         'SET    data           = \'' . sqlite_escape_string($data)  . '\', ' . "\n" .
-                         '       will_expire_at = \'' . (time() + $lifetime) . '\' '          . "\n" .
-                         'WHERE  id             = \'' . sqlite_escape_string($md5) . '\'';
+                         'SET    data           = \'' .
+                         sqlite_escape_string($data)  . '\', ' . "\n" .
+                         '       will_expire_at = \'' .
+                         (time() + $lifetime) . '\' '          . "\n" .
+                         'WHERE  id             = \'' .
+                         sqlite_escape_string($md5) . '\'';
 
         return sqlite_query($statement, $this->getSqlite());
     }
@@ -152,7 +158,8 @@ class Sqlite extends Backend {
         $this->clean();
 
         $statement = 'SELECT data FROM hoa_cache ' . "\n" .
-                     'WHERE  id = \'' . sqlite_escape_string($this->getIdMd5()) . '\'';
+                     'WHERE  id = \'' .
+                     sqlite_escape_string($this->getIdMd5()) . '\'';
         $query     = sqlite_query($statement, $this->getSqlite());
 
         if(0     === $num = sqlite_num_rows($query))
@@ -160,7 +167,7 @@ class Sqlite extends Backend {
 
         $content   = sqlite_fetch_single($query);
 
-        if(true === $this->getParameter('serialize_content'))
+        if(true === $this->_parameters->getParameter('serialize_content'))
             $content = unserialize($content);
 
         return $content;
@@ -236,10 +243,10 @@ class Sqlite extends Backend {
         if(null !== $this->_sqlite)
             return;
 
-        $database     = $this->getParameter('sqlite.database.host');
+        $database     = $this->_parameters->getParameter('sqlite.database.host');
 
         if(empty($database))
-            $database = $this->getParameter('sqlite.cache.directory');
+            $database = $this->_parameters->getParameter('sqlite.cache.directory');
 
         $new = false;
 

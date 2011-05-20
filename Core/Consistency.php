@@ -106,7 +106,7 @@ class Consistency {
 
         foreach($this->_from as $f)
             $this->setRoot(
-                \Hoa\Core::getInstance()->getFormattedParameter(
+                \Hoa\Core::getInstance()->getParameters()->getFormattedParameter(
                     'namespace.prefix.' . $f
                 ) ?: '/Flatland',
                 $f

@@ -96,13 +96,13 @@ class Xcache extends Backend {
 
         $this->clean();
 
-        if(true === $this->getParameter('serialize_content'))
+        if(true === $this->_parameters->getParameter('serialize_content'))
             $data = serialize($data);
 
         xcache_set(
             $this->getIdMd5(),
             $data,
-            $this->getParameter('lifetime')
+            $this->_parameters->getParameter('lifetime')
         );
 
         return;
@@ -120,7 +120,7 @@ class Xcache extends Backend {
 
         $content = xcache_get($this->getIdMd5());
 
-        if(true === $this->getParameter('serialize_content'))
+        if(true === $this->_parameters->getParameter('serialize_content'))
             $content = unserialize($content);
 
         return $content;

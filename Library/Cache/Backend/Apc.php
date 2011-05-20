@@ -96,13 +96,13 @@ class Apc extends Backend {
 
         $this->clean();
 
-        if(false !== $this->getParameter('serialize_content'))
+        if(false !== $this->_parameters->getParameter('serialize_content'))
             $data  = serialize($data);
 
         return apc_store(
             $this->getIdMd5(),
             $data,
-            $this->getParameter('lifetime')
+            $this->_parameters->getParameter('lifetime')
         );
     }
 
@@ -118,7 +118,7 @@ class Apc extends Backend {
 
         $content = apc_fetch($this->getIdMd5());
 
-        if(true === $this->getParameter('serialize_content'))
+        if(true === $this->_parameters->getParameter('serialize_content'))
             $content = unserialize($content);
 
         return $content;

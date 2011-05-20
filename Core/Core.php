@@ -92,7 +92,7 @@ namespace Hoa\Core {
  * @license    New BSD License
  */
 
-class Core implements Parameterizable {
+class Core implements Parameter\Parameterizable {
 
     /**
      * Stack of all registered shutdown function.
@@ -109,7 +109,7 @@ class Core implements Parameterizable {
     private static $_root     = null;
 
     /**
-     * Parameters of \Hoa\Core.
+     * Parameters.
      *
      * @var \Hoa\Core\Parameter object
      */
@@ -249,85 +249,24 @@ class Core implements Parameterizable {
             )
         );
         $this->_parameters->setKeyword(
-            $this,
             'root.ofFrameworkDirectory',
             $root
         );
-        $this->setParameters($parameters);
+        $this->_parameters->setParameters($parameters);
+        $this->setProtocol();
 
         return $this;
     }
 
     /**
-     * Set many parameters to a class.
+     * Get parameters.
      *
      * @access  public
-     * @param   array   $in    Parameters to set.
-     * @return  void
-     * @throw   \Hoa\Core\Exception
-     */
-    public function setParameters ( Array $in ) {
-
-        $handle = $this->_parameters->setParameters($this, $in);
-        $this->setProtocol();
-
-        return $handle;
-    }
-
-    /**
-     * Get many parameters from a class.
-     *
-     * @access  public
-     * @return  array
-     * @throw   \Hoa\Core\Exception
+     * @return  \Hoa\Core\Parameter
      */
     public function getParameters ( ) {
 
-        return $this->_parameters->getParameters($this);
-    }
-
-    /**
-     * Set a parameter to a class.
-     *
-     * @access  public
-     * @param   string  $key      Key.
-     * @param   mixed   $value    Value.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function setParameter ( $key, $value ) {
-
-        $handle = $this->_parameters->setParameter($this, $key, $value);
-        $this->setProtocol();
-
-        return $handle;
-    }
-
-    /**
-     * Get a parameter from a class.
-     *
-     * @access  public
-     * @param   string  $key    Key.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function getParameter ( $key ) {
-
-        return $this->_parameters->getParameter($this, $key);
-    }
-
-    /**
-     * Get a formatted parameter from a class (i.e. zFormat with keywords and
-     * other parameters).
-     *
-     * @access  public
-     * @param   string  $key    Key.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function getFormattedParameter ( $key ) {
-
-        return $this->_parameters->getFormattedParameter($this, $key);
+        return $this->_parameters;
     }
 
     /**
@@ -338,7 +277,7 @@ class Core implements Parameterizable {
      */
     protected function setProtocol ( ) {
 
-        $protocol     = $this->_parameters->unlinearizeBranche($this, 'protocol');
+        $protocol     = $this->getParameters()->unlinearizeBranche('protocol');
         $protocolRoot = self::getProtocol();
 
         foreach($protocol as $path => $reach)

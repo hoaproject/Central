@@ -106,13 +106,13 @@ class Memcache extends Backend {
         $this->setMemcache();
         $this->clean();
 
-        if(true === $this->getParameter('serialize_content'))
+        if(true === $this->_parameters->getParameter('serialize_content'))
             $data = serialize($data);
 
-        $flag     = $this->getParameter('memcache.compress.active')
+        $flag     = $this->_parameters->getParameter('memcache.compress.active')
                         ? MEMCACHE_COMPRESSED
                         : 0;
-        $lifetime = $this->getParameter('lifetime');
+        $lifetime = $this->_parameters->getParameter('lifetime');
 
         if($lifetime > 2592000) // 30 days.
             $lifetime = 2592000;
@@ -138,7 +138,7 @@ class Memcache extends Backend {
 
         $content = $this->_memcache->get($this->getIdMd5());
 
-        if(true === $this->getParameter('serialize_content'))
+        if(true === $this->_parameters->getParameter('serialize_content'))
             $content = unserialize($content);
 
         return $content;
@@ -165,7 +165,7 @@ class Memcache extends Backend {
         if(false === @$this->_memcache->flush())
             throw new \Hoa\Cache\Exception(
                 'Flush all existing items on Memcache server %s failed.',
-                2, $this->_backendOptions['database']['host']);
+                2, $this->_parameters->getParameter('memcache.database.host'));
 
         return;
     }
@@ -195,11 +195,11 @@ class Memcache extends Backend {
         if(is_object($this->_memcache))
             return true;
 
-        $this->_memcache = new Memcache();
+        $this->_memcache = new \Memcache();
         $this->_memcache->addServer(
-            $this->getParameter('memcache.database.host'),
-            $this->getParameter('memcache.database.port'),
-            $this->getParameter('memcache.database.persistent')
+            $this->_parameters->getParameter('memcache.database.host'),
+            $this->_parameters->getParameter('memcache.database.port'),
+            $this->_parameters->getParameter('memcache.database.persistent')
         );
 
         return true;

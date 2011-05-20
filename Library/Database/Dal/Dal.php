@@ -67,7 +67,7 @@ namespace Hoa\Database\Dal {
  * @license    New BSD License
  */
 
-class Dal implements \Hoa\Core\Parameterizable\Readable {
+class Dal {
 
     /**
      * Abstract layer : DBA.
@@ -144,7 +144,7 @@ class Dal implements \Hoa\Core\Parameterizable\Readable {
                                    Array $driverOption = array() ) {
 
         $this->_parameters = \Hoa\Database::getInstance()
-                                 ->shareParametersWithMe($this);
+                                 ->getParameters();
 
         if(   !isset($dalName)
            && !isset($dsn)
@@ -251,45 +251,6 @@ class Dal implements \Hoa\Core\Parameterizable\Readable {
                 'No instance was set, cannot return the last instance.', 5);
 
         return self::$_instance[self::$_id];
-    }
-
-    /**
-     * Get many parameters from a class.
-     *
-     * @access  public
-     * @return  array
-     * @throw   \Hoa\Core\Exception
-     */
-    public function getParameters ( ) {
-
-        return $this->_parameters->getParameters($this);
-    }
-
-    /**
-     * Get a parameter from a class.
-     *
-     * @access  public
-     * @param   string  $key    Key.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function getParameter ( $key ) {
-
-        return $this->_parameters->getParameter($this, $key);
-    }
-
-    /**
-     * Get a formatted parameter from a class (i.e. zFormat with keywords and
-     * other parameters).
-     *
-     * @access  public
-     * @param   string  $key    Key.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function getFormattedParameter ( $key ) {
-
-        return $this->_parameters->getFormattedParameter($this, $key);
     }
 
     /**

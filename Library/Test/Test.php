@@ -82,7 +82,9 @@ namespace Hoa\Test {
  * @license    New BSD License
  */
 
-class Test implements \Hoa\Core\Parameterizable, \Hoa\Core\Event\Source {
+class          Test
+    implements \Hoa\Core\Parameter\Parameterizable,
+               \Hoa\Core\Event\Source {
 
     /**
      * Singleton.
@@ -92,7 +94,7 @@ class Test implements \Hoa\Core\Parameterizable, \Hoa\Core\Event\Source {
     private static $_instance = null;
 
     /**
-     * Parameters of \Hoa\Test.
+     * Parameters.
      *
      * @var \Hoa\Core\Parameter object
      */
@@ -127,8 +129,7 @@ class Test implements \Hoa\Core\Parameterizable, \Hoa\Core\Event\Source {
                 'maxtry'       => 64
             )
         );
-
-        $this->setParameters($parameters);
+        $this->_parameters->setParameters($parameters);
         \Hoa\Core\Event::register(
             'hoa://Event/Test/Sample:open-iteration', 
             $this
@@ -151,13 +152,8 @@ class Test implements \Hoa\Core\Parameterizable, \Hoa\Core\Event\Source {
      */
     public function initialize ( $directory ) {
 
-        $this->setParameter('convict', $directory);
+        $this->_parameters->setParameter('convict', $directory);
         $orchestrate = new Orchestrate($this->_parameters);
-        $this->_parameters->shareWith(
-            $this,
-            $orchestrate,
-            \Hoa\Core\Parameter::PERMISSION_READ
-        );
         $orchestrate->compute();
 
         return;
@@ -262,69 +258,15 @@ class Test implements \Hoa\Core\Parameterizable, \Hoa\Core\Event\Source {
     }
 
     /**
-     * Set many parameters to a class.
+     * Get parameters.
      *
      * @access  public
-     * @param   array   $in      Parameters to set.
-     * @return  void
-     * @throw   \Hoa\Core\Exception
-     */
-    public function setParameters ( Array $in ) {
-
-        return $this->_parameters->setParameters($this, $in);
-    }
-
-    /**
-     * Get many parameters from a class.
-     *
-     * @access  public
-     * @return  array
+     * @return  \Hoa\Core\Parameter
      * @throw   \Hoa\Core\Exception
      */
     public function getParameters ( ) {
 
-        return $this->_parameters->getParameters($this);
-    }
-
-    /**
-     * Set a parameter to a class.
-     *
-     * @access  public
-     * @param   string  $key      Key.
-     * @param   mixed   $value    Value.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function setParameter ( $key, $value ) {
-
-        return $this->_parameters->setParameter($this, $key, $value);
-    }
-
-    /**
-     * Get a parameter from a class.
-     *
-     * @access  public
-     * @param   string  $key      Key.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function getParameter ( $key ) {
-
-        return $this->_parameters->getParameter($this, $key);
-    }
-
-    /**
-     * Get a formatted parameter from a class (i.e. zFormat with keywords and
-     * other parameters).
-     *
-     * @access  public
-     * @param   string  $key    Key.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function getFormattedParameter ( $key ) {
-
-        return $this->_parameters->getFormattedParameter($this, $key);
+        return $this->_parameters;
     }
 }
 

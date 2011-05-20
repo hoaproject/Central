@@ -91,7 +91,7 @@ class          Xyl
     extends    \Hoa\Xml
     implements Element,
                \Hoa\View\Viewable,
-               \Hoa\Core\Parameterizable {
+               \Hoa\Core\Parameter\Parameterizable {
 
     /**
      * XYL's namespace.
@@ -122,7 +122,7 @@ class          Xyl
     const TYPE_OVERLAY    = 2;
 
     /**
-     * The \Hoa\Controller\Dispatcher parameters.
+     * Parameters.
      *
      * @var \Hoa\Core\Parameter object
      */
@@ -258,7 +258,7 @@ class          Xyl
                     'html5.video'      => 'hoa://Application/Public/(:%theme:)/Video/'
                 )
             );
-            $this->setParameters($parameters);
+            $this->getParameters()->setParameters($parameters);
         }
 
         $this->_i           = self::$_ci++;
@@ -304,69 +304,14 @@ class          Xyl
     }
 
     /**
-     * Set many parameters to a class.
+     * Get parameters.
      *
      * @access  public
-     * @param   array   $in    Parameters to set.
-     * @return  void
-     * @throw   \Hoa\Core\Exception
-     */
-    public function setParameters ( Array $in ) {
-
-        return self::$_parameters->setParameters($this, $in);
-    }
-
-    /**
-     * Get many parameters from a class.
-     *
-     * @access  public
-     * @return  array
-     * @throw   \Hoa\Core\Exception
+     * @return  \Hoa\Core\Parameter
      */
     public function getParameters ( ) {
 
-        return self::$_parameters->getParameters($this);
-    }
-
-    /**
-     * Set a parameter to a class.
-     *
-     * @access  public
-     * @param   string  $key      Key.
-     * @param   mixed   $value    Value.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function setParameter ( $key, $value ) {
-
-        return self::$_parameters->setParameter($this, $key, $value);
-    }
-
-    /**
-     * Get a parameter from a class.
-     *
-     * @access  public
-     * @param   string  $key    Key.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function getParameter ( $key ) {
-
-        return self::$_parameters->getParameter($this, $key);
-    }
-
-    /**
-     * Get a formatted parameter from a class (i.e. zFormat with keywords and
-     * other parameters).
-     *
-     * @access  public
-     * @param   string  $key    Key.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function getFormattedParameter ( $key ) {
-
-        return self::$_parameters->getFormattedParameter($this, $key);
+        return self::$_parameters;
     }
 
     /**
@@ -964,7 +909,7 @@ class          Xyl
     public function setTheme ( $theme ) {
 
         $old = $this->getTheme();
-        self::$_parameters->setKeyword($this, 'theme', $theme);
+        $this->getParameters()->setKeyword('theme', $theme);
 
         return $old;
     }
@@ -977,7 +922,7 @@ class          Xyl
      */
     public function getTheme ( ) {
         
-        return self::$_parameters->getKeyword($this, 'theme');
+        return $this->getParameters()->getKeyword('theme');
     }
 
     /**
@@ -1048,7 +993,8 @@ class          Xyl
         if(0 !== preg_match('#^hoa://Application/Public(/.*)#', $hoa, $matches))
             return resolve(
                 'hoa://Application/Public/' .
-                $this->getFormattedParameter('theme') . $matches[1]
+                $this->getParameters()->getFormattedParameter('theme') .
+                $matches[1]
             );
 
         return resolve($hoa);

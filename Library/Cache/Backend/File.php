@@ -80,22 +80,24 @@ class File extends Backend {
 
         $this->clean();
 
-        if(true === $this->getParameter('serialize_content'))
+        if(true === $this->_parameters->getParameter('serialize_content'))
             $data = serialize($data);
 
-        if(true === $this->getParameter('file.compress.active'))
+        if(true === $this->_parameters->getParameter('file.compress.active'))
             $data = gzcompress(
                 $data,
-                $this->getParameter('file.compress.level')
+                $this->_parameters->getParameter('file.compress.level')
             );
 
         $this->setId($this->getIdMd5());
-        $directory = $this->getFormattedParameter('file.cache.directory');
+        $directory = $this->_parameters
+                          ->getFormattedParameter('file.cache.directory');
 
         @mkdir($directory, 0755, true);
 
         file_put_contents(
-            $directory . $this->getFormattedParameter('file.cache.file'),
+            $directory .
+            $this->_parameters->getFormattedParameter('file.cache.file'),
             $data
         );
 
@@ -113,18 +115,20 @@ class File extends Backend {
         $this->clean();
         $this->setId($this->getIdMd5());
 
-        $filename = $this->getFormattedParameter('file.cache.directory') .
-                    $this->getFormattedParameter('file.cache.file');
+        $filename = $this->_parameters
+                          ->getFormattedParameter('file.cache.directory') .
+                    $this->_parameters
+                         ->getFormattedParameter('file.cache.file');
 
         if(false === file_exists($filename))
             return false;
 
         $content = file_get_contents($filename);
 
-        if(true === $this->getParameter('file.compress.active'))
+        if(true === $this->_parameters->getParameter('file.compress.active'))
             $content = gzuncompress($content);
 
-        if(true === $this->getParameter('serialize_content'))
+        if(true === $this->_parameters->getParameter('serialize_content'))
             $content = unserialize($content);
 
         return $content;
@@ -148,7 +152,7 @@ class File extends Backend {
               break;
 
             case \Hoa\Cache::CLEAN_EXPIRED:
-                $lifetime = $this->getParameter('lifetime');
+                $lifetime = $this->_parameters->getParameter('lifetime');
               break;
 
             case \Hoa\Cache::CLEAN_USER:
@@ -167,7 +171,8 @@ class File extends Backend {
         try {
 
             $cacheDir  = new \Hoa\File\Finder(
-                $this->getFormattedParameter('file.cache.directory'),
+                $this->_parameters
+                     ->getFormattedParameter('file.cache.directory'),
                 \Hoa\File\Finder::LIST_FILE |
                 \Hoa\File\Finder::LIST_NO_DOT,
                 \Hoa\File\Finder::SORT_INAME
@@ -192,8 +197,10 @@ class File extends Backend {
 
         $this->setId($this->getIdMd5());
 
-        $filename = $this->getFormattedParameter('file.cache.directory') .
-                    $this->getFormattedParameter('file.cache.file');
+        $filename = $this->_parameters
+                         ->getFormattedParameter('file.cache.directory') .
+                    $this->_parameters
+                         ->getFormattedParameter('file.cache.file');
 
         $file = new \Hoa\File\Read($filename);
         $file->delete();

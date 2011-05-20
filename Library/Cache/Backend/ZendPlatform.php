@@ -158,7 +158,7 @@ class ZendPlatform extends Backend {
 
         $content = output_cache_get(
             $this->getIdMd5(),
-            $this->getParameter('lifetime')
+            $this->_parameters->getParameter('lifetime')
         );
 
         if(isset($return[0]))
@@ -185,7 +185,7 @@ class ZendPlatform extends Backend {
               break;
 
             case \Hoa\Cache::CLEAN_EXPIRED:
-                $lifetime = $this->getParameter('lifetime');
+                $lifetime = $this->_parameters->getParameter('lifetime');
               break;
 
             case \Hoa\Cache::CLEAN_USER:

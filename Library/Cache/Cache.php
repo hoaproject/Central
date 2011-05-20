@@ -56,7 +56,7 @@ namespace Hoa\Cache {
  * @license    New BSD License
  */
 
-abstract class Cache implements \Hoa\Core\Parameterizable {
+abstract class Cache implements \Hoa\Core\Parameter\Parameterizable {
 
     /**
      * Clean all entries.
@@ -80,7 +80,7 @@ abstract class Cache implements \Hoa\Core\Parameterizable {
     const CLEAN_USER    =  1;
 
     /**
-     * The \Hoa\Controller parameters.
+     * Parameters.
      *
      * @var \Hoa\Core\Parameter object
      */
@@ -105,7 +105,7 @@ abstract class Cache implements \Hoa\Core\Parameterizable {
     public function __construct ( Array $parameters = array() ) {
 
         $this->_parameters = new \Hoa\Core\Parameter(
-            $this,
+            __CLASS__,
             array(
                 'id' => null
             ),
@@ -143,79 +143,23 @@ abstract class Cache implements \Hoa\Core\Parameterizable {
                 'xcache'                       => '',
 
                 'zendplatform'                 => ''
-            ),
-            __CLASS__
+            )
         );
 
-        $this->setParameters($parameters);
+        $this->_parameters->setParameters($parameters);
 
         return;
     }
 
     /**
-     * Set many parameters to a class.
+     * Get parameters.
      *
      * @access  public
-     * @param   array   $in    Parameters to set.
-     * @return  void
-     * @throw   \Hoa\Core\Exception
-     */
-    public function setParameters ( Array $in ) {
-
-        return $this->_parameters->setParameters($this, $in);
-    }
-
-    /**
-     * Get many parameters from a class.
-     *
-     * @access  public
-     * @return  array
-     * @throw   \Hoa\Core\Exception
+     * @return  \Hoa\Core\Parameter
      */
     public function getParameters ( ) {
 
-        return $this->_parameters->getParameters($this);
-    }
-
-    /**
-     * Set a parameter to a class.
-     *
-     * @access  public
-     * @param   string  $key      Key.
-     * @param   mixed   $value    Value.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function setParameter ( $key, $value ) {
-
-        return $this->_parameters->setParameter($this, $key, $value);
-    }
-
-    /**
-     * Get a parameter from a class.
-     *
-     * @access  public
-     * @param   string  $key    Key.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function getParameter ( $key ) {
-
-        return $this->_parameters->getParameter($this, $key);
-    }
-
-    /**
-     * Get a formatted parameter from a class (i.e. zFormat with keywords and
-     * other parameters).
-     *
-     * @access  public
-     * @param   string  $key    Key.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function getFormattedParameter ( $key ) {
-
-        return $this->_parameters->getFormattedParameter($this, $key);
+        return $this->_parameters;
     }
 
     /**
@@ -233,27 +177,27 @@ abstract class Cache implements \Hoa\Core\Parameterizable {
 
         $_id = $id;
 
-        if(   true === $this->getParameter('make_id_with.cookie')
+        if(   true === $this->_parameters->getParameter('make_id_with.cookie')
            && isset($_COOKIE))
             $_id .= serialize($this->ksort($_COOKIE));
 
-        if(   true === $this->getParameter('make_id_with.files')
+        if(   true === $this->_parameters->getParameter('make_id_with.files')
            && isset($_FILES))
             $_id .= serialize($this->ksort($_FILES));
 
-        if(   true === $this->getParameter('make_id_with.get')
+        if(   true === $this->_parameters->getParameter('make_id_with.get')
            && isset($_GET))
             $_id .= serialize($this->ksort($_GET));
 
-        if(   true === $this->getParameter('make_id_with.post')
+        if(   true === $this->_parameters->getParameter('make_id_with.post')
            && isset($_POST))
             $_id .= serialize($this->ksort($_POST));
 
-        if(   true === $this->getParameter('make_id_with.server')
+        if(   true === $this->_parameters->getParameter('make_id_with.server')
            && isset($_SERVER))
             $_id .= serialize($this->ksort($_SERVER));
 
-        if(   true === $this->getParameter('make_id_with.session')
+        if(   true === $this->_parameters->getParameter('make_id_with.session')
            && isset($_SESSION))
             $_id .= serialize($this->ksort($_SESSION));
 
@@ -269,8 +213,8 @@ abstract class Cache implements \Hoa\Core\Parameterizable {
      */
     protected function setId ( $id ) {
 
-        $old = $this->_parameters->getKeyword($this, 'id');
-        $this->_parameters->setKeyword($this, 'id', $id);
+        $old = $this->_parameters->getKeyword('id');
+        $this->_parameters->setKeyword('id', $id);
 
         return $old;
     }
