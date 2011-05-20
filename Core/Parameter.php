@@ -124,7 +124,7 @@ class Parameter {
             if(!($owner instanceof Parameterizable))
                 throw new \Hoa\Core\Exception(
                     'Only parameterizable object can have parameter; ' .
-                    '%s does implement \Hoa\Core\Parameterizable.',
+                    '%s does implement \Hoa\Core\Parameter\Parameterizable.',
                     0, get_class($owner));
 
             $owner = get_class($owner);
@@ -134,11 +134,11 @@ class Parameter {
             $reflection = new \ReflectionClass($owner);
 
             if(false === $reflection->implementsInterface(
-                            '\Hoa\Core\Parameterizable'
+                            '\Hoa\Core\Parameter\Parameterizable'
                          ))
                 throw new \Hoa\Core\Exception(
                     'Only parameterizable object can have parameter; ' .
-                    '%s does implement \Hoa\Core\Parameterizable.',
+                    '%s does implement \Hoa\Core\Parameter\Parameterizable.',
                     1, $owner);
         }
 
