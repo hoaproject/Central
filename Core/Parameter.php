@@ -96,6 +96,13 @@ class Parameter {
      */
     private static $_constants = null;
 
+    /**
+     * Cache for zFormat.
+     *
+     * @var \Hoa\Core\Parameter array
+     */
+    private $_cache            = array();
+
 
 
     /**
@@ -188,11 +195,10 @@ class Parameter {
 
         if($this->_owner == 'Hoa\Core\Core') {
 
-            $class = 'HoaCoreCore';
-            $path  = self::zFormat(
-                $parameters['protocol.Data/Etc/Configuration'],
-                $this->getKeywords(),
-                $parameters
+            $class             = 'HoaCoreCore';
+            $this->_parameters = $parameters;
+            $path              = $this->zFormat(
+                $parameters['protocol.Data/Etc/Configuration']
             ) . '.Cache' . DS . 'HoaCoreCore.php';
         }
         else {
@@ -240,6 +246,8 @@ class Parameter {
      */
     public function setParameters ( Array $parameters ) {
 
+        $this->resetCache();
+
         foreach($parameters as $key => $value)
             $this->setParameter($key, $value);
 
@@ -267,6 +275,7 @@ class Parameter {
      */
     public function setParameter ( $key, $value ) {
 
+        $this->resetCache();
         $old = null;
 
         if(true === array_key_exists($key, $this->_parameters))
@@ -304,11 +313,7 @@ class Parameter {
         if(null === $value = $this->getParameter($parameter))
             return null;
 
-        return self::zFormat(
-            $value,
-            $this->getKeywords(),
-            $this->getParameters()
-        );
+        return $this->zFormat($value);
     }
 
     /**
@@ -339,7 +344,6 @@ class Parameter {
     public function unlinearizeBranche ( $branche ) {
 
         $parameters = $this->getParameters();
-        $keywords   = $this->getKeywords();
         $out        = array();
         $qBranche   = preg_quote($branche);
 
@@ -365,11 +369,7 @@ class Parameter {
                 if($i != $end)
                     $handle = array($explode[$i] => $handle);
                 else
-                    $handle = array($explode[$i] => self::zFormat(
-                        $value,
-                        $keywords,
-                        $parameters
-                    ));
+                    $handle = array($explode[$i] => $this->zFormat($value));
 
                 --$i;
             }
@@ -389,6 +389,8 @@ class Parameter {
      * @throw   \Hoa\Core\Exception
      */
     public function setKeywords ( $keywords ) {
+
+        $this->resetCache();
 
         foreach($keywords as $key => $value)
             $this->setKeyword($key, $value);
@@ -417,6 +419,7 @@ class Parameter {
      */
     public function setKeyword ( $key, $value ) {
 
+        $this->resetCache();
         $old = null;
 
         if(true === array_key_exists($key, $this->_keywords))
@@ -531,24 +534,24 @@ class Parameter {
      *
      * @access  public
      * @param   string  $value         Parameter value.
-     * @param   array   $keywords      Keywords.
-     * @param   array   $parameters    Parameters.
      * @return  string
      * @throw   \Hoa\Core\Exception
      */
-    public static function zFormat ( $value,
-                                     Array $keywords   = array(),
-                                     Array $parameters = array() ) {
+    public function zFormat ( $value ) {
 
-        if(!is_string($value))
-            return $value;
+        if(isset($this->_cache[$value]))
+            return $this->_cache[$value];
 
         if(null === self::$_constants)
             self::initializeConstants();
 
-        return preg_replace_callback(
+        $self       = $this;
+        $keywords   = $this->getKeywords();
+        $parameters = $this->getParameters();
+
+        return $this->_cache[$value] = preg_replace_callback(
             '#\(:(.*?):\)#',
-            function ( $match ) use ( $value, &$keywords, &$parameters ) {
+            function ( $match ) use ( $self, $value, &$keywords, &$parameters ) {
 
                 preg_match(
                     '#([^:]+)(?::(.*))?#',
@@ -572,7 +575,7 @@ class Parameter {
                             0, $word);
 
                     $handle = $parameters[$word];
-                    $out    = Parameter::zFormat($handle, $keywords, $parameters);
+                    $out    = $self->zFormat($handle);
                 }
                 // Call a constant.
                 elseif($key[0] == '_') {
@@ -674,28 +677,25 @@ class Parameter {
             $value
         );
     }
+
+    /**
+     * Reset zFormat cache.
+     *
+     * @access  private
+     * @return  void
+     */
+    private function resetCache ( ) {
+
+        unset($this->_cache);
+        $this->_cache = array();
+
+        return;
+    }
 }
 
 }
 
 namespace {
-
-/**
- * Alias of the \Hoa\Core\Parameter::zFormat() method.
- *
- * @access  public
- * @param   string  $value         Parameter value.
- * @param   array   $keywords      Keywords.
- * @param   array   $parameters    Parameters.
- * @return  string
- * @throw   \Hoa\Core\Exception
- */
-if(!ƒ('zformat')) {
-function zformat ( $value,
-                   Array $keywords = array(), Array $parameters = array() ) {
-
-    return \Hoa\Core\Parameter::zFormat($value, $keywords, $parameters);
-}}
 
 /**
  * Make the alias automatically (because it's not imported with the import()
