@@ -99,7 +99,7 @@ class Eaccelerator extends Backend {
         return eaccelerator_put(
             $this->getIdMd5(),
             serialize($data),
-            $this->getParameter('lifetime')
+            $this->_parameters->getParameter('lifetime')
         );
     }
 
@@ -158,9 +158,6 @@ class Eaccelerator extends Backend {
                 throw new \Hoa\Cache\Exception(
                     '\Hoa\Cache::CLEAN_USER constant is not supported by ' .
                     'EAccelerator backend.', 2);
-
-            default:
-                return;
         }
 
         return;
