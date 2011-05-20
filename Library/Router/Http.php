@@ -67,10 +67,10 @@ namespace Hoa\Router {
  * @license    New BSD License
  */
 
-class Http implements Router, \Hoa\Core\Parameterizable {
+class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
 
     /**
-     * Parameters of \Hoa\Test.
+     * Parameters.
      *
      * @var \Hoa\Core\Parameter object
      */
@@ -125,20 +125,15 @@ class Http implements Router, \Hoa\Core\Parameterizable {
             $this,
             array(),
             array(
-                'base'  => null,
-                'rules.public' => array(
-                    'id' => array(
-                        array('get', 'post'),
-                        'pattern'
-                    )
-                ),
+                'base'          => null,
+                'rules.public'  => array(),
                 'rules.private' => array()
             )
         );
+        $this->_parameters->setParameters($parameters);
+        $this->setBase($this->_parameters->getParameter('base'));
 
-        $this->setParameters($parameters);
-
-        foreach($this->getParameter('rules.public') as $id => $rule) {
+        foreach($this->_parameters->getParameter('rules.public') as $id => $rule) {
 
             @list($methods, $pattern, $call, $able, $variables)
                 = $rule;
@@ -149,7 +144,7 @@ class Http implements Router, \Hoa\Core\Parameterizable {
             $this->addRule($methods, $id, $pattern, $call, $able, $variables);
         }
 
-        foreach($this->getParameter('rules.private') as $id => $rule) {
+        foreach($this->_parameters->getParameter('rules.private') as $id => $rule) {
 
             @list($methods, $pattern, $call, $able, $variables)
                 = $rule;
@@ -166,69 +161,14 @@ class Http implements Router, \Hoa\Core\Parameterizable {
     }
 
     /**
-     * Set many parameters to a class.
+     * Get parameters.
      *
      * @access  public
-     * @param   array   $in      Parameters to set.
-     * @return  void
-     * @throw   \Hoa\Core\Exception
-     */
-    public function setParameters ( Array $in ) {
-
-        return $this->_parameters->setParameters($this, $in);
-    }
-
-    /**
-     * Get many parameters from a class.
-     *
-     * @access  public
-     * @return  array
-     * @throw   \Hoa\Core\Exception
+     * @return  \Hoa\Core\Parameter
      */
     public function getParameters ( ) {
 
-        return $this->_parameters->getParameters($this);
-    }
-
-    /**
-     * Set a parameter to a class.
-     *
-     * @access  public
-     * @param   string  $key      Key.
-     * @param   mixed   $value    Value.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function setParameter ( $key, $value ) {
-
-        return $this->_parameters->setParameter($this, $key, $value);
-    }
-
-    /**
-     * Get a parameter from a class.
-     *
-     * @access  public
-     * @param   string  $key      Key.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function getParameter ( $key ) {
-
-        return $this->_parameters->getParameter($this, $key);
-    }
-
-    /**
-     * Get a formatted parameter from a class (i.e. zFormat with keywords and
-     * other parameters).
-     *
-     * @access  public
-     * @param   string  $key    Key.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function getFormattedParameter ( $key ) {
-
-        return $this->_parameters->getFormattedParameter($this, $key);
+        return $this->_parameters;
     }
 
     /**
