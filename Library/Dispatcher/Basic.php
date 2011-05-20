@@ -89,7 +89,7 @@ class Basic extends Dispatcher {
             $called     = $call;
             $reflection = new \ReflectionMethod($call, '__invoke');
 
-            foreach($reflection->getParameters() as $i => $parameter) {
+            foreach($reflection->getParameters() as $parameter) {
 
                 $name = strtolower($parameter->getName());
 
@@ -111,7 +111,7 @@ class Basic extends Dispatcher {
 
             $reflection = new \ReflectionFunction($call);
 
-            foreach($reflection->getParameters() as $i => $parameter) {
+            foreach($reflection->getParameters() as $parameter) {
 
                 $name = strtolower($parameter->getName());
 
@@ -150,12 +150,12 @@ class Basic extends Dispatcher {
                     $_action     = 'asynchronous.action';
                 }
 
-                $this->_parameters->setKeyword($this, 'controller', $controller);
-                $this->_parameters->setKeyword($this, 'action',     $action);
+                $this->_parameters->setKeyword('controller', $controller);
+                $this->_parameters->setKeyword('action',     $action);
 
-                $file       = $this->getFormattedParameter($_file);
-                $controller = $this->getFormattedParameter($_controller);
-                $action     = $this->getFormattedParameter($_action);
+                $file       = $this->_parameters->getFormattedParameter($_file);
+                $controller = $this->_parameters->getFormattedParameter($_controller);
+                $action     = $this->_parameters->getFormattedParameter($_action);
 
                 if(!file_exists($file))
                     throw new Exception(
@@ -190,13 +190,13 @@ class Basic extends Dispatcher {
                 throw new Exception(
                     'Action %s does not exist on the controller %s ' .
                     '(method: %s, asynchronous: %s).',
-                    5, array($action, get_class($controller), strtoupper($method),
+                    4, array($action, get_class($controller), strtoupper($method),
                              true === $async ? 'true': 'false'));
 
             $called     = $controller;
             $reflection = new \ReflectionMethod($controller, $action);
 
-            foreach($reflection->getParameters() as $i => $parameter) {
+            foreach($reflection->getParameters() as $parameter) {
 
                 $name = strtolower($parameter->getName());
 
@@ -210,7 +210,7 @@ class Basic extends Dispatcher {
                     throw new Exception(
                         'The action %s on the controller %s needs a value for ' .
                         'the parameter $%s and this value does not exist.',
-                        6, array($action, get_class($controller), $name));
+                        5, array($action, get_class($controller), $name));
             }
         }
 

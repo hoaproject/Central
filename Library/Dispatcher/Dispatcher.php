@@ -62,10 +62,10 @@ namespace Hoa\Dispatcher {
  * @license    New BSD License
  */
 
-abstract class Dispatcher implements \Hoa\Core\Parameterizable {
+abstract class Dispatcher implements \Hoa\Core\Parameter\Parameterizable {
 
     /**
-     * The \Hoa\Controller\Dispatcher parameters.
+     * Parameters.
      *
      * @var \Hoa\Core\Parameter object
      */
@@ -97,7 +97,7 @@ abstract class Dispatcher implements \Hoa\Core\Parameterizable {
     public function __construct ( Array $parameters = array() ) {
 
         $this->_parameters = new \Hoa\Core\Parameter(
-            $this,
+            __CLASS__,
             array(
                 'controller' => 'main',
                 'action'     => 'main',
@@ -111,78 +111,22 @@ abstract class Dispatcher implements \Hoa\Core\Parameterizable {
                 'asynchronous.file'       => '(:%synchronous.file:)',
                 'asynchronous.controller' => '(:%synchronous.controller:)',
                 'asynchronous.action'     => '(:%synchronous.action:)Async'
-            ),
-            __CLASS__
+            )
         );
-        $this->setParameters($parameters);
+        $this->_parameters->setParameters($parameters);
 
         return;
     }
 
     /**
-     * Set many parameters to a class.
+     * Get parameters.
      *
      * @access  public
-     * @param   array   $in    Parameters to set.
-     * @return  void
-     * @throw   \Hoa\Core\Exception
-     */
-    public function setParameters ( Array $in ) {
-
-        return $this->_parameters->setParameters($this, $in);
-    }
-
-    /**
-     * Get many parameters from a class.
-     *
-     * @access  public
-     * @return  array
-     * @throw   \Hoa\Core\Exception
+     * @return  \Hoa\Core\Parameter
      */
     public function getParameters ( ) {
 
-        return $this->_parameters->getParameters($this);
-    }
-
-    /**
-     * Set a parameter to a class.
-     *
-     * @access  public
-     * @param   string  $key      Key.
-     * @param   mixed   $value    Value.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function setParameter ( $key, $value ) {
-
-        return $this->_parameters->setParameter($this, $key, $value);
-    }
-
-    /**
-     * Get a parameter from a class.
-     *
-     * @access  public
-     * @param   string  $key    Key.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function getParameter ( $key ) {
-
-        return $this->_parameters->getParameter($this, $key);
-    }
-
-    /**
-     * Get a formatted parameter from a class (i.e. zFormat with keywords and
-     * other parameters).
-     *
-     * @access  public
-     * @param   string  $key    Key.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function getFormattedParameter ( $key ) {
-
-        return $this->_parameters->getFormattedParameter($this, $key);
+        return $this->_parameters;
     }
 
     /**
@@ -210,7 +154,7 @@ abstract class Dispatcher implements \Hoa\Core\Parameterizable {
         $rule[\Hoa\Router::RULE_VARIABLES]['_this']
             = dnew($this->getKitName(), array($router, $this, $view));
 
-        $this->_parameters->setKeyword($this, 'method', $router->getMethod());
+        $this->_parameters->setKeyword('method', $router->getMethod());
 
         return $this->resolve($rule);
     }
