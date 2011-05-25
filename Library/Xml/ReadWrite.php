@@ -61,7 +61,7 @@ from('Hoa')
 /**
  * \Hoa\Xml\Element\ReadWrite
  */
--> import('Xml.Element.ReadWrite', true);
+-> import('Xml.Element.ReadWrite');
 
 }
 
@@ -83,6 +83,15 @@ class          ReadWrite
                \Hoa\Stream\IStream\Out {
 
     /**
+     * Whether we should auto-save the document.
+     *
+     * @var \Hoa\Xml\ReadWrite bool
+     */
+    protected $_autoSave = true;
+
+
+
+    /**
      * Start the stream reader/writer as if it is a XML document.
      *
      * @access  public
@@ -91,15 +100,19 @@ class          ReadWrite
      * @param   bool                    $initializeNamespace    Whether we
      *                                                          initialize
      *                                                          namespaces.
+     * @param   bool                    $autoSave               Whether we
+     *                                                          should
+     *                                                          auto-save.
      * @return  void
      * @throw   \Hoa\Xml\Exception
      */
     public function __construct ( \Hoa\Stream\IStream\In $stream,
-                                  $initializeNamespace = true ) {
+                                  $initializeNamespace = true,
+                                  $autoSave = true ) {
 
-        if(!($stream instanceof \Hoa\Stream\IStream\Out))
+        if(true === $autoSave && !($stream instanceof \Hoa\Stream\IStream\Out))
             throw new Exception(
-                'The stream %s (that opened %s) must implement ' .
+                'The stream %s (that has opened %s) must implement ' .
                 '\Hoa\Stream\IStream\In and \Hoa\Stream\IStream\Out interfaces.',
                 0, array(get_class($stream), $stream->getStreamName()));
 
@@ -109,8 +122,13 @@ class          ReadWrite
             $initializeNamespace
         );
 
-        event('hoa://Event/Stream/' . $stream->getStreamName() . ':close-before')
-            ->attach($this, '_close');
+        if(true === $autoSave)
+            event(
+                'hoa://Event/Stream/' .$stream->getStreamName() .
+                ':close-before'
+            )->attach($this, '_close');
+
+        $this->_autoSave = $autoSave;
 
         return;
     }
@@ -126,6 +144,9 @@ class          ReadWrite
      * @return  void
      */
     public function _close ( \Hoa\Core\Event\Bucket $bucket ) {
+
+        if(false === $this->isAutoSaveEnabled())
+            return;
 
         $handle = $this->getStream()->selectRoot()->asXML();
 
@@ -431,6 +452,17 @@ class          ReadWrite
     public function writeAttribute ( $name, $value ) {
 
         return $this->getStream()->writeAttribute($name, $value);
+    }
+
+    /**
+     * Check if we should auto-save the document.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function isAutoSaveEnabled ( ) {
+
+        return $this->_autoSave;
     }
 }
 
