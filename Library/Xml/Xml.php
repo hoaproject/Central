@@ -92,15 +92,22 @@ abstract class Xml
      */
     protected $_namespaces = null;
 
+    /**
+     * Errors.
+     *
+     * @var \Hoa\Xml array
+     */
+    protected $_errors     = null;
+
 
 
     /**
-     * Constructor. Load the inner stream as a XML tree. If the inner stream is
-     * empty (e.g. an empty new file), the XML tree will represent the following
-     * XML code:
+     * Constructor. Load the inner stream as a XML tree.
+     * If we cannot load the inner stream and if it is a \Hoa\Stream\IStream\In
+     * stream and if its content is empty, we use the follow default XML value:
      *     <?xml version="1.0" encoding="utf-8"?>
      *
-     *     <handler>
+     *     <handler xmlns="http://hoa-project.net/ns/xml/default">
      *     </handler>
      *
      * @access  public
@@ -121,85 +128,83 @@ abstract class Xml
 
         libxml_use_internal_errors(true);
 
-        $streamName = $innerStream->getStreamName();
-        $root       = simplexml_load_file($streamName, $stream);
+        $root = @simplexml_load_file($innerStream->getStreamName(), $stream);
 
-        if(false === $root) {
+        if(   false === $root
+           && $innerStream instanceof \Hoa\Stream\IStream\In) {
 
-            if($innerStream instanceof \Hoa\Stream\IStream\In)
-                $root = @simplexml_load_string($innerStream->readAll(), $stream);
+            $handle = $innerStream->readAll();
 
-            if(false === $root) {
+            if(empty($handle)) {
 
-                if($innerStream instanceof \Hoa\Stream\IStream\Out)
-                    $root = simplexml_load_string(
-                        '<?xml version="1.0" encoding="utf-8"?' . ">\n\n" .
-                        '<handler xmlns="flatland">' . "\n" . '</handler>',
-                        $stream
-                    );
-
-                elseif(true === $this->hasError()) {
-
-                    $errors   = $this->getErrors();
-                    $first    = array_shift($errors);
-                    $message  = '  • ' . trim(ucfirst($first->message)) .
-                                ' (at line ' . $first->line .
-                                ', column ' . $first->column . ')';
-
-                    foreach($errors as $error)
-                        $message .= ';' . "\n" .
-                                    '  • ' . trim(ucfirst($error->message)) .
-                                    ' (at line ' . $error->line .
-                                    ', column ' . $error->column . ')';
-
-                    $message .= '.' . "\n";
-
-                    if($innerStream instanceof \Hoa\Stream\IStream\In) {
-
-                        $xml  = explode("\n", $innerStream->readAll());
-
-                        if(!empty($xml[0])) {
-
-                            $message .= "\n" . 'You should take a look at ' .
-                                        'this piece of code: ' . "\n";
-                            $lines    = count($xml) - 1;
-                            $line     = $first->line;
-                            $foo      = strlen((string) ($line + 3));
-
-                            for($i = max(1, $line - 3),
-                                $m = min($lines, $line + 3);
-                                $i <= $m;
-                                ++$i) {
-
-                                $message .= sprintf('%' . $foo . 'd', $i) . '. ';
-
-                                if($i == $line)
-                                    $message .= '➜  ';
-                                else
-                                    $message .= '   ';
-
-                                $message .= $xml[$i - 1] . "\n";
-                            }
-                        }
-                    }
-
-                    throw new Exception(
-                        'Errors occured while parsing the XML document %s:' .
-                        "\n" . '%s',
-                        1, array($innerStream->getStreamName(), $message));
-                }
-
-                if(!($innerStream instanceof \Hoa\Stream\IStream\Out))
-                    throw new Exception(
-                        'Failed to open the XML document %s.',
-                        2, $innerStream->getStreamName());
+                $this->clearErrors();
+                $handle = '<?xml version="1.0" encoding="utf-8"?' . ">\n\n" .
+                          '<handler xmlns="' .
+                          'http://hoa-project.net/ns/xml/default">' . "\n" .
+                          '</handler>';
             }
+
+            $root = @simplexml_load_string($handle, $stream);
         }
 
-        if(null === $root)
+        $this->_errors = libxml_get_errors();
+        $this->clearErrors();
+
+        if(false === $root || true === $this->hasError()) {
+
+            if(false === $this->hasError())
+                throw new Exception(
+                    'Failed to open the XML document %s.',
+                    1, $innerStream->getStreamName());
+
+            $errors   = $this->getErrors();
+            $first    = array_shift($errors);
+            $message  = '  • ' . trim(ucfirst($first->message)) .
+                        ' (at line ' . $first->line .
+                        ', column ' . $first->column . ')';
+
+            foreach($errors as $error)
+                $message .= ';' . "\n" .
+                            '  • ' . trim(ucfirst($error->message)) .
+                            ' (at line ' . $error->line .
+                            ', column ' . $error->column . ')';
+
+            $message .= '.' . "\n";
+
+            if($innerStream instanceof \Hoa\Stream\IStream\In) {
+
+                $xml  = explode("\n", $innerStream->readAll());
+
+                if(!empty($xml[0])) {
+
+                    $message .= "\n" . 'You should take a look at ' .
+                                'this piece of code: ' . "\n";
+                    $lines    = count($xml) - 1;
+                    $line     = $first->line;
+                    $foo      = strlen((string) ($line + 3));
+
+                    for($i = max(1, $line - 3),
+                        $m = min($lines, $line + 3);
+                        $i <= $m;
+                        ++$i) {
+
+                        $message .= sprintf('%' . $foo . 'd', $i) . '. ';
+
+                        if($i == $line)
+                            $message .= '➜  ';
+                        else
+                            $message .= '   ';
+
+                        $message .= $xml[$i - 1] . "\n";
+                    }
+                }
+            }
+
             throw new Exception(
-                'Failed to understand %s as a XML stream.',
-                3, $streamName);
+                'Errors occured while parsing the XML document %s:' .
+                "\n" . '%s',
+                2, array($innerStream->getStreamName(), $message));
+        }
 
         $this->setStream($root);
         $this->setInnerStream($innerStream);
@@ -658,9 +663,7 @@ abstract class Xml
      */
     public function hasError ( ) {
 
-        $errors = $this->getErrors();
-
-        return !empty($errors);
+        return !empty($this->_errors);
     }
 
     /**
@@ -671,7 +674,18 @@ abstract class Xml
      */
     public function getErrors ( ) {
 
-        return libxml_get_errors();
+        return $this->_errors;
+    }
+
+    /**
+     * Clear libXMLError.
+     *
+     * @access  protected
+     * @return  void
+     */
+    protected function clearErrors ( ) {
+
+        return libxml_clear_errors();
     }
 }
 
