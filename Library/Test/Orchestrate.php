@@ -281,9 +281,9 @@ class Orchestrate implements \Hoa\Core\Parameter\Parameterizable {
             '        );'
         );
 
-        $from      = $this->getFormattedParameter('convict');
-        $to        = $this->getFormattedParameter('instrumented');
-        $incubator = $this->getFormattedParameter('incubator');
+        $from      = $this->_parameters->getFormattedParameter('convict');
+        $to        = $this->_parameters->getFormattedParameter('instrumented');
+        $incubator = $this->_parameters->getFormattedParameter('incubator');
         \Hoa\File\Directory::create($to);
 
         return $this->_instrumentation($finder, $from, $to, $incubator);
