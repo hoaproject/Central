@@ -266,22 +266,49 @@ class Php extends \Hoa\Visitor\Registry {
                 switch(strtolower($argument->getName())) {
 
                     case 'constboolean':
-                        $out[] = $spaces . '    ->with(' .
-                                 ($argument->getValue() ? 'true' : 'false') .
-                                 ')' . "\n";
+                        if(true === $f)
+                            $out[] = $spaces . '    ->belongsTo(\'' .
+                                         $argument->getName() .
+                                     '\')' . "\n" .
+                                     $spaces . '      ->with(' .
+                                     ($argument->getValue() ? 'true' : 'false') .
+                                     ')' . "\n" .
+                                     $spaces . '      ->_ok()' . "\n";
+                        else
+                            $out[] = $spaces . '    ->with(' .
+                                     ($argument->getValue() ? 'true' : 'false') .
+                                     ')' . "\n";
                       break;
 
                     case 'constfloat':
                     case 'constinteger':
-                        $out[] = $spaces . '    ->with(' .
-                                 (string) $argument->getValue() .
-                                 ')' . "\n";
+                        if(true === $f)
+                            $out[] = $spaces . '    ->belongsTo(\'' .
+                                         $argument->getName() .
+                                     '\')' . "\n" .
+                                     $spaces . '      ->with(' .
+                                     (string) $argument->getValue() .
+                                     ')' . "\n" .
+                                     $spaces . '      ->_ok()' . "\n";
+                        else
+                            $out[] = $spaces . '    ->with(' .
+                                     (string) $argument->getValue() .
+                                     ')' . "\n";
                       break;
 
                     case 'conststring':
-                        $out[] = $spaces . '    ->with(\'' .
-                                 str_replace("'", "\'", $argument->getValue()) .
-                                 '\')' . "\n";
+                        if(true === $f)
+                            $out[] = $spaces . '    ->belongsTo(\'' .
+                                         $argument->getName() .
+                                     '\')' . "\n" .
+                                     $spaces . '      ->with(\'' .
+                                     str_replace("'", "\'", $argument->getValue()) .
+                                     '\')' . "\n" .
+                                     $spaces . '      ->_ok()' . "\n";
+                        else
+                            $out[] = $spaces . '    ->with(\'' .
+                                     str_replace("'", "\'", $argument->getValue()) .
+                                     '\')' . "\n";
                       break;
 
                     default:
