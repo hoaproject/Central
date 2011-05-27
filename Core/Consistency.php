@@ -169,16 +169,18 @@ class Consistency {
         if(false === $out) {
 
             $trace = $exception->getTrace();
+            $self  = get_class($this);
+
+            do {
+
+                $t = array_shift($trace);
+            } while(isset($t['class']) && $t['class'] == $self);
 
             throw new \Hoa\Core\Exception(
                 'The file %s need the class %s to work properly but this ' .
                 'last one is not found. We have looked for in: %s family(ies).',
                 0,
-                array(
-                    @$trace[1]['file'] ?: @$trace[0]['file'],
-                    $path,
-                    implode(', ', $this->_from)
-                ),
+                array(@$t['file'], $path, implode(', ', $this->_from)),
                 $exception
             );
         }
@@ -395,13 +397,11 @@ class Consistency {
      * @access  public
      * @param   string  $classname    Classname.
      * @return  string
-     * @throw   \Hoa\Core\Exception\Idle
      */
     public static function getClassShortestName ( $classname ) {
 
         if(!isset(self::$_class[$classname]))
-            throw new \Hoa\Core\Exception\Idle(
-                'Class %s does not exist.', 3, $classname);
+            return $classname;
 
         if(is_string(self::$_class[$classname]))
             return $classname;
