@@ -73,35 +73,35 @@ class Parameter {
      *
      * @var \Hoa\Core\Parameter string
      */
-    protected $_owner          = null;
+    protected $_owner            = null;
 
     /**
      * Parameters.
      *
      * @var \Hoa\Core\Parameter array
      */
-    private $_parameters       = array();
+    protected $_parameters       = array();
 
     /**
      * Keywords.
      *
      * @var \Hoa\Core\Parameter array
      */
-    private $_keywords         = array();
+    protected $_keywords         = array();
 
     /**
      * Constants values for zFormat.
      *
      * @var \Hoa\Core\Parameter array
      */
-    private static $_constants = null;
+    protected static $_constants = null;
 
     /**
      * Cache for zFormat.
      *
      * @var \Hoa\Core\Parameter array
      */
-    private $_cache            = array();
+    protected $_cache            = array();
 
 
 
@@ -181,6 +181,17 @@ class Parameter {
         );
 
         return;
+    }
+
+    /**
+     * Get constants.
+     *
+     * @access  public
+     * @return  array
+     */
+    public static function getConstants ( ) {
+
+        return self::$_constants;
     }
 
     /**
@@ -580,15 +591,17 @@ class Parameter {
                 // Call a constant.
                 elseif('_' == $key[0]) {
 
+                    $constants = Parameter::getConstants();
+
                     foreach(str_split($word) as $k => $v) {
 
-                        if(!isset(Parameters::$_constants[$v]))
+                        if(!isset($constants[$v]))
                             throw new \Hoa\Core\Exception(
                                 'Constant char %s is not supported in the ' .
                                 'rule %s.',
                                 1, array($v, $value));
 
-                        $out .= Parameter::$_constants[$v];
+                        $out .= $constants[$v];
                     }
                 }
                 // Call a keyword.
