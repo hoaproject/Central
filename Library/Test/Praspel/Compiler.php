@@ -126,12 +126,7 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                     ','                 // ,
                 ),
 
-                // 4. Extend.
-                array(
-
-                ),
-
-                // 5. Variable.
+                // 4. Variable.
                 array(
                     '#\w+',             // id
                     '#\\\result',       // \r
@@ -139,7 +134,7 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                     ')'                 // )
                 ),
 
-                // 6. Domains.
+                // 5. Domains.
                 array(
                     '#or',              // or
                     '#\w+',             // id
@@ -147,7 +142,7 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                     ')'                 // )
                 ),
 
-                // 7. Arguments.
+                // 6. Arguments.
                 array(
                     ',',                // ,
                     '#([+-]?0[xX][0-9a-fA-F]+)',                 // 0x
@@ -163,12 +158,12 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                     '#\w+'              // id
                 ),
 
-                // 8. Array.
+                // 7. Array.
                 array(
                     ']'                 // ]
                 ),
 
-                // 9. Pairs.
+                // 8. Pairs.
                 array(
                     ',',                // ,
                     '#from',            // fr
@@ -202,12 +197,7 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                     'CO'  // comma
                 ),
 
-                // 4. Extend.
-                array(
-
-                ),
-
-                // 5. Variable.
+                // 4. Variable.
                 array(
                      __ , // error
                     'GO', // start
@@ -216,7 +206,7 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                     'OK'  // terminal
                 ),
 
-                // 6. Domains.
+                // 5. Domains.
                 array(
                      __ , // error
                     'GO', // start
@@ -225,7 +215,7 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                     'OK'  // terminal
                 ),
 
-                // 7. Arguments.
+                // 6. Arguments.
                 array(
                      __ , // error
                     'GO', // start
@@ -235,14 +225,14 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                     'OK'  // terminal
                 ),
 
-                // 8. Array.
+                // 7. Array.
                 array(
                      __ , // error
                     'GO', // start
                     'OK'  // terminal
                 ),
 
-                // 9. Pairs.
+                // 8. Pairs.
                 array(
                      __ , // error
                     'GO', // start
@@ -263,22 +253,19 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                 // 3. List.
                 array('GO', 'CO'),
 
-                // 4. Extend.
-                array(),
-
-                // 5. Variable.
+                // 4. Variable.
                 array('OK'),
 
-                // 6. Domains
+                // 5. Domains
                 array('GO', 'OK'),
 
-                // 7. Arguments.
+                // 6. Arguments.
                 array('GO', '[]', 'OK'),
 
-                // 8. Array.
+                // 7. Array.
                 array('OK'),
 
-                // 9. Pairs.
+                // 8. Pairs.
                 array('GO', 'TO', 'OK')
             ),
 
@@ -311,11 +298,7 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                     /* CO */ array( __ , 'GO')
                 ),
 
-                // 4. Extend.
-                array(
-                ),
-
-                // 5. Variable.
+                // 4. Variable.
                 array(
                     /*              id    \r    \o    )
                     /* __ */ array( __ ,  __ ,  __ ,  __ ),
@@ -325,7 +308,7 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                     /* OK */ array( __ ,  __ ,  __ ,  __ )
                 ),
 
-                // 6. Domains.
+                // 5. Domains.
                 array(
                     /*              or    id     (    )
                     /* __ */ array( __ ,  __ ,  __ ,  __ ),
@@ -335,7 +318,7 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                     /* OK */ array('GO',  __ ,  __ ,  __ )
                 ),
 
-                // 7. Arguments.
+                // 6. Arguments.
                 array(
                     /*               ,    0x    07    0.    09     t     f     (     )     [     s    id
                     /* __ */ array( __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ),
@@ -346,7 +329,7 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                     /* OK */ array('GO',  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ )
                 ),
 
-                // 8. Array.
+                // 7. Array.
                 array(
                     /*               ]
                     /* __ */ array( __ ),
@@ -354,7 +337,7 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                     /* OK */ array( __ )
                 ),
 
-                // 9. Pairs.
+                // 8. Pairs.
                 array(
                     /*               ,    fr    to
                     /* __ */ array( __ ,  __ ,  __ ),
@@ -381,9 +364,9 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                 array(
                     /*              &    :   do
                     /* __ */ array( 0 ,  0 ,  0 ),
-                    /* GO */ array( 5 , ':', 'd'),
-                    /* DM */ array('&',  6 ,  0 ),
-                    /* DO */ array('D',  0 ,  5 )
+                    /* GO */ array( 4 , ':', 'd'),
+                    /* DM */ array('&',  5 ,  0 ),
+                    /* DO */ array('D',  0 ,  4 )
                 ),
 
                 // 3. List.
@@ -394,12 +377,7 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                     /* CO */ array( 0 , 'l')
                 ),
 
-                // 4. Extend.
-                array(
-
-                ),
-
-                // 5. Variable.
+                // 4. Variable.
                 array(
                     /*             id   \r   \o    )
                     /* __ */ array( 0 ,  0 ,  0 ,  0 ),
@@ -409,43 +387,43 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                     /* OK */ array( 0 ,  0 ,  0 ,  0 )
                 ),
 
-                // 6. Domains.
+                // 5. Domains.
                 array(
                     /*             or   id    (    )
                     /* __ */ array( 0 ,  0 ,  0 ,  0 ),
                     /* GO */ array('|', -3,   0 ,  0 ),
                     /* ID */ array( 0 ,  0 , 'y',  0 ),
-                    /* AR */ array( 0 ,  0 ,  7 , 'Y'),
+                    /* AR */ array( 0 ,  0 ,  6 , 'Y'),
                     /* OK */ array( 0 ,  0 ,  0 ,  0 )
                 ),
 
-                // 7. Arguments.
+                // 6. Arguments.
                 array(
                     /*              ,   0x   07   0.   09    t    f    (    )    [    s   id
                     /* __ */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ),
                     /* GO */ array( 0 , 'x', '7', '.', '9', 'T', 'F',  0 ,  0 , '[', 's', -3 ),
                     /* ID */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 , 'z',  0 ,  0 ,  0 ,  0 ),
-                    /* AR */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  7 , 'Y',  0 ,  0 ,  0 ),
-                    /* [] */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  8 ,  0 ,  0 ),
+                    /* AR */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  6 , 'Y',  0 ,  0 ,  0 ),
+                    /* [] */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  7 ,  0 ,  0 ),
                     /* OK */ array('c',  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 )
                 ),
 
-                // 8. Array.
+                // 7. Array.
                 array(
                     /*              ]
                     /* __ */ array( 0   ),
-                    /* GO */ array('9,]'),
+                    /* GO */ array('8,]'),
                     /* OK */ array( 0   )
                 ),
 
-                // 9. Pairs.
+                // 8. Pairs.
                 array(
                     /*              ,   fr  to
                     /* __ */ array( 0 ,  0,   0 ),
                     /* GO */ array( 0 ,  0,   0 ),
-                    /* FR */ array( 0 ,  6, 'to'),
-                    /* TO */ array(',',  0,   6 ),
-                    /* OK */ array( 9 ,  0,   0 )
+                    /* FR */ array( 0 ,  5, 'to'),
+                    /* TO */ array(',',  0,   5 ),
+                    /* OK */ array( 8 ,  0,   0 )
                 )
             ),
 
@@ -454,7 +432,6 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                 'Clauses',
                 'Expressions',
                 'List',
-                'Extend',
                 'Variable',
                 'Domains',
                 'Arguments',
