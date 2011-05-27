@@ -137,6 +137,13 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                 // 5. Domains.
                 array(
                     '#or',              // or
+                    '#([+-]?0[xX][0-9a-fA-F]+)',                 // 0x
+                    '#([+-]?0[0-7]+)',                           // 07
+                    '#([+-]?([0-9]*\.[0-9]+)|([0-9]+\.[0-9]*))', // 0.
+                    '#([+-]?[1-9][0-9]*|0)',                     // 09
+                    '#true',            // t
+                    '#false',           // f
+                    '#\'.*?(?<!\\\)\'', // s
                     '#\w+',             // id
                     '(',                // (
                     ')'                 // )
@@ -310,12 +317,12 @@ class Compiler extends \Hoa\Compiler\Ll1 {
 
                 // 5. Domains.
                 array(
-                    /*              or    id     (    )
-                    /* __ */ array( __ ,  __ ,  __ ,  __ ),
-                    /* GO */ array( __ , 'ID',  __ ,  __ ),
-                    /* ID */ array( __ ,  __ , 'AR',  __ ),
-                    /* AR */ array( __ ,  __ ,  __ , 'OK'),
-                    /* OK */ array('GO',  __ ,  __ ,  __ )
+                    /*              or    0x    07    0.    09     t     f     s    id     (    )
+                    /* __ */ array( __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ),
+                    /* GO */ array( __ , 'OK', 'OK', 'OK', 'OK', 'OK', 'OK', 'OK', 'ID',  __ ,  __ ),
+                    /* ID */ array( __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ , 'AR',  __ ),
+                    /* AR */ array( __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ , 'OK'),
+                    /* OK */ array('GO',  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ ,  __ )
                 ),
 
                 // 6. Arguments.
@@ -389,12 +396,12 @@ class Compiler extends \Hoa\Compiler\Ll1 {
 
                 // 5. Domains.
                 array(
-                    /*             or   id    (    )
-                    /* __ */ array( 0 ,  0 ,  0 ,  0 ),
-                    /* GO */ array('|', -3,   0 ,  0 ),
-                    /* ID */ array( 0 ,  0 , 'y',  0 ),
-                    /* AR */ array( 0 ,  0 ,  6 , 'Y'),
-                    /* OK */ array( 0 ,  0 ,  0 ,  0 )
+                    /*             or   0x   07   0.   09    t    f    s   id    (    )
+                    /* __ */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ),
+                    /* GO */ array('|', 'x', '7', '.', '9', 'T', 'F', 's', -3,   0 ,  0 ),
+                    /* ID */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 , 'y',  0 ),
+                    /* AR */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  6 , 'Y'),
+                    /* OK */ array( 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 )
                 ),
 
                 // 6. Arguments.
@@ -485,10 +492,13 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                     $this->buffers[0]
                 );
                 unset($this->buffers[0]);
+                $this->buffers[4] = true;
               break;
 
             // variable: domain(
             case 'y':
+                unset($this->buffers[4]);
+
                 $this->_current = $this->_current->belongsTo(
                     $this->buffers[1]
                 );
@@ -513,7 +523,8 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                     unset($this->buffers[3]);
                 }
 
-                $this->_current = $this->_current->_ok();
+                $this->_current   = $this->_current->_ok();
+                $this->buffers[4] = true;
               break;
 
             // variable: domain([
@@ -584,31 +595,91 @@ class Compiler extends \Hoa\Compiler\Ll1 {
             // Number: hexadecimal.
             case 'x':
                 $this->buffers[3] = hexdec(substr($this->buffers[-1], 2));
+
+                if(isset($this->buffers[4])) {
+
+                    $this->_current = $this->_current->belongsTo(
+                        'constinteger'
+                    )->with(
+                        $this->buffers[3]
+                    )->_ok();
+                    unset($this->buffers[3]);
+                }
               break;
 
             // Number: octal.
             case '7':
                 $this->buffers[3] = intval($this->buffers[-1], 8);
+
+                if(isset($this->buffers[4])) {
+
+                    $this->_current = $this->_current->belongsTo(
+                        'constinteger'
+                    )->with(
+                        $this->buffers[3]
+                    )->_ok();
+                    unset($this->buffers[3]);
+                }
               break;
 
             // Number: float.
             case '.':
                 $this->buffers[3] = floatval($this->buffers[-1]);
+
+                if(isset($this->buffers[4])) {
+
+                    $this->_current = $this->_current->belongsTo(
+                        'constfloat'
+                    )->with(
+                        $this->buffers[3]
+                    )->_ok();
+                    unset($this->buffers[3]);
+                }
               break;
 
             // Number: decimal.
             case '9':
                 $this->buffers[3] = intval($this->buffers[-1], 10);
+
+                if(isset($this->buffers[4])) {
+
+                    $this->_current = $this->_current->belongsTo(
+                        'constinteger'
+                    )->with(
+                        $this->buffers[3]
+                    )->_ok();
+                    unset($this->buffers[3]);
+                }
               break;
 
             // Boolean: true.
             case 'T':
                 $this->buffers[3] = true;
+
+                if(isset($this->buffers[4])) {
+
+                    $this->_current = $this->_current->belongsTo(
+                        'constboolean'
+                    )->with(
+                        $this->buffers[3]
+                    )->_ok();
+                    unset($this->buffers[3]);
+                }
               break;
 
             // Boolean: false.
-            case 'T':
+            case 'F':
                 $this->buffers[3] = false;
+
+                if(isset($this->buffers[4])) {
+
+                    $this->_current = $this->_current->belongsTo(
+                        'constboolean'
+                    )->with(
+                        $this->buffers[3]
+                    )->_ok();
+                    unset($this->buffers[3]);
+                }
               break;
 
             // String.
@@ -618,6 +689,16 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                     "'",
                     substr($this->buffers[-1], 1, -1)
                 );
+
+                if(isset($this->buffers[4])) {
+
+                    $this->_current = $this->_current->belongsTo(
+                        'conststring'
+                    )->with(
+                        $this->buffers[3]
+                    )->_ok();
+                    unset($this->buffers[3]);
+                }
               break;
         }
     }
