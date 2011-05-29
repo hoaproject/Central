@@ -139,13 +139,11 @@ class Basic extends Dispatcher {
 
                 if(false === $async) {
 
-                    $_file       = 'synchronous.file';
                     $_controller = 'synchronous.controller';
                     $_action     = 'synchronous.action';
                 }
                 else {
 
-                    $_file       = 'asynchronous.file';
                     $_controller = 'asynchronous.controller';
                     $_action     = 'asynchronous.action';
                 }
@@ -153,44 +151,39 @@ class Basic extends Dispatcher {
                 $this->_parameters->setKeyword('controller', $controller);
                 $this->_parameters->setKeyword('action',     $action);
 
-                $file       = $this->_parameters->getFormattedParameter($_file);
                 $controller = $this->_parameters->getFormattedParameter($_controller);
                 $action     = $this->_parameters->getFormattedParameter($_action);
+                $kit        = $variables['_this'];
 
-                if(!file_exists($file))
-                    throw new Exception(
-                        'File %s is not found (method: %s, asynchronous: %s).',
-                        2, array($file, strtoupper($method),
-                                 true === $async ? 'true': 'false'));
+                try {
 
-                require_once $file;
-
-                if(!class_exists($controller))
-                    throw new Exception(
-                        'Controller %s is not found in the file %s ' .
-                        '(method: %s, asynchronous: %s).',
-                        3, array($controller, $file, strtoupper($method),
-                                 true === $async ? 'true': 'false'));
-
-                if(is_subclass_of($controller, '\Hoa\Dispatcher\Kit')) {
-
-                    $kit        = $variables['_this'];
-                    $controller = new $controller(
-                        $kit->router,
-                        $kit->dispatcher,
-                        $kit->view
+                    $controller = dnew(
+                        $controller,
+                        array(
+                            $kit->router,
+                            $kit->dispatcher,
+                            $kit->view
+                        )
                     );
-                    $controller->construct();
                 }
-                else
-                    $controller = new $controller();
+                catch ( \Hoa\Core\Exception $e ) {
+
+                    throw new Exception(
+                        'Controller %s is not found ' .
+                        '(method: %s, asynchronous: %s).',
+                        2, array($controller, strtoupper($method),
+                                 true === $async ? 'true': 'false'), $e);
+                }
+
+                if(method_exists($controller, 'contruct'))
+                    $controller->construct();
             }
 
             if(!method_exists($controller, $action))
                 throw new Exception(
                     'Action %s does not exist on the controller %s ' .
                     '(method: %s, asynchronous: %s).',
-                    4, array($action, get_class($controller), strtoupper($method),
+                    3, array($action, get_class($controller), strtoupper($method),
                              true === $async ? 'true': 'false'));
 
             $called     = $controller;
@@ -210,7 +203,7 @@ class Basic extends Dispatcher {
                     throw new Exception(
                         'The action %s on the controller %s needs a value for ' .
                         'the parameter $%s and this value does not exist.',
-                        5, array($action, get_class($controller), $name));
+                        4, array($action, get_class($controller), $name));
             }
         }
 

@@ -104,13 +104,11 @@ abstract class Dispatcher implements \Hoa\Core\Parameter\Parameterizable {
                 'method'     => null
             ),
             array(
-                'synchronous.file'        => 'hoa://Application/Controller/(:controller:U:).php',
-                'synchronous.controller'  => '(:controller:U:)Controller',
+                'synchronous.controller'  => 'Application\Controller\(:controller:U:)',
                 'synchronous.action'      => '(:action:U:)Action',
 
-                'asynchronous.file'       => '(:%synchronous.file:)',
                 'asynchronous.controller' => '(:%synchronous.controller:)',
-                'asynchronous.action'     => '(:%synchronous.action:)Async'
+                'asynchronous.action'     => '(:%synchronous.action:)Async',
             )
         );
         $this->_parameters->setParameters($parameters);
@@ -151,9 +149,14 @@ abstract class Dispatcher implements \Hoa\Core\Parameter\Parameterizable {
         else
             $this->_currentView = $view;
 
-        $rule[\Hoa\Router::RULE_VARIABLES]['_this']
-            = dnew($this->getKitName(), array($router, $this, $view));
+        $kit = dnew($this->getKitName(), array($router, $this, $view));
 
+        if(!($kit instanceof \Hoa\Dispatcher\Kit))
+            throw new Exception(
+                'Your kit %s must extend Hoa\Dispatcher\Kit.',
+                0, $this->getKitName());
+
+        $rule[\Hoa\Router::RULE_VARIABLES]['_this'] = $kit;
         $this->_parameters->setKeyword('method', $router->getMethod());
 
         return $this->resolve($rule);
@@ -168,6 +171,22 @@ abstract class Dispatcher implements \Hoa\Core\Parameter\Parameterizable {
      * @throw   \Hoa\Dispatcher\Exception
      */
     abstract protected function resolve ( Array $rule );
+
+    /**
+     * Set kit's name.
+     *
+     * @access  public
+     * @param   string  $kit    Kit's name.
+     * @return  string
+     * @throw   \Hoa\Dispatcher\Exception
+     */
+    public function setKitName ( $kit ) {
+
+        $old        = $this->_kit;
+        $this->_kit = $kit;
+
+        return $old;
+    }
 
     /**
      * Get kit's name.
