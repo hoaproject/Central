@@ -489,7 +489,7 @@ class Consistency {
 
         $class = new \ReflectionClass($classname);
 
-        if(empty($arguments))
+        if(empty($arguments) || false === $class->hasMethod('__construct'))
             return $class->newInstance();
 
         return $class->newInstanceArgs($arguments);
