@@ -179,6 +179,12 @@ class          Test
 
         $cut       = new $class();
         $hop       = '__hoa_' . $method . '_contract';
+
+        if(!method_exists($cut, $hop))
+            throw new Exception(
+                'Method %s on class %s does not exist.',
+                1, array($method, $class));
+
         $cut->$hop();
         $praspel   = Praspel::getInstance();
         $contract  = $praspel->getContract($contractId);
