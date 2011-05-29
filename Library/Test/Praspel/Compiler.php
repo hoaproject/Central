@@ -492,17 +492,15 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                     $this->buffers[0]
                 );
                 unset($this->buffers[0]);
-                $this->buffers[4] = true;
               break;
 
             // variable: domain(
             case 'y':
-                unset($this->buffers[4]);
-
                 $this->_current = $this->_current->belongsTo(
                     $this->buffers[1]
                 );
                 unset($this->buffers[1]);
+                $this->buffers[4]= true;
               break;
 
             // variable: domain(…, domain(
@@ -511,6 +509,7 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                     $this->buffers[1]
                 );
                 unset($this->buffers[1]);
+                $this->buffers[4]= true;
               break;
 
             // variable: domain(…)
@@ -523,28 +522,32 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                     unset($this->buffers[3]);
                 }
 
-                $this->_current   = $this->_current->_ok();
-                $this->buffers[4] = true;
+                $this->_current = $this->_current->_ok();
+                unset($this->buffers[4]);
               break;
 
             // variable: domain([
             case '[':
                 $this->_current = $this->_current->withArray()->from();
+                unset($this->buffers[4]);
               break;
 
             // variable: domain([…,
             case ',':
                 $this->_current = $this->_current->from();
+                unset($this->buffers[4]);
               break;
 
             // variable: domain([… to
             case 'to':
                 $this->_current = $this->_current->to();
+                unset($this->buffers[4]);
               break;
 
             // variable: domain([…]
             case ']':
                 $this->_current = $this->_current->end();
+                $this->buffers[4] = true;
               break;
 
             // variable: domain(…,
@@ -596,7 +599,7 @@ class Compiler extends \Hoa\Compiler\Ll1 {
             case 'x':
                 $this->buffers[3] = hexdec(substr($this->buffers[-1], 2));
 
-                if(isset($this->buffers[4])) {
+                if(!isset($this->buffers[4])) {
 
                     $this->_current = $this->_current->belongsTo(
                         'constinteger'
@@ -626,7 +629,7 @@ class Compiler extends \Hoa\Compiler\Ll1 {
             case '.':
                 $this->buffers[3] = floatval($this->buffers[-1]);
 
-                if(isset($this->buffers[4])) {
+                if(!isset($this->buffers[4])) {
 
                     $this->_current = $this->_current->belongsTo(
                         'constfloat'
@@ -641,7 +644,7 @@ class Compiler extends \Hoa\Compiler\Ll1 {
             case '9':
                 $this->buffers[3] = intval($this->buffers[-1], 10);
 
-                if(isset($this->buffers[4])) {
+                if(!isset($this->buffers[4])) {
 
                     $this->_current = $this->_current->belongsTo(
                         'constinteger'
@@ -656,7 +659,7 @@ class Compiler extends \Hoa\Compiler\Ll1 {
             case 'T':
                 $this->buffers[3] = true;
 
-                if(isset($this->buffers[4])) {
+                if(!isset($this->buffers[4])) {
 
                     $this->_current = $this->_current->belongsTo(
                         'constboolean'
@@ -671,7 +674,7 @@ class Compiler extends \Hoa\Compiler\Ll1 {
             case 'F':
                 $this->buffers[3] = false;
 
-                if(isset($this->buffers[4])) {
+                if(!isset($this->buffers[4])) {
 
                     $this->_current = $this->_current->belongsTo(
                         'constboolean'
@@ -690,7 +693,7 @@ class Compiler extends \Hoa\Compiler\Ll1 {
                     substr($this->buffers[-1], 1, -1)
                 );
 
-                if(isset($this->buffers[4])) {
+                if(!isset($this->buffers[4])) {
 
                     $this->_current = $this->_current->belongsTo(
                         'conststring'
