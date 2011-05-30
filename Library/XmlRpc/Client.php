@@ -70,9 +70,9 @@ namespace Hoa\XmlRpc {
 class Client {
 
     /**
-     * Client socket connection.
+     * Client.
      *
-     * @var \Hoa\Socket\Connection\Client object
+     * @var \Hoa\Socket\Client object
      */
     protected $_client = null;
 
@@ -89,16 +89,16 @@ class Client {
      * Constructor.
      *
      * @access  public
-     * @param   \Hoa\Socket\Connection\Client  $client    Client connection.
-     * @param   string                         $script    Script.
+     * @param   \Hoa\Socket\Client  $client    Client.
+     * @param   string              $script    Script.
      * @return  void
+     * @throw   \Hoa\Socket\Exception
      */
-    public function __construct ( \Hoa\Socket\Connection\Client $client,
-                                  $script ) {
+    public function __construct ( \Hoa\Socket\Client $client, $script ) {
 
-        $client->connect();
         $this->_client = $client;
         $this->_script = $script;
+        $client->connect();
 
         return;
     }
