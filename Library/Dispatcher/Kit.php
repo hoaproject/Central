@@ -87,9 +87,9 @@ class Kit {
      * @param   \Hoa\View\Viewable    $view          The view.
      * @return  void
      */
-    final public function __construct ( \Hoa\Router        $router,
-                                        Dispatcher         $dispatcher,
-                                        \Hoa\View\Viewable $view = null ) {
+    public function __construct ( \Hoa\Router        $router,
+                                  Dispatcher         $dispatcher,
+                                  \Hoa\View\Viewable $view = null ) {
 
         $this->router     = $router;
         $this->dispatcher = $dispatcher;
