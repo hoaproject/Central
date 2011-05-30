@@ -84,7 +84,7 @@ interface Router {
     const RULE_ID            = 2;
 
     /**
-     * Rule bucket: pattern (on-subdomain@on-request).
+     * Rule bucket: pattern.
      *
      * @const int
      */
