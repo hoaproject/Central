@@ -49,14 +49,9 @@ from('Hoa')
 -> import('Notification.~')
 
 /**
- * \Hoa\Socket\Connection\Client
+ * \Hoa\Socket\Client
  */
--> import('Socket.Connection.Client')
-
-/**
- * \Hoa\Socket\Internet\DomainName
- */
--> import('Socket.Internet.DomainName');
+-> import('Socket.Client');
 
 }
 
@@ -72,12 +67,12 @@ namespace Hoa\Notification {
  * @license    New BSD License
  */
 
-class Growl {
+class Growl implements Notification {
 
     /**
-     * Client connection.
+     * Client.
      *
-     * @var \Hoa\Socket\Connection\Client object
+     * @var \Hoa\Socket\Client object
      */
     protected $_client          = null;
 
@@ -116,23 +111,21 @@ class Growl {
      * Construct a new notifier.
      *
      * @access  public
-     * @param   string                $applicationName    Application's name.
-     * @param   \Hoa\Socket\Internet  $socket             Socketable.
-     * @param   string                $password           Application's
-     *                                                    password.
+     * @param   string              $applicationName    Application's name.
+     * @param   \Hoa\Socket\Client  $client             Client.
+     * @param   string              $password           Application's
+     *                                                  password.
      * @return  void
-     * @throw   \Hoa\Socket\Connection\Exception
+     * @throw   \Hoa\Socket\Exception
      */
-    public function __construct ( $applicationName             = 'Hoa',
-                                  \Hoa\Socket\Internet $socket = null,
-                                  $password                    = '' ) {
+    public function __construct ( $applicationName           = 'Hoa',
+                                  \Hoa\Socket\Client $client = null,
+                                  $password                  = '' ) {
 
-        if(null === $socket)
-            $socket = new \Hoa\Socket\Internet\DomainName(
-                'localhost', 9887, 'udp'
-            );
+        if(null === $client)
+            $client = new \Hoa\Socket\Client('udp://localhost:9887');
 
-        $this->_client = new \Hoa\Socket\Connection\Client($socket);
+        $this->_client = $client;
         $this->_client->connect();
         $this->setApplicationName($applicationName);
         $this->setPassword($password);
