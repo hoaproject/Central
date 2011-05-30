@@ -39,9 +39,14 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Socket\Connection\Exception
+ * \Hoa\Socket\Exception
  */
--> import('Socket.Connection.Exception')
+-> import('Socket.Exception')
+
+/**
+ * \Hoa\Socket
+ */
+-> import('Socket.~')
 
 /**
  * \Hoa\Stream
@@ -65,12 +70,12 @@ from('Hoa')
 
 }
 
-namespace Hoa\Socket\Connection {
+namespace Hoa\Socket {
 
 /**
  * Class \Hoa\Socket\Connection.
  *
- * Abstract connection, usefull for client and server.
+ * Abstract connection, useful for client and server.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
@@ -86,7 +91,7 @@ abstract class Connection
     /**
      * Socket.
      *
-     * @var \Hoa\Socket\Socketable object
+     * @var \Hoa\Socket object
      */
     protected $_socket        = null;
 
@@ -156,21 +161,22 @@ abstract class Connection
 
 
     /**
-     * Constructor.
-     * Configure a socket.
+     * Start a connection.
      *
      * @access  public
-     * @param   \Hoa\Socket\Socketable  $socket     Socket.
-     * @param   int                     $timeout    Timeout.
-     * @param   int                     $flag       Flag, see the child::* constants.
-     * @param   string                  $context    Context ID (please, see the
-     *                                              \Hoa\Stream\Context class).
+     * @param   string  $socket     Socket URI.
+     * @param   int     $timeout    Timeout.
+     * @param   int     $flag       Flag, see the child::* constants.
+     * @param   string  $context    Context ID (please, see the
+     *                              \Hoa\Stream\Context class).
      * @return  void
      */
-    public function __construct ( \Hoa\Socket\Socketable $socket, $timeout, $flag,
-                                  $context = null ) {
+    public function __construct ( $socket, $timeout, $flag, $context = null ) {
 
-        $this->setSocket($socket);
+        // Children could setSocket() before __construct.
+        if(null !== $socket)
+            $this->setSocket($socket);
+
         $this->setTimeout($timeout);
         $this->setFlag($flag);
         $this->setContext($context);
@@ -247,13 +253,13 @@ abstract class Connection
      * Set socket.
      *
      * @access  protected
-     * @param   \Hoa\Socket\Socketable  $socket     Socket.
-     * @return  \Hoa\Socket\Socketable
+     * @param   string  $socket    Socket  URI.
+     * @return  \Hoa\Socket
      */
-    protected function setSocket ( \Hoa\Socket\Socketable $socket ) {
+    protected function setSocket ( $socket ) {
 
         $old           = $this->_socket;
-        $this->_socket = $socket;
+        $this->_socket = new Socket($socket);
 
         return $old;
     }
@@ -322,7 +328,7 @@ abstract class Connection
      * Get socket.
      *
      * @access  public
-     * @return  \Hoa\Socket\Socketable
+     * @return  \Hoa\Socket
      */
     public function getSocket ( ) {
 
@@ -434,7 +440,7 @@ abstract class Connection
      * @access  public
      * @param   int     $length    Length.
      * @return  string
-     * @throw   \Hoa\Socket\Connection\Exception
+     * @throw   \Hoa\Socket\Exception
      */
     public function read ( $length ) {
 
@@ -573,7 +579,7 @@ abstract class Connection
      * @param   string  $string    String.
      * @param   int     $length    Length.
      * @return  mixed
-     * @throw   \Hoa\Socket\Connection\Exception
+     * @throw   \Hoa\Socket\Exception
      */
     public function write ( $string, $length ) {
 

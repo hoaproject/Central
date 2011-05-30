@@ -44,51 +44,81 @@ from('Hoa')
 -> import('Socket.Exception')
 
 /**
- * \Hoa\Socket\Socketable
- */
--> import('Socket.Socketable')
-
-/**
  * \Hoa\Socket\Transport
  */
 -> import('Socket.Transport');
 
 }
 
-namespace Hoa\Socket\Internet {
+namespace Hoa\Socket {
 
 /**
- * Class \Hoa\Socket\Internet.
+ * Class \Hoa\Socket.
  *
- * Mother class for Internet sockets.
+ * Socket analyzer.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 
-abstract class Internet implements \Hoa\Socket\Socketable {
+class Socket {
+
+    /**
+     * Address type: IPv6.
+     *
+     * @const int
+     */
+    const ADDRESS_IPV6   = 0;
+
+    /**
+     * Address type: IPv4.
+     *
+     * @const int
+     */
+    const ADDRESS_IPV4   = 1;
+
+    /**
+     * Address type: domain.
+     *
+     * @const int
+     */
+    const ADDRESS_DOMAIN = 2;
+
+    /**
+     * Address type: path.
+     *
+     * @const int
+     */
+    const ADDRESS_PATH   = 3;
 
     /**
      * Address.
      *
-     * @var \Hoa\Socket\Internet string
+     * @var \Hoa\Socket string
      */
-    protected $_address   = null;
+    protected $_address     = null;
+
+    /**
+     * Address type. Please, see the self::ADDRESS_* constants.
+     *
+     * @var \Hoa\Socket int
+     */
+    protected $_addressType = 0;
 
     /**
      * Port.
      *
-     * @var \Hoa\Socket\Internet int
+     * @var \Hoa\Socket int
      */
-    protected $_port      = -1;
+    protected $_port        = -1;
 
     /**
      * Transport.
      *
-     * @var \Hoa\Socket\Internet string
+     * @var \Hoa\Socket string
      */
-    protected $_transport = null;
+    protected $_transport   = null;
 
 
 
@@ -96,43 +126,90 @@ abstract class Internet implements \Hoa\Socket\Socketable {
      * Constructor.
      *
      * @access  public
-     * @param   string  $address      Address.
-     * @param   int     $port         Port.
-     * @param   string  $transport    Transport (TCP, UDP etc.).
+     * @param   string  $uri    URI.
      * @return  void
      */
-    public function __construct ( $address, $port, $transport ) {
+    public function __construct ( $uri ) {
 
-        $this->setAddress($address);
-        $this->setPort($port);
-        $this->setTransport($transport);
+        $this->setURI($uri);
 
         return;
     }
 
     /**
-     * Set address.
+     * Set URI.
      *
      * @access  public
-     * @param   string  $address    Address.
+     * @param   string  $uri    URI.
      * @return  string
      * @throw   \Hoa\Socket\Exception
      */
-    abstract public function setAddress ( $address );
+    public function setURI ( $uri ) {
+
+        $m = preg_match(
+            '#(?<scheme>[^:]+)://' .
+                '(?:\[(?<ipv6_>[^\]]+)\]:(?<ipv6_port>\d+)$|' .
+                '(?<ipv4>\d+(?:\.\d+){3})(?::(?<ipv4_port>\d+))?$|' .
+                '(?<domain>[^:]+)(?::(?<domain_port>\d+))?$|' .
+                '(?<ipv6>.+)$)#',
+            $uri,
+            $matches);
+
+        if(0 === $m)
+            throw new Exception(
+                'URI %s is not recognized (it is not an IPv6, IPv4 nor ' .
+                'domain name.', 0, $uri);
+
+        $this->setTransport($matches['scheme']);
+
+        if(isset($matches['ipv6_']) && !empty($matches['ipv6_'])) {
+
+            $this->_address     = $matches['ipv6_'];
+            $this->_addressType = self::ADDRESS_IPV6;
+            $this->setPort($matches['ipv6_port']);
+        }
+        elseif(isset($matches['ipv6']) && !empty($matches['ipv6'])) {
+
+            $this->_address     = $matches['ipv6'];
+            $this->_addressType = self::ADDRESS_IPV6;
+        }
+        elseif(isset($matches['ipv4']) && !empty($matches['ipv4'])) {
+
+            $this->_address     = $matches['ipv4'];
+            $this->_addressType = self::ADDRESS_IPV4;
+
+            if(isset($matches['ipv4_port']))
+                $this->setPort($matches['ipv4_port']);
+        }
+        elseif(isset($matches['domain'])) {
+
+            $this->_address     = $matches['domain'];
+
+            if(false !== strpos($this->_address, '/'))
+                $this->_addressType = self::ADDRESS_PATH;
+            else
+                $this->_addressType = self::ADDRESS_DOMAIN;
+
+            if(isset($matches['domain_port']))
+                $this->setPort($matches['domain_port']);
+        }
+
+        return;
+    }
 
     /**
      * Set the port.
      *
-     * @access  public
-     * @param   int     $port    Port.
+     * @access  protected
+     * @param   int  $port    Port.
      * @return  int
      * @throw   \Hoa\Socket\Exception
      */
-    public function setPort ( $port ) {
+    protected function setPort ( $port ) {
 
         if($port < 0)
             throw new \Hoa\Socket\Exception(
-                'Port must be greater or equal than zero, given %d.', 0, $port);
+                'Port must be greater or equal than zero, given %d.', 1, $port);
 
         $old         = $this->_port;
         $this->_port = $port;
@@ -143,18 +220,18 @@ abstract class Internet implements \Hoa\Socket\Socketable {
     /**
      * Set the transport.
      *
-     * @access  public
+     * @access  protected
      * @param   string  $transport    Transport (TCP, UDP etc.).
      * @return  string
      * @throw   \Hoa\Socket\Exception
      */
-    public function setTransport ( $transport ) {
+    protected function setTransport ( $transport ) {
 
         $transport = strtolower($transport);
 
         if(false === \Hoa\Socket\Transport::exists($transport))
             throw new \Hoa\Socket\Exception(
-                'Transport %s is not enabled on this machin.', 1, $transport);
+                'Transport %s is not enabled on this machin.', 2, $transport);
 
         $old              = $this->_transport;
         $this->_transport = $transport;
@@ -171,6 +248,17 @@ abstract class Internet implements \Hoa\Socket\Socketable {
     public function getAddress ( ) {
 
         return $this->_address;
+    }
+
+    /**
+     * Get the address type.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getAddressType ( ) {
+
+        return $this->_addressType;
     }
 
     /**
@@ -225,13 +313,22 @@ abstract class Internet implements \Hoa\Socket\Socketable {
      */
     public function __toString ( ) {
 
-        return (true === $this->hasTransport()
-                  ? $this->getTransport() . '://'
-                  : '') .
-               $this->getAddress() .
-               (true === $this->hasPort()
-                  ? ':' . $this->getPort()
-                  : '');
+        $out = null;
+
+        if(true === $this->hasTransport())
+            $out .= $this->getTransport() . '://';
+
+        if(true === $this->hasPort()) {
+
+            if(self::ADDRESS_IPV6 === $this->getAddressType())
+                $out .= '[' . $this->getAddress() . ']';
+            else
+                $out .= $this->getAddress();
+
+            return $out . ':' . $this->getPort();
+        }
+
+        return $out . $this->getAddress();
     }
 }
 
