@@ -164,7 +164,7 @@ class Responder extends Connection {
     /**
      * Client socket connection.
      *
-     * @var \Hoa\Socket\Connection\Client object
+     * @var \Hoa\Socket\Client object
      */
     protected $_client  = null;
 
@@ -188,10 +188,10 @@ class Responder extends Connection {
      * Constructor.
      *
      * @access  public
-     * @param   \Hoa\Socket\Connection\Client  $client    Client connection.
+     * @param   \Hoa\Socket\Client  $client    Client connection.
      * @return  void
      */
-    public function __construct ( \Hoa\Socket\Connection\Client $client ) {
+    public function __construct ( \Hoa\Socket\Client $client ) {
 
         $this->setClient($client);
 
@@ -206,6 +206,10 @@ class Responder extends Connection {
      * @param   string  $content    Content (e.g. key=value for POST).
      * @return  string
      * @throw   \Hoa\Socket\Exception
+     * @throw   \Hoa\FastCgi\Exception
+     * @throw   \Hoa\FastCgi\Exception\CannotMultiplex
+     * @throw   \Hoa\FastCgi\Exception\Overloaded
+     * @throw   \Hoa\FastCgi\Exception\UnknownRole
      */
     public function send ( Array $headers, $content = null ) {
 
@@ -330,10 +334,10 @@ class Responder extends Connection {
      * Set client.
      *
      * @access  public
-     * @param   \Hoa\Socket\Connection\Client  $client    Client.
-     * @return  \Hoa\Socket\Connection\Client
+     * @param   \Hoa\Socket\Client  $client    Client.
+     * @return  \Hoa\Socket\Client
      */
-    public function setClient ( \Hoa\Socket\Connection\Client $client ) {
+    public function setClient ( \Hoa\Socket\Client $client ) {
 
         $old           = $this->_client;
         $this->_client = $client;
@@ -345,7 +349,7 @@ class Responder extends Connection {
      * Get client.
      *
      * @access  public
-     * @return  \Hoa\Socket\Connection\Client
+     * @return  \Hoa\Socket\Client
      */
     public function getClient ( ) {
 
