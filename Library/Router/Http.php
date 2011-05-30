@@ -231,7 +231,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
      * @return  \Hoa\Router\Http
      * @throw   \Hoa\Router\Exception
      */
-    public function addRule ( Array $methods, $id, $pattern, $call,
+    public function addRule ( Array $methods, $id, $pattern, $call = null,
                               $able = null, Array $variables = array() ) {
 
         return $this->_addRule(
