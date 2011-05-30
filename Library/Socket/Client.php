@@ -39,26 +39,21 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Socket\Connection\Exception
+ * \Hoa\Socket\Exception
  */
--> import('Socket.Connection.Exception')
+-> import('Socket.Exception')
 
 /**
  * \Hoa\Socket\Connection
  */
--> import('Socket.Connection')
-
-/**
- * \Hoa\Socket\Socketable
- */
--> import('Socket.Socketable');
+-> import('Socket.Connection');
 
 }
 
-namespace Hoa\Socket\Connection {
+namespace Hoa\Socket {
 
 /**
- * Class \Hoa\Socket\Connection\Client.
+ * Class \Hoa\Socket\Client.
  *
  * Established a client connection.
  *
@@ -93,18 +88,17 @@ class Client extends Connection {
 
 
     /**
-     * Constructor.
-     * Configure a socket.
+     * Start a connection.
      *
      * @access  public
-     * @param   \Hoa\Socket\Socketable  $socket     Socket.
-     * @param   int                     $timeout    Timeout.
-     * @param   int                     $flag       Flag, see the self::* constants.
-     * @param   string                  $context    Context ID (please, see the
-     *                                              \Hoa\Stream\Context class).
+     * @param   string  $socket     Socket URI.
+     * @param   int     $timeout    Timeout.
+     * @param   int     $flag       Flag, see the child::* constants.
+     * @param   string  $context    Context ID (please, see the
+     *                              \Hoa\Stream\Context class).
      * @return  void
      */
-    public function __construct ( \Hoa\Socket\Socketable $socket, $timeout = 30,
+    public function __construct ( $socket, $timeout = 30,
                                   $flag = self::CONNECT, $context = null ) {
 
         parent::__construct($socket, $timeout, self::CONNECT & $flag, $context);
@@ -116,10 +110,10 @@ class Client extends Connection {
      * Open the stream and return the associated resource.
      *
      * @access  protected
-     * @param   string               $streamName    Socket name (e.g. path or URL).
+     * @param   string               $streamName    Socket URI.
      * @param   \Hoa\Stream\Context  $context       Context.
      * @return  resource
-     * @throw   \Hoa\Socket\Connection\Exception
+     * @throw   \Hoa\Socket\Exception
      */
     protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
 

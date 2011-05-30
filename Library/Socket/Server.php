@@ -39,26 +39,26 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Socket\Connection\Exception
+ * \Hoa\Socket\Exception
  */
--> import('Socket.Connection.Exception')
+-> import('Socket.Exception')
 
 /**
  * \Hoa\Socket\Connection
  */
--> import('Socket.Connection.~')
+-> import('Socket.Connection')
 
 /**
- * \Hoa\Socket\Connection\Node
+ * \Hoa\Socket\Node
  */
--> import('Socket.Connection.Node');
+-> import('Socket.Node');
 
 }
 
-namespace Hoa\Socket\Connection {
+namespace Hoa\Socket {
 
 /**
- * Class \Hoa\Socket\Connection\Server.
+ * Class \Hoa\Socket\Server.
  *
  * Established a server connection.
  *
@@ -86,62 +86,63 @@ class Server extends Connection implements \Iterator {
     /**
      * Master connection.
      *
-     * @var \Hoa\Socket\Connection\Server resource
+     * @var \Hoa\Socket\Server resource
      */
     protected $_master   = null;
 
     /**
      * Stack of connections.
      *
-     * @var \Hoa\Socket\Connection\Server array
+     * @var \Hoa\Socket\Server array
      */
     protected $_stack    = null;
 
     /**
      * Node name.
      *
-     * @var \Hoa\Socket\Connection\Server string
+     * @var \Hoa\Socket\Server string
      */
     protected $_nodeName = null;
 
     /**
      * Current node.
      *
-     * @var \Hoa\Socket\Connection\Node object
+     * @var \Hoa\Socket\Node object
      */
     protected $_node     = null;
 
     /**
      * List of nodes (connections) when selecting.
      *
-     * @var \Hoa\Socket\Connection\Server array
+     * @var \Hoa\Socket\Server array
      */
     protected $_nodes    = array();
 
     /**
      * Temporize selected connections when selecting.
      *
-     * @var \Hoa\Socket\Connection\Server array
+     * @var \Hoa\Socket\Server array
      */
     protected $_iterator = array();
 
 
 
     /**
-     * Constructor.
-     * Configure a socket.
+     * Start a connection.
      *
      * @access  public
-     * @param   \Hoa\Socket\Socketable  $socket     Socket.
-     * @param   int                     $timeout    Timeout.
-     * @param   int                     $flag       Flag, see the self::* constants.
-     * @param   string                  $context    Context ID (please, see the
-     *                                              \Hoa\Stream\Context class).
+     * @param   string  $socket     Socket URI.
+     * @param   int     $timeout    Timeout.
+     * @param   int     $flag       Flag, see the child::* constants.
+     * @param   string  $context    Context ID (please, see the
+     *                              \Hoa\Stream\Context class).
      * @return  void
-     * @throw   \Hoa\Socket\Connection\Exception
      */
-    public function __construct ( \Hoa\Socket\Socketable $socket, $timeout = 30,
+    public function __construct ( $socket, $timeout = 30,
                                   $flag = -1, $context = null ) {
+
+        $this->setSocket($socket);
+        $socket = $this->getSocket();
 
         if($flag == -1)
             switch($socket->getTransport()) {
@@ -165,15 +166,15 @@ class Server extends Connection implements \Iterator {
                     if($flag & self::LISTEN)
                         throw new Exception(
                             'Cannot use the flag ' .
-                            '\Hoa\Socket\Connection\Server::LISTEN ' .
+                            '\Hoa\Socket\Server::LISTEN ' .
                             'for connect-less transports (such as UDP).', 0);
 
                     $flag = self::BIND;
                   break;
             }
 
-        parent::__construct($socket, $timeout, $flag, $context);
-        $this->setNodeName('\Hoa\Socket\Connection\Node');
+        parent::__construct(null, $timeout, $flag, $context);
+        $this->setNodeName('\Hoa\Socket\Node');
 
         return;
     }
@@ -182,10 +183,10 @@ class Server extends Connection implements \Iterator {
      * Open the stream and return the associated resource.
      *
      * @access  protected
-     * @param   string               $streamName    Stream name (e.g. path or URL).
+     * @param   string               $streamName    Socket URI.
      * @param   \Hoa\Stream\Context  $context       Context.
      * @return  resource
-     * @throw   \Hoa\Socket\Connection\Exception
+     * @throw   \Hoa\Socket\Exception
      */
     protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
 
@@ -220,7 +221,7 @@ class Server extends Connection implements \Iterator {
      *
      * @access  public
      * @return  void
-     * @throw   \Hoa\Socket\Connection\Exception
+     * @throw   \Hoa\Socket\Exception
      */
     public function connect ( ) {
 
@@ -254,8 +255,8 @@ class Server extends Connection implements \Iterator {
      * Select connections.
      *
      * @access  public
-     * @return  \Hoa\Socket\Connection\Server
-     * @throw   \Hoa\Socket\Connection\Exception
+     * @return  \Hoa\Socket\Server
+     * @throw   \Hoa\Socket\Exception
      */
     public function select ( ) {
 
@@ -290,7 +291,7 @@ class Server extends Connection implements \Iterator {
      * Set and get the current selected connection.
      *
      * @access  public
-     * @return  \Hoa\Socket\Connection\Server
+     * @return  \Hoa\Socket\Server
      */
     public function current ( ) {
 
@@ -442,7 +443,7 @@ class Server extends Connection implements \Iterator {
      * Get current node.
      *
      * @access  public
-     * @return  \Hoa\Socket\Connection\Node
+     * @return  \Hoa\Socket\Node
      */
     public function getCurrentNode ( ) {
 

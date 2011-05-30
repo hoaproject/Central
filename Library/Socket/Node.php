@@ -34,10 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Socket\Connection {
+namespace Hoa\Socket {
 
 /**
- * Class \Hoa\Socket\Connection\Node.
+ * Class \Hoa\Socket\Node.
  *
  * Represent a generic node.
  *
@@ -51,14 +51,14 @@ class Node {
     /**
      * Node's ID.
      *
-     * @var \Hoa\Socket\Connection\Node string
+     * @var \Hoa\Socket\Node string
      */
     protected $_id   = null;
 
     /**
      * Node's socket resource.
      *
-     * @var \Hoa\Socket\Connection\Node resource
+     * @var \Hoa\Socket\Node resource
      */
     private $_socket = null;
 
