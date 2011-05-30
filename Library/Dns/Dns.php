@@ -69,7 +69,7 @@ class Dns implements \Hoa\Core\Event\Listenable {
     /**
      * Socket.
      *
-     * @var \Hoa\Socket\Socketable object
+     * @var \Hoa\Socket object
      */
     protected $_socket       = null;
 
@@ -151,10 +151,10 @@ class Dns implements \Hoa\Core\Event\Listenable {
      * Construct the DNS server.
      *
      * @access  public
-     * @param   \Hoa\Socket\Connection\Server  $server    Server.
+     * @param   \Hoa\Socket\Server  $server    Server.
      * @return  void
      */
-    public function __construct ( \Hoa\Socket\Connection\Server $server ) {
+    public function __construct ( \Hoa\Socket\Server $server ) {
 
         if('udp' != $server->getSocket()->getTransport())
             throw new Exception(
