@@ -109,6 +109,12 @@ abstract class Dispatcher implements \Hoa\Core\Parameter\Parameterizable {
 
                 'asynchronous.controller' => '(:%synchronous.controller:)',
                 'asynchronous.action'     => '(:%synchronous.action:)Async',
+
+                /**
+                 * Router variables.
+                 *
+                 * 'variables.…'          => …
+                 */
             )
         );
         $this->_parameters->setParameters($parameters);
@@ -149,6 +155,12 @@ abstract class Dispatcher implements \Hoa\Core\Parameter\Parameterizable {
         else
             $this->_currentView = $view;
 
+        $parameters        = $this->_parameters;
+        $this->_parameters = clone $this->_parameters;
+
+        foreach($rule[\Hoa\Router::RULE_VARIABLES] as $key => $value)
+            $this->_parameters->setParameter('variables.' . $key, $value);
+
         $kit = dnew($this->getKitName(), array($router, $this, $view));
 
         if(!($kit instanceof \Hoa\Dispatcher\Kit))
@@ -159,7 +171,11 @@ abstract class Dispatcher implements \Hoa\Core\Parameter\Parameterizable {
         $rule[\Hoa\Router::RULE_VARIABLES]['_this'] = $kit;
         $this->_parameters->setKeyword('method', $router->getMethod());
 
-        return $this->resolve($rule);
+        $out               = $this->resolve($rule);
+        unset($this->_parameters);
+        $this->_parameters = $parameters;
+
+        return $out;
     }
 
     /**
