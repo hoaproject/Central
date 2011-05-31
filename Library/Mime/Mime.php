@@ -164,7 +164,7 @@ class Mime implements \Hoa\Core\Parameter\Parameterizable {
             $this,
             array(),
             array(
-                'magic' => 'foobar'
+                'magic' => null
             )
         );
         $this->_parameters->setParameters($parameters);
