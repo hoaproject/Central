@@ -381,7 +381,8 @@ class Idle extends \Exception implements \Serializable {
             $matches
         );
 
-        $this->_previous = unserialize($matches[1] . ';');
+        if(isset($matches[1]))
+            $this->_previous = unserialize($matches[1] . ';');
 
         return;
     }
