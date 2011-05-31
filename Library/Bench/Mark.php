@@ -280,7 +280,7 @@ class Mark {
      * @param   \Hoa\Bench\Mark  $mark    The mark to compare to.
      * @return  int
      */
-    public function compareTo ( \Hoa\Bench\Mark $mark ) {
+    public function compareTo ( Mark $mark ) {
 
         $a = $this->diff();
         $b = $mark->diff();
