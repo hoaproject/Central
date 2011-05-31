@@ -163,7 +163,7 @@ abstract class Dispatcher implements \Hoa\Core\Parameter\Parameterizable {
 
         $kit = dnew($this->getKitName(), array($router, $this, $view));
 
-        if(!($kit instanceof \Hoa\Dispatcher\Kit))
+        if(!($kit instanceof Kit))
             throw new Exception(
                 'Your kit %s must extend Hoa\Dispatcher\Kit.',
                 0, $this->getKitName());
