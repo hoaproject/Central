@@ -459,10 +459,18 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
         $rule[Router::RULE_VARIABLES]['_able']      = $rule[Router::RULE_ABLE];
         $rule[Router::RULE_VARIABLES]['_request']   = $_REQUEST;
 
-        foreach(array_merge($muri, $msubdomain) as $key => $value)
-            if(is_string($key))
-                $rule[Router::RULE_VARIABLES][strtolower($key)]
-                    = strtolower($value);
+        foreach(array_merge($muri, $msubdomain) as $key => $value) {
+
+            if(!is_string($key))
+                continue;
+
+            $key = strtolower($key);
+
+            if(isset($rule[Router::RULE_VARIABLES][$key]) && empty($value))
+                continue;
+
+            $rule[Router::RULE_VARIABLES][$key] = strtolower($value);
+        }
 
         return $this->_rule = $rule;
     }
