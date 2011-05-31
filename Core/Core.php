@@ -212,22 +212,24 @@ class Core implements Parameter\Parameterizable {
         $this->_parameters = new Parameter(
             $this,
             array(
-                'hoa'                => $hoa,
-                'cwd'                => $cwd
+                'hoa'              => $hoa,
+                'cwd'              => $cwd
             ),
             array(
-                'root.framework'     => '(:hoa:)',
-                'root.data'          => '(:%root.application:h:)/Data',
-                'root.application'   => '(:cwd:h:)',
+                'root.application' => '(:cwd:h:)',
+                'root.data'        => '(:%root.application:h:)/Data',
+                'root.hoa'         => '(:hoa:)',
 
-                'framework.core'     => '(:%root.framework:)/Core',
-                'framework.library'  => '(:%root.framework:)/Library',
-                'framework.module'   => '(:%root.framework:)/Module',
+                'hoa.bin'          => '(:%root.hoa:)/Bin',
+                'hoa.core'         => '(:%root.hoa:)/Core',
+                'hoa.library'      => '(:%root.hoa:)/Library',
+                'hoa.module'       => '(:%root.hoa:)/Module',
 
-                'data.module'        => '(:%root.data:)/Module',
+                'data.module'      => '(:%root.data:)/Module',
 
                 'protocol.Application'            => '(:%root.application:)/',
                 'protocol.Application/Public'     => '(:%protocol.Application:)Public/',
+                'protocol.Bin'                    => '(:%hoa.bin:)/',
                 'protocol.Data'                   => '(:%root.data:)/',
                 'protocol.Data/Etc'               => '(:%protocol.Data:)Etc/',
                 'protocol.Data/Etc/Configuration' => '(:%protocol.Data/Etc:)Configuration/',
@@ -243,10 +245,10 @@ class Core implements Parameter\Parameterizable {
                 'protocol.Data/Variable/Run'      => '(:%protocol.Data/Variable:)Run/',
                 'protocol.Data/Variable/Test'     => '(:%protocol.Data/Variable:)Test/',
                 'protocol.Data'                   => '(:%root.data:)/',
-                'protocol.Library'                => '(:%framework.library:)/',
+                'protocol.Library'                => '(:%hoa.library:)/',
 
-                'namespace.prefix.Hoa'     => '(:%framework.library:)',
-                'namespace.prefix.Hoathis' => '(:%data.module:);(:%framework.module:)'
+                'namespace.prefix.Hoa'     => '(:%hoa.library:)',
+                'namespace.prefix.Hoathis' => '(:%data.module:);(:%hoa.module:)'
             )
         );
         $this->_parameters->setKeyword('hoa', $hoa);
@@ -347,29 +349,26 @@ class Core implements Parameter\Parameterizable {
      * Start the debugger.
      *
      * @access  public
-     * @param   \Hoa\Socket\Socketable  $socket    Socket.
+     * @param   string  $socket    Socket URI.
      * @return  void
      */
-    public static function startDebugger ( \Hoa\Socket\Socketable $socket = null ) {
+    public static function startDebugger ( $socket = null ) {
 
         from('Hoa')
-        -> import('Socket.Internet.DomainName')
-        -> import('Socket.Connection.Client');
+        -> import('Socket.Client');
 
         if(null === $socket)
-            $socket = new \Hoa\Socket\Internet\DomainName(
-                'localhost', 57005, 'tcp'
-            );
+            $socket = 'tcp://localhost:57005';
 
         try {
 
-            $client = new \Hoa\Socket\Connection\Client($socket);
+            $client = new \Hoa\Socket\Client($socket);
             $client->connect();
             self::$_debugger = true;
         }
-        catch ( \Hoa\Core\Exception $e ) {
+        catch ( Exception $e ) {
 
-            throw new \Hoa\Core\Exception(
+            throw new Exception(
                 'Cannot start the debugger because the server is not ' .
                 'listening.', 0);
         }
@@ -377,7 +376,7 @@ class Core implements Parameter\Parameterizable {
         $client->writeLine('open');
 
         event('hoa://Event/Exception')
-            ->attach(function ( \Hoa\Core\Event\Bucket $event) use ( $client ) {
+            ->attach(function ( Event\Bucket $event) use ( $client ) {
 
                 $exception = $event->getData();
 
