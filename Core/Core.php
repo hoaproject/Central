@@ -217,7 +217,7 @@ class Core implements Parameter\Parameterizable {
             ),
             array(
                 'root.application' => '(:cwd:h:)',
-                'root.data'        => '(:%root.application:h:)/Data',
+                'root.data'        => '(:%root.application:)/Data',
                 'root.hoa'         => '(:hoa:)',
 
                 'hoa.bin'          => '(:%root.hoa:)/Bin',
