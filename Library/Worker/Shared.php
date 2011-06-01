@@ -54,9 +54,9 @@ from('Hoa')
 -> import('Worker.Backend.Shared')
 
 /**
- * \Hoa\Socket\Connection\Client
+ * \Hoa\Socket\Client
  */
--> import('Socket.Connection.Client');
+-> import('Socket.Client');
 
 }
 
@@ -75,9 +75,9 @@ namespace Hoa\Worker {
 class Shared {
 
     /**
-     * Client to worker.
+     * Client.
      *
-     * @var \Hoa\Socket\Connection\Client object
+     * @var \Hoa\Socket\Client object
      */
     protected $_client = null;
 
@@ -87,8 +87,8 @@ class Shared {
      * Build a worker pipe.
      *
      * @access  public
-     * @param   mixed   $workerId    Worker ID or an object of type
-     *                               \Hoa\Socket\Connection\Client.
+     * @param   mixed   $workerId    Worker ID or a socket client (i.e. a
+     *                               \Hoa\Socket\Client object).
      * @return  void
      * @throw   \Hoa\Worker\Exception
      */
@@ -97,11 +97,11 @@ class Shared {
         if(is_string($workerId)) {
 
             $wid           = Run::get($workerId);
-            $this->_client = new \Hoa\Socket\Connection\Client($wid['socket']);
+            $this->_client = new \Hoa\Socket\Client($wid['socket']);
 
             return;
         }
-        elseif($workerId instanceof \Hoa\Socket\Connection\Client) {
+        elseif($workerId instanceof \Hoa\Socket\Client) {
 
             $this->_client = $workerId;
 
@@ -110,7 +110,7 @@ class Shared {
 
         throw new Exception(
             'Either you give a worker ID or you give an object of type ' .
-            '\Hoa\Socket\Connection\Client, but not anything else; given %s',
+            '\Hoa\Socket\Client, but not anything else; given %s',
             0, is_object($workerId) ? get_class($workerId) : $workerId);
 
         return;

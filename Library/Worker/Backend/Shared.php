@@ -49,14 +49,14 @@ from('Hoa')
 -> import('Worker.Run')
 
 /**
- * \Hoa\Socket\Connection\Client
+ * \Hoa\Socket\Client
  */
--> import('Socket.Connection.Client')
+-> import('Socket.Client')
 
 /**
- * \Hoa\Socket\Connection\Server
+ * \Hoa\Socket\Server
  */
--> import('Socket.Connection.Server')
+-> import('Socket.Server')
 
 /**
  * \Hoa\FastCgi\Responder
@@ -121,9 +121,9 @@ class Shared implements \Hoa\Core\Event\Listenable {
     const TYPE_INFORMATIONS = 2;
 
     /**
-     * Socketable object.
+     * Socket URI.
      *
-     * @var \Hoa\Socket\Socketable object
+     * @var \Hoa\Worker\Backend\Shared string
      */
     protected $_socket      = null;
 
@@ -175,8 +175,8 @@ class Shared implements \Hoa\Core\Event\Listenable {
      * Construct a worker.
      *
      * @access  public
-     * @param   mixed   $workerId    Worker ID or a socketable object (instance
-     *                               of \Hoa\Socket\Socketable).
+     * @param   mixed   $workerId    Worker ID or a socket client (i.e. a
+     *                               \Hoa\Socket\Client object).
      * @param   string  $password    Worker's password.
      * @return  void
      * @throw   \Hoa\Worker\Exception
@@ -185,10 +185,10 @@ class Shared implements \Hoa\Core\Event\Listenable {
     public function __construct ( $workerId, $password ) {
 
         if(   !is_string($workerId)
-           && !($workerId instanceof \Hoa\Socket\Socketable))
+           && !($workerId instanceof \Hoa\Socket\Client))
             throw new Exception(
                 'Either you give a worker ID or you give an object of type ' .
-                '\Hoa\Socket\Connection\Client, but not anything else; given %s',
+                '\Hoa\Socket\Client, but not anything else; given %s',
                 0, is_object($workerId) ? get_class($workerId) : $workerId);
 
         if(is_string($workerId)) {
@@ -232,7 +232,7 @@ class Shared implements \Hoa\Core\Event\Listenable {
      */
     public function run ( ) {
 
-        $server = new \Hoa\Socket\Connection\Server($this->_socket);
+        $server = new \Hoa\Socket\Server($this->_socket);
         $server->connectAndWait();
 
         if(false === function_exists('fastcgi_finish_request'))
@@ -308,17 +308,14 @@ class Shared implements \Hoa\Core\Event\Listenable {
      * Start the shared worker.
      *
      * @access  public
-     * @param   \Hoa\Socket\Socketable  $socket        Socketable object to
-     *                                                 PHP-FPM server.
-     * @param   string                  $workerPath    Path to the shared worker
-     *                                                 program.
+     * @param   string  $socket        Socket URI to PHP-FPM server.
+     * @param   string  $workerPath    Path to the shared worker program.
      * @return  bool
      */
-    public static function start ( \Hoa\Socket\Socketable $socket,
-                                   $workerPath ) {
+    public static function start ( $socket, $workerPath ) {
 
         $server = new \Hoa\FastCgi\Responder(
-            new \Hoa\Socket\Connection\Client($socket)
+            new \Hoa\Socket\Client($socket)
         );
 
         return $server->send(array(
@@ -339,7 +336,7 @@ class Shared implements \Hoa\Core\Event\Listenable {
      */
     public function stop ( ) {
 
-        $client = new \Hoa\Socket\Connection\Client($this->_socket);
+        $client = new \Hoa\Socket\Client($this->_socket);
         $client->connect();
         $client->writeAll(self::pack(self::TYPE_STOP, $this->_password));
         $client->disconnect();

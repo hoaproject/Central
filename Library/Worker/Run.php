@@ -63,12 +63,12 @@ class Run {
      * Register a socketable object as a worker ID.
      *
      * @access  public
-     * @param   string                  $workerId    Worker ID.
-     * @param   \Hoa\Socket\Socketable  $socket      Socketable object.
+     * @param   string  $workerId    Worker ID.
+     * @param   string  $socket      Socket URI.
      * @return  bool
      * @throw   \Hoa\Worker\Exception
      */
-    public static function register ( $workerId, \Hoa\Socket\Socketable $socket ) {
+    public static function register ( $workerId, $socket ) {
 
         if(true === self::widExists($workerId))
             throw new Exception(
@@ -103,11 +103,11 @@ class Run {
     }
 
     /**
-     * Get a worker ID data (i.e. a socketable object).
+     * Get a worker ID data.
      *
      * @access  public
      * @param   string  $workerId    Worker ID.
-     * @return  \Hoa\Socket\Socketable
+     * @return  string
      */
     public static function get ( $workerId ) {
 
