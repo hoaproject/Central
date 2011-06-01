@@ -112,6 +112,58 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
             array(
                 '    ' . $this->stylize('bhoa', 'command'),
                 'Start a damn stupid HTTP server.'
+            ),
+
+            // Protocol.
+            array('Protocol'),
+            array(
+                '    ' . $this->stylize('resolve', 'command'),
+                'Resolve a hoa:// URI.'
+            ),
+            array(
+                '    ' . $this->stylize('tree', 'command'),
+                'Print the whole hoa:// protocol as a tree.'
+            ),
+
+            // Documentation.
+            array('Documentation'),
+            array(
+                '    ' . $this->stylize('php', 'command'),
+                'About PHP functions, classes, extensions etc.'
+            ),
+
+            // Test.
+            array('Test'),
+            array(
+                '    ' . $this->stylize('initialize', 'command'),
+                'Initialize a new test revision.'
+            ),
+            array(
+                '    ' . $this->stylize('run', 'command'),
+                'Run a test revision.'
+            ),
+            array(
+                '    ' . $this->stylize('remove', 'command'),
+                'Remove a test revision.'
+            ),
+            array(
+                '    ' . $this->stylize('praspel', 'command'),
+                'Interactive Praspel shell.'
+            ),
+
+            // Worker.
+            array('Worker'),
+            array(
+                '    ' . $this->stylize('start', 'command'),
+                'Start a worker.'
+            ),
+            array(
+                '    ' . $this->stylize('stop', 'command'),
+                'Stop a worker.'
+            ),
+            array(
+                '    ' . $this->stylize('status', 'command'),
+                'About worker PID, uptime, memory etc.'
             )
         )));
 
