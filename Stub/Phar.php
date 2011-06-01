@@ -36,7 +36,7 @@
 
 $root = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR;
 
-require $root . 'Core/Core.php';
+require $root . 'Core' . DIRECTORY_SEPARATOR . 'Core.php';
 
 if('1' === ini_get('phar.readonly'))
     throw new \Hoa\Core\Exception(
