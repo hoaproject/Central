@@ -99,7 +99,7 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
      *
      * @var \Bin\Command\Main\Bhoa array
      */
-    protected $options     = array(
+    protected $options = array(
         array('listen',       \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'l'),
         array('fastcgi',      \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'f'),
         array('root',         \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'r'),

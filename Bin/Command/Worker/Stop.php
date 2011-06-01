@@ -64,7 +64,7 @@ class Stop extends \Hoa\Console\Dispatcher\Kit {
      *
      * @var \Bin\Command\Worker\Stop array
      */
-    protected $options     = array(
+    protected $options = array(
         array('help', \Hoa\Console\GetOption::NO_ARGUMENT, 'h'),
         array('help', \Hoa\Console\GetOption::NO_ARGUMENT, '?')
     );

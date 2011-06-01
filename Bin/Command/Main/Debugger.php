@@ -69,7 +69,7 @@ class Debugger extends \Hoa\Console\Dispatcher\Kit {
      *
      * @var \Bin\Command\Main\Debugger array
      */
-    protected $options     = array(
+    protected $options = array(
         array('help', \Hoa\Console\GetOption::NO_ARGUMENT, 'h'),
         array('help', \Hoa\Console\GetOption::NO_ARGUMENT, '?')
     );

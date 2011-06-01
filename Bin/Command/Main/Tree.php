@@ -64,7 +64,7 @@ class Tree extends \Hoa\Console\Dispatcher\Kit {
      *
      * @var \Bin\Command\Main\Tree array
      */
-    protected $options     = array(
+    protected $options = array(
         array('depth',            \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'd'),
         array('list-visible',     \Hoa\Console\GetOption::NO_ARGUMENT,       'v'),
         array('list-hidden',      \Hoa\Console\GetOption::NO_ARGUMENT,       'V'),

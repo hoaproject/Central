@@ -53,7 +53,7 @@ class Resolve extends \Hoa\Console\Dispatcher\Kit {
      *
      * @var \Bin\Command\Protocol\Resolve array
      */
-    protected $options     = array(
+    protected $options = array(
         array('no-verbose', \Hoa\Console\GetOption::NO_ARGUMENT, 'V'),
         array('help',       \Hoa\Console\GetOption::NO_ARGUMENT, 'h'),
         array('help',       \Hoa\Console\GetOption::NO_ARGUMENT, '?')
