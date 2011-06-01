@@ -48,7 +48,7 @@ from('Hoa')
 namespace Bin\Command\Worker {
 
 /**
- * Class \Bin\Command\Main\Status.
+ * Class \Bin\Command\Worker\Status.
  *
  * Status all workers.
  *
@@ -62,7 +62,7 @@ class Status extends \Hoa\Console\Dispatcher\Kit {
     /**
      * Options description.
      *
-     * @var VersionCommand array
+     * @var \Bin\Command\Worker\Status array
      */
     protected $options     = array(
         array('help', \Hoa\Console\GetOption::NO_ARGUMENT, 'h'),

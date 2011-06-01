@@ -48,7 +48,7 @@ from('Hoa')
 namespace Bin\Command\Worker {
 
 /**
- * Class \Bin\Command\Main\Start.
+ * Class \Bin\Command\Worker\Start.
  *
  * Start a worker.
  *
@@ -62,7 +62,7 @@ class Start extends \Hoa\Console\Dispatcher\Kit {
     /**
      * Options description.
      *
-     * @var VersionCommand array
+     * @var \Bin\Command\Worker\Start array
      */
     protected $options     = array(
         array('fastcgi', \Hoa\Console\GetOption::NO_ARGUMENT, 'f'),

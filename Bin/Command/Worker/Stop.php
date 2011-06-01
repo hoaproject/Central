@@ -48,7 +48,7 @@ from('Hoa')
 namespace Bin\Command\Worker {
 
 /**
- * Class \Bin\Command\Main\Stop.
+ * Class \Bin\Command\Worker\Stop.
  *
  * Stop worker.
  *
@@ -62,7 +62,7 @@ class Stop extends \Hoa\Console\Dispatcher\Kit {
     /**
      * Options description.
      *
-     * @var VersionCommand array
+     * @var \Bin\Command\Worker\Stop array
      */
     protected $options     = array(
         array('help', \Hoa\Console\GetOption::NO_ARGUMENT, 'h'),
