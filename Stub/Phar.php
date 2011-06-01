@@ -80,7 +80,7 @@ $phar->setSignatureAlgorithm(\Phar::SHA1);
 $phar->buildFromIterator(
     new Filter(
         new \RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($root)
+            new \RecursiveDirectoryIterator($root)
         )
     ),
     $root
