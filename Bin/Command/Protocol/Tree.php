@@ -41,11 +41,9 @@ namespace Bin\Command\Protocol {
  *
  * This command prints the hoa:// tree (each node is a component).
  *
- * @author      Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright © 2007-2011 Ivan Enderlin.
- * @license     New BSD License
- * @since       PHP 5
- * @version     0.1
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @license    New BSD License
  */
 
 class Tree extends \Hoa\Console\Dispatcher\Kit {
