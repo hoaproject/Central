@@ -41,18 +41,21 @@ namespace {
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  */
 
-if(!defined('HOA_DATA') || !defined('HOA_APPLICATION'))
-    throw new \Hoa\Core\Exception(
-        'Constants HOA_DATA and HOA_APPLICATION must be both set.', 0);
+if(!defined('HOA_DATA') || !defined('HOA_APPLICATION')) {
 
-/**
- * Add some components the the hoa://'s protocol.
- */
-\Hoa\Core::getInstance()->initialize(array(
-    'root.data'            => HOA_DATA,
-    'root.application'     => HOA_APPLICATION,
-    'namespace.prefix.Bin' => 'hoa://Data/Bin;hoa://Bin'
-));
+    require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Core' .
+            DIRECTORY_SEPARATOR . 'Core.php';
+
+    \Hoa\Core::getInstance()->initialize(array(
+        'namespace.prefix.Bin' => 'hoa://Data/Bin;hoa://Bin'
+    ));
+}
+else
+    \Hoa\Core::getInstance()->initialize(array(
+        'root.data'            => HOA_DATA,
+        'root.application'     => HOA_APPLICATION,
+        'namespace.prefix.Bin' => 'hoa://Data/Bin;hoa://Bin'
+    ));
 
 from('Hoa')
 -> import('Router.Cli')
