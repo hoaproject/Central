@@ -46,8 +46,63 @@ namespace Hoa\Test\Sampler {
  * @license    New BSD License
  */
 
-abstract class Sampler {
+abstract class Sampler implements \Hoa\Core\Parameter\Parameterizable {
 
+    /**
+     * Parameters.
+     *
+     * @var \Hoa\Core\Parameter object
+     */
+    protected $_parameters = null;
+
+
+
+    /**
+     * Construct an abstract sampler.
+     *
+     * @access  public
+     * @param   array  $parameters    Parameters.
+     * @return  void
+     */
+    public function __construct ( Array $parameters = array() ) {
+
+        $this->_parameters = new \Hoa\Core\Parameter(
+            __CLASS__,
+            array(),
+            array(
+                'integer.min' => null,
+                'integer.max' => null,
+                'float.min'   => null,
+                'float.max'   => null
+            )
+        );
+        $this->_parameters->setParameters($parameters);
+
+        if(null === $this->_parameters->getParameter('integer.min'))
+            $this->_parameters->setParameter('integer.min', ~PHP_INT_MAX);
+
+        if(null === $this->_parameters->getParameter('integer.max'))
+            $this->_parameters->setParameter('integer.max', PHP_INT_MAX);
+
+        if(null === $this->_parameters->getParameter('float.min'))
+            $this->_parameters->setParameter('float.min', (float) ~PHP_INT_MAX);
+
+        if(null === $this->_parameters->getParameter('float.max'))
+            $this->_parameters->setParameter('float.max', (float) PHP_INT_MAX);
+
+        return;
+    }
+
+    /**
+     * Get parameters.
+     *
+     * @access  public
+     * @return  \Hoa\Core\Parameter
+     */
+    public function getParameters ( ) {
+
+        return $this->_parameters;
+    }
     /**
      * Generate a discrete uniform distribution.
      *
@@ -59,10 +114,10 @@ abstract class Sampler {
     public function getInteger ( $lower = null, $upper = null ) {
 
         if(null === $lower)
-            $lower = ~PHP_INT_MAX;
+            $lower = $this->_parameters->getParameter('integer.min');
 
         if(null === $upper)
-            $upper = PHP_INT_MAX;
+            $upper = $this->_parameters->getParameter('integer.max');
 
         if($upper !== PHP_INT_MAX)
             ++$upper;
@@ -91,7 +146,7 @@ abstract class Sampler {
     public function getFloat ( $lower = null, $upper = null ) {
 
         if(null === $lower)
-            $lower = (float) ~PHP_INT_MAX;
+            $lower = $this->_parameters->getParameter('float.min');
             /*
             $lower = true === S_32\BITS
                          ? -3.4028235e38 + 1
@@ -99,7 +154,7 @@ abstract class Sampler {
             */
 
         if(null === $upper)
-            $upper = (float)  PHP_INT_MAX;
+            $upper = $this->_parameters->getParameter('float.max');
             /*
             $upper = true === S_32\BITS
                          ? 3.4028235e38 - 1
