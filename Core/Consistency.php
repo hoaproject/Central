@@ -34,6 +34,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+namespace {
+
+define('…', '__hoa_core_fill');
+
+}
+
 namespace Hoa\Core\Consistency {
 
 /**
@@ -751,6 +757,47 @@ function callable ( $call, $able = '' ) {
         return $call;
 
     return new \Hoa\Core\Consistency\Callable($call, $able);
+}}
+
+/**
+ * Curry.
+ * Example:
+ *     $c = curry('str_replace', …, …, 'foobar');
+ *     var_dump($c('foo', 'baz')); // bazbar
+ *     $c = curry('str_replace', 'foo', 'baz', …);
+ *     var_dump($c('foobarbaz')); // bazbarbaz
+ * Nested curries also work:
+ *     $c1 = curry('str_replace', …, …, 'foobar');
+ *     $c2 = curry($c1, 'foo', …);
+ *     var_dump($c2, 'baz'); // bazbar
+ * Obviously, as the first argument is a callable, we can combine this with
+ * \Hoa\Core\Consistency\Callable ;-).
+ * The “…” character is the HORIZONTAL ELLIPSIS Unicode character (Unicode:
+ * 2026, UTF-8: E2 80 A6).
+ *
+ * @access  public
+ * @param   mixed  $callable    Callable (two parts).
+ * @param   ...    ...          Arguments.
+ * @return  \Closure
+ */
+if(!ƒ('curry')) {
+function curry ( $callable ) {
+
+    $arguments = func_get_args();
+    array_shift($arguments);
+    $ii        = array();
+
+    foreach($arguments as $i => $argument)
+        if(… == $argument)
+            $ii[] = $i;
+
+    return function ( ) use ( $callable, $arguments, $ii ) {
+
+        return call_user_func_array(
+            $callable,
+            array_replace($arguments, array_combine($ii, func_get_args()))
+        );
+    };
 }}
 
 }
