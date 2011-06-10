@@ -447,6 +447,10 @@ class          Xyl
                 $fragment->readDOM()->ownerDocument,
                 $receiptDocument
             );
+            $this->_stylesheets = array_merge(
+                $this->_stylesheets,
+                $fragment->getStylesheets()
+            );
         }
 
         return true;
