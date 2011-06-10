@@ -187,11 +187,10 @@ class _Protocol extends \Hoa\Core\Protocol {
      * @access  public
      * @param   string  $id    ID of the component.
      * @return  mixed
-     * @throw   \Hoa\Core\Exception
      */
     public function reachId ( $id ) {
 
-        return \Hoa\Registry::get($id);
+        return Registry::get($id);
     }
 }
 
