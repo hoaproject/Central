@@ -69,14 +69,16 @@ class Constboolean extends Boolean implements Constant {
      *
      * @var \Hoa\Realdom string
      */
-    protected $_name  = 'constboolean';
+    protected $_name      = 'constboolean';
 
     /**
-     * Constant value.
+     * Realistic domain defined arguments.
      *
-     * @var \Hoa\Realdom bool
+     * @var \Hoa\Realdom array
      */
-    protected $_value = false;
+    protected $_arguments = array(
+        'value'
+    );
 
 
 
@@ -84,13 +86,13 @@ class Constboolean extends Boolean implements Constant {
      * Construct a realistic domain.
      *
      * @access  public
-     * @param   bool  $boolean    Boolean.
      * @return  void
      * @throw   \Hoa\Realdom\Exception
      */
-    public function construct ( $boolean = false ) {
+    public function construct ( ) {
 
-        $this->_value = $boolean;
+        if(!isset($this['value']))
+            $this['value'] = false;
 
         return;
     }
@@ -104,7 +106,7 @@ class Constboolean extends Boolean implements Constant {
      */
     public function predicate ( $q ) {
 
-        return $this->_value === (bool) $q;
+        return $this['value'] === (bool) $q;
     }
 
     /**
@@ -116,7 +118,7 @@ class Constboolean extends Boolean implements Constant {
      */
     protected function _sample ( \Hoa\Test\Sampler $sampler ) {
 
-        return $this->_value;
+        return $this['value'];
     }
 
     /**
@@ -127,7 +129,7 @@ class Constboolean extends Boolean implements Constant {
      */
     public function getConstantValue ( ) {
 
-        return $this->_value;
+        return $this['value'];
     }
 }
 

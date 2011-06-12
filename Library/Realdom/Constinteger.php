@@ -69,14 +69,16 @@ class Constinteger extends Integer implements Constant {
      *
      * @var \Hoa\Realdom string
      */
-    protected $_name  = 'constinteger';
+    protected $_name      = 'constinteger';
 
     /**
-     * Constant value.
+     * Realistic domain defined arguments.
      *
-     * @var \Hoa\Realdom int
+     * @var \Hoa\Realdom array
      */
-    protected $_value = 0;
+    protected $_arguments = array(
+        'value'
+    );
 
 
 
@@ -84,13 +86,13 @@ class Constinteger extends Integer implements Constant {
      * Construct a realistic domain.
      *
      * @access  public
-     * @param   int     $integer    Integer.
      * @return  void
      * @throw   \Hoa\Realdom\Exception
      */
-    public function construct ( $integer = 0 ) {
+    public function construct ( ) {
 
-        $this->_value = $integer;
+        if(!isset($this['value']))
+            $this['value'] = 0;
 
         return;
     }
@@ -104,7 +106,7 @@ class Constinteger extends Integer implements Constant {
      */
     public function predicate ( $q ) {
 
-        return $this->_value === (int) $q;
+        return $this['value'] === (int) $q;
     }
 
     /**
@@ -116,7 +118,7 @@ class Constinteger extends Integer implements Constant {
      */
     protected function _sample ( \Hoa\Test\Sampler $sampler ) {
 
-        return $this->_value;
+        return $this['value'];
     }
 
     /**
@@ -127,7 +129,7 @@ class Constinteger extends Integer implements Constant {
      */
     public function getConstantValue ( ) {
 
-        return $this->_value;
+        return $this['value'];
     }
 }
 

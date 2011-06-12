@@ -62,7 +62,10 @@ namespace Hoa\Realdom {
  * @license    New BSD License
  */
 
-abstract class Realdom implements \Hoa\Core\Parameter\Parameterizable {
+abstract class Realdom
+    implements \Hoa\Core\Parameter\Parameterizable,
+               \ArrayAccess,
+               \Countable {
 
     /**
      * Parameters.
@@ -79,11 +82,18 @@ abstract class Realdom implements \Hoa\Core\Parameter\Parameterizable {
     protected $_name           = null;
 
     /**
-     * Realistic domain given arguments.
+     * Realistic domain defined arguments.
      *
      * @var \Hoa\Realdom array
      */
     protected $_arguments      = null;
+
+    /**
+     * Realistic domain arguments.
+     *
+     * @var \Hoa\Realdom array
+     */
+    protected $arguments       = null;
 
     /**
      * Choosen sampler.
@@ -121,15 +131,31 @@ abstract class Realdom implements \Hoa\Core\Parameter\Parameterizable {
             array(),
             array()
         );
-        $arguments         = func_get_args();
 
-        $this->setArguments($arguments);
-        $this->setName($this->_name);
+        switch($this->_arguments) {
 
-        call_user_func_array(
-            array($this, 'construct'),
-            $arguments
-        );
+            case null:
+                $this->arguments = array();
+              break;
+
+            case …:
+                $this->arguments = func_get_args();
+              break;
+
+            default:
+                $arguments = func_get_args();
+                $arity     = count($this->_arguments);
+
+                if($arity > $c = count($arguments))
+                    $arguments += array_fill($c, $arity - $c, null);
+
+                $this->arguments = array_combine(
+                    array_values($this->_arguments),
+                    array_slice($arguments, 0, $arity)
+                );
+        }
+
+        $this->construct();
 
         return;
     }
@@ -157,18 +183,81 @@ abstract class Realdom implements \Hoa\Core\Parameter\Parameterizable {
     }
 
     /**
-     * Set the realistic domain name.
+     * Check if an argument exists.
      *
-     * @access  protected
-     * @param   string     $name    Name.
-     * @return  string
+     * @access  public
+     * @param   string  $offset    Attribute name.
+     * @return  bool
      */
-    protected function setName ( $name ) {
+    public function offsetExists ( $offset ) {
 
-        $old         = $this->_name;
-        $this->_name = $name;
+        return isset($this->arguments[$offset]);
+    }
+
+    /**
+     * Get an argument value.
+     *
+     * @access  public
+     * @param   string  $offset    Attribute name.
+     * @return  mixed
+     */
+    public function offsetGet ( $offset ) {
+
+        return true === $this->offsetExists($offset)
+                   ? $this->arguments[$offset]
+                   : null;
+    }
+
+    /**
+     * Set an argument value.
+     *
+     * @access  public
+     * @param   string  $offset    Attribute name.
+     * @param   mixed   $value     Attribute value.
+     * @return  mixed
+     */
+    public function offsetSet ( $offset, $value ) {
+
+        $old                      = $this->offsetGet($offset);
+        $this->arguments[$offset] = $value;
 
         return $old;
+    }
+
+    /**
+     * Unset an argument.
+     *
+     * @access  public
+     * @param   string  $offset    Attribute name.
+     * @return  void
+     */
+    public function offsetUnset ( $offset ) {
+
+        unset($this->arguments[$offset]);
+
+        return;
+    }
+
+    /**
+     * Get all arguments values.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getArguments ( ) {
+
+        return $this->arguments;
+    }
+
+    /**
+     * Get arity.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function count ( ) {
+
+        return count($this->arguments);
     }
 
     /**
@@ -180,32 +269,6 @@ abstract class Realdom implements \Hoa\Core\Parameter\Parameterizable {
     public function getName ( ) {
 
         return $this->_name;
-    }
-
-    /**
-     * Set the realistic domain arguments.
-     *
-     * @access  protected
-     * @param   array      $arguments    Arguments.
-     * @return  array
-     */
-    protected function setArguments ( Array $arguments ) {
-
-        $old              = $this->_arguments;
-        $this->_arguments = $arguments;
-
-        return $old;
-    }
-
-    /**
-     * Get the realistic domain arguments.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function getArguments ( ) {
-
-        return $this->_arguments;
     }
 
     /**

@@ -69,35 +69,25 @@ class String extends Realdom {
      *
      * @var \Hoa\Realdom string
      */
-    protected $_name         = 'string';
+    protected $_name      = 'string';
 
     /**
-     * Minimum code point.
+     * Realistic domain defined arguments.
      *
-     * @var \Hoa\Realdom\String int
+     * @var \Hoa\Realdom array
      */
-    protected $_codepointMin = 0;
-
-    /**
-     * Maximum code point.
-     *
-     * @var \Hoa\Realdom\String int
-     */
-    protected $_codepointMax = 0;
-
-    /**
-     * String's length.
-     *
-     * @var \Hoa\Realdom\Integer object
-     */
-    protected $_length       = null;
+    protected $_arguments = array(
+        'length',
+        'codepointMin',
+        'codepointMax'
+    );
 
     /**
      * All generated letters.
      *
      * @var \Hoa\Realdom\String array
      */
-    protected $_letters      = array();
+    protected $_letters   = array();
 
 
 
@@ -105,29 +95,23 @@ class String extends Realdom {
      * Construct a realistic domain.
      *
      * @access  public
-     * @param   \Hoa\Realdom\Integer       $length          Length.
-     * @param   \Hoa\Realdom\Constinteger  $codepointMin    Minimum code point.
-     * @param   \Hoa\Realdom\Constinteger  $codepointMax    Maximum code point.
      * @return  void
      */
-    public function construct ( $length       = null,
-                                $codepointMin = null,
-                                $codepointMax = null ) {
+    public function construct ( ) {
 
-        if(null === $length)
-            $length = new Constinteger(13);
+        if(!isset($this['length']))
+            $this['length'] = new Constinteger(13);
 
-        if(null === $codepointMin)
-            $codepointMin = new Constinteger(0x20);
+        if(!isset($this['codepointMin']))
+            $this['codepointMin'] = new Constinteger(0x20);
 
-        if(null === $codepointMax)
-            $codepointMax = new Constinteger(0x7E);
+        if(!isset($this['codepointMax']))
+            $this['codepointMax'] = new Constinteger(0x7e);
 
-        $this->_length       = $length;
-        $this->_codepointMin = $codepointMin->getValue();
-        $this->_codepointMax = $codepointMax->getValue();
+        $this['codepointMin'] = $this['codepointMin']->getConstantValue();
+        $this['codepointMax'] = $this['codepointMax']->getConstantValue();
 
-        for($i = $this->getCodepointMin(), $j = $this->getCodepointMax();
+        for($i = $this['codepointMin'], $j = $this['codepointMax'];
             $i <= $j;
             ++$i)
             $this->_letters[] = iconv('UCS-4LE', 'UTF-8', pack('V', $i));
@@ -149,7 +133,7 @@ class String extends Realdom {
 
         $length = mb_strlen($q);
 
-        if(false === $this->getLength()->predicate($length))
+        if(false === $this['length']->predicate($length))
             return false;
 
         if(0 === $length)
@@ -158,8 +142,8 @@ class String extends Realdom {
         $split  = preg_split('#(?<!^)(?!$)#u', $q);
         $out    = true;
         $handle = 0;
-        $min    = $this->getCodepointMin();
-        $max    = $this->getCodepointMax();
+        $min    = $this['codepointMin'];
+        $max    = $this['codepointMax'];
 
         foreach($split as $letter) {
 
@@ -182,7 +166,7 @@ class String extends Realdom {
         $string  = null;
         $letters = array();
         $count   = count($this->_letters) - 1;
-        $length  = $this->getLength()->sample($sampler);
+        $length  = $this['length']->sample($sampler);
 
         if(0 > $length)
             return false;
@@ -191,39 +175,6 @@ class String extends Realdom {
             $string .= $this->_letters[$sampler->getInteger(0, $count)];
 
         return $string;
-    }
-
-    /**
-     * Get the minimum code point.
-     *
-     * @access  public
-     * @return  int
-     */
-    public function getCodepointMin ( ) {
-
-        return $this->_codepointMin;
-    }
-
-    /**
-     * Get the maximum code point.
-     *
-     * @access  public
-     * @return  int
-     */
-    public function getCodepointMax ( ) {
-
-        return $this->_codepointMax;
-    }
-
-    /**
-     * Get the string's length.
-     *
-     * @access  public
-     * @return  \Hoa\Realdom\Integer
-     */
-    public function getLength ( ) {
-
-        return $this->_length;
     }
 }
 

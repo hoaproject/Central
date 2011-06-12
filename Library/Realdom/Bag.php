@@ -64,38 +64,16 @@ class Bag extends Realdom {
      *
      * @var \Hoa\Realdom string
      */
-    protected $_name = 'bag';
+    protected $_name      = 'bag';
 
     /**
-     * List.
+     * Realistic domain defined arguments.
      *
      * @var \Hoa\Realdom\Bag array
      */
-    protected $_bag  = array();
-
-    /**
-     * List's length.
-     *
-     * @var \Hoa\Realdom\Bag int
-     */
-    private $_length = 0;
+    protected $_arguments = …;
 
 
-
-    /**
-     * Construct a realistic domain.
-     *
-     * @access  public
-     * @param   mixed   …    Elements.
-     * @return  void
-     */
-    public function construct ( ) {
-
-        $this->_bag    = func_get_args();
-        $this->_length = count($this->_bag) - 1;
-
-        return;
-    }
 
     /**
      * Predicate whether the sampled value belongs to the realistic domains.
@@ -108,7 +86,7 @@ class Bag extends Realdom {
 
         $out = false;
 
-        foreach($this->getBag() as $i => $domain)
+        foreach($this->getArguments() as $i => $domain)
             $out = $out || $domain->predicate($q);
 
         return $out;
@@ -123,19 +101,8 @@ class Bag extends Realdom {
      */
     protected function _sample ( \Hoa\Test\Sampler $sampler ) {
 
-        return $this->_bag[$sampler->getInteger(0, $this->_length)]
+        return $this->arguments[$sampler->getInteger(0, count($this) - 1)]
                     ->sample($sampler);
-    }
-
-    /**
-     * Get bag.
-     *
-     * @access  public
-     * @return  mixed
-     */
-    public function getBag ( ) {
-
-        return $this->_bag;
     }
 }
 

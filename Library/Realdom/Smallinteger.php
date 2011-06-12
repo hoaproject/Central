@@ -77,17 +77,13 @@ class Smallinteger extends Boundinteger {
      * Construct a realistic domain.
      *
      * @access  public
-     * @param   \Hoa\Realdom\Constinteger  $lower    Lower bound value.
-     * @param   \Hoa\Realdom\Constinteger  $upper    Upper bound value.
      * @return  void
      */
-    public function construct ( Constinteger $lower = null,
-                                Constinteger $upper = null ) {
+    public function construct ( ) {
 
-        parent::construct(
-            new Constinteger(-128),
-            new Constinteger( 127)
-        );
+        $this['lower'] = new Constinteger(-128);
+        $this['upper'] = new Constinteger( 127);
+        parent::construct();
 
         return;
     }

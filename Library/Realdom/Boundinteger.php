@@ -69,21 +69,17 @@ class Boundinteger extends Integer {
      *
      * @var \Hoa\Realdom string
      */
-    protected $_name = 'boundinteger';
+    protected $_name      = 'boundinteger';
 
     /**
-     * Lower bound value.
+     * Realistic domains defined arguments.
      *
-     * @var \Hoa\Realdom\Constinteger object
+     * @var \Hoa\Realdom array
      */
-    protected $_lower = 0;
-
-    /**
-     * Upper bound value.
-     *
-     * @var \Hoa\Realdom\Constinteger object
-     */
-    protected $_upper = 0;
+    protected $_arguments = array(
+        'lower',
+        'upper'
+    );
 
 
 
@@ -91,21 +87,15 @@ class Boundinteger extends Integer {
      * Construct a realistic domain.
      *
      * @access  public
-     * @param   \Hoa\Realdom\Constinteger  $lower    Lower bound value.
-     * @param   \Hoa\Realdom\Constinteger  $upper    Upper bound value.
      * @return  void
      */
-    public function construct ( Constinteger $lower = null,
-                                Constinteger $upper = null ) {
+    public function construct ( ) {
 
-        if(null === $lower)
-            $lower = new Constinteger(~PHP_INT_MAX);
+        if(!isset($this['lower']))
+            $this['lower'] = new Constinteger(~PHP_INT_MAX);
 
-        if(null === $upper)
-            $upper = new Constinteger( PHP_INT_MAX);
-
-        $this->_lower = $lower;
-        $this->_upper = $upper;
+        if(!isset($this['upper']))
+            $this['upper'] = new Constinteger( PHP_INT_MAX);
 
         return;
     }
@@ -120,8 +110,8 @@ class Boundinteger extends Integer {
     public function predicate ( $q ) {
 
         return    parent::predicate($q)
-               && $q >= $this->getLower()->getValue()
-               && $q <= $this->getUpper()->getValue();
+               && $q >= $this['lower']->getValue()
+               && $q <= $this['upper']->getValue();
     }
 
     /**
@@ -134,31 +124,9 @@ class Boundinteger extends Integer {
     protected function _sample ( \Hoa\Test\Sampler $sampler ) {
 
         return $sampler->getInteger(
-            $this->getLower()->sample($sampler),
-            $this->getUpper()->sample($sampler)
+            $this['lower']->sample($sampler),
+            $this['upper']->sample($sampler)
         );
-    }
-
-    /**
-     * Get the lower bound value.
-     *
-     * @access  public
-     * @return  \Hoa\Realdom\Constinteger
-     */
-    public function getLower ( ) {
-
-        return $this->_lower;
-    }
-
-    /**
-     * Get the upper bound value.
-     *
-     * @access  public
-     * @return  \Hoa\Realdom\Constinteger
-     */
-    public function getUpper ( ) {
-
-        return $this->_upper;
     }
 }
 
