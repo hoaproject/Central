@@ -39,6 +39,11 @@ namespace {
 from('Hoa')
 
 /**
+ * \Hoa\Realdom\Constfloat
+ */
+-> import('Realdom.Constfloat')
+
+/**
  * \Hoa\Realdom\Float
  */
 -> import('Realdom.Float');
@@ -64,21 +69,17 @@ class Boundfloat extends Float {
      *
      * @var \Hoa\Realdom string
      */
-    protected $_name = 'boundfloat';
+    protected $_name      = 'boundfloat';
 
     /**
-     * Lower bound value.
+     * Realistic domains defined arguments.
      *
-     * @var \Hoa\Realdom\Boundfloat int
+     * @var \Hoa\Realdom array
      */
-    protected $_lower = 0;
-
-    /**
-     * Upper bound value.
-     *
-     * @var \Hoa\Realdom\Boundfloat int
-     */
-    protected $_upper = 0;
+    protected $_arguments = array(
+        'lower',
+        'upper'
+    );
 
 
 
@@ -86,21 +87,15 @@ class Boundfloat extends Float {
      * Construct a realistic domain.
      *
      * @access  public
-     * @param   \Hoa\Realdom\Constinteger  $lower    Lower bound value.
-     * @param   \Hoa\Realdom\Constinteger  $upper    Upper bound value.
      * @return  void
      */
-    public function construct ( Constinteger $lower = null,
-                                Constinteger $upper = null ) {
+    public function construct ( ) {
 
-        if(null === $lower)
-            $lower = new Constinteger(~PHP_INT_MAX);
+        if(!isset($this['lower']))
+            $this['lower'] = new Constfloat((float) ~PHP_INT_MAX);
 
-        if(null === $upper)
-            $upper = new Constinteger( PHP_INT_MAX);
-
-        $this->_lower = $lower;
-        $this->_upper = $upper;
+        if(!isset($this['upper']))
+            $this['upper'] = new Constfloat((float)  PHP_INT_MAX);
 
         return;
     }
@@ -115,8 +110,8 @@ class Boundfloat extends Float {
     public function predicate ( $q ) {
 
         return    parent::predicate($q)
-               && $q >= $this->getLower()->getValue()
-               && $q <= $this->getUpper()->getValue();
+               && $q >= $this['lower']->getValue()
+               && $q <= $this['upper']->getValue();
     }
 
     /**
@@ -129,31 +124,9 @@ class Boundfloat extends Float {
     protected function _sample ( \Hoa\Test\Sampler $sampler ) {
 
         return $sampler->getFloat(
-            $this->getLower()->sample($sampler),
-            $this->getUpper()->sample($sampler)
+            $this['lower']->sample($sampler),
+            $this['upper']->sample($sampler)
         );
-    }
-
-    /**
-     * Get the lower bound value.
-     *
-     * @access  public
-     * @return  int
-     */
-    public function getLower ( ) {
-
-        return $this->_lower;
-    }
-
-    /**
-     * Get the upper bound value.
-     *
-     * @access  public
-     * @return  int
-     */
-    public function getUpper ( ) {
-
-        return $this->_upper;
     }
 }
 

@@ -77,17 +77,13 @@ class Smallfloat extends Boundfloat {
      * Construct a realistic domain.
      *
      * @access  public
-     * @param   \Hoa\Realdom\Constfloat  $lower    Lower bound value.
-     * @param   \Hoa\Realdom\Constfloat  $upper    Upper bound value.
      * @return  void
      */
-    public function construct ( Constfloat $lower = null,
-                                Constfloat $upper = null ) {
+    public function construct ( ) {
 
-        parent::construct(
-            new Constfloat(-128.0),
-            new Constfloat( 127.0)
-        );
+        $this['lower'] = new Constfloat(-128.0);
+        $this['upper'] = new Constfloat( 127.0);
+        parent::construct();
 
         return;
     }

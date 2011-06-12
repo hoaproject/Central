@@ -74,14 +74,16 @@ class Odd extends Realdom implements Number {
      *
      * @var \Hoa\Realdom string
      */
-    protected $_name    = 'odd';
+    protected $_name      = 'odd';
 
     /**
-     * Subject.
+     * Realistic domain defined arguments.
      *
-     * @var \Hoa\Realdom\Number object
+     * @var \Hoa\Realdom array
      */
-    protected $_subject = null;
+    protected $_arguments = array(
+        'subject'
+    );
 
 
 
@@ -89,15 +91,12 @@ class Odd extends Realdom implements Number {
      * Construct a realistic domain.
      *
      * @access  public
-     * @param   \Hoa\Realdom\Number  $subject    Subject.
      * @return  void
      */
-    public function construct ( Number $subject = null ) {
+    public function construct ( ) {
 
-        if(null === $subject)
-            $subject = new Integer();
-
-        $this->_subject = $subject;
+        if(!isset($this['subject']))
+            $this['subject'] = new Integer();
 
         return;
     }
@@ -111,8 +110,7 @@ class Odd extends Realdom implements Number {
      */
     public function predicate ( $q ) {
 
-        return    $this->getSubject()->predicate($q)
-               && ($q & 1) == 1;
+        return $this['subject']->predicate($q) && ($q & 1) == 1;
     }
 
     /**
@@ -124,23 +122,12 @@ class Odd extends Realdom implements Number {
      */
     protected function _sample ( \Hoa\Test\Sampler $sampler ) {
 
-        $q = $this->getSubject()->sample($sampler);
+        $q = $this['subject']->sample($sampler);
 
         if(($q & 1) == 0)
             --$q;
 
         return $q;
-    }
-
-    /**
-     * Get subject.
-     *
-     * @access  public
-     * @return  \Hoa\Realdom\Integer
-     */
-    public function getSubject ( ) {
-
-        return $this->_subject;
     }
 }
 

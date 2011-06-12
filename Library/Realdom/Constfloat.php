@@ -46,7 +46,7 @@ from('Hoa')
 /**
  * \Hoa\Realdom\Constant
  */
--> import('Realdom.Float');
+-> import('Realdom.Constant');
 
 }
 
@@ -72,11 +72,13 @@ class Constfloat extends Float implements Constant {
     protected $_name  = 'constfloat';
 
     /**
-     * Constant value.
+     * Realistic domain defined arguments.
      *
-     * @var \Hoa\Realdom float
+     * @var \Hoa\Realdom array
      */
-    protected $_value = 0.0;
+    protected $_arguments = array(
+        'value'
+    );
 
 
 
@@ -84,13 +86,13 @@ class Constfloat extends Float implements Constant {
      * Construct a realistic domain.
      *
      * @access  public
-     * @param   float  $float    Float.
      * @return  void
      * @throw   \Hoa\Realdom\Exception
      */
-    public function construct ( $float = 0.0 ) {
+    public function construct ( ) {
 
-        $this->_value = $float;
+        if(!isset($this['value']))
+            $this['value'] = 0.0;
 
         return;
     }
@@ -104,7 +106,7 @@ class Constfloat extends Float implements Constant {
      */
     public function predicate ( $q ) {
 
-        return $this->_value === (float) $q;
+        return $this['value'] === (float) $q;
     }
 
     /**
@@ -116,7 +118,7 @@ class Constfloat extends Float implements Constant {
      */
     protected function _sample ( \Hoa\Test\Sampler $sampler ) {
 
-        return $this->_value;
+        return $this['value'];
     }
 
     /**
@@ -127,7 +129,7 @@ class Constfloat extends Float implements Constant {
      */
     public function getConstantValue ( ) {
 
-        return $this->_value;
+        return $this['value'];
     }
 }
 

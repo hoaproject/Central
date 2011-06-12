@@ -72,11 +72,13 @@ class Conststring extends String implements Constant {
     protected $_name  = 'conststring';
 
     /**
-     * Constant value.
+     * Realistic domain defined arguments.
      *
-     * @var \Hoa\Realdom string
+     * @var \Hoa\Realdom array
      */
-    protected $_value = '';
+    protected $_arguments = array(
+        'value'
+    );
 
 
 
@@ -84,13 +86,13 @@ class Conststring extends String implements Constant {
      * Construct a realistic domain.
      *
      * @access  public
-     * @param   string  $string    String.
      * @return  void
      * @throw   \Hoa\Realdom\Exception
      */
-    public function construct ( $string  = '', $compati = null, $bility = null ) {
+    public function construct ( ) {
 
-        $this->_value = $string;
+        if(!isset($this['value']))
+            $this['value'] = '';
 
         return;
     }
@@ -104,7 +106,7 @@ class Conststring extends String implements Constant {
      */
     public function predicate ( $q ) {
 
-        return $this->_value === (string) $q;
+        return $this['value'] === (string) $q;
     }
 
     /**
@@ -116,7 +118,7 @@ class Conststring extends String implements Constant {
      */
     protected function _sample ( \Hoa\Test\Sampler $sampler ) {
 
-        return $this->_value;
+        return $this['value'];
     }
 
     /**
@@ -127,7 +129,7 @@ class Conststring extends String implements Constant {
      */
     public function getConstantValue ( ) {
 
-        return $this->_value;
+        return $this['value'];
     }
 }
 

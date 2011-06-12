@@ -69,21 +69,17 @@ class _Array extends Realdom {
      *
      * @var \Hoa\Realdom string
      */
-    protected $_name    = 'array';
+    protected $_name      = 'array';
 
     /**
-     * Domains (pair => 0 (key), 1 (value) => domain disjunction).
+     * Realistic domain defined arguments.
      *
-     * @var \Hoa\Realdom\_Array array
+     * @var \Hoa\Realdom array
      */
-    protected $_domains = null;
-
-    /**
-     * Length.
-     *
-     * @var \Hoa\Realdom\Constinteger object
-     */
-    protected $_length  = null;
+    protected $_arguments = array(
+        'domains',
+        'length'
+    );
 
 
 
@@ -91,19 +87,16 @@ class _Array extends Realdom {
      * Construct a realistic domain.
      *
      * @access  public
-     * @param   array                 $domains    Domains.
-     * @param   \Hoa\Realdom\Integer  $length     Length.
      * @return  void
-     * @throw   \Hoa\Realdom\Exception
      */
-    public function construct ( Array   $domains = array(),
-                                Integer $length  = null ) {
+    public function construct ( ) {
 
-        if(null === $length)
-            $length = new Constinteger(7);
+        if(!isset($this['domains']))
+            throw new Exception(
+                'Argument missing.', 0);
 
-        $this->_domains = $domains;
-        $this->_length  = $length;
+        if(!isset($this['length']))
+            $this['length'] = new Constinteger(7);
 
         return;
     }
@@ -120,10 +113,10 @@ class _Array extends Realdom {
         if(!is_array($q))
             return false;
 
-        if(false === $this->getLength()->predicate(count($q)))
+        if(false === $this['length']->predicate(count($q)))
             return false;
 
-        foreach($this->getDomains() as $e => $pairs) {
+        foreach($this['domains'] as $e => $pairs) {
 
             $dom = false;
             $ran = false;
@@ -156,9 +149,9 @@ class _Array extends Realdom {
      */
     protected function _sample ( \Hoa\Test\Sampler $sampler ) {
 
-        $domains = $this->getDomains();
+        $domains = $this['domains'];
         $pair    = $domains[$sampler->getInteger(0, count($domains) - 1)];
-        $length  = $this->getLength()->sample($sampler);
+        $length  = $this['length']->sample($sampler);
 
         if(0 > $length)
             return false;
@@ -179,28 +172,6 @@ class _Array extends Realdom {
                           ->sample($sampler);
 
         return $out;
-    }
-
-    /**
-     * Get domains.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function getDomains ( ) {
-
-        return $this->_domains;
-    }
-
-    /**
-     * Get length.
-     *
-     * @access  public
-     * @return  \Hoa\Realdom\Constinteger
-     */
-    public function getLength ( ) {
-
-        return $this->_length;
     }
 }
 

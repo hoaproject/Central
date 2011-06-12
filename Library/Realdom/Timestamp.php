@@ -74,14 +74,16 @@ class Timestamp extends Constinteger {
      *
      * @var \Hoa\Realdom string
      */
-    protected $_name = 'timestamp';
+    protected $_name      = 'timestamp';
 
     /**
-     * Date description. Please, see http://php.net/datetime.formats.
+     * Realistic domain defined arguments.
      *
-     * @var \Hoa\Realdom\Timestamp int
+     * @var \Hoa\Realdom array
      */
-    protected $_date = 0;
+    protected $_arguments = array(
+        'date'
+    );
 
 
 
@@ -89,15 +91,12 @@ class Timestamp extends Constinteger {
      * Construct a realistic domain.
      *
      * @access  public
-     * @param   \Hoa\Realdom\Conststring  $date    Date description.
      * @return  void
      */
-    public function construct ( $date = null ) {
+    public function construct ( ) {
 
-        if(null === $date)
-            $date = new \Hoa\Realdom\Conststring(date('d/m/Y H:i:s'));
-
-        $this->_date = $date;
+        if(!isset($this['date']))
+            $this['date'] = new Conststring(date('d/m/Y H:i:s'));
 
         return;
     }
@@ -111,7 +110,7 @@ class Timestamp extends Constinteger {
      */
     public function predicate ( $q ) {
 
-        return $q == strtotime($this->_date->getConstantValue());
+        return $q == strtotime($this['date']->getConstantValue());
     }
 
     /**
@@ -123,7 +122,7 @@ class Timestamp extends Constinteger {
      */
     protected function _sample ( \Hoa\Test\Sampler $sampler ) {
 
-        return strtotime($this->_date->sample($sampler));
+        return strtotime($this['date']->sample($sampler));
     }
 }
 

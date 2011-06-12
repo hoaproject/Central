@@ -49,14 +49,14 @@ from('Hoa')
 -> import('Realdom.Conststring')
 
 /**
- * \Hoa\Realdom\Constinteger
- */
--> import('Realdom.Constinteger')
-
-/**
  * \Hoa\Realdom\Boundinteger
  */
--> import('Realdom.Boundinteger');
+-> import('Realdom.Boundinteger')
+
+/**
+ * \Hoa\Realdom\Constinteger
+ */
+-> import('Realdom.Constinteger');
 
 }
 
@@ -82,18 +82,14 @@ class Date extends Realdom {
     protected $_name      = 'date';
 
     /**
-     * Date format. Please, see http://php.net/datetime.formats.
+     * Realistic domain defined arguments.
      *
-     * @var \Hoa\Realdom\Conststring object
+     * @var \Hoa\Realdom array
      */
-    protected $_format    = null;
-
-    /**
-     * Timestamp.
-     *
-     * @var \Hoa\Realdom\Integer object
-     */
-    protected $_timestamp = null;
+    protected $_arguments = array(
+        'format',
+        'timestamp'
+    );
 
 
 
@@ -101,21 +97,15 @@ class Date extends Realdom {
      * Construct a realistic domain.
      *
      * @access  public
-     * @param   \Hoa\Realdom\Conststring  $format       Date format.
-     * @param   \Hoa\Realdom\Integer      $timestamp    Timestamp.
      * @return  void
      */
-    public function construct ( Conststring $format    = null,
-                                Integer     $timestamp = null ) {
+    public function construct ( ) {
 
-        if(null === $format)
-            $format = new Conststring('c');
+        if(!isset($this['format']))
+            $this['format'] = new Conststring('c');
 
-        if(null === $timestamp)
-            $timestamp = new Boundinteger(new Constinteger(0));
-
-        $this->_format    = $format;
-        $this->_timestamp = $timestamp;
+        if(!isset($this['timestamp']))
+            $this['timestamp'] = new Boundinteger(new Constinteger(0));
 
         return;
     }
@@ -143,8 +133,8 @@ class Date extends Realdom {
     protected function _sample ( \Hoa\Test\Sampler $sampler ) {
 
         return date(
-            $this->_format->getConstantValue(),
-            $this->_timestamp->sample($sampler)
+            $this['format']->getConstantValue(),
+            $this['timestamp']->sample($sampler)
         );
     }
 }
