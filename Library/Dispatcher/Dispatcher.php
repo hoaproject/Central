@@ -83,7 +83,7 @@ abstract class Dispatcher implements \Hoa\Core\Parameter\Parameterizable {
      *
      * @var \Hoa\Dispatcher string
      */
-    protected $_kit         = '\Hoa\Dispatcher\Kit';
+    protected $_kit         = 'Hoa\Dispatcher\Kit';
 
 
 
