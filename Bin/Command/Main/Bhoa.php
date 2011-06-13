@@ -249,7 +249,10 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
                     else {
 
                         $content = $request->getHost() . '/' . $url . "\n" .
-                                   str_repeat('*', strlen($url) + 1) . "\n\n";
+                                   str_repeat(
+                                       '*',
+                                       strlen($request->getHost()) + 1
+                                   ) . "\n\n";
                         $finder  = new \Hoa\File\Finder($target);
 
                         foreach($finder as $file) {
