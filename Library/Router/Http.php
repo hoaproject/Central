@@ -642,9 +642,14 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
      * @access  public
      * @return  string
      */
-    public function getSubDomain ( ) {
+    public function getSubdomain ( ) {
 
-        return implode('.', array_slice(explode('.', $this->getDomain()), 0, -2));
+        $domain = $this->getDomain();
+
+        if($domain == long2ip(ip2long($domain)))
+            return null;
+
+        return implode('.', array_slice(explode('.', $domain), 0, -2));
     }
 
     /**
