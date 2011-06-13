@@ -87,11 +87,13 @@ class Regex extends String {
     protected $_name            = 'regex';
 
     /**
-     * Regex.
+     * Realistic domain defined arguments.
      *
-     * @var \Hoa\Realdom\Conststring object
+     * @var \Hoa\Realdom array
      */
-    protected $_regex           = null;
+    protected $_arguments       = array(
+        'regex'
+    );
 
     /**
      * Regex compiler.
@@ -120,22 +122,20 @@ class Regex extends String {
      * Construct a realistic domain.
      *
      * @access  public
-     * @param   \Hoa\Realdom\Conststring  $regex    Regex.
      * @return  void
      */
-    public function construct ( $regex = null, $foo = null, $bar = null ) {
+    public function construct ( ) {
 
         if(null === self::$_compiler)
             self::$_compiler = \Hoa\Compiler\Llk::load(
                 new \Hoa\File\Read('hoa://Library/Regex/Grammar.pp')
             );
 
-        if(null === self::$_visitor)
-            self::$_visitor = new \Hoa\Regex\Visitor\Realdom();
+        if(!isset($this['regex']))
+            $this['regex'] = new Conststring('');
 
-        $this->_regex = $regex;
         $this->_ast   = self::$_compiler->parse(
-            $this->_regex->getConstantValue()
+            $this['regex']->getConstantValue()
         );
 
         return;
@@ -151,7 +151,11 @@ class Regex extends String {
     public function predicate ( $q ) {
 
         return 0 !== preg_match(
-            '#' . str_replace('#', '\#', $this->_regex->getConstantValue()) . '#',
+            '#' . str_replace(
+                '#',
+                '\#',
+                $this['regex']->getConstantValue()
+            ) . '#',
             $q
         );
     }
@@ -165,7 +169,10 @@ class Regex extends String {
      */
     protected function _sample ( \Hoa\Test\Sampler $sampler ) {
 
-        return self::$_visitor->visit($this->_ast, $sampler);
+        if(null === self::$_visitor)
+            self::$_visitor = new \Hoa\Regex\Visitor\Realdom($sampler);
+
+        return self::$_visitor->visit($this->_ast);
     }
 }
 
