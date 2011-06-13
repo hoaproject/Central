@@ -169,7 +169,7 @@ class Domain {
 
                 $this->_currentArgument
                     = $this->_arguments[]
-                    = $this->_factory('const' . $type, array($argument));;
+                    = $this->_factory('const' . $type, array($argument));
         }
 
         return $this;
@@ -303,6 +303,7 @@ class Domain {
 
             case 'empty':
             case 'array':
+            case 'class':
                 $name = '_' . ucfirst($name);
               break;
         }
