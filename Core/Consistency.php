@@ -34,12 +34,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-define('…', '__hoa_core_fill');
-
-}
-
 namespace Hoa\Core\Consistency {
 
 /**

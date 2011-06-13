@@ -141,6 +141,7 @@ class Core implements Parameter\Parameterizable {
 
         !defined('SUCCEED')   and define('SUCCEED', true);
         !defined('FAILED')    and define('FAILED', false);
+        !defined('…')         and define('…',  '__hoa_core_fill');
         !defined('DS')        and define('DS', DIRECTORY_SEPARATOR);
         !defined('PS')        and define('PS', PATH_SEPARATOR);
         !defined('CRLF')      and define('CRLF', "\r\n");
@@ -247,8 +248,9 @@ class Core implements Parameter\Parameterizable {
                 'protocol.Data'                   => '(:%root.data:)/',
                 'protocol.Library'                => '(:%hoa.library:)/',
 
-                'namespace.prefix.Hoa'     => '(:%hoa.library:)',
-                'namespace.prefix.Hoathis' => '(:%data.module:);(:%hoa.module:)'
+                'namespace.prefix.Hoa'         => '(:%hoa.library:)',
+                'namespace.prefix.Hoathis'     => '(:%data.module:);(:%hoa.module:)',
+                'namespace.prefix.Application' => '(:%root.application:)',
             )
         );
         $this->_parameters->setKeyword('hoa', $hoa);
