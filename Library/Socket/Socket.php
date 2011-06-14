@@ -149,7 +149,7 @@ class Socket {
         $m = preg_match(
             '#(?<scheme>[^:]+)://' .
                 '(?:\[(?<ipv6_>[^\]]+)\]:(?<ipv6_port>\d+)$|' .
-                '(?<ipv4>\d+(?:\.\d+){3})(?::(?<ipv4_port>\d+))?$|' .
+                '(?<ipv4>(\*|\d+(?:\.\d+){3}))(?::(?<ipv4_port>\d+))?$|' .
                 '(?<domain>[^:]+)(?::(?<domain_port>\d+))?$|' .
                 '(?<ipv6>.+)$)#',
             $uri,
@@ -177,6 +177,9 @@ class Socket {
 
             $this->_address     = $matches['ipv4'];
             $this->_addressType = self::ADDRESS_IPV4;
+
+            if('*' == $this->_address)
+                $this->_address = '0.0.0.0';
 
             if(isset($matches['ipv4_port']))
                 $this->setPort($matches['ipv4_port']);
