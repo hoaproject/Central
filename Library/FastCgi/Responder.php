@@ -246,7 +246,8 @@ class Responder extends Connection {
         do {
 
             if(false === $handle = $this->readPack())
-                throw new Exception('Bad request foobar.', 0);
+                throw new Exception(
+                    'Bad request (not a well-formed FastCGI request).', 0);
 
             if(   self::STREAM_STDOUT === $handle[parent::HEADER_TYPE]
                || self::STREAM_STDERR === $handle[parent::HEADER_TYPE])
