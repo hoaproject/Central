@@ -235,6 +235,9 @@ class Idle extends \Exception implements \Serializable {
         if(!($exception instanceof Idle))
             throw $exception;
 
+        while(0 < ob_get_level())
+            ob_end_flush();
+
         echo 'Uncaught exception (' . get_class($exception) . '):' . "\n" .
              $exception->raise();
 
