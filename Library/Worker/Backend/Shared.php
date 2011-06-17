@@ -49,6 +49,11 @@ from('Hoa')
 -> import('Worker.Run')
 
 /**
+ * \Hoa\Zombie
+ */
+-> import('Zombie.~')
+
+/**
  * \Hoa\Socket\Client
  */
 -> import('Socket.Client')
@@ -225,6 +230,7 @@ class Shared implements \Hoa\Core\Event\Listenable {
 
     /**
      * Run the shared worker.
+     * It creates a zombie with \Hoa\Zombie.
      *
      * @access  public
      * @return  void
@@ -235,11 +241,8 @@ class Shared implements \Hoa\Core\Event\Listenable {
         $server = new \Hoa\Socket\Server($this->_socket);
         $server->connectAndWait();
 
-        if(false === function_exists('fastcgi_finish_request'))
-            throw new Exception(
-                'This program (%s) must run behind PHP-FPM.', 1, __FILE__);
+        \Hoa\Zombie::fork();
 
-        fastcgi_finish_request();
         $_eom   = pack('C', 0);
 
         while(true) foreach($server->select() as $node) {
