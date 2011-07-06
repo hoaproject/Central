@@ -415,7 +415,7 @@ class          Xyl
             $href = $useParsed->readAttribute('href');
             unset($useParsed);
 
-            if(0 === preg_match('#^([^:]+://)|([A-Z]:)|/#', $href))
+            if(0 === preg_match('#^(([^:]+://)|([A-Z]:)|/)#', $href))
                 $href = $dirname . DS . $href;
 
             if(false === file_exists($href))
@@ -570,7 +570,7 @@ class          Xyl
             $href = $overlayParsed->readAttribute('href');
             unset($overlayParsed);
 
-            if(0 === preg_match('#^([^:]+://)|([A-Z]:)|/#', $href))
+            if(0 === preg_match('#^(([^:]+://)|([A-Z]:)|/)#', $href))
                 $href = $dirname . DS . $href;
 
             if(false === file_exists($href))
