@@ -550,6 +550,9 @@ class Parameter {
      */
     public function zFormat ( $value ) {
 
+        if(!is_string($value))
+            return $value;
+
         if(isset($this->_cache[$value]))
             return $this->_cache[$value];
 
