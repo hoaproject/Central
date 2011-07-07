@@ -39,26 +39,26 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Database\Dal\Exception
+ * \Hoa\Database\Exception
  */
--> import('Database.Dal.Exception')
+-> import('Database.Exception')
 
 /**
- * \Hoa\Database\Dal\AbstractLayer\Pdo\PdoStatement
+ * \Hoa\Database\AbstractLayer\Pdo\PdoStatement
  */
--> import('Database.Dal.AbstractLayer.Pdo.PdoStatement')
+-> import('Database.AbstractLayer.Pdo.PdoStatement')
 
 /**
- * \Hoa\Database\Dal\IDal\Wrapper
+ * \Hoa\Database\IDal\Wrapper
  */
--> import('Database.Dal.I~.Wrapper');
+-> import('Database.IDal.Wrapper');
 
 }
 
-namespace Hoa\Database\Dal\AbstractLayer\Pdo {
+namespace Hoa\Database\AbstractLayer\Pdo {
 
 /**
- * Class \Hoa\Database\Dal\AbstractLayer\Pdo.
+ * Class \Hoa\Database\AbstractLayer\Pdo.
  *
  * Wrap PDO.
  *
@@ -67,12 +67,12 @@ namespace Hoa\Database\Dal\AbstractLayer\Pdo {
  * @license    New BSD License
  */
 
-class Pdo implements \Hoa\Database\Dal\IDal\Wrapper {
+class Pdo implements \Hoa\Database\IDal\Wrapper {
 
     /**
      * Connection to database.
      *
-     * @var PDO object
+     * @var \PDO object
      */
     protected $_connection = null;
 
@@ -87,24 +87,24 @@ class Pdo implements \Hoa\Database\Dal\IDal\Wrapper {
      * @param   string  $password         The password to connect to database.
      * @param   array   $driverOptions    The driver options.
      * @return  void
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function __construct ( $dns, $username, $password,
-                                  Array $driverOption = array() ) {
+                                  Array $driverOptions = array() ) {
 
         if(false === extension_loaded('pdo'))
-            throw new \Hoa\Database\Dal\Exception(
+            throw new \Hoa\Database\Exception(
                 'The module PDO is not enabled.', 0);
 
         $connection = null;
 
         try {
 
-            $connection = new \PDO($dns, $username, $password, $driverOption);
+            $connection = new \PDO($dns, $username, $password, $driverOptions);
         }
         catch ( \PDOException $e ) {
 
-            throw new \Hoa\Database\Dal\Exception(
+            throw new \Hoa\Database\Exception(
                 $e->getMessage(), $e->getCode()
             );
         }
@@ -139,7 +139,7 @@ class Pdo implements \Hoa\Database\Dal\IDal\Wrapper {
     protected function getConnection ( ) {
 
         if(null === $this->_connection)
-            throw new \Hoa\Database\Dal\Exception(
+            throw new \Hoa\Database\Exception(
                 'Cannot return a null connection.', 1);
 
         return $this->_connection;
@@ -150,7 +150,7 @@ class Pdo implements \Hoa\Database\Dal\IDal\Wrapper {
      *
      * @access  public
      * @return  bool
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function beginTransaction ( ) {
 
@@ -162,7 +162,7 @@ class Pdo implements \Hoa\Database\Dal\IDal\Wrapper {
      *
      * @access  public
      * @return  bool
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function commit ( ) {
 
@@ -174,7 +174,7 @@ class Pdo implements \Hoa\Database\Dal\IDal\Wrapper {
      *
      * @access  public
      * @return  bool
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function rollBack ( ) {
 
@@ -188,7 +188,7 @@ class Pdo implements \Hoa\Database\Dal\IDal\Wrapper {
      * @param   string  $name    Name of sequence object (needed for some
      *                           driver).
      * @return  string
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function lastInsertId ( $name = null ) {
 
@@ -206,8 +206,8 @@ class Pdo implements \Hoa\Database\Dal\IDal\Wrapper {
      *                                target database server.
      * @param   array   $options      Options to set attributes values for the
      *                                AbstractLayer Statement.
-     * @return  \Hoa\Database\Dal\AbstractLayer\Pdo\PdoStatement
-     * @throw   \Hoa\Database\Dal\Exception
+     * @return  \Hoa\Database\AbstractLayer\Pdo\PdoStatement
+     * @throw   \Hoa\Database\Exception
      */
     public function prepare ( $statement, Array $options = array() ) {
 
@@ -226,7 +226,7 @@ class Pdo implements \Hoa\Database\Dal\IDal\Wrapper {
      * @param   int     $type      Provide a data type hint for drivers that
      *                             have alternate quoting styles.
      * @return  string
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function quote ( $string = null, $type = -1 ) {
 
@@ -238,22 +238,22 @@ class Pdo implements \Hoa\Database\Dal\IDal\Wrapper {
 
     /**
      * Execute an SQL statement, returning a result set as a
-     * \Hoa\Database\Dal\AbstractLayer\Pdo\PdoStatement object.
+     * \Hoa\Database\AbstractLayer\Pdo\PdoStatement object.
      *
      * @access  public
      * @param   string  $statement    The SQL statement to prepare and execute.
-     * @return  \Hoa\Database\Dal\AbstractLayer\Pdo\PdoStatement
-     * @throw   \Hoa\Database\Dal\Exception
+     * @return  \Hoa\Database\AbstractLayer\Pdo\PdoStatement
+     * @throw   \Hoa\Database\Exception
      */
     public function query ( $statement ) {
 
-        $tmp = $this->getConnection()->query($statement);
+        $handle = $this->getConnection()->query($statement);
 
-        if(!($tmp instanceof \PDOStatement))
-            throw new \Hoa\Database\Dal\Exception(
+        if(!($handle instanceof \PDOStatement))
+            throw new \Hoa\Database\Exception(
                 '%3$s (%1$s/%2$d).', 2, $this->errorInfo());
 
-        return new PdoStatement($tmp);
+        return new PdoStatement($handle);
     }
 
     /**
@@ -262,7 +262,7 @@ class Pdo implements \Hoa\Database\Dal\IDal\Wrapper {
      *
      * @access  public
      * @return  string
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function errorCode ( ) {
 
@@ -275,7 +275,7 @@ class Pdo implements \Hoa\Database\Dal\IDal\Wrapper {
      *
      * @access  public
      * @return  array
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function errorInfo ( ) {
 
@@ -287,7 +287,7 @@ class Pdo implements \Hoa\Database\Dal\IDal\Wrapper {
      *
      * @access  public
      * @return  array
-     * @throw   \Hoa\Datatase\Dal\Exception
+     * @throw   \Hoa\Datatase\Exception
      */
     public function getAvailableDrivers ( ) {
 
@@ -300,7 +300,7 @@ class Pdo implements \Hoa\Database\Dal\IDal\Wrapper {
      * @access  public
      * @param   array   $attributes    Attributes values.
      * @return  array
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function setAttributes ( Array $attributes ) {
 
@@ -319,7 +319,7 @@ class Pdo implements \Hoa\Database\Dal\IDal\Wrapper {
      * @param   mixed   $attribute    Attribute name.
      * @param   mixed   $value        Attribute value.
      * @return  mixed
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function setAttribute ( $attribute, $value ) {
 
@@ -331,7 +331,7 @@ class Pdo implements \Hoa\Database\Dal\IDal\Wrapper {
      *
      * @access  public
      * @return  array
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function getAttributes ( ) {
 
@@ -363,7 +363,7 @@ class Pdo implements \Hoa\Database\Dal\IDal\Wrapper {
      * @access  public
      * @param   string  $attribute    Attribute name.
      * @return  mixed
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function getAttribute ( $attribute ) {
 

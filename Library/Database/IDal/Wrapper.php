@@ -34,12 +34,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Database\Dal\IDal {
+namespace Hoa\Database\IDal {
 
 /**
- * Interface \Hoa\Database\Dal\IDal\Wrapper.
+ * Interface \Hoa\Database\IDal\Wrapper.
  *
- * Interface a DAL wrapper.
+ * Interface of a DAL wrapper.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
@@ -50,7 +50,6 @@ interface Wrapper {
 
     /**
      * Create a DAL instance, representing a connection to a database.
-     * The constructor is private to make a singleton.
      *
      * @access  public
      * @param   string  $dns              The DNS of database.
@@ -58,7 +57,7 @@ interface Wrapper {
      * @param   string  $password         The password to connect to database.
      * @param   array   $driverOptions    The driver options.
      * @return  void
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function __construct ( $dns, $username, $password,
                                   Array $driverOption = array() );
@@ -68,7 +67,7 @@ interface Wrapper {
      *
      * @access  public
      * @return  bool
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function beginTransaction ( );
 
@@ -77,7 +76,7 @@ interface Wrapper {
      *
      * @access  public
      * @return  bool
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function commit ( );
 
@@ -86,7 +85,7 @@ interface Wrapper {
      *
      * @access  public
      * @return  bool
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function rollBack ( );
 
@@ -97,7 +96,7 @@ interface Wrapper {
      * @param   string  $name    Name of sequence object (needed for some
      *                           driver).
      * @return  string
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function lastInsertId ( $name = null );
 
@@ -109,8 +108,8 @@ interface Wrapper {
      *                                target database server.
      * @param   array   $options      Options to set attributes values for the
      *                                AbstractLayer Statement.
-     * @return  \Hoa\Database\Dal\IDal\WrapperStatement
-     * @throw   \Hoa\Database\Dal\Exception
+     * @return  \Hoa\Database\IDal\WrapperStatement
+     * @throw   \Hoa\Database\Exception
      */
     public function prepare ( $statement, Array $options = array() );
 
@@ -122,18 +121,18 @@ interface Wrapper {
      * @param   int     $type      Provide a data type hint for drivers that
      *                             have alternate quoting styles.
      * @return  string
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function quote ( $string = null, $type = -1 );
 
     /**
      * Execute an SQL statement, returning a result set as a
-     * \Hoa\Database\Dal\IDal\WrapperStatement object.
+     * \Hoa\Database\IDal\WrapperStatement object.
      *
      * @access  public
      * @param   string  $statement    The SQL statement to prepare and execute.
-     * @return  \Hoa\Database\Dal\IDal\WrapperStatement
-     * @throw   \Hoa\Database\Dal\Exception
+     * @return  \Hoa\Database\IDal\WrapperStatement
+     * @throw   \Hoa\Database\Exception
      */
     public function query ( $statement );
 
@@ -143,7 +142,7 @@ interface Wrapper {
      *
      * @access  public
      * @return  string
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function errorCode ( );
 
@@ -153,7 +152,7 @@ interface Wrapper {
      *
      * @access  public
      * @return  array
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function errorInfo ( );
 
@@ -162,7 +161,7 @@ interface Wrapper {
      *
      * @access  public
      * @return  array
-     * @throw   \Hoa\Datatase\Dal\Exception
+     * @throw   \Hoa\Datatase\Exception
      */
     public function getAvailableDrivers ( );
 
@@ -172,7 +171,7 @@ interface Wrapper {
      * @access  public
      * @param   array   $attributes    Attributes values.
      * @return  array
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function setAttributes ( Array $attributes );
 
@@ -183,7 +182,7 @@ interface Wrapper {
      * @param   mixed   $attribute    Attribute name.
      * @param   mixed   $value        Attribute value.
      * @return  mixed
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function setAttribute ( $attribute, $value );
 
@@ -192,7 +191,7 @@ interface Wrapper {
      *
      * @access  public
      * @return  array
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function getAttributes ( );
 
@@ -202,7 +201,7 @@ interface Wrapper {
      * @access  public
      * @param   string  $attribute    Attribute name.
      * @return  mixed
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function getAttribute ( $attribute );
 }

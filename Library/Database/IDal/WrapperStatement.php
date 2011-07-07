@@ -32,94 +32,84 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- *
- * @category    Framework
- * @package     Hoa_Database
- * @subpackage  Hoa_Database_QueryBuilder_Criterion_OrderBy
- *
  */
+
+namespace Hoa\Database\IDal {
 
 /**
- * Hoa_Database_QueryBuilder_Criterion_Exception
- */
-import('Database.QueryBuilder.Criterion.Exception');
-
-/**
- * Hoa_Database_QueryBuilder_Interface
- */
-import('Database.QueryBuilder.Interface');
-
-/**
- * Class Hoa_Database_QueryBuilder_Criterion_OrderBy.
+ * Interface \Hoa\Database\IDal\WrapperStatement.
  *
- * Build the ORDER BY clauses.
+ * Interface of a DAL statement wrapper.
  *
- * @author      Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright © 2007-2011 Ivan Enderlin.
- * @license     New BSD License
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Database
- * @subpackage  Hoa_Database_QueryBuilder_Criterion_OrderBy
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @license    New BSD License
  */
 
-class Hoa_Database_QueryBuilder_Criterion_OrderBy implements Hoa_Database_QueryBuilder_Interface {
+interface WrapperStatement {
 
     /**
-     * The built query.
-     *
-     * @var Hoa_Database_QueryBuilder_Criterion_OrderBy string
-     */
-    protected $query = null;
-
-
-
-    /**
-     * Call the self::builtQuery() method.
+     * Execute a prepared statement.
      *
      * @access  public
-     * @param   string  $orderBy    The group by.
-     * @return  void
+     * @param   array   $bindParameters    Bind parameters values if
+     *                                     bindParameter() is not called.
+     * @return  bool
+     * @throw   \Hoa\Database\Exception
      */
-    public function __construct ( $orderBy ) {
-
-        $this->builtQuery($orderBy);
-    }
+    public function execute ( Array $bindParameters = array() );
 
     /**
-     * Built the query.
+     * Bind a parameter to te specified variable name.
      *
-     * @access  protected
-     * @param   string     $orderBy    The order by.
-     * @return  string
+     * @access  public
+     * @param   mixed   $parameter    Parameter name.
+     * @param   mixed   $value        Parameter value.
+     * @param   int     $type         Type of value.
+     * @param   int     $length       Length of data type.
+     * @return  bool
+     * @throw   \Hoa\Database\Exception
      */
-    protected function builtQuery ( $orderBy ) {
-
-        $this->query = $orderBy;
-
-        return $this->getQuery();
-    }
+    public function bindParameter ( $parameter, &$value, $type = null,
+                                    $length = null);
 
     /**
-     * Return the built query.
+     * Return an array containing all of the result set rows.
+     *
+     * @access  public
+     * @return  array
+     * @throw   \Hoa\Database\Exception
+     */
+    public function fetchAll ( );
+
+    /**
+     * Close the cursor, enabling the statement to be executed again.
+     *
+     * @access  public
+     * @return  bool
+     * @throw   \Hoa\Database\Exception
+     */
+    public function closeCursor ( );
+
+    /**
+     * Fetch the SQLSTATE associated with the last operation on the statement
+     * handle.
      *
      * @access  public
      * @return  string
+     * @throw   \Hoa\Database\Exception
      */
-    public function getQuery ( ) {
-
-        return $this->query;
-    }
+    public function errorCode ( );
 
     /**
-     * Call the self::getQuery() method.
+     * Fetch extends error information associated with the last operation on the
+     * statement handle.
      *
      * @access  public
-     * @return  string
+     * @return  array
+     * @throw   \Hoa\Database\Exception
      */
-    public function __toString ( ) {
+    public function errorInfo ( );
+}
 
-        return $this->getQuery();
-    }
 }
