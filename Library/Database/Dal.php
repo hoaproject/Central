@@ -39,23 +39,18 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Database\Dal\Exception
+ * \Hoa\Database\Exception
  */
--> import('Database.Dal.Exception')
+-> import('Database.Exception')
 
 /**
- * \Hoa\Database\Dal\DalStatement
+ * \Hoa\Database\DalStatement
  */
--> import('Database.Dal.DalStatement')
-
-/**
- * \Hoa\Database
- */
--> import('Database.~');
+-> import('Database.DalStatement');
 
 }
 
-namespace Hoa\Database\Dal {
+namespace Hoa\Database {
 
 /**
  * Class \Hoa\Database\Dal.
@@ -67,7 +62,7 @@ namespace Hoa\Database\Dal {
  * @license    New BSD License
  */
 
-class Dal {
+class Dal implements \Hoa\Core\Parameter\Parameterizable {
 
     /**
      * Abstract layer : DBA.
@@ -102,28 +97,28 @@ class Dal {
      *
      * @var \Hoa\Database\Dal array
      */
-    private static $_instance = array();
+    private static $_instance     = array();
 
     /**
      * Current singleton ID.
      *
      * @var \Hoa\Database\Dal string
      */
-    private static $_id       = null;
+    private static $_id           = null;
 
     /**
      * The abstract layer instance.
      *
-     * @var \Hoa\Database\Dal\IDal\Wrapper object
+     * @var \Hoa\Database\IDal\Wrapper object
      */
-    protected $abstractLayer  = null;
+    protected $_abstractLayer     = null;
 
     /**
-     * Parameter of \Hoa\Database.
+     * Parameter of \Hoa\Database\Dal.
      *
      * @var \Hoa\Core\Parameter object
      */
-    protected $_parameters    = null;
+    protected static $_parameters = null;
 
 
 
@@ -138,66 +133,48 @@ class Dal {
      * @param   string   $password         The password to connect to database.
      * @param   array    $driverOptions    The driver options.
      * @return  void
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     private function __construct ( $dalName, $dsn, $username, $password,
-                                   Array $driverOption = array() ) {
+                                   Array $driverOptions = array() ) {
 
-        $this->_parameters = \Hoa\Database::getInstance()
-                                 ->getParameters();
-
-        if(   !isset($dalName)
-           && !isset($dsn)
-           && !isset($username)
-           && !isset($password)
-           && empty($driverOption)) {
-
-            $parameters = $this->_parameters->unlinearizeBranche(
-                $this,
-                'connection.list'
-            );
-
-            if(!isset($parameters[self::$_id]))
-                throw new Exception(
-                    'Cannot load the %s connection, because parameters are not ' .
-                    'found.', 0, self::$_id);
-
-            $profile = $parameters[self::$_id];
-
-            if(!array_key_exists('dal', $profile))
-                throw new Exception(
-                    'The connection profile of %s need the “dal” information.',
-                    1, self::$_id);
-
-            if(!array_key_exists('dsn', $profile))
-                throw new Exception(
-                    'The connection profile of %s need the “dsn” information.',
-                    2, self::$_id);
-
-            if(!array_key_exists('username', $profile))
-                throw new Exception(
-                    'The connection profile of %s need the “username” information.',
-                    3, self::$_id);
-
-            if(!array_key_exists('password', $profile))
-                throw new Exception(
-                    'The connection profile of %s need the “password” information.',
-                    4, self::$_id);
-
-            if(!isset($profile['options']))
-                $profile['options'] = array();
-
-            $dalName      = $profile['dal'];
-            $dsn          = $profile['dsn'];
-            $username     = $profile['username'];
-            $password     = $profile['password'];
-            $driverOption = $profile['options'];
-        }
+        if(0 !== preg_match('#^sqlite:([^$]+)$#i', $dsn, $matches))
+            $dsn = 'sqlite:' . resolve($matches[1]);
 
         $this->setDal(dnew(
-            '\Hoa\Database\Dal\AbstractLayer\\' . $dalName,
-            array($dsn, $username, $password, $driverOption)
+            '\Hoa\Database\AbstractLayer\\' . $dalName,
+            array($dsn, $username, $password, $driverOptions)
         ));
+
+        return;
+    }
+
+    /**
+     * Initialize parameters.
+     *
+     * @access  public
+     * @param   array   $parameters    Parameters.
+     * @return  void
+     */
+    public static function initializeParameters ( Array $parameters = array() ) {
+
+        self::$_parameters = new \Hoa\Core\Parameter(
+            __CLASS__,
+            array(),
+            array(
+                /**
+                 * Example:
+                 *   'connection.list.default.dal'      => Dal::PDO,
+                 *   'connection.list.default.dsn'      => 'sqlite:hoa://Data/Variable/Database/Foo.sqlite',
+                 *   'connection.list.default.username' => '',
+                 *   'connection.list.default.password' => '',
+                 *   'connection.list.default.options'  => null,
+                 */
+
+                'connection.autoload' => null // or connection ID, e.g. 'default'.
+            )
+        );
+        self::$_parameters->setParameters($parameters);
 
         return;
     }
@@ -212,69 +189,116 @@ class Dal {
      * @param   string  $username         The username to connect to database.
      * @param   string  $password         The password to connect to database.
      * @param   array   $driverOptions    The driver options.
-     * @return  \Hoa\Database\Dal\IDal\Wrapper
-     * @throw   \Hoa\Database\Dal\Exception
+     * @return  \Hoa\Database\IDal\Wrapper
+     * @throw   \Hoa\Database\Exception
      */
     public static function getInstance ( $id,
                                          $dalName  = null, $dsn      = null,
                                          $username = null, $password = null,
-                                         Array $driverOption = array() ) {
+                                         Array $driverOptions = array() ) {
+
+        if(null === self::$_parameters)
+            self::initializeParameters();
 
         self::$_id = $id;
 
         if(isset(self::$_instance[$id]))
             return self::$_instance[$id];
 
+        if(   null === $dalName
+           && null === $dsn
+           && null === $username
+           && null === $password
+           && empty($driverOptions)) {
+
+            $list = self::$_parameters->unlinearizeBranche('connection.list');
+
+            if(!isset($list[$id]))
+                throw new Exception(
+                    'Connection ID %s does not exist in the connection list.',
+                    0, $id);
+
+            $handle        = $list[$id];
+            $dalName       = @$handle['dal']      ?: 'Undefined';
+            $dsn           = @$handle['dsn']      ?: '';
+            $username      = @$handle['username'] ?: '';
+            $password      = @$handle['password'] ?: '';
+            $driverOptions = @$handle['options']  ?: array();
+        }
+
         return self::$_instance[$id] = new self(
             $dalName,
             $dsn,
             $username,
             $password,
-            $driverOption
+            $driverOptions
         );
     }
 
     /**
      * Get the last instance of a DAL, i.e. the last used singleton.
+     * If no instance was set but if the connection.autoload parameter is set,
+     * then we auto-connect (autoload) a connection.
      *
      * @access  public
-     * @return  \Hoa\Database\Dal\IDal\Wrapper
-     * @throw   \Hoa\Database\Dal\Exception
+     * @return  \Hoa\Database\IDal\Wrapper
+     * @throw   \Hoa\Database\Exception
      */
     public static function getLastInstance ( ) {
 
-        if(null === self::$_id)
-            \Hoa\Database::getInstance();
+        if(null === self::$_parameters)
+            self::initializeParameters();
+
+        if(null === self::$_id) {
+
+            $autoload = self::$_parameters->getFormattedParameter(
+                'connection.autoload'
+            );
+
+            if(null !== $autoload)
+                self::getInstance($autoload);
+        }
 
         if(null === self::$_id)
             throw new Exception(
-                'No instance was set, cannot return the last instance.', 5);
+                'No instance was set, cannot return the last instance.', 0);
 
         return self::$_instance[self::$_id];
+    }
+
+    /**
+     * Get parameters.
+     *
+     * @access  public
+     * @return  \Hoa\Core\Parameter
+     */
+    public function getParameters ( ) {
+
+        return self::$_parameters;
     }
 
     /**
      * Set abstract layer instance.
      *
      * @access  protected
-     * @param   \Hoa\Database\Dal\IDal\Wrapper  $dal    The dal instance.
-     * @return  \Hoa\Database\Dal\IDal\Wrapper
+     * @param   \Hoa\Database\IDal\Wrapper  $dal    The DAL instance.
+     * @return  \Hoa\Database\IDal\Wrapper
      */
-    protected function setDal ( \Hoa\Database\Dal\IDal\Wrapper $dal ) {
+    protected function setDal ( IDal\Wrapper $dal ) {
 
-        $old                 = $this->abstractLayer;
-        $this->abstractLayer = $dal;
+        $old                  = $this->_abstractLayer;
+        $this->_abstractLayer = $dal;
     }
 
     /**
      * Get the abstract layer instance.
      *
      * @access  protected
-     * @return  \Hoa\Database\Dal\IDal\Wrapper
+     * @return  \Hoa\Database\IDal\Wrapper
      */
     protected function getDal ( ) {
 
-        return $this->abstractLayer;
+        return $this->_abstractLayer;
     }
 
     /**
@@ -282,7 +306,7 @@ class Dal {
      *
      * @access  public
      * @return  bool
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function beginTransaction ( ) {
 
@@ -294,7 +318,7 @@ class Dal {
      *
      * @access  public
      * @return  bool
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function commit ( ) {
 
@@ -306,7 +330,7 @@ class Dal {
      *
      * @access  public
      * @return  bool
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function rollBack ( ) {
 
@@ -320,7 +344,7 @@ class Dal {
      * @param   string  $name    Name of sequence object (needed for some
      *                           driver).
      * @return  string
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function lastInsertId ( $name = null ) {
 
@@ -338,12 +362,12 @@ class Dal {
      *                                target database server.
      * @param   array   $options      Options to set attributes values for the
      *                                AbstractLayer Statement.
-     * @return  \Hoa\Database\Dal\DalStatement
-     * @throw   \Hoa\Database\Dal\Exception
+     * @return  \Hoa\Database\DalStatement
+     * @throw   \Hoa\Database\Exception
      */
     public function prepare ( $statement, Array $options = array() ) {
 
-        return new \Hoa\Database\Dal\DalStatement(
+        return new \Hoa\Database\DalStatement(
             $this->getDal()->prepare(
                 $statement, $options
             )
@@ -358,7 +382,7 @@ class Dal {
      * @param   int     $type      Provide a data type hint for drivers that
      *                             have alternate quoting styles.
      * @return  string
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function quote ( $string = null, $type = -1 ) {
 
@@ -370,16 +394,16 @@ class Dal {
 
     /**
      * Execute an SQL statement, returning a result set as a
-     * \Hoa\Database\Dal\DalStatement object.
+     * \Hoa\Database\DalStatement object.
      *
      * @access  public
      * @param   string  $statement    The SQL statement to prepare and execute.
-     * @return  \Hoa\Database\Dal\DalStatement
-     * @throw   \Hoa\Database\Dal\Exception
+     * @return  \Hoa\Database\DalStatement
+     * @throw   \Hoa\Database\Exception
      */
     public function query ( $statement ) {
 
-        return new \Hoa\Database\Dal\DalStatement(
+        return new \Hoa\Database\DalStatement(
             $this->getDal()->query($statement)
         );
     }
@@ -390,7 +414,7 @@ class Dal {
      *
      * @access  public
      * @return  string
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function errorCode ( ) {
 
@@ -403,7 +427,7 @@ class Dal {
      *
      * @access  public
      * @return  array
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function errorInfo ( ) {
 
@@ -415,7 +439,7 @@ class Dal {
      *
      * @access  public
      * @return  array
-     * @throw   \Hoa\Datatase\Dal\Exception
+     * @throw   \Hoa\Datatase\Exception
      */
     public function getAvailableDrivers ( ) {
 
@@ -428,7 +452,7 @@ class Dal {
      * @access  public
      * @param   array   $attributes    Attributes values.
      * @return  array
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function setAttributes ( Array $attributes ) {
 
@@ -442,7 +466,7 @@ class Dal {
      * @param   mixed   $attribute    Attribute name.
      * @param   mixed   $value        Attribute value.
      * @return  mixed
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function setAttribute ( $attribute, $value ) {
 
@@ -454,7 +478,7 @@ class Dal {
      *
      * @access  public
      * @return  array
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function getAttributes ( ) {
 
@@ -467,7 +491,7 @@ class Dal {
      * @access  public
      * @param   string  $attribute    Attribute name.
      * @return  mixed
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function getAttribute ( $attribute ) {
 

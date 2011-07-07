@@ -39,21 +39,21 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Database\Dal\Exception
+ * \Hoa\Database\Exception
  */
--> import('Database.Dal.Exception')
+-> import('Database.Exception')
 
 /**
- * \Hoa\Database\Dal\IDal\WrapperStatement
+ * \Hoa\Database\IDal\WrapperStatement
  */
--> import('Database.Dal.I~.WrapperStatement');
+-> import('Database.IDal.WrapperStatement');
 
 }
 
-namespace Hoa\Database\Dal\AbstractLayer\Pdo {
+namespace Hoa\Database\AbstractLayer\Pdo {
 
 /**
- * Class \Hoa\Database\Dal\AbstractLayer\Pdo\PdoStatement.
+ * Class \Hoa\Database\AbstractLayer\Pdo\PdoStatement.
  *
  * Wrap PDOStatement.
  *
@@ -62,12 +62,12 @@ namespace Hoa\Database\Dal\AbstractLayer\Pdo {
  * @license    New BSD License
  */
 
-class PdoStatement implements \Hoa\Database\Dal\IDal\WrapperStatement {
+class PdoStatement implements \Hoa\Database\IDal\WrapperStatement {
 
     /**
      * The statement instance.
      *
-     * @var PDOStatement object
+     * @var \PDOStatement object
      */
     protected $_statement = null;
 
@@ -117,10 +117,10 @@ class PdoStatement implements \Hoa\Database\Dal\IDal\WrapperStatement {
      * Execute a prepared statement.
      *
      * @access  public
-     * @param   array   $bindParameters    Bind parameters values if bindParam is
-     *                                     not called.
-     * @return  \Hoa\Database\Dal\Pdo\PdoStatement
-     * @throw   \Hoa\Database\Dal\Exception
+     * @param   array   $bindParameters    Bind parameters values if bindParam
+     *                                     is not called.
+     * @return  \Hoa\Database\Pdo\PdoStatement
+     * @throw   \Hoa\Database\Exception
      */
     public function execute ( Array $bindParameters = array() ) {
 
@@ -132,7 +132,7 @@ class PdoStatement implements \Hoa\Database\Dal\IDal\WrapperStatement {
         }
 
         if(false === $this->getStatement()->execute($bindParameters))
-            throw new \Hoa\Database\Dal\Exception(
+            throw new \Hoa\Database\Exception(
                 '%3$s (%1$s/%2$d)', 0, $this->errorInfo());
 
         return $this;
@@ -147,14 +147,14 @@ class PdoStatement implements \Hoa\Database\Dal\IDal\WrapperStatement {
      * @param   int     $type         Type of value.
      * @param   int     $length       Length of data type.
      * @return  bool
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function bindParameter ( $parameter, &$value, $type = null,
                                     $length = null ) {
 
         if(null === $type)
             return $this->getStatement()->bindParam($parameter, $value);
-        
+
         if(null === $length)
             return $this->getStatement()->bindParam($parameter, $value, $type);
 
@@ -166,7 +166,7 @@ class PdoStatement implements \Hoa\Database\Dal\IDal\WrapperStatement {
      *
      * @access  public
      * @return  array
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function fetchAll ( ) {
 
@@ -178,7 +178,7 @@ class PdoStatement implements \Hoa\Database\Dal\IDal\WrapperStatement {
      *
      * @access  public
      * @return  bool
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function closeCursor ( ) {
 
@@ -191,7 +191,7 @@ class PdoStatement implements \Hoa\Database\Dal\IDal\WrapperStatement {
      *
      * @access  public
      * @return  string
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function errorCode ( ) {
 
@@ -204,7 +204,7 @@ class PdoStatement implements \Hoa\Database\Dal\IDal\WrapperStatement {
      *
      * @access  public
      * @return  array
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function errorInfo ( ) {
 

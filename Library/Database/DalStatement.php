@@ -34,10 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Database\Dal {
+namespace Hoa\Database {
 
 /**
- * Class \Hoa\Database\Dal\DalStatement.
+ * Class \Hoa\DatabaseStatement.
  *
  * The heigher class that represents a DAL statement.
  *
@@ -51,7 +51,7 @@ class DalStatement {
     /**
      * The statement instance.
      *
-     * @var \Hoa\Database\Dal\IDal\WrapperStatement object
+     * @var \Hoa\Database\IDal\WrapperStatement object
      */
     protected $statement = null;
 
@@ -61,9 +61,9 @@ class DalStatement {
      * Create a statement instance.
      *
      * @access  public
-     * @param   \Hoa\Database\Dal\IDal\WrapperStatement  $statement    The
-     *                                                                 statement
-     *                                                                 instance.
+     * @param   \Hoa\Database\IDal\WrapperStatement  $statement    The
+     *                                                             statement
+     *                                                             instance.
      * @return  void
      */
     public function __construct ( IDal\WrapperStatement $statement ) {
@@ -75,10 +75,10 @@ class DalStatement {
      * Set the statement instance.
      *
      * @access  protected
-     * @param   \Hoa\Database\Dal\IDal\WrapperStatement  $statement    The
-     *                                                                 statement
-     *                                                                 instance.
-     * @return  \Hoa\Database\Dal\IDal\WrapperStatement
+     * @param   \Hoa\Database\IDal\WrapperStatement  $statement    The
+     *                                                             statement
+     *                                                             instance.
+     * @return  \Hoa\Database\IDal\WrapperStatement
      */
     protected function setStatement ( IDal\WrapperStatement $statement ) {
 
@@ -90,7 +90,7 @@ class DalStatement {
      * Get the statement instance.
      *
      * @access  protected
-     * @return  \Hoa\Database\Dal\IDal\WrapperStatement
+     * @return  \Hoa\Database\IDal\WrapperStatement
      */
     protected function getStatement ( ) {
 
@@ -103,8 +103,8 @@ class DalStatement {
      * @access  public
      * @param   array   $bindParameters    Bind parameters values if bindParam is
      *                                     not called.
-     * @return  \Hoa\Database\Dal\DalStatement
-     * @throw   \Hoa\Database\Dal\Exception
+     * @return  \Hoa\DatabaseStatement
+     * @throw   \Hoa\Database\Exception
      */
     public function execute ( Array $bindParameters = array() ) {
 
@@ -125,7 +125,7 @@ class DalStatement {
      * @param   int     $type         Type of value.
      * @param   int     $length       Length of data type.
      * @return  bool
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function bindParameter ( $parameter, &$value, $type = null,
                                     $length = null) {
@@ -153,7 +153,7 @@ class DalStatement {
      *
      * @access  public
      * @return  array
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function fetchAll ( ) {
 
@@ -165,7 +165,7 @@ class DalStatement {
      *
      * @access  public
      * @return  bool
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function closeCursor ( ) {
 
@@ -178,7 +178,7 @@ class DalStatement {
      *
      * @access  public
      * @return  string
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function errorCode ( ) {
 
@@ -191,7 +191,7 @@ class DalStatement {
      *
      * @access  public
      * @return  array
-     * @throw   \Hoa\Database\Dal\Exception
+     * @throw   \Hoa\Database\Exception
      */
     public function errorInfo ( ) {
 
