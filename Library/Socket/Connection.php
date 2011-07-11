@@ -142,21 +142,14 @@ abstract class Connection
      *
      * @var \Hoa\Socket\Connection bool
      */
-    protected $_remoteAddress = false;
+    protected $_remote        = false;
 
     /**
-     * Remote IP (v4 or v6).
+     * Remote address.
      *
      * @var \Hoa\Socket\Connection string
      */
-    protected $_remoteIp      = null;
-
-    /**
-     * Remote port.
-     *
-     * @var \Hoa\Socket\Connection int
-     */
-    protected $_remotePort    = 0;
+    protected $_remoteAddress = false;
 
 
 
@@ -318,8 +311,8 @@ abstract class Connection
      */
     public function considerRemoteAddress ( $consider ) {
 
-        $old                  = $this->_remoteAddress;
-        $this->_remoteAddress = $consider;
+        $old           = $this->_remote;
+        $this->_remote = $consider;
 
         return $old;
     }
@@ -409,29 +402,18 @@ abstract class Connection
      */
     public function isRemoteAddressConsidered ( ) {
 
-        return $this->_remoteAddress;
+        return $this->_remote;
     }
 
     /**
-     * Get remote IP.
+     * Get remote address.
      *
      * @access  public
      * @return  string
      */
-    public function getRemoteIp ( ) {
+    public function getRemoteAddress ( ) {
 
-        return $this->_remoteIp;
-    }
-
-    /**
-     * Get remote port.
-     *
-     * @access  public
-     * @return  int
-     */
-    public function getRemotePort ( ) {
-
-        return $this->_remotePort;
+        return $this->_remoteAddress;
     }
 
     /**
@@ -459,9 +441,13 @@ abstract class Connection
             $address
         );
 
-        $explode           = explode(':', $address);
-        $this->_remoteIp   = $explode[0];
-        $this->_remotePort = (int) $explode[1];
+        $this->_remoteAddress = null;
+
+        if(!empty($address)) {
+
+            $explode              = explode(':', $address);
+            $this->_remoteAddress = $address;
+        }
 
         return $out;
     }
@@ -596,14 +582,15 @@ abstract class Connection
         if(strlen($string) > $length)
             $string = substr($string, 0, $length);
 
-        if(false === $this->isRemoteAddressConsidered())
+        if(   false === $this->isRemoteAddressConsidered()
+           || null  === $remote = $this->getRemoteAddress())
             return stream_socket_sendto($this->getStream(), $string);
 
         return stream_socket_sendto(
             $this->getStream(),
             $string,
             0,
-            $this->getRemoteIp() . ':' . $this->getRemotePort()
+            $remote
         );
     }
 
