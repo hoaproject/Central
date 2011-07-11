@@ -208,7 +208,8 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
             $request->parse($buffer);
             $method         = $request->getMethod();
             $methodAsString = strtoupper($request->getMethodAsString());
-            $url            = $request->getURL();
+            $uri            = $request->getURL();
+            $url            = $uri;
             $ttime          = time();
             $smartPrint     = "\r";
             $_headers['HTTP_HOST'] = $request->getHost();
@@ -360,7 +361,7 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
                     $data = null;
                     $headers = array_merge($_headers, array(
                         'REQUEST_METHOD'  => 'GET',
-                        'REQUEST_URI'     => DS . $url,
+                        'REQUEST_URI'     => DS . $uri,
                         'REQUEST_TIME'    => time(),
                         'SCRIPT_FILENAME' => $script_filename,
                         'SCRIPT_NAME'     => $script_name
@@ -379,7 +380,7 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
 
                     $headers = array_merge($_headers, array(
                         'REQUEST_METHOD'  => 'POST',
-                        'REQUEST_URI'     => DS . $url,
+                        'REQUEST_URI'     => DS . $uri,
                         'REQUEST_TIME'    => time(),
                         'SCRIPT_FILENAME' => $script_filename,
                         'SCRIPT_NAME'     => $script_name,
