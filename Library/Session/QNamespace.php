@@ -69,7 +69,7 @@ namespace Hoa\Session {
  * @license    New BSD License
  */
 
-class QNamespace {
+class QNamespace implements \IteratorAggregate {
 
     /**
      * Namespace value.
@@ -252,6 +252,20 @@ class QNamespace {
                 'Namespace %s is locked.', 9, $name);
 
         unset($_SESSION[$this->getNamespaceName()][$name]);
+    }
+
+    /**
+     * Aggregate iterator on defined key/value pairs.
+     *
+     * @access  public
+     * @return  \ArrayObject
+     */
+    public function getIterator ( ) {
+
+        return new \ArrayObject(
+            $_SESSION[$this->getNamespaceName()],
+            \ArrayObject::ARRAY_AS_PROPS
+        );
     }
 
     /**
