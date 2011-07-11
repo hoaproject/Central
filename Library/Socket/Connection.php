@@ -149,7 +149,7 @@ abstract class Connection
      *
      * @var \Hoa\Socket\Connection string
      */
-    protected $_remoteAddress = false;
+    protected $_remoteAddress = null;
 
 
 
