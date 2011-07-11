@@ -411,7 +411,11 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
 
         // (?inner-bind).
         $handle = &$this->_attributeBucket;
-        $data   = $handle['data'][$handle['current']][$handle['branche']][0];
+        $data   = $handle['data'][$handle['current']][$handle['branche']];
+
+        if(is_array($data) && isset($data[0]))
+            $data = $data[0];
+
         $value  = preg_replace_callback(
             '#\(\?([^\)]+)\)#',
             function ( Array $matches ) use ( &$data ) {
