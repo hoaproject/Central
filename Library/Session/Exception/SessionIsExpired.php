@@ -45,7 +45,7 @@ from('Hoa')
 
 }
 
-namespace Hoa\Session\Êxception {
+namespace Hoa\Session\Exception {
 
 /**
  * Class \Hoa\Session\Exception\SessionIsExpired.
