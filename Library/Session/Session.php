@@ -75,7 +75,7 @@ namespace Hoa\Session {
 /**
  * Class \Hoa\Session.
  *
- * This class allows to do different action on session (start, close, identify,
+ * This class allows to do different actions on session (start, close, identify,
  * expire etc.).
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
@@ -86,7 +86,7 @@ namespace Hoa\Session {
 abstract class Session {
 
     /**
-     * Whether session is stared or not.
+     * Whether session is started or not.
      *
      * @var \Hoa\Session bool
      */
@@ -94,7 +94,7 @@ abstract class Session {
 
     /**
      * Whether session is in strict mode, i.e. \Hoa\Session::start must be
-     * called before all new namespace declaration.
+     * called before all new namespace declarations.
      *
      * @var \Hoa\Session bool
      */
@@ -132,23 +132,22 @@ abstract class Session {
                 return;
             else
                 throw new Exception(
-                    'A session must be started by \Hoa\Session::start() before ' .
-                    'declare a new namespace.', 0);
-        else
-            if(true === self::isStarted())
-                return;
+                    'A session must be started by \Hoa\Session::start() ' .
+                    'before declaring a new namespace.', 0);
+        elseif(true === self::isStarted())
+            return;
 
 
         if(headers_sent($filename, $line))
             throw new Exception(
-                'Session must be started before any output ; ' .
+                'Session must be started before any output; ' .
                 'output started in %s at line %d.', 1,
                 array($filename, $line));
 
         if(defined('SID'))
             throw new Exception(
-                'Session has been already auto or manually started (by ' .
-                'session.auto_start or session_start()).', 2);
+                'Session has been already automatically or manually started ' .
+                '(by session.auto_start or session_start()).', 2);
 
         Option::set($option);
 
@@ -205,8 +204,8 @@ abstract class Session {
      * Regenerate the session ID.
      *
      * @access  public
-     * @param   bool    $getNew    Whether the method returns the new session ID
-     *                             (false) or the new session ID (true).
+     * @param   bool  $getNew    Whether the method returns the new session ID
+     *                           (false) or the new session ID (true).
      * @return  string
      * @throw   \Hoa\Session\Exception
      */
@@ -214,7 +213,7 @@ abstract class Session {
 
         if(headers_sent($filename, $line))
             throw new Exception(
-                'Cannot regenerate session ID ; headers already sent in %s ' .
+                'Cannot regenerate session ID; headers already sent in %s ' .
                 'on line %d.', 6,
                 array($filename, $line));
 
@@ -243,7 +242,7 @@ abstract class Session {
 
         if(false === self::isStarted())
             throw new Exception(
-                'Cannot identify a no-started session.', 8);
+                'Cannot identify a not-started session.', 8);
 
         if(!isset($_SESSION['__Hoa']['identity']))
             throw new Exception(
@@ -253,20 +252,20 @@ abstract class Session {
 
         if(!isset($identity['id']))
             throw new Exception(
-                'Cannot identify the current session ; session ID missing.', 10);
+                'Cannot identify the current session; session ID missing.', 10);
 
         if(!isset($identity['ip']))
             throw new Exception(
-                'Cannot identify the current session ; session IP missing.', 11);
+                'Cannot identify the current session; session IP missing.', 11);
 
         if($identity['id'] !== md5(session_id()))
             throw new Exception(
-                'Session is not well-identify ; session ID is not the right ' .
+                'Session is not well-identify; session ID is not the right ' .
                 'ID.', 12);
 
         if($identity['ip'] !== md5($_SERVER['REMOTE_ADDR']))
             throw new Exception(
-                'Session is not well-identify ; IP is not the right IP.', 13);
+                'Session is not well-identify; IP is not the right IP.', 13);
 
         return true;
     }
@@ -275,7 +274,7 @@ abstract class Session {
      * Check if a namespace already exists.
      *
      * @access  public
-     * @param   mixed   $namespace    The namespace name or object.
+     * @param   mixed  $namespace    The namespace name or object.
      * @return  bool
      */
     public static function isNamespaceSet ( $namespace ) {
@@ -290,7 +289,7 @@ abstract class Session {
      * Unset a namespace.
      *
      * @access  public
-     * @param   mixed   $namespace    The namespace name or instance.
+     * @param   mixed  $namespace    The namespace name or instance.
      * @return  void
      * @throw   \Hoa\Session\Exception
      */
@@ -298,9 +297,10 @@ abstract class Session {
 
         if(false === self::isStarted())
             throw new Exception(
-                'Cannot unset a namespace on a no-starded session.', 14);
+                'Cannot unset a namespace on a not-starded session.', 14);
 
         $name     = $namespace;
+
         if($namespace instanceof QNamespace)
             $name = $namespace->getNamespaceName();
 
@@ -441,8 +441,10 @@ abstract class Session {
                 'Cannot write and close the session, because it is not ' .
                 'writable.', 22);
 
-        set_error_handler(array('\Hoa\Session\Exception', 'handleWriteAndCloseError'),
-                          E_ALL);
+        set_error_handler(
+            array('\Hoa\Session\Exception', 'handleWriteAndCloseError'),
+            E_ALL
+        );
         @session_write_close();
         restore_error_handler();
 
@@ -500,10 +502,12 @@ abstract class Session {
 
         if(true === self::isOnlyReadable())
             throw new Exception(
-                'Trying to destroy uninitialized session.', 23);
+                'Trying to destroy an uninitialized session.', 23);
 
-        set_error_handler(array('\Hoa\Session\Exception', 'handleDestroyError'),
-                          E_ALL);
+        set_error_handler(
+            array('\Hoa\Session\Exception', 'handleDestroyError'),
+            E_ALL
+        );
         @session_destroy();
         restore_error_handler();
 
@@ -617,7 +621,7 @@ abstract class Session {
 
         if(false === self::isStarted())
             throw new Exception(
-                'Cannot force a no-started session to expire.', 24);
+                'Cannot force a not-started session to expire.', 24);
 
         if(!is_int($time))
             throw new Exception(
@@ -658,7 +662,7 @@ abstract class Session {
 
         if(false === self::isStarted())
             throw new Exception(
-                'Cannot get the expiration time for a no-started session.', 26);
+                'Cannot get the expiration time for a not-started session.', 26);
 
         return $_SESSION['__Hoa']['expire_second'];
     }
@@ -674,7 +678,7 @@ abstract class Session {
 
         if(false === self::isStarted())
             throw new Exception(
-                'Cannot get the expiration time for a no-started session.', 27);
+                'Cannot get the expiration time for a not-started session.', 27);
 
         return self::getExpireSecond() - time();
     }
@@ -706,7 +710,7 @@ abstract class Session {
 
         if(false === self::isStarted())
             throw new Exception(
-                'Cannot remember a no-started session.', 28);
+                'Cannot remember a not-started session.', 28);
 
         if(   false !== $overwrite
            || null  === self::getExpireSecond()) {
@@ -729,9 +733,11 @@ abstract class Session {
 
         if(false === self::isStarted())
             throw new Exception(
-                'Cannot forget a no-started session.', 29);
+                'Cannot forget a not-started session.', 29);
 
         $_SESSION['__Hoa']['expire_second'] = time() - 1;
+
+        return;
     }
 
     /**
@@ -784,7 +790,7 @@ abstract class Session {
     }
 
     /**
-     * Get an iterator, based on an ArrayObject and an ArrayIterator.
+     * Get an iterator, based on ArrayObject and ArrayIterator.
      *
      * @access  public
      * @return  void
@@ -796,8 +802,6 @@ abstract class Session {
 
         $array = $_SESSION;
         unset($array['__Hoa']);
-        foreach($_SESSION['__Hoa']['flash'] as $id => $foo)
-            unset($array[$id]);
 
         return new \ArrayObject(
             $array,

@@ -86,8 +86,8 @@ class QNamespace {
      * @access  public
      * @param   string  $namespace    Namespace value.
      * @param   bool    $strict       Whether session must be started by
-     *                                \Hoa\Session::start() before declare a new
-     *                                namespace. 
+     *                                \Hoa\Session::start() before declaring a
+     *                                new namespace.
      * @return  void
      */
     public function __construct ( $namespace, $strict = true ) {
@@ -118,8 +118,8 @@ class QNamespace {
             throw new Exception(
                 'Namespace %s is not well-formed ; must match with ' .
                 '^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]$*', 1, $namespace);
-        
-        if($namespace == '__Hoa')
+
+        if('__Hoa' == $namespace)
             throw new Exception(
                 '__Hoa is a reserved namespace.', 2);
 
@@ -157,7 +157,7 @@ class QNamespace {
     }
 
     /**
-     * Overload property.
+     * Set a new value to a specific key.
      *
      * @access  public
      * @param   string  $name     Variable name.
@@ -180,18 +180,15 @@ class QNamespace {
             throw new Exception(
                 'Namespace is locked.', 6);
 
-        $old = null;
-
-        if(isset($_SESSION[$this->getNamespaceName()][$name]))
-            $old = $_SESSION[$this->getNamespaceName()][$name];
-
-        $_SESSION[$this->getNamespaceName()][$name] = $value;
+        $namespace                   = $this->getNamespaceName();
+        $old                         = @$_SESSION[$namespace][$name];
+        $_SESSION[$namespace][$name] = $value;
 
         return $old;
     }
 
     /**
-     * Overload property.
+     * Get a value from a specific key.
      *
      * @access  public
      * @param   string  $name    Variable name.
@@ -211,9 +208,11 @@ class QNamespace {
             throw new Exception\NamespaceIsExpired(
                 'Namespace %s has no more access.', 8, $name);
 
-        $_SESSION['__Hoa']['namespace'][$this->getNamespaceName()]['expire_access']--;
+        $namespace = $this->getNamespaceName();
 
-        $value = $_SESSION[$this->getNamespaceName()][$name];
+        $_SESSION['__Hoa']['namespace'][$namespace]['expire_access']--;
+
+        $value = $_SESSION[$namespace][$name];
         $cast  = gettype($value);
 
         switch($cast) {
@@ -228,7 +227,7 @@ class QNamespace {
     }
 
     /**
-     * Overload property.
+     * Check if a key exists.
      *
      * @access  public
      * @param   string  $name    Variable name.
@@ -236,7 +235,7 @@ class QNamespace {
      */
     public function __isset ( $name ) {
 
-        return isset($_SESSION[$this->getNamespaceName()][$name]);
+        return array_key_exists($name, $_SESSION[$this->getNamespaceName()]);
     }
 
     /**
@@ -263,13 +262,15 @@ class QNamespace {
      */
     public function lock ( ) {
 
-        if(false === Session::isNamespaceSet($this->getNamespaceName()))
+        $namespace = $this->getNamespaceName();
+
+        if(false === Session::isNamespaceSet($namespace))
             throw new Exception(
                 'Namespace %s is not set. Should not be used.',
-                10, $this->getNamespaceName());
+                10, $namespace);
 
-        $old = $_SESSION['__Hoa']['namespace'][$this->getNamespaceName()]['lock'];
-        $_SESSION['__Hoa']['namespace'][$this->getNamespaceName()]['lock'] = true;
+        $old = $_SESSION['__Hoa']['namespace'][$namespace]['lock'];
+        $_SESSION['__Hoa']['namespace'][$namespace]['lock'] = true;
 
         return $old;
     }
@@ -282,12 +283,14 @@ class QNamespace {
      */
     public function isLocked ( ) {
 
-        if(false === Session::isNamespaceSet($this->getNamespaceName()))
+        $namespace = $this->getNamespaceName();
+
+        if(false === Session::isNamespaceSet($namespace))
             throw new Exception(
                 'Namespace %s is not set. Should not be used.',
-                11, $this->getNamespaceName());
+                11, $namespace);
 
-        return $_SESSION['__Hoa']['namespace'][$this->getNamespaceName()]['lock'];
+        return $_SESSION['__Hoa']['namespace'][$namespace]['lock'];
     }
 
     /**
@@ -298,13 +301,15 @@ class QNamespace {
      */
     public function unlock ( ) {
 
-        if(false === Session::isNamespaceSet($this->getNamespaceName()))
+        $namespace = $this->getNamespaceName();
+
+        if(false === Session::isNamespaceSet($namespace))
             throw new Exception(
                 'Namespace %s is not set. Should not be used.',
-                12, $this->getNamespaceName());
+                12, $namespace);
 
-        $old = $_SESSION['__Hoa']['namespace'][$this->getNamespaceName()]['lock'];
-        $_SESSION['__Hoa']['namespace'][$this->getNamespaceName()]['lock'] = false;
+        $old = $_SESSION['__Hoa']['namespace'][$namespace]['lock'];
+        $_SESSION['__Hoa']['namespace'][$namespace]['lock'] = false;
 
         return $old;
     }
@@ -318,22 +323,24 @@ class QNamespace {
      */
     public function setExpireSecond ( $time ) {
 
-        if(false === Session::isNamespaceSet($this->getNamespaceName()))
+        $namespace = $this->getNamespaceName();
+
+        if(false === Session::isNamespaceSet($namespace))
             throw new Exception(
                 'Namespace %s is not set. Should not be used.',
-                13, $this->getNamespaceName());
+                13, $namespace);
 
-        if(null !== $_SESSION['__Hoa']['namespace'][$this->getNamespaceName()]
+        if(null !== $_SESSION['__Hoa']['namespace'][$namespace]
                     ['expire_second'])
             return;
 
         if(!is_int($time))
             throw new Exception(
-                'The expiration time must be an int, that represents seconds. ' .
-                'Given %s.', 14, gettype($time));
+                'The expiration time must be an integer representing ' .
+                'seconds; given %s.', 14, gettype($time));
 
-        $old = $_SESSION['__Hoa']['namespace'][$this->getNamespaceName()]['expire_second'];
-        $_SESSION['__Hoa']['namespace'][$this->getNamespaceName()]['expire_second']
+        $old = $_SESSION['__Hoa']['namespace'][$namespace]['expire_second'];
+        $_SESSION['__Hoa']['namespace'][$namespace]['expire_second']
             = time() + $time;
 
         return $old;
@@ -347,12 +354,14 @@ class QNamespace {
      */
     public function getExpireSecond ( ) {
 
-        if(false === Session::isNamespaceSet($this->getNamespaceName()))
+        $namespace = $this->getNamespaceName();
+
+        if(false === Session::isNamespaceSet($namespace))
             throw new Exception(
                 'Namespace %s is not set. Should not be used.',
-                15, $this->getNamespaceName());
+                15, $namespace);
 
-        return $_SESSION['__Hoa']['namespace'][$this->getNamespaceName()]['expire_second'];
+        return $_SESSION['__Hoa']['namespace'][$namespace]['expire_second'];
     }
 
     /**
@@ -383,13 +392,14 @@ class QNamespace {
      */
     public function setExpireAccess ( $access ) {
 
-        if(false === Session::isNamespaceSet($this->getNamespaceName()))
+        $namespace = $this->getNamespaceName();
+
+        if(false === Session::isNamespaceSet($namespace))
             throw new Exception(
                 'Namespace %s is not set. Should not be used.',
-                17, $this->getNamespaceName());
+                17, $namespace);
 
-        if(null !== $_SESSION['__Hoa']['namespace'][$this->getNamespaceName()]
-                    ['expire_access'])
+        if(null !== $_SESSION['__Hoa']['namespace'][$namespace]['expire_access'])
             return;
 
         if(!is_int($access))
@@ -397,9 +407,8 @@ class QNamespace {
                 'The expiration access must be an int. ' .
                 'Given %s.', 18, gettype($access));
 
-        $old = $_SESSION['__Hoa']['namespace'][$this->getNamespaceName()]['expire_access'];
-        $_SESSION['__Hoa']['namespace'][$this->getNamespaceName()]['expire_access']
-             = $access;
+        $old = $_SESSION['__Hoa']['namespace'][$namespace]['expire_access'];
+        $_SESSION['__Hoa']['namespace'][$namespace]['expire_access'] = $access;
 
         return $old;
     }
@@ -412,12 +421,14 @@ class QNamespace {
      */
     public function getExpireAccess ( ) {
 
-        if(false === Session::isNamespaceSet($this->getNamespaceName()))
+        $namespace = $this->getNamespaceName();
+
+        if(false === Session::isNamespaceSet($namespace))
             throw new Exception(
                 'Namespace %s is not set. Should not be used.',
-                19, $this->getNamespaceName());
+                19, $namespace);
 
-        return $_SESSION['__Hoa']['namespace'][$this->getNamespaceName()]['expire_access'];
+        return $_SESSION['__Hoa']['namespace'][$namespace]['expire_access'];
     }
 
     /**
