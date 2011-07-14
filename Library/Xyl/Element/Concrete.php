@@ -119,7 +119,7 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
     public function computeDataBinding ( Array &$data, Array &$parent = null ) {
 
         $bucket     = $data;
-        $executable = $this instanceof \Hoa\Xyl\Element\Executable;
+        $executable = $this instanceof Executable;
         $bindable   = false;
 
         if(   true === $this->abstract->attributeExists('href')
