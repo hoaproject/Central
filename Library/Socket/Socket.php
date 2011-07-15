@@ -218,8 +218,8 @@ class Socket {
     protected function setPort ( $port ) {
 
         if($port < 0)
-            throw new \Hoa\Socket\Exception(
-                'Port must be greater or equal than zero, given %d.', 1, $port);
+            throw new Exception(
+                'Port must be greater or equal than zero, given %d.', 2, $port);
 
         $old         = $this->_port;
         $this->_port = $port;
@@ -239,9 +239,9 @@ class Socket {
 
         $transport = strtolower($transport);
 
-        if(false === \Hoa\Socket\Transport::exists($transport))
-            throw new \Hoa\Socket\Exception(
-                'Transport %s is not enabled on this machin.', 2, $transport);
+        if(false === Transport::exists($transport))
+            throw new Exception(
+                'Transport %s is not enabled on this machin.', 3, $transport);
 
         $old              = $this->_transport;
         $this->_transport = $transport;
