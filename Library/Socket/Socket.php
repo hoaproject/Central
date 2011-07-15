@@ -198,8 +198,10 @@ class Socket {
         }
 
         if(   self::ADDRESS_IPV6 == $this->_addressType
-           && function_exists('socket_create') // ext/socket is enabled.
-           && !defined('AF_INET6'))
+           && (
+                !defined('STREAM_PF_INET6')
+             || (function_exists('socket_create') && !defined('AF_INET6'))
+              ))
             throw new Exception(
                 'IPv6 support has been disabled from PHP, we cannot use ' .
                 'the %s URI.', 1, $uri);
