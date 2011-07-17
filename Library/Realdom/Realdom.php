@@ -367,13 +367,12 @@ abstract class Realdom
      */
     public function sample ( ) {
 
-        if(null === self::getSampler())
+        if(null === $sampler = self::getSampler())
             throw new Exception(
                 'No sampler set. Please, use the %s::setSampler() method.',
                 0, __CLASS__);
 
-        $maxtry  = $this->getMaxTry();
-        $sampler = $this->getSampler();
+        $maxtry = $this->getMaxTry();
 
         do {
 
