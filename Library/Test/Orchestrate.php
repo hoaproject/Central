@@ -377,7 +377,7 @@ class Orchestrate implements \Hoa\Core\Parameter\Parameterizable {
                         "\n",
                         "\n" . '        ',
                         $invBd . $this->_compiler->getResult()->accept(
-                            new \Hoa\Test\Praspel\Visitor\Php()
+                            new Praspel\Visitor\Php()
                         )
                     ) .
                     (false !== $class->getParentClass()
@@ -419,7 +419,7 @@ class Orchestrate implements \Hoa\Core\Parameter\Parameterizable {
 
                     // Contract.
                     $contract = $this->_compiler->getResult()->accept(
-                        new \Hoa\Test\Praspel\Visitor\Php()
+                        new Praspel\Visitor\Php()
                     );
                     $contract = str_replace("\n", "\n" . '        ', $contract);
 
