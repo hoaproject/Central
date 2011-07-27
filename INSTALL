@@ -1,34 +1,47 @@
-                                      Hoa
-                                      ***
+
+                                   ┏━━━━━━━┓
+                                   ✰  Hoa  ✰
+                                   ┗━━━━━━━┛
+
+
 
 Summary
--------
-
-  Installation  ............................................................. 13
-  System requirement  ....................................................... 20
-  Development versions  ..................................................... 27
+¯¯¯¯¯¯¯
+  Installation  ⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅ 16
+  System requirement  ⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅ 30
+  Development versions  ⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅ 41
 
 
 
 Installation
-------------
-
+¯¯¯¯¯¯¯¯¯¯¯¯
 Hoa requires no special installation steps. Simply download the project archive,
-extract it, or clone the project, and the “installation” is over, or
+extract it, or clone the project, and the “installation” is over. We
+recommend to install Hoa in /usr/local/lib/hoa (if your system respect FHS) or
+C:\Program Files\Hoa\ if you are on Windows.
+
+To test the installation:
+  ┌
+    $ php -r "require '/usr/local/lib/hoa/Core/Core.php'; var_dump(HOA);"
+    bool(true)
+  └
 
 
 System requirement
-------------------
-
-Hoa requires PHP 5.3.0 or later. Hoa uses some SPL libraries, they must all be
-present.
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+Hoa requires PHP5.3.0 or later. Hoa uses some SPL libraries, they must all be
+present. Nevertheless, we recommend to use PHP5.3.6 with at least the following
+configure command:
+  ┌
+    $ ./configure --prefix=… --with-config-file-path=… \
+                  --with-zend-vm=GOTO --enable-fpm --enable-mbstring
+  └
 
 
 Development versions
---------------------
-
-Archived   snapshots   are   online;   please,  to  get  more  details,  go  to:
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+Archived snapshots are online; please, to get more details, go to:
     <http://download.hoa-project.net/Central>
-Many  archives  are  produced  each days. That's why we recommend you Mercurial.
-Mercurial is available at
+Many archives are produced each day. That's why we recommend you to use Hoa with
+Mercurial. Its repositories are available at:
     <http://hg.hoa-project.net/Central>

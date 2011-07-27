@@ -1,46 +1,45 @@
-                                      Hoa
-                                      ***
+
+                                   ┏━━━━━━━┓
+                                   ✰  Hoa  ✰
+                                   ┗━━━━━━━┛
+
+
 
 Summary
--------
-
-  Introduction  ............................................................  16
-  Release informations  ....................................................  23
-  Installation  ............................................................  30
-  Project  .................................................................  35
-    Site, manuals, download, community etc.  ...............................  39
-    License  ...............................................................  46
+¯¯¯¯¯¯¯
+  Introduction  ⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅  19
+  Release informations  ⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅  25
+  Installation  ⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅  31
+  Project  ⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅  36
+    Site, manuals, download, community etc.  ⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅  38
+    License  ⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅  45
 
 
 
 Introduction
-------------
-
-Welcome  to Hoa 1.0beta1. This is the first release of the branch 1.0, but still
-a beta :-).
+¯¯¯¯¯¯¯¯¯¯¯¯
+Welcome to Hoa 1.0.0beta5. This is the first release of the branch 1.0.0, but
+still a beta :-).
 
 
 Release informations
---------------------
-
-Hoa 1.0beta1 (tag: 1.0b1).
-Released on 16 februar 2011.
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+Hoa 1.0.0beta5 (tag: 1.0.0b5).
+Released on 20 July 2011.
 
 
 Installation
-------------
-
+¯¯¯¯¯¯¯¯¯¯¯¯
 Please, read INSTALL.
 
 
 Project
--------
-
+¯¯¯¯¯¯¯
   Site, manuals, download, community etc.
 
 Hoa website should be found at the following address:
     <http://hoa-project.net>
-At  this  address  is  placed  differents  manuals, download section, communauty
+At this address is placed differents manuals, download section, communauty
 support etc.
 
   License
