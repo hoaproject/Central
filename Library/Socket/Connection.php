@@ -181,7 +181,7 @@ abstract class Connection
      * Connect.
      *
      * @access  public
-     * @return  void
+     * @return  \Hoa\Socket\Connection
      */
     public function connect ( ) {
 
@@ -190,7 +190,7 @@ abstract class Connection
             $this->getContext()
         );
 
-        return;
+        return $this;
     }
 
     /**

@@ -220,7 +220,7 @@ class Server extends Connection implements \Iterator {
      * Connect and accept the first connection.
      *
      * @access  public
-     * @return  void
+     * @return  \Hoa\Socket\Server
      * @throw   \Hoa\Socket\Exception
      */
     public function connect ( ) {
@@ -235,20 +235,18 @@ class Server extends Connection implements \Iterator {
 
         $this->_setStream($client);
 
-        return;
+        return $this;
     }
 
     /**
      * Connect but wait for select and accept new connections.
      *
      * @access  public
-     * @return  void
+     * @return  \Hoa\Socket\Server
      */
     public function connectAndWait ( ) {
 
-        parent::connect();
-
-        return;
+        return parent::connect();
     }
 
     /**
