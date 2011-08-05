@@ -145,7 +145,7 @@ class Core implements Parameter\Parameterizable {
         !defined('DS')        and define('DS', DIRECTORY_SEPARATOR);
         !defined('PS')        and define('PS', PATH_SEPARATOR);
         !defined('CRLF')      and define('CRLF', "\r\n");
-        !defined('OS_WIN')    and define('OS_WIN', !strncasecmp(PHP_OS, 'win', 3));
+        !defined('OS_WIN')    and define('OS_WIN', defined('PHP_WINDOWS_VERSION_PLATFORM'));
         !defined('S_64_BITS') and define('S_64_BITS', PHP_INT_SIZE == 8);
         !defined('S_32_BITS') and define('S_32_BITS', !S_64_BITS);
         !defined('void')         and define('void', (unset) null);
