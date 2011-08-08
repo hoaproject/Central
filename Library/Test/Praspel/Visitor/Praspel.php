@@ -222,19 +222,23 @@ class Praspel extends \Hoa\Visitor\Registry {
                 switch(strtolower($argument->getName())) {
 
                     case 'constboolean':
-                        $out[] = $argument->getValue()
+                        $out[] = $argument->getConstantValue()
                                    ? 'true'
                                    : 'false';
                       break;
 
                     case 'constfloat':
                     case 'constinteger':
-                        $out[] = (string) $argument->getValue();
+                        $out[] = (string) $argument->getConstantValue();
                       break;
 
                     case 'conststring':
                         $out[] = '\'' .
-                                 str_replace("'", "\'", $argument->getValue()) .
+                                 str_replace(
+                                     "'",
+                                     "\'",
+                                     $argument->getConstantValue()
+                                 ) .
                                  '\'';
                       break;
 
