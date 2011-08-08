@@ -271,12 +271,16 @@ class Php extends \Hoa\Visitor\Registry {
                                          $argument->getName() .
                                      '\')' . "\n" .
                                      $spaces . '      ->with(' .
-                                     ($argument->getValue() ? 'true' : 'false') .
+                                     ($argument->getConstantValue()
+                                         ? 'true'
+                                         : 'false') .
                                      ')' . "\n" .
                                      $spaces . '      ->_ok()' . "\n";
                         else
                             $out[] = $spaces . '    ->with(' .
-                                     ($argument->getValue() ? 'true' : 'false') .
+                                     ($argument->getConstantValue()
+                                         ? 'true'
+                                         : 'false') .
                                      ')' . "\n";
                       break;
 
@@ -287,12 +291,12 @@ class Php extends \Hoa\Visitor\Registry {
                                          $argument->getName() .
                                      '\')' . "\n" .
                                      $spaces . '      ->with(' .
-                                     (string) $argument->getValue() .
+                                     (string) $argument->getConstantValue() .
                                      ')' . "\n" .
                                      $spaces . '      ->_ok()' . "\n";
                         else
                             $out[] = $spaces . '    ->with(' .
-                                     (string) $argument->getValue() .
+                                     (string) $argument->getConstantValue() .
                                      ')' . "\n";
                       break;
 
@@ -302,12 +306,20 @@ class Php extends \Hoa\Visitor\Registry {
                                          $argument->getName() .
                                      '\')' . "\n" .
                                      $spaces . '      ->with(\'' .
-                                     str_replace("'", "\'", $argument->getValue()) .
+                                     str_replace(
+                                         "'",
+                                         "\'",
+                                         $argument->getConstantValue()
+                                     ) .
                                      '\')' . "\n" .
                                      $spaces . '      ->_ok()' . "\n";
                         else
                             $out[] = $spaces . '    ->with(\'' .
-                                     str_replace("'", "\'", $argument->getValue()) .
+                                     str_replace(
+                                         "'",
+                                         "\'",
+                                         $argument->getConstantValue()
+                                     ) .
                                      '\')' . "\n";
                       break;
 
