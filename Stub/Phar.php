@@ -50,7 +50,11 @@ else
             HOA_VERSION_MAJOR   . '.' .
             HOA_VERSION_MINOR   . '.' .
             HOA_VERSION_RELEASE .
-            HOA_VERSION_STATUS  . '.phar';
+            HOA_VERSION_STATUS  .
+            (null !== HOA_VERSION_EXTRA
+                ? '-' . HOA_VERSION_EXTRA
+                : '') .
+            '.phar';
 
 if(file_exists($name) && false === unlink($name))
     throw new \Hoa\Core\Exception(
@@ -74,6 +78,7 @@ $phar->setMetadata(array(
     'version.minor'   => HOA_VERSION_MINOR,
     'version.release' => HOA_VERSION_RELEASE,
     'version.status'  => HOA_VERSION_STATUS,
+    'version.extra'   => HOA_VERSION_EXTRA,
     'datetime'        => date('c')
 ));
 $phar->setSignatureAlgorithm(\Phar::SHA1);

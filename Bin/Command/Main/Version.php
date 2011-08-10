@@ -55,7 +55,6 @@ class Version extends \Hoa\Console\Dispatcher\Kit {
      */
     protected $options = array(
         array('version',    \Hoa\Console\GetOption::NO_ARGUMENT, 'v'),
-        array('revision',   \Hoa\Console\GetOption::NO_ARGUMENT, 'r'),
         array('signature',  \Hoa\Console\GetOption::NO_ARGUMENT, 's'),
         array('no-verbose', \Hoa\Console\GetOption::NO_ARGUMENT, 'V'),
         array('help',       \Hoa\Console\GetOption::NO_ARGUMENT, 'h'),
@@ -73,23 +72,19 @@ class Version extends \Hoa\Console\Dispatcher\Kit {
     public function main ( ) {
 
         $version  = HOA_VERSION_MAJOR . '.' . HOA_VERSION_MINOR . '.' .
-                    HOA_VERSION_RELEASE . HOA_VERSION_STATUS;
-        $revision = HOA_REVISION;
+                    HOA_VERSION_RELEASE . HOA_VERSION_STATUS .
+                    (null !== HOA_VERSION_EXTRA
+                        ? '-' . HOA_VERSION_EXTRA
+                        : '');
         $verbose  = true;
         $message  = null;
         $info     = null;
 
         while(false !== $c = $this->getOption($v)) switch($c) {
 
-            case 'r':
-                $info    = $revision;
-                $message = 'Framework revision number: ' .
-                           $this->stylize($info, 'info') . '.';
-              break;
-
             case 'v':
                 $info    = $version;
-                $message = 'Framework version: ' .
+                $message = 'Hoa version: ' .
                            $this->stylize($info, 'info') . '.';
               break;
 
@@ -104,8 +99,7 @@ class Version extends \Hoa\Console\Dispatcher\Kit {
 
             case 's':
             default:
-                $info = $message = 'Hoa ' . $version . ' (' .
-                                   $revision . ').' . "\n" .
+                $info = $message = 'Hoa ' . $version . '.' . "\n" .
                                    \Hoa\Core::©();
               break;
         }
@@ -129,9 +123,8 @@ class Version extends \Hoa\Console\Dispatcher\Kit {
         cout('Usage   : main:version <options>');
         cout('Options :');
         cout($this->makeUsageOptionsList(array(
-            'v'    => 'Get the framework version.',
-            'r'    => 'Get the framework revision number.',
-            's'    => 'Get the complete framework signature.',
+            'v'    => 'Get the version.',
+            's'    => 'Get the complete signature.',
             'V'    => 'No-verbose, i.e. be as quiet as possible, just print ' .
                       'essential informations.',
             'help' => 'This help.'

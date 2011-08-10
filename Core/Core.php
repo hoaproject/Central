@@ -162,9 +162,8 @@ class Core implements Parameter\Parameterizable {
         !defined('HOA_VERSION_MAJOR')   and define('HOA_VERSION_MAJOR',   1);
         !defined('HOA_VERSION_MINOR')   and define('HOA_VERSION_MINOR',   0);
         !defined('HOA_VERSION_RELEASE') and define('HOA_VERSION_RELEASE', 0);
-        !defined('HOA_VERSION_STATUS')  and define('HOA_VERSION_STATUS',  'b');
-        !defined('HOA_REVISION')        and define('HOA_REVISION',        998);
-        !defined('HOA_REVISION_PREV')   and define('HOA_REVISION_PREV',   600);
+        !defined('HOA_VERSION_STATUS')  and define('HOA_VERSION_STATUS',  'b6');
+        !defined('HOA_VERSION_EXTRA')   and define('HOA_VERSION_EXTRA',   'dev');
 
         if(false !== $wl = ini_get('suhosin.executor.include.whitelist'))
             if(false === in_array('hoa', explode(',', $wl)))
