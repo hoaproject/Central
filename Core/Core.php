@@ -208,7 +208,10 @@ class Core implements Parameter\Parameterizable {
     public function initialize ( Array $parameters = array() ) {
 
         $hoa               = dirname(__DIR__);
-        $cwd               = getcwd();
+        $cwd               = getcwd() .
+                             (isset($_SERVER['argv'][0])
+                                 ? DS . dirname($_SERVER['argv'][0])
+                                 : '');
         $this->_parameters = new Parameter(
             $this,
             array(
