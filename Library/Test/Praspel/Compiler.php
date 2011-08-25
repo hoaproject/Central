@@ -748,3 +748,27 @@ class Compiler extends \Hoa\Compiler\Ll1 {
 }
 
 }
+
+namespace {
+
+/**
+ * Alias of the \Hoa\Test\Praspel\Compiler::compile() method.
+ *
+ * @access  public
+ * @return  \Hoa\Test\Praspel\Contract
+ * @throws  \Hoa\Compiler\Exception
+ */
+if(!ƒ('praspel')) {
+function praspel ( $praspel ) {
+
+    static $compiler = null;
+
+    if(null === $compiler)
+        $compiler = new \Hoa\Test\Praspel\Compiler();
+
+    $compiler->compile($praspel);
+
+    return $compiler->getRoot();
+}}
+
+}
