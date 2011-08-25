@@ -447,7 +447,7 @@ class Compiler extends \Hoa\Compiler\Ll1 {
             )
         );
 
-        parent::disableCache();
+        $this->disableCache();
 
         return;
     }
