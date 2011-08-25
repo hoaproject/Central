@@ -41,7 +41,7 @@ from('Hoa')
 /**
  * \Hoa\Test\Praspel\Compiler
  */
--> import('Test.Praspel.Compiler')
+-> import('Test.Praspel.Compiler', true)
 
 /**
  * \Hoa\Test\Sampler\Random
@@ -135,7 +135,6 @@ class Praspel extends \Hoa\Console\Dispatcher\Kit {
         if(null === $code)
             $code = 'h';
 
-        $compiler = new \Hoa\Test\Praspel\Compiler();
         $praspel  = null;
         $ccode    = null;
         $variable = null;
@@ -235,10 +234,7 @@ class Praspel extends \Hoa\Console\Dispatcher\Kit {
 
                     try {
 
-                        $compiler = new \Hoa\Test\Praspel\Compiler();
-                        $compiler->compile($code);
-
-                        $praspel  = $compiler->getRoot();
+                        $praspel  = praspel($code);
                     }
                     catch ( \Hoa\Core\Exception $e ) {
 
