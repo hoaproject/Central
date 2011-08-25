@@ -728,7 +728,7 @@ class Compiler extends \Hoa\Compiler\Ll1 {
      * Get the result of the compiling.
      *
      * @access  public
-     * @return  \Hoa\Test\Praspel
+     * @return  \Hoa\Test\Praspel\Contract
      */
     public function getResult ( ) {
 
@@ -739,7 +739,7 @@ class Compiler extends \Hoa\Compiler\Ll1 {
      * Get the Praspel's objet model root.
      *
      * @access  public
-     * @return  \Hoa\Test\Praspel
+     * @return  \Hoa\Test\Praspel\Contract
      */
     public function getRoot ( ) {
 
