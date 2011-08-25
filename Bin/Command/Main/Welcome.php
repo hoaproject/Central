@@ -113,6 +113,10 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
                 '    ' . $this->stylize('bhoa', 'command'),
                 'Start a damn stupid HTTP server.'
             ),
+            array(
+                '    ' . $this->stylize('pp', 'command'),
+                'Compile a language with a grammar in PP.'
+            ),
 
             // Protocol.
             array('Protocol'),
