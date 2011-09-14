@@ -118,8 +118,8 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
      */
     public function main ( ) {
 
-        $listen  = 'localhost:8888';
-        $fastcgi = 'localhost:9000';
+        $listen  = '127.0.0.1:8888';
+        $fastcgi = '127.0.0.1:9000';
         $root    = '.';
         $pbuffer = false;
 
@@ -481,17 +481,17 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
         cout('Usage   : main:bhoa <options>');
         cout('Options :');
         cout($this->makeUsageOptionsList(array(
-            'l'    => 'Socket URI to listen (default: localhost:8888).',
-            'f'    => 'PHP FastCGI or PHP-FPM socket URI (default: localhost:9000).',
+            'l'    => 'Socket URI to listen (default: 127.0.0.1:8888).',
+            'f'    => 'PHP FastCGI or PHP-FPM socket URI (default: 127.0.0.1:9000).',
             'r'    => 'Public/document root.',
             'b'    => 'Print buffers (headers & content).',
             'help' => 'This help.'
         )));
         cout('Bhoa needs PHP FastCGI to communicate with PHP.' . "\n" .
              'To start PHP FastCGI:' . "\n" .
-             '    $ php-cgi -b localhost:9000' . "\n" .
+             '    $ php-cgi -b 127.0.0.1:9000' . "\n" .
              'or' . "\n" .
-             '    $ php-fpm -d listen=localhost:9000');
+             '    $ php-fpm -d listen=127.0.0.1:9000');
 
         return;
     }
