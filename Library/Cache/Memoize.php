@@ -41,7 +41,7 @@ namespace Hoa\Cache {
  *
  * Memoization is useful when making dynamic programming for example because it
  * avoid to compute a function if it was previously computed with the same
- * arguments. An symptomatic example is the Fibonacci number which one can
+ * arguments. A symptomatic example is the Fibonacci number which one can
  * naively implement as follows:
  *
  *     function fib ( $x ) {
