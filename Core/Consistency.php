@@ -593,6 +593,18 @@ class Callable {
     }
 
     /**
+     * Distribute arguments according to an array.
+     *
+     * @access  public
+     * @param   array  $arguments    Arguments.
+     * @return  mixed
+     */
+    public function distributesArguments ( Array $arguments ) {
+
+        return call_user_func_array(array($this, '__invoke'), $arguments);
+    }
+
+    /**
      * Get a valid callback in the PHP meaning.
      *
      * @access  public
