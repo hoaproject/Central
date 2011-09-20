@@ -59,7 +59,7 @@ namespace Hoa\Cache {
  *     $fib = memoize('fib');
  *     var_dump($fib(30));
  *
- * But here, we only memoize fib(35) and not fib(34), fib(33) etc. A universal
+ * But here, we only memoize fib(30) and not fib(29), fib(28) etc. A universal
  * transformation is then proposed with a closure:
  *
  *     function fib ( $x ) {
