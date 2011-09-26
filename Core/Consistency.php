@@ -791,11 +791,7 @@ function curry ( $callable ) {
 
     $arguments = func_get_args();
     array_shift($arguments);
-    $ii        = array();
-
-    foreach($arguments as $i => $argument)
-        if(… == $argument)
-            $ii[] = $i;
+    $ii        = array_keys($arguments, …, true);
 
     return function ( ) use ( $callable, $arguments, $ii ) {
 
