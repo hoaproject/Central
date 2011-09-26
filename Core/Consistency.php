@@ -775,7 +775,7 @@ function callable ( $call, $able = '' ) {
  * Nested curries also work:
  *     $c1 = curry('str_replace', …, …, 'foobar');
  *     $c2 = curry($c1, 'foo', …);
- *     var_dump($c2, 'baz'); // bazbar
+ *     var_dump($c2('baz')); // bazbar
  * Obviously, as the first argument is a callable, we can combine this with
  * \Hoa\Core\Consistency\Callable ;-).
  * The “…” character is the HORIZONTAL ELLIPSIS Unicode character (Unicode:
