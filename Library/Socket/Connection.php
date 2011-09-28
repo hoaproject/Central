@@ -434,17 +434,13 @@ abstract class Connection
         if(false === $this->isRemoteAddressConsidered())
             return stream_socket_recvfrom($this->getStream(), $length);
 
-        $out = stream_socket_recvfrom(
+        $out                  = stream_socket_recvfrom(
             $this->getStream(),
             $length,
             0,
             $address
         );
-
-        $this->_remoteAddress = null;
-
-        if(!empty($address))
-            $this->_remoteAddress = $address;
+        $this->_remoteAddress = !empty($address) ? $address : null;
 
         return $out;
     }
