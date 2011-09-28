@@ -443,11 +443,8 @@ abstract class Connection
 
         $this->_remoteAddress = null;
 
-        if(!empty($address)) {
-
-            $explode              = explode(':', $address);
+        if(!empty($address))
             $this->_remoteAddress = $address;
-        }
 
         return $out;
     }
