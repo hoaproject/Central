@@ -95,7 +95,7 @@ class Consistency implements \ArrayAccess {
      * Whether autoload imported files or not.
      * Possible values:
      *     • 0, autoload (normal behavior);
-     *     • 1, load (oneshot, back to lazyload after loading files);
+     *     • 1, load (oneshot, back to autoload after loading files);
      *     • 2, load* (autoload for all imports).
      *
      * @var \Hoa\Consistency bool
