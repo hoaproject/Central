@@ -94,9 +94,9 @@ class Consistency implements \ArrayAccess {
     /**
      * Whether autoload imported files or not.
      * Possible values:
-     *     • 0, lazyload (normal behavior);
-     *     • 1, autoload (oneshot, back to lazyload after loading files);
-     *     • 2, autoload* (autoload for all imports).
+     *     • 0, autoload (normal behavior);
+     *     • 1, load (oneshot, back to lazyload after loading files);
+     *     • 2, load* (autoload for all imports).
      *
      * @var \Hoa\Consistency bool
      */
@@ -402,7 +402,7 @@ class Consistency implements \ArrayAccess {
      * E.g:
      *     from('Hoa')
      *
-     *     ['autoload']
+     *     ['load']
      *     -> import('Cache.Memoize');
      * is strictly equivalent to:
      *     from('Hoa')
@@ -410,12 +410,12 @@ class Consistency implements \ArrayAccess {
      * It's just funnier and more beautiful. Easter egg \o/.
      * Options could be a string or an array. Current recognized options are:
      *     • 'root' => 'new/root', equivalent to setRoot('new/root');
-     *     • 'autoload', equivalent to setAutoload(1);
-     *     • 'autoload*', equivalent to setAutoload(2);
-     *     • 'lazyload', equivalent to setAutoload(0);
+     *     • 'load', equivalent to setAutoload(1);
+     *     • 'load*', equivalent to setAutoload(2);
+     *     • 'autoload', equivalent to setAutoload(0);
      *     • '…' (unrecognized option), equivalent to setRoot(…).
      * Obvsiouly, we can combine options:
-     *     [['autoload', 'root' => 'new/root']]
+     *     [['load', 'root' => 'new/root']]
      *
      * @access  public
      * @param   mixed  $options    Options.
@@ -433,15 +433,15 @@ class Consistency implements \ArrayAccess {
                 default:
                     switch($value) {
 
-                        case 'autoload':
+                        case 'load':
                             $this->setAutoload(1);
                           break;
 
-                        case 'autoload*':
+                        case 'load*':
                             $this->setAutoload(2);
                           break;
 
-                        case 'lazyload':
+                        case 'autoload':
                             $this->setAutoload(0);
                           break;
 
