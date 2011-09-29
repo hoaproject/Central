@@ -46,7 +46,7 @@ namespace Hoa\Core\Consistency {
  * @license    New BSD License
  */
 
-class Consistency {
+class Consistency implements \ArrayAccess {
 
     /**
      * One singleton by library family.
@@ -90,6 +90,17 @@ class Consistency {
      * @var \Hoa\Consistency array
      */
     protected $__class        = array();
+
+    /**
+     * Whether autoload imported files or not.
+     * Possible values:
+     *     • 0, lazyload (normal behavior);
+     *     • 1, autoload (oneshot, back to lazyload after loading files);
+     *     • 2, autoload* (autoload for all imports).
+     *
+     * @var \Hoa\Consistency bool
+     */
+    protected $_autoload      = false;
 
 
 
@@ -141,10 +152,16 @@ class Consistency {
      * @return  \Hoa\Consistency
      * @throw   \Hoa\Core\Exception
      */
-    public function import ( $path, $load = false, &$family = null ) {
+    public function import ( $path, $load = null, &$family = null ) {
 
         $exception = null;
         $out       = false;
+
+        if(   null === $load
+           && 1    === $load = $this->getAutoload())
+            $this->setAutoload(0);
+
+        $load = (bool) $load;
 
         foreach($this->_from as $from)
             foreach($this->_roots[$from] as $root)
@@ -366,6 +383,125 @@ class Consistency {
     public function getRoot ( ) {
 
         return $this->_roots;
+    }
+
+    /**
+     * To be conform with \ArrayAccess.
+     *
+     * @access  public
+     * @param   mixed  $offset    Offset.
+     * @return  bool
+     */
+    public function offsetExists ( $offset ) {
+
+        return false;
+    }
+
+    /**
+     * Use options in the importation flow.
+     * E.g:
+     *     from('Hoa')
+     *
+     *     ['autoload']
+     *     -> import('Cache.Memoize');
+     * is strictly equivalent to:
+     *     from('Hoa')
+     *     -> import('Cache.Memoize', true);
+     * It's just funnier and more beautiful. Easter egg \o/.
+     * Options could be a string or an array. Current recognized options are:
+     *     • 'root' => 'new/root', equivalent to setRoot('new/root');
+     *     • 'autoload', equivalent to setAutoload(1);
+     *     • 'autoload*', equivalent to setAutoload(2);
+     *     • 'lazyload', equivalent to setAutoload(0);
+     *     • '…' (unrecognized option), equivalent to setRoot(…).
+     * Obvsiouly, we can combine options:
+     *     [['autoload', 'root' => 'new/root']]
+     *
+     * @access  public
+     * @param   mixed  $options    Options.
+     * @return  \Hoa\Consistency
+     */
+    public function offsetGet ( $options ) {
+
+        foreach((array) $options as $option => $value)
+            switch("$option") {
+
+                case 'root':
+                    $this->setRoot($value);
+                  break;
+
+                default:
+                    switch($value) {
+
+                        case 'autoload':
+                            $this->setAutoload(1);
+                          break;
+
+                        case 'autoload*':
+                            $this->setAutoload(2);
+                          break;
+
+                        case 'lazyload':
+                            $this->setAutoload(0);
+                          break;
+
+                        default:
+                            $this->setRoot($value);
+                    }
+            }
+
+        return $this;
+    }
+
+    /**
+     * To be conform with \ArrayAccess.
+     *
+     * @access  public
+     * @param   mixed  $offset    Offset.
+     * @param   mixed  $offset    Value.
+     * @return  bool
+     */
+    public function offsetSet ( $offset, $value ) {
+
+        return false;
+    }
+
+    /**
+     * To be conform with \ArrayAccess.
+     *
+     * @access  public
+     * @param   mixed  $offset    Offset.
+     * @return  bool
+     */
+    public function offsetUnset ( $offset ) {
+
+        return false;
+    }
+
+    /**
+     * Set autoload.
+     *
+     * @access  public
+     * @param   bool  $autoload    Autoload.
+     * @return  bool
+     */
+    public function setAutoload ( $autoload ) {
+
+        $old             = $this->_autoload;
+        $this->_autoload = $autoload;
+
+        return $old;
+    }
+
+    /**
+     * Get autoload.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function getAutoload ( ) {
+
+        return $this->_autoload;
     }
 
     /**
