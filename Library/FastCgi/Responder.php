@@ -220,11 +220,9 @@ class Responder extends Connection {
         $response   = null;
         $request    = $this->pack(
             self::REQUEST_BEGIN,
-            //   ___________________
-            //  /                   \
-            //  | “I'm a responder” |
-            //  \_______  __________/
-            //          \/
+            // ┌───────────────────┐
+            // │ “I'm a responder” │
+            // └─────────⌵─────────┘
             chr(0) . chr(1) . chr((int) $client->isPersistent()) .
             chr(0) . chr(0) . chr(0) . chr(0) . chr(0)
         );
