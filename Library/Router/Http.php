@@ -437,7 +437,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
 
         if(empty($rules))
             throw new Exception\NotFound(
-                'Cannot found a rule to apply to route %s.', 5, $uri);
+                'No rule to apply to route %s.', 5, $uri);
 
         $gotcha = false;
 
