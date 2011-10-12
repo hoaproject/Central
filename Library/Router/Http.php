@@ -111,6 +111,15 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
         'options'
     );
 
+    /**
+     * Subdomain stack: static or dynamic.
+     * A subdomain is said dynamic if at least one rule pattern considers
+     * subdomain. It changes the default rules filter behavior.
+     *
+     * @var \Hoa\Router\Http int
+     */
+    protected $_subdomainStack = _static;
+
 
 
     /**
@@ -204,6 +213,10 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
                 ' invalid for the rule %s (valid methods are: %s).',
                 1, array(implode(', ', $diff), $id,
                          implode(', ', self::$_methods)));
+
+        if(   _static == $this->_subdomainStack
+           && false   != strpos($pattern, '@'))
+            $this->_subdomainStack = _dynamic;
 
         $this->_rules[$id] = array(
             Router::RULE_VISIBILITY => $visibility,
@@ -416,7 +429,9 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
                             $subdomain
                         );
 
-                return empty($subdomain);
+                return _dynamic == $this->getSubdomainStack()
+                           ? empty($subdomain)
+                           : true;
             }
         );
 
@@ -654,6 +669,32 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
             return null;
 
         return implode('.', array_slice(explode('.', $domain), 0, -2));
+    }
+
+    /**
+     * Set subdomain stack: static or dynamic.
+     *
+     * @access  public
+     * @param   int  $stack    Stack: _static or _dynamic constants.
+     * @return  int
+     */
+    public function setSubdomainStack ( $stack ) {
+
+        $old                   = $this->_subdomainStack;
+        $this->_subdomainStack = $stack;
+
+        return $old;
+    }
+
+    /**
+     * Get subdomain stack.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getSubdomainStack ( ) {
+
+        return $this->_subdomainStack;
     }
 
     /**
