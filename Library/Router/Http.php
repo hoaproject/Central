@@ -420,6 +420,10 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
             }
         );
 
+        if(empty($rules))
+            throw new Exception\NotFound(
+                'Cannot found a rule to apply to route %s.', 5, $uri);
+
         $gotcha = false;
 
         foreach($rules as $rule) {
@@ -440,7 +444,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
 
         if(false === $gotcha)
             throw new Exception\NotFound(
-                'Cannot found an appropriated rule to route %s.', 5, $uri);
+                'Cannot found an appropriated rule to route %s.', 6, $uri);
 
         if(false !== $pos)
             preg_match(
@@ -596,7 +600,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
 
         if(!isset($_SERVER['REQUEST_URI']))
             throw new Exception(
-                'Cannot find URI so we cannot route.', 6);
+                'Cannot find URI so we cannot route.', 7);
 
         return ltrim($_SERVER['REQUEST_URI'], '/');
     }
