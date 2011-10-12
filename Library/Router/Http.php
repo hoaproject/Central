@@ -408,11 +408,12 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
             $bootstrap = ltrim($matchees[1], '/');
         }
 
-        $method    = $this->getMethod();
-        $subdomain = $this->getSubdomain();
-        $rules     = array_filter(
+        $method         = $this->getMethod();
+        $subdomain      = $this->getSubdomain();
+        $subdomainStack = $this->getSubdomainStack();
+        $rules          = array_filter(
             $this->getRules(),
-            function ( $rule ) use ( &$method, &$subdomain ) {
+            function ( $rule ) use ( &$method, &$subdomain, &$subdomainStack ) {
 
                 if(Router::VISIBILITY_PUBLIC != $rule[Router::RULE_VISIBILITY])
                     return false;
@@ -429,7 +430,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
                             $subdomain
                         );
 
-                return _dynamic == $this->getSubdomainStack()
+                return _dynamic == $subdomainStack
                            ? empty($subdomain)
                            : true;
             }
