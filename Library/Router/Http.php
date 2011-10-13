@@ -426,7 +426,9 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
                         return false;
                     else
                         return 0 !== preg_match(
-                            '#^' . substr($rule[3], 0, $pos) . '$#i',
+                            '#^' .
+                            substr($rule[Router::RULE_PATTERN], 0, $pos)
+                            . '$#i',
                             $subdomain
                         );
 
