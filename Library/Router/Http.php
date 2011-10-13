@@ -513,6 +513,14 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
 
         $rule      = $this->getRule($id);
         $pattern   = $rule[Router::RULE_PATTERN];
+
+        foreach($variables as $KeY => $value)
+            if($KeY != $key = strtolower($KeY)) {
+
+                unset($variables[$KeY]);
+                $variables[$key] = $value;
+            }
+
         $variables = array_merge($rule[Router::RULE_VARIABLES], $variables);
 
         if(false !== $pos = strpos($pattern, '@')) {
