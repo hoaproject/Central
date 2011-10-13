@@ -386,6 +386,8 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
 
         if(null === $uri)
             $uri = $this->getURI();
+        else
+            $uri = ltrim($uri, '/');
 
         if(null === $base)
             $base = $this->getBase();
