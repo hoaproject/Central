@@ -123,7 +123,7 @@ interface Router {
      * Find the appropriated rule.
      *
      * @access  public
-     * @return  mixed
+     * @return  \Hoa\Router
      * @throw   \Hoa\Router\Exception\NotFound
      */
     public function route ( );

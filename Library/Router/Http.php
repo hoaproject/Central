@@ -379,7 +379,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
      * @param   string  $uri     URI or complete URL (without scheme). If null,
      *                           it will be deduce.
      * @param   string  $base    Base. If null, it will be deduce.
-     * @return  array
+     * @return  \Hoa\Router\Http
      * @throw   \Hoa\Router\Exception\NotFound
      */
     public function route ( $uri = null, $base = null ) {
@@ -492,7 +492,9 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
             $rule[Router::RULE_VARIABLES][$key] = strtolower($value);
         }
 
-        return $this->_rule = $rule;
+        $this->_rule = $rule;
+
+        return $this;
     }
 
     /**
