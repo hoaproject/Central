@@ -147,8 +147,11 @@ abstract class Dispatcher implements \Hoa\Core\Parameter\Parameterizable {
 
         $rule     = $router->getTheRule();
 
-        if(null === $rule)
-            $rule = $router->route();
+        if(null === $rule) {
+
+            $router->route();
+            $rule = $this->getTheRule();
+        }
 
         if(null === $view)
             $view = $this->_currentView;
