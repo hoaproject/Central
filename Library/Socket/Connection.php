@@ -418,6 +418,8 @@ abstract class Connection
 
     /**
      * Read n characters.
+     * Warning: if this method returns false, it means that the buffer is empty.
+     * You should use the Hoa\Stream::setStreamBlocking(true) method.
      *
      * @access  public
      * @param   int     $length    Length.
