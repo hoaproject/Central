@@ -384,8 +384,11 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
      */
     public function route ( $uri = null, $base = null ) {
 
-        if(null === $uri)
-            $uri   = $this->getURI();
+        if(null === $uri) {
+
+            $uri       = $this->getURI();
+            $subdomain = $this->getSubdomain();
+        }
         else {
 
             if(false !== $pos = strpos($uri, '@'))
