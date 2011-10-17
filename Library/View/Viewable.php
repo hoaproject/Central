@@ -76,7 +76,7 @@ interface Viewable {
      * Get router.
      *
      * @access  public
-     * @return  \Hoa\Controller\Router
+     * @return  \Hoa\Router
      */
     public function getRouter ( );
 }
