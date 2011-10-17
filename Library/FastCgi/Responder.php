@@ -215,6 +215,7 @@ class Responder extends Connection {
 
         $client = $this->getClient();
         $client->connect();
+        $client->setStreamBlocking(true);
 
         $parameters = null;
         $response   = null;
