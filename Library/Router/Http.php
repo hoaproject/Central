@@ -74,35 +74,35 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
      *
      * @var \Hoa\Core\Parameter object
      */
-    protected $_parameters    = null;
+    protected $_parameters      = null;
 
     /**
      * All rules buckets.
      *
      * @var \Hoa\Router\Http array
      */
-    protected $_rules          = array();
+    protected $_rules           = array();
 
     /**
      * Selected rule after routing.
      *
      * @var \Hoa\Router\Http array
      */
-    protected $_rule           = null;
+    protected $_rule            = null;
 
     /**
      * Base.
      *
      * @var \Hoa\Router\Http string
      */
-    protected $_base           = null;
+    protected $_base            = null;
 
     /**
      * HTTP methods that the router understand.
      *
      * @var \Hoa\Router\Http array
      */
-    protected static $_methods = array(
+    protected static $_methods  = array(
         'get',
         'post',
         'put',
@@ -118,7 +118,15 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
      *
      * @var \Hoa\Router\Http int
      */
-    protected $_subdomainStack = _static;
+    protected $_subdomainStack  = _static;
+
+    /**
+     * Subdomain suffix.
+     * A string to append to subdomain on each rule.
+     *
+     * @var \Hoa\Router\Http string
+     */
+    protected $_subdomainSuffix = null;
 
 
 
@@ -215,8 +223,15 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
                          implode(', ', self::$_methods)));
 
         if(   _static == $this->_subdomainStack
-           && false   != strpos($pattern, '@'))
+           && false   != strpos($pattern, '@')) {
+
             $this->_subdomainStack = _dynamic;
+
+            if(null !== $suffix = $this->getSubdomainSuffix())
+                $pattern = str_replace('@', '\.' . $suffix . '@', $pattern);
+        }
+        elseif(null !== $suffix = $this->getSubdomainSuffix())
+            $pattern = $suffix . '@' . $pattern;
 
         $this->_rules[$id] = array(
             Router::RULE_VISIBILITY => $visibility,
@@ -719,6 +734,32 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
     public function getSubdomainStack ( ) {
 
         return $this->_subdomainStack;
+    }
+
+    /**
+     * Set subdomain suffix.
+     *
+     * @access  public
+     * @param   string  $suffix    Suffix.
+     * @return  string
+     */
+    public function setSubdomainSuffix ( $suffix ) {
+
+        $old                    = $this->_subdomainSuffix;
+        $this->_subdomainSuffix = $suffix;
+
+        return $old;
+    }
+
+    /**
+     * Get subdomain suffix.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getSubdomainSuffix ( ) {
+
+        return $this->_subdomainSuffix;
     }
 
     /**
