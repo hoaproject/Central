@@ -377,7 +377,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
      *
      * @access  public
      * @param   string  $uri     URI or complete URL (without scheme). If null,
-     *                           it will be deduce.
+     *                           it will be deduce. Can contain subdomain.
      * @param   string  $base    Base. If null, it will be deduce.
      * @return  \Hoa\Router\Http
      * @throw   \Hoa\Router\Exception\NotFound
@@ -385,12 +385,19 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
     public function route ( $uri = null, $base = null ) {
 
         if(null === $uri)
-            $uri = $this->getURI();
-        else
-            $uri = ltrim($uri, '/');
+            $uri   = $this->getURI();
+        else {
+
+            if(false !== $pos = strpos($uri, '@'))
+                list($subdomain, $uri) = explode('@', $uri, 2);
+            else
+                $subdomain             = $this->getSubdomain();
+
+            $uri   = ltrim($uri, '/');
+        }
 
         if(null === $base)
-            $base = $this->getBase();
+            $base  = $this->getBase();
 
         $bootstrap = $this->getBootstrap();
 
@@ -411,7 +418,6 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
         }
 
         $method         = $this->getMethod();
-        $subdomain      = $this->getSubdomain();
         $subdomainStack = $this->getSubdomainStack();
         $rules          = array_filter(
             $this->getRules(),
