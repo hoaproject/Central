@@ -110,8 +110,8 @@ class Boundfloat extends Float {
     public function predicate ( $q ) {
 
         return    parent::predicate($q)
-               && $q >= $this['lower']->getValue()
-               && $q <= $this['upper']->getValue();
+               && $q >= $this['lower']->getConstantValue()
+               && $q <= $this['upper']->getConstantValue();
     }
 
     /**
