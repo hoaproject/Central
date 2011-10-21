@@ -209,6 +209,28 @@ class Variable extends DomainDisjunction {
     }
 
     /**
+     * Shortcut to predicate all domains.
+     *
+     * @access  public
+     * @param   mixed   $value    Value.
+     * @return  bool
+     */
+    public function predicate ( $value ) {
+
+        $out = false;
+
+        foreach($this->getDomains() as $domain) {
+
+            $out = $domain->predicate($value);
+
+            if(true === $out)
+                break;
+        }
+
+        return $out;
+    }
+
+    /**
      * Set the variable name.
      *
      * @access  public
