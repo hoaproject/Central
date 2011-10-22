@@ -62,23 +62,64 @@ namespace Hoa\Model {
  * @license    New BSD License
  */
 
-class Model {
+abstract class Model {
 
-    protected $_validation = true;
+    private $__validation = true;
+    private $__attributes = array();
 
 
 
     public function __construct ( ) {
 
+        $class   = new \ReflectionClass($this);
+        $ucfirst = function ( Array $matches ) {
+
+            return ucfirst($matches[1]);
+        };
+
+        foreach($class->getProperties() as $property) {
+
+            $_name = $property->getName();
+
+            if('_' !== $_name[0])
+                continue;
+
+            $name      = substr($_name, 1);
+            $comment   = $property->getDocComment();
+            $comment   = preg_replace('#^(\s*/\*\*\s*)#', '', $comment);
+            $comment   = preg_replace('#(\s*\*/)#',       '', $comment);
+            $comment   = preg_replace('#^(\s*\*\s*)#m',   '', $comment);
+            $validator = 'validate' . ucfirst(preg_replace_callback(
+                '#_(.)#',
+                $ucfirst,
+                strtolower($name)
+            ));
+
+            $this->__attributes[$name] = array(
+                'comment'   => $comment,
+                'name'      => $name,
+                '_name'     => $_name,
+                'validator' => method_exists($this, $validator)
+                                   ? $validator
+                                   : null,
+                'contract'  => null // be lazy
+            );
+        }
+
         return;
+    }
+
+    public function __isset ( $name ) {
+
+        return isset($this->__attributes[$name]);
     }
 
     public function __set ( $name, $value) {
 
-        $_name = '_' . $name;
-
-        if(!isset($this->$_name))
+        if(!isset($this->$name))
             return null;
+
+        $_name = '_' . $name;
 
         if(false === $this->isValidationEnabled()) {
 
@@ -88,13 +129,8 @@ class Model {
             return $old;
         }
 
-        $class     = new \ReflectionClass($this);
-        $attribute = $class->getProperty($_name);
-        $comment   = $attribute->getDocComment();
-        $comment   = preg_replace('#^(\s*/\*\*\s*)#', '', $comment);
-        $comment   = preg_replace('#(\s*\*/)#',       '', $comment);
-        $comment   = preg_replace('#^(\s*\*\s*)#m',   '', $comment);
-        $verdict   = praspel($comment)
+        $attribute = &$this->__attributes[$name];
+        $verdict   = praspel($attribute['comment'])
                          ->getClause('invariant')
                          ->getVariable($name)
                          ->predicate($value);
@@ -103,17 +139,8 @@ class Model {
             throw new Exception(
                 'Try to set the %s attribute with an invalid data.', 0, $name);
 
-        $Name = 'validate' . ucfirst(preg_replace_callback(
-            '#_(.)#',
-            function ( Array $matches ) {
-
-                return ucfirst($matches[1]);
-            },
-            strtolower($name)
-        ));
-
-        if(   method_exists($this, $Name)
-           && false === $this->$Name($value))
+        if(   (null  !== $validator = $attribute['validator'])
+           &&  false === $this->{$validator}($value))
             throw new Exception(
                 'Try to set the %s attribute with an invalid data.',
                 1, $name);
@@ -126,25 +153,23 @@ class Model {
 
     public function __get ( $name ) {
 
-        $_name = '_' . $name;
-
-        if(!isset($this->$_name))
+        if(!isset($this->$name))
             return null;
 
-        return $this->$_name;
+        return $this->{'_' . $name};
     }
 
     public function setEnableValidation ( $enable ) {
 
-        $old               = $this->_validation;
-        $this->_validation = $enable;
+        $old                = $this->__validation;
+        $this->__validation = $enable;
 
         return $old;
     }
 
     public function isValidationEnabled ( ) {
 
-        return $this->_validation;
+        return $this->__validation;
     }
 }
 
