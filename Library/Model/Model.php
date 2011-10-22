@@ -103,7 +103,7 @@ class Model {
             throw new Exception(
                 'Try to set the %s attribute with an invalid data.', 0, $name);
 
-        $Name = ucfirst(preg_replace_callback(
+        $Name = 'validate' . ucfirst(preg_replace_callback(
             '#_(.)#',
             function ( Array $matches ) {
 
@@ -112,18 +112,14 @@ class Model {
             strtolower($name)
         ));
 
-        if(method_exists($this, 'set' . $Name)) {
+        if(   method_exists($this, $Name)
+           && false === $this->$Name($value))
+            throw new Exception(
+                'Try to set the %s attribute with an invalid data.',
+                1, $name);
 
-            if(false === $this->{'set' . $Name}($value))
-                throw new Exception(
-                    'Try to set the %s attribute with an invalid data.',
-                    1, $name);
-        }
-        else {
-
-            $old          = $this->$_name;
-            $this->$_name = $value;
-        }
+        $old          = $this->$_name;
+        $this->$_name = $value;
 
         return;
     }
