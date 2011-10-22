@@ -64,8 +64,9 @@ namespace Hoa\Model {
 
 abstract class Model {
 
-    private $__validation = true;
-    private $__attributes = array();
+    private $__validation            = true;
+    private $__attributes            = array();
+    protected static $__mappingLayer = array('_default' => null);
 
 
 
@@ -76,12 +77,14 @@ abstract class Model {
 
             return ucfirst($matches[1]);
         };
+        $default = $class->getDefaultProperties();
 
         foreach($class->getProperties() as $property) {
 
             $_name = $property->getName();
 
-            if('_' !== $_name[0])
+            if(   '_' !== $_name[0]
+               || '_' === $_name[1])
                 continue;
 
             $name      = substr($_name, 1);
@@ -102,11 +105,60 @@ abstract class Model {
                 'validator' => method_exists($this, $validator)
                                    ? $validator
                                    : null,
-                'contract'  => null // be lazy
+                'contract'  => null, // be lazy
+                'default'   => $default[$_name],
+                'value'     => &$this->$_name
             );
         }
 
+        $this->construct();
+
         return;
+    }
+
+    public function construct ( ) {
+
+        return;
+    }
+
+    public function openMany ( Array $constraints = array() ) {
+
+        return;
+    }
+
+    abstract public function open ( Array $constraints = array() );
+
+    abstract public function save ( );
+
+    protected function map ( Array $data, Array $map = null ) {
+
+        if(empty($map))
+            $map = array_combine($handle = array_keys($data), $handle);
+
+        foreach($data as $name => $value) {
+
+            if(array_key_exists($name, $map))
+                $name = $map[$name];
+
+            if($value == $this->$name)
+                continue;
+
+            $this->$name = $value;
+        }
+
+        return;
+    }
+
+    protected function getConstraints ( $defaultValues = false ) {
+
+        $out = array();
+
+        foreach($this->__attributes as $name => $attribute)
+            if(   true === $defaultValues
+               || $attribute['default'] != $attribute['value'])
+                $out[$name] = $attribute['value'];
+
+        return $out;
     }
 
     public function __isset ( $name ) {
@@ -121,6 +173,14 @@ abstract class Model {
 
         $_name = '_' . $name;
 
+        if(is_numeric($value)) {
+
+            if($value == $_value = (int) $value)
+                $value = $_value;
+            else
+                $value = (float) $value;
+        }
+
         if(false === $this->isValidationEnabled()) {
 
             $old          = $this->$_name;
@@ -129,7 +189,7 @@ abstract class Model {
             return $old;
         }
 
-        $attribute = &$this->__attributes[$name];
+        $attribute = $this->getAttribute($name);
         $verdict   = praspel($attribute['comment'])
                          ->getClause('invariant')
                          ->getVariable($name)
@@ -159,6 +219,18 @@ abstract class Model {
         return $this->{'_' . $name};
     }
 
+    private function &getAttribute ( $name ) {
+
+        if(!isset($this->$name)) {
+
+            $out = null;
+
+            return $out;
+        }
+
+        return $this->__attributes[$name];
+    }
+
     public function setEnableValidation ( $enable ) {
 
         $old                = $this->__validation;
@@ -170,6 +242,25 @@ abstract class Model {
     public function isValidationEnabled ( ) {
 
         return $this->__validation;
+    }
+
+    protected static function setMappingLayer ( $layer, $name = '_default' ) {
+
+        if(!array_key_exists($name, static::$__mappingLayer))
+            return null;
+
+        $old                           = static::$__mappingLayer[$name];
+        static::$__mappingLayer[$name] = $layer;
+
+        return $old;
+    }
+
+    public static function getMappingLayer ( $name = '_default' ) {
+
+        if(!array_key_exists($name, static::$__mappingLayer))
+            return null;
+
+        return static::$__mappingLayer[$name];
     }
 }
 
