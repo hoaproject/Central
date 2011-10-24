@@ -133,7 +133,7 @@ class Pp extends \Hoa\Console\Dispatcher\Kit {
 
         if(null !== $visitor) {
 
-            $visitor  = dnew($visitor);
+            $visitor = dnew($visitor);
             echo $visitor->visit($ast);
         }
 
