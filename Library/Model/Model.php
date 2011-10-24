@@ -284,8 +284,12 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
             return $old;
         }
 
-        $attribute = $this->getAttribute($name);
-        $verdict   = praspel($attribute['comment'])
+        $attribute = &$this->getAttribute($name);
+
+        if(null === $attribute['contract'])
+            $attribute['contract'] = praspel($attribute['comment']);
+
+        $verdict   = $attribute['contract']
                          ->getClause('invariant')
                          ->getVariable($name)
                          ->predicate($value);
@@ -375,10 +379,9 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
 
         if(false === $this->isValidationEnabled()) {
 
-            $old = $this->{$this->__arrayAccess}[$offset];
             $this->{$this->__arrayAccess}[$offset] = $value;
 
-            return $old;
+            return null;
         }
 
         $oldOffset = false !== $this->_offsetExists($offset)
@@ -388,8 +391,12 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
         $this->{$this->__arrayAccess}[$offset] = $value;
 
         $name      = substr($this->__arrayAccess, 1);
-        $attribute = $this->getAttribute($name);
-        $verdict   = praspel($attribute['comment'])
+        $attribute = &$this->getAttribute($name);
+
+        if(null === $attribute['contract'])
+            $attribute['contract'] = praspel($attribute['comment']);
+
+        $verdict   = $attribute['contract']
                          ->getClause('invariant')
                          ->getVariable($name)
                          ->predicate($this->{$this->__arrayAccess});
