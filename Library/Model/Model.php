@@ -55,7 +55,7 @@ namespace Hoa\Model {
 /**
  * Class \Hoa\Model\Exception.
  *
- * Extending the \Hoa\Core\Exception class.
+ * Represent a model/document with atributes and relations.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
