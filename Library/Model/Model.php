@@ -62,14 +62,44 @@ namespace Hoa\Model {
  * @license    New BSD License
  */
 
-abstract class Model {
+abstract class Model implements \ArrayAccess {
 
+    /**
+     * Whether we should check Praspel and validate*().
+     *
+     * @var \Hoa\Model bool
+     */
     private $__validation            = true;
+
+    /**
+     * Bucket of all model attributes.
+     *
+     * @var \Hoa\Model array
+     */
     private $__attributes            = array();
+
+    /**
+     * Current attribute in an array access.
+     *
+     * @var \Hoa\Model string
+     */
+    private $__arrayAccess           = null;
+
+    /**
+     * Mapping layers.
+     *
+     * @var \Hoa\Model array
+     */
     protected static $__mappingLayer = array('_default' => null);
 
 
 
+    /**
+     * Initialize the model.
+     *
+     * @access  public
+     * @return  void
+     */
     public function __construct ( ) {
 
         $class   = new \ReflectionClass($this);
@@ -116,20 +146,60 @@ abstract class Model {
         return;
     }
 
+    /**
+     * User constructor.
+     *
+     * @access  public
+     * @return  void
+     */
     public function construct ( ) {
 
         return;
     }
 
+    /**
+     * Open many documents.
+     *
+     * @access  public
+     * @param   array  $constraints    Contraints.
+     * @return  void
+     */
     public function openMany ( Array $constraints = array() ) {
 
         return;
     }
 
-    abstract public function open ( Array $constraints = array() );
+    /**
+     * Open one document.
+     *
+     * @access  public
+     * @param   array  $constraints    Contraints.
+     * @return  void
+     */
+    public function open ( Array $constraints = array() ) {
 
-    abstract public function save ( );
+        return;
+    }
 
+    /**
+     * Save the document.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function save ( ) {
+
+        return;
+    }
+
+    /**
+     * Map data to attributes.
+     *
+     * @access  public
+     * @param   array  $data    Data.
+     * @param   array  $map     Map: data name to attribute name.
+     * @return  void
+     */
     protected function map ( Array $data, Array $map = null ) {
 
         if(empty($map))
@@ -149,6 +219,15 @@ abstract class Model {
         return;
     }
 
+    /**
+     * Get constraints, i.e. all attributes values that defer from their default
+     * values. We could include the default values if the only argument is set
+     * to true.
+     *
+     * @access  public
+     * @param   bool  $defaultValues    Whether we include default values.
+     * @return  array
+     */
     protected function getConstraints ( $defaultValues = false ) {
 
         $out = array();
@@ -161,11 +240,27 @@ abstract class Model {
         return $out;
     }
 
+    /**
+     * Check if an attribute exists and is set.
+     *
+     * @access  public
+     * @param   string  $name    Attribute name.
+     * @return  bool
+     */
     public function __isset ( $name ) {
 
         return isset($this->__attributes[$name]);
     }
 
+    /**
+     * Set a value to an attribute.
+     *
+     * @access  public
+     * @param   string  $name     Name.
+     * @param   mixed   $value    Value.
+     * @return  void
+     * @throw   \Hoa\Model\Exception
+     */
     public function __set ( $name, $value) {
 
         if(!isset($this->$name))
@@ -211,14 +306,159 @@ abstract class Model {
         return;
     }
 
+    /**
+     * Get an attribute value.
+     *
+     * @access  public
+     * @param   string  $name    Name.
+     * @return  mixed
+     */
     public function __get ( $name ) {
 
         if(!isset($this->$name))
             return null;
 
-        return $this->{'_' . $name};
+        $handle = &$this->{'_' . $name};
+
+        if(is_array($handle)) {
+
+            $this->__arrayAccess = '_' . $name;
+
+            return $this;
+        }
+        elseif(null !== $this->__arrayAccess)
+            $this->__arrayAccess = null;
+
+        return $handle;
     }
 
+    /**
+     * Check if an offset exists on an attribute.
+     *
+     * @access  public
+     * @param   int  $offset    Offset.
+     * @return  bool
+     */
+    private function _offsetExists ( $offset ) {
+
+        if(null === $this->__arrayAccess)
+            return false;
+
+        return array_key_exists($offset, $this->{$this->__arrayAccess});
+    }
+
+    /**
+     * Check if an offset exists on an attribute.
+     *
+     * @access  public
+     * @param   int  $offset    Offset.
+     * @return  bool
+     */
+    public function offsetExists ( $offset ) {
+
+        $out                 = $this->_offsetExists($offset);
+        $this->__arrayAccess = null;
+
+        return $out;
+    }
+
+    /**
+     * Set a value to a specific offset of the current attribute.
+     *
+     * @access  public
+     * @param   int    $offset    Offset.
+     * @param   mixed  $value     Value.
+     * @return  bool
+     * @throw   \Hoa\Model\Exception
+     */
+    public function offsetSet ( $offset, $value ) {
+
+        if(false === $this->isValidationEnabled()) {
+
+            $old = $this->{$this->__arrayAccess}[$offset];
+            $this->{$this->__arrayAccess}[$offset] = $value;
+
+            return $old;
+        }
+
+        $oldOffset = false !== $this->_offsetExists($offset)
+                         ? $this->{$this->__arrayAccess}[$offset]
+                         : null;
+
+        $this->{$this->__arrayAccess}[$offset] = $value;
+
+        $name      = substr($this->__arrayAccess, 1);
+        $attribute = $this->getAttribute($name);
+        $verdict   = praspel($attribute['comment'])
+                         ->getClause('invariant')
+                         ->getVariable($name)
+                         ->predicate($this->{$this->__arrayAccess});
+
+        if(false === $verdict) {
+
+            if(null !== $oldOffset)
+                $this->{$this->__arrayAccess}[$offset] = $oldOffset;
+
+            throw new Exception(
+                'Try to set the %s attribute with an invalid data.', 2, $name);
+        }
+
+        if(   (null  !== $validator = $attribute['validator'])
+           &&  false === $this->{$validator}($value)) {
+
+            if(null !== $oldOffset)
+                $this->{$this->__arrayAccess}[$offset] = $oldOffset;
+
+            throw new Exception(
+                'Try to set the %s attribute with an invalid data.',
+                3, $name);
+        }
+
+        return $this->__arrayAccess = null;
+    }
+
+    /**
+     * Get a value from a specific offset of the current attribute.
+     *
+     * @access  public
+     * @param   int  $offset    Offset.
+     * @return  mixed
+     */
+    public function offsetGet ( $offset ) {
+
+        if(false === $this->_offsetExists($offset))
+            return $this->__arrayAccess = null;
+
+        $out                 = &$this->{$this->__arrayAccess}[$offset];
+        $this->__arrayAccess = null;
+
+        return $out;
+    }
+
+    /**
+     * Unset a specific offset of the current attribute.
+     *
+     * @access  public
+     * @param   int  $offset    Offset.
+     * @return  void
+     */
+    public function offsetUnset ( $offset ) {
+
+        if(false !== $this->_offsetExists($offset))
+            unset($this->__arrayAccess[$offset]);
+
+        $this->__arrayAccess = null;
+
+        return;
+    }
+
+    /**
+     * Get an attribute in the bucket.
+     *
+     * @access  public
+     * @param   string  $name    Name.
+     * @return  array
+     */
     private function &getAttribute ( $name ) {
 
         if(!isset($this->$name)) {
@@ -231,6 +471,13 @@ abstract class Model {
         return $this->__attributes[$name];
     }
 
+    /**
+     * Enable validation or not (i.e. execute Praspel and validate*() methods).
+     *
+     * @access  public
+     * @param   bool  $enable    Enable or not.
+     * @return  bool
+     */
     public function setEnableValidation ( $enable ) {
 
         $old                = $this->__validation;
@@ -239,11 +486,25 @@ abstract class Model {
         return $old;
     }
 
+    /**
+     * Check if validation is enabled or not.
+     *
+     * @access  public
+     * @return  bool
+     */
     public function isValidationEnabled ( ) {
 
         return $this->__validation;
     }
 
+    /**
+     * Set a mapping layer.
+     *
+     * @access  public
+     * @param   object  $layer    Layer (e.g. \Hoa\Database\Dal).
+     * @param   string  $name     Name.
+     * @return  object
+     */
     protected static function setMappingLayer ( $layer, $name = '_default' ) {
 
         if(!array_key_exists($name, static::$__mappingLayer))
@@ -255,6 +516,13 @@ abstract class Model {
         return $old;
     }
 
+    /**
+     * Get a mapping layer.
+     *
+     * @access  public
+     * @param   string  $name    Name.
+     * @return  object
+     */
     public static function getMappingLayer ( $name = '_default' ) {
 
         if(!array_key_exists($name, static::$__mappingLayer))
