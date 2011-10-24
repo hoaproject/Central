@@ -62,7 +62,7 @@ namespace Hoa\Model {
  * @license    New BSD License
  */
 
-abstract class Model implements \ArrayAccess, \Countable {
+abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
 
     /**
      * Whether we should check Praspel and validate*().
@@ -450,6 +450,20 @@ abstract class Model implements \ArrayAccess, \Countable {
         $this->__arrayAccess = null;
 
         return;
+    }
+
+    /**
+     * Iterate a relation.
+     *
+     * @access  public
+     * @return  \ArrayIterator
+     */
+    public function getIterator ( ) {
+
+        if(null === $this->__arrayAccess)
+            return null;
+
+        return new \ArrayIterator($this->{$this->__arrayAccess});
     }
 
     /**
