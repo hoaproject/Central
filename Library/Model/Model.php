@@ -62,7 +62,7 @@ namespace Hoa\Model {
  * @license    New BSD License
  */
 
-abstract class Model implements \ArrayAccess {
+abstract class Model implements \ArrayAccess, \Countable {
 
     /**
      * Whether we should check Praspel and validate*().
@@ -450,6 +450,23 @@ abstract class Model implements \ArrayAccess {
         $this->__arrayAccess = null;
 
         return;
+    }
+
+    /**
+     * Count number of attributes.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function count ( ) {
+
+        if(null === $this->__arrayAccess)
+            return count($this->__attributes);
+
+        $out                 = count($this->{$this->__arrayAccess});
+        $this->__arrayAccess = null;
+
+        return $out;
     }
 
     /**
