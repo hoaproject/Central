@@ -755,6 +755,7 @@ namespace {
  * Alias of the \Hoa\Test\Praspel\Compiler::compile() method.
  *
  * @access  public
+ * @param   string  $praspel    Praspel's code.
  * @return  \Hoa\Test\Praspel\Contract
  * @throws  \Hoa\Compiler\Exception
  */
