@@ -108,7 +108,8 @@ class _Class extends Realdom {
      */
     public function predicate ( $q ) {
 
-        return true;
+        return    is_object($q)
+               && is_a($q, $this[0]->getConstantValue());
     }
 
     /**
