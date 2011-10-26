@@ -149,10 +149,10 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
     /**
      * User constructor.
      *
-     * @access  public
+     * @access  protected
      * @return  void
      */
-    public function construct ( ) {
+    protected function construct ( ) {
 
         return;
     }
