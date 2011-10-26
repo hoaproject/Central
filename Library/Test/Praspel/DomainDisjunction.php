@@ -167,6 +167,28 @@ abstract class DomainDisjunction implements \Hoa\Visitor\Element {
     }
 
     /**
+     * Get a specific domain.
+     *
+     * @access  public
+     * @return  \Hoa\Test\Praspel\Domain
+     */
+    public function getNthDomain ( $i ) {
+
+        if($i > count($this->_domains))
+            return null;
+
+        reset($this->_domains);
+        $j   = 0;
+
+        while($j++ < $i && next($this->_domains));
+
+        $out = current($this->_domains);
+        reset($this->_domains);
+
+        return $out;
+    }
+
+    /**
      * Accept a visitor.
      *
      * @access  public
