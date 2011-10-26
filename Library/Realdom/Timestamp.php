@@ -122,7 +122,18 @@ class Timestamp extends Constinteger {
      */
     protected function _sample ( \Hoa\Test\Sampler $sampler ) {
 
-        return strtotime($this['date']->sample($sampler));
+        return $this->getConstantValue();
+    }
+
+    /**
+     * Get constant value.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getConstantValue ( ) {
+
+        return strtotime($this['date']->getConstantValue());
     }
 }
 
