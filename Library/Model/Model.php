@@ -137,7 +137,8 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
                                    : null,
                 'contract'  => null, // be lazy
                 'default'   => $default[$_name],
-                'value'     => &$this->$_name
+                'value'     => &$this->$_name,
+                'relation'  => false !== strpos($comment, 'relation(')
             );
         }
 
@@ -266,7 +267,23 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
         if(!isset($this->$name))
             return null;
 
-        $_name = '_' . $name;
+        $_name     = '_' . $name;
+        $attribute = &$this->getAttribute($name);
+
+        if(true === $attribute['relation']) {
+
+            if(!is_array($value))
+                $value = array($value);
+
+            $this->__arrayAccess = $_name;
+
+            foreach($value as $k => $v)
+                $this->offsetSet($k, $v);
+
+            $this->__arrayAccess = null;
+
+            return;
+        }
 
         if(is_numeric($value)) {
 
@@ -283,8 +300,6 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
 
             return $old;
         }
-
-        $attribute = &$this->getAttribute($name);
 
         if(null === $attribute['contract'])
             $attribute['contract'] = praspel($attribute['comment']);
@@ -322,9 +337,9 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
         if(!isset($this->$name))
             return null;
 
-        $handle = &$this->{'_' . $name};
+        $attribute = &$this->getAttribute($name);
 
-        if(is_array($handle)) {
+        if(true === $attribute['relation']) {
 
             $this->__arrayAccess = '_' . $name;
 
@@ -333,7 +348,7 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
         elseif(null !== $this->__arrayAccess)
             $this->__arrayAccess = null;
 
-        return $handle;
+        return $this->{'_' . $name};
     }
 
     /**
