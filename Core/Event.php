@@ -200,7 +200,8 @@ class Event {
     }
 
     /**
-     * Manage multiton of events, with the principle of asynchronous attachements.
+     * Manage multiton of events, with the principle of asynchronous
+     * attachements.
      *
      * @access  public
      * @param   string  $eventId    Event ID.
@@ -273,7 +274,7 @@ class Event {
     /**
      * Attach an object to an event.
      * It can be a callable or an accepted callable form (please, see the
-     * \Hoa\Core\Consistency\Callable class).
+     * \Hoa\Core\Consistency\Xcallable class).
      *
      * @access  public
      * @param   mixed   $call    First callable part.
@@ -282,7 +283,7 @@ class Event {
      */
     public function attach ( $call, $able = '' ) {
 
-        $callable                              = callable($call, $able);
+        $callable                              = xcallable($call, $able);
         $this->_callable[$callable->getHash()] = $callable;
 
         return $this;
@@ -299,7 +300,7 @@ class Event {
      */
     public function detach ( $call, $able = '' ) {
 
-        unset($this->_callable[callable($call, $able)->getHash()]);
+        unset($this->_callable[xcallable($call, $able)->getHash()]);
 
         return $this;
     }
@@ -443,7 +444,7 @@ class Listener {
             throw new \Hoa\Core\Exception(
                 'Cannot listen %s because it is not defined.', 0);
 
-        $callable = callable($call, $able);
+        $callable = xcallable($call, $able);
         $this->_listen[$listenerId][$callable->getHash()] = $callable;
 
         return $this;
@@ -460,7 +461,7 @@ class Listener {
      */
     public function detach ( $listenerId, $call, $able = '' ) {
 
-        unset($this->_callable[$listenerId][callable($call, $able)->getHash()]);
+        unset($this->_callable[$listenerId][xcallable($call, $able)->getHash()]);
 
         return $this;
     }

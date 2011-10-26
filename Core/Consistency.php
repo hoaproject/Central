@@ -633,17 +633,18 @@ class Consistency implements \ArrayAccess {
 }
 
 /**
- * Class Hoa\Core\Consistency\Callable.
+ * Class Hoa\Core\Consistency\Xcallable.
  *
  * Build a callable object, i.e. function, class::method, object->method or
- * closure, they all have the same behaviour.
+ * closure, they all have the same behaviour. This callable is an extension of
+ * native PHP callable (aka callback) to integrate Hoa's structures.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Callable {
+class Xcallable {
 
     /**
      * Callback, with the PHP format.
@@ -885,20 +886,20 @@ function dnew ( $classname, Array $arguments = array() ) {
 }}
 
 /**
- * Alias of \Hoa\Core\Consistency\Callable.
+ * Alias of \Hoa\Core\Consistency\Xcallable.
  *
  * @access  public
  * @param   mixed   $call    First callable part.
  * @param   mixed   $able    Second callable part (if needed).
  * @return  mixed
  */
-if(!ƒ('callable')) {
-function callable ( $call, $able = '' ) {
+if(!ƒ('xcallable')) {
+function xcallable ( $call, $able = '' ) {
 
-    if($call instanceof \Hoa\Core\Consistency\Callable)
+    if($call instanceof \Hoa\Core\Consistency\Xcallable)
         return $call;
 
-    return new \Hoa\Core\Consistency\Callable($call, $able);
+    return new \Hoa\Core\Consistency\Xcallable($call, $able);
 }}
 
 /**
@@ -913,7 +914,7 @@ function callable ( $call, $able = '' ) {
  *     $c2 = curry($c1, 'foo', …);
  *     var_dump($c2('baz')); // bazbar
  * Obviously, as the first argument is a callable, we can combine this with
- * \Hoa\Core\Consistency\Callable ;-).
+ * \Hoa\Core\Consistency\Xcallable ;-).
  * The “…” character is the HORIZONTAL ELLIPSIS Unicode character (Unicode:
  * 2026, UTF-8: E2 80 A6).
  *
