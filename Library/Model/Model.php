@@ -100,7 +100,7 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
      * @access  public
      * @return  void
      */
-    public function __construct ( ) {
+    final public function __construct ( ) {
 
         $class   = new \ReflectionClass($this);
         $ucfirst = function ( Array $matches ) {
@@ -122,6 +122,7 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
             $comment   = preg_replace('#^(\s*/\*\*\s*)#', '', $comment);
             $comment   = preg_replace('#(\s*\*/)#',       '', $comment);
             $comment   = preg_replace('#^(\s*\*\s*)#m',   '', $comment);
+            $relation  = false !== strpos($comment, 'relation(');
             $validator = 'validate' . ucfirst(preg_replace_callback(
                 '#_(.)#',
                 $ucfirst,
@@ -138,8 +139,11 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
                 'contract'  => null, // be lazy
                 'default'   => $default[$_name],
                 'value'     => &$this->$_name,
-                'relation'  => false !== strpos($comment, 'relation(')
+                'relation'  => $relation
             );
+
+            if(true === $relation && empty($this->$_name))
+                $this->$_name = array();
         }
 
         $this->construct();
@@ -199,7 +203,7 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
      * @access  public
      * @param   array  $data    Data.
      * @param   array  $map     Map: data name to attribute name.
-     * @return  void
+     * @return  \Hoa\Model
      */
     protected function map ( Array $data, Array $map = null ) {
 
@@ -216,6 +220,41 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
 
             $this->$name = $value;
         }
+
+        return $this;
+    }
+
+    protected function mapRelation ( $name, Array $data, Array $map = null ) {
+
+        if(!isset($this->$name))
+            throw new Exception(
+                'Cannot map relation %s because it does not exist.', 42, $name);
+
+        $attribute = &$this->getAttribute($name);
+
+        if(true !== $attribute['relation'])
+            throw new Exception(
+                'Cannot map relation %s because it is not a relation.',
+                43, $name);
+
+        if(null === $attribute['contract'])
+            $attribute['contract'] = praspel($attribute['comment']);
+
+        $realdom   = $attribute['contract']
+                       ->getClause('invariant')
+                       ->getVariable($name)
+                       ->getNthDomain(0);
+        $classname = $realdom['classname']->getConstantValue();
+        $_name     = '_' . $name;
+
+        foreach($data as $i => $d) {
+
+            $this->__arrayAccess = $_name;
+            $class               = new $classname();
+            $this->offsetSet($i, $class->map($d, $map));
+        }
+
+        $this->__arrayAccess = null;
 
         return;
     }
@@ -420,6 +459,8 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
 
             if(null !== $oldOffset)
                 $this->{$this->__arrayAccess}[$offset] = $oldOffset;
+            else
+                unset($this->{$this->__arrayAccess}[$offset]);
 
             throw new Exception(
                 'Try to set the %s attribute with an invalid data.', 2, $name);
