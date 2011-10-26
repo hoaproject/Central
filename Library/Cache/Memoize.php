@@ -123,7 +123,7 @@ class Memoize {
     /**
      * Callable.
      *
-     * @var \Hoa\Core\Consistency\Callable object
+     * @var \Hoa\Core\Consistency\Xcallable object
      */
     protected $_callable      = null;
 
@@ -157,7 +157,7 @@ class Memoize {
      */
     public static function getInstance ( $call, $able = '' ) {
 
-        $callable = callable($call, $able);
+        $callable = xcallable($call, $able);
         $hash     = $callable->getHash();
 
         if(!isset(self::$_multiton[$hash])) {
