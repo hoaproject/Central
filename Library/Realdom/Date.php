@@ -75,18 +75,26 @@ namespace Hoa\Realdom {
 class Date extends Realdom {
 
     /**
+     * Constants that represent defined formats.
+     * As examples, you could see \DateTime constants.
+     *
+     * @var \Hoa\Realdom\Date array
+     */
+    protected static $_constants = null;
+
+    /**
      * Realistic domain name.
      *
      * @var \Hoa\Realdom string
      */
-    protected $_name      = 'date';
+    protected $_name             = 'date';
 
     /**
      * Realistic domain defined arguments.
      *
      * @var \Hoa\Realdom array
      */
-    protected $_arguments = array(
+    protected $_arguments        = array(
         'format',
         'timestamp'
     );
@@ -101,8 +109,31 @@ class Date extends Realdom {
      */
     public function construct ( ) {
 
+        if(null === static::$_constants) {
+
+            $reflection         = new \ReflectionClass('DateTime');
+            static::$_constants = $reflection->getConstants();
+        }
+
         if(!isset($this['format']))
             $this['format'] = new Conststring('c');
+        else {
+
+            $constants               = &static::$_constants;
+            $this['format']['value'] = preg_replace_callback(
+                '#(?<!\\\)_(\w+)#',
+                function ( Array $matches ) use ( &$constants ) {
+
+                    $c = $matches[1];
+
+                    if(!isset($constants[$c]))
+                        return $matches[0];
+
+                    return $constants[$c];
+                },
+                $this['format']['value']
+            );
+        }
 
         if(!isset($this['timestamp']))
             $this['timestamp'] = new Boundinteger(new Constinteger(0));
