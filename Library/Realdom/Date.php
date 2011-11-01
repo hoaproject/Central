@@ -116,11 +116,16 @@ class Date extends Realdom {
      * @access  public
      * @param   mixed  $q    Sampled value.
      * @return  boolean
-     * @TODO    Need to write the predicate!
      */
     public function predicate ( $q ) {
 
-        return true;
+        $iq = strtotime($q);
+
+        return    $this['timestamp']->predicate($iq)
+               && 0 == strcasecmp(
+                      $q,
+                      date($this['format']->getConstantValue(), $iq)
+                  );
     }
 
     /**
