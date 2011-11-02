@@ -649,14 +649,14 @@ class Xcallable {
     /**
      * Callback, with the PHP format.
      *
-     * @var \Hoa\Core\Consistency\Callback mixed
+     * @var \Hoa\Core\Consistency\Xcallable mixed
      */
     protected $_callback = null;
 
     /**
      * Callable hash.
      *
-     * @var \Hoa\Core\Consistency\Callback string
+     * @var \Hoa\Core\Consistency\Xcallable string
      */
     protected $_hash     = null;
 
