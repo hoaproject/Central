@@ -34,18 +34,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Http {
+namespace {
+
+from('Hoa')
 
 /**
- * Class \Hoa\Http\Exception.
+ * \Hoa\Http\Response
+ */
+-> import('Http.Response.~');
+
+}
+
+namespace Hoa\Http\Response {
+
+/**
+ * Class \Hoa\Http\Response\Download.
  *
- * Extending the \Hoa\Core\Exception class.
+ *
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Exception extends \Hoa\Core\Exception { }
+class Download extends Response { }
 
 }
