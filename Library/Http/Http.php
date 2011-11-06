@@ -46,7 +46,7 @@ namespace Hoa\Http {
  * @license    New BSD License
  */
 
-abstract class Http implements \ArrayAccess {
+abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable {
 
     /**
      * Whether PHP is running with FastCGI or not.
@@ -174,6 +174,28 @@ abstract class Http implements \ArrayAccess {
         unset($this->_headers[$offset]);
 
         return;
+    }
+
+    /**
+     * Get iterator.
+     *
+     * @access  public
+     * @return  \ArrayIterator
+     */
+    public function getIterator ( ) {
+
+        return new \ArrayIterator($this->getHeaders());
+    }
+
+    /**
+     * Count number of headers.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function count ( ) {
+
+        return count($this->getHeaders());
     }
 }
 
