@@ -206,13 +206,13 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
             }
 
             $request->parse($buffer);
-            $method         = $request->getMethod();
-            $methodAsString = strtoupper($request->getMethodAsString());
-            $uri            = $request->getURL();
-            $url            = $uri;
-            $ttime          = time();
-            $smartPrint     = "\r";
-            $_headers['HTTP_HOST'] = $request->getHost();
+            $method                = $request->getMethod();
+            $methodReadable        = strtoupper($method);
+            $uri                   = $request->getUrl();
+            $url                   = ltrim($uri, '/');
+            $ttime                 = time();
+            $smartPrint            = "\r";
+            $_headers['HTTP_HOST'] = $request['host'];
 
             if($ttime - $time >= 2) {
 
@@ -221,7 +221,7 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
             }
 
             $this->log(
-                $smartPrint . '↺ '. $methodAsString . ' /' . $url .
+                $smartPrint . '↺ '. $methodReadable . ' /' . $url .
                 ' (waiting…)'
             );
 
@@ -249,10 +249,10 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
                     }
                     else {
 
-                        $content = $request->getHost() . '/' . $url . "\n" .
+                        $content = $request['host'] . '/' . $url . "\n" .
                                    str_repeat(
                                        '*',
-                                       strlen($request->getHost()) + 1
+                                       strlen($request['host']) + 1
                                    ) . "\n\n";
                         $finder  = new \Hoa\File\Finder($target);
 
@@ -281,7 +281,7 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
                             $content
                         );
 
-                        $this->log("\r" . '✔ '. $methodAsString . ' /' . $url);
+                        $this->log("\r" . '✔ '. $methodReadable . ' /' . $url);
 
                         $this->log(null);
                         $this->log("\n" . 'Waiting for new connection…');
@@ -314,7 +314,7 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
                         $file->readAll()
                     );
 
-                    $this->log("\r" . '✔ '. $methodAsString . ' /' . $url);
+                    $this->log("\r" . '✔ '. $methodReadable . ' /' . $url);
 
                     $this->log(null);
                     $this->log("\n" . 'Waiting for new connection…');
@@ -347,7 +347,7 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
                     $content
                 );
 
-                $this->log("\r" . '✔ '. $methodAsString . ' /' . $url);
+                $this->log("\r" . '✔ '. $methodReadable . ' /' . $url);
 
                 $this->log(null);
                 $this->log("\n" . 'Waiting for new connection…');
@@ -369,9 +369,9 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
                   break;
 
                 case \Hoa\Http\Request::METHOD_POST:
-                    $data = $request->getContent();
+                    $data = $request->getBody();
 
-                    switch(strtolower($request->getContentType())) {
+                    switch(strtolower($request['content-type'])) {
 
                         case 'application/json':
                             $data = http_build_query(@json_decode($data) ?: array());
@@ -391,7 +391,7 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
 
                 default:
                     $content = 'This server is stupid and does not ' .
-                               'support ' . $methodAsString . '! ' .
+                               'support ' . $methodReadable . '! ' .
                                'Yup, damn stupid…';
                     $server->writeAll(
                         'HTTP/1.1 200 OK' . "\r\n" .
@@ -413,7 +413,7 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
                 $socket  = $client->getClient()->getSocket();
                 $listen  = $socket->getAddress() . ':' .
                            $socket->getPort();
-                $this->log("\r" . '✖ ' . $methodAsString . ' /' . $url);
+                $this->log("\r" . '✖ ' . $methodReadable . ' /' . $url);
                 $this->log("\n" . '  ↳ PHP FastCGI seems to be ' .
                            'disconnected (tried to reach ' . $socket .
                            ').' . "\n" .
@@ -434,7 +434,7 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
                 $content
             );
 
-            $this->log("\r" . '✔ '. $methodAsString . ' /' . $url);
+            $this->log("\r" . '✔ '. $methodReadable . ' /' . $url);
             $this->log(null);
             $this->log("\n" . 'Waiting for new connection…');
         }
