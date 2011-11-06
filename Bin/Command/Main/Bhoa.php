@@ -104,6 +104,7 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
         array('fastcgi',      \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'f'),
         array('root',         \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'r'),
         array('print-buffer', \Hoa\Console\GetOption::NO_ARGUMENT,       'b'),
+        array('debug',        \Hoa\Console\GetOption::NO_ARGUMENT,       'd'),
         array('help',         \Hoa\Console\GetOption::NO_ARGUMENT,       'h'),
         array('help',         \Hoa\Console\GetOption::NO_ARGUMENT,       '?')
     );
@@ -122,6 +123,7 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
         $fastcgi = '127.0.0.1:9000';
         $root    = '.';
         $pbuffer = false;
+        $debug   = false;
 
         while(false !== $c = $this->getOption($v)) switch($c) {
 
@@ -139,6 +141,10 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
 
             case 'b':
                 $pbuffer = !$pbuffer;
+              break;
+
+            case 'd':
+                $debug = !$debug;
               break;
 
             case 'h':
@@ -172,7 +178,9 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
             'REQUEST_TIME'      => 0,
 
             'SCRIPT_FILENAME'   => null,
-            'SCRIPT_NAME'       => null
+            'SCRIPT_NAME'       => null,
+
+            'X_HOA_DEBUG'       => $debug
         );
 
         if('hoa://' == substr($_root, 0, 6))
@@ -485,6 +493,7 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
             'f'    => 'PHP FastCGI or PHP-FPM socket URI (default: 127.0.0.1:9000).',
             'r'    => 'Public/document root.',
             'b'    => 'Print buffers (headers & content).',
+            'd'    => 'Start the debugger in Hoa.',
             'help' => 'This help.'
         )));
         cout('Bhoa needs PHP FastCGI to communicate with PHP.' . "\n" .
