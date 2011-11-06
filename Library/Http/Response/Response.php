@@ -70,8 +70,7 @@ namespace Hoa\Http\Response {
 /**
  * Class \Hoa\Http\Response.
  *
- * Parse HTTP headers.
- * Please, see the RFC 2616.
+ * HTTP response support.
  *
  * @TODO Follow http://tools.ietf.org/html/draft-nottingham-http-new-status-03.
  *
