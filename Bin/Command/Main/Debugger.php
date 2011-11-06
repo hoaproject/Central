@@ -146,13 +146,22 @@ class Debugger extends \Hoa\Console\Dispatcher\Kit {
 
             $exception          = unserialize($buffer);
             $exceptions[$exi++] = $exception;
+            $message            = $exception->getFormattedMessage();
+
+            if(false !== $pos = strpos($message, "\n"))
+                $message        = substr($message, 0, $pos);
+
+            $messageLength      = strlen($message);
 
             cout(
                 "\n" .
                 sprintf('%2d', $exi) . '. ' .
                 ('Hoa\Core\Core::dump()' == ($from = $exception->getFrom())
-                    ? '[dump]' : $from) . ': ' .
-                $exception->getFormattedMessage(),
+                    ? $from = '[dump]'
+                    : $from) . ': ' .
+                (74 <= strlen($from) + $messageLength
+                    ? substr($message, 0, 73 - strlen($from)) . '…'
+                    : $message),
                 \Hoa\Console\Io::NO_NEW_LINE
             );
         }
