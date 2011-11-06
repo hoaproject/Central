@@ -39,14 +39,14 @@ namespace Hoa\Http {
 /**
  * Class \Hoa\Http.
  *
- *
+ * Generic class to manage HTTP headers (parse, set, get) only.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Http implements \ArrayAccess {
+abstract class Http implements \ArrayAccess {
 
     /**
      * Whether PHP is running with FastCGI or not.
@@ -79,28 +79,43 @@ class Http implements \ArrayAccess {
     }
 
     /**
-     * Get headers.
+     * Parse a HTTP packet.
      *
      * @access  public
+     * @param   string  $packet    HTTP packet.
      * @return  void
+     * @throw   \Hoa\Http\Exception
      */
-    public function getHeaders ( ) {
-
-        return implode("\r\n", $this->_headers);
-    }
+    abstract public function parse ( $packet );
 
     /**
-     * Parse HTTP headers.
+     * Helper to parse HTTP headers and distribute them in array accesses.
      *
-     * @access  public
+     * @access  protected
+     * @param   array  $hedaers    Headers to parse and distribute.
      * @return  array
      */
-    public function parse ( $packet ) {
+    protected function _parse ( Array $headers ) {
 
         unset($this->_headers);
         $this->_headers = array();
 
-        // ...
+        foreach($headers as $header) {
+
+            list($name, $value)                = explode(':', $header, 2);
+            $this->_headers[strtolower($name)] = trim($value);
+        }
+
+        return $this->_headers;
+    }
+
+    /**
+     * Get headers.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getHeaders ( ) {
 
         return $this->_headers;
     }
