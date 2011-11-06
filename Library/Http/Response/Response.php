@@ -408,6 +408,27 @@ class          Response
     const STATUS_HTTP_VERSION_NOT_SUPPORTED      = '505 HTTP Version Not Supported';
 
     /**
+     * Status (different ordering).
+     *
+     * @var \Hoa\Http\Response arra
+     */
+    private $_status                             = array();
+
+    /**
+     * Request HTTP version.
+     *
+     * @var \Hoa\Http\Request float
+     */
+    protected $_httpVersion                      = null;
+
+    /**
+     * Response body.
+     *
+     * @var \Hoa\Http\Request string
+     */
+    protected $_body                             = null;
+
+    /**
      * This object hash.
      *
      * @var \Hoa\Http\Response string
@@ -443,6 +464,52 @@ class          Response
 
         if(true === $newBuffer)
             $this->newBuffer($call, $able, $size);
+
+        if(empty($this->_status)) {
+
+            $reflection = new \ReflectionClass($this);
+
+            foreach($reflection->getConstants() as $value)
+                $this->_status[$this->getStatus($value)] = $value;
+        }
+
+        return;
+    }
+
+    /**
+     * Parse a HTTP packet.
+     *
+     * @access  public
+     * @param   string  $packet    HTTP packet.
+     * @return  void
+     */
+    public function parse ( $packet ) {
+
+        $headers     = explode("\r\n", $packet);
+        $status      = array_shift($headers);
+        $this->_body = null;
+
+        foreach($headers as $i => $header)
+            if('' == trim($header)) {
+
+                unset($headers[$i]);
+                $this->_body = trim(
+                    implode("\r\n", array_splice($headers, $i))
+                );
+                break;
+            }
+
+        if(0 === preg_match('#^HTTP/(1\.(?:0|1))\s+(\d{3})#i', $status, $matches))
+            throw new Exception(
+                'HTTP headers are not well-formed: %s.', 0, $status);
+
+        if(!isset($this->_status[$matches[2]]))
+            throw new Exception(
+                'Unknow HTTP status %d in %s.', 1, array($matches[2], $status));
+
+        $this->_httpVersion = (float) $matches[1];
+        $this->_parse($headers);
+        $this['status']     = $this->_status[$matches[2]];
 
         return;
     }
@@ -774,6 +841,58 @@ class          Response
     }
 
     /**
+     * Set response HTTP version.
+     *
+     * @access  public
+     * @param   float  $version    HTTP version.
+     * @return  float
+     */
+    public function setHttpVersion ( $version ) {
+
+        $old                = $this->_httpVersion;
+        $this->_httpVersion = $version;
+
+        return $old;
+    }
+
+    /**
+     * Get response HTTP version.
+     *
+     * @access  public
+     * @return  float
+     */
+    public function getHttpVersion ( ) {
+
+        return $this->_httpVersion;
+    }
+
+    /**
+     * Set response body.
+     *
+     * @access  public
+     * @param   string  $body   Body.
+     * @return  string
+     */
+    public function setBody ( $body ) {
+
+        $old         = $this->_body;
+        $this->_body = $body;
+
+        return $old;
+    }
+
+    /**
+     * Get response body.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getBody ( ) {
+
+        return $this->_body;
+    }
+
+    /**
      * Delete head buffer.
      *
      * @access  public
@@ -787,7 +906,7 @@ class          Response
         if($this->getHash() != $last[0])
             return;
 
-        for($i = 0; $i < $last[1]; ++$i) {
+        for($i = 0, $max = $last[1]; $i < $max; ++$i) {
 
             $this->flush();
 
