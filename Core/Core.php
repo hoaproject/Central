@@ -196,7 +196,7 @@ class Core implements Parameter\Parameterizable {
     public static function getInstance ( ) {
 
         if(null === static::$_instance)
-            static::$_instance = new self();
+            static::$_instance = new static();
 
         return static::$_instance;
     }
@@ -286,7 +286,7 @@ class Core implements Parameter\Parameterizable {
     protected function setProtocol ( ) {
 
         $protocol     = $this->getParameters()->unlinearizeBranche('protocol');
-        $protocolRoot = self::getProtocol();
+        $protocolRoot = static::getProtocol();
 
         foreach($protocol as $path => $reach)
             $protocolRoot->addComponentHelper(
@@ -325,10 +325,10 @@ class Core implements Parameter\Parameterizable {
      */
     public static function getProtocol ( ) {
 
-        if(null === self::$_root)
-            self::$_root = new Protocol\Root();
+        if(null === static::$_root)
+            static::$_root = new Protocol\Root();
 
-        return self::$_root;
+        return static::$_root;
     }
 
     /**
@@ -343,9 +343,9 @@ class Core implements Parameter\Parameterizable {
      */
     public static function registerShutdownFunction ( $class = '', $method = '' ) {
 
-        if(!isset(self::$_rsdf[$class][$method])) {
+        if(!isset(static::$_rsdf[$class][$method])) {
 
-            self::$_rsdf[$class][$method] = true;
+            static::$_rsdf[$class][$method] = true;
             return register_shutdown_function(array($class, $method));
         }
 
@@ -371,7 +371,7 @@ class Core implements Parameter\Parameterizable {
 
             $client = new \Hoa\Socket\Client($socket);
             $client->connect();
-            self::$_debugger = true;
+            static::$_debugger = true;
         }
         catch ( Exception $e ) {
 
@@ -409,8 +409,8 @@ class Core implements Parameter\Parameterizable {
      */
     public static function dump ( $data ) {
 
-        if(false === self::$_debugger)
-            self::startDebugger();
+        if(false === static::$_debugger)
+            static::startDebugger();
 
         try {
 

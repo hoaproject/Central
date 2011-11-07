@@ -135,10 +135,10 @@ class Consistency implements \ArrayAccess {
      */
     public static function from ( $namespace ) {
 
-        if(!isset(self::$_multiton[$namespace]))
-            self::$_multiton[$namespace] = new self($namespace);
+        if(!isset(static::$_multiton[$namespace]))
+            static::$_multiton[$namespace] = new static($namespace);
 
-        return self::$_multiton[$namespace];
+        return static::$_multiton[$namespace];
     }
 
     /**
@@ -223,14 +223,14 @@ class Consistency implements \ArrayAccess {
         else
             $all = $path;
 
-        if(isset(self::$_cache[$all]) && false === $load)
+        if(isset(static::$_cache[$all]) && false === $load)
             return $this;
 
-        self::$_cache[$all] = true;
-        $uncache            = array($all);
-        $edited             = false;
-        $explode            = explode('.', $all);
-        $parts              = array();
+        static::$_cache[$all] = true;
+        $uncache              = array($all);
+        $edited               = false;
+        $explode              = explode('.', $all);
+        $parts                = array();
 
         if(false !== strpos($all, '~')) {
 
@@ -247,11 +247,11 @@ class Consistency implements \ArrayAccess {
             $explode = $parts;
             $edited  = true;
 
-            if(isset(self::$_cache[$all]) && false === $load)
+            if(isset(static::$_cache[$all]) && false === $load)
                 return $this;
 
-            self::$_cache[$all] = true;
-            $uncache[]          = $all;
+            static::$_cache[$all] = true;
+            $uncache[]            = $all;
         }
 
         if(false !== strpos($all, '*')) {
@@ -264,7 +264,7 @@ class Consistency implements \ArrayAccess {
             if(empty($glob)) {
 
                 foreach($uncache as $un)
-                    unset(self::$_cache[$un]);
+                    unset(static::$_cache[$un]);
 
                 throw new \Hoa\Core\Exception\Idle(
                     'File %s does not exist.', 1, implode('/', $explode));
@@ -286,7 +286,7 @@ class Consistency implements \ArrayAccess {
                 catch ( \Hoa\Core\Exception\Idle $e ) {
 
                     foreach($uncache as $un)
-                        unset(self::$_cache[$un]);
+                        unset(static::$_cache[$un]);
 
                     throw $e;
                 }
@@ -311,7 +311,7 @@ class Consistency implements \ArrayAccess {
             if(!file_exists($path)) {
 
                 foreach($uncache as $un)
-                    unset(self::$_cache[$un]);
+                    unset(static::$_cache[$un]);
 
                 array_pop($parts);
                 throw new \Hoa\Core\Exception\Idle(
@@ -327,24 +327,24 @@ class Consistency implements \ArrayAccess {
         if(true === $entry) {
 
             array_pop($parts);
-            $alias                 = implode('\\', $parts);
-            self::$_class[$alias]  = $class;
-            $this->__class[$alias] = &self::$_class[$alias];
+            $alias                  = implode('\\', $parts);
+            static::$_class[$alias] = $class;
+            $this->__class[$alias]  = &static::$_class[$alias];
         }
 
-        self::$_class[$class]  = array(
+        static::$_class[$class]  = array(
             'path'     => $path,
             'alias'    => $alias,
             'imported' => false
         );
-        $this->__class[$class] = &self::$_class[$class];
+        $this->__class[$class] = &static::$_class[$class];
 
         if(false === $load)
             return $this;
 
         require $path;
 
-        self::$_class[$class]['imported'] = true;
+        static::$_class[$class]['imported'] = true;
 
         if(true === $entry)
             class_alias($class, $alias);
@@ -523,7 +523,7 @@ class Consistency implements \ArrayAccess {
      */
     public static function getAllImportedClasses ( ) {
 
-        return self::$_class;
+        return static::$_class;
     }
 
     /**
@@ -536,13 +536,13 @@ class Consistency implements \ArrayAccess {
      */
     public static function getClassShortestName ( $classname ) {
 
-        if(!isset(self::$_class[$classname]))
+        if(!isset(static::$_class[$classname]))
             return $classname;
 
-        if(is_string(self::$_class[$classname]))
+        if(is_string(static::$_class[$classname]))
             return $classname;
 
-        return self::$_class[$classname]['alias'] ?: $classname;
+        return static::$_class[$classname]['alias'] ?: $classname;
     }
 
     /**
@@ -555,7 +555,7 @@ class Consistency implements \ArrayAccess {
     public static function autoload ( $classname ) {
 
         $classname = ltrim($classname, '\\');
-        $classes   = self::getAllImportedClasses();
+        $classes   = static::getAllImportedClasses();
 
         if(!isset($classes[$classname])) {
 
@@ -571,7 +571,7 @@ class Consistency implements \ArrayAccess {
                     ), '()');
             $tail = substr($classname, $pos + 1);
 
-            self::from($head)
+            static::from($head)
                 ->import(str_replace('\\', '.', $tail), true);
 
             return true;
@@ -617,7 +617,7 @@ class Consistency implements \ArrayAccess {
                     ), '()');
             $tail = substr($classname, $pos + 1);
 
-            self::from($head)
+            static::from($head)
                 ->import(str_replace('\\', '.', $tail), true, $family);
 
             $classname = $family . '\\' . $tail;
