@@ -181,6 +181,9 @@ class Core implements Parameter\Parameterizable {
         if(empty($date))
             ini_set('date.timezone', 'Europe/Paris');
 
+        if(isset($_SERVER['X_HOA_DEBUG']) && true == $_SERVER['X_HOA_DEBUG'])
+            static::startDebugger();
+
         return;
     }
 
@@ -259,9 +262,6 @@ class Core implements Parameter\Parameterizable {
         $this->_parameters->setKeyword('cwd', $cwd);
         $this->_parameters->setParameters($parameters);
         $this->setProtocol();
-
-        if(isset($_SERVER['X_HOA_DEBUG']) && true == $_SERVER['X_HOA_DEBUG'])
-            static::startDebugger();
 
         return $this;
     }
