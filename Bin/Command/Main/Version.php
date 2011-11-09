@@ -104,6 +104,10 @@ class Version extends \Hoa\Console\Dispatcher\Kit {
               break;
         }
 
+        if(null === $message && null === $info)
+            $info = $message  = 'Hoa ' . $version . '.' . "\n" .
+                                \Hoa\Core::©();
+
         if(true === $verbose)
             cout($message);
         else
