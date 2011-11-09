@@ -89,7 +89,7 @@ $dispatcher = new \Hoa\Dispatcher\Basic(array(
     'synchronous.action'
         => 'main'
 ));
-$dispatcher->setKitName('\Hoa\Console\Dispatcher\Kit');
+$dispatcher->setKitName('Hoa\Console\Dispatcher\Kit');
 $dispatcher->dispatch($router);
 
 }
