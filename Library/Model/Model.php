@@ -130,7 +130,7 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
             ));
 
             $this->__attributes[$name] = array(
-                'comment'   => $comment,
+                'comment'   => $comment ?: false,
                 'name'      => $name,
                 '_name'     => $_name,
                 'validator' => method_exists($this, $validator)
@@ -340,17 +340,21 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
             return $old;
         }
 
-        if(null === $attribute['contract'])
-            $attribute['contract'] = praspel($attribute['comment']);
+        if(false !== $attribute['comment']) {
 
-        $verdict   = $attribute['contract']
-                         ->getClause('invariant')
-                         ->getVariable($name)
-                         ->predicate($value);
+            if(null === $attribute['contract'])
+                $attribute['contract'] = praspel($attribute['comment']);
 
-        if(false === $verdict)
-            throw new Exception(
-                'Try to set the %s attribute with an invalid data.', 0, $name);
+            $verdict   = $attribute['contract']
+                             ->getClause('invariant')
+                             ->getVariable($name)
+                             ->predicate($value);
+
+            if(false === $verdict)
+                throw new Exception(
+                    'Try to set the %s attribute with an invalid data.',
+                    0, $name);
+        }
 
         if(   (null  !== $validator = $attribute['validator'])
            &&  false === $this->{$validator}($value))
@@ -447,13 +451,18 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
         $name      = substr($this->__arrayAccess, 1);
         $attribute = &$this->getAttribute($name);
 
-        if(null === $attribute['contract'])
-            $attribute['contract'] = praspel($attribute['comment']);
+        if(false !== $attribute['comment']) {
 
-        $verdict   = $attribute['contract']
-                         ->getClause('invariant')
-                         ->getVariable($name)
-                         ->predicate($this->{$this->__arrayAccess});
+            if(null === $attribute['contract'])
+                $attribute['contract'] = praspel($attribute['comment']);
+
+            $verdict = $attribute['contract']
+                           ->getClause('invariant')
+                           ->getVariable($name)
+                           ->predicate($this->{$this->__arrayAccess});
+        }
+        else
+            $verdict = true;
 
         if(false === $verdict) {
 
