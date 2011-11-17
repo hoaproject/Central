@@ -55,7 +55,7 @@ namespace Hoa\Model {
 /**
  * Class \Hoa\Model\Exception.
  *
- * Represent a model/document with atributes and relations.
+ * Represent a model/document with attributes and relations.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
@@ -207,6 +207,13 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
      */
     protected function map ( Array $data, Array $map = null ) {
 
+        if(null !== $this->__arrayAccess)
+            return $this->mapRelation(
+                substr($this->__arrayAccess, 1),
+                $data,
+                $map
+            );
+
         if(empty($map))
             $map = array_combine($handle = array_keys($data), $handle);
 
@@ -224,6 +231,15 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
         return $this;
     }
 
+    /**
+     * Map data to a relation attribute.
+     *
+     * @access  public
+     * @param   array  $name    Relation name.
+     * @param   array  $data    Data.
+     * @param   array  $map     Map: data name to attribute name.
+     * @return  \Hoa\Model
+     */
     protected function mapRelation ( $name, Array $data, Array $map = null ) {
 
         if(!isset($this->$name))
@@ -240,23 +256,22 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
         if(null === $attribute['contract'])
             $attribute['contract'] = praspel($attribute['comment']);
 
-        $realdom   = $attribute['contract']
-                       ->getClause('invariant')
-                       ->getVariable($name)
-                       ->getNthDomain(0);
-        $classname = $realdom['classname']->getConstantValue();
-        $_name     = '_' . $name;
+        $realdom             = $attribute['contract']
+                                   ->getClause('invariant')
+                                   ->getVariable($name)
+                                   ->getNthDomain(0);
+        $classname           = $realdom['classname']->getConstantValue();
+        $this->__arrayAccess = '_' . $name;
 
         foreach($data as $i => $d) {
 
-            $this->__arrayAccess = $_name;
             $class               = new $classname();
             $this->offsetSet($i, $class->map($d, $map));
         }
 
         $this->__arrayAccess = null;
 
-        return;
+        return $this;
     }
 
     /**
