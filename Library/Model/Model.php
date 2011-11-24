@@ -261,10 +261,11 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
                                    ->getVariable($name)
                                    ->getNthDomain(0);
         $classname           = $realdom['classname']->getConstantValue();
-        $this->__arrayAccess = '_' . $name;
+        $_name               = '_' . $name;
 
         foreach($data as $i => $d) {
 
+            $this->__arrayAccess = $_name;
             $class               = new $classname();
             $this->offsetSet($i, $class->map($d, $map));
         }
