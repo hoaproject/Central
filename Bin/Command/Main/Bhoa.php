@@ -217,6 +217,7 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
             $method                = $request->getMethod();
             $methodReadable        = strtoupper($method);
             $uri                   = $request->getUrl();
+            $uri                   = substr($uri, 0, strpos($uri, '?') ?: strlen($uri));
             $url                   = ltrim($uri, '/');
             $ttime                 = time();
             $smartPrint            = "\r";
