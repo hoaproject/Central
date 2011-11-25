@@ -143,7 +143,10 @@ class Html extends \Hoa\Xyl\Interpreter {
         'image'           => '\Hoa\Xyl\Interpreter\Html\Image',
 
         // Phrasing model.
-        '__text'          => '\Hoa\Xyl\Interpreter\Html\Text'
+        '__text'          => '\Hoa\Xyl\Interpreter\Html\Text',
+
+        // Others.
+        'iframe'          => '\Hoa\Xyl\Interpreter\Html\Iframe'
     );
 
     /**
