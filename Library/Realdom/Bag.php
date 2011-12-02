@@ -86,7 +86,7 @@ class Bag extends Realdom {
 
         $out = false;
 
-        foreach($this->getArguments() as $i => $domain)
+        foreach($this->getArguments() as $domain)
             $out = $out || $domain->predicate($q);
 
         return $out;
