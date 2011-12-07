@@ -943,18 +943,18 @@ function curry ( $callable ) {
  * Same as curry() but where all arguments are references.
  *
  * @access  public
- * @param   mixed  $callable    Callable (two parts).
- * @param   ...    ...          Arguments.
+ * @param   mixed  &$callable    Callable (two parts).
+ * @param   ...    &...          Arguments.
  * @return  \Closure
  */
 if(!ƒ('curry_ref')) {
-function curry_ref ( $callable, &$a = null, &$b = null, &$c = null, &$d = null,
-                                &$e = null, &$f = null, &$g = null, &$h = null,
-                                &$i = null, &$j = null, &$k = null, &$l = null,
-                                &$m = null, &$n = null, &$o = null, &$p = null,
-                                &$q = null, &$r = null, &$s = null, &$t = null,
-                                &$u = null, &$v = null, &$w = null, &$x = null,
-                                &$y = null, &$z = null ) {
+function curry_ref ( &$callable, &$a = null, &$b = null, &$c = null, &$d = null,
+                                 &$e = null, &$f = null, &$g = null, &$h = null,
+                                 &$i = null, &$j = null, &$k = null, &$l = null,
+                                 &$m = null, &$n = null, &$o = null, &$p = null,
+                                 &$q = null, &$r = null, &$s = null, &$t = null,
+                                 &$u = null, &$v = null, &$w = null, &$x = null,
+                                 &$y = null, &$z = null ) {
 
     $handle    = func_get_args();
     $arguments = array();
@@ -964,7 +964,7 @@ function curry_ref ( $callable, &$a = null, &$b = null, &$c = null, &$d = null,
 
     $ii        = array_keys($arguments, …, true);
 
-    return function ( ) use ( $callable, &$arguments, $ii ) {
+    return function ( ) use ( &$callable, &$arguments, $ii ) {
 
         return call_user_func_array(
             $callable,
