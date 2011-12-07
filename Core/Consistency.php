@@ -924,13 +924,37 @@ function xcallable ( $call, $able = '' ) {
  * @return  \Closure
  */
 if(!ƒ('curry')) {
-function curry ( $callable, &$a = null, &$b = null, &$c = null, &$d = null,
-                            &$e = null, &$f = null, &$g = null, &$h = null,
-                            &$i = null, &$j = null, &$k = null, &$l = null,
-                            &$m = null, &$n = null, &$o = null, &$p = null,
-                            &$q = null, &$r = null, &$s = null, &$t = null,
-                            &$u = null, &$v = null, &$w = null, &$x = null,
-                            &$y = null, &$z = null ) {
+function curry ( $callable ) {
+
+    $arguments = func_get_args();
+    array_shift($arguments);
+    $ii        = array_keys($arguments, …, true);
+
+    return function ( ) use ( $callable, $arguments, $ii ) {
+
+        return call_user_func_array(
+            $callable,
+            array_replace($arguments, array_combine($ii, func_get_args()))
+        );
+    };
+}}
+
+/**
+ * Same as curry() but where all arguments are references.
+ *
+ * @access  public
+ * @param   mixed  $callable    Callable (two parts).
+ * @param   ...    ...          Arguments.
+ * @return  \Closure
+ */
+if(!ƒ('curry_ref')) {
+function curry_ref ( $callable, &$a = null, &$b = null, &$c = null, &$d = null,
+                                &$e = null, &$f = null, &$g = null, &$h = null,
+                                &$i = null, &$j = null, &$k = null, &$l = null,
+                                &$m = null, &$n = null, &$o = null, &$p = null,
+                                &$q = null, &$r = null, &$s = null, &$t = null,
+                                &$u = null, &$v = null, &$w = null, &$x = null,
+                                &$y = null, &$z = null ) {
 
     $handle    = func_get_args();
     $arguments = array();
