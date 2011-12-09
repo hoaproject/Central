@@ -434,10 +434,10 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
     /**
      * Clean transient value.
      *
-     * @access  public
+     * @access  protected
      * @return  void
      */
-    public function cleanTransientValue ( ) {
+    protected function cleanTransientValue ( ) {
 
         $this->_transientValue = null;
 
