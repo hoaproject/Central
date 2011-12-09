@@ -71,6 +71,48 @@ namespace Hoa\Xyl\Element {
 abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
 
     /**
+     * Attribute type: normal.
+     *
+     * @const int
+     */
+    const ATTRIBUTE_TYPE_NORMAL =  0;
+
+    /**
+     * Attribute type: id (if it represents an ID).
+     *
+     * @const int
+     */
+    const ATTRIBUTE_TYPE_ID     =  1;
+
+    /**
+     * Attribute type: bind (if an inner-binding exists with (?…)).
+     *
+     * @const int
+     */
+    const ATTRIBUTE_TYPE_BIND   =  2;
+
+    /**
+     * Attribute type: custom (e.g. data-*).
+     *
+     * @const int
+     */
+    const ATTRIBUTE_TYPE_CUSTOM =  4;
+
+    /**
+     * Attribute type: list (e.g. the class attribute).
+     *
+     * @const int
+     */
+    const ATTRIBUTE_TYPE_LIST   =  8;
+
+    /**
+     * Attribute type: link (if it is a link).
+     *
+     * @const int
+     */
+    const ATTRIBUTE_TYPE_LINK   = 16;
+
+    /**
      * Data bucket.
      *
      * @var \Hoa\Xyl\Element\Concrete array
@@ -106,9 +148,9 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      * @var \Hoa\Xyl\Element\Concrete array
      */
     protected static $_attributes = array(
-        'id'    => null,
-        'class' => null,
-        'lang'  => null
+        'id'    => self::ATTRIBUTE_TYPE_ID,
+        'class' => self::ATTRIBUTE_TYPE_LIST,
+        'lang'  => self::ATTRIBUTE_TYPE_NORMAL
     );
 
 
@@ -128,9 +170,11 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         $executable = $this instanceof Executable;
         $bindable   = false;
 
-        if(   true === $this->abstract->attributeExists('href')
-           && 0 !== preg_match('#\(\?[^\)]+\)#', $this->abstract->readAttribute('href')))
-            $bindable = true;
+        foreach(static::getDeclaredAttributes() as $attribute => $type)
+            $bindable |= self::ATTRIBUTE_TYPE_BIND
+                           == ($type & self::ATTRIBUTE_TYPE_BIND);
+
+        $bindable = (bool) $bindable;
 
         if(   false === $this->abstract->attributeExists('bind')
            || null  === $bind = $this->selectData(
@@ -539,7 +583,7 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
 
         } while(false !== ($parent = get_parent_class($parent)));
 
-        return array_keys($out);
+        return $out;
     }
 
     /**
