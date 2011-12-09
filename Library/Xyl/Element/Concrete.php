@@ -78,7 +78,7 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
     private $_bucket           = array('data' => null);
 
     /**
-     * Attribute data bucket.
+     * Data bucket for attributes.
      *
      * @var \Hoa\Xyl\Element\Concrete array
      */
@@ -100,10 +100,16 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
 
     /**
      * Attributes description.
+     * Each element can declare its own attributes and inherit its parent's
+     * attributes.
      *
      * @var \Hoa\Xyl\Element\Concrete array
      */
-    protected $_attributes     = null;
+    protected static $_attributes = array(
+        'id'    => null,
+        'class' => null,
+        'lang'  => null
+    );
 
 
 
@@ -494,6 +500,46 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
             $out .= ' ' . $name . '="' . str_replace('"', '\"', $value) . '"';
 
         return $out;
+    }
+
+    /**
+     * Check whether an attribute is declared.
+     *
+     * @access  public
+     * @param   string  $name    Attribute's name.
+     * @return  bool
+     */
+    protected static function isAttributeDeclared ( $name ) {
+
+        $parent = get_called_class();
+
+        while(   false === ($out    = in_array($name, $parent::$_attributes))
+              && false !== ($parent = get_parent_class($parent)));
+
+        return $out;
+    }
+
+    /**
+     * Get all declared attributes.
+     *
+     * @access  public
+     * @return  array
+     */
+    protected static function getDeclaredAttributes ( ) {
+
+        $out    = array();
+        $parent = get_called_class();
+
+        do {
+
+            if(!isset($parent::$_attributes))
+                continue;
+
+            $out = array_merge($out, $parent::$_attributes);
+
+        } while(false !== ($parent = get_parent_class($parent)));
+
+        return array_keys($out);
     }
 
     /**

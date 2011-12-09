@@ -60,70 +60,89 @@ namespace Hoa\Xyl\Interpreter\Html {
 abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
 
     /**
-     * Attributes description.
+     * Attributes mapping between XYL and HTML.
+     * If $_attributesMapping is equal to “…”, it means that all XYL attributes
+     * are copied as HTML attributes. Else, it is a simple mapping, e.g.:
+     *     'href' => 'src'
      *
      * @var \Hoa\Xyl\Interpreter\Html\Concrete array
      */
-    protected $_attributes        = array(
-        'id'    => null,
-        'class' => null
-    );
+    protected static $_attributesMapping = …;
 
     /**
-     * Attributes description of the interpreted element.
+     * HTML attributes.
      *
      * @var \Hoa\Xyl\Interpreter\Html\Concrete array
      */
-    protected $_iAttributes       = array(
-        'id'    => null,
-        'class' => null
-    );
+    protected $_htmlAttributes           = array();
+
+
 
     /**
-     * Attributes mapping from XYL to the interpreter.
+     * Construct element.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Concrete array
+     * @access  public
+     * @return  void
      */
-    protected $_attributesMapping = array(
-        'id'    => 'id',
-        'class' => 'class'
-    );
-
-    /**
-     * Extra attributes defined by child.
-     *
-     * @var \Hoa\Xyl\Interpreter\Html\Concrete array
-     */
-    protected $iAttributes        = null;
-
-    /**
-     * Extra attributes mapping defined by child.
-     *
-     * @var \Hoa\Xyl\Interpreter\Html\Concrete array
-     */
-    protected $attributesMapping  = null;
-
-
-
     public function construct ( ) {
 
-        if(null !== $this->attributesMapping)
-            $this->_attributesMapping = array_merge(
-                $this->_attributesMapping,
-                $this->attributesMapping
-            );
+        parent::construct();
+        $this->mapAttributes();
 
-        if(null !== $this->iAttributes)
-            $this->_iAttributes = array_merge(
-                $this->_iAttributes,
-                $this->iAttributes
-            );
+        return;
+    }
 
-        foreach($this->_attributesMapping as $from => $to)
-            $this->writeAttribute(
-                $to,
-                $this->abstract->readAttribute($from)
-            );
+    /**
+     * Map attributes (from XYL to HTML).
+     *
+     * @access  protected
+     * @return  void
+     */
+    protected function mapAttributes ( ) {
+
+        $parent = get_called_class();
+
+        do {
+
+            static::_mapAttributes($this, $parent);
+
+        } while(__CLASS__ !== $parent = get_parent_class($parent));
+
+        static::_mapAttributes($this, $parent);
+
+        return;
+    }
+
+    /**
+     * Real attributes mapping.
+     *
+     * @access  private
+     * @param   \Hoa\Xyl\Element\Concrete  $self      Element that will receive
+     *                                                attributes.
+     * @param   string                     $parent    Parent's name.
+     * @return  void
+     */
+    private static function _mapAttributes ( $self, $parent ) {
+
+        if(   !isset($parent::$_attributesMapping)
+           || !isset($parent::$_attributes))
+            return;
+
+        $map = $parent::$_attributesMapping;
+
+        if(… === $map)
+            $map = array_keys($parent::$_attributes);
+
+        foreach($map as $from => $to) {
+
+            if(is_int($from))
+                $from = $to;
+
+            if(null === $value = $self->abstract->readAttribute($from))
+                continue;
+
+            $self->writeAttribute($to, $value);
+        }
 
         return;
     }
@@ -136,7 +155,7 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
      */
     public function readAttributes ( ) {
 
-        return $this->_iAttributes;
+        return $this->_htmlAttributes;
     }
 
     /**
@@ -280,7 +299,7 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
      */
     public function writeAttribute ( $name, $value ) {
 
-        $this->_iAttributes[$name] = $value;
+        $this->_htmlAttributes[$name] = $value;
 
         return;
     }
@@ -314,7 +333,7 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
      */
     public function removeAttribute ( $name ) {
 
-        unset($this->_iAttributes[$name]);
+        unset($this->_htmlAttributes[$name]);
 
         return;
     }
