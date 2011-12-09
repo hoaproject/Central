@@ -304,7 +304,7 @@ class Concrete implements Element, \Countable, \IteratorAggregate, \ArrayAccess 
      * Set a child.
      *
      * @access  public
-     * @param   string                    $name     Child name.
+     * @param   string                     $name     Child name.
      * @param   \Hoa\Xml\Element\Concrete  $value    Value.
      * @return  void
      */
@@ -362,7 +362,7 @@ class Concrete implements Element, \Countable, \IteratorAggregate, \ArrayAccess 
      * Set an element to an index.
      *
      * @access  public
-     * @param   string                    $offset    Element index.
+     * @param   string                     $offset    Element index.
      * @param   \Hoa\Xyl\Element\Concrete  $value     Element.
      * @return  void
      */
