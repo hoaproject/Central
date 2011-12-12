@@ -60,7 +60,7 @@ namespace Hoa\Xyl\Interpreter\Html {
 /**
  * Class \Hoa\Xyl\Interpreter\Html.
  *
- * HTML intepreter.
+ * HTML interpreter.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
