@@ -171,8 +171,12 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         $bindable   = false;
 
         foreach(static::getDeclaredAttributes() as $attribute => $type)
-            $bindable |= self::ATTRIBUTE_TYPE_BIND
-                           == ($type & self::ATTRIBUTE_TYPE_BIND);
+            $bindable |=    (self::ATTRIBUTE_TYPE_BIND
+                               == ($type & self::ATTRIBUTE_TYPE_BIND))
+                         && (0 !== preg_match(
+                                       '#\(\?[^\)]+\)#',
+                                       $this->abstract->readAttribute($attribute)
+                                   ));
 
         $bindable = (bool) $bindable;
 
