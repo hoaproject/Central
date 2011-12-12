@@ -76,6 +76,13 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
      */
     protected $_htmlAttributes           = array();
 
+    /**
+     * HTML attributes type (from mapping).
+     *
+     * @var \Hoa\Xyl\Interpreter\Html\Concrete array
+     */
+    protected $_htmlAttributesType       = array();
+
 
 
     /**
@@ -142,6 +149,7 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
                 continue;
 
             $self->writeAttribute($to, $value);
+            $self->_htmlAttributesType[$to] = &$parent::$_attributes[$from];
         }
 
         return;
@@ -259,15 +267,27 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
      * Read attributes as a string.
      *
      * @access  public
+     * @param   bool  $compute    Whether we automatically call the
+     *                            Hoa\Xyl\Element\Concrete::computeAttributeValue()
+     *                            method.
      * @return  string
      */
-    public function readAttributesAsString ( ) {
+    public function readAttributesAsString ( $compute = true ) {
 
         $out = null;
 
         foreach($this->readAttributes() as $name => $value)
             if(null !== $value)
-                $out .= ' ' . $name . '="' . str_replace('"', '\"', $value) . '"';
+                $out .= ' ' . $name . '="' . str_replace(
+                            '"',
+                            '\"',
+                            true === $compute
+                                ? $this->computeAttributeValue(
+                                      $value,
+                                      $this->_htmlAttributesType[$name]
+                                  )
+                                : $value
+                        ) . '"';
 
         return $out;
     }
