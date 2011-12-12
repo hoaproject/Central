@@ -57,16 +57,7 @@ namespace Hoa\Xyl\Interpreter\Html {
  * @license    New BSD License
  */
 
-abstract class Generic extends Concrete {
-
-    /**
-     * Map.
-     *
-     * @var \Hoa\Xyl\Interpreter\Html\Generic string
-     */
-    protected $_map = null;
-
-
+class Generic extends Concrete {
 
     /**
      * Paint the element.
@@ -77,10 +68,18 @@ abstract class Generic extends Concrete {
      */
     protected function paint ( \Hoa\Stream\IStream\Out $out ) {
 
-        $out->writeAll('<' . $this->_map .
-                       $this->readAttributesAsString() . '>');
-        $this->computeValue($out);
-        $out->writeAll('</' . $this->_map . '>');
+        $name = $this->abstract->getName();
+
+        if(0 !== $this->_contentFlow) {
+
+            $out->writeAll('<' . $name . $this->readAttributesAsString() . '>');
+            $this->computeValue($out);
+            $out->writeAll('</' . $name . '>');
+
+            return;
+        }
+
+        $out->writeAll('<' . $name . $this->readAttributesAsString() . ' />');
 
         return;
     }

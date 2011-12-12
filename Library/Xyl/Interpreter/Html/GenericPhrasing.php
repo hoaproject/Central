@@ -53,23 +53,17 @@ from('Hoa')
 namespace Hoa\Xyl\Interpreter\Html {
 
 /**
- * Class \Hoa\Xyl\Interpreter\Html\Script.
+ * Class \Hoa\Xyl\Interpreter\Html\GenericPhrasing.
  *
- * The <script /> component.
+ * Abstract/generic phrasing component.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Script extends Generic implements \Hoa\Xml\Element\Model\Phrasing {
-
-    /**
-     * Map.
-     *
-     * @var \Hoa\Xyl\Interpreter\Html\Generic string
-     */
-    protected $_map = 'script';
-}
+class          GenericPhrasing
+    extends    Generic
+    implements \Hoa\Xml\Element\Model\Phrasing { }
 
 }

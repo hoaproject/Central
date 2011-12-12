@@ -39,32 +39,41 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Xyl\Interpreter\Html\Section
+ * \Hoa\Xyl\Interpreter\Html\GenericPhrasing
  */
--> import('Xyl.Interpreter.Html.Section');
+-> import('Xyl.Interpreter.Html.GenericPhrasing');
 
 }
 
 namespace Hoa\Xyl\Interpreter\Html {
 
 /**
- * Class \Hoa\Xyl\Interpreter\Html\Section2.
+ * Class \Hoa\Xyl\Interpreter\Html\Q.
  *
- * The <section2 /> component.
+ * The <q /> or <blockquote /> components.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Section2 extends Section {
+class Q extends GenericPhrasing {
 
     /**
-     * Depth.
+     * Attributes description.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Section int
+     * @var \Hoa\Xyl\Interpreter\Html\Q array
      */
-    protected $_n = 2;
+    protected static $_attributes        = array(
+        'cite' => parent::ATTRIBUTE_TYPE_NORMAL
+    );
+
+    /**
+     * Attributes mapping between XYL and HTML.
+     *
+     * @var \Hoa\Xyl\Interpreter\Html\Q array
+     */
+    protected static $_attributesMapping = …;
 }
 
 }
