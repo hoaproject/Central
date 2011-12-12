@@ -71,39 +71,46 @@ namespace Hoa\Xyl\Element {
 abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
 
     /**
+     * Attribute type: unknown.
+     *
+     * @const int
+     */
+    const ATTRIBUTE_TYPE_UNKNOWN =  0;
+
+    /**
      * Attribute type: normal.
      *
      * @const int
      */
-    const ATTRIBUTE_TYPE_NORMAL = 0;
+    const ATTRIBUTE_TYPE_NORMAL  =  1;
 
     /**
      * Attribute type: id (if it represents an ID).
      *
      * @const int
      */
-    const ATTRIBUTE_TYPE_ID     = 1;
+    const ATTRIBUTE_TYPE_ID      =  2;
 
     /**
      * Attribute type: custom (e.g. data-*).
      *
      * @const int
      */
-    const ATTRIBUTE_TYPE_CUSTOM = 2;
+    const ATTRIBUTE_TYPE_CUSTOM  =  4;
 
     /**
      * Attribute type: list (e.g. the class attribute).
      *
      * @const int
      */
-    const ATTRIBUTE_TYPE_LIST   = 4;
+    const ATTRIBUTE_TYPE_LIST    =  8;
 
     /**
      * Attribute type: link (if it is a link).
      *
      * @const int
      */
-    const ATTRIBUTE_TYPE_LINK   = 8;
+    const ATTRIBUTE_TYPE_LINK    = 16;
 
     /**
      * Data bucket.
@@ -426,21 +433,30 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
     }
 
     /**
+     * Clean transient value.
+     *
+     * @access  protected
+     * @return  void
+     */
+    protected function cleanTransientValue ( ) {
+
+        $this->_transientValue = null;
+
+        return;
+    }
+
+    /**
      * Compute attribute value.
      *
      * @access  public
-     * @param   string  $attribute    Attribute name.
-     * @param   array   $variables    Variables.
+     * @param   string  $value    Attribute value.
+     * @param   int     $type     Attribute type.
      * @return  string
      */
-    public function computeAttributeValue ( $attribute,
-                                            Array $variables = array() ) {
+    public function computeAttributeValue ( $value,
+                                            $type = self::ATTRIBUTE_TYPE_UNKNOWN ) {
 
-        if(false === $this->abstract->attributeExists($attribute))
-            return null;
-
-        $value = $this->abstract->readAttribute($attribute);
-
+        /*
         // (!variable).
         $value = preg_replace_callback(
             '#\(\!([^\)]+)\)#',
@@ -453,6 +469,7 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
             },
             $value
         );
+        */
 
         // (?inner-bind).
         $handle = &$this->_attributeBucket;
@@ -473,20 +490,12 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
             $value
         );
 
+        // Link.
+        if(   self::ATTRIBUTE_TYPE_LINK    == $type
+           || self::ATTRIBUTE_TYPE_UNKNOWN == $type)
+            $value = $this->computeLink($value);
+
         return $value;
-    }
-
-    /**
-     * Clean transient value.
-     *
-     * @access  protected
-     * @return  void
-     */
-    protected function cleanTransientValue ( ) {
-
-        $this->_transientValue = null;
-
-        return;
     }
 
     /**
@@ -498,12 +507,13 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      */
     public function computeLink ( $link ) {
 
-        $router = $this->getAbstractElementSuperRoot()->getRouter();
-
-        if(null === $router)
-            return $link;
-
+        // Router.
         if(0 != preg_match('#^@(?:(?:([^:]+):(.*))|([^$]+))$#', $link, $matches)) {
+
+            $router = $this->getAbstractElementSuperRoot()->getRouter();
+
+            if(null === $router)
+                return $link;
 
             if(isset($matches[3]))
                 return $router->unroute($matches[3]);
@@ -520,48 +530,17 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
             return $router->unroute($id, $kv);
         }
 
+        // hoa://.
+        if('hoa://' == substr($link, 0, 6))
+            return $this->getAbstractElementSuperRoot()->resolve($link);
+
         return $link;
-    }
-
-    /**
-     * Read attributes as a string.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function readAttributesAsString ( ) {
-
-        $out        = null;
-        $attributes = $this->abstract->readAttributes();
-        unset($attributes['bind']);
-
-        foreach($attributes as $name => $value)
-            $out .= ' ' . $name . '="' . str_replace('"', '\"', $value) . '"';
-
-        return $out;
-    }
-
-    /**
-     * Check whether an attribute is declared.
-     *
-     * @access  public
-     * @param   string  $name    Attribute's name.
-     * @return  bool
-     */
-    protected static function isAttributeDeclared ( $name ) {
-
-        $parent = get_called_class();
-
-        while(   false === ($out    = in_array($name, $parent::$_attributes))
-              && false !== ($parent = get_parent_class($parent)));
-
-        return $out;
     }
 
     /**
      * Get all declared attributes.
      *
-     * @access  public
+     * @access  protected
      * @return  array
      */
     protected static function getDeclaredAttributes ( ) {
