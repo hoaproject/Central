@@ -48,23 +48,33 @@ from('Hoa')
 namespace Hoa\Xyl\Interpreter\Html {
 
 /**
- * Class \Hoa\Xyl\Interpreter\Html\Ulist.
+ * Class \Hoa\Xyl\Interpreter\Html\Ol.
  *
- * The <ulist /> component.
+ * The <ol /> component.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Ulist extends Generic {
+class Ol extends Generic {
 
     /**
-     * Map.
+     * Attributes description.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Generic string
+     * @var \Hoa\Xyl\Interpreter\Html\Ol array
      */
-    protected $_map = 'ul';
+    protected static $_attributes        = array(
+        'reversed' => parent::ATTRIBUTE_TYPE_NORMAL,
+        'start'    => parent::ATTRIBUTE_TYPE_NORMAL
+    );
+
+    /**
+     * Attributes mapping between XYL and HTML.
+     *
+     * @var \Hoa\Xyl\Interpreter\Html\Ol array
+     */
+    protected static $_attributesMapping = …;
 }
 
 }

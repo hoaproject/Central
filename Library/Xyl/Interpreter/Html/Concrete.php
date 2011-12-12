@@ -50,7 +50,7 @@ namespace Hoa\Xyl\Interpreter\Html {
 /**
  * Class \Hoa\Xyl\Interpreter\Html\Concrete.
  *
- * Sub-concrete element.
+ * Parent of all XYL components for this interpreter.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
@@ -82,6 +82,14 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
      * @var \Hoa\Xyl\Interpreter\Html\Concrete array
      */
     protected $_htmlAttributesType       = array();
+
+    /**
+     * Whether content could exist or not.
+     * 0 to false, 1 to true, 2 to maybe.
+     *
+     * @var \Hoa\Xyl\Interpreter\Html\Concrete int
+     */
+    protected $_contentFlow              = 2;
 
 
 
@@ -145,11 +153,12 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
             if(is_int($from))
                 $from = $to;
 
+            $self->_htmlAttributesType[$to] = &$parent::$_attributes[$from];
+
             if(null === $value = $self->abstract->readAttribute($from))
                 continue;
 
             $self->writeAttribute($to, $value);
-            $self->_htmlAttributesType[$to] = &$parent::$_attributes[$from];
         }
 
         return;

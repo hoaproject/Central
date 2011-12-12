@@ -60,7 +60,7 @@ namespace Hoa\Xyl\Interpreter\Html {
 /**
  * Class \Hoa\Xyl\Interpreter\Html.
  *
- * HTML5 intepreter.
+ * HTML intepreter.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
@@ -80,73 +80,24 @@ class Html extends \Hoa\Xyl\Interpreter {
         'definition'      => '\Hoa\Xyl\Interpreter\Common\Yield',
         'value'           => '\Hoa\Xyl\Interpreter\Common\Value',
         'yield'           => '\Hoa\Xyl\Interpreter\Common\Yield',
-        'debug'           => '\Hoa\Xyl\Interpreter\Common\Debug',
-        'script'          => '\Hoa\Xyl\Interpreter\Html\Script',
-
-        // Layout.
-        'box'             => '\Hoa\Xyl\Interpreter\Html\Box',
-        'hbox'            => '\Hoa\Xyl\Interpreter\Html\Hbox',
-        'vbox'            => '\Hoa\Xyl\Interpreter\Html\Vbox',
-        'grid'            => '\Hoa\Xyl\Interpreter\Html\Grid',
-        'grows'           => '\Hoa\Xyl\Interpreter\Html\Grows',
-        'grow'            => '\Hoa\Xyl\Interpreter\Html\Grow',
-
-        // Section.
-        'section1'        => '\Hoa\Xyl\Interpreter\Html\Section1',
-        'section2'        => '\Hoa\Xyl\Interpreter\Html\Section2',
-        'section3'        => '\Hoa\Xyl\Interpreter\Html\Section3',
-        'section4'        => '\Hoa\Xyl\Interpreter\Html\Section4',
-        'section5'        => '\Hoa\Xyl\Interpreter\Html\Section5',
-        'section6'        => '\Hoa\Xyl\Interpreter\Html\Section6',
-        'tableofcontents' => '\Hoa\Xyl\Interpreter\Html\Tableofcontents',
-        'navigation'      => '\Hoa\Xyl\Interpreter\Html\Navigation',
-        'header'          => '\Hoa\Xyl\Interpreter\Html\Header',
-        'content'         => '\Hoa\Xyl\Interpreter\Html\Content',
-        'footer'          => '\Hoa\Xyl\Interpreter\Html\Footer',
-        'title'           => '\Hoa\Xyl\Interpreter\Html\Title',
 
         // Grouping content.
-        'blockcode'       => '\Hoa\Xyl\Interpreter\Html\Blockcode',
-        'p'               => '\Hoa\Xyl\Interpreter\Html\P',
-        'span'            => '\Hoa\Xyl\Interpreter\Html\Span',
-        'ulist'           => '\Hoa\Xyl\Interpreter\Html\Ulist',
-        'olist'           => '\Hoa\Xyl\Interpreter\Html\Olist',
-        'item'            => '\Hoa\Xyl\Interpreter\Html\Item',
-        'error'           => '\Hoa\Xyl\Interpreter\Html\Error',
-
-        // Text-level semantics.
-        'big'             => '\Hoa\Xyl\Interpreter\Html\Big',
-        'code'            => '\Hoa\Xyl\Interpreter\Html\Code',
-        'em'              => '\Hoa\Xyl\Interpreter\Html\Em',
-        'fbreak'          => '\Hoa\Xyl\Interpreter\Html\Fbreak',
-        'hseparator'      => '\Hoa\Xyl\Interpreter\Html\Hseparator',
-        'mark'            => '\Hoa\Xyl\Interpreter\Html\Mark',
-        'small'           => '\Hoa\Xyl\Interpreter\Html\Small',
-        'strong'          => '\Hoa\Xyl\Interpreter\Html\Strong',
-        'sub'             => '\Hoa\Xyl\Interpreter\Html\Sub',
-        'sup'             => '\Hoa\Xyl\Interpreter\Html\Sup',
-
-        // Form.
-        'button'          => '\Hoa\Xyl\Interpreter\Html\Button',
-        'form'            => '\Hoa\Xyl\Interpreter\Html\Form',
-        'input'           => '\Hoa\Xyl\Interpreter\Html\Input',
-        'select'          => '\Hoa\Xyl\Interpreter\Html\Select',
-        'optgroup'        => '\Hoa\Xyl\Interpreter\Html\Optgroup',
-        'option'          => '\Hoa\Xyl\Interpreter\Html\Option',
-        'textarea'        => '\Hoa\Xyl\Interpreter\Html\Textarea',
-        'label'           => '\Hoa\Xyl\Interpreter\Html\Label',
-
-        // Link.
-        'link'            => '\Hoa\Xyl\Interpreter\Html\Link',
-
-        // Media.
-        'image'           => '\Hoa\Xyl\Interpreter\Html\Image',
+        'p'               => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'blockquote'      => '\Hoa\Xyl\Interpreter\Html\Q',
+        'hr'              => '\Hoa\Xyl\Interpreter\Html\Hr',
+        'pre'             => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'ol'              => '\Hoa\Xyl\Interpreter\Html\Ol',
+        'ul'              => '\Hoa\Xyl\Interpreter\Html\Generic',
+        'li'              => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'dl'              => '\Hoa\Xyl\Interpreter\Html\Generic',
+        'dt'              => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'dd'              => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'figure'          => '\Hoa\Xyl\Interpreter\Html\Generic',
+        'figcaption'      => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'div'             => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
 
         // Phrasing model.
-        '__text'          => '\Hoa\Xyl\Interpreter\Html\Text',
-
-        // Others.
-        'iframe'          => '\Hoa\Xyl\Interpreter\Html\Iframe'
+        '__text'          => '\Hoa\Xyl\Interpreter\Html\Text'
     );
 
     /**
