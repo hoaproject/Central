@@ -75,42 +75,35 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      *
      * @const int
      */
-    const ATTRIBUTE_TYPE_NORMAL =  0;
+    const ATTRIBUTE_TYPE_NORMAL = 0;
 
     /**
      * Attribute type: id (if it represents an ID).
      *
      * @const int
      */
-    const ATTRIBUTE_TYPE_ID     =  1;
-
-    /**
-     * Attribute type: bind (if an inner-binding exists with (?…)).
-     *
-     * @const int
-     */
-    const ATTRIBUTE_TYPE_BIND   =  2;
+    const ATTRIBUTE_TYPE_ID     = 1;
 
     /**
      * Attribute type: custom (e.g. data-*).
      *
      * @const int
      */
-    const ATTRIBUTE_TYPE_CUSTOM =  4;
+    const ATTRIBUTE_TYPE_CUSTOM = 2;
 
     /**
      * Attribute type: list (e.g. the class attribute).
      *
      * @const int
      */
-    const ATTRIBUTE_TYPE_LIST   =  8;
+    const ATTRIBUTE_TYPE_LIST   = 4;
 
     /**
      * Attribute type: link (if it is a link).
      *
      * @const int
      */
-    const ATTRIBUTE_TYPE_LINK   = 16;
+    const ATTRIBUTE_TYPE_LINK   = 8;
 
     /**
      * Data bucket.
@@ -171,12 +164,10 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         $bindable   = false;
 
         foreach(static::getDeclaredAttributes() as $attribute => $type)
-            $bindable |=    (self::ATTRIBUTE_TYPE_BIND
-                               == ($type & self::ATTRIBUTE_TYPE_BIND))
-                         && (0 !== preg_match(
-                                       '#\(\?[^\)]+\)#',
-                                       $this->abstract->readAttribute($attribute)
-                                   ));
+            $bindable |= 0 !== preg_match(
+                                   '#\(\?[^\)]+\)#',
+                                   $this->abstract->readAttribute($attribute)
+                               );
 
         $bindable = (bool) $bindable;
 
