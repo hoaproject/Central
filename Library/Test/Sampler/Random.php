@@ -69,7 +69,7 @@ class Random extends Sampler {
      */
     protected function _getInteger ( $lower, $upper ) {
 
-        return (int) $this->_getFloat($lower, $upper);
+        return mt_rand($lower, $upper);
     }
 
     /**
