@@ -119,9 +119,6 @@ abstract class Sampler implements \Hoa\Core\Parameter\Parameterizable {
         if(null === $upper)
             $upper = $this->_parameters->getParameter('integer.max');
 
-        if($upper !== PHP_INT_MAX)
-            ++$upper;
-
         return $this->_getInteger($lower, $upper);
     }
 
