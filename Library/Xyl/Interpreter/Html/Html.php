@@ -81,6 +81,22 @@ class Html extends \Hoa\Xyl\Interpreter {
         'value'           => '\Hoa\Xyl\Interpreter\Common\Value',
         'yield'           => '\Hoa\Xyl\Interpreter\Common\Yield',
 
+        // Sections.
+        'section'         => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'nav'             => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'article'         => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'aside'           => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'h1'              => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'h2'              => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'h3'              => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'h4'              => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'h5'              => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'h6'              => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'hgroup'          => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'header'          => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'footer'          => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'address'         => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+
         // Grouping content.
         'p'               => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
         'blockquote'      => '\Hoa\Xyl\Interpreter\Html\Q',
