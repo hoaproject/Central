@@ -146,6 +146,14 @@ class Html extends \Hoa\Xyl\Interpreter {
         'ins'             => '\Hoa\Xyl\Interpreter\Html\Mod',
         'del'             => '\Hoa\Xyl\Interpreter\Html\Mod',
 
+        // Embedded content.
+        'img'             => '\Hoa\Xyl\Interpreter\Html\Img',
+        'iframe'          => '\Hoa\Xyl\Interpreter\Html\Iframe',
+        'video'           => '\Hoa\Xyl\Interpreter\Html\Video',
+        'audio'           => '\Hoa\Xyl\Interpreter\Html\Media',
+        'source'          => '\Hoa\Xyl\Interpreter\Html\Source',
+        'track'           => '\Hoa\Xyl\Interpreter\Html\Track',
+
         // Phrasing model.
         '__text'          => '\Hoa\Xyl\Interpreter\Html\Text'
     );
