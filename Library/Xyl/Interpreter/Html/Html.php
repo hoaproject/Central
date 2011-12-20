@@ -124,7 +124,11 @@ class Html extends \Hoa\Xyl\Interpreter {
         'bdo'             => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
         'span'            => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
         'br'              => '\Hoa\Xyl\Interpreter\Html\Br',
-        'wbr'             => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing'
+        'wbr'             => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+
+        // Edits.
+        'ins'             => '\Hoa\Xyl\Interpreter\Html\Mod',
+        'del'             => '\Hoa\Xyl\Interpreter\Html\Mod',
 
         // Phrasing model.
         '__text'          => '\Hoa\Xyl\Interpreter\Html\Text'
