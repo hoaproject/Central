@@ -82,19 +82,19 @@ class Html extends \Hoa\Xyl\Interpreter {
         'yield'           => '\Hoa\Xyl\Interpreter\Common\Yield',
 
         // Sections.
-        'section'         => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
-        'nav'             => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
-        'article'         => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
-        'aside'           => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'section'         => '\Hoa\Xyl\Interpreter\Html\Generic',
+        'nav'             => '\Hoa\Xyl\Interpreter\Html\Generic',
+        'article'         => '\Hoa\Xyl\Interpreter\Html\Generic',
+        'aside'           => '\Hoa\Xyl\Interpreter\Html\Generic',
         'h1'              => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
         'h2'              => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
         'h3'              => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
         'h4'              => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
         'h5'              => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
         'h6'              => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
-        'hgroup'          => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
-        'header'          => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
-        'footer'          => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'hgroup'          => '\Hoa\Xyl\Interpreter\Html\Generic',
+        'header'          => '\Hoa\Xyl\Interpreter\Html\Generic',
+        'footer'          => '\Hoa\Xyl\Interpreter\Html\Generic',
         'address'         => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
 
         // Grouping content.
