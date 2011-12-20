@@ -76,6 +76,14 @@ class Source extends Generic {
      * @var \Hoa\Xyl\Interpreter\Html\Source array
      */
     protected static $_attributesMapping = …;
+
+    /**
+     * Whether content could exist or not.
+     * 0 to false, 1 to true, 2 to maybe.
+     *
+     * @var \Hoa\Xyl\Interpreter\Html\Source int
+     */
+    protected $_contentFlow              = 0;
 }
 
 }
