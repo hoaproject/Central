@@ -77,9 +77,14 @@ class Html extends \Hoa\Xyl\Interpreter {
     protected $_rank         = array(
         // XYL.
         'document'        => '\Hoa\Xyl\Interpreter\Html\Document',
+        'title'           => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
         'definition'      => '\Hoa\Xyl\Interpreter\Common\Yield',
         'value'           => '\Hoa\Xyl\Interpreter\Common\Value',
         'yield'           => '\Hoa\Xyl\Interpreter\Common\Yield',
+
+        // Script.
+        'script'          => '\Hoa\Xyl\Interpreter\Html\Script',
+        'noscript'        => '\Hoa\Xyl\Interpreter\Html\Generic',
 
         // Sections.
         'section'         => '\Hoa\Xyl\Interpreter\Html\Generic',
