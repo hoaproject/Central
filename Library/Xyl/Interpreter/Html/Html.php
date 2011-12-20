@@ -96,6 +96,36 @@ class Html extends \Hoa\Xyl\Interpreter {
         'figcaption'      => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
         'div'             => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
 
+        // Text-level semantics.
+        'a'               => '\Hoa\Xyl\Interpreter\Html\A',
+        'em'              => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'strong'          => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'small'           => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        's'               => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'cite'            => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'q'               => '\Hoa\Xyl\Interpreter\Html\Q',
+        'dfn'             => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'abbr'            => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'time'            => '\Hoa\Xyl\Interpreter\Html\Time',
+        'code'            => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'var'             => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'samp'            => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'kbd'             => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'sub'             => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'sup'             => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'i'               => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'b'               => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'u'               => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'mark'            => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'ruby'            => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'rt'              => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'rp'              => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'bdi'             => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'bdo'             => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'span'            => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'br'              => '\Hoa\Xyl\Interpreter\Html\Br',
+        'wbr'             => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing'
+
         // Phrasing model.
         '__text'          => '\Hoa\Xyl\Interpreter\Html\Text'
     );

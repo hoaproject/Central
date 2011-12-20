@@ -48,24 +48,33 @@ from('Hoa')
 namespace Hoa\Xyl\Interpreter\Html {
 
 /**
- * Class \Hoa\Xyl\Interpreter\Html\Hr.
+ * Class \Hoa\Xyl\Interpreter\Html\Time.
  *
- * The <hr /> component.
+ * The <time /> component.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Hr extends GenericPhrasing {
+class Time extends GenericPhrasing {
 
     /**
-     * Whether content could exist or not.
-     * 0 to false, 1 to true, 2 to maybe.
+     * Attributes description.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Hr int
+     * @var \Hoa\Xyl\Interpreter\Html\Time array
      */
-    protected $_contentFlow = 0;
+    protected static $_attributes        = array(
+        'datetime' => parent::ATTRIBUTE_TYPE_NORMAL,
+        'pubdate'  => parent::ATTRIBUTE_TYPE_NORMAL
+    );
+
+    /**
+     * Attributes mapping between XYL and HTML.
+     *
+     * @var \Hoa\Xyl\Interpreter\Html\Time array
+     */
+    protected static $_attributesMapping = …;
 }
 
 }

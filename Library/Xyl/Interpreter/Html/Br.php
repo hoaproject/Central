@@ -48,22 +48,22 @@ from('Hoa')
 namespace Hoa\Xyl\Interpreter\Html {
 
 /**
- * Class \Hoa\Xyl\Interpreter\Html\Hr.
+ * Class \Hoa\Xyl\Interpreter\Html\Br.
  *
- * The <hr /> component.
+ * The <br /> component.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Hr extends GenericPhrasing {
+class Br extends GenericPhrasing {
 
     /**
      * Whether content could exist or not.
      * 0 to false, 1 to true, 2 to maybe.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Hr int
+     * @var \Hoa\Xyl\Interpreter\Html\Br int
      */
     protected $_contentFlow = 0;
 }
