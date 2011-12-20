@@ -48,24 +48,32 @@ from('Hoa')
 namespace Hoa\Xyl\Interpreter\Html {
 
 /**
- * Class \Hoa\Xyl\Interpreter\Html\Hr.
+ * Class \Hoa\Xyl\Interpreter\Html\A.
  *
- * The <hr /> component.
+ * The <a /> component.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Hr extends GenericPhrasing {
+class A extends GenericPhrasing {
 
     /**
-     * Whether content could exist or not.
-     * 0 to false, 1 to true, 2 to maybe.
+     * Attributes description.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Hr int
+     * @var \Hoa\Xyl\Interpreter\Html\A array
      */
-    protected $_contentFlow = 0;
+    protected static $_attributes        = array(
+        'href' => parent::ATTRIBUTE_TYPE_LINK
+    );
+
+    /**
+     * Attributes mapping between XYL and HTML.
+     *
+     * @var \Hoa\Xyl\Interpreter\Html\A array
+     */
+    protected static $_attributesMapping = …;
 }
 
 }

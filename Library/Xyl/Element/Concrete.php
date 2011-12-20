@@ -149,8 +149,10 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      */
     protected static $_attributes = array(
         'id'    => self::ATTRIBUTE_TYPE_ID,
+        'title' => self::ATTRIBUTE_TYPE_NORMAL,
         'class' => self::ATTRIBUTE_TYPE_LIST,
-        'lang'  => self::ATTRIBUTE_TYPE_NORMAL
+        'lang'  => self::ATTRIBUTE_TYPE_NORMAL,
+        'dir'   => self::ATTRIBUTE_TYPE_DIR
     );
 
 
