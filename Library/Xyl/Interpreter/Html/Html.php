@@ -154,6 +154,18 @@ class Html extends \Hoa\Xyl\Interpreter {
         'source'          => '\Hoa\Xyl\Interpreter\Html\Source',
         'track'           => '\Hoa\Xyl\Interpreter\Html\Track',
 
+        // Tabular data.
+        'table'           => '\Hoa\Xyl\Interpreter\Html\Table',
+        'caption'         => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'colgroup'        => '\Hoa\Xyl\Interpreter\Html\TableCol',
+        'col'             => '\Hoa\Xyl\Interpreter\Html\TableCol',
+        'tbody'           => '\Hoa\Xyl\Interpreter\Html\Generic',
+        'thead'           => '\Hoa\Xyl\Interpreter\Html\Generic',
+        'tfoot'           => '\Hoa\Xyl\Interpreter\Html\Generic',
+        'tr'              => '\Hoa\Xyl\Interpreter\Html\Generic',
+        'td'              => '\Hoa\Xyl\Interpreter\Html\Td',
+        'th'              => '\Hoa\Xyl\Interpreter\Html\Th',
+
         // Phrasing model.
         '__text'          => '\Hoa\Xyl\Interpreter\Html\Text'
     );
