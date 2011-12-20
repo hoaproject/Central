@@ -166,6 +166,22 @@ class Html extends \Hoa\Xyl\Interpreter {
         'td'              => '\Hoa\Xyl\Interpreter\Html\Td',
         'th'              => '\Hoa\Xyl\Interpreter\Html\Th',
 
+        // Forms.
+        'form'            => '\Hoa\Xyl\Interpreter\Html\Form',
+        'fieldset'        => '\Hoa\Xyl\Interpreter\Html\Fieldset',
+        'legend'          => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'label'           => '\Hoa\Xyl\Interpreter\Html\Label',
+        'input'           => '\Hoa\Xyl\Interpreter\Html\Input',
+        'button'          => '\Hoa\Xyl\Interpreter\Html\Button',
+        'select'          => '\Hoa\Xyl\Interpreter\Html\Select',
+        'optgroup'        => '\Hoa\Xyl\Interpreter\Html\Optgroup',
+        'option'          => '\Hoa\Xyl\Interpreter\Html\Option',
+        'textarea'        => '\Hoa\Xyl\Interpreter\Html\Textarea',
+        'keygen'          => '\Hoa\Xyl\Interpreter\Html\Keygen',
+        'output'          => '\Hoa\Xyl\Interpreter\Html\Output',
+        'progress'        => '\Hoa\Xyl\Interpreter\Html\Progress',
+        'meter'           => '\Hoa\Xyl\Interpreter\Html\Meter',
+
         // Phrasing model.
         '__text'          => '\Hoa\Xyl\Interpreter\Html\Text'
     );
