@@ -54,9 +54,14 @@ from('Hoa')
 -> import('Compiler.Llk')
 
 /**
- * \Hoa\Regex\Visitor\Realdom
+ * \Hoa\Regex\Visitor\UniformPreCompute
  */
--> import('Regex.Visitor.Realdom')
+-> import('Regex.Visitor.UniformPreCompute')
+
+/**
+ * \Hoa\Regex\Visitor\Uniform
+ */
+-> import('Regex.Visitor.Uniform')
 
 /**
  * \Hoa\File\Read
@@ -84,15 +89,16 @@ class Regex extends String {
      *
      * @var \Hoa\Realdom string
      */
-    protected $_name            = 'regex';
+    protected $_name              = 'regex';
 
     /**
      * Realistic domain defined arguments.
      *
      * @var \Hoa\Realdom array
      */
-    protected $_arguments       = array(
-        'regex'
+    protected $_arguments         = array(
+        'regex',
+        'size'
     );
 
     /**
@@ -100,21 +106,28 @@ class Regex extends String {
      *
      * @var \Hoa\Compiler\Llk object
      */
-    protected static $_compiler = null;
+    protected static $_compiler   = null;
+
+    /**
+     * Regex visitor (pre-computation).
+     *
+     * @var \Hoa\Regex\Visitor\UniformPreCompute object
+     */
+    protected static $_precompute = null;
 
     /**
      * Regex visitor that use realdom.
      *
-     * @var \Hoa\Regex\Visitor\Realdom object
+     * @var \Hoa\Regex\Visitor\Uniform object
      */
-    protected static $_visitor  = null;
+    protected static $_visitor    = null;
 
     /**
      * AST.
      *
      * @var \Hoa\Compiler\TreeNode object
      */
-    protected $_ast             = null;
+    protected $_ast               = null;
 
 
 
@@ -134,7 +147,14 @@ class Regex extends String {
         if(!isset($this['regex']))
             $this['regex'] = new Conststring('');
 
-        $this->_ast   = self::$_compiler->parse(
+        if(!isset($this['size']))
+            throw new Exception(
+                'Argument missing.', 0);
+
+        if(null === self::$_precompute)
+            self::$_precompute = new \Hoa\Regex\Visitor\UniformPreCompute();
+
+        $this->_ast = self::$_compiler->parse(
             $this['regex']->getConstantValue()
         );
 
@@ -170,7 +190,12 @@ class Regex extends String {
     protected function _sample ( \Hoa\Test\Sampler $sampler ) {
 
         if(null === self::$_visitor)
-            self::$_visitor = new \Hoa\Regex\Visitor\Realdom($sampler);
+            self::$_visitor = new \Hoa\Regex\Visitor\Uniform($sampler);
+
+        $size = $this['size']->sample($sampler);
+        self::$_precompute->setSize($size);
+        self::$_precompute->visit($this->_ast);
+        self::$_visitor->setSize($size);
 
         return self::$_visitor->visit($this->_ast);
     }
