@@ -122,6 +122,27 @@ class          Xyl
     const TYPE_OVERLAY    = 2;
 
     /**
+     * Selector type: path.
+     *
+     * @const int
+     */
+    const SELECTOR_PATH   = 0;
+
+    /**
+     * Selector type: query.
+     *
+     * @const int
+     */
+    const SELECTOR_QUERY  = 1;
+
+    /**
+     * Selector type: xpath.
+     *
+     * @const int
+     */
+    const SELECTOR_XPATH  = 2;
+
+    /**
      * Parameters.
      *
      * @var \Hoa\Core\Parameter object
@@ -285,7 +306,7 @@ class          Xyl
 
             default:
                 throw new Exception(
-                    'Unknown document <%s>.', 0, $this->getName());
+                    'Unknown document <%s>.', 1, $this->getName());
         }
 
         $this->useNamespace(self::NAMESPACE_ID);
@@ -420,7 +441,7 @@ class          Xyl
 
             if(false === file_exists($href))
                 throw new Exception(
-                    'File %s is not found, cannot use it.', 0, $href);
+                    'File %s is not found, cannot use it.', 2, $href);
 
             if(true === in_array($href, $hrefs))
                 continue;
@@ -436,7 +457,7 @@ class          Xyl
             if(self::TYPE_DEFINITION != $fragment->getType())
                 throw new Exception(
                     '%s must only contain <definition> of <yield> (and some ' .
-                    '<?xyl-use) elements.', 1, $href);
+                    '<?xyl-use) elements.', 3, $href);
 
             foreach($fragment->xpath('//__current_ns:yield[@name]') as $yield)
                 $receiptDocument->documentElement->appendChild(
@@ -597,7 +618,7 @@ class          Xyl
 
             if(false === file_exists($href))
                 throw new Exception(
-                    'File %s is not found, cannot use it.', 2, $href);
+                    'File %s is not found, cannot use it.', 4, $href);
 
             if(true === in_array($href, $hrefs))
                 continue;
@@ -613,7 +634,7 @@ class          Xyl
             if(self::TYPE_OVERLAY != $fragment->getType())
                 throw new Exception(
                     '%s must only contain <overlay> (and some <?xyl-overlay) ' .
-                    'elements.', 3, $href);
+                    'elements.', 5, $href);
 
             foreach($fragment->selectChildElements() as $e => $element)
                 $this->_computeOverlay(
@@ -829,7 +850,7 @@ class          Xyl
         if(false === array_key_exists($name, $rank))
             throw new Exception(
                 'Cannot create the concrete tree because the root <%s> is ' .
-                'unknown from the rank.', 5, $name);
+                'unknown from the rank.', 6, $name);
 
         $class           = $rank[$name];
         $this->_concrete = new $class($root, $this, $rank, self::NAMESPACE_ID);
@@ -852,7 +873,7 @@ class          Xyl
         if(null === $this->_concrete)
             throw new Exception(
                 'Cannot compute the data binding before building the ' .
-                'concrete tree.', 4);
+                'concrete tree.', 7);
 
         $data = $this->getData()->toArray();
 
@@ -1024,6 +1045,36 @@ class          Xyl
             );
 
         return resolve($hoa);
+    }
+
+    /**
+     * Get selector type.
+     *
+     * @access  public
+     * @param   string  $selector    Selector.
+     * @return  int
+     * @throw   \Hoa\Xyl\Exception
+     */
+    public static function getSelector ( $selector, &$matches = false ) {
+
+        // ?a/b/c
+        // ?p:a/b/c
+        // ?path:a/b/c
+        if(0 !== preg_match('#^\?(?:p(?:ath)?:)?([^:]+)$#i', $selector, $matches))
+            return self::SELECTOR_PATH;
+
+        // ?q:a b c
+        // ?query:a b c
+        elseif(0 !== preg_match('#^\?q(?:uery)?:(.*)?$#i', $expression, $matches))
+            return self::SELECTOR_QUERY;
+
+        // ?x:a/b/c
+        // ?xpath:a/b/c
+        elseif(0 !== preg_match('#^\?x(?:path)?:(.*)?$#i', $expression, $matches))
+            return self::SELECTOR_XPATH;
+
+        throw new Exception(
+            'Selector %s is not a valid selector.', 8, $selector);
     }
 
     /**
