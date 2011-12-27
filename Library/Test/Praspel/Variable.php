@@ -219,13 +219,9 @@ class Variable extends DomainDisjunction {
 
         $out = false;
 
-        foreach($this->getDomains() as $domain) {
-
-            $out = $domain->predicate($value);
-
-            if(true === $out)
+        foreach($this->getDomains() as $domain)
+            if(true === $out = $domain->predicate($value))
                 break;
-        }
 
         return $out;
     }
