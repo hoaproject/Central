@@ -80,6 +80,143 @@ class Select extends Generic {
      * @var \Hoa\Xyl\Interpreter\Html\Select array
      */
     protected static $_attributesMapping = …;
+
+    /**
+     * Whether the select is valid or not.
+     *
+     * @var \Hoa\Xyl\Interpreter\Html\Input bool
+     */
+    protected $_validity                 = false;
+
+
+
+    /**
+     * Set (or restore) the select value.
+     *
+     * @access  public
+     * @param   string  $value    Value.
+     * @return  string
+     */
+    public function setValue ( $value ) {
+
+        foreach($this->getOptions() as $option) {
+
+            $option = $this->getConcreteElement($option);
+
+            if($value == $option->getValue())
+                $option->setValue($value);
+            else
+                $option->unsetValue($value);
+        }
+
+        return;
+    }
+
+    /**
+     * Get the select value.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getValue ( ) {
+
+        if(null === $option = $this->getSelectedOption())
+            return null;
+
+        return $option->getValue();
+    }
+
+    /**
+     * Unset the select value.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function unsetValue ( ) {
+
+        if(null === $option = $this->getSelectedOption())
+            return;
+
+        $option->unsetValue();
+
+        return;
+    }
+
+    /**
+     * Get all <option /> components.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getOptions ( ) {
+
+        return array_merge(
+            $this->xpath('./__current_ns:option'),
+            $this->xpath('./__current_ns:optgroup/__current_ns:option')
+        );
+    }
+
+    /**
+     * Get the selected <option /> components.
+     *
+     * @access  public
+     * @return  \Hoa\Xyl\Interpreter\Html\Option
+     */
+    public function getSelectedOption ( ) {
+
+        $options = array_merge(
+            $this->xpath('./__current_ns:option[@selected]'),
+            $this->xpath('./__current_ns:optgroup/__current_ns:option[@selected]')
+        );
+
+        if(empty($options))
+            return null;
+
+        return $this->getConcreteElement($options[0]);
+    }
+
+    /**
+     * Check the select validity.
+     *
+     * @access  public
+     * @param   mixed  $value    Value (if null, will find the value).
+     * @return  bool
+     */
+    public function checkValidity ( $value = null ) {
+
+        $options = $this->getOptions();
+        $values  = array();
+
+        if(null === $value)
+            foreach($options as $option) {
+
+                $option = $this->getConcreteElement($option);
+
+                if(true === $option->isSelected())
+                    $values[] = $value = $option->getValue();
+                else
+                    $values[] = $option->getValue();
+            }
+        else
+            foreach($options as $option ) {
+
+                $option   = $this->getConcreteElement($option);
+                $values[] = $option->getValue();
+            }
+
+        return $this->_validity = in_array($value, $values);
+    }
+
+    /**
+     * Whether the select is valid or not.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isValid ( ) {
+
+        return $this->_validity;
+    }
 }
 
 }
