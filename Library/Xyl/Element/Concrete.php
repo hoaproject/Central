@@ -44,6 +44,11 @@ from('Hoa')
 -> import('Xyl.Exception')
 
 /**
+ * \Hoa\Xyl
+ */
+-> import('Xyl.~')
+
+/**
  * \Hoa\Xml\Element\Concrete
  */
 -> import('Xml.Element.Concrete')
@@ -230,44 +235,34 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      */
     protected function selectData ( $expression, Array &$bucket ) {
 
-        if('?' != $expression[0] || '?' == $expression)
-            return null;
+        switch(\Hoa\Xyl::getSelector($expression, $matches)) {
 
-        // ?a/b/c
-        // ?p:a/b/c
-        // ?path:a/b/c
-        if(0 !== preg_match('#^\?(?:p(?:ath)?:)?([^:]+)$#i', $expression, $matches)) {
+            case \Hoa\Xyl::SELECTOR_PATH:
+                $split = preg_split(
+                    '#(?<!\\\)\/#',
+                    $matches[1]
+                );
 
-            $split = preg_split(
-                '#(?<!\\\)\/#',
-                $matches[1]
-            );
+                foreach($split as &$s)
+                    $s = str_replace('\/', '/', $s);
 
-            foreach($split as &$s)
-                $s = str_replace('\/', '/', $s);
+                $branche = array_pop($split);
 
-            $branche = array_pop($split);
+                foreach($split as $part)
+                    $bucket = &$bucket[0][$part];
 
-            foreach($split as $part)
-                $bucket = &$bucket[0][$part];
+                return $branche;
+              break;
 
-            return $branche;
-        }
+            case \Hoa\Xyl::SELECTOR_QUERY:
+                dump('*** QUERY');
+                dump($matches);
+              break;
 
-        // ?q:a b c
-        // ?query:a b c
-        elseif(0 !== preg_match('#^\?q(?:uery)?:(.*)?$#i', $expression, $matches)) {
-
-            dump('*** QUERY');
-            dump($matches);
-        }
-
-        // ?x:a/b/c
-        // ?xpath:a/b/c
-        elseif(0 !== preg_match('#^\?x(?:path)?:(.*)?$#i', $expression, $matches)) {
-
-            dump('*** XPATH');
-            dump($matches);
+            case \Hoa\Xyl::SELECTOR_XPATH:
+                dump('*** XPATH');
+                dump($matches);
+              break;
         }
 
         return null;
