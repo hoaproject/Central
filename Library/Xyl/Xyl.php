@@ -465,8 +465,9 @@ class          Xyl
     protected function computeYielder ( ) {
 
         $remove = self::TYPE_DOCUMENT == $this->getType();
+        $stream = $this->getStream();
 
-        foreach($this->getStream()->xpath('//__current_ns:yield[@name]') as $yield) {
+        foreach($stream->xpath('//__current_ns:yield[@name]') as $yield) {
 
             $yieldomized = $yield->readDOM();
             $name        = $yieldomized->getAttribute('name');
@@ -477,11 +478,14 @@ class          Xyl
                 $yieldomized->removeAttribute('bind');
             }
 
-            foreach($this->getStream()->xpath('//__current_ns:' . $name) as $ciao) {
+            foreach($stream->xpath('//__current_ns:' . $name) as $ciao) {
 
                 $placeholder = $ciao->readDOM();
                 $parent      = $placeholder->parentNode;
                 $handle      = $yieldomized->cloneNode(true);
+                $_yield      = simplexml_import_dom($handle, '\Hoa\Xyl\Element\Basic');
+                $_yield->useNamespace(self::NAMESPACE_ID);
+                $ciao->useNamespace(self::NAMESPACE_ID);
 
                 if(false === $remove) {
 
@@ -494,6 +498,24 @@ class          Xyl
                         'bind',
                         $placeholder->getAttribute('bind')
                     );
+
+                $selects = $_yield->xpath('.//__current_ns:yield[@select]');
+
+                foreach($selects as $select) {
+
+                    $selectdomized = $select->readDOM();
+                    $xpath         = $ciao->xpath(
+                        './/' . $select->readAttribute('select')
+                    );
+
+                    foreach($xpath ?: array() as $selected)
+                        $selectdomized->parentNode->insertBefore(
+                            $selected->readDOM(),
+                            $selectdomized
+                        );
+
+                    $selectdomized->parentNode->removeChild($selectdomized);
+                }
 
                 $parent->replaceChild($handle, $placeholder);
             }
