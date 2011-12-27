@@ -170,14 +170,15 @@ class Regex extends String {
      */
     public function predicate ( $q ) {
 
-        return 0 !== preg_match(
-            '#' . str_replace(
-                '#',
-                '\#',
-                $this['regex']->getConstantValue()
-            ) . '#',
-            $q
-        );
+        return    parent::predicate($q)
+               && 0 !== preg_match(
+                      '#' . str_replace(
+                          '#',
+                          '\#',
+                          $this['regex']->getConstantValue()
+                      ) . '#',
+                      $q
+                  );
     }
 
     /**
