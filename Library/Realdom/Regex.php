@@ -98,7 +98,7 @@ class Regex extends String {
      */
     protected $_arguments         = array(
         'regex',
-        'size'
+        'length'
     );
 
     /**
@@ -147,7 +147,7 @@ class Regex extends String {
         if(!isset($this['regex']))
             $this['regex'] = new Conststring('');
 
-        if(!isset($this['size']))
+        if(!isset($this['length']))
             throw new Exception(
                 'Argument missing.', 0);
 
@@ -193,10 +193,10 @@ class Regex extends String {
         if(null === self::$_visitor)
             self::$_visitor = new \Hoa\Regex\Visitor\Uniform($sampler);
 
-        $size = $this['size']->sample($sampler);
-        self::$_precompute->setSize($size);
+        $length = $this['length']->sample($sampler);
+        self::$_precompute->setSize($length);
         self::$_precompute->visit($this->_ast);
-        self::$_visitor->setSize($size);
+        self::$_visitor->setSize($length);
 
         return self::$_visitor->visit($this->_ast);
     }
