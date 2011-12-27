@@ -308,6 +308,7 @@ class CssToXPath extends \Hoa\Compiler\Ll1 {
      */
     protected function consume ( $action ) {
 
+        static $__element = '*';
         static $_element  = '*';
         static $element   = '*';
         static $selector  = array();
@@ -318,12 +319,18 @@ class CssToXPath extends \Hoa\Compiler\Ll1 {
         if(isset($this->buffers[0])) {
 
             if(false !== strpos($this->buffers[0], '|'))
-                $_element = $element = str_replace('|', ':', $this->buffers[0]);
-            else
+                $__element = $_element
+                           = $element
+                           = str_replace('|', ':', $this->buffers[0]);
+            else {
+
+                $__element = $this->buffers[0];
+
                 if(null !== $p = $this->getDefaultNamespacePrefix())
-                    $_element = $element = $p . ':' . $this->buffers[0];
+                    $_element = $element = $p . ':' . $__element;
                 else
-                    $_element = $element = $this->buffers[0];
+                    $_element = $element = $__element;
+            }
 
             unset($this->buffers[0]);
         }
@@ -453,14 +460,14 @@ class CssToXPath extends \Hoa\Compiler\Ll1 {
                 switch($pc) {
 
                     case 'root':
-                        $this->_root = '/';
+                        $this->_root = 'self::';
                       break;
 
                     case 'first-child':
                         if('*' != $_element) {
 
                             $element    = '*';
-                            $selector[] = 'name() = "' . $_element . '"';
+                            $selector[] = 'name() = "' . $__element . '"';
                         }
                         $selector[] = 'position() = 1';
                       break;
@@ -469,7 +476,7 @@ class CssToXPath extends \Hoa\Compiler\Ll1 {
                         if('*' != $_element) {
 
                             $element    = '*';
-                            $selector[] = 'name() = "' . $_element . '"';
+                            $selector[] = 'name() = "' . $__element . '"';
                         }
                         $selector[] = 'position() = last()';
                       break;
