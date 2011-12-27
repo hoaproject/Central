@@ -41,7 +41,12 @@ from('Hoa')
 /**
  * \Hoa\Xyl\Interpreter\Html\Generic
  */
--> import('Xyl.Interpreter.Html.Generic');
+-> import('Xyl.Interpreter.Html.Generic')
+
+/**
+ * \Hoa\Xyl\Element\Executable
+ */
+-> import('Xyl.Element.Executable');
 
 }
 
@@ -57,7 +62,7 @@ namespace Hoa\Xyl\Interpreter\Html {
  * @license    New BSD License
  */
 
-class Form extends Generic {
+class Form extends Generic implements \Hoa\Xyl\Element\Executable {
 
     /**
      * Attributes description.
@@ -72,6 +77,7 @@ class Form extends Generic {
         'method'         => parent::ATTRIBUTE_TYPE_NORMAL,
         'name'           => parent::ATTRIBUTE_TYPE_NORMAL,
         'novalidate'     => parent::ATTRIBUTE_TYPE_NORMAL,
+        'onerror'        => parent::ATTRIBUTE_TYPE_LIST,
         'target'         => parent::ATTRIBUTE_TYPE_NORMAL
     );
 
@@ -80,7 +86,138 @@ class Form extends Generic {
      *
      * @var \Hoa\Xyl\Interpreter\Html\Form array
      */
-    protected static $_attributesMapping = …;
+    protected static $_attributesMapping = array(
+        'accept-charset',
+        'action',
+        'autocomplete',
+        'enctype',
+        'method',
+        'name',
+        'novalidate',
+        'target'
+    );
+
+    /**
+     * Form data.
+     *
+     * @var \Hoa\Xyl\Interpreter\Html\Form array
+     */
+    protected $_formData                 = null;
+
+    /**
+     * Whether the form is valid or not.
+     *
+     * @var \Hoa\Xyl\Interpreter\Html\Form bool
+     */
+    protected $_validity                 = true;
+
+
+
+    /**
+     * Pre-execute an element.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function preExecute ( ) {
+
+        return;
+    }
+
+    /**
+     * Post-execute an element.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function postExecute ( ) {
+
+        $this->_formData = $_REQUEST;
+
+        if(true === $this->attributeExists('novalidate'))
+            return;
+
+        $inputs          = array_merge(
+            $this->xpath('.//__current_ns:input'),
+            $this->xpath('.//__current_ns:select'),
+            $this->xpath('.//__current_ns:textarea')
+        );
+
+        if(empty($this->_formData))
+            return;
+
+        foreach($inputs as $input) {
+
+            $input = $this->getConcreteElement($input);
+            $name  = $input->readAttribute('name');
+
+            var_dump($name);
+
+            if('[]' == substr($name, -2))
+                $name = substr($name, 0, -2);
+
+            if(!isset($this->_formData[$name])) {
+
+                $input->unsetValue();
+                $input->checkValidity();
+                $this->_validity = $input->isValid() && $this->_validity;
+
+                continue;
+            }
+
+            if(is_array($this->_formData[$name]))
+                $value = array_shift($this->_formData[$name]);
+            else
+                $value = $this->_formData[$name];
+
+            $input->setValue($value);
+            $input->checkValidity($value);
+            $this->_validity = $input->isValid() && $this->_validity;
+        }
+
+        if(true === $this->_validity)
+            return;
+
+        $errors = $this->xpath(
+            $a = '//__current_ns:error[@id="' .
+            implode('" or @id="', $this->abstract->readAttributeAsList('onerror')) .
+            '"]'
+        );
+
+        foreach($errors as $error)
+            $this->getConcreteElement($error)->setVisibility(true);
+
+        return;
+    }
+
+    /**
+     * Whether the form is valid or not.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isValid ( ) {
+
+        return $this->_validity;
+    }
+
+    /**
+     * Get a data from the form.
+     *
+     * @access  public
+     * @param   string  $index    Index (if null, return all data).
+     * @return  mixed
+     */
+    public function getFormData ( $index = null ) {
+
+        if(null === $index)
+            return $this->_formData;
+
+        if(!isset($this->_formData[$index]))
+            return null;
+
+        return $this->_formData[$index];
+    }
 }
 
 }

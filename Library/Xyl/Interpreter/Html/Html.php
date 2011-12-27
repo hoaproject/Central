@@ -119,6 +119,8 @@ class Html extends \Hoa\Xyl\Interpreter {
         'figcaption'      => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
         'div'             => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
 
+        'error'           => '\Hoa\Xyl\Interpreter\Html\Error',
+
         // Text-level semantics.
         'a'               => '\Hoa\Xyl\Interpreter\Html\A',
         'em'              => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',

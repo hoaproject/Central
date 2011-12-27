@@ -39,95 +39,50 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Xyl\Interpreter\Html\Generic
+ * \Hoa\Xyl\Interpreter\Html\GenericPhrasing
  */
--> import('Xyl.Interpreter.Html.Generic');
+-> import('Xyl.Interpreter.Html.GenericPhrasing');
 
 }
 
 namespace Hoa\Xyl\Interpreter\Html {
 
 /**
- * Class \Hoa\Xyl\Interpreter\Html\Option.
+ * Class \Hoa\Xyl\Interpreter\Html\Error.
  *
- * The <option /> component.
+ * The <error /> component.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Option extends Generic {
+class Error extends GenericPhrasing {
 
     /**
-     * Attributes description.
+     * Visibility.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Option array
+     * @var \Hoa\Xyl\Interpreter\Html\Error bool
      */
-    protected static $_attributes        = array(
-        'disabled' => parent::ATTRIBUTE_TYPE_NORMAL,
-        'label'    => parent::ATTRIBUTE_TYPE_NORMAL,
-        'selected' => parent::ATTRIBUTE_TYPE_NORMAL,
-        'value'    => parent::ATTRIBUTE_TYPE_NORMAL
-    );
-
-    /**
-     * Attributes mapping between XYL and HTML.
-     *
-     * @var \Hoa\Xyl\Interpreter\Html\Option array
-     */
-    protected static $_attributesMapping = …;
+    protected $_visibility = false;
 
 
 
     /**
-     * Set (or restore) the option value.
+     * Paint the element.
      *
-     * @access  public
-     * @param   string  $value    Value.
-     * @return  string
-     */
-    public function setValue ( $value ) {
-
-        if($value === $v = $this->getValue())
-            $this->writeAttribute('selected', 'selected');
-
-        return $v;
-    }
-
-    /**
-     * Unset the option value.
-     *
-     * @access  public
+     * @access  protected
+     * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
      * @return  void
      */
-    public function unsetValue ( ) {
+    protected function paint ( \Hoa\Stream\IStream\Out $out ) {
 
-        $this->removeAttribute('selected');
+        $this->writeAttribute('class', 'error');
+        $out->writeAll('<div' . $this->readAttributesAsString() . '>');
+        $this->computeValue($out);
+        $out->writeAll('</div>');
 
         return;
-    }
-
-    /**
-     * Get the option value.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getValue ( ) {
-
-        return $this->readAttribute('value');
-    }
-
-    /**
-     * Whether the option is selected or not.
-     *
-     * @access  public
-     * @return  bool
-     */
-    public function isSelected ( ) {
-
-        return true === $this->attributeExists('selected');
     }
 }
 
