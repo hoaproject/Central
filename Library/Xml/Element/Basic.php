@@ -228,16 +228,11 @@ class          Basic
      */
     public function querySelectorAll ( $query ) {
 
-        if(null === self::$_cssToXPath) {
-
-            self::$_cssToXPath = new \Hoa\Xml\CssToXPath();
-            self::$_cssToXPath->setDefaultNamespacePrefix('__current_ns');
-        }
-
         self::$_buffer = null;
-        self::$_cssToXPath->compile($query);
+        $_cssToXPath   = self::getCssToXPathInstance();
+        $_cssToXPath->compile($query);
 
-        return $this->xpath(self::$_cssToXPath->getXPath());
+        return $this->xpath($_cssToXPath->getXPath());
     }
 
     /**
@@ -450,6 +445,23 @@ class          Basic
         $this->registerXPathNamespace('__current_ns', $namespace);
 
         return $this;
+    }
+
+    /**
+     * Get CSS to XPath compiler instance.
+     *
+     * @access  public
+     * @return  \Hoa\Xml\CssToXPath
+     */
+    public static function getCssToXPathInstance ( ) {
+
+        if(null === self::$_cssToXPath) {
+
+            self::$_cssToXPath = new \Hoa\Xml\CssToXPath();
+            self::$_cssToXPath->setDefaultNamespacePrefix('__current_ns');
+        }
+
+        return self::$_cssToXPath;
     }
 
     /**
