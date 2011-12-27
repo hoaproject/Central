@@ -525,9 +525,28 @@ class          Xyl
                 foreach($selects as $select) {
 
                     $selectdomized = $select->readDOM();
-                    $xpath         = $ciao->xpath(
-                        './/' . $select->readAttribute('select')
-                    );
+                    $_select       = $select->readAttribute('select');
+
+                    switch(static::getSelector($_select, $matches)) {
+
+                        case self::SELECTOR_PATH:
+                            throw new Exception(
+                                'Selector %s is not supported in a @select ' .
+                                'attribute of the <yield /> component.',
+                                4, $_select);
+                          break;
+
+                        case self::SELECTOR_QUERY:
+                            $_ = \Hoa\Xml\Element\Basic::getCssToXPathInstance();
+                            $_->compile(':root ' . $matches[1]);
+                            $_select = $_->getXPath();
+                          break;
+
+                        case self::SELECTOR_XPATH:
+                            $_select = $matches[1];
+                    }
+
+                    $xpath = $ciao->xpath('.//' . $_select);
 
                     foreach($xpath ?: array() as $selected)
                         $selectdomized->parentNode->insertBefore(
@@ -618,7 +637,7 @@ class          Xyl
 
             if(false === file_exists($href))
                 throw new Exception(
-                    'File %s is not found, cannot use it.', 4, $href);
+                    'File %s is not found, cannot use it.', 5, $href);
 
             if(true === in_array($href, $hrefs))
                 continue;
@@ -634,7 +653,7 @@ class          Xyl
             if(self::TYPE_OVERLAY != $fragment->getType())
                 throw new Exception(
                     '%s must only contain <overlay> (and some <?xyl-overlay) ' .
-                    'elements.', 5, $href);
+                    'elements.', 6, $href);
 
             foreach($fragment->selectChildElements() as $e => $element)
                 $this->_computeOverlay(
@@ -850,7 +869,7 @@ class          Xyl
         if(false === array_key_exists($name, $rank))
             throw new Exception(
                 'Cannot create the concrete tree because the root <%s> is ' .
-                'unknown from the rank.', 6, $name);
+                'unknown from the rank.', 7, $name);
 
         $class           = $rank[$name];
         $this->_concrete = new $class($root, $this, $rank, self::NAMESPACE_ID);
@@ -873,7 +892,7 @@ class          Xyl
         if(null === $this->_concrete)
             throw new Exception(
                 'Cannot compute the data binding before building the ' .
-                'concrete tree.', 7);
+                'concrete tree.', 8);
 
         $data = $this->getData()->toArray();
 
@@ -1065,16 +1084,16 @@ class          Xyl
 
         // ?q:a b c
         // ?query:a b c
-        elseif(0 !== preg_match('#^\?q(?:uery)?:(.*)?$#i', $expression, $matches))
+        elseif(0 !== preg_match('#^\?q(?:uery)?:(.*)?$#i', $selector, $matches))
             return self::SELECTOR_QUERY;
 
         // ?x:a/b/c
         // ?xpath:a/b/c
-        elseif(0 !== preg_match('#^\?x(?:path)?:(.*)?$#i', $expression, $matches))
+        elseif(0 !== preg_match('#^\?x(?:path)?:(.*)?$#i', $selector, $matches))
             return self::SELECTOR_XPATH;
 
         throw new Exception(
-            'Selector %s is not a valid selector.', 8, $selector);
+            'Selector %s is not a valid selector.', 9, $selector);
     }
 
     /**
