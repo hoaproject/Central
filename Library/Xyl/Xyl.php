@@ -925,7 +925,7 @@ class          Xyl
      * @return  string
      */
     public function getTheme ( ) {
-        
+
         return $this->getParameters()->getKeyword('theme');
     }
 
