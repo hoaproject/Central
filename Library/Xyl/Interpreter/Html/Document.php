@@ -100,14 +100,14 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
             '<html>' . "\n" .
             '<![endif]-->' . "\n" .
             '<head>' . "\n" .
-            '  <title>'
+            '  '
         );
 
         if(null !== $this->_title)
             $this->_title->render($out);
 
         $out->writeAll(
-            '</title>' . "\n" .
+            "\n" .
             '  <meta http-equiv="content-type" content="text/html; charset=utf-8" />' . "\n" .
             '  <meta http-equiv="content-type" content="text/javascript; charset=utf-8" />' . "\n" .
             '  <meta http-equiv="content-type" content="text/css; charset=utf-8" />' . "\n"
@@ -131,7 +131,7 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
         );
 
         foreach($this as $child)
-            if('title' != $child->getName())
+            if('title' != $child->abstract->getName())
                 $child->render($out);
 
         $out->writeAll(
@@ -175,17 +175,12 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
      */
     protected function computeTitle ( ) {
 
-        $xpath = $this->xpath('./__current_ns:*[1]');
+        $xpath = $this->xpath('./__current_ns:title');
 
         if(empty($xpath))
             return;
 
-        $title = $this->getConcreteElement($xpath[0]);
-
-        if(!($title instanceof Title))
-            return;
-
-        $this->_title = $title;
+        $this->_title = $this->getConcreteElement($xpath[0]);
 
         return;
     }
