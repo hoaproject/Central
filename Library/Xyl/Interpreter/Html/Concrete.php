@@ -293,7 +293,9 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
                             true === $compute
                                 ? $this->computeAttributeValue(
                                       $value,
-                                      $this->_htmlAttributesType[$name]
+                                      isset($this->_htmlAttributesType[$name])
+                                          ? $this->_htmlAttributesType[$name]
+                                          : parent::ATTRIBUTE_TYPE_NORMAL
                                   )
                                 : $value
                         ) . '"';
