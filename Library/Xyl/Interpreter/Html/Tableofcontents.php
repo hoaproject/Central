@@ -65,28 +65,11 @@ namespace Hoa\Xyl\Interpreter\Html {
 class Tableofcontents extends Generic {
 
     /**
-     * Attributes description.
-     *
-     * @var \Hoa\Xyl\Interpreter\Html\Tableofcontents array
-     */
-    protected static $_attributes        = array(
-        'depth-min' => parent::ATTRIBUTE_TYPE_NORMAL,
-        'depth-max' => parent::ATTRIBUTE_TYPE_NORMAL
-    );
-
-    /**
-     * Attributes mapping between XYL and HTML.
-     *
-     * @var \Hoa\Xyl\Interpreter\Html\Tableofcontents array
-     */
-    protected static $_attributesMapping = null;
-
-    /**
      * Headings.
      *
      * @var \Hoa\Xyl\Interpreter\Html\Tableofcontents array
      */
-    protected $_headings                 = array();
+    protected $_headings = array();
 
 
 
@@ -101,6 +84,22 @@ class Tableofcontents extends Generic {
 
         $this->writeAttribute('class', 'toc');
         $out->writeAll('<ol' . $this->readAttributesAsString() . '>');
+
+        $links = $this->selectChildElements('a');
+
+        if(!empty($links)) {
+
+            foreach($links as $link) {
+
+                $out->writeAll('<li>');
+                $this->getConcreteElement($link)->render($out);
+                $out->writeAll('</li>');
+            }
+
+            $out->writeAll('</ol>');
+
+            return;
+        }
 
         if(empty($this->_headings)) {
 
@@ -149,7 +148,7 @@ class Tableofcontents extends Generic {
                 $heading->computeTransientValue($out);
         }
 
-        for($i = $n - 1; $i >= 0; --$i)
+        for($i = $n - 2; $i >= 0; --$i)
             $out->writeAll('</li></ol>');
 
         return;
