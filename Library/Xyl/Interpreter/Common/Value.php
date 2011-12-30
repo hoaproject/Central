@@ -75,6 +75,16 @@ class          Value
      */
     public function paint ( \Hoa\Stream\IStream\Out $out ) {
 
+        if(true === $this->abstract->attributeExists('link')) {
+
+            $out->writeAll($this->computeAttributeValue(
+                $this->abstract->readAttribute('link'),
+                parent::ATTRIBUTE_TYPE_LINK
+            ));
+
+            return;
+        }
+
         $this->computeValue($out);
 
         return;
