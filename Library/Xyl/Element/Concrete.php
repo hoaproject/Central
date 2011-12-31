@@ -202,9 +202,9 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
             return;
         }
 
-        $this->_bucket['parent']  = &$parent;
-        $this->_bucket['current'] = 0;
-        $this->_bucket['branche'] = $bind;
+        $this->_bucket['parent']   = &$parent;
+        $this->_bucket['current']  = 0;
+        $this->_bucket['branche']  = $bind;
 
         if(null === $parent)
             $this->_bucket['data'] = $bucket;
@@ -247,9 +247,12 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
                     $s = str_replace('\/', '/', $s);
 
                 $branche = array_pop($split);
+                $handle  = &$bucket;
 
                 foreach($split as $part)
-                    $bucket = &$bucket[0][$part];
+                    $handle = &$bucket[0][$part];
+
+                $bucket = $handle;
 
                 return $branche;
               break;
