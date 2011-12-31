@@ -479,7 +479,7 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
             $data = $data[0];
 
         $value  = preg_replace_callback(
-            '#\(\?([^\)]+)\)#',
+            '#\(\?(?:p(?:ath)?:)?([^\)]+)\)#',
             function ( Array $matches ) use ( &$data ) {
 
                 if(!is_array($data) || !isset($data[$matches[1]]))
