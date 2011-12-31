@@ -92,6 +92,9 @@ class Data implements \ArrayAccess {
      */
     public function __set ( $name, $value ) {
 
+        if(null !== $this->_temp)
+            return $this->offsetGet(0)->__set($name, $value);
+
         $this->_temp = $name;
 
         return $this->offsetSet(null, $value);
