@@ -845,9 +845,7 @@ class          Xyl
             $styleParsed = new \Hoa\Xml\Attribute($item->data);
 
             if(true === $styleParsed->attributeExists('href'))
-                $this->_stylesheets[] = $this->computeLink(
-                    $styleParsed->readAttribute('href')
-                );
+                $this->_stylesheets[] = $styleParsed->readAttribute('href');
 
             $ownerDocument->removeChild($item);
             unset($styleParsed);
