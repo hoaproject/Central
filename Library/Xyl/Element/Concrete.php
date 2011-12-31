@@ -490,48 +490,9 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         // Link.
         if(   self::ATTRIBUTE_TYPE_LINK    == $type
            || self::ATTRIBUTE_TYPE_UNKNOWN == $type)
-            $value = $this->computeLink($value);
+            $value = $this->getAbstractElementSuperRoot()->computeLink($value);
 
         return $value;
-    }
-
-    /**
-     * Compute link.
-     *
-     * @access  public
-     * @param   string  $link    Link.
-     * @return  string
-     */
-    public function computeLink ( $link ) {
-
-        // Router.
-        if(0 != preg_match('#^@(?:(?:([^:]+):(.*))|([^$]+))$#', $link, $matches)) {
-
-            $router = $this->getAbstractElementSuperRoot()->getRouter();
-
-            if(null === $router)
-                return $link;
-
-            if(isset($matches[3]))
-                return $router->unroute($matches[3]);
-
-            $id = $matches[1];
-            $kv = array();
-
-            foreach(explode('&', $matches[2]) as $value) {
-
-                $handle                    = explode('=', $value);
-                $kv[urldecode($handle[0])] = urldecode($handle[1]);
-            }
-
-            return $router->unroute($id, $kv);
-        }
-
-        // hoa://.
-        if('hoa://' == substr($link, 0, 6))
-            return $this->getAbstractElementSuperRoot()->resolve($link);
-
-        return $link;
     }
 
     /**

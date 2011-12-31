@@ -433,7 +433,7 @@ class          Xyl
                 continue;
             }
 
-            $href = $useParsed->readAttribute('href');
+            $href = $this->computeLink($useParsed->readAttribute('href'));
             unset($useParsed);
 
             if(0 === preg_match('#^(([^:]+://)|([A-Z]:)|/)#', $href))
@@ -629,7 +629,7 @@ class          Xyl
                 continue;
             }
 
-            $href = $overlayParsed->readAttribute('href');
+            $href = $this->computeLink($overlayParsed->readAttribute('href'));
             unset($overlayParsed);
 
             if(0 === preg_match('#^(([^:]+://)|([A-Z]:)|/)#', $href))
@@ -845,7 +845,9 @@ class          Xyl
             $styleParsed = new \Hoa\Xml\Attribute($item->data);
 
             if(true === $styleParsed->attributeExists('href'))
-                $this->_stylesheets[] = $styleParsed->readAttribute('href');
+                $this->_stylesheets[] = $this->computeLink(
+                    $styleParsed->readAttribute('href')
+                );
 
             $ownerDocument->removeChild($item);
             unset($styleParsed);
@@ -897,7 +899,46 @@ class          Xyl
         $data = $this->getData()->toArray();
 
         return $this->_concrete->computeDataBinding($data);
-    } 
+    }
+
+    /**
+     * Compute link.
+     *
+     * @access  public
+     * @param   string  $link    Link.
+     * @return  string
+     */
+    public function computeLink ( $link ) {
+
+        // Router.
+        if(0 != preg_match('#^@(?:(?:([^:]+):(.*))|([^$]+))$#', $link, $matches)) {
+
+            $router = $this->getRouter();
+
+            if(null === $router)
+                return $link;
+
+            if(isset($matches[3]))
+                return $router->unroute($matches[3]);
+
+            $id = $matches[1];
+            $kv = array();
+
+            foreach(explode('&', $matches[2]) as $value) {
+
+                $handle                    = explode('=', $value);
+                $kv[urldecode($handle[0])] = urldecode($handle[1]);
+            }
+
+            return $router->unroute($id, $kv);
+        }
+
+        // hoa://.
+        if('hoa://' == substr($link, 0, 6))
+            return $this->resolve($link);
+
+        return $link;
+    }
 
     /**
      * Interprete XYL as…

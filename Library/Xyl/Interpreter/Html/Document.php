@@ -119,8 +119,7 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
 
             foreach($this->_resources['css'] as $href)
                 $out->writeAll(
-                    '  <link type="text/css" href="' .
-                    $this->computeLink($href) .
+                    '  <link type="text/css" href="' . $href .
                     '" rel="stylesheet" />' . "\n"
                 );
         }
