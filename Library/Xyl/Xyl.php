@@ -54,11 +54,6 @@ from('Hoa')
 -> import('Xyl.Element.Basic', true)
 
 /**
- * \Hoa\Xyl\Element\Executable
- */
--> import('Xyl.Element.Executable')
-
-/**
  * \Hoa\Xml
  */
 -> import('Xml.~')
