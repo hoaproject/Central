@@ -41,7 +41,12 @@ from('Hoa')
 /**
  * \Hoa\Xyl\Element\Concrete
  */
--> import('Xyl.Element.Concrete');
+-> import('Xyl.Element.Concrete')
+
+/**
+ * \Hoa\Xml\Element\Model\Phrasing
+ */
+-> import('Xml.Element.Model.Phrasing');
 
 }
 
@@ -57,7 +62,9 @@ namespace Hoa\Xyl\Interpreter\Common {
  * @license    New BSD License
  */
 
-class Yield extends \Hoa\Xyl\Element\Concrete {
+class          Yield
+    extends    \Hoa\Xyl\Element\Concrete
+    implements \Hoa\Xml\Element\Model\Phrasing {
 
     /**
      * Paint the element.
@@ -68,8 +75,7 @@ class Yield extends \Hoa\Xyl\Element\Concrete {
      */
     public function paint ( \Hoa\Stream\IStream\Out $out ) {
 
-        foreach($this as $child)
-            $child->render($out);
+        $this->computeValue($out);
 
         return;
     }
