@@ -151,8 +151,6 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
             $input = $this->getConcreteElement($input);
             $name  = $input->readAttribute('name');
 
-            var_dump($name);
-
             if('[]' == substr($name, -2))
                 $name = substr($name, 0, -2);
 
