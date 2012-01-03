@@ -59,9 +59,9 @@ from('Hoa')
 -> import('File.Finder')
 
 /**
- * \Hoa\Php\Io\Out
+ * \Hoa\File\Write
  */
--> import('Php.Io.Out');
+-> import('File.Write');
 
 }
 
@@ -77,7 +77,7 @@ namespace Bin\Command\Test {
  * @license    New BSD License
  */
 
-class Out extends \Hoa\Php\Io\Out {
+class Out extends \Hoa\File\Write {
 
     public $self = null;
 
