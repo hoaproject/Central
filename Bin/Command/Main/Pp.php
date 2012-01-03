@@ -121,7 +121,7 @@ class Pp extends \Hoa\Console\Dispatcher\Kit {
 
         $this->parser->listInputs($grammar, $language);
 
-        if(empty($grammar) || empty($language))
+        if(empty($grammar) || (empty($language) && '0' !== $language))
             return $this->usage();
 
         $compiler = \Hoa\Compiler\Llk::load(
