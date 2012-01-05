@@ -265,7 +265,7 @@ class Server extends Connection implements \Iterator {
 
         @stream_select($read, $write, $except, $this->getTimeout(), 0);
 
-        foreach($read as $i => $socket)
+        foreach($read as $socket)
             if($this->_master == $socket) {
 
                 $client = @stream_socket_accept($this->_master);
