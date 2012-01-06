@@ -216,11 +216,7 @@ class Praspel extends \Hoa\Console\Dispatcher\Kit {
 
                         cout();
 
-                    } while('quit' != $dcode = cin(
-                                                   'debug> ',
-                                                   \Hoa\Console\Io::TYPE_NORMAL,
-                                                   \Hoa\Console\Io::NO_NEW_LINE
-                                               ));
+                    } while('quit' != $dcode = $this->readLine('debug> '));
                   break;
 
                 case 'q':
@@ -252,11 +248,7 @@ class Praspel extends \Hoa\Console\Dispatcher\Kit {
 
             cout();
 
-        } while('quit' != $code = cin(
-                                      '> ',
-                                      \Hoa\Console\Io::TYPE_NORMAL,
-                                      \Hoa\Console\Io::NO_NEW_LINE
-                                  ));
+        } while('quit' != $code = $this->readline('> '));
 
         return;
     }
