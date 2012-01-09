@@ -209,7 +209,7 @@ class Core implements Parameter\Parameterizable {
 
         $hoa               = dirname(__DIR__);
         $cwd               = getcwd() .
-                             (isset($_SERVER['argv'][0])
+                             ('cli' === PHP_SAPI
                                  ? DS . dirname($_SERVER['argv'][0])
                                  : '');
         $this->_parameters = new Parameter(
@@ -255,6 +255,7 @@ class Core implements Parameter\Parameterizable {
                 'namespace.prefix.Application' => '(:%root.application:)',
             )
         );
+
         $this->_parameters->setKeyword('hoa', $hoa);
         $this->_parameters->setKeyword('cwd', $cwd);
         $this->_parameters->setParameters($parameters);
