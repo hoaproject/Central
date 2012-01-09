@@ -212,12 +212,12 @@ class Data implements \ArrayAccess {
 
         $out = array();
 
-        foreach($this->_data as $key => $ii)
-            foreach($ii as $i => $value)
+        foreach($this->_data as $key => &$ii)
+            foreach($ii as $i => &$value)
                 if(is_object($value))
                     $out[$i][$key] = $value->toArray();
                 else
-                    $out[$i][$key] = $value;
+                    $out[$i][$key] = &$value;
 
         return $out;
     }
