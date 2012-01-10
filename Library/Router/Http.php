@@ -437,7 +437,8 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
 
         // Please, see http://php.net/language.variables.external, section “Dots
         // in incoming variable names”.
-        unset($_REQUEST[str_replace('.', '_', $uri)]);
+        unset($_REQUEST[$_uri = str_replace('.', '_', $uri)]);
+        unset($_GET[$_uri]);
 
         $method         = $this->getMethod();
         $subdomainStack = $this->getSubdomainStack();
