@@ -132,7 +132,7 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
      */
     public function postExecute ( ) {
 
-        $this->_formData = $_REQUEST;
+        $this->_formData = array_merge($_GET, $_POST);
 
         if(true === $this->attributeExists('novalidate'))
             return;
