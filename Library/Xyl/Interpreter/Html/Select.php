@@ -150,10 +150,7 @@ class Select extends Generic {
      */
     public function getOptions ( ) {
 
-        return array_merge(
-            $this->xpath('./__current_ns:option'),
-            $this->xpath('./__current_ns:optgroup/__current_ns:option')
-        );
+        return $this->xpath('.//__current_ns:option');
     }
 
     /**
@@ -164,10 +161,7 @@ class Select extends Generic {
      */
     public function getSelectedOption ( ) {
 
-        $options = array_merge(
-            $this->xpath('./__current_ns:option[@selected]'),
-            $this->xpath('./__current_ns:optgroup/__current_ns:option[@selected]')
-        );
+        $options = $this->xpath('.//__current_ns:option[@selected]');
 
         if(empty($options))
             return null;
