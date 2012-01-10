@@ -435,6 +435,10 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
             $bootstrap = ltrim($matchees[1], '/');
         }
 
+        // Please, see http://php.net/language.variables.external, section “Dots
+        // in incoming variable names”.
+        unset($_REQUEST[str_replace('.', '_', $uri)]);
+
         $method         = $this->getMethod();
         $subdomainStack = $this->getSubdomainStack();
         $rules          = array_filter(
