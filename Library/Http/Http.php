@@ -121,6 +121,27 @@ abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable {
     }
 
     /**
+     * Get headers (formatted).
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getHeadersFormatted ( ) {
+
+        $out = array();
+
+        foreach($this->getHeaders() as $header => $value) {
+
+            if('x-' == strtolower(substr($header, 0, 2)))
+                $header = 'http_' . $header;
+
+            $out[strtoupper(str_replace('-', '_', $header))] = $value;
+        }
+
+        return $out;
+    }
+
+    /**
      * Check if header exists.
      *
      * @access  public
