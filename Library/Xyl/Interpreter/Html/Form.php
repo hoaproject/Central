@@ -177,7 +177,7 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
             return;
 
         $errors = $this->xpath(
-            $a = '//__current_ns:error[@id="' .
+            '//__current_ns:error[@id="' .
             implode('" or @id="', $this->abstract->readAttributeAsList('onerror')) .
             '"]'
         );
