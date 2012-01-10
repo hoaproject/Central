@@ -71,9 +71,7 @@ number:
     <number>
 
 #object:
-    ::brace_::
-    pair() ( ::comma:: pair() )*
-    ::_brace::
+    ::brace_:: pair() ( ::comma:: pair() )* ::_brace::
 
 #pair:
     string() ::colon:: value()
