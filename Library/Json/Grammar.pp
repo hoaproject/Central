@@ -31,9 +31,9 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
-// Grammar \Hoa\Compiler\Llk.
+// Grammar \Hoa\Json\Grammar.
 //
-// Provide grammar for the LL(k) parser.
+// Provide grammar for JSON. Please, see <http://json.org> or RFC4627.
 //
 // @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
 // @copyright  Copyright © 2007-2011 Ivan Enderlin.
