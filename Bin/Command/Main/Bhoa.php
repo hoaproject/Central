@@ -368,13 +368,17 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
 
                 case \Hoa\Http\Request::METHOD_GET:
                     $data = null;
-                    $headers = array_merge($_headers, array(
-                        'REQUEST_METHOD'  => 'GET',
-                        'REQUEST_URI'     => DS . $uri,
-                        'REQUEST_TIME'    => time(),
-                        'SCRIPT_FILENAME' => $script_filename,
-                        'SCRIPT_NAME'     => $script_name
-                    ));
+                    $headers = array_merge(
+                        $_headers,
+                        $request->getHeadersFormatted(),
+                        array(
+                            'REQUEST_METHOD'  => 'GET',
+                            'REQUEST_URI'     => DS . $uri,
+                            'REQUEST_TIME'    => time(),
+                            'SCRIPT_FILENAME' => $script_filename,
+                            'SCRIPT_NAME'     => $script_name
+                        )
+                    );
                   break;
 
                 case \Hoa\Http\Request::METHOD_POST:
@@ -387,15 +391,19 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
                           break;
                     }
 
-                    $headers = array_merge($_headers, array(
-                        'REQUEST_METHOD'  => 'POST',
-                        'REQUEST_URI'     => DS . $uri,
-                        'REQUEST_TIME'    => time(),
-                        'SCRIPT_FILENAME' => $script_filename,
-                        'SCRIPT_NAME'     => $script_name,
-                        'CONTENT_TYPE'    => 'application/x-www-form-urlencoded',
-                        'CONTENT_LENGTH'  => strlen($data)
-                    ));
+                    $headers = array_merge(
+                        $_headers,
+                        $request->getHeadersFormatted(),
+                        array(
+                            'REQUEST_METHOD'  => 'POST',
+                            'REQUEST_URI'     => DS . $uri,
+                            'REQUEST_TIME'    => time(),
+                            'SCRIPT_FILENAME' => $script_filename,
+                            'SCRIPT_NAME'     => $script_name,
+                            'CONTENT_TYPE'    => 'application/x-www-form-urlencoded',
+                            'CONTENT_LENGTH'  => strlen($data)
+                        )
+                    );
                   break;
 
                 default:
