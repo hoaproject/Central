@@ -245,7 +245,7 @@ abstract class Protocol {
         if(isset(self::$_cache[$path]))
             return self::$_cache[$path];
 
-        $handle = $this->_resolve($path);
+        $handle              = $this->_resolve($path);
         self::$_cache[$path] = $handle;
 
         return $handle;
