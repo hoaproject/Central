@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2011, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2012, Ivan Enderlin. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -42,7 +42,7 @@ namespace Hoa\Core\Event {
  * Each object which is observable must implement this interface.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 
@@ -54,7 +54,7 @@ interface Source { }
  * This class is the object which is transmit through event channels.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 
@@ -165,7 +165,7 @@ class Bucket {
  * without any known connection between them.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 
@@ -362,7 +362,7 @@ class Event {
  * Each object which is listenable must implement this interface.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 
@@ -388,7 +388,7 @@ interface Listenable extends Source {
  * useful for close interactions between one or some components.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 

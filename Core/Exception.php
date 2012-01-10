@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2011, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2012, Ivan Enderlin. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,7 +44,7 @@ namespace Hoa\Core\Exception {
  * \Hoa\Core\Exception is that the later fires event after beeing constructed.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 
@@ -408,7 +408,7 @@ class Idle extends \Exception implements \Serializable {
  * Each exception must extend \Hoa\Core\Exception.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 
@@ -464,7 +464,7 @@ class Exception extends Idle implements \Hoa\Core\Event\Source {
  * This exception is the equivalent representation of PHP errors.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 

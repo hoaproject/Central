@@ -8,7 +8,7 @@ REM * @license
 REM *
 REM * New BSD License
 REM *
-REM * Copyright © 2007-2011, Ivan Enderlin. All rights reserved.
+REM * Copyright © 2007-2012, Ivan Enderlin. All rights reserved.
 REM *
 REM * Redistribution and use in source and binary forms, with or without
 REM * modification, are permitted provided that the following conditions are met:
@@ -36,7 +36,7 @@ REM **
 REM
 REM **
 REM * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
-REM * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+REM * @copyright  Copyright © 2007-2012 Ivan Enderlin.
 REM * @license    New BSD License
 REM **
 
