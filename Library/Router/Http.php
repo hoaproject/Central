@@ -417,8 +417,6 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
         if(null === $base)
             $base  = $this->getBase();
 
-        $bootstrap = $this->getBootstrap();
-
         if(!empty($base)) {
 
             if(0 === preg_match('#^' . $base . '(.*)?$#', $uri, $matches))
@@ -426,13 +424,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
                     'Cannot match the base %s in the URI %s.',
                     3, array($base, $uri));
 
-            if(0 === preg_match('#^' . $base . '(.*)?$', $bootstrap, $matchees))
-                throw new Exception\NotFound(
-                    'Cannot match the base %s in the bootstrap %s.',
-                    4, array($base, $bootstrap));
-
-            $uri       = ltrim($matches[1],  '/');
-            $bootstrap = ltrim($matchees[1], '/');
+            $uri = ltrim($matches[1],  '/');
         }
 
         // Please, see http://php.net/language.variables.external, section “Dots
@@ -471,7 +463,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
 
         if(empty($rules))
             throw new Exception\NotFound(
-                'No rule to apply to route %s.', 5, $uri);
+                'No rule to apply to route %s.', 4, $uri);
 
         $gotcha = false;
 
@@ -493,7 +485,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
 
         if(false === $gotcha)
             throw new Exception\NotFound(
-                'Cannot found an appropriated rule to route %s.', 6, $uri);
+                'Cannot found an appropriated rule to route %s.', 5, $uri);
 
         if(false !== $pos)
             preg_match(
@@ -659,7 +651,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
 
         if(!isset($_SERVER['REQUEST_URI']))
             throw new Exception(
-                'Cannot find URI so we cannot route.', 7);
+                'Cannot find URI so we cannot route.', 6);
 
         return ltrim($_SERVER['REQUEST_URI'], '/');
     }
