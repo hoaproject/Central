@@ -45,6 +45,11 @@ namespace {
 and
     exit('The Hoa framework main file (Core.php) must be included once.');
 
+(
+    !defined('PHP_VERSION_ID') or PHP_VERSION_ID < 50303
+)
+and
+    exit('Hoa needs at least PHP5.3.3 to work; you have ' . phpversion() . '.');
 
 /**
  * \Hoa\Core\Consistency
