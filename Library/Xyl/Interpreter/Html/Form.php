@@ -156,7 +156,7 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
 
             if(!isset($this->_formData[$name])) {
 
-                $input->unsetValue();
+                //$input->unsetValue();
                 $input->checkValidity();
                 $this->_validity = $input->isValid() && $this->_validity;
 
