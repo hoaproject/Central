@@ -248,7 +248,7 @@ class          Xyl
     public function __construct ( \Hoa\Stream\IStream\In  $in,
                                   \Hoa\Stream\IStream\Out $out,
                                   Interpreter             $interpreter,
-                                  \Hoa\Router\Http        $router = null,
+                                  \Hoa\Router\Http        $router     = null,
                                   Array                   $parameters = array() ) {
 
         parent::__construct('\Hoa\Xyl\Element\Basic', $in);
@@ -266,12 +266,7 @@ class          Xyl
                     'theme' => 'classic'
                 ),
                 array(
-                    'theme'            => '(:theme:lU:)',
-                    'html5.css'        => 'hoa://Application/Public/(:%theme:)/Css/',
-                    'html5.font'       => 'hoa://Application/Public/(:%theme:)/Font/',
-                    'html5.image'      => 'hoa://Application/Public/(:%theme:)/Image/',
-                    'html5.javascript' => 'hoa://Application/Public/(:%theme:)/Javascript/',
-                    'html5.video'      => 'hoa://Application/Public/(:%theme:)/Video/'
+                    'theme' => '(:theme:lU:)'
                 )
             );
             $this->getParameters()->setParameters($parameters);
@@ -313,8 +308,8 @@ class          Xyl
                     'Interpreter' . DS .$this->_interpreter->getResourcePath()
                 ));
 
-        if(null !== $router && false === $router->ruleExists('_css'))
-            $router->_all('_css', 'Public/Css/(?<theme>.*)/(?<sheet>.*)');
+        if(null !== $router && false === $router->ruleExists('_resource'))
+            $router->_all('_resource', '/(?<theme>)/(?<resource>)');
 
         return;
     }
@@ -428,7 +423,7 @@ class          Xyl
                 continue;
             }
 
-            $href = $this->computeLink($useParsed->readAttribute('href'));
+            $href = $this->computeLink($useParsed->readAttribute('href'), true);
             unset($useParsed);
 
             if(0 === preg_match('#^(([^:]+://)|([A-Z]:)|/)#', $href))
@@ -624,7 +619,10 @@ class          Xyl
                 continue;
             }
 
-            $href = $this->computeLink($overlayParsed->readAttribute('href'));
+            $href = $this->computeLink(
+                $overlayParsed->readAttribute('href'),
+                true
+            );
             unset($overlayParsed);
 
             if(0 === preg_match('#^(([^:]+://)|([A-Z]:)|/)#', $href))
@@ -840,7 +838,10 @@ class          Xyl
             $styleParsed = new \Hoa\Xml\Attribute($item->data);
 
             if(true === $styleParsed->attributeExists('href'))
-                $this->_stylesheets[] = $styleParsed->readAttribute('href');
+                $this->_stylesheets[] = $this->computeLink(
+                    $styleParsed->readAttribute('href'),
+                    true
+                );
 
             $ownerDocument->removeChild($item);
             unset($styleParsed);
@@ -899,9 +900,10 @@ class          Xyl
      *
      * @access  public
      * @param   string  $link    Link.
+     * @param   bool    $late    If hoa:// resolving is postponed.
      * @return  string
      */
-    public function computeLink ( $link ) {
+    public function computeLink ( $link, $late = false ) {
 
         // Router.
         if(0 != preg_match('#^@(?:(?:([^:]+):(.*))|([^$]+))$#', $link, $matches)) {
@@ -928,7 +930,7 @@ class          Xyl
 
         // hoa://.
         if('hoa://' == substr($link, 0, 6))
-            return $this->resolve($link);
+            return $this->resolve($link, $late);
 
         return $link;
     }
@@ -1081,21 +1083,21 @@ class          Xyl
      *
      * @access  public
      * @param   string  $hoa    hoa:// path.
+     * @param   bool    $late   If hoa:// real resolving is postponed.
      * @return  string
      */
-    public function resolve ( $hoa ) {
+    public function resolve ( $hoa, $late = false ) {
 
         if(0 !== preg_match('#^hoa://Library/Xyl(/.*|$)#', $hoa, $matches))
-            return resolve(
-                'hoa://Library/Xyl[' . $this->_i . ']' . $matches[1]
-            );
+            $hoa ='hoa://Library/Xyl[' . $this->_i . ']' . $matches[1];
 
         if(0 !== preg_match('#^hoa://Application/Public(/.*)#', $hoa, $matches))
-            return resolve(
-                'hoa://Application/Public/' .
-                $this->getParameters()->getFormattedParameter('theme') .
-                $matches[1]
-            );
+            $hoa = 'hoa://Application/Public/' .
+                   $this->getParameters()->getFormattedParameter('theme') .
+                   $matches[1];
+
+        if(true === $late)
+            return $hoa;
 
         return resolve($hoa);
     }
