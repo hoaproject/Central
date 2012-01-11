@@ -153,6 +153,15 @@ interface Router {
      * @return  bool
      */
     public function isAsynchronous ( );
+
+    /**
+     * Check whether a rule exists.
+     *
+     * @access  public
+     * @param   string  $id    ID.
+     * @return  bool
+     */
+    public function ruleExists ( $id );
 }
 
 }
