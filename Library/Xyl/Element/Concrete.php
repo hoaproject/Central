@@ -209,7 +209,7 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         if(null === $parent)
             $this->_bucket['data'] = $bucket;
 
-        $bindable   and $this->_attributeBucket = &$this->_bucket;
+        $bindable   and $this->_attributeBucket = &$parent;
         $executable and $this->preExecute();
 
         if(isset($bucket[0][$bind]))
