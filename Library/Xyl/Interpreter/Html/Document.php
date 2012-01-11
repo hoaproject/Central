@@ -39,6 +39,11 @@ namespace {
 from('Hoa')
 
 /**
+ * \Hoa\Xyl\Exception
+ */
+-> import('Xyl.Exception')
+
+/**
  * \Hoa\Xyl\Interpreter\Html\Concrete
  */
 -> import('Xyl.Interpreter.Html.Concrete')
@@ -149,7 +154,7 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
      */
     public function preExecute ( ) {
 
-        $this->computeStylesheet();
+        //$this->computeStylesheet();
 
         return;
     }
@@ -163,6 +168,7 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
     public function postExecute ( ) {
 
         $this->computeTitle();
+        $this->computeStylesheet();
 
         return;
     }
@@ -186,6 +192,81 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
     }
 
     /**
+     * Compute ressources.
+     *
+     * @access  public
+     * @param   array  &$resources    Ressources.
+     * @return  void
+     * @throw   \Hoa\Xyl\Exception
+     */
+    protected function computeRessources ( Array &$resources ) {
+
+        $root      = $this->getAbstractElementSuperRoot();
+        $theme     = $root->getParameters()->getFormattedParameter('theme');
+        $router    = $root->getRouter();
+        $libHead   = '#^' . preg_quote(
+                         $root->resolve('hoa://Library/Xyl/', true)
+                     ) . '(.*)$#';
+        $appHead   = '#^' . preg_quote(
+                         $_ = $root->resolve('hoa://Application/Public/', true)
+                     ) . '(.*)$#';
+
+        foreach($resources as &$resource) {
+
+            if(0 !== preg_match($libHead, $resource, $matches)) {
+
+                $target = $_ . $matches[1];
+
+                if(true !== file_exists($target)) {
+
+                    $copy = @copy(
+                        $root->resolve($resource),
+                        $root->resolve($target, true)
+                    );
+
+                    if(false === $copy)
+                        throw new \Hoa\Xyl\Exception(
+                            'Ressource %s can be copied to %s.', 0,
+                            array('hoa://Library/Xyl/' . $matches[1], $target));
+                }
+
+                $resource = $target;
+            }
+
+            if(0 !== preg_match($appHead, $resource, $matches)) {
+
+                $top = '_' . strtolower(substr(
+                    $matches[1],
+                    0,
+                    ($pos = strpos($matches[1], '/')) ?: strlen($matches[1])
+                ));
+
+                if(false === $router->ruleExists($top)) {
+
+                    if(false === $router->ruleExists('_resource'))
+                        continue;
+
+                    $top = '_resource';
+                    $pos = false;
+                }
+
+                $resource = $router->unroute(
+                    $top,
+                    array(
+                        'theme'    => $theme,
+                        'resource' => substr(
+                            $matches[1],
+                            false !== $pos ? $pos + 1 : 0
+                        )
+                    )
+                );
+            }
+        }
+
+        return;
+    }
+
+    /**
      * Compute stylesheet.
      *
      * @access  protected
@@ -194,60 +275,8 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
     protected function computeStylesheet ( ) {
 
         $root                    = $this->getAbstractElementSuperRoot();
-        $router                  = $root->getRouter();
-        $styles                  = $root->getStylesheets();
-        $theme                   = $root->getTheme();
-        $this->_resources['css'] = array();
-
-        foreach($styles as $style)
-            if('hoa://Library/Xyl/Css/' == substr($style, 0, 22)) {
-
-                $resolved = $root->resolve($style);
-
-                if(false === file_exists($resolved))
-                    continue;
-
-                $redirect = $root->resolve(
-                    'hoa://Application/Public/' . substr($style, 18)
-                );
-
-                if(false === file_exists($redirect))
-                    if(false === copy($resolved, $redirect))
-                        throw new Exception(
-                            'Failed to copy %s in %s.',
-                            0, array($style, $redirect));
-
-                if(null === $router)
-                    $this->_resources['css'][] = $resolved;
-                else
-                    $this->_resources['css'][] = $router->unroute(
-                        '_css',
-                        array(
-                            'theme' => $theme,
-                            'sheet' => substr($style, 22)
-                        )
-                    );
-            }
-            elseif('hoa://Application/Public/Css/' == substr($style, 0, 29)) {
-
-                $resolved = $root->resolve($style);
-
-                if(false === file_exists($resolved))
-                    continue;
-
-                if(null === $router)
-                    $this->_resources['css'][] = $resolved;
-                else
-                    $this->_resources['css'][] = $router->unroute(
-                        '_css',
-                        array(
-                            'theme' => $theme,
-                            'sheet' => substr($style, 29)
-                        )
-                    );
-            }
-            else
-                $this->_resources['css'][] = $style;
+        $this->_resources['css'] = $root->getStylesheets();
+        $this->computeRessources($this->_resources['css']);
 
         return;
     }
