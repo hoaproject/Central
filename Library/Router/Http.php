@@ -337,7 +337,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
     }
 
     /**
-     * Check if a rule exists.
+     * Check whether a rule exists.
      *
      * @access  public
      * @param   string  $id    ID.
