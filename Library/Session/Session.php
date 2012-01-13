@@ -94,7 +94,7 @@ abstract class Session {
 
     /**
      * Whether session is in strict mode, i.e. \Hoa\Session::start must be
-     * called before all new namespace declarations.
+     * called before all new qnamespace declarations.
      *
      * @var \Hoa\Session bool
      */
