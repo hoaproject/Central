@@ -584,7 +584,7 @@ class          Xyl
      * @return  bool
      * @throw   \Hoa\Xml\Exception
      */
-    protected function computeOverlay ( \DOMDocument $ownerDocument = null,
+    protected function computeOverlay ( \DOMDocument $ownerDocument   = null,
                                         \DOMDocument $receiptDocument = null ) {
 
         if(null === $ownerDocument)
@@ -837,11 +837,56 @@ class          Xyl
             $item        = $xyl_style->item($i);
             $styleParsed = new \Hoa\Xml\Attribute($item->data);
 
-            if(true === $styleParsed->attributeExists('href'))
-                $this->_stylesheets[] = $this->computeLink(
+            if(true === $styleParsed->attributeExists('href')) {
+
+                $href = $this->computeLink(
                     $styleParsed->readAttribute('href'),
                     true
                 );
+
+                if(true === $styleParsed->attributeExists('position')) {
+
+                    $position = max(0, (int) $this->_xe->evaluate(
+                        $styleParsed->readAttribute('position')
+                    ));
+
+                    if(isset($this->_stylesheets[$position])) {
+
+                        $handle = array();
+
+                        foreach($this->_stylesheets as $i => $foo)
+                            if($position > $i) {
+
+                                $handle[$i] = $foo;
+                                unset($this->_stylesheets[$i]);
+                            }
+                            else
+                                break;
+
+                        $handle[$position] = $href;
+
+                        foreach($this->_stylesheets as $i => $foo) {
+
+                            if($i === $position) {
+
+                                $handle[$position = $i + 1] = $foo;
+                                unset($this->_stylesheets[$i]);
+                            }
+                            else
+                                break;
+                        }
+
+                        $this->_stylesheets = $handle + $this->_stylesheets;
+                    }
+                    else {
+
+                        $this->_stylesheets[$position] = $href;
+                        ksort($this->_stylesheets, SORT_NUMERIC);
+                    }
+                }
+                else
+                    $this->_stylesheets[] = $href;
+            }
 
             $ownerDocument->removeChild($item);
             unset($styleParsed);
