@@ -157,6 +157,7 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
         $client   = new \Hoa\FastCgi\Responder(
             new \Hoa\Socket\Client('tcp://' . $fastcgi)
         );
+        $server->considerRemoteAddress(true);
         $server->connectAndWait();
         $request  = new \Hoa\Http\Request();
         $_root    = $root;
@@ -214,14 +215,15 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
             }
 
             $request->parse($buffer);
-            $method                = $request->getMethod();
-            $methodReadable        = strtoupper($method);
-            $uri                   = $request->getUrl();
-            $uri                   = substr($uri, 0, strpos($uri, '?') ?: strlen($uri));
-            $url                   = ltrim($uri, '/');
-            $ttime                 = time();
-            $smartPrint            = "\r";
-            $_headers['HTTP_HOST'] = $request['host'];
+            $method                  = $request->getMethod();
+            $methodReadable          = strtoupper($method);
+            $uri                     = $request->getUrl();
+            $uri                     = substr($uri, 0, strpos($uri, '?') ?: strlen($uri));
+            $url                     = ltrim($uri, '/');
+            $ttime                   = time();
+            $smartPrint              = "\r";
+            $_headers['HTTP_HOST']   = $request['host'];
+            $_headers['REMOTE_ADDR'] = $server->getRemoteAddress();
 
             if($ttime - $time >= 2) {
 
