@@ -846,9 +846,11 @@ class          Xyl
 
                 if(true === $styleParsed->attributeExists('position')) {
 
-                    $position = max(0, (int) $this->_xe->evaluate(
+                    $position = max(0, (int) $this->_xe->evaluate(str_replace(
+                        'last()',
+                        ($k = key($this->_stylesheets)) ? $k + 1 : 0,
                         $styleParsed->readAttribute('position')
-                    ));
+                    )));
 
                     if(isset($this->_stylesheets[$position])) {
 
