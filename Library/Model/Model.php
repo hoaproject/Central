@@ -62,7 +62,11 @@ namespace Hoa\Model {
  * @license    New BSD License
  */
 
-abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
+abstract class Model
+    implements \Hoa\Core\Data\Datable,
+               \ArrayAccess,
+               \IteratorAggregate,
+               \Countable {
 
     /**
      * Whether we should check Praspel and validate*().
@@ -83,7 +87,7 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
      *
      * @var \Hoa\Model string
      */
-    private $__arrayAccess           = null;
+    private $__currentAccess           = null;
 
     /**
      * Mapping layers.
@@ -207,9 +211,9 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
      */
     protected function map ( Array $data, Array $map = null ) {
 
-        if(null !== $this->__arrayAccess)
+        if(null !== $this->__currentAccess)
             return $this->mapRelation(
-                substr($this->__arrayAccess, 1),
+                substr($this->__currentAccess, 1),
                 $data,
                 $map
             );
@@ -256,21 +260,21 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
         if(null === $attribute['contract'])
             $attribute['contract'] = praspel($attribute['comment']);
 
-        $realdom             = $attribute['contract']
-                                   ->getClause('invariant')
-                                   ->getVariable($name)
-                                   ->getNthDomain(0);
-        $classname           = $realdom['classname']->getConstantValue();
-        $_name               = '_' . $name;
+        $realdom   = $attribute['contract']
+                         ->getClause('invariant')
+                         ->getVariable($name)
+                         ->getNthDomain(0);
+        $classname = $realdom['classname']->getConstantValue();
+        $_name     = '_' . $name;
 
         foreach($data as $i => $d) {
 
-            $this->__arrayAccess = $_name;
-            $class               = new $classname();
+            $this->__currentAccess = $_name;
+            $class                 = new $classname();
             $this->offsetSet($i, $class->map($d, $map));
         }
 
-        $this->__arrayAccess = null;
+        $this->__currentAccess = null;
 
         return $this;
     }
@@ -330,12 +334,12 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
             if(!is_array($value))
                 $value = array($value);
 
-            $this->__arrayAccess = $_name;
+            $this->__currentAccess = $_name;
 
             foreach($value as $k => $v)
                 $this->offsetSet($k, $v);
 
-            $this->__arrayAccess = null;
+            $this->__currentAccess = null;
 
             return;
         }
@@ -361,10 +365,10 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
             if(null === $attribute['contract'])
                 $attribute['contract'] = praspel($attribute['comment']);
 
-            $verdict   = $attribute['contract']
-                             ->getClause('invariant')
-                             ->getVariable($name)
-                             ->predicate($value);
+            $verdict = $attribute['contract']
+                           ->getClause('invariant')
+                           ->getVariable($name)
+                           ->predicate($value);
 
             if(false === $verdict)
                 throw new Exception(
@@ -400,12 +404,12 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
 
         if(true === $attribute['relation']) {
 
-            $this->__arrayAccess = '_' . $name;
+            $this->__currentAccess = '_' . $name;
 
             return $this;
         }
-        elseif(null !== $this->__arrayAccess)
-            $this->__arrayAccess = null;
+        elseif(null !== $this->__currentAccess)
+            $this->__currentAccess = null;
 
         return $this->{'_' . $name};
     }
@@ -419,10 +423,10 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
      */
     private function _offsetExists ( $offset ) {
 
-        if(null === $this->__arrayAccess)
+        if(null === $this->__currentAccess)
             return false;
 
-        return array_key_exists($offset, $this->{$this->__arrayAccess});
+        return array_key_exists($offset, $this->{$this->__currentAccess});
     }
 
     /**
@@ -434,8 +438,8 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
      */
     public function offsetExists ( $offset ) {
 
-        $out                 = $this->_offsetExists($offset);
-        $this->__arrayAccess = null;
+        $out                   = $this->_offsetExists($offset);
+        $this->__currentAccess = null;
 
         return $out;
     }
@@ -453,18 +457,18 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
 
         if(false === $this->isValidationEnabled()) {
 
-            $this->{$this->__arrayAccess}[$offset] = $value;
+            $this->{$this->__currentAccess}[$offset] = $value;
 
             return null;
         }
 
         $oldOffset = false !== $this->_offsetExists($offset)
-                         ? $this->{$this->__arrayAccess}[$offset]
+                         ? $this->{$this->__currentAccess}[$offset]
                          : null;
 
-        $this->{$this->__arrayAccess}[$offset] = $value;
+        $this->{$this->__currentAccess}[$offset] = $value;
 
-        $name      = substr($this->__arrayAccess, 1);
+        $name      = substr($this->__currentAccess, 1);
         $attribute = &$this->getAttribute($name);
 
         if(false !== $attribute['comment']) {
@@ -475,7 +479,7 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
             $verdict = $attribute['contract']
                            ->getClause('invariant')
                            ->getVariable($name)
-                           ->predicate($this->{$this->__arrayAccess});
+                           ->predicate($this->{$this->__currentAccess});
         }
         else
             $verdict = true;
@@ -483,9 +487,9 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
         if(false === $verdict) {
 
             if(null !== $oldOffset)
-                $this->{$this->__arrayAccess}[$offset] = $oldOffset;
+                $this->{$this->__currentAccess}[$offset] = $oldOffset;
             else
-                unset($this->{$this->__arrayAccess}[$offset]);
+                unset($this->{$this->__currentAccess}[$offset]);
 
             throw new Exception(
                 'Try to set the %s attribute with an invalid data.', 2, $name);
@@ -495,14 +499,14 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
            &&  false === $this->{$validator}($value)) {
 
             if(null !== $oldOffset)
-                $this->{$this->__arrayAccess}[$offset] = $oldOffset;
+                $this->{$this->__currentAccess}[$offset] = $oldOffset;
 
             throw new Exception(
                 'Try to set the %s attribute with an invalid data.',
                 3, $name);
         }
 
-        return $this->__arrayAccess = null;
+        return $this->__currentAccess = null;
     }
 
     /**
@@ -515,10 +519,10 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
     public function offsetGet ( $offset ) {
 
         if(false === $this->_offsetExists($offset))
-            return $this->__arrayAccess = null;
+            return $this->__currentAccess = null;
 
-        $out                 = &$this->{$this->__arrayAccess}[$offset];
-        $this->__arrayAccess = null;
+        $out                   = &$this->{$this->__currentAccess}[$offset];
+        $this->__currentAccess = null;
 
         return $out;
     }
@@ -533,9 +537,9 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
     public function offsetUnset ( $offset ) {
 
         if(false !== $this->_offsetExists($offset))
-            unset($this->__arrayAccess[$offset]);
+            unset($this->__currentAccess[$offset]);
 
-        $this->__arrayAccess = null;
+        $this->__currentAccess = null;
 
         return;
     }
@@ -548,10 +552,10 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
      */
     public function getIterator ( ) {
 
-        if(null === $this->__arrayAccess)
+        if(null === $this->__currentAccess)
             return null;
 
-        return new \ArrayIterator($this->{$this->__arrayAccess});
+        return new \ArrayIterator($this->{$this->__currentAccess});
     }
 
     /**
@@ -562,11 +566,11 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
      */
     public function count ( ) {
 
-        if(null === $this->__arrayAccess)
+        if(null === $this->__currentAccess)
             return count($this->__attributes);
 
-        $out                 = count($this->{$this->__arrayAccess});
-        $this->__arrayAccess = null;
+        $out                   = count($this->{$this->__currentAccess});
+        $this->__currentAccess = null;
 
         return $out;
     }
@@ -648,6 +652,35 @@ abstract class Model implements \ArrayAccess, \IteratorAggregate, \Countable {
             return null;
 
         return static::$__mappingLayer[$name];
+    }
+
+    /**
+     * Transform data as an array.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function toArray ( ) {
+
+        if(null === $this->__currentAccess) {
+
+            $out = array();
+
+            foreach($this->__attributes as $attribute)
+                if(false === $attribute['relation'])
+                    $out[$attribute['name']] = $attribute['value'];
+
+            return $out;
+        }
+
+        $out = array();
+
+        foreach($this->{$this->__currentAccess} as $i => $value)
+            $out[$i] = $value->toArray();
+
+        $this->__currentAccess = null;
+
+        return $out;
     }
 }
 
