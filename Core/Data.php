@@ -34,19 +34,41 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Core {
+namespace Hoa\Core\Data {
 
 /**
- * Class \Hoa\Core\Data.
+ * Interface \Hoa\Core\Data\Datable.
  *
- * Universal data structure.
+ * Polymorphic data interface (for transformation, ensures fun for other data
+ * providers).
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Data implements \ArrayAccess {
+interface Datable {
+
+    /**
+     * Transform data as an array.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function toArray ( );
+}
+
+/**
+ * Class \Hoa\Core\Data.
+ *
+ * Polymorphic data.
+ *
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2012 Ivan Enderlin.
+ * @license    New BSD License
+ */
+
+class Data implements Datable, \ArrayAccess {
 
     /**
      * Data as intuitive structure.
@@ -162,6 +184,9 @@ class Data implements \ArrayAccess {
         if(null === $this->_temp)
             return;
 
+        if($value instanceof Datable)
+            $value = $value->toArray();
+
         if(null === $offset)
             if(is_array($value)) {
 
@@ -203,7 +228,7 @@ class Data implements \ArrayAccess {
     }
 
     /**
-     * Transform data as universal structure.
+     * Transform data as an array.
      *
      * @access  public
      * @return  array
@@ -214,7 +239,8 @@ class Data implements \ArrayAccess {
 
         foreach($this->_data as $key => &$ii)
             foreach($ii as $i => &$value)
-                if(is_object($value))
+                if(   is_object($value)
+                   && $value instanceof Datable)
                     $out[$i][$key] = $value->toArray();
                 else
                     $out[$i][$key] = &$value;
@@ -222,5 +248,15 @@ class Data implements \ArrayAccess {
         return $out;
     }
 }
+
+}
+
+namespace {
+
+/**
+ * Make the alias automatically (because it's not imported with the import()
+ * function).
+ */
+class_alias('Hoa\Core\Data\Data', 'Hoa\Core\Data');
 
 }
