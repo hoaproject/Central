@@ -680,7 +680,10 @@ class          Xyl
         $query = $xpath->query('//*[@id="' . $to->getAttribute('id') . '"]');
 
         if(0 === $query->length)
-            return $this->_computeOverlayPosition($from, $to);
+            if($from->parentNode == $this->_mowgli) // reference component
+                return null;
+            else
+                return $this->_computeOverlayPosition($from, $to);
 
         $from  = $query->item(0);
 
