@@ -536,7 +536,7 @@ class          Xyl
                             $_select = $matches[1];
                     }
 
-                    $xpath = $ciao->xpath('.//' . $_select);
+                    $xpath = $ciao->xpath('./' . $_select);
 
                     foreach($xpath ?: array() as $selected)
                         $selectdomized->parentNode->insertBefore(
