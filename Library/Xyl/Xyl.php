@@ -305,7 +305,7 @@ class          Xyl
                 ->getComponent('Library')
                 ->addComponent(new _Protocol(
                     'Xyl[' . $this->_i . ']',
-                    'Interpreter' . DS .$this->_interpreter->getResourcePath()
+                    'Interpreter' . DS . $this->_interpreter->getResourcePath()
                 ));
 
         if(null !== $router && false === $router->ruleExists('_resource'))
