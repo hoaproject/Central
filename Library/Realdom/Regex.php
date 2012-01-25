@@ -170,8 +170,8 @@ class Regex extends String {
      */
     public function predicate ( $q ) {
 
-        return    $this['length']->predicate(mb_strlen($q))
-               && 0 !== preg_match(
+        return    /*$this['length']->predicate(mb_strlen($q))
+               &&*/ 0 !== preg_match(
                       '#' . str_replace(
                           '#',
                           '\#',
