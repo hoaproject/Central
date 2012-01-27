@@ -393,7 +393,10 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
                   = $this->abstract->readAll();
 
         if(null === $out)
-            return $this->readAll();
+            if(false === $data)
+                return $this->readAll();
+            else
+                return $data;
 
         if(false !== $data && true === $count) {
 
