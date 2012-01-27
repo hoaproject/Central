@@ -774,7 +774,7 @@ class          Xyl
             if($child->hasAttribute('id')) {
 
                 $search[]  = 'element(#' . $child->getAttribute('id') . ')';
-                $replace[] = $e + 1;
+                $replace[] = $e;
             }
 
             ++$e;
