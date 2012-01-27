@@ -181,8 +181,11 @@ class Cli implements Router, \Hoa\Core\Parameter\Parameterizable {
             throw new Exception(
                 'Cannot add rule %s because it already exists.', 0, $id);
 
-        $methods = array_map('strtolower', $methods);
-        $diff    = array_diff($methods, self::$_methods);
+        array_walk($methods, function ( &$method ) {
+
+            $method = strtolower($method);
+        });
+        $diff = array_diff($methods, self::$_methods);
 
         if(!empty($diff))
             throw new Exception(
