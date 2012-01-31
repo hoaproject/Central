@@ -73,7 +73,7 @@ class          Value
      */
     protected static $_attributes = array(
         'link'      => self::ATTRIBUTE_TYPE_LINK,
-        'formatter' => self::ATTRIBUTE_TYPE_NORMAL,
+        'formatter' => self::ATTRIBUTE_TYPE_CUSTOM
     );
 
 
@@ -94,7 +94,7 @@ class          Value
             $formatter   = $this->abstract->readAttribute('formatter');
             $variables   = $this->abstract->readCustomAttributes('formatter');
             $self        = $this;
-            array_walk($variables, $f = function ( &$variable ) use ( &$self )  {
+            array_walk($variables, $f = function ( &$variable ) use ( &$self ) {
 
                 $variable = $self->computeAttributeValue(
                     $variable,
