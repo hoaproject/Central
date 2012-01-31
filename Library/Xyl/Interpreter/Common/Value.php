@@ -96,10 +96,7 @@ class          Value
             $self        = $this;
             array_walk($variables, $f = function ( &$variable ) use ( &$self ) {
 
-                $variable = $self->computeAttributeValue(
-                    $variable,
-                    parent::ATTRIBUTE_TYPE_UNKNOWN
-                );
+                $variable = $self->computeAttributeValue($variable);
 
                 if(ctype_digit($variable))
                     $variable = (int) $variable;
