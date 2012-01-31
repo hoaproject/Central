@@ -157,7 +157,8 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         'title' => self::ATTRIBUTE_TYPE_NORMAL,
         'class' => self::ATTRIBUTE_TYPE_LIST,
         'lang'  => self::ATTRIBUTE_TYPE_NORMAL,
-        'dir'   => self::ATTRIBUTE_TYPE_NORMAL
+        'dir'   => self::ATTRIBUTE_TYPE_NORMAL,
+        'data'  => self::ATTRIBUTE_TYPE_CUSTOM
     );
 
 
@@ -173,25 +174,23 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      */
     public function computeDataBinding ( Array &$data, Array &$parent = null ) {
 
-        $bucket     = $data;
         $executable = $this instanceof Executable;
-        $bindable   = false;
+        $bindable   = $this->abstract->attributeExists('bind');
 
-        foreach(static::getDeclaredAttributes() as $attribute => $type)
-            $bindable |= 0 !== preg_match(
-                                   '#\(\?[^\)]+\)#',
-                                   $this->abstract->readAttribute($attribute)
-                               );
+        if(false === $bindable) {
 
-        $bindable = (bool) $bindable;
+            foreach(static::getDeclaredAttributes() as $attribute => $type)
+                $bindable |= 0 !== preg_match(
+                                       '#\(\?[^\)]+\)#',
+                                       $this->abstract->readAttribute($attribute)
+                                   );
 
-        if(   false === $this->abstract->attributeExists('bind')
-           || null  === $bind = $this->selectData(
-                                    $this->abstract->readAttribute('bind'),
-                                    $bucket
-                                )) {
+            $bindable = (bool) $bindable;
+        }
 
-            $bindable   and $this->_attributeBucket = &$parent;
+        // Propagate binding.
+        if(false === $bindable) {
+
             $executable and $this->preExecute();
 
             foreach($this as $element)
@@ -202,22 +201,49 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
             return;
         }
 
+        // Inner-binding.
+        if(false === $this->abstract->attributeExists('bind')) {
+
+            if(null === $parent)
+                $parent = array(
+                    'parent'  => null,
+                    'current' => 0,
+                    'branche' => '_',
+                    'data'    => array(array(
+                        '_' => $data
+                    ))
+                );
+
+            $this->_attributeBucket = &$parent;
+            $executable and $this->preExecute();
+
+            foreach($this as $element)
+                $element->computeDataBinding($data, $parent);
+
+            $executable and $this->postExecute();
+
+            return;
+        }
+
+        // Binding.
         $this->_bucket['parent']   = &$parent;
         $this->_bucket['current']  = 0;
-        $this->_bucket['branche']  = $bind;
+        $this->_bucket['branche']  = $bind = $this->selectData(
+            $this->abstract->readAttribute('bind'),
+            $data
+        );
 
         if(null === $parent)
-            $this->_bucket['data'] = $bucket;
+            $this->_bucket['data'] = $data;
 
         $bindable   and $this->_attributeBucket = &$parent;
         $executable and $this->preExecute();
 
-        if(isset($bucket[0][$bind]))
+        if(isset($data[0][$bind]))
             foreach($this as $element)
-                $element->computeDataBinding($bucket[0][$bind], $this->_bucket);
+                $element->computeDataBinding($data[0][$bind], $this->_bucket);
 
         $executable and $this->postExecute();
-        unset($bucket);
 
         return;
     }
@@ -370,7 +396,7 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
     abstract protected function paint ( \Hoa\Stream\IStream\Out $out );
 
     /**
-     * Compute value. If the @bind attribute existss, compute the current data,
+     * Compute value. If the @bind attribute exists, compute the current data,
      * else compute the abstract element casted as string if no child is
      * present, else rendering all children.
      *
@@ -381,24 +407,20 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      */
     public function computeValue ( \Hoa\Stream\IStream\Out $out = null ) {
 
-        $data  = false;
-        $count = 0 == count($this);
+        $data = false;
 
         if($this->abstract->attributeExists('bind'))
             $data = $this->_transientValue
                   = $this->getCurrentData();
 
-        elseif(true === $count)
-            $data = $this->_transientValue
-                  = $this->abstract->readAll();
-
         if(null === $out)
-            if(false === $data)
-                return $this->readAll();
-            else
+            if(false !== $data)
                 return $data;
+            else
+                return $data = $this->_transientValue
+                             = $this->abstract->readAll();
 
-        if(false !== $data && true === $count) {
+        if(false !== $data) {
 
             $out->writeAll($data);
 
@@ -494,8 +516,8 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         );
 
         // Link.
-        if(   self::ATTRIBUTE_TYPE_LINK    == $type
-           || self::ATTRIBUTE_TYPE_UNKNOWN == $type)
+        if(   self::ATTRIBUTE_TYPE_LINK    === $type
+           || self::ATTRIBUTE_TYPE_UNKNOWN === $type)
             $value = $this->getAbstractElementSuperRoot()->computeLink($value);
 
         return $value;
@@ -507,7 +529,26 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      * @access  protected
      * @return  array
      */
-    protected static function getDeclaredAttributes ( ) {
+    protected function getDeclaredAttributes ( ) {
+
+        $out      = static::_getDeclaredAttributes();
+        $abstract = $this->abstract;
+
+        foreach($out as $attr => $type)
+            if(self::ATTRIBUTE_TYPE_CUSTOM === $type)
+                foreach($abstract->readCustomAttributes($attr) as $a => $_)
+                    $out[$attr . '-' . $a] = self::ATTRIBUTE_TYPE_UNKNOWN;
+
+        return $out;
+    }
+
+    /**
+     * Get all declared attributes in a trivial way.
+     *
+     * @access  protected
+     * @return  array
+     */
+    protected static function _getDeclaredAttributes ( ) {
 
         $out    = array();
         $parent = get_called_class();
