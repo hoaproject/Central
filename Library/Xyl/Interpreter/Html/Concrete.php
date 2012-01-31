@@ -161,7 +161,7 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
             $self->_htmlAttributesType[$to] = $type;
             $mapped[]                       = $from;
 
-            if(static::ATTRIBUTE_TYPE_CUSTOM == $type) {
+            if(self::ATTRIBUTE_TYPE_CUSTOM == $type) {
 
                 $values = $self->abstract->readCustomAttributes($from);
 
