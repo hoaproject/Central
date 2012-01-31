@@ -116,14 +116,15 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
     protected function mapAttributes ( ) {
 
         $parent = get_called_class();
+        $mapped = array();
 
         do {
 
-            static::_mapAttributes($this, $parent);
+            static::_mapAttributes($this, $parent, $mapped);
 
         } while(__CLASS__ !== $parent = get_parent_class($parent));
 
-        static::_mapAttributes($this, $parent);
+        static::_mapAttributes($this, $parent, $mapped);
 
         return;
     }
@@ -132,12 +133,13 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
      * Real attributes mapping.
      *
      * @access  private
-     * @param   \Hoa\Xyl\Element\Concrete  $self      Element that will receive
-     *                                                attributes.
-     * @param   string                     $parent    Parent's name.
+     * @param   \Hoa\Xyl\Element\Concrete  $self       Element that will receive
+     *                                                 attributes.
+     * @param   string                     $parent     Parent's name.
+     * @param   array                      &$mapped    Mapped attributes.
      * @return  void
      */
-    private static function _mapAttributes ( $self, $parent ) {
+    private static function _mapAttributes ( $self, $parent, Array &$mapped ) {
 
         if(   !isset($parent::$_attributesMapping)
            || !isset($parent::$_attributes))
@@ -148,14 +150,27 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
         if(… === $map)
             $map = array_keys($parent::$_attributes);
 
+        $map = array_diff($map, $mapped);
+
         foreach($map as $from => $to) {
 
             if(is_int($from))
                 $from = $to;
 
-            $self->_htmlAttributesType[$to] = &$parent::$_attributes[$from];
+            $type                           = $parent::$_attributes[$from];
+            $self->_htmlAttributesType[$to] = $type;
+            $mapped[]                       = $from;
 
-            if(null === $value = $self->abstract->readAttribute($from))
+            if(static::ATTRIBUTE_TYPE_CUSTOM == $type) {
+
+                $values = $self->abstract->readCustomAttributes($from);
+
+                foreach($values as $name => $value)
+                    $self->writeAttribute($to . '-' . $name, $value);
+
+                continue;
+            }
+            elseif(null === $value = $self->abstract->readAttribute($from))
                 continue;
 
             $self->writeAttribute($to, $value);
