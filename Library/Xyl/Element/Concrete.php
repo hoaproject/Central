@@ -420,9 +420,12 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
                 return $data = $this->_transientValue
                              = $this->abstract->readAll();
 
-        if(false !== $data && 0 === count($this)) {
+        if(0 === count($this)) {
 
-            $out->writeAll($data);
+            if(false !== $data)
+                $out->writeAll($data);
+            else
+                $out->writeAll($this->abstract->readAll());
 
             return;
         }
