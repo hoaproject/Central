@@ -181,7 +181,7 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
             'SCRIPT_FILENAME'   => null,
             'SCRIPT_NAME'       => null,
 
-            'X_HOA_DEBUG'       => $debug
+            'HTTP_X_HOA_DEBUG'  => $debug
         );
 
         if('hoa://' == substr($_root, 0, 6))
@@ -369,7 +369,8 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
             switch($method) {
 
                 case \Hoa\Http\Request::METHOD_GET:
-                    $data = null;
+                    $data    = null;
+                    print_r($request->getHeadersFormatted());
                     $headers = array_merge(
                         $_headers,
                         $request->getHeadersFormatted(),
@@ -381,6 +382,7 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
                             'SCRIPT_NAME'     => $script_name
                         )
                     );
+                    print_r($request->getHeadersFormatted());
                   break;
 
                 case \Hoa\Http\Request::METHOD_POST:

@@ -266,7 +266,8 @@ class Core implements Parameter\Parameterizable {
         $this->_parameters->setParameters($parameters);
         $this->setProtocol();
 
-        if(isset($_SERVER['X_HOA_DEBUG']) && true == $_SERVER['X_HOA_DEBUG'])
+        if(   isset($_SERVER['HTTP_X_HOA_DEBUG'])
+           && true == $_SERVER['HTTP_X_HOA_DEBUG'])
             static::startDebugger();
 
         return $this;
