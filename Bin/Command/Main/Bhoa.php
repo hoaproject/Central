@@ -370,7 +370,6 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
 
                 case \Hoa\Http\Request::METHOD_GET:
                     $data    = null;
-                    print_r($request->getHeadersFormatted());
                     $headers = array_merge(
                         $_headers,
                         $request->getHeadersFormatted(),
@@ -382,7 +381,6 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
                             'SCRIPT_NAME'     => $script_name
                         )
                     );
-                    print_r($request->getHeadersFormatted());
                   break;
 
                 case \Hoa\Http\Request::METHOD_POST:
