@@ -41,7 +41,7 @@ from('Hoa')
 /**
  * \Hoa\Compiler\LLk
  */
--> import('Compiler.Llk')
+-> import('Compiler.Llk.~')
 
 /**
  * \Hoa\File\Read
@@ -72,7 +72,6 @@ class Pp extends \Hoa\Console\Dispatcher\Kit {
     protected $options = array(
         array('visitor',       \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'v'),
         array('visitor-class', \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'c'),
-        array('debug',         \Hoa\Console\GetOption::NO_ARGUMENT,       'd'),
         array('help',          \Hoa\Console\GetOption::NO_ARGUMENT,       'h'),
         array('help',          \Hoa\Console\GetOption::NO_ARGUMENT,       '?')
     );
@@ -108,10 +107,6 @@ class Pp extends \Hoa\Console\Dispatcher\Kit {
                 $visitor = str_replace('.', '\\', $v);
               break;
 
-            case 'd':
-                $debug = $v;
-              break;
-
             case 'h':
             case '?':
             default:
@@ -125,8 +120,7 @@ class Pp extends \Hoa\Console\Dispatcher\Kit {
             return $this->usage();
 
         $compiler = \Hoa\Compiler\Llk::load(
-            new \Hoa\File\Read($grammar),
-            $debug
+            new \Hoa\File\Read($grammar)
         );
         $data     = new \Hoa\File\Read($language);
         $ast      = $compiler->parse($data->readAll());
@@ -153,7 +147,6 @@ class Pp extends \Hoa\Console\Dispatcher\Kit {
         cout($this->makeUsageOptionsList(array(
             'v'    => 'Visitor name (only “dump” is supported).',
             'c'    => 'Visitor classname (using . instead of \ works).',
-            'd'    => 'Enable debugger.',
             'help' => 'This help.'
         )));
 
