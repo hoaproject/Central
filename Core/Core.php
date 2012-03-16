@@ -153,6 +153,7 @@ class Core implements Parameter\Parameterizable {
         !defined('OS_WIN')    and define('OS_WIN', defined('PHP_WINDOWS_VERSION_PLATFORM'));
         !defined('S_64_BITS') and define('S_64_BITS', PHP_INT_SIZE == 8);
         !defined('S_32_BITS') and define('S_32_BITS', !S_64_BITS);
+        !defined('π')         and define('π', M_PI);
         !defined('void')         and define('void', (unset) null);
         !defined('_public')      and define('_public', 1);
         !defined('_protected')   and define('_protected', 2);
