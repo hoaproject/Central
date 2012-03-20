@@ -85,6 +85,10 @@ class Status extends \Hoa\Console\Dispatcher\Kit {
             case '?':
                 return $this->usage();
               break;
+
+            case '__ambiguous':
+                $this->resolveOptionAmbiguity($v);
+              break;
         }
 
         $run  = resolve('hoa://Data/Variable/Run/');

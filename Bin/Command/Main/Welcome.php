@@ -74,6 +74,10 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
             case '?':
                 return $this->usage();
               break;
+
+            case '__ambiguous':
+                $this->resolveOptionAmbiguity($v);
+              break;
         }
 
         cout(\Hoa\Console\Chrome\Text::align(

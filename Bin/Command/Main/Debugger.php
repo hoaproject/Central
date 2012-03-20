@@ -90,6 +90,10 @@ class Debugger extends \Hoa\Console\Dispatcher\Kit {
             case '?':
                 return $this->usage();
               break;
+
+            case '__ambiguous':
+                $this->resolveOptionAmbiguity($v);
+              break;
         }
 
         $server     = new \Hoa\Socket\Server('tcp://localhost:57005');

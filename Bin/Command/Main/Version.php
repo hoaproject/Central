@@ -97,6 +97,10 @@ class Version extends \Hoa\Console\Dispatcher\Kit {
                 return $this->usage();
               break;
 
+            case '__ambiguous':
+                $this->resolveOptionAmbiguity($v);
+              break;
+
             case 's':
             default:
                 $info = $message = 'Hoa ' . $version . '.' . "\n" .

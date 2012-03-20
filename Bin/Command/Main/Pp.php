@@ -107,6 +107,10 @@ class Pp extends \Hoa\Console\Dispatcher\Kit {
                 $visitor = str_replace('.', '\\', $v);
               break;
 
+            case '__ambiguous':
+                $this->resolveOptionAmbiguity($v);
+              break;
+
             case 'h':
             case '?':
             default:

@@ -262,6 +262,10 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
             case '?':
                 return $this->usage();
               break;
+
+            case '__ambiguous':
+                $this->resolveOptionAmbiguity($v);
+              break;
         }
 
         if(false === $rev) {

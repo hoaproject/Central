@@ -122,6 +122,10 @@ class Praspel extends \Hoa\Console\Dispatcher\Kit {
             case '?':
                 return $this->usage();
               break;
+
+            case '__ambiguous':
+                $this->resolveOptionAmbiguity($v);
+              break;
         }
 
         if(null !== $filename) {

@@ -74,6 +74,10 @@ class Tree extends \Hoa\Console\Dispatcher\Kit {
             case '?':
                 return $this->usage();
               break;
+
+            case '__ambiguous':
+                $this->resolveOptionAmbiguity($v);
+              break;
         }
 
         cout(\Hoa\Core::getProtocol()->__toString());
