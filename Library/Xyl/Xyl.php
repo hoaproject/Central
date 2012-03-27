@@ -75,7 +75,7 @@ namespace Hoa\Xyl {
 /**
  * Class \Hoa\Xyl.
  *
- * 
+ * XYL documents handler.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
@@ -96,25 +96,32 @@ class          Xyl
     const NAMESPACE_ID    = 'http://hoa-project.net/xyl/xylophone';
 
     /**
-     * Type: <document>
+     * Type: <document>.
      *
      * @const int
      */
     const TYPE_DOCUMENT   = 0;
 
     /**
-     * Type: <definition>
+     * Type: <definition>.
      *
      * @const int
      */
     const TYPE_DEFINITION = 1;
 
     /**
-     * Type: <overlay>
+     * Type: <overlay>.
      *
      * @const int
      */
     const TYPE_OVERLAY    = 2;
+
+    /**
+     * Type: <fragment>.
+     *
+     * @const int
+     */
+    const TYPE_FRAGMENT   = 4;
 
     /**
      * Selector type: path.
@@ -136,6 +143,13 @@ class          Xyl
      * @const int
      */
     const SELECTOR_XPATH  = 2;
+
+    /**
+     * Selector type: file.
+     *
+     * @const int
+     */
+    const SELECTOR_FILE   = 4;
 
     /**
      * Parameters.
@@ -207,6 +221,13 @@ class          Xyl
      * @var \Hoa\Xyl array
      */
     protected $_stylesheets       = array();
+
+    /**
+     * Fragments.
+     *
+     * @var \Hoa\Xyl array
+     */
+    protected $_fragments         = array();
 
     /**
      * Get ID of the instance.
@@ -292,6 +313,10 @@ class          Xyl
 
             case 'overlay':
                 $this->_type = self::TYPE_OVERLAY;
+              break;
+
+            case 'fragment':
+                $this->_type = self::TYPE_FRAGMENT;
               break;
 
             default:
@@ -475,8 +500,59 @@ class          Xyl
      */
     protected function computeYielder ( ) {
 
-        $remove = self::TYPE_DOCUMENT == $this->getType();
-        $stream = $this->getStream();
+        $remove          = self::TYPE_DOCUMENT == $this->getType();
+        $stream          = $this->getStream();
+        $streamClass     = get_class($this->getInnerStream());
+        $openedFragments = array();
+
+        foreach($stream->xpath('//__current_ns:yield[@select]') as $yield) {
+
+            $yieldomized = $yield->readDOM();
+            $select      = $yield->readAttribute('select');
+
+            if(self::SELECTOR_FILE != static::getSelector($select, $matches))
+                continue;
+
+            if(empty($matches[2]))
+                throw new Exception(
+                    'Fragment selection %s is incomplet, an ID ' .
+                    'must be specified.',
+                    4, $select);
+
+            list(, $as, $sId) = $matches;
+
+            if(!isset($this->_fragments[$as]))
+                throw new Exception(
+                    'Fragment alias %s in selector %s does not exist.',
+                    5, array($as, $select));
+
+            $href = $this->_fragments[$as];
+
+            if(!isset($openedFragments[$as]))
+                $openedFragments[$as] = new self(
+                    new $streamClass($href),
+                    $this->_out,
+                    $this->_interpreter,
+                    $this->_router
+                );
+
+            $fragment = $openedFragments[$as];
+            $snippet  = $fragment->xpath(
+                '//__current_ns:snippet[@id="' . $sId . '"]'
+            );
+
+            if(empty($snippet))
+                throw new Exception(
+                    'Snippet %s does not exist in fragment %s.',
+                    6, array($sId, $href));
+
+            $snippet = $snippet[0];
+            $yieldomized->parentNode->insertBefore(
+                $this->_mowgli->importNode($snippet->readDOM(), true),
+                $yieldomized
+            );
+            $yieldomized->parentNode->removeChild($yieldomized);
+        }
 
         foreach($stream->xpath('//__current_ns:yield[@name]') as $yield) {
 
@@ -519,13 +595,6 @@ class          Xyl
 
                     switch(static::getSelector($_select, $matches)) {
 
-                        case self::SELECTOR_PATH:
-                            throw new Exception(
-                                'Selector %s is not supported in a @select ' .
-                                'attribute of the <yield /> component.',
-                                4, $_select);
-                          break;
-
                         case self::SELECTOR_QUERY:
                             $_ = \Hoa\Xml\Element\Basic::getCssToXPathInstance();
                             $_->compile(':root ' . $matches[1]);
@@ -534,6 +603,14 @@ class          Xyl
 
                         case self::SELECTOR_XPATH:
                             $_select = $matches[1];
+                          break;
+
+                        default:
+                            throw new Exception(
+                                'Selector %s is not supported in a @select ' .
+                                'attribute of the <yield /> component.',
+                                7, $_select);
+                          break;
                     }
 
                     $xpath = $ciao->xpath('./' . $_select);
@@ -630,7 +707,7 @@ class          Xyl
 
             if(false === file_exists($href))
                 throw new Exception(
-                    'File %s is not found, cannot use it.', 5, $href);
+                    'File %s is not found, cannot use it.', 8, $href);
 
             if(true === in_array($href, $hrefs))
                 continue;
@@ -646,7 +723,7 @@ class          Xyl
             if(self::TYPE_OVERLAY != $fragment->getType())
                 throw new Exception(
                     '%s must only contain <overlay> (and some <?xyl-overlay) ' .
-                    'elements.', 6, $href);
+                    'elements.', 9, $href);
 
             foreach($fragment->selectChildElements() as $e => $element)
                 $this->_computeOverlay(
@@ -800,6 +877,96 @@ class          Xyl
     }
 
     /**
+     * Add a <?xyl-fragment?> processing-instruction (only that).
+     *
+     * @access  public
+     * @param   string  $href    Fragment's path.
+     * @param   string  $as      Fragment's alias.
+     * @return  void
+     */
+    public function addFragment ( $href, $as = null ) {
+
+        $this->_mowgli->insertBefore(
+            new \DOMProcessingInstruction(
+                'xyl-fragment',
+                'href="' . str_replace('"', '\"', $href) . '"' .
+                (!empty($as)
+                    ? ' as="' . str_replace('"', '\"', $as) . '"'
+                    : '')
+            ),
+            $this->_mowgli->firstChild
+        );
+
+        return;
+    }
+
+    /**
+     * Compute <?xyl-fragment?> processing-instruction.
+     *
+     * @access  protected
+     * @return  bool
+     * @throw   \Hoa\Xml\Exception
+     */
+    protected function computeFragment ( ) {
+
+        $ownerDocument   = $this->_mowgli;
+        $receiptDocument = $this->_mowgli;
+        $streamClass     = get_class($this->getInnerStream());
+        $dirname         = dirname($this->getInnerStream()->getStreamName());
+        $remove          = self::TYPE_DOCUMENT == $this->getType();
+        $xpath           = new \DOMXPath($ownerDocument);
+        $xyl_fragment    = $xpath->query('/processing-instruction(\'xyl-fragment\')');
+        unset($xpath);
+
+        if(0 === $xyl_fragment->length)
+            return false;
+
+        for($i = 0, $m = $xyl_fragment->length; $i < $m; ++$i) {
+
+            $item           = $xyl_fragment->item($i);
+            $fragment       = $item;
+            $remove and $ownerDocument->removeChild($item);
+            $fragmentParsed = new \Hoa\Xml\Attribute($fragment->data);
+
+            if(false === $fragmentParsed->attributeExists('href')) {
+
+                unset($fragmentParsed);
+
+                continue;
+            }
+
+            $href = $this->computeLink(
+                $fragmentParsed->readAttribute('href'),
+                true
+            );
+
+            if(0 === preg_match('#^(([^:]+://)|([A-Z]:)|/)#', $href))
+                $href = $dirname . DS . $href;
+
+            if(false === file_exists($href))
+                throw new Exception(
+                    'File %s is not found, cannot use it.', 10, $href);
+
+            if(false === $fragmentParsed->attributeExists('as'))
+                $as = $href;
+            else
+                $as = $fragmentParsed->readAttribute('as');
+
+            unset($fragmentParsed);
+
+            if(isset($this->_fragments[$as]))
+                throw new Exception(
+                    'Alias %s already exists for fragment %s, cannot ' .
+                    'redeclare it for fragment %s.',
+                    11, array($as, $this->_fragments[$as], $href));
+
+            $this->_fragments[$as] = $href;
+        }
+
+        return true;
+    }
+
+    /**
      * Add a <?xyl-stylesheet?> processing-instruction (only that).
      *
      * @access  public
@@ -900,6 +1067,14 @@ class          Xyl
         return;
     }
 
+    /**
+     * Compute concrete tree.
+     *
+     * @access  protected
+     * @param   \Hoa\Xyl\Interpreter  $interpreter    Interpreter.
+     * @return  void
+     * @throw   \Hoa\Xml\Exception
+     */
     protected function computeConcrete ( Interpreter $interpreter = null ) {
 
         if(null !== $this->_concrete)
@@ -915,7 +1090,7 @@ class          Xyl
         if(false === array_key_exists($name, $rank))
             throw new Exception(
                 'Cannot create the concrete tree because the root <%s> is ' .
-                'unknown from the rank.', 7, $name);
+                'unknown from the rank.', 12, $name);
 
         $class           = $rank[$name];
         $this->_concrete = new $class($root, $this, $rank, self::NAMESPACE_ID);
@@ -938,7 +1113,7 @@ class          Xyl
         if(null === $this->_concrete)
             throw new Exception(
                 'Cannot compute the data binding before building the ' .
-                'concrete tree.', 8);
+                'concrete tree.', 13);
 
         $data = $this->getData()->toArray();
 
@@ -997,6 +1172,7 @@ class          Xyl
 
         $this->computeUse();
         $this->computeOverlay();
+        $this->computeFragment();
         $this->computeYielder();
         $this->computeConcrete($interpreter);
         $this->computeDataBinding();
@@ -1162,24 +1338,29 @@ class          Xyl
      */
     public static function getSelector ( $selector, &$matches = false ) {
 
-        // ?a/b/c
-        // ?p:a/b/c
-        // ?path:a/b/c
-        if(0 !== preg_match('#^\?(?:p(?:ath)?:)?([^:]+)$#i', $selector, $matches))
-            return self::SELECTOR_PATH;
-
         // ?q:a b c
         // ?query:a b c
-        elseif(0 !== preg_match('#^\?q(?:uery)?:(.*)?$#i', $selector, $matches))
+        if(0 !== preg_match('#^\?q(?:uery)?:(.*)$#i', $selector, $matches))
             return self::SELECTOR_QUERY;
 
         // ?x:a/b/c
         // ?xpath:a/b/c
-        elseif(0 !== preg_match('#^\?x(?:path)?:(.*)?$#i', $selector, $matches))
+        elseif(0 !== preg_match('#^\?x(?:path)?:(.*)$#i', $selector, $matches))
             return self::SELECTOR_XPATH;
 
+        // ?f:a/b/c
+        // ?file:a/b/c
+        elseif(0 !== preg_match('#^\?f(?:ile)?:([^\#]+)(?:\#(.*))?$#i', $selector, $matches))
+            return self::SELECTOR_FILE;
+
+        // ?a/b/c
+        // ?p:a/b/c
+        // ?path:a/b/c
+        elseif(0 !== preg_match('#^\?(?:p(?:ath)?:)?(.*)$#i', $selector, $matches))
+            return self::SELECTOR_PATH;
+
         throw new Exception(
-            'Selector %s is not a valid selector.', 9, $selector);
+            'Selector %s is not a valid selector.', 14, $selector);
     }
 
     /**
