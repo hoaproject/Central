@@ -1,8 +1,8 @@
 {
     "name": "hoa/central",
-    "type": "",
-    "description": "Hoa is a set of libraries, simple, …",
-    "keywords": ["library", "framework", "simple", …],
+    "type": "library",
+    "description": "Hoa is a set of libraries.",
+    "keywords": ["library", "framework"],
     "homepage": "http://hoa-project.net/",
     "license": "BSD-2",
     "authors": [
