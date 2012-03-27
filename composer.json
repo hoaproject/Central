@@ -1,0 +1,21 @@
+{
+    "name": "hoa/central",
+    "type": "",
+    "description": "Hoa is a set of libraries, simple, …",
+    "keywords": ["library", "framework", "simple", …],
+    "homepage": "http://hoa-project.net/",
+    "license": "BSD-2",
+    "authors": [
+        {
+            "name": "Ivan Enderlin",
+            "email": "ivan.enderlin@hoa-project.net"
+        },
+        {
+            "name": "Hoa community",
+            "homepage": "http://hoa-project.net"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3"
+    }
+}
