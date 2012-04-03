@@ -231,10 +231,10 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
         $revision   = basename($finder->getIterator()->current());
         $rev        = false;
 
-        while(false !== $c = parent::getOption($v)) switch($c) {
+        while(false !== $c = $this->getOption($v)) switch($c) {
 
             case 'r':
-                $handle   = $this->parse->parseSpecialValue(
+                $handle   = $this->parser->parseSpecialValue(
                     $v,
                     array('HEAD' => $revision)
                 );
@@ -303,7 +303,7 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
            || null === $method)
             return $this->usage();
 
-        $out = new Out();
+        $out = new Out(1);
         $out->self = $this; // berk…
 
         event('hoa://Event/Log/' . \Hoa\Test\Praspel::LOG_CHANNEL)
