@@ -131,7 +131,7 @@ class Date extends Realdom {
 
                     return $constants[$c];
                 },
-                $this['format']['value']
+                $this['format']->getConstantValue()
             );
         }
 
@@ -150,13 +150,19 @@ class Date extends Realdom {
      */
     public function predicate ( $q ) {
 
-        $iq = strtotime($q);
+        $format = $this['format']->getConstantValue();
 
-        return    $this['timestamp']->predicate($iq)
-               && 0 == strcasecmp(
-                      $q,
-                      date($this['format']->getConstantValue(), $iq)
-                  );
+        try {
+
+            $datetime = \DateTime::createFromFormat($format, $q);
+        }
+        catch ( \Exception $e ) {
+
+            return false;
+        }
+
+        return    false !== $datetime
+               && $this['timestamp']->predicate((int) $datetime->format('U'));
     }
 
     /**

@@ -96,7 +96,7 @@ class Timestamp extends Constinteger {
     public function construct ( ) {
 
         if(!isset($this['date']))
-            $this['date'] = new Conststring(date('d/m/Y H:i:s'));
+            $this['date'] = new Conststring('now');
 
         return;
     }
@@ -110,7 +110,7 @@ class Timestamp extends Constinteger {
      */
     public function predicate ( $q ) {
 
-        return $q == strtotime($this['date']->getConstantValue());
+        return $q == $this->getConstantValue();
     }
 
     /**
@@ -133,7 +133,9 @@ class Timestamp extends Constinteger {
      */
     public function getConstantValue ( ) {
 
-        return strtotime($this['date']->getConstantValue());
+        $datetime = new \DateTime($this['date']->getConstantValue());
+
+        return (int) $datetime->format('U');
     }
 }
 
