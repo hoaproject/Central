@@ -234,7 +234,17 @@ class Praspel extends \Hoa\Console\Dispatcher\Kit {
 
                     try {
 
-                        $praspel  = praspel($code);
+                        $praspel   = praspel($code);
+                        $variable  = $praspel->getClause('requires')
+                                             ->getVariable('i');
+                        $selection = new \Hoa\Test\Selector\Random(
+                            $praspel->getClause('requires')->getVariables()
+                        );
+
+                        var_dump(
+                            $variable->selectDomain($selection->current())
+                                     ->sample()
+                        );
                     }
                     catch ( \Hoa\Core\Exception $e ) {
 
@@ -242,12 +252,6 @@ class Praspel extends \Hoa\Console\Dispatcher\Kit {
 
                         continue;
                     }
-
-                    $variable  = $praspel->getClause('requires')->getVariable('i');
-                    $selection = new \Hoa\Test\Selector\Random(
-                        $praspel->getClause('requires')->getVariables()
-                    );
-                    var_dump($variable->selectDomain($selection->current())->sample());
             }
 
             cout();
