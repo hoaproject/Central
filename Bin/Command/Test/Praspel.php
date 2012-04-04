@@ -71,7 +71,12 @@ from('Hoa')
 /**
  * \Hoa\File\Read
  */
--> import('File.Read');
+-> import('File.Read')
+
+/**
+ * \Hoa\Console\Readline
+ */
+-> import('Console.Readline.~');
 
 }
 
@@ -136,8 +141,12 @@ class Praspel extends \Hoa\Console\Dispatcher\Kit {
         else
             $this->parser->listInputs($code);
 
+        $readline = new \Hoa\Console\Readline();
+
         if(null === $code)
             $code = 'h';
+        else
+            $readline->addHistory($code);
 
         $praspel  = null;
         $ccode    = null;
@@ -256,7 +265,7 @@ class Praspel extends \Hoa\Console\Dispatcher\Kit {
 
             cout();
 
-        } while('quit' != $code = $this->readline('> '));
+        } while('quit' != $code = $readline->readline('> '));
 
         return;
     }
