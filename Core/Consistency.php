@@ -414,7 +414,7 @@ class Consistency implements \ArrayAccess {
      *     • 'load*', equivalent to setAutoload(2);
      *     • 'autoload', equivalent to setAutoload(0);
      *     • '…' (unrecognized option), equivalent to setRoot(…).
-     * Obvsiouly, we can combine options:
+     * Obviously, we can combine options:
      *     [['load', 'root' => 'new/root']]
      *
      * @access  public
