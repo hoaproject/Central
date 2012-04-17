@@ -447,13 +447,23 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
                 continue;
             }
 
-            $response = $client->getResponseHeaders();
+            $response  = $client->getResponseHeaders();
+            $headers   = array_merge(
+                array(
+                    'date'           => date('r'),
+                    'content-length' => strlen($content)
+                ),
+                $response
+            );
+            $_response = null;
+
+            foreach($headers as $name => $value)
+                $_response .= $name . ': ' . $value . "\r\n";
+
             $server->writeAll(
                 'HTTP/1.1 200 OK' . "\r\n" .
-                'Date: ' . date('r') . "\r\n" .
-                'Server: Hoa+Bhoa/0.1' . "\r\n" .
-                'Content-Type: ' . $response['content-type'] . "\r\n" .
-                'Content-Length: ' . strlen($content) . "\r\n\r\n" .
+                'server: Hoa+Bhoa/0.1' . "\r\n" .
+                $_response . "\r\n" .
                 $content
             );
 
