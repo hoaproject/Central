@@ -60,7 +60,7 @@ namespace Hoa\Zombie {
 class Zombie {
 
     /**
-     * Try to kill a zombie.
+     * Try to create a zombie.
      *
      * @access  public
      * @return  void
