@@ -138,7 +138,7 @@ class Heading extends GenericPhrasing implements \Hoa\Xyl\Element\Executable {
      */
     public function getLevel ( ) {
 
-        return (int) substr($this->abstract->getName(), -1);
+        return (int) substr($this->getName(), -1);
     }
 }
 

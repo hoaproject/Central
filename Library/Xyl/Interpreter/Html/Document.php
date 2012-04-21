@@ -136,7 +136,7 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
         );
 
         foreach($this as $child)
-            if('title' != $child->abstract->getName())
+            if('title' != $child->getName())
                 $child->render($out);
 
         $out->writeAll(
