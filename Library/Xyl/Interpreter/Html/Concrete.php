@@ -383,6 +383,17 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
 
         return;
     }
+
+    /**
+     * Get component name.
+     *
+     * @access  public
+     * @reurn   string
+     */
+    public function getName ( ) {
+
+        return $this->abstract->getName();
+    }
 }
 
 }

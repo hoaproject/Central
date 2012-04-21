@@ -68,7 +68,7 @@ class Generic extends Concrete {
      */
     protected function paint ( \Hoa\Stream\IStream\Out $out ) {
 
-        $name = $this->abstract->getName();
+        $name = $this->getName();
 
         if(0 !== $this->_contentFlow) {
 
