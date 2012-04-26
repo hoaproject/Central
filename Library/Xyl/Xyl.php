@@ -385,6 +385,18 @@ class          Xyl
     }
 
     /**
+     * Get type as string.
+     * Please, see the self::TYPE_* constants.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getTypeAsString ( ) {
+
+        return strtolower($this->getName());
+    }
+
+    /**
      * Add a <?xyl-use?> processing-instruction (only that).
      *
      * @access  public
@@ -1184,14 +1196,21 @@ class          Xyl
      * Run the render.
      *
      * @access  public
+     * @param   \Hoa\Xyl\Element\Concrete  $element    Element.
      * @return  string
      */
-    public function render ( ) {
+    public function render ( Element\Concrete $element = null ) {
 
-        if(null === $this->_concrete)
+        if(null === $element)
+            $element = $this->_concrete;
+
+        if(null === $element) {
+
             $this->interprete();
+            $element = $this->_concrete;
+        }
 
-        return $this->_concrete->render($this->_out);
+        return $element->render($this->_out);
     }
 
     /**
@@ -1291,6 +1310,27 @@ class          Xyl
     }
 
     /**
+     * Get a specific snippet (if the document is a <fragment />).
+     *
+     * @access  public
+     * @return  Hoa\Xyl\Element\Concrete
+     */
+    public function getSnippet ( $id ) {
+
+        $handle = $this->xpath(
+            '/__current_ns:fragment/__current_ns:snippet[@id="' . $id . '"]'
+        );
+
+        if(empty($handle))
+            throw new Exception(
+                'Snippet %s does not exist.', 14, $id);
+
+        $out = $this->getConcrete()->getConcreteElement($handle[0]);
+
+        return $out[0];
+    }
+
+    /**
      * Whether the document is open from the constructor or from the
      * self::open() method.
      *
@@ -1360,7 +1400,7 @@ class          Xyl
             return self::SELECTOR_PATH;
 
         throw new Exception(
-            'Selector %s is not a valid selector.', 14, $selector);
+            'Selector %s is not a valid selector.', 15, $selector);
     }
 
     /**

@@ -82,7 +82,7 @@ class Html extends \Hoa\Xyl\Interpreter {
         'value'           => '\Hoa\Xyl\Interpreter\Common\Value',
         'yield'           => '\Hoa\Xyl\Interpreter\Common\Yield',
         'fragment'        => '\Hoa\Xyl\Interpreter\Common\Yield',
-        'snippet'         => '\Hoa\Xyl\Interpreter\Html\Generic',
+        'snippet'         => '\Hoa\Xyl\Interpreter\Common\Snippet',
 
         // Script.
         'script'          => '\Hoa\Xyl\Interpreter\Html\Script',
