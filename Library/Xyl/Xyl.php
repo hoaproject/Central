@@ -1313,7 +1313,7 @@ class          Xyl
      * Get a specific snippet (if the document is a <fragment />).
      *
      * @access  public
-     * @return  Hoa\Xyl\Element\Concrete
+     * @return  \Hoa\Xyl\Element\Concrete
      */
     public function getSnippet ( $id ) {
 
