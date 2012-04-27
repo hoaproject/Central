@@ -179,6 +179,7 @@ class Html extends \Hoa\Xyl\Interpreter {
 
         // Forms.
         'form'            => '\Hoa\Xyl\Interpreter\Html\Form',
+        'async'           => '\Hoa\Xyl\Interpreter\Html\Async',
         'fieldset'        => '\Hoa\Xyl\Interpreter\Html\Fieldset',
         'legend'          => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
         'label'           => '\Hoa\Xyl\Interpreter\Html\Label',
