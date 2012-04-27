@@ -1313,6 +1313,7 @@ class          Xyl
      * Get a specific snippet (if the document is a <fragment />).
      *
      * @access  public
+     * @param   string  $id    ID.
      * @return  \Hoa\Xyl\Element\Concrete
      */
     public function getSnippet ( $id ) {
@@ -1325,9 +1326,35 @@ class          Xyl
             throw new Exception(
                 'Snippet %s does not exist.', 14, $id);
 
-        $out = $this->getConcrete()->getConcreteElement($handle[0]);
+        if(null === $concrete = $this->getConcrete())
+            throw new Exception(
+                'Take care to interprete the document before getting a ' .
+                'snippet.', 15);
 
-        return $out[0];
+        return $concrete->getConcreteElement($handle[0]);
+    }
+
+    /**
+     * Get an identified element. This is only a shortcut, a helper.
+     *
+     * @access  public
+     * @param   string  $id    ID.
+     * @return  \Hoa\Xyl\Element\Concrete
+     */
+    public function getElement ( $id ) {
+
+        $handle = $this->xpath('//__current_ns:*[@id="' . $id . '"]');
+
+        if(empty($handle))
+            throw new Exception(
+                'Element with ID %s does not exist.', 16, $id);
+
+        if(null === $concrete = $this->getConcrete())
+            throw new Exception(
+                'Take care to interprete the document before getting a form.',
+                17);
+
+        return $concrete->getConcreteElement($handle[0]);
     }
 
     /**
@@ -1400,7 +1427,7 @@ class          Xyl
             return self::SELECTOR_PATH;
 
         throw new Exception(
-            'Selector %s is not a valid selector.', 15, $selector);
+            'Selector %s is not a valid selector.', 18, $selector);
     }
 
     /**
