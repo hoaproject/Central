@@ -66,6 +66,12 @@ class Button extends GenericPhrasing {
      */
     protected static $_attributes        = array(
         'autofocus'      => parent::ATTRIBUTE_TYPE_NORMAL,
+        'async'          => parent::ATTRIBUTE_TYPE_NORMAL,
+        'asyncaction'    => parent::ATTRIBUTE_TYPE_LINK,
+        'asyncenctype'   => parent::ATTRIBUTE_TYPE_NORMAL,
+        'asyncmethod'    => parent::ATTRIBUTE_TYPE_NORMAL,
+        'asynctarget'    => parent::ATTRIBUTE_TYPE_NORMAL,
+        'asyncscope'     => parent::ATTRIBUTE_TYPE_NORMAL,
         'disabled'       => parent::ATTRIBUTE_TYPE_NORMAL,
         'form'           => parent::ATTRIBUTE_TYPE_NORMAL,
         'formaction'     => parent::ATTRIBUTE_TYPE_LINK,
@@ -83,7 +89,25 @@ class Button extends GenericPhrasing {
      *
      * @var \Hoa\Xyl\Interpreter\Html\Button array
      */
-    protected static $_attributesMapping = …;
+    protected static $_attributesMapping = array(
+        'autofocus',
+        'async'          => 'data-async',
+        'asyncaction'    => 'data-asyncaction',
+        'asyncenctype'   => 'data-asyncenctype',
+        'asyncmethod'    => 'data-asyncmethod',
+        'asynctarget'    => 'data-asynctarget',
+        'asyncscope'     => 'data-asyncscope',
+        'disabled',
+        'form',
+        'formaction',
+        'formenctype',
+        'formmethod',
+        'formnovalidate',
+        'formtarget',
+        'name',
+        'type',
+        'value'
+    );
 
     /**
      * Whether content could exist or not.
