@@ -91,7 +91,7 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
         'accept-charset',
         'action',
         'autocomplete',
-        'async'          => 'data-async',
+        'async'          => 'data-formasync',
         'enctype',
         'method',
         'name',
