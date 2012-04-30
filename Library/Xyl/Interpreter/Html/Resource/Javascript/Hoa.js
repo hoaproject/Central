@@ -377,6 +377,77 @@ Hoa.Concurrent = Hoa.Concurrent || new function ( ) {
             );
         };
     };
+
+    this.Queue = function ( autospawn ) {
+
+        autospawn     = undefined === autospawn ? 500 : autospawn;
+        var queue     = [];
+        var state     = 0;
+        var sthat     = this;
+        var terminate = function ( ) {
+
+            var task = queue.shift();
+            state = 0;
+
+            if(undefined === task) {
+
+                if(!autospawn)
+                    return;
+
+                Hoa.Concurrent.after(autospawn, function ( ) {
+
+                    sthat.spawn();
+                });
+
+                return;
+            }
+
+            task();
+        };
+        var wait      = function ( ) {
+
+            state          = -1;
+            this.terminate = terminate;
+        };
+
+        this.schedule = new function ( ) {
+
+            var that  = this;
+            this.wait = wait;
+
+            return function ( task ) {
+
+                var t = task.bind(that);
+
+                queue.push(function ( ) {
+
+                    t();
+
+                    if(-1 == state)
+                        return;
+
+                    terminate();
+                });
+
+                return this;
+            };
+        };
+
+        this.wait  = function ( delay ) {
+
+            queue.push(Hoa.Concurrent.delay(delay, function ( ) {
+
+                terminate();
+            }));
+
+            return this;
+        };
+
+        this.spawn = terminate;
+
+        if(autospawn)
+            this.spawn();
+    };
 };
 
 Hoa.namespace([Object], function ( ) {
