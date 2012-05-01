@@ -383,7 +383,7 @@ Hoa.Concurrent = Hoa.Concurrent || new function ( ) {
         autospawn     = undefined === autospawn ? 500 : autospawn;
         var queue     = [];
         var state     = 0;
-        var sthat     = this;
+        var that      = this;
         var terminate = function ( ) {
 
             var task = queue.shift();
@@ -396,7 +396,7 @@ Hoa.Concurrent = Hoa.Concurrent || new function ( ) {
 
                 Hoa.Concurrent.after(autospawn, function ( ) {
 
-                    sthat.spawn();
+                    that.spawn();
                 });
 
                 return;
