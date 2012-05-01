@@ -378,60 +378,115 @@ Hoa.Concurrent = Hoa.Concurrent || new function ( ) {
         };
     };
 
-    this.Queue = function ( ) {
+    this.Scheduler = function ( ) {
 
         var queue     = [];
-        var state     = 0;
-        var that      = this;
         var terminate = function ( ) {
 
             var task = queue.shift();
-            state = 0;
 
             if(undefined === task)
                 return;
 
-            task();
+            task.run();
+
+            if(-1 == task.state)
+                return;
+
+            task.terminate();
         };
 
-        this.schedule = new function ( ) {
+        this.schedule = function ( task ) {
 
-            var that       = this;
-            this.terminate = terminate;
-            this.wait      = function ( ) {
+            queue.push(new this.TaskTemplate(task));
 
-                state = -1;
-            };
+            return this;
+        };
 
-            return function ( task ) {
+        this.wait = function ( delay ) {
 
-                var t = task.bind(that);
+            this.schedule(function ( ) {
 
-                queue.push(function ( ) {
+                var that = this;
+                this.wait();
 
-                    t();
-
-                    if(-1 == state)
-                        return;
+                Hoa.Concurrent.after(delay, function ( ) {
 
                     that.terminate();
+                });
+            });
+
+            return this;
+        };
+
+        this.join = new function ( ) {
+
+            var innerTerminate = function ( i, parentTerminate ) {
+
+                return function ( ) {
+
+                    if(0 == i--)
+                        parentTerminate();
+                };
+            };
+
+            return function ( ) {
+
+                var tasks = [];
+                var i     = arguments.length - 1;
+
+                for(var e = i; e >= 0; --e)
+                    tasks.unshift(queue.pop());
+
+                this.schedule(function ( ) {
+
+                    this.wait();
+                    var _terminate = innerTerminate(i, this.terminate);
+
+                    tasks.forEach(function ( task ) {
+
+                        Hoa.Concurrent.after(0, function ( ) {
+
+                            task.terminate = _terminate;
+                            task.run();
+
+                            if(-1 == task.state)
+                                return;
+
+                            task.terminate();
+                        });
+                    });
                 });
 
                 return this;
             };
         };
 
-        this.wait = function ( delay ) {
-
-            queue.push(Hoa.Concurrent.delay(delay, function ( ) {
-
-                terminate();
-            }));
-
-            return this;
-        };
-
         this.spawn = terminate;
+
+        this.TaskTemplate = function ( task ) {
+
+            var state = 0;
+
+            this.__defineGetter__('state', function ( ) {
+
+                return state;
+            });
+
+            this.wait = function ( ) {
+
+                state = -1;
+            };
+
+            this.terminate = terminate;
+
+            this.run = function ( ) {
+
+                (task.bind(this))();
+
+                return this;
+            };
+        };
     };
 };
 
