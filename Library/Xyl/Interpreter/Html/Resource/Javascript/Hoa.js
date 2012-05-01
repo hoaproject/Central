@@ -378,9 +378,8 @@ Hoa.Concurrent = Hoa.Concurrent || new function ( ) {
         };
     };
 
-    this.Queue = function ( autospawn ) {
+    this.Queue = function ( ) {
 
-        autospawn     = undefined === autospawn ? 500 : autospawn;
         var queue     = [];
         var state     = 0;
         var that      = this;
@@ -389,18 +388,8 @@ Hoa.Concurrent = Hoa.Concurrent || new function ( ) {
             var task = queue.shift();
             state = 0;
 
-            if(undefined === task) {
-
-                if(!autospawn)
-                    return;
-
-                Hoa.Concurrent.after(autospawn, function ( ) {
-
-                    that.spawn();
-                });
-
+            if(undefined === task)
                 return;
-            }
 
             task();
         };
@@ -432,7 +421,7 @@ Hoa.Concurrent = Hoa.Concurrent || new function ( ) {
             };
         };
 
-        this.wait  = function ( delay ) {
+        this.wait = function ( delay ) {
 
             queue.push(Hoa.Concurrent.delay(delay, function ( ) {
 
@@ -443,9 +432,6 @@ Hoa.Concurrent = Hoa.Concurrent || new function ( ) {
         };
 
         this.spawn = terminate;
-
-        if(autospawn)
-            this.spawn();
     };
 };
 
