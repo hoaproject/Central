@@ -404,16 +404,15 @@ Hoa.Concurrent = Hoa.Concurrent || new function ( ) {
 
             task();
         };
-        var wait      = function ( ) {
-
-            state          = -1;
-            this.terminate = terminate;
-        };
 
         this.schedule = new function ( ) {
 
-            var that  = this;
-            this.wait = wait;
+            var that       = this;
+            this.terminate = terminate;
+            this.wait      = function ( ) {
+
+                state = -1;
+            };
 
             return function ( task ) {
 
@@ -426,7 +425,7 @@ Hoa.Concurrent = Hoa.Concurrent || new function ( ) {
                     if(-1 == state)
                         return;
 
-                    terminate();
+                    that.terminate();
                 });
 
                 return this;
