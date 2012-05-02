@@ -381,12 +381,16 @@ Hoa.Concurrent = Hoa.Concurrent || new function ( ) {
     this.Scheduler = function ( ) {
 
         var queue     = [];
+        var running   = false;
         var terminate = function ( ) {
 
             var task = queue.shift();
 
-            if(undefined === task)
+            if(undefined === task) {
+
+                running = false;
                 return;
+            }
 
             task.run();
 
@@ -462,7 +466,13 @@ Hoa.Concurrent = Hoa.Concurrent || new function ( ) {
             };
         };
 
-        this.spawn = terminate;
+        this.spawn = function ( ) {
+
+            if(true == running)
+                return;
+
+            terminate();
+        };
 
         this.TaskTemplate = function ( task ) {
 
@@ -482,6 +492,7 @@ Hoa.Concurrent = Hoa.Concurrent || new function ( ) {
 
             this.run = function ( ) {
 
+                running = true;
                 (task.bind(this))();
 
                 return this;
