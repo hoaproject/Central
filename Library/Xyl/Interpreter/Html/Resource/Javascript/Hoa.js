@@ -36,6 +36,8 @@
 
 var Hoa = Hoa || {};
 
+Hoa.nop = function ( ) { };
+
 Hoa.ℙ = new function ( ) {
 
     var decision = typeof WorkerGlobalScope === 'undefined';
