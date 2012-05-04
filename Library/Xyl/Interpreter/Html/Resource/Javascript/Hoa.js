@@ -92,6 +92,94 @@ Hoa.namespace = Hoa.namespace || function ( subjects, callback ) {
     });
 };
 
+Hoa.namespace([Object], function ( ) {
+
+    var that = this;
+
+    return {
+
+        extend: function ( object ) {
+
+            if(undefined === object)
+                return that;
+
+            object.hoa.forEach(function ( key ) {
+
+                Object.defineProperty(
+                    that,
+                    key,
+                    Object.getOwnPropertyDescriptor(object, key)
+                );
+            });
+
+            return that;
+        },
+
+        forEach: function ( callback ) {
+
+            Object.keys(that).forEach(callback);
+
+            return that;
+        }
+    };
+});
+
+Hoa.namespace([Function], function ( ) {
+
+    var that = this;
+
+    return {
+
+        curry: function ( ) {
+
+            var args  = Array.prototype.slice.call(arguments);
+            var margs = args.length;
+
+            return function ( ) {
+
+                var handle = [];
+
+                for(var i = 0, j = 0; i < margs; ++i)
+                    if(undefined == args[i])
+                        handle[i] = arguments[j++];
+                    else
+                        handle[i] = args[i];
+
+                for(var max = arguments.length; j < max; ++j)
+                    handle[i++] = arguments[j];
+
+                return that.apply(this, handle);
+            };
+        }
+    };
+});
+
+Hoa.namespace([String], function ( ) {
+
+    var that = this;
+
+    return {
+
+        pad: function ( length, piece, end ) {
+
+            var string     = that.toString();
+            var difference = length - string.length;
+
+            if(0 >= difference)
+                return string;
+
+            var handle = '';
+
+            for(var i = difference / piece.length - 1; i >= 0; --i)
+                handle += piece;
+
+            handle += piece.substring(0, difference - handle.length);
+
+            return end ? string.concat(handle) : handle.concat(string)
+        }
+    };
+});
+
 Hoa.Form = Hoa.Form || new function ( ) {
 
     if(Hoa.ℙ(1)) {
@@ -311,6 +399,62 @@ Hoa.Async = Hoa.Async || new function ( ) {
     });
 };
 
+Hoa.ℙ(1) && (Hoa.DOM = Hoa.DOM || new function ( ) {
+
+    var that = this;
+
+    this.element = function ( name, children, attributes, ns ) {
+
+        var node = null;
+
+        if(undefined != ns)
+            node = document.createElementNS(name);
+        else
+            node = document.createElement(name);
+
+        if(undefined != attributes)
+            attributes.hoa.forEach(function ( attribute ) {
+
+                node.setAttribute(attribute, attributes[attribute]);
+            });
+
+        if(undefined == children)
+            return node;
+
+        if(typeof children == 'string')
+            node.appendChild(that.text(children));
+        else
+            children.forEach(function ( child ) {
+
+                node.appendChild(child);
+            });
+
+        return node;
+    };
+
+    this.text = function ( text ) {
+
+        return document.createTextNode(text);
+    };
+
+    ['a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 'b', 'base',
+     'bdi', 'bdo', 'blockquote', 'body', 'br', 'button', 'canvas', 'caption',
+     'cite', 'code', 'col', 'colgroup', 'command', 'datalist', 'dd', 'del',
+     'details', 'dfn', 'div', 'dl', 'dt', 'em', 'embed', 'fieldset',
+     'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5',
+     'h6', 'head', 'header', 'hgroup', 'hr', 'html', 'i', 'iframe', 'img',
+     'input', 'ins', 'kbd', 'keygen', 'label', 'legend', 'li', 'link', 'map',
+     'mark', 'menu', 'meta', 'meter', 'nav', 'noscript', 'object', 'ol',
+     'optgroup', 'option', 'output', 'p', 'param', 'pre', 'progress', 'q', 'rp',
+     'rt', 'ruby', 's', 'samp', 'script', 'section', 'select', 'small',
+     'source', 'span', 'strong', 'style', 'sub', 'summary', 'sup', 'table',
+     'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr',
+     'track', 'u', 'ul', 'var', 'video', 'wbr'].forEach(function ( name ) {
+
+        that[name] = that.element.hoa.curry(name);
+    });
+});
+
 Hoa.Concurrent = Hoa.Concurrent || new function ( ) {
 
     this.after = function ( delay, callback /*, arguments… */ ) {
@@ -502,88 +646,3 @@ Hoa.Concurrent = Hoa.Concurrent || new function ( ) {
         };
     };
 };
-
-Hoa.namespace([Object], function ( ) {
-
-    var that = this;
-
-    return {
-
-        extend: function ( object ) {
-
-            if(undefined === object)
-                return that;
-
-            object.hoa.forEach(function ( element ) {
-
-                Object.defineProperty(
-                    that,
-                    element,
-                    Object.getOwnPropertyDescriptor(object, element)
-                );
-            });
-
-            return that;
-        },
-
-        forEach: function ( callback ) {
-
-            Object.keys(that).forEach(callback);
-
-            return that;
-        }
-    };
-});
-
-Hoa.namespace([Function], function ( ) {
-
-    var that = this;
-
-    return {
-
-        curry: function ( ) {
-
-            var args = Array.prototype.slice.call(arguments);
-
-            return function ( ) {
-
-                var i          = 0;
-                var arg        = 0;
-                var margs      = args.length;
-                var marguments = arguments.length;
-
-                for(; i < margs && arg < marguments; ++i)
-                    if(undefined === args[i])
-                        args[i] = arguments[arg++];
-
-                return that.apply(this, args);
-            };
-        }
-    };
-});
-
-Hoa.namespace([String], function ( ) {
-
-    var that = this;
-
-    return {
-
-        pad: function ( length, piece, end ) {
-
-            var string     = that.toString();
-            var difference = length - string.length;
-
-            if(0 >= difference)
-                return string;
-
-            var handle = '';
-
-            for(var i = difference / piece.length - 1; i >= 0; --i)
-                handle += piece;
-
-            handle += piece.substring(0, difference - handle.length);
-
-            return end ? string.concat(handle) : handle.concat(string)
-        }
-    };
-});
