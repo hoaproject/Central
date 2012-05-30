@@ -572,21 +572,27 @@ abstract class Connection
         if($length < 0)
             throw new Exception(
                 'Length must be greather than or equal to 0, given %d.',
-                0, $length);
+                2, $length);
 
         if(strlen($string) > $length)
             $string = substr($string, 0, $length);
 
         if(   false === $this->isRemoteAddressConsidered()
            || null  === $remote = $this->getRemoteAddress())
-            return stream_socket_sendto($this->getStream(), $string);
+            $out = @stream_socket_sendto($this->getStream(), $string);
+        else
+            $out = @stream_socket_sendto(
+                $this->getStream(),
+                $string,
+                0,
+                $remote
+            );
 
-        return stream_socket_sendto(
-            $this->getStream(),
-            $string,
-            0,
-            $remote
-        );
+        if(-1 == $out)
+            throw new Exception(
+                'Pipe is broken, cannot write data.', 3);
+
+        return $out;
     }
 
     /**
