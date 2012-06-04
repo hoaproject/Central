@@ -1143,15 +1143,24 @@ class          Xyl
     public function computeLink ( $link, $late = false ) {
 
         // Router.
-        if(0 != preg_match('#^@(?:(?:([^:]+):(.*))|([^$]+))$#', $link, $matches)) {
+        if(0 != preg_match('#^@(?:([^:]+):([^\#]+)|([^:\#]+):?)(?:\#([^$]+))?$#',
+                           $link, $matches)) {
 
             $router = $this->getRouter();
 
             if(null === $router)
                 return $link;
 
-            if(isset($matches[3]))
+            if(!empty($matches[3])) {
+
+                if(!empty($matches[4]))
+                    return $router->unroute(
+                        $matches[3],
+                        array('_anchor' => $matches[4])
+                    );
+
                 return $router->unroute($matches[3]);
+            }
 
             $id = $matches[1];
             $kv = array();
@@ -1161,6 +1170,9 @@ class          Xyl
                 $handle                    = explode('=', $value);
                 $kv[urldecode($handle[0])] = urldecode($handle[1]);
             }
+
+            if(!empty($matches[4]))
+                $kv['_anchor'] = $matches[4];
 
             return $router->unroute($id, $kv);
         }
