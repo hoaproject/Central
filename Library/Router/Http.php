@@ -529,7 +529,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
 
     /**
      * Unroute a rule (i.e. route()^-1).
-     * Special variables: _domain, _subdomain and _anchor.
+     * Special variables: _domain, _subdomain and _fragment.
      *
      * @access  public
      * @param   string  $id           ID.
@@ -552,10 +552,10 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
             }
 
         $variables = array_merge($rule[Router::RULE_VARIABLES], $variables);
-        $anchor    = !empty($variables['_anchor'])
-                         ? '#' . $variables['_anchor']
+        $anchor    = !empty($variables['_fragment'])
+                         ? '#' . $variables['_fragment']
                          : null;
-        unset($variables['_anchor']);
+        unset($variables['_fragment']);
 
         if(false !== $pos = strpos($pattern, '@')) {
 
