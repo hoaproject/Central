@@ -532,9 +532,12 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
      * @access  public
      * @param   string  $id           ID.
      * @param   array   $variables    Variables.
+     * @param   bool    $secure       Whether the connection is secured. If
+     *                                null, will use the self::isSecure() value.
      * @return  string
      */
-    public function unroute ( $id, Array $variables = array() ) {
+    public function unroute ( $id, Array $variables = array(),
+                              $secured = null ) {
 
         $rule      = $this->getRule($id);
         $pattern   = $rule[Router::RULE_PATTERN];
@@ -551,7 +554,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
         if(false !== $pos = strpos($pattern, '@')) {
 
             $port   = $this->getPort();
-            $secure = $this->isSecure();
+            $secure = null === $secured ? $this->isSecure() : $secured;
 
             return (true === $secure ? 'https://' : 'http://') .
                    $this->_unroute(substr($pattern, 0, $pos), $variables) .
@@ -563,7 +566,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
         if(true === array_key_exists('_subdomain', $variables)) {
 
             $port   = $this->getPort();
-            $secure = $this->isSecure();
+            $secure = null === $secured ? $this->isSecure() : $secured;
 
             return (true === $secure ? 'https://' : 'http://') .
                    $variables['_subdomain'] .
