@@ -1156,7 +1156,7 @@ class          Xyl
                 if(!empty($matches[4]))
                     return $router->unroute(
                         $matches[3],
-                        array('_anchor' => $matches[4])
+                        array('_fragment' => $matches[4])
                     );
 
                 return $router->unroute($matches[3]);
@@ -1172,7 +1172,7 @@ class          Xyl
             }
 
             if(!empty($matches[4]))
-                $kv['_anchor'] = $matches[4];
+                $kv['_fragment'] = $matches[4];
 
             return $router->unroute($id, $kv);
         }
