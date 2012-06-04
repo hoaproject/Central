@@ -393,6 +393,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
 
     /**
      * Find the appropriated rule.
+     * Special variables: _domain, _subdomain, _call, _able and _request.
      *
      * @access  public
      * @param   string  $uri     URI or complete URL (without scheme). If null,
@@ -528,6 +529,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
 
     /**
      * Unroute a rule (i.e. route()^-1).
+     * Special variables: _domain, _subdomain and _anchor.
      *
      * @access  public
      * @param   string  $id           ID.
@@ -550,6 +552,10 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
             }
 
         $variables = array_merge($rule[Router::RULE_VARIABLES], $variables);
+        $anchor    = !empty($variables['_anchor'])
+                         ? '#' . $variables['_anchor']
+                         : null;
+        unset($variables['_anchor']);
 
         if(false !== $pos = strpos($pattern, '@')) {
 
@@ -560,7 +566,8 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
                    $this->_unroute(substr($pattern, 0, $pos), $variables) .
                    '.' . $this->getStrictDomain() .
                    ((80 !== $port && false === $secure) ? ':' . $port : '') .
-                   $this->_unroute(substr($pattern, $pos + 1), $variables);
+                   $this->_unroute(substr($pattern, $pos + 1), $variables) .
+                   $anchor;
         }
 
         if(true === array_key_exists('_subdomain', $variables)) {
@@ -573,10 +580,11 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
                    (!empty($variables['_subdomain']) ? '.' : '') .
                    $this->getStrictDomain() .
                    ((80 !== $port && false === $secure) ? ':' . $port : '') .
-                   $this->_unroute($pattern, $variables);
+                   $this->_unroute($pattern, $variables) .
+                   $anchor;
         }
 
-        return $this->_unroute($pattern, $variables);
+        return $this->_unroute($pattern, $variables) . $anchor;
     }
 
     /**
