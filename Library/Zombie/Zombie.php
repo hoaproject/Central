@@ -60,6 +60,17 @@ namespace Hoa\Zombie {
 class Zombie {
 
     /**
+     * Test if we can start a zombie.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public static function test ( ) {
+
+        return true === function_exists('fastcgi_finish_request');
+    }
+
+    /**
      * Try to create a zombie.
      *
      * @access  public
@@ -67,7 +78,7 @@ class Zombie {
      */
     public static function fork ( ) {
 
-        if(false === function_exists('fastcgi_finish_request'))
+        if(true !== static::test())
             throw new Exception(
                 'This program must run behind PHP-FPM to create a zombie.', 0);
 
@@ -129,6 +140,19 @@ class Zombie {
     }
 
     /**
+     * Would like a slice?
+     *
+     * @access  public
+     * @return  void
+     */
+    public static function cutOff ( ) {
+
+        static::_kill();
+
+        return;
+    }
+
+    /**
      * Whatever, really kill the zombie.
      *
      * @access  public
@@ -145,7 +169,7 @@ class Zombie {
      * @access  public
      * @return  int
      */
-    public function getPid ( ) {
+    public static function getPid ( ) {
 
         return getmypid();
     }
