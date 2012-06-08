@@ -80,7 +80,7 @@ class Start extends \Hoa\Console\Dispatcher\Kit {
      */
     public function main ( ) {
 
-        $fastcgi = 'localhost:9000';
+        $fastcgi = '127.0.0.1:9000';
 
         while(false !== $c = $this->getOption($v)) switch($c) {
 
@@ -124,7 +124,7 @@ class Start extends \Hoa\Console\Dispatcher\Kit {
         cout('Usage   : worker:start <options> <worker_path>');
         cout('Options :');
         cout($this->makeUsageOptionsList(array(
-            'f'    => 'PHP-FPM socket URI (default: localhost:9000).',
+            'f'    => 'PHP-FPM socket URI (default: 127.0.0.1:9000).',
             'help' => 'This help.'
         )));
 
