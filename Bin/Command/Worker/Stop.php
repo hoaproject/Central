@@ -65,8 +65,9 @@ class Stop extends \Hoa\Console\Dispatcher\Kit {
      * @var \Bin\Command\Worker\Stop array
      */
     protected $options = array(
-        array('help', \Hoa\Console\GetOption::NO_ARGUMENT, 'h'),
-        array('help', \Hoa\Console\GetOption::NO_ARGUMENT, '?')
+        array('run',  \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'r'),
+        array('help', \Hoa\Console\GetOption::NO_ARGUMENT,       'h'),
+        array('help', \Hoa\Console\GetOption::NO_ARGUMENT,       '?')
     );
 
 
@@ -79,7 +80,13 @@ class Stop extends \Hoa\Console\Dispatcher\Kit {
      */
     public function main ( ) {
 
+        $run = 'hoa://Data/Variable/Run/';
+
         while(false !== $c = $this->getOption($v)) switch($c) {
+
+            case 'r':
+                $run = $v;
+              break;
 
             case 'h':
             case '?':
@@ -97,7 +104,11 @@ class Stop extends \Hoa\Console\Dispatcher\Kit {
             return $this->usage();
 
 
-        $password = cin('Password: ', \Hoa\Console\Io::TYPE_PASSWORD);
+        $run  = resolve($run);
+        \Hoa\Core::getInstance()->initialize(array(
+            'protocol.Data/Variable/Run' => $run . DS
+        ));
+        $password = $this->readPassword('Password: ');
         $sw       = new \Hoa\Worker\Backend\Shared($workerId, $password);
         $sw->stop();
 

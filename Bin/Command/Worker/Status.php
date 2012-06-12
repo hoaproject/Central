@@ -65,8 +65,9 @@ class Status extends \Hoa\Console\Dispatcher\Kit {
      * @var \Bin\Command\Worker\Status array
      */
     protected $options = array(
-        array('help', \Hoa\Console\GetOption::NO_ARGUMENT, 'h'),
-        array('help', \Hoa\Console\GetOption::NO_ARGUMENT, '?')
+        array('run',  \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'r'),
+        array('help', \Hoa\Console\GetOption::NO_ARGUMENT,       'h'),
+        array('help', \Hoa\Console\GetOption::NO_ARGUMENT,       '?')
     );
 
 
@@ -79,7 +80,13 @@ class Status extends \Hoa\Console\Dispatcher\Kit {
      */
     public function main ( ) {
 
+        $run = 'hoa://Data/Variable/Run/';
+
         while(false !== $c = $this->getOption($v)) switch($c) {
+
+            case 'r':
+                $run = $v;
+              break;
 
             case 'h':
             case '?':
@@ -91,7 +98,10 @@ class Status extends \Hoa\Console\Dispatcher\Kit {
               break;
         }
 
-        $run  = resolve('hoa://Data/Variable/Run/');
+        $run  = resolve($run);
+        \Hoa\Core::getInstance()->initialize(array(
+            'protocol.Data/Variable/Run' => $run . DS
+        ));
         $outi = array(array('ID', 'PID', 'Socket', 'Uptime', 'Messages', 'Last'));
         $outm = array();
         $now  = new \DateTime();
