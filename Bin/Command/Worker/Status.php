@@ -204,6 +204,7 @@ class Status extends \Hoa\Console\Dispatcher\Kit {
         cout('Usage   : worker:list <options>');
         cout('Options :');
         cout($this->makeUsageOptionsList(array(
+            'run'  => 'Define hoa://Data/Variable/Run/ path.',
             'help' => 'This help.'
         )));
         cout('Legend: ' . $this->stylize('allocated', 'success') . ', ' .

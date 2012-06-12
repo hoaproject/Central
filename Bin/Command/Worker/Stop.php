@@ -126,6 +126,7 @@ class Stop extends \Hoa\Console\Dispatcher\Kit {
         cout('Usage   : worker:stop <options> <worker_id>');
         cout('Options :');
         cout($this->makeUsageOptionsList(array(
+            'run'  => 'Define hoa://Data/Variable/Run/ path.',
             'help' => 'This help.'
         )));
 
