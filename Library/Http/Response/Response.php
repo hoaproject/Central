@@ -528,6 +528,11 @@ class          Response
      * Add a new header.
      *
      * @access  public
+     * @param   string  $header     Header.
+     * @param   string  $value      Value.
+     * @param   bool    $replace    Whether replace an existing sent header.
+     * @param   string  $status     Force a specific status. Please, see
+     *                              static::STATUS_* constants.
      * @return  void
      */
     public function sendHeader ( $header, $value, $replace = true,
