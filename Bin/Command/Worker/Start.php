@@ -65,9 +65,9 @@ class Start extends \Hoa\Console\Dispatcher\Kit {
      * @var \Bin\Command\Worker\Start array
      */
     protected $options = array(
-        array('fastcgi', \Hoa\Console\GetOption::NO_ARGUMENT, 'f'),
-        array('help',    \Hoa\Console\GetOption::NO_ARGUMENT, 'h'),
-        array('help',    \Hoa\Console\GetOption::NO_ARGUMENT, '?')
+        array('fastcgi', \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'f'),
+        array('help',    \Hoa\Console\GetOption::NO_ARGUMENT,       'h'),
+        array('help',    \Hoa\Console\GetOption::NO_ARGUMENT,       '?')
     );
 
 
