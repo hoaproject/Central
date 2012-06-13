@@ -14,18 +14,25 @@ Summary
 
 List of constributors
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-  • Ivan Enderlin (hywan)
+
+(The symbol ➜ indicates that the contributor has an email address of the form
+firstname.lastname@hoa-project and its alias pseudo@hoa-project.net, with a
+cloak on IRC etc.).
+
+  ➜ Ivan Enderlin (hywan)
   • Abdallah Ben Othman (badoul)
-  • Julien Clauzel (thehawk)
-  • Matthieu Codron (circlecode)
+  ➜ Julien Clauzel (thehawk)
+  ➜ Matthieu Codron (circlecode)
   • Frédéric Dadeau (fdadeau)
   • Antoine Darche (ecureuilvirtuel)
   • Grégory Darche (tetardo)
-  • Raphaël Emourgeon (iraphael)
-  • Gérard Ernaelsten (maitrepylos)
+  ➜ Yohann Dupont (jir4)
+  ➜ Raphaël Emourgeon (iraphael)
+  ➜ Gérard Ernaelsten (maitrepylos)
   • Julian Espérat (savageman)
   • Baptiste Fedi (baptiste)
-  • Julien Lorrain (julien)
+  ➜ Julien Lorrain (julien)
+  ➜ Jean Molliné (cyrano)
   • Joris Mulliez (jojolapine)
   • Emmanuel Thierry (sekiltoyai)
 
@@ -40,7 +47,6 @@ Special thanks
   • Sarah Haïm-Lubczanski
   • Frédéric Hardy
   • Vincent Hasenfratz
-  • Jean Molliné
   • François Piat
   • Mikaël Randy
   • Paul Rouget
