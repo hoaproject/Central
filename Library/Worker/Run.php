@@ -70,7 +70,7 @@ class Run {
      */
     public static function register ( $workerId, $socket ) {
 
-        if(true === self::widExists($workerId))
+        if(true === static::widExists($workerId))
             throw new Exception(
                 'Worker ID %s already exists, we cannot create it again.',
                 0, $workerId);
@@ -96,7 +96,7 @@ class Run {
      */
     public static function unregister ( $workerId ) {
 
-        if(false === self::widExists($workerId))
+        if(false === static::widExists($workerId))
             return true;
 
         return @unlink(static::find($workerId));
@@ -111,7 +111,7 @@ class Run {
      */
     public static function get ( $workerId ) {
 
-        if(false === self::widExists($workerId))
+        if(false === static::widExists($workerId))
             throw new Exception(
                 'Worker ID %s does not exist.', 1, $workerId);
 

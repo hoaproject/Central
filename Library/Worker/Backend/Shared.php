@@ -261,7 +261,7 @@ class Shared implements \Hoa\Core\Event\Listenable {
 
             switch($request['r']) {
 
-                case self::TYPE_MESSAGE:
+                case static::TYPE_MESSAGE:
                     $this->_on->fire('message', new \Hoa\Core\Event\Bucket(
                         $message
                     ));
@@ -269,7 +269,7 @@ class Shared implements \Hoa\Core\Event\Listenable {
                     $this->_lastMessage = time();
                   break;
 
-                case self::TYPE_STOP:
+                case static::TYPE_STOP:
                     if($this->_password === $message) {
 
                         $server->disconnect();
@@ -278,7 +278,7 @@ class Shared implements \Hoa\Core\Event\Listenable {
                     }
                   break;
 
-                case self::TYPE_INFORMATIONS:
+                case static::TYPE_INFORMATIONS:
                     $message = array(
                         'id'                    => $this->_wid,
                         'socket'                => $this->_socket,
@@ -292,7 +292,9 @@ class Shared implements \Hoa\Core\Event\Listenable {
                         'last_message'          => $this->_lastMessage,
                         'filename'              => $_SERVER['SCRIPT_FILENAME']
                     );
-                    $server->writeAll(self::pack(self::TYPE_MESSAGE, $message));
+                    $server->writeAll(
+                        static::pack(static::TYPE_MESSAGE, $message)
+                    );
                   break;
             }
 
@@ -341,7 +343,7 @@ class Shared implements \Hoa\Core\Event\Listenable {
 
         $client = new \Hoa\Socket\Client($this->_socket);
         $client->connect();
-        $client->writeAll(self::pack(self::TYPE_STOP, $this->_password));
+        $client->writeAll(static::pack(static::TYPE_STOP, $this->_password));
         $client->disconnect();
 
         return true;
