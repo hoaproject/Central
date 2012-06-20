@@ -420,7 +420,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
         }
 
         if(null === $base)
-            $base  = $this->getBase();
+            $base = $this->getBase();
 
         if(!empty($base)) {
 
