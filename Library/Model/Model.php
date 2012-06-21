@@ -293,8 +293,8 @@ abstract class Model
         $out = array();
 
         foreach($this->__attributes as $name => $attribute)
-            if(   true === $defaultValues
-               || $attribute['default'] != $attribute['value'])
+            if(   true                  === $defaultValues
+               || $attribute['default'] !== $attribute['value'])
                 $out[$name] = $attribute['value'];
 
         return $out;
@@ -309,7 +309,7 @@ abstract class Model
      */
     public function __isset ( $name ) {
 
-        return isset($this->__attributes[$name]);
+        return array_key_exists($name, $this->__attributes);
     }
 
     /**
