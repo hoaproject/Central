@@ -186,7 +186,7 @@ class Remove extends \Hoa\Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        cout('Usage   : test:run <options>');
+        cout('Usage   : test:remove <options>');
         cout('Options :');
         cout($this->makeUsageOptionsList(array(
             'r'    => 'Revision of the repository tests:' . "\n" .

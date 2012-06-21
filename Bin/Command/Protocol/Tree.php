@@ -93,7 +93,7 @@ class Tree extends \Hoa\Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        cout('Usage   : protocol:print <options>');
+        cout('Usage   : protocol:tree <options>');
         cout('Options :');
         cout($this->makeUsageOptionsList(array(
             'help' => 'This help.'

@@ -201,7 +201,7 @@ class Status extends \Hoa\Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        cout('Usage   : worker:list <options>');
+        cout('Usage   : worker:status <options>');
         cout('Options :');
         cout($this->makeUsageOptionsList(array(
             'run'  => 'Define hoa://Data/Variable/Run/ path.',
