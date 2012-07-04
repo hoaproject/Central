@@ -293,8 +293,9 @@ abstract class Model
         $out = array();
 
         foreach($this->__attributes as $name => $attribute)
-            if(   true                  === $defaultValues
-               || $attribute['default'] !== $attribute['value'])
+            if(   false                 === $attribute['relation']
+               && (true                 === $defaultValues
+               || $attribute['default'] !== $attribute['value']))
                 $out[$name] = $attribute['value'];
 
         return $out;
