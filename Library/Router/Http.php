@@ -91,11 +91,11 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
     protected $_rule            = null;
 
     /**
-     * Base.
+     * Path prefix.
      *
      * @var \Hoa\Router\Http string
      */
-    protected $_base            = null;
+    protected $_pathPrefix      = null;
 
     /**
      * HTTP methods that the router understand.
@@ -143,13 +143,13 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
             $this,
             array(),
             array(
-                'base'          => null,
+                'prefix'        => null,
                 'rules.public'  => array(),
                 'rules.private' => array()
             )
         );
         $this->_parameters->setParameters($parameters);
-        $this->setBase($this->_parameters->getParameter('base'));
+        $this->setPrefix($this->_parameters->getParameter('prefix'));
 
         foreach($this->_parameters->getParameter('rules.public') as $id => $rule) {
 
@@ -396,13 +396,14 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
      * Special variables: _domain, _subdomain, _call, _able and _request.
      *
      * @access  public
-     * @param   string  $uri     URI or complete URL (without scheme). If null,
-     *                           it will be deduce. Can contain subdomain.
-     * @param   string  $base    Base. If null, it will be deduce.
+     * @param   string  $uri       URI or complete URL (without scheme). If
+     *                             null, it will be deduced. Can contain
+     *                             subdomain.
+     * @param   string  $prefix    Path prefix. If null, it will be deduced.
      * @return  \Hoa\Router\Http
      * @throw   \Hoa\Router\Exception\NotFound
      */
-    public function route ( $uri = null, $base = null ) {
+    public function route ( $uri = null, $prefix = null ) {
 
         if(null === $uri) {
 
@@ -419,17 +420,17 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
             $uri = ltrim($uri, '/');
         }
 
-        if(null === $base)
-            $base = $this->getBase();
+        if(null === $prefix)
+            $prefix = $this->getPrefix();
 
-        if(!empty($base)) {
+        if(!empty($prefix)) {
 
-            $base = ltrim($base, '/');
+            $prefix = ltrim($prefix, '/');
 
-            if(0 === preg_match('#^' . $base . '(.*)?$#', $uri, $matches))
+            if(0 === preg_match('#^' . $prefix . '(.*)?$#', $uri, $matches))
                 throw new Exception\NotFound(
-                    'Cannot match the base %s in the URI %s.',
-                    3, array($base, $uri));
+                    'Cannot match the path prefix %s in the URI %s.',
+                    3, array($prefix, $uri));
 
             $uri = ltrim($matches[1],  '/');
         }
@@ -538,14 +539,14 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
      * @param   array   $variables    Variables.
      * @param   bool    $secure       Whether the connection is secured. If
      *                                null, will use the self::isSecure() value.
-     * @param   string  $base         Base. If null, it will be deduce.
+     * @param   string  $prefix       Path prefix. If null, it will be deduced.
      * @return  string
      */
     public function unroute ( $id, Array $variables = array(),
-                              $secured = null, $base = null ) {
+                              $secured = null, $prefix = null ) {
 
-        if(null === $base)
-            $base = $this->getBase();
+        if(null === $prefix)
+            $prefix = $this->getPrefix();
 
         $rule    = $this->getRule($id);
         $pattern = $rule[Router::RULE_PATTERN];
@@ -572,7 +573,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
                    $this->_unroute(substr($pattern, 0, $pos), $variables) .
                    '.' . $this->getStrictDomain() .
                    ((80 !== $port && false === $secure) ? ':' . $port : ':' . 443) .
-                   $base .
+                   $prefix .
                    $this->_unroute(substr($pattern, $pos + 1), $variables) .
                    $anchor;
         }
@@ -587,12 +588,12 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
                    (!empty($variables['_subdomain']) ? '.' : '') .
                    $this->getStrictDomain() .
                    ((80 !== $port && false === $secure) ? ':' . $port : ':' . 443) .
-                   $base .
+                   $prefix .
                    $this->_unroute($pattern, $variables) .
                    $anchor;
         }
 
-        return $base . $this->_unroute($pattern, $variables) . $anchor;
+        return $prefix . $this->_unroute($pattern, $variables) . $anchor;
     }
 
     /**
@@ -811,29 +812,29 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
     }
 
     /**
-     * Set base.
+     * Set path prefix.
      *
      * @access  public
-     * @param   string  $base    Base.
+     * @param   string  $prefix    Path prefix.
      * @return  string
      */
-    public function setBase ( $base ) {
+    public function setPrefix ( $prefix ) {
 
-        $old         = $this->_base;
-        $this->_base = $base;
+        $old               = $this->_pathPrefix;
+        $this->_pathPrefix = $prefix;
 
         return $old;
     }
 
     /**
-     * Get base.
+     * Get path prefix (aka “base”).
      *
      * @access  public
      * @return  string
      */
-    public function getBase ( ) {
+    public function getPrefix ( ) {
 
-        return $this->_base;
+        return $this->_pathPrefix;
     }
 
     /**
