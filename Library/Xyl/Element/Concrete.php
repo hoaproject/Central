@@ -122,28 +122,28 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      *
      * @var \Hoa\Xyl\Element\Concrete array
      */
-    private $_bucket           = array('data' => null);
+    private $_bucket              = array('data' => null);
 
     /**
      * Data bucket for attributes.
      *
      * @var \Hoa\Xyl\Element\Concrete array
      */
-    private $_attributeBucket  = null;
+    private $_attributeBucket     = null;
 
     /**
      * Visibility.
      *
      * @var \Hoa\Xyl\Element\Concrete bool
      */
-    protected $_visibility     = true;
+    protected $_visibility        = true;
 
     /**
      * Transient value.
      *
      * @var \Hoa\Xyl\Element\Concrete string
      */
-    protected $_transientValue = null;
+    protected $_transientValue    = null;
 
     /**
      * Attributes description.
