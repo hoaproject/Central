@@ -308,7 +308,7 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      */
     protected function getCurrentData ( ) {
 
-        if(!isset($this->_bucket['data']))
+        if(empty($this->_bucket['data']))
             return;
 
         $current = $this->_bucket['data'][$this->_bucket['current']];
@@ -376,6 +376,11 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
             return;
 
         $this->firstUpdate();
+
+        if(   isset($this->_bucket['branche'])
+           && empty($this->_bucket['data']))
+            return;
+
         $data = &$this->_bucket['data'];
 
         do {
