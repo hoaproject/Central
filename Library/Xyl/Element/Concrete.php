@@ -229,9 +229,9 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         }
 
         // Binding.
-        $this->_bucket['parent']   = &$parent;
-        $this->_bucket['current']  = 0;
-        $this->_bucket['branche']  = $bind = $this->selectData(
+        $this->_bucket['parent']  = &$parent;
+        $this->_bucket['current'] = 0;
+        $this->_bucket['branche'] = $bind = $this->selectData(
             $this->abstract->readAttribute('bind'),
             $data
         );
