@@ -161,7 +161,8 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         'class'     => self::ATTRIBUTE_TYPE_LIST,
         'style'     => self::ATTRIBUTE_TYPE_NORMAL,
         'data'      => self::ATTRIBUTE_TYPE_CUSTOM,
-        'aria'      => self::ATTRIBUTE_TYPE_CUSTOM
+        'aria'      => self::ATTRIBUTE_TYPE_CUSTOM,
+        'role'      => self::ATTRIBUTE_TYPE_NORMAL
     );
 
 
