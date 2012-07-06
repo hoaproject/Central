@@ -118,10 +118,33 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
     /**
      * Pre-execute an element.
      *
+     * ARIA and @async attribute
+     *   In http://w3.org/TR/wai-aria/, the section “6.5.2 Live Region
+     *   Attributes” specifies 4 attributes corresponding to our needs:
+     *     • aria-atomic
+     *     • aria-busy
+     *     • aria-live
+     *     • aria-relevant
+     *
      * @access  public
      * @return  void
      */
     public function preExecute ( ) {
+
+        if('true' === $this->abstract->readAttribute('async')) {
+
+            if(false === $this->abstract->attributeExists('aria-atomic'))
+                $this->writeAttribute('aria-atomic', 'true');
+
+            if(false === $this->abstract->attributeExists('aria-busy'))
+                $this->writeAttribute('aria-busy', 'false');
+
+            if(false === $this->abstract->attributeExists('aria-live'))
+                $this->writeAttribute('aria-live', 'polite');
+
+            if(false === $this->abstract->attributeExists('aria-relevant'))
+                $this->writeAttribute('aria-relevant', 'all');
+        }
 
         return;
     }
