@@ -194,6 +194,12 @@ class Html extends \Hoa\Xyl\Interpreter {
         'progress'        => '\Hoa\Xyl\Interpreter\Html\Progress',
         'meter'           => '\Hoa\Xyl\Interpreter\Html\Meter',
 
+        // Widgets.
+        'tabs'            => '\Hoa\Xyl\Interpreter\Html\Tabs',
+        'tablist'         => '\Hoa\Xyl\Interpreter\Html\Tablist',
+        'tab'             => '\Hoa\Xyl\Interpreter\Html\Tab',
+        'tabpanel'        => '\Hoa\Xyl\Interpreter\Html\Tabpanel',
+
         // Phrasing model.
         '__text'          => '\Hoa\Xyl\Interpreter\Html\Text'
     );
