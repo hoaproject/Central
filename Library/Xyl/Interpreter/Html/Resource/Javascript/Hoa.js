@@ -48,14 +48,20 @@ Hoa.ℙ = new function ( ) {
     };
 };
 
-Hoa.ℙ(1) && (Hoa.$ = Hoa.$ || function ( query ) {
+Hoa.ℙ(1) && (Hoa.$ = Hoa.$ || function ( query, element ) {
 
-    return document.querySelector(query);
+    if(undefined === element)
+        element = document;
+
+    return element.querySelector(query);
 });
 
-Hoa.ℙ(1) && (Hoa.$$ = Hoa.$$ || function ( query ) {
+Hoa.ℙ(1) && (Hoa.$$ = Hoa.$$ || function ( query, element ) {
 
-    return document.querySelectorAll(query);
+    if(undefined === element)
+        element = document;
+
+    return element.querySelectorAll(query);
 });
 
 Hoa.ℙ(1) && (Hoa.log = Hoa.log || new function ( ) {
@@ -229,6 +235,8 @@ Hoa.Form = Hoa.Form || new function ( ) {
 
                 enable: function ( ) {
 
+                    that.setAttribute('aria-disabled', 'false');
+
                     this.foreachElements(function ( element ) {
 
                         if(undefined == element.disabled)
@@ -239,6 +247,8 @@ Hoa.Form = Hoa.Form || new function ( ) {
                 },
 
                 disable: function ( ) {
+
+                    that.setAttribute('aria-disabled', 'true');
 
                     this.foreachElements(function ( element ) {
 
@@ -395,7 +405,16 @@ Hoa.Async = Hoa.Async || new function ( ) {
 
             request.setRequestHeader(name, headers[name]);
         });
+
+        var ariaBusy = null !== form.getAttribute('aria-busy');
+
+        if(true === ariaBusy)
+            form.setAttribute('aria-busy', 'true');
+
         request.send(data);
+
+        if(true === ariaBusy)
+            form.setAttribute('aria-busy', 'false');
     });
 };
 
