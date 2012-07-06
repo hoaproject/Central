@@ -378,7 +378,10 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         $this->firstUpdate();
 
         if(   isset($this->_bucket['branche'])
-           && empty($this->_bucket['data']))
+           && (empty($this->_bucket['data'])
+           ||  empty($this->_bucket['data']
+                                   [$this->_bucket['current']]
+                                   [$this->_bucket['branche']])))
             return;
 
         $data = &$this->_bucket['data'];
