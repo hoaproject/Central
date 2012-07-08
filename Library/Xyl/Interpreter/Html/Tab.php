@@ -65,7 +65,8 @@ class Tab extends Concrete {
      * @var \Hoa\Xyl\Interpreter\Html\Form array
      */
     protected static $_attributes        = array(
-        'for' => parent::ATTRIBUTE_TYPE_NORMAL
+        'for'      => parent::ATTRIBUTE_TYPE_NORMAL,
+        'selected' => parent::ATTRIBUTE_TYPE_NORMAL
     );
 
     /**
@@ -86,14 +87,19 @@ class Tab extends Concrete {
      */
     protected function paint ( \Hoa\Stream\IStream\Out $out ) {
 
-        $name = $this->getName();
-        $for  = $this->abstract->readAttribute('for');
+        $name     = $this->getName();
+        $for      = $this->abstract->readAttribute('for');
+        $selected = $this->abstract->readAttribute('aria-selected');
+
+        if('true' !== $selected)
+            $selected = 'false';
 
         $this->writeAttribute('role', 'presentation');
         $out->writeAll(
             '<' . $name . $this->readAttributesAsString() . '>' .
             '<a href="#' . $for . '" role="tab" aria-controls="' . $for . '" ' .
-            'aria-selected="false" tabindex="-1" id="' . $for . '__tab">'
+            'aria-selected="' . $selected . '" tabindex="-1" ' .
+            'id="' . $for . '__tab">'
         );
         $this->computeValue($out);
         $out->writeAll('</a></' . $name . '>');

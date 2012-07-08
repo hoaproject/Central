@@ -84,7 +84,15 @@ class Tabs extends Generic implements \Hoa\Xyl\Element\Executable {
             if(empty($tabpanel))
                 continue;
 
-            $tabpanel[0]->writeAttribute('aria-labelledby', $id . '__tab');
+            $tabpanel = $tabpanel[0];
+            $tabpanel->writeAttribute('aria-labelledby', $id . '__tab');
+
+            if(false === $tab->attributeExists('selected'))
+                continue;
+
+            $tab->writeAttribute('aria-selected',      'true');
+            $tabpanel->writeAttribute('aria-hidden',   'false');
+            $tabpanel->writeAttribute('aria-expanded', 'true');
         }
 
         return;
