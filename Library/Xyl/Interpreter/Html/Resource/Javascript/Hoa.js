@@ -665,3 +665,165 @@ Hoa.Concurrent = Hoa.Concurrent || new function ( ) {
         };
     };
 };
+
+Hoa.Keyboard = Hoa.Keyboard || new function ( ) {
+
+    this.TAB      =  9;
+    this.ENTER    = 13;
+    this.ESC      = 27;
+    this.SPACE    = 32;
+    this.PAGEUP   = 33;
+    this.PAGEDOWN = 34;
+    this.END      = 35;
+    this.HOME     = 36;
+    this.LEFT     = 37;
+    this.UP       = 38;
+    this.RIGHT    = 39;
+    this.DOWN     = 40;
+};
+
+Hoa.ℙ(1) && (Hoa.Tabs = Hoa.Tabs || new function ( ) {
+
+    var tabs          = {};
+    var tabsLastIndex = 0;
+
+    var TabTemplate = function ( tab ) {
+
+        var that           = this;
+        var selected       = null;
+        var tablist        = [];
+        var tabpanel       = [];
+        var _tablist       = Hoa.$$('[role="tablist"] [role="tab"]', tab);
+        var _tabitem       = null;
+        var _controls      = null;
+        var _tabpanel      = null;
+        var _callbackClick = function ( i ) {
+
+            return function ( evt ) {
+
+                evt.preventDefault();
+                that.select(i);
+
+                return true;
+            };
+        };
+        var _callbackKey   = function ( i ) {
+
+            return function ( evt ) {
+
+                var keyboard = Hoa.Keyboard;
+
+                switch(evt.keyCode) {
+
+                    case keyboard.LEFT:
+                    case keyboard.UP:
+                        that.selectPrevious();
+                      break;
+
+                    case keyboard.RIGHT:
+                    case keyboard.DOWN:
+                        that.selectNext();
+                      break;
+
+                    case keyboard.HOME:
+                        that.select(0);
+                      break;
+
+                    case keyboard.END:
+                        that.select(-1);
+                      break;
+
+                    default:
+                        return;
+                }
+
+                evt.preventDefault();
+
+                return;
+            };
+        };
+
+        for(var i = 0, max = _tablist.length; i < max; ++i) {
+
+            _tabitem = _tablist[i];
+
+            if(undefined === (_controls = _tabitem.getAttribute('aria-controls')))
+                continue;
+
+            _tabpanel = Hoa.$('[role="tabpanel"][id="' + _controls + '"]', tab);
+
+            if(   null === _tabpanel
+               || _tabpanel.getAttribute('aria-labelledby')
+                  !== _tabitem.getAttribute('id'))
+                continue;
+
+            tablist[i]  = _tabitem;
+            tabpanel[i] = _tabpanel;
+
+            if('true' == _tabitem.getAttribute('aria-selected'))
+                selected = i;
+
+            _tabitem.addEventListener('click', _callbackClick(i));
+            _tabitem.addEventListener('keydown', _callbackKey(i));
+        }
+
+        this.select = function ( i ) {
+
+            if(0 > i)
+                i = Math.abs(tablist.length + i);
+
+            i = i % tablist.length;
+            var tab   = tablist[i];
+            var panel = tabpanel[i];
+
+            if(null !== selected) {
+
+                tablist[selected].setAttribute('aria-selected',  'false');
+                tabpanel[selected].setAttribute('aria-hidden',   'true');
+                tabpanel[selected].setAttribute('aria-expanded', 'false');
+            }
+
+            tab.setAttribute('aria-selected',   'true');
+            panel.setAttribute('aria-hidden',   'false');
+            panel.setAttribute('aria-expanded', 'true');
+            selected = i;
+
+            return this;
+        };
+
+        this.selectNext = function ( ) {
+
+            if(null !== selected)
+                return this.select(selected + 1);
+
+            return this.select(0);
+        };
+
+        this.selectPrevious = function ( ) {
+
+            if(null !== selected)
+                return this.select(selected - 1);
+
+            return this.select(0);
+        };
+    };
+
+    var _tabs = Hoa.$$('[data-tabs]');
+    var _tab  = null;
+
+    for(var i = 0, max = _tabs.length; i < max; ++i) {
+
+        _tab                                             = _tabs[i]
+        tabs[_tab.getAttribute('id') || tabsLastIndex++] = new TabTemplate(_tab);
+    }
+
+    this.get = function ( id ) {
+
+        return tabs[id];
+    };
+
+    this.getAll = function ( ) {
+
+        return tabs;
+    };
+});
