@@ -74,14 +74,7 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
      *
      * @var \Hoa\Xyl\Interpreter\Html\Title object
      */
-    protected $_title     = null;
-
-    /**
-     * All document resources.
-     *
-     * @var \Hoa\Xyl\Interpreter\Html\Document array
-     */
-    protected $_resources = array();
+    protected $_title = null;
 
 
 
@@ -118,11 +111,13 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
             '  <meta http-equiv="content-type" content="text/css; charset=utf-8" />' . "\n"
         );
 
-        if(isset($this->_resources['css'])) {
+        $stylesheets = $root->getStylesheets();
+
+        if(!empty($stylesheets)) {
 
             $out->writeAll("\n");
 
-            foreach($this->_resources['css'] as $href)
+            foreach($stylesheets as $href)
                 $out->writeAll(
                     '  <link type="text/css" href="' . $href .
                     '" rel="stylesheet" />' . "\n"
@@ -154,8 +149,6 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
      */
     public function preExecute ( ) {
 
-        //$this->computeStylesheet();
-
         return;
     }
 
@@ -168,7 +161,6 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
     public function postExecute ( ) {
 
         $this->computeTitle();
-        $this->computeStylesheet();
 
         return;
     }
@@ -187,96 +179,6 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
             return;
 
         $this->_title = $this->getConcreteElement($xpath[0]);
-
-        return;
-    }
-
-    /**
-     * Compute ressources.
-     *
-     * @access  public
-     * @param   array  &$resources    Ressources.
-     * @return  void
-     * @throw   \Hoa\Xyl\Exception
-     */
-    protected function computeRessources ( Array &$resources ) {
-
-        $root      = $this->getAbstractElementSuperRoot();
-        $theme     = $root->getParameters()->getFormattedParameter('theme');
-        $router    = $root->getRouter();
-        $libHead   = '#^' . preg_quote(
-                         $root->resolve('hoa://Library/Xyl/', true)
-                     ) . '(.*)$#';
-        $appHead   = '#^' . preg_quote(
-                         $_ = $root->resolve('hoa://Application/Public/', true)
-                     ) . '(.*)$#';
-
-        foreach($resources as &$resource) {
-
-            if(0 !== preg_match($libHead, $resource, $matches)) {
-
-                $target = $_ . $matches[1];
-
-                if(true !== file_exists($target)) {
-
-                    $copy = @copy(
-                        $root->resolve($resource),
-                        $root->resolve($target, true)
-                    );
-
-                    if(false === $copy)
-                        throw new \Hoa\Xyl\Exception(
-                            'Ressource %s can be copied to %s.', 0,
-                            array('hoa://Library/Xyl/' . $matches[1], $target));
-                }
-
-                $resource = $target;
-            }
-
-            if(0 !== preg_match($appHead, $resource, $matches)) {
-
-                $top = '_' . strtolower(substr(
-                    $matches[1],
-                    0,
-                    ($pos = strpos($matches[1], '/')) ?: strlen($matches[1])
-                ));
-
-                if(false === $router->ruleExists($top)) {
-
-                    if(false === $router->ruleExists('_resource'))
-                        continue;
-
-                    $top = '_resource';
-                    $pos = false;
-                }
-
-                $resource = $router->unroute(
-                    $top,
-                    array(
-                        'theme'    => $theme,
-                        'resource' => substr(
-                            $matches[1],
-                            false !== $pos ? $pos + 1 : 0
-                        )
-                    )
-                );
-            }
-        }
-
-        return;
-    }
-
-    /**
-     * Compute stylesheet.
-     *
-     * @access  protected
-     * @return  void
-     */
-    protected function computeStylesheet ( ) {
-
-        $root                    = $this->getAbstractElementSuperRoot();
-        $this->_resources['css'] = $root->getStylesheets();
-        $this->computeRessources($this->_resources['css']);
 
         return;
     }
