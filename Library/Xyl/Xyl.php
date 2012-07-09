@@ -1178,8 +1178,62 @@ class          Xyl
         }
 
         // hoa://.
-        if('hoa://' === substr($link, 0, 6))
+        if('hoa://' === substr($link, 0, 6)) {
+
+            if(0 !== preg_match('#^hoa://Library/Xyl/(.*)$#', $link, $m)) {
+
+                $handle = 'hoa://Application/Public/' . $m[1];
+                $_link  = $this->resolve($handle);
+
+                if(true !== file_exists($_link)) {
+
+                    $dirname = dirname($_link);
+
+                    if(   true  !== is_dir($dirname)
+                       && false === @mkdir($dirname, 0755, true))
+                        throw new Exception(
+                            'Cannot create directory for the resource %s.',
+                            42, $handle);
+
+                    if(false === @copy($this->resolve($link), $_link))
+                        throw new Exception(
+                            'Resource %s can not be copied to %s.', 0,
+                            array($link, $_link));
+                }
+
+                $link = $handle;
+            }
+
+            if(0 !== preg_match('#^hoa://Application/Public/(.*)$#', $link, $m)) {
+
+                $theme  = $this->getParameters()->getFormattedParameter('theme');
+                list($type, $resource) = explode('/', $m[1], 2);
+                $rule   = '_' . strtolower($type);
+                $router = $this->getRouter();
+
+                if(null === $router)
+                    throw new Exception(
+                        'Need a router to compute %s.', 44, $link);
+
+                if(false === $router->ruleExists($rule)) {
+
+                    if(false === $router->ruleExists('_resource'))
+                        throw new Exception(
+                            'Cannot compute %s because the rule _resource ' .
+                            'does not exist in the router.', 43, $link);
+
+                    $rule     = '_resource';
+                    $resource = $m[1];
+                }
+
+                return $router->unroute(
+                    $rule,
+                    array('theme' => $theme, 'resource' => $resource)
+                );
+            }
+
             return $this->resolve($link, $late);
+        }
 
         return $link;
     }
