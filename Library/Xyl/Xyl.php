@@ -1143,8 +1143,8 @@ class          Xyl
     public function computeLink ( $link, $late = false ) {
 
         // Router.
-        if(0 != preg_match('#^@(?:([^:]+):([^\#]+)|([^:\#]+):?)(?:\#([^$]+))?$#',
-                           $link, $matches)) {
+        if(0 !== preg_match('#^@(?:([^:]+):([^\#]+)|([^:\#]+):?)(?:\#([^$]+))?$#',
+                            $link, $matches)) {
 
             $router = $this->getRouter();
 
@@ -1178,7 +1178,7 @@ class          Xyl
         }
 
         // hoa://.
-        if('hoa://' == substr($link, 0, 6))
+        if('hoa://' === substr($link, 0, 6))
             return $this->resolve($link, $late);
 
         return $link;
