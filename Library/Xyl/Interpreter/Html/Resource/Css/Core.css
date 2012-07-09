@@ -35,46 +35,24 @@
 @charset   "utf-8";
 @namespace url("http://www.w3.org/1999/xhtml");
 
+/**
+ * Support for: <tabs />, <tablist />, <tab /> and <tabpanel />.
+ */
 
-[dir=ltr] .start {
-    /* */
-}
-
-[dir=ltr] .end {
-    /* */
-}
-
-[dir=rtl] .start {
-    /* */
-}
-
-[dir=rtl] .end {
-    /* */
-}
-
-html, body {
+[data-tabs] > ul[role="tablist"] {
+    list-style: none;
     margin: 0;
     padding: 0;
-    height: 100%;
-    width: 100%
 }
 
-.grid {
-    display: table;
+[data-tabs] > ul[role="tablist"] > li {
+    display: inline;
 }
 
-    .grow {
-        display: table-row;
-    }
+[data-tabs] > div[role="tabpanel"][aria-hidden="true"] {
+    display: none;
+}
 
-    .gcell {
-        display: table-cell;
-    }
-
-
-
-/* misc-temp */
-
-label {
+[data-tabs] > div[role="tabpanel"][aria-hidden="false"] {
     display: block;
 }
