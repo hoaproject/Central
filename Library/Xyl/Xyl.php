@@ -1193,11 +1193,11 @@ class          Xyl
                        && false === @mkdir($dirname, 0755, true))
                         throw new Exception(
                             'Cannot create directory for the resource %s.',
-                            42, $handle);
+                            14, $handle);
 
                     if(false === @copy($this->resolve($link), $_link))
                         throw new Exception(
-                            'Resource %s can not be copied to %s.', 0,
+                            'Resource %s can not be copied to %s.', 15,
                             array($link, $_link));
                 }
 
@@ -1213,14 +1213,14 @@ class          Xyl
 
                 if(null === $router)
                     throw new Exception(
-                        'Need a router to compute %s.', 44, $link);
+                        'Need a router to compute %s.', 16, $link);
 
                 if(false === $router->ruleExists($rule)) {
 
                     if(false === $router->ruleExists('_resource'))
                         throw new Exception(
                             'Cannot compute %s because the rule _resource ' .
-                            'does not exist in the router.', 43, $link);
+                            'does not exist in the router.', 17, $link);
 
                     $rule     = '_resource';
                     $resource = $m[1];
@@ -1390,12 +1390,12 @@ class          Xyl
 
         if(empty($handle))
             throw new Exception(
-                'Snippet %s does not exist.', 14, $id);
+                'Snippet %s does not exist.', 18, $id);
 
         if(null === $concrete = $this->getConcrete())
             throw new Exception(
                 'Take care to interprete the document before getting a ' .
-                'snippet.', 15);
+                'snippet.', 19);
 
         return $concrete->getConcreteElement($handle[0]);
     }
@@ -1413,12 +1413,12 @@ class          Xyl
 
         if(empty($handle))
             throw new Exception(
-                'Element with ID %s does not exist.', 16, $id);
+                'Element with ID %s does not exist.', 20, $id);
 
         if(null === $concrete = $this->getConcrete())
             throw new Exception(
                 'Take care to interprete the document before getting a form.',
-                17);
+                21);
 
         return $concrete->getConcreteElement($handle[0]);
     }
@@ -1493,7 +1493,7 @@ class          Xyl
             return self::SELECTOR_PATH;
 
         throw new Exception(
-            'Selector %s is not a valid selector.', 18, $selector);
+            'Selector %s is not a valid selector.', 22, $selector);
     }
 
     /**
