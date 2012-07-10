@@ -666,6 +666,175 @@ Hoa.Concurrent = Hoa.Concurrent || new function ( ) {
     };
 };
 
+Hoa.ℙ(1) && (Hoa.Checkpoint = Hoa.Checkpoint || new function ( ) {
+
+    var getDimensions = function ( client ) {
+
+        if(undefined === client)
+            return {
+                height: window.innerHeight,
+                width:  window.innerWidth
+            };
+
+        return {
+            height: client.clientHeight,
+            width:  client.clientWidth
+        };
+    };
+
+    Hoa.namespace([HTMLDivElement], function ( ) {
+
+        var that = this;
+
+        if(false === this.hasAttribute('data-checkpoint'))
+            return {};
+
+        var scoped = undefined;
+
+        return {
+
+            isVisible: function ( where, client ) {
+
+                var rect = that.getBoundingClientRect();
+                var dim  = getDimensions(client);
+
+                switch((where || '*').charAt(0)) {
+
+                    case 't'/* op */:
+                        return rect.top >= 0 && rect.top < dim.height;
+
+                    case 'b'/* ottom */:
+                        return rect.bottom >= 0 && rect.bottom < dim.height;
+
+                    case 'l'/* eft */:
+                        return rect.left >= 0 && rect.left < dim.width;
+
+                    case 'r'/* ight */:
+                        return rect.right >= 0 && rect.right < dim.width;
+
+                    default:
+                        return    rect.top    <  dim.height
+                               && rect.bottom >= 0
+                               && rect.left   <  dim.width
+                               && rect.right  >= 0;
+                }
+            },
+
+            distance: function ( where ) {
+
+                var opposite = null;
+                var rect     = that.getBoundingClientRect();
+                var w        = null;
+
+                switch(where.charAt(0)) {
+
+                    case 't'/* op */:
+                        w        = function ( ) { return rect.top; };
+                        opposite = 'b';
+                      break;
+
+                    case 'b'/* ottom */:
+                        w        = function ( ) { return rect.bottom; };
+                        opposite = 't';
+                      break;
+
+                    case 'l'/* eft */:
+                        w        = function ( ) { return rect.width; };
+                        opposite = 'r';
+                      break;
+
+                    case 'r'/* ight */:
+                        w        = function ( ) { return rect.right; };
+                        opposite = 'l';
+                      break;
+
+                    default:
+                        return null;
+                }
+
+                return {
+
+                    to: function ( element, ewhere ) {
+
+                        if(undefined === ewhere)
+                            ewhere = opposite;
+
+                        var erect = element.getBoundingClientRect();
+
+                        switch(ewhere.charAt(0)) {
+
+                            case 't'/* op */:
+                                return erect.top - w();
+
+                            case 'b'/* ottom */:
+                                return erect.bottom - w();
+
+                            case 'l'/* eft */:
+                                return erect.left - w();
+
+                            case 'r'/* ight */:
+                                return erect.right - w();
+
+                            default:
+                                return false;
+                        }
+                    }
+                };
+            },
+
+            in: function ( top, right, bottom, left, strict, client ) {
+
+                var dim = getDimensions(client);
+                var abs = null;
+
+                if(undefined === client)
+                    abs = document.body.getBoundingClientRect();
+                else
+                    abs = client.getBoundingClientRect();
+
+                var _top      = Math.max(0, -abs.top);
+                var _left     = Math.max(0, -abs.left);
+                var rectangle = {
+                    top:     _top  + dim.height              * top    / 100,
+                    right:   _left + dim.width  - dim.width  * right  / 100,
+                    bottom:  _top  + dim.height - dim.height * bottom / 100,
+                    left:    _left + dim.width               * left   / 100
+                };
+                var rect      = that.getBoundingClientRect();
+
+                if(undefined === strict || true === strict)
+                    return    (rectangle.top    <= _top  + rect.top)
+                           && (rectangle.bottom >= _top  + rect.top + rect.height)
+                           && (rectangle.left   <= _left + rect.left)
+                           && (rectangle.right  >= _left + rect.left + rect.width);
+
+                return    (rectangle.top    <= _top  + rect.top + rect.height)
+                       && (rectangle.bottom >= _top  + rect.top)
+                       && (rectangle.left   <= _left + rect.left + rect.width)
+                       && (rectangle.right  >= _left + rect.left);
+            },
+
+            getScoped: function ( ) {
+
+                if(undefined !== scoped)
+                    return scoped;
+
+                var scope = that.getAttribute('data-for');
+
+                if(null === scope)
+                    return scoped = null;
+
+                return scoped = Hoa.$('#' + scope);
+            }
+        };
+    });
+
+    this.getCheckpoints = function ( className ) {
+
+        return Hoa.$$('[data-checkpoint]' + (className || ''));
+    };
+});
+
 Hoa.Keyboard = Hoa.Keyboard || new function ( ) {
 
     this.TAB      =  9;
