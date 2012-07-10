@@ -200,6 +200,9 @@ class Html extends \Hoa\Xyl\Interpreter {
         'tab'             => '\Hoa\Xyl\Interpreter\Html\Tab',
         'tabpanel'        => '\Hoa\Xyl\Interpreter\Html\Tabpanel',
 
+        // Extra.
+        'checkpoint'      => '\Hoa\Xyl\Interpreter\Html\Checkpoint',
+
         // Phrasing model.
         '__text'          => '\Hoa\Xyl\Interpreter\Html\Text'
     );
