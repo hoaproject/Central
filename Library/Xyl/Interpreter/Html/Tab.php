@@ -39,9 +39,9 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Xyl\Interpreter\Html\Concrete
+ * \Hoa\Xyl\Interpreter\Html\GenericPhrasing
  */
--> import('Xyl.Interpreter.Html.Concrete');
+-> import('Xyl.Interpreter.Html.GenericPhrasing');
 
 }
 
@@ -57,7 +57,7 @@ namespace Hoa\Xyl\Interpreter\Html {
  * @license    New BSD License
  */
 
-class Tab extends Concrete {
+class Tab extends GenericPhrasing {
 
     /**
      * Attributes description.
