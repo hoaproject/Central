@@ -257,22 +257,29 @@ class          Xyl
      * Interprete a stream as XYL.
      *
      * @access  public
-     * @param   \Hoa\Stream\IStream\In     $in             Stream to interprete
-     *                                                     as XYL.
-     * @param   \Hoa\Stream\IStream\Out    $out            Stream for rendering.
-     * @param   \Hoa\Xyl\Interpreter       $interpreter    Interpreter.
-     * @param   \Hoa\Router\Http           $router         Router.
-     * @param   array                      $parameters     Parameters.
+     * @param   \Hoa\Stream\IStream\In     $in              Stream to interprete
+     *                                                      as XYL.
+     * @param   \Hoa\Stream\IStream\Out    $out             Stream for rendering.
+     * @param   \Hoa\Xyl\Interpreter       $interpreter     Interpreter.
+     * @param   \Hoa\Router\Http           $router          Router.
+     * @param   \XCallable                 $entityResolver  Entity resolver.
+     * @param   array                      $parameters      Parameters.
      * @return  void
      * @throw   \Hoa\Xml\Exception
      */
     public function __construct ( \Hoa\Stream\IStream\In  $in,
                                   \Hoa\Stream\IStream\Out $out,
                                   Interpreter             $interpreter,
-                                  \Hoa\Router\Http        $router     = null,
-                                  Array                   $parameters = array() ) {
+                                  \Hoa\Router\Http        $router         = null,
+                                  \XCallable              $entityResolver = null,
+                                  Array                   $parameters     = array() ) {
 
-        parent::__construct('\Hoa\Xyl\Element\Basic', $in);
+        parent::__construct(
+            '\Hoa\Xyl\Element\Basic',
+            $in,
+            true,
+            $entityResolver
+        );
 
         if(false === $this->namespaceExists(self::NAMESPACE_ID))
             throw new Exception(
