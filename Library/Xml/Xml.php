@@ -111,18 +111,18 @@ abstract class Xml
      *     </handler>
      *
      * @access  public
-     * @param   string       $stream                 Stream name to use.
-     * @param   \Hoa\Stream  $innerStream            Inner stream.
-     * @param   bool         $initializeNamespace    Whether we initialize
-     *                                               namespaces.
-     * @param   callable     $entityResolver         Entity resolver.
+     * @param   string         $stream                 Stream name to use.
+     * @param   \Hoa\Stream    $innerStream            Inner stream.
+     * @param   bool           $initializeNamespace    Whether we initialize
+     *                                                 namespaces.
+     * @param   \XCallable     $entityResolver         Entity resolver.
      * @return  void
      * @throw   \Hoa\Xml\Exception
      * @throw   \Hoa\Xml\Exception\NamespaceMissing
      */
     public function __construct ( $stream, \Hoa\Stream $innerStream,
-                                  $initializeNamespace     = true,
-                                  Callable $entityResolver = null ) {
+                                  $initializeNamespace       = true,
+                                  \XCallable $entityResolver = null ) {
 
         if(!function_exists('simplexml_load_file'))
             throw new Exception(
