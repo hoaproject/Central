@@ -129,7 +129,7 @@ class          ReadWrite
             event(
                 'hoa://Event/Stream/' .$stream->getStreamName() .
                 ':close-before'
-            )->attach($this, '_close');
+            )->attach(xcallable($this, '_close'));
 
         $this->_autoSave = $autoSave;
 
