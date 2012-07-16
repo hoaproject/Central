@@ -1577,6 +1577,6 @@ namespace {
 
 from('Hoa') -> import('Xyl.Interpreter.Common.Debug');
 event('hoa://Event/Exception')
-    ->attach('\Hoa\Xyl\Interpreter\Common\Debug', 'receiveException');
+    ->attach(xcallable('\Hoa\Xyl\Interpreter\Common\Debug', 'receiveException'));
 
 }

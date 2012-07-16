@@ -594,7 +594,7 @@ class          Response
      * @param   int         $size        Size.
      * @return  int
      */
-    public function newBuffer ( \XCallable $callable, $size = null ) {
+    public function newBuffer ( \XCallable $callable = null, $size = null ) {
 
         $last = current(self::$_stack);
         $hash = $this->getHash();
