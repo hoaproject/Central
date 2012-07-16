@@ -217,15 +217,14 @@ class Shared implements \Hoa\Core\Event\Listenable {
      * Attach a callable to this listenable object.
      *
      * @access  public
-     * @param   string  $listenerId    Listener ID.
-     * @param   mixed   $call          First callable part.
-     * @param   mixed   $able          Second callable part (if needed).
+     * @param   string      $listenerId    Listener ID.
+     * @param   \XCallable  $callable      Callable.
      * @return  \Hoa\Worker\Backend\Shared
      * @throw   \Hoa\Core\Exception
      */
-    public function on ( $listenerId, $call, $able = '' ) {
+    public function on ( $listenerId, \XCallable $callable ) {
 
-        return $this->_on->attach($listenerId, $call, $able);
+        return $this->_on->attach($listenerId, $callable);
     }
 
     /**
