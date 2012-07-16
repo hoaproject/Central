@@ -145,7 +145,7 @@ abstract class StringBuffer
      * @param   int         $size        Size.
      * @return  int
      */
-    public function newBuffer ( \XCallable $callable, $size = null ) {
+    public function newBuffer ( \XCallable $callable = null, $size = null ) {
 
         $this->setStreamBuffer($size);
 
