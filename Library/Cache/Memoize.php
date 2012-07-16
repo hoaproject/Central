@@ -151,14 +151,12 @@ class Memoize {
      * Get a memoization (multiton).
      *
      * @access  public
-     * @param   mixed  $call    First callable part.
-     * @param   mixed  $able    Second callable part (if needed).
+     * @param   \XCallable  $callable    Callable.
      * @return  \Hoa\Cache\Memoize
      */
-    public static function getInstance ( $call, $able = '' ) {
+    public static function getInstance ( \XCallable $callable ) {
 
-        $callable = xcallable($call, $able);
-        $hash     = $callable->getHash();
+        $hash = $callable->getHash();
 
         if(!isset(self::$_multiton[$hash])) {
 
@@ -198,14 +196,13 @@ namespace {
  * Alias of \Hoa\Cache\Memoize::getInstance().
  *
  * @access  public
- * @param   mixed  $call    First callable part.
- * @param   mixed  $able    Second callable part (if needed).
+ * @param   \XCallable  $callable    Callable.
  * @return  \Hoa\Cache\Memoize
  */
 if(!ƒ('memoize')) {
-function memoize ( $call, $able = '' ) {
+function memoize ( \XCallable $callable ) {
 
-    return \Hoa\Cache\Memoize::getInstance($call, $able);
+    return \Hoa\Cache\Memoize::getInstance($callable);
 }}
 
 }
