@@ -83,15 +83,18 @@ class Write extends Xml implements \Hoa\Stream\IStream\Out {
      * @param   bool                     $initializeNamespace    Whether we
      *                                                           initialize
      *                                                           namespaces.
+     * @param   callable                 $entityResolver         Entity resolver.
      * @return  void
      */
     public function __construct ( \Hoa\Stream\IStream\Out $stream,
-                                  $initializeNamespace = true ) {
+                                  $initializeNamespace     = true,
+                                  Callable $entityResolver = null ) {
 
         parent::__construct(
             '\Hoa\Xml\Element\Write',
             $stream,
-            $initializeNamespace
+            $initializeNamespace,
+            $entityResolver
         );
 
         event('hoa://Event/Stream/' . $stream->getStreamName() . ':close-before')
