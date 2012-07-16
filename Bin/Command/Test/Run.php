@@ -307,11 +307,11 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
         $out->self = $this; // berk…
 
         event('hoa://Event/Log/' . \Hoa\Test\Praspel::LOG_CHANNEL)
-            ->attach($out);
+            ->attach(xcallable($out));
         event('hoa://Event/Test/Sample:open-iteration')
-            ->attach($out, 'writeOpenIteration');
+            ->attach(xcallable($out, 'writeOpenIteration'));
         event('hoa://Event/Test/Sample:close-iteration')
-            ->attach($out, 'writeCloseIteration');
+            ->attach(xcallable($out, 'writeCloseIteration'));
 
         for($i = 1; $iteration > 0; --$iteration, ++$i) {
 
