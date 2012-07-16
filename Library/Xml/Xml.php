@@ -132,15 +132,19 @@ abstract class Xml
             $entityResolver = xcallable($entityResolver);
 
         libxml_use_internal_errors(true);
-        libxml_set_external_entity_loader(
-            function ( $public, $system, $context ) use ( &$entityResolver ) {
 
-                if(null === $entityResolver)
-                    return null;
+        if(PHP_VERSION_ID >= 50400)
+            libxml_set_external_entity_loader(
+                function ( $public, $system, $context ) use ( &$entityResolver ) {
 
-                return $entityResolver($public, $system, $context);
-            }
-        );
+                    if(null === $entityResolver)
+                        return null;
+
+                    return $entityResolver($public, $system, $context);
+                }
+            );
+        else
+            libxml_disable_entity_loader(true);
 
         if($innerStream instanceof \Hoa\Stream\IStream\In) {
 
