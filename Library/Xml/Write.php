@@ -98,7 +98,7 @@ class Write extends Xml implements \Hoa\Stream\IStream\Out {
         );
 
         event('hoa://Event/Stream/' . $stream->getStreamName() . ':close-before')
-            ->attach($this, '_close');
+            ->attach(xcallable($this, '_close'));
 
         return;
     }
