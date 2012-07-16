@@ -127,25 +127,15 @@ abstract class Xml
                 'SimpleXML must be enable for using %s.', 0, get_class($this));
 
         libxml_use_internal_errors(true);
+        libxml_disable_entity_loader(true);
 
-        $root = @simplexml_load_file($innerStream->getStreamName(), $stream);
-
-        if(   false === $root
-           && $innerStream instanceof \Hoa\Stream\IStream\In) {
+        if($innerStream instanceof \Hoa\Stream\IStream\In) {
 
             $handle = $innerStream->readAll();
-
-            if(empty($handle)) {
-
-                $this->clearErrors();
-                $handle = '<?xml version="1.0" encoding="utf-8"?' . ">\n\n" .
-                          '<handler xmlns="' .
-                          'http://hoa-project.net/xml/default">' . "\n" .
-                          '</handler>';
-            }
-
-            $root = @simplexml_load_string($handle, $stream);
+            $root   = @simplexml_load_string($handle, $stream);
         }
+        else
+            $root = @simplexml_load_file($innerStream->getStreamName(), $stream);
 
         $this->_errors = libxml_get_errors();
         $this->clearErrors();
