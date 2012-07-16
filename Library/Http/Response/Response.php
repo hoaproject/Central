@@ -448,21 +448,22 @@ class          Response
      * Constructor.
      *
      * @access  public
-     * @param   bool   $newBuffer    Whether we run $this->newBuffer().
-     *                               Following arguments are for this method.
-     * @param   mixed  $call         First callable part.
-     * @param   mixed  $able         Second callable part (if needed).
-     * @param   int    $size         Size.
+     * @param   bool        $newBuffer    Whether we run $this->newBuffer().
+     *                                    Following arguments are for this
+     *                                    method.
+     * @param   \XCallable  $callable     Callable.
+     * @param   int         $size         Size.
      * @return  void
      */
-    public function __construct ( $newBuffer = true, $call = null, $able = '',
-                                  $size      = null ) {
+    public function __construct ( $newBuffer           = true,
+                                  \XCallable $callable = null,
+                                  $size                = null ) {
 
         parent::__construct();
         $this->_hash = spl_object_hash($this);
 
         if(true === $newBuffer)
-            $this->newBuffer($call, $able, $size);
+            $this->newBuffer($callable, $size);
 
         if(empty($this->_status)) {
 
@@ -589,17 +590,11 @@ class          Response
      * The callable acts like a filter.
      *
      * @access  public
-     * @param   mixed  $call    First callable part.
-     * @param   mixed  $able    Second callable part (if needed).
-     * @param   int    $size    Size.
+     * @param   \XCallable  $callable    Callable.
+     * @param   int         $size        Size.
      * @return  int
      */
-    public function newBuffer ( $call = null, $able = '',  $size = null ) {
-
-        $callable = null;
-
-        if(null !== $call)
-            $callable = xcallable($call, $able);
+    public function newBuffer ( \XCallable $callable, $size = null ) {
 
         $last = current(self::$_stack);
         $hash = $this->getHash();
@@ -613,7 +608,7 @@ class          Response
             ++self::$_stack[key(self::$_stack)][1];
 
         end(self::$_stack);
-        ob_start($callable, (int) (bool) $size);
+        ob_start($callable, null === $size ? 0 : $size);
 
         return $this->getBufferLevel();
     }
