@@ -128,9 +128,6 @@ abstract class Xml
             throw new Exception(
                 'SimpleXML must be enable for using %s.', 0, get_class($this));
 
-        if(null !== $entityResolver)
-            $entityResolver = xcallable($entityResolver);
-
         libxml_use_internal_errors(true);
 
         if(PHP_VERSION_ID >= 50400)
