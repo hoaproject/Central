@@ -82,12 +82,12 @@ class Read extends Xml implements \Hoa\Stream\IStream\In {
      * @param   bool                    $initializeNamespace    Whether we
      *                                                          initialize
      *                                                          namespaces.
-     * @param   \XCallable              $entityResolver         Entity resolver.
+     * @param   mixed                   $entityResolver         Entity resolver.
      * @return  void
      */
     public function __construct ( \Hoa\Stream\IStream\In $stream,
-                                  $initializeNamespace       = true,
-                                  \XCallable $entityResolver = null ) {
+                                  $initializeNamespace = true,
+                                  $entityResolver      = null ) {
 
         parent::__construct(
             '\Hoa\Xml\Element\Read',
