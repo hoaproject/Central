@@ -859,6 +859,11 @@ class_alias('Hoa\Core\Consistency\Consistency', 'Hoa\Core\Consistency');
 spl_autoload_register('\Hoa\Core\Consistency::autoload');
 
 /**
+ * Make sure that xcallable is as much as easier to use than callable.
+ */
+class_alias('Hoa\Core\Consistency\XCallable', 'XCallable');
+
+/**
  * Alias for \Hoa\Core\Consistency::from().
  *
  * @access  public
