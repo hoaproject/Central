@@ -83,12 +83,12 @@ class Write extends Xml implements \Hoa\Stream\IStream\Out {
      * @param   bool                     $initializeNamespace    Whether we
      *                                                           initialize
      *                                                           namespaces.
-     * @param   \XCallable               $entityResolver         Entity resolver.
+     * @param   mixed                    $entityResolver         Entity resolver.
      * @return  void
      */
     public function __construct ( \Hoa\Stream\IStream\Out $stream,
-                                  $initializeNamespace       = true,
-                                  \XCallable $entityResolver = null ) {
+                                  $initializeNamespace = true,
+                                  $entityResolver      = null ) {
 
         parent::__construct(
             '\Hoa\Xml\Element\Write',

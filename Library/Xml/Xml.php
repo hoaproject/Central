@@ -115,18 +115,21 @@ abstract class Xml
      * @param   \Hoa\Stream    $innerStream            Inner stream.
      * @param   bool           $initializeNamespace    Whether we initialize
      *                                                 namespaces.
-     * @param   \XCallable     $entityResolver         Entity resolver.
+     * @param   mixed          $entityResolver         Entity resolver.
      * @return  void
      * @throw   \Hoa\Xml\Exception
      * @throw   \Hoa\Xml\Exception\NamespaceMissing
      */
     public function __construct ( $stream, \Hoa\Stream $innerStream,
-                                  $initializeNamespace       = true,
-                                  \XCallable $entityResolver = null ) {
+                                  $initializeNamespace = true,
+                                  $entityResolver      = null ) {
 
         if(!function_exists('simplexml_load_file'))
             throw new Exception(
                 'SimpleXML must be enable for using %s.', 0, get_class($this));
+
+        if(null !== $entityResolver)
+            $entityResolver = xcallable($entityResolver);
 
         libxml_use_internal_errors(true);
 

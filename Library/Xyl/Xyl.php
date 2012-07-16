@@ -262,7 +262,7 @@ class          Xyl
      * @param   \Hoa\Stream\IStream\Out    $out             Stream for rendering.
      * @param   \Hoa\Xyl\Interpreter       $interpreter     Interpreter.
      * @param   \Hoa\Router\Http           $router          Router.
-     * @param   \XCallable                 $entityResolver  Entity resolver.
+     * @param   mixed                      $entityResolver  Entity resolver.
      * @param   array                      $parameters      Parameters.
      * @return  void
      * @throw   \Hoa\Xml\Exception
@@ -271,7 +271,7 @@ class          Xyl
                                   \Hoa\Stream\IStream\Out $out,
                                   Interpreter             $interpreter,
                                   \Hoa\Router\Http        $router         = null,
-                                  \XCallable              $entityResolver = null,
+                                                          $entityResolver = null,
                                   Array                   $parameters     = array() ) {
 
         parent::__construct(

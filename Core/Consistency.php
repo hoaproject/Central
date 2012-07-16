@@ -679,6 +679,9 @@ class Xcallable {
      */
     public function __construct ( $call, $able = '' ) {
 
+        if(null === $call)
+            return null;
+
         if($call instanceof \Closure) {
 
             $this->_callback = $call;
@@ -857,11 +860,6 @@ class_alias('Hoa\Core\Consistency\Consistency', 'Hoa\Core\Consistency');
  * Set autoloader.
  */
 spl_autoload_register('\Hoa\Core\Consistency::autoload');
-
-/**
- * Make sure that xcallable is as much as easier to use than callable.
- */
-class_alias('Hoa\Core\Consistency\XCallable', 'XCallable');
 
 /**
  * Alias for \Hoa\Core\Consistency::from().

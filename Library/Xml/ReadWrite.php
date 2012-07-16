@@ -100,7 +100,7 @@ class          ReadWrite
      * @param   bool                    $initializeNamespace    Whether we
      *                                                          initialize
      *                                                          namespaces.
-     * @param   \XCallable              $entityResolver         Entity resolver.
+     * @param   mixed                   $entityResolver         Entity resolver.
      * @param   bool                    $autoSave               Whether we
      *                                                          should
      *                                                          auto-save.
@@ -108,9 +108,9 @@ class          ReadWrite
      * @throw   \Hoa\Xml\Exception
      */
     public function __construct ( \Hoa\Stream\IStream\In $stream,
-                                  $initializeNamespace       = true,
-                                  \XCallable $entityResolver = null,
-                                  $autoSave                  = true ) {
+                                  $initializeNamespace = true,
+                                  $entityResolver      = null,
+                                  $autoSave            = true ) {
 
         if(true === $autoSave && !($stream instanceof \Hoa\Stream\IStream\Out))
             throw new Exception(

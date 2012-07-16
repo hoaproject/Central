@@ -277,11 +277,12 @@ class Event {
      * \Hoa\Core\Consistency\Xcallable class).
      *
      * @access  public
-     * @param   \XCallable  $callable    Callable.
+     * @param   mixed   $callable    Callable.
      * @return  \Hoa\Core\Event
      */
-    public function attach ( \XCallable $callable ) {
+    public function attach ( $callable ) {
 
+        $callable                              = xcallable($callable);
         $this->_callable[$callable->getHash()] = $callable;
 
         return $this;
@@ -292,12 +293,12 @@ class Event {
      * Please see $this->attach() method.
      *
      * @access  public
-     * @param   \XCallable  $callable    Callable.
+     * @param   mixed   $callable    Callable.
      * @return  \Hoa\Core\Event
      */
-    public function detach ( \XCallable $callable ) {
+    public function detach ( $callable ) {
 
-        unset($this->_callable[$callable->getHash()]);
+        unset($this->_callable[xcallable($callable)->getHash()]);
 
         return $this;
     }
@@ -369,12 +370,12 @@ interface Listenable extends Source {
      * Attach a callable to a listenable component.
      *
      * @access  public
-     * @param   string      $listenerId    Listener ID.
-     * @param   \XCallable  $callable      Callable.
+     * @param   string  $listenerId    Listener ID.
+     * @param   mixed   $callable      Callable.
      * @return  \Hoa\Core\Event\Listenable
      * @throw   \Hoa\Core\Exception
      */
-    public function on ( $listenerId, \XCallable $callable );
+    public function on ( $listenerId, $callable );
 }
 
 /**
@@ -428,17 +429,18 @@ class Listener {
      * Attach a callable to a listenable component.
      *
      * @access  public
-     * @param   string      $listenerId    Listener ID.
-     * @param   \XCallable  $callable      Callable.
+     * @param   string  $listenerId    Listener ID.
+     * @param   mixed   $callable      Callable.
      * @return  \Hoa\Core\Event\Listener
      * @throw   \Hoa\Core\Exception
      */
-    public function attach ( $listenerId, \XCallable $callable ) {
+    public function attach ( $listenerId, $callable ) {
 
         if(false === $this->listenerExists($listenerId))
             throw new \Hoa\Core\Exception(
                 'Cannot listen %s because it is not defined.', 0);
 
+        $callable                                         = xcallable($callable);
         $this->_listen[$listenerId][$callable->getHash()] = $callable;
 
         return $this;
@@ -448,13 +450,13 @@ class Listener {
      * Detach a callable from a listenable component.
      *
      * @access  public
-     * @param   string      $listenerId    Listener ID.
-     * @param   \XCallable  $callable      Callable.
+     * @param   string  $listenerId    Listener ID.
+     * @param   mixed   $callable      Callable.
      * @return  \Hoa\Core\Event\Listener
      */
-    public function detach ( $listenerId, \XCallable $callable ) {
+    public function detach ( $listenerId, $callable ) {
 
-        unset($this->_callable[$listenerId][$callable->getHash()]);
+        unset($this->_callable[$listenerId][xcallable($callable)->getHash()]);
 
         return $this;
     }

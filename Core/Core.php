@@ -391,7 +391,7 @@ class Core implements Parameter\Parameterizable {
         $client->writeLine('open');
 
         event('hoa://Event/Exception')
-            ->attach(xcallable(function ( Event\Bucket $event) use ( $client ) {
+            ->attach(function ( Event\Bucket $event) use ( $client ) {
 
                 $exception = $event->getData();
 
@@ -403,7 +403,7 @@ class Core implements Parameter\Parameterizable {
 
                     $client->writeLine('error serialize');
                 }
-            }));
+            });
 
         return;
     }
