@@ -140,7 +140,7 @@ abstract class Xml
                 $this->clearErrors();
                 $handle = '<?xml version="1.0" encoding="utf-8"?' . ">\n\n" .
                           '<handler xmlns="' .
-                          'http://hoa-project.net/ns/xml/default">' . "\n" .
+                          'http://hoa-project.net/xml/default">' . "\n" .
                           '</handler>';
             }
 
