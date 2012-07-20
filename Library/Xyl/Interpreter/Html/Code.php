@@ -118,6 +118,10 @@ class Code extends GenericPhrasing {
                 $this->colorizeXml($out);
               break;
 
+            case 'pp':
+                $this->colorizePp($out);
+              break;
+
             default:
                 $out->writeAll($this->computeValue());
               break;
@@ -296,7 +300,63 @@ class Code extends GenericPhrasing {
         $out->writeAll($xml);
 
         return;
-}
+    }
+
+    protected function colorizePp ( \Hoa\Stream\IStream\Out $out ) {
+
+        foreach(explode("\n", $this->computeValue()) as $line) {
+
+            $line = rtrim($line);
+
+            if(empty($line))
+                $out->writeAll("\n");
+            elseif('%' == $line[0])
+                $out->writeAll(
+                    '<span class="token-id">' . $line . '</span>' . "\n"
+                );
+            elseif(' ' == $line[0] || "\t" == $line[0]) {
+
+                $line = preg_replace_callback(
+                    '#::[^:]+::#',
+                    function ( Array $m ) {
+
+                        return '<span class="token-id">' . $m[0] . '</span>';
+                    },
+                    $line
+                );
+                $line = preg_replace_callback(
+                    '#&lt;[^>]+>#',
+                    function ( Array $m ) {
+
+                        return '<span class="token-variable">' . $m[0] . '</span>';
+                    },
+                    $line
+                );
+                $line = preg_replace_callback(
+                    '#(\w+)\(\)#',
+                    function ( Array $m ) {
+
+                        return '<span class="token-string">' . $m[1] . '()</span>';
+                    },
+                    $line
+                );
+                $line = preg_replace_callback(
+                    '#\?|\+|\*|\||\((?!\))|\)(?<!\()#',
+                    function ( Array $m ) {
+
+                        return '<span class="token-keyword">' . $m[0] . '</span>';
+                    },
+                    $line
+                );
+
+                $out->writeAll($line . "\n");
+            }
+            else
+                $out->writeAll(
+                    '<span class="token-keyword">' . $line . '</span>' . "\n"
+                );
+        }
+    }
 }
 
 }
