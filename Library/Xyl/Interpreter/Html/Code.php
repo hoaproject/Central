@@ -199,6 +199,19 @@ class Code extends GenericPhrasing {
                 case T_OPEN_TAG:
                   continue;
 
+                case T_COMMENT:
+                case T_DOC_COMMENT:
+                    $out->writeAll(
+                        '<span class="token-comment">' .
+                        str_replace(
+                            "\n",
+                            '</span>' . "\n" . '<span class="token-comment">',
+                            $value
+                        ) .
+                        '</span>'
+                    );
+                  break;
+
                 default:
                     $out->writeAll(
                         '<span class="token-keyword">' .
@@ -310,6 +323,10 @@ class Code extends GenericPhrasing {
 
             if(empty($line))
                 $out->writeAll("\n");
+            elseif('/' == $line[0] && '/' == $line[1])
+                $out->writeAll(
+                    '<span class="token-comment">' . $line . '</span>' . "\n"
+                );
             elseif('%' == $line[0])
                 $out->writeAll(
                     '<span class="token-id">' . $line . '</span>' . "\n"
@@ -341,7 +358,7 @@ class Code extends GenericPhrasing {
                     $line
                 );
                 $line = preg_replace_callback(
-                    '#\?|\+|\*|\||\((?!\))|\)(?<!\()#',
+                    '#\?|\+|\*|\||\((?!\))|\)(?<!\()|\#\w+#',
                     function ( Array $m ) {
 
                         return '<span class="token-keyword">' . $m[0] . '</span>';
