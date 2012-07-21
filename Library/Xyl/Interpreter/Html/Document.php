@@ -126,8 +126,7 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
 
         $out->writeAll(
             '</head>' . "\n" .
-            '<body>' . "\n\n" .
-            '<div id="body">' . "\n"
+            '<body>' . "\n\n"
         );
 
         foreach($this as $child)
@@ -135,7 +134,7 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
                 $child->render($out);
 
         $out->writeAll(
-            "\n" . '</div>' . "\n\n" . '</body>' . "\n" . '</html>'
+            "\n\n" . '</body>' . "\n" . '</html>'
         );
 
         return;
