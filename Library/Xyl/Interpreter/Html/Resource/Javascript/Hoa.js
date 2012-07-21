@@ -186,237 +186,23 @@ Hoa.namespace([String], function ( ) {
     };
 });
 
-Hoa.Form = Hoa.Form || new function ( ) {
+Hoa.ℙ(1) && (Hoa.Document = Hoa.Document || new function ( ) {
 
-    if(Hoa.ℙ(1)) {
+    this.onReady = function ( callback ) {
 
-        Hoa.namespace([HTMLFormElement], function ( ) {
+        document.onreadystatechange = function ( ) {
 
-            if(undefined === this._hoa)
-                this._hoa = { store: { events: [] } };
+            if('complete' !== document.readyState)
+                return;
 
-            var that   = this;
-            var events = this._hoa.store.events;
-
-            return {
-
-                async: {
-
-                    addEventListener: function ( type, listener, useCapture ) {
-
-                        events.push({
-                            type      : type,
-                            listener  : listener,
-                            useCapture: useCapture || false
-                        });
-                    },
-
-                    removeEventListener: function ( type, listener, useCapture ) {
-
-                        events.forEach(function ( element, index, array ) {
-
-                            if(   type     != element.type
-                               && listener != element.listener)
-                                return;
-
-                            array.splice(index, 1);
-                        });
-                    }
-                },
-
-                foreachElements: function ( callback ) {
-
-                    var elements = that.elements;
-                    var element  = null;
-
-                    for(var i = elements.length - 1; i >= 0; --i)
-                        callback(elements.item(i), i, elements);
-                },
-
-                enable: function ( ) {
-
-                    that.setAttribute('aria-disabled', 'false');
-
-                    this.foreachElements(function ( element ) {
-
-                        if(undefined == element.disabled)
-                            return;
-
-                        element.disabled = false;
-                    });
-                },
-
-                disable: function ( ) {
-
-                    that.setAttribute('aria-disabled', 'true');
-
-                    this.foreachElements(function ( element ) {
-
-                        if(undefined == element.disabled)
-                            return;
-
-                        element.disabled = true;
-                    });
-                }
-            };
-        });
-
-        Hoa.namespace([HTMLInputElement, HTMLButtonElement], function ( ) {
-
-            var that = this
-
-            return {
-
-                async: {
-
-                    getScopedElements: function ( ) {
-
-                        var fromForm = !that.hasAttribute('data-asyncscope');
-                        var result   = document.evaluate(
-                            fromForm
-                                ? that.form.getAttribute('data-asyncscope')
-                                : that.getAttribute('data-asyncscope')
-                                  || '..',
-                            fromForm ? that.form : that,
-                            null,
-                            XPathResult.ANY_TYPE,
-                            null
-                        );
-                        var scoped   = [];
-                        var handle   = null;
-
-                        while(handle = result.iterateNext())
-                            scoped.push(handle);
-
-                        return scoped;
-                    }
-                }
-            };
-        });
-    }
-};
-
-Hoa.Async = Hoa.Async || new function ( ) {
-
-    var events = [
-        // nsIXMLHttpRequest
-        'readystatechange',
-        // nsIXMLHttpRequestEventTarget
-        'abort', 'error', 'load', 'loadend', 'loadstart', 'progress'
-    ];
-
-    if(Hoa.ℙ(1)) {
-
-        var submits  = Hoa.$$('form[data-formasync] input[type="submit"]');
-        var submit   = null;
-        var callback = function ( submit ) {
-
-            return function ( evt ) {
-
-                evt.preventDefault();
-                Hoa.Async.sendForm(
-                    submit.form,
-                    submit.getAttribute('formmethod'),
-                    submit.getAttribute('formaction')
-                );
-            };
+            callback();
         };
-
-        for(var i = submits.length - 1; i >= 0; --i) {
-
-            submit = submits.item(i);
-            submit.addEventListener('click', callback(submit), false);
-        }
-
-        var buttons = Hoa.$$('form[data-async] button');
-        var button  = null;
-        callback    = function ( button ) {
-
-            return function ( evt ) {
-
-                evt.preventDefault();
-                Hoa.Async.sendForm(
-                    button.form,
-                    button.getAttribute('data-asyncmethod'),
-                    button.getAttribute('data-asyncaction'),
-                    {scoped: button.hoa.async.getScopedElements()}
-                );
-            };
-        };
-
-        for(var i = buttons.length - 1; i >= 0; --i) {
-
-            button = buttons.item(i);
-
-            if('submit' != button.type)
-                continue;
-
-            button.addEventListener('click', callback(button), false);
-        }
-    }
-
-    this.XHR = new function ( ) {
-
-        var handle = null;
-
-        if(undefined !== (handle = XMLHttpRequest)) {
-
-            XMLHttpRequest.prototype.STATE_UNSENT           = 0;
-            XMLHttpRequest.prototype.STATE_OPENED           = 1;
-            XMLHttpRequest.prototype.STATE_HEADERS_RECEIVED = 2;
-            XMLHttpRequest.prototype.STATE_LOADING          = 3;
-            XMLHttpRequest.prototype.STATE_DONE             = 4;
-
-            return function ( ) { return new handle(); };
-        }
-        else if(undefined !== (handle = ActiveXObject))
-            return function ( ) { return new handle('Microsoft.XMLHTTP') };
     };
 
-    Hoa.ℙ(1) && (this.sendForm = function ( form, method, action, extra,
-                                            headers ) {
-
-        method      = method || form.method;
-        action      = action || form.action;
-        var data    = new FormData(form);
-        var request = new Hoa.Async.XHR();
-        headers     = {
-            'Content-Type'    : 'application/x-www-form-urlencoded',
-            'X-Requested-With': 'XMLHttpRequest'
-        }.hoa.extend(headers);
-
-        if(undefined !== form._hoa)
-            form._hoa.store.events.forEach(function ( element ) {
-                request.addEventListener(
-                    element.type,
-                    element.listener.hoa.curry(undefined, {
-                        form    : form,
-                        method  : method,
-                        action  : action,
-                        formData: data,
-                        headers : headers
-                    }.hoa.extend(extra)),
-                    element.useCapture
-                );
-            });
-
-        request.open(method, action, true);
-        headers.hoa.forEach(function ( name ) {
-
-            request.setRequestHeader(name, headers[name]);
-        });
-
-        var ariaBusy = null !== form.getAttribute('aria-busy');
-
-        if(true === ariaBusy)
-            form.setAttribute('aria-busy', 'true');
-
-        request.send(data);
-
-        if(true === ariaBusy)
-            form.setAttribute('aria-busy', 'false');
-    });
-};
+    // load    \
+    // unload   |> link, script etc.
+    // reload  /
+});
 
 Hoa.ℙ(1) && (Hoa.DOM = Hoa.DOM || new function ( ) {
 
@@ -664,6 +450,238 @@ Hoa.Concurrent = Hoa.Concurrent || new function ( ) {
             };
         };
     };
+};
+
+Hoa.Form = Hoa.Form || new function ( ) {
+
+    if(Hoa.ℙ(1)) {
+
+        Hoa.namespace([HTMLFormElement], function ( ) {
+
+            if(undefined === this._hoa)
+                this._hoa = { store: { events: [] } };
+
+            var that   = this;
+            var events = this._hoa.store.events;
+
+            return {
+
+                async: {
+
+                    addEventListener: function ( type, listener, useCapture ) {
+
+                        events.push({
+                            type      : type,
+                            listener  : listener,
+                            useCapture: useCapture || false
+                        });
+                    },
+
+                    removeEventListener: function ( type, listener, useCapture ) {
+
+                        events.forEach(function ( element, index, array ) {
+
+                            if(   type     != element.type
+                               && listener != element.listener)
+                                return;
+
+                            array.splice(index, 1);
+                        });
+                    }
+                },
+
+                foreachElements: function ( callback ) {
+
+                    var elements = that.elements;
+                    var element  = null;
+
+                    for(var i = elements.length - 1; i >= 0; --i)
+                        callback(elements.item(i), i, elements);
+                },
+
+                enable: function ( ) {
+
+                    that.setAttribute('aria-disabled', 'false');
+
+                    this.foreachElements(function ( element ) {
+
+                        if(undefined == element.disabled)
+                            return;
+
+                        element.disabled = false;
+                    });
+                },
+
+                disable: function ( ) {
+
+                    that.setAttribute('aria-disabled', 'true');
+
+                    this.foreachElements(function ( element ) {
+
+                        if(undefined == element.disabled)
+                            return;
+
+                        element.disabled = true;
+                    });
+                }
+            };
+        });
+
+        Hoa.namespace([HTMLInputElement, HTMLButtonElement], function ( ) {
+
+            var that = this
+
+            return {
+
+                async: {
+
+                    getScopedElements: function ( ) {
+
+                        var fromForm = !that.hasAttribute('data-asyncscope');
+                        var result   = document.evaluate(
+                            fromForm
+                                ? that.form.getAttribute('data-asyncscope')
+                                : that.getAttribute('data-asyncscope')
+                                  || '..',
+                            fromForm ? that.form : that,
+                            null,
+                            XPathResult.ANY_TYPE,
+                            null
+                        );
+                        var scoped   = [];
+                        var handle   = null;
+
+                        while(handle = result.iterateNext())
+                            scoped.push(handle);
+
+                        return scoped;
+                    }
+                }
+            };
+        });
+    }
+};
+
+Hoa.Async = Hoa.Async || new function ( ) {
+
+    var events = [
+        // nsIXMLHttpRequest
+        'readystatechange',
+        // nsIXMLHttpRequestEventTarget
+        'abort', 'error', 'load', 'loadend', 'loadstart', 'progress'
+    ];
+
+    if(Hoa.ℙ(1)) {
+
+        var submits  = Hoa.$$('form[data-formasync] input[type="submit"]');
+        var submit   = null;
+        var callback = function ( submit ) {
+
+            return function ( evt ) {
+
+                evt.preventDefault();
+                Hoa.Async.sendForm(
+                    submit.form,
+                    submit.getAttribute('formmethod'),
+                    submit.getAttribute('formaction')
+                );
+            };
+        };
+
+        for(var i = submits.length - 1; i >= 0; --i) {
+
+            submit = submits.item(i);
+            submit.addEventListener('click', callback(submit), false);
+        }
+
+        var buttons = Hoa.$$('form[data-async] button');
+        var button  = null;
+        callback    = function ( button ) {
+
+            return function ( evt ) {
+
+                evt.preventDefault();
+                Hoa.Async.sendForm(
+                    button.form,
+                    button.getAttribute('data-asyncmethod'),
+                    button.getAttribute('data-asyncaction'),
+                    {scoped: button.hoa.async.getScopedElements()}
+                );
+            };
+        };
+
+        for(var i = buttons.length - 1; i >= 0; --i) {
+
+            button = buttons.item(i);
+
+            if('submit' != button.type)
+                continue;
+
+            button.addEventListener('click', callback(button), false);
+        }
+    }
+
+    this.XHR = new function ( ) {
+
+        var handle = null;
+
+        if(undefined !== (handle = XMLHttpRequest)) {
+
+            XMLHttpRequest.prototype.STATE_UNSENT           = 0;
+            XMLHttpRequest.prototype.STATE_OPENED           = 1;
+            XMLHttpRequest.prototype.STATE_HEADERS_RECEIVED = 2;
+            XMLHttpRequest.prototype.STATE_LOADING          = 3;
+            XMLHttpRequest.prototype.STATE_DONE             = 4;
+
+            return function ( ) { return new handle(); };
+        }
+        else if(undefined !== (handle = ActiveXObject))
+            return function ( ) { return new handle('Microsoft.XMLHTTP') };
+    };
+
+    Hoa.ℙ(1) && (this.sendForm = function ( form, method, action, extra,
+                                            headers ) {
+
+        method      = method || form.method;
+        action      = action || form.action;
+        var data    = new FormData(form);
+        var request = new Hoa.Async.XHR();
+        headers     = {
+            'Content-Type'    : 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest'
+        }.hoa.extend(headers);
+
+        if(undefined !== form._hoa)
+            form._hoa.store.events.forEach(function ( element ) {
+                request.addEventListener(
+                    element.type,
+                    element.listener.hoa.curry(undefined, {
+                        form    : form,
+                        method  : method,
+                        action  : action,
+                        formData: data,
+                        headers : headers
+                    }.hoa.extend(extra)),
+                    element.useCapture
+                );
+            });
+
+        request.open(method, action, true);
+        headers.hoa.forEach(function ( name ) {
+
+            request.setRequestHeader(name, headers[name]);
+        });
+
+        var ariaBusy = null !== form.getAttribute('aria-busy');
+
+        if(true === ariaBusy)
+            form.setAttribute('aria-busy', 'true');
+
+        request.send(data);
+
+        if(true === ariaBusy)
+            form.setAttribute('aria-busy', 'false');
+    });
 };
 
 Hoa.ℙ(1) && (Hoa.Checkpoint = Hoa.Checkpoint || new function ( ) {
@@ -936,14 +954,64 @@ Hoa.ℙ(1) && (Hoa.Tabs = Hoa.Tabs || new function ( ) {
             _tabitem.addEventListener('keydown', _callbackKey(i));
         }
 
+        this.add = function ( id, name ) {
+
+            var handle   = Hoa.$('[role="tablist"]', tab);
+            var i        = handle.childNodes.length;
+            var id       = 'hoa_tabs_auto_' + i;
+            var _tabitem = Hoa.DOM.a(
+                name,
+                {
+                    href           : '#' + id,
+                    role           : 'tab',
+                    'aria-controls': id,
+                    'aria-selected': 'false',
+                    tabindex       : '-1',
+                    id             : id + '__tab'
+                }
+            );
+            _tabitem.addEventListener('click', _callbackClick(i));
+            _tabitem.addEventListener('keydown', _callbackKey(i));
+            tablist[i] = _tabitem;
+            handle.appendChild(Hoa.DOM.li([_tabitem], {role: 'presentation'}));
+
+            var _tabpanel = Hoa.DOM.div(
+                undefined,
+                {
+                    id: id,
+                    role: 'tabpanel',
+                    'aria-hidden': 'true',
+                    'aria-expanded': 'false',
+                    'aria-labelledby': id + '__tab'
+                }
+            );
+            tab.appendChild(_tabpanel);
+            tabpanel[i] = _tabpanel;
+
+            if(null === selected)
+                this.select(i);
+
+            return _tabpanel;
+        };
+
+        this.remove = function ( i ) {
+
+            // todo.
+        };
+
+        this.getPanel = function ( i ) {
+
+            return tabpanel[i];
+        };
+
         this.select = function ( i ) {
 
             if(0 > i)
                 i = Math.abs(tablist.length + i);
 
-            i = i % tablist.length;
-            var tab   = tablist[i];
-            var panel = tabpanel[i];
+            i           = i % tablist.length;
+            var tabitem = tablist[i];
+            var panel   = tabpanel[i];
 
             if(null !== selected) {
 
@@ -952,9 +1020,9 @@ Hoa.ℙ(1) && (Hoa.Tabs = Hoa.Tabs || new function ( ) {
                 tabpanel[selected].setAttribute('aria-expanded', 'false');
             }
 
-            tab.setAttribute('aria-selected',   'true');
-            panel.setAttribute('aria-hidden',   'false');
-            panel.setAttribute('aria-expanded', 'true');
+            tabitem.setAttribute('aria-selected', 'true');
+            panel.setAttribute('aria-hidden',     'false');
+            panel.setAttribute('aria-expanded',   'true');
             selected = i;
 
             return this;
@@ -977,15 +1045,6 @@ Hoa.ℙ(1) && (Hoa.Tabs = Hoa.Tabs || new function ( ) {
         };
     };
 
-    var _tabs = Hoa.$$('[data-tabs]');
-    var _tab  = null;
-
-    for(var i = 0, max = _tabs.length; i < max; ++i) {
-
-        _tab                                             = _tabs[i]
-        tabs[_tab.getAttribute('id') || tabsLastIndex++] = new TabTemplate(_tab);
-    }
-
     this.get = function ( id ) {
 
         return tabs[id];
@@ -995,4 +1054,17 @@ Hoa.ℙ(1) && (Hoa.Tabs = Hoa.Tabs || new function ( ) {
 
         return tabs;
     };
+
+    Hoa.Document.onReady(function ( ) {
+
+        var _tabs = Hoa.$$('[data-tabs]');
+        var _tab  = null;
+
+        for(var i = 0, max = _tabs.length; i < max; ++i) {
+
+            _tab                             = _tabs[i]
+            tabs[   _tab.getAttribute('id')
+                 || tabsLastIndex++        ] = new TabTemplate(_tab);
+        }
+    });
 });
