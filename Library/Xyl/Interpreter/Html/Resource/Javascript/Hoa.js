@@ -1023,6 +1023,7 @@ Hoa.ℙ(1) && (Hoa.Tabs = Hoa.Tabs || new function ( ) {
             tabitem.setAttribute('aria-selected', 'true');
             panel.setAttribute('aria-hidden',     'false');
             panel.setAttribute('aria-expanded',   'true');
+            tabitem.focus();
             selected = i;
 
             return this;
