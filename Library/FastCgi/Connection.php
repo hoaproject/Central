@@ -229,7 +229,7 @@ abstract class Connection {
             return $headers;
 
         $headers[self::HEADER_CONTENT] = substr(
-            $this->_client->read($length),
+            $this->read($length),
             0,
             $headers[self::HEADER_CONTENT_LENGTH]
         );
