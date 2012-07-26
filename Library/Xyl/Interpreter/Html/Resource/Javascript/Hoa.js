@@ -36,7 +36,9 @@
 
 var Hoa = Hoa || {};
 
-Hoa.nop = function ( ) { };
+Hoa.nop     =              function ( ) {               };
+Hoa.〱true  = Hoa.top    = function ( ) { return true;  };
+Hoa.〱false = Hoa.bottom = function ( ) { return false; };
 
 Hoa.ℙ = new function ( ) {
 
@@ -90,114 +92,188 @@ Hoa.uuid = Hoa.uuid || new function ( ) {
     };
 };
 
-Hoa.namespace = Hoa.namespace || function ( subjects, callback ) {
+Hoa.namespace = Hoa.namespace || new function ( ) {
 
-    subjects.forEach(function( subject ) {
+    var defined = [];
+    var map     = [];
 
-        subject.prototype.__defineGetter__('hoa', callback);
-    });
-};
+    return function ( subjects, callback, onprototype ) {
 
-Hoa.namespace([Object], function ( ) {
+        subjects.forEach(function ( subject ) {
 
-    var that = this;
+            var index = defined.indexOf(subject);
 
-    return {
+            if(-1 === index) {
 
-        extend: function ( object ) {
-
-            if(undefined === object)
-                return that;
-
-            object.hoa.forEach(function ( key ) {
+                index = defined.push(subject) - 1;
+                map.push([]);
 
                 Object.defineProperty(
-                    that,
-                    key,
-                    Object.getOwnPropertyDescriptor(object, key)
+                    false !== onprototype ? subject.prototype : subject,
+                    'hoa',
+                    {
+                        get         : function ( ) {
+
+                            var prototype = {};
+                            var callbacks = map[index];
+                            var callback  = null;
+                            var proto     = null;
+
+                            for(var c in callbacks) {
+
+                                callback = callbacks[c];
+
+                                if(true !== callback.guard(this))
+                                    continue;
+
+                                proto = callback.body(this);
+
+                                for(var p in proto)
+                                    prototype[p] = proto[p];
+                            }
+
+                            return prototype;
+                        },
+                        set         : undefined,
+                        configurable: false,
+                        enumerable  : false
+                    }
                 );
-            });
+            }
 
-            return that;
-        },
-
-        forEach: function ( callback ) {
-
-            Object.keys(that).forEach(callback);
-
-            return that;
-        }
+            map[index].push(callback);
+        });
     };
+};
+
+Hoa.namespace([Object], {
+
+    guard: Hoa.〱true,
+    body : function ( element ) {
+
+        return {
+
+            extend: function ( object ) {
+
+                if(undefined === object)
+                    return element;
+
+                object.hoa.forEach(function ( key ) {
+
+                    Object.defineProperty(
+                        element,
+                        key,
+                        Object.getOwnPropertyDescriptor(object, key)
+                    );
+                });
+
+                return element;
+            },
+
+            forEach: function ( callback ) {
+
+                Object.keys(element).forEach(callback);
+
+                return element;
+            },
+
+            getter: function ( name, callback ) {
+
+                Object.defineProperty(
+                    element,
+                    name,
+                    {
+                        get         : callback,
+                        set         : undefined,
+                        configurable: false,
+                        enumerable  : false
+                    }
+                );
+
+                return element;
+            }
+        };
+    }
 });
 
-Hoa.namespace([Function], function ( ) {
+Hoa.namespace([Function], {
 
-    var that = this;
+    guard: Hoa.〱true,
+    body : function ( element ) {
 
-    return {
+        return {
 
-        curry: function ( ) {
+            curry: function ( ) {
 
-            var args  = Array.prototype.slice.call(arguments);
-            var margs = args.length;
+                var args  = Array.prototype.slice.call(arguments);
+                var margs = args.length;
 
-            return function ( ) {
+                return function ( ) {
 
-                var handle = [];
+                    var handle = [];
 
-                for(var i = 0, j = 0; i < margs; ++i)
-                    if(undefined == args[i])
-                        handle[i] = arguments[j++];
-                    else
-                        handle[i] = args[i];
+                    for(var i = 0, j = 0; i < margs; ++i)
+                        if(undefined == args[i])
+                            handle[i] = arguments[j++];
+                        else
+                            handle[i] = args[i];
 
-                for(var max = arguments.length; j < max; ++j)
-                    handle[i++] = arguments[j];
+                    for(var max = arguments.length; j < max; ++j)
+                        handle[i++] = arguments[j];
 
-                return that.apply(this, handle);
-            };
-        }
-    };
+                    return element.apply(this, handle);
+                };
+            }
+        };
+    }
 });
 
-Hoa.namespace([String], function ( ) {
+Hoa.namespace([String], {
 
-    var that = this;
+    guard: Hoa.〱true,
+    body : function ( element ) {
 
-    return {
+        return {
 
-        pad: function ( length, piece, end ) {
+            pad: function ( length, piece, end ) {
 
-            var string     = that.toString();
-            var difference = length - string.length;
+                var string     = element.toString();
+                var difference = length - string.length;
 
-            if(0 >= difference)
-                return string;
+                if(0 >= difference)
+                    return string;
 
-            var handle = '';
+                var handle = '';
 
-            for(var i = difference / piece.length - 1; i >= 0; --i)
-                handle += piece;
+                for(var i = difference / piece.length - 1; i >= 0; --i)
+                    handle += piece;
 
-            handle += piece.substring(0, difference - handle.length);
+                handle += piece.substring(0, difference - handle.length);
 
-            return end ? string.concat(handle) : handle.concat(string)
-        }
-    };
+                return end ? string.concat(handle) : handle.concat(string)
+            }
+        };
+    }
 });
 
 Hoa.ℙ(1) && (Hoa.Document = Hoa.Document || new function ( ) {
 
+    var callbacks = [];
+
     this.onReady = function ( callback ) {
 
-        document.onreadystatechange = function ( ) {
-
-            if('complete' !== document.readyState)
-                return;
-
-            callback();
-        };
+        return callbacks.push(callback);
     };
+
+    document.addEventListener('readystatechange', function ( ) {
+
+        if('complete' !== document.readyState)
+            return;
+
+        for(var c in callbacks)
+            if('function' === typeof callbacks[c])
+                callbacks[c]();
+    });
 
     // load    \
     // unload   |> link, script etc.
@@ -429,7 +505,7 @@ Hoa.Concurrent = Hoa.Concurrent || new function ( ) {
 
             var state = 0;
 
-            this.__defineGetter__('state', function ( ) {
+            this.hoa.getter('state', function ( ) {
 
                 return state;
             });
@@ -452,115 +528,113 @@ Hoa.Concurrent = Hoa.Concurrent || new function ( ) {
     };
 };
 
-Hoa.Form = Hoa.Form || new function ( ) {
+Hoa.ℙ(1) && Hoa.namespace([HTMLFormElement], {
 
-    if(Hoa.ℙ(1)) {
+    guard: Hoa.〱true,
+    body : function ( element ) {
 
-        Hoa.namespace([HTMLFormElement], function ( ) {
+        if(undefined === element._hoa)
+            element._hoa = { store: { events: [] } };
 
-            if(undefined === this._hoa)
-                this._hoa = { store: { events: [] } };
+        var events = element._hoa.store.events;
 
-            var that   = this;
-            var events = this._hoa.store.events;
+        return {
 
-            return {
+            async: {
 
-                async: {
+                addEventListener: function ( type, listener, useCapture ) {
 
-                    addEventListener: function ( type, listener, useCapture ) {
-
-                        events.push({
-                            type      : type,
-                            listener  : listener,
-                            useCapture: useCapture || false
-                        });
-                    },
-
-                    removeEventListener: function ( type, listener, useCapture ) {
-
-                        events.forEach(function ( element, index, array ) {
-
-                            if(   type     != element.type
-                               && listener != element.listener)
-                                return;
-
-                            array.splice(index, 1);
-                        });
-                    }
-                },
-
-                foreachElements: function ( callback ) {
-
-                    var elements = that.elements;
-                    var element  = null;
-
-                    for(var i = elements.length - 1; i >= 0; --i)
-                        callback(elements.item(i), i, elements);
-                },
-
-                enable: function ( ) {
-
-                    that.setAttribute('aria-disabled', 'false');
-
-                    this.foreachElements(function ( element ) {
-
-                        if(undefined == element.disabled)
-                            return;
-
-                        element.disabled = false;
+                    events.push({
+                        type      : type,
+                        listener  : listener,
+                        useCapture: useCapture || false
                     });
                 },
 
-                disable: function ( ) {
+                removeEventListener: function ( type, listener,useCapture ) {
 
-                    that.setAttribute('aria-disabled', 'true');
+                    events.forEach(function ( el, index, array ) {
 
-                    this.foreachElements(function ( element ) {
-
-                        if(undefined == element.disabled)
+                        if(   type     != el.type
+                           && listener != el.listener)
                             return;
 
-                        element.disabled = true;
+                        array.splice(index, 1);
                     });
                 }
-            };
-        });
+            },
 
-        Hoa.namespace([HTMLInputElement, HTMLButtonElement], function ( ) {
+            foreachElements: function ( callback ) {
 
-            var that = this
+                var elements = element.elements;
 
-            return {
+                for(var i = elements.length - 1; i >= 0; --i)
+                    callback(elements.item(i), i, elements);
+            },
 
-                async: {
+            enable: function ( ) {
 
-                    getScopedElements: function ( ) {
+                element.setAttribute('aria-disabled', 'false');
 
-                        var fromForm = !that.hasAttribute('data-asyncscope');
-                        var result   = document.evaluate(
-                            fromForm
-                                ? that.form.getAttribute('data-asyncscope')
-                                : that.getAttribute('data-asyncscope')
-                                  || '..',
-                            fromForm ? that.form : that,
-                            null,
-                            XPathResult.ANY_TYPE,
-                            null
-                        );
-                        var scoped   = [];
-                        var handle   = null;
+                this.foreachElements(function ( el ) {
 
-                        while(handle = result.iterateNext())
-                            scoped.push(handle);
+                    if(undefined == el.disabled)
+                        return;
 
-                        return scoped;
-                    }
-                }
-            };
-        });
+                    el.disabled = false;
+                });
+            },
+
+            disable: function ( ) {
+
+                element.setAttribute('aria-disabled', 'true');
+
+                this.foreachElements(function ( el ) {
+
+                    if(undefined == el.disabled)
+                        return;
+
+                    el.disabled = true;
+                });
+            }
+        };
     }
-};
+});
+
+Hoa.ℙ(1) && Hoa.namespace([HTMLInputElement, HTMLButtonElement], {
+
+    guard: Hoa.〱true,
+    body : function ( element ) {
+
+        return {
+
+            async: {
+
+                getScopedElements: function ( ) {
+
+                    var fromForm = !that.hasAttribute('data-asyncscope');
+                    var result   = document.evaluate(
+                        fromForm
+                            ? that.form.getAttribute('data-asyncscope')
+                            : that.getAttribute('data-asyncscope')
+                              || '..',
+                        fromForm ? that.form : that,
+                        null,
+                        XPathResult.ANY_TYPE,
+                        null
+                    );
+                    var scoped   = [];
+                    var handle   = null;
+
+                    while(handle = result.iterateNext())
+                        scoped.push(handle);
+
+                    return scoped;
+                }
+            }
+        };
+    }
+});
 
 Hoa.Async = Hoa.Async || new function ( ) {
 
@@ -568,58 +642,131 @@ Hoa.Async = Hoa.Async || new function ( ) {
         // nsIXMLHttpRequest
         'readystatechange',
         // nsIXMLHttpRequestEventTarget
-        'abort', 'error', 'load', 'loadend', 'loadstart', 'progress'
+        'abort', 'error', 'load', 'loadend', 'loadstart', 'progress',
+        // nsIDOMWindow
+        'popstate',
+        // Hoa
+        'pushstate'
     ];
 
-    if(Hoa.ℙ(1)) {
+    Hoa.ℙ(1) && Hoa.Document.onReady(function ( ) {
 
-        var submits  = Hoa.$$('form[data-formasync] input[type="submit"]');
-        var submit   = null;
-        var callback = function ( submit ) {
-
-            return function ( evt ) {
-
-                evt.preventDefault();
-                Hoa.Async.sendForm(
-                    submit.form,
-                    submit.getAttribute('formmethod'),
-                    submit.getAttribute('formaction')
-                );
-            };
-        };
-
-        for(var i = submits.length - 1; i >= 0; --i) {
-
-            submit = submits.item(i);
-            submit.addEventListener('click', callback(submit), false);
-        }
-
-        var buttons = Hoa.$$('form[data-async] button');
-        var button  = null;
-        callback    = function ( button ) {
+        var asyncs = Hoa.$$('form[data-formasync], form[data-async]');
+        var async  = null;
+        var click  = function ( form ) {
 
             return function ( evt ) {
 
-                evt.preventDefault();
-                Hoa.Async.sendForm(
-                    button.form,
-                    button.getAttribute('data-asyncmethod'),
-                    button.getAttribute('data-asyncaction'),
-                    {scoped: button.hoa.async.getScopedElements()}
-                );
+                if(undefined === evt.target)
+                    return;
+
+                switch(evt.target.nodeName) {
+
+                    case 'INPUT':
+                        if('submit' === evt.target.getAttribute('type'))
+                            return submit(from, evt);
+                      break;
+
+                    case 'BUTTON':
+                        if('submit' !== evt.target.type)
+                            return button(form, evt);
+                      break;
+
+                    case 'A':
+                        return anchor(form, evt);
+                      break;
+                }
+
+                return;
             };
         };
+        var submit = function ( form, evt ) {
 
-        for(var i = buttons.length - 1; i >= 0; --i) {
+            evt.preventDefault();
+            Hoa.Async.sendForm(
+                submit.form,
+                submit.getAttribute('formmethod'),
+                submit.getAttribute('formaction')
+            );
+        };
+        var button = function ( form, evt ) {
 
-            button = buttons.item(i);
+            evt.preventDefault();
+            Hoa.Async.sendForm(
+                button.form,
+                button.getAttribute('data-asyncmethod'),
+                button.getAttribute('data-asyncaction'),
+                {scoped: button.hoa.async.getScopedElements()}
+            );
+        };
+        var anchor = function ( form, evt ) {
 
-            if('submit' != button.type)
-                continue;
+            evt.preventDefault();
+            var element = evt.target;
 
-            button.addEventListener('click', callback(button), false);
+            var pushstate = {
+                state  : {formId: form.getAttribute('id')},
+                title  : element.getAttribute('title'),
+                form   : form,
+                action : element.getAttribute('href'),
+                uri    : element.getAttribute('href'),
+                method : 'get'
+            };
+
+            if(undefined !== form._hoa)
+                form._hoa.store.events.forEach(function ( el ) {
+
+                    if('pushstate' !== el.type)
+                        return;
+
+                    el.listener(evt, pushstate);
+                });
+
+            Hoa.History.push(
+                pushstate.state,
+                pushstate.title,
+                pushstate.uri
+            );
+            Hoa.Async.sendForm(
+                form,
+                pushstate.method,
+                pushstate.action,
+                {link: true},
+                {'Content-Type': document.contentType || 'text/html'}
+            );
+
+            return;
+        };
+
+        for(var i = 0, max = asyncs.length; i < max; ++i) {
+
+            async = asyncs[i];
+            async.addEventListener('click', click(async));
         }
-    }
+
+        Hoa.History.onupdate(function ( evt ) {
+
+            var state = evt.state;
+
+            if(undefined === state.formId)
+                return;
+
+            var form = Hoa.$('#' + state.formId);
+
+            if(undefined === form)
+                return;
+
+            form._hoa.store.events.forEach(function ( el ) {
+
+                if('popstate' !== el.type)
+                    return;
+
+                el.listener(evt);
+            });
+
+            return;
+        });
+    });
 
     this.XHR = new function ( ) {
 
@@ -645,24 +792,30 @@ Hoa.Async = Hoa.Async || new function ( ) {
         method      = method || form.method;
         action      = action || form.action;
         var data    = new FormData(form);
-        var request = new Hoa.Async.XHR();
+        var request = Hoa.Async.XHR();
         headers     = {
             'Content-Type'    : 'application/x-www-form-urlencoded',
             'X-Requested-With': 'XMLHttpRequest'
         }.hoa.extend(headers);
 
         if(undefined !== form._hoa)
-            form._hoa.store.events.forEach(function ( element ) {
+            form._hoa.store.events.forEach(function ( el ) {
+
+                if(   -1          === events.indexOf(el.type)
+                   || 'popstate'  === el.type
+                   || 'pushstate' === el.type)
+                    return;
+
                 request.addEventListener(
-                    element.type,
-                    element.listener.hoa.curry(undefined, {
+                    el.type,
+                    el.listener.hoa.curry(undefined, {
                         form    : form,
                         method  : method,
                         action  : action,
                         formData: data,
                         headers : headers
                     }.hoa.extend(extra)),
-                    element.useCapture
+                    el.useCapture
                 );
             });
 
@@ -700,151 +853,153 @@ Hoa.ℙ(1) && (Hoa.Checkpoint = Hoa.Checkpoint || new function ( ) {
         };
     };
 
-    Hoa.namespace([HTMLDivElement], function ( ) {
+    Hoa.namespace([HTMLDivElement], {
 
-        var that = this;
+        guard: function ( element ) {
 
-        if(false === this.hasAttribute('data-checkpoint'))
-            return {};
+            return element.hasAttribute('data-checkpoint');
+        },
+        body : function ( element ) {
 
-        var scoped = undefined;
+            var scoped = undefined;
 
-        return {
+            return {
 
-            isVisible: function ( where, client ) {
+                isVisible: function ( where, client ) {
 
-                var rect = that.getBoundingClientRect();
-                var dim  = getDimensions(client);
+                    var rect = element.getBoundingClientRect();
+                    var dim  = getDimensions(client);
 
-                switch((where || '*').charAt(0)) {
+                    switch((where || '*').charAt(0)) {
 
-                    case 't'/* op */:
-                        return rect.top >= 0 && rect.top < dim.height;
+                        case 't'/* op */:
+                            return rect.top >= 0 && rect.top < dim.height;
 
-                    case 'b'/* ottom */:
-                        return rect.bottom >= 0 && rect.bottom < dim.height;
+                        case 'b'/* ottom */:
+                            return rect.bottom >= 0 && rect.bottom < dim.height;
 
-                    case 'l'/* eft */:
-                        return rect.left >= 0 && rect.left < dim.width;
+                        case 'l'/* eft */:
+                            return rect.left >= 0 && rect.left < dim.width;
 
-                    case 'r'/* ight */:
-                        return rect.right >= 0 && rect.right < dim.width;
+                        case 'r'/* ight */:
+                            return rect.right >= 0 && rect.right < dim.width;
 
-                    default:
-                        return    rect.top    <  dim.height
-                               && rect.bottom >= 0
-                               && rect.left   <  dim.width
-                               && rect.right  >= 0;
-                }
-            },
-
-            distance: function ( where ) {
-
-                var opposite = null;
-                var rect     = that.getBoundingClientRect();
-                var w        = null;
-
-                switch(where.charAt(0)) {
-
-                    case 't'/* op */:
-                        w        = function ( ) { return rect.top; };
-                        opposite = 'b';
-                      break;
-
-                    case 'b'/* ottom */:
-                        w        = function ( ) { return rect.bottom; };
-                        opposite = 't';
-                      break;
-
-                    case 'l'/* eft */:
-                        w        = function ( ) { return rect.width; };
-                        opposite = 'r';
-                      break;
-
-                    case 'r'/* ight */:
-                        w        = function ( ) { return rect.right; };
-                        opposite = 'l';
-                      break;
-
-                    default:
-                        return null;
-                }
-
-                return {
-
-                    to: function ( element, ewhere ) {
-
-                        if(undefined === ewhere)
-                            ewhere = opposite;
-
-                        var erect = element.getBoundingClientRect();
-
-                        switch(ewhere.charAt(0)) {
-
-                            case 't'/* op */:
-                                return erect.top - w();
-
-                            case 'b'/* ottom */:
-                                return erect.bottom - w();
-
-                            case 'l'/* eft */:
-                                return erect.left - w();
-
-                            case 'r'/* ight */:
-                                return erect.right - w();
-
-                            default:
-                                return false;
-                        }
+                        default:
+                            return    rect.top    <  dim.height
+                                   && rect.bottom >= 0
+                                   && rect.left   <  dim.width
+                                   && rect.right  >= 0;
                     }
-                };
-            },
+                },
 
-            in: function ( top, right, bottom, left, strict, client ) {
+                distance: function ( where ) {
 
-                var dim = getDimensions(client);
-                var abs = null;
+                    var opposite = null;
+                    var rect     = element.getBoundingClientRect();
+                    var w        = null;
 
-                if(undefined === client)
-                    abs = document.body.getBoundingClientRect();
-                else
-                    abs = client.getBoundingClientRect();
+                    switch(where.charAt(0)) {
 
-                var _top      = Math.max(0, -abs.top);
-                var _left     = Math.max(0, -abs.left);
-                var rectangle = {
-                    top:     _top  + dim.height              * top    / 100,
-                    right:   _left + dim.width  - dim.width  * right  / 100,
-                    bottom:  _top  + dim.height - dim.height * bottom / 100,
-                    left:    _left + dim.width               * left   / 100
-                };
-                var rect      = that.getBoundingClientRect();
+                        case 't'/* op */:
+                            w        = function ( ) { return rect.top; };
+                            opposite = 'b';
+                          break;
 
-                if(undefined === strict || true === strict)
-                    return    (rectangle.top    <= _top  + rect.top)
-                           && (rectangle.bottom >= _top  + rect.top + rect.height)
-                           && (rectangle.left   <= _left + rect.left)
-                           && (rectangle.right  >= _left + rect.left + rect.width);
+                        case 'b'/* ottom */:
+                            w        = function ( ) { return rect.bottom; };
+                            opposite = 't';
+                          break;
 
-                return    (rectangle.top    <= _top  + rect.top + rect.height)
-                       && (rectangle.bottom >= _top  + rect.top)
-                       && (rectangle.left   <= _left + rect.left + rect.width)
-                       && (rectangle.right  >= _left + rect.left);
-            },
+                        case 'l'/* eft */:
+                            w        = function ( ) { return rect.width; };
+                            opposite = 'r';
+                          break;
 
-            getScoped: function ( ) {
+                        case 'r'/* ight */:
+                            w        = function ( ) { return rect.right; };
+                            opposite = 'l';
+                          break;
 
-                if(undefined !== scoped)
-                    return scoped;
+                        default:
+                            return null;
+                    }
 
-                var scope = that.getAttribute('data-for');
+                    return {
 
-                if(null === scope)
-                    return scoped = null;
+                        to: function ( el, ewhere ) {
 
-                return scoped = Hoa.$('#' + scope);
-            }
-        };
+                            if(undefined === ewhere)
+                                ewhere = opposite;
+
+                            var erect = el.getBoundingClientRect();
+
+                            switch(ewhere.charAt(0)) {
+
+                                case 't'/* op */:
+                                    return erect.top - w();
+
+                                case 'b'/* ottom */:
+                                    return erect.bottom - w();
+
+                                case 'l'/* eft */:
+                                    return erect.left - w();
+
+                                case 'r'/* ight */:
+                                    return erect.right - w();
+
+                                default:
+                                    return false;
+                            }
+                        }
+                    };
+                },
+
+                in: function ( top, right, bottom, left, strict, client ) {
+
+                    var dim = getDimensions(client);
+                    var abs = null;
+
+                    if(undefined === client)
+                        abs = document.body.getBoundingClientRect();
+                    else
+                        abs = client.getBoundingClientRect();
+
+                    var _top      = Math.max(0, -abs.top);
+                    var _left     = Math.max(0, -abs.left);
+                    var rectangle = {
+                        top:     _top  + dim.height              * top    / 100,
+                        right:   _left + dim.width  - dim.width  * right  / 100,
+                        bottom:  _top  + dim.height - dim.height * bottom / 100,
+                        left:    _left + dim.width               * left   / 100
+                    };
+                    var rect      = element.getBoundingClientRect();
+
+                    if(undefined === strict || true === strict)
+                        return    (rectangle.top    <= _top  + rect.top)
+                               && (rectangle.bottom >= _top  + rect.top + rect.height)
+                               && (rectangle.left   <= _left + rect.left)
+                               && (rectangle.right  >= _left + rect.left + rect.width);
+
+                    return    (rectangle.top    <= _top  + rect.top + rect.height)
+                           && (rectangle.bottom >= _top  + rect.top)
+                           && (rectangle.left   <= _left + rect.left + rect.width)
+                           && (rectangle.right  >= _left + rect.left);
+                },
+
+                getScoped: function ( ) {
+
+                    if(undefined !== scoped)
+                        return scoped;
+
+                    var scope = element.getAttribute('data-for');
+
+                    if(null === scope)
+                        return scoped = null;
+
+                    return scoped = Hoa.$('#' + scope);
+                }
+            };
+        }
     });
 
     this.getCheckpoints = function ( className ) {
@@ -1068,4 +1223,41 @@ Hoa.ℙ(1) && (Hoa.Tabs = Hoa.Tabs || new function ( ) {
                  || tabsLastIndex++        ] = new TabTemplate(_tab);
         }
     });
+});
+
+Hoa.ℙ(1) && (Hoa.History = Hoa.History || new function ( ) {
+
+    var that = this;
+    var w    = window;
+
+    this.hoa.getter('length', function ( ) {
+
+        return w.history.length;
+    });
+
+    this.hoa.getter('state', function ( ) {
+
+        return w.history.state;
+    });
+
+    this.back = w.history.back;
+
+    this.forward = w.history.forward;
+
+    this.go = w.history.go;
+
+    this.push = function ( state, title, uri ) {
+
+        return w.history.pushState(state, title, uri);
+    };
+
+    this.replace = function ( ) {
+
+        return w.history.replaceState();
+    };
+
+    this.onupdate = function ( callback ) {
+
+        return window.addEventListener('popstate', callback);
+    };
 });
