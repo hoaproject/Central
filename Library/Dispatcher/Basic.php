@@ -179,7 +179,7 @@ class Basic extends Dispatcher {
                                  true === $async ? 'true': 'false'), $e);
                 }
 
-                if(method_exists($controller, 'contruct'))
+                if(method_exists($controller, 'construct'))
                     $controller->construct();
             }
 
