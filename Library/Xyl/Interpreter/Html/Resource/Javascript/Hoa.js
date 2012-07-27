@@ -96,6 +96,14 @@ Hoa.namespace = Hoa.namespace || new function ( ) {
 
     var defined = [];
     var map     = [];
+    var merge   = function ( first, second ) {
+
+        for(var i in first)
+            if(undefined !== second[i])
+                merge(first[i], second[i]);
+            else
+                second[i] = first[i];
+    };
 
     return function ( subjects, callback, onprototype ) {
 
@@ -127,9 +135,7 @@ Hoa.namespace = Hoa.namespace || new function ( ) {
                                     continue;
 
                                 proto = callback.body(this);
-
-                                for(var p in proto)
-                                    prototype[p] = proto[p];
+                                merge(proto, prototype);
                             }
 
                             return prototype;
@@ -601,11 +607,16 @@ Hoa.ℙ(1) && Hoa.namespace([HTMLFormElement], {
     }
 });
 
-Hoa.ℙ(1) && Hoa.namespace([HTMLInputElement,
+Hoa.ℙ(1) && Hoa.namespace([HTMLFormElement,
+                           HTMLInputElement,
                            HTMLButtonElement,
                            HTMLAnchorElement], {
 
     guard: function ( element ) {
+
+        if(element instanceof HTMLFormElement)
+            return    element.hasAttribute('data-formasync')
+                   || element.hasAttribute('data-async');
 
         if(   element instanceof HTMLInputElement
            || element instanceof HTMLButtonElement)
@@ -752,7 +763,6 @@ Hoa.Async = Hoa.Async || new function ( ) {
         };
         var anchor = function ( form, evt ) {
 
-            evt.preventDefault();
             var anchor = evt.target;
 
             var pushstate = {
@@ -773,14 +783,27 @@ Hoa.Async = Hoa.Async || new function ( ) {
                     el.listener(evt, pushstate);
                 });
 
-            if(null === pushstate.uri)
-                return;
+            if(null === pushstate.uri) {
 
-            Hoa.History.push(
-                pushstate.state,
-                pushstate.title,
-                pushstate.uri
-            );
+                evt.preventDefault();
+
+                return;
+            }
+
+            try {
+
+                Hoa.History.push(
+                    pushstate.state,
+                    pushstate.title,
+                    pushstate.uri
+                );
+            }
+            catch ( e ) {
+
+                return;
+            }
+
+            evt.preventDefault();
             Hoa.Async.sendForm(
                 form,
                 pushstate.method,
@@ -851,7 +874,7 @@ Hoa.Async = Hoa.Async || new function ( ) {
 
         var scoped = data.scoped;
 
-        if(null === scoped)
+        if(null == scoped)
             return;
 
         scoped[0].innerHTML = this.responseText;
@@ -878,8 +901,20 @@ Hoa.Async = Hoa.Async || new function ( ) {
                 listener  : this.defaultReadyStateChangeEvent,
                 useCapture: false
             }];
-        else
-            handle = form._hoa.store.events;
+        else {
+
+            handle = form._hoa.store.events.filter(function ( el ) {
+
+                return 'readystatechange' === el.type;
+            });
+
+            if(0 === handle.length)
+                handle = [{
+                    type      : 'readystatechange',
+                    listener  : this.defaultReadyStateChangeEvent,
+                    useCapture: false
+                }];
+        }
 
         handle.forEach(function ( el ) {
 
