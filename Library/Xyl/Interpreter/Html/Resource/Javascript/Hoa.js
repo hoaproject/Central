@@ -601,10 +601,38 @@ Hoa.ℙ(1) && Hoa.namespace([HTMLFormElement], {
     }
 });
 
-Hoa.ℙ(1) && Hoa.namespace([HTMLInputElement, HTMLButtonElement], {
+Hoa.ℙ(1) && Hoa.namespace([HTMLInputElement,
+                           HTMLButtonElement,
+                           HTMLAnchorElement], {
 
-    guard: Hoa.〱true,
+    guard: function ( element ) {
+
+        if(   element instanceof HTMLInputElement
+           || element instanceof HTMLButtonElement)
+            return    element.form.hasAttribute('data-formasync')
+                   || element.form.hasAttribute('data-async');
+
+        if(!(element instanceof HTMLAnchorElement))
+            return false;
+
+        var p = element;
+
+        while(null !== (p = p.parentElement))
+            if(   p instanceof HTMLFormElement
+               && (p.hasAttribute('data-formasync')
+               ||  p.hasAttribute('data-async'))) {
+
+                element.form = p;
+                return true;
+            }
+
+        return false;
+    },
     body : function ( element ) {
+
+        var sQuery  = /\?q(?:uery)?:(.*)/;
+        var sRQuery = /\?r(?:elative-)?q(?:uery)?:(.*)/;
+        var sXpath  = /\?x(?:path)?:(.*)/;
 
         return {
 
@@ -612,22 +640,43 @@ Hoa.ℙ(1) && Hoa.namespace([HTMLInputElement, HTMLButtonElement], {
 
                 getScopedElements: function ( ) {
 
-                    var fromForm = !that.hasAttribute('data-asyncscope');
-                    var result   = document.evaluate(
-                        fromForm
-                            ? that.form.getAttribute('data-asyncscope')
-                            : that.getAttribute('data-asyncscope')
-                              || '..',
-                        fromForm ? that.form : that,
-                        null,
-                        XPathResult.ANY_TYPE,
-                        null
-                    );
-                    var scoped   = [];
-                    var handle   = null;
+                    var scope =    element.getAttribute('data-asyncscope')
+                                || element.form.getAttribute('data-asyncscope');
 
-                    while(handle = result.iterateNext())
-                        scoped.push(handle);
+                    var scoped = null;
+                    var match  = null;
+
+                    if(null !== (match = sQuery.exec(scope)))
+                        scoped = Hoa.$$(match[1]);
+                    else if(null !== (match = sRQuery.exec(scope)))
+                        scoped = Hoa.$$(match[1], element.form);
+                    else if(null !== (match = sXpath.exec(scope))) {
+
+                        console.log('todo');
+
+                        /*
+                        var fromForm = !element.hasAttribute('data-asyncscope');
+                        var result   = document.evaluate(
+                            fromForm
+                                ? element.form.getAttribute('data-asyncscope')
+                                : element.getAttribute('data-asyncscope')
+                                  || '..',
+                            fromForm ? element.form : element,
+                            null,
+                            XPathResult.ANY_TYPE,
+                            null
+                        );
+                        var scoped   = [];
+                        var handle   = null;
+
+                        while(handle = result.iterateNext())
+                            scoped.push(handle);
+
+                        return scoped;
+                        */
+                    }
+                    else
+                        return null;
 
                     return scoped;
                 }
@@ -664,11 +713,11 @@ Hoa.Async = Hoa.Async || new function ( ) {
 
                     case 'INPUT':
                         if('submit' === evt.target.getAttribute('type'))
-                            return submit(from, evt);
+                            return submit(form, evt);
                       break;
 
                     case 'BUTTON':
-                        if('submit' !== evt.target.type)
+                        if('submit' === evt.target.type)
                             return button(form, evt);
                       break;
 
@@ -683,6 +732,7 @@ Hoa.Async = Hoa.Async || new function ( ) {
         var submit = function ( form, evt ) {
 
             evt.preventDefault();
+            var submit = evt.target;
             Hoa.Async.sendForm(
                 submit.form,
                 submit.getAttribute('formmethod'),
@@ -692,6 +742,7 @@ Hoa.Async = Hoa.Async || new function ( ) {
         var button = function ( form, evt ) {
 
             evt.preventDefault();
+            var button = evt.target;
             Hoa.Async.sendForm(
                 button.form,
                 button.getAttribute('data-asyncmethod'),
@@ -702,14 +753,14 @@ Hoa.Async = Hoa.Async || new function ( ) {
         var anchor = function ( form, evt ) {
 
             evt.preventDefault();
-            var element = evt.target;
+            var anchor = evt.target;
 
             var pushstate = {
                 state  : {formId: form.getAttribute('id')},
-                title  : element.getAttribute('title'),
+                title  : anchor.getAttribute('title'),
                 form   : form,
-                action : element.getAttribute('href'),
-                uri    : element.getAttribute('href'),
+                action : anchor.getAttribute('href'),
+                uri    : anchor.getAttribute('href'),
                 method : 'get'
             };
 
@@ -731,7 +782,10 @@ Hoa.Async = Hoa.Async || new function ( ) {
                 form,
                 pushstate.method,
                 pushstate.action,
-                {link: true},
+                {
+                    link  : true,
+                    scoped: anchor.hoa.async.getScopedElements()
+                },
                 {'Content-Type': document.contentType || 'text/html'}
             );
 
@@ -786,6 +840,22 @@ Hoa.Async = Hoa.Async || new function ( ) {
             return function ( ) { return new handle('Microsoft.XMLHTTP') };
     };
 
+    this.defaultReadyStateChangeEvent = function ( evt, data ) {
+
+        if(   this.STATE_DONE != this.readyState
+           ||             200 != this.status)
+            return;
+
+        var scoped = data.scoped;
+
+        if(null === scoped)
+            return;
+
+        scoped[0].innerHTML = this.responseText;
+
+        return;
+    };
+
     Hoa.ℙ(1) && (this.sendForm = function ( form, method, action, extra,
                                             headers ) {
 
@@ -797,28 +867,36 @@ Hoa.Async = Hoa.Async || new function ( ) {
             'Content-Type'    : 'application/x-www-form-urlencoded',
             'X-Requested-With': 'XMLHttpRequest'
         }.hoa.extend(headers);
+        var handle  = null;
 
-        if(undefined !== form._hoa)
-            form._hoa.store.events.forEach(function ( el ) {
+        if(undefined === form._hoa)
+            handle = [{
+                type      : 'readystatechange',
+                listener  : this.defaultReadyStateChangeEvent,
+                useCapture: false
+            }];
+        else
+            handle = form._hoa.store.events;
 
-                if(   -1          === events.indexOf(el.type)
-                   || 'popstate'  === el.type
-                   || 'pushstate' === el.type)
-                    return;
+        handle.forEach(function ( el ) {
 
-                request.addEventListener(
-                    el.type,
-                    el.listener.hoa.curry(undefined, {
-                        form    : form,
-                        method  : method,
-                        action  : action,
-                        formData: data,
-                        headers : headers
-                    }.hoa.extend(extra)),
-                    el.useCapture
-                );
-            });
+            if(   -1          === events.indexOf(el.type)
+               || 'popstate'  === el.type
+               || 'pushstate' === el.type)
+                return;
 
+            request.addEventListener(
+                el.type,
+                el.listener.hoa.curry(undefined, {
+                    form    : form,
+                    method  : method,
+                    action  : action,
+                    formData: data,
+                    headers : headers
+                }.hoa.extend(extra)),
+                el.useCapture
+            );
+        });
         request.open(method, action, true);
         headers.hoa.forEach(function ( name ) {
 
