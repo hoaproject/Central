@@ -65,7 +65,8 @@ class A extends GenericPhrasing {
      * @var \Hoa\Xyl\Interpreter\Html\A array
      */
     protected static $_attributes        = array(
-        'href' => parent::ATTRIBUTE_TYPE_LINK
+        'asyncscope' => parent::ATTRIBUTE_TYPE_NORMAL,
+        'href'       => parent::ATTRIBUTE_TYPE_LINK
     );
 
     /**
@@ -73,7 +74,10 @@ class A extends GenericPhrasing {
      *
      * @var \Hoa\Xyl\Interpreter\Html\A array
      */
-    protected static $_attributesMapping = …;
+    protected static $_attributesMapping = array(
+        'asyncscope' => 'data-asyncscope',
+        'href'
+    );
 }
 
 }
