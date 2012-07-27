@@ -773,6 +773,9 @@ Hoa.Async = Hoa.Async || new function ( ) {
                     el.listener(evt, pushstate);
                 });
 
+            if(null === pushstate.uri)
+                return;
+
             Hoa.History.push(
                 pushstate.state,
                 pushstate.title,
