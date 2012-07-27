@@ -1332,9 +1332,9 @@ Hoa.ℙ(1) && (Hoa.History = Hoa.History || new function ( ) {
         return w.history.pushState(state, title, uri);
     };
 
-    this.replace = function ( ) {
+    this.replace = function ( state, title, uri ) {
 
-        return w.history.replaceState();
+        return w.history.replaceState(state, title, uri);
     };
 
     this.onupdate = function ( callback ) {
