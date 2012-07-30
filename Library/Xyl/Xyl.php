@@ -441,7 +441,9 @@ class          Xyl
 
         $streamClass = get_class($this->getInnerStream());
         $dirname     = dirname($this->getInnerStream()->getStreamName());
-        $remove      = self::TYPE_DOCUMENT == $this->getType();
+        $type        = $this->getType();
+        $remove      =    self::TYPE_DOCUMENT == $type
+                       || self::TYPE_FRAGMENT == $type;
         $hrefs       = array();
         $uses        = array();
         $xpath       = new \DOMXPath($ownerDocument);
@@ -519,7 +521,9 @@ class          Xyl
      */
     protected function computeYielder ( ) {
 
-        $remove          = self::TYPE_DOCUMENT == $this->getType();
+        $type            = $this->getType();
+        $remove          =    self::TYPE_DOCUMENT == $type
+                           || self::TYPE_FRAGMENT == $type;
         $stream          = $this->getStream();
         $streamClass     = get_class($this->getInnerStream());
         $openedFragments = array();
@@ -565,9 +569,8 @@ class          Xyl
                     'Snippet %s does not exist in fragment %s.',
                     6, array($sId, $href));
 
-            $snippet = $snippet[0];
             $yieldomized->parentNode->insertBefore(
-                $this->_mowgli->importNode($snippet->readDOM(), true),
+                $this->_mowgli->importNode($snippet[0]->readDOM(), true),
                 $yieldomized
             );
             $yieldomized->parentNode->removeChild($yieldomized);
@@ -676,7 +679,9 @@ class          Xyl
      * Compute <?xyl-overlay?> processing-instruction.
      *
      * @access  protected
-     * @param   \DOMDocument  $ownerDocument    Document that ownes PIs.
+     * @param   \DOMDocument  $ownerDocument      Document that ownes PIs.
+     * @param   \DOMDocument  $receiptDocument    Document that receipts
+     *                                            overlays.
      * @return  bool
      * @throw   \Hoa\Xml\Exception
      */
@@ -691,7 +696,9 @@ class          Xyl
 
         $streamClass = get_class($this->getInnerStream());
         $dirname     = dirname($this->getInnerStream()->getStreamName());
-        $remove      = self::TYPE_DOCUMENT == $this->getType();
+        $type        = $this->getType();
+        $remove      =    self::TYPE_DOCUMENT == $type
+                       || self::TYPE_FRAGMENT == $type;
         $hrefs       = array();
         $overlays    = array();
         $xpath       = new \DOMXPath($ownerDocument);
@@ -744,7 +751,7 @@ class          Xyl
                     '%s must only contain <overlay> (and some <?xyl-overlay) ' .
                     'elements.', 9, $href);
 
-            foreach($fragment->selectChildElements() as $e => $element)
+            foreach($fragment->selectChildElements() as $element)
                 $this->_computeOverlay(
                     $receiptDocument->documentElement,
                     $receiptDocument->importNode($element->readDOM(), true)
@@ -827,7 +834,7 @@ class          Xyl
             $children[] = $element;
         }
 
-        foreach($children as $i => $child)
+        foreach($children as $child)
             $this->_computeOverlay($from, $child);
 
         return;
@@ -932,7 +939,9 @@ class          Xyl
         $receiptDocument = $this->_mowgli;
         $streamClass     = get_class($this->getInnerStream());
         $dirname         = dirname($this->getInnerStream()->getStreamName());
-        $remove          = self::TYPE_DOCUMENT == $this->getType();
+        $type            = $this->getType();
+        $remove          =    self::TYPE_DOCUMENT == $type
+                           || self::TYPE_FRAGMENT == $type;
         $xpath           = new \DOMXPath($ownerDocument);
         $xyl_fragment    = $xpath->query('/processing-instruction(\'xyl-fragment\')');
         unset($xpath);
