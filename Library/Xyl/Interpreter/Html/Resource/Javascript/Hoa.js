@@ -790,6 +790,9 @@ Hoa.Async = Hoa.Async || new function ( ) {
                 return;
             }
 
+            if('#' === pushstate.uri.charAt(0))
+                return;
+
             try {
 
                 Hoa.History.push(
@@ -828,7 +831,7 @@ Hoa.Async = Hoa.Async || new function ( ) {
 
             var state = evt.state;
 
-            if(undefined === state.formId)
+            if(null === state || undefined === state.formId)
                 return;
 
             var form = Hoa.$('#' + state.formId);
