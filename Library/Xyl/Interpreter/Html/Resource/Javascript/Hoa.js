@@ -534,6 +534,60 @@ Hoa.Concurrent = Hoa.Concurrent || new function ( ) {
     };
 };
 
+Hoa.Event = Hoa.Event || new function ( ) {
+
+    var delegator = document;
+
+    return {
+
+        from: function ( deleg ) {
+
+            delegator = deleg;
+
+            return this;
+        },
+
+        on: function ( type, selector, handler, data, useCapture ) {
+
+            var handle = delegator;
+            delegator  = document;
+
+            return handle.addEventListener(
+                type,
+                function ( evt ) {
+
+                    if(null === evt.target)
+                        return;
+
+                    var i = Array.prototype.slice
+                                 .call(Hoa.$$(selector, handle))
+                                 .indexOf(evt.target);
+
+                    if(i < 0)
+                        return;
+
+                    handler(evt, data);
+
+                    return;
+                },
+                undefined === useCapture ? false : useCapture
+            );
+        },
+
+        off: function ( type, handler, useCapture ) {
+
+            var handle = delegator;
+            delegator  = document;
+
+            return handle.removeEventListener(
+                type,
+                handler,
+                undefined === useCapture ? false : useCapture
+            );
+        }
+    };
+};
+
 Hoa.ℙ(1) && Hoa.namespace([HTMLFormElement], {
 
     guard: Hoa.〱true,
@@ -711,36 +765,18 @@ Hoa.Async = Hoa.Async || new function ( ) {
 
     Hoa.ℙ(1) && Hoa.Document.onReady(function ( ) {
 
-        var asyncs = Hoa.$$('form[data-formasync], form[data-async]');
-        var async  = null;
-        var click  = function ( form ) {
+        var selector = 'form[data-formasync] input, ' +
+                       'form[data-async] button, ' +
+                       'form[data-async] a';
+        var getForm  = function ( p ) {
 
-            return function ( evt ) {
+            while(   null !== (p = p.parentElement)
+                  && (   false === p.hasAttribute('data-async')
+                      && false === p.hasAttribute('data-formasync')));
 
-                if(undefined === evt.target)
-                    return;
-
-                switch(evt.target.nodeName) {
-
-                    case 'INPUT':
-                        if('submit' === evt.target.getAttribute('type'))
-                            return submit(form, evt);
-                      break;
-
-                    case 'BUTTON':
-                        if('submit' === evt.target.type)
-                            return button(form, evt);
-                      break;
-
-                    case 'A':
-                        return anchor(form, evt);
-                      break;
-                }
-
-                return;
-            };
+            return p;
         };
-        var submit = function ( form, evt ) {
+        var submit   = function ( form, evt ) {
 
             evt.preventDefault();
             var submit = evt.target;
@@ -750,7 +786,7 @@ Hoa.Async = Hoa.Async || new function ( ) {
                 submit.getAttribute('formaction')
             );
         };
-        var button = function ( form, evt ) {
+        var button   = function ( form, evt ) {
 
             evt.preventDefault();
             var button = evt.target;
@@ -761,17 +797,19 @@ Hoa.Async = Hoa.Async || new function ( ) {
                 {scoped: button.hoa.async.getScopedElements()}
             );
         };
-        var anchor = function ( form, evt ) {
+        var anchor   = function ( form, evt ) {
 
-            var anchor = evt.target;
+            if(undefined === window.history)
+                return;
 
+            var anchor    = evt.target;
             var pushstate = {
-                state  : {formId: form.getAttribute('id')},
-                title  : anchor.getAttribute('title'),
-                form   : form,
-                action : anchor.getAttribute('href'),
-                uri    : anchor.getAttribute('href'),
-                method : 'get'
+                state : {formId: form.getAttribute('id')},
+                title : anchor.getAttribute('title'),
+                form  : form,
+                action: anchor.getAttribute('href'),
+                uri   : anchor.getAttribute('href'),
+                method: 'get'
             };
 
             if(undefined !== form._hoa)
@@ -783,19 +821,15 @@ Hoa.Async = Hoa.Async || new function ( ) {
                     el.listener(evt, pushstate);
                 });
 
-            if(null === pushstate.uri) {
-
-                evt.preventDefault();
-
-                return;
-            }
+            if(null === pushstate.uri)
+                return evt.preventDefault();
 
             if('#' === pushstate.uri.charAt(0))
                 return;
 
             try {
 
-                Hoa.History.push(
+                window.history.pushState(
                     pushstate.state,
                     pushstate.title,
                     pushstate.uri
@@ -821,13 +855,35 @@ Hoa.Async = Hoa.Async || new function ( ) {
             return;
         };
 
-        for(var i = 0, max = asyncs.length; i < max; ++i) {
+        Hoa.Event.on('click', selector, function ( evt ) {
 
-            async = asyncs[i];
-            async.addEventListener('click', click(async));
-        }
+            var target = evt.target;
+            var form   = getForm(target);
 
-        Hoa.History.onupdate(function ( evt ) {
+            if(null === form)
+                return;
+
+            switch(target.nodeName) {
+
+                case 'INPUT':
+                    if('submit' === evt.target.getAttribute('type'))
+                        return submit(form, evt);
+                  break;
+
+                case 'BUTTON':
+                    if('submit' === evt.target.type)
+                        return button(form, evt);
+                  break;
+
+                case 'A':
+                    return anchor(form, evt);
+                  break;
+            }
+
+            return;
+        });
+
+        window.addEventListener('popstate', function ( evt ) {
 
             var state = evt.state;
 
@@ -1166,64 +1222,18 @@ Hoa.Keyboard = Hoa.Keyboard || new function ( ) {
 
 Hoa.ℙ(1) && (Hoa.Tabs = Hoa.Tabs || new function ( ) {
 
+    var that          = this;
     var tabs          = {};
     var tabsLastIndex = 0;
+    var TabTemplate   = function ( tab ) {
 
-    var TabTemplate = function ( tab ) {
-
-        var that           = this;
-        var selected       = null;
-        var tablist        = [];
-        var tabpanel       = [];
-        var _tablist       = Hoa.$$('[role="tablist"] [role="tab"]', tab);
-        var _tabitem       = null;
-        var _controls      = null;
-        var _tabpanel      = null;
-        var _callbackClick = function ( i ) {
-
-            return function ( evt ) {
-
-                evt.preventDefault();
-                that.select(i);
-
-                return true;
-            };
-        };
-        var _callbackKey   = function ( i ) {
-
-            return function ( evt ) {
-
-                var keyboard = Hoa.Keyboard;
-
-                switch(evt.keyCode) {
-
-                    case keyboard.LEFT:
-                    case keyboard.UP:
-                        that.selectPrevious();
-                      break;
-
-                    case keyboard.RIGHT:
-                    case keyboard.DOWN:
-                        that.selectNext();
-                      break;
-
-                    case keyboard.HOME:
-                        that.select(0);
-                      break;
-
-                    case keyboard.END:
-                        that.select(-1);
-                      break;
-
-                    default:
-                        return;
-                }
-
-                evt.preventDefault();
-
-                return;
-            };
-        };
+        var selected  = null;
+        var tablist   = [];
+        var tabpanel  = [];
+        var _tablist  = Hoa.$$('[role="tablist"] [role="tab"]', tab);
+        var _tabitem  = null;
+        var _controls = null;
+        var _tabpanel = null;
 
         for(var i = 0, max = _tablist.length; i < max; ++i) {
 
@@ -1239,14 +1249,13 @@ Hoa.ℙ(1) && (Hoa.Tabs = Hoa.Tabs || new function ( ) {
                   !== _tabitem.getAttribute('id'))
                 continue;
 
+            _tabitem.setAttribute('data-tab-index', i);
+
             tablist[i]  = _tabitem;
             tabpanel[i] = _tabpanel;
 
             if('true' == _tabitem.getAttribute('aria-selected'))
                 selected = i;
-
-            _tabitem.addEventListener('click', _callbackClick(i));
-            _tabitem.addEventListener('keydown', _callbackKey(i));
         }
 
         this.add = function ( id, name ) {
@@ -1257,26 +1266,25 @@ Hoa.ℙ(1) && (Hoa.Tabs = Hoa.Tabs || new function ( ) {
             var _tabitem = Hoa.DOM.a(
                 name,
                 {
-                    href           : '#' + id,
-                    role           : 'tab',
-                    'aria-controls': id,
-                    'aria-selected': 'false',
-                    tabindex       : '-1',
-                    id             : id + '__tab'
+                    href            : '#' + id,
+                    role            : 'tab',
+                    'aria-controls' : id,
+                    'aria-selected' : 'false',
+                    tabindex        : '-1',
+                    id              : id + '__tab',
+                    'data-tab-index': i
                 }
             );
-            _tabitem.addEventListener('click', _callbackClick(i));
-            _tabitem.addEventListener('keydown', _callbackKey(i));
             tablist[i] = _tabitem;
             handle.appendChild(Hoa.DOM.li([_tabitem], {role: 'presentation'}));
 
             var _tabpanel = Hoa.DOM.div(
                 undefined,
                 {
-                    id: id,
-                    role: 'tabpanel',
-                    'aria-hidden': 'true',
-                    'aria-expanded': 'false',
+                    id               : id,
+                    role             : 'tabpanel',
+                    'aria-hidden'    : 'true',
+                    'aria-expanded'  : 'false',
                     'aria-labelledby': id + '__tab'
                 }
             );
@@ -1343,61 +1351,67 @@ Hoa.ℙ(1) && (Hoa.Tabs = Hoa.Tabs || new function ( ) {
 
     this.get = function ( id ) {
 
-        return tabs[id];
+        if(undefined !== tabs[id])
+            return tabs[id];
+
+        var tab = id;
+
+        if('object' === typeof tab)
+            id = tab.getAttribute('id');
+
+        if(null === id)
+            id = tabs.length;
+
+        return tabs[id] = new TabTemplate(tab);
     };
 
-    this.getAll = function ( ) {
+    var selector = '[data-tabs] [role="tablist"] [role="tab"]';
+    var getTab   = function ( p ) {
 
-        return tabs;
+        while(   null !== (p = p.parentElement)
+              && false === p.hasAttribute('data-tabs'));
+
+        return that.get(p);
     };
+    Hoa.Event.on('click', selector, function ( evt ) {
 
-    Hoa.Document.onReady(function ( ) {
+        var tabitem = evt.target;
+        var tab     = getTab(tabitem);
+        tab.select(tabitem.getAttribute('data-tab-index'));
+        evt.preventDefault();
 
-        var _tabs = Hoa.$$('[data-tabs]');
-        var _tab  = null;
+        return;
+    });
+    Hoa.Event.on('keydown', selector, function ( evt ) {
 
-        for(var i = 0, max = _tabs.length; i < max; ++i) {
+        var tabitem  = evt.target;
+        var tab      = getTab(tabitem);
+        var keyboard = Hoa.Keyboard;
 
-            _tab                             = _tabs[i]
-            tabs[   _tab.getAttribute('id')
-                 || tabsLastIndex++        ] = new TabTemplate(_tab);
+        switch(evt.keyCode) {
+
+            case keyboard.LEFT:
+            case keyboard.UP:
+                tab.selectPrevious();
+              break;
+
+            case keyboard.RIGHT:
+            case keyboard.DOWN:
+                tab.selectNext();
+              break;
+
+            case keyboard.HOME:
+                tab.select(0);
+              break;
+
+            case keyboard.END:
+                tab.select(-1);
+              break;
+
+            default:
+                return;
         }
+
+        evt.preventDefault();
     });
-});
-
-Hoa.ℙ(1) && (Hoa.History = Hoa.History || new function ( ) {
-
-    var that = this;
-    var w    = window;
-
-    this.hoa.getter('length', function ( ) {
-
-        return w.history.length;
-    });
-
-    this.hoa.getter('state', function ( ) {
-
-        return w.history.state;
-    });
-
-    this.back = w.history.back;
-
-    this.forward = w.history.forward;
-
-    this.go = w.history.go;
-
-    this.push = function ( state, title, uri ) {
-
-        return w.history.pushState(state, title, uri);
-    };
-
-    this.replace = function ( state, title, uri ) {
-
-        return w.history.replaceState(state, title, uri);
-    };
-
-    this.onupdate = function ( callback ) {
-
-        return window.addEventListener('popstate', callback);
-    };
 });
