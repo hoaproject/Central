@@ -224,7 +224,9 @@ class Shared implements \Hoa\Core\Event\Listenable {
      */
     public function on ( $listenerId, $callable ) {
 
-        return $this->_on->attach($listenerId, $callable);
+        $this->_on->attach($listenerId, $callable);
+
+        return $this;
     }
 
     /**
