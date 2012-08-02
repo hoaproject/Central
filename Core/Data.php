@@ -176,7 +176,8 @@ class Data implements Datable, \ArrayAccess {
      * @access  public
      * @param   mixed   $offset    Branch index. Could be null to
      *                             auto-increment.
-     * @param   mixed   $value     Branche value (scalar or array value).
+     * @param   mixed   $value     Branche value (scalar, array or Datable
+     *                             value).
      * @return  \Hoa\Core\Data
      */
     public function offsetSet ( $offset, $value ) {
