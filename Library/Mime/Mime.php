@@ -239,7 +239,7 @@ class Mime implements \Hoa\Core\Parameter\Parameterizable {
             }
             else
                 list($mime, $extensions) = preg_split('#' . "\t" . '+#', $line);
-            
+
             try {
 
                 list($media, $type) = self::parseMime($mime);
