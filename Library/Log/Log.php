@@ -51,17 +51,7 @@ from('Hoa')
 /**
  * \Hoa\Tree\Visitor\Dump
  */
--> import('Tree.Visitor.Dump')
-
-/**
- * \Hoa\Stream
- */
--> import('Stream.~')
-
-/**
- * \Hoa\Stream\IStream\Out
- */
--> import('Stream.I~.Out');
+-> import('Tree.Visitor.Dump');
 
 }
 
