@@ -175,12 +175,14 @@ class Dns implements \Hoa\Core\Event\Listenable {
      * @access  public
      * @param   string  $listenerId    Listener ID.
      * @param   mixed   $callable      Callable.
-     * @return  \Hoa\Worker\Backend\Shared
+     * @return  \Hoa\Dns
      * @throw   \Hoa\Core\Exception
      */
     public function on ( $listenerId, $callable ) {
 
-        return $this->_on->attach($listenerId, $callable);
+        $this->_on->attach($listenerId, $callable);
+
+        return $this;
     }
 
     /**
