@@ -438,7 +438,7 @@ class Listener {
 
         if(false === $this->listenerExists($listenerId))
             throw new \Hoa\Core\Exception(
-                'Cannot listen %s because it is not defined.', 0);
+                'Cannot listen %s because it is not defined.', 0, $listenerId);
 
         $callable                                         = xcallable($callable);
         $this->_listen[$listenerId][$callable->getHash()] = $callable;
