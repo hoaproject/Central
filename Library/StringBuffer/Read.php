@@ -90,9 +90,9 @@ class Read extends StringBuffer implements \Hoa\Stream\IStream\In {
      */
     public function read ( $length ) {
 
-        if($length <= 0)
+        if(0 > $length)
             throw new Exception(
-                'Length must be greather than 0, given %d.', 0, $length);
+                'Length must be greater than 0, given %d.', 0, $length);
 
         return fread($this->getStream(), $length);
     }

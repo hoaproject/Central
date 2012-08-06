@@ -80,10 +80,9 @@ class Write extends StringBuffer implements \Hoa\Stream\IStream\Out {
      */
     public function write ( $string, $length ) {
 
-        if($length < 0)
+        if(0 > $length)
             throw new Exception(
-                'Length must be greather than or equal to 0, given %d.',
-                0, $length);
+                'Length must be greater than 0, given %d.', 0, $length);
 
         return fwrite($this->getStream(), $string, $length);
     }
