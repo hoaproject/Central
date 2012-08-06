@@ -433,6 +433,11 @@ abstract class Connection
                 'Cannot read because socket is not established, ' .
                 'i.e. not connected.', 0);
 
+        if($length < 0)
+            throw new Exception(
+                'Length must be greather than or equal to 0, given %d.',
+                1, $length);
+
         if(false === $this->isRemoteAddressConsidered())
             return stream_socket_recvfrom($this->getStream(), $length);
 
@@ -567,12 +572,12 @@ abstract class Connection
         if(null === $this->getStream())
             throw new Exception(
                 'Cannot write because socket is not established, ' .
-                'i.e. not connected.', 1);
+                'i.e. not connected.', 2);
 
         if($length < 0)
             throw new Exception(
                 'Length must be greather than or equal to 0, given %d.',
-                2, $length);
+                3, $length);
 
         if(strlen($string) > $length)
             $string = substr($string, 0, $length);
@@ -590,7 +595,7 @@ abstract class Connection
 
         if(-1 == $out)
             throw new Exception(
-                'Pipe is broken, cannot write data.', 3);
+                'Pipe is broken, cannot write data.', 4);
 
         return $out;
     }
