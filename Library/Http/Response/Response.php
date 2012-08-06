@@ -648,7 +648,7 @@ class          Response
             throw new \Hoa\Http\Exception\CrossBufferization(
                 'Cannot delete this buffer because it was not opened by this ' .
                 'class (%s, %s).',
-                1, array(get_class($this), $this->getHash()));
+                2, array(get_class($this), $this->getHash()));
 
         $out = ob_end_clean();
 
@@ -698,8 +698,7 @@ class          Response
 
         if(0 > $length)
             throw new \Hoa\Http\Exception(
-                'Length must be greather than or equal to 0, given %d.',
-                0, $length);
+                'Length must be greater than 0, given %d.', 3, $length);
 
         if(strlen($string) > $length)
             $string = substr($string, 0, $length);

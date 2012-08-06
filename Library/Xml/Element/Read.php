@@ -98,9 +98,9 @@ class Read extends Basic implements \Hoa\Stream\IStream\In {
      */
     public function read ( $length ) {
 
-        if($length <= 0)
+        if(0 > $length)
             throw new \Hoa\Xml\Exception(
-                'Length must be greather than 0, given %d.', 0, $length);
+                'Length must be greater than 0, given %d.', 0, $length);
 
         if(null === parent::$_buffer) {
 
