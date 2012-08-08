@@ -799,7 +799,8 @@ Hoa.Async = Hoa.Async || new function ( ) {
         };
         var anchor   = function ( form, evt ) {
 
-            if(undefined === window.history)
+            if(   undefined === window.history
+               || 0         !== evt.button)
                 return;
 
             var anchor    = evt.target;
