@@ -358,7 +358,7 @@ class Code extends GenericPhrasing {
                     $line
                 );
                 $line = preg_replace_callback(
-                    '#\?|\+|\*|\||\((?!\))|\)(?<!\()|\#\w+#',
+                    '#\?|\+|\*|\||\((?!\))|(?<!\()\)|\#\w+#',
                     function ( Array $m ) {
 
                         return '<span class="token-keyword">' . $m[0] . '</span>';
