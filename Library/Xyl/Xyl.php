@@ -590,6 +590,7 @@ class          Xyl
             foreach($stream->xpath('//__current_ns:' . $name) as $ciao) {
 
                 $placeholder = $ciao->readDOM();
+                $xpath       = new \DOMXpath($placeholder->ownerDocument);
                 $parent      = $placeholder->parentNode;
                 $handle      = $yieldomized->cloneNode(true);
                 $_yield      = simplexml_import_dom($handle, '\Hoa\Xyl\Element\Basic');
@@ -635,11 +636,11 @@ class          Xyl
                           break;
                     }
 
-                    $xpath = $ciao->xpath('./' . $_select);
+                    $result = $xpath->query('./' . $_select, $placeholder);
 
-                    foreach($xpath ?: array() as $selected)
+                    foreach($result ?: array() as $selected)
                         $selectdomized->parentNode->insertBefore(
-                            $selected->readDOM(),
+                            $selected,
                             $selectdomized
                         );
 
