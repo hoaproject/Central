@@ -104,7 +104,7 @@ class Bench implements \Iterator, \Countable {
         if(true === $this->markExists($id))
             return self::$_mark[$id];
 
-        $mark = new \Hoa\Bench\Mark($id);
+        $mark = new Mark($id);
         self::$_mark[$id] = $mark;
 
         return $mark;
