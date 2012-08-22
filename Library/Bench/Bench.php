@@ -289,7 +289,7 @@ class Bench implements \Iterator, \Countable {
      * @return  string
      * @throw   \Hoa\Bench\Exception
      */
-    public function drawStatistic ( $width = 70 ) {
+    public function drawStatistic ( $width = 80 ) {
 
         if(empty(self::$_mark))
             return '';
@@ -298,28 +298,26 @@ class Bench implements \Iterator, \Countable {
             throw new Exception(
                 'The graphic width must be positive, given %d.', 0, $width);
 
-        $out         = null;
-        $stats       = $this->getStatistic();
-        $idMaxLength = 0;
+        $out    = null;
+        $stats  = $this->getStatistic();
+        $margin = 0;
 
         foreach($stats as $id => $foo)
-            strlen($id) > $idMaxLength and $idMaxLength = strlen($id);
+            strlen($id) > $margin and $margin = strlen($id);
+
+        $width   = $width - $margin - 18;
+        $format  = '%-' . $margin . 's  %-' . $width . 's %5dms, %5.1f%%' . "\n";
 
         foreach($stats as $id => $stat)
-            $out .= str_pad(
-                        $id,
-                        $idMaxLength
-                    ) .
-                    '  ' .
-                    str_pad(
-                        str_repeat(
-                            '|',
-                            round(($stat[self::STAT_POURCENT] * $width) / 100)
-                        ),
-                        $width
-                    ) .
-                    ' ' . round(1000 * $stat[self::STAT_RESULT], 3) . ' ms,' .
-                    ' ' . round($stat[self::STAT_POURCENT], 3) . ' %' . "\n";
+            $out .= sprintf(
+                $format,
+                $id,
+                str_repeat(
+                    '|', round(($stat[self::STAT_POURCENT] * $width) / 100)
+                ),
+                round(1000 * $stat[self::STAT_RESULT]),
+                round($stat[self::STAT_POURCENT], 3)
+            );
 
         return $out;
     }
