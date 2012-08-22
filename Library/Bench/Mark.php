@@ -114,6 +114,8 @@ class Mark {
     public function __construct ( $id ) {
 
         $this->setId($id);
+
+        return;
     }
 
     /**
