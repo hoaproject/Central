@@ -49,7 +49,6 @@ The kit is reachable through the `$_this` argument or `$this` variable if the
 controller is a class that extends `Hoa\Dispatcher\Kit`. The kit propose four
 elementary attributes, which are: `router`, `dispatcher`, `view` and `data`.
 
-
 ## Documentation
 
 Different documentations can be found on the website:
