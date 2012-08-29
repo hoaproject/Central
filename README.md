@@ -1,7 +1,7 @@
 ![Hoa](http://hoa-project.net/Media/Image/Hoa_small.png)
 
 Hoa is a **modular**, **extensible** and **structured** set of PHP libraries.
-Moreover, Hoa aims at beeing a bridge between industrial and research worlds.
+Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
 # Hoa\Router
 
