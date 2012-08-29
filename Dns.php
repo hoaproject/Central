@@ -71,7 +71,7 @@ class Dns implements \Hoa\Core\Event\Listenable {
      *
      * @var \Hoa\Socket object
      */
-    protected $_socket       = null;
+    protected $_server       = null;
 
     /**
      * Type values for resources and queries.
