@@ -213,22 +213,19 @@ class Core implements Parameter\Parameterizable {
      */
     public function initialize ( Array $parameters = array() ) {
 
-        $root              = dirname(dirname(__DIR__));
-        $central           = dirname($root);
-        $cwd               = getcwd() .
-                             ('cli' === PHP_SAPI
-                                 ? DS . dirname($_SERVER['argv'][0])
-                                 : '');
+        $root = dirname(dirname(__DIR__));
+        $cwd  = getcwd() .
+                ('cli' === PHP_SAPI
+                    ? DS . dirname($_SERVER['argv'][0])
+                    : '');
         $this->_parameters = new Parameter(
             $this,
             array(
-                'root'             => $root,
-                'central'          => $central,
-                'cwd'              => $cwd
+                'root' => $root,
+                'cwd'  => $cwd
             ),
             array(
                 'root.hoa'         => '(:root:)',
-                'root.central'     => '(:central:)',
                 'root.application' => '(:cwd:h:)',
                 'root.data'        => '(:%root.application:h:)/Data',
 
@@ -254,13 +251,12 @@ class Core implements Parameter\Parameterizable {
 
                 //'namespace.prefix.Hoathis'     => '(:%data.module:);(:%hoa.module:)',
                 'namespace.prefix.*'           => '(:%root.hoa:)/',
-                'namespace.prefix.Application' => '(:%root.application:)/',
+                'namespace.prefix.Application' => '(:%root.application:h:)/',
             )
         );
 
-        $this->_parameters->setKeyword('root',    $root);
-        $this->_parameters->setKeyword('central', $central);
-        $this->_parameters->setKeyword('cwd',     $cwd);
+        $this->_parameters->setKeyword('root', $root);
+        $this->_parameters->setKeyword('cwd',  $cwd);
         $this->_parameters->setParameters($parameters);
         $this->setProtocol();
 
