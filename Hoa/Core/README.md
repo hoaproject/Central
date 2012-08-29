@@ -92,7 +92,7 @@ Some libraries define their own channels, such as `Hoa\Stream` with, for
 example, `hoa://Event/Stream/<stream-name>:close-before`, or
 `hoa://Event/Log/<channel>` etc.
 
-For listeners, we are closer to the emmiter:
+For listeners, we are closer to the emitter:
 
     $websocket = new Hoa\Websocket\Server(
         new Hoa\Socket\Server('tcp://127.0.0.1:8889')
