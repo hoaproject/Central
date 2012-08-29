@@ -416,7 +416,7 @@ class          Xyl
                 'xyl-use',
                 'href="' . str_replace('"', '\"', $href) . '"'
             ),
-            $this->_mowgli->firstChild
+            $this->_mowgli->documentElement
         );
 
         return;
@@ -670,7 +670,7 @@ class          Xyl
                 'xyl-overlay',
                 'href="' . str_replace('"', '\"', $href) . '"'
             ),
-            $this->_mowgli->firstChild
+            $this->_mowgli->documentElement
         );
 
         return;
@@ -921,7 +921,7 @@ class          Xyl
                     ? ' as="' . str_replace('"', '\"', $as) . '"'
                     : '')
             ),
-            $this->_mowgli->firstChild
+            $this->_mowgli->documentElement
         );
 
         return;
@@ -1009,7 +1009,7 @@ class          Xyl
                 'xyl-stylesheet',
                 'href="' . str_replace('"', '\"', $href) . '"'
             ),
-            $this->_mowgli->firstChild
+            $this->_mowgli->documentElement
         );
 
         return;
