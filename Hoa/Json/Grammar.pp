@@ -47,7 +47,7 @@
 %token  false           false
 %token  null            null
 %token  quote_          "                             -> string
-%token  string:escaped  \\(["/bfnrt]|u[0-9a-fA-F]{4})
+%token  string:escaped  \\(["\\/bfnrt]|u[0-9a-fA-F]{4})
 %token  string:string   [^"\\]+
 %token  string:_quote   "                             -> default
 %token  brace_          {
