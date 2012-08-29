@@ -254,7 +254,7 @@ class Core implements Parameter\Parameterizable {
 
                 //'namespace.prefix.Hoathis'     => '(:%data.module:);(:%hoa.module:)',
                 'namespace.prefix.*'           => '(:%root.hoa:)/',
-                'namespace.prefix.Application' => '(:%root.application:)/',
+                'namespace.prefix.Application' => '(:%root.application:h:)/',
             )
         );
 
