@@ -64,9 +64,9 @@ from('Hoa')
 -> import('Socket.Server')
 
 /**
- * \Hoa\FastCgi\Responder
+ * \Hoa\Fastcgi\Responder
  */
--> import('FastCgi.Responder');
+-> import('Fastcgi.Responder');
 
 }
 
@@ -320,7 +320,7 @@ class Shared implements \Hoa\Core\Event\Listenable {
      */
     public static function start ( $socket, $workerPath ) {
 
-        $server = new \Hoa\FastCgi\Responder(
+        $server = new \Hoa\Fastcgi\Responder(
             new \Hoa\Socket\Client($socket)
         );
 
