@@ -39,18 +39,18 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\FastCgi\Exception
+ * \Hoa\Fastcgi\Exception
  */
--> import('FastCgi.Exception.~');
+-> import('Fastcgi.Exception.~');
 
 }
 
-namespace Hoa\FastCgi\Exception {
+namespace Hoa\Fastcgi\Exception {
 
 /**
- * Class \Hoa\FastCgi\Exception\UnknownRole.
+ * Class \Hoa\Fastcgi\Exception\UnknownRole.
  *
- * Extending the \Hoa\FastCgi\Exception class.
+ * Extending the \Hoa\Fastcgi\Exception class.
  * This happens when the Web server has specified a role that is unknown to the
  * application.
  *

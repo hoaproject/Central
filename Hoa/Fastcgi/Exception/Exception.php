@@ -34,10 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\FastCgi\Exception {
+namespace Hoa\Fastcgi\Exception {
 
 /**
- * Class \Hoa\FastCgi\Exception.
+ * Class \Hoa\Fastcgi\Exception.
  *
  * Extending the \Hoa\Core\Exception class.
  *

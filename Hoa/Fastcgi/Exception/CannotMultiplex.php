@@ -39,18 +39,18 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\FastCgi\Exception
+ * \Hoa\Fastcgi\Exception
  */
--> import('FastCgi.Exception.~');
+-> import('Fastcgi.Exception.~');
 
 }
 
-namespace Hoa\FastCgi\Exception {
+namespace Hoa\Fastcgi\Exception {
 
 /**
- * Class \Hoa\FastCgi\Exception\CannotMultiplex.
+ * Class \Hoa\Fastcgi\Exception\CannotMultiplex.
  *
- * Extending the \Hoa\FastCgi\Exception class.
+ * Extending the \Hoa\Fastcgi\Exception class.
  * This happens when a Web server sends concurrent requests over one connection
  * to an application that is designed to process one request at a time per
  * connection.
