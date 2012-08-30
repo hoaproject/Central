@@ -39,36 +39,36 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\FastCgi\Exception
+ * \Hoa\Fastcgi\Exception
  */
--> import('FastCgi.Exception.~')
+-> import('Fastcgi.Exception.~')
 
 /**
- * \Hoa\FastCgi\Exception\CannotMultiplex
+ * \Hoa\Fastcgi\Exception\CannotMultiplex
  */
--> import('FastCgi.Exception.CannotMultiplex')
+-> import('Fastcgi.Exception.CannotMultiplex')
 
 /**
- * \Hoa\FastCgi\Exception\Overloaded
+ * \Hoa\Fastcgi\Exception\Overloaded
  */
--> import('FastCgi.Exception.Overloaded')
+-> import('Fastcgi.Exception.Overloaded')
 
 /**
- * \Hoa\FastCgi\Exception\UnknownRole
+ * \Hoa\Fastcgi\Exception\UnknownRole
  */
--> import('FastCgi.Exception.UnknownRole')
+-> import('Fastcgi.Exception.UnknownRole')
 
 /**
- * \Hoa\FastCgi\Connection
+ * \Hoa\Fastcgi\Connection
  */
--> import('FastCgi.Connection');
+-> import('Fastcgi.Connection');
 
 }
 
-namespace Hoa\FastCgi {
+namespace Hoa\Fastcgi {
 
 /**
- * Class \Hoa\FastCgi\Responder.
+ * Class \Hoa\Fastcgi\Responder.
  *
  * A FastCGI client with a responder role.
  * Inspired by PHP SAPI code: php://sapi/cgi/fastcgi.*.
@@ -171,14 +171,14 @@ class Responder extends Connection {
     /**
      * Response: content.
      *
-     * @var \Hoa\FastCgi\Client string
+     * @var \Hoa\Fastcgi\Client string
      */
     protected $_content = null;
 
     /**
      * Response: headers.
      *
-     * @var \Hoa\FastCgi\Client array
+     * @var \Hoa\Fastcgi\Client array
      */
     protected $_headers = array();
 
@@ -206,10 +206,10 @@ class Responder extends Connection {
      * @param   string  $content    Content (e.g. key=value for POST).
      * @return  string
      * @throw   \Hoa\Socket\Exception
-     * @throw   \Hoa\FastCgi\Exception
-     * @throw   \Hoa\FastCgi\Exception\CannotMultiplex
-     * @throw   \Hoa\FastCgi\Exception\Overloaded
-     * @throw   \Hoa\FastCgi\Exception\UnknownRole
+     * @throw   \Hoa\Fastcgi\Exception
+     * @throw   \Hoa\Fastcgi\Exception\CannotMultiplex
+     * @throw   \Hoa\Fastcgi\Exception\Overloaded
+     * @throw   \Hoa\Fastcgi\Exception\UnknownRole
      */
     public function send ( Array $headers, $content = null ) {
 

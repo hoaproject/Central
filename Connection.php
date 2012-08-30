@@ -34,10 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\FastCgi {
+namespace Hoa\Fastcgi {
 
 /**
- * Class \Hoa\FastCgi\Connection.
+ * Class \Hoa\Fastcgi\Connection.
  *
  * A FastCGI connection; mainly pack & unpack methods.
  * Specification can be found here:

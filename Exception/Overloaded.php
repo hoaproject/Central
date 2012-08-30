@@ -39,18 +39,18 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\FastCgi\Exception
+ * \Hoa\Fastcgi\Exception
  */
--> import('FastCgi.Exception.~');
+-> import('Fastcgi.Exception.~');
 
 }
 
-namespace Hoa\FastCgi\Exception {
+namespace Hoa\Fastcgi\Exception {
 
 /**
- * Class \Hoa\FastCgi\Exception\Overloaded.
+ * Class \Hoa\Fastcgi\Exception\Overloaded.
  *
- * Extending the \Hoa\FastCgi\Exception class.
+ * Extending the \Hoa\Fastcgi\Exception class.
  * This happens when the application runs out of some resource, e.g. database
  * connections.
  *
