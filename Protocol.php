@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Core {
+namespace Hoa\Core\Protocol {
 
 /**
  * Class \Hoa\Core\Protocol.
@@ -136,7 +136,7 @@ abstract class Protocol {
                                          $overwrite = self::DO_NOT_OVERWRITE ) {
 
         $components = explode('/', $path);
-        $current    = Core::getProtocol();
+        $current    = \Hoa\Core::getProtocol();
         $handle     = null;
         $max        = count($components) - 1;
 
@@ -151,9 +151,9 @@ abstract class Protocol {
             }
 
             if($i != $max)
-                $handle = new Protocol\Generic($component);
+                $handle = new Generic($component);
             else
-                $handle = new Protocol\Generic($component, $reach);
+                $handle = new Generic($component, $reach);
 
             $current->addComponent($handle);
             $current = $handle;
@@ -175,7 +175,7 @@ abstract class Protocol {
         $name = $component->getName();
 
         if(empty($name))
-            throw new Exception(
+            throw new \Hoa\Core\Exception(
                 'Cannot add a component to the protocol hoa:// without a name.', 0);
 
         $this->_components[$component->getName()] = $component;
@@ -211,7 +211,7 @@ abstract class Protocol {
     public function getComponent ( $component ) {
 
         if(false === $this->componentExists($component))
-            throw new Exception(
+            throw new \Hoa\Core\Exception(
                 'Component %s does not exist.', 1, $component);
 
         return $this->_components[$component];
@@ -323,9 +323,9 @@ abstract class Protocol {
      */
     public function reachId ( $id ) {
 
-        throw new Exception(
+        throw new \Hoa\Core\Exception(
             'The component %s has no ID support (tried to reach #%s).',
-            0, array($this->getName(), $id));
+            2, array($this->getName(), $id));
     }
 
     /**
@@ -371,9 +371,11 @@ abstract class Protocol {
     }
 }
 
-}
-
-namespace Hoa\Core\Protocol {
+/**
+ * Make the alias automatically (because it's not imported with the import()
+ * function).
+ */
+class_alias('Hoa\Core\Protocol\Protocol', 'Hoa\Core\Protocol');
 
 /**
  * Class \Hoa\Core\Protocol\Generic.
