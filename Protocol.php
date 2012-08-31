@@ -263,7 +263,6 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
 
         if(isset($this[$next])) {
 
-            // Last.
             if(false === $pos) {
 
                 $this->_resolveChoice($this[$next]->reach(), $accumulator);
@@ -273,7 +272,6 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
 
             $handle = substr($path, $pos + 1);
 
-            // ID.
             if('#' == $path[$pos]) {
 
                 $accumulator = null;
