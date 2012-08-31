@@ -244,7 +244,6 @@ class Core implements Parameter\Parameterizable {
                 'protocol.Data/Variable/Private'  => '(:%protocol.Data/Variable:)Private/',
                 'protocol.Data/Variable/Run'      => '(:%protocol.Data/Variable:)Run/',
                 'protocol.Data/Variable/Test'     => '(:%protocol.Data/Variable:)Test/',
-                'protocol.Data'                   => '(:%root.data:)/',
                 'protocol.Library'                => '(:%root.hoa:)/Hoa/',
 
                 //'namespace.prefix.Hoathis'     => '(:%data.module:);(:%hoa.module:)',
