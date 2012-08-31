@@ -46,7 +46,7 @@ namespace Hoa\Core\Protocol {
  * @license    New BSD License
  */
 
-abstract class Protocol {
+abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
 
     /**
      * Overwrite components if already exists.
@@ -123,7 +123,7 @@ abstract class Protocol {
     }
 
     /**
-     * Helper for adding component easily.
+     * Helper for adding component easily from the root.
      *
      * @access  public
      * @param   string  $path         hoa:// path.
@@ -142,11 +142,12 @@ abstract class Protocol {
 
         foreach($components as $i => $component) {
 
-            if(    $current->componentExists($component)
+            if(    isset($current[$component])
                && (self::DO_NOT_OVERWRITE === $overwrite
                ||  $i != $max)) {
 
-                $current = $current->getComponent($component);
+                $current = $current[$component];
+
                 continue;
             }
 
@@ -155,8 +156,7 @@ abstract class Protocol {
             else
                 $handle = new Generic($component, $reach);
 
-            $current->addComponent($handle);
-            $current = $handle;
+            $current = $current[] = $handle;
         }
 
         return $this;
@@ -166,67 +166,72 @@ abstract class Protocol {
      * Add a component.
      *
      * @access  public
+     * @param   string              $name         Component name. If null, will
+     *                                            be set to name of $component.
      * @param   \Hoa\Core\Protocol  $component    Component to add.
      * @return  \Hoa\Core\Protocol
      * @throws  \Hoa\Core\Exception
      */
-    public function addComponent ( Protocol $component ) {
+    public function offsetSet ( $name, $component ) {
 
-        $name = $component->getName();
+        if(!($component instanceof Protocol))
+            throw new Exception(
+                'Component must extend %s.', __CLASS__, 0);
+
+        if(empty($name))
+            $name = $component->getName();
 
         if(empty($name))
             throw new \Hoa\Core\Exception(
-                'Cannot add a component to the protocol hoa:// without a name.', 0);
+                'Cannot add a component to the protocol hoa:// without a name.',
+                0);
 
-        $this->_components[$component->getName()] = $component;
+        $this->_components[$name] = $component;
 
-        return $this;
-    }
-
-    /**
-     * Remove a component.
-     *
-     * @access  public
-     * @param   string  $component    Component name to remove.
-     * @return  \Hoa\Core\Protocol
-     */
-    public function removeComponent ( $component ) {
-
-        if(false === $this->componentExists($component))
-            return $this;
-
-        unset($this->_components[$component]);
-
-        return $this;
+        return;
     }
 
     /**
      * Get a specific component.
      *
      * @access  public
-     * @param   string  $component    Component name.
+     * @param   string  $name    Component name.
      * @return  \Hoa\Core\Protocol
      * @throw   \Hoa\Core\Exception
      */
-    public function getComponent ( $component ) {
+    public function offsetGet ( $name ) {
 
-        if(false === $this->componentExists($component))
+        if(!isset($this[$name]))
             throw new \Hoa\Core\Exception(
-                'Component %s does not exist.', 1, $component);
+                'Component %s does not exist.', 1, $name);
 
-        return $this->_components[$component];
+        return $this->_components[$name];
     }
 
     /**
      * Check if a component exists.
      *
      * @access  public
-     * @param   string  $component    Component name.
+     * @param   string  $name    Component name.
      * @return  bool
      */
-    public function componentExists ( $component ) {
+    public function offsetExists ( $name ) {
 
-        return array_key_exists($component, $this->_components);
+        return array_key_exists($name, $this->_components);
+    }
+
+    /**
+     * Remove a component.
+     *
+     * @access  public
+     * @param   string  $name    Component name to remove.
+     * @return  \Hoa\Core\Protocol
+     */
+    public function offsetUnset ( $name ) {
+
+        unset($this->_components[$name]);
+
+        return;
     }
 
     /**
@@ -282,17 +287,17 @@ abstract class Protocol {
                 $next = $path;
         }
 
-        if(true === $this->componentExists($next)) {
+        if(isset($this[$next])) {
 
             if(false === $pos)
-                return $this->getComponent($next)->reach(null);
+                return $this[$next]->reach(null);
 
             $handle = substr($path, $pos + 1);
 
             if('#' == $path[$pos])
-                return $this->getComponent($next)->reachId($handle);
+                return $this[$next]->reachId($handle);
 
-            return $this->getComponent($next)->_resolve($handle);
+            return $this[$next]->_resolve($handle);
         }
 
         return $this->reach($path);
@@ -351,6 +356,17 @@ abstract class Protocol {
     }
 
     /**
+     * Get an iterator.
+     *
+     * @access  public
+     * @return  \ArrayObject
+     */
+    public function getIterator ( ) {
+
+        return new \ArrayObject($this->_components);
+    }
+
+    /**
      * Print a tree of component.
      *
      * @access  public
@@ -360,10 +376,10 @@ abstract class Protocol {
 
         $out = str_repeat('  ', self::$i) . $this->getName() . "\n";
 
-        foreach($this->_components as $foo => $component) {
+        foreach($this as $foo => $component) {
 
             self::$i++;
-            $out .= $component->__toString();
+            $out .= $component;
             self::$i--;
         }
 
