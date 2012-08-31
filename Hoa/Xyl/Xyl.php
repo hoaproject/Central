@@ -265,7 +265,9 @@ class          Xyl
      * @param   mixed                      $entityResolver  Entity resolver.
      * @param   array                      $parameters      Parameters.
      * @return  void
+     * @throw   \Hoa\Xyl\Exception
      * @throw   \Hoa\Xml\Exception
+     * @throw   \Hoa\Xml\Exception\NamespaceMissing
      */
     public function __construct ( \Hoa\Stream\IStream\In  $in,
                                   \Hoa\Stream\IStream\Out $out,
@@ -428,7 +430,7 @@ class          Xyl
      * @access  protected
      * @param   \DOMDocument  $ownerDocument    Document that ownes PIs.
      * @return  bool
-     * @throw   \Hoa\Xml\Exception
+     * @throw   \Hoa\Xyl\Exception
      */
     protected function computeUse ( \DOMDocument $ownerDocument = null,
                                     \DOMDocument $receiptDocument = null ) {
@@ -684,7 +686,7 @@ class          Xyl
      * @param   \DOMDocument  $receiptDocument    Document that receipts
      *                                            overlays.
      * @return  bool
-     * @throw   \Hoa\Xml\Exception
+     * @throw   \Hoa\Xyl\Exception
      */
     protected function computeOverlay ( \DOMDocument $ownerDocument   = null,
                                         \DOMDocument $receiptDocument = null ) {
@@ -932,7 +934,7 @@ class          Xyl
      *
      * @access  protected
      * @return  bool
-     * @throw   \Hoa\Xml\Exception
+     * @throw   \Hoa\Xyl\Exception
      */
     protected function computeFragment ( ) {
 
@@ -1102,7 +1104,7 @@ class          Xyl
      * @access  protected
      * @param   \Hoa\Xyl\Interpreter  $interpreter    Interpreter.
      * @return  void
-     * @throw   \Hoa\Xml\Exception
+     * @throw   \Hoa\Xyl\Exception
      */
     protected function computeConcrete ( Interpreter $interpreter = null ) {
 
