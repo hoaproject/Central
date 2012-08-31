@@ -862,17 +862,6 @@ class Xcallable {
 namespace {
 
 /**
- * Make the alias automatically (because it's not imported with the import()
- * function).
- */
-class_alias('Hoa\Core\Consistency\Consistency', 'Hoa\Core\Consistency');
-
-/**
- * Set autoloader.
- */
-spl_autoload_register('\Hoa\Core\Consistency::autoload');
-
-/**
  * Alias for \Hoa\Core\Consistency::from().
  *
  * @access  public
@@ -986,5 +975,16 @@ function curry_ref ( &$callable, &$a = null, &$b = null, &$c = null, &$d = null,
         );
     };
 }}
+
+/**
+ * Make the alias automatically (because it's not imported with the import()
+ * function).
+ */
+class_alias('Hoa\Core\Consistency\Consistency', 'Hoa\Core\Consistency');
+
+/**
+ * Set autoloader.
+ */
+spl_autoload_register('\Hoa\Core\Consistency::autoload');
 
 }
