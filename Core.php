@@ -231,13 +231,11 @@ class Core implements Parameter\Parameterizable {
 
                 'protocol.Application'            => '(:%root.application:)/',
                 'protocol.Application/Public'     => '(:%protocol.Application:)Public/',
-                //'protocol.Bin'                    => '(:%hoa.bin:)/',
                 'protocol.Data'                   => '(:%root.data:)/',
                 'protocol.Data/Etc'               => '(:%protocol.Data:)Etc/',
                 'protocol.Data/Etc/Configuration' => '(:%protocol.Data/Etc:)Configuration/',
                 'protocol.Data/Etc/Locale'        => '(:%protocol.Data/Etc:)Locale/',
                 'protocol.Data/Lost+found'        => '(:%protocol.Data:)Lost+found/',
-                //'protocol.Data/Module'            => '(:%data.module:)/',
                 'protocol.Data/Temporary'         => '(:%protocol.Data:)Temporary/',
                 'protocol.Data/Variable'          => '(:%protocol.Data:)Variable/',
                 'protocol.Data/Variable/Cache'    => '(:%protocol.Data/Variable:)Cache/',
