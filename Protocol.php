@@ -208,12 +208,22 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
             return $path;
 
         if(isset(self::$_cache[$path]))
-            return self::$_cache[$path];
+            $handle = self::$_cache[$path];
+        else {
 
-        $handle              = $this->_resolve($path);
-        self::$_cache[$path] = $handle;
+            $out = $this->_resolve($path, $handle);
 
-        return $handle;
+            if(!is_array($handle))
+                return $out;
+
+            self::$_cache[$path] = $handle;
+        }
+
+        foreach($handle as $solution)
+            if(file_exists($solution))
+                return $solution;
+
+        return $handle[0];
     }
 
     /**
@@ -221,16 +231,20 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
      * the path.
      *
      * @access  public
-     * @param   string  $path    Path to resolve.
+     * @param   string  $path            Path to resolve.
+     * @param   array   &$accumulator    Combination of all possibles paths.
      * @return  mixed
      */
-    protected function _resolve ( $path ) {
+    protected function _resolve ( $path, &$accumulator ) {
 
         if(substr($path, 0, 6) == 'hoa://')
             $path = substr($path, 6);
 
         if(empty($path))
             return null;
+
+        if(null === $accumulator)
+            $accumulator = array();
 
         $path = trim($path, '/');
         $pos  = strpos($path, '/');
@@ -249,18 +263,71 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
 
         if(isset($this[$next])) {
 
-            if(false === $pos)
-                return $this[$next]->reach(null);
+            // Last.
+            if(false === $pos) {
+
+                $this->_resolveChoice($this[$next]->reach(), $accumulator);
+
+                return true;
+            }
 
             $handle = substr($path, $pos + 1);
 
-            if('#' == $path[$pos])
-                return $this[$next]->reachId($handle);
+            // ID.
+            if('#' == $path[$pos]) {
 
-            return $this[$next]->_resolve($handle);
+                $accumulator = null;
+
+                return $this[$next]->reachId($handle);
+            }
+
+            $tnext = $this[$next];
+            $reach = $tnext->reach();
+            $this->_resolveChoice($reach, $accumulator);
+
+            return $tnext->_resolve($handle, $accumulator);
         }
 
-        return $this->reach($path);
+        $this->_resolveChoice($this->reach($path), $accumulator);
+
+        return true;
+    }
+
+    /**
+     * Resolve choices, i.e. a reach value has a “;”.
+     *
+     * @access  public
+     * @param   string  $reach           Reach value.
+     * @param   array   &$accumulator    Combination of all possibles paths.
+     * @return  void
+     */
+    protected function _resolveChoice ( $reach, Array &$accumulator ) {
+
+        $choices = explode(';', $reach);
+
+        if(empty($accumulator))
+            $accumulator = $choices;
+        else {
+
+            if(false === strpos($reach, ';')) {
+
+                foreach($accumulator as &$entry)
+                    $entry .= $reach;
+
+                return;
+            }
+
+            $ref         = $accumulator;
+            $accumulator = array();
+
+            foreach($choices as $choice)
+                foreach($ref as $entry)
+                    $accumulator[] = $entry . $choice;
+
+            unset($ref);
+        }
+
+        return;
     }
 
     /**
@@ -272,9 +339,9 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
      *                            with probably a query).
      * @return  mixed
      */
-    public function reach ( $queue ) {
+    public function reach ( $queue = null ) {
 
-        return $this->_reach . $queue;
+        return empty($queue) ? $this->_reach : $queue;
     }
 
     /**
