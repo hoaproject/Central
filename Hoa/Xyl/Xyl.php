@@ -334,13 +334,11 @@ class          Xyl
         }
 
         $this->useNamespace(self::NAMESPACE_ID);
-        \Hoa\Core::getInstance()
-                ->getProtocol()
-                ->getComponent('Library')
-                ->addComponent(new _Protocol(
-                    'Xyl[' . $this->_i . ']',
-                    'Interpreter' . DS . $this->_interpreter->getResourcePath()
-                ));
+        $protocol              = \Hoa\Core::getInstance()->getProtocol();
+        $protocol['Library'][] = new _Protocol(
+            'Xyl[' . $this->_i . ']',
+            'Xyl' . DS . 'Interpreter' . DS . $this->_interpreter->getResourcePath()
+        );
 
         if(null !== $router && false === $router->ruleExists('_resource'))
             $router->_all('_resource', '/(?<theme>)/(?<resource>)');
@@ -1523,10 +1521,8 @@ class          Xyl
      */
     public function __destruct ( ) {
 
-        \Hoa\Core::getInstance()
-            ->getProtocol()
-            ->getComponent('Library')
-            ->removeComponent('Xyl[' . $this->_i . ']');
+        $protocol = \Hoa\Core::getInstance()->getProtocol();
+        unset($protocol['Library']['Xyl[' . $this->_i . ']']);
 
         return;
     }
@@ -1542,46 +1538,7 @@ class          Xyl
  * @license    New BSD License
  */
 
-class _Protocol extends \Hoa\Core\Protocol {
-
-    /**
-     * Fragment to insert in the path.
-     *
-     * @var \Hoa\Xyl\_Protocol string
-     */
-    protected $_fragment = null;
-
-
-
-    /**
-     * Construct a hoa://Library/Xyl component.
-     *
-     * @access  public
-     * @param   string  $name        Component name (normally, Xyl[i]).
-     * @param   string  $fragment    Fragment to insert in the path (normally,
-     *                               the resource path).
-     * @return  void
-     */
-    public function __construct ( $name, $fragment ) {
-
-        parent::__construct($name);
-        $this->_fragment = $fragment;
-
-        return;
-    }
-
-    /**
-     * Queue of the component.
-     *
-     * @access  public
-     * @param   string  $queue    Queue of the component.
-     * @return  string
-     */
-    public function reach ( $queue ) {
-
-        return __DIR__ . DS . $this->_fragment . $queue;
-    }
-}
+class _Protocol extends \Hoa\Core\Protocol { }
 
 }
 
