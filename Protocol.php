@@ -123,46 +123,6 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
     }
 
     /**
-     * Helper for adding component easily from the root.
-     *
-     * @access  public
-     * @param   string  $path         hoa:// path.
-     * @param   string  $reach        Path for the reach() method.
-     * @param   bool    $overwrite    Overwrite existing components (please, see
-     *                                self::*_OVERWRITE constants).
-     * @return  \Hoa\Core\Protocol
-     */
-    public function addComponentHelper ( $path, $reach,
-                                         $overwrite = self::DO_NOT_OVERWRITE ) {
-
-        $components = explode('/', $path);
-        $current    = \Hoa\Core::getProtocol();
-        $handle     = null;
-        $max        = count($components) - 1;
-
-        foreach($components as $i => $component) {
-
-            if(    isset($current[$component])
-               && (self::DO_NOT_OVERWRITE === $overwrite
-               ||  $i != $max)) {
-
-                $current = $current[$component];
-
-                continue;
-            }
-
-            if($i != $max)
-                $handle = new Generic($component);
-            else
-                $handle = new Generic($component, $reach);
-
-            $current = $current[] = $handle;
-        }
-
-        return $this;
-    }
-
-    /**
      * Add a component.
      *
      * @access  public
