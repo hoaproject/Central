@@ -230,24 +230,28 @@ class Core implements Parameter\Parameterizable {
                 'root.data'        => '(:%root.application:h:)/Data',
 
                 'protocol.Application'            => '(:%root.application:)/',
-                'protocol.Application/Public'     => '(:%protocol.Application:)Public/',
+                'protocol.Application/Public'     => 'Public/',
                 'protocol.Data'                   => '(:%root.data:)/',
-                'protocol.Data/Etc'               => '(:%protocol.Data:)Etc/',
-                'protocol.Data/Etc/Configuration' => '(:%protocol.Data/Etc:)Configuration/',
-                'protocol.Data/Etc/Locale'        => '(:%protocol.Data/Etc:)Locale/',
-                'protocol.Data/Lost+found'        => '(:%protocol.Data:)Lost+found/',
-                'protocol.Data/Temporary'         => '(:%protocol.Data:)Temporary/',
-                'protocol.Data/Variable'          => '(:%protocol.Data:)Variable/',
-                'protocol.Data/Variable/Cache'    => '(:%protocol.Data/Variable:)Cache/',
-                'protocol.Data/Variable/Database' => '(:%protocol.Data/Variable:)Database/',
-                'protocol.Data/Variable/Log'      => '(:%protocol.Data/Variable:)Log/',
-                'protocol.Data/Variable/Private'  => '(:%protocol.Data/Variable:)Private/',
-                'protocol.Data/Variable/Run'      => '(:%protocol.Data/Variable:)Run/',
-                'protocol.Data/Variable/Test'     => '(:%protocol.Data/Variable:)Test/',
-                'protocol.Library'                => '(:%root.hoa:)/Hoa/',
+                'protocol.Data/Etc'               => 'Etc/',
+                'protocol.Data/Etc/Configuration' => 'Configuration/',
+                'protocol.Data/Etc/Locale'        => 'Locale/',
+                'protocol.Data/Library'           => 'Library/Hoathis/;' .
+                                                     'Library/Hoa/',
+                'protocol.Data/Lost+found'        => 'Lost+found/',
+                'protocol.Data/Temporary'         => 'Temporary/',
+                'protocol.Data/Variable'          => 'Variable/',
+                'protocol.Data/Variable/Cache'    => 'Cache/',
+                'protocol.Data/Variable/Database' => 'Database/',
+                'protocol.Data/Variable/Log'      => 'Log/',
+                'protocol.Data/Variable/Private'  => 'Private/',
+                'protocol.Data/Variable/Run'      => 'Run/',
+                'protocol.Data/Variable/Test'     => 'Test/',
+                'protocol.Library'                => '(:%protocol.Data:)Library/Hoathis/;' .
+                                                     '(:%protocol.Data:)Library/Hoa/;' .
+                                                     '(:%root.hoa:)/Hoathis/;' .
+                                                     '(:%root.hoa:)/Hoa/',
 
-                //'namespace.prefix.Hoathis'     => '(:%data.module:);(:%hoa.module:)',
-                'namespace.prefix.*'           => '(:%root.hoa:)/',
+                'namespace.prefix.*'           => '(:%protocol.Data:)Library/;(:%root.hoa:)/',
                 'namespace.prefix.Application' => '(:%root.application:h:)/',
             )
         );
@@ -255,6 +259,14 @@ class Core implements Parameter\Parameterizable {
         $this->_parameters->setKeyword('root', $root);
         $this->_parameters->setKeyword('cwd',  $cwd);
         $this->_parameters->setParameters($parameters);
+
+        if(!file_exists($this->_parameters->getFormattedParameter('root.data')))
+            $this->_parameters->setParameter(
+                'protocol.Library',
+                '(:%root.hoa:)/Hoathis/;(:%root.hoa:)/Hoa/'
+            );
+
+
         $this->setProtocol();
 
         /*
@@ -285,15 +297,20 @@ class Core implements Parameter\Parameterizable {
      */
     protected function setProtocol ( ) {
 
-        $protocol     = $this->getParameters()->unlinearizeBranche('protocol');
-        $protocolRoot = static::getProtocol();
+        $protocol = $this->getParameters()->unlinearizeBranche('protocol');
+        $root     = static::getProtocol();
 
-        foreach($protocol as $path => $reach)
-            $protocolRoot->addComponentHelper(
-                $path,
-                $reach,
-                Protocol::OVERWRITE
-            );
+        foreach($protocol as $components => $reach) {
+
+            $parts  = explode('/', $components);
+            $last   = array_pop($parts);
+            $handle = $root;
+
+            foreach($parts as $part)
+                $handle = $handle[$part];
+
+            $handle[] = new Protocol\Generic($last, $reach);
+        }
 
         return;
     }
