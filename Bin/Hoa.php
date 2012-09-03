@@ -41,7 +41,7 @@ namespace {
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  */
 
-if(!defined('HOA_DATA') || !defined('HOA_APPLICATION'))
+if(!defined('HOA'))
     require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Core.php';
 
 from('Hoa')
