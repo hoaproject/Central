@@ -344,7 +344,7 @@ class Cli implements Router, \Hoa\Core\Parameter\Parameterizable {
      * @access  public
      * @return  array
      */
-    public function getTheRule ( ) {
+    public function &getTheRule ( ) {
 
         return $this->_rule;
     }
