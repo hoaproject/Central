@@ -463,17 +463,6 @@ class          Basic
 
         return self::$_cssToXPath;
     }
-
-    /**
-     * Transform this object to a string.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function __toString ( ) {
-
-        return (string) $this;
-    }
 }
 
 }
