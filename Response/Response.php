@@ -539,8 +539,8 @@ class          Response
     public function sendHeader ( $header, $value, $replace = true,
                                  $status = null ) {
 
-        if(   0    === strcasecmp('status', $header)
-           && true === self::$_fcgi) {
+        if(   0     === strcasecmp('status', $header)
+           && false === self::$_fcgi) {
 
             header(
                 'HTTP/1.1 ' . $value,
