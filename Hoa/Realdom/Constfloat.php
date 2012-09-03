@@ -113,10 +113,10 @@ class Constfloat extends Float implements Constant {
      * Sample one new value.
      *
      * @access  protected
-     * @param   \Hoa\Test\Sampler  $sampler    Sampler.
+     * @param   \Hoa\Math\Sampler  $sampler    Sampler.
      * @return  mixed
      */
-    protected function _sample ( \Hoa\Test\Sampler $sampler ) {
+    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
 
         return $this['value'];
     }

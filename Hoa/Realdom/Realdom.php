@@ -44,9 +44,9 @@ from('Hoa')
 -> import('Realdom.Exception')
 
 /**
- * \Hoa\Test\Sampler
+ * \Hoa\Math\Sampler
  */
--> import('Test.Sampler.~');
+-> import('Math.Sampler.~');
 
 }
 
@@ -98,7 +98,7 @@ abstract class Realdom
     /**
      * Choosen sampler.
      *
-     * @var \Hoa\Test\Sampler object
+     * @var \Hoa\Math\Sampler object
      */
     protected static $_sampler = null;
 
@@ -275,10 +275,10 @@ abstract class Realdom
      * Set the sampler.
      *
      * @access  public
-     * @param   \Hoa\Test\Sampler  $sampler    Sampler.
-     * @return  \Hoa\Test\Sampler
+     * @param   \Hoa\Math\Sampler  $sampler    Sampler.
+     * @return  \Hoa\Math\Sampler
      */
-    public static function setSampler ( \Hoa\Test\Sampler $sampler ) {
+    public static function setSampler ( \Hoa\Math\Sampler $sampler ) {
 
         $old            = self::$_sampler;
         self::$_sampler = $sampler;
@@ -290,7 +290,7 @@ abstract class Realdom
      * Get the sampler.
      *
      * @access  public
-     * @return  \Hoa\Test\Sampler
+     * @return  \Hoa\Math\Sampler
      */
     public static function getSampler ( ) {
 
@@ -394,10 +394,10 @@ abstract class Realdom
      * Sample one new value.
      *
      * @access  protected
-     * @param   \Hoa\Test\Sampler  $sampler    Sampler.
+     * @param   \Hoa\Math\Sampler  $sampler    Sampler.
      * @return  mixed
      */
-    abstract protected function _sample ( \Hoa\Test\Sampler $sampler );
+    abstract protected function _sample ( \Hoa\Math\Sampler $sampler );
 }
 
 }
