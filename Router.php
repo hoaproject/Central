@@ -117,7 +117,7 @@ interface Router {
      * @access  public
      * @return  mixed
      */
-    public function getTheRule ( );
+    public function &getTheRule ( );
 
     /**
      * Find the appropriated rule.
