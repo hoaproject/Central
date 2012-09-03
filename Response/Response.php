@@ -526,7 +526,21 @@ class          Response
     }
 
     /**
-     * Add a new header.
+     * Send a new status.
+     *
+     * @access  public
+     * @param   string  $status     Status. Please, see static::STATUS_*
+     *                              constants.
+     * @param   bool    $replace    Whether replace an existing sent header.
+     * @return  void
+     */
+    public function sendStatus ( $status, $replace = true ) {
+
+        return $this->sendHeader('status', $status, $replace, $status);
+    }
+
+    /**
+     * Send a new header.
      *
      * @access  public
      * @param   string  $header     Header.
