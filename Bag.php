@@ -96,10 +96,10 @@ class Bag extends Realdom {
      * Sample one new value.
      *
      * @access  protected
-     * @param   \Hoa\Test\Sampler  $sampler    Sampler.
+     * @param   \Hoa\Math\Sampler  $sampler    Sampler.
      * @return  mixed
      */
-    protected function _sample ( \Hoa\Test\Sampler $sampler ) {
+    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
 
         return $this->arguments[$sampler->getInteger(0, count($this) - 1)]
                     ->sample($sampler);
