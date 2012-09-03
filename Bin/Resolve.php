@@ -54,6 +54,7 @@ class Resolve extends \Hoa\Console\Dispatcher\Kit {
      * @var \Hoa\Core\Bin\Resolve array
      */
     protected $options = array(
+        array('tree',       \Hoa\Console\GetOption::NO_ARGUMENT, 't'),
         array('no-verbose', \Hoa\Console\GetOption::NO_ARGUMENT, 'V'),
         array('help',       \Hoa\Console\GetOption::NO_ARGUMENT, 'h'),
         array('help',       \Hoa\Console\GetOption::NO_ARGUMENT, '?')
@@ -69,9 +70,14 @@ class Resolve extends \Hoa\Console\Dispatcher\Kit {
      */
     public function main ( ) {
 
+        $tree    = false;
         $verbose = true;
 
         while(false !== $c = $this->getOption($v)) switch($c) {
+
+            case 't':
+                $tree = true;
+              break;
 
             case 'V':
                 $verbose = false;
@@ -92,6 +98,30 @@ class Resolve extends \Hoa\Console\Dispatcher\Kit {
         if(null === $path)
             return $this->usage();
 
+        if(true === $tree) {
+
+            $protocol = \Hoa\Core::getProtocol();
+            $foo      = substr($path, 0, 6);
+
+            if('hoa://' !== $foo)
+                return;
+
+            $path    = substr($path, 6);
+            $current = $protocol;
+
+            foreach(explode('/', $path) as $component) {
+
+                if(!isset($current[$component]))
+                    break;
+
+                $current = $current[$component];
+            }
+
+            cout($current, \Hoa\Console\Io::NO_NEW_LINE);
+
+            return;
+        }
+
         if(true === $verbose)
             cout($this->stylize($path, 'info') . ' is equivalent to: ');
 
@@ -111,6 +141,7 @@ class Resolve extends \Hoa\Console\Dispatcher\Kit {
         cout('Usage   : core:resolve <options> path');
         cout('Options :');
         cout($this->makeUsageOptionsList(array(
+            't'    => 'Print the tree from the path.',
             'V'    => 'No-verbose, i.e. be as quiet as possible, just print ' .
                       'essential informations.',
             'help' => 'This help.'
