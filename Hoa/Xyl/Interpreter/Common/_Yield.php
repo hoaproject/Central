@@ -53,7 +53,7 @@ from('Hoa')
 namespace Hoa\Xyl\Interpreter\Common {
 
 /**
- * Class \Hoa\Xyl\Interpreter\Common\Yield.
+ * Class \Hoa\Xyl\Interpreter\Common\_Yield.
  *
  * The <yield /> component.
  *
@@ -62,7 +62,7 @@ namespace Hoa\Xyl\Interpreter\Common {
  * @license    New BSD License
  */
 
-class          Yield
+class          _Yield
     extends    \Hoa\Xyl\Element\Concrete
     implements \Hoa\Xml\Element\Model\Phrasing {
 

@@ -78,10 +78,10 @@ class Html extends \Hoa\Xyl\Interpreter {
         // XYL.
         'document'        => '\Hoa\Xyl\Interpreter\Html\Document',
         'title'           => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
-        'definition'      => '\Hoa\Xyl\Interpreter\Common\Yield',
+        'definition'      => '\Hoa\Xyl\Interpreter\Common\_Yield',
         'value'           => '\Hoa\Xyl\Interpreter\Common\Value',
-        'yield'           => '\Hoa\Xyl\Interpreter\Common\Yield',
-        'fragment'        => '\Hoa\Xyl\Interpreter\Common\Yield',
+        'yield'           => '\Hoa\Xyl\Interpreter\Common\_Yield',
+        'fragment'        => '\Hoa\Xyl\Interpreter\Common\_Yield',
         'snippet'         => '\Hoa\Xyl\Interpreter\Common\Snippet',
 
         // Script.
