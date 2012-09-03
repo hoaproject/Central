@@ -53,14 +53,14 @@ abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable {
      *
      * @var \Hoa\Http\Response bool
      */
-    private static $_fcgi = null;
+    protected static $_fcgi = null;
 
     /**
      * Headers (not sent).
      *
      * @var \Hoa\Http\Response array
      */
-    protected $_headers   = array();
+    protected $_headers     = array();
 
 
 
