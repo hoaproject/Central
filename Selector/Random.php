@@ -44,9 +44,9 @@ from('Hoa')
 -> import('Test.Selector.~')
 
 /**
- * \Hoa\Test\Sampler\Random
+ * \Hoa\Math\Sampler\Random
  */
--> import('Test.Sampler.Random');
+-> import('Math.Sampler.Random');
 
 }
 
@@ -66,7 +66,7 @@ class Random extends Selector {
 
     public function __construct ( Array $variables ) {
 
-        $sampler              = new \Hoa\Test\Sampler\Random();
+        $sampler              = new \Hoa\Math\Sampler\Random();
         $this->_selections[0] = array();
 
         foreach($variables as $variable) {
