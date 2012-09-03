@@ -44,9 +44,9 @@ from('Hoa')
 -> import('Test.Praspel.Compiler', true)
 
 /**
- * \Hoa\Test\Sampler\Random
+ * \Hoa\Math\Sampler\Random
  */
--> import('Test.Sampler.Random')
+-> import('Math.Sampler.Random')
 
 /**
  * \Hoa\Test\Selector\Random
@@ -155,7 +155,7 @@ class Praspel extends \Hoa\Console\Dispatcher\Kit {
         $vPraspel = new \Hoa\Test\Praspel\Visitor\Praspel();
         $vPHP     = new \Hoa\Test\Praspel\Visitor\Php();
 
-        \Hoa\Realdom::setSampler(new \Hoa\Test\Sampler\Random());
+        \Hoa\Realdom::setSampler(new \Hoa\Math\Sampler\Random());
 
         do {
 

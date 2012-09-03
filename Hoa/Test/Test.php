@@ -54,9 +54,9 @@ from('Hoa')
 -> import('Test.Praspel.~')
 
 /**
- * \Hoa\Test\Sampler\Random
+ * \Hoa\Math\Sampler\Random
  */
--> import('Test.Sampler.Random')
+-> import('Math.Sampler.Random')
 
 /**
  * \Hoa\Test\Selector\Random
@@ -175,7 +175,7 @@ class          Test
             throw new Exception(
                 'Class %s does not exist and cannot be tested.', 0, $class);
 
-        \Hoa\Realdom::setSampler(new Sampler\Random());
+        \Hoa\Realdom::setSampler(new \Hoa\Math\Sampler\Random());
 
         $cut       = new $class();
         $hop       = '__hoa_' . $method . '_contract';
