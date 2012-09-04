@@ -307,6 +307,14 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
 
             if(false === strpos($reach, ';')) {
 
+                if(false !== $pos = strrpos($reach, "\r")) {
+
+                    $reach = substr($reach, $pos + 1);
+
+                    foreach($accumulator as &$entry)
+                        $entry = null;
+                }
+
                 foreach($accumulator as &$entry)
                     $entry .= $reach;
 
@@ -317,9 +325,19 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
             $ref         = $accumulator;
             $accumulator = array();
 
-            foreach($choices as $choice)
-                foreach($ref as $entry)
-                    $accumulator[] = $entry . $choice;
+            foreach($choices as $choice) {
+
+                if(false !== $pos = strrpos($choice, "\r")) {
+
+                    $choice = substr($choice, $pos + 1);
+
+                    foreach($ref as $entry)
+                        $accumulator[] = $choice;
+                }
+                else
+                    foreach($ref as $entry)
+                        $accumulator[] = $entry . $choice;
+            }
 
             unset($ref);
         }
