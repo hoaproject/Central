@@ -301,46 +301,48 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
     protected function _resolveChoice ( $reach, Array &$accumulator ) {
 
 
-        if(empty($accumulator))
+        if(empty($accumulator)) {
+
             $accumulator = explode(';', $reach);
-        else {
 
-            if(false === strpos($reach, ';')) {
+            return;
+        }
 
-                if(false !== $pos = strrpos($reach, "\r")) {
+        if(false === strpos($reach, ';')) {
 
-                    $reach = substr($reach, $pos + 1);
+            if(false !== $pos = strrpos($reach, "\r")) {
 
-                    foreach($accumulator as &$entry)
-                        $entry = null;
-                }
+                $reach = substr($reach, $pos + 1);
 
                 foreach($accumulator as &$entry)
-                    $entry .= $reach;
-
-                return;
+                    $entry = null;
             }
 
-            $choices     = explode(';', $reach);
-            $ref         = $accumulator;
-            $accumulator = array();
+            foreach($accumulator as &$entry)
+                $entry .= $reach;
 
-            foreach($choices as $choice) {
-
-                if(false !== $pos = strrpos($choice, "\r")) {
-
-                    $choice = substr($choice, $pos + 1);
-
-                    foreach($ref as $entry)
-                        $accumulator[] = $choice;
-                }
-                else
-                    foreach($ref as $entry)
-                        $accumulator[] = $entry . $choice;
-            }
-
-            unset($ref);
+            return;
         }
+
+        $choices     = explode(';', $reach);
+        $ref         = $accumulator;
+        $accumulator = array();
+
+        foreach($choices as $choice) {
+
+            if(false !== $pos = strrpos($choice, "\r")) {
+
+                $choice = substr($choice, $pos + 1);
+
+                foreach($ref as $entry)
+                    $accumulator[] = $choice;
+            }
+            else
+                foreach($ref as $entry)
+                    $accumulator[] = $entry . $choice;
+        }
+
+        unset($ref);
 
         return;
     }
