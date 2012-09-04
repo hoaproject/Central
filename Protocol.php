@@ -101,14 +101,13 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
 
     /**
      * Construct a protocol's component.
-     * If it is not a data object (i.e. if it is not extend this class to overload
-     * the $this->_name property), we can set the $this->_name property
+     * If it is not a data object (i.e. if it is not extend this class to
+     * overload the $this->_name property), we can set the $this->_name property
      * dynamically. So usefull to create components on the fly…
      *
      * @access  public
      * @param   string  $name     Component's name.
-     * @param   string  $reach    Path for the reach() method (usefull for the
-     *                            helper).
+     * @param   string  $reach    Path for the reach() method.
      * @return  void
      */
     public function __construct ( $name = null, $reach = null ) {
@@ -329,6 +328,19 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
     }
 
     /**
+     * Clear cache.
+     *
+     * @access  public
+     * @return  void
+     */
+    public static function clearCache ( ) {
+
+        self::$_cache = array();
+
+        return;
+    }
+
+    /**
      * Queue of the component.
      * Generic one. Should be overload in childs classes.
      *
@@ -356,6 +368,21 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
         throw new \Hoa\Core\Exception(
             'The component %s has no ID support (tried to reach #%s).',
             2, array($this->getName(), $id));
+    }
+
+    /**
+     * Set a new reach value.
+     *
+     * @access  public
+     * @param   string  $reach    Reach value.
+     * @return  string
+     */
+    public function setReach ( $reach ) {
+
+        $old          = $this->_reach;
+        $this->_reach = $reach;
+
+        return $old;
     }
 
     /**
