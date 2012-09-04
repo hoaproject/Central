@@ -292,9 +292,9 @@ class Core implements Parameter\Parameterizable {
     /**
      * Set protocol according to the current parameter.
      *
-     * @access  protected
-     * @param   string     $path     Path (e.g. hoa://Data/Temporary).
-     * @param   string     $reach    Reach value.
+     * @access  public
+     * @param   string  $path     Path (e.g. hoa://Data/Temporary).
+     * @param   string  $reach    Reach value.
      * @return  void
      */
     public function setProtocol ( $path = null, $reach = null ) {
