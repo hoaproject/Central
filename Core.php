@@ -293,24 +293,44 @@ class Core implements Parameter\Parameterizable {
      * Set protocol according to the current parameter.
      *
      * @access  protected
+     * @param   string     $path     Path (e.g. hoa://Data/Temporary).
+     * @param   string     $reach    Reach value.
      * @return  void
      */
-    protected function setProtocol ( ) {
+    public function setProtocol ( $path = null, $reach = null ) {
 
-        $protocol = $this->getParameters()->unlinearizeBranche('protocol');
-        $root     = static::getProtocol();
+        $root = static::getProtocol();
 
-        foreach($protocol as $components => $reach) {
+        if(!isset($root['Library'])) {
 
-            $parts  = explode('/', $components);
-            $last   = array_pop($parts);
-            $handle = $root;
+            $protocol = $this->getParameters()->unlinearizeBranche('protocol');
 
-            foreach($parts as $part)
-                $handle = $handle[$part];
+            foreach($protocol as $components => $reach) {
 
-            $handle[] = new Protocol\Generic($last, $reach);
+                $parts  = explode('/', trim($components, '/'));
+                $last   = array_pop($parts);
+                $handle = $root;
+
+                foreach($parts as $part)
+                    $handle = $handle[$part];
+
+                $handle[] = new Protocol\Generic($last, $reach);
+            }
+
+            return;
         }
+
+        if('hoa://' === substr($path, 0, 6))
+            $path = substr($path, 6);
+
+        $parts  = explode('/', trim($path, '/'));
+        $handle = $root;
+
+        foreach($parts as $part)
+            $handle = $handle[$part];
+
+        $handle->setReach($reach);
+        $root->clearCache();
 
         return;
     }
