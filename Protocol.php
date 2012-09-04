@@ -300,10 +300,9 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
      */
     protected function _resolveChoice ( $reach, Array &$accumulator ) {
 
-        $choices = explode(';', $reach);
 
         if(empty($accumulator))
-            $accumulator = $choices;
+            $accumulator = explode(';', $reach);
         else {
 
             if(false === strpos($reach, ';')) {
@@ -314,6 +313,7 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
                 return;
             }
 
+            $choices     = explode(';', $reach);
             $ref         = $accumulator;
             $accumulator = array();
 
