@@ -54,7 +54,8 @@ function and then by using the `import` method. The path separator symbol is `.`
     from('Hoa or Hoathis')
     -> import('Gordon.I~.Freeman.*'); // more complex import
 
-Libraries are (by default) preloaded for memory concerns.
+When importing, libraries are (by default) preloaded instead of directly loaded
+for memory concerns.
 
 ### Exceptions and errors
 
