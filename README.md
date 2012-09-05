@@ -20,7 +20,7 @@ fundamentals algorithms, paradigms and mechanisms, organized as follows:
 
 ## Installation
 
-The core can be placed where you want. We recommand `/usr/local/lib/hoa` for
+The core can be placed where you want. We recommand `/usr/local/lib/Hoa` for
 Unix-like systems and `C:\Program Files\Hoa` for Windows systems.
 
 Then, you have to require `Core.php` and it is enough to use all libraries of
@@ -28,7 +28,7 @@ Hoa; thus:
 
     <?php
 
-    require '/usr/local/lib/hoa/Core/Core.php';
+    require '/usr/local/lib/Hoa/Core/Core.php';
     var_dump(HOA); // bool(true)
 
 With [Composer](https://getcomposer.org/), you do not need to require
