@@ -214,10 +214,9 @@ class Core implements Parameter\Parameterizable {
     public function initialize ( Array $parameters = array() ) {
 
         $root = dirname(dirname(__DIR__));
-        $cwd  = getcwd() .
-                ('cli' === PHP_SAPI
-                    ? DS . dirname($_SERVER['argv'][0])
-                    : '');
+        $cwd  = 'cli' === PHP_SAPI
+                    ? dirname(realpath($_SERVER['argv'][0]))
+                    : getcwd();
         $this->_parameters = new Parameter(
             $this,
             array(
