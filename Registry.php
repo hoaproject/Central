@@ -182,7 +182,6 @@ class _Protocol extends \Hoa\Core\Protocol {
 
     /**
      * ID of the component.
-     * Generic one. Should be overload in childs classes.
      *
      * @access  public
      * @param   string  $id    ID of the component.
