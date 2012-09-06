@@ -113,6 +113,13 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
      */
     protected $_validity                 = true;
 
+    /**
+     * Whether the form has been validated or not.
+     *
+     * @var bool
+     */
+    protected $_hasBeenValidated         = false;
+
 
 
     /**
@@ -157,10 +164,27 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
      */
     public function postExecute ( ) {
 
-        $this->_formData = array_merge($_GET, $_POST);
+        $this->isValid();
+
+        return;
+    }
+
+    /**
+     * Whether the form is valid or not.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isValid ( $revalid = false ) {
+
+        if(false === $revalid && true === $this->_hasBeenValidated)
+            return $this->_validity;
+
+        $this->_hasBeenValidated = true;
+        $this->_formData         = array_merge($_POST, $_GET);
 
         if(true === $this->attributeExists('novalidate'))
-            return;
+            return null;
 
         $inputs          = array_merge(
             $this->xpath('.//__current_ns:input'),
@@ -169,7 +193,7 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
         );
 
         if(empty($this->_formData))
-            return;
+            return $this->_validity = false;
 
         foreach($inputs as $input) {
 
@@ -181,7 +205,6 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
 
             if(!isset($this->_formData[$name])) {
 
-                //$input->unsetValue();
                 $input->checkValidity();
                 $this->_validity = $input->isValid() && $this->_validity;
 
@@ -199,7 +222,7 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
         }
 
         if(true === $this->_validity)
-            return;
+            return $this->_validity;
 
         $errors = $this->xpath(
             '//__current_ns:error[@id="' .
@@ -209,17 +232,6 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
 
         foreach($errors as $error)
             $this->getConcreteElement($error)->setVisibility(true);
-
-        return;
-    }
-
-    /**
-     * Whether the form is valid or not.
-     *
-     * @access  public
-     * @return  bool
-     */
-    public function isValid ( ) {
 
         return $this->_validity;
     }
@@ -240,6 +252,17 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
             return null;
 
         return $this->_formData[$index];
+    }
+
+    /**
+     * Whether the form has been sent or not.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function hasBeenSent ( ) {
+
+        return !empty($_POST) || !empty($_GET);
     }
 }
 

@@ -166,6 +166,13 @@ class          Xyl
     protected $_data              = null;
 
     /**
+     * Whether data has been computed or not.
+     *
+     * @var bool
+     */
+    protected $_isDataComputed    = false;
+
+    /**
      * Concrete tree.
      *
      * @var \Hoa\Xyl\Element\Concrete object
@@ -1132,21 +1139,18 @@ class          Xyl
      * reference to the data bucket in this object.
      *
      * @access  protected
+     * @param   Element\Concrete  $element    Compute data on this element.
      * @return  void
      */
-    protected function computeDataBinding ( ) {
+    protected function computeDataBinding ( Element\Concrete $element ) {
 
         if(true === $this->isInnerOpened())
             return;
 
-        if(null === $this->_concrete)
-            throw new Exception(
-                'Cannot compute the data binding before building the ' .
-                'concrete tree.', 13);
-
+        $this->_isDataComputed = true;
         $data = $this->getData()->toArray();
 
-        return $this->_concrete->computeDataBinding($data);
+        return $element->computeDataBinding($data);
     }
 
     /**
@@ -1210,11 +1214,11 @@ class          Xyl
                        && false === @mkdir($dirname, 0755, true))
                         throw new Exception(
                             'Cannot create directory for the resource %s.',
-                            14, $handle);
+                            13, $handle);
 
                     if(false === @copy($this->resolve($link), $_link))
                         throw new Exception(
-                            'Resource %s can not be copied to %s.', 15,
+                            'Resource %s can not be copied to %s.', 14,
                             array($link, $_link));
                 }
 
@@ -1230,14 +1234,14 @@ class          Xyl
 
                 if(null === $router)
                     throw new Exception(
-                        'Need a router to compute %s.', 16, $link);
+                        'Need a router to compute %s.', 15, $link);
 
                 if(false === $router->ruleExists($rule)) {
 
                     if(false === $router->ruleExists('_resource'))
                         throw new Exception(
                             'Cannot compute %s because the rule _resource ' .
-                            'does not exist in the router.', 17, $link);
+                            'does not exist in the router.', 16, $link);
 
                     $rule     = '_resource';
                     $resource = $m[1];
@@ -1260,17 +1264,22 @@ class          Xyl
      *
      * @access  public
      * @param   \Hoa\Xyl\Interpreter  $interpreter    Interpreter.
+     * @param   bool                  $computeData    Whether we compute data or
+     *                                                not.
      * @return  \Hoa\Xyl
      * @throws  \Hoa\Xyl\Exception
      */
-    public function interprete ( Interpreter $interpreter = null ) {
+    public function interprete ( Interpreter $interpreter = null,
+                                 $computeData = false ) {
 
         $this->computeUse();
         $this->computeOverlay();
         $this->computeFragment();
         $this->computeYielder();
         $this->computeConcrete($interpreter);
-        $this->computeDataBinding();
+
+        if(true === $computeData)
+            $this->computeDataBinding($this->_concrete);
 
         return $this;
     }
@@ -1289,9 +1298,12 @@ class          Xyl
 
         if(null === $element) {
 
-            $this->interprete();
+            $this->interprete(null, true);
             $element = $this->_concrete;
         }
+
+        if(false === $this->_isDataComputed)
+            $this->computeDataBinding($element);
 
         return $element->render($this->_out);
     }
@@ -1407,12 +1419,12 @@ class          Xyl
 
         if(empty($handle))
             throw new Exception(
-                'Snippet %s does not exist.', 18, $id);
+                'Snippet %s does not exist.', 17, $id);
 
         if(null === $concrete = $this->getConcrete())
             throw new Exception(
                 'Take care to interprete the document before getting a ' .
-                'snippet.', 19);
+                'snippet.', 18);
 
         return $concrete->getConcreteElement($handle[0]);
     }
@@ -1430,12 +1442,12 @@ class          Xyl
 
         if(empty($handle))
             throw new Exception(
-                'Element with ID %s does not exist.', 20, $id);
+                'Element with ID %s does not exist.', 19, $id);
 
         if(null === $concrete = $this->getConcrete())
             throw new Exception(
                 'Take care to interprete the document before getting a form.',
-                21);
+                20);
 
         return $concrete->getConcreteElement($handle[0]);
     }
@@ -1510,7 +1522,7 @@ class          Xyl
             return self::SELECTOR_PATH;
 
         throw new Exception(
-            'Selector %s is not a valid selector.', 22, $selector);
+            'Selector %s is not a valid selector.', 21, $selector);
     }
 
     /**
