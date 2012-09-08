@@ -111,6 +111,9 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
             '  <meta http-equiv="content-type" content="text/css; charset=utf-8" />' . "\n"
         );
 
+        foreach($root->getMetas() as $meta)
+            $out->writeAll('  <meta ' . $meta . ' />' . "\n");
+
         $stylesheets = $root->getStylesheets();
 
         if(!empty($stylesheets)) {
