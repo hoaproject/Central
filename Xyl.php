@@ -230,6 +230,13 @@ class          Xyl
     protected $_stylesheets       = array();
 
     /**
+     * Temporize metas.
+     *
+     * @var \Hoa\Xyl array
+     */
+    protected $_metas             = array();
+
+    /**
      * Fragments.
      *
      * @var \Hoa\Xyl array
@@ -458,6 +465,7 @@ class          Xyl
         unset($xpath);
 
         $this->computeStylesheet($ownerDocument);
+        $this->computeMeta($ownerDocument);
 
         if(0 === $xyl_use->length)
             return false;
@@ -1104,6 +1112,54 @@ class          Xyl
     }
 
     /**
+     * Add a <?xyl-meta?> processing-instruction (only that).
+     *
+     * @access  public
+     * @param   array   $attributes    Attributes.
+     * @return  void
+     */
+    public function addMeta ( Array $attributes ) {
+
+        $handle = null;
+
+        foreach($attributes as $key => $value)
+            $handle .= $key . '="' . str_replace('"', '\"', $value) . '" ';
+
+        $this->_mowgli->insertBefore(
+            new \DOMProcessingInstruction('xyl-meta', substr($handle, 0, -1)),
+            $this->_mowgli->documentElement
+        );
+
+        return;
+    }
+
+    /**
+     * Compute <?xyl-meta?> processing-instruction.
+     *
+     * @access  protected
+     * @param   \DOMDocument  $ownerDocument    Document that ownes PIs.
+     * @return  void
+     */
+    protected function computeMeta ( \DOMDocument $ownerDocument ) {
+
+        $xpath    = new \DOMXPath($ownerDocument);
+        $xyl_meta = $xpath->query('/processing-instruction(\'xyl-meta\')');
+        unset($xpath);
+
+        if(0 === $xyl_meta->length)
+            return;
+
+        for($i = 0, $m = $xyl_meta->length; $i < $m; ++$i) {
+
+            $item           = $xyl_meta->item($i);
+            $this->_metas[] = new \Hoa\Xml\Attribute($item->data);
+            $ownerDocument->removeChild($item);
+        }
+
+        return;
+    }
+
+    /**
      * Compute concrete tree.
      *
      * @access  protected
@@ -1376,6 +1432,17 @@ class          Xyl
     public function getStylesheets ( ) {
 
         return $this->_stylesheets;
+    }
+
+    /**
+     * Get all metas in <?xyl-meta?>
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getMetas ( ) {
+
+        return $this->_metas;
     }
 
     /**
