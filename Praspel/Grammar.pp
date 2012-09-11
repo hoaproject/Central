@@ -75,9 +75,9 @@
 %token  from            from
 %token  to              to
 %token  this            this
-%token  parent          parent
 %token  self            self
 %token  static          static
+%token  parent          parent
 %token  and             and
 %token  or              or
 %token  with            with
@@ -194,9 +194,9 @@ pair:
     <identifier>
   | ::this:: ::arrow:: <identifier> ( ::arrow:: <identifier> )* #this_identifier
   | (
-        ::parent:: #parent_identifier
-      | ::self::   #self_identifier
+        ::self::   #self_identifier
       | ::static:: #static_identifier
+      | ::parent:: #parent_identifier
     )
     ::resolution:: <identifier> ( ::resolution:: <identifier> )*
   | ::old:: ::parenthesis_:: identifier() ::_parenthesis:: #old
