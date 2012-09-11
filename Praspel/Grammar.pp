@@ -146,7 +146,10 @@ expression:
     ( assignation() | domainof() )
     ( ::and:: ( assignation() | domainof() ) )*
 
-exceptional_expression:
+exceptional_exception:
+    exception() ( ::and:: exception() )*
+
+exception:
     classname() ( ::or:: classname() )* #exception_list
   | classname() <identifier> ( ::or:: classname() <identifier> )*
     ::with:: assignation() #exception_with
