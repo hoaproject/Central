@@ -75,9 +75,9 @@
 %token  from            from
 %token  to              to
 %token  this            this
-%token  parent          parent
 %token  self            self
 %token  static          static
+%token  parent          parent
 %token  and             and
 %token  or              or
 %token  with            with
@@ -146,7 +146,10 @@ expression:
     ( assignation() | domainof() )
     ( ::and:: ( assignation() | domainof() ) )*
 
-exceptional_expression:
+exceptional_exception:
+    exception() ( ::and:: exception() )*
+
+exception:
     classname() ( ::or:: classname() )* #exception_list
   | classname() <identifier> ( ::or:: classname() <identifier> )*
     ::with:: assignation() #exception_with
@@ -194,9 +197,9 @@ pair:
     <identifier>
   | ::this:: ::arrow:: <identifier> ( ::arrow:: <identifier> )* #this_identifier
   | (
-        ::parent:: #parent_identifier
-      | ::self::   #self_identifier
+        ::self::   #self_identifier
       | ::static:: #static_identifier
+      | ::parent:: #parent_identifier
     )
     ::resolution:: <identifier> ( ::resolution:: <identifier> )*
   | ::old:: ::parenthesis_:: identifier() ::_parenthesis:: #old
