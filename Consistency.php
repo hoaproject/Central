@@ -168,13 +168,8 @@ class Consistency implements \ArrayAccess {
             foreach($this->_roots[$from] as $root)
                 try {
 
-                    $classname = $from . '\\' . str_replace('.', '\\', $path);
-                    $family    = $from;
-
-                    if(class_exists($classname, false))
-                        return $this;
-
-                    $out = $this->_import($path, $load, $from, $root);
+                    $family = $from;
+                    $out    = $this->_import($path, $load, $from, $root);
 
                     break 2;
                 }
@@ -334,6 +329,9 @@ class Consistency implements \ArrayAccess {
         $entry    = $parts[$count - 2] == $parts[$count - 1];
         $class    = implode('\\', $parts);
         $alias    = false;
+
+        if(isset(static::$_class[$class]))
+            return $this;
 
         if(true === $entry) {
 
