@@ -588,6 +588,29 @@ class Consistency implements \ArrayAccess {
     }
 
     /**
+     * Load a class from its classname.
+     *
+     * @access  public
+     * @param   string  $classname    Classname.
+     * @return  string
+     * @throw   \Hoa\Core\Exception
+     */
+    public static function autoloadFromClass ( $classname ) {
+
+        $head = trim(str_replace(
+                    '\\',
+                    '.',
+                    substr($classname, 0, $pos = strpos($classname, '\\'))
+                ), '()');
+        $tail = substr($classname, $pos + 1);
+
+        static::from($head)
+            ->import(str_replace('\\', '.', $tail), true, $family);
+
+        return $family . '\\' . $tail;
+    }
+
+    /**
      * Dynamic new, i.e. a native factory (import + load + instance).
      *
      * @access  public
@@ -600,20 +623,8 @@ class Consistency implements \ArrayAccess {
 
         $classname = ltrim($classname, '\\');
 
-        if(!class_exists($classname, false)) {
-
-            $head = trim(str_replace(
-                        '\\',
-                        '.',
-                        substr($classname, 0, $pos = strpos($classname, '\\'))
-                    ), '()');
-            $tail = substr($classname, $pos + 1);
-
-            static::from($head)
-                ->import(str_replace('\\', '.', $tail), true, $family);
-
-            $classname = $family . '\\' . $tail;
-        }
+        if(!class_exists($classname, false))
+            $classname = static::autoloadFromClass($classname);
 
         $class = new \ReflectionClass($classname);
 
@@ -621,6 +632,38 @@ class Consistency implements \ArrayAccess {
             return $class->newInstance();
 
         return $class->newInstanceArgs($arguments);
+    }
+
+    /**
+     * Enable import when unserializing.
+     *
+     * When unserializing an object, if the class is not imported, it will
+     * fails. This method will automatically import class when needed.
+     * Note: for now, this is only restricted to Hoa autoloader, i.e. it does
+     * not take into account other existing autoloader.
+     *
+     * @access  public
+     * @return  void
+     */
+    public static function enableImportWhenUnserializing ( ) {
+
+        ini_set(
+            'unserialize_callback_func',
+            get_called_class() . '::autoloadFromClass'
+        );
+
+        return;
+    }
+
+    /**
+     * Disable import when unserializing.
+     *
+     * @access  public
+     * @return  void
+     */
+    public static function disableImportWhenUnserializing ( ) {
+
+        ini_restore('unserialize_callback_func');
     }
 }
 
@@ -967,5 +1010,10 @@ class_alias('Hoa\Core\Consistency\Consistency', 'Hoa\Core\Consistency');
  * Set autoloader.
  */
 spl_autoload_register('\Hoa\Core\Consistency::autoload');
+
+/**
+ * Auto-enable import when unserializing.
+ */
+Hoa\Core\Consistency::enableImportWhenUnserializing();
 
 }
