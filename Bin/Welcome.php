@@ -127,26 +127,6 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
         cout($this->makeUsageOptionsList(array(
             'help' => 'This help.'
         )));
-        /*
-        cout(
-            'A command line is made up of a ' .
-            $this->stylize('group', 'info') .
-            ' and a ' .
-            $this->stylize('command name', 'info') .
-            '. Both are separated by the symbol ' .
-            $this->stylize(':', 'info') .
-            '. If the group is ' .
-            $this->stylize('main', 'info') .
-            ' then, it could be ommited.' . "\n" . 'Thus:' . "\n" .
-            '    hoa main:version' . "\n" .
-            'is equivalent to:' . "\n" .
-            '    hoa version' . "\n" .
-            'But, no equivalence exists for:' . "\n" .
-            '    hoa application:start' . "\n\n" .
-            'All commands have a help page accessibles via options ' .
-            '-h, -? or --help.'
-        );
-        */
 
         return;
     }
