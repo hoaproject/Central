@@ -303,7 +303,7 @@ class Consistency implements \ArrayAccess {
         $count  = count($parts);
         $backup = array($parts[0], $parts[1]);
 
-        if(class_exists('Composer\Autoload\ClassLoader')) {
+        if(class_exists('Composer\Autoload\ClassLoader', false)) {
 
             $parts[0] = strtolower($parts[0]);
             $parts[1] = strtolower($parts[1]);
