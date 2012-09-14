@@ -1011,4 +1011,9 @@ class_alias('Hoa\Core\Consistency\Consistency', 'Hoa\Core\Consistency');
  */
 spl_autoload_register('\Hoa\Core\Consistency::autoload');
 
+/**
+ * Auto-enable import when unserializing.
+ */
+Hoa\Core\Consistency::enableImportWhenUnserializing();
+
 }
