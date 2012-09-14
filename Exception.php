@@ -51,25 +51,32 @@ namespace Hoa\Core\Exception {
 class Idle extends \Exception {
 
     /**
+     * Delay processing on arguments.
+     *
+     * @var \Hoa\Core\Exception array
+     */
+    protected $_tmpArguments = null;
+
+    /**
      * Arguments to format message.
      *
      * @var \Hoa\Core\Exception array
      */
-    protected $_arguments = array();
+    protected $_arguments    = null;
 
     /**
      * Backtrace.
      *
      * @var \Hoa\Core\Exception\Idle array
      */
-    protected $_trace     = null;
+    protected $_trace        = null;
 
     /**
      * Previous.
      *
      * @var \Exception object
      */
-    protected $_previous  = null;
+    protected $_previous     = null;
 
 
 
@@ -89,19 +96,8 @@ class Idle extends \Exception {
     public function __construct ( $message, $code = 0, $arguments = array(),
                                   \Exception $previous = null ) {
 
-        if(!is_array($arguments))
-            $arguments = array($arguments);
-
-        foreach($arguments as $key => &$value)
-            if(null === $value)
-                $value = '(null)';
-
-        $this->_arguments = $arguments;
+        $this->_tmpArguments = $arguments;
         parent::__construct($message, $code, $previous);
-
-        // Crapy but we do not have the choice.
-        $this->_trace     = $this->getTrace();
-        $this->_previous  = $this->getPrevious();
 
         return;
     }
@@ -115,6 +111,9 @@ class Idle extends \Exception {
      */
     public function getBacktrace ( ) {
 
+        if(null === $this->_trace)
+            $this->_trace = $this->getTrace();
+
         return $this->_trace;
     }
 
@@ -127,6 +126,9 @@ class Idle extends \Exception {
      */
     public function getPreviousThrow ( ) {
 
+        if(null === $this->_previous)
+            $this->_previous = $this->getPrevious();
+
         return $this->_previous;
     }
 
@@ -137,6 +139,21 @@ class Idle extends \Exception {
      * @return  array
      */
     public function getArguments ( ) {
+
+        if(null === $this->_arguments) {
+
+            $arguments = $this->_tmpArguments;
+
+            if(!is_array($arguments))
+                $arguments = array($arguments);
+
+            foreach($arguments as $key => &$value)
+                if(null === $value)
+                    $value = '(null)';
+
+            $this->_arguments = $arguments;
+            unset($this->_tmpArguments);
+        }
 
         return $this->_arguments;
     }
