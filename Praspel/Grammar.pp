@@ -42,7 +42,7 @@
 
 
 %skip   s               \s
-%skip   inline_comment  /\*(.|\n)*\*/
+%skip   block_comment   /\*(.|\n)*\*/
 
 // Clauses.
 %token  type            @type
@@ -156,12 +156,12 @@ exception:
 //              NO
 
 #assignation:
-    identifier() ::colon:: disjunction()
+    identifier() ::colon:: representation()
 
 #domainof:
     identifier() ::domainof:: identifier()
 
-disjunction:
+representation:
     ( constant() | realdom() )
     ( ::or:: ( constant() | realdom() ) #disjunction )*
 
@@ -191,7 +191,7 @@ constant:
     ::_bracket::
 
 pair:
-    ( ::from:: disjunction() #pair )? ::to:: disjunction()
+    ( ::from:: representation() #pair )? ::to:: representation()
 
 #identifier:
     <identifier>
