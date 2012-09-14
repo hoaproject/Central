@@ -48,28 +48,35 @@ namespace Hoa\Core\Exception {
  * @license    New BSD License
  */
 
-class Idle extends \Exception implements \Serializable {
+class Idle extends \Exception {
+
+    /**
+     * Delay processing on arguments.
+     *
+     * @var \Hoa\Core\Exception array
+     */
+    protected $_tmpArguments = null;
 
     /**
      * Arguments to format message.
      *
      * @var \Hoa\Core\Exception array
      */
-    protected $_arguments = array();
+    protected $_arguments    = null;
 
     /**
      * Backtrace.
      *
      * @var \Hoa\Core\Exception\Idle array
      */
-    protected $_trace     = null;
+    protected $_trace        = null;
 
     /**
      * Previous.
      *
      * @var \Exception object
      */
-    protected $_previous  = null;
+    protected $_previous     = null;
 
 
 
@@ -89,19 +96,8 @@ class Idle extends \Exception implements \Serializable {
     public function __construct ( $message, $code = 0, $arguments = array(),
                                   \Exception $previous = null ) {
 
-        if(!is_array($arguments))
-            $arguments = array($arguments);
-
-        foreach($arguments as $key => &$value)
-            if(null === $value)
-                $value = '(null)';
-
-        $this->_arguments = $arguments;
+        $this->_tmpArguments = $arguments;
         parent::__construct($message, $code, $previous);
-
-        // Crapy but we do not have the choice.
-        $this->_trace     = $this->getTrace();
-        $this->_previous  = $this->getPrevious();
 
         return;
     }
@@ -115,6 +111,9 @@ class Idle extends \Exception implements \Serializable {
      */
     public function getBacktrace ( ) {
 
+        if(null === $this->_trace)
+            $this->_trace = $this->getTrace();
+
         return $this->_trace;
     }
 
@@ -127,6 +126,9 @@ class Idle extends \Exception implements \Serializable {
      */
     public function getPreviousThrow ( ) {
 
+        if(null === $this->_previous)
+            $this->_previous = $this->getPrevious();
+
         return $this->_previous;
     }
 
@@ -137,6 +139,21 @@ class Idle extends \Exception implements \Serializable {
      * @return  array
      */
     public function getArguments ( ) {
+
+        if(null === $this->_arguments) {
+
+            $arguments = $this->_tmpArguments;
+
+            if(!is_array($arguments))
+                $arguments = array($arguments);
+
+            foreach($arguments as $key => &$value)
+                if(null === $value)
+                    $value = '(null)';
+
+            $this->_arguments = $arguments;
+            unset($this->_tmpArguments);
+        }
 
         return $this->_arguments;
     }
@@ -187,7 +204,7 @@ class Idle extends \Exception implements \Serializable {
      */
     public function raise ( $previous = false ) {
 
-        $message = @vsprintf($this->getMessage(), $this->getArguments());
+        $message = $this->getFormattedMessage();
         $trace   = $this->getBacktrace();
         $file    = '/dev/null';
         $line    = -1;
@@ -280,114 +297,6 @@ class Idle extends \Exception implements \Serializable {
         array_shift($trace);
 
         throw new Error($errstr, -1, $errfile, $errline, $trace);
-    }
-
-    /**
-     * Serialize exception even if we cannot serialize the backtrace.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function serialize ( ) {
-
-        $name   = get_class($this);
-        $length = strlen($name);
-        $trace  = $this->getBacktrace();
-
-        try {
-
-            $trace = serialize($trace);
-        }
-        catch ( \Exception $e ) {
-
-            foreach($trace as &$t)
-                unset($t['args']);
-
-            $trace = serialize($trace);
-        }
-
-        try { $previous = serialize($this->getPreviousThrow()); }
-        catch ( \Exception $e ) { $previous = serialize(null); }
-
-        return 'O:' . strlen($name) . ':"' . $name . '":7:{' .
-               's:10:"*message";' . serialize(str_replace(
-                   "\n", '??\n??', $this->getFormattedMessage()
-               )) .
-               's:17:"Exceptionstring";s:0:"";' .
-               's:7:"*code";' . serialize($this->getCode()) .
-               's:7:"*file";' . serialize($this->getFile()) .
-               's:7:"*line";' . serialize($this->getLine()) .
-               's:16:"Exceptiontrace";' . $trace .
-               's:19:"Exceptionprevious";' . $previous . '}';
-    }
-
-    /**
-     * Unserialize exception.
-     *
-     * @access  public
-     * @param   string  $serialized    Serialized exception.
-     * @return  void
-     */
-    public function unserialize ( $serialized ) {
-
-        $_ = '"(.*?)(?<!\\\")";';
-
-        preg_match(
-            '#^O:(\d+):"([^"]+)":7:{' .
-            's:10:"\*message";s:\d+:' . $_ .
-            's:17:"Exceptionstring";s:0:"";' .
-            's:7:"\*code";i:([^;]+);' .
-            's:7:"\*file";s:\d+:' . $_ .
-            's:7:"\*line";i:([^;]+);' .
-            's:16:"Exceptiontrace";' .
-            '(.*)?}$#s',
-            $serialized,
-            $matches
-        );
-
-        $this->message = str_replace('??\n??', "\n", $matches[3]);
-        $this->code    = $matches[4];
-        $this->file    = $matches[5];
-        $this->line    = $matches[6];
-        $tail          = $matches[7];
-
-        for($i = 0, $m = strlen($tail), $c = 0, $e = false, $ti = $tail[$i];
-            $i < $m && ('}' != $ti || $c != 1);
-            $ti = $tail[++$i]) {
-
-            if('\\' == $ti) {
-
-                ++$i;
-                continue;
-            }
-
-            if('"' == $ti) {
-
-                $e = !$e;
-                continue;
-            }
-
-            if(true === $e)
-                continue;
-
-            if('{' == $ti)
-                ++$c;
-            elseif('}' == $ti)
-                --$c;
-        }
-
-        $this->_trace = unserialize(substr($tail, 0, ++$i));
-
-        preg_match(
-            '#^s:19:"Exceptionprevious";(.*);$#s',
-            substr($tail, $i),
-            $matches
-        );
-
-        if(isset($matches[1]))
-            $this->_previous = unserialize($matches[1] . ';');
-
-        return;
     }
 
     /**

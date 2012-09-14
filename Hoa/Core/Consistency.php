@@ -300,8 +300,8 @@ class Consistency implements \ArrayAccess {
         if(false === $edited)
             $parts = $explode;
 
-        $count    = count($parts);
-        $backup   = array($parts[0], $parts[1]);
+        $count  = count($parts);
+        $backup = array($parts[0], $parts[1]);
 
         if(class_exists('Composer\Autoload\ClassLoader')) {
 
@@ -568,25 +568,8 @@ class Consistency implements \ArrayAccess {
         $classname = ltrim($classname, '\\');
         $classes   = static::getAllImportedClasses();
 
-        if(!isset($classes[$classname])) {
-
-            $trace = debug_backtrace();
-
-            if('unserialize' !== @$trace[2]['function'])
-                return false;
-
-            $head = trim(str_replace(
-                        '\\',
-                        '.',
-                        substr($classname, 0, $pos = strpos($classname, '\\'))
-                    ), '()');
-            $tail = substr($classname, $pos + 1);
-
-            static::from($head)
-                ->import(str_replace('\\', '.', $tail), true);
-
-            return true;
-        }
+        if(!isset($classes[$classname]))
+            return false;
 
         $class = &$classes[$classname];
 

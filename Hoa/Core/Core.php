@@ -260,10 +260,12 @@ class Core implements Parameter\Parameterizable {
         $this->_parameters->setParameters($parameters);
 
         if(!file_exists($this->_parameters->getFormattedParameter('root.data')))
-            $this->_parameters->setParameter(
-                'protocol.Library',
-                '(:%root.hoa:)/Hoathis/;(:%root.hoa:)/Hoa/'
-            );
+            $this->_parameters->setParameters(array(
+                'protocol.Library' =>
+                    '(:%root.hoa:)/Hoathis/;(:%root.hoa:)/Hoa/',
+                'namespace.prefix.*' =>
+                    '(:%root.hoa:)/'
+            ));
 
 
         $this->setProtocol();
