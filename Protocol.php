@@ -362,7 +362,7 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
 
     /**
      * Queue of the component.
-     * Generic one. Should be overload in childs classes.
+     * Generic one. Should be overload in children classes.
      *
      * @access  public
      * @param   string  $queue    Queue of the component (generally, a filename,
@@ -376,7 +376,7 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
 
     /**
      * ID of the component.
-     * Generic one. Should be overload in childs classes.
+     * Generic one. Should be overload in children classes.
      *
      * @access  public
      * @param   string  $id    ID of the component.
