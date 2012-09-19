@@ -170,6 +170,7 @@ class Core implements Parameter\Parameterizable {
         !defined('HOA_VERSION_RELEASE') and define('HOA_VERSION_RELEASE', 0);
         !defined('HOA_VERSION_STATUS')  and define('HOA_VERSION_STATUS',  'b8');
         !defined('HOA_VERSION_EXTRA')   and define('HOA_VERSION_EXTRA',   'dev');
+        !defined('WITH_COMPOSER')       and define('WITH_COMPOSER',       class_exists('Composer\Autoload\ClassLoader', false));
 
         if(false !== $wl = ini_get('suhosin.executor.include.whitelist'))
             if(false === in_array('hoa', explode(',', $wl)))
@@ -315,7 +316,10 @@ class Core implements Parameter\Parameterizable {
                 foreach($parts as $part)
                     $handle = $handle[$part];
 
-                $handle[] = new Protocol\Generic($last, $reach);
+                if('Library' === $last)
+                    $handle[] = new Protocol\Library($last, $reach);
+                else
+                    $handle[] = new Protocol\Generic($last, $reach);
             }
 
             return;
