@@ -213,6 +213,7 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
 
             $out = $this->_resolve($path, $handle);
 
+            // Not a path but a resource.
             if(!is_array($handle))
                 return $out;
 
@@ -496,6 +497,55 @@ class Root extends \Hoa\Core\Protocol {
      * @var \Hoa\Core\Protocol\Root string
      */
     protected $_name = 'hoa://';
+}
+
+/**
+ * Class \Hoa\Core\Protocol\Library.
+ *
+ * Library protocol's component.
+ *
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2012 Ivan Enderlin.
+ * @license    New BSD License
+ */
+
+class Library extends \Hoa\Core\Protocol {
+
+    /**
+     * Queue of the component.
+     *
+     * @access  public
+     * @param   string  $queue    Queue of the component (generally, a filename,
+     *                            with probably a query).
+     * @return  mixed
+     */
+    public function reach ( $queue = null ) {
+
+        if(!WITH_COMPOSER)
+            return parent::reach($queue);
+
+        if(!empty($queue)) {
+
+            $pos   = strpos($queue, DS);
+            $queue = strtolower(substr($queue, 0, $pos)) . substr($queue, $pos);
+        }
+        else {
+
+            $out = array();
+
+            foreach(explode(';', $this->_reach) as $part) {
+
+                $pos   = strrpos(rtrim($part, DS), DS) + 1;
+                $head  = substr($part, 0, $pos);
+                $tail  = substr($part, $pos);
+                $out[] = $head . strtolower($tail);
+            }
+
+            $this->_reach = implode(';', $out);
+        }
+
+        return parent::reach($queue);
+    }
 }
 
 /**
