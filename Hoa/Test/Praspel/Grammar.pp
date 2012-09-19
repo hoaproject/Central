@@ -45,7 +45,7 @@
 %skip   block_comment   /\*(.|\n)*\*/
 
 // Clauses.
-%token  type            @type
+%token  is              @is
 %token  requires        @requires
 %token  ensures         @ensures
 %token  throwable       @throwable
@@ -109,7 +109,7 @@ method:
       | ensures()
       | throwable()
       | invariant()
-      | type()
+      | is()
     )
     ::semicolon::
   | behavior() ::semicolon::?
@@ -126,8 +126,8 @@ method:
 #invariant:
     ::invariant:: expression()?
 
-#type:
-    ::type:: <pure>
+#is:
+    ::is:: <pure>
 
 #behavior:
     ::behavior:: <identifier> ::brace_::
