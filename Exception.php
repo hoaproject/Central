@@ -312,7 +312,7 @@ class Idle extends \Exception {
 }
 
 /**
- * Class \Hoa\Core\Exception\Idle.
+ * Class \Hoa\Core\Exception.
  *
  * Each exception must extend \Hoa\Core\Exception.
  *
