@@ -143,7 +143,7 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
         if(empty($name))
             throw new \Hoa\Core\Exception(
                 'Cannot add a component to the protocol hoa:// without a name.',
-                0);
+                1);
 
         $this->_components[$name] = $component;
 
@@ -162,7 +162,7 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
 
         if(!isset($this[$name]))
             throw new \Hoa\Core\Exception(
-                'Component %s does not exist.', 1, $name);
+                'Component %s does not exist.', 2, $name);
 
         return $this->_components[$name];
     }
@@ -200,6 +200,7 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
      * @access  public
      * @param   string  $path    Path to resolve.
      * @return  mixed
+     * @throw   \Hoa\Core\Exception
      */
     public function resolve ( $path ) {
 
@@ -222,7 +223,7 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
             if(file_exists($solution))
                 return $solution;
 
-        return $handle[0];
+        throw new \Hoa\Core\Exception('Could not resolve %s.', 3, $path);
     }
 
     /**
@@ -387,7 +388,7 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
 
         throw new \Hoa\Core\Exception(
             'The component %s has no ID support (tried to reach #%s).',
-            2, array($this->getName(), $id));
+            4, array($this->getName(), $id));
     }
 
     /**
