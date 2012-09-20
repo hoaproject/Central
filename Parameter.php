@@ -222,15 +222,6 @@ class Parameter {
             $path  = 'hoa://Data/Etc/Configuration/.Cache/' . $class . '.php';
         }
 
-        try {
-
-            $path = resolve($path);
-        }
-        catch ( \Hoa\Core\Exception $e ) {
-
-            $path = false;
-        }
-
         if(file_exists($path)) {
 
             $handle = require $path;
