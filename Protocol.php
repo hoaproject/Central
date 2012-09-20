@@ -198,11 +198,12 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
      * method.
      *
      * @access  public
-     * @param   string  $path    Path to resolve.
+     * @param   string  $path      Path to resolve.
+     * @param   bool    $exists    If true, try to find the first that exists,
+     *                             else return the first solution.
      * @return  mixed
-     * @throw   \Hoa\Core\Exception
      */
-    public function resolve ( $path ) {
+    public function resolve ( $path, $exists = true ) {
 
         if(substr($path, 0, 6) !== 'hoa://')
             return $path;
@@ -220,11 +221,14 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
             self::$_cache[$path] = $handle;
         }
 
+        if(true !== $exists)
+            return $handle[0];
+
         foreach($handle as $solution)
             if(file_exists($solution))
                 return $solution;
 
-        throw new \Hoa\Core\Exception('Could not resolve %s.', 3, $path);
+        return '/hoa/flatland';
     }
 
     /**
@@ -1032,13 +1036,15 @@ namespace {
  * method.
  *
  * @access  public
- * @param   string  $path    Path to resolve.
+ * @param   string  $path      Path to resolve.
+ * @param   bool    $exists    If true, try to find the first that exists,
+ *                             else return the first solution.
  * @return  mixed
  */
 if(!ƒ('resolve')) {
-function resolve ( $path ) {
+function resolve ( $path, $exists = true ) {
 
-    return \Hoa\Core::getInstance()->getProtocol()->resolve($path);
+    return \Hoa\Core::getInstance()->getProtocol()->resolve($path, $exists);
 }}
 
 /**
