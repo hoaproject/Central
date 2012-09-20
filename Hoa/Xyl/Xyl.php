@@ -1543,8 +1543,13 @@ class          Xyl
      */
     public function resolve ( $hoa, $late = false ) {
 
-        if(0 !== preg_match('#^hoa://Library/Xyl(/.*|$)#', $hoa, $matches))
-            $hoa ='hoa://Library/Xyl[' . $this->_i . ']' . $matches[1];
+        $exists = false;
+
+        if(0 !== preg_match('#^hoa://Library/Xyl(/.*|$)#', $hoa, $matches)) {
+
+            $hoa    = 'hoa://Library/Xyl[' . $this->_i . ']' . $matches[1];
+            $exists = true;
+        }
 
         if(0 !== preg_match('#^hoa://Application/Public(/.*)#', $hoa, $matches))
             $hoa = 'hoa://Application/Public/' .
@@ -1554,7 +1559,7 @@ class          Xyl
         if(true === $late)
             return $hoa;
 
-        return resolve($hoa);
+        return resolve($hoa, $exists);
     }
 
     /**

@@ -182,11 +182,8 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
 
         $this->_hasBeenValidated = true;
         $this->_formData         = array_merge($_POST, $_GET);
-
-        if(true === $this->attributeExists('novalidate'))
-            return null;
-
-        $inputs          = array_merge(
+        $validate                = false === $this->attributeExists('novalidate');
+        $inputs                  = array_merge(
             $this->xpath('.//__current_ns:input'),
             $this->xpath('.//__current_ns:select'),
             $this->xpath('.//__current_ns:textarea')
@@ -205,8 +202,11 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
 
             if(!isset($this->_formData[$name])) {
 
-                $input->checkValidity();
-                $this->_validity = $input->isValid() && $this->_validity;
+                if(true === $validate) {
+
+                    $input->checkValidity();
+                    $this->_validity = $input->isValid() && $this->_validity;
+                }
 
                 continue;
             }
@@ -217,9 +217,16 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
                 $value = $this->_formData[$name];
 
             $input->setValue($value);
-            $input->checkValidity($value);
-            $this->_validity = $input->isValid() && $this->_validity;
+
+            if(true === $validate) {
+
+                $input->checkValidity($value);
+                $this->_validity = $input->isValid() && $this->_validity;
+            }
         }
+
+        if(true !== $validate)
+            return true;
 
         if(true === $this->_validity)
             return $this->_validity;
