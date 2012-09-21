@@ -1281,7 +1281,7 @@ class          Xyl
                 $link = $handle;
             }
 
-            if(0 !== preg_match('#^hoa://Application/Public/(.*)$#', $link, $m)) {
+            if(0 !== preg_match('#^hoa://Application/Public/(.+/.+)$#', $link, $m)) {
 
                 $theme  = $this->getParameters()->getFormattedParameter('theme');
                 list($type, $resource) = explode('/', $m[1], 2);
