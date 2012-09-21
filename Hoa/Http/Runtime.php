@@ -130,6 +130,7 @@ class Runtime {
               break;
 
             case Request::METHOD_PUT:
+            case Request::METHOD_PATCH:
                 return file_get_contents('php://input');
               break;
 
