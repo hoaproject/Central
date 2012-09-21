@@ -49,18 +49,11 @@ namespace Hoa\Core\Protocol {
 abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
 
     /**
-     * Overwrite components if already exists.
+     * No resolution value.
      *
-     * @const bool
+     * @const string
      */
-    const OVERWRITE        = true;
-
-    /**
-     * Do not overwrite components if already exists.
-     *
-     * @const bool
-     */
-    const DO_NOT_OVERWRITE = false;
+    const NO_RESOLUTION = '/hoa/flatland';
 
     /**
      * Component's name.
@@ -89,13 +82,6 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
      * @var \Hoa\Core\Protocol array
      */
     private static $_cache = array();
-
-    /**
-     * Static indentation for the __toString() method.
-     *
-     * @var \Hoa\Core\Protocol int
-     */
-    private static $i      = 0;
 
 
 
@@ -228,7 +214,7 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
             if(file_exists($solution))
                 return $solution;
 
-        return '/hoa/flatland';
+        return static::NO_RESOLUTION;
     }
 
     /**
@@ -452,13 +438,15 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
      */
     public function __toString ( ) {
 
-        $out = str_repeat('  ', self::$i) . $this->getName() . "\n";
+        static $i = 0;
+
+        $out = str_repeat('  ', $i) . $this->getName() . "\n";
 
         foreach($this as $foo => $component) {
 
-            self::$i++;
+            $i++;
             $out .= $component;
-            self::$i--;
+            $i--;
         }
 
         return $out;
@@ -592,12 +580,13 @@ class Wrapper {
      * Could return false if the path cannot be reached.
      *
      * @access  public
-     * @param   string  $path    Path (or URL).
+     * @param   string  $path      Path (or URL).
+     * @param   bool    $exists    If true, try to find the first that exists,
      * @return  mixed
      */
-    public static function realPath ( $path ) {
+    public static function realPath ( $path, $exists = true ) {
 
-        return \Hoa\Core::getProtocol()->resolve($path);
+        return \Hoa\Core::getProtocol()->resolve($path, $exists);
     }
 
     /**
@@ -697,27 +686,20 @@ class Wrapper {
      */
     public function stream_open ( $path, $mode, $options, &$openedPath ) {
 
-        $p = self::realPath($path);
-
-        if(false === $p)
-            return false;
+        $path = self::realPath($path);
 
         if(null === $this->context)
-            $openedPath = fopen(
-                $p,
-                $mode,
-                $options & STREAM_USE_PATH
-            );
+            $openedPath = fopen($path, $mode, $options & STREAM_USE_PATH);
         else
             $openedPath = fopen(
-                $p,
+                $path,
                 $mode,
                 $options & STREAM_USE_PATH,
                 $this->context
             );
 
         $this->_stream     = $openedPath;
-        $this->_streamName = $p;
+        $this->_streamName = $path;
 
         return true;
     }
@@ -839,19 +821,19 @@ class Wrapper {
      */
     public function dir_opendir ( $path, $options ) {
 
-        $p      = self::realPath($path);
+        $path   = self::realPath($path);
         $handle = null;
 
         if(null === $this->context)
-            $handle = @opendir($p);
+            $handle = @opendir($path);
         else
-            $handle = @opendir($p, $this->context);
+            $handle = @opendir($path, $this->context);
 
         if(false === $handle)
             return false;
 
         $this->_stream     = $handle;
-        $this->_streamName = $p;
+        $this->_streamName = $path;
 
         return true;
     }
@@ -897,13 +879,13 @@ class Wrapper {
 
         if(null === $this->context)
             return mkdir(
-                self::realPath($path),
+                self::realPath($path, false),
                 $mode,
                 $options | STREAM_MKDIR_RECURSIVE
             );
 
         return mkdir(
-            self::realPath($path),
+            self::realPath($path, false),
             $mode,
             $options | STREAM_MKDIR_RECURSIVE,
             $this->context
@@ -923,9 +905,13 @@ class Wrapper {
     public function rename ( $from, $to ) {
 
         if(null === $this->context)
-            return rename(self::realPath($from), self::realPath($to));
+            return rename(self::realPath($from), self::realPath($to, false));
 
-        return rename(self::realPath($from), self::realPath($to), $this->context);
+        return rename(
+            self::realPath($from),
+            self::realPath($to, false),
+            $this->context
+        );
     }
 
     /**
@@ -989,9 +975,11 @@ class Wrapper {
      */
     public function url_stat ( $path, $flags ) {
 
-        if(false === $p = self::realPath($path))
+        $path = self::realPath($path);
+
+        if(Protocol::NO_RESOLUTION === $path)
             if($flags & STREAM_URL_STAT_QUIET)
-                return array(); // Not sure…
+                return 0;
             else
                 return trigger_error(
                     'Path ' . $path . ' cannot be resolved.',
@@ -999,9 +987,9 @@ class Wrapper {
                 );
 
         if($flags & STREAM_URL_STAT_LINK)
-            return @lstat($p);
+            return @lstat($path);
 
-        return @stat($p);
+        return @stat($path);
     }
 
     /**
