@@ -1,0 +1,179 @@
+<?php
+
+/**
+ * Hoa
+ *
+ *
+ * @license
+ *
+ * New BSD License
+ *
+ * Copyright © 2007-2012, Ivan Enderlin. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Hoa nor the names of its contributors may be
+ *       used to endorse or promote products derived from this software without
+ *       specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS AND CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+namespace {
+
+from('Hoa')
+
+/**
+ * \Hoa\Http\Request
+ */
+-> import('Http.Request');
+
+}
+
+namespace Hoa\Http {
+
+/**
+ * Class \Hoa\Http\Runtime.
+ *
+ * Runtime informations.
+ *
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2012 Ivan Enderlin.
+ * @license    New BSD License
+ */
+
+class Runtime {
+
+    /**
+     * Get HTTP method.
+     *
+     * @access  public
+     * @return  string
+     */
+    public static function getMethod ( ) {
+
+        if('cli' === php_sapi_name())
+            return 'get';
+
+        return strtolower($_SERVER['REQUEST_METHOD']);
+    }
+
+    /**
+     * Get URI.
+     *
+     * @access  public
+     * @return  string
+     */
+    public static function getUri ( ) {
+
+        return $_SERVER['REQUEST_URI'];
+    }
+
+    /**
+     * Get data.
+     *
+     * @access  public
+     * @param   bool  $extended    Whether we want a larger support of
+     *                             content-type for example.
+     * @return  mixed
+     */
+    public static function getData ( $extended = true ) {
+
+        switch(static::getMethod()) {
+
+            case Request::METHOD_GET:
+                return $_GET;
+              break;
+
+            case Request::METHOD_POST:
+                $contentType = static::getHeader('Content-Type');
+
+                switch($contentType) {
+
+                    case 'application/x-www-form-urlencoded':
+                        return $_POST;
+                      break;
+
+                    case 'application/json':
+                        $input = file_get_contents('php://input');
+
+                        if(   true !== $extended
+                           || true !== function_exists('json_decode'))
+                            return $input;
+
+                        $json = json_decode($input, true);
+
+                        if(JSON_ERROR_NONE !== json_last_error())
+                            return $input;
+
+                        return $json;
+                      break;
+
+                    default:
+                        return file_get_contents('php://input');
+                }
+              break;
+
+            case Request::METHOD_PUT:
+                return file_get_contents('php://input');
+              break;
+
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Get all headers.
+     *
+     * @access  public
+     * @return  array
+     */
+    public static function getHeaders ( ) {
+
+        static $_headers = null;
+
+        if(null === $_headers)
+            foreach($_SERVER as $key => $value)
+                if('HTTP_' === substr($key, 0, 5))
+                    $_headers[strtolower(str_replace('_', '-', substr($key, 5)))]
+                        = $value;
+
+        return $_headers;
+    }
+
+    /**
+     * Get a specific header.
+     *
+     * @access  public
+     * @param   string  $header    Header name.
+     * @return  string
+     */
+    public static function getHeader ( $header ) {
+
+        $headers = static::getHeaders();
+        $header  = strtolower($header);
+
+        if(true !== array_key_exists($header, $headers))
+            return null;
+
+        return $headers[$header];
+    }
+}
+
+}
