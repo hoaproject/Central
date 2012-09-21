@@ -143,19 +143,19 @@ method:
     ::_brace::
 
 expression:
-    ( assignation() | domainof() )
-    ( ::and:: ( assignation() | domainof() ) )*
+    ( declaration() | domainof() )
+    ( ::and:: ( declaration() | domainof() ) )*
 
-exceptional_exception:
+exceptional_expression:
     exception() ( ::and:: exception() )*
 
 exception:
     classname() ( ::or:: classname() )* #exception_list
   | classname() <identifier> ( ::or:: classname() <identifier> )*
-    ::with:: assignation() #exception_with
+    ::with:: declaration() #exception_with
 //              NO
 
-#assignation:
+#declaration:
     identifier() ::colon:: representation()
 
 #domainof:
