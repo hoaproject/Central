@@ -140,6 +140,20 @@ class Runtime {
     }
 
     /**
+     * Whether there is data or not.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public static function hasData ( ) {
+
+        if(Request::METHOD_GET === static::getMethod())
+            return !empty($_GET);
+
+        return 0 < intval(static::getHeader('Content-Length'));
+    }
+
+    /**
      * Get all headers.
      *
      * @access  public
