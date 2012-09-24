@@ -129,8 +129,12 @@ method:
 #is:
     ::is:: <pure>
 
-#behavior:
-    ::behavior:: <identifier> ::brace_::
+behavior:
+    ::behavior:: behavior_content()
+    ( ::and:: behavior_content() )*
+
+behavior_content:
+    <identifier> ::brace_::
     (
         (
             requires()
@@ -140,7 +144,7 @@ method:
         )
         ::semicolon::
     )+
-    ::_brace::
+    ::_brace:: #behavior
 
 expression:
     ( declaration() | domainof() )
