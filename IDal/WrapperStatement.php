@@ -83,6 +83,16 @@ interface WrapperStatement {
     public function fetchAll ( );
 
     /**
+     * Return a single column from the next row of the result set or false if
+     * there is no more row.
+     *
+     * @access  public
+     * @return  mixed
+     * @throw   \Hoa\Database\Exception
+     */
+    public function fetchColumn ( $column_number = 0 );
+
+    /**
      * Close the cursor, enabling the statement to be executed again.
      *
      * @access  public
