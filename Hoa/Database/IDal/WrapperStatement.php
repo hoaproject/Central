@@ -42,7 +42,8 @@ namespace Hoa\Database\IDal {
  * Interface of a DAL statement wrapper.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2012 Ivan Enderlin.
+ * @author     Raphaël Emourgeon <raphael.emourgeon@hoa-project.net>
+ * @copyright  Copyright © 2007-2012 Ivan Enderlin, Raphaël Emourgeon.
  * @license    New BSD License
  */
 
@@ -81,6 +82,17 @@ interface WrapperStatement {
      * @throw   \Hoa\Database\Exception
      */
     public function fetchAll ( );
+
+    /**
+     * Return a single column from the next row of the result set or false if
+     * there is no more row.
+     *
+     * @access  public
+     * @param   string  $column    Column index.
+     * @return  mixed
+     * @throw   \Hoa\Database\Exception
+     */
+    public function fetchColumn ( $column = 0 );
 
     /**
      * Close the cursor, enabling the statement to be executed again.
