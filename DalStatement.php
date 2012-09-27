@@ -42,7 +42,8 @@ namespace Hoa\Database {
  * The heigher class that represents a DAL statement.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2012 Ivan Enderlin.
+ * @author     Raphaël Emourgeon <raphael.emourgeon@hoa-project.net>
+ * @copyright  Copyright © 2007-2012 Ivan Enderlin, Raphaël Emourgeon.
  * @license    New BSD License
  */
 
@@ -165,12 +166,13 @@ class DalStatement {
      * there is no more row.
      *
      * @access  public
+     * @param   string  $column    Column index.
      * @return  mixed
      * @throw   \Hoa\Database\Exception
      */
-    public function fetchColumn ( $column_number = 0 ) {
+    public function fetchColumn ( $column = 0 ) {
 
-        return $this->getStatement()->fetchColumn($column_number);
+        return $this->getStatement()->fetchColumn($column);
     }
 
     /**
