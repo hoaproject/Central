@@ -688,6 +688,9 @@ class Wrapper {
 
         $path = self::realPath($path);
 
+        if(Protocol::NO_RESOLUTION === $path)
+            return false;
+
         if(null === $this->context)
             $openedPath = fopen($path, $mode, $options & STREAM_USE_PATH);
         else
