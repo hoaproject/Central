@@ -686,7 +686,7 @@ class Wrapper {
      */
     public function stream_open ( $path, $mode, $options, &$openedPath ) {
 
-        $path = self::realPath($path);
+        $path = self::realPath($path, 'r' === $mode[0]);
 
         if(Protocol::NO_RESOLUTION === $path)
             return false;
