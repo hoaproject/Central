@@ -284,8 +284,15 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
 
         $test->getParameters()->setParameter('revision', $revision . DS);
 
-        if(null === $file)
-            return $this->usage();
+        if(null === $file) {
+
+            if(null === $class)
+                return $this->usage();
+
+            $file  = str_replace('.',  DS, $class);
+            $file  = str_replace('\\', DS, $file);
+            $file .= '.php';
+        }
 
         $instrumented = $test->getParameters()->getFormattedParameter('instrumented');
 
