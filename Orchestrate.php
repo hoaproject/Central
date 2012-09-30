@@ -223,8 +223,8 @@ class Orchestrate implements \Hoa\Core\Parameter\Parameterizable {
 
         \Hoa\File\Directory::create($incubator);
 
-        foreach($finder as $i => $file)
-            $file->define()->copy($incubator . $file->getBasename());
+        foreach($finder as $file)
+            $file->copy($incubator . $file->getBasename());
 
         return;
     }
@@ -302,7 +302,7 @@ class Orchestrate implements \Hoa\Core\Parameter\Parameterizable {
     private function _instrumentation ( \Hoa\File\Finder $finder, $from, $to,
                                         $incubator ) {
 
-        foreach($finder as $i => $file) {
+        foreach($finder as $file) {
 
             $basename = $file->getBasename();
             $path     = $to . DS . $basename;
