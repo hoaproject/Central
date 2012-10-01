@@ -55,26 +55,34 @@ $style->import();
 /**
  * Here we go…
  */
-$router = new \Hoa\Router\Cli();
-$router->get(
-    'g',
-    '(?:(?<vendor>\w+)\s+)?(?<library>\w+)?(?::(?<command>\w+))?(?<_tail>.*?)',
-    'main',
-    'main',
-    array(
-        'vendor'  => 'hoa',
-        'library' => 'core',
-        'command' => 'welcome'
-    )
-);
+try {
 
-$dispatcher = new \Hoa\Dispatcher\Basic(array(
-    'synchronous.controller'
-        => '(:%variables.vendor:lU:)\(:%variables.library:lU:)\Bin\(:%variables.command:lU:)',
-    'synchronous.action'
-        => 'main'
-));
-$dispatcher->setKitName('Hoa\Console\Dispatcher\Kit');
-$dispatcher->dispatch($router);
+    $router = new \Hoa\Router\Cli();
+    $router->get(
+        'g',
+        '(?:(?<vendor>\w+)\s+)?(?<library>\w+)?(?::(?<command>\w+))?(?<_tail>.*?)',
+        'main',
+        'main',
+        array(
+            'vendor'  => 'hoa',
+            'library' => 'core',
+            'command' => 'welcome'
+        )
+    );
+
+    $dispatcher = new \Hoa\Dispatcher\Basic(array(
+        'synchronous.controller'
+            => '(:%variables.vendor:lU:)\(:%variables.library:lU:)\Bin\(:%variables.command:lU:)',
+        'synchronous.action'
+            => 'main'
+    ));
+    $dispatcher->setKitName('Hoa\Console\Dispatcher\Kit');
+    exit($dispatcher->dispatch($router));
+}
+catch ( \Exception $e ) {
+
+    cout($e->raise(true));
+    exit($e->getCode() + 1);
+}
 
 }
