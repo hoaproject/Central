@@ -268,7 +268,6 @@ class Core implements Parameter\Parameterizable {
                     '(:%root.hoa:)/'
             ));
 
-
         $this->setProtocol();
 
         /*
