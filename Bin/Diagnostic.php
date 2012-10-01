@@ -36,165 +36,224 @@
 
 namespace Hoa\Core\Bin {
 
+/**
+ * Class \Hoa\Core\Bin\Diagnostic.
+ *
+ * This command generates a diagnostic.
+ *
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @author     Julien Clauzel <julien.clauzel@hoa-project.net>
+ * @copyright  Copyright © 2007-2012 Ivan Enderlin, Julien Clauzel.
+ * @license    New BSD License
+ */
+
+class Diagnostic extends \Hoa\Console\Dispatcher\Kit {
+
     /**
-     * Class \Hoa\Core\Bin\Diagnostic.
+     * Options description.
      *
-     * This command generate an INI file for effecient debug.
-     *
-     * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
-     * @author     Julien Clauzel <julien.clauzel@hoa-project.net>
-     * @copyright  Copyright © 2007-2012 Ivan Enderlin, Julien Clauzel.
-     * @license    New BSD License
+     * @var \Hoa\Core\Bin\Diagnostic array
      */
+    protected $options = array(
+        array('section', \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 's'),
+        array('help',    \Hoa\Console\GetOption::NO_ARGUMENT,       'h'),
+        array('help',    \Hoa\Console\GetOption::NO_ARGUMENT,       '?')
 
-    class Diagnostic extends \Hoa\Console\Dispatcher\Kit
-    {
+    );
 
 
-        /**
-         * Options description.
-         *
-         * @var array
-         */
-        protected $options = array(
-            array('help', \Hoa\Console\GetOption::NO_ARGUMENT, 'h'),
-            array('section', \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 's'),
-            array('help', \Hoa\Console\GetOption::NO_ARGUMENT, '?')
 
+    /**
+     * The entry method.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function main ( ) {
+
+        $sections   = array();
+        $diagnostic = array();
+
+        while(false !== $c = $this->getOption($v)) switch ($c) {
+
+            case 's':
+                $sections = $this->parser->parseSpecialValue($v);
+              break;
+
+            case 'h':
+            case '?':
+                return $this->usage();
+              break;
+
+            case '__ambiguous':
+                $this->resolveOptionAmbiguity($v);
+              break;
+        }
+
+        $store = function ( $sections, $key, $value = null ) use ( &$diagnostic ) {
+
+            if(is_array($key) && null === $value)
+                foreach($key as $i => $name)
+                    $diagnostic[$sections][$i] = $name;
+            else
+                $diagnostic[$sections][$key] = $value;
+
+            return;
+        };
+
+        $store(
+            'version',
+            'hoa',
+            HOA_VERSION_MAJOR . '.' . HOA_VERSION_MINOR . '.' .
+            HOA_VERSION_RELEASE . HOA_VERSION_STATUS . '-' . HOA_VERSION_EXTRA
+        );
+        $store(
+            'version',
+            'php',
+            phpversion()
+        );
+        $store(
+            'version',
+            'zend_engine',
+            zend_version()
+        );
+        $store(
+            'system',
+            'platform',
+            php_uname()
+        );
+        $store(
+            'system',
+            'architecture',
+            (true === S_32_BITS) ? '32bits' : '64bits'
+        );
+        $store(
+            'system',
+            'lang',
+            $_SERVER['LANG']
+        );
+        $store(
+            'bin',
+            'self',
+            $_SERVER['PHP_SELF']
+        );
+        $store(
+            'bin',
+            'hoa',
+            \Hoa\Core::getInstance()->getParameters()->getFormattedParameter('root.hoa')
+        );
+        $store(
+            'bin',
+            'php_dir',
+            PHP_BINDIR
+        );
+        $store(
+            'bin',
+            'php',
+            !defined('PHP_BINARY') ? 'unknown' : PHP_BINARY
         );
 
+        foreach(get_loaded_extensions() as $extension) {
 
-        /**
-         * The entry method.
-         *
-         * @access  public
-         * @return  int
-         */
-        public function main()
-        {
+            $reflection = new \ReflectionExtension($extension);
+            $entry      = 'extension-' . strtolower($extension);
 
-            $display = array();
-            $diagnostic = array();
+            if(    'extension-standard' !== $entry
+                && 'extension-core'     !== $entry) {
 
+                $entries = array();
 
-            while (false !== $c = $this->getOption($v)) switch ($c) {
-
-                case 's':
-                    $display =  $this->parser->parseSpecialValue ($v);
-                    break;
-                case 'h':
-                case '?':
-                    return $this->usage();
-                    break;
-                case '__ambiguous':
-                    $this->resolveOptionAmbiguity($v);
-                    break;
+                foreach($reflection->getINIEntries() as $key => $value)
+                    $entries[substr($key, strpos($key, '.') + 1)] = $value;
             }
-            $constant = function ($constantName) {
-                if (defined($constantName))
-                    return constant($constantName);
-                else
-                    return 'constant ' . $constantName . ' is not defined !';
-            };
-  
-            $store = function ($section, $key, $value = null) use (&$diagnostic) {
-                if (is_array($key) && $value === null) {
-                    foreach ($key as $i => $name)
-                        $diagnostic[$section][$i] = $name;
-                } else {
-                    $diagnostic[$section][$key] = $value;
-                }
+            else
+                $entries = $reflection->getINIEntries();
 
-            };
-            // VERSION
-
-            $store('version', 'hoa', HOA_VERSION_MAJOR . '.' . HOA_VERSION_MINOR . '.' . HOA_VERSION_RELEASE . HOA_VERSION_STATUS . (null !== HOA_VERSION_EXTRA ? '-' . HOA_VERSION_EXTRA : ''));
-            $store('version', 'php', phpversion());
-            $store('version', 'zend_engine', zend_version());
-            $store('version', 'php_os', $constant('PHP_OS'));
-            $store('version', 'plateform', php_uname());
-	    $store('version' , 'architecture' , (S_32_BITS === true)? '32 BITS' : '64 BITS');
-
-            // LOCATED File
-            $core = \Hoa\Core\Core::getInstance();
-            $hoa = $core->getParameters()->getFormattedParameter('root.hoa');
-
-            $store('bin', 'hoa', $hoa);
-            $store('bin', 'php', $constant('PHP_BINARY'));
-
-            // LOADED EXTENSION
-            $extension = get_loaded_extensions();
-
-            foreach ($extension as $ext) {
-
-                $version = new \ReflectionExtension($ext);
-                $store('extension', $ext . '.version', $version->getVersion());
-                    foreach ($version->getINIEntries() as $k => $v)
-                        $store('extension', $k, $v);
-
-            }
-
-
-            // Configuration file
-            $store('php.ini', ini_get_all(null, false));
-
-
-            if (empty($display) or in_array('all' , $display))
-                $ini = $this->arrayToIni($diagnostic);
-            else {
-                $t = array();
-                foreach ($display as $d)
-                    if (array_key_exists($d, $diagnostic))
-                        $t[$d] = $diagnostic[$d];
-
-                $ini = $this->arrayToIni($t);
-            }
-
-            echo $ini;
-            return;
+            $store(
+                $entry,
+                'version',
+                $reflection->getVersion() ?: 'unknown'
+            );
+            $store(
+                $entry,
+                $entries
+            );
         }
 
-        /**
-         * The command usage.
-         *
-         * @access  public
-         * @return  int
-         */
-        public function usage()
-        {
-            cout('Usage   : core:diagnostic <options>');
-            cout('Options :');
-            cout($this->makeUsageOptionsList(array(
-                'help' => 'This help.',
-                'section' => 'Display select section , "version" or "version,bin,php.ini" by default all is select'
-            )));
+        if(empty($sections) || in_array('all', $sections))
+            $ini = $this->arrayToIni($diagnostic);
+        else {
 
-            return;
-        }
+            $handle = array();
 
+            foreach($sections as $section) {
 
-        /**
-         * Transform an array into an INI String
-         *
-         * @param array $array
-         * @return string
-         */
-        private function arrayToIni(Array $array)
-        {
-            $buffer = '';
-            foreach ($array as $section => $subArray) {
-                $buffer .= '[' . $section . ']' . "\n";
-                foreach ($subArray as $key => $value) {
-                    if (is_array($value))
-                        $value = implode(' ', $value);
+                if(false === array_key_exists($section, $diagnostic))
+                    return 1;
 
-                    $buffer .= $key . ' = "' . $value . '"' . "\n";
-                }
-
-
+                $handle[$section] = $diagnostic[$section];
             }
-            return $buffer;
+
+            $ini = $this->arrayToIni($handle);
         }
+
+        cout($ini);
+
+        return;
     }
+
+    /**
+     * The command usage.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function usage ( ) {
+
+        cout('Usage   : core:diagnostic <options>');
+        cout('Options :');
+        cout($this->makeUsageOptionsList(array(
+            's'    => 'Sections (comma separated) to display, among:' . "\n" .
+                      '    • all;' . "\n" .
+                      '    • version;' . "\n" .
+                      '    • system;' . "\n" .
+                      '    • bin;' . "\n" .
+                      '    • extension-<name in lowercase> (see `php -m`).',
+            'help' => 'This help.'
+        )));
+
+        return;
+    }
+
+    /**
+     * Transform an array into INI format.
+     *
+     * @access  public
+     * @param   array  $array    Array to transform.
+     * @return  string
+     */
+    private function arrayToIni ( Array $array ) {
+
+        $out = null;
+
+        foreach($array as $section => $entries) {
+
+            if(null !== $out)
+                $out .= "\n\n";
+
+            $out .= '[' . $section . ']';
+
+            foreach($entries as $key => $value) {
+
+                if (is_array($value))
+                    $value = implode(' ', $value);
+
+                $out .= "\n" . $key . ' = "' . $value . '"';
+            }
+        }
+
+        return $out;
+    }
+}
 
 }
