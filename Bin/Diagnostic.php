@@ -56,6 +56,7 @@ class Diagnostic extends \Hoa\Console\Dispatcher\Kit {
      */
     protected $options = array(
         array('section', \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 's'),
+        array('mail',    \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'm'),
         array('help',    \Hoa\Console\GetOption::NO_ARGUMENT,       'h'),
         array('help',    \Hoa\Console\GetOption::NO_ARGUMENT,       '?')
 
@@ -72,12 +73,17 @@ class Diagnostic extends \Hoa\Console\Dispatcher\Kit {
     public function main ( ) {
 
         $sections   = array();
+        $mail       = null;
         $diagnostic = array();
 
         while(false !== $c = $this->getOption($v)) switch ($c) {
 
             case 's':
                 $sections = $this->parser->parseSpecialValue($v);
+              break;
+
+            case 'm':
+                $mail = $v;
               break;
 
             case 'h':
@@ -199,6 +205,13 @@ class Diagnostic extends \Hoa\Console\Dispatcher\Kit {
 
         cout($ini);
 
+        if(null !== $mail) {
+
+            $subject = 'Diagnostic from ' . get_current_user();
+
+            return mail($mail, $subject, $ini) ? 0 : 1;
+        }
+
         return;
     }
 
@@ -219,6 +232,7 @@ class Diagnostic extends \Hoa\Console\Dispatcher\Kit {
                       '    • system;' . "\n" .
                       '    • bin;' . "\n" .
                       '    • extension-<name in lowercase> (see `php -m`).',
+            'm'    => 'Email address where to send the diagnostic.',
             'help' => 'This help.'
         )));
 
