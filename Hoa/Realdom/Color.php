@@ -44,62 +44,34 @@ from('Hoa')
 -> import('Realdom.~')
 
 /**
- * \Hoa\Realdom\Constinteger
+ * \Hoa\Realdom\String
  */
--> import('Realdom.Constinteger')
-
-/**
- * \Hoa\Realdom\Conststring
- */
--> import('Realdom.Conststring');
+-> import('Realdom.String');
 
 }
 
 namespace Hoa\Realdom {
 
 /**
- * Class \Hoa\Realdom\Timestamp.
+ * Class \Hoa\Realdom\Color
  *
- * Realistic domain: timestamp.
+ * Realistic domain: color.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Timestamp extends Constinteger {
+class Color extends String {
 
     /**
      * Realistic domain name.
      *
      * @var \Hoa\Realdom string
      */
-    protected $_name      = 'timestamp';
-
-    /**
-     * Realistic domain defined arguments.
-     *
-     * @var \Hoa\Realdom array
-     */
-    protected $_arguments = array(
-        'date'
-    );
+    protected $_name = 'color';
 
 
-
-    /**
-     * Construct a realistic domain.
-     *
-     * @access  public
-     * @return  void
-     */
-    public function construct ( ) {
-
-        if(!isset($this['date']))
-            $this['date'] = new Conststring('now');
-
-        return;
-    }
 
     /**
      * Predicate whether the sampled value belongs to the realistic domains.
@@ -110,7 +82,7 @@ class Timestamp extends Constinteger {
      */
     public function predicate ( $q ) {
 
-        return $q == $this->getConstantValue();
+        return 0 !== preg_match('#^\#[a-f0-9]{3}([a-f0-9]{3})?$#i', $q, $m);
     }
 
     /**
@@ -118,24 +90,53 @@ class Timestamp extends Constinteger {
      *
      * @access  protected
      * @param   \Hoa\Math\Sampler  $sampler    Sampler.
-     * @return  mixed
+     * @return  string
      */
     protected function _sample ( \Hoa\Math\Sampler $sampler ) {
 
-        return $this->getConstantValue();
+        if(0 === $sampler->getInteger(0, 1))
+            return '#' . sprintf(
+                '%02' . implode('%02', $this->samplePattern($sampler)),
+                $sampler->getInteger(0, 255),
+                $sampler->getInteger(0, 255),
+                $sampler->getInteger(0, 255)
+            );
+
+        return '#' . sprintf(
+            '%' . implode('%', $this->samplePattern($sampler)),
+            $sampler->getInteger(0, 15),
+            $sampler->getInteger(0, 15),
+            $sampler->getInteger(0, 15)
+        );
     }
 
     /**
-     * Get constant value.
+     * Sample patterns.
      *
      * @access  public
-     * @return  int
+     * @param   \Hoa\Math\Sampler  $sampler    Sampler.
+     * @return  array
      */
-    public function getConstantValue ( ) {
+    public function samplePattern ( \Hoa\Math\Sampler $sampler ) {
 
-        $datetime = new \DateTime($this['date']->getConstantValue());
+        switch($sampler->getInteger(0, 2)) {
 
-        return (int) $datetime->format('U');
+            case 0:
+                return array('x', 'x', 'x');
+              break;
+
+            case 1:
+                return array('X', 'X', 'X');
+              break;
+
+            case 2:
+                return array(
+                    0 === $sampler->getInteger(0, 1) ? 'x' : 'X',
+                    0 === $sampler->getInteger(0, 1) ? 'x' : 'X',
+                    0 === $sampler->getInteger(0, 1) ? 'x' : 'X',
+                );
+              break;
+        }
     }
 }
 
