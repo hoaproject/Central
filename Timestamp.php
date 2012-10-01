@@ -58,7 +58,7 @@ from('Hoa')
 namespace Hoa\Realdom {
 
 /**
- * Class \Hoa\Realdom\Integer.
+ * Class \Hoa\Realdom\Timestamp.
  *
  * Realistic domain: timestamp.
  *
