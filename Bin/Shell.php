@@ -281,10 +281,10 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        cout('Usage   : xml:shell <options>');
+        cout('Usage   : xml:shell <options> [filename]');
         cout('Options :');
         cout($this->makeUsageOptionsList(array(
-            'f'    => 'Filename.',
+            'c'    => 'Allowed colors number among 1, 8 and 256 (default).',
             'help' => 'This help.'
         )));
 
