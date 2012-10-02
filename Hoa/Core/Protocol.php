@@ -120,7 +120,7 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
     public function offsetSet ( $name, $component ) {
 
         if(!($component instanceof Protocol))
-            throw new Exception(
+            throw new \Hoa\Core\Exception(
                 'Component must extend %s.', __CLASS__, 0);
 
         if(empty($name))
