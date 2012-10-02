@@ -121,7 +121,7 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
 
         if(!($component instanceof Protocol))
             throw new \Hoa\Core\Exception(
-                'Component must extend %s.', __CLASS__, 0);
+                'Component must extend %s.', 0, __CLASS__);
 
         if(empty($name))
             $name = $component->getName();
