@@ -259,22 +259,7 @@ class Core implements Parameter\Parameterizable {
         $this->_parameters->setKeyword('root', $root);
         $this->_parameters->setKeyword('cwd',  $cwd);
         $this->_parameters->setParameters($parameters);
-
-        if(!file_exists($this->_parameters->getFormattedParameter('root.data')))
-            $this->_parameters->setParameters(array(
-                'protocol.Library' =>
-                    '(:%root.hoa:)/Hoathis/;(:%root.hoa:)/Hoa/',
-                'namespace.prefix.*' =>
-                    '(:%root.hoa:)/'
-            ));
-
         $this->setProtocol();
-
-        /*
-        if(   isset($_SERVER['HTTP_X_HOA_DEBUG'])
-           && true == $_SERVER['HTTP_X_HOA_DEBUG'])
-            static::startDebugger();
-        */
 
         return $this;
     }
@@ -327,7 +312,8 @@ class Core implements Parameter\Parameterizable {
         if('hoa://' === substr($path, 0, 6))
             $path = substr($path, 6);
 
-        $parts  = explode('/', trim($path, '/'));
+        $path   = trim($path, '/');
+        $parts  = explode('/', $path);
         $handle = $root;
 
         foreach($parts as $part)
@@ -335,6 +321,7 @@ class Core implements Parameter\Parameterizable {
 
         $handle->setReach($reach);
         $root->clearCache();
+        $this->getParameters()->setParameter('protocol.' . $path, $reach);
 
         return;
     }
