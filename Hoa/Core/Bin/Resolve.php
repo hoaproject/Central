@@ -147,6 +147,7 @@ class Resolve extends \Hoa\Console\Dispatcher\Kit {
         cout('Usage   : core:resolve <options> path');
         cout('Options :');
         cout($this->makeUsageOptionsList(array(
+            'E'    => 'Do not check if the resolution result exists.',
             't'    => 'Print the tree from the path.',
             'V'    => 'No-verbose, i.e. be as quiet as possible, just print ' .
                       'essential informations.',
