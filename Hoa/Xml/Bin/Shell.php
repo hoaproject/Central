@@ -193,6 +193,7 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
                     case 'help':
                         cout('Usage:');
                         cout('    h[elp] to print this help;');
+                        cout('    %      to print loaded filename;');
                         cout('    load   to load a file (`load %` to reload);');
                         cout('    ls     to print current tree;');
                         cout('    cd     to move in the tree with XPath;');
@@ -200,6 +201,10 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
                         cout('    color  to change color (among 1, 8 and 256);');
                         cout('    q[uit] to quit.');
                         cout();
+                      break;
+
+                    case '%':
+                        cout($root->getInnerStream()->getStreamName());
                       break;
 
                     case 'ls':
