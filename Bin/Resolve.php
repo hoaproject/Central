@@ -54,6 +54,7 @@ class Resolve extends \Hoa\Console\Dispatcher\Kit {
      * @var \Hoa\Core\Bin\Resolve array
      */
     protected $options = array(
+        array('exists',     \Hoa\Console\GetOption::NO_ARGUMENT, 'E'),
         array('tree',       \Hoa\Console\GetOption::NO_ARGUMENT, 't'),
         array('no-verbose', \Hoa\Console\GetOption::NO_ARGUMENT, 'V'),
         array('help',       \Hoa\Console\GetOption::NO_ARGUMENT, 'h'),
@@ -70,10 +71,15 @@ class Resolve extends \Hoa\Console\Dispatcher\Kit {
      */
     public function main ( ) {
 
+        $exists  = true;
         $tree    = false;
         $verbose = true;
 
         while(false !== $c = $this->getOption($v)) switch($c) {
+
+            case 'E':
+                $exists = false;
+              break;
 
             case 't':
                 $tree = true;
@@ -125,7 +131,7 @@ class Resolve extends \Hoa\Console\Dispatcher\Kit {
         if(true === $verbose)
             cout($this->stylize($path, 'info') . ' is equivalent to: ');
 
-        cout(resolve($path));
+        cout(resolve($path, $exists));
 
         return;
     }
