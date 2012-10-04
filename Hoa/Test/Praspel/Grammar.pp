@@ -143,6 +143,7 @@ behavior_content:
           | invariant()
         )
         ::semicolon::
+      | behavior() ::semicolon::?
     )+
     ::_brace:: #behavior
 
