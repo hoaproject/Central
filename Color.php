@@ -65,6 +65,15 @@ namespace Hoa\Realdom {
 class Color extends String {
 
     /**
+     * Regular expression to represent a valid simple color.
+     *
+     * @const string
+     */
+    const REGEX = '#^\#[a-f0-9]{3}([a-f0-9]{3})?$#i';
+
+
+
+    /**
      * Realistic domain name.
      *
      * @var \Hoa\Realdom string
@@ -82,7 +91,7 @@ class Color extends String {
      */
     public function predicate ( $q ) {
 
-        return 0 !== preg_match('#^\#[a-f0-9]{3}([a-f0-9]{3})?$#i', $q, $m);
+        return 0 !== preg_match(static::REGEX, $q, $m);
     }
 
     /**
