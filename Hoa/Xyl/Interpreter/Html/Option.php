@@ -77,58 +77,6 @@ class Option extends Generic {
      * @var \Hoa\Xyl\Interpreter\Html\Option array
      */
     protected static $_attributesMapping = …;
-
-
-
-    /**
-     * Set (or restore) the option value.
-     *
-     * @access  public
-     * @param   string  $value    Value.
-     * @return  string
-     */
-    public function setValue ( $value ) {
-
-        if($value === $v = $this->getValue())
-            $this->writeAttribute('selected', 'selected');
-
-        return $v;
-    }
-
-    /**
-     * Unset the option value.
-     *
-     * @access  public
-     * @return  void
-     */
-    public function unsetValue ( ) {
-
-        $this->removeAttribute('selected');
-
-        return;
-    }
-
-    /**
-     * Get the option value.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getValue ( ) {
-
-        return $this->readAttribute('value');
-    }
-
-    /**
-     * Whether the option is selected or not.
-     *
-     * @access  public
-     * @return  bool
-     */
-    public function isSelected ( ) {
-
-        return true === $this->attributeExists('selected');
-    }
 }
 
 }

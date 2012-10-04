@@ -41,7 +41,12 @@ from('Hoa')
 /**
  * \Hoa\Xyl\Interpreter\Html\Generic
  */
--> import('Xyl.Interpreter.Html.Generic');
+-> import('Xyl.Interpreter.Html.Generic')
+
+/**
+ * \Hoa\Xyl\Interpreter\Html\Form
+ */
+-> import('Xyl.Interpreter.Html.Form');
 
 }
 
@@ -76,6 +81,32 @@ class Output extends Generic {
      * @var \Hoa\Xyl\Interpreter\Html\Output array
      */
     protected static $_attributesMapping = …;
+
+
+
+    /**
+     * Get form.
+     *
+     * @access  public
+     * @return  \Hoa\Xyl\Interpreter\Html\Form
+     */
+    public function getForm ( ) {
+
+        return Form::getMe($this);
+    }
+
+    /**
+     * Whether the input is valid or not.
+     *
+     * @access  public
+     * @param   bool   $revalid    Re-valid or not.
+     * @param   mixed  $value      Value to test.
+     * @return  bool
+     */
+    public function isValid ( $revalid = false, $value ) {
+
+        return Form::postValidation(true, $this);
+    }
 }
 
 }

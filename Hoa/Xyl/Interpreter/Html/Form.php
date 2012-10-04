@@ -46,7 +46,12 @@ from('Hoa')
 /**
  * \Hoa\Xyl\Element\Executable
  */
--> import('Xyl.Element.Executable');
+-> import('Xyl.Element.Executable')
+
+/**
+ * \Hoa\Http\Runtime
+ */
+-> import('Http.Runtime');
 
 }
 
@@ -77,6 +82,7 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
         'enctype'        => parent::ATTRIBUTE_TYPE_NORMAL,
         'method'         => parent::ATTRIBUTE_TYPE_NORMAL,
         'name'           => parent::ATTRIBUTE_TYPE_NORMAL,
+        // client, value, security, all (=true)
         'novalidate'     => parent::ATTRIBUTE_TYPE_NORMAL,
         'onerror'        => parent::ATTRIBUTE_TYPE_LIST,
         'target'         => parent::ATTRIBUTE_TYPE_NORMAL
@@ -111,14 +117,7 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
      *
      * @var \Hoa\Xyl\Interpreter\Html\Form bool
      */
-    protected $_validity                 = true;
-
-    /**
-     * Whether the form has been validated or not.
-     *
-     * @var bool
-     */
-    protected $_hasBeenValidated         = false;
+    protected $_validity                 = null;
 
 
 
@@ -140,18 +139,24 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
 
         if('true' === $this->abstract->readAttribute('async')) {
 
-            if(false === $this->abstract->attributeExists('aria-atomic'))
+            if(false === $this->attributeExists('aria-atomic'))
                 $this->writeAttribute('aria-atomic', 'true');
 
-            if(false === $this->abstract->attributeExists('aria-busy'))
+            if(false === $this->attributeExists('aria-busy'))
                 $this->writeAttribute('aria-busy', 'false');
 
-            if(false === $this->abstract->attributeExists('aria-live'))
+            if(false === $this->attributeExists('aria-live'))
                 $this->writeAttribute('aria-live', 'polite');
 
-            if(false === $this->abstract->attributeExists('aria-relevant'))
+            if(false === $this->attributeExists('aria-relevant'))
                 $this->writeAttribute('aria-relevant', 'all');
         }
+
+        if(false === $this->attributeExists('method'))
+            $this->writeAttribute('method', 'post');
+
+        if(false === $this->attributeExists('novalidate'))
+            $this->writeAttribute('novalidate', 'true');
 
         return;
     }
@@ -164,83 +169,375 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
      */
     public function postExecute ( ) {
 
-        $this->isValid();
-
         return;
+    }
+
+    /**
+     * Get form elements (and associated elements).
+     *
+     * TODO : add fieldset support.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getElements ( ) {
+
+        // Form elements.
+        $out = array_merge(
+            $this->xpath('.//__current_ns:input[@name]'),
+            $this->xpath('.//__current_ns:button[@name]'),
+            $this->xpath('.//__current_ns:select[@name]'),
+            $this->xpath('.//__current_ns:textarea[@name]'),
+            $this->xpath('.//__current_ns:keygen[@name]'),
+            $this->xpath('.//__current_ns:output[@name]')
+        );
+
+        if(null !== $id = $this->readAttribute('id'))
+            // Form-associated elements.
+            $out = array_merge(
+                $out,
+                $this->xpath('//__current_ns:input[@name    and @form="' . $id . '"]'),
+                $this->xpath('//__current_ns:button[@name   and @form="' . $id . '"]'),
+                $this->xpath('//__current_ns:select[@name   and @form="' . $id . '"]'),
+                $this->xpath('//__current_ns:textarea[@name and @form="' . $id . '"]'),
+                $this->xpath('//__current_ns:keygen[@name   and @form="' . $id . '"]'),
+                $this->xpath('//__current_ns:output[@name   and @form="' . $id . '"]')
+            );
+
+        return $out;
+    }
+
+    /**
+     * Get submit elements.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getSubmitElements ( ) {
+
+        $out = array_merge(
+            $this->xpath('.//__current_ns:input[@type="submit"]'),
+            $this->xpath('.//__current_ns:input[@type="image"]')
+        );
+
+        if(null !== $id = $this->readAttribute('id'))
+            // Form-associated elements.
+            $out = array_merge(
+                $this->xpath('//__current_ns:input[@type="submit" and @form="' .  $id . '"]'),
+                $this->xpath('//__current_ns:input[@type="image"  and @form="' .  $id . '"]')
+            );
+
+        return $out;
+    }
+
+    /**
+     * Whether the form has been sent or not.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function hasBeenSent ( ) {
+
+        $novalidate = $this->abstract->readAttributeAsList('novalidate');
+
+        if(    false === $this->abstract->attributeExists('novalidate')
+           || (false === in_array('security', $novalidate)
+           &&  false === in_array('all', $novalidate)
+           &&  false === in_array('true', $novalidate))) {
+
+            $method = strtolower($this->readAttribute('method')) ?: 'post';
+
+            if($method !== \Hoa\Http\Runtime::getMethod())
+                return false;
+
+            $enctype = $this->readAttribute('enctype')
+                           ?: 'application/x-www-form-urlencoded';
+
+            if($enctype !== \Hoa\Http\Runtime::getHeader('Content-Type'))
+                return false;
+
+            // add verifications if:
+            //     <input type="submit" formaction="…" form*="…" />
+        }
+
+        return \Hoa\Http\Runtime::hasData();
     }
 
     /**
      * Whether the form is valid or not.
      *
      * @access  public
+     * @param   bool  $revalid    Re-valid or not.
      * @return  bool
      */
     public function isValid ( $revalid = false ) {
 
-        if(false === $revalid && true === $this->_hasBeenValidated)
+        if(false === $revalid && null !== $this->_validity)
             return $this->_validity;
 
-        $this->_hasBeenValidated = true;
-        $this->_formData         = array_merge($_POST, $_GET);
-        $validate                = false === $this->attributeExists('novalidate');
-        $inputs                  = array_merge(
-            $this->xpath('.//__current_ns:input'),
-            $this->xpath('.//__current_ns:select'),
-            $this->xpath('.//__current_ns:textarea')
-        );
+        $novalidate = $this->abstract->readAttributeAsList('novalidate');
 
-        if(empty($this->_formData))
+        if(   true === in_array('all', $novalidate)
+           || true === in_array('true', $novalidate))
+            return $this->_validity = true;
+
+        $this->_validity = true;
+        $data            = \Hoa\Http\Runtime::getData();
+        $this->flat($data, $flat);
+
+        if(false === is_array($data) || empty($data))
             return $this->_validity = false;
 
-        foreach($inputs as $input) {
+        $elements   = $this->getElements();
+        $names      = array();
+        $validation = array();
 
-            $input = $this->getConcreteElement($input);
-            $name  = $input->readAttribute('name');
+        foreach($elements as &$_element) {
 
-            if('[]' == substr($name, -2))
-                $name = substr($name, 0, -2);
+            $_element = $this->getConcreteElement($_element);
+            $name     = $_element->readAttribute('name');
 
-            if(!isset($this->_formData[$name])) {
+            if(!isset($names[$name]))
+                $names[$name] = array();
 
-                if(true === $validate) {
+            $names[$name][] = $_element;
+        }
 
-                    $input->checkValidity();
-                    $this->_validity = $input->isValid() && $this->_validity;
+        foreach($data as $index => $datum) {
+
+            if(!is_array($datum)) {
+
+                if(!isset($names[$index])) {
+
+                    $validation[$index] = false;
+
+                    continue;
                 }
+
+                if(1 < count($names[$index])) {
+
+                    $validation[$index] = false;
+
+                    continue;
+                }
+
+                $validation[$index] = $names[$index][0]->isValid($revalid, $datum);
+                unset($names[$index]);
+                unset($flat[$index]);
 
                 continue;
             }
 
-            if(is_array($this->_formData[$name]))
-                $value = array_shift($this->_formData[$name]);
-            else
-                $value = $this->_formData[$name];
+            $validation[$index] = false;
 
-            $input->setValue($value);
+            /*
+            print_r($flat);
+            print_r($validation);
 
-            if(true === $validate) {
+            $remainder = array();
 
-                $input->checkValidity($value);
-                $this->_validity = $input->isValid() && $this->_validity;
+            foreach($datum as $key => &$value) {
+
+                $key = key($flat);
+
+                if(!isset($names[$key])) {
+
+                    $remainder[] = $key;
+                    next($flat);
+
+                    continue;
+                }
+
+                $validation[$key] = $names[$key][0]->isValid($revalid, $value);
+                unset($flat[$key]);
+                unset($names[$key]);
             }
+
+            print_r($remainder);
+            */
         }
 
-        if(true !== $validate)
-            return true;
+        foreach($names as $name => $element)
+            foreach($element as $el)
+                if((   $el instanceof Input
+                    || $el instanceof Textarea
+                    || $el instanceof Select)
+                   && true === $el->attributeExists('required'))
+                    $validation[$name] = false;
+
+        $handle = &$this->_validity;
+        array_walk($validation, function ( $verdict ) use ( &$handle ) {
+
+            $handle = $handle && $verdict;
+        });
+
+        self::postVerification($this->_validity, $this);
 
         if(true === $this->_validity)
-            return $this->_validity;
+            $this->_formData = $data;
 
-        $errors = $this->xpath(
-            '//__current_ns:error[@id="' .
-            implode('" or @id="', $this->abstract->readAttributeAsList('onerror')) .
-            '"]'
+        return $this->_validity;
+    }
+
+    /**
+     * Flat array into name[k1][k2]…[kn] = value
+     *
+     * @access  protected
+     * @param   mixed   $value    Array.
+     * @param   array   &$out     Result.
+     * @param   string  $key      Key (prefix).
+     * @return  void
+     */
+    protected function flat ( &$value, &$out, $key = null ) {
+
+        if(!is_array($value)) {
+
+            $out[$key] = &$value;
+
+            return;
+        }
+
+        foreach($value as $k => &$v)
+            if(null === $key)
+                $this->flat($v, $out, $k);
+            else
+                $this->flat($v, $out, $key . '[' . $k . ']');
+
+        return;
+    }
+
+    /**
+     * Post simple validation.
+     *
+     * @access  public
+     * @param   bool $verdict             Verdict.
+     * @param   \Hoa\Xyl\Interpreter\Html\Concrete  $element    Element that
+     *                                                          requires it.
+     * @param   bool $postVerification    Whether we run post-verification or
+     *                                    not.
+     * @return  bool
+     */
+    public static function postValidation ( $verdict, Concrete $element,
+                                            $postVerification = true ) {
+
+        if(true === $postVerification)
+            static::postVerification($verdict, $element);
+
+        /*
+        $validates = array();
+
+        if(true === $this->abstract->attributeExists('validate'))
+            $validates['@'] = $this->abstract->readAttribute('validate');
+        else
+            switch($type) {
+
+                //@TODO
+                // Write Praspel for each input type.
+            }
+
+        if(true === $this->attributeExists('pattern')) {
+
+            $pattern = 'regex(\'' . str_replace(
+                           '\'',
+                           '\\\'',
+                           $this->readAttribute('pattern')
+                       ) .
+                       '\', boundinteger(1, ' .
+                       ($this->attributeExists('maxlength')
+                           ? $this->readAttribute('maxlength')
+                           : 7) .
+                       '))';
+
+            if(!isset($validates['@']))
+                $validates['@']  = $pattern;
+            else
+                $validates['@'] .= ' or ' . $pattern;
+        }
+
+        $validates = array_merge(
+            $validates,
+            $this->abstract->readCustomAttributes('validate')
+        );
+
+        if(empty($validates))
+            return true;
+
+        $onerrors = array();
+
+        if(true === $this->abstract->attributeExists('onerror'))
+            $onerrors['@'] = $this->abstract->readAttributeAsList('onerror');
+
+        $onerrors = array_merge(
+            $onerrors,
+            $this->abstract->readCustomAttributesAsList('onerror')
+        );
+
+        if(null === $value)
+            $value = $this->getValue();
+        else
+            if(ctype_digit($value))
+                $value = (int) $value;
+            elseif(is_numeric($value))
+                $value = (float) $value;
+
+        if(null === self::$_compiler)
+            self::$_compiler = new \Hoa\Test\Praspel\Compiler();
+
+        $this->_validity = true;
+
+        foreach($validates as $name => $realdom) {
+
+            self::$_compiler->compile('@requires i: ' . $realdom . ';');
+            $praspel         = self::$_compiler->getRoot();
+            $variable        = $praspel->getClause('requires')->getVariable('i');
+            $decision        = $variable->predicate($value);
+            $this->_validity = $this->_validity && $decision;
+
+            if(true === $decision)
+                continue;
+
+            if(!isset($onerrors[$name]))
+                continue;
+
+            $errors = $this->xpath(
+                '//__current_ns:error[@id="' .
+                implode('" or @id="', $onerrors[$name]) .
+                '"]'
+            );
+
+            foreach($errors as $error)
+                $this->getConcreteElement($error)->setVisibility(true);
+        }
+
+        return $this->_validity;
+        */
+
+        return $verdict;
+    }
+
+    /**
+     * Post-verification.
+     *
+     * @access  public
+     * @param   bool                                $verdict    Verdict.
+     * @param   \Hoa\Xyl\Interpreter\Html\Concrete  $element    Element that
+     *                                                          requires it.
+     * @return  void
+     */
+    public static function postVerification ( $verdict, Concrete $element ) {
+
+        if(true === $verdict)
+            return;
+
+        $onerror = $element->abstract->readAttributeAsList('onerror');
+        $errors  = $element->xpath(
+            '//__current_ns:error[@id="' . implode('" or @id="', $onerror) . '"]'
         );
 
         foreach($errors as $error)
-            $this->getConcreteElement($error)->setVisibility(true);
+            $element->getConcrete($error)->setVisibility(true);
 
-        return $this->_validity;
+        return;
     }
 
     /**
@@ -262,14 +559,25 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
     }
 
     /**
-     * Whether the form has been sent or not.
+     * Get form associated to an element.
      *
      * @access  public
-     * @return  bool
+     * @param   \Hoa\Xyl\Interpreter\Html\Concrete  $element    Element.
+     * @return  \Hoa\Xyl\Interpreter\Html\Form
      */
-    public function hasBeenSent ( ) {
+    public static function getMe ( Concrete $element ) {
 
-        return !empty($_POST) || !empty($_GET);
+        if(true === $element->attributeExists('form'))
+            $form = $element->xpath(
+                '//__current_ns:form[@id="' . $element->readAttribute('form') . '"]'
+            );
+        else
+            $form = $element->xpath('.//ancestor::__current_ns:form');
+
+        if(empty($form))
+            return null;
+
+        return $form[0];
     }
 }
 

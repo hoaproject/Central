@@ -66,8 +66,7 @@ class Progress extends Generic {
      */
     protected static $_attributes        = array(
         'value' => parent::ATTRIBUTE_TYPE_NORMAL,
-        'max'   => parent::ATTRIBUTE_TYPE_NORMAL,
-        'form'  => parent::ATTRIBUTE_TYPE_NORMAL
+        'max'   => parent::ATTRIBUTE_TYPE_NORMAL
     );
 
     /**

@@ -41,7 +41,12 @@ from('Hoa')
 /**
  * \Hoa\Xyl\Interpreter\Html\Generic
  */
--> import('Xyl.Interpreter.Html.Generic');
+-> import('Xyl.Interpreter.Html.Generic')
+
+/**
+ * \Hoa\Xyl\Interpreter\Html\Form
+ */
+-> import('Xyl.Interpreter.Html.Form');
 
 }
 
@@ -79,6 +84,45 @@ class Keygen extends Generic {
      * @var \Hoa\Xyl\Interpreter\Html\Keygen array
      */
     protected static $_attributesMapping = …;
+
+    /**
+     * Whether the input is valid or not.
+     *
+     * @var \Hoa\Xyl\Interpreter\Html\Input bool
+     */
+    protected $_validity                 = null;
+
+
+
+    /**
+     * Get form.
+     *
+     * @access  public
+     * @return  \Hoa\Xyl\Interpreter\Html\Form
+     */
+    public function getForm ( ) {
+
+        return Form::getMe($this);
+    }
+
+    /**
+     * Whether the input is valid or not.
+     *
+     * @access  public
+     * @param   bool   $revalid    Re-valid or not.
+     * @param   mixed  $value      Value to test.
+     * @return  bool
+     */
+    public function isValid ( $revalid = false, $value ) {
+
+        if(false === $revalid && null !== $this->_validity)
+            return $this->_validity;
+
+        // @TODO
+        // Please, see http://lists.whatwg.org/pipermail/whatwg-whatwg.org/attachments/20080714/07ea5534/attachment.txt
+
+        return $this->_validity = true;
+    }
 }
 
 }
