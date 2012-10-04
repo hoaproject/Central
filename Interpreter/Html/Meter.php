@@ -70,8 +70,7 @@ class Meter extends Generic {
         'max'     => parent::ATTRIBUTE_TYPE_NORMAL,
         'low'     => parent::ATTRIBUTE_TYPE_NORMAL,
         'high'    => parent::ATTRIBUTE_TYPE_NORMAL,
-        'optimum' => parent::ATTRIBUTE_TYPE_NORMAL,
-        'form'    => parent::ATTRIBUTE_TYPE_NORMAL
+        'optimum' => parent::ATTRIBUTE_TYPE_NORMAL
     );
 
     /**

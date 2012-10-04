@@ -41,7 +41,12 @@ from('Hoa')
 /**
  * \Hoa\Xyl\Interpreter\Html\GenericPhrasing
  */
--> import('Xyl.Interpreter.Html.GenericPhrasing');
+-> import('Xyl.Interpreter.Html.GenericPhrasing')
+
+/**
+ * \Hoa\Xyl\Interpreter\Html\Form
+ */
+-> import('Xyl.Interpreter.Html.Form');
 
 }
 
@@ -116,6 +121,44 @@ class Button extends GenericPhrasing {
      * @var \Hoa\Xyl\Interpreter\Html\Button int
      */
     protected $_contentFlow              = 2;
+
+    /**
+     * Whether the input is valid or not.
+     *
+     * @var \Hoa\Xyl\Interpreter\Html\Input bool
+     */
+    protected $_validity                 = null;
+
+
+
+    /**
+     * Get form.
+     *
+     * @access  public
+     * @return  \Hoa\Xyl\Interpreter\Html\Form
+     */
+    public function getForm ( ) {
+
+        return Form::getMe($this);
+    }
+
+    /**
+     * Whether the input is valid or not.
+     *
+     * @access  public
+     * @param   bool   $revalid    Re-valid or not.
+     * @param   mixed  $value      Value to test.
+     * @return  bool
+     */
+    public function isValid ( $revalid = false, $value ) {
+
+        if(false === $revalid && null !== $this->_validity)
+            return $this->_validity;
+
+        $this->_validity = $value === $this->readAttribute('value');
+
+        return Form::postValidation($this->_validity, $this);
+    }
 }
 
 }

@@ -41,7 +41,12 @@ from('Hoa')
 /**
  * \Hoa\Xyl\Interpreter\Html\Generic
  */
--> import('Xyl.Interpreter.Html.Generic');
+-> import('Xyl.Interpreter.Html.Generic')
+
+/**
+ * \Hoa\Xyl\Interpreter\Html\Form
+ */
+-> import('Xyl.Interpreter.Html.Form');
 
 }
 
@@ -86,61 +91,9 @@ class Select extends Generic {
      *
      * @var \Hoa\Xyl\Interpreter\Html\Input bool
      */
-    protected $_validity                 = false;
+    protected $_validity                 = null;
 
 
-
-    /**
-     * Set (or restore) the select value.
-     *
-     * @access  public
-     * @param   string  $value    Value.
-     * @return  string
-     */
-    public function setValue ( $value ) {
-
-        foreach($this->getOptions() as $option) {
-
-            $option = $this->getConcreteElement($option);
-
-            if($value == $option->getValue())
-                $option->setValue($value);
-            else
-                $option->unsetValue($value);
-        }
-
-        return;
-    }
-
-    /**
-     * Get the select value.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getValue ( ) {
-
-        if(null === $option = $this->getSelectedOption())
-            return null;
-
-        return $option->getValue();
-    }
-
-    /**
-     * Unset the select value.
-     *
-     * @access  public
-     * @return  void
-     */
-    public function unsetValue ( ) {
-
-        if(null === $option = $this->getSelectedOption())
-            return;
-
-        $option->unsetValue();
-
-        return;
-    }
 
     /**
      * Get all <option /> components.
@@ -157,59 +110,84 @@ class Select extends Generic {
      * Get the selected <option /> components.
      *
      * @access  public
-     * @return  \Hoa\Xyl\Interpreter\Html\Option
+     * @return  array
      */
-    public function getSelectedOption ( ) {
+    public function getSelectedOptions ( ) {
 
-        $options = $this->xpath('.//__current_ns:option[@selected]');
-
-        if(empty($options))
-            return null;
-
-        return $this->getConcreteElement($options[0]);
+        return $this->xpath('.//__current_ns:option[@selected]');
     }
 
     /**
-     * Check the select validity.
+     * Get form.
      *
      * @access  public
-     * @param   mixed  $value    Value (if null, will find the value).
+     * @return  \Hoa\Xyl\Interpreter\Html\Form
+     */
+    public function getForm ( ) {
+
+        return Form::getMe($this);
+    }
+
+    /**
+     * Whether the input is valid or not.
+     *
+     * @access  public
+     * @param   bool   $revalid    Re-valid or not.
+     * @param   mixed  $value      Value to test.
      * @return  bool
      */
-    public function checkValidity ( $value = null ) {
+    public function isValid ( $revalid = false, $value ) {
 
-        $options = $this->getOptions();
-        $values  = array();
+        if(false === $revalid && null !== $this->_validity)
+            return $this->_validity;
 
-        if(null === $value)
-            foreach($options as $option) {
+        $this->_validity = true;
 
-                $option = $this->getConcreteElement($option);
+        if(   (null === $value || '' === $value || array() === $value)
+           &&  true === $this->attributeExists('required')) {
 
-                if(true === $option->isSelected())
-                    $values[] = $value = $option->getValue();
-                else
-                    $values[] = $option->getValue();
+            $this->_validity = false;
+
+            return Form::postValidation($this->_validity, $this);
+        }
+
+        if(empty($value)) {
+
+            $this->_validity = true;
+
+            return Form::postValidation($this->_validity, $this);
+        }
+
+        if(is_array($value)) {
+
+            if(false === $this->attributeExists('multiple')) {
+
+                $this->_validity = false;
+
+                return Form::postValidation($this->_validity, $this);
             }
+        }
         else
-            foreach($options as $option ) {
+            $value = array($value);
 
-                $option   = $this->getConcreteElement($option);
-                $values[] = $option->getValue();
-            }
+        $values = array();
 
-        return $this->_validity = in_array($value, $values);
-    }
+        foreach($this->getOptions() as $option) {
 
-    /**
-     * Whether the select is valid or not.
-     *
-     * @access  public
-     * @return  bool
-     */
-    public function isValid ( ) {
+            $option = $this->getConcreteElement($option);
 
-        return $this->_validity;
+            if(false === $option->attributeExists('value'))
+                continue;
+
+            $handle = $option->readAttribute('value');
+
+            if(false !== $i = array_search($handle, $value))
+                unset($value[$i]);
+        }
+
+        $this->_validity = empty($value);
+
+        return Form::postValidation($this->_validity, $this);
     }
 }
 

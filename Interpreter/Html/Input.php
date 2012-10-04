@@ -44,9 +44,14 @@ from('Hoa')
 -> import('Xyl.Interpreter.Html.Generic')
 
 /**
- * \Hoa\Test\Praspel\Compiler
+ * \Hoa\Xyl\Interpreter\Html\Form
  */
--> import('Test.Praspel.Compiler');
+-> import('Xyl.Interpreter.Html.Form')
+
+/**
+ * \Hoa\Realdom\Color
+ */
+-> import('Realdom.Color');
 
 }
 
@@ -73,14 +78,18 @@ class Input extends Generic {
         'accept'         => parent::ATTRIBUTE_TYPE_NORMAL,
         'alt'            => parent::ATTRIBUTE_TYPE_NORMAL,
         'autocomplete'   => parent::ATTRIBUTE_TYPE_NORMAL,
+        'autofocus'      => parent::ATTRIBUTE_TYPE_NORMAL,
         'checked'        => parent::ATTRIBUTE_TYPE_NORMAL,
         'dirname'        => parent::ATTRIBUTE_TYPE_NORMAL,
+        'disabled'       => parent::ATTRIBUTE_TYPE_NORMAL,
+        'form'           => parent::ATTRIBUTE_TYPE_NORMAL,
         'formaction'     => parent::ATTRIBUTE_TYPE_LINK,
         'formenctype'    => parent::ATTRIBUTE_TYPE_NORMAL,
         'formmethod'     => parent::ATTRIBUTE_TYPE_NORMAL,
         'formnovalidate' => parent::ATTRIBUTE_TYPE_NORMAL,
         'formtarget'     => parent::ATTRIBUTE_TYPE_NORMAL,
         'height'         => parent::ATTRIBUTE_TYPE_NORMAL,
+        'inputmode'      => parent::ATTRIBUTE_TYPE_NORMAL,
         'list'           => parent::ATTRIBUTE_TYPE_NORMAL,
         'max'            => parent::ATTRIBUTE_TYPE_NORMAL,
         'maxlength'      => parent::ATTRIBUTE_TYPE_NORMAL,
@@ -110,14 +119,18 @@ class Input extends Generic {
         'accept',
         'alt',
         'autocomplete',
+        'autofocus',
         'checked',
         'dirname',
+        'disabled',
+        'form',
         'formaction',
         'formenctype',
         'formmethod',
         'formnovalidate',
         'formtarget',
         'height',
+        'inputmode',
         'list',
         'max',
         'maxlength',
@@ -145,211 +158,246 @@ class Input extends Generic {
     protected $_contentFlow              = 0;
 
     /**
-     * Praspel compiler, to interprete the validate attribute.
-     *
-     * @var \Hoa\Test\Praspel\Compiler object
-     */
-    protected static $_compiler          = null;
-
-    /**
      * Whether the input is valid or not.
      *
      * @var \Hoa\Xyl\Interpreter\Html\Input bool
      */
-    protected $_validity                 = true;
+    protected $_validity                 = null;
 
 
 
     /**
-     * Set (or restore) the input value.
+     * Get form.
      *
      * @access  public
-     * @param   string  $value    Value.
-     * @return  string
+     * @return  \Hoa\Xyl\Interpreter\Html\Form
      */
-    public function setValue ( $value ) {
+    public function getForm ( ) {
 
-        $old = $this->getValue();
-
-        switch(strtolower($this->readAttribute('type'))) {
-
-            case 'checkbox':
-                $this->writeAttribute('checked', 'checked');
-              break;
-
-            case 'radio':
-                if($value == $this->readAttribute('value'))
-                    $this->writeAttribute('checked', 'checked');
-                else
-                    $this->removeAttribute('checked');
-              break;
-
-            default:
-                $this->writeAttribute('value', $value);
-        }
-
-        return $old;
-    }
-
-    /**
-     * Get the input value.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getValue ( ) {
-
-        $value = $this->readAttribute('value');
-
-        if(ctype_digit($value))
-            $value = (int) $value;
-        elseif(is_numeric($value))
-            $value = (float) $value;
-
-        return $value;
-    }
-
-    /**
-     * Unset the input value.
-     *
-     * @access  public
-     * @return  void
-     */
-    public function unsetValue ( ) {
-
-        switch(strtolower($this->readAttribute('type'))) {
-
-            case 'checkbox':
-            case 'radio':
-                $this->removeAttribute('checked');
-              break;
-
-            default:
-                $this->removeAttribute('value');
-        }
-
-        return;
-    }
-
-    /**
-     * Check the input validity.
-     *
-     * @access  public
-     * @param   mixed  $value    Value (if null, will find the value).
-     * @return  bool
-     */
-    public function checkValidity ( $value = null ) {
-
-        $type = strtolower($this->readAttribute('type'));
-
-        if('submit' === $type || 'reset' === $type) {
-
-            $this->_validity = false;
-
-            if(   null   === $value
-               || $value ==  $this->getValue())
-                $this->_validity = true;
-
-            return $this->_validity;
-        }
-
-        $validates = array();
-
-        if(true === $this->abstract->attributeExists('validate'))
-            $validates['@'] = $this->abstract->readAttribute('validate');
-        else
-            switch($type) {
-
-                //@TODO
-                // Write Praspel for each input type.
-            }
-
-        if(true === $this->attributeExists('pattern')) {
-
-            $pattern = 'regex(\'' . str_replace(
-                           '\'',
-                           '\\\'',
-                           $this->readAttribute('pattern')
-                       ) .
-                       '\', boundinteger(1, ' .
-                       ($this->attributeExists('maxlength')
-                           ? $this->readAttribute('maxlength')
-                           : 7) .
-                       '))';
-
-            if(!isset($validates['@']))
-                $validates['@']  = $pattern;
-            else
-                $validates['@'] .= ' or ' . $pattern;
-        }
-
-        $validates = array_merge(
-            $validates,
-            $this->abstract->readCustomAttributes('validate')
-        );
-
-        if(empty($validates))
-            return true;
-
-        $onerrors = array();
-
-        if(true === $this->abstract->attributeExists('onerror'))
-            $onerrors['@'] = $this->abstract->readAttributeAsList('onerror');
-
-        $onerrors = array_merge(
-            $onerrors,
-            $this->abstract->readCustomAttributesAsList('onerror')
-        );
-
-        if(null === $value)
-            $value = $this->getValue();
-        else
-            if(ctype_digit($value))
-                $value = (int) $value;
-            elseif(is_numeric($value))
-                $value = (float) $value;
-
-        if(null === self::$_compiler)
-            self::$_compiler = new \Hoa\Test\Praspel\Compiler();
-
-        $this->_validity = true;
-
-        foreach($validates as $name => $realdom) {
-
-            self::$_compiler->compile('@requires i: ' . $realdom . ';');
-            $praspel         = self::$_compiler->getRoot();
-            $variable        = $praspel->getClause('requires')->getVariable('i');
-            $decision        = $variable->predicate($value);
-            $this->_validity = $this->_validity && $decision;
-
-            if(true === $decision)
-                continue;
-
-            if(!isset($onerrors[$name]))
-                continue;
-
-            $errors = $this->xpath(
-                '//__current_ns:error[@id="' .
-                implode('" or @id="', $onerrors[$name]) .
-                '"]'
-            );
-
-            foreach($errors as $error)
-                $this->getConcreteElement($error)->setVisibility(true);
-        }
-
-        return $this->_validity;
+        return Form::getMe($this);
     }
 
     /**
      * Whether the input is valid or not.
      *
      * @access  public
+     * @param   bool   $revalid    Re-valid or not.
+     * @param   mixed  $value      Value to test.
      * @return  bool
      */
-    public function isValid ( ) {
+    public function isValid ( $revalid = false, &$value ) {
 
-        return $this->_validity;
+        if(false === $revalid && null !== $this->_validity)
+            return $this->_validity;
+
+        $this->_validity = true;
+        $type            = strtolower($this->readAttribute('type'));
+
+        if(   (null === $value || '' === $value)
+           &&  true === $this->attributeExists('required')) {
+
+            $this->_validity = false;
+
+            return Form::postValidation($this->_validity, $this);
+        }
+
+        if(   false !== strpos($value, "\n")
+           || false !== strpos($value, "\r")) {
+
+            $this->_validity = false;
+
+            return Form::postValidation($this->_validity, $this);
+        }
+
+        if(true === $this->attributeExists('pattern')) {
+
+            $pattern = str_replace('#', '\#', $this->readAttribute('pattern'));
+
+            if(0 == @preg_match_all('#^' . $pattern . '$#uim', $value, $_)) {
+
+                $this->_validity = false;
+
+                return Form::postValidation($this->_validity, $this);
+            }
+        }
+
+        if(true === $this->attributeExists('maxlength')) {
+
+            $maxlength = intval($this->readAttribute('maxlength'));
+
+            if(mb_strlen($value) > $maxlength) {
+
+                $this->_validity = false;
+
+                return Form::postValidation($this->_validity, $this);
+            }
+        }
+
+        if(true === $this->attributeExists('readonly')) {
+
+            $this->_validity = $value === $this->readAttribute('value');
+
+            return Form::postValidation($this->_validity, $this);
+        }
+
+        switch($type) {
+
+            case 'hidden':
+                $this->_validity = $value === $this->readAttribute('value');
+              break;
+
+            case 'color':
+                $this->_validity = 0 !== preg_match(
+                    \Hoa\Realdom\Color::REGEX,
+                    $value,
+                    $ 
+                );
+              break;
+
+            // @TODO
+            case 'tel':
+            case 'url':
+            case 'email':
+            case 'datetime':
+            case 'date':
+            case 'month':
+            case 'week':
+            case 'time':
+            case 'datetime-local':
+            case 'file':
+                $this->_validity = true;
+              break;
+
+            case 'number':
+                $value = floatval($value);
+
+                if(false === $this->attributeExists('min')) {
+
+                    if(true === $this->attributeExists('max')) {
+
+                        $max = floatval($this->readAttribute('max'));
+
+                        if($value > $max) {
+
+                            $this->_validity = false;
+
+                            break;
+                        }
+                    }
+
+                    $this->_validity = true;
+
+                    break;
+                }
+
+                $min = floatval($this->readAttribute('min'));
+
+                if($value < $min) {
+
+                    $this->_validity = false;
+
+                    break;
+                }
+
+                if(false === $this->attributeExists('max')) {
+
+                    $this->_validity = true;
+
+                    break;
+                }
+
+                $max = floatval($this->readAttribute('max'));
+
+                if($value > $max) {
+
+                    $this->_validity = false;
+
+                    break;
+                }
+
+                // @TODO step
+                $this->_validity = true;
+              break;
+
+            case 'range':
+                $value = floatval($value);
+                $min   = floatval($this->readAttribute('min') ?:   0);
+                $max   = floatval($this->readAttribute('max') ?: 100);
+
+                if($value < $min || $value > $max)
+                    $this->_validity = false;
+
+                $step = $this->getStep();
+
+                if(false === $step) {
+
+                    $this->_validity = false;
+
+                    break;
+                }
+                elseif(true !== $step) {
+
+                    // @TODO
+                    //$this->_validity = $min % $step === $value % $step;
+                    $this->_validity = true;
+                }
+              break;
+
+            case 'checkbox':
+                if(null === $value)
+                    $this->_validity = true;
+                elseif(!is_string($value))
+                    $this->_validity = false;
+                else
+                    $this->_validity = $value === $this->readAttribute('value');
+              break;
+
+            case 'radio':
+                if(!is_string($value))
+                    $this->_validity = false;
+                else
+                    $this->_validity = $value === $this->readAttribute('value');
+              break;
+
+            case 'submit':
+            case 'image':
+            case 'reset':
+            case 'button':
+                $this->_validity = true;
+              break;
+
+            case 'text':
+            case 'search':
+            case 'password':
+            default:
+                $this->_validity = true;
+        }
+
+        return Form::postValidation($this->_validity, $this);
+    }
+
+    /**
+     * Get step.
+     *
+     * @access  protected
+     * @return  mixed
+     */
+    protected function getStep ( ) {
+
+        if(false === $this->attributeExists('step'))
+            return true;
+
+        $step = $this->readAttribute('step');
+
+        if('any' === strtolower($step))
+            return true;
+
+        $step = floatval($step);
+
+        if(0 >= $step)
+            return false;
+
+        return $step;
     }
 }
 

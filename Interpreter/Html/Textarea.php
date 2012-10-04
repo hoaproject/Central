@@ -44,9 +44,9 @@ from('Hoa')
 -> import('Xyl.Interpreter.Html.Generic')
 
 /**
- * \Hoa\Test\Praspel\Compiler
+ * \Hoa\Xyl\Interpreter\Html\Form
  */
--> import('Test.Praspel.Compiler');
+-> import('Xyl.Interpreter.Html.Form');
 
 }
 
@@ -70,20 +70,22 @@ class Textarea extends Generic {
      * @var \Hoa\Xyl\Interpreter\Html\Textarea array
      */
     protected static $_attributes        = array(
-        'autofocus'   => parent::ATTRIBUTE_TYPE_NORMAL,
-        'cols'        => parent::ATTRIBUTE_TYPE_NORMAL,
-        'dirname'     => parent::ATTRIBUTE_TYPE_NORMAL,
-        'disabled'    => parent::ATTRIBUTE_TYPE_NORMAL,
-        'form'        => parent::ATTRIBUTE_TYPE_NORMAL,
-        'maxlength'   => parent::ATTRIBUTE_TYPE_NORMAL,
-        'name'        => parent::ATTRIBUTE_TYPE_NORMAL,
-        'onerror'     => parent::ATTRIBUTE_TYPE_LIST,
-        'placeholder' => parent::ATTRIBUTE_TYPE_NORMAL,
-        'readonly'    => parent::ATTRIBUTE_TYPE_NORMAL,
-        'required'    => parent::ATTRIBUTE_TYPE_NORMAL,
-        'rows'        => parent::ATTRIBUTE_TYPE_NORMAL,
-        'validate'    => parent::ATTRIBUTE_TYPE_CUSTOM,
-        'wrap'        => parent::ATTRIBUTE_TYPE_NORMAL
+        'autocomplete' => parent::ATTRIBUTE_TYPE_NORMAL,
+        'autofocus'    => parent::ATTRIBUTE_TYPE_NORMAL,
+        'cols'         => parent::ATTRIBUTE_TYPE_NORMAL,
+        'dirname'      => parent::ATTRIBUTE_TYPE_NORMAL,
+        'disabled'     => parent::ATTRIBUTE_TYPE_NORMAL,
+        'form'         => parent::ATTRIBUTE_TYPE_NORMAL,
+        'inputmode'    => parent::ATTRIBUTE_TYPE_NORMAL,
+        'maxlength'    => parent::ATTRIBUTE_TYPE_NORMAL,
+        'name'         => parent::ATTRIBUTE_TYPE_NORMAL,
+        'onerror'      => parent::ATTRIBUTE_TYPE_LIST,
+        'placeholder'  => parent::ATTRIBUTE_TYPE_NORMAL,
+        'readonly'     => parent::ATTRIBUTE_TYPE_NORMAL,
+        'required'     => parent::ATTRIBUTE_TYPE_NORMAL,
+        'rows'         => parent::ATTRIBUTE_TYPE_NORMAL,
+        'validate'     => parent::ATTRIBUTE_TYPE_CUSTOM,
+        'wrap'         => parent::ATTRIBUTE_TYPE_NORMAL
     );
 
     /**
@@ -92,11 +94,13 @@ class Textarea extends Generic {
      * @var \Hoa\Xyl\Interpreter\Html\Textarea array
      */
     protected static $_attributesMapping = array(
+        'autocomplete',
         'autofocus',
         'cols',
         'dirname',
         'disabled',
         'form',
+        'inputmode',
         'maxlength',
         'name',
         'placeholder',
@@ -107,136 +111,68 @@ class Textarea extends Generic {
     );
 
     /**
-     * Praspel compiler, to interprete the validate attribute.
-     *
-     * @var \Hoa\Test\Praspel\Compiler object
-     */
-    protected static $_compiler          = null;
-
-    /**
      * Whether the textarea is valid or not.
      *
      * @var \Hoa\Xyl\Interpreter\Html\Textarea bool
      */
-    protected $_validity                 = true;
+    protected $_validity                 = null;
 
 
 
     /**
-     * Set (or restore) the textarea value.
+     * Get form.
      *
      * @access  public
-     * @param   string  $value    Value.
-     * @return  string
+     * @return  \Hoa\Xyl\Interpreter\Html\Form
      */
-    public function setValue ( $value ) {
+    public function getForm ( ) {
 
-        $this->truncate(0);
-        $this->writeAll($value);
-
-        return;
+        return Form::getMe($this);
     }
 
     /**
-     * Get the textarea value.
+     * Whether the input is valid or not.
      *
      * @access  public
-     * @return  string
-     */
-    public function getValue ( ) {
-
-        return $this->readAll();
-    }
-
-    /**
-     * Unset the textarea value.
-     *
-     * @access  public
-     * @return  void
-     */
-    public function unsetValue ( ) {
-
-        $this->truncate(0);
-
-        return;
-    }
-
-    /**
-     * Check the textarea validity.
-     *
-     * @access  public
-     * @param   mixed  $value    Value (if null, will find the value).
+     * @param   bool   $revalid    Re-valid or not.
+     * @param   mixed  $value      Value to test.
      * @return  bool
      */
-    public function checkValidity ( $value = null ) {
+    public function isValid ( $revalid = false, $value ) {
 
-        $validates = array();
-
-        if(true === $this->attributeExists('validate'))
-            $validates['@'] = $this->readAttribute('validate');
-
-        $validates = array_merge(
-            $validates,
-            $this->abstract->readCustomAttributes('validate')
-        );
-
-        if(empty($validates))
-            return true;
-
-        $onerrors = array();
-
-        if(true === $this->attributeExists('onerror'))
-            $onerrors['@'] = $this->readAttributeAsList('onerror');
-
-        $onerrors = array_merge(
-            $onerrors,
-            $this->readCustomAttributesAsList('onerror')
-        );
-
-        if(null === $value)
-            $value = $this->getValue();
-
-        if(null === self::$_compiler)
-            self::$_compiler = new \Hoa\Test\Praspel\Compiler();
+        if(false === $revalid && null !== $this->_validity)
+            return $this->_validity;
 
         $this->_validity = true;
 
-        foreach($validates as $name => $realdom) {
+        if(   (null === $value || '' === $value)
+           &&  true === $this->attributeExists('required')) {
 
-            self::$_compiler->compile('@requires i: ' . $realdom . ';');
-            $praspel         = self::$_compiler->getRoot();
-            $variable        = $praspel->getClause('requires')->getVariable('i');
-            $decision        = $variable->predicate($value);
-            $this->_validity = $this->_validity && $decision;
+            $this->_validity = false;
 
-            if(true === $decision)
-                continue;
-
-            if(!isset($onerrors[$name]))
-                continue;
-
-            $errors = $this->xpath(
-                '//__current_ns:error[@id="' .
-                implode('" or @id="', $onerrors[$name]) .
-                '"]'
-            );
-
-            foreach($errors as $error)
-                $this->getConcreteElement($error)->setVisibility(true);
+            return Form::postValidation($this->_validity, $this);
         }
 
-        return $this->_validity;
-    }
+        if(true === $this->attributeExists('maxlength')) {
 
-    /**
-     * Whether the textarea is valid or not.
-     *
-     * @access  public
-     * @return  bool
-     */
-    public function isValid ( ) {
+            $maxlength = intval($this->readAttribute('maxlength'));
 
-        return $this->_validity;
+            if(mb_strlen($value) > $maxlength) {
+
+                $this->_validity = false;
+
+                return Form::postValidation($this->_validity, $this);
+            }
+        }
+
+        if(true === $this->attributeExists('readonly')) {
+
+            $this->_validity = $value === $this->computeValue();
+
+            return Form::postValidation($this->_validity, $this);
+        }
+
+        return Form::postValidation($this->_validity, $this);
     }
 }
 
