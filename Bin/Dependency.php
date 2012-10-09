@@ -171,3 +171,6 @@ class Dependency extends \Hoa\Console\Dispatcher\Kit {
 }
 
 }
+
+__halt_compiler();
+Manipulate dependencies of a library.

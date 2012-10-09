@@ -159,3 +159,6 @@ class Resolve extends \Hoa\Console\Dispatcher\Kit {
 }
 
 }
+
+__halt_compiler();
+Resolve hoa:// paths.
