@@ -369,3 +369,6 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
 }
 
 }
+
+__halt_compiler();
+Run tests.
