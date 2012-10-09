@@ -159,3 +159,6 @@ class Initialize extends \Hoa\Console\Dispatcher\Kit {
 }
 
 }
+
+__halt_compiler();
+Initialize tests (repository, compilation…).

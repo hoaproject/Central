@@ -290,3 +290,6 @@ class Praspel extends \Hoa\Console\Dispatcher\Kit {
 }
 
 }
+
+__halt_compiler();
+Interactive Praspel shell.
