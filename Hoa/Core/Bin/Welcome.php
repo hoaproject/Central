@@ -54,9 +54,10 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
      * @var \Hoa\Core\Bin\Welcome array
      */
     protected $options = array(
-        array('library', \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'l'),
-        array('help',    \Hoa\Console\GetOption::NO_ARGUMENT,       'h'),
-        array('help',    \Hoa\Console\GetOption::NO_ARGUMENT,       '?'),
+        array('library',    \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'l'),
+        array('no-verbose', \Hoa\Console\GetOption::NO_ARGUMENT,       'V'),
+        array('help',       \Hoa\Console\GetOption::NO_ARGUMENT,       'h'),
+        array('help',       \Hoa\Console\GetOption::NO_ARGUMENT,       '?'),
     );
 
 
@@ -70,11 +71,16 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
     public function main ( ) {
 
         $library = null;
+        $verbose = true;
 
         while(false !== $c = $this->getOption($v)) switch($c) {
 
             case 'l':
                 $library = $this->parser->parseSpecialValue($v);
+              break;
+
+            case 'V':
+                $verbose = false;
               break;
 
             case 'h':
@@ -87,18 +93,21 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
               break;
         }
 
-        cout(\Hoa\Console\Chrome\Text::align(
-            $this->stylize('Hoa', 'h1'),
-            \Hoa\Console\Chrome\Text::ALIGN_CENTER
-        ));
+        if(true === $verbose) {
 
-        cout('Welcome in the command-line interface of Hoa :-).' .  "\n");
-        cout($this->stylize('List of available commands', 'h2'));
+            cout(\Hoa\Console\Chrome\Text::align(
+                $this->stylize('Hoa', 'h1'),
+                \Hoa\Console\Chrome\Text::ALIGN_CENTER
+            ));
 
-        cout();
+            cout('Welcome in the command-line interface of Hoa :-).' .  "\n");
+            cout($this->stylize('List of available commands', 'h2'));
+
+            cout();
+        }
 
         if(null !== $library)
-            $library = array_map('strtolower', $library);
+            $library = array_map('mb_strtolower', $library);
 
         $locations = array_merge(
             resolve('hoa://Library', true, true),
@@ -116,13 +125,13 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
         foreach($iterator as $entry) {
 
             $pathname = $entry->getPathname();
-            $lib      = basename(dirname(dirname($pathname)));
+            $lib      = mb_strtolower(basename(dirname(dirname($pathname))));
             $bin      = mb_strtolower(
                 mb_substr($entry->getBasename(), 0, -4)
             );
 
             if(   null !== $library
-               && false === in_array(strtolower($lib), $library))
+               && false === in_array($lib, $library))
                 continue;
 
             if('Core' === $lib && 'hoa' === $bin)
@@ -131,18 +140,25 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
             if(!isset($binaries[$lib]))
                 $binaries[$lib] = array();
 
-            $lines       = file($pathname);
-            $description = '';
+            if(true === $verbose) {
 
-            // Berk…
-            for($i = count($lines) - 1; $i >= 0; --$i)
-                if('__halt_compiler();' . "\n" === $lines[$i]) {
+                $lines = file($pathname);
 
-                    $description = trim(implode('', array_slice($lines, $i + 1)));
-                    break;
-                }
+                // Berk…
+                for($i = count($lines) - 1; $i >= 0; --$i)
+                    if('__halt_compiler();' . "\n" === $lines[$i]) {
 
-            unset($lines);
+                        $description = trim(implode(
+                            '',
+                            array_slice($lines, $i + 1)
+                        ));
+                        break;
+                    }
+
+                unset($lines);
+            }
+            else
+                $description = '';
 
             $binaries[$lib][] = array(
                 'name'        => $bin,
@@ -150,20 +166,33 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
             );
         }
 
-        $out = array();
+        if(true === $verbose) {
 
-        foreach($binaries as $group => $commands) {
+            $out = array();
 
-            $out[] = array($group);
+            foreach($binaries as $group => $commands) {
 
-            foreach($commands as $binary)
-                $out[] = array(
-                    '    ' . $this->stylize($binary['name'], 'command'),
-                    $binary['description']
-                );
+                $out[] = array(mb_convert_case($group, MB_CASE_TITLE));
+
+                foreach($commands as $binary)
+                    $out[] = array(
+                        '    ' . $this->stylize($binary['name'], 'command'),
+                        $binary['description']
+                    );
+            }
+
+            cout(\Hoa\Console\Chrome\Text::columnize($out));
         }
+        else {
 
-        cout(\Hoa\Console\Chrome\Text::columnize($out));
+            $out = null;
+
+            foreach($binaries as $group => $commands)
+                foreach($commands as $binary)
+                    $out .= $group . ':' . $binary['name'] . "\n";
+
+            cout($out);
+        }
 
         return;
     }
@@ -180,6 +209,8 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
         cout('Options :');
         cout($this->makeUsageOptionsList(array(
             'l'    => 'Filter libraries to list (comma-separated).',
+            'V'    => 'No-verbose, i.e. be as quiet as possible, just print ' .
+                      'essential informations.',
             'help' => 'This help.'
         )));
 
