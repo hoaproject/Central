@@ -532,3 +532,6 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
 }
 
 }
+
+__halt_compiler();
+A damn stupid and very simple HTTP server.
