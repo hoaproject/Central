@@ -133,3 +133,6 @@ class Start extends \Hoa\Console\Dispatcher\Kit {
 }
 
 }
+
+__halt_compiler();
+Start a worker.
