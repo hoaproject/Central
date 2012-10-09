@@ -389,3 +389,6 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
 }
 
 }
+
+__halt_compiler();
+Interactive XML shell.
