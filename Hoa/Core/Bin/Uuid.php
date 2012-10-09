@@ -114,3 +114,6 @@ class Uuid extends \Hoa\Console\Dispatcher\Kit {
 }
 
 }
+
+__halt_compiler();
+Generate an Universal Unique Identifier (UUID).

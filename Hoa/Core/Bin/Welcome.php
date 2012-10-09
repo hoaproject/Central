@@ -54,8 +54,9 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
      * @var \Hoa\Core\Bin\Welcome array
      */
     protected $options = array(
-        array('help', \Hoa\Console\GetOption::NO_ARGUMENT, 'h'),
-        array('help', \Hoa\Console\GetOption::NO_ARGUMENT, '?'),
+        array('library', \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'l'),
+        array('help',    \Hoa\Console\GetOption::NO_ARGUMENT,       'h'),
+        array('help',    \Hoa\Console\GetOption::NO_ARGUMENT,       '?'),
     );
 
 
@@ -68,7 +69,13 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
      */
     public function main ( ) {
 
+        $library = null;
+
         while(false !== $c = $this->getOption($v)) switch($c) {
+
+            case 'l':
+                $library = $this->parser->parseSpecialValue($v);
+              break;
 
             case 'h':
             case '?':
@@ -85,31 +92,78 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
             \Hoa\Console\Chrome\Text::ALIGN_CENTER
         ));
 
-        cout('Welcome in the command-line interface of Hoa :).' .  "\n");
-
+        cout('Welcome in the command-line interface of Hoa :-).' .  "\n");
         cout($this->stylize('List of available commands', 'h2'));
+
         cout();
 
-        cout(\Hoa\Console\Chrome\Text::columnize(array(
-            // Main.
-            array('Core'),
-            array(
-                '    ' . $this->stylize('welcome', 'command'),
-                'This homepage.'
-            ),
-            array(
-                '    ' . $this->stylize('version', 'command'),
-                'The framework version and revision.'
-            ),
-            array(
-                '    ' . $this->stylize('uuid', 'command'),
-                'Generate an universally unique identifier.'
-            ),
-            array(
-                '    ' . $this->stylize('resolve', 'command'),
-                'Resolve a hoa:// URI.'
-            )
-        )));
+        if(null !== $library)
+            $library = array_map('strtolower', $library);
+
+        $locations = array_merge(
+            resolve('hoa://Library', true, true),
+            resolve('hoa://Data/Library', true, true)
+        );
+        $iterator  = new \AppendIterator();
+
+        foreach($locations as $location)
+            $iterator->append(new \GlobIterator(
+                $location . '*' . DS . 'Bin' . DS . '*.php'
+            ));
+
+        $binaries = array();
+
+        foreach($iterator as $entry) {
+
+            $pathname = $entry->getPathname();
+            $lib      = basename(dirname(dirname($pathname)));
+            $bin      = mb_strtolower(
+                mb_substr($entry->getBasename(), 0, -4)
+            );
+
+            if(   null !== $library
+               && false === in_array(strtolower($lib), $library))
+                continue;
+
+            if('Core' === $lib && 'hoa' === $bin)
+                continue;
+
+            if(!isset($binaries[$lib]))
+                $binaries[$lib] = array();
+
+            $lines       = file($pathname);
+            $description = '';
+
+            // Berk…
+            for($i = count($lines) - 1; $i >= 0; --$i)
+                if('__halt_compiler();' . "\n" === $lines[$i]) {
+
+                    $description = trim(implode('', array_slice($lines, $i + 1)));
+                    break;
+                }
+
+            unset($lines);
+
+            $binaries[$lib][] = array(
+                'name'        => $bin,
+                'description' => $description
+            );
+        }
+
+        $out = array();
+
+        foreach($binaries as $group => $commands) {
+
+            $out[] = array($group);
+
+            foreach($commands as $binary)
+                $out[] = array(
+                    '    ' . $this->stylize($binary['name'], 'command'),
+                    $binary['description']
+                );
+        }
+
+        cout(\Hoa\Console\Chrome\Text::columnize($out));
 
         return;
     }
@@ -125,6 +179,7 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
         cout('Usage   : core:welcome <options>');
         cout('Options :');
         cout($this->makeUsageOptionsList(array(
+            'l'    => 'Filter libraries to list (comma-separated).',
             'help' => 'This help.'
         )));
 
@@ -133,3 +188,6 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
 }
 
 }
+
+__halt_compiler();
+This page.

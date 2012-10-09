@@ -271,3 +271,6 @@ class Diagnostic extends \Hoa\Console\Dispatcher\Kit {
 }
 
 }
+
+__halt_compiler();
+Generate a diagnostic for help.

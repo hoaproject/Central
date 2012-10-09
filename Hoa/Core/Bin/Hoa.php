@@ -48,8 +48,8 @@ from('Hoa')
 -> import('Router.Cli')
 -> import('Dispatcher.Basic');
 
-require __DIR__ . DS . 'Style.php';
-$style = new \Hoa\Core\Bin\Style();
+require __DIR__ . DS . 'Style' . DS . 'Basic.php';
+$style = new \Hoa\Core\Bin\Style\Basic();
 $style->import();
 
 /**

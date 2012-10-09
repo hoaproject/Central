@@ -45,10 +45,10 @@ from('Hoa')
 
 }
 
-namespace Hoa\Core\Bin {
+namespace Hoa\Core\Bin\Style {
 
 /**
- * Class Style.
+ * Class \Hoa\Core\Bin\Style\Basic.
  *
  * This sheet declares the main style.
  *
@@ -56,7 +56,7 @@ namespace Hoa\Core\Bin {
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  */
 
-class Style extends \Hoa\Console\Chrome\Style {
+class Basic extends \Hoa\Console\Chrome\Style {
 
     /**
      * Import the style.
