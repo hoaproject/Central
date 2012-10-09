@@ -135,3 +135,6 @@ class Stop extends \Hoa\Console\Dispatcher\Kit {
 }
 
 }
+
+__halt_compiler();
+Stop a worker.
