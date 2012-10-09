@@ -109,10 +109,7 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
         if(null !== $library)
             $library = array_map('mb_strtolower', $library);
 
-        $locations = array_merge(
-            resolve('hoa://Library', true, true),
-            resolve('hoa://Data/Library', true, true)
-        );
+        $locations = resolve('hoa://Library', true, true);
         $iterator  = new \AppendIterator();
 
         foreach($locations as $location)
