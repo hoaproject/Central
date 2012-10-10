@@ -131,11 +131,13 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
                && false === in_array($lib, $library))
                 continue;
 
-            if('Core' === $lib && 'hoa' === $bin)
+            if('core' === $lib && 'hoa' === $bin)
                 continue;
 
             if(!isset($binaries[$lib]))
                 $binaries[$lib] = array();
+
+            $description = '';
 
             if(true === $verbose) {
 
@@ -154,8 +156,6 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
 
                 unset($lines);
             }
-            else
-                $description = '';
 
             $binaries[$lib][] = array(
                 'name'        => $bin,
