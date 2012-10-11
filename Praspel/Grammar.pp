@@ -65,7 +65,7 @@
 %token _bracket         \]
 %token  comma           ,
 %token  backslash       \\
-%token  arrow           \-\>
+%token  arrow           \->
 %token  resolution      ::
 %token  colon           :
 %token  semicolon       ;
