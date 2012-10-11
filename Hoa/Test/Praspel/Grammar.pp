@@ -74,7 +74,7 @@
 %token  hd:identifier   [A-Z]+
 %token  hd:newline      \n
 %token  hd:_heredoc     ;                         -> default
-%token  hd:doc          [^\n]+
+%token  hd:line         [^\n]+
 
 // Keywords.
 %token  domainof        domainof
@@ -138,7 +138,7 @@ method:
 
 #forexample:
     ::forexample:: ::heredoc_:: <identifier[0]> ::newline::
-    ( <doc> ::newline:: )+
+    ( <line> ::newline:: )+
     ::identifier[0]:: ::_heredoc::
 
 behavior:
