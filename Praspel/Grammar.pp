@@ -201,6 +201,7 @@ constant:
     ( <escaped> | <string> )
     ( ( <escaped> | <string> ) #concatenation )*
     ::_quote::
+  | array()
 
 #array:
     ::bracket_::
