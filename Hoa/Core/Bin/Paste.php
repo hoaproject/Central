@@ -37,21 +37,21 @@
 namespace Hoa\Core\Bin {
 
 /**
- * Class \Hoa\Core\Bin\Uuid.
+ * Class \Hoa\Core\Bin\Paste.
  *
- * This command generates an UUID.
+ * Paste something somewhere.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Uuid extends \Hoa\Console\Dispatcher\Kit {
+class Paste extends \Hoa\Console\Dispatcher\Kit {
 
     /**
      * Options description.
      *
-     * @var \Hoa\Core\Bin\Uuid array
+     * @var \Hoa\Core\Bin\Paste array
      */
     protected $options = array(
         array('help', \Hoa\Console\GetOption::NO_ARGUMENT, 'h'),
@@ -80,17 +80,38 @@ class Uuid extends \Hoa\Console\Dispatcher\Kit {
               break;
         }
 
-        cout(sprintf(
-            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0x0fff) | 0x4000,
-            mt_rand(0, 0x3fff) | 0x8000,
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff)
-        ));
+        $input  = file_get_contents('php://stdin');
+        $server = @stream_socket_client(
+            'tcp://paste.hoa-project.net',
+            $errno,
+            $errstr,
+            30
+        );
+
+        if(false == $server) {
+
+            cout('Cannot connect to the server.');
+
+            return 1;
+        }
+
+        $request = 'POST / HTTP/1.1' . "\r\n" .
+                   'Host: http://paste.hoa-project.net/' . "\r\n" .
+                   'Content-Type: text/plain' . "\r\n" .
+                   'Content-Length: ' . strlen($input) . "\r\n\r\n" .
+                   $input;
+
+        if(-1 === stream_socket_sendto($server, $request)) {
+
+            cout('Pipe is broken, cannot write data.');
+
+            return 2;
+        }
+
+        $response = stream_socket_recvfrom($server, 1024);
+        list($headers, $body) = explode("\r\n\r\n", $response);
+
+        cout(trim($body));
 
         return;
     }
@@ -103,7 +124,7 @@ class Uuid extends \Hoa\Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        cout('Usage   : core:uuid <options>');
+        cout('Usage   : core:paste <options>');
         cout('Options :');
         cout($this->makeUsageOptionsList(array(
             'help' => 'This help.'
@@ -116,4 +137,4 @@ class Uuid extends \Hoa\Console\Dispatcher\Kit {
 }
 
 __halt_compiler();
-Generate an Universal Unique Identifier (UUID).
+Paste something somewhere.
