@@ -51,6 +51,7 @@
 %token  throwable       @throwable
 %token  invariant       @invariant
 %token  behavior        @behavior
+%token  forexample      @forexample
 
 // Constructions.
 %token  old             \\old
@@ -69,6 +70,11 @@
 %token  resolution      ::
 %token  colon           :
 %token  semicolon       ;
+%token  heredoc_        <<<                       -> hd
+%token  hd:identifier   [A-Z]+
+%token  hd:newline      \n
+%token  hd:_heredoc     ;                         -> default
+%token  hd:doc          [^\n]+
 
 // Keywords.
 %token  domainof        domainof
@@ -90,10 +96,10 @@
 %token  octal           ([+-]?0[0-7]+)
 %token  float           ([+-]?([0-9]*\.[0-9]+)|([0-9]+\.[0-9]*))
 %token  decimal         ([+-]?[1-9][0-9]*|0)
-%token  quote_          '    -> string
+%token  quote_          '                         -> string
 %token  string:escaped  \\['|\\]
 %token  string:string   [^'\\]+
-%token  string:_quote   '    -> default
+%token  string:_quote   '                         -> default
 %token  string          '.*?(?<!\\)'
 %token  identifier      [a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*
 
@@ -112,6 +118,7 @@ method:
       | is()
     )
     ::semicolon::
+  | forexample()
   | behavior() ::semicolon::?
 
 #requires:
@@ -128,6 +135,11 @@ method:
 
 #is:
     ::is:: <pure>
+
+#forexample:
+    ::forexample:: ::heredoc_:: <identifier[0]> ::newline::
+    ( <doc> ::newline:: )+
+    ::identifier[0]:: ::_heredoc::
 
 behavior:
     ::behavior:: behavior_content()
