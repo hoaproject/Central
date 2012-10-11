@@ -145,7 +145,7 @@ abstract class Dispatcher implements \Hoa\Core\Parameter\Parameterizable {
     public function dispatch ( \Hoa\Router        $router,
                                \Hoa\View\Viewable $view = null ) {
 
-        $rule     = $router->getTheRule();
+        $rule = $router->getTheRule();
 
         if(null === $rule) {
 
