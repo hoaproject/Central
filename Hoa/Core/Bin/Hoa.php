@@ -46,7 +46,8 @@ if(!defined('HOA'))
 
 from('Hoa')
 -> import('Router.Cli')
--> import('Dispatcher.Basic');
+-> import('Dispatcher.Basic')
+-> import('Console.Dispatcher.Kit');
 
 require __DIR__ . DS . 'Style' . DS . 'Basic.php';
 $style = new \Hoa\Core\Bin\Style\Basic();
