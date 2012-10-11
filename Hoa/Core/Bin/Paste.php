@@ -54,8 +54,9 @@ class Paste extends \Hoa\Console\Dispatcher\Kit {
      * @var \Hoa\Core\Bin\Paste array
      */
     protected $options = array(
-        array('help', \Hoa\Console\GetOption::NO_ARGUMENT, 'h'),
-        array('help', \Hoa\Console\GetOption::NO_ARGUMENT, '?')
+        array('address', \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'a'),
+        array('help',    \Hoa\Console\GetOption::NO_ARGUMENT,       'h'),
+        array('help',    \Hoa\Console\GetOption::NO_ARGUMENT,       '?')
     );
 
 
@@ -68,7 +69,13 @@ class Paste extends \Hoa\Console\Dispatcher\Kit {
      */
     public function main ( ) {
 
+        $address = 'paste.hoa-project.net:80';
+
         while(false !== $c = $this->getOption($v)) switch($c) {
+
+            case 'a':
+                $address = $v;
+              break;
 
             case 'h':
             case '?':
@@ -82,7 +89,7 @@ class Paste extends \Hoa\Console\Dispatcher\Kit {
 
         $input  = file_get_contents('php://stdin');
         $server = stream_socket_client(
-            'tcp://paste.hoa-project.net:80',
+            'tcp://' . $address,
             $errno,
             $errstr,
             30
@@ -96,7 +103,7 @@ class Paste extends \Hoa\Console\Dispatcher\Kit {
         }
 
         $request = 'POST / HTTP/1.1' . "\r\n" .
-                   'Host: paste.hoa-project.net' . "\r\n" .
+                   'Host: ' . $address . "\r\n" .
                    'Content-Type: text/plain' . "\r\n" .
                    'Content-Length: ' . strlen($input) . "\r\n\r\n" .
                    $input;
@@ -127,6 +134,7 @@ class Paste extends \Hoa\Console\Dispatcher\Kit {
         cout('Usage   : core:paste <options>');
         cout('Options :');
         cout($this->makeUsageOptionsList(array(
+            'a'    => 'Address to the paste server.',
             'help' => 'This help.'
         )));
 
