@@ -50,7 +50,7 @@ from('Hoa')
 
 }
 
-namespace Hoa\Dispatcher\Basic {
+namespace Hoa\Dispatcher {
 
 /**
  * Class \Hoa\Dispatcher\Basic.
@@ -69,29 +69,39 @@ class Basic extends \Hoa\Dispatcher {
      * Resolve the dispatch call.
      *
      * @access  protected
-     * @param   array      $rule    Rule.
+     * @param   array                $rule      Rule.
+     * @param   \Hoa\Router          $router    Router.
+     * @param   \Hoa\View\Viewable   $view      View.
      * @return  mixed
      * @throw   \Hoa\Dispatcher\Exception
      */
-    protected function resolve ( Array $rule ) {
+    protected function resolve ( Array $rule, \Hoa\Router $router,
+                                 \Hoa\View\Viewable $view = null ) {
 
         $called     = null;
-        $variables  = $rule[\Hoa\Router::RULE_VARIABLES];
+        $variables  = &$rule[\Hoa\Router::RULE_VARIABLES];
         $call       = @$variables['controller']
                           ?: @$variables['_call']
                           ?: $rule[\Hoa\Router::RULE_CALL];
         $able       = @$variables['action']
                           ?: @$variables['_able']
                           ?: $rule[\Hoa\Router::RULE_ABLE];
+        $rtv        = array($router, $this, $view);
         $arguments  = array();
         $reflection = null;
-        $_this      = $variables['_this'];
-        $method     = $_this->router->getMethod();
 
         if($call instanceof \Closure) {
 
-            $called     = $call;
-            $reflection = new \ReflectionMethod($call, '__invoke');
+            $kit = dnew($this->getKitName(), $rtv);
+
+            if(!($kit instanceof Kit))
+                throw new Exception(
+                    'Your kit %s must extend Hoa\Dispatcher\Kit.',
+                    0, $this->getKitName());
+
+            $variables['_this'] = $kit;
+            $called             = $call;
+            $reflection         = new \ReflectionMethod($call, '__invoke');
 
             foreach($reflection->getParameters() as $parameter) {
 
@@ -108,12 +118,20 @@ class Basic extends \Hoa\Dispatcher {
                         'The closured action for the rule with pattern %s needs ' .
                         'a value for the parameter $%s and this value does not ' .
                         'exist.',
-                        0, array($rule[\Hoa\Router::RULE_PATTERN], $name));
+                        1, array($rule[\Hoa\Router::RULE_PATTERN], $name));
             }
         }
         elseif(is_string($call) && null === $able) {
 
-            $reflection = new \ReflectionFunction($call);
+            $kit = dnew($this->getKitName(), $rtv);
+
+            if(!($kit instanceof Kit))
+                throw new Exception(
+                    'Your kit %s must extend Hoa\Dispatcher\Kit.',
+                    2, $this->getKitName());
+
+            $variables['_this'] = $kit;
+            $reflection         = new \ReflectionFunction($call);
 
             foreach($reflection->getParameters() as $parameter) {
 
@@ -130,12 +148,12 @@ class Basic extends \Hoa\Dispatcher {
                         'The functional action for the rule with pattern %s needs ' .
                         'a value for the parameter $%s and this value does not ' .
                         'exist.',
-                        1, array($rule[\Hoa\Router::RULE_PATTERN], $name));
+                        3, array($rule[\Hoa\Router::RULE_PATTERN], $name));
             }
         }
         else {
 
-            $async      = $_this->router->isAsynchronous();
+            $async      = $router->isAsynchronous();
             $controller = $call;
             $action     = $able;
 
@@ -157,30 +175,36 @@ class Basic extends \Hoa\Dispatcher {
 
                 $controller = $this->_parameters->getFormattedParameter($_controller);
                 $action     = $this->_parameters->getFormattedParameter($_action);
-                $kit        = $variables['_this'];
 
                 try {
 
-                    $controller = dnew($controller, array($kit));
+                    $controller = dnew($controller, $rtv);
                 }
                 catch ( \Hoa\Core\Exception $e ) {
 
-                    throw new \Hoa\Dispatcher\Exception(
+                    throw new Exception(
                         'Controller %s is not found ' .
                         '(method: %s, asynchronous: %s).',
-                        2, array($controller, strtoupper($method),
+                        4, array($controller, strtoupper($method),
                                  true === $async ? 'true': 'false'), $e);
                 }
+
+                if(!($controller instanceof Kit))
+                    $kit = dnew($this->getKitName(), $rtv);
+                else
+                    $kit = $controller;
+
+                $variables['_this'] = $kit;
 
                 if(method_exists($controller, 'construct'))
                     $controller->construct();
             }
 
             if(!method_exists($controller, $action))
-                throw new \Hoa\Dispatcher\Exception(
+                throw new Exception(
                     'Action %s does not exist on the controller %s ' .
                     '(method: %s, asynchronous: %s).',
-                    3, array($action, get_class($controller), strtoupper($method),
+                    5, array($action, get_class($controller), strtoupper($method),
                              true === $async ? 'true': 'false'));
 
             $called     = $controller;
@@ -197,10 +221,10 @@ class Basic extends \Hoa\Dispatcher {
                 }
 
                 if(false === $parameter->isOptional())
-                    throw new \Hoa\Dispatcher\Exception(
+                    throw new Exception(
                         'The action %s on the controller %s needs a value for ' .
                         'the parameter $%s and this value does not exist.',
-                        4, array($action, get_class($controller), $name));
+                        6, array($action, get_class($controller), $name));
             }
         }
 
