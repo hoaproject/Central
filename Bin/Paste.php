@@ -81,8 +81,8 @@ class Paste extends \Hoa\Console\Dispatcher\Kit {
         }
 
         $input  = file_get_contents('php://stdin');
-        $server = @stream_socket_client(
-            'tcp://paste.hoa-project.net',
+        $server = stream_socket_client(
+            'tcp://paste.hoa-project.net:80',
             $errno,
             $errstr,
             30
@@ -96,7 +96,7 @@ class Paste extends \Hoa\Console\Dispatcher\Kit {
         }
 
         $request = 'POST / HTTP/1.1' . "\r\n" .
-                   'Host: http://paste.hoa-project.net/' . "\r\n" .
+                   'Host: paste.hoa-project.net' . "\r\n" .
                    'Content-Type: text/plain' . "\r\n" .
                    'Content-Length: ' . strlen($input) . "\r\n\r\n" .
                    $input;
