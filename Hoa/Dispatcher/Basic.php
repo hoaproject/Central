@@ -185,7 +185,7 @@ class Basic extends \Hoa\Dispatcher {
                     throw new Exception(
                         'Controller %s is not found ' .
                         '(method: %s, asynchronous: %s).',
-                        4, array($controller, strtoupper($method),
+                        4, array($controller, strtoupper($router->getMethod()),
                                  true === $async ? 'true': 'false'), $e);
                 }
 
@@ -204,7 +204,8 @@ class Basic extends \Hoa\Dispatcher {
                 throw new Exception(
                     'Action %s does not exist on the controller %s ' .
                     '(method: %s, asynchronous: %s).',
-                    5, array($action, get_class($controller), strtoupper($method),
+                    5, array($action, get_class($controller),
+                             strtoupper($router->getRouter()),
                              true === $async ? 'true': 'false'));
 
             $called     = $controller;
