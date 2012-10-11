@@ -103,7 +103,7 @@ class Uuid extends \Hoa\Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        cout('Usage   : main:uuid <options>');
+        cout('Usage   : core:uuid <options>');
         cout('Options :');
         cout($this->makeUsageOptionsList(array(
             'help' => 'This help.'

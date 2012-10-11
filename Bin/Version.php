@@ -128,7 +128,7 @@ class Version extends \Hoa\Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        cout('Usage   : main:version <options>');
+        cout('Usage   : core:version <options>');
         cout('Options :');
         cout($this->makeUsageOptionsList(array(
             'v'    => 'Get the version.',
