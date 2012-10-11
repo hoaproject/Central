@@ -50,7 +50,7 @@ from('Hoa')
 
 }
 
-namespace Hoa\Dispatcher {
+namespace Hoa\Dispatcher\Basic {
 
 /**
  * Class \Hoa\Dispatcher\Basic.
@@ -63,7 +63,7 @@ namespace Hoa\Dispatcher {
  * @license    New BSD License
  */
 
-class Basic extends Dispatcher {
+class Basic extends \Hoa\Dispatcher {
 
     /**
      * Resolve the dispatch call.
@@ -161,18 +161,11 @@ class Basic extends Dispatcher {
 
                 try {
 
-                    $controller = dnew(
-                        $controller,
-                        array(
-                            $kit->router,
-                            $kit->dispatcher,
-                            $kit->view
-                        )
-                    );
+                    $controller = dnew($controller, array($kit));
                 }
                 catch ( \Hoa\Core\Exception $e ) {
 
-                    throw new Exception(
+                    throw new \Hoa\Dispatcher\Exception(
                         'Controller %s is not found ' .
                         '(method: %s, asynchronous: %s).',
                         2, array($controller, strtoupper($method),
@@ -184,7 +177,7 @@ class Basic extends Dispatcher {
             }
 
             if(!method_exists($controller, $action))
-                throw new Exception(
+                throw new \Hoa\Dispatcher\Exception(
                     'Action %s does not exist on the controller %s ' .
                     '(method: %s, asynchronous: %s).',
                     3, array($action, get_class($controller), strtoupper($method),
@@ -204,7 +197,7 @@ class Basic extends Dispatcher {
                 }
 
                 if(false === $parameter->isOptional())
-                    throw new Exception(
+                    throw new \Hoa\Dispatcher\Exception(
                         'The action %s on the controller %s needs a value for ' .
                         'the parameter $%s and this value does not exist.',
                         4, array($action, get_class($controller), $name));
