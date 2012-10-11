@@ -86,6 +86,7 @@
 %token  parent          parent
 %token  and             and
 %token  or              or
+%token  xor             xor
 %token  with            with
 %token  pure            pure
 
@@ -179,8 +180,12 @@ exception:
     identifier() ::domainof:: identifier()
 
 representation:
+    disjunction() ( ::xor:: disjunction() #exclusive_disjunction )*
+
+disjunction:
     ( constant() | realdom() )
-    ( ::or:: ( constant() | realdom() ) #disjunction )*
+    ( ::or:: disjunction() #disjunction )*
+  | ::parenthesis_:: representation() ::_parenthesis::
 
 #realdom:
     <identifier> ::parenthesis_::
@@ -201,6 +206,7 @@ constant:
     ( <escaped> | <string> )
     ( ( <escaped> | <string> ) #concatenation )*
     ::_quote::
+  | array()
 
 #array:
     ::bracket_::
