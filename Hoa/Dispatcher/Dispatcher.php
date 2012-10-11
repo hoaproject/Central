@@ -164,17 +164,9 @@ abstract class Dispatcher implements \Hoa\Core\Parameter\Parameterizable {
         foreach($rule[\Hoa\Router::RULE_VARIABLES] as $key => $value)
             $this->_parameters->setParameter('variables.' . $key, $value);
 
-        $kit = dnew($this->getKitName(), array($router, $this, $view));
-
-        if(!($kit instanceof Kit))
-            throw new Exception(
-                'Your kit %s must extend Hoa\Dispatcher\Kit.',
-                0, $this->getKitName());
-
-        $rule[\Hoa\Router::RULE_VARIABLES]['_this'] = $kit;
         $this->_parameters->setKeyword('method', $router->getMethod());
 
-        $out               = $this->resolve($rule);
+        $out               = $this->resolve($rule, $router, $view);
         unset($this->_parameters);
         $this->_parameters = $parameters;
 
@@ -185,11 +177,14 @@ abstract class Dispatcher implements \Hoa\Core\Parameter\Parameterizable {
      * Resolve the dispatch call.
      *
      * @access  protected
-     * @param   array      $rule    Rule.
+     * @param   array               $rule      Rule.
+     * @param   \Hoa\Router         $router    Router.
+     * @param   \Hoa\View\Viewable  $view      View.
      * @return  mixed
      * @throw   \Hoa\Dispatcher\Exception
      */
-    abstract protected function resolve ( Array $rule );
+    abstract protected function resolve ( Array $rule, \Hoa\Router $router,
+                                          \Hoa\View\Viewable $view = null );
 
     /**
      * Set kit's name.
