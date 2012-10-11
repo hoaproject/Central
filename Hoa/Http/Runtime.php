@@ -163,7 +163,13 @@ class Runtime {
 
         static $_headers = null;
 
-        if(null === $_headers)
+        if(null !== $_headers)
+            return $_headers;
+
+        if(true === function_exists('apache_request_headers'))
+            foreach(apache_request_headers() as $header => $value)
+                $_headers[strtolower($header)] = $value;
+        else
             foreach($_SERVER as $key => $value)
                 if('HTTP_' === substr($key, 0, 5))
                     $_headers[strtolower(str_replace('_', '-', substr($key, 5)))]
