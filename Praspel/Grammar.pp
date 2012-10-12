@@ -102,7 +102,7 @@
 %token  float           [+-]?(0|[1-9]\d*)(\.\d+)?([eE][\+\-]?\d+)?
 %token  decimal         [+-]?[1-9][0-9]*|0
 %token  quote_          '                         -> string
-%token  string:escaped  \\.
+%token  string:escaped  \\(['nrtvef\\b]|[0-7]{1,3}|[xX][0-9a-fA-F]{1,2})
 %token  string:string   [^'\\]+
 %token  string:concat   '\s*\.\s*'
 %token  string:_quote   '                         -> default
