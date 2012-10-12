@@ -96,12 +96,13 @@
 // Constants.
 %token  true            true
 %token  false           false
-%token  hexa            ([+-]?0[xX][0-9a-fA-F]+)
-%token  octal           ([+-]?0[0-7]+)
-%token  float           ([+-]?([0-9]*\.[0-9]+))
-%token  decimal         ([+-]?[1-9][0-9]*|0)
+%token  binary          [+-]?0b[01]+
+%token  octal           [+-]?0[0-7]+
+%token  hexa            [+-]?0[xX][0-9a-fA-F]+
+%token  float           [+-]?(0|[1-9]\d*)(\.\d+)?([eE][\+\-]?\d+)?
+%token  decimal         [+-]?[1-9][0-9]*|0
 %token  quote_          '                         -> string
-%token  string:escaped  \\.
+%token  string:escaped  \\(['nrtvef\\b]|[0-7]{1,3}|[xX][0-9a-fA-F]{1,2})
 %token  string:string   [^'\\]+
 %token  string:concat   '\s*\.\s*'
 %token  string:_quote   '                         -> default
@@ -203,7 +204,7 @@ constant:
     <true> | <false> | number() | string() | <regex> | array() | range()
 
 number:
-    <hexa> | <octal> | <decimal> | <float>
+    <binary> | <octal> | <hexa> | <decimal> | <float>
 
 string:
     quoted_string() | herestring()
