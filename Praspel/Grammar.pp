@@ -96,8 +96,9 @@
 // Constants.
 %token  true            true
 %token  false           false
-%token  hexa            ([+-]?0[xX][0-9a-fA-F]+)
+%token  binary          ([+-]?0b[01]+)
 %token  octal           ([+-]?0[0-7]+)
+%token  hexa            ([+-]?0[xX][0-9a-fA-F]+)
 %token  float           ([+-]?([0-9]*\.[0-9]+))
 %token  decimal         ([+-]?[1-9][0-9]*|0)
 %token  quote_          '                         -> string
@@ -203,7 +204,7 @@ constant:
     <true> | <false> | number() | string() | <regex> | array() | range()
 
 number:
-    <hexa> | <octal> | <decimal> | <float>
+    <binary> | <octal> | <hexa> | <decimal> | <float>
 
 string:
     quoted_string() | herestring()
