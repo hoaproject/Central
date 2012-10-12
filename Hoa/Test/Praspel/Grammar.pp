@@ -92,8 +92,10 @@
 %token  xor             xor
 %token  with            with
 %token  pure            pure
+%token  default         default
 
 // Constants.
+%token  null            null
 %token  true            true
 %token  false           false
 %token  binary          [+-]?0b[01]+
@@ -192,7 +194,7 @@ disjunction:
     ::_parenthesis::
 
 argument:
-    realdom() | constant() | array()
+    <default> | realdom() | constant() | array()
 
 #domainof:
     identifier() ::domainof:: identifier()
@@ -201,7 +203,8 @@ argument:
     ::pred:: ::parenthesis_:: string()? ::_parenthesis::
 
 constant:
-    <true> | <false> | number() | string() | <regex> | array() | range()
+    <null> | <true> | <false> | number() | string() | <regex> | array()
+  | range()
 
 number:
     <binary> | <octal> | <hexa> | <decimal> | <float>
