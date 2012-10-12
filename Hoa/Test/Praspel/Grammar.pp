@@ -122,9 +122,8 @@ method:
       | invariant()
       | is()
     )
-    ::semicolon::
-  | forexample()
-  | behavior() ::semicolon::?
+    ::semicolon::+
+  | ( forexample() | behavior() ) ::semicolon::*
 
 #requires:
     ::requires:: expression()?
@@ -142,7 +141,7 @@ method:
     ::is:: <pure>
 
 #forexample:
-    ::forexample:: herestring()
+    ::forexample:: string()
 
 behavior:
     ::behavior:: behavior_content()
@@ -201,14 +200,13 @@ argument:
     ::pred:: ::parenthesis_:: string()? ::_parenthesis::
 
 constant:
-    <true> | <false> | number() | string() | array() | range()
+    <true> | <false> | number() | string() | <regex> | array() | range()
 
 number:
     <hexa> | <octal> | <decimal> | <float>
 
-#string:
-    <regex> #regex
-  | quoted_string()
+string:
+    quoted_string() | herestring()
 
 quoted_string:
     ::quote_::
