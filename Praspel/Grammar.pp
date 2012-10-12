@@ -96,11 +96,11 @@
 // Constants.
 %token  true            true
 %token  false           false
-%token  binary          ([+-]?0b[01]+)
-%token  octal           ([+-]?0[0-7]+)
-%token  hexa            ([+-]?0[xX][0-9a-fA-F]+)
-%token  float           ([+-]?([0-9]*\.[0-9]+))
-%token  decimal         ([+-]?[1-9][0-9]*|0)
+%token  binary          [+-]?0b[01]+
+%token  octal           [+-]?0[0-7]+
+%token  hexa            [+-]?0[xX][0-9a-fA-F]+
+%token  float           [+-]?(0|[1-9]\d*)(\.\d+)?([eE][\+\-]?\d+)?
+%token  decimal         [+-]?[1-9][0-9]*|0
 %token  quote_          '                         -> string
 %token  string:escaped  \\.
 %token  string:string   [^'\\]+
