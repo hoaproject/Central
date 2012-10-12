@@ -155,7 +155,7 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
         if(false === $this->attributeExists('method'))
             $this->writeAttribute('method', 'post');
 
-        if(false === $this->attributeExists('novalidate'))
+        if(true === $this->attributeExists('novalidate'))
             $this->writeAttribute('novalidate', 'true');
 
         return;
