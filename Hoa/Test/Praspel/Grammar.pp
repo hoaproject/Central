@@ -57,6 +57,7 @@
 // Constructions.
 %token  old             \\old
 %token  result          \\result
+%token  pred            \\pred
 
 // Symbols.
 %token  parenthesis_    \(
@@ -71,6 +72,7 @@
 %token  resolution      ::
 %token  colon           :
 %token  semicolon       ;
+%token  range           \.\.
 %token  heredoc_        <<<                       -> hd
 %token  hd:quote        '
 %token  hd:identifier   [A-Z]+
@@ -96,13 +98,14 @@
 %token  false           false
 %token  hexa            ([+-]?0[xX][0-9a-fA-F]+)
 %token  octal           ([+-]?0[0-7]+)
-%token  float           ([+-]?([0-9]*\.[0-9]+)|([0-9]+\.[0-9]*))
+%token  float           ([+-]?([0-9]*\.[0-9]+))
 %token  decimal         ([+-]?[1-9][0-9]*|0)
 %token  quote_          '                         -> string
-%token  string:escaped  \\['|\\]
+%token  string:escaped  \\.
 %token  string:string   [^'\\]+
+%token  string:concat   '\s*\.\s*'
 %token  string:_quote   '                         -> default
-%token  string          '.*?(?<!\\)'
+%token  regex           /.*?(?<!\\)/[imsxADSUXJu]*
 %token  identifier      [a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*
 
 #specification:
@@ -160,8 +163,8 @@ behavior_content:
     ::_brace:: #behavior
 
 expression:
-    ( declaration() | domainof() )
-    ( ::and:: ( declaration() | domainof() ) )*
+    ( declaration() | domainof() | predicate() )
+    ( ::and:: ( declaration() | domainof() | predicate() ) )*
 
 exceptional_expression:
     exception() ( ::and:: exception() )*
@@ -174,9 +177,6 @@ exception:
 
 #declaration:
     identifier() ::colon:: representation()
-
-#domainof:
-    identifier() ::domainof:: identifier()
 
 representation:
     disjunction() ( ::xor:: disjunction() #exclusive_disjunction )*
@@ -194,18 +194,27 @@ disjunction:
 argument:
     realdom() | constant() | array()
 
+#domainof:
+    identifier() ::domainof:: identifier()
+
+#predicate:
+    ::pred:: ::parenthesis_:: string()? ::_parenthesis::
+
 constant:
-    <true>
-  | <false>
-  | <hexa>
-  | <octal>
-  | <float>
-  | <decimal>
-  | ::quote_::
-    ( <escaped> | <string> )
-    ( ( <escaped> | <string> ) #concatenation )*
+    <true> | <false> | number() | string() | array() | range()
+
+number:
+    <hexa> | <octal> | <decimal> | <float>
+
+#string:
+    <regex> #regex
+  | quoted_string()
+
+quoted_string:
+    ::quote_::
+    ( <escaped> | <string> | ::concat:: #concatenation )
+    ( ( <escaped> | <string> | ::concat:: ) #concatenation )*
     ::_quote::
-  | array()
 
 #array:
     ::bracket_::
@@ -214,6 +223,9 @@ constant:
 
 pair:
     ( ::from:: representation() #pair )? ::to:: representation()
+
+#range:
+    number() ::range:: number()
 
 #identifier:
     <identifier>
