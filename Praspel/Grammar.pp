@@ -100,10 +100,11 @@
 %token  float           ([+-]?([0-9]*\.[0-9]+))
 %token  decimal         ([+-]?[1-9][0-9]*|0)
 %token  quote_          '                         -> string
-%token  string:escaped  \\['|\\]
+%token  string:escaped  \\.
 %token  string:string   [^'\\]+
+%token  string:concat   '\s*\.\s*'
 %token  string:_quote   '                         -> default
-%token  string          '.*?(?<!\\)'
+%token  regex           /.*?(?<!\\)/
 %token  identifier      [a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*
 
 #specification:
@@ -202,9 +203,13 @@ number:
     <hexa> | <octal> | <decimal> | <float>
 
 #string:
+    <regex> #regex
+  | quoted_string()
+
+quoted_string:
     ::quote_::
-    ( <escaped> | <string> )
-    ( ( <escaped> | <string> ) #concatenation )*
+    ( <escaped> | <string> | ::concat:: #concatenation )
+    ( ( <escaped> | <string> | ::concat:: ) #concatenation )*
     ::_quote::
 
 #array:
