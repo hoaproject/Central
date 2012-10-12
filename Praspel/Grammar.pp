@@ -92,6 +92,7 @@
 %token  xor             xor
 %token  with            with
 %token  pure            pure
+%token  default         default
 
 // Constants.
 %token  true            true
@@ -192,7 +193,7 @@ disjunction:
     ::_parenthesis::
 
 argument:
-    realdom() | constant() | array()
+    <default> | realdom() | constant() | array()
 
 #domainof:
     identifier() ::domainof:: identifier()
