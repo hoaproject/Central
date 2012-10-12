@@ -72,9 +72,8 @@
 %token  semicolon       ;
 %token  heredoc_        <<<                       -> hd
 %token  hd:identifier   [A-Z]+
-%token  hd:newline      \n
+%token  hd:content      ((\h[^\n]+)?\n)+
 %token  hd:_heredoc     ;                         -> default
-%token  hd:line         \h[^\n]+
 
 // Keywords.
 %token  domainof        domainof
@@ -138,8 +137,8 @@ method:
     ::is:: <pure>
 
 #forexample:
-    ::forexample:: ::heredoc_:: <identifier[0]> ::newline::
-    ( <line> ::newline:: )+
+    ::forexample:: ::heredoc_:: <identifier[0]>
+    <content>?
     ::identifier[0]:: ::_heredoc::
 
 behavior:
