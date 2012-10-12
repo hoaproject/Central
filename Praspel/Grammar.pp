@@ -57,6 +57,7 @@
 // Constructions.
 %token  old             \\old
 %token  result          \\result
+%token  pred            \\pred
 
 // Symbols.
 %token  parenthesis_    \(
@@ -162,8 +163,8 @@ behavior_content:
     ::_brace:: #behavior
 
 expression:
-    ( declaration() | domainof() )
-    ( ::and:: ( declaration() | domainof() ) )*
+    ( declaration() | domainof() | predicate() )
+    ( ::and:: ( declaration() | domainof() | predicate() ) )*
 
 exceptional_expression:
     exception() ( ::and:: exception() )*
@@ -176,9 +177,6 @@ exception:
 
 #declaration:
     identifier() ::colon:: representation()
-
-#domainof:
-    identifier() ::domainof:: identifier()
 
 representation:
     disjunction() ( ::xor:: disjunction() #exclusive_disjunction )*
@@ -195,6 +193,12 @@ disjunction:
 
 argument:
     realdom() | constant() | array()
+
+#domainof:
+    identifier() ::domainof:: identifier()
+
+#predicate:
+    ::pred:: ::parenthesis_:: string()? ::_parenthesis::
 
 constant:
     <true> | <false> | number() | string() | array() | range()
