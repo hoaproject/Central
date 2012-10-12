@@ -92,16 +92,22 @@ class Basic extends \Hoa\Dispatcher {
 
         if($call instanceof \Closure) {
 
-            $kit = dnew($this->getKitName(), $rtv);
+            $kitname = $this->getKitName();
 
-            if(!($kit instanceof Kit))
-                throw new Exception(
-                    'Your kit %s must extend Hoa\Dispatcher\Kit.',
-                    0, $this->getKitName());
+            if(!empty($kitname)) {
 
-            $variables['_this'] = $kit;
-            $called             = $call;
-            $reflection         = new \ReflectionMethod($call, '__invoke');
+                $kit = dnew($this->getKitName(), $rtv);
+
+                if(!($kit instanceof Kit))
+                    throw new Exception(
+                        'Your kit %s must extend Hoa\Dispatcher\Kit.',
+                        0, $kitname);
+
+                $variables['_this'] = $kit;
+            }
+
+            $called     = $call;
+            $reflection = new \ReflectionMethod($call, '__invoke');
 
             foreach($reflection->getParameters() as $parameter) {
 
@@ -123,15 +129,21 @@ class Basic extends \Hoa\Dispatcher {
         }
         elseif(is_string($call) && null === $able) {
 
-            $kit = dnew($this->getKitName(), $rtv);
+            $kitname = $this->getKitName();
 
-            if(!($kit instanceof Kit))
-                throw new Exception(
-                    'Your kit %s must extend Hoa\Dispatcher\Kit.',
-                    2, $this->getKitName());
+            if(!empty($kitname)) {
 
-            $variables['_this'] = $kit;
-            $reflection         = new \ReflectionFunction($call);
+                $kit = dnew($this->getKitName(), $rtv);
+
+                if(!($kit instanceof Kit))
+                    throw new Exception(
+                        'Your kit %s must extend Hoa\Dispatcher\Kit.',
+                        2, $kitname);
+
+                $variables['_this'] = $kit;
+            }
+
+            $reflection = new \ReflectionFunction($call);
 
             foreach($reflection->getParameters() as $parameter) {
 
@@ -189,12 +201,10 @@ class Basic extends \Hoa\Dispatcher {
                                  true === $async ? 'true': 'false'), $e);
                 }
 
-                if(!($controller instanceof Kit))
-                    $kit = dnew($this->getKitName(), $rtv);
-                else
-                    $kit = $controller;
+                $kitname = $this->getKitName();
 
-                $variables['_this'] = $kit;
+                if(!empty($kitname))
+                    $variables['_this'] = dnew($kitname, $rtv);
 
                 if(method_exists($controller, 'construct'))
                     $controller->construct();
