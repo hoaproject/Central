@@ -42,7 +42,8 @@
 
 
 %skip   s               \s
-%skip   block_comment   /\*(.|\n)*\*/
+%skip   block_comment   /\*(.|\n)*?\*/
+%skip   inline_comment  //[^\n]*
 
 // Clauses.
 %token  is              @is
