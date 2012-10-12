@@ -71,6 +71,7 @@
 %token  colon           :
 %token  semicolon       ;
 %token  heredoc_        <<<                       -> hd
+%token  hd:quote        '
 %token  hd:identifier   [A-Z]+
 %token  hd:content      ((\h[^\n]+)?\n)+
 %token  hd:_heredoc     ;                         -> default
@@ -137,9 +138,7 @@ method:
     ::is:: <pure>
 
 #forexample:
-    ::forexample:: ::heredoc_:: <identifier[0]>
-    <content>?
-    ::identifier[0]:: ::_heredoc::
+    ::forexample:: herestring()
 
 behavior:
     ::behavior:: behavior_content()
@@ -229,3 +228,12 @@ pair:
 
 #classname:
     ::backslash::? <identifier> ( ::backslash:: <identifier> )*
+
+herestring:
+    ::heredoc_::
+    (
+        ::quote:: <identifier[0]> ::quote:: #nowdoc
+      | <identifier[0]>                     #heredoc
+    )
+    <content>?
+    ::identifier[0]:: ::_heredoc::
