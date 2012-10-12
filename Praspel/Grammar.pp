@@ -104,7 +104,7 @@
 %token  string:string   [^'\\]+
 %token  string:concat   '\s*\.\s*'
 %token  string:_quote   '                         -> default
-%token  regex           /.*?(?<!\\)/
+%token  regex           /.*?(?<!\\)/[imsxADSUXJu]*
 %token  identifier      [a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*
 
 #specification:
