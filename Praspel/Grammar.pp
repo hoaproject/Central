@@ -95,6 +95,7 @@
 %token  default         default
 
 // Constants.
+%token  null            null
 %token  true            true
 %token  false           false
 %token  binary          [+-]?0b[01]+
@@ -202,7 +203,8 @@ argument:
     ::pred:: ::parenthesis_:: string()? ::_parenthesis::
 
 constant:
-    <true> | <false> | number() | string() | <regex> | array() | range()
+    <null> | <true> | <false> | number() | string() | <regex> | array()
+  | range()
 
 number:
     <binary> | <octal> | <hexa> | <decimal> | <float>
