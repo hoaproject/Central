@@ -101,8 +101,7 @@
 %token  binary          [+-]?0b[01]+
 %token  octal           [+-]?0[0-7]+
 %token  hexa            [+-]?0[xX][0-9a-fA-F]+
-%token  float           [+-]?(0|[1-9]\d*)(\.\d+)?([eE][\+\-]?\d+)?
-%token  decimal         [+-]?[1-9][0-9]*|0
+%token  decimal         [+-]?(0|[1-9]\d*)(\.\d+)?([eE][\+\-]?\d+)?
 %token  quote_          '                         -> string
 %token  string:escaped  \\(['nrtvef\\b]|[0-7]{1,3}|[xX][0-9a-fA-F]{1,2})
 %token  string:string   [^'\\]+
@@ -207,7 +206,7 @@ constant:
   | range()
 
 number:
-    <binary> | <octal> | <hexa> | <decimal> | <float>
+    <binary> | <octal> | <hexa> | <decimal>
 
 string:
     quoted_string() | herestring()
