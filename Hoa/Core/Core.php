@@ -287,7 +287,13 @@ class Core implements Parameter\Parameterizable {
 
         $root = static::getProtocol();
 
-        if(!isset($root['Library'])) {
+        if(null === $path && null === $reach) {
+
+            if(!isset($root['Library'])) {
+
+                static::$_root = null;
+                $root          = static::getProtocol();
+            }
 
             $protocol = $this->getParameters()->unlinearizeBranche('protocol');
 
