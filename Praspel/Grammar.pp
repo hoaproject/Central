@@ -228,6 +228,8 @@ pair:
 
 #range:
     number() ::range:: number()
+  | number() ::range:: #left_range
+  | ::range:: number() #right_range
 
 #identifier:
     <identifier>
