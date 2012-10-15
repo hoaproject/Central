@@ -169,11 +169,19 @@ class Runtime {
         if(true === function_exists('apache_request_headers'))
             foreach(apache_request_headers() as $header => $value)
                 $_headers[strtolower($header)] = $value;
-        else
+        else {
+
+            if(isset($_SERVER['CONTENT_TYPE']))
+                $_headers['content-type'] = $_SERVER['CONTENT_TYPE'];
+
+            if(isset($_SERVER['CONTENT_LENGTH']))
+                $_headers['content-length'] = $_SERVER['CONTENT_LENGTH'];
+
             foreach($_SERVER as $key => $value)
                 if('HTTP_' === substr($key, 0, 5))
                     $_headers[strtolower(str_replace('_', '-', substr($key, 5)))]
                         = $value;
+        }
 
         return $_headers;
     }
