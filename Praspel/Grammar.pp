@@ -92,7 +92,7 @@
 %token  xor             xor
 %token  with            with
 %token  pure            pure
-%token  default         default
+%token  default         …|default
 
 // Constants.
 %token  null            null
