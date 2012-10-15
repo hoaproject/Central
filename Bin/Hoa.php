@@ -82,7 +82,7 @@ try {
 }
 catch ( \Exception $e ) {
 
-    cout($e->raise(true));
+    echo $e->raise(true);
     exit($e->getCode() + 1);
 }
 
