@@ -686,6 +686,25 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
     }
 
     /**
+     * Get query.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getQuery ( ) {
+
+        if('cli' === php_sapi_name())
+            return array();
+
+        if(!isset($_SERVER['QUERY_STRING']))
+            return array();
+
+        parse_str($_SERVER['QUERY_STRING'], $out);
+
+        return $out;
+    }
+
+    /**
      * Get domain (with subdomain if exists).
      *
      * @access  public
