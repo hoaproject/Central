@@ -696,6 +696,10 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
         if('cli' === php_sapi_name())
             return array();
 
+        if(!isset($_SERVER['REQUEST_URI']))
+            throw new Exception(
+                'Cannot find URI so we cannot get query.', 7);
+
         $uri = $_SERVER['REQUEST_URI'];
 
         if(false === $pos = strpos($uri, '?'))
