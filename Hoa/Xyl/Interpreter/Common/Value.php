@@ -89,49 +89,8 @@ class          Value
 
         $value = $this->computeValue();
 
-        if(true === $this->abstract->attributeExists('formatter')) {
-
-            $formatter   = $this->abstract->readAttribute('formatter');
-            $variables   = $this->abstract->readCustomAttributes('formatter');
-            $self        = $this;
-            array_walk($variables, $f = function ( &$variable ) use ( &$self ) {
-
-                $variable = $self->computeAttributeValue($variable);
-
-                if(ctype_digit($variable))
-                    $variable = (int) $variable;
-                elseif(is_numeric($variable))
-                    $variable = (float) $variable;
-                elseif('true' == $variable)
-                    $variable = true;
-                elseif('false' == $variable)
-                    $variable = false;
-                elseif('null' == $variable)
-                    $variable = null;
-            });
-            $reflection  = new \ReflectionFunction($formatter);
-            $arguments   = array();
-            $placeholder = $value;
-            $f($placeholder);
-
-            foreach($reflection->getParameters() as $parameter) {
-
-                $name = strtolower($parameter->getName());
-
-                if(true === array_key_exists($name, $variables)) {
-
-                    $arguments[$name] = $variables[$name];
-                    continue;
-                }
-                elseif(null !== $placeholder) {
-
-                    $arguments[$name] = $placeholder;
-                    $placeholder      = null;
-                }
-            }
-
-            $value = $reflection->invokeArgs($arguments);
-        }
+        if(true === $this->abstract->attributeExists('formatter'))
+            $value = $this->formatValue($value);
 
         if(true === $this->abstract->attributeExists('link')) {
 

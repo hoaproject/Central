@@ -491,10 +491,12 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      * @access  public
      * @param   string  $value    Attribute value.
      * @param   int     $type     Attribute type.
+     * @param   string  $name     Attribute name.
      * @return  string
      */
     public function computeAttributeValue ( $value,
-                                            $type = self::ATTRIBUTE_TYPE_UNKNOWN ) {
+                                            $type = self::ATTRIBUTE_TYPE_UNKNOWN,
+                                            $name = null ) {
 
         /*
         // (!variable).
@@ -534,6 +536,76 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         if(   self::ATTRIBUTE_TYPE_LINK    === $type
            || self::ATTRIBUTE_TYPE_UNKNOWN === $type)
             $value = $this->getAbstractElementSuperRoot()->computeLink($value);
+
+        // Formatter.
+        if(   null !== $name
+           && true === $this->abstract->attributeExists($name . '-formatter'))
+            $value = $this->formatValue($value, $name . '-');
+
+        return $value;
+    }
+
+    /**
+     * Format an attribute value.
+     * Formatter is of the form:
+     *     @attr-formatter="functionName"
+     * Arguments of functionName are declared as:
+     *     @attr-formatter-argumentName="argumentValue"
+     *
+     *
+     * @access  protected
+     * @param   string     $value    Value.
+     * @param   string     $name     Name.
+     * @return  string
+     */
+    protected function formatValue ( $value, $name = null ) {
+
+        $_formatter = $name . 'formatter';
+        $formatter  = $this->abstract->readAttribute($_formatter);
+
+        if(false === function_exists($formatter))
+            return $value;
+
+        $arguments = $this->abstract->readCustomAttributes($_formatter);
+        $self      = $this;
+        array_walk($arguments, $f = function ( &$argument ) use ( &$self ) {
+
+            $argument = $self->computeAttributeValue($argument);
+
+            if(ctype_digit($argument))
+                $argument = intval($argument);
+            elseif(is_numeric($argument))
+                $argument = floatval($argument);
+            elseif('true' === $argument)
+                $argument = true;
+            elseif('false' === $argument)
+                $argument = false;
+            elseif('null' === $argument)
+                $argument = null;
+            // what about constants?
+        });
+        $reflection   = new \ReflectionFunction($formatter);
+        $distribution = array();
+        $placeholder  = $value;
+        $f($placeholder);
+
+        foreach($reflection->getParameters() as $parameter) {
+
+            $name = strtolower($parameter->getName());
+
+            if(true === array_key_exists($name, $arguments)) {
+
+                $distribution[$name] = $arguments[$name];
+                continue;
+            }
+            elseif(null !== $placeholder) {
+
+                $distribution[$name] = $placeholder;
+                $placeholder         = null;
+            }
+        }
+
+        $value = $reflection->invokeArgs($distribution);
 
         return $value;
     }
