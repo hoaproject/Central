@@ -677,7 +677,12 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
             throw new Exception(
                 'Cannot find URI so we cannot route.', 6);
 
-        return ltrim($_SERVER['REQUEST_URI'], '/');
+        $uri = ltrim($_SERVER['REQUEST_URI'], '/');
+
+        if(false !== $pos = strpos($uri, '?'))
+            $uri = substr($uri, 0, $pos);
+
+        return $uri;
     }
 
     /**
