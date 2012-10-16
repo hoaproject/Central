@@ -200,6 +200,9 @@ class          ReadWrite
         $this->seek(0, \Hoa\Stream\IStream\Pointable::SEEK_END);
         $end     = $this->tell();
 
+        if(0 === $end)
+            return '';
+
         $this->seek(0, \Hoa\Stream\IStream\Pointable::SEEK_SET);
         $handle  = $this->read($end);
 
