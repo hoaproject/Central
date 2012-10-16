@@ -551,6 +551,8 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
             $self      = $this;
             array_walk($arguments, $f = function ( &$argument ) use ( &$self ) {
 
+                $argument = $self->computeAttributeValue($argument);
+
                 if(ctype_digit($argument))
                     $argument = intval($argument);
                 elseif(is_numeric($argument))
