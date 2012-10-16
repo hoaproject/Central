@@ -671,7 +671,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
     public function getURI ( ) {
 
         if('cli' === php_sapi_name())
-            return @$_SERVER['argv'][1] ?: '';
+            return ltrim(@$_SERVER['argv'][1] ?: '', '/');
 
         if(!isset($_SERVER['REQUEST_URI']))
             throw new Exception(
