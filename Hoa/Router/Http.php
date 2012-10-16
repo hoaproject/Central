@@ -677,7 +677,31 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
             throw new Exception(
                 'Cannot find URI so we cannot route.', 6);
 
-        return ltrim($_SERVER['REQUEST_URI'], '/');
+        $uri = ltrim($_SERVER['REQUEST_URI'], '/');
+
+        if(false !== $pos = strpos($uri, '?'))
+            $uri = substr($uri, 0, $pos);
+
+        return $uri;
+    }
+
+    /**
+     * Get query.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getQuery ( ) {
+
+        if('cli' === php_sapi_name())
+            return array();
+
+        if(!isset($_SERVER['QUERY_STRING']))
+            return array();
+
+        parse_str($_SERVER['QUERY_STRING'], $out);
+
+        return $out;
     }
 
     /**
