@@ -574,15 +574,15 @@ class          Xyl
 
             $href = $this->_fragments[$as];
 
-            if(!isset($openedFragments[$as]))
-                $openedFragments[$as] = new self(
+            if(!isset($openedFragments[$href]))
+                $openedFragments[$href] = new self(
                     new $streamClass($href),
                     $this->_out,
                     $this->_interpreter,
                     $this->_router
                 );
 
-            $fragment = $openedFragments[$as];
+            $fragment = $openedFragments[$href];
             $snippet  = $fragment->xpath(
                 '//__current_ns:snippet[@id="' . $sId . '"]'
             );
