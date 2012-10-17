@@ -1295,13 +1295,7 @@ class          Xyl
             }
 
             $id = $matches[1];
-            $kv = array();
-
-            foreach(explode('&', $matches[2]) as $value) {
-
-                $handle                    = explode('=', $value);
-                $kv[urldecode($handle[0])] = urldecode($handle[1]);
-            }
+            parse_str($matches[2], $kv);
 
             if(!empty($matches[4]))
                 $kv['_fragment'] = $matches[4];
