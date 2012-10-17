@@ -440,11 +440,13 @@ class          Xyl
      * Compute <?xyl-use?> processing-instruction.
      *
      * @access  protected
-     * @param   \DOMDocument  $ownerDocument    Document that ownes PIs.
+     * @param   \DOMDocument  $ownerDocument      Document that ownes PIs.
+     * @param   \DOMDocument  $receiptDocument    Document that receipts
+     *                                            uses.
      * @return  bool
      * @throw   \Hoa\Xyl\Exception
      */
-    protected function computeUse ( \DOMDocument $ownerDocument = null,
+    protected function computeUse ( \DOMDocument $ownerDocument   = null,
                                     \DOMDocument $receiptDocument = null ) {
 
         if(null === $ownerDocument)
