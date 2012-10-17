@@ -440,12 +440,16 @@ class          Xyl
      * Compute <?xyl-use?> processing-instruction.
      *
      * @access  protected
-     * @param   \DOMDocument  $ownerDocument    Document that ownes PIs.
+     * @param   \DOMDocument  $ownerDocument      Document that ownes PIs.
+     * @param   \DOMDocument  $receiptDocument    Document that receipts
+     *                                            uses.
+     * @param   \Hoa\Xyl      $self               Owner XYL document.
      * @return  bool
      * @throw   \Hoa\Xyl\Exception
      */
-    protected function computeUse ( \DOMDocument $ownerDocument = null,
-                                    \DOMDocument $receiptDocument = null ) {
+    protected function computeUse ( \DOMDocument $ownerDocument   = null,
+                                    \DOMDocument $receiptDocument = null,
+                                    Xyl          $self            = null ) {
 
         if(null === $ownerDocument)
             $ownerDocument   = $this->_mowgli;
@@ -453,8 +457,11 @@ class          Xyl
         if(null === $receiptDocument)
             $receiptDocument = $this->_mowgli;
 
-        $streamClass = get_class($this->getInnerStream());
-        $dirname     = dirname($this->getInnerStream()->getStreamName());
+        if(null === $self)
+            $self = $this;
+
+        $streamClass = get_class($self->getInnerStream());
+        $dirname     = dirname($self->getInnerStream()->getStreamName());
         $type        = $this->getType();
         $remove      =    self::TYPE_DOCUMENT == $type
                        || self::TYPE_FRAGMENT == $type;
@@ -517,7 +524,8 @@ class          Xyl
 
             $fragment->computeUse(
                 $fragment->readDOM()->ownerDocument,
-                $receiptDocument
+                $receiptDocument,
+                $fragment
             );
             $this->_stylesheets = array_merge(
                 $this->_stylesheets,
@@ -536,12 +544,12 @@ class          Xyl
      */
     protected function computeYielder ( ) {
 
-        $type            = $this->getType();
-        $remove          =    self::TYPE_DOCUMENT == $type
-                           || self::TYPE_FRAGMENT == $type;
         $stream          = $this->getStream();
         $streamClass     = get_class($this->getInnerStream());
         $openedFragments = array();
+        $type            = $this->getType();
+        $remove          =    self::TYPE_DOCUMENT == $type
+                           || self::TYPE_FRAGMENT == $type;
 
         foreach($stream->xpath('//__current_ns:yield[@select]') as $yield) {
 
@@ -566,15 +574,15 @@ class          Xyl
 
             $href = $this->_fragments[$as];
 
-            if(!isset($openedFragments[$as]))
-                $openedFragments[$as] = new self(
+            if(!isset($openedFragments[$href]))
+                $openedFragments[$href] = new self(
                     new $streamClass($href),
                     $this->_out,
                     $this->_interpreter,
                     $this->_router
                 );
 
-            $fragment = $openedFragments[$as];
+            $fragment = $openedFragments[$href];
             $snippet  = $fragment->xpath(
                 '//__current_ns:snippet[@id="' . $sId . '"]'
             );
@@ -698,11 +706,13 @@ class          Xyl
      * @param   \DOMDocument  $ownerDocument      Document that ownes PIs.
      * @param   \DOMDocument  $receiptDocument    Document that receipts
      *                                            overlays.
+     * @param   \Hoa\Xyl      $self               Owner XYL document.
      * @return  bool
      * @throw   \Hoa\Xyl\Exception
      */
     protected function computeOverlay ( \DOMDocument $ownerDocument   = null,
-                                        \DOMDocument $receiptDocument = null ) {
+                                        \DOMDocument $receiptDocument = null,
+                                        Xyl          $self            = null ) {
 
         if(null === $ownerDocument)
             $ownerDocument   = $this->_mowgli;
@@ -710,8 +720,11 @@ class          Xyl
         if(null === $receiptDocument)
             $receiptDocument = $this->_mowgli;
 
-        $streamClass = get_class($this->getInnerStream());
-        $dirname     = dirname($this->getInnerStream()->getStreamName());
+        if(null === $self)
+            $self = $this;
+
+        $streamClass = get_class($self->getInnerStream());
+        $dirname     = dirname($self->getInnerStream()->getStreamName());
         $type        = $this->getType();
         $remove      =    self::TYPE_DOCUMENT == $type
                        || self::TYPE_FRAGMENT == $type;
@@ -767,16 +780,17 @@ class          Xyl
                     '%s must only contain <overlay> (and some <?xyl-overlay) ' .
                     'elements.', 9, $href);
 
+            $fod = $fragment->readDOM()->ownerDocument;
+            $this->computeFragment($fod, $fragment);
+
             foreach($fragment->selectChildElements() as $element)
                 $this->_computeOverlay(
                     $receiptDocument->documentElement,
                     $receiptDocument->importNode($element->readDOM(), true)
                 );
 
-            $fod = $fragment->readDOM()->ownerDocument;
-
-            $this->computeUse    ($fod, $receiptDocument);
-            $this->computeOverlay($fod, $receiptDocument);
+            $this->computeUse    ($fod, $receiptDocument, $fragment);
+            $this->computeOverlay($fod, $receiptDocument, $fragment);
         }
 
         return true;
@@ -946,21 +960,29 @@ class          Xyl
      * Compute <?xyl-fragment?> processing-instruction.
      *
      * @access  protected
+     * @param   \DOMDocument  $ownerDocument    Document that ownes PIs.
+     * @param   \Hoa\Xyl      $self             Owner XYL document.
      * @return  bool
      * @throw   \Hoa\Xyl\Exception
      */
-    protected function computeFragment ( ) {
+    protected function computeFragment ( \DOMDocument $ownerDocument = null,
+                                         Xyl          $self          = null ) {
 
-        $ownerDocument   = $this->_mowgli;
-        $receiptDocument = $this->_mowgli;
-        $streamClass     = get_class($this->getInnerStream());
-        $dirname         = dirname($this->getInnerStream()->getStreamName());
-        $type            = $this->getType();
-        $remove          =    self::TYPE_DOCUMENT == $type
-                           || self::TYPE_FRAGMENT == $type;
-        $xpath           = new \DOMXPath($ownerDocument);
-        $xyl_fragment    = $xpath->query('/processing-instruction(\'xyl-fragment\')');
-        unset($xpath);
+        if(null === $ownerDocument)
+            $ownerDocument = $this->_mowgli;
+
+        if(null === $self)
+            $self = $this;
+
+        $streamClass  = get_class($self->getInnerStream());
+        $dirname      = dirname($self->getInnerStream()->getStreamName());
+        $type         = $this->getType();
+        $remove       =    self::TYPE_DOCUMENT == $type
+                        || self::TYPE_FRAGMENT == $type;
+        $xpath        = new \DOMXPath($ownerDocument);
+        $xyl_fragment = $xpath->query('/processing-instruction(\'xyl-fragment\')');
+        $xpath->registerNamespace('__current_ns', self::NAMESPACE_ID);
+        $fragments    = array();
 
         if(0 === $xyl_fragment->length)
             return false;
@@ -998,14 +1020,47 @@ class          Xyl
 
             unset($fragmentParsed);
 
-            if(isset($this->_fragments[$as]))
+            if(isset($fragments[$as]))
                 throw new Exception(
                     'Alias %s already exists for fragment %s, cannot ' .
-                    'redeclare it for fragment %s.',
-                    11, array($as, $this->_fragments[$as], $href));
+                    'redeclare it for fragment %s in the same document.',
+                    11, array($as, $fragments[$as], $href));
 
-            $this->_fragments[$as] = $href;
+            if(!isset($this->_fragments[$as])) {
+
+                $this->_fragments[$as] = $href;
+
+                continue;
+            }
+
+            while(isset($this->_fragments[$newAs = uniqid() . '-' . $as]));
+
+            $renamed = $xpath->query('//__current_ns:yield[' .
+                'starts-with(@select, "?f:' . $as . '") or ' .
+                'starts-with(@select, "?file:' . $as . '")' .
+            ']');
+
+            if(0 === $renamed->length)
+                continue;
+
+            for($j = 0, $n = $renamed->length; $j < $n; ++$j) {
+
+                $handle = $renamed->item($j);
+                $select = $handle->getAttribute('select');
+                $handle->setAttribute(
+                    'select',
+                    '?f:' . $newAs . substr(
+                        $select,
+                        strpos($select, '#')
+                    )
+                );
+            }
+
+            $fragments[$newAs]        = $href;
+            $this->_fragments[$newAs] = $href;
         }
+
+        unset($xpath);
 
         return true;
     }
@@ -1240,13 +1295,7 @@ class          Xyl
             }
 
             $id = $matches[1];
-            $kv = array();
-
-            foreach(explode('&', $matches[2]) as $value) {
-
-                $handle                    = explode('=', $value);
-                $kv[urldecode($handle[0])] = urldecode($handle[1]);
-            }
+            parse_str($matches[2], $kv);
 
             if(!empty($matches[4]))
                 $kv['_fragment'] = $matches[4];
@@ -1329,8 +1378,8 @@ class          Xyl
                                  $computeData = false ) {
 
         $this->computeUse();
-        $this->computeOverlay();
         $this->computeFragment();
+        $this->computeOverlay();
         $this->computeYielder();
         $this->computeConcrete($interpreter);
 
