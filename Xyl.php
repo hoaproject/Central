@@ -1006,17 +1006,17 @@ class          Xyl
                 true
             );
 
+            if(false === $fragmentParsed->attributeExists('as'))
+                $as = $href;
+            else
+                $as = $fragmentParsed->readAttribute('as');
+
             if(0 === preg_match('#^(([^:]+://)|([A-Z]:)|/)#', $href))
                 $href = $dirname . DS . $href;
 
             if(false === file_exists($href))
                 throw new Exception(
                     'File %s is not found, cannot use it.', 10, $href);
-
-            if(false === $fragmentParsed->attributeExists('as'))
-                $as = $href;
-            else
-                $as = $fragmentParsed->readAttribute('as');
 
             unset($fragmentParsed);
 
