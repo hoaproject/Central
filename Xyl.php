@@ -443,11 +443,13 @@ class          Xyl
      * @param   \DOMDocument  $ownerDocument      Document that ownes PIs.
      * @param   \DOMDocument  $receiptDocument    Document that receipts
      *                                            uses.
+     * @param   \Hoa\Xyl      $self               Owner XYL document.
      * @return  bool
      * @throw   \Hoa\Xyl\Exception
      */
     protected function computeUse ( \DOMDocument $ownerDocument   = null,
-                                    \DOMDocument $receiptDocument = null ) {
+                                    \DOMDocument $receiptDocument = null,
+                                    Xyl          $self            = null ) {
 
         if(null === $ownerDocument)
             $ownerDocument   = $this->_mowgli;
@@ -455,8 +457,11 @@ class          Xyl
         if(null === $receiptDocument)
             $receiptDocument = $this->_mowgli;
 
-        $streamClass = get_class($this->getInnerStream());
-        $dirname     = dirname($this->getInnerStream()->getStreamName());
+        if(null === $self)
+            $self = $this;
+
+        $streamClass = get_class($self->getInnerStream());
+        $dirname     = dirname($self->getInnerStream()->getStreamName());
         $type        = $this->getType();
         $remove      =    self::TYPE_DOCUMENT == $type
                        || self::TYPE_FRAGMENT == $type;
@@ -519,7 +524,8 @@ class          Xyl
 
             $fragment->computeUse(
                 $fragment->readDOM()->ownerDocument,
-                $receiptDocument
+                $receiptDocument,
+                $fragment
             );
             $this->_stylesheets = array_merge(
                 $this->_stylesheets,
@@ -700,11 +706,13 @@ class          Xyl
      * @param   \DOMDocument  $ownerDocument      Document that ownes PIs.
      * @param   \DOMDocument  $receiptDocument    Document that receipts
      *                                            overlays.
+     * @param   \Hoa\Xyl      $self               Owner XYL document.
      * @return  bool
      * @throw   \Hoa\Xyl\Exception
      */
     protected function computeOverlay ( \DOMDocument $ownerDocument   = null,
-                                        \DOMDocument $receiptDocument = null ) {
+                                        \DOMDocument $receiptDocument = null,
+                                        Xyl          $self            = null ) {
 
         if(null === $ownerDocument)
             $ownerDocument   = $this->_mowgli;
@@ -712,8 +720,11 @@ class          Xyl
         if(null === $receiptDocument)
             $receiptDocument = $this->_mowgli;
 
-        $streamClass = get_class($this->getInnerStream());
-        $dirname     = dirname($this->getInnerStream()->getStreamName());
+        if(null === $self)
+            $self = $this;
+
+        $streamClass = get_class($self->getInnerStream());
+        $dirname     = dirname($self->getInnerStream()->getStreamName());
         $type        = $this->getType();
         $remove      =    self::TYPE_DOCUMENT == $type
                        || self::TYPE_FRAGMENT == $type;
@@ -770,7 +781,7 @@ class          Xyl
                     'elements.', 9, $href);
 
             $fod = $fragment->readDOM()->ownerDocument;
-            $this->computeFragment($fod, $receiptDocument);
+            $this->computeFragment($fod, $fragment);
 
             foreach($fragment->selectChildElements() as $element)
                 $this->_computeOverlay(
@@ -778,8 +789,8 @@ class          Xyl
                     $receiptDocument->importNode($element->readDOM(), true)
                 );
 
-            $this->computeUse    ($fod, $receiptDocument);
-            $this->computeOverlay($fod, $receiptDocument);
+            $this->computeUse    ($fod, $receiptDocument, $fragment);
+            $this->computeOverlay($fod, $receiptDocument, $fragment);
         }
 
         return true;
@@ -950,16 +961,21 @@ class          Xyl
      *
      * @access  protected
      * @param   \DOMDocument  $ownerDocument    Document that ownes PIs.
+     * @param   \Hoa\Xyl      $self             Owner XYL document.
      * @return  bool
      * @throw   \Hoa\Xyl\Exception
      */
-    protected function computeFragment ( \DOMDocument $ownerDocument = null ) {
+    protected function computeFragment ( \DOMDocument $ownerDocument = null,
+                                         Xyl          $self          = null ) {
 
         if(null === $ownerDocument)
             $ownerDocument = $this->_mowgli;
 
-        $streamClass  = get_class($this->getInnerStream());
-        $dirname      = dirname($this->getInnerStream()->getStreamName());
+        if(null === $self)
+            $self = $this;
+
+        $streamClass  = get_class($self->getInnerStream());
+        $dirname      = dirname($self->getInnerStream()->getStreamName());
         $type         = $this->getType();
         $remove       =    self::TYPE_DOCUMENT == $type
                         || self::TYPE_FRAGMENT == $type;
