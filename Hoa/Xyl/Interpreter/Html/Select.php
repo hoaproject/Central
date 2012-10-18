@@ -189,6 +189,31 @@ class Select extends Generic {
 
         return Form::postValidation($this->_validity, $this);
     }
+
+    /**
+     * Set value.
+     *
+     * @access  public
+     * @param   mixed  $value    Value.
+     * @return  string
+     */
+    public function setValue ( $value ) {
+
+        foreach($this->getOptions() as $option) {
+
+            $option = $this->getConcreteElement($option);
+
+            if(false === $option->attributeExists('value'))
+                continue;
+
+            if($value !== $option->readAttribute('value'))
+                continue;
+
+            $option->writeAttribute('selected', 'selected');
+        }
+
+        return;
+    }
 }
 
 }
