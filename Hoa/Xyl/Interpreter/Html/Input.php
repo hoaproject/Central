@@ -198,7 +198,7 @@ class Input extends Generic {
 
             $this->_validity = false;
 
-            return Form::postValidation($this->_validity, $this);
+            return Form::postValidation($this->_validity, $value, $this);
         }
 
         if(   false !== strpos($value, "\n")
@@ -206,18 +206,18 @@ class Input extends Generic {
 
             $this->_validity = false;
 
-            return Form::postValidation($this->_validity, $this);
+            return Form::postValidation($this->_validity, $value, $this);
         }
 
         if(true === $this->attributeExists('pattern')) {
 
             $pattern = str_replace('#', '\#', $this->readAttribute('pattern'));
 
-            if(0 == @preg_match_all('#^' . $pattern . '$#uim', $value, $_)) {
+            if(0 == @preg_match('#^' . $pattern . '$#u', $value, $_)) {
 
                 $this->_validity = false;
 
-                return Form::postValidation($this->_validity, $this);
+                return Form::postValidation($this->_validity, $value, $this);
             }
         }
 
@@ -229,7 +229,7 @@ class Input extends Generic {
 
                 $this->_validity = false;
 
-                return Form::postValidation($this->_validity, $this);
+                return Form::postValidation($this->_validity, $value, $this);
             }
         }
 
@@ -237,7 +237,7 @@ class Input extends Generic {
 
             $this->_validity = $value === $this->readAttribute('value');
 
-            return Form::postValidation($this->_validity, $this);
+            return Form::postValidation($this->_validity, $value, $this);
         }
 
         switch($type) {
@@ -373,7 +373,7 @@ class Input extends Generic {
                 $this->_validity = true;
         }
 
-        return Form::postValidation($this->_validity, $this);
+        return Form::postValidation($this->_validity, $value, $this);
     }
 
     /**
@@ -397,6 +397,8 @@ class Input extends Generic {
             default:
                 $this->writeAttribute('value', $value);
         }
+
+        return;
     }
 
     /**

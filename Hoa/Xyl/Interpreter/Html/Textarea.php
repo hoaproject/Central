@@ -180,7 +180,7 @@ class Textarea extends Generic {
 
             $this->_validity = false;
 
-            return Form::postValidation($this->_validity, $this);
+            return Form::postValidation($this->_validity, $value, $this);
         }
 
         if(true === $this->attributeExists('maxlength')) {
@@ -191,7 +191,7 @@ class Textarea extends Generic {
 
                 $this->_validity = false;
 
-                return Form::postValidation($this->_validity, $this);
+                return Form::postValidation($this->_validity, $value, $this);
             }
         }
 
@@ -199,10 +199,10 @@ class Textarea extends Generic {
 
             $this->_validity = $value === $this->computeValue();
 
-            return Form::postValidation($this->_validity, $this);
+            return Form::postValidation($this->_validity, $value, $this);
         }
 
-        return Form::postValidation($this->_validity, $this);
+        return Form::postValidation($this->_validity, $value, $this);
     }
 
     /**

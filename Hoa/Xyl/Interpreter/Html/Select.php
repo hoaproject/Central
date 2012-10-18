@@ -148,14 +148,14 @@ class Select extends Generic {
 
             $this->_validity = false;
 
-            return Form::postValidation($this->_validity, $this);
+            return Form::postValidation($this->_validity, $value, $this);
         }
 
         if(empty($value)) {
 
             $this->_validity = true;
 
-            return Form::postValidation($this->_validity, $this);
+            return Form::postValidation($this->_validity, $value, $this);
         }
 
         if(is_array($value)) {
@@ -164,7 +164,7 @@ class Select extends Generic {
 
                 $this->_validity = false;
 
-                return Form::postValidation($this->_validity, $this);
+                return Form::postValidation($this->_validity, $value, $this);
             }
         }
         else
@@ -187,7 +187,7 @@ class Select extends Generic {
 
         $this->_validity = empty($value);
 
-        return Form::postValidation($this->_validity, $this);
+        return Form::postValidation($this->_validity, $value, $this);
     }
 
     /**
