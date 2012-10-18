@@ -198,7 +198,7 @@ class Input extends Generic {
 
             $this->_validity = false;
 
-            return Form::postValidation($this->_validity, $this);
+            return Form::postValidation($this->_validity, $value, $this);
         }
 
         if(   false !== strpos($value, "\n")
@@ -206,7 +206,7 @@ class Input extends Generic {
 
             $this->_validity = false;
 
-            return Form::postValidation($this->_validity, $this);
+            return Form::postValidation($this->_validity, $value, $this);
         }
 
         if(true === $this->attributeExists('pattern')) {
@@ -217,7 +217,7 @@ class Input extends Generic {
 
                 $this->_validity = false;
 
-                return Form::postValidation($this->_validity, $this);
+                return Form::postValidation($this->_validity, $value, $this);
             }
         }
 
@@ -229,7 +229,7 @@ class Input extends Generic {
 
                 $this->_validity = false;
 
-                return Form::postValidation($this->_validity, $this);
+                return Form::postValidation($this->_validity, $value, $this);
             }
         }
 
@@ -237,7 +237,7 @@ class Input extends Generic {
 
             $this->_validity = $value === $this->readAttribute('value');
 
-            return Form::postValidation($this->_validity, $this);
+            return Form::postValidation($this->_validity, $value, $this);
         }
 
         switch($type) {
@@ -373,7 +373,7 @@ class Input extends Generic {
                 $this->_validity = true;
         }
 
-        return Form::postValidation($this->_validity, $this);
+        return Form::postValidation($this->_validity, $value, $this);
     }
 
     /**

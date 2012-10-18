@@ -157,7 +157,7 @@ class Button extends GenericPhrasing {
 
         $this->_validity = $value === $this->readAttribute('value');
 
-        return Form::postValidation($this->_validity, $this);
+        return Form::postValidation($this->_validity, $value, $this);
     }
 }
 

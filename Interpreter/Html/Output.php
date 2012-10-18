@@ -105,7 +105,7 @@ class Output extends Generic {
      */
     public function isValid ( $revalid = false, $value ) {
 
-        return Form::postValidation(true, $this);
+        return Form::postValidation(true, $value, $this);
     }
 }
 

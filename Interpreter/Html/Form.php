@@ -449,14 +449,15 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
      * Post simple validation.
      *
      * @access  public
-     * @param   bool $verdict             Verdict.
+     * @param   bool   $verdict             Verdict.
+     * @param   bool   &$value              Value.
      * @param   \Hoa\Xyl\Interpreter\Html\Concrete  $element    Element that
      *                                                          requires it.
-     * @param   bool $postVerification    Whether we run post-verification or
-     *                                    not.
+     * @param   bool   $postVerification    Whether we run post-verification or
+     *                                      not.
      * @return  bool
      */
-    public static function postValidation ( $verdict, Concrete $element,
+    public static function postValidation ( $verdict, &$value, Concrete $element,
                                             $postVerification = true ) {
 
         if(true === $postVerification)
