@@ -257,7 +257,6 @@ class Input extends Generic {
             // @TODO
             case 'tel':
             case 'url':
-            case 'email':
             case 'datetime':
             case 'date':
             case 'month':
@@ -266,6 +265,10 @@ class Input extends Generic {
             case 'datetime-local':
             case 'file':
                 $this->_validity = true;
+              break;
+
+            case 'email':
+                $this->_validity = false !== filter_var($value, FILTER_VALIDATE_EMAIL);
               break;
 
             case 'number':
