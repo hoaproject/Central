@@ -84,6 +84,18 @@ class Error extends GenericPhrasing {
 
         return;
     }
+
+    /**
+     * Raise the error (just change the visibility).
+     *
+     * @access  public
+     * @param   bool   $raise    Whether we raise the error or not.
+     * @return  bool
+     */
+    public function raise ( $raise = true ) {
+
+        return $this->setVisibility($raise);
+    }
 }
 
 }
