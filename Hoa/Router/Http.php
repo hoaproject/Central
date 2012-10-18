@@ -572,7 +572,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
             return (true === $secure ? 'https://' : 'http://') .
                    $this->_unroute(substr($pattern, 0, $pos), $variables) .
                    '.' . $this->getStrictDomain() .
-                   ((80 !== $port && false === $secure) ? ':' . $port : ':' . 443) .
+                   (80 !== $port ? (false === $secure ? ':' . $port : ':443') : '') .
                    $prefix .
                    $this->_unroute(substr($pattern, $pos + 1), $variables) .
                    $anchor;
@@ -587,7 +587,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
                    $variables['_subdomain'] .
                    (!empty($variables['_subdomain']) ? '.' : '') .
                    $this->getStrictDomain() .
-                   ((80 !== $port && false === $secure) ? ':' . $port : ':' . 443) .
+                   (80 !== $port ? (false === $secure ? ':' . $port : ':443') : '') .
                    $prefix .
                    $this->_unroute($pattern, $variables) .
                    $anchor;
