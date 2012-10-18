@@ -51,7 +51,12 @@ from('Hoa')
 /**
  * \Hoa\Http\Runtime
  */
--> import('Http.Runtime');
+-> import('Http.Runtime')
+
+/**
+ * \Hoa\Test\Praspel\Compiler
+ */
+-> import('Test.Praspel.Compiler');
 
 }
 
@@ -118,6 +123,8 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
      * @var \Hoa\Xyl\Interpreter\Html\Form bool
      */
     protected $_validity                 = null;
+
+    protected static $_compiler          = null;
 
 
 
@@ -460,97 +467,79 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
     public static function postValidation ( $verdict, &$value, Concrete $element,
                                             $postVerification = true ) {
 
-        if(true === $postVerification)
-            static::postVerification($verdict, $element);
-
-        /*
+        // Order is important.
         $validates = array();
 
-        if(true === $this->abstract->attributeExists('validate'))
-            $validates['@'] = $this->abstract->readAttribute('validate');
-        else
-            switch($type) {
-
-                //@TODO
-                // Write Praspel for each input type.
-            }
-
-        if(true === $this->attributeExists('pattern')) {
-
-            $pattern = 'regex(\'' . str_replace(
-                           '\'',
-                           '\\\'',
-                           $this->readAttribute('pattern')
-                       ) .
-                       '\', boundinteger(1, ' .
-                       ($this->attributeExists('maxlength')
-                           ? $this->readAttribute('maxlength')
-                           : 7) .
-                       '))';
-
-            if(!isset($validates['@']))
-                $validates['@']  = $pattern;
-            else
-                $validates['@'] .= ' or ' . $pattern;
-        }
+        if(true === $element->abstract->attributeExists('validate'))
+            $validates['@'] = $element->abstract->readAttribute('validate');
 
         $validates = array_merge(
             $validates,
-            $this->abstract->readCustomAttributes('validate')
+            $element->abstract->readCustomAttributes('validate')
         );
 
-        if(empty($validates))
-            return true;
+        if(empty($validates)) {
 
-        $onerrors = array();
+            if(true === $postVerification)
+                static::postVerification($verdict, $element);
 
-        if(true === $this->abstract->attributeExists('onerror'))
-            $onerrors['@'] = $this->abstract->readAttributeAsList('onerror');
+            return $verdict;
+        }
 
-        $onerrors = array_merge(
-            $onerrors,
-            $this->abstract->readCustomAttributesAsList('onerror')
-        );
+        // Order is not important.
+        $errors = $element->abstract->readCustomAttributesAsList('error');
 
-        if(null === $value)
-            $value = $this->getValue();
-        else
-            if(ctype_digit($value))
-                $value = (int) $value;
-            elseif(is_numeric($value))
-                $value = (float) $value;
+        if(true === $element->abstract->attributeExists('error'))
+            $errors['@'] = $element->abstract->readAttributeAsList('error');
 
-        if(null === self::$_compiler)
-            self::$_compiler = new \Hoa\Test\Praspel\Compiler();
+        if(ctype_digit($value))
+            $value = (int) $value;
+        elseif(is_numeric($value))
+            $value = (float) $value;
 
-        $this->_validity = true;
+        if(null === static::$_compiler)
+            static::$_compiler = new \Hoa\Test\Praspel\Compiler();
+
+        $decision = true;
 
         foreach($validates as $name => $realdom) {
 
-            self::$_compiler->compile('@requires i: ' . $realdom . ';');
-            $praspel         = self::$_compiler->getRoot();
-            $variable        = $praspel->getClause('requires')->getVariable('i');
-            $decision        = $variable->predicate($value);
-            $this->_validity = $this->_validity && $decision;
+            static::$_compiler->compile('@requires i: ' . $realdom . ';');
+            $praspel  = self::$_compiler->getRoot();
+            $variable = $praspel->getClause('requires')->getVariable('i');
+            $decision = $variable->predicate($value);
 
-            if(true === $decision)
+            if('@' === $name)
+                $decision = $verdict && $decision;
+
+            if(true === $decision) {
+
+                unset($errors[$name]);
+
+                continue;
+            }
+
+            if(!isset($errors[$name]))
                 continue;
 
-            if(!isset($onerrors[$name]))
-                continue;
-
-            $errors = $this->xpath(
+            $handle = $element->xpath(
                 '//__current_ns:error[@id="' .
-                implode('" or @id="', $onerrors[$name]) .
+                implode('" or @id="', $errors[$name]) .
                 '"]'
             );
 
-            foreach($errors as $error)
-                $this->getConcreteElement($error)->setVisibility(true);
+            foreach($handle as $error)
+                $element->getConcreteElement($error)->setVisibility(true);
+
+            unset($errors[$name]);
+
+            break;
         }
 
-        return $this->_validity;
-        */
+        $verdict = $decision;
+
+        if(true === $postVerification)
+            static::postVerification($verdict, $element, isset($errors['@']));
 
         return $verdict;
     }
@@ -564,18 +553,22 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
      *                                                          requires it.
      * @return  void
      */
-    public static function postVerification ( $verdict, Concrete $element ) {
+    public static function postVerification ( $verdict, Concrete $element,
+                                              $raise = true ) {
 
         if(true === $verdict)
             return;
 
-        $onerror = $element->abstract->readAttributeAsList('onerror');
+        if(true !== $raise)
+            return;
+
+        $onerror = $element->abstract->readAttributeAsList('error');
         $errors  = $element->xpath(
             '//__current_ns:error[@id="' . implode('" or @id="', $onerror) . '"]'
         );
 
         foreach($errors as $error)
-            $element->getConcrete($error)->setVisibility(true);
+            $element->getConcreteElement($error)->setVisibility(true);
 
         return;
     }
