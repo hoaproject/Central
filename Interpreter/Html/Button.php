@@ -159,6 +159,20 @@ class Button extends GenericPhrasing {
 
         return Form::postValidation($this->_validity, $value, $this);
     }
+
+    /**
+     * Set value.
+     *
+     * @access  public
+     * @param   mixed  $value    Value.
+     * @return  string
+     */
+    public function setValue ( $value ) {
+
+        $this->writeAttribute('value', $value);
+
+        return;
+    }
 }
 
 }

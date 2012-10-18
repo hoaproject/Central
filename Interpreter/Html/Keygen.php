@@ -123,6 +123,18 @@ class Keygen extends Generic {
 
         return $this->_validity = true;
     }
+
+    /**
+     * Set value.
+     *
+     * @access  public
+     * @param   mixed  $value    Value.
+     * @return  string
+     */
+    public function setValue ( $value ) {
+
+        return;
+    }
 }
 
 }

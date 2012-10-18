@@ -397,6 +397,8 @@ class Input extends Generic {
             default:
                 $this->writeAttribute('value', $value);
         }
+
+        return;
     }
 
     /**
