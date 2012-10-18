@@ -377,6 +377,29 @@ class Input extends Generic {
     }
 
     /**
+     * Set value.
+     *
+     * @access  public
+     * @param   mixed  $value    Value.
+     * @return  string
+     */
+    public function setValue ( $value ) {
+
+        $type = strtolower($this->readAttribute('type'));
+
+        switch($type) {
+
+            case 'checkbox':
+            case 'radio':
+                $this->writeAttribute('checked', 'checked');
+              break;
+
+            default:
+                $this->writeAttribute('value', $value);
+        }
+    }
+
+    /**
      * Get step.
      *
      * @access  protected

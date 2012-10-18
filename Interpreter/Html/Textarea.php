@@ -117,7 +117,37 @@ class Textarea extends Generic {
      */
     protected $_validity                 = null;
 
+    /**
+     * Temporize value.
+     *
+     * @var \Hoa\Xyl\Interpreter\Html\Textarea string
+     */
+    protected $_value                    = null;
 
+
+
+    /**
+     * Paint the element.
+     *
+     * @access  protected
+     * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
+     * @return  void
+     */
+    protected function paint ( \Hoa\Stream\IStream\Out $out ) {
+
+        $name = $this->getName();
+
+        $out->writeAll('<' . $name . $this->readAttributesAsString() . '>');
+
+        if(null === $this->_value)
+            $this->computeValue($out);
+        else
+            $out->writeAll($this->_value);
+
+        $out->writeAll('</' . $name . '>');
+
+        return;
+    }
 
     /**
      * Get form.
@@ -173,6 +203,20 @@ class Textarea extends Generic {
         }
 
         return Form::postValidation($this->_validity, $this);
+    }
+
+    /**
+     * Set value.
+     *
+     * @access  public
+     * @param   mixed  $value    Value.
+     * @return  string
+     */
+    public function setValue ( $value ) {
+
+        $this->_value = $value;
+
+        return;
     }
 }
 

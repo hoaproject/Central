@@ -342,10 +342,25 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
 
                     $validation[$index] = false;
 
+                    foreach($names[$index] as $element) {
+
+                        $handle = $element->isValid($revalid, $datum);
+
+                        if(true === $handle)
+                            $element->setValue($datum);
+
+                        $validation[$index] = $validation[$index] || $handle;
+                    }
+
+                    unset($names[$index]);
+                    unset($flat[$index]);
+
                     continue;
                 }
 
-                $validation[$index] = $names[$index][0]->isValid($revalid, $datum);
+                $element            = $names[$index][0];
+                $validation[$index] = $element->isValid($revalid, $datum);
+                $element->setValue($datum);
                 unset($names[$index]);
                 unset($flat[$index]);
 
