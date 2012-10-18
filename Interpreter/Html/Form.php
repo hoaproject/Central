@@ -172,6 +172,9 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
                 $this->writeAttribute('aria-relevant', 'all');
         }
 
+        if(false === $this->attributeExists('action'))
+            $this->writeAttribute('action', '#');
+
         if(false === $this->attributeExists('method'))
             $this->writeAttribute('method', 'post');
 
