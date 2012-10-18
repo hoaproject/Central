@@ -122,6 +122,26 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
 
 
     /**
+     * Paint the element.
+     *
+     * @access  protected
+     * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
+     * @return  void
+     */
+    protected function paint ( \Hoa\Stream\IStream\Out $out ) {
+
+        $name = $this->getName();
+
+        $out->writeAll('<' . $name . $this->readAttributesAsString() . '>');
+        // Force Internet Explorer <= 8 to use UTF-8.
+        $out->writeAll('<input type="hidden" name="__utf8" value="✓" />');
+        $this->computeValue($out);
+        $out->writeAll('</' . $name . '>');
+
+        return;
+    }
+
+    /**
      * Pre-execute an element.
      *
      * ARIA and @async attribute
@@ -283,6 +303,7 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
 
         $this->_validity = true;
         $data            = \Hoa\Http\Runtime::getData();
+        unset($data['__utf8']);
         $this->flat($data, $flat);
 
         if(false === is_array($data) || empty($data))
