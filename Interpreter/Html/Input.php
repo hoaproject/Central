@@ -213,7 +213,7 @@ class Input extends Generic {
 
             $pattern = str_replace('#', '\#', $this->readAttribute('pattern'));
 
-            if(0 == @preg_match_all('#^' . $pattern . '$#uim', $value, $_)) {
+            if(0 == @preg_match('#^' . $pattern . '$#u', $value, $_)) {
 
                 $this->_validity = false;
 
