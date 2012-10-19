@@ -87,7 +87,7 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
         'enctype'        => parent::ATTRIBUTE_TYPE_NORMAL,
         'method'         => parent::ATTRIBUTE_TYPE_NORMAL,
         'name'           => parent::ATTRIBUTE_TYPE_NORMAL,
-        // client, value, security, all (=true)
+        // client, security, all (=true)
         'novalidate'     => parent::ATTRIBUTE_TYPE_NORMAL,
         'onerror'        => parent::ATTRIBUTE_TYPE_LIST,
         'target'         => parent::ATTRIBUTE_TYPE_NORMAL
@@ -580,7 +580,7 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
      * @param   string  $index    Index (if null, return all data).
      * @return  mixed
      */
-    public function getFormData ( $index = null ) {
+    public function getData ( $index = null ) {
 
         if(null === $index)
             return $this->_formData;
