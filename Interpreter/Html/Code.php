@@ -277,7 +277,7 @@ class Code extends GenericPhrasing {
                        $submatches[1] . '</span>';
 
                 preg_match_all(
-                    '#(\w+)\s*(=\s*(?<!\\\)(?:("|\')|)(?(3)(.*?)(?<!\\\)\3|(\w+))\s*)?#',
+                    '#([\w\-]+)\s*(=\s*(?<!\\\)(?:("|\')|)(?(3)(.*?)(?<!\\\)\3|(\w+))\s*)?#',
                     $submatches[2],
                     $attributes,
                     PREG_SET_ORDER
