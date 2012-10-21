@@ -51,35 +51,35 @@ class Consistency implements \ArrayAccess {
     /**
      * One singleton by library family.
      *
-     * @var \Hoa\Consistency array
+     * @var \Hoa\Core\Consistency array
      */
     private static $_multiton = array();
 
     /**
      * Libraries to considere.
      *
-     * @var \Hoa\Consistency array
+     * @var \Hoa\Core\Consistency array
      */
     protected $_from          = null;
 
     /**
      * Library's roots to considere.
      *
-     * @var \Hoa\Consistency array
+     * @var \Hoa\Core\Consistency array
      */
     protected $_roots         = array();
 
     /**
      * Cache all imports.
      *
-     * @var \Hoa\Consistency array
+     * @var \Hoa\Core\Consistency array
      */
     protected static $_cache  = array();
 
     /**
      * Cache all classes informations: path, alias and imported.
      *
-     * @var \Hoa\Consistency array
+     * @var \Hoa\Core\Consistency array
      */
     protected static $_class  = array();
 
@@ -87,7 +87,7 @@ class Consistency implements \ArrayAccess {
      * Cache all classes from the current library family.
      * It contains references to self:$_class.
      *
-     * @var \Hoa\Consistency array
+     * @var \Hoa\Core\Consistency array
      */
     protected $__class        = array();
 
@@ -98,7 +98,7 @@ class Consistency implements \ArrayAccess {
      *     • 1, load (oneshot, back to autoload after loading files);
      *     • 2, load* (autoload for all imports).
      *
-     * @var \Hoa\Consistency bool
+     * @var \Hoa\Core\Consistency bool
      */
     protected $_autoload      = false;
 
@@ -132,7 +132,7 @@ class Consistency implements \ArrayAccess {
      *
      * @access  public
      * @param   string  $from    Library family's name.
-     * @return  \Hoa\Consistency
+     * @return  \Hoa\Core\Consistency
      */
     public static function from ( $namespace ) {
 
@@ -150,7 +150,7 @@ class Consistency implements \ArrayAccess {
      * @param   string  $path       Path.
      * @param   bool    $load       Whether loading directly or not.
      * @param   string  &$family    Finally choosen family.
-     * @return  \Hoa\Consistency
+     * @return  \Hoa\Core\Consistency
      * @throw   \Hoa\Core\Exception
      */
     public function import ( $path, $load = null, &$family = null ) {
@@ -209,7 +209,7 @@ class Consistency implements \ArrayAccess {
      * @param   bool    $load    Whether loading directly or not.
      * @param   string  $from    Library family's name.
      * @param   string  $root    Root.
-     * @return  \Hoa\Consistency
+     * @return  \Hoa\Core\Consistency
      * @throw   \Hoa\Core\Exception\Idle
      */
     protected function _import ( $path, $load, $from, $root ) {
@@ -219,8 +219,16 @@ class Consistency implements \ArrayAccess {
         else
             $all = $path;
 
-        if(isset(static::$_cache[$all]) && false === $load)
-            return $this;
+        if(isset(static::$_cache[$all])) {
+
+            if(false === $load)
+                return $this;
+
+            $class = str_replace('.', '\\', $all);
+            $alias = static::$_class[$class]['alias'];
+
+            return $this->_load($class, false !== $alias, $alias);
+        }
 
         static::$_cache[$all] = true;
         $uncache              = array($all);
@@ -243,8 +251,16 @@ class Consistency implements \ArrayAccess {
             $explode = $parts;
             $edited  = true;
 
-            if(isset(static::$_cache[$all]) && false === $load)
-                return $this;
+            if(isset(static::$_cache[$all])) {
+
+                if(false === $load)
+                    return $this;
+
+                $class = str_replace('.', '\\', $all);
+                $alias = static::$_class[$class]['alias'];
+
+                return $this->_load($class, false !== $alias, $alias);
+            }
 
             static::$_cache[$all] = true;
             $uncache[]            = $all;
@@ -351,11 +367,30 @@ class Consistency implements \ArrayAccess {
         if(false === $load)
             return $this;
 
-        require $path;
+        return $this->_load($class, $entry, $alias);
+    }
 
-        static::$_class[$class]['imported'] = true;
+    /**
+     * Load a class.
+     *
+     * @access  protected
+     * @param   string    $class    Classname.
+     * @param   bool      $entry    Whether it is an entry class.
+     * @param   string    $alias    Alias classname.
+     * @return  \Hoa\Core\Consistency
+     */
+    protected function _load ( $class, $entry = false, $alias = false ) {
 
-        if(true === $entry)
+        $bucket = &static::$_class[$class];
+
+        if(true === $bucket['imported'])
+            return $this;
+
+        require $bucket['path'];
+
+        $bucket['imported'] = true;
+
+        if(true === $entry && false !== $alias)
             class_alias($class, $alias);
 
         return $this;
@@ -368,7 +403,7 @@ class Consistency implements \ArrayAccess {
      * @param   bool    $root    Root.
      * @param   string  $from    Library family's name (if null, first family
      *                           will be choosen).
-     * @return  \Hoa\Consistency
+     * @return  \Hoa\Core\Consistency
      */
     public function setRoot ( $root, $from = null ) {
 
@@ -428,7 +463,7 @@ class Consistency implements \ArrayAccess {
      *
      * @access  public
      * @param   mixed  $options    Options.
-     * @return  \Hoa\Consistency
+     * @return  \Hoa\Core\Consistency
      */
     public function offsetGet ( $options ) {
 
@@ -890,7 +925,7 @@ namespace {
  *
  * @access  public
  * @param   string  $from    Library family's name.
- * @return  \Hoa\Consistency
+ * @return  \Hoa\Core\Consistency
  */
 if(!ƒ('from')) {
 function from ( $namespace ) {
