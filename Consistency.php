@@ -225,9 +225,13 @@ class Consistency implements \ArrayAccess {
                 return $this;
 
             $class = str_replace('.', '\\', $all);
-            $alias = static::$_class[$class]['alias'];
 
-            return $this->_load($class, false !== $alias, $alias);
+            if(isset(static::$_class[$class])) {
+
+                $alias = static::$_class[$class]['alias'];
+
+                return $this->_load($class, false !== $alias, $alias);
+            }
         }
 
         static::$_cache[$all] = true;
