@@ -567,27 +567,15 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
             return $value;
 
         $arguments = $this->abstract->readCustomAttributes($_formatter);
-        $self      = $this;
-        array_walk($arguments, $f = function ( &$argument ) use ( &$self ) {
 
-            $argument = $self->computeAttributeValue($argument);
+        foreach($arguments as &$argument)
+            $argument = $this->_formatValue(
+                $this->computeAttributeValue($argument)
+            );
 
-            if(ctype_digit($argument))
-                $argument = intval($argument);
-            elseif(is_numeric($argument))
-                $argument = floatval($argument);
-            elseif('true' === $argument)
-                $argument = true;
-            elseif('false' === $argument)
-                $argument = false;
-            elseif('null' === $argument)
-                $argument = null;
-            // what about constants?
-        });
         $reflection   = new \ReflectionFunction($formatter);
         $distribution = array();
-        $placeholder  = $value;
-        $f($placeholder);
+        $placeholder  = $this->_formatValue($value);
 
         foreach($reflection->getParameters() as $parameter) {
 
@@ -606,6 +594,30 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         }
 
         $value = $reflection->invokeArgs($distribution);
+
+        return $value;
+    }
+
+    /**
+     * Format value to a specific type.
+     *
+     * @access  protected
+     * @param   string  $value    Value.
+     * @return  mixed
+     */
+    protected function _formatValue ( $value ) {
+
+        if(ctype_digit($value))
+            $value = intval($value);
+        elseif(is_numeric($value))
+            $value = floatval($value);
+        elseif('true' === $value)
+            $value = true;
+        elseif('false' === $value)
+            $value = false;
+        elseif('null' === $value)
+            $value = null;
+        // what about constants?
 
         return $value;
     }
