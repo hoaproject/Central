@@ -90,7 +90,7 @@ class          Value
         $value = $this->computeValue();
 
         if(true === $this->abstract->attributeExists('formatter'))
-            $value = $this->formatValue($value);
+            $value = $this->formatValue(empty($value) ? null : $value);
 
         if(true === $this->abstract->attributeExists('link')) {
 
