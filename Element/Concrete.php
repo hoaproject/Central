@@ -562,18 +562,14 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
 
         $_formatter = $name . 'formatter';
         $formatter  = $this->abstract->readAttribute($_formatter);
-
-        if(false === function_exists($formatter))
-            return $value;
-
-        $arguments = $this->abstract->readCustomAttributes($_formatter);
+        $arguments  = $this->abstract->readCustomAttributes($_formatter);
 
         foreach($arguments as &$argument)
             $argument = $this->_formatValue(
                 $this->computeAttributeValue($argument)
             );
 
-        $reflection   = new \ReflectionFunction($formatter);
+        $reflection   = xcallable($formatter)->getReflection();
         $distribution = array();
         $placeholder  = $this->_formatValue($value);
 
@@ -593,7 +589,10 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
             }
         }
 
-        $value = $reflection->invokeArgs($distribution);
+        if($reflection instanceof \ReflectionMethod)
+            $value = $reflection->invokeArgs(null, $distribution);
+        else
+            $value = $reflection->invokeArgs($distribution);
 
         return $value;
     }
