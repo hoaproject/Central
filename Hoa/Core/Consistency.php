@@ -909,6 +909,38 @@ class Xcallable {
     }
 
     /**
+     * Get appropriated reflection instance.
+     *
+     * @access  public
+     * @param   ...
+     * @return  \Reflector
+     */
+    public function getReflection ( ) {
+
+        $arguments = func_get_args();
+        $valid     = $this->getValidCallback($arguments);
+
+        if(is_string($valid))
+            return new \ReflectionFunction($valid);
+
+        if($valid instanceof \Closure)
+            return new \ReflectionFunction($valid);
+
+        if(is_array($valid)) {
+
+            if(is_string($valid[0]))
+                return new \ReflectionMethod($valid[0], $valid[1]);
+
+            $object = new \ReflectionObject($valid[0]);
+
+            if(null === $valid[1])
+                return $object;
+
+            return $object->getMethod($valid[1]);
+        }
+    }
+
+    /**
      * Return the hash.
      *
      * @access  public
