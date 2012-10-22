@@ -103,10 +103,10 @@ class String extends Realdom {
             $this['length'] = new Constinteger(13);
 
         if(!isset($this['codepointMin']))
-            $this['codepointMin'] = new Constinteger(0x20);
+            $this['codepointMin'] = new Constinteger(0x9);
 
         if(!isset($this['codepointMax']))
-            $this['codepointMax'] = new Constinteger(0x7e);
+            $this['codepointMax'] = new Constinteger(0xffff);
 
         $this['codepointMin'] = $this['codepointMin']->getConstantValue();
         $this['codepointMax'] = $this['codepointMax']->getConstantValue();
