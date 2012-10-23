@@ -85,11 +85,11 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
         'autocomplete'   => parent::ATTRIBUTE_TYPE_NORMAL,
         'async'          => parent::ATTRIBUTE_TYPE_NORMAL,
         'enctype'        => parent::ATTRIBUTE_TYPE_NORMAL,
+        'error'          => parent::ATTRIBUTE_TYPE_LIST,
         'method'         => parent::ATTRIBUTE_TYPE_NORMAL,
         'name'           => parent::ATTRIBUTE_TYPE_NORMAL,
         // client, security, all (=true)
         'novalidate'     => parent::ATTRIBUTE_TYPE_NORMAL,
-        'onerror'        => parent::ATTRIBUTE_TYPE_LIST,
         'target'         => parent::ATTRIBUTE_TYPE_NORMAL
     );
 
@@ -306,6 +306,7 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
             return $this->_validity;
 
         $novalidate = $this->abstract->readAttributeAsList('novalidate');
+        // what about @formnovalidate on submitable element?
 
         if(   true === in_array('all', $novalidate)
            || true === in_array('true', $novalidate))
