@@ -306,6 +306,7 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
             return $this->_validity;
 
         $novalidate = $this->abstract->readAttributeAsList('novalidate');
+        // what about @formnovalidate on submitable element?
 
         if(   true === in_array('all', $novalidate)
            || true === in_array('true', $novalidate))
