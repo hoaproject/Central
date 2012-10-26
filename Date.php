@@ -104,10 +104,10 @@ class Date extends Realdom {
     /**
      * Construct a realistic domain.
      *
-     * @access  public
+     * @access  protected
      * @return  void
      */
-    public function construct ( ) {
+    protected function construct ( ) {
 
         if(null === static::$_constants) {
 

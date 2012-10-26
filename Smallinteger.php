@@ -76,10 +76,10 @@ class Smallinteger extends Boundinteger {
     /**
      * Construct a realistic domain.
      *
-     * @access  public
+     * @access  protected
      * @return  void
      */
-    public function construct ( ) {
+    protected function construct ( ) {
 
         $this['lower'] = new Constinteger(-128);
         $this['upper'] = new Constinteger( 127);

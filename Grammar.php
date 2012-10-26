@@ -115,10 +115,10 @@ class Grammar extends String {
     /**
      * Construct a realistic domain.
      *
-     * @access  public
+     * @access  protected
      * @return  void
      */
-    public function construct ( ) {
+    protected function construct ( ) {
 
         if(!isset($this['grammar']))
             throw new Exception(

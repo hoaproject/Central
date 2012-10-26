@@ -76,10 +76,10 @@ class Smallfloat extends Boundfloat {
     /**
      * Construct a realistic domain.
      *
-     * @access  public
+     * @access  protected
      * @return  void
      */
-    public function construct ( ) {
+    protected function construct ( ) {
 
         $this['lower'] = new Constfloat(-128.0);
         $this['upper'] = new Constfloat( 127.0);

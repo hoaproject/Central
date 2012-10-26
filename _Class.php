@@ -85,10 +85,10 @@ class _Class extends Realdom {
     /**
      * Construct a realistic domain.
      *
-     * @access  public
+     * @access  protected
      * @return  void
      */
-    public function construct ( ) {
+    protected function construct ( ) {
 
         if(!isset($this[0]))
             throw new Exception(

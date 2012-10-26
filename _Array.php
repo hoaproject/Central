@@ -86,10 +86,10 @@ class _Array extends Realdom {
     /**
      * Construct a realistic domain.
      *
-     * @access  public
+     * @access  protected
      * @return  void
      */
-    public function construct ( ) {
+    protected function construct ( ) {
 
         if(!isset($this['domains']))
             throw new Exception(

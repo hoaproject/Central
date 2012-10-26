@@ -86,10 +86,10 @@ class Boundfloat extends Float {
     /**
      * Construct a realistic domain.
      *
-     * @access  public
+     * @access  protected
      * @return  void
      */
-    public function construct ( ) {
+    protected function construct ( ) {
 
         if(!isset($this['lower']))
             $this['lower'] = new Constfloat((float) ~PHP_INT_MAX);

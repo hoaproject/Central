@@ -86,10 +86,10 @@ class Relation extends _Array {
     /**
      * Construct a realistic domain.
      *
-     * @access  public
+     * @access  protected
      * @return  void
      */
-    public function construct ( ) {
+    protected function construct ( ) {
 
         if(!isset($this['classname']))
             throw new Exception(

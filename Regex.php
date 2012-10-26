@@ -134,10 +134,10 @@ class Regex extends String {
     /**
      * Construct a realistic domain.
      *
-     * @access  public
+     * @access  protected
      * @return  void
      */
-    public function construct ( ) {
+    protected function construct ( ) {
 
         if(null === self::$_compiler)
             self::$_compiler = \Hoa\Compiler\Llk::load(

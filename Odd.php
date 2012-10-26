@@ -90,10 +90,10 @@ class Odd extends Realdom implements Number {
     /**
      * Construct a realistic domain.
      *
-     * @access  public
+     * @access  protected
      * @return  void
      */
-    public function construct ( ) {
+    protected function construct ( ) {
 
         if(!isset($this['subject']))
             $this['subject'] = new Integer();

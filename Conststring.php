@@ -85,11 +85,10 @@ class Conststring extends String implements Constant {
     /**
      * Construct a realistic domain.
      *
-     * @access  public
+     * @access  protected
      * @return  void
-     * @throw   \Hoa\Realdom\Exception
      */
-    public function construct ( ) {
+    protected function construct ( ) {
 
         if(!isset($this['value']))
             $this['value'] = '';
