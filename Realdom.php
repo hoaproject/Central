@@ -44,6 +44,26 @@ from('Hoa')
 -> import('Realdom.Exception')
 
 /**
+ * \Hoa\Realdom\Constboolean
+ */
+-> import('Realdom.Constboolean')
+
+/**
+ * \Hoa\Realdom\Constfloat
+ */
+-> import('Realdom.Constfloat')
+
+/**
+ * \Hoa\Realdom\Constinteger
+ */
+-> import('Realdom.Constinteger')
+
+/**
+ * \Hoa\Realdom\Conststring
+ */
+-> import('Realdom.Conststring')
+
+/**
  * \Hoa\Math\Sampler
  */
 -> import('Math.Sampler.~');
@@ -62,17 +82,7 @@ namespace Hoa\Realdom {
  * @license    New BSD License
  */
 
-abstract class Realdom
-    implements \Hoa\Core\Parameter\Parameterizable,
-               \ArrayAccess,
-               \Countable {
-
-    /**
-     * Parameters.
-     *
-     * @var \Hoa\Core\Parameter object
-     */
-    protected $_parameters     = null;
+abstract class Realdom implements \ArrayAccess, \Countable {
 
     /**
      * Realistic domain name.
@@ -126,12 +136,6 @@ abstract class Realdom
      */
     final public function __construct ( ) {
 
-        $this->_parameters = new \Hoa\Core\Parameter(
-            $this,
-            array(),
-            array()
-        );
-
         switch($this->_arguments) {
 
             case null:
@@ -154,6 +158,31 @@ abstract class Realdom
                     array_slice($arguments, 0, $arity)
                 );
         }
+
+        if(   get_class($this) !== 'Hoa\Realdom\Constboolean'
+           && get_class($this) !== 'Hoa\Realdom\Constfloat'
+           && get_class($this) !== 'Hoa\Realdom\Constinteger'
+           && get_class($this) !== 'Hoa\Realdom\Conststring')
+            foreach($this->arguments as &$argument)
+                switch(gettype($argument)) {
+
+                    case 'boolean':
+                        $argument = new Constboolean($argument);
+                      break;
+
+                    case 'double':
+                        $argument = new Constfloat($argument);
+                      break;
+
+                    case 'integer':
+                        $argument = new Constinteger($argument);
+                      break;
+
+                    case 'string':
+                        $argument = new Conststring($argument);
+                      break;
+                }
+
 
         $this->construct();
 
