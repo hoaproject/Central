@@ -226,17 +226,6 @@ abstract class Realdom implements \ArrayAccess, \Countable {
     }
 
     /**
-     * Get parameters.
-     *
-     * @access  public
-     * @return  \Hoa\Core\Parameter
-     */
-    public function getParameters ( ) {
-
-        return $this->_parameters;
-    }
-
-    /**
      * Check if an argument exists.
      *
      * @access  public
