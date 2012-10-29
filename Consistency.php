@@ -813,7 +813,7 @@ class Xcallable {
      * @param   array  $arguments    Arguments.
      * @return  mixed
      */
-    public function distributesArguments ( Array $arguments ) {
+    public function distributeArguments ( Array $arguments ) {
 
         return call_user_func_array(array($this, '__invoke'), $arguments);
     }
