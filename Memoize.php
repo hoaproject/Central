@@ -181,7 +181,7 @@ class Memoize {
         $id        = md5(serialize($arguments));
 
         if(!isset($this->_arguments[$id]))
-            $this->_arguments[$id] = $this->_callable->distributesArguments(
+            $this->_arguments[$id] = $this->_callable->distributeArguments(
                 $arguments
             );
 
