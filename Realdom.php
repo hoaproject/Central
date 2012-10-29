@@ -149,10 +149,12 @@ abstract class Realdom implements \ArrayAccess, \Countable {
 
             case …:
                 $this->arguments = func_get_args();
+                $this->autoBoxing($this->arguments);
               break;
 
             default:
                 $arguments = func_get_args();
+                $this->autoBoxing($arguments);
                 $arity     = count($this->_arguments);
 
                 if($arity > $c = count($arguments))
@@ -163,36 +165,6 @@ abstract class Realdom implements \ArrayAccess, \Countable {
                     array_slice($arguments, 0, $arity)
                 );
         }
-
-        if(   get_class($this) !== 'Hoa\Realdom\Constnull'
-           && get_class($this) !== 'Hoa\Realdom\Constboolean'
-           && get_class($this) !== 'Hoa\Realdom\Constfloat'
-           && get_class($this) !== 'Hoa\Realdom\Constinteger'
-           && get_class($this) !== 'Hoa\Realdom\Conststring')
-            foreach($this->arguments as &$argument)
-                switch(gettype($argument)) {
-
-                    case 'NULL':
-                        $argument = new Constnull($argument);
-                      break;
-
-                    case 'boolean':
-                        $argument = new Constboolean($argument);
-                      break;
-
-                    case 'double':
-                        $argument = new Constfloat($argument);
-                      break;
-
-                    case 'integer':
-                        $argument = new Constinteger($argument);
-                      break;
-
-                    case 'string':
-                        $argument = new Conststring($argument);
-                      break;
-                }
-
 
         $this->construct();
 
@@ -206,6 +178,49 @@ abstract class Realdom implements \ArrayAccess, \Countable {
      * @return  void
      */
     protected function construct ( ) {
+
+        return;
+    }
+
+    /**
+     * Auto-boxing.
+     *
+     * @access  protected
+     * @param   array  &$arguments    Arguments.
+     * @return  void
+     */
+    protected function autoBoxing ( Array &$arguments ) {
+
+        if(   get_class($this) === 'Hoa\Realdom\Constnull'
+           || get_class($this) === 'Hoa\Realdom\Constboolean'
+           || get_class($this) === 'Hoa\Realdom\Constfloat'
+           || get_class($this) === 'Hoa\Realdom\Constinteger'
+           || get_class($this) === 'Hoa\Realdom\Conststring')
+            return;
+
+        foreach($arguments as &$argument)
+            switch(gettype($argument)) {
+
+                case 'NULL':
+                    $argument = new Constnull($argument);
+                  break;
+
+                case 'boolean':
+                    $argument = new Constboolean($argument);
+                  break;
+
+                case 'double':
+                    $argument = new Constfloat($argument);
+                  break;
+
+                case 'integer':
+                    $argument = new Constinteger($argument);
+                  break;
+
+                case 'string':
+                    $argument = new Conststring($argument);
+                  break;
+            }
 
         return;
     }
