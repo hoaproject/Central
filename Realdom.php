@@ -165,7 +165,7 @@ abstract class Realdom implements \ArrayAccess, \Countable {
         }
 
         if(   get_class($this) !== 'Hoa\Realdom\Constnull'
-           && get_class($this) !== 'Hoa\Realdom\Constfloat'
+           && get_class($this) !== 'Hoa\Realdom\Constboolean'
            && get_class($this) !== 'Hoa\Realdom\Constfloat'
            && get_class($this) !== 'Hoa\Realdom\Constinteger'
            && get_class($this) !== 'Hoa\Realdom\Conststring')
