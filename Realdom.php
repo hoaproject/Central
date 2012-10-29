@@ -44,6 +44,11 @@ from('Hoa')
 -> import('Realdom.Exception')
 
 /**
+ * \Hoa\Realdom\Constnull
+ */
+-> import('Realdom.Constnull')
+
+/**
  * \Hoa\Realdom\Constboolean
  */
 -> import('Realdom.Constboolean')
@@ -159,12 +164,17 @@ abstract class Realdom implements \ArrayAccess, \Countable {
                 );
         }
 
-        if(   get_class($this) !== 'Hoa\Realdom\Constboolean'
+        if(   get_class($this) !== 'Hoa\Realdom\Constnull'
+           && get_class($this) !== 'Hoa\Realdom\Constfloat'
            && get_class($this) !== 'Hoa\Realdom\Constfloat'
            && get_class($this) !== 'Hoa\Realdom\Constinteger'
            && get_class($this) !== 'Hoa\Realdom\Conststring')
             foreach($this->arguments as &$argument)
                 switch(gettype($argument)) {
+
+                    case 'NULL':
+                        $argument = new Constnull($argument);
+                      break;
 
                     case 'boolean':
                         $argument = new Constboolean($argument);
