@@ -153,6 +153,7 @@ class Core implements Parameter\Parameterizable {
         static::_define('OS_WIN',              defined('PHP_WINDOWS_VERSION_PLATFORM'));
         static::_define('S_64_BITS',           PHP_INT_SIZE == 8);
         static::_define('S_32_BITS',           !S_64_BITS);
+        static::_define('PHP_INT_MIN',         ~PHP_INT_MAX);
         static::_define('π',                   M_PI);
         static::_define('void',                (unset) null);
         static::_define('_public',             1);
