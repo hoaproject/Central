@@ -110,7 +110,7 @@ class Html extends \Hoa\Xyl\Interpreter {
         'p'               => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
         'blockquote'      => '\Hoa\Xyl\Interpreter\Html\Q',
         'hr'              => '\Hoa\Xyl\Interpreter\Html\Hr',
-        'pre'             => '\Hoa\Xyl\Interpreter\Html\Pre',
+        'pre'             => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
         'ol'              => '\Hoa\Xyl\Interpreter\Html\Ol',
         'ul'              => '\Hoa\Xyl\Interpreter\Html\Generic',
         'li'              => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
