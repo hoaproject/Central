@@ -82,9 +82,9 @@ class Grammar extends String {
     /**
      * Realistic domain name.
      *
-     * @var \Hoa\Realdom string
+     * @const string
      */
-    protected $_name            = 'grammar';
+    const NAME = 'grammar';
 
     /**
      * Realistic domain defined arguments.
@@ -115,10 +115,10 @@ class Grammar extends String {
     /**
      * Construct a realistic domain.
      *
-     * @access  public
+     * @access  protected
      * @return  void
      */
-    public function construct ( ) {
+    protected function construct ( ) {
 
         if(!isset($this['grammar']))
             throw new Exception(

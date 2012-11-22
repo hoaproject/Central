@@ -34,63 +34,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
+namespace Hoa\Realdom\Exception {
 
 /**
- * \Hoa\Realdom
- */
--> import('Realdom.~');
-
-}
-
-namespace Hoa\Realdom {
-
-/**
- * Class \Hoa\Realdom\Boolean.
+ * Class \Hoa\Realdom\Exception.
  *
- * Realistic domain: boolean.
+ * Extending the \Hoa\Core\Exception class.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Boolean extends Realdom {
-
-    /**
-     * Realistic domain name.
-     *
-     * @const string
-     */
-    const NAME = 'boolean';
-
-
-
-    /**
-     * Predicate whether the sampled value belongs to the realistic domains.
-     *
-     * @access  public
-     * @param   mixed  $q    Sampled value.
-     * @return  boolean
-     */
-    public function predicate ( $q ) {
-
-        return is_bool($q);
-    }
-
-    /**
-     * Sample one new value.
-     *
-     * @access  protected
-     * @param   \Hoa\Math\Sampler  $sampler    Sampler.
-     * @return  mixed
-     */
-    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
-
-        return (bool) $sampler->getInteger(0, 1);
-    }
-}
+class Exception extends \Hoa\Core\Exception { }
 
 }

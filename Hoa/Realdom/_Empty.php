@@ -62,9 +62,9 @@ class _Empty extends Realdom {
     /**
      * Realistic domain name.
      *
-     * @var \Hoa\Realdom string
+     * @const string
      */
-    protected $_name = 'empty';
+    const NAME = 'empty';
 
 
 

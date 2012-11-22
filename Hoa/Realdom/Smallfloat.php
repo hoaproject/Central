@@ -67,19 +67,19 @@ class Smallfloat extends Boundfloat {
     /**
      * Realistic domain name.
      *
-     * @var \Hoa\Realdom string
+     * @const string
      */
-    protected $_name = 'smallfloat';
+    const NAME = 'smallfloat';
 
 
 
     /**
      * Construct a realistic domain.
      *
-     * @access  public
+     * @access  protected
      * @return  void
      */
-    public function construct ( ) {
+    protected function construct ( ) {
 
         $this['lower'] = new Constfloat(-128.0);
         $this['upper'] = new Constfloat( 127.0);

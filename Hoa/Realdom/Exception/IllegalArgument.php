@@ -39,58 +39,24 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Realdom
+ * \Hoa\Realdom\Exception
  */
--> import('Realdom.~');
+-> import('Realdom.Exception.~');
 
 }
 
-namespace Hoa\Realdom {
+namespace Hoa\Realdom\Exception {
 
 /**
- * Class \Hoa\Realdom\Boolean.
+ * Class \Hoa\Realdom\Exception.
  *
- * Realistic domain: boolean.
+ * Extending the \Hoa\Praspel\Exception class.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Boolean extends Realdom {
-
-    /**
-     * Realistic domain name.
-     *
-     * @const string
-     */
-    const NAME = 'boolean';
-
-
-
-    /**
-     * Predicate whether the sampled value belongs to the realistic domains.
-     *
-     * @access  public
-     * @param   mixed  $q    Sampled value.
-     * @return  boolean
-     */
-    public function predicate ( $q ) {
-
-        return is_bool($q);
-    }
-
-    /**
-     * Sample one new value.
-     *
-     * @access  protected
-     * @param   \Hoa\Math\Sampler  $sampler    Sampler.
-     * @return  mixed
-     */
-    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
-
-        return (bool) $sampler->getInteger(0, 1);
-    }
-}
+class IllegalArgument extends Exception { }
 
 }

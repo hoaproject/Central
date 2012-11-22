@@ -41,17 +41,7 @@ from('Hoa')
 /**
  * \Hoa\Realdom
  */
--> import('Realdom.~')
-
-/**
- * \Hoa\Realdom\Number
- */
--> import('Realdom.Number')
-
-/**
- * \Hoa\Realdom\Integer
- */
--> import('Realdom.Integer');
+-> import('Realdom.~');
 
 }
 
@@ -67,14 +57,14 @@ namespace Hoa\Realdom {
  * @license    New BSD License
  */
 
-class Odd extends Realdom implements Number {
+class Odd extends Realdom {
 
     /**
      * Realistic domain name.
      *
-     * @var \Hoa\Realdom string
+     * @const string
      */
-    protected $_name      = 'odd';
+    const NAME = 'odd';
 
     /**
      * Realistic domain defined arguments.
@@ -82,24 +72,10 @@ class Odd extends Realdom implements Number {
      * @var \Hoa\Realdom array
      */
     protected $_arguments = array(
-        'subject'
+        'Integer number'
     );
 
 
-
-    /**
-     * Construct a realistic domain.
-     *
-     * @access  public
-     * @return  void
-     */
-    public function construct ( ) {
-
-        if(!isset($this['subject']))
-            $this['subject'] = new Integer();
-
-        return;
-    }
 
     /**
      * Predicate whether the sampled value belongs to the realistic domains.
@@ -110,7 +86,7 @@ class Odd extends Realdom implements Number {
      */
     public function predicate ( $q ) {
 
-        return $this['subject']->predicate($q) && ($q & 1) == 1;
+        return $this['number']->predicate($q) && ($q & 1) == 1;
     }
 
     /**
@@ -122,7 +98,7 @@ class Odd extends Realdom implements Number {
      */
     protected function _sample ( \Hoa\Math\Sampler $sampler ) {
 
-        $q = $this['subject']->sample($sampler);
+        $q = $this['number']->sample($sampler);
 
         if(($q & 1) == 0)
             --$q;

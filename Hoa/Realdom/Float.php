@@ -41,12 +41,7 @@ from('Hoa')
 /**
  * \Hoa\Realdom
  */
--> import('Realdom.~')
-
-/**
- * \Hoa\Realdom\Number
- */
--> import('Realdom.Number');
+-> import('Realdom.~');
 
 }
 
@@ -62,14 +57,14 @@ namespace Hoa\Realdom {
  * @license    New BSD License
  */
 
-class Float extends Realdom implements Number {
+class Float extends Realdom {
 
     /**
      * Realistic domain name.
      *
-     * @var \Hoa\Realdom string
+     * @const string
      */
-    protected $_name = 'float';
+    const NAME = 'float';
 
 
 

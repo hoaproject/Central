@@ -39,14 +39,14 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Realdom\Constfloat
- */
--> import('Realdom.Constfloat')
-
-/**
  * \Hoa\Realdom\Float
  */
--> import('Realdom.Float');
+-> import('Realdom.Float')
+
+/**
+ * \Hoa\Realdom\Exception\InvalidArgument
+ */
+-> import('Realdom.Exception.InvalidArgument');
 
 }
 
@@ -67,9 +67,9 @@ class Boundfloat extends Float {
     /**
      * Realistic domain name.
      *
-     * @var \Hoa\Realdom string
+     * @const string
      */
-    protected $_name      = 'boundfloat';
+    const NAME = 'boundfloat';
 
     /**
      * Realistic domains defined arguments.
@@ -77,8 +77,8 @@ class Boundfloat extends Float {
      * @var \Hoa\Realdom array
      */
     protected $_arguments = array(
-        'lower',
-        'upper'
+        'Constfloat lower' => PHP_FLOAT_MIN,
+        'Constfloat upper' => PHP_FLOAT_MAX
     );
 
 
@@ -86,16 +86,18 @@ class Boundfloat extends Float {
     /**
      * Construct a realistic domain.
      *
-     * @access  public
+     * @access  protected
      * @return  void
      */
-    public function construct ( ) {
+    protected function construct ( ) {
 
-        if(!isset($this['lower']))
-            $this['lower'] = new Constfloat((float) ~PHP_INT_MAX);
+        $lower = $this['lower']->getConstantValue();
+        $upper = $this['upper']->getConstantValue();
 
-        if(!isset($this['upper']))
-            $this['upper'] = new Constfloat((float)  PHP_INT_MAX);
+        if($lower >= $upper)
+            throw new Exception\InvalidArgument(
+                '$lower must be strictly lower than $upper, given %d and %d.',
+                0, array($lower, $upper));
 
         return;
     }

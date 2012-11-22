@@ -67,9 +67,9 @@ class Constinteger extends Integer implements Constant {
     /**
      * Realistic domain name.
      *
-     * @var \Hoa\Realdom string
+     * @const string
      */
-    protected $_name      = 'constinteger';
+    const NAME = 'constinteger';
 
     /**
      * Realistic domain defined arguments.
@@ -83,21 +83,6 @@ class Constinteger extends Integer implements Constant {
 
 
     /**
-     * Construct a realistic domain.
-     *
-     * @access  public
-     * @return  void
-     * @throw   \Hoa\Realdom\Exception
-     */
-    public function construct ( ) {
-
-        if(!isset($this['value']))
-            $this['value'] = 0;
-
-        return;
-    }
-
-    /**
      * Predicate whether the sampled value belongs to the realistic domains.
      *
      * @access  public
@@ -106,7 +91,8 @@ class Constinteger extends Integer implements Constant {
      */
     public function predicate ( $q ) {
 
-        return $this['value'] === (int) $q;
+        return    parent::predicate($q)
+               && $this['value'] === $q;
     }
 
     /**
@@ -130,6 +116,17 @@ class Constinteger extends Integer implements Constant {
     public function getConstantValue ( ) {
 
         return $this['value'];
+    }
+
+    /**
+     * Get string representation of the realistic domain.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function __toString ( ) {
+
+        return (string) $this['value'];
     }
 }
 

@@ -62,9 +62,9 @@ class Undefined extends Realdom {
     /**
      * Realistic domain name.
      *
-     * @var \Hoa\Realdom string
+     * @const string
      */
-    protected $_name = 'undefined';
+    const NAME = 'undefined';
 
 
 

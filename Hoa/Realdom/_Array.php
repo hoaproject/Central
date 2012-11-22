@@ -41,12 +41,7 @@ from('Hoa')
 /**
  * \Hoa\Realdom
  */
--> import('Realdom.~')
-
-/**
- * \Hoa\Realdom\Constinteger
- */
--> import('Realdom.Constinteger');
+-> import('Realdom.~');
 
 }
 
@@ -56,6 +51,7 @@ namespace Hoa\Realdom {
  * Class \Hoa\Realdom\_Array.
  *
  * Realistic domain: array.
+ * Supported constraints: sorted, rsorted, ksorted, krsorted, unique.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
@@ -67,9 +63,9 @@ class _Array extends Realdom {
     /**
      * Realistic domain name.
      *
-     * @var \Hoa\Realdom string
+     * @const string
      */
-    protected $_name      = 'array';
+    const NAME = 'array';
 
     /**
      * Realistic domain defined arguments.
@@ -77,26 +73,18 @@ class _Array extends Realdom {
      * @var \Hoa\Realdom array
      */
     protected $_arguments = array(
-        'domains',
-        'length'
+        'Constarray pairs',
+        'Integer    length'
     );
 
 
 
     /**
-     * Construct a realistic domain.
      *
-     * @access  public
-     * @return  void
      */
-    public function construct ( ) {
+    public function reset ( ) {
 
-        if(!isset($this['domains']))
-            throw new Exception(
-                'Argument missing.', 0);
-
-        if(!isset($this['length']))
-            $this['length'] = new Constinteger(7);
+        $this->resetArguments();
 
         return;
     }
@@ -113,31 +101,101 @@ class _Array extends Realdom {
         if(!is_array($q))
             return false;
 
-        if(false === $this['length']->predicate(count($q)))
+        $count = count($q);
+
+        if(false === $this['length']->predicate($count))
             return false;
 
-        foreach($this['domains'] as $e => $pairs) {
+        $pairs = $this['pairs']['pairs'];
+        $out   = false;
 
-            $dom = false;
-            $ran = false;
+        foreach($q as $_key => $_value) {
 
-            foreach($q as $key => $value) {
+            $out = false;
 
-                if(isset($pairs[0]))
-                    foreach($pairs[0] as $i => $domain)
-                        $dom = $dom || $domain->predicate($key);
-                else
-                    $dom = true;
+            foreach($pairs as $pair) {
 
-                foreach($pairs[1] as $i => $domain)
-                    $ran = $ran || $domain->predicate($value);
+                $key   = $pair[0];
+                $value = $pair[1];
+
+                if(false === $key->predicate($_key))
+                    continue;
+
+                if(false === $value->predicate($_value))
+                    continue;
+
+                $out = true;
+
+                break;
             }
 
-            if(true === $dom && true === $ran)
-                return true;
+            if(false === $out)
+                return false;
         }
 
-        return false;
+        if(   true === $this->is('unique')
+           && $count !== count(array_unique($q, SORT_REGULAR)))
+            return false;
+
+        if(true === $this->is('sorted')) {
+
+            $first    = true;
+            $previous = array_shift($q);
+
+            foreach($q as $value) {
+
+                if($previous > $value)
+                    return false;
+
+                $previous = $value;
+            }
+        }
+
+        if(true === $this->is('rsorted')) {
+
+            $first    = true;
+            $previous = array_shift($q);
+
+            foreach($q as $value) {
+
+                if($previous < $value)
+                    return false;
+
+                $previous = $value;
+            }
+        }
+
+        if(true === $this->is('ksorted')) {
+
+            $first    = true;
+            reset($q);
+            $previous = key($q);
+
+            foreach($q as $key => $_) {
+
+                if($previous > $key)
+                    return false;
+
+                $previous = $key;
+            }
+        }
+
+        if(true === $this->is('krsorted')) {
+
+            $first    = true;
+            reset($q);
+            $previous = key($q);
+
+            foreach($q as $key => $_) {
+
+                if($previous < $key)
+                    return false;
+
+                $previous = $key;
+            }
+        }
+
+        return $out;
     }
 
     /**
@@ -149,27 +207,71 @@ class _Array extends Realdom {
      */
     protected function _sample ( \Hoa\Math\Sampler $sampler ) {
 
-        $domains = $this['domains'];
-        $pair    = $domains[$sampler->getInteger(0, count($domains) - 1)];
-        $length  = $this['length']->sample($sampler);
+        $length = $this['length']->sample($sampler);
 
         if(0 > $length)
             return false;
 
-        $domL    = count($pair[0]) - 1;
-        $ranL    = count($pair[1]) - 1;
-        $out     = array();
+        $constraints = &$this->getConstraints();
+        $out         =  array();
+        $pairs       =  $this['pairs']['pairs'];
+        $count       =  count($pairs) - 1;
+        $unique      =  true === $this->is('unique');
+        $miniMaxTry  =  $this->getMaxTry();
 
-        if(!isset($pair[0]) || empty($pair[0]))
-            for($i = 0; $i < $length; ++$i)
-                $out[] = $pair[1][$sampler->getInteger(0, $ranL)]
-                              ->sample($sampler);
-        else
-            for($i = 0; $i < $length; ++$i)
-                $out[$pair[0][$sampler->getInteger(0, $domL)]
-                    ->sample($sampler)] =
-                     $pair[1][$sampler->getInteger(0, $ranL)]
-                          ->sample($sampler);
+        if(isset($constraints['key'])) {
+
+            $cKey = &$constraints['key'];
+
+            foreach($cKey as $pair) {
+
+                $value = $pair[1]->sample($sampler);
+
+                if(true === $unique && in_array($value, $out)) {
+
+                    if(0 >= $miniMaxTry)
+                        return false;
+
+                    --$miniMaxTry;
+
+                    continue;
+                }
+
+                $out[$pair[0]->sample($sampler)] = $value;
+            }
+        }
+
+        for($i = 0; $i < $length; ++$i) {
+
+            $pair  = $pairs[$sampler->getInteger(0, $count)];
+            $key   = $pair[0]->sample($sampler);
+            $value = $pair[1]->sample($sampler);
+
+            if(   (true === array_key_exists($key, $out))
+               || (true === $unique && in_array($value, $out))) {
+
+                if(0 >= $miniMaxTry)
+                    return false;
+
+                --$miniMaxTry;
+
+                continue;
+            }
+
+            $out[$key] = $value;
+        }
+
+        if(true === $this->is('sorted'))
+            asort($out);
+
+        if(true === $this->is('rsorted'))
+            arsort($out);
+
+        if(true === $this->is('ksorted'))
+            ksort($out);
+
+        if(true === $this->is('krsorted'))
+            krsort($out);
 
         return $out;
     }

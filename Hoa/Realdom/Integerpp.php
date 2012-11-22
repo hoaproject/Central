@@ -39,37 +39,32 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Realdom\_Array
+ * \Hoa\Realdom\Integer
  */
--> import('Realdom._Array')
-
-/**
- * \Hoa\Realdom\_Class
- */
--> import('Realdom._Class');
+-> import('Realdom.Integer');
 
 }
 
 namespace Hoa\Realdom {
 
 /**
- * Class \Hoa\Realdom\Relation.
+ * Class \Hoa\Realdom\Integerpp.
  *
- * Realistic domain: relation, a simple child to array for semantics purposes.
+ * Realistic domain: integerpp.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Relation extends _Array {
+class Integerpp extends Integer {
 
     /**
      * Realistic domain name.
      *
-     * @var \Hoa\Realdom string
+     * @const string
      */
-    protected $_name      = 'relation';
+    const NAME = 'integerpp';
 
     /**
      * Realistic domain defined arguments.
@@ -77,35 +72,49 @@ class Relation extends _Array {
      * @var \Hoa\Realdom array
      */
     protected $_arguments = array(
-        'classname',
-        'length'
+        'Constinteger start' => 0,
+        'Constinteger step'  => 1
     );
 
 
 
     /**
-     * Construct a realistic domain.
      *
-     * @access  public
-     * @return  void
      */
-    public function construct ( ) {
+    public function reset ( ) {
 
-        if(!isset($this['classname']))
-            throw new Exception(
-                'Argument missing.', 0);
-
-        if(!isset($this['length']))
-            $this['length'] = new Constinteger(1);
-
-        $this['domains'] = array(array(
-            0 => null,
-            1 => array(0 => new _Class($this['classname']))
-        ));
-
-        // i.e. array([to class(<classname>)], <length>).
+        $this->setValue(null);
 
         return;
+    }
+
+    /**
+     * Predicate whether the sampled value belongs to the realistic domains.
+     *
+     * @access  public
+     * @param   mixed  $q    Sampled value.
+     * @return  boolean
+     */
+    public function predicate ( $q ) {
+
+        $q -= $this['start']->getConstantValue();
+
+        return 0 === $q % $this['step']->getConstantValue();
+    }
+
+    /**
+     * Sample one new value.
+     *
+     * @access  protected
+     * @param   \Hoa\Math\Sampler  $sampler    Sampler.
+     * @return  mixed
+     */
+    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
+
+        if(null === $this->getValue())
+            return $this['start']->getConstantValue();
+
+        return $this->getValue() + $this['step']->getConstantValue();
     }
 }
 

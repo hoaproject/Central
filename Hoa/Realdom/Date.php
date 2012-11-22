@@ -75,6 +75,13 @@ namespace Hoa\Realdom {
 class Date extends Realdom {
 
     /**
+     * Realistic domain name.
+     *
+     * @const string
+     */
+    const NAME = 'date';
+
+    /**
      * Constants that represent defined formats.
      * As examples, you could see \DateTime constants.
      *
@@ -83,20 +90,13 @@ class Date extends Realdom {
     protected static $_constants = null;
 
     /**
-     * Realistic domain name.
-     *
-     * @var \Hoa\Realdom string
-     */
-    protected $_name             = 'date';
-
-    /**
      * Realistic domain defined arguments.
      *
      * @var \Hoa\Realdom array
      */
     protected $_arguments        = array(
-        'format',
-        'timestamp'
+        'String  format'    => 'c',
+        'Integer timestamp' => -1
     );
 
 
@@ -104,10 +104,10 @@ class Date extends Realdom {
     /**
      * Construct a realistic domain.
      *
-     * @access  public
+     * @access  protected
      * @return  void
      */
-    public function construct ( ) {
+    protected function construct ( ) {
 
         if(null === static::$_constants) {
 
@@ -115,28 +115,24 @@ class Date extends Realdom {
             static::$_constants = $reflection->getConstants();
         }
 
-        if(!isset($this['format']))
-            $this['format'] = new Conststring('c');
-        else {
+        $constants               = &static::$_constants;
+        $this['format']['value'] = preg_replace_callback(
+            '#__(\w+)__#',
+            function ( Array $matches ) use ( &$constants ) {
 
-            $constants               = &static::$_constants;
-            $this['format']['value'] = preg_replace_callback(
-                '#(?<!\\\)_(\w+)#',
-                function ( Array $matches ) use ( &$constants ) {
+                $c = $matches[1];
 
-                    $c = $matches[1];
+                if(!isset($constants[$c]))
+                    return $matches[0];
 
-                    if(!isset($constants[$c]))
-                        return $matches[0];
+                return $constants[$c];
+            },
+            $this['format']->getConstantValue()
+        );
 
-                    return $constants[$c];
-                },
-                $this['format']->getConstantValue()
-            );
-        }
-
-        if(!isset($this['timestamp']))
-            $this['timestamp'] = new Boundinteger(new Constinteger(0));
+        if(   $this['timestamp'] instanceof Constinteger
+           && -1 === $this['timestamp']->getConstantValue())
+            $this['timestamp'] = new Constinteger(time());
 
         return;
     }
@@ -162,7 +158,7 @@ class Date extends Realdom {
         }
 
         return    false !== $datetime
-               && $this['timestamp']->predicate((int) $datetime->format('U'));
+               && $this['timestamp']->predicate(intval($datetime->format('U')));
     }
 
     /**

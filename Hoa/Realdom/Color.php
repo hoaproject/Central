@@ -65,22 +65,37 @@ namespace Hoa\Realdom {
 class Color extends String {
 
     /**
+     * Realistic domain name.
+     *
+     * @const string
+     */
+    const NAME  = 'color';
+
+    /**
      * Regular expression to represent a valid simple color.
      *
      * @const string
      */
     const REGEX = '#^\#[a-f0-9]{3}([a-f0-9]{3})?$#i';
+    /**
+     * Realistic domains defined arguments.
+     *
+     * @var \Hoa\Realdom array
+     */
+    protected $_arguments = null;
 
 
 
     /**
-     * Realistic domain name.
+     * Construct a realistic domain.
      *
-     * @var \Hoa\Realdom string
+     * @access  protected
+     * @return  void
      */
-    protected $_name = 'color';
+    protected function construct ( ) {
 
-
+        return;
+    }
 
     /**
      * Predicate whether the sampled value belongs to the realistic domains.

@@ -67,19 +67,19 @@ class Smallinteger extends Boundinteger {
     /**
      * Realistic domain name.
      *
-     * @var \Hoa\Realdom string
+     * @const string
      */
-    protected $_name = 'smallinteger';
+    const NAME = 'smallinteger';
 
 
 
     /**
      * Construct a realistic domain.
      *
-     * @access  public
+     * @access  protected
      * @return  void
      */
-    public function construct ( ) {
+    protected function construct ( ) {
 
         $this['lower'] = new Constinteger(-128);
         $this['upper'] = new Constinteger( 127);

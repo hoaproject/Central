@@ -39,58 +39,24 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Realdom
+ * \Hoa\Realdom\Exception
  */
--> import('Realdom.~');
+-> import('Realdom.Exception.~');
 
 }
 
-namespace Hoa\Realdom {
+namespace Hoa\Realdom\Exception {
 
 /**
- * Class \Hoa\Realdom\Void.
+ * Class \Hoa\Realdom\Exception.
  *
- * Realistic domain: void.
+ * Extending the \Hoa\Praspel\Exception class.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Void extends Realdom {
-
-    /**
-     * Realistic domain name.
-     *
-     * @var \Hoa\Realdom string
-     */
-    protected $_name = 'void';
-
-
-
-    /**
-     * Predicate whether the sampled value belongs to the realistic domains.
-     *
-     * @access  public
-     * @param   mixed  $q    Sampled value.
-     * @return  boolean
-     */
-    public function predicate ( $q ) {
-
-        return void === $q;
-    }
-
-    /**
-     * Sample one new value.
-     *
-     * @access  protected
-     * @param   \Hoa\Math\Sampler  $sampler    Sampler.
-     * @return  mixed
-     */
-    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
-
-        return void;
-    }
-}
+class MissingArgument extends Exception { }
 
 }

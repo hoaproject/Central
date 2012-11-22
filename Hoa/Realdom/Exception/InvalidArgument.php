@@ -34,18 +34,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Realdom {
+namespace {
+
+from('Hoa')
 
 /**
- * Interface \Hoa\Realdom\Number.
+ * \Hoa\Realdom\Exception
+ */
+-> import('Realdom.Exception.~');
+
+}
+
+namespace Hoa\Realdom\Exception {
+
+/**
+ * Class \Hoa\Realdom\Exception.
  *
- * Realistic domain interface: number.
+ * Extending the \Hoa\Praspel\Exception class.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 
-interface Number { }
+class InvalidArgument extends Exception { }
 
 }

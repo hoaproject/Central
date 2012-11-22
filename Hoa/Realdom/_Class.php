@@ -62,9 +62,9 @@ class _Class extends Realdom {
     /**
      * Realistic domain name.
      *
-     * @var \Hoa\Realdom string
+     * @const string
      */
-    protected $_name           = 'class';
+    const NAME = 'class';
 
     /**
      * Realistic domain defined arguments.
@@ -85,10 +85,10 @@ class _Class extends Realdom {
     /**
      * Construct a realistic domain.
      *
-     * @access  public
+     * @access  protected
      * @return  void
      */
-    public function construct ( ) {
+    protected function construct ( ) {
 
         if(!isset($this[0]))
             throw new Exception(
