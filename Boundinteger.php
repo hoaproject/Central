@@ -39,14 +39,14 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Realdom\Constinteger
- */
--> import('Realdom.Constinteger')
-
-/**
  * \Hoa\Realdom\Integer
  */
--> import('Realdom.Integer');
+-> import('Realdom.Integer')
+
+/**
+ * \Hoa\Realdom\Exception\InvalidArgument
+ */
+-> import('Realdom.Exception.InvalidArgument');
 
 }
 
@@ -67,9 +67,9 @@ class Boundinteger extends Integer {
     /**
      * Realistic domain name.
      *
-     * @var \Hoa\Realdom string
+     * @const string
      */
-    protected $_name      = 'boundinteger';
+    const NAME = 'boundinteger';
 
     /**
      * Realistic domains defined arguments.
@@ -77,8 +77,8 @@ class Boundinteger extends Integer {
      * @var \Hoa\Realdom array
      */
     protected $_arguments = array(
-        'lower',
-        'upper'
+        'Constinteger lower' => PHP_INT_MIN,
+        'Constinteger upper' => PHP_INT_MAX
     );
 
 
@@ -91,11 +91,13 @@ class Boundinteger extends Integer {
      */
     protected function construct ( ) {
 
-        if(!isset($this['lower']))
-            $this['lower'] = new Constinteger(~PHP_INT_MAX);
+        $lower = $this['lower']->getConstantValue();
+        $upper = $this['upper']->getConstantValue();
 
-        if(!isset($this['upper']))
-            $this['upper'] = new Constinteger( PHP_INT_MAX);
+        if($lower >= $upper)
+            throw new Exception\InvalidArgument(
+                '$lower must be strictly lower than $upper, given %d and %d.',
+                0, array($lower, $upper));
 
         return;
     }

@@ -67,9 +67,9 @@ class Constfloat extends Float implements Constant {
     /**
      * Realistic domain name.
      *
-     * @var \Hoa\Realdom string
+     * @const string
      */
-    protected $_name  = 'constfloat';
+    const NAME = 'constfloat';
 
     /**
      * Realistic domain defined arguments.
@@ -83,20 +83,6 @@ class Constfloat extends Float implements Constant {
 
 
     /**
-     * Construct a realistic domain.
-     *
-     * @access  protected
-     * @return  void
-     */
-    protected function construct ( ) {
-
-        if(!isset($this['value']))
-            $this['value'] = 0.0;
-
-        return;
-    }
-
-    /**
      * Predicate whether the sampled value belongs to the realistic domains.
      *
      * @access  public
@@ -105,7 +91,8 @@ class Constfloat extends Float implements Constant {
      */
     public function predicate ( $q ) {
 
-        return $this['value'] === (float) $q;
+        return    parent::predicate($q)
+               && $this['value'] === $q;
     }
 
     /**
@@ -129,6 +116,17 @@ class Constfloat extends Float implements Constant {
     public function getConstantValue ( ) {
 
         return $this['value'];
+    }
+
+    /**
+     * Get string representation of the realistic domain.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function __toString ( ) {
+
+        return (string) $this['value'];
     }
 }
 

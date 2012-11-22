@@ -37,6 +37,12 @@
 namespace {
 
 from('Hoa')
+
+/**
+ * \Hoa\Realdom
+ */
+-> import('Realdom.~')
+
 /**
  * \Hoa\Realdom\Constant
  */
@@ -56,14 +62,14 @@ namespace Hoa\Realdom {
  * @license    New BSD License
  */
 
-class Constnull implements Constant {
+class Constnull extends Realdom implements Constant {
 
     /**
      * Realistic domain name.
      *
-     * @var \Hoa\Realdom string
+     * @const string
      */
-    protected $_name = 'constnull';
+    const NAME = 'constnull';
 
 
 
@@ -100,6 +106,17 @@ class Constnull implements Constant {
     public function getConstantValue ( ) {
 
         return null;
+    }
+
+    /**
+     * Get string representation of the realistic domain.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function __toString ( ) {
+
+        return 'null';
     }
 }
 

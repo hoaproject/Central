@@ -62,9 +62,9 @@ class _Class extends Realdom {
     /**
      * Realistic domain name.
      *
-     * @var \Hoa\Realdom string
+     * @const string
      */
-    protected $_name           = 'class';
+    const NAME = 'class';
 
     /**
      * Realistic domain defined arguments.

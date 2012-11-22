@@ -67,9 +67,9 @@ class Smallinteger extends Boundinteger {
     /**
      * Realistic domain name.
      *
-     * @var \Hoa\Realdom string
+     * @const string
      */
-    protected $_name = 'smallinteger';
+    const NAME = 'smallinteger';
 
 
 

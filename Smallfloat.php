@@ -67,9 +67,9 @@ class Smallfloat extends Boundfloat {
     /**
      * Realistic domain name.
      *
-     * @var \Hoa\Realdom string
+     * @const string
      */
-    protected $_name = 'smallfloat';
+    const NAME = 'smallfloat';
 
 
 

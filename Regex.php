@@ -87,9 +87,9 @@ class Regex extends String {
     /**
      * Realistic domain name.
      *
-     * @var \Hoa\Realdom string
+     * @const string
      */
-    protected $_name              = 'regex';
+    const NAME = 'regex';
 
     /**
      * Realistic domain defined arguments.

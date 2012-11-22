@@ -67,9 +67,9 @@ class Constboolean extends Boolean implements Constant {
     /**
      * Realistic domain name.
      *
-     * @var \Hoa\Realdom string
+     * @const string
      */
-    protected $_name      = 'constboolean';
+    const NAME = 'constboolean';
 
     /**
      * Realistic domain defined arguments.
@@ -83,20 +83,6 @@ class Constboolean extends Boolean implements Constant {
 
 
     /**
-     * Construct a realistic domain.
-     *
-     * @access  protected
-     * @return  void
-     */
-    protected function construct ( ) {
-
-        if(!isset($this['value']))
-            $this['value'] = false;
-
-        return;
-    }
-
-    /**
      * Predicate whether the sampled value belongs to the realistic domains.
      *
      * @access  public
@@ -105,7 +91,8 @@ class Constboolean extends Boolean implements Constant {
      */
     public function predicate ( $q ) {
 
-        return $this['value'] === (bool) $q;
+        return    parent::predicate($q)
+               && $this['value'] === $q;
     }
 
     /**
@@ -129,6 +116,17 @@ class Constboolean extends Boolean implements Constant {
     public function getConstantValue ( ) {
 
         return $this['value'];
+    }
+
+    /**
+     * Get string representation of the realistic domain.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function __toString ( ) {
+
+        return $this['value'] ? 'true' : 'false';
     }
 }
 

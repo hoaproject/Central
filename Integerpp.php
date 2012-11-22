@@ -34,18 +34,88 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+namespace {
+
+from('Hoa')
+
+/**
+ * \Hoa\Realdom\Integer
+ */
+-> import('Realdom.Integer');
+
+}
+
 namespace Hoa\Realdom {
 
 /**
- * Interface \Hoa\Realdom\Number.
+ * Class \Hoa\Realdom\Integerpp.
  *
- * Realistic domain interface: number.
+ * Realistic domain: integerpp.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 
-interface Number { }
+class Integerpp extends Integer {
+
+    /**
+     * Realistic domain name.
+     *
+     * @const string
+     */
+    const NAME = 'integerpp';
+
+    /**
+     * Realistic domain defined arguments.
+     *
+     * @var \Hoa\Realdom array
+     */
+    protected $_arguments = array(
+        'Constinteger start' => 0,
+        'Constinteger step'  => 1
+    );
+
+
+
+    /**
+     *
+     */
+    public function reset ( ) {
+
+        $this->setValue(null);
+
+        return;
+    }
+
+    /**
+     * Predicate whether the sampled value belongs to the realistic domains.
+     *
+     * @access  public
+     * @param   mixed  $q    Sampled value.
+     * @return  boolean
+     */
+    public function predicate ( $q ) {
+
+        $q -= $this['start']->getConstantValue();
+
+        return 0 === $q % $this['step']->getConstantValue();
+    }
+
+    /**
+     * Sample one new value.
+     *
+     * @access  protected
+     * @param   \Hoa\Math\Sampler  $sampler    Sampler.
+     * @return  mixed
+     */
+    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
+
+        if(null === $this->getValue())
+            return $this['start']->getConstantValue();
+
+        return $this->getValue() + $this['step']->getConstantValue();
+    }
+}
 
 }

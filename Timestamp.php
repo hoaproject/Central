@@ -72,9 +72,9 @@ class Timestamp extends Constinteger {
     /**
      * Realistic domain name.
      *
-     * @var \Hoa\Realdom string
+     * @const string
      */
-    protected $_name      = 'timestamp';
+    const NAME = 'timestamp';
 
     /**
      * Realistic domain defined arguments.
@@ -82,24 +82,10 @@ class Timestamp extends Constinteger {
      * @var \Hoa\Realdom array
      */
     protected $_arguments = array(
-        'date'
+        'Conststring date' => 'now'
     );
 
 
-
-    /**
-     * Construct a realistic domain.
-     *
-     * @access  protected
-     * @return  void
-     */
-    protected function construct ( ) {
-
-        if(!isset($this['date']))
-            $this['date'] = new Conststring('now');
-
-        return;
-    }
 
     /**
      * Predicate whether the sampled value belongs to the realistic domains.

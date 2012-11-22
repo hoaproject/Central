@@ -82,9 +82,9 @@ class Grammar extends String {
     /**
      * Realistic domain name.
      *
-     * @var \Hoa\Realdom string
+     * @const string
      */
-    protected $_name            = 'grammar';
+    const NAME = 'grammar';
 
     /**
      * Realistic domain defined arguments.

@@ -39,74 +39,24 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Realdom\_Array
+ * \Hoa\Realdom\Exception
  */
--> import('Realdom._Array')
-
-/**
- * \Hoa\Realdom\_Class
- */
--> import('Realdom._Class');
+-> import('Realdom.Exception.~');
 
 }
 
-namespace Hoa\Realdom {
+namespace Hoa\Realdom\Exception {
 
 /**
- * Class \Hoa\Realdom\Relation.
+ * Class \Hoa\Realdom\Exception.
  *
- * Realistic domain: relation, a simple child to array for semantics purposes.
+ * Extending the \Hoa\Praspel\Exception class.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Relation extends _Array {
-
-    /**
-     * Realistic domain name.
-     *
-     * @var \Hoa\Realdom string
-     */
-    protected $_name      = 'relation';
-
-    /**
-     * Realistic domain defined arguments.
-     *
-     * @var \Hoa\Realdom array
-     */
-    protected $_arguments = array(
-        'classname',
-        'length'
-    );
-
-
-
-    /**
-     * Construct a realistic domain.
-     *
-     * @access  protected
-     * @return  void
-     */
-    protected function construct ( ) {
-
-        if(!isset($this['classname']))
-            throw new Exception(
-                'Argument missing.', 0);
-
-        if(!isset($this['length']))
-            $this['length'] = new Constinteger(1);
-
-        $this['domains'] = array(array(
-            0 => null,
-            1 => array(0 => new _Class($this['classname']))
-        ));
-
-        // i.e. array([to class(<classname>)], <length>).
-
-        return;
-    }
-}
+class MissingArgument extends Exception { }
 
 }

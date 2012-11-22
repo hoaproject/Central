@@ -41,17 +41,7 @@ from('Hoa')
 /**
  * \Hoa\Realdom
  */
--> import('Realdom.~')
-
-/**
- * \Hoa\Realdom\Number
- */
--> import('Realdom.Number')
-
-/**
- * \Hoa\Realdom\Integer
- */
--> import('Realdom.Integer');
+-> import('Realdom.~');
 
 }
 
@@ -67,14 +57,14 @@ namespace Hoa\Realdom {
  * @license    New BSD License
  */
 
-class Even extends Realdom implements Number {
+class Even extends Realdom {
 
     /**
      * Realistic domain name.
      *
-     * @var \Hoa\Realdom string
+     * @const string
      */
-    protected $_name    = 'even';
+    const NAME = 'even';
 
     /***
      * Realistic domain defined arguments.
@@ -82,24 +72,10 @@ class Even extends Realdom implements Number {
      * @var \Hoa\Realdom array
      */
     protected $_arguments = array(
-        'subject'
+        'Integer number'
     );
 
 
-
-    /**
-     * Construct a realistic domain.
-     *
-     * @access  protected
-     * @return  void
-     */
-    protected function construct ( ) {
-
-        if(!isset($this['subject']))
-            $this['subject'] = new Integer();
-
-        return;
-    }
 
     /**
      * Predicate whether the sampled value belongs to the realistic domains.
@@ -110,7 +86,7 @@ class Even extends Realdom implements Number {
      */
     public function predicate ( $q ) {
 
-        return $this['subject']->predicate($q) && ($q & 1) == 0;
+        return $this['number']->predicate($q) && ($q & 1) == 0;
     }
 
     /**
@@ -122,7 +98,7 @@ class Even extends Realdom implements Number {
      */
     protected function _sample ( \Hoa\Math\Sampler $sampler ) {
 
-        $q = $this['subject']->sample($sampler);
+        $q = $this['number']->sample($sampler);
 
         if(($q & 1) == 1)
             ++$q;

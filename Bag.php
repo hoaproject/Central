@@ -62,9 +62,9 @@ class Bag extends Realdom {
     /**
      * Realistic domain name.
      *
-     * @var \Hoa\Realdom string
+     * @const string
      */
-    protected $_name      = 'bag';
+    const NAME = 'bag';
 
     /**
      * Realistic domain defined arguments.

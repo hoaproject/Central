@@ -44,9 +44,9 @@ from('Hoa')
 -> import('Realdom.~')
 
 /**
- * \Hoa\Realdom\Constinteger
+ * \Hoa\String
  */
--> import('Realdom.Constinteger');
+-> import('String.~');
 
 }
 
@@ -67,9 +67,9 @@ class String extends Realdom {
     /**
      * Realistic domain name.
      *
-     * @var \Hoa\Realdom string
+     * @const string
      */
-    protected $_name      = 'string';
+    const NAME = 'string';
 
     /**
      * Realistic domain defined arguments.
@@ -77,9 +77,9 @@ class String extends Realdom {
      * @var \Hoa\Realdom array
      */
     protected $_arguments = array(
-        'length',
-        'codepointMin',
-        'codepointMax'
+        'Integer                  length',
+        'Constinteger|Conststring codepointMin' => 0x20,
+        'Constinteger|Conststring codepointMax' => 0x7e
     );
 
     /**
@@ -99,22 +99,23 @@ class String extends Realdom {
      */
     protected function construct ( ) {
 
-        if(!isset($this['length']))
-            $this['length'] = new Constinteger(13);
+        if($this['codepointMin'] instanceof Conststring) {
 
-        if(!isset($this['codepointMin']))
-            $this['codepointMin'] = new Constinteger(0x9);
+            $char = mb_substr($this['codepointMin']->getConstantValue(), 0, 1);
+            $this['codepointMin'] = new Constinteger(\Hoa\String::toCode($char));
+        }
 
-        if(!isset($this['codepointMax']))
-            $this['codepointMax'] = new Constinteger(0xffff);
+        if($this['codepointMax'] instanceof Conststring) {
 
-        $this['codepointMin'] = $this['codepointMin']->getConstantValue();
-        $this['codepointMax'] = $this['codepointMax']->getConstantValue();
+            $char = mb_substr($this['codepointMax']->getConstantValue(), 0, 1);
+            $this['codepointMax'] = new Constinteger(\Hoa\String::toCode($char));
+        }
 
-        for($i = $this['codepointMin'], $j = $this['codepointMax'];
+        for($i = $this['codepointMin']->getConstantValue(),
+            $j = $this['codepointMax']->getConstantValue();
             $i <= $j;
             ++$i)
-            $this->_letters[] = iconv('UCS-4LE', 'UTF-8', pack('V', $i));
+            $this->_letters[] = \Hoa\String::fromCode($i);
 
         return;
     }
@@ -142,13 +143,13 @@ class String extends Realdom {
         $split  = preg_split('#(?<!^)(?!$)#u', $q);
         $out    = true;
         $handle = 0;
-        $min    = $this['codepointMin'];
-        $max    = $this['codepointMax'];
+        $min    = $this['codepointMin']->getConstantValue();
+        $max    = $this['codepointMax']->getConstantValue();
 
         foreach($split as $letter) {
 
-            $handle = unpack('V', iconv('UTF-8', 'UCS-4LE', $letter));
-            $out    = $out && ($min <= $handle[1]) && ($handle[1] <= $max);
+            $handle = \Hoa\String::toCode($letter);
+            $out    = $out && ($min <= $handle) && ($handle <= $max);
         }
 
         return $out;

@@ -39,37 +39,42 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Realdom\String
+ * \Hoa\Realdom\_Array
  */
--> import('Realdom.String')
+-> import('Realdom._Array')
 
 /**
  * \Hoa\Realdom\Constant
  */
--> import('Realdom.Constant');
+-> import('Realdom.Constant')
+
+/**
+ * \Hoa\Realdom\Constinteger
+ */
+-> import('Realdom.Constinteger');
 
 }
 
 namespace Hoa\Realdom {
 
 /**
- * Class \Hoa\Realdom\Conststring.
+ * Class \Hoa\Realdom\Constarray.
  *
- * Realistic domain: conststring.
+ * Realistic domain: constarray.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Conststring extends String implements Constant {
+class Constarray extends _Array implements Constant {
 
     /**
      * Realistic domain name.
      *
      * @const string
      */
-    const NAME = 'conststring';
+    const NAME = 'constarray';
 
     /**
      * Realistic domain defined arguments.
@@ -77,7 +82,7 @@ class Conststring extends String implements Constant {
      * @var \Hoa\Realdom array
      */
     protected $_arguments = array(
-        'value' => ''
+        'pairs'
     );
 
 
@@ -85,10 +90,31 @@ class Conststring extends String implements Constant {
     /**
      * Construct a realistic domain.
      *
-     * @access  protcted
+     * @access  protected
      * @return  void
      */
     protected function construct ( ) {
+
+        $this['length'] = new Constinteger(count($this['pairs']));
+
+        return;
+    }
+
+    /**
+     * Reset realistic domain.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function reset ( ) {
+
+        foreach($this['pairs'] as $pair) {
+
+            $pair[0]->reset();
+
+            if(isset($pair[1]))
+                $pair[1]->reset();
+        }
 
         return;
     }
@@ -102,8 +128,41 @@ class Conststring extends String implements Constant {
      */
     public function predicate ( $q ) {
 
-        return    is_string($q)
-               && $this['value'] === $q;
+        if(!is_array($q))
+            return false;
+
+        $count = count($q);
+
+        if(false === $this['length']->predicate($count))
+            return false;
+
+        $pairs = $this['pairs'];
+
+        foreach($q as $_key => $_value) {
+
+            $out = false;
+
+            foreach($pairs as $pair) {
+
+                $key   = $pair[0];
+                $value = $pair[1];
+
+                if(false === $key->predicate($_key))
+                    continue;
+
+                if(false === $value->predicate($_value))
+                    continue;
+
+                $out = true;
+
+                break;
+            }
+
+            if(false === $out)
+                return false;
+        }
+
+        return $out;
     }
 
     /**
@@ -115,18 +174,32 @@ class Conststring extends String implements Constant {
      */
     protected function _sample ( \Hoa\Math\Sampler $sampler ) {
 
-        return $this['value'];
+        $out = array();
+
+        foreach($this['pairs'] as $pair) {
+
+            if(!isset($pair[1])) {
+
+                $out[] = $pair[0]->sample($sampler);
+
+                continue;
+            }
+
+            $out[$pair[0]->sample($sampler)] = $pair[1]->sample($sampler);
+        }
+
+        return $out;
     }
 
     /**
      * Get constant value.
      *
      * @access  public
-     * @return  string
+     * @return  float
      */
     public function getConstantValue ( ) {
 
-        return $this['value'];
+        return $this['pairs'];
     }
 
     /**
@@ -137,9 +210,21 @@ class Conststring extends String implements Constant {
      */
     public function __toString ( ) {
 
-        return '\'' .
-               preg_replace('#(?<!\\\)\'#', '\\\'', $this['value']) .
-               '\'';
+        $out    = 'array(';
+        $handle = array();
+
+        foreach($this['pairs'] as $pair) {
+
+            if(isset($pair[1]))
+                $handle[] = 'array(' . $pair[0] .
+                            ', ' . $pair[1] . ')';
+            else
+                $handle[] = 'array(' . $pair[0] . ')';
+        }
+
+        $out .= implode(', ', $handle);
+
+        return $out . ')';
     }
 }
 
