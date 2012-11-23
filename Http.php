@@ -541,6 +541,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
      *                                null, will use the self::isSecure() value.
      * @param   string  $prefix       Path prefix. If null, it will be deduced.
      * @return  string
+     * @throw   \Hoa\Router\Exception
      */
     public function unroute ( $id, Array $variables = array(),
                               $secured = null, $prefix = null ) {
@@ -570,50 +571,64 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
             $secure = null === $secured ? $this->isSecure() : $secured;
 
             return (true === $secure ? 'https://' : 'http://') .
-                   $this->_unroute(substr($pattern, 0, $pos), $variables) .
+                   $this->_unroute($id, substr($pattern, 0, $pos), $variables, false) .
                    '.' . $this->getStrictDomain() .
                    (80 !== $port ? (false === $secure ? ':' . $port : ':443') : '') .
                    $prefix .
-                   $this->_unroute(substr($pattern, $pos + 1), $variables) .
+                   $this->_unroute($id, substr($pattern, $pos + 1), $variables) .
                    $anchor;
         }
 
         if(true === array_key_exists('_subdomain', $variables)) {
 
+            if(empty($variables['_subdomain']))
+                throw new Exception(
+                    'Subdomain is empty, cannot unroute the rule %s properly.',
+                    6, $id);
+
             $port   = $this->getPort();
             $secure = null === $secured ? $this->isSecure() : $secured;
 
             return (true === $secure ? 'https://' : 'http://') .
-                   $variables['_subdomain'] .
-                   (!empty($variables['_subdomain']) ? '.' : '') .
+                   $variables['_subdomain'] . '.' .
                    $this->getStrictDomain() .
                    (80 !== $port ? (false === $secure ? ':' . $port : ':443') : '') .
                    $prefix .
-                   $this->_unroute($pattern, $variables) .
+                   $this->_unroute($id, $pattern, $variables) .
                    $anchor;
         }
 
-        return $prefix . $this->_unroute($pattern, $variables) . $anchor;
+        return $prefix . $this->_unroute($id, $pattern, $variables) . $anchor;
     }
 
     /**
      * Real unroute method.
      *
      * @access  protected
+     * @param   string  $id           ID.
      * @param   string  $pattern      Pattern.
      * @param   array   $variables    Variables.
+     * @param   bool    $allowEmpty   Whether allow empty variables.
      * @return  string
+     * @throw   \Hoa\Router\Exception
      */
-    protected function _unroute ( $pattern, Array $variables ) {
+    protected function _unroute ( $id, $pattern, Array $variables,
+                                  $allowEmpty = true ) {
 
         $out = preg_replace_callback(
             '#\(\?\<([^>]+)>[^\)]*\)#',
-            function ( Array $matches ) use ( &$variables ) {
+            function ( Array $matches ) use ( &$id, &$variables, &$allowEmpty ) {
 
                 $m = strtolower($matches[1]);
 
-                if(!isset($variables[$m]))
-                    return '';
+                if(empty($variables[$m]))
+                    if(true === $allowEmpty)
+                        return '';
+                    else
+                        throw new Exception(
+                            'Variable %s is empty and it is not allowed when ' .
+                            'unrouting rule %s.',
+                            7, array($m, $id));
 
                 return $variables[$m];
             },
@@ -675,7 +690,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
 
         if(!isset($_SERVER['REQUEST_URI']))
             throw new Exception(
-                'Cannot find URI so we cannot route.', 6);
+                'Cannot find URI so we cannot route.', 8);
 
         $uri = ltrim($_SERVER['REQUEST_URI'], '/');
 
@@ -698,7 +713,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
 
         if(!isset($_SERVER['REQUEST_URI']))
             throw new Exception(
-                'Cannot find URI so we cannot get query.', 7);
+                'Cannot find URI so we cannot get query.', 9);
 
         $uri = $_SERVER['REQUEST_URI'];
 
