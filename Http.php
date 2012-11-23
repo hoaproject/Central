@@ -761,7 +761,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
      */
     public function getStrictDomain ( ) {
 
-        $sub = $this->getSubDomain();
+        $sub = $this->getSubdomain();
 
         if(empty($sub))
             return $this->getDomain();
