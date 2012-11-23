@@ -565,6 +565,34 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
                          : null;
         unset($variables['_fragment']);
 
+        if(true === array_key_exists('_subdomain', $variables)) {
+
+            if(empty($variables['_subdomain']))
+                throw new Exception(
+                    'Subdomain is empty, cannot unroute the rule %s properly.',
+                    6, $id);
+
+            $port   = $this->getPort();
+            $secure = null === $secured ? $this->isSecure() : $secured;
+
+            if(false !== $pos = strpos($pattern, '@'))
+                $pattern = substr($pattern, $pos + 1);
+
+            $subdomain = $variables['_subdomain'];
+            $suffix    = $this->getSubdomainSuffix();
+
+            if(null !== $suffix)
+                $subdomain .= '.' . $suffix;
+
+            return (true === $secure ? 'https://' : 'http://') .
+                   $subdomain . '.' .
+                   $this->getStrictDomain() .
+                   (80 !== $port ? (false === $secure ? ':' . $port : ':443') : '') .
+                   $prefix .
+                   $this->_unroute($id, $pattern, $variables) .
+                   $anchor;
+        }
+
         if(false !== $pos = strpos($pattern, '@')) {
 
             $port   = $this->getPort();
@@ -576,25 +604,6 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
                    (80 !== $port ? (false === $secure ? ':' . $port : ':443') : '') .
                    $prefix .
                    $this->_unroute($id, substr($pattern, $pos + 1), $variables) .
-                   $anchor;
-        }
-
-        if(true === array_key_exists('_subdomain', $variables)) {
-
-            if(empty($variables['_subdomain']))
-                throw new Exception(
-                    'Subdomain is empty, cannot unroute the rule %s properly.',
-                    6, $id);
-
-            $port   = $this->getPort();
-            $secure = null === $secured ? $this->isSecure() : $secured;
-
-            return (true === $secure ? 'https://' : 'http://') .
-                   $variables['_subdomain'] . '.' .
-                   $this->getStrictDomain() .
-                   (80 !== $port ? (false === $secure ? ':' . $port : ':443') : '') .
-                   $prefix .
-                   $this->_unroute($id, $pattern, $variables) .
                    $anchor;
         }
 
