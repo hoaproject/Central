@@ -235,7 +235,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
                 $pattern = str_replace('@', '\.' . $suffix . '@', $pattern);
         }
         elseif(null !== $suffix = $this->getSubdomainSuffix())
-            $pattern = $suffix . '@' . $pattern;
+            $pattern = str_replace('@', '\.' . $suffix . '@', $pattern);
 
         $this->_rules[$id] = array(
             Router::RULE_VISIBILITY => $visibility,
@@ -533,6 +533,12 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
     /**
      * Unroute a rule (i.e. route()^-1).
      * Special variables: _domain, _subdomain and _fragment.
+     * _subdomain accepts 3 keywords:
+     *     * __root__ to go back to the root (with the smallest subdomain);
+     *     * __self__ to copy the current subdomain (useful if you want a
+     *       complete URL with protocol etc., not only the query part);
+     *     * __shift__ to shift a subdomain part, i.e. going to the upper
+     *       domain; if you want to shift x times, just type __shift__ * x.
      *
      * @access  public
      * @param   string  $id           ID.
@@ -541,6 +547,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
      *                                null, will use the self::isSecure() value.
      * @param   string  $prefix       Path prefix. If null, it will be deduced.
      * @return  string
+     * @throw   \Hoa\Router\Exception
      */
     public function unroute ( $id, Array $variables = array(),
                               $secured = null, $prefix = null ) {
@@ -548,6 +555,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
         if(null === $prefix)
             $prefix = $this->getPrefix();
 
+        $suffix  = $this->getSubdomainSuffix();
         $rule    = $this->getRule($id);
         $pattern = $rule[Router::RULE_PATTERN];
 
@@ -564,56 +572,122 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
                          : null;
         unset($variables['_fragment']);
 
-        if(false !== $pos = strpos($pattern, '@')) {
-
-            $port   = $this->getPort();
-            $secure = null === $secured ? $this->isSecure() : $secured;
-
-            return (true === $secure ? 'https://' : 'http://') .
-                   $this->_unroute(substr($pattern, 0, $pos), $variables) .
-                   '.' . $this->getStrictDomain() .
-                   (80 !== $port ? (false === $secure ? ':' . $port : ':443') : '') .
-                   $prefix .
-                   $this->_unroute(substr($pattern, $pos + 1), $variables) .
-                   $anchor;
-        }
-
         if(true === array_key_exists('_subdomain', $variables)) {
 
+            if(empty($variables['_subdomain']))
+                throw new Exception(
+                    'Subdomain is empty, cannot unroute the rule %s properly.',
+                    6, $id);
+
             $port   = $this->getPort();
             $secure = null === $secured ? $this->isSecure() : $secured;
 
+            if(false !== $pos = strpos($pattern, '@'))
+                $pattern = substr($pattern, $pos + 1);
+
+            $subdomain = $variables['_subdomain'];
+            $handle    = strtolower($subdomain);
+
+            switch($handle) {
+
+                case '__self__':
+                    $subdomain = $this->getSubdomain();
+                  break;
+
+                case '__root__':
+                    $subdomain = '';
+                  break;
+
+                default:
+                    if(0 !== preg_match('#__shift__(?:\s*\*\s*(\d+))?#', $handle, $m)) {
+
+                        $repetition = isset($m[1]) ? (int) $m[1] : 1;
+                        $subdomain  = $this->getSubdomain();
+
+                        for(; $repetition >= 1; --$repetition) {
+
+                            if(false === $pos = strpos($subdomain, '.')) {
+
+                                $subdomain = '';
+                                break;
+                            }
+
+                            $subdomain = substr($subdomain, $pos + 1);
+                        }
+
+                        break;
+                    }
+
+                    if(null !== $suffix)
+                        $subdomain .= '.' . $suffix;
+                  break;
+            }
+
+            if(!empty($subdomain))
+                $subdomain .= '.';
+
             return (true === $secure ? 'https://' : 'http://') .
-                   $variables['_subdomain'] .
-                   (!empty($variables['_subdomain']) ? '.' : '') .
+                   $subdomain .
                    $this->getStrictDomain() .
                    (80 !== $port ? (false === $secure ? ':' . $port : ':443') : '') .
                    $prefix .
-                   $this->_unroute($pattern, $variables) .
+                   $this->_unroute($id, $pattern, $variables) .
                    $anchor;
         }
 
-        return $prefix . $this->_unroute($pattern, $variables) . $anchor;
+        if(false !== $pos = strpos($pattern, '@')) {
+
+            $subPattern = substr($pattern, 0, $pos);
+            $pattern    = substr($pattern, $pos + 1);
+
+            if($suffix === $subPattern)
+                return $prefix .
+                       $this->_unroute($id, $pattern, $variables) .
+                       $anchor;
+
+            $port   = $this->getPort();
+            $secure = null === $secured ? $this->isSecure() : $secured;
+
+            return (true === $secure ? 'https://' : 'http://') .
+                   $this->_unroute($id, $subPattern, $variables, false) .
+                   '.' . $this->getStrictDomain() .
+                   (80 !== $port ? (false === $secure ? ':' . $port : ':443') : '') .
+                   $prefix .
+                   $this->_unroute($id, $pattern, $variables) .
+                   $anchor;
+        }
+
+        return $prefix . $this->_unroute($id, $pattern, $variables) . $anchor;
     }
 
     /**
      * Real unroute method.
      *
      * @access  protected
+     * @param   string  $id           ID.
      * @param   string  $pattern      Pattern.
      * @param   array   $variables    Variables.
+     * @param   bool    $allowEmpty   Whether allow empty variables.
      * @return  string
+     * @throw   \Hoa\Router\Exception
      */
-    protected function _unroute ( $pattern, Array $variables ) {
+    protected function _unroute ( $id, $pattern, Array $variables,
+                                  $allowEmpty = true ) {
 
         $out = preg_replace_callback(
             '#\(\?\<([^>]+)>[^\)]*\)#',
-            function ( Array $matches ) use ( &$variables ) {
+            function ( Array $matches ) use ( &$id, &$variables, &$allowEmpty ) {
 
                 $m = strtolower($matches[1]);
 
-                if(!isset($variables[$m]))
-                    return '';
+                if(empty($variables[$m]))
+                    if(true === $allowEmpty)
+                        return '';
+                    else
+                        throw new Exception(
+                            'Variable %s is empty and it is not allowed when ' .
+                            'unrouting rule %s.',
+                            7, array($m, $id));
 
                 return $variables[$m];
             },
@@ -675,7 +749,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
 
         if(!isset($_SERVER['REQUEST_URI']))
             throw new Exception(
-                'Cannot find URI so we cannot route.', 6);
+                'Cannot find URI so we cannot route.', 8);
 
         $uri = ltrim($_SERVER['REQUEST_URI'], '/');
 
@@ -698,7 +772,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
 
         if(!isset($_SERVER['REQUEST_URI']))
             throw new Exception(
-                'Cannot find URI so we cannot get query.', 7);
+                'Cannot find URI so we cannot get query.', 9);
 
         $uri = $_SERVER['REQUEST_URI'];
 
@@ -737,7 +811,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
      */
     public function getStrictDomain ( ) {
 
-        $sub = $this->getSubDomain();
+        $sub = $this->getSubdomain();
 
         if(empty($sub))
             return $this->getDomain();
@@ -749,16 +823,38 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
      * Get subdomain.
      *
      * @access  public
+     * @param   bool  $withSuffix    With or without suffix.
      * @return  string
      */
-    public function getSubdomain ( ) {
+    public function getSubdomain ( $withSuffix = true ) {
 
         $domain = $this->getDomain();
 
         if($domain == long2ip(ip2long($domain)))
             return null;
 
-        return implode('.', array_slice(explode('.', $domain), 0, -2));
+        if(2 > substr_count($domain, '.', 1))
+            return null;
+
+        $subdomain = substr(
+            $domain,
+            0,
+            strrpos(
+                $domain,
+                '.',
+                -(strlen($domain) - strrpos($domain, '.') + 1)
+            )
+        );
+
+        if(true === $withSuffix)
+            return $subdomain;
+
+        $suffix = $this->getSubdomainSuffix();
+
+        if(null !== $suffix)
+            $subdomain = substr($subdomain, 0, -strlen($suffix) - 1);
+
+        return $subdomain;
     }
 
     /**
