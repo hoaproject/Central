@@ -44,29 +44,9 @@ from('Hoa')
 -> import('Session.Exception.~')
 
 /**
- * \Hoa\Session\Exception\SessionIsExpired
+ * \Hoa\Session\Exception\Expired
  */
--> import('Session.Exception.SessionIsExpired')
-
-/**
- * \Hoa\Session\QNamespace;
- */
--> import('Session.QNamespace')
-
-/**
- * \Hoa\Session\Option
- */
--> import('Session.Option')
-
-/**
- * \Hoa\Session\Flash
- */
--> import('Session.Flash')
-
-/**
- * \Hoa\Session\ISession\SaveHandler
- */
--> import('Session.I~.SaveHandler');
+-> import('Session.Exception.Expired');
 
 }
 
@@ -75,424 +55,445 @@ namespace Hoa\Session {
 /**
  * Class \Hoa\Session.
  *
- * This class allows to do different actions on session (start, close, identify,
- * expire etc.).
+ * Object represents a “namespace” in a session, i.e. an entry in the $_SESSION
+ * global array.
+ * Class represents some useful operations (or aliases) on sessions.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 
-abstract class Session {
+class          Session
+    implements \Hoa\Core\Event\Source,
+               \ArrayAccess,
+               \Countable,
+               \IteratorAggregate {
 
     /**
-     * Whether session is started or not.
+     * Top-namespace: entry where namespaces are located in $_SESSION, i.e.
+     * $_SESSION[static::TOP_NAMESPACE][<namespace>].
+     *
+     * @const string
+     */
+    const TOP_NAMESPACE           = '__Hoa__';
+
+    /**
+     * Profile of the namespace, i.e.
+     * $_SESSION[static::TOP_NAMESPACE][<namespace>][static::PROFILE].
+     *
+     * @const string
+     */
+    const PROFILE                 = 0;
+
+    /**
+     * Data bucket of the namespace, i.e.
+     * $_SESSION[static::TOP_NAMESPACE][<namespace>][static::BUCKET].
+     *
+     * @const string
+     */
+    const BUCKET                  = 1;
+
+    /**
+     * HTTP cache control: no cache.
+     *
+     * @const string
+     */
+    const NO_CACHE                = 'nocache';
+
+    /**
+     * HTTP cache control: public.
+     *
+     * @const string
+     */
+    const CACHE_PUBLIC            = 'public';
+
+    /**
+     * HTTP cache control: private.
+     *
+     * @const string
+     */
+    const CACHE_PRIVATE           = 'private';
+
+    /**
+     * HTTP cache control: private and no expiration.
+     *
+     * @const string
+     */
+    const CACHE_PRIVATE_NO_EXPIRE = 'private_no_expire';
+
+    /**
+     * Control destruction behavior.
      *
      * @var \Hoa\Session bool
      */
-    protected static $_start    = false;
+    private static $_destruction = true;
 
     /**
-     * Whether session is in strict mode, i.e. \Hoa\Session::start must be
-     * called before all new qnamespace declarations.
+     * Whether the session is started or not.
      *
      * @var \Hoa\Session bool
      */
-    protected static $_strict   = false;
+    protected static $_started   = false;
 
     /**
-     * Whether session is writable or not.
+     * Current namespace.
      *
-     * @var \Hoa\Session bool
+     * @var \Hoa\Session string
      */
-    protected static $_writable = false;
+    protected $_namespace        = null;
 
     /**
-     * Whether session is readable or not.
+     * Profile data.
      *
-     * @var \Hoa\Session bool
+     * @var \Hoa\Session array
      */
-    protected static $_readable = false;
+    protected $_profile          = null;
+
+    /**
+     * Bucket data.
+     *
+     * @var \Hoa\Session array
+     */
+    protected $_bucket           = null;
 
 
 
     /**
-     * Start a session.
+     * Manipulate a namespace.
+     * If session has not been previously started, it will be done
+     * automatically.
      *
      * @access  public
-     * @param   array   $option     Option for Session\Option.
-     * @return  bool
-     * @throw   \Hoa\Session\Exception
-     * @throw   \Hoa\Session\Exception\SessionIsExpired
+     * @param   string  $namespace      Namespace.
+     * @param   string  $cache          Cache value (please, see static::*CACHE*
+     *                                  constants).
+     * @param   int     $cacheExpire    Cache expire (in seconds).
+     * @return  void
      */
-    public static function start ( Array $option = array() ) {
+    public function __construct ( $namespace = '_default', $cache = null,
+                                  $cacheExpire = null ) {
 
-        if(true === self::getStrictMode())
-            if(true === self::isStarted())
-                return;
-            else
-                throw new Exception(
-                    'A session must be started by \Hoa\Session::start() ' .
-                    'before declaring a new namespace.', 0);
-        elseif(true === self::isStarted())
-            return;
+        static::start($cache, $cacheExpire);
+        $this->_namespace = $namespace;
+        $this->initialize();
 
+        $channel = 'hoa://Event/Session/' . $namespace;
+        $expired = $channel . ':expired';
 
-        if(headers_sent($filename, $line))
-            throw new Exception(
-                'Session must be started before any output; ' .
-                'output started in %s at line %d.', 1,
-                array($filename, $line));
+        if(false === \Hoa\Core\Event::eventExists($channel))
+            \Hoa\Core\Event::register($channel, 'Hoa\Session');
 
-        if(defined('SID'))
-            throw new Exception(
-                'Session has been already automatically or manually started ' .
-                '(by session.auto_start or session_start()).', 2);
+        if(false === \Hoa\Core\Event::eventExists($expired))
+            \Hoa\Core\Event::register($expired, 'Hoa\Session');
 
-        Option::set($option);
+        if(true === $this->isExpired())
+            $this->hasExpired();
 
-        if(false === session_start())
-            throw new \Hoa\Session\Exception(
-                'Error when starting session. Cannot send session cookie. ' .
-                'Headers already sent.', 3);
-
-        self::setStart(true);
-        self::setWritable(true);
-        self::setReadable(true);
-        self::prepareSecretPart();
-        self::regenerateId();
-        self::identifyMe();
-
-        if(self::isExpiredSecond())
-            throw new Exception\SessionIsExpired(
-                'Session is expired.', 4);
+        $this->_profile['last_used']->setTimestamp(time());
 
         return;
     }
 
     /**
-     * Prepare secret part of the session (private namespace).
+     * Start the session.
      *
-     * @access  protected
+     * @access  public
+     * @param   string  $cache          Cache value (please, see static::*CACHE*
+     *                                  constants).
+     * @param   int     $cacheExpire    Cache expire (in seconds).
      * @return  void
      * @throw   \Hoa\Session\Exception
      */
-    protected static function prepareSecretPart ( ) {
+    public static function start ( $cache = null, $cacheExpire = null ) {
 
-        if(true === self::isNamespaceSet('__Hoa'))
+        if(null === $cache)
+            $cache = session_cache_limiter();
+
+        if(null === $cacheExpire)
+            $cacheExpire = session_cache_expire();
+
+        if(true === static::$_started)
             return;
 
-        if(!isset($_SERVER['REMOTE_ADDR']))
+        if(headers_sent($filename, $line))
             throw new Exception(
-                'Cannot prepare the session identity, because the ' .
-                '$_SERVER[\'REMOTE_ADDR\'] variable is not found.', 5);
+                'Session must be started before any ouput; ' .
+                'output started in %s at line %d.',
+                0, array($filename, $line));
 
-        $_SESSION['__Hoa'] = array(
-            'namespace'     => array(),
-            'expire_second' => null,   // should be parameterizable, aye?
-            'flash'         => array(),
-            'identity'      => array(
-                'id'        => md5(session_id()),
-                'ip'        => md5($_SERVER['REMOTE_ADDR'])
-            )
-        );
+        if(false === defined('SID')) {
+
+            session_cache_limiter($cache);
+
+            if(static::NO_CACHE !== $cache)
+                session_cache_expire($cacheExpire);
+
+            if(false === session_start())
+                throw new Exception(
+                    'Error when starting session. Cannot send session cookie.',
+                    1);
+        }
+
+        static::$_started = true;
+
+        if(!isset($_SESSION[static::TOP_NAMESPACE]))
+            $_SESSION[static::TOP_NAMESPACE] = array();
 
         return;
     }
 
     /**
-     * Regenerate the session ID.
+     * Initialize the namespace.
      *
      * @access  public
-     * @param   bool  $getNew    Whether the method returns the new session ID
-     *                           (false) or the new session ID (true).
+     * @param   bool  $reset    Re-initialize.
+     * @return  void
+     */
+    protected function initialize ( $reset = false ) {
+
+        $namespace = $this->getNamespace();
+
+        if(true === $reset)
+            unset($_SESSION[static::TOP_NAMESPACE][$namespace]);
+
+        if(!isset($_SESSION[static::TOP_NAMESPACE][$namespace]))
+            $_SESSION[static::TOP_NAMESPACE][$namespace] = array(
+                static::PROFILE => array(
+                    'started'   => new \DateTime(),
+                    'last_used' => new \DateTime(),
+                    'lifetime'  => new \DateTime(
+                        '+' . ini_get('session.gc_maxlifetime') . ' second'
+                    )
+                ),
+                static::BUCKET  => array()
+            );
+
+        $handle         = &$_SESSION[static::TOP_NAMESPACE][$namespace];
+        $this->_profile = &$handle[static::PROFILE];
+        $this->_bucket  = &$handle[static::BUCKET];
+
+        return;
+    }
+
+    /**
+     * Get current namespace.
+     *
+     * @access  public
      * @return  string
-     * @throw   \Hoa\Session\Exception
      */
-    public static function regenerateId ( $getNew = false ) {
+    public function getNamespace ( ) {
 
-        if(headers_sent($filename, $line))
-            throw new Exception(
-                'Cannot regenerate session ID; headers already sent in %s ' .
-                'on line %d.', 6,
-                array($filename, $line));
-
-        if(true !== self::isNamespaceSet('__Hoa'))
-            throw new Exception(
-                'Cannot regenerate ID, because the session was not ' .
-                'well-started.', 7);
-
-        $old = session_id();
-        session_regenerate_id();
-
-        $_SESSION['__Hoa']['identity']['id'] = md5(session_id());
-
-        return false === $getNew ? $old : session_id();
+        return $this->_namespace;
     }
 
     /**
-     * Identify a session, i.e. check if the owner's session is the right
-     * person.
-     *
-     * @access  public
-     * @return  bool
-     * @throw   \Hoa\Session\Exception
-     */
-    public static function identifyMe ( ) {
-
-        if(false === self::isStarted())
-            throw new Exception(
-                'Cannot identify a not-started session.', 8);
-
-        if(!isset($_SESSION['__Hoa']['identity']))
-            throw new Exception(
-                'Cannot identify the current session.', 9);
-
-        $identity = $_SESSION['__Hoa']['identity'];
-
-        if(!isset($identity['id']))
-            throw new Exception(
-                'Cannot identify the current session; session ID missing.', 10);
-
-        if(!isset($identity['ip']))
-            throw new Exception(
-                'Cannot identify the current session; session IP missing.', 11);
-
-        if($identity['id'] !== md5(session_id()))
-            throw new Exception(
-                'Session is not well-identify; session ID is not the right ' .
-                'ID.', 12);
-
-        if($identity['ip'] !== md5($_SERVER['REMOTE_ADDR']))
-            throw new Exception(
-                'Session is not well-identify; IP is not the right IP.', 13);
-
-        return true;
-    }
-
-    /**
-     * Check if a namespace already exists.
-     *
-     * @access  public
-     * @param   mixed  $namespace    The namespace name or object.
-     * @return  bool
-     */
-    public static function isNamespaceSet ( $namespace ) {
-
-        if($namespace instanceof QNamespace)
-            $namespace = $namespace->getNamespaceName();
-
-        return isset($_SESSION[$namespace]);
-    }
-
-    /**
-     * Unset a namespace.
-     *
-     * @access  public
-     * @param   mixed  $namespace    The namespace name or instance.
-     * @return  void
-     * @throw   \Hoa\Session\Exception
-     */
-    public static function unsetNamespace ( $namespace ) {
-
-        if(false === self::isStarted())
-            throw new Exception(
-                'Cannot unset a namespace on a not-starded session.', 14);
-
-        $name     = $namespace;
-
-        if($namespace instanceof QNamespace)
-            $name = $namespace->getNamespaceName();
-
-        if(true === $_SESSION['__Hoa']['namespace'][$name]['lock'])
-            throw new Exception(
-                'Namespace %s is locked.', 15, $name);
-
-        unset($_SESSION[$name]);
-        unset($_SESSION['__Hoa']['namespace'][$name]);
-        $namespace = null;
-
-        return;
-    }
-
-    /**
-     * Unset all namespaces.
-     *
-     * @access  public
-     * @return  void
-     * @throw   \Hoa\Session\Exception
-     */
-    public static function unsetAllNamespaces ( ) {
-
-        if(false === self::isStarted())
-            throw new Exception(
-                'Cannot unset namespaces on a no-starded session.', 16);
-
-        $nsidList = $_SESSION['__Hoa']['namespace'];
-
-        foreach($_SESSION['__Hoa']['flash'] as $id => $foo)
-            unset($nsidList[$id]);
-
-        foreach($nsidList as $id => $foo) {
-
-            if(true === $foo['lock'])
-                throw new Exception(
-                    'Namespace %s is locked.', 17, $flash);
-
-            unset($_SESSION[$id]);
-            unset($_SESSION['__Hoa']['namespace'][$id]);
-        }
-
-        return;
-    }
-
-    /**
-     * Check if a flash already exists.
-     *
-     * @access  public
-     * @param   string  $flash    The flash message ID. Should be the original
-     *                            ID or the prefixed and encoded ID.
-     * @return  bool
-     */
-    public static function isFlashSet ( $flash ) {
-
-        return    isset($_SESSION[$flash])
-               || isset($_SESSION['_flashMessage_' . md5($flash)]);
-    }
-
-    /**
-     * Unset a flash.
-     *
-     * @access  public
-     * @param   string  $flash    The flash message ID.
-     * @return  void
-     * @throw   \Hoa\Session\Exception
-     */
-    public static function unsetFlash ( $flash ) {
-
-        if(false === self::isStarted())
-            throw new Exception(
-                'Cannot unset a flash on a no-starded session.', 18);
-
-        $flashId = '_flashMessage_' . md5($flash);
-
-        if(true === $_SESSION['__Hoa']['namespace'][$flashId]['lock'])
-            throw new Exception(
-                'Namespace %s is locked.', 19, $flash);
-
-        unset($_SESSION[$flashId]);
-        unset($_SESSION['__Hoa']['namespace'][$flashId]);
-        unset($_SESSION['__Hoa']['flash'][$flashId]);
-
-        return;
-    }
-
-    /**
-     * Unset all flashes.
-     *
-     * @access  public
-     * @return  void
-     * @throw   \Hoa\Session\Exception
-     */
-    public static function unsetAllFlashes ( ) {
-
-        if(false === self::isStarted())
-            throw new Exception(
-                'Cannot unset flashes on a no-starded session.', 20);
-
-        $fidList = $_SESSION['__Hoa']['flash'];
-        $_SESSION['__Hoa']['flash'] = array();
-
-        foreach($fidList as $id => $foo) {
-
-            if(true === $_SESSION['__Hoa']['namespace'][$id]['lock'])
-                throw new \Hoa\Session\Exception(
-                    'Namespace %s is locked.', 21, $flash);
-
-            unset($_SESSION[$id]);
-            unset($_SESSION['__Hoa']['namespace'][$id]);
-        }
-
-        return;
-    }
-
-    /**
-     * Get self::$_start value.
+     * Check if the session is started or not.
      *
      * @access  public
      * @return  bool
      */
     public static function isStarted ( ) {
 
-        return self::$_start;
+        return static::$_started;
     }
 
     /**
-     * Write and close a session.
+     * Check if the namespace is empty, i.e. if it does not contain data.
      *
      * @access  public
-     * @return  void
-     * @throw   \Hoa\Session\Exception
+     * @return  bool
      */
-    public static function writeAndClose ( ) {
+    public function isEmpty ( ) {
 
-        if(false === self::isWritable())
-            throw new Exception(
-                'Cannot write and close the session, because it is not ' .
-                'writable.', 22);
+        return empty($this->_bucket);
+    }
 
-        set_error_handler(
-            array('\Hoa\Session\Exception', 'handleWriteAndCloseError'),
-            E_ALL
+    /**
+     * Check if the namespace is expired or not (test the lifetime).
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isExpired ( ) {
+
+        $lifetime = $this->_profile['lifetime'];
+        $current  = new \DateTime();
+
+        if($lifetime > $current)
+            return false;
+
+        return true;
+    }
+
+    /**
+     * Declare the session as “expired”. It will fire an event on
+     * hoa://Event/Session/<namespace>:expired if this channel is listened, else
+     * it will throw an exception. Moreover, it will reset the namespace.
+     *
+     * @access  public
+     * @param   bool  $exception    Whether throw an exception if needed or not.
+     * @return  void
+     * @throw   \Hoa\Session\Exception\Expired
+     */
+    public function hasExpired ( $exception = true ) {
+
+        $this->initialize(true);
+        $namespace = $this->getNamespace();
+        $expired   = 'hoa://Event/Session/' . $namespace . ':expired';
+
+        if(   true === $exception
+           && false === event($expired)->isListened())
+            throw new Exception\Expired(
+                'Session %s has expired. All data belonging to this ' .
+                'namespace are lost.',
+                2, $namespace);
+
+        \Hoa\Core\Event::notify(
+            $expired,
+            $this,
+            new \Hoa\Core\Event\Bucket()
         );
-        @session_write_close();
-        restore_error_handler();
-
-        if(true === Exception::hasWriteAndCloseError())
-            throw new Exception(
-                Exception::getWriteAndCloseErrorMessage());
-
-        self::$_writable = false;
 
         return;
     }
 
     /**
-     * Check if a session is writable or not.
+     * Get profile of the namespace.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getProfile ( ) {
+
+        return $this->_profile;
+    }
+
+    /**
+     * Modify the lifetime of the namespace.
+     * Reference value: session.gc_maxlifetime seconds.
+     *
+     * @access  public
+     * @param   string  $modify    Please, see \DateTime::modify().
+     * @return  \DateTime
+     */
+    public function rememberMe ( $modify ) {
+
+        return $this->_profile['lifetime']->modify($modify);
+    }
+
+    /**
+     * Set lifetime to 0.
+     *
+     * @access  public
+     * @return  \DateTime
+     */
+    public function forgetMe ( ) {
+
+        return $this->_profile['lifetime']->setTimestamp(time() - 60);
+    }
+
+    /**
+     * Check if a data exists.
+     *
+     * @access  public
+     * @param   mixed  $offset    Data name.
+     * @return  bool
+     */
+    public function offsetExists ( $offset ) {
+
+        return array_key_exists($offset, $this->_bucket);
+    }
+
+    /**
+     * Get a data.
+     *
+     * @access  public
+     * @param   mixed  $offset    Data name.
+     * @return  mixed
+     */
+    public function offsetGet ( $offset ) {
+
+        if(false === $this->offsetExists($offset))
+            return null;
+
+        return $this->_bucket[$offset];
+    }
+
+    /**
+     * Set a data.
+     *
+     * @access  public
+     * @param   mixed  $offset    Data name.
+     * @param   mixed  $value     Data value.
+     * @return  \Hoa\Session
+     */
+    public function offsetSet ( $offset, $value ) {
+
+        if(null === $offset)
+            $this->_bucket[]        = $value;
+        else
+            $this->_bucket[$offset] = $value;
+
+        return $this;
+    }
+
+    /**
+     * Unset a data.
+     *
+     * @access  public
+     * @param   mixed  $offset    Data name.
+     * @return  void
+     */
+    public function offsetUnset ( $offset ) {
+
+        unset($this->_bucket[$offset]);
+
+        return;
+    }
+
+    /**
+     * Count number of data.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function count ( ) {
+
+        return count($this->_bucket);
+    }
+
+    /**
+     * Iterate over data in the namespace.
+     *
+     * @access  public
+     * @return  \ArrayIterator
+     */
+    public function getIterator ( ) {
+
+        return new \ArrayIterator($this->_bucket);
+    }
+
+    /**
+     * Write and close the session (including all namespaces).
      *
      * @access  public
      * @return  bool
      */
-    public static function isWritable ( ) {
+    public function writeAndClose ( ) {
 
-        return self::$_writable;
+        if(false === static::$_started)
+            return false;
+
+        session_write_close();
+
+        return true;
     }
 
     /**
-     * Check if a session is readable or not.
-     *
-     * @access  public
-     * @return  bool
-     */
-    public static function isReadable ( ) {
-
-        return self::$_readable;
-    }
-
-    /**
-     * Check if a session is not writable but readable (i.e. in read-only
-     * access) or not.
-     *
-     * @access  public
-     * @return  bool
-     */
-    public static function isOnlyReadable ( ) {
-
-        return false === self::isWritable() && true === self::isReadable();
-    }
-
-    /**
-     * Destroy a session.
+     * Destroy the session (including all namespaces and cookie).
+     * If session has not been previously started, it will be done
+     * automatically.
      *
      * @access  public
      * @return  void
@@ -500,314 +501,116 @@ abstract class Session {
      */
     public static function destroy ( ) {
 
-        if(true === self::isOnlyReadable())
-            throw new Exception(
-                'Trying to destroy an uninitialized session.', 23);
+        static::start();
 
-        set_error_handler(
-            array('\Hoa\Session\Exception', 'handleDestroyError'),
-            E_ALL
-        );
-        @session_destroy();
-        restore_error_handler();
+        if(true == ini_get('session.use_cookies')) {
 
-        if(true === Exception::hasDestroyError())
-            throw new Exception(
-                Exception::getDestroyErrorMessage());
+            if(headers_sent($filename, $line))
+                throw new Exception(
+                    'Headers have been already sent, cannot destroy cookie; ' .
+                    'output started in %s at line %d.',
+                    3, array($filename, $line));
 
-        self::setWritable(false);
-        self::setReadable(true);
-        self::setStart(false);
-
-        if(true !== Option::isUsingCookie())
-            return;
-
-        if(true !== Option::isCookieSet())
-            return;
-
-        $cookieParams = session_get_cookie_params();
-        setcookie(
-            self::getName(),
-            false,
-            0,
-            $cookieParams['path'],
-            $cookieParams['domain'],
-            $cookieParams['secure']
-        );
-
-        return;
-    }
-
-    /**
-     * Set self::$_start.
-     *
-     * @access  protected
-     * @param   bool       $value    Value of start variable.
-     * @return  bool
-     */
-    protected static function setStart ( $value ) {
-
-        $old          = self::$_start;
-        self::$_start = $value;
-
-        return $old;
-    }
-
-    /**
-     * Set strict mode.
-     *
-     * @access  public
-     * @param   bool    $strict    Strict mode.
-     * @return  bool
-     */
-    public static function setStrictMode ( $strict ) {
-
-        $old           = self::$_strict;
-        self::$_strict = $strict;
-
-        return $old;
-    }
-
-    /**
-     * Set writable.
-     *
-     * @access  protected
-     * @param   bool       $writable    Value of write access.
-     * @return  bool
-     */
-    protected static function setWritable ( $writable ) {
-
-        $old             = self::$_writable;
-        self::$_writable = $writable;
-
-        return $old;
-    }
-
-    /**
-     * Set readable.
-     *
-     * @access  protected
-     * @param   bool       $readable    Value of read access.
-     * @return  bool
-     */
-    protected static function setReadable ( $readable ) {
-
-        $old             = self::$_readable;
-        self::$_readable = $readable;
-
-        return $old;
-    }
-
-    /**
-     * Get strict mode.
-     *
-     * @access  public
-     * @return  bool
-     */
-    public static function getStrictMode ( ) {
-
-        return self::$_strict;
-    }
-
-    /**
-     * Set expire second time.
-     *
-     * @access  public
-     * @param   int     $time    Time before expire.
-     * @return  int
-     * @throw   \Hoa\Session\Exception
-     */
-    public static function setExpireSecond ( $time ) {
-
-        if(false === self::isStarted())
-            throw new Exception(
-                'Cannot force a not-started session to expire.', 24);
-
-        if(!is_int($time))
-            throw new Exception(
-                'The expiration time must be an int, that represents seconds. ' .
-                'Given %s.', 25, gettype($time));
-
-        if(null !== $_SESSION['__Hoa']['expire_second'])
-            return;
-
-        $old                                = $_SESSION['__Hoa']['expire_second'];
-        $_SESSION['__Hoa']['expire_second'] = time() + $time;
-
-        if(true !== Option::isUsingCookie())
-            return $old;
-
-        if(true !== Option::isCookieSet())
-            return $old;
-
-        $cookieParams = session_get_cookie_params();
-        session_set_cookie_params(
-            $time,
-            $cookieParams['path'],
-            $cookieParams['domain'],
-            $cookieParams['secure']
-        );
-
-        return $old;
-    }
-
-    /**
-     * Get expire second time.
-     *
-     * @access  public
-     * @return  int
-     * @throw   \Hoa\Session\Exception
-     */
-    public static function getExpireSecond ( ) {
-
-        if(false === self::isStarted())
-            throw new Exception(
-                'Cannot get the expiration time for a not-started session.', 26);
-
-        return $_SESSION['__Hoa']['expire_second'];
-    }
-
-    /**
-     * Get the number of second before expiring.
-     *
-     * @access  public
-     * @return  int
-     * @throw   \Hoa\Session\Exception
-     */
-    public static function getSecondBeforeExpiring ( ) {
-
-        if(false === self::isStarted())
-            throw new Exception(
-                'Cannot get the expiration time for a not-started session.', 27);
-
-        return self::getExpireSecond() - time();
-    }
-
-    /**
-     * Check if a session is expired according to time.
-     *
-     * @access  public
-     * @return  bool
-     * @throw   \Hoa\Session\Exception
-     */
-    public static function isExpiredSecond ( ) {
-
-        if(null === self::getExpireSecond())
-            return false;
-
-        return time() > self::getExpireSecond();
-    }
-
-    /**
-     * Force a session to not expire before a long time (2 weeks).
-     *
-     * @access  public
-     * @param   bool    $overwrite    Force to overwrite previous expire time.
-     * @return  bool
-     * @throw   \Hoa\Session\Exception
-     */
-    public static function rememberMe ( $overwrite = false ) {
-
-        if(false === self::isStarted())
-            throw new Exception(
-                'Cannot remember a not-started session.', 28);
-
-        if(   false !== $overwrite
-           || null  === self::getExpireSecond()) {
-
-            $_SESSION['__Hoa']['expire_second'] = time() + 1209600;
-            return true;
+            $parameters = session_get_cookie_params();
+            setcookie(
+                session_name(),
+                '',
+                time() - 1,
+                $parameters['path'],
+                $parameters['domain'],
+                $parameters['secure'],
+                $parameters['httponly']
+            );
         }
 
-        return false;
-    }
-
-    /**
-     * Force a session to expire.
-     *
-     * @access  public
-     * @return  void
-     * @throw   \Hoa\Session\Exception
-     */
-    public static function forgetMe ( ) {
-
-        if(false === self::isStarted())
-            throw new Exception(
-                'Cannot forget a not-started session.', 29);
-
-        $_SESSION['__Hoa']['expire_second'] = time() - 1;
+        session_destroy();
+        static::$_started = false;
 
         return;
     }
 
     /**
-     * Add a save handler interface.
-     *
-     * @access  public
-     * @param   \Hoa\Session\ISession\SaveHandler  $savehandler    The save
-     *                                                             handler
-     *                                                             interface.
-     * @return  void
-     */
-    public static function setSaveHandler ( ISession\SaveHandler $savehandler ) {
-
-        return session_set_save_handler(
-            array(&$savehandler, 'open'),
-            array(&$savehandler, 'close'),
-            array(&$savehandler, 'read'),
-            array(&$savehandler, 'write'),
-            array(&$savehandler, 'destroy'),
-            array(&$savehandler, 'gc')
-        );
-    }
-
-    /**
-     * Get the session ID.
+     * Get current session ID.
      *
      * @access  public
      * @return  string
      */
     public static function getId ( ) {
 
-        if(false === self::isStarted())
-            return null;
-
         return session_id();
     }
 
     /**
-     * Get the session name.
+     * Update the current session ID with a newly generated one.
      *
      * @access  public
-     * @return  string
+     * @param   bool  $deleteOldSession    Delete the old session file or not.
+     * @return  bool
      */
-    public static function getName ( ) {
+    public static function newId ( $deleteOldSession = false ) {
 
-        if(false === self::isStarted())
-            return null;
-
-        return session_name();
+        return session_regenerate_id($deleteOldSession);
     }
 
     /**
-     * Get an iterator, based on ArrayObject and ArrayIterator.
+     * Control destruction behavior.
+     * Not for user, but for a global callback.
      *
      * @access  public
      * @return  void
      */
-    public static function getIterator ( ) {
+    public static function _avoidDestruction ( ) {
 
-        if(false === self::isStarted())
-            return new \ArrayObject();
+        self::$_destruction = false;
 
-        $array = $_SESSION;
-        unset($array['__Hoa']);
+        return;
+    }
 
-        return new \ArrayObject(
-            $array,
-            ArrayObject::ARRAY_AS_PROPS
-        );
+    /**
+     * Destructor.
+     * If called by PHP, nothing special will happen. If called by user with the
+     * help of unset(), it will delete the namespace.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function __destruct ( ) {
+
+        // If exit.
+        if(false === self::$_destruction)
+            return;
+
+        // If unset $this.
+        $namespace = $this->getNamespace();
+        $channel   = 'hoa://Event/Session/' . $namespace;
+        unset($_SESSION[static::TOP_NAMESPACE][$namespace]);
+        \Hoa\Core\Event::unregister($channel);
+        \Hoa\Core\Event::unregister($channel . ':expired');
+
+        return;
     }
 }
+
+}
+
+namespace {
+
+/**
+ * Control namespace destruction behavior.
+ */
+\Hoa\Core::registerShutDownFunction('\Hoa\Session\Session', '_avoidDestruction');
+
+/**
+ * Session shutdown function.
+ * Offering a PHP5.4 feature to lower version.
+ *
+ * @access  public
+ * @return  void
+ */
+if(!ƒ('session_register_shutdown')) {
+function session_register_shutdown ( ) {
+
+    return register_shutdown_function('session_write_close');
+}}
 
 }
