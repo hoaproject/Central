@@ -34,21 +34,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Session\ISession {
+namespace {
 
 /**
- * Interface \Hoa\Session\ISession\SaveHandler.
+ * Offering a PHP5.4 feature to lower version.
+ */
+if(PHP_VERSION_ID < 50400) {
+
+/**
+ * Interface SessionHandlerInterface.
  *
- * Force some methods to be implemented by a class.
- * Theses methods must be implemented for the PHP function
- * session_set_save_handler. Please, see the manuel for more informations.
+ * SessionHandlerInterface is an interface which defines a prototype for
+ * creating a custom session handler. In order to pass a custom session handler
+ * to session_set_save_handler() using its OOP invocation, the class must
+ * implement this interface.
+ * Please note the callback methods of this class are designed to be called
+ * internally by PHP and are not meant to be called from user-space code. 
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
-
-interface SaveHandler {
+interface SessionHandlerInterface {
 
     /**
      * Open a session.
@@ -105,6 +112,22 @@ interface SaveHandler {
      * @return  bool
      */
     public function gc ( $maxlifetime );
+}}
+
 }
+
+namespace Hoa\Session {
+
+/**
+ * Interface \Hoa\Session\Handler.
+ *
+ * Extend \SessionHandlerInterface.
+ *
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2012 Ivan Enderlin.
+ * @license    New BSD License
+ */
+
+interface Handler extends \SessionHandlerInterface { }
 
 }
