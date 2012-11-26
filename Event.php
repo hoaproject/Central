@@ -180,7 +180,7 @@ class Event {
     private static $_register = array();
 
     /**
-     * Callable, i.e. observer objects.
+     * Callables, i.e. observer objects.
      *
      * @var \Hoa\Core\Event array
      */
@@ -301,6 +301,17 @@ class Event {
         unset($this->_callable[xcallable($callable)->getHash()]);
 
         return $this;
+    }
+
+    /**
+     * Check if at least one callable is attached to an event.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isListened ( ) {
+
+        return !empty($this->_callable);
     }
 
     /**
