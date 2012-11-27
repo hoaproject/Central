@@ -34,68 +34,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Realdom
- */
--> import('Realdom.~')
-
-/**
- * \Hoa\Realdom\Number
- */
--> import('Realdom.Number');
-
-}
-
 namespace Hoa\Realdom {
 
 /**
- * Class \Hoa\Realdom\Float.
+ * Interface \Hoa\Realdom\Number.
  *
- * Realistic domain: float.
+ * Interface to represent numbers.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Float extends Realdom implements Number {
-
-    /**
-     * Realistic domain name.
-     *
-     * @const string
-     */
-    const NAME = 'float';
-
-
-
-    /**
-     * Predicate whether the sampled value belongs to the realistic domains.
-     *
-     * @access  public
-     * @param   mixed  $q    Sampled value.
-     * @return  boolean
-     */
-    public function predicate ( $q ) {
-
-        return is_float($q);
-    }
-
-    /**
-     * Sample one new value.
-     *
-     * @access  protected
-     * @param   \Hoa\Math\Sampler  $sampler    Sampler.
-     * @return  mixed
-     */
-    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
-
-        return $sampler->getFloat();
-    }
-}
+interface Number { }
 
 }

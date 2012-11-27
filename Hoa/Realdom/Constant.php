@@ -39,7 +39,7 @@ namespace Hoa\Realdom {
 /**
  * Interface \Hoa\Realdom\Constant.
  *
- * Realistic domain interface: constant.
+ * Interface to represent constants.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
