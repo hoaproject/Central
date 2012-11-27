@@ -61,6 +61,13 @@ namespace Hoa\Session {
 class Flash extends Session {
 
     /**
+     * Event channel.
+     *
+     * @const string
+     */
+    const EVENT_CHANNEL           = 'hoa://Event/Session/Flash/';
+
+    /**
      * Top-namespace. See parent::TOP_NAMESPACE for more informations.
      *
      * @const string
