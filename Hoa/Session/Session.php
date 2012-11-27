@@ -387,9 +387,9 @@ class          Session
 
     /**
      * Declare the session as “expired”. It will fire an event on
-     * static::EVENT_CHANNEL . <namespace>:expired if this channel is listened,
-     * else it will throw an exception. Moreover, it will re-initialize the
-     * namespace.
+     * static::EVENT_CHANNEL . $namespace . ':expired' if this channel is
+     * listened, else it will throw an exception. Moreover, it will
+     * re-initialize the namespace.
      *
      * @access  public
      * @param   bool  $exception    Whether throw an exception if needed or not.
