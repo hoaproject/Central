@@ -46,7 +46,12 @@ from('Hoa')
 /**
  * \Hoa\Session\Exception\Expired
  */
--> import('Session.Exception.Expired');
+-> import('Session.Exception.Expired')
+
+/**
+ * \Hoa\Session\Exception\Locked
+ */
+-> import('Session.Exception.Locked');
 
 }
 
@@ -69,6 +74,13 @@ class          Session
                \ArrayAccess,
                \Countable,
                \IteratorAggregate {
+
+    /**
+     * Event channel.
+     *
+     * @const string
+     */
+    const EVENT_CHANNEL           = 'hoa://Event/Session/';
 
     /**
      * Top-namespace: entry where namespaces are located in $_SESSION, i.e.
@@ -157,6 +169,13 @@ class          Session
      */
     protected $_bucket           = null;
 
+    /**
+     * Lock status (for all namespaces).
+     *
+     * @var \Hoa\Session array
+     */
+    protected static $_lock      = array();
+
 
 
     /**
@@ -170,15 +189,31 @@ class          Session
      *                                  constants).
      * @param   int     $cacheExpire    Cache expire (in seconds).
      * @return  void
+     * @throw   \Hoa\Session\Exception
+     * @throw   \Hoa\Session\Exception\Locked
      */
     public function __construct ( $namespace = '_default', $cache = null,
                                   $cacheExpire = null ) {
 
-        static::start($cache, $cacheExpire);
+        if(false !== strpos($namespace, '/'))
+            throw new Exception(
+                'Namespace must not contain a slash (/); given %s.',
+                0, $namespace);
+
         $this->_namespace = $namespace;
+
+        if(false === array_key_exists($namespace, static::$_lock))
+            static::$_lock[$namespace] = false;
+
+        if(true === $this->isLocked())
+            throw new Exception\Locked(
+                'Namespace %s is locked because it has been unset.',
+                1, $namespace);
+
+        static::start($cache, $cacheExpire);
         $this->initialize();
 
-        $channel = 'hoa://Event/Session/' . $namespace;
+        $channel = static::EVENT_CHANNEL . $namespace;
         $expired = $channel . ':expired';
 
         if(false === \Hoa\Core\Event::eventExists($channel))
@@ -220,7 +255,7 @@ class          Session
             throw new Exception(
                 'Session must be started before any ouput; ' .
                 'output started in %s at line %d.',
-                0, array($filename, $line));
+                2, array($filename, $line));
 
         if(false === defined('SID')) {
 
@@ -232,7 +267,7 @@ class          Session
             if(false === session_start())
                 throw new Exception(
                     'Error when starting session. Cannot send session cookie.',
-                    1);
+                    3);
         }
 
         static::$_started = true;
@@ -246,7 +281,7 @@ class          Session
     /**
      * Initialize the namespace.
      *
-     * @access  public
+     * @access  protected
      * @param   bool  $reset    Re-initialize.
      * @return  void
      */
@@ -272,6 +307,20 @@ class          Session
         $handle         = &$_SESSION[static::TOP_NAMESPACE][$namespace];
         $this->_profile = &$handle[static::PROFILE];
         $this->_bucket  = &$handle[static::BUCKET];
+
+        return;
+    }
+
+    /**
+     * Remove all data from the namespace. It does not touch the profile or the
+     * session, only the data.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function clean ( ) {
+
+        $this->_bucket = array();
 
         return;
     }
@@ -306,6 +355,9 @@ class          Session
      */
     public function isEmpty ( ) {
 
+        if(true === $this->isLocked())
+            $this->__destruct();
+
         return empty($this->_bucket);
     }
 
@@ -316,6 +368,13 @@ class          Session
      * @return  bool
      */
     public function isExpired ( ) {
+
+        if(true === $this->isLocked()) {
+
+            $this->__destruct();
+
+            return true;
+        }
 
         $lifetime = $this->_profile['lifetime'];
         $current  = new \DateTime();
@@ -328,26 +387,34 @@ class          Session
 
     /**
      * Declare the session as “expired”. It will fire an event on
-     * hoa://Event/Session/<namespace>:expired if this channel is listened, else
-     * it will throw an exception. Moreover, it will reset the namespace.
+     * static::EVENT_CHANNEL . <namespace>:expired if this channel is listened,
+     * else it will throw an exception. Moreover, it will re-initialize the
+     * namespace.
      *
      * @access  public
      * @param   bool  $exception    Whether throw an exception if needed or not.
      * @return  void
      * @throw   \Hoa\Session\Exception\Expired
+     * @throw   \Hoa\Session\Exception\Locked
      */
     public function hasExpired ( $exception = true ) {
 
-        $this->initialize(true);
         $namespace = $this->getNamespace();
-        $expired   = 'hoa://Event/Session/' . $namespace . ':expired';
 
-        if(   true === $exception
+        if(true === $this->isLocked())
+            throw new Exception\Locked(
+                'Namespace %s is locked because it has been unset.',
+                4, $namespace);
+
+        $this->initialize(true);
+        $expired = static::EVENT_CHANNEL . $namespace . ':expired';
+
+        if(   true  === $exception
            && false === event($expired)->isListened())
             throw new Exception\Expired(
-                'Session %s has expired. All data belonging to this ' .
+                'Namespace %s has expired. All data belonging to this ' .
                 'namespace are lost.',
-                2, $namespace);
+                5, $namespace);
 
         \Hoa\Core\Event::notify(
             $expired,
@@ -359,12 +426,29 @@ class          Session
     }
 
     /**
+     * Check if the namespace is not locked.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isLocked ( ) {
+
+        return static::$_lock[$this->getNamespace()];
+    }
+
+    /**
      * Get profile of the namespace.
      *
      * @access  public
      * @return  array
+     * @throw   \Hoa\Session\Exception\Locked
      */
     public function getProfile ( ) {
+
+        if(true === $this->isLocked())
+            throw new Exception\Locked(
+                'Namespace %s is locked because it has been unset.',
+                6, $this->getNamespace());
 
         return $this->_profile;
     }
@@ -376,21 +460,32 @@ class          Session
      * @access  public
      * @param   string  $modify    Please, see \DateTime::modify().
      * @return  \DateTime
+     * @throw   \Hoa\Session\Exception\Locked
      */
     public function rememberMe ( $modify ) {
+
+        if(true === $this->isLocked())
+            throw new Exception\Locked(
+                'Namespace %s is locked because it has been unset.',
+                7, $this->getNamespace());
 
         return $this->_profile['lifetime']->modify($modify);
     }
 
     /**
      * Set lifetime to 0.
+     * This method is different from self::hasExpired() because it will only
+     * modify the lifetime and it will not throw or fire anything.
      *
      * @access  public
      * @return  \DateTime
      */
     public function forgetMe ( ) {
 
-        return $this->_profile['lifetime']->setTimestamp(time() - 60);
+        if(true === $this->isLocked())
+            return null;
+
+        return $this->_profile['lifetime']->setTimestamp(time() - 1);
     }
 
     /**
@@ -399,8 +494,14 @@ class          Session
      * @access  public
      * @param   mixed  $offset    Data name.
      * @return  bool
+     * @throw   \Hoa\Session\Exception\Locked
      */
     public function offsetExists ( $offset ) {
+
+        if(true === $this->isLocked())
+            throw new Exception\Locked(
+                'Namespace %s is locked because it has been unset.',
+                8, $this->getNamespace());
 
         return array_key_exists($offset, $this->_bucket);
     }
@@ -411,8 +512,14 @@ class          Session
      * @access  public
      * @param   mixed  $offset    Data name.
      * @return  mixed
+     * @throw   \Hoa\Session\Exception\Locked
      */
     public function offsetGet ( $offset ) {
+
+        if(true === $this->isLocked())
+            throw new Exception\Locked(
+                'Namespace %s is locked because it has been unset.',
+                9, $this->getNamespace());
 
         if(false === $this->offsetExists($offset))
             return null;
@@ -427,8 +534,14 @@ class          Session
      * @param   mixed  $offset    Data name.
      * @param   mixed  $value     Data value.
      * @return  \Hoa\Session
+     * @throw   \Hoa\Session\Exception\Locked
      */
     public function offsetSet ( $offset, $value ) {
+
+        if(true === $this->isLocked())
+            throw new Exception\Locked(
+                'Namespace %s is locked because it has been unset.',
+                10, $this->getNamespace());
 
         if(null === $offset)
             $this->_bucket[]        = $value;
@@ -444,8 +557,14 @@ class          Session
      * @access  public
      * @param   mixed  $offset    Data name.
      * @return  void
+     * @throw   \Hoa\Session\Exception\Locked
      */
     public function offsetUnset ( $offset ) {
+
+        if(true === $this->isLocked())
+            throw new Exception\Locked(
+                'Namespace %s is locked because it has been unset.',
+                11, $this->getNamespace());
 
         unset($this->_bucket[$offset]);
 
@@ -460,6 +579,9 @@ class          Session
      */
     public function count ( ) {
 
+        if(true === $this->isLocked())
+            return 0;
+
         return count($this->_bucket);
     }
 
@@ -468,8 +590,14 @@ class          Session
      *
      * @access  public
      * @return  \ArrayIterator
+     * @throw   \Hoa\Session\Exception\Locked
      */
     public function getIterator ( ) {
+
+        if(true === $this->isLocked())
+            throw new Exception\Locked(
+                'Namespace %s is locked because it has been unset.',
+                12, $this->getNamespace());
 
         return new \ArrayIterator($this->_bucket);
     }
@@ -479,8 +607,14 @@ class          Session
      *
      * @access  public
      * @return  bool
+     * @throw   \Hoa\Session\Exception\Locked
      */
     public function writeAndClose ( ) {
+
+        if(true === $this->isLocked())
+            throw new Exception\Locked(
+                'Namespace %s is locked because it has been unset.',
+                13, $this->getNamespace());
 
         if(false === static::$_started)
             return false;
@@ -493,7 +627,7 @@ class          Session
     /**
      * Destroy the session (including all namespaces and cookie).
      * If session has not been previously started, it will be done
-     * automatically.
+     * automatically. It won't modify current lock, be careful.
      *
      * @access  public
      * @return  void
@@ -509,7 +643,7 @@ class          Session
                 throw new Exception(
                     'Headers have been already sent, cannot destroy cookie; ' .
                     'output started in %s at line %d.',
-                    3, array($filename, $line));
+                    14, array($filename, $line));
 
             $parameters = session_get_cookie_params();
             setcookie(
@@ -525,6 +659,7 @@ class          Session
 
         session_destroy();
         static::$_started = false;
+        // let locks unchanged.
 
         return;
     }
@@ -569,7 +704,9 @@ class          Session
     /**
      * Destructor.
      * If called by PHP, nothing special will happen. If called by user with the
-     * help of unset(), it will delete the namespace.
+     * help of unset(), it will delete the namespace. The namespace will be
+     * locked and considered as expired (only the event will be fired, not the
+     * exception).
      *
      * @access  public
      * @return  void
@@ -580,12 +717,17 @@ class          Session
         if(false === self::$_destruction)
             return;
 
+        if(true === $this->isLocked())
+            return;
+
         // If unset $this.
         $namespace = $this->getNamespace();
-        $channel   = 'hoa://Event/Session/' . $namespace;
+        $channel   = static::EVENT_CHANNEL . $namespace;
+        $this->hasExpired(false);
         unset($_SESSION[static::TOP_NAMESPACE][$namespace]);
         \Hoa\Core\Event::unregister($channel);
         \Hoa\Core\Event::unregister($channel . ':expired');
+        static::$_lock[$namespace] = true;
 
         return;
     }
@@ -602,7 +744,7 @@ namespace {
 
 /**
  * Session shutdown function.
- * Offering a PHP5.4 feature to lower version.
+ * Offering a PHP5.4 feature to prior versions.
  *
  * @access  public
  * @return  void

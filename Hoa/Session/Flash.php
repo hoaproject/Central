@@ -36,98 +36,107 @@
 
 namespace {
 
-/**
- * Offering a PHP5.4 feature to prior versions.
- */
-if(PHP_VERSION_ID < 50400) {
+from('Hoa')
 
 /**
- * Interface SessionHandlerInterface.
- *
- * SessionHandlerInterface is an interface which defines a prototype for
- * creating a custom session handler. In order to pass a custom session handler
- * to session_set_save_handler() using its OOP invocation, the class must
- * implement this interface.
- * Please note the callback methods of this class are designed to be called
- * internally by PHP and are not meant to be called from user-space code. 
- *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2012 Ivan Enderlin.
- * @license    New BSD License
+ * \Hoa\Session
  */
-interface SessionHandlerInterface {
-
-    /**
-     * Open a session.
-     *
-     * @access  public
-     * @param   string  $savePath    Path where the session is stocked.
-     * @param   string  $name        Session name.
-     * @return  bool
-     */
-    public function open ( $savePath, $name );
-
-    /**
-     * Close a session.
-     *
-     * @access  public
-     * @return  bool
-     */
-    public function close ( );
-
-    /**
-     * Read the session data.
-     *
-     * @access  public
-     * @param   string  $id    Session ID.
-     * @return  string
-     */
-    public function read ( $id );
-
-    /**
-     * Write the session data.
-     *
-     * @access  public
-     * @param   string  $id      Session ID.
-     * @param   string  $data    Session data.
-     * @return  mixed
-     */
-    public function write ( $id, $data );
-
-    /**
-     * Destroy a session.
-     *
-     * @access  public
-     * @param   string  $id    Session ID.
-     * @return  bool
-     */
-    public function destroy ( $id );
-
-    /**
-     * The garbage collection remove all old session data older than the value of
-     * $maxlifetime variable (in seconds).
-     *
-     * @access  public
-     * @param   int     $maxlifetime    Max lifetime of a session.
-     * @return  bool
-     */
-    public function gc ( $maxlifetime );
-}}
+-> import('Session.~');
 
 }
 
 namespace Hoa\Session {
 
 /**
- * Interface \Hoa\Session\Handler.
+ * Class \Hoa\Session\Flash.
  *
- * Extend \SessionHandlerInterface.
+ * Flash is a special top-namespace that contains namespaces which are
+ * destructed when empty. Each data is destructed after a read.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 
-interface Handler extends \SessionHandlerInterface { }
+class Flash extends Session {
+
+    /**
+     * Event channel.
+     *
+     * @const string
+     */
+    const EVENT_CHANNEL           = 'hoa://Event/Session/Flash/';
+
+    /**
+     * Top-namespace. See parent::TOP_NAMESPACE for more informations.
+     *
+     * @const string
+     */
+    const TOP_NAMESPACE = '__Hoa_Flash__';
+
+
+
+    /**
+     * Manipulate a namespace.
+     * If session has not been previously started, it will be done
+     * automatically.
+     *
+     * @access  public
+     * @param   string  $namespace      Namespace.
+     * @return  void
+     */
+    public function __construct ( $namespace = '_defaultFlash' ) {
+
+        parent::__construct($namespace, parent::NO_CACHE);
+
+        return;
+    }
+
+    /**
+     * Get a data.
+     *
+     * @access  public
+     * @param   mixed  $offset    Data name.
+     * @return  mixed
+     */
+    public function offsetGet ( $offset ) {
+
+        $out = parent::offsetGet($offset);
+        $this->offsetUnset($offset);
+
+        return $out;
+    }
+
+    /**
+     * Unset a data.
+     *
+     * @access  public
+     * @param   mixed  $offset    Data name.
+     * @return  void
+     */
+    public function offsetUnset ( $offset ) {
+
+        parent::offsetUnset($offset);
+
+        if(true === $this->isEmpty())
+            $this->__destruct();
+
+        return;
+    }
+
+    /**
+     * Iterate over data in the namespace.
+     *
+     * @access  public
+     * @return  \ArrayIterator
+     */
+    public function getIterator ( ) {
+
+        $out = parent::getIterator();
+        $this->__destruct();
+
+        return $out;
+    }
+}
 
 }
