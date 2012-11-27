@@ -41,7 +41,12 @@ from('Hoa')
 /**
  * \Hoa\Realdom
  */
--> import('Realdom.~');
+-> import('Realdom.~')
+
+/**
+ * \Hoa\Realdom\Number
+ */
+-> import('Realdom.Number');
 
 }
 
@@ -57,7 +62,7 @@ namespace Hoa\Realdom {
  * @license    New BSD License
  */
 
-class Integer extends Realdom {
+class Integer extends Realdom implements Number {
 
     /**
      * Realistic domain name.
