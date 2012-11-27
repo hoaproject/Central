@@ -6,7 +6,8 @@ Moreover, Hoa aims at being a bridge between industrial and research worlds.
 # Hoa\Session
 
 This library allows to manipulate sessions easily by creating “namespaces”, i.e.
-an entry in the `$_SESSION` global variable.
+an entry in the `$_SESSION` global variable. It also allows to manipulate flash
+sessions.
 
 Each namespace has a profile. Amongst many things, it implies we can control
 lifetime of each namespace individually. This library can be used in conjunction
