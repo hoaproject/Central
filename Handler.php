@@ -37,7 +37,7 @@
 namespace {
 
 /**
- * Offering a PHP5.4 feature to lower version.
+ * Offering a PHP5.4 feature to prior versions.
  */
 if(PHP_VERSION_ID < 50400) {
 
