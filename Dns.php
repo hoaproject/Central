@@ -169,7 +169,7 @@ class Dns implements \Hoa\Core\Event\Listenable {
      */
     protected static $_classes = array(
         'in'    =>   1, // Internet.
-        'dc'    =>   2, // Data class.
+        'cs'    =>   2, // CSNET (obsolete).
         'ch'    =>   3, // Chaos.
         'hs'    =>   4, // Hesiod.
         'qnone' => 254, // QClass none.
