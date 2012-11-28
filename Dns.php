@@ -255,6 +255,41 @@ class Dns implements \Hoa\Core\Event\Listenable {
             )));
             $ip      = null;
 
+            if(false === $ips[0]) {
+
+                $this->_server->writeAll(
+                    // Header.
+
+                    // ID.
+                    $buffer[0] .
+                    $buffer[1] .
+                    pack(
+                        'C',
+                        1 << 7 // QR,     1 = response.
+                               // OpCode, 0 = QUERY.
+                               // AA,     0
+                               // TC,     0
+                      | 1      // RD
+                    ) .
+                    pack(
+                        'C',
+                        0      // RA, Z, AD, CD.
+                      | 3      // NXDOMAIN.
+                    ) .
+                    // QDCOUNT.
+                    $buffer[4] .
+                    $buffer[5] .
+                    // ANCOUNT.
+                    pack('n', 1) .
+                    // NSCOUNT.
+                    pack('n', 0) .
+                    // ARCOUNT.
+                    pack('n', 0)
+                );
+
+                continue;
+            }
+
             foreach(explode('.', $ips[0]) as $foo)
                 $ip .= pack('C', $foo);
 
