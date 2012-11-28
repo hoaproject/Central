@@ -251,7 +251,8 @@ class Dns implements \Hoa\Core\Event\Listenable {
 
             $i    += 2;
             $type  = array_search(
-                $_ = (int) (string) ord($handle[$i] + $handle[$i + 1]),
+                $_ = (int) (string) ord($handle[$i]) +
+                     (int) (string) ord($handle[$i + 1]),
                 static::$_types
             ) ?: $_;
 
