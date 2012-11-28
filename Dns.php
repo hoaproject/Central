@@ -249,37 +249,46 @@ class Dns implements \Hoa\Core\Event\Listenable {
                 $i      += $length;
             }
 
-            $i    += 2;
-            $type  = array_search(
-                $_ = (int) (string) ord($handle[$i]) +
-                     (int) (string) ord($handle[$i + 1]),
-                static::$_types
-            ) ?: $_;
+            $i      += 2;
+            $_type   = (int) (string) ord($handle[$i]) +
+                       (int) (string) ord($handle[$i + 1]);
+            $type    = array_search($_type, static::$_types) ?: $_type;
 
-            $i     += 2;
-            $class  = array_search(
-                $_  = (int) (string) ord($handle[$i]),
-                static::$_classes
-            ) ?: $_;
+            $i      += 2;
+            $_class  = (int) (string) ord($handle[$i]);
+            $class   = array_search($_class, static::$_classes) ?: $_class;
 
-            $ips    = $this->_on->fire('query', new \Hoa\Core\Event\Bucket(array(
+            $ips     = $this->_on->fire('query', new \Hoa\Core\Event\Bucket(array(
                 'domain' => $domain,
                 'type'   => $type,
                 'class'  => $class
             )));
-            $ip     = null;
+            $ip      = null;
 
             foreach(explode('.', $ips[0]) as $foo)
-                $ip .= chr($foo);
+                $ip .= pack('C', $foo);
 
             $this->_server->writeAll(
-                $buffer[0] . $buffer[1] . chr(129)   . chr(128)   .
-                $buffer[4] . $buffer[5] . $buffer[4] . $buffer[5] .
-                chr(0)     . chr(0)     . chr(0)     . chr(0)     .
-                $handle    . chr(192)   . chr(12)    . chr(0)     .
-                chr(1)     . chr(0)     . chr(1)     . chr(0)     .
-                chr(0)     . chr(0)     . chr(60)    . chr(0)     .
-                chr(4)     . $ip
+                $buffer[0] .
+                $buffer[1] .
+                pack('CC', 129, 128) .
+                $buffer[4] .
+                $buffer[5] .
+                $buffer[4] .
+                $buffer[5] .
+                pack('CCCC', 0, 0, 0, 0) .
+                $handle    .
+                pack('CC', 192, 12) .
+                // TYPE.
+                pack('n', $_type) .
+                // CLASS.
+                pack('n', $_class) .
+                // TTL.
+                pack('N', 60) .
+                // RDLENGTH.
+                pack('n', 4) .
+                // RDATA.
+                $ip
             );
         }
 
