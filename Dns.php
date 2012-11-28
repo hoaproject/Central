@@ -51,6 +51,7 @@ namespace Hoa\Dns {
  * Class \Hoa\Dns.
  *
  * Provide a tiny and very simple DNS server.
+ * Please, see RFC6195.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
