@@ -239,14 +239,14 @@ class Dns implements \Hoa\Core\Event\Listenable {
 
             // QTYPE.
             $i      += 2;
-            $_type   = (int) (string) ord($handle[$i]) +
+            $qtype   = (int) (string) ord($handle[$i]) +
                        (int) (string) ord($handle[$i + 1]);
-            $type    = array_search($_type, static::$_types) ?: $_type;
+            $type    = array_search($qtype, static::$_types) ?: $qtype;
 
             // QCLASS.
             $i      += 2;
-            $_class  = (int) (string) ord($handle[$i]);
-            $class   = array_search($_class, static::$_classes) ?: $_class;
+            $qclass  = (int) (string) ord($handle[$i]);
+            $class   = array_search($qclass, static::$_classes) ?: $qclass;
 
             $ips     = $this->_on->fire('query', new \Hoa\Core\Event\Bucket(array(
                 'domain' => $domain,
@@ -329,9 +329,9 @@ class Dns implements \Hoa\Core\Event\Listenable {
                 // Answer.
 
                 // TYPE.
-                pack('n', $_type) .
+                pack('n', $qtype) .
                 // CLASS.
-                pack('n', $_class) .
+                pack('n', $qclass) .
                 // TTL.
                 pack('N', 60) .
                 // RDLENGTH.
