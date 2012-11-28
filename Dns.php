@@ -107,7 +107,7 @@ class Dns implements \Hoa\Core\Event\Listenable {
         'key'         =>    25, // Security key.
         'px'          =>    26, // X.400 mail mapping.
         'gpos'        =>    27, // Geographical position (withdrawn).
-        'aaaa'        =>    28, // Ip6 Address.
+        'aaaa'        =>    28, // IPv6 Address.
         'loc'         =>    29, // Location Information.
         'nxt'         =>    30, // Next domain (security)
         'eid'         =>    31, // Endpoint identifier.
@@ -117,7 +117,7 @@ class Dns implements \Hoa\Core\Event\Listenable {
         'naptr'       =>    35, // Naming Authority PoinTeR
         'kx'          =>    36, // Key Exchange
         'cert'        =>    37, // Certification Record
-        'a6'          =>    38, // IPv6 Address (deprecated, use ns_t.aaaa)
+        'a6'          =>    38, // IPv6 Address (deprecated, use aaaa)
         'dname'       =>    39, // Non-terminal DNAME (for IPv6)
         'sink'        =>    40, // Kitchen sink (experimental)
         'opt'         =>    41, // EDNS0 option (meta-RR)
