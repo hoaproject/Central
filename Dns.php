@@ -76,12 +76,13 @@ class Dns implements \Hoa\Core\Event\Listenable {
 
     /**
      * Type values for resources and queries.
+     * Please, see
+     * http://iana.org/assignments/dns-parameters/dns-parameters.xml.
      *
      * @var \Hoa\Dns\Light array
      */
     protected static $_types   = array(
         'invalid'     =>     0, // Invalid.
-        // <RFC1035>
         'a'           =>     1, // Host address.
         'ns'          =>     2, // Authorative name server.
         'md'          =>     3, // Mail destination (obsolete, use MX).
@@ -98,29 +99,20 @@ class Dns implements \Hoa\Core\Event\Listenable {
         'minfo'       =>    14, // Mailbox or mail list information.
         'mx'          =>    15, // Mail exchange.
         'txt'         =>    16, // Text strings.
-        // </RFC1035>
-        // <RFC1183>
         'rp'          =>    17, // Responsible person.
         'afsdb'       =>    18, // AFS cell database.
         'x25'         =>    19, // X_25 calling address.
         'isdn'        =>    20, // ISDN calling address.
         'rt'          =>    21, // Route through resource record.
-        // </RFC1183>
-        // <RFC1348>
         'nsap'        =>    22, // NSAP address.
         'ns_nsap_ptr' =>    23, // Reverse NSAP lookup (deprecated).
-        // </RFC1348>
-        // <RFC2065>
         'sig'         =>    24, // Security signature.
         'key'         =>    25, // Security key resource record.
-        // </RFC2065>
         'px'          =>    26, // X.400 mail mapping.
         'gpos'        =>    27, // Geographical position (withdrawn).
         'aaaa'        =>    28, // IPv6 Address.
         'loc'         =>    29, // Location Information.
-        // <RFC2065>
         'nxt'         =>    30, // Next domain.
-        // </RFC2065>
         'eid'         =>    31, // Endpoint identifier.
         'nimloc'      =>    32, // Nimrod Locator.
         'srv'         =>    33, // Server Selection.
@@ -132,9 +124,7 @@ class Dns implements \Hoa\Core\Event\Listenable {
         'dname'       =>    39, // Non-terminal DNAME (for IPv6).
         'sink'        =>    40, // Kitchen sink.
         'opt'         =>    41, // EDNS0 option (meta-RR).
-        // <RFC3123>
         'apl'         =>    42, // Address prefix list.
-        // </RFC3123>
         'ds'          =>    43, // Delegation Signer
         'sshfp'       =>    44, // SSH Fingerprint
         'ipseckey'    =>    45, // IPSEC Key
@@ -147,15 +137,11 @@ class Dns implements \Hoa\Core\Event\Listenable {
         'hip'         =>    55, // Host Identity Protocol
         'spf'         =>    99, // Sender Policy Framework
         'tkey'        =>   249, // Transaction key
-        // <RFC2845>
         'tsig'        =>   250, // Transaction signature.
-        // </RFC2845>
         'ixfr'        =>   251, // Incremental zone transfer.
-        // <RFC5936>
         'axfr'        =>   252, // Transfer zone of authority.
         'mailb'       =>   253, // Transfer mailbox records.
         'maila'       =>   254, // Transfer mail agent records.
-        // </RFC5936>
         'any'         =>   255, // Wildcard match.
         'zxfr'        =>   256, // BIND-specific, nonstandard.
         'dlv'         => 32769, // DNSSEC look-aside validation.
@@ -237,6 +223,7 @@ class Dns implements \Hoa\Core\Event\Listenable {
             $domain = null;
             $handle = substr($buffer, 12);
 
+            // QNAME.
             for($i = 0, $m = strlen($handle); $i < $m; ++$i) {
 
                 if(0 === $length = ord($handle[$i]))
@@ -249,11 +236,13 @@ class Dns implements \Hoa\Core\Event\Listenable {
                 $i      += $length;
             }
 
+            // QTYPE.
             $i      += 2;
             $_type   = (int) (string) ord($handle[$i]) +
                        (int) (string) ord($handle[$i + 1]);
             $type    = array_search($_type, static::$_types) ?: $_type;
 
+            // QCLASS.
             $i      += 2;
             $_class  = (int) (string) ord($handle[$i]);
             $class   = array_search($_class, static::$_classes) ?: $_class;
