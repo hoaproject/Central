@@ -220,8 +220,9 @@ class Dns implements \Hoa\Core\Event\Listenable {
             if(empty($buffer))
                 continue;
 
-            $domain = null;
+            // Skip header.
             $handle = substr($buffer, 12);
+            $domain = null;
 
             // QNAME.
             for($i = 0, $m = strlen($handle); $i < $m; ++$i) {
@@ -258,16 +259,40 @@ class Dns implements \Hoa\Core\Event\Listenable {
                 $ip .= pack('C', $foo);
 
             $this->_server->writeAll(
+                // Header.
+
+                // ID.
                 $buffer[0] .
                 $buffer[1] .
-                pack('CC', 129, 128) .
+                pack(
+                    'C',
+                    1 << 7 // QR,     1 = response.
+                           // OpCode, 0 = QUERY.
+                           // AA,     0
+                           // TC,     0
+                  | 1      // RD
+                ) .
+                pack(
+                    'C',
+                    0      // RA, Z, AD, CD.
+                ) .
+                // QDCOUNT.
                 $buffer[4] .
                 $buffer[5] .
-                $buffer[4] .
-                $buffer[5] .
-                pack('CCCC', 0, 0, 0, 0) .
-                $handle    .
+                // ANCOUNT.
+                pack('n', 1) .
+                // NSCOUNT.
+                pack('n', 0) .
+                // ARCOUNT.
+                pack('n', 0) .
+
+                // Question.
+
+                $handle .
                 pack('CC', 192, 12) .
+
+                // Answer.
+
                 // TYPE.
                 pack('n', $_type) .
                 // CLASS.
