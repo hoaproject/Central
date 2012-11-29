@@ -277,10 +277,9 @@ class Dns implements \Hoa\Core\Event\Listenable {
                       | 3      // NXDOMAIN.
                     ) .
                     // QDCOUNT.
-                    $buffer[4] .
-                    $buffer[5] .
+                    pack('n', 0) .
                     // ANCOUNT.
-                    pack('n', 1) .
+                    pack('n', 0) .
                     // NSCOUNT.
                     pack('n', 0) .
                     // ARCOUNT.
