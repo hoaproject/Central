@@ -135,13 +135,6 @@ class          Session
     const CACHE_PRIVATE_NO_EXPIRE = 'private_no_expire';
 
     /**
-     * Control destruction behavior.
-     *
-     * @var \Hoa\Session bool
-     */
-    private static $_destruction = true;
-
-    /**
      * Whether the session is started or not.
      *
      * @var \Hoa\Session bool
@@ -307,20 +300,6 @@ class          Session
         $handle         = &$_SESSION[static::TOP_NAMESPACE][$namespace];
         $this->_profile = &$handle[static::PROFILE];
         $this->_bucket  = &$handle[static::BUCKET];
-
-        return;
-    }
-
-    /**
-     * Remove all data from the namespace. It does not touch the profile or the
-     * session, only the data.
-     *
-     * @access  public
-     * @return  void
-     */
-    public function clean ( ) {
-
-        $this->_bucket = array();
 
         return;
     }
@@ -625,6 +604,41 @@ class          Session
     }
 
     /**
+     * Remove all data from the namespace. It does not touch the profile or the
+     * session, only the data.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function clean ( ) {
+
+        $this->_bucket = array();
+
+        return;
+    }
+
+    /**
+     * Destroy the namespace.
+     * The namespace will be locked and considered as expired (only the event
+     * will be fired, not the exception).
+     *
+     * @access  public
+     * @return  void
+     */
+    public function delete ( ) {
+
+        $namespace = $this->getNamespace();
+        $channel   = static::EVENT_CHANNEL . $namespace;
+        $this->hasExpired(false);
+        unset($_SESSION[static::TOP_NAMESPACE][$namespace]);
+        \Hoa\Core\Event::unregister($channel);
+        \Hoa\Core\Event::unregister($channel . ':expired');
+        static::$_lock[$namespace] = true;
+
+        return;
+    }
+
+    /**
      * Destroy the session (including all namespaces and cookie).
      * If session has not been previously started, it will be done
      * automatically. It won't modify current lock, be careful.
@@ -686,61 +700,11 @@ class          Session
 
         return session_regenerate_id($deleteOldSession);
     }
-
-    /**
-     * Control destruction behavior.
-     * Not for user, but for a global callback.
-     *
-     * @access  public
-     * @return  void
-     */
-    public static function _avoidDestruction ( ) {
-
-        self::$_destruction = false;
-
-        return;
-    }
-
-    /**
-     * Destructor.
-     * If called by PHP, nothing special will happen. If called by user with the
-     * help of unset(), it will delete the namespace. The namespace will be
-     * locked and considered as expired (only the event will be fired, not the
-     * exception).
-     *
-     * @access  public
-     * @return  void
-     */
-    public function __destruct ( ) {
-
-        // If exit.
-        if(false === self::$_destruction)
-            return;
-
-        if(true === $this->isLocked())
-            return;
-
-        // If unset $this.
-        $namespace = $this->getNamespace();
-        $channel   = static::EVENT_CHANNEL . $namespace;
-        $this->hasExpired(false);
-        unset($_SESSION[static::TOP_NAMESPACE][$namespace]);
-        \Hoa\Core\Event::unregister($channel);
-        \Hoa\Core\Event::unregister($channel . ':expired');
-        static::$_lock[$namespace] = true;
-
-        return;
-    }
 }
 
 }
 
 namespace {
-
-/**
- * Control namespace destruction behavior.
- */
-\Hoa\Core::registerShutDownFunction('\Hoa\Session\Session', '_avoidDestruction');
 
 /**
  * Session shutdown function.
