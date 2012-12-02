@@ -100,17 +100,14 @@ And we can also forget the namespace:
 
 ### Destructing a namespace
 
-Creating a namespace uses the `new` keyword. Manipulating data uses the
-`\ArrayAccess` interface. Then, destructing a namespace uses the `unset`
-language operation.
+Destructing a namespace uses the `Hoa\Session::delete` method:
 
     $user = new Hoa\Session('user');
     $user['foo'] = 'bar';
-    unset($user);
+    $user->delete();
 
-Stored data in the namespace are **lost** because we explicitly unset the
-namespace instance. When the application exits, stored data are obviously
-**not** lost.
+Stored data in the namespace are **lost** because we explicitly delete the
+namespace.
 
 If we want to destroy the session (including all namespaces and cookie), we
 could use the `Hoa\Session::destroy` static method. Again, no need to previously
