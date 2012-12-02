@@ -480,7 +480,8 @@ class Parameter {
      *   • e: to get the extension;
      *   • l: to get the result in lowercase;
      *   • u: to get the result in uppercase;
-     *   • U: to get the result with the first letter in uppercase;
+     *   • U: to get the result with the first letter in uppercase (understand
+     *        classname);
      *   • s/<foo>/<bar>/: to replace all matches <foo> by <bar> (the last / is
      *     optional, only if more options are given after);
      *   • s%<foo>%<bar>%: to replace the prefix <foo> by <bar> (the last % is
@@ -662,7 +663,15 @@ class Parameter {
                           break;
 
                         case 'U':
-                            $out = ucfirst($out);
+                            $handle = null;
+
+                            foreach(explode('\\', $out) as $part)
+                                if(null === $handle)
+                                    $handle  = ucfirst($part);
+                                else
+                                    $handle .= '\\' . ucfirst($part);
+
+                            $out = $handle;
                           break;
 
                         default:
