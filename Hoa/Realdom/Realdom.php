@@ -54,6 +54,11 @@ from('Hoa')
 -> import('Realdom.Exception.MissingArgument')
 
 /**
+ * \Hoa\Realdom\Disjunction
+ */
+-> import('Realdom.Disjunction', true)
+
+/**
  * \Hoa\Realdom\Constarray
  */
 -> import('Realdom.Constarray')
