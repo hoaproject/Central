@@ -187,20 +187,7 @@ class Read extends StringBuffer implements \Hoa\Stream\IStream\In {
      */
     public function readAll ( ) {
 
-        $current = $this->tell();
-
-        $this->seek(0, \Hoa\Stream\IStream\Pointable::SEEK_END);
-        $end     = $this->tell();
-
-        if(0 === $end)
-            return '';
-
-        $this->seek(0, \Hoa\Stream\IStream\Pointable::SEEK_SET);
-        $handle  = $this->read($end);
-
-        $this->seek($current, \Hoa\Stream\IStream\Pointable::SEEK_SET);
-
-        return $handle;
+        return stream_get_contents($this->getStream());
     }
 
     /**
