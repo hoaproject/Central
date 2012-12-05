@@ -87,7 +87,7 @@ abstract class Model
      *
      * @var \Hoa\Model string
      */
-    private $__currentAccess           = null;
+    private $__currentAccess         = null;
 
     /**
      * Mapping layers.
