@@ -108,7 +108,7 @@ class Start extends \Hoa\Console\Dispatcher\Kit {
             $workerPath
         );
 
-        cout($output);
+        echo $output, "\n";
 
         return;
     }
@@ -121,12 +121,12 @@ class Start extends \Hoa\Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        cout('Usage   : worker:start <options> <worker_path>');
-        cout('Options :');
-        cout($this->makeUsageOptionsList(array(
-            'f'    => 'PHP-FPM socket URI (default: 127.0.0.1:9000).',
-            'help' => 'This help.'
-        )));
+        echo 'Usage   : worker:start <options> <worker_path>', "\n",
+             'Options :', "\n",
+             $this->makeUsageOptionsList(array(
+                 'f'    => 'PHP-FPM socket URI (default: 127.0.0.1:9000).',
+                 'help' => 'This help.'
+             )), "\n";
 
         return;
     }
