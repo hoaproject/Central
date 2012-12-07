@@ -483,6 +483,17 @@ class Interpreter implements \Hoa\Visitor\Visit {
 
         return $this->_root;
     }
+
+    /**
+     * Get current clause.
+     *
+     * @access  public
+     * @return  \Hoa\Praspel\Model\Clause
+     */
+    public function getClause ( ) {
+
+        return $this->_clause;
+    }
 }
 
 }
