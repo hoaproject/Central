@@ -175,7 +175,7 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
                                 ),
                                 false
                             );
-                            cout('Reloaded!');
+                            echo 'Reloaded!';
                         }
                         else {
 
@@ -183,42 +183,37 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
                                 new \Hoa\File\Read($argument),
                                 false
                             );
-                            cout('Loaded!');
+                            echo 'Loaded!';
                         }
 
                         $current = $root;
-                        cout();
+                        echo "\n";
 
                     case 'h':
                     case 'help':
-                        cout('Usage:');
-                        cout('    h[elp] to print this help;');
-                        cout('    %      to print loaded filename;');
-                        cout('    load   to load a file (`load %` to reload);');
-                        cout('    ls     to print current tree;');
-                        cout('    cd     to move in the tree with XPath;');
-                        cout('    pwd    to print the current path;');
-                        cout('    color  to change color (among 1, 8 and 256);');
-                        cout('    q[uit] to quit.');
-                        cout();
+                        echo 'Usage:', "\n",
+                             '    h[elp] to print this help;', "\n",
+                             '    %      to print loaded filename;', "\n",
+                             '    load   to load a file (`load %` to reload);', "\n",
+                             '    ls     to print current tree;', "\n",
+                             '    cd     to move in the tree with XPath;', "\n",
+                             '    pwd    to print the current path;', "\n",
+                             '    color  to change color (among 1, 8 and 256);', "\n",
+                             '    q[uit] to quit.', "\n";
                       break;
 
                     case '%':
-                        cout($root->getInnerStream()->getStreamName());
+                        echo $root->getInnerStream()->getStreamName(), "\n";
                       break;
 
                     case 'ls':
-                        cout(
-                            $this->cout($current->readDOM()),
-                            \Hoa\Console\Io::NEW_LINE,
-                            \Hoa\Console\Io::NO_WORDWRAP
-                        );
+                        echo $this->cout($current->readDOM()), "\n";
                       break;
 
                     case 'cd':
                         if(null === $argument) {
 
-                            cout('Need an argument.');
+                            echo 'Need an argument.', "\n";
 
                             break;
                         }
@@ -227,7 +222,7 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
 
                         if(empty($handle)) {
 
-                            cout($argument . ' is not found.');
+                            echo $argument, ' is not found.', "\n";
 
                             break;
                         }
@@ -236,7 +231,7 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
                       break;
 
                     case 'pwd':
-                        cout($current->readDOM()->getNodePath());
+                        echo $current->readDOM()->getNodePath(), "\n";
                       break;
 
                     case 'color':
@@ -246,7 +241,8 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
                            &&   8 !== $argument
                            && 256 !== $argument) {
 
-                            cout($argument . ' is not valid color (1, 8 or 256).');
+                            echo $argument,
+                                 ' is not valid color (1, 8 or 256).', "\n";
 
                             break;
                         }
@@ -256,22 +252,22 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
 
                     case 'q':
                     case 'quit':
-                        cout('Bye bye!');
+                        echo 'Bye bye!', "\n";
                       break 2;
 
                     default:
                         if(!empty($command))
-                            cout('Command ' . $command . ' not found.');
+                            echo 'Command ', $command, ' not found.', "\n";
                 }
             }
             catch ( \Hoa\Core\Exception $e ) {
 
-                cout($e->getFormattedMessage());
+                echo $e->getFormattedMessage(), "\n";
 
                 continue;
             }
 
-            cout();
+            echo "\n";
 
         } while('quit' != $line = $this->readLine('> '));
 
@@ -286,12 +282,12 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        cout('Usage   : xml:shell <options> [filename]');
-        cout('Options :');
-        cout($this->makeUsageOptionsList(array(
-            'c'    => 'Allowed colors number among 1, 8 and 256 (default).',
-            'help' => 'This help.'
-        )));
+        echo 'Usage   : xml:shell <options> [filename]', "\n",
+             'Options :', "\n",
+             $this->makeUsageOptionsList(array(
+                 'c'    => 'Allowed colors number among 1, 8 and 256 (default).',
+                 'help' => 'This help.'
+             )), "\n";
 
         return;
     }
@@ -382,9 +378,9 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
      */
     public function color ( $text, $token ) {
 
-        return '[' . $this->_colors[$this->_color][$token] . 'm' .
+        return "\033[" . $this->_colors[$this->_color][$token] . 'm' .
                $text .
-               '[0m';
+               "\033[0m";
     }
 }
 
