@@ -225,7 +225,7 @@ class Interpreter implements \Hoa\Visitor\Visit {
                     $value = $child->accept($this, $handle, $eldnah);
 
                     if($value instanceof \Hoa\Realdom\Disjunction)
-                        $disjunction->addRealdom($value->getRealdoms());
+                        $disjunction[] = $value;
                     else
                         $disjunction->const($value);
                 }
@@ -243,8 +243,11 @@ class Interpreter implements \Hoa\Visitor\Visit {
 
                     $argument = $child->accept($this, $handle, $eldnah);
 
-                    if($argument instanceof \Hoa\Realdom\Disjunction)
-                        $argument = $argument->getRealdoms();
+                    if($argument instanceof \Hoa\Realdom\Disjunction) {
+
+                        $realdoms = $argument->getRealdoms();
+                        $argument = $realdoms[0];
+                    }
 
                     $arguments[] = $argument;
                 }
@@ -479,6 +482,17 @@ class Interpreter implements \Hoa\Visitor\Visit {
     public function getRoot ( ) {
 
         return $this->_root;
+    }
+
+    /**
+     * Get current clause.
+     *
+     * @access  public
+     * @return  \Hoa\Praspel\Model\Clause
+     */
+    public function getClause ( ) {
+
+        return $this->_clause;
     }
 }
 
