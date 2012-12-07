@@ -246,7 +246,20 @@ class Variable implements \Hoa\Visitor\Element {
     public function sample ( ) {
 
         // @TODO
-        return $this->getDomains()->getRealdoms()->sample();
+        $domains = $this->getDomains();
+
+        return $domains[0]->sample();
+    }
+
+    /**
+     * Call the reset() method on realistic domains.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function reset ( ) {
+
+        return $this->getDomains()->reset();
     }
 
     /**
