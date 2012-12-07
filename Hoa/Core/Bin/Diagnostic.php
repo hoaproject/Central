@@ -203,7 +203,7 @@ class Diagnostic extends \Hoa\Console\Dispatcher\Kit {
             $ini = $this->arrayToIni($handle);
         }
 
-        cout($ini);
+        echo $ini, "\n";
 
         if(null !== $mail) {
 
@@ -223,18 +223,18 @@ class Diagnostic extends \Hoa\Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        cout('Usage   : core:diagnostic <options>');
-        cout('Options :');
-        cout($this->makeUsageOptionsList(array(
-            's'    => 'Sections (comma separated) to display, among:' . "\n" .
-                      '    • all;' . "\n" .
-                      '    • version;' . "\n" .
-                      '    • system;' . "\n" .
-                      '    • bin;' . "\n" .
-                      '    • extension-<name in lowercase> (see `php -m`).',
-            'm'    => 'Email address where to send the diagnostic.',
-            'help' => 'This help.'
-        )));
+        echo 'Usage   : core:diagnostic <options>', "\n",
+             'Options :', "\n",
+             $this->makeUsageOptionsList(array(
+                 's'    => 'Sections (comma separated) to display, among:' . "\n" .
+                           '    • all;' . "\n" .
+                           '    • version;' . "\n" .
+                           '    • system;' . "\n" .
+                           '    • bin;' . "\n" .
+                           '    • extension-<name in lowercase> (see `php -m`).',
+                 'm'    => 'Email address where to send the diagnostic.',
+                 'help' => 'This help.'
+             )), "\n";
 
         return;
     }

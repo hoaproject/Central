@@ -95,15 +95,13 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
 
         if(true === $verbose) {
 
-            cout(\Hoa\Console\Chrome\Text::align(
+            echo \Hoa\Console\Chrome\Text::align(
                 $this->stylize('Hoa', 'h1'),
                 \Hoa\Console\Chrome\Text::ALIGN_CENTER
-            ));
+            ), "\n";
 
-            cout('Welcome in the command-line interface of Hoa :-).' .  "\n");
-            cout($this->stylize('List of available commands', 'h2'));
-
-            cout();
+            echo 'Welcome in the command-line interface of Hoa :-).',  "\n\n";
+            echo $this->stylize('List of available commands', 'h2'), "\n\n";
         }
 
         if(null !== $library)
@@ -178,7 +176,7 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
                     );
             }
 
-            cout(\Hoa\Console\Chrome\Text::columnize($out));
+            echo \Hoa\Console\Chrome\Text::columnize($out);
         }
         else {
 
@@ -188,7 +186,7 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
                 foreach($commands as $binary)
                     $out .= $group . ':' . $binary['name'] . "\n";
 
-            cout($out);
+            echo $out;
         }
 
         return;
@@ -202,14 +200,14 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        cout('Usage   : core:welcome <options>');
-        cout('Options :');
-        cout($this->makeUsageOptionsList(array(
-            'l'    => 'Filter libraries to list (comma-separated).',
-            'V'    => 'No-verbose, i.e. be as quiet as possible, just print ' .
-                      'essential informations.',
-            'help' => 'This help.'
-        )));
+        echo 'Usage   : core:welcome <options>', "\n",
+             'Options :', "\n",
+             $this->makeUsageOptionsList(array(
+                 'l'    => 'Filter libraries to list (comma-separated).',
+                 'V'    => 'No-verbose, i.e. be as quiet as possible, just ' .
+                           'print essential informations.',
+                 'help' => 'This help.'
+             ));
 
         return;
     }
