@@ -168,15 +168,14 @@ class Server extends \Hoa\Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        cout('Usage   : dns:server <options> [<regex> to <ip>]+');
-        cout('Options :');
-        cout($this->makeUsageOptionsList(array(
-            'l'    => 'Socket URI to listen (default: 127.0.0.1:57005).',
-            'help' => 'This help.'
-        )));
-        cout();
-        cout('Example: `… dns:server \'foo.*\' to 1.2.3.4 \\' . "\n" .
-             '                       \'bar.*\' to 5.6.7.8`.');
+        echo 'Usage   : dns:server <options> [<regex> to <ip>]+', "\n",
+             'Options :', "\n",
+             $this->makeUsageOptionsList(array(
+                 'l'    => 'Socket URI to listen (default: 127.0.0.1:57005).',
+                 'help' => 'This help.'
+             )), "\n",
+             'Example: `… dns:server \'foo.*\' to 1.2.3.4 \\', "\n",
+             '                       \'bar.*\' to 5.6.7.8`.', "\n";
 
         return;
     }
