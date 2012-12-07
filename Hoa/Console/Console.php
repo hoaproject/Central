@@ -39,89 +39,43 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Console\Environment\Exception
+ * \Hoa\Console\Processus
  */
--> import('Console.Environment.Exception')
-
-/**
- * \Hoa\Console\Environment\Window
- */
--> import('Console.Environment.Window')
-
-/**
- * \Hoa\Console\Environment\User
- */
--> import('Console.Environment.User')
-
-/**
- * \Hoa\Console\Environment\System
- */
--> import('Console.Environment.System');
+-> import('Console.Processus');
 
 }
 
-namespace Hoa\Console\Environment {
+namespace Hoa\Console {
 
 /**
- * Class \Hoa\Console\Environment.
+ * Class \Hoa\Console.
  *
- * Dispatch the asked data through the get() method.
+ * Util.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Environment {
+class Console {
 
     /**
-     * Obtain data from the environment.
-     * Data has the form : group.key, where the group is the class, and key
-     * depends of the class (should be a method for example).
+     * Prepare the environment for advanced interactions.
      *
      * @access  public
-     * @param   string  $data    Data to get.
-     * @return  mixed
+     * @return  void
      */
-    public static function get ( $data ) {
+    public static function advancedInteraction ( ) {
 
-        @list($group, $key) = explode('.', $data);
+        static $_done = false;
 
-        if(null === $key)
-            throw new Exception(
-                'No key was found in the data %s. Must precise : group.key, not ' .
-                'only group.', 0, $data);
+        if(OS_WIN || true === $_done)
+            return;
 
-        if(empty($group))
-            throw new Exception(
-                'The group in data %s must not be empty. Must precise : ' . 
-                'group.key, not only key.', 1, $data);
+        \Hoa\Console\Processus::execute('stty -echo -icanon min 1 time 0');
+        $_done = true;
 
-        if(empty($key))
-            throw new Exception(
-                'The key in data %s must not be empty. Must precise : ' . 
-                'group.key, not only group.', 2, $data);
-
-        switch($group) {
-
-            case 'window':
-                return \Hoa\Console\Environment\Window::get($key);
-              break;
-
-            case 'user':
-                return \Hoa\Console\Environment\User::get($key);
-              break;
-
-            case 'system':
-                return \Hoa\Console\Environment\System::get($key);
-              break;
-
-            default:
-                throw new Exception(
-                    'Unknown group %s.', 3, $group);
-        }
-
-        return null;
+        return;
     }
 }
 
