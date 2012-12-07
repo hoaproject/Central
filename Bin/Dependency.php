@@ -107,7 +107,7 @@ class Dependency extends \Hoa\Console\Dispatcher\Kit {
         $path    = 'hoa://Library/' . $library . '/composer.json';
 
         if(true === $verbose)
-            cout('Dependency for the library ' . $library . ':');
+            echo 'Dependency for the library ', $library, ':', "\n";
 
         if(false === file_exists($path))
             throw new \Hoa\Console\Exception(
@@ -132,15 +132,15 @@ class Dependency extends \Hoa\Console\Dispatcher\Kit {
             switch($print) {
 
                 case 'both':
-                    cout($item . $dependency . $separator . $version);
+                    echo $item, $dependency, $separator, $version, "\n";
                   break;
 
                 case 'library':
-                    cout($item . $dependency);
+                    echo $item, $dependency, "\n";
                   break;
 
                 case 'version':
-                    cout($item . $version);
+                    echo $item, $version, "\n";
                   break;
             }
         }
@@ -156,15 +156,15 @@ class Dependency extends \Hoa\Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        cout('Usage   : core:dependency <options> library');
-        cout('Options :');
-        cout($this->makeUsageOptionsList(array(
-            'V'    => 'No-verbose, i.e. be as quiet as possible, just print ' .
-                      'essential informations.',
-            'l'    => 'Print only the library name.',
-            'v'    => 'Print only the version.',
-            'help' => 'This help.'
-        )));
+        echo 'Usage   : core:dependency <options> library', "\n",
+             'Options :', "\n",
+             $this->makeUsageOptionsList(array(
+                 'V'    => 'No-verbose, i.e. be as quiet as possible, just print ' .
+                           'essential informations.',
+                 'l'    => 'Print only the library name.',
+                 'v'    => 'Print only the version.',
+                 'help' => 'This help.'
+             )), "\n";
 
         return;
     }

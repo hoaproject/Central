@@ -80,7 +80,7 @@ class Uuid extends \Hoa\Console\Dispatcher\Kit {
               break;
         }
 
-        cout(sprintf(
+        echo sprintf(
             '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
             mt_rand(0, 0xffff),
             mt_rand(0, 0xffff),
@@ -90,7 +90,7 @@ class Uuid extends \Hoa\Console\Dispatcher\Kit {
             mt_rand(0, 0xffff),
             mt_rand(0, 0xffff),
             mt_rand(0, 0xffff)
-        ));
+        ), "\n";
 
         return;
     }
@@ -103,11 +103,11 @@ class Uuid extends \Hoa\Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        cout('Usage   : core:uuid <options>');
-        cout('Options :');
-        cout($this->makeUsageOptionsList(array(
-            'help' => 'This help.'
-        )));
+        echo 'Usage   : core:uuid <options>', "\n",
+             'Options :', "\n",
+             $this->makeUsageOptionsList(array(
+                  'help' => 'This help.'
+             )), "\n";
 
         return;
     }

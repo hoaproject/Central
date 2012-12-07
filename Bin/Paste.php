@@ -97,7 +97,7 @@ class Paste extends \Hoa\Console\Dispatcher\Kit {
 
         if(false == $server) {
 
-            cout('Cannot connect to the server.');
+            echo 'Cannot connect to the server.', "\n";
 
             return 1;
         }
@@ -110,7 +110,7 @@ class Paste extends \Hoa\Console\Dispatcher\Kit {
 
         if(-1 === stream_socket_sendto($server, $request)) {
 
-            cout('Pipe is broken, cannot write data.');
+            echo 'Pipe is broken, cannot write data.', "\n";
 
             return 2;
         }
@@ -118,7 +118,7 @@ class Paste extends \Hoa\Console\Dispatcher\Kit {
         $response = stream_socket_recvfrom($server, 1024);
         list($headers, $body) = explode("\r\n\r\n", $response);
 
-        cout(trim($body));
+        echo trim($body), "\n";
 
         return;
     }
@@ -131,12 +131,12 @@ class Paste extends \Hoa\Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        cout('Usage   : core:paste <options>');
-        cout('Options :');
-        cout($this->makeUsageOptionsList(array(
-            'a'    => 'Address to the paste server.',
-            'help' => 'This help.'
-        )));
+        echo 'Usage   : core:paste <options>', "\n",
+             'Options :', "\n",
+             $this->makeUsageOptionsList(array(
+                 'a'    => 'Address to the paste server.',
+                 'help' => 'This help.'
+             )), "\n";
 
         return;
     }

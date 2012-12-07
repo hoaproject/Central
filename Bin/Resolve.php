@@ -123,15 +123,15 @@ class Resolve extends \Hoa\Console\Dispatcher\Kit {
                 $current = $current[$component];
             }
 
-            cout($current, \Hoa\Console\Io::NO_NEW_LINE);
+            echo $current;
 
             return;
         }
 
         if(true === $verbose)
-            cout($this->stylize($path, 'info') . ' is equivalent to: ');
+            echo $this->stylize($path, 'info'), ' is equivalent to: ', "\n";
 
-        cout(resolve($path, $exists));
+        echo resolve($path, $exists), "\n";
 
         return;
     }
@@ -144,15 +144,15 @@ class Resolve extends \Hoa\Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        cout('Usage   : core:resolve <options> path');
-        cout('Options :');
-        cout($this->makeUsageOptionsList(array(
-            'E'    => 'Do not check if the resolution result exists.',
-            't'    => 'Print the tree from the path.',
-            'V'    => 'No-verbose, i.e. be as quiet as possible, just print ' .
-                      'essential informations.',
-            'help' => 'This help.'
-        )));
+        echo 'Usage   : core:resolve <options> path', "\n",
+             'Options :', "\n",
+             $this->makeUsageOptionsList(array(
+                 'E'    => 'Do not check if the resolution result exists.',
+                 't'    => 'Print the tree from the path.',
+                 'V'    => 'No-verbose, i.e. be as quiet as possible, just print ' .
+                           'essential informations.',
+                 'help' => 'This help.'
+             )), "\n";
 
         return;
     }

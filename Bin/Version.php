@@ -113,9 +113,9 @@ class Version extends \Hoa\Console\Dispatcher\Kit {
                                 \Hoa\Core::©();
 
         if(true === $verbose)
-            cout($message);
+            echo $message, "\n";
         else
-            cout($info);
+            echo $info, "\n";
 
         return;
     }
@@ -128,15 +128,15 @@ class Version extends \Hoa\Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        cout('Usage   : core:version <options>');
-        cout('Options :');
-        cout($this->makeUsageOptionsList(array(
-            'v'    => 'Get the version.',
-            's'    => 'Get the complete signature.',
-            'V'    => 'No-verbose, i.e. be as quiet as possible, just print ' .
-                      'essential informations.',
-            'help' => 'This help.'
-        )));
+        echo 'Usage   : core:version <options>', "\n",
+             'Options :', "\n",
+             $this->makeUsageOptionsList(array(
+                 'v'    => 'Get the version.',
+                 's'    => 'Get the complete signature.',
+                 'V'    => 'No-verbose, i.e. be as quiet as possible, just print ' .
+                           'essential informations.',
+                 'help' => 'This help.'
+             )), "\n";
 
         return;
     }
