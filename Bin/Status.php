@@ -107,8 +107,7 @@ class Status extends \Hoa\Console\Dispatcher\Kit {
         $now  = new \DateTime();
         $t    = 0;
 
-        cout($this->stylize('Shared worker informations', 'info'));
-        cout();
+        echo $this->stylize('Shared worker informations', 'info'), "\n\n";
 
         foreach(glob($run . DS . '*.wid') as $wid) {
 
@@ -135,7 +134,7 @@ class Status extends \Hoa\Console\Dispatcher\Kit {
             ++$t;
         }
 
-        cout(\Hoa\Console\Chrome\Text::columnize($outi, 0, 1, '|'));
+        echo \Hoa\Console\Chrome\Text::columnize($outi, 0, 1, '|'), "\n";
 
         $max_id   = 0;
         $max_peak = 0;
@@ -187,8 +186,8 @@ class Status extends \Hoa\Console\Dispatcher\Kit {
             echo $outmm . "\n";
         }
 
-        cout();
-        cout($t . ' shared worker' . ($t > 1 ? 's are' : ' is') . ' running.');
+        echo "\n", $t,
+             ' shared worker', ($t > 1 ? 's are' : ' is'), ' running.', "\n";
 
         return;
     }
@@ -201,15 +200,15 @@ class Status extends \Hoa\Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        cout('Usage   : worker:status <options>');
-        cout('Options :');
-        cout($this->makeUsageOptionsList(array(
-            'run'  => 'Define hoa://Data/Variable/Run/ path.',
-            'help' => 'This help.'
-        )));
-        cout('Legend: ' . $this->stylize('allocated', 'success') . ', ' .
-             $this->stylize('allocated peak', 'info') . ', ' .
-             $this->stylize('peak', 'nosuccess') . '.');
+        echo 'Usage   : worker:status <options>', "\n",
+             'Options :', "\n",
+             $this->makeUsageOptionsList(array(
+                 'run'  => 'Define hoa://Data/Variable/Run/ path.',
+                 'help' => 'This help.'
+             )), "\n",
+             'Legend: ', $this->stylize('allocated', 'success'), ', ',
+             $this->stylize('allocated peak', 'info'), ', ',
+             $this->stylize('peak', 'nosuccess'),'.', "\n";
 
         return;
     }
