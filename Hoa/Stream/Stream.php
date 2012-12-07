@@ -312,6 +312,9 @@ abstract class Stream implements \Hoa\Core\Event\Listenable {
         $streamName = $this->getStreamName();
         $name       = md5($streamName);
 
+        if(!isset(self::$_register[$name]))
+            return;
+
         \Hoa\Core\Event::notify(
             'hoa://Event/Stream/' . $streamName . ':close-before',
             $this,
@@ -581,6 +584,19 @@ abstract class Stream implements \Hoa\Core\Event\Listenable {
     public function __toString ( ) {
 
         return $this->getStreamName();
+    }
+
+    /**
+     * Close the stream when destructing.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function __destruct ( ) {
+
+        $this->close();
+
+        return;
     }
 }
 
