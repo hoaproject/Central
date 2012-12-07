@@ -193,9 +193,8 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
         else
             $_root = $root = realpath($root);
 
-        cout('Server is up, on ' . $server->getSocket() . '!');
-        cout('Root: ' . $root . '.');
-        cout();
+        echo 'Server is up, on ' . $server->getSocket() . '!', "\n",
+             'Root: ' . $root . '.', "\n\n";
 
         $this->log('Waiting for connection…');
 
@@ -494,11 +493,7 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
         }
 
         $l = max($l, strlen($message) + 1);
-
-        cout(
-            str_pad($message, $l, ' ', STR_PAD_RIGHT),
-            \Hoa\Console\Io::NO_NEW_LINE
-        );
+        echo str_pad($message, $l, ' ', STR_PAD_RIGHT);
 
         return;
     }
@@ -511,21 +506,21 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        cout('Usage   : http:bhoa <options>');
-        cout('Options :');
-        cout($this->makeUsageOptionsList(array(
-            'l'    => 'Socket URI to listen (default: 127.0.0.1:8888).',
-            'f'    => 'PHP FastCGI or PHP-FPM socket URI (default: 127.0.0.1:9000).',
-            'r'    => 'Public/document root.',
-            'b'    => 'Print buffers (headers & content).',
-            'd'    => 'Start the debugger in Hoa.',
-            'help' => 'This help.'
-        )));
-        cout('Bhoa needs PHP FastCGI to communicate with PHP.' . "\n" .
-             'To start PHP FastCGI:' . "\n" .
-             '    $ php-cgi -b 127.0.0.1:9000' . "\n" .
-             'or' . "\n" .
-             '    $ php-fpm -d listen=127.0.0.1:9000');
+        echo 'Usage   : http:bhoa <options>', "\n",
+             'Options :', "\n",
+             $this->makeUsageOptionsList(array(
+                 'l'    => 'Socket URI to listen (default: 127.0.0.1:8888).',
+                 'f'    => 'PHP FastCGI or PHP-FPM socket URI (default: 127.0.0.1:9000).',
+                 'r'    => 'Public/document root.',
+                 'b'    => 'Print buffers (headers & content).',
+                 'd'    => 'Start the debugger in Hoa.',
+                 'help' => 'This help.'
+             )), "\n",
+             'Bhoa needs PHP FastCGI to communicate with PHP.', "\n",
+             'To start PHP FastCGI:', "\n",
+             '    $ php-cgi -b 127.0.0.1:9000', "\n",
+             'or', "\n",
+             '    $ php-fpm -d listen=127.0.0.1:9000', "\n";
 
         return;
     }
