@@ -26,6 +26,11 @@
         "php"    : ">=5.3.3",
         "ext-spl": "*"
     },
+    "suggest": {
+        "hoa/console"   : "To use the `hoa` script.",
+        "hoa/dispatcher": "To use the `hoa` script.",
+        "hoa/router"    : "To use the `hoa` script."
+    }
     "autoload": {
         "files": ["Core.php"]
     },
