@@ -30,7 +30,7 @@
         "hoa/console"   : "To use the `hoa` script.",
         "hoa/dispatcher": "To use the `hoa` script.",
         "hoa/router"    : "To use the `hoa` script."
-    }
+    },
     "autoload": {
         "files": ["Core.php"]
     },
