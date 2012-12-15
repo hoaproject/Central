@@ -22,7 +22,10 @@
         "source": "http://git.hoa-project.net/"
     },
     "require": {
-        "hoa/core"  : "master",
-        "hoa/router": "master"
+        "hoa/core": "master"
+    },
+    "suggest": {
+        "hoa/router": "Provide routers.",
+        "hoa/view"  : "Provide view interface."
     }
 }
