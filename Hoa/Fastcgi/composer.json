@@ -23,5 +23,8 @@
     },
     "require": {
         "hoa/core": "master"
+    },
+    "suggest": {
+        "hoa/socket": "Provide sockets."
     }
 }
