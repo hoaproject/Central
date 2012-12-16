@@ -23,5 +23,9 @@
     },
     "require": {
         "hoa/core": "master"
+    },
+    "suggest": {
+        "hoa/router": "Provide routers.",
+        "hoa/stream": "Provide stream interfaces."
     }
 }
