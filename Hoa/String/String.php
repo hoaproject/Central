@@ -368,11 +368,11 @@ class String implements \ArrayAccess, \Countable, \IteratorAggregate {
      * Iterator over chars.
      *
      * @access  public
-     * @return  \ArrayObject
+     * @return  \ArrayIterator
      */
     public function getIterator ( ) {
 
-        return new \ArrayObject(preg_split('#(?<!^)(?!$)#u', $this->_string));
+        return new \ArrayIterator(preg_split('#(?<!^)(?!$)#u', $this->_string));
     }
 
     /**
@@ -680,10 +680,10 @@ class String implements \ArrayAccess, \Countable, \IteratorAggregate {
      * @param   int  $code    Code.
      * @return  string
      */
-    public static function fromCode ( $hexa ) {
+    public static function fromCode ( $code ) {
 
         return mb_convert_encoding(
-            '&#x' . dechex($hexa) . ';',
+            '&#x' . dechex($code) . ';',
             'UTF-8',
             'HTML-ENTITIES'
         );
@@ -707,6 +707,7 @@ class String implements \ArrayAccess, \Countable, \IteratorAggregate {
      * Check if a string is encoded in UTF-8.
      *
      * @access  public
+     * @param   string  $string    String.
      * @return  bool
      */
     public static function isUtf8 ( $string ) {
