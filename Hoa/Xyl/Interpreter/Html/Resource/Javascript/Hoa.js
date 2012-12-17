@@ -695,7 +695,7 @@ Hoa.ℙ(1) && Hoa.namespace([HTMLFormElement,
     },
     body : function ( element ) {
 
-        var sQuery  = /\?q(?:uery)?:(.*)/;
+        var sQuery  = /(?:\?q(?:uery)?:)?(.*)/;
         var sRQuery = /\?r(?:elative-)?q(?:uery)?:(.*)/;
         var sXpath  = /\?x(?:path)?:(.*)/;
 
