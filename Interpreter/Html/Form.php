@@ -54,9 +54,19 @@ from('Hoa')
 -> import('Http.Runtime')
 
 /**
- * \Hoa\Test\Praspel\Compiler
+ * \Hoa\File\Read
  */
--> import('Test.Praspel.Compiler');
+-> import('File.Read')
+
+/**
+ * \Hoa\Compiler\Llk
+ */
+-> import('Compiler.Llk.~')
+
+/**
+ * \Hoa\Praspel\Visitor\Interpreter
+ */
+-> import('Praspel.Visitor.Interpreter');
 
 }
 
@@ -125,6 +135,8 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
     protected $_validity                 = null;
 
     protected static $_compiler          = null;
+
+    protected static $_interpreter       = null;
 
 
 
@@ -498,16 +510,23 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
         elseif(is_numeric($value))
             $value = (float) $value;
 
-        if(null === static::$_compiler)
-            static::$_compiler = new \Hoa\Test\Praspel\Compiler();
+        if(null === static::$_compiler) {
+
+            static::$_compiler    = \Hoa\Compiler\Llk::load(
+                new \Hoa\File\Read('hoa://Library/Praspel/Grammar.pp')
+            );
+            static::$_interpreter = new \Hoa\Praspel\Visitor\Interpreter();
+        }
 
         $decision = true;
 
         foreach($validates as $name => $realdom) {
 
-            static::$_compiler->compile('@requires i: ' . $realdom . ';');
-            $praspel  = self::$_compiler->getRoot();
-            $variable = $praspel->getClause('requires')->getVariable('i');
+            $praspel  = static::$_interpreter->visit(static::$_compiler->parse(
+                '@requires i: ' . $realdom . ';'
+            ));
+            $clause   = $praspel->getClause('requires');
+            $variable = $clause['i'];
             $decision = $variable->predicate($value);
 
             if('@' === $name)
