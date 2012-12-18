@@ -46,13 +46,13 @@
 %skip   inline_comment  //[^\n]*
 
 // Clauses.
-%token  is              @is
-%token  requires        @requires
-%token  ensures         @ensures
-%token  throwable       @throwable
-%token  invariant       @invariant
-%token  behavior        @behavior
-%token  forexample      @forexample
+%token  at_is           @is
+%token  at_requires     @requires
+%token  at_ensures      @ensures
+%token  at_throwable    @throwable
+%token  at_invariant    @invariant
+%token  at_behavior     @behavior
+%token  at_forexample   @forexample
 
 // Constructions.
 %token  old             \\old
@@ -131,22 +131,22 @@ method:
   | ( behavior() | forexample() ) ::semicolon::*
 
 #is:
-    ::is:: <pure>
+    ::at_is:: <pure>
 
 #requires:
-    ::requires:: expression()?
+    ::at_requires:: expression()?
 
 #ensures:
-    ::ensures:: expression()?
+    ::at_ensures:: expression()?
 
 #throwable:
-    ::throwable:: exceptional_expression()?
+    ::at_throwable:: exceptional_expression()?
 
 #invariant:
-    ::invariant:: expression()?
+    ::at_invariant:: expression()?
 
 behavior:
-    ::behavior:: behavior_content()
+    ::at_behavior:: behavior_content()
     ( ::and:: behavior_content() )*
 
 behavior_content:
@@ -164,7 +164,7 @@ behavior_content:
     ::_brace:: #behavior
 
 #forexample:
-    ::forexample:: string()
+    ::at_forexample:: string()
 
 expression:
               ( declaration() | constraint() | domainof() | predicate() )
@@ -202,7 +202,8 @@ constraint:
     ::pred:: ::parenthesis_:: string()? ::_parenthesis::
 
 disjunction:
-    ( constant() | realdom() ) ( ::or:: disjunction() #disjunction )*
+    ( constant() | realdom() | extended_identifier() )
+    ( ::or:: disjunction() #disjunction )*
 
 disjunction_of_constants:
     constant() ( ::or:: disjunction_of_constants() #disjunction )*
@@ -213,7 +214,7 @@ disjunction_of_constants:
     ::_parenthesis::
 
 argument:
-    <default> | realdom() | constant() | array()
+    <default> | realdom() | constant() | array() | extended_identifier()
 
 constant:
     scalar() | array()

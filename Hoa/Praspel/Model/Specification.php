@@ -142,6 +142,17 @@ class Specification extends Behavior {
 
         return $this->_clauses[$clause] = $handle;
     }
+
+    /**
+     * Get identifier (fallback).
+     *
+     * @access  protected
+     * @return  string
+     */
+    protected function _getId ( ) {
+
+        return 'praspel';
+    }
 }
 
 }

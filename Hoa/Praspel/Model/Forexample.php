@@ -142,11 +142,11 @@ class          Forexample
      * Iterator over examples.
      *
      * @access  public
-     * @return  \ArrayObject
+     * @return  \ArrayIterator
      */
     public function getIterator ( ) {
 
-        return new \ArrayObject($this->_examples);
+        return new \ArrayIterator($this->_examples);
     }
 
     /**

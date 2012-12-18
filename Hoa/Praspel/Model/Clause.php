@@ -127,6 +127,35 @@ abstract class Clause implements \Hoa\Visitor\Element {
     }
 
     /**
+     * Get identifier.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getId ( ) {
+
+        $out    = null;
+        $parent = $this->getParent();
+
+        if(   null !== $parent
+           && !($parent instanceof Specification))
+            $out .= $this->getParent()->getId() . '_';
+
+        return $out . $this->_getId();
+    }
+
+    /**
+     * Get identifier (fallback).
+     *
+     * @access  protected
+     * @return  string
+     */
+    protected function _getId ( ) {
+
+        return $this->getName();
+    }
+
+    /**
      * Accept a visitor.
      *
      * @access  public

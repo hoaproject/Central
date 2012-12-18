@@ -180,7 +180,7 @@ class Interpreter implements \Hoa\Visitor\Visit {
 
             case '#declaration':
                 $variable                     = $element->getChild(0)
-                                                        ->accept($this, $handle, $eldnah);
+                                                        ->accept($this, $handle, false);
                 $this->_clause[$variable]->in = $element->getChild(1)
                                                         ->accept($this, $handle, $eldnah);
               break;
@@ -190,23 +190,23 @@ class Interpreter implements \Hoa\Visitor\Visit {
                 $variable = $this->_clause[array_shift($children)->accept(
                     $this,
                     $handle,
-                    $eldnah
+                    false
                 )];
 
                 foreach($children as $child)
-                    $variable->is($child->accept($this, $handle, $eldnah));
+                    $variable->is($child->accept($this, $handle, false));
               break;
 
             case '#contains':
-                $variable = $element->getChild(0)->accept($this, $handle, $eldnah);
-                $value    = $element->getChild(1)->accept($this, $handle, $eldnah);
+                $variable = $element->getChild(0)->accept($this, $handle, false);
+                $value    = $element->getChild(1)->accept($this, $handle, false);
 
                 $this->_clause[$variable]->contains($value);
               break;
 
             case '#domainof':
-                $left  = $element->getChild(0)->accept($this, $handle, $eldnah);
-                $right = $element->getChild(1)->accept($this, $handle, $eldnah);
+                $left  = $element->getChild(0)->accept($this, $handle, false);
+                $right = $element->getChild(1)->accept($this, $handle, false);
 
                 $this->_clause[$left]->domainof($right);
               break;
@@ -236,7 +236,7 @@ class Interpreter implements \Hoa\Visitor\Visit {
             case '#realdom':
                 $children  = $element->getChildren();
                 $child0    = array_shift($children);
-                $name      = $child0->accept($this, $handle, $eldnah);
+                $name      = $child0->accept($this, $handle, false);
                 $arguments = array();
 
                 foreach($children as $child) {
@@ -378,8 +378,12 @@ class Interpreter implements \Hoa\Visitor\Visit {
 
                 switch($tId) {
 
-                    case 'content':
                     case 'identifier':
+                        if(false !== $eldnah)
+                            return $this->getIdentifier($value);
+                        return $value;
+
+                    case 'content':
                     case 'pure':
                     case 'result':
                         return $value;
@@ -471,6 +475,22 @@ class Interpreter implements \Hoa\Visitor\Visit {
                 throw new \Hoa\Praspel\Exception\Interpreter(
                     'Element %s is unknown.', 2, $id);
         }
+    }
+
+    /**
+     * Get identifier object.
+     *
+     * @access  public
+     * @return  \Hoa\Praspel\Model\Variable
+     */
+    public function getIdentifier ( $identifier ) {
+
+        if(!isset($this->_clause[$identifier]))
+            throw new \Hoa\Praspel\Exception\Interpreter(
+                'The identifier %s does not exist on clause %s.',
+                3, array($identifier, $this->_clause->getName()));
+
+        return $this->_clause[$identifier];
     }
 
     /**

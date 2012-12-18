@@ -46,7 +46,12 @@ from('Hoa')
 /**
  * \Hoa\Visitor\Element
  */
--> import('Visitor.Element');
+-> import('Visitor.Element')
+
+/**
+ * \Hoa\Realdom\IRealdom\Holder
+ */
+-> import('Realdom.I~.Holder');
 
 }
 
@@ -62,7 +67,9 @@ namespace Hoa\Praspel\Model {
  * @license    New BSD License
  */
 
-class Variable implements \Hoa\Visitor\Element {
+class          Variable
+    implements \Hoa\Visitor\Element,
+               \Hoa\Realdom\IRealdom\Holder {
 
     /**
      * Variable name.
@@ -202,23 +209,10 @@ class Variable implements \Hoa\Visitor\Element {
         unset($this->_refDomains);
         $this->_refDomains = &$this->_domains;
 
-        if(   true === $onDomains
-           && !empty($this->_domains)) {
+        foreach($this->getDomains() as $domain) {
 
-            $domains = $this->getDomains()->getRealdoms();
-
-            if(null === $domains)
-                return;
-
-            if(!is_array($domains)) {
-
-                $domains->setConstraints($this->_constraints);
-
-                return;
-            }
-
-            foreach($domains as $domain)
-                $domain->setConstraints($this->_constraints);
+            $domain->setConstraints($this->_constraints);
+            $domain->setHolder($this);
         }
 
         return;
@@ -231,9 +225,12 @@ class Variable implements \Hoa\Visitor\Element {
      * @param   mixed  $q    Sampled value.
      * @return  boolean
      */
-    public function predicate ( ) {
+    public function predicate ( $q = null ) {
 
-        return $this->getDomains()->predicate($this->getValue());
+        if(null === $q)
+            $q = $this->getValue();
+
+        return $this->getDomains()->predicate($q);
     }
 
     /**
@@ -246,7 +243,7 @@ class Variable implements \Hoa\Visitor\Element {
     public function sample ( ) {
 
         // @TODO
-        $domains = $this->getDomains();
+        $domains = &$this->getDomains();
 
         return $domains[0]->sample();
     }
@@ -360,6 +357,28 @@ class Variable implements \Hoa\Visitor\Element {
     }
 
     /**
+     * Get held realdoms.
+     *
+     * @access  public
+     * @return  \Hoa\Realdom\Disjunction
+     */
+    public function &getHeld ( ) {
+
+        return $this->getDomains();
+    }
+
+    /**
+     * Get variable name.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getName ( ) {
+
+        return $this->_name;
+    }
+
+    /**
      * Get constraints.
      *
      * @access  public
@@ -379,17 +398,6 @@ class Variable implements \Hoa\Visitor\Element {
     public function getAlias ( ) {
 
         return $this->_alias;
-    }
-
-    /**
-     * Get variable name.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getName ( ) {
-
-        return $this->_name;
     }
 
     /**
