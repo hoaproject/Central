@@ -71,16 +71,13 @@ class Compiler implements \Hoa\Visitor\Visit {
     public function visit ( \Hoa\Visitor\Element $element,
                             &$handle = null, $eldnah = null ) {
 
-        $out    = null;
-        $parent = '$praspel';
-
-        if(null !== $eldnah)
-            $parent = '$' . substr($eldnah, 0, -1);
+        $out = null;
 
         if($element instanceof \Hoa\Praspel\Model\Specification) {
 
-            $out     = $parent . ' = new \Hoa\Praspel\Model\Specification();' .  "\n";
-            $clauses = array(
+            $variable = '$' . $element->getId();
+            $out      = $variable . ' = new \Hoa\Praspel\Model\Specification();' .  "\n";
+            $clauses  = array(
                 'is',
                 'invariant',
                 'requires',
@@ -100,15 +97,17 @@ class Compiler implements \Hoa\Visitor\Visit {
         }
         elseif($element instanceof \Hoa\Praspel\Model\Is) {
 
-            $out = "\n" .
-                   $parent . '->getClause(\'is\')->setProperty(' .
-                   $element->getProperty() .
-                   ');' . "\n";
+            $variable = '$' . $element->getParent()->getId();
+            $out      = "\n" .
+                        $variable . '->getClause(\'is\')->setProperty(' .
+                        $element->getProperty() .
+                        ');' . "\n";
         }
         elseif($element instanceof \Hoa\Praspel\Model\Declaration) {
 
+            $parent   = '$' . $element->getParent()->getId();
+            $variable = '$' . $element->getId();
             $clause   = $element->getName();
-            $variable = '$' . $eldnah . $clause;
             $out      = "\n" .
                         $variable . ' = ' . $parent .
                         '->getClause(\'' . $clause . '\');' . "\n";
@@ -145,23 +144,24 @@ class Compiler implements \Hoa\Visitor\Visit {
         }
         elseif($element instanceof \Hoa\Praspel\Model\Throwable) {
 
-            $variable = '$' . $eldnah . 'throwable';
-            $out       = "\n" .
-                         $variable . ' = ' . $parent .
-                         '->getClause(\'throwable\');' . "\n";
+            $parent   = '$' . $element->getParent()->getId();
+            $variable = '$' . $element->getId();
+            $out      = "\n" .
+                        $variable . ' = ' . $parent .
+                        '->getClause(\'throwable\');' . "\n";
 
             foreach($element->getExceptions() as $class)
                 $out .= $variable . '->exception(\'' . $class . '\');' . "\n";
         }
         elseif($element instanceof \Hoa\Praspel\Model\Behavior) {
 
+            $parent     = '$' . $element->getParent()->getId();
+            $variable   = '$' . $element->getId();
             $identifier = $element->getIdentifier();
-            $variable   = '$' . $eldnah . 'behavior_' . $identifier;
             $out        = "\n" .
                           $variable . ' = ' . $parent .
                           '->getClause(\'behavior\');' . "\n" .
                           $variable . '->setIdentifier(\'' . $identifier . '\');' . "\n";
-            $eldnah     = $eldnah . 'behavior_' . $identifier . '_';
             $clauses    = array(
                 'invariant',
                 'requires',
@@ -180,7 +180,8 @@ class Compiler implements \Hoa\Visitor\Visit {
         }
         elseif($element instanceof \Hoa\Praspel\Model\Forexample) {
 
-            $variable = '$' . $eldnah . 'forexample';
+            $parent   = '$' . $element->getParent()->getId();
+            $variable = '$' . $element->getId();
             $out      = "\n" .
                         $variable . ' = ' . $parent .
                         '->getClause(\'forexample\');' . "\n";
