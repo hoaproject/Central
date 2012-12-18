@@ -195,6 +195,17 @@ class Behavior extends Clause {
 
         return $this->_identifier;
     }
+
+    /**
+     * Get identifier (fallback).
+     *
+     * @access  protected
+     * @return  string
+     */
+    protected function _getId ( ) {
+
+        return $this->getName() . '_' . $this->getIdentifier();
+    }
 }
 
 }
