@@ -756,7 +756,7 @@ Hoa.Async = Hoa.Async || new function ( ) {
         // nsIXMLHttpRequest
         'readystatechange',
         // nsIXMLHttpRequestEventTarget
-        'abort', 'error', 'load', 'loadend', 'loadstart', 'progress',
+        'abort', 'error', 'load', 'loadend', 'loadstart', 'progress', 'timeout',
         // nsIDOMWindow
         'popstate',
         // Hoa
