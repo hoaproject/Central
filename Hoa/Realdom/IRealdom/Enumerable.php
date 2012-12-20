@@ -34,101 +34,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
+namespace Hoa\Realdom\IRealdom {
 
 /**
- * \Hoa\Realdom
- */
--> import('Realdom.~')
-
-/**
- * \Hoa\Realdom\Constant
- */
--> import('Realdom.Constant');
-
-}
-
-namespace Hoa\Realdom {
-
-/**
- * Class \Hoa\Realdom\Constnull.
+ * Interface \Hoa\Realdom\IRealdom\Enumerable.
  *
- * Realistic domain: constnull.
+ * Represent domain than can be enumarated.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Constnull extends Realdom implements Constant {
-
-    /**
-     * Realistic domain name.
-     *
-     * @const string
-     */
-    const NAME = 'constnull';
-
-
-
-    /**
-     * Predicate whether the sampled value belongs to the realistic domains.
-     *
-     * @access  public
-     * @param   mixed  $q    Sampled value.
-     * @return  boolean
-     */
-    public function predicate ( $q ) {
-
-        return null === $q;
-    }
-
-    /**
-     * Sample one new value.
-     *
-     * @access  protected
-     * @param   \Hoa\Math\Sampler  $sampler    Sampler.
-     * @return  mixed
-     */
-    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
-
-        return null;
-    }
-
-    /**
-     * Get constant value.
-     *
-     * @access  public
-     * @return  null
-     */
-    public function getConstantValue ( ) {
-
-        return null;
-    }
-
-    /**
-     * Get Praspel representation of the realistic domain.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function toPraspel ( ) {
-
-        return $this->__toString();
-    }
-
-    /**
-     * Get string representation of the realistic domain.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function __toString ( ) {
-
-        return 'null';
-    }
-}
+interface Enumerable extends \IteratorAggregate { }
 
 }

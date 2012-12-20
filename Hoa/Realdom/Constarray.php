@@ -203,6 +203,39 @@ class Constarray extends _Array implements Constant {
     }
 
     /**
+     * Get Praspel representation of the realistic domain.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function toPraspel ( ) {
+
+        $handle = array();
+
+        foreach($this['pairs'] as $pair) {
+
+            $_handle = null;
+
+            foreach($pair as $_pair) {
+
+                if(null === $_handle)
+                    $_handle  = isset($pair[1]) ? 'from ' :  'to ';
+                else
+                    $_handle .= ' to ';
+
+                if(null !== $holder = $_pair->getHolder())
+                    $_handle .= $holder->getName();
+                else
+                    $_handle .= $_pair->toPraspel();
+            }
+
+            $handle[] = $_handle;
+        }
+
+        return '[' . implode(', ', $handle) . ']';
+    }
+
+    /**
      * Get string representation of the realistic domain.
      *
      * @access  public
@@ -215,11 +248,23 @@ class Constarray extends _Array implements Constant {
 
         foreach($this['pairs'] as $pair) {
 
-            if(isset($pair[1]))
-                $handle[] = 'array(' . $pair[0] .
-                            ', ' . $pair[1] . ')';
-            else
-                $handle[] = 'array(' . $pair[0] . ')';
+            $_out = null;
+
+            foreach($pair as $_pair) {
+
+                if(null !== $_out)
+                    $_out .= ', ';
+
+                if(null !== $holder = $_pair->getHolder()) {
+
+                    $variable = '$' . $holder->getClause()->getId();
+                    $_out .= $variable . '[\'' . $holder->getName() . '\']';
+                }
+                else
+                    $_out .= $_pair->__toString();
+            }
+
+            $handle[] = 'array(' . $_out . ')';
         }
 
         $out .= implode(', ', $handle);

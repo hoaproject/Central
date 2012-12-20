@@ -39,119 +39,33 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Realdom\String
+ * \Hoa\Realdom\IRealdom\Interval
  */
--> import('Realdom.String')
-
-/**
- * \Hoa\Realdom\Constant
- */
--> import('Realdom.Constant');
+-> import('Realdom.I~.Interval');
 
 }
 
-namespace Hoa\Realdom {
+namespace Hoa\Realdom\IRealdom {
 
 /**
- * Class \Hoa\Realdom\Conststring.
+ * Interface \Hoa\Realdom\IRealdom\Countable.
  *
- * Realistic domain: conststring.
+ * Represent domain that is countable (with a size).
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Conststring extends String implements Constant {
+interface Countable {
 
     /**
-     * Realistic domain name.
-     *
-     * @const string
-     */
-    const NAME = 'conststring';
-
-    /**
-     * Realistic domain defined arguments.
-     *
-     * @var \Hoa\Realdom array
-     */
-    protected $_arguments = array(
-        'value' => ''
-    );
-
-
-
-    /**
-     * Construct a realistic domain.
-     *
-     * @access  protcted
-     * @return  void
-     */
-    protected function construct ( ) {
-
-        return;
-    }
-
-    /**
-     * Predicate whether the sampled value belongs to the realistic domains.
+     * Get size of the domain.
      *
      * @access  public
-     * @param   mixed  $q    Sampled value.
-     * @return  boolean
+     * @return  int
      */
-    public function predicate ( $q ) {
-
-        return    is_string($q)
-               && $this['value'] === $q;
-    }
-
-    /**
-     * Sample one new value.
-     *
-     * @access  protected
-     * @param   \Hoa\Math\Sampler  $sampler    Sampler.
-     * @return  mixed
-     */
-    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
-
-        return $this['value'];
-    }
-
-    /**
-     * Get constant value.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getConstantValue ( ) {
-
-        return $this['value'];
-    }
-
-    /**
-     * Get Praspel representation of the realistic domain.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function toPraspel ( ) {
-
-        return $this->__toString();
-    }
-
-    /**
-     * Get string representation of the realistic domain.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function __toString ( ) {
-
-        return '\'' .
-               preg_replace('#(?<!\\\)\'#', '\\\'', $this['value']) .
-               '\'';
-    }
+    public function getSize ( );
 }
 
 }
