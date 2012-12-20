@@ -76,49 +76,65 @@ class          Variable
      *
      * @var \Hoa\Praspel\Model\Variable string
      */
-    protected $_name        = null;
+    protected $_name                = null;
 
     /**
      * Clause that contains this variable.
      *
      * @var \Hoa\Praspel\Model\Clause object
      */
-    protected $_clause      = null;
+    protected $_clause              = null;
 
     /**
      * Variable value.
      *
      * @var \Hoa\Praspel\Model\Variable mixed
      */
-    protected $_value       = null;
+    protected $_value               = null;
 
     /**
      * Domains that describe the variable.
      *
      * @var \Hoa\Realdom\Disjunction object
      */
-    protected $_domains     = null;
+    protected $_domains             = null;
 
     /**
      * References domains.
      *
      * @var \Hoa\Realdom\Disjunction object
      */
-    protected $_refDomains  = null;
+    protected $_refDomains          = null;
 
     /**
      * Alias variable (please, see “domainof”).
      *
      * @var \Hoa\Praspel\Model\Variable object
      */
-    protected $_alias       = null;
+    protected $_alias               = null;
 
     /**
      * Constraints.
      *
      * @var \Hoa\Praspel\Model\Variable array
      */
-    protected $_constraints = array();
+    protected $_constraints         = array();
+
+    /**
+     * Temporary constraints type.
+     * Useful when propagate new constraints.
+     *
+     * @var \Hoa\Praspel\Model\Variable string
+     */
+    protected $_tmpConstraintsType  = null;
+
+    /**
+     * Temporary constraints index.
+     * Useful when propagate new constraints.
+     *
+     * @var \Hoa\Praspel\Model\Variable string
+     */
+    protected $_tmpConstraintsIndex = null;
 
 
 
@@ -206,14 +222,24 @@ class          Variable
 
         $this->_refDomains = $value;
 
+        if(false === $onDomains) {
+
+            $this->_domains->propagateConstraints(
+                $this->_tmpConstraintsType,
+                $this->_tmpConstraintsIndex
+            );
+
+            $this->_tmpConstraintsType  = null;
+            $this->_tmpConstraintsIndex = null;
+        }
+
         unset($this->_refDomains);
         $this->_refDomains = &$this->_domains;
 
-        foreach($this->getDomains() as $domain) {
+        $this->_domains->setHolder($this);
 
+        foreach($this->_domains as $domain)
             $domain->setConstraints($this->_constraints);
-            $domain->setHolder($this);
-        }
 
         return;
     }
@@ -272,9 +298,13 @@ class          Variable
             $this->_constraints['key'] = array();
 
         unset($this->_refDomains);
-        $handle            = &$this->_constraints['key'][];
-        $handle[0]         = realdom()->const($scalar);
-        $this->_refDomains = &$handle[1];
+        $handle                     = &$this->_constraints['key'][];
+        $handle[0]                  = realdom()->const($scalar);
+        $this->_refDomains          = &$handle[1];
+
+        end($this->_constraints['key']);
+        $this->_tmpConstraintsType  = 'key';
+        $this->_tmpConstraintsIndex = key($this->_constraints['key']);
 
         return $this;
     }
