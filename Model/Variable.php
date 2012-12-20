@@ -236,11 +236,10 @@ class          Variable
         unset($this->_refDomains);
         $this->_refDomains = &$this->_domains;
 
-        foreach($this->getDomains() as $domain) {
+        $this->_domains->setHolder($this);
 
+        foreach($this->_domains as $domain)
             $domain->setConstraints($this->_constraints);
-            $domain->setHolder($this);
-        }
 
         return;
     }
