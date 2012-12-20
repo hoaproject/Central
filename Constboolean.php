@@ -119,6 +119,17 @@ class Constboolean extends Boolean implements Constant {
     }
 
     /**
+     * Get Praspel representation of the realistic domain.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function toPraspel ( ) {
+
+        return $this->__toString();
+    }
+
+    /**
      * Get string representation of the realistic domain.
      *
      * @access  public

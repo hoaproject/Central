@@ -41,7 +41,17 @@ from('Hoa')
 /**
  * \Hoa\Realdom\Integer
  */
--> import('Realdom.Integer');
+-> import('Realdom.Integer')
+
+/**
+ * \Hoa\Realdom\IRealdom\Nonconvex
+ */
+-> import('Realdom.I~.Nonconvex')
+
+/**
+ * \Hoa\Realdom\IRealdom\Countable
+ */
+-> import('Realdom.I~.Countable');
 
 }
 
@@ -57,7 +67,10 @@ namespace Hoa\Realdom {
  * @license    New BSD License
  */
 
-class Integerpp extends Integer {
+class          Integerpp
+    extends    Integer
+    implements IRealdom\Nonconvex,
+               IRealdom\Countable {
 
     /**
      * Realistic domain name.
@@ -71,19 +84,30 @@ class Integerpp extends Integer {
      *
      * @var \Hoa\Realdom array
      */
-    protected $_arguments = array(
+    protected $_arguments   = array(
         'Constinteger start' => 0,
         'Constinteger step'  => 1
     );
 
+    /**
+     * Discredited values.
+     *
+     * @var \Hoa\Realdom\Integerpp array
+     */
+    protected $_discredited = array();
+
 
 
     /**
+     * Reset the realistic domain.
      *
+     * @access  public
+     * @return  void
      */
     public function reset ( ) {
 
         $this->setValue(null);
+        $this->_discredited = array();
 
         return;
     }
@@ -111,10 +135,47 @@ class Integerpp extends Integer {
      */
     protected function _sample ( \Hoa\Math\Sampler $sampler ) {
 
-        if(null === $this->getValue())
-            return $this['start']->getConstantValue();
+        $sampled = $this->getValue();
 
-        return $this->getValue() + $this['step']->getConstantValue();
+        do {
+
+            if(null === $sampled)
+                $sampled = $this['start']->getConstantValue();
+            else
+                $sampled += $this['step']->getConstantValue();
+
+        } while(true === in_array($sampled, $this->_discredited));
+
+        return $sampled;
+    }
+
+    /**
+     * Discredit a value.
+     *
+     * @access  public
+     * @param   mixed  $value    Value to discredit.
+     * @return  \Hoa\Realdom
+     */
+    public function discredit ( $value ) {
+
+        if(   true  === in_array($value, $this->_discredited)
+           || false === $this->predicate($value))
+            return $this;
+
+        $this->_discredited[] = $value;
+
+        return $this;
+    }
+
+    /**
+     * Get size of the domain.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getSize ( ) {
+
+        return PHP_INT_MAX;
     }
 }
 

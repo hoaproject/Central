@@ -46,7 +46,17 @@ from('Hoa')
 /**
  * \Hoa\String
  */
--> import('String.~');
+-> import('String.~')
+
+/**
+ * \Hoa\Realdom\IRealdom\Nonconvex
+ */
+-> import('Realdom.I~.Nonconvex')
+
+/**
+ * \Hoa\Realdom\IRealdom\Countable
+ */
+-> import('Realdom.I~.Countable');
 
 }
 
@@ -62,7 +72,10 @@ namespace Hoa\Realdom {
  * @license    New BSD License
  */
 
-class String extends Realdom {
+class          String
+    extends    Realdom
+    implements IRealdom\Nonconvex,
+               IRealdom\Countable {
 
     /**
      * Realistic domain name.
@@ -76,18 +89,18 @@ class String extends Realdom {
      *
      * @var \Hoa\Realdom array
      */
-    protected $_arguments = array(
+    protected $_arguments   = array(
         'Integer                  length',
         'Constinteger|Conststring codepointMin' => 0x20,
         'Constinteger|Conststring codepointMax' => 0x7e
     );
 
     /**
-     * All generated letters.
+     * Discredited values.
      *
      * @var \Hoa\Realdom\String array
      */
-    protected $_letters   = array();
+    protected $_discredited = array();
 
 
 
@@ -110,12 +123,6 @@ class String extends Realdom {
             $char = mb_substr($this['codepointMax']->getConstantValue(), 0, 1);
             $this['codepointMax'] = new Constinteger(\Hoa\String::toCode($char));
         }
-
-        for($i = $this['codepointMin']->getConstantValue(),
-            $j = $this['codepointMax']->getConstantValue();
-            $i <= $j;
-            ++$i)
-            $this->_letters[] = \Hoa\String::fromCode($i);
 
         return;
     }
@@ -164,18 +171,57 @@ class String extends Realdom {
      */
     protected function _sample ( \Hoa\Math\Sampler $sampler ) {
 
-        $string  = null;
-        $letters = array();
-        $count   = count($this->_letters) - 1;
-        $length  = $this['length']->sample($sampler);
+        $string = null;
+        $min    = $this['codepointMin']->getConstantValue();
+        $max    = $this['codepointMax']->getConstantValue();
+        $length = $this['length']->sample($sampler);
 
         if(0 > $length)
             return false;
 
         for($i = 0; $i < $length; ++$i)
-            $string .= $this->_letters[$sampler->getInteger(0, $count)];
+            $string .= \Hoa\String::fromCode($sampler->getInteger(
+                $min,
+                $max,
+                $this->_discredited
+            ));
 
         return $string;
+    }
+
+    /**
+     * Discredit a value.
+     *
+     * @access  public
+     * @param   mixed  $value    Value to discredit.
+     * @return  \Hoa\Realdom
+     */
+    public function discredit ( $value ) {
+
+        $_value = \Hoa\String::toCode($value);
+
+        if(   true  === in_array($_value, $this->_discredited)
+           || false === $this->predicate($value))
+            return $this;
+
+        $this->_discredited[] = $_value;
+
+        return $this;
+    }
+
+    /**
+     * Get size of the domain.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getSize ( ) {
+
+        // @TODO : this is only for length=1.
+        return $this['codepointMax']->getConstantValue() -
+               $this['codepointMin']->getConstantValue() -
+               count($this->_discredited)                + 1;
+
     }
 }
 

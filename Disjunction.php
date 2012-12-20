@@ -41,7 +41,12 @@ from('Hoa')
 /**
  * \Hoa\Realdom\Exception
  */
--> import('Realdom.Exception');
+-> import('Realdom.Exception')
+
+/**
+ * \Hoa\Realdom
+ */
+-> import('Realdom.~');
 
 }
 
@@ -57,37 +62,80 @@ namespace Hoa\Realdom {
  * @license    New BSD License
  */
 
-class Disjunction implements \IteratorAggregate, \Countable {
+class Disjunction implements \ArrayAccess, \IteratorAggregate, \Countable {
+
+    /**
+     * Original disjointed realistisc domains.
+     *
+     * @var \Hoa\Realdom\Disjunction array
+     */
+    protected $_originalRealdoms = array();
 
     /**
      * Disjointed realistic domains.
      *
-     * @var \Hoa\Realdom\Disjunction mixed
+     * @var \Hoa\Realdom\Disjunction array
      */
-    protected $_realdoms      = null;
+    protected $_realdoms         = null;
 
     /**
      * Chosen realistic domain.
      *
      * @var \Hoa\Realdom object
      */
-    protected $_chosenRealdom = null;
-
-    /**
-     * Number of realistic domains in the disjunction.
-     *
-     * @var \Hoa\Realdom\Disjunction int
-     */
-    protected $_count         = 0;
+    protected $_chosenRealdom    = null;
 
     /**
      * Constraints.
      *
      * @var \Hoa\Realdom\Disjunction array
      */
-    protected $_constraints   = array();
+    protected $_constraints      = array();
+
+    /**
+     * Holder.
+     *
+     * @var \Hoa\Realdom\IRealdom\Holder
+     */
+    protected $_holder           = null;
 
 
+
+    /**
+     * Construct.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function __construct ( ) {
+
+        // Original realdoms are the same in every clone.
+        $this->_originalRealdoms = &$this->_originalRealdoms;
+
+        // In the original object (not a clone):
+        $this->_realdoms         = &$this->_originalRealdoms;
+
+        return;
+    }
+
+    /**
+     * Clone.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function __clone ( ) {
+
+        // Break the reference.
+        unset($this->_realdoms);
+
+        // Create a new array of references (of realdoms).
+        $this->_realdoms = $this->_originalRealdoms;
+
+        $this->_chosenRealdom = null;
+
+        return;
+    }
 
     /**
      * Allow to write: $disjunction->realdom1()->or->realdom2().
@@ -95,13 +143,11 @@ class Disjunction implements \IteratorAggregate, \Countable {
      * @access  public
      * @param   string  $name    Must be “or”.
      * @return  \Hoa\Realdom\Disjunction
-     * @throw   \Hoa\Realdom\Exception
      */
     public function __get ( $name ) {
 
         if('or' !== $name)
-            throw new Exception(
-                'Hmmm, what do you mean by %s?', 0, $name);
+            return $this->$name;
 
         return $this;
     }
@@ -114,6 +160,7 @@ class Disjunction implements \IteratorAggregate, \Countable {
      * @param   string  $name         Realistic domain name.
      * @param   array   $arguments    Arguments.
      * @return  \Hoa\Realdom\Disjunction
+     * @throw   \Hoa\Realdom\Exception
      */
     public function __call ( $name, Array $arguments ) {
 
@@ -128,32 +175,29 @@ class Disjunction implements \IteratorAggregate, \Countable {
         }
         else {
 
-            if(   'Array' === $name
-               || 'Class' === $name
-               || 'Empty' === $name)
+            if(\Hoa\Core\Consistency::isKeyword($name))
                 $name = '_' . $name;
 
-            $handle = dnew(
-                '(Hoathis or Hoa)\Realdom\\' . $name,
-                $arguments
-            );
+            try {
+
+                $handle = dnew(
+                    '(Hoathis or Hoa)\Realdom\\' . $name,
+                    $arguments
+                );
+            }
+            catch ( Exception $e ) {
+
+                throw $e;
+            }
+            catch ( \Hoa\Core\Exception $e ) {
+
+                throw new Exception(
+                    'Realistic domain %s() does not exist.',
+                    0, strtolower($name), $e);
+            }
         }
 
-        $handle->setConstraints($this->_constraints);
-
-        if(null === $this->_realdoms) {
-
-            $this->_realdoms = $handle;
-            $this->_count    = 1;
-
-            return $this;
-        }
-
-        if(!is_array($this->_realdoms))
-            $this->_realdoms = array($this->_realdoms);
-
-        $this->_realdoms[] = $handle;
-        ++$this->_count;
+        $this->offsetSet(null, $handle);
 
         return $this;
     }
@@ -172,18 +216,85 @@ class Disjunction implements \IteratorAggregate, \Countable {
     }
 
     /**
-     * Add a realdom.
+     * Check if a realistic domain exists for a specified offset.
      *
      * @access  public
+     * @param   mixed  $offset    Offset.
+     * @return  bool
+     */
+    public function offsetExists ( $offset ) {
+
+        return array_key_exists($offset, $this->_realdoms);
+    }
+
+    /**
+     * Get a specific realistic domain.
+     *
+     * @access  public
+     * @param   mixed  $offset    Offset.
+     * @return  \Hoa\Realdom
+     */
+    public function offsetGet ( $offset ) {
+
+        if(false === $this->offsetExists($offset))
+            return null;
+
+        return $this->_realdoms[$offset];
+    }
+
+    /**
+     * Set a specific realistic domain.
+     *
+     * @access  public
+     * @param   mixed         $offset     Offset.
      * @param   \Hoa\Realdom  $realdom    Realistic domain.
      * @return  \Hoa\Realdom\Disjunction
+     * @throw   \Hoa\Realdom\Exception
      */
-    public function addRealdom ( Realdom $realdom ) {
+    public function offsetSet ( $offset, $realdom ) {
 
-        $this->_realdoms[] = $realdom;
-        ++$this->_count;
+        if($realdom instanceof self) {
+
+            foreach($realdom as $_realdom)
+                $this->offsetSet(null, $_realdom);
+
+            return $this;
+        }
+
+        if(!($realdom instanceof Realdom))
+            throw new Exception(
+                'A disjunction accepts only realdom; given %s.',
+                0, is_object($realdom) ? get_class($realdom) : gettype($realdom));
+
+        $realdom->setConstraints($this->_constraints);
+
+        if(null === $offset)
+            $this->_realdoms[] = $realdom;
+        elseif(!is_int($offset))
+            throw new Exception(
+                'Offset %s must be an integer.', 1, $offset);
+        else
+            $this->_realdoms[$offset] = $realdom;
 
         return $this;
+    }
+
+    /**
+     * Unset a specific realistic domain.
+     * Index are re-computed.
+     *
+     * @access  public
+     * @param   mixed  $offset    Offset.
+     * @return  void
+     */
+    public function offsetUnset ( $offset ) {
+
+        if(false === $this->offsetExists($offset))
+            return;
+
+        array_splice($this->_realdoms, $offset, 1);
+
+        return;
     }
 
     /**
@@ -216,12 +327,6 @@ class Disjunction implements \IteratorAggregate, \Countable {
      */
     public function reset ( ) {
 
-        if(null === $this->_realdoms)
-            return;
-
-        if(!is_array($this->_realdoms))
-            return $this->_realdoms->reset();
-
         foreach($this->_realdoms as $realdom)
             $realdom->reset();
 
@@ -236,12 +341,6 @@ class Disjunction implements \IteratorAggregate, \Countable {
      * @return  boolean
      */
     public function predicate ( $q ) {
-
-        if(null === $this->_realdoms)
-            return false;
-
-        if(!is_array($this->_realdoms))
-            return $this->_realdoms->predicate($q);
 
         foreach($this->_realdoms as $realdom)
             if(true === $realdom->predicate($q))
@@ -260,38 +359,42 @@ class Disjunction implements \IteratorAggregate, \Countable {
      */
     public function sample ( \Hoa\Math\Sampler $sampler ) {
 
-        if(null === $this->_realdoms)
+        if(empty($this->_realdoms))
             throw new Exception(
                 'Cannot sample because the disjunction is empty.', 2);
 
-        if(!is_array($this->_realdoms)) {
-
-            $this->_chosenRealdom = $this->_realdoms;
-
-            return $this->_chosenRealdom->sample($sampler);
-        }
-
-        $i                    = $sampler->getInteger(0, $this->_count - 1);
+        $m                    = count($this->_realdoms) - 1;
+        $i                    = $sampler->getInteger(0, $m);
         $this->_chosenRealdom = $this->_realdoms[$i];
 
         return $this->_chosenRealdom->sample($sampler);
     }
 
     /**
+     * Propagate constraints (public).
+     *
+     * @access  protected
+     * @param   string  $type     Type.
+     * @param   int     $index    Index.
+     * @return  void
+     */
+    public function propagateConstraints ( $type, $index ) {
+
+        foreach($this->_realdoms as $realdom)
+            $realdom->propagateConstraints($type, $index);
+
+        return;
+    }
+
+    /**
      * Iterate over realistic domains.
      *
      * @access  public
-     * @return  \ArrayObject
+     * @return  \ArrayIterator
      */
     public function getIterator ( ) {
 
-        if(null === $this->_realdoms)
-            return new \ArrayObject(array());
-
-        if(!is_array($this->_realdoms))
-            return new \ArrayObject(array($this->_realdoms));
-
-        return new \ArrayObject($this->_realdoms);
+        return new \ArrayIterator($this->_realdoms);
     }
 
     /**
@@ -302,7 +405,55 @@ class Disjunction implements \IteratorAggregate, \Countable {
      */
     public function count ( ) {
 
-        return $this->_count;
+        return count($this->_realdoms);
+    }
+
+    /**
+     * Set holder.
+     *
+     * @access  public
+     * @param   \Hoa\Realdom\IRealdom\Holder  $holder    Holder.
+     * @return  \Hoa\Realdom\IRealdom\Holder
+     */
+    public function setHolder ( IRealdom\Holder $holder ) {
+
+        $old           = $holder;
+        $this->_holder = $holder;
+
+        foreach($this->_realdoms as $realdom)
+            $realdom->setHolder($holder);
+
+        return $old;
+    }
+
+    /**
+     * Get holder.
+     *
+     * @access  public
+     * @return  \Hoa\Realdom\IRealdom\Holder
+     */
+    public function getHolder ( ) {
+
+        return $this->_holder;
+    }
+
+    /**
+     * Get Praspel representation of the realistic domain.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function toPraspel ( ) {
+
+        if(empty($this->_realdoms))
+            return null;
+
+        $out = array();
+
+        foreach($this->_realdoms as $realdom)
+            $out[] = $realdom->toPraspel();
+
+        return implode(' or ', $out);
     }
 
     /**
@@ -313,11 +464,8 @@ class Disjunction implements \IteratorAggregate, \Countable {
      */
     public function __toString ( ) {
 
-        if(null === $this->_realdoms)
+        if(empty($this->_realdoms))
             return null;
-
-        if(!is_array($this->_realdoms))
-            return $this->_realdoms->__toString();
 
         $out = array();
 
@@ -330,7 +478,13 @@ class Disjunction implements \IteratorAggregate, \Countable {
                 $handle = array();
 
                 foreach($realdom->getArguments() as $argument)
-                    $handle[] = $argument->__toString();
+                    if(null !== $holder = $argument->getHolder()) {
+
+                        $variable = '$' . $holder->getClause()->getId();
+                        $handle[] = $variable . '[\'' . $holder->getName() . '\']';
+                    }
+                    else
+                        $handle[] = $argument->__toString();
 
                 $out[]  = $realdom->getName() . '(' .
                           implode(', ', $handle) .

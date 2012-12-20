@@ -44,9 +44,19 @@ from('Hoa')
 -> import('Realdom.Float')
 
 /**
+ * \Hoa\Realdom\Constfloat
+ */
+-> import('Realdom.Constfloat')
+
+/**
  * \Hoa\Realdom\Exception\InvalidArgument
  */
--> import('Realdom.Exception.InvalidArgument');
+-> import('Realdom.Exception.InvalidArgument')
+
+/**
+ * \Hoa\Realdom\IRealdom\Interval
+ */
+-> import('Realdom.I~.Interval');
 
 }
 
@@ -62,7 +72,7 @@ namespace Hoa\Realdom {
  * @license    New BSD License
  */
 
-class Boundfloat extends Float {
+class Boundfloat extends Float implements IRealdom\Interval {
 
     /**
      * Realistic domain name.
@@ -94,12 +104,10 @@ class Boundfloat extends Float {
         $lower = $this['lower']->getConstantValue();
         $upper = $this['upper']->getConstantValue();
 
-        if($lower >= $upper)
+        if($lower > $upper)
             throw new Exception\InvalidArgument(
-                '$lower must be strictly lower than $upper, given %d and %d.',
+                '$lower must be strictly lower than $upper; given %d and %d.',
                 0, array($lower, $upper));
-
-        return;
     }
 
     /**
@@ -129,6 +137,68 @@ class Boundfloat extends Float {
             $this['lower']->sample($sampler),
             $this['upper']->sample($sampler)
         );
+    }
+
+    /**
+     * Get lower bound of the domain.
+     *
+     * @access  public
+     * @return  \Hoa\Realdom
+     */
+    public function getLowerBound ( ) {
+
+        return $this['lower']->getConstantValue();
+    }
+
+    /**
+     * Get upper bound of the domain.
+     *
+     * @access  public
+     * @return  \Hoa\Realdom
+     */
+    public function getUpperBound ( ) {
+
+        return $this['upper']->getConstantValue();
+    }
+
+    /**
+     * Reduce the lower bound.
+     *
+     * @access  public
+     * @param   mixed  $value    Value.
+     * @return  bool
+     */
+    public function reduceRightTo ( $value ) {
+
+        $lower = $this['lower']->getConstantValue();
+        $upper = min($this['upper']->getConstantValue(), $value);
+
+        if($lower > $upper)
+            return false;
+
+        $this['upper'] = new Constinteger($value);
+
+        return true;
+    }
+
+    /**
+     * Reduce the upper bound.
+     *
+     * @access  public
+     * @param   int  $value    Value.
+     * @return  bool
+     */
+    public function reduceLeftTo ( $value ) {
+
+        $lower = max($this['lower']->getConstantValue(), $value);
+        $upper = $this['upper']->getConstantValue();
+
+        if($lower > $upper)
+            return false;
+
+        $this['lower'] = new Constinteger($value);
+
+        return true;
     }
 }
 

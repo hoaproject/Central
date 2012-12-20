@@ -46,7 +46,22 @@ from('Hoa')
 /**
  * \Hoa\Realdom\Exception\InvalidArgument
  */
--> import('Realdom.Exception.InvalidArgument');
+-> import('Realdom.Exception.InvalidArgument')
+
+/**
+ * \Hoa\Realdom\IRealdom\Interval
+ */
+-> import('Realdom.I~.Interval')
+
+/**
+ * \Hoa\Realdom\IRealdom\Nonconvex
+ */
+-> import('Realdom.I~.Nonconvex')
+
+/**
+ * \Hoa\Realdom\IRealdom\Countable
+ */
+-> import('Realdom.I~.Countable');
 
 }
 
@@ -62,7 +77,11 @@ namespace Hoa\Realdom {
  * @license    New BSD License
  */
 
-class Boundinteger extends Integer {
+class          Boundinteger
+    extends    Integer
+    implements IRealdom\Interval,
+               IRealdom\Nonconvex,
+               IRealdom\Countable {
 
     /**
      * Realistic domain name.
@@ -76,10 +95,17 @@ class Boundinteger extends Integer {
      *
      * @var \Hoa\Realdom array
      */
-    protected $_arguments = array(
+    protected $_arguments   = array(
         'Constinteger lower' => PHP_INT_MIN,
         'Constinteger upper' => PHP_INT_MAX
     );
+
+    /**
+     * Discredited values.
+     *
+     * @var \Hoa\Realdom\Boundinteger array
+     */
+    protected $_discredited = array();
 
 
 
@@ -94,9 +120,9 @@ class Boundinteger extends Integer {
         $lower = $this['lower']->getConstantValue();
         $upper = $this['upper']->getConstantValue();
 
-        if($lower >= $upper)
+        if($lower > $upper)
             throw new Exception\InvalidArgument(
-                '$lower must be strictly lower than $upper, given %d and %d.',
+                '$lower must be strictly lower than $upper; given %d and %d.',
                 0, array($lower, $upper));
 
         return;
@@ -127,8 +153,113 @@ class Boundinteger extends Integer {
 
         return $sampler->getInteger(
             $this['lower']->sample($sampler),
-            $this['upper']->sample($sampler)
+            $this['upper']->sample($sampler),
+            $this->_discredited
         );
+    }
+
+    /**
+     * Get lower bound of the domain.
+     *
+     * @access  public
+     * @return  \Hoa\Realdom
+     */
+    public function getLowerBound ( ) {
+
+        return $this['lower']->getConstantValue();
+    }
+
+    /**
+     * Get upper bound of the domain.
+     *
+     * @access  public
+     * @return  \Hoa\Realdom
+     */
+    public function getUpperBound ( ) {
+
+        return $this['upper']->getConstantValue();
+    }
+
+    /**
+     * Reduce the lower bound.
+     *
+     * @access  public
+     * @param   mixed  $value    Value.
+     * @return  bool
+     */
+    public function reduceRightTo ( $value ) {
+
+        $lower = $this['lower']->getConstantValue();
+        $upper = min($this['upper']->getConstantValue(), $value);
+
+        if($lower > $upper)
+            return false;
+
+        $this['upper'] = new Constinteger($value);
+
+        return true;
+    }
+
+    /**
+     * Reduce the upper bound.
+     *
+     * @access  public
+     * @param   int  $value    Value.
+     * @return  bool
+     */
+    public function reduceLeftTo ( $value ) {
+
+        $lower = max($this['lower']->getConstantValue(), $value);
+        $upper = $this['upper']->getConstantValue();
+
+        if($lower > $upper)
+            return false;
+
+        $this['lower'] = new Constinteger($value);
+
+        return true;
+    }
+
+    /**
+     * Discredit a value.
+     *
+     * @access  public
+     * @param   mixed  $value    Value to discredit.
+     * @return  \Hoa\Realdom
+     */
+    public function discredit ( $value ) {
+
+        if(   true  === in_array($value, $this->_discredited)
+           || false === $this->predicate($value))
+            return $this;
+
+        $this->_discredited[] = $value;
+
+        return $this;
+    }
+
+    /**
+     * Get size of the domain.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getSize ( ) {
+
+        return $this['upper']->getConstantValue() -
+               $this['lower']->getConstantValue() -
+               count($this->_discredited)         + 1;
+    }
+
+    /**
+     * Get Praspel representation of the realistic domain.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function toPraspel ( ) {
+
+        return $this['lower']->toPraspel() . '..' . $this['upper']->toPraspel();
     }
 }
 

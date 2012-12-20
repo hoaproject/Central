@@ -39,96 +39,24 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Realdom
+ * \Hoa\Realdom\Exception
  */
--> import('Realdom.~')
-
-/**
- * \Hoa\Realdom\Constant
- */
--> import('Realdom.Constant');
+-> import('Realdom.Exception.~');
 
 }
 
-namespace Hoa\Realdom {
+namespace Hoa\Realdom\Exception {
 
 /**
- * Class \Hoa\Realdom\Constnull.
+ * Class \Hoa\Realdom\Exception.
  *
- * Realistic domain: constnull.
+ * Extending the \Hoa\Praspel\Exception class.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Constnull extends Realdom implements Constant {
-
-    /**
-     * Realistic domain name.
-     *
-     * @const string
-     */
-    const NAME = 'constnull';
-
-
-
-    /**
-     * Predicate whether the sampled value belongs to the realistic domains.
-     *
-     * @access  public
-     * @param   mixed  $q    Sampled value.
-     * @return  boolean
-     */
-    public function predicate ( $q ) {
-
-        return null === $q;
-    }
-
-    /**
-     * Sample one new value.
-     *
-     * @access  protected
-     * @param   \Hoa\Math\Sampler  $sampler    Sampler.
-     * @return  mixed
-     */
-    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
-
-        return null;
-    }
-
-    /**
-     * Get constant value.
-     *
-     * @access  public
-     * @return  null
-     */
-    public function getConstantValue ( ) {
-
-        return null;
-    }
-
-    /**
-     * Get Praspel representation of the realistic domain.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function toPraspel ( ) {
-
-        return $this->__toString();
-    }
-
-    /**
-     * Get string representation of the realistic domain.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function __toString ( ) {
-
-        return 'null';
-    }
-}
+class Inconsistent extends Exception { }
 
 }

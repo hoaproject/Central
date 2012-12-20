@@ -165,6 +165,13 @@ abstract class Realdom implements \ArrayAccess, \Countable {
      */
     protected $_constraints    = null;
 
+    /**
+     * Holder.
+     *
+     * @var \Hoa\Realdom\IRealdom\Holder object
+     */
+    protected $_holder         = null;
+
 
 
     /**
@@ -265,44 +272,97 @@ abstract class Realdom implements \ArrayAccess, \Countable {
 
                 self::autoBoxing($this->arguments, $this);
 
-                foreach($this->arguments as $argument) {
+                foreach($this->arguments as &$argument) {
 
                     $hint = current($hints);
-                    next($hints);
 
-                    if(null === $hint)
+                    if(null === $hint) {
+
+                        next($hints);
+
                         continue;
-
-                    $flag = false;
-
-                    foreach(explode('|', $hint) as $_hint) {
-
-                        if('\\' !== $_hint[0])
-                            $__hint = __NAMESPACE__ . '\\' . $_hint;
-                        else
-                            $__hint = $_hint;
-
-                        if($argument instanceof $__hint) {
-
-                            $flag = true;
-
-                            break;
-                        }
                     }
 
-                    if(false === $flag)
-                        throw new Exception\IllegalArgument(
-                            'Argument %d passed to %s() must be of type %s, ' .
-                            '%s given.',
-                            2, array(
-                                key($hints),
-                                $this->getName(),
-                                mb_strtolower($hint),
-                                mb_strtolower(mb_substr(
-                                    $_ = get_class($argument),
-                                    mb_strrpos($_, '\\') + 1
-                                ))
-                            ));
+                    if($argument instanceof IRealdom\Holder)
+                        $_argument = $argument->getHeld();
+                    else
+                        $_argument = array($argument);
+
+                    $k = 0;
+
+                    foreach($_argument as $__argument) {
+
+                        $flag = false;
+
+                        foreach(explode('|', $hint) as $_hint) {
+
+                            if('\\' !== $_hint[0])
+                                $__hint = __NAMESPACE__ . '\\' . $_hint;
+                            else
+                                $__hint = $_hint;
+
+                            if($__argument instanceof $__hint) {
+
+                                $flag = true;
+
+                                break;
+                            }
+                        }
+
+                        if(false === $flag)
+                            unset($_argument[$k]);
+                        else
+                            ++$k;
+                    }
+
+                    switch(count($_argument)) {
+
+                        case 0:
+                            if($argument instanceof IRealdom\Holder)
+                                throw new Exception\IllegalArgument(
+                                    'Argument %d passed to %s() must be of ' .
+                                    'type %s, variable %s does not satisfy ' .
+                                    'this constraint.',
+                                    2, array(
+                                        key($hints),
+                                        $this->getName(),
+                                        mb_strtolower($hint),
+                                        $argument->getName()
+                                    )
+                                );
+
+                            throw new Exception\IllegalArgument(
+                                'Argument %d passed to %s() must be of type ' .
+                                '%s, %s given.',
+                                3, array(
+                                    key($hints),
+                                    $this->getName(),
+                                    mb_strtolower($hint),
+                                    mb_strtolower(mb_substr(
+                                        $_ = get_class($argument),
+                                        mb_strrpos($_, '\\') + 1
+                                    ))
+                                )
+                            );
+                          break;
+
+                        case 1:
+                            $argument = $_argument[0];
+                          break;
+
+                        default:
+                            throw new Exception\IllegalArgument(
+                                'Variable %s, passed as argument %d of %s(), ' .
+                                'has to many domains.',
+                                4, array(
+                                    $argument->getName(),
+                                    key($hints),
+                                    $this->getName()
+                                )
+                            );
+                    }
+
+                    next($hints);
                 }
         }
 
@@ -380,6 +440,17 @@ abstract class Realdom implements \ArrayAccess, \Countable {
                 case 'string':
                     $argument = new Conststring($argument);
                   break;
+
+                default:
+                    if($argument instanceof IRealdom\Holder) {
+
+                        $argument = $argument->getHeld();
+
+                        if(null !== $self)
+                            $argument = $argument[0];
+
+                        break;
+                    }
             }
 
         return;
@@ -501,6 +572,13 @@ abstract class Realdom implements \ArrayAccess, \Countable {
         return self::$_sampler;
     }
 
+    /**
+     * Set the sampler.
+     *
+     * @access  public
+     * @param   \Hoa\Math\Sampler  $sampler    Sampler.
+     * @return  \Hoa\Math\Sampler
+     */
     public function setSampler ( \Hoa\Math\Sampler $sampler ) {
 
         $old             = $this->__sampler;
@@ -509,6 +587,12 @@ abstract class Realdom implements \ArrayAccess, \Countable {
         return $old;
     }
 
+    /**
+     * Get the sampler.
+     *
+     * @access  public
+     * @return  \Hoa\Math\Sampler
+     */
     public function getSampler ( ) {
 
         return $this->__sampler ?: static::$_sampler;
@@ -574,6 +658,10 @@ abstract class Realdom implements \ArrayAccess, \Countable {
      */
     public function reset ( ) {
 
+        if(   $this instanceof IRealdom\Boundable
+           && isset($this->_discredited))
+            $this->_discredited = array();
+
         return;
     }
 
@@ -616,7 +704,7 @@ abstract class Realdom implements \ArrayAccess, \Countable {
             throw new Exception(
                 'No sampler set. Please, use the %s::setDefaultSampler() or ' .
                 '%1$s::setSampler() method.',
-                3, __CLASS__);
+                4, __CLASS__);
 
         $maxtry = $this->getMaxTry();
 
@@ -633,7 +721,7 @@ abstract class Realdom implements \ArrayAccess, \Countable {
         if(0 >= $maxtry)
             throw new Exception(
                 'Cannot sample a value, all tries failed (%d tries) from %s.',
-                4, array($this->getMaxTry(), $this->getName()));
+                5, array($this->getMaxTry(), $this->getName()));
 
         $this->setValue($sampled);
 
@@ -648,6 +736,18 @@ abstract class Realdom implements \ArrayAccess, \Countable {
      * @return  mixed
      */
     abstract protected function _sample ( \Hoa\Math\Sampler $sampler );
+
+    /**
+     * Check if the realistic domain intersects with another.
+     *
+     * @access  public
+     * @param   \Hoa\Realdom  $realdom    Realistic domain.
+     * @return  bool
+     */
+    public function intersectWith ( Realdom $realdom ) {
+
+        return false;
+    }
 
     /**
      * Set constraints.
@@ -676,6 +776,37 @@ abstract class Realdom implements \ArrayAccess, \Countable {
     }
 
     /**
+     * Propagate constraints (public).
+     *
+     * @access  protected
+     * @param   string  $type     Type.
+     * @param   int     $index    Index.
+     * @return  void
+     */
+    public function propagateConstraints ( $type, $index ) {
+
+        $this->_propagateConstraints($type, $index, $this->getConstraints());
+
+        return;
+    }
+
+    /**
+     * Propagate constraints.
+     *
+     * @access  protected
+     * @param   string  $type           Type.
+     * @param   int     $index          Index.
+     * @param   array   $constraints    Constraints.
+     * @return  void
+     * @throw   \Hoa\Realdom\Exception\Inconsistent
+     */
+    protected function _propagateConstraints ( $type, $index,
+                                               Array &$constraints ) {
+
+        return;
+    }
+
+    /**
      * Test the “is” constraint.
      *
      * @access  public
@@ -691,6 +822,51 @@ abstract class Realdom implements \ArrayAccess, \Countable {
     }
 
     /**
+     * Set holder.
+     *
+     * @access  public
+     * @param   \Hoa\Realdom\IRealdom\Holder  $holder    Holder.
+     * @return  \Hoa\Realdom\IRealdom\Holder
+     */
+    public function setHolder ( IRealdom\Holder $holder ) {
+
+        $old           = $holder;
+        $this->_holder = $holder;
+
+        return $old;
+    }
+
+    /**
+     * Get holder.
+     *
+     * @access  public
+     * @return  \Hoa\Realdom\IRealdom\Holder
+     */
+    public function getHolder ( ) {
+
+        return $this->_holder;
+    }
+
+    /**
+     * Get Praspel representation of the realistic domain.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function toPraspel ( ) {
+
+        $handle = array();
+
+        foreach($this->arguments as $argument)
+            if(null !== $holder = $argument->getHolder())
+                $handle[] = $holder->getName();
+            else
+                $handle[] = $argument->toPraspel();
+
+        return $this->getName() . '(' . implode(', ', $handle) . ')';
+    }
+
+    /**
      * Get string representation of the realistic domain.
      *
      * @access  public
@@ -701,8 +877,14 @@ abstract class Realdom implements \ArrayAccess, \Countable {
         $out    = 'realdom()->' . $this->getName() . '(';
         $handle = array();
 
-        foreach($this->arguments as $argument)
-            $handle[] = $argument->__toString();
+        foreach($this->getArguments() as $argument)
+            if(null !== $holder = $argument->getHolder()) {
+
+                $variable = '$' . $holder->getClause()->getId();
+                $handle[] = $variable . '[\'' . $holder->getName() . '\']';
+            }
+            else
+                $handle[] = $argument->__toString();
 
         $out .= implode(', ', $handle);
 

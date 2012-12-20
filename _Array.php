@@ -41,7 +41,12 @@ from('Hoa')
 /**
  * \Hoa\Realdom
  */
--> import('Realdom.~');
+-> import('Realdom.~')
+
+/**
+ * \Hoa\Realdom\Exception\Inconsistent
+ */
+-> import('Realdom.Exception.Inconsistent');
 
 }
 
@@ -80,7 +85,25 @@ class _Array extends Realdom {
 
 
     /**
+     * Constructor of the realistic domain.
      *
+     * @access  protected
+     * @return  void
+     */
+    protected function construct ( ) {
+
+        parent::construct();
+
+        $this->adjustLength();
+
+        return;
+    }
+
+    /**
+     * Reset the realistic domain.
+     *
+     * @access  public
+     * @return  void
      */
     public function reset ( ) {
 
@@ -204,6 +227,7 @@ class _Array extends Realdom {
      * @access  protected
      * @param   \Hoa\Math\Sampler  $sampler    Sampler.
      * @return  mixed
+     * @throw   \Hoa\Realdom\Exception\Inconsistent
      */
     protected function _sample ( \Hoa\Math\Sampler $sampler ) {
 
@@ -214,53 +238,138 @@ class _Array extends Realdom {
 
         $constraints = &$this->getConstraints();
         $out         =  array();
-        $pairs       =  $this['pairs']['pairs'];
-        $count       =  count($pairs) - 1;
+        $pairs       =  array();
         $unique      =  true === $this->is('unique');
-        $miniMaxTry  =  $this->getMaxTry();
+
+        foreach($this['pairs']['pairs'] as $pair) {
+
+            $key   = clone $pair[0];
+            $value = clone $pair[1];
+            $i     = 0;
+
+            foreach($key as $realdom) {
+
+                if(   $realdom instanceof IRealdom\Countable
+                   && $length > $realdom->getSize())
+                    unset($key[$i--]);
+
+                ++$i;
+            }
+
+            if(0 >= count($key))
+                continue;
+
+            if(true === $unique) {
+
+                $i = 0;
+
+                foreach($value as $realdom) {
+
+                    if(   $realdom instanceof IRealdom\Countable
+                       && $length > $realdom->getSize())
+                        unset($value[$i--]);
+
+                    ++$i;
+                }
+
+                if(0 >= count($value))
+                    continue;
+            }
+
+            $pairs[] = array($key, $value);
+        }
 
         if(isset($constraints['key'])) {
 
-            $cKey = &$constraints['key'];
+            foreach($constraints['key'] as $kPair) {
 
-            foreach($cKey as $pair) {
+                $_key   = $kPair[0]->sample($sampler);
+                $_value = $kPair[1]->sample($sampler);
 
-                $value = $pair[1]->sample($sampler);
+                foreach($pairs as $pair) {
 
-                if(true === $unique && in_array($value, $out)) {
+                    $keyRealdoms   = array();
+                    $valueRealdoms = array();
 
-                    if(0 >= $miniMaxTry)
-                        return false;
+                    foreach($pair[0] as $realdom)
+                        if(true === $realdom->predicate($_key))
+                            $keyRealdoms[] = $realdom;
 
-                    --$miniMaxTry;
+                    foreach($pair[1] as $realdom)
+                        if(true === $realdom->predicate($_value))
+                            $valueRealdoms[] = $realdom;
 
-                    continue;
+                    if(empty($keyRealdoms) || empty($valueRealdoms))
+                        continue;
+
+                    foreach($keyRealdoms as $realdom)
+                        if($realdom instanceof IRealdom\Nonconvex)
+                            $realdom->discredit($_key);
+
+                    if(false === $unique)
+                        continue;
+
+                    foreach($valueRealdoms as $realdom)
+                        if($realdom instanceof IRealdom\Nonconvex)
+                            $realdom->discredit($_value);
                 }
 
-                $out[$pair[0]->sample($sampler)] = $value;
+                $out[$_key] = $_value;
             }
         }
 
-        for($i = 0; $i < $length; ++$i) {
+        $count = count($pairs) - 1;
+
+        for($i = 0, $length -= count($out); $i < $length; ++$i) {
+
+            if(0 > $count)
+                throw new Exception\Inconsistent(
+                    'There is no enought data to sample.', 0);
 
             $pair  = $pairs[$sampler->getInteger(0, $count)];
             $key   = $pair[0]->sample($sampler);
             $value = $pair[1]->sample($sampler);
 
-            if(   (true === array_key_exists($key, $out))
-               || (true === $unique && in_array($value, $out))) {
+            foreach($pairs as $p => $_pair) {
 
-                if(0 >= $miniMaxTry)
-                    return false;
+                $j = 0;
 
-                --$miniMaxTry;
+                foreach($_pair[0] as $realdom) {
 
-                continue;
+                    if(   !($realdom instanceof IRealdom\Nonconvex)
+                       || false === $realdom->predicate($key))
+                        continue;
+
+                    $realdom->discredit($key);
+
+                    if($realdom instanceof IRealdom\Countable)
+                        if(0 === $realdom->getSize())
+                            unset($_pair[0][$j--]);
+
+                    ++$j;
+                }
+
+                if(0 === count($_pair[0])) {
+
+                    unset($pairs[$p]);
+                    --$count;
+                }
+
+                if(false === $unique)
+                    continue;
+
+                foreach($_pair[1] as $realdom)
+                    if(   $realdom instanceof IRealdom\Nonconvex
+                       && true === $realdom->predicate($value))
+                        $realdom->discredit($value);
             }
 
             $out[$key] = $value;
         }
 
+        ksort($out);
+
+        /*
         if(true === $this->is('sorted'))
             asort($out);
 
@@ -272,8 +381,134 @@ class _Array extends Realdom {
 
         if(true === $this->is('krsorted'))
             krsort($out);
+        */
 
         return $out;
+    }
+
+    /**
+     * Propagate constraints.
+     *
+     * @access  protected
+     * @param   string  $type           Type.
+     * @param   int     $index          Index.
+     * @param   array   $constraints    Constraints.
+     * @return  void
+     * @throw   \Hoa\Realdom\Exception\Inconsistent
+     */
+    protected function _propagateConstraints ( $type, $index,
+                                               Array &$constraints ) {
+
+        if('key' !== $type)
+            return;
+
+        if(!isset($constraints['key'][$index]))
+            return;
+
+        $pairs  = $this['pairs']['pairs'];
+        $_pair  = &$constraints['key'][$index];
+        $key    = &$_pair[0][0];
+        $values = $_pair[1];
+
+        if(!($key instanceof Constant))
+            return;
+
+        $_key = $key->getConstantValue();
+
+        foreach($pairs as $p => $pair) {
+
+            $i = 0;
+
+            foreach($pair[0] as $realdom) {
+
+                if(false === $realdom->predicate($_key))
+                    unset($pair[0][$i--]);
+
+                ++$i;
+            }
+
+            if(0 === count($pair[0]))
+                unset($pairs[$p]);
+        }
+
+        if(0 === count($pairs))
+            throw new Exception\Inconsistent(
+                'The constraint %s[%s] = %s is not consistent because the ' .
+                'key %2$s does not satisfy the array description.',
+                1, array(
+                    $this->getHolder()->getName(),
+                    $_key,
+                    $values->toPraspel()
+                ));
+
+        $this->adjustLength();
+
+        $minSize = count($constraints['key']);
+        $length  = $this['length'];
+
+        if($length instanceof Constant) {
+
+            if($minSize > $length->getConstantValue())
+                throw new Exception\Inconsistent(
+                    'There is too many declared keys compared to the array ' .
+                    'size (%d > %d).',
+                    2, array($minSize, $length->getConstantValue()));
+        }
+        elseif(   $length instanceof IRealdom\Interval
+               && $minSize > $length->getUpperBound())
+            throw new Exception\Inconsistent(
+                'There is too many declared keys compared to the array size ' .
+                '(%d ∉ %s).',
+                3, array($minSize, $length->toPraspel()));
+
+
+        return;
+    }
+
+    /**
+     * Adjust size according to pairs.
+     *
+     * @access  protected
+     * @return  void
+     * @throw   \Hoa\Realdom\Exception\Inconsistent
+     */
+    protected function adjustLength ( ) {
+
+        $pairs   = $this['pairs']['pairs'];
+        $length  = $this['length'];
+        $maxSize = 0;
+
+        foreach($pairs as $pair)
+            foreach($pair[0] as $realdom)
+                if($realdom instanceof IRealdom\Countable) {
+
+                    $size = $realdom->getSize();
+
+                    if($maxSize < $size)
+                        $maxSize = $size;
+                }
+
+        if($length instanceof Constant) {
+
+            if($maxSize < $length->getConstantValue())
+                throw new Exception\Inconsistent(
+                    'There is no enough key to sample (%d < %d).',
+                    4, array($maxSize, $length->getConstantValue()));
+        }
+
+        if($length instanceof IRealdom\Interval) {
+
+            if($maxSize < $length->getLowerBound())
+                throw new Exception\Inconsistent(
+                    'There is no enough key to sample (%d ∉ %s).',
+                    5, array($maxSize, $length->toPraspel()));
+
+            if($length instanceof IRealdom\Interval)
+                if($maxSize < $length->getUpperBound())
+                    $length->reduceRightTo($maxSize);
+        }
+
+        return;
     }
 }
 
