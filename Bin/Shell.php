@@ -162,7 +162,8 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
             case '.v':
             case '.variables':
                 foreach($interpreter->getClause() as $variable)
-                    echo $variable->getName(), "\n";
+                    echo $variable->getName(), ': ',
+                         $variable->getHeld()->toPraspel(), "\n";
               break;
 
             case '.s':
