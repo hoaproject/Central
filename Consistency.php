@@ -155,8 +155,7 @@ class Consistency implements \ArrayAccess {
      */
     public function import ( $path, $load = null, &$family = null ) {
 
-        $exception = null;
-        $out       = false;
+        $out = false;
 
         if(   null === $load
            &&    1 === $load = $this->getAutoload())
