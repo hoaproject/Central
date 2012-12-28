@@ -165,40 +165,36 @@ class Consistency implements \ArrayAccess {
         $load = (bool) $load;
 
         foreach($this->_from as $from)
-            foreach($this->_roots[$from] as $root)
-                try {
+            foreach($this->_roots[$from] as $root) {
 
-                    $family = $from;
-                    $out    = $this->_import($path, $load, $from, $root);
+                $family = $from;
+                $out    = $this->_import($path, $load, $from, $root);
 
+                if(true === $out)
                     break 2;
-                }
-                catch ( \Hoa\Core\Exception\Idle $e ) {
-
-                    $exception = $e;
-                    $out       = false;
-                }
+            }
 
         if(false === $out) {
 
-            $trace = $exception->getTrace();
-            $self  = get_class($this);
+            $trace = debug_backtrace();
+            $file  = $trace[0]['file'];
 
-            do {
-
-                $t = array_shift($trace);
-            } while(isset($t['class']) && $t['class'] == $self);
+            foreach(static::$_class as $_ => $bucket)
+                if(is_array($bucket) && $file === $bucket['path'])
+                    break;
 
             throw new \Hoa\Core\Exception(
-                'The file %s need the class %s to work properly but this ' .
-                'last one is not found. We have looked for in: %s family(ies).',
-                0,
-                array(@$t['file'], $path, implode(', ', $this->_from)),
-                $exception
-            );
+                'Class %s does not exist. This file is required by %s.',
+                0, array(
+                    (1 === count($this->_from)
+                        ? $this->_from[0]
+                        : '(' .  implode(' or ', $this->_from) . ')') .
+                    '\\' . str_replace('.', '\\', $path),
+                    $bucket['alias'] ?: $_
+                ));
         }
 
-        return $out;
+        return $this;
     }
 
     /**
@@ -209,8 +205,7 @@ class Consistency implements \ArrayAccess {
      * @param   bool    $load    Whether loading directly or not.
      * @param   string  $from    Library family's name.
      * @param   string  $root    Root.
-     * @return  \Hoa\Core\Consistency
-     * @throw   \Hoa\Core\Exception\Idle
+     * @return  bool
      */
     protected function _import ( $path, $load, $from, $root ) {
 
@@ -258,7 +253,7 @@ class Consistency implements \ArrayAccess {
             if(isset(static::$_cache[$all])) {
 
                 if(false === $load)
-                    return $this;
+                    return true;
 
                 $class = str_replace('.', '\\', $all);
                 $alias = static::$_class[$class]['alias'];
@@ -282,34 +277,33 @@ class Consistency implements \ArrayAccess {
                 foreach($uncache as $un)
                     unset(static::$_cache[$un]);
 
-                throw new \Hoa\Core\Exception\Idle(
-                    'File %s does not exist.', 1, implode('/', $explode));
+                return false;
             }
 
             $explode[0] = $backup;
 
-            foreach($glob as $value)
-                try {
+            foreach($glob as $value) {
 
-                    $this->_import(
-                        substr(
-                            str_replace('/', '.', substr($value, 0, -4)),
-                            $countFrom
-                        ),
-                        $load,
-                        $from,
-                        $root
-                    );
-                }
-                catch ( \Hoa\Core\Exception\Idle $e ) {
+                $out = $this->_import(
+                    substr(
+                        str_replace('/', '.', substr($value, 0, -4)),
+                        $countFrom
+                    ),
+                    $load,
+                    $from,
+                    $root
+                );
+
+                if(false === $out) {
 
                     foreach($uncache as $un)
                         unset(static::$_cache[$un]);
 
-                    throw $e;
+                    return false;
                 }
+            }
 
-            return $this;
+            return true;
         }
 
         if(false === $edited)
@@ -338,9 +332,7 @@ class Consistency implements \ArrayAccess {
                 foreach($uncache as $un)
                     unset(static::$_cache[$un]);
 
-                array_pop($parts);
-                throw new \Hoa\Core\Exception\Idle(
-                    'File %s does not exist.', 2, implode('/', $parts) . '.php');
+                return false;
             }
         }
 
@@ -351,7 +343,7 @@ class Consistency implements \ArrayAccess {
         $alias    = false;
 
         if(isset(static::$_class[$class]))
-            return $this;
+            return true;
 
         if(true === $entry) {
 
@@ -369,7 +361,7 @@ class Consistency implements \ArrayAccess {
         $this->__class[$class] = &static::$_class[$class];
 
         if(false === $load)
-            return $this;
+            return true;
 
         return $this->_load($class, $entry, $alias);
     }
@@ -381,14 +373,14 @@ class Consistency implements \ArrayAccess {
      * @param   string    $class    Classname.
      * @param   bool      $entry    Whether it is an entry class.
      * @param   string    $alias    Alias classname.
-     * @return  \Hoa\Core\Consistency
+     * @return  bool
      */
     protected function _load ( $class, $entry = false, $alias = false ) {
 
         $bucket = &static::$_class[$class];
 
         if(true === $bucket['imported'])
-            return $this;
+            return true;
 
         require $bucket['path'];
 
@@ -397,7 +389,7 @@ class Consistency implements \ArrayAccess {
         if(true === $entry && false !== $alias)
             class_alias($class, $alias);
 
-        return $this;
+        return true;
     }
 
     /**
