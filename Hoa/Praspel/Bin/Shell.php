@@ -71,7 +71,17 @@ from('Hoa')
 /**
  * \Hoa\Console\Cursor
  */
--> import('Console.Cursor');
+-> import('Console.Cursor')
+
+/**
+ * \Hoa\Console\Readline
+ */
+-> import('Console.Readline.~')
+
+/**
+ * \Hoa\Console\Readline\Autocompleter\Word
+ */
+-> import('Console.Readline.Autocompleter.Word');
 
 }
 
@@ -123,22 +133,35 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
 
         \Hoa\Realdom::setDefaultSampler(new \Hoa\Math\Sampler\Random());
 
-        $compiler = \Hoa\Compiler\Llk::load(
+        $compiler    = \Hoa\Compiler\Llk::load(
             new \Hoa\File\Read('hoa://Library/Praspel/Grammar.pp')
         );
         $interpreter = new \Hoa\Praspel\Visitor\Interpreter();
         $dump        = new \Hoa\Praspel\Visitor\Compiler();
         $interpreter->visit($compiler->parse('@requires;'));
+        $words       = array();
+
+        from('Hoathis or Hoa')
+        -> foreachImport('Realdom.*', function ( $classname ) use ( &$words ) {
+
+            $class = new \ReflectionClass($classname);
+
+            if($class->isSubclassOf('\Hoa\Realdom'))
+                $words[] = $classname::NAME;
+        });
+
+        $readline = new \Hoa\Console\Readline();
+        $readline->setAutocompleter(
+            new \Hoa\Console\Readline\Autocompleter\Word($words)
+        );
 
         $handle     = null;
         $expression = '.h';
 
         do { try {
 
-        if('.' === $expression[0]) {
-
+        if('.' === $expression[0])
             @list($expression, $tail) = explode(' ', $expression);
-        }
 
         switch($expression) {
 
@@ -226,7 +249,7 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
 
         echo "\n";
 
-        } while('.quit' !== $expression = $this->readLine('> '));
+        } while('.quit' !== $expression = $readline->readLine('> '));
 
         return;
     }
