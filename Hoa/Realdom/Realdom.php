@@ -658,7 +658,7 @@ abstract class Realdom implements \ArrayAccess, \Countable {
      */
     public function reset ( ) {
 
-        if(   $this instanceof IRealdom\Boundable
+        if(   $this instanceof IRealdom\Nonconvex
            && isset($this->_discredited))
             $this->_discredited = array();
 
