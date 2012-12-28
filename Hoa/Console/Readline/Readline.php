@@ -225,38 +225,7 @@ class Readline {
 
             $char          = $this->_read();
             $this->_buffer = $char;
-
-            if(   isset($this->_mapping[$char])
-               && is_callable($this->_mapping[$char])) {
-
-                $mapping = $this->_mapping[$char];
-                $return  = $mapping($this);
-            }
-            else {
-
-                if(isset($this->_mapping[$char]))
-                    $this->_buffer = $this->_mapping[$char];
-
-                if($this->getLineLength() == $this->getLineCurrent()) {
-
-                    $this->appendLine($this->_buffer);
-                    $return = static::STATE_CONTINUE;
-                }
-                else {
-
-                    $this->insertLine($this->_buffer);
-                    $tail          = mb_substr(
-                        $this->getLine(),
-                        $this->getLineCurrent() - 1
-                    );
-                    $this->_buffer = "\033[K" . $tail . str_repeat(
-                        "\033[D",
-                        mb_strlen($tail) - 1
-                    );
-
-                    $return = self::STATE_CONTINUE;
-                }
-            }
+            $return        = $this->_readLine($char);
 
             if(0 === ($return & self::STATE_NO_ECHO))
                 echo $this->_buffer;
@@ -266,6 +235,50 @@ class Readline {
         }
 
         return $this->getLine();
+    }
+
+    /**
+     * Readline core.
+     *
+     * @access  public
+     * @param   string  $char    Char.
+     * @return  string
+     */
+    public function _readLine ( $char ) {
+
+        if(   isset($this->_mapping[$char])
+           && is_callable($this->_mapping[$char])) {
+
+            $mapping = $this->_mapping[$char];
+            $return  = $mapping($this);
+        }
+        else {
+
+            if(isset($this->_mapping[$char]))
+                $this->_buffer = $this->_mapping[$char];
+
+            if($this->getLineLength() == $this->getLineCurrent()) {
+
+                $this->appendLine($this->_buffer);
+                $return = static::STATE_CONTINUE;
+            }
+            else {
+
+                $this->insertLine($this->_buffer);
+                $tail          = mb_substr(
+                    $this->getLine(),
+                    $this->getLineCurrent() - 1
+                );
+                $this->_buffer = "\033[K" . $tail . str_repeat(
+                    "\033[D",
+                    mb_strlen($tail) - 1
+                );
+
+                $return = self::STATE_CONTINUE;
+            }
+        }
+
+        return $return;
     }
 
     /**
@@ -577,6 +590,20 @@ class Readline {
     public function setLineCurrent ( $current ) {
 
         $this->_lineCurrent = $current;
+
+        return;
+    }
+
+    /**
+     * Set line length. Not for user.
+     *
+     * @access  public
+     * @param   int  $length    Length.
+     * @return  void
+     */
+    public function setLineLength ( $length ) {
+
+        $this->_lineLength = $length;
 
         return;
     }
@@ -1064,13 +1091,22 @@ class Readline {
                     case "\n":
                         if(-1 !== $mColumn && -1 !== $mLine) {
 
-                            $tail = mb_substr($line, $current);
-                            $s    = mb_substr($solution[$coord], $length);
-                            echo $s;
+                            $tail     = mb_substr($line, $current);
+                            $current -= $length;
+                            $self->setLine(
+                                mb_substr($line, 0, $current) .
+                                $solution[$coord] .
+                                $tail
+                            );
+                            $self->setLineCurrent(
+                                $current + mb_strlen($solution[$coord])
+                            );
+
+                            \Hoa\Console\Cursor::move('←', $length);
+                            echo $solution[$coord];
                             \Hoa\Console\Cursor::clear('→');
                             echo $tail;
                             \Hoa\Console\Cursor::move('←', mb_strlen($tail));
-                            $self->insertLine($s);
                         }
 
                     default:
@@ -1081,6 +1117,14 @@ class Readline {
                         \Hoa\Console\Cursor::move('↓ LEFT');
                         \Hoa\Console\Cursor::clear('↓');
                         \Hoa\Console\Cursor::restore();
+
+                        if("\033" !== $char && "\n" !== $char) {
+
+                            $self->setBuffer($char);
+
+                            return $self->_readLine($char);
+                        }
+
                         break 2;
                 }
             }
@@ -1088,13 +1132,22 @@ class Readline {
             return $state;
         }
 
-        $tail = mb_substr($line, $current);
-        $s    = mb_substr($solution, $length);
-        echo $s;
+        $tail     = mb_substr($line, $current);
+        $current -= $length;
+        $self->setLine(
+            mb_substr($line, 0, $current) .
+            $solution .
+            $tail
+        );
+        $self->setLineCurrent(
+            $current + mb_strlen($solution)
+        );
+
+        \Hoa\Console\Cursor::move('←', $length);
+        echo $solution;
         \Hoa\Console\Cursor::clear('→');
         echo $tail;
         \Hoa\Console\Cursor::move('←', mb_strlen($tail));
-        $self->insertLine($s);
 
         return $state;
     }
