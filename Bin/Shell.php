@@ -135,10 +135,8 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
 
         do { try {
 
-        if('.' === $expression[0]) {
-
+        if('.' === $expression[0])
             @list($expression, $tail) = explode(' ', $expression);
-        }
 
         switch($expression) {
 
