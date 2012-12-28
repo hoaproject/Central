@@ -155,8 +155,7 @@ class Consistency implements \ArrayAccess {
      */
     public function import ( $path, $load = null, &$family = null ) {
 
-        $exception = null;
-        $out       = false;
+        $out = false;
 
         if(   null === $load
            &&    1 === $load = $this->getAutoload())
@@ -165,64 +164,60 @@ class Consistency implements \ArrayAccess {
         $load = (bool) $load;
 
         foreach($this->_from as $from)
-            foreach($this->_roots[$from] as $root)
-                try {
+            foreach($this->_roots[$from] as $root) {
 
-                    $family = $from;
-                    $out    = $this->_import($path, $load, $from, $root);
+                $family = $from;
+                $out    = $this->_import($path, $load, $from, $root);
 
+                if(true === $out)
                     break 2;
-                }
-                catch ( \Hoa\Core\Exception\Idle $e ) {
-
-                    $exception = $e;
-                    $out       = false;
-                }
+            }
 
         if(false === $out) {
 
-            $trace = $exception->getTrace();
-            $self  = get_class($this);
+            $trace = debug_backtrace();
+            $file  = $trace[0]['file'];
 
-            do {
-
-                $t = array_shift($trace);
-            } while(isset($t['class']) && $t['class'] == $self);
+            foreach(static::$_class as $_ => $bucket)
+                if(is_array($bucket) && $file === $bucket['path'])
+                    break;
 
             throw new \Hoa\Core\Exception(
-                'The file %s need the class %s to work properly but this ' .
-                'last one is not found. We have looked for in: %s family(ies).',
-                0,
-                array(@$t['file'], $path, implode(', ', $this->_from)),
-                $exception
-            );
+                'Class %s does not exist. This file is required by %s.',
+                0, array(
+                    (1 === count($this->_from)
+                        ? $this->_from[0]
+                        : '(' .  implode(' or ', $this->_from) . ')') .
+                    '\\' . str_replace('.', '\\', $path),
+                    $bucket['alias'] ?: $_
+                ));
         }
 
-        return $out;
+        return $this;
     }
 
     /**
      * Real import method for an one specific root.
      *
      * @access  protected
-     * @param   string  $path    Path.
-     * @param   bool    $load    Whether loading directly or not.
-     * @param   string  $from    Library family's name.
-     * @param   string  $root    Root.
-     * @return  \Hoa\Core\Consistency
-     * @throw   \Hoa\Core\Exception\Idle
+     * @param   string    $path        Path.
+     * @param   bool      $load        Whether loading directly or not.
+     * @param   string    $from        Library family's name.
+     * @param   string    $root        Root.
+     * @param   callable  $callback    Callback (also disable cache).
+     * @return  bool
      */
-    protected function _import ( $path, $load, $from, $root ) {
+    protected function _import ( $path, $load, $from, $root, $callback = null ) {
 
         if(!empty($from))
             $all = $from . '.' . $path;
         else
             $all = $path;
 
-        if(isset(static::$_cache[$all])) {
+        if(isset(static::$_cache[$all]) && null === $callback) {
 
             if(false === $load)
-                return $this;
+                return true;
 
             $class = str_replace('.', '\\', $all);
 
@@ -255,10 +250,10 @@ class Consistency implements \ArrayAccess {
             $explode = $parts;
             $edited  = true;
 
-            if(isset(static::$_cache[$all])) {
+            if(isset(static::$_cache[$all]) && null === $callback) {
 
                 if(false === $load)
-                    return $this;
+                    return true;
 
                 $class = str_replace('.', '\\', $all);
                 $alias = static::$_class[$class]['alias'];
@@ -282,34 +277,34 @@ class Consistency implements \ArrayAccess {
                 foreach($uncache as $un)
                     unset(static::$_cache[$un]);
 
-                throw new \Hoa\Core\Exception\Idle(
-                    'File %s does not exist.', 1, implode('/', $explode));
+                return false;
             }
 
             $explode[0] = $backup;
 
-            foreach($glob as $value)
-                try {
+            foreach($glob as $value) {
 
-                    $this->_import(
-                        substr(
-                            str_replace('/', '.', substr($value, 0, -4)),
-                            $countFrom
-                        ),
-                        $load,
-                        $from,
-                        $root
-                    );
-                }
-                catch ( \Hoa\Core\Exception\Idle $e ) {
+                $out = $this->_import(
+                    substr(
+                        str_replace('/', '.', substr($value, 0, -4)),
+                        $countFrom
+                    ),
+                    $load,
+                    $from,
+                    $root,
+                    $callback
+                );
+
+                if(false === $out) {
 
                     foreach($uncache as $un)
                         unset(static::$_cache[$un]);
 
-                    throw $e;
+                    return false;
                 }
+            }
 
-            return $this;
+            return true;
         }
 
         if(false === $edited)
@@ -338,9 +333,7 @@ class Consistency implements \ArrayAccess {
                 foreach($uncache as $un)
                     unset(static::$_cache[$un]);
 
-                array_pop($parts);
-                throw new \Hoa\Core\Exception\Idle(
-                    'File %s does not exist.', 2, implode('/', $parts) . '.php');
+                return false;
             }
         }
 
@@ -350,8 +343,13 @@ class Consistency implements \ArrayAccess {
         $class    = implode('\\', $parts);
         $alias    = false;
 
-        if(isset(static::$_class[$class]))
-            return $this;
+        if(isset(static::$_class[$class])) {
+
+            if(null !== $callback)
+                $callback($class);
+
+            return true;
+        }
 
         if(true === $entry) {
 
@@ -361,17 +359,27 @@ class Consistency implements \ArrayAccess {
             $this->__class[$alias]  = &static::$_class[$alias];
         }
 
-        static::$_class[$class]  = array(
+        static::$_class[$class] = array(
             'path'     => $path,
             'alias'    => $alias,
             'imported' => false
         );
-        $this->__class[$class] = &static::$_class[$class];
+        $this->__class[$class]  = &static::$_class[$class];
 
-        if(false === $load)
-            return $this;
+        if(false === $load) {
 
-        return $this->_load($class, $entry, $alias);
+            if(null !== $callback)
+                $callback($class);
+
+            return true;
+        }
+
+        $out = $this->_load($class, $entry, $alias);
+
+        if(null !== $callback)
+            $callback($class);
+
+        return $out;
     }
 
     /**
@@ -381,14 +389,14 @@ class Consistency implements \ArrayAccess {
      * @param   string    $class    Classname.
      * @param   bool      $entry    Whether it is an entry class.
      * @param   string    $alias    Alias classname.
-     * @return  \Hoa\Core\Consistency
+     * @return  bool
      */
     protected function _load ( $class, $entry = false, $alias = false ) {
 
         $bucket = &static::$_class[$class];
 
         if(true === $bucket['imported'])
-            return $this;
+            return true;
 
         require $bucket['path'];
 
@@ -397,7 +405,27 @@ class Consistency implements \ArrayAccess {
         if(true === $entry && false !== $alias)
             class_alias($class, $alias);
 
-        return $this;
+        return true;
+    }
+
+    /**
+     * Iterate over each solution found by an import.
+     *
+     * @access  public
+     * @param   string    $path        Path.
+     * @param   callable  $callback    Callback (also disable cache).
+     * @return  void
+     */
+    public function foreachImport ( $path, $callback ) {
+
+        foreach($this->_from as $from)
+            foreach($this->_roots[$from] as $root) {
+
+                $family = $from;
+                $out    = $this->_import($path, false, $from, $root, $callback);
+            }
+
+        return;
     }
 
     /**
