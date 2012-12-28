@@ -200,23 +200,24 @@ class Consistency implements \ArrayAccess {
      * Real import method for an one specific root.
      *
      * @access  protected
-     * @param   string  $path    Path.
-     * @param   bool    $load    Whether loading directly or not.
-     * @param   string  $from    Library family's name.
-     * @param   string  $root    Root.
+     * @param   string    $path        Path.
+     * @param   bool      $load        Whether loading directly or not.
+     * @param   string    $from        Library family's name.
+     * @param   string    $root        Root.
+     * @param   callable  $callback    Callback (also disable cache).
      * @return  bool
      */
-    protected function _import ( $path, $load, $from, $root ) {
+    protected function _import ( $path, $load, $from, $root, $callback = null ) {
 
         if(!empty($from))
             $all = $from . '.' . $path;
         else
             $all = $path;
 
-        if(isset(static::$_cache[$all])) {
+        if(isset(static::$_cache[$all]) && null === $callback) {
 
             if(false === $load)
-                return $this;
+                return true;
 
             $class = str_replace('.', '\\', $all);
 
@@ -249,7 +250,7 @@ class Consistency implements \ArrayAccess {
             $explode = $parts;
             $edited  = true;
 
-            if(isset(static::$_cache[$all])) {
+            if(isset(static::$_cache[$all]) && null === $callback) {
 
                 if(false === $load)
                     return true;
@@ -290,7 +291,8 @@ class Consistency implements \ArrayAccess {
                     ),
                     $load,
                     $from,
-                    $root
+                    $root,
+                    $callback
                 );
 
                 if(false === $out) {
@@ -341,8 +343,13 @@ class Consistency implements \ArrayAccess {
         $class    = implode('\\', $parts);
         $alias    = false;
 
-        if(isset(static::$_class[$class]))
+        if(isset(static::$_class[$class])) {
+
+            if(null !== $callback)
+                $callback($class);
+
             return true;
+        }
 
         if(true === $entry) {
 
@@ -352,17 +359,27 @@ class Consistency implements \ArrayAccess {
             $this->__class[$alias]  = &static::$_class[$alias];
         }
 
-        static::$_class[$class]  = array(
+        static::$_class[$class] = array(
             'path'     => $path,
             'alias'    => $alias,
             'imported' => false
         );
-        $this->__class[$class] = &static::$_class[$class];
+        $this->__class[$class]  = &static::$_class[$class];
 
-        if(false === $load)
+        if(false === $load) {
+
+            if(null !== $callback)
+                $callback($class);
+
             return true;
+        }
 
-        return $this->_load($class, $entry, $alias);
+        $out = $this->_load($class, $entry, $alias);
+
+        if(null !== $callback)
+            $callback($class);
+
+        return $out;
     }
 
     /**
@@ -389,6 +406,26 @@ class Consistency implements \ArrayAccess {
             class_alias($class, $alias);
 
         return true;
+    }
+
+    /**
+     * Iterate over each solution found by an import.
+     *
+     * @access  public
+     * @param   string    $path        Path.
+     * @param   callable  $callback    Callback (also disable cache).
+     * @return  void
+     */
+    public function foreachImport ( $path, $callback ) {
+
+        foreach($this->_from as $from)
+            foreach($this->_roots[$from] as $root) {
+
+                $family = $from;
+                $out    = $this->_import($path, false, $from, $root, $callback);
+            }
+
+        return;
     }
 
     /**
