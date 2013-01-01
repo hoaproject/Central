@@ -54,11 +54,6 @@ from('Hoa')
 -> import('Compiler.Llk')
 
 /**
- * \Hoa\Compiler\Visitor\Meta
- */
--> import('Compiler.Visitor.Meta')
-
-/**
  * \Hoa\File\Read
  */
 -> import('File.Read');
