@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2012, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2013, Ivan Enderlin. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -42,7 +42,7 @@ namespace Hoa\Core\Protocol {
  * Abstract class for all hoa://'s components.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2012 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
@@ -480,7 +480,7 @@ class_alias('Hoa\Core\Protocol\Protocol', 'Hoa\Core\Protocol');
  * hoa://'s protocol's generic component.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2012 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
@@ -492,7 +492,7 @@ class Generic extends \Hoa\Core\Protocol { }
  * hoa://'s protocol's root.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2012 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
@@ -512,7 +512,7 @@ class Root extends \Hoa\Core\Protocol {
  * Library protocol's component.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2012 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
@@ -561,7 +561,7 @@ class Library extends \Hoa\Core\Protocol {
  * Wrapper for hoa://'s protocol.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2012 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
