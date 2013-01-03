@@ -189,7 +189,9 @@ class Consistency implements \ArrayAccess {
                         ? $this->_from[0]
                         : '(' .  implode(' or ', $this->_from) . ')') .
                     '\\' . str_replace('.', '\\', $path),
-                    $bucket['alias'] ?: $_
+                    isset($bucket)
+                        ? $bucket['alias'] ?: $_
+                        : $file
                 ));
         }
 
