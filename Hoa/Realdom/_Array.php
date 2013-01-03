@@ -503,9 +503,8 @@ class _Array extends Realdom {
                     'There is no enough key to sample (%d ∉ %s).',
                     5, array($maxSize, $length->toPraspel()));
 
-            if($length instanceof IRealdom\Interval)
-                if($maxSize < $length->getUpperBound())
-                    $length->reduceRightTo($maxSize);
+            if($maxSize < $length->getUpperBound())
+                $length->reduceRightTo($maxSize);
         }
 
         return;
