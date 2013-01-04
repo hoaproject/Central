@@ -334,6 +334,7 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         $parent                   = &$this->_bucket['parent'];
         $this->_bucket['data']    = &$parent['data'][$parent['current']]
                                             [$parent['branche']];
+        reset($this->_bucket['data']);
         $this->_bucket['current'] = 0;
 
         if(!isset($this->_bucket['data'][0])) {
