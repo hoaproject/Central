@@ -515,23 +515,35 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         */
 
         // (?inner-bind).
-        $handle = &$this->_attributeBucket;
-        $data   = $handle['data'][$handle['current']][$handle['branche']];
+        if(   null !== $this->_attributeBucket
+           || !empty($this->_bucket['data'])) {
 
-        if(is_array($data) && isset($data[0]))
-            $data = $data[0];
+            if(null === $this->_attributeBucket) {
 
-        $value  = preg_replace_callback(
-            '#\(\?(?:p(?:ath)?:)?([^\)]+)\)#',
-            function ( Array $matches ) use ( &$data ) {
+                $handle = &$this->_bucket;
+                $data   = $handle['data'][$handle['current']];
+            }
+            else {
 
-                if(!is_array($data) || !isset($data[$matches[1]]))
-                    return '';
+                $handle = &$this->_attributeBucket;
+                $data   = $handle['data'][$handle['current']][$handle['branche']];
+            }
 
-                return $data[$matches[1]];
-            },
-            $value
-        );
+            if(is_array($data) && isset($data[0]))
+                $data = $data[0];
+
+            $value  = preg_replace_callback(
+                '#\(\?(?:p(?:ath)?:)?([^\)]+)\)#',
+                function ( Array $matches ) use ( &$data ) {
+
+                    if(!is_array($data) || !isset($data[$matches[1]]))
+                        return '';
+
+                    return $data[$matches[1]];
+                },
+                $value
+            );
+        }
 
         // Link.
         if(   self::ATTRIBUTE_TYPE_LINK    === $type
