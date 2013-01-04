@@ -59,9 +59,9 @@ from('Hoa')
 -> import('Realdom.I~.Nonconvex')
 
 /**
- * \Hoa\Realdom\IRealdom\Countable
+ * \Hoa\Realdom\IRealdom\Finite
  */
--> import('Realdom.I~.Countable');
+-> import('Realdom.I~.Finite');
 
 }
 
@@ -81,7 +81,7 @@ class          Boundinteger
     extends    Integer
     implements IRealdom\Interval,
                IRealdom\Nonconvex,
-               IRealdom\Countable {
+               IRealdom\Finite {
 
     /**
      * Realistic domain name.

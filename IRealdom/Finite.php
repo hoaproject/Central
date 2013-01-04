@@ -48,16 +48,16 @@ from('Hoa')
 namespace Hoa\Realdom\IRealdom {
 
 /**
- * Interface \Hoa\Realdom\IRealdom\Countable.
+ * Interface \Hoa\Realdom\IRealdom\Finite.
  *
- * Represent domain that is countable (with a size).
+ * Represent domain that is finite (with a size).
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-interface Countable {
+interface Finite {
 
     /**
      * Get size of the domain.

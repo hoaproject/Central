@@ -49,9 +49,9 @@ from('Hoa')
 -> import('Realdom.I~.Nonconvex')
 
 /**
- * \Hoa\Realdom\IRealdom\Countable
+ * \Hoa\Realdom\IRealdom\Finite
  */
--> import('Realdom.I~.Countable');
+-> import('Realdom.I~.Finite');
 
 }
 
@@ -70,7 +70,7 @@ namespace Hoa\Realdom {
 class          Integerpp
     extends    Integer
     implements IRealdom\Nonconvex,
-               IRealdom\Countable {
+               IRealdom\Finite {
 
     /**
      * Realistic domain name.
