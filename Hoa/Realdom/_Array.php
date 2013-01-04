@@ -249,7 +249,7 @@ class _Array extends Realdom {
 
             foreach($key as $realdom) {
 
-                if(   $realdom instanceof IRealdom\Countable
+                if(   $realdom instanceof IRealdom\Finite
                    && $length > $realdom->getSize())
                     unset($key[$i--]);
 
@@ -265,7 +265,7 @@ class _Array extends Realdom {
 
                 foreach($value as $realdom) {
 
-                    if(   $realdom instanceof IRealdom\Countable
+                    if(   $realdom instanceof IRealdom\Finite
                        && $length > $realdom->getSize())
                         unset($value[$i--]);
 
@@ -342,7 +342,7 @@ class _Array extends Realdom {
 
                     $realdom->discredit($key);
 
-                    if($realdom instanceof IRealdom\Countable)
+                    if($realdom instanceof IRealdom\Finite)
                         if(0 === $realdom->getSize())
                             unset($_pair[0][$j--]);
 
@@ -480,7 +480,7 @@ class _Array extends Realdom {
 
         foreach($pairs as $pair)
             foreach($pair[0] as $realdom)
-                if($realdom instanceof IRealdom\Countable) {
+                if($realdom instanceof IRealdom\Finite) {
 
                     $size = $realdom->getSize();
 
