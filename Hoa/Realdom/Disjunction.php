@@ -192,7 +192,8 @@ class Disjunction implements \ArrayAccess, \IteratorAggregate, \Countable {
             catch ( \Hoa\Core\Exception $e ) {
 
                 throw new Exception(
-                    'Realistic domain %s() does not exist.',
+                    'Realistic domain %s() does not exist (or something ' .
+                    'wrong happened).',
                     0, strtolower($name), $e);
             }
         }
