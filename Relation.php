@@ -80,12 +80,12 @@ class Relation extends _Array {
 
     public function construct ( ) {
 
-        parent::construct();
-
         $this['pairs'] = new Constarray(array(array(
             0 => realdom()->integerpp(),
             1 => realdom()->class($this['classname']->getConstantValue())
         )));
+
+        parent::construct();
 
         return;
     }
