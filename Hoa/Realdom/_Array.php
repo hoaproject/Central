@@ -410,7 +410,7 @@ class _Array extends Realdom {
         $key    = &$_pair[0][0];
         $values = $_pair[1];
 
-        if(!($key instanceof Constant))
+        if(!($key instanceof IRealdom\Constant))
             return;
 
         $_key = $key->getConstantValue();
@@ -446,7 +446,7 @@ class _Array extends Realdom {
         $minSize = count($constraints['key']);
         $length  = $this['length'];
 
-        if($length instanceof Constant) {
+        if($length instanceof IRealdom\Constant) {
 
             if($minSize > $length->getConstantValue())
                 throw new Exception\Inconsistent(
@@ -488,7 +488,7 @@ class _Array extends Realdom {
                         $maxSize = $size;
                 }
 
-        if($length instanceof Constant) {
+        if($length instanceof IRealdom\Constant) {
 
             if($maxSize < $length->getConstantValue())
                 throw new Exception\Inconsistent(

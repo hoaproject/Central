@@ -44,9 +44,9 @@ from('Hoa')
 -> import('Realdom.String')
 
 /**
- * \Hoa\Realdom\Constant
+ * \Hoa\Realdom\IRealdom\Constant
  */
--> import('Realdom.Constant');
+-> import('Realdom.I~.Constant');
 
 }
 
@@ -62,7 +62,7 @@ namespace Hoa\Realdom {
  * @license    New BSD License
  */
 
-class Conststring extends String implements Constant {
+class Conststring extends String implements IRealdom\Constant {
 
     /**
      * Realistic domain name.

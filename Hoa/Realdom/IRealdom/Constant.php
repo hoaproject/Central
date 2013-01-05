@@ -34,10 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Realdom {
+namespace Hoa\Realdom\IRealdom {
 
 /**
- * Interface \Hoa\Realdom\Constant.
+ * Interface \Hoa\Realdom\IRealdom\Constant.
  *
  * Interface to represent constants.
  *
