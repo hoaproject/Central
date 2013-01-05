@@ -472,7 +472,7 @@ class Disjunction implements \ArrayAccess, \IteratorAggregate, \Countable {
 
         foreach($this->_realdoms as $realdom) {
 
-            if($realdom instanceof Constant)
+            if($realdom instanceof IRealdom\Constant)
                 $out[] = 'const(' . $realdom->__toString() . ')';
             else {
 

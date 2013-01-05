@@ -44,9 +44,9 @@ from('Hoa')
 -> import('Realdom.Boolean')
 
 /**
- * \Hoa\Realdom\Constant
+ * \Hoa\Realdom\IRealdom\Constant
  */
--> import('Realdom.Constant');
+-> import('Realdom.I~.Constant');
 
 }
 
@@ -62,7 +62,7 @@ namespace Hoa\Realdom {
  * @license    New BSD License
  */
 
-class Constboolean extends Boolean implements Constant {
+class Constboolean extends Boolean implements IRealdom\Constant {
 
     /**
      * Realistic domain name.

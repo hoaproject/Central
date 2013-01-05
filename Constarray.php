@@ -44,9 +44,9 @@ from('Hoa')
 -> import('Realdom._Array')
 
 /**
- * \Hoa\Realdom\Constant
+ * \Hoa\Realdom\IRealdom\Constant
  */
--> import('Realdom.Constant')
+-> import('Realdom.I~.Constant')
 
 /**
  * \Hoa\Realdom\Constinteger
@@ -67,7 +67,7 @@ namespace Hoa\Realdom {
  * @license    New BSD License
  */
 
-class Constarray extends _Array implements Constant {
+class Constarray extends _Array implements IRealdom\Constant {
 
     /**
      * Realistic domain name.
