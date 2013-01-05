@@ -34,17 +34,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Realdom\IRealdom\Interval
- */
--> import('Realdom.I~.Interval');
-
-}
-
 namespace Hoa\Realdom\IRealdom {
 
 /**
