@@ -484,7 +484,7 @@ class_alias('Hoa\Core\Protocol\Protocol', 'Hoa\Core\Protocol');
  * @license    New BSD License
  */
 
-class Generic extends \Hoa\Core\Protocol { }
+class Generic extends Protocol { }
 
 /**
  * Class \Hoa\Core\Protocol\Root.
@@ -496,7 +496,7 @@ class Generic extends \Hoa\Core\Protocol { }
  * @license    New BSD License
  */
 
-class Root extends \Hoa\Core\Protocol {
+class Root extends Protocol {
 
     /**
      * Component's name.
@@ -516,7 +516,7 @@ class Root extends \Hoa\Core\Protocol {
  * @license    New BSD License
  */
 
-class Library extends \Hoa\Core\Protocol {
+class Library extends Protocol {
 
     /**
      * Queue of the component.
