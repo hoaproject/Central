@@ -383,6 +383,21 @@ class          Xyl
     }
 
     /**
+     * Set output stream.
+     *
+     * @access  public
+     * @param   \Hoa\Stream\IStream\Out  $out   Output stream.
+     * @return  \Hoa\Stream\IStream\Out
+     */
+    public function setOutputStream ( \Hoa\Stream\IStream\Out $out ) {
+
+      $old = $this->_out;
+      $this->_out = $out;
+
+      return $old;
+    }
+
+    /**
      * Get output stream.
      *
      * @access  public
