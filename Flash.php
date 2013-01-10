@@ -119,7 +119,7 @@ class Flash extends Session {
         parent::offsetUnset($offset);
 
         if(true === $this->isEmpty())
-            $this->__destruct();
+            $this->delete();
 
         return;
     }
@@ -133,7 +133,7 @@ class Flash extends Session {
     public function getIterator ( ) {
 
         $out = parent::getIterator();
-        $this->__destruct();
+        $this->delete();
 
         return $out;
     }
