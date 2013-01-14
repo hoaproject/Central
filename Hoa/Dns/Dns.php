@@ -79,7 +79,7 @@ class Dns implements \Hoa\Core\Event\Listenable {
      * Please, see
      * http://iana.org/assignments/dns-parameters/dns-parameters.xml.
      *
-     * @var \Hoa\Dns\Light array
+     * @var \Hoa\Dns array
      */
     protected static $_types   = array(
         'invalid'     =>     0, // Invalid.
@@ -151,7 +151,7 @@ class Dns implements \Hoa\Core\Event\Listenable {
     /**
      * Class values for resources and queries.
      *
-     * @var \Hoa\Dns\Light array
+     * @var \Hoa\Dns array
      */
     protected static $_classes = array(
         'in'    =>   1, // Internet.
