@@ -59,7 +59,8 @@ namespace Hoa\Console {
  *     • setTitle;
  *     • getTitle;
  *     • getLabel;
- *     • refresh.
+ *     • refresh;
+ *     • copy.
  *
  * We can listen the event channel hoa://Event/Console/Window:resize to detect
  * if the window has been resized. Please, see the constructor documentation to
@@ -271,6 +272,7 @@ class Window implements \Hoa\Core\Event\Source {
         if(OS_WIN)
             return;
 
+        // DECSLPP.
         echo "\033[2t";
 
         return;
@@ -288,6 +290,7 @@ class Window implements \Hoa\Core\Event\Source {
         if(OS_WIN)
             return;
 
+        // DECSLPP.
         echo "\033]0;" . $title . "\033\\";
 
         return;
@@ -384,6 +387,23 @@ class Window implements \Hoa\Core\Event\Source {
 
         // DECSLPP.
         echo "\033[7t";
+
+        return;
+    }
+
+    /**
+     * Set clipboard value.
+     *
+     * @access  public
+     * @param   string  $data    Data to copy.
+     * @return  void
+     */
+    public static function copy ( $data ) {
+
+        if(OS_WIN)
+            return;
+
+        echo "\033]52;;" . base64_encode($data) . "\033\\";
 
         return;
     }
