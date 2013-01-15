@@ -49,9 +49,9 @@ from('Hoa')
 -> import('Socket.Client')
 
 /**
- * \Hoa\FastCgi\Responder
+ * \Hoa\Fastcgi\Responder
  */
--> import('FastCgi.Responder')
+-> import('Fastcgi.Responder')
 
 /**
  * \Hoa\File\Read
@@ -158,7 +158,7 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
         }
 
         $server   = new \Hoa\Socket\Server('tcp://' . $listen);
-        $client   = new \Hoa\FastCgi\Responder(
+        $client   = new \Hoa\Fastcgi\Responder(
             new \Hoa\Socket\Client('tcp://' . $fastcgi)
         );
         $server->considerRemoteAddress(true);
