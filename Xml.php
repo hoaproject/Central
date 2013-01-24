@@ -148,6 +148,9 @@ abstract class Xml
 
         if($innerStream instanceof \Hoa\Stream\IStream\In) {
 
+            if($innerStream instanceof \Hoa\Stream\IStream\Pointable)
+                $innerStream->rewind();
+
             $handle = $innerStream->readAll();
             $root   = @simplexml_load_string($handle, $stream);
         }
