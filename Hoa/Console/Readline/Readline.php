@@ -38,6 +38,11 @@ namespace {
 
 from('Hoa')
 
+/**
+ * \Hoa\Console
+ */
+-> import('Console.~')
+
 /*
  * \Hoa\Console\Processus
  */
@@ -274,7 +279,7 @@ class Readline {
                     mb_strlen($tail) - 1
                 );
 
-                $return = self::STATE_CONTINUE;
+                $return = static::STATE_CONTINUE;
             }
         }
 
@@ -632,8 +637,11 @@ class Readline {
      */
     public function _bindArrowUp ( Readline $self ) {
 
-        \Hoa\Console\Cursor::clear('↔');
-        echo $self->getPrefix();
+        if(0 === (static::STATE_CONTINUE & static::STATE_NO_ECHO)) {
+
+            \Hoa\Console\Cursor::clear('↔');
+            echo $self->getPrefix();
+        }
         $self->setBuffer($buffer = $self->previousHistory());
         $self->setLine($buffer);
 
@@ -650,8 +658,12 @@ class Readline {
      */
     public function _bindArrowDown ( Readline $self ) {
 
-        \Hoa\Console\Cursor::clear('↔');
-        echo $self->getPrefix();
+        if(0 === (static::STATE_CONTINUE & static::STATE_NO_ECHO)) {
+
+            \Hoa\Console\Cursor::clear('↔');
+            echo $self->getPrefix();
+        }
+
         $self->setBuffer($buffer = $self->nextHistory());
         $self->setLine($buffer);
 
@@ -670,7 +682,9 @@ class Readline {
 
         if($self->getLineLength() > $self->getLineCurrent()) {
 
-            \Hoa\Console\Cursor::move('→');
+            if(0 === (static::STATE_CONTINUE & static::STATE_NO_ECHO))
+                \Hoa\Console\Cursor::move('→');
+
             $self->setLineCurrent($self->getLineCurrent() + 1);
         }
 
@@ -691,8 +705,10 @@ class Readline {
 
         if(0 < $self->getLineCurrent()) {
 
-            \Hoa\Console\Cursor::move('←');
-            $self->setLineCurrent($this->getLineCurrent() - 1);
+            if(0 === (static::STATE_CONTINUE & static::STATE_NO_ECHO))
+                \Hoa\Console\Cursor::move('←');
+
+            $self->setLineCurrent($self->getLineCurrent() - 1);
         }
 
         $self->setBuffer(null);
@@ -714,11 +730,14 @@ class Readline {
 
         if(0 < $self->getLineCurrent()) {
 
-            \Hoa\Console\Cursor::move('←');
-            \Hoa\Console\Cursor::clear('→');
+            if(0 === (static::STATE_CONTINUE & static::STATE_NO_ECHO)) {
+
+                \Hoa\Console\Cursor::move('←');
+                \Hoa\Console\Cursor::clear('→');
+            }
 
             if($self->getLineLength() == $current = $self->getLineCurrent())
-                $self->setLine(mb_substr($this->getLine(), 0, -1));
+                $self->setLine(mb_substr($self->getLine(), 0, -1));
             else {
 
                 $line    = $self->getLine();
@@ -813,7 +832,7 @@ class Readline {
 
         $current = $self->getLineCurrent();
 
-        if($this->getLineLength() === $current)
+        if($self->getLineLength() === $current)
             return static::STATE_CONTINUE;
 
         $words = preg_split(
@@ -828,7 +847,7 @@ class Readline {
             ++$i);
 
         if(!isset($words[$i + 1]))
-            $words[$i + 1] = array(1 => $this->getLineLength());
+            $words[$i + 1] = array(1 => $self->getLineLength());
 
         for($j = $words[$i + 1][1]; $j > $current; --$j)
             $self->_bindArrowRight($self);
@@ -891,14 +910,14 @@ class Readline {
      */
     public function _bindTab ( Readline $self ) {
 
-        $autocompleter = $this->getAutocompleter();
+        $autocompleter = $self->getAutocompleter();
+        $state         = static::STATE_CONTINUE | static::STATE_NO_ECHO;
 
         if(null === $autocompleter)
-            return static::STATE_CONTINUE;
+            return $state;
 
         $current = $self->getLineCurrent();
         $line    = $self->getLine();
-        $state   = static::STATE_CONTINUE | static::STATE_NO_ECHO;
 
         if(0 === $current)
             return $state;
@@ -961,10 +980,14 @@ class Readline {
             --$mColumns;
             $i        = 0;
 
-            if(0 > $window['y'] - $cursor['y'] - $mLines)
+            if(0 > $window['y'] - $cursor['y'] - $mLines) {
+
                 \Hoa\Console\Window::scroll('↑', $mLines);
+                \Hoa\Console\Cursor::move('↑', $mLines);
+            }
 
             \Hoa\Console\Cursor::save();
+            \Hoa\Console\Cursor::hide();
             \Hoa\Console\Cursor::move('↓ LEFT');
             \Hoa\Console\Cursor::clear('↓');
 
@@ -984,6 +1007,7 @@ class Readline {
             }
 
             \Hoa\Console\Cursor::restore();
+            \Hoa\Console\Cursor::show();
 
             ++$mColumns;
             $read     = array(STDIN);
@@ -994,11 +1018,13 @@ class Readline {
                                            &$_solution, &$cWidth ) {
 
                 \Hoa\Console\Cursor::save();
+                \Hoa\Console\Cursor::hide();
                 \Hoa\Console\Cursor::move('↓ LEFT');
                 \Hoa\Console\Cursor::move('→', $mColumn * ($cWidth + 2));
                 \Hoa\Console\Cursor::move('↓', $mLine);
                 echo "\033[0m" . $_solution[$coord] . "\033[0m";
                 \Hoa\Console\Cursor::restore();
+                \Hoa\Console\Cursor::show();
 
                 return;
             };
@@ -1006,11 +1032,13 @@ class Readline {
                                          &$_solution, &$cWidth ) {
 
                 \Hoa\Console\Cursor::save();
+                \Hoa\Console\Cursor::hide();
                 \Hoa\Console\Cursor::move('↓ LEFT');
                 \Hoa\Console\Cursor::move('→', $mColumn * ($cWidth + 2));
                 \Hoa\Console\Cursor::move('↓', $mLine);
                 echo "\033[7m" . $_solution[$coord] . "\033[0m";
                 \Hoa\Console\Cursor::restore();
+                \Hoa\Console\Cursor::show();
 
                 return;
             };
@@ -1035,7 +1063,7 @@ class Readline {
                     continue;
                 }
 
-                switch($char = $this->_read()) {
+                switch($char = $self->_read()) {
 
                     case "\033[A":
                         if(-1 === $mColumn && -1 === $mLine) {
@@ -1158,5 +1186,14 @@ class Readline {
         return $state;
     }
 }
+
+}
+
+namespace {
+
+/**
+ * Advanced interaction.
+ */
+\Hoa\Console::advancedInteraction();
 
 }

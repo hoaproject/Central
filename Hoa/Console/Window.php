@@ -39,6 +39,11 @@ namespace {
 from('Hoa')
 
 /**
+ * \Hoa\Console
+ */
+-> import('Console.~')
+
+/**
  * \Hoa\Console\Processus
  */
 -> import('Console.Processus');
@@ -120,7 +125,7 @@ class Window implements \Hoa\Core\Event\Source {
             return;
 
         // DECSLPP.
-        echo "\033[8;" . $x . ";" . $y . "t";
+        echo "\033[8;" . $y . ";" . $x . "t";
 
         return;
     }
@@ -298,7 +303,6 @@ class Window implements \Hoa\Core\Event\Source {
             // SU.
             $up = $count['up'] * $repeat;
             echo "\033[" . $up . "S";
-            echo "\033[" . $up . "A";
         }
 
         if(0 < $count['down']) {
@@ -306,7 +310,6 @@ class Window implements \Hoa\Core\Event\Source {
             // SD.
             $down = $count['down'] * $repeat;
             echo "\033[" . $down . "T";
-            echo "\033[" . $down . "B";
         }
 
         return;
@@ -464,6 +467,14 @@ class Window implements \Hoa\Core\Event\Source {
 
 namespace {
 
+/**
+ * Advanced interaction.
+ */
+\Hoa\Console::advancedInteraction();
+
+/**
+ * Event.
+ */
 if(ƒ('pcntl_signal')) {
 
     \Hoa\Console\Window::getInstance();

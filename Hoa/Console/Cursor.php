@@ -34,6 +34,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+namespace {
+
+from('Hoa')
+
+/**
+ * \Hoa\Console
+ */
+-> import('Console.~');
+
+}
+
 namespace Hoa\Console {
 
 /**
@@ -163,6 +174,52 @@ class Cursor {
         echo "\033[" . $y . ";" . $x . "H";
 
         return;
+    }
+
+    /**
+     * Get current position (x and y) of the cursor.
+     *
+     * @access  public
+     * @return  array
+     */
+    public static function getPosition ( ) {
+
+        if(OS_WIN)
+            return;
+
+        // DSR.
+        echo "\033[6n";
+
+        // Read \033[y;xR.
+        fread(STDIN, 2); // skip \033 and [.
+
+        $x      = null;
+        $y      = null;
+        $handle = &$y;
+
+        do {
+
+            $char = fread(STDIN, 1);
+
+            switch($char) {
+
+                case ';':
+                    $handle = &$x;
+                  break;
+
+                case 'R':
+                    break 2;
+
+                default:
+                    $handle .= $char;
+            }
+
+        } while(true);
+
+        return array(
+            'x' => (int) $x,
+            'y' => (int) $y
+        );
     }
 
     /**
@@ -300,52 +357,6 @@ class Cursor {
         echo "\033[?25h";
 
         return;
-    }
-
-    /**
-     * Get current position (x and y) of the cursor.
-     *
-     * @access  public
-     * @return  array
-     */
-    public static function getPosition ( ) {
-
-        if(OS_WIN)
-            return;
-
-        // DSR.
-        echo "\033[6n";
-
-        // Read \033[y;xR.
-        fread(STDIN, 2); // skip \033 and [.
-
-        $x      = null;
-        $y      = null;
-        $handle = &$y;
-
-        do {
-
-            $char = fread(STDIN, 1);
-
-            switch($char) {
-
-                case ';':
-                    $handle = &$x;
-                  break;
-
-                case 'R':
-                    break 2;
-
-                default:
-                    $handle .= $char;
-            }
-
-        } while(true);
-
-        return array(
-            'x' => (int) $x,
-            'y' => (int) $y
-        );
     }
 
     /**
@@ -611,7 +622,7 @@ class Cursor {
 
         $r = ($toColor >> 16) & 255;
         $g = ($toColor >>  8) & 255;
-        $b =  $tocolor        & 255;
+        $b =  $toColor        & 255;
 
         echo "\033]4;" . $fromCode . ";#" .
              sprintf('%02x%02x%02x', $r, $g, $b) .
@@ -680,5 +691,14 @@ class Cursor {
         return;
     }
 }
+
+}
+
+namespace {
+
+/**
+ * Advanced interaction.
+ */
+\Hoa\Console::advancedInteraction();
 
 }
