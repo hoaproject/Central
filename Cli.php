@@ -491,10 +491,11 @@ class Cli implements Router, \Hoa\Core\Parameter\Parameterizable {
         if(!isset($_SERVER['argv']))
             return null;
 
-        array_shift($_SERVER['argv']);
-        $out = null;
+        $out   = null;
+        $_argv = $_SERVER['argv'];
+        array_shift($_argv);
 
-        foreach($_SERVER['argv'] as $arg) {
+        foreach($_argv as $arg) {
 
             if(false !== strpos($arg, '=')) {
 
