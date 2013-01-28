@@ -215,7 +215,7 @@ class Basic extends \Hoa\Dispatcher {
                     'Action %s does not exist on the controller %s ' .
                     '(method: %s, asynchronous: %s).',
                     5, array($action, get_class($controller),
-                             strtoupper($router->getRouter()),
+                             strtoupper($router->getMethod()),
                              true === $async ? 'true': 'false'));
 
             $called     = $controller;
