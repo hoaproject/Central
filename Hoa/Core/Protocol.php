@@ -239,9 +239,10 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
      * @access  public
      * @param   string  $path            Path to resolve.
      * @param   array   &$accumulator    Combination of all possibles paths.
+     * @param   string  $id              ID.
      * @return  mixed
      */
-    protected function _resolve ( $path, &$accumulator ) {
+    protected function _resolve ( $path, &$accumulator, $id = null ) {
 
         if(substr($path, 0, 6) == 'hoa://')
             $path = substr($path, 6);
@@ -249,47 +250,48 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
         if(empty($path))
             return null;
 
-        if(null === $accumulator)
+        if(null === $accumulator) {
+
             $accumulator = array();
+            $posId       = strpos($path, '#');
+
+            if(false !== $posId) {
+
+                $id   = substr($path, $posId + 1);
+                $path = substr($path, 0, $posId);
+            }
+            else
+                $id   = null;
+        }
 
         $path = trim($path, '/');
         $pos  = strpos($path, '/');
 
         if(false !== $pos)
             $next = substr($path, 0, $pos);
-        else {
-
-            $pos = strpos($path, '#');
-
-            if(false !== $pos)
-                $next = substr($path, 0, $pos);
-            else
-                $next = $path;
-        }
+        else
+            $next = $path;
 
         if(isset($this[$next])) {
 
             if(false === $pos) {
 
-                $this->_resolveChoice($this[$next]->reach(), $accumulator);
+                if(null === $id) {
 
-                return true;
-            }
+                    $this->_resolveChoice($this[$next]->reach(), $accumulator);
 
-            $handle = substr($path, $pos + 1);
-
-            if('#' == $path[$pos]) {
+                    return true;
+                }
 
                 $accumulator = null;
 
-                return $this[$next]->reachId($handle);
+                return $this[$next]->reachId($id);
             }
 
-            $tnext = $this[$next];
-            $reach = $tnext->reach();
-            $this->_resolveChoice($reach, $accumulator);
+            $tnext  = $this[$next];
+            $this->_resolveChoice($tnext->reach(), $accumulator);
 
-            return $tnext->_resolve($handle, $accumulator);
+            return $tnext->_resolve(substr($path, $pos + 1), $accumulator, $id);
         }
 
         $this->_resolveChoice($this->reach($path), $accumulator);
