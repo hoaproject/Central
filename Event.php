@@ -429,6 +429,19 @@ class Listener {
     public function __construct ( Listenable $source, Array $ids ) {
 
         $this->_source = $source;
+        $this->addIds($ids);
+
+        return;
+    }
+
+    /**
+     * Add acceptable ID (or reset).
+     *
+     * @access  public
+     * @param   array  $ids    Accepted ID.
+     * @return  void
+     */
+    public function addIds ( Array $ids ) {
 
         foreach($ids as $id)
             $this->_listen[$id] = array();
