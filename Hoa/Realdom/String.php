@@ -90,9 +90,9 @@ class          String
      * @var \Hoa\Realdom array
      */
     protected $_arguments   = array(
-        'Integer                  length',
         'Constinteger|Conststring codepointMin' => 0x20,
-        'Constinteger|Conststring codepointMax' => 0x7e
+        'Constinteger|Conststring codepointMax' => 0x7e,
+        'Integer                  length'
     );
 
     /**
