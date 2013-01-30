@@ -269,4 +269,57 @@ abstract class StringBuffer
     }
 }
 
+/**
+ * Class \Hoa\StringBuffer\_Protocol.
+ *
+ * hoa://Library/StringBuffer component.
+ *
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2013 Ivan Enderlin.
+ * @license    New BSD License
+ */
+
+class _Protocol extends \Hoa\Core\Protocol {
+
+    /**
+     * Component's name.
+     *
+     * @var \Hoa\Core\Protocol string
+     */
+    protected $_name = 'StringBuffer';
+
+
+
+    /**
+     * ID of the component.
+     *
+     * @access  public
+     * @param   string  $id    ID of the component.
+     * @return  mixed
+     */
+    public function reachId ( $id ) {
+
+        $stream = resolve(
+            'hoa://Library/Stream#hoa://Library/StringBuffer#' . $id
+        );
+
+        if(null === $stream)
+            return null;
+
+        $meta = $stream->getStreamMetaData();
+
+        return $meta['uri'];
+    }
+}
+
+}
+namespace {
+
+/**
+ * Add the hoa://Library/StringBuffer component. Help to know to real path of a
+ * stringbuffer.
+ */
+$protocol              = \Hoa\Core::getInstance()->getProtocol();
+$protocol['Library'][] = new \Hoa\StringBuffer\_Protocol();
+
 }
