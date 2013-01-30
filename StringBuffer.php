@@ -98,8 +98,7 @@ abstract class StringBuffer
     public function __construct ( $streamName = null ) {
 
         if(null === $streamName)
-            $streamName = 'hoa://Library/StringBuffer/' .
-                          'StringBuffer.php#' . self::$_i++;
+            $streamName = 'hoa://Library/StringBuffer#' . self::$_i++;
 
         parent::__construct($streamName, null);
 
