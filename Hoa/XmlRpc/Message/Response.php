@@ -49,9 +49,9 @@ from('Hoa')
 -> import('XmlRpc.Message.~')
 
 /**
- * \Hoa\StringBuffer\Read
+ * \Hoa\Stringbuffer\Read
  */
--> import('StringBuffer.Read')
+-> import('Stringbuffer.Read')
 
 /**
  * \Hoa\Xml\Read
@@ -88,7 +88,7 @@ class Response extends Message {
      */
     public function __construct ( $response ) {
 
-        $buffer = new \Hoa\StringBuffer\Read();
+        $buffer = new \Hoa\Stringbuffer\Read();
         $buffer->initializeWith($response);
         $this->_response = new \Hoa\Xml\Read($buffer, false);
         $this->computeValues(
