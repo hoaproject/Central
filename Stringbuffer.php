@@ -117,7 +117,7 @@ abstract class Stringbuffer
      */
     protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
 
-        if(false === $out = @tmpfile())
+        if(false === $out = @fopen('php://temp', 'r+'))
             throw new Exception(
                 'Failed to open a string buffer.', 0);
 
