@@ -39,9 +39,9 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Xyl\Interpreter\Html\Generic
+ * \Hoa\Xyl\Interpreter\Html\GenericPhrasing
  */
--> import('Xyl.Interpreter.Html.Generic');
+-> import('Xyl.Interpreter.Html.GenericPhrasing');
 
 }
 
@@ -57,7 +57,7 @@ namespace Hoa\Xyl\Interpreter\Html {
  * @license    New BSD License
  */
 
-class Script extends Generic {
+class Script extends GenericPhrasing {
 
     /**
      * Attributes description.
