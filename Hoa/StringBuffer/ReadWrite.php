@@ -39,14 +39,14 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\StringBuffer\Exception
+ * \Hoa\Stringbuffer\Exception
  */
--> import('StringBuffer.Exception')
+-> import('Stringbuffer.Exception')
 
 /**
- * \Hoa\StringBuffer
+ * \Hoa\Stringbuffer
  */
--> import('StringBuffer.~')
+-> import('Stringbuffer.~')
 
 /**
  * \Hoa\Stream\IStream\In
@@ -60,10 +60,10 @@ from('Hoa')
 
 }
 
-namespace Hoa\StringBuffer {
+namespace Hoa\Stringbuffer {
 
 /**
- * Class \Hoa\StringBuffer\ReadWrite.
+ * Class \Hoa\Stringbuffer\ReadWrite.
  *
  * Read/write a string buffer.
  *
@@ -73,7 +73,7 @@ namespace Hoa\StringBuffer {
  */
 
 class          ReadWrite
-    extends    StringBuffer
+    extends    Stringbuffer
     implements \Hoa\Stream\IStream\In,
                \Hoa\Stream\IStream\Out {
 
@@ -94,7 +94,7 @@ class          ReadWrite
      * @access  public
      * @param   int     $length    Length.
      * @return  string
-     * @throw   \Hoa\StringBuffer\Exception
+     * @throw   \Hoa\Stringbuffer\Exception
      */
     public function read ( $length ) {
 
@@ -217,7 +217,7 @@ class          ReadWrite
      * @param   string  $string    String.
      * @param   int     $length    Length.
      * @return  mixed
-     * @throw   \Hoa\StringBuffer\Exception
+     * @throw   \Hoa\Stringbuffer\Exception
      */
     public function write ( $string, $length ) {
 

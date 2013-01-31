@@ -60,10 +60,10 @@ from('Hoa')
 
 }
 
-namespace Hoa\StringBuffer {
+namespace Hoa\Stringbuffer {
 
 /**
- * Class \Hoa\StringBuffer.
+ * Class \Hoa\Stringbuffer.
  *
  * 
  *
@@ -72,7 +72,7 @@ namespace Hoa\StringBuffer {
  * @license    New BSD License
  */
 
-abstract class StringBuffer
+abstract class Stringbuffer
     extends    \Hoa\Stream
     implements \Hoa\Stream\IStream\Bufferable,
                \Hoa\Stream\IStream\Lockable,
@@ -81,7 +81,7 @@ abstract class StringBuffer
     /**
      * String buffer index.
      *
-     * @var \Hoa\StringBuffer int
+     * @var \Hoa\Stringbuffer int
      */
     private static $_i = 0;
 
@@ -98,7 +98,7 @@ abstract class StringBuffer
     public function __construct ( $streamName = null ) {
 
         if(null === $streamName)
-            $streamName = 'hoa://Library/StringBuffer#' . self::$_i++;
+            $streamName = 'hoa://Library/Stringbuffer#' . self::$_i++;
 
         parent::__construct($streamName, null);
 
@@ -113,7 +113,7 @@ abstract class StringBuffer
      *                                             null).
      * @param   \Hoa\Stream\Context  $context       Context.
      * @return  resource
-     * @throw   \Hoa\StringBuffer\Exception
+     * @throw   \Hoa\Stringbuffer\Exception
      */
     protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
 
@@ -256,7 +256,7 @@ abstract class StringBuffer
      *
      * @access  public
      * @param   string  $string    String.
-     * @return  \Hoa\StringBuffer
+     * @return  \Hoa\Stringbuffer
      */
     public function initializeWith ( $string ) {
 
@@ -270,9 +270,9 @@ abstract class StringBuffer
 }
 
 /**
- * Class \Hoa\StringBuffer\_Protocol.
+ * Class \Hoa\Stringbuffer\_Protocol.
  *
- * hoa://Library/StringBuffer component.
+ * hoa://Library/Stringbuffer component.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
@@ -286,7 +286,7 @@ class _Protocol extends \Hoa\Core\Protocol {
      *
      * @var \Hoa\Core\Protocol string
      */
-    protected $_name = 'StringBuffer';
+    protected $_name = 'Stringbuffer';
 
 
 
@@ -300,7 +300,7 @@ class _Protocol extends \Hoa\Core\Protocol {
     public function reachId ( $id ) {
 
         $stream = resolve(
-            'hoa://Library/Stream#hoa://Library/StringBuffer#' . $id
+            'hoa://Library/Stream#hoa://Library/Stringbuffer#' . $id
         );
 
         if(null === $stream)
@@ -316,10 +316,10 @@ class _Protocol extends \Hoa\Core\Protocol {
 namespace {
 
 /**
- * Add the hoa://Library/StringBuffer component. Help to know to real path of a
+ * Add the hoa://Library/Stringbuffer component. Help to know to real path of a
  * stringbuffer.
  */
 $protocol              = \Hoa\Core::getInstance()->getProtocol();
-$protocol['Library'][] = new \Hoa\StringBuffer\_Protocol();
+$protocol['Library'][] = new \Hoa\Stringbuffer\_Protocol();
 
 }
