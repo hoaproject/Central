@@ -59,9 +59,9 @@ from('Hoa')
 -> import('Stream.I~.Out')
 
 /**
- * \Hoa\StringBuffer\ReadWrite
+ * \Hoa\Stringbuffer\ReadWrite
  */
--> import('StringBuffer.ReadWrite');
+-> import('Stringbuffer.ReadWrite');
 
 }
 
@@ -112,7 +112,7 @@ class          ReadWrite
 
         if(null === parent::$_buffer) {
 
-            parent::$_buffer = new \Hoa\StringBuffer\ReadWrite();
+            parent::$_buffer = new \Hoa\Stringbuffer\ReadWrite();
             parent::$_buffer->initializeWith($this->__toString());
         }
 
@@ -257,7 +257,7 @@ class          ReadWrite
 
         if(null === parent::$_buffer) {
 
-            parent::$_buffer = new \Hoa\StringBuffer\ReadWrite();
+            parent::$_buffer = new \Hoa\Stringbuffer\ReadWrite();
             parent::$_buffer->initializeWith($this->__toString());
         }
 
@@ -442,7 +442,7 @@ class          ReadWrite
 
         if(null === parent::$_buffer) {
 
-            parent::$_buffer = new \Hoa\StringBuffer\ReadWrite();
+            parent::$_buffer = new \Hoa\Stringbuffer\ReadWrite();
             parent::$_buffer->initializeWith($this->__toString());
         }
 
