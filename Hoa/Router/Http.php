@@ -680,8 +680,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
 
                 $m = strtolower($matches[1]);
 
-                if(   empty($variables[$m])
-                   && '0' !== $variables[$m])
+                if(!isset($variables[$m]) || '' === $variables[$m])
                     if(true === $allowEmpty)
                         return '';
                     else
