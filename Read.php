@@ -39,14 +39,14 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\StringBuffer\Exception
+ * \Hoa\Stringbuffer\Exception
  */
--> import('StringBuffer.Exception')
+-> import('Stringbuffer.Exception')
 
 /**
- * \Hoa\StringBuffer
+ * \Hoa\Stringbuffer
  */
--> import('StringBuffer.~')
+-> import('Stringbuffer.~')
 
 /**
  * \Hoa\Stream\IStream\In
@@ -55,10 +55,10 @@ from('Hoa')
 
 }
 
-namespace Hoa\StringBuffer {
+namespace Hoa\Stringbuffer {
 
 /**
- * Class \Hoa\StringBuffer\Read.
+ * Class \Hoa\Stringbuffer\Read.
  *
  * Read a string buffer.
  *
@@ -67,7 +67,7 @@ namespace Hoa\StringBuffer {
  * @license    New BSD License
  */
 
-class Read extends StringBuffer implements \Hoa\Stream\IStream\In {
+class Read extends Stringbuffer implements \Hoa\Stream\IStream\In {
 
     /**
      * Test for end-of-file.
@@ -86,7 +86,7 @@ class Read extends StringBuffer implements \Hoa\Stream\IStream\In {
      * @access  public
      * @param   int     $length    Length.
      * @return  string
-     * @throw   \Hoa\StringBuffer\Exception
+     * @throw   \Hoa\Stringbuffer\Exception
      */
     public function read ( $length ) {
 

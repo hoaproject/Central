@@ -34,10 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\StringBuffer {
+namespace Hoa\Stringbuffer {
 
 /**
- * Class \Hoa\StringBuffer\Exception.
+ * Class \Hoa\Stringbuffer\Exception.
  *
  * Extending the \Hoa\Core\Exception class.
  *

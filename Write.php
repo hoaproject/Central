@@ -39,14 +39,14 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\StringBuffer\Exception
+ * \Hoa\Stringbuffer\Exception
  */
--> import('StringBuffer.Exception')
+-> import('Stringbuffer.Exception')
 
 /**
- * \Hoa\StringBuffer
+ * \Hoa\Stringbuffer
  */
--> import('StringBuffer.~')
+-> import('Stringbuffer.~')
 
 /**
  * \Hoa\Stream\IStream\Out
@@ -55,10 +55,10 @@ from('Hoa')
 
 }
 
-namespace Hoa\StringBuffer {
+namespace Hoa\Stringbuffer {
 
 /**
- * Class \Hoa\StringBuffer\Write.
+ * Class \Hoa\Stringbuffer\Write.
  *
  * Write into a string buffer.
  *
@@ -67,7 +67,7 @@ namespace Hoa\StringBuffer {
  * @license    New BSD License
  */
 
-class Write extends StringBuffer implements \Hoa\Stream\IStream\Out {
+class Write extends Stringbuffer implements \Hoa\Stream\IStream\Out {
 
     /**
      * Write n characters.
@@ -76,7 +76,7 @@ class Write extends StringBuffer implements \Hoa\Stream\IStream\Out {
      * @param   string  $string    String.
      * @param   int     $length    Length.
      * @return  mixed
-     * @throw   \Hoa\StringBuffer\Exception
+     * @throw   \Hoa\Stringbuffer\Exception
      */
     public function write ( $string, $length ) {
 
