@@ -262,8 +262,7 @@ abstract class Stringbuffer
 
         ftruncate($this->getStream(), 0);
         fwrite($this->getStream(), $string, strlen($string));
-
-        $this->seek(0, \Hoa\Stream\IStream\Pointable::SEEK_SET);
+        $this->rewind();
 
         return $this;
     }
