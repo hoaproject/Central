@@ -82,7 +82,7 @@ class          Basic
     /**
      * String buffer (nodeValue).
      *
-     * @var \Hoa\StringBuffer object
+     * @var \Hoa\Stringbuffer object
      */
     protected static $_buffer     = null;
 

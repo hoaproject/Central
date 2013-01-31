@@ -54,9 +54,9 @@ from('Hoa')
 -> import('Stream.I~.In')
 
 /**
- * \Hoa\StringBuffer\ReadWrite
+ * \Hoa\Stringbuffer\ReadWrite
  */
--> import('StringBuffer.ReadWrite');
+-> import('Stringbuffer.ReadWrite');
 
 }
 
@@ -104,7 +104,7 @@ class Read extends Basic implements \Hoa\Stream\IStream\In {
 
         if(null === parent::$_buffer) {
 
-            parent::$_buffer = new \Hoa\StringBuffer\ReadWrite();
+            parent::$_buffer = new \Hoa\Stringbuffer\ReadWrite();
             parent::$_buffer->initializeWith($this->__toString());
         }
 
