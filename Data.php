@@ -188,21 +188,53 @@ class Data implements Datable, \ArrayAccess {
         if($value instanceof Datable)
             $value = $value->toArray();
 
-        if(null === $offset)
-            if(is_array($value)) {
+        if(!is_array($value)) {
 
-                if(!is_int(key($value)))
-                    $value = array($value);
-
-                foreach($value as $k => $v)
-                    $this->_data[$this->_temp][] = $v;
-            }
+            if(null === $offset)
+                $this->_data[$this->_temp][] = $value;
             else
-                $this->_data[$this->_temp][]     = $value;
-        else
-            $this->_data[$this->_temp][$offset]  = $value;
+                $this->_data[$this->_temp][$offset] = $value;
 
-        $this->_temp                             = null;
+            $this->_temp = null;
+
+            return;
+        }
+
+        if(null === $offset) {
+
+            $offset = 0;
+
+            if(isset($this->_data[$this->_temp]))
+                foreach($this->_data[$this->_temp] as $i => $_)
+                    if(is_int($i))
+                        $offset = $i;
+
+            foreach($value as $k => $v)
+                if(is_int($k)) {
+
+                    $temp = $this->_temp;
+                    $this->offsetSet($k, $v);
+                    $this->_temp = $temp;
+                }
+                else {
+
+                    $temp = $this->_temp;
+                    $this->offsetGet($offset)->__set($k, $v);
+                    $this->_temp = $temp;
+                }
+        }
+        else
+            foreach($value as $k => $v) {
+
+                if(is_int($k))
+                    continue;
+
+                $temp = $this->_temp;
+                $this->offsetGet($offset)->__set($k, $v);
+                $this->_temp = $temp;
+            }
+
+        $this->_temp = null;
 
         return;
     }
