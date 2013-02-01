@@ -830,6 +830,9 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
 
         $domain = $this->getDomain();
 
+        if(empty($domain))
+            return null;
+
         if($domain == long2ip(ip2long($domain)))
             return null;
 
