@@ -243,9 +243,14 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         $bindable   and $this->_attributeBucket = &$parent;
         $executable and $this->preExecute();
 
-        if(isset($data[0][$bind]))
+        if(isset($data[0][$bind])) {
+
+            if(is_string($data[0][$bind]))
+                return;
+
             foreach($this as $element)
                 $element->computeDataBinding($data[0][$bind], $this->_bucket);
+        }
 
         $executable and $this->postExecute();
 
