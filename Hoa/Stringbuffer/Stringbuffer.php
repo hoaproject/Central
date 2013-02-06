@@ -65,7 +65,7 @@ namespace Hoa\Stringbuffer {
 /**
  * Class \Hoa\Stringbuffer.
  *
- * 
+ * This class allows to manipulate a string as a stream.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
@@ -109,15 +109,15 @@ abstract class Stringbuffer
      * Open the stream and return the associated resource.
      *
      * @access  protected
-     * @param   string              $streamName    Stream name (here, it is
-     *                                             null).
+     * @param   string               $streamName    Stream name (here, it is
+     *                                              null).
      * @param   \Hoa\Stream\Context  $context       Context.
      * @return  resource
      * @throw   \Hoa\Stringbuffer\Exception
      */
     protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
 
-        if(false === $out = @tmpfile())
+        if(false === $out = @fopen('php://temp', 'r+'))
             throw new Exception(
                 'Failed to open a string buffer.', 0);
 
@@ -262,8 +262,7 @@ abstract class Stringbuffer
 
         ftruncate($this->getStream(), 0);
         fwrite($this->getStream(), $string, strlen($string));
-
-        $this->seek(0, \Hoa\Stream\IStream\Pointable::SEEK_SET);
+        $this->rewind();
 
         return $this;
     }
