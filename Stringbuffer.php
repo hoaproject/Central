@@ -65,7 +65,7 @@ namespace Hoa\Stringbuffer {
 /**
  * Class \Hoa\Stringbuffer.
  *
- * 
+ * This class allows to manipulate a string as a stream.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
