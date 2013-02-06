@@ -109,8 +109,8 @@ abstract class Stringbuffer
      * Open the stream and return the associated resource.
      *
      * @access  protected
-     * @param   string              $streamName    Stream name (here, it is
-     *                                             null).
+     * @param   string               $streamName    Stream name (here, it is
+     *                                              null).
      * @param   \Hoa\Stream\Context  $context       Context.
      * @return  resource
      * @throw   \Hoa\Stringbuffer\Exception
