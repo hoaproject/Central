@@ -718,6 +718,8 @@ class          Response
             $string = substr($string, 0, $length);
 
         echo $string;
+
+        return;
     }
 
     /**
@@ -730,6 +732,8 @@ class          Response
     public function writeString ( $string ) {
 
         echo (string) $string;
+
+        return;
     }
 
     /**
@@ -742,6 +746,8 @@ class          Response
     public function writeCharacter ( $character ) {
 
         echo $character[0];
+
+        return;
     }
 
     /**
@@ -754,6 +760,8 @@ class          Response
     public function writeBoolean ( $boolean ) {
 
         echo (string) (bool) $boolean;
+
+        return;
     }
 
     /**
@@ -766,6 +774,8 @@ class          Response
     public function writeInteger ( $integer ) {
 
         echo (string) (int) $integer;
+
+        return;
     }
 
     /**
@@ -778,6 +788,8 @@ class          Response
     public function writeFloat ( $float ) {
 
         echo (string) (float) $float;
+
+        return;
     }
 
     /**
@@ -790,6 +802,8 @@ class          Response
     public function writeArray ( Array $array ) {
 
         echo var_export($array, true);
+
+        return;
     }
 
     /**
@@ -805,6 +819,8 @@ class          Response
             $line = substr($line, 0, $n + 1);
 
         echo $line;
+
+        return;
     }
 
     /**
@@ -817,6 +833,8 @@ class          Response
     public function writeAll ( $string ) {
 
         echo $string;
+
+        return;
     }
 
     /**
