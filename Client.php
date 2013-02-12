@@ -170,7 +170,7 @@ class Client extends Connection {
      */
     public function isConnected ( ) {
 
-        return (bool) $this->getFlag() & self::CONNECT;
+        return (bool) ($this->getFlag() & self::CONNECT);
     }
 
     /**
@@ -181,7 +181,7 @@ class Client extends Connection {
      */
     public function isAsynchronous ( ) {
 
-        return (bool) $this->getFlag() & self::ASYNCHRONOUS;
+        return (bool) ($this->getFlag() & self::ASYNCHRONOUS);
     }
 
     /**
@@ -192,7 +192,7 @@ class Client extends Connection {
      */
     public function isPersistent ( ) {
 
-        return (bool) $this->getFlag() & self::PERSISTENT;
+        return (bool) ($this->getFlag() & self::PERSISTENT);
     }
 }
 
