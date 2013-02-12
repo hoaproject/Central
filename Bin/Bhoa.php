@@ -59,11 +59,6 @@ from('Hoa')
 -> import('File.Read')
 
 /**
- * \Hoa\File\Undefined
- */
--> import('File.Undefined')
-
-/**
  * \Hoa\File\Finder
  */
 -> import('File.Finder')
@@ -244,22 +239,18 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
 
             if(true === file_exists($target)) {
 
-                $file = new \Hoa\File\Undefined($target);
-
                 // Listing.
-                if(true === $file->isDirectory()) {
+                if(true === is_dir($target)) {
 
                     if(file_exists($_root . DS . $url . DS . 'index.php')) {
 
                         $target = $_root . DS . $url . DS . 'index.php';
                         $url    = 'index.php';
-                        $file   = new \Hoa\File\Read($target);
                     }
                     elseif(file_exists($_root . DS . $url . DS . 'index.html')) {
 
                         $target = $_root . DS . $url . DS . 'index.html';
                         $url    = 'index.html';
-                        $file   = new \Hoa\File\Read($target);
                     }
                     else {
 
@@ -268,19 +259,22 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
                                        '*',
                                        strlen($request['host']) + 1
                                    ) . "\n\n";
-                        $finder  = new \Hoa\File\Finder($target);
+                        $finder  = new \Hoa\File\Finder();
+                        $finder->in($target)
+                               ->maxDepth(1);
 
-                        foreach($finder as $file) {
+                        foreach($finder as $_file) {
 
-                            $defined  = $file->define();
+                            $defined  = $_file->open();
                             $content .= sprintf(
                                 '%10d %s %s %s  %s',
                                 $defined->getINode(),
                                 $defined->getReadablePermissions(),
                                 $defined->getOwner(),
-                                date('Y-m-d H:i', $file->getMTime()),
-                                $file->getBasename()
+                                date('Y-m-d H:i', $defined->getMTime()),
+                                $defined->getBasename()
                             ) . "\n";
+                            $_file->close();
                         }
 
                         $content .= "\n\n" . str_repeat('_', 42) . "\n\n" .
@@ -340,9 +334,9 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
                 $script_name     = DS . $url;
             }
 
-            $file = new \Hoa\File\Undefined($target);
+            $pathinfo = pathinfo($target);
 
-            if('php' != $file->getExtension()) {
+            if('php' != $pathinfo['extension']) {
 
                 $script_filename = $_root . DS . 'index.php';
                 $script_name     = DS . 'index.php';
