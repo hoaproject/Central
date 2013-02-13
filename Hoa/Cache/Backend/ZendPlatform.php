@@ -203,16 +203,16 @@ class ZendPlatform extends Backend {
 
         try {
 
-            $cacheDir = new \Hoa\File\Finder(
-                $directory,
-                \Hoa\File\Finder::LIST_FILE |
-                \Hoa\File\Finder::LIST_NO_DOT,
-                \Hoa\File\Finder::SORT_INAME
-            );
+            $finder = new \Hoa\File\Finder();
+            $finder->in($directory)
+                   ->files()
+                   ->modified('since ' . $lifetime . ' seconds');
 
-            foreach($cacheDir as $i => $fileinfo)
-                if($fileinfo->getMTime() + $lifetime <= time())
-                    $fileinfo->delete();
+            foreach($finder as $file) {
+
+                $file->open()->delete();
+                $file->close();
+            }
         }
         catch ( \Hoa\File\Exception\FileDoesNotExist $e ) { }
 
