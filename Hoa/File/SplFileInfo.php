@@ -39,24 +39,97 @@ namespace {
 from('Hoa')
 
 /**
- * Hoa_File_Exception
+ * \Hoa\File\Exception
  */
--> import('File.Exception.~');
+-> import('File.Exception')
+
+/**
+ * \Hoa\File\ReadWrite
+ */
+-> import('File.ReadWrite')
+
+/**
+ * \Hoa\File\Directory
+ */
+-> import('File.Directory')
+
+/**
+ * \Hoa\File\Link\ReadWrite
+ */
+-> import('File.Link.ReadWrite');
 
 }
 
-namespace Hoa\File\Exception {
+namespace Hoa\File {
 
 /**
- * Class \Hoa\File\Exception\FileDoesNotExist.
+ * Class \Hoa\File\SplFileInfo.
  *
- * Extending the \Hoa\File\Exception class.
+ * Link between SplFileInfo and \Hoa\File.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class UploadExtension extends Exception { }
+class SplFileInfo extends \SplFileInfo {
+
+    /**
+     * Current stream.
+     *
+     * @var \Hoa\File\Generic object
+     */
+    protected $_stream = null;
+
+
+
+    /**
+     * Open the SplFileInfo as a Hoa\File stream.
+     *
+     * @access  public
+     * @return  \Hoa\File\Generic
+     * @throw   \Hoa\File\Exception
+     */
+    public function open ( ) {
+
+        if(true === $this->isFile())
+            return $this->_stream = new ReadWrite($this->getPathname());
+
+        elseif(true === $this->isDir())
+            return $this->_stream = new Directory($this->getPathname());
+
+        elseif(true === $this->isLink())
+            return $this->_stream = new Link\ReadWrite($this->getPathname());
+
+        throw new Exception('%s has a unknown type.', 0, $this->getPathname());
+    }
+
+    /**
+     * Close the opened stream.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function close ( ) {
+
+        if(null === $this->_stream)
+            return;
+
+        return $this->_stream->close();
+    }
+
+    /**
+     * Destruct.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function __destruct ( ) {
+
+        $this->close();
+
+        return;
+    }
+}
 
 }
