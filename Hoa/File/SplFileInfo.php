@@ -81,7 +81,43 @@ class SplFileInfo extends \SplFileInfo {
      */
     protected $_stream = null;
 
+    /**
+     * Hash.
+     *
+     * @var \Hoa\File\SplFileInfo string
+     */
+    protected $_hash   = null;
 
+
+
+    /**
+     * Construct.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function __construct ( $filename ) {
+
+        parent::__construct($filename);
+
+        $this->_hash = md5(
+            $this->getPathname() .
+            $this->getCTime()
+        );
+
+        return;
+    }
+
+    /**
+     * Get the hash.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getHash ( ) {
+
+        return $this->_hash;
+    }
 
     /**
      * Open the SplFileInfo as a Hoa\File stream.
