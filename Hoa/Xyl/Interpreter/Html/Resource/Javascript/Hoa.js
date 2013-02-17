@@ -268,7 +268,12 @@ Hoa.ℙ(1) && (Hoa.Document = Hoa.Document || new function ( ) {
 
     this.onReady = function ( callback ) {
 
-        return callbacks.push(callback);
+        if('complete' !== document.readyState)
+            callbacks.push(callback);
+        else
+            callback();
+
+        return;
     };
 
     document.addEventListener('readystatechange', function ( ) {
@@ -277,8 +282,9 @@ Hoa.ℙ(1) && (Hoa.Document = Hoa.Document || new function ( ) {
             return;
 
         for(var c in callbacks)
-            if('function' === typeof callbacks[c])
-                callbacks[c]();
+            callbacks[c]();
+
+        return;
     });
 
     // load    \
@@ -939,6 +945,9 @@ Hoa.Async = Hoa.Async || new function ( ) {
 
             var s = scoped.item(0);
 
+            if(null === s)
+                return;
+
             if(this.STATE_OPENED == this.readyState) {
 
                 delay = delay || Hoa.Concurrent.after(250, function ( ) {
@@ -956,6 +965,18 @@ Hoa.Async = Hoa.Async || new function ( ) {
 
             clearTimeout(delay);
             s.innerHTML = this.responseText;
+
+            var scripts = s.querySelectorAll('script');
+
+            for(var i = 0, max = scripts.length; i < max; ++i) {
+
+                var script = document.createElement('script');
+                script.setAttribute('type', 'text/javascript');
+                script.textContent = scripts.item(i).textContent;
+                document.head.appendChild(script);
+                document.head.removeChild(script);
+            }
+
             s.setAttribute('aria-busy', 'false');
             s.removeAttribute('data-latency');
 
