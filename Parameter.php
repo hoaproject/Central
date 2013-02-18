@@ -157,27 +157,28 @@ class Parameter {
      */
     public static function initializeConstants ( ) {
 
+        $c = explode('…', date('d…j…N…w…z…W…m…n…Y…y…g…G…h…H…i…s…u…O…T…U'));
         self::$_constants = array(
-            'd' => date('d'),
-            'j' => date('j'),
-            'N' => date('N'),
-            'w' => date('w'),
-            'z' => date('z'),
-            'W' => date('W'),
-            'm' => date('m'),
-            'n' => date('n'),
-            'Y' => date('Y'),
-            'y' => date('y'),
-            'g' => date('g'),
-            'G' => date('G'),
-            'h' => date('h'),
-            'H' => date('H'),
-            'i' => date('i'),
-            's' => date('s'),
-            'u' => date('u'),
-            'O' => date('O'),
-            'T' => date('T'),
-            'U' => date('U')
+            'd' => $c[0],
+            'j' => $c[1],
+            'N' => $c[2],
+            'w' => $c[3],
+            'z' => $c[4],
+            'W' => $c[5],
+            'm' => $c[6],
+            'n' => $c[7],
+            'Y' => $c[8],
+            'y' => $c[9],
+            'g' => $c[10],
+            'G' => $c[11],
+            'h' => $c[12],
+            'H' => $c[13],
+            'i' => $c[14],
+            's' => $c[15],
+            'u' => $c[16],
+            'O' => $c[17],
+            'T' => $c[18],
+            'U' => $c[19]
         );
 
         return;
