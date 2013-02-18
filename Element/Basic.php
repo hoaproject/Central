@@ -245,8 +245,13 @@ class          Basic
 
         $handle = (array) $this->attributes();
 
-        if(!isset($handle['@attributes']))
-            return array();
+        if(!isset($handle['@attributes'])) {
+
+            $handle = (array) $this;
+
+            if(!isset($handle['@attributes']))
+                return array();
+        }
 
         return $handle['@attributes'];
     }
