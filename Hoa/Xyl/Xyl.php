@@ -685,6 +685,35 @@ class          Xyl
                     $selectdomized->parentNode->removeChild($selectdomized);
                 }
 
+                $attributesSelects = $_yield->xpath(
+                    './/__current_ns:*[@yield-select]'
+                );
+
+                foreach($attributesSelects as $select) {
+
+                    $_select = $select->readAttribute('yield-select');
+
+                    switch(static::getSelector($_select, $matches)) {
+
+                        case self::SELECTOR_XPATH:
+                            $_select = $matches[1];
+                          break;
+
+                        default:
+                            throw new Exception(
+                                'Selector %s is not supported in a ' .
+                                '@yield-select attribute.',
+                                8, $_select);
+                          break;
+                    }
+
+                    foreach($ciao->xpath($_select) as $_el)
+                        foreach($_el->readAttributes() as $key => $value)
+                            $select->writeAttribute($key, $value);
+
+                    $select->removeAttribute('yield-select');
+                }
+
                 $parent->replaceChild($handle, $placeholder);
             }
 
@@ -777,7 +806,7 @@ class          Xyl
 
             if(false === file_exists($href))
                 throw new Exception(
-                    'File %s is not found, cannot use it.', 8, $href);
+                    'File %s is not found, cannot use it.', 9, $href);
 
             if(true === in_array($href, $hrefs))
                 continue;
@@ -793,7 +822,7 @@ class          Xyl
             if(self::TYPE_OVERLAY != $fragment->getType())
                 throw new Exception(
                     '%s must only contain <overlay> (and some <?xyl-overlay) ' .
-                    'elements.', 9, $href);
+                    'elements.', 10, $href);
 
             $fod = $fragment->readDOM()->ownerDocument;
             $this->computeFragment($fod, $fragment);
@@ -1031,7 +1060,7 @@ class          Xyl
 
             if(false === file_exists($href))
                 throw new Exception(
-                    'File %s is not found, cannot use it.', 10, $href);
+                    'File %s is not found, cannot use it.', 11, $href);
 
             unset($fragmentParsed);
 
@@ -1039,7 +1068,7 @@ class          Xyl
                 throw new Exception(
                     'Alias %s already exists for fragment %s, cannot ' .
                     'redeclare it for fragment %s in the same document.',
-                    11, array($as, $fragments[$as], $href));
+                    12, array($as, $fragments[$as], $href));
 
             if(!isset($this->_fragments[$as])) {
 
@@ -1252,7 +1281,7 @@ class          Xyl
         if(false === array_key_exists($name, $rank))
             throw new Exception(
                 'Cannot create the concrete tree because the root <%s> is ' .
-                'unknown from the rank.', 12, $name);
+                'unknown from the rank.', 13, $name);
 
         $class           = $rank[$name];
         $this->_concrete = new $class($root, $this, $rank, self::NAMESPACE_ID);
@@ -1334,11 +1363,11 @@ class          Xyl
                        && false === @mkdir($dirname, 0755, true))
                         throw new Exception(
                             'Cannot create directory for the resource %s.',
-                            13, $handle);
+                            14, $handle);
 
                     if(false === @copy($this->resolve($link), $_link))
                         throw new Exception(
-                            'Resource %s can not be copied to %s.', 14,
+                            'Resource %s can not be copied to %s.', 15,
                             array($link, $_link));
                 }
 
@@ -1354,14 +1383,14 @@ class          Xyl
 
                 if(null === $router)
                     throw new Exception(
-                        'Need a router to compute %s.', 15, $link);
+                        'Need a router to compute %s.', 16, $link);
 
                 if(false === $router->ruleExists($rule)) {
 
                     if(false === $router->ruleExists('_resource'))
                         throw new Exception(
                             'Cannot compute %s because the rule _resource ' .
-                            'does not exist in the router.', 16, $link);
+                            'does not exist in the router.', 17, $link);
 
                     $rule     = '_resource';
                     $resource = $m[1];
@@ -1550,12 +1579,12 @@ class          Xyl
 
         if(empty($handle))
             throw new Exception(
-                'Snippet %s does not exist.', 17, $id);
+                'Snippet %s does not exist.', 18, $id);
 
         if(null === $concrete = $this->getConcrete())
             throw new Exception(
                 'Take care to interprete the document before getting a ' .
-                'snippet.', 18);
+                'snippet.', 19);
 
         return $concrete->getConcreteElement($handle[0]);
     }
@@ -1573,12 +1602,12 @@ class          Xyl
 
         if(empty($handle))
             throw new Exception(
-                'Element with ID %s does not exist.', 19, $id);
+                'Element with ID %s does not exist.', 20, $id);
 
         if(null === $concrete = $this->getConcrete())
             throw new Exception(
                 'Take care to interprete the document before getting a form.',
-                20);
+                21);
 
         return $concrete->getConcreteElement($handle[0]);
     }
@@ -1658,7 +1687,7 @@ class          Xyl
             return self::SELECTOR_PATH;
 
         throw new Exception(
-            'Selector %s is not a valid selector.', 21, $selector);
+            'Selector %s is not a valid selector.', 22, $selector);
     }
 
     /**
