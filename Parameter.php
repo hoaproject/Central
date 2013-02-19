@@ -358,16 +358,17 @@ class Parameter {
         $parameters = $this->getParameters();
         $out        = array();
         $qBranche   = preg_quote($branche);
+        $lBranche   = strlen($branche);
 
         foreach($parameters as $key => $value) {
 
-            if(0 === preg_match('#^' . $qBranche . '(.*)?#', $key, $match))
+            if($branche !== substr($key, 0, $lBranche))
                 continue;
 
             $handle  = array();
             $explode = preg_split(
                 '#((?<!\\\)\.)#',
-                $match[1],
+                substr($key, $lBranche + 1),
                 -1,
                 PREG_SPLIT_NO_EMPTY
             );
