@@ -37,6 +37,14 @@
 namespace Hoa\Core\Consistency {
 
 /**
+ * Hard-preload.
+ */
+$path = __DIR__ . DIRECTORY_SEPARATOR;
+define('PATH_EVENT',     $path . 'Event.php');
+define('PATH_EXCEPTION', $path . 'Exception.php');
+define('PATH_DATA',      $path . 'Data.php');
+
+/**
  * Class Hoa\Core\Consistency.
  *
  * This class manages all classes, importations etc.
@@ -81,7 +89,24 @@ class Consistency implements \ArrayAccess {
      *
      * @var \Hoa\Core\Consistency array
      */
-    protected static $_class  = array();
+    protected static $_class  = array(
+        // Hard-preload.
+        'Hoa\Core\Event' => array(
+            'path'     => PATH_EVENT,
+            'alias'    => false,
+            'imported' => false
+        ),
+        'Hoa\Core\Exception' => array(
+            'path'     => PATH_EXCEPTION,
+            'alias'    => false,
+            'imported' => false
+        ),
+        'Hoa\Core\Data' => array(
+            'path'     => PATH_DATA,
+            'alias'    => false,
+            'imported' => false
+        ),
+    );
 
     /**
      * Cache all classes from the current library family.
@@ -633,7 +658,13 @@ class Consistency implements \ArrayAccess {
     public static function autoload ( $classname ) {
 
         $classname = ltrim($classname, '\\');
-        $classes   = static::getAllImportedClasses();
+
+        // Hard-preload.
+        if(   'Hoa\Core' === substr($classname, 0, 8)
+           &&      false !== $pos = strpos($classname, '\\', 10))
+            $classname = substr($classname, 0, $pos);
+
+        $classes = static::getAllImportedClasses();
 
         if(!isset($classes[$classname]))
             return false;
