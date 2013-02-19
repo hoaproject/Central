@@ -764,8 +764,8 @@ class Consistency implements \ArrayAccess {
             'unset',           'use',          'var',           'while',
             'xor',
             // Compile-time constants.
-            '__CLASS__',       '__DIR__',      '__FILE__',      '__FUNCTION__',
-            '__LINE__',        '__METHOD__',   '__NAMESPACE__', '__TRAIT__'
+            '__class__',       '__dir__',      '__file__',      '__function__',
+            '__line__',        '__method__',   '__namespace__', '__trait__'
         );
 
         return in_array(strtolower($word), $_list);
