@@ -527,21 +527,7 @@ class Listener {
 namespace {
 
 /**
- * Alias of the \Hoa\Core\Event::getEvent() method.
- *
- * @access  public
- * @param   string  $eventId    Event ID.
- * @return  \Hoa\Core\Event
- */
-if(!ƒ('event')) {
-function event ( $eventId ) {
-
-    return \Hoa\Core\Event::getEvent($eventId);
-}}
-
-/**
- * Make the alias automatically (because it's not imported with the import()
- * function).
+ * Alias.
  */
 class_alias('Hoa\Core\Event\Event', 'Hoa\Core\Event');
 

@@ -407,19 +407,8 @@ class Error extends Exception {
 namespace {
 
 /**
- * Make the alias automatically (because it's not imported with the import()
- * function).
+ * Alias.
  */
 class_alias('Hoa\Core\Exception\Exception', 'Hoa\Core\Exception');
-
-/**
- * Catch uncaught exception.
- */
-set_exception_handler(array('\Hoa\Core\Exception\Idle', 'uncaught'));
-
-/**
- * Transform PHP error into \Hoa\Core\Exception\Error.
- */
-set_error_handler(array('\Hoa\Core\Exception\Idle', 'error'));
 
 }

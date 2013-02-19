@@ -287,8 +287,7 @@ class Data implements Datable, \ArrayAccess {
 namespace {
 
 /**
- * Make the alias automatically (because it's not imported with the import()
- * function).
+ * Alias.
  */
 class_alias('Hoa\Core\Data\Data', 'Hoa\Core\Data');
 

@@ -484,6 +484,11 @@ class Core implements Parameter\Parameterizable {
 namespace {
 
 /**
+ * Alias.
+ */
+class_alias('Hoa\Core\Core', 'Hoa\Core');
+
+/**
  * Alias of function_exists().
  *
  * @access  public
@@ -524,9 +529,33 @@ function dump ( $message ) {
 }}
 
 /**
- * Alias.
+ * Alias of the \Hoa\Core\Event::getEvent() method.
+ *
+ * @access  public
+ * @param   string  $eventId    Event ID.
+ * @return  \Hoa\Core\Event
  */
-class_alias('Hoa\Core\Core', 'Hoa\Core');
+if(!ƒ('event')) {
+function event ( $eventId ) {
+
+    return \Hoa\Core\Event\Event::getEvent($eventId);
+}}
+
+/**
+ * Catch uncaught exception.
+ */
+set_exception_handler(function ( $exception ) {
+
+    return Hoa\Core\Exception\Idle::uncaught($exception);
+});
+
+/**
+ * Transform PHP error into \Hoa\Core\Exception\Error.
+ */
+set_error_handler(function ( $no, $str, $file = null, $line = null, $ctx = null ) {
+
+    return Hoa\Core\Exception\Idle::error($no, $str, $file, $line, $ctx);
+});
 
 /**
  * Then, initialize Hoa.
