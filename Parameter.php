@@ -725,8 +725,7 @@ class Parameter {
 namespace {
 
 /**
- * Make the alias automatically (because it's not imported with the import()
- * function).
+ * Alias.
  */
 class_alias('Hoa\Core\Parameter\Parameter', 'Hoa\Core\Parameter');
 
