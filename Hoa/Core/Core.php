@@ -57,14 +57,14 @@ and
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Consistency.php';
 
 /**
- * \Hoa\Core\Event
+ * \Hoa\Core\Event, (hard-preloaded in Hoa\Core\Consistency).
  */
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'Event.php';
+//require_once __DIR__ . DIRECTORY_SEPARATOR . 'Event.php';
 
 /**
- * \Hoa\Core\Exception
+ * \Hoa\Core\Exception, (hard-preloaded in Hoa\Core\Consistency).
  */
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'Exception.php';
+//require_once __DIR__ . DIRECTORY_SEPARATOR . 'Exception.php';
 
 /**
  * \Hoa\Core\Parameter
@@ -77,9 +77,9 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'Parameter.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Protocol.php';
 
 /**
- * \Hoa\Core\Data
+ * \Hoa\Core\Data, (hard-preloaded in Hoa\Core\Consistency).
  */
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'Data.php';
+//require_once __DIR__ . DIRECTORY_SEPARATOR . 'Data.php';
 
 }
 
