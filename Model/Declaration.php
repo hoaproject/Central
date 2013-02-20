@@ -143,6 +143,18 @@ abstract class Declaration
     }
 
     /**
+     * Alias of $this->offsetGet().
+     *
+     * @access  public
+     * @param   string  $variable    Variable name.
+     * @return  \Hoa\Prasel\Model\Variable
+     */
+    public function getVariable ( $variable ) {
+
+        return $this->offsetGet($variable);
+    }
+
+    /**
      * Iterator over local variables.
      *
      * @access  public
