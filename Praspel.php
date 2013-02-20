@@ -41,7 +41,22 @@ from('Hoa')
 /**
  * \Hoa\Praspel\Exception
  */
--> import('Praspel.Exception.~');
+-> import('Praspel.Exception.~')
+
+/**
+ * \Hoa\Praspel\Visitor\Interpreter
+ */
+-> import('Praspel.Visitor.Interpreter')
+
+/**
+ * \Hoa\Compiler\Llk
+ */
+-> import('Compiler.Llk.~')
+
+/**
+ * \Hoa\File\Read
+ */
+-> import('File.Read');
 
 }
 
@@ -241,6 +256,47 @@ class Praspel {
 
         return $this->_callable;
     }
+
+    /**
+     * Short interpreter.
+     *
+     * @access  public
+     * @param   string  $praspel    Praspel.
+     * @return  \Hoa\Praspel\Model\Clause
+     */
+    public static function interprete ( $praspel ) {
+
+        static $_compiler    = null;
+        static $_interpreter = null;
+
+        if(null === $_compiler)
+            $_compiler = \Hoa\Compiler\Llk::load(
+                new \Hoa\File\Read('hoa://Library/Praspel/Grammar.pp')
+            );
+
+        if(null === $_interpreter)
+            $_interpreter = new Visitor\Interpreter();
+
+        $ast = $_compiler->parse($praspel);
+
+        return $_interpreter->visit($ast);
+    }
 }
 
+}
+
+namespace {
+
+/**
+ * Alias of \Hoa\Praspel::interprete().
+ *
+ * @access  public
+ * @param   string  $praspel    Praspel
+ * @return  \Hoa\Praspel\Model\Clause
+ */
+if(!ƒ('praspel')) {
+function praspel ( $praspel ) {
+
+    return \Hoa\Praspel::interprete($praspel);
+}}
 }
