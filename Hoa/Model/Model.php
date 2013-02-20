@@ -44,9 +44,9 @@ from('Hoa')
 -> import('Model.Exception')
 
 /**
- * \Hoa\Test\Praspel\Compiler
+ * \Hoa\Praspel
  */
--> import('Test.Praspel.Compiler', true);
+-> import('Praspel.~', true);
 
 }
 
@@ -263,7 +263,8 @@ abstract class Model
         $realdom   = $attribute['contract']
                          ->getClause('invariant')
                          ->getVariable($name)
-                         ->getNthDomain(0);
+                         ->getDomains()
+                         ->offsetGet(0);
         $classname = $realdom['classname']->getConstantValue();
         $_name     = '_' . $name;
 
