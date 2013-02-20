@@ -262,7 +262,7 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        echo 'Usage   : math:calc <options> [expression]', "\n",
+        echo 'Usage   : praspel:shell <options> [expression]', "\n",
              'Options :', "\n",
              $this->makeUsageOptionsList(array(
                  'help' => 'This help.'
