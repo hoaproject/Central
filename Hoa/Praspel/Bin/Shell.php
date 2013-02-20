@@ -232,10 +232,9 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
                 if(null === $expression)
                     break;
 
-                echo $interpreter->visit(
+                $interpreter->visit(
                     $compiler->parse($expression, 'expression')
                 );
-
                 $handle = $expression;
               break;
 
