@@ -462,6 +462,7 @@ class Interpreter implements \Hoa\Visitor\Visit {
                                 return \Hoa\String::fromCode(octdec($value));
                         }
 
+                    case 'accepted':
                     case 'string':
                         return $value;
 
