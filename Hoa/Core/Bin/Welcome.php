@@ -34,6 +34,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+namespace {
+
+from('Hoa')
+
+/**
+ * \Hoa\Console
+ */
+-> import('Console.~');
+
+}
+
 namespace Hoa\Core\Bin {
 
 /**
@@ -71,7 +82,7 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
     public function main ( ) {
 
         $library = null;
-        $verbose = true;
+        $verbose = \Hoa\Console::isDirect(STDOUT);
 
         while(false !== $c = $this->getOption($v)) switch($c) {
 
