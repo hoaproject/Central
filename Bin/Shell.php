@@ -252,7 +252,6 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
 
                     case 'q':
                     case 'quit':
-                        echo 'Bye bye!', "\n";
                       break 2;
 
                     default:
@@ -269,7 +268,7 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
 
             echo "\n";
 
-        } while('quit' != $line = $this->readLine('> '));
+        } while(false !== $line = $this->readLine('> '));
 
         return;
     }
