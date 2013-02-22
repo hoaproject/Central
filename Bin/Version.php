@@ -34,6 +34,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+namespace {
+
+from('Hoa')
+
+/**
+ * \Hoa\Console
+ */
+-> import('Console.~');
+
+}
+
 namespace Hoa\Core\Bin {
 
 /**
@@ -76,7 +87,7 @@ class Version extends \Hoa\Console\Dispatcher\Kit {
                     (null !== HOA_VERSION_EXTRA
                         ? '-' . HOA_VERSION_EXTRA
                         : '');
-        $verbose  = true;
+        $verbose  = \Hoa\Console::isDirect(STDOUT);
         $message  = null;
         $info     = null;
 

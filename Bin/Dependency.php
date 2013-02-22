@@ -34,6 +34,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+namespace {
+
+from('Hoa')
+
+/**
+ * \Hoa\Console
+ */
+-> import('Console.~');
+
+}
+
 namespace Hoa\Core\Bin {
 
 /**
@@ -71,7 +82,7 @@ class Dependency extends \Hoa\Console\Dispatcher\Kit {
      */
     public function main ( ) {
 
-        $verbose = true;
+        $verbose = \Hoa\Console::isDirect(STDOUT);
         $print   = 'both';
 
         while(false !== $c = $this->getOption($v)) switch($c) {

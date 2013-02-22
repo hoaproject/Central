@@ -34,6 +34,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+namespace {
+
+from('Hoa')
+
+/**
+ * \Hoa\Console
+ */
+-> import('Console.~');
+
+}
+
 namespace Hoa\Core\Bin {
 
 /**
@@ -73,7 +84,7 @@ class Resolve extends \Hoa\Console\Dispatcher\Kit {
 
         $exists  = true;
         $tree    = false;
-        $verbose = true;
+        $verbose = \Hoa\Console::isDirect(STDOUT);
 
         while(false !== $c = $this->getOption($v)) switch($c) {
 
