@@ -174,7 +174,7 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
                      '    .s[ample]    to sample a value of a variable;', "\n",
                      '    .u[nset]     to unset a variable;', "\n",
                      '    .d[ump]      to dump the tree of the expression;', "\n",
-                     '    .quit        to quit.', "\n";
+                     '    .q[uit]      to quit.', "\n";
               break;
 
             case '.c':
@@ -228,6 +228,10 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
                 echo $dump->visit($interpreter->getRoot());
               break;
 
+            case '.q':
+            case '.quit':
+                break 2;
+
             default:
                 if(null === $expression)
                     break;
@@ -248,7 +252,7 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
 
         echo "\n";
 
-        } while('.quit' !== $expression = $readline->readLine('> '));
+        } while(false !== $expression = $readline->readLine('> '));
 
         return;
     }
