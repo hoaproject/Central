@@ -468,12 +468,7 @@ class Server extends Connection implements \Iterator {
      */
     private function getNodeId ( $resource ) {
 
-        ob_start();
-        var_dump($resource);
-        $id = md5(ob_get_contents());
-        ob_end_clean();
-
-        return $id;
+        return md5((int) $resource);
     }
 }
 
