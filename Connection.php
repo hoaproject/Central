@@ -591,7 +591,7 @@ abstract class Connection
                 $remote
             );
 
-        if(-1 == $out)
+        if(-1 === $out)
             throw new Exception(
                 'Pipe is broken, cannot write data.', 4);
 
