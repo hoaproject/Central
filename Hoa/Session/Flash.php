@@ -65,7 +65,7 @@ class Flash extends Session {
      *
      * @const string
      */
-    const EVENT_CHANNEL           = 'hoa://Event/Session/Flash/';
+    const EVENT_CHANNEL = 'hoa://Event/Session/Flash/';
 
     /**
      * Top-namespace. See parent::TOP_NAMESPACE for more informations.
