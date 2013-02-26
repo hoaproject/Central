@@ -266,7 +266,7 @@ class Server extends Connection implements \Iterator {
         @stream_select($read, $write, $except, $this->getTimeout(), 0);
 
         foreach($read as $socket)
-            if($this->_master == $socket) {
+            if($this->_master === $socket) {
 
                 $client = @stream_socket_accept($this->_master);
 
@@ -371,7 +371,7 @@ class Server extends Connection implements \Iterator {
 
         $current = $this->getStream();
 
-        if($current != $this->_master) {
+        if($current !== $this->_master) {
 
             $i = array_search($current, $this->_stack);
 
@@ -468,12 +468,7 @@ class Server extends Connection implements \Iterator {
      */
     private function getNodeId ( $resource ) {
 
-        ob_start();
-        var_dump($resource);
-        $id = md5(ob_get_contents());
-        ob_end_clean();
-
-        return $id;
+        return md5((int) $resource);
     }
 }
 
