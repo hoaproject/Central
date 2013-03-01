@@ -134,8 +134,18 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
      */
     protected $_validity                 = null;
 
+    /**
+     * Compiler of Praspel.
+     *
+     * @var \Hoa\Compiler\Llk\Parser object
+     */
     protected static $_compiler          = null;
 
+    /**
+     * Praspel interpreter.
+     *
+     * @var \Hoa\Praspel\Visitor\Interpreter object
+     */
     protected static $_interpreter       = null;
 
 
