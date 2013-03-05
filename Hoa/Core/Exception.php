@@ -212,8 +212,8 @@ class Idle extends \Exception {
 
         if(!empty($trace)) {
 
-            $file = @$t['file'];
-            $line = @$t['line'];
+            $file = isset($trace['file']) ? $trace['file'] : null;
+            $line = isset($trace['line']) ? $trace['line'] : null;
         }
 
         $pre  .= ': ';
@@ -282,16 +282,8 @@ class Idle extends \Exception {
      */
     public static function error ( $errno, $errstr, $errfile, $errline ) {
 
-        // If @.
-        if(0 == error_reporting())
+        if(0 === ($errno & error_reporting()))
             return;
-
-        // <tricky>
-        // Please @internals, what the hell is that?
-        if('Redefining already defined constructor for class' ==
-           substr($errstr, 0, 48))
-            return;
-        // </tricky>
 
         $trace = debug_backtrace();
         array_shift($trace);
