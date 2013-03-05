@@ -212,8 +212,8 @@ class Idle extends \Exception {
 
         if(!empty($trace)) {
 
-            $file = @$t['file'];
-            $line = @$t['line'];
+            $file = isset($trace['file']) ? $trace['file'] : null;
+            $line = isset($trace['line']) ? $trace['line'] : null;
         }
 
         $pre  .= ': ';
