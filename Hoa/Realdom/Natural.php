@@ -58,16 +58,16 @@ from('Hoa')
 namespace Hoa\Realdom {
 
 /**
- * Class \Hoa\Realdom\Integerpp.
+ * Class \Hoa\Realdom\Natural.
  *
- * Realistic domain: integerpp.
+ * Realistic domain: natural.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class          Integerpp
+class          Natural
     extends    Integer
     implements IRealdom\Nonconvex,
                IRealdom\Finite {
@@ -77,7 +77,7 @@ class          Integerpp
      *
      * @const string
      */
-    const NAME = 'integerpp';
+    const NAME = 'natural';
 
     /**
      * Realistic domain defined arguments.
@@ -92,7 +92,7 @@ class          Integerpp
     /**
      * Discredited values.
      *
-     * @var \Hoa\Realdom\Integerpp array
+     * @var \Hoa\Realdom\Natural array
      */
     protected $_discredited = array();
 

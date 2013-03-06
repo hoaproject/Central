@@ -81,7 +81,7 @@ class Relation extends _Array {
     public function construct ( ) {
 
         $this['pairs'] = new Constarray(array(array(
-            0 => realdom()->integerpp(),
+            0 => realdom()->natural(),
             1 => realdom()->class($this['classname']->getConstantValue())
         )));
 
