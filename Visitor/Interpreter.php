@@ -280,7 +280,7 @@ class Interpreter implements \Hoa\Visitor\Visit {
                         continue;
                     }
 
-                    $key     = realdom()->integerpp(0, 1);
+                    $key     = realdom()->natural(0, 1);
                     $value   = $child->accept($this, $handle, $eldnah);
                     $array[] = array($key, $value);
                 }
