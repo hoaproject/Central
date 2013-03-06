@@ -57,6 +57,6 @@ namespace Hoa\Session\Exception {
  * @license    New BSD License
  */
 
-class Expired extends \Hoa\Session\Exception { }
+class Expired extends Exception { }
 
 }
