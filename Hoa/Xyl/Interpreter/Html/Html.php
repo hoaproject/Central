@@ -133,6 +133,7 @@ class Html extends \Hoa\Xyl\Interpreter {
         'q'               => '\Hoa\Xyl\Interpreter\Html\Q',
         'dfn'             => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
         'abbr'            => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
+        'data'            => '\Hoa\Xyl\Interpreter\Html\Data',
         'time'            => '\Hoa\Xyl\Interpreter\Html\Time',
         'code'            => '\Hoa\Xyl\Interpreter\Html\Code',
         'var'             => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
