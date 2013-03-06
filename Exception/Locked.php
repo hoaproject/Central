@@ -57,6 +57,6 @@ namespace Hoa\Session\Exception {
  * @license    New BSD License
  */
 
-class Locked extends \Hoa\Session\Exception { }
+class Locked extends Exception { }
 
 }
