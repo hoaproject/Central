@@ -127,6 +127,91 @@ class Server implements \Hoa\Core\Event\Listenable {
     const OPCODE_PONG               = 0xa;
 
     /**
+     * Close: normal.
+     *
+     * @const int
+     */
+    const CLOSE_NORMAL              = 1000;
+
+    /**
+     * Close: going away.
+     *
+     * @const int
+     */
+    const CLOSE_GOING_AWAY          = 1001;
+
+    /**
+     * Close: protocol error.
+     *
+     * @const int
+     */
+    const CLOSE_PROTOCOL_ERROR      = 1002;
+
+    /**
+     * Close: data error.
+     *
+     * @const int
+     */
+    const CLOSE_DATA_ERROR          = 1003;
+
+    /**
+     * Close: status error.
+     *
+     * @const int
+     */
+    const CLOSE_STATUS_ERROR        = 1005;
+
+    /**
+     * Close: abnormal.
+     *
+     * @const int
+     */
+    const CLOSE_ABNORMAL            = 1006;
+
+    /**
+     * Close: message error.
+     *
+     * @const int
+     */
+    const CLOSE_MESSAGE_ERROR       = 1007;
+
+    /**
+     * Close: policy error.
+     *
+     * @const int
+     */
+    const CLOSE_POLICY_ERROR        = 1008;
+
+    /**
+     * Close: message too big.
+     *
+     * @const int
+     */
+    const CLOSE_MESSAGE_TOO_BIG     = 1009;
+
+    /**
+     * Close: extension missing.
+     *
+     * @const int
+     */
+    const CLOSE_EXTENSION_MISSING   = 1010;
+
+    /**
+     * Close: server error.
+     *
+     * @const int
+     */
+    const CLOSE_SERVER_ERROR        = 1011;
+
+    /**
+     * Close: TLS.
+     *
+     * @const int
+     */
+    const CLOSE_TLS                 = 1015;
+
+
+    /**
      * Listeners.
      *
      * @var \Hoa\Core\Event\Listener object
@@ -203,9 +288,9 @@ class Server implements \Hoa\Core\Event\Listenable {
      */
     public function run ( ) {
 
-        $this->_server->connectAndWait();
+        $this->getServer()->connectAndWait();
 
-        while(true) foreach($this->_server->select() as $node) {
+        while(true) foreach($this->getServer()->select() as $node) {
 
             try {
 
@@ -241,12 +326,43 @@ class Server implements \Hoa\Core\Event\Listenable {
                       break;
 
                     case self::OPCODE_TEXT_FRAME:
+                        if(0 === $frame['length']) {
+
+                            $this->send($frame['message']);
+                            $this->close(self::CLOSE_NORMAL);
+
+                            break;
+                        }
+
                         $this->_on->fire(
                             'message',
                             new \Hoa\Core\Event\Bucket(array(
                                 'message' => $frame['message']
                             ))
                         );
+                      break;
+
+                    case self::OPCODE_PING:
+                        $message = &$frame['message'];
+
+                        if(0x7d < strlen($message)) {
+
+                            $this->close(self::CLOSE_PROTOCOL_ERROR);
+
+                            break;
+                        }
+
+                        $this->getServer()
+                             ->getCurrentNode()
+                             ->getProtocolImplementation()
+                             ->writeFrame(
+                                 $message,
+                                 true,
+                                 self::OPCODE_PONG
+                             );
+                      break;
+
+                    case self::OPCODE_PONG:
                       break;
 
                     case self::OPCODE_CONNECTION_CLOSE:
@@ -268,7 +384,7 @@ class Server implements \Hoa\Core\Event\Listenable {
                 $this->_on->fire('error', new \Hoa\Core\Event\Bucket(array(
                     'exception' => $e
                 )));
-                $this->_server->disconnect();
+                $this->close();
             }
         }
 
@@ -286,7 +402,7 @@ class Server implements \Hoa\Core\Event\Listenable {
      */
     protected function doHandshake ( ) {
 
-        $buffer  = $this->_server->read(2048);
+        $buffer  = $this->getServer()->read(2048);
         $server  = $this->getServer();
         $request = $this->getRequest();
         $request->parse($buffer);
@@ -337,6 +453,26 @@ class Server implements \Hoa\Core\Event\Listenable {
                     ->getCurrentNode()
                     ->getProtocolImplementation()
                     ->send($message, $node);
+    }
+
+    /**
+     * Close a specific node/connection.
+     * It is just a “inline” method, a shortcut.
+     *
+     * @access  public
+     * @param   int                  $reason    Reason (please, see
+     *                                          self::CLOSE_* constants).
+     * @param   \Hoa\Websocket\Node  $node      Node.
+     * @return  void
+     */
+    public function close ( $reason = self::CLOSE_NORMAL, Node $node = null ) {
+
+        $server = $this->getServer();
+        $server->getCurrentNode()
+               ->getProtocolImplementation()
+               ->close($reason, $node);
+
+        return $server->disconnect();
     }
 
     /**

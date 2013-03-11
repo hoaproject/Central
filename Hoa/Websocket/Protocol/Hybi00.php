@@ -144,9 +144,10 @@ class Hybi00 extends Generic {
      * @access  public
      * @param   string  $message    Message.
      * @param   bool    $end        Whether it is the last frame of the message.
+     * @param   int     $opcode     Opcode (useless here).
      * @return  int
      */
-    public function writeFrame ( $message, $end = true ) {
+    public function writeFrame ( $message, $end = true, $opcode = -1 ) {
 
         return $this->_server->writeAll(
             chr(0) . $message . chr(255)
@@ -173,6 +174,22 @@ class Hybi00 extends Generic {
         $old = $this->_server->_setStream($node->getSocket());
         $node->getProtocolImplementation()->writeFrame($message);
         $this->_server->_setStream($old);
+
+        return;
+    }
+
+    /**
+     * Close a specific node/connection.
+     *
+     * @access  public
+     * @param   int                  $reason    Reason (please, see
+     *                                          \Hoa\Websocket\Server::CLOSE_*
+     *                                          constants).
+     * @param   \Hoa\Websocket\Node  $node      Node.
+     * @return  void
+     */
+    public function close ( $reason = \Hoa\Websocket\Server::CLOSE_NORMAL,
+                            \Hoa\Websocket\Node $node = null ) {
 
         return;
     }

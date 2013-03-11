@@ -150,6 +150,12 @@ class Rfc6455 extends Generic {
                 'given 0x%x, 0x%x and 0x%x.',
                 1, array($out['rsv1'], $out['rsv2'], $out['rsv3']));
 
+        if(0 === $out['length']) {
+
+            $out['message'] = '';
+
+            return $out;
+        }
         if(0 === $out['length'])
             throw new \Hoa\Websocket\Exception(
                 'Length cannot be zero.', 2);
@@ -196,18 +202,17 @@ class Rfc6455 extends Generic {
      * @access  public
      * @param   string  $message    Message.
      * @param   bool    $end        Whether it is the last frame of the message.
+     * @param   int     $opcode     Opcode.
      * @return  int
-     * @throw   \Hoa\Websocket\Exception
      */
-    public function writeFrame ( $message, $end = true ) {
+    public function writeFrame ( $message,
+                                 $end    = true,
+                                 $opcode = \Hoa\Websocket\Server::OPCODE_TEXT_FRAME ) {
 
         $fin    = true === $end ? 0x1 : 0x0;
         $rsv1   = 0x0;
         $rsv2   = 0x0;
         $rsv3   = 0x0;
-        $opcode = true === $end
-                      ? \Hoa\Websocket\Server::OPCODE_TEXT_FRAME
-                      : \Hoa\Websocket\Server::OPCODE_CONTINUATION_FRAME;
         $mask   = 0x1;
         $length = strlen($message);
         $out    = chr(
@@ -218,15 +223,12 @@ class Rfc6455 extends Generic {
           | $opcode
         );
 
-        if(0x7d >= $length)
-            $out .= chr($length);
-        elseif(0x10000 >= $length)
+        if(0xffff < $length)
+            $out .= chr(0x7f) . pack('NN', 0, $length);
+        elseif(0x7d < $length)
             $out .= chr(0x7e) . pack('n', $length);
-        elseif(0x8000000000000000 >= $length)
-            $out .= chr(0x7f) . pack('N', $length);
         else
-            throw new \Hoa\Websocket\Exception(
-                'Message is too long.', 4);
+            $out .= chr($length);
 
         $out .= $message;
 
@@ -252,6 +254,41 @@ class Rfc6455 extends Generic {
 
         $old = $this->_server->_setStream($node->getSocket());
         $node->getProtocolImplementation()->writeFrame($message);
+        $this->_server->_setStream($old);
+
+        return;
+    }
+
+    /**
+     * Close a specific node/connection.
+     *
+     * @access  public
+     * @param   int                  $reason    Reason (please, see
+     *                                          \Hoa\Websocket\Server::CLOSE_*
+     *                                          constants).
+     * @param   \Hoa\Websocket\Node  $node      Node.
+     * @return  void
+     */
+    public function close ( $reason = \Hoa\Websocket\Server::CLOSE_NORMAL,
+                            \Hoa\Websocket\Node $node = null ) {
+
+        if(null === $node) {
+
+            $this->writeFrame(
+                pack('n', $reason),
+                true,
+                \Hoa\Websocket\Server::OPCODE_CONNECTION_CLOSE
+            );
+
+            return;
+        }
+
+        $old = $this->_server->_setStream($node->getSocket());
+        $node->getProtocolImplementation()->writeFrame(
+            pack('n', $reason),
+            true,
+            \Hoa\Websocket\Server::OPCODE_CONNECTION_CLOSE
+        );
         $this->_server->_setStream($old);
 
         return;
