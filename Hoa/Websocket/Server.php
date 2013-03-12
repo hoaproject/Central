@@ -307,6 +307,9 @@ class Server implements \Hoa\Core\Event\Listenable {
 
                 $frame = $node->getProtocolImplementation()->readFrame();
 
+                if(false === $frame)
+                    continue;
+
                 switch($frame['opcode']) {
 
                     case self::OPCODE_CONTINUATION_FRAME:
@@ -374,9 +377,7 @@ class Server implements \Hoa\Core\Event\Listenable {
                       break;
 
                     default:
-                        throw new Exception(
-                            'Opcode 0x%x is not supported by this server.',
-                            0, $frame['opcode']);
+                        $this->close(self::CLOSE_DATA_ERROR);
                 }
             }
             catch ( \Hoa\Core\Exception\Idle $e ) {
