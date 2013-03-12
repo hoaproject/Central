@@ -252,6 +252,7 @@ class Server implements \Hoa\Core\Event\Listenable {
         $this->_on     = new \Hoa\Core\Event\Listener($this, array(
             'open',
             'message',
+            'ping',
             'close',
             'error'
         ));
@@ -315,19 +316,18 @@ class Server implements \Hoa\Core\Event\Listenable {
                 switch($frame['opcode']) {
 
                     case self::OPCODE_TEXT_FRAME:
-                        if(0 === $frame['length']) {
-
-                            $this->send($frame['message']);
-                            $this->close(self::CLOSE_NORMAL);
-
-                            break;
-                        }
-
                         if(0x1 === $frame['fin']) {
 
                             if(0 < $node->getNumberOfFragments()) {
 
                                 $this->close(self::CLOSE_PROTOCOL_ERROR);
+
+                                break;
+                            }
+
+                            if(false === (bool) preg_match('//u', $frame['message'])) {
+
+                                $this->close(self::CLOSE_MESSAGE_ERROR);
 
                                 break;
                             }
@@ -363,6 +363,14 @@ class Server implements \Hoa\Core\Event\Listenable {
 
                             $message = $node->getFragmentedMessage();
                             $node->clearFragmentation();
+
+                            if(false === (bool) preg_match('//u', $message)) {
+
+                                $this->close(self::CLOSE_MESSAGE_ERROR);
+
+                                break;
+                            }
+
                             $this->_on->fire(
                                 'message',
                                 new \Hoa\Core\Event\Bucket(array(
@@ -376,9 +384,16 @@ class Server implements \Hoa\Core\Event\Listenable {
                         $message = &$frame['message'];
 
                         if(   0x0  === $frame['fin']
-                           || 0x7d  <  strlen($message)) {
+                           || 0x7d  <  $frame['length']) {
 
                             $this->close(self::CLOSE_PROTOCOL_ERROR);
+
+                            break;
+                        }
+
+                        if(false === (bool) preg_match('//u', $message)) {
+
+                            $this->close(self::CLOSE_MESSAGE_ERROR);
 
                             break;
                         }
@@ -391,6 +406,13 @@ class Server implements \Hoa\Core\Event\Listenable {
                                  true,
                                  self::OPCODE_PONG
                              );
+
+                        $this->_on->fire(
+                            'ping',
+                            new \Hoa\Core\Event\Bucket(array(
+                                'message' => $message
+                            ))
+                        );
                       break;
 
                     case self::OPCODE_PONG:
