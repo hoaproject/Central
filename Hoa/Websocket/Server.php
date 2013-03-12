@@ -310,9 +310,60 @@ class Server implements \Hoa\Core\Event\Listenable {
                 if(false === $frame)
                     continue;
 
+                if(false === (bool) preg_match('//u', $frame['message'])) {
+
+                    $this->close(self::CLOSE_MESSAGE_ERROR);
+
+                    continue;
+                }
+
+                $fromText = false;
+
                 switch($frame['opcode']) {
 
+                    case self::OPCODE_TEXT_FRAME:
+                        if(0 === $frame['length']) {
+
+                            $this->send($frame['message']);
+                            $this->close(self::CLOSE_NORMAL);
+
+                            break;
+                        }
+
+                        if(0x1 === $frame['fin']) {
+
+                            if(0 < $node->getNumberOfFragments()) {
+
+                                $this->close(self::CLOSE_PROTOCOL_ERROR);
+
+                                break;
+                            }
+
+                            $this->_on->fire(
+                                'message',
+                                new \Hoa\Core\Event\Bucket(array(
+                                    'message' => $frame['message']
+                                ))
+                            );
+
+                            break;
+                        }
+
+                        $fromText = true;
+
                     case self::OPCODE_CONTINUATION_FRAME:
+                        if(false === $fromText) {
+
+                            if(0 === $node->getNumberOfFragments()) {
+
+                                $this->close(self::CLOSE_PROTOCOL_ERROR);
+
+                                break;
+                            }
+                        }
+                        else
+                            $fromText = false;
+
                         $node->appendMessageFragment($frame['message']);
 
                         if(0x1 === $frame['fin']) {
@@ -328,27 +379,11 @@ class Server implements \Hoa\Core\Event\Listenable {
                         }
                       break;
 
-                    case self::OPCODE_TEXT_FRAME:
-                        if(0 === $frame['length']) {
-
-                            $this->send($frame['message']);
-                            $this->close(self::CLOSE_NORMAL);
-
-                            break;
-                        }
-
-                        $this->_on->fire(
-                            'message',
-                            new \Hoa\Core\Event\Bucket(array(
-                                'message' => $frame['message']
-                            ))
-                        );
-                      break;
-
                     case self::OPCODE_PING:
                         $message = &$frame['message'];
 
-                        if(0x7d < strlen($message)) {
+                        if(   0x0  === $frame['fin']
+                           || 0x7d  <  strlen($message)) {
 
                             $this->close(self::CLOSE_PROTOCOL_ERROR);
 
@@ -366,6 +401,12 @@ class Server implements \Hoa\Core\Event\Listenable {
                       break;
 
                     case self::OPCODE_PONG:
+                        if(0 === $frame['fin']) {
+
+                            $this->close(self::CLOSE_PROTOCOL_ERROR);
+
+                            break;
+                        }
                       break;
 
                     case self::OPCODE_CONNECTION_CLOSE:
@@ -377,7 +418,7 @@ class Server implements \Hoa\Core\Event\Listenable {
                       break;
 
                     default:
-                        $this->close(self::CLOSE_DATA_ERROR);
+                        $this->close(self::CLOSE_PROTOCOL_ERROR);
                 }
             }
             catch ( \Hoa\Core\Exception\Idle $e ) {
