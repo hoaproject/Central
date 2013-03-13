@@ -252,6 +252,7 @@ class Server implements \Hoa\Core\Event\Listenable {
         $this->_on     = new \Hoa\Core\Event\Listener($this, array(
             'open',
             'message',
+            'binary-message',
             'ping',
             'close',
             'error'
@@ -380,6 +381,15 @@ class Server implements \Hoa\Core\Event\Listenable {
                         }
                       break;
 
+                    case self::OPCODE_BINARY_FRAME:
+                        $this->_on->fire(
+                            'binary-message',
+                            new \Hoa\Core\Event\Bucket(array(
+                                'message' => $frame['message']
+                            ))
+                        );
+                      break;
+
                     case self::OPCODE_PING:
                         $message = &$frame['message'];
 
@@ -396,8 +406,8 @@ class Server implements \Hoa\Core\Event\Listenable {
                              ->getProtocolImplementation()
                              ->writeFrame(
                                  $message,
-                                 true,
-                                 self::OPCODE_PONG
+                                 self::OPCODE_PONG,
+                                 true
                              );
 
                         $this->_on->fire(
@@ -548,6 +558,23 @@ class Server implements \Hoa\Core\Event\Listenable {
                     ->getCurrentNode()
                     ->getProtocolImplementation()
                     ->send($message, $node);
+    }
+
+    /**
+     * Send a binary message to a specific node/connection.
+     * It is just a “inline” method, a shortcut.
+     *
+     * @access  public
+     * @param   string               $message    Message.
+     * @param   \Hoa\Websocket\Node  $node       Node.
+     * @return  void
+     */
+    public function sendBinary ( $message, Node $node = null ) {
+
+        return $this->getServer()
+                    ->getCurrentNode()
+                    ->getProtocolImplementation()
+                    ->send($message, $node, self::OPCODE_BINARY_FRAME);
     }
 
     /**
