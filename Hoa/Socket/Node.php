@@ -62,20 +62,29 @@ class Node {
      */
     private $_socket = null;
 
+    /**
+     * Get server.
+     *
+     * @var \Hoa\Socket\Server object
+     */
+    private $_server = null;
+
 
 
     /**
      * Constructor.
      *
      * @access  public
-     * @param   string    $id        ID.
-     * @param   resource  $socket    Socket.
+     * @param   string              $id        ID.
+     * @param   resource            $socket    Socket.
+     * @param   \Hoa\Socket\Server  $server    Server.
      * @return  void
      */
-    public function __construct ( $id, $socket ) {
+    public function __construct ( $id, $socket, $server ) {
 
         $this->_id     = $id;
         $this->_socket = $socket;
+        $this->_server = $server;
 
         return;
     }
@@ -100,6 +109,17 @@ class Node {
     public function getSocket ( ) {
 
         return $this->_socket;
+    }
+
+    /**
+     * Get server.
+     *
+     * @access  public
+     * @return  \Hoa\Socket\Server
+     */
+    public function getServer ( ) {
+
+        return $this->_server;
     }
 }
 

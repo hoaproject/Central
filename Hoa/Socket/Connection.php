@@ -135,7 +135,7 @@ abstract class Connection
      *
      * @var \Hoa\Socket\Connection bool
      */
-    protected $_disconnect    = false;
+    protected $_disconnect    = true;
 
     /**
      * Whether we should consider remote address or not.
@@ -189,6 +189,7 @@ abstract class Connection
             $this->getSocket()->__toString(),
             $this->getContext()
         );
+        $this->_disconnect = false;
 
         return $this;
     }

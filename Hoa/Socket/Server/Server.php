@@ -55,7 +55,7 @@ from('Hoa')
 
 }
 
-namespace Hoa\Socket {
+namespace Hoa\Socket\Server {
 
 /**
  * Class \Hoa\Socket\Server.
@@ -67,7 +67,7 @@ namespace Hoa\Socket {
  * @license    New BSD License
  */
 
-class Server extends Connection implements \Iterator {
+class Server extends \Hoa\Socket\Connection implements \Iterator {
 
     /**
      * Tell a stream to bind to the specified target.
@@ -91,11 +91,25 @@ class Server extends Connection implements \Iterator {
     protected $_master   = null;
 
     /**
+     * All considered server.
+     *
+     * @var \Hoa\Socket\Server array
+     */
+    protected $_servers  = array();
+
+    /**
+     * Masters connection.
+     *
+     * @var \Hoa\Socket\Server array
+     */
+    protected $_masters  = array();
+
+    /**
      * Stack of connections.
      *
      * @var \Hoa\Socket\Server array
      */
-    protected $_stack    = null;
+    protected $_stack    = array();
 
     /**
      * Node name.
@@ -211,7 +225,10 @@ class Server extends Connection implements \Iterator {
                 'Server cannot join %s and returns an error (number %d): %s.',
                 0, array($streamName, $errno, $errstr));
 
-        $this->_stack[] = $this->_master;
+        $i                  = count($this->_masters);
+        $this->_masters[$i] = $this->_master;
+        $this->_servers[$i] = $this;
+        $this->_stack[]     = $this->_masters[$i];
 
         return $this->_master;
     }
@@ -258,24 +275,28 @@ class Server extends Connection implements \Iterator {
      */
     public function select ( ) {
 
-        $read      = $this->_stack;
-        $write     = null;
-        $except    = null;
-        $nodeClass = $this->getNodeName();
+        $read   = $this->_stack;
+        $write  = null;
+        $except = null;
 
         @stream_select($read, $write, $except, $this->getTimeout(), 0);
 
         foreach($read as $socket)
-            if($this->_master === $socket) {
+            if(true === in_array($socket, $this->_masters, true)) {
 
-                $client = @stream_socket_accept($this->_master);
+                $client = @stream_socket_accept($socket);
 
                 if(false === $client)
                     throw new Exception(
                         'Operation timed out (nothing to accept).', 2);
 
+                $m                 = array_search($socket, $this->_masters, true);
+                $server            = $this->_servers[$m];
                 $id                = $this->getNodeId($client);
-                $node              = dnew($nodeClass, array($id, $client));
+                $node              = dnew(
+                    $server->getNodeName(),
+                    array($id, $client, $server)
+                );
                 $this->_nodes[$id] = $node;
                 $this->_stack[]    = $client;
             }
@@ -283,6 +304,38 @@ class Server extends Connection implements \Iterator {
                 $this->_iterator[] = $socket;
 
         return $this;
+    }
+
+    /**
+     * Consider another server when selecting connection.
+     *
+     * @access  public
+     * @param   \Hoa\Socket\Server  $other    Other server.
+     * @return  \Hoa\Socket\Server
+     */
+    public function consider ( self $other ) {
+
+        if(true === $other->isDisconnected())
+            $other->connectAndWait();
+
+        $i                  = count($this->_masters);
+        $this->_masters[$i] = $other->_master;
+        $this->_servers[$i] = $other;
+        $this->_stack[]     = $this->_masters[$i];
+
+        return $this;
+    }
+
+    /**
+     * Check if the current node belongs to a specific server.
+     *
+     * @access  public
+     * @param   \Hoa\Socket\Server  $server    Server.
+     * @return  bool
+     */
+    public function is ( self $server ) {
+
+        return $this->_node->getServer() === $server;
     }
 
     /**
@@ -371,7 +424,7 @@ class Server extends Connection implements \Iterator {
 
         $current = $this->getStream();
 
-        if($current !== $this->_master) {
+        if(false === in_array($current, $this->_masters, true)) {
 
             $i = array_search($current, $this->_stack);
 
