@@ -55,7 +55,7 @@ from('Hoa')
 
 }
 
-namespace Hoa\Socket {
+namespace Hoa\Socket\Server {
 
 /**
  * Class \Hoa\Socket\Server.
@@ -67,7 +67,7 @@ namespace Hoa\Socket {
  * @license    New BSD License
  */
 
-class Server extends Connection implements \Iterator {
+class Server extends \Hoa\Socket\Connection implements \Iterator {
 
     /**
      * Tell a stream to bind to the specified target.
@@ -226,9 +226,9 @@ class Server extends Connection implements \Iterator {
                 0, array($streamName, $errno, $errstr));
 
         $i                  = count($this->_masters);
-        $this->_masters[$i] = &$this->_master;
+        $this->_masters[$i] = $this->_master;
         $this->_servers[$i] = $this;
-        $this->_stack[]     = &$this->_masters[$i];
+        $this->_stack[]     = $this->_masters[$i];
 
         return $this->_master;
     }
@@ -319,9 +319,9 @@ class Server extends Connection implements \Iterator {
             $other->connectAndWait();
 
         $i                  = count($this->_masters);
-        $this->_masters[$i] = &$other->_master;
+        $this->_masters[$i] = $other->_master;
         $this->_servers[$i] = $other;
-        $this->_stack[]     = &$this->_masters[$i];
+        $this->_stack[]     = $this->_masters[$i];
 
         return $this;
     }
