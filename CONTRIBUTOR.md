@@ -7,7 +7,7 @@ firstname.lastname@hoa-project and its alias pseudo@hoa-project.net, with a
 cloak on IRC, etc.
 
   * ➜ Ivan Enderlin (hywan)
-  * • Abdallah Ben Othman (badoul)
+  * Abdallah Ben Othman (badoul)
   * ➜ Julien Clauzel (thehawk)
   * ➜ Matthieu Codron (circlecode)
   * Frédéric Dadeau (fdadeau)
