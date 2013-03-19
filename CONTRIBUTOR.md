@@ -2,8 +2,8 @@
 
 # List of constributors
 
-The symbol ➜ indicates that the contributor has an email address of the form
-firstname.lastname@hoa-project and its alias pseudo@hoa-project.net, with a
+The symbol `➜` indicates that the contributor has an email address of the form
+`firstname.lastname@hoa-project` and its alias `pseudo@hoa-project.net`, with a
 cloak on IRC, etc.
 
   * ➜ Ivan Enderlin (hywan)
