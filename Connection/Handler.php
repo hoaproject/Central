@@ -34,14 +34,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Socket\Server {
+namespace Hoa\Socket\Connection {
 
 /**
- * Class \Hoa\Socket\Server\Handler.
+ * Class \Hoa\Socket\Connection.
  *
- * This class provides a server handler: a complete server skeleton.
- * We are able to run() a server, to merge() with other ones and to send
- * messages in different ways (A -> A, A -> B, A -> *\A etc.).
+ * This class provides a connection handler: a complete connection skeleton.  We
+ * are able to run() a connection (client or server), to merge() with other ones
+ * and to send messages in different ways (A -> A, A -> B, A -> *\A etc.).
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
@@ -51,25 +51,25 @@ namespace Hoa\Socket\Server {
 abstract class Handler {
 
     /**
-     * Original server.
+     * Original connection.
      *
-     * @var \Hoa\Socket\Server object
+     * @var \Hoa\Socket\Connection object
      */
-    protected $_originalServer = null;
+    protected $_originalConnection = null;
 
     /**
-     * Current server.
+     * Current connection.
      *
-     * @var \Hoa\Socket\Server object
+     * @var \Hoa\Socket\Connection object
      */
-    protected $_server         = null;
+    protected $_connection         = null;
 
     /**
-     * All other servers that have been merged.
+     * All other connections that have been merged.
      *
-     * @var \Hoa\Socket\Server object
+     * @var \Hoa\Socket\Connection\Handler array
      */
-    protected $_servers        = array();
+    protected $_connections        = array();
 
 
 
@@ -77,59 +77,59 @@ abstract class Handler {
      * Constructor. Must be called.
      *
      * @access  public
-     * @param   \Hoa\Socket\Server  $server    Server.
+     * @param   \Hoa\Socket\Connection  $connection    Connection.
      * @return  void
      */
-    public function __construct ( Server $server ) {
+    public function __construct ( Connection $connection ) {
 
-        $this->_originalServer = $server;
-        $this->setServer($server);
+        $this->_originalConnection = $connection;
+        $this->setConnection($connection);
 
         return;
     }
 
     /**
-     * Set current server.
+     * Set current connection.
      *
      * @access  protected
-     * @param   \Hoa\Socket\Server  $server    Server.
-     * @return  \Hoa\Socket\Server
+     * @param   \Hoa\Socket\Connection  $connection    Connection.
+     * @return  \Hoa\Socket\Connection
      */
-    protected function setServer ( Server $server ) {
+    protected function setConnection ( Connection $connection ) {
 
-        $old           = $this->_server;
-        $this->_server = $server;
+        $old               = $this->_connection;
+        $this->_connection = $connection;
 
         return $old;
     }
 
     /**
-     * Get original server.
+     * Get original connection.
      *
      * @access  protected
-     * @return  \Hoa\Socket\Server
+     * @return  \Hoa\Socket\Connection
      */
-    protected function getOriginalServer ( ) {
+    protected function getOriginalConnection ( ) {
 
-        return $this->_originalServer;
+        return $this->_originalConnection;
     }
 
     /**
-     * Get current server.
+     * Get current connection.
      *
      * @access  public
-     * @return  \Hoa\Socket\Server
+     * @return  \Hoa\Socket\Connection
      */
-    public function getServer ( ) {
+    public function getConnection ( ) {
 
-        return $this->_server;
+        return $this->_connection;
     }
 
     /**
      * The node dedicated part of the run() method.
      * A run is pretty simple, schematically:
      *
-     *     while(true) foreach($server->select() as $node)
+     *     while(true) foreach($connection->select() as $node)
      *         // body
      *
      * The body is given by this method.
@@ -141,49 +141,59 @@ abstract class Handler {
     abstract protected function _run ( \Hoa\Socket\Node $node );
 
     /**
-     * Run the server.
+     * Run the connection.
      *
      * @access  public
      * @return  void
      */
     public function run ( ) {
 
-        $server = $this->getServer();
-        $server->connectAndWait();
+        $connection = $this->getConnection();
 
-        while(true) foreach($server->select() as $node) {
+        if($connection instanceof \Hoa\Socket\Server)
+            $connection->connectAndWait();
+        else
+            $connection->connect();
 
-            foreach($this->_servers as $other)
-                if(true === $server->is($other->getOriginalServer())) {
+        while(true) foreach($connection->select() as $node) {
+
+            foreach($this->_connections as $other) {
+
+                if(true === $connection->is($other->getOriginalConnection())) {
 
                     $other->_run($node);
 
                     continue 2;
                 }
+            }
 
             $this->_run($node);
         }
 
-        $server->disconnect();
+        $connection->disconnect();
 
         return;
     }
 
     /**
-     * Merge a server into this one.
-     * If we have two servers that must run at the same time, the
-     * Hoa\Socket\Server::consider() and Hoa\Socket\Server::is() methods are
-     * helpful but this whole class eases the merge of “high-level” servers.
+     * Merge a connection into this one.
+     * If we have two connections that must run at the same time, the
+     * Hoa\Socket\Connection::consider() and Hoa\Socket\Connection::is() methods
+     * are helpful but this whole class eases the merge of “high-level”
+     * connections.
      *
      * @access  public
-     * @param   \Hoa\Socket\Server\Handler  $other    Server to merge.
-     * @return  \Hoa\Socket\Server\Handler
+     * @param   \Hoa\Socket\Connection  $other    Connection to merge.
+     * @return  \Hoa\Socket\Connection
      */
     public function merge ( self $other ) {
 
-        $this->getServer()->consider($other->getServer());
-        $other->setServer($this->getServer());
-        $this->_servers[] = $other;
+        $this->getConnection()->consider($other->getConnection());
+
+        if($other instanceof \Hoa\Socket\Server)
+            $other->setConnection($this->getConnection());
+
+        $this->_connections[] = $other;
 
         return $this;
     }
@@ -212,21 +222,21 @@ abstract class Handler {
     public function send ( $message, \Hoa\Socket\Node $node = null ) {
 
         if(null === $node)
-            return $this->_send($message, $this->getServer()->getCurrentNode());
+            return $this->_send($message, $this->getConnection()->getCurrentNode());
 
-        $old  = $this->getServer()->_setStream($node->getSocket());
+        $old  = $this->getConnection()->_setStream($node->getSocket());
         $send = $this->_send($message, $node);
 
         if($send instanceof \Closure)
             return function ( ) use ( &$send, &$old ) {
 
                 $out = call_user_func_array($send, func_get_args());
-                $this->getServer()->_setStream($old);
+                $this->getConnection()->_setStream($old);
 
                 return $out;
             };
 
-        $this->getServer()->_setStream($old);
+        $this->getConnection()->_setStream($old);
 
         return $send;
     }
@@ -242,15 +252,15 @@ abstract class Handler {
      */
     public function broadcast ( $message ) {
 
-        $server        = $this->getServer();
-        $currentNode   = $server->getCurrentNode();
-        $currentSocket = $this->getOriginalServer()->getSocket();
+        $connection    = $this->getConnection();
+        $currentNode   = $connection->getCurrentNode();
+        $currentSocket = $this->getOriginalConnection()->getSocket();
 
         if(1 === func_num_args()) {
 
-            foreach($server->getNodes() as $node)
+            foreach($connection->getNodes() as $node)
                 if($node !== $currentNode)
-                    if($node->getServer()->getSocket() === $currentSocket)
+                    if($node->getConnection()->getSocket() === $currentSocket)
                         $this->send($message, $node);
 
             return;
@@ -260,9 +270,9 @@ abstract class Handler {
         array_unshift($arguments, $message, null);
         $callable  = array($this, 'send');
 
-        foreach($server->getNodes() as $node)
+        foreach($connection->getNodes() as $node)
             if($node !== $currentNode)
-                if($node->getServer()->getSocket() === $currentSocket) {
+                if($node->getConnection()->getSocket() === $currentSocket) {
 
                     $arguments[1] = $node;
                     call_user_func_array($callable, $arguments);
