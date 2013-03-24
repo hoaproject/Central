@@ -157,6 +157,30 @@ abstract class Handler {
 
         while(true) foreach($connection->select() as $node) {
 
+            // Connection has failed to detect the node, maybe it is a resource
+            // from a merged client in a server.
+            if(false === is_object($node)) {
+
+                $socket = $node;
+
+                foreach($this->_connections as $other) {
+
+                    $otherConnection = $other->getOriginalConnection();
+
+                    if(!($otherConnection instanceof \Hoa\Socket\Client))
+                        continue;
+
+                    $node = $otherConnection->getCurrentNode();
+
+                    if($node->getSocket() === $socket) {
+
+                        $other->_run($node);
+
+                        continue 2;
+                    }
+                }
+            }
+
             foreach($this->_connections as $other) {
 
                 if(true === $connection->is($other->getOriginalConnection())) {
@@ -188,9 +212,10 @@ abstract class Handler {
      */
     public function merge ( self $other ) {
 
-        $this->getConnection()->consider($other->getConnection());
+        $otherConnection = $other->getConnection();
+        $this->getConnection()->consider($otherConnection);
 
-        if($other instanceof \Hoa\Socket\Server)
+        if($otherConnection instanceof \Hoa\Socket\Server)
             $other->setConnection($this->getConnection());
 
         $this->_connections[] = $other;
@@ -222,7 +247,7 @@ abstract class Handler {
     public function send ( $message, \Hoa\Socket\Node $node = null ) {
 
         if(null === $node)
-            return $this->_send($message, $this->getConnection()->getCurrentNode());
+            $node = $this->getConnection()->getCurrentNode();
 
         $old  = $this->getConnection()->_setStream($node->getSocket());
         $send = $this->_send($message, $node);

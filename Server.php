@@ -314,9 +314,15 @@ class Server extends Connection {
      */
     public function consider ( parent $other ) {
 
-        if(!($other instanceof self))
-            throw new Exception(
-                'Other server must be of type %s.', 4, __CLASS__);
+        if($other instanceof Client) {
+
+            if(true === $other->isDisconnected())
+                $other->connect();
+
+            $this->_stack[] = $other->getStream();
+
+            return $this;
+        }
 
         if(true === $other->isDisconnected())
             $other->connectAndWait();
@@ -350,6 +356,10 @@ class Server extends Connection {
     public function current ( ) {
 
         $current = parent::_current();
+        $id      = $this->getNodeId($current);
+
+        if(!isset($this->_nodes[$id]))
+            return $current;
 
         return $this->_node = $this->_nodes[$this->getNodeId($current)];
     }
