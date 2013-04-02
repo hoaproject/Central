@@ -46,7 +46,7 @@ from('Hoa')
 /**
  * \Hoa\Socket\Connection
  */
--> import('Socket.Connection')
+-> import('Socket.Connection.~')
 
 /**
  * \Hoa\Socket\Node
@@ -55,7 +55,7 @@ from('Hoa')
 
 }
 
-namespace Hoa\Socket\Server {
+namespace Hoa\Socket {
 
 /**
  * Class \Hoa\Socket\Server.
@@ -67,7 +67,7 @@ namespace Hoa\Socket\Server {
  * @license    New BSD License
  */
 
-class Server extends \Hoa\Socket\Connection implements \Iterator {
+class Server extends Connection {
 
     /**
      * Tell a stream to bind to the specified target.
@@ -110,34 +110,6 @@ class Server extends \Hoa\Socket\Connection implements \Iterator {
      * @var \Hoa\Socket\Server array
      */
     protected $_stack    = array();
-
-    /**
-     * Node name.
-     *
-     * @var \Hoa\Socket\Server string
-     */
-    protected $_nodeName = null;
-
-    /**
-     * Current node.
-     *
-     * @var \Hoa\Socket\Node object
-     */
-    protected $_node     = null;
-
-    /**
-     * List of nodes (connections) when selecting.
-     *
-     * @var \Hoa\Socket\Server array
-     */
-    protected $_nodes    = array();
-
-    /**
-     * Temporize selected connections when selecting.
-     *
-     * @var \Hoa\Socket\Server array
-     */
-    protected $_iterator = array();
 
 
 
@@ -188,7 +160,6 @@ class Server extends \Hoa\Socket\Connection implements \Iterator {
             }
 
         parent::__construct(null, $timeout, $flag, $context);
-        $this->setNodeName('\Hoa\Socket\Node');
 
         return;
     }
@@ -223,7 +194,7 @@ class Server extends \Hoa\Socket\Connection implements \Iterator {
         if(false === $this->_master)
             throw new Exception(
                 'Server cannot join %s and returns an error (number %d): %s.',
-                0, array($streamName, $errno, $errstr));
+                1, array($streamName, $errno, $errstr));
 
         $i                  = count($this->_masters);
         $this->_masters[$i] = $this->_master;
@@ -231,6 +202,34 @@ class Server extends \Hoa\Socket\Connection implements \Iterator {
         $this->_stack[]     = $this->_masters[$i];
 
         return $this->_master;
+    }
+
+    /**
+     * Close the current stream.
+     *
+     * @access  protected
+     * @return  bool
+     */
+    protected function _close ( ) {
+
+        $current = $this->getStream();
+
+        if(false === in_array($current, $this->_masters, true)) {
+
+            $i = array_search($current, $this->_stack);
+
+            if(false !== $i)
+                unset($this->_stack[$i]);
+
+            unset($this->_nodes[$this->getNodeId($current)]);
+
+            @fclose($current);
+
+            // Closing slave does not have the same effect that closing master.
+            return false;
+        }
+
+        return (bool) (@fclose($this->_master) + @fclose($this->getStream()));
     }
 
     /**
@@ -248,7 +247,7 @@ class Server extends \Hoa\Socket\Connection implements \Iterator {
 
         if(false === $client)
             throw new Exception(
-                'Operation timed out (nothing to accept).', 1);
+                'Operation timed out (nothing to accept).', 2);
 
         $this->_setStream($client);
 
@@ -288,7 +287,7 @@ class Server extends \Hoa\Socket\Connection implements \Iterator {
 
                 if(false === $client)
                     throw new Exception(
-                        'Operation timed out (nothing to accept).', 2);
+                        'Operation timed out (nothing to accept).', 3);
 
                 $m                 = array_search($socket, $this->_masters, true);
                 $server            = $this->_servers[$m];
@@ -313,7 +312,17 @@ class Server extends \Hoa\Socket\Connection implements \Iterator {
      * @param   \Hoa\Socket\Server  $other    Other server.
      * @return  \Hoa\Socket\Server
      */
-    public function consider ( self $other ) {
+    public function consider ( parent $other ) {
+
+        if($other instanceof Client) {
+
+            if(true === $other->isDisconnected())
+                $other->connect();
+
+            $this->_stack[] = $other->getStream();
+
+            return $this;
+        }
 
         if(true === $other->isDisconnected())
             $other->connectAndWait();
@@ -333,113 +342,26 @@ class Server extends \Hoa\Socket\Connection implements \Iterator {
      * @param   \Hoa\Socket\Server  $server    Server.
      * @return  bool
      */
-    public function is ( self $server ) {
+    public function is ( parent $server ) {
 
-        return $this->_node->getServer() === $server;
+        return $this->_node->getConnection() === $server;
     }
 
     /**
      * Set and get the current selected connection.
      *
      * @access  public
-     * @return  \Hoa\Socket\Server
+     * @return  \Hoa\Socket\Node
      */
     public function current ( ) {
 
-        $current = current($this->_iterator);
-        $this->_setStream($current);
+        $current = parent::_current();
+        $id      = $this->getNodeId($current);
+
+        if(!isset($this->_nodes[$id]))
+            return $current;
 
         return $this->_node = $this->_nodes[$this->getNodeId($current)];
-    }
-
-    /**
-     * Get the current selected connection index.
-     *
-     * @access  public
-     * @return  int
-     */
-    public function key ( ) {
-
-        return key($this->_iterator);
-    }
-
-    /**
-     * Advance the internal pointer of the connection iterator and return the
-     * current selected connection.
-     *
-     * @access  public
-     * @return  mixed
-     */
-    public function next ( ) {
-
-        return next($this->_iterator);
-    }
-
-    /**
-     * Rewind the internal iterator pointer and the first connection.
-     *
-     * @access  public
-     * @return  mixed
-     */
-    public function rewind ( ) {
-
-        return reset($this->_iterator);
-    }
-
-    /**
-     * Check if there is a current connection after calls to the rewind() or the
-     * next() methods.
-     *
-     * @access  public
-     * @return  bool
-     */
-    public function valid ( ) {
-
-        if(empty($this->_iterator))
-            return false;
-
-        $key    = key($this->_iterator);
-        $return = (bool) next($this->_iterator);
-        prev($this->_iterator);
-
-        if(false === $return) {
-
-            end($this->_iterator);
-            if($key === key($this->_iterator))
-                $return = true;
-            else
-                $this->_iterator = array();
-        }
-
-        return $return;
-    }
-
-    /**
-     * Close the current stream.
-     *
-     * @access  protected
-     * @return  bool
-     */
-    protected function _close ( ) {
-
-        $current = $this->getStream();
-
-        if(false === in_array($current, $this->_masters, true)) {
-
-            $i = array_search($current, $this->_stack);
-
-            if(false !== $i)
-                unset($this->_stack[$i]);
-
-            unset($this->_nodes[$this->getNodeId($current)]);
-
-            @fclose($current);
-
-            // Closing slave does not have the same effect that closing master.
-            return false;
-        }
-
-        return (bool) (@fclose($this->_master) + @fclose($this->getStream()));
     }
 
     /**
@@ -462,66 +384,6 @@ class Server extends \Hoa\Socket\Connection implements \Iterator {
     public function isListening ( ) {
 
         return (bool) $this->getFlag() & self::LISTEN;
-    }
-
-    /**
-     * Set node name.
-     *
-     * @access  public
-     * @param   string  $node    Node name.
-     * @return  string
-     */
-    public function setNodeName ( $node ) {
-
-        $old             = $this->_nodeName;
-        $this->_nodeName = $node;
-
-        return $old;
-    }
-
-    /**
-     * Get node name.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getNodeName ( ) {
-
-        return $this->_nodeName;
-    }
-
-    /**
-     * Get current node.
-     *
-     * @access  public
-     * @return  \Hoa\Socket\Node
-     */
-    public function getCurrentNode ( ) {
-
-        return $this->_node;
-    }
-
-    /**
-     * Get nodes list.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function getNodes ( ) {
-
-        return $this->_nodes;
-    }
-
-    /**
-     * Get node ID.
-     *
-     * @access  private
-     * @param   resource  $resource    Resource.
-     * @return  string
-     */
-    private function getNodeId ( $resource ) {
-
-        return md5((int) $resource);
     }
 }
 

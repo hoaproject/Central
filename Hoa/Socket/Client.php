@@ -46,7 +46,7 @@ from('Hoa')
 /**
  * \Hoa\Socket\Connection
  */
--> import('Socket.Connection');
+-> import('Socket.Connection.~');
 
 }
 
@@ -84,6 +84,13 @@ class Client extends Connection {
      * @const int
      */
     const PERSISTENT   = STREAM_CLIENT_PERSISTENT;
+
+    /**
+     * Stack of connections.
+     *
+     * @var \Hoa\Socket\Client array
+     */
+    protected $_stack = array();
 
 
 
@@ -145,6 +152,14 @@ class Client extends Connection {
                     'to join %s.',
                     1, array($errno, $errstr, $streamName));
 
+        $this->_stack[]    = $connection;
+        $id                = $this->getNodeId($connection);
+        $this->_node       = dnew(
+            $this->getNodeName(),
+            array($id, $connection, $this)
+        );
+        $this->_nodes[$id] = $this->_node;
+
         return $connection;
     }
 
@@ -160,6 +175,74 @@ class Client extends Connection {
             return false;
 
         return @fclose($this->getStream());
+    }
+
+    /**
+     * Select connections.
+     *
+     * @access  public
+     * @return  \Hoa\Socket\Client
+     */
+    public function select ( ) {
+
+        $read   = $this->_stack;
+        $write  = null;
+        $except = null;
+
+        @stream_select($read, $write, $except, $this->getTimeout(), 0);
+
+        foreach($read as $socket)
+            $this->_iterator[] = $socket;
+
+        return $this;
+    }
+
+    /**
+     * Consider another client when selecting connection.
+     *
+     * @access  public
+     * @param   \Hoa\Socket\Client  $other    Other client.
+     * @return  \Hoa\Socket\Client
+     */
+    public function consider ( parent $other ) {
+
+        if(!($other instanceof self))
+            throw new Exception(
+                'Other client must be of type %s.', 2, __CLASS__);
+
+        if(true === $other->isDisconnected())
+            $other->connect();
+
+        $otherNode                         = $other->getCurrentNode();
+        $this->_stack[]                    = $otherNode->getSocket();
+        $this->_nodes[$otherNode->getId()] = $otherNode;
+
+        return $this;
+    }
+
+    /**
+     * Check if the current node belongs to a specific server.
+     *
+     * @access  public
+     * @param   \Hoa\Socket\Client  $server    Server.
+     * @return  bool
+     */
+    public function is ( parent $server ) {
+
+        return $this->getStream() === $server->getStream();
+    }
+
+    /**
+     * Set and get the current selected connection.
+     *
+     * @access  public
+     * @return  \Hoa\Socket\Node
+     */
+    public function current ( ) {
+
+        $current = parent::_current();
+
+        return $this->_node = $this->_nodes[$this->getNodeId($current)];
     }
 
     /**

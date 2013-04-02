@@ -45,13 +45,13 @@ from('Hoa')
 
 }
 
-namespace Hoa\Socket\Server {
+namespace Hoa\Socket\Connection {
 
 /**
- * Class \Hoa\Socket\Server\Group.
+ * Class \Hoa\Socket\Connection\Group.
  *
- * Represent a group of server handlers.
- * Add semantics around Hoa\Socket\Server\Handler.
+ * Represent a group of connection handlers.
+ * Add semantics around Hoa\Socket\Connection\Handler.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
@@ -61,16 +61,16 @@ namespace Hoa\Socket\Server {
 class Group implements \ArrayAccess, \IteratorAggregate, \Countable {
 
     /**
-     * All servers.
+     * All connections.
      *
-     * @var \Hoa\Socket\Server\Group array
+     * @var \Hoa\Socket\Connection\Group array
      */
-    protected $_servers = array();
+    protected $_connections = array();
 
 
 
     /**
-     * Check if a server offset exists.
+     * Check if a connection offset exists.
      *
      * @access  public
      * @param   mixed  $offset    Offset.
@@ -78,47 +78,48 @@ class Group implements \ArrayAccess, \IteratorAggregate, \Countable {
      */
     public function offsetExists ( $offset ) {
 
-        return true === array_key_exists($offset, $this->_servers);
+        return true === array_key_exists($offset, $this->_connections);
     }
 
     /**
-     * Get a specific server.
+     * Get a specific connection.
      *
      * @access  public
      * @param   mixed  $offset    Offset.
-     * @return  \Hoa\Socket\Server\Handler
+     * @return  \Hoa\Socket\Connection\Handler
      */
     public function offsetGet ( $offset ) {
 
         if(false === $this->offsetExists($offset))
             return null;
 
-        return $this->_servers[$offset];
+        return $this->_connections[$offset];
     }
 
     /**
-     * Add a server.
+     * Add a connection.
      *
      * @access  public
-     * @param   mixed                       $offset    Offset.
-     * @param   \Hoa\Socket\Server\Handler  $server    Server (handler).
+     * @param   mixed                           $offset        Offset.
+     * @param   \Hoa\Socket\Connection\Handler  $connection    Connection
+     *                                                         (handler).
      * @return  void
      * @throw   \Hoa\Socket\Exception
      */
-    public function offsetSet ( $offset, $server ) {
+    public function offsetSet ( $offset, $connection ) {
 
-        if(!($server instanceof Handler))
+        if(!($connection instanceof Handler))
             throw new \Hoa\Socket\Exception(
                 '%s only accepts %s\Handler objects.',
                 0, array(__CLASS__, __NAMESPACE__));
 
         if(null === $offset)
-            $this->_servers[]        = $server;
+            $this->_connections[]        = $connection;
         else
-            $this->_servers[$offset] = $server;
+            $this->_connections[$offset] = $connection;
 
         if(1 < count($this))
-            $this->getFirstServer()->merge($server);
+            $this->getFirstConnection()->merge($connection);
 
         return;
     }
@@ -133,50 +134,51 @@ class Group implements \ArrayAccess, \IteratorAggregate, \Countable {
     public function offsetUnset ( $offset ) {
 
         throw new \Hoa\Socket\Exception(
-            'This operation is not allowed: you cannot unset a server from a ' .
-            'group.', 1);
+            'This operation is not allowed: you cannot unset a connection ' .
+            'from a group.', 1);
 
         return;
     }
 
     /**
-     * Get iterator of all declared servers.
+     * Get iterator of all declared connections.
      *
      * @access  public
      * @return  \ArrayIterator
      */
     public function getIterator ( ) {
 
-        return new \ArrayIterator($this->_servers);
+        return new \ArrayIterator($this->_connections);
     }
 
     /**
-     * Count number of declared servers.
+     * Count number of declared connections.
      *
      * @access  public
      * @return  int
      */
     public function count ( ) {
 
-        return count($this->_servers);
+        return count($this->_connections);
     }
 
     /**
-     * Semantics alias of $this->offsetSet(null, $server).
+     * Semantics alias of $this->offsetSet(null, $connection).
      *
      * @access  public
-     * @param   \Hoa\Socket\Server\Handler  $server    Server (handler).
-     * @return  \Hoa\Socket\Server\Group
+     * @param   \Hoa\Socket\Connection\Handler  $connection    Connection
+     *                                                         (handler).
+     * @return  \Hoa\Socket\Connection\Group
      */
-    public function merge ( Handler $server ) {
+    public function merge ( Handler $connection ) {
 
-        $this[] = $server;
+        $this[] = $connection;
 
         return $this;
     }
 
     /**
-     * Run the group of servers.
+     * Run the group of connections.
      *
      * @access  public
      * @return  void
@@ -186,20 +188,21 @@ class Group implements \ArrayAccess, \IteratorAggregate, \Countable {
 
         if(0 === count($this))
             throw new \Hoa\Socket\Exception(
-                'Nothing to run. You should merge a server.', 2);
+                'Nothing to run. You should merge a connection.', 2);
 
-        return $this->getFirstServer()->run();
+        return $this->getFirstConnection()->run();
     }
 
     /**
-     * Get the first declared server (where other servers have been merged).
+     * Get the first declared connection (where other connections have been
+     * merged).
      *
      * @access  public
-     * @return  \Hoa\Socket\Server\Handler
+     * @return  \Hoa\Socket\Connection\Handler
      */
-    public function getFirstServer ( ) {
+    public function getFirstConnection ( ) {
 
-        return $this[key($this->_servers)];
+        return $this[key($this->_connections)];
     }
 }
 

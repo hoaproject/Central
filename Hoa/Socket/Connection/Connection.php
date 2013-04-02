@@ -70,7 +70,7 @@ from('Hoa')
 
 }
 
-namespace Hoa\Socket {
+namespace Hoa\Socket\Connection {
 
 /**
  * Class \Hoa\Socket\Connection.
@@ -86,7 +86,8 @@ abstract class Connection
     extends    \Hoa\Stream
     implements \Hoa\Stream\IStream\In,
                \Hoa\Stream\IStream\Out,
-               \Hoa\Stream\IStream\Pathable {
+               \Hoa\Stream\IStream\Pathable,
+               \Iterator {
 
     /**
      * Socket.
@@ -115,6 +116,27 @@ abstract class Connection
      * @var \Hoa\Socket\Connection string
      */
     protected $_context      = null;
+
+    /**
+     * Node name.
+     *
+     * @var \Hoa\Socket\Connection string
+     */
+    protected $_nodeName     = '\Hoa\Socket\Node';
+
+    /**
+     * Current node.
+     *
+     * @var \Hoa\Socket\Node object
+     */
+    protected $_node          = null;
+
+    /**
+     * List of nodes (connections) when selecting.
+     *
+     * @var \Hoa\Socket\Connection array
+     */
+    protected $_nodes         = array();
 
     /**
      * Whether the stream is quiet.
@@ -151,6 +173,13 @@ abstract class Connection
      */
     protected $_remoteAddress = null;
 
+    /**
+     * Temporize selected connections when selecting.
+     *
+     * @var \Hoa\Socket\Server array
+     */
+    protected $_iterator      = array();
+
 
 
     /**
@@ -185,13 +214,123 @@ abstract class Connection
      */
     public function connect ( ) {
 
+        $this->_disconnect = false;
         parent::__construct(
             $this->getSocket()->__toString(),
             $this->getContext()
         );
-        $this->_disconnect = false;
 
         return $this;
+    }
+
+    /**
+     * Select connections.
+     *
+     * @access  public
+     * @return  \Hoa\Socket\Connection
+     */
+    abstract public function select ( );
+
+    /**
+     * Consider another connection when selecting connection.
+     *
+     * @access  public
+     * @param   \Hoa\Socket\Connection  $other    Other connection.
+     * @return  \Hoa\Socket\Connection
+     */
+    abstract public function consider ( self $other );
+
+    /**
+     * Check if the current node belongs to a specific server.
+     *
+     * @access  public
+     * @param   \Hoa\Socket\Connection  $connection    Connection.
+     * @return  bool
+     */
+    abstract public function is ( self $connection );
+
+    /**
+     * Set the current selected connection.
+     *
+     * @access  public
+     * @return  resource
+     */
+    protected function _current ( ) {
+
+        $current = current($this->_iterator);
+        $this->_setStream($current);
+
+        return $current;
+    }
+
+    /**
+     * Set and get the current selected connection.
+     *
+     * @access  public
+     * @return  \Hoa\Socket\Node
+     */
+    abstract public function current ( );
+
+    /**
+     * Get the current selected connection index.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function key ( ) {
+
+        return key($this->_iterator);
+    }
+
+    /**
+     * Advance the internal pointer of the connection iterator and return the
+     * current selected connection.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function next ( ) {
+
+        return next($this->_iterator);
+    }
+
+    /**
+     * Rewind the internal iterator pointer and the first connection.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function rewind ( ) {
+
+        return reset($this->_iterator);
+    }
+
+    /**
+     * Check if there is a current connection after calls to the rewind() or the
+     * next() methods.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function valid ( ) {
+
+        if(empty($this->_iterator))
+            return false;
+
+        $key    = key($this->_iterator);
+        $return = (bool) next($this->_iterator);
+        prev($this->_iterator);
+
+        if(false === $return) {
+
+            end($this->_iterator);
+            if($key === key($this->_iterator))
+                $return = true;
+            else
+                $this->_iterator = array();
+        }
+
+        return $return;
     }
 
     /**
@@ -253,7 +392,7 @@ abstract class Connection
     protected function setSocket ( $socket ) {
 
         $old           = $this->_socket;
-        $this->_socket = new Socket($socket);
+        $this->_socket = new \Hoa\Socket($socket);
 
         return $old;
     }
@@ -299,6 +438,21 @@ abstract class Connection
 
         $old            = $this->_context;
         $this->_context = $context;
+
+        return $old;
+    }
+
+    /**
+     * Set node name.
+     *
+     * @access  public
+     * @param   string  $node    Node name.
+     * @return  string
+     */
+    public function setNodeName ( $node ) {
+
+        $old             = $this->_nodeName;
+        $this->_nodeName = $node;
 
         return $old;
     }
@@ -360,6 +514,51 @@ abstract class Connection
     public function getContext ( ) {
 
         return $this->_context;
+    }
+
+    /**
+     * Get node name.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getNodeName ( ) {
+
+        return $this->_nodeName;
+    }
+
+    /**
+     * Get node ID.
+     *
+     * @access  protected
+     * @param   resource  $resource    Resource.
+     * @return  string
+     */
+    protected function getNodeId ( $resource ) {
+
+        return md5((int) $resource);
+    }
+
+    /**
+     * Get current node.
+     *
+     * @access  public
+     * @return  \Hoa\Socket\Node
+     */
+    public function getCurrentNode ( ) {
+
+        return $this->_node;
+    }
+
+    /**
+     * Get nodes list.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getNodes ( ) {
+
+        return $this->_nodes;
     }
 
     /**
@@ -430,12 +629,12 @@ abstract class Connection
     public function read ( $length ) {
 
         if(null === $this->getStream())
-            throw new Exception(
+            throw new \Hoa\Socket\Exception(
                 'Cannot read because socket is not established, ' .
                 'i.e. not connected.', 0);
 
         if(0 > $length)
-            throw new Exception(
+            throw new \Hoa\Socket\Exception(
                 'Length must be greater than 0, given %d.', 1, $length);
 
         if(false === $this->isRemoteAddressConsidered())
@@ -570,12 +769,12 @@ abstract class Connection
     public function write ( $string, $length ) {
 
         if(null === $this->getStream())
-            throw new Exception(
+            throw new \Hoa\Socket\Exception(
                 'Cannot write because socket is not established, ' .
                 'i.e. not connected.', 2);
 
         if(0 > $length)
-            throw new Exception(
+            throw new \Hoa\Socket\Exception(
                 'Length must be greater than 0, given %d.', 3, $length);
 
         if(strlen($string) > $length)
@@ -593,7 +792,7 @@ abstract class Connection
             );
 
         if(-1 === $out)
-            throw new Exception(
+            throw new \Hoa\Socket\Exception(
                 'Pipe is broken, cannot write data.', 4);
 
         return $out;
