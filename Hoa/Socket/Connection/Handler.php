@@ -212,11 +212,13 @@ abstract class Handler {
      */
     public function merge ( self $other ) {
 
+        $thisConnection  = $this->getConnection();
         $otherConnection = $other->getConnection();
-        $this->getConnection()->consider($otherConnection);
+
+        $thisConnection->consider($otherConnection);
 
         if($otherConnection instanceof \Hoa\Socket\Server)
-            $other->setConnection($this->getConnection());
+            $other->setConnection($thisConnection);
 
         $this->_connections[] = $other;
 
