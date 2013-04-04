@@ -32,100 +32,107 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- *
- * @category    Framework
- * @package     Hoa_Mail
- *
  */
+
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Mail_Exception
+ * \Hoa\Mail\Content
  */
-import('Mail.Exception');
+-> import('Mail.Content.~');
+
+}
+
+namespace Hoa\Mail\Content {
 
 /**
- * Hoa_Mail_Mime
- */
-import('Mail.Mime');
-
-/**
- * Class Hoa_Mail.
+ * Class \Hoa\Mail\Content\Text.
  *
- * Superclass :
- * Send an email with differents methods.
+ * This class represents a text.
  *
- * @author      Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright © 2007-2013 Ivan Enderlin.
- * @license     New BSD License
- * @since       PHP 5
- * @version     0.2
- * @package     Hoa_Mail
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2013 Ivan Enderlin.
+ * @license    New BSD License
  */
 
-class Hoa_Mail extends Hoa_Mail_Mime {
+class Text extends Content {
 
     /**
-     * Type of sender.
+     * Content.
      *
-     * @var Hoa_Mail object
+     * @var \Hoa\Mail\Content\Text string
      */
-    protected $defaultSender = null;
-
-    /**
-     * Built mail.
-     *
-     * @var Hoa_Mail_Mime array
-     */
-    protected $data = array();
+    protected $_content = null;
 
 
 
     /**
-     * __construct
-     * Prepare Mime.
+     * Construct a text content.
      *
      * @access  public
-     * @param   charset   string    Charset.
-     * @param   eol       string    End-Of-Line sequence.
-     * @param   priority  int       X-Priority level.
+     * @param   string  $content    Content.
      * @return  void
-     * @throw   Hoa_Mail_Transport_Exception
      */
-    public function __construct ( $charset = 'UTF-8', $eol = CRLF, $priority = 3 ) {
+    public function __construct ( $content = null ) {
 
-        parent::__construct($charset, $eol, $priority);
+        parent::__construct();
+        $this['content-type'] = 'text/plain; charset=utf-8';
+        $this->append($content);
+
+        return;
     }
 
     /**
-     * setDefaultSender
-     * Set default sender.
+     * Prepend content (in memory order, i.e. from left-to-right only).
      *
      * @access  public
-     * @param   sender  objet    The sender.
-     * @return  object
+     * @param   string  $content    Content.
+     * @return  string
      */
-    public function setDefaultSender ( $sender ) {
+    public function prepend ( $content ) {
 
-        if($sender instanceof Hoa_Mail_Transport_Abstract)
-            return $this->defaultSender = $sender;
-        else
-            throw new Hoa_Mail_Exception('Sender must be an instance of Hoa_Mail_Sender_Abstract', 0);
+        $this->_content = $content . $this->_content;
+
+        return $this;
     }
-
 
     /**
-     * send
-	 * Send an email with different method.
-	 * For more documentation, see RFC 2821.
+     * Append content (in memory order, i.e. from left-to-right only).
      *
      * @access  public
-     * @param   arg     array    Methode argument.
-     * @return  bool
+     * @param   string  $content    Content.
+     * @return  string
      */
-    public function send ( Array $arg = array() ) {
+    public function append ( $content ) {
 
-        $this->data = $this->get();
-        return $this->defaultSender->sendMail($this->data, $arg);
+        $this->_content .= $content;
+
+        return $this;
     }
+
+    /**
+     * Get the content.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function get ( ) {
+
+        return $this->_content;
+    }
+
+    /**
+     * Get final “plain” content.
+     *
+     * @access  protected
+     * @return  string
+     */
+    protected function _getContent ( ) {
+
+        return base64_encode($this->get());
+    }
+}
+
 }

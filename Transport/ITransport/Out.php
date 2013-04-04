@@ -32,26 +32,34 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- *
- * @category    Framework
- * @package     Hoa_Mail
- * @subpackage  Hoa_Mail_Exception
- *
  */
+
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Mail_Exception.
+ * \Hoa\Mail\Transport\ITransport\Transport
+ */
+-> import('Mail.Transport.I~.Transport');
+
+}
+
+namespace Hoa\Mail\Transport\ITransport {
+
+/**
+ * Interface \Hoa\Mail\Transport\ITransport\Out
  *
- * Extending the Hoa_Core_Exception class.
+ * 
  *
- * @author      Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright © 2007-2013 Ivan Enderlin.
- * @license     New BSD License
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Mail
- * @subpackage  Hoa_Mail_Exception
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2013 Ivan Enderlin.
+ * @license    New BSD License
  */
 
-class Hoa_Mail_Exception extends Hoa_Core_Exception { }
+interface Out extends Transport {
+
+    public function send ( \Hoa\Mail\Message $message );
+}
+
+}

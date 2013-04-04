@@ -39,104 +39,39 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Mail\Exception
+ * \Hoa\Mail\Content\Text
  */
--> import('Mail.Exception.~')
-
-/**
- * \Hoa\Mail\Transport\ITransport\Out
- */
--> import('Mail.Transport.I~.Out');
+-> import('Mail.Content.Text');
 
 }
 
-namespace Hoa\Mail\Transport {
+namespace Hoa\Mail\Content {
 
 /**
- * Class \Hoa\Mail\Transport\Sendmail.
+ * Class \Hoa\Mail\Content\Html.
  *
- * This class allows to send an email by using sendmail (through the PHP mail()
- * function).
+ * This class represents an HTML document.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Sendmail implements ITransport\Out {
+class Html extends Text {
 
     /**
-     * Additional parameters for the mail() function.
-     *
-     * @var \Hoa\Mail\Transport\Sendmail array
-     */
-    protected $_parameters = null;
-
-
-
-    /**
-     * Constructor.
+     * Construct an HTML content.
      *
      * @access  public
-     * @param   array  $parameters    Additional parameters for the mail()
-     *                                function.
+     * @param   string  $content    Content.
      * @return  void
      */
-    public function __construct ( Array $parameters = array() ) {
+    public function __construct ( $content = null ) {
 
-        $this->_parameters = $parameters;
+        parent::__construct($content);
+        $this['content-type'] = 'text/html; charset=utf-8';
 
         return;
-    }
-
-    /**
-     * Set additional parameters.
-     *
-     * @access  protected
-     * @param   array  $parameters    Additional parameters.
-     * @return  array
-     */
-    protected function setParameters ( Array $parameters ) {
-
-        $old               = $this->_parameters;
-        $this->_parameters = $parameters;
-
-        return $old;
-    }
-
-    /**
-     * Get additional parameters.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function getParameters ( ) {
-
-        return $this->_parameters;
-    }
-
-    /**
-     * Send a message.
-     *
-     * @access  public
-     * @param   \Hoa\Mail\Message  $message    Message.
-     * @return  bool
-     */
-    public function send ( \Hoa\Mail\Message $message ) {
-
-        $content  = $message->getFormattedContent();
-        $headers  = $message->getHeaders();
-        $pos      = strpos($content, CRLF . CRLF);
-        $_headers = substr($content, 0, $pos);
-        $_body    = substr($content, $pos + 4);
-
-        return mail(
-            $headers['to'],
-            $headers['subject'],
-            $_body,
-            $_headers,
-            $message->formatHeaders($this->getParameters())
-        );
     }
 }
 
