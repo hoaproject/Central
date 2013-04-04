@@ -32,90 +32,58 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- *
- * @category    Framework
- * @package     Hoa_Mail
- * @subpackage  Hoa_Mail_Protocol_Abstract
- *
  */
+
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Socket_Connection_Client
+ * \Hoa\Mail\Content\Message
  */
-import('Socket.Connection.Client');
+-> import('Mail.Content.Message');
+
+}
+
+namespace Hoa\Mail\Content {
 
 /**
- * Hoa_Socket_Internet_DomainName
- */
-import('Socket.Internet.DomainName');
-
-/**
- * Hoa_Socket_Internet_Ipv4
- */
-import('Socket.Internet.Ipv4');
-
-/**
- * Hoa_Socket_Internet_Ipv6
- */
-import('Socket.Internet.Ipv6');
-
-/**
- * Class Hoa_Mail_Protocol_Abstract.
+ * Class \Hoa\Mail\Content\Alternative.
  *
- * Abstract layer for protocol : manage connection for SMTP etc.
+ * Represent an alternative content.
  *
- * @author      Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright © 2007-2013 Ivan Enderlin.
- * @license     New BSD License
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Mail
- * @subpackage  Hoa_Mail_Protocol_Abstract
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2013 Ivan Enderlin.
+ * @license    New BSD License
  */
 
-class Hoa_Mail_Protocol_Abstract {
+class Alternative extends Message {
 
     /**
-     * Socket.
+     * Boundary hash prefix.
      *
-     * @var Hoa_Socket_Connection_Client object
+     * @const string
      */
-    protected $_sockt = null;
+    const BOUNDARY = '@hoaproject-alternative-';
 
 
 
     /**
-     * getConnection
-     * Try to open a connection to the remote server.
+     * Constructor.
      *
      * @access  public
-     * @param   host     Hoa_Socket_Internet    Remote server, represented by
-     *                                          the Hoa_Socket_Internet_DomainName,
-     *                                          Hoa_Socket_Internet_Ipv4 or
-     *                                          Hoa_Socket_Internet_Ipv4 objects.
+     * @param   array  $contents    Alternative contents.
      * @return  void
-     * @throw   Hoa_Socket_Exception
      */
-    public function connect ( Hoa_Socket_Internet $host ) {
+    public function __construct ( Array $contents = array() ) {
 
-        $this->_socket = new Hoa_Socket_Connection_Client($host, $port, $timeout);
-        $this->_socket->connect();
+        foreach($contents as $content)
+            $this->addContent($content);
+
+        $this['content-type'] = 'multipart/alternative';
 
         return;
     }
+}
 
-    /**
-     * disconnect
-     * Destroy an opened connection.
-     *
-     * @access  public
-     * @return  void
-     */
-    public function disconnect ( ) {
-
-        $this->_socket->disconnect();
-
-        return;
-    }
 }
