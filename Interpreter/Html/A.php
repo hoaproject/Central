@@ -67,7 +67,8 @@ class A extends GenericPhrasing {
     protected static $_attributes        = array(
         'asyncscope' => parent::ATTRIBUTE_TYPE_NORMAL,
         'download'   => parent::ATTRIBUTE_TYPE_NORMAL,
-        'href'       => parent::ATTRIBUTE_TYPE_LINK
+        'href'       => parent::ATTRIBUTE_TYPE_LINK,
+        'rel'        => parent::ATTRIBUTE_TYPE_NORMAL
     );
 
     /**
@@ -78,7 +79,8 @@ class A extends GenericPhrasing {
     protected static $_attributesMapping = array(
         'asyncscope' => 'data-asyncscope',
         'download',
-        'href'
+        'href',
+        'rel'
     );
 }
 
