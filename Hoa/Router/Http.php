@@ -651,8 +651,8 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
                 return $prependPrefix($this->_unroute($id, $pattern, $variables)) .
                        $anchor;
 
-            $port     = $this->getPort();
-            $secure   = null === $secured ? $this->isSecure() : $secured;
+            $port   = $this->getPort();
+            $secure = null === $secured ? $this->isSecure() : $secured;
 
             return (true === $secure ? 'https://' : 'http://') .
                    $this->_unroute($id, $subPattern, $variables, false) .
