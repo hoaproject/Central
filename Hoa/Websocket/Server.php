@@ -588,11 +588,11 @@ class          Server
      * Send a message to a specific node/connection.
      *
      * @access  public
-     * @param   string               $message    Message.
-     * @param   \Hoa\Websocket\Node  $node       Node (if null, current node).
-     * @param   int                  $opcode     Opcode.
-     * @param   bool                 $end        Whether it is the last frame of
-     *                                           the message.
+     * @param   string            $message    Message.
+     * @param   \Hoa\Socket\Node  $node       Node (if null, current node).
+     * @param   int               $opcode     Opcode.
+     * @param   bool              $end        Whether it is the last frame of
+     *                                        the message.
      * @return  void
      */
     public function send ( $message, \Hoa\Socket\Node $node = null,
@@ -617,8 +617,8 @@ class          Server
 
         $connection = $this->getConnection();
         $connection->getCurrentNode()
-               ->getProtocolImplementation()
-               ->close($code, $reason);
+                   ->getProtocolImplementation()
+                   ->close($code, $reason);
 
         return $connection->disconnect();
     }
