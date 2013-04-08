@@ -572,6 +572,14 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
                          : null;
         unset($variables['_fragment']);
 
+        $prependPrefix = function ( $unroute ) use ( &$prefix ) {
+
+            if(0 !== preg_match('#^https?://#', $unroute))
+                return $unroute;
+
+            return $prefix . $unroute;
+        };
+
         if(true === array_key_exists('_subdomain', $variables)) {
 
             if(empty($variables['_subdomain']))
@@ -630,8 +638,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
                    $subdomain .
                    $this->getStrictDomain() .
                    (80 !== $port ? (false === $secure ? ':' . $port : ':443') : '') .
-                   $prefix .
-                   $this->_unroute($id, $pattern, $variables) .
+                   $prependPrefix($this->_unroute($id, $pattern, $variables)) .
                    $anchor;
         }
 
@@ -641,23 +648,22 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
             $pattern    = substr($pattern, $pos + 1);
 
             if($suffix === $subPattern)
-                return $prefix .
-                       $this->_unroute($id, $pattern, $variables) .
+                return $prependPrefix($this->_unroute($id, $pattern, $variables)) .
                        $anchor;
 
-            $port   = $this->getPort();
-            $secure = null === $secured ? $this->isSecure() : $secured;
+            $port     = $this->getPort();
+            $secure   = null === $secured ? $this->isSecure() : $secured;
 
             return (true === $secure ? 'https://' : 'http://') .
                    $this->_unroute($id, $subPattern, $variables, false) .
                    '.' . $this->getStrictDomain() .
                    (80 !== $port ? (false === $secure ? ':' . $port : ':443') : '') .
-                   $prefix .
-                   $this->_unroute($id, $pattern, $variables) .
+                   $prependPrefix($this->_unroute($id, $pattern, $variables)) .
                    $anchor;
         }
 
-        return $prefix . $this->_unroute($id, $pattern, $variables) . $anchor;
+        return $prependPrefix($this->_unroute($id, $pattern, $variables)) .
+               $anchor;
     }
 
     /**
@@ -950,7 +956,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
     public function setPrefix ( $prefix ) {
 
         $old               = $this->_pathPrefix;
-        $this->_pathPrefix = $prefix;
+        $this->_pathPrefix = rtrim($prefix, '/');
 
         return $old;
     }
