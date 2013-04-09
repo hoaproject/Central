@@ -96,6 +96,7 @@
 %token  default         …|default
 %token  contains        contains
 %token  is              is
+%token  let             let
 
 // Constants.
 %token  null            null|void
@@ -178,6 +179,7 @@ exception:
 //              NO
 
 #declaration:
+    ( ::let:: #local_declaration )?
     extended_identifier() ::colon:: representation()
 
 representation:

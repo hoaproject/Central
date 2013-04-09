@@ -115,7 +115,11 @@ class Compiler implements \Hoa\Visitor\Visit {
             foreach($element as $name => $var) {
 
                 $start  = $variable . '[\'' . $name . '\']';
-                $out   .= $start;
+
+                if(true === $var->isLocal())
+                    $out .= $variable . '->let[\'' . $name . '\']';
+                else
+                    $out .= $start;
 
                 if(null === $alias = $var->getAlias())
                     $out .= '->in = ' . $var->getDomains() . ';' . "\n";
