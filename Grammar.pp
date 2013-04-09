@@ -90,7 +90,6 @@
 %token  parent          parent
 %token  and             and
 %token  or              or
-%token  xor             xor
 %token  with            with
 %token  pure            pure
 %token  default         …|default
@@ -184,7 +183,6 @@ exception:
 
 representation:
     disjunction()
-// ( ::xor:: disjunction() #exclusive_disjunction )*
 
 constraint:
     qualification() | contains()
