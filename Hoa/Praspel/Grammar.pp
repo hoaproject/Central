@@ -90,12 +90,12 @@
 %token  parent          parent
 %token  and             and
 %token  or              or
-%token  xor             xor
 %token  with            with
 %token  pure            pure
 %token  default         …|default
 %token  contains        contains
 %token  is              is
+%token  let             let
 
 // Constants.
 %token  null            null|void
@@ -178,11 +178,11 @@ exception:
 //              NO
 
 #declaration:
+    ( ::let:: #local_declaration )?
     extended_identifier() ::colon:: representation()
 
 representation:
     disjunction()
-// ( ::xor:: disjunction() #exclusive_disjunction )*
 
 constraint:
     qualification() | contains()

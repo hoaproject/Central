@@ -82,6 +82,13 @@ abstract class Declaration
      */
     protected $_predicates = array();
 
+    /**
+     * Whether declaring a local variable or not.
+     *
+     * @var \Hoa\Praspel\Model\Declaration bool
+     */
+    protected $_let        = false;
+
 
 
     /**
@@ -105,8 +112,13 @@ abstract class Declaration
      */
     public function offsetGet ( $offset ) {
 
-        if(false === $this->offsetExists($offset))
-            return $this->_variables[$offset] = new Variable($offset, $this);
+        if(false === $this->offsetExists($offset)) {
+
+            $variable   = new Variable($offset, $this->_let, $this);
+            $this->_let = false;
+
+            return $this->_variables[$offset] = $variable;
+        }
 
         return $this->_variables[$offset];
     }
@@ -140,6 +152,26 @@ abstract class Declaration
         unset($this->_variables[$offset]);
 
         return;
+    }
+
+    /**
+     * Allow to write $clause->let['var'] = … to define a local variable (if
+     * $name is not equal to "let", then it is a normal behavior).
+     *
+     * @access  public
+     * @param   string  $name     Name.
+     * @return  \Hoa\Praspel\Model\Declaration
+     */
+    public function __get ( $name ) {
+
+        if('let' !== $name) {
+
+            return $this->$name;
+        }
+
+        $this->_let = true;
+
+        return $this;
     }
 
     /**

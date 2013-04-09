@@ -185,6 +185,13 @@ class Interpreter implements \Hoa\Visitor\Visit {
                                                         ->accept($this, $handle, $eldnah);
               break;
 
+            case '#local_declaration':
+                $variable                          = $element->getChild(0)
+                                                             ->accept($this, $handle, false);
+                $this->_clause->let[$variable]->in = $element->getChild(1)
+                                                             ->accept($this, $handle, $eldnah);
+              break;
+
             case '#qualification':
                 $children = $element->getChildren();
                 $variable = $this->_clause[array_shift($children)->accept(

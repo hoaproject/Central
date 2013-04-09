@@ -79,6 +79,13 @@ class          Variable
     protected $_name                = null;
 
     /**
+     * Local (let) or not.
+     *
+     * @var \Hoa\Praspel\Model\Variable bool
+     */
+    protected $_local               = false;
+
+    /**
      * Clause that contains this variable.
      *
      * @var \Hoa\Praspel\Model\Clause object
@@ -143,13 +150,15 @@ class          Variable
      *
      * @access  public
      * @param   string                     $name      Name.
+     * @param   bool                       $local     Local.
      * @param   \Hoa\Praspel\Model\Clause  $clause    Clause.
      * @return  void
      * @throw   \Hoa\Praspel\Exception\Model
      */
-    public function __construct ( $name, Clause $clause ) {
+    public function __construct ( $name, $local, Clause $clause ) {
 
         $this->_name       = $name;
+        $this->_local      = $local;
         $this->_clause     = $clause;
         $this->_refDomains = &$this->_domains;
 
@@ -406,6 +415,17 @@ class          Variable
     public function getName ( ) {
 
         return $this->_name;
+    }
+
+    /**
+     * Check if the variable is local (let) or not.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isLocal ( ) {
+
+        return $this->_local;
     }
 
     /**
