@@ -351,7 +351,7 @@ class          Response
     const STATUS_EXPECTATION_FAILED              = '417 Expectation Failed';
 
     /**
-     * I'm a teapot (see RFC 2324, April Fool's jok'e).'
+     * I'm a teapot (see RFC 2324, April Fool's joke).
      *
      * @const string
      */
