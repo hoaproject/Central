@@ -635,14 +635,18 @@ class          Response
      * Flush the buffer.
      *
      * @access  public
+     * @param   bool  $force    Force to flush the output buffer.
      * @return  void
      */
-    public function flush ( ) {
+    public function flush ( $force = false ) {
 
         if(0 >= $this->getBufferSize())
             return;
 
         ob_flush();
+
+        if(true === $force)
+            flush();
 
         return;
     }
