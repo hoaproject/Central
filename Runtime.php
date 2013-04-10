@@ -161,9 +161,9 @@ class Runtime {
      */
     public static function getHeaders ( ) {
 
-        static $_headers = null;
+        static $_headers = array();
 
-        if(null !== $_headers)
+        if(!empty($_headers))
             return $_headers;
 
         if(true === function_exists('apache_request_headers'))
