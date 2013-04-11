@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<overlay xmlns="http://hoa-project.net/xyl/xylophone">
+<yield id="chapter">
+
+  <p>Un programme doit gérer beaucoup de <strong>données</strong>, et une tâche
+  <strong>essentielle</strong> est de savoir les <strong>router</strong>,
+  c'est à dire de les <strong>acheminer</strong> au bon endroit. C'est le
+  rôle qui incombe à la bibliothèque <code>Hoa\Router</code>.</p>
+
+  <h2 id="Table_des_matieres">Table des matières</h2>
+
+  <tableofcontents id="main-toc" />
+
+  <h2 id="Introduction" for="main-toc">Introduction</h2>
+
+  <p>Un routeur a une tâche assez simple : il reçoit une requête et il doit
+  trouver où l'acheminer. Pour cela, il regarde quelle règle, parmi toutes
+  celles qui lui ont été données, reconnaît la requête. Si une requête est
+  reconnue par une règle, alors des données en seront extraites.</p>
+
+  <h2 id="Ecrire_des_regles" for="main-toc">Écrire des règles</h2>
+
+  <p>Une règle doit être vue comme une succession de filtres. Si tous les
+  filtres laissent passer la requête, alors la règle sera retenue pour acheminer
+  la requête.</p>
+  <p>Une règle se compose des trois filtres suivants :</p>
+  <div id="filters" class="verbatim schema"></div>
+  <script>
+  Hoa.Document.onReady(function ( ) {
+
+      var paper      = Hoa.Graph(Hoa.$('#filters'), 800, 150);
+      var grid       = paper.grid(0, 0, 800, 150, 5, 1);
+      var request    = grid.push(paper.rect(0, 0, 120, 90, 3, 'requête'));
+      var visibility = grid.push(paper.rect(0, 0, 120, 90, 3, 'visibilité'));
+      var methods    = grid.push(paper.rect(0, 0, 120, 90, 3, 'méthodes'));
+      var pattern    = grid.push(paper.rect(0, 0, 120, 90, 3, 'motif'));
+      var gotcha     = grid.push(paper.circle(0, 0, 20));
+
+      paper.link.between(request,    visibility);
+      paper.link.between(visibility, methods);
+      paper.link.between(methods,    pattern);
+      paper.link.between(pattern,    gotcha);
+  });
+  </script>
+  <p>Tout d'abord, une règle a une <strong>visibilité</strong> qui contrôle la
+  <strong>provenance</strong> de la requête. Il y a deux visibilités possibles :
+  publique (avec la constante <code>Hoa\Router::VISIBILITY_PUBLIC</code>) et
+  privée (avec la constante <code>Hoa\Router::VISIBILITY_PRIVATE</code>). Par
+  exemple, si la requête est extérieure au programme (typiquement, un client
+  envoie une requête sur un serveur) et que la règle a une visibilité privée, la
+  règle ne sera pas retenue. En revanche, si une requête est interne au
+  programme, une règle publique ou privée pourra être retenue.  Ensuite, une
+  règle définit des <strong>méthodes</strong> qui vérifient le type de la
+  requête. Par exemple, dans le cas d'une requête HTTP, nous pouvons avoir la
+  méthode <code>GET</code> : toutes les règles ayant au moins la méthode
+  <code>GET</code> peuvent être retenues.  Enfin, une règle impose un
+  <strong>motif</strong> sous la forme d'une expression régulière (basée sur les
+  <a href="http://pcre.org/">PCRE</a>). La requête doit correspondre à ce motif
+  pour que la règle soit retenue. Ce motif permet aussi d'extraire des données
+  de la requête, ce qui aidera à son acheminant.  Notons par ailleurs que toutes
+  les règles portent un <strong>identifiant</strong> unique.</p>
+
+  <h3 id="Router_et_derouter" for="main-toc">Router et dérouter</h3>
+
+  <p>Prenons l'exemple du routeur HTTP qui manipule des requêtes HTTP. L'ajout
+  de règle se fait à l'aide de la méthode <code>Hoa\Router\Http::addRule</code>
+  et prend obligatoirement en arguments les méthodes, l'identifiant et le motif,
+  dans cet ordre. Il existe aussi la méthode
+  <code>Hoa\Router\Http::addPrivateRule</code> avec les même arguments.
+  Ainsi :</p>
+  <pre><code class="language-php">from('Hoa')
+-> import('Router.Http');
+
+$router = new Hoa\Router\Http();
+$router->addRule(array('get'),         'h', '/hello')
+       ->addRule(array('get', 'post'), 'l', '/login');</code></pre>
+  <p>Nous avons déclaré deux règles publiques : <code>h</code> qui n'accepte que
+  des requêtes ayant la méthode <code>GET</code> et dont l'URI est
+  <code>/hello</code>, et <code>l</code> qui n'accepte que les requêtes
+  <code>GET</code> et <code>POST</code> et dont l'URI est <code>/login</code>.
+  Maintenant, essayons de trouver la règle pour la requête <code>/hello</code> à
+  l'aide de la méthode <code>Hoa\Router\Http::route</code>, ainsi :</p>
+  <pre><code class="language-php">$zeRule = $router->route('/hello')->getTheRule();
+var_dump($zeRule[Hoa\Router::RULE_ID);
+
+/**
+ * Will output:
+ *     string(1) "h"
+ */</code></pre>
+  <p>Excellent. Maintenant que notre routeur est capable de déterminer quelle
+  règle est utile pour acheminer une requête, voyons comment en extraire des
+  données. Les expressions régulières permettent …</p>
+  <p>Doit-on préciser ce qui est sur l'interface <code>Hoa\Router</code> et les
+  routeurs ?</p>
+
+  <h3 id="Variables_reservees" for="main-toc">Variables réservées</h3>
+
+  <p>Elles commencent par un <code>_</code>.</p>
+
+  <h3 id="Informations_sur_les_requetes" for="main-toc">Informations sur les
+  requêtes</h3>
+
+  <p><code>isAsynchronous</code>, <code>geMethod</code>, et autres spécificités
+  par routeur.</p>
+
+  <h2 id="Routeur_HTTP" for="main-toc">Routeur HTTP</h2>
+
+  <h2 id="Routeur_CLI" for="main-toc">Router CLI</h2>
+
+  <h2 id="Conclusion" for="main-toc">Conclusion</h2>
+
+</yield>
+</overlay>
