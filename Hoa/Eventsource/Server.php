@@ -67,7 +67,7 @@ namespace Hoa\Eventsource {
  * @license    New BSD License
  */
 
-class Eventsource {
+class Server {
 
     /**
      * Mime type.
@@ -79,7 +79,7 @@ class Eventsource {
     /**
      * Current event.
      *
-     * @var \Hoa\Eventsource string
+     * @var \Hoa\Eventsource\Server string
      */
     protected $_event    = null;
 
@@ -112,7 +112,7 @@ class Eventsource {
         $gotcha = false;
 
         foreach($mimes as $mime)
-            if(0 !== preg_match('#^' . self::MIME_TYPE . ';?#', $mime)) {
+            if(0 !== preg_match('#^(\*/\*|' . self::MIME_TYPE . ';?)#', $mime)) {
 
                 $gotcha = true;
                 break;
@@ -125,6 +125,10 @@ class Eventsource {
             $this->_response->sendHeader(
                 'Status',
                 \Hoa\Http\Response::STATUS_NOT_ACCEPTABLE
+            );
+            $this->_response->sendHeader(
+                'Content-Type',
+                'text/plain; charset=utf-8'
             );
 
             throw new Exception(
@@ -155,10 +159,9 @@ class Eventsource {
             $this->_event = null;
         }
 
-        $data = str_replace(CRLF, "\n", trim($data));
-
         $this->_response->writeAll(
-            'data: ' . preg_replace("#(\n|\r)#", "\n" . 'data: >', $data)
+            'data: ' .
+            preg_replace("#(" . CRLF . "|\n|\r)#", "\n" . 'data: >', $data)
         );
 
         if(null !== $id) {
@@ -195,7 +198,7 @@ class Eventsource {
      *
      * @access  public
      * @param   string  $event    Event.
-     * @return  \Hoa\Eventsource
+     * @return  \Hoa\Eventsource\Server
      * @throw   \Hoa\Eventsource\Exception
      */
     public function __get ( $event ) {
