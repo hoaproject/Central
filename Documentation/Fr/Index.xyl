@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<overlay xmlns="http://hoa-project.net/xyl/xylophone">
+<yield id="chapter">
+
+  <p>Les <em lang="en">workers</em> permettent de décharger une application de
+  tâches <strong>lourdes</strong> ou <strong>bloquantes</strong>. La
+  bibliothèque <code>Hoa\Worker</code> permet de créer et de manipuler des <em
+  lang="en">workers</em> à moindre effort.</p>
+
+  <h2 id="Table_des_matieres">Table des matières</h2>
+
+  <tableofcontents id="main-toc" />
+
+  <h2 id="Introduction" for="main-toc">Introduction</h2>
+
+  <p>Il est conseillé de lire le chapitre sur
+  <a href="@lh:chapter=Zombie"><code>Hoa\Zombie</code></a> dans lequel nous
+  apprennons comment transformer un processus en <strong>zombie</strong>. C'est
+  l'idée qu'exploite <code>Hoa\Worker</code> pour, une fois le zombie créé,
+  mettre en place un <strong>serveur</strong> qui va recevoir des
+  <strong>messages</strong>. À chaque message reçu, un
+  <strong>événement</strong> va être émis que nous pourrons intercepter pour
+  exécuter une <strong>tâche</strong>.</p>
+  <p>Ces tâches peuvent être de plusieurs natures comme envoyer une notification
+  (par exemple par mail), faire des opérations importantes sur des bases de
+  données, traiter de multiples fichiers etc. L'idée est de
+  <strong>décharger</strong> l'application de tâches qui pourraient la
+  <strong>ralentir</strong> et s'exécuter en <strong>parallèle</strong> sans
+  interférer avec l'exécution de l'application.</p>
+  <p>Même si le protocole établi permet une certaine <strong>intégrité</strong>
+  et <strong>sûreté</strong> des messages, il est préférables que les
+  communications se déroulent de <strong>serveur à serveur</strong> et non pas
+  transitées par le client.</p>
+  <p><code>Hoa\Worker</code> se présente en deux parties :</p>
+  <ul>
+    <li><code>Hoa\Worker\Backend\Shared</code> qui permet de
+    <strong>créer</strong> un <em lang="en">worker</em> <strong>partagé</strong>
+    entre <strong>plusieurs</strong> processus ;</li>
+    <li><code>Hoa\Worker\Shared</code> qui permet d'<strong>envoyer</strong> des
+    messages vers le <em lang="en">worker</em>.</li>
+  </ul>
+
+  <h2 id="Worker_partage" for="main-toc"><em lang="en">Worker</em>
+  partagé</h2>
+
+  <p>Un <em lang="en">worker</em> est avant tout <strong>identifié</strong> par
+  un <code>workerId</code>, parfois abrégé <code>wid</code>. Cet identifiant
+  permet de créer un <strong>profil</strong> pour notre
+  <em lang="en">worker</em> grâce à <code>Hoa\Worker\Run</code> qui ne s'occupe
+  que de ça. Seul un identifiant et l'adresse du serveur créé dans le
+  <em lang="en">worker</em> sont nécessaires pour établir un profil. Ensuite,
+  nous pourrons démarrer un <em lang="en">worker</em> uniquement à partir de son
+  identifiant.</p>
+  <p>La première étape va donc être de vérifier que le profil existe grâce à la
+  méthode <code>Hoa\Worker\Run::widExists</code>, dans le cas échant nous
+  allons le créer avec la méthode <code>Hoa\Worker\Run::register</code>.
+  Ainsi :</p>
+  <pre><code class="language-php">from('Hoa')
+-> import('Worker.Run')
+-> import('Worker.Backend.Shared');
+
+if(false === Hoa\Worker\Run::widExists('demorker'))
+    Hoa\Worker\Run::register('demorker', 'tcp://127.0.0.1:123456');</code></pre>
+  <p>Nous sommes maintenant certains que le profil existe. Nous pouvons alors
+  <strong>démarrer</strong> notre <em lang="en">worker</em>. Pour cela, nous
+  devons utiliser son <strong>identifiant</strong> et son <strong>mot de
+  passe</strong> (nécessaire pour l'arrêter) dans le constructeur de
+  <code>Hoa\Worker\Backend\Shared</code>. Une fois l'objet créé, il émettra une
+  seule catégorie d'<strong>événement</strong> : <code>message</code>, que nous
+  allons écouter pour mettre en place notre propre <strong>protocole</strong> de
+  traitement de tâches. Enfin, la méthode
+  <code>Hoa\Worker\Backend\Shared::run</code> permet de démarrer le <em
+  lang="en">worker</em> :</p>
+  <pre><code class="language-php">from('Hoa')
+-> import('File.Write');
+
+$file   = new Hoa\File\Write(__DIR__ . DS . 'Log');
+$worker = new Hoa\Worker\Backend\Shared('demorker', 'iamapassword');
+$worker->on('message', function ( Hoa\Core\Event\Bucket $bucket ) use ( $file ) {
+
+    // compute messages from $bucket->getData().
+    $file->writeAll($bucket->getData() . "\n");
+});
+$worker->run();
+</code></pre>
+  <p>Nous sommes <strong>libres</strong> de faire ce que nous voulons pour
+  traiter la <strong>tâche</strong> !  Le format est totalement libre : binaire,
+  compressé, ligne de commande, objet sérialisé … nous pouvons envoyer ce que
+  nous voulons.</p>
+
+  <h3 id="Ou_sont_stockes_les_profils_wid" for="main-toc">Où sont stockés les
+  profils <code>wid</code> ?</h3>
+
+  <p>Les profils des <em lang="en">workers</em> sont stockés dans les fichiers
+  <code>hoa://Data/Variable/Run/<em>workerId</em>.wid</code>. Attention à
+  vérifier que ce chemin est bien défini, par exemple en choisissant le dossier
+  <code>/path/to/wid/directory</code> :</p>
+  <pre><code class="language-php">Hoa\Core::getInstance()->setProtocol(
+    'hoa://Data/Variable/Run',
+    '/path/to/wid/directory/'
+);
+var_dump(resolve('hoa://Data/Variable/Run/'));
+
+/**
+ * Will output:
+ *     string(21) "/path/to/wid/directory/
+ */</code></pre>
+  <p>Notons que si nous utilisons Hoa avec son dossier <code>Data/</code> alors
+  <code>hoa://Data/</code> se définira <strong>automatiquement</strong> vers ce
+  dossier et nous n'aurons pas besoin de redéfinir le protocole. Et dans tous
+  les cas, il ne sera <strong>pas nécessaire</strong> de modifier le code mais
+  uniquement le protocole <code>hoa://</code>.</p>
+
+  <h2 id="Communiquer_avec_un_worker" for="main-toc">Communiquer avec
+  un <em lang="en">worker</em></h2>
+
+  <p>Un <em lang="en">worker</em> représente un serveur, nous allons donc
+  présenter son <strong>client</strong> qui permet de lui
+  <strong>envoyer</strong> des tâches. Le client est très simple à utiliser, il
+  suffit d'instancier la classe <code>Hoa\Worker\Shared</code> en précisant
+  l'identifiant du <em lang="en">worker</em>, et ensuite utiliser la méthode
+  adéquate pour envoyer des messages, à savoir
+  <code>Hoa\Worker\Shared::postMessage</code> :</p>
+  <pre><code class="language-php">from('Hoa')
+-> import('Worker.Shared');
+
+$worker = new Hoa\Worker\Shared('demorker');
+$worker->postMessage('mail gordon@freeman.hl Hello Gordon!');</code></pre>
+  <p>Bien sûr, le client va chercher le profil du <em lang="en">worker</em> dans
+  le fichier <code>hoa://Data/Variable/Run/<em>workerId</em>.wid</code>. Si nous
+  l'avons redéfini dans le <em lang="en">worker</em>, il faudra aussi le
+  redéfinir dans son client.</p>
+  <p>Nous pouvons utiliser la méthode
+  <code>Hoa\Worker\Shared::postMessage</code> autant de fois que nous le
+  désirons mais attention, elle se connecte et se déconnecte <strong>à chaque
+  fois</strong> du <em lang="en">worker</em> pour ne pas perturber l'exécution
+  de notre application principale. Il faut alors penser à envoyer le
+  <strong>maximum</strong> d'informations à chaque fois (par exemple à travers
+  un tableau, les données seront sérialisées dans tous les cas).</p>
+
+  <h2 id="Utiliser_les_commandes_dediees" for="main-toc">Utiliser les
+  commandes dédiées</h2>
+
+  <p>Pour exécuter un <em lang="en">worker</em>, il faut avant tout démarrer
+  <a href="http://php.net/install.fpm">PHP FPM</a> :</p>
+  <pre><code class="language-shell">$ php-fpm -d listen=127.0.0.1:9000</code></pre>
+  <p>Ensuite, pour <strong>démarrer</strong> notre <em lang="en">worker</em>,
+  nous allons utiliser
+  <a href="@ll:chapter=Install#Hoa_en_ligne_de_commande">Hoa en ligne de
+  commande</a>, et plus particulièrement la commande <code>worker:start</code>.
+  Elle n'est qu'un alias pratique vers
+  <code>Hoa\Worker\Backend\Shared::start</code> qui nécessite l'adresse de
+  PHP FPM (par défaut <code>127.0.0.1:9000</code>) et le chemin vers le fichier
+  qui contient notre <em lang="en">worker</em> :</p>
+  <pre><code class="language-shell">$ hoa worker:start /path/to/your/worker.php</code></pre>
+  <p>Pour vérifier que notre <em lang="en">worker</em> a été créé, nous pouvons
+  utiliser la commande <code>worker:status</code> qui va nous retourner la
+  <strong>liste</strong> de tous les <em lang="en">workers</em> ainsi que des
+  <strong>informations</strong> et <strong>statistiques</strong> associées comme
+  les identifiants, adresses des serveurs, âge, consommation mémoire actuelle,
+  moyenne et maximum etc. En réalité, elle n'est qu'un alias vers
+  <code>Hoa\Worker\Shared::getInformations()</code>. Ainsi :</p>
+  <pre><code class="language-shell">$ hoa worker:status --run /path/to/wid/directory/
+Shared worker informations
+
+ID        PID   Socket                  Uptime      Messages  Last  
+demorker  2465  tcp://127.0.0.1:123456  0d00:03:15  0         -     
+
+demorker  ||||||||||||||||||||||||||||||||||||   |  1,398Kb 1,398Kb 1,536Kb
+
+1 shared worker is running.</code></pre>
+  <p>Note : le code couleur n'apparaît pas dans l'exemple.</p>
+  <p>Notre <em lang="en">worker</em> est maintenant en place. Nous pouvons
+  <strong>exécuter</strong> le client sans problème (en ligne de commande,
+  <em>via</em> un navigateur, peu importe) !</p>
+  <p>Enfin, pour <strong>arrêter</strong> le <em lang="en">worker</em>
+  proprement, nous avons la commande <code>worker:stop</code>, qui n'est qu'un
+  alias de <code>Hoa\Worker\Backend\Shared</code>, nécessitant l'identifiant du
+  <em lang="en">worker</em> et son <strong>mot de passe</strong> :</p>
+  <pre><code class="language-shell">$ hoa worker:stop --run /path/to/wid/directory/ demorker
+Password: ▋</code></pre>
+  <p>Si le mot de passe est correct, le <em lang="en">worker</em> sera arrêté et
+  le client ne pourra plus communiquer avec lui et lèvera une exception
+  <code>Hoa\Worker\Exception</code>.</p>
+
+  <h2 id="Conclusion" for="main-toc">Conclusion</h2>
+
+  <p><code>Hoa\Worker</code> est une démonstration de ce qu'il est possible de
+  faire avec <a href="@lh:chapter=Zombie"><code>Hoa\Zombie</code></a> mais pas
+  seulement. Il remplit parfaitement son rôle à savoir
+  <strong>décharger</strong> l'application de traitements
+  <strong>lourds</strong> et <strong>bloquants</strong>. Les commandes
+  <code>worker:<em>*</em></code> permettent d'<strong>administrer</strong> ces
+  <em lang="en">workers</em> à moindre efforts. Rien ne vous empêche de bâtir
+  votre <strong>propre</strong> solution à partir des concepts évoqués ici !</p>
+
+</yield>
+</overlay>
