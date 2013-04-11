@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<overlay xmlns="http://hoa-project.net/xyl/xylophone">
+<yield id="chapter">
+
+  <p><strong>Analyser</strong> les <strong>performances</strong> de ses
+  algorithmes ou de ses programmes est une tâche courante, à laquelle
+  <code>Hoa\Bench</code> permet de répondre.</p>
+
+  <h2 id="Table_des_matieres">Table des matières</h2>
+
+  <tableofcontents id="main-toc" />
+
+  <h2 id="Introduction" for="main-toc">Introduction</h2>
+
+  <p><code>Hoa\Bench</code> propose deux manières d'<strong>analyser</strong>
+  son application : avec PHP lui-même, ou alors avec
+  <a href="http://opensolaris.org/os/community/dtrace/">DTrace</a>, grâce à des
+  programmes présents dans le dossier
+  <code>hoa://Library/Bench/Dtrace/</code>.</p>
+
+  <h2 id="Placer_des_marques" for="main-toc">Placer des marques</h2>
+
+  <p>La bibliothèque <code>Hoa\Bench</code> fonctionne de manière très
+  intuitive : il suffit de placer des <strong>marques</strong> dans notre
+  programme et c'est tout. À chaque fois qu'une marque est exécutée, elle
+  récolte des informations que nous pouvons exploiter par la suite.</p>
+  <p>Il y a deux classes à considérer : <code>Hoa\Bench</code> qui permet de
+  regroupe un ensemble de marques, et <code>Hoa\Bench\Mark</code> qui représente
+  une seule marque.</p>
+
+  <h3 id="Utilisation_rapide" for="main-toc">Utilisation rapide</h3>
+
+  <p>L'utilisation la plus courante de <code>Hoa\Bench</code> sera la suivante :
+  placer quelques marques et afficher leurs statistiques. Ainsi :</p>
+  <pre><code class="language-php">from('Hoa')
+-> import('Bench.~');
+
+$bench = new Hoa\Bench();
+
+// Start two marks: “one” and “two”.
+$bench->one->start();
+$bench->two->start();
+
+usleep(50000);
+
+// Stop the mark “two” and start the mark “three”.
+$bench->two->stop();
+$bench->three->start();
+
+usleep(25000);
+
+// Stop all marks.
+$bench->three->stop();
+$bench->one->stop();
+
+// Print statistics.
+echo $bench;
+
+/**
+ * Will output:
+ *     one    |||||||||||||||||||||||||||||||||||||||||||||||||||||||||    76ms, 100.0%
+ *     two    ||||||||||||||||||||||||||||||||||||||                       50ms,  66.0%
+ *     three  |||||||||||||||||||                                          26ms,  33.9%
+ */</code></pre>
+  <p>Nous remarquons que pour déclarer une marque, nous faisons simplement appel
+  à un attribut sur la classe <code>Hoa\Bench</code> ce qui va retourner une
+  marque (ou la créer avant si elle n'existe pas). Une fois que nous avons notre
+  marque, nous pouvons la démarrer avec la méthode
+  <code>Hoa\Bench\Mark::start</code>. Pour arrêter les marques, nous appelons la
+  méthode <code>Hoa\Bench\Mark::stop</code>. Enfin, afficher l'objet
+  <code>Hoa\Bench</code> va afficher les statistiques des marques : leur nom, un
+  petit graphique, leur temps d'exécution et le pourcentage de ce temps par
+  rapport aux autres marques.</p>
+
+  <h3 id="Bien_manipuler_les_marques" for="main-toc">Bien manipuler les
+  marques</h3>
+
+  <p>Les marques peuvent être dans trois états différents :</p>
+  <ul>
+    <li>en marche, grâce à la méthode <code>Hoa\Bench\Mark::start</code> ;</li>
+    <li>en pause, grâce à la méthode <code>Hoa\Bench\Mark::pause</code>,
+    uniquement si elle était en marche précédemment ;</li>
+    <li>à l'arrêt, grâce à la méthode <code>Hoa\Bench\Mark::stop</code>,
+    uniquement si elle est en marche.</li>
+  </ul>
+  <p>Si nous démarrons puis arrêtons une marque, pour ensuite la démarrer à
+  nouveau, elle sera remise à zéro. Toutefois, il existe la méthode
+  <code>Hoa\Bench\Mark::reset</code> qui aura le même effet mais en forçant une
+  remise à zéro quelque soit l'état de la marque. Ainsi :</p>
+  <pre><code class="language-php">$bench = new Hoa\Bench();
+$mark  = $bench->aMark;
+$mark->start(); // =  0ms
+usleep(10000);
+$mark->pause(); // = 10ms
+usleep(10000);
+$mark->start(); // = 10ms
+usleep(10000);
+$mark->stop();  // = 20ms
+echo $bench;
+
+/**
+ * Will output:
+ *     aMark  |||||||||||||||||||||||||||||||||||||||||||||||||||||||||    21ms, 100.0%
+ */
+
+$mark->reset();
+$mark->start(); // =  0ms
+usleep(10000);
+$mark->stop();  // = 10ms
+echo $bench;
+
+/**
+ * Will output:
+ *     aMark  |||||||||||||||||||||||||||||||||||||||||||||||||||||||||    11ms, 100.0%
+ */</code></pre>
+  <p>D'autres opérations sont possibles, comme :</p>
+  <ul>
+    <li>obtenir la durée d'exécution, grâce à la méthode
+    <code>Hoa\Bench\Mark::diff</code> ;</li>
+    <li>comparer la durée d'exécution entre deux marques, grâce à la méthode
+    <code>Hoa\Bench\Mark::compareTo</code> ;</li>
+    <li>savoir si une marque est en cours d'exécution, grâce à la méthode
+    <code>Hoa\Bench\Mark::isRunning</code> ;</li>
+    <li>savoir si une marque est en pause, grâce à la méthode
+    <code>Hoa\Bench\Mark::isPause</code>.</li>
+  </ul>
+  <p>Nous avons précisé qu'un objet <code>Hoa\Bench</code> permettait de
+  regrouper plusieurs marques ensemble. Nous avons vu comment déclarer une
+  marque, mais nous avons d'autres opérations comme savoir si une marque existe
+  ou alors la supprimer avec les constructions de PHP correspondantes :</p>
+  <pre><code class="language-php">$bench = new Hoa\Bench();
+
+// Create a mark.
+$bench->foo;
+
+// Is “foo” exists?
+if(isset($bench->foo))
+    // Then, delete it, for example.
+    unset($bench->foo);</code></pre>
+  <p>Bien entendu, nous pouvons supprimer toutes les marques grâce à la méthode
+  <code>Hoa\Bench::unsetAll</code>. De plus, la classe <code>Hoa\Bench</code> se
+  comporte comme un itérateur sur toutes les marques, ainsi :</p>
+  <pre><code class="language-php">foreach($bench as $id => $mark)
+    echo $id, ' => ', ($mark->isRunning() ? 'running' : 'stopped'), "\n";
+
+/**
+ * Could output:
+ *     one => stopped
+ *     two => running
+ *     three => running
+ */</code></pre>
+  <p>Nous pouvons également compter le nombre de marques de la manière
+  suivante :</p>
+  <pre><code class="language-php">var_dump(count($bench));
+
+/**
+ * Will output:
+ *     int(3)
+ */</code></pre>
+  <p>Enfin, nous pouvons obtenir des statistiques grâce aux méthodes
+  <code>Hoa\Bench::getStatistic</code> et <code>Hoa\Bench::getLongest</code>,
+  respectivement pour obtenir les statistiques sous forme de tableau
+  correspondant au graphique vu précédemment et pour obtenir la marque qui a la
+  plus longue exécution.</p>
+
+  <h2 id="DTrace" for="main-toc">DTrace</h2>
+
+  <p>La bibliothèque <code>Hoa\Bench</code> fournit également des programmes
+  DTrace dans le dossier <code>hoa://Library/Bench/Dtrace/</code>. DTrace permet
+  de générer des <strong>traces</strong> afin de détecter des problèmes en temps
+  réel dans un environnement de production. Il est intégré au niveau du noyau et
+  au niveau applicatif, ce qui lui assure d'excellentes
+  <strong>performances</strong>. DTrace utilise
+  <a href="https://wikis.oracle.com/display/DTrace/Documentation">le langage
+  D</a>. Nous conseillons également la lecture de
+  <a href="http://dtracebook.com/">DTraceBook</a>. Attention, DTrace n'est pas
+  disponible sur toutes les plateformes.</p>
+  <p>PHP peut utiliser DTrace s'il a été compilé avec l'option
+  <code>--enable-dtrace</code> (voir
+  <a href="https://wiki.php.net/rfc/dtrace"><em lang="en">DTraces probes for
+  PHP</em></a>).</p>
+  <p>Nous allons commencer par analyser l'exécution du fichier
+  <code>Dtrace.php</code> suivant :</p>
+  <pre><code class="language-php">&amp;lt;?php
+
+function f ( ) { g(); h(); }
+function g ( ) { h();      }
+function h ( ) {           }
+
+f();</code></pre>
+  <p>Ce fichier est très simple mais il va nous servir de test pour exécuter le
+  premier programme DTrace, à savoir
+  <code>hoa://Library/Bench/Dtrace/Execution.d</code>. Attention, il faut
+  exécuter DTrace en étant super-utilisateur ; ainsi :</p>
+  <pre><code class="language-shell">$ exed=`hoa core:resolve hoa://Library/Bench/Dtrace/Execution.d`
+$ sudo $exed -c "php Dtrace.php"
+Request start
+     2ms ➜ f()        …/Dtrace.php:007
+    37ms   ➜ g()      …/Dtrace.php:003
+    26ms     ➜ h()    …/Dtrace.php:004
+    28ms     ← h()
+    37ms   ← g()
+    44ms   ➜ h()      …/Dtrace.php:003
+    25ms   ← h()
+    30ms ← f()
+Request end</code></pre>
+  <p>Voyons si nous ajoutons des erreurs et des exceptions dans notre fichier
+  <code>Dtrace.php</code> :</p>
+  <pre><code class="language-php">&amp;lt;?php
+
+function f ( ) { ++$i; g(); h();             }
+function g ( ) { h();                        }
+function h ( ) { throw new Exception('foo'); }
+
+try                     { f(); }
+catch ( \Exception $e ) {      }
+  </code></pre>
+  <p>Et réexécutons notre programme DTrace :</p>
+  <pre><code class="language-shell">$ sudo $exed -c "php Dtrace.php"
+Request start
+     2ms ➜ f()                              …/Dtrace.php:007
+✖          Undefined variable: i            …/Dtrace.php:003
+    37ms   ➜ g()                            …/Dtrace.php:003
+    26ms     ➜ h()                          …/Dtrace.php:004
+●              Exception has been thrown
+    28ms     ← h()
+    37ms   ← g()
+    44ms   ➜ h()                            …/Dtrace.php:003
+    25ms   ← h()
+    30ms ← f()
+✔          Exception has been caught
+Request end</code></pre>
+  <p>Le second programme DTrace est
+  <code>hoa://Library/Bench/Dtrace/Stat.d</code> et permet de collecter quelques
+  statistiques sur l'exécution comme la liste de toutes les fonctions et
+  méthodes appelées avec leur nombre d'appels et la distribution du temps
+  d'exécution. Par exemple, si nous essayons sur notre première version de
+  <code>Dtrace.php</code>, nous allons avoir :</p>
+  <pre><code class="language-shell">$ exed=`hoa core:resolve hoa://Library/Bench/Dtrace/Stat.d`
+$ sudo $exed -c "php Dtrace.php"
+Count calls:
+  • h                                                                        2
+  • g                                                                        1
+  • f                                                                        1
+
+Execution distribution (values are in nanoseconds):
+
+  f
+           value  ------------- Distribution ------------- count
+             256 |                                         0
+             512 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 1
+            1024 |                                         0
+
+  h
+           value  ------------- Distribution ------------- count
+               4 |                                         0
+               8 |@@@@@@@@@@@@@@@@@@@@                     1
+              16 |                                         0
+              32 |                                         0
+              64 |                                         0
+             128 |                                         0
+             256 |@@@@@@@@@@@@@@@@@@@@                     1
+             512 |                                         0
+
+  g
+           value  ------------- Distribution ------------- count
+             128 |                                         0
+             256 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 1
+             512 |                                         0
+
+Total execution time: 108ms</code></pre>
+  <p>Ce programme DTrace est très utile pour connaître quelles sont les
+  fonctions ou méthodes les plus appelées dans votre programme et de connaître
+  également leur temps d'exécution moyen. Autant dire que pour détecter les
+  sections critiques d'un point de vue performance, ce programme apporte une
+  véritable réponse et rapidement !</p>
+
+  <h2 id="Conclusion" for="main-toc">Conclusion</h2>
+
+  <p><code>Hoa\Bench</code> permet d'analyser l'exécution de programmes PHP à
+  l'aide de PHP lui-même ou de DTrace. Ces outils sont utiles pour améliorer les
+  <strong>performances</strong> en permettant de détecter des goulots
+  d'étranglements, des appels trop nombreux, des ralentissements etc., afin de
+  les corriger. Bref, tout ce qu'il faut pour obtenir des programmes de
+  <strong>qualité</strong>.</p>
+</yield>
+</overlay>
