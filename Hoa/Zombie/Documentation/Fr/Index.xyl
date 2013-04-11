@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<overlay xmlns="http://hoa-project.net/xyl/xylophone">
+<yield id="chapter">
+
+  <p>Un zombie est un processus qui n'est ni actif, ni terminé : il est entre la
+  <strong>vie</strong> et la <strong>mort</strong>. <code>Hoa\Zombie</code>
+  permet de transformer une exécution PHP en <strong>zombie</strong> !</p>
+
+  <h2 id="Table_des_matieres">Table des matières</h2>
+
+  <tableofcontents id="main-toc" />
+
+  <h2 id="Introduction" for="main-toc">Introduction</h2>
+
+  <p>Placer un processus entre la vie et la mort est en général à éviter car
+  cela est souvent synonyme de <strong>dysfonctionnement</strong>. Toutefois, il
+  peut arriver que ce soit astucieux de le faire, notamment dans le cas de
+  <strong>démons</strong> (voir
+  <a href="@lh:chapter=Worker"><code>Hoa\Worker</code></a>). Il est à noter
+  qu'un zombie est également <strong>muet</strong> : il ne peut plus écrire sur
+  la sortie standard puisqu'il n'est théoriquement plus attaché à aucun
+  processus parent.</p>
+  <p>Actuellement, <code>Hoa\Zombie</code> ne permet de créer des zombies que
+  s'il est utilisé derrière
+  <a href="http://php.net/install.fpm">PHP FPM</a>. Rappelons-nous du
+  fonctionnement de PHP : un serveur <a href="http://fastcgi.com/">FastCGI</a>
+  (comme PHP FastCGI ou PHP FPM) va démarrer un processus PHP quand une
+  <strong>requête</strong> arrive et la terminer quand la
+  <strong>réponse</strong> est envoyée. D'une certaine manière, le processus PHP
+  est <strong>synchronisé</strong> sur le protocole FastCGI. Heureusement, quand
+  nous utilisons PHP FPM, nous pouvons <strong>désynchroniser</strong> ce
+  protocole, et ainsi créer des zombies tout en <strong>délégant</strong>
+  <a href="http://php.net/install.fpm.configuration">la gestion des processus à
+  PHP FPM</a> !</p>
+
+  <h2 id="Manipuler_des_zombies" for="main-toc">Manipuler des
+  zombies</h2>
+
+  <p>Créer un zombie est très <strong>simple</strong> : il suffit d'appeler la
+  méthode <code>Hoa\Zombie::fork()</code>.</p>
+  <p>Il est de notoriété publique que tuer un zombie est une activité
+  <strong>amusante</strong>, d'autant plus si nous avons le choix des
+  <strong>armes</strong> ! C'est pourquoi <code>Hoa\Zombie</code> propose les
+  méthodes suivantes :</p>
+  <ul>
+    <li><code>Hoa\Zombie::decapitate</code>, pour <strong>décapiter</strong> un
+    zombie ;</li>
+    <li><code>Hoa\Zombie::bludgeon</code>, pour <strong>matraquer</strong> un
+    zombie ;</li>
+    <li><code>Hoa\Zombie::burn</code>, pour <strong>brûler</strong> un
+    zombie ;</li>
+    <li><code>Hoa\Zombie::explode</code>, pour faire <strong>exploser</strong>
+    un zombie ;</li>
+    <li><code>Hoa\Zombie::cutOff</code>, pour <strong>découper</strong> un
+    zombie en rondelles.</li>
+  </ul>
+  <p>Toutes ces méthodes ont fait leurs preuves. Ainsi :</p>
+  <pre><code class="language-php">from('Hoa')
+-> import('Zombie.~');
+
+// I'm alive!
+Hoa\Zombie::fork();
+// I'm a zombie!
+Hoa\Zombie::decapitate();
+// I'm dead…</code></pre>
+  <p><code>Hoa\Zombie</code> propose également d'obtenir
+  l'<strong>identifiant</strong> du processus, ce qui peut parfois être utile, à
+  travers la méthode <code>Hoa\Zombie::getPid</code>. Enfin, il existe la
+  méthode <code>Hoa\Zombie::test</code> qui permet de savoir si nous pouvons
+  créer un zombie ou pas.</p>
+
+  <h2 id="Test" for="main-toc">Test</h2>
+
+  <p>Pour créer un zombie, nous avons dit qu'il fallait utiliser PHP FPM.
+  Ensuite, nous avons plusieurs possibilités pour exécuter notre programme PHP
+  qui sera notre futur zombie : soit à travers HTTP (qui fera automatiquement
+  une requête FastCGI vers PHP FPM) ou alors directement en
+  <strong>émettant</strong> une requête FastCGI vers PHP FPM. C'est ce dernier
+  choix que nous allons retenir.</p>
+  <p>Nous commençons avec le fichier <code>Zombie.php</code> :</p>
+  <pre><code class="language-php">from('Hoa')
+-> import('Zombie.~');
+
+echo 'I guess I am sick…', "\n";
+Hoa\Zombie::fork();
+
+// Do whatever you want here, e.g.:
+sleep(10);
+file_put_contents(
+    __DIR__ . DS . 'AMessage',
+    'Hello from after-life… or somewhere about!'
+);
+</code></pre>
+  <p>Ensuite, nous continuons avec le fichier <code>Run.php</code> qui va
+  exécuter <code>Zombie.php</code> grâce à
+  <a href="@lh:chapter=Fastcgi"><code>Hoa\Fastcgi</code></a> :</p>
+  <pre><code class="language-php">from('Hoa')
+-> import('Socket.Client')
+-> import('Fastcgi.Responder');
+
+$fastcgi = new Hoa\Fastcgi\Responder(
+    new Hoa\Socket\Client('tcp://127.0.0.1:9000')
+);
+
+// Start Zombie.php and print the response before it becomes undead.
+echo $fastcgi->send(array(
+    'GATEWAY_INTERFACE' => 'FastCGI/1.0',
+    'REQUEST_METHOD'    => 'GET',
+    'SCRIPT_FILENAME'   => __DIR__ . DS . 'Zombie.php'
+));</code></pre>
+  <p>Et enfin, nous testons :</p>
+  <pre><code class="language-shell">$ php-fpm -d listen=127.0.0.1:9000
+$ php Run.php
+I guess I am sick…</code></pre>
+  <p>Et après 10 secondes, nous verrons le fichier <code>AMessage</code>
+  apparaître et contenant <em lang="en">Hello from after-life… or somewhere
+  about!</em>.</p>
+  <p>Nous pouvons créer un zombie <strong>à tout moment</strong> et le tuer
+  comme nous le voulons. Si la fin du programme est atteinte, le zombie se tuera
+  de <strong>lui-même</strong>. Nous anticiperons qu'un démon n'est finalement
+  rien d'autre qu'une zombie qui démarre un serveur.</p>
+
+  <h2 id="Conclusion" for="main-toc">Conclusion</h2>
+
+  <p><code>Hoa\Zombie</code> permet de transformer un processus en
+  <strong>zombie</strong> uniquement lorsqu'il est utilisé avec PHP FPM. Nous
+  vous invitons à regarder
+  <a href="@lh:chapter=Worker"><code>Hoa\Worker</code></a> pour un exemple
+  d'utilisation plus <strong>complet</strong>.</p>
+
+</yield>
+</overlay>
