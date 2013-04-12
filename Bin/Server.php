@@ -67,7 +67,7 @@ class Server extends \Hoa\Console\Dispatcher\Kit {
     /**
      * Options description.
      *
-     * @var Hoa\Dns\Bin\Server array
+     * @var \Hoa\Dns\Bin\Server array
      */
     protected $options = array(
         array('listen', \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'l'),
