@@ -263,9 +263,9 @@ class Shared implements \Hoa\Core\Event\Listenable {
             switch($request['r']) {
 
                 case static::TYPE_MESSAGE:
-                    $this->_on->fire('message', new \Hoa\Core\Event\Bucket(
-                        $message
-                    ));
+                    $this->_on->fire('message', new \Hoa\Core\Event\Bucket(array(
+                        'message' => $message
+                    )));
                     ++$this->_messages;
                     $this->_lastMessage = time();
                   break;

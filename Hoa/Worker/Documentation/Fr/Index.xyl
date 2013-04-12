@@ -79,8 +79,9 @@ $file   = new Hoa\File\Write(__DIR__ . DS . 'Log');
 $worker = new Hoa\Worker\Backend\Shared('demorker', 'iamapassword');
 $worker->on('message', function ( Hoa\Core\Event\Bucket $bucket ) use ( $file ) {
 
-    // compute messages from $bucket->getData().
-    $file->writeAll($bucket->getData() . "\n");
+    // compute messages.
+    $data = $bucket->getData();
+    $file->writeAll($data['message'] . "\n");
 });
 $worker->run();
 </code></pre>
