@@ -214,7 +214,7 @@ class Mime implements \Hoa\Core\Parameter\Parameterizable {
 
         if(!file_exists($magic))
             throw new Exception(
-                'Magic file %s does not exist.', 1, $magic);
+                'Magic file %s does not exist.', 0, $magic);
 
         self::$_computed = array(
             self::STRUCTURE_MEDIA_TYPE => array(),
@@ -268,7 +268,7 @@ class Mime implements \Hoa\Core\Parameter\Parameterizable {
                     'Magic file %s seems to be corrupted (at line %d). ' .
                     'You should take a look at this piece of code: ' .
                     $message,
-                    2, array($magic, $i), $exception);
+                    1, array($magic, $i), $exception);
             }
 
             if(!isset($s_media_type[$media]))
@@ -311,7 +311,7 @@ class Mime implements \Hoa\Core\Parameter\Parameterizable {
         if(false === $poos = strrpos($based, '.'))
             throw new Exception\MimeIsNotFound(
                 'Cannot find MIME type of %s, because extension is not found.',
-                3, $name);
+                2, $name);
 
         $this->_extension  = substr($based, $poos + 1);
         $this->_mime       = self::getMimeFromExtension(
@@ -335,7 +335,7 @@ class Mime implements \Hoa\Core\Parameter\Parameterizable {
 
         if(null === self::$_computed)
             throw new Exception(
-                'No MIME type has been computed.', 4);
+                'No MIME type has been computed.', 3);
 
         return isset(self::$_computed[self::STRUCTURE_EXTENSION][$extension]);
     }
@@ -354,7 +354,7 @@ class Mime implements \Hoa\Core\Parameter\Parameterizable {
         if(false === self::extensionExists($extension))
             throw new Exception\MimeIsNotFound(
                 'Cannot find MIME type because extension %s does ' .
-                'not exist.', 5, $extension);
+                'not exist.', 4, $extension);
 
         return self::$_computed[self::STRUCTURE_EXTENSION][$extension];
     }
@@ -372,7 +372,7 @@ class Mime implements \Hoa\Core\Parameter\Parameterizable {
 
         if(false === strpos($mime, '/'))
             throw new Exception(
-                'MIME %s is not well-formed (media/type).', 6, $mime);
+                'MIME %s is not well-formed (media/type).', 5, $mime);
 
         return explode('/', $mime);
     }
