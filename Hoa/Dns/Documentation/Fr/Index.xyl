@@ -85,7 +85,7 @@
   <p>Il existe plusieurs programmes de résolution selon les systèmes. Notre
   objectif est de <strong>spécifier</strong> un <strong>serveur de
   résolution</strong> pour les domaines <code>*.hoa</code>. Notre serveur
-  écoutera le port 57055 (<ie /> <code>0xDEAD</code>, pour ne pas devoir
+  écoutera le port 57055 (<em>i.e.</em> <code>0xDEAD</code>, pour ne pas devoir
   exécuter notre serveur avec les droits <em lang="en">root</em>) sur l'adresse
   <code>127.0.0.1</code>.</p>
 
