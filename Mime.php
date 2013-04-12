@@ -172,7 +172,7 @@ class Mime implements \Hoa\Core\Parameter\Parameterizable {
 
         if(null === $magic) {
 
-            $found = __DIR__ . DS . 'Mime.types';
+            $found = 'hoa://Library/Mime/Mime.types';
 
             /**
              * Search.
