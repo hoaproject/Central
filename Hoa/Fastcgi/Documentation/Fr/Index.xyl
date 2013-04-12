@@ -99,8 +99,8 @@ $fastcgi = new Hoa\Fastcgi\Responder(
 );</code></pre>
   <p>Pour <strong>envoyer une requête</strong>, nous utilisons la méthode
   <code>Hoa\Fastcgi\Responder::send</code> qui prend en premier argument la
-  liste des en-têtes HTTP et en second argument le contenu de la requête (<ie />
-  le corps, optionnel). Les en-têtes minimales sont :</p>
+  liste des en-têtes HTTP et en second argument le contenu de la requête
+  (<em>i.e.</em> le corps, optionnel). Les en-têtes minimales sont :</p>
   <ul>
     <li><code>SCRIPT_FILENAME</code> : le chemin absolu vers le fichier PHP qui
     sera exécuté (la seule réellement nécessaire) ;</li>
