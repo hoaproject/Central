@@ -206,7 +206,10 @@ class Mime implements \Hoa\Core\Parameter\Parameterizable {
      * @return  void
      * @throw   \Hoa\Mime\Exception
      */
-    public static function compute ( $magic ) {
+    public static function compute ( $magic = null ) {
+
+        if(null === $magic)
+            $magic = 'hoa://Library/Mime/Mime.types';
 
         if(!file_exists($magic))
             throw new Exception(
@@ -293,15 +296,35 @@ class Mime implements \Hoa\Core\Parameter\Parameterizable {
      * @access  public
      * @param   string  $extension    Extension to check.
      * @return  bool
-     * @throw   \Hoa\Mime\Exception
      */
     public static function extensionExists ( $extension ) {
 
         if(null === static::$_computed)
-            throw new Exception(
-                'No MIME type has been computed.', 3);
+            static::compute();
 
         return isset(static::$_computed[self::STRUCTURE_EXTENSION][$extension]);
+    }
+
+    /**
+     * Get extensions from a MIME (media/type).
+     *
+     * @access  public
+     * @param   string  $mime    MIME.
+     * @return  array
+     * @throw   \Hoa\Mime\Exception\MimeIsNotFound
+     */
+    public static function getExtensionsFromMime( $mime ) {
+
+        if(null === static::$_computed)
+            static::compute();
+
+        list($media, $type) = static::parseMime($mime);
+
+        if(!isset(static::$_computed[self::STRUCTURE_MEDIA_TYPE][$media][$type]))
+            throw new Exception\MimeIsNotFound(
+                'MIME type %s does not exist.', 2, $mime);
+
+        return static::$_computed[self::STRUCTURE_MEDIA_TYPE][$media][$type];
     }
 
     /**
@@ -310,15 +333,11 @@ class Mime implements \Hoa\Core\Parameter\Parameterizable {
      * @access  public
      * @param   string  $extension    Extension to considere.
      * @return  string
-     * @throw   \Hoa\Mime\Exception
-     * @throw   \Hoa\Mime\Exception\MimeIsNotFound
      */
     public static function getMimeFromExtension ( $extension ) {
 
         if(false === static::extensionExists($extension))
-            throw new Exception\MimeIsNotFound(
-                'Cannot find MIME type because extension %s does ' .
-                'not exist.', 4, $extension);
+            return null;
 
         return static::$_computed[self::STRUCTURE_EXTENSION][$extension];
     }
@@ -336,7 +355,7 @@ class Mime implements \Hoa\Core\Parameter\Parameterizable {
 
         if(false === strpos($mime, '/'))
             throw new Exception(
-                'MIME %s is not well-formed (media/type).', 5, $mime);
+                'MIME %s is not well-formed (media/type).', 3, $mime);
 
         return explode('/', $mime);
     }
@@ -361,7 +380,7 @@ class Mime implements \Hoa\Core\Parameter\Parameterizable {
         if(false === $poos = strrpos($based, '.'))
             throw new Exception\MimeIsNotFound(
                 'Cannot find MIME type of %s, because extension is not found.',
-                2, $name);
+                4, $name);
 
         $this->_extension = substr($based, $poos + 1);
         $this->_mime      = static::getMimeFromExtension($this->_extension);
