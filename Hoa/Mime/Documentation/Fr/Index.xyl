@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<overlay xmlns="http://hoa-project.net/xyl/xylophone">
+<yield id="chapter">
+
+  <p>Le <strong>type</strong> des ressources est codifié à partir d'un format
+  appelé <em>MIME Media Types</em>. La bibliothèque <code>Hoa\Mime</code> permet
+  de manipuler ce <strong>format</strong> et de déduire des informations à
+  partir de flux.</p>
+
+  <h2 id="Table_des_matieres">Table des matières</h2>
+
+  <tableofcontents id="main-toc" />
+
+  <h2 id="Introduction" for="main-toc">Introduction</h2>
+
+  <p>Toutes les ressources en Informatique n'ont pas le même type. Un
+  <strong>type</strong> permet d'<strong>identifier</strong> une ressource afin
+  de lui associer une <strong>interprétation</strong> particulière. Par exemple,
+  une ressource de type <code>text/html</code> représente un document HTML et
+  sera interprété dans un navigateur Web. Autre exemple, une ressource de type
+  <code>video/webm</code> représente une vidéo au format WebM et peut être
+  interprétée dans un lecteur vidéo.</p>
+  <p>Nous remarquons que le type est exprimé sous la forme
+  <code><em>media</em>/<em>type</em></code>. Un <strong>média</strong>
+  représente une catégorie de ressources. Il en existe 9 pour l'instant :
+  <code>application</code>, <code>audio</code>, <code>example</code>,
+  <code>image</code>, <code>message</code>, <code>model</code>,
+  <code>multipart</code>, <code>text</code> et <code>video</code>. Les types
+  <strong>standards</strong> n'ont pas de préfixe particulier, <em>a
+  contrario</em> des types <strong>expérimentaux</strong> qui sont préfixés par
+  <code>x-</code>, comme <code>image/x-icon</code>. Il existe aussi des types
+  réservés pour les « <strong>entreprises</strong> » (<em lang="en">vendors</em>
+  en anglais), préfixés par <code>vnd.</code>, comme
+  <code>application/vnd.ms-excel</code>. À chaque type peut être associées une
+  ou plusieurs <strong>extensions</strong>, comme <code>html</code> et
+  <code>htm</code> pour <code>text/html</code>. Cela signifie qu'un fichier avec
+  le nom <code>Foobar.html</code> est un document HTML.</p>
+  <p>L'autorité chargée de <strong>spécifier</strong> tous les types est l'IANA
+  (<em lang="en">Internet Assigned Numbers Authority</em>). Nous les trouverons
+  dans le <a href="http://iana.org/assignments/media-types">document
+  <em lang="en">MIME Media Types</em></a> (nous trouverons également toutes les
+  RFC correspondantes, notamment celles décrivant la procédure pour faire
+  standardiser un nouveau type).</p>
+  <p>La bibliothèque <code>Hoa\Mime</code> permet de manipuler le fichier
+  <code>Mime.types</code>, qui historiquement, contient tous les types. Elle
+  permet également de trouver le type et d'autres informations associées d'un
+  flux (d'une ressource).</p>
+
+  <h3 id="Historique" for="main-toc">Historique</h3>
+
+  <p>À l'origine, ce formalisme était utilisé dans les <strong>mails</strong>
+  (voir la <a href="https://tools.ietf.org/html/rfc2046">RFC2046</a>) qui
+  pouvaient transporter plusieurs sortes de documents. C'est pourquoi nous
+  parlons de types MIME, pour <em lang="en">Multipurpose Internet Mail
+  Extensions</em>. Par la suite, ce format a été étendu à d'autres protocoles
+  comme HTTP (avec l'en-tête <code>Content-Type</code>). C'est maintenant <em>de
+  facto</em> un standard pour tout nouveau protocole.</p>
+
+  <h2 id="Informations_generales" for="main-toc">Informations générales</h2>
+
+  <p>Il y a deux façons d'utiliser la classe <code>Hoa\Mime</code>. Nous allons
+  commencer par la première façon : <strong>statiquement</strong>.</p>
+  <p>Les deux méthodes principales sont
+  <code>Hoa\Mime::getExtensionsFromMime</code> pour obtenir les extensions
+  associées à un type, et <code>Hoa\Mime::getMimeFromExtension</code> pour
+  l'opération inverse, à savoir obtenir le type à partir d'une extension.
+  Ainsi :</p>
+  <pre><code class="language-php">from('Hoa')
+-> import('Mime.~');
+
+print_r(Hoa\Mime::getExtensionsFromMime('text/html'));
+
+/**
+ * Will output:
+ *     Array
+ *     (
+ *         [0] => html
+ *         [1] => htm
+ *     )
+ */
+
+var_dump(Hoa\Mime::getMimeFromExtension('webm'));
+
+/**
+ * Will output:
+ *     string(10) "video/webm"
+ */</code></pre>
+  <p>Nous pouvons aussi savoir si une extension existe dans notre fichier
+  <code>Mime.types</code> grâce à la méthode (toujours statique)
+  <code>Hoa\Mime::extensionExists</code>.</p>
+  <p>Par défaut, <code>Hoa\Mime</code> va utiliser le fichier
+  <code>hoa://Library/Mime/Mime.types</code> comme <strong>base de
+  données</strong>. Nous pouvons lui préciser un <strong>autre</strong> fichier
+  en utilisant la méthode <code>Hoa\Mime::compute</code> :</p>
+  <pre><code class="language-php">Hoa\Mime::compute('/etc/mime.types');</code></pre>
+  <p>Toutes les informations fournies par la classe <code>Hoa\Mime</code> sont
+  calculées à partir de ce fichier. Il est préférable d'exécuter cette méthode
+  avant toutes opérations sur la classe <code>Hoa\Mime</code>.</p>
+
+  <h2 id="Informations_sur_un_flux" for="main-toc">Informations sur un flux</h2>
+
+  <p>Une autre façon d'utiliser la bibliothèque <code>Hoa\Mime</code> est
+  <strong>dynamiquement</strong>, à partir d'un flux. Nous instancions notre
+  classe en lui donnant un flux, et ensuite nous pourrons connaître le type de
+  ce flux, ses extensions etc. Ainsi :</p>
+  <pre><code class="language-php">$type = new Hoa\Mime(new Hoa\File\Read('index.html'));</code></pre>
+  <p>Nous avons maintenant les méthodes suivantes :</p>
+  <ul>
+    <li><code>getExtension</code> pour obtenir l'extension du flux ;</li>
+    <li><code>getOtherExtensions</code> pour obtenir les autres extensions du
+    flux ;</li>
+    <li><code>getMime</code> pour connaître son type MIME (sous la forme
+    complète <code><em>media</em>/<em>type</em></code>) ;</li>
+    <li><code>getMedia</code> pour connaître uniquement
+    <code><em>media</em></code> ;</li>
+    <li><code>getType</code> pour connaître uniquement
+    <code><em>type</em></code>.</li>
+  </ul>
+  <p>Enfin, nous avons deux autres méthodes : <code>isExperimental</code> pour
+  savoir si le type est expérimental ou pas, et <code>isVendor</code> pour
+  savoir si le type est « propriétaire » ou pas. Par exemple :</p>
+  <pre><code class="language-php">var_dump(
+    $type->getExtension(),
+    $type->getOtherExtensions(),
+    $type->getMime(),
+    $type->isExperimental()
+);
+
+/**
+ * Will output:
+ *     string(4) "html"
+ *     array(1) {
+ *       [0]=>
+ *       string(3) "htm"
+ *     }
+ *     string(9) "text/html"
+ *     bool(false)
+ */</code></pre>
+  <p>Et c'est tout !</p>
+
+  <h2 id="Les_types_de_Hoa" for="main-toc">Les types de Hoa</h2>
+
+  <p>Hoa définit plusieurs langages, avec leur propre type. C'est par exemple le
+  cas du langage PP dans
+  <a href="@lh:chapter=Compiler"><code>Hoa\Compiler</code></a>. Chaque
+  bibliothèque qui propose un <strong>nouveau</strong> langage comporte un
+  fichier <code>hoa://Library/<em>library-name</em>/.Mime</code> au même format
+  que <code>Mime.types</code>. Pour le langage PP, son extension est
+  <code>pp</code> et son type <code>text/vnd.hoa.compiler</code>.</p>
+  <p>Pour trouver tous les types définies par Hoa, vous pouvez exécuter la ligne
+  de commande suivante :</p>
+  <pre><code class="language-shell">$ find /usr/local/lib/Hoa -name '.Mime' | xargs cat</code></pre>
+
+  <h2 id="Conclusion" for="main-toc">Conclusion</h2>
+
+  <p>La bibliothèque <code>Hoa\Mime</code> permet de manipuler le fichier
+  <code>Mime.types</code> <strong>rapidement</strong> et
+  <strong>simplement</strong>.</p>
+
+</yield>
+</overlay>
