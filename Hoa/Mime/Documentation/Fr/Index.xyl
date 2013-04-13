@@ -18,7 +18,7 @@
   <strong>type</strong> permet d'<strong>identifier</strong> une ressource afin
   de lui associer une <strong>interprétation</strong> particulière. Par exemple,
   une ressource de type <code>text/html</code> représente un document HTML et
-  sera interprété dans un navigateur Web. Autre exemple, une ressource de type
+  sera interprétée dans un navigateur Web. Autre exemple, une ressource de type
   <code>video/webm</code> représente une vidéo au format WebM et peut être
   interprétée dans un lecteur vidéo.</p>
   <p>Nous remarquons que le type est exprimé sous la forme
@@ -32,20 +32,21 @@
   <code>x-</code>, comme <code>image/x-icon</code>. Il existe aussi des types
   réservés pour les « <strong>entreprises</strong> » (<em lang="en">vendors</em>
   en anglais), préfixés par <code>vnd.</code>, comme
-  <code>application/vnd.ms-excel</code>. À chaque type peut être associées une
-  ou plusieurs <strong>extensions</strong>, comme <code>html</code> et
+  <code>application/vnd.ms-excel</code>. À chaque type peuvent être associées
+  une ou plusieurs <strong>extensions</strong>, comme <code>html</code> et
   <code>htm</code> pour <code>text/html</code>. Cela signifie qu'un fichier avec
   le nom <code>Foobar.html</code> est un document HTML.</p>
   <p>L'autorité chargée de <strong>spécifier</strong> tous les types est l'IANA
-  (<em lang="en">Internet Assigned Numbers Authority</em>). Nous les trouverons
-  dans le <a href="http://iana.org/assignments/media-types">document
-  <em lang="en">MIME Media Types</em></a> (nous trouverons également toutes les
-  RFC correspondantes, notamment celles décrivant la procédure pour faire
+  (<em lang="en">Internet Assigned Numbers Authority</em>). Nous trouverons la
+  liste des types standardisés dans le
+  <a href="http://iana.org/assignments/media-types">document
+  <em lang="en">MIME Media Types</em></a> (nous y trouverons également toutes
+  les RFC correspondantes, notamment celles décrivant la procédure pour faire
   standardiser un nouveau type).</p>
   <p>La bibliothèque <code>Hoa\Mime</code> permet de manipuler le fichier
-  <code>Mime.types</code>, qui historiquement, contient tous les types. Elle
-  permet également de trouver le type et d'autres informations associées d'un
-  flux (d'une ressource).</p>
+  <code>Mime.types</code> qui, historiquement, contient tous les types. Elle
+  permet également de trouver le type d'un flux (d'une ressource) et d'autres
+  informations associées au type.</p>
 
   <h3 id="Historique" for="main-toc">Historique</h3>
 
@@ -60,7 +61,7 @@
   <h2 id="Informations_generales" for="main-toc">Informations générales</h2>
 
   <p>Il y a deux façons d'utiliser la classe <code>Hoa\Mime</code>. Nous allons
-  commencer par la première façon : <strong>statiquement</strong>.</p>
+  commencer par l'approche <strong>statique</strong>.</p>
   <p>Les deux méthodes principales sont
   <code>Hoa\Mime::getExtensionsFromMime</code> pour obtenir les extensions
   associées à un type, et <code>Hoa\Mime::getMimeFromExtension</code> pour
@@ -95,8 +96,8 @@ var_dump(Hoa\Mime::getMimeFromExtension('webm'));
   en utilisant la méthode <code>Hoa\Mime::compute</code> :</p>
   <pre><code class="language-php">Hoa\Mime::compute('/etc/mime.types');</code></pre>
   <p>Toutes les informations fournies par la classe <code>Hoa\Mime</code> sont
-  calculées à partir de ce fichier. Il est préférable d'exécuter cette méthode
-  avant toutes opérations sur la classe <code>Hoa\Mime</code>.</p>
+  calculées à partir de ce fichier. Il est donc préférable d'exécuter cette
+  méthode avant toute opération sur la classe <code>Hoa\Mime</code>.</p>
 
   <h2 id="Informations_sur_un_flux" for="main-toc">Informations sur un flux</h2>
 
