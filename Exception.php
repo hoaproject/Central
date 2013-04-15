@@ -287,6 +287,7 @@ class Idle extends \Exception {
 
         $trace = debug_backtrace();
         array_shift($trace);
+        array_shift($trace);
 
         throw new Error($errstr, -1, $errfile, $errline, $trace);
     }
