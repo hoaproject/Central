@@ -238,7 +238,7 @@ abstract class Connection
      * @param   \Hoa\Socket\Connection  $other    Other connection.
      * @return  \Hoa\Socket\Connection
      */
-    abstract public function consider ( self $other );
+    abstract public function consider ( Connection $other );
 
     /**
      * Check if the current node belongs to a specific server.
@@ -247,7 +247,7 @@ abstract class Connection
      * @param   \Hoa\Socket\Connection  $connection    Connection.
      * @return  bool
      */
-    abstract public function is ( self $connection );
+    abstract public function is ( Connection $connection );
 
     /**
      * Set the current selected connection.
@@ -269,7 +269,7 @@ abstract class Connection
      * @access  public
      * @return  \Hoa\Socket\Node
      */
-    abstract public function current ( );
+    //abstract public function current ( );
 
     /**
      * Get the current selected connection index.

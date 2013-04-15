@@ -206,10 +206,10 @@ class Client extends Connection {
      * Consider another client when selecting connection.
      *
      * @access  public
-     * @param   \Hoa\Socket\Client  $other    Other client.
+     * @param   \Hoa\Socket\Connection  $other    Other client.
      * @return  \Hoa\Socket\Client
      */
-    public function consider ( parent $other ) {
+    public function consider ( Connection\Connection $other ) {
 
         if(!($other instanceof self))
             throw new Exception(
@@ -232,7 +232,7 @@ class Client extends Connection {
      * @param   \Hoa\Socket\Client  $server    Server.
      * @return  bool
      */
-    public function is ( parent $server ) {
+    public function is ( Connection\Connection $server ) {
 
         return $this->getStream() === $server->getStream();
     }

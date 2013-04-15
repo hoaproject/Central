@@ -314,10 +314,10 @@ class Server extends Connection {
      * Consider another server when selecting connection.
      *
      * @access  public
-     * @param   \Hoa\Socket\Server  $other    Other server.
+     * @param   \Hoa\Socket\Connection  $other    Other server.
      * @return  \Hoa\Socket\Server
      */
-    public function consider ( parent $other ) {
+    public function consider ( Connection\Connection $other ) {
 
         if($other instanceof Client) {
 
@@ -347,7 +347,7 @@ class Server extends Connection {
      * @param   \Hoa\Socket\Server  $server    Server.
      * @return  bool
      */
-    public function is ( parent $server ) {
+    public function is ( Connection\Connection $server ) {
 
         return $this->_node->getConnection() === $server;
     }
