@@ -74,14 +74,42 @@ class Server extends Connection {
      *
      * @const int
      */
-    const BIND   = STREAM_SERVER_BIND;
+    const BIND              = STREAM_SERVER_BIND;
 
     /**
      * Tell a stream to start listening on the socket.
      *
      * @const int
      */
-    const LISTEN = STREAM_SERVER_LISTEN;
+    const LISTEN            = STREAM_SERVER_LISTEN;
+
+    /**
+     * Encryption: SSLv2.
+     *
+     * @const int
+     */
+    const ENCRYPTION_SSLv2  = STREAM_CRYPTO_METHOD_SSLv2_SERVER;
+
+    /**
+     * Encryption: SSLv3.
+     *
+     * @const int
+     */
+    const ENCRYPTION_SSLv3  = STREAM_CRYPTO_METHOD_SSLv3_SERVER;
+
+    /**
+     * Encryption: SSLv2.3.
+     *
+     * @const int
+     */
+    const ENCRYPTION_SSLv23 = STREAM_CRYPTO_METHOD_SSLv23_SERVER;
+
+    /**
+     * Encryption: TLS.
+     *
+     * @const int
+     */
+    const ENCRYPTION_TLS    = STREAM_CRYPTO_METHOD_TLS_SERVER;
 
     /**
      * Master connection.

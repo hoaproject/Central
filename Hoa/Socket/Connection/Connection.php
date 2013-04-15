@@ -174,6 +174,13 @@ abstract class Connection
     protected $_remoteAddress = null;
 
     /**
+     * Encryption.
+     *
+     * @var \Hoa\Socket\Connection mixed
+     */
+    protected $_encryption    = false;
+
+    /**
      * Temporize selected connections when selecting.
      *
      * @var \Hoa\Socket\Server array
@@ -473,6 +480,51 @@ abstract class Connection
     }
 
     /**
+     * Set encryption.
+     *
+     * @access  public
+     * @param   bool        $enable           Whether enable encryption.
+     * @param   int         $type             Type of encryption (please, see
+     *                                        children ENCRYPTION_* constants).
+     * @param   resource    $sessionStream    Seed the stream with settings from
+     *                                        this session stream.
+     * @return  bool
+     */
+    public function setEncryption ( $enable, $type = null,
+                                    $sessionStream = null ) {
+
+        $this->_encryption = $enable ? $type : false;
+
+        if(null === $type)
+            return stream_socket_enable_crypto($this->getStream(), $enable);
+
+        if(null === $sessionStream)
+            return stream_socket_enable_crypto(
+                $this->getStream(),
+                $enable,
+                $type
+            );
+
+        return stream_socket_enable_crypto(
+            $this->getStream(),
+            $enable,
+            $type,
+            $sessionStream
+        );
+    }
+
+    /**
+     * Get encryption.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function getEncryption ( ) {
+
+        return $this->_encryption;
+    }
+
+    /**
      * Get socket.
      *
      * @access  public
@@ -637,6 +689,9 @@ abstract class Connection
             throw new \Hoa\Socket\Exception(
                 'Length must be greater than 0, given %d.', 1, $length);
 
+        if(false !== $this->getEncryption())
+            return fread($this->getStream(), $length);
+
         if(false === $this->isRemoteAddressConsidered())
             return stream_socket_recvfrom($this->getStream(), $length);
 
@@ -731,6 +786,9 @@ abstract class Connection
      */
     public function readLine ( ) {
 
+        if(false !== $this->getEncryption())
+            return rtrim(fgets($this->getStream(), 1 << 15), "\n");
+
         return stream_get_line($this->getStream(), 1 << 15, "\n");
     }
 
@@ -780,16 +838,21 @@ abstract class Connection
         if(strlen($string) > $length)
             $string = substr($string, 0, $length);
 
-        if(   false === $this->isRemoteAddressConsidered()
-           || null  === $remote = $this->getRemoteAddress())
-            $out = @stream_socket_sendto($this->getStream(), $string);
-        else
-            $out = @stream_socket_sendto(
-                $this->getStream(),
-                $string,
-                0,
-                $remote
-            );
+        if(false !== $this->getEncryption())
+            $out = fwrite($this->getStream(), $string, $length);
+        else {
+
+            if(   false === $this->isRemoteAddressConsidered()
+               || null  === $remote = $this->getRemoteAddress())
+                $out = @stream_socket_sendto($this->getStream(), $string);
+            else
+                $out = @stream_socket_sendto(
+                    $this->getStream(),
+                    $string,
+                    0,
+                    $remote
+                );
+        }
 
         if(-1 === $out)
             throw new \Hoa\Socket\Exception(
@@ -888,7 +951,7 @@ abstract class Connection
      * @param   array   $array    Array.
      * @return  mixed
      */
-    public function writeArray ( Array $array) {
+    public function writeArray ( Array $array ) {
 
         $array = serialize($array);
 
