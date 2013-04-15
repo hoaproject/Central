@@ -472,6 +472,27 @@ abstract class Connection
         return $old;
     }
 
+    public function setEncryption ( $enable, $type = null,
+                                    $sessionStream = null ) {
+
+        if(null === $type)
+            return stream_socket_enable_crypto($this->getStream(), $enable);
+
+        if(null === $sessionStream)
+            return stream_socket_enable_crypto(
+                $this->getStream(),
+                $enable,
+                $type
+            );
+
+        return stream_socket_enable_crypto(
+            $this->getStream(),
+            $enable,
+            $type,
+            $sessionStream
+        );
+    }
+
     /**
      * Get socket.
      *

@@ -83,6 +83,11 @@ class Server extends Connection {
      */
     const LISTEN = STREAM_SERVER_LISTEN;
 
+    const ENCRYPTION_SSLv2  = STREAM_CRYPTO_METHOD_SSLv2_SERVER;
+    const ENCRYPTION_SSLv3  = STREAM_CRYPTO_METHOD_SSLv3_SERVER;
+    const ENCRYPTION_SSLv23 = STREAM_CRYPTO_METHOD_SSLv23_SERVER;
+    const ENCRYPTION_TLS    = STREAM_CRYPTO_METHOD_TLS_SERVER;
+
     /**
      * Master connection.
      *

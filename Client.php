@@ -85,6 +85,11 @@ class Client extends Connection {
      */
     const PERSISTENT   = STREAM_CLIENT_PERSISTENT;
 
+    const ENCRYPTION_SSLv2  = STREAM_CRYPTO_METHOD_SSLv2_CLIENT;
+    const ENCRYPTION_SSLv3  = STREAM_CRYPTO_METHOD_SSLv3_CLIENT;
+    const ENCRYPTION_SSLv23 = STREAM_CRYPTO_METHOD_SSLv23_CLIENT;
+    const ENCRYPTION_TLS    = STREAM_CRYPTO_METHOD_TLS_CLIENT;
+
     /**
      * Stack of connections.
      *
@@ -129,17 +134,17 @@ class Client extends Connection {
                 $streamName,
                 $errno,
                 $errstr,
-                $this->getTimeout(),
-                $this->getFlag()
+                $this->getTimeout()/*,
+                $this->getFlag()*/
             );
         else
             $connection = @stream_socket_client(
                 $streamName,
                 $errno,
                 $errstr,
-                $this->getTimeout(),
+                $this->getTimeout()/*,
                 $this->getFlag(),
-                $context->getContext()
+                $context->getContext()*/
             );
 
         if(false === $connection)
