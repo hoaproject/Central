@@ -44,9 +44,12 @@
   les RFC correspondantes, notamment celles décrivant la procédure pour faire
   standardiser un nouveau type).</p>
   <p>La bibliothèque <code>Hoa\Mime</code> permet de manipuler le fichier
-  <code>Mime.types</code> qui, historiquement, contient tous les types. Elle
-  permet également de trouver le type d'un flux (d'une ressource) et d'autres
-  informations associées au type.</p>
+  <code>Mime.types</code> qui, historiquement, contient tous les types (son
+  format est un dérivé du format utilisé par <code>mailcap</code>, voir la
+  <a href="https://tools.ietf.org/html/rfc1524">RFC1524</a>, et voir des
+  <a href="https://en.wikipedia.org/wiki/Mime.types#mime.types">explications sur
+  Wikipédia</a>). Elle permet également de trouver le type d'un flux (d'une
+  ressource) et d'autres informations associées au type.</p>
 
   <h3 id="Historique" for="main-toc">Historique</h3>
 
