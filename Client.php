@@ -69,25 +69,48 @@ class Client extends Connection {
      *
      * @const int
      */
-    const ASYNCHRONOUS = STREAM_CLIENT_ASYNC_CONNECT;
+    const ASYNCHRONOUS      = STREAM_CLIENT_ASYNC_CONNECT;
 
     /**
      * Open client socket connection.
      *
      * @const int
      */
-    const CONNECT      = STREAM_CLIENT_CONNECT;
+    const CONNECT           = STREAM_CLIENT_CONNECT;
 
     /**
      * Client socket should remain persistent between page loads.
      *
      * @const int
      */
-    const PERSISTENT   = STREAM_CLIENT_PERSISTENT;
+    const PERSISTENT        = STREAM_CLIENT_PERSISTENT;
 
+    /**
+     * Encryption: SSLv2.
+     *
+     * @const int
+     */
     const ENCRYPTION_SSLv2  = STREAM_CRYPTO_METHOD_SSLv2_CLIENT;
+
+    /**
+     * Encryption: SSLv3.
+     *
+     * @const int
+     */
     const ENCRYPTION_SSLv3  = STREAM_CRYPTO_METHOD_SSLv3_CLIENT;
+
+    /**
+     * Encryption: SSLv2.3.
+     *
+     * @const int
+     */
     const ENCRYPTION_SSLv23 = STREAM_CRYPTO_METHOD_SSLv23_CLIENT;
+
+    /**
+     * Encryption: TLS.
+     *
+     * @const int
+     */
     const ENCRYPTION_TLS    = STREAM_CRYPTO_METHOD_TLS_CLIENT;
 
     /**
