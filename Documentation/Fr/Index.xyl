@@ -58,8 +58,8 @@
   pouvaient transporter plusieurs sortes de documents. C'est pourquoi nous
   parlons de types MIME, pour <em lang="en">Multipurpose Internet Mail
   Extensions</em>. Par la suite, ce format a été étendu à d'autres protocoles
-  comme HTTP (avec l'en-tête <code>Content-Type</code>). C'est maintenant <em>de
-  facto</em> un standard pour tout nouveau protocole.</p>
+  comme HTTP (avec l'en-tête <code>Content-Type</code>). C'est maintenant un
+  standard <em>de facto</em> pour tout nouveau protocole.</p>
 
   <h2 id="Informations_generales" for="main-toc">Informations générales</h2>
 
