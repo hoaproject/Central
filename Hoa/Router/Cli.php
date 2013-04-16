@@ -264,6 +264,20 @@ class Cli implements Router, \Hoa\Core\Parameter\Parameterizable {
     }
 
     /**
+     * Remove a rule.
+     *
+     * @access  public
+     * @param   string  $id    ID.
+     * @return  void
+     */
+    public function removeRule ( $id ) {
+
+        unset($this->_rules[$id]);
+
+        return;
+    }
+
+    /**
      * Helper for adding rules.
      * Methods are concatenated by _. If prefixed by _, it's a private rule. In
      * addition, the keyword “all” takes place for all methods.
