@@ -168,6 +168,7 @@ class Resolve extends \Hoa\Console\Dispatcher\Kit {
              'Options :', "\n",
              $this->makeUsageOptionsList(array(
                  'E'    => 'Do not check if the resolution result exists.',
+                 'u'    => 'Unfold all possible results.',
                  't'    => 'Print the tree from the path.',
                  'V'    => 'No-verbose, i.e. be as quiet as possible, just print ' .
                            'essential informations.',
