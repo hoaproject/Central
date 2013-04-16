@@ -66,12 +66,7 @@ from('Hoa')
 /**
  * \Hoa\Praspel\Model\Invariant
  */
--> import('Praspel.Model.Invariant')
-
-/**
- * \Hoa\Praspel\Model\Forexample
- */
--> import('Praspel.Model.Forexample');
+-> import('Praspel.Model.Invariant');
 
 }
 

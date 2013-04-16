@@ -52,7 +52,7 @@
 %token  at_throwable    @throwable
 %token  at_invariant    @invariant
 %token  at_behavior     @behavior
-%token  at_forexample   @forexample
+%token  at_description  @description
 
 // Constructions.
 %token  old             \\old
@@ -126,7 +126,7 @@ method:
       | invariant()
     )
     ::semicolon::+
-  | ( behavior() | forexample() ) ::semicolon::*
+  | ( behavior() | description() ) ::semicolon::*
 
 #is:
     ::at_is:: <pure>
@@ -161,8 +161,8 @@ behavior_content:
     )+
     ::_brace:: #behavior
 
-#forexample:
-    ::at_forexample:: string()
+#description:
+    ::at_description:: string()
 
 expression:
               ( declaration() | constraint() | domainof() | predicate() )

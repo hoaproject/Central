@@ -84,7 +84,7 @@ class Compiler implements \Hoa\Visitor\Visit {
                 'ensures',
                 'behavior',
                 'throwable',
-                'forexample'
+                'description'
             );
 
             foreach($clauses as $clause)
@@ -182,13 +182,13 @@ class Compiler implements \Hoa\Visitor\Visit {
                         $eldnah
                     );
         }
-        elseif($element instanceof \Hoa\Praspel\Model\Forexample) {
+        elseif($element instanceof \Hoa\Praspel\Model\Description) {
 
             $parent   = '$' . $element->getParent()->getId();
             $variable = '$' . $element->getId();
             $out      = "\n" .
                         $variable . ' = ' . $parent .
-                        '->getClause(\'forexample\');' . "\n";
+                        '->getClause(\'description\');' . "\n";
 
             foreach($element as $example)
                 $out .= $variable . '[] = \'' .
