@@ -132,7 +132,15 @@ class Specification extends Behavior {
               break;
 
             case 'behavior':
-                $handle = new Behavior($this);
+                $handle = new Collection(
+                    new Behavior($this),
+                    function ( Behavior $clause, $identifier ) {
+
+                        $clause->setIdentifier($identifier);
+
+                        return;
+                    }
+                );
               break;
 
             case 'description':

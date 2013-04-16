@@ -164,8 +164,8 @@ class Compiler implements \Hoa\Visitor\Visit {
             $identifier = $element->getIdentifier();
             $out        = "\n" .
                           $variable . ' = ' . $parent .
-                          '->getClause(\'behavior\');' . "\n" .
-                          $variable . '->setIdentifier(\'' . $identifier . '\');' . "\n";
+                          '->getClause(\'behavior\')' .
+                          '->get(\'' . $identifier . '\');' . "\n";
             $clauses    = array(
                 'invariant',
                 'requires',
@@ -195,6 +195,9 @@ class Compiler implements \Hoa\Visitor\Visit {
                         preg_replace('#(?<!\\\)\'#', '\\\'', $example) .
                         '\';' . "\n";
         }
+        elseif($element instanceof \Hoa\Praspel\Model\Collection)
+            foreach($element as $el)
+                $out .= $el->accept($this, $handle, $eldnah);
         else
             throw new \Hoa\Core\Exception(
                 '%s is not yet implemented.', 0, get_class($element));
