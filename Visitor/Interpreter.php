@@ -153,7 +153,7 @@ class Interpreter implements \Hoa\Visitor\Visit {
                 $this->_clause = $this->_current
                                = $this->_current->getClause('behavior');
                 $this->_clause->setIdentifier(
-                    $child0->accept($this, $handle, $eldnah)
+                    $child0->accept($this, $handle, false)
                 );
 
                 foreach($children as $child)
@@ -388,6 +388,7 @@ class Interpreter implements \Hoa\Visitor\Visit {
                     case 'identifier':
                         if(false !== $eldnah)
                             return $this->getIdentifier($value);
+
                         return $value;
 
                     case 'content':
