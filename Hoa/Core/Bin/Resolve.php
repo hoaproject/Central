@@ -66,6 +66,7 @@ class Resolve extends \Hoa\Console\Dispatcher\Kit {
      */
     protected $options = array(
         array('exists',     \Hoa\Console\GetOption::NO_ARGUMENT, 'E'),
+        array('unfold',     \Hoa\Console\GetOption::NO_ARGUMENT, 'u'),
         array('tree',       \Hoa\Console\GetOption::NO_ARGUMENT, 't'),
         array('no-verbose', \Hoa\Console\GetOption::NO_ARGUMENT, 'V'),
         array('help',       \Hoa\Console\GetOption::NO_ARGUMENT, 'h'),
@@ -83,6 +84,7 @@ class Resolve extends \Hoa\Console\Dispatcher\Kit {
     public function main ( ) {
 
         $exists  = true;
+        $unfold  = false;
         $tree    = false;
         $verbose = \Hoa\Console::isDirect(STDOUT);
 
@@ -90,6 +92,10 @@ class Resolve extends \Hoa\Console\Dispatcher\Kit {
 
             case 'E':
                 $exists = false;
+              break;
+
+            case 'u':
+                $unfold = true;
               break;
 
             case 't':
@@ -142,7 +148,10 @@ class Resolve extends \Hoa\Console\Dispatcher\Kit {
         if(true === $verbose)
             echo $this->stylize($path, 'info'), ' is equivalent to: ', "\n";
 
-        echo resolve($path, $exists), "\n";
+        $resolved = resolve($path, $exists, $unfold);
+
+        foreach((array) $resolved as $r)
+            echo $r, "\n";
 
         return;
     }
