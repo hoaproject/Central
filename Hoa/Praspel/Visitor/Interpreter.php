@@ -149,12 +149,13 @@ class Interpreter implements \Hoa\Visitor\Visit {
             case '#behavior':
                 $children      = $element->getChildren();
                 $child0        = array_shift($children);
+                $identifier    = $child0->accept($this, $handle, false);
                 $previous      = $this->_current;
+
                 $this->_clause = $this->_current
-                               = $this->_current->getClause('behavior');
-                $this->_clause->setIdentifier(
-                    $child0->accept($this, $handle, false)
-                );
+                               = $this->_current
+                                      ->getClause('behavior')
+                                      ->get($identifier);
 
                 foreach($children as $child)
                     $child->accept($this, $handle, $eldnah);

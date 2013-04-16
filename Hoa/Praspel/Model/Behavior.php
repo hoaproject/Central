@@ -66,7 +66,12 @@ from('Hoa')
 /**
  * \Hoa\Praspel\Model\Invariant
  */
--> import('Praspel.Model.Invariant');
+-> import('Praspel.Model.Invariant')
+
+/**
+ * \Hoa\Praspel\Model\Collection
+ */
+-> import('Praspel.Model.Collection');
 
 }
 
@@ -141,7 +146,15 @@ class Behavior extends Clause {
               break;
 
             case 'behavior':
-                $handle = new self($this);
+                $handle = new Collection(
+                    new self($this),
+                    function ( self $clause, $identifier ) {
+
+                        $clause->setIdentifier($identifier);
+
+                        return;
+                    }
+                );
               break;
 
             default:
@@ -169,7 +182,6 @@ class Behavior extends Clause {
      * Set identifier.
      *
      * @access  public
-     * @param   string  $identifier    Identifier.
      * @return  string
      */
     public function setIdentifier ( $identifier ) {
