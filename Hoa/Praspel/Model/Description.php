@@ -48,16 +48,16 @@ from('Hoa')
 namespace Hoa\Praspel\Model {
 
 /**
- * Class \Hoa\Praspel\Model\Forexample.
+ * Class \Hoa\Praspel\Model\Description.
  *
- * Represent the @forexample clause.
+ * Represent the @description clause.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class          Forexample
+class          Description
     extends    Clause
     implements \ArrayAccess,
                \IteratorAggregate,
@@ -68,12 +68,12 @@ class          Forexample
      *
      * @const string
      */
-    const NAME = 'forexample';
+    const NAME = 'description';
 
     /**
      * Examples.
      *
-     * @var \Hoa\Praspel\Model\Forexample array
+     * @var \Hoa\Praspel\Model\Description array
      */
     protected $_examples = array();
 
@@ -112,7 +112,7 @@ class          Forexample
      * @access  public
      * @param   int     $offset    Offset.
      * @param   string  $value     Example value.
-     * @return  \Hoa\Praspel\Model\Forexample
+     * @return  \Hoa\Praspel\Model\Description
      */
     public function offsetSet ( $offset, $value ) {
 

@@ -162,8 +162,8 @@ class Interpreter implements \Hoa\Visitor\Visit {
                 $this->_current = $previous;
               break;
 
-            case '#forexample':
-                $this->_clause   = $this->_root->getClause('forexample');
+            case '#description':
+                $this->_clause   = $this->_root->getClause('description');
                 $this->_clause[] = $element->getChild(0)->accept(
                     $this,
                     $handle,

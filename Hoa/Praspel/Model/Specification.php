@@ -49,6 +49,11 @@ from('Hoa')
 -> import('Praspel.Model.Is')
 
 /**
+ * \Hoa\Praspel\Model\Description
+ */
+-> import('Praspel.Model.Description')
+
+/**
  * \Hoa\Realdom\Disjunction
  */
 -> import('Realdom.Disjunction', true);
@@ -130,8 +135,8 @@ class Specification extends Behavior {
                 $handle = new Behavior($this);
               break;
 
-            case 'forexample':
-                $handle = new Forexample($this);
+            case 'description':
+                $handle = new Description($this);
               break;
 
             default:
