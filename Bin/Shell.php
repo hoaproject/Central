@@ -197,7 +197,7 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
                     break;
                 }
 
-                $_clause   = $interpreter->getClause();
+                $_clause = $interpreter->getClause();
 
                 if(!isset($_clause[$tail])) {
 
