@@ -164,10 +164,8 @@ abstract class Declaration
      */
     public function __get ( $name ) {
 
-        if('let' !== $name) {
-
+        if('let' !== $name)
             return $this->$name;
-        }
 
         $this->_let = true;
 
