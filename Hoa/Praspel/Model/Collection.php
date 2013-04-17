@@ -65,7 +65,8 @@ namespace Hoa\Praspel\Model {
 class          Collection
     implements \Hoa\Visitor\Element,
                \ArrayAccess,
-               \IteratorAggregate {
+               \IteratorAggregate,
+               \Countable {
 
     /**
      * Clauses.
@@ -208,6 +209,17 @@ class          Collection
     public function getIterator ( ) {
 
         return new \ArrayIterator($this->_clauses);
+    }
+
+    /**
+     * Count number of clauses.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function count ( ) {
+
+        return count($this->_clauses);
     }
 
     /**
