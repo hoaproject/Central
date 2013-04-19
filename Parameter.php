@@ -391,7 +391,7 @@ class Parameter {
         }
 
         return $out;
-    } 
+    }
 
     /**
      * Set keywords.
