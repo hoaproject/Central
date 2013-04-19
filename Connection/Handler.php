@@ -251,6 +251,9 @@ abstract class Handler {
         if(null === $node)
             $node = $this->getConnection()->getCurrentNode();
 
+        if(null === $node)
+            return null;
+
         $old  = $this->getConnection()->_setStream($node->getSocket());
         $send = $this->_send($message, $node);
 
