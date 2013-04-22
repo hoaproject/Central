@@ -50,7 +50,7 @@ namespace Hoa\Mail\Transport\ITransport {
 /**
  * Interface \Hoa\Mail\Transport\ITransport\Out
  *
- * 
+ * Represent a transport to send mails.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
@@ -59,6 +59,13 @@ namespace Hoa\Mail\Transport\ITransport {
 
 interface Out extends Transport {
 
+    /**
+     * Send a message.
+     *
+     * @access  public
+     * @param   \Hoa\Mail\Message  $message    Message.
+     * @return  bool
+     */
     public function send ( \Hoa\Mail\Message $message );
 }
 

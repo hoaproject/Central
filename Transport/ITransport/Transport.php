@@ -39,7 +39,7 @@ namespace Hoa\Mail\Transport\ITransport {
 /**
  * Interface \Hoa\Mail\Transport\ITransport\Transport
  *
- * 
+ * Represent a mail transport.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
