@@ -248,16 +248,16 @@ class Smtp implements ITransport\Out {
         }
 
         $client->writeAll('EHLO ' . $domain . CRLF);
-        $client->read(2048);
+        $ehlo = preg_split('#' . CRLF . '250[\-\s]+#', $client->read(2048));
         $matches = null;
 
         foreach($ehlo as $entry)
             if(0 !== preg_match('#^AUTH ([^$]+)$#', $entry, $matches))
                 break;
 
-        if(null === $matches)
+        if(empty($matches))
             throw new \Hoa\Mail\Exception\Transport(
-                'The server does not support AUTH PLAIN, we cannot ' .
+                'The server does not support authentification, we cannot ' .
                 'authenticate.', 2);
 
         $auth     = explode(' ', $matches[1]);
@@ -310,7 +310,7 @@ class Smtp implements ITransport\Out {
 
         foreach($message->getRecipients() as $recipient) {
 
-            $client->writeAll('RCPT TO: ' . $recipient . '' . CRLF);
+            $client->writeAll('RCPT TO: <' . $recipient . '>' . CRLF);
             $this->ifNot(250, 'Recipient ' . $recipient . ' is wrong');
         }
 
