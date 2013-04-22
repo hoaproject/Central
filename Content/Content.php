@@ -34,6 +34,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+namespace {
+
+from('Hoa')
+
+/**
+ * \Hoa\Mail\Exception\Security
+ */
+-> import('Mail.Exception.Security');
+
+}
+
 namespace Hoa\Mail\Content {
 
 /**
@@ -118,6 +129,10 @@ abstract class Content implements \ArrayAccess {
             $old = $this->_headers[$header];
         else
             $old = null;
+
+        if(0 !== preg_match('#[' . CRLF . ']#', $value))
+            throw new \Hoa\Mail\Exception\Security(
+                'Header “%s” contains illegal character.', 0, $header);
 
         $this->_headers[$header] = $value;
 
