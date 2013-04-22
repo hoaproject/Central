@@ -8,6 +8,7 @@ cloak on IRC, etc.
 
   * ➜ Ivan Enderlin (hywan)
   * Abdallah Ben Othman (badoul)
+  * Julien Bianchi (jubianchi)
   * ➜ Julien Clauzel (thehawk)
   * ➜ Matthieu Codron (circlecode)
   * Frédéric Dadeau (fdadeau)
