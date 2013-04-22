@@ -39,104 +39,103 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Mail\Exception
+ * \Hoa\Mail\Content
  */
--> import('Mail.Exception.~')
+-> import('Mail.Content.~')
 
 /**
- * \Hoa\Mail\Transport\ITransport\Out
+ * \Hoa\Mime
  */
--> import('Mail.Transport.I~.Out');
+-> import('Mime.~');
 
 }
 
-namespace Hoa\Mail\Transport {
+namespace Hoa\Mail\Content {
 
 /**
- * Class \Hoa\Mail\Transport\Sendmail.
+ * Class \Hoa\Mail\Content\Attachment.
  *
- * This class allows to send an email by using sendmail (through the PHP mail()
- * function).
+ * This class represents an attachment.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Sendmail implements ITransport\Out {
+class Attachment extends Content {
 
     /**
-     * Additional parameters for the mail() function.
+     * Stream.
      *
-     * @var \Hoa\Mail\Transport\Sendmail array
+     * @var \Hoa\Stream object
      */
-    protected $_parameters = null;
+    protected $_stream = null;
 
 
 
     /**
-     * Constructor.
+     * Construct an attachment with a stream and a name.
      *
      * @access  public
-     * @param   array  $parameters    Additional parameters for the mail()
-     *                                function.
+     * @param   \Hoa\Stream  $stream    Stream that contains the attachment.
+     * @param   string       $name      Name of the attachment (if null, will
+     *                                  use the stream basename).
      * @return  void
      */
-    public function __construct ( Array $parameters = array() ) {
+    public function __construct ( \Hoa\Stream $stream, $name = null ) {
 
-        $this->_parameters = $parameters;
+        parent::__construct();
+
+        if(null === $name)
+            if($stream instanceof \Hoa\Stream\IStream\Pathable)
+                $name = $stream->getBasename();
+            else
+                $name = basename($stream->getStreamName());
+
+        $mime                        = new \Hoa\Mime($stream);
+        $this['content-type']        = $mime->getMime() ?: 'application/octet-stream';
+        $this['content-disposition'] = 'attachment; ' .
+                                       'filename=' . $name . ';';
+        $this->setStream($stream);
 
         return;
     }
 
     /**
-     * Set additional parameters.
+     * Set the stream.
      *
      * @access  protected
-     * @param   array  $parameters    Additional parameters.
-     * @return  array
+     * @param   \Hoa\Stream  $stream    Stream.
+     * @return  \Hoa\Stream
      */
-    protected function setParameters ( Array $parameters ) {
+    protected function setStream ( \Hoa\Stream $stream ) {
 
-        $old               = $this->_parameters;
-        $this->_parameters = $parameters;
+        $old           = $this->_stream;
+        $this->_stream = $stream;
 
         return $old;
     }
 
     /**
-     * Get additional parameters.
+     * Get the stream.
      *
      * @access  public
-     * @return  array
+     * @return  \Hoa\Stream
      */
-    public function getParameters ( ) {
+    public function getStream ( ) {
 
-        return $this->_parameters;
+        return $this->_stream;
     }
 
     /**
-     * Send a message.
+     * Get final “plain” content.
      *
-     * @access  public
-     * @param   \Hoa\Mail\Message  $message    Message.
-     * @return  bool
+     * @access  protected
+     * @return  string
      */
-    public function send ( \Hoa\Mail\Message $message ) {
+    protected function _getContent ( ) {
 
-        $content  = $message->getFormattedContent();
-        $headers  = $message->getHeaders();
-        $pos      = strpos($content, CRLF . CRLF);
-        $_headers = substr($content, 0, $pos);
-        $_body    = substr($content, $pos + 4);
-
-        return mail(
-            $headers['to'],
-            $headers['subject'],
-            $_body,
-            $_headers,
-            $message->formatHeaders($this->getParameters())
-        );
+        return base64_encode($this->getStream()->readAll());
     }
 }
 
