@@ -216,6 +216,7 @@ class Smtp implements ITransport\Out {
 
     /**
      * Send a message.
+     * @TODO DIGEST-MD5, GSSAPI, and SSLv1 and v2 support.
      *
      * @access  public
      * @param   \Hoa\Mail\Message  $message    Message.
@@ -298,7 +299,6 @@ class Smtp implements ITransport\Out {
             $client->writeAll($challenge . CRLF);
             $this->ifNot(235, 'Wrong username or password');
         }
-        // @TODO DIGEST-MD5, GSSAPI.
         else
             throw new \Hoa\Mail\Transport(
                 '%s does not support authentification algorithms available ' .
