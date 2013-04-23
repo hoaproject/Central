@@ -249,7 +249,7 @@ class          Client
     public function say ( $message, $channel = null ) {
 
         if(null === $channel)
-            $channel = $this->getChannel();
+            $channel = $this->getConnection()->getCurrentNode()->getChannel();
 
         return $this->send('PRIVMSG ' . $channel . ' :' . $message);
     }
@@ -294,7 +294,7 @@ class          Client
     public function setTopic ( $topic, $channel = null ) {
 
         if(null === $channel)
-            $channel = $this->getChannel();
+            $channel = $this->getConnection()->getCurrentNode()->getChannel();
 
         return $this->send('TOPIC ' . $channel . ' ' . $topic);
     }
@@ -310,7 +310,7 @@ class          Client
     public function invite ( $nickname, $channel = null ) {
 
         if(null === $channel)
-            $channel = $this->getChannel();
+            $channel = $this->getConnection()->getCurrentNode()->getChannel();
 
         return $this->send('INVITE ' . $nickname . ' ' . $channel);
     }
