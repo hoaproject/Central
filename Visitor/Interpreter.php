@@ -175,7 +175,7 @@ class Interpreter implements \Hoa\Visitor\Visit {
             case '#exception_list':
                 foreach($element->getChildren() as $child)
                     $this->_clause->exception(
-                        $child->accept($this, $handle, $eldnah)
+                        $child->accept($this, $handle, false)
                     );
               break;
 
