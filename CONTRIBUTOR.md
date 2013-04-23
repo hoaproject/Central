@@ -1,6 +1,6 @@
 ![Hoa](http://static.hoa-project.net/Image/Hoa_small.png)
 
-# List of constributors
+# List of contributors
 
 The symbol `➜` indicates that the contributor has an email address of the form
 `firstname.lastname@hoa-project` and its alias `pseudo@hoa-project.net`, with a
