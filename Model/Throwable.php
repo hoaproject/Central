@@ -57,7 +57,7 @@ namespace Hoa\Praspel\Model {
  * @license    New BSD License
  */
 
-class Throwable extends Clause {
+class Throwable extends Clause implements \IteratorAggregate, \Countable {
 
     /**
      * Name.
@@ -98,6 +98,28 @@ class Throwable extends Clause {
     public function getExceptions ( ) {
 
         return $this->_exceptions;
+    }
+
+    /**
+     * Iterator over exceptions.
+     *
+     * @access  public
+     * @return  \ArrayIterator
+     */
+    public function getIterator ( ) {
+
+        return new \ArrayIterator($this->getExceptions());
+    }
+
+    /**
+     * Count number of exceptions.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function count ( ) {
+
+        return count($this->getExceptions());
     }
 }
 
