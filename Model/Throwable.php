@@ -57,7 +57,11 @@ namespace Hoa\Praspel\Model {
  * @license    New BSD License
  */
 
-class Throwable extends Clause implements \IteratorAggregate, \Countable {
+class          Throwable
+    extends    Clause
+    implements \ArrayAccess,
+               \IteratorAggregate,
+               \Countable {
 
     /**
      * Name.
@@ -76,17 +80,60 @@ class Throwable extends Clause implements \IteratorAggregate, \Countable {
 
 
     /**
-     * Add an exception to the list.
+     * Check if an exception identifier exists.
      *
      * @access  public
-     * @param   string  $exception    Exception name.
-     * @return  \Hoa\Praspel\Model\Throwable
+     * @param   string  $offset    Exception identifier.
+     * @return  bool
      */
-    public function exception ( $exception ) {
+    public function offsetExists ( $offset ) {
 
-        $this->_exceptions[] = $exception;
+        return isset($this->_exceptions[$offset]);
+    }
 
-        return $this;
+    /**
+     * Get an exception.
+     *
+     * @access  public
+     * @param   string  $offset    Exception identifier.
+     * @return  \Hoa\Prasel\Model\Variable
+     */
+    public function offsetGet ( $offset ) {
+
+        if(false === $this->offsetExists($offset))
+            return null;
+
+        return $this->_exceptions[$offset];
+    }
+
+    /**
+     * Add an exception.
+     *
+     * @access  public
+     * @param   string  $offset    Exception identifier.
+     * @param   mixed   $value     Exception classname.
+     * @return  mixed
+     */
+    public function offsetSet ( $offset, $value ) {
+
+        $old                        = $this->offsetGet($offset);
+        $this->_exceptions[$offset] = $value;
+
+        return $old;
+    }
+
+    /**
+     * Delete an exception.
+     *
+     * @access  public
+     * @param   string  $offset    Exception identifier.
+     * @return  void
+     */
+    public function offsetUnset ( $offset ) {
+
+        unset($this->_exceptions[$offset]);
+
+        return;
     }
 
     /**
