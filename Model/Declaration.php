@@ -188,11 +188,11 @@ abstract class Declaration
      * Iterator over local variables.
      *
      * @access  public
-     * @return  \ArrayObject
+     * @return  \ArrayIterator
      */
     public function getIterator ( ) {
 
-        return new \ArrayObject($this->getLocalVariables());
+        return new \ArrayIterator($this->getLocalVariables());
     }
 
     /**
