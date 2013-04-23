@@ -216,7 +216,8 @@ class Smtp implements ITransport\Out {
 
     /**
      * Send a message.
-     * @TODO DIGEST-MD5, GSSAPI, and SSLv1 and v2 support.
+     * @TODO: Implement the DIGEST-MD5 and GSSAPI auth protocol. Implement SSLv1
+     * and v2 support.
      *
      * @access  public
      * @param   \Hoa\Mail\Message  $message    Message.
