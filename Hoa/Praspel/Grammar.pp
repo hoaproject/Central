@@ -172,10 +172,9 @@ exceptional_expression:
     exception() ( ::and:: exception() )*
 
 exception:
-    classname() ( ::or:: classname() )* #exception_list
-  | classname() <identifier> ( ::or:: classname() <identifier> )*
-    ::with:: declaration() #exception_with
-//              NO
+    classname() <identifier> ( ::or:: classname() <identifier> )* #exception_list
+//    ( ::with:: declaration() #exception_with )?
+//                 NO
 
 #declaration:
     ( ::let:: #local_declaration )?

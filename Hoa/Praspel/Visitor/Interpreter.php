@@ -173,10 +173,21 @@ class Interpreter implements \Hoa\Visitor\Visit {
               break;
 
             case '#exception_list':
-                foreach($element->getChildren() as $child)
-                    $this->_clause->exception(
-                        $child->accept($this, $handle, $eldnah)
+                for($i = 0, $max = $element->getChildrenNumber(); $i < $max; $i += 2) {
+
+                    $identifier = $element->getChild($i + 1)->accept(
+                        $this,
+                        $handle,
+                        false
                     );
+                    $classname  = $element->getChild($i)->accept(
+                        $this,
+                        $handle,
+                        false
+                    );
+
+                    $this->_clause[$identifier] = $classname;
+                }
               break;
 
             case '#declaration':

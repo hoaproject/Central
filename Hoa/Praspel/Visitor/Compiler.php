@@ -154,8 +154,9 @@ class Compiler implements \Hoa\Visitor\Visit {
                         $variable . ' = ' . $parent .
                         '->getClause(\'throwable\');' . "\n";
 
-            foreach($element->getExceptions() as $class)
-                $out .= $variable . '->exception(\'' . $class . '\');' . "\n";
+            foreach($element->getExceptions() as $identifier => $class)
+                $out .= $variable . '[\'' . $identifier . '\'] = \'' . $class .
+                        '\';' . "\n";
         }
         elseif($element instanceof \Hoa\Praspel\Model\Behavior) {
 

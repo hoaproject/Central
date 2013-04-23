@@ -34,6 +34,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+namespace {
+
+from('Hoa')
+
+/**
+ * \Hoa\Praspel\Iterator\WeakStack
+ */
+-> import('Praspel.Iterator.WeakStack');
+
+}
+
 namespace Hoa\Praspel\Iterator\Coverage {
 
 /**
@@ -70,7 +81,7 @@ class Structural implements \Iterator {
     protected $_key           = -1;
 
     /**
-     * Current (with two indexes: requires and ensures, with SplStack
+     * Current (with two indexes: pre and post, with SplStack
      * associated).
      *
      * @var \Hoa\Praspel\Iterator\Coverage\Structural array
@@ -83,6 +94,13 @@ class Structural implements \Iterator {
      * @var \Hoa\Praspel\Iterator\Coverage\Structural bool
      */
     protected $_up            = false;
+
+    /**
+     * Post-condition clause: ensure or throwable.
+     *
+     * @var \Hoa\Praspel\Iterator\Coverage\Structural string
+     */
+    protected $_post          = 'ensures';
 
 
 
@@ -136,6 +154,15 @@ class Structural implements \Iterator {
 
             if(true === $this->_up) {
 
+                if('ensures' === $this->_post) {
+
+                    $this->_up   = false;
+                    $this->_post = 'throwable';
+                    $this->_rewindCurrent();
+
+                    return $this->current();
+                }
+
                 unset($this->_current);
                 $this->_current = null;
 
@@ -156,14 +183,8 @@ class Structural implements \Iterator {
            && true  === $handle->clauseExists('behavior'))
             return $this->_next($handle);
 
-        $countRequires = count($this->_current['requires']);
-        $countEnsures  = count($this->_current['ensures']);
-
-        if($countRequires >= $countEnsures)
-            $this->_current['requires']->pop();
-
-        if($countRequires <= $countEnsures)
-            $this->_current['ensures']->pop();
+        $this->_current['pre']->pop();
+        $this->_current['post']->pop();
 
         next($collection);
         $handle = current($collection);
@@ -177,16 +198,7 @@ class Structural implements \Iterator {
         }
 
         $this->_up = false;
-
-        if(true === $handle->clauseExists('requires'))
-            $this->_current['requires']->push(
-                $handle->getClause('requires')
-            );
-
-        if(true === $handle->clauseExists('ensures'))
-            $this->_current['ensures']->push(
-                $handle->getClause('ensures')
-            );
+        $this->pushCurrent($handle);
 
         ++$this->_key;
 
@@ -213,16 +225,7 @@ class Structural implements \Iterator {
             return $this->next();
         }
 
-        if(true === $current->clauseExists('requires'))
-            $this->_current['requires']->push(
-                $current->getClause('requires')
-            );
-
-        if(true === $current->clauseExists('ensures'))
-            $this->_current['ensures']->push(
-                $current->getClause('ensures')
-            );
-
+        $this->pushCurrent($current);
         ++$this->_key;
 
         return $this->current();
@@ -236,36 +239,63 @@ class Structural implements \Iterator {
      */
     public function rewind ( ) {
 
-        $iterator = new \SplStack();
-        $iterator->setIteratorMode(
+        $this->_up  = false;
+        $this->_key = 0;
+
+        unset($this->_stack);
+        $this->_stack = new \SplStack();
+        $this->_stack->push($this->_specification);
+
+        $this->_rewindCurrent();
+
+        return $this->current();
+    }
+
+    /**
+     * Rewind $this->_current.
+     *
+     * @access  protected
+     * @return  void
+     */
+    protected function _rewindCurrent ( ) {
+
+        $stack = new \Hoa\Praspel\Iterator\WeakStack();
+        $stack->setIteratorMode(
             \SplDoublyLinkedList::IT_MODE_LIFO
           | \SplDoublyLinkedList::IT_MODE_KEEP
         );
-
-        $this->_up      = false;
-        $this->_key     = 0;
         unset($this->_current);
         $this->_current = array(
-            'requires' => $iterator,
-            'ensures'  => clone $iterator
+            'pre'  =>       $stack,
+            'post' => clone $stack
         );
+        $this->pushCurrent($this->_stack->top());
 
-        unset($this->_stack);
-        $this->_stack   = new \SplStack();
-        $this->_stack->push($this->_specification);
-        $handle         = &$this->_specification;
+        return;
+    }
 
-        if(true === $handle->clauseExists('requires'))
-            $this->_current['requires']->push(
-                $handle->getClause('requires')
-            );
+    /**
+     * Push pre and post clauses in $this->_current.
+     *
+     * @access  protected
+     * @param   \Hoa\Praspel\Model\Behavior  $current    Current.
+     * @return  void
+     */
+    protected function pushCurrent ( \Hoa\Praspel\Model\Behavior $current ) {
 
-        if(true === $handle->clauseExists('ensures'))
-            $this->_current['ensures']->push(
-                $handle->getClause('ensures')
-            );
+        $pre  = null;
+        $post = null;
 
-        return $this->current();
+        if(true === $current->clauseExists('requires'))
+            $pre = $current->getClause('requires');
+
+        if(true === $current->clauseExists($this->_post))
+            $post = $current->getClause($this->_post);
+
+        $this->_current['pre']->push($pre);
+        $this->_current['post']->push($post);
+
+        return;
     }
 
     /**
