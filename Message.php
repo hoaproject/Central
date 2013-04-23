@@ -60,7 +60,7 @@ namespace Hoa\Mail {
 /**
  * Class \Hoa\Mail\Message.
  *
- * This class represents a message that can be sent.
+ * This class represents a message that can be sent through a transport.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
