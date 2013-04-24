@@ -39,7 +39,7 @@ namespace Hoa\Praspel\Iterator {
 /**
  * Class \Hoa\Praspel\Iterator\WeakStack.
  *
- * A weak stack is a SplStack with null element that are not iterated.
+ * A weak stack is a SplStack with null elements that are not iterated.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
