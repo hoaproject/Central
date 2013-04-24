@@ -39,6 +39,11 @@ namespace {
 from('Hoa')
 
 /**
+ * \Hoa\Mail\Exception
+ */
+-> import('Mail.Exception.~')
+
+/**
  * \Hoa\Mail\Content
  */
 -> import('Mail.Content.~');
@@ -119,32 +124,47 @@ class Message extends Content {
      *
      * @access  protected
      * @return  string
+     * @throw   \Hoa\Mail\Exception
      */
     protected function _getContent ( ) {
 
         if(!isset($this['date']))
             $this['date'] = date('r');
 
-        $content  = $this->getContent();
-        $boundary = null;
-        $frontier = null;
+        $content = $this->getContent();
+
+        if(empty($content))
+            throw new \Hoa\Mail\Exception(
+                'The message does not have content.', 0);
 
         if(1 < count($content)) {
 
+            $boundary             = null;
+            $frontier             = null;
             $boundary             = '__bndry-' .
                                     md5(static::BOUNDARY . microtime(true));
             $frontier             = '--' . $boundary;
             $this['content-type'] = $this['content-type'] .
                                     '; boundary=' . $boundary;
+
+            $message = static::formatHeaders($this->getHeaders()) . CRLF;
+
+            foreach($content as $c)
+                $message .= $frontier . CRLF . $c . CRLF;
+
+            if(null !== $frontier)
+                $message .= $frontier . '--' . CRLF;
         }
+        else {
 
-        $message = static::formatHeaders($this->getHeaders()) . CRLF;
+            $oldContentType = $this['content-type'];
+            unset($this['content-type']);
 
-        foreach($content as $c)
-            $message .= $frontier . CRLF . $c . CRLF;
+            $message = static::formatHeaders($this->getHeaders()) .
+                       current($content);
 
-        if(null !== $frontier)
-            $message .= $frontier . '--' . CRLF;
+            $this['content-type'] = $oldContentType;
+        }
 
 
         return $message;
