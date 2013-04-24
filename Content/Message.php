@@ -139,8 +139,6 @@ class Message extends Content {
 
         if(1 < count($content)) {
 
-            $boundary             = null;
-            $frontier             = null;
             $boundary             = '__bndry-' .
                                     md5(static::BOUNDARY . microtime(true));
             $frontier             = '--' . $boundary;
