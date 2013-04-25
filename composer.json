@@ -27,9 +27,9 @@
         "ext-spl": "*"
     },
     "require-dev": {
-        "hoa/console"   : "master",
-        "hoa/dispatcher": "master",
-        "hoa/router"    : "master"
+        "hoa/console"   : "dev-master",
+        "hoa/dispatcher": "dev-master",
+        "hoa/router"    : "dev-master"
     },
     "autoload": {
         "files": ["Core.php"]
