@@ -24,14 +24,14 @@
         "source": "http://git.hoa-project.net/"
     },
     "require": {
-        "hoa/core"    : "master",
-        "hoa/compiler": "master",
-        "hoa/file"    : "master",
-        "hoa/realdom" : "master",
-        "hoa/string"  : "master",
-        "hoa/visitor" : "master"
+        "hoa/core"    : "dev-master",
+        "hoa/compiler": "dev-master",
+        "hoa/file"    : "dev-master",
+        "hoa/realdom" : "dev-master",
+        "hoa/string"  : "dev-master",
+        "hoa/visitor" : "dev-master"
     },
     "require-dev": {
-        "hoa/math": "master"
+        "hoa/math": "dev-master"
     }
 }
