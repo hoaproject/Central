@@ -23,7 +23,8 @@
         "source": "http://git.hoa-project.net/"
     },
     "require": {
-        "hoa/core"   : "master",
+        "hoa/core"   : "dev-master",
         "ext-session": "*"
-    }
+    },
+    "minimum-stability": "dev"
 }
