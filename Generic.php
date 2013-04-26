@@ -1,0 +1,269 @@
+<?php
+
+/**
+ * Hoa
+ *
+ *
+ * @license
+ *
+ * New BSD License
+ *
+ * Copyright © 2007-2013, Ivan Enderlin. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Hoa nor the names of its contributors may be
+ *       used to endorse or promote products derived from this software without
+ *       specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS AND CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+namespace {
+
+from('Hoa')
+
+/**
+ * \Hoa\Router\Exception
+ */
+-> import('Router.Exception.~')
+
+/**
+ * \Hoa\Router
+ */
+-> import('Router.~');
+
+}
+
+namespace Hoa\Router {
+
+/**
+ * Class \Hoa\Router\Generic.
+ *
+ * Generic router.
+ *
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2013 Ivan Enderlin.
+ * @license    New BSD License
+ */
+
+abstract class Generic implements Router {
+
+    /**
+     * All rules buckets.
+     *
+     * @var \Hoa\Router\Generic array
+     */
+    protected $_rules          = array();
+
+    /**
+     * The routed rule.
+     *
+     * @var \Hoa\Router\Generic array
+     */
+    protected $_rule           = null;
+
+    /**
+     * Methods that the router understand.
+     *
+     * @var \Hoa\Router\Generic array
+     */
+    protected static $_methods = array();
+
+
+
+    /**
+     * Fallback for add*Rule() methods.
+     *
+     * @access  public
+     * @param   int     $visibility    Visibility (please, see
+     *                                 Router::VISIBILITY_* constants).
+     * @param   string  $id            ID.
+     * @param   array   $methods       HTTP methods allowed by the rule.
+     * @param   string  $pattern       Pattern (on-subdomain@on-request).
+     * @param   mixed   $call          Call (first part).
+     * @param   mixed   $able          Able (second part).
+     * @param   array   $variables     Variables (default or additional values).
+     * @return  \Hoa\Router\Generic
+     * @throw   \Hoa\Router\Exception
+     */
+    abstract protected function _addRule ( $visibility, $id, Array $methods,
+                                           $pattern, $call, $able,
+                                           Array $variables );
+
+    /**
+     * Add a public rule.
+     *
+     * @access  public
+     * @param   string  $id           ID.
+     * @param   array   $methods      HTTP methods allowed by the rule.
+     * @param   string  $pattern      Pattern (on-subdomain@on-request).
+     * @param   mixed   $call         Call (first part).
+     * @param   mixed   $able         Able (second part).
+     * @param   array   $variables    Variables (default or additional values).
+     * @return  \Hoa\Router\Generic
+     * @throw   \Hoa\Router\Exception
+     */
+    public function addRule ( $id, Array $methods, $pattern, $call = null,
+                              $able = null, Array $variables = array() ) {
+
+        return $this->_addRule(
+            Router::VISIBILITY_PUBLIC,
+            $id,
+            $methods,
+            $pattern,
+            $call,
+            $able,
+            $variables
+        );
+    }
+
+    /**
+     * Add a private rule.
+     *
+     * @access  public
+     * @param   string  $id           ID.
+     * @param   array   $methods      HTTP methods allowed by the rule.
+     * @param   string  $pattern      Pattern (on-subdomain@on-request).
+     * @param   mixed   $call         Call (first part).
+     * @param   mixed   $able         Able (second part).
+     * @param   array   $variables    Variables (default or additional values).
+     * @return  \Hoa\Router\Generic
+     * @throw   \Hoa\Router\Exception
+     */
+    public function addPrivateRule ( $id, Array $methods, $pattern, $call = null,
+                                     $able = null, Array $variables = array() ) {
+
+        return $this->_addRule(
+            Router::VISIBILITY_PRIVATE,
+            $id,
+            $methods,
+            $pattern,
+            $call,
+            $able,
+            $variables
+        );
+    }
+
+    /**
+     * Remove a rule.
+     *
+     * @access  public
+     * @param   string  $id    ID.
+     * @return  void
+     */
+    public function removeRule ( $id ) {
+
+        unset($this->_rules[$id]);
+
+        return;
+    }
+
+    /**
+     * Helper for adding rules.
+     * Methods are concatenated by _. If prefixed by _, it's a private rule. In
+     * addition, the keyword “all” takes place for all methods.
+     * Examples:
+     *     get(…)        : addRule(…, array('get'), …);
+     *     get_post(…)   : addRule(…, array('get', 'post'), …);
+     *     post_get(…)   : same that above;
+     *     _get(…)       : addPrivateRule(…, array('get'), …);
+     *     all(…)        : addRule(…, array(<all methods>), …);
+     *     head_delete(…): addRule(…, array('head', 'delete'), …).
+     *
+     * @access  public
+     * @param   string  $name         Please, see API documentation.
+     * @param   array   $arguments    Arguments for add*Rule() methods.
+     * @return  \Hoa\Router\Generic
+     * @throw   \Hoa\Router\Exception
+     */
+    public function __call ( $name, $arguments ) {
+
+        if('_' == $name[0]) {
+
+            $name   = substr($name, 1);
+            $method = 'addPrivateRule';
+        }
+        else
+            $method = 'addRule';
+
+        if('all' == $name)
+            array_unshift($arguments, static::$_methods);
+        else
+            array_unshift($arguments, explode('_', $name));
+
+        $handle       = $arguments[0];
+        $arguments[0] = $arguments[1];
+        $arguments[1] = $handle;
+
+        return call_user_func_array(array($this, $method), $arguments);
+    }
+
+    /**
+     * Check whether a rule exists.
+     *
+     * @access  public
+     * @param   string  $id    ID.
+     * @return  bool
+     */
+    public function ruleExists ( $id ) {
+
+        return isset($this->_rules[$id]);
+    }
+
+    /**
+     * Get all rules.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getRules ( ) {
+
+        return $this->_rules;
+    }
+
+    /**
+     * Get a specific rule.
+     *
+     * @access  public
+     * @param   string  $id    ID.
+     * @return  array
+     * @throw   \Hoa\Router\Exception
+     */
+    public function getRule ( $id ) {
+
+        if(false === $this->ruleExists($id))
+            throw new Exception(
+                'Rule %s does not exist.', 2, $id);
+
+        return $this->_rules[$id];
+    }
+
+    /**
+     * Get the selected rule after routing.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function &getTheRule ( ) {
+
+        return $this->_rule;
+    }
+}
+
+}
