@@ -159,7 +159,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
             if(null === $variables)
                 $variables = array();
 
-            $this->addRule($methods, $id, $pattern, $call, $able, $variables);
+            $this->addRule($id, $methods, $pattern, $call, $able, $variables);
         }
 
         foreach($this->_parameters->getParameter('rules.private') as $id => $rule) {
@@ -171,7 +171,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
                 $variables = array();
 
             $this->addPrivateRule(
-                $methods, $id, $pattern, $call, $able, $variables
+                $id, $methods, $pattern, $call, $able, $variables
             );
         }
 
@@ -195,8 +195,8 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
      * @access  public
      * @param   int     $visibility    Visibility (please, see
      *                                 Router::VISIBILITY_* constants).
-     * @param   array   $methods       HTTP methods allowed by the rule.
      * @param   string  $id            ID.
+     * @param   array   $methods       HTTP methods allowed by the rule.
      * @param   string  $pattern       Pattern (on-subdomain@on-request).
      * @param   mixed   $call          Call (first part).
      * @param   mixed   $able          Able (second part).
@@ -204,7 +204,7 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
      * @return  \Hoa\Router\Http
      * @throw   \Hoa\Router\Exception
      */
-    protected function _addRule ( $visibility,  Array $methods, $id, $pattern,
+    protected function _addRule ( $visibility, $id, Array $methods, $pattern,
                                   $call, $able, Array $variables ) {
 
         if(true === $this->ruleExists($id))
@@ -239,8 +239,8 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
 
         $this->_rules[$id] = array(
             Router::RULE_VISIBILITY => $visibility,
-            Router::RULE_METHODS    => $methods,
             Router::RULE_ID         => $id,
+            Router::RULE_METHODS    => $methods,
             Router::RULE_PATTERN    => $pattern,
             Router::RULE_CALL       => $call,
             Router::RULE_ABLE       => $able,
@@ -254,8 +254,8 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
      * Add a public rule.
      *
      * @access  public
-     * @param   array   $methods      HTTP methods allowed by the rule.
      * @param   string  $id           ID.
+     * @param   array   $methods      HTTP methods allowed by the rule.
      * @param   string  $pattern      Pattern (on-subdomain@on-request).
      * @param   mixed   $call         Call (first part).
      * @param   mixed   $able         Able (second part).
@@ -263,13 +263,13 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
      * @return  \Hoa\Router\Http
      * @throw   \Hoa\Router\Exception
      */
-    public function addRule ( Array $methods, $id, $pattern, $call = null,
+    public function addRule ( $id, Array $methods, $pattern, $call = null,
                               $able = null, Array $variables = array() ) {
 
         return $this->_addRule(
             Router::VISIBILITY_PUBLIC,
-            $methods,
             $id,
+            $methods,
             $pattern,
             $call,
             $able,
@@ -281,8 +281,8 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
      * Add a private rule.
      *
      * @access  public
-     * @param   array   $methods      HTTP methods allowed by the rule.
      * @param   string  $id           ID.
+     * @param   array   $methods      HTTP methods allowed by the rule.
      * @param   string  $pattern      Pattern (on-subdomain@on-request).
      * @param   mixed   $call         Call (first part).
      * @param   mixed   $able         Able (second part).
@@ -290,13 +290,13 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
      * @return  \Hoa\Router\Http
      * @throw   \Hoa\Router\Exception
      */
-    public function addPrivateRule ( Array $methods, $id, $pattern, $call = null,
+    public function addPrivateRule ( $id, Array $methods, $pattern, $call = null,
                                      $able = null, Array $variables = array() ) {
 
         return $this->_addRule(
             Router::VISIBILITY_PRIVATE,
-            $methods,
             $id,
+            $methods,
             $pattern,
             $call,
             $able,
@@ -323,12 +323,12 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
      * Methods are concatenated by _. If prefixed by _, it's a private rule. In
      * addition, the keyword “all” takes place for all methods.
      * Examples:
-     *     get(…)        : addRule(array('get'), …);
-     *     get_post(…)   : addRule(array('get', 'post'), …);
-     *     post_get(…)   : same that previous;
-     *     _get(…)       : addPrivateRule(array('get'), …);
-     *     all(…)        : addRule(array(<all methods>), …);
-     *     head_delete(…): addRule(array('head', 'delete'), …).
+     *     get(…)        : addRule(…, array('get'), …);
+     *     get_post(…)   : addRule(…, array('get', 'post'), …);
+     *     post_get(…)   : same that above;
+     *     _get(…)       : addPrivateRule(…, array('get'), …);
+     *     all(…)        : addRule(…, array(<all methods>), …);
+     *     head_delete(…): addRule(…, array('head', 'delete'), …).
      *
      * @access  public
      * @param   string  $name         Please, see API documentation.
@@ -350,6 +350,10 @@ class Http implements Router, \Hoa\Core\Parameter\Parameterizable {
             array_unshift($arguments, self::$_methods);
         else
             array_unshift($arguments, explode('_', $name));
+
+        $handle       = $arguments[0];
+        $arguments[0] = $arguments[1];
+        $arguments[1] = $handle;
 
         return call_user_func_array(array($this, $method), $arguments);
     }

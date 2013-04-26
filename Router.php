@@ -70,18 +70,18 @@ interface Router {
     const RULE_VISIBILITY    = 0;
 
     /**
-     * Rule bucket: methods.
-     *
-     * @const int
-     */
-    const RULE_METHODS       = 1;
-
-    /**
      * Rule bucket: ID.
      *
      * @const int
      */
-    const RULE_ID            = 2;
+    const RULE_ID            = 1;
+
+    /**
+     * Rule bucket: methods.
+     *
+     * @const int
+     */
+    const RULE_METHODS       = 2;
 
     /**
      * Rule bucket: pattern.
@@ -123,30 +123,30 @@ interface Router {
      * Add a public rule.
      *
      * @access  public
-     * @param   array   $methods      Methods.
      * @param   string  $id           ID.
+     * @param   array   $methods      Methods.
      * @param   string  $pattern      Pattern.
      * @param   mixed   $call         Call (first part).
      * @param   mixed   $able         Able (second part).
      * @param   array   $variables    Variables (default or additional values).
      * @return  \Hoa\Router
      */
-    public function addRule ( Array $methods, $id, $pattern, $call = null,
+    public function addRule ( $id, Array $methods, $pattern, $call = null,
                               $able = null, Array $variables = array() );
 
     /**
      * Add a private rule.
      *
      * @access  public
-     * @param   array   $methods      Methods.
      * @param   string  $id           ID.
+     * @param   array   $methods      Methods.
      * @param   string  $pattern      Pattern.
      * @param   mixed   $call         Call (first part).
      * @param   mixed   $able         Able (second part).
      * @param   array   $variables    Variables (default or additional values).
      * @return  \Hoa\Router
      */
-    public function addPrivateRule ( Array $methods, $id, $pattern, $call = null,
+    public function addPrivateRule ( $id, Array $methods, $pattern, $call = null,
                                      $able = null, Array $variables = array() );
 
     /**
