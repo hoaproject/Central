@@ -120,6 +120,45 @@ interface Router {
     public function &getTheRule ( );
 
     /**
+     * Add a public rule.
+     *
+     * @access  public
+     * @param   array   $methods      Methods.
+     * @param   string  $id           ID.
+     * @param   string  $pattern      Pattern.
+     * @param   mixed   $call         Call (first part).
+     * @param   mixed   $able         Able (second part).
+     * @param   array   $variables    Variables (default or additional values).
+     * @return  \Hoa\Router
+     */
+    public function addRule ( Array $methods, $id, $pattern, $call = null,
+                              $able = null, Array $variables = array() );
+
+    /**
+     * Add a private rule.
+     *
+     * @access  public
+     * @param   array   $methods      Methods.
+     * @param   string  $id           ID.
+     * @param   string  $pattern      Pattern.
+     * @param   mixed   $call         Call (first part).
+     * @param   mixed   $able         Able (second part).
+     * @param   array   $variables    Variables (default or additional values).
+     * @return  \Hoa\Router
+     */
+    public function addPrivateRule ( Array $methods, $id, $pattern, $call = null,
+                                     $able = null, Array $variables = array() );
+
+    /**
+     * Remove a rule.
+     *
+     * @access  public
+     * @param   string  $id    ID.
+     * @return  void
+     */
+    public function removeRule ( $id );
+
+    /**
      * Find the appropriated rule.
      *
      * @access  public
