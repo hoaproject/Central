@@ -31,6 +31,7 @@
         "hoa/dispatcher": "dev-master",
         "hoa/router"    : "dev-master"
     },
+    "minimum-stability": "dev",
     "autoload": {
         "files": ["Core.php"]
     },
