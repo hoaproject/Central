@@ -33,5 +33,6 @@
     },
     "require-dev": {
         "hoa/math": "dev-master"
-    }
+    },
+    "minimum-stability": "dev"
 }
