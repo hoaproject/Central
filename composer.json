@@ -29,5 +29,6 @@
         "hoa/math"    : "dev-master",
         "hoa/regex"   : "dev-master",
         "hoa/string"  : "dev-master"
-    }
+    },
+    "minimum-stability": "dev"
 }
