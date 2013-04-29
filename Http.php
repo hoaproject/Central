@@ -356,11 +356,11 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
         array_shift($muri);
         $sub = array_shift($msubdomain) ?: null;
-        $rule[Router::RULE_VARIABLES]['_domain']    = $this->getDomain();
-        $rule[Router::RULE_VARIABLES]['_subdomain'] = $sub;
-        $rule[Router::RULE_VARIABLES]['_call']      = $rule[Router::RULE_CALL];
-        $rule[Router::RULE_VARIABLES]['_able']      = $rule[Router::RULE_ABLE];
-        $rule[Router::RULE_VARIABLES]['_request']   = $_REQUEST;
+        $rule[Router::RULE_VARIABLES]['_domain']    =  $this->getDomain();
+        $rule[Router::RULE_VARIABLES]['_subdomain'] =  $sub;
+        $rule[Router::RULE_VARIABLES]['_call']      = &$rule[Router::RULE_CALL];
+        $rule[Router::RULE_VARIABLES]['_able']      = &$rule[Router::RULE_ABLE];
+        $rule[Router::RULE_VARIABLES]['_request']   =  $_REQUEST;
 
         foreach(array_merge($muri, $msubdomain) as $key => $value) {
 

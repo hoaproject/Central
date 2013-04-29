@@ -248,8 +248,8 @@ class Cli extends Generic implements \Hoa\Core\Parameter\Parameterizable {
                 'Cannot found an appropriated rule to route %s.', 5, $uri);
 
         array_shift($muri);
-        $rule[Router::RULE_VARIABLES]['_call'] = $rule[Router::RULE_CALL];
-        $rule[Router::RULE_VARIABLES]['_able'] = $rule[Router::RULE_ABLE];
+        $rule[Router::RULE_VARIABLES]['_call'] = &$rule[Router::RULE_CALL];
+        $rule[Router::RULE_VARIABLES]['_able'] = &$rule[Router::RULE_ABLE];
 
         foreach($muri as $key => $value) {
 
