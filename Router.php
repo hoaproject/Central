@@ -112,14 +112,6 @@ interface Router {
     const RULE_VARIABLES     = 6;
 
     /**
-     * Get the selected rule after routing.
-     *
-     * @access  public
-     * @return  mixed
-     */
-    public function &getTheRule ( );
-
-    /**
      * Add a public rule.
      *
      * @access  public
@@ -159,6 +151,23 @@ interface Router {
     public function removeRule ( $id );
 
     /**
+     * Check whether a rule exists.
+     *
+     * @access  public
+     * @param   string  $id    ID.
+     * @return  bool
+     */
+    public function ruleExists ( $id );
+
+    /**
+     * Get the selected rule after routing.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function &getTheRule ( );
+
+    /**
      * Find the appropriated rule.
      *
      * @access  public
@@ -192,15 +201,6 @@ interface Router {
      * @return  bool
      */
     public function isAsynchronous ( );
-
-    /**
-     * Check whether a rule exists.
-     *
-     * @access  public
-     * @param   string  $id    ID.
-     * @return  bool
-     */
-    public function ruleExists ( $id );
 }
 
 }

@@ -161,20 +161,6 @@ abstract class Generic implements Router {
     }
 
     /**
-     * Remove a rule.
-     *
-     * @access  public
-     * @param   string  $id    ID.
-     * @return  void
-     */
-    public function removeRule ( $id ) {
-
-        unset($this->_rules[$id]);
-
-        return;
-    }
-
-    /**
      * Helper for adding rules.
      * Methods are concatenated by _. If prefixed by _, it's a private rule. In
      * addition, the keyword “all” takes place for all methods.
@@ -212,6 +198,20 @@ abstract class Generic implements Router {
         $arguments[1] = $handle;
 
         return call_user_func_array(array($this, $method), $arguments);
+    }
+
+    /**
+     * Remove a rule.
+     *
+     * @access  public
+     * @param   string  $id    ID.
+     * @return  void
+     */
+    public function removeRule ( $id ) {
+
+        unset($this->_rules[$id]);
+
+        return;
     }
 
     /**
