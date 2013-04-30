@@ -51,7 +51,12 @@ from('Hoa')
 /**
  * \Hoa\Router
  */
--> import('Router.~');
+-> import('Router.~')
+
+/**
+ * \Hoa\Router\Generic
+ */
+-> import('Router.Generic');
 
 }
 
@@ -67,7 +72,7 @@ namespace Hoa\Router {
  * @license    New BSD License
  */
 
-class Cli implements Router, \Hoa\Core\Parameter\Parameterizable {
+class Cli extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
     /**
      * Parameters.
@@ -75,20 +80,6 @@ class Cli implements Router, \Hoa\Core\Parameter\Parameterizable {
      * @var \Hoa\Core\Parameter object
      */
     protected $_parameters    = null;
-
-    /**
-     * All rules buckets.
-     *
-     * @var \Hoa\Router\Http array
-     */
-    protected $_rules          = array();
-
-    /**
-     * Selected rule after routing.
-     *
-     * @var \Hoa\Router\Http array
-     */
-    protected $_rule           = null;
 
     /**
      * CLI methods that the router understand.
@@ -129,7 +120,7 @@ class Cli implements Router, \Hoa\Core\Parameter\Parameterizable {
             if(null === $variables)
                 $variables = array();
 
-            $this->addRule($methods, $id, $pattern, $call, $able, $variables);
+            $this->addRule($id, $methods, $pattern, $call, $able, $variables);
         }
 
         foreach($this->_parameters->getParameter('rules.private') as $id => $rule) {
@@ -141,7 +132,7 @@ class Cli implements Router, \Hoa\Core\Parameter\Parameterizable {
                 $variables = array();
 
             $this->addPrivateRule(
-                $methods, $id, $pattern, $call, $able, $variables
+                $id, $methods, $pattern, $call, $able, $variables
             );
         }
 
@@ -165,8 +156,8 @@ class Cli implements Router, \Hoa\Core\Parameter\Parameterizable {
      * @access  public
      * @param   int     $visibility    Visibility (please, see
      *                                 Router::VISIBILITY_* constants).
-     * @param   array   $methods       HTTP methods allowed by the rule.
      * @param   string  $id            ID.
+     * @param   array   $methods       HTTP methods allowed by the rule.
      * @param   string  $pattern       Pattern (on-subdomain@on-request).
      * @param   mixed   $call          Call (first part).
      * @param   mixed   $able          Able (second part).
@@ -174,7 +165,7 @@ class Cli implements Router, \Hoa\Core\Parameter\Parameterizable {
      * @return  \Hoa\Router\Http
      * @throw   \Hoa\Router\Exception
      */
-    protected function _addRule ( $visibility,  Array $methods, $id, $pattern,
+    protected function _addRule ( $visibility, $id, Array $methods, $pattern,
                                   $call, $able, Array $variables ) {
 
         if(true === $this->ruleExists($id))
@@ -198,8 +189,8 @@ class Cli implements Router, \Hoa\Core\Parameter\Parameterizable {
 
         $this->_rules[$id] = array(
             Router::RULE_VISIBILITY => $visibility,
-            Router::RULE_METHODS    => $methods,
             Router::RULE_ID         => $id,
+            Router::RULE_METHODS    => $methods,
             Router::RULE_PATTERN    => $pattern,
             Router::RULE_CALL       => $call,
             Router::RULE_ABLE       => $able,
@@ -207,160 +198,6 @@ class Cli implements Router, \Hoa\Core\Parameter\Parameterizable {
         );
 
         return $this;
-    }
-
-    /**
-     * Add a public rule.
-     *
-     * @access  public
-     * @param   array   $methods      HTTP methods allowed by the rule.
-     * @param   string  $id           ID.
-     * @param   string  $pattern      Pattern (on-subdomain@on-request).
-     * @param   mixed   $call         Call (first part).
-     * @param   mixed   $able         Able (second part).
-     * @param   array   $variables    Variables (default or additional values).
-     * @return  \Hoa\Router\Http
-     * @throw   \Hoa\Router\Exception
-     */
-    public function addRule ( Array $methods, $id, $pattern, $call = null,
-                              $able = null, Array $variables = array() ) {
-
-        return $this->_addRule(
-            Router::VISIBILITY_PUBLIC,
-            $methods,
-            $id,
-            $pattern,
-            $call,
-            $able,
-            $variables
-        );
-    }
-
-    /**
-     * Add a private rule.
-     *
-     * @access  public
-     * @param   array   $methods      HTTP methods allowed by the rule.
-     * @param   string  $id           ID.
-     * @param   string  $pattern      Pattern (on-subdomain@on-request).
-     * @param   mixed   $call         Call (first part).
-     * @param   mixed   $able         Able (second part).
-     * @param   array   $variables    Variables (default or additional values).
-     * @return  \Hoa\Router\Http
-     * @throw   \Hoa\Router\Exception
-     */
-    public function addPrivateRule ( Array $methods, $id, $pattern, $call = null,
-                                     $able = null, Array $variables = array() ) {
-
-        return $this->_addRule(
-            Router::VISIBILITY_PRIVATE,
-            $methods,
-            $id,
-            $pattern,
-            $call,
-            $able,
-            $variables
-        );
-    }
-
-    /**
-     * Remove a rule.
-     *
-     * @access  public
-     * @param   string  $id    ID.
-     * @return  void
-     */
-    public function removeRule ( $id ) {
-
-        unset($this->_rules[$id]);
-
-        return;
-    }
-
-    /**
-     * Helper for adding rules.
-     * Methods are concatenated by _. If prefixed by _, it's a private rule. In
-     * addition, the keyword “all” takes place for all methods.
-     * Examples:
-     *     get(…)        : addRule(array('get'), …);
-     *     get_post(…)   : addRule(array('get', 'post'), …);
-     *     post_get(…)   : same that previous;
-     *     _get(…)       : addPrivateRule(array('get'), …);
-     *     all(…)        : addRule(array(<all methods>), …).
-     *
-     * @access  public
-     * @param   string  $name         Please, see API documentation.
-     * @param   array   $arguments    Arguments for add*Rule() methods.
-     * @return  \Hoa\Router\Http
-     * @throw   \Hoa\Router\Exception
-     */
-    public function __call ( $name, $arguments ) {
-
-        if('_' == $name[0]) {
-
-            $name   = substr($name, 1);
-            $method = 'addPrivateRule';
-        }
-        else
-            $method = 'addRule';
-
-        if('all' == $name)
-            array_unshift($arguments, self::$_methods);
-        else
-            array_unshift($arguments, explode('_', $name));
-
-        return call_user_func_array(array($this, $method), $arguments);
-    }
-
-    /**
-     * Check whether a rule exists.
-     *
-     * @access  public
-     * @param   string  $id    ID.
-     * @return  bool
-     */
-    public function ruleExists ( $id ) {
-
-        return isset($this->_rules[$id]);
-    }
-
-    /**
-     * Get all rules.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function getRules ( ) {
-
-        return $this->_rules;
-    }
-
-    /**
-     * Get a specific rule.
-     *
-     * @access  public
-     * @param   string  $id    ID.
-     * @return  array
-     * @throw   \Hoa\Router\Exception
-     */
-    public function getRule ( $id ) {
-
-        if(false === $this->ruleExists($id))
-            throw new Exception(
-                'Rule %s does not exist.', 2, $id);
-
-        return $this->_rules[$id];
-    }
-
-    /**
-     * Get the selected rule after routing.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function &getTheRule ( ) {
-
-        return $this->_rule;
     }
 
     /**
@@ -411,8 +248,8 @@ class Cli implements Router, \Hoa\Core\Parameter\Parameterizable {
                 'Cannot found an appropriated rule to route %s.', 5, $uri);
 
         array_shift($muri);
-        $rule[Router::RULE_VARIABLES]['_call'] = $rule[Router::RULE_CALL];
-        $rule[Router::RULE_VARIABLES]['_able'] = $rule[Router::RULE_ABLE];
+        $rule[Router::RULE_VARIABLES]['_call'] = &$rule[Router::RULE_CALL];
+        $rule[Router::RULE_VARIABLES]['_able'] = &$rule[Router::RULE_ABLE];
 
         foreach($muri as $key => $value) {
 
@@ -446,7 +283,7 @@ class Cli implements Router, \Hoa\Core\Parameter\Parameterizable {
         $pattern   = $rule[Router::RULE_PATTERN];
         $variables = array_merge($rule[Router::RULE_VARIABLES], $variables);
         $out       = preg_replace_callback(
-            '#\(\?\<([^>]+)>[^\)]*\)#',
+            '#\(\?\<([^>]+)>[^\)]*\)[\?\*\+]{0,2}#',
             function ( Array $matches ) use ( &$variables ) {
 
                 $m = strtolower($matches[1]);
