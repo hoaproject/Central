@@ -34,6 +34,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+namespace {
+
+from('Hoa')
+
+/**
+ * \Hoa\Iterator
+ */
+-> import('Iterator.~');
+
+}
+
 namespace Hoa\Praspel\Iterator\Coverage {
 
 /**
@@ -46,7 +57,7 @@ namespace Hoa\Praspel\Iterator\Coverage {
  * @license    New BSD License
  */
 
-class Domain implements \Iterator {
+class Domain implements \Hoa\Iterator {
 
     /**
      * Variables to cover.
