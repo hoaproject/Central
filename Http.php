@@ -531,7 +531,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
                                   $allowEmpty = true ) {
 
         $out = preg_replace_callback(
-            '#\(\?\<([^>]+)>[^\)]*\)#',
+            '#\(\?\<([^>]+)>[^\)]*\)[\?\*\+]{0,2}#',
             function ( Array $matches ) use ( &$id, &$variables, &$allowEmpty ) {
 
                 $m = strtolower($matches[1]);

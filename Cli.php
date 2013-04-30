@@ -283,7 +283,7 @@ class Cli extends Generic implements \Hoa\Core\Parameter\Parameterizable {
         $pattern   = $rule[Router::RULE_PATTERN];
         $variables = array_merge($rule[Router::RULE_VARIABLES], $variables);
         $out       = preg_replace_callback(
-            '#\(\?\<([^>]+)>[^\)]*\)#',
+            '#\(\?\<([^>]+)>[^\)]*\)[\?\*\+]{0,2}#',
             function ( Array $matches ) use ( &$variables ) {
 
                 $m = strtolower($matches[1]);
