@@ -41,7 +41,12 @@ from('Hoa')
 /**
  * \Hoa\Praspel\Iterator\WeakStack
  */
--> import('Praspel.Iterator.WeakStack');
+-> import('Praspel.Iterator.WeakStack')
+
+/**
+ * \Hoa\Iterator
+ */
+-> import('Iterator.~');
 
 }
 
@@ -57,7 +62,7 @@ namespace Hoa\Praspel\Iterator\Coverage {
  * @license    New BSD License
  */
 
-class Structural implements \Iterator {
+class Structural implements \Hoa\Iterator {
 
     /**
      * Specification to cover.
