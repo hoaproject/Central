@@ -41,7 +41,12 @@ from('Hoa')
 /**
  * \Hoa\Praspel\Model\Clause
  */
--> import('Praspel.Model.Clause');
+-> import('Praspel.Model.Clause')
+
+/**
+ * \Hoa\Iterator\Aggregate
+ */
+-> import('Iterator.Aggregate');
 
 }
 
@@ -59,8 +64,8 @@ namespace Hoa\Praspel\Model {
 
 class          Throwable
     extends    Clause
-    implements \ArrayAccess,
-               \IteratorAggregate,
+    implements \Hoa\Iterator\Aggregate,
+               \ArrayAccess,
                \Countable {
 
     /**

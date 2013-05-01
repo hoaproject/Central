@@ -100,7 +100,7 @@ class Domain implements \Hoa\Iterator {
      * Constructor.
      *
      * @access  public
-     * @param   array  $variables    Variables.
+     * @param   mixed  $variables    Variables.
      * @return  void
      */
     public function __construct ( $variables ) {

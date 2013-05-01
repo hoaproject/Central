@@ -46,7 +46,12 @@ from('Hoa')
 /**
  * \Hoa\Visitor\Element
  */
--> import('Visitor.Element');
+-> import('Visitor.Element')
+
+/**
+ * \Hoa\Iterator\Aggregate
+ */
+-> import('Iterator.Aggregate');
 
 }
 
@@ -64,8 +69,8 @@ namespace Hoa\Praspel\Model {
 
 class          Collection
     implements \Hoa\Visitor\Element,
+               \Hoa\Iterator\Aggregate,
                \ArrayAccess,
-               \IteratorAggregate,
                \Countable {
 
     /**
