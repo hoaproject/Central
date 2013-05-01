@@ -65,11 +65,32 @@ namespace Hoa\Praspel\Iterator\Coverage {
 class Structural implements \Hoa\Iterator {
 
     /**
+     * Criteria: normal (@requires and @ensures).
+     *
+     * @const int
+     */
+    const CRITERIA_NORMAL      = 1;
+
+    /**
+     * Criteria: exceptional (@requires and @throwable).
+     *
+     * @const int
+     */
+    const CRITERIA_EXCEPTIONAL = 2;
+
+    /**
      * Specification to cover.
      *
      * @var \Hoa\Praspel\Model\Specification object
      */
     protected $_specification = null;
+
+    /**
+     * Coverage criteria.
+     *
+     * @var \Hoa\Praspel\Iterator\Coverage\Structural int
+     */
+    protected $_criteria      = 3; // CRITERIA_NORMAL | CRITERIA_EXCEPTIONAL
 
     /**
      * Stack (to manage backtracks, yields, etc.)
@@ -119,6 +140,9 @@ class Structural implements \Hoa\Iterator {
     public function __construct ( \Hoa\Praspel\Model\Specification $specification ) {
 
         $this->_specification = $specification;
+        $this->setCriteria(
+            static::CRITERIA_NORMAL | static::CRITERIA_EXCEPTIONAL
+        );
 
         return;
     }
@@ -159,7 +183,8 @@ class Structural implements \Hoa\Iterator {
 
             if(true === $this->_up) {
 
-                if('ensures' === $this->_post) {
+                if(   'ensures' === $this->_post
+                   && 0 !== (static::CRITERIA_EXCEPTIONAL & $this->getCriteria())) {
 
                     $this->_up   = false;
                     $this->_post = 'throwable';
@@ -251,6 +276,10 @@ class Structural implements \Hoa\Iterator {
         $this->_stack = new \SplStack();
         $this->_stack->push($this->_specification);
 
+        $this->_post = 0 !== (static::CRITERIA_NORMAL & $this->getCriteria())
+                           ? 'ensures'
+                           : 'throwable';
+
         $this->_rewindCurrent();
 
         return $this->current();
@@ -313,6 +342,33 @@ class Structural implements \Hoa\Iterator {
     public function valid ( ) {
 
         return null !== $this->_current;
+    }
+
+    /**
+     * Set coverage criteria.
+     *
+     * @access  public
+     * @param   int  $criteria    Criteria (please, see self::CRITERIA_*
+     *                            constants).
+     * @return  int
+     */
+    public function setCriteria ( $criteria ) {
+
+        $old             = $this->_criteria;
+        $this->_criteria = $criteria;
+
+        return $old;
+    }
+
+    /**
+     * get coverage criteria.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getCriteria ( ) {
+
+        return $this->_criteria;
     }
 }
 
