@@ -27,6 +27,7 @@
         "hoa/core"    : "dev-master",
         "hoa/compiler": "dev-master",
         "hoa/file"    : "dev-master",
+        "hoa/iterator": "dev-master",
         "hoa/realdom" : "dev-master",
         "hoa/string"  : "dev-master",
         "hoa/visitor" : "dev-master"

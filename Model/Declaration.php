@@ -46,7 +46,12 @@ from('Hoa')
 /**
  * \Hoa\Praspel\Model\Variable
  */
--> import('Praspel.Model.Variable');
+-> import('Praspel.Model.Variable')
+
+/**
+ * \Hoa\Iterator\Aggregate
+ */
+-> import('Iterator.Aggregate');
 
 }
 
@@ -64,8 +69,8 @@ namespace Hoa\Praspel\Model {
 
 abstract class Declaration
     extends    Clause
-    implements \ArrayAccess,
-               \IteratorAggregate,
+    implements \Hoa\Iterator\Aggregate,
+               \ArrayAccess,
                \Countable {
 
     /**
