@@ -1244,10 +1244,9 @@ Hoa.Keyboard = Hoa.Keyboard || new function ( ) {
 
 Hoa.ℙ(1) && (Hoa.Tabs = Hoa.Tabs || new function ( ) {
 
-    var that          = this;
-    var tabs          = {};
-    var tabsLastIndex = 0;
-    var TabTemplate   = function ( tab ) {
+    var that        = this;
+    var tabs        = [];
+    var TabTemplate = function ( tab ) {
 
         var selected  = null;
         var tablist   = [];
@@ -1283,7 +1282,7 @@ Hoa.ℙ(1) && (Hoa.Tabs = Hoa.Tabs || new function ( ) {
         this.add = function ( id, name ) {
 
             var handle   = Hoa.$('[role="tablist"]', tab);
-            var i        = handle.childNodes.length;
+            var i        = Hoa.$$('li[role="presentation"]', handle).length;
             var id       = 'hoa_tabs_auto_' + i;
             var _tabitem = Hoa.DOM.a(
                 name,
@@ -1373,13 +1372,15 @@ Hoa.ℙ(1) && (Hoa.Tabs = Hoa.Tabs || new function ( ) {
 
     this.get = function ( id ) {
 
-        if(undefined !== tabs[id])
-            return tabs[id];
-
         var tab = id;
 
-        if(typeof id === 'string')
+        if('string' === typeof id)
             tab = Hoa.$(id);
+
+        id = tab.getAttribute('id');
+
+        if(undefined !== tabs[id])
+            return tabs[id];
 
         return tabs[id] = new TabTemplate(tab);
     };
