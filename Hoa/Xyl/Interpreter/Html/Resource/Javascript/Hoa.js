@@ -300,21 +300,21 @@ Hoa.ℙ(1) && (Hoa.DOM = Hoa.DOM || new function ( ) {
 
         var node = null;
 
-        if(undefined != ns)
+        if(undefined !== ns)
             node = document.createElementNS(name);
         else
             node = document.createElement(name);
 
-        if(undefined != attributes)
+        if(undefined !== attributes)
             attributes.hoa.forEach(function ( attribute ) {
 
                 node.setAttribute(attribute, attributes[attribute]);
             });
 
-        if(undefined == children)
+        if(undefined === children)
             return node;
 
-        if(typeof children == 'string')
+        if(typeof children === 'string')
             node.appendChild(that.text(children));
         else
             children.forEach(function ( child ) {
@@ -1378,11 +1378,8 @@ Hoa.ℙ(1) && (Hoa.Tabs = Hoa.Tabs || new function ( ) {
 
         var tab = id;
 
-        if('object' === typeof tab)
-            id = tab.getAttribute('id');
-
-        if(null === id)
-            id = tabs.length;
+        if(typeof id === 'string')
+            tab = Hoa.$(id);
 
         return tabs[id] = new TabTemplate(tab);
     };
