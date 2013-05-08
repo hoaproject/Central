@@ -1090,17 +1090,23 @@ class          Processus
      */
     public static function locate ( $binary ) {
 
-        // Unix.
         if(isset($_ENV['PATH'])) {
 
             $separator = ':';
             $path      = &$_ENV['PATH'];
+        }
+        elseif(isset($_SERVER['PATH'])) {
+
+            $separator = ':';
+            $path      = &$_SERVER['PATH'];
         }
         elseif(isset($_SERVER['Path'])) {
 
             $separator = ';';
             $path      = &$_SERVER['Path'];
         }
+        else
+            return null;
 
         foreach(explode($separator, $path) as $directory)
             if(true === file_exists($out = $directory . DS . $binary))
