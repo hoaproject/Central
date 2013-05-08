@@ -1120,11 +1120,16 @@ class          Processus
      * Returns only the STDOUT.
      *
      * @access  public
+     * @param   string  $commandLine    Command line to execute.
+     * @param   bool    $escape         Escape command.
      * @return  string
      */
-    public static function execute ( $commandLine ) {
+    public static function execute ( $commandLine, $escape = true ) {
 
-        return rtrim(shell_exec(escapeshellcmd($commandLine)));
+        if(true === $escape)
+            $commandLine = escapeshellcmd($commandLine);
+
+        return rtrim(shell_exec($commandLine));
     }
 }
 
