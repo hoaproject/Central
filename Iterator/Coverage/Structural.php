@@ -398,12 +398,12 @@ class Structural implements \Hoa\Iterator\Recursive {
      */
     public function getChildren ( ) {
 
+        $pre      = array();
+        $post     = array();
         $iterator = new \Hoa\Iterator\Multiple(
             \Hoa\Iterator\Multiple::MIT_NEED_ALL
           | \Hoa\Iterator\Multiple::MIT_KEYS_ASSOC
         );
-        $pre      = array();
-        $post     = array();
 
         foreach($this->_current['pre'] as $clause)
             foreach($clause->getLocalVariables() as $variable)
