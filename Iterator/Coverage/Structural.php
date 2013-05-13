@@ -413,8 +413,8 @@ class Structural implements \Hoa\Iterator\Recursive {
             foreach($clause->getLocalVariables() as $variable)
                 $post[] = $variable;
 
-        $iterator->attachIterator(new Domain($pre), 'pre');
-        $iterator->attachIterator(new Domain($post), 'post');
+        $iterator->attachIterator(new Domain($pre), 'pre', array());
+        $iterator->attachIterator(new Domain($post), 'post', array());
 
         return new \Hoa\Iterator\Recursive\Mock($iterator);
     }
