@@ -64,7 +64,7 @@ class Domain implements \Hoa\Iterator {
      *
      * @var \Hoa\Praspel\Iterator\Coverage\Domain array
      */
-    protected $_variables = null;
+    protected $_variables = array();
 
     /**
      * Number of variables.
@@ -92,7 +92,7 @@ class Domain implements \Hoa\Iterator {
      *
      * @var \Hoa\Praspel\Iterator\Coverage\Domain bool
      */
-    protected $_end       = false;
+    protected $_break     = true;
 
 
 
@@ -108,7 +108,8 @@ class Domain implements \Hoa\Iterator {
         foreach($variables as $variable)
             $this->_variables[] = $variable->getDomains()->getIterator();
 
-        $this->_max = count($this->_variables) - 1;
+        $this->_max   = count($this->_variables) - 1;
+        $this->_break = empty($this->_variables);
 
         return;
     }
@@ -192,7 +193,7 @@ class Domain implements \Hoa\Iterator {
      */
     public function rewind ( ) {
 
-        $this->_break = false;
+        $this->_break = empty($this->_variables);
         $this->_key   = 0;
 
         foreach($this->_variables as $variable)

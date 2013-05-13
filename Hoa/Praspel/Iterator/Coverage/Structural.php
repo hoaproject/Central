@@ -59,11 +59,6 @@ from('Hoa')
 -> import('Iterator.Recursive.~')
 
 /**
- * \Hoa\Iterator\Map
- */
--> import('Iterator.Map')
-
-/**
  * \Hoa\Iterator\Multiple
  */
 -> import('Iterator.Multiple')
@@ -403,12 +398,12 @@ class Structural implements \Hoa\Iterator\Recursive {
      */
     public function getChildren ( ) {
 
+        $pre      = array();
+        $post     = array();
         $iterator = new \Hoa\Iterator\Multiple(
             \Hoa\Iterator\Multiple::MIT_NEED_ANY
           | \Hoa\Iterator\Multiple::MIT_KEYS_ASSOC
         );
-        $pre      = array();
-        $post     = array();
 
         foreach($this->_current['pre'] as $clause)
             foreach($clause->getLocalVariables() as $variable)
@@ -418,8 +413,8 @@ class Structural implements \Hoa\Iterator\Recursive {
             foreach($clause->getLocalVariables() as $variable)
                 $post[] = $variable;
 
-        $iterator->attachIterator(new Domain($pre), 'pre');
-        $iterator->attachIterator(new Domain($post), 'post');
+        $iterator->attachIterator(new Domain($pre), 'pre', array());
+        $iterator->attachIterator(new Domain($post), 'post', array());
 
         return new \Hoa\Iterator\Recursive\Mock($iterator);
     }
