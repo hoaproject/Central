@@ -399,7 +399,7 @@ class Structural implements \Hoa\Iterator\Recursive {
     public function getChildren ( ) {
 
         $iterator = new \Hoa\Iterator\Multiple(
-            \Hoa\Iterator\Multiple::MIT_NEED_ANY
+            \Hoa\Iterator\Multiple::MIT_NEED_ALL
           | \Hoa\Iterator\Multiple::MIT_KEYS_ASSOC
         );
         $pre      = array();
