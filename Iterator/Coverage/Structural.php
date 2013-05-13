@@ -59,11 +59,6 @@ from('Hoa')
 -> import('Iterator.Recursive.~')
 
 /**
- * \Hoa\Iterator\Map
- */
--> import('Iterator.Map')
-
-/**
  * \Hoa\Iterator\Multiple
  */
 -> import('Iterator.Multiple')
