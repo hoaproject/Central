@@ -46,7 +46,12 @@ from('Hoa')
 /**
  * \Hoa\Iterator\Aggregate
  */
--> import('Iterator.Aggregate');
+-> import('Iterator.Aggregate')
+
+/**
+ * \Hoa\Iterator\Map
+ */
+-> import('Iterator.Map');
 
 }
 
@@ -147,11 +152,11 @@ class          Description
      * Iterator over examples.
      *
      * @access  public
-     * @return  \ArrayIterator
+     * @return  \Hoa\Iterator\Map
      */
     public function getIterator ( ) {
 
-        return new \ArrayIterator($this->_examples);
+        return new \Hoa\Iterator\Map($this->_examples);
     }
 
     /**

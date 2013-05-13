@@ -44,9 +44,34 @@ from('Hoa')
 -> import('Praspel.Iterator.WeakStack')
 
 /**
- * \Hoa\Iterator
+ * \Hoa\Praspel\Iterator\Coverage
  */
--> import('Iterator.~');
+-> import('Praspel.Iterator.Coverage.~')
+
+/**
+ * \Hoa\Praspel\Iterator\Coverage\Domain
+ */
+-> import('Praspel.Iterator.Coverage.Domain')
+
+/**
+ * \Hoa\Iterator\Recursive
+ */
+-> import('Iterator.Recursive.~')
+
+/**
+ * \Hoa\Iterator\Map
+ */
+-> import('Iterator.Map')
+
+/**
+ * \Hoa\Iterator\Multiple
+ */
+-> import('Iterator.Multiple')
+
+/**
+ * \Hoa\Iterator\Recursive\Mock
+ */
+-> import('Iterator.Recursive.Mock');
 
 }
 
@@ -62,21 +87,7 @@ namespace Hoa\Praspel\Iterator\Coverage {
  * @license    New BSD License
  */
 
-class Structural implements \Hoa\Iterator {
-
-    /**
-     * Criteria: normal (@requires and @ensures).
-     *
-     * @const int
-     */
-    const CRITERIA_NORMAL      = 1;
-
-    /**
-     * Criteria: exceptional (@requires and @throwable).
-     *
-     * @const int
-     */
-    const CRITERIA_EXCEPTIONAL = 2;
+class Structural implements \Hoa\Iterator\Recursive {
 
     /**
      * Specification to cover.
@@ -90,7 +101,8 @@ class Structural implements \Hoa\Iterator {
      *
      * @var \Hoa\Praspel\Iterator\Coverage\Structural int
      */
-    protected $_criteria      = 3; // CRITERIA_NORMAL | CRITERIA_EXCEPTIONAL
+    protected $_criteria      = 3; //   Coverage::CRITERIA_NORMAL
+                                   // | Coverage::CRITERIA_EXCEPTIONAL
 
     /**
      * Stack (to manage backtracks, yields, etc.)
@@ -141,7 +153,7 @@ class Structural implements \Hoa\Iterator {
 
         $this->_specification = $specification;
         $this->setCriteria(
-            static::CRITERIA_NORMAL | static::CRITERIA_EXCEPTIONAL
+            Coverage::CRITERIA_NORMAL | Coverage::CRITERIA_EXCEPTIONAL
         );
 
         return;
@@ -184,7 +196,7 @@ class Structural implements \Hoa\Iterator {
             if(true === $this->_up) {
 
                 if(   'ensures' === $this->_post
-                   && 0 !== (static::CRITERIA_EXCEPTIONAL & $this->getCriteria())) {
+                   && 0 !== (Coverage::CRITERIA_EXCEPTIONAL & $this->getCriteria())) {
 
                     $this->_up   = false;
                     $this->_post = 'throwable';
@@ -276,7 +288,7 @@ class Structural implements \Hoa\Iterator {
         $this->_stack = new \SplStack();
         $this->_stack->push($this->_specification);
 
-        $this->_post = 0 !== (static::CRITERIA_NORMAL & $this->getCriteria())
+        $this->_post = 0 !== (Coverage::CRITERIA_NORMAL & $this->getCriteria())
                            ? 'ensures'
                            : 'throwable';
 
@@ -348,7 +360,7 @@ class Structural implements \Hoa\Iterator {
      * Set coverage criteria.
      *
      * @access  public
-     * @param   int  $criteria    Criteria (please, see self::CRITERIA_*
+     * @param   int  $criteria    Criteria (please, see Coverage::CRITERIA_*
      *                            constants).
      * @return  int
      */
@@ -369,6 +381,47 @@ class Structural implements \Hoa\Iterator {
     public function getCriteria ( ) {
 
         return $this->_criteria;
+    }
+
+    /**
+     * Check if we can go deeper (structural to domain coverage).
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function hasChildren ( ) {
+
+        return 0 !== (Coverage::CRITERIA_DOMAIN & $this->getCriteria());
+    }
+
+    /**
+     * Get the domain coverage iterator from the current variables from pre and
+     * post clauses.
+     *
+     * @access  public
+     * @return  \Hoa\Iterator\Recursive
+     */
+    public function getChildren ( ) {
+
+        $iterator = new \Hoa\Iterator\Multiple(
+            \Hoa\Iterator\Multiple::MIT_NEED_ANY
+          | \Hoa\Iterator\Multiple::MIT_KEYS_ASSOC
+        );
+        $pre      = array();
+        $post     = array();
+
+        foreach($this->_current['pre'] as $clause)
+            foreach($clause->getLocalVariables() as $variable)
+                $pre[] = $variable;
+
+        foreach($this->_current['post'] as $clause)
+            foreach($clause->getLocalVariables() as $variable)
+                $post[] = $variable;
+
+        $iterator->attachIterator(new Domain($pre), 'pre');
+        $iterator->attachIterator(new Domain($post), 'post');
+
+        return new \Hoa\Iterator\Recursive\Mock($iterator);
     }
 }
 

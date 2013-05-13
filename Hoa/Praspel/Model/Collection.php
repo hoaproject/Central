@@ -51,7 +51,12 @@ from('Hoa')
 /**
  * \Hoa\Iterator\Aggregate
  */
--> import('Iterator.Aggregate');
+-> import('Iterator.Aggregate')
+
+/**
+ * \Hoa\Iterator\Map
+ */
+-> import('Iterator.Map');
 
 }
 
@@ -209,11 +214,11 @@ class          Collection
      * Iterate over all clauses.
      *
      * @access  public
-     * @return  \ArrayIterator
+     * @return  \Hoa\Iterator\Map
      */
     public function getIterator ( ) {
 
-        return new \ArrayIterator($this->_clauses);
+        return new \Hoa\Iterator\Map($this->_clauses);
     }
 
     /**

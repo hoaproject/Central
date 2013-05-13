@@ -39,9 +39,9 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Praspel\Model\Clause
+ * \Hoa\Praspel\Iterator\Coverage\Structural
  */
--> import('Praspel.Model.Clause')
+-> import('Praspel.Iterator.Coverage.Structural')
 
 /**
  * \Hoa\Iterator\Aggregate
@@ -49,134 +49,92 @@ from('Hoa')
 -> import('Iterator.Aggregate')
 
 /**
- * \Hoa\Iterator\Map
+ * \Hoa\Iterator\Recursive\Iterator
  */
--> import('Iterator.Map');
+-> import('Iterator.Recursive.Iterator');
 
 }
 
-namespace Hoa\Praspel\Model {
+namespace Hoa\Praspel\Iterator\Coverage {
 
 /**
- * Class \Hoa\Praspel\Model\Throwable.
+ * Class \Hoa\Praspel\Iterator\Coverage.
  *
- * Represent the @throwable clause.
+ * Coverage recursive iterator.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class          Throwable
-    extends    Clause
-    implements \Hoa\Iterator\Aggregate,
-               \ArrayAccess,
-               \Countable {
+class Coverage implements \Hoa\Iterator\Aggregate {
 
     /**
-     * Name.
+     * Criteria: normal (@requires and @ensures).
      *
-     * @const string
+     * @const int
      */
-    const NAME = 'throwable';
+    const CRITERIA_NORMAL      = 1;
 
     /**
-     * List of exception names.
+     * Criteria: exceptional (@requires and @throwable).
      *
-     * @var \Hoa\Praspel\Model\Throwable array
+     * @const int
      */
-    protected $_exceptions = array();
+    const CRITERIA_EXCEPTIONAL = 2;
+
+    /**
+     * Criteria: domain (all disjunctions).
+     *
+     * @const int
+     */
+    const CRITERIA_DOMAIN      = 4;
+
+    /**
+     * Iterator (of the specification to cover).
+     *
+     * @var \Hoa\Praspel\Iterator\Coverage\Structural object
+     */
+    protected $_iterator = null;
 
 
 
     /**
-     * Check if an exception identifier exists.
+     * Constructor.
      *
      * @access  public
-     * @param   string  $offset    Exception identifier.
-     * @return  bool
-     */
-    public function offsetExists ( $offset ) {
-
-        return isset($this->_exceptions[$offset]);
-    }
-
-    /**
-     * Get an exception.
-     *
-     * @access  public
-     * @param   string  $offset    Exception identifier.
-     * @return  \Hoa\Prasel\Model\Variable
-     */
-    public function offsetGet ( $offset ) {
-
-        if(false === $this->offsetExists($offset))
-            return null;
-
-        return $this->_exceptions[$offset];
-    }
-
-    /**
-     * Add an exception.
-     *
-     * @access  public
-     * @param   string  $offset    Exception identifier.
-     * @param   mixed   $value     Exception classname.
-     * @return  mixed
-     */
-    public function offsetSet ( $offset, $value ) {
-
-        $old                        = $this->offsetGet($offset);
-        $this->_exceptions[$offset] = $value;
-
-        return $old;
-    }
-
-    /**
-     * Delete an exception.
-     *
-     * @access  public
-     * @param   string  $offset    Exception identifier.
+     * @param   \Hoa\Praspel\Model\Specification  $specification    Specification.
      * @return  void
      */
-    public function offsetUnset ( $offset ) {
+    public function __construct ( \Hoa\Praspel\Model\Specification $specification ) {
 
-        unset($this->_exceptions[$offset]);
+        $this->_iterator = new Structural($specification);
 
         return;
     }
 
     /**
-     * Get exceptions list.
+     * Set coverage criteria.
      *
      * @access  public
-     * @return  array
+     * @param   int  $criteria    Criteria (please, see self::CRITERIA_*
+     *                            constants).
+     * @return  int
      */
-    public function getExceptions ( ) {
+    public function setCriteria ( $criteria ) {
 
-        return $this->_exceptions;
+        return $this->_iterator->setCriteria($criteria);
     }
 
     /**
-     * Iterator over exceptions.
+     * Get iterator.
      *
      * @access  public
-     * @return  \Hoa\Iterator\Map
+     * @return  \Hoa\Iterator\Recursive\Iterator
      */
     public function getIterator ( ) {
 
-        return new \Hoa\Iterator\Map($this->getExceptions());
-    }
-
-    /**
-     * Count number of exceptions.
-     *
-     * @access  public
-     * @return  int
-     */
-    public function count ( ) {
-
-        return count($this->getExceptions());
+        return new \Hoa\Iterator\Recursive\Iterator($this->_iterator);
     }
 }
 
