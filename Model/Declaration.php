@@ -51,7 +51,12 @@ from('Hoa')
 /**
  * \Hoa\Iterator\Aggregate
  */
--> import('Iterator.Aggregate');
+-> import('Iterator.Aggregate')
+
+/**
+ * \Hoa\Iterator\Map
+ */
+-> import('Iterator.Map');
 
 }
 
@@ -193,11 +198,11 @@ abstract class Declaration
      * Iterator over local variables.
      *
      * @access  public
-     * @return  \ArrayIterator
+     * @return  \Hoa\Iterator\Map
      */
     public function getIterator ( ) {
 
-        return new \ArrayIterator($this->getLocalVariables());
+        return new \Hoa\Iterator\Map($this->getLocalVariables());
     }
 
     /**

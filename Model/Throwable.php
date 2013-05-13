@@ -46,7 +46,12 @@ from('Hoa')
 /**
  * \Hoa\Iterator\Aggregate
  */
--> import('Iterator.Aggregate');
+-> import('Iterator.Aggregate')
+
+/**
+ * \Hoa\Iterator\Map
+ */
+-> import('Iterator.Map');
 
 }
 
@@ -156,11 +161,11 @@ class          Throwable
      * Iterator over exceptions.
      *
      * @access  public
-     * @return  \ArrayIterator
+     * @return  \Hoa\Iterator\Map
      */
     public function getIterator ( ) {
 
-        return new \ArrayIterator($this->getExceptions());
+        return new \Hoa\Iterator\Map($this->getExceptions());
     }
 
     /**
