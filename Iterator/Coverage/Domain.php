@@ -64,7 +64,7 @@ class Domain implements \Hoa\Iterator {
      *
      * @var \Hoa\Praspel\Iterator\Coverage\Domain array
      */
-    protected $_variables = null;
+    protected $_variables = array();
 
     /**
      * Number of variables.
