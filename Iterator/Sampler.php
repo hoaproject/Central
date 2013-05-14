@@ -34,6 +34,22 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+namespace {
+
+from('Hoa')
+
+/**
+ * \Hoa\Iterator
+ */
+-> import('Iterator.~')
+
+/**
+ * \Hoa\Praspel\Iterator\Coverage\Domain
+ */
+-> import('Praspel.Iterator.Coverage.Domain');
+
+}
+
 namespace Hoa\Praspel\Iterator {
 
 /**
@@ -46,7 +62,7 @@ namespace Hoa\Praspel\Iterator {
  * @license    New BSD License
  */
 
-class Sampler implements \Iterator {
+class Sampler implements \Hoa\Iterator {
 
     /**
      * Key value is variable name.
@@ -68,13 +84,6 @@ class Sampler implements \Iterator {
      * @var \Hoa\Praspel\Model\Declaration object
      */
     protected $_declaration = null;
-
-    /**
-     * Max number of data to generate.
-     *
-     * @var \Hoa\Praspel\Iterator\Sampler int
-     */
-    protected $_maxData     = null;
 
     /**
      * Key type (please, see self::KEY_AS_* constants).
@@ -104,6 +113,13 @@ class Sampler implements \Iterator {
      */
     protected $_current     = null;
 
+    /**
+     * Coverage iterator.
+     *
+     * @var \Hoa\Praspel\Iterator\Coverage\Domain object
+     */
+    protected $_coverage    = null;
+
 
 
     /**
@@ -111,8 +127,6 @@ class Sampler implements \Iterator {
      *
      * @access  public
      * @param   \Hoa\Praspel\Model\Declaration  $declaration    Declaration.
-     * @param   int                             $maxData        Maximum data to
-     *                                                          sample.
      * @param   int                             $keyType        Key type (plese,
      *                                                          see
      *                                                          self::KEY_AS*
@@ -120,11 +134,9 @@ class Sampler implements \Iterator {
      * @return  void
      */
     public function __construct ( \Hoa\Praspel\Model\Declaration $declaration,
-                                  $maxData = 5,
                                   $keyType = self::KEY_AS_VARIABLE_NAME ) {
 
         $this->_declaration = $declaration;
-        $this->_maxData     = $maxData;
         $this->_keyType     = $keyType;
 
         return;
@@ -178,22 +190,34 @@ class Sampler implements \Iterator {
      */
     public function next ( ) {
 
-        $handle = array();
+        $this->_coverage->next();
+        $this->_current();
 
-        if(empty($this->_variables))
-            $this->_variables = $this->_declaration->getLocalVariables();
+        return $this->current();
+    }
+
+    /**
+     * Prepare the current value.
+     *
+     * @access  protected
+     * @return  void
+     */
+    protected function _current ( ) {
+
+        $current = $this->_coverage->current();
+        $handle  = array();
 
         if(self::KEY_AS_VARIABLE_NAME === $this->_keyType)
-            foreach($this->_variables as $variable)
-                $handle[$variable->getName()] = $variable->sample();
+            foreach($current as $name => $domain)
+                $handle[$name] = $domain->sample();
         else
-            foreach($this->_variables as $variable)
-                $handle[] = $variable->sample();
+            foreach($current as $domain)
+                $handle[] = $domain->sample();
 
         ++$this->_key;
         $this->_current = $handle;
 
-        return $this->current();
+        return;
     }
 
     /**
@@ -206,7 +230,17 @@ class Sampler implements \Iterator {
 
         $this->_key     = -1;
         $this->_current = null;
-        $this->next();
+
+        if(null === $this->_coverage) {
+
+            if(empty($this->_variables))
+                $this->_variables = $this->_declaration->getLocalVariables();
+
+            $this->_coverage = new Coverage\Domain($this->_variables);
+        }
+
+        $this->_coverage->rewind();
+        $this->_current();
 
         return;
     }
@@ -219,7 +253,7 @@ class Sampler implements \Iterator {
      */
     public function valid ( ) {
 
-        return $this->_key < $this->_maxData;
+        return $this->_coverage->valid();
     }
 }
 
