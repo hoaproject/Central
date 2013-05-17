@@ -63,7 +63,8 @@ namespace Hoa\Irc {
  * An IRC client.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2013 Ivan Enderlin.
+ * @author     Yohann Dupont <yohann.dupont@hoa-project.net>
+ * @copyright  Copyright © 2007-2013 Ivan Enderlin, Yohann Dupont.
  * @license    New BSD License
  */
 
