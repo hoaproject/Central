@@ -61,7 +61,8 @@ namespace Hoa\Bench {
  * marks, or count the number of marks.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2013 Ivan Enderlin.
+ * @author     Julien Clauzel <julien.clauzel@hoa-project.net>> 
+ * @copyright  Copyright © 2007-2013 Ivan Enderlin, Julien Clauzel.
  * @license    New BSD License
  */
 
@@ -88,7 +89,28 @@ class Bench implements \Iterator, \Countable {
      */
     protected static $_mark = array();
 
+    /**
+     * Collection of filter.
+     *
+     * @var \Hoa\Bench array
+     */
 
+    protected $_filters = array();
+
+    /**
+     * Filter output drawing
+     *
+     * @access  public
+     * @param   \Closure $filter    like function ($name , $time , $pourcent) { return bool; }
+     * @return  void
+     */
+
+    public function filter(\Closure $filter){
+
+            $this->_filters[] = $filter;
+
+            return;
+    }
 
     /**
      * Get a mark.
@@ -308,7 +330,22 @@ class Bench implements \Iterator, \Countable {
         $width   = $width - $margin - 18;
         $format  = '%-' . $margin . 's  %-' . $width . 's %5dms, %5.1f%%' . "\n";
 
-        foreach($stats as $id => $stat)
+        foreach($stats as $id => $stat) {
+
+            $match = false;
+
+            if(!empty($this->_filters)){
+                foreach($this->_filters as $filter){
+                    if($filter($id , $stat[self::STAT_RESULT] , $stat[self::STAT_POURCENT]) === true){
+                        $match = true;
+                        break;
+                    }
+                }
+            }
+
+            if($match === true)
+                continue;
+
             $out .= sprintf(
                 $format,
                 $id,
@@ -318,7 +355,7 @@ class Bench implements \Iterator, \Countable {
                 round(1000 * $stat[self::STAT_RESULT]),
                 round($stat[self::STAT_POURCENT], 3)
             );
-
+        }
         return $out;
     }
 
