@@ -87,7 +87,7 @@ $worker->run();
 </code></pre>
   <p>Nous sommes <strong>libres</strong> de faire ce que nous voulons pour
   traiter la <strong>tâche</strong> !  Le format est totalement libre : binaire,
-  compressé, ligne de commande, objet sérialisé … nous pouvons envoyer ce que
+  compressé, ligne de commande, objet sérialisé… nous pouvons envoyer ce que
   nous voulons.</p>
 
   <h3 id="Ou_sont_stockes_les_profils_wid" for="main-toc">Où sont stockés les
