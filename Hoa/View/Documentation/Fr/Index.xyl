@@ -60,7 +60,7 @@
     <li><code>getOutputStream</code> doit retourner un flux implémentant
     l'interface <code>Hoa\Stream\IStream\Out</code> (voir
     <a href="@lh:chapter=Stream">la bibliothèque <code>Hoa\Stream</code></a>) ;
-    ça peut être un fichier, une chaîne de caractères, une réponse HTTP …</li>
+    ça peut être un fichier, une chaîne de caractères, une réponse HTTP…</li>
   </ul>
   <p>Même si cette approche peut sembler simpliste au premier abord, cette
   interface couvre l'ensemble des besoins, et vous permet d'écrire la vue que
