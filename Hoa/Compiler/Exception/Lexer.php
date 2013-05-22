@@ -48,7 +48,7 @@ from('Hoa')
 namespace Hoa\Compiler\Exception {
 
 /**
- * Class \Hoa\Compiler\Exception\UnrecognizedToken.
+ * Class \Hoa\Compiler\Exception\Lexer.
  *
  * Extending the \Hoa\Compiler\Exception class.
  *
@@ -57,48 +57,6 @@ namespace Hoa\Compiler\Exception {
  * @license    New BSD License
  */
 
-class UnrecognizedToken extends Exception {
-
-    /**
-     * Column.
-     *
-     * @var \Hoa\Compiler\Exception\UnrecognizedToken int
-     */
-    protected $column = 0;
-
-
-
-    /**
-     * Override line and add column support.
-     *
-     * @access  public
-     * @param   string  $message    Formatted message.
-     * @param   int     $code       Code (the ID).
-     * @param   array   $arg        RaiseError string arguments.
-     * @param   int     $line       Line.
-     * @param   int     $column     Column.
-     * @return  void
-     */
-    public function __construct ( $message, $code, $arg, $line, $column ) {
-
-        parent::__construct($message, $code, $arg);
-
-        $this->line   = $line;
-        $this->column = $column;
-
-        return;
-    }
-
-    /**
-     * Get column.
-     *
-     * @access  public
-     * @return  int
-     */
-    public function getColumn ( ) {
-
-        return $this->column;
-    }
-}
+class Lexer extends Exception { }
 
 }
