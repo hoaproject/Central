@@ -48,8 +48,8 @@ statistic graph that could be helpful:
      *     three  |||||||                                           11ms,  14.4%
      */
 
-More operations are available, such as iterating over all marks, deleting a mark
-etc.
+More operations are available, such as iterating over all marks, deleting a
+mark, filters marks etc.
 
 ### DTrace
 
@@ -62,7 +62,7 @@ we consider the `Dtrace.php` file that contains the following code:
     function f ( ) { g(); h(); }
     function g ( ) { h();      }
     function h ( ) {           }
-    
+
     f();
 
 Then, we can run DTrace like this:
