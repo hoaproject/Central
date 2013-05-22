@@ -26,10 +26,10 @@
         "php"    : ">=5.3.3",
         "ext-spl": "*"
     },
-    "require-dev": {
-        "hoa/console"   : "dev-master",
-        "hoa/dispatcher": "dev-master",
-        "hoa/router"    : "dev-master"
+    "suggest": {
+        "hoa/console"   : "To use the `hoa` script.",
+        "hoa/dispatcher": "To use the `hoa` script.",
+        "hoa/router"    : "To use the `hoa` script."
     },
     "minimum-stability": "dev",
     "autoload": {
