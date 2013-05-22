@@ -61,7 +61,7 @@ namespace Hoa\Bench {
  * marks, or count the number of marks.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @author     Julien Clauzel <julien.clauzel@hoa-project.net>> 
+ * @author     Julien Clauzel <julien.clauzel@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin, Julien Clauzel.
  * @license    New BSD License
  */
@@ -90,27 +90,13 @@ class Bench implements \Iterator, \Countable {
     protected static $_mark = array();
 
     /**
-     * Collection of filter.
+     * Collection of filters.
      *
      * @var \Hoa\Bench array
      */
+    protected $_filters     = array();
 
-    protected $_filters = array();
 
-    /**
-     * Filter output drawing
-     *
-     * @access  public
-     * @param   \Closure $filter    like function ($name , $time , $pourcent) { return bool; }
-     * @return  void
-     */
-
-    public function filter(\Closure $filter){
-
-            $this->_filters[] = $filter;
-
-            return;
-    }
 
     /**
      * Get a mark.
@@ -256,15 +242,45 @@ class Bench implements \Iterator, \Countable {
     }
 
     /**
+     * Add a filter.
+     * Used in the self::getStatistic() method, no in iterator.
+     * A filter is a callable that will receive 3 values about a mark: ID, time
+     * result, and time pourcent. The callable must return a boolean.
+     *
+     * @access  public
+     * @param   mixed  $callable    Callable.
+     * @return  void
+     */
+    public function filter ( $callable ) {
+
+        $this->_filters[] = xcallable($callable);
+
+        return $this;
+    }
+
+    /**
+     * Return all filters.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getFilters ( ) {
+
+        return $this->_filters;
+    }
+
+    /**
      * Get statistic.
      * Return an associative array : id => sub-array. The sub-array contains the
      * result time in second (given by the constant self::STAT_RESULT), and the
      * result pourcent (given by the constant self::START_POURCENT).
      *
      * @access  public
+     * @param   bool  $considerFilters    Whether we should consider filters or
+     *                                    not.
      * @return  array
      */
-    public function getStatistic ( ) {
+    public function getStatistic ( $considerFilters = true ) {
 
         if(empty(self::$_mark))
             return array();
@@ -272,11 +288,21 @@ class Bench implements \Iterator, \Countable {
         $max = $this->getLongest()->diff();
         $out = array();
 
-        foreach($this as $id => $mark)
+        foreach($this as $id => $mark) {
+
+            $result   = $mark->diff();
+            $pourcent = ($result * 100) / $max;
+
+            if(true === $considerFilters)
+                foreach($this->getFilters() as $filter)
+                    if(true !== $filter($id, $result, $pourcent))
+                        continue 2;
+
             $out[$id] = array(
-                self::STAT_RESULT   =>  $mark->diff(),
-                self::STAT_POURCENT => ($mark->diff() * 100) / $max
+                self::STAT_RESULT   => $result,
+                self::STAT_POURCENT => $pourcent
             );
+        }
 
         return $out;
     }
@@ -303,11 +329,10 @@ class Bench implements \Iterator, \Countable {
     }
 
     /**
-     * Draw statistic in text mode (yep, totally useless, but funny to
-     * develop :D).
+     * Draw statistic in text mode.
      *
      * @access  public
-     * @param   int     $width    The graphic width.
+     * @param   int  $width    The graphic width.
      * @return  string
      * @throw   \Hoa\Bench\Exception
      */
@@ -330,22 +355,7 @@ class Bench implements \Iterator, \Countable {
         $width   = $width - $margin - 18;
         $format  = '%-' . $margin . 's  %-' . $width . 's %5dms, %5.1f%%' . "\n";
 
-        foreach($stats as $id => $stat) {
-
-            $match = false;
-
-            if(!empty($this->_filters)){
-                foreach($this->_filters as $filter){
-                    if($filter($id , $stat[self::STAT_RESULT] , $stat[self::STAT_POURCENT]) === true){
-                        $match = true;
-                        break;
-                    }
-                }
-            }
-
-            if($match === true)
-                continue;
-
+        foreach($stats as $id => $stat)
             $out .= sprintf(
                 $format,
                 $id,
@@ -355,7 +365,7 @@ class Bench implements \Iterator, \Countable {
                 round(1000 * $stat[self::STAT_RESULT]),
                 round($stat[self::STAT_POURCENT], 3)
             );
-        }
+
         return $out;
     }
 
