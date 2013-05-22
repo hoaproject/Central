@@ -164,6 +164,39 @@ if(isset($bench->foo))
   correspondant au graphique vu précédemment et pour obtenir la marque qui a la
   plus longue exécution.</p>
 
+  <h3 id="Filtrer_les_marques" for="main-toc">Filtrer les marques</h3>
+
+  <p>La classe <code>Hoa\Bench</code> permet de <strong>filtrer</strong> les
+  marques lors de calculs de résultats (par example avec la méthode
+  <code>Hoa\Bench::getStatistic</code> ou <code>Hoa\Bench::__toString</code>
+  pour dessiner le graphique). Un filtre est un <em lang="en">callable</em> (par
+  exemple une fonction) qui reçoit trois arguments :
+  l'<strong>identifiant</strong> de la marque, sa <strong>durée</strong>
+  d'exécution en millisecondes et en pourcentage (par rapport à la marque la
+  plus longue). Un filtre est également un prédicat, c'est à dire que son
+  résultat est un booléen : <code>true</code> pour accepter la marque,
+  <code>false</code> pour la rejeter.</p>
+  <p>Par exemple, si nous avons beaucoup de marques et que nous voulons filtrer
+  le « bruit », c'est à dire les marques avec des petits temps d'exécutions
+  (disons inférieur à 5%), nous pouvons utiliser le filtre suivant :</p>
+  <pre><code class="language-php">$bench->filter(function ( $id, $time, $pourcent ) {
+
+    return $pourcent > 5;
+});</code></pre>
+  <p>Si nous nommons nos marques avec une nomenclature particulière, nous
+  pouvons filtrer à partir de leurs identifiants. Par exemple, nous voulons
+  toutes les marques comportant le sous-mot <code>_critical</code> :</p>
+  <pre><code class="language-php">$bench->filter(function ( $id, $time, $pourcent ) {
+
+    return 0 !== preg_match('#_critical#', $id);
+});</code></pre>
+  <p>Nous pouvons bien sûr ajouter plusieurs filtres.</p>
+  <p>Notons que la méthode <code>Hoa\Bench::getStatistic</code> permet de ne pas
+  considérer les filtres grâce à son seul argument
+  <code>$considerFilters</code>, par défaut à <code>true</code>. Il suffit de le
+  passer à <code>false</code> pour avoir tous les résultats.</p>
+
+
   <h2 id="DTrace" for="main-toc">DTrace</h2>
 
   <p>La bibliothèque <code>Hoa\Bench</code> fournit également des programmes
