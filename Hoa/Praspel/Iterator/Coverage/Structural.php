@@ -59,9 +59,9 @@ from('Hoa')
 -> import('Iterator.Recursive.~')
 
 /**
- * \Hoa\Iterator\Multiple
+ * \Hoa\Iterator\Demultiplexer
  */
--> import('Iterator.Multiple')
+-> import('Iterator.Demultiplexer')
 
 /**
  * \Hoa\Iterator\Recursive\Mock
@@ -398,25 +398,37 @@ class Structural implements \Hoa\Iterator\Recursive {
      */
     public function getChildren ( ) {
 
-        $pre      = array();
-        $post     = array();
-        $iterator = new \Hoa\Iterator\Multiple(
-            \Hoa\Iterator\Multiple::MIT_NEED_ANY
-          | \Hoa\Iterator\Multiple::MIT_KEYS_ASSOC
-        );
+        $variables = array();
 
         foreach($this->_current['pre'] as $clause)
             foreach($clause->getLocalVariables() as $variable)
-                $pre[] = $variable;
+                $variables[] = $variable;
 
         foreach($this->_current['post'] as $clause)
             foreach($clause->getLocalVariables() as $variable)
-                $post[] = $variable;
+                $variables[] = $variable;
 
-        $iterator->attachIterator(new Domain($pre), 'pre', array());
-        $iterator->attachIterator(new Domain($post), 'post', array());
+        return new \Hoa\Iterator\Recursive\Mock(
+            new \Hoa\Iterator\Demultiplexer(
+                new Domain($variables),
+                function ( $current ) {
 
-        return new \Hoa\Iterator\Recursive\Mock($iterator);
+                    $out = array('pre' => array(), 'post' => array());
+
+                    foreach($current as $name => $variable) {
+
+                        $clause = $variable->getHolder()->getClause();
+
+                        if($clause instanceof \Hoa\Praspel\Model\Requires)
+                            $out['pre'][$name]  = $variable;
+                        else
+                            $out['post'][$name] = $variable;
+                    }
+
+                    return $out;
+                }
+            )
+        );
     }
 }
 
