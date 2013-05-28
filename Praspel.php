@@ -281,6 +281,33 @@ class Praspel {
 
         return $_interpreter->visit($ast);
     }
+
+    /**
+     * Extract Praspel (as a string) from a comment.
+     *
+     * @access  public
+     * @param   string  $comment    Comment.
+     * @return  string
+     * @throw   \Hoa\Praspel\Exception
+     */
+    public static function extractFromComment ( $comment ) {
+
+        $i = preg_match('#/\*(.*?)\*/#s', $comment, $matches);
+
+        if(0 === $i)
+            throw new Exception(
+                'Not able to extract Praspel from the following ' .
+                'comment:' . "\n" . '%s', 1, $comment);
+
+        $i = preg_match_all('#^[\s\*]*([^\n]*)$#m', $matches[1], $maatches);
+
+        if(0 === $i)
+            throw new Exception(
+                'Not able to extract Praspel from the following ' .
+                'comment:' . "\n" . '%s', 2, $comment);
+
+        return trim(implode("\n", $maatches[1]));
+    }
 }
 
 }
