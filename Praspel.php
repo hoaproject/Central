@@ -312,7 +312,7 @@ class Praspel {
                 'Not able to extract Praspel from the following ' .
                 'comment:' . "\n" . '%s', 1, $comment);
 
-        $i = preg_match_all('#^[\s\*]*([^\n]*)$#m', $matches[1], $maatches);
+        $i = preg_match_all('#^[\s\*]*\s*\*\s?([^\n]*)$#m', $matches[1], $maatches);
 
         if(0 === $i)
             throw new Exception(
