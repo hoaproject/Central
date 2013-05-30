@@ -86,7 +86,7 @@ class Praspel {
      *
      * @var \Hoa\Praspel array
      */
-    protected $_data          = array();
+    protected $_data          = null;
 
     /**
      * Callable to validate and verify.
@@ -125,16 +125,19 @@ class Praspel {
 
         $callable   = $this->getCallable();
         $reflection = $callable->getReflection();
-        $variables  = $this->getData();
         $arguments  = array();
+        $data       = $this->getData();
+
+        if(null === $data)
+            $data = $this->generateData();
 
         foreach($reflection->getParameters() as $parameter) {
 
             $name = $parameter->getName();
 
-            if(true === array_key_exists($name, $variables)) {
+            if(true === array_key_exists($name, $data)) {
 
-                $arguments[$name] = &$variables[$name];
+                $arguments[$name] = &$data[$name];
                 continue;
             }
 
@@ -165,7 +168,7 @@ class Praspel {
         $return  = $callable->distributeArguments($arguments);
         $ensures = $specification->getClause('ensures');
 
-        if(isset($ensures['result']))
+        if(isset($ensures['\result']))
             $ensures['\result'] = $return;
 
         $postcondition = true;
@@ -203,6 +206,16 @@ class Praspel {
     public function getSpecification ( ) {
 
         return $this->_specification;
+    }
+
+    public function generateData ( ) {
+
+        $data = array();
+
+        foreach($this->_specification->getClause('requires') as $name => $variable)
+            $data[$name] = $variable->sample();
+
+        return $this->_data = $data;
     }
 
     /**
@@ -280,6 +293,33 @@ class Praspel {
         $ast = $_compiler->parse($praspel);
 
         return $_interpreter->visit($ast);
+    }
+
+    /**
+     * Extract Praspel (as a string) from a comment.
+     *
+     * @access  public
+     * @param   string  $comment    Comment.
+     * @return  string
+     * @throw   \Hoa\Praspel\Exception
+     */
+    public static function extractFromComment ( $comment ) {
+
+        $i = preg_match('#/\*(.*?)\*/#s', $comment, $matches);
+
+        if(0 === $i)
+            throw new Exception(
+                'Not able to extract Praspel from the following ' .
+                'comment:' . "\n" . '%s', 1, $comment);
+
+        $i = preg_match_all('#^[\s\*]*([^\n]*)$#m', $matches[1], $maatches);
+
+        if(0 === $i)
+            throw new Exception(
+                'Not able to extract Praspel from the following ' .
+                'comment:' . "\n" . '%s', 2, $comment);
+
+        return trim(implode("\n", $maatches[1]));
     }
 }
 
