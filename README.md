@@ -1,0 +1,29 @@
+![Hoa](http://static.hoa-project.net/Image/Hoa_small.png)
+
+Hoa is a **modular**, **extensible** and **structured** set of PHP libraries.
+Moreover, Hoa aims at being a bridge between industrial and research worlds.
+
+# Hoa\Praspel
+
+Praspel (PHP Realistic Annotation and Specification Language) is a formal
+specification language for PHP. It is based on the design-by-contract paradigm
+and uses preconditions, postconditions, invariants etc. Specifications are
+written in the comments of the PHP code (always accessible). Praspel is used for
+manual or automatic software validation and verification, thanks to realistic
+domains.
+
+This library contains compiler, interpreter, visitors, iterators and other tools
+around the Praspel language.
+
+An interesting related library is
+[`Hoathis\Atoum`](https://github.com/hoaproject/Hoathis-Atoum).
+
+## Documentation
+
+Different documentations can be found on the website:
+[http://hoa-project.net/](http://hoa-project.net/).
+
+## License
+
+Hoa is under the New BSD License (BSD-3-Clause). Please, see
+[`LICENSE`](http://hoa-project.net/LICENSE).
