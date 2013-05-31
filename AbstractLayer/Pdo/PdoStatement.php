@@ -123,14 +123,7 @@ class PdoStatement implements \Hoa\Database\IDal\WrapperStatement {
      * @return  \Hoa\Database\Pdo\PdoStatement
      * @throw   \Hoa\Database\Exception
      */
-    public function execute ( Array $bindParameters = array() ) {
-
-        if(empty($bindParameters)) {
-
-            $this->getStatement()->execute();
-
-            return $this;
-        }
+    public function execute ( Array $bindParameters = null ) {
 
         if(false === $this->getStatement()->execute($bindParameters))
             throw new \Hoa\Database\Exception(
