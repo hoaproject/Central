@@ -764,6 +764,8 @@ class Consistency implements \ArrayAccess {
     public static function disableImportWhenUnserializing ( ) {
 
         ini_restore('unserialize_callback_func');
+
+        return;
     }
 
     /**
