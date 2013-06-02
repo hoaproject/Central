@@ -39,6 +39,11 @@ namespace {
 from('Hoa')
 
 /**
+ * \Hoa\Iterator\SplFileInfo
+ */
+-> import('Iterator.SplFileInfo')
+
+/**
  * \Hoa\File\Exception
  */
 -> import('File.Exception')
@@ -65,14 +70,14 @@ namespace Hoa\File {
 /**
  * Class \Hoa\File\SplFileInfo.
  *
- * Link between SplFileInfo and \Hoa\File.
+ * Link between \Hoa\Iterator\SplFileInfo and \Hoa\File.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class SplFileInfo extends \SplFileInfo {
+class SplFileInfo extends \Hoa\Iterator\SplFileInfo {
 
     /**
      * Current stream.
@@ -81,43 +86,7 @@ class SplFileInfo extends \SplFileInfo {
      */
     protected $_stream = null;
 
-    /**
-     * Hash.
-     *
-     * @var \Hoa\File\SplFileInfo string
-     */
-    protected $_hash   = null;
 
-
-
-    /**
-     * Construct.
-     *
-     * @access  public
-     * @return  void
-     */
-    public function __construct ( $filename ) {
-
-        parent::__construct($filename);
-
-        $this->_hash = md5(
-            $this->getPathname() .
-            $this->getCTime()
-        );
-
-        return;
-    }
-
-    /**
-     * Get the hash.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getHash ( ) {
-
-        return $this->_hash;
-    }
 
     /**
      * Open the SplFileInfo as a Hoa\File stream.
@@ -137,7 +106,7 @@ class SplFileInfo extends \SplFileInfo {
         elseif(true === $this->isLink())
             return $this->_stream = new Link\ReadWrite($this->getPathname());
 
-        throw new Exception('%s has a unknown type.', 0, $this->getPathname());
+        throw new Exception('%s has an unknown type.', 0, $this->getPathname());
     }
 
     /**
