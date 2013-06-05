@@ -246,8 +246,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      * Special variables: _domain, _subdomain, _call, _able and _request.
      *
      * @access  public
-     * @param   string  $uri       URI or complete URL (without scheme). If
-     *                             null, it will be deduced. Can contain
+     * @param   string  $uri       URI. If null, it will be deduced. Can contain
      *                             subdomain.
      * @param   string  $prefix    Path prefix. If null, it will be deduced.
      * @return  \Hoa\Router\Http
