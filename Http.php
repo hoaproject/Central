@@ -218,14 +218,10 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
                          implode(', ', self::$_methods)));
 
         if(   _static == $this->_subdomainStack
-           && false   != strpos($pattern, '@')) {
-
+           && false   != strpos($pattern, '@'))
             $this->_subdomainStack = _dynamic;
 
-            if(null !== $suffix = $this->getSubdomainSuffix())
-                $pattern = str_replace('@', '\.' . $suffix . '@', $pattern);
-        }
-        elseif(null !== $suffix = $this->getSubdomainSuffix())
+        if(null !== $suffix = $this->getSubdomainSuffix())
             $pattern = str_replace('@', '\.' . $suffix . '@', $pattern);
 
         $this->_rules[$id] = array(
