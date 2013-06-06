@@ -398,7 +398,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
     /**
      * Unroute a rule (i.e. route()^-1).
-     * Special variables: _domain, _subdomain and _fragment.
+     * Special variables: _subdomain and _fragment.
      * _subdomain accepts 3 keywords:
      *     * __root__ to go back to the root (with the smallest subdomain);
      *     * __self__ to copy the current subdomain (useful if you want a
