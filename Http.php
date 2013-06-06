@@ -825,7 +825,10 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      */
     public function isSecure ( ) {
 
-        return 443 === $this->getPort();
+        if(!isset($_SERVER['HTTPS']))
+            return false;
+
+        return !empty($_SERVER['HTTPS']) && 'off' !== $_SERVER['HTTPS'];
     }
 }
 
