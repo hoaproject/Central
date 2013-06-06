@@ -213,7 +213,7 @@ class Cli extends Generic implements \Hoa\Core\Parameter\Parameterizable {
     public function route ( $uri = null, $base = null ) {
 
         if(null === $uri)
-            $uri = $this->getURI();
+            $uri = static::getURI();
 
         $method = $this->getMethod();
         $rules  = array_filter(
@@ -337,7 +337,7 @@ class Cli extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      * @access  public
      * @return  string
      */
-    public function getURI ( ) {
+    public static function getURI ( ) {
 
         if(!isset($_SERVER['argv']))
             return null;
