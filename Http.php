@@ -180,7 +180,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
             );
         }
 
-        $this->setDefaultPort($this->getPort(), $this->isSecure());
+        $this->setDefaultPort(static::getPort(), static::isSecure());
 
         return;
     }
@@ -265,7 +265,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
         if(null === $uri) {
 
-            $uri       = $this->getURI();
+            $uri       = static::getURI();
             $subdomain = $this->getSubdomain();
         }
         else {
@@ -374,7 +374,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
         array_shift($muri);
         $sub = array_shift($msubdomain) ?: null;
-        $rule[Router::RULE_VARIABLES]['_domain']    =  $this->getDomain();
+        $rule[Router::RULE_VARIABLES]['_domain']    =  static::getDomain();
         $rule[Router::RULE_VARIABLES]['_subdomain'] =  $sub;
         $rule[Router::RULE_VARIABLES]['_call']      = &$rule[Router::RULE_CALL];
         $rule[Router::RULE_VARIABLES]['_able']      = &$rule[Router::RULE_ABLE];
@@ -464,7 +464,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
                     'Subdomain is empty, cannot unroute the rule %s properly.',
                     6, $id);
 
-            $secure = null === $secured ? $this->isSecure() : $secured;
+            $secure = null === $secured ? static::isSecure() : $secured;
 
             if(false !== $pos = strpos($pattern, '@'))
                 $pattern = substr($pattern, $pos + 1);
@@ -530,7 +530,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
                 return $prependPrefix($this->_unroute($id, $pattern, $variables)) .
                        $anchor;
 
-            $secure = null === $secured ? $this->isSecure() : $secured;
+            $secure = null === $secured ? static::isSecure() : $secured;
 
             return (true === $secure ? 'https://' : 'http://') .
                    $this->_unroute($id, $subPattern, $variables, false) .
@@ -698,9 +698,9 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
         $sub = $this->getSubdomain();
 
         if(empty($sub))
-            return $this->getDomain();
+            return static::getDomain();
 
-        return substr($this->getDomain(), strlen($sub) + 1);
+        return substr(static::getDomain(), strlen($sub) + 1);
     }
 
     /**
@@ -712,7 +712,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      */
     public function getSubdomain ( $withSuffix = true ) {
 
-        $domain = $this->getDomain();
+        $domain = static::getDomain();
 
         if(empty($domain))
             return null;
