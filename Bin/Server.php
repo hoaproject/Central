@@ -128,8 +128,7 @@ class Server extends \Hoa\Console\Dispatcher\Kit {
             if('to' !== $inputs[$i + 1])
                 continue;
 
-            $to   = $inputs[$i + 2];
-
+            $to                  = $inputs[$i + 2];
             $redirections[$from] = $to;
         }
 
@@ -149,7 +148,7 @@ class Server extends \Hoa\Console\Dispatcher\Kit {
                     return $to;
                 }
 
-            echo '127.0.0.1.', "\n";
+            echo '127.0.0.1 (default).', "\n";
 
             return '127.0.0.1';
         });
