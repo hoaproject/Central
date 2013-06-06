@@ -89,6 +89,20 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
     protected $_pathPrefix      = null;
 
     /**
+     * HTTP port.
+     *
+     * @var \Hoa\Router\Http int
+     */
+    protected $_httpPort        = 80;
+
+    /**
+     * HTTPS port.
+     *
+     * @var \Hoa\Router\Http int
+     */
+    protected $_httpsPort       = 443;
+
+    /**
      * HTTP methods that the router understand.
      *
      * @var \Hoa\Router\Http array
@@ -166,6 +180,8 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
             );
         }
 
+        $this->setDefaultPort(static::getPort(), static::isSecure());
+
         return;
     }
 
@@ -218,15 +234,8 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
                          implode(', ', self::$_methods)));
 
         if(   _static == $this->_subdomainStack
-           && false   != strpos($pattern, '@')) {
-
+           && false   != strpos($pattern, '@'))
             $this->_subdomainStack = _dynamic;
-
-            if(null !== $suffix = $this->getSubdomainSuffix())
-                $pattern = str_replace('@', '\.' . $suffix . '@', $pattern);
-        }
-        elseif(null !== $suffix = $this->getSubdomainSuffix())
-            $pattern = str_replace('@', '\.' . $suffix . '@', $pattern);
 
         $this->_rules[$id] = array(
             Router::RULE_VISIBILITY => $visibility,
@@ -246,8 +255,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      * Special variables: _domain, _subdomain, _call, _able and _request.
      *
      * @access  public
-     * @param   string  $uri       URI or complete URL (without scheme). If
-     *                             null, it will be deduced. Can contain
+     * @param   string  $uri       URI. If null, it will be deduced. Can contain
      *                             subdomain.
      * @param   string  $prefix    Path prefix. If null, it will be deduced.
      * @return  \Hoa\Router\Http
@@ -257,7 +265,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
         if(null === $uri) {
 
-            $uri       = $this->getURI();
+            $uri       = static::getURI();
             $subdomain = $this->getSubdomain();
         }
         else {
@@ -290,11 +298,17 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
         unset($_REQUEST[$_uri = str_replace('.', '_', $uri)]);
         unset($_GET[$_uri]);
 
-        $method         = $this->getMethod();
-        $subdomainStack = $this->getSubdomainStack();
-        $rules          = array_filter(
+        $method          = $this->getMethod();
+        $subdomainStack  = $this->getSubdomainStack();
+        $subdomainSuffix = $this->getSubdomainSuffix();
+
+        if(null !== $subdomainSuffix)
+            $subdomainSuffix = '\.' . $subdomainSuffix;
+
+        $rules = array_filter(
             $this->getRules(),
-            function ( $rule ) use ( &$method, &$subdomain, &$subdomainStack ) {
+            function ( $rule ) use ( &$method, &$subdomain, &$subdomainStack,
+                                     &$subdomainSuffix ) {
 
                 if(Router::VISIBILITY_PUBLIC != $rule[Router::RULE_VISIBILITY])
                     return false;
@@ -308,8 +322,9 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
                     else
                         return 0 !== preg_match(
                             '#^' .
-                            substr($rule[Router::RULE_PATTERN], 0, $pos)
-                            . '$#i',
+                            substr($rule[Router::RULE_PATTERN], 0, $pos) .
+                            $subdomainSuffix .
+                            '$#i',
                             $subdomain
                         );
 
@@ -347,7 +362,10 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
         if(false !== $pos)
             preg_match(
-                '#^' . substr($rule[Router::RULE_PATTERN], 0, $pos) . '$#i',
+                '#^' .
+                substr($rule[Router::RULE_PATTERN], 0, $pos) .
+                $subdomainSuffix .
+                '$#i',
                 $subdomain,
                 $msubdomain
             );
@@ -356,7 +374,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
         array_shift($muri);
         $sub = array_shift($msubdomain) ?: null;
-        $rule[Router::RULE_VARIABLES]['_domain']    =  $this->getDomain();
+        $rule[Router::RULE_VARIABLES]['_domain']    =  static::getDomain();
         $rule[Router::RULE_VARIABLES]['_subdomain'] =  $sub;
         $rule[Router::RULE_VARIABLES]['_call']      = &$rule[Router::RULE_CALL];
         $rule[Router::RULE_VARIABLES]['_able']      = &$rule[Router::RULE_ABLE];
@@ -382,7 +400,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
     /**
      * Unroute a rule (i.e. route()^-1).
-     * Special variables: _domain, _subdomain and _fragment.
+     * Special variables: _subdomain and _fragment.
      * _subdomain accepts 3 keywords:
      *     * __root__ to go back to the root (with the smallest subdomain);
      *     * __self__ to copy the current subdomain (useful if you want a
@@ -429,6 +447,15 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
             return $prefix . $unroute;
         };
+        $getPort = function ( $secure ) {
+
+            $defaultPort = $this->getDefaultPort($secure);
+
+            if(false === $secure)
+                return 80 !== $defaultPort ? ':' . $defaultPort : '';
+
+            return 443 !== $defaultPort ? ':' . $defaultPort  : '';
+        };
 
         if(true === array_key_exists('_subdomain', $variables)) {
 
@@ -437,8 +464,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
                     'Subdomain is empty, cannot unroute the rule %s properly.',
                     6, $id);
 
-            $port   = $this->getPort();
-            $secure = null === $secured ? $this->isSecure() : $secured;
+            $secure = null === $secured ? static::isSecure() : $secured;
 
             if(false !== $pos = strpos($pattern, '@'))
                 $pattern = substr($pattern, $pos + 1);
@@ -487,7 +513,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
             return (true === $secure ? 'https://' : 'http://') .
                    $subdomain .
                    $this->getStrictDomain() .
-                   (80 !== $port ? (false === $secure ? ':' . $port : ':443') : '') .
+                   $getPort($secure) .
                    $prependPrefix($this->_unroute($id, $pattern, $variables)) .
                    $anchor;
         }
@@ -497,17 +523,19 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
             $subPattern = substr($pattern, 0, $pos);
             $pattern    = substr($pattern, $pos + 1);
 
+            if(null !== $suffix)
+                $subPattern .= '.' . $suffix;
+
             if($suffix === $subPattern)
                 return $prependPrefix($this->_unroute($id, $pattern, $variables)) .
                        $anchor;
 
-            $port   = $this->getPort();
-            $secure = null === $secured ? $this->isSecure() : $secured;
+            $secure = null === $secured ? static::isSecure() : $secured;
 
             return (true === $secure ? 'https://' : 'http://') .
                    $this->_unroute($id, $subPattern, $variables, false) .
                    '.' . $this->getStrictDomain() .
-                   (80 !== $port ? (false === $secure ? ':' . $port : ':443') : '') .
+                   $getPort($secure) .
                    $prependPrefix($this->_unroute($id, $pattern, $variables)) .
                    $anchor;
         }
@@ -598,7 +626,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      * @return  string
      * @throw   \Hoa\Router\Exception
      */
-    public function getURI ( ) {
+    public static function getURI ( ) {
 
         if('cli' === php_sapi_name())
             return ltrim(@$_SERVER['argv'][1] ?: '', '/');
@@ -621,7 +649,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      * @access  public
      * @return  array
      */
-    public function getQuery ( ) {
+    public static function getQuery ( ) {
 
         if('cli' === php_sapi_name())
             return array();
@@ -646,15 +674,20 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      * @access  public
      * @return  string
      */
-    public function getDomain ( ) {
+    public static function getDomain ( ) {
 
-        if('cli' === php_sapi_name())
-            return '';
+        static $domain = null;
 
-        $domain = $_SERVER['HTTP_HOST'];
+        if(null === $domain) {
 
-        if(false !== $pos = strpos($domain, ':'))
-            return substr($domain, 0, $pos);
+            if('cli' === php_sapi_name())
+                return $domain = '';
+
+            $domain = $_SERVER['HTTP_HOST'];
+
+            if(0 !== preg_match('#^(.+):' . static::getPort() . '$#', $domain, $m))
+                $domain = $m[1];
+        }
 
         return $domain;
     }
@@ -670,9 +703,9 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
         $sub = $this->getSubdomain();
 
         if(empty($sub))
-            return $this->getDomain();
+            return static::getDomain();
 
-        return substr($this->getDomain(), strlen($sub) + 1);
+        return substr(static::getDomain(), strlen($sub) + 1);
     }
 
     /**
@@ -684,36 +717,41 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      */
     public function getSubdomain ( $withSuffix = true ) {
 
-        $domain = $this->getDomain();
+        static $subdomain = null;
 
-        if(empty($domain))
-            return null;
+        if(null === $subdomain) {
 
-        if($domain == long2ip(ip2long($domain)))
-            return null;
+            $domain = static::getDomain();
 
-        if(2 > substr_count($domain, '.', 1))
-            return null;
+            if(empty($domain))
+                return null;
 
-        $subdomain = substr(
-            $domain,
-            0,
-            strrpos(
+            if($domain == long2ip(ip2long($domain)))
+                return null;
+
+            if(2 > substr_count($domain, '.', 1))
+                return null;
+
+            $subdomain = substr(
                 $domain,
-                '.',
-                -(strlen($domain) - strrpos($domain, '.') + 1)
-            )
-        );
+                0,
+                strrpos(
+                    $domain,
+                    '.',
+                    -(strlen($domain) - strrpos($domain, '.') + 1)
+                )
+            );
+        }
 
         if(true === $withSuffix)
             return $subdomain;
 
         $suffix = $this->getSubdomainSuffix();
 
-        if(null !== $suffix)
-            $subdomain = substr($subdomain, 0, -strlen($suffix) - 1);
+        if(null === $suffix)
+            return $subdomain;
 
-        return $subdomain;
+        return substr($subdomain, 0, -strlen($suffix) - 1);
     }
 
     /**
@@ -774,7 +812,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      * @access  public
      * @return  int
      */
-    public function getPort ( ) {
+    public static function getPort ( ) {
 
         if('cli' === php_sapi_name())
             return 80;
@@ -788,7 +826,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      * @access  public
      * @return  string
      */
-    public function getBootstrap ( ) {
+    public static function getBootstrap ( ) {
 
         if('cli' === php_sapi_name())
             return '';
@@ -823,14 +861,56 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
     }
 
     /**
+     * Set port.
+     *
+     * @access  public
+     * @param   int   $port      Port.
+     * @param   bool  $secure    Whether the connection is secured.
+     * @return  int
+     */
+    public function setDefaultPort ( $port, $secure = false ) {
+
+        if(false === $secure) {
+
+            $old             = $this->_httpPort;
+            $this->_httpPort = $port;
+        }
+        else {
+
+            $old              = $this->_httpsPort;
+            $this->_httpsPort = $port;
+        }
+
+        return $old;
+    }
+
+    /**
+     * Get HTTP port.
+     *
+     * @access  public
+     * @param   bool  $secure    Whether the connection is secured.
+     * @return  int
+     */
+    public function getDefaultPort ( $secure = false ) {
+
+        if(false === $secure)
+            return $this->_httpPort;
+
+        return $this->_httpsPort;
+    }
+
+    /**
      * Whether the connection is secure.
      *
      * @access  public
      * @return  bool
      */
-    public function isSecure ( ) {
+    public static function isSecure ( ) {
 
-        return 443 === $this->getPort();
+        if(!isset($_SERVER['HTTPS']))
+            return false;
+
+        return !empty($_SERVER['HTTPS']) && 'off' !== $_SERVER['HTTPS'];
     }
 }
 

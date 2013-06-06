@@ -105,7 +105,6 @@ class Cli extends Generic implements \Hoa\Core\Parameter\Parameterizable {
             $this,
             array(),
             array(
-                'base'          => null,
                 'rules.public'  => array(),
                 'rules.private' => array()
             )
@@ -206,14 +205,13 @@ class Cli extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      * @access  public
      * @param   string  $uri     URI or complete URL (without scheme). If null,
      *                           it will be deduce.
-     * @param   string  $base    Base. If null, it will be deduce.
      * @return  \Hoa\Router\Cli
      * @throw   \Hoa\Router\Exception\NotFound
      */
-    public function route ( $uri = null, $base = null ) {
+    public function route ( $uri = null ) {
 
         if(null === $uri)
-            $uri = $this->getURI();
+            $uri = static::getURI();
 
         $method = $this->getMethod();
         $rules  = array_filter(
@@ -337,7 +335,7 @@ class Cli extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      * @access  public
      * @return  string
      */
-    public function getURI ( ) {
+    public static function getURI ( ) {
 
         if(!isset($_SERVER['argv']))
             return null;
