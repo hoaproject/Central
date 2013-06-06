@@ -180,6 +180,8 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
             );
         }
 
+        $this->setDefaultPort($this->getPort(), $this->isSecure());
+
         return;
     }
 
@@ -445,12 +447,14 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
             return $prefix . $unroute;
         };
-        $getPort = function ( $port, $secure ) {
+        $getPort = function ( $secure ) {
+
+            $defaultPort = $this->getDefaultPort($secure);
 
             if(false === $secure)
-                return 80 !== $port ? ':' . $this->getDefaultPort(false) : '';
+                return 80 !== $defaultPort ? ':' . $defaultPort : '';
 
-            return 443 !== $port ? ':' . $this->getDefaultPort(true)  : '';
+            return 443 !== $defaultPort ? ':' . $defaultPort  : '';
         };
 
         if(true === array_key_exists('_subdomain', $variables)) {
@@ -460,7 +464,6 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
                     'Subdomain is empty, cannot unroute the rule %s properly.',
                     6, $id);
 
-            $port   = $this->getPort();
             $secure = null === $secured ? $this->isSecure() : $secured;
 
             if(false !== $pos = strpos($pattern, '@'))
@@ -510,7 +513,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
             return (true === $secure ? 'https://' : 'http://') .
                    $subdomain .
                    $this->getStrictDomain() .
-                   $getPort($port, $secure) .
+                   $getPort($secure) .
                    $prependPrefix($this->_unroute($id, $pattern, $variables)) .
                    $anchor;
         }
@@ -527,13 +530,12 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
                 return $prependPrefix($this->_unroute($id, $pattern, $variables)) .
                        $anchor;
 
-            $port   = $this->getPort();
             $secure = null === $secured ? $this->isSecure() : $secured;
 
             return (true === $secure ? 'https://' : 'http://') .
                    $this->_unroute($id, $subPattern, $variables, false) .
                    '.' . $this->getStrictDomain() .
-                   $getPort($port, $secure) .
+                   $getPort($secure) .
                    $prependPrefix($this->_unroute($id, $pattern, $variables)) .
                    $anchor;
         }
