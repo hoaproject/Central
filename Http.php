@@ -221,9 +221,6 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
            && false   != strpos($pattern, '@'))
             $this->_subdomainStack = _dynamic;
 
-        if(null !== $suffix = $this->getSubdomainSuffix())
-            $pattern = str_replace('@', '\.' . $suffix . '@', $pattern);
-
         $this->_rules[$id] = array(
             Router::RULE_VISIBILITY => $visibility,
             Router::RULE_ID         => $id,
@@ -285,11 +282,17 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
         unset($_REQUEST[$_uri = str_replace('.', '_', $uri)]);
         unset($_GET[$_uri]);
 
-        $method         = $this->getMethod();
-        $subdomainStack = $this->getSubdomainStack();
-        $rules          = array_filter(
+        $method          = $this->getMethod();
+        $subdomainStack  = $this->getSubdomainStack();
+        $subdomainSuffix = $this->getSubdomainSuffix();
+
+        if(null !== $subdomainSuffix)
+            $subdomainSuffix = '\.' . $subdomainSuffix;
+
+        $rules = array_filter(
             $this->getRules(),
-            function ( $rule ) use ( &$method, &$subdomain, &$subdomainStack ) {
+            function ( $rule ) use ( &$method, &$subdomain, &$subdomainStack,
+                                     &$subdomainSuffix ) {
 
                 if(Router::VISIBILITY_PUBLIC != $rule[Router::RULE_VISIBILITY])
                     return false;
@@ -303,8 +306,9 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
                     else
                         return 0 !== preg_match(
                             '#^' .
-                            substr($rule[Router::RULE_PATTERN], 0, $pos)
-                            . '$#i',
+                            substr($rule[Router::RULE_PATTERN], 0, $pos) .
+                            $subdomainSuffix .
+                            '$#i',
                             $subdomain
                         );
 
@@ -342,7 +346,10 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
         if(false !== $pos)
             preg_match(
-                '#^' . substr($rule[Router::RULE_PATTERN], 0, $pos) . '$#i',
+                '#^' .
+                substr($rule[Router::RULE_PATTERN], 0, $pos) .
+                $subdomainSuffix .
+                '$#i',
                 $subdomain,
                 $msubdomain
             );
@@ -491,6 +498,9 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
             $subPattern = substr($pattern, 0, $pos);
             $pattern    = substr($pattern, $pos + 1);
+
+            if(null !== $suffix)
+                $subPattern .= '.' . $suffix;
 
             if($suffix === $subPattern)
                 return $prependPrefix($this->_unroute($id, $pattern, $variables)) .
