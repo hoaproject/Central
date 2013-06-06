@@ -676,13 +676,18 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      */
     public static function getDomain ( ) {
 
-        if('cli' === php_sapi_name())
-            return '';
+        static $domain = null;
 
-        $domain = $_SERVER['HTTP_HOST'];
+        if(null === $domain) {
 
-        if(false !== $pos = strpos($domain, ':'))
-            return substr($domain, 0, $pos);
+            if('cli' === php_sapi_name())
+                return $domain = '';
+
+            $domain = $_SERVER['HTTP_HOST'];
+
+            if(0 !== preg_match('#^(.+):' . static::getPort() . '$#', $domain, $m))
+                $domain = $m[1];
+        }
 
         return $domain;
     }
