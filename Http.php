@@ -593,7 +593,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      * @return  string
      * @throw   \Hoa\Router\Exception
      */
-    public function getURI ( ) {
+    public static function getURI ( ) {
 
         if('cli' === php_sapi_name())
             return ltrim(@$_SERVER['argv'][1] ?: '', '/');
@@ -616,7 +616,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      * @access  public
      * @return  array
      */
-    public function getQuery ( ) {
+    public static function getQuery ( ) {
 
         if('cli' === php_sapi_name())
             return array();
@@ -641,7 +641,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      * @access  public
      * @return  string
      */
-    public function getDomain ( ) {
+    public static function getDomain ( ) {
 
         if('cli' === php_sapi_name())
             return '';
@@ -769,7 +769,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      * @access  public
      * @return  int
      */
-    public function getPort ( ) {
+    public static function getPort ( ) {
 
         if('cli' === php_sapi_name())
             return 80;
@@ -783,7 +783,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      * @access  public
      * @return  string
      */
-    public function getBootstrap ( ) {
+    public static function getBootstrap ( ) {
 
         if('cli' === php_sapi_name())
             return '';
@@ -823,7 +823,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      * @access  public
      * @return  bool
      */
-    public function isSecure ( ) {
+    public static function isSecure ( ) {
 
         if(!isset($_SERVER['HTTPS']))
             return false;
