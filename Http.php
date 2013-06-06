@@ -89,6 +89,20 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
     protected $_pathPrefix      = null;
 
     /**
+     * HTTP port.
+     *
+     * @var \Hoa\Router\Http int
+     */
+    protected $_httpPort        = 80;
+
+    /**
+     * HTTPS port.
+     *
+     * @var \Hoa\Router\Http int
+     */
+    protected $_httpsPort       = 443;
+
+    /**
      * HTTP methods that the router understand.
      *
      * @var \Hoa\Router\Http array
@@ -431,6 +445,13 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
             return $prefix . $unroute;
         };
+        $getPort = function ( $port, $secure ) {
+
+            if(false === $secure)
+                return 80 !== $port ? ':' . $this->getDefaultPort(false) : '';
+
+            return 443 !== $port ? ':' . $this->getDefaultPort(true)  : '';
+        };
 
         if(true === array_key_exists('_subdomain', $variables)) {
 
@@ -489,7 +510,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
             return (true === $secure ? 'https://' : 'http://') .
                    $subdomain .
                    $this->getStrictDomain() .
-                   (80 !== $port ? (false === $secure ? ':' . $port : ':443') : '') .
+                   $getPort($port, $secure) .
                    $prependPrefix($this->_unroute($id, $pattern, $variables)) .
                    $anchor;
         }
@@ -512,7 +533,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
             return (true === $secure ? 'https://' : 'http://') .
                    $this->_unroute($id, $subPattern, $variables, false) .
                    '.' . $this->getStrictDomain() .
-                   (80 !== $port ? (false === $secure ? ':' . $port : ':443') : '') .
+                   $getPort($port, $secure) .
                    $prependPrefix($this->_unroute($id, $pattern, $variables)) .
                    $anchor;
         }
@@ -825,6 +846,45 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
     public function getPrefix ( ) {
 
         return $this->_pathPrefix;
+    }
+
+    /**
+     * Set port.
+     *
+     * @access  public
+     * @param   int   $port      Port.
+     * @param   bool  $secure    Whether the connection is secured.
+     * @return  int
+     */
+    public function setDefaultPort ( $port, $secure = false ) {
+
+        if(false === $secure) {
+
+            $old             = $this->_httpPort;
+            $this->_httpPort = $port;
+        }
+        else {
+
+            $old              = $this->_httpsPort;
+            $this->_httpsPort = $port;
+        }
+
+        return $old;
+    }
+
+    /**
+     * Get HTTP port.
+     *
+     * @access  public
+     * @param   bool  $secure    Whether the connection is secured.
+     * @return  int
+     */
+    public function getDefaultPort ( $secure = false ) {
+
+        if(false === $secure)
+            return $this->_httpPort;
+
+        return $this->_httpsPort;
     }
 
     /**
