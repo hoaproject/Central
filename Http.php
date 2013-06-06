@@ -712,36 +712,41 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      */
     public function getSubdomain ( $withSuffix = true ) {
 
-        $domain = static::getDomain();
+        static $subdomain = null;
 
-        if(empty($domain))
-            return null;
+        if(null === $subdomain) {
 
-        if($domain == long2ip(ip2long($domain)))
-            return null;
+            $domain = static::getDomain();
 
-        if(2 > substr_count($domain, '.', 1))
-            return null;
+            if(empty($domain))
+                return null;
 
-        $subdomain = substr(
-            $domain,
-            0,
-            strrpos(
+            if($domain == long2ip(ip2long($domain)))
+                return null;
+
+            if(2 > substr_count($domain, '.', 1))
+                return null;
+
+            $subdomain = substr(
                 $domain,
-                '.',
-                -(strlen($domain) - strrpos($domain, '.') + 1)
-            )
-        );
+                0,
+                strrpos(
+                    $domain,
+                    '.',
+                    -(strlen($domain) - strrpos($domain, '.') + 1)
+                )
+            );
+        }
 
         if(true === $withSuffix)
             return $subdomain;
 
         $suffix = $this->getSubdomainSuffix();
 
-        if(null !== $suffix)
-            $subdomain = substr($subdomain, 0, -strlen($suffix) - 1);
+        if(null === $suffix)
+            return $subdomain;
 
-        return $subdomain;
+        return substr($subdomain, 0, -strlen($suffix) - 1);
     }
 
     /**
