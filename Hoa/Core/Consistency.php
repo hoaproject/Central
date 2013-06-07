@@ -926,7 +926,7 @@ class Xcallable {
      *                                 object if not precised).
      * @return  mixed
      */
-    public function getValidCallback ( Array &$arguments ) {
+    public function getValidCallback ( Array &$arguments = array() ) {
 
         $callback = $this->_callback;
         $head     = null;
