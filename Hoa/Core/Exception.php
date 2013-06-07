@@ -232,7 +232,7 @@ class Idle extends \Exception {
 
         if(   true === $previous
            && null !== $previous = $this->getPreviousThrow())
-            $out .= "\n\n" . '⬇' . "\n\n" .
+            $out .= "\n\n" . '    ⬇' . "\n\n" .
                     'Nested exception (' . get_class($previous) . '):' . "\n" .
                     $previous->raise(true);
 
@@ -256,12 +256,7 @@ class Idle extends \Exception {
             ob_end_flush();
 
         echo 'Uncaught exception (' . get_class($exception) . '):' . "\n" .
-             $exception->raise();
-
-        if(null !== $previous = $exception->getPreviousThrow())
-            echo "\n\n" . '⬇' . "\n\n" .
-                 'Nested exception (' . get_class($previous) . '):' . "\n" .
-                 $previous->raise(true);
+             $exception->raise(true);
 
         return;
     }
@@ -392,6 +387,151 @@ class Error extends Exception {
         parent::__construct($message, $code);
 
         return;
+    }
+}
+
+/**
+ * Class \Hoa\Core\Exception\Group.
+ *
+ * This is an exception that contains a group of exceptions.
+ *
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2013 Ivan Enderlin.
+ * @license    New BSD License
+ */
+
+class          Group
+    extends    Exception
+    implements \ArrayAccess, \IteratorAggregate, \Countable {
+
+    /**
+     * All exceptions.
+     *
+     * @var \Hoa\Core\Exception\Group array
+     */
+    protected $_group = array();
+
+
+
+    /**
+     * Raise an exception as a string.
+     *
+     * @access  public
+     * @param   bool    $previous    Whether raise previous exception if exists.
+     * @return  string
+     */
+    public function raise ( $previous = false ) {
+
+        $out = parent::raise($previous);
+
+        if(0 >= count($this))
+            return $out;
+
+        $out .= "\n\n" . 'Contain the following exceptions:' . "\n";
+
+        foreach($this as $exception)
+            $out .= "\n" . '  • ' . str_replace(
+                "\n",
+                "\n" . '    ',
+                $exception->raise($previous)
+            );
+
+        return $out;
+    }
+
+    /**
+     * Check if an index in the group exists.
+     *
+     * @access  public
+     * @param   mixed  $index    Index.
+     * @return  bool
+     */
+    public function offsetExists ( $index ) {
+
+        return true === array_key_exists($index, $this->_group);
+    }
+
+    /**
+     * Get an exception from the group.
+     *
+     * @access  public
+     * @param   mixed  $index    Index.
+     * @return  \Exception
+     */
+    public function offsetGet ( $index ) {
+
+        if(false === $this->offsetExists($index))
+            return null;
+
+        return $this->_group[$index];
+    }
+
+    /**
+     * Set an exception in the group.
+     *
+     * @access  public
+     * @param   mixed       $index        Index.
+     * @param   \Exception  $exception    Exception.
+     * @return  void
+     */
+    public function offsetSet ( $index, $exception ) {
+
+        if(!($exception instanceof \Exception))
+            return null;
+
+        if(null === $index)
+            $this->_group[]       = $exception;
+        else
+            $this->_group[$index] = $exception;
+
+        return;
+    }
+
+    /**
+     * Remove an exception in the group.
+     *
+     * @access  public
+     * @param   mixed  $index    Index.
+     * @return  void
+     */
+    public function offsetUnset ( $index ) {
+
+        unset($this->_group[$index]);
+
+        return;
+    }
+
+    /**
+     * Get all exceptions in the group.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getExceptions ( ) {
+
+        return $this->_group;
+    }
+
+    /**
+     * Get an iterator on the group.
+     *
+     * @access  public
+     * @return  \ArrayIterator
+     */
+    public function getIterator ( ) {
+
+        return new \ArrayIterator($this->getExceptions());
+    }
+
+    /**
+     * Count the number of exceptions in the group.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function count ( ) {
+
+        return count($this->getExceptions());
     }
 }
 
