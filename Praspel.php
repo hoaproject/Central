@@ -79,6 +79,11 @@ from('Hoa')
 -> import('Praspel.Visitor.Interpreter')
 
 /**
+ * \Hoa\Praspel\Visitor\Praspel
+ */
+-> import('Praspel.Visitor.Praspel')
+
+/**
  * \Hoa\Compiler\Llk
  */
 -> import('Compiler.Llk.~')
@@ -109,21 +114,28 @@ class Praspel {
      *
      * @var \Hoa\Praspel\Model\Specification object
      */
-    protected $_specification = null;
+    protected $_specification  = null;
 
     /**
      * Data of the specification.
      *
      * @var \Hoa\Praspel array
      */
-    protected $_data          = null;
+    protected $_data           = null;
 
     /**
      * Callable to validate and verify.
      *
      * @var \Hoa\Core\Consistency\Xcallable object
      */
-    protected $_callable      = null;
+    protected $_callable       = null;
+
+    /**
+     * Visitor Praspel.
+     *
+     * @var \Hoa\Praspel\Visitor\Praspel object
+     */
+    protected $_visitorPraspel = null;
 
 
 
@@ -271,7 +283,8 @@ class Praspel {
             if(false === $_verdict)
                 $exceptions[] = new $exception(
                     'Variable %s does not verify the constraint %s.',
-                    0, array($name, $variable->getDomains()->toPraspel()));
+                    0,
+                    array($name, $this->getVisitorPraspel()->visit($variable)));
 
             $verdict = $_verdict && $verdict;
         }
@@ -377,6 +390,20 @@ class Praspel {
     public function getCallable ( ) {
 
         return $this->_callable;
+    }
+
+    /**
+     * Get visitor Praspel.
+     *
+     * @access  protected
+     * @return  \Hoa\Praspel\Visitor\Praspel
+     */
+    protected function getVisitorPraspel ( ) {
+
+        if(null === $this->_visitorPraspel)
+            $this->_visitorPraspel = new Visitor\Praspel();
+
+        return $this->_visitorPraspel;
     }
 
     /**
