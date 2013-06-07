@@ -113,7 +113,7 @@ class Praspel implements \Hoa\Visitor\Visit {
             $oout   = array();
 
             foreach($element as $name => $var)
-                $oout[] = $var->accept($this, $handle, $eldnah);
+                $oout[] = ' ' . $var->accept($this, $handle, $eldnah);
 
             foreach($element->getPredicates() as $predicate)
                 $oout[] = ' \pred(\'' . $predicate . '\')';
@@ -125,9 +125,9 @@ class Praspel implements \Hoa\Visitor\Visit {
             $name = $element->getName();
 
             if(true === $element->isLocal())
-                $out = ' let';
+                $out = 'let ';
 
-            $out .= ' ' . $name;
+            $out .= $name;
 
             if(null === $alias = $element->getAlias())
                 $out .= ': ' . $element->getDomains()->toPraspel();
