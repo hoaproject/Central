@@ -232,7 +232,7 @@ class Idle extends \Exception {
 
         if(   true === $previous
            && null !== $previous = $this->getPreviousThrow())
-            $out .= "\n\n" . '⬇' . "\n\n" .
+            $out .= "\n\n" . '    ⬇' . "\n\n" .
                     'Nested exception (' . get_class($previous) . '):' . "\n" .
                     $previous->raise(true);
 
@@ -256,12 +256,7 @@ class Idle extends \Exception {
             ob_end_flush();
 
         echo 'Uncaught exception (' . get_class($exception) . '):' . "\n" .
-             $exception->raise();
-
-        if(null !== $previous = $exception->getPreviousThrow())
-            echo "\n\n" . '⬇' . "\n\n" .
-                 'Nested exception (' . get_class($previous) . '):' . "\n" .
-                 $previous->raise(true);
+             $exception->raise(true);
 
         return;
     }
