@@ -39,11 +39,6 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Visitor\Visit
- */
--> import('Visitor.Visit')
-
-/**
  * \Hoa\Praspel\Exception\Interpreter
  */
 -> import('Praspel.Exception.Interpreter')
@@ -52,6 +47,11 @@ from('Hoa')
  * \Hoa\Praspel\Model\Specification
  */
 -> import('Praspel.Model.Specification')
+
+/**
+ * \Hoa\Visitor\Visit
+ */
+-> import('Visitor.Visit')
 
 /**
  * \Hoa\String

@@ -34,18 +34,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+namespace {
+
+from('Hoa')
+
+/**
+ * \Hoa\Praspel\Exception
+ */
+-> import('Praspel.Exception.~');
+
+}
+
 namespace Hoa\Praspel\Exception {
 
 /**
- * Interface \Hoa\Praspel\Exception.
+ * Class \Hoa\Praspel\Exception\Generic.
  *
- * Interface representing Hoa\Praspel exceptions.
+ * Extending the \Hoa\Core\Exception\Group class.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-interface Exception { }
+class Group extends \Hoa\Core\Exception\Group implements Exception { }
 
 }
