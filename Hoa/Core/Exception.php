@@ -427,7 +427,7 @@ class          Group
         if(0 >= count($this))
             return $out;
 
-        $out .= "\n\n" . 'Contain the following exceptions:' . "\n";
+        $out .= "\n\n" . 'Contains the following exceptions:' . "\n";
 
         foreach($this as $exception)
             $out .= "\n" . '  • ' . str_replace(
