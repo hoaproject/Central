@@ -39,9 +39,9 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Praspel\Exception
+ * \Hoa\Praspel\Exception\Generic
  */
--> import('Praspel.Exception.~');
+-> import('Praspel.Exception.Generic');
 
 }
 
@@ -50,13 +50,13 @@ namespace Hoa\Praspel\Exception {
 /**
  * Class \Hoa\Praspel\Exception\Model.
  *
- * Extending the \Hoa\Praspel\Exception class.
+ * Extending the \Hoa\Praspel\Exception\Generic class.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Model extends Exception { }
+class Model extends Generic { }
 
 }

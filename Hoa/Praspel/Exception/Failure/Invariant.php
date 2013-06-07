@@ -34,18 +34,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Praspel\Exception {
+namespace {
+
+from('Hoa')
 
 /**
- * Interface \Hoa\Praspel\Exception.
+ * \Hoa\Praspel\Exception\Failure
+ */
+-> import('Praspel.Exception.Failure.~');
+
+}
+
+namespace Hoa\Praspel\Exception\Failure {
+
+/**
+ * Class \Hoa\Praspel\Exception\Failure\Invariant.
  *
- * Interface representing Hoa\Praspel exceptions.
+ * Extending the \Hoa\Praspel\Exception\Failure class.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-interface Exception { }
+class Invariant extends Failure { }
 
 }

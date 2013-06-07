@@ -39,6 +39,11 @@ namespace {
 from('Hoa')
 
 /**
+ * \Hoa\Praspel\Exception\Compiler
+ */
+-> import('Praspel.Exception.Compiler')
+
+/**
  * \Hoa\Visitor\Visit
  */
 -> import('Visitor.Visit');
@@ -200,7 +205,7 @@ class Compiler implements \Hoa\Visitor\Visit {
             foreach($element as $el)
                 $out .= $el->accept($this, $handle, $eldnah);
         else
-            throw new \Hoa\Core\Exception(
+            throw new \Hoa\Praspel\Exception\Compiler(
                 '%s is not yet implemented.', 0, get_class($element));
 
         return $out;
