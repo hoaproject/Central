@@ -39,9 +39,39 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Praspel\Exception
+ * \Hoa\Praspel\Exception\Generic
  */
--> import('Praspel.Exception.~')
+-> import('Praspel.Exception.Generic')
+
+/**
+ * \Hoa\Praspel\Exception\Group
+ */
+-> import('Praspel.Exception.Group')
+
+/**
+ * \Hoa\Praspel\Exception\Failure\Precondition
+ */
+-> import('Praspel.Exception.Failure.Precondition')
+
+/**
+ * \Hoa\Praspel\Exception\Failure\Postcondition
+ */
+-> import('Praspel.Exception.Failure.Postcondition')
+
+/**
+ * \Hoa\Praspel\Exception\Failure\Exceptional
+ */
+-> import('Praspel.Exception.Failure.Exceptional')
+
+/**
+ * \Hoa\Praspel\Exception\Failure\Invariant
+ */
+-> import('Praspel.Exception.Failure.Invariant')
+
+/**
+ * \Hoa\Praspel\Exception\Failure\InternalPrecondition
+ */
+-> import('Praspel.Exception.Failure.InternalPrecondition')
 
 /**
  * \Hoa\Praspel\Visitor\Interpreter
@@ -123,13 +153,21 @@ class Praspel {
      */
     public function evaluate ( ) {
 
-        $callable   = $this->getCallable();
-        $reflection = $callable->getReflection();
-        $arguments  = array();
-        $data       = $this->getData();
+        // Start.
+        $callable      = $this->getCallable();
+        $reflection    = $callable->getReflection();
+        $specification = $this->getSpecification();
+        $exceptions    = new \Hoa\Praspel\Exception\Group(
+            'The Runtime Assertion Checker has detected errors for %s.',
+            0, $callable);
 
-        if(null === $data)
-            $data = $this->generateData();
+        if($reflection instanceof \ReflectionMethod)
+            $reflection->setAccessible(true);
+
+
+        // Prepare data.
+        $data      = $this->getData() ?: $this->generateData();
+        $arguments = array();
 
         foreach($reflection->getParameters() as $parameter) {
 
@@ -142,44 +180,103 @@ class Praspel {
             }
 
             if(false === $parameter->isOptional())
-                throw new Exception(
-                    'The evaluated callable needs a data for the argument $%s.',
-                    0, $name);
+                // Let the error be caught by the @requires clause.
+                continue;
 
             $arguments[$name] = $parameter->getDefaultValue();
         }
 
-        $specification = $this->getSpecification();
-        $requires      = $specification->getClause('requires');
-        $precondition  = true;
 
-        foreach($arguments as $name => $value) {
+        // Check precondition.
+        $precondition = true;
 
-            if(!isset($requires[$name]))
-                $variable = $requires[$name]->in = realdom()->undefined();
+        if(true === $specification->clauseExists('requires')) {
 
-            $variable = &$requires[$name];
-            $variable->setValue($value);
-
-            $precondition =    $variable->predicate()
-                            && $precondition;
+            $requires     = $specification->getClause('requires');
+            $precondition = $this->checkClause(
+                $requires,
+                $arguments,
+                $exceptions,
+                __NAMESPACE__ . '\Exception\Failure\Precondition'
+            );
         }
 
-        $return  = $callable->distributeArguments($arguments);
-        $ensures = $specification->getClause('ensures');
+        if(0 < count($exceptions))
+            throw $exceptions;
 
-        if(isset($ensures['\result']))
-            $ensures['\result'] = $return;
 
+        // Invoke.
+        if($reflection instanceof \ReflectionFunction)
+            $return = $reflection->invokeArgs($arguments);
+        else {
+
+            $_callback = $callable->getValidCallback();
+            $_object   = $_callback[0];
+            $return    = $reflection->invokeArgs($_object, $arguments);
+        }
+
+
+        // Check postcondition.
         $postcondition = true;
 
-        foreach($ensures as $name => $variable) {
+        if(true === $specification->clauseExists('ensures')) {
 
-            $postcondition =    $variable->predicate()
-                             && $postcondition;
+            $ensures              = $specification->getClause('ensures');
+            $arguments['\result'] = $return;
+            $postcondition        = $this->checkClause(
+                $ensures,
+                $arguments,
+                $exceptions,
+                __NAMESPACE__ . '\Exception\Failure\Postcondition'
+            );
         }
 
+        if(0 < count($exceptions))
+            throw $exceptions;
+
+
+        // Verdict.
         return $precondition && $postcondition;
+    }
+
+    /**
+     * Check a clause.
+     *
+     * @access  protected
+     * @param   \Hoa\Praspel\Model\Declaration   $clause        Clause.
+     * @param   array                           &$data          Data.
+     * @param   \Hoa\Praspel\Exception\Group     $exceptions    Exceptions group.
+     * @param   string                           $exception     Exception to
+     *                                                          throw.
+     * @return  bool
+     * @throw   \Hoa\Praspel\Exception
+     */
+    protected function checkClause ( Model\Declaration $clause, Array &$data,
+                                     Exception\Group $exceptions, $exception ) {
+
+        $verdict = true;
+
+        foreach($clause as $name => $variable) {
+
+            if(false === array_key_exists($name, $data)) {
+
+                $exceptions[] = new $exception(
+                    'Variable %s has no value and is required.', 0, $name);
+
+                continue;
+            }
+
+            $_verdict = $variable->predicate($data[$name]);
+
+            if(false === $_verdict)
+                $exceptions[] = new $exception(
+                    'Variable %s does not verify the constraint %s.',
+                    0, array($name, $variable->getDomains()->toPraspel()));
+
+            $verdict = $_verdict && $verdict;
+        }
+
+        return $verdict;
     }
 
     /**
@@ -208,14 +305,26 @@ class Praspel {
         return $this->_specification;
     }
 
+    /**
+     * Generate data from the @requires clause.
+     *
+     * @access  public
+     * @return  array
+     */
     public function generateData ( ) {
 
-        $data = array();
+        $data          = array();
+        $specification = $this->getSpecification();
 
-        foreach($this->_specification->getClause('requires') as $name => $variable)
+        if(false === $specification->clauseExists('requires'))
+            return $data;
+
+        foreach($specification->getClause('requires') as $name => $variable)
             $data[$name] = $variable->sample();
 
-        return $this->_data = $data;
+        $this->setData($data);
+
+        return $data;
     }
 
     /**
@@ -308,14 +417,14 @@ class Praspel {
         $i = preg_match('#/\*(.*?)\*/#s', $comment, $matches);
 
         if(0 === $i)
-            throw new Exception(
+            throw new Exception\Generic(
                 'Not able to extract Praspel from the following ' .
                 'comment:' . "\n" . '%s', 1, $comment);
 
         $i = preg_match_all('#^[\s\*]*\s*\*\s?([^\n]*)$#m', $matches[1], $maatches);
 
         if(0 === $i)
-            throw new Exception(
+            throw new Exception\Generic(
                 'Not able to extract Praspel from the following ' .
                 'comment:' . "\n" . '%s', 2, $comment);
 
