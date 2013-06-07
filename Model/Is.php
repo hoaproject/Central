@@ -151,6 +151,22 @@ class Is extends Clause {
     }
 
     /**
+     * Get property name.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getPropertyName ( ) {
+
+        $out = array();
+
+        if(true === $this->is(static::PURE))
+            $out[] = 'pure';
+
+        return implode(', ', $out);
+    }
+
+    /**
      * Get property value from a string.
      *
      * @access  public
