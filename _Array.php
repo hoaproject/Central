@@ -129,8 +129,9 @@ class _Array extends Realdom {
         if(false === $this['length']->predicate($count))
             return false;
 
-        $pairs = $this['pairs']['pairs'];
-        $out   = false;
+        $pairs       = $this['pairs']['pairs'];
+        $out         = false;
+        $constraints = &$this->getConstraints();
 
         foreach($q as $_key => $_value) {
 
@@ -154,6 +155,25 @@ class _Array extends Realdom {
 
             if(false === $out)
                 return false;
+
+            if(isset($constraints['key'])) {
+
+                $out = true;
+
+                foreach($constraints['key'] as $kPair) {
+
+                    $key   = $kPair[0];
+                    $value = $kPair[1];
+
+                    if(false === $key->predicate($_key))
+                        continue;
+
+                    $out = $value->predicate($_value) && $out;
+                }
+            }
+
+            if(false === $out)
+                return $out;
         }
 
         if(   true === $this->is('unique')
