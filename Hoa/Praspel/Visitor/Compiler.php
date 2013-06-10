@@ -110,58 +110,87 @@ class Compiler implements \Hoa\Visitor\Visit {
         }
         elseif($element instanceof \Hoa\Praspel\Model\Declaration) {
 
-            $parent   = '$' . $element->getParent()->getId();
-            $variable = '$' . $element->getId();
-            $clause   = $element->getName();
+            $variable = '$' . ($eldnah ?: $element->getId());
             $out      = "\n" .
-                        $variable . ' = ' . $parent .
-                        '->getClause(\'' . $clause . '\');' . "\n";
+                        $variable . ' = $' . $element->getParent()->getId() .
+                        '->getClause(\'' . $element->getName() . '\');' . "\n";
 
-            foreach($element as $name => $var) {
-
-                $start  = $variable . '[\'' . $name . '\']';
-
-                if(true === $var->isLocal())
-                    $out .= $variable . '->let[\'' . $name . '\']';
-                else
-                    $out .= $start;
-
-                if(null === $alias = $var->getAlias())
-                    $out .= '->in = ' . $var->getDomains() . ';' . "\n";
-                else
-                    $out .= '->domainof(\'' . $alias . '\');' . "\n";
-
-                $constraints = $var->getConstraints();
-
-                if(isset($constraints['is']))
-                    $out .= $start . '->is(\'' .
-                            implode('\', \'', $constraints['is']) . '\');' .
-                            "\n";
-
-                if(isset($constraints['contains']))
-                    foreach($constraints['contains'] as $contains)
-                        $out .= $start . '->contains(' . $contains . ');' . "\n";
-
-                if(isset($constraints['key']))
-                    foreach($constraints['key'] as $pairs)
-                        $out .= $start . '->key(' . $pairs[0] . ')->in = ' .
-                                $pairs[1] . ';' . "\n";
-            }
+            foreach($element as $var)
+                $out .= $var->accept($this, $handle, $eldnah);
 
             foreach($element->getPredicates() as $predicate)
                 $out .= $variable . '->predicate(\'' . $predicate . '\');' . "\n";
         }
+        elseif($element instanceof \Hoa\Praspel\Model\Variable) {
+
+            $variable = '$' . ($eldnah ?: $element->getClause()->getId());
+            $name     = $element->getName();
+            $start    = $variable . '[\'' . $name . '\']';
+
+            if(true === $element->isLocal())
+                $out .= $variable . '->let[\'' . $name . '\']';
+            else
+                $out .= $start;
+
+            if(null === $alias = $element->getAlias())
+                $out .= '->in = ' . $element->getDomains() . ';' . "\n";
+            else
+                $out .= '->domainof(\'' . $alias . '\');' . "\n";
+
+            $constraints = $element->getConstraints();
+
+            if(isset($constraints['is']))
+                $out .= $start . '->is(\'' .
+                        implode('\', \'', $constraints['is']) . '\');' .
+                        "\n";
+
+            if(isset($constraints['contains']))
+                foreach($constraints['contains'] as $contains)
+                    $out .= $start . '->contains(' . $contains . ');' . "\n";
+
+            if(isset($constraints['key']))
+                foreach($constraints['key'] as $pairs)
+                    $out .= $start . '->key(' . $pairs[0] . ')->in = ' .
+                            $pairs[1] . ';' . "\n";
+        }
         elseif($element instanceof \Hoa\Praspel\Model\Throwable) {
 
-            $parent   = '$' . $element->getParent()->getId();
-            $variable = '$' . $element->getId();
-            $out      = "\n" .
-                        $variable . ' = ' . $parent .
-                        '->getClause(\'throwable\');' . "\n";
+            $parent    = '$' . $element->getParent()->getId();
+            $_variable = $element->getId();
+            $variable  = '$' . $_variable;
+            $out       = "\n" .
+                         $variable . ' = ' . $parent .
+                         '->getClause(\'throwable\');' . "\n";
 
-            foreach($element->getExceptions() as $identifier => $class)
-                $out .= $variable . '[\'' . $identifier . '\'] = \'' . $class .
-                        '\';' . "\n";
+            foreach($element as $identifier) {
+
+                $exception  = $element[$identifier];
+                $start      = $variable . '[\'' . $identifier . '\']';
+                $out       .= $start . ' = \'' . $exception->getInstanceName() .
+                              '\';' . "\n";
+
+                if(false === $element->isDisjointed()) {
+
+                    if(null !== $with = $element->getWith()) {
+
+                        $temp = $_variable . '_' . $identifier . '_with';
+                        $out .= '$' . $temp . ' = ' .
+                                $variable . '->newWith();' . "\n";
+
+                        foreach($with as $var)
+                            $out .= $var->accept($this, $handle, $temp);
+
+                        foreach($with->getPredicates() as $predicate)
+                            $out .= '$' . $temp . '->predicate(\'' . $predicate .
+                                    '\');' . "\n";
+
+                        $out .= $start . '->setWith($' . $temp . ');' . "\n";
+                    }
+                }
+                else
+                    $out .= $start . '->disjunctionWith(\'' .
+                            $exception->getDisjunction() . '\');' . "\n";
+            }
         }
         elseif($element instanceof \Hoa\Praspel\Model\Behavior) {
 

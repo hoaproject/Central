@@ -44,6 +44,11 @@ from('Hoa')
 -> import('Praspel.Model.Clause')
 
 /**
+ * \Hoa\Praspel\Model\Ensures
+ */
+-> import('Praspel.Model.Ensures')
+
+/**
  * \Hoa\Iterator\Aggregate
  */
 -> import('Iterator.Aggregate')
@@ -78,14 +83,49 @@ class          Throwable
      *
      * @const string
      */
-    const NAME = 'throwable';
+    const NAME        = 'throwable';
+
+    /**
+     * Identifier index.
+     *
+     * @const int
+     */
+    const IDENTIFIER  = 0;
+
+    /**
+     * Instance of index.
+     *
+     * @const int
+     */
+    const INSTANCE_OF = 1;
+
+    /**
+     * With index.
+     *
+     * @const int
+     */
+    const WITH        = 2;
+
+    /**
+     * Disjunction index.
+     *
+     * @const int
+     */
+    const DISJUNCTION = 3;
 
     /**
      * List of exception names.
      *
      * @var \Hoa\Praspel\Model\Throwable array
      */
-    protected $_exceptions = array();
+    protected $_exceptions       = array();
+
+    /**
+     * Current exception.
+     *
+     * @var \Hoa\Praspel\Model\Throwable array
+     */
+    protected $_currentException = null;
 
 
 
@@ -93,41 +133,49 @@ class          Throwable
      * Check if an exception identifier exists.
      *
      * @access  public
-     * @param   string  $offset    Exception identifier.
+     * @param   string  $identifier    Exception identifier.
      * @return  bool
      */
-    public function offsetExists ( $offset ) {
+    public function offsetExists ( $identifier ) {
 
-        return isset($this->_exceptions[$offset]);
+        return isset($this->_exceptions[$identifier]);
     }
 
     /**
-     * Get an exception.
+     * Select an exception.
      *
      * @access  public
-     * @param   string  $offset    Exception identifier.
-     * @return  \Hoa\Prasel\Model\Variable
+     * @param   string  $identifier    Exception identifier.
+     * @return  \Hoa\Praspel\Model\Throwable
      */
-    public function offsetGet ( $offset ) {
+    public function offsetGet ( $identifier ) {
 
-        if(false === $this->offsetExists($offset))
+        if(false === $this->offsetExists($identifier))
             return null;
 
-        return $this->_exceptions[$offset];
+        unset($this->_currentException);
+        $this->_currentException = &$this->_exceptions[$identifier];
+
+        return $this;
     }
 
     /**
      * Add an exception.
      *
      * @access  public
-     * @param   string  $offset    Exception identifier.
-     * @param   mixed   $value     Exception classname.
+     * @param   string  $identifier       Exception identifier.
+     * @param   mixed   $instanceName     Exception instance name.
      * @return  mixed
      */
-    public function offsetSet ( $offset, $value ) {
+    public function offsetSet ( $identifier, $instanceName ) {
 
-        $old                        = $this->offsetGet($offset);
-        $this->_exceptions[$offset] = $value;
+        $old                            = $this->offsetGet($identifier);
+        $this->_exceptions[$identifier] = array(
+            static::IDENTIFIER  => $identifier,
+            static::INSTANCE_OF => $instanceName,
+            static::WITH        => null,
+            static::DISJUNCTION => null
+        );
 
         return $old;
     }
@@ -136,14 +184,134 @@ class          Throwable
      * Delete an exception.
      *
      * @access  public
-     * @param   string  $offset    Exception identifier.
+     * @param   string  $identifier    Exception identifier.
      * @return  void
      */
-    public function offsetUnset ( $offset ) {
+    public function offsetUnset ( $identifier ) {
 
-        unset($this->_exceptions[$offset]);
+        unset($this->_exceptions[$identifier]);
 
         return;
+    }
+
+    /**
+     * Get instance name.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getInstanceName ( ) {
+
+        if(null === $this->_currentException)
+            return null;
+
+        return $this->_currentException[static::INSTANCE_OF];
+    }
+
+    /**
+     * Create a new with instance (an Hoa\Praspel\Model\Ensures instance with
+     * this instance as parent).
+     *
+     * @access  public
+     * @return  \Hoa\Praspel\Model\Ensures
+     */
+    public function newWith ( ) {
+
+        return new Ensures($this);
+    }
+
+    /**
+     * Set with declaration.
+     *
+     * @access  public
+     * @param   \Hoa\Praspel\Model\Ensures  $with    With.
+     * @return  \Hoa\Praspel\Model\Throwable
+     */
+    public function setWith ( Ensures $with ) {
+
+        if(null === $this->_currentException)
+            return $this;
+
+        $this->_currentException[static::WITH] = $with;
+
+        return $this;
+    }
+
+    /**
+     * Get with declaration.
+     *
+     * @access  public
+     * @return  \Hoa\Praspel\Model\Ensures
+     */
+    public function getWith ( ) {
+
+        if(null === $this->_currentException)
+            return null;
+
+        return $this->_currentException[static::WITH];
+    }
+
+    /**
+     * Declare that this exception is disjointed with another one.
+     *
+     * @access  public
+     * @param   string  $identifier    Identifier.
+     * @return  \Hoa\Praspel\Model\Throwable
+     */
+    public function disjunctionWith ( $identifier ) {
+
+        if(null === $this->_currentException)
+            return $this;
+
+        if(false === isset($this[$identifier]))
+            return $this;
+
+        $_identifier                           = &$this->_exceptions[$identifier];
+        $this->_currentException[static::WITH] = &$_identifier[static::WITH];
+
+        if(true === is_array($_identifier[static::DISJUNCTION]))
+            $_identifier[static::DISJUNCTION][] =
+                $this->_currentException[static::IDENTIFIER];
+        else
+            $_identifier[static::DISJUNCTION] = array(
+                $this->_currentException[static::IDENTIFIER]
+            );
+
+        $this->_currentException[static::DISJUNCTION] = $identifier;
+
+        return $this;
+    }
+
+    /**
+     * Check if an exception is disjointed with another one.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isDisjointed ( ) {
+
+        return is_string($this->getDisjunction());
+    }
+
+    /**
+     * Get disjointed exceptions.
+     * Example:
+     *     T1 t1 or T2 t2 or T3 t3
+     * For t1, this method will return an array containing t2 and t3.
+     * For t2, this method will return a string equals to t1.
+     * Same for t3.
+     * If this method returns null, it means that the exception is not in a
+     * disjunction.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function getDisjunction ( ) {
+
+        if(null === $this->_currentException)
+            return null;
+
+        return $this->_currentException[static::DISJUNCTION];
     }
 
     /**
@@ -165,7 +333,7 @@ class          Throwable
      */
     public function getIterator ( ) {
 
-        return new \Hoa\Iterator\Map($this->getExceptions());
+        return new \Hoa\Iterator\Map(array_keys($this->getExceptions()));
     }
 
     /**

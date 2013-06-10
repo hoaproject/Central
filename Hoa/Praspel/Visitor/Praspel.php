@@ -154,8 +154,39 @@ class Praspel implements \Hoa\Visitor\Visit {
 
             $oout = array();
 
-            foreach($element->getExceptions() as $identifier => $class)
-                $oout[] = ' ' . $class . ' ' . $identifier;
+            foreach($element as $identifier) {
+
+                $exception = $element[$identifier];
+
+                if(true === $exception->isDisjointed())
+                    continue;
+
+                $line = ' ' . $exception->getInstanceName() . ' ' .
+                        $identifier;
+
+                foreach((array) $exception->getDisjunction() as $_identifier) {
+
+                    $_exception = $element[$_identifier];
+                    $line      .= ' or ' . $_exception->getInstanceName() . ' ' .
+                                  $_identifier;
+                }
+
+                if(null !== $with = $exception->getWith()) {
+
+                    $line .= ' with ';
+                    $liine = array();
+
+                    foreach($with as $var)
+                        $liine[] = $var->accept($this, $handle, $eldnah);
+
+                    foreach($with->getPredicates() as $predicate)
+                        $liine[] = '\pred(\'' . $predicate . '\')';
+
+                    $line .= implode(' and ', $liine);
+                }
+
+                $oout[] = $line;
+            }
 
             $out = '@throwable' . implode(' or', $oout) . ';';
         }
