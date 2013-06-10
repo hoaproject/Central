@@ -183,15 +183,28 @@ class Compiler implements \Hoa\Visitor\Visit {
                             $exception->getDisjunction() . '\');' . "\n";
             }
         }
+        elseif($element instanceof \Hoa\Praspel\Model\DefaultBehavior) {
+
+            $out = "\n" .
+                   '$' . $element->getId() . ' = $' .
+                   $element->getParent()->getId() .
+                   '->getClause(\'default\')' . "\n";
+
+            foreach($element::getAllowedClauses() as $clause)
+                if(true === $element->clauseExists($clause))
+                    $out .= $element->getClause($clause)->accept(
+                        $this,
+                        $handle,
+                        $eldnah
+                    );
+        }
         elseif($element instanceof \Hoa\Praspel\Model\Behavior) {
 
-            $parent     = '$' . $element->getParent()->getId();
-            $variable   = '$' . $element->getId();
-            $identifier = $element->getIdentifier();
-            $out        = "\n" .
-                          $variable . ' = ' . $parent .
-                          '->getClause(\'behavior\')' .
-                          '->get(\'' . $identifier . '\');' . "\n";
+            $out = "\n" .
+                   '$' . $element->getId() . ' = $' .
+                   $element->getParent()->getId() .
+                   '->getClause(\'behavior\')' .
+                   '->get(\'' . $element->getIdentifier() . '\');' . "\n";
 
             foreach($element::getAllowedClauses() as $clause)
                 if(true === $element->clauseExists($clause))

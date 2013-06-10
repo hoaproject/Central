@@ -74,6 +74,11 @@ from('Hoa')
 -> import('Praspel.Model.Invariant')
 
 /**
+ * \Hoa\Praspel\Model\DefaultBehavior
+ */
+-> import('Praspel.Model.DefaultBehavior')
+
+/**
  * \Hoa\Praspel\Model\Collection
  */
 -> import('Praspel.Model.Collection')
@@ -116,7 +121,8 @@ class Behavior extends Clause {
         'ensures',
         'throwable',
         'invariant',
-        'behavior'
+        'behavior',
+        'default'
     );
 
     /**
@@ -187,6 +193,10 @@ class Behavior extends Clause {
                         return;
                     }
                 );
+              break;
+
+            case 'default':
+                $handle = new DefaultBehavior($this);
               break;
 
             case 'description':

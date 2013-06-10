@@ -52,6 +52,7 @@
 %token  at_throwable    @throwable
 %token  at_invariant    @invariant
 %token  at_behavior     @behavior
+%token  at_default      @default
 %token  at_description  @description
 
 // Constructions.
@@ -126,7 +127,8 @@ method:
       | invariant()
     )
     ::semicolon::+
-  | ( behavior() | description() ) ::semicolon::*
+  | ( behavior() ::semicolon::* )+ default()? ::semicolon::*
+  | description() ::semicolon::*
 
 #is:
     ::at_is:: <pure>
@@ -156,10 +158,22 @@ behavior_content:
           | throwable()
           | invariant()
         )
-        ::semicolon::
-      | behavior() ::semicolon::?
+        ::semicolon::+
+      | ( behavior() ::semicolon::* )+ default()? ::semicolon::*
     )+
     ::_brace:: #behavior
+
+#default:
+    ::at_default:: ::brace_::
+    (
+      (
+          ensures()
+        | throwable()
+        | invariant()
+      )
+      ::semicolon::+
+    )+
+    ::_brace::
 
 #description:
     ::at_description:: string()

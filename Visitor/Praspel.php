@@ -180,6 +180,25 @@ class Praspel implements \Hoa\Visitor\Visit {
 
             $out = '@throwable' . implode(' or', $oout) . ';';
         }
+        elseif($element instanceof \Hoa\Praspel\Model\DefaultBehavior) {
+
+            $out  = '@default {' . "\n";
+            $oout = array();
+
+            foreach($element::getAllowedClauses() as $clause)
+                if(true === $element->clauseExists($clause))
+                    $oout[] = '    ' . str_replace(
+                        "\n",
+                        "\n" . '    ',
+                        $element->getClause($clause)->accept(
+                            $this,
+                            $handle,
+                            $eldnah
+                        )
+                    );
+
+            $out .= implode("\n", $oout) . "\n" . '}';
+        }
         elseif($element instanceof \Hoa\Praspel\Model\Behavior) {
 
             $out  = '@behavior ' . $element->getIdentifier() . ' {' . "\n";
