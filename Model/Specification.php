@@ -44,16 +44,6 @@ from('Hoa')
 -> import('Praspel.Model.Behavior')
 
 /**
- * \Hoa\Praspel\Model\Is
- */
--> import('Praspel.Model.Is')
-
-/**
- * \Hoa\Praspel\Model\Description
- */
--> import('Praspel.Model.Description')
-
-/**
  * \Hoa\Realdom\Disjunction
  */
 -> import('Realdom.Disjunction', true);
@@ -81,6 +71,21 @@ class Specification extends Behavior {
      */
     const NAME = '';
 
+    /**
+     * Allowed clauses.
+     *
+     * @var \Hoa\Praspel\Model\Specification array
+     */
+    protected static $_allowedClauses = array(
+        'is',
+        'requires',
+        'ensures',
+        'throwable',
+        'invariant',
+        'behavior',
+        'description'
+    );
+
 
 
     /**
@@ -92,68 +97,6 @@ class Specification extends Behavior {
     public function __construct ( ) {
 
         return;
-    }
-
-    /**
-     * Get a specific clause.
-     *
-     * @access  public
-     * @param   string  $clause    Clause (without leading arobase).
-     * @return  \Hoa\Praspel\Model\Clause
-     * @throw   \Hoa\Praspel\Exception\Model
-     */
-    public function getClause ( $clause ) {
-
-        if(isset($this->_clauses[$clause]))
-            return $this->_clauses[$clause];
-
-        $handle = null;
-
-        switch($clause) {
-
-            case 'is':
-                $handle = new Is($this);
-              break;
-
-            case 'requires':
-                $handle = new Requires($this);
-              break;
-
-            case 'ensures':
-                $handle = new Ensures($this);
-              break;
-
-            case 'throwable':
-                $handle = new Throwable($this);
-              break;
-
-            case 'invariant':
-                $handle = new Invariant($this);
-              break;
-
-            case 'behavior':
-                $handle = new Collection(
-                    new Behavior($this),
-                    function ( Behavior $clause, $identifier ) {
-
-                        $clause->setIdentifier($identifier);
-
-                        return;
-                    }
-                );
-              break;
-
-            case 'description':
-                $handle = new Description($this);
-              break;
-
-            default:
-                throw new \Hoa\Praspel\Exception\Model(
-                    'Clause @%s is unknown.',
-                    0, $clause);
-        }
-
-        return $this->_clauses[$clause] = $handle;
     }
 
     /**

@@ -49,6 +49,11 @@ from('Hoa')
 -> import('Praspel.Model.Clause')
 
 /**
+ * \Hoa\Praspel\Model\Is
+ */
+-> import('Praspel.Model.Is')
+
+/**
  * \Hoa\Praspel\Model\Requires
  */
 -> import('Praspel.Model.Requires')
@@ -71,7 +76,12 @@ from('Hoa')
 /**
  * \Hoa\Praspel\Model\Collection
  */
--> import('Praspel.Model.Collection');
+-> import('Praspel.Model.Collection')
+
+/**
+ * \Hoa\Praspel\Model\Description
+ */
+-> import('Praspel.Model.Description');
 
 }
 
@@ -97,18 +107,31 @@ class Behavior extends Clause {
     const NAME = 'behavior';
 
     /**
+     * Allowed clauses.
+     *
+     * @var \Hoa\Praspel\Model\Behavior array
+     */
+    protected static $_allowedClauses = array(
+        'requires',
+        'ensures',
+        'throwable',
+        'invariant',
+        'behavior'
+    );
+
+    /**
      * Clauses.
      *
      * @var \Hoa\Praspel\Model\Behavior array
      */
-    protected $_clauses    = array();
+    protected $_clauses               = array();
 
     /**
      * Identifier (@behavior <identifier> { … }).
      *
      * @var \Hoa\Praspel\Model\Behavior string
      */
-    protected $_identifier = null;
+    protected $_identifier            = null;
 
 
 
@@ -127,7 +150,16 @@ class Behavior extends Clause {
 
         $handle = null;
 
+        if(false === in_array($clause, static::getAllowedClauses()))
+            throw new \Hoa\Praspel\Exception\Model(
+                'Clause @%s is not allowed in @%s.',
+                1, array($clause, $this->getId()));
+
         switch($clause) {
+
+            case 'is':
+                $handle = new Is($this);
+              break;
 
             case 'requires':
                 $handle = new Requires($this);
@@ -157,10 +189,14 @@ class Behavior extends Clause {
                 );
               break;
 
+            case 'description':
+                $handle = new Description($this);
+              break;
+
             default:
                 throw new \Hoa\Praspel\Exception\Model(
-                    'Clause @%s is unknown or not allowed in %s.',
-                    0, array($clause, $this->getName()));
+                    'Clause @%s is unknown.',
+                    1, array($clause, $this->getName()));
         }
 
         return $this->_clauses[$clause] = $handle;
@@ -176,6 +212,17 @@ class Behavior extends Clause {
     public function clauseExists ( $clause ) {
 
         return isset($this->_clauses[$clause]);
+    }
+
+    /**
+     * Get allowed clauses.
+     *
+     * @access  public
+     * @return  array
+     */
+    public static function getAllowedClauses ( ) {
+
+        return static::$_allowedClauses;
     }
 
     /**
