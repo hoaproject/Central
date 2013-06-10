@@ -139,7 +139,6 @@ class Interpreter implements \Hoa\Visitor\Visit {
             case '#requires':
             case '#ensures':
             case '#invariant':
-            case '#throwable':
                 $this->_clause = $this->_current->getClause(substr($id, 1));
 
                 foreach($element->getChildren() as $child)
@@ -163,6 +162,50 @@ class Interpreter implements \Hoa\Visitor\Visit {
                 $this->_current = $previous;
               break;
 
+            case '#throwable':
+                $this->_clause = $this->_current->getClause('throwable');
+                $identifier    = null;
+
+                foreach($element->getChildren() as $child) {
+
+                    switch($child->getId()) {
+
+                        case '#exception_identifier':
+                            $_identifier = $child->getChild(1)->accept(
+                                $this,
+                                $handle,
+                                false
+                            );
+                            $_instanceof = $child->getChild(0)->accept(
+                                $this,
+                                $handle,
+                                false
+                            );
+
+                            $this->_clause[$_identifier] = $_instanceof;
+
+                            if(null === $identifier)
+                                $identifier = $_identifier;
+                            else
+                                $this->_clause[$_identifier]->disjunctionWith(
+                                    $identifier
+                                );
+                          break;
+
+                        case '#exception_with':
+                            $old           = $this->_clause;
+                            $this->_clause = $old->newWith();
+
+                            foreach($child->getChildren() as $_child)
+                                $_child->accept($this, $handle, $eldnah);
+
+                            $old[$identifier]->setWith($this->_clause);
+                            $this->_clause = $old;
+                          break;
+                    }
+                }
+              break;
+
             case '#description':
                 $this->_clause   = $this->_root->getClause('description');
                 $this->_clause[] = $element->getChild(0)->accept(
@@ -170,24 +213,6 @@ class Interpreter implements \Hoa\Visitor\Visit {
                     $handle,
                     $eldnah
                 );
-              break;
-
-            case '#exception_list':
-                for($i = 0, $max = $element->getChildrenNumber(); $i < $max; $i += 2) {
-
-                    $identifier = $element->getChild($i + 1)->accept(
-                        $this,
-                        $handle,
-                        false
-                    );
-                    $classname  = $element->getChild($i)->accept(
-                        $this,
-                        $handle,
-                        false
-                    );
-
-                    $this->_clause[$identifier] = $classname;
-                }
               break;
 
             case '#declaration':
