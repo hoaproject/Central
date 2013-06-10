@@ -80,19 +80,9 @@ class Praspel implements \Hoa\Visitor\Visit {
 
         if($element instanceof \Hoa\Praspel\Model\Specification) {
 
-            $clauses  = array(
-                'is',
-                'invariant',
-                'requires',
-                'ensures',
-                'behavior',
-                'throwable',
-                'description'
-            );
-
             $oout = array();
 
-            foreach($clauses as $clause)
+            foreach($element::getAllowedClauses() as $clause)
                 if(true === $element->clauseExists($clause))
                     $oout[] = $element->getClause($clause)->accept(
                         $this,
@@ -192,18 +182,10 @@ class Praspel implements \Hoa\Visitor\Visit {
         }
         elseif($element instanceof \Hoa\Praspel\Model\Behavior) {
 
-            $out     = '@behavior ' . $element->getIdentifier() . ' {' . "\n";
-            $clauses = array(
-                'invariant',
-                'requires',
-                'ensures',
-                'behavior',
-                'throwable'
-            );
-
+            $out  = '@behavior ' . $element->getIdentifier() . ' {' . "\n";
             $oout = array();
 
-            foreach($clauses as $clause)
+            foreach($element::getAllowedClauses() as $clause)
                 if(true === $element->clauseExists($clause))
                     $oout[] = '    ' . str_replace(
                         "\n",

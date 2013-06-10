@@ -82,17 +82,8 @@ class Compiler implements \Hoa\Visitor\Visit {
 
             $variable = '$' . $element->getId();
             $out      = $variable . ' = new \Hoa\Praspel\Model\Specification();' .  "\n";
-            $clauses  = array(
-                'is',
-                'invariant',
-                'requires',
-                'ensures',
-                'behavior',
-                'throwable',
-                'description'
-            );
 
-            foreach($clauses as $clause)
+            foreach($element::getAllowedClauses() as $clause)
                 if(true === $element->clauseExists($clause))
                     $out .= $element->getClause($clause)->accept(
                         $this,
@@ -201,15 +192,8 @@ class Compiler implements \Hoa\Visitor\Visit {
                           $variable . ' = ' . $parent .
                           '->getClause(\'behavior\')' .
                           '->get(\'' . $identifier . '\');' . "\n";
-            $clauses    = array(
-                'invariant',
-                'requires',
-                'ensures',
-                'behavior',
-                'throwable'
-            );
 
-            foreach($clauses as $clause)
+            foreach($element::getAllowedClauses() as $clause)
                 if(true === $element->clauseExists($clause))
                     $out .= $element->getClause($clause)->accept(
                         $this,
