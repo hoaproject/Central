@@ -159,7 +159,7 @@ class Behavior extends Clause {
         if(false === in_array($clause, static::getAllowedClauses()))
             throw new \Hoa\Praspel\Exception\Model(
                 'Clause @%s is not allowed in @%s.',
-                1, array($clause, $this->getId()));
+                0, array($clause, $this->getId()));
 
         switch($clause) {
 
