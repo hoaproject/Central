@@ -447,10 +447,10 @@ class          Group
         if(0 >= count($this))
             return $out;
 
-        $out .= "\n\n" . 'Contains the following exceptions:' . "\n";
+        $out .= "\n\n" . 'Contains the following exceptions:';
 
         foreach($this as $exception)
-            $out .= "\n" . '  • ' . str_replace(
+            $out .= "\n\n" . '  • ' . str_replace(
                 "\n",
                 "\n" . '    ',
                 $exception->raise($previous)
