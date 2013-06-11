@@ -203,6 +203,7 @@ class Praspel {
             $arguments[$name] = $parameter->getDefaultValue();
         }
 
+        // Check requires and behaviors.
         $behavior = $specification;
         $verdict &= $this->checkBehavior(
             $behavior,
@@ -324,7 +325,7 @@ class Praspel {
 
                 if(true === $behavior->clauseExists('default')) {
 
-                    $exceptions->cancelTransaction();
+                    $exceptions->rollbackTransaction();
                     $_verdict = true;
                     $behavior = $behavior->getClause('default');
                 }
@@ -333,7 +334,7 @@ class Praspel {
             }
             else {
 
-                $exceptions->cancelTransaction();
+                $exceptions->rollbackTransaction();
                 $behavior = $_behavior;
             }
 
