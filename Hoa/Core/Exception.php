@@ -473,12 +473,12 @@ class          Group
     }
 
     /**
-     * Cancel a transaction.
+     * Rollback a transaction.
      *
      * @access  public
      * @return  \Hoa\Core\Exception\Group
      */
-    public function cancelTransaction ( ) {
+    public function rollbackTransaction ( ) {
 
         if(1 >= count($this->_group))
             return $this;
