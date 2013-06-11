@@ -405,13 +405,33 @@ class          Group
     implements \ArrayAccess, \IteratorAggregate, \Countable {
 
     /**
-     * All exceptions.
+     * All exceptions (stored in a stack for transactions).
      *
-     * @var \Hoa\Core\Exception\Group array
+     * @var \SplStack object
      */
-    protected $_group = array();
+    protected $_group = null;
 
 
+
+    /**
+     * Create an exception.
+     *
+     * @access  public
+     * @param   string      $message      Formatted message.
+     * @param   int         $code         Code (the ID).
+     * @param   array       $arguments    Arguments to format message.
+     * @param   \Exception  $previous     Previous exception in chaining.
+     * @return  void
+     */
+    public function __construct ( $message, $code = 0, $arguments = array(),
+                                  \Exception $previous = null ) {
+
+        parent::__construct($message, $code, $arguments, $previous);
+        $this->_group = new \SplStack();
+        $this->beginTransaction();
+
+        return;
+    }
 
     /**
      * Raise an exception as a string.
@@ -427,16 +447,74 @@ class          Group
         if(0 >= count($this))
             return $out;
 
-        $out .= "\n\n" . 'Contains the following exceptions:' . "\n";
+        $out .= "\n\n" . 'Contains the following exceptions:';
 
         foreach($this as $exception)
-            $out .= "\n" . '  • ' . str_replace(
+            $out .= "\n\n" . '  • ' . str_replace(
                 "\n",
                 "\n" . '    ',
                 $exception->raise($previous)
             );
 
         return $out;
+    }
+
+    /**
+     * Begin a transaction.
+     *
+     * @access  public
+     * @return  \Hoa\Core\Exception\Group
+     */
+    public function beginTransaction ( ) {
+
+        $this->_group->push(new \ArrayObject());
+
+        return $this;
+    }
+
+    /**
+     * Cancel a transaction.
+     *
+     * @access  public
+     * @return  \Hoa\Core\Exception\Group
+     */
+    public function cancelTransaction ( ) {
+
+        if(1 >= count($this->_group))
+            return $this;
+
+        $this->_group->pop();
+
+        return $this;
+    }
+
+    /**
+     * Commit a transaction.
+     *
+     * @access  public
+     * @return  \Hoa\Core\Exception\Group
+     */
+    public function commitTransaction ( ) {
+
+        if(false === $this->hasUncommittedExceptions())
+            return $this;
+
+        foreach($this->_group->pop() as $index => $exception)
+            $this->offsetSet($index, $exception);
+
+        return $this;
+    }
+
+    /**
+     * Check if there is uncommitted exceptions.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function hasUncommittedExceptions ( ) {
+
+        return    1 < count($this->_group)
+               && 0 < count($this->_group->top());
     }
 
     /**
@@ -448,7 +526,11 @@ class          Group
      */
     public function offsetExists ( $index ) {
 
-        return true === array_key_exists($index, $this->_group);
+        foreach($this->_group as $group)
+            if(isset($group[$index]))
+                return true;
+
+        return false;
     }
 
     /**
@@ -460,10 +542,11 @@ class          Group
      */
     public function offsetGet ( $index ) {
 
-        if(false === $this->offsetExists($index))
-            return null;
+        foreach($this->_group as $group)
+            if(isset($group[$index]))
+                return $group[$index];
 
-        return $this->_group[$index];
+        return null;
     }
 
     /**
@@ -479,10 +562,13 @@ class          Group
         if(!($exception instanceof \Exception))
             return null;
 
-        if(null === $index)
-            $this->_group[]       = $exception;
+        $group = $this->_group->top();
+
+        if(   null === $index
+           || true === is_int($index))
+            $group[]       = $exception;
         else
-            $this->_group[$index] = $exception;
+            $group[$index] = $exception;
 
         return;
     }
@@ -496,42 +582,44 @@ class          Group
      */
     public function offsetUnset ( $index ) {
 
-        unset($this->_group[$index]);
+        foreach($this->_group as $group)
+            if(isset($group[$index]))
+                unset($group[$index]);
 
         return;
     }
 
     /**
-     * Get all exceptions in the group.
+     * Get committed exceptions in the group.
      *
      * @access  public
-     * @return  array
+     * @return  \ArrayObject
      */
     public function getExceptions ( ) {
 
-        return $this->_group;
+        return $this->_group->bottom();
     }
 
     /**
-     * Get an iterator on the group.
+     * Get an iterator over all exceptions (committed or not).
      *
      * @access  public
      * @return  \ArrayIterator
      */
     public function getIterator ( ) {
 
-        return new \ArrayIterator($this->getExceptions());
+        return $this->getExceptions()->getIterator();
     }
 
     /**
-     * Count the number of exceptions in the group.
+     * Count the number of committed exceptions.
      *
      * @access  public
      * @return  int
      */
     public function count ( ) {
 
-        return count($this->getExceptions());
+        return count($this->_group->bottom());
     }
 }
 
