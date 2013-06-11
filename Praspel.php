@@ -161,6 +161,7 @@ class Praspel {
      *
      * @access  public
      * @return  bool
+     * @throw   \Hoa\Praspel\Exception\Generic
      * @throw   \Hoa\Praspel\Exception\Group
      */
     public function evaluate ( ) {
@@ -177,7 +178,11 @@ class Praspel {
             $reflection->setAccessible(true);
 
         // Prepare data.
-        $data      = $this->getData() ?: $this->generateData();
+        if(null === $data = $this->getData())
+            throw new Exception\Generic(
+                'No data were given. The System Under Test %s needs data to ' .
+                'be executed.', 1, $callable);
+
         $arguments = array();
 
         foreach($reflection->getParameters() as $parameter) {
