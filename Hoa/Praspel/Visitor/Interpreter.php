@@ -162,6 +162,19 @@ class Interpreter implements \Hoa\Visitor\Visit {
                 $this->_current = $previous;
               break;
 
+            case '#default':
+                $children      = $element->getChildren();
+                $previous      = $this->_current;
+                $this->_clause = $this->_current
+                               = $this->_current
+                                      ->getClause('default');
+
+                foreach($children as $child)
+                    $child->accept($this, $handle, $eldnah);
+
+                $this->_current = $previous;
+              break;
+
             case '#throwable':
                 $this->_clause = $this->_current->getClause('throwable');
                 $identifier    = null;

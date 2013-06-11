@@ -41,64 +41,43 @@ from('Hoa')
 /**
  * \Hoa\Praspel\Model\Behavior
  */
--> import('Praspel.Model.Behavior')
-
-/**
- * \Hoa\Realdom\Disjunction
- */
--> import('Realdom.Disjunction', true);
+-> import('Praspel.Model.Behavior');
 
 }
 
 namespace Hoa\Praspel\Model {
 
 /**
- * Class \Hoa\Praspel\Model\Specification.
+ * Class \Hoa\Praspel\Model\DefaultBehavior.
  *
- * Represent a specification (contains all clauses).
+ * Represent a default behavior.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Specification extends Behavior {
+class DefaultBehavior extends Behavior {
 
     /**
      * Name.
      *
      * @const string
      */
-    const NAME = '';
+    const NAME = 'default';
 
     /**
      * Allowed clauses.
      *
-     * @var \Hoa\Praspel\Model\Specification array
+     * @var \Hoa\Praspel\Model\DefaultBehavior array
      */
     protected static $_allowedClauses = array(
-        'is',
-        'requires',
         'ensures',
         'throwable',
-        'invariant',
-        'behavior',
-        'default',
-        'description'
+        'invariant'
     );
 
 
-
-    /**
-     * Cancel the constructor from the parent.
-     *
-     * @access  public
-     * @return  void
-     */
-    public function __construct ( ) {
-
-        return;
-    }
 
     /**
      * Get identifier (fallback).
@@ -108,7 +87,7 @@ class Specification extends Behavior {
      */
     protected function _getId ( ) {
 
-        return 'praspel';
+        return $this->getName();
     }
 }
 

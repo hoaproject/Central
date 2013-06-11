@@ -161,7 +161,7 @@ class Praspel {
      *
      * @access  public
      * @return  bool
-     * @throw   \Hoa\Praspel\Exception
+     * @throw   \Hoa\Praspel\Exception\Group
      */
     public function evaluate ( ) {
 
@@ -175,7 +175,6 @@ class Praspel {
 
         if($reflection instanceof \ReflectionMethod)
             $reflection->setAccessible(true);
-
 
         // Prepare data.
         $data      = $this->getData() ?: $this->generateData();
@@ -198,7 +197,6 @@ class Praspel {
             $arguments[$name] = $parameter->getDefaultValue();
         }
 
-
         // Check precondition.
         $precondition = true;
 
@@ -216,36 +214,53 @@ class Praspel {
         if(0 < count($exceptions))
             throw $exceptions;
 
+        try {
 
-        // Invoke.
-        if($reflection instanceof \ReflectionFunction)
-            $return = $reflection->invokeArgs($arguments);
-        else {
+            // Invoke.
+            if($reflection instanceof \ReflectionFunction)
+                $return = $reflection->invokeArgs($arguments);
+            else {
 
-            $_callback = $callable->getValidCallback();
-            $_object   = $_callback[0];
-            $return    = $reflection->invokeArgs($_object, $arguments);
+                $_callback = $callable->getValidCallback();
+                $_object   = $_callback[0];
+                $return    = $reflection->invokeArgs($_object, $arguments);
+            }
+
+            // Check normal postcondition.
+            $postcondition = true;
+
+            if(true === $specification->clauseExists('ensures')) {
+
+                $ensures              = $specification->getClause('ensures');
+                $arguments['\result'] = $return;
+                $postcondition        = $this->checkClause(
+                    $ensures,
+                    $arguments,
+                    $exceptions,
+                    __NAMESPACE__ . '\Exception\Failure\Postcondition'
+                );
+            }
         }
+        catch ( \Exception $exception ) {
 
+            // Check exceptional postcondition.
+            $postcondition = true;
 
-        // Check postcondition.
-        $postcondition = true;
+            if(true === $specification->clauseExists('throwable')) {
 
-        if(true === $specification->clauseExists('ensures')) {
-
-            $ensures              = $specification->getClause('ensures');
-            $arguments['\result'] = $return;
-            $postcondition        = $this->checkClause(
-                $ensures,
-                $arguments,
-                $exceptions,
-                __NAMESPACE__ . '\Exception\Failure\Postcondition'
-            );
+                $throwable            = $specification->getClause('throwable');
+                $arguments['\result'] = $exception;
+                $postcondition        = $this->checkExceptionalClause(
+                    $throwable,
+                    $arguments,
+                    $exceptions,
+                    __NAMESPACE__ . '\Exception\Failure\Exceptional'
+                );
+            }
         }
 
         if(0 < count($exceptions))
             throw $exceptions;
-
 
         // Verdict.
         return $precondition && $postcondition;
@@ -288,6 +303,57 @@ class Praspel {
 
             $verdict = $_verdict && $verdict;
         }
+
+        return $verdict;
+    }
+
+    /**
+     * Check an exceptional clause.
+     *
+     * @access  protected
+     * @param   \Hoa\Praspel\Model\Throwable    $clause        Clause.
+     * @param   array                          &$data          Data.
+     * @param   \Hoa\Praspel\Exception\Group    $exceptions    Exceptions group.
+     * @param   string                          $exception     Exception to
+     *                                                         throw.
+     * @return  bool
+     * @throw   \Hoa\Praspel\Exception
+     */
+    protected function checkExceptionalClause ( Model\Throwable $clause,
+                                                Array &$data,
+                                                Exception\Group $exceptions,
+                                                $exception ) {
+
+        $verdict = false;
+
+        foreach($clause as $identifier) {
+
+            $_exception   = $clause[$identifier];
+            $instanceName = $_exception->getInstanceName();
+
+            if($data['\result'] instanceof $instanceName) {
+
+                $verdict = true;
+                break;
+            }
+
+            foreach((array) $_exception->getDisjunction() as $_identifier) {
+
+                $__exception   = $clause[$_identifier];
+                $_instanceName = $__exception->getInstanceName();
+
+                if($exception instanceof $_instanceName) {
+
+                    $verdict = true;
+                    break;
+                }
+            }
+        }
+
+        if(false === $verdict)
+            $exceptions[] = new $exception(
+                'The exception %s has been thrown and it is not specified.',
+                0, array(get_class($data['\result'])));
 
         return $verdict;
     }
