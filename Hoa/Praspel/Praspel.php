@@ -161,11 +161,13 @@ class Praspel {
      *
      * @access  public
      * @return  bool
+     * @throw   \Hoa\Praspel\Exception\Generic
      * @throw   \Hoa\Praspel\Exception\Group
      */
     public function evaluate ( ) {
 
         // Start.
+        $verdict       = true;
         $callable      = $this->getCallable();
         $reflection    = $callable->getReflection();
         $specification = $this->getSpecification();
@@ -177,7 +179,11 @@ class Praspel {
             $reflection->setAccessible(true);
 
         // Prepare data.
-        $data      = $this->getData() ?: $this->generateData();
+        if(null === $data = $this->getData())
+            throw new Exception\Generic(
+                'No data were given. The System Under Test %s needs data to ' .
+                'be executed.', 1, $callable);
+
         $arguments = array();
 
         foreach($reflection->getParameters() as $parameter) {
@@ -197,19 +203,12 @@ class Praspel {
             $arguments[$name] = $parameter->getDefaultValue();
         }
 
-        // Check precondition.
-        $precondition = true;
-
-        if(true === $specification->clauseExists('requires')) {
-
-            $requires     = $specification->getClause('requires');
-            $precondition = $this->checkClause(
-                $requires,
-                $arguments,
-                $exceptions,
-                __NAMESPACE__ . '\Exception\Failure\Precondition'
-            );
-        }
+        $behavior = $specification;
+        $verdict &= $this->checkBehavior(
+            $behavior,
+            $arguments,
+            $exceptions
+        );
 
         if(0 < count($exceptions))
             throw $exceptions;
@@ -226,31 +225,31 @@ class Praspel {
                 $return    = $reflection->invokeArgs($_object, $arguments);
             }
 
-            // Check normal postcondition.
-            $postcondition = true;
+            do {
 
-            if(true === $specification->clauseExists('ensures')) {
+                // Check normal postcondition.
+                if(true === $behavior->clauseExists('ensures')) {
 
-                $ensures              = $specification->getClause('ensures');
-                $arguments['\result'] = $return;
-                $postcondition        = $this->checkClause(
-                    $ensures,
-                    $arguments,
-                    $exceptions,
-                    __NAMESPACE__ . '\Exception\Failure\Postcondition'
-                );
-            }
+                    $ensures               = $behavior->getClause('ensures');
+                    $arguments['\result']  = $return;
+                    $verdict              &= $this->checkClause(
+                        $ensures,
+                        $arguments,
+                        $exceptions,
+                        __NAMESPACE__ . '\Exception\Failure\Postcondition'
+                    );
+                }
+
+            } while(null !== $behavior = $behavior->getParent());
         }
         catch ( \Exception $exception ) {
 
             // Check exceptional postcondition.
-            $postcondition = true;
+            if(true === $behavior->clauseExists('throwable')) {
 
-            if(true === $specification->clauseExists('throwable')) {
-
-                $throwable            = $specification->getClause('throwable');
-                $arguments['\result'] = $exception;
-                $postcondition        = $this->checkExceptionalClause(
+                $throwable             = $behavior->getClause('throwable');
+                $arguments['\result']  = $exception;
+                $verdict              &= $this->checkExceptionalClause(
                     $throwable,
                     $arguments,
                     $exceptions,
@@ -262,8 +261,86 @@ class Praspel {
         if(0 < count($exceptions))
             throw $exceptions;
 
-        // Verdict.
-        return $precondition && $postcondition;
+        return (bool) $verdict;
+    }
+
+    /**
+     * Check behavior clauses.
+     *
+     * @access  protected
+     * @param   \Hoa\Praspel\Model\Behavior     $behavior      Behavior clause.
+     * @param   array                          &$data          Data.
+     * @param   \Hoa\Praspel\Exception\Group    $exceptions    Exceptions group.
+     * @return  bool
+     * @throw   \Hoa\Praspel\Exception
+     */
+    protected function checkBehavior ( Model\Behavior &$behavior,
+                                       Array          &$data,
+                                       Exception\Group $exceptions ) {
+
+        $verdict = true;
+
+        // Check precondition.
+        if(true === $behavior->clauseExists('requires')) {
+
+            $requires = $behavior->getClause('requires');
+            $verdict  = $this->checkClause(
+                $requires,
+                $data,
+                $exceptions,
+                __NAMESPACE__ . '\Exception\Failure\Precondition'
+            );
+
+            if(false === $verdict)
+                return false;
+        }
+
+        // Check behaviors.
+        if(true === $behavior->clauseExists('behavior')) {
+
+            $_verdict    = false;
+            $behaviors   = $behavior->getClause('behavior');
+            $exceptions->beginTransaction();
+
+            foreach($behaviors as $_behavior) {
+
+                $_exceptions = new Exception\Group(
+                    'Behavior %s does not verify data.',
+                    2, $_behavior->getIdentifier());
+
+                $_verdict = $this->checkBehavior(
+                    $_behavior,
+                    $data,
+                    $_exceptions
+                );
+
+                if(true === $_verdict)
+                    break;
+
+                $exceptions[] = $_exceptions;
+            }
+
+            if(false === $_verdict) {
+
+                if(true === $behavior->clauseExists('default')) {
+
+                    $exceptions->cancelTransaction();
+                    $_verdict = true;
+                    $behavior = $behavior->getClause('default');
+                }
+                else
+                    $exceptions->commitTransaction();
+            }
+            else {
+
+                $exceptions->cancelTransaction();
+                $behavior = $_behavior;
+            }
+
+            $verdict &= $_verdict;
+        }
+
+        return $verdict;
     }
 
     /**
@@ -288,7 +365,7 @@ class Praspel {
             if(false === array_key_exists($name, $data)) {
 
                 $exceptions[] = new $exception(
-                    'Variable %s has no value and is required.', 0, $name);
+                    'Variable %s has no value and is required.', 3, $name);
 
                 continue;
             }
@@ -298,7 +375,7 @@ class Praspel {
             if(false === $_verdict)
                 $exceptions[] = new $exception(
                     'Variable %s does not verify the constraint %s.',
-                    0,
+                    4,
                     array($name, $this->getVisitorPraspel()->visit($variable)));
 
             $verdict = $_verdict && $verdict;
@@ -320,9 +397,9 @@ class Praspel {
      * @throw   \Hoa\Praspel\Exception
      */
     protected function checkExceptionalClause ( Model\Throwable $clause,
-                                                Array &$data,
+                                                Array          &$data,
                                                 Exception\Group $exceptions,
-                                                $exception ) {
+                                                                $exception ) {
 
         $verdict = false;
 
@@ -353,7 +430,7 @@ class Praspel {
         if(false === $verdict)
             $exceptions[] = new $exception(
                 'The exception %s has been thrown and it is not specified.',
-                0, array(get_class($data['\result'])));
+                5, array(get_class($data['\result'])));
 
         return $verdict;
     }
@@ -512,14 +589,14 @@ class Praspel {
         if(0 === $i)
             throw new Exception\Generic(
                 'Not able to extract Praspel from the following ' .
-                'comment:' . "\n" . '%s', 1, $comment);
+                'comment:' . "\n" . '%s', 5, $comment);
 
         $i = preg_match_all('#^[\s\*]*\s*\*\s?([^\n]*)$#m', $matches[1], $maatches);
 
         if(0 === $i)
             throw new Exception\Generic(
                 'Not able to extract Praspel from the following ' .
-                'comment:' . "\n" . '%s', 2, $comment);
+                'comment:' . "\n" . '%s', 6, $comment);
 
         return trim(implode("\n", $maatches[1]));
     }
