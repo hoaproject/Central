@@ -219,8 +219,8 @@ class Praspel {
         }
 
         // Check requires and behaviors.
-        $behavior = $specification;
-        $verdict &= $this->checkBehavior(
+        $behavior  = $specification;
+        $verdict  &= $this->checkBehavior(
             $behavior,
             $arguments,
             $exceptions
@@ -419,10 +419,10 @@ class Praspel {
                         $this->getVisitorPraspel()->visit($variable)
                     ));
 
-            $verdict = $_verdict && $verdict;
+            $verdict &= $_verdict;
         }
 
-        return $verdict;
+        return (bool) $verdict;
     }
 
     /**
