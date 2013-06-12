@@ -243,6 +243,12 @@ class Praspel {
 
             } while(null !== $behavior = $behavior->getParent());
         }
+        catch ( Exception $internalException ) {
+
+            $exceptions[] = new Exception\Failure\InternalPrecondition(
+                'The System Under Test has broken an internal contract.',
+                2, null, $internalException);
+        }
         catch ( \Exception $exception ) {
 
             // Check exceptional postcondition.
@@ -307,7 +313,7 @@ class Praspel {
 
                 $_exceptions = new Exception\Group(
                     'Behavior %s does not verify data.',
-                    2, $_behavior->getIdentifier());
+                    3, $_behavior->getIdentifier());
 
                 $_verdict = $this->checkBehavior(
                     $_behavior,
@@ -366,7 +372,7 @@ class Praspel {
             if(false === array_key_exists($name, $data)) {
 
                 $exceptions[] = new $exception(
-                    'Variable %s has no value and is required.', 3, $name);
+                    'Variable %s has no value and is required.', 4, $name);
 
                 continue;
             }
@@ -376,7 +382,7 @@ class Praspel {
             if(false === $_verdict)
                 $exceptions[] = new $exception(
                     'Variable %s does not verify the constraint %s.',
-                    4,
+                    5,
                     array($name, $this->getVisitorPraspel()->visit($variable)));
 
             $verdict = $_verdict && $verdict;
@@ -431,7 +437,7 @@ class Praspel {
         if(false === $verdict)
             $exceptions[] = new $exception(
                 'The exception %s has been thrown and it is not specified.',
-                5, array(get_class($data['\result'])));
+                6, array(get_class($data['\result'])));
 
         return $verdict;
     }
@@ -590,14 +596,14 @@ class Praspel {
         if(0 === $i)
             throw new Exception\Generic(
                 'Not able to extract Praspel from the following ' .
-                'comment:' . "\n" . '%s', 5, $comment);
+                'comment:' . "\n" . '%s', 6, $comment);
 
         $i = preg_match_all('#^[\s\*]*\s*\*\s?([^\n]*)$#m', $matches[1], $maatches);
 
         if(0 === $i)
             throw new Exception\Generic(
                 'Not able to extract Praspel from the following ' .
-                'comment:' . "\n" . '%s', 6, $comment);
+                'comment:' . "\n" . '%s', 7, $comment);
 
         return trim(implode("\n", $maatches[1]));
     }
