@@ -171,7 +171,7 @@ class Praspel {
         $callable      = $this->getCallable();
         $reflection    = $callable->getReflection();
         $specification = $this->getSpecification();
-        $exceptions    = new \Hoa\Praspel\Exception\Group(
+        $exceptions    = new Exception\Group(
             'The Runtime Assertion Checker has detected errors for %s.',
             0, $callable);
 
