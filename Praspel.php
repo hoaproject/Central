@@ -402,7 +402,7 @@ class Praspel {
             if(false === array_key_exists($name, $data)) {
 
                 $exceptions[] = new $exception(
-                    'Variable %s has no value and is required.', 4, $name);
+                    'Variable %s is required and has no value.', 4, $name);
 
                 continue;
             }
