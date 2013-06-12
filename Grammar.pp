@@ -156,7 +156,6 @@ behavior_content:
             requires()
           | ensures()
           | throwable()
-          | invariant()
         )
         ::semicolon::+
       | ( behavior() ::semicolon::* )+ default()? ::semicolon::*
