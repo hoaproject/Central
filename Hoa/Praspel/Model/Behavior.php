@@ -120,7 +120,6 @@ class Behavior extends Clause {
         'requires',
         'ensures',
         'throwable',
-        'invariant',
         'behavior',
         'default'
     );

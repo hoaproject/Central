@@ -203,9 +203,24 @@ class Praspel {
             $arguments[$name] = $parameter->getDefaultValue();
         }
 
+        // Check invariant.
+        if(true === $specification->clauseExists('invariant')) {
+
+            $invariant  = $specification->getClause('invariant');
+            $verdict   &= $this->checkClause(
+                $invariant,
+                $arguments,
+                $exceptions,
+                __NAMESPACE__ . '\Exception\Failure\Invariant'
+            );
+
+            if(0 < count($exceptions))
+                throw $exceptions;
+        }
+
         // Check requires and behaviors.
-        $behavior = $specification;
-        $verdict &= $this->checkBehavior(
+        $behavior  = $specification;
+        $verdict  &= $this->checkBehavior(
             $behavior,
             $arguments,
             $exceptions
@@ -267,6 +282,21 @@ class Praspel {
 
         if(0 < count($exceptions))
             throw $exceptions;
+
+        // Check invariant.
+        if(true === $specification->clauseExists('invariant')) {
+
+            $invariant  = $specification->getClause('invariant');
+            $verdict   &= $this->checkClause(
+                $invariant,
+                $arguments,
+                $exceptions,
+                __NAMESPACE__ . '\Exception\Failure\Invariant'
+            );
+
+            if(0 < count($exceptions))
+                throw $exceptions;
+        }
 
         return (bool) $verdict;
     }
@@ -372,7 +402,7 @@ class Praspel {
             if(false === array_key_exists($name, $data)) {
 
                 $exceptions[] = new $exception(
-                    'Variable %s has no value and is required.', 4, $name);
+                    'Variable %s is required and has no value.', 4, $name);
 
                 continue;
             }
@@ -381,14 +411,18 @@ class Praspel {
 
             if(false === $_verdict)
                 $exceptions[] = new $exception(
-                    'Variable %s does not verify the constraint %s.',
+                    'Variable %s does not verify the constraint @%s %s.',
                     5,
-                    array($name, $this->getVisitorPraspel()->visit($variable)));
+                    array(
+                        $name,
+                        $clause->getName(),
+                        $this->getVisitorPraspel()->visit($variable)
+                    ));
 
-            $verdict = $_verdict && $verdict;
+            $verdict &= $_verdict;
         }
 
-        return $verdict;
+        return (bool) $verdict;
     }
 
     /**
