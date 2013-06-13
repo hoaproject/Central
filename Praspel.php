@@ -182,7 +182,7 @@ class Praspel {
         $reflection    = $callable->getReflection();
         $specification = $this->getSpecification();
         $exceptions    = new Exception\Group(
-            'The Runtime Assertion Checker has detected errors for %s.',
+            'The Runtime Assertion Checker has detected failures for %s.',
             0, $callable);
 
         if($reflection instanceof \ReflectionMethod)
@@ -254,7 +254,20 @@ class Praspel {
                 $return    = $reflection->invokeArgs($_object, $arguments);
             }
 
+            $_exceptions = null;
+
             do {
+
+                $handle = $behavior instanceof Model\Specification
+                              ? $exceptions
+                              : new Exception\Group(
+                                    'Behavior %s is broken.',
+                                    2, $behavior->getIdentifier());
+
+                if(null !== $_exceptions && 0 < count($_exceptions))
+                    $handle[] = $_exceptions;
+
+                $_exceptions = $handle;
 
                 // Check normal postcondition.
                 if(true === $behavior->clauseExists('ensures')) {
@@ -264,7 +277,7 @@ class Praspel {
                     $verdict              &= $this->checkClause(
                         $ensures,
                         $arguments,
-                        $exceptions,
+                        $_exceptions,
                         __NAMESPACE__ . '\Exception\Failure\Postcondition'
                     );
                 }
@@ -275,7 +288,7 @@ class Praspel {
 
             $exceptions[] = new Exception\Failure\InternalPrecondition(
                 'The System Under Test has broken an internal contract.',
-                2, null, $internalException);
+                3, null, $internalException);
         }
         catch ( \Exception $exception ) {
 
@@ -355,8 +368,8 @@ class Praspel {
             foreach($behaviors as $_behavior) {
 
                 $_exceptions = new Exception\Group(
-                    'Behavior %s does not verify data.',
-                    3, $_behavior->getIdentifier());
+                    'Behavior %s is broken.',
+                    4, $_behavior->getIdentifier());
 
                 $_verdict = $this->checkBehavior(
                     $_behavior,
@@ -415,7 +428,7 @@ class Praspel {
             if(false === array_key_exists($name, $data)) {
 
                 $exceptions[] = new $exception(
-                    'Variable %s is required and has no value.', 4, $name);
+                    'Variable %s is required and has no value.', 5, $name);
 
                 continue;
             }
@@ -425,7 +438,7 @@ class Praspel {
             if(false === $_verdict)
                 $exceptions[] = new $exception(
                     'Variable %s does not verify the constraint @%s %s.',
-                    5,
+                    6,
                     array(
                         $name,
                         $clause->getName(),
@@ -484,7 +497,7 @@ class Praspel {
         if(false === $verdict)
             $exceptions[] = new $exception(
                 'The exception %s has been unexpectedly thrown.',
-                6, array(get_class($data['\result'])));
+                7, array(get_class($data['\result'])));
 
         return $verdict;
     }
@@ -669,14 +682,14 @@ class Praspel {
         if(0 === $i)
             throw new Exception\Generic(
                 'Not able to extract Praspel from the following ' .
-                'comment:' . "\n" . '%s', 6, $comment);
+                'comment:' . "\n" . '%s', 8, $comment);
 
         $i = preg_match_all('#^[\s\*]*\s*\*\s?([^\n]*)$#m', $matches[1], $maatches);
 
         if(0 === $i)
             throw new Exception\Generic(
                 'Not able to extract Praspel from the following ' .
-                'comment:' . "\n" . '%s', 7, $comment);
+                'comment:' . "\n" . '%s', 9, $comment);
 
         return trim(implode("\n", $maatches[1]));
     }
