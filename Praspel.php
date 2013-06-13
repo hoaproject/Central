@@ -124,6 +124,13 @@ class Praspel {
     protected $_data           = null;
 
     /**
+     * Whether we are able to automatically generate data.
+     *
+     * @var \Hoa\Praspel bool
+     */
+    protected $_generateData   = false;
+
+    /**
      * Callable to validate and verify.
      *
      * @var \Hoa\Core\Consistency\Xcallable object
@@ -145,13 +152,16 @@ class Praspel {
      * @access  public
      * @param   \Hoa\Praspel\Model\Specification  $specification    Specification.
      * @param   \Hoa\Core\Consistency\Xcallable   $callable         Callable.
+     * @param   bool                              $genrateData      Generate data.
      * @return  void
      */
     public function __construct ( Model\Specification             $specification,
-                                  \Hoa\Core\Consistency\Xcallable $callable ) {
+                                  \Hoa\Core\Consistency\Xcallable $callable,
+                                  $generateData = false ) {
 
         $this->setSpecification($specification);
         $this->setCallable($callable);
+        $this->automaticallyGenerateData($generateData);
 
         return;
     }
@@ -180,9 +190,12 @@ class Praspel {
 
         // Prepare data.
         if(null === $data = $this->getData())
-            throw new Exception\Generic(
-                'No data were given. The System Under Test %s needs data to ' .
-                'be executed.', 1, $callable);
+            if(true === $this->canGenerateData())
+                $data = $this->generateData();
+            else
+                throw new Exception\Generic(
+                    'No data were given. The System Under Test %s needs data ' .
+                    'to be executed.', 1, $callable);
 
         $arguments = array();
 
@@ -522,6 +535,32 @@ class Praspel {
         $this->setData($data);
 
         return $data;
+    }
+
+    /**
+     * Enable or disable the automatic data generation.
+     *
+     * @access  public
+     * @param   bool  $generateData    Generate data or not.
+     * @return  bool
+     */
+    public function automaticallyGenerateData ( $generateData ) {
+
+        $old                 = $this->_generateData;
+        $this->_generateData = $generateData;
+
+        return $old;
+    }
+
+    /**
+     * Whether we are able to automatically generate data.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function canGenerateData ( ) {
+
+        return $this->_generateData;
     }
 
     /**
