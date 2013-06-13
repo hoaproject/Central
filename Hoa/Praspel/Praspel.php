@@ -483,7 +483,7 @@ class Praspel {
 
         if(false === $verdict)
             $exceptions[] = new $exception(
-                'The exception %s has been thrown and it is not specified.',
+                'The exception %s has been unexpectedly thrown.',
                 6, array(get_class($data['\result'])));
 
         return $verdict;
