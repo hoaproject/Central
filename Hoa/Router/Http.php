@@ -833,7 +833,9 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      */
     public static function getBootstrap ( ) {
 
-        if('cli' === php_sapi_name())
+        $sapi = php_sapi_name();
+
+        if('cli' === $sapi || 'cli-server' === $sapi)
             return '';
 
         return $_SERVER['SCRIPT_NAME'];
