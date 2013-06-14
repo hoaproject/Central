@@ -154,7 +154,11 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
             )
         );
         $this->_parameters->setParameters($parameters);
-        $this->setPrefix($this->_parameters->getParameter('prefix'));
+
+        if(null === $prefix = $this->_parameters->getParameter('prefix'))
+            $this->setPrefix(dirname($this->getBootstrap()));
+        else
+            $this->setPrefix($prefix);
 
         foreach($this->_parameters->getParameter('rules.public') as $id => $rule) {
 
