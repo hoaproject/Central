@@ -440,6 +440,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
                          : null;
         unset($variables['_fragment']);
 
+        $self          = $this;
         $prependPrefix = function ( $unroute ) use ( &$prefix ) {
 
             if(0 !== preg_match('#^https?://#', $unroute))
@@ -447,9 +448,9 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
             return $prefix . $unroute;
         };
-        $getPort = function ( $secure ) {
+        $getPort = function ( $secure ) use ( $self ) {
 
-            $defaultPort = $this->getDefaultPort($secure);
+            $defaultPort = $self->getDefaultPort($secure);
 
             if(false === $secure)
                 return 80 !== $defaultPort ? ':' . $defaultPort : '';
