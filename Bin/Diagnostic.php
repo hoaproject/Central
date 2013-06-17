@@ -136,7 +136,7 @@ class Diagnostic extends \Hoa\Console\Dispatcher\Kit {
         $store(
             'system',
             'lang',
-            $_SERVER['LANG']
+            isset($_SERVER['LANG']) ? $_SERVER['LANG'] : 'unknown'
         );
         $store(
             'bin',
@@ -156,7 +156,7 @@ class Diagnostic extends \Hoa\Console\Dispatcher\Kit {
         $store(
             'bin',
             'php',
-            !defined('PHP_BINARY') ? 'unknown' : PHP_BINARY
+            defined('PHP_BINARY') ? PHP_BINARY : 'unknown'
         );
 
         foreach(get_loaded_extensions() as $extension) {
