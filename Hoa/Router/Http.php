@@ -851,7 +851,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
     public function setPrefix ( $prefix ) {
 
         $old               = $this->_pathPrefix;
-        $this->_pathPrefix = rtrim($prefix, '/');
+        $this->_pathPrefix = preg_quote(rtrim($prefix, '/'));
 
         return $old;
     }
