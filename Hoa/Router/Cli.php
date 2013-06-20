@@ -87,8 +87,7 @@ class Cli extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      * @var \Hoa\Router\Http array
      */
     protected static $_methods = array(
-        'get', // classic call
-        'post' // pipe/stdin
+        'get'
     );
 
 
