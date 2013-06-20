@@ -200,10 +200,10 @@ class Cli extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
     /**
      * Find the appropriated rule.
+     * Special variables: _call and _able.
      *
      * @access  public
-     * @param   string  $uri     URI or complete URL (without scheme). If null,
-     *                           it will be deduce.
+     * @param   string  $uri     URI. If null, it will be deduce.
      * @return  \Hoa\Router\Cli
      * @throw   \Hoa\Router\Exception\NotFound
      */
