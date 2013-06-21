@@ -156,7 +156,9 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
         $this->_parameters->setParameters($parameters);
 
         if(null === $prefix = $this->_parameters->getParameter('prefix'))
-            $this->setPrefix(dirname($this->getBootstrap()));
+            $this->setPrefix(
+                ('\\' === $_ = dirname($this->getBootstrap())) ? '/' : $_
+            );
         else
             $this->setPrefix($prefix);
 
