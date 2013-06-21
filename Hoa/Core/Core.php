@@ -43,7 +43,7 @@ namespace {
     !defined('HOA') and define('HOA', true)
 )
 and
-    exit('The Hoa framework main file (Core.php) must be included once.');
+    exit('Hoa main file (Core.php) must be included once.');
 
 (
     !defined('PHP_VERSION_ID') or PHP_VERSION_ID < 50303
