@@ -200,7 +200,7 @@ class Cli extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
     /**
      * Find the appropriated rule.
-     * Special variables: _call and _able.
+     * Special variables: _call, _able and _tail.
      *
      * @access  public
      * @param   string  $uri     URI. If null, it will be deduce.
