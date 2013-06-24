@@ -265,7 +265,7 @@ class Disjunction implements \ArrayAccess, \IteratorAggregate, \Countable {
         if(!($realdom instanceof Realdom))
             throw new Exception(
                 'A disjunction accepts only realdom; given %s.',
-                0, is_object($realdom) ? get_class($realdom) : gettype($realdom));
+                1, is_object($realdom) ? get_class($realdom) : gettype($realdom));
 
         $realdom->setConstraints($this->_constraints);
 
@@ -273,7 +273,7 @@ class Disjunction implements \ArrayAccess, \IteratorAggregate, \Countable {
             $this->_realdoms[] = $realdom;
         elseif(!is_int($offset))
             throw new Exception(
-                'Offset %s must be an integer.', 1, $offset);
+                'Offset %s must be an integer.', 2, $offset);
         else
             $this->_realdoms[$offset] = $realdom;
 
@@ -362,7 +362,14 @@ class Disjunction implements \ArrayAccess, \IteratorAggregate, \Countable {
 
         if(empty($this->_realdoms))
             throw new Exception(
-                'Cannot sample because the disjunction is empty.', 2);
+                'Cannot sample because the disjunction is empty.', 3);
+
+        if(   null === $sampler
+           && null === $sampler = Realdom::getDefaultSampler())
+            throw new Exception(
+                'No sampler set. Please, use the %s::setDefaultSampler() ' .
+                'method.',
+                4, __NAMESPACE__);
 
         $m                    = count($this->_realdoms) - 1;
         $i                    = $sampler->getInteger(0, $m);
