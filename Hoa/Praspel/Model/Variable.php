@@ -272,15 +272,13 @@ class          Variable
      * Call the sample() method on realistic domains.
      *
      * @access  public
+     * @param   \Hoa\Math\Sampler  $sampler    Sampler.
      * @return  mixed
      * @throw   \Hoa\Realdom\Exception
      */
-    public function sample ( ) {
+    public function sample ( \Hoa\Math\Sampler $sampler = null ) {
 
-        // @TODO
-        $domains = &$this->getDomains();
-
-        return $domains[0]->sample();
+        return $this->getDomains()->sample($sampler);
     }
 
     /**
