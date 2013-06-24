@@ -54,19 +54,14 @@ from('Hoa')
 -> import('Compiler.Llk')
 
 /**
- * \Hoa\Regex\Visitor\UniformPreCompute
- */
--> import('Regex.Visitor.UniformPreCompute')
-
-/**
- * \Hoa\Regex\Visitor\Uniform
- */
--> import('Regex.Visitor.Uniform')
-
-/**
  * \Hoa\File\Read
  */
--> import('File.Read');
+-> import('File.Read')
+
+/**
+ * \Hoa\Regex\Visitor\Isotropic
+ */
+-> import('Regex.Visitor.Isotropic');
 
 }
 
@@ -109,16 +104,9 @@ class Regex extends String {
     protected static $_compiler   = null;
 
     /**
-     * Regex visitor (pre-computation).
-     *
-     * @var \Hoa\Regex\Visitor\UniformPreCompute object
-     */
-    protected static $_precompute = null;
-
-    /**
      * Regex visitor that use realdom.
      *
-     * @var \Hoa\Regex\Visitor\Uniform object
+     * @var \Hoa\Regex\Visitor\Isotropic object
      */
     protected static $_visitor    = null;
 
@@ -151,11 +139,12 @@ class Regex extends String {
             throw new Exception(
                 'Argument missing.', 0);
 
-        if(null === self::$_precompute)
-            self::$_precompute = new \Hoa\Regex\Visitor\UniformPreCompute();
-
         $this->_ast = self::$_compiler->parse(
-            $this['regex']->getConstantValue()
+            mb_substr(
+                $regex = $this['regex']->getConstantValue(),
+                1,
+                mb_strrpos($regex, mb_substr($regex, 0, 1), 1) - 1
+            )
         );
 
         return;
@@ -170,15 +159,8 @@ class Regex extends String {
      */
     public function predicate ( $q ) {
 
-        return    /*$this['length']->predicate(mb_strlen($q))
-               &&*/ 0 !== preg_match(
-                      '#' . str_replace(
-                          '#',
-                          '\#',
-                          $this['regex']->getConstantValue()
-                      ) . '#',
-                      $q
-                  );
+        return    $this['length']->predicate(mb_strlen($q))
+               && 0 !== preg_match($this['regex']->getConstantValue(), $q);
     }
 
     /**
@@ -191,12 +173,7 @@ class Regex extends String {
     protected function _sample ( \Hoa\Math\Sampler $sampler ) {
 
         if(null === self::$_visitor)
-            self::$_visitor = new \Hoa\Regex\Visitor\Uniform($sampler);
-
-        $length = $this['length']->sample($sampler);
-        self::$_precompute->setSize($length);
-        self::$_precompute->visit($this->_ast);
-        self::$_visitor->setSize($length);
+            self::$_visitor = new \Hoa\Regex\Visitor\Isotropic($sampler);
 
         return self::$_visitor->visit($this->_ast);
     }
