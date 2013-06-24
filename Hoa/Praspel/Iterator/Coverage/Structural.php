@@ -111,7 +111,7 @@ class Structural implements \Hoa\Iterator\Recursive {
      *
      * @var \Hoa\Praspel\Iterator\Coverage\Structural int
      */
-    protected $_key           = -1;
+    protected $_key           = 0;
 
     /**
      * Current (with two indexes: pre and post, with SplStack
@@ -195,6 +195,7 @@ class Structural implements \Hoa\Iterator\Recursive {
 
                     $this->_up   = false;
                     $this->_post = 'throwable';
+                    ++$this->_key;
                     $this->_rewindCurrent();
 
                     return $this->current();
@@ -213,6 +214,24 @@ class Structural implements \Hoa\Iterator\Recursive {
 
             return $this->next();
         }
+        elseif($collection instanceof \Hoa\Praspel\Model\DefaultBehavior) {
+
+            if(false === $this->_up) {
+
+                $this->pushCurrent($collection);
+                $this->_up = true;
+                ++$this->_key;
+
+                return $this->current();
+            }
+
+            $this->_current['pre']->pop();
+            $this->_current['post']->pop();
+
+            $this->_stack->pop();
+
+            return $this->next();
+        }
 
         $handle = current($collection);
 
@@ -224,19 +243,27 @@ class Structural implements \Hoa\Iterator\Recursive {
         $this->_current['post']->pop();
 
         next($collection);
-        $handle = current($collection);
+        $nextHandle = current($collection);
 
-        if(false === $handle) {
+        if(false === $nextHandle) {
 
             $this->_stack->pop();
+
+            if(true === $handle->getParent()->clauseExists('default')) {
+
+                $this->_up = false;
+                $this->_stack->push($handle->getParent()->getClause('default'));
+
+                return $this->next();
+            }
+
             $this->_up = true;
 
             return $this->next();
         }
 
         $this->_up = false;
-        $this->pushCurrent($handle);
-
+        $this->pushCurrent($nextHandle);
         ++$this->_key;
 
         return $this->current();
