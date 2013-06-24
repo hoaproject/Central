@@ -569,7 +569,7 @@ abstract class Realdom implements \ArrayAccess, \Countable {
      */
     public static function getDefaultSampler ( ) {
 
-        return self::$_sampler;
+        return static::$_sampler;
     }
 
     /**
