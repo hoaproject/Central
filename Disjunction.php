@@ -358,7 +358,7 @@ class Disjunction implements \ArrayAccess, \IteratorAggregate, \Countable {
      * @return  mixed
      * @throw   \Hoa\Realdom\Exception
      */
-    public function sample ( \Hoa\Math\Sampler $sampler ) {
+    public function sample ( \Hoa\Math\Sampler $sampler = null ) {
 
         if(empty($this->_realdoms))
             throw new Exception(
