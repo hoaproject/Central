@@ -235,7 +235,7 @@ constant:
     scalar() | array()
 
 scalar:
-    <null> | boolean() | number() | string() | <regex> | range()
+    <null> | boolean() | number() | string() | regex() | range()
 
 boolean:
     <true> | <false>
@@ -252,6 +252,14 @@ quoted_string:
     ( ( <escaped> | <accepted> | <string> | ::concat:: ) #concatenation )*
     ::_quote::
 
+#regex:
+    <regex> ( ::colon:: ( range() | number() ) )?
+
+#range:
+    number() ::range:: number()
+  | number() ::range:: #left_range
+  | ::range:: number() #right_range
+
 #array:
     ::bracket_::
     ( pair() ( ::comma:: pair() )* )?
@@ -260,11 +268,6 @@ quoted_string:
 pair:
     ( ::from::? representation() ::to:: representation() #pair )
   | ::to::? representation()
-
-#range:
-    number() ::range:: number()
-  | number() ::range:: #left_range
-  | ::range:: number() #right_range
 
 extended_identifier:
     ( ::count:: #count )? arrayaccess()

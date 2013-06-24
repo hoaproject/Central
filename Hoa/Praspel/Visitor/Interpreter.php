@@ -429,6 +429,16 @@ class Interpreter implements \Hoa\Visitor\Visit {
                 return $element->getChild(1)->accept($this, $handle, $eldnah);
               break;
 
+            case '#regex':
+                $regex  = $element->getChild(0)->accept($this, $handle, $eldnah);
+                $length = 12;
+
+                if(true === $element->childExists(1))
+                    $length = $element->getChild(1)->accept($this, $handle, $eldnah);
+
+                return realdom()->regex($regex, $length);
+              break;
+
             case 'token':
                 $tId   = $element->getValueToken();
                 $value = $element->getValueValue();
@@ -522,6 +532,7 @@ class Interpreter implements \Hoa\Visitor\Visit {
 
                     case 'accepted':
                     case 'string':
+                    case 'regex';
                         return $value;
 
                     default:
