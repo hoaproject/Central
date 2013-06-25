@@ -388,6 +388,27 @@ class Core implements Parameter\Parameterizable {
     }
 
     /**
+     * Get PHP executable.
+     *
+     * @access  public
+     * @return  string
+     */
+    public static function getPHPBinary ( ) {
+
+        if(defined('PHP_BINARY'))
+            return PHP_BINARY;
+
+        if(isset($_SERVER['_']))
+            return $_SERVER['_'];
+
+        foreach(array('', '.exe') as $extension)
+            if(file_exists($_ = PHP_BINDIR . DS . 'php' . $extension))
+                return realpath($_);
+
+        return null;
+    }
+
+    /**
      * Generate an Universal Unique Identifier (UUID).
      *
      * @access  public
