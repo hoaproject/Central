@@ -92,8 +92,7 @@ class Regex extends String {
      * @var \Hoa\Realdom array
      */
     protected $_arguments         = array(
-        'regex',
-        'length'
+        'regex'
     );
 
     /**
@@ -135,10 +134,6 @@ class Regex extends String {
         if(!isset($this['regex']))
             $this['regex'] = new Conststring('');
 
-        if(!isset($this['length']))
-            throw new Exception(
-                'Argument missing.', 0);
-
         $this->_ast = self::$_compiler->parse(
             mb_substr(
                 $regex = $this['regex']->getConstantValue(),
@@ -159,8 +154,7 @@ class Regex extends String {
      */
     public function predicate ( $q ) {
 
-        return    $this['length']->predicate(mb_strlen($q))
-               && 0 !== preg_match($this['regex']->getConstantValue(), $q);
+        return 0 !== preg_match($this['regex']->getConstantValue(), $q);
     }
 
     /**
