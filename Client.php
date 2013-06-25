@@ -244,15 +244,15 @@ class          Client
      *
      * @access  public
      * @param   string  $message    Message.
-     * @param   string  $channel    Channel.
+     * @param   string  $to         Channel or username.
      * @return  string
      */
-    public function say ( $message, $channel = null ) {
+    public function say ( $message, $to = null ) {
 
-        if(null === $channel)
-            $channel = $this->getConnection()->getCurrentNode()->getChannel();
+        if(null === $to)
+            $to = $this->getConnection()->getCurrentNode()->getChannel();
 
-        return $this->send('PRIVMSG ' . $channel . ' :' . $message);
+        return $this->send('PRIVMSG ' . $to . ' :' . $message);
     }
 
     /**
