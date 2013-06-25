@@ -201,7 +201,10 @@ class          Client
 
                 default:
                     $listener = 'other-message';
-                    $bucket   = array('line' => $line);
+                    $bucket   = array(
+                        'line'        => $line,
+                        'parsed_line' => $matches
+                    );
             }
 
             $this->_on->fire($listener, new \Hoa\Core\Event\Bucket($bucket));
