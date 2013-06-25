@@ -253,7 +253,7 @@ quoted_string:
     ::_quote::
 
 #regex:
-    <regex> ( ::colon:: ( range() | number() ) )?
+    <regex>
 
 #range:
     number() ::range:: number()
