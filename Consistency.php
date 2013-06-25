@@ -1057,6 +1057,18 @@ class Xcallable {
 namespace {
 
 /**
+ * Alias of function_exists().
+ *
+ * @access  public
+ * @param   string  $name    Name.
+ * @return  bool
+ */
+function ƒ ( $name ) {
+
+    return function_exists($name);
+}
+
+/**
  * Alias for \Hoa\Core\Consistency::from().
  *
  * @access  public
