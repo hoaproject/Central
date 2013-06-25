@@ -487,18 +487,6 @@ namespace {
 class_alias('Hoa\Core\Core', 'Hoa\Core');
 
 /**
- * Alias of function_exists().
- *
- * @access  public
- * @param   string  $name    Name.
- * @return  bool
- */
-function ƒ ( $name ) {
-
-    return function_exists($name);
-}
-
-/**
  * Alias of \Hoa\Core::_define().
  *
  * @access  public
