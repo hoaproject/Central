@@ -88,9 +88,7 @@ namespace Hoa\Core {
 /**
  * Class \Hoa\Core.
  *
- * \Hoa\Core is the framework package manager.
- * Each package must include \Hoa\Core, because it is the “taproot” of the
- * framework.
+ * \Hoa\Core is the base of all libraries.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
@@ -209,7 +207,7 @@ class Core implements Parameter\Parameterizable {
     }
 
     /**
-     * Initialize the framework.
+     * Initialize the core.
      *
      * @access  public
      * @param   array   $parameters    Parameters of \Hoa\Core.
