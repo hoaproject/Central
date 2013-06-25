@@ -97,8 +97,11 @@ class          Client
             'open',
             'join',
             'message',
+            'private-message',
+            'mention',
             'other-message',
             'ping',
+            'kick',
             'error'
         ));
 
@@ -155,7 +158,6 @@ class          Client
 
                 case 366: // RPL_ENDOFNAMES
                     list($nickname, $channel) = explode(' ', $matches['middle'], 2);
-                    $node->setChannel($channel);
 
                     $listener = 'join';
                     $bucket   = array(
@@ -165,11 +167,23 @@ class          Client
                   break;
 
                 case 'PRIVMSG':
-                    $node->setChannel(trim($matches['middle']));
-                    $listener = 'message';
+                    $middle   = trim($matches['middle']);
+                    $message  = $matches['trailing'];
+                    $username = $node->getUsername();
+
+                    if($username === $middle)
+                        $listener = 'private-message';
+                    elseif(false !== strpos($message, $username))
+                        $listener = 'mention';
+                    else {
+
+                        $listener = 'message';
+                        $node->setChannel($middle);
+                    }
+
                     $bucket   = array(
                         'from'    => $this->parseNick($matches['prefix']),
-                        'message' => $matches['trailing']
+                        'message' => $message
                     );
                   break;
 
@@ -186,9 +200,22 @@ class          Client
                         $this->pong($daemons[0]);
                   break;
 
+                case 'KICK':
+                    list($channel, ) = explode(' ', $matches['middle'], 2);
+
+                    $listener = 'kick';
+                    $bucket   = array(
+                        'from'    => $this->parseNick($matches['prefix']),
+                        'channel' => $channel
+                    );
+                  break;
+
                 default:
                     $listener = 'other-message';
-                    $bucket   = array('line' => $line);
+                    $bucket   = array(
+                        'line'        => $line,
+                        'parsed_line' => $matches
+                    );
             }
 
             $this->_on->fire($listener, new \Hoa\Core\Event\Bucket($bucket));
@@ -220,21 +247,22 @@ class          Client
      * Join a channel.
      *
      * @access  public
-     * @param   string  $nickname    Nickname.
+     * @param   string  $username    Username.
      * @param   string  $channel     Channel.
      * @param   string  $password    Password.
      * @return  int
      */
-    public function join ( $nickname, $channel, $password = null ) {
-
-        $this->_nickname = $nickname;
-        $this->_channel  = $channel;
+    public function join ( $username, $channel, $password = null ) {
 
         if(null !== $password)
             $this->send('PASS ' . $password);
 
-        $this->setNickname($nickname);
-        $this->send('USER ' . $nickname . ' 0 * :' . $nickname);
+        $this->send('USER ' . $username . ' 0 * :' . $username);
+
+        $node = $this->getConnection()->getCurrentNode();
+        $node->setUsername($username);
+        $node->setChannel($channel);
+        $this->setNickname($username);
 
         return $this->send('JOIN ' . $channel);
     }
@@ -244,15 +272,15 @@ class          Client
      *
      * @access  public
      * @param   string  $message    Message.
-     * @param   string  $channel    Channel.
+     * @param   string  $to         Channel or username.
      * @return  string
      */
-    public function say ( $message, $channel = null ) {
+    public function say ( $message, $to = null ) {
 
-        if(null === $channel)
-            $channel = $this->getConnection()->getCurrentNode()->getChannel();
+        if(null === $to)
+            $to = $this->getConnection()->getCurrentNode()->getChannel();
 
-        return $this->send('PRIVMSG ' . $channel . ' :' . $message);
+        return $this->send('PRIVMSG ' . $to . ' :' . $message);
     }
 
     /**
@@ -278,8 +306,6 @@ class          Client
      * @return  int
      */
     public function setNickname ( $nickname ) {
-
-        $this->getConnection()->getCurrentNode()->setNickname($nickname);
 
         return $this->send('NICK ' . $nickname);
     }

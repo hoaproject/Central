@@ -67,11 +67,11 @@ class Node extends \Hoa\Socket\Node {
     protected $_joined   = false;
 
     /**
-     * Nickname.
+     * Username.
      *
      * @var \Hoa\Irc\Node string
      */
-    protected $_nickname = null;
+    protected $_username = null;
 
     /**
      * Channel.
@@ -109,29 +109,29 @@ class Node extends \Hoa\Socket\Node {
     }
 
     /**
-     * Set nickname.
+     * Set username.
      *
      * @access  public
-     * @param   string  $nickname    Nickname.
+     * @param   string  $username    Username.
      * @return  string
      */
-    public function setNickname ( $nickname ) {
+    public function setUsername ( $username ) {
 
-        $old             = $this->_nickname;
-        $this->_nickname = $nickname;
+        $old             = $this->_username;
+        $this->_username = $username;
 
         return $old;
     }
 
     /**
-     * Get nickname.
+     * Get username.
      *
      * @access  public
      * @return  string
      */
-    public function getNickname ( ) {
+    public function getUsername ( ) {
 
-        return $this->_nickname;
+        return $this->_username;
     }
 
     /**
