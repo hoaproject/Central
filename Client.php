@@ -101,6 +101,7 @@ class          Client
             'mention',
             'other-message',
             'ping',
+            'kick',
             'error'
         ));
 
@@ -197,6 +198,16 @@ class          Client
                         $this->pong($daemons[0], $daemons[1]);
                     else
                         $this->pong($daemons[0]);
+                  break;
+
+                case 'KICK':
+                    list($channel, ) = explode(' ', $matches['middle'], 2);
+
+                    $listener = 'kick';
+                    $bucket   = array(
+                        'from'    => $this->parseNick($matches['prefix']),
+                        'channel' => $channel
+                    );
                   break;
 
                 default:
