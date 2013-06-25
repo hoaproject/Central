@@ -388,80 +388,45 @@ class Core implements Parameter\Parameterizable {
     }
 
     /**
-     * Start the debugger.
+     * Get PHP executable.
      *
      * @access  public
-     * @param   string  $socket    Socket URI.
-     * @return  void
+     * @return  string
      */
-    public static function startDebugger ( $socket = null ) {
+    public static function getPHPBinary ( ) {
 
-        from('Hoa')
-        -> import('Socket.Client');
+        if(defined('PHP_BINARY'))
+            return PHP_BINARY;
 
-        if(null === $socket)
-            $socket = 'tcp://localhost:57005';
+        if(isset($_SERVER['_']))
+            return $_SERVER['_'];
 
-        try {
+        foreach(array('', '.exe') as $extension)
+            if(file_exists($_ = PHP_BINDIR . DS . 'php' . $extension))
+                return realpath($_);
 
-            $client = new \Hoa\Socket\Client($socket);
-            $client->connect();
-            static::$_debugger = true;
-        }
-        catch ( Exception $e ) {
-
-            throw new Exception(
-                'Cannot start the debugger because the server is not ' .
-                'listening.', 0);
-        }
-
-        $client->writeLine('open');
-
-        event('hoa://Event/Exception')
-            ->attach(function ( Event\Bucket $event) use ( $client ) {
-
-                $exception = $event->getData();
-
-                try {
-
-                    $client->writeLine(serialize($exception));
-                }
-                catch ( \Exception $e ) {
-
-                    $client->writeLine('error serialize');
-                }
-            });
-
-        return;
+        return null;
     }
 
     /**
-     * Dump a data to the debugger.
+     * Generate an Universal Unique Identifier (UUID).
      *
      * @access  public
-     * @param   mixed   $data    Data.
      * @return  void
      */
-    public static function dump ( $data ) {
+    public static function uuid ( ) {
 
-        if(false === static::$_debugger)
-            static::startDebugger();
-
-        try {
-
-            $trace = debug_backtrace();
-
-            ob_start();
-            debug_zval_dump($data);
-            $data = trim(ob_get_contents());
-            ob_end_clean();
-
-            throw new Exception\Error(
-                $data, 0, $trace[0]['file'], $trace[0]['line'], $trace);
-        }
-        catch ( Exception $e ) { }
-
-        return;
+        return sprintf(
+            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0x0fff) | 0x4000,
+            mt_rand(0, 0x3fff) | 0x8000,
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff)
+        );
     }
 
     /**
