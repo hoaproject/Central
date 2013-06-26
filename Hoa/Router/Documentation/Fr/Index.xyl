@@ -106,8 +106,8 @@ $router->addRule('h', array('get'),         '/hello')
   <p>La liste des méthodes peut être concaténées par le symbole
   « <code>_</code> », puis utilisée comme nom de méthode sur le routeur. L'ordre
   des méthodes n'a toujours pas d'importance. Si nous voulons représenter toutes
-  les méthodes, nous pourrons utiliser <code>all</code> :</p>
-  <pre><code class="language-php">$router->all(…);</code></pre>
+  les méthodes, nous pourrons utiliser <code>any</code> :</p>
+  <pre><code class="language-php">$router->any(…);</code></pre>
   <p>Et enfin, pour représenter une règle privée, le nom devra commencer par le
   symbole « <code>_</code> ». Ainsi, ces deux déclarations sont strictement
   identiques :</p>
