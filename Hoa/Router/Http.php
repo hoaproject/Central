@@ -797,7 +797,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
     public function setSubdomainSuffix ( $suffix ) {
 
         $old                    = $this->_subdomainSuffix;
-        $this->_subdomainSuffix = $suffix;
+        $this->_subdomainSuffix = preg_quote($suffix);
 
         return $old;
     }

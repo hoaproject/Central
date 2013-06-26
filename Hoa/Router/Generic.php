@@ -163,13 +163,13 @@ abstract class Generic implements Router {
     /**
      * Helper for adding rules.
      * Methods are concatenated by _. If prefixed by _, it's a private rule. In
-     * addition, the keyword “all” takes place for all methods.
+     * addition, the keyword “any” takes place for all methods.
      * Examples:
      *     get(…)        : addRule(…, array('get'), …);
      *     get_post(…)   : addRule(…, array('get', 'post'), …);
      *     post_get(…)   : same that above;
      *     _get(…)       : addPrivateRule(…, array('get'), …);
-     *     all(…)        : addRule(…, array(<all methods>), …);
+     *     any(…)        : addRule(…, array(<all methods>), …);
      *     head_delete(…): addRule(…, array('head', 'delete'), …).
      *
      * @access  public
@@ -188,7 +188,7 @@ abstract class Generic implements Router {
         else
             $method = 'addRule';
 
-        if('all' == $name)
+        if('any' == $name)
             array_unshift($arguments, static::$_methods);
         else
             array_unshift($arguments, explode('_', $name));
