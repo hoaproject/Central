@@ -189,6 +189,9 @@ class Core implements Parameter\Parameterizable {
         if(empty($date))
             ini_set('date.timezone', 'Europe/Paris');
 
+        mb_internal_encoding('UTF-8');
+        mb_regex_encoding('UTF-8');
+
         return;
     }
 
