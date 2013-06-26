@@ -59,7 +59,7 @@
   <strong>motif</strong> sous la forme d'une expression régulière (basée sur les
   <a href="http://pcre.org/">PCRE</a>). La requête doit correspondre à ce motif
   pour qu'elle soit retenue. Ce motif permet aussi d'extraire des données de la
-  requête, ce qui aidera à son acheminement.  Notons par ailleurs que toutes les
+  requête, ce qui aidera à son acheminement. Notons par ailleurs que toutes les
   règles portent un <strong>identifiant</strong> unique.</p>
 
   <h2 id="Ecrire_des_regles" for="main-toc">Écrire des règles</h2>
@@ -82,8 +82,8 @@
     <li>un <strong><em lang="en">callable</em></strong> ;</li>
     <li>des <strong>variables</strong>.</li>
   </ul>
-  <p>Les deux derniers paramètres sont optionnels. Nous verrons par la suite que le
-  <em lang="en">callable</em> est en fait une variable, ce qui réduit notre
+  <p>Les deux derniers paramètres sont optionnels. Nous verrons par la suite que
+  le <em lang="en">callable</em> est en fait une variable, ce qui réduit notre
   liste aux quatre éléments énoncés précédemment.</p>
   <p>Prenons un exemple avec le routeur HTTP représenté par la classe
   <code>Hoa\Router\Http</code> :</p>
@@ -116,9 +116,10 @@ $router->_get_post('f', '/foobar');</code></pre>
   <p>Cette notation est plus appréciée des utilisateurs car elle facilite la
   lecture et l'écriture du code.</p>
   <p>Notons que nous pouvons supprimer à tout moment une règle avec la méthode
-  <code>Hoa\Router::removeRule</code> à laquelle on passe l'identifiant d'une règle.  Nous sommes
-  également capable de vérifier qu'une règle existe avec la méthode
-  <code>Hoa\Router::ruleExists</code> et un identifiant de règle.</p>
+  <code>Hoa\Router::removeRule</code> à laquelle nous passons l'identifiant
+  d'une règle. Nous sommes également capable de vérifier qu'une règle existe
+  avec la méthode <code>Hoa\Router::ruleExists</code> et un identifiant de
+  règle.</p>
 
   <h3 id="Router" for="main-toc">Router</h3>
 
@@ -228,7 +229,8 @@ print_r($theRule[$router::RULE_VARIABLES]);
   PCRE. Nous nous servons de son pouvoir d'expression pour filtrer (ou valider)
   les requêtes finement.</p>
   <p>Quand nous précisons des variables lors d'une déclaration de règle avec
-  <code>Hoa\Router::addRule</code> (ou sa sœur <code>Hoa\Router::addPrivateRule</code>), cela définit des valeurs par
+  <code>Hoa\Router::addRule</code> (ou sa sœur
+  <code>Hoa\Router::addPrivateRule</code>), cela définit des valeurs par
   <strong>défaut</strong> pour les variables. Par exemple, si la partie
   <code>format</code> devient optionnelle, nous voudrions que sa valeur par
   défaut soit <code>.txt</code> :</p>
@@ -422,8 +424,8 @@ var_dump(
  */
 </code></pre>
   <p>Bien. Maintenant voyons comment dire à une <strong>règle</strong> de
-  travailler sur les sous-domaines. Une règle est en réalité
-  constituée de <strong>deux</strong> expressions régulières, <strong>concaténées</strong> par
+  travailler sur les sous-domaines. Une règle est en réalité constituée de
+  <strong>deux</strong> expressions régulières, <strong>concaténées</strong> par
   le symbole <code>@</code> (arobase), c'est à dire
   <code>[<em>subdomain</em>@]<em>URI</em></code>, avec la première partie qui
   est optionnelle. Si nous voulons reconnaître les sous-domaines de la forme
