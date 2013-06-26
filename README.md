@@ -9,6 +9,9 @@ This library allows to find an appropriated route and extracts data from a
 request. Conversely, given a route and data, this library is able to build a
 request.
 
+For now, we have two routers: HTTP (routes understand URI and subdomains) and
+CLI (routes understand a full command-line).
+
 ## Quick usage
 
 We propose a quick overview of two usages: in a HTTP context and in a CLI
@@ -22,7 +25,7 @@ We consider the following routes:
   * `/bye`, only accessible with the `GET` method;
   * `/hello_<nick>` only accessible with the `GET` method.
 
-There is different ways to declare routes but the more usual is as follows:
+There are different ways to declare routes but the more usual is as follows:
 
     $router = new Hoa\Router\Http();
     $router
@@ -65,7 +68,7 @@ on `127.0.0.1:8888`:
     $ curl 127.0.0.1:8888/hello_alyx
     Welcome Alyx!
 
-This simple API hides a very modular mechanism that can be foreseen by typing
+This simple API hides a modular mechanism that can be foreseen by typing
 `print_r($router->getTheRule())`.
 
 To unroute, i.e. make the opposite operation, we can do this:
@@ -75,18 +78,18 @@ To unroute, i.e. make the opposite operation, we can do this:
 
 ### CLI
 
-We would like to recognize the following route `[<group>:]?<command> <options>`
-in the `cli.php` file:
+We would like to recognize the following route `[<group>:]?<subcommand>
+<options>` in the `Router.php` file:
 
     $router = new Hoa\Router\Cli();
     $router->get(
         'g',
-        '(?:(?<group>\w+):)?(?<command>\w+)(?<options>.*?)',
-        function ( $command, $group = null, $options = null ) {
+        '(?<group>\w+):(?<subcommand>\w+)(?<options>.*?)'
+        function ( $group, $subcommand, $options ) {
 
-            echo 'Group  : ', $group, "\n",
-                 'Command: ', $command, "\n",
-                 'Options: ', trim($options), "\n";
+            echo 'Group     : ', $group, "\n",
+                 'Subcommand: ', $subcommand, "\n",
+                 'Options   : ', trim($options), "\n";
         }
     );
 
@@ -97,14 +100,10 @@ We can use a basic dispatcher to call automatically the associated callable:
 
 And now, testing time:
 
-    $ php cli.php mycommand
-    Group  : 
-    Command: mycommand
-    Options: 
-    $ php cli.php mygroup:mycommand --some options
-    Group  : mygroup
-    Command: mycommand
-    Options: --some options
+    $ php Router.php foo:bar --some options
+    Group     : foo
+    Subcommand: bar
+    Options   : --some options
 
 The use of `Hoa\Console` would be a good idea to interprete the options and
 getting some confortable services for the terminal.
