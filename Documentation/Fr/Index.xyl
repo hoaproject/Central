@@ -59,7 +59,7 @@
   <strong>motif</strong> sous la forme d'une expression régulière (basée sur les
   <a href="http://pcre.org/">PCRE</a>). La requête doit correspondre à ce motif
   pour qu'elle soit retenue. Ce motif permet aussi d'extraire des données de la
-  requête, ce qui aidera à son acheminant.  Notons par ailleurs que toutes les
+  requête, ce qui aidera à son acheminement.  Notons par ailleurs que toutes les
   règles portent un <strong>identifiant</strong> unique.</p>
 
   <h2 id="Ecrire_des_regles" for="main-toc">Écrire des règles</h2>
@@ -69,7 +69,7 @@
   également que lorsqu'une règle a été choisie, son motif sera utilisé pour
   extraire des données de la requête, qui seront ensuite placées dans des
   variables. Une règle est donc également composée de
-  <strong>variables</strong>. Nous avons quatre éléments.</p>
+  <strong>variables</strong>. Nous avons donc quatre éléments.</p>
   <p>Nous trouvons deux méthodes pour ajouter des règles sur un routeur :
   <code>Hoa\Router::addRule</code> pour ajouter une règle publique et
   <code>Hoa\Router::addPrivateRule</code> pour ajouter une règle privée. Les
@@ -82,7 +82,7 @@
     <li>un <strong><em lang="en">callable</em></strong> ;</li>
     <li>des <strong>variables</strong>.</li>
   </ul>
-  <p>Les deux derniers points sont optionnels. Nous verrons par la suite que le
+  <p>Les deux derniers paramètres sont optionnels. Nous verrons par la suite que le
   <em lang="en">callable</em> est en fait une variable, ce qui réduit notre
   liste aux quatre éléments énoncés précédemment.</p>
   <p>Prenons un exemple avec le routeur HTTP représenté par la classe
@@ -111,12 +111,12 @@ $router->addRule('h', array('get'),         '/hello')
   <p>Et enfin, pour représenter une règle privée, le nom devra commencer par le
   symbole « <code>_</code> ». Ainsi, ces deux déclarations sont strictement
   identiques :</p>
-  <pre><code class="language-php">$router->addPrivateRule('f', array('get_post'), '/foobar');
+  <pre><code class="language-php">$router->addPrivateRule('f', array('get', 'post'), '/foobar');
 $router->_get_post('f', '/foobar');</code></pre>
   <p>Cette notation est plus appréciée des utilisateurs car elle facilite la
   lecture et l'écriture du code.</p>
   <p>Notons que nous pouvons supprimer à tout moment une règle avec la méthode
-  <code>Hoa\Router::removeRule</code> et l'identifiant d'une règle.  Nous sommes
+  <code>Hoa\Router::removeRule</code> à laquelle on passe l'identifiant d'une règle.  Nous sommes
   également capable de vérifier qu'une règle existe avec la méthode
   <code>Hoa\Router::ruleExists</code> et un identifiant de règle.</p>
 
@@ -164,7 +164,7 @@ print_r($router->getTheRule());
  *
  *     )
  */</code></pre>
-  <p>Les indices du tableau sont données par les constantes sur
+  <p>Les indices du tableau sont donnés par les constantes sur
   <code>Hoa\Router</code> suivantes :</p>
   <ul>
     <li><code>RULE_VISIBILITY</code>, pour la <strong>visibilité</strong> de la
@@ -228,7 +228,7 @@ print_r($theRule[$router::RULE_VARIABLES]);
   PCRE. Nous nous servons de son pouvoir d'expression pour filtrer (ou valider)
   les requêtes finement.</p>
   <p>Quand nous précisons des variables lors d'une déclaration de règle avec
-  <code>Hoa\Router::addRule</code> (ou sa sœur), cela définit des valeurs par
+  <code>Hoa\Router::addRule</code> (ou sa sœur <code>Hoa\Router::addPrivateRule</code>), cela définit des valeurs par
   <strong>défaut</strong> pour les variables. Par exemple, si la partie
   <code>format</code> devient optionnelle, nous voudrions que sa valeur par
   défaut soit <code>.txt</code> :</p>
@@ -423,11 +423,11 @@ var_dump(
 </code></pre>
   <p>Bien. Maintenant voyons comment dire à une <strong>règle</strong> de
   travailler sur les sous-domaines. Une règle est en réalité
-  <strong>deux</strong> expressions régulières, <strong>concaténées</strong> par
+  constituée de <strong>deux</strong> expressions régulières, <strong>concaténées</strong> par
   le symbole <code>@</code> (arobase), c'est à dire
   <code>[<em>subdomain</em>@]<em>URI</em></code>, avec la première partie qui
   est optionnelle. Si nous voulons reconnaître les sous-domaines de la forme
-  <code><em>user</em>.domain.tld</code>, et les URI de la forme
+  <code><em>user</em>.domain.tld</code> et les URI de la forme
   <code>/Project/<em>project</em>.html</code>, nous écrirons la règle
   <code>p</code> suivante (accessible avec la méthode <code>GET</code>
   uniquement) :</p>
