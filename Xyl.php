@@ -355,7 +355,7 @@ class          Xyl
         );
 
         if(null !== $router && false === $router->ruleExists('_resource'))
-            $router->_all('_resource', '/(?<theme>)/(?<resource>)');
+            $router->_any('_resource', '/(?<theme>)/(?<resource>)');
 
         return;
     }
