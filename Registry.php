@@ -78,8 +78,8 @@ class Registry extends \ArrayObject {
     public function __construct ( ) {
 
         throw new Exception(
-            'Cannot instance the \Hoa\Registry object. Use set, get, remove ' .
-            'and isRegistered static methods.', 0);
+            'Cannot instance the %s object. Use set, get, remove ' .
+            'and isRegistered static methods instead.', 0, __CLASS__);
 
         return;
     }
