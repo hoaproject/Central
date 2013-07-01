@@ -50,7 +50,7 @@ namespace Hoa\Registry {
 /**
  * Class \Hoa\Registry.
  *
- * Hold a register of objects.
+ * Hold a register of something.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
@@ -92,10 +92,10 @@ class Registry extends \ArrayObject {
      */
     protected static function getInstance ( ) {
 
-        if(null === self::$_instance)
-            self::$_instance = new parent();
+        if(null === static::$_instance)
+            static::$_instance = new parent();
 
-        return self::$_instance;
+        return static::$_instance;
     }
 
     /**
@@ -108,7 +108,7 @@ class Registry extends \ArrayObject {
      */
     public static function set ( $index, $value ) {
 
-        self::getInstance()->offsetSet($index, $value);
+        static::getInstance()->offsetSet($index, $value);
 
         return;
     }
@@ -123,9 +123,9 @@ class Registry extends \ArrayObject {
      */
     public static function get ( $index ) {
 
-        $registry = self::getInstance();
+        $registry = static::getInstance();
 
-        if(!$registry->offsetExists($index))
+        if(false === $registry->offsetExists($index))
             throw new Exception('Registry %s does not exist.',
                 1, $index);
 
@@ -141,7 +141,7 @@ class Registry extends \ArrayObject {
      */
     public static function isRegistered ( $index ) {
 
-        return self::getInstance()->offsetExists($index);
+        return static::getInstance()->offsetExists($index);
     }
 
     /**
@@ -153,7 +153,7 @@ class Registry extends \ArrayObject {
      */
     public static function remove ( $index ) {
 
-        self::getInstance()->offsetUnset($index);
+        static::getInstance()->offsetUnset($index);
 
         return;
     }
