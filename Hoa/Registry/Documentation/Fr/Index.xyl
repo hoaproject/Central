@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<overlay xmlns="http://hoa-project.net/xyl/xylophone">
+<yield id="chapter">
+
+  <p>Les <strong>registres</strong> statiques sont des <strong>tableaux</strong>
+  contenant des <strong>informations</strong> de toutes sortes. La bibliothèque
+  <code>Hoa\Registry</code> propose un registre statique et quelques
+  facilités.</p>
+
+  <h2 id="Table_des_matieres">Table des matières</h2>
+
+  <tableofcontents id="main-toc" />
+
+  <h2 id="Introduction" for="main-toc">Introduction</h2>
+
+  <p>Un <strong>registre</strong> statique permet de <strong>stocker</strong>
+  des informations de toutes sortes, appelées <strong>entrées</strong>. Un
+  registre se comporte comme un tableau PHP avec des clés et des valeurs, c'est
+  à dire comme un <em lang="en">hashmap</em>.</p>
+
+  <h2 id="Manipuler_le_registre" for="main-toc">Manipuler le registre</h2>
+
+  <p>La classe <code>Hoa\Registry</code> ne propose que quatre méthodes
+  statiques :</p>
+  <ul>
+    <li><code>set</code> pour <strong>définir</strong> une valeur à une
+    entrée ;</li>
+    <li><code>get</code> pour <strong>obtenir</strong> la valeur d'une
+    entrée ;</li>
+    <li><code>isRegistered</code> pour <strong>tester</strong> qu'une entrée
+    existe bien ;</li>
+    <li><code>remove</code> pour <strong>supprimer</strong> une entrée dans le
+    registre.</li>
+  </ul>
+  <p>L'utilisation est triviale. Nous allons prendre un exemple :</p>
+  <pre><code class="language-php">from('Hoa')
+-> import('Registry.~');
+
+Hoa\Registry::set('foo', 'bar');
+var_dump(Hoa\Registry::get('foo'));
+
+/**
+ * Will output:
+ *     string(3) "bar"
+ */</code></pre>
+  <p>Les clés doivent être un booléen, un entier ou une chaîne de caractères. Il
+  n'y a <strong>aucune</strong> restriction, pas de valeur ou de caractère
+  interdit. Il est libre à l'utilisateur de définir ses propres
+  <strong>conventions</strong> de nommage pour les clés. Nous pouvons par
+  exemple utiliser <code>.</code> (point) ou <code>/</code>
+  (<em lang="en">slash</em>) pour créer une sorte de structure linéarisée ; par
+  exemple <code>group.subgroup.entry</code>. Peu importe,
+  <code>Hoa\Registry</code> ne fera aucune différence.</p>
+  <p>Voyons les deux dernières méthodes à travers la suite de l'exemple :</p>
+  <pre><code class="language-php">var_dump(Hoa\Registry::isRegistered('foo'));
+
+Hoa\Registry::remove('foo');
+var_dump(Hoa\Registry::isRegistered('foo'));
+
+/**
+ * Will output:
+ *     bool(true)
+ *     bool(false)
+ */</code></pre>
+  <p>C'est aussi simple que ça. Le registre ne vit que durant une exécution. Il
+  est accessible <strong>globalement</strong> depuis partout.</p>
+
+  <h2 id="Integration_au_protocole_hoa" for="main-toc">Intégration au protocole
+  <code>hoa://</code></h2>
+
+  <p>Le protocole <code>hoa://</code> permet d'<strong>abstraire</strong> des
+  ressources de toutes sortes et la branche <code>hoa://Library</code> abstrait
+  les ressources appartenant aux <strong>bibliothèques</strong>. La bibliothèque
+  <code>Hoa\Registry</code> propose d'accéder aux valeurs des entrées à l'aide
+  du chemin <code>hoa://Library/Registry#<em>key</em></code> où
+  <code><em>key</em></code> représente la clé de l'entrée. Le moyen le plus
+  simple pour résoudre un tel chemin est d'utiliser la fonction
+  <code>resolve</code> :</p>
+  <pre><code class="language-php">var_dump(resolve('hoa://Library/Registry#foo'));
+
+/**
+ * Will output:
+ *     string(3) "bar"
+ */</code></pre>
+  <p>L'utilisation du protocole est très utile pour <strong>représenter</strong>
+  une ressource stockée dans le registre à travers une URI. Comme nous pouvons y
+  stocker toutes sortes de données, nous pouvons imaginer y stocker des flux ;
+  par exemple :</p>
+  <pre><code class="language-php">// A dummy stream.
+$stream = new Hoa\File\Read(__FILE__);
+Hoa\Registry::set('stream.dummy', $stream);</code></pre>
+  <p>Et autre part, dans notre application, grâce à des conventions de nommage,
+  nous pouvons retrouver notre flux :</p>
+  <pre><code class="language-php">$stream = resolve('hoa://Library/Registry#stream.dummy');
+echo $stream->readAll();</code></pre>
+  <p>Nous pouvons y stocker aussi des fonctions anonymes ou tout autre chose.
+  Les possibilités sont <strong>intéressantes</strong>.</p>
+
+  <h2 id="Conclusion" for="main-toc">Conclusion</h2>
+
+  <p>La bibliothèque <code>Hoa\Registry</code> propose un
+  <strong>registre</strong> statique. Son intégration au protocole
+  <code>hoa://</code> l'expose à de <strong>nouveaux</strong> usages. Son
+  fonctionnement est assez trivial mais elle peut s'avérer utile
+  régulièrement.</p>
+
+</yield>
+</overlay>
