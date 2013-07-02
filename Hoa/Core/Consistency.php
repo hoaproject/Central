@@ -294,6 +294,12 @@ class Consistency implements \ArrayAccess {
 
         if(false !== strpos($all, '*')) {
 
+            if(WITH_COMPOSER) {
+
+                $explode[0] = strtolower($explode[0]);
+                $explode[1] = strtolower($explode[1]);
+            }
+
             $backup     = $explode[0];
             $explode[0] = $root . $explode[0];
             $countFrom  = strlen($explode[0]) + 1;
