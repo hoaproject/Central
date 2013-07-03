@@ -181,6 +181,23 @@ print_r($router->getTheRule());
   <p>Ainsi, si nous voulons toutes les variables de la règle choisie, nous
   écrirons <code class="language-php">$theRule[$router::RULE_VARIABLES]</code>.
   C'est aussi simple que ça.</p>
+  <p>L'exception <code>Hoa\Router\Exception\NotFound</code> signifie qu'aucune
+  règle ne reconnaît la requête. Par exemple :</p>
+  <pre><code class="language-php">try {
+
+    $router->route('/foobar');
+}
+catch ( Hoa\Router\Exception\NotFound $e ) {
+
+    echo $e->getFormattedMessage();
+}
+
+/**
+ * Will output:
+ *     Cannot found an appropriated rule to route foobar.
+ */</code></pre>
+  <p>Elle peut être levée à différentes étapes de la méthode
+  <code>Hoa\Router::route</code>, avec des messages différents.</p>
 
   <h3 id="Bien_comprendre_les_motifs" for="main-toc">Bien comprendre les
   motifs</h3>
