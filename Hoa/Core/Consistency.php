@@ -294,13 +294,14 @@ class Consistency implements \ArrayAccess {
 
         if(false !== strpos($all, '*')) {
 
+            $backup = array($explode[0], $explode[1]);
+
             if(WITH_COMPOSER) {
 
                 $explode[0] = strtolower($explode[0]);
                 $explode[1] = strtolower($explode[1]);
             }
 
-            $backup     = $explode[0];
             $explode[0] = $root . $explode[0];
             $countFrom  = strlen($explode[0]) + 1;
             $glob       = glob(implode('/', $explode) . '.php');
@@ -313,15 +314,15 @@ class Consistency implements \ArrayAccess {
                 return false;
             }
 
-            $explode[0] = $backup;
-
             foreach($glob as $value) {
 
-                $out = $this->_import(
-                    substr(
-                        str_replace('/', '.', substr($value, 0, -4)),
-                        $countFrom
-                    ),
+                $path = substr(
+                    str_replace('/', '.', substr($value, 0, -4)),
+                    $countFrom
+                );
+                $path = $backup[1] . substr($path, strpos($path, '.'));
+                $out  = $this->_import(
+                    $path,
                     $load,
                     $from,
                     $root,
