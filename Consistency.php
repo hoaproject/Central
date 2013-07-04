@@ -373,7 +373,7 @@ class Consistency implements \ArrayAccess {
 
         $parts[0] = $backup[0];
         $parts[1] = $backup[1];
-        $entry    = $parts[$count - 2] == $parts[$count - 1];
+        $entry    = $parts[$count - 2] === $parts[$count - 1];
         $class    = implode('\\', $parts);
         $alias    = false;
 
