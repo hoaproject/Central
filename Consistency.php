@@ -886,12 +886,19 @@ class Xcallable {
 
                 list($call, $able) = explode('::', $call);
             }
-            elseif(   is_object($call)
-                   && $call instanceof \Hoa\Stream\IStream\Out)
-                $able = null;
+            elseif(is_object($call)) {
+
+                if($call instanceof \Hoa\Stream\IStream\Out)
+                    $able = null;
+                elseif(method_exists($call, '__invoke'))
+                    $able = '__invoke';
+                else
+                    throw new \Hoa\Core\Exception(
+                        'Bad callback form.', 1);
+            }
             else
                 throw new \Hoa\Core\Exception(
-                    'Bad callback form.', 1);
+                    'Bad callback form.', 2);
 
         $this->_callback = array($call, $able);
 
