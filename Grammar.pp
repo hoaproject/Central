@@ -182,7 +182,7 @@ expression:
     ( ::and:: ( declaration() | constraint() | domainof() | predicate() ) )*
 
 exceptional_expression:
-    exception() ( ::and:: exception() )*
+    exception() ( ::or:: exception() )*
 
 exception:
     exception_identifier() ( ::or:: exception_identifier() )*
