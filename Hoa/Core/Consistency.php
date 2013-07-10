@@ -811,6 +811,20 @@ class Consistency implements \ArrayAccess {
         return in_array(strtolower($word), $_list);
     }
 
+    /**
+     * Whether an ID is a valid PHP identifier.
+     *
+     * @access  public
+     * @param   string  $id    ID.
+     * @return  bool
+     */
+    public static function isIdentifier ( $id ) {
+
+        return 0 !== preg_match(
+            '#^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$#',
+            $id
+        );
+    }
 }
 
 /**
