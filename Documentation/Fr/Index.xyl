@@ -3,7 +3,7 @@
 <overlay xmlns="http://hoa-project.net/xyl/xylophone">
 <yield id="chapter">
 
-  <p>Un programme doit gérer beaucoup de <strong>données</strong>, et une tâche
+  <p>Un programme doit gérer beaucoup de <strong>requêtes</strong>, et une tâche
   <strong>essentielle</strong> est de savoir les <strong>router</strong>,
   c'est à dire de savoir où les <strong>acheminer</strong>. C'est le rôle qui
   incombe à la bibliothèque <code>Hoa\Router</code>.</p>
@@ -232,8 +232,15 @@ print_r($theRule[$router::RULE_VARIABLES]);
  *     )
  */</code></pre>
   <p>Nous retrouvons notre variable <code>who</code> qui vaut
-  <code>gordon</code>. Nous avons <strong>extrait</strong> des données de la
-  requête choisie. Le nombre de variables n'est pas limité. Ainsi :</p>
+  <code>gordon</code>.  Nous remarquons que le nom de certaines variables
+  commencent par le symbole « <code>_</code> », comme <code>_domain</code> ou
+  <code>_request</code>. Cela signifie que ce sont des variables déclarées par
+  le <strong>routeur</strong> et non pas par l'<strong>utilisateur</strong>.
+  Elles sont dites <strong>réservées</strong>.  Chaque routeur a ses propres
+  variables réservées. Notons que rien ne nous empêche d'utiliser leur nom dans
+  une règle. Le routeur leur donne des valeurs « par défaut », c'est tout.</p>
+  <p>Nous avons <strong>extrait</strong> des données de la requête choisie. Le
+  nombre de variables n'est pas limité. Ainsi :</p>
   <pre><code class="language-php">$router->get('h', '/hello_(?&amp;lt;who>\w+)(?&amp;lt;format>\.[a-z]+)');</code></pre>
   <p>Avec <code>/hello_gordon.html</code>, la variable <code>who</code> sera
   égale à <code>gordon</code> et <code>format</code> sera égale à
@@ -277,25 +284,16 @@ var_dump($theRule[$router::RULE_VARIABLES]['format']);
  *     string(5) ".html"
  */</code></pre>
 
-  <h3 id="Variables_reservees" for="main-toc">Variables réservées</h3>
-
-  <p>Nous remarquons que le nom de certaines variables commencent par le symbole
-  « <code>_</code> », cela signifie que ce sont des variables déclarées par le
-  <strong>routeur</strong> et non pas par l'<strong>utilisateur</strong>. Elles
-  sont dites <strong>réservées</strong>. Chaque routeur a ses propres variables
-  réservées. Notons que rien ne nous empêche d'utiliser leur nom dans une
-  règle. Le routeur leur donne des valeurs « par défaut », c'est tout.</p>
-
   <h3 id="Derouter" for="main-toc">Dérouter</h3>
 
   <p>L'opération <strong>inverse</strong> de <code>Hoa\Router::route</code> est
-  <code>Hoa\Router::unroute</code>. Cette fois-ci, les arguments sont standards.
-  Au minimum, il est demandé l'<strong>identifiant</strong> de la règle et une
-  liste de <strong>variables</strong>. Cette méthode va construire une requête à
-  partir d'une règle. Par exemple, nous aimerions produire la requête reconnue
-  par la règle <code>h</code> avec comme valeur <code>alyx</code> pour
-  <code>who</code> et rien pour le format (la valeur par défaut sera utilisée).
-  Alors, nous écrirons :</p>
+  <code>Hoa\Router::unroute</code>. Au minimum, il est demandé
+  l'<strong>identifiant</strong> de la règle et une liste de
+  <strong>variables</strong>. Cette méthode va construire une requête à partir
+  d'une règle. Par exemple, nous aimerions produire la requête reconnue par la
+  règle <code>h</code> avec comme valeur <code>alyx</code> pour <code>who</code>
+  et rien pour le format (la valeur par défaut sera utilisée).  Alors, nous
+  écrirons :</p>
   <pre><code class="language-php">var_dump($router->unroute('h', array('who' => 'alyx')));
 
 /**
@@ -368,7 +366,7 @@ var_dump($router->unroute('h', array('who' => 'alyx')));
   <code>/Forum/</code> ; une URI peut alors être :
   <code>/Forum/Help/Newpost.html</code>. Le routeur n'est intéressé que par la
   partie <code>/Help/Newpost.html</code>. Dans ce cas, le préfixe est
-  <code>Forum</code> (les <em lang="en">slashes</em> avant et après non pas
+  <code>Forum</code> (les <em lang="en">slashes</em> avant et après n'ont pas
   d'importance). Ainsi :</p>
   <pre><code class="language-php">$router->route('/Forum/Help/Newpost.html', 'Forum');</code></pre>
   <p>Toutefois, nous pouvons définir un préfixe pour toutes les requêtes, avec
@@ -380,10 +378,9 @@ $router->route('/Forum/Help/Newpost.html');</code></pre>
   serveurs HTTP, <code>Hoa\Router\Http</code> sait détecter
   <strong>automatiquement</strong> le préfixe, vous n'aurez donc pas à vous
   soucier de cette problématique.</p>
-  <p>Additionnellement, nous avons les méthodes
-  <code>Hoa\Router\Http::getPort</code> pour obtenir le port et
-  <code>Hoa\Router\Http::isSecure</code> pour savoir si la connexion est
-  sécurisée ou pas.</p>
+  <p>Nous avons également les méthodes <code>Hoa\Router\Http::getPort</code>
+  pour obtenir le port et <code>Hoa\Router\Http::isSecure</code> pour savoir si
+  la connexion est sécurisée ou pas.</p>
 
   <h3 id="Sous-domaines" for="main-toc">Sous-domaines</h3>
 
@@ -682,10 +679,11 @@ var_dump(
   l'URI. Dans ce contexte, l'URI est la ligne de commande, ou plus précisément,
   ce qui suit la commande. Par exemple :</p>
   <pre><code class="language-shell">$ command --option value input</code></pre>
-  <p>Ici, <code>--option value input</code> forme l'URI. C'est vraiment tout ce
-  qui suit, sans distinction. Nous pouvons nous en rendre compte en appelant la
-  méthode statique <code>Hoa\Router\Cli::getURI</code>. Il n'y pas de notion de
-  préfixe comme pour <code>Hoa\Router\Http</code>.</p>
+  <p>Dans ce contexte, l'URI est la ligne de commande, ou plus précisément, ce
+  qui suit la commande, sans distinction ; soit <code>--option value
+  input</code>. Nous pouvons nous en rendre compte en appelant la méthode
+  statique <code>Hoa\Router\Cli::getURI</code>. Il n'y pas de notion de préfixe
+  comme pour <code>Hoa\Router\Http</code>.</p>
   <p>Prenons un exemple très courant qui consiste à avoir une ligne de commande
   la forme <code><em>command </em><em>group</em>:<em>subcommand</em>
   <em>options</em></code>. Nous écrirons la règle <code>g</code> suivante dans
