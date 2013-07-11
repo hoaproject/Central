@@ -248,12 +248,18 @@ class Cli extends Generic implements \Hoa\Core\Parameter\Parameterizable {
         $rule[Router::RULE_VARIABLES]['_call'] = &$rule[Router::RULE_CALL];
         $rule[Router::RULE_VARIABLES]['_able'] = &$rule[Router::RULE_ABLE];
 
+        $caseless = 0 === preg_match(
+            '#\(\?\-[imsxUXJ]+\)#',
+            $rule[Router::RULE_PATTERN]
+        );
+
         foreach($muri as $key => $value) {
 
             if(!is_string($key))
                 continue;
 
-            $key = strtolower($key);
+            if(true === $caseless)
+                $key = mb_strtolower($key);
 
             if(isset($rule[Router::RULE_VARIABLES][$key]) && empty($value))
                 continue;
@@ -290,7 +296,7 @@ class Cli extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
                 return $variables[$m];
             },
-            $pattern
+            preg_replace('#\(\?\-?[imsxUXJ]+\)#', '', $pattern)
         );
 
         return str_replace(
