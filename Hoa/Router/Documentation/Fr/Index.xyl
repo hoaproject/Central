@@ -16,17 +16,16 @@
 
   <p>Un routeur a une tâche assez simple : il reçoit une
   <strong>requête</strong> et il doit trouver où l'<strong>acheminer</strong>.
-  Pour cela, il dispose d'une série de <strong>règles</strong>. Il cherche donc
+  Pour cela, il dispose d'une série de <strong>règles</strong>. Il cherche
   quelle règle parmi toutes celles dont il dispose correspond à la requête. Si
-  une requête est <strong>reconnue</strong> par une règle, alors des
-  <strong>données</strong> en seront extraites. Ces données peuvent être
-  utilisées pour acheminer la requête quelque part. C'est le rôle de <a
-  href="@lh:chapter=Dispatcher"><code>Hoa\Dispatcher</code></a>, qui fonctionne
-  de paire avec <code>Hoa\Router</code>.</p>
+  une <strong>correspondance</strong> entre une requête et une règle existe,
+  alors des <strong>données</strong> seront extraites de cette requête. Ces
+  données peuvent être utilisées pour acheminer la requête quelque part. C'est
+  le rôle de <a href="@lh:chapter=Dispatcher"><code>Hoa\Dispatcher</code></a>,
+  qui fonctionne de paire avec <code>Hoa\Router</code>.</p>
   <p>Une règle doit être vue comme une succession de filtres. Si tous les
   filtres laissent passer la requête, alors la règle sera retenue pour acheminer
-  la requête.</p>
-  <p>Une requête est traitée de la façon suivante :</p>
+  la requête. Une requête est traitée de la façon suivante :</p>
   <div id="filters" class="verbatim schema"></div>
   <script>
   Hoa.Document.onReady(function ( ) {
@@ -71,7 +70,7 @@
   également que lorsqu'une règle a été choisie, son motif sera utilisé pour
   extraire des données de la requête, qui seront ensuite placées dans des
   variables. Une règle est donc également composée de
-  <strong>variables</strong>. Nous avons donc quatre éléments.</p>
+  <strong>variables</strong>. Nous avons au total quatre éléments.</p>
   <p>Nous trouvons deux méthodes pour ajouter des règles sur un routeur :
   <code>Hoa\Router::addRule</code> pour ajouter une règle publique et
   <code>Hoa\Router::addPrivateRule</code> pour ajouter une règle privée. Les
@@ -97,10 +96,10 @@ $router->addRule('h', array('get'),         '/hello')
        ->addRule('l', array('get', 'post'), '/login');</code></pre>
   <p>Nous avons déclarés deux règles : <code>h</code> et <code>l</code>. La
   règle <code>h</code> n'est accessible qu'à travers la méthode HTTP
-  <code>GET</code> et ne reconnaît que la requête (l'URI) <code>/hello</code>.
+  <code>GET</code> et seule la requête (l'URI) <code>/hello</code> correspond.
   La règle <code>l</code> n'est accessible qu'à travers les méthodes HTTP
-  <code>GET</code> et <code>POST</code> et ne reconnaît que la requête
-  <code>/login</code>. Toutes les deux sont des règles publiques.</p>
+  <code>GET</code> et <code>POST</code> et seule la requête <code>/login</code>
+  correspond. Toutes les deux sont des règles publiques.</p>
   <p>Il existe un raccourci pour ajouter plus rapidement et plus facilement des
   règles. Nous pouvons ainsi écrire :</p>
   <pre><code class="language-php">$router->get('h',      '/hello')
@@ -123,8 +122,8 @@ $router->_get_post('f', '/foobar');</code></pre>
 
   <h3 id="Router" for="main-toc">Router</h3>
 
-  <p>Maintenant que nous avons des règles, voyons laquelle peut
-  <strong>reconnaître</strong> une requête. Pour cela, nous allons utiliser la
+  <p>Maintenant que nous avons des règles, voyons à laquelle
+  <strong>correspond</strong> une requête. Pour cela, nous allons utiliser la
   méthode <code>Hoa\Router::route</code>. L'en-tête de cette méthode dépend du
   routeur. Nous allons nous concentrer sur le router HTTP pour illustrer le
   concept, soit la méthode <code>Hoa\Router\Http::route</code>. Le premier
@@ -181,8 +180,8 @@ print_r($router->getTheRule());
   <p>Ainsi, si nous voulons toutes les variables de la règle choisie, nous
   écrirons <code class="language-php">$theRule[$router::RULE_VARIABLES]</code>.
   C'est aussi simple que ça.</p>
-  <p>L'exception <code>Hoa\Router\Exception\NotFound</code> signifie qu'aucune
-  règle ne reconnaît la requête. Par exemple :</p>
+  <p>L'exception <code>Hoa\Router\Exception\NotFound</code> signifie que la
+  requête ne correspond à aucune règle. Par exemple :</p>
   <pre><code class="language-php">try {
 
     $router->route('/foobar');
@@ -199,17 +198,16 @@ catch ( Hoa\Router\Exception\NotFound $e ) {
   <p>Elle peut être levée à différentes étapes de la méthode
   <code>Hoa\Router::route</code>, avec des messages différents.</p>
 
-  <h3 id="Bien_comprendre_les_motifs" for="main-toc">Bien comprendre les
-  motifs</h3>
+  <h3 id="Motifs_et_variables" for="main-toc">Motifs et variables</h3>
 
-  <p>Les <strong>motifs</strong> utilisés dans nos exemples jusqu'à maintenant
+  <p>Jusqu'à maintenant, les <strong>motifs</strong> utilisés dans nos exemples
   sont <em>constants</em> : il n'y a pas de plages de caractères non-définis,
   pas de captures etc. Les motifs sont écrits avec des expressions régulières de
-  type PCRE, ce qui nous permet de reconnaître des requêtes avec des parties
-  variables. Par exemple :</p>
+  type PCRE, ce qui nous permet de définir des règles avec des parties
+  partiellement définies. Par exemple :</p>
   <pre><code class="language-php">$router->get('h', '/hello_(?&amp;lt;who>\w+)');</code></pre>
-  <p>Cela signifique que la règle <code>h</code> reconnaît toutes les requêtes
-  de la forme <code>/hello_<em>word</em></code>. La valeur de
+  <p>Cela signifie que les requêtes correspondantes à la règle <code>h</code>
+  sont de la forme <code>/hello_<em>word</em></code>. La valeur de
   <code><em>word</em></code> sera placée dans la variable <code>who</code>.
   Voyons plutôt :</p>
   <pre><code class="language-php">$router->route('/hello_gordon');
@@ -290,10 +288,10 @@ var_dump($theRule[$router::RULE_VARIABLES]['format']);
   <code>Hoa\Router::unroute</code>. Au minimum, il est demandé
   l'<strong>identifiant</strong> de la règle et une liste de
   <strong>variables</strong>. Cette méthode va construire une requête à partir
-  d'une règle. Par exemple, nous aimerions produire la requête reconnue par la
-  règle <code>h</code> avec comme valeur <code>alyx</code> pour <code>who</code>
-  et rien pour le format (la valeur par défaut sera utilisée).  Alors, nous
-  écrirons :</p>
+  d'une règle. Par exemple, nous aimerions produire la requête correspondante à
+  la règle <code>h</code> avec comme valeur <code>alyx</code> pour
+  <code>who</code> et rien pour le format (la valeur par défaut sera utilisée).
+  Alors, nous écrirons :</p>
   <pre><code class="language-php">var_dump($router->unroute('h', array('who' => 'alyx')));
 
 /**
@@ -471,7 +469,7 @@ print_r($router->getTheRule());
  *         [5] => 
  *         [6] => Array
  *             (
- *                 [_domain] => gordon.domain.hoa
+ *                 [_domain] => gordon.domain.tld
  *                 [_subdomain] => gordon
  *                 [_call] => 
  *                 [_able] => 
@@ -566,12 +564,12 @@ var_dump(
 
 /**
  * Will output:
- *     string(29) "http://foo.bar.baz.domain.hoa"
- *     string(30) "http://my-subdomain.domain.hoa"
- *     string(32) "http://sub3.sub2.sub1.domain.hoa"
- *     string(17) "http://domain.hoa"
- *     string(27) "http://sub2.sub1.domain.hoa"
- *     string(22) "http://sub1.domain.hoa"
+ *     string(29) "http://foo.bar.baz.domain.tld"
+ *     string(30) "http://my-subdomain.domain.tld"
+ *     string(32) "http://sub3.sub2.sub1.domain.tld"
+ *     string(17) "http://domain.tld"
+ *     string(27) "http://sub2.sub1.domain.tld"
+ *     string(22) "http://sub1.domain.tld"
  */</code></pre>
   <p>Notons que le symbole <code>@</code> est présent à la fin de la règle. Ce
   serait une erreur de l'oublier, la règle s'appliquerait sur l'URI et non pas
