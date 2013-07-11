@@ -3,7 +3,7 @@
 <overlay xmlns="http://hoa-project.net/xyl/xylophone">
 <yield id="chapter">
 
-  <p>Un programme doit gérer beaucoup de <strong>données</strong>, et une tâche
+  <p>Un programme doit gérer beaucoup de <strong>requêtes</strong>, et une tâche
   <strong>essentielle</strong> est de savoir les <strong>router</strong>,
   c'est à dire de savoir où les <strong>acheminer</strong>. C'est le rôle qui
   incombe à la bibliothèque <code>Hoa\Router</code>.</p>
@@ -16,51 +16,53 @@
 
   <p>Un routeur a une tâche assez simple : il reçoit une
   <strong>requête</strong> et il doit trouver où l'<strong>acheminer</strong>.
-  Pour cela, il regarde quelle <strong>règle</strong> reconnaît la requête parmi
-  toutes celles qui lui ont été données. Si une requête est
-  <strong>reconnue</strong> par une règle, alors des <strong>données</strong> en
-  seront extraites. Ces données peuvent être utilisées pour acheminer la requête
-  quelque part. C'est le rôle de
-  <a href="@lh:chapter=Dispatcher"><code>Hoa\Dispatcher</code></a>, qui
-  fonctionne de paire avec <code>Hoa\Router</code>.</p>
+  Pour cela, il dispose d'une série de <strong>règles</strong>. Il cherche donc
+  quelle règle parmi toutes celles dont il dispose correspond à la requête. Si
+  une requête est <strong>reconnue</strong> par une règle, alors des
+  <strong>données</strong> en seront extraites. Ces données peuvent être
+  utilisées pour acheminer la requête quelque part. C'est le rôle de <a
+  href="@lh:chapter=Dispatcher"><code>Hoa\Dispatcher</code></a>, qui fonctionne
+  de paire avec <code>Hoa\Router</code>.</p>
   <p>Une règle doit être vue comme une succession de filtres. Si tous les
   filtres laissent passer la requête, alors la règle sera retenue pour acheminer
   la requête.</p>
-  <p>Une règle se compose des filtres suivants :</p>
+  <p>Une requête est traitée de la façon suivante :</p>
   <div id="filters" class="verbatim schema"></div>
   <script>
   Hoa.Document.onReady(function ( ) {
 
       var paper      = Hoa.Graph(Hoa.$('#filters'), 800, 150);
       var grid       = paper.grid(0, 0, 800, 150, 5, 1);
-      var request    = grid.push(paper.rect(0, 0, 120, 90, 3, 'requête'));
+      var request    = grid.push(paper.circle(0, 0, 20));
       var visibility = grid.push(paper.rect(0, 0, 120, 90, 3, 'visibilité'));
       var methods    = grid.push(paper.rect(0, 0, 120, 90, 3, 'méthodes'));
       var pattern    = grid.push(paper.rect(0, 0, 120, 90, 3, 'motif'));
       var gotcha     = grid.push(paper.circle(0, 0, 20));
 
-      paper.link.between(request,    visibility);
+      paper.link.between(request,    visibility, 'requête');
       paper.link.between(visibility, methods);
       paper.link.between(methods,    pattern);
-      paper.link.between(pattern,    gotcha);
+      paper.link.between(pattern,    gotcha, 'retenue');
   });
   </script>
   <p>Tout d'abord, une règle a une <strong>visibilité</strong> qui contrôle la
   <strong>provenance</strong> de la requête. Il y a deux visibilités possibles :
-  publique et privée, respectivement pour l'extérieur et l'intérieur du
-  programme. Par exemple, si la requête est extérieure au programme
-  (typiquement, un client envoie une requête sur un serveur) et que la règle a
-  une visibilité privée, elle ne sera pas retenue. En revanche, si une requête
-  est interne au programme, une règle publique ou privée pourra être retenue.
-  Ensuite, une règle définit des <strong>méthodes</strong> qui vérifient le type
-  de la requête. Par exemple, dans le cas d'une requête HTTP, nous pouvons avoir
-  la méthode <code>GET</code> : toutes les règles ayant au moins la méthode
+  <strong>publique</strong>, qui est validée par les requêtes provenant de
+  l'intérieur du programme comme de l'extérieur, et <strong>privée</strong>, qui
+  n'est validée que par les requêtes provenant du programme lui-même. Par
+  exemple, si la requête est extérieure au programme (typiquement, un client
+  envoie une requête sur un serveur) et que la règle a une visibilité privée,
+  elle ne sera pas retenue. En revanche, si une requête est interne au
+  programme, une règle publique ou privée pourra être retenue.  Ensuite, une
+  règle définit des <strong>méthodes</strong> qui vérifient le type de la
+  requête. Par exemple, dans le cas d'une requête HTTP, nous pouvons avoir la
+  méthode <code>GET</code> : toutes les règles ayant au moins la méthode
   <code>GET</code> peuvent être retenues.  Enfin, une règle impose un
   <strong>motif</strong> sous la forme d'une expression régulière (basée sur les
   <a href="http://pcre.org/">PCRE</a>). La requête doit correspondre à ce motif
   pour qu'elle soit retenue. Ce motif permet aussi d'extraire des données de la
-  requête, ce qui aidera à son acheminement. Notons par ailleurs que toutes les
-  règles portent un <strong>identifiant</strong> unique.</p>
+  requête, ce qui pourra aider à son acheminement. Notons par ailleurs que
+  toutes les règles portent un <strong>identifiant</strong> unique.</p>
 
   <h2 id="Ecrire_des_regles" for="main-toc">Écrire des règles</h2>
 
@@ -110,11 +112,9 @@ $router->addRule('h', array('get'),         '/hello')
   <pre><code class="language-php">$router->any(…);</code></pre>
   <p>Et enfin, pour représenter une règle privée, le nom devra commencer par le
   symbole « <code>_</code> ». Ainsi, ces deux déclarations sont strictement
-  identiques :</p>
+  équivalentes :</p>
   <pre><code class="language-php">$router->addPrivateRule('f', array('get', 'post'), '/foobar');
 $router->_get_post('f', '/foobar');</code></pre>
-  <p>Cette notation est plus appréciée des utilisateurs car elle facilite la
-  lecture et l'écriture du code.</p>
   <p>Notons que nous pouvons supprimer à tout moment une règle avec la méthode
   <code>Hoa\Router::removeRule</code> à laquelle nous passons l'identifiant
   d'une règle. Nous sommes également capable de vérifier qu'une règle existe
@@ -232,25 +232,32 @@ print_r($theRule[$router::RULE_VARIABLES]);
  *     )
  */</code></pre>
   <p>Nous retrouvons notre variable <code>who</code> qui vaut
-  <code>gordon</code>. Nous avons <strong>extrait</strong> des données de la
-  requête choisie. Le nombre de variables n'est pas limité. Ainsi :</p>
+  <code>gordon</code>.  Nous remarquons que le nom de certaines variables
+  commence par le symbole « <code>_</code> », comme <code>_domain</code> ou
+  <code>_request</code>. Cela signifie que ce sont des variables déclarées par
+  le <strong>routeur</strong> et non pas par l'<strong>utilisateur</strong>.
+  Elles sont dites <strong>réservées</strong>.  Chaque routeur a ses propres
+  variables réservées. Notons que rien ne nous empêche d'utiliser leur nom dans
+  une règle. Le routeur leur donne des valeurs « par défaut », c'est tout.</p>
+  <p>Nous avons <strong>extrait</strong> des données de la requête choisie. Le
+  nombre de variables n'est pas limité. Ainsi :</p>
   <pre><code class="language-php">$router->get('h', '/hello_(?&amp;lt;who>\w+)(?&amp;lt;format>\.[a-z]+)');</code></pre>
   <p>Avec <code>/hello_gordon.html</code>, la variable <code>who</code> sera
   égale à <code>gordon</code> et <code>format</code> sera égale à
   <code>.html</code>. Avec <code>/hello_gordon.42</code>, une exception
   <code>Hoa\Router\Exception\NotFound</code> sera levée car <code>.42</code>
-  n'est pas un format accepté et aucune autre règle ne reconnaît cette
-  requête.</p>
+  n'est pas reconnu par le motif <code>\.[a-z]+</code> et la requêe ne
+  correspond à aucune autre règle.</p>
   <p>Nous l'aurons compris, le motif est une expression régulière classique et
-  nous exploitons le <strong>nommage</strong> des captures qu'offre la syntaxe
-  PCRE. Nous nous servons de son pouvoir d'expression pour filtrer (ou valider)
-  les requêtes finement.</p>
+  nous utilisons les <a href="http://pcre.org/pcre.txt">sous-masques nommés</a>
+  pour définir le nom des variables à extraire. Nous nous servons de son pouvoir
+  d'expression pour filtrer (ou valider) les requêtes finement.</p>
   <p>Quand nous précisons des variables lors d'une déclaration de règle avec
   <code>Hoa\Router::addRule</code> (ou sa sœur
-  <code>Hoa\Router::addPrivateRule</code>), cela définit des valeurs par
-  <strong>défaut</strong> pour les variables. Par exemple, si la partie
-  <code>format</code> devient optionnelle, nous voudrions que sa valeur par
-  défaut soit <code>.txt</code> :</p>
+  <code>Hoa\Router::addPrivateRule</code>), il est possible de définir des
+  valeurs par <strong>défaut</strong> pour les variables. Par exemple, si la
+  partie <code>format</code> devient optionnelle, nous voudrions que sa valeur
+  par défaut soit <code>.txt</code> :</p>
   <pre data-line="3,6"><code class="language-php">$router->get(
     'h',
     '/hello_(?&amp;lt;who>\w+)(?&amp;lt;format>\.[a-z]+)?',
@@ -277,25 +284,16 @@ var_dump($theRule[$router::RULE_VARIABLES]['format']);
  *     string(5) ".html"
  */</code></pre>
 
-  <h3 id="Variables_reservees" for="main-toc">Variables réservées</h3>
-
-  <p>Nous remarquons que le nom de certaines variables commencent par le symbole
-  « <code>_</code> », cela signifie que ce sont des variables déclarées par le
-  <strong>routeur</strong> et non pas par l'<strong>utilisateur</strong>. Elles
-  sont dites <strong>réservées</strong>. Chaque routeur a ses propres variables
-  réservées. Notons que rien ne nous empêche d'utiliser leur nom dans une
-  règle. Le routeur leur donne des valeurs « par défaut », c'est tout.</p>
-
   <h3 id="Derouter" for="main-toc">Dérouter</h3>
 
   <p>L'opération <strong>inverse</strong> de <code>Hoa\Router::route</code> est
-  <code>Hoa\Router::unroute</code>. Cette fois-ci, les arguments sont standards.
-  Au minimum, il est demandé l'<strong>identifiant</strong> de la règle et une
-  liste de <strong>variables</strong>. Cette méthode va construire une requête à
-  partir d'une règle. Par exemple, nous aimerions produire la requête reconnue
-  par la règle <code>h</code> avec comme valeur <code>alyx</code> pour
-  <code>who</code> et rien pour le format (la valeur par défaut sera utilisée).
-  Alors, nous écrirons :</p>
+  <code>Hoa\Router::unroute</code>. Au minimum, il est demandé
+  l'<strong>identifiant</strong> de la règle et une liste de
+  <strong>variables</strong>. Cette méthode va construire une requête à partir
+  d'une règle. Par exemple, nous aimerions produire la requête reconnue par la
+  règle <code>h</code> avec comme valeur <code>alyx</code> pour <code>who</code>
+  et rien pour le format (la valeur par défaut sera utilisée).  Alors, nous
+  écrirons :</p>
   <pre><code class="language-php">var_dump($router->unroute('h', array('who' => 'alyx')));
 
 /**
@@ -319,7 +317,7 @@ var_dump($router->unroute('h', array('who' => 'alyx')));
   <h3 id="Informations_sur_les_requetes" for="main-toc">Informations sur les
   requêtes</h3>
 
-  <p>Parmis les informations que nous retrouverons sur tous les routeurs, nous
+  <p>Parmi les informations que nous retrouverons sur tous les routeurs, nous
   avons :</p>
   <ul>
     <li><code>Hoa\Router::getMethod</code> pour connaître la
@@ -345,14 +343,14 @@ var_dump($router->unroute('h', array('who' => 'alyx')));
     <li><code>_domain</code>, le <strong>domaine</strong> (de la forme
     <code>domain.tld</code>) ;</li>
     <li><code>_subdomain</code>, le <strong>sous-domaine</strong> (que nous
-    allons détaillé) ;</li>
+    allons détailler) ;</li>
     <li><code>_call</code> et <code>_able</code>, le
     <strong><em lang="en">callable</em></strong> ;</li>
     <li><code>_request</code>, la partie <strong>requête</strong> de l'URI, soit
     le contenu de la variable
     <a href="http://php.net/reserved.variables.request"><code>$_REQUEST</code></a>.</li>
   </ul>
-  <p>Quand nous voulons router une requête avec la méthode
+  <p>Quand nous voudrons router une requête avec la méthode
   <code>Hoa\Router\Http::route</code>, nous allons travailler sur deux données :
   l'<strong>URI</strong> et son <strong>préfixe</strong>. L'URI est à comprendre
   au sens HTTP, c'est le <strong>chemin</strong> vers une ressource. Par
@@ -368,7 +366,7 @@ var_dump($router->unroute('h', array('who' => 'alyx')));
   <code>/Forum/</code> ; une URI peut alors être :
   <code>/Forum/Help/Newpost.html</code>. Le routeur n'est intéressé que par la
   partie <code>/Help/Newpost.html</code>. Dans ce cas, le préfixe est
-  <code>Forum</code> (les <em lang="en">slashes</em> avant et après non pas
+  <code>Forum</code> (les <em lang="en">slashes</em> avant et après n'ont pas
   d'importance). Ainsi :</p>
   <pre><code class="language-php">$router->route('/Forum/Help/Newpost.html', 'Forum');</code></pre>
   <p>Toutefois, nous pouvons définir un préfixe pour toutes les requêtes, avec
@@ -380,10 +378,9 @@ $router->route('/Forum/Help/Newpost.html');</code></pre>
   serveurs HTTP, <code>Hoa\Router\Http</code> sait détecter
   <strong>automatiquement</strong> le préfixe, vous n'aurez donc pas à vous
   soucier de cette problématique.</p>
-  <p>Additionnellement, nous avons les méthodes
-  <code>Hoa\Router\Http::getPort</code> pour obtenir le port et
-  <code>Hoa\Router\Http::isSecure</code> pour savoir si la connexion est
-  sécurisée ou pas.</p>
+  <p>Nous avons également les méthodes <code>Hoa\Router\Http::getPort</code>
+  pour obtenir le port et <code>Hoa\Router\Http::isSecure</code> pour savoir si
+  la connexion est sécurisée ou pas.</p>
 
   <h3 id="Sous-domaines" for="main-toc">Sous-domaines</h3>
 
@@ -392,7 +389,8 @@ $router->route('/Forum/Help/Newpost.html');</code></pre>
   avons accès :</p>
   <ul>
     <li><code>Hoa\Router\Http::getDomain</code> pour avoir le domaine en
-    <strong>entier</strong> sans le port ;</li>
+    <strong>entier</strong> (c'est à dire avec les sous-domaines) sans le
+    port ;</li>
     <li><code>Hoa\Router\Http::getStrictDomain</code> pour avoir
     <strong>uniquement</strong> le domaine, sans les sous-domaines ;</li>
     <li><code>Hoa\Router\Http::getSubdomain</code> pour avoir
@@ -430,8 +428,8 @@ $router->route('/Forum/Help/Newpost.html');</code></pre>
   <code>gordon.app.domain.tld</code> :</p>
   <pre><code class="language-php">$router->setSubdomainSuffix('app');
 var_dump(
-    $router->getStrictDomain(),
-    $router->getStrictDomain(false)
+    $router->getSubdomain(),
+    $router->getSubdomain(false)
 );
 
 /**
@@ -511,7 +509,7 @@ print_r($router->getTheRule());
  *     string(49) "http://gordon.domain.tld/Project/Space-biker.html"
  */</code></pre>
   <p>La méthode <code>Hoa\Router\Http::unroute</code> a deux
-  <strong>variables</strong> réservées. Nous allons nous intéressés à la
+  <strong>variables</strong> réservées. Nous allons nous intéresser à la
   première : <code>_subdomain</code>. Elle permet de définir la valeur du
   sous-domaine, elle écrasera <strong>complètement</strong> le sous-domaine mais
   le suffixe sera tout de même ajouté. Ainsi :</p>
@@ -682,10 +680,11 @@ var_dump(
   l'URI. Dans ce contexte, l'URI est la ligne de commande, ou plus précisément,
   ce qui suit la commande. Par exemple :</p>
   <pre><code class="language-shell">$ command --option value input</code></pre>
-  <p>Ici, <code>--option value input</code> forme l'URI. C'est vraiment tout ce
-  qui suit, sans distinction. Nous pouvons nous en rendre compte en appelant la
-  méthode statique <code>Hoa\Router\Cli::getURI</code>. Il n'y pas de notion de
-  préfixe comme pour <code>Hoa\Router\Http</code>.</p>
+  <p>Dans ce contexte, l'URI est la ligne de commande, ou plus précisément, ce
+  qui suit la commande, sans distinction ; soit <code>--option value
+  input</code>. Nous pouvons nous en rendre compte en appelant la méthode
+  statique <code>Hoa\Router\Cli::getURI</code>. Il n'y pas de notion de préfixe
+  comme pour <code>Hoa\Router\Http</code>.</p>
   <p>Prenons un exemple très courant qui consiste à avoir une ligne de commande
   la forme <code><em>command </em><em>group</em>:<em>subcommand</em>
   <em>options</em></code>. Nous écrirons la règle <code>g</code> suivante dans
