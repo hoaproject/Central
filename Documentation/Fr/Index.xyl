@@ -428,8 +428,8 @@ $router->route('/Forum/Help/Newpost.html');</code></pre>
   <code>gordon.app.domain.tld</code> :</p>
   <pre><code class="language-php">$router->setSubdomainSuffix('app');
 var_dump(
-    $router->getStrictDomain(),
-    $router->getStrictDomain(false)
+    $router->getSubdomain(),
+    $router->getSubdomain(false)
 );
 
 /**
