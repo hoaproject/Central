@@ -891,9 +891,16 @@ class Xcallable {
         if('' === $able)
             if(is_string($call)) {
 
-                if(false === strpos($call, '::'))
-                    throw new \Hoa\Core\Exception(
-                        'Bad callback form.', 1);
+                if(false === strpos($call, '::')) {
+
+                    if(!function_exists($call))
+                        throw new \Hoa\Core\Exception(
+                            'Bad callback form.', 1);
+
+                    $this->_callback = $call;
+
+                    return;
+                }
 
                 list($call, $able) = explode('::', $call);
             }
