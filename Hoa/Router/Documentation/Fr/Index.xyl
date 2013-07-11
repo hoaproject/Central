@@ -281,6 +281,43 @@ var_dump($theRule[$router::RULE_VARIABLES]['format']);
  * Will output:
  *     string(5) ".html"
  */</code></pre>
+  <p>Il est important de savoir que le routeur traite les requêtes et les règles
+  sans tenir compte de la <strong>casse</strong>, c'est à dire de la différence
+  entre majuscule et minuscule. D'ailleurs, les données extraites des variables
+  sont passées en <strong>minuscules</strong> selon les routeurs (ce qui est le
+  cas de <code>Hoa\Router\Http</code> par exemple). En effet, dans la plupart
+  des situations, il est souhaitable que le routeur soit insensible à la casse.
+  En revanche, il existe certains cas rares où la casse est importante. Par
+  exemple avec un moteur de recherche où les mots-clés de la recherche sont
+  contenus dans l'URI.</p>
+  <p>Les PCRE définissent les <em lang="en">internal options</em> permettant de
+  changer les options d'une expression à la volée et à l'intérieur même d'une
+  expression. Par exemple : les chaînes <code>foo/bar/baz</code> ou
+  <code>FOO/bAr/BaZ</code> correspondent à l'expression
+  <code>#foo/bar/baz#i</code> car l'option <em>globale</em> <code>i</code> rend
+  l'expression entièrement insensible à la casse. Si nous voulons que seulement
+  <code>bar</code> soit sensible à la casse, nous écrirons :
+  <code>#foo/(?-i)bar(?i)/baz#i</code>. Alors <code>FOO/bar/BaZ</code> sera
+  valide, tout comme <code>foo/bar/baz</code> mais pas <code>FOO/bAr/BaZ</code>.
+  Les options internes supportées par <code>Hoa\Router</code> sont de la forme
+  <code>(?<em>options</em>)</code> pour activer des options et
+  <code>(?-<em>options</em>)</code> pour désactiver des options. Dès qu'une
+  option interne <strong>désactive</strong> la casse, les données extraites de
+  toutes les variables ne seront pas passées en minuscule si c'était le cas
+  avant.</p>
+  <p>Par exemple, si nous voulons que tout ce qui suit <code>/hello_</code> soit
+  <strong>sensible</strong> à la casse, nous écrirons :</p>
+  <pre><code class="language-php">$router->get('h', '/hello_(?-i)(?&amp;lt;who>\w+)');
+$router->route('/hello_GorDON');
+$theRule = $router->getTheRule();
+var_dump($theRule[$router::RULE_VARIABLES]['who']);
+
+/**
+ * Will output:
+ *     string(6) "GorDON"
+ */</code></pre>
+  <p>Il arrivera rarement que nous ayons besoin des options internes mais il est
+  important de les comprendre.</p>
 
   <h3 id="Derouter" for="main-toc">Dérouter</h3>
 

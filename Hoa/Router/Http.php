@@ -386,17 +386,26 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
         $rule[Router::RULE_VARIABLES]['_able']      = &$rule[Router::RULE_ABLE];
         $rule[Router::RULE_VARIABLES]['_request']   =  $_REQUEST;
 
+        $caseless = 0 === preg_match(
+            '#\(\?\-[imsxUXJ]+\)#',
+            $rule[Router::RULE_PATTERN]
+        );
+
         foreach(array_merge($muri, $msubdomain) as $key => $value) {
 
             if(!is_string($key))
                 continue;
 
-            $key = strtolower($key);
+            if(true === $caseless)
+                $key = mb_strtolower($key);
 
             if(isset($rule[Router::RULE_VARIABLES][$key]) && empty($value))
                 continue;
 
-            $rule[Router::RULE_VARIABLES][$key] = strtolower($value);
+            if(true === $caseless)
+                $value = mb_strtolower($value);
+
+            $rule[Router::RULE_VARIABLES][$key] = $value;
         }
 
         $this->_rule = $rule;
@@ -582,7 +591,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
                 return $variables[$m];
             },
-            $pattern
+            preg_replace('#\(\?\-?[imsxUXJ]+\)#', '', $pattern)
         );
 
         return str_replace(
