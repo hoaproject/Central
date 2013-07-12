@@ -351,7 +351,7 @@ class Cli extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
         foreach($_argv as $arg) {
 
-            if(false !== strpos($arg, '=')) {
+            if('-' === $arg[0] && false !== strpos($arg, '=')) {
 
                 if(false !== strpos($arg, '"'))
                     $arg = str_replace(
