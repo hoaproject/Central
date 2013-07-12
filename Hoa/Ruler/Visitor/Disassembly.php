@@ -48,26 +48,17 @@ from('Hoa')
 namespace Hoa\Ruler\Visitor {
 
 /**
- * Class \Hoa\Ruler\Visitor\Compiler.
+ * Class \Hoa\Ruler\Visitor\Disassembly.
  *
- * Compiler: rule model to PHP.
+ * Disassembly: rule model to rule as a regular string.
  *
- * @author     Stéphane Py <stephane.py@hoa-project.net>
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2013 Stéphane Py, Ivan Enderlin.
+ * @author     Stéphane Py <stephane.py@hoa-project.net>
+ * @copyright  Copyright © 2007-2013 Ivan Enderlin, Stéphane P
  * @license    New BSD License
  */
 
-class Compiler implements \Hoa\Visitor\Visit {
-
-    /**
-     * Indentation level.
-     *
-     * @var \Hoa\Ruler\Visitor\Compiler int
-     */
-    protected $_indentation = 0;
-
-
+class Disassembly implements \Hoa\Visitor\Visit {
 
     /**
      * Visit an element.
@@ -81,49 +72,35 @@ class Compiler implements \Hoa\Visitor\Visit {
     public function visit ( \Hoa\Visitor\Element $element, &$handle = null, $eldnah = null ) {
 
         $out = null;
-        $_   = str_repeat('    ', $this->_indentation);
 
         if($element instanceof \Hoa\Ruler\Model) {
 
-            $this->_indentation = 1;
-
-            $out = '$model = new \Hoa\Ruler\Model();' . "\n" .
-                   '$model->expression =' . "\n" .
-                   $element->getExpression()->accept($this, $handle, $eldnah) .
-                   ';';
+            $out .= $element->getExpression()->accept($this, $handle, $eldnah);
         }
         elseif($element instanceof \Hoa\Ruler\Model\Operator) {
 
-            $out  = $_ . '$model->';
-            $name = $element->getName();
-
-            if(false === $element->isFunction()) {
-
-                if(true === \Hoa\Core\Consistency::isIdentifier($name))
-                    $out .= $name;
-                else
-                    $out .= '{\'' . $name . '\'}';
-
-                $out     .= '(' . "\n";
-            }
-            else
-                $out .= 'func(' . "\n" . $_ . '    ' .
-                        '\'' . $name . '\',' . "\n";
-
-            $_handle  = array();
-            ++$this->_indentation;
+            $name      = $element->getName();
+            $arguments = array();
 
             foreach($element->getArguments() as $argument)
-                $_handle[] = $argument->accept($this, $handle, $eldnah);
+                $arguments[] = $argument->accept($this, $handle, $eldnah);
 
-            --$this->_indentation;
+            if(true === $element->isFunction())
+                $out .= $name . '(' . implode(', ', $arguments) . ')';
+            else {
 
-            $out .= implode(',' . "\n", $_handle) . "\n" . $_ . ')';
+                $_out = $arguments[0] . ' ' . $name . ' ' . $arguments[1];
+
+                if(false === \Hoa\Ruler\Model\Operator::isToken($name))
+                    $_out = '(' . $_out . ')';
+
+                $out .= $_out;
+            }
+
         }
         elseif($element instanceof \Hoa\Ruler\Model\Bag\Scalar) {
 
             $value = $element->getValue();
-            $out   = $_;
 
             if(true === $value)
                 $out .= 'true';
@@ -141,18 +118,16 @@ class Compiler implements \Hoa\Visitor\Visit {
         elseif($element instanceof \Hoa\Ruler\Model\Bag\_Array) {
 
             $values = array();
-            ++$this->_indentation;
 
             foreach($element->getArray() as $value)
                 $values[] = $value->accept($this, $handle, $eldnah);
 
-            --$this->_indentation;
-
-            $out = $_ . 'array(' . "\n" . implode(',' . "\n", $values) . "\n" .
-                   $_ . ')';
+            $out .= '(' . implode(', ', $values) . ')';
         }
-        elseif($element instanceof \Hoa\Ruler\Model\Bag\Context)
-            $out = $_ . '$model->variable(\'' . $element->getId() . '\')';
+        elseif($element instanceof \Hoa\Ruler\Model\Bag\Context) {
+
+            $out .= $element->getId();
+        }
 
         return $out;
     }
