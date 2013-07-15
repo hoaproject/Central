@@ -32,160 +32,137 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- *
- * @category    Framework
- * @package     Hoa_Translate
- *
  */
+
+namespace Hoa\Translate {
 
 /**
- * Hoa_Translate_Exception
- */
-import('Translate.Exception');
-
-/**
- * Hoa_Registry
- */
-import('Registry.~');
-
-/**
- * Hoa_Factory
- */
-import('Factory.~');
-
-/**
- * Class Hoa_Translate.
+ * Class \Hoa\Translate.
  *
- * Translate text with different methods.
+ * Generic class for translaters.
  *
- * @author      Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright © 2007-2013 Ivan Enderlin.
- * @license     New BSD License
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Translate
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2013 Ivan Enderlin.
+ * @license    New BSD License
  */
 
-class Hoa_Translate {
+abstract class Translate implements \IteratorAggregate {
 
     /**
-     * _adapter.
+     * Stream.
      *
-     * @var Hoa_Translate_Adapter_Abstract object
+     * @var \Hoa\Stream\IStream\In object
      */
-    protected $_adapter = null;
+    protected $_stream = null;
 
     /**
-     * Domain.
+     * Messages.
      *
-     * @var Hoa_Translate_Adapter_Abstract string
+     * @var \Hoa\Translate array
      */
-    protected $_domain = null;
-
-    /**
-     * Registry identifier.
-     *
-     * @var Hoa_Translate_Adapter_Abstract mixed
-     */
-    protected $_registry = null;
+    protected $_data   = array();
 
 
 
     /**
-     * __construct
-     * Set adapter.
+     * Constructor.
      *
      * @access  public
-     * @param   adapter   string    Adapter.
-     * @param   path      string    Path to locale directory.
-     * @param   locale    string    Locale value (xx_XX).
-     * @param   domain    string    Domain.
-     * @param   registry  mixed     Registry identifier.
+     * @param   \Hoa\Stream\IStream\In  $stream    Stream.
      * @return  void
-     * @throw   Hoa_Translate_Exception
      */
-    public function __construct ( $adapter  = null, $path   = null,
-                                  $locale   = null, $domain = null,
-                                  $registry = null) {
+    public function __construct ( \Hoa\Stream\IStream\In $stream ) {
 
-        $domain   = $domain   === null ? $this->_domain   : $domain;
-        $registry = $registry === null ? $this->_registry : $registry;
+        $this->setStream($stream);
 
-        if($registry !== null && is_string($registry)) {
-
-            $this->_adapter = Hoa_Registry::get($registry);
-
-            if($domain !== null)
-                $this->setDomain($domain);
-
-            return $this->_adapter;
-        }
-
-        try {
-            $parameters     = array($path, $locale, $domain);
-            $this->_adapter = Hoa_Factory::get('Translate.Adapter', $adapter, $parameters);
-        }
-        catch ( Hoa_Factory_Exception $e ) {
-            throw new Hoa_Translate_Exception($e->getMessage(), $e->getCode());
-        }
+        return;
     }
 
     /**
-     * getAdapter
-     * Get adapter.
+     * Set stream.
      *
-     * @access  public
-     * @return  mixed
+     * @access  protected
+     * @param   \Hoa\Stream\IStream\In  $stream    Stream.
+     * @return  \Hoa\Stream\IStream\In
      */
-    public function getAdapter ( ) {
+    protected function setStream ( \Hoa\Stream\IStream\In $stream ) {
 
-        return $this->_adapter;
+        $old           = $this->_stream;
+        $this->_stream = $stream;
+
+        return $old;
     }
 
     /**
-     * setDomain
-     * Call setDomain of adapter object.
+     * Get stream.
      *
      * @access  public
-     * @param   domain  string    Domain.
-     * @return  mixed
-     * @throw   Hoa_Translate_Exception
+     * @return  \Hoa\Stream\IStream\In
      */
-    public function setDomain ( $domain = '' ) {
+    public function getStream ( ) {
 
-        return $this->_adapter->setDomain($domain);
+        return $this->_stream;
     }
 
     /**
-     * _
-     * Translate a message.
+     * Set messages.
+     *
+     * @access  protected
+     * @param   array  $data    Data.
+     * @return  array
+     */
+    protected function setData ( Array $data ) {
+
+        $old         = $this->_data;
+        $this->_data = $data;
+
+        return $old;
+    }
+
+    /**
+     * Get messages.
      *
      * @access  public
-     * @param   message  string    Message.
-     * @param   -        -         For printf.
+     * @return  array
+     */
+    public function getData ( ) {
+
+        return $this->_data;
+    }
+
+    /**
+     * Iterate over messages.
+     *
+     * @access  public
+     * @return  \ArrayIterator
+     */
+    public function getIterator ( ) {
+
+        return new \ArrayIterator($this->_data);
+    }
+
+    /**
+     * Get translation for regular message.
+     *
+     * @access  public
+     * @param   string  $message    Message.
+     * @param   mixed   …           Parameters.
      * @return  string
      */
-    public function _ ( $message = '' ) {
-
-        $parameters = func_get_args();
-        return call_user_func_array(array($this->_adapter, 'get'), $parameters);
-    }
+    abstract public function _ ( $message );
 
     /**
-     * _
-     * Translate a message in plurial mode.
+     * Get translation for plural messages.
+     * Messages are concatenated by NUL (\0), or \0 or ^@. They can be escaped
+     * by \.
      *
      * @access  public
-     * @param   message         string    Message.
-     * @param   message_plural  string    Message in plurial.
-     * @param   n               int       n.
-     * @param   -               -         For printf.
+     * @param   string  $message    Message.
+     * @param   int     $n          n (to select the plural).
+     * @param   mixed   …           Parameters.
      * @return  string
      */
-    public function _n ( $message = '', $message_plural = '', $n = 2 ) {
+    abstract public function _n ( $message, $n );
+}
 
-        $parameters = func_get_args();
-        return call_user_func_array(array($this->_adapter, 'getn'), $parameters);
-    }
 }
