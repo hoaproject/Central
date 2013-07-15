@@ -32,26 +32,20 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- *
- * @category    Framework
- * @package     Hoa_Translate
- * @subpackage  Hoa_Translate_Exception
- *
  */
+
+namespace Hoa\Translate {
 
 /**
- * Class Hoa_Translate_Exception.
+ * Class \Hoa\Translate\Exception.
  *
- * Extending the Hoa_Core_Exception class.
+ * Extending the \Hoa\Core\Exception class.
  *
- * @author      Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright © 2007-2013 Ivan Enderlin.
- * @license     New BSD License
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Translate
- * @subpackage  Hoa_Translate_Exception
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2013 Ivan Enderlin.
+ * @license    New BSD License
  */
 
-class Hoa_Translate_Exception extends Hoa_Core_Exception { }
+class Exception extends \Hoa\Core\Exception { }
+
+}
