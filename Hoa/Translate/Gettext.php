@@ -65,7 +65,7 @@ namespace Hoa\Translate {
 class Gettext extends Translate {
 
     /**
-     * Endianess.
+     * Endianness.
      *
      * @var \Hoa\Translate\Gettext bool
      */
@@ -118,19 +118,19 @@ class Gettext extends Translate {
                 0, $stream->getStreamName());
 
         $stream->seek(0);
-        $this->setEndianess();
+        $this->setEndianness();
         $this->unpack();
 
         return;
     }
 
     /**
-     * Compute endianess.
+     * Compute endianness.
      *
      * @access  protected
      * @return  void
      */
-    protected function setEndianess ( ) {
+    protected function setEndianness ( ) {
 
         $magicNumber = unpack('V1', $this->getStream()->read(4));
 
