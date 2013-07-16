@@ -243,12 +243,12 @@ class String implements \ArrayAccess, \Countable, \IteratorAggregate {
      * if equal.
      *
      * @access  public
-     * @param   string  $string    String.
+     * @param   mixed  $string    String.
      * @return  int
      */
     public function compareTo ( $string ) {
 
-        return strcmp($this->_string, $string);
+        return strcmp($this->_string, (string) $string);
     }
 
     /**
@@ -293,8 +293,7 @@ class String implements \ArrayAccess, \Countable, \IteratorAggregate {
         if(true === $global)
             $flags = PREG_PATTERN_ORDER;
 
-        if(0 < $offset)
-            $offset = strlen(mb_substr($this->_string, 0, $offset));
+        $offset = strlen(mb_substr($this->_string, 0, $offset));
 
         if(true === $global)
             return preg_match_all(
@@ -351,7 +350,7 @@ class String implements \ArrayAccess, \Countable, \IteratorAggregate {
      *                              PREG_SPLIT_OFFSET_CAPTURE.
      * @return  array
      */
-    public function split ( $pattern, $limit = -1, $flags = 0 ) {
+    public function split ( $pattern, $limit = -1, $flags = PREG_SPLIT_NO_EMPTY ) {
 
         return preg_split(
             static::safePattern($pattern),
@@ -724,7 +723,7 @@ class String implements \ArrayAccess, \Countable, \IteratorAggregate {
      */
     public static function isUtf8 ( $string ) {
 
-        return (bool) preg_match('//u', $string);
+        return (bool) preg_match('##u', $string);
     }
 
     /**
