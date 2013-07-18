@@ -47,7 +47,8 @@ if(!defined('HOA'))
 from('Hoa')
 -> import('Router.Cli')
 -> import('Dispatcher.Basic')
--> import('Console.Dispatcher.Kit');
+-> import('Console.Dispatcher.Kit')
+-> import('Console.Cursor');
 
 require __DIR__ . DS . 'Style' . DS . 'Basic.php';
 $style = new \Hoa\Core\Bin\Style\Basic();
@@ -80,10 +81,18 @@ try {
     $dispatcher->setKitName('Hoa\Console\Dispatcher\Kit');
     exit($dispatcher->dispatch($router));
 }
+catch ( \Hoa\Core\Exception $e ) {
+
+    $message = $e->raise(true);
+}
 catch ( \Exception $e ) {
 
-    echo $e->raise(true);
-    exit($e->getCode() + 1);
+    $message = $e->getMessage();
 }
+
+\Hoa\Console\Cursor::colorize('foreground(white) background(red)');
+echo $message, "\n";
+\Hoa\Console\Cursor::colorize('normal');
+exit($e->getCode() + 1);
 
 }
