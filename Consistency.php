@@ -730,7 +730,7 @@ class Consistency implements \ArrayAccess {
 
         $classname = ltrim($classname, '\\');
 
-        if(!class_exists($classname, false))
+        if(!class_exists($classname))
             $classname = static::autoloadFromClass($classname);
 
         $class = new \ReflectionClass($classname);
