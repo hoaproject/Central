@@ -267,7 +267,7 @@ class String implements \ArrayAccess, \Countable, \IteratorAggregate {
     }
 
     /**
-     * Binary safe strings comparison.
+     * Make a comparison with a string.
      * Return < 0 if current string is less than $string, > 0 if greater and 0
      * if equal.
      *
@@ -275,7 +275,7 @@ class String implements \ArrayAccess, \Countable, \IteratorAggregate {
      * @param   mixed  $string    String.
      * @return  int
      */
-    public function compareTo ( $string ) {
+    public function compare ( $string ) {
 
         if(false === class_exists('Collator', false))
             return min(-1, max(1, strcmp($this->_string, (string) $string)));
@@ -540,14 +540,14 @@ class String implements \ArrayAccess, \Countable, \IteratorAggregate {
     }
 
     /**
-     * Get a part of a string.
+     * Reduce the strings.
      *
      * @access  public
      * @param   int  $start     Position of first character.
      * @param   int  $length    Maximum number of characters.
      * @return  \Hoa\String
      */
-    public function substr ( $start, $length = null ) {
+    public function reduce ( $start, $length = null ) {
 
         $this->_string = mb_substr($this->_string, $start, $length);
 
@@ -758,6 +758,33 @@ class String implements \ArrayAccess, \Countable, \IteratorAggregate {
         $ucs = mb_convert_encoding($char, 'UCS-2LE', 'UTF-8');
 
         return ord($ucs[1]) * 256 + ord($ucs[0]);
+    }
+
+    /**
+     * Get a binary representation of the decimal code of a specific character.
+     *
+     * @access  public
+     * @param   string  $char      Character.
+     * @param   int     $length    Length of the binary result.
+     * @return  string
+     */
+    public static function toBinaryCode ( $char, $length = 32 ) {
+
+        return vsprintf('%0' . intval($length) . 'b', static::toCode($char));
+    }
+
+    /**
+     * Transcode.
+     *
+     * @access  public
+     * @param   string  $string    String.
+     * @param   string  $from      Original encoding.
+     * @param   string  $to        Final encoding.
+     * @return  string
+     */
+    public static function transcode ( $string, $from, $to = 'UTF-8' ) {
+
+        return iconv($from, $to, $string);
     }
 
     /**
