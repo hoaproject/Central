@@ -262,11 +262,16 @@ class Event {
      *
      * @access  public
      * @param   string  $eventId    Event ID.
+     * @param   bool    $hard       If false, just delete the source, else,
+     *                              delete source and attached callables.
      * @return  void
      */
-    public static function unregister ( $eventId ) {
+    public static function unregister ( $eventId, $hard = false ) {
 
-        unset(self::$_register[$eventId]);
+        if(false !== $hard)
+            unset(self::$_register[$eventId]);
+        else
+            self::$_register[$eventId][1] = null;
 
         return;
     }
