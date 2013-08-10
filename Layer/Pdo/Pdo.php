@@ -105,7 +105,7 @@ class Pdo implements \Hoa\Database\IDal\Wrapper {
         catch ( \PDOException $e ) {
 
             throw new \Hoa\Database\Exception(
-                $e->getMessage(), $e->getCode()
+                $e->getMessage(), $e->getCode(), null, $e
             );
         }
 
