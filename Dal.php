@@ -65,28 +65,28 @@ namespace Hoa\Database {
 class Dal implements \Hoa\Core\Parameter\Parameterizable {
 
     /**
-     * Abstract layer : DBA.
+     * Abstract layer: DBA.
      *
      * @const string
      */
     const DBA  = 'Dba';
 
     /**
-     * Abstract layer : DBX.
+     * Abstract layer: DBX.
      *
      * @const string
      */
     const DBX  = 'Dbx';
 
     /**
-     * Abstract layer : Odbc.
+     * Abstract layer: Odbc.
      *
      * @const string
      */
     const ODBC = 'Odbc';
 
     /**
-     * Abstract layer : PDO.
+     * Abstract layer: PDO.
      *
      * @const string
      */
@@ -107,11 +107,11 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable {
     private static $_id           = null;
 
     /**
-     * The abstract layer instance.
+     * The layer instance.
      *
      * @var \Hoa\Database\IDal\Wrapper object
      */
-    protected $_abstractLayer     = null;
+    protected $_layer             = null;
 
     /**
      * Parameter of \Hoa\Database\Dal.
@@ -127,7 +127,7 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable {
      * The constructor is private to make a multiton.
      *
      * @access  private
-     * @param   string   $dalName          The abstract layer name.
+     * @param   string   $dalName          The database abstract layer name.
      * @param   string   $dsn              The DSN of database.
      * @param   string   $username         The username to connect to database.
      * @param   string   $password         The password to connect to database.
@@ -142,7 +142,7 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable {
             $dsn = 'sqlite:' . resolve($matches[1]);
 
         $this->setDal(dnew(
-            '\Hoa\Database\AbstractLayer\\' . $dalName,
+            '\Hoa\Database\Layer\\' . $dalName,
             array($dsn, $username, $password, $driverOptions)
         ));
 
@@ -184,7 +184,7 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable {
      *
      * @access  public
      * @param   string  $id               The instance ID.
-     * @param   string  $dalName          The abstract layer name.
+     * @param   string  $dalName          The database abstract layer name.
      * @param   string  $dsn              The DSN of database.
      * @param   string  $username         The username to connect to database.
      * @param   string  $password         The password to connect to database.
@@ -278,7 +278,7 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable {
     }
 
     /**
-     * Set abstract layer instance.
+     * Set database abstract layer instance.
      *
      * @access  protected
      * @param   \Hoa\Database\IDal\Wrapper  $dal    The DAL instance.
@@ -286,19 +286,19 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable {
      */
     protected function setDal ( IDal\Wrapper $dal ) {
 
-        $old                  = $this->_abstractLayer;
-        $this->_abstractLayer = $dal;
+        $old          = $this->_layer;
+        $this->_layer = $dal;
     }
 
     /**
-     * Get the abstract layer instance.
+     * Get the database abstract layer instance.
      *
      * @access  protected
      * @return  \Hoa\Database\IDal\Wrapper
      */
     protected function getDal ( ) {
 
-        return $this->_abstractLayer;
+        return $this->_layer;
     }
 
     /**
@@ -361,7 +361,7 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable {
      * @param   string  $statement    This must be a valid SQL statement for the
      *                                target database server.
      * @param   array   $options      Options to set attributes values for the
-     *                                AbstractLayer Statement.
+     *                                layer statement.
      * @return  \Hoa\Database\DalStatement
      * @throw   \Hoa\Database\Exception
      */

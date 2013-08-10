@@ -50,10 +50,10 @@ from('Hoa')
 
 }
 
-namespace Hoa\Database\AbstractLayer\Pdo {
+namespace Hoa\Database\Layer\Pdo {
 
 /**
- * Class \Hoa\Database\AbstractLayer\Pdo\PdoStatement.
+ * Class \Hoa\Database\Layer\Pdo\Statement.
  *
  * Wrap PDOStatement.
  *
@@ -63,7 +63,7 @@ namespace Hoa\Database\AbstractLayer\Pdo {
  * @license    New BSD License
  */
 
-class PdoStatement implements \Hoa\Database\IDal\WrapperStatement {
+class Statement implements \Hoa\Database\IDal\WrapperStatement {
 
     /**
      * The statement instance.
@@ -120,7 +120,7 @@ class PdoStatement implements \Hoa\Database\IDal\WrapperStatement {
      * @access  public
      * @param   array   $bindParameters    Bind parameters values if bindParam
      *                                     is not called.
-     * @return  \Hoa\Database\Pdo\PdoStatement
+     * @return  \Hoa\Database\Pdo\Statement
      * @throw   \Hoa\Database\Exception
      */
     public function execute ( Array $bindParameters = null ) {

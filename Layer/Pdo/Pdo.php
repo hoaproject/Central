@@ -44,9 +44,9 @@ from('Hoa')
 -> import('Database.Exception')
 
 /**
- * \Hoa\Database\AbstractLayer\Pdo\PdoStatement
+ * \Hoa\Database\Layer\Pdo\Statement
  */
--> import('Database.AbstractLayer.Pdo.PdoStatement')
+-> import('Database.Layer.Pdo.Statement')
 
 /**
  * \Hoa\Database\IDal\Wrapper
@@ -55,10 +55,10 @@ from('Hoa')
 
 }
 
-namespace Hoa\Database\AbstractLayer\Pdo {
+namespace Hoa\Database\Layer\Pdo {
 
 /**
- * Class \Hoa\Database\AbstractLayer\Pdo.
+ * Class \Hoa\Database\Layer\Pdo.
  *
  * Wrap PDO.
  *
@@ -205,13 +205,13 @@ class Pdo implements \Hoa\Database\IDal\Wrapper {
      * @param   string  $statement    This must be a valid SQL statement for the
      *                                target database server.
      * @param   array   $options      Options to set attributes values for the
-     *                                AbstractLayer Statement.
-     * @return  \Hoa\Database\AbstractLayer\Pdo\PdoStatement
+     *                                Layer Statement.
+     * @return  \Hoa\Database\Layer\Pdo\Statement
      * @throw   \Hoa\Database\Exception
      */
     public function prepare ( $statement, Array $options = array() ) {
 
-        return new PdoStatement(
+        return new Statement(
             $this->getConnection()->prepare(
                 $statement, $options
             )
@@ -238,11 +238,11 @@ class Pdo implements \Hoa\Database\IDal\Wrapper {
 
     /**
      * Execute an SQL statement, returning a result set as a
-     * \Hoa\Database\AbstractLayer\Pdo\PdoStatement object.
+     * \Hoa\Database\Layer\Pdo\Statement object.
      *
      * @access  public
      * @param   string  $statement    The SQL statement to prepare and execute.
-     * @return  \Hoa\Database\AbstractLayer\Pdo\PdoStatement
+     * @return  \Hoa\Database\Layer\Pdo\Statement
      * @throw   \Hoa\Database\Exception
      */
     public function query ( $statement ) {
@@ -253,7 +253,7 @@ class Pdo implements \Hoa\Database\IDal\Wrapper {
             throw new \Hoa\Database\Exception(
                 '%3$s (%1$s/%2$d).', 2, $this->errorInfo());
 
-        return new PdoStatement($handle);
+        return new Statement($handle);
     }
 
     /**
