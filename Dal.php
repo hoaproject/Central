@@ -149,12 +149,11 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable,
         if(0 !== preg_match('#^sqlite:([^$]+)$#i', $dsn, $matches))
             $dsn = 'sqlite:' . resolve($matches[1]);
 
-        $id = $this->__id = self::$_id;
+        $id    = $this->__id = self::$_id;
+        $event = 'hoa://Event/Database/' . $id;
 
-        \Hoa\Core\Event::register(
-            'hoa://Event/Database/' . $id . ':opened',
-            $this
-        );
+        \Hoa\Core\Event::register($event . ':opened', $this);
+        \Hoa\Core\Event::register($event . ':closed', $this);
 
         $this->setDal(dnew(
             '\Hoa\Database\Layer\\' . $dalName,
@@ -162,7 +161,7 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable,
         ));
 
         \Hoa\Core\Event::notify(
-            'hoa://Event/Database/' . $id . ':opened',
+            $event . ':opened',
             $this,
             new \Hoa\Core\Event\Bucket(array(
                 'id'            => $id,
@@ -301,6 +300,33 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable,
     public function getParameters ( ) {
 
         return self::$_parameters;
+    }
+
+    /**
+     * Close connection to the database.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function close ( ) {
+
+        $id    = $this->getId();
+        $event = 'hoa://Event/Database/' . $id;
+
+        $this->_layer = null;
+        self::$_id    = null;
+        unset(self::$_instance[$id]);
+
+        \Hoa\Core\Event::notify(
+            $event . ':closed',
+            $this,
+            new \Hoa\Core\Event\Bucket(array('id' => $id))
+        );
+
+        \Hoa\Core\Event::unregister($event . ':opened');
+        \Hoa\Core\Event::unregister($event . ':closed');
+
+        return true;
     }
 
     /**
