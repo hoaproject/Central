@@ -62,7 +62,8 @@ namespace Hoa\Database {
  * @license    New BSD License
  */
 
-class Dal implements \Hoa\Core\Parameter\Parameterizable {
+class Dal implements \Hoa\Core\Parameter\Parameterizable,
+                     \Hoa\Core\Event\Source {
 
     /**
      * Abstract layer: DBA.
@@ -107,6 +108,13 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable {
     private static $_id           = null;
 
     /**
+     * Current ID.
+     *
+     * @var \Hoa\Database\Dal string
+     */
+    protected $__id               = null;
+
+    /**
      * The layer instance.
      *
      * @var \Hoa\Database\IDal\Wrapper object
@@ -141,10 +149,28 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable {
         if(0 !== preg_match('#^sqlite:([^$]+)$#i', $dsn, $matches))
             $dsn = 'sqlite:' . resolve($matches[1]);
 
+        $id = $this->__id = self::$_id;
+
+        \Hoa\Core\Event::register(
+            'hoa://Event/Database/' . $id . ':opened',
+            $this
+        );
+
         $this->setDal(dnew(
             '\Hoa\Database\Layer\\' . $dalName,
             array($dsn, $username, $password, $driverOptions)
         ));
+
+        \Hoa\Core\Event::notify(
+            'hoa://Event/Database/' . $id . ':opened',
+            $this,
+            new \Hoa\Core\Event\Bucket(array(
+                'id'            => $id,
+                'dsn'           => $dsn,
+                'username'      => $username,
+                'driverOptions' => $driverOptions
+            ))
+        );
 
         return;
     }
@@ -496,6 +522,17 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable {
     public function getAttribute ( $attribute ) {
 
         return $this->getDal()->getAttribute($attribute);
+    }
+
+    /**
+     * Get current ID.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getId ( ) {
+
+        return $this->__id;
     }
 }
 
