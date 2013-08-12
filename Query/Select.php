@@ -96,14 +96,16 @@ class Select extends SelectCore {
 
     public function orderBy ( $term ) {
 
-        $this->_orderBy[] = $term;
+        foreach(func_get_args() as $term)
+            $this->_orderBy[] = $term;
 
         return $this;
     }
 
     public function limit ( $expression ) {
 
-        $this->_limit[] = $expression;
+        foreach(func_get_args() as $expression)
+            $this->_limit[] = $expression;
 
         return $this;
     }

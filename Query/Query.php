@@ -93,22 +93,22 @@ class Query {
 
     public function select ( $column = null ) {
 
-        return $this->store(new Select($column));
+        return $this->store(new Select(func_get_args()));
     }
 
     public function insert ( ) {
 
-        return $this->store(new Insert());
+        return $this->store(new Insert(func_get_args()));
     }
 
     public function update ( ) {
 
-        return $this->store(new Update());
+        return $this->store(new Update(func_get_args()));
     }
 
     public function delete ( ) {
 
-        return $this->store(new Delete());
+        return $this->store(new Delete(func_get_args()));
     }
 
     protected function store ( $object ) {

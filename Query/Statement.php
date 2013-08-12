@@ -46,29 +46,113 @@ namespace Hoa\Database\Query {
  * @license    New BSD License
  */
 
-abstract class Statement {
+class Statement {
 
-    protected $_from            = array();
-    protected $_where           = array();
-    protected static $_snapshot = array(
-        '_from',
-        '_where'
-    );
+    protected $_from  = array();
+    protected $_where = array();
 
 
 
     public function from ( $source ) {
 
-        $this->_from[] = $source;
+        foreach(func_get_args() as $source) {
+
+            if($source instanceof self)
+                $source = '(' . $source . ')';
+
+            $this->_from[] = $source;
+        }
 
         return $this;
     }
 
-    public function where ( $expression ) {
+    public function _as ( $alias ) {
 
-        $this->_where[] = $expression;
+        if(empty($this->_from))
+            return $this;
+
+        $this->_from[$alias] = '(' . array_pop($this->_from) . ')';
 
         return $this;
+    }
+
+    public function join ( $source ) {
+
+        return $this->_join('JOIN', $source);
+    }
+
+    public function naturalJoin ( $source ) {
+
+        return $this->_join('NATURAL JOIN', $source);
+    }
+
+    public function leftJoin ( $source ) {
+
+        return $this->_join('LEFT JOIN', $source);
+    }
+
+    public function naturalLeftJoin ( $source ) {
+
+        return $this->_join('NATURAL LEFT JOIN', $source);
+    }
+
+    public function leftOuterJoin ( $source ) {
+
+        return $this->_join('LEFT OUTER JOIN', $source);
+    }
+
+    public function naturalLeftOuterJoin ( $source ) {
+
+        return $this->_join('NATURAL LEFT OUTER JOIN', $source);
+    }
+
+    public function innerJoin ( $source ) {
+
+        return $this->_join('INNER JOIN', $source);
+    }
+
+    public function naturalInnerJoin ( $source ) {
+
+        return $this->_join('NATURAL INNER JOIN', $source);
+    }
+
+    public function crossJoin ( $source ) {
+
+        return $this->_join('CROSS JOIN', $source);
+    }
+
+    public function naturalCrossJoin ( $source ) {
+
+        return $this->_join('NATURAL CROSS JOIN', $source);
+    }
+
+    protected function _join ( $type, $source ) {
+
+        if(empty($this->_from))
+            return $this;
+
+        if($source instanceof self)
+            $source = '(' . $source . ')';
+
+        end($this->_from);
+        $key               = key($this->_from);
+        $value             = current($this->_from);
+        $this->_from[$key] = $value . ' ' . $type . ' ' . $source;
+
+        return new _Join($this, $this->_from);
+    }
+
+    public function where ( $expression ) {
+
+        foreach(func_get_args() as $expression)
+            $this->_where[] = $expression;
+
+        return $this;
+    }
+
+    public function __call ( $name, Array $values ) {
+
+        return call_user_func_array(array($this, '_' . $name), $values);
     }
 
     public function reset ( ) {
@@ -81,7 +165,13 @@ abstract class Statement {
 
     public function __toString ( ) {
 
-        $out = 'FROM ' . implode(' ', $this->_from);
+        $out = 'FROM'; // . implode(' ', $this->_from);
+
+        foreach($this->_from as $alias => $from)
+            if(is_int($alias))
+                $out .= ' ' . $from;
+            else
+                $out .= ' ' . $from . ' AS ' . $alias;
 
         if(empty($this->_where))
             return $out;
@@ -89,6 +179,40 @@ abstract class Statement {
         $out .= ' WHERE ' . implode(' ', $this->_where);
 
         return $out;
+    }
+}
+
+class _Join {
+
+    protected $_parent = null;
+    protected $_from   = null;
+
+
+
+    public function __construct ( Statement $parent, Array &$from ) {
+
+        $this->_parent = $parent;
+        $this->_from   = &$from;
+        end($this->_from);
+
+        return;
+    }
+
+    public function on ( $expression ) {
+
+        $this->_from[key($this->_from)] = current($this->_from) .
+                                          ' ON ' . $expression;
+
+        return $this->_parent;
+    }
+
+    public function using ( $column ) {
+
+        $this->_from[key($this->_from)] = current($this->_from) .
+                                          ' USING (' .
+                                          implode(', ', func_get_args()) . ')';
+
+        return $this->_parent;
     }
 }
 

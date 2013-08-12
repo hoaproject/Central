@@ -57,23 +57,17 @@ namespace Hoa\Database\Query {
  * @license    New BSD License
  */
 
-class SelectCore extends Statement {
+abstract class SelectCore extends Statement {
 
-    protected $_columns         = array();
-    protected $_distinctOrAll   = null;
-    protected $_groupBy         = array();
-    protected $_having          = null;
-    protected static $_snapshot = array(
-        '_distinctOrAll',
-        '_groupBy',
-        '_having'
-    );
+    protected $_columns       = array();
+    protected $_distinctOrAll = null;
+    protected $_groupBy       = array();
+    protected $_having        = null;
 
 
-    public function __construct ( $column = null ) {
+    public function __construct ( Array $columns ) {
 
-        if(null !== $column)
-            $this->select($column);
+        $this->_columns = $columns;
 
         return;
     }
@@ -94,7 +88,8 @@ class SelectCore extends Statement {
 
     public function select ( $column ) {
 
-        $this->_columns[] = $column;
+        foreach(func_get_args() as $column)
+            $this->_columns[] = $column;
 
         return $this;
     }
