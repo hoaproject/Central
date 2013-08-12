@@ -59,13 +59,13 @@ namespace Hoa\Database\Query {
 
 abstract class SelectCore extends Statement {
 
-    protected $_columns       = array();
+    protected $_columns       = null;
     protected $_distinctOrAll = null;
     protected $_groupBy       = array();
     protected $_having        = null;
 
 
-    public function __construct ( Array $columns ) {
+    public function __construct ( Array $columns = array() ) {
 
         $this->_columns = $columns;
 

@@ -48,8 +48,9 @@ namespace Hoa\Database\Query {
 
 class Statement {
 
-    protected $_from  = array();
-    protected $_where = array();
+    protected $_from          = array();
+    protected $_where         = array();
+    protected $_logicOperator = null;
 
 
 
@@ -144,8 +145,22 @@ class Statement {
 
     public function where ( $expression ) {
 
-        foreach(func_get_args() as $expression)
-            $this->_where[] = $expression;
+        $where = null;
+
+        if(!empty($this->_where))
+            $where = ($this->_logicOperator ?: 'AND') . ' ';
+
+        if($expression instanceof \Closure) {
+
+            $subStatement = new self();
+            $expression($subStatement);
+            $subStatement->partialReset();
+            //                    skip WHERE
+            $expression   = '(' . substr($subStatement, 6) . ')';
+        }
+
+        $this->_where[]       = $where . $expression;
+        $this->_logicOperator = null;
 
         return $this;
     }
@@ -153,6 +168,29 @@ class Statement {
     public function __call ( $name, Array $values ) {
 
         return call_user_func_array(array($this, '_' . $name), $values);
+    }
+
+    public function __get ( $name ) {
+
+        switch(strtolower($name)) {
+
+            case 'and':
+            case 'or':
+                $this->_logicOperator = strtoupper($name);
+              break;
+
+            default:
+                return $this->$name;
+        }
+
+        return $this;
+    }
+
+    public function partialReset ( ) {
+
+        $this->_from = array();
+
+        return $this;
     }
 
     public function reset ( ) {
@@ -165,18 +203,26 @@ class Statement {
 
     public function __toString ( ) {
 
-        $out = 'FROM'; // . implode(' ', $this->_from);
+        $out = null;
 
-        foreach($this->_from as $alias => $from)
-            if(is_int($alias))
-                $out .= ' ' . $from;
-            else
-                $out .= ' ' . $from . ' AS ' . $alias;
+        if(!empty($this->_from)) {
+
+            $out = 'FROM';
+
+            foreach($this->_from as $alias => $from)
+                if(is_int($alias))
+                    $out .= ' ' . $from;
+                else
+                    $out .= ' ' . $from . ' AS ' . $alias;
+        }
 
         if(empty($this->_where))
             return $out;
 
-        $out .= ' WHERE ' . implode(' ', $this->_where);
+        if(null !== $out)
+            $out .= ' ';
+
+        $out .= 'WHERE ' . implode(' ', $this->_where);
 
         return $out;
     }

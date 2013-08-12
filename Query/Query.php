@@ -98,7 +98,7 @@ class Query {
 
     public function insert ( ) {
 
-        return $this->store(new Insert(func_get_args()));
+        return $this->store(new Insert());
     }
 
     public function update ( ) {
