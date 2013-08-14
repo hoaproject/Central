@@ -171,7 +171,9 @@ class Core implements Parameter\Parameterizable {
         static::_define('HOA_VERSION_RELEASE', 0);
         static::_define('HOA_VERSION_STATUS',  'b8');
         static::_define('HOA_VERSION_EXTRA',   'dev');
-        static::_define('WITH_COMPOSER',       class_exists('Composer\Autoload\ClassLoader', false));
+        static::_define('WITH_COMPOSER',       class_exists('Composer\Autoload\ClassLoader', false)
+                                            || ('cli' === PHP_SAPI
+                                            &&  file_exists(__DIR__ . DS . '..' . DS . '..' . DS . 'autoload.php')));
 
         if(false !== $wl = ini_get('suhosin.executor.include.whitelist'))
             if(false === in_array('hoa', explode(',', $wl)))
