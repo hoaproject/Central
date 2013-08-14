@@ -39,6 +39,11 @@ namespace {
 from('Hoa')
 
 /**
+ * \Hoa\Database\Query\Dml
+ */
+-> import('Database.Query.Dml')
+
+/**
  * \Hoa\Database\Query\SelectCore
  */
 -> import('Database.Query.SelectCore');
@@ -50,42 +55,96 @@ namespace Hoa\Database\Query {
 /**
  * Class \Hoa\Database\Query\Select.
  *
- * 
+ * Build a SELECT query.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Select extends SelectCore {
+class Select extends SelectCore implements Dml {
 
+    /**
+     * “Core” selects (whether we have union, unionAll, intersect or except).
+     *
+     * @var \Hoa\Database\Query\Select array
+     */
     protected $_select  = array();
+
+    /**
+     * Ordering terms.
+     *
+     * @var \Hoa\Database\Query\Select array
+     */
     protected $_orderBy = array();
+
+    /**
+     * Limit expressions.
+     *
+     * @var \Hoa\Database\Query\Select array
+     */
     protected $_limit   = array();
+
+    /**
+     * Offset expression.
+     *
+     * @var \Hoa\Database\Query\Select string
+     */
     protected $_offset  = null;
 
 
 
+    /**
+     * Start a new SELECT query which is an union of the previous one.
+     *
+     * @access  public
+     * @return  \Hoa\Database\Query\Select
+     */
     public function union ( ) {
 
         return $this->compose('UNION');
     }
 
+    /**
+     * Start a new SELECT query which is an unionAll of the previous one.
+     *
+     * @access  public
+     * @return  \Hoa\Database\Query\Select
+     */
     public function unionAll ( ) {
 
         return $this->compose('UNION ALL');
     }
 
+    /**
+     * Start a new SELECT query which is an intersection of the previous one.
+     *
+     * @access  public
+     * @return  \Hoa\Database\Query\Select
+     */
     public function intersect ( ) {
 
         return $this->compose('INTERSECT');
     }
 
+    /**
+     * Start a new SELECT query which is an exception of the previous one.
+     *
+     * @access  public
+     * @return  \Hoa\Database\Query\Select
+     */
     public function except ( ) {
 
         return $this->compose('EXCEPT');
     }
 
+    /**
+     * Compose SELECT queries.
+     *
+     * @access  protected
+     * @param   string  $operator    Composition operator.
+     * @return  \Hoa\Database\Query\Select
+     */
     protected function compose ( $operator ) {
 
         $this->_select[] = parent::__toString() . ' ' . $operator;
@@ -94,6 +153,14 @@ class Select extends SelectCore {
         return $this;
     }
 
+    /**
+     * Add ordering terms.
+     *
+     * @access  public
+     * @param   string  $term    Term.
+     * @param   ...     ...
+     * @return  \Hoa\Database\Query\Select
+     */
     public function orderBy ( $term ) {
 
         foreach(func_get_args() as $term)
@@ -102,6 +169,14 @@ class Select extends SelectCore {
         return $this;
     }
 
+    /**
+     * Add limit expressions.
+     *
+     * @access  public
+     * @param   string  $expression    Expression.
+     * @param   ...     ...
+     * @return  \Hoa\Database\Query\Select
+     */
     public function limit ( $expression ) {
 
         foreach(func_get_args() as $expression)
@@ -110,6 +185,13 @@ class Select extends SelectCore {
         return $this;
     }
 
+    /**
+     * Add offset expression.
+     *
+     * @access  public
+     * @param   string  $expression    Expression.
+     * @return  \Hoa\Database\Query\Select
+     */
     public function offset ( $expression ) {
 
         $this->_offset = $expression;
@@ -117,6 +199,12 @@ class Select extends SelectCore {
         return $this;
     }
 
+    /**
+     * Generate the query.
+     *
+     * @access  public
+     * @return  string
+     */
     public function __toString ( ) {
 
         $out    = null;

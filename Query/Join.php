@@ -34,68 +34,83 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Database\Query\Dml
- */
--> import('Database.Query.Dml')
-
-/**
- * \Hoa\Database\Query\Where
- */
--> import('Database.Query.Where');
-
-}
-
 namespace Hoa\Database\Query {
 
 /**
- * Class \Hoa\Database\Query\Delete.
+ * Class \Hoa\Database\Query\Join.
  *
- * Build a DELETE query.
+ * Build a JOIN clause.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Delete extends Where implements Dml {
+class Join {
 
     /**
-     * Table name.
+     * Parent query.
      *
-     * @var \Hoa\Database\Query\Delete string
+     * @var \Hoa\Database\Query\Select object
      */
-    protected $_from = null;
+    protected $_parent = null;
+
+    /**
+     * Reference the FROM entry of the parent (simulate “friends”).
+     *
+     * @var \Hoa\Database\Query\Select string
+     */
+    protected $_from   = null;
 
 
 
     /**
-     * Set the table name.
+     * Constructor.
      *
      * @access  public
-     * @param   string  $source    Table name.
-     * @return  \Hoa\Database\Query\Delete
+     * @param   \Hoa\Database\Query\Select  $parent    Parent query.
+     * @param   string                      $from      FROM entry (“friends”).
+     * @return  void
      */
-    public function from ( $source ) {
+    public function __construct ( Select $parent, Array &$from ) {
 
-        $this->_from = $source;
+        $this->_parent = $parent;
+        $this->_from   = &$from;
+        end($this->_from);
 
-        return $this;
+        return;
     }
 
     /**
-     * Generate the query.
+     * Declare the JOIN constraint ON.
      *
      * @access  public
-     * @return  string
+     * @param   string  $expression    Expression.
+     * @return  \Hoa\Database\Query\Join
      */
-    public function __toString ( ) {
+    public function on ( $expression ) {
 
-        return 'DELETE ' . $this->_from . parent::__toString();
+        $this->_from[key($this->_from)] = current($this->_from) .
+                                          ' ON ' . $expression;
+
+        return $this->_parent;
+    }
+
+    /**
+     * Declare the JOIN constraint USING.
+     *
+     * @access  public
+     * @param   string  $expression    Expression.
+     * @param   ...     ...
+     * @return  \Hoa\Database\Query\Select
+     */
+    public function using ( $column ) {
+
+        $this->_from[key($this->_from)] = current($this->_from) .
+                                          ' USING (' .
+                                          implode(', ', func_get_args()) . ')';
+
+        return $this->_parent;
     }
 }
 

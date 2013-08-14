@@ -39,7 +39,7 @@ namespace Hoa\Database\Query {
 /**
  * Class \Hoa\Database\Query\Where.
  *
- * 
+ * Build a WHERE clause.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
@@ -48,11 +48,29 @@ namespace Hoa\Database\Query {
 
 class Where {
 
+    /**
+     * Expressions.
+     *
+     * @var \Hoa\Database\Query\Where array
+     */
     protected $_where         = array();
+
+    /**
+     * Current logic operator.
+     *
+     * @var \Hoa\Database\Query\Where string
+     */
     protected $_logicOperator = null;
 
 
 
+    /**
+     * Add an expression (regular string or a WHERE clause).
+     *
+     * @access  public
+     * @param   mixed  $expression    Expression.
+     * @return  \Hoa\Database\Query\Where
+     */
     public function where ( $expression ) {
 
         $where = null;
@@ -74,11 +92,26 @@ class Where {
         return $this;
     }
 
+    /**
+     * Redirect undefined calls to _calls.
+     *
+     * @access  public
+     * @param   string  $name      Name.
+     * @param   array   $values    Values.
+     * @return  \Hoa\Database\Query\Where
+     */
     public function __call ( $name, Array $values ) {
 
         return call_user_func_array(array($this, '_' . $name), $values);
     }
 
+    /**
+     * Set the current logic operator.
+     *
+     * @access  public
+     * @param   string  $name   Name.
+     * @return  \Hoa\Database\Query\Where
+     */
     public function __get ( $name ) {
 
         switch(strtolower($name)) {
@@ -95,6 +128,12 @@ class Where {
         return $this;
     }
 
+    /**
+     * Reset.
+     *
+     * @access  public
+     * @return  \Hoa\Database\Query\Where
+     */
     public function reset ( ) {
 
         $this->_where = array();
@@ -102,6 +141,12 @@ class Where {
         return $this;
     }
 
+    /**
+     * Generate the query.
+     *
+     * @access  public
+     * @return  string
+     */
     public function __toString ( ) {
 
         if(empty($this->_where))

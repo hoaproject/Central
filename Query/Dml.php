@@ -34,58 +34,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Database\Query\Dml
- */
--> import('Database.Query.Dml')
-
-/**
- * \Hoa\Database\Query\Where
- */
--> import('Database.Query.Where');
-
-}
-
 namespace Hoa\Database\Query {
 
 /**
- * Class \Hoa\Database\Query\Delete.
+ * Interface \Hoa\Database\Query\Dml.
  *
- * Build a DELETE query.
+ * Represent Data Manipulation Language queries.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Delete extends Where implements Dml {
-
-    /**
-     * Table name.
-     *
-     * @var \Hoa\Database\Query\Delete string
-     */
-    protected $_from = null;
-
-
-
-    /**
-     * Set the table name.
-     *
-     * @access  public
-     * @param   string  $source    Table name.
-     * @return  \Hoa\Database\Query\Delete
-     */
-    public function from ( $source ) {
-
-        $this->_from = $source;
-
-        return $this;
-    }
+interface Dml {
 
     /**
      * Generate the query.
@@ -93,10 +54,7 @@ class Delete extends Where implements Dml {
      * @access  public
      * @return  string
      */
-    public function __toString ( ) {
-
-        return 'DELETE ' . $this->_from . parent::__toString();
-    }
+    public function __toString ( );
 }
 
 }

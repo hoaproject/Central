@@ -39,6 +39,11 @@ namespace {
 from('Hoa')
 
 /**
+ * \Hoa\Database\Query\Dml
+ */
+-> import('Database.Query.Dml')
+
+/**
  * \Hoa\Database\Query\Select
  */
 -> import('Database.Query.Select');
@@ -50,23 +55,59 @@ namespace Hoa\Database\Query {
 /**
  * Class \Hoa\Database\Query\Insert.
  *
- * 
+ * Build an INSERT query.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Insert {
+class Insert implements Dml {
 
+    /**
+     * Source.
+     *
+     * @var \Hoa\Database\Query\Insert string
+     */
     protected $_into          = null;
+
+    /**
+     * Alternative to INSERT.
+     *
+     * @var \Hoa\Database\Query\Insert string
+     */
     protected $_or            = null;
+
+    /**
+     * Columns.
+     *
+     * @var \Hoa\Database\Query\Insert array
+     */
     protected $_columns       = array();
+
+    /**
+     * Values (tuples).
+     *
+     * @var \Hoa\Database\Query\Insert array
+     */
     protected $_values        = array();
+
+    /**
+     * Whether we should use default values or not.
+     *
+     * @var \Hoa\Database\Query\Insert bool
+     */
     protected $_defaultValues = false;
 
 
 
+    /**
+     * Set source.
+     *
+     * @access  public
+     * @param   string  $name    Name.
+     * @return  \Hoa\Database\Query\Insert
+     */
     public function into ( $name ) {
 
         $this->_into = $name;
@@ -74,31 +115,68 @@ class Insert {
         return $this;
     }
 
+    /**
+     * Insert or rollback.
+     *
+     * @access  public
+     * @return  \Hoa\Database\Query\Insert
+     */
     public function rollback ( ) {
 
         return $this->_or('ROLLBACK');
     }
 
+    /**
+     * Insert or abort.
+     *
+     * @access  public
+     * @return  \Hoa\Database\Query\Insert
+     */
     public function abort ( ) {
 
         return $this->_or('ABORT');
     }
 
+    /**
+     * Insert or replace.
+     *
+     * @access  public
+     * @return  \Hoa\Database\Query\Insert
+     */
     public function replace ( ) {
 
         return $this->_or('REPLACE');
     }
 
+    /**
+     * Insert or fail.
+     *
+     * @access  public
+     * @return  \Hoa\Database\Query\Insert
+     */
     public function fail ( ) {
 
         return $this->_or('FAIL');
     }
 
+    /**
+     * Insert or ignore.
+     *
+     * @access  public
+     * @return  \Hoa\Database\Query\Insert
+     */
     public function ignore ( ) {
 
         return $this->_or('IGNORE');
     }
 
+    /**
+     * Declare an alternative to “INSERT”.
+     *
+     * @access  protected
+     * @param   string  $alternative    Alternative.
+     * @return  \Hoa\Database\Query\Insert
+     */
     protected function _or ( $or ) {
 
         $this->_or = $or;
@@ -106,6 +184,14 @@ class Insert {
         return $this;
     }
 
+    /**
+     * Set columns.
+     *
+     * @access  public
+     * @param   string  $column    Column name.
+     * @param   ...     ...
+     * @return  \Hoa\Database\Query\Insert
+     */
     public function on ( $column ) {
 
         foreach(func_get_args() as $column)
@@ -114,17 +200,22 @@ class Insert {
         return $this;
     }
 
+    /**
+     * Set values (on call per tuple).
+     * Expression can be: a regular value or a SELECT query.
+     *
+     * @access  public
+     * @param   mixed  $expression    Expression.
+     * @param   ...    ...
+     * @return  \Hoa\Database\Query\Insert
+     */
     public function values ( $expression ) {
 
-        if($expression instanceof \Closure) {
-
-            $subStatement  = new Select();
-            $expression($subStatement);
-            $this->_values = (string) $subStatement;
-        }
+        if($expression instanceof Select)
+            $this->_values = (string) $expression;
         else {
 
-            if($this->_values instanceof \Closure)
+            if(is_string($this->_values))
                 $this->_values = array();
 
             $values = &$this->_values[];
@@ -137,6 +228,12 @@ class Insert {
         return $this;
     }
 
+    /**
+     * Use default values.
+     *
+     * @access  public
+     * @return  \Hoa\Database\Query\Insert
+     */
     public function defaultValues ( ) {
 
         $this->_defaultValues = true;
@@ -144,6 +241,13 @@ class Insert {
         return $this;
     }
 
+    /**
+     * Allow to use the “or” attribute to chain method calls.
+     *
+     * @access  public
+     * @param   string  $name    Name.
+     * @return  mixed
+     */
     public function __get ( $name ) {
 
         switch(strtolower($name)) {
@@ -157,6 +261,12 @@ class Insert {
         }
     }
 
+    /**
+     * Generate the query.
+     *
+     * @access  public
+     * @return  string
+     */
     public function __toString ( ) {
 
         $out = 'INSERT';

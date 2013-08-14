@@ -39,6 +39,11 @@ namespace {
 from('Hoa')
 
 /**
+ * \Hoa\Database\Query\Dml
+ */
+-> import('Database.Query.Dml')
+
+/**
  * \Hoa\Database\Query\Where
  */
 -> import('Database.Query.Where');
@@ -50,46 +55,100 @@ namespace Hoa\Database\Query {
 /**
  * Class \Hoa\Database\Query\Update.
  *
- * 
+ * Build an UPDATE query.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Update extends Where {
+class Update extends Where implements Dml {
 
+    /**
+     * Table.
+     *
+     * @var \Hoa\Database\Query\Update string
+     */
     protected $_table = null;
+
+    /**
+     * Alternative to UPDATE.
+     *
+     * @var \Hoa\Database\Query\Update string
+     */
     protected $_or    = null;
+
+    /**
+     * Pairs to update.
+     *
+     * @var \Hoa\Database\Query\Update string
+     */
     protected $_set   = array();
 
 
 
+    /**
+     * Update or rollback.
+     *
+     * @access  public
+     * @return  \Hoa\Database\Query\Update
+     */
     public function rollback ( ) {
 
         return $this->_or('ROLLBACK');
     }
 
+    /**
+     * Update or abort.
+     *
+     * @access  public
+     * @return  \Hoa\Database\Query\Update
+     */
     public function abort ( ) {
 
         return $this->_or('ABORT');
     }
 
+    /**
+     * Update or replace.
+     *
+     * @access  public
+     * @return  \Hoa\Database\Query\Update
+     */
     public function replace ( ) {
 
         return $this->_or('REPLACE');
     }
 
+    /**
+     * Update or fail.
+     *
+     * @access  public
+     * @return  \Hoa\Database\Query\Update
+     */
     public function fail ( ) {
 
         return $this->_or('FAIL');
     }
 
+    /**
+     * Update or ignore.
+     *
+     * @access  public
+     * @return  \Hoa\Database\Query\Update
+     */
     public function ignore ( ) {
 
         return $this->_or('IGNORE');
     }
 
+    /**
+     * Declare an alternative to “INSERT”.
+     *
+     * @access  protected
+     * @param   string  $alternative    Alternative.
+     * @return  \Hoa\Database\Query\Update
+     */
     protected function _or ( $or ) {
 
         $this->_or = $or;
@@ -97,6 +156,13 @@ class Update extends Where {
         return $this;
     }
 
+    /**
+     * Set the table.
+     *
+     * @access  public
+     * @param   string  $table    Table.
+     * @return  \Hoa\Database\Query\Update
+     */
     public function table ( $table ) {
 
         $this->_table = $table;
@@ -104,6 +170,14 @@ class Update extends Where {
         return $this;
     }
 
+    /**
+     * Set a pair.
+     *
+     * @access  public
+     * @param   string  $name     Name.
+     * @param   mixed   $value    Value.
+     * @return  \Hoa\Database\Query\Update
+     */
     public function set ( $name, $value ) {
 
         $this->_set[$name] = $value;
@@ -111,6 +185,12 @@ class Update extends Where {
         return $this;
     }
 
+    /**
+     * Generate the query.
+     *
+     * @access  public
+     * @return  string
+     */
     public function __toString ( ) {
 
         $out = 'UPDATE';
