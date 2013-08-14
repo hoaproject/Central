@@ -73,7 +73,7 @@ abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable {
     public function __construct ( ) {
 
         if(null === self::$_fcgi)
-            self::$_fcgi = 'cgi-fcgi' == PHP_SAPI;
+            self::$_fcgi = 'cgi-fcgi' === PHP_SAPI;
 
         return;
     }
