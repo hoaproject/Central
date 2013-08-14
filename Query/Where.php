@@ -34,21 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Database\Query\Where
- */
--> import('Database.Query.Where');
-
-}
-
 namespace Hoa\Database\Query {
 
 /**
- * Class \Hoa\Database\Query\Update.
+ * Class \Hoa\Database\Query\Where.
  *
  * 
  *
@@ -57,76 +46,68 @@ namespace Hoa\Database\Query {
  * @license    New BSD License
  */
 
-class Update extends Where {
+class Where {
 
-    protected $_table = null;
-    protected $_or    = null;
-    protected $_set   = array();
-
+    protected $_where         = array();
+    protected $_logicOperator = null;
 
 
-    public function rollback ( ) {
 
-        return $this->_or('ROLLBACK');
-    }
+    public function where ( $expression ) {
 
-    public function abort ( ) {
+        $where = null;
 
-        return $this->_or('ABORT');
-    }
+        if(!empty($this->_where))
+            $where = ($this->_logicOperator ?: 'AND') . ' ';
 
-    public function replace ( ) {
+        if($expression instanceof \Closure) {
 
-        return $this->_or('REPLACE');
-    }
+            $subWhere   = new self();
+            $expression($subWhere);
+            //                    skip “ WHERE”
+            $expression = '(' . substr($subWhere, 7) . ')';
+        }
 
-    public function fail ( ) {
-
-        return $this->_or('FAIL');
-    }
-
-    public function ignore ( ) {
-
-        return $this->_or('IGNORE');
-    }
-
-    protected function _or ( $or ) {
-
-        $this->_or = $or;
+        $this->_where[]       = $where . $expression;
+        $this->_logicOperator = null;
 
         return $this;
     }
 
-    public function table ( $table ) {
+    public function __call ( $name, Array $values ) {
 
-        $this->_table = $table;
+        return call_user_func_array(array($this, '_' . $name), $values);
+    }
+
+    public function __get ( $name ) {
+
+        switch(strtolower($name)) {
+
+            case 'and':
+            case 'or':
+                $this->_logicOperator = strtoupper($name);
+              break;
+
+            default:
+                return $this->$name;
+        }
 
         return $this;
     }
 
-    public function set ( $name, $value ) {
+    public function reset ( ) {
 
-        $this->_set[$name] = $value;
+        $this->_where = array();
 
         return $this;
     }
 
     public function __toString ( ) {
 
-        $out = 'UPDATE';
+        if(empty($this->_where))
+            return null;
 
-        if(null !== $this->_or)
-            $out .= ' OR ' . $this->_or;
-
-        $out .= ' ' . $this->_table;
-        $set  = array();
-
-        foreach($this->_set as $name => $value)
-            $set[] = $name . ' = ' . $value;
-
-        $out .= ' SET ' . implode(', ', $set);
-
-        return $out . parent::__toString();
+        return ' WHERE ' . implode(' ', $this->_where);
     }
 }
 

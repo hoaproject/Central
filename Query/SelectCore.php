@@ -39,9 +39,9 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Database\Query\Statement
+ * \Hoa\Database\Query\Where
  */
--> import('Database.Query.Statement');
+-> import('Database.Query.Where');
 
 }
 
@@ -57,12 +57,13 @@ namespace Hoa\Database\Query {
  * @license    New BSD License
  */
 
-abstract class SelectCore extends Statement {
+abstract class SelectCore extends Where {
 
     protected $_columns       = null;
     protected $_distinctOrAll = null;
     protected $_groupBy       = array();
     protected $_having        = null;
+    protected $_from          = array();
 
 
     public function __construct ( Array $columns = array() ) {
@@ -108,6 +109,95 @@ abstract class SelectCore extends Statement {
         return $this;
     }
 
+    public function from ( $source ) {
+
+        foreach(func_get_args() as $source) {
+
+            if($source instanceof self)
+                $source = '(' . $source . ')';
+
+            $this->_from[] = $source;
+        }
+
+        return $this;
+    }
+
+    public function _as ( $alias ) {
+
+        if(empty($this->_from))
+            return $this;
+
+        $this->_from[$alias] = '(' . array_pop($this->_from) . ')';
+
+        return $this;
+    }
+
+    public function join ( $source ) {
+
+        return $this->_join('JOIN', $source);
+    }
+
+    public function naturalJoin ( $source ) {
+
+        return $this->_join('NATURAL JOIN', $source);
+    }
+
+    public function leftJoin ( $source ) {
+
+        return $this->_join('LEFT JOIN', $source);
+    }
+
+    public function naturalLeftJoin ( $source ) {
+
+        return $this->_join('NATURAL LEFT JOIN', $source);
+    }
+
+    public function leftOuterJoin ( $source ) {
+
+        return $this->_join('LEFT OUTER JOIN', $source);
+    }
+
+    public function naturalLeftOuterJoin ( $source ) {
+
+        return $this->_join('NATURAL LEFT OUTER JOIN', $source);
+    }
+
+    public function innerJoin ( $source ) {
+
+        return $this->_join('INNER JOIN', $source);
+    }
+
+    public function naturalInnerJoin ( $source ) {
+
+        return $this->_join('NATURAL INNER JOIN', $source);
+    }
+
+    public function crossJoin ( $source ) {
+
+        return $this->_join('CROSS JOIN', $source);
+    }
+
+    public function naturalCrossJoin ( $source ) {
+
+        return $this->_join('NATURAL CROSS JOIN', $source);
+    }
+
+    protected function _join ( $type, $source ) {
+
+        if(empty($this->_from))
+            return $this;
+
+        if($source instanceof self)
+            $source = '(' . $source . ')';
+
+        end($this->_from);
+        $key               = key($this->_from);
+        $value             = current($this->_from);
+        $this->_from[$key] = $value . ' ' . $type . ' ' . $source;
+
+        return new _Join($this, $this->_from);
+    }
+
     public function reset ( ) {
 
         parent::reset();
@@ -115,6 +205,7 @@ abstract class SelectCore extends Statement {
         $this->_distinctOrAll = null;
         $this->_groupBy       = array();
         $this->_having        = array();
+        $this->_from          = array();
 
         return $this;
     }
@@ -131,7 +222,18 @@ abstract class SelectCore extends Statement {
         else
             $out .= ' *';
 
-        $out .= ' ' . parent::__toString();
+        if(!empty($this->_from)) {
+
+            $out .= ' FROM';
+
+            foreach($this->_from as $alias => $from)
+                if(is_int($alias))
+                    $out .= ' ' . $from;
+                else
+                    $out .= ' ' . $from . ' AS ' . $alias;
+        }
+
+        $out .= parent::__toString();
 
         if(!empty($this->_groupBy)) {
 
@@ -142,6 +244,40 @@ abstract class SelectCore extends Statement {
         }
 
         return $out;
+    }
+}
+
+class _Join {
+
+    protected $_parent = null;
+    protected $_from   = null;
+
+
+
+    public function __construct ( Where $parent, Array &$from ) {
+
+        $this->_parent = $parent;
+        $this->_from   = &$from;
+        end($this->_from);
+
+        return;
+    }
+
+    public function on ( $expression ) {
+
+        $this->_from[key($this->_from)] = current($this->_from) .
+                                          ' ON ' . $expression;
+
+        return $this->_parent;
+    }
+
+    public function using ( $column ) {
+
+        $this->_from[key($this->_from)] = current($this->_from) .
+                                          ' USING (' .
+                                          implode(', ', func_get_args()) . ')';
+
+        return $this->_parent;
     }
 }
 
