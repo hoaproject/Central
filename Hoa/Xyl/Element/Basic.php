@@ -55,7 +55,7 @@ namespace Hoa\Xyl\Element {
 /**
  * Class \Hoa\Xyl\Element\Basic.
  *
- * 
+ * Basic XYL element.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.

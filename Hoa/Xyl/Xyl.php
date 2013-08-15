@@ -230,11 +230,18 @@ class          Xyl
     protected $_stylesheets       = array();
 
     /**
-     * Temporize metas.
+     * Computed metas.
      *
      * @var \Hoa\Xyl array
      */
     protected $_metas             = array();
+
+    /**
+     * Computed overlay references.
+     *
+     * @var \Hoa\Xyl array
+     */
+    protected $_overlays          = array();
 
     /**
      * Fragments.
@@ -743,6 +750,40 @@ class          Xyl
         return;
     }
 
+    public function removeOverlay ( $href ) {
+
+        $href          = str_replace('"', '\"', $href);
+        $ownerDocument = $this->_mowgli;
+        $xpath         = new \DOMXpath($ownerDocument);
+        $xyl_overlay   = $xpath->query('/processing-instruction(\'xyl-overlay\')');
+
+        for($i = 0, $m = $xyl_overlay->length; $i < $m; ++$i) {
+
+            $item          = $xyl_overlay->item($i);
+            $overlayParsed = new \Hoa\Xml\Attribute($item->data);
+
+            if(false === $overlayParsed->attributeExists('href'))
+                continue;
+
+            if($overlayParsed->readAttribute('href') !== $href)
+                continue;
+
+            $ownerDocument->removeChild($item);
+            break;
+        }
+
+        if(!isset($this->_overlays[$href]))
+            return false;
+
+        foreach(array_reverse($this->_overlays[$href]) as $overlay)
+            $overlay->parentNode->removeChild($overlay);
+
+        unset($this->_overlays[$href]);
+        $this->partiallyUninterprete();
+
+        return true;
+    }
+
     /**
      * Compute <?xyl-overlay?> processing-instruction.
      *
@@ -795,10 +836,8 @@ class          Xyl
                 continue;
             }
 
-            $href = $this->computeLink(
-                $overlayParsed->readAttribute('href'),
-                true
-            );
+            $_href = $overlayParsed->readAttribute('href');
+            $href  = $this->computeLink($_href, true);
             unset($overlayParsed);
 
             if(0 === preg_match('#^(([^:]+://)|([A-Z]:)|/)#', $href))
@@ -824,13 +863,15 @@ class          Xyl
                     '%s must only contain <overlay> (and some <?xyl-overlay) ' .
                     'elements.', 10, $href);
 
-            $fod = $fragment->readDOM()->ownerDocument;
+            $this->_overlays[$_href] = array();
+            $fod                     = $fragment->readDOM()->ownerDocument;
             $this->computeFragment($fod, $fragment);
 
             foreach($fragment->selectChildElements() as $element)
                 $this->_computeOverlay(
                     $receiptDocument->documentElement,
-                    $receiptDocument->importNode($element->readDOM(), true)
+                    $receiptDocument->importNode($element->readDOM(), true),
+                    $this->_overlays[$_href]
                 );
 
             $this->computeUse    ($fod, $receiptDocument, $fragment);
@@ -844,14 +885,16 @@ class          Xyl
      * Next step for computing overlay.
      *
      * @access  private
-     * @param   \DOMElement  $from    Receiver fragment.
-     * @param   \DOMElement  $to      Overlay fragment.
+     * @param   \DOMElement  $from        Receiver fragment.
+     * @param   \DOMElement  $to          Overlay fragment.
+     * @param   array        $overlays    Overlays accumulator.
      * @return  void
      */
-    private function _computeOverlay ( \DOMElement $from, \DOMElement $to ) {
+    private function _computeOverlay ( \DOMElement $from, \DOMElement $to,
+                                       Array &$overlays ) {
 
         if(false === $to->hasAttribute('id'))
-            return $this->_computeOverlayPosition($from, $to);
+            return $this->_computeOverlayPosition($from, $to, $overlays);
 
         $xpath = new \DOMXPath($from->ownerDocument);
         $query = $xpath->query('//*[@id="' . $to->getAttribute('id') . '"]');
@@ -860,7 +903,7 @@ class          Xyl
             if($from->parentNode == $this->_mowgli) // reference component
                 return null;
             else
-                return $this->_computeOverlayPosition($from, $to);
+                return $this->_computeOverlayPosition($from, $to, $overlays);
 
         $from  = $query->item(0);
 
@@ -896,6 +939,7 @@ class          Xyl
                     $from->setAttribute($name, $node->value);
             }
 
+
         $children = array();
 
         for($h = $to->childNodes, $i = 0, $m = $h->length; $i < $m; ++$i) {
@@ -909,7 +953,7 @@ class          Xyl
         }
 
         foreach($children as $child)
-            $this->_computeOverlay($from, $child);
+            $this->_computeOverlay($from, $child, $overlays);
 
         return;
     }
@@ -918,16 +962,19 @@ class          Xyl
      * Compute position while computing overlay.
      *
      * @access  private
-     * @param   \DOMElement  $from    Receiver fragment.
-     * @param   \DOMElement  $to      Overlay fragment.
+     * @param   \DOMElement  $from        Receiver fragment.
+     * @param   \DOMElement  $to          Overlay fragment.
+     * @param   array        $overlays    Overlays accumulator.
      * @return  void
      */
-    private function _computeOverlayPosition ( \DOMElement $from,
-                                               \DOMElement $to ) {
+    private function _computeOverlayPosition ( \DOMElement  $from,
+                                               \DOMElement  $to,
+                                               Array       &$overlays ) {
 
         if(false === $to->hasAttribute('position')) {
 
             $from->appendChild($to);
+            $overlays[] = $to;
 
             return;
         }
@@ -972,6 +1019,7 @@ class          Xyl
             $from->appendChild($to);
 
         $to->removeAttribute('position');
+        $overlays[] = $to;
 
         return;
     }
@@ -1434,13 +1482,29 @@ class          Xyl
     }
 
     /**
+     * Uninterprete partially the document.
+     *
+     * @access  public
+     * @return  \Hoa\Xyl
+     */
+    public function partiallyUninterprete ( ) {
+
+        $this->_isDataComputed = false;
+        $this->_concrete       = null;
+
+        return $this;
+    }
+
+    /**
      * Run the render.
      *
      * @access  public
      * @param   \Hoa\Xyl\Element\Concrete  $element    Element.
+     * @param   bool                       $force      Force to re-compute the
+     *                                                 interpretation.
      * @return  string
      */
-    public function render ( Element\Concrete $element = null ) {
+    public function render ( Element\Concrete $element = null, $force = false) {
 
         if(null === $element)
             $element = $this->_concrete;
@@ -1449,6 +1513,12 @@ class          Xyl
 
             $this->interprete(null, true);
             $element = $this->_concrete;
+        }
+        elseif(false !== $force) {
+
+            $this->partiallyUninterprete();
+
+            return $this->render();
         }
 
         if(false === $this->_isDataComputed)
