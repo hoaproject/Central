@@ -391,7 +391,7 @@ class Consistency implements \ArrayAccess {
 
                     $parts[0] = $backup[0];
                     $parts[1] = $backup[1];
-                    array_shift($parts);
+                    array_pop($parts);
                     --$count;
 
                     $parts[0] = $root . $parts[0];
