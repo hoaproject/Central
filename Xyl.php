@@ -939,7 +939,6 @@ class          Xyl
                     $from->setAttribute($name, $node->value);
             }
 
-
         $children = array();
 
         for($h = $to->childNodes, $i = 0, $m = $h->length; $i < $m; ++$i) {
