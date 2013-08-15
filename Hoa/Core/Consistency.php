@@ -308,10 +308,29 @@ class Consistency implements \ArrayAccess {
 
             if(empty($glob)) {
 
-                foreach($uncache as $un)
-                    unset(static::$_cache[$un]);
+                $goUncache = true;
 
-                return false;
+                // For classes that are not installed with Composer but with
+                // Composer present.
+                if(WITH_COMPOSER) {
+
+                    $explode[0] = $backup[0];
+                    $explode[1] = $backup[1];
+
+                    $explode[0] = $root . $explode[0];
+                    $countFrom  = strlen($explode[0]) + 1;
+                    $glob       = glob(implode('/', $explode) . '.php');
+
+                    $goUncache  = empty($glob);
+                }
+
+                if(true === $goUncache) {
+
+                    foreach($uncache as $un)
+                        unset(static::$_cache[$un]);
+
+                    return false;
+                }
             }
 
             foreach($glob as $value) {
@@ -364,10 +383,39 @@ class Consistency implements \ArrayAccess {
 
             if(!file_exists($path)) {
 
-                foreach($uncache as $un)
-                    unset(static::$_cache[$un]);
+                $goUncache = true;
 
-                return false;
+                // For classes that are not installed with Composer but with
+                // Composer present.
+                if(WITH_COMPOSER) {
+
+                    $parts[0] = $backup[0];
+                    $parts[1] = $backup[1];
+                    array_shift($parts);
+                    --$count;
+
+                    $parts[0] = $root . $parts[0];
+                    $path     = implode('/',  $parts) . '.php';
+
+                    if(!file_exists($path)) {
+
+                        $parts[] = $parts[$count - 1];
+                        $path    = implode('/',  $parts) . '.php';
+                        ++$count;
+
+                        $goUncache = !file_exists($path);
+                    }
+                    else
+                        $goUncache = false;
+                }
+
+                if(true === $goUncache) {
+
+                    foreach($uncache as $un)
+                        unset(static::$_cache[$un]);
+
+                    return false;
+                }
             }
         }
 
