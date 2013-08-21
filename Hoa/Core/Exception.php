@@ -232,7 +232,7 @@ class Idle extends \Exception {
 
         if(   true === $previous
            && null !== $previous = $this->getPreviousThrow())
-            $out .= "\n\n" . '    ⬇' . "\n\n" .
+            $out .= "\n\n" . '    ⬇ ' . "\n\n" .
                     'Nested exception (' . get_class($previous) . '):' . "\n" .
                     $previous->raise(true);
 
