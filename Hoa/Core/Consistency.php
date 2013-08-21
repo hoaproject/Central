@@ -962,6 +962,13 @@ class Xcallable {
                     throw new \Hoa\Core\Exception(
                         'Bad callback form.', 2);
             }
+            elseif(is_array($call) && isset($call[0])) {
+
+                if(!isset($call[1]))
+                    return $this->__construct($call[0]);
+
+                return $this->__construct($call[0], $call[1]);
+            }
             else
                 throw new \Hoa\Core\Exception(
                     'Bad callback form.', 3);
