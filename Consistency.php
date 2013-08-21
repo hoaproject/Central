@@ -908,12 +908,14 @@ class Xcallable {
     /**
      * Build a callback.
      * Accepted forms:
-     *     * 'function';
-     *     * 'class::method';
-     *     * 'class', 'method';
-     *     * $object, 'method';
-     *     * $object, '';
-     *     * function ( … ) { … }.
+     *     • 'function';
+     *     • 'class::method';
+     *     • 'class', 'method';
+     *     • $object, 'method';
+     *     • $object, '';
+     *     • function ( … ) { … };
+     *     • array('class', 'method');
+     *     • array($object, 'method').
      *
      * @access  public
      * @param   mixed   $call    First callable part.
