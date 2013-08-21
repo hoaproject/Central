@@ -673,23 +673,18 @@ class Praspel {
      * @access  public
      * @param   string  $comment    Comment.
      * @return  string
-     * @throw   \Hoa\Praspel\Exception
      */
     public static function extractFromComment ( $comment ) {
 
         $i = preg_match('#/\*(.*?)\*/#s', $comment, $matches);
 
         if(0 === $i)
-            throw new Exception\Generic(
-                'Not able to extract Praspel from the following ' .
-                'comment:' . "\n" . '%s', 8, $comment);
+            return '';
 
         $i = preg_match_all('#^[\s\*]*\s*\*\s?([^\n]*)$#m', $matches[1], $maatches);
 
         if(0 === $i)
-            throw new Exception\Generic(
-                'Not able to extract Praspel from the following ' .
-                'comment:' . "\n" . '%s', 9, $comment);
+            return '';
 
         return trim(implode("\n", $maatches[1]));
     }
