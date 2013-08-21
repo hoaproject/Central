@@ -123,6 +123,28 @@ class Timestamp extends Constinteger {
 
         return (int) $datetime->format('U');
     }
+
+    /**
+     * Get Praspel representation of the realistic domain.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function toPraspel ( ) {
+
+        return $this->defaultToPraspel();
+    }
+
+    /**
+     * Get string representation of the realistic domain.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function __toString ( ) {
+
+        return $this->defaultToString();
+    }
 }
 
 }

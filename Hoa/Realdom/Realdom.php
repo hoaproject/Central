@@ -848,12 +848,12 @@ abstract class Realdom implements \ArrayAccess, \Countable {
     }
 
     /**
-     * Get Praspel representation of the realistic domain.
+     * Get default Praspel representation of the realistic domain.
      *
-     * @access  public
+     * @access  protected
      * @return  string
      */
-    public function toPraspel ( ) {
+    protected function defaultToPraspel ( ) {
 
         $handle = array();
 
@@ -867,12 +867,23 @@ abstract class Realdom implements \ArrayAccess, \Countable {
     }
 
     /**
-     * Get string representation of the realistic domain.
+     * Get Praspel representation of the realistic domain.
      *
      * @access  public
      * @return  string
      */
-    public function __toString ( ) {
+    public function toPraspel ( ) {
+
+        return $this->defaultToPraspel();
+    }
+
+    /**
+     * Get default string representation of the realistic domain.
+     *
+     * @access  protected
+     * @return  string
+     */
+    protected function defaultToString ( ) {
 
         $out    = 'realdom()->' . $this->getName() . '(';
         $handle = array();
@@ -889,6 +900,17 @@ abstract class Realdom implements \ArrayAccess, \Countable {
         $out .= implode(', ', $handle);
 
         return $out . ')';
+    }
+
+    /**
+     * Get string representation of the realistic domain.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function __toString ( ) {
+
+        return $this->defaultToString();
     }
 }
 
