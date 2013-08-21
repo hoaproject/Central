@@ -407,7 +407,7 @@ class Interpreter implements \Hoa\Visitor\Visit {
 
             case '#old':
                 return '\old(' .
-                       $element->getChild(0)->accept($this, $handle, $eldnah) .
+                       $element->getChild(0)->accept($this, $handle, false) .
                        ')';
               break;
 
