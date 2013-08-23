@@ -21,6 +21,7 @@ cloak on IRC, etc.
   * Julian Espérat (savageman)
   * Baptiste Fedi (baptiste)
   * ➜ Sébastien Houzé (shouze)
+  * Renaud Littolff (marmotz)
   * ➜ Julien Lorrain (julien)
   * ➜ Jean Molliné (cyrano)
   * Joris Mulliez (jojolapine)
