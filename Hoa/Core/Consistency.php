@@ -54,7 +54,7 @@ define('PATH_DATA',      $path . 'Data.php');
  * @license    New BSD License
  */
 
-class Consistency implements \ArrayAccess {
+class Consistency {
 
     /**
      * One singleton by library family.
@@ -117,15 +117,11 @@ class Consistency implements \ArrayAccess {
     protected $__class        = array();
 
     /**
-     * Whether autoload imported files or not.
-     * Possible values:
-     *     • 0, autoload (normal behavior);
-     *     • 1, load (oneshot, back to autoload after loading files);
-     *     • 2, load* (autoload for all imports).
+     * Whether preload is required or not.
      *
-     * @var \Hoa\Core\Consistency bool
+     * @var \Hoa\Core\Consistency int
      */
-    protected $_autoload      = false;
+    protected $_preload       = false;
 
 
 
@@ -178,15 +174,9 @@ class Consistency implements \ArrayAccess {
      * @return  \Hoa\Core\Consistency
      * @throw   \Hoa\Core\Exception
      */
-    public function import ( $path, $load = null, &$family = null ) {
+    public function import ( $path, $load = false, &$family = null ) {
 
         $out = false;
-
-        if(   null === $load
-           &&    1 === $load = $this->getAutoload())
-            $this->setAutoload(0);
-
-        $load = (bool) $load;
 
         foreach($this->_from as $from)
             foreach($this->_roots[$from] as $root) {
@@ -544,122 +534,29 @@ class Consistency implements \ArrayAccess {
     }
 
     /**
-     * To be conform with \ArrayAccess.
+     * Set preload.
      *
      * @access  public
-     * @param   mixed  $offset    Offset.
+     * @param   bool  $preload    Preload.
      * @return  bool
      */
-    public function offsetExists ( $offset ) {
+    public function requirePreload ( $preload ) {
 
-        return false;
-    }
-
-    /**
-     * Use options in the importation flow.
-     * E.g:
-     *     from('Hoa')
-     *
-     *     ['load']
-     *     -> import('Cache.Memoize');
-     * is strictly equivalent to:
-     *     from('Hoa')
-     *     -> import('Cache.Memoize', true);
-     * It's just funnier and more beautiful. Easter egg \o/.
-     * Options could be a string or an array. Current recognized options are:
-     *     • 'root' => 'new/root', equivalent to setRoot('new/root');
-     *     • 'load', equivalent to setAutoload(1);
-     *     • 'load*', equivalent to setAutoload(2);
-     *     • 'autoload', equivalent to setAutoload(0);
-     *     • '…' (unrecognized option), equivalent to setRoot(…).
-     * Obviously, we can combine options:
-     *     [['load', 'root' => 'new/root']]
-     *
-     * @access  public
-     * @param   mixed  $options    Options.
-     * @return  \Hoa\Core\Consistency
-     */
-    public function offsetGet ( $options ) {
-
-        foreach((array) $options as $option => $value)
-            switch("$option") {
-
-                case 'root':
-                    $this->setRoot($value);
-                  break;
-
-                default:
-                    switch($value) {
-
-                        case 'load':
-                            $this->setAutoload(1);
-                          break;
-
-                        case 'load*':
-                            $this->setAutoload(2);
-                          break;
-
-                        case 'autoload':
-                            $this->setAutoload(0);
-                          break;
-
-                        default:
-                            $this->setRoot($value);
-                    }
-            }
-
-        return $this;
-    }
-
-    /**
-     * To be conform with \ArrayAccess.
-     *
-     * @access  public
-     * @param   mixed  $offset    Offset.
-     * @param   mixed  $offset    Value.
-     * @return  bool
-     */
-    public function offsetSet ( $offset, $value ) {
-
-        return false;
-    }
-
-    /**
-     * To be conform with \ArrayAccess.
-     *
-     * @access  public
-     * @param   mixed  $offset    Offset.
-     * @return  bool
-     */
-    public function offsetUnset ( $offset ) {
-
-        return false;
-    }
-
-    /**
-     * Set autoload.
-     *
-     * @access  public
-     * @param   bool  $autoload    Autoload.
-     * @return  bool
-     */
-    public function setAutoload ( $autoload ) {
-
-        $old             = $this->_autoload;
-        $this->_autoload = $autoload;
+        $old            = $this->_preload;
+        $this->_preload = $preload;
 
         return $old;
     }
 
     /**
-     * Get autoload.
+     * Get preload.
      *
      * @access  public
      * @return  bool
      */
-    public function getAutoload ( ) {
+    public function isPreloadRequired ( ) {
 
-        return $this->_autoload;
+        return $this->_preload;
     }
 
     /**
@@ -721,8 +618,15 @@ class Consistency implements \ArrayAccess {
 
         $classes = static::getAllImportedClasses();
 
-        if(!isset($classes[$classname]))
+        if(!isset($classes[$classname])) {
+
+            $head = substr($classname, 0, strpos($classname, '\\'));
+
+            if(false === static::from($head)->isPreloadRequired())
+                return static::autoloadFromClass($classname);
+
             return false;
+        }
 
         $class = &$classes[$classname];
 
@@ -752,12 +656,13 @@ class Consistency implements \ArrayAccess {
      */
     public static function autoloadFromClass ( $classname ) {
 
-        $head = trim(str_replace(
-                    '\\',
-                    '.',
-                    substr($classname, 0, $pos = strpos($classname, '\\'))
-                ), '()');
-        $tail = substr($classname, $pos + 1);
+        $classname = ltrim($classname, '\\');
+        $head      = trim(str_replace(
+                         '\\',
+                         '.',
+                         substr($classname, 0, $pos = strpos($classname, '\\'))
+                     ), '()');
+        $tail      = substr($classname, $pos + 1);
 
         static::from($head)
             ->import(str_replace('\\', '.', $tail), true, $family);
@@ -778,7 +683,7 @@ class Consistency implements \ArrayAccess {
 
         $classname = ltrim($classname, '\\');
 
-        if(!class_exists($classname))
+        if(!class_exists($classname, false))
             $classname = static::autoloadFromClass($classname);
 
         $class = new \ReflectionClass($classname);
