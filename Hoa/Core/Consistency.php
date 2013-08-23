@@ -190,6 +190,18 @@ class Consistency {
 
         if(false === $out) {
 
+            if(true === $load) {
+
+                $autoloaders = spl_autoload_functions();
+                $index       = array_search(
+                    array(__CLASS__, 'autoload'),
+                    $autoloaders
+                );
+
+                if(isset($autoloaders[$index + 1]))
+                    return false;
+            }
+
             $trace = debug_backtrace();
             $file  = $trace[0]['file'];
 
