@@ -472,19 +472,6 @@ function _define ( $name, $value, $case = false ) {
 }}
 
 /**
- * Alias of \Hoa\Core::dump().
- *
- * @access  public
- * @param   mixed   $data    Data.
- * @return  void
- */
-if(!ƒ('dump')) {
-function dump ( $message ) {
-
-    return \Hoa\Core::dump($message);
-}}
-
-/**
  * Alias of the \Hoa\Core\Event::getEvent() method.
  *
  * @access  public
