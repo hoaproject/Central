@@ -621,7 +621,10 @@ class Consistency {
      */
     public static function autoload ( $classname ) {
 
-        $classname = ltrim(str_replace('_', '\\', $classname), '\\');
+        if(false === strpos($classname, '\\'))
+            $classname = str_replace('_', '\\', $classname);
+
+        $classname = ltrim($classname, '\\');
 
         // Hard-preload.
         if(   'Hoa\Core' === substr($classname, 0, 8)
@@ -668,7 +671,10 @@ class Consistency {
      */
     public static function autoloadFromClass ( $classname ) {
 
-        $classname = ltrim(str_replace('_', '\\', $classname), '\\');
+        if(false === strpos($classname, '\\'))
+            $classname = str_replace('_', '\\', $classname);
+
+        $classname = ltrim($classname, '\\');
         $head      = trim(str_replace(
                          '\\',
                          '.',
