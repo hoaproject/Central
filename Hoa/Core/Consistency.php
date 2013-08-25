@@ -188,7 +188,7 @@ class Consistency {
                     break 2;
             }
 
-        if(false === $out) {
+        if(false === $out && true === in_array('Hoa', $this->_from)) {
 
             if(true === $load) {
 
