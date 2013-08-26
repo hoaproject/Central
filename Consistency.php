@@ -264,6 +264,13 @@ class Consistency {
         $explode              = explode('.', $all);
         $parts                = array();
 
+        if(!isset($explode[1])) {
+
+            unset(static::$_cache[$all]);
+
+            return false;
+        }
+
         if(false !== strpos($all, '~')) {
 
             $handle  = array_shift($explode);
@@ -680,7 +687,11 @@ class Consistency {
                          '.',
                          substr($classname, 0, $pos = strpos($classname, '\\'))
                      ), '()');
-        $tail      = substr($classname, $pos + 1);
+
+        if(empty($head))
+            return false;
+
+        $tail = substr($classname, $pos + 1);
 
         static::from($head)
             ->import(str_replace('\\', '.', $tail), true, $family);
