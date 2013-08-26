@@ -20,6 +20,7 @@ cloak on IRC, etc.
   * ➜ Gérard Ernaelsten (maitrepylos)
   * Julian Espérat (savageman)
   * Baptiste Fedi (baptiste)
+  * Alexis von Glasow (avonglasow)
   * ➜ Sébastien Houzé (shouze)
   * Renaud Littolff (marmotz)
   * ➜ Julien Lorrain (julien)
