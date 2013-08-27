@@ -168,7 +168,6 @@ behavior_content:
       (
           ensures()
         | throwable()
-        | invariant()
       )
       ::semicolon::+
     )+
