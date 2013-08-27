@@ -281,7 +281,7 @@ arrayaccess:
 
 identifier:
     <identifier>
-  | ::this:: ::arrow:: <identifier> ( ::arrow:: <identifier> )* #this_identifier
+  | ::this:: ( ::arrow:: <identifier> ( ::arrow:: <identifier> )* )? #this_identifier
   | (
         ::self::   #self_identifier
       | ::static:: #static_identifier
