@@ -202,9 +202,10 @@ class Read extends Basic implements \Hoa\Stream\IStream\In {
      * Read all, i.e. read as much as possible.
      *
      * @access  public
+     * @param   int  $offset    Offset (not used).
      * @return  string
      */
-    public function readAll ( ) {
+    public function readAll ( $offset = 0 ) {
 
         return $this->__toString();
     }
