@@ -796,9 +796,10 @@ abstract class Connection
      * Read all, i.e. read as much as possible.
      *
      * @access  public
+     * @param   int  $offset    Offset (not used).
      * @return  string
      */
-    public function readAll ( ) {
+    public function readAll ( $offset = -1 ) {
 
         return stream_get_contents($this->getStream());
     }
