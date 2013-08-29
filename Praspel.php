@@ -403,7 +403,7 @@ class Praspel {
             $verdict &= $_verdict;
         }
 
-        return $verdict;
+        return (bool) $verdict;
     }
 
     /**
