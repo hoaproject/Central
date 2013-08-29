@@ -28,7 +28,8 @@
     "suggest": {
         "hoa/console"   : "To use the `hoa` script.",
         "hoa/dispatcher": "To use the `hoa` script.",
-        "hoa/router"    : "To use the `hoa` script."
+        "hoa/router"    : "To use the `hoa` script.",
+        "ext-mbstring"  : "ext/mbstring must be present (or a third implementation)."
     },
     "minimum-stability": "dev",
     "autoload": {
