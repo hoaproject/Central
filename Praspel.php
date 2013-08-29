@@ -308,7 +308,7 @@ class Praspel {
                 }
 
             } while(   false === $_verdict
-                    && null !== $behavior = $behavior->getParent());
+                    &&  null !== $behavior = $behavior->getParent());
 
             if(false === $_verdict) {
 
