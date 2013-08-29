@@ -146,6 +146,7 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable,
     private function __construct ( $dalName, $dsn, $username, $password,
                                    Array $driverOptions = array() ) {
 
+        // Please see https://bugs.php.net/55154.
         if(0 !== preg_match('#^sqlite:([^$]+)$#i', $dsn, $matches))
             $dsn = 'sqlite:' . resolve($matches[1]);
 
