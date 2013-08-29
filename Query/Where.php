@@ -78,13 +78,8 @@ class Where {
         if(!empty($this->_where))
             $where = ($this->_logicOperator ?: 'AND') . ' ';
 
-        if($expression instanceof \Closure) {
-
-            $subWhere   = new self();
-            $expression($subWhere);
-            //                    skip “ WHERE”
-            $expression = '(' . substr($subWhere, 7) . ')';
-        }
+        if($expression instanceof self)
+            $expression = '(' . substr($expression, 7) . ')';
 
         $this->_where[]       = $where . $expression;
         $this->_logicOperator = null;
