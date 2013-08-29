@@ -22,7 +22,7 @@ cloak on IRC, etc.
   * Baptiste Fedi (baptiste)
   * Alexis von Glasow (avonglasow)
   * ➜ Sébastien Houzé (shouze)
-  * Renaud Littolff (marmotz)
+  * ➜ Renaud Littolff (marmotz)
   * ➜ Julien Lorrain (julien)
   * ➜ Jean Molliné (cyrano)
   * Joris Mulliez (jojolapine)
