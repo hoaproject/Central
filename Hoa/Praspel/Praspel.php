@@ -300,8 +300,8 @@ class Praspel {
                 // Check exceptional postcondition.
                 if(true === $behavior->clauseExists('throwable')) {
 
-                    $throwable  = $behavior->getClause('throwable');
-                    $_verdict  |= $this->checkExceptionalClause(
+                    $throwable = $behavior->getClause('throwable');
+                    $_verdict  = $this->checkExceptionalClause(
                         $throwable,
                         $arguments
                     );
