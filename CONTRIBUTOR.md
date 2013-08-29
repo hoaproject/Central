@@ -27,6 +27,7 @@ cloak on IRC, etc.
   * ➜ Jean Molliné (cyrano)
   * Joris Mulliez (jojolapine)
   * ➜ Stéphane Py (stephpy)
+  * Mathias Strasser (mathiasstrasser)
   * Emmanuel Thierry (sekiltoyai)
 
 # Special thanks
