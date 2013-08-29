@@ -292,18 +292,33 @@ class Praspel {
         }
         catch ( \Exception $exception ) {
 
-            // Check exceptional postcondition.
-            if(true === $behavior->clauseExists('throwable')) {
+            $_verdict             = false;
+            $arguments['\result'] = $exception;
 
-                $throwable             = $behavior->getClause('throwable');
-                $arguments['\result']  = $exception;
-                $verdict              &= $this->checkExceptionalClause(
-                    $throwable,
-                    $arguments,
-                    $exceptions,
-                    __NAMESPACE__ . '\Exception\Failure\Exceptional'
+            do {
+
+                // Check exceptional postcondition.
+                if(true === $behavior->clauseExists('throwable')) {
+
+                    $throwable  = $behavior->getClause('throwable');
+                    $_verdict  |= $this->checkExceptionalClause(
+                        $throwable,
+                        $arguments
+                    );
+                }
+
+            } while(   false === $_verdict
+                    && null !== $behavior = $behavior->getParent());
+
+            if(false === $_verdict) {
+
+                $exceptions[] = new Exception\Failure\Exceptional(
+                    'The exception %s has been unexpectedly thrown.',
+                    42, array(get_class($arguments['\result']))
                 );
             }
+
+            $verdict &= $_verdict;
         }
 
         if(0 < count($exceptions))
@@ -455,18 +470,13 @@ class Praspel {
      * Check an exceptional clause.
      *
      * @access  protected
-     * @param   \Hoa\Praspel\Model\Throwable    $clause        Clause.
-     * @param   array                          &$data          Data.
-     * @param   \Hoa\Praspel\Exception\Group    $exceptions    Exceptions group.
-     * @param   string                          $exception     Exception to
-     *                                                         throw.
+     * @param   \Hoa\Praspel\Model\Throwable   $clause    Clause.
+     * @param   array                         &$data      Data.
      * @return  bool
      * @throw   \Hoa\Praspel\Exception
      */
     protected function checkExceptionalClause ( Model\Throwable $clause,
-                                                Array          &$data,
-                                                Exception\Group $exceptions,
-                                                                $exception ) {
+                                                Array          &$data ) {
 
         $verdict = false;
 
@@ -493,11 +503,6 @@ class Praspel {
                 }
             }
         }
-
-        if(false === $verdict)
-            $exceptions[] = new $exception(
-                'The exception %s has been unexpectedly thrown.',
-                7, array(get_class($data['\result'])));
 
         return $verdict;
     }
