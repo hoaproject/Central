@@ -331,7 +331,7 @@ class Praspel {
      * Check behavior clauses.
      *
      * @access  protected
-     * @param   \Hoa\Praspel\Model\Behavior     $behavior      Behavior clause.
+     * @param   \Hoa\Praspel\Model\Behavior    &$behavior      Behavior clause.
      * @param   array                          &$data          Data.
      * @param   \Hoa\Praspel\Exception\Group    $exceptions    Exceptions group.
      * @return  bool

@@ -116,7 +116,7 @@
 %token  identifier      [a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*
 
 #specification:
-    method()+
+    method()*
 
 method:
     (
@@ -168,7 +168,6 @@ behavior_content:
       (
           ensures()
         | throwable()
-        | invariant()
       )
       ::semicolon::+
     )+
@@ -281,7 +280,7 @@ arrayaccess:
 
 identifier:
     <identifier>
-  | ::this:: ::arrow:: <identifier> ( ::arrow:: <identifier> )* #this_identifier
+  | ::this:: ( ::arrow:: <identifier> ( ::arrow:: <identifier> )* )? #this_identifier
   | (
         ::self::   #self_identifier
       | ::static:: #static_identifier
