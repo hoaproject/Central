@@ -757,7 +757,7 @@ class Wrapper {
      */
     public function stream_seek ( $offset, $whence = SEEK_SET ) {
 
-        return fseek($this->getStream(), $offset, $whence);
+        return 0 === fseek($this->getStream(), $offset, $whence);
     }
 
     /**
