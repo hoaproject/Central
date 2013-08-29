@@ -21,6 +21,7 @@ cloak on IRC, etc.
   * Julian Espérat (savageman)
   * Baptiste Fedi (baptiste)
   * Alexis von Glasow (avonglasow)
+  * Nicolas Grekas (nicolas-grekas)
   * ➜ Sébastien Houzé (shouze)
   * ➜ Renaud Littolff (marmotz)
   * ➜ Julien Lorrain (julien)
