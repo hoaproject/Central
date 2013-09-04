@@ -27,6 +27,7 @@ cloak on IRC, etc.
   * ➜ Julien Lorrain (julien)
   * ➜ Jean Molliné (cyrano)
   * Joris Mulliez (jojolapine)
+  * Grégoire Pineau (lyrixx)
   * ➜ Stéphane Py (stephpy)
   * Mathias Strasser (mathiasstrasser)
   * Emmanuel Thierry (sekiltoyai)
