@@ -69,7 +69,7 @@ class          Value
     /**
      * Attributes description.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\A array
+     * @var \Hoa\Xyl\Interpreter\Common\Value array
      */
     protected static $_attributes = array(
         'link'      => self::ATTRIBUTE_TYPE_LINK,
