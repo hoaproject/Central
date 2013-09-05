@@ -155,7 +155,7 @@ class          Variable
      * @return  void
      * @throw   \Hoa\Praspel\Exception\Model
      */
-    public function __construct ( $name, $local, Clause $clause ) {
+    public function __construct ( $name, $local, Clause $clause = null ) {
 
         $this->_name       = $name;
         $this->_local      = $local;
