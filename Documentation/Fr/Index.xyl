@@ -804,8 +804,8 @@ Array
   <code>_call</code> et <code>_able</code> : elles permettent de définir un
   <strong><em lang="en">callable</em></strong>. Ces variables peuvent être alors
   réutilisées pour <strong>dispatcher</strong> la requête. C'est exactement le
-  rôle de <a href="@lh:chapter"><code>Hoa\Dispatcher</code></a> et c'est la
-  suite logique de <code>Hoa\Router</code>.</p>
+  rôle de <a href="@lh:chapter=Dispatcher"><code>Hoa\Dispatcher</code></a> et
+  c'est la suite logique de <code>Hoa\Router</code>.</p>
 
   <h2 id="Conclusion" for="main-toc">Conclusion</h2>
 
