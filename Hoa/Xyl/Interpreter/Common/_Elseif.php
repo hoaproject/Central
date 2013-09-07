@@ -39,44 +39,25 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Xyl\Element\Concrete
+ * \Hoa\Xyl\Interpreter\Common\_If
  */
--> import('Xyl.Element.Concrete')
-
-/**
- * \Hoa\Xml\Element\Model\Phrasing
- */
--> import('Xml.Element.Model.Phrasing');
+-> import('Xyl.Interpreter.Common._If');
 
 }
 
 namespace Hoa\Xyl\Interpreter\Common {
 
 /**
- * Class \Hoa\Xyl\Interpreter\Common\Value.
+ * Class \Hoa\Xyl\Interpreter\Common\_Elseif.
  *
- * The <value /> component.
+ * The <elseif /> component.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class          Value
-    extends    \Hoa\Xyl\Element\Concrete
-    implements \Hoa\Xml\Element\Model\Phrasing {
-
-    /**
-     * Attributes description.
-     *
-     * @var \Hoa\Xyl\Interpreter\Common\Value array
-     */
-    protected static $_attributes = array(
-        'link'      => self::ATTRIBUTE_TYPE_LINK,
-        'formatter' => self::ATTRIBUTE_TYPE_CUSTOM
-    );
-
-
+class _Elseif extends _If {
 
     /**
      * Paint the element.
@@ -86,23 +67,6 @@ class          Value
      * @return  void
      */
     public function paint ( \Hoa\Stream\IStream\Out $out ) {
-
-        $value = $this->computeValue();
-
-        if(true === $this->abstract->attributeExists('formatter'))
-            $value = $this->formatValue(empty($value) ? null : $value);
-
-        if(true === $this->abstract->attributeExists('link')) {
-
-            $out->writeAll($this->computeAttributeValue(
-                $this->abstract->readAttribute('link'),
-                parent::ATTRIBUTE_TYPE_LINK
-            ));
-
-            return;
-        }
-
-        $out->writeAll($value);
 
         return;
     }

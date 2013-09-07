@@ -41,39 +41,31 @@ from('Hoa')
 /**
  * \Hoa\Xyl\Element\Concrete
  */
--> import('Xyl.Element.Concrete')
-
-/**
- * \Hoa\Xml\Element\Model\Phrasing
- */
--> import('Xml.Element.Model.Phrasing');
+-> import('Xyl.Element.Concrete');
 
 }
 
 namespace Hoa\Xyl\Interpreter\Common {
 
 /**
- * Class \Hoa\Xyl\Interpreter\Common\Value.
+ * Class \Hoa\Xyl\Interpreter\Common\_If.
  *
- * The <value /> component.
+ * The <if /> component.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class          Value
-    extends    \Hoa\Xyl\Element\Concrete
-    implements \Hoa\Xml\Element\Model\Phrasing {
+class _If extends \Hoa\Xyl\Element\Concrete {
 
     /**
      * Attributes description.
      *
-     * @var \Hoa\Xyl\Interpreter\Common\Value array
+     * @var \Hoa\Xyl\Interpreter\Common\_If array
      */
     protected static $_attributes = array(
-        'link'      => self::ATTRIBUTE_TYPE_LINK,
-        'formatter' => self::ATTRIBUTE_TYPE_CUSTOM
+        'test' => self::ATTRIBUTE_TYPE_NORMAL
     );
 
 
@@ -87,22 +79,42 @@ class          Value
      */
     public function paint ( \Hoa\Stream\IStream\Out $out ) {
 
-        $value = $this->computeValue();
+        return $this->structuralCompute($out);
+    }
 
-        if(true === $this->abstract->attributeExists('formatter'))
-            $value = $this->formatValue(empty($value) ? null : $value);
+    /**
+     * Structural compute (if/elseif/else).
+     *
+     * @access  public
+     * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
+     * @return  void
+     */
+    public function structuralCompute ( \Hoa\Stream\IStream\Out $out ) {
 
-        if(true === $this->abstract->attributeExists('link')) {
+        $verdict = false;
 
-            $out->writeAll($this->computeAttributeValue(
-                $this->abstract->readAttribute('link'),
-                parent::ATTRIBUTE_TYPE_LINK
-            ));
+        if(true === $this->abstract->attributeExists('test'))
+            $verdict = \Hoa\Xyl::evaluateXPath(
+                $this->computeAttributeValue(
+                    $this->abstract->readAttribute('test'),
+                    self::ATTRIBUTE_TYPE_NORMAL
+                )
+            );
+
+        if(false === $verdict) {
+
+            $next = $this->abstract->selectAdjacentSiblingElement('elseif')
+                        ?: $this->abstract->selectAdjacentSiblingElement('else');
+
+            if(false === $next)
+                return;
+
+            $this->getConcreteElement($next)->structuralCompute($out);
 
             return;
         }
 
-        $out->writeAll($value);
+        $this->computeValue($out);
 
         return;
     }

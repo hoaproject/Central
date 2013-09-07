@@ -41,42 +41,23 @@ from('Hoa')
 /**
  * \Hoa\Xyl\Element\Concrete
  */
--> import('Xyl.Element.Concrete')
-
-/**
- * \Hoa\Xml\Element\Model\Phrasing
- */
--> import('Xml.Element.Model.Phrasing');
+-> import('Xyl.Element.Concrete');
 
 }
 
 namespace Hoa\Xyl\Interpreter\Common {
 
 /**
- * Class \Hoa\Xyl\Interpreter\Common\Value.
+ * Class \Hoa\Xyl\Interpreter\Common\_Else.
  *
- * The <value /> component.
+ * The <else /> component.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class          Value
-    extends    \Hoa\Xyl\Element\Concrete
-    implements \Hoa\Xml\Element\Model\Phrasing {
-
-    /**
-     * Attributes description.
-     *
-     * @var \Hoa\Xyl\Interpreter\Common\Value array
-     */
-    protected static $_attributes = array(
-        'link'      => self::ATTRIBUTE_TYPE_LINK,
-        'formatter' => self::ATTRIBUTE_TYPE_CUSTOM
-    );
-
-
+class _Else extends \Hoa\Xyl\Element\Concrete {
 
     /**
      * Paint the element.
@@ -87,22 +68,19 @@ class          Value
      */
     public function paint ( \Hoa\Stream\IStream\Out $out ) {
 
-        $value = $this->computeValue();
+        return;
+    }
 
-        if(true === $this->abstract->attributeExists('formatter'))
-            $value = $this->formatValue(empty($value) ? null : $value);
+    /**
+     * Structural compute (if/elseif/else).
+     *
+     * @access  public
+     * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
+     * @return  void
+     */
+    public function structuralCompute ( \Hoa\Stream\IStream\Out $out ) {
 
-        if(true === $this->abstract->attributeExists('link')) {
-
-            $out->writeAll($this->computeAttributeValue(
-                $this->abstract->readAttribute('link'),
-                parent::ATTRIBUTE_TYPE_LINK
-            ));
-
-            return;
-        }
-
-        $out->writeAll($value);
+        $this->computeValue($out);
 
         return;
     }

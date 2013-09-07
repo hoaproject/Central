@@ -184,7 +184,7 @@ class          Xyl
      *
      * @var DOMXPath object
      */
-    protected $_xe                = null;
+    protected static $_xe         = null;
 
     /**
      * Output stream.
@@ -324,7 +324,6 @@ class          Xyl
         }
 
         $this->_i           = self::$_ci++;
-        $this->_xe          = new \DOMXPath(new \DOMDocument());
         $this->_data        = new \Hoa\Core\Data();
         $this->_out         = $out;
         $this->_interpreter = $interpreter;
@@ -1007,7 +1006,7 @@ class          Xyl
         $search[]  = 'last()';
         $replace[] = $last;
         $handle    = str_replace($search, $replace, $to->getAttribute('position'));
-        $position  = max(0, (int) $this->_xe->evaluate($handle));
+        $position  = max(0, (int) static::evaluateXPath($handle));
 
         if($position < $last)
             $from->insertBefore(
@@ -1206,7 +1205,7 @@ class          Xyl
 
                 if(true === $styleParsed->attributeExists('position')) {
 
-                    $position = max(0, (int) $this->_xe->evaluate(str_replace(
+                    $position = max(0, (int) static::evaluateXPath(str_replace(
                         'last()',
                         ($k = key($this->_stylesheets)) ? $k + 1 : 0,
                         $styleParsed->readAttribute('position')
@@ -1679,6 +1678,21 @@ class          Xyl
                 21);
 
         return $concrete->getConcreteElement($handle[0]);
+    }
+
+    /**
+     * Evaluate an XPath expression.
+     *
+     * @access  public
+     * @param   string  $expression    Expression.
+     * @return  mixed
+     */
+    public static function evaluateXPath ( $expression ) {
+
+        if(null === static::$_xe)
+            static::$_xe = new \DOMXpath(new \DOMDocument());
+
+        return static::$_xe->evaluate($expression);
     }
 
     /**
