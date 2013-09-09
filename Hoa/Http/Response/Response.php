@@ -500,11 +500,11 @@ class          Response
             }
 
         if(0 === preg_match('#^HTTP/(1\.(?:0|1))\s+(\d{3})#i', $status, $matches))
-            throw new Exception(
+            throw new \Hoa\Http\Exception(
                 'HTTP headers are not well-formed: %s.', 0, $status);
 
         if(!isset($this->_status[$matches[2]]))
-            throw new Exception(
+            throw new \Hoa\Http\Exception(
                 'Unknow HTTP status %d in %s.', 1, array($matches[2], $status));
 
         $this->_httpVersion = (float) $matches[1];
