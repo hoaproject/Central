@@ -50,7 +50,7 @@ namespace Hoa\Xyl\Interpreter {
 /**
  * Class \Hoa\Xyl\Interpreter.
  *
- * 
+ * Abstract interpreter.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
@@ -74,6 +74,50 @@ abstract class Interpreter {
     protected $_resourcePath = null;
 
 
+
+    /**
+     * Construct interpreter.
+     *
+     * @access  public
+     * @param   array  $rank    Rank.
+     * @return  void
+     */
+    public function __construct ( Array $rank = array() ) {
+
+        $this->setComponents($rank);
+
+        return;
+    }
+
+    /**
+     * Set ranks.
+     *
+     * @access  public
+     * @param   array  $rank    Ranks.
+     * @return  void
+     */
+    public function setComponents ( Array $rank ) {
+
+        foreach($rank as $element => $component)
+            $this->setComponent($element, $component);
+
+        return;
+    }
+
+    /**
+     * Set rank.
+     *
+     * @access  public
+     * @param   array  $element      Element.
+     * @param   array  $component    Classname of the component.
+     * @return  void
+     */
+    public function setComponent ( $element, $component ) {
+
+        $this->_rank[$element] = $component;
+
+        return;
+    }
 
     /**
      * Get rank.
