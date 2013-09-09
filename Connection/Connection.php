@@ -643,7 +643,7 @@ abstract class Connection
      */
     public function isDisconnected ( ) {
 
-        return $this->_disconnect;
+        return false !== $this->_disconnect;
     }
 
     /**
