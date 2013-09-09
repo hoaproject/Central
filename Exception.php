@@ -234,7 +234,9 @@ class Idle extends \Exception {
            && null !== $previous = $this->getPreviousThrow())
             $out .= "\n\n" . '    ⬇ ' . "\n\n" .
                     'Nested exception (' . get_class($previous) . '):' . "\n" .
-                    $previous->raise(true);
+                    ($previous instanceof Idle
+                        ? $previous->raise(true)
+                        : $previous->getMessage());
 
         return $out;
     }
