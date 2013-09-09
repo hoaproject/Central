@@ -76,6 +76,20 @@ abstract class Interpreter {
 
 
     /**
+     * Construct interpreter.
+     *
+     * @access  public
+     * @param   Array  $data    Components collection.
+     * @return  void
+     */
+    public function __construct ( Array $data = array() ) {
+
+        $this->setComponents($data);
+
+        return;
+    }
+
+    /**
      * Get rank.
      *
      * @access  public
@@ -95,6 +109,36 @@ abstract class Interpreter {
     public function getResourcePath ( ) {
 
         return $this->_resourcePath;
+    }
+
+    /**
+     * Set components collection.
+     *
+     * @access  public
+     * @param   Array  $data    Components collection.
+     * @return  void
+     */
+    public function setComponents ( Array $data ) {
+
+        foreach ($array as $components => $class)
+            $this->setComponent($components, $class);
+
+        return;
+    }
+
+    /**
+     * Set component item.
+     *
+     * @access  public
+     * @param   Array  $name    Components name.
+     * @param   Array  $class    Components class.
+     * @return  void
+     */
+    public function setComponent ( $name, $class ) {
+
+        $this->_rank[$name] = $class;
+
+        return:
     }
 }
 
