@@ -50,7 +50,7 @@ namespace Hoa\Xyl\Interpreter {
 /**
  * Class \Hoa\Xyl\Interpreter.
  *
- * 
+ * Abstract interpreter.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
@@ -79,12 +79,42 @@ abstract class Interpreter {
      * Construct interpreter.
      *
      * @access  public
-     * @param   Array  $data    Components collection.
+     * @param   array  $rank    Rank.
      * @return  void
      */
-    public function __construct ( Array $data = array() ) {
+    public function __construct ( Array $rank = array() ) {
 
-        $this->setComponents($data);
+        $this->setComponents($rank);
+
+        return;
+    }
+
+    /**
+     * Set ranks.
+     *
+     * @access  public
+     * @param   array  $rank    Ranks.
+     * @return  void
+     */
+    public function setComponents ( Array $rank ) {
+
+        foreach($rank as $element => $component)
+            $this->setComponent($element, $component);
+
+        return;
+    }
+
+    /**
+     * Set rank.
+     *
+     * @access  public
+     * @param   array  $element      Element.
+     * @param   array  $component    Classname of the component.
+     * @return  void
+     */
+    public function setComponent ( $element, $component ) {
+
+        $this->_rank[$element] = $component;
 
         return;
     }
@@ -109,36 +139,6 @@ abstract class Interpreter {
     public function getResourcePath ( ) {
 
         return $this->_resourcePath;
-    }
-
-    /**
-     * Set components collection.
-     *
-     * @access  public
-     * @param   Array  $data    Components collection.
-     * @return  void
-     */
-    public function setComponents ( Array $data ) {
-
-        foreach ($array as $components => $class)
-            $this->setComponent($components, $class);
-
-        return;
-    }
-
-    /**
-     * Set component item.
-     *
-     * @access  public
-     * @param   Array  $name    Components name.
-     * @param   Array  $class    Components class.
-     * @return  void
-     */
-    public function setComponent ( $name, $class ) {
-
-        $this->_rank[$name] = $class;
-
-        return:
     }
 }
 
