@@ -100,6 +100,13 @@ class Request extends Http {
     const METHOD_OPTIONS  = 'options';
 
     /**
+     * Method: PATCH.
+     *
+     * @const string
+     */
+    const METHOD_PATCH    = 'patch';
+
+    /**
      * Method: POST.
      *
      * @const string
@@ -112,13 +119,6 @@ class Request extends Http {
      * @const string
      */
     const METHOD_PUT      = 'put';
-
-    /**
-     * Method: PATCH.
-     *
-     * @const string
-     */
-    const METHOD_PATCH    = 'patch';
 
     /**
      * Method: TRACE.
@@ -199,9 +199,9 @@ class Request extends Http {
             case self::METHOD_GET:
             case self::METHOD_HEAD:
             case self::METHOD_OPTIONS:
+            case self::METHOD_PATCH:
             case self::METHOD_POST:
             case self::METHOD_PUT:
-            case self::METHOD_PATCH:
             case self::METHOD_TRACE:
                 $this->_method = $method;
               break;
