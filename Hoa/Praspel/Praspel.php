@@ -310,13 +310,11 @@ class Praspel {
             } while(   false === $_verdict
                     &&  null !== $behavior = $behavior->getParent());
 
-            if(false === $_verdict) {
-
+            if(false === $_verdict)
                 $exceptions[] = new Exception\Failure\Exceptional(
                     'The exception %s has been unexpectedly thrown.',
                     42, array(get_class($arguments['\result']))
                 );
-            }
 
             $verdict &= $_verdict;
         }
