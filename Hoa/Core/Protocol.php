@@ -607,6 +607,21 @@ class Wrapper {
     }
 
     /**
+     * Retrieve the underlaying resource.
+     *
+     * @access  public
+     * @param   int     $castAs    Can be STREAM_CAST_FOR_SELECT when
+     *                             stream_select() is calling stream_cast() or
+     *                             STREAM_CAST_AS_STREAM when stream_cast() is
+     *                             called for other uses.
+     * @return  resource
+     */
+    public function stream_cast ( $castAs ) {
+
+        return false;
+    }
+
+    /**
      * Close a resource.
      * This method is called in response to fclose().
      * All resources that were locked, or allocated, by the wrapper should be
