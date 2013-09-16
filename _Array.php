@@ -39,14 +39,14 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Realdom
- */
--> import('Realdom.~')
-
-/**
  * \Hoa\Realdom\Exception\Inconsistent
  */
--> import('Realdom.Exception.Inconsistent');
+-> import('Realdom.Exception.Inconsistent')
+
+/**
+ * \Hoa\Realdom
+ */
+-> import('Realdom.~');
 
 }
 

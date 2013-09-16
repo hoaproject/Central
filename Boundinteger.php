@@ -39,14 +39,14 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Realdom\Integer
- */
--> import('Realdom.Integer')
-
-/**
  * \Hoa\Realdom\Exception\InvalidArgument
  */
 -> import('Realdom.Exception.InvalidArgument')
+
+/**
+ * \Hoa\Realdom\Integer
+ */
+-> import('Realdom.Integer')
 
 /**
  * \Hoa\Realdom\IRealdom\Interval

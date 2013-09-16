@@ -39,6 +39,11 @@ namespace {
 from('Hoa')
 
 /**
+ * \Hoa\Realdom\Exception\MissingArgument
+ */
+-> import('Realdom.Exception.MissingArgument')
+
+/**
  * \Hoa\Realdom
  */
 -> import('Realdom.~');
@@ -91,7 +96,7 @@ class _Class extends Realdom {
     protected function construct ( ) {
 
         if(!isset($this[0]))
-            throw new Exception(
+            throw new Exception\MissingArgument(
                 'Argument missing.', 0);
 
         $this->_classArguments = array_slice($this->getArguments(), 1);

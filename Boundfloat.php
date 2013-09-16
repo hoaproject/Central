@@ -39,6 +39,11 @@ namespace {
 from('Hoa')
 
 /**
+ * \Hoa\Realdom\Exception\InvalidArgument
+ */
+-> import('Realdom.Exception.InvalidArgument')
+
+/**
  * \Hoa\Realdom\Float
  */
 -> import('Realdom.Float')
@@ -47,11 +52,6 @@ from('Hoa')
  * \Hoa\Realdom\Constfloat
  */
 -> import('Realdom.Constfloat')
-
-/**
- * \Hoa\Realdom\Exception\InvalidArgument
- */
--> import('Realdom.Exception.InvalidArgument')
 
 /**
  * \Hoa\Realdom\IRealdom\Interval
