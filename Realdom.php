@@ -285,6 +285,8 @@ abstract class Realdom implements \ArrayAccess, \Countable {
 
                     if($argument instanceof IRealdom\Holder)
                         $_realdoms = $argument->getHeld();
+                    elseif($argument instanceof IRealdom\Crate)
+                        $_realdoms = $argument->getTypes();
                     else
                         $_realdoms = array($argument);
 
@@ -300,13 +302,16 @@ abstract class Realdom implements \ArrayAccess, \Countable {
 
                         $flag = false;
 
-                        foreach($_hints as $_hint)
-                            if($_realdom instanceof $_hint) {
+                        foreach($_hints as $_hint) {
+
+                            if(   $_realdom instanceof $_hint
+                               || $_realdom === $_hint) {
 
                                 $flag = true;
 
                                 break;
                             }
+                        }
 
                         if(false === $flag)
                             unset($_realdoms[$k]);
@@ -346,6 +351,9 @@ abstract class Realdom implements \ArrayAccess, \Countable {
                           break;
 
                         case 1:
+                            if($argument instanceof IRealdom\Crate)
+                                break;
+
                             $argument = $_realdoms[0];
                           break;
 
