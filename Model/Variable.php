@@ -167,7 +167,7 @@ class          Variable
            && !($this->_clause instanceof Ensures))
             throw new \Hoa\Praspel\Exception\Model(
                 '\old(…) and \result are only allowed in @ensures, ' .
-                'given %s in %s.',
+                'given %s in @%s.',
                 0, array($name, $this->getClause()->getName()));
 
         return;
