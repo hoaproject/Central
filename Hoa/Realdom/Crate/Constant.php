@@ -39,9 +39,14 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Realdom\String
+ * \Hoa\Realdom\Exception
  */
--> import('Realdom.String')
+-> import('Realdom.Exception.~')
+
+/**
+ * \Hoa\Realdom\IRealdom\Crate
+ */
+-> import('Realdom.I~.Crate')
 
 /**
  * \Hoa\Realdom\IRealdom\Constant
@@ -50,107 +55,113 @@ from('Hoa')
 
 }
 
-namespace Hoa\Realdom {
+namespace Hoa\Realdom\Crate {
 
 /**
- * Class \Hoa\Realdom\Conststring.
+ * Class \Hoa\Realdom\Crate\Constant
  *
- * Realistic domain: conststring.
+ * Represent a mocked constant.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Conststring extends String implements IRealdom\Constant {
+class          Constant
+    implements \Hoa\Realdom\IRealdom\Crate,
+               \Hoa\Realdom\IRealdom\Constant {
 
     /**
-     * Realistic domain name.
+     * Holder.
      *
-     * @const string
+     * @var \Hoa\Realdom\IRealdom\Holder object
      */
-    const NAME = 'conststring';
-
-    /**
-     * Realistic domain defined arguments.
-     *
-     * @var \Hoa\Realdom array
-     */
-    protected $_arguments = array(
-        'value' => ''
-    );
+    protected $_holder = null;
 
 
 
     /**
-     * Construct a realistic domain.
+     * Constructor.
      *
-     * @access  protcted
+     * @access  public
+     * @param   \Hoa\Realdom\IRealdom\Holder  $holder    Holder.
      * @return  void
      */
-    protected function construct ( ) {
+    public function __construct ( \Hoa\Realdom\IRealdom\Holder $holder ) {
+
+        $this->setHolder($holder);
 
         return;
     }
 
     /**
-     * Predicate whether the sampled value belongs to the realistic domains.
+     * Set holder.
      *
      * @access  protected
-     * @param   mixed  $q    Sampled value.
-     * @return  boolean
+     * @param   \Hoa\Realdom\IRealdom\Holder  $holder    Holder.
+     * @return  \Hoa\Realdom\IRealdom\Holder
      */
-    protected function _predicate ( $q ) {
+    protected function setHolder ( \Hoa\Realdom\IRealdom\Holder $holder) {
 
-        return    is_string($q)
-               && $this['value'] === $q;
+        $old           = $this->_holder;
+        $this->_holder = $holder;
+
+        return $old;
     }
 
     /**
-     * Sample one new value.
+     * Get holder.
      *
-     * @access  protected
-     * @param   \Hoa\Math\Sampler  $sampler    Sampler.
-     * @return  mixed
+     * @access  public
+     * @return  \Hoa\Realdom\IRealdom\Holder
      */
-    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
+    public function getHolder ( ) {
 
-        return $this['value'];
+        return $this->_holder;
+    }
+
+    /**
+     * Get crate types.
+     *
+     * @access  public
+     * @return  array
+     * @throw   \Hoa\Realdom\Exception
+     */
+    public function getTypes ( ) {
+
+        $held   = $this->getHolder()->getHeld();
+        $out    = array();
+        $prefix = 'Hoa\Realdom\\';
+
+        foreach($held as $realdom) {
+
+            if($realdom instanceof \Hoa\Realdom\_Array)
+                $out[] = $prefix . 'Constarray';
+            elseif($realdom instanceof \Hoa\Realdom\Boolean)
+                $out[] = $prefix . 'Constboolean';
+            elseif($realdom instanceof \Hoa\Realdom\Float)
+                $out[] = $prefix . 'Constfloat';
+            elseif($realdom instanceof \Hoa\Realdom\Integer)
+                $out[] = $prefix . 'Constinteger';
+            elseif($realdom instanceof \Hoa\Realdom\String)
+                $out[] = $prefix . 'Conststring';
+            else
+                throw new \Hoa\Realdom\Exception(
+                    'Cannot determine the type.', 0);
+        }
+
+        return $out;
     }
 
     /**
      * Get constant value.
      *
      * @access  public
-     * @return  string
+     * @return  mixed
      */
     public function getConstantValue ( ) {
 
-        return $this['value'];
-    }
-
-    /**
-     * Get Praspel representation of the realistic domain.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function toPraspel ( ) {
-
-        return $this->__toString();
-    }
-
-    /**
-     * Get string representation of the realistic domain.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function __toString ( ) {
-
-        return '\'' .
-               preg_replace('#(?<!\\\)\'#', '\\\'', $this['value']) .
-               '\'';
+        return $this->getHolder()->getValue();
     }
 }
 

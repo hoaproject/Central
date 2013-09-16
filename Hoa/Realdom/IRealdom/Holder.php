@@ -63,6 +63,14 @@ interface Holder {
      * @return  string
      */
     public function getName ( );
+
+    /**
+     * Get value of the holder.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function &getValue ( );
 }
 
 }

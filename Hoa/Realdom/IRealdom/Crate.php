@@ -34,68 +34,27 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
+namespace Hoa\Realdom\IRealdom {
 
 /**
- * \Hoa\Realdom
- */
--> import('Realdom.~')
-
-/**
- * \Hoa\Realdom\Number
- */
--> import('Realdom.Number');
-
-}
-
-namespace Hoa\Realdom {
-
-/**
- * Class \Hoa\Realdom\Float.
+ * Interface \Hoa\Realdom\IRealdom\Crate.
  *
- * Realistic domain: float.
+ * Represent a mocked realdom.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Float extends Realdom implements Number {
+interface Crate {
 
     /**
-     * Realistic domain name.
+     * Get crate types.
      *
-     * @const string
+     * @access  public
+     * @return  array
      */
-    const NAME = 'float';
-
-
-
-    /**
-     * Predicate whether the sampled value belongs to the realistic domains.
-     *
-     * @access  protected
-     * @param   mixed  $q    Sampled value.
-     * @return  boolean
-     */
-    protected function _predicate ( $q ) {
-
-        return is_float($q);
-    }
-
-    /**
-     * Sample one new value.
-     *
-     * @access  protected
-     * @param   \Hoa\Math\Sampler  $sampler    Sampler.
-     * @return  mixed
-     */
-    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
-
-        return $sampler->getFloat();
-    }
+    public function getTypes ( );
 }
 
 }

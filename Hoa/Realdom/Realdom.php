@@ -172,6 +172,13 @@ abstract class Realdom implements \ArrayAccess, \Countable {
      */
     protected $_holder         = null;
 
+    /**
+     * Whether the realdom has been constructed or not.
+     *
+     * @var \Hoa\Realdom bool
+     */
+    protected $_constructed    = false;
+
 
 
     /**
@@ -284,24 +291,28 @@ abstract class Realdom implements \ArrayAccess, \Countable {
                     }
 
                     if($argument instanceof IRealdom\Holder)
-                        $_argument = $argument->getHeld();
+                        $_realdoms = $argument->getHeld();
+                    elseif($argument instanceof IRealdom\Crate)
+                        $_realdoms = $argument->getTypes();
                     else
-                        $_argument = array($argument);
+                        $_realdoms = array($argument);
 
                     $k = 0;
 
-                    foreach($_argument as $__argument) {
+                    $_hints = explode('|', $hint);
+
+                    foreach($_hints as &$_hint)
+                        if('\\' !== $_hint[0])
+                            $_hint = __NAMESPACE__ . '\\' . $_hint;
+
+                    foreach($_realdoms as $_realdom) {
 
                         $flag = false;
 
-                        foreach(explode('|', $hint) as $_hint) {
+                        foreach($_hints as $_hint) {
 
-                            if('\\' !== $_hint[0])
-                                $__hint = __NAMESPACE__ . '\\' . $_hint;
-                            else
-                                $__hint = $_hint;
-
-                            if($__argument instanceof $__hint) {
+                            if(   $_realdom instanceof $_hint
+                               || $_realdom === $_hint) {
 
                                 $flag = true;
 
@@ -310,12 +321,12 @@ abstract class Realdom implements \ArrayAccess, \Countable {
                         }
 
                         if(false === $flag)
-                            unset($_argument[$k]);
+                            unset($_realdoms[$k]);
                         else
                             ++$k;
                     }
 
-                    switch(count($_argument)) {
+                    switch(count($_realdoms)) {
 
                         case 0:
                             if($argument instanceof IRealdom\Holder)
@@ -347,7 +358,10 @@ abstract class Realdom implements \ArrayAccess, \Countable {
                           break;
 
                         case 1:
-                            $argument = $_argument[0];
+                            if($argument instanceof IRealdom\Crate)
+                                break;
+
+                            $argument = $_realdoms[0];
                           break;
 
                         default:
@@ -365,8 +379,6 @@ abstract class Realdom implements \ArrayAccess, \Countable {
                     next($hints);
                 }
         }
-
-        $this->construct();
 
         return;
     }
@@ -658,6 +670,12 @@ abstract class Realdom implements \ArrayAccess, \Countable {
      */
     public function reset ( ) {
 
+        if(false === $this->_constructed) {
+
+            $this->construct();
+            $this->_constructed = true;
+        }
+
         if(   $this instanceof IRealdom\Nonconvex
            && isset($this->_discredited))
             $this->_discredited = array();
@@ -687,7 +705,25 @@ abstract class Realdom implements \ArrayAccess, \Countable {
      * @param   mixed  $q    Sampled value.
      * @return  boolean
      */
-    abstract public function predicate ( $q );
+    public function predicate ( $q ) {
+
+        if(false === $this->_constructed) {
+
+            $this->construct();
+            $this->_constructed = true;
+        }
+
+        return $this->_predicate($q);
+    }
+
+    /**
+     * Predicate whether the sampled value belongs to the realistic domains.
+     *
+     * @access  protected
+     * @param   mixed  $q    Sampled value.
+     * @return  boolean
+     */
+    abstract protected function _predicate ( $q );
 
     /**
      * Sample a new value.
@@ -698,6 +734,12 @@ abstract class Realdom implements \ArrayAccess, \Countable {
      * @throw   \Hoa\Realdom\Exception
      */
     public function sample ( \Hoa\Math\Sampler $sampler = null ) {
+
+        if(false === $this->_constructed) {
+
+            $this->construct();
+            $this->_constructed = true;
+        }
 
         if(   null === $sampler
            && null === $sampler = $this->getSampler())

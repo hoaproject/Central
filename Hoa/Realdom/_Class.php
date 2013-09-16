@@ -39,6 +39,11 @@ namespace {
 from('Hoa')
 
 /**
+ * \Hoa\Realdom\Exception\MissingArgument
+ */
+-> import('Realdom.Exception.MissingArgument')
+
+/**
  * \Hoa\Realdom
  */
 -> import('Realdom.~');
@@ -91,7 +96,7 @@ class _Class extends Realdom {
     protected function construct ( ) {
 
         if(!isset($this[0]))
-            throw new Exception(
+            throw new Exception\MissingArgument(
                 'Argument missing.', 0);
 
         $this->_classArguments = array_slice($this->getArguments(), 1);
@@ -102,11 +107,11 @@ class _Class extends Realdom {
     /**
      * Predicate whether the sampled value belongs to the realistic domains.
      *
-     * @access  public
+     * @access  protected
      * @param   mixed  $q    Sampled value.
      * @return  boolean
      */
-    public function predicate ( $q ) {
+    protected function _predicate ( $q ) {
 
         return    is_object($q)
                && is_a($q, $this[0]->getConstantValue());

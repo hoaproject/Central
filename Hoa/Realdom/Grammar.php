@@ -39,6 +39,11 @@ namespace {
 from('Hoa')
 
 /**
+ * \Hoa\Realdom\Exception\MissingArgument
+ */
+-> import('Realdom.Exception.MissingArgument')
+
+/**
  * \Hoa\Realdom
  */
 -> import('Realdom.~')
@@ -116,11 +121,11 @@ class Grammar extends String {
     protected function construct ( ) {
 
         if(!isset($this['grammar']))
-            throw new Exception(
+            throw new Exception\MissingArgument(
                 'Argument missing.', 0);
 
         if(!isset($this['length']))
-            throw new Exception(
+            throw new Exception\Missingargument(
                 'Argument missing.', 1);
 
         if(null === self::$_compiler)
@@ -134,11 +139,11 @@ class Grammar extends String {
     /**
      * Predicate whether the sampled value belongs to the realistic domains.
      *
-     * @access  public
+     * @access  protected
      * @param   mixed  $q    Sampled value.
      * @return  boolean
      */
-    public function predicate ( $q ) {
+    protected function _predicate ( $q ) {
 
         // How to handle size (because the unit of size is token, not
         // character)?
