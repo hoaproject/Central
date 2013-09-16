@@ -172,6 +172,13 @@ abstract class Realdom implements \ArrayAccess, \Countable {
      */
     protected $_holder         = null;
 
+    /**
+     * Whether the realdom has been constructed or not.
+     *
+     * @var \Hoa\Realdom bool
+     */
+    protected $_constructed    = false;
+
 
 
     /**
@@ -372,8 +379,6 @@ abstract class Realdom implements \ArrayAccess, \Countable {
                     next($hints);
                 }
         }
-
-        $this->construct();
 
         return;
     }
@@ -665,6 +670,12 @@ abstract class Realdom implements \ArrayAccess, \Countable {
      */
     public function reset ( ) {
 
+        if(false === $this->_constructed) {
+
+            $this->construct();
+            $this->_constructed = true;
+        }
+
         if(   $this instanceof IRealdom\Nonconvex
            && isset($this->_discredited))
             $this->_discredited = array();
@@ -694,7 +705,25 @@ abstract class Realdom implements \ArrayAccess, \Countable {
      * @param   mixed  $q    Sampled value.
      * @return  boolean
      */
-    abstract public function predicate ( $q );
+    public function predicate ( $q ) {
+
+        if(false === $this->_constructed) {
+
+            $this->construct();
+            $this->_constructed = true;
+        }
+
+        return $this->_predicate($q);
+    }
+
+    /**
+     * Predicate whether the sampled value belongs to the realistic domains.
+     *
+     * @access  protected
+     * @param   mixed  $q    Sampled value.
+     * @return  boolean
+     */
+    abstract protected function _predicate ( $q );
 
     /**
      * Sample a new value.
@@ -705,6 +734,12 @@ abstract class Realdom implements \ArrayAccess, \Countable {
      * @throw   \Hoa\Realdom\Exception
      */
     public function sample ( \Hoa\Math\Sampler $sampler = null ) {
+
+        if(false === $this->_constructed) {
+
+            $this->construct();
+            $this->_constructed = true;
+        }
 
         if(   null === $sampler
            && null === $sampler = $this->getSampler())

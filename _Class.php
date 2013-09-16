@@ -107,11 +107,11 @@ class _Class extends Realdom {
     /**
      * Predicate whether the sampled value belongs to the realistic domains.
      *
-     * @access  public
+     * @access  protected
      * @param   mixed  $q    Sampled value.
      * @return  boolean
      */
-    public function predicate ( $q ) {
+    protected function _predicate ( $q ) {
 
         return    is_object($q)
                && is_a($q, $this[0]->getConstantValue());

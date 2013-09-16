@@ -113,13 +113,13 @@ class Boundfloat extends Float implements IRealdom\Interval {
     /**
      * Predicate whether the sampled value belongs to the realistic domains.
      *
-     * @access  public
+     * @access  protected
      * @param   mixed   $q    Sampled value.
      * @return  boolean
      */
-    public function predicate ( $q ) {
+    protected function _predicate ( $q ) {
 
-        return    parent::predicate($q)
+        return    parent::_predicate($q)
                && $q >= $this['lower']->getConstantValue()
                && $q <= $this['upper']->getConstantValue();
     }
