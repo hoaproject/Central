@@ -54,6 +54,11 @@ from('Hoa')
 -> import('Iterator.Aggregate')
 
 /**
+ * \Hoa\Iterator\CallbackFilter
+ */
+-> import('Iterator.CallbackFilter')
+
+/**
  * \Hoa\Iterator\Map
  */
 -> import('Iterator.Map');
@@ -198,11 +203,17 @@ abstract class Declaration
      * Iterator over local variables.
      *
      * @access  public
-     * @return  \Hoa\Iterator\Map
+     * @return  \Hoa\Iterator\CallbackFilter
      */
     public function getIterator ( ) {
 
-        return new \Hoa\Iterator\Map($this->getLocalVariables());
+        return new \Hoa\Iterator\CallbackFilter(
+            new \Hoa\Iterator\Map($this->getLocalVariables()),
+            function ( Variable $variable ) {
+
+                return false === $variable->isLocal();
+            }
+        );
     }
 
     /**
