@@ -55,7 +55,7 @@ from('Hoa')
 
 }
 
-namespace Hoa\Praspel\Model {
+namespace Hoa\Praspel\Model\Variable {
 
 /**
  * Class \Hoa\Praspel\Model\Variable.
@@ -155,20 +155,21 @@ class          Variable
      * @return  void
      * @throw   \Hoa\Praspel\Exception\Model
      */
-    public function __construct ( $name, $local, Clause $clause = null ) {
+    public function __construct ( $name, $local,
+                                  \Hoa\Praspel\Model\Clause $clause = null ) {
+
+        if(   ('\old'    === substr($name, 0, 4)
+           ||  '\result' === $name)
+           && !($clause instanceof \Hoa\Praspel\Model\Ensures))
+            throw new \Hoa\Praspel\Exception\Model(
+                '\old(…) and \result are only allowed in @ensures, ' .
+                'given %s in @%s.',
+                0, array($name, $clause->getName()));
 
         $this->_name       = $name;
         $this->_local      = $local;
         $this->_clause     = $clause;
         $this->_refDomains = &$this->_domains;
-
-        if(   ('\old'    === substr($name, 0, 4)
-           ||  '\result' === $name)
-           && !($this->_clause instanceof Ensures))
-            throw new \Hoa\Praspel\Exception\Model(
-                '\old(…) and \result are only allowed in @ensures, ' .
-                'given %s in %s.',
-                0, array($name, $this->getClause()->getName()));
 
         return;
     }

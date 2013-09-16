@@ -54,6 +54,11 @@ from('Hoa')
 -> import('Visitor.Visit')
 
 /**
+ * \Hoa\Realdom\Crate\Constant
+ */
+-> import('Realdom.Crate.Constant')
+
+/**
  * \Hoa\String
  */
 -> import('String.~');
@@ -300,6 +305,12 @@ class Interpreter implements \Hoa\Visitor\Visit {
 
                     $argument = $child->accept($this, $handle, $eldnah);
 
+                    if(   $argument instanceof \Hoa\Praspel\Model\Variable\Borrowing
+                       && $argument::TYPE_OLD === $argument->getType())
+                        $argument = new \Hoa\Realdom\Crate\Constant(
+                            $argument->getBorrowedVariable()
+                        );
+
                     if($argument instanceof \Hoa\Realdom\Disjunction) {
 
                         $realdoms = $argument->getRealdoms();
@@ -406,9 +417,17 @@ class Interpreter implements \Hoa\Visitor\Visit {
               break;
 
             case '#old':
-                return '\old(' .
-                       $element->getChild(0)->accept($this, $handle, false) .
-                       ')';
+                $value = '\old(' .
+                         $element->getChild(0)->accept($this, $handle, false) .
+                         ')';
+
+                if(false !== $eldnah)
+                    return $this->_clause->getVariable(
+                        $value,
+                        true
+                    );
+
+                return $value;
               break;
 
             case '#result':
@@ -551,6 +570,7 @@ class Interpreter implements \Hoa\Visitor\Visit {
      * Get identifier object.
      *
      * @access  public
+     * @param   string  $identifier    Identifier.
      * @return  \Hoa\Praspel\Model\Variable
      */
     public function getIdentifier ( $identifier ) {

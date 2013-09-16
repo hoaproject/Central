@@ -39,6 +39,11 @@ namespace {
 from('Hoa')
 
 /**
+ * \Hoa\Praspel\Exception\Model
+ */
+-> import('Praspel.Exception.Model')
+
+/**
  * \Hoa\Praspel\Model\Clause
  */
 -> import('Praspel.Model.Clause')
@@ -46,12 +51,22 @@ from('Hoa')
 /**
  * \Hoa\Praspel\Model\Variable
  */
--> import('Praspel.Model.Variable')
+-> import('Praspel.Model.Variable.~')
+
+/**
+ * \Hoa\Praspel\Model\Variable\Borrowing
+ */
+-> import('Praspel.Model.Variable.Borrowing')
 
 /**
  * \Hoa\Iterator\Aggregate
  */
 -> import('Iterator.Aggregate')
+
+/**
+ * \Hoa\Iterator\CallbackFilter
+ */
+-> import('Iterator.CallbackFilter')
 
 /**
  * \Hoa\Iterator\Map
@@ -122,15 +137,42 @@ abstract class Declaration
      */
     public function offsetGet ( $offset ) {
 
-        if(false === $this->offsetExists($offset)) {
+        return $this->getVariable($offset);
+    }
 
-            $variable   = new Variable($offset, $this->_let, $this);
+    /**
+     * Declare or get a new variable.
+     *
+     * @access  public
+     * @param   string  $name         Variable name.
+     * @param   bool    $borrowing    Borrowing variable or not.
+     * @return  \Hoa\Praspel\Model\Variable
+     * @throw   \Hoa\Praspel\Exception\Model
+     */
+    public function getVariable ( $name, $borrowing = false ) {
+
+        if(true === $borrowing) {
+
+            $out        = new Variable\Borrowing($name, $this->_let, $this);
             $this->_let = false;
 
-            return $this->_variables[$offset] = $variable;
+            return $out;
         }
 
-        return $this->_variables[$offset];
+        if('\old(' === substr($name, 0, 5))
+            throw new \Hoa\Praspel\Exception\Model(
+                'Cannot declare domains for %s in @%s.',
+                0, array($name, $this->getName()));
+
+        if(false === $this->offsetExists($name)) {
+
+            $variable   = new Variable($name, $this->_let, $this);
+            $this->_let = false;
+
+            return $this->_variables[$name] = $variable;
+        }
+
+        return $this->_variables[$name];
     }
 
     /**
@@ -183,26 +225,20 @@ abstract class Declaration
     }
 
     /**
-     * Alias of $this->offsetGet().
-     *
-     * @access  public
-     * @param   string  $variable    Variable name.
-     * @return  \Hoa\Prasel\Model\Variable
-     */
-    public function getVariable ( $variable ) {
-
-        return $this->offsetGet($variable);
-    }
-
-    /**
      * Iterator over local variables.
      *
      * @access  public
-     * @return  \Hoa\Iterator\Map
+     * @return  \Hoa\Iterator\CallbackFilter
      */
     public function getIterator ( ) {
 
-        return new \Hoa\Iterator\Map($this->getLocalVariables());
+        return new \Hoa\Iterator\CallbackFilter(
+            new \Hoa\Iterator\Map($this->getLocalVariables()),
+            function ( Variable $variable ) {
+
+                return false === $variable->isLocal();
+            }
+        );
     }
 
     /**
