@@ -224,7 +224,8 @@ class Praspel {
                 $invariant,
                 $arguments,
                 $exceptions,
-                __NAMESPACE__ . '\Exception\Failure\Invariant'
+                __NAMESPACE__ . '\Exception\Failure\Invariant',
+                true
             );
 
             if(0 < count($exceptions))
@@ -236,7 +237,8 @@ class Praspel {
         $verdict  &= $this->checkBehavior(
             $behavior,
             $arguments,
-            $exceptions
+            $exceptions,
+            true
         );
 
         if(0 < count($exceptions))
@@ -330,7 +332,8 @@ class Praspel {
                 $invariant,
                 $arguments,
                 $exceptions,
-                __NAMESPACE__ . '\Exception\Failure\Invariant'
+                __NAMESPACE__ . '\Exception\Failure\Invariant',
+                true
             );
 
             if(0 < count($exceptions))
@@ -347,12 +350,15 @@ class Praspel {
      * @param   \Hoa\Praspel\Model\Behavior    &$behavior      Behavior clause.
      * @param   array                          &$data          Data.
      * @param   \Hoa\Praspel\Exception\Group    $exceptions    Exceptions group.
+     * @param   bool                            $assign        Assign data to
+     *                                                         variable.
      * @return  bool
      * @throw   \Hoa\Praspel\Exception
      */
     protected function checkBehavior ( Model\Behavior &$behavior,
                                        Array          &$data,
-                                       Exception\Group $exceptions ) {
+                                       Exception\Group $exceptions,
+                                       $assign = false ) {
 
         $verdict = true;
 
@@ -364,7 +370,8 @@ class Praspel {
                 $requires,
                 $data,
                 $exceptions,
-                __NAMESPACE__ . '\Exception\Failure\Precondition'
+                __NAMESPACE__ . '\Exception\Failure\Precondition',
+                $assign
             );
 
             if(false === $verdict)
@@ -387,7 +394,8 @@ class Praspel {
                 $_verdict = $this->checkBehavior(
                     $_behavior,
                     $data,
-                    $_exceptions
+                    $_exceptions,
+                    $assign
                 );
 
                 if(true === $_verdict)
@@ -428,17 +436,25 @@ class Praspel {
      * @param   \Hoa\Praspel\Exception\Group     $exceptions    Exceptions group.
      * @param   string                           $exception     Exception to
      *                                                          throw.
+     * @param   bool                             $assign        Assign data to
+     *                                                          variable.
      * @return  bool
      * @throw   \Hoa\Praspel\Exception
      */
     protected function checkClause ( Model\Declaration $clause, Array &$data,
-                                     Exception\Group $exceptions, $exception ) {
+                                     Exception\Group $exceptions, $exception,
+                                     $assign = false ) {
 
         $verdict = true;
 
         foreach($clause as $name => $variable) {
 
-            if(false === array_key_exists($name, $data)) {
+            $_name = $name;
+
+            if('\old(' === substr($name, 0, 5))
+                $_name = substr($name, 5, -1);
+
+            if(false === array_key_exists($_name, $data)) {
 
                 $exceptions[] = new $exception(
                     'Variable %s is required and has no value.', 5, $name);
@@ -446,7 +462,8 @@ class Praspel {
                 continue;
             }
 
-            $_verdict = $variable->predicate($data[$name]);
+            $datum    = &$data[$_name];
+            $_verdict = $variable->predicate($datum);
 
             if(false === $_verdict)
                 $exceptions[] = new $exception(
@@ -457,6 +474,8 @@ class Praspel {
                         $clause->getName(),
                         $this->getVisitorPraspel()->visit($variable)
                     ));
+            elseif(true === $assign)
+                $variable->setValue($datum);
 
             $verdict &= $_verdict;
         }
