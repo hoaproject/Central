@@ -254,7 +254,8 @@ class Praspel {
                 $return    = $reflection->invokeArgs($_object, $arguments);
             }
 
-            $_exceptions = null;
+            $arguments['\result'] = $return;
+            $_exceptions          = null;
 
             do {
 
@@ -272,9 +273,8 @@ class Praspel {
                 // Check normal postcondition.
                 if(true === $behavior->clauseExists('ensures')) {
 
-                    $ensures               = $behavior->getClause('ensures');
-                    $arguments['\result']  = $return;
-                    $verdict              &= $this->checkClause(
+                    $ensures  = $behavior->getClause('ensures');
+                    $verdict &= $this->checkClause(
                         $ensures,
                         $arguments,
                         $_exceptions,
