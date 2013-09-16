@@ -157,18 +157,18 @@ class          Variable
      */
     public function __construct ( $name, $local, Clause $clause = null ) {
 
+        if(   ('\old'    === substr($name, 0, 4)
+           ||  '\result' === $name)
+           && !($clause instanceof Ensures))
+            throw new \Hoa\Praspel\Exception\Model(
+                '\old(…) and \result are only allowed in @ensures, ' .
+                'given %s in @%s.',
+                0, array($name, $clause->getName()));
+
         $this->_name       = $name;
         $this->_local      = $local;
         $this->_clause     = $clause;
         $this->_refDomains = &$this->_domains;
-
-        if(   ('\old'    === substr($name, 0, 4)
-           ||  '\result' === $name)
-           && !($this->_clause instanceof Ensures))
-            throw new \Hoa\Praspel\Exception\Model(
-                '\old(…) and \result are only allowed in @ensures, ' .
-                'given %s in @%s.',
-                0, array($name, $this->getClause()->getName()));
 
         return;
     }
