@@ -290,24 +290,23 @@ abstract class Realdom implements \ArrayAccess, \Countable {
 
                     $k = 0;
 
+                    $_hints = explode('|', $hint);
+
+                    foreach($_hints as &$_hint)
+                        if('\\' !== $_hint[0])
+                            $_hint = __NAMESPACE__ . '\\' . $_hint;
+
                     foreach($_argument as $__argument) {
 
                         $flag = false;
 
-                        foreach(explode('|', $hint) as $_hint) {
-
-                            if('\\' !== $_hint[0])
-                                $__hint = __NAMESPACE__ . '\\' . $_hint;
-                            else
-                                $__hint = $_hint;
-
-                            if($__argument instanceof $__hint) {
+                        foreach($_hints as $_hint)
+                            if($__argument instanceof $_hint) {
 
                                 $flag = true;
 
                                 break;
                             }
-                        }
 
                         if(false === $flag)
                             unset($_argument[$k]);
