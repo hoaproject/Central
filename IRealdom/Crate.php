@@ -55,6 +55,14 @@ interface Crate {
      * @return  array
      */
     public function getTypes ( );
+
+    /**
+     * Get Praspel representation of the realistic domain.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function toPraspel ( );
 }
 
 }
