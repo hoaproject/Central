@@ -308,7 +308,11 @@ class Interpreter implements \Hoa\Visitor\Visit {
                     if(   $argument instanceof \Hoa\Praspel\Model\Variable\Borrowing
                        && $argument::TYPE_OLD === $argument->getType())
                         $argument = new \Hoa\Realdom\Crate\Constant(
-                            $argument->getBorrowedVariable()
+                            $argument->getBorrowedVariable(),
+                            function ( ) use ( $argument ) {
+
+                                return $argument->getName();
+                            }
                         );
 
                     if($argument instanceof \Hoa\Realdom\Disjunction) {
