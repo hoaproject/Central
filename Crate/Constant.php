@@ -76,7 +76,14 @@ class          Constant
      *
      * @var \Hoa\Realdom\IRealdom\Holder object
      */
-    protected $_holder = null;
+    protected $_holder                = null;
+
+    /**
+     * Praspel representation.
+     *
+     * @var \Closure object
+     */
+    protected $_praspelRepresentation = null;
 
 
 
@@ -84,12 +91,16 @@ class          Constant
      * Constructor.
      *
      * @access  public
-     * @param   \Hoa\Realdom\IRealdom\Holder  $holder    Holder.
+     * @param   \Hoa\Realdom\IRealdom\Holder  $holder     Holder.
+     * @param   \Closure                      $praspel    Praspel
+     *                                                    representation.
      * @return  void
      */
-    public function __construct ( \Hoa\Realdom\IRealdom\Holder $holder ) {
+    public function __construct ( \Hoa\Realdom\IRealdom\Holder $holder,
+                                  \Closure $praspel ) {
 
         $this->setHolder($holder);
+        $this->setPraspelRepresentation($praspel);
 
         return;
     }
@@ -162,6 +173,46 @@ class          Constant
     public function getConstantValue ( ) {
 
         return $this->getHolder()->getValue();
+    }
+
+    /**
+     * Set Praspel representation.
+     *
+     * @access  protected
+     * @param   \Closure  $praspel    Praspel representation.
+     * @return  \Closure
+     */
+    protected function setPraspelRepresentation ( \Closure $praspel ) {
+
+        $old                          = $this->_praspelRepresentation;
+        $this->_praspelRepresentation = $praspel;
+
+        return $old;
+    }
+
+    /**
+     * Get Praspel representation.
+     *
+     * @access  public
+     * @return  \Closure
+     */
+    public function getPraspelRepresentation ( ) {
+
+        return $this->_praspelRepresentation;
+    }
+
+
+    /**
+     * Get Praspel representation of the realistic domain.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function toPraspel ( ) {
+
+        $praspel = $this->getPraspelRepresentation();
+
+        return $praspel();
     }
 }
 
