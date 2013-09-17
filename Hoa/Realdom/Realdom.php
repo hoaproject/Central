@@ -900,10 +900,11 @@ abstract class Realdom implements \ArrayAccess, \Countable {
         $handle = array();
 
         foreach($this->arguments as $argument)
-            if(null !== $holder = $argument->getHolder())
-                $handle[] = $holder->getName();
-            else
+            if(   $argument instanceof IRealdom\Crate
+               || null === $holder = $argument->getHolder())
                 $handle[] = $argument->toPraspel();
+            else
+                $handle[] = $holder->getName();
 
         return $this->getName() . '(' . implode(', ', $handle) . ')';
     }
