@@ -551,21 +551,40 @@ class Praspel {
     }
 
     /**
-     * Generate data from the @requires clause.
+     * Isotropic random generation of data from the @requires clause.
      *
      * @access  public
      * @return  array
      */
     public function generateData ( ) {
 
-        $data          = array();
-        $specification = $this->getSpecification();
+        $data     = array();
+        $behavior = $this->getSpecification();
 
-        if(false === $specification->clauseExists('requires'))
-            return $data;
+        do {
 
-        foreach($specification->getClause('requires') as $name => $variable)
-            $data[$name] = $variable->sample();
+            if(true === $behavior->clauseExists('requires')) {
+
+                foreach($behavior->getClause('requires') as $name => $variable)
+                    $data[$name] = $variable->sample();
+            }
+
+            if(false === $behavior->clauseExists('behavior'))
+                break;
+
+            $behaviors = $behavior->getClause('behavior');
+            $count     = count($behaviors);
+            $i         = mt_rand(0, $count);
+
+            if($i === $count) {
+
+                if(true === $behavior->clauseExists('default'))
+                    $behavior = $behavior->getClause('default');
+            }
+            else
+                $behavior = $behaviors->getNth($i);
+
+        } while(true);
 
         $this->setData($data);
 
