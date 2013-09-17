@@ -86,6 +86,13 @@ class          Collection
     protected $_clauses   = array();
 
     /**
+     * Mapping from position to clauses (instead of identifier).
+     *
+     * @var \Hoa\Praspel\Model\Collection array
+     */
+    protected $_mapping   = array();
+
+    /**
      * Reference clause.
      *
      * @var \Hoa\Praspel\Model\Clause object
@@ -143,6 +150,7 @@ class          Collection
 
             $clause                  = $this->getClause();
             $this->_clauses[$offset] = clone $clause;
+            $this->_mapping[]        = &$this->_clauses[$offset];
             $postClone               = $this->getPostClone();
 
             if(null !== $postClone)
@@ -156,12 +164,27 @@ class          Collection
      * Alias of $this->offsetGet($offset).
      *
      * @access  public
-     * @param   string  $offset    Offset.
+     * @param   string  $identifier    Identifier.
      * @return  \Hoa\Praspel\Model\Clause
      */
     public function get ( $offset ) {
 
         return $this->offsetGet($offset);
+    }
+
+    /**
+     * Get a clause from its position.
+     *
+     * @access  public
+     * @param   string  $position    Position.
+     * @return  \Hoa\Praspel\Model\Clause
+     */
+    public function getNth ( $position ) {
+
+        if(!isset($this->_mapping[$position]))
+            return null;
+
+        return $this->_mapping[$position];
     }
 
     /**
