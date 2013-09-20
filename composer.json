@@ -23,7 +23,6 @@
     },
     "require": {
         "hoa/core"    : "dev-master",
-        "hoa/compiler": "dev-master",
         "hoa/file"    : "dev-master",
         "hoa/http"    : "dev-master",
         "hoa/praspel" : "dev-master",
