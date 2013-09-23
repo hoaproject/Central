@@ -284,7 +284,7 @@ identifier:
       | ::static:: #static_identifier
       | ::parent:: #parent_identifier
     )
-    ::resolution:: <identifier> ( ::resolution:: <identifier> )*
+    ( ::resolution:: <identifier> )+
   | ::old:: ::parenthesis_:: extended_identifier() ::_parenthesis:: #old
   | <result>
 
