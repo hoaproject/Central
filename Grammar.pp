@@ -196,10 +196,7 @@ exception:
 
 #declaration:
     ( ::let:: #local_declaration )?
-    extended_identifier() ::colon:: representation()
-
-representation:
-    disjunction()
+    extended_identifier() ::colon:: disjunction()
 
 constraint:
     qualification() | contains()
@@ -266,8 +263,8 @@ quoted_string:
     ::_bracket::
 
 pair:
-    ( ::from::? representation() ::to:: representation() #pair )
-  | ::to::? representation()
+    ( ::from::? disjunction() ::to:: disjunction() #pair )
+  | ::to::? disjunction()
 
 extended_identifier:
     ( ::count:: #count )? arrayaccess()
