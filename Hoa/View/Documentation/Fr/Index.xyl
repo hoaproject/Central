@@ -73,7 +73,7 @@
   pour servir de premier exemple (ce qui ne vous empêche pas d'aller y
   jeter un œil !). C'est pourquoi nous allons donner un exemple plus simple et
   plus basique.</p>
-  <p>Commençons par définir ce que nous voulons : Nous souhaitons mettre en
+  <p>Commençons par définir ce que nous voulons. Nous souhaitons mettre en
   place un mécanisme de vues et de <strong>sous-vues</strong> répondant aux
   caractéristiques suivantes :</p>
   <ul>
