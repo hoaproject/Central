@@ -58,7 +58,7 @@ from('Hoa')
 namespace Hoa\Realdom\Crate {
 
 /**
- * Class \Hoa\Realdom\Crate\Constant
+ * Class \Hoa\Realdom\Crate\Constant.
  *
  * Represent a mocked constant.
  *
