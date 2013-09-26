@@ -58,7 +58,7 @@ from('Hoa')
 namespace Hoa\Realdom\Crate {
 
 /**
- * Class \Hoa\Realdom\Crate\Constant
+ * Class \Hoa\Realdom\Crate\Constant.
  *
  * Represent a mocked constant.
  *
@@ -200,7 +200,6 @@ class          Constant
 
         return $this->_praspelRepresentation;
     }
-
 
     /**
      * Get Praspel representation of the realistic domain.
