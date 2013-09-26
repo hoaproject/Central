@@ -201,7 +201,6 @@ class          Constant
         return $this->_praspelRepresentation;
     }
 
-
     /**
      * Get Praspel representation of the realistic domain.
      *
