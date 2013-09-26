@@ -309,10 +309,10 @@ abstract class Realdom implements \ArrayAccess, \Countable {
 
                         $flag = false;
 
-                        foreach($_hints as $_hint) {
+                        foreach($_hints as $__hint) {
 
-                            if(   $_realdom instanceof $_hint
-                               || $_realdom === $_hint) {
+                            if(   $_realdom instanceof $__hint
+                               || $_realdom === $__hint) {
 
                                 $flag = true;
 
