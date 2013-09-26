@@ -151,7 +151,6 @@ behavior:
 
 behavior_content:
     <identifier> ::brace_::
-    requires() ::semicolon::+
     (
         (
             requires()
@@ -160,7 +159,7 @@ behavior_content:
         )
         ::semicolon::+
       | ( behavior() ::semicolon::* )+ default()? ::semicolon::*
-    )*
+    )+
     ::_brace:: #behavior
 
 #default:
