@@ -106,7 +106,7 @@ class Compiler implements \Hoa\Visitor\Visit {
                         $variable . ' = $' . $element->getParent()->getId() .
                         '->getClause(\'' . $element->getName() . '\');' . "\n";
 
-            foreach($element as $var)
+            foreach($element->getLocalVariables() as $var)
                 $out .= $var->accept($this, $handle, $eldnah);
 
             foreach($element->getPredicates() as $predicate)
@@ -123,10 +123,10 @@ class Compiler implements \Hoa\Visitor\Visit {
             else
                 $out .= $start;
 
-            if(null === $alias = $element->getAlias())
-                $out .= '->in = ' . $element->getDomains() . ';' . "\n";
-            else
+            if(null !== $alias = $element->getAlias())
                 $out .= '->domainof(\'' . $alias . '\');' . "\n";
+            else
+                $out .= '->in = ' . $element->getDomains() . ';' . "\n";
 
             $constraints = $element->getConstraints();
 
@@ -168,7 +168,7 @@ class Compiler implements \Hoa\Visitor\Visit {
                         $out .= '$' . $temp . ' = ' .
                                 $variable . '->newWith();' . "\n";
 
-                        foreach($with as $var)
+                        foreach($with->getLocalVariables() as $var)
                             $out .= $var->accept($this, $handle, $temp);
 
                         foreach($with->getPredicates() as $predicate)
