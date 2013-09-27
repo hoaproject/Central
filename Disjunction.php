@@ -76,7 +76,12 @@ class Disjunction implements \ArrayAccess, \IteratorAggregate, \Countable {
      *
      * @var \Hoa\Realdom\Disjunction array
      */
-    protected $_realdoms         = null;
+    protected $_realdoms         = array();
+
+    /**
+     * Added realistic domains, variables etc.
+     */
+    protected $__realdoms        = array();
 
     /**
      * Chosen realistic domain.
@@ -173,6 +178,10 @@ class Disjunction implements \ArrayAccess, \IteratorAggregate, \Countable {
             $handle    = $handle[0];
             $arguments = array();
         }
+        elseif('Variable' === $name) {
+
+            $handle = $arguments[0];
+        }
         else {
 
             if(\Hoa\Core\Consistency::isKeyword($name))
@@ -257,15 +266,42 @@ class Disjunction implements \ArrayAccess, \IteratorAggregate, \Countable {
         if($realdom instanceof self) {
 
             foreach($realdom as $_realdom)
-                $this->offsetSet(null, $_realdom);
+                $this->_offsetSet(null, $_realdom);
 
             return $this;
         }
+
+        if($realdom instanceof Crate\Variable) {
+
+            $this->__realdoms[] = $realdom;
+
+            foreach($realdom->getDomains() as $_realdom)
+                $this->_offsetSet(null, $_realdom, false);
+
+            return $this;
+        }
+
+        return $this->_offsetSet($offset, $realdom);
+    }
+
+    /**
+     * Set a specific realistic domain.
+     *
+     * @access  protected
+     * @param   mixed         $offset     Offset.
+     * @param   \Hoa\Realdom  $realdom    Realistic domain.
+     * @return  \Hoa\Realdom\Disjunction
+     * @throw   \Hoa\Realdom\Exception
+     */
+    protected function _offsetSet ( $offset, $realdom, $backStore = true ) {
 
         if(!($realdom instanceof Realdom))
             throw new Exception(
                 'A disjunction accepts only realdom; given %s.',
                 1, is_object($realdom) ? get_class($realdom) : gettype($realdom));
+
+        if(true === $backStore)
+            $this->__realdoms[] = &$realdom;
 
         $realdom->setConstraints($this->_constraints);
 
@@ -290,10 +326,11 @@ class Disjunction implements \ArrayAccess, \IteratorAggregate, \Countable {
      */
     public function offsetUnset ( $offset ) {
 
-        if(false === $this->offsetExists($offset))
+        if(null === $removed = $this->offsetGet($offset))
             return;
 
         array_splice($this->_realdoms, $offset, 1);
+        // @TODO: Need to also remove in __realdoms.
 
         return;
     }
@@ -453,12 +490,12 @@ class Disjunction implements \ArrayAccess, \IteratorAggregate, \Countable {
      */
     public function toPraspel ( ) {
 
-        if(empty($this->_realdoms))
+        if(empty($this->__realdoms))
             return null;
 
         $out = array();
 
-        foreach($this->_realdoms as $realdom)
+        foreach($this->__realdoms as $realdom)
             $out[] = $realdom->toPraspel();
 
         return implode(' or ', $out);
@@ -472,15 +509,21 @@ class Disjunction implements \ArrayAccess, \IteratorAggregate, \Countable {
      */
     public function __toString ( ) {
 
-        if(empty($this->_realdoms))
+        if(empty($this->__realdoms))
             return null;
 
         $out = array();
 
-        foreach($this->_realdoms as $realdom) {
+        foreach($this->__realdoms as $realdom) {
 
             if($realdom instanceof IRealdom\Constant)
                 $out[] = 'const(' . $realdom->__toString() . ')';
+            elseif($realdom instanceof Crate\Variable) {
+
+                $holder = $realdom->getVariable();
+                $out[] = 'variable($' . $holder->getClause()->getId() . '[\'' .
+                         $holder->getName() . '\'])';
+            }
             else {
 
                 $handle = array();
