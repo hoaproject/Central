@@ -102,7 +102,7 @@ class Praspel implements \Hoa\Visitor\Visit {
             $out    = '@' . $clause;
             $oout   = array();
 
-            foreach($element as $name => $var)
+            foreach($element->getLocalVariables() as $name => $var)
                 $oout[] = ' ' . $var->accept($this, $handle, $eldnah);
 
             foreach($element->getPredicates() as $predicate)
