@@ -54,6 +54,11 @@ from('Hoa')
 -> import('Visitor.Visit')
 
 /**
+ * \Hoa\Realdom\Crate\Variable
+ */
+-> import('Realdom.Crate.Variable')
+
+/**
  * \Hoa\Realdom\Crate\Constant
  */
 -> import('Realdom.Crate.Constant')
@@ -288,6 +293,8 @@ class Interpreter implements \Hoa\Visitor\Visit {
 
                     if($value instanceof \Hoa\Realdom\Disjunction)
                         $disjunction[] = $value;
+                    elseif($value instanceof \Hoa\Praspel\Model\Variable)
+                        $disjunction->variable(new \Hoa\Realdom\Crate\Variable($value));
                     else
                         $disjunction->const($value);
                 }
