@@ -32,6 +32,9 @@ cloak on IRC, etc.
   * Mathias Strasser (mathiasstrasser)
   * Emmanuel Thierry (sekiltoyai)
 
+Only pseudos:
+  * Derver (on Github)
+
 # Special thanks
 
   * Hend Ksontini-Enderlin
