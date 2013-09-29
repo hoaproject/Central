@@ -44,6 +44,11 @@ from('Hoa')
 -> import('Realdom.Exception')
 
 /**
+ * \Hoa\Realdom\Crate\Variable
+ */
+-> import('Realdom.Crate.Variable')
+
+/**
  * \Hoa\Realdom
  */
 -> import('Realdom.~');
@@ -180,7 +185,7 @@ class Disjunction implements \ArrayAccess, \IteratorAggregate, \Countable {
         }
         elseif('Variable' === $name) {
 
-            $handle = $arguments[0];
+            $handle = new Crate\Variable($arguments[0]);
         }
         else {
 
