@@ -294,7 +294,7 @@ class Interpreter implements \Hoa\Visitor\Visit {
                     if($value instanceof \Hoa\Realdom\Disjunction)
                         $disjunction[] = $value;
                     elseif($value instanceof \Hoa\Praspel\Model\Variable)
-                        $disjunction->variable(new \Hoa\Realdom\Crate\Variable($value));
+                        $disjunction->variable($value);
                     else
                         $disjunction->const($value);
                 }
