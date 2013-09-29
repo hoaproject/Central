@@ -239,17 +239,27 @@ class Interpreter implements \Hoa\Visitor\Visit {
               break;
 
             case '#declaration':
-                $variable                     = $element->getChild(0)
-                                                        ->accept($this, $handle, false);
-                $this->_clause[$variable]->in = $element->getChild(1)
-                                                        ->accept($this, $handle, $eldnah);
+                $left  = $element->getChild(0)->accept($this, $handle, false);
+                $right = $element->getChild(1)->accept($this, $handle, $eldnah);
+
+                $variable = $left;
+
+                if($right instanceof \Hoa\Praspel\Model\Variable)
+                    $right = realdom()->variable($right);
+
+                $this->_clause[$variable]->in = $right;
               break;
 
             case '#local_declaration':
-                $variable                          = $element->getChild(0)
-                                                             ->accept($this, $handle, false);
-                $this->_clause->let[$variable]->in = $element->getChild(1)
-                                                             ->accept($this, $handle, $eldnah);
+                $left  = $element->getChild(0)->accept($this, $handle, false);
+                $right = $element->getChild(1)->accept($this, $handle, $eldnah);
+
+                $variable = $left;
+
+                if($right instanceof \Hoa\Praspel\Model\Variable)
+                    $right = realdom()->variable($right);
+
+                $this->_clause->let[$variable]->in = $right;
               break;
 
             case '#qualification':
@@ -294,7 +304,7 @@ class Interpreter implements \Hoa\Visitor\Visit {
                     if($value instanceof \Hoa\Realdom\Disjunction)
                         $disjunction[] = $value;
                     elseif($value instanceof \Hoa\Praspel\Model\Variable)
-                        $disjunction->variable(new \Hoa\Realdom\Crate\Variable($value));
+                        $disjunction->variable($value);
                     else
                         $disjunction->const($value);
                 }
