@@ -239,17 +239,27 @@ class Interpreter implements \Hoa\Visitor\Visit {
               break;
 
             case '#declaration':
-                $variable                     = $element->getChild(0)
-                                                        ->accept($this, $handle, false);
-                $this->_clause[$variable]->in = $element->getChild(1)
-                                                        ->accept($this, $handle, $eldnah);
+                $left  = $element->getChild(0)->accept($this, $handle, false);
+                $right = $element->getChild(1)->accept($this, $handle, $eldnah);
+
+                $variable = $left;
+
+                if($right instanceof \Hoa\Praspel\Model\Variable)
+                    $right = realdom()->variable($right);
+
+                $this->_clause[$variable]->in = $right;
               break;
 
             case '#local_declaration':
-                $variable                          = $element->getChild(0)
-                                                             ->accept($this, $handle, false);
-                $this->_clause->let[$variable]->in = $element->getChild(1)
-                                                             ->accept($this, $handle, $eldnah);
+                $left  = $element->getChild(0)->accept($this, $handle, false);
+                $right = $element->getChild(1)->accept($this, $handle, $eldnah);
+
+                $variable = $left;
+
+                if($right instanceof \Hoa\Praspel\Model\Variable)
+                    $right = realdom()->variable($right);
+
+                $this->_clause->let[$variable]->in = $right;
               break;
 
             case '#qualification':
