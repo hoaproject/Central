@@ -188,7 +188,7 @@ print_r($router->getTheRule());
 }
 catch ( Hoa\Router\Exception\NotFound $e ) {
 
-    echo $e->getFormattedMessage();
+    echo $e->getMessage();
 }
 
 /**
