@@ -83,7 +83,7 @@ example, if we attach a function to the channel of exceptions:
     event('hoa://Event/Exception')->attach(function ( $bucket ) {
 
         $exception = $bucket->getData();
-        echo 'Exception: ', $exception->getFormattedMessage(), "\n";
+        echo 'Exception: ', $exception->getMessage(), "\n";
     })
 
     throw new Hoa\Core\Exception('Hello %s!', 0, 'Gordon');
