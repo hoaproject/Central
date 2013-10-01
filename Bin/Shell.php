@@ -246,7 +246,7 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
 
         catch ( \Hoa\Core\Exception $e ) {
 
-            echo $e->getFormattedMessage(), "\n";
+            echo $e->getMessage(), "\n";
 
         }
 
