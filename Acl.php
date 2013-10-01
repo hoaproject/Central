@@ -224,7 +224,7 @@ class Acl {
         }
         catch ( \Hoa\Graph\Exception $e ) {
 
-            throw new Exception($e->getFormattedMessage(), $e->getCode());
+            throw new Exception($e->getMessage(), $e->getCode());
         }
 
         return;
@@ -250,7 +250,7 @@ class Acl {
         }
         catch ( \Hoa\Graph\Exception $e ) {
 
-            throw new Exception($e->getFormattedMessage(), $e->getCode());
+            throw new Exception($e->getMessage(), $e->getCode());
         }
 
         foreach($this->getUsers() as $userId => $user)
