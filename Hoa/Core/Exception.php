@@ -78,6 +78,13 @@ class Idle extends \Exception {
      */
     protected $_previous     = null;
 
+    /**
+     * Original message.
+     *
+     * @var \Hoa\Core\Exception\Idle string
+     */
+    protected $_rawMessage   = null;
+
 
 
     /**
@@ -98,6 +105,8 @@ class Idle extends \Exception {
 
         $this->_tmpArguments = $arguments;
         parent::__construct($message, $code, $previous);
+        $this->_rawMessage   = $message;
+        $this->message       = @vsprintf($message, $this->getArguments());
 
         return;
     }
@@ -159,6 +168,17 @@ class Idle extends \Exception {
     }
 
     /**
+     * Get the raw message.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getRawMessage ( ) {
+
+        return $this->_rawMessage;
+    }
+
+    /**
      * Get the message already formatted.
      *
      * @access  public
@@ -166,7 +186,7 @@ class Idle extends \Exception {
      */
     public function getFormattedMessage ( ) {
 
-        return @vsprintf($this->getMessage(), $this->getArguments());
+        return $this->getMessage();
     }
 
     /**
