@@ -491,6 +491,20 @@ class Listener {
     }
 
     /**
+     * Detach all callables from a listenable component.
+     *
+     * @access public
+     * @param  string  $listenerId    Listener ID.
+     * @return \Hoa\Core\Event\Listener
+     */
+    public function detachAll ( $listenerId ) {
+
+        unset($this->_callable[$listenerId]);
+
+        return $this;
+    }
+
+    /**
      * Check if a listener exists.
      *
      * @access  public
