@@ -14,6 +14,7 @@ cloak on IRC, etc.
   * Frédéric Dadeau (fdadeau)
   * Antoine Darche (ecureuilvirtuel)
   * Grégory Darche (tetardo)
+  * Benjamin Delespierre (bdelespierre)
   * Gautier Di Folco (black-heaven)
   * ➜ Yohann Dupont (jir4)
   * ➜ Raphaël Emourgeon (iraphael)
