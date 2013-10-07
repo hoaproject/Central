@@ -491,16 +491,14 @@ class Listener {
     }
 
     /**
-     * Detach every callable attached to given listenerId from a listenable component.
+     * Detach all callables from a listenable component.
      *
      * @access public
-     * @param  string  in   $listenerId   Listener ID.
-     * @param  array   out  $released     The number of callback detached
+     * @param  string  $listenerId    Listener ID.
      * @return \Hoa\Core\Event\Listener
      */
-    public function detachAll ( $listenerId, & $released = null ) {
+    public function detachAll ( $listenerId ) {
 
-        $released = isset($this->_callable[$listenerId]) ? $this->_callable[$listenerId] : array();
         unset($this->_callable[$listenerId]);
 
         return $this;
