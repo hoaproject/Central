@@ -22,6 +22,7 @@ cloak on IRC, etc.
   * Julian Espérat (savageman)
   * Baptiste Fedi (baptiste)
   * Alexis von Glasow (avonglasow)
+  * Kevin Gravier (mrkmg)
   * Nicolas Grekas (nicolas-grekas)
   * ➜ Sébastien Houzé (shouze)
   * ➜ Renaud Littolff (marmotz)
@@ -35,7 +36,6 @@ cloak on IRC, etc.
 
 Only pseudos:
   * Derver (on Github)
-  * mrkmg (on Github)
 
 # Special thanks
 
