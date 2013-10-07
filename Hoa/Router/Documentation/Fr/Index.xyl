@@ -712,8 +712,7 @@ var_dump(
     <strong>entrées</strong> d'une ligne de commande (optionnelle).</li>
   </ul>
   <p>La méthode <code>Hoa\Router\Cli::route</code> n'a qu'un seul argument :
-  l'URI. Dans ce contexte, l'URI est la ligne de commande, ou plus précisément,
-  ce qui suit la commande. Par exemple :</p>
+  l'URI ; par exemple avec :</p>
   <pre><code class="language-shell">$ command --option value input</code></pre>
   <p>Dans ce contexte, l'URI est la ligne de commande, ou plus précisément, ce
   qui suit la commande, sans distinction ; soit <code>--option value
