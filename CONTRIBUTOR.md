@@ -35,6 +35,7 @@ cloak on IRC, etc.
 
 Only pseudos:
   * Derver (on Github)
+  * mrkmg (on Github)
 
 # Special thanks
 
