@@ -218,7 +218,7 @@ class Parameter {
             $class = str_replace(
                 '\\',
                 '',
-                \Hoa\Core\Consistency::getClassShortestName($this->_owner)
+                \Hoa\Core\Consistency::getEntityShortestName($this->_owner)
             );
             $path  = 'hoa://Data/Etc/Configuration/.Cache/' . $class . '.php';
         }
