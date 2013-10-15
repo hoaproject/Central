@@ -96,3 +96,12 @@ abstract class Backend extends \Hoa\Cache {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Cache\Backend\Backend');
+
+}
