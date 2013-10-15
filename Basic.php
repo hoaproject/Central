@@ -63,7 +63,7 @@ namespace Hoa\Dispatcher {
  * @license    New BSD License
  */
 
-class Basic extends \Hoa\Dispatcher {
+class Basic extends Dispatcher {
 
     /**
      * Resolve the dispatch call.
