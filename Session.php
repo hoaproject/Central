@@ -707,6 +707,11 @@ class          Session
 namespace {
 
 /**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Session\Session');
+
+/**
  * Session shutdown function.
  * Offering a PHP5.4 feature to prior versions.
  *
