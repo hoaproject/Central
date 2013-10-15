@@ -176,3 +176,12 @@ class Zombie {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Zombie\Zombie');
+
+}
