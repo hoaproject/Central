@@ -326,8 +326,16 @@ class Consistency {
 
         $head = substr($classname, 0, strpos($classname, '\\'));
 
-        if(false === array_key_exists($classname, static::$_class))
-            return from($head)->_import(str_replace('\\', '.', $classname), true);
+        if(false === array_key_exists($classname, static::$_class)) {
+
+            $_classname = str_replace('\\', '.', $classname);
+            $out = from($head)->_import($_classname, true);
+
+            if(false === static::entityExists($classname))
+                $out = from($head)->_import($_classname . '.~', true);
+
+            return $out;
+        }
         elseif(is_string($original = static::$_class[$classname])) {
 
             spl_autoload_call($original);
