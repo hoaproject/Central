@@ -205,6 +205,8 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
             if(!is_array($handle))
                 return $out;
 
+            $handle = array_values(array_unique($handle, SORT_REGULAR));
+
             self::$_cache[$path] = $handle;
         }
 
@@ -535,8 +537,28 @@ class Library extends Protocol {
 
         if(!empty($queue)) {
 
-            $pos   = strpos($queue, DS);
-            $queue = strtolower(substr($queue, 0, $pos)) . substr($queue, $pos);
+            $head = $queue;
+
+            if(false !== $pos = strpos($queue, '/')) {
+
+                $head  = substr($head, 0, $pos);
+                $queue = DS . substr($queue, $pos + 1);
+            }
+            else
+                $queue = null;
+
+            $out = array();
+
+            foreach(explode(';', $this->_reach) as $part) {
+
+                $_pos  = strrpos(rtrim($part, DS), DS) + 1;
+                $_head = substr($part, 0, $_pos);
+                $_tail = rtrim(substr($part, $_pos), DS);
+                $out[] = "\r" . $_head . $_tail . DS . strtolower($head) . DS .
+                         ucfirst($_tail) . DS . $head . $queue;
+            }
+
+            return $this->_reach = implode(';', $out);
         }
         else {
 

@@ -306,7 +306,7 @@ class Idle extends \Exception {
         array_shift($trace);
         array_shift($trace);
 
-        throw new Error($errstr, -1, $errfile, $errline, $trace);
+        throw new Error($errstr, $errno, $errfile, $errline, $trace);
     }
 
     /**
