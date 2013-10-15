@@ -49,3 +49,12 @@ namespace Hoa\Xml\Element {
 interface Element { }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Xml\Element\Element');
+
+}
