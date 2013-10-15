@@ -253,3 +253,12 @@ class Prototype {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Prototype\Prototype');
+
+}
