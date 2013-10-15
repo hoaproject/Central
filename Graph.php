@@ -276,3 +276,12 @@ abstract class Graph {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Graph\Graph');
+
+}
