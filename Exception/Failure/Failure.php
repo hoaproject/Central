@@ -60,3 +60,12 @@ namespace Hoa\Praspel\Exception\Failure {
 class Failure extends \Hoa\Praspel\Exception\Generic { }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Praspel\Exception\Failure');
+
+}

@@ -736,6 +736,11 @@ class Praspel {
 namespace {
 
 /**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Praspel\Praspel');
+
+/**
  * Alias of \Hoa\Praspel::interprete().
  *
  * @access  public
@@ -747,4 +752,5 @@ function praspel ( $praspel ) {
 
     return \Hoa\Praspel::interprete($praspel);
 }}
+
 }

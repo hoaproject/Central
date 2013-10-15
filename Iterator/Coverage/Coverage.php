@@ -139,3 +139,12 @@ class Coverage implements \Hoa\Iterator\Aggregate {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Praspel\Iterator\Coverage\Coverage');
+
+}

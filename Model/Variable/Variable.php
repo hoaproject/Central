@@ -477,3 +477,12 @@ class          Variable
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Praspel\Model\Variable\Variable');
+
+}
