@@ -156,3 +156,12 @@ class Memory {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Memory\Memory');
+
+}
