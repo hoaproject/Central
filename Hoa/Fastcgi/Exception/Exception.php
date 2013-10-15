@@ -49,3 +49,12 @@ namespace Hoa\Fastcgi\Exception {
 class Exception extends \Hoa\Core\Exception { }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Fastcgi\Exception\Exception');
+
+}
