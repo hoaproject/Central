@@ -27,5 +27,11 @@
         "hoa/socket"  : "dev-master",
         "hoa/zombie"  : "dev-master"
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "target-dir": "Hoa/Worker",
+    "autoload": {
+        "psr-0": {
+            "Hoa\\Worker": "."
+        }
+    }
 }
