@@ -305,3 +305,12 @@ abstract class Content implements \ArrayAccess {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Mail\Content\Content');
+
+}
