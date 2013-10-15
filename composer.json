@@ -25,5 +25,11 @@
         "hoa/core"   : "dev-master",
         "ext-session": "*"
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "target-dir": "Hoa/Session",
+    "autoload": {
+        "psr-0": {
+            "Hoa\\Session": "."
+        }
+    }
 }
