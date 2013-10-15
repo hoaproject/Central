@@ -97,7 +97,7 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
             '<!--[if (gte IE 9)|!(IE)]>' . "\n" .
             '<html>' . "\n" .
             '<![endif]-->' . "\n" .
-            '<head>' . "\n";
+            '<head>' . "\n"
         );
 
         if(null !== $this->_title) {
