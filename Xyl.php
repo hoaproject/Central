@@ -54,6 +54,11 @@ from('Hoa')
 -> import('Xyl.Element.Basic', true)
 
 /**
+ * \Hoa\Xyl\Interpreter
+ */
+-> import('Xyl.Interpreter.~')
+
+/**
  * \Hoa\Xml
  */
 -> import('Xml.~')
@@ -1804,8 +1809,13 @@ class _Protocol extends \Hoa\Core\Protocol { }
 
 namespace {
 
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Xyl\Xyl');
+
 from('Hoa') -> import('Xyl.Interpreter.Common.Debug');
 event('hoa://Event/Exception')
-    ->attach(xcallable('\Hoa\Xyl\Interpreter\Common\Debug', 'receiveException'));
+    ->attach(xcallable('Hoa\Xyl\Interpreter\Common\Debug', 'receiveException'));
 
 }

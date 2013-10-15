@@ -60,3 +60,12 @@ namespace Hoa\Xyl\Element {
 interface Element extends \Hoa\Xml\Element { }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Xyl\Element\Element');
+
+}
