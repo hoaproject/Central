@@ -27,9 +27,9 @@
         "hoa/http"    : "dev-master",
         "hoa/praspel" : "dev-master",
         "hoa/realdom" : "dev-master",
+        "hoa/router"  : "dev-master",
         "hoa/view"    : "dev-master",
         "hoa/xml"     : "dev-master"
-
     },
     "minimum-stability": "dev",
     "target-dir": "Hoa/Xyl",
