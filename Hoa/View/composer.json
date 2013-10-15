@@ -24,6 +24,12 @@
         "hoa/core": "dev-master"
     },
     "minimum-stability": "dev",
+    "target-dir": "Hoa/View",
+    "autoload": {
+        "psr-0": {
+            "Hoa\\View": "."
+        }
+    },
     "suggest": {
         "hoa/router": "Provide routers.",
         "hoa/stream": "Provide stream interfaces."
