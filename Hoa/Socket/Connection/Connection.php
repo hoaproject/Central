@@ -1018,3 +1018,12 @@ abstract class Connection
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Socket\Connection\Connection');
+
+}
