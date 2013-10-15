@@ -347,3 +347,12 @@ class Dns implements \Hoa\Core\Event\Listenable {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Dns\Dns');
+
+}
