@@ -345,3 +345,12 @@ class Socket {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Socket\Socket');
+
+}
