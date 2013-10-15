@@ -700,3 +700,12 @@ abstract class Xml
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Xml\Xml');
+
+}
