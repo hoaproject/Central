@@ -594,3 +594,12 @@ class Message {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\XmlRpc\Message\Message');
+
+}
