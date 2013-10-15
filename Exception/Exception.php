@@ -49,3 +49,12 @@ namespace Hoa\Realdom\Exception {
 class Exception extends \Hoa\Core\Exception { }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Realdom\Exception\Exception');
+
+}

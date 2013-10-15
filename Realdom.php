@@ -958,3 +958,12 @@ abstract class Realdom implements \ArrayAccess, \Countable {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Realdom\Realdom');
+
+}
