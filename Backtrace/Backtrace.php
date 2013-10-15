@@ -181,3 +181,12 @@ class Backtrace {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Log\Backtrace\Backtrace');
+
+}
