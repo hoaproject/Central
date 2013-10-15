@@ -29,7 +29,7 @@
         "psr-0": {
             "Hoa\\Dns": "."
         }
-    }
+    },
     "suggest": {
         "hoa/socket": "Provide sockets."
     }
