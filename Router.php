@@ -204,3 +204,12 @@ interface Router {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Router\Router');
+
+}
