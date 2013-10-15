@@ -540,3 +540,12 @@ function hlog ( $message, $type = \Hoa\Log::DEBUG, $extra = array() ) {
 }}
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Log\Log');
+
+}
