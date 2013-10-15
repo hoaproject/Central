@@ -221,3 +221,12 @@ abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Http\Http');
+
+}

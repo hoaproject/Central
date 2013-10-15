@@ -957,3 +957,12 @@ class          Response
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Http\Response\Response');
+
+}
