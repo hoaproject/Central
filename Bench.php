@@ -393,3 +393,12 @@ class Bench implements \Iterator, \Countable {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Bench\Bench');
+
+}
