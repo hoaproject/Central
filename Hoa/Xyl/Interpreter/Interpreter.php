@@ -143,3 +143,12 @@ abstract class Interpreter {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Xyl\Interpreter\Interpreter');
+
+}

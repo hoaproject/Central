@@ -67,7 +67,7 @@ namespace Hoa\Xyl\Interpreter\Html {
  * @license    New BSD License
  */
 
-class Html extends \Hoa\Xyl\Interpreter { 
+class Html extends \Hoa\Xyl\Interpreter {
 
     /**
      * Rank: abstract elements to concrete elements.
@@ -219,5 +219,14 @@ class Html extends \Hoa\Xyl\Interpreter {
      */
     protected $_resourcePath = 'Html/Resource/';
 }
+
+}
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Xyl\Interpreter\Html\Html');
 
 }
