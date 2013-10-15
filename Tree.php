@@ -124,3 +124,12 @@ class Tree extends Generic {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Tree\Tree');
+
+}
