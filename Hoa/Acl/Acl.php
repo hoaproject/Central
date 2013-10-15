@@ -564,3 +564,12 @@ class Acl {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Acl\Acl');
+
+}
