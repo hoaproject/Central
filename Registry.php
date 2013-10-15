@@ -198,6 +198,11 @@ class _Protocol extends \Hoa\Core\Protocol {
 namespace {
 
 /**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Registry\Registry');
+
+/**
  * Add the hoa://Library/Registry component. Should be use to reach/get an entry
  * in the \Hoa\Registry, e.g.: resolve('hoa://Library/Registry#AnID').
  */
