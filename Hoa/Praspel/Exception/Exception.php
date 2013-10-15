@@ -49,3 +49,12 @@ namespace Hoa\Praspel\Exception {
 interface Exception { }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Praspel\Exception\Exception');
+
+}

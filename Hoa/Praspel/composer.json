@@ -34,5 +34,11 @@
     "require-dev": {
         "hoa/math": "dev-master"
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "target-dir": "Hoa/Praspel",
+    "autoload": {
+        "psr-0": {
+            "Hoa\\Praspel": "."
+        }
+    }
 }
