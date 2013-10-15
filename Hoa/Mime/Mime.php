@@ -478,3 +478,12 @@ class Mime implements \Hoa\Core\Parameter\Parameterizable {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Mime\Mime');
+
+}
