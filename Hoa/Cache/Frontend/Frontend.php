@@ -118,3 +118,12 @@ abstract class Frontend extends \Hoa\Cache {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Cache\Frontend\Frontend');
+
+}

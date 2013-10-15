@@ -280,3 +280,12 @@ abstract class Cache implements \Hoa\Core\Parameter\Parameterizable {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Cache\Cache');
+
+}
