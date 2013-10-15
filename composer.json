@@ -28,5 +28,11 @@
         "hoa/stringbuffer": "dev-master"
 
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "target-dir": "Hoa/Xml",
+    "autoload": {
+        "psr-0": {
+            "Hoa\\Xml": "."
+        }
+    }
 }
