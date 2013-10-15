@@ -166,3 +166,12 @@ abstract class Translate implements \IteratorAggregate {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Translate\Translate');
+
+}
