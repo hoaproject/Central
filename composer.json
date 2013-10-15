@@ -24,6 +24,12 @@
         "hoa/core": "dev-master"
     },
     "minimum-stability": "dev",
+    "target-dir": "Hoa/Dispatcher",
+    "autoload": {
+        "psr-0": {
+            "Hoa\\Dispatcher": "."
+        }
+    },
     "suggest": {
         "hoa/router": "Provide routers.",
         "hoa/view"  : "Provide view interface."
