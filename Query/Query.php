@@ -232,3 +232,12 @@ class Query {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Database\Query\Query');
+
+}
