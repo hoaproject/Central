@@ -29,5 +29,11 @@
         "hoa/regex"   : "dev-master",
         "hoa/string"  : "dev-master"
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "target-dir": "Hoa/Realdom",
+    "autoload": {
+        "psr-0": {
+            "Hoa\\Realdom": "."
+        }
+    }
 }
