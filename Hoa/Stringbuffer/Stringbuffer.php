@@ -315,6 +315,11 @@ class _Protocol extends \Hoa\Core\Protocol {
 namespace {
 
 /**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Stringbuffer\Stringbuffer');
+
+/**
  * Add the hoa://Library/Stringbuffer component. Help to know to real path of a
  * stringbuffer.
  */
