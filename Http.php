@@ -75,6 +75,20 @@ namespace Hoa\Router {
 class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
     /**
+     * Connection unsecure
+     *
+     * @const boolean
+     */
+    const UNSECURE = false;
+
+    /**
+     * Connection secure
+     *
+     * @const boolean
+     */
+    const SECURE = true;
+
+    /**
      * Parameters.
      *
      * @var \Hoa\Core\Parameter object
@@ -886,9 +900,9 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      * @param   bool  $secure    Whether the connection is secured.
      * @return  int
      */
-    public function setDefaultPort ( $port, $secure = false ) {
+    public function setDefaultPort ( $port, $secure = self::UNSECURE ) {
 
-        if(false === $secure) {
+        if(static::UNSECURE === $secure) {
 
             $old             = $this->_httpPort;
             $this->_httpPort = $port;
@@ -909,9 +923,9 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      * @param   bool  $secure    Whether the connection is secured.
      * @return  int
      */
-    public function getDefaultPort ( $secure = false ) {
+    public function getDefaultPort ( $secure = self::UNSECURE ) {
 
-        if(false === $secure)
+        if(static::UNSECURE === $secure)
             return $this->_httpPort;
 
         return $this->_httpsPort;
