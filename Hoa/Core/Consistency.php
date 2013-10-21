@@ -310,7 +310,10 @@ class Consistency {
     public static function autoload ( $classname ) {
 
         if(false === strpos($classname, '\\'))
-            $classname = str_replace('_', '\\', $classname);
+            if(false === strpos($classname, '_'))
+                return false;
+            else
+                $classname = str_replace('_', '\\', $classname);
 
         $classname = ltrim($classname, '\\');
 
