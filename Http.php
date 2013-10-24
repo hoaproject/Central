@@ -75,18 +75,18 @@ namespace Hoa\Router {
 class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
     /**
-     * Connection unsecure
+     * Secure connection.
      *
-     * @const boolean
+     * @const bool
      */
-    const UNSECURE = false;
+    const SECURE   = true;
 
     /**
-     * Connection secure
+     * Unsecure connection.
      *
-     * @const boolean
+     * @const bool
      */
-    const SECURE = true;
+    const UNSECURE = false;
 
     /**
      * Parameters.
@@ -940,9 +940,11 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
     public static function isSecure ( ) {
 
         if(!isset($_SERVER['HTTPS']))
-            return false;
+            return static::UNSECURE;
 
-        return !empty($_SERVER['HTTPS']) && 'off' !== $_SERVER['HTTPS'];
+        return (!empty($_SERVER['HTTPS']) && 'off' !== $_SERVER['HTTPS'])
+                   ? static::SECURE
+                   : static::UNSECURE;
     }
 }
 
