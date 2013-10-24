@@ -660,16 +660,14 @@ var_dump(
  * Will output:
  *     int(80)
  */</code></pre>
-  <p>Cette façon de procéder est pratique quand nous utilisons la valeur de
-  <code>Hoa\Router\Http::isSecure</code> comme paramètre.</p>
   <p>La valeur des ports par défaut se met à jour toute <strong>seule</strong>.
   Par exemple, si les requêtes arrivent sur une connexion non-cryptée à travers
   le port 8880, <code>Hoa\Router\Http</code> changera 80 par 8880
   automatiquement. Toutefois, pour modifier les ports par défaut manuellement,
   nous utiliserons la méthode <code>Hoa\Router\Http::setDefaultPort</code>, avec
   en premier argument la valeur du port et en second argument l'une des deux
-  constantes (<code>Hoa\Router\Http::SECURE</code>,
-  <code>Hoa\Router\Http::UNSECURE</code>) indiquant si c'est pour une connexion
+  constantes : <code>Hoa\Router\Http::SECURE</code> ou
+  <code>Hoa\Router\Http::UNSECURE</code>, indiquant si c'est pour une connexion
   cryptée ou pas.</p>
   <p>Ces numéros de port par défaut sont importants quand nous appelons la
   méthode <code>Hoa\Router\Http::unroute</code> et qu'un domaine avec un port
