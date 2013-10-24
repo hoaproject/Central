@@ -21,7 +21,7 @@ cloak on IRC, etc.
   * ➜ Gérard Ernaelsten (maitrepylos)
   * Julian Espérat (savageman)
   * Baptiste Fedi (baptiste)
-  * Alexis von Glasow (avonglasow)
+  * ➜ Alexis von Glasow (avonglasow)
   * Kevin Gravier (mrkmg)
   * Nicolas Grekas (nicolas-grekas)
   * ➜ Sébastien Houzé (shouze)
