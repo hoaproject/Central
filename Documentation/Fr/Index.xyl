@@ -651,8 +651,9 @@ var_dump(
   <strong>cryptée</strong> (avec TLS). Pour obtenir ces valeurs de ports, nous
   pouvons utiliser la méthode <code>Hoa\Router\Http::getDefaultPort</code>.
   Naturellement, nous aurons le port par défaut pour une connexion non-cryptée.
-  En revanche, si nous donnons <code>true</code> en seul argument, nous aurons
-  le port par défaut pour une connexion cryptée. Ainsi :</p>
+  En revanche, si nous donnons <code>Hoa\Router\Http::SECURE</code> en seul
+  argument, nous aurons le port par défaut pour une connexion cryptée.
+  Ainsi :</p>
   <pre><code class="language-php">var_dump($router->getDefaultPort());
 
 /**
@@ -666,13 +667,15 @@ var_dump(
   le port 8880, <code>Hoa\Router\Http</code> changera 80 par 8880
   automatiquement. Toutefois, pour modifier les ports par défaut manuellement,
   nous utiliserons la méthode <code>Hoa\Router\Http::setDefaultPort</code>, avec
-  en premier argument la valeur du port et en second argument un booléen
-  indiquant si c'est pour une connexion cryptée ou pas.</p>
+  en premier argument la valeur du port et en second argument l'une des deux
+  constantes (<code>Hoa\Router\Http::SECURE</code>,
+  <code>Hoa\Router\Http::UNSECURE</code>) indiquant si c'est pour une connexion
+  cryptée ou pas.</p>
   <p>Ces numéros de port par défaut sont importants quand nous appelons la
   méthode <code>Hoa\Router\Http::unroute</code> et qu'un domaine avec un port
   doit être reconstitué. C'est le cas, par exemple, si nous forçons à dérouter
   vers une connexion cryptée, à l'aide du troisième argument de cette méthode en
-  lui donnant <code>true</code> :</p>
+  lui donnant <code>Hoa\Router\Http::SECURE</code> :</p>
   <pre><code class="language-php">var_dump(
     $router->unroute(
         'p',
@@ -680,7 +683,7 @@ var_dump(
         true
     )
 );
-$router->setDefaultPort(8443, true);
+$router->setDefaultPort(8443, Hoa\Router\Http::SECURE);
 var_dump(
     $router->unroute(
         …
