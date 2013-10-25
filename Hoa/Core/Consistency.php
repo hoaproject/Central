@@ -876,8 +876,7 @@ if(!ƒ('trait_exists')) {
 function trait_exists ( $classname ) {
 
     return false;
-}
-}
+}}
 
 /**
  * Alias for \Hoa\Core\Consistency::from().
