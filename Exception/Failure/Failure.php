@@ -66,6 +66,6 @@ namespace {
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Praspel\Exception\Failure');
+Hoa\Core\Consistency::flexEntity('Hoa\Praspel\Exception\Failure\Failure');
 
 }
