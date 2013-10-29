@@ -512,8 +512,8 @@ class Consistency {
     public static function entityExists ( $entityName, $autoloader = false ) {
 
         return    class_exists($entityName, $autoloader)
-               || interface_exists($entityName, $autoloader)
-               || trait_exists($entityName, $autoloader);
+               || interface_exists($entityName, false)
+               || trait_exists($entityName, false);
     }
 
     /**
