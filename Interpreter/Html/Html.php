@@ -86,6 +86,7 @@ class Html extends \Hoa\Xyl\Interpreter {
         'if'              => '\Hoa\Xyl\Interpreter\Common\_If',
         'elseif'          => '\Hoa\Xyl\Interpreter\Common\_Elseif',
         'else'            => '\Hoa\Xyl\Interpreter\Common\_Else',
+        '_'               => '\Hoa\Xyl\Interpreter\Common\_',
 
         // Script.
         'script'          => '\Hoa\Xyl\Interpreter\Html\Script',
