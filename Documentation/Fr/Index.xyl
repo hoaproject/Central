@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<overlay xmlns="http://hoa-project.net/xyl/xylophone">
+<yield id="chapter">
+
+  <p><q>« Je suis la bibliothèque fantôme qui hante Hoa ! »</q></p>
+
+</yield>
+</overlay>
