@@ -155,7 +155,7 @@ class          Response
     const STATUS_PARTIAL_CONTENT                 = '206 Partial Content';
 
     /**
-     * IM used (please, see RFC 226).
+     * IM used (please, see RFC226).
      *
      * @const string
      */
@@ -351,14 +351,14 @@ class          Response
     const STATUS_EXPECTATION_FAILED              = '417 Expectation Failed';
 
     /**
-     * I'm a teapot (see RFC 2324, April Fool's joke).
+     * I'm a teapot (see RFC2324, April Fool's joke).
      *
      * @const string
      */
     const STATUS_IM_A_TEAPOT                     = '418 I\'m a Teapot';
 
     /**
-     * Upgrade required (RFC 2817).
+     * Upgrade required (RFC2817).
      *
      * @const string
      */
