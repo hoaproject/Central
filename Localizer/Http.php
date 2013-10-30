@@ -34,18 +34,90 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Locale {
+namespace {
+
+from('Hoa')
 
 /**
- * Class \Hoa\Locale\Exception.
+ * \Hoa\Locale\Localizer
+ */
+-> import('Locale.Localizer.~')
+
+/**
+ * \Hoa\Http\Runtime
+ */
+-> import('Http.Runtime');
+
+}
+
+namespace Hoa\Locale\Localizer {
+
+/**
+ * Class \Hoa\Locale\Localizer\Http.
  *
- * Extending the \Hoa\Core\Exception class.
+ * Deduce locale from a HTTP request.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Exception extends \Hoa\Core\Exception { }
+class Http implements Localizer {
+
+    /**
+     * Value of the Accept-Language header.
+     *
+     * @var \Hoa\Locale\Localizer\Http string
+     */
+    protected $_value = null;
+
+
+
+    /**
+     * Constructor.
+     *
+     * @access  public
+     * @param   string  $headerValue    Accept-Language value. If null, will be
+     *                                  deduced from the current HTTP request.
+     * @return  void
+     */
+    public function __construct ( $headerValue = null ) {
+
+        $value = $headerValue ?: \Hoa\Http\Runtime::getHeader('accept-language');
+
+        // Remove CFWS.
+        $this->_value = preg_replace('#\([^\)]+\)|\s#', '', $value);
+
+        return;
+    }
+
+    /**
+     * Get locale.
+     * Please, see RFC3282 3. The Accept-Language header and
+     * RFC2822 3.2.3. Folding white space and comments.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getLocale ( ) {
+
+        foreach(explode(',', $this->_value) as $language) {
+
+            $match = preg_match(
+                '#^(?<language>[^;$]+)(;q=(?<q>0(?:\.\d{0,3})|1(?:\.0{0,3})))?$#',
+                $language,
+                $matches
+            );
+
+            if(0 !== $match)
+                break;
+        }
+
+        if(empty($matches))
+            return null;
+
+        return $matches['language'];
+    }
+}
 
 }
