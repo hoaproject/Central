@@ -256,6 +256,13 @@ class          Xyl
     protected $_fragments         = array();
 
     /**
+     * Translations.
+     *
+     * @var \Hoa\Xyl array
+     */
+    protected $_translations      = array();
+
+    /**
      * Get ID of the instance.
      *
      * @var \Hoa\Xyl int
@@ -1683,6 +1690,37 @@ class          Xyl
                 21);
 
         return $concrete->getConcreteElement($handle[0]);
+    }
+
+    /**
+     * Add a translation.
+     *
+     * @access  public
+     * @param   \Hoa\Translate  $translation    Translation.
+     * @param   string          $id             Translation ID.
+     * @return  void
+     */
+    public function addTranslation ( \Hoa\Translate $translation,
+                                     $id = '__main__' ) {
+
+        $this->_translations[$id] = $translation;
+
+        return;
+    }
+
+    /**
+     * Get translation.
+     *
+     * @access  public
+     * @param   string  $id    Translation ID.
+     * @return  \Hoa\Translate
+     */
+    public function getTranslation ( $id  = '__main__' ) {
+
+        if(!isset($this->_translations[$id]))
+            return null;
+
+        return $this->_translations[$id];
     }
 
     /**
