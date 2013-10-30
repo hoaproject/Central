@@ -73,7 +73,7 @@ from('Hoa')
 namespace Hoa\Acl {
 
 /**
- * Class \Hoa\Alc.
+ * Class \Hoa\Acl.
  *
  * The ACL main class. It contains all users, groups, and resources collections.
  * It also proposes to check if a user is allow or not to do an action according
