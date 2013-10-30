@@ -290,6 +290,8 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
         }
         else {
 
+            $uri = urldecode($uri);
+
             if(false !== $pos = strpos($uri, '@'))
                 list($subdomain, $uri) = explode('@', $uri, 2);
             else
@@ -665,7 +667,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
             throw new Exception(
                 'Cannot find URI so we cannot route.', 8);
 
-        $uri = ltrim($_SERVER['REQUEST_URI'], '/');
+        $uri = ltrim(urldecode($_SERVER['REQUEST_URI']), '/');
 
         if(false !== $pos = strpos($uri, '?'))
             $uri = substr($uri, 0, $pos);
