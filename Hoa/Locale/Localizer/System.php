@@ -34,18 +34,52 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Locale {
+namespace {
+
+from('Hoa')
 
 /**
- * Class \Hoa\Locale\Exception.
+ * \Hoa\Locale\Localizer
+ */
+-> import('Locale.Localizer.~');
+
+}
+
+namespace Hoa\Locale\Localizer {
+
+/**
+ * Class \Hoa\Locale\Localizer\System.
  *
- * Extending the \Hoa\Core\Exception class.
+ * Deduce locale from the system.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Exception extends \Hoa\Core\Exception { }
+class System implements Localizer {
+
+    /**
+     * Get locale.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getLocale ( ) {
+
+        foreach(explode('/', setlocale(LC_ALL, 0)) as $locale)
+            if('C' !== $locale)
+                break;
+
+        if('C' === $locale)
+            return null;
+
+        return str_replace(
+            '_',
+            '-',
+            substr($locale, 0, strpos($locale, '.') ?: strlen($locale))
+        );
+    }
+}
 
 }

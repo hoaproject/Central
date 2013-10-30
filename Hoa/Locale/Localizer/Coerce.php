@@ -34,18 +34,64 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Locale {
+namespace {
+
+from('Hoa')
 
 /**
- * Class \Hoa\Locale\Exception.
+ * \Hoa\Locale\Localizer
+ */
+-> import('Locale.Localizer.~');
+
+}
+
+namespace Hoa\Locale\Localizer {
+
+/**
+ * Class \Hoa\Locale\Localizer\Coerce.
  *
- * Extending the \Hoa\Core\Exception class.
+ * Arbitrary local.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Exception extends \Hoa\Core\Exception { }
+class Coerce implements Localizer {
+
+    /**
+     * Locale.
+     *
+     * @var \Hoa\Locale\Localizer
+     */
+    protected $_locale = null;
+
+
+
+    /**
+     * Force a locale.
+     *
+     * @access  public
+     * @param   string  $locale    Locale.
+     * @return  void
+     */
+    public function __construct ( $locale ) {
+
+        $this->_locale = $locale;
+
+        return;
+    }
+
+    /**
+     * Get locale.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getLocale ( ) {
+
+        return $this->_locale;
+    }
+}
 
 }

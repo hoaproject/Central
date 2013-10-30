@@ -34,18 +34,35 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Locale {
+namespace Hoa\Locale\Localizer {
 
 /**
- * Class \Hoa\Locale\Exception.
+ * Interface \Hoa\Locale\Localizer.
  *
- * Extending the \Hoa\Core\Exception class.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Exception extends \Hoa\Core\Exception { }
+interface Localizer {
+
+    /**
+     * Get locale.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getLocale ( );
+}
+
+}
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Locale\Localizer\Localizer');
 
 }
