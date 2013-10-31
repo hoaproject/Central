@@ -876,7 +876,7 @@ function ƒ ( $name ) {
 if(!ƒ('trait_exists')) {
 function trait_exists ( $traitname, $autoload = true ) {
 
-    if ($autoload)
+    if(true === $autoload)
         class_exists($traitname, true);
 
     return false;
