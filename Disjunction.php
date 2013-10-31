@@ -84,7 +84,10 @@ class Disjunction implements \ArrayAccess, \IteratorAggregate, \Countable {
     protected $_realdoms         = array();
 
     /**
-     * Added realistic domains, variables etc.
+     * Added realistic domains, variables etc. (as $this->_realdoms but
+     * un-flattened).
+     *
+     * @var \Hoa\Realdom\Disjunction array
      */
     protected $__realdoms        = array();
 
