@@ -381,8 +381,8 @@ class Praspel {
         // Check behaviors.
         if(true === $behavior->clauseExists('behavior')) {
 
-            $_verdict    = false;
-            $behaviors   = $behavior->getClause('behavior');
+            $_verdict  = false;
+            $behaviors = $behavior->getClause('behavior');
             $exceptions->beginTransaction();
 
             foreach($behaviors as $_behavior) {
