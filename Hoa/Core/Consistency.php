@@ -512,8 +512,8 @@ class Consistency {
     public static function entityExists ( $entityName, $autoloader = false ) {
 
         return    class_exists($entityName, $autoloader)
-               || interface_exists($entityName, $autoloader)
-               || trait_exists($entityName, $autoloader);
+               || interface_exists($entityName, false)
+               || trait_exists($entityName, false);
     }
 
     /**
@@ -869,11 +869,15 @@ function ƒ ( $name ) {
  * Implement a fake trait_exists function.
  *
  * @access  public
- * @param   string  $classname    Classname.
+ * @param   string  $traitname    Traitname.
+ * @param   bool    $autoload     Autoload.
  * @return  bool
  */
 if(!ƒ('trait_exists')) {
-function trait_exists ( $classname ) {
+function trait_exists ( $traitname, $autoload = true ) {
+
+    if(true === $autoload)
+        class_exists($traitname, true);
 
     return false;
 }}
