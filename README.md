@@ -12,21 +12,21 @@ This is possible only if the program is running behind
 
 ## Quick usage
 
-To create a zombie, all we have to do is to call the `Hoa\Zombie::fork` method.
-And to kill a zombie, we have the choice between different weapons:
+To create a zombie, all we have to do is to call the `Hoa\Zombie\Zombie::fork`
+method. And to kill a zombie, we have the choice between different weapons:
 
-  * `Hoa\Zombie::decapitate`, *ziip*;
-  * `Hoa\Zombie::bludgeon`, *tap tap*;
-  * `Hoa\Zombie::burn`, if you are cold;
-  * `Hoa\Zombie::explode`, *boom*;
-  * `Hoa\Zombie::cutOff`, sausage?
+  * `Hoa\Zombie\Zombie::decapitate`, *ziip*;
+  * `Hoa\Zombie\Zombie::bludgeon`, *tap tap*;
+  * `Hoa\Zombie\Zombie::burn`, if you are cold;
+  * `Hoa\Zombie\Zombie::explode`, *boom*;
+  * `Hoa\Zombie\Zombie::cutOff`, sausage?
 
 All these methods have been proven. Thus:
 
     // I'm alive!
-    Hoa\Zombie::fork();
+    Hoa\Zombie\Zombie::fork();
     // I'm a zombie!
-    Hoa\Zombie::decapitate();
+    Hoa\Zombie\Zombie::decapitate();
     // I'm dead…
 
 But we have to run the script behind FastCGI, that is why we will use
@@ -35,7 +35,7 @@ But we have to run the script behind FastCGI, that is why we will use
 In the `Zombie.php` file, we write the following instructions:
 
     echo 'I guess I am sick…', "\n";
-    Hoa\Zombie::fork();
+    Hoa\Zombie\Zombie::fork();
 
     // Do whatever you want here, e.g.:
     sleep(10);
@@ -43,7 +43,7 @@ In the `Zombie.php` file, we write the following instructions:
         __DIR__ . DS . 'AMessage',
         'Hello from after-life… or somewhere about!'
     );
-    Hoa\Zombie::decapitate();
+    Hoa\Zombie\Zombie::decapitate();
 
 Then, in the `Run.php` file, we write:
 

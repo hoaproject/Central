@@ -38,37 +38,34 @@
   zombies</h2>
 
   <p>Créer un zombie est très <strong>simple</strong> : il suffit d'appeler la
-  méthode <code>Hoa\Zombie::fork()</code>.</p>
+  méthode <code>Hoa\Zombie\Zombie::fork()</code>.</p>
   <p>Il est de notoriété publique que tuer un zombie est une activité
   <strong>amusante</strong>, d'autant plus si nous avons le choix des
-  <strong>armes</strong> ! C'est pourquoi <code>Hoa\Zombie</code> propose les
-  méthodes suivantes :</p>
+  <strong>armes</strong> ! C'est pourquoi <code>Hoa\Zombie\Zombie</code> propose
+  les méthodes suivantes :</p>
   <ul>
-    <li><code>Hoa\Zombie::decapitate</code>, pour <strong>décapiter</strong> un
+    <li><code>Hoa\Zombie\Zombie::decapitate</code>, pour
+    <strong>décapiter</strong> un zombie ;</li>
+    <li><code>Hoa\Zombie\Zombie::bludgeon</code>, pour
+    <strong>matraquer</strong> un zombie ;</li>
+    <li><code>Hoa\Zombie\Zombie::burn</code>, pour <strong>brûler</strong> un
     zombie ;</li>
-    <li><code>Hoa\Zombie::bludgeon</code>, pour <strong>matraquer</strong> un
-    zombie ;</li>
-    <li><code>Hoa\Zombie::burn</code>, pour <strong>brûler</strong> un
-    zombie ;</li>
-    <li><code>Hoa\Zombie::explode</code>, pour faire <strong>exploser</strong>
-    un zombie ;</li>
-    <li><code>Hoa\Zombie::cutOff</code>, pour <strong>découper</strong> un
-    zombie en rondelles.</li>
+    <li><code>Hoa\Zombie\Zombie::explode</code>, pour faire
+    <strong>exploser</strong> un zombie ;</li>
+    <li><code>Hoa\Zombie\Zombie::cutOff</code>, pour <strong>découper</strong>
+    un zombie en rondelles.</li>
   </ul>
   <p>Toutes ces méthodes ont fait leurs preuves. Ainsi :</p>
-  <pre><code class="language-php">from('Hoa')
--> import('Zombie.~');
-
-// I'm alive!
-Hoa\Zombie::fork();
+  <pre><code class="language-php">// I'm alive!
+Hoa\Zombie\Zombie::fork();
 // I'm a zombie!
-Hoa\Zombie::decapitate();
+Hoa\Zombie\Zombie::decapitate();
 // I'm dead…</code></pre>
-  <p><code>Hoa\Zombie</code> propose également d'obtenir
+  <p><code>Hoa\Zombie\Zombie</code> propose également d'obtenir
   l'<strong>identifiant</strong> du processus, ce qui peut parfois être utile, à
-  travers la méthode <code>Hoa\Zombie::getPid</code>. Enfin, il existe la
-  méthode <code>Hoa\Zombie::test</code> qui permet de savoir si nous pouvons
-  créer un zombie ou pas.</p>
+  travers la méthode <code>Hoa\Zombie\Zombie::getPid</code>. Enfin, il existe la
+  méthode <code>Hoa\Zombie\Zombie::test</code> qui permet de savoir si nous
+  pouvons créer un zombie ou pas.</p>
 
   <h2 id="Test" for="main-toc">Test</h2>
 
@@ -79,11 +76,8 @@ Hoa\Zombie::decapitate();
   <strong>émettant</strong> une requête FastCGI vers PHP FPM. C'est ce dernier
   choix que nous allons retenir.</p>
   <p>Nous commençons avec le fichier <code>Zombie.php</code> :</p>
-  <pre><code class="language-php">from('Hoa')
--> import('Zombie.~');
-
-echo 'I guess I am sick…', "\n";
-Hoa\Zombie::fork();
+  <pre><code class="language-php">echo 'I guess I am sick…', "\n";
+Hoa\Zombie\Zombie::fork();
 
 // Do whatever you want here, e.g.:
 sleep(10);
@@ -95,11 +89,7 @@ file_put_contents(
   <p>Ensuite, nous continuons avec le fichier <code>Run.php</code> qui va
   exécuter <code>Zombie.php</code> grâce à
   <a href="@lh:chapter=Fastcgi"><code>Hoa\Fastcgi</code></a> :</p>
-  <pre><code class="language-php">from('Hoa')
--> import('Socket.Client')
--> import('Fastcgi.Responder');
-
-$fastcgi = new Hoa\Fastcgi\Responder(
+  <pre><code class="language-php">$fastcgi = new Hoa\Fastcgi\Responder(
     new Hoa\Socket\Client('tcp://127.0.0.1:9000')
 );
 
