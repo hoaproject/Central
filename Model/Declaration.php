@@ -176,6 +176,19 @@ abstract class Declaration
     }
 
     /**
+     * Add a variable.
+     *
+     * @access  public
+     * @param   string                       $name        Name.
+     * @param   \Hoa\Praspel\Model\Variable  $variable    Variable.
+     * @return  \Hoa\Praspel\Model\Variable
+     */
+    public function addVariable ( $name, Variable $variable ) {
+
+        return $this->_variables[$name] = $variable;
+    }
+
+    /**
      * Set a value to a variable.
      *
      * @access  public
