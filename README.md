@@ -29,7 +29,7 @@ things: either the session is newly created or it has expired. In all cases, we
 print `first time` and save the current time in `foo`. And if the namespace is
 not empty, we print `other times` and dump the saved time. Thus:
 
-    $user = new Hoa\Session('user');
+    $user = new Hoa\Session\Session('user');
 
     if($user->isEmpty()) {
 
@@ -46,8 +46,8 @@ First execution will print `first time` and next ones will print `other times`
 followed by a timestamp.
 
 No need to start the session, it will be done automatically. But if we want to,
-we can use the `session_start` function or the `Hoa\Session::start` static
-method, which is more sophisticated.
+we can use the `session_start` function or the `Hoa\Session\Session::start`
+static method, which is more sophisticated.
 
 ### Expiration handling
 
@@ -55,9 +55,9 @@ If a namespace expires before the session, either an event is fired on the
 channel `hoa://Event/Session/<namespace>:expired` or an exception
 `Hoa\Session\Exception\Expired` is thrown (if no callable listens the channel).
 We can test if the namespace is expired with the help of the
-`Hoa\Session::isExpired` method or we can declare the namespace as expired with
-the help of the `Hoa\Session::hasExpired` method (this method will throw an
-exception or fire an event).
+`Hoa\Session\Session::isExpired` method or we can declare the namespace as
+expired with the help of the `Hoa\Session\Session::hasExpired` method (this
+method will throw an exception or fire an event).
 
 Considering the previous example, we will declare the namespace as expired when
 the session is empty:
@@ -68,7 +68,7 @@ the session is empty:
             echo 'expired', "\n";
         });
 
-    $user = new Hoa\Session('user');
+    $user = new Hoa\Session\Session('user');
 
     if($user->isEmpty()) {
 
@@ -89,8 +89,8 @@ If an empty session does not imply an expiration (depending of our workflow and
 configuration), we could avoid the call to `$user->hasExpired()`: the test is
 automatically done during the construction of the namespace.
 
-We can modify the lifetime by using the `Hoa\Session::rememberMe` method; for
-example:
+We can modify the lifetime by using the `Hoa\Session\Session::rememberMe`
+method; for example:
 
     $user->rememberMe('+1 day');
 
@@ -100,9 +100,9 @@ And we can also forget the namespace:
 
 ### Destructing a namespace
 
-Destructing a namespace uses the `Hoa\Session::delete` method:
+Destructing a namespace uses the `Hoa\Session\Session::delete` method:
 
-    $user = new Hoa\Session('user');
+    $user = new Hoa\Session\Session('user');
     $user['foo'] = 'bar';
     $user->delete();
 
@@ -110,8 +110,8 @@ Stored data in the namespace are **lost** because we explicitly delete the
 namespace.
 
 If we want to destroy the session (including all namespaces and cookie), we
-could use the `Hoa\Session::destroy` static method. Again, no need to previously
-start the session manually if it is not done.
+could use the `Hoa\Session\Session::destroy` static method. Again, no need to
+previously start the session manually if it is not done.
 
 ## Documentation
 
