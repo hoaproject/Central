@@ -39,7 +39,7 @@ Well, now, we will create our resolution server that will listen
 `127.0.0.1:57005` (`57005` = `0xDEAD`) in UDP. Thus, in the `Resolution.php`
 file:
 
-    $dns = new Hoa\Dns(
+    $dns = new Hoa\Dns\Dns(
         new Hoa\Socket\Server('udp://127.0.0.1:57005')
     );
     $dns->on('query', function ( Hoa\Core\Event\Bucket $bucket ) {
