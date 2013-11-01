@@ -63,17 +63,14 @@
 
   <h2 id="Informations_generales" for="main-toc">Informations générales</h2>
 
-  <p>Il y a deux façons d'utiliser la classe <code>Hoa\Mime</code>. Nous allons
-  commencer par l'approche <strong>statique</strong>.</p>
+  <p>Il y a deux façons d'utiliser la classe <code>Hoa\Mime\Mime</code>. Nous
+  allons commencer par l'approche <strong>statique</strong>.</p>
   <p>Les deux méthodes principales sont
-  <code>Hoa\Mime::getExtensionsFromMime</code> pour obtenir les extensions
-  associées à un type, et <code>Hoa\Mime::getMimeFromExtension</code> pour
+  <code>Hoa\Mime\Mime::getExtensionsFromMime</code> pour obtenir les extensions
+  associées à un type, et <code>Hoa\Mime\Mime::getMimeFromExtension</code> pour
   l'opération inverse, à savoir obtenir le type à partir d'une extension.
   Ainsi :</p>
-  <pre><code class="language-php">from('Hoa')
--> import('Mime.~');
-
-print_r(Hoa\Mime::getExtensionsFromMime('text/html'));
+  <pre><code class="language-php">print_r(Hoa\Mime\Mime::getExtensionsFromMime('text/html'));
 
 /**
  * Will output:
@@ -84,7 +81,7 @@ print_r(Hoa\Mime::getExtensionsFromMime('text/html'));
  *     )
  */
 
-var_dump(Hoa\Mime::getMimeFromExtension('webm'));
+var_dump(Hoa\Mime\Mime::getMimeFromExtension('webm'));
 
 /**
  * Will output:
@@ -92,23 +89,23 @@ var_dump(Hoa\Mime::getMimeFromExtension('webm'));
  */</code></pre>
   <p>Nous pouvons aussi savoir si une extension existe dans notre fichier
   <code>Mime.types</code> grâce à la méthode (toujours statique)
-  <code>Hoa\Mime::extensionExists</code>.</p>
-  <p>Par défaut, <code>Hoa\Mime</code> va utiliser le fichier
+  <code>Hoa\Mime\Mime::extensionExists</code>.</p>
+  <p>Par défaut, <code>Hoa\Mime\Mime</code> va utiliser le fichier
   <code>hoa://Library/Mime/Mime.types</code> comme <strong>base de
   données</strong>. Nous pouvons lui préciser un <strong>autre</strong> fichier
-  en utilisant la méthode <code>Hoa\Mime::compute</code> :</p>
-  <pre><code class="language-php">Hoa\Mime::compute('/etc/mime.types');</code></pre>
-  <p>Toutes les informations fournies par la classe <code>Hoa\Mime</code> sont
+  en utilisant la méthode <code>Hoa\Mime\Mime::compute</code> :</p>
+  <pre><code class="language-php">Hoa\Mime\Mime::compute('/etc/mime.types');</code></pre>
+  <p>Toutes les informations fournies par la classe <code>Hoa\Mime\Mime</code> sont
   calculées à partir de ce fichier. Il est donc préférable d'exécuter cette
-  méthode avant toute opération sur la classe <code>Hoa\Mime</code>.</p>
+  méthode avant toute opération sur la classe <code>Hoa\Mime\Mime</code>.</p>
 
   <h2 id="Informations_sur_un_flux" for="main-toc">Informations sur un flux</h2>
 
-  <p>Une autre façon d'utiliser la bibliothèque <code>Hoa\Mime</code> est
+  <p>Une autre façon d'utiliser la bibliothèque <code>Hoa\Mime\Mime</code> est
   <strong>dynamiquement</strong>, à partir d'un flux. Nous instancions notre
   classe en lui donnant un flux, et ensuite nous pourrons connaître le type de
   ce flux, ses extensions etc. Ainsi :</p>
-  <pre><code class="language-php">$type = new Hoa\Mime(new Hoa\File\Read('index.html'));</code></pre>
+  <pre><code class="language-php">$type = new Hoa\Mime\Mime(new Hoa\File\Read('index.html'));</code></pre>
   <p>Nous avons maintenant les méthodes suivantes :</p>
   <ul>
     <li><code>getExtension</code> pour obtenir l'extension du flux ;</li>
