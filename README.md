@@ -11,7 +11,7 @@ This library is a ghost library… ouuuh.
 
 A simple useless usage:
 
-    $  = new Hoa\ ();
+    $  = new Hoa\ \ ();
     var_dump($ ->  ()); // string(1) " "
 
 ## Documentation
