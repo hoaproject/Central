@@ -189,7 +189,8 @@ class Praspel {
         $specification = $this->getSpecification();
         $exceptions    = new Exception\Group(
             'The Runtime Assertion Checker has detected failures for %s.',
-            0, $callable);
+            0, $callable
+        );
 
         if($reflection instanceof \ReflectionMethod)
             $reflection->setAccessible(true);
