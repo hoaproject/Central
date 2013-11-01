@@ -74,6 +74,11 @@ from('Hoa')
 -> import('Praspel.Exception.Failure.InternalPrecondition')
 
 /**
+ * \Hoa\Praspel\Trace
+ */
+-> import('Praspel.Trace')
+
+/**
  * \Hoa\Praspel\Visitor\Interpreter
  */
 -> import('Praspel.Visitor.Interpreter')
@@ -170,11 +175,12 @@ class Praspel {
      * Runtime assertion checker.
      *
      * @access  public
+     * @param   \Hoa\Praspel\Trace  $trace    Trace.
      * @return  bool
      * @throw   \Hoa\Praspel\Exception\Generic
      * @throw   \Hoa\Praspel\Exception\Group
      */
-    public function evaluate ( ) {
+    public function evaluate ( &$trace = false ) {
 
         // Start.
         $verdict       = true;
@@ -183,10 +189,14 @@ class Praspel {
         $specification = $this->getSpecification();
         $exceptions    = new Exception\Group(
             'The Runtime Assertion Checker has detected failures for %s.',
-            0, $callable);
+            0, $callable
+        );
 
         if($reflection instanceof \ReflectionMethod)
             $reflection->setAccessible(true);
+
+        if(false !== $trace && !($trace instanceof Trace))
+            $trace = new Trace();
 
         // Prepare data.
         if(null === $data = $this->getData())
@@ -197,7 +207,8 @@ class Praspel {
                     'No data were given. The System Under Test %s needs data ' .
                     'to be executed.', 1, $callable);
 
-        $arguments = array();
+        $arguments                 = array();
+        $numberOfRequiredArguments = 0;
 
         foreach($reflection->getParameters() as $parameter) {
 
@@ -206,12 +217,20 @@ class Praspel {
             if(true === array_key_exists($name, $data)) {
 
                 $arguments[$name] = &$data[$name];
+
+                if(false === $parameter->isOptional())
+                    ++$numberOfRequiredArguments;
+
                 continue;
             }
 
-            if(false === $parameter->isOptional())
-                // Let the error be caught by the @requires clause.
+            if(false === $parameter->isOptional()) {
+
+                ++$numberOfRequiredArguments;
+
+                // Let the error be caught by a @requires clause.
                 continue;
+            }
 
             $arguments[$name] = $parameter->getDefaultValue();
         }
@@ -225,7 +244,8 @@ class Praspel {
                 $arguments,
                 $exceptions,
                 __NAMESPACE__ . '\Exception\Failure\Invariant',
-                true
+                true,
+                $trace
             );
 
             if(0 < count($exceptions))
@@ -238,11 +258,24 @@ class Praspel {
             $behavior,
             $arguments,
             $exceptions,
-            true
+            true,
+            $trace
         );
 
         if(0 < count($exceptions))
             throw $exceptions;
+
+        $numberOfArguments = count($arguments);
+
+        if($numberOfArguments < $numberOfRequiredArguments) {
+
+            $exceptions[] = new Exception\Failure\Precondition(
+                'Callable %s needs %d arguments; %d given.',
+                2, array($callable, $numberOfRequiredArguments, $numberOfArguments)
+            );
+
+            throw $exceptions;
+        }
 
         try {
 
@@ -265,7 +298,8 @@ class Praspel {
                               ? $exceptions
                               : new Exception\Group(
                                     'Behavior %s is broken.',
-                                    2, $behavior->getIdentifier());
+                                    3, $behavior->getIdentifier()
+                                );
 
                 if(null !== $_exceptions && 0 < count($_exceptions))
                     $handle[] = $_exceptions;
@@ -280,7 +314,9 @@ class Praspel {
                         $ensures,
                         $arguments,
                         $_exceptions,
-                        __NAMESPACE__ . '\Exception\Failure\Postcondition'
+                        __NAMESPACE__ . '\Exception\Failure\Postcondition',
+                        false,
+                        $trace
                     );
                 }
 
@@ -290,7 +326,7 @@ class Praspel {
 
             $exceptions[] = new Exception\Failure\InternalPrecondition(
                 'The System Under Test has broken an internal contract.',
-                3, null, $internalException);
+                4, null, $internalException);
         }
         catch ( \Exception $exception ) {
 
@@ -315,7 +351,7 @@ class Praspel {
             if(false === $_verdict)
                 $exceptions[] = new Exception\Failure\Exceptional(
                     'The exception %s has been unexpectedly thrown.',
-                    42, array(get_class($arguments['\result']))
+                    5, array(get_class($arguments['\result']))
                 );
 
             $verdict &= $_verdict;
@@ -333,7 +369,8 @@ class Praspel {
                 $arguments,
                 $exceptions,
                 __NAMESPACE__ . '\Exception\Failure\Invariant',
-                true
+                true,
+                $trace
             );
 
             if(0 < count($exceptions))
@@ -347,18 +384,20 @@ class Praspel {
      * Check behavior clauses.
      *
      * @access  protected
-     * @param   \Hoa\Praspel\Model\Behavior    &$behavior      Behavior clause.
+     * @param   \Hoa\Praspel\Model\Behavior     $behavior      Behavior clause.
      * @param   array                          &$data          Data.
      * @param   \Hoa\Praspel\Exception\Group    $exceptions    Exceptions group.
      * @param   bool                            $assign        Assign data to
      *                                                         variable.
+     * @param   \Hoa\Praspel\Trace              $trace         Trace.
      * @return  bool
      * @throw   \Hoa\Praspel\Exception
      */
-    protected function checkBehavior ( Model\Behavior &$behavior,
+    protected function checkBehavior ( Model\Behavior  $behavior,
                                        Array          &$data,
                                        Exception\Group $exceptions,
-                                       $assign = false ) {
+                                       $assign = false,
+                                       $trace  = false ) {
 
         $verdict = true;
 
@@ -371,7 +410,8 @@ class Praspel {
                 $data,
                 $exceptions,
                 __NAMESPACE__ . '\Exception\Failure\Precondition',
-                $assign
+                $assign,
+                $trace
             );
 
             if(false === $verdict)
@@ -381,27 +421,42 @@ class Praspel {
         // Check behaviors.
         if(true === $behavior->clauseExists('behavior')) {
 
-            $_verdict    = false;
-            $behaviors   = $behavior->getClause('behavior');
+            $_verdict  = false;
+            $behaviors = $behavior->getClause('behavior');
             $exceptions->beginTransaction();
 
             foreach($behaviors as $_behavior) {
 
                 $_exceptions = new Exception\Group(
                     'Behavior %s is broken.',
-                    4, $_behavior->getIdentifier());
+                    6, $_behavior->getIdentifier()
+                );
+
+                $_trace = null;
+
+                if(!empty($trace)) {
+
+                    $_trace = new Model\Behavior($trace);
+                    $_trace->setIdentifier($_behavior->getIdentifier());
+                }
 
                 $_verdict = $this->checkBehavior(
                     $_behavior,
                     $data,
                     $_exceptions,
-                    $assign
+                    $assign,
+                    $_trace
                 );
 
-                if(true === $_verdict)
+                if(true === $_verdict) {
+
+                    $trace->addClause($_trace);
+
                     break;
+                }
 
                 $exceptions[] = $_exceptions;
+                unset($_trace);
             }
 
             if(false === $_verdict) {
@@ -438,14 +493,20 @@ class Praspel {
      *                                                          throw.
      * @param   bool                             $assign        Assign data to
      *                                                          variable.
+     * @param   \Hoa\Praspel\Trace               $trace         Trace.
      * @return  bool
      * @throw   \Hoa\Praspel\Exception
      */
     protected function checkClause ( Model\Declaration $clause, Array &$data,
                                      Exception\Group $exceptions, $exception,
-                                     $assign = false ) {
+                                     $assign = false,
+                                     $trace  = false ) {
 
-        $verdict = true;
+        $verdict     = true;
+        $traceClause = null;
+
+        if(!empty($trace))
+            $traceClause = clone $clause;
 
         foreach($clause as $name => $variable) {
 
@@ -462,10 +523,33 @@ class Praspel {
                 continue;
             }
 
-            $datum    = &$data[$_name];
-            $_verdict = $variable->predicate($datum);
+            $datum         = &$data[$_name];
+            $_verdict      = false;
+            $traceVariable = null;
 
-            if(false === $_verdict)
+            if(null !== $traceClause) {
+
+                $traceVariable        = clone $variable;
+                $traceVariableDomains = $traceVariable->getDomains();
+            }
+
+            $i = 0;
+
+            foreach($variable->getDomains() as $realdom) {
+
+                if(false === $_verdict && true === $realdom->predicate($datum))
+                    $_verdict = true;
+                else
+                    unset($traceVariableDomains[$i--]);
+
+                ++$i;
+            }
+
+            if(false === $_verdict) {
+
+                if(null !== $traceClause)
+                    unset($traceClause[$name]);
+
                 $exceptions[] = new $exception(
                     'Variable %s does not verify the constraint @%s %s.',
                     6,
@@ -474,11 +558,24 @@ class Praspel {
                         $clause->getName(),
                         $this->getVisitorPraspel()->visit($variable)
                     ));
-            elseif(true === $assign)
-                $variable->setValue($datum);
+            }
+            else {
+
+                if(true === $assign)
+                    $variable->setValue($datum);
+
+                if(null !== $traceClause) {
+
+                    unset($traceClause[$name]);
+                    $traceClause->addVariable($name, $traceVariable);
+                }
+            }
 
             $verdict &= $_verdict;
         }
+
+        if(!empty($trace))
+            $trace->addClause($traceClause);
 
         return (bool) $verdict;
     }

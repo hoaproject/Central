@@ -133,7 +133,7 @@ abstract class Declaration
      *
      * @access  public
      * @param   string  $offset    Variable name.
-     * @return  \Hoa\Prasel\Model\Variable
+     * @return  \Hoa\Praspel\Model\Variable
      */
     public function offsetGet ( $offset ) {
 
@@ -173,6 +173,19 @@ abstract class Declaration
         }
 
         return $this->_variables[$name];
+    }
+
+    /**
+     * Add a variable.
+     *
+     * @access  public
+     * @param   string                       $name        Name.
+     * @param   \Hoa\Praspel\Model\Variable  $variable    Variable.
+     * @return  \Hoa\Praspel\Model\Variable
+     */
+    public function addVariable ( $name, Variable $variable ) {
+
+        return $this->_variables[$name] = $variable;
     }
 
     /**

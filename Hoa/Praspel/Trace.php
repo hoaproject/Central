@@ -39,77 +39,24 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Praspel\Model\Behavior
+ * \Hoa\Praspel\Model\Specification
  */
--> import('Praspel.Model.Behavior')
-
-/**
- * \Hoa\Realdom\Disjunction
- */
--> import('Realdom.Disjunction', true);
+-> import('Praspel.Model.Specification');
 
 }
 
-namespace Hoa\Praspel\Model {
+namespace Hoa\Praspel {
 
 /**
- * Class \Hoa\Praspel\Model\Specification.
+ * Class \Hoa\Praspel\Trace.
  *
- * Represent a specification (contains all clauses).
+ * A trace is a derivated specification.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Specification extends Behavior {
-
-    /**
-     * Name.
-     *
-     * @const string
-     */
-    const NAME = '';
-
-    /**
-     * Allowed clauses.
-     *
-     * @var \Hoa\Praspel\Model\Specification array
-     */
-    protected static $_allowedClauses = array(
-        'is',
-        'invariant',
-        'requires',
-        'behavior',
-        'default',
-        'ensures',
-        'throwable',
-        'description'
-    );
-
-
-
-    /**
-     * Cancel the constructor from the parent.
-     *
-     * @access  public
-     * @return  void
-     */
-    public function __construct ( ) {
-
-        return;
-    }
-
-    /**
-     * Get identifier (fallback).
-     *
-     * @access  protected
-     * @return  string
-     */
-    protected function _getId ( ) {
-
-        return 'praspel';
-    }
-}
+class Trace extends Model\Specification { }
 
 }
