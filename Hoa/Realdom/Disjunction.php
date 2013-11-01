@@ -84,9 +84,20 @@ class Disjunction implements \ArrayAccess, \IteratorAggregate, \Countable {
     protected $_realdoms         = array();
 
     /**
-     * Added realistic domains, variables etc.
+     * Added realistic domains, variables etc. (as $this->_realdoms but
+     * un-flattened).
+     *
+     * @var \Hoa\Realdom\Disjunction array
      */
     protected $__realdoms        = array();
+
+    /**
+     * $this->_realdoms to $this->__realdoms:
+     *     {index from __realdoms => number of produced values in _realdoms}
+     *
+     * @var \Hoa\Realdom\Disjunction array
+     */
+    protected $__matches         = array();
 
     /**
      * Chosen realistic domain.
@@ -279,9 +290,15 @@ class Disjunction implements \ArrayAccess, \IteratorAggregate, \Countable {
         if($realdom instanceof Crate\Variable) {
 
             $this->__realdoms[] = $realdom;
+            $unfolded           = 1;
 
-            foreach($realdom->getDomains() as $_realdom)
+            foreach($realdom->getDomains() as $_realdom) {
+
                 $this->_offsetSet(null, $_realdom, false);
+                ++$unfolded;
+            }
+
+            $this->__matches[] = $unfolded;
 
             return $this;
         }
@@ -293,8 +310,9 @@ class Disjunction implements \ArrayAccess, \IteratorAggregate, \Countable {
      * Set a specific realistic domain.
      *
      * @access  protected
-     * @param   mixed         $offset     Offset.
-     * @param   \Hoa\Realdom  $realdom    Realistic domain.
+     * @param   mixed         $offset       Offset.
+     * @param   \Hoa\Realdom  $realdom      Realistic domain.
+     * @param   bool          $backStore    Back-store in __realdoms or not.
      * @return  \Hoa\Realdom\Disjunction
      * @throw   \Hoa\Realdom\Exception
      */
@@ -305,18 +323,21 @@ class Disjunction implements \ArrayAccess, \IteratorAggregate, \Countable {
                 'A disjunction accepts only realdom; given %s.',
                 1, is_object($realdom) ? get_class($realdom) : gettype($realdom));
 
-        if(true === $backStore)
-            $this->__realdoms[] = &$realdom;
-
         $realdom->setConstraints($this->_constraints);
 
-        if(null === $offset)
+        if(null === $offset) {
+
             $this->_realdoms[] = $realdom;
-        elseif(!is_int($offset))
-            throw new Exception(
-                'Offset %s must be an integer.', 2, $offset);
+
+            if(true === $backStore) {
+
+                $this->__realdoms[] = &$realdom;
+                $this->__matches[]  = 1;
+            }
+        }
         else
-            $this->_realdoms[$offset] = $realdom;
+            throw new Exception(
+                'Offset %s must be null.', 2);
 
         return $this;
     }
@@ -334,8 +355,14 @@ class Disjunction implements \ArrayAccess, \IteratorAggregate, \Countable {
         if(null === $removed = $this->offsetGet($offset))
             return;
 
-        array_splice($this->_realdoms, $offset, 1);
-        // @TODO: Need to also remove in __realdoms.
+        array_splice($this->__realdoms, $offset, 1);
+
+        $acc = 0;
+
+        for($i = 0; $i < $offset - 1; ++$i)
+            $acc += $this->__matches[$i];
+
+        array_splice($this->_realdoms, $acc, $this->__matches[$i]);
 
         return;
     }
