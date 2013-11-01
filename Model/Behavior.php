@@ -141,7 +141,7 @@ class Behavior extends Clause {
 
 
     /**
-     * Get a specific clause.
+     * Get or create a specific clause.
      *
      * @access  public
      * @param   string  $clause    Clause (without leading arobase).
@@ -209,6 +209,25 @@ class Behavior extends Clause {
         }
 
         return $this->_clauses[$clause] = $handle;
+    }
+
+    /**
+     * Add a clause.
+     *
+     * @access  public
+     * @param   \Hoa\Praspel\Model\Clause  $clause    Clause.
+     * @return  \Hoa\Praspel\Model\Clause
+     */
+    public function addClause ( Clause $clause ) {
+
+        $name = $clause->getName();
+
+        if(false === in_array($name, static::getAllowedClauses()))
+            throw new \Hoa\Praspel\Exception\Model(
+                'Clause @%s is not allowed in @%s.',
+                0, array($name, $this->getId()));
+
+        return $this->_clauses[$name] = $clause;
     }
 
     /**
