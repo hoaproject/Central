@@ -78,12 +78,12 @@ class Specification extends Behavior {
      */
     protected static $_allowedClauses = array(
         'is',
-        'requires',
-        'ensures',
-        'throwable',
         'invariant',
+        'requires',
         'behavior',
         'default',
+        'ensures',
+        'throwable',
         'description'
     );
 

@@ -72,9 +72,9 @@ class DefaultBehavior extends Behavior {
      * @var \Hoa\Praspel\Model\DefaultBehavior array
      */
     protected static $_allowedClauses = array(
+        'invariant',
         'ensures',
-        'throwable',
-        'invariant'
+        'throwable'
     );
 
 

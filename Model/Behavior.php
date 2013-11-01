@@ -118,10 +118,10 @@ class Behavior extends Clause {
      */
     protected static $_allowedClauses = array(
         'requires',
-        'ensures',
-        'throwable',
         'behavior',
-        'default'
+        'default',
+        'ensures',
+        'throwable'
     );
 
     /**
