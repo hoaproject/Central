@@ -72,7 +72,7 @@ and `Application`) and another abstraction for libraries resources (with root
 
 We can attach more than resources on this protocol. Example with `Hoa\Registry`:
 
-    Hoa\Registry::set('foo', 'bar');
+    Hoa\Registry\Registry::set('foo', 'bar');
     echo resolve('hoa://Library/Registry#foo'); // bar
 
 ### Events and listeners
