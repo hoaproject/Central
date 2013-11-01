@@ -54,8 +54,8 @@
     <code>Hoa\Core</code></a>) ; il est néanmoins possible de retourner un objet
     quelconque ;</li>
     <li><code>getRouter</code> doit retourner un routeur de type
-    <code>Hoa\Router</code> (voir <a href="@lh:chapter=Router">la bibliothèque
-    <code>Hoa\Router</code></a>) ;</li>
+    <code>Hoa\Router\Router</code> (voir <a href="@lh:chapter=Router">la
+    bibliothèque <code>Hoa\Router</code></a>) ;</li>
     <li><code>render</code> ne doit rien retourner ;</li>
     <li><code>getOutputStream</code> doit retourner un flux implémentant
     l'interface <code>Hoa\Stream\IStream\Out</code> (voir
@@ -86,12 +86,7 @@
     pour plus de simplicité.</li>
   </ul>
   <p>Commençons par écrire la classe <code>SuperView</code> :</p>
-  <pre data-line="49"><code class="language-php">from('Hoa')
--> import('View.~able')
--> import('Http.Response')
--> import('Router.Http');
-
-class SuperView implements Hoa\View\Viewable {
+  <pre data-line="49"><code class="language-php">class SuperView implements Hoa\View\Viewable {
 
     protected $_in     = null;
     protected $_out    = null;
@@ -100,7 +95,7 @@ class SuperView implements Hoa\View\Viewable {
 
     public function __construct (                        $in,
                                   Hoa\Stream\IStream\Out $out,
-                                  Hoa\Router             $router = null,
+                                  Hoa\Router\Router      $router = null,
                                   StdClass               $data   = null ) {
 
         if(null === $data)
