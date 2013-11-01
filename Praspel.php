@@ -207,7 +207,8 @@ class Praspel {
                     'No data were given. The System Under Test %s needs data ' .
                     'to be executed.', 1, $callable);
 
-        $arguments = array();
+        $arguments                 = array();
+        $numberOfRequiredArguments = 0;
 
         foreach($reflection->getParameters() as $parameter) {
 
@@ -216,12 +217,20 @@ class Praspel {
             if(true === array_key_exists($name, $data)) {
 
                 $arguments[$name] = &$data[$name];
+
+                if(false === $parameter->isOptional())
+                    ++$numberOfRequiredArguments;
+
                 continue;
             }
 
-            if(false === $parameter->isOptional())
-                // Let the error be caught by the @requires clause.
+            if(false === $parameter->isOptional()) {
+
+                ++$numberOfRequiredArguments;
+
+                // Let the error be caught by a @requires clause.
                 continue;
+            }
 
             $arguments[$name] = $parameter->getDefaultValue();
         }
@@ -255,6 +264,18 @@ class Praspel {
 
         if(0 < count($exceptions))
             throw $exceptions;
+
+        $numberOfArguments = count($arguments);
+
+        if($numberOfArguments < $numberOfRequiredArguments) {
+
+            $exceptions[] = new Exception\Failure\Precondition(
+                'Callable %s needs %d arguments; %d given.',
+                2, array($callable, $numberOfRequiredArguments, $numberOfArguments)
+            );
+
+            throw $exceptions;
+        }
 
         try {
 
