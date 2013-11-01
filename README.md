@@ -17,10 +17,10 @@ program.
 ### Benchmark
 
 All we have to do is to place different marks in the code. A mark can be
-started, paused, stopped and reset. The class `Hoa\Bench` proposes a quick
+started, paused, stopped and reset. The class `Hoa\Bench\Bench` proposes a quick
 statistic graph that could be helpful:
 
-    $bench = new Hoa\Bench();
+    $bench = new Hoa\Bench\Bench();
 
     // Start two marks: “one” and “two”.
     $bench->one->start();
