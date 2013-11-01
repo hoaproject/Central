@@ -72,9 +72,9 @@
   variables. Une règle est donc également composée de
   <strong>variables</strong>. Nous avons au total quatre éléments.</p>
   <p>Nous trouvons deux méthodes pour ajouter des règles sur un routeur :
-  <code>Hoa\Router::addRule</code> pour ajouter une règle publique et
-  <code>Hoa\Router::addPrivateRule</code> pour ajouter une règle privée. Les
-  deux méthodes ont la même en-tête :</p>
+  <code>Hoa\Router\Router::addRule</code> pour ajouter une règle publique et
+  <code>Hoa\Router\Router::addPrivateRule</code> pour ajouter une règle privée.
+  Les deux méthodes ont la même en-tête :</p>
   <ul>
     <li>l'<strong>identifiant</strong> de la règle ;</li>
     <li>la liste non-ordonnée des <strong>méthodes</strong> acceptées par la
@@ -88,10 +88,7 @@
   liste aux quatre éléments énoncés précédemment.</p>
   <p>Prenons un exemple avec le routeur HTTP représenté par la classe
   <code>Hoa\Router\Http</code> :</p>
-  <pre><code class="language-php">from('Hoa')
--> import('Router.Http');
-
-$router = new Hoa\Router\Http();
+  <pre><code class="language-php">$router = new Hoa\Router\Http();
 $router->addRule('h', array('get'),         '/hello')
        ->addRule('l', array('get', 'post'), '/login');</code></pre>
   <p>Nous avons déclarés deux règles : <code>h</code> et <code>l</code>. La
@@ -115,23 +112,23 @@ $router->addRule('h', array('get'),         '/hello')
   <pre><code class="language-php">$router->addPrivateRule('f', array('get', 'post'), '/foobar');
 $router->_get_post('f', '/foobar');</code></pre>
   <p>Notons que nous pouvons supprimer à tout moment une règle avec la méthode
-  <code>Hoa\Router::removeRule</code> à laquelle nous passons l'identifiant
-  d'une règle. Nous sommes également capable de vérifier qu'une règle existe
-  avec la méthode <code>Hoa\Router::ruleExists</code> et un identifiant de
-  règle.</p>
+  <code>Hoa\Router\Router::removeRule</code> à laquelle nous passons
+  l'identifiant d'une règle. Nous sommes également capable de vérifier qu'une
+  règle existe avec la méthode <code>Hoa\Router\Router::ruleExists</code> et un
+  identifiant de règle.</p>
 
   <h3 id="Router" for="main-toc">Router</h3>
 
   <p>Maintenant que nous avons des règles, voyons à laquelle
   <strong>correspond</strong> une requête. Pour cela, nous allons utiliser la
-  méthode <code>Hoa\Router::route</code>. L'en-tête de cette méthode dépend du
-  routeur. Nous allons nous concentrer sur le router HTTP pour illustrer le
-  concept, soit la méthode <code>Hoa\Router\Http::route</code>. Le premier
-  argument est l'URI, soit notre requête (ce paramètre est optionnel mais nous
-  le verrons plus tard). Nous allons chercher la règle associée à l'URI
-  <code>/hello</code>. Si aucune exception
+  méthode <code>Hoa\Router\Router::route</code>. L'en-tête de cette méthode
+  dépend du routeur. Nous allons nous concentrer sur le router HTTP pour
+  illustrer le concept, soit la méthode <code>Hoa\Router\Http::route</code>. Le
+  premier argument est l'URI, soit notre requête (ce paramètre est optionnel
+  mais nous le verrons plus tard). Nous allons chercher la règle associée à
+  l'URI <code>/hello</code>. Si aucune exception
   <code>Hoa\Router\Exception\NotFound</code> n'est levée, alors nous pouvons
-  appeler la méthode <code>Hoa\Router::getTheRule</code> pour obtenir les
+  appeler la méthode <code>Hoa\Router\Router::getTheRule</code> pour obtenir les
   <strong>informations</strong> sur la règle choisie ; voyons plutôt :</p>
   <pre><code class="language-php">$router->route('/hello');
 print_r($router->getTheRule());
@@ -165,7 +162,7 @@ print_r($router->getTheRule());
  *     )
  */</code></pre>
   <p>Les indices du tableau sont donnés par les constantes sur
-  <code>Hoa\Router</code> suivantes :</p>
+  <code>Hoa\Router\Router</code> suivantes :</p>
   <ul>
     <li><code>RULE_VISIBILITY</code>, pour la <strong>visibilité</strong> de la
     règle (<code>VISIBILITY_PUBLIC</code> ou
@@ -196,7 +193,7 @@ catch ( Hoa\Router\Exception\NotFound $e ) {
  *     Cannot found an appropriated rule to route foobar.
  */</code></pre>
   <p>Elle peut être levée à différentes étapes de la méthode
-  <code>Hoa\Router::route</code>, avec des messages différents.</p>
+  <code>Hoa\Router\Router::route</code>, avec des messages différents.</p>
 
   <h3 id="Motifs_et_variables" for="main-toc">Motifs et variables</h3>
 
@@ -251,9 +248,9 @@ print_r($theRule[$router::RULE_VARIABLES]);
   pour définir le nom des variables à extraire. Nous nous servons de son pouvoir
   d'expression pour filtrer (ou valider) les requêtes finement.</p>
   <p>Quand nous précisons des variables lors d'une déclaration de règle avec
-  <code>Hoa\Router::addRule</code> (ou sa sœur
-  <code>Hoa\Router::addPrivateRule</code>), il est possible de définir des
-  valeurs par <strong>défaut</strong> pour les variables. Par exemple, si la
+  <code>Hoa\Router\Router::addRule</code> (ou sa sœur
+  <code>Hoa\Router\Router::addPrivateRule</code>), il est possible de définir
+  des valeurs par <strong>défaut</strong> pour les variables. Par exemple, si la
   partie <code>format</code> devient optionnelle, nous voudrions que sa valeur
   par défaut soit <code>.txt</code> :</p>
   <pre data-line="3,6"><code class="language-php">$router->get(
@@ -321,8 +318,9 @@ var_dump($theRule[$router::RULE_VARIABLES]['who']);
 
   <h3 id="Derouter" for="main-toc">Dérouter</h3>
 
-  <p>L'opération <strong>inverse</strong> de <code>Hoa\Router::route</code> est
-  <code>Hoa\Router::unroute</code>. Au minimum, il est demandé
+  <p>L'opération <strong>inverse</strong> de
+  <code>Hoa\Router\Router::route</code> est
+  <code>Hoa\Router\Router::unroute</code>. Au minimum, il est demandé
   l'<strong>identifiant</strong> de la règle et une liste de
   <strong>variables</strong>. Cette méthode va construire une requête à partir
   d'une règle. Par exemple, nous aimerions produire la requête correspondante à
@@ -355,9 +353,9 @@ var_dump($router->unroute('h', array('who' => 'alyx')));
   <p>Parmi les informations que nous retrouverons sur tous les routeurs, nous
   avons :</p>
   <ul>
-    <li><code>Hoa\Router::getMethod</code> pour connaître la
+    <li><code>Hoa\Router\Router::getMethod</code> pour connaître la
     <strong>méthode</strong> détectée par le routeur ;</li>
-    <li><code>Hoa\Router::isAsynchronous</code> pour connaître le type de
+    <li><code>Hoa\Router\Router::isAsynchronous</code> pour connaître le type de
     <strong>communication</strong> détectée par le routeur (synchrone ou
     asynchrone).</li>
   </ul>
@@ -724,10 +722,7 @@ var_dump(
   la forme <code><em>command </em><em>group</em>:<em>subcommand</em>
   <em>options</em></code>. Nous écrirons la règle <code>g</code> suivante dans
   le fichier <code>Router.php</code> :</p>
-  <pre><code class="language-php">from('Hoa')
--> import('Router.Cli');
-
-$router = new Hoa\Router\Cli();
+  <pre><code class="language-php">$router = new Hoa\Router\Cli();
 $router->get(
     'g',
     '(?&amp;lt;group>\w+):(?&amp;lt;subcommand>\w+)(?&amp;lt;_tail>.*?)'
@@ -735,7 +730,7 @@ $router->get(
 
 $router->route();
 $theRule = $router->getTheRule();
-print_r($theRule[Hoa\Router::RULE_VARIABLES]);</code></pre>
+print_r($theRule[$router::RULE_VARIABLES]);</code></pre>
   <p>Nous pouvons exécuter le fichier de la façon suivante :</p>
   <pre><code class="language-shell">$ php Router.php foo:bar baz
 Array
@@ -798,8 +793,8 @@ Array
 
   <p>Lorsque le routeur reçoit une requête et qu'il trouve une règle qui la
   reconnaît, il pourra en extraire des données. C'est ce que fait
-  <code>Hoa\Router::route</code>. Nous obtenons les informations de la règle
-  avec <code>Hoa\Router::getTheRule</code>. Nous remarquons que
+  <code>Hoa\Router\Router::route</code>. Nous obtenons les informations de la
+  règle avec <code>Hoa\Router\Router::getTheRule</code>. Nous remarquons que
   <strong>tous</strong> les routeurs ont les variables réservées
   <code>_call</code> et <code>_able</code> : elles permettent de définir un
   <strong><em lang="en">callable</em></strong>. Ces variables peuvent être alors
