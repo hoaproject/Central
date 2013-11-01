@@ -133,7 +133,7 @@ abstract class Declaration
      *
      * @access  public
      * @param   string  $offset    Variable name.
-     * @return  \Hoa\Prasel\Model\Variable
+     * @return  \Hoa\Praspel\Model\Variable
      */
     public function offsetGet ( $offset ) {
 
