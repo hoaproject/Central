@@ -90,11 +90,7 @@
   vers le serveur CGI, et la donner au constructeur de
   <code>Hoa\Fastcgi\Responder</code>. Ainsi, nous avons le fichier
   <code>Responder.php</code> :</p>
-  <pre><code class="language-php">from('Hoa')
--> import('Socket.Client')
--> import('Fastcgi.Responder');
-
-$fastcgi = new Hoa\Fastcgi\Responder(
+  <pre><code class="language-php">$fastcgi = new Hoa\Fastcgi\Responder(
     new Hoa\Socket\Client('tcp://127.0.0.1:9000')
 );</code></pre>
   <p>Pour <strong>envoyer une requête</strong>, nous utilisons la méthode
@@ -159,17 +155,17 @@ var_dump($fastcgi->getResponseContent());
     <li><code>Hoa\Fastcgi\Exception\UnknownRole</code> quand un rôle
     (un paquet du protocole) <strong>n'est pas reconnu</strong> par le programme
     externe ;</li>
-    <li><code>Hoa\Fastcgi\Exception</code> quand une
+    <li><code>Hoa\Fastcgi\Exception\Exception</code> quand une
     <strong>erreur</strong> de connexion, de protocole ou autre intervient
     (ajouté par <code>Hoa\Fastcgi\Responder</code>).</li>
   </ul>
   <p>Le meilleur moyen de capturer toutes les exceptions est de capturer
-  <code>Hoa\Fastcgi\Exception</code> :</p>
+  <code>Hoa\Fastcgi\Exception\Exception</code> :</p>
   <pre><code class="language-php">try {
 
     $fastcgi->send(…);
 }
-catch ( Hoa\Fastcgi\Exception $e ) {
+catch ( Hoa\Fastcgi\Exception\Exception $e ) {
 
     // compute $e.
 }</code></pre>
