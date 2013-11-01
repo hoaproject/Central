@@ -298,7 +298,8 @@ class Praspel {
                               ? $exceptions
                               : new Exception\Group(
                                     'Behavior %s is broken.',
-                                    2, $behavior->getIdentifier());
+                                    3, $behavior->getIdentifier()
+                                );
 
                 if(null !== $_exceptions && 0 < count($_exceptions))
                     $handle[] = $_exceptions;
@@ -325,7 +326,7 @@ class Praspel {
 
             $exceptions[] = new Exception\Failure\InternalPrecondition(
                 'The System Under Test has broken an internal contract.',
-                3, null, $internalException);
+                4, null, $internalException);
         }
         catch ( \Exception $exception ) {
 
@@ -350,7 +351,7 @@ class Praspel {
             if(false === $_verdict)
                 $exceptions[] = new Exception\Failure\Exceptional(
                     'The exception %s has been unexpectedly thrown.',
-                    42, array(get_class($arguments['\result']))
+                    5, array(get_class($arguments['\result']))
                 );
 
             $verdict &= $_verdict;
