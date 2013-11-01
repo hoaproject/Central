@@ -21,7 +21,7 @@
 
   <h2 id="Manipuler_le_registre" for="main-toc">Manipuler le registre</h2>
 
-  <p>La classe <code>Hoa\Registry</code> ne propose que quatre méthodes
+  <p>La classe <code>Hoa\Registry\Registry</code> ne propose que quatre méthodes
   statiques :</p>
   <ul>
     <li><code>set</code> pour <strong>définir</strong> une valeur à une
@@ -34,11 +34,8 @@
     registre.</li>
   </ul>
   <p>L'utilisation est triviale. Nous allons prendre un exemple :</p>
-  <pre><code class="language-php">from('Hoa')
--> import('Registry.~');
-
-Hoa\Registry::set('foo', 'bar');
-var_dump(Hoa\Registry::get('foo'));
+  <pre><code class="language-php">Hoa\Registry\Registry::set('foo', 'bar');
+var_dump(Hoa\Registry\Registry::get('foo'));
 
 /**
  * Will output:
@@ -51,12 +48,11 @@ var_dump(Hoa\Registry::get('foo'));
   exemple utiliser <code>.</code> (point) ou <code>/</code>
   (<em lang="en">slash</em>) pour créer une sorte de structure linéarisée ; par
   exemple <code>group.subgroup.entry</code>. Peu importe,
-  <code>Hoa\Registry</code> ne fera aucune différence.</p>
+  <code>Hoa\Registry\Registry</code> ne fera aucune différence.</p>
   <p>Voyons les deux dernières méthodes à travers la suite de l'exemple :</p>
-  <pre><code class="language-php">var_dump(Hoa\Registry::isRegistered('foo'));
-
-Hoa\Registry::remove('foo');
-var_dump(Hoa\Registry::isRegistered('foo'));
+  <pre><code class="language-php">var_dump(Hoa\Registry\Registry::isRegistered('foo'));
+Hoa\Registry\Registry::remove('foo');
+var_dump(Hoa\Registry\Registry::isRegistered('foo'));
 
 /**
  * Will output:
@@ -89,7 +85,7 @@ var_dump(Hoa\Registry::isRegistered('foo'));
   par exemple :</p>
   <pre><code class="language-php">// A dummy stream.
 $stream = new Hoa\File\Read(__FILE__);
-Hoa\Registry::set('stream.dummy', $stream);</code></pre>
+Hoa\Registry\Registry::set('stream.dummy', $stream);</code></pre>
   <p>Et autre part, dans notre application, grâce à des conventions de nommage,
   nous pouvons retrouver notre flux :</p>
   <pre><code class="language-php">$stream = resolve('hoa://Library/Registry#stream.dummy');

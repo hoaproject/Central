@@ -12,9 +12,9 @@ This library proposes a static register with facilities.
 As a quick overview, we propose to set an entry and retrieve it from the
 `hoa://` protocol:
 
-    Hoa\Register::set('foo', 'bar');
+    Hoa\Register\Registry::set('foo', 'bar');
     var_dump(
-        Hoa\Registry::get('foo'),
+        Hoa\Registry\Registry::get('foo'),
         resolve('hoa://Library/Registry#foo')
     );
 
