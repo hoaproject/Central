@@ -56,11 +56,7 @@
   méthode <code>Hoa\Worker\Run::widExists</code>, dans le cas échant nous
   allons le créer avec la méthode <code>Hoa\Worker\Run::register</code>.
   Ainsi :</p>
-  <pre><code class="language-php">from('Hoa')
--> import('Worker.Run')
--> import('Worker.Backend.Shared');
-
-if(false === Hoa\Worker\Run::widExists('demorker'))
+  <pre><code class="language-php">if(false === Hoa\Worker\Run::widExists('demorker'))
     Hoa\Worker\Run::register('demorker', 'tcp://127.0.0.1:123456');</code></pre>
   <p>Nous sommes maintenant certains que le profil existe. Nous pouvons alors
   <strong>démarrer</strong> notre <em lang="en">worker</em>. Pour cela, nous
@@ -72,10 +68,7 @@ if(false === Hoa\Worker\Run::widExists('demorker'))
   traitement de tâches. Enfin, la méthode
   <code>Hoa\Worker\Backend\Shared::run</code> permet de démarrer le <em
   lang="en">worker</em> :</p>
-  <pre><code class="language-php">from('Hoa')
--> import('File.Write');
-
-$file   = new Hoa\File\Write(__DIR__ . DS . 'Log');
+  <pre><code class="language-php">$file   = new Hoa\File\Write(__DIR__ . DS . 'Log');
 $worker = new Hoa\Worker\Backend\Shared('demorker', 'iamapassword');
 $worker->on('message', function ( Hoa\Core\Event\Bucket $bucket ) use ( $file ) {
 
@@ -97,7 +90,7 @@ $worker->run();
   <code>hoa://Data/Variable/Run/<em>workerId</em>.wid</code>. Attention à
   vérifier que ce chemin est bien défini, par exemple en choisissant le dossier
   <code>/path/to/wid/directory</code> :</p>
-  <pre><code class="language-php">Hoa\Core::getInstance()->setProtocol(
+  <pre><code class="language-php">Hoa\Core\Core::getInstance()->setProtocol(
     'hoa://Data/Variable/Run',
     '/path/to/wid/directory/'
 );
@@ -123,10 +116,7 @@ var_dump(resolve('hoa://Data/Variable/Run/'));
   l'identifiant du <em lang="en">worker</em>, et ensuite utiliser la méthode
   adéquate pour envoyer des messages, à savoir
   <code>Hoa\Worker\Shared::postMessage</code> :</p>
-  <pre><code class="language-php">from('Hoa')
--> import('Worker.Shared');
-
-$worker = new Hoa\Worker\Shared('demorker');
+  <pre><code class="language-php">$worker = new Hoa\Worker\Shared('demorker');
 $worker->postMessage('mail gordon@freeman.hl Hello Gordon!');</code></pre>
   <p>Bien sûr, le client va chercher le profil du <em lang="en">worker</em> dans
   le fichier <code>hoa://Data/Variable/Run/<em>workerId</em>.wid</code>. Si nous
