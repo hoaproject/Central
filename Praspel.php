@@ -539,7 +539,7 @@ class Praspel {
 
                 if(false === $_verdict && true === $realdom->predicate($datum))
                     $_verdict = true;
-                else
+                elseif(null !== $traceClause)
                     unset($traceVariableDomains[$i--]);
 
                 ++$i;
