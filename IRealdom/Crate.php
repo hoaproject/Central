@@ -34,6 +34,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+namespace {
+
+from('Hoa')
+
+/**
+ * \Hoa\Visitor\Element
+ */
+-> import('Visitor.Element');
+
+}
+
 namespace Hoa\Realdom\IRealdom {
 
 /**
@@ -46,7 +57,7 @@ namespace Hoa\Realdom\IRealdom {
  * @license    New BSD License
  */
 
-interface Crate {
+interface Crate extends \Hoa\Visitor\Element {
 
     /**
      * Get crate types.
@@ -55,14 +66,6 @@ interface Crate {
      * @return  array
      */
     public function getTypes ( );
-
-    /**
-     * Get Praspel representation of the realistic domain.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function toPraspel ( );
 }
 
 }

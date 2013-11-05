@@ -458,7 +458,7 @@ class _Array extends Realdom {
                 1, array(
                     $this->getHolder()->getName(),
                     $_key,
-                    $values->toPraspel()
+                    $this->getPraspelVisitor()->visit($values)
                 ));
 
         $this->adjustLength();
@@ -479,7 +479,7 @@ class _Array extends Realdom {
             throw new Exception\Inconsistent(
                 'There is too many declared keys compared to the array size ' .
                 '(%d ∉ %s).',
-                3, array($minSize, $length->toPraspel()));
+                3, array($minSize, $this->getPraspelVisitor()->visit($length)));
 
 
         return;
@@ -521,7 +521,7 @@ class _Array extends Realdom {
             if($maxSize < $length->getLowerBound())
                 throw new Exception\Inconsistent(
                     'There is no enough key to sample (%d ∉ %s).',
-                    5, array($maxSize, $length->toPraspel()));
+                    5, array($maxSize, $this->getPraspelVisitor()->visit($length)));
 
             if($maxSize < $length->getUpperBound())
                 $length->reduceRightTo($maxSize);

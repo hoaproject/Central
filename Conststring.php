@@ -130,23 +130,12 @@ class Conststring extends String implements IRealdom\Constant {
     }
 
     /**
-     * Get Praspel representation of the realistic domain.
+     * Get representation of the realistic domain.
      *
      * @access  public
      * @return  string
      */
-    public function toPraspel ( ) {
-
-        return $this->__toString();
-    }
-
-    /**
-     * Get string representation of the realistic domain.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function __toString ( ) {
+    public function getConstantRepresentation ( ) {
 
         return '\'' .
                preg_replace('#(?<!\\\)\'#', '\\\'', $this['value']) .
