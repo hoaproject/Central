@@ -51,7 +51,7 @@ from('Hoa')
 /**
  * \Hoa\Compiler\Llk
  */
--> import('Compiler.Llk')
+-> import('Compiler.Llk.~')
 
 /**
  * \Hoa\File\Read
