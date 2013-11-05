@@ -69,7 +69,7 @@ class Borrowing extends Variable {
      *
      * @const int
      */
-    const TYPE_OLD     = 1;
+    const TYPE_OLD = 1;
 
     /**
      * Type.

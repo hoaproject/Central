@@ -78,6 +78,8 @@ class Compiler implements \Hoa\Visitor\Visit {
 
         $out = null;
 
+        // Hoa\Praspel.
+
         if($element instanceof \Hoa\Praspel\Model\Specification) {
 
             $variable = '$' . $element->getId();
@@ -126,7 +128,9 @@ class Compiler implements \Hoa\Visitor\Visit {
             if(null !== $alias = $element->getAlias())
                 $out .= '->domainof(\'' . $alias . '\');' . "\n";
             else
-                $out .= '->in = ' . $element->getDomains() . ';' . "\n";
+                $out .= '->in = ' .
+                        $element->getDomains()->accept($this, $handle, $eldnah) .
+                        ';' . "\n";
 
             $constraints = $element->getConstraints();
 
@@ -230,6 +234,82 @@ class Compiler implements \Hoa\Visitor\Visit {
         elseif($element instanceof \Hoa\Praspel\Model\Collection)
             foreach($element as $el)
                 $out .= $el->accept($this, $handle, $eldnah);
+
+        // Hoa\Realdom.
+
+        elseif($element instanceof \Hoa\Realdom\Disjunction) {
+
+            $realdoms = $element->getUnflattenedRealdoms();
+
+            if(!empty($realdoms)) {
+
+                $oout = array();
+
+                foreach($realdoms as $realdom) {
+
+                    if($realdom instanceof \Hoa\Realdom\IRealdom\Constant)
+                        $oout[] = 'const(' .
+                                  $realdom->accept($this, $handle, $eldnah) .
+                                  ')';
+                    else
+                        $oout[] = $realdom->accept($this, $handle, $eldnah);
+                }
+
+                $out .= 'realdom()->' . implode('->or->', $oout);
+            }
+        }
+        elseif($element instanceof \Hoa\Realdom) {
+
+            if($element instanceof \Hoa\Realdom\IRealdom\Constant) {
+
+                if($element instanceof \Hoa\Realdom\_Array) {
+
+                    $oout = array();
+
+                    foreach($element['pairs'] as $pair) {
+
+                        $_oout = null;
+
+                        foreach($pair as $_pair) {
+
+                            if(null !== $_oout)
+                                $_oout .= ', ';
+
+                            $_oout .= $_pair->accept($this, $handle, $eldnah);
+                        }
+
+                        $oout[] = 'array(' . $_oout . ')';
+                    }
+
+                    $out .= 'array(' . implode(', ', $oout) . ')';
+                }
+                else
+                    $out .= $element->getConstantRepresentation();
+            }
+            else {
+
+                $oout = array();
+
+                foreach($element->getArguments() as $argument)
+                    $oout[] = $argument->accept($this, $handle, $eldnah);
+
+                $out .= $element->getName() .
+                        '(' . implode(', ', $oout) . ')';
+            }
+        }
+        elseif($element instanceof \Hoa\Realdom\Crate\Variable) {
+
+            $holder = $element->getVariable();
+
+            if($holder instanceof \Hoa\Praspel\Model\Variable\Implicit)
+                $out .= 'variable($' . $holder->getClause()->getId() .
+                        '->getImplicitVariable(\'' . $holder->getName() .
+                        '\'))';
+            else
+                $out .= 'variable($' . $holder->getClause()->getId() .
+                        '[\'' . $holder->getName() . '\'])';
+        }
+
         else
             throw new \Hoa\Praspel\Exception\Compiler(
                 '%s is not yet implemented.', 0, get_class($element));

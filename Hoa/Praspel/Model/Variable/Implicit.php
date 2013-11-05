@@ -39,9 +39,14 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Praspel\Model\Behavior
+ * \Hoa\Praspel\Exception\Model
  */
--> import('Praspel.Model.Behavior')
+-> import('Praspel.Exception.Model')
+
+/**
+ * \Hoa\Praspel\Model\Variable
+ */
+-> import('Praspel.Model.Variable.~')
 
 /**
  * \Hoa\Realdom\Disjunction
@@ -50,88 +55,58 @@ from('Hoa')
 
 }
 
-namespace Hoa\Praspel\Model {
+namespace Hoa\Praspel\Model\Variable {
 
 /**
- * Class \Hoa\Praspel\Model\Specification.
+ * Class \Hoa\Praspel\Model\Variable\Implicit.
  *
- * Represent a specification (contains all clauses).
+ * Represent an implicit variable.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Specification extends Behavior {
+class Implicit extends Variable {
 
     /**
-     * Name.
-     *
-     * @const string
-     */
-    const NAME = '';
-
-    /**
-     * Allowed clauses.
-     *
-     * @var \Hoa\Praspel\Model\Specification array
-     */
-    protected static $_allowedClauses = array(
-        'is',
-        'invariant',
-        'requires',
-        'behavior',
-        'default',
-        'ensures',
-        'throwable',
-        'description'
-    );
-
-    /**
-     * Implicit variables.
-     *
-     * @var \Hoa\Praspel\Model\Specification array
-     */
-    protected $_implicitVariables     = array();
-
-
-
-    /**
-     * Cancel the constructor from the parent.
+     * Build a variable.
      *
      * @access  public
+     * @param   string                     $name      Name.
+     * @param   bool                       $local     Local.
+     * @param   \Hoa\Praspel\Model\Clause  $clause    Clause.
      * @return  void
+     * @throw   \Hoa\Praspel\Exception\Model
      */
-    public function __construct ( ) {
+    public function __construct ( $name, $local,
+                                  \Hoa\Praspel\Model\Clause $clause = null ) {
+
+        if('this' !== $name)
+            throw new \Hoa\Praspel\Exception\Model(
+                'Variable %s is not an implicit one.', 0, $name);
+
+        parent::__construct($name, $local, $clause);
+
+        $this->in = realdom()->object();
 
         return;
     }
 
     /**
-     * Get an implicit variable.
+     * Bind the variable to a specific value.
      *
      * @access  public
-     * @param   string  $identifier    Identifier.
-     * @return  \Hoa\Praspel\Model\Variable\Implicit
+     * @param   mixed  $value    Value.
+     * @return  void
      */
-    public function getImplicitVariable ( $identifier ) {
+    public function bindTo ( $value ) {
 
-        if(isset($this->_implicitVariables[$identifier]))
-            return $this->_implicitVariables[$identifier];
+        foreach($this->getDomains() as $domain)
+            if($domain instanceof \Hoa\Realdom\Object)
+                $domain->setObject($value);
 
-        return $this->_implicitVariables[$identifier]
-                   = new Variable\Implicit($identifier, false, $this);
-    }
-
-    /**
-     * Get identifier (fallback).
-     *
-     * @access  protected
-     * @return  string
-     */
-    protected function _getId ( ) {
-
-        return 'praspel';
+        return;
     }
 }
 
