@@ -117,7 +117,7 @@ abstract class AssertionChecker {
      * @throw   \Hoa\Praspel\Exception\Generic
      * @throw   \Hoa\Praspel\Exception\Group
      */
-    abstract public function evaluate ( &$trace = false );
+    abstract public function evaluate ( );
 
     /**
      * Generate data.
