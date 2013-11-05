@@ -202,16 +202,18 @@ class          Constant
     }
 
     /**
-     * Get Praspel representation of the realistic domain.
+     * Accept a visitor.
      *
      * @access  public
-     * @return  string
+     * @param   \Hoa\Visitor\Visit  $visitor    Visitor.
+     * @param   mixed               &$handle    Handle (reference).
+     * @param   mixed               $eldnah     Handle (no reference).
+     * @return  mixed
      */
-    public function toPraspel ( ) {
+    public function accept ( \Hoa\Visitor\Visit $visitor,
+                             &$handle = null, $eldnah = null ) {
 
-        $praspel = $this->getPraspelRepresentation();
-
-        return $praspel();
+        return $visitor->visit($this, $handle, $eldnah);
     }
 }
 

@@ -26,8 +26,10 @@
         "hoa/compiler": "dev-master",
         "hoa/file"    : "dev-master",
         "hoa/math"    : "dev-master",
+        "hoa/praspel" : "dev-master",
         "hoa/regex"   : "dev-master",
-        "hoa/string"  : "dev-master"
+        "hoa/string"  : "dev-master",
+        "hoa/visitor" : "dev-master"
     },
     "minimum-stability": "dev",
     "target-dir": "Hoa/Realdom",

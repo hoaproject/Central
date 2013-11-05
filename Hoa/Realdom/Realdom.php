@@ -91,7 +91,17 @@ from('Hoa')
 /**
  * \Hoa\Math\Sampler
  */
--> import('Math.Sampler.~');
+-> import('Math.Sampler.~')
+
+/**
+ * \Hoa\Visitor\Element
+ */
+-> import('Visitor.Element')
+
+/**
+ * \Hoa\Praspel\Visitor\Praspel
+ */
+-> import('Praspel.Visitor.Praspel');
 
 }
 
@@ -107,7 +117,10 @@ namespace Hoa\Realdom {
  * @license    New BSD License
  */
 
-abstract class Realdom implements \ArrayAccess, \Countable {
+abstract class Realdom
+    implements \ArrayAccess,
+               \Countable,
+               \Hoa\Visitor\Element {
 
     /**
      * Realistic domain name.
@@ -121,63 +134,77 @@ abstract class Realdom implements \ArrayAccess, \Countable {
      *
      * @var \Hoa\Realdom array
      */
-    protected $_arguments      = null;
+    protected $_arguments                    = null;
 
     /**
      * Realistic domain arguments.
      *
      * @var \Hoa\Realdom array
      */
-    protected $arguments       = null;
+    protected $arguments                     = null;
 
     /**
      * Default sampler.
      *
      * @var \Hoa\Math\Sampler object
      */
-    protected static $_sampler = null;
+    protected static $_sampler               = null;
 
     /**
      * Current sampler.
      *
      * @var \Hoa\Math\Sampler object
      */
-    protected $__sampler       = null;
+    protected $__sampler                     = null;
 
     /**
      * Sampled value.
      *
      * @var \Hoa\Realdom mixed
      */
-    protected $_value          = null;
+    protected $_value                        = null;
 
     /**
      * Number of max try when sampling a new value.
      *
      * @var \Hoa\Realdom int
      */
-    protected static $_maxtry  = 64;
+    protected static $_maxtry                = 64;
 
     /**
      * Constraints.
      *
      * @var \Hoa\Realdom array
      */
-    protected $_constraints    = null;
+    protected $_constraints                  = null;
 
     /**
      * Holder.
      *
      * @var \Hoa\Realdom\IRealdom\Holder object
      */
-    protected $_holder         = null;
+    protected $_holder                       = null;
 
     /**
      * Whether the realdom has been constructed or not.
      *
      * @var \Hoa\Realdom bool
      */
-    protected $_constructed    = false;
+    protected $_constructed                  = false;
+
+    /**
+     * Default Praspel visitor.
+     *
+     * @var \Hoa\Visitor\Visit object
+     */
+    protected static $_defaultPraspelVisitor = null;
+
+    /**
+     * Praspel visitor.
+     *
+     * @var \Hoa\Visitor\Visit object
+     */
+    protected $_praspelVisitor               = null;
 
 
 
@@ -890,70 +917,75 @@ abstract class Realdom implements \ArrayAccess, \Countable {
     }
 
     /**
-     * Get default Praspel representation of the realistic domain.
-     *
-     * @access  protected
-     * @return  string
-     */
-    protected function defaultToPraspel ( ) {
-
-        $handle = array();
-
-        foreach($this->arguments as $argument)
-            if(   $argument instanceof IRealdom\Crate
-               || null === $holder = $argument->getHolder())
-                $handle[] = $argument->toPraspel();
-            else
-                $handle[] = $holder->getName();
-
-        return $this->getName() . '(' . implode(', ', $handle) . ')';
-    }
-
-    /**
-     * Get Praspel representation of the realistic domain.
+     * Set default Praspel visitor.
      *
      * @access  public
-     * @return  string
+     * @param   \Hoa\Visitor\Visit  $visitor    Visitor.
+     * @return  \Hoa\Visitor\Visit
      */
-    public function toPraspel ( ) {
+    public static function setDefaultPraspelVisitor ( \Hoa\Visitor\Visit $visitor ) {
 
-        return $this->defaultToPraspel();
+        $old                            = static::$_defaultPraspelVisitor;
+        static::$_defaultPraspelVisitor = $visitor;
+
+        return $old;
     }
 
     /**
-     * Get default string representation of the realistic domain.
-     *
-     * @access  protected
-     * @return  string
-     */
-    protected function defaultToString ( ) {
-
-        $out    = 'realdom()->' . $this->getName() . '(';
-        $handle = array();
-
-        foreach($this->getArguments() as $argument)
-            if(null !== $holder = $argument->getHolder()) {
-
-                $variable = '$' . $holder->getClause()->getId();
-                $handle[] = $variable . '[\'' . $holder->getName() . '\']';
-            }
-            else
-                $handle[] = $argument->__toString();
-
-        $out .= implode(', ', $handle);
-
-        return $out . ')';
-    }
-
-    /**
-     * Get string representation of the realistic domain.
+     * Get default Praspel visitor.
+     * If default visitor is null, Hoa\Praspel\Visitor\Praspel will be used.
      *
      * @access  public
-     * @return  string
+     * @param   \Hoa\Visitor\Visit  $visitor    Visitor.
+     * @return  \Hoa\Visitor\Visit
      */
-    public function __toString ( ) {
+    public static function getDefaultPraspelVisitor ( ) {
 
-        return $this->defaultToString();
+        if(null === static::$_defaultPraspelVisitor)
+            static::$_defaultPraspelVisitor = new \Hoa\Praspel\Visitor\Praspel();
+
+        return static::$_defaultPraspelVisitor;
+    }
+
+    /**
+     * Set Praspel visitor.
+     *
+     * @access  public
+     * @param   \Hoa\Visitor\Visit  $visitor    Visitor.
+     * @return  \Hoa\Visitor\Visit
+     */
+    public function setPraspelVisitor ( \Hoa\Visitor\Visit $visitor ) {
+
+        $old                   = $this->_praspelVisitor;
+        $this->_praspelVisitor = $visitor;
+
+        return $old;
+    }
+
+    /**
+     * Get Praspel visitor.
+     *
+     * @access  public
+     * @return  \Hoa\Visitor\Visit
+     */
+    public function getPraspelVisitor ( ) {
+
+        return $this->_praspelVisitor ?: static::getDefaultPraspelVisitor();
+    }
+
+    /**
+     * Accept a visitor.
+     *
+     * @access  public
+     * @param   \Hoa\Visitor\Visit  $visitor    Visitor.
+     * @param   mixed               &$handle    Handle (reference).
+     * @param   mixed               $eldnah     Handle (no reference).
+     * @return  mixed
+     */
+    public function accept ( \Hoa\Visitor\Visit $visitor,
+                             &$handle = null, $eldnah = null ) {
+
+        return $visitor->visit($this, $handle, $eldnah);
     }
 }
 

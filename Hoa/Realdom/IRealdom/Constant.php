@@ -55,6 +55,14 @@ interface Constant {
      * @return  mixed
      */
     public function getConstantValue ( );
+
+    /**
+     * Get representation of the realistic domain.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getConstantRepresentation ( );
 }
 
 }

@@ -51,7 +51,12 @@ from('Hoa')
 /**
  * \Hoa\Realdom
  */
--> import('Realdom.~');
+-> import('Realdom.~')
+
+/**
+ * \Hoa\Visitor\Element
+ */
+-> import('Visitor.Element');
 
 }
 
@@ -67,7 +72,11 @@ namespace Hoa\Realdom {
  * @license    New BSD License
  */
 
-class Disjunction implements \ArrayAccess, \IteratorAggregate, \Countable {
+class          Disjunction
+    implements \ArrayAccess,
+               \IteratorAggregate,
+               \Countable,
+               \Hoa\Visitor\Element {
 
     /**
      * Original disjointed realistisc domains.
@@ -475,6 +484,17 @@ class Disjunction implements \ArrayAccess, \IteratorAggregate, \Countable {
     }
 
     /**
+     * Get unflattened realistic domains.
+     *
+     * @access  public
+     * @return  array
+     */
+    public function getUnflattenedRealdoms ( ) {
+
+        return $this->__realdoms;
+    }
+
+    /**
      * Count number of realistics domains.
      *
      * @access  public
@@ -515,67 +535,18 @@ class Disjunction implements \ArrayAccess, \IteratorAggregate, \Countable {
     }
 
     /**
-     * Get Praspel representation of the realistic domain.
+     * Accept a visitor.
      *
      * @access  public
-     * @return  string
+     * @param   \Hoa\Visitor\Visit  $visitor    Visitor.
+     * @param   mixed               &$handle    Handle (reference).
+     * @param   mixed               $eldnah     Handle (no reference).
+     * @return  mixed
      */
-    public function toPraspel ( ) {
+    public function accept ( \Hoa\Visitor\Visit $visitor,
+                             &$handle = null, $eldnah = null ) {
 
-        if(empty($this->__realdoms))
-            return null;
-
-        $out = array();
-
-        foreach($this->__realdoms as $realdom)
-            $out[] = $realdom->toPraspel();
-
-        return implode(' or ', $out);
-    }
-
-    /**
-     * Get string representation of the disjunction.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function __toString ( ) {
-
-        if(empty($this->__realdoms))
-            return null;
-
-        $out = array();
-
-        foreach($this->__realdoms as $realdom) {
-
-            if($realdom instanceof IRealdom\Constant)
-                $out[] = 'const(' . $realdom->__toString() . ')';
-            elseif($realdom instanceof Crate\Variable) {
-
-                $holder = $realdom->getVariable();
-                $out[] = 'variable($' . $holder->getClause()->getId() . '[\'' .
-                         $holder->getName() . '\'])';
-            }
-            else {
-
-                $handle = array();
-
-                foreach($realdom->getArguments() as $argument)
-                    if(null !== $holder = $argument->getHolder()) {
-
-                        $variable = '$' . $holder->getClause()->getId();
-                        $handle[] = $variable . '[\'' . $holder->getName() . '\']';
-                    }
-                    else
-                        $handle[] = $argument->__toString();
-
-                $out[]  = $realdom->getName() . '(' .
-                          implode(', ', $handle) .
-                          ')';
-            }
-        }
-
-        return 'realdom()->' . implode('->or->', $out);
+        return $visitor->visit($this, $handle, $eldnah);
     }
 }
 

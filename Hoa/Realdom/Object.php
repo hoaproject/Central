@@ -39,37 +39,32 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Realdom\String
+ * \Hoa\Realdom
  */
--> import('Realdom.String')
-
-/**
- * \Hoa\Realdom\IRealdom\Constant
- */
--> import('Realdom.I~.Constant');
+-> import('Realdom.~');
 
 }
 
 namespace Hoa\Realdom {
 
 /**
- * Class \Hoa\Realdom\Conststring.
+ * Class \Hoa\Realdom\Object.
  *
- * Realistic domain: conststring.
+ * Realistic domain: object.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Conststring extends String implements IRealdom\Constant {
+class Object extends Realdom {
 
     /**
      * Realistic domain name.
      *
      * @const string
      */
-    const NAME = 'conststring';
+    const NAME = 'object';
 
     /**
      * Realistic domain defined arguments.
@@ -77,21 +72,10 @@ class Conststring extends String implements IRealdom\Constant {
      * @var \Hoa\Realdom array
      */
     protected $_arguments = array(
-        'value' => ''
+        'object' => null
     );
 
 
-
-    /**
-     * Construct a realistic domain.
-     *
-     * @access  protcted
-     * @return  void
-     */
-    protected function construct ( ) {
-
-        return;
-    }
 
     /**
      * Predicate whether the sampled value belongs to the realistic domains.
@@ -102,8 +86,8 @@ class Conststring extends String implements IRealdom\Constant {
      */
     protected function _predicate ( $q ) {
 
-        return    is_string($q)
-               && $this['value'] === $q;
+        return    is_object($q)
+               && $q === $this['object'];
     }
 
     /**
@@ -115,31 +99,22 @@ class Conststring extends String implements IRealdom\Constant {
      */
     protected function _sample ( \Hoa\Math\Sampler $sampler ) {
 
-        return $this['value'];
+        return $this['object'];
     }
 
     /**
-     * Get constant value.
+     * Set object.
      *
      * @access  public
-     * @return  string
+     * @param   object  $object    Object.
+     * @return  object
      */
-    public function getConstantValue ( ) {
+    public function setObject ( $object ) {
 
-        return $this['value'];
-    }
+        $old            = $this['object'];
+        $this['object'] = $object;
 
-    /**
-     * Get representation of the realistic domain.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getConstantRepresentation ( ) {
-
-        return '\'' .
-               preg_replace('#(?<!\\\)\'#', '\\\'', $this['value']) .
-               '\'';
+        return $old;
     }
 }
 
