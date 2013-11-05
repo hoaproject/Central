@@ -420,6 +420,9 @@ class Interpreter implements \Hoa\Visitor\Visit {
             case '#this_identifier':
                 $identifier = 'this';
 
+                if(0 === $element->getChildrenNumber())
+                    return $this->_root->getImplicitVariable('this');
+
                 foreach($element->getChildren() as $child)
                     $identifier .= '->' . $child->accept($this, $handle, $eldnah);
 
