@@ -483,7 +483,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
             $defaultPort = $self->getDefaultPort($secure);
 
-            if(false === $secure)
+            if(static::UNSECURE === $secure)
                 return 80 !== $defaultPort ? ':' . $defaultPort : '';
 
             return 443 !== $defaultPort ? ':' . $defaultPort  : '';
