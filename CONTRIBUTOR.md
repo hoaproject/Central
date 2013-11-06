@@ -16,6 +16,7 @@ cloak on IRC, etc.
   * Grégory Darche (tetardo)
   * Benjamin Delespierre (bdelespierre)
   * Gautier Di Folco (black-heaven)
+  * Cédric Dugat (ph3nol)
   * ➜ Yohann Dupont (jir4)
   * ➜ Raphaël Emourgeon (iraphael)
   * ➜ Gérard Ernaelsten (maitrepylos)
