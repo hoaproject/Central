@@ -182,7 +182,6 @@ class _Array extends Realdom {
 
         if(true === $this->is('sorted')) {
 
-            $first    = true;
             $previous = array_shift($q);
 
             foreach($q as $value) {
@@ -196,7 +195,6 @@ class _Array extends Realdom {
 
         if(true === $this->is('rsorted')) {
 
-            $first    = true;
             $previous = array_shift($q);
 
             foreach($q as $value) {
@@ -210,7 +208,6 @@ class _Array extends Realdom {
 
         if(true === $this->is('ksorted')) {
 
-            $first    = true;
             reset($q);
             $previous = key($q);
 
@@ -225,7 +222,6 @@ class _Array extends Realdom {
 
         if(true === $this->is('krsorted')) {
 
-            $first    = true;
             reset($q);
             $previous = key($q);
 
