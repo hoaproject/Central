@@ -938,7 +938,6 @@ class          Response
      */
     public function __destruct ( ) {
 
-        $hash = $this->getHash();
         $last = current(self::$_stack);
 
         if($this->getHash() != $last[0])
