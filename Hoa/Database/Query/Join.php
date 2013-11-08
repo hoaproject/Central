@@ -104,7 +104,7 @@ class Join {
      * @param   ...     ...
      * @return  \Hoa\Database\Query\Select
      */
-    public function using ( $column ) {
+    public function using ( $expression ) {
 
         $this->_from[key($this->_from)] = current($this->_from) .
                                           ' USING (' .

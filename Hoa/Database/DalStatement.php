@@ -85,6 +85,8 @@ class DalStatement {
 
         $old             = $this->statement;
         $this->statement = $statement;
+
+        return $old;
     }
 
     /**
