@@ -166,7 +166,6 @@ class File extends Backend {
         }
 
         $this->setId($this->getIdMd5());
-        $time = time();
 
         try {
 
