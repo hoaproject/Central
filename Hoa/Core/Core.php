@@ -125,13 +125,6 @@ class Core implements Parameter\Parameterizable {
      */
     private static $_instance = null;
 
-    /**
-     * Whether the debugger is started or not.
-     *
-     * @var \Hoa\Core bool
-     */
-    private static $_debugger = false;
-
 
 
     /**
