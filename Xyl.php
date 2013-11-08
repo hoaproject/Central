@@ -825,7 +825,6 @@ class          Xyl
         $remove      =    self::TYPE_DOCUMENT == $type
                        || self::TYPE_FRAGMENT == $type;
         $hrefs       = array();
-        $overlays    = array();
         $xpath       = new \DOMXPath($ownerDocument);
         $xyl_overlay = $xpath->query('/processing-instruction(\'xyl-overlay\')');
         unset($xpath);
@@ -1076,7 +1075,6 @@ class          Xyl
         if(null === $self)
             $self = $this;
 
-        $streamClass  = get_class($self->getInnerStream());
         $dirname      = dirname($self->getInnerStream()->getStreamName());
         $type         = $this->getType();
         $remove       =    self::TYPE_DOCUMENT == $type
