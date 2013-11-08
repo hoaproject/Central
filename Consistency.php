@@ -980,13 +980,12 @@ function curry_ref ( &$callable, &$a = null, &$b = null, &$c = null, &$d = null,
                                  &$u = null, &$v = null, &$w = null, &$x = null,
                                  &$y = null, &$z = null ) {
 
-    $handle    = func_get_args();
     $arguments = array();
 
     for($i = 0, $max = func_num_args() - 1; $i < $max; ++$i)
         $arguments[] = &${chr(97 + $i)};
 
-    $ii        = array_keys($arguments, …, true);
+    $ii = array_keys($arguments, …, true);
 
     return function ( ) use ( &$callable, &$arguments, $ii ) {
 
