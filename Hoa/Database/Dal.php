@@ -341,6 +341,8 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable,
 
         $old          = $this->_layer;
         $this->_layer = $dal;
+
+        return $old;
     }
 
     /**
