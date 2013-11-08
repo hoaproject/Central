@@ -155,7 +155,6 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
             new \Hoa\Console\Readline\Autocompleter\Word($words)
         );
 
-        $handle     = null;
         $expression = '.h';
 
         do { try {
@@ -239,7 +238,6 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
                 $interpreter->visit(
                     $compiler->parse($expression, 'expression')
                 );
-                $handle = $expression;
               break;
 
         } }
