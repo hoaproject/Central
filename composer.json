@@ -4,7 +4,7 @@
     "description": "Hoa is a set of libraries.",
     "keywords": ["library", "framework"],
     "homepage": "http://hoa-project.net/",
-    "license": "BSD-2",
+    "license": "BSD-3-Clause",
     "authors": [
         {
             "name": "Ivan Enderlin",
