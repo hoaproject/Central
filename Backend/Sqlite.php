@@ -162,10 +162,10 @@ class Sqlite extends Backend {
                      sqlite_escape_string($this->getIdMd5()) . '\'';
         $query     = sqlite_query($statement, $this->getSqlite());
 
-        if(0     === $num = sqlite_num_rows($query))
+        if(0 === sqlite_num_rows($query))
             return false;
 
-        $content   = sqlite_fetch_single($query);
+        $content = sqlite_fetch_single($query);
 
         if(true === $this->_parameters->getParameter('serialize_content'))
             $content = unserialize($content);
