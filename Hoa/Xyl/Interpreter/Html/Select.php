@@ -170,8 +170,6 @@ class Select extends Generic {
         else
             $value = array($value);
 
-        $values = array();
-
         foreach($this->getOptions() as $option) {
 
             $option = $this->getConcreteElement($option);
