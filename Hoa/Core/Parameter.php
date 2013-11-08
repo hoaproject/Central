@@ -357,7 +357,6 @@ class Parameter {
 
         $parameters = $this->getParameters();
         $out        = array();
-        $qBranche   = preg_quote($branche);
         $lBranche   = strlen($branche);
 
         foreach($parameters as $key => $value) {
