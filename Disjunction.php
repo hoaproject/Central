@@ -361,7 +361,7 @@ class          Disjunction
      */
     public function offsetUnset ( $offset ) {
 
-        if(null === $removed = $this->offsetGet($offset))
+        if(null === $this->offsetGet($offset))
             return;
 
         array_splice($this->__realdoms, $offset, 1);
