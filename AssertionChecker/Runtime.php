@@ -119,7 +119,6 @@ class Runtime extends AssertionChecker {
         $callable      = $this->getCallable();
         $reflection    = $callable->getReflection();
         $specification = $this->getSpecification();
-
         $exceptions    = new \Hoa\Praspel\Exception\Group(
             'The Runtime Assertion Checker has detected failures for %s.',
             0, $callable
