@@ -391,7 +391,8 @@ class Runtime extends AssertionChecker {
 
                 if(true === $_verdict) {
 
-                    $trace->addClause($_trace);
+                    if(!empty($trace))
+                        $trace->addClause($_trace);
 
                     break;
                 }
