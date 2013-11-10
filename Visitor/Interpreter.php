@@ -417,14 +417,8 @@ class Interpreter implements \Hoa\Visitor\Visit {
                 return $variable;
               break;
 
-            case '#this_identifier':
-                $identifier = 'this';
-
-                if(0 === $element->getChildrenNumber())
-                    return $this->_root->getImplicitVariable('this');
-
-                foreach($element->getChildren() as $child)
-                    $identifier .= '->' . $child->accept($this, $handle, $eldnah);
+            case '#dynamic_resolution':
+                $identifier = $element->getChild(0)->accept($this, $handle, $eldnah);
 
                 return $identifier;
               break;
@@ -493,6 +487,9 @@ class Interpreter implements \Hoa\Visitor\Visit {
                             return $this->getIdentifier($value);
 
                         return $value;
+
+                    case 'this':
+                        return $this->_root->getImplicitVariable('this');
 
                     case 'content':
                     case 'pure':

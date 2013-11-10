@@ -276,8 +276,8 @@ arrayaccess:
     )?
 
 identifier:
-    <identifier>
-  | ::this:: ( ::arrow:: <identifier> ( ::arrow:: <identifier> )* )? #this_identifier
+    ( <identifier> | <this> )
+    ( ::arrow:: <identifier> ( ::arrow:: <identifier> )* )? #dynamic_resolution
   | (
         ::self::   #self_identifier
       | ::static:: #static_identifier
