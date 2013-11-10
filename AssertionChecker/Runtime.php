@@ -148,41 +148,20 @@ class Runtime extends AssertionChecker {
                     'No data were given. The System Under Test %s needs data ' .
                     'to be executed.', 1, $callable);
 
-        $arguments                 = array();
-        $numberOfRequiredArguments = 0;
-
-        foreach($reflection->getParameters() as $parameter) {
-
-            $name = $parameter->getName();
-
-            if(true === array_key_exists($name, $data)) {
-
-                $arguments[$name] = &$data[$name];
-
-                if(false === $parameter->isOptional())
-                    ++$numberOfRequiredArguments;
-
-                continue;
-            }
-
-            if(false === $parameter->isOptional()) {
-
-                ++$numberOfRequiredArguments;
-
-                // Let the error be caught by a @requires clause.
-                continue;
-            }
-
-            $arguments[$name] = $parameter->getDefaultValue();
-        }
+        $arguments = $this->getArgumentData(
+            $reflection,
+            $data,
+            $numberOfRequiredArguments
+        );
 
         // Check invariant.
         if(true === $specification->clauseExists('invariant')) {
 
+            $attributes = $this->getAttributeData($callable);
             $invariant  = $specification->getClause('invariant');
             $verdict   &= $this->checkClause(
                 $invariant,
-                $arguments,
+                $attributes,
                 $exceptions,
                 'Hoa\Praspel\Exception\Failure\Invariant',
                 true,
@@ -304,10 +283,11 @@ class Runtime extends AssertionChecker {
         // Check invariant.
         if(true === $specification->clauseExists('invariant')) {
 
+            $attributes = $this->getAttributeData($callable);
             $invariant  = $specification->getClause('invariant');
             $verdict   &= $this->checkClause(
                 $invariant,
-                $arguments,
+                $attributes,
                 $exceptions,
                 'Hoa\Praspel\Exception\Failure\Invariant',
                 true,
@@ -319,6 +299,79 @@ class Runtime extends AssertionChecker {
         }
 
         return (bool) $verdict;
+    }
+
+    /**
+     * Get argument data.
+     *
+     * @access  protected
+     * @param   \ReflectionFunctionAbstract  $reflection                    Reflection.
+     * @param   array                        &$data                         Data.
+     * @param   int                           $numberOfRequiredArguments    Number of
+     *                                                                      required
+     *                                                                      arguments.
+     * @return  array
+     */
+    protected function getArgumentData ( \ReflectionFunctionAbstract  $reflection,
+                                         Array                       &$data,
+                                         &$numberOfRequiredArguments ) {
+
+        $arguments                 = array();
+        $numberOfRequiredArguments = 0;
+
+        foreach($reflection->getParameters() as $parameter) {
+
+            $name = $parameter->getName();
+
+            if(true === array_key_exists($name, $data)) {
+
+                $arguments[$name] = &$data[$name];
+
+                if(false === $parameter->isOptional())
+                    ++$numberOfRequiredArguments;
+
+                continue;
+            }
+
+            if(false === $parameter->isOptional()) {
+
+                ++$numberOfRequiredArguments;
+
+                // Let the error be caught by a @requires clause.
+                continue;
+            }
+
+            $arguments[$name] = $parameter->getDefaultValue();
+        }
+
+        return $arguments;
+    }
+
+    /**
+     * Get attribute data.
+     *
+     * @access  protected
+     * @param   \Hoa\Core\Consistency\Xcallable  $callable    Callable.
+     * @return  array
+     */
+    protected function getAttributeData ( \Hoa\Core\Consistency\Xcallable $callable ) {
+
+        $callback = $callable->getValidCallback();
+        $object   = $callback[0];
+
+        if(!is_object($object))
+            return array();
+
+        $reflectionObject = new \ReflectionObject($object);
+        $attributes       = array();
+
+        foreach($reflectionObject->getProperties() as $property) {
+
+            $property->setAccessible(true);
+            $attributes[$property->getName()] = $property->getValue($object);
+        }
+
+        return $attributes;
     }
 
     /**
@@ -462,7 +515,7 @@ class Runtime extends AssertionChecker {
             if(false === array_key_exists($_name, $data)) {
 
                 $exceptions[] = new $exception(
-                    'Variable %s is required and has no value.', 5, $name);
+                    'Variable %s is required and has no value.', 7, $name);
 
                 continue;
             }
@@ -496,7 +549,7 @@ class Runtime extends AssertionChecker {
 
                 $exceptions[] = new $exception(
                     'Variable %s does not verify the constraint @%s %s.',
-                    6,
+                    8,
                     array(
                         $name,
                         $clause->getName(),
