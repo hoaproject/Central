@@ -39,33 +39,24 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Praspel\Exception\AssertionChecker
+ * \Hoa\Praspel\Exception\Generic
  */
--> import('Praspel.Exception.AssertionChecker');
+-> import('Praspel.Exception.Generic');
 
 }
 
-namespace Hoa\Praspel\Exception\Failure {
+namespace Hoa\Praspel\Exception {
 
 /**
- * Class \Hoa\Praspel\Exception\Failure.
+ * Class \Hoa\Praspel\Exception\AssertionChecker.
  *
- * Extending the \Hoa\Praspel\Exception\AssertionChecker class.
+ * Extending the \Hoa\Praspel\Exception\Generic class.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Failure extends \Hoa\Praspel\Exception\AssertionChecker { }
-
-}
-
-namespace {
-
-/**
- * Flex entity.
- */
-Hoa\Core\Consistency::flexEntity('Hoa\Praspel\Exception\Failure\Failure');
+class AssertionChecker extends Generic { }
 
 }
