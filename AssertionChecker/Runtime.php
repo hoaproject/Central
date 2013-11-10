@@ -39,9 +39,9 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Praspel\Exception\Generic
+ * \Hoa\Praspel\Exception\AssertionChecker
  */
--> import('Praspel.Exception.Generic')
+-> import('Praspel.Exception.AssertionChecker')
 
 /**
  * \Hoa\Praspel\Exception\Group
@@ -109,7 +109,7 @@ class Runtime extends AssertionChecker {
      * @access  public
      * @param   \Hoa\Praspel\Trace  $trace    Trace.
      * @return  bool
-     * @throw   \Hoa\Praspel\Exception\Generic
+     * @throw   \Hoa\Praspel\Exception\AssertionChecker
      * @throw   \Hoa\Praspel\Exception\Group
      */
     public function evaluate ( &$trace = false ) {
@@ -144,7 +144,7 @@ class Runtime extends AssertionChecker {
             if(true === $this->canGenerateData())
                 $data = $this->generateData();
             else
-                throw new \Hoa\Praspel\Exception\Generic(
+                throw new \Hoa\Praspel\Exception\AssertionChecker(
                     'No data were given. The System Under Test %s needs data ' .
                     'to be executed.', 1, $callable);
 
