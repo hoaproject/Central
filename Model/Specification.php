@@ -94,6 +94,13 @@ class Specification extends Behavior {
      */
     protected $_implicitVariables     = array();
 
+    /**
+     * Binded class.
+     *
+     * @var \Hoa\Praspel\Model\Specification string
+     */
+    protected $_bindedClass           = null;
+
 
 
     /**
@@ -121,6 +128,32 @@ class Specification extends Behavior {
 
         return $this->_implicitVariables[$identifier]
                    = new Variable\Implicit($identifier, false, $this);
+    }
+
+    /**
+     * Bind this specification to a specific class.
+     * Obligatory for dynamic or static resolutions.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function bindToClass ( $classname ) {
+
+        $old                = $this->_bindedClass;
+        $this->_bindedClass = $classname;
+
+        return $old;
+    }
+
+    /**
+     * Get binded class.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getBindedClass ( ) {
+
+        return $this->_bindedClass;
     }
 
     /**
