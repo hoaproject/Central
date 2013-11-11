@@ -428,9 +428,23 @@ class Interpreter implements \Hoa\Visitor\Visit {
               break;
 
             case '#dynamic_resolution':
-                $identifier = $element->getChild(0)->accept($this, $handle, $eldnah);
+                if(1 === $element->getChildrenNumber())
+                    return $element->getChild(0)->accept($this, $handle, $eldnah);
 
-                return $identifier;
+                $value = null;
+
+                foreach($element->getChildren() as $child) {
+
+                    if(null !== $value)
+                        $value .= '->';
+
+                    $value .= $child->accept($this, $handle, false);
+                }
+
+                if(false !== $eldnah)
+                    return $this->_clause->getVariable($value, true);
+
+                return $value;
               break;
 
             case '#self_identifier':
@@ -499,7 +513,10 @@ class Interpreter implements \Hoa\Visitor\Visit {
                         return $value;
 
                     case 'this':
-                        return $this->_root->getImplicitVariable('this');
+                        if(false !== $eldnah)
+                            return $this->_root->getImplicitVariable($value);
+
+                        return $value;
 
                     case 'content':
                     case 'pure':
