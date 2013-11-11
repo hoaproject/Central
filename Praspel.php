@@ -75,6 +75,15 @@ namespace Hoa\Praspel {
 class Praspel {
 
     /**
+     * Registry of all contracts.
+     *
+     * @var \ArrayObject object
+     */
+    protected static $_registry = null;
+
+
+
+    /**
      * Short interpreter.
      *
      * @access  public
@@ -119,6 +128,20 @@ class Praspel {
             return '';
 
         return trim(implode("\n", $maatches[1]));
+    }
+
+    /**
+     * Get registry of all contracts.
+     *
+     * @access  public
+     * @return  \ArrayObject
+     */
+    public static function getRegistry ( ) {
+
+        if(null === static::$_registry)
+            static::$_registry = new \ArrayObject();
+
+        return static::$_registry;
     }
 }
 
