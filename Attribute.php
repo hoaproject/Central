@@ -77,7 +77,10 @@ class Attribute {
      * @return  void
      * @throw   \Hoa\Xml\Exception
      */
-    public function __construct ( $string ) {
+    public function __construct ( $string = null ) {
+        if (null === $string) {
+            return;
+        }
 
         $out = preg_match_all(
             '#(\w+)\s*(=\s*(?<!\\\)(?:("|\')|)(?(3)(.*?)(?<!\\\)\3|(\w+))\s*)?#',
@@ -172,6 +175,52 @@ class Attribute {
     public function readAttributeAsList ( $name ) {
 
         return explode(' ', $this->readAttribute($name));
+    }
+
+    /**
+     * Write attributes.
+     * If an attribute does not exist, it will be created.
+     *
+     * @access public
+     * @param array $attributes Attributes.
+     * @return void
+     */
+    public function writeAttributes ( Array $attributes ) {
+
+        foreach($attributes as $name => $value)
+            $this->writeAttribute($name, $value);
+
+        return;
+    }
+
+    /**
+     * Write an attribute.
+     * If the attribute does not exist, it will be created.
+     *
+     * @access public
+     * @param string $name Name.
+     * @param string $value Value.
+     * @return void
+     */
+    public function writeAttribute ( $name, $value ) {
+
+        $this->_attributes[$name] = $value;
+
+        return;
+    }
+
+    /**
+     * Remove an attribute.
+     *
+     * @access public
+     * @param string $name Name.
+     * @return void
+     */
+    public function removeAttribute ( $name ) {
+
+        unset($this->_attributes[$name]);
+
+        return;
     }
 
     /**
