@@ -135,38 +135,33 @@ class Core implements Parameter\Parameterizable {
      */
     private function __construct ( ) {
 
-        static::_define('SUCCEED',             true);
-        static::_define('FAILED',              false);
-        static::_define('…',                   '__hoa_core_fill');
-        static::_define('DS',                  DIRECTORY_SEPARATOR);
-        static::_define('PS',                  PATH_SEPARATOR);
-        static::_define('CRLF',                "\r\n");
-        static::_define('OS_WIN',              defined('PHP_WINDOWS_VERSION_PLATFORM'));
-        static::_define('S_64_BITS',           PHP_INT_SIZE == 8);
-        static::_define('S_32_BITS',           !S_64_BITS);
-        static::_define('PHP_INT_MIN',         ~PHP_INT_MAX);
-        static::_define('PHP_FLOAT_MIN',       (float) PHP_INT_MIN);
-        static::_define('PHP_FLOAT_MAX',       (float) PHP_INT_MAX);
-        static::_define('π',                   M_PI);
-        static::_define('void',                (unset) null);
-        static::_define('_public',             1);
-        static::_define('_protected',          2);
-        static::_define('_private',            4);
-        static::_define('_static',             8);
-        static::_define('_abstract',           16);
-        static::_define('_pure',               32);
-        static::_define('_final',              64);
-        static::_define('_dynamic',            ~_static);
-        static::_define('_concrete',           ~_abstract);
-        static::_define('_overridable',        ~_final);
-        static::_define('HOA_VERSION_MAJOR',   1);
-        static::_define('HOA_VERSION_MINOR',   0);
-        static::_define('HOA_VERSION_RELEASE', 0);
-        static::_define('HOA_VERSION_STATUS',  'b8');
-        static::_define('HOA_VERSION_EXTRA',   'dev');
-        static::_define('WITH_COMPOSER',       class_exists('Composer\Autoload\ClassLoader', false)
-                                            || ('cli' === PHP_SAPI
-                                            &&  file_exists(__DIR__ . DS . '..' . DS . '..' . DS . 'autoload.php')));
+        static::_define('SUCCEED',       true);
+        static::_define('FAILED',        false);
+        static::_define('…',             '__hoa_core_fill');
+        static::_define('DS',            DIRECTORY_SEPARATOR);
+        static::_define('PS',            PATH_SEPARATOR);
+        static::_define('CRLF',          "\r\n");
+        static::_define('OS_WIN',        defined('PHP_WINDOWS_VERSION_PLATFORM'));
+        static::_define('S_64_BITS',     PHP_INT_SIZE == 8);
+        static::_define('S_32_BITS',     !S_64_BITS);
+        static::_define('PHP_INT_MIN',   ~PHP_INT_MAX);
+        static::_define('PHP_FLOAT_MIN', (float) PHP_INT_MIN);
+        static::_define('PHP_FLOAT_MAX', (float) PHP_INT_MAX);
+        static::_define('π',             M_PI);
+        static::_define('void',          (unset) null);
+        static::_define('_public',       1);
+        static::_define('_protected',    2);
+        static::_define('_private',      4);
+        static::_define('_static',       8);
+        static::_define('_abstract',     16);
+        static::_define('_pure',         32);
+        static::_define('_final',        64);
+        static::_define('_dynamic',      ~_static);
+        static::_define('_concrete',     ~_abstract);
+        static::_define('_overridable',  ~_final);
+        static::_define('WITH_COMPOSER', class_exists('Composer\Autoload\ClassLoader', false)
+                                      || ('cli' === PHP_SAPI
+                                      &&  file_exists(__DIR__ . DS . '..' . DS . '..' . DS . 'autoload.php')));
 
         if(false !== $wl = ini_get('suhosin.executor.include.whitelist'))
             if(false === in_array('hoa', explode(',', $wl)))

@@ -109,12 +109,6 @@ class Diagnostic extends \Hoa\Console\Dispatcher\Kit {
 
         $store(
             'version',
-            'hoa',
-            HOA_VERSION_MAJOR . '.' . HOA_VERSION_MINOR . '.' .
-            HOA_VERSION_RELEASE . HOA_VERSION_STATUS . '-' . HOA_VERSION_EXTRA
-        );
-        $store(
-            'version',
             'php',
             phpversion()
         );

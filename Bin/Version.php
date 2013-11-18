@@ -82,11 +82,7 @@ class Version extends \Hoa\Console\Dispatcher\Kit {
      */
     public function main ( ) {
 
-        $version  = HOA_VERSION_MAJOR . '.' . HOA_VERSION_MINOR . '.' .
-                    HOA_VERSION_RELEASE . HOA_VERSION_STATUS .
-                    (null !== HOA_VERSION_EXTRA
-                        ? '-' . HOA_VERSION_EXTRA
-                        : '');
+        $version  = 'dev';
         $verbose  = \Hoa\Console::isDirect(STDOUT);
         $message  = null;
         $info     = null;
