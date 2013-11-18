@@ -364,6 +364,42 @@ class Core implements Parameter\Parameterizable {
     }
 
     /**
+     * Enable exception handler: catch uncaught exception.
+     *
+     * @access  public
+     * @param   bool  $enable    Enable.
+     * @return  mixed
+     */
+    public static function enableExceptionHandler ( $enable = true ) {
+
+        if(false === $enable)
+            return restore_exception_handler();
+
+        return set_exception_handler(function ( $exception ) {
+
+            return Exception\Idle::uncaught($exception);
+        });
+    }
+
+    /**
+     * Enable error handler: transform PHP error into \Hoa\Core\Exception\Error.
+     *
+     * @access  public
+     * @param   bool  $enable    Enable.
+     * @return  mixed
+     */
+    public static function enableErrorHandler ( $enable = true ) {
+
+        if(false === $enable)
+            return restore_error_handler();
+
+        return set_error_handler(function ( $no, $str, $file = null, $line = null, $ctx = null ) {
+
+            return Exception\Idle::error($no, $str, $file, $line, $ctx);
+        });
+    }
+
+    /**
      * Apply and save a register shutdown function.
      * It may be analogous to a static __destruct, but it allows us to make more
      * that a __destruct method.
@@ -475,22 +511,6 @@ function event ( $eventId ) {
 
     return \Hoa\Core\Event\Event::getEvent($eventId);
 }}
-
-/**
- * Catch uncaught exception.
- */
-set_exception_handler(function ( $exception ) {
-
-    return Hoa\Core\Exception\Idle::uncaught($exception);
-});
-
-/**
- * Transform PHP error into \Hoa\Core\Exception\Error.
- */
-set_error_handler(function ( $no, $str, $file = null, $line = null, $ctx = null ) {
-
-    return Hoa\Core\Exception\Idle::error($no, $str, $file, $line, $ctx);
-});
 
 /**
  * Then, initialize Hoa.
