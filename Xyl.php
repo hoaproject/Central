@@ -1540,21 +1540,25 @@ class          Xyl
      *
      * @access  public
      * @param   string  $streamName    Stream name.
+     * @param   bool    $interprete    Whether we interprete the document.
      * @return  \Hoa\Xyl
      * @throw   \Hoa\Xyl\Exception
      */
-    public function open ( $streamName ) {
+    public function open ( $streamName, $interprete = true ) {
 
-        $in              = get_class($this->getInnerStream());
-        $new             = new self(
+        $in  = get_class($this->getInnerStream());
+        $new = new static(
             new $in($streamName),
-            $this->getStream(),
+            $this->getOutputStream(),
             $this->_interpreter,
             $this->getRouter()
         );
         $new->_innerOpen = true;
 
-        return $new->interprete();
+        if(true === $interprete)
+            $new->interprete();
+
+        return $new;
     }
 
     /**
