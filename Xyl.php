@@ -538,9 +538,9 @@ class          Xyl
                 continue;
 
             $hrefs[]  = $href;
-            $fragment = new self(
+            $fragment = new static(
                 new $streamClass($href),
-                $this->_out,
+                $this->getOutputStream(),
                 $this->_interpreter,
                 $this->_router
             );
@@ -608,9 +608,9 @@ class          Xyl
             $href = $this->_fragments[$as];
 
             if(!isset($openedFragments[$href]))
-                $openedFragments[$href] = new self(
+                $openedFragments[$href] = new static(
                     new $streamClass($href),
-                    $this->_out,
+                    $this->getOutputStream(),
                     $this->_interpreter,
                     $this->_router
                 );
@@ -861,9 +861,9 @@ class          Xyl
                 continue;
 
             $hrefs[]  = $href;
-            $fragment = new self(
+            $fragment = new static(
                 new $streamClass($href),
-                $this->_out,
+                $this->getOutputStream(),
                 $this->_interpreter,
                 $this->_router
             );
@@ -1532,7 +1532,7 @@ class          Xyl
         if(false === $this->_isDataComputed)
             $this->computeDataBinding($element);
 
-        return $element->render($this->_out);
+        return $element->render($this->getOutputStream());
     }
 
     /**
