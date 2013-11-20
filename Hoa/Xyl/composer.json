@@ -22,14 +22,15 @@
         "source": "http://git.hoa-project.net/"
     },
     "require": {
-        "hoa/core"    : "dev-master",
-        "hoa/file"    : "dev-master",
-        "hoa/http"    : "dev-master",
-        "hoa/praspel" : "dev-master",
-        "hoa/realdom" : "dev-master",
-        "hoa/router"  : "dev-master",
-        "hoa/view"    : "dev-master",
-        "hoa/xml"     : "dev-master"
+        "hoa/core"        : "dev-master",
+        "hoa/file"        : "dev-master",
+        "hoa/http"        : "dev-master",
+        "hoa/praspel"     : "dev-master",
+        "hoa/realdom"     : "dev-master",
+        "hoa/router"      : "dev-master",
+        "hoa/stringbuffer": "dev-master",
+        "hoa/view"        : "dev-master",
+        "hoa/xml"         : "dev-master"
     },
     "minimum-stability": "dev",
     "target-dir": "Hoa/Xyl",

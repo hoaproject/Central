@@ -87,6 +87,7 @@ class _ extends \Hoa\Xyl\Element\Concrete {
         if(true === $this->abstract->attributeExists('with'))
             $with = $this->abstract->readAttribute('with');
 
+
         $translation = $root->getTranslation($with);
 
         if(null === $translation) {
@@ -113,7 +114,12 @@ class _ extends \Hoa\Xyl\Element\Concrete {
             foreach($with as $w)
                 $arguments[] = $this->computeAttributeValue($w);
 
-        $out->writeAll($callable->distributeArguments($arguments));
+        $result = $callable->distributeArguments($arguments);
+
+        if(false !== strpos($result, '<'))
+            $this->computeFromString($result);
+        else
+            $out->writeAll($result);
 
         return;
     }

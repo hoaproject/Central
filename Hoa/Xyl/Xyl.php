@@ -538,9 +538,9 @@ class          Xyl
                 continue;
 
             $hrefs[]  = $href;
-            $fragment = new self(
+            $fragment = new static(
                 new $streamClass($href),
-                $this->_out,
+                $this->getOutputStream(),
                 $this->_interpreter,
                 $this->_router
             );
@@ -608,9 +608,9 @@ class          Xyl
             $href = $this->_fragments[$as];
 
             if(!isset($openedFragments[$href]))
-                $openedFragments[$href] = new self(
+                $openedFragments[$href] = new static(
                     new $streamClass($href),
-                    $this->_out,
+                    $this->getOutputStream(),
                     $this->_interpreter,
                     $this->_router
                 );
@@ -861,9 +861,9 @@ class          Xyl
                 continue;
 
             $hrefs[]  = $href;
-            $fragment = new self(
+            $fragment = new static(
                 new $streamClass($href),
-                $this->_out,
+                $this->getOutputStream(),
                 $this->_interpreter,
                 $this->_router
             );
@@ -1532,7 +1532,7 @@ class          Xyl
         if(false === $this->_isDataComputed)
             $this->computeDataBinding($element);
 
-        return $element->render($this->_out);
+        return $element->render($this->getOutputStream());
     }
 
     /**
@@ -1540,21 +1540,25 @@ class          Xyl
      *
      * @access  public
      * @param   string  $streamName    Stream name.
+     * @param   bool    $interprete    Whether we interprete the document.
      * @return  \Hoa\Xyl
      * @throw   \Hoa\Xyl\Exception
      */
-    public function open ( $streamName ) {
+    public function open ( $streamName, $interprete = true ) {
 
-        $in              = get_class($this->getInnerStream());
-        $new             = new self(
+        $in  = get_class($this->getInnerStream());
+        $new = new static(
             new $in($streamName),
-            $this->getStream(),
+            $this->getOutputStream(),
             $this->_interpreter,
             $this->getRouter()
         );
         $new->_innerOpen = true;
 
-        return $new->interprete();
+        if(true === $interprete)
+            $new->interprete();
+
+        return $new;
     }
 
     /**
