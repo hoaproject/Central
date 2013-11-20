@@ -56,7 +56,12 @@ from('Hoa')
 /**
  * \Hoa\Xyl\Element
  */
--> import('Xyl.Element.~');
+-> import('Xyl.Element.~')
+
+/**
+ * \Hoa\Stringbuffer\ReadWrite
+ */
+-> import('Stringbuffer.ReadWrite');
 
 }
 
@@ -637,6 +642,32 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         // what about constants?
 
         return $value;
+    }
+
+    /**
+     * Compute from strings, directly on the output stream.
+     *
+     * @access  protected
+     * @return  void
+     */
+    protected function computeFromString ( $xyl ) {
+
+        if(0 < count($this))
+            return null;
+
+        $stringBuffer = new \Hoa\Stringbuffer\ReadWrite();
+        $stringBuffer->initializeWith(
+            '<?xml version="1.0" encoding="utf-8"?>' .
+            '<fragment xmlns="' . \Hoa\Xyl::NAMESPACE_ID . '">' .
+            '<snippet id="h"><yield>' . $xyl . '</yield></snippet>' .
+            '</fragment>'
+        );
+
+        $root     = $this->getAbstractElementSuperRoot();
+        $fragment = $root->open($stringBuffer->getStreamName());
+        $fragment->render($fragment->getSnippet('h'));
+
+        return;
     }
 
     /**
