@@ -234,7 +234,9 @@ class Gettext extends Translate {
 
             if(0 === $originalStringOffset[$e * 2 + 1]) {
 
-                if(!empty($this->getHeaders()))
+                $_headers = $this->getHeaders();
+
+                if(!empty($_headers))
                     continue;
 
                 $stream->seek($translateStringOffset[$e * 2 + 2]);
