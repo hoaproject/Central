@@ -590,6 +590,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
     protected function _unroute ( $id, $pattern, Array $variables,
                                   $allowEmpty = true ) {
 
+        // (?<named>…)
         $out = preg_replace_callback(
             '#\(\?\<([^>]+)>[^\)]*\)[\?\*\+]{0,2}#',
             function ( Array $matches ) use ( &$id, &$variables, &$allowEmpty ) {
@@ -607,8 +608,21 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
                 return $variables[$m];
             },
+            // (-…)
             preg_replace('#\(\?\-?[imsxUXJ]+\)#', '', $pattern)
         );
+
+        // (?:
+        $out = preg_replace('#(?<!\\\)\(\?:#', '(', $out);
+
+        // (…)?, (…)*
+        $out = preg_replace('#(?<!\\\)\((.*)(?<!\\\)\)[\?\*]#', '\1', $out);
+
+        // (…)+
+        $out = preg_replace('#(?<!\\\)\((.+)(?<!\\\)\)\+#', '\1', $out);
+
+        // …?, …*, …+
+        $out = preg_replace('#(.)(?<![\)\\\])[\?\*\+]#', '\1', $out);
 
         return str_replace(
             array(
