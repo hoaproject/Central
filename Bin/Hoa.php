@@ -44,6 +44,9 @@ namespace {
 if(!defined('HOA'))
     require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Core.php';
 
+Hoa\Core::enableErrorHandler();
+Hoa\Core::enableExceptionHandler();
+
 from('Hoa')
 -> import('Router.Cli')
 -> import('Dispatcher.Basic')
