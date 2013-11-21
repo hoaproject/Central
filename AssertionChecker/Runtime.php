@@ -155,7 +155,9 @@ class Runtime extends AssertionChecker {
         );
 
         // Check invariant.
-        if(true === $specification->clauseExists('invariant')) {
+        if(   true === $specification->clauseExists('invariant')
+           && !(   $reflection instanceof \ReflectionMethod
+                && '__construct' === $reflection->getName())) {
 
             $attributes = $this->getAttributeData($callable);
             $invariant  = $specification->getClause('invariant');
