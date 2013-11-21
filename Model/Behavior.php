@@ -171,10 +171,20 @@ class Behavior extends Clause {
               break;
 
             case 'ensures':
+                if(true === $this->clauseExists('behavior'))
+                    throw new \Hoa\Praspel\Exception\Model(
+                        'Cannot add the @ensures clause, since a @behavior ' .
+                        'clause exists at the same level.', 1);
+
                 $handle = new Ensures($this);
               break;
 
             case 'throwable':
+                if(true === $this->clauseExists('behavior'))
+                    throw new \Hoa\Praspel\Exception\Model(
+                        'Cannot add the @throwable clause, since a @behavior ' .
+                        'clause exists at the same level.', 2);
+
                 $handle = new Throwable($this);
               break;
 
@@ -183,6 +193,12 @@ class Behavior extends Clause {
               break;
 
             case 'behavior':
+                if(   true === $this->clauseExists('ensures')
+                   || true === $this->clauseExists('throwable'))
+                    throw new \Hoa\Praspel\Exception\Model(
+                        'Cannot add the @behavior clause, since an @ensures ' .
+                        'or a @throwable clause exists at the same level.', 3);
+
                 $handle = new Collection(
                     new self($this),
                     function ( self $clause, $identifier ) {
@@ -195,6 +211,12 @@ class Behavior extends Clause {
               break;
 
             case 'default':
+                if(   true === $this->clauseExists('ensures')
+                   || true === $this->clauseExists('throwable'))
+                    throw new \Hoa\Praspel\Exception\Model(
+                        'Cannot add the @default clause, since an @ensures ' .
+                        'or a @throwable clause exists at the same level.', 4);
+
                 $handle = new DefaultBehavior($this);
               break;
 
