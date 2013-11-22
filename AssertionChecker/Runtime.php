@@ -206,6 +206,7 @@ class Runtime extends AssertionChecker {
 
             // Invoke.
             $return = $this->invoke(
+                $callable,
                 $reflection,
                 $arguments,
                 $isConstructor
@@ -306,7 +307,7 @@ class Runtime extends AssertionChecker {
      * Get argument data.
      *
      * @access  protected
-     * @param   \ReflectionFunctionAbstract  $reflection                    Reflection.
+     * @param   \ReflectionFunctionAbstract   $reflection                   Reflection.
      * @param   array                        &$data                         Data.
      * @param   int                           $numberOfRequiredArguments    Number of
      *                                                                      required
@@ -379,15 +380,18 @@ class Runtime extends AssertionChecker {
      * Invoke.
      *
      * @acccess  protected
-     * @param    \ReflectionFunctionAbstract   $reflection       Reflection.
-     * @param    array                        &$arguments        Arguments.
-     * @param    bool                          $isConstructor    Whether it is a
-     *                                                           constructor.
+     * @param    \Hoa\Core\Consistency\Xcallable    &$reflection       Callable.
+     * @param    \ReflectionFunctionAbstract        &$reflection       Reflection.
+     * @param    array                              &$arguments        Arguments.
+     * @param    bool                                $isConstructor    Whether
+     *                                                                 it is a
+     *                                                                 constructor.
      * @return   mixed
      * @throw    \Exception
      */
-    protected function invoke ( \ReflectionFunctionAbstract $reflection,
-                                Array &$arguments,
+    protected function invoke ( \Hoa\Core\Consistency\Xcallable &$callable,
+                                \ReflectionFunctionAbstract     &$reflection,
+                                Array                           &$arguments,
                                 $isConstructor ) {
 
         if($reflection instanceof \ReflectionFunction)
@@ -401,8 +405,10 @@ class Runtime extends AssertionChecker {
             return $reflection->invokeArgs($_object, $arguments);
         }
 
-        $class = $reflection->getDeclaringClass();
-        $class->newInstanceArgs($arguments);
+        $class      = $reflection->getDeclaringClass();
+        $instance   = $class->newInstanceArgs($arguments);
+        $callable   = xcallable($instance, '__construct');
+        $reflection = $callable->getReflection();
 
         return void;
     }
