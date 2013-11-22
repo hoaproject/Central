@@ -87,10 +87,11 @@ class Praspel {
      * Short interpreter.
      *
      * @access  public
-     * @param   string  $praspel    Praspel.
+     * @param   string  $praspel        Praspel.
+     * @param   string  $bindToClass    Classname to bind.
      * @return  \Hoa\Praspel\Model\Clause
      */
-    public static function interprete ( $praspel ) {
+    public static function interprete ( $praspel, $bindToClass = null ) {
 
         static $_compiler    = null;
         static $_interpreter = null;
@@ -104,6 +105,9 @@ class Praspel {
             $_interpreter = new Visitor\Interpreter();
 
         $ast = $_compiler->parse($praspel);
+
+        if(null !== $bindToClass)
+            $_interpreter->bindToClass($bindToClass);
 
         return $_interpreter->visit($ast);
     }
