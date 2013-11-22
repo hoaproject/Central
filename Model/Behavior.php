@@ -249,6 +249,8 @@ class Behavior extends Clause {
                 'Clause @%s is not allowed in @%s.',
                 0, array($name, $this->getId()));
 
+        $clause->setParent($this);
+
         return $this->_clauses[$name] = $clause;
     }
 
