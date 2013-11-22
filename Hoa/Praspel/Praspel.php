@@ -75,13 +75,23 @@ namespace Hoa\Praspel {
 class Praspel {
 
     /**
+     * Registry of all contracts.
+     *
+     * @var \ArrayObject object
+     */
+    protected static $_registry = null;
+
+
+
+    /**
      * Short interpreter.
      *
      * @access  public
-     * @param   string  $praspel    Praspel.
+     * @param   string  $praspel        Praspel.
+     * @param   string  $bindToClass    Classname to bind.
      * @return  \Hoa\Praspel\Model\Clause
      */
-    public static function interprete ( $praspel ) {
+    public static function interprete ( $praspel, $bindToClass = null ) {
 
         static $_compiler    = null;
         static $_interpreter = null;
@@ -95,6 +105,9 @@ class Praspel {
             $_interpreter = new Visitor\Interpreter();
 
         $ast = $_compiler->parse($praspel);
+
+        if(null !== $bindToClass)
+            $_interpreter->bindToClass($bindToClass);
 
         return $_interpreter->visit($ast);
     }
@@ -119,6 +132,20 @@ class Praspel {
             return '';
 
         return trim(implode("\n", $maatches[1]));
+    }
+
+    /**
+     * Get registry of all contracts.
+     *
+     * @access  public
+     * @return  \ArrayObject
+     */
+    public static function getRegistry ( ) {
+
+        if(null === static::$_registry)
+            static::$_registry = new \ArrayObject();
+
+        return static::$_registry;
     }
 }
 

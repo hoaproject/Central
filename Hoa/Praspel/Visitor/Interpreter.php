@@ -89,21 +89,28 @@ class Interpreter implements \Hoa\Visitor\Visit {
      *
      * @var \Hoa\Praspel\Model\Specification object
      */
-    protected $_root    = null;
+    protected $_root            = null;
 
     /**
      * Current clause.
      *
      * @var \Hoa\Praspel\Model\Clause object
      */
-    protected $_clause  = null;
+    protected $_clause          = null;
 
     /**
      * Current object.
      *
      * @var \Hoa\Praspel\Model object
      */
-    protected $_current = null;
+    protected $_current         = null;
+
+    /**
+     * Classname to bind to the specification.
+     *
+     * @var \Hoa\Praspel\Visitor\Interpreter string
+     */
+    protected $_classnameToBind = null;
 
 
 
@@ -128,6 +135,9 @@ class Interpreter implements \Hoa\Visitor\Visit {
                 $this->_clause = $this->_current
                                = $this->_root
                                = new \Hoa\Praspel\Model\Specification();
+
+                if(null !== $classname = $this->getBindedClass())
+                    $this->_root->bindToClass($classname);
 
                 foreach($element->getChildren() as $child)
                     $child->accept($this, $handle, $eldnah);
@@ -417,16 +427,24 @@ class Interpreter implements \Hoa\Visitor\Visit {
                 return $variable;
               break;
 
-            case '#this_identifier':
-                $identifier = 'this';
+            case '#dynamic_resolution':
+                if(1 === $element->getChildrenNumber())
+                    return $element->getChild(0)->accept($this, $handle, $eldnah);
 
-                if(0 === $element->getChildrenNumber())
-                    return $this->_root->getImplicitVariable('this');
+                $value = null;
 
-                foreach($element->getChildren() as $child)
-                    $identifier .= '->' . $child->accept($this, $handle, $eldnah);
+                foreach($element->getChildren() as $child) {
 
-                return $identifier;
+                    if(null !== $value)
+                        $value .= '->';
+
+                    $value .= $child->accept($this, $handle, false);
+                }
+
+                if(false !== $eldnah)
+                    return $this->_clause->getVariable($value, true);
+
+                return $value;
               break;
 
             case '#self_identifier':
@@ -491,6 +509,12 @@ class Interpreter implements \Hoa\Visitor\Visit {
                     case 'identifier':
                         if(false !== $eldnah)
                             return $this->getIdentifier($value);
+
+                        return $value;
+
+                    case 'this':
+                        if(false !== $eldnah)
+                            return $this->_root->getImplicitVariable($value);
 
                         return $value;
 
@@ -627,6 +651,32 @@ class Interpreter implements \Hoa\Visitor\Visit {
     public function getClause ( ) {
 
         return $this->_clause;
+    }
+
+    /**
+     * Set classname to bind.
+     *
+     * @access  public
+     * @param   string  $classname    Classname.
+     * @return  string
+     */
+    public function bindToClass ( $classname ) {
+
+        $old                    = $this->_classnameToBind;
+        $this->_classnameToBind = $classname;
+
+        return $old;
+    }
+
+    /**
+     * Get classname to bind.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getBindedClass ( ) {
+
+        return $this->_classnameToBind;
     }
 }
 

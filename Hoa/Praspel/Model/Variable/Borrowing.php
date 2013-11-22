@@ -69,7 +69,14 @@ class Borrowing extends Variable {
      *
      * @const int
      */
-    const TYPE_OLD = 1;
+    const TYPE_OLD      = 0;
+
+    /**
+     * Type: external (e.g. this->foo->bar).
+     *
+     * @const int
+     */
+    const TYPE_EXTERNAL = 1;
 
     /**
      * Type.
@@ -115,34 +122,110 @@ class Borrowing extends Variable {
      */
     protected function determineType ( ) {
 
-        $name   = $this->getName();
+        $name = $this->getName();
+
+        if('\old(' === substr($name, 0, 5))
+            $this->computeOld(substr($name, 5, -1));
+        elseif(false !== strpos($name, '>', 2))
+            $this->computeDynamicResolution($name);
+        else
+            throw new \Hoa\Praspel\Exception\Model(
+                'Variable %s would be a borrowing one, but its type cannot ' .
+                'be determined.', 0, $name);
+
+        return;
+    }
+
+    /**
+     * Compute \old(…).
+     *
+     * @access  protected
+     * @param   string  $name    Name.
+     * @return  void
+     * @throw   \Hoa\Praspel\Exception\Model
+     */
+    protected function computeOld ( $name ) {
+
+        $clause      = $this->getClause();
+        $this->_type = static::TYPE_OLD;
+        $parent      = $clause->getParent();
+
+        while(   false === $parent->clauseExists('requires')
+              && null  !== $parent = $parent->getParent());
+
+        if(   null === $parent
+           || false === $parent->clauseExists('requires'))
+            throw new \Hoa\Praspel\Exception\Model(
+                'No parent or no requires.', 1);
+
+        $requires         = $parent->getClause('requires');
+        $inScopeVariables = $requires->getInScopeVariables();
+
+        if(!isset($inScopeVariables[$name]))
+            throw new \Hoa\Praspel\Exception\Model(
+                'Variable %s does not exist, cannot get its old value ' .
+                '(in @%s).',
+                2, array($name, $clause->getName()));
+
+        $this->_variable = &$inScopeVariables[$name];
+
+        return;
+    }
+
+    /**
+     * Compute dynamic resolution.
+     *
+     * @access  protected
+     * @param   string  $name    Name.
+     * @return  void
+     * @throw   \Hoa\Praspel\Exception\Model
+     */
+    protected function computeDynamicResolution ( $name ) {
+
+        $this->_type = static::TYPE_EXTERNAL;
+
         $clause = $this->getClause();
+        $parts  = explode('->', $name);
+        $head   = array_shift($parts);
 
-        if('\old(' === substr($name, 0, 5)) {
+        if('this' !== $head)
+            //$head = $clause->getVariable($parts[0]);
+            throw new \Hoa\Praspel\Exception\Model('Not yet implemented!');
 
-            $this->_type = static::TYPE_OLD;
-            $old         = substr($name, 5, -1);
-            $parent      = $clause->getParent();
+        $registry    = \Hoa\Praspel::getRegistry();
+        $root        = $clause->getRoot();
+        $bindedClass = $root->getBindedClass();
 
-            while(   false === $parent->clauseExists('requires')
-                  && null  !== $parent = $parent->getParent());
+        if(null === $bindedClass)
+            throw new \Hoa\Praspel\Exception\Model(
+                'Cannot resolve the dynamic identifier %s; ' .
+                '%s::getBindedClass returned null.',
+                3, array($name, get_class($root)));
 
-            if(   null === $parent
-               || false === $parent->clauseExists('requires'))
-                throw new \Hoa\Praspel\Exception\Model(
-                    'No parent or no requires.', 0);
+        $attribute = array_shift($parts);
+        $id        = $bindedClass . '::$' . $attribute;
 
-            $requires         = $parent->getClause('requires');
-            $inScopeVariables = $requires->getInScopeVariables();
+        if(!isset($registry[$id]))
+            throw new \Hoa\Praspel\Exception\Model(
+                'The identifier contract %s does not exist in the registry.',
+                4, $name);
 
-            if(!isset($inScopeVariables[$old]))
-                throw new \Hoa\Praspel\Exception\Model(
-                    'Variable %s does not exist, cannot get its old value ' .
-                    '(in @%s).',
-                    1, array($old, $clause->getName()));
+        $entry = $registry[$id];
 
-            $this->_variable = &$inScopeVariables[$old];
-        }
+        if(false === $entry->clauseExists('invariant'))
+            throw new \Hoa\Praspel\Exception\Model(
+                '%s is not declared with an @invariant clause.',
+                5, $id);
+
+        $targetedClause = $entry->getClause('invariant');
+
+        if(!isset($targetedClause[$attribute]))
+            throw new \Hoa\Praspel\Exception\Model(
+                'The identifier %s does not exist.',
+                6, $attribute);
+
+        $variable        = $targetedClause[$attribute];
+        $this->_variable = $variable;
 
         return;
     }

@@ -39,6 +39,11 @@ namespace {
 from('Hoa')
 
 /**
+ * \Hoa\Praspel\AssertionChecker\Preambler
+ */
+-> import('Praspel.AssertionChecker.Preambler')
+
+/**
  * \Hoa\Praspel\Visitor\Praspel
  */
 -> import('Praspel.Visitor.Praspel');
@@ -105,6 +110,21 @@ abstract class AssertionChecker {
         $this->setSpecification($specification);
         $this->setCallable($callable);
         $this->automaticallyGenerateData($generateData);
+
+        return;
+    }
+
+    /**
+     * Preamble: put the system under test into a specific state in order to be
+     * able to execute the test.
+     *
+     * @access  public
+     * @param   mixed  $preamble    Preamble callable.
+     * @return  void
+     */
+    public function preamble ( $preamble ) {
+
+        $preamble(new Preambler($this->getCallable()));
 
         return;
     }

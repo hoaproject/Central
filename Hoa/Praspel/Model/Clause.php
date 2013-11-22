@@ -116,6 +116,22 @@ abstract class Clause implements \Hoa\Visitor\Element {
     }
 
     /**
+     * Get the root clause.
+     *
+     * @access  public
+     * @return  \Hoa\Praspel\Model\Clause
+     */
+    public function getRoot ( ) {
+
+        $parent = $this;
+
+        while(null !== $nextParent = $parent->getParent())
+            $parent = $nextParent;
+
+        return $parent;
+    }
+
+    /**
      * Get clause name.
      *
      * @access  public
