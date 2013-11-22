@@ -167,7 +167,8 @@ abstract class Declaration
                 function ( ) use ( $variable ) {
 
                     return $variable->getName();
-                }
+                },
+                $this
             );
         }
 
