@@ -178,13 +178,13 @@ class          Variable
      * Set a value to the variable.
      *
      * @access  public
-     * @param   mixed  &$value    Value.
+     * @param   mixed  $value    Value.
      * @return  mixed
      */
-    public function setValue ( &$value ) {
+    public function setValue ( $value ) {
 
         $old          = $this->_value;
-        $this->_value = &$value;
+        $this->_value = $value;
 
         return $old;
     }
