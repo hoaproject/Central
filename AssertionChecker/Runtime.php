@@ -417,7 +417,7 @@ class Runtime extends AssertionChecker {
      * Check behavior clauses.
      *
      * @access  protected
-     * @param   \Hoa\Praspel\Model\Behavior     $behavior      Behavior clause.
+     * @param   \Hoa\Praspel\Model\Behavior    &$behavior      Behavior clause.
      * @param   array                          &$data          Data.
      * @param   \Hoa\Praspel\Exception\Group    $exceptions    Exceptions group.
      * @param   bool                            $assign        Assign data to
@@ -426,9 +426,9 @@ class Runtime extends AssertionChecker {
      * @return  bool
      * @throw   \Hoa\Praspel\Exception
      */
-    protected function checkBehavior ( \Hoa\Praspel\Model\Behavior  $behavior,
+    protected function checkBehavior ( \Hoa\Praspel\Model\Behavior  &$behavior,
                                        Array                        &$data,
-                                       \Hoa\Praspel\Exception\Group $exceptions,
+                                       \Hoa\Praspel\Exception\Group  $exceptions,
                                        $assign = false,
                                        $trace  = false ) {
 
