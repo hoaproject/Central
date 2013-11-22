@@ -314,7 +314,7 @@ class Compiler implements \Hoa\Visitor\Visit {
                         '\'))';
             else
                 $out .= 'variable($' . $holder->getClause()->getId() .
-                        '[\'' . $holder->getName() . '\'])';
+                        '->getVariable(\'' . $holder->getName() . '\', true))';
         }
 
         else
