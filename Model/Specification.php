@@ -140,7 +140,7 @@ class Specification extends Behavior {
     public function bindToClass ( $classname ) {
 
         $old                = $this->_bindedClass;
-        $this->_bindedClass = $classname;
+        $this->_bindedClass = ltrim($classname, '\\');
 
         return $old;
     }
