@@ -546,12 +546,7 @@ class Runtime extends AssertionChecker {
 
         foreach($clause as $name => $variable) {
 
-            $_name = $name;
-
-            if('\old(' === substr($name, 0, 5))
-                $_name = substr($name, 5, -1);
-
-            if(false === array_key_exists($_name, $data)) {
+            if(false === array_key_exists($name, $data)) {
 
                 $exceptions[] = new $exception(
                     'Variable %s is required and has no value.', 7, $name);
@@ -559,7 +554,7 @@ class Runtime extends AssertionChecker {
                 continue;
             }
 
-            $datum         = &$data[$_name];
+            $datum         = &$data[$name];
             $_verdict      = false;
             $traceVariable = null;
 
