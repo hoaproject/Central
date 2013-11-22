@@ -85,22 +85,34 @@ class          Constant
      */
     protected $_praspelRepresentation = null;
 
+    /**
+     * Original declaration object.
+     *
+     * @var \Hoa\Praspel\Model\Declaration object
+     */
+    protected $_declaration           = null;
+
 
 
     /**
      * Constructor.
      *
      * @access  public
-     * @param   \Hoa\Realdom\IRealdom\Holder  $holder     Holder.
-     * @param   \Closure                      $praspel    Praspel
-     *                                                    representation.
+     * @param   \Hoa\Realdom\IRealdom\Holder    $holder         Holder.
+     * @param   \Closure                        $praspel        Praspel
+     *                                                          representation.
+     * @param   \Hoa\Praspel\Model\Declaration  $declaration    Original
+     *                                                          declaration
+     *                                                          object.
      * @return  void
      */
     public function __construct ( \Hoa\Realdom\IRealdom\Holder $holder,
-                                  \Closure $praspel ) {
+                                  \Closure $praspel,
+                                  \Hoa\Praspel\Model\Declaration $declaration = null ) {
 
         $this->setHolder($holder);
         $this->setPraspelRepresentation($praspel);
+        $this->setDeclaration($declaration);
 
         return;
     }
@@ -199,6 +211,43 @@ class          Constant
     public function getPraspelRepresentation ( ) {
 
         return $this->_praspelRepresentation;
+    }
+
+    /**
+     * Set original declaration object.
+     *
+     * @access  public
+     * @param   \Hoa\Praspel\Model\Declaration  $declaration    Declaration.
+     * @return  \Hoa\Praspel\Model\Declaration
+     */
+    public function setDeclaration ( \Hoa\Praspel\Model\Declaration $declaration ) {
+
+        $old                = $this->_declaration;
+        $this->_declaration = $declaration;
+
+        return $old;
+    }
+
+    /**
+     * Get original declaration object.
+     *
+     * @access  public
+     * @return  \Hoa\Praspel\Model\Declaration
+     */
+    public function getDeclaration ( ) {
+
+        return $this->_declaration;
+    }
+
+    /**
+     * Get representation of the realistic domain.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getConstantRepresentation ( ) {
+
+        return '';
     }
 
     /**
