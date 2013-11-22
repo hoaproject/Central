@@ -123,10 +123,14 @@ class Runtime extends AssertionChecker {
             'The Runtime Assertion Checker has detected failures for %s.',
             0, $callable
         );
+        $isConstructor = false;
 
         if($reflection instanceof \ReflectionMethod) {
 
             $reflection->setAccessible(true);
+
+            if('__construct' === $reflection->getName())
+                $isConstructor = true;
 
             if(false === $reflection->isStatic()) {
 
@@ -155,9 +159,8 @@ class Runtime extends AssertionChecker {
         );
 
         // Check invariant.
-        if(   true === $specification->clauseExists('invariant')
-           && !(   $reflection instanceof \ReflectionMethod
-                && '__construct' === $reflection->getName())) {
+        if(    true === $specification->clauseExists('invariant')
+           && false === $isConstructor) {
 
             $attributes = $this->getAttributeData($callable);
             $invariant  = $specification->getClause('invariant');
@@ -202,15 +205,11 @@ class Runtime extends AssertionChecker {
         try {
 
             // Invoke.
-            if($reflection instanceof \ReflectionFunction)
-                $return = $reflection->invokeArgs($arguments);
-            else {
-
-                $_callback = $callable->getValidCallback();
-                $_object   = $_callback[0];
-                $return    = $reflection->invokeArgs($_object, $arguments);
-            }
-
+            $return = $this->invoke(
+                $reflection,
+                $arguments,
+                $isConstructor
+            );
             $arguments['\result'] = $return;
             $_exceptions          = null;
 
@@ -374,6 +373,38 @@ class Runtime extends AssertionChecker {
         }
 
         return $attributes;
+    }
+
+    /**
+     * Invoke.
+     *
+     * @acccess  protected
+     * @param    \ReflectionFunctionAbstract   $reflection       Reflection.
+     * @param    array                        &$arguments        Arguments.
+     * @param    bool                          $isConstructor    Whether it is a
+     *                                                           constructor.
+     * @return   mixed
+     * @throw    \Exception
+     */
+    protected function invoke ( \ReflectionFunctionAbstract $reflection,
+                                Array &$arguments,
+                                $isConstructor ) {
+
+        if($reflection instanceof \ReflectionFunction)
+            return $reflection->invokeArgs($arguments);
+
+        if(false === $isConstructor) {
+
+            $_callback = $callable->getValidCallback();
+            $_object   = $_callback[0];
+
+            return $reflection->invokeArgs($_object, $arguments);
+        }
+
+        $class = $reflection->getDeclaringClass();
+        $class->newInstanceArgs($arguments);
+
+        return void;
     }
 
     /**
