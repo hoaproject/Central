@@ -101,7 +101,7 @@ class Handler {
 
             if(!is_object($callback[0]))
                 throw new \Hoa\Praspel\Exception\Preambler(
-                    'Callable %s is not an object.', 0, $this->getCallable());
+                    'Callable %s is not an object.', 0, $this->__getCallable());
 
             $_object = $callback[0];
             $_out    = new \ReflectionObject($_object);
