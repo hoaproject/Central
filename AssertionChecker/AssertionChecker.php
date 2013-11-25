@@ -124,7 +124,9 @@ abstract class AssertionChecker {
      */
     public function preamble ( $preamble ) {
 
-        $preamble(new \Hoa\Praspel\Preambler\Handler($this->getCallable()));
+        $preambler = new \Hoa\Praspel\Preambler\Handler($this->getCallable());
+        $preamble($preambler);
+        $this->setCallable($preambler->__getCallable());
 
         return;
     }
