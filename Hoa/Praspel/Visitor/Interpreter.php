@@ -54,16 +54,6 @@ from('Hoa')
 -> import('Visitor.Visit')
 
 /**
- * \Hoa\Realdom\Crate\Variable
- */
--> import('Realdom.Crate.Variable')
-
-/**
- * \Hoa\Realdom\Crate\Constant
- */
--> import('Realdom.Crate.Constant')
-
-/**
  * \Hoa\String
  */
 -> import('String.~');
@@ -332,16 +322,6 @@ class Interpreter implements \Hoa\Visitor\Visit {
 
                     $argument = $child->accept($this, $handle, $eldnah);
 
-                    if(   $argument instanceof \Hoa\Praspel\Model\Variable\Borrowing
-                       && $argument::TYPE_OLD === $argument->getType())
-                        $argument = new \Hoa\Realdom\Crate\Constant(
-                            $argument->getBorrowedVariable(),
-                            function ( ) use ( $argument ) {
-
-                                return $argument->getName();
-                            }
-                        );
-
                     if($argument instanceof \Hoa\Realdom\Disjunction) {
 
                         $realdoms = $argument->getRealdoms();
@@ -464,10 +444,7 @@ class Interpreter implements \Hoa\Visitor\Visit {
                          ')';
 
                 if(false !== $eldnah)
-                    return $this->_clause->getVariable(
-                        $value,
-                        true
-                    );
+                    return $this->_clause->getVariable($value);
 
                 return $value;
               break;

@@ -207,7 +207,7 @@ class Borrowing extends Variable {
 
         if(!isset($registry[$id]))
             throw new \Hoa\Praspel\Exception\Model(
-                'The identifier contract %s does not exist in the registry.',
+                'The contract identifier %s does not exist in the registry.',
                 4, $name);
 
         $entry = $registry[$id];

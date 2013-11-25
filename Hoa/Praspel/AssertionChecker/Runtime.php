@@ -145,8 +145,11 @@ class Runtime extends AssertionChecker {
 
         // Prepare data.
         if(null === $data = $this->getData())
-            if(true === $this->canGenerateData())
-                $data = $this->generateData();
+            if(true === $this->canGenerateData()) {
+
+                $data = static::generateData($specification);
+                $this->setData($data);
+            }
             else
                 throw new \Hoa\Praspel\Exception\AssertionChecker(
                     'No data were given. The System Under Test %s needs data ' .
@@ -206,6 +209,7 @@ class Runtime extends AssertionChecker {
 
             // Invoke.
             $return = $this->invoke(
+                $callable,
                 $reflection,
                 $arguments,
                 $isConstructor
@@ -306,7 +310,7 @@ class Runtime extends AssertionChecker {
      * Get argument data.
      *
      * @access  protected
-     * @param   \ReflectionFunctionAbstract  $reflection                    Reflection.
+     * @param   \ReflectionFunctionAbstract   $reflection                   Reflection.
      * @param   array                        &$data                         Data.
      * @param   int                           $numberOfRequiredArguments    Number of
      *                                                                      required
@@ -379,15 +383,18 @@ class Runtime extends AssertionChecker {
      * Invoke.
      *
      * @acccess  protected
-     * @param    \ReflectionFunctionAbstract   $reflection       Reflection.
-     * @param    array                        &$arguments        Arguments.
-     * @param    bool                          $isConstructor    Whether it is a
-     *                                                           constructor.
+     * @param    \Hoa\Core\Consistency\Xcallable    &$reflection       Callable.
+     * @param    \ReflectionFunctionAbstract        &$reflection       Reflection.
+     * @param    array                              &$arguments        Arguments.
+     * @param    bool                                $isConstructor    Whether
+     *                                                                 it is a
+     *                                                                 constructor.
      * @return   mixed
      * @throw    \Exception
      */
-    protected function invoke ( \ReflectionFunctionAbstract $reflection,
-                                Array &$arguments,
+    protected function invoke ( \Hoa\Core\Consistency\Xcallable &$callable,
+                                \ReflectionFunctionAbstract     &$reflection,
+                                Array                           &$arguments,
                                 $isConstructor ) {
 
         if($reflection instanceof \ReflectionFunction)
@@ -401,8 +408,10 @@ class Runtime extends AssertionChecker {
             return $reflection->invokeArgs($_object, $arguments);
         }
 
-        $class = $reflection->getDeclaringClass();
-        $class->newInstanceArgs($arguments);
+        $class      = $reflection->getDeclaringClass();
+        $instance   = $class->newInstanceArgs($arguments);
+        $callable   = xcallable($instance, '__construct');
+        $reflection = $callable->getReflection();
 
         return void;
     }
@@ -411,7 +420,7 @@ class Runtime extends AssertionChecker {
      * Check behavior clauses.
      *
      * @access  protected
-     * @param   \Hoa\Praspel\Model\Behavior     $behavior      Behavior clause.
+     * @param   \Hoa\Praspel\Model\Behavior    &$behavior      Behavior clause.
      * @param   array                          &$data          Data.
      * @param   \Hoa\Praspel\Exception\Group    $exceptions    Exceptions group.
      * @param   bool                            $assign        Assign data to
@@ -420,9 +429,9 @@ class Runtime extends AssertionChecker {
      * @return  bool
      * @throw   \Hoa\Praspel\Exception
      */
-    protected function checkBehavior ( \Hoa\Praspel\Model\Behavior  $behavior,
+    protected function checkBehavior ( \Hoa\Praspel\Model\Behavior  &$behavior,
                                        Array                        &$data,
-                                       \Hoa\Praspel\Exception\Group $exceptions,
+                                       \Hoa\Praspel\Exception\Group  $exceptions,
                                        $assign = false,
                                        $trace  = false ) {
 
@@ -540,12 +549,7 @@ class Runtime extends AssertionChecker {
 
         foreach($clause as $name => $variable) {
 
-            $_name = $name;
-
-            if('\old(' === substr($name, 0, 5))
-                $_name = substr($name, 5, -1);
-
-            if(false === array_key_exists($_name, $data)) {
+            if(false === array_key_exists($name, $data)) {
 
                 $exceptions[] = new $exception(
                     'Variable %s is required and has no value.', 7, $name);
@@ -553,7 +557,7 @@ class Runtime extends AssertionChecker {
                 continue;
             }
 
-            $datum         = &$data[$_name];
+            $datum         = &$data[$name];
             $_verdict      = false;
             $traceVariable = null;
 
@@ -649,45 +653,6 @@ class Runtime extends AssertionChecker {
         }
 
         return $verdict;
-    }
-
-    /**
-     * Isotropic random generation of data from the @requires clause.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function generateData ( ) {
-
-        $data     = array();
-        $behavior = $this->getSpecification();
-
-        do {
-
-            if(true === $behavior->clauseExists('requires'))
-                foreach($behavior->getClause('requires') as $name => $variable)
-                    $data[$name] = $variable->sample();
-
-            if(false === $behavior->clauseExists('behavior'))
-                break;
-
-            $behaviors = $behavior->getClause('behavior');
-            $count     = count($behaviors);
-            $i         = mt_rand(0, $count);
-
-            if($i === $count) {
-
-                if(true === $behavior->clauseExists('default'))
-                    $behavior = $behavior->getClause('default');
-            }
-            else
-                $behavior = $behaviors->getNth($i);
-
-        } while(true);
-
-        $this->setData($data);
-
-        return $data;
     }
 }
 

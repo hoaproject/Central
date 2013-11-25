@@ -59,6 +59,16 @@ from('Hoa')
 -> import('Praspel.Model.Variable.Borrowing')
 
 /**
+ * \Hoa\Realdom\Crate\Variable
+ */
+-> import('Realdom.Crate.Variable')
+
+/**
+ * \Hoa\Realdom\Crate\Constant
+ */
+-> import('Realdom.Crate.Constant')
+
+/**
  * \Hoa\Iterator\Aggregate
  */
 -> import('Iterator.Aggregate')
@@ -146,8 +156,7 @@ abstract class Declaration
      * @access  public
      * @param   string  $name         Variable name.
      * @param   bool    $borrowing    Borrowing variable or not.
-     * @return  \Hoa\Praspel\Model\Variable
-     * @throw   \Hoa\Praspel\Exception\Model
+     * @return  mixed
      */
     public function getVariable ( $name, $borrowing = false ) {
 
@@ -159,10 +168,19 @@ abstract class Declaration
             return $out;
         }
 
-        if('\old(' === substr($name, 0, 5))
-            throw new \Hoa\Praspel\Exception\Model(
-                'Cannot declare domains for %s in @%s.',
-                0, array($name, $this->getName()));
+        if('\old(' === substr($name, 0, 5)) {
+
+            $variable = $this->getVariable($name, true);
+
+            return new \Hoa\Realdom\Crate\Constant(
+                $variable->getBorrowedVariable(),
+                function ( ) use ( $variable ) {
+
+                    return $variable->getName();
+                },
+                $this
+            );
+        }
 
         if(false === $this->offsetExists($name)) {
 

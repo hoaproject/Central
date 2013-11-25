@@ -297,6 +297,13 @@ class Compiler implements \Hoa\Visitor\Visit {
                         '(' . implode(', ', $oout) . ')';
             }
         }
+        elseif($element instanceof \Hoa\Realdom\Crate\Constant) {
+
+            $holder  = $element->getHolder();
+            $praspel = $element->getPraspelRepresentation();
+            $out    .= '$' . $element->getDeclaration()->getId() .
+                       '[\'' . $praspel() . '\']';
+        }
         elseif($element instanceof \Hoa\Realdom\Crate\Variable) {
 
             $holder = $element->getVariable();
@@ -307,7 +314,7 @@ class Compiler implements \Hoa\Visitor\Visit {
                         '\'))';
             else
                 $out .= 'variable($' . $holder->getClause()->getId() .
-                        '[\'' . $holder->getName() . '\'])';
+                        '->getVariable(\'' . $holder->getName() . '\', true))';
         }
 
         else
