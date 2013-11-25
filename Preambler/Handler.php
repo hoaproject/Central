@@ -39,25 +39,25 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Praspel\Exception\AssertionChecker
+ * \Hoa\Praspel\Exception\Preambler
  */
--> import('Praspel.Exception.AssertionChecker');
+-> import('Praspel.Exception.Preambler');
 
 }
 
-namespace Hoa\Praspel\AssertionChecker {
+namespace Hoa\Praspel\Preambler {
 
 /**
- * Class \Hoa\Praspel\AssertionChecker\Preambler.
+ * Class \Hoa\Praspel\Preambler\Handler.
  *
- * Helpers for the preamble.
+ * Handle a class and ease to run a preamble.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Preambler {
+class Handler {
 
     /**
      * Callable to validate and verify.
@@ -88,7 +88,7 @@ class Preambler {
      * @access  public
      * @param   object  &$object    Object.
      * @return  \ReflectionObject
-     * @throw   \Hoa\Praspel\Exception\AssertionChecker
+     * @throw   \Hoa\Praspel\Exception\Preambler
      */
     public function __getReflectionObject ( &$object ) {
 
@@ -100,7 +100,7 @@ class Preambler {
             $callback = $this->__getCallable()->getValidCallback();
 
             if(!is_object($callback[0]))
-                throw new \Hoa\Praspel\Exception\AssertionChecker(
+                throw new \Hoa\Praspel\Exception\Preambler(
                     'Callable %s is not an object.', 0, $this->getCallable());
 
             $_object = $callback[0];
@@ -118,15 +118,15 @@ class Preambler {
      * @access  public
      * @param   string  $name     Name.
      * @param   mixed   $value    Value.
-     * @return  \Hoa\Praspel\AssertionChecker\Preambler
-     * @throw   \Hoa\Praspel\Exception\AssertionChecker
+     * @return  \Hoa\Praspel\Preambler\Handler
+     * @throw   \Hoa\Praspel\Exception\Preambler
      */
     public function __set ( $name, $value ) {
 
         $reflectionObject = $this->__getReflectionObject($object);
 
         if(false === $reflectionObject->hasProperty($name))
-            throw new \Hoa\Praspel\Exception\AssertionChecker(
+            throw new \Hoa\Praspel\Exception\Preambler(
                 'Attribute %s on object %s does not exist, cannot set it.',
                 1, array($name, $reflectionObject->getName()));
 
@@ -143,14 +143,14 @@ class Preambler {
      * @access  public
      * @param   string  $name    Name.
      * @return  mixed
-     * @throw   \Hoa\Praspel\Exception\AssertionChecker
+     * @throw   \Hoa\Praspel\Exception\Preambler
      */
     public function __get ( $name ) {
 
         $reflectionObject = $this->__getReflectionObject($object);
 
         if(false === $reflectionObject->hasProperty($name))
-            throw new \Hoa\Praspel\Exception\AssertionChecker(
+            throw new \Hoa\Praspel\Exception\Preambler(
                 'Attribute %s on object %s does not exist, cannot get it.',
                 2, array($name, $reflectionObject->getName()));
 

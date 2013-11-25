@@ -39,9 +39,9 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Praspel\AssertionChecker\Preambler
+ * \Hoa\Praspel\Preambler\Handler
  */
--> import('Praspel.AssertionChecker.Preambler')
+-> import('Praspel.Preambler.Handler')
 
 /**
  * \Hoa\Praspel\Visitor\Praspel
@@ -124,7 +124,7 @@ abstract class AssertionChecker {
      */
     public function preamble ( $preamble ) {
 
-        $preamble(new Preambler($this->getCallable()));
+        $preamble(new \Hoa\Praspel\Preambler\Handler($this->getCallable()));
 
         return;
     }
