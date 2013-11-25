@@ -232,7 +232,7 @@ class Behavior extends Clause {
             default:
                 throw new \Hoa\Praspel\Exception\Model(
                     'Clause @%s is unknown.',
-                    1, array($clause, $this->getName()));
+                    6, array($clause, $this->getName()));
         }
 
         return $this->_clauses[$clause] = $handle;
@@ -252,7 +252,7 @@ class Behavior extends Clause {
         if(false === in_array($name, static::getAllowedClauses()))
             throw new \Hoa\Praspel\Exception\Model(
                 'Clause @%s is not allowed in @%s.',
-                0, array($name, $this->getId()));
+                7, array($name, $this->getId()));
 
         $clause->setParent($this);
 
