@@ -163,11 +163,11 @@ class Handler {
     /**
      * Set callable.
      *
-     * @access  protected
+     * @access  public
      * @param   \Hoa\Core\Consistency\Xcallable  $callable    Callable.
      * @return  \Hoa\Core\Consistency\Xcallable
      */
-    protected function __setCallable ( \Hoa\Core\Consistency\Xcallable $callable ) {
+    public function __setCallable ( \Hoa\Core\Consistency\Xcallable $callable ) {
 
         $old              = $this->__callable;
         $this->__callable = $callable;
