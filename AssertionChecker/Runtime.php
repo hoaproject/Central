@@ -145,8 +145,11 @@ class Runtime extends AssertionChecker {
 
         // Prepare data.
         if(null === $data = $this->getData())
-            if(true === $this->canGenerateData())
-                $data = $this->generateData();
+            if(true === $this->canGenerateData()) {
+
+                $data = static::generateData($specification);
+                $this->setData($data);
+            }
             else
                 throw new \Hoa\Praspel\Exception\AssertionChecker(
                     'No data were given. The System Under Test %s needs data ' .
@@ -650,45 +653,6 @@ class Runtime extends AssertionChecker {
         }
 
         return $verdict;
-    }
-
-    /**
-     * Isotropic random generation of data from the @requires clause.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function generateData ( ) {
-
-        $data     = array();
-        $behavior = $this->getSpecification();
-
-        do {
-
-            if(true === $behavior->clauseExists('requires'))
-                foreach($behavior->getClause('requires') as $name => $variable)
-                    $data[$name] = $variable->sample();
-
-            if(false === $behavior->clauseExists('behavior'))
-                break;
-
-            $behaviors = $behavior->getClause('behavior');
-            $count     = count($behaviors);
-            $i         = mt_rand(0, $count);
-
-            if($i === $count) {
-
-                if(true === $behavior->clauseExists('default'))
-                    $behavior = $behavior->getClause('default');
-            }
-            else
-                $behavior = $behaviors->getNth($i);
-
-        } while(true);
-
-        $this->setData($data);
-
-        return $data;
     }
 }
 

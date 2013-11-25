@@ -141,11 +141,42 @@ abstract class AssertionChecker {
 
     /**
      * Generate data.
+     * Isotropic random generation of data from the @requires clause.
      *
      * @access  public
+     * @param   \Hoa\Praspel\Model\Specification  $specification    Specification.
      * @return  array
      */
-    abstract public function generateData ( );
+    public static function generateData ( \Hoa\Praspel\Model\Specification $specification ) {
+
+        $data     = array();
+        $behavior = $specification;
+
+        do {
+
+            if(true === $behavior->clauseExists('requires'))
+                foreach($behavior->getClause('requires') as $name => $variable)
+                    $data[$name] = $variable->sample();
+
+            if(false === $behavior->clauseExists('behavior'))
+                break;
+
+            $behaviors = $behavior->getClause('behavior');
+            $count     = count($behaviors);
+            $i         = mt_rand(0, $count);
+
+            if($i === $count) {
+
+                if(true === $behavior->clauseExists('default'))
+                    $behavior = $behavior->getClause('default');
+            }
+            else
+                $behavior = $behaviors->getNth($i);
+
+        } while(true);
+
+        return $data;
+    }
 
     /**
      * Set specification.
