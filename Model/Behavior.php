@@ -217,6 +217,11 @@ class Behavior extends Clause {
                         'Cannot add the @default clause, since an @ensures ' .
                         'or a @throwable clause exists at the same level.', 4);
 
+                if(false === $this->clauseExists('behavior'))
+                    throw new \Hoa\Praspel\Exception\Model(
+                        'Cannot add a @default clause if at least one ' .
+                        '@behavior clause has not been declared.', 5);
+
                 $handle = new DefaultBehavior($this);
               break;
 
