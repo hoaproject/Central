@@ -59,6 +59,16 @@ from('Hoa')
 -> import('Praspel.Model.Variable.Borrowing')
 
 /**
+ * \Hoa\Realdom\Crate\Variable
+ */
+-> import('Realdom.Crate.Variable')
+
+/**
+ * \Hoa\Realdom\Crate\Constant
+ */
+-> import('Realdom.Crate.Constant')
+
+/**
  * \Hoa\Iterator\Aggregate
  */
 -> import('Iterator.Aggregate')

@@ -54,16 +54,6 @@ from('Hoa')
 -> import('Visitor.Visit')
 
 /**
- * \Hoa\Realdom\Crate\Variable
- */
--> import('Realdom.Crate.Variable')
-
-/**
- * \Hoa\Realdom\Crate\Constant
- */
--> import('Realdom.Crate.Constant')
-
-/**
  * \Hoa\String
  */
 -> import('String.~');
