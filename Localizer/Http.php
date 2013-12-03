@@ -57,6 +57,9 @@ namespace Hoa\Locale\Localizer {
  *
  * Deduce locale from a HTTP request.
  *
+ * Overview: http://www.w3.org/International/articles/language-tags/.
+ * Specifications: RFC2822 and RFC3282.
+ *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
