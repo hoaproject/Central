@@ -87,15 +87,17 @@ try {
 catch ( \Hoa\Core\Exception $e ) {
 
     $message = $e->raise(true);
+    $code    = 1;
 }
 catch ( \Exception $e ) {
 
     $message = $e->getMessage();
+    $code    = 2;
 }
 
 \Hoa\Console\Cursor::colorize('foreground(white) background(red)');
 echo $message, "\n";
 \Hoa\Console\Cursor::colorize('normal');
-exit($e->getCode() + 1);
+exit($code);
 
 }
