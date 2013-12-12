@@ -126,7 +126,7 @@ class Constfloat extends Float implements IRealdom\Constant {
      */
     public function getConstantRepresentation ( ) {
 
-        return sprintf('%f', $this->getConstantValue());
+        return sprintf('%F', $this->getConstantValue());
     }
 }
 
