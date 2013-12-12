@@ -48,24 +48,25 @@ from('Hoa')
 namespace Hoa\Xyl\Interpreter\Common {
 
 /**
- * Class \Hoa\Xyl\Interpreter\Common\_If.
+ * Class \Hoa\Xyl\Interpreter\Common\Translate.
  *
- * The <if /> component.
+ * The <_ /> component.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class _If extends \Hoa\Xyl\Element\Concrete {
+class Translate extends \Hoa\Xyl\Element\Concrete {
 
     /**
      * Attributes description.
      *
-     * @var \Hoa\Xyl\Interpreter\Common\_If array
+     * @var \Hoa\Xyl\Interpreter\Common\Value array
      */
     protected static $_attributes = array(
-        'test' => self::ATTRIBUTE_TYPE_NORMAL
+        'n'    => self::ATTRIBUTE_TYPE_NORMAL,
+        'with' => self::ATTRIBUTE_TYPE_CUSTOM
     );
 
 
@@ -79,42 +80,46 @@ class _If extends \Hoa\Xyl\Element\Concrete {
      */
     public function paint ( \Hoa\Stream\IStream\Out $out ) {
 
-        return $this->structuralCompute($out);
-    }
+        $root  = $this->getAbstractElementSuperRoot();
+        $value = $this->computeValue();
+        $with  = '__main__';
 
-    /**
-     * Structural compute (if/elseif/else).
-     *
-     * @access  public
-     * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
-     * @return  void
-     */
-    public function structuralCompute ( \Hoa\Stream\IStream\Out $out ) {
+        if(true === $this->abstract->attributeExists('with'))
+            $with = $this->abstract->readAttribute('with');
 
-        $verdict = false;
 
-        if(true === $this->abstract->attributeExists('test'))
-            $verdict = \Hoa\Xyl::evaluateXPath(
-                $this->computeAttributeValue(
-                    $this->abstract->readAttribute('test'),
-                    self::ATTRIBUTE_TYPE_NORMAL
-                )
-            );
+        $translation = $root->getTranslation($with);
 
-        if(false === $verdict) {
+        if(null === $translation) {
 
-            $next = $this->abstract->selectAdjacentSiblingElement('elseif')
-                        ?: $this->abstract->selectAdjacentSiblingElement('else');
-
-            if(false === $next)
-                return;
-
-            $this->getConcreteElement($next)->structuralCompute($out);
+            $out->writeAll($value);
 
             return;
         }
 
-        $this->computeValue($out);
+        $callable  = null;
+        $arguments = array($value);
+
+        if(true === $this->abstract->attributeExists('n')) {
+
+            $callable    = xcallable($translation, '_n');
+            $arguments[] = $this->abstract->readAttribute('n');
+        }
+        else
+            $callable = xcallable($translation, '_');
+
+        $with = $this->abstract->readCustomAttributes('with');
+
+        if(!empty($with))
+            foreach($with as $w)
+                $arguments[] = $this->computeAttributeValue($w);
+
+        $result = $callable->distributeArguments($arguments);
+
+        if(false !== strpos($result, '<'))
+            $this->computeFromString($result);
+        else
+            $out->writeAll($result);
 
         return;
     }

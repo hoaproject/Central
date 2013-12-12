@@ -39,25 +39,25 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Xyl\Element\Concrete
+ * \Hoa\Xyl\Interpreter\Common\XylIf
  */
--> import('Xyl.Element.Concrete');
+-> import('Xyl.Interpreter.Common.XylIf');
 
 }
 
 namespace Hoa\Xyl\Interpreter\Common {
 
 /**
- * Class \Hoa\Xyl\Interpreter\Common\_Else.
+ * Class \Hoa\Xyl\Interpreter\Common\XylElseif.
  *
- * The <else /> component.
+ * The <elseif /> component.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class _Else extends \Hoa\Xyl\Element\Concrete {
+class XylElseif extends XylIf {
 
     /**
      * Paint the element.
@@ -67,20 +67,6 @@ class _Else extends \Hoa\Xyl\Element\Concrete {
      * @return  void
      */
     public function paint ( \Hoa\Stream\IStream\Out $out ) {
-
-        return;
-    }
-
-    /**
-     * Structural compute (if/elseif/else).
-     *
-     * @access  public
-     * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
-     * @return  void
-     */
-    public function structuralCompute ( \Hoa\Stream\IStream\Out $out ) {
-
-        $this->computeValue($out);
 
         return;
     }

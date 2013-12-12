@@ -41,30 +41,23 @@ from('Hoa')
 /**
  * \Hoa\Xyl\Element\Concrete
  */
--> import('Xyl.Element.Concrete')
-
-/**
- * \Hoa\Xml\Element\Model\Phrasing
- */
--> import('Xml.Element.Model.Phrasing');
+-> import('Xyl.Element.Concrete');
 
 }
 
 namespace Hoa\Xyl\Interpreter\Common {
 
 /**
- * Class \Hoa\Xyl\Interpreter\Common\_Yield.
+ * Class \Hoa\Xyl\Interpreter\Common\XylElse.
  *
- * The <yield /> component.
+ * The <else /> component.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class          _Yield
-    extends    \Hoa\Xyl\Element\Concrete
-    implements \Hoa\Xml\Element\Model\Phrasing {
+class XylElse extends \Hoa\Xyl\Element\Concrete {
 
     /**
      * Paint the element.
@@ -74,6 +67,18 @@ class          _Yield
      * @return  void
      */
     public function paint ( \Hoa\Stream\IStream\Out $out ) {
+
+        return;
+    }
+
+    /**
+     * Structural compute (if/elseif/else).
+     *
+     * @access  public
+     * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
+     * @return  void
+     */
+    public function structuralCompute ( \Hoa\Stream\IStream\Out $out ) {
 
         $this->computeValue($out);
 

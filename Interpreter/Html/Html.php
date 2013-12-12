@@ -78,15 +78,15 @@ class Html extends \Hoa\Xyl\Interpreter {
         // XYL.
         'document'        => '\Hoa\Xyl\Interpreter\Html\Document',
         'title'           => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
-        'definition'      => '\Hoa\Xyl\Interpreter\Common\_Yield',
+        'definition'      => '\Hoa\Xyl\Interpreter\Common\XylYield',
         'value'           => '\Hoa\Xyl\Interpreter\Common\Value',
-        'yield'           => '\Hoa\Xyl\Interpreter\Common\_Yield',
-        'fragment'        => '\Hoa\Xyl\Interpreter\Common\_Yield',
+        'yield'           => '\Hoa\Xyl\Interpreter\Common\XylYield',
+        'fragment'        => '\Hoa\Xyl\Interpreter\Common\XylYield',
         'snippet'         => '\Hoa\Xyl\Interpreter\Common\Snippet',
-        'if'              => '\Hoa\Xyl\Interpreter\Common\_If',
-        'elseif'          => '\Hoa\Xyl\Interpreter\Common\_Elseif',
-        'else'            => '\Hoa\Xyl\Interpreter\Common\_Else',
-        '_'               => '\Hoa\Xyl\Interpreter\Common\_',
+        'if'              => '\Hoa\Xyl\Interpreter\Common\XylIf',
+        'elseif'          => '\Hoa\Xyl\Interpreter\Common\XylElseif',
+        'else'            => '\Hoa\Xyl\Interpreter\Common\XylElse',
+        '_'               => '\Hoa\Xyl\Interpreter\Common\Translate',
 
         // Script.
         'script'          => '\Hoa\Xyl\Interpreter\Html\Script',
