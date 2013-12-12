@@ -76,14 +76,14 @@ class RealdomClass extends Realdom {
      *
      * @var \Hoa\Realdom array
      */
-    protected $_arguments      = …;
+    protected $_arguments = …;
 
     /**
-     * Class arguments.
+     * Object.
      *
-     * @var \Hoa\Realdom\_Class array
+     * @var \Hoa\Realdom\RealdomClass object
      */
-    protected $_classArguments = null;
+    protected $_object    = null;
 
 
 
@@ -98,8 +98,6 @@ class RealdomClass extends Realdom {
         if(!isset($this[0]))
             throw new Exception\MissingArgument(
                 'Argument missing.', 0);
-
-        $this->_classArguments = array_slice($this->getArguments(), 1);
 
         return;
     }
@@ -126,15 +124,15 @@ class RealdomClass extends Realdom {
      */
     protected function _sample ( \Hoa\Math\Sampler $sampler ) {
 
-        $arguments = array();
-
-        foreach($this->_classArguments as $i => $argument)
-            $arguments[$i] = $argument->sample($sampler);
-
-        return dnew(
-            $this[0]->getConstantValue(),
-            $arguments
+        $className = $this[0]->getConstantValue();
+        $handler   = new \Hoa\Praspel\Preambler\Handler(
+            xcallable($className, '__construct')
         );
+        $preambler = new \Hoa\Praspel\Preambler\EncapsulationShunter();
+        $preambler($handler);
+        $callback  = $handler->__getCallable()->getValidCallback();
+
+        return $callback[0];
     }
 }
 
