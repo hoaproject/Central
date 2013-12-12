@@ -210,7 +210,7 @@ class          Disjunction
         else {
 
             if(\Hoa\Core\Consistency::isKeyword($name))
-                $name = '_' . $name;
+                $name = 'Realdom' . $name;
 
             try {
 

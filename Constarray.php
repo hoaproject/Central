@@ -39,9 +39,9 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Realdom\_Array
+ * \Hoa\Realdom\RealdomArray
  */
--> import('Realdom._Array')
+-> import('Realdom.RealdomArray')
 
 /**
  * \Hoa\Realdom\IRealdom\Constant
@@ -67,7 +67,7 @@ namespace Hoa\Realdom {
  * @license    New BSD License
  */
 
-class Constarray extends _Array implements IRealdom\Constant {
+class Constarray extends RealdomArray implements IRealdom\Constant {
 
     /**
      * Realistic domain name.

@@ -39,9 +39,9 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Realdom\_Array
+ * \Hoa\Realdom\RealdomArray
  */
--> import('Realdom._Array');
+-> import('Realdom.RealdomArray');
 
 }
 
@@ -57,7 +57,7 @@ namespace Hoa\Realdom {
  * @license    New BSD License
  */
 
-class Relation extends _Array {
+class Relation extends RealdomArray {
 
     /**
      * Realistic domain name.

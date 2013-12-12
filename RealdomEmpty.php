@@ -39,11 +39,6 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Realdom\Exception\MissingArgument
- */
--> import('Realdom.Exception.MissingArgument')
-
-/**
  * \Hoa\Realdom
  */
 -> import('Realdom.~');
@@ -53,56 +48,25 @@ from('Hoa')
 namespace Hoa\Realdom {
 
 /**
- * Class \Hoa\Realdom\_Class.
+ * Class \Hoa\Realdom\RealdomEmpty.
  *
- * Realistic domain: class.
+ * Realistic domain: empty.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class _Class extends Realdom {
+class RealdomEmpty extends Realdom {
 
     /**
      * Realistic domain name.
      *
      * @const string
      */
-    const NAME = 'class';
-
-    /**
-     * Realistic domain defined arguments.
-     *
-     * @var \Hoa\Realdom array
-     */
-    protected $_arguments      = …;
-
-    /**
-     * Class arguments.
-     *
-     * @var \Hoa\Realdom\_Class array
-     */
-    protected $_classArguments = null;
+    const NAME = 'empty';
 
 
-
-    /**
-     * Construct a realistic domain.
-     *
-     * @access  protected
-     * @return  void
-     */
-    protected function construct ( ) {
-
-        if(!isset($this[0]))
-            throw new Exception\MissingArgument(
-                'Argument missing.', 0);
-
-        $this->_classArguments = array_slice($this->getArguments(), 1);
-
-        return;
-    }
 
     /**
      * Predicate whether the sampled value belongs to the realistic domains.
@@ -113,8 +77,7 @@ class _Class extends Realdom {
      */
     protected function _predicate ( $q ) {
 
-        return    is_object($q)
-               && is_a($q, $this[0]->getConstantValue());
+        return empty($q);
     }
 
     /**
@@ -126,15 +89,7 @@ class _Class extends Realdom {
      */
     protected function _sample ( \Hoa\Math\Sampler $sampler ) {
 
-        $arguments = array();
-
-        foreach($this->_classArguments as $i => $argument)
-            $arguments[$i] = $argument->sample($sampler);
-
-        return dnew(
-            $this[0]->getConstantValue(),
-            $arguments
-        );
+        return void;
     }
 }
 
