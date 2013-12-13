@@ -39,25 +39,36 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Xyl\Interpreter\Common\_If
+ * \Hoa\Xyl\Element\Concrete
  */
--> import('Xyl.Interpreter.Common._If');
+-> import('Xyl.Element.Concrete');
 
 }
 
 namespace Hoa\Xyl\Interpreter\Common {
 
 /**
- * Class \Hoa\Xyl\Interpreter\Common\_Elseif.
+ * Class \Hoa\Xyl\Interpreter\Common\XylIf.
  *
- * The <elseif /> component.
+ * The <if /> component.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class _Elseif extends _If {
+class XylIf extends \Hoa\Xyl\Element\Concrete {
+
+    /**
+     * Attributes description.
+     *
+     * @var \Hoa\Xyl\Interpreter\Common\XylIf array
+     */
+    protected static $_attributes = array(
+        'test' => self::ATTRIBUTE_TYPE_NORMAL
+    );
+
+
 
     /**
      * Paint the element.
@@ -67,6 +78,43 @@ class _Elseif extends _If {
      * @return  void
      */
     public function paint ( \Hoa\Stream\IStream\Out $out ) {
+
+        return $this->structuralCompute($out);
+    }
+
+    /**
+     * Structural compute (if/elseif/else).
+     *
+     * @access  public
+     * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
+     * @return  void
+     */
+    public function structuralCompute ( \Hoa\Stream\IStream\Out $out ) {
+
+        $verdict = false;
+
+        if(true === $this->abstract->attributeExists('test'))
+            $verdict = \Hoa\Xyl::evaluateXPath(
+                $this->computeAttributeValue(
+                    $this->abstract->readAttribute('test'),
+                    self::ATTRIBUTE_TYPE_NORMAL
+                )
+            );
+
+        if(false === $verdict) {
+
+            $next = $this->abstract->selectAdjacentSiblingElement('elseif')
+                        ?: $this->abstract->selectAdjacentSiblingElement('else');
+
+            if(false === $next)
+                return;
+
+            $this->getConcreteElement($next)->structuralCompute($out);
+
+            return;
+        }
+
+        $this->computeValue($out);
 
         return;
     }

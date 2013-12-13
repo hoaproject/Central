@@ -41,35 +41,30 @@ from('Hoa')
 /**
  * \Hoa\Xyl\Element\Concrete
  */
--> import('Xyl.Element.Concrete');
+-> import('Xyl.Element.Concrete')
+
+/**
+ * \Hoa\Xml\Element\Model\Phrasing
+ */
+-> import('Xml.Element.Model.Phrasing');
 
 }
 
 namespace Hoa\Xyl\Interpreter\Common {
 
 /**
- * Class \Hoa\Xyl\Interpreter\Common\_.
+ * Class \Hoa\Xyl\Interpreter\Common\XylYield.
  *
- * The <_ /> component.
+ * The <yield /> component.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class _ extends \Hoa\Xyl\Element\Concrete {
-
-    /**
-     * Attributes description.
-     *
-     * @var \Hoa\Xyl\Interpreter\Common\Value array
-     */
-    protected static $_attributes = array(
-        'n'    => self::ATTRIBUTE_TYPE_NORMAL,
-        'with' => self::ATTRIBUTE_TYPE_CUSTOM
-    );
-
-
+class          XylYield
+    extends    \Hoa\Xyl\Element\Concrete
+    implements \Hoa\Xml\Element\Model\Phrasing {
 
     /**
      * Paint the element.
@@ -80,46 +75,7 @@ class _ extends \Hoa\Xyl\Element\Concrete {
      */
     public function paint ( \Hoa\Stream\IStream\Out $out ) {
 
-        $root  = $this->getAbstractElementSuperRoot();
-        $value = $this->computeValue();
-        $with  = '__main__';
-
-        if(true === $this->abstract->attributeExists('with'))
-            $with = $this->abstract->readAttribute('with');
-
-
-        $translation = $root->getTranslation($with);
-
-        if(null === $translation) {
-
-            $out->writeAll($value);
-
-            return;
-        }
-
-        $callable  = null;
-        $arguments = array($value);
-
-        if(true === $this->abstract->attributeExists('n')) {
-
-            $callable    = xcallable($translation, '_n');
-            $arguments[] = $this->abstract->readAttribute('n');
-        }
-        else
-            $callable = xcallable($translation, '_');
-
-        $with = $this->abstract->readCustomAttributes('with');
-
-        if(!empty($with))
-            foreach($with as $w)
-                $arguments[] = $this->computeAttributeValue($w);
-
-        $result = $callable->distributeArguments($arguments);
-
-        if(false !== strpos($result, '<'))
-            $this->computeFromString($result);
-        else
-            $out->writeAll($result);
+        $this->computeValue($out);
 
         return;
     }
