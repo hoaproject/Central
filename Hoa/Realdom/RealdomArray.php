@@ -53,7 +53,7 @@ from('Hoa')
 namespace Hoa\Realdom {
 
 /**
- * Class \Hoa\Realdom\_Array.
+ * Class \Hoa\Realdom\RealdomArray.
  *
  * Realistic domain: array.
  * Supported constraints: sorted, rsorted, ksorted, krsorted, unique.
@@ -63,7 +63,7 @@ namespace Hoa\Realdom {
  * @license    New BSD License
  */
 
-class _Array extends Realdom {
+class RealdomArray extends Realdom {
 
     /**
      * Realistic domain name.

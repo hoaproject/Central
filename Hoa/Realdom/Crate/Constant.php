@@ -158,7 +158,7 @@ class          Constant
 
         foreach($held as $realdom) {
 
-            if($realdom instanceof \Hoa\Realdom\_Array)
+            if($realdom instanceof \Hoa\Realdom\RealdomArray)
                 $out[] = $prefix . 'Constarray';
             elseif($realdom instanceof \Hoa\Realdom\Boolean)
                 $out[] = $prefix . 'Constboolean';
