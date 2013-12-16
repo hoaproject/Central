@@ -95,7 +95,7 @@ class Delete extends Where implements Dml {
      */
     public function __toString ( ) {
 
-        return 'DELETE ' . $this->_from . parent::__toString();
+        return 'DELETE FROM ' . $this->_from . parent::__toString();
     }
 }
 
