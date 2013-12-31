@@ -225,32 +225,32 @@ class Core implements Parameter\Parameterizable {
             array(
                 'root.hoa'         => '(:root:)',
                 'root.application' => '(:cwd:h:)',
-                'root.data'        => '(:%root.application:h:)/Data',
+                'root.data'        => '(:%root.application:h:)' . DS . 'Data',
 
-                'protocol.Application'            => '(:%root.application:)/',
-                'protocol.Application/Public'     => 'Public/',
-                'protocol.Data'                   => '(:%root.data:)/',
-                'protocol.Data/Etc'               => 'Etc/',
-                'protocol.Data/Etc/Configuration' => 'Configuration/',
-                'protocol.Data/Etc/Locale'        => 'Locale/',
-                'protocol.Data/Library'           => 'Library/Hoathis/;' .
-                                                     'Library/Hoa/',
-                'protocol.Data/Lost+found'        => 'Lost+found/',
-                'protocol.Data/Temporary'         => 'Temporary/',
-                'protocol.Data/Variable'          => 'Variable/',
-                'protocol.Data/Variable/Cache'    => 'Cache/',
-                'protocol.Data/Variable/Database' => 'Database/',
-                'protocol.Data/Variable/Log'      => 'Log/',
-                'protocol.Data/Variable/Private'  => 'Private/',
-                'protocol.Data/Variable/Run'      => 'Run/',
-                'protocol.Data/Variable/Test'     => 'Test/',
-                'protocol.Library'                => '(:%protocol.Data:)Library/Hoathis/;' .
-                                                     '(:%protocol.Data:)Library/Hoa/;' .
-                                                     '(:%root.hoa:)/Hoathis/;' .
-                                                     '(:%root.hoa:)/Hoa/',
+                'protocol.Application'            => '(:%root.application:)' . DS,
+                'protocol.Application/Public'     => 'Public' . DS,
+                'protocol.Data'                   => '(:%root.data:)' . DS,
+                'protocol.Data/Etc'               => 'Etc' . DS,
+                'protocol.Data/Etc/Configuration' => 'Configuration' . DS,
+                'protocol.Data/Etc/Locale'        => 'Locale' . DS,
+                'protocol.Data/Library'           => 'Library' . DS . 'Hoathis' . DS . ';' .
+                                                     'Library' . DS . 'Hoa' . DS,
+                'protocol.Data/Lost+found'        => 'Lost+found' . DS,
+                'protocol.Data/Temporary'         => 'Temporary' . DS,
+                'protocol.Data/Variable'          => 'Variable' . DS,
+                'protocol.Data/Variable/Cache'    => 'Cache' . DS,
+                'protocol.Data/Variable/Database' => 'Database' . DS,
+                'protocol.Data/Variable/Log'      => 'Log' . DS,
+                'protocol.Data/Variable/Private'  => 'Private' . DS,
+                'protocol.Data/Variable/Run'      => 'Run' . DS,
+                'protocol.Data/Variable/Test'     => 'Test' . DS,
+                'protocol.Library'                => '(:%protocol.Data:)Library' . DS . 'Hoathis' . DS. ';' .
+                                                     '(:%protocol.Data:)Library' . DS . 'Hoa' . DS . ';' .
+                                                     '(:%root.hoa:)' . DS . 'Hoathis' . DS . ';' .
+                                                     '(:%root.hoa:)' . DS . 'Hoa' . DS,
 
-                'namespace.prefix.*'           => '(:%protocol.Data:)Library/;(:%root.hoa:)/',
-                'namespace.prefix.Application' => '(:%root.application:h:)/',
+                'namespace.prefix.*'           => '(:%protocol.Data:)Library' . DS . ';(:%root.hoa:)' . DS,
+                'namespace.prefix.Application' => '(:%root.application:h:)' . DS,
             )
         );
 
