@@ -33,10 +33,6 @@
         "hoa/xml"         : "dev-master"
     },
     "minimum-stability": "dev",
-    "target-dir": "Hoa/Xyl",
-    "autoload": {
-        "psr-0": {
-            "Hoa\\Xyl": "."
-        }
-    }
+    "target-dir"       : "Hoa/Xyl",
+    "autoload"         : { "psr-0": { "Hoa\\Xyl": "." } }
 }
