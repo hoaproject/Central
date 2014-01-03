@@ -24,10 +24,6 @@
         "hoa/core": "dev-master"
     },
     "minimum-stability": "dev",
-    "target-dir": "Hoa/Zombie",
-    "autoload": {
-        "psr-0": {
-            "Hoa\\Zombie": "."
-        }
-    }
+    "target-dir"       : "Hoa/Zombie",
+    "autoload"         : { "psr-0": { "Hoa\\Zombie": "." } }
 }
