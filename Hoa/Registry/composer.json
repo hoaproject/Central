@@ -23,11 +23,7 @@
     "require": {
         "hoa/core": "dev-master"
     },
-    "minimum-stability": "dev",
-    "target-dir": "Hoa/Registry",
-    "autoload": {
-        "psr-0": {
-            "Hoa\\Registry": "."
-        }
-    }
+    "minimum-stability" : "dev",
+    "target-dir"        : "Hoa/Registry",
+    "autoload"          : { "psr-0": { "Hoa\\Registry": "." } }
 }
