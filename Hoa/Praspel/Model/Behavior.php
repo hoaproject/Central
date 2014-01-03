@@ -121,7 +121,8 @@ class Behavior extends Clause {
         'behavior',
         'default',
         'ensures',
-        'throwable'
+        'throwable',
+        'description'
     );
 
     /**

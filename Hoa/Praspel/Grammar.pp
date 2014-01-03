@@ -159,17 +159,19 @@ behavior_content:
         )
         ::semicolon::+
       | ( behavior() ::semicolon::* )+ default()? ::semicolon::*
+      | description() ::semicolon::*
     )+
     ::_brace:: #behavior
 
 #default:
     ::at_default:: ::brace_::
     (
-      (
-          ensures()
-        | throwable()
-      )
-      ::semicolon::+
+        (
+            ensures()
+          | throwable()
+        )
+        ::semicolon::+
+      | description() ::semicolon::*
     )+
     ::_brace::
 
