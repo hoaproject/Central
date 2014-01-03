@@ -26,10 +26,7 @@
         "ext-session": "*"
     },
     "minimum-stability": "dev",
-    "target-dir": "Hoa/Session",
-    "autoload": {
-        "psr-0": {
-            "Hoa\\Session": "."
-        }
+    "target-dir"       : "Hoa/Session",
+    "autoload"         : { "psr-0": { "Hoa\\Session": "." }
     }
 }
