@@ -71,7 +71,12 @@ from('Hoa')
 /**
  * \Hoa\Iterator\Counter
  */
--> import('Iterator.Counter');
+-> import('Iterator.Counter')
+
+/**
+ * \Hoa\Iterator\CallbackFilter
+ */
+-> import('Iterator.CallbackFilter');
 
 }
 
@@ -270,10 +275,18 @@ class          Boundinteger
      */
     public function getIterator ( ) {
 
-        return new \Hoa\Iterator\Counter(
-            $this['lower']->getConstantValue(),
-            $this['upper']->getConstantValue() + 1,
-            1
+        $discredited = &$this->_discredited;
+
+        return new \Hoa\Iterator\CallbackFilter(
+            new \Hoa\Iterator\Counter(
+                $this['lower']->getConstantValue(),
+                $this['upper']->getConstantValue() + 1,
+                1
+            ),
+            function ( $value ) use ( &$discredited ) {
+
+                return false === in_array($value, $discredited);
+            }
         );
     }
 }
