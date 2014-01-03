@@ -26,6 +26,7 @@ cloak on IRC, etc.
   * Kevin Gravier (mrkmg)
   * Nicolas Grekas (nicolas-grekas)
   * ➜ Sébastien Houzé (shouze)
+  * Matthieu de Laubrie (Metalaka, ex-Derver)
   * ➜ Renaud Littolff (marmotz)
   * ➜ Julien Lorrain (julien)
   * ➜ Jean Molliné (cyrano)
@@ -34,9 +35,6 @@ cloak on IRC, etc.
   * ➜ Stéphane Py (stephpy)
   * Mathias Strasser (mathiasstrasser)
   * Emmanuel Thierry (sekiltoyai)
-
-Only pseudos:
-  * Derver (on Github)
 
 # Special thanks
 
