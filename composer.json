@@ -25,6 +25,7 @@
         "hoa/core"    : "dev-master",
         "hoa/compiler": "dev-master",
         "hoa/file"    : "dev-master",
+        "hoa/iterator": "dev-master",
         "hoa/math"    : "dev-master",
         "hoa/praspel" : "dev-master",
         "hoa/regex"   : "dev-master",
@@ -32,10 +33,6 @@
         "hoa/visitor" : "dev-master"
     },
     "minimum-stability": "dev",
-    "target-dir": "Hoa/Realdom",
-    "autoload": {
-        "psr-0": {
-            "Hoa\\Realdom": "."
-        }
-    }
+    "target-dir"       : "Hoa/Realdom",
+    "autoload"         : { "psr-0": { "Hoa\\Realdom": "." } }
 }
