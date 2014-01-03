@@ -26,10 +26,6 @@
         "hoa/stream": "dev-master"
     },
     "minimum-stability": "dev",
-    "target-dir": "Hoa/Socket",
-    "autoload": {
-        "psr-0": {
-            "Hoa\\Socket": "."
-        }
-    }
+    "target-dir"       : "Hoa/Socket",
+    "autoload"         : { "psr-0": { "Hoa\\Socket": "." } }
 }
