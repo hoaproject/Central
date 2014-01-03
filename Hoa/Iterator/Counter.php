@@ -39,83 +39,82 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Iterator\Exception
- */
--> import('Iterator.Exception')
-
-/**
  * \Hoa\Iterator
  */
--> import('Iterator.~');
+-> import('Iterator.~')
+
+/**
+ * \Hoa\Iterator\Exception
+ */
+-> import('Iterator.Exception');
 
 }
 
 namespace Hoa\Iterator {
 
 /**
- * Class \Hoa\Iterator\Repeater.
+ * Class \Hoa\Iterator\Counter.
  *
- * Repeat an iterator n-times.
+ * A counter.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Repeater implements Iterator {
+class Counter implements Iterator {
 
     /**
-     * Current iterator.
+     * From (lower bound).
      *
-     * @var \Traversable object
+     * @var \Hoa\Iterator\Counter int
      */
-    protected $_iterator = null;
+    protected $_from = 0;
 
     /**
-     * Maximum repetition.
+     * Current index.
      *
-     * @var \Hoa\Iterator\Repeater int
+     * @var \Hoa\Iterator\Counter int
      */
-    protected $_n        = 1;
+    protected $_i    = 0;
 
     /**
-     * Current repetition.
+     * To (upper bound).
      *
-     * @var \Hoa\Iterator\Repeater int
+     * @var \Hoa\Iterator\Counter int
      */
-    protected $_i        = 1;
+    protected $_to   = 0;
 
     /**
-     * Body (callable to execute each time).
+     * Step.
      *
-     * @var \Hoa\Iterator\Repeater callable
+     * @var \Hoa\Iterator\Counter int
      */
-    protected $_body     = null;
+    protected $_step = 0;
 
 
 
     /**
      * Constructor.
+     * Equivalent to:
+     *     for($i = $from; $i < $to; $i += $step)
      *
      * @access  public
-     * @param   \Traversable  $iterator    Iterator.
-     * @param   int           $n           Repeat $n-times.
-     * @param   callable      $body        Body.
+     * @param   int  $from    Start value.
+     * @param   int  $to      Maximum value.
+     * @param   int  $step    Step.
      * @return  void
      * @throw   \Hoa\Iterator\Exception
      */
-    public function __construct ( \Traversable $iterator, $n, $body = null ) {
+    public function __construct ( $from, $to, $step ) {
 
-        if(0 >= $n)
+        if($step <= 0)
             throw new Exception(
-                'n must be greater than 0, given %d.', 0, $n);
+                'The step must be non-negative; given %d.', 0, $step);
 
-        if($iterator instanceof \IteratorAggregate)
-            $iterator = $iterator->getIterator();
-
-        $this->_iterator = $iterator;
-        $this->_n        = $n;
-        $this->_body     = $body;
+        $this->_from = $from;
+        $this->_to   = $to;
+        $this->_step = $step;
 
         return;
     }
@@ -124,22 +123,22 @@ class Repeater implements Iterator {
      * Return the current element.
      *
      * @access  public
-     * @return  mixed
+     * @return  int
      */
     public function current ( ) {
 
-        return $this->_iterator->current();
+        return $this->_i;
     }
 
     /**
      * Return the key of the current element.
      *
      * @access  public
-     * @return  mixed
+     * @return  int
      */
     public function key ( ) {
 
-        return $this->_iterator->key();
+        return $this->_i;
     }
 
     /**
@@ -150,7 +149,9 @@ class Repeater implements Iterator {
      */
     public function next ( ) {
 
-        return $this->_iterator->next();
+        $this->_i += $this->_step;
+
+        return;
     }
 
     /**
@@ -161,7 +162,9 @@ class Repeater implements Iterator {
      */
     public function rewind ( ) {
 
-        return $this->_iterator->rewind();
+        $this->_i = $this->_from;
+
+        return;
     }
 
     /**
@@ -172,27 +175,7 @@ class Repeater implements Iterator {
      */
     public function valid ( ) {
 
-        $valid = $this->_iterator->valid();
-
-        if(true === $valid)
-            return true;
-
-        if(null !== $this->_body) {
-
-            $handle = &$this->_body;
-            $handle($this->_i);
-        }
-
-        $this->rewind();
-
-        if($this->_n <= $this->_i++) {
-
-            $this->_i = 1;
-
-            return false;
-        }
-
-        return true;
+        return $this->_i < $this->_to;
     }
 }
 
