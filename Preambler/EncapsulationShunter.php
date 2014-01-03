@@ -44,6 +44,11 @@ from('Hoa')
 -> import('Praspel.Exception.Preambler')
 
 /**
+ * \Hoa\Praspel\AssertionChecker
+ */
+-> import('Praspel.AssertionChecker.~')
+
+/**
  * \Hoa\Praspel
  */
 -> import('Praspel.~');
@@ -140,11 +145,7 @@ class EncapsulationShunter {
                 $assertionChecker = $this->getAssertionChecker();
 
                 if(null === $assertionChecker)
-                    throw new \Hoa\Praspel\Exception\Preambler(
-                        'We need the assertion checker to generate data to ' .
-                        'instanciate the class. Please, call the ' .
-                        '%s::%s method.',
-                        1, array(get_class($this), 'setAssertionChecker'));
+                    $assertionChecker = '\Hoa\Praspel\AssertionChecker';
 
                 $arguments = $assertionChecker::generateData($registry[$id]);
                 $_object   = $reflectionClass->newInstanceArgs($arguments);
