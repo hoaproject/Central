@@ -61,7 +61,17 @@ from('Hoa')
 /**
  * \Hoa\Realdom\IRealdom\Finite
  */
--> import('Realdom.I~.Finite');
+-> import('Realdom.I~.Finite')
+
+/**
+ * \Hoa\Realdom\IRealdom\Enumerable
+ */
+-> import('Realdom.I~.Enumerable')
+
+/**
+ * \Hoa\Iterator\Counter
+ */
+-> import('Iterator.Counter');
 
 }
 
@@ -81,7 +91,8 @@ class          Boundinteger
     extends    Integer
     implements IRealdom\Interval,
                IRealdom\Nonconvex,
-               IRealdom\Finite {
+               IRealdom\Finite,
+               IRealdom\Enumerable {
 
     /**
      * Realistic domain name.
@@ -249,6 +260,21 @@ class          Boundinteger
         return $this['upper']->getConstantValue() -
                $this['lower']->getConstantValue() -
                count($this->_discredited)         + 1;
+    }
+
+    /**
+     * Enumerate.
+     *
+     * @access  public
+     * @return  \Hoa\Iterator\Counter
+     */
+    public function getIterator ( ) {
+
+        return new \Hoa\Iterator\Counter(
+            $this['lower']->getConstantValue(),
+            $this['upper']->getConstantValue() + 1,
+            1
+        );
     }
 }
 
