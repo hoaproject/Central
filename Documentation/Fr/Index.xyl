@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<overlay xmlns="http://hoa-project.net/xyl/xylophone">
+<yield id="chapter">
+
+  <p>Une tâche importante dans un programme est de distribuer des données. Nous
+  parlons aussi de <strong>dispatcher</strong> des données. C'est le rôle qui
+  incombe à la bibliothèque <code>Hoa\Dispatcher</code>.</p>
+
+  <h2 id="Table_des_matieres">Table des matières</h2>
+
+  <tableofcontents id="main-toc" />
+
+  <h2 id="Introduction" for="main-toc">Introduction</h2>
+
+  <p>Un dispatcheur a une tâche assez <strong>simple</strong> : à partir de
+  <strong>données</strong> provenant d'un <strong>routeur</strong>, il va être
+  capable de les <strong>acheminer</strong> quelque part, le plus souvent sur un
+  <em lang="en">callable</em>, par exemple sur une fonction ou une méthode.</p>
+  <p>Le chemin précis est le suivant. Nous avons une requête qui passe à travers
+  un routeur. Une règle correspond à la requête est retenue. Cette règle est
+  utilisée par le dispatcheur pour appeler un <em lang="en">callable</em> avec
+  les données de cette requête. Les données sont portées par les variables de la
+  règle (voir <a href="@lh:chapter=Router">la bibliothèque
+  <code>Hoa\Router</code></a> si des détails sont nécessaires).</p>
+  <div id="processus" class="verbatim schema"></div>
+  <script>
+  Hoa.Document.onReady(function ( ) {
+
+      var paper      = Hoa.Graph(Hoa.$('#processus'), 800, 150);
+      var grid       = paper.grid(0, 0, 800, 150, 5, 1);
+      var request    = grid.push(paper.circle(0, 0, 20));
+      var router     = grid.push(paper.rect(0, 0, 120, 90, 3, 'routeur'));
+      var gotcha     = grid.push(paper.circle(0, 0, 20));
+      var dispatcher = grid.push(paper.rect(0, 0, 120, 90, 3, 'dispatcheur'));
+      var callable   = grid.push(paper.rect(0, 0, 120, 90, 3, 'callable'));
+
+      paper.link.between(request,    router,     'requête');
+      paper.link.between(router,     gotcha,     'retenue');
+      paper.link.between(gotcha,     dispatcher, 'règle');
+      paper.link.between(dispatcher, callable);
+  });
+  </script>
+  <p>Le mot <em lang="en">callable</em> est utilisé en interne, mais si nous
+  utilisons le vocabulaire du <em lang="en">design pattern</em> MVC (Modèle,
+  Vue, Contrôleur), nous parlerons de <strong>contrôleur</strong> pour une
+  classe et d'<strong>action</strong> pour une méthode. Nous parlons aussi de
+  contrôleur pour une fonction ou une fonction anonyme.</p>
+  <p>En plus d'un routeur, un dispatcheur peut porter une <strong>vue</strong>
+  et l'acheminer avec le reste des données. Le routeur est de type
+  <a href="@lh:chapter=Router"><code>Hoa\Router</code></a> et la vue est de type
+  <a href="@lh:chapter=View"><code>Hoa\View\Viewable</code></a>.</p>
+
+  <h2 id="Utiliser_un_dispatcheur" for="main-toc">Utiliser un dispatcheur</h2>
+
+  <p>La classe <code>Hoa\Dispatcher</code> est la classe mère de tous les
+  dispatcheurs. Deux méthodes sont importantes :</p>
+  <ol>
+    <li><code>Hoa\Dispatcher::dispatch</code> qui va préparer les données pour
+    la méthode suivante ;</li>
+    <li><code>Hoa\Dispatcher::resolve</code> qui s'occupe de réellement
+    dispatcher les données.</li>
+  </ol>
+  <p>Cette dernière est abstraite. Chaque dispatcheur doit donc au minimum
+  implémenter cette méthode. Un dispatcheur « basique » est proposé pour
+  répondre à la majorité des cas (il sera détaillé ci-après).</p>
+  <p>Une utilisation classique se résume alors à :</p>
+  <pre><code class="language-php">$dispatcher->dispatch($router, $view);</code></pre>
+  <p>C'est tout ce qu'il y a à faire !</p>
+
+  <h3 id="Dispatcheur_basique" for="main-toc">Dispatcheur basique</h3>
+
+  <p>La classe <code>Hoa\Dispatcher\Basic</code> représente un dispatcheur
+  basique. Il est capable de dispatcher les données sur :</p>
+  <ul>
+    <li>une fonction ou une fonction anonyme ;</li>
+    <li>une classe et une méthode ;</li>
+    <li>un objet et une méthode.</li>
+  </ul>
+  <p>Ces <em lang="en">callables</em> sont portées par la règle, dans les
+  variables réservées <code>_call</code> et <code>_able</code>, ou alors les
+  variables <code>controller</code> et <code>action</code>, qui sont des aliases
+  sémantiques. Ainsi, nous allons écrire une règle sur un routeur et transmettre
+  les données extraites sur une fonction :</p>
+  <pre><code class="language-php">from('Hoa')
+-> import('Router.Http')
+-> import('Dispatcher.Basic');
+
+function login ( $id ) {
+
+    echo 'Hello ', $id, "\n";
+}
+
+function logout ( $id ) {
+
+    echo 'Bye bye ', $id, "\n";
+}
+
+$router = new Hoa\Router\Http();
+$router->get('w', '/(?&amp;lt;_call>log(in|out))/(?&amp;lt;id>\w+)\.html');
+
+$dispatcher = new Hoa\Dispatcher\Basic();
+$dispatcher->dispatch($router);</code></pre>
+  <p>Ainsi, la requête <code>/login/gordon.html</code> affichera <code>Hello
+  gordon</code> et la requête <code>/logout/gordon.html</code> affichera
+  <code>Bye bye gordon</code>.</p>
+  <p>Dans le cas des fonctions, fonctions anonymes et méthodes, le nom des
+  arguments n'est pas annodin. Le dispatcheur basique associe les variables
+  d'une règle aux arguments à travers leurs noms. Sur notre exemple, la règle
+  <code>w</code> extrait des données alors placées dans la variable
+  <code>id</code>. Nos fonctions <code>login</code> et <code>logout</code> ont
+  toutes les deux un argument <code>$id</code>. Le nom correspond. Le
+  dispatcheur basique utilisera la valeur de la variable <code>id</code> comme
+  valeur de l'argument <code>$id</code>.</p>
+  <p>La règle <code>w</code> extrait aussi des données placées dans la variable
+  <code>_call</code> (équivalent à <code>controller</code>). Sans
+  <code>_able</code> (ou <code>action</code>), cette information est comprise
+  par le dispatcheur basique comme une fonction. Les fonctions
+  <code>login</code> et <code>logout</code> seront appelées.</p>
+  <p>Dans le cas des classes et des méthodes, le contrôleur aura comme nom
+  <code>Application\Controller\<em>Controller</em></code> et la méthode
+  <code><em>Action</em>Action</code>. C'est à dire que pour une règle </p>
+
+  <h2 id="Notion_de_kit" for="main-toc">Notion de kit</h2>
+
+  <p>foobar</p>
+
+  <h2 id="Vers_un_MVC_hierarchique" for="main-toc">Vers un MVC hiérarchique</h2>
+
+  <p>La méthode <code>Hoa\Router::route</code> est appelée automatiquement par
+  la méthode <code>Hoa\Dispatcher::dispatch</code> si elle n'a pas été appelée.
+  Cela implique que nous pouvons router manuellement des requêtes et les donner
+  aux dispatcheurs :</p>
+  <pre><code class="language-php">$router->route('/logout/alyx');
+$dispatcher->dispatch($router);</code></pre>
+  <p>Avec ce mécanisme, nous pouvons facilement faire du HMVC, soit du MVC
+  hiérarchique. Un <em lang="en">callable</em> récupère une requête grossière,
+  il est capable de l'analyser plus finement ou de forcer certaines requêtes qui
+  seront router et dispatcher à leur tour, où un autre
+  <em lang="en">callable</em> sera appelé et ainsi de suite !</p>
+
+  <h2 id="Conclusion" for="main-toc">Conclusion</h2>
+
+  <p>bla bla</p>
+
+</yield>
+</overlay>
