@@ -20,7 +20,7 @@ cloak on IRC, etc.
   * ➜ Yohann Dupont (jir4)
   * ➜ Raphaël Emourgeon (iraphael)
   * ➜ Gérard Ernaelsten (maitrepylos)
-  * Julian Espérat (savageman)
+  * ➜ Julian Espérat (savageman)
   * Baptiste Fedi (baptiste)
   * ➜ Alexis von Glasow (avonglasow)
   * Kevin Gravier (mrkmg)
