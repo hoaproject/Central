@@ -34,9 +34,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-$root = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR;
+$root = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Hoa');
 
-require $root . 'Core' . DIRECTORY_SEPARATOR . 'Core.php';
+require $root . DIRECTORY_SEPARATOR . 'Core' . DIRECTORY_SEPARATOR . 'Core.php';
+
+\Hoa\Core::enableErrorHandler();
+\Hoa\Core::enableExceptionHandler();
 
 if('1' === ini_get('phar.readonly'))
     throw new \Hoa\Core\Exception(
@@ -56,13 +59,13 @@ class Filter extends \FilterIterator {
 
     public function accept ( ) {
 
-        return false === strpos($this->current()->getPathname(), '.hg');
+        return false === strpos($this->current()->getPathname(), '.git');
     }
 }
 
 $phar = new \Phar(__DIR__ . DS . $name);
 $phar->setMetadata(array(
-    'author'       => 'Ivan Enderlin',
+    'author'       => 'Ivan Enderlin, Hoa community',
     'license'      => 'New BSD License',
     'copyright'    => \Hoa\Core::©(),
     'version.name' => $name,
