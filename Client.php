@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2013, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2014, Ivan Enderlin. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -64,7 +64,7 @@ namespace Hoa\Irc {
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @author     Yohann Dupont <yohann.dupont@hoa-project.net>
- * @copyright  Copyright © 2007-2013 Ivan Enderlin, Yohann Dupont.
+ * @copyright  Copyright © 2007-2014 Ivan Enderlin, Yohann Dupont.
  * @license    New BSD License
  */
 
