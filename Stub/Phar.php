@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2013, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2014, Ivan Enderlin. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -46,15 +46,7 @@ if('1' === ini_get('phar.readonly'))
 if(isset($_SERVER['argv'][1]))
     $name = $_SERVER['argv'][1];
 else
-    $name = 'Hoa_v-' .
-            HOA_VERSION_MAJOR   . '.' .
-            HOA_VERSION_MINOR   . '.' .
-            HOA_VERSION_RELEASE .
-            HOA_VERSION_STATUS  .
-            (null !== HOA_VERSION_EXTRA
-                ? '-' . HOA_VERSION_EXTRA
-                : '') .
-            '.phar';
+    $name = 'Hoa.phar';
 
 if(file_exists($name) && false === unlink($name))
     throw new \Hoa\Core\Exception(
@@ -70,16 +62,11 @@ class Filter extends \FilterIterator {
 
 $phar = new \Phar(__DIR__ . DS . $name);
 $phar->setMetadata(array(
-    'author'          => 'Ivan Enderlin',
-    'license'         => 'New BSD License',
-    'copyright'       => \Hoa\Core::©(),
-    'version.name'    => $name,
-    'version.major'   => HOA_VERSION_MAJOR,
-    'version.minor'   => HOA_VERSION_MINOR,
-    'version.release' => HOA_VERSION_RELEASE,
-    'version.status'  => HOA_VERSION_STATUS,
-    'version.extra'   => HOA_VERSION_EXTRA,
-    'datetime'        => date('c')
+    'author'       => 'Ivan Enderlin',
+    'license'      => 'New BSD License',
+    'copyright'    => \Hoa\Core::©(),
+    'version.name' => $name,
+    'datetime'     => date('c')
 ));
 $phar->setSignatureAlgorithm(\Phar::SHA1);
 $phar->buildFromIterator(
