@@ -34,18 +34,70 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Mail\Transport\ITransport {
+namespace {
+
+from('Hoa')
 
 /**
- * Interface \Hoa\Mail\Transport\ITransport\Transport
+ * \Hoa\Mail\Message
+ */
+-> import('Mail.Message');
+
+}
+
+namespace Hoa\Mail\Inbox {
+
+/**
+ * Class \Hoa\Mail\Inbox\Message.
  *
- * Represent a mail transport.
+ * 
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2014 Ivan Enderlin.
  * @license    New BSD License
  */
 
-interface Transport { }
+class Message extends \Hoa\Mail\Message {
+
+    public function save ( ) {
+
+
+    }
+
+    public function move ( ) {
+
+
+    }
+
+    public function copy ( ) {
+
+
+    }
+
+    public function forward ( ) {
+
+
+    }
+
+    public function delete ( ) {
+
+
+    }
+
+    public function reply ( ) {
+
+
+    }
+
+    public function replyAll ( ) {
+
+
+    }
+
+    public function markRead ( ) {
+
+
+    }
+}
 
 }
