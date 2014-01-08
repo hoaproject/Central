@@ -78,9 +78,9 @@ class Attribute {
      * @throw   \Hoa\Xml\Exception
      */
     public function __construct ( $string = null ) {
-        if (null === $string) {
+
+        if(null === $string)
             return;
-        }
 
         $out = preg_match_all(
             '#(\w+)\s*(=\s*(?<!\\\)(?:("|\')|)(?(3)(.*?)(?<!\\\)\3|(\w+))\s*)?#',
@@ -181,9 +181,9 @@ class Attribute {
      * Write attributes.
      * If an attribute does not exist, it will be created.
      *
-     * @access public
-     * @param array $attributes Attributes.
-     * @return void
+     * @access  public
+     * @param   array   $attributes    Attributes.
+     * @return  void
      */
     public function writeAttributes ( Array $attributes ) {
 
@@ -197,10 +197,10 @@ class Attribute {
      * Write an attribute.
      * If the attribute does not exist, it will be created.
      *
-     * @access public
-     * @param string $name Name.
-     * @param string $value Value.
-     * @return void
+     * @access  public
+     * @param   string  $name     Name.
+     * @param   string  $value    Value.
+     * @return  void
      */
     public function writeAttribute ( $name, $value ) {
 
@@ -212,9 +212,9 @@ class Attribute {
     /**
      * Remove an attribute.
      *
-     * @access public
-     * @param string $name Name.
-     * @return void
+     * @access  public
+     * @param   string  $name    Name.
+     * @return  void
      */
     public function removeAttribute ( $name ) {
 
