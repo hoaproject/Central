@@ -68,7 +68,7 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
         array('library',    \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'l'),
         array('no-verbose', \Hoa\Console\GetOption::NO_ARGUMENT,       'V'),
         array('help',       \Hoa\Console\GetOption::NO_ARGUMENT,       'h'),
-        array('help',       \Hoa\Console\GetOption::NO_ARGUMENT,       '?'),
+        array('help',       \Hoa\Console\GetOption::NO_ARGUMENT,       '?')
     );
 
 
