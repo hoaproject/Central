@@ -7,7 +7,7 @@
   <strong>vie</strong> et la <strong>mort</strong>. <code>Hoa\Zombie</code>
   permet de transformer une exécution PHP en <strong>zombie</strong> !</p>
 
-  <h2 id="Table_des_matieres">Table des matières</h2>
+  <h2 id="Table_of_contents">Table des matières</h2>
 
   <tableofcontents id="main-toc" />
 
@@ -34,7 +34,7 @@
   <a href="http://php.net/install.fpm.configuration">la gestion des processus à
   PHP FPM</a> !</p>
 
-  <h2 id="Manipuler_des_zombies" for="main-toc">Manipuler des
+  <h2 id="Manipulate_zombies" for="main-toc">Manipuler des
   zombies</h2>
 
   <p>Créer un zombie est très <strong>simple</strong> : il suffit d'appeler la
