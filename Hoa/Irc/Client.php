@@ -162,7 +162,7 @@ class          Client
                     $listener = 'join';
                     $bucket   = array(
                         'nickname' => $nickname,
-                        'channel'  => $channel
+                        'channel'  => trim($channel)
                     );
                   break;
 
