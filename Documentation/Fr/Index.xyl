@@ -8,7 +8,7 @@
   capable de répondre à la majorité des besoins à travers un mécanisme
   <strong>souple</strong> et <strong>extensible</strong>.</p>
 
-  <h2 id="Table_des_matieres">Table des matières</h2>
+  <h2 id="Table_of_contents">Table des matières</h2>
 
   <tableofcontents id="main-toc" />
 
@@ -22,7 +22,7 @@
   l'<strong>essentiel</strong> des fonctionnalités afin de pouvoir intégrer une
   vue à n'importe quelle autre bibliothèque.</p>
 
-  <h2 id="Une_seule_interface" for="main-toc">Une seule interface</h2>
+  <h2 id="One_interface" for="main-toc">Une seule interface</h2>
 
   <p>Le mécanisme principal d'une vue est presque toujours le même :</p>
   <ul>
@@ -66,7 +66,7 @@
   interface couvre l'ensemble des besoins, et vous permet d'écrire la vue que
   vous désirez avec vos propres outils ou avec des outils déjà existants.</p>
 
-  <h2 id="Exemple" for="main-toc">Exemple</h2>
+  <h2 id="Example" for="main-toc">Exemple</h2>
 
   <p><a href="@lh:chapter=Xyl">La bibliothèque <code>Hoa\Xyl</code></a> 
   utilise <code>Hoa\View\Viewable</code>, mais elle est un peu complexe
