@@ -168,6 +168,18 @@ class Statement implements \Hoa\Database\IDal\WrapperStatement {
     }
 
     /**
+     * Return an array containing all of the result set rows.
+     *
+     * @access  public
+     * @return  array
+     * @throw   \Hoa\Database\Exception
+     */
+    public function fetch ( ) {
+
+        return $this->getStatement()->fetch(\PDO::FETCH_ASSOC, \PDO::FETCH_ORI_NEXT);
+    }
+
+    /**
      * Return a single column from the next row of the result set or false if
      * there is no more row.
      *

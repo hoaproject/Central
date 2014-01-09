@@ -84,6 +84,15 @@ interface WrapperStatement {
     public function fetchAll ( );
 
     /**
+     * Return an array containing next result row.
+     *
+     * @access  public
+     * @return  array
+     * @throw   \Hoa\Database\Exception
+     */
+    public function fetch ( );
+
+    /**
      * Return a single column from the next row of the result set or false if
      * there is no more row.
      *
