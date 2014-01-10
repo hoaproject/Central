@@ -273,14 +273,17 @@ class          Client
      * @access  public
      * @param   string  $message    Message.
      * @param   string  $to         Channel or username.
-     * @return  string
+     * @return  void
      */
     public function say ( $message, $to = null ) {
 
         if(null === $to)
             $to = $this->getConnection()->getCurrentNode()->getChannel();
 
-        return $this->send('PRIVMSG ' . $to . ' :' . $message);
+        foreach(explode("\n", $message) as $line)
+            $this->send('PRIVMSG ' . $to . ' :' . $line);
+
+        return;
     }
 
     /**
