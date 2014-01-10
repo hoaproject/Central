@@ -102,6 +102,7 @@ class          Client
             'other-message',
             'ping',
             'kick',
+            'invite',
             'error'
         ));
 
@@ -206,7 +207,18 @@ class          Client
                     $listener = 'kick';
                     $bucket   = array(
                         'from'    => $this->parseNick($matches['prefix']),
-                        'channel' => $channel
+                        'channel' => trim($channel)
+                    );
+                  break;
+
+                case 'INVITE':
+                    list($channel, ) = explode(' ', $matches['middle'], 2);
+
+                    $listener = 'invite';
+                    $bucket   = array(
+                        'from'               => $this->parseNick($matches['prefix']),
+                        'channel'            => trim($channel),
+                        'invitation_channel' => trim($matches['trailing'])
                     );
                   break;
 
