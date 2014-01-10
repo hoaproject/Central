@@ -102,6 +102,7 @@ class          Client
             'other-message',
             'ping',
             'kick',
+            'invite',
             'error'
         ));
 
@@ -158,6 +159,7 @@ class          Client
 
                 case 366: // RPL_ENDOFNAMES
                     list($nickname, $channel) = explode(' ', $matches['middle'], 2);
+                    $node->setChannel($channel);
 
                     $listener = 'join';
                     $bucket   = array(
@@ -173,12 +175,15 @@ class          Client
 
                     if($username === $middle)
                         $listener = 'private-message';
-                    elseif(false !== strpos($message, $username))
+                    elseif(false !== strpos($message, $username)) {
+
+                        $node->setChannel($middle);
                         $listener = 'mention';
+                    }
                     else {
 
-                        $listener = 'message';
                         $node->setChannel($middle);
+                        $listener = 'message';
                     }
 
                     $bucket   = array(
@@ -202,11 +207,24 @@ class          Client
 
                 case 'KICK':
                     list($channel, ) = explode(' ', $matches['middle'], 2);
+                    $node->setChannel($channel);
 
                     $listener = 'kick';
                     $bucket   = array(
                         'from'    => $this->parseNick($matches['prefix']),
-                        'channel' => $channel
+                        'channel' => trim($channel)
+                    );
+                  break;
+
+                case 'INVITE':
+                    list($channel, ) = explode(' ', $matches['middle'], 2);
+                    $node->setChannel($channel);
+
+                    $listener = 'invite';
+                    $bucket   = array(
+                        'from'               => $this->parseNick($matches['prefix']),
+                        'channel'            => trim($channel),
+                        'invitation_channel' => trim($matches['trailing'])
                     );
                   break;
 
@@ -273,14 +291,17 @@ class          Client
      * @access  public
      * @param   string  $message    Message.
      * @param   string  $to         Channel or username.
-     * @return  string
+     * @return  void
      */
     public function say ( $message, $to = null ) {
 
         if(null === $to)
             $to = $this->getConnection()->getCurrentNode()->getChannel();
 
-        return $this->send('PRIVMSG ' . $to . ' :' . $message);
+        foreach(explode("\n", $message) as $line)
+            $this->send('PRIVMSG ' . $to . ' :' . $line);
+
+        return;
     }
 
     /**
