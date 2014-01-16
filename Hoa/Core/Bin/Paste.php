@@ -87,38 +87,20 @@ class Paste extends \Hoa\Console\Dispatcher\Kit {
               break;
         }
 
-        $input  = file_get_contents('php://stdin');
-        $server = stream_socket_client(
-            'tcp://' . $address,
-            $errno,
-            $errstr,
-            30
-        );
+        $input   = file_get_contents('php://stdin');
+        $context = stream_context_create(array(
+            'http' => array(
+                'method'  => 'POST',
+                'header'  => 'Host: ' . $address . "\r\n" .
+                             'User-Agent: Hoa' . "\r\n" .
+                             'Accept: */*' . "\r\n" .
+                             'Content-Type: text/plain' . "\r\n" .
+                             'Content-Length: ' . strlen($input) ."\r\n",
+                'content' => $input
+            )
+        ));
 
-        if(false == $server) {
-
-            echo 'Cannot connect to the server.', "\n";
-
-            return 1;
-        }
-
-        $request = 'POST / HTTP/1.1' . "\r\n" .
-                   'Host: ' . $address . "\r\n" .
-                   'Content-Type: text/plain' . "\r\n" .
-                   'Content-Length: ' . strlen($input) . "\r\n\r\n" .
-                   $input;
-
-        if(-1 === stream_socket_sendto($server, $request)) {
-
-            echo 'Pipe is broken, cannot write data.', "\n";
-
-            return 2;
-        }
-
-        $response = stream_socket_recvfrom($server, 1024);
-        list($headers, $body) = explode("\r\n\r\n", $response);
-
-        echo trim($body), "\n";
+        echo file_get_contents('http://' . $address, false, $context), "\n";
 
         return;
     }
