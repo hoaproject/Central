@@ -220,7 +220,7 @@ abstract class SelectCore extends Where {
         if(empty($this->_from))
             return $this;
 
-        $this->_from[$alias] = '(' . array_pop($this->_from) . ')';
+        $this->_from[$alias] = array_pop($this->_from);
 
         return $this;
     }
