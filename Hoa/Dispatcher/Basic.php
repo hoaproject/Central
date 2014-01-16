@@ -80,12 +80,16 @@ class Basic extends Dispatcher {
 
         $called     = null;
         $variables  = &$rule[\Hoa\Router::RULE_VARIABLES];
-        $call       = @$variables['controller']
-                          ?: @$variables['_call']
-                          ?: $rule[\Hoa\Router::RULE_CALL];
-        $able       = @$variables['action']
-                          ?: @$variables['_able']
-                          ?: $rule[\Hoa\Router::RULE_ABLE];
+        $call       = isset($variables['controller'])
+                          ? $variables['controller']
+                          : (isset($variables['_call'])
+                                 ? $variables['_call']
+                                 : $rule[\Hoa\Router::RULE_CALL]);
+        $able       = isset($variables['action'])
+                          ? $variables['action']
+                          : (isset($variables['_able'])
+                                 ? $variables['_able']
+                                 : $rule[\Hoa\Router::RULE_ABLE]);
         $rtv        = array($router, $this, $view);
         $arguments  = array();
         $reflection = null;
