@@ -407,13 +407,16 @@ abstract class SelectCore extends Where {
 
         if(!empty($this->_from)) {
 
-            $out .= ' FROM';
+            $out    .= ' FROM ';
+            $handle  = array();
 
             foreach($this->_from as $alias => $from)
                 if(is_int($alias))
-                    $out .= ' ' . $from;
+                    $handle[] = $from;
                 else
-                    $out .= ' ' . $from . ' AS ' . $alias;
+                    $handle[] = $from . ' AS ' . $alias;
+
+            $out .= implode(', ', $handle);
         }
 
         $out .= parent::__toString();
