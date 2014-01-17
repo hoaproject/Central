@@ -77,7 +77,7 @@ class          Client
      *
      * @var \Hoa\Core\Event\Listener object
      */
-    protected $_on       = null;
+    protected $_on = null;
 
 
 
