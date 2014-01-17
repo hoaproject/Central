@@ -407,9 +407,8 @@ abstract class SelectCore extends Where {
 
         if(!empty($this->_from)) {
 
-            $out .= ' FROM ';
-
-            $handle = array();
+            $out    .= ' FROM ';
+            $handle  = array();
 
             foreach($this->_from as $alias => $from)
                 if(is_int($alias))
