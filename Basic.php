@@ -196,7 +196,7 @@ class Basic extends Dispatcher {
 
                     $controller = dnew($controller, $rtv);
                 }
-                catch ( \Hoa\Core\Exception $e ) {
+                catch ( \Exception $e ) {
 
                     throw new Exception(
                         'Controller %s is not found ' .
