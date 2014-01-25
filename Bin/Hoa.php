@@ -41,11 +41,23 @@ namespace {
  * @copyright  Copyright © 2007-2014 Ivan Enderlin.
  */
 
-if(!defined('HOA'))
-    require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Core.php';
+if(!defined('HOA')) {
 
-Hoa\Core::enableErrorHandler();
-Hoa\Core::enableExceptionHandler();
+    $composer = dirname(__DIR__) . DIRECTORY_SEPARATOR .
+                '..' . DIRECTORY_SEPARATOR .
+                '..' . DIRECTORY_SEPARATOR .
+                '..' . DIRECTORY_SEPARATOR .
+                '..' . DIRECTORY_SEPARATOR .
+                'autoload.php';
+
+    if(file_exists($composer))
+        require_once $composer;
+    else
+        require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Core.php';
+}
+
+\Hoa\Core::enableErrorHandler();
+\Hoa\Core::enableExceptionHandler();
 
 from('Hoa')
 -> import('Router.Cli')
