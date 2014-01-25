@@ -86,7 +86,7 @@
     pour plus de simplicité.</li>
   </ul>
   <p>Commençons par écrire la classe <code>SuperView</code> :</p>
-  <pre data-line="49"><code class="language-php">class SuperView implements Hoa\View\Viewable {
+  <pre data-line="44"><code class="language-php">class SuperView implements Hoa\View\Viewable {
 
     protected $_in     = null;
     protected $_out    = null;
@@ -148,7 +148,7 @@
   <code class="language-php">$this</code>), à savoir
   <code class="language-php">$data</code> et
   <code class="language-php">$router</code>, pour lui faciliter l'écriture.
-  Enfin, la ligne 49 utilise le flux de sortie pour écrire les données.</p>
+  Enfin, la ligne 44 utilise le flux de sortie pour écrire les données.</p>
   <p>Testons en écrivant un fichier <code>Test.php</code> :</p>
   <pre data-line="9,17"><code class="language-php">// Output.
 $output = new Hoa\Http\Response();
@@ -201,7 +201,7 @@ $superview->render();</code></pre>
   <p>Et dans <code>Sub.phtml</code>, nous pouvons utiliser nos données comme bon
   nous semble. En bonus, nous allons utiliser le routeur pour créer un lien
   (pour rappel, notre routeur définissait la règle <code>a</code> vers
-  <code>/foo.html</code>). Ainsi :</p>
+  <code>/Foo.html</code>). Ainsi :</p>
   <pre><code class="language-markup">&amp;lt;p>Sub-view! This is a link:
    &amp;lt;a href="&amp;lt;?php echo $router->unroute('a'); ?>">click click&amp;lt;/a>!&amp;lt;/p>
 
@@ -236,7 +236,7 @@ $superview->render();</code></pre>
   <p>La bibliothèque <code>Hoa\View</code> ne définit qu'une seule
   <strong>interface</strong> avec quatre <strong>méthodes</strong>. À l'usage,
   nous nous rendons compte que ces méthodes sont <strong>suffisantes</strong>
-  pour décrire et manipuler plusieurs systèmes de vue qui peuvent être très
+  pour décrire et manipuler plusieurs systèmes de vue potentiellement
   <strong>complexes</strong>.</p>
 
 </yield>
