@@ -170,6 +170,13 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         'role'      => self::ATTRIBUTE_TYPE_NORMAL
     );
 
+    /**
+     * Whether this is the last iteration or not.
+     *
+     * @var \Hoa\Xyl\Element\Concrete bool
+     */
+    protected $_lastIteration     = false;
+
 
 
     /**
@@ -400,8 +407,10 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
 
         do {
 
+            $next                 = is_array($data) ? next($data) : false;
+            $this->_lastIteration = false === $next;
+
             $this->paint($out);
-            $next = is_array($data) ? next($data) : false;
             $next = $next && $this->update();
 
         } while(false !== $next);
@@ -668,6 +677,17 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         $fragment->render($fragment->getSnippet('h'));
 
         return;
+    }
+
+    /**
+     * Check if this is the last iteration or not.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isLastIteration ( ) {
+
+        return $this->_lastIteration;
     }
 
     /**
