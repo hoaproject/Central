@@ -86,7 +86,7 @@
     pour plus de simplicité.</li>
   </ul>
   <p>Commençons par écrire la classe <code>SuperView</code> :</p>
-  <pre data-line="49"><code class="language-php">class SuperView implements Hoa\View\Viewable {
+  <pre data-line="44"><code class="language-php">class SuperView implements Hoa\View\Viewable {
 
     protected $_in     = null;
     protected $_out    = null;
@@ -148,7 +148,7 @@
   <code class="language-php">$this</code>), à savoir
   <code class="language-php">$data</code> et
   <code class="language-php">$router</code>, pour lui faciliter l'écriture.
-  Enfin, la ligne 49 utilise le flux de sortie pour écrire les données.</p>
+  Enfin, la ligne 44 utilise le flux de sortie pour écrire les données.</p>
   <p>Testons en écrivant un fichier <code>Test.php</code> :</p>
   <pre data-line="9,17"><code class="language-php">// Output.
 $output = new Hoa\Http\Response();
