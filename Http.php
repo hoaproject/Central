@@ -489,7 +489,8 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
             return 443 !== $defaultPort ? ':' . $defaultPort  : '';
         };
 
-        if(true === array_key_exists('_subdomain', $variables)) {
+        if(   true === array_key_exists('_subdomain', $variables)
+           && null !== $variables['_subdomain']) {
 
             if(empty($variables['_subdomain']))
                 throw new Exception(
