@@ -201,7 +201,7 @@ $superview->render();</code></pre>
   <p>Et dans <code>Sub.phtml</code>, nous pouvons utiliser nos données comme bon
   nous semble. En bonus, nous allons utiliser le routeur pour créer un lien
   (pour rappel, notre routeur définissait la règle <code>a</code> vers
-  <code>/foo.html</code>). Ainsi :</p>
+  <code>/Foo.html</code>). Ainsi :</p>
   <pre><code class="language-markup">&amp;lt;p>Sub-view! This is a link:
    &amp;lt;a href="&amp;lt;?php echo $router->unroute('a'); ?>">click click&amp;lt;/a>!&amp;lt;/p>
 
