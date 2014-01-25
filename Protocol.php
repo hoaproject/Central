@@ -558,22 +558,20 @@ class Library extends Protocol {
                          ucfirst($_tail) . DS . $head . $queue;
             }
 
-            return $this->_reach = implode(';', $out);
+            return implode(';', $out);
         }
-        else {
 
-            $out = array();
+        $out = array();
 
-            foreach(explode(';', $this->_reach) as $part) {
+        foreach(explode(';', $this->_reach) as $part) {
 
-                $pos   = strrpos(rtrim($part, DS), DS) + 1;
-                $head  = substr($part, 0, $pos);
-                $tail  = substr($part, $pos);
-                $out[] = $head . strtolower($tail);
-            }
-
-            $this->_reach = implode(';', $out);
+            $pos   = strrpos(rtrim($part, DS), DS) + 1;
+            $head  = substr($part, 0, $pos);
+            $tail  = substr($part, $pos);
+            $out[] = $head . strtolower($tail);
         }
+
+        $this->_reach = implode(';', $out);
 
         return parent::reach($queue);
     }
