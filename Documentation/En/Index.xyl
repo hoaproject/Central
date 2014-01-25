@@ -4,8 +4,8 @@
 <yield id="chapter">
 
   <p><strong>Views</strong> are <strong>complex</strong> and
-  <strong>diversified</strong> systems. <code>Hoa\View</code> proposes an
-  interface able to match the majority of requirements through a
+  <strong>diversified</strong> systems. <code>Hoa\View</code> provides an
+  interface able to match most of the requirements through a
   <strong>modular</strong> and <strong>extensible</strong> mechanism.</p>
 
   <h2 id="Table_of_contents">Table of contents</h2>
