@@ -236,7 +236,7 @@ $superview->render();</code></pre>
   <p>La bibliothèque <code>Hoa\View</code> ne définit qu'une seule
   <strong>interface</strong> avec quatre <strong>méthodes</strong>. À l'usage,
   nous nous rendons compte que ces méthodes sont <strong>suffisantes</strong>
-  pour décrire et manipuler plusieurs systèmes de vue qui peuvent être très
+  pour décrire et manipuler plusieurs systèmes de vue potentiellement
   <strong>complexes</strong>.</p>
 
 </yield>
