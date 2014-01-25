@@ -67,7 +67,7 @@ Hoa\Zombie\Zombie::decapitate();
   méthode <code>Hoa\Zombie\Zombie::test</code> qui permet de savoir si nous
   pouvons créer un zombie ou pas.</p>
 
-  <h2 id="Test" for="main-toc">Test</h2>
+  <h2 id="Example" for="main-toc">Exemple</h2>
 
   <p>Pour créer un zombie, nous avons dit qu'il fallait utiliser PHP FPM.
   Ensuite, nous avons plusieurs possibilités pour exécuter notre programme PHP
