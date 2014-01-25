@@ -67,6 +67,15 @@ class          XylYield
     implements \Hoa\Xml\Element\Model\Phrasing {
 
     /**
+     * Attributes description.
+     *
+     * @var \Hoa\Xyl\Interpreter\Common\XylYield array
+     */
+    protected static $_attributes = array(
+        'separator' => self::ATTRIBUTE_TYPE_NORMAL
+    );
+
+    /**
      * Paint the element.
      *
      * @access  protected
@@ -76,6 +85,10 @@ class          XylYield
     public function paint ( \Hoa\Stream\IStream\Out $out ) {
 
         $this->computeValue($out);
+
+        if(   true === $this->abstract->attributeExists('separator')
+           && false === $this->isLastIteration())
+            $out->writeAll($this->abstract->readAttribute('separator'));
 
         return;
     }
