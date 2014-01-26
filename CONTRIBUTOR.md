@@ -18,6 +18,7 @@ cloak on IRC, etc.
   * Gautier Di Folco (black-heaven)
   * Cédric Dugat (ph3nol)
   * ➜ Yohann Dupont (jir4)
+  * Guislain Duthieuw (guiled)
   * ➜ Raphaël Emourgeon (iraphael)
   * ➜ Gérard Ernaelsten (maitrepylos)
   * ➜ Julian Espérat (savageman)
