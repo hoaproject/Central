@@ -15,11 +15,11 @@
   <h2 id="Introduction" for="main-toc">Introduction</h2>
 
   <p>A <strong>view</strong> is a mechanism allowing to graphically organize
-  <strong>data</strong> to a user. Many approaches exist, sometimes quite
-  <strong>different</strong> from each other and some of them can be very
-  <strong>complex</strong>. The <code>Hoa\View</code> library proposes one
-  interface that gathers the <strong>essential</strong> features in order to
-  integrate a view inside any other library.</p>
+  <strong>data</strong> for a user. There are many approaches that might be very
+  <strong>different</strong> to each other and some of them can be very
+  <strong>complex</strong>. The <code>Hoa\View</code> library provides one
+  single interface that gathers the <strong>essential</strong> features in order
+  to integrate a view inside any other library.</p>
 
   <h2 id="One_interface" for="main-toc">One interface</h2>
 
@@ -28,18 +28,18 @@
     <li>we have <strong>data</strong> that we would like to
     <strong>organize</strong> and <strong>print</strong> to the user,</li>
     <li>a view also uses <strong>resources</strong> we must be able to
-    localize,</li>
+    locate,</li>
     <li>finally, the <strong>rendering</strong> is the process that computes a
     result (organized data, linked resources etc.).</li>
   </ul>
-  <p>Thus, we have four notions: data, a “renderer”, a router and an output
+  <p>Thus we have four notions: data, a “renderer”, a router and an output
   channel where to write the result.</p>
-  <p>The <code>Hoa\View</code> library proposes only one
+  <p>The <code>Hoa\View</code> library provides only one
   <strong>interface</strong>: <code>Hoa\View\Viewable</code>. This latter
   defines a method for each preceding notion:</p>
   <ul>
     <li><code>getData</code>, the data to organize,</li>
-    <li><code>getRouter</code>, to localize resources and other documents,</li>
+    <li><code>getRouter</code>, to locate resources and other documents,</li>
     <li><code>render</code>, our “renderer”, which will trigger the
     rendering,</li>
     <li><code>getOutputStream</code>, the stream where to write the view.</li>
@@ -62,7 +62,7 @@
   </ul>
   <p>Even if this approach may seem simplistic at first sight, this interface
   covers the majority of requirements, and allows you to write the view you like
-  with your own or existing tools.</p>
+  with your own tools or existing ones.</p>
 
   <h2 id="Example" for="main-toc">Example</h2>
 
@@ -82,7 +82,7 @@
     <a href="http://php.net/reserved.classes"><code>StdClass</code> class</a>
     for more simplicity.</li>
   </ul>
-  <p>Let's start by writting the <code>SuperView</code> class:</p>
+  <p>Let's start by writing the <code>SuperView</code> class:</p>
   <pre data-line="44"><code class="language-php">class SuperView implements Hoa\View\Viewable {
 
     protected $_in     = null;
@@ -143,7 +143,7 @@
   <code class="language-php">$in</code> file by having formerly declared two
   variables (in addition to <code class="language-php">$this</code>), namely
   <code class="language-php">$data</code> and
-  <code class="language-php">$router</code>, to ease the usage. Finally, the
+  <code class="language-php">$router</code>, to ease the usage. Finally the
   line 44 uses the output stream to write computed data.</p>
   <p>Now, let's test by writing a <code>Test.php</code> file:</p>
   <pre data-line="9,17"><code class="language-php">// Output.
@@ -165,11 +165,12 @@ $data->foo   = (object) array('bar' => 'baz', 'qux' => 'hop');
 $superview->render();</code></pre>
   <p>And finally, let's write our <code>Out.phtml</code> file:</p>
   <pre><code class="language-markup">&amp;lt;h1>&amp;lt;?php echo $data->title; ?>&amp;lt;/h1></code></pre>
-  <p>Now, let's observe the result of the execution of <code>Test.php</code>:</p>
+  <p>Now, let's take a look at the result of the execution of
+  <code>Test.php</code>:</p>
   <pre><code class="language-shell">$ php Test.php
 &amp;lt;h1>foobar&amp;lt;/h1></code></pre>
   <p>Excellent. Now, we will add the <code>import</code> method to create
-  <strong>sub-views</strong>. Thus, in the <code>SuperView</code> class:</p>
+  <strong>sub-views</strong>. Thus in the <code>SuperView</code> class:</p>
   <pre><code class="language-php">    public function import ( $in, $data = null ) {
 
         $new = new static(
@@ -183,15 +184,15 @@ $superview->render();</code></pre>
         return;
     }</code></pre>
   <p>We use the <code>static</code> keyword to make a static reference to the
-  class itself, or to its children (see <a href="http://php.net/lsb">Late Static
+  class itself or to its children (see <a href="http://php.net/lsb">Late Static
   Bindings</a>).</p>
-  <p>Nested views appear. Let's modify <code>Out.phtml</code> in order that it
-  uses <code>Sub.phtml</code> which will be a new view. To this sub-view, we
-  will just give a subset of data (only <code>foo</code>):</p>
+  <p>Let's modify <code>Out.phtml</code> in order that it uses
+  <code>Sub.phtml</code> which will be a new view. To this sub-view, we will
+  just give a subset of data (only <code>foo</code>):</p>
   <pre><code class="language-markup">&amp;lt;h1>&amp;lt;?php echo $data->title; ?>&amp;lt;/h1>
 
 &amp;lt;?php $this->import('Sub.phtml', $data->foo); ?></code></pre>
-  <p>And in <code>Sub.phtml</code>, we are free to use those data. Bonus: we
+  <p>Then in <code>Sub.phtml</code>, we are free to use those data. Bonus: we
   will use the router to create a link (as a reminder, the router defined the
   <code>a</code> rule to <code>/Foo.html</code>). Thus:</p>
   <pre><code class="language-markup">&amp;lt;p>Sub-view! This is a link:
@@ -219,15 +220,15 @@ $superview->render();</code></pre>
   <p>This <code>SuperView</code> class is very basic but the
   <strong>performances</strong> are interesting because the result of the
   rendering is sent <strong>directly</strong> in the output stream, without
-  never manipulating heavy strings. This becomes particularly interesting when
-  we manipulate a lot of nested sub-views for example.</p>
+  manipulating heavy strings. This becomes particularly interesting for example
+  a lot of nested sub-views are handled/.</p>
 
   <h2 id="Conclusion" for="main-toc">Conclusion</h2>
 
   <p>The <code>Hoa\View</code> library defines only one
   <strong>interface</strong> with four <strong>methods</strong>. After a period
-  of use, we understand that those methods are <strong>enough</strong> to
-  describe and manipulate many view systems potentially
+  of use we understand that those methods are <strong>enough</strong> to
+  describe and manipulate many view systems that may be
   <strong>complex</strong>.</p>
 
 </yield>
