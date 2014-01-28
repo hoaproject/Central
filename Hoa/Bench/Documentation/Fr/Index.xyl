@@ -7,7 +7,7 @@
   algorithmes ou de ses programmes est une tâche courante, à laquelle
   <code>Hoa\Bench</code> permet de répondre.</p>
 
-  <h2 id="Table_des_matieres">Table des matières</h2>
+  <h2 id="Table_of_contents">Table des matières</h2>
 
   <tableofcontents id="main-toc" />
 
@@ -19,7 +19,7 @@
   programmes présents dans le dossier
   <code>hoa://Library/Bench/Dtrace/</code>.</p>
 
-  <h2 id="Placer_des_marques" for="main-toc">Placer des marques</h2>
+  <h2 id="Place_marks" for="main-toc">Placer des marques</h2>
 
   <p>La bibliothèque <code>Hoa\Bench</code> fonctionne de manière très
   intuitive : il suffit de placer des <strong>marques</strong> dans notre
@@ -29,7 +29,7 @@
   de regroupe un ensemble de marques, et <code>Hoa\Bench\Mark</code> qui
   représente une seule marque.</p>
 
-  <h3 id="Utilisation_rapide" for="main-toc">Utilisation rapide</h3>
+  <h3 id="Quick_usage" for="main-toc">Utilisation rapide</h3>
 
   <p>L'utilisation la plus courante de <code>Hoa\Bench\Bench</code> sera la
   suivante : placer quelques marques et afficher leurs statistiques. Ainsi :</p>
@@ -70,7 +70,7 @@ echo $bench;
   nom, un petit graphique, leur temps d'exécution et le pourcentage de ce temps
   par rapport aux autres marques.</p>
 
-  <h3 id="Bien_manipuler_les_marques" for="main-toc">Bien manipuler les
+  <h3 id="Manipulate_marks" for="main-toc">Bien manipuler les
   marques</h3>
 
   <p>Les marques peuvent être dans trois états différents :</p>
@@ -162,7 +162,7 @@ if(isset($bench->foo))
   statistiques sous forme de tableau correspondant au graphique vu précédemment
   et pour obtenir la marque qui a la plus longue exécution.</p>
 
-  <h3 id="Filtrer_les_marques" for="main-toc">Filtrer les marques</h3>
+  <h3 id="Filter_marks" for="main-toc">Filtrer les marques</h3>
 
   <p>La classe <code>Hoa\Bench\Bench</code> permet de <strong>filtrer</strong>
   les marques lors de calculs de résultats (par example avec la méthode
@@ -194,10 +194,9 @@ if(isset($bench->foo))
   <code>$considerFilters</code>, par défaut à <code>true</code>. Il suffit de le
   passer à <code>false</code> pour avoir tous les résultats.</p>
 
-
   <h2 id="DTrace" for="main-toc">DTrace</h2>
 
-  <p>La bibliothèque <code>Hoa\Bench\Bench</code> fournit également des
+  <p>La bibliothèque <code>Hoa\Bench</code> fournit également des
   programmes DTrace dans le dossier <code>hoa://Library/Bench/Dtrace/</code>.
   DTrace permet de générer des <strong>traces</strong> afin de détecter des
   problèmes en temps réel dans un environnement de production. Il est intégré au
@@ -315,5 +314,6 @@ Total execution time: 108ms</code></pre>
   d'étranglements, des appels trop nombreux, des ralentissements etc., afin de
   les corriger. Bref, tout ce qu'il faut pour obtenir des programmes de
   <strong>qualité</strong>.</p>
+
 </yield>
 </overlay>
