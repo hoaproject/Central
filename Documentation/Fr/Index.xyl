@@ -196,7 +196,7 @@ if(isset($bench->foo))
 
   <h2 id="DTrace" for="main-toc">DTrace</h2>
 
-  <p>La bibliothèque <code>Hoa\Bench\Bench</code> fournit également des
+  <p>La bibliothèque <code>Hoa\Bench</code> fournit également des
   programmes DTrace dans le dossier <code>hoa://Library/Bench/Dtrace/</code>.
   DTrace permet de générer des <strong>traces</strong> afin de détecter des
   problèmes en temps réel dans un environnement de production. Il est intégré au
