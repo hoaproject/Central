@@ -3,8 +3,8 @@
 <overlay xmlns="http://hoa-project.net/xyl/xylophone">
 <yield id="chapter">
 
-  <p><strong>Analyzing performances</strong> of its algorithms or its programs
-  is a very common task, to which <code>Hoa\Bench</code> answers.</p>
+  <p><strong>Analyzing performances</strong> of algorithms or programs is a very
+  common task, to which <code>Hoa\Bench</code> answers.</p>
 
   <h2 id="Table_of_contents">Table des matières</h2>
 
@@ -22,14 +22,14 @@
   <p>The <code>Hoa\Bench</code> library has a very intuitive use: we only need
   to place <strong>mark</strong> in the program and that's all. Each time a mark
   is executed, it collects informations we will exploit.</p>
-  <p>There is two classes to know: <code>Hoa\Bench\Bench</code> that allows to
-  group a set of marks, and <code>Hoa\Bench\Mark</code> that represents a single
-  mark.</p>
+  <p>There is two classes to know: <code>Hoa\Bench\Bench</code> which allows to
+  group a set of marks, and <code>Hoa\Bench\Mark</code> which represents a
+  single mark.</p>
 
   <h3 id="Quick_usage" for="main-toc">Quick usage</h3>
 
-  <p>The most common usage of <code>Hoa\Bench\Bench</code> will be as follows:
-  place some marks and print their statistics. Thus:</p>
+  <p>The most common usage of <code>Hoa\Bench\Bench</code> is to place some
+  marks and print their statistics. Thus:</p>
   <pre><code class="language-php">$bench = new Hoa\Bench\Bench();
 
 // Start two marks: “one” and “two”.
@@ -57,10 +57,10 @@ echo $bench;
  *     two    ||||||||||||||||||||||||||||||||||||||                       50ms,  66.0%
  *     three  |||||||||||||||||||                                          26ms,  33.9%
  */</code></pre>
-  <p>We notice that to declare a mark, we simply call an attribute on the class
+  <p>Note, to declare a mark we simply call an attribute on the class
   <code>Hoa\Bench\Bench</code>, which will return a mark (or create if it does
   not exist). Once we have a mark, we can start it by calling the
-  <code>Hoa\Bench\Mark::start</code> method. To stop them, we call the
+  <code>Hoa\Bench\Mark::start</code> method. To stop it, we call the
   <code>Hoa\Bench\Mark::stop</code> method. Finally, printing the
   <code>Hoa\Bench\Bench</code> object will print the statistics of marks: their
   name, a little graph, their execution time and a percentage according to all
@@ -71,12 +71,12 @@ echo $bench;
   <p>Marks can be in three different states:</p>
   <ul>
     <li>running, thanks to the <code>Hoa\Bench\Mark::start</code> method,</li>
-    <li>in pause, thanks to the <code>Hoa\Bench\Mark::pause</code> method, only
-    if it was previously running,</li>
+    <li>paused, thanks to the <code>Hoa\Bench\Mark::pause</code> method, only if
+    it was previously running,</li>
     <li>stopped, thanks to the <code>Hoa\Bench\Bench::stop</code> method, only
     if it was previously running.</li>
   </ul>
-  <p>If we start and stop a mark, and then start again, it will be reset.
+  <p>If we start and stop a mark, and then start it again, it will be reset.
   Notwithstanding, it exists the <code>Hoa\Bench\Mark::reset</code> method that
   will have the same behavior while forcing the reset whatever the state of the
   mark. Thus:</p>
@@ -114,13 +114,12 @@ echo $bench;
     <code>Hoa\Bench\Mark::compareTo</code> method,</li>
     <li>check whether a mark is running, thanks to the
     <code>Hoa\Bench\Mark::isRunning</code> method,</li>
-    <li>check whether a mark is in pause, thanks to the
+    <li>check whether a mark is paused, thanks to the
     <code>Hoa\Bench\Mark::isPause</code> method.</li>
   </ul>
-  <p>We said that an object <code>Hoa\Bench\Bench</code> allows to group
-  several marks together. We have seen how to declare a mark, but we have other
-  operations like checking if a mark exists or remove a mark with PHP native
-  constructions:</p>
+  <p>We said that an object <code>Hoa\Bench\Bench</code> allows to group several
+  marks together. We have seen how to declare a mark, but we can also check if a
+  mark exists or remove it with PHP native constructions:</p>
   <pre><code class="language-php">$bench = new Hoa\Bench\Bench();
 
 // Create a mark.
@@ -195,7 +194,7 @@ if(isset($bench->foo))
   environment. It is integrated into the kernel level and applicative level,
   which ensures excellent <strong>performances</strong>. DTrace uses
   <a href="https://wikis.oracle.com/display/DTrace/Documentation">the D language</a>.
-  We also recommend the reading of
+  We also recommend reading the
   <a href="http://dtracebook.com/">DTraceBook</a>. Attention, DTrace is not
   available on all platforms.</p>
   <p>PHP is able to use DTrace if it has been compiled with the
@@ -253,7 +252,7 @@ Request start
 Request end</code></pre>
   <p>The second DTrace program is <code>hoa://Library/Bench/Dtrace/Stat.d</code>
   and allows to collect some statistics on an execution such as the list of all
-  called functions and methods with their number of invocations and the
+  called functions and methods with their respective invocations number and the
   distribution of the execution time. For example, if we try with our first
   version of <code>Dtrace.php</code>, we will have:</p>
   <pre><code class="language-shell">$ exed=`hoa core:resolve hoa://Library/Bench/Dtrace/Stat.d`
