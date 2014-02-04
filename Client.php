@@ -110,6 +110,7 @@ class          Client
      *
      * @param   \Hoa\Socket\Node  $node    Node.
      * @return  void
+     * @throws  \Hoa\Irc\Exception
      */
     protected function _run(Socket\Node $node)
     {
@@ -145,6 +146,13 @@ class          Client
                     ];
 
                     break;
+
+                case 433: // ERR_NICKNAMEINUSE
+                    throw new Exception(
+                        'Nickname %s is already in use.',
+                        0,
+                        $node->getUsername()
+                    );
 
                 case 'PRIVMSG':
                     $middle   = trim($matches['middle']);
