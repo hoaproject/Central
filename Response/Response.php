@@ -501,7 +501,7 @@ class          Response
 
         if(0 === preg_match('#^HTTP/(1\.(?:0|1))\s+(\d{3})#i', $status, $matches))
             throw new \Hoa\Http\Exception(
-                'HTTP headers are not well-formed: %s.', 0, $status);
+                'HTTP status is not well-formed: %s.', 0, $status);
 
         if(!isset($this->_status[$matches[2]]))
             throw new \Hoa\Http\Exception(
