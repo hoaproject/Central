@@ -3,7 +3,7 @@
 Hoa is a **modular**, **extensible** and **structured** set of PHP libraries.
 Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
-# Hoa\Dns
+# Hoa\Dns ![state](http://central.hoa-project.net/State/Dns)
 
 This library allows to resolve domain name according to their types.
 
