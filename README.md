@@ -3,7 +3,7 @@
 Hoa is a **modular**, **extensible** and **structured** set of PHP libraries.
 Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
-# Hoa\Bench
+# Hoa\Bench ![state](http://central.hoa-project.net/State/Bench)
 
 This library allows to analyze performance of algorithms or programs by placing
 some “marks” in the code. Furthermore, this library proposes some
