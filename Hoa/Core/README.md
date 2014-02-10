@@ -3,7 +3,7 @@
 Hoa is a **modular**, **extensible** and **structured** set of PHP libraries.
 Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
-# Hoa\Core
+# Hoa\Core ![state](http://central.hoa-project.net/State/Core)
 
 This library is the foundation —the core— of all libraries of Hoa. It proposes
 fundamentals algorithms, paradigms and mechanisms, organized as follows:
@@ -38,24 +38,6 @@ With [Composer](https://getcomposer.org/), you do not need to require
 ## Quick usage
 
 We propose a quick overview of some layers of the core.
-
-### Importing libraries
-
-You can import libraries from one or more vendors by using the `from` alias
-function and then by using the `import` method. The path separator symbol is `.`
-(dot), thus:
-
-    from('Hoa')
-    -> import('Router.Http');
-
-    from('Hoathis')
-    -> import('Foo.Bar.Baz.');
-
-    from('Hoa or Hoathis')
-    -> import('Gordon.I~.Freeman.*'); // more complex import
-
-When importing, libraries are (by default) preloaded instead of directly loaded
-for memory concerns.
 
 ### Exceptions and errors
 
