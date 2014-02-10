@@ -107,7 +107,7 @@ class Status extends \Hoa\Console\Dispatcher\Kit {
                 'The %s library does not exist.',
                 0, $library);
 
-        $status  = 'living';
+        $status  = 'beta';
         $path   .= '/.Status';
 
         if(true === file_exists($path))
