@@ -4,9 +4,9 @@
 <yield id="chapter">
 
   <p>Le <strong>type</strong> des ressources est codifié à partir d'un format
-  appelé <em>MIME Media Types</em>. La bibliothèque <code>Hoa\Mime</code> permet
-  de manipuler ce <strong>format</strong> et de déduire des informations à
-  partir de flux.</p>
+  appelé <em lang="en">MIME Media Types</em>. La bibliothèque
+  <code>Hoa\Mime</code> permet de manipuler ce <strong>format</strong> et de
+  déduire des informations à partir de flux.</p>
 
   <h2 id="Table_of_contents">Table des matières</h2>
 
