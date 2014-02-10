@@ -3,7 +3,7 @@
 Hoa is a **modular**, **extensible** and **structured** set of PHP libraries.
 Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
-# Hoa\Mime
+# Hoa\Mime ![state](http://central.hoa-project.net/State/Mime)
 
 This library allows to manipulate a MIME types database and get some related
 informations about streams.
