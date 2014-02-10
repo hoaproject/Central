@@ -9,8 +9,8 @@ require_once __DIR__ . DIRECTORY_SEPARATOR .
 
 $router = new Hoa\Router\Http();
 $router->get(
-    'i',
-    '/(?<library>[\w ]+)',
+    's',
+    '/State/(?<library>[\w ]+)',
     function ( $library ) {
 
         $Library = ucfirst(strtolower($library));
