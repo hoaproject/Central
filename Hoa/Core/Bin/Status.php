@@ -48,28 +48,25 @@ from('Hoa')
 namespace Hoa\Core\Bin {
 
 /**
- * Class \Hoa\Core\Bin\Dependency.
+ * Class \Hoa\Core\Bin\Version.
  *
- * This command manipulates dependencies of a library.
+ * Get status of a library.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2014 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Dependency extends \Hoa\Console\Dispatcher\Kit {
+class Status extends \Hoa\Console\Dispatcher\Kit {
 
     /**
      * Options description.
      *
-     * @var \Hoa\Core\Bin\Dependency array
+     * @var \Hoa\Core\Bin\Version array
      */
     protected $options = array(
-        array('no-verbose',   \Hoa\Console\GetOption::NO_ARGUMENT, 'V'),
-        array('only-library', \Hoa\Console\GetOption::NO_ARGUMENT, 'l'),
-        array('only-version', \Hoa\Console\GetOption::NO_ARGUMENT, 'v'),
-        array('help',         \Hoa\Console\GetOption::NO_ARGUMENT, 'h'),
-        array('help',         \Hoa\Console\GetOption::NO_ARGUMENT, '?')
+        array('help', \Hoa\Console\GetOption::NO_ARGUMENT, 'h'),
+        array('help', \Hoa\Console\GetOption::NO_ARGUMENT, '?')
     );
 
 
@@ -82,30 +79,18 @@ class Dependency extends \Hoa\Console\Dispatcher\Kit {
      */
     public function main ( ) {
 
-        $verbose = \Hoa\Console::isDirect(STDOUT);
-        $print   = 'both';
+        $library = null;
 
         while(false !== $c = $this->getOption($v)) switch($c) {
 
-            case 'V':
-                $verbose = false;
-              break;
-
-            case 'l':
-                $print = 'library';
-              break;
-
-            case 'v':
-                $print = 'version';
+            case '__ambiguous':
+                $this->resolveOptionAmbiguity($v);
               break;
 
             case 'h':
             case '?':
+            default:
                 return $this->usage();
-              break;
-
-            case '__ambiguous':
-                $this->resolveOptionAmbiguity($v);
               break;
         }
 
@@ -115,46 +100,20 @@ class Dependency extends \Hoa\Console\Dispatcher\Kit {
             return $this->usage();
 
         $library = ucfirst(strtolower($library));
-        $path    = 'hoa://Library/' . $library . '/composer.json';
-
-        if(true === $verbose)
-            echo 'Dependency for the library ', $library, ':', "\n";
+        $path    = 'hoa://Library/' . $library;
 
         if(false === file_exists($path))
             throw new \Hoa\Console\Exception(
-                'Not yet computed or the %s library does not exist.',
+                'The %s library does not exist.',
                 0, $library);
 
-        $json = json_decode(file_get_contents($path), true);
+        $status  = 'living';
+        $path   .= '/.Status';
 
-        if(true === $verbose) {
+        if(true === file_exists($path))
+            $status = trim(file_get_contents($path));
 
-            $item      = '    • ';
-            $separator = ' => ';
-        }
-        else {
-
-            $item      = '';
-            $separator = ' ';
-        }
-
-        foreach($json['require'] ?: array() as $dependency => $version) {
-
-            switch($print) {
-
-                case 'both':
-                    echo $item, $dependency, $separator, $version, "\n";
-                  break;
-
-                case 'library':
-                    echo $item, $dependency, "\n";
-                  break;
-
-                case 'version':
-                    echo $item, $version, "\n";
-                  break;
-            }
-        }
+        echo $status;
 
         return;
     }
@@ -167,13 +126,9 @@ class Dependency extends \Hoa\Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        echo 'Usage   : core:dependency <options> library', "\n",
+        echo 'Usage   : core:status <options> library', "\n",
              'Options :', "\n",
              $this->makeUsageOptionsList(array(
-                 'V'    => 'No-verbose, i.e. be as quiet as possible, just print ' .
-                           'essential informations.',
-                 'l'    => 'Print only the library name.',
-                 'v'    => 'Print only the version.',
                  'help' => 'This help.'
              )), "\n";
 
@@ -184,4 +139,4 @@ class Dependency extends \Hoa\Console\Dispatcher\Kit {
 }
 
 __halt_compiler();
-Manipulate dependencies of a library.
+Get status of a library.
