@@ -3,7 +3,7 @@
 Hoa is a **modular**, **extensible** and **structured** set of PHP libraries.
 Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
-# Hoa\Zombie
+# Hoa\Zombie ![state](http://central.hoa-project.net/State/Zombie)
 
 This library allows to transform a processus as a zombie: not alive, not dead!
 
