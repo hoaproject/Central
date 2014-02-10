@@ -3,7 +3,7 @@
 Hoa is a **modular**, **extensible** and **structured** set of PHP libraries.
 Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
-# Hoa\Worker
+# Hoa\Worker ![state](http://central.hoa-project.net/State/Worker)
 
 This library allows to create shared workers in order to lift out some heavy and
 blocking tasks.
