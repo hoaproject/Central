@@ -48,21 +48,21 @@ from('Hoa')
 namespace Hoa\Core\Bin {
 
 /**
- * Class \Hoa\Core\Bin\Version.
+ * Class \Hoa\Core\Bin\State.
  *
- * Get status of a library.
+ * Get state of a library.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2014 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Status extends \Hoa\Console\Dispatcher\Kit {
+class State extends \Hoa\Console\Dispatcher\Kit {
 
     /**
      * Options description.
      *
-     * @var \Hoa\Core\Bin\Version array
+     * @var \Hoa\Core\Bin\State array
      */
     protected $options = array(
         array('help', \Hoa\Console\GetOption::NO_ARGUMENT, 'h'),
@@ -107,8 +107,8 @@ class Status extends \Hoa\Console\Dispatcher\Kit {
                 'The %s library does not exist.',
                 0, $library);
 
-        $status  = 'living';
-        $path   .= '/.Status';
+        $status  = 'beta';
+        $path   .= '/.State';
 
         if(true === file_exists($path))
             $status = trim(file_get_contents($path));
@@ -126,7 +126,7 @@ class Status extends \Hoa\Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        echo 'Usage   : core:status <options> library', "\n",
+        echo 'Usage   : core:state <options> library', "\n",
              'Options :', "\n",
              $this->makeUsageOptionsList(array(
                  'help' => 'This help.'
@@ -139,4 +139,4 @@ class Status extends \Hoa\Console\Dispatcher\Kit {
 }
 
 __halt_compiler();
-Get status of a library.
+Get the state of a library.
