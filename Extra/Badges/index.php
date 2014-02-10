@@ -22,7 +22,7 @@ $router->get(
             exit;
         }
 
-        $status = Hoa\Console\Processus::execute('hoa core:status ' . $library);
+        $status = Hoa\Console\Processus::execute('hoa core:state ' . $library);
 
         if(empty($status)) {
 
