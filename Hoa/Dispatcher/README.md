@@ -3,7 +3,7 @@
 Hoa is a **modular**, **extensible** and **structured** set of PHP libraries.
 Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
-# Hoa\Dispatcher
+# Hoa\Dispatcher ![state](http://central.hoa-project.net/State/Dispatcher)
 
 This library dispatches a task defined by some data on a callable, or with the
 appropriated vocabulary, on a controller and an action. It is often used in
