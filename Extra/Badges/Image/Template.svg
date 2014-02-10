@@ -59,7 +59,7 @@
     <text x="32.5" y="16">state</text>
     <!--
     <text x="97" y="16">beta</text>
-    <text x="97" y="16">mature</text>
+    <text x="97" y="16">release c.</text>
     -->
     <text x="97" y="16">finalized</text>
   </g>
