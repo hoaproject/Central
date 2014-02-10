@@ -5,15 +5,15 @@ Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
 # Hoa\Zombie ![state](http://central.hoa-project.net/State/Zombie)
 
-This library allows to transform a processus as a zombie: not alive, not dead!
+This library allows to transform a process to a zombie: not alive, nor dead!
 
 This is possible only if the program is running behind
-[PHP-FPM](http://php.net/install.fpm) (which manages processus for us).
+[PHP-FPM](http://php.net/install.fpm) (which manages processes for us).
 
 ## Quick usage
 
 To create a zombie, all we have to do is to call the `Hoa\Zombie\Zombie::fork`
-method. And to kill a zombie, we have the choice between different weapons:
+method. To kill a zombie, we have the choice between different weapons:
 
   * `Hoa\Zombie\Zombie::decapitate`, *ziip*;
   * `Hoa\Zombie\Zombie::bludgeon`, *tap tap*;
@@ -40,7 +40,7 @@ In the `Zombie.php` file, we write the following instructions:
     // Do whatever you want here, e.g.:
     sleep(10);
     file_put_contents(
-        __DIR__ . DS . 'AMessage',
+        __DIR__ . DS . 'A_Message',
         'Hello from after-life… or somewhere about!'
     );
     Hoa\Zombie\Zombie::decapitate();
@@ -62,12 +62,12 @@ And finally, we can test:
     $ php Run.php
     I guess I am sick…
 
-And 10 seconds after, we will see the `AMessage` file appear with the content:
+And 10 seconds after, we will see the `A_Message` file appear with the content:
 *Hello from after-life… or somewhere about!*.
 
 ## Documentation
 
-Different documentations can be found on the website:
+Different documentation can be found on the website:
 [http://hoa-project.net/](http://hoa-project.net/).
 
 ## License
