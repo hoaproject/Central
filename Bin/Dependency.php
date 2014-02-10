@@ -111,7 +111,7 @@ class Dependency extends \Hoa\Console\Dispatcher\Kit {
 
         $this->parser->listInputs($library);
 
-        if(null === $library)
+        if(empty($library))
             return $this->usage();
 
         $library = ucfirst(strtolower($library));
