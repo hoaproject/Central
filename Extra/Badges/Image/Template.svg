@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="150" height="35" viewBox="0 0 150 35">
+  <style>
+    @font-face {
+        font-family: Text;
+        src: url("http://static.hoa-project.net/Font/DroidSansMono.eot")     format("eot"),
+             url("http://static.hoa-project.net/Font/DroidSansMono.woff")    format("woff"),
+             url("http://static.hoa-project.net/Font/DroidSansMono.ttf")     format("truetype"),
+             url("http://static.hoa-project.net/Font/DroidSansMono.svg#foo") format("svg");
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    rect {
+        fill: url(#boxFill);
+        stroke: #fff;
+        stroke-width: 2px;
+    }
+
+    rect.back {
+        fill: #ddd;
+        stroke: none;
+    }
+
+    rect.label {
+        fill: url(#labelFill);
+        filter: none;
+        stroke: none;
+    }
+
+    text {
+        font-family: Text;
+        font-size: 7pt;
+        fill: #ffffbe;
+        text-anchor: middle;
+        dominant-baseline: middle;
+    }
+  </style>
+
+  <defs>
+    <radialGradient id="boxFill" cx="50%" cy="50%" r="100%" fx="50%" fy="10%">
+      <stop offset="5%"  stop-color="#8ec33d" />
+      <stop offset="95%" stop-color="#508106" />
+    </radialGradient>
+
+    <radialGradient id="labelFill" cx="50%" cy="50%" r="100%" fx="50%" fy="10%">
+      <stop offset="5%"  stop-color="#505050" />
+      <stop offset="95%" stop-color="#161616" />
+    </radialGradient>
+  </defs>
+
+  <g id="f">
+    <rect x="3" y="3" width="134" height="24" class="back" />
+    <rect x="5" y="5" width="130" height="20" />
+    <rect x="6" y="6" width="53" height="18" class="label" />
+    <text x="32.5" y="16">status</text>
+    <!--
+    <text x="97" y="16">beta</text>
+    <text x="97" y="16">mature</text>
+    -->
+    <text x="97" y="16">finalized</text>
+  </g>
+</svg>
