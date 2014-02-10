@@ -3,7 +3,7 @@
 Hoa is a **modular**, **extensible** and **structured** set of PHP libraries.
 Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
-# Hoa\Session
+# Hoa\Session ![state](http://central.hoa-project.net/State/Session)
 
 This library allows to manipulate sessions easily by creating “namespaces”, i.e.
 an entry in the `$_SESSION` global variable. It also allows to manipulate flash
