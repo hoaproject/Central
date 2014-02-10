@@ -3,7 +3,7 @@
 Hoa is a **modular**, **extensible** and **structured** set of PHP libraries.
 Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
-# Hoa\Praspel
+# Hoa\Praspel ![state](http://central.hoa-project.net/State/Praspel)
 
 Praspel (PHP Realistic Annotation and Specification Language) is a formal
 specification language for PHP. It is based on the design-by-contract paradigm
