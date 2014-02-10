@@ -3,7 +3,7 @@
 Hoa is a **modular**, **extensible** and **structured** set of PHP libraries.
 Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
-# Hoa\Registry
+# Hoa\Registry ![state](http://central.hoa-project.net/State/Registry)
 
 This library proposes a static register with facilities.
 
