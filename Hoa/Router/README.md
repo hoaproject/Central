@@ -3,7 +3,7 @@
 Hoa is a **modular**, **extensible** and **structured** set of PHP libraries.
 Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
-# Hoa\Router
+# Hoa\Router ![state](http://central.hoa-project.net/State/Router)
 
 This library allows to find an appropriated route and extracts data from a
 request. Conversely, given a route and data, this library is able to build a
