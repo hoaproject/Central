@@ -19,7 +19,7 @@
   registre se comporte comme un tableau PHP avec des clés et des valeurs, c'est
   à dire comme un <em lang="en">hashmap</em>.</p>
 
-  <h2 id="Manipuler_le_registre" for="main-toc">Manipuler le registre</h2>
+  <h2 id="Manipulate_the_registry" for="main-toc">Manipuler le registre</h2>
 
   <p>La classe <code>Hoa\Registry\Registry</code> ne propose que quatre méthodes
   statiques :</p>
@@ -62,7 +62,7 @@ var_dump(Hoa\Registry\Registry::isRegistered('foo'));
   <p>C'est aussi simple que ça. Le registre ne vit que durant une exécution. Il
   est accessible <strong>globalement</strong> depuis partout.</p>
 
-  <h2 id="Integration_au_protocole_hoa" for="main-toc">Intégration au protocole
+  <h2 id="Integration_to_the_hoa_protocol" for="main-toc">Intégration au protocole
   <code>hoa://</code></h2>
 
   <p>Le protocole <code>hoa://</code> permet d'<strong>abstraire</strong> des
