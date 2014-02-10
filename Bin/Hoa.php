@@ -107,9 +107,16 @@ catch ( \Exception $e ) {
     $code    = 2;
 }
 
+ob_start();
+
 \Hoa\Console\Cursor::colorize('foreground(white) background(red)');
 echo $message, "\n";
 \Hoa\Console\Cursor::colorize('normal');
+$content = ob_get_contents();
+
+ob_end_clean();
+
+file_put_contents('php://stderr', $content);
 exit($code);
 
 }
