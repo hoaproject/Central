@@ -3,7 +3,7 @@
 Hoa is a **modular**, **extensible** and **structured** set of PHP libraries.
 Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
-# Hoa\Fastcgi
+# Hoa\Fastcgi ![state](http://central.hoa-project.net/State/Fastcgi)
 
 This library allows to manipulate the [FastCGI](http://fastcgi.com/) protocol,
 which ensures the communication between a HTTP server and an external program
