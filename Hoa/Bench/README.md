@@ -7,7 +7,7 @@ Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
 This library allows to analyze performance of algorithms or programs by placing
 some “marks” in the code. Furthermore, this library proposes some
-[DTrace](http://opensolaris.org/os/community/dtrace/) programs.
+[DTrace](http://dtrace.org/guide/) programs.
 
 ## Quick usage
 

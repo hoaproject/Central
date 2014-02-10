@@ -14,8 +14,8 @@
 
   <p><code>Hoa\Bench</code> provides two ways to <strong>analyze</strong> an
   application: with PHP itself, or with
-  <a href="http://opensolaris.org/os/community/dtrace/">DTrace</a>, thanks to
-  program written in the <code>hoa://Library/Bench/Dtrace/</code> directory.</p>
+  <a href="http://dtrace.org/guide/">DTrace</a>, thanks to program written in
+  the <code>hoa://Library/Bench/Dtrace/</code> directory.</p>
 
   <h2 id="Place_marks" for="main-toc">Place marks</h2>
 
@@ -193,8 +193,8 @@ if(isset($bench->foo))
   <strong>traces</strong> in order to detect issues in realtime in a production
   environment. It is integrated into the kernel level and applicative level,
   which ensures excellent <strong>performances</strong>. DTrace uses
-  <a href="https://wikis.oracle.com/display/DTrace/Documentation">the D language</a>.
-  We also recommend reading the
+  <a href="http://dtrace.org/guide/">the D language</a>.  We also recommend
+  reading the
   <a href="http://dtracebook.com/">DTraceBook</a>. Attention, DTrace is not
   available on all platforms.</p>
   <p>PHP is able to use DTrace if it has been compiled with the

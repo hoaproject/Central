@@ -15,9 +15,8 @@
 
   <p><code>Hoa\Bench</code> propose deux manières d'<strong>analyser</strong>
   son application : avec PHP lui-même, ou alors avec
-  <a href="http://opensolaris.org/os/community/dtrace/">DTrace</a>, grâce à des
-  programmes présents dans le dossier
-  <code>hoa://Library/Bench/Dtrace/</code>.</p>
+  <a href="http://dtrace.org/guide/">DTrace</a>, grâce à des programmes présents
+  dans le dossier <code>hoa://Library/Bench/Dtrace/</code>.</p>
 
   <h2 id="Place_marks" for="main-toc">Placer des marques</h2>
 
@@ -196,16 +195,15 @@ if(isset($bench->foo))
 
   <h2 id="DTrace" for="main-toc">DTrace</h2>
 
-  <p>La bibliothèque <code>Hoa\Bench</code> fournit également des
-  programmes DTrace dans le dossier <code>hoa://Library/Bench/Dtrace/</code>.
-  DTrace permet de générer des <strong>traces</strong> afin de détecter des
-  problèmes en temps réel dans un environnement de production. Il est intégré au
-  niveau du noyau et au niveau applicatif, ce qui lui assure d'excellentes
+  <p>La bibliothèque <code>Hoa\Bench</code> fournit également des programmes
+  DTrace dans le dossier <code>hoa://Library/Bench/Dtrace/</code>.  DTrace
+  permet de générer des <strong>traces</strong> afin de détecter des problèmes
+  en temps réel dans un environnement de production. Il est intégré au niveau du
+  noyau et au niveau applicatif, ce qui lui assure d'excellentes
   <strong>performances</strong>. DTrace utilise
-  <a href="https://wikis.oracle.com/display/DTrace/Documentation">le langage D</a>.
-  Nous conseillons également la lecture de
-  <a href="http://dtracebook.com/">DTraceBook</a>. Attention, DTrace n'est pas
-  disponible sur toutes les plateformes.</p>
+  <a href="http://dtrace.org/guide/">le langage D</a>.  Nous conseillons
+  également la lecture de <a href="http://dtracebook.com/">DTraceBook</a>.
+  Attention, DTrace n'est pas disponible sur toutes les plateformes.</p>
   <p>PHP peut utiliser DTrace s'il a été compilé avec l'option
   <code>--enable-dtrace</code> (voir
   <a href="https://wiki.php.net/rfc/dtrace"><em lang="en">DTraces probes for
