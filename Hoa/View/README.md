@@ -3,7 +3,7 @@
 Hoa is a **modular**, **extensible** and **structured** set of PHP libraries.
 Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
-# Hoa\View
+# Hoa\View ![state](http://central.hoa-project.net/State/View)
 
 This library defines a view interface: `Hoa\View\Viewable`.
 
