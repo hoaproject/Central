@@ -5,12 +5,11 @@ Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
 # Hoa\Registry ![state](http://central.hoa-project.net/State/Registry)
 
-This library proposes a static register with facilities.
+This library offers a static registry that stores key/value combinations. Any kind of PHP variable can be stored: an array, an object, a resource, etc..
 
 ## Quick usage
 
-As a quick overview, we propose to set an entry and retrieve it from the
-`hoa://` protocol:
+As a quick example, we set an entry and retrieve it. The retrieval can be done with a static method on the `Hoa\Registry\Registry` class and also using the `hoa://` protocol.
 
     Hoa\Register\Registry::set('foo', 'bar');
     var_dump(
@@ -23,9 +22,6 @@ As a quick overview, we propose to set an entry and retrieve it from the
      *     string(3) "bar"
      *     string(3) "bar"
      */
-
-There is no restriction about the key form or the value type. We can store any
-kinds of type: objects, functions, resources…
 
 ## Documentation
 
