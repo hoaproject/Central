@@ -4,11 +4,11 @@
 <yield id="chapter">
 
   <p>Le <strong>type</strong> des ressources est codifié à partir d'un format
-  appelé <em>MIME Media Types</em>. La bibliothèque <code>Hoa\Mime</code> permet
-  de manipuler ce <strong>format</strong> et de déduire des informations à
-  partir de flux.</p>
+  appelé <em lang="en">MIME Media Types</em>. La bibliothèque
+  <code>Hoa\Mime</code> permet de manipuler ce <strong>format</strong> et de
+  déduire des informations à partir de flux.</p>
 
-  <h2 id="Table_des_matieres">Table des matières</h2>
+  <h2 id="Table_of_contents">Table des matières</h2>
 
   <tableofcontents id="main-toc" />
 
@@ -51,7 +51,7 @@
   Wikipédia</a>). Elle permet également de trouver le type d'un flux (d'une
   ressource) et d'autres informations associées au type.</p>
 
-  <h3 id="Historique" for="main-toc">Historique</h3>
+  <h3 id="History" for="main-toc">Historique</h3>
 
   <p>À l'origine, ce formalisme était utilisé dans les <strong>mails</strong>
   (voir la <a href="https://tools.ietf.org/html/rfc2046">RFC2046</a>) qui
@@ -61,7 +61,7 @@
   comme HTTP (avec l'en-tête <code>Content-Type</code>). C'est maintenant un
   standard <em>de facto</em> pour tout nouveau protocole.</p>
 
-  <h2 id="Informations_generales" for="main-toc">Informations générales</h2>
+  <h2 id="General_informations" for="main-toc">Informations générales</h2>
 
   <p>Il y a deux façons d'utiliser la classe <code>Hoa\Mime\Mime</code>. Nous
   allons commencer par l'approche <strong>statique</strong>.</p>
@@ -99,7 +99,8 @@ var_dump(Hoa\Mime\Mime::getMimeFromExtension('webm'));
   calculées à partir de ce fichier. Il est donc préférable d'exécuter cette
   méthode avant toute opération sur la classe <code>Hoa\Mime\Mime</code>.</p>
 
-  <h2 id="Informations_sur_un_flux" for="main-toc">Informations sur un flux</h2>
+  <h2 id="Informations_about_a_stream" for="main-toc">Informations sur un
+  flux</h2>
 
   <p>Une autre façon d'utiliser la bibliothèque <code>Hoa\Mime\Mime</code> est
   <strong>dynamiquement</strong>, à partir d'un flux. Nous instancions notre
@@ -140,7 +141,7 @@ var_dump(Hoa\Mime\Mime::getMimeFromExtension('webm'));
  */</code></pre>
   <p>Et c'est tout !</p>
 
-  <h2 id="Les_types_de_Hoa" for="main-toc">Les types de Hoa</h2>
+  <h2 id="Types_of_Hoa" for="main-toc">Les types de Hoa</h2>
 
   <p>Hoa définit plusieurs langages, avec leur propre type. C'est par exemple le
   cas du langage PP dans
