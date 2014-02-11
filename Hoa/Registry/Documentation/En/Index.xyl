@@ -3,8 +3,95 @@
 <overlay xmlns="http://hoa-project.net/xyl/xylophone">
 <yield id="chapter">
 
-  <p class="warning">This chapter is not yet translated. Contributions are
-  welcomed!</p>
+  <p>Static <strong>registries</strong> are <strong>arrays</strong> containing
+  any kinds of <strong>informations</strong>. The <code>Hoa\Registry</code>
+  library provides a static registry and some facilities.</p>
+
+  <h2 id="Table_of_contents">Table of contents</h2>
+
+  <tableofcontents id="main-toc" />
+
+  <h2 id="Introduction" for="main-toc">Introduction</h2>
+
+  <p>A static <strong>registry</strong> allows to <strong>store</strong> any
+  kinds of informations, called <strong>entries</strong>. A registry behaves
+  like a PHP array with keys and values, it means like an hashmap.</p>
+
+  <h2 id="Manipulate_the_registry" for="main-toc">Manipulate the registry</h2>
+
+  <p>The <code>Hoa\Registry\Registry</code> class provides only four static
+  methods:</p>
+  <ul>
+    <li><code>set</code> to <strong>define</strong> a value for an entry,</li>
+    <li><code>get</code> to <strong>obtain</strong> a value from an entry,</li>
+    <li><code>isRegistered</code> to <strong>test</strong> that a value
+    exists,</li>
+    <li><code>remove</code> to <strong>delete</strong> an entry from the
+    registry.</li>
+  </ul>
+  <p>The use is trivial. We will see an example:</p>
+  <pre><code class="language-php">Hoa\Registry\Registry::set('foo', 'bar');
+var_dump(Hoa\Registry\Registry::get('foo'));
+
+/**
+ * Will output:
+ *     string(3) "bar"
+ */</code></pre>
+  <p>Keys must be a boolean, an integer or a string. There is <strong>no
+  restriction</strong>, no forbidden value or character. The user is free to
+  define its own naming <strong>conventions</strong> for the keys. We are able
+  for example to use <code>.</code> (point) or <code>/</code> (slash) to create
+  sort of a linearized structure; for example <code>group.subgroup.entry</code>.
+  No matter, <code>Hoa\Registry\Registry</code> will never make any
+  difference.</p>
+  <p>Let's see the two last methods through examples:</p>
+  <pre><code class="language-php">var_dump(Hoa\Registry\Registry::isRegistered('foo'));
+Hoa\Registry\Registry::remove('foo');
+var_dump(Hoa\Registry\Registry::isRegistered('foo'));
+
+/**
+ * Will output:
+ *     bool(true)
+ *     bool(false)
+ */</code></pre>
+  <p>Simple. The registry lives during one execution. It is
+  <strong>globally</strong> accessible from anywhere.</p>
+
+  <h2 id="Integration_to_the_hoa_protocol" for="main-toc">Integration to the
+  <code>hoa://</code> protocol</h2>
+
+  <p>The <code>hoa://</code> protocol allows to <strong>abstract</strong>
+  resources of any kinds and the <code>hoa://Library</code> branch abstracts
+  resources related to <strong>libraries</strong>. The <code>Hoa\Registry</code>
+  library provides an access to its entries thanks to
+  <code>hoa://Library/Registry#<em>key</em></code> where
+  <code><em>key</em></code> represents the key of an entry. The simplest way to
+  resolve such a path is to use the <code>resolve</code> function:</p>
+  <pre><code class="language-php">var_dump(resolve('hoa://Library/Registry#foo'));
+
+/**
+ * Will output:
+ *     string(3) "bar"
+ */</code></pre>
+  <p>The use of the protocol is really useful to <strong>represent</strong> a
+  resource stored in the registry through a URI. Since we can store any kinds of
+  data, we can imagine to store a stream; thus:</p>
+  <pre><code class="language-php">// A dummy stream.
+$stream = new Hoa\File\Read(__FILE__);
+Hoa\Registry\Registry::set('stream.dummy', $stream);</code></pre>
+  <p>And in our application, thanks to the naming conventions, we can retrieve
+  our stream:</p>
+  <pre><code class="language-php">$stream = resolve('hoa://Library/Registry#stream.dummy');
+echo $stream->readAll();</code></pre>
+  <p>We can also store anonymous functions or anything else. The possibilities
+  are <strong>interesting</strong>.</p>
+
+  <h2 id="Conclusion" for="main-toc">Conclusion</h2>
+
+  <p>The <code>Hoa\Registry</code> library provides a static
+  <strong>registry</strong>. Its integration to the <code>hoa://</code> protocol
+  propels it to <strong>new</strong> usages. Its behavior is pretty trivial
+  but it can be often useful.</p>
 
 </yield>
 </overlay>
