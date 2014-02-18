@@ -89,7 +89,7 @@ From the server, we will see:
 To reproduce the same behavior with our own client, we will write (thanks to
 `Hoa\Console\Readline\Readline`):
 
-    $client   = new Hoa\Socket\Client('tcp://127.0.0.1:4242');
+    $client = new Hoa\Socket\Client('tcp://127.0.0.1:4242');
     $client->connect();
 
     $readline = new Hoa\Console\Readline\Readline();
