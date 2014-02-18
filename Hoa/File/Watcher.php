@@ -147,6 +147,13 @@ class Watcher extends Finder implements \Hoa\Core\Event\Listenable {
                     continue;
                 }
 
+                if(null === $c->getHash()) {
+
+                    unset($current[$name]);
+
+                    continue;
+                }
+
                 if($previous[$name]->getHash() != $c->getHash())
                     $this->_on->fire(
                         'modify',
