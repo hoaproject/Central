@@ -37,7 +37,7 @@
 namespace Hoa\Socket\Connection {
 
 /**
- * Class \Hoa\Socket\Connection.
+ * Class \Hoa\Socket\Connection\Handler.
  *
  * This class provides a connection handler: a complete connection skeleton.  We
  * are able to run() a connection (client or server), to merge() with other ones
