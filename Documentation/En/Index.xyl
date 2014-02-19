@@ -3,10 +3,10 @@
 <overlay xmlns="http://hoa-project.net/xyl/xylophone">
 <yield id="chapter">
 
-  <p>The FastCGI protocol ensures the <strong>communication</strong> between an
-  <strong>HTTP server</strong> and an <strong>external program</strong>. Since
+  <p>The FastCGI protocol offers an <strong>interface</strong> between an
+  <strong>HTTP server</strong> and an <strong>external program</strong>. When
   PHP runs behind a <strong>CGI server</strong>, the <code>Hoa\Fastcgi</code>
-  library allows to create PHP executions.</p>
+  library allows to easily create new PHP executions.</p>
 
   <h2 id="Table_of_contents">Table of contents</h2>
 
