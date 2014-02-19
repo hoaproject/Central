@@ -74,8 +74,8 @@
   <code>--enable-cgi</code> ou <code>--enable-fpm</code> pour obtenir l'outil de
   votre choix.</p>
   <p>Toutefois, il se peut que des serveurs HTTP préfèrent utiliser leur propre
-  serveur CGI, comme c'est le cas avec le <code>mod_php</code> pour <a
-  href="http://httpd.apache.org/">Apache</a>.</p>
+  serveur CGI, comme c'est le cas avec le <code>mod_php</code> pour
+  <a href="http://httpd.apache.org/">Apache</a>.</p>
 
   <h2 id="Execute_PHP" for="main-toc">Exécuter PHP</h2>
 
