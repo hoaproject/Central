@@ -190,8 +190,8 @@ catch ( Hoa\Fastcgi\Exception\Exception $e ) {
   qui est nécessaire.</p>
   <p>Manipuler les requêtes FastCGI de cette manière permet également d'en
   <strong>apprendre</strong> plus sur PHP et de manipuler les processus PHP
-  d'une autre manière (voir le chapitre sur
-  <a href="@lh:chapter=Zombie"><code>Hoa\Zombie</code></a>).</p>
+  d'une autre manière (voir <a href="@lh:chapter=Zombie">le chapitre sur
+  <code>Hoa\Zombie</code></a>).</p>
 
 </yield>
 </overlay>
