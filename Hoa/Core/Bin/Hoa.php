@@ -65,10 +65,6 @@ from('Hoa')
 -> import('Console.Dispatcher.Kit')
 -> import('Console.Cursor');
 
-require __DIR__ . DS . 'Style' . DS . 'Basic.php';
-$style = new \Hoa\Core\Bin\Style\Basic();
-$style->import();
-
 /**
  * Here we go…
  */

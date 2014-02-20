@@ -146,7 +146,8 @@ class Resolve extends \Hoa\Console\Dispatcher\Kit {
         }
 
         if(true === $verbose)
-            echo $this->stylize($path, 'info'), ' is equivalent to: ', "\n";
+            echo \Hoa\Console\Chrome\Text::colorize($path, 'foreground(yellow)'),
+                 ' is equivalent to:', "\n";
 
         $resolved = resolve($path, $exists, $unfold);
 

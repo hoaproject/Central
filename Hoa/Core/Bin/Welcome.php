@@ -107,12 +107,17 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
         if(true === $verbose) {
 
             echo \Hoa\Console\Chrome\Text::align(
-                $this->stylize('Hoa', 'h1'),
-                \Hoa\Console\Chrome\Text::ALIGN_CENTER
-            ), "\n";
-
-            echo 'Welcome in the command-line interface of Hoa :-).',  "\n\n";
-            echo $this->stylize('List of available commands', 'h2'), "\n\n";
+                     \Hoa\Console\Chrome\Text::colorize(
+                         'Hoa',
+                         'foreground(yellow) underlined'
+                     ),
+                     \Hoa\Console\Chrome\Text::ALIGN_CENTER
+                 ), "\n\n",
+                 'Welcome in the command-line interface of Hoa :-).',  "\n\n",
+                 \Hoa\Console\Chrome\Text::colorize(
+                     'List of available commands',
+                     'foreground(green)'
+                 ), "\n\n";
         }
 
         if(null !== $library)
@@ -189,7 +194,11 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
 
                 foreach($commands as $binary)
                     $out[] = array(
-                        '    ' . $this->stylize($binary['name'], 'command'),
+                        '    ' .
+                        \Hoa\Console\Chrome\Text::colorize(
+                            $binary['name'],
+                            'foreground(blue)'
+                        ),
                         $binary['description']
                     );
             }
