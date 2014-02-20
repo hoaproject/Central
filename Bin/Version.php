@@ -92,7 +92,7 @@ class Version extends \Hoa\Console\Dispatcher\Kit {
             case 'v':
                 $info    = $version;
                 $message = 'Hoa version: ' .
-                           $this->stylize($info, 'info') . '.';
+                           \Hoa\Console\Chrome\Text::colorize($info, 'foreground(yellow)') . '.';
               break;
 
             case 'V':
