@@ -107,7 +107,10 @@ class Status extends \Hoa\Console\Dispatcher\Kit {
         $now  = new \DateTime();
         $t    = 0;
 
-        echo $this->stylize('Shared worker informations', 'info'), "\n\n";
+        echo \Hoa\Console\Chrome\Text::colorize(
+            'Shared worker informations',
+            'foreground(yellow)'
+        ), "\n\n";
 
         foreach(glob($run . DS . '*.wid') as $wid) {
 
@@ -156,31 +159,40 @@ class Status extends \Hoa\Console\Dispatcher\Kit {
             $memory = (int) (($m['memory_allocated'] * 40) / $max_peak);
 
             for($i = 0; $i < $memory - 1; ++$i)
-                $outmm .= $this->stylize('|', 'success');
+                $outmm .= \Hoa\Console\Chrome\Text::colorize(
+                    '|',
+                    'foreground(green)'
+                );
 
             for(; $i < $peak; ++$i)
-                $outmm .= $this->stylize('|', 'info');
+                $outmm .= \Hoa\Console\Chrome\Text::colorize(
+                    '|',
+                    'foreground(yellow)'
+                );
 
             for(; $i < $max; ++$i)
                 $outmm .= ' ';
 
-            $outmm .= $this->stylize('|', 'nosuccess');
+            $outmm .= \Hoa\Console\Chrome\Text::colorize(
+                '|',
+                'foreground(red)'
+            );
 
             for(++$i; $i < 40; ++$i)
                 $outmm .= ' ';
 
             $outmm .= '  ' .
-                      $this->stylize(
-                        number_format($m['memory_allocated'] / 1024) . 'Kb',
-                        'success'
+                      \Hoa\Console\Chrome\Text::colorize(
+                          number_format($m['memory_allocated'] / 1024) . 'Kb',
+                          'foreground(green)'
                       ) . ' ' .
-                      $this->stylize(
-                        number_format($m['memory_allocated_peak'] / 1024) . 'Kb',
-                        'info'
+                      \Hoa\Console\Chrome\Text::colorize(
+                           number_format($m['memory_allocated_peak'] / 1024) . 'Kb',
+                          'foreground(yellow)'
                       ) . ' ' .
-                      $this->stylize(
-                        number_format($m['memory_peak'] / 1024) . 'Kb',
-                        'nosuccess'
+                      \Hoa\Console\Chrome\Text::colorize(
+                           number_format($m['memory_peak'] / 1024) . 'Kb',
+                          'foreground(red)'
                       );
 
             echo $outmm . "\n";
@@ -206,9 +218,19 @@ class Status extends \Hoa\Console\Dispatcher\Kit {
                  'run'  => 'Define hoa://Data/Variable/Run/ path.',
                  'help' => 'This help.'
              )), "\n",
-             'Legend: ', $this->stylize('allocated', 'success'), ', ',
-             $this->stylize('allocated peak', 'info'), ', ',
-             $this->stylize('peak', 'nosuccess'),'.', "\n";
+             'Legend: ',
+             \Hoa\Console\Chrome\Text::colorize(
+                'allocated',
+                'foreground(green)'
+             ), ', ',
+             \Hoa\Console\Chrome\Text::colorize(
+                'allocated peak',
+                'foreground(yellow)'
+             ), ', ',
+             \Hoa\Console\Chrome\Text::colorize(
+                 'peak',
+                 'foreground(red)'
+             ), '.', "\n";
 
         return;
     }
