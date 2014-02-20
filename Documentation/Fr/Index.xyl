@@ -6,7 +6,7 @@
   <p>Le protocole FastCGI offre une <strong>interface</strong> entre un
   <strong>serveur HTTP</strong> et un <strong>programme externe</strong>. Quand
   PHP est exécuté derrière un <strong>serveur CGI</strong>, la bibliothèque
-  <code>Hoa\Fastcgi</strong> permet de créer facilement de nouvelles exécutions
+  <code>Hoa\Fastcgi</code> permet de créer facilement de nouvelles exécutions
   de PHP.</p>
 
   <h2 id="Table_of_contents">Table des matières</h2>
