@@ -41,17 +41,17 @@
   <strong>response</strong> and then dies. However, the HTTP servers load are
   growing, CGI has began to reach its <strong>limits</strong>, notably in term
   of speed: too much messages were exchanged on the network and the processus
-  managing was not longer efficient. That's why the
+  managing was no longer efficient. That's why the
   <a href="http://fastcgi.com/">FastCGI protocol</a> has been proposed in order
   to resolve all these problems. Historically, even though we use CGI or
   FastCGI, those servers are always called CGI servers.</p>
   <p>The HTTP server receives requests. Thanks to HTTP headers, it detects what
   external program is <strong>concerned</strong> by this request. It keeps some
   headers, add new ones, and send a <strong>new</strong> request to the CGI
-  server This latter will then create a new processus and when a response is
+  server. This latter will then create a new processus and when a response is
   computed, kill it and send the response to the HTTP server, which will send it
   back to the client.</p>
-  <p>CGI works in TCP, according to the
+  <p>CGI relies on TCP, according to the
   <a href="https://tools.ietf.org/html/rfc793">RFC793</a>, and usually, the
   servers listen on the 9000 port and on the local network (or on a protected
   network) for security reasons.</p>
@@ -102,7 +102,7 @@
     <li><code>REQUEST_URI</code>: the identifier of the resource we are trying
     to reach.</li>
   </ul>
-  <p>This method returns a response to the request Thus, we are preparing the
+  <p>This method returns a response to the request. Thus, we are preparing the
   <code>Echo.php</code> file:</p>
   <pre><code class="language-php">&amp;lt;?php
 
