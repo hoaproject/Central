@@ -10,7 +10,7 @@ documents, alternative contents, attachments etc., this is very extensible).
 Email can be sent with sendmail or SMTP. The SMTP layer supports TLS and
 `PLAIN`, `LOGIN` and `CRAM-MD5` authentifications.
 
-In a near future, this library will also allow to receive and parses emails.
+In a near future, this library will also allow to receive and parse emails.
 
 ## Quick usage
 
