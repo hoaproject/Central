@@ -50,7 +50,7 @@ namespace Hoa\Locale\Localizer {
 /**
  * Class \Hoa\Locale\Localizer\Coerce.
  *
- * Arbitrary local.
+ * Arbitrary locale.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2014 Ivan Enderlin.
