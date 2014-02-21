@@ -1,0 +1,30 @@
+{
+    "name"       : "hoa/mail",
+    "description": "The Hoa\\Mail library.",
+    "type"       : "library",
+    "keywords"   : ["library", "mail", "smtp", "sendmail", "pop3", "imap"],
+    "homepage"   : "http://hoa-project.net/",
+    "license"    : "BSD-3-Clause",
+    "authors"    : [
+        {
+            "name" : "Ivan Enderlin",
+            "email": "ivan.enderlin@hoa-project.net"
+        },
+        {
+            "name"    : "Hoa community",
+            "homepage": "http://hoa-project.net/"
+        }
+    ],
+    "support": {
+        "email" : "support@lists.hoa-project.net",
+        "irc"   : "irc://irc.freenode.org/hoaproject",
+        "source": "http://git.hoa-project.net/"
+    },
+    "require": {
+        "hoa/core": "dev-master",
+        "hoa/mime": "dev-master"
+    },
+    "minimum-stability": "dev",
+    "target-dir"       : "Hoa/Mail",
+    "autoload"         : { "psr-0": { "Hoa\\Mail": "." } }
+}
