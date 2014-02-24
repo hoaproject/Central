@@ -12,17 +12,19 @@ This library proposes a static register with facilities.
 As a quick overview, we propose to set an entry and retrieve it from the
 `hoa://` protocol:
 
-    Hoa\Register\Registry::set('foo', 'bar');
-    var_dump(
-        Hoa\Registry\Registry::get('foo'),
-        resolve('hoa://Library/Registry#foo')
-    );
+```php
+Hoa\Register\Registry::set('foo', 'bar');
+var_dump(
+    Hoa\Registry\Registry::get('foo'),
+    resolve('hoa://Library/Registry#foo')
+);
 
-    /**
-     * Will output:
-     *     string(3) "bar"
-     *     string(3) "bar"
-     */
+/**
+ * Will output:
+ *     string(3) "bar"
+ *     string(3) "bar"
+ */
+```
 
 There is no restriction about the key form or the value type. We can store any
 kinds of type: objects, functions, resources…
