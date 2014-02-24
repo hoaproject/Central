@@ -19,13 +19,17 @@ FastCGI: `php-cgi` and `php-fpm` (for
 [FastCGI Process Manager](http://php.net/install.fpm)). We will use `php-cgi` in
 local with the standard port `9000` in TCP:
 
-    $ php-cgi -b 127.0.0.1:9000
+```sh
+$ php-cgi -b 127.0.0.1:9000
+```
 
 First, we write the `Echo.php` file, the one we are likely to execute:
 
-    <?php
+```php
+<?php
 
-    echo 'foobar';
+echo 'foobar';
+```
 
 Second, we need to open a connexion to the FastCGI server and send a query with
 the following headers:
@@ -39,15 +43,17 @@ the following headers:
 
 Thus:
 
-    $fastcgi = new Hoa\Fastcgi\Responder(
-        new Hoa\Socket\Client('tcp://127.0.0.1:9000')
-    );
-    var_dump($fastcgi->send(array(
-        'REQUEST_METHOD'  => 'GET',
-        'REQUEST_URI'     => '/',
-        'SCRIPT_FILENAME' => __DIR__ . DS . 'Echo.php'
-    )));
-    // string(6) "foobar"
+```php
+$fastcgi = new Hoa\Fastcgi\Responder(
+    new Hoa\Socket\Client('tcp://127.0.0.1:9000')
+);
+var_dump($fastcgi->send(array(
+    'REQUEST_METHOD'  => 'GET',
+    'REQUEST_URI'     => '/',
+    'SCRIPT_FILENAME' => __DIR__ . DS . 'Echo.php'
+)));
+// string(6) "foobar"
+```
 
 We can get the headers from the executed file by calling the
 `Hoa\Fastcgi\Responder::getResponseHeaders` method.
