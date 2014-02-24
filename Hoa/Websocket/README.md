@@ -17,104 +17,108 @@ As a quick overview, we propose to start a websocket server and echo messages.
 The class `Hoa\Websocket\Server` proposes six listeners: `open`, `message`,
 `binary-message`, `ping`, `close` and `error`. Thus:
 
-    $websocket = new Hoa\Websocket\Server(
-        new Hoa\Socket\Server('tcp://127.0.0.1:8889')
-    );
-    $websocket->on('open', function ( Hoa\Core\Event\Bucket $bucket ) {
+```php
+$websocket = new Hoa\Websocket\Server(
+    new Hoa\Socket\Server('tcp://127.0.0.1:8889')
+);
+$websocket->on('open', function ( Hoa\Core\Event\Bucket $bucket ) {
 
-        echo 'new connection', "\n";
+    echo 'new connection', "\n";
 
-        return;
-    });
-    $websocket->on('message', function ( Hoa\Core\Event\Bucket $bucket ) {
+    return;
+});
+$websocket->on('message', function ( Hoa\Core\Event\Bucket $bucket ) {
 
-        $data = $bucket->getData();
-        echo '> message ', $data['message'], "\n";
-        $bucket->getSource()->send($data['message']);
-        echo '< echo', "\n";
+    $data = $bucket->getData();
+    echo '> message ', $data['message'], "\n";
+    $bucket->getSource()->send($data['message']);
+    echo '< echo', "\n";
 
-        return;
-    });
-    $websocket->on('close', function ( Hoa\Core\Event\Bucket $bucket ) {
+    return;
+});
+$websocket->on('close', function ( Hoa\Core\Event\Bucket $bucket ) {
 
-        echo 'connection closed', "\n";
+    echo 'connection closed', "\n";
 
-        return;
-    });
-    $websocket->run();
+    return;
+});
+$websocket->run();
+```
 
 Finally, we have to write a client in HTML and Javascript:
 
-    <input type="text" id="input" placeholder="Message…" />
-    <hr />
-    <pre id="output"></pre>
+```html
+<input type="text" id="input" placeholder="Message…" />
+<hr />
+<pre id="output"></pre>
 
-    <script>
-      var host   = 'ws://127.0.0.1:8889';
-      var socket = null;
-      var input  = document.getElementById('input');
-      var output = document.getElementById('output');
-      var print  = function ( message ) {
+<script>
+  var host   = 'ws://127.0.0.1:8889';
+  var socket = null;
+  var input  = document.getElementById('input');
+  var output = document.getElementById('output');
+  var print  = function ( message ) {
 
-          var samp       = document.createElement('samp');
-          samp.innerHTML = message + '\n';
-          output.appendChild(samp);
+      var samp       = document.createElement('samp');
+      samp.innerHTML = message + '\n';
+      output.appendChild(samp);
+
+      return;
+  };
+
+  input.addEventListener('keyup', function ( evt ) {
+
+      if(13 === evt.keyCode) {
+
+          var msg = input.value;
+
+          if(!msg)
+              return;
+
+          try {
+
+              socket.send(msg);
+              input.value = '';
+              input.focus();
+          }
+          catch ( e ) {
+
+              console.log(e);
+          }
+
+          return;
+      }
+  });
+
+  try {
+
+      socket = new WebSocket(host);
+      socket.onopen = function ( ) {
+
+          print('connection is opened');
+          input.focus();
 
           return;
       };
+      socket.onmessage = function ( msg ) {
 
-      input.addEventListener('keyup', function ( evt ) {
+          print(msg.data);
 
-          if(13 === evt.keyCode) {
+          return;
+      };
+      socket.onclose = function ( ) {
 
-              var msg = input.value;
+          print('connection is closed');
 
-              if(!msg)
-                  return;
+          return;
+      };
+  }
+  catch ( e ) {
 
-              try {
-
-                  socket.send(msg);
-                  input.value = '';
-                  input.focus();
-              }
-              catch ( e ) {
-
-                  console.log(e);
-              }
-
-              return;
-          }
-      });
-
-      try {
-
-          socket = new WebSocket(host);
-          socket.onopen = function ( ) {
-
-              print('connection is opened');
-              input.focus();
-
-              return;
-          };
-          socket.onmessage = function ( msg ) {
-
-              print(msg.data);
-
-              return;
-          };
-          socket.onclose = function ( ) {
-
-              print('connection is closed');
-
-              return;
-          };
-      }
-      catch ( e ) {
-
-          console.log(e);
-      }
-    </script>
+      console.log(e);
+  }
+</script>
+```
 
 Here we are. All sent messages are echoed.
 
