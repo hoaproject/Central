@@ -23,27 +23,31 @@ Before all, just like any messaging softwares, we have to setup the transport.
 We will send our email by using SMTP as the default transport. We will specify a
 socket to the SMTP server, a login and a password:
 
-    Hoa\Mail\Message::setDefaultTransport(
-        new Hoa\Mail\Transport\Smtp(
-            new Hoa\Socket\Client('tcp://mail.domain.tld:587'),
-            'gordon_freeman',
-            '*********'
-        )
-    );
+```php
+Hoa\Mail\Message::setDefaultTransport(
+    new Hoa\Mail\Transport\Smtp(
+        new Hoa\Socket\Client('tcp://mail.domain.tld:587'),
+        'gordon_freeman',
+        '*********'
+    )
+);
+```
 
 Then, we will get an instance of a message and set all the headers, such as
 `From`, `To` and `Subject`, we will add a textual content and we will send it:
 
-    $message            = new Hoa\Mail\Message();
-    $message['From']    = 'Gordon Freeman <gordon@freeman.hf>';
-    $message['To']      = 'Alyx Vance <alyx@vance.hf>';
-    $message['Subject'] = 'Hoa is awesome!';
+```php
+$message            = new Hoa\Mail\Message();
+$message['From']    = 'Gordon Freeman <gordon@freeman.hf>';
+$message['To']      = 'Alyx Vance <alyx@vance.hf>';
+$message['Subject'] = 'Hoa is awesome!';
 
-    $message->addContent(
-        new Hoa\Mail\Content\Text('Check this out: http://hoa-project.net/!')
-    );
+$message->addContent(
+    new Hoa\Mail\Content\Text('Check this out: http://hoa-project.net/!')
+);
 
-    $message->send();
+$message->send();
+```
 
 Notice that we can use any view or template library to produce the content of
 the mail!
@@ -53,33 +57,39 @@ the mail!
 Now, instead of having only one textual content, we will have an alternative
 content: either textual or HTML.
 
-    $message->addContent(
-        new Hoa\Mail\Content\Alternative(
-            array(
-                new Hoa\Mail\Content\Text(
-                    'Check this out: http://hoa-project.net/!'
-                ),
-                new Hoa\Mail\Content\Html(
-                    '<a href="http://hoa-project.net/">Check this ' .
-                    '<strong>out</strong>!</a>'
-                )
+```php
+$message->addContent(
+    new Hoa\Mail\Content\Alternative(
+        array(
+            new Hoa\Mail\Content\Text(
+                'Check this out: http://hoa-project.net/!'
+            ),
+            new Hoa\Mail\Content\Html(
+                '<a href="http://hoa-project.net/">Check this ' .
+                '<strong>out</strong>!</a>'
             )
         )
-    );
+    )
+);
+```
 
 Then, to add an attachment, we will add a new kind of content. The attachment is
 an image that will be named `Foobar.jpg`. Thus:
 
-    $message->addContent(
-        new Hoa\Mail\Content\Attachment(
-            new Hoa\File\Read('Attachment.jpg'),
-            'Foobar.jpg'
-        )
-    );
+```php
+$message->addContent(
+    new Hoa\Mail\Content\Attachment(
+        new Hoa\File\Read('Attachment.jpg'),
+        'Foobar.jpg'
+    )
+);
+```
 
 And finally, we send the email:
 
-    $message->send();
+```php
+$message->send();
+```
 
 ## Documentation
 
