@@ -29,18 +29,20 @@ things: either the session is newly created or it has expired. In all cases, we
 print `first time` and save the current time in `foo`. And if the namespace is
 not empty, we print `other times` and dump the saved time. Thus:
 
-    $user = new Hoa\Session\Session('user');
+```php
+$user = new Hoa\Session\Session('user');
 
-    if($user->isEmpty()) {
+if($user->isEmpty()) {
 
-        echo 'first time', "\n";
-        $user['foo'] = time();
-    }
-    else {
+    echo 'first time', "\n";
+    $user['foo'] = time();
+}
+else {
 
-        echo 'other times', "\n";
-        var_dump($user['foo']);
-    }
+    echo 'other times', "\n";
+    var_dump($user['foo']);
+}
+```
 
 First execution will print `first time` and next ones will print `other times`
 followed by a timestamp.
@@ -62,25 +64,27 @@ method will throw an exception or fire an event).
 Considering the previous example, we will declare the namespace as expired when
 the session is empty:
 
-    event('hoa://Event/Session/user:expired')
-        ->attach(function ( Hoa\Core\Event\Bucket $bucket ) {
+```php
+event('hoa://Event/Session/user:expired')
+    ->attach(function ( Hoa\Core\Event\Bucket $bucket ) {
 
-            echo 'expired', "\n";
-        });
+        echo 'expired', "\n";
+    });
 
-    $user = new Hoa\Session\Session('user');
+$user = new Hoa\Session\Session('user');
 
-    if($user->isEmpty()) {
+if($user->isEmpty()) {
 
-        $user->hasExpired();
-        echo 'first time', "\n";
-        $user['foo'] = time();
-    }
-    else {
+    $user->hasExpired();
+    echo 'first time', "\n";
+    $user['foo'] = time();
+}
+else {
 
-        echo 'other times', "\n";
-        var_dump($user['foo']);
-    }
+    echo 'other times', "\n";
+    var_dump($user['foo']);
+}
+```
 
 First execution will print `expired` and `first time`, and next ones will print
 `other times` followed by a timestamp.
@@ -92,19 +96,25 @@ automatically done during the construction of the namespace.
 We can modify the lifetime by using the `Hoa\Session\Session::rememberMe`
 method; for example:
 
-    $user->rememberMe('+1 day');
+```php
+$user->rememberMe('+1 day');
+```
 
 And we can also forget the namespace:
 
-    $user->forgetMe();
+```php
+$user->forgetMe();
+```
 
 ### Destructing a namespace
 
 Destructing a namespace uses the `Hoa\Session\Session::delete` method:
 
-    $user = new Hoa\Session\Session('user');
-    $user['foo'] = 'bar';
-    $user->delete();
+```php
+$user = new Hoa\Session\Session('user');
+$user['foo'] = 'bar';
+$user->delete();
+```
 
 Stored data in the namespace are **lost** because we explicitly delete the
 namespace.
