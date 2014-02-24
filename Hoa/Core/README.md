@@ -26,10 +26,12 @@ Unix-like systems and `C:\Program Files\Hoa` for Windows systems.
 Then, you have to require `Core.php` and it is enough to use all libraries of
 Hoa; thus:
 
-    <?php
+```php
+<?php
 
-    require '/usr/local/lib/Hoa/Core/Core.php';
-    var_dump(HOA); // bool(true)
+require '/usr/local/lib/Hoa/Core/Core.php';
+var_dump(HOA); // bool(true)
+```
 
 With [Composer](https://getcomposer.org/), you do not need to require
 `Core.php`, only `vendor/autoload.php` as usual.
@@ -50,26 +52,32 @@ error. They support formatted messages, auto-catch, dedicated event channel etc.
 and `Application`) and another abstraction for libraries resources (with root
 `Library`). For example:
 
-    $conf = require 'hoa://Data/Etc/Configuration/Foo.php';
+```php
+$conf = require 'hoa://Data/Etc/Configuration/Foo.php';
+```
 
 We can attach more than resources on this protocol. Example with `Hoa\Registry`:
 
-    Hoa\Registry\Registry::set('foo', 'bar');
-    echo resolve('hoa://Library/Registry#foo'); // bar
+```php
+Hoa\Registry\Registry::set('foo', 'bar');
+echo resolve('hoa://Library/Registry#foo'); // bar
+```
 
 ### Events and listeners
 
 Libraries can use events and listeners (which have some similarities). For
 example, if we attach a function to the channel of exceptions:
 
-    event('hoa://Event/Exception')->attach(function ( $bucket ) {
+```php
+event('hoa://Event/Exception')->attach(function ( $bucket ) {
 
-        $exception = $bucket->getData();
-        echo 'Exception: ', $exception->getMessage(), "\n";
-    })
+    $exception = $bucket->getData();
+    echo 'Exception: ', $exception->getMessage(), "\n";
+})
 
-    throw new Hoa\Core\Exception('Hello %s!', 0, 'Gordon');
-    // Exception: Hello Gordon!
+throw new Hoa\Core\Exception('Hello %s!', 0, 'Gordon');
+// Exception: Hello Gordon!
+```
 
 Some libraries define their own channels, such as `Hoa\Stream` with, for
 example, `hoa://Event/Stream/<stream-name>:close-before`, or
@@ -77,11 +85,13 @@ example, `hoa://Event/Stream/<stream-name>:close-before`, or
 
 For listeners, we are closer to the emitter:
 
-    $websocket = new Hoa\Websocket\Server(
-        new Hoa\Socket\Server('tcp://127.0.0.1:8889')
-    );
-    $websocket->on('message', $callable);
-    $websocket->run();
+```php
+$websocket = new Hoa\Websocket\Server(
+    new Hoa\Socket\Server('tcp://127.0.0.1:8889')
+);
+$websocket->on('message', $callable);
+$websocket->run();
+```
 
 ## Documentation
 
