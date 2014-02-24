@@ -3,8 +3,188 @@
 <overlay xmlns="http://hoa-project.net/xyl/xylophone">
 <yield id="chapter">
 
-  <p class="warning">This chapter is not yet translated. Contributions are
-  welcomed!</p>
+  <p>The FastCGI protocol offers an <strong>interface</strong> between an
+  <strong>HTTP server</strong> and an <strong>external program</strong>. When
+  PHP runs behind a <strong>CGI server</strong>, the <code>Hoa\Fastcgi</code>
+  library allows to easily create new PHP executions.</p>
+
+  <h2 id="Table_of_contents">Table of contents</h2>
+
+  <tableofcontents id="main-toc" />
+
+  <h2 id="Introduction" for="main-toc">Introduction</h2>
+
+  <div id="overview" class="verbatim schema"></div>
+  <script>
+  Hoa.Document.onReady(function ( ) {
+
+      var paper = Hoa.Graph(Hoa.$('#overview'), 800, 300);
+      var grid  = paper.grid(0, 0, 800, 300, 3, 3);
+      var http  = grid.push(paper.rect(0, 0, 170, 90, 3, 'HTTP server'), 0, 1);
+      var fcgi  = grid.push(paper.rect(0, 0, 170, 90, 3, 'CGI server'),  1, 1);
+      var p1    = grid.push(paper.rect(0, 0, 170, 90, 3, 'processus 1'), 2, 0);
+      var p2    = grid.push(paper.rect(0, 0, 170, 90, 3, 'processus 2'), 2, 1);
+      var p3    = grid.push(paper.rect(0, 0, 170, 90, 3, 'processus 3'), 2, 2);
+
+      paper.link.between(http, fcgi, 'CGI');
+      paper.link.between(fcgi, p1);
+      paper.link.between(fcgi, p2);
+      paper.link.between(fcgi, p3);
+  });
+  </script>
+  <p>CGI is a <strong>protocol</strong> ensuring the
+  <strong>communication</strong> between an <strong>HTTP server</strong> and an
+  <strong>external program</strong>, for example PHP, and is specified in the
+  <a href="https://tools.ietf.org/html/rfc3875">RFC3875</a>. CGI embraces the
+  “one new execution per request” <strong>model</strong>. In general, each
+  execution or <strong>processus</strong>, lives while computing a
+  <strong>response</strong> and then dies. However, the HTTP servers load are
+  growing, CGI has began to reach its <strong>limits</strong>, notably in term
+  of speed: too much messages were exchanged on the network and the processus
+  managing was no longer efficient. That's why the
+  <a href="http://fastcgi.com/">FastCGI protocol</a> has been proposed in order
+  to resolve all these problems. Historically, even though we use CGI or
+  FastCGI, those servers are always called CGI servers.</p>
+  <p>The HTTP server receives requests. Thanks to HTTP headers, it detects what
+  external program is <strong>concerned</strong> by this request. It keeps some
+  headers, add new ones, and send a <strong>new</strong> request to the CGI
+  server. This latter will then create a new processus and when a response is
+  computed, kill it and send the response to the HTTP server, which will send it
+  back to the client.</p>
+  <p>CGI relies on TCP, according to the
+  <a href="https://tools.ietf.org/html/rfc793">RFC793</a>, and usually, the
+  servers listen on the 9000 port and on the local network (or on a protected
+  network) for security reasons.</p>
+
+  <h3 id="PHP_tools" for="main-toc">PHP tools</h3>
+
+  <p>PHP provides the <code>php-cgi</code> tool that allows to
+  <strong>start</strong> a CGI server (based on the FastCGI protocol). To use
+  it:</p>
+  <pre><code class="language-shell">$ php-cgi -b 127.0.0.1:9000</code></pre>
+  <p>PHP provides another tool: <code>php-fpm</code> that uses
+  <a href="http://php.net/install.fpm">FPM</a> (that stands for FastCGI Process
+  Manager). This is a CGI server for <strong>high performances</strong> and
+  restricted to PHP. To use it:</p>
+  <pre><code class="language-shell">$ php-fpm -d listen=127.0.0.1:9000</code></pre>
+  <p>Be careful to <strong>compile</strong> PHP with the
+  <code>--enable-cgi</code> or <code>--enable-fpm</code> options to get the tool
+  of your choice.</p>
+  <p>However, it is possible that HTTP servers are likely to use their own CGI
+  server, such as <code>mod_php</code> for
+  <a href="http://httpd.apache.org/">Apache</a>.</p>
+
+  <h2 id="Execute_PHP" for="main-toc">Execute PHP</h2>
+
+  <p>The <code>Hoa\Fastcgi</code> library allows in a certain way to play the
+  <strong>role</strong> of the HTTP server: it allows to send HTTP requests on a
+  CGI server and get a response. Thus, we will not need an HTTP server but only
+  the PHP tools.</p>
+
+  <h3 id="Send_a_request" for="main-toc">Send a request</h3>
+
+  <p>To send a request, we need to <strong>open a connection</strong> to the CGI
+  server and give it to the constructor of <code>Hoa\Fastcgi\Responder</code>.
+  Thus, we have the <code>Responder.php</code> file:</p>
+  <pre><code class="language-php">$fastcgi = new Hoa\Fastcgi\Responder(
+    new Hoa\Socket\Client('tcp://127.0.0.1:9000')
+);</code></pre>
+  <p>To <strong>send a request</strong>, we use the
+  <code>Hoa\Fastcgi\Responder::send</code> method that takes as the first
+  argument a list of HTTP headers and as a the second argument the content of
+  the request (it means the body, optional). The minimal required headers
+  are:</p>
+  <ul>
+    <li><code>SCRIPT_FILENAME</code>: the absolute path to the PHP file that
+    will be executed (this is the real required header),</li>
+    <li><code>REQUEST_METHOD</code>: the HTTP method among <code>GET</code>,
+    <code>POST</code>, <code>PUT</code>, <code>DELETE</code> etc.,</li>
+    <li><code>REQUEST_URI</code>: the identifier of the resource we are trying
+    to reach.</li>
+  </ul>
+  <p>This method returns a response to the request. Thus, we are preparing the
+  <code>Echo.php</code> file:</p>
+  <pre><code class="language-php">&amp;lt;?php
+
+echo 'foobar';</code></pre>
+  <p>And we add in the <code>Responder.php</code> file:</p>
+  <pre><code class="language-php">var_dump($fastcgi->send(array(
+    'REQUEST_METHOD'  => 'GET',
+    'REQUEST_URI'     => '/',
+    'SCRIPT_FILENAME' => __DIR__ . DS . 'Echo.php'
+)));
+
+/**
+ * Will output:
+ *    string(6) "foobar"
+ */</code></pre>
+  <p>The HTTP headers returned by our PHP program do not appear in the response.
+  But they need to be returned as a response to the HTTP server for the client.
+  To get them, we only need to call the
+  <code>Hoa\Fastcgi\Responder::getResponseHeaders</code> method (sister of the
+  <code>Hoa\Fastcgi\Responder::getResponseContent</code> that returns the same
+  result that the <code>Hoa\Fastcgi\Responder::send</code> method):</p>
+  <pre><code class="language-php">print_r($fastcgi->getResponseHeaders());
+var_dump($fastcgi->getResponseContent());
+
+/**
+ * Will output:
+ *     Array
+ *     (
+ *         [x-powered-by] => PHP/x.y.z
+ *         [content-type] => text/html
+ *     )
+ *     string(6) "foobar"
+ */</code></pre>
+  <p>That's it!</p>
+
+  <h3 id="Possible_errors" for="main-toc">Possible errors</h3>
+
+  <p>The FastCGI protocol can throw <strong>three errors</strong> in addition to
+  those added by <code>Hoa\Fastcgi\Responder</code>:</p>
+  <ul>
+    <li><code>Hoa\Fastcgi\Exception\CannotMultiplex</code> when an external
+    program does not support <strong>multiplexing</strong>: several requests
+    through the same connection,</li>
+    <li><code>Hoa\Fastcgi\Exception\Overloaded</code> when an external program
+    is too <strong>busy</strong> and <strong>reject</strong> the request,</li>
+    <li><code>Hoa\Fastcgi\Exception\UnknownRole</code> when a role (a pack of
+    the protocol) <strong>is unknown</strong> by the external program,</li>
+    <li><code>Hoa\Fastcgi\Exception\Exception</code> when an
+    <strong>error</strong> from the connection, the protocol or something else
+    happens (added by <code>Hoa\Fastcgi\Responder</code>).</li>
+  </ul>
+  <p>The best way to catch all the exceptions is to catch
+  <code>Hoa\Fastcgi\Exception\Exception</code>:</p>
+  <pre><code class="language-php">try {
+
+    $fastcgi->send(…);
+}
+catch ( Hoa\Fastcgi\Exception\Exception $e ) {
+
+    // compute $e.
+}</code></pre>
+  <p>So far, the most used CGI servers support the multiplexing, high load and
+  also understand all the roles. The most frequent errors we may encounter will
+  be related to <strong>network</strong> and not the protocol.</p>
+  <p>Notice that FastCGI supports three types of <strong>stream</strong>:
+  <code>STDIN</code>, <code>STDOUT</code> and <code>STDERR</code>. The incoming
+  stream is used to <strong>send</strong> a request. The outgoing stream is used
+  to <strong>receive</strong> a response. And finally, the error stream is
+  <strong>concatenated</strong> to the outgoing stream by
+  <code>Hoa\Fastcgi\Responder</code>.</p>
+
+  <h2 id="Conclusion" for="main-toc">Conclusion</h2>
+
+  <p><code>Hoa\Fastcgi</code> allows to <strong>execute PHP progams</strong> (or
+  other external programs) in a very <strong>simple</strong> and
+  <strong>fast</strong> way without worry about the location of PHP binaries,
+  sub-shells to excute them, manage errors etc. We only need a started CGI
+  server.</p>
+  <p>Manipulating FastCGI requests in this manner allows also to
+  <strong>learn</strong> more about PHP and to manipulate PHP processus in
+  another way (please, see <a href="@lh:chapter=Zombie">the
+  <code>Hoa\Zombie</code> library</a>).</p>
 
 </yield>
 </overlay>

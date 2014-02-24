@@ -3,13 +3,13 @@
 <overlay xmlns="http://hoa-project.net/xyl/xylophone">
 <yield id="chapter">
 
-  <p>Le protocole FastCGI permet d'assurer la <strong>communication</strong>
-  entre un <strong>serveur HTTP</strong> et un <strong>programme
-  externe</strong>. Comme PHP fonctionne derrière un <strong>serveur
-  CGI</strong>, la bibliothèque <code>Hoa\Fastcgi</code> va nous permettre de
-  créer des exécutions de PHP.</p>
+  <p>Le protocole FastCGI offre une <strong>interface</strong> entre un
+  <strong>serveur HTTP</strong> et un <strong>programme externe</strong>. Quand
+  PHP est exécuté derrière un <strong>serveur CGI</strong>, la bibliothèque
+  <code>Hoa\Fastcgi</code> permet de créer facilement de nouvelles exécutions
+  de PHP.</p>
 
-  <h2 id="Table_des_matieres">Table des matières</h2>
+  <h2 id="Table_of_contents">Table des matières</h2>
 
   <tableofcontents id="main-toc" />
 
@@ -59,7 +59,7 @@
   serveurs écoutent sur le port 9000 et en local (ou sur un réseau protégé) pour
   des raisons de sécurité.</p>
 
-  <h3 id="Les_outils_de_PHP" for="main-toc">Les outils de PHP</h3>
+  <h3 id="PHP_tools" for="main-toc">Les outils de PHP</h3>
 
   <p>PHP propose l'outil <code>php-cgi</code> qui permet de
   <strong>démarrer</strong> un serveur CGI (reposant sur le protocole FastCGI).
@@ -74,17 +74,17 @@
   <code>--enable-cgi</code> ou <code>--enable-fpm</code> pour obtenir l'outil de
   votre choix.</p>
   <p>Toutefois, il se peut que des serveurs HTTP préfèrent utiliser leur propre
-  serveur CGI, comme c'est le cas avec le <code>mod_php</code> pour <a
-  href="http://httpd.apache.org/">Apache</a>.</p>
+  serveur CGI, comme c'est le cas avec le <code>mod_php</code> pour
+  <a href="http://httpd.apache.org/">Apache</a>.</p>
 
-  <h2 id="Executer_PHP" for="main-toc">Exécuter PHP</h2>
+  <h2 id="Execute_PHP" for="main-toc">Exécuter PHP</h2>
 
   <p>La bibliothèque <code>Hoa\Fastcgi</code> permet d'une certaine façon de
   jouer le <strong>rôle</strong> du serveur HTTP : elle permet d'envoyer des
   requêtes HTTP sur un serveur CGI et de récupérer une réponse. Ainsi, nous
   n'aurons pas besoin de serveur HTTP, mais uniquement des outils de PHP.</p>
 
-  <h3 id="Envoyer_une_requête" for="main-toc">Envoyer une requête</h3>
+  <h3 id="Send_a_request" for="main-toc">Envoyer une requête</h3>
 
   <p>Pour envoyer une requête, nous devons <strong>ouvrir une connexion</strong>
   vers le serveur CGI, et la donner au constructeur de
@@ -141,7 +141,7 @@ var_dump($fastcgi->getResponseContent());
  */</code></pre>
   <p>C'est aussi <strong>simple</strong> que ça !</p>
 
-  <h3 id="Erreurs_possibles" for="main-toc">Erreurs possibles</h3>
+  <h3 id="Possible_errors" for="main-toc">Erreurs possibles</h3>
 
   <p>Le protocole FastCGI peut lever <strong>trois erreurs</strong> possibles en
   plus de celles ajoutées par <code>Hoa\Fastcgi\Responder</code> :</p>
@@ -190,8 +190,8 @@ catch ( Hoa\Fastcgi\Exception\Exception $e ) {
   qui est nécessaire.</p>
   <p>Manipuler les requêtes FastCGI de cette manière permet également d'en
   <strong>apprendre</strong> plus sur PHP et de manipuler les processus PHP
-  d'une autre manière (voir le chapitre sur
-  <a href="@lh:chapter=Zombie"><code>Hoa\Zombie</code></a>).</p>
+  d'une autre manière (voir <a href="@lh:chapter=Zombie">le chapitre sur
+  <code>Hoa\Zombie</code></a>).</p>
 
 </yield>
 </overlay>
