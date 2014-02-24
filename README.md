@@ -25,11 +25,13 @@ callables:
 
 We will focus on the last kind with this following example:
 
-    $router = new Hoa\Router\Http();
-    $router->get('w', '/(?<controller>[^/]+)/(?<action>\w+)\.html');
+```php
+$router = new Hoa\Router\Http();
+$router->get('w', '/(?<controller>[^/]+)/(?<action>\w+)\.html');
 
-    $dispatcher = new Hoa\Dispatcher\Basic();
-    $dispatcher->dispatch($router);
+$dispatcher = new Hoa\Dispatcher\Basic();
+$dispatcher->dispatch($router);
+```
 
 By default, the controller will be `Application\Controller\<Controller>` and the
 action will be `<Action>Action`. Thus, for the request `/Foo/Bar.html`, we will
