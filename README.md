@@ -18,18 +18,22 @@ it.
 First, we need to register the worker (i.e. creating a `.wid` file), called
 `demorker`:
 
-    if(false === Hoa\Worker\Run::widExists('demorker'))
-        Hoa\Worker\Run::register('demorker', 'tcp://127.0.0.1:123456');
+```php
+if(false === Hoa\Worker\Run::widExists('demorker'))
+    Hoa\Worker\Run::register('demorker', 'tcp://127.0.0.1:123456');
+```
 
 Then, we start the worker (with a password) and we listen to messages:
 
-    $worker = new Hoa\Worker\Backend\Shared('demorker', 'iamapassword');
-    $worker->on('message', function ( Hoa\Core\Event\Bucket $bucket ) {
+```php
+$worker = new Hoa\Worker\Backend\Shared('demorker', 'iamapassword');
+$worker->on('message', function ( Hoa\Core\Event\Bucket $bucket ) {
 
-        $data = $bucket->getData();
-        // compute $data['message'].
-    });
-    $worker->run();
+    $data = $bucket->getData();
+    // compute $data['message'].
+});
+$worker->run();
+```
 
 The message indicates a task to do (sending an email, create some archives,
 update the database, send some notifications…).
@@ -41,8 +45,10 @@ We are also able to manage all workers from a CLI.
 Second, since the worker is running, we can communicate with it from our
 application. Thus:
 
-    $worker = new Hoa\Worker\Shared('demorker');
-    $worker->postMessage('mail gordon@freeman.hl Hello Gordon!');
+```php
+$worker = new Hoa\Worker\Shared('demorker');
+$worker->postMessage('mail gordon@freeman.hl Hello Gordon!');
+```
 
 We are able to send everything that can be serialized.
 
