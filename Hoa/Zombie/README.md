@@ -23,44 +23,52 @@ method. And to kill a zombie, we have the choice between different weapons:
 
 All these methods have been proven. Thus:
 
-    // I'm alive!
-    Hoa\Zombie\Zombie::fork();
-    // I'm a zombie!
-    Hoa\Zombie\Zombie::decapitate();
-    // I'm dead…
+```php
+// I'm alive!
+Hoa\Zombie\Zombie::fork();
+// I'm a zombie!
+Hoa\Zombie\Zombie::decapitate();
+// I'm dead…
+```
 
 But we have to run the script behind FastCGI, that is why we will use
 `Hoa\Fastcgi` in the following example.
 
 In the `Zombie.php` file, we write the following instructions:
 
-    echo 'I guess I am sick…', "\n";
-    Hoa\Zombie\Zombie::fork();
+```php
+echo 'I guess I am sick…', "\n";
+Hoa\Zombie\Zombie::fork();
 
-    // Do whatever you want here, e.g.:
-    sleep(10);
-    file_put_contents(
-        __DIR__ . DS . 'AMessage',
-        'Hello from after-life… or somewhere about!'
-    );
-    Hoa\Zombie\Zombie::decapitate();
+// Do whatever you want here, e.g.:
+sleep(10);
+file_put_contents(
+    __DIR__ . DS . 'AMessage',
+    'Hello from after-life… or somewhere about!'
+);
+Hoa\Zombie\Zombie::decapitate();
+```
 
 Then, in the `Run.php` file, we write:
 
-    $fastcgi = new Hoa\Fastcgi\Responder(
-        new Hoa\Socket\Client('tcp://127.0.0.1:9000')
-    );
-    echo $fastcgi->send(array(
-        'GATEWAY_INTERFACE' => 'FastCGI/1.0',
-        'REQUEST_METHOD'    => 'GET',
-        'SCRIPT_FILENAME'   => __DIR__ . DS . 'Zombie.php'
-    ));
+```php
+$fastcgi = new Hoa\Fastcgi\Responder(
+    new Hoa\Socket\Client('tcp://127.0.0.1:9000')
+);
+echo $fastcgi->send(array(
+    'GATEWAY_INTERFACE' => 'FastCGI/1.0',
+    'REQUEST_METHOD'    => 'GET',
+    'SCRIPT_FILENAME'   => __DIR__ . DS . 'Zombie.php'
+));
+```
 
 And finally, we can test:
 
-    $ php-fpm -d listen=127.0.0.1:9000
-    $ php Run.php
-    I guess I am sick…
+```sh
+$ php-fpm -d listen=127.0.0.1:9000
+$ php Run.php
+I guess I am sick…
+```
 
 And 10 seconds after, we will see the `AMessage` file appear with the content:
 *Hello from after-life… or somewhere about!*.
