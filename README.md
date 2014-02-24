@@ -53,67 +53,77 @@ We will instanciate the `Hoa\Socket\Server` class and start a connection to
 we will use the `Hoa\Socket\Connection\Connection::select` method that returns
 an iterator.  Finally, we will read a line and write an uppercassed echo. Thus:
 
-    $server = new Hoa\Socket\Server('tcp://127.0.0.1:4242');
-    $server->connectAndWait();
+```php
+$server = new Hoa\Socket\Server('tcp://127.0.0.1:4242');
+$server->connectAndWait();
 
-    while(true) foreach($server->select() as $node) {
+while(true) foreach($server->select() as $node) {
 
-        $line = $server->readLine();
+    $line = $server->readLine();
 
-        if(empty($line)) {
+    if(empty($line)) {
 
-            $server->disconnect();
-            continue;
-        }
-
-        echo '< ', $line, "\n";
-        $server->writeLine(strtoupper($line));
+        $server->disconnect();
+        continue;
     }
+
+    echo '< ', $line, "\n";
+    $server->writeLine(strtoupper($line));
+}
+```
 
 And then, with `telnet`:
 
-    $ telnet 127.0.0.1 4242
-    Trying 127.0.0.1...
-    Connected to localhost.
-    Escape character is '^]'.
-    foobar
-    FOOBAR
-    hello world
-    HELLO WORLD
+```sh
+$ telnet 127.0.0.1 4242
+Trying 127.0.0.1...
+Connected to localhost.
+Escape character is '^]'.
+foobar
+FOOBAR
+hello world
+HELLO WORLD
+```
 
 From the server, we will see:
 
-    < foobar
-    < hello world
+```
+< foobar
+< hello world
+```
 
 To reproduce the same behavior with our own client, we will write (thanks to
 `Hoa\Console\Readline\Readline`):
 
-    $client = new Hoa\Socket\Client('tcp://127.0.0.1:4242');
-    $client->connect();
+```php
+$client = new Hoa\Socket\Client('tcp://127.0.0.1:4242');
+$client->connect();
 
-    $readline = new Hoa\Console\Readline\Readline();
+$readline = new Hoa\Console\Readline\Readline();
 
-    while(true) {
+while(true) {
 
-        $line = $readline->readLine('> ');
+    $line = $readline->readLine('> ');
 
-        if('quit' === $line)
-            break;
+    if('quit' === $line)
+        break;
 
-        $client->writeLine($line);
+    $client->writeLine($line);
 
-        echo '< ', $client->readLine(), "\n";
-    }
+    echo '< ', $client->readLine(), "\n";
+}
+```
 
 Finally:
 
-    $ php Client.php
-    > foobar
-    < FOOBAR
-    > hello world
-    < HELLO WORLD
-    > quit
+```sh
+$ php Client.php
+> foobar
+< FOOBAR
+> hello world
+< HELLO WORLD
+> quit
+```
 
 ### Handle servers and clients
 
@@ -133,43 +143,49 @@ and `broadcast`. Then, we no longer need to start the connection or to take care
 about the implementation of different network topologies. All is managed by the
 handler.  Thus:
 
-    class MyServer extends Hoa\Socket\Connection\Handler {
+```php
+class MyServer extends Hoa\Socket\Connection\Handler {
 
-        protected function _run ( Hoa\Socket\Node $node ) {
+    protected function _run ( Hoa\Socket\Node $node ) {
 
-            $connection = $node->getConnection();
-            $line       = $connection->readLine();
+        $connection = $node->getConnection();
+        $line       = $connection->readLine();
 
-            if(empty($line)) {
+        if(empty($line)) {
 
-                $connection->disconnect();
-                return;
-            }
-
-            echo '< ', $line, "\n";
-            $this->send(strtoupper($line));
-
+            $connection->disconnect();
             return;
         }
 
-        protected function _send ( $message, Hoa\Socket\Node $node ) {
+        echo '< ', $line, "\n";
+        $this->send(strtoupper($line));
 
-            return $node->getConnection()->writeLine($message);
-        }
+        return;
     }
+
+    protected function _send ( $message, Hoa\Socket\Node $node ) {
+
+        return $node->getConnection()->writeLine($message);
+    }
+}
+```
 
 And then, all we need to do is:
 
-    $server = new MyServer(new Hoa\Socket\Server('tcp://127.0.0.1:4242'));
-    $server->run();
+```php
+$server = new MyServer(new Hoa\Socket\Server('tcp://127.0.0.1:4242'));
+$server->run();
+```
 
 We see that the connection is embeded inside our server, and that all the logic
 has been moved inside the `_run` method. If we change the call to `send` by
 `broadcast`, we will see all connected clients receiving the message, something
 like:
 
-            echo '< ', $line, "\n";
-            $this->broadcast(strtoupper($line));
+```php
+        echo '< ', $line, "\n";
+        $this->broadcast(strtoupper($line));
+```
 
 The `_send` method gives an implementation of “sending one message”, which is
 the basis. Because the `_run` method does not start an infinite loop, we have
@@ -193,26 +209,28 @@ For example, we will run an instance of `Hoa\Irc\Client` with a
 `Hoa\Websocket\Server`: all messages received by the WebSocket server will be
 redirected on the IRC client. Thus:
 
-    $websocket = new Hoa\Websocket\Server(new Hoa\Socket\Server('tcp://…'));
-    $irc       = new Hoa\Irc\Client(new Hoa\Socket\Client('tcp://…'));
-    $group     = new Hoa\Socket\Connection\Group();
-    $group[]   = $websocket;
-    $group[]   = $irc;
+```php
+$websocket = new Hoa\Websocket\Server(new Hoa\Socket\Server('tcp://…'));
+$irc       = new Hoa\Irc\Client(new Hoa\Socket\Client('tcp://…'));
+$group     = new Hoa\Socket\Connection\Group();
+$group[]   = $websocket;
+$group[]   = $irc;
 
-    $websocket->on(
-        'message',
-        function ( Hoa\Core\Event\Bucket $bucket ) use ( $irc ) {
+$websocket->on(
+    'message',
+    function ( Hoa\Core\Event\Bucket $bucket ) use ( $irc ) {
 
-            $data = $bucket->getData();
-            $irc->say($data['message']);
+        $data = $bucket->getData();
+        $irc->say($data['message']);
 
-            return;
-        }
-    );
+        return;
+    }
+);
 
-    // $irc->…
+// $irc->…
 
-    $group->run();
+$group->run();
+```
 
 This is an illustration of the power provided by the `Hoa\Socket\Connection`
 classes.
