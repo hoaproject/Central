@@ -20,33 +20,35 @@ All we have to do is to place different marks in the code. A mark can be
 started, paused, stopped and reset. The class `Hoa\Bench\Bench` proposes a quick
 statistic graph that could be helpful:
 
-    $bench = new Hoa\Bench\Bench();
+```php
+$bench = new Hoa\Bench\Bench();
 
-    // Start two marks: “one” and “two”.
-    $bench->one->start();
-    $bench->two->start();
+// Start two marks: “one” and “two”.
+$bench->one->start();
+$bench->two->start();
 
-    usleep(50000);
+usleep(50000);
 
-    // Stop the mark “two” and start the mark “three”.
-    $bench->two->stop();
-    $bench->three->start();
+// Stop the mark “two” and start the mark “three”.
+$bench->two->stop();
+$bench->three->start();
 
-    usleep(25000);
+usleep(25000);
 
-    // Stop all marks.
-    $bench->three->stop();
-    $bench->one->stop();
+// Stop all marks.
+$bench->three->stop();
+$bench->one->stop();
 
-    // Print statistics.
-    echo $bench;
+// Print statistics.
+echo $bench;
 
-    /**
-     * Will output:
-     *     one    ||||||||||||||||||||||||||||||||||||||||||||||    77ms, 100.0%
-     *     two    ||||||||||||||||||||||||||||||                    51ms,  66.0%
-     *     three  |||||||                                           11ms,  14.4%
-     */
+/**
+ * Will output:
+ *     one    ||||||||||||||||||||||||||||||||||||||||||||||    77ms, 100.0%
+ *     two    ||||||||||||||||||||||||||||||                    51ms,  66.0%
+ *     three  |||||||                                           11ms,  14.4%
+ */
+```
 
 More operations are available, such as iterating over all marks, deleting a
 mark, filters marks etc.
@@ -57,28 +59,32 @@ An interesting DTrace program is `hoa://Library/Bench/Dtrace/Execution.d` that
 shows the call trace, errors and exceptions during an execution. For example, if
 we consider the `Dtrace.php` file that contains the following code:
 
-    <?php
+```php
+<?php
 
-    function f ( ) { g(); h(); }
-    function g ( ) { h();      }
-    function h ( ) {           }
+function f ( ) { g(); h(); }
+function g ( ) { h();      }
+function h ( ) {           }
 
-    f();
+f();
+```
 
 Then, we can run DTrace like this:
 
-    $ exed=`hoa core:resolve hoa://Library/Bench/Dtrace/Execution.d --no-verbose`
-    $ sudo $exed -c "php Dtrace.php"
-    Request start
-         2ms ➜ f()        …/Dtrace.php:007
-        37ms   ➜ g()      …/Dtrace.php:003
-        26ms     ➜ h()    …/Dtrace.php:004
-        28ms     ← h()
-        37ms   ← g()
-        44ms   ➜ h()      …/Dtrace.php:003
-        25ms   ← h()
-        30ms ← f()
-    Request end
+```sh
+$ exed=`hoa core:resolve hoa://Library/Bench/Dtrace/Execution.d --no-verbose`
+$ sudo $exed -c "php Dtrace.php"
+Request start
+     2ms ➜ f()        …/Dtrace.php:007
+    37ms   ➜ g()      …/Dtrace.php:003
+    26ms     ➜ h()    …/Dtrace.php:004
+    28ms     ← h()
+    37ms   ← g()
+    44ms   ➜ h()      …/Dtrace.php:003
+    25ms   ← h()
+    30ms ← f()
+Request end
+```
 
 Another program shows statistics about an execution: each function that has been
 called, how many times, how long the execution has taken etc.
