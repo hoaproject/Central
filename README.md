@@ -26,20 +26,24 @@ following interesting methods:
 
 Thus:
 
-    $locale = new Hoa\Locale(new Hoa\Locale\Localizer\Http());
+```php
+$locale = new Hoa\Locale(new Hoa\Locale\Localizer\Http());
 
-    echo 'language : ', $locale->getLanguage(), "\n",
-         'script   : ', $locale->getScript(), "\n",
-         'region   : ', $locale->getRegion(), "\n",
-         'variant  : ', implode(', ', $locale->getVariants()), "\n";
+echo 'language : ', $locale->getLanguage(), "\n",
+     'script   : ', $locale->getScript(), "\n",
+     'region   : ', $locale->getRegion(), "\n",
+     'variant  : ', implode(', ', $locale->getVariants()), "\n";
+```
 
 For example, with the `Accept-Language` HTTP header set to
 `zh-Hant-TW-xy-ab-123`, we will have:
 
-    language : zh
-    script   : Hant
-    region   : TW
-    variant  : xy, ab, 123
+```
+language : zh
+script   : Hant
+region   : TW
+variant  : xy, ab, 123
+```
 
 ### Other localizers
 
