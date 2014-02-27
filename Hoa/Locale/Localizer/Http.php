@@ -107,7 +107,7 @@ class Http implements Localizer {
         foreach(explode(',', $this->_value) as $language) {
 
             $match = preg_match(
-                '#^(?<language>[^;$]+)(;q=(?<q>0(?:\.\d{0,3})|1(?:\.0{0,3})))?$#',
+                '#^(?<language>[^;]+)(;q=(?<q>0(?:\.\d{0,3})|1(?:\.0{0,3})))?$#',
                 $language,
                 $matches
             );
