@@ -147,7 +147,7 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable,
                                    Array $driverOptions = array() ) {
 
         // Please see https://bugs.php.net/55154.
-        if(0 !== preg_match('#^sqlite:([^$]+)$#i', $dsn, $matches))
+        if(0 !== preg_match('#^sqlite:(.+)$#i', $dsn, $matches))
             $dsn = 'sqlite:' . resolve($matches[1]);
 
         $id    = $this->__id = self::$_id;
