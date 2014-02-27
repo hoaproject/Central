@@ -391,7 +391,7 @@ class          Client
     public function parseNick ( $nick ) {
 
         preg_match(
-            '#^(?<nick>[^!]+)!(?<user>[^@]+)@(?<host>[^$]+)$#',
+            '#^(?<nick>[^!]+)!(?<user>[^@]+)@(?<host>.+)$#',
             $nick,
             $matches
         );
