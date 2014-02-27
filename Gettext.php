@@ -342,7 +342,7 @@ class Gettext extends Translate {
 
             $pluralForms = $this->_headers['Plural-Forms'];
 
-            if(false === preg_match('#^nplurals=(\d+);\s*plural=([^;$]+);?$#s',
+            if(false === preg_match('#^nplurals=(\d+);\s*plural=(.+?);?$#s',
                                     $pluralForms, $matches))
                 return $plurals[0];
 
