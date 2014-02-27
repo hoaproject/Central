@@ -147,7 +147,7 @@ class          Client
             $line = $node->getConnection()->readLine();
 
             preg_match(
-                '#^(?::(?<prefix>[^\s]+)\s+)?(?<command>[^\s]+)\s+(?<middle>[^:]+)?(:\s*(?<trailing>[^$]+))?$#',
+                '#^(?::(?<prefix>[^\s]+)\s+)?(?<command>[^\s]+)\s+(?<middle>[^:]+)?(:\s*(?<trailing>.+))?$#',
                 $line,
                 $matches
             );
