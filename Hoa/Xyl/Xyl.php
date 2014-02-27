@@ -1375,7 +1375,7 @@ class          Xyl
     public function computeLink ( $link, $late = false ) {
 
         // Router.
-        if(0 !== preg_match('#^@(?:([^:]+):([^\#]+)|([^:\#]+):?)(?:\#([^$]+))?$#',
+        if(0 !== preg_match('#^@(?:([^:]+):([^\#]+)|([^:\#]+):?)(?:\#(.+))?$#',
                             $link, $matches)) {
 
             $router = $this->getRouter();
