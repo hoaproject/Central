@@ -254,7 +254,7 @@ class Smtp implements ITransport\Out {
         $matches = null;
 
         foreach($ehlo as $entry)
-            if(0 !== preg_match('#^AUTH ([^$]+)$#', $entry, $matches))
+            if(0 !== preg_match('#^AUTH (.+)$#', $entry, $matches))
                 break;
 
         if(empty($matches))
