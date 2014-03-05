@@ -2,7 +2,8 @@
     "name"       : "hoa/acl",
     "description": "The Hoa\\Acl library.",
     "type"       : "library",
-    "keywords"   : ["library", "acl"],
+    "keywords"   : ["library", "acl", "access", "control", "list", "user",
+                    "group", "permission", "resource"],
     "homepage"   : "http://hoa-project.net/",
     "license"    : "BSD-3-Clause",
     "authors"    : [
@@ -16,12 +17,15 @@
         }
     ],
     "support": {
-        "email" : "ivan.enderlin@hoa-project.net",
-        "forum" : "http://forum.hoa-project.net",
+        "email" : "support@lists.hoa-project.net",
         "irc"   : "irc://irc.freenode.org/hoaproject",
         "source": "http://git.hoa-project.net/"
     },
     "require": {
-        "hoa/graph" : "master",
-    }
+        "hoa/core" : "dev-master",
+        "hoa/graph": "dev-master"
+    },
+    "minimum-stability": "dev",
+    "target-dir"       : "Hoa/Acl",
+    "autoload"         : { "psr-0": { "Hoa\\Acl": "." } }
 }
