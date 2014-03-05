@@ -37,7 +37,7 @@
 namespace Hoa\Database {
 
 /**
- * Class \Hoa\DatabaseStatement.
+ * Class \Hoa\Database\DalStatement.
  *
  * The heigher class that represents a DAL statement.
  *
@@ -106,7 +106,7 @@ class DalStatement {
      * @access  public
      * @param   array   $bindParameters    Bind parameters values if bindParam is
      *                                     not called.
-     * @return  \Hoa\DatabaseStatement
+     * @return  \Hoa\Database\DalStatement
      * @throw   \Hoa\Database\Exception
      */
     public function execute ( Array $bindParameters = array() ) {
