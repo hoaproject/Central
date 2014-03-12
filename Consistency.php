@@ -143,7 +143,7 @@ class Consistency {
      * Get the library family's singleton.
      *
      * @access  public
-     * @param   string  $from    Library family's name.
+     * @param   string  $namespace    Library family's name.
      * @return  \Hoa\Core\Consistency
      */
     public static function from ( $namespace ) {
@@ -883,7 +883,7 @@ function trait_exists ( $traitname, $autoload = true ) {
  * Alias for \Hoa\Core\Consistency::from().
  *
  * @access  public
- * @param   string  $from    Library family's name.
+ * @param   string  $namespace    Library family's name.
  * @return  \Hoa\Core\Consistency
  */
 if(!ƒ('from')) {
