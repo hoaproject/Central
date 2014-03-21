@@ -321,6 +321,8 @@ abstract class Realdom
                         $_realdoms = $argument->getHeld();
                     elseif($argument instanceof IRealdom\Crate)
                         $_realdoms = $argument->getTypes();
+                    elseif($argument instanceof Disjunction)
+                        $_realdoms = $argument->getRealdoms();
                     else
                         $_realdoms = array($argument);
 
