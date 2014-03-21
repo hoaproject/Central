@@ -180,7 +180,10 @@ class Core implements Parameter\Parameterizable {
             ini_set('date.timezone', 'Europe/Paris');
 
         mb_internal_encoding('UTF-8');
-        mb_regex_encoding('UTF-8');
+        
+        if (function_exists('mb_regex_encoding')) {
+            mb_regex_encoding('UTF-8');
+        }
 
         return;
     }
