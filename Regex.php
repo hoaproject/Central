@@ -92,7 +92,7 @@ class Regex extends String {
      * @var \Hoa\Realdom array
      */
     protected $_arguments         = array(
-        'regex'
+        'Conststring regex'
     );
 
     /**
