@@ -148,6 +148,8 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
 
             if($class->isSubclassOf('\Hoa\Realdom'))
                 $words[] = $classname::NAME;
+
+            return;
         });
 
         $readline = new \Hoa\Console\Readline();
