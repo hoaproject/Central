@@ -131,7 +131,6 @@ class Reflection extends \Hoa\Console\Dispatcher\Kit {
             echo ';', "\n";
         }
 
-
         echo '}', "\n";
 
         return;
