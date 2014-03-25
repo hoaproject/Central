@@ -113,23 +113,26 @@ class Reflection extends \Hoa\Console\Dispatcher\Kit {
 
         $i = 0;
 
-        foreach($arguments as $typeAndName => $defaultValue) {
+        if(is_array($arguments))
+            foreach($arguments as $typeAndName => $defaultValue) {
 
-            if(is_int($typeAndName)) {
+                if(is_int($typeAndName)) {
 
-                $typeAndName  = $defaultValue;
-                $defaultValue = null;
+                    $typeAndName  = $defaultValue;
+                    $defaultValue = null;
+                }
+
+                echo '    [#', $i++,
+                     ' ', (null !== $defaultValue ? 'required' : 'optional'), '] ',
+                     $typeAndName;
+
+                if(null !== $defaultValue)
+                    echo ' = ', $defaultValue;
+
+                echo ';', "\n";
             }
-
-            echo '    [#', $i++,
-                 ' ', (null !== $defaultValue ? 'required' : 'optional'), '] ',
-                 $typeAndName;
-
-            if(null !== $defaultValue)
-                echo ' = ', $defaultValue;
-
-            echo ';', "\n";
-        }
+        else
+            echo '    …variadic', "\n";
 
         echo '}', "\n";
 
