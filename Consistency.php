@@ -226,7 +226,7 @@ class Consistency {
 
             foreach(resolve('hoa://Library/' . $parts[1], true, true) as $path)
                 if(0 !== preg_match($_pattern, $path))
-                    $glob->append(new \CallbackFilterIterator(
+                    $glob->append(new ImportFilterIterator(
                         new \GlobIterator(
                             $path . DS . implode(DS, array_slice($parts, 2)) . '.php',
                             \GlobIterator::KEY_AS_PATHNAME
@@ -576,6 +576,65 @@ class Consistency {
         return 0 !== preg_match(
             '#^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$#',
             $id
+        );
+    }
+}
+
+/**
+ * Class Hoa\Core\Consistency\ImportFilterIterator.
+ *
+ * Fake \CallbackFilterIterator for compatibility.
+ *
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2014 Ivan Enderlin.
+ * @license    New BSD License
+ */
+
+class ImportFilterIterator extends \FilterIterator {
+
+    /**
+     * Callback.
+     *
+     * @var Closure object
+     */
+    protected $_callback = null;
+
+
+
+    /**
+     * Create a filtered iterator from another iterator.
+     *
+     * @access  public
+     * @param   \Iterator  $iterator    The iterator to be filtered.
+     * @param   \Closure   $callback    The callback, which should return true
+     *                                  to accept the current item false
+     *                                  otherwise.
+     * @return  void
+     */
+    public function __construct ( \Iterator $iterator,
+                                  \Closure  $callback = null ) {
+
+        $this->_callback = $callback;
+        parent::__construct($iterator);
+
+        return;
+    }
+
+    /**
+     * Cals the callback with the current value, the current key and the inner
+     * iterator as arguments.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function accept ( ) {
+
+        $callback = $this->_callback;
+
+        return $callback(
+            $this->current(),
+            $this->key(),
+            $this->getInnerIterator()
         );
     }
 }
