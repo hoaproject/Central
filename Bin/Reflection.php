@@ -123,7 +123,7 @@ class Reflection extends \Hoa\Console\Dispatcher\Kit {
                 }
 
                 echo '    [#', $i++,
-                     ' ', (null !== $defaultValue ? 'required' : 'optional'), '] ',
+                     ' ', (null === $defaultValue ? 'required' : 'optional'), '] ',
                      $typeAndName;
 
                 if(null !== $defaultValue)
