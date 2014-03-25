@@ -127,7 +127,7 @@ class Reflection extends \Hoa\Console\Dispatcher\Kit {
                      $typeAndName;
 
                 if(null !== $defaultValue)
-                    echo ' = ', $defaultValue;
+                    echo ' = ', var_export($defaultValue, true);
 
                 echo ';', "\n";
             }
