@@ -39,11 +39,6 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Realdom\Exception\MissingArgument
- */
--> import('Realdom.Exception.MissingArgument')
-
-/**
  * \Hoa\Realdom
  */
 -> import('Realdom.~')
@@ -123,10 +118,6 @@ class Grammar extends String {
      * @return  void
      */
     protected function construct ( ) {
-
-        if(!isset($this['grammar']))
-            throw new Exception\MissingArgument(
-                'Argument missing.', 0);
 
         $this->_compiler = \Hoa\Compiler\Llk::load(
             new \Hoa\File\Read($this['grammar']->getConstantValue())
