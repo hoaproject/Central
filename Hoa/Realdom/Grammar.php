@@ -56,7 +56,12 @@ from('Hoa')
 /**
  * \Hoa\Compiler\Llk
  */
--> import('Compiler.Llk')
+-> import('Compiler.Llk.~')
+
+/**
+ * \Hoa\Regex\Visitor\Isotropic
+ */
+-> import('Regex.Visitor.Isotropic')
 
 /**
  * \Hoa\File\Read
@@ -92,8 +97,7 @@ class Grammar extends String {
      * @var \Hoa\Realdom array
      */
     protected $_arguments       = array(
-        'grammar',
-        'length'
+        'Conststring grammar'
     );
 
     /**
@@ -101,14 +105,14 @@ class Grammar extends String {
      *
      * @var \Hoa\Compiler\Llk object
      */
-    protected static $_compiler = null;
+    protected $_compiler        = null;
 
     /**
-     * Meta visitor.
+     * Sampler.
      *
-     * @var \Hoa\Compiler\Visitor\Meta object
+     * @var \Hoa\Compiler\Llk\Sampler object
      */
-    protected static $_visitor  = null;
+    protected $_compilerSampler = null;
 
 
 
@@ -124,14 +128,9 @@ class Grammar extends String {
             throw new Exception\MissingArgument(
                 'Argument missing.', 0);
 
-        if(!isset($this['length']))
-            throw new Exception\Missingargument(
-                'Argument missing.', 1);
-
-        if(null === self::$_compiler)
-            self::$_compiler = \Hoa\Compiler\Llk::load(
-                new \Hoa\File\Read($this['grammar']->getConstantValue())
-            );
+        $this->_compiler = \Hoa\Compiler\Llk::load(
+            new \Hoa\File\Read($this['grammar']->getConstantValue())
+        );
 
         return;
     }
@@ -150,7 +149,7 @@ class Grammar extends String {
 
         try {
 
-            self::$_compiler->parse($q, null, false);
+            $this->_compiler->parse($q, null, false);
         }
         catch ( \Exception $e ) {
 
@@ -169,18 +168,21 @@ class Grammar extends String {
      */
     protected function _sample ( \Hoa\Math\Sampler $sampler ) {
 
-        if(null === self::$_visitor)
-            self::$_visitor = new \Hoa\Compiler\Visitor\Meta(
-                self::$_compiler,
-                $sampler
+        static $_values = array();
+
+        if(null === $this->_compilerSampler)
+            $this->_compilerSampler = new \Hoa\Compiler\Llk\Sampler\Coverage(
+                $this->_compiler,
+                new \Hoa\Regex\Visitor\Isotropic($sampler)
             );
 
-        $length = $this['length']->sample($sampler);
-        self::$_visitor->setSize($length);
+        if(empty($_values)) {
 
-        return self::$_visitor->visit(self::$_visitor->getRuleAst(
-            self::$_compiler->getRootRule()
-        ));
+            $_values = iterator_to_array($this->_compilerSampler);
+            shuffle($_values);
+        }
+
+        return array_shift($_values);
     }
 }
 
