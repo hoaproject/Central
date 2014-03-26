@@ -33,6 +33,7 @@ cloak on IRC, etc.
   * ➜ Jean Molliné (cyrano)
   * Joris Mulliez (jojolapine)
   * Matthieu Napoli (mnapoli)
+  * Cosmin Nitu (ncosmin2001)
   * Grégoire Pineau (lyrixx)
   * ➜ Stéphane Py (stephpy)
   * Mathias Strasser (mathiasstrasser)
