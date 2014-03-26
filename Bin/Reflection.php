@@ -155,7 +155,7 @@ class Reflection extends \Hoa\Console\Dispatcher\Kit {
                 echo ';', "\n";
             }
         else
-            echo '    …variadic', "\n";
+            echo '        …variadic', "\n";
 
         echo '    }', "\n", '}', "\n";
 
