@@ -109,7 +109,30 @@ class Reflection extends \Hoa\Console\Dispatcher\Kit {
         $_arguments->setAccessible(true);
         $arguments  = $_arguments->getValue($object);
 
-        echo 'Realdom [', $class->getName(), '] ', $realdom, ' {', "\n";
+        echo 'Realdom ', $realdom, ' {', "\n\n",
+             '    Implementation ', $class->getName(), ';', "\n\n",
+             '    Interfaces {', "\n\n";
+
+        $interfaces = $class->getInterfaces();
+        usort($interfaces, function ( $a, $b ) {
+
+            if('' === $a->getNamespaceName())
+                if('' === $b->getNamespaceName())
+                    return strcmp($a->getName(), $b->getName());
+                else
+                    return -1;
+
+            if('' === $b->getNamespaceName())
+                return 1;
+
+            return strcmp($a->getName(), $b->getName());
+        });
+
+        foreach($interfaces as $interface)
+            echo '        ', $interface->getName(), ';', "\n";
+
+        echo '    }', "\n\n",
+             '    Parameters {', "\n\n";
 
         $i = 0;
 
@@ -122,7 +145,7 @@ class Reflection extends \Hoa\Console\Dispatcher\Kit {
                     $defaultValue = null;
                 }
 
-                echo '    [#', $i++,
+                echo '        [#', $i++,
                      ' ', (null === $defaultValue ? 'required' : 'optional'), '] ',
                      $typeAndName;
 
@@ -134,7 +157,7 @@ class Reflection extends \Hoa\Console\Dispatcher\Kit {
         else
             echo '    …variadic', "\n";
 
-        echo '}', "\n";
+        echo '    }', "\n", '}', "\n";
 
         return;
     }
