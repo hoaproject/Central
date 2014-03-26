@@ -111,6 +111,7 @@ class Reflection extends \Hoa\Console\Dispatcher\Kit {
 
         echo 'Realdom ', $realdom, ' {', "\n\n",
              '    Implementation ', $class->getName(), ';', "\n\n",
+             '    Parent ', $class->getParentClass()->getName(), ';', "\n\n",
              '    Interfaces {', "\n\n";
 
         $interfaces = $class->getInterfaces();
