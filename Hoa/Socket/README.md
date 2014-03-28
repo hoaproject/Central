@@ -9,7 +9,7 @@ This library provides an abstract layer to build safe, fast and modular clients
 and servers.
 
 It represents a connection as a stream (please, see the [`Hoa\Stream`
-library)(http://central.hoa-project.net/Resource/Library/Stream)) that is used
+library](http://central.hoa-project.net/Resource/Library/Stream)) that is used
 to build clients and servers. A connection supports timeout, options, context,
 encryption, remote informations etc. Such a connection, along with an abstract
 connection handler, allows to embed and “merge” many connections inside the same
