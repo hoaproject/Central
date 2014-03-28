@@ -119,8 +119,10 @@ Subcommand: bar
 Options   : --some options
 ```
 
-The use of `Hoa\Console` would be a good idea to interprete the options and
-getting some confortable services for the terminal.
+The use of the [`Hoa\Console`
+library](http://central.hoa-project.net/Resource/Library/Console) would be a
+good idea to interprete the options and getting some confortable services for
+the terminal.
 
 ## Documentation
 
