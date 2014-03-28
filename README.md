@@ -56,7 +56,9 @@ and `Application`) and another abstraction for libraries resources (with root
 $conf = require 'hoa://Data/Etc/Configuration/Foo.php';
 ```
 
-We can attach more than resources on this protocol. Example with `Hoa\Registry`:
+We can attach more than resources on this protocol. Example with the
+[`Hoa\Registry`
+library](http://central.hoa-project.net/Resource/Library/Registry):
 
 ```php
 Hoa\Registry\Registry::set('foo', 'bar');
@@ -79,7 +81,8 @@ throw new Hoa\Core\Exception('Hello %s!', 0, 'Gordon');
 // Exception: Hello Gordon!
 ```
 
-Some libraries define their own channels, such as `Hoa\Stream` with, for
+Some libraries define their own channels, such as the [`Hoa\Stream`
+library](http://central.hoa-project.net/Resource/Library/Stream) with, for
 example, `hoa://Event/Stream/<stream-name>:close-before`, or
 `hoa://Event/Log/<channel>` etc.
 
