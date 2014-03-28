@@ -7,7 +7,10 @@ Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
 This library dispatches a task defined by some data on a callable, or with the
 appropriated vocabulary, on a controller and an action. It is often used in
-conjunction with the `Hoa\Router` and `Hoa\View` libraries.
+conjunction with the [`Hoa\Router`
+library](http://central.hoa-project.net/Resource/Library/Router) and the
+[`Hoa\View` library](http://central.hoa-project.net/Resource/Library/View)
+libraries.
 
 The link between libraries and the application is represented by a kit which
 aggregates all important data, such as the dispatcher, the router, the view and
