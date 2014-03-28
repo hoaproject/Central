@@ -8,8 +8,9 @@ Moreover, Hoa aims at being a bridge between industrial and research worlds.
 This library provides an abstract layer to build safe, fast and modular clients
 and servers.
 
-It represents a connection as a stream (`Hoa\Stream`) that is used to build
-clients and servers. A connection supports timeout, options, context,
+It represents a connection as a stream (please, see the [`Hoa\Stream`
+library)(http://central.hoa-project.net/Resource/Library/Stream)) that is used
+to build clients and servers. A connection supports timeout, options, context,
 encryption, remote informations etc. Such a connection, along with an abstract
 connection handler, allows to embed and “merge” many connections inside the same
 processus side-by-side.
@@ -23,12 +24,13 @@ introduce the respective API.
 
 Both server and client extend a connection, namely the
 `Hoa\Socket\Connection\Connection` class, which is a stream represented by the
-`Hoa\Stream` library. This latter provides the common stream API whose the read
-and write methods (from `Hoa\Stream\IStream\In`, `Hoa\Stream\IStream\Out` and
-also `Hoa\Stream\IStream\Pathable`). Since it is also responsible of the
-connection, we are able to manipulate the underlying socket resource, the
-timeout, the different flags, the stream context, the encryption, the remote
-informations etc.
+[`Hoa\Stream` library](http://central.hoa-project.net/Resource/Library/Stream).
+This latter provides the common stream API whose the read and write methods
+(from `Hoa\Stream\IStream\In`, `Hoa\Stream\IStream\Out` and also
+`Hoa\Stream\IStream\Pathable`). Since it is also responsible of the connection,
+we are able to manipulate the underlying socket resource, the timeout, the
+different flags, the stream context, the encryption, the remote informations
+etc.
 
 To start a connection, we will use the `connect` method (the constructor does
 not start the connection by itself). For a server, we will often prefer to use
@@ -93,7 +95,8 @@ From the server, we will see:
 ```
 
 To reproduce the same behavior with our own client, we will write (thanks to
-`Hoa\Console\Readline\Readline`):
+`Hoa\Console\Readline\Readline`, please see the [`Hoa\Console`
+library](http://central.hoa-project.net/Resource/Library/Console)):
 
 ```php
 $client = new Hoa\Socket\Client('tcp://127.0.0.1:4242');
@@ -131,7 +134,8 @@ A connection has advanced operations but they are low-levels and not obvious.
 Moreover, there is repetitive and not so trivial tasks that we need often, such
 as broadcasting messages. The `Hoa\Socket\Connection\Handler` provides an easy
 way to create and embed a very flexible server or client. (A good and complete
-example is the `Hoa\Websocket` library).
+example is the [`Hoa\Websocket`
+library](http://central.hoa-project.net/Resource/Library/Websocket)).
 
 We will focus on a server. A server has the magic `run` method that starts an
 infinite loop and make some computation on active nodes. This is basically the
@@ -191,8 +195,9 @@ The `_send` method gives an implementation of “sending one message”, which i
 the basis. Because the `_run` method does not start an infinite loop, we have
 more flexibility (see the next section).
 
-We can add listeners (with `Hoa\Core\Event`) to interact with the server,
-something like `$server->on('message', function ( … ) { … });` etc.
+We can add listeners (with `Hoa\Core\Event`, please see the [`Hoa\Core`
+library](http://central.hoa-project.net/Resource/Library/Core)) to interact with
+the server, something like `$server->on('message', function ( … ) { … });` etc.
 
 ### Merging connections
 
@@ -205,9 +210,12 @@ abstracts and manages all the complexity). Consequently, we are able to run
 several servers and clients together, inside the same processus, at the same
 time.
 
-For example, we will run an instance of `Hoa\Irc\Client` with a
-`Hoa\Websocket\Server`: all messages received by the WebSocket server will be
-redirected on the IRC client. Thus:
+For example, we will run an instance of `Hoa\Irc\Client` (please, see the
+[`Hoa\Irc` library](http://central.hoa-project.net/Resource/Library/Irc)) with a
+`Hoa\Websocket\Server` (please, see the [`Hoa\Websocket`
+library](http://central.hoa-project.net/Resource/Library/Websocket): all
+messages received by the WebSocket server will be redirected on the IRC client.
+Thus:
 
 ```php
 $websocket = new Hoa\Websocket\Server(new Hoa\Socket\Server('tcp://…'));
