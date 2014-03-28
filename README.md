@@ -31,8 +31,9 @@ Hoa\Zombie\Zombie::decapitate();
 // I'm dead…
 ```
 
-But we have to run the script behind FastCGI, that is why we will use
-`Hoa\Fastcgi` in the following example.
+But we have to run the script behind FastCGI, that is why we will use the
+[`Hoa\Fastcgi` library](http://central.hoa-project.net/Resource/Library/Fastcgi) in the
+following example.
 
 In the `Zombie.php` file, we write the following instructions:
 
