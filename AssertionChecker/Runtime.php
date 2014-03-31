@@ -216,15 +216,16 @@ class Runtime extends AssertionChecker {
             );
             $arguments['\result'] = $return;
 
+            $rootBehavior = $behavior instanceof \Hoa\Praspel\Model\Specification;
+            $_exceptions  = true === $rootBehavior
+                                ? $exceptions
+                                : new \Hoa\Praspel\Exception\Group(
+                                      'Behavior %s is broken.',
+                                      3, $behavior->getIdentifier()
+                                  );
+
             // Check normal postcondition.
             if(true === $behavior->clauseExists('ensures')) {
-
-                $_exceptions = $behavior instanceof \Hoa\Praspel\Model\Specification
-                                   ? $exceptions
-                                   : new \Hoa\Praspel\Exception\Group(
-                                         'Behavior %s is broken.',
-                                         3, $behavior->getIdentifier()
-                                     );
 
                 $ensures  = $behavior->getClause('ensures');
                 $verdict &= $this->checkClause(
@@ -235,6 +236,19 @@ class Runtime extends AssertionChecker {
                     false,
                     $trace
                 );
+            }
+            else {
+
+                $verdict       &= false;
+                $_exceptions[]  = new \Hoa\Praspel\Exception\Failure\Postcondition(
+                    'The System Under Test cannot terminate normally because ' .
+                    'no normal postcondition has been specified (there is ' .
+                    'no @ensures clause).', 3);
+            }
+
+            if(   0      <  count($_exceptions)
+               && false === $rootBehavior) {
+
                 $_behavior = $behavior;
 
                 while(   (null !== $_behavior = $_behavior->getParent())
@@ -248,8 +262,7 @@ class Runtime extends AssertionChecker {
                     $_exceptions = $handle;
                 }
 
-                if(0 < count($_exceptions))
-                    $exceptions[] = $_exceptions;
+                $exceptions[] = $_exceptions;
             }
         }
         catch ( \Hoa\Praspel\Exception $internalException ) {
