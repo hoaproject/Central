@@ -469,12 +469,11 @@ class Interpreter implements \Hoa\Visitor\Visit {
 
             case '#regex':
                 $regex  = $element->getChild(0)->accept($this, $handle, $eldnah);
-                $length = 12;
 
                 if(true === $element->childExists(1))
                     $length = $element->getChild(1)->accept($this, $handle, $eldnah);
 
-                return realdom()->regex($regex, $length);
+                return realdom()->regex($regex);
               break;
 
             case 'token':
