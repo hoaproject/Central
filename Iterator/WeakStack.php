@@ -62,6 +62,22 @@ class WeakStack extends \SplStack {
 
         return parent::valid();
     }
+
+    /**
+     * Check whether the stack is empty or not.
+     * An element is present if different of null.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isEmpty ( ) {
+
+        foreach($this as $element)
+            if(null !== $element)
+                return false;
+
+        return true;
+    }
 }
 
 }
