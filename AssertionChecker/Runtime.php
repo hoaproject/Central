@@ -193,6 +193,7 @@ class Runtime extends AssertionChecker {
         if(0 < count($exceptions))
             throw $exceptions;
 
+        $rootBehavior      = $behavior instanceof \Hoa\Praspel\Model\Specification;
         $numberOfArguments = count($arguments);
 
         if($numberOfArguments < $numberOfRequiredArguments) {
@@ -205,6 +206,13 @@ class Runtime extends AssertionChecker {
             throw $exceptions;
         }
 
+        $_exceptions = true === $rootBehavior
+                           ? $exceptions
+                           : new \Hoa\Praspel\Exception\Group(
+                                 'Behavior %s is broken.',
+                                 3, $behavior->getIdentifier()
+                             );
+
         try {
 
             // Invoke.
@@ -215,14 +223,6 @@ class Runtime extends AssertionChecker {
                 $isConstructor
             );
             $arguments['\result'] = $return;
-
-            $rootBehavior = $behavior instanceof \Hoa\Praspel\Model\Specification;
-            $_exceptions  = true === $rootBehavior
-                                ? $exceptions
-                                : new \Hoa\Praspel\Exception\Group(
-                                      'Behavior %s is broken.',
-                                      3, $behavior->getIdentifier()
-                                  );
 
             // Check normal postcondition.
             if(true === $behavior->clauseExists('ensures')) {
@@ -245,59 +245,59 @@ class Runtime extends AssertionChecker {
                     'no normal postcondition has been specified (there is ' .
                     'no @ensures clause).', 3);
             }
-
-            if(   0      <  count($_exceptions)
-               && false === $rootBehavior) {
-
-                $_behavior = $behavior;
-
-                while(   (null !== $_behavior = $_behavior->getParent())
-                      && !($_behavior instanceof \Hoa\Praspel\Model\Specification)) {
-
-                    $handle = new \Hoa\Praspel\Exception\Group(
-                        'Behavior %s is broken.',
-                        4, $_behavior->getIdentifier()
-                    );
-                    $handle[]    = $_exceptions;
-                    $_exceptions = $handle;
-                }
-
-                $exceptions[] = $_exceptions;
-            }
         }
         catch ( \Hoa\Praspel\Exception $internalException ) {
 
-            $exceptions[] = new \Hoa\Praspel\Exception\Failure\InternalPrecondition(
+            $_exceptions[] = new \Hoa\Praspel\Exception\Failure\InternalPrecondition(
                 'The System Under Test has broken an internal contract.',
                 5, null, $internalException);
         }
         catch ( \Exception $exception ) {
 
-            $_verdict             = false;
             $arguments['\result'] = $exception;
 
-            do {
+            // Check exceptional postcondition.
+            if(true === $behavior->clauseExists('throwable')) {
 
-                // Check exceptional postcondition.
-                if(true === $behavior->clauseExists('throwable')) {
-
-                    $throwable = $behavior->getClause('throwable');
-                    $_verdict  = $this->checkExceptionalClause(
-                        $throwable,
-                        $arguments
-                    );
-                }
-
-            } while(   false === $_verdict
-                    &&  null !== $behavior = $behavior->getParent());
-
-            if(false === $_verdict)
-                $exceptions[] = new \Hoa\Praspel\Exception\Failure\Exceptional(
-                    'The exception %s has been unexpectedly thrown.',
-                    6, get_class($arguments['\result']), $exception
+                $throwable  = $behavior->getClause('throwable');
+                $verdict   &= $this->checkExceptionalClause(
+                    $throwable,
+                    $arguments
                 );
 
-            $verdict &= $_verdict;
+                if(false == $verdict)
+                    $_exceptions[]  = new \Hoa\Praspel\Exception\Failure\Exceptional(
+                        'The exception %s has been unexpectedly thrown.',
+                        6, get_class($arguments['\result']), $exception);
+            }
+            else {
+
+                $verdict       &= false;
+                $_exceptions[]  = new \Hoa\Praspel\Exception\Failure\Exceptional(
+                    'The System Under Test cannot terminate exceptionally ' .
+                    'because no exceptional postcondition has been specified ' .
+                    '(there is no @throwable clause).',
+                    6, array(), $exception);
+            }
+        }
+
+        if(   0      <  count($_exceptions)
+           && false === $rootBehavior) {
+
+            $_behavior = $behavior;
+
+            while(   (null !== $_behavior = $_behavior->getParent())
+                  && !($_behavior instanceof \Hoa\Praspel\Model\Specification)) {
+
+                $handle = new \Hoa\Praspel\Exception\Group(
+                    'Behavior %s is broken.',
+                    4, $_behavior->getIdentifier()
+                );
+                $handle[]    = $_exceptions;
+                $_exceptions = $handle;
+            }
+
+            $exceptions[] = $_exceptions;
         }
 
         if(0 < count($exceptions))
