@@ -243,8 +243,17 @@ class Structural implements \Hoa\Iterator\Recursive {
 
             case static::STATE_REQUIRES:
                 ++$this->_key;
-                $this->_current = $behavior->getClause('requires');
-                $this->_path->push($this->_current);
+
+                if(true === $behavior->clauseExists('requires')) {
+
+                    $this->_current = $behavior->getClause('requires');
+                    $this->_path->push($this->_current);
+                }
+                else {
+
+                    $this->_current = true;
+                    $this->_path->push(null);
+                }
 
                 if(true === $behavior->clauseExists('behavior')) {
 
@@ -355,7 +364,7 @@ class Structural implements \Hoa\Iterator\Recursive {
         $this->_key = -1;
 
         unset($this->_path);
-        $this->_path = new \SplQueue();
+        $this->_path = new \Hoa\Praspel\Iterator\WeakStack();
 
         unset($this->_stack);
         $this->_stack = new \SplStack();
