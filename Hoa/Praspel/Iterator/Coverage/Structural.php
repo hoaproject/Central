@@ -39,6 +39,11 @@ namespace {
 from('Hoa')
 
 /**
+ * \Hoa\Praspel\Exception\Generic
+ */
+-> import('Praspel.Exception.Generic')
+
+/**
  * \Hoa\Praspel\Iterator\WeakStack
  */
 -> import('Praspel.Iterator.WeakStack')
@@ -85,6 +90,34 @@ namespace Hoa\Praspel\Iterator\Coverage {
 class Structural implements \Hoa\Iterator\Recursive {
 
     /**
+     * State of the iterator: will compute a @requires clause.
+     *
+     * @const int
+     */
+    const STATE_REQUIRES  = 0;
+
+    /**
+     * State of the iterator: will compute a @behavior clause.
+     *
+     * @const int
+     */
+    const STATE_BEHAVIOR  = 1;
+
+    /**
+     * State of the iterator: will compute an @ensures clause.
+     *
+     * @const int
+     */
+    const STATE_ENSURES   = 2;
+
+    /**
+     * State of the iterator: will compute a @throwable clause.
+     *
+     * @const int
+     */
+    const STATE_THROWABLE = 3;
+
+    /**
      * Specification to cover.
      *
      * @var \Hoa\Praspel\Model\Specification object
@@ -100,6 +133,13 @@ class Structural implements \Hoa\Iterator\Recursive {
                                    // | Coverage::CRITERIA_EXCEPTIONAL
 
     /**
+     * Path.
+     *
+     * @var \SplQueue object
+     */
+    protected $_path          = null;
+
+    /**
      * Stack (to manage backtracks, yields, etc.)
      *
      * @var \SplStack object
@@ -107,11 +147,18 @@ class Structural implements \Hoa\Iterator\Recursive {
     protected $_stack         = null;
 
     /**
+     * Pop queue (when we should pop an element from the path).
+     *
+     * @var \SplQueue
+     */
+    protected $_pop           = null;
+
+    /**
      * Key.
      *
      * @var \Hoa\Praspel\Iterator\Coverage\Structural int
      */
-    protected $_key           = 0;
+    protected $_key           = -1;
 
     /**
      * Current (with two indexes: pre and post, with SplStack
@@ -120,20 +167,6 @@ class Structural implements \Hoa\Iterator\Recursive {
      * @var \Hoa\Praspel\Iterator\Coverage\Structural array
      */
     protected $_current       = null;
-
-    /**
-     * Whether the algorithm is backtracking or not.
-     *
-     * @var \Hoa\Praspel\Iterator\Coverage\Structural bool
-     */
-    protected $_up            = false;
-
-    /**
-     * Post-condition clause: ensure or throwable.
-     *
-     * @var \Hoa\Praspel\Iterator\Coverage\Structural string
-     */
-    protected $_post          = 'ensures';
 
 
 
@@ -162,7 +195,15 @@ class Structural implements \Hoa\Iterator\Recursive {
      */
     public function current ( ) {
 
-        return $this->_current;
+        $out = array('pre' => array(), 'post' => array());
+
+        foreach($this->_path as $element)
+            if($element instanceof \Hoa\Praspel\Model\Requires)
+                $out['pre'][] = $element;
+            else
+                $out['post'][] = $element;
+
+        return $out;
     }
 
     /**
@@ -180,119 +221,127 @@ class Structural implements \Hoa\Iterator\Recursive {
      * Advance the internal collection pointer, and return the current value.
      *
      * @access  public
-     * @return  array
+     * @return  void
      */
     public function next ( ) {
 
-        $collection = $this->_stack->top();
+        $this->_current = null;
 
-        if($collection instanceof \Hoa\Praspel\Model\Specification) {
+        if(0 === count($this->_stack))
+            return;
 
-            if(true === $this->_up) {
+        while(0 === $this->_pop->top()) {
 
-                if(   'ensures' === $this->_post
-                   && 0 !== (Coverage::CRITERIA_EXCEPTIONAL & $this->getCriteria())) {
+            $this->_pop->pop();
+            $this->_path->pop();
+            $this->_pop->push($this->_pop->pop() - 1);
+        }
 
-                    $this->_up   = false;
-                    $this->_post = 'throwable';
-                    ++$this->_key;
-                    $this->_rewindCurrent();
+        list($behavior, $state) = array_values($this->_stack->pop());
 
-                    return $this->current();
+        switch($state) {
+
+            case static::STATE_REQUIRES:
+                ++$this->_key;
+                $this->_current = $behavior->getClause('requires');
+                $this->_path->push($this->_current);
+
+                if(true === $behavior->clauseExists('behavior')) {
+
+                    $behaviors = $behavior->getClause('behavior')->getIterator();
+                    $this->_stack->push(array(
+                        'behavior' => $behavior,
+                        'state'    => static::STATE_BEHAVIOR
+                    ));
+                    $this->_stack->push(array(
+                        'behavior' => $behaviors,
+                        'state'    => static::STATE_BEHAVIOR
+                    ));
+
+                    $this->_pop->push(
+                        count($behaviors)
+                      + (2 * $behavior->clauseExists('default'))
+                    );
+                }
+                else {
+
+                    $this->_stack->push(array(
+                        'behavior' => $behavior,
+                        'state'    => static::STATE_ENSURES
+                    ));
+                    $this->_pop->push(2);
+                    $this->next();
+                }
+              break;
+
+            case static::STATE_BEHAVIOR:
+                if(true === $behavior->valid()) {
+
+                    $this->_stack->push(array(
+                        'behavior' => $behavior,
+                        'state'    => static::STATE_BEHAVIOR
+                    ));
+                    $this->_stack->push(array(
+                        'behavior' => $behavior->current(),
+                        'state'    => static::STATE_REQUIRES
+                    ));
+                    $behavior->next();
+                    $this->next();
+
+                    break;
                 }
 
-                unset($this->_current);
-                $this->_current = null;
+                list($parentBehavior, ) = array_values($this->_stack->pop());
 
-                return $this->current();
-            }
+                if(true === $parentBehavior->clauseExists('default'))
+                    $this->_stack->push(array(
+                        'behavior' => $parentBehavior->getClause('default'),
+                        'state'    => static::STATE_ENSURES
+                    ));
 
-            if(true === $collection->clauseExists('behavior'))
-                return $this->_next($collection);
+                $this->next();
+              break;
 
-            $this->_up = true;
+            case static::STATE_ENSURES:
+                $this->_stack->push(array(
+                    'behavior' => $behavior,
+                    'state'    => static::STATE_THROWABLE
+                ));
 
-            return $this->next();
-        }
-        elseif($collection instanceof \Hoa\Praspel\Model\DefaultBehavior) {
+                if(   false === $behavior->clauseExists('ensures')
+                   || 0     === (Coverage::CRITERIA_NORMAL & $this->getCriteria())) {
 
-            if(false === $this->_up) {
+                    $this->_pop->push($this->_pop->pop() - 1);
+                    $this->next();
 
-                $this->pushCurrent($collection);
-                $this->_up = true;
+                    break;
+                }
+
                 ++$this->_key;
+                $this->_current = $behavior->getClause('ensures');
+                $this->_path->push($this->_current);
+                $this->_pop->push(0);
+              break;
 
-                return $this->current();
-            }
+            case static::STATE_THROWABLE:
+                if(   false === $behavior->clauseExists('throwable')
+                   || 0     === (Coverage::CRITERIA_EXCEPTIONAL & $this->getCriteria())) {
 
-            $this->_current['pre']->pop();
-            $this->_current['post']->pop();
+                    $this->_pop->push($this->_pop->pop() - 1);
+                    $this->next();
 
-            $this->_stack->pop();
+                    break;
+                }
 
-            return $this->next();
+                ++$this->_key;
+                $this->_current = $behavior->getClause('throwable');
+
+                $this->_path->push($this->_current);
+                $this->_pop->push(0);
+              break;
         }
 
-        $handle = current($collection);
-
-        if(   false === $this->_up
-           && true  === $handle->clauseExists('behavior'))
-            return $this->_next($handle);
-
-        $this->_current['pre']->pop();
-        $this->_current['post']->pop();
-
-        next($collection);
-        $nextHandle = current($collection);
-
-        if(false === $nextHandle) {
-
-            $this->_stack->pop();
-
-            if(true === $handle->getParent()->clauseExists('default')) {
-
-                $this->_up = false;
-                $this->_stack->push($handle->getParent()->getClause('default'));
-
-                return $this->next();
-            }
-
-            $this->_up = true;
-
-            return $this->next();
-        }
-
-        $this->_up = false;
-        $this->pushCurrent($nextHandle);
-        ++$this->_key;
-
-        return $this->current();
-    }
-
-    /**
-     * Common (and inline) parts of the $this->next() method.
-     *
-     * @access  private
-     * @param   \Hoa\Praspel\Model\Behavior  $handle    Handle.
-     * @return  array
-     */
-    private function _next ( \Hoa\Praspel\Model\Behavior $handle ) {
-
-        $iterator = $handle->getClause('behavior')->getIterator();
-        $this->_stack->push($iterator);
-        $current  = current($iterator);
-
-        if(false === $current) {
-
-            $this->_up = true;
-
-            return $this->next();
-        }
-
-        $this->pushCurrent($current);
-        ++$this->_key;
-
-        return $this->current();
+        return;
     }
 
     /**
@@ -303,67 +352,25 @@ class Structural implements \Hoa\Iterator\Recursive {
      */
     public function rewind ( ) {
 
-        $this->_up  = false;
-        $this->_key = 0;
+        $this->_key = -1;
+
+        unset($this->_path);
+        $this->_path = new \SplQueue();
 
         unset($this->_stack);
         $this->_stack = new \SplStack();
-        $this->_stack->push($this->_specification);
+        $this->_stack->push(array(
+            'behavior' => $this->_specification,
+            'state'    => static::STATE_REQUIRES
+        ));
 
-        $this->_post = 0 !== (Coverage::CRITERIA_NORMAL & $this->getCriteria())
-                           ? 'ensures'
-                           : 'throwable';
+        unset($this->_pop);
+        $this->_pop = new \SplQueue();
+        $this->_pop->push(-1);
 
-        $this->_rewindCurrent();
+        $this->next();
 
         return $this->current();
-    }
-
-    /**
-     * Rewind $this->_current.
-     *
-     * @access  protected
-     * @return  void
-     */
-    protected function _rewindCurrent ( ) {
-
-        $stack = new \Hoa\Praspel\Iterator\WeakStack();
-        $stack->setIteratorMode(
-            \SplDoublyLinkedList::IT_MODE_LIFO
-          | \SplDoublyLinkedList::IT_MODE_KEEP
-        );
-        unset($this->_current);
-        $this->_current = array(
-            'pre'  =>       $stack,
-            'post' => clone $stack
-        );
-        $this->pushCurrent($this->_stack->top());
-
-        return;
-    }
-
-    /**
-     * Push pre and post clauses in $this->_current.
-     *
-     * @access  protected
-     * @param   \Hoa\Praspel\Model\Behavior  $current    Current.
-     * @return  void
-     */
-    protected function pushCurrent ( \Hoa\Praspel\Model\Behavior $current ) {
-
-        $pre  = null;
-        $post = null;
-
-        if(true === $current->clauseExists('requires'))
-            $pre = $current->getClause('requires');
-
-        if(true === $current->clauseExists($this->_post))
-            $post = $current->getClause($this->_post);
-
-        $this->_current['pre']->push($pre);
-        $this->_current['post']->push($post);
-
-        return;
     }
 
     /**
@@ -387,6 +394,12 @@ class Structural implements \Hoa\Iterator\Recursive {
      * @return  int
      */
     public function setCriteria ( $criteria ) {
+
+        if(   0 !== (Coverage::CRITERIA_DOMAIN & $criteria)
+           && 0 !== (Coverage::CRITERIA_EXCEPTIONAL & $criteria))
+            throw new \Hoa\Praspel\Exception\Generic(
+                'Mixing CRITERIA_EXCEPTIONAL and CRITERIA_DOMAIN is not ' .
+                'supported yet. Sorry.', 0);
 
         $old             = $this->_criteria;
         $this->_criteria = $criteria;
@@ -426,12 +439,13 @@ class Structural implements \Hoa\Iterator\Recursive {
     public function getChildren ( ) {
 
         $variables = array();
+        $current   = $this->current();
 
-        foreach($this->_current['pre'] as $clause)
+        foreach($current['pre'] as $clause)
             foreach($clause->getLocalVariables() as $variable)
                 $variables[] = $variable;
 
-        foreach($this->_current['post'] as $clause)
+        foreach($current['post'] as $clause)
             foreach($clause->getLocalVariables() as $variable)
                 $variables[] = $variable;
 

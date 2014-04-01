@@ -408,9 +408,6 @@ class Interpreter implements \Hoa\Visitor\Visit {
               break;
 
             case '#dynamic_resolution':
-                if(1 === $element->getChildrenNumber())
-                    return $element->getChild(0)->accept($this, $handle, $eldnah);
-
                 $value = null;
 
                 foreach($element->getChildren() as $child) {

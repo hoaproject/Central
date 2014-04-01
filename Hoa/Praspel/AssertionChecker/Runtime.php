@@ -237,20 +237,12 @@ class Runtime extends AssertionChecker {
                     $trace
                 );
             }
-            else {
-
-                $verdict       &= false;
-                $_exceptions[]  = new \Hoa\Praspel\Exception\Failure\Postcondition(
-                    'The System Under Test cannot terminate normally because ' .
-                    'no normal postcondition has been specified (there is ' .
-                    'no @ensures clause).', 3);
-            }
         }
         catch ( \Hoa\Praspel\Exception $internalException ) {
 
             $_exceptions[] = new \Hoa\Praspel\Exception\Failure\InternalPrecondition(
                 'The System Under Test has broken an internal contract.',
-                5, null, $internalException);
+                4, null, $internalException);
         }
         catch ( \Exception $exception ) {
 
@@ -268,7 +260,7 @@ class Runtime extends AssertionChecker {
                 if(false == $verdict)
                     $_exceptions[]  = new \Hoa\Praspel\Exception\Failure\Exceptional(
                         'The exception %s has been unexpectedly thrown.',
-                        6, get_class($arguments['\result']), $exception);
+                        5, get_class($arguments['\result']), $exception);
             }
             else {
 
@@ -291,7 +283,7 @@ class Runtime extends AssertionChecker {
 
                 $handle = new \Hoa\Praspel\Exception\Group(
                     'Behavior %s is broken.',
-                    4, $_behavior->getIdentifier()
+                    7, $_behavior->getIdentifier()
                 );
                 $handle[]    = $_exceptions;
                 $_exceptions = $handle;
@@ -483,7 +475,7 @@ class Runtime extends AssertionChecker {
 
                 $_exceptions = new \Hoa\Praspel\Exception\Group(
                     'Behavior %s is broken.',
-                    7, $_behavior->getIdentifier()
+                    8, $_behavior->getIdentifier()
                 );
 
                 $_trace = null;
@@ -570,7 +562,7 @@ class Runtime extends AssertionChecker {
             if(false === array_key_exists($name, $data)) {
 
                 $exceptions[] = new $exception(
-                    'Variable %s is required and has no value.', 8, $name);
+                    'Variable %s is required and has no value.', 9, $name);
 
                 continue;
             }
@@ -604,7 +596,7 @@ class Runtime extends AssertionChecker {
 
                 $exceptions[] = new $exception(
                     'Variable %s does not verify the constraint @%s %s.',
-                    9,
+                    10,
                     array(
                         $name,
                         $clause->getName(),
