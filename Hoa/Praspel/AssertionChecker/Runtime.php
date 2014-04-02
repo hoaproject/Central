@@ -562,7 +562,8 @@ class Runtime extends AssertionChecker {
             if(false === array_key_exists($name, $data)) {
 
                 $exceptions[] = new $exception(
-                    'Variable %s is required and has no value.', 9, $name);
+                    'Variable %s in @%s is required and has no value.',
+                    9, array($name, $clause->getName()));
 
                 continue;
             }
