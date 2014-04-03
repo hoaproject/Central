@@ -55,7 +55,7 @@ interface WrapperStatement {
      * @access  public
      * @param   array   $bindParameters    Bind parameters values if
      *                                     bindParameter() is not called.
-     * @return  bool
+     * @return  \Hoa\Database\IDal\WrapperStatement
      * @throw   \Hoa\Database\Exception
      */
     public function execute ( Array $bindParameters = array() );
@@ -88,7 +88,7 @@ interface WrapperStatement {
      * there is no more row.
      *
      * @access  public
-     * @param   string  $column    Column index.
+     * @param   int  $column    Column index.
      * @return  mixed
      * @throw   \Hoa\Database\Exception
      */

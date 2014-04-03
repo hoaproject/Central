@@ -172,7 +172,7 @@ class Statement implements \Hoa\Database\IDal\WrapperStatement {
      * there is no more row.
      *
      * @access  public
-     * @param   string  $column    Column index.
+     * @param   int  $column    Column index.
      * @return  mixed
      * @throw   \Hoa\Database\Exception
      */
