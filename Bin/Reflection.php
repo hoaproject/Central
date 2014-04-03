@@ -54,6 +54,7 @@ class Reflection extends \Hoa\Console\Dispatcher\Kit {
      * @var \Hoa\Realdom\Bin\Reflection array
      */
     protected $options = array(
+        array('list', \Hoa\Console\GetOption::NO_ARGUMENT, 'l'),
         array('help', \Hoa\Console\GetOption::NO_ARGUMENT, 'h'),
         array('help', \Hoa\Console\GetOption::NO_ARGUMENT, '?')
     );
@@ -68,7 +69,13 @@ class Reflection extends \Hoa\Console\Dispatcher\Kit {
      */
     public function main ( ) {
 
+        $list = false;
+
         while(false !== $c = $this->getOption($v)) switch($c) {
+
+            case 'l':
+                $list = $v;
+              break;
 
             case 'h':
             case '?':
@@ -79,11 +86,6 @@ class Reflection extends \Hoa\Console\Dispatcher\Kit {
                 $this->resolveOptionAmbiguity($v);
               break;
         }
-
-        $this->parser->listInputs($realdom);
-
-        if(empty($realdom))
-            return $this->usage();
 
         $matches = array();
 
@@ -97,6 +99,18 @@ class Reflection extends \Hoa\Console\Dispatcher\Kit {
 
             return;
         });
+
+        if(true === $list) {
+
+            echo implode("\n", array_keys($matches)), "\n";
+
+            return;
+        }
+
+        $this->parser->listInputs($realdom);
+
+        if(empty($realdom))
+            return $this->usage();
 
         if(!isset($matches[$realdom]))
             throw new \Hoa\Console\Exception(
@@ -174,6 +188,7 @@ class Reflection extends \Hoa\Console\Dispatcher\Kit {
         echo 'Usage   : realdom:reflection <options> [realdom]', "\n",
              'Options :', "\n",
              $this->makeUsageOptionsList(array(
+                 'l'    => 'List all realdoms.',
                  'help' => 'This help.'
              )), "\n";
 
