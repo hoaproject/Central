@@ -202,7 +202,7 @@ class Behavior extends Clause {
 
                 $handle = new Collection(
                     new self($this),
-                    function ( self $clause, $identifier ) {
+                    function ( Behavior $clause, $identifier ) {
 
                         $clause->setIdentifier($identifier);
 
