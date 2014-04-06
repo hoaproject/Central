@@ -23,7 +23,7 @@
     },
     "require": {
         "hoa/core": "dev-master",
-        "ext/pdo" : "*"
+        "ext-pdo" : "*"
     },
     "minimum-stability": "dev",
     "target-dir"       : "Hoa/Database",
