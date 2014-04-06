@@ -28,6 +28,7 @@ cloak on IRC, etc.
   * Nicolas Grekas (nicolas-grekas)
   * ➜ Sébastien Houzé (shouze)
   * Matthieu de Laubrie (Metalaka, ex-Derver)
+  * Baptiste Leduc (Korbeil)
   * ➜ Renaud Littolff (marmotz)
   * ➜ Julien Lorrain (julien)
   * ➜ Jean Molliné (cyrano)
