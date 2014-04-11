@@ -59,6 +59,7 @@
 %token  old             \\old
 %token  result          \\result
 %token  pred            \\pred
+%token  nothing         \\nothing
 
 // Symbols.
 %token  parenthesis_    \(
@@ -181,6 +182,7 @@ behavior_content:
 expression:
               ( declaration() | constraint() | domainof() | predicate() )
     ( ::and:: ( declaration() | constraint() | domainof() | predicate() ) )*
+  | <nothing>
 
 exceptional_expression:
     exception() ( ::or:: exception() )*
