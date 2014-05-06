@@ -174,10 +174,12 @@ class Core implements Parameter\Parameterizable {
                         array('hoa')
                     )));
 
+        setlocale(LC_CTYPE, 'C');
+
         $date = ini_get('date.timezone');
 
         if(empty($date))
-            ini_set('date.timezone', 'Europe/Paris');
+            ini_set('date.timezone', 'UTC');
 
         mb_internal_encoding('UTF-8');
 
