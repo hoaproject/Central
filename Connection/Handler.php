@@ -257,14 +257,16 @@ abstract class Handler {
         $old  = $this->getConnection()->_setStream($node->getSocket());
         $send = $this->_send($message, $node);
 
-        if($send instanceof \Closure)
-            return function ( ) use ( &$send, &$old ) {
+        if($send instanceof \Closure) {
+            $self = $this;
+            return function ( ) use ( &$send, &$old, &$self ) {
 
                 $out = call_user_func_array($send, func_get_args());
-                $this->getConnection()->_setStream($old);
+                $self->getConnection()->_setStream($old);
 
                 return $out;
             };
+        }
 
         $this->getConnection()->_setStream($old);
 
