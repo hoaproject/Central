@@ -23,6 +23,7 @@ cloak on IRC, etc.
   * ➜ Gérard Ernaelsten (maitrepylos)
   * ➜ Julian Espérat (savageman)
   * Baptiste Fedi (baptiste)
+  * Aymeric Gerlier (skan)
   * ➜ Alexis von Glasow (avonglasow)
   * Kevin Gravier (mrkmg)
   * Nicolas Grekas (nicolas-grekas)
