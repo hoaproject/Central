@@ -258,7 +258,9 @@ abstract class Handler {
         $send = $this->_send($message, $node);
 
         if($send instanceof \Closure) {
+
             $self = $this;
+
             return function ( ) use ( &$send, &$old, &$self ) {
 
                 $out = call_user_func_array($send, func_get_args());
