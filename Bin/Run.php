@@ -101,16 +101,18 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
                          ->directories()
                          ->maxDepth(1);
 
-                foreach($iterator as $directory) {
+                foreach($iterator as $fileinfo) {
 
-                    $pathname = $directory->getPathname();
-                    $test     = $pathname . DS . 'Test' . DS . 'Unit';
+                    $libraryName = $fileinfo->getBasename();
+                    $pathname    = resolve('hoa://Library/' . $libraryName);
+                    $test        = $pathname . DS . 'Test' . DS . 'Unit';
 
                     if(is_dir($test))
                         $out[] = $test;
                 }
 
-                $directory = implode(' ', $out);
+                if(!empty($out))
+                    $directory = implode(' ', $out);
               break;
 
             case 'l':
@@ -154,6 +156,8 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
             $command .= ' --directories ' . $directory;
         elseif(null !== $file)
             $command .= ' --files ' . $file;
+        else
+            return $this->usage();
 
         $processus = new \Hoa\Console\Processus($command);
         $processus->on('input', function ( $bucket ) {
