@@ -41,6 +41,12 @@ will execute all the test suites of a library with the `--library` option. Thus:
 $ hoa test:run --library Foo
 ```
 
+## Environment variables
+
+  * `HOA_ATOUM_BIN`: this variable represents the path to the atoum binary,
+  * `HOA_ATOUM_PRASPEL_EXTENSION`: this variable indicates the root of the
+    `Atoum\PraspelExtension` library (do not forget the trailing `/`!).
+
 ## Documentation
 
 Different documentations can be found on the website:

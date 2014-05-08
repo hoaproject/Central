@@ -136,7 +136,14 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
               break;
         }
 
-        $command = 'atoum' .
+        $atoum = 'atoum';
+
+        if(isset($_SERVER['HOA_ATOUM_BIN']))
+            $atoum = $_SERVER['HOA_ATOUM_BIN'];
+
+        $command = $atoum .
+                   ' --configurations ' .
+                       resolve('hoa://Library/Test/.atoum.php') .
                    ' --bootstrap-file ' .
                        resolve('hoa://Library/Test/.bootstrap.atoum.php') .
                    ' --force-terminal';
