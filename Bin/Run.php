@@ -41,7 +41,12 @@ from('Hoa')
 /**
  * \Hoa\Console\Processus
  */
--> import('Console.Processus');
+-> import('Console.Processus')
+
+/**
+ * \Hoa\File\Finder
+ */
+-> import('File.Finder');
 
 }
 
@@ -65,6 +70,7 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
      * @var \Hoa\Test\Bin\Pp array
      */
     protected $options = array(
+        array('all',       \Hoa\Console\GetOption::NO_ARGUMENT,       'a'),
         array('library',   \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'l'),
         array('directory', \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'd'),
         array('file',      \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'f'),
@@ -87,6 +93,25 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
         $file      = null;
 
         while(false !== $c = $this->getOption($v)) switch($c) {
+
+            case 'a':
+                $out      = array();
+                $iterator = new \Hoa\File\Finder();
+                $iterator->in(resolve('hoa://Library/', true, true))
+                         ->directories()
+                         ->maxDepth(1);
+
+                foreach($iterator as $directory) {
+
+                    $pathname = $directory->getPathname();
+                    $test     = $pathname . DS . 'Test' . DS . 'Unit';
+
+                    if(is_dir($test))
+                        $out[] = $test;
+                }
+
+                $directory = implode(' ', $out);
+              break;
 
             case 'l':
                 $library = ucfirst(strtolower($v));
@@ -116,10 +141,8 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
                        resolve('hoa://Library/Test/.bootstrap.atoum.php') .
                    ' --force-terminal';
 
-        if(null !== $library) {
-
+        if(null !== $library)
             $command .= ' --directories ' . resolve('hoa://Library/' . $library);
-        }
         elseif(null !== $directory)
             $command .= ' --directories ' . $directory;
         elseif(null !== $file)
@@ -154,6 +177,7 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
         echo 'Usage   : test:run <options>', "\n",
              'Options :', "\n",
              $this->makeUsageOptionsList(array(
+                 'a'    => 'Run all tests of all libraries.',
                  'l'    => 'Run all tests of a library.',
                  'd'    => 'Run tests of a specific directory.',
                  'f'    => 'Run test of a specific file.',
