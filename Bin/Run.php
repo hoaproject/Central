@@ -67,7 +67,7 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
     /**
      * Options description.
      *
-     * @var \Hoa\Test\Bin\Pp array
+     * @var \Hoa\Test\Bin\Run array
      */
     protected $options = array(
         array('all',       \Hoa\Console\GetOption::NO_ARGUMENT,       'a'),
@@ -103,12 +103,17 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
 
                 foreach($iterator as $fileinfo) {
 
-                    $libraryName = $fileinfo->getBasename();
-                    $pathname    = resolve('hoa://Library/' . $libraryName);
-                    $test        = $pathname . DS . 'Test' . DS . 'Unit';
+                    $libraryName    = $fileinfo->getBasename();
+                    $pathname       = resolve('hoa://Library/' . $libraryName);
+                    $tests          = $pathname . DS . 'Test' . DS;
+                    $manualTests    = $tests . 'Unit';
+                    $automaticTests = $tests . 'Praspel' . DS . 'Unit';
 
-                    if(is_dir($test))
-                        $out[] = $test;
+                    if(is_dir($manualTests))
+                        $out[] = $manualTests;
+
+                    if(is_dir($automaticTests))
+                        $out[] = $automaticTests;
                 }
 
                 if(!empty($out))
