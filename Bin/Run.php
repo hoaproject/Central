@@ -70,12 +70,13 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
      * @var \Hoa\Test\Bin\Run array
      */
     protected $options = array(
-        array('all',       \Hoa\Console\GetOption::NO_ARGUMENT,       'a'),
-        array('library',   \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'l'),
-        array('directory', \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'd'),
-        array('file',      \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'f'),
-        array('help',      \Hoa\Console\GetOption::NO_ARGUMENT,       'h'),
-        array('help',      \Hoa\Console\GetOption::NO_ARGUMENT,       '?')
+        array('all',         \Hoa\Console\GetOption::NO_ARGUMENT,       'a'),
+        array('libraries',   \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'l'),
+        array('namespaces',  \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'n'),
+        array('directories', \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'd'),
+        array('files',       \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'f'),
+        array('help',        \Hoa\Console\GetOption::NO_ARGUMENT,       'h'),
+        array('help',        \Hoa\Console\GetOption::NO_ARGUMENT,       '?')
     );
 
 
@@ -88,14 +89,12 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
      */
     public function main ( ) {
 
-        $library   = null;
-        $directory = null;
-        $file      = null;
+        $directories = array();
+        $files       = array();
 
         while(false !== $c = $this->getOption($v)) switch($c) {
 
             case 'a':
-                $out      = array();
                 $iterator = new \Hoa\File\Finder();
                 $iterator->in(resolve('hoa://Library/', true, true))
                          ->directories()
@@ -110,26 +109,83 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
                     $automaticTests = $tests . 'Praspel' . DS . 'Unit';
 
                     if(is_dir($manualTests))
-                        $out[] = $manualTests;
+                        $directories[] = $manualTests;
 
                     if(is_dir($automaticTests))
-                        $out[] = $automaticTests;
+                        $directories[] = $automaticTests;
                 }
-
-                if(!empty($out))
-                    $directory = implode(' ', $out);
               break;
 
             case 'l':
-                $library = ucfirst(strtolower($v));
+                foreach($this->parser->parseSpecialValue($v) as $library) {
+
+                    $libraryName = ucfirst(strtolower($library));
+                    $pathname    = resolve('hoa://Library/' . $libraryName);
+                    $tests       = $pathname . DS . 'Test';
+
+                    if(!is_dir($tests))
+                        throw new \Hoa\Console\Exception(
+                            'Library %s does not exist or has no test.',
+                            0, $libraryName);
+
+                    $directories[] = $tests;
+                }
+              break;
+
+            case 'n':
+                foreach($this->parser->parseSpecialValue($v) as $namespace) {
+
+                    $namespace = str_replace('.', '\\', $namespace);
+                    $parts     = explode('\\', $namespace);
+
+                    if(2 > count($parts))
+                        throw new \Hoa\Console\Exception(
+                            'Namespace %s is too short.',
+                            1, $namespace);
+
+                    $head               = resolve('hoa://Library/' . $parts[1]);
+                    $tail               = implode(DS, array_slice($parts, 2));
+                    $namespaceDirectory = $head . DS . $tail;
+
+                    if(!is_dir($namespaceDirectory))
+                        throw new \Hoa\Console\Exception(
+                            'Namespace %s does not exist.',
+                            2, $namespace);
+
+                    $tests          = $head . DS . 'Test' . DS;
+                    $manualTests    = $tests . 'Unit' . DS . $tail;
+                    $automaticTests = $tests . 'Praspel' . DS . 'Unit' . DS . $tail;
+
+                    if(is_dir($manualTests))
+                        $directories[] = $manualTests;
+
+                    if(is_dir($automaticTests))
+                        $directories[] = $automaticTests;
+                }
               break;
 
             case 'd':
-                $directory = $v;
+                foreach($this->parser->parseSpecialValue($v) as $directory) {
+
+                    if(!is_dir($directory))
+                        throw new \Hoa\Console\Exception(
+                            'Directory %s does not exist.',
+                            3, $directory);
+
+                    $directories[] = $directory;
+                }
               break;
 
             case 'f':
-                $file = $v;
+                foreach($this->parser->parseSpecialValue($v) as $file) {
+
+                    if(!file_exists($file))
+                        throw new \Hoa\Console\Exception(
+                            'File %s does not exist.',
+                            4, $file);
+
+                    $files[] = $file;
+                }
               break;
 
             case '__ambiguous':
@@ -155,12 +211,10 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
                        resolve('hoa://Library/Test/.bootstrap.atoum.php') .
                    ' --force-terminal';
 
-        if(null !== $library)
-            $command .= ' --directories ' . resolve('hoa://Library/' . $library);
-        elseif(null !== $directory)
-            $command .= ' --directories ' . $directory;
-        elseif(null !== $file)
-            $command .= ' --files ' . $file;
+        if(!empty($directories))
+            $command .= ' --directories ' . implode(' ', $directories);
+        elseif(!empty($files))
+            $command .= ' --files ' . implode(' ', $files);
         else
             return $this->usage();
 
@@ -193,10 +247,11 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
         echo 'Usage   : test:run <options>', "\n",
              'Options :', "\n",
              $this->makeUsageOptionsList(array(
-                 'a'    => 'Run all tests of all libraries.',
-                 'l'    => 'Run all tests of a library.',
-                 'd'    => 'Run tests of a specific directory.',
-                 'f'    => 'Run test of a specific file.',
+                 'a'    => 'Run tests of all libraries.',
+                 'l'    => 'Run tests of some libraries.',
+                 'n'    => 'Run tests of some namespaces.',
+                 'd'    => 'Run tests of some directories.',
+                 'f'    => 'Run tests of some files.',
                  'help' => 'This help.'
              )), "\n";
 
