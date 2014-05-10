@@ -51,6 +51,11 @@ from('Hoa')
 -> import('Console.Cursor')
 
 /**
+ * \Hoa\File\Finder
+ */
+-> import('File.Finder')
+
+/**
  * \Hoa\String\Search
  */
 -> import('String.Search');
@@ -84,10 +89,11 @@ class Generate extends \Hoa\Console\Dispatcher\Kit {
      * @var \Hoa\Test\Bin\Generate array
      */
     protected $options = array(
-        array('classes', \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'c'),
-        array('dry-run', \Hoa\Console\GetOption::NO_ARGUMENT,       'd'),
-        array('help',    \Hoa\Console\GetOption::NO_ARGUMENT,       'h'),
-        array('help',    \Hoa\Console\GetOption::NO_ARGUMENT,       '?')
+        array('namespaces', \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'n'),
+        array('classes',    \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'c'),
+        array('dry-run',    \Hoa\Console\GetOption::NO_ARGUMENT,       'd'),
+        array('help',       \Hoa\Console\GetOption::NO_ARGUMENT,       'h'),
+        array('help',       \Hoa\Console\GetOption::NO_ARGUMENT,       '?')
     );
 
 
@@ -104,6 +110,27 @@ class Generate extends \Hoa\Console\Dispatcher\Kit {
         $classes = array();
 
         while(false !== $c = $this->getOption($v)) switch($c) {
+
+            case 'n':
+                foreach($this->parser->parseSpecialValue($v) as $namespace) {
+
+                    $namespace = trim(str_replace('.', '\\', $namespace), '\\');
+
+                    if(false === $pos = strpos($namespace, '\\'))
+                        throw new \Hoa\Console\Exception(
+                            'Namespace %s is too short.',
+                            0, $namespace);
+
+                    $tail = substr($namespace, strpos($namespace, '\\') + 1);
+                    $root = resolve($a = 'hoa://Library/' .
+                                    str_replace('\\', '/', $tail));
+
+                    $classes = array_merge(
+                        $classes,
+                        static::findClasses($root, $namespace)
+                    );
+                }
+              break;
 
             case 'c':
                 foreach($this->parser->parseSpecialValue($v) as $class)
@@ -241,14 +268,15 @@ class Generate extends \Hoa\Console\Dispatcher\Kit {
                     mkdir($dirname, 0755, true);
                 else
                     echo "\n",
-                         static::info('Creating directory: ' . $dirname . '.'),
-                         "\n";
+                         static::info('Creating directory: ' . $dirname . '.');
 
             if(false === $dryRun)
                 file_put_contents($thePath, $output);
             else {
 
-                echo static::info('Content of the ' . $thePath . ':'), "\n";
+                echo "\n",
+                     static::info('Content of the ' . $thePath . ':'),
+                     "\n";
                 \Hoa\Console\Cursor::colorize('foreground(yellow)');
                 echo '    ┏', "\n",
                      '    ┃  ' ,
@@ -281,6 +309,7 @@ class Generate extends \Hoa\Console\Dispatcher\Kit {
         echo 'Usage   : test:generate <options>', "\n",
              'Options :', "\n",
              $this->makeUsageOptionsList(array(
+                 'n'    => 'Generate tests of some namespaces.',
                  'c'    => 'Generate tests of some classes.',
                  'd'    => 'Generate tests but output them instead of save ' .
                            'them.',
@@ -304,6 +333,40 @@ class Generate extends \Hoa\Console\Dispatcher\Kit {
                   (false === $sub ? '# ' : '') . $message,
                   'foreground(yellow)'
                );
+    }
+
+    /**
+     * Find all classes from a root.
+     *
+     * @access  protected
+     * @param   string  $root         Root.
+     * @param   string  $namespace    Namespace to prepend.
+     * @return  array
+     */
+    protected static function findClasses ( $root, $namespace ) {
+
+        $out    = array();
+        $finder = new \Hoa\File\Finder();
+        $finder->in($root)
+               ->files()
+               ->name('#^(?!\.).+\.php#');
+
+        foreach($finder as $fileinfo)
+            $out[] = $namespace . '\\' .
+                     str_replace(
+                         DS,
+                         '\\',
+                         trim(
+                             substr(
+                                $fileinfo->getRelativePathname(),
+                                0,
+                                -4
+                             ),
+                             DS
+                         )
+                     );
+
+        return $out;
     }
 }
 
