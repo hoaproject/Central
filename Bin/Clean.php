@@ -173,7 +173,7 @@ class Clean extends \Hoa\Console\Dispatcher\Kit {
              'Options :', "\n",
              $this->makeUsageOptionsList(array(
                  'a'    => 'Clean all generated tests of all libraries.',
-                 'l'    => 'Clean all generated tests of given libraries.',
+                 'l'    => 'Clean all generated tests of some libraries.',
                  'help' => 'This help.'
              )), "\n";
 
