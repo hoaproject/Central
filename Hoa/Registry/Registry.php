@@ -206,7 +206,7 @@ Hoa\Core\Consistency::flexEntity('Hoa\Registry\Registry');
  * Add the hoa://Library/Registry component. Should be use to reach/get an entry
  * in the \Hoa\Registry, e.g.: resolve('hoa://Library/Registry#AnID').
  */
-$protocol              = \Hoa\Core::getInstance()->getProtocol();
-$protocol['Library'][] = new \Hoa\Registry\_Protocol();
+$protocol              = Hoa\Core::getInstance()->getProtocol();
+$protocol['Library'][] = new Hoa\Registry\_Protocol();
 
 }
