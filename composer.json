@@ -20,12 +20,6 @@
         "irc"   : "irc://irc.freenode.org/hoaproject",
         "source": "http://git.hoa-project.net/"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url" : "https://github.com/jubianchi/atoum"
-        }
-    ],
     "require": {
         "atoum/atoum"            : "dev-extension",
         "atoum/praspel-extension": "dev-master",
