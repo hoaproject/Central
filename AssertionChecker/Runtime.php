@@ -386,7 +386,11 @@ class Runtime extends AssertionChecker {
     protected function getAttributeData ( \Hoa\Core\Consistency\Xcallable $callable ) {
 
         $callback = $callable->getValidCallback();
-        $object   = $callback[0];
+
+        if($callback instanceof \Closure)
+            return array();
+
+        $object = $callback[0];
 
         if(!is_object($object))
             return array();
