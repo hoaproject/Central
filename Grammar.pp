@@ -235,7 +235,7 @@ constant:
     scalar() | array()
 
 scalar:
-    <null> | boolean() | number() | string() | regex() | range()
+    <null> | boolean() | number() | string() | regex() | class() | range()
 
 boolean:
     <true> | <false>
@@ -254,6 +254,9 @@ quoted_string:
 
 #regex:
     <regex>
+
+#class:
+    classname()
 
 #range:
     number() ::range:: number()
@@ -292,7 +295,7 @@ identifier:
   | <result>
 
 #classname:
-    ::backslash::? <identifier> ( ::backslash:: <identifier> )*
+    ::backslash:: <identifier> ( ::backslash:: <identifier> )*
 
 herestring:
     ::heredoc_::
