@@ -44,11 +44,6 @@ from('Hoa')
 -> import('Realdom.~')
 
 /**
- * \Hoa\Realdom\String
- */
--> import('Realdom.String')
-
-/**
  * \Hoa\Compiler\Llk
  */
 -> import('Compiler.Llk.~')
@@ -77,7 +72,7 @@ namespace Hoa\Realdom {
  * @license    New BSD License
  */
 
-class Regex extends String {
+class Regex extends Realdom {
 
     /**
      * Realistic domain name.
