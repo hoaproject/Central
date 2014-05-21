@@ -130,7 +130,7 @@ class RealdomArray extends Realdom {
             return false;
 
         $pairs       = $this['pairs']['pairs'];
-        $out         = false;
+        $out         = 0 === $count;
         $constraints = &$this->getConstraints();
 
         foreach($q as $_key => $_value) {
