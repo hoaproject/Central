@@ -115,6 +115,7 @@ class Runtime extends AssertionChecker {
     public function evaluate ( &$trace = false ) {
 
         // Start.
+        $registry      = \Hoa\Praspel::getRegistry();
         $verdict       = true;
         $callable      = $this->getCallable();
         $reflection    = $callable->getReflection();
@@ -123,6 +124,7 @@ class Runtime extends AssertionChecker {
             'The Runtime Assertion Checker has detected failures for %s.',
             0, $callable
         );
+        $classname     = null;
         $isConstructor = false;
 
         if($reflection instanceof \ReflectionMethod) {
@@ -138,6 +140,8 @@ class Runtime extends AssertionChecker {
                 $_object   = $_callback[0];
                 $specification->getImplicitVariable('this')->bindTo($_object);
             }
+
+            $classname = $reflection->getDeclaringClass()->getName();
         }
 
         if(false !== $trace && !($trace instanceof Trace))
@@ -162,12 +166,26 @@ class Runtime extends AssertionChecker {
         );
 
         // Check invariant.
-        if(    true === $specification->clauseExists('invariant')
-           && false === $isConstructor) {
+        $invariant  = $specification->getClause('invariant');
+        $attributes = $this->getAttributeData($callable);
 
-            $attributes = $this->getAttributeData($callable);
-            $invariant  = $specification->getClause('invariant');
-            $verdict   &= $this->checkClause(
+        foreach($attributes as $name => $_) {
+
+            $entryName = $classname . '::$' . $name;
+
+            if(!isset($registry[$entryName]))
+                continue;
+
+            $entry = $registry[$entryName];
+
+            if(true === $entry->clauseExists('invariant'))
+                foreach($entry->getClause('invariant') as $variable)
+                    $invariant->addVariable($variable->getName(), $variable);
+        }
+
+        if(false === $isConstructor) {
+
+            $verdict &= $this->checkClause(
                 $invariant,
                 $attributes,
                 $exceptions,
@@ -296,22 +314,18 @@ class Runtime extends AssertionChecker {
             throw $exceptions;
 
         // Check invariant.
-        if(true === $specification->clauseExists('invariant')) {
+        $attributes = $this->getAttributeData($callable);
+        $verdict   &= $this->checkClause(
+            $invariant,
+            $attributes,
+            $exceptions,
+            'Hoa\Praspel\Exception\Failure\Invariant',
+            true,
+            $trace
+        );
 
-            $attributes = $this->getAttributeData($callable);
-            $invariant  = $specification->getClause('invariant');
-            $verdict   &= $this->checkClause(
-                $invariant,
-                $attributes,
-                $exceptions,
-                'Hoa\Praspel\Exception\Failure\Invariant',
-                true,
-                $trace
-            );
-
-            if(0 < count($exceptions))
-                throw $exceptions;
-        }
+        if(0 < count($exceptions))
+            throw $exceptions;
 
         return (bool) $verdict;
     }

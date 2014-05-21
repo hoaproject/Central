@@ -473,6 +473,12 @@ class Interpreter implements \Hoa\Visitor\Visit {
                 return realdom()->regex($regex);
               break;
 
+            case '#class':
+                $classname  = $element->getChild(0)->accept($this, $handle, false);
+
+                return realdom()->class($classname);
+              break;
+
             case 'token':
                 $tId   = $element->getValueToken();
                 $value = $element->getValueValue();
