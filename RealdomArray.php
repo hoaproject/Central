@@ -492,7 +492,7 @@ class RealdomArray extends Realdom {
 
         $pairs   = $this['pairs']['pairs'];
         $length  = $this['length'];
-        $maxSize = 0;
+        $maxSize = -1;
 
         foreach($pairs as $pair)
             foreach($pair[0] as $realdom)
@@ -503,6 +503,9 @@ class RealdomArray extends Realdom {
                     if($maxSize < $size)
                         $maxSize = $size;
                 }
+
+        if(-1 === $maxSize)
+            return;
 
         if($length instanceof IRealdom\Constant) {
 
