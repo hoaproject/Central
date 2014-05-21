@@ -386,7 +386,11 @@ class Runtime extends AssertionChecker {
     protected function getAttributeData ( \Hoa\Core\Consistency\Xcallable $callable ) {
 
         $callback = $callable->getValidCallback();
-        $object   = $callback[0];
+
+        if($callback instanceof \Closure)
+            return array();
+
+        $object = $callback[0];
 
         if(!is_object($object))
             return array();
@@ -629,6 +633,57 @@ class Runtime extends AssertionChecker {
                     $traceClause->addVariable($name, $traceVariable);
                 }
             }
+
+            $verdict &= $_verdict;
+        }
+
+        $predicateEvaluator = function ( $__hoa_arguments, $__hoa_code ) {
+
+            extract($__hoa_arguments);
+
+            return true == eval('return ' . $__hoa_code . ';');
+        };
+
+        foreach($clause->getPredicates() as $predicate) {
+
+            $_predicate = $predicate;
+
+            preg_match_all(
+                '#(?<!\\\)\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)#',
+                $_predicate,
+                $matches
+            );
+
+            $predicateArguments = array();
+
+            foreach($matches[1] as $variable)
+                if(true === array_key_exists($variable, $data))
+                    $predicateArguments[$variable] = $data[$variable];
+
+            if(false !== strpos($_predicate, '\result')) {
+
+                if(   !($clause instanceof \Hoa\Praspel\Model\Ensures)
+                   && !($clause instanceof \Hoa\Praspel\Model\Throwable)) {
+
+                    $verdict      &= false;
+                    $exceptions[]  = new $exception(
+                        'Illegal \result in the following predicate: %s.',
+                        11, $predicate);
+
+                    continue;
+                }
+
+                $placeholder = '__hoa_praspel_' . uniqid();
+                $_predicate  = str_replace('\\result', '$' . $placeholder, $_predicate);
+                $predicateArguments[$placeholder] = $data['\result'];
+            }
+
+            $_verdict = $predicateEvaluator($predicateArguments, $_predicate);
+
+            if(false === $_verdict)
+                $exceptions[] = new $exception(
+                    'Violation of the following predicate: %s.',
+                    11, $predicate);
 
             $verdict &= $_verdict;
         }
