@@ -572,6 +572,9 @@ class Interpreter implements \Hoa\Visitor\Visit {
                             case 'x':
                                 return \Hoa\String::fromCode(hexdec($value));
 
+                            case '\\':
+                                return $value[1];
+
                             default:
                                 return \Hoa\String::fromCode(octdec($value));
                         }
