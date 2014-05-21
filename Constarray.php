@@ -185,7 +185,9 @@ class Constarray extends RealdomArray implements IRealdom\Constant {
                 continue;
             }
 
-            $out[$pair[0]->sample($sampler)] = $pair[1]->sample($sampler);
+            $key       = $pair[0]->sample($sampler);
+            $value     = $pair[1]->sample($sampler);
+            $out[$key] = $value;
         }
 
         return $out;
