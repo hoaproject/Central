@@ -328,7 +328,8 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
 
             $pathinfo = pathinfo($target);
 
-            if('php' != $pathinfo['extension']) {
+            if(   !isset($pathinfo['extension'])
+               || 'php' != $pathinfo['extension']) {
 
                 $script_filename = $_root . DS . 'index.php';
                 $script_name     = DS . 'index.php';
