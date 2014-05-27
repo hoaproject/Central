@@ -428,7 +428,7 @@ class Consistency
             $this->_roots[$from] = [];
         }
 
-        foreach (explode(';', $root) as $r) {
+        foreach (explode(RS, $root) as $r) {
             $this->_roots[$from][] = rtrim($r, '/\\') . DS;
         }
 
