@@ -365,7 +365,7 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
                         $request->getHeadersFormatted(),
                         array(
                             'REQUEST_METHOD'  => 'GET',
-                            'REQUEST_URI'     => DS . $uri,
+                            'REQUEST_URI'     => $uri,
                             'REQUEST_TIME'    => time(),
                             'SCRIPT_FILENAME' => $script_filename,
                             'SCRIPT_NAME'     => $script_name
@@ -388,7 +388,7 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
                         $request->getHeadersFormatted(),
                         array(
                             'REQUEST_METHOD'  => 'POST',
-                            'REQUEST_URI'     => DS . $uri,
+                            'REQUEST_URI'     => $uri,
                             'REQUEST_TIME'    => time(),
                             'SCRIPT_FILENAME' => $script_filename,
                             'SCRIPT_NAME'     => $script_name,
