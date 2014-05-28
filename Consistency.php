@@ -431,7 +431,11 @@ class Consistency {
         if(null === $from)
             $from = $this->_from[0];
 
-        $this->_roots[$from] = explode(';', $root);
+        if(!isset($this->_roots[$from]))
+            $this->_roots[$from] = array();
+
+        foreach(explode(';', $root) as $r)
+            $this->_roots[$from][] = rtrim($r, '/\\') . DS;
 
         return $this;
     }
