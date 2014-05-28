@@ -328,7 +328,8 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
 
             $pathinfo = pathinfo($target);
 
-            if('php' != $pathinfo['extension']) {
+            if(   !isset($pathinfo['extension'])
+               || 'php' != $pathinfo['extension']) {
 
                 $script_filename = $_root . DS . 'index.php';
                 $script_name     = DS . 'index.php';
@@ -364,7 +365,7 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
                         $request->getHeadersFormatted(),
                         array(
                             'REQUEST_METHOD'  => 'GET',
-                            'REQUEST_URI'     => DS . $uri,
+                            'REQUEST_URI'     => $uri,
                             'REQUEST_TIME'    => time(),
                             'SCRIPT_FILENAME' => $script_filename,
                             'SCRIPT_NAME'     => $script_name
@@ -387,7 +388,7 @@ class Bhoa extends \Hoa\Console\Dispatcher\Kit {
                         $request->getHeadersFormatted(),
                         array(
                             'REQUEST_METHOD'  => 'POST',
-                            'REQUEST_URI'     => DS . $uri,
+                            'REQUEST_URI'     => $uri,
                             'REQUEST_TIME'    => time(),
                             'SCRIPT_FILENAME' => $script_filename,
                             'SCRIPT_NAME'     => $script_name,
