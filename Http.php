@@ -51,16 +51,30 @@ abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable {
     /**
      * Whether PHP is running with FastCGI or not.
      *
-     * @var \Hoa\Http\Response bool
+     * @var \Hoa\Http bool
      */
     protected static $_fcgi = null;
 
     /**
+     * Request HTTP version.
+     *
+     * @var \Hoa\Http float
+     */
+    protected $_httpVersion = 1.1;
+
+    /**
      * Headers (not sent).
      *
-     * @var \Hoa\Http\Response array
+     * @var \Hoa\Http array
      */
     protected $_headers     = array();
+
+    /**
+     * Request body.
+     *
+     * @var \Hoa\Http string
+     */
+    protected $_body        = null;
 
 
 
@@ -76,6 +90,32 @@ abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable {
             self::$_fcgi = 'cgi-fcgi' === PHP_SAPI;
 
         return;
+    }
+
+    /**
+     * Set request HTTP version.
+     *
+     * @access  public
+     * @param   float  $version    HTTP version.
+     * @return  float
+     */
+    public function setHttpVersion ( $version ) {
+
+        $old                = $this->_httpVersion;
+        $this->_httpVersion = $version;
+
+        return $old;
+    }
+
+    /**
+     * Get request HTTP version.
+     *
+     * @access  public
+     * @return  float
+     */
+    public function getHttpVersion ( ) {
+
+        return $this->_httpVersion;
     }
 
     /**
@@ -217,6 +257,48 @@ abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable {
     public function count ( ) {
 
         return count($this->getHeaders());
+    }
+
+    /**
+     * Set request body.
+     *
+     * @access  public
+     * @param   string  $body   Body.
+     * @return  string
+     */
+    public function setBody ( $body ) {
+
+        $old         = $this->_body;
+        $this->_body = $body;
+
+        return $old;
+    }
+
+    /**
+     * Get request body.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getBody ( ) {
+
+        return $this->_body;
+    }
+
+    /**
+     * Dump (parse^-1).
+     *
+     * @access  public
+     * @return  string
+     */
+    public function __toString ( ) {
+
+        $out = null;
+
+        foreach($this->getHeaders() as $key => $value)
+            $out .= $key . ': ' . $value . CRLF;
+
+        return $out;
     }
 }
 
