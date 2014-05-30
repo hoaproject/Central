@@ -1,7 +1,5 @@
 <?php
 
-namespace {
-
 $composer = dirname(__DIR__) . DIRECTORY_SEPARATOR .
             '..' . DIRECTORY_SEPARATOR .
             '..' . DIRECTORY_SEPARATOR .
@@ -20,5 +18,3 @@ if(isset($_SERVER['HOA_ATOUM_PRASPEL_EXTENSION']))
         'namespace.prefix.Atoum',
         $_SERVER['HOA_ATOUM_PRASPEL_EXTENSION']
     );
-
-}
