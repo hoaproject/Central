@@ -229,7 +229,7 @@ class Core implements Parameter\Parameterizable {
             array(
                 'root.hoa'         => '(:root:)',
                 'root.application' => '(:cwd:h:)',
-                'root.data'        => '(:%root.application:h:)' . DS . 'Data',
+                'root.data'        => '(:%root.application:h:)' . DS . 'Data' . DS,
 
                 'protocol.Application'            => '(:%root.application:)' . DS,
                 'protocol.Application/Public'     => 'Public' . DS,
