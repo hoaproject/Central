@@ -126,6 +126,13 @@ class Clean extends \Hoa\Console\Dispatcher\Kit {
                     if(is_dir($automaticTests))
                         $libraries[] = $automaticTests;
                 }
+
+                if(empty($libraries)) {
+
+                    echo 'Already clean.';
+
+                    return;
+                }
               break;
 
             case '__ambiguous':
