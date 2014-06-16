@@ -69,6 +69,13 @@ class Node {
      */
     private $_connection = null;
 
+    /**
+     * Encryption.
+     *
+     * @var \Hoa\Socket\Node mixed
+     */
+    protected $_encryptionType = null;
+
 
 
     /**
@@ -120,6 +127,30 @@ class Node {
     public function getConnection ( ) {
 
         return $this->_connection;
+    }
+
+    /**
+     * Get encryption.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function getEncryptionType ( ) {
+
+        return $this->_encryptionType;
+    }
+
+    /**
+     * Get encryption.
+     *
+     * @param   int         $type             Type of encryption (please, see
+     *                                        children ENCRYPTION_* constants).
+     * @access  public
+     * @return  void
+     */
+    public function setEncryptionType ( $type ) {
+
+        $this->_encryptionType = $type;
     }
 }
 
