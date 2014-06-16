@@ -176,7 +176,7 @@ class Clean extends \Hoa\Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        echo 'Usage   : test:run <options>', "\n",
+        echo 'Usage   : test:clean <options>', "\n",
              'Options :', "\n",
              $this->makeUsageOptionsList(array(
                  'a'    => 'Clean all generated tests of all libraries.',
