@@ -261,6 +261,13 @@ class Generate extends \Hoa\Console\Dispatcher\Kit {
             echo $statusTail;
             $status .= $statusTail;
 
+            if(false === $reflection->isInstantiable()) {
+
+                \Hoa\Console\Cursor::clear('↔');
+                echo '  ⚡️ ', $status, '; not instantiable.', "\n";
+                continue;
+            }
+
             $dirname = dirname($thePath);
 
             if(false === is_dir($dirname))
