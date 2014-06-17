@@ -449,7 +449,7 @@ class Core implements Parameter\Parameterizable {
      * Generate an Universal Unique Identifier (UUID).
      *
      * @access  public
-     * @return  void
+     * @return  string
      */
     public static function uuid ( ) {
 
