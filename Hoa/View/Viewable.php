@@ -49,34 +49,26 @@ namespace Hoa\View {
 interface Viewable {
 
     /**
-     * Get the output stream.
-     *
-     * @access  public
-     * @return  \Hoa\Stream\IStream\Out
+     * @description 'Get the output stream.';
+     * @ensures \result: \Hoa\Stream\IStream\Out;
      */
     public function getOutputStream ( );
 
     /**
-     * Get the data holded by the view.
-     *
-     * @access  public
-     * @return  \Hoa\Core\Data
+     * @description 'Get the data holded by the view.';
+     * @ensures \result: \Hoa\Core\Data;
      */
     public function getData ( );
 
     /**
-     * Make a render of the view.
-     *
-     * @access  public
-     * @return  void
+     * @description 'Make a render of the view.';
+     * @ensures \result: void;
      */
     public function render ( );
 
     /**
-     * Get router.
-     *
-     * @access  public
-     * @return  \Hoa\Router
+     * @description 'Get router.';
+     * @ensures \result: \Hoa\Router;
      */
     public function getRouter ( );
 }
