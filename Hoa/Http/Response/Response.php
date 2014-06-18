@@ -411,28 +411,14 @@ class          Response
      *
      * @var \Hoa\Http\Response arra
      */
-    private $_status                             = array();
-
-    /**
-     * Request HTTP version.
-     *
-     * @var \Hoa\Http\Request float
-     */
-    protected $_httpVersion                      = null;
-
-    /**
-     * Response body.
-     *
-     * @var \Hoa\Http\Request string
-     */
-    protected $_body                             = null;
+    private $_status       = array();
 
     /**
      * This object hash.
      *
      * @var \Hoa\Http\Response string
      */
-    private $_hash                               = null;
+    private $_hash         = null;
 
     /**
      * ob_*() is stateless, so we manage a stack to avoid cross-buffers
@@ -440,7 +426,7 @@ class          Response
      *
      * @var \Hoa\Http\Response array
      */
-    private static $_stack                       = array();
+    private static $_stack = array();
 
 
 
@@ -485,17 +471,17 @@ class          Response
      */
     public function parse ( $packet ) {
 
-        $headers     = explode("\r\n", $packet);
-        $status      = array_shift($headers);
-        $this->_body = null;
+        $headers = explode("\r\n", $packet);
+        $status  = array_shift($headers);
+        $this->setBody(null);
 
         foreach($headers as $i => $header)
             if('' == trim($header)) {
 
                 unset($headers[$i]);
-                $this->_body = trim(
+                $this->setBody(trim(
                     implode("\r\n", array_splice($headers, $i))
-                );
+                ));
                 break;
             }
 
@@ -507,9 +493,9 @@ class          Response
             throw new \Hoa\Http\Exception(
                 'Unknow HTTP status %d in %s.', 1, array($matches[2], $status));
 
-        $this->_httpVersion = (float) $matches[1];
+        $this->setHttpVersion((float) $matches[1]);
         $this->_parse($headers);
-        $this['status']     = $this->_status[$matches[2]];
+        $this['status'] = $this->_status[$matches[2]];
 
         return;
     }
@@ -876,58 +862,6 @@ class          Response
     public function getHash ( ) {
 
         return $this->_hash;
-    }
-
-    /**
-     * Set response HTTP version.
-     *
-     * @access  public
-     * @param   float  $version    HTTP version.
-     * @return  float
-     */
-    public function setHttpVersion ( $version ) {
-
-        $old                = $this->_httpVersion;
-        $this->_httpVersion = $version;
-
-        return $old;
-    }
-
-    /**
-     * Get response HTTP version.
-     *
-     * @access  public
-     * @return  float
-     */
-    public function getHttpVersion ( ) {
-
-        return $this->_httpVersion;
-    }
-
-    /**
-     * Set response body.
-     *
-     * @access  public
-     * @param   string  $body   Body.
-     * @return  string
-     */
-    public function setBody ( $body ) {
-
-        $old         = $this->_body;
-        $this->_body = $body;
-
-        return $old;
-    }
-
-    /**
-     * Get response body.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getBody ( ) {
-
-        return $this->_body;
     }
 
     /**

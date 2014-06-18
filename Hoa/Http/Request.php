@@ -139,28 +139,14 @@ class Request extends Http {
      *
      * @var \Hoa\Http\Request string
      */
-    protected $_method      = null;
+    protected $_method = null;
 
     /**
      * Request URL.
      *
      * @var \Hoa\Http\Request string
      */
-    protected $_url         = null;
-
-    /**
-     * Request HTTP version.
-     *
-     * @var \Hoa\Http\Request float
-     */
-    protected $_httpVersion = null;
-
-    /**
-     * Request body.
-     *
-     * @var \Hoa\Http\Request string
-     */
-    protected $_body        = null;
+    protected $_url    = null;
 
 
 
@@ -174,17 +160,17 @@ class Request extends Http {
      */
     public function parse ( $packet ) {
 
-        $headers     = explode("\r\n", $packet);
-        $http        = array_shift($headers);
-        $this->_body = null;
+        $headers = explode("\r\n", $packet);
+        $http    = array_shift($headers);
+        $this->setBody(null);
 
         foreach($headers as $i => $header)
             if('' == trim($header)) {
 
                 unset($headers[$i]);
-                $this->_body = trim(
+                $this->setBody(trim(
                     implode("\r\n", array_splice($headers, $i))
-                );
+                ));
                 break;
             }
 
@@ -210,8 +196,8 @@ class Request extends Http {
                 $this->_method = self::METHOD_EXTENDED;
         }
 
-        $this->_url         = $matches[2];
-        $this->_httpVersion = (float) $matches[3];
+        $this->setUrl($matches[2]);
+        $this->setHttpVersion((float) $matches[3]);
 
         $this->_parse($headers);
 
@@ -272,55 +258,17 @@ class Request extends Http {
     }
 
     /**
-     * Set request HTTP version.
-     *
-     * @access  public
-     * @param   float  $version    HTTP version.
-     * @return  float
-     */
-    public function setHttpVersion ( $version ) {
-
-        $old                = $this->_httpVersion;
-        $this->_httpVersion = $version;
-
-        return $old;
-    }
-
-    /**
-     * Get request HTTP version.
-     *
-     * @access  public
-     * @return  float
-     */
-    public function getHttpVersion ( ) {
-
-        return $this->_httpVersion;
-    }
-
-    /**
-     * Set request body.
-     *
-     * @access  public
-     * @param   string  $body   Body.
-     * @return  string
-     */
-    public function setBody ( $body ) {
-
-        $old         = $this->_body;
-        $this->_body = $body;
-
-        return $old;
-    }
-
-    /**
-     * Get request body.
+     * Dump (parse^-1).
      *
      * @access  public
      * @return  string
      */
-    public function getBody ( ) {
+    public function __toString ( ) {
 
-        return $this->_body;
+        return strtoupper($this->getMethod()) . ' ' .
+               $this->getUrl() . ' ' .
+               'HTTP/' . $this->getHttpVersion() . CRLF .
+               parent::__toString() . CRLF;
     }
 }
 
