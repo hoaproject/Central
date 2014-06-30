@@ -15,8 +15,8 @@ domains.
 This library contains compiler, interpreter, visitors, iterators and other tools
 around the Praspel language.
 
-An interesting related library is
-[`Hoathis\Atoum`](https://github.com/hoaproject/Hoathis-Atoum).
+An interesting related project is
+[`atoum/praspel-extension`](http://central.hoa-project.net/Resource/Contributions/Atoum/PraspelExtension).
 
 ## Documentation
 
