@@ -497,7 +497,7 @@ class_alias('Hoa\Core\Core', 'Hoa\Core');
  * @param   bool    $case     True set the case-insentisitve.
  * @return  bool
  */
-if(!ƒ('_define')) {
+if(!function_exists('_define')) {
 function _define ( $name, $value, $case = false ) {
 
     return \Hoa\Core::_define($name, $value, $case);
@@ -510,7 +510,7 @@ function _define ( $name, $value, $case = false ) {
  * @param   string  $eventId    Event ID.
  * @return  \Hoa\Core\Event
  */
-if(!ƒ('event')) {
+if(!function_exists('event')) {
 function event ( $eventId ) {
 
     return \Hoa\Core\Event\Event::getEvent($eventId);

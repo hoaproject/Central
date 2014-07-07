@@ -1085,7 +1085,7 @@ namespace {
  * @param   bool    $unfold    Return all solutions instead of one.
  * @return  mixed
  */
-if(!ƒ('resolve')) {
+if(!function_exists('resolve')) {
 function resolve ( $path, $exists = true, $unfold = false ) {
 
     return \Hoa\Core::getInstance()->getProtocol()->resolve($path, $exists, $unfold);
