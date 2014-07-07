@@ -718,7 +718,7 @@ Hoa\Core\Consistency::flexEntity('Hoa\Session\Session');
  * @access  public
  * @return  void
  */
-if(!ƒ('session_register_shutdown')) {
+if(!function_exists('session_register_shutdown')) {
 function session_register_shutdown ( ) {
 
     return register_shutdown_function('session_write_close');
