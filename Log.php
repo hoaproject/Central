@@ -533,7 +533,7 @@ namespace {
  * @param   array   $extra      Extra dynamic informations.
  * @return  void
  */
-if(!ƒ('hlog')) {
+if(!function_exists('hlog')) {
 function hlog ( $message, $type = \Hoa\Log::DEBUG, $extra = array() ) {
 
     return \Hoa\Log::getChannel()->log($message, $type, $extra);
