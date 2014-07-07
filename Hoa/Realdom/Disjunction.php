@@ -560,7 +560,7 @@ namespace {
  * @access  public
  * @return  \Hoa\Realdom\Disjunction
  */
-if(!ƒ('realdom')) {
+if(!function_exists('realdom')) {
 function realdom ( ) {
 
     return new Hoa\Realdom\Disjunction();
