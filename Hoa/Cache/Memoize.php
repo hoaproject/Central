@@ -200,7 +200,7 @@ namespace {
  * @param   mixed   $callable    Callable.
  * @return  \Hoa\Cache\Memoize
  */
-if(!ƒ('memoize')) {
+if(!function_exists('memoize')) {
 function memoize ( $callable ) {
 
     return \Hoa\Cache\Memoize::getInstance($callable);
