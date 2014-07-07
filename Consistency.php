@@ -914,18 +914,6 @@ class Xcallable {
 namespace {
 
 /**
- * Alias of function_exists().
- *
- * @access  public
- * @param   string  $name    Name.
- * @return  bool
- */
-function ƒ ( $name ) {
-
-    return function_exists($name);
-}
-
-/**
  * Implement a fake trait_exists function.
  *
  * @access  public
@@ -933,7 +921,7 @@ function ƒ ( $name ) {
  * @param   bool    $autoload     Autoload.
  * @return  bool
  */
-if(!ƒ('trait_exists')) {
+if(!function_exists('trait_exists')) {
 function trait_exists ( $traitname, $autoload = true ) {
 
     if(true == $autoload)
@@ -949,7 +937,7 @@ function trait_exists ( $traitname, $autoload = true ) {
  * @param   string  $namespace    Library family's name.
  * @return  \Hoa\Core\Consistency
  */
-if(!ƒ('from')) {
+if(!function_exists('from')) {
 function from ( $namespace ) {
 
     return \Hoa\Core\Consistency::from($namespace);
@@ -963,7 +951,7 @@ function from ( $namespace ) {
  * @param   array   $arguments    Constructor's arguments.
  * @return  object
  */
-if(!ƒ('dnew')) {
+if(!function_exists('dnew')) {
 function dnew ( $classname, Array $arguments = array() ) {
 
     return \Hoa\Core\Consistency::dnew($classname, $arguments);
@@ -977,7 +965,7 @@ function dnew ( $classname, Array $arguments = array() ) {
  * @param   mixed   $able    Second callable part (if needed).
  * @return  mixed
  */
-if(!ƒ('xcallable')) {
+if(!function_exists('xcallable')) {
 function xcallable ( $call, $able = '' ) {
 
     if($call instanceof \Hoa\Core\Consistency\Xcallable)
@@ -1007,7 +995,7 @@ function xcallable ( $call, $able = '' ) {
  * @param   ...    ...          Arguments.
  * @return  \Closure
  */
-if(!ƒ('curry')) {
+if(!function_exists('curry')) {
 function curry ( $callable ) {
 
     $arguments = func_get_args();
@@ -1031,7 +1019,7 @@ function curry ( $callable ) {
  * @param   ...    &...          Arguments.
  * @return  \Closure
  */
-if(!ƒ('curry_ref')) {
+if(!function_exists('curry_ref')) {
 function curry_ref ( &$callable, &$a = null, &$b = null, &$c = null, &$d = null,
                                  &$e = null, &$f = null, &$g = null, &$h = null,
                                  &$i = null, &$j = null, &$k = null, &$l = null,
