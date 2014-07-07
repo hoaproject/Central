@@ -165,7 +165,7 @@ Hoa\Core\Consistency::flexEntity('Hoa\Praspel\Praspel');
  * @param   string  $praspel    Praspel
  * @return  \Hoa\Praspel\Model\Clause
  */
-if(!ƒ('praspel')) {
+if(!function_exists('praspel')) {
 function praspel ( $praspel ) {
 
     return \Hoa\Praspel::interprete($praspel);
