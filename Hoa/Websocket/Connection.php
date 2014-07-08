@@ -286,10 +286,31 @@ abstract class Connection
                 return;
             }
 
-            $frame = $node->getProtocolImplementation()->readFrame();
+            try {
+
+                $frame = $node->getProtocolImplementation()->readFrame();
+            }
+            catch ( Exception\CloseError $e ) {
+
+                $this->close($e->getErrorCode(), $e->getMessage());
+
+                return;
+            }
 
             if(false === $frame)
                 return;
+
+            if(   $this instanceof Server
+               && isset($frame['mask'])
+               && 0x0 === $frame['mask']) {
+
+                $this->close(
+                    self::CLOSE_MESSAGE_ERROR,
+                    'All messages from the client must be masked.'
+                );
+
+                return;
+            }
 
             $fromText   = false;
             $fromBinary = false;
@@ -539,10 +560,12 @@ abstract class Connection
      */
     protected function _send ( $message, \Hoa\Socket\Node $node ) {
 
-        return function ( $opcode, $end ) use ( &$message, $node ) {
+        $mustMask = $this instanceof Client;
+
+        return function ( $opcode, $end ) use ( &$message, $node, $mustMask ) {
 
             return $node->getProtocolImplementation()
-                        ->send($message, $opcode, $end);
+                        ->send($message, $opcode, $end, $mustMask);
         };
     }
 

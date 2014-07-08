@@ -49,6 +49,11 @@ from('Hoa')
 -> import('Websocket.Exception.BadProtocol')
 
 /**
+ * \Hoa\Websocket\Exception\CloseError
+ */
+-> import('Websocket.Exception.CloseError')
+
+/**
  * \Hoa\Websocket\Exception\InvalidMessage
  */
 -> import('Websocket.Exception.InvalidMessage')
@@ -130,7 +135,7 @@ class Rfc6455 extends Generic {
      *
      * @access  public
      * @return  array
-     * @throw   \Hoa\Websocket\Exception
+     * @throw   \Hoa\Websocket\Exception\CloseError
      */
     public function readFrame ( ) {
 
@@ -158,9 +163,16 @@ class Rfc6455 extends Generic {
 
         if(0x0 !== $out['rsv1'] || 0x0 !== $out['rsv2'] || 0x0 !== $out['rsv3']) {
 
-            $this->_connection->close(\Hoa\Websocket\Connection::CLOSE_PROTOCOL_ERROR);
+            $exception = new \Hoa\Websocket\Exception\CloseError(
+                'Get rsv1: %s, rsv2: %s, rsv3: %s, they all must be equal to 0.',
+                0,
+                array($out['rsv1'], $out['rsv2'], $out['rsv3'])
+            );
+            $exception->setErrorCode(
+                \Hoa\Websocket\Connection::CLOSE_PROTOCOL_ERROR
+            );
 
-            return false;
+            throw $exception;
         }
 
         if(0 === $length) {
@@ -179,9 +191,18 @@ class Rfc6455 extends Generic {
             $handle = unpack('N*l', $this->_connection->read(8));
             $length = $handle['l2'];
 
-            if($length > 0x7fffffffffffffff)
-                throw new \Hoa\Websocket\Exception(
-                    'Message is too long.', 1);
+            if($length > 0x7fffffffffffffff) {
+
+                $exception = new \Hoa\Websocket\Exception\CloseError(
+                    'Message is too long.',
+                    1
+                );
+                $exception->setErrorCode(
+                    \Hoa\Websocket\Connection::CLOSE_MESSAGE_TOO_BIG
+                );
+
+                throw $exception;
+            }
         }
 
         if(0x0 === $out['mask']) {
@@ -193,6 +214,19 @@ class Rfc6455 extends Generic {
 
         $maskN = array_map('ord', str_split($this->_connection->read(4)));
         $maskC = 0;
+
+        if(4 !== count($maskN)) {
+
+            $exception = new \Hoa\Websocket\Exception\CloseError(
+                'Mask is not well-formed (too short).',
+                1
+            );
+            $exception->setErrorCode(
+                \Hoa\Websocket\Connection::CLOSE_PROTOCOL_ERROR
+            );
+
+            throw $exception;
+        }
 
         $buffer       = 0;
         $bufferLength = 3000;
@@ -224,17 +258,19 @@ class Rfc6455 extends Generic {
      * @param   string  $message    Message.
      * @param   int     $opcode     Opcode.
      * @param   bool    $end        Whether it is the last frame of the message.
+     * @param   bool    $mask       Whether the message will be masked or not.
      * @return  int
      */
     public function writeFrame ( $message,
                                  $opcode = \Hoa\Websocket\Connection::OPCODE_TEXT_FRAME,
-                                 $end    = true ) {
+                                 $end    = true,
+                                 $mask   = false ) {
 
         $fin    = true === $end ? 0x1 : 0x0;
         $rsv1   = 0x0;
         $rsv2   = 0x0;
         $rsv3   = 0x0;
-        $mask   = 0x1;
+        $mask   = true === $mask ? 0x1 : 0x0;
         $length = strlen($message);
         $out    = chr(
             ($fin  << 7)
@@ -245,13 +281,37 @@ class Rfc6455 extends Generic {
         );
 
         if(0xffff < $length)
-            $out .= chr(0x7f) . pack('NN', 0, $length);
+            $out .= chr(($mask << 7) | 0x7f) . pack('NN', 0, $length);
         elseif(0x7d < $length)
-            $out .= chr(0x7e) . pack('n', $length);
+            $out .= chr(($mask << 7) | 0x7e) . pack('n', $length);
         else
-            $out .= chr($length);
+            $out .= chr(($mask << 7) | $length);
 
-        $out .= $message;
+        if(0x0 === $mask)
+            $out .= $message;
+        else {
+
+            $maskingKey = array();
+
+            if(function_exists('openssl_random_pseudo_bytes'))
+                $maskingKey = array_map(
+                    'ord',
+                    str_split(
+                        openssl_random_pseudo_bytes(4)
+                    )
+                );
+            else
+                for($i = 0; $i < 4; ++$i)
+                    $maskingKey[] = mt_rand(1, 255);
+
+            $maskedMessage = null;
+
+            for($i = 0, $max = strlen($message); $i < $max; ++$i)
+                $maskedMessage .= chr(ord($message[$i]) ^ $maskingKey[$i % 4]);
+
+            $out .= implode('', array_map('chr', $maskingKey)) .
+                    $maskedMessage;
+        }
 
         return $this->_connection->writeAll($out);
     }
@@ -264,12 +324,14 @@ class Rfc6455 extends Generic {
      * @param   int     $opcode     Opcode.
      * @param   bool    $end        Whether it is the last frame of
      *                              the message.
+     * @param   bool    $mask       Whether the message will be masked or not.
      * @return  void
      * @throw   \Hoa\Websocket\Exception\InvalidMessage
      */
     public function send ( $message,
                            $opcode = \Hoa\Websocket\Connection::OPCODE_TEXT_FRAME,
-                           $end    = true ) {
+                           $end    = true,
+                           $mask   = false ) {
 
         if(   (\Hoa\Websocket\Connection::OPCODE_TEXT_FRAME         === $opcode
            ||  \Hoa\Websocket\Connection::OPCODE_CONTINUATION_FRAME === $opcode)
@@ -278,7 +340,7 @@ class Rfc6455 extends Generic {
                 'Message “%s” is not in UTF-8, cannot send it.',
                 2, 32 > strlen($message) ? substr($message, 0, 32) . '…' : $message);
 
-        $this->writeFrame($message, $opcode, $end);
+        $this->writeFrame($message, $opcode, $end, $mask);
 
         return;
     }
