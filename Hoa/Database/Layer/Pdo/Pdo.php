@@ -105,8 +105,7 @@ class Pdo implements \Hoa\Database\IDal\Wrapper {
         catch ( \PDOException $e ) {
 
             throw new \Hoa\Database\Exception(
-                $e->getMessage(), $e->getCode(), null, $e
-            );
+                $e->getMessage(), $e->getCode(), null, $e);
         }
 
         $this->setConnection($connection);
@@ -211,11 +210,13 @@ class Pdo implements \Hoa\Database\IDal\Wrapper {
      */
     public function prepare ( $statement, Array $options = array() ) {
 
-        return new Statement(
-            $this->getConnection()->prepare(
-                $statement, $options
-            )
-        );
+        $handle = $this->getConnection()->prepare($statement);
+
+        if(!($handle instanceof \PDOStatement))
+            throw new \Hoa\Database\Exception(
+                '%3$s (%1$s/%2$d).', 2, $this->errorInfo());
+
+        return new Statement($handle);
     }
 
     /**
@@ -251,7 +252,7 @@ class Pdo implements \Hoa\Database\IDal\Wrapper {
 
         if(!($handle instanceof \PDOStatement))
             throw new \Hoa\Database\Exception(
-                '%3$s (%1$s/%2$d).', 2, $this->errorInfo());
+                '%3$s (%1$s/%2$d).', 3, $this->errorInfo());
 
         return new Statement($handle);
     }
