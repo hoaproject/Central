@@ -100,7 +100,7 @@ class Status extends \Hoa\Console\Dispatcher\Kit {
 
         $run  = resolve($run);
         \Hoa\Core::getInstance()->initialize(array(
-            'protocol.Data/Variable/Run' => $run . DS
+            'protocol.Data/Variable/Run' => "\r" . $run . DS
         ));
         $outi = array(array('ID', 'PID', 'Socket', 'Uptime', 'Messages', 'Last'));
         $outm = array();

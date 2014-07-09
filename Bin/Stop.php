@@ -106,7 +106,7 @@ class Stop extends \Hoa\Console\Dispatcher\Kit {
 
         $run  = resolve($run);
         \Hoa\Core::getInstance()->initialize(array(
-            'protocol.Data/Variable/Run' => $run . DS
+            'protocol.Data/Variable/Run' => "\r" . $run . DS
         ));
         $password = $this->readPassword('Password: ');
         $sw       = new \Hoa\Worker\Backend\Shared($workerId, $password);
