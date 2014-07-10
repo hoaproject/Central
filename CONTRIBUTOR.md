@@ -28,6 +28,7 @@ cloak on IRC, etc.
   * ➜ Alexis von Glasow (avonglasow)
   * Kevin Gravier (mrkmg)
   * Nicolas Grekas (nicolas-grekas)
+  * Sarah Haïm-Lubczanski (mere-teresa)
   * ➜ Sébastien Houzé (shouze)
   * Matthieu de Laubrie (Metalaka, ex-Derver)
   * Baptiste Leduc (Korbeil)
@@ -50,7 +51,6 @@ cloak on IRC, etc.
   * Nadine Enderlin
   * Pierre Gérardin
   * Alain Giorgetti
-  * Sarah Haïm-Lubczanski
   * Frédéric Hardy
   * Vincent Hasenfratz
   * François Piat
