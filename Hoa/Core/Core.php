@@ -181,7 +181,8 @@ class Core implements Parameter\Parameterizable {
         if(empty($date))
             ini_set('date.timezone', 'UTC');
 
-        mb_internal_encoding('UTF-8');
+        if(true === function_exists('mb_internal_encoding'))
+            mb_internal_encoding('UTF-8');
 
         if(true === function_exists('mb_regex_encoding'))
             mb_regex_encoding('UTF-8');
