@@ -244,7 +244,7 @@ class Shared implements \Hoa\Core\Event\Listenable {
 
         \Hoa\Zombie::fork();
 
-        $_eom   = pack('C', 0);
+        $_eom = pack('C', 0);
 
         while(true) foreach($server->select() as $node) {
 
