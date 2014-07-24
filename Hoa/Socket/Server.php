@@ -249,6 +249,9 @@ class Server extends Connection {
             if(false !== $i)
                 unset($this->_stack[$i]);
 
+            // $this->_node is voluntary kept in memory until a new node will be
+            // used.
+
             unset($this->_nodes[$this->getNodeId($current)]);
 
             @fclose($current);
