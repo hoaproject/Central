@@ -208,7 +208,8 @@ abstract class Connection {
      */
     protected function readPack ( ) {
 
-        if(null === $pack = $this->read(8))
+        if(   (null === $pack = $this->read(8))
+           || empty($pack))
             return false;
 
         $headers = array(
