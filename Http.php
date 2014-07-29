@@ -730,7 +730,10 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
             if('cli' === php_sapi_name())
                 return $domain = '';
 
-            $domain = $_SERVER['HTTP_HOST'];
+            $domain = $_SERVER['SERVER_NAME'];
+
+            if(empty($domain))
+                $domain = $_SERVER['SERVER_ADDR'];
 
             if(0 !== preg_match('#^(.+):' . static::getPort() . '$#', $domain, $m))
                 $domain = $m[1];
