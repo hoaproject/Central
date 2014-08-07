@@ -1372,12 +1372,7 @@ Hoa.ℙ(1) && (Hoa.Tabs = Hoa.Tabs || new function ( ) {
 
     this.get = function ( id ) {
 
-        var tab = id;
-
-        if('string' === typeof id)
-            tab = Hoa.$(id);
-
-        id = tab.getAttribute('id');
+        var tab = Hoa.$('#' + id);
 
         if(undefined !== tabs[id])
             return tabs[id];
@@ -1391,7 +1386,7 @@ Hoa.ℙ(1) && (Hoa.Tabs = Hoa.Tabs || new function ( ) {
         while(   null !== (p = p.parentElement)
               && false === p.hasAttribute('data-tabs'));
 
-        return that.get(p);
+        return that.get(p.getAttribute('id'));
     };
     Hoa.Event.on('click', selector, function ( evt ) {
 
