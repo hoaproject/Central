@@ -473,7 +473,7 @@ abstract class Connection
     }
 
     /**
-     * Set encryption.
+     * Enable or disable encryption.
      *
      * @access  public
      * @param   bool        $enable           Whether enable encryption.
@@ -484,12 +484,15 @@ abstract class Connection
      * @return  bool
      */
     public function enableEncryption ( $enable, $type = null,
-                                    $sessionStream = null ) {
+                                       $sessionStream = null ) {
 
-        if(null === $type && null === ($type = $this->getCurrentNode()->getEncryptionType()))
+        $currentNode = $this->getCurrentNode();
+
+        if(   null === $type
+           && null === $type = $currentNode->getEncryptionType())
             return stream_socket_enable_crypto($this->getStream(), $enable);
 
-        $this->getCurrentNode()->setEncryptionType($type);
+        $currentNode->setEncryptionType($type);
 
         if(null === $sessionStream)
             return stream_socket_enable_crypto(
@@ -507,14 +510,14 @@ abstract class Connection
     }
 
     /**
-     * Get encryption.
+     * Check if the connection is encrypted or not.
      *
      * @access  public
      * @return  mixed
      */
     public function isEncrypted ( ) {
 
-        return (null !== $this->getCurrentNode()->getEncryptionType());
+        return null !== $this->getCurrentNode()->getEncryptionType();
     }
 
     /**
