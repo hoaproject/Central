@@ -136,7 +136,7 @@ class Node {
      * @param   int  $type    Type of encryption (please, see ENCRYPTION_*
      *                        constants from Hoa\Socket\Client and
      *                        Hoa\Socket\Server).
-     * @return  void
+     * @return  int
      */
     public function setEncryptionType ( $type ) {
 
