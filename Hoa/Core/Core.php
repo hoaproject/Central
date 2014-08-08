@@ -234,7 +234,7 @@ class Core implements Parameter\Parameterizable {
 
                 'protocol.Application'            => '(:%root.application:)' . DS,
                 'protocol.Application/Public'     => 'Public' . DS,
-                'protocol.Data'                   => '(:%root.data:)' . DS,
+                'protocol.Data'                   => '(:%root.data:)',
                 'protocol.Data/Etc'               => 'Etc' . DS,
                 'protocol.Data/Etc/Configuration' => 'Configuration' . DS,
                 'protocol.Data/Etc/Locale'        => 'Locale' . DS,
