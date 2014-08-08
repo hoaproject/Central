@@ -286,31 +286,54 @@ abstract class Handler {
      */
     public function broadcast ( $message ) {
 
+        $currentNode = $this->getConnection()->getCurrentNode();
+        $arguments   = func_get_args();
+        array_unshift(
+            $arguments,
+            function ( \Hoa\Socket\Node $node ) use ( $currentNode ) {
+
+                return $node !== $currentNode;
+            }
+        );
+
+        return call_user_func_array(array($this, 'broadcastIf'), $arguments);
+    }
+
+    /**
+     * Broadcast a message to a subset of nodes that respect a predicate.
+     *
+     * @access  public
+     * @param   \Closure  $predicate    Predicate. Take a node in argument.
+     * @param   string    $message      Message.
+     * @param   …         …             …
+     * @return  void
+     */
+    public function broadcastIf ( \Closure $predicate, $message ) {
+
         $connection    = $this->getConnection();
-        $currentNode   = $connection->getCurrentNode();
         $currentSocket = $this->getOriginalConnection()->getSocket();
 
         if(1 === func_num_args()) {
 
             foreach($connection->getNodes() as $node)
-                if($node !== $currentNode)
-                    if($node->getConnection()->getSocket() === $currentSocket)
-                        $this->send($message, $node);
+                if(   true === $predicate($node)
+                   && $node->getConnection()->getSocket() === $currentSocket)
+                    $this->send($message, $node);
 
             return;
         }
 
-        $arguments = array_slice(func_get_args(), 1);
+        $arguments = array_slice(func_get_args(), 2);
         array_unshift($arguments, $message, null);
         $callable  = array($this, 'send');
 
         foreach($connection->getNodes() as $node)
-            if($node !== $currentNode)
-                if($node->getConnection()->getSocket() === $currentSocket) {
+            if(   true === $predicate($node)
+               && $node->getConnection()->getSocket() === $currentSocket) {
 
-                    $arguments[1] = $node;
-                    call_user_func_array($callable, $arguments);
-                }
+                $arguments[1] = $node;
+                call_user_func_array($callable, $arguments);
+            }
 
         return;
     }
