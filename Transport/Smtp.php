@@ -244,7 +244,7 @@ class Smtp implements ITransport\Out {
             $client->writeAll('STARTTLS' . CRLF);
             $this->ifNot(220, 'Cannot start a TLS connection');
 
-            if(true !== $client->setEncryption(true, $client::ENCRYPTION_TLS))
+            if(true !== $client->enableEncryption(true, $client::ENCRYPTION_TLS))
                 throw new \Hoa\Mail\Exception\Transport(
                     'Cannot start a TLS connection.', 1);
         }
