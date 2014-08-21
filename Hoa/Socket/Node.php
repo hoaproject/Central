@@ -53,21 +53,28 @@ class Node {
      *
      * @var \Hoa\Socket\Node string
      */
-    protected $_id       = null;
+    protected $_id             = null;
 
     /**
      * Node's socket resource.
      *
      * @var \Hoa\Socket\Node resource
      */
-    private $_socket     = null;
+    private $_socket           = null;
 
     /**
      * Get server.
      *
      * @var \Hoa\Socket\Connection object
      */
-    private $_connection = null;
+    private $_connection       = null;
+
+    /**
+     * Encryption type.
+     *
+     * @var \Hoa\Socket\Node int
+     */
+    protected $_encryptionType = null;
 
 
 
@@ -120,6 +127,34 @@ class Node {
     public function getConnection ( ) {
 
         return $this->_connection;
+    }
+
+    /**
+     * Set encryption type.
+     *
+     * @access  public
+     * @param   int  $type    Type of encryption (please, see ENCRYPTION_*
+     *                        constants from Hoa\Socket\Client and
+     *                        Hoa\Socket\Server).
+     * @return  int
+     */
+    public function setEncryptionType ( $type ) {
+
+        $old                   = $this->_encryptionType;
+        $this->_encryptionType = $type;
+
+        return $old;
+    }
+
+    /**
+     * Get encryption type.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getEncryptionType ( ) {
+
+        return $this->_encryptionType;
     }
 }
 

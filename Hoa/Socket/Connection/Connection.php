@@ -174,13 +174,6 @@ abstract class Connection
     protected $_remoteAddress = null;
 
     /**
-     * Encryption.
-     *
-     * @var \Hoa\Socket\Connection mixed
-     */
-    protected $_encryption    = false;
-
-    /**
      * Temporize selected connections when selecting.
      *
      * @var \Hoa\Socket\Server array
@@ -480,7 +473,7 @@ abstract class Connection
     }
 
     /**
-     * Set encryption.
+     * Enable or disable encryption.
      *
      * @access  public
      * @param   bool        $enable           Whether enable encryption.
@@ -490,13 +483,16 @@ abstract class Connection
      *                                        this session stream.
      * @return  bool
      */
-    public function setEncryption ( $enable, $type = null,
-                                    $sessionStream = null ) {
+    public function enableEncryption ( $enable, $type = null,
+                                       $sessionStream = null ) {
 
-        $this->_encryption = $enable ? $type : false;
+        $currentNode = $this->getCurrentNode();
 
-        if(null === $type)
+        if(   null === $type
+           && null === $type = $currentNode->getEncryptionType())
             return stream_socket_enable_crypto($this->getStream(), $enable);
+
+        $currentNode->setEncryptionType($type);
 
         if(null === $sessionStream)
             return stream_socket_enable_crypto(
@@ -514,14 +510,14 @@ abstract class Connection
     }
 
     /**
-     * Get encryption.
+     * Check if the connection is encrypted or not.
      *
      * @access  public
      * @return  mixed
      */
-    public function getEncryption ( ) {
+    public function isEncrypted ( ) {
 
-        return $this->_encryption;
+        return null !== $this->getCurrentNode()->getEncryptionType();
     }
 
     /**
@@ -689,7 +685,7 @@ abstract class Connection
             throw new \Hoa\Socket\Exception(
                 'Length must be greater than 0, given %d.', 1, $length);
 
-        if(false !== $this->getEncryption())
+        if(true === $this->isEncrypted())
             return fread($this->getStream(), $length);
 
         if(false === $this->isRemoteAddressConsidered())
@@ -786,7 +782,7 @@ abstract class Connection
      */
     public function readLine ( ) {
 
-        if(false !== $this->getEncryption())
+        if(true === $this->isEncrypted())
             return rtrim(fgets($this->getStream(), 1 << 15), "\n");
 
         return stream_get_line($this->getStream(), 1 << 15, "\n");
@@ -839,7 +835,7 @@ abstract class Connection
         if(strlen($string) > $length)
             $string = substr($string, 0, $length);
 
-        if(false !== $this->getEncryption())
+        if(true === $this->isEncrypted())
             $out = fwrite($this->getStream(), $string, $length);
         else {
 
