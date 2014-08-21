@@ -42,6 +42,7 @@ cloak on IRC, etc.
   * ➜ Stéphane Py (stephpy)
   * Mathias Strasser (mathiasstrasser)
   * Emmanuel Thierry (sekiltoyai)
+  * Pierre Tomasina (pierozi)
   * flip101
 
 # Special thanks
