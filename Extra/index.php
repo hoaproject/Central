@@ -216,6 +216,32 @@ catch ( \Hoa\Router\Exception\NotFound $e ) {
 
     $http = new \Hoa\Http\Response\Response();
     $http->sendStatus($http::STATUS_NOT_FOUND);
+    $http->sendHeader('Content-Type', 'text/plain');
+
+    $rules = $router->getRules();
+
+    echo 'GET ' . $rules['r'][$router::RULE_PATTERN] . "\n\n" .
+         'Permanent link to a library or a resource inside a library.' . "\n\n" .
+         'Usage:' . "\n" .
+         '    * Link to the Hoa\Core library' . "\n" .
+         '      GET /Resource/Library/Core' . "\n" .
+         '    * Use ?remote to select a specific remote amongst hoa or github (default: auto-select):' . "\n" .
+         '      GET /Resource/Library/Core?remote=github' . "\n" .
+         '    * Link to the Hoa\Console\Cursor class' . "\n" .
+         '      GET /Resource/Library/Console/Cursor.php' . "\n" .
+         '    * Link to the atoum/praspel-extension contribution:' . "\n" .
+         '      GET /Resource/Contributions/Atoum/PraspelExtension' . "\n" .
+         '    * Use ?format=raw to get only the file, not the tree (default: format=tree)' . "\n" .
+         '      GET
+         /Resource/Library/Console/Documentation/Image/Readline_autocompleters.gif?format=raw' . "\n\n\n" .
+
+         'GET ' . $rules['s'][$router::RULE_PATTERN] . "\n\n" .
+         'Get the state of a library.' . "\n\n" .
+         'Usage:' . "\n" .
+         '    * State of Hoa\Core as an image'. "\n" .
+         '      GET /State/Core' . "\n" .
+         '    * Use ?format to turn the image into text' . "\n" .
+         '      GET /State/Core?format=raw' . "\n";
 }
 catch ( \Exception $e ) {
 
