@@ -61,6 +61,13 @@ namespace Hoa\Bench {
 class Mark {
 
     /**
+     * Name of the global mark.
+     *
+     * @const string
+     */
+    const GLOBAL_NAME = '__global__';
+
+    /**
      * Mark ID.
      *
      * @var \Hoa\Bench\Mark string
@@ -169,8 +176,8 @@ class Mark {
             $this->start  = microtime(true);
         }
 
-        $this->_running   = true;
-        $this->_pause     = false;
+        $this->_running = true;
+        $this->_pause   = false;
 
         return $this;
     }
