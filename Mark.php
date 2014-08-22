@@ -61,6 +61,13 @@ namespace Hoa\Bench {
 class Mark {
 
     /**
+     * Name of the global mark.
+     *
+     * @const string
+     */
+    const GLOBAL_NAME = '__global__';
+
+    /**
      * Mark ID.
      *
      * @var \Hoa\Bench\Mark string
