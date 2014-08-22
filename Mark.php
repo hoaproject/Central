@@ -169,8 +169,8 @@ class Mark {
             $this->start  = microtime(true);
         }
 
-        $this->_running   = true;
-        $this->_pause     = false;
+        $this->_running = true;
+        $this->_pause   = false;
 
         return $this;
     }

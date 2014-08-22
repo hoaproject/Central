@@ -111,8 +111,9 @@ class Bench implements \Iterator, \Countable {
 
         if(true === empty(self::$_mark)) {
 
-            $global = new Mark('__global');
-            self::$_mark['__global'] = $global->start();
+            $global                  = new Mark('__global');
+            self::$_mark['__global'] = $global;
+            $global->start();
         }
 
         if(true === $this->markExists($id))
