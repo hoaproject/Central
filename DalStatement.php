@@ -164,15 +164,51 @@ class DalStatement {
     }
 
     /**
-     * Return an array containing next result row.
+     * Fetch the first row in the result set.
      *
-     * @access public
-     * @return array
-     * @throw \Hoa\Database\Exception
+     * @access  public
+     * @return  mixed
+     * @throw   \Hoa\Database\Exception
      */
-    public function fetch ( ) {
+    public function fetchFirst ( ) {
 
-        return $this->getStatement()->fetch();
+        return $this->getStatement()->fetchFirst();
+    }
+
+    /**
+     * Fetch the last row in the result set.
+     *
+     * @access  public
+     * @return  mixed
+     * @throw   \Hoa\Database\Exception
+     */
+    public function fetchLast ( ) {
+
+        return $this->getStatement()->fetchLast();
+    }
+
+    /**
+     * Fetch the next row in the result set.
+     *
+     * @access  public
+     * @return  mixed
+     * @throw   \Hoa\Database\Exception
+     */
+    public function fetchNext ( ) {
+
+        return $this->getStatement()->fetchNext();
+    }
+
+    /**
+     * Fetch the previous row in the result set.
+     *
+     * @access  public
+     * @return  mixed
+     * @throw   \Hoa\Database\Exception
+     */
+    public function fetchPrior ( ) {
+
+        return $this->getStatement()->fetchPrior();
     }
 
     /**
