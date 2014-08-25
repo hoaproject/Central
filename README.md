@@ -6,7 +6,7 @@ Moreover, Hoa aims at being a bridge between industrial and research worlds.
 # Hoa\Bench ![state](http://central.hoa-project.net/State/Bench)
 
 This library allows to analyze performance of algorithms or programs by placing
-some “marks” in the code. Furthermore, this library proposes some
+some “marks” in the code. Furthermore, this library provides some
 [DTrace](http://dtrace.org/guide/) programs.
 
 ## Quick usage
