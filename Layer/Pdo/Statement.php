@@ -168,15 +168,64 @@ class Statement implements \Hoa\Database\IDal\WrapperStatement {
     }
 
     /**
-     * Return an array containing all of the result set rows.
+     * Fetch the next row in the result set.
      *
-     * @access  public
-     * @return  array
+     * @access  protected
+     * @param   int  $cursor_orientation    Must be one of the \PDO::FETCH_ORI_* constants.
+     * @return  mixed
      * @throw   \Hoa\Database\Exception
      */
-    public function fetch ( ) {
+    protected function fetch ( $cursor_orientation = \PDO::FETCH_ORI_NEXT ) {
 
-        return $this->getStatement()->fetch(\PDO::FETCH_ASSOC, \PDO::FETCH_ORI_NEXT);
+        return $this->getStatement()->fetch(\PDO::FETCH_ASSOC, $cursor_orientation);
+    }
+
+    /**
+     * Fetch the first row in the result set.
+     *
+     * @access  public
+     * @return  mixed
+     * @throw   \Hoa\Database\Exception
+     */
+    public function fetchFirst ( ) {
+
+        return $this->fetch(\PDO::FETCH_ORI_FIRST);
+    }
+
+    /**
+     * Fetch the last row in the result set.
+     *
+     * @access  public
+     * @return  mixed
+     * @throw   \Hoa\Database\Exception
+     */
+    public function fetchLast ( ) {
+
+        return $this->fetch(\PDO::FETCH_ORI_LAST);
+    }
+
+    /**
+     * Fetch the next row in the result set.
+     *
+     * @access  public
+     * @return  mixed
+     * @throw   \Hoa\Database\Exception
+     */
+    public function fetchNext ( ) {
+
+        return $this->fetch(\PDO::FETCH_ORI_NEXT);
+    }
+
+    /**
+     * Fetch the previous row in the result set.
+     *
+     * @access  public
+     * @return  mixed
+     * @throw   \Hoa\Database\Exception
+     */
+    public function fetchPrior ( ) {
+
+        return $this->fetch(\PDO::FETCH_ORI_PRIOR);
     }
 
     /**
