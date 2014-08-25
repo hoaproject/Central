@@ -171,13 +171,17 @@ class Statement implements \Hoa\Database\IDal\WrapperStatement {
      * Fetch the next row in the result set.
      *
      * @access  protected
-     * @param   int  $cursor_orientation    Must be one of the \PDO::FETCH_ORI_* constants.
+     * @param   int  $orientation    Must be one of the \PDO::FETCH_ORI_*
+     *                               constants.
      * @return  mixed
      * @throw   \Hoa\Database\Exception
      */
-    protected function fetch ( $cursor_orientation = \PDO::FETCH_ORI_NEXT ) {
+    protected function fetch ( $orientation = \PDO::FETCH_ORI_NEXT ) {
 
-        return $this->getStatement()->fetch(\PDO::FETCH_ASSOC, $cursor_orientation);
+        return $this->getStatement()->fetch(
+            \PDO::FETCH_ASSOC,
+            $orientation
+        );
     }
 
     /**
