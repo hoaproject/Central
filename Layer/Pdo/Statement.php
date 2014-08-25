@@ -168,6 +168,71 @@ class Statement implements \Hoa\Database\IDal\WrapperStatement {
     }
 
     /**
+     * Fetch the next row in the result set.
+     *
+     * @access  protected
+     * @param   int  $orientation    Must be one of the \PDO::FETCH_ORI_*
+     *                               constants.
+     * @return  mixed
+     * @throw   \Hoa\Database\Exception
+     */
+    protected function fetch ( $orientation = \PDO::FETCH_ORI_NEXT ) {
+
+        return $this->getStatement()->fetch(
+            \PDO::FETCH_ASSOC,
+            $orientation
+        );
+    }
+
+    /**
+     * Fetch the first row in the result set.
+     *
+     * @access  public
+     * @return  mixed
+     * @throw   \Hoa\Database\Exception
+     */
+    public function fetchFirst ( ) {
+
+        return $this->fetch(\PDO::FETCH_ORI_FIRST);
+    }
+
+    /**
+     * Fetch the last row in the result set.
+     *
+     * @access  public
+     * @return  mixed
+     * @throw   \Hoa\Database\Exception
+     */
+    public function fetchLast ( ) {
+
+        return $this->fetch(\PDO::FETCH_ORI_LAST);
+    }
+
+    /**
+     * Fetch the next row in the result set.
+     *
+     * @access  public
+     * @return  mixed
+     * @throw   \Hoa\Database\Exception
+     */
+    public function fetchNext ( ) {
+
+        return $this->fetch(\PDO::FETCH_ORI_NEXT);
+    }
+
+    /**
+     * Fetch the previous row in the result set.
+     *
+     * @access  public
+     * @return  mixed
+     * @throw   \Hoa\Database\Exception
+     */
+    public function fetchPrior ( ) {
+
+        return $this->fetch(\PDO::FETCH_ORI_PRIOR);
+    }
+
+    /**
      * Return a single column from the next row of the result set or false if
      * there is no more row.
      *
