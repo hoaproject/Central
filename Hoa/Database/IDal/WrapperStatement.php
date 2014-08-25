@@ -84,6 +84,42 @@ interface WrapperStatement {
     public function fetchAll ( );
 
     /**
+     * Fetch the first row in the result set.
+     *
+     * @access  public
+     * @return  mixed
+     * @throw   \Hoa\Database\Exception
+     */
+    public function fetchFirst ( );
+
+    /**
+     * Fetch the last row in the result set.
+     *
+     * @access  public
+     * @return  mixed
+     * @throw   \Hoa\Database\Exception
+     */
+    public function fetchLast ( );
+
+    /**
+     * Fetch the next row in the result set.
+     *
+     * @access  public
+     * @return  mixed
+     * @throw   \Hoa\Database\Exception
+     */
+    public function fetchNext ( );
+
+    /**
+     * Fetch the previous row in the result set.
+     *
+     * @access  public
+     * @return  mixed
+     * @throw   \Hoa\Database\Exception
+     */
+    public function fetchPrior ( );
+
+    /**
      * Return a single column from the next row of the result set or false if
      * there is no more row.
      *

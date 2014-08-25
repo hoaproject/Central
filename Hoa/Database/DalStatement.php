@@ -164,6 +164,54 @@ class DalStatement {
     }
 
     /**
+     * Fetch the first row in the result set.
+     *
+     * @access  public
+     * @return  mixed
+     * @throw   \Hoa\Database\Exception
+     */
+    public function fetchFirst ( ) {
+
+        return $this->getStatement()->fetchFirst();
+    }
+
+    /**
+     * Fetch the last row in the result set.
+     *
+     * @access  public
+     * @return  mixed
+     * @throw   \Hoa\Database\Exception
+     */
+    public function fetchLast ( ) {
+
+        return $this->getStatement()->fetchLast();
+    }
+
+    /**
+     * Fetch the next row in the result set.
+     *
+     * @access  public
+     * @return  mixed
+     * @throw   \Hoa\Database\Exception
+     */
+    public function fetchNext ( ) {
+
+        return $this->getStatement()->fetchNext();
+    }
+
+    /**
+     * Fetch the previous row in the result set.
+     *
+     * @access  public
+     * @return  mixed
+     * @throw   \Hoa\Database\Exception
+     */
+    public function fetchPrior ( ) {
+
+        return $this->getStatement()->fetchPrior();
+    }
+
+    /**
      * Return a single column from the next row of the result set or false if
      * there is no more row.
      *
