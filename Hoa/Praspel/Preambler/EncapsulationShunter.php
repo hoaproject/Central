@@ -109,49 +109,56 @@ class EncapsulationShunter {
 
         $callable   = $preambler->__getCallable();
         $reflection = $callable->getReflection();
+        $registry   = \Hoa\Praspel::getRegistry();
 
-        if(!($reflection instanceof \ReflectionMethod))
+        if($reflection instanceof \ReflectionClass) {
+
+            $_object = $reflection->newInstance();
+            $preambler->__setCallable(xcallable($_object, '__construct'));
+        }
+        elseif(!($reflection instanceof \ReflectionMethod))
             throw new \Hoa\Praspel\Exception\Preambler(
                 'The callable must be a class and a (dynamic) method name.', 0);
+        else {
 
-        $registry = \Hoa\Praspel::getRegistry();
-        $callback = $callable->getValidCallback();
+            $callback = $callable->getValidCallback();
 
-        if(!is_object($callback[0])) {
+            if(!is_object($callback[0])) {
 
-            $reflectionClass  = $reflection->getDeclaringClass();
-            $_reflectionClass = $reflectionClass;
+                $reflectionClass  = $reflection->getDeclaringClass();
+                $_reflectionClass = $reflectionClass;
 
-            while(
-                ( null === $constructor      = $_reflectionClass->getConstructor())
-             && (false !== $_reflectionClass = $_reflectionClass->getParentClass())
-            );
+                while(
+                    ( null === $constructor      = $_reflectionClass->getConstructor())
+                 && (false !== $_reflectionClass = $_reflectionClass->getParentClass())
+                );
 
-            if(null === $constructor)
-                $_object = $reflectionClass->newInstance();
-            else {
+                if(null === $constructor)
+                    $_object = $reflectionClass->newInstance();
+                else {
 
-                $className = $_reflectionClass->getName();
-                $id        = $className . '::__construct';
+                    $className = $_reflectionClass->getName();
+                    $id        = $className . '::__construct';
 
-                if(!isset($registry[$id]))
-                    $registry[$id] = \Hoa\Praspel::interprete(
-                        \Hoa\Praspel::extractFromComment(
-                            $constructor->getDocComment()
-                        ),
-                        $className
-                    );
+                    if(!isset($registry[$id]))
+                        $registry[$id] = \Hoa\Praspel::interprete(
+                            \Hoa\Praspel::extractFromComment(
+                                $constructor->getDocComment()
+                            ),
+                            $className
+                        );
 
-                $assertionChecker = $this->getAssertionChecker();
+                    $assertionChecker = $this->getAssertionChecker();
 
-                if(null === $assertionChecker)
-                    $assertionChecker = '\Hoa\Praspel\AssertionChecker';
+                    if(null === $assertionChecker)
+                        $assertionChecker = '\Hoa\Praspel\AssertionChecker';
 
-                $arguments = $assertionChecker::generateData($registry[$id]);
-                $_object   = $reflectionClass->newInstanceArgs($arguments);
+                    $arguments = $assertionChecker::generateData($registry[$id]);
+                    $_object   = $reflectionClass->newInstanceArgs($arguments);
+                }
+
+                $preambler->__setCallable(xcallable($_object, $callback[1]));
             }
-
-            $preambler->__setCallable(xcallable($_object, $callback[1]));
         }
 
         $reflectionObject = $preambler->__getReflectionObject($object);
