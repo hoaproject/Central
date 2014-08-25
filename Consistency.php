@@ -885,8 +885,13 @@ class Xcallable {
 
         if(is_array($valid)) {
 
-            if(is_string($valid[0]))
+            if(is_string($valid[0])) {
+
+                if(false === method_exists($valid[0], $valid[1]))
+                    return new \ReflectionClass($valid[0]);
+
                 return new \ReflectionMethod($valid[0], $valid[1]);
+            }
 
             $object = new \ReflectionObject($valid[0]);
 
