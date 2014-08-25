@@ -244,10 +244,9 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
 
         } }
 
-        catch ( \Hoa\Core\Exception $e ) {
+        catch ( \Exception $e ) {
 
             echo $e->getMessage(), "\n";
-
         }
 
         echo "\n";
