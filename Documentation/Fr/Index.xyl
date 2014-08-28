@@ -10,7 +10,7 @@
   permet de <strong>résoudre</strong> des noms de domaines en fonction de leurs
   types.</p>
 
-  <h2 id="Table_des_matieres">Table des matières</h2>
+  <h2 id="Table_of_contents">Table des matières</h2>
 
   <tableofcontents id="main-toc" />
 
@@ -33,9 +33,9 @@
   <code>org</code>, <code>com</code> etc. En dessous, nous trouvons d'autres
   domaines, comme <code>hoa-project</code>, <code>wikipedia</code>,
   <code>php</code> etc. Et encore en dessous, nous trouvons d'autres domaines,
-  comme <code>hg</code> pour <code>hoa-project</code>. Nous disons que le
+  comme <code>git</code> pour <code>hoa-project</code>. Nous disons que le
   domaine <code>hoa-project.net</code> est un <strong>sous-domaine</strong> de
-  <code>net</code>, tout comme <code>hg.hoa-project.net</code> est un
+  <code>net</code>, tout comme <code>git.hoa-project.net</code> est un
   sous-domaine de <code>hoa-project.net</code> : la notion de hiérarchie est
   bien présente.</p>
   <p>Mais ce système de noms est également <strong>distribué</strong>. Quand
@@ -71,25 +71,25 @@
   <a href="https://tools.ietf.org/html/rfc768">RFC768</a> et
   <a href="https://tools.ietf.org/html/rfc793">RFC793</a>.</p>
 
-  <h2 id="Resoudre_ses_propres_noms_de_domaines" for="main-toc">Résoudre
-  ses propres noms de domaines</h2>
+  <h2 id="Resolving_its_own_domain_names" for="main-toc">Résoudre ses propres
+  noms de domaines</h2>
 
   <p>Notre objectif va être de <strong>résoudre</strong> des noms de domaines de
   la forme <code>*.hoa</code>. Pour cela nous allons commencer par modifier
   notre résolveur local pour lui ajouter un hôte de résolution que nous ferons
   avec <code>Hoa\Dns</code>.</p>
 
-  <h3 id="Specifier_un_serveur_de_resolution" for="main-toc">Spécifier un
-  serveur de résolution</h3>
+  <h3 id="Specifying_a_resolution_server" for="main-toc">Spécifier un serveur de
+  résolution</h3>
 
   <p>Il existe plusieurs programmes de résolution selon les systèmes. Notre
   objectif est de <strong>spécifier</strong> un <strong>serveur de
   résolution</strong> pour les domaines <code>*.hoa</code>. Notre serveur
-  écoutera le port 57055 (<em>i.e.</em> <code>0xDEAD</code>, pour ne pas devoir
+  écoutera le port 57005 (<em>i.e.</em> <code>0xDEAD</code>, pour ne pas devoir
   exécuter notre serveur avec les droits <em lang="en">root</em>) sur l'adresse
   <code>127.0.0.1</code>.</p>
 
-  <h4 id="Sous_Mac_OS_X" for="main-toc">Sous Mac OS X</h4>
+  <h4 id="With_Mac_OS_X" for="main-toc">Sous Mac OS X</h4>
 
   <p>Sous Mac OS X, il suffit de créer un fichier
   <code>/etc/resolver/<em>tld</em></code> (attention à avoir les droits
@@ -101,7 +101,7 @@ port 57005</code></pre>
   <p>Il ne faut pas hésiter à attendre quelques secondes que le cache du serveur
   local s'invalide avant de passer à la suite.</p>
 
-  <h4 id="Sous_Linux" for="main-toc">Sous Linux</h4>
+  <h4 id="With_Linux" for="main-toc">Sous Linux</h4>
 
   <p>Sous Linux, nous allons utiliser
   <a href="http://thekelleys.org.uk/dnsmasq/doc.html">DNSMasq</a>, très souvent
@@ -120,7 +120,7 @@ port 57005</code></pre>
   <p>Sous Windows, …</p>
   -->
 
-  <h3 id="Creer_son_serveur_de_resolution" for="main-toc">Créer son serveur de
+  <h3 id="Create_its_own_resolution_server" for="main-toc">Créer son serveur de
   résolution</h3>
 
   <p>Nous allons <strong>créer</strong> un serveur qui écoute l'adresse
@@ -181,7 +181,7 @@ $dns->run();</code></pre>
   <p>Pour atteindre ce fichier, nous allons démarrer un <strong>serveur
   HTTP</strong>, par exemple Bhoa, sur l'adresse <code>127.0.0.1:8888</code>. Si
   ce serveur reçoit une requête depuis un domaine <code>*.hoa</code> c'est que
-  notre serveur de résolution à fonctionner. Le fichier
+  notre serveur de résolution a fonctionné. Le fichier
   <code>/tmp/index.html</code> n'est présent que pour avoir un exemple complet.
   Démarrons donc Bhoa :</p>
   <pre><code class="language-shell">$ hoa http:bhoa --root /tmp --listen 127.0.0.1:8888</code></pre>
@@ -189,7 +189,7 @@ $dns->run();</code></pre>
   <pre><code class="language-shell">$ php Resolver.php</code></pre>
   <p>Enfin, nous pouvons tester l'ensemble, par exemple avec
   <a href="http://curl.haxx.se/">cURL</a> :</p>
-  <pre><code class="language-shell">$ curl foo.hoa:8888 --verbose
+  <pre data-line="11-17"><code class="language-shell">$ curl foo.hoa:8888 --verbose
 * About to connect() to foo.hoa port 8888 (#0)
 *   Trying 127.0.0.1... connected
 * Connected to foo.hoa (127.0.0.1) port 8888 (#0)
@@ -213,7 +213,7 @@ yeah \o/
   par notre serveur HTTP qui va nous répondre le contenu de
   <code>/tmp/index.html</code>.</p>
 
-  <h2 id="En_ligne_de_commande" for="main-toc">En ligne de commande</h2>
+  <h2 id="In_command_line" for="main-toc">En ligne de commande</h2>
 
   <p><code>Hoa\Dns</code> propose la commande <code>dns:server</code> à partir
   du script <code>hoa</code>. Cette commande permet de démarrer rapidement un
