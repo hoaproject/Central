@@ -125,13 +125,13 @@ port 57005</code></pre>
 
   <p>Nous allons <strong>créer</strong> un serveur qui écoute l'adresse
   <code>127.0.0.1:57005</code> et en UDP. Ce serveur sera donné à
-  <code>Hoa\Dns\Dns</code>, et le tout sera dans le fichier
+  <code>Hoa\Dns\Resolver</code>, et le tout sera dans le fichier
   <code>Resolver.php</code> :</p>
-  <pre><code class="language-php">$dns = new Hoa\Dns\Dns(
+  <pre><code class="language-php">$dns = new Hoa\Dns\Resolver(
     new Hoa\Socket\Server('udp://127.0.0.1:57005')
 );</code></pre>
-  <p><code>Hoa\Dns\Dns</code> émet un seul évènement : <code>query</code>, et
-  envoie en donnée un tableau contenant <code>domain</code> (par exemple
+  <p><code>Hoa\Dns\Resolver</code> émet un seul évènement : <code>query</code>,
+  et envoie en donnée un tableau contenant <code>domain</code> (par exemple
   <code>foo.bar.baz.tld</code>), <code>type</code> (par exemple
   <code>aaaa</code>) et <code>class</code> (par exemple <code>in</code>). Nous
   allons <strong>associer</strong> à tous les domaines <code>*.hoa</code>

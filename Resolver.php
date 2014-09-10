@@ -48,9 +48,9 @@ from('Hoa')
 namespace Hoa\Dns {
 
 /**
- * Class \Hoa\Dns.
+ * Class \Hoa\Dns\Resolver.
  *
- * Provide a tiny and very simple DNS server.
+ * Provide a DNS resolution server.
  * Please, see RFC6195, RFC1035 and RFC1034 for an overview.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
@@ -58,7 +58,7 @@ namespace Hoa\Dns {
  * @license    New BSD License
  */
 
-class Dns implements \Hoa\Core\Event\Listenable {
+class Resolver implements \Hoa\Core\Event\Listenable {
 
     /**
      * Listeners.
@@ -151,7 +151,7 @@ class Dns implements \Hoa\Core\Event\Listenable {
     /**
      * Class values for resources and queries.
      *
-     * @var \Hoa\Dns array
+     * @var \Hoa\Dns\Resolver array
      */
     protected static $_classes = array(
         'in'    =>   1, // Internet.
@@ -192,7 +192,7 @@ class Dns implements \Hoa\Core\Event\Listenable {
      * @access  public
      * @param   string  $listenerId    Listener ID.
      * @param   mixed   $callable      Callable.
-     * @return  \Hoa\Dns
+     * @return  \Hoa\Dns\Resolver
      * @throw   \Hoa\Core\Exception
      */
     public function on ( $listenerId, $callable ) {
@@ -345,14 +345,5 @@ class Dns implements \Hoa\Core\Event\Listenable {
         return;
     }
 }
-
-}
-
-namespace {
-
-/**
- * Flex entity.
- */
-Hoa\Core\Consistency::flexEntity('Hoa\Dns\Dns');
 
 }

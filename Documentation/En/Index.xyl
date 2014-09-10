@@ -107,12 +107,12 @@ port 57005</code></pre>
 
   <p>We will <strong>create</strong> a server that listens the
   <code>127.0.0.1:57005</code> address in UDP. This server will be given to
-  <code>Hoa\Dns\Dns</code>, and all will be written in the
+  <code>Hoa\Dns\Resolver</code>, and all will be written in the
   <code>Resolver.php</code> file:</p>
-  <pre><code class="language-php">$dns = new Hoa\Dns\Dns(
+  <pre><code class="language-php">$dns = new Hoa\Dns\Resolver(
     new Hoa\Socket\Server('udp://127.0.0.1:57005')
 );</code></pre>
-  <p><code>Hoa\Dns\Dns</code> fires only one event: <code>query</code>, and
+  <p><code>Hoa\Dns\Resolver</code> fires only one event: <code>query</code>, and
   sends an array containing <code>domain</code> (for example
   <code>foo.bar.baz.tld</code>), <code>type</code> (for example
   <code>aaaa</code>) and <code>class</code> (for example <code>in</code>). We
