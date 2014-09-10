@@ -3,8 +3,221 @@
 <overlay xmlns="http://hoa-project.net/xyl/xylophone">
 <yield id="chapter">
 
-  <p class="warning">This chapter is not yet translated. Contributions are
-  welcomed!</p>
+  <p>DNS, or Domain Name System, is a system allowing to <strong>translate
+  domain names</strong> into <strong>IP addresses</strong>. Names are
+  <strong>classified</strong> in several <strong>types</strong> according to
+  services. <code>Hoa\Dns</code> allows to <strong>resolve</strong> domain names
+  based on their types.</p>
+
+  <h2 id="Table_of_contents">Table of contents</h2>
+
+  <tableofcontents id="main-toc" />
+
+  <h2 id="Introduction" for="main-toc">Introduction</h2>
+
+  <p>Every machine connected to a <strong>network</strong> has an IP address
+  (stands for Internet Protocol). There is several versions of this protocol:
+  the IPv4 version, formely standardized in the
+  <a href="https://tools.ietf.org/html/rfc791">RFC791</a>, and the IPv6 version,
+  formely standardized in the
+  <a href="https://tools.ietf.org/html/rfc2460">RFC2460</a>. These addresses are
+  <strong>numerical</strong> and it is not always easy to remember them. That's
+  why DNS allows to <strong>map</strong> names to these addresses. We talk about
+  domain names, and traduction, or resolution or even association.</p>
+  <p>This name system is <strong>hierarchical</strong> and has a
+  <strong>tree</strong> structure. Under the root of this tree, we have
+  <strong>first level</strong> domain, also called TLD for Top Level Domain; for
+  instance: <code>net</code>, <code>org</code>, <code>com</code> etc. Below, we
+  have other domains, like <code>hoa-project</code>, <code>wikipedia</code>,
+  <code>php</code> etc. And still below, we have other domains, like
+  <code>git</code> for <code>hoa-project.net</code>. We say that
+  <code>hoa-project.net</code> is a <strong>sub-domain</strong> of
+  <code>net</code>, just like <code>git.hoa-project.net</code> is a sub-domain
+  of <code>hoa-project.net</code>: the hierarchical aspect is present.</p>
+  <p>But this name system is also <strong>distributed</strong>. When we try to
+  resolve a domain name, we start by looking for <strong>hosts</strong> being
+  able to resolve its TLD, then its sub-domain and so on. Each machine has a
+  program called a <strong>local resolver</strong> of domain names, which is
+  able to find appropriated hosts in order to resolve domain names. We can
+  modify these resolvers to use our own resolution server. <code>Hoa\Dns</code>
+  allows to create such a server. If no server is specified, the local resolver
+  will ask third-services: the distributed aspect is present.</p>
+  <p>In addition, domain names are <strong>classified</strong> based on
+  <strong>types</strong>, like:</p>
+  <ul>
+    <li><code>A</code> for an IPv4 host,</li>
+    <li><code>AAAA</code> for an IPv6 host,</li>
+    <li><code>MX</code> for a mail server,</li>
+    <li>etc.</li>
+  </ul>
+  <p>The <a href="http://www.iana.org/assignments/dns-parameters">complete list
+  of all types</a> is maintained by the <a href="http://iana.org">IANA</a>,
+  which is the organism responsible to manage the IP addressing space along with
+  protocols. The whole DNS protocol is specified in the
+  <a href="https://tools.ietf.org/html/rfc6195">RFC6195</a>.</p>
+  <p>Thanks to domain name and its type, the resolver will be able to find its
+  associated IP address, or, else, it will find another resolver. Once the IP
+  address is found, requests could be routed correctly.</p>
+  <p>Finally, the DNS protocol works in UDP or TCP on the 53 port, respectively
+  according to the
+  <a href="https://tools.ietf.org/html/rfc768">RFC768</a> and
+  <a href="https://tools.ietf.org/html/rfc793">RFC793</a>.</p>
+
+  <h2 id="Resolving_its_own_domain_names" for="main-toc">Resolving its own
+  domain names</h2>
+
+  <p>Our goal is to <strong>resolve</strong> domain names of the form
+  <code>*.hoa</code>. We will start by modifying our local resolver by adding a
+  resolution host made with <code>Hoa\Dns</code>.</p>
+
+  <h3 id="Specifying_a_resolution_server" for="main-toc">Specifying a resolution
+  server</h3>
+
+  <p>There is several resolution programs according to the systems. Our goal is
+  to <strong>specify</strong> a <strong>resolution server</strong> for the
+  <code>*.hoa</code> domains. Our server will listen the 57005 port (i.e.
+  <code>0xDEAD</code>, in order to not have to run our server with root
+  permissions) on the <code>127.0.0.1</code> address.</p>
+
+  <h4 id="With_Mac_OS_X" for="main-toc">With Mac OS X</h4>
+
+  <p>With Mac OS X, it is enough to create a
+  <code>/etc/resolver/<em>tld</em></code> file (be aware to have root
+  permissions, and the <code>/etc/resolver</code> directory does not always
+  exist, do not hesitate to create it). Thus, we will edit the
+  <code>/etc/resolver/hoa</code> file:</p>
+  <pre><code>nameserver 127.0.0.1
+port 57005</code></pre>
+  <p>You probably have to wait few seconds the local server cache to be emptied
+  before reading further.</p>
+
+  <h4 id="With_Linux" for="main-toc">With Linux</h4>
+
+  <p>With Linux, we will use
+  <a href="http://thekelleys.org.uk/dnsmasq/doc.html">DNSMasq</a>, often
+  installed by default. Next, we will modify the <code>/etc/dnsmasq.conf</code>
+  to delegate the <code>*.hoa</code> domains resolution to our own server:</p>
+  <pre><code>server=/hoa/127.0.0.1#57005</code></pre>
+  <p>Do not forget to restart DNSMasq:</p>
+  <pre><code class="language-shell">$ sudo /etc/init.d/dnsmasq restart
+ * Restarting DNS forwarder and DHCP server dnsmasq                         [OK]</code></pre>
+
+  <h3 id="Create_its_own_resolution_server" for="main-toc">Create its own
+  resolution server</h3>
+
+  <p>We will <strong>create</strong> a server that listens the
+  <code>127.0.0.1:57005</code> address in UDP. This server will be given to
+  <code>Hoa\Dns\Dns</code>, and all will be written in the
+  <code>Resolver.php</code> file:</p>
+  <pre><code class="language-php">$dns = new Hoa\Dns\Dns(
+    new Hoa\Socket\Server('udp://127.0.0.1:57005')
+);</code></pre>
+  <p><code>Hoa\Dns\Dns</code> fires only one event: <code>query</code>, and
+  sends an array containing <code>domain</code> (for example
+  <code>foo.bar.baz.tld</code>), <code>type</code> (for example
+  <code>aaaa</code>) and <code>class</code> (for example <code>in</code>). We
+  will <strong>associate</strong> the <code>127.0.0.1</code> IP address to all
+  <code>*.hoa</code> domains, we will not consider sub-domains of
+  <code>hoa</code> in this exercise.</p>
+  <pre><code class="language-php">$dns->on('query', function ( Hoa\Core\Event\Bucket $bucket ) {
+
+    $data = $bucket->getData();
+    echo 'Resolving domain ', $data['domain'],
+         ' of type ', $data['type'], "\n";
+
+    return '127.0.0.1';
+});
+$dns->run();</code></pre>
+  <p>Pretty <strong>simple</strong> no? Notice that we do not consider the
+  domain type (which should be <code>A</code> or <code>AAAA</code>).</p>
+
+  <h2 id="Test" for="main-toc">Test</h2>
+
+  <div id="overview" class="verbatim schema"></div>
+  <script>
+  Hoa.Document.onReady(function ( ) {
+
+      var paper    = Hoa.Graph(Hoa.$('#overview'), 800, 300);
+      var grid     = paper.grid(0, 0, 800, 300, 3, 3);
+      var client   = grid.push(paper.rect(0, 0, 120, 290, 3, 'client'),      0, 1);
+      var resolver = grid.push(paper.rect(0, 0, 170,  90, 3, 'resolver'),    1, 0);
+      var http     = grid.push(paper.rect(0, 0, 170,  90, 3, 'HTTP server'), 1, 2);
+      var index    = grid.push(paper.rect(0, 0, 170,  90, 3, 'index.html'),  2, 2);
+
+      var l1       = paper.link.between(client, resolver, 'foo.hoa');
+      l1.element.move('+0', '-30');
+      l1.text.move('-13', '-13');
+      var l2       = paper.link.between(resolver, client, '127.0.0.1');
+      l2.text.move('+15', '+15');
+      var l3       = paper.link.between(client, http, '127.0.0.1:8888');
+      l3.text.move('+20', '+0');
+      paper.link.between(http, index);
+  });
+  </script>
+  <p>To test and play, we will <strong>create</strong> a file
+  <code>/tmp/index.html</code> containing:</p>
+  <pre><code class="language-markup">&amp;lt;body&amp;gt;
+  yeah \o/
+&amp;lt;/body&amp;gt;</code></pre>
+  <p>To reach this file, we will start an <strong>HTTP server</strong>, for
+  instance Bhoa, on the <code>127.0.0.1:8888</code> address. If this server
+  receives a request from a <code>*.hoa</code> domain it means that our
+  resolution server has worked. The <code>/tmp/index.html</code> file is only
+  present to get a full example. Let's start Bhoa:</p>
+  <pre><code class="language-shell">$ hoa http:bhoa --root /tmp --listen 127.0.0.1:8888</code></pre>
+  <p>Let's also start our resolution server:</p>
+  <pre><code class="language-shell">$ php Resolver.php</code></pre>
+  <p>Finally, we can test the whole system, for instance with
+  <a href="http://curl.haxx.se/">cURL</a>:</p>
+  <pre data-line="11-17"><code class="language-shell">$ curl foo.hoa:8888 --verbose
+* About to connect() to foo.hoa port 8888 (#0)
+*   Trying 127.0.0.1... connected
+* Connected to foo.hoa (127.0.0.1) port 8888 (#0)
+> GET / HTTP/1.1
+> User-Agent: curl/a.b.c (…) libcurl/d.e.f
+> OpenSSL/g.h.i zlib/j.k.l
+> Host: foo.hoa:8888
+> Accept: */*
+>
+&amp;lt; HTTP/1.1 200 OK
+&amp;lt; Date: …
+&amp;lt; Server: Hoa+Bhoa/x.y
+&amp;lt; Content-Type: text/html
+&amp;lt; Content-Length: 8
+&amp;lt;
+yeah \o/
+* Connection #0 to host foo.hoa left intact
+* Closing connection #0</code></pre>
+  <p>We see that <code>foo.hoa</code> is correctly <strong>resolved</strong>
+  into <code>127.0.0.1</code>. The <code>foo.hoa:8888</code> request is captured
+  by our HTTP server which will be respond the content of
+  <code>/tmp/index.html</code>.</p>
+
+  <h2 id="In_command_line" for="main-toc">In command line</h2>
+
+  <p><code>Hoa\Dns</code> provides the <code>dns:server</code> command based on
+  the <code>hoa</code> script. This command allows to quickly start a resolution
+  server and to redirect some domains to IP addresses. The matching is based on
+  regular expressions (please, see <a href="http://pcre.org/">PCRE</a>).
+  Thus:</p>
+  <pre><code class="language-shell">$ hoa dns:server 'foo.*' to 1.2.3.4 '.*\.bar\..*' to 5.6.7.8
+Server is up, on udp://127.0.0.1:57005!
+
+▋</code></pre>
+  <p>Consequently, all the names starting by <code>foo</code> will be resolved
+  into <code>1.2.3.4</code> and those containing <code>.bar.</code> will be
+  resolved into <code>5.6.7.8</code>. The syntax is pretty simple:
+  <code><em>regex</em> to <em>ip</em></code>.</p>
+  <p>This command is very simple and can be useful to test quickly.</p>
+
+  <h2 id="Conclusion" for="main-toc">Conclusion</h2>
+
+  <p>The <code>Hoa\Dns</code> library allows to create a <strong>resolution
+  server</strong> of <strong>domain names</strong>. Its <strong>simple</strong>
+  API allows for instance to quickly <strong>create</strong> development
+  environments (with <code>*.dev</code> domains for example) or to deploy
+  <strong>services</strong> (by filtering types) on a local networks or
+  larger.</p>
 
 </yield>
 </overlay>
