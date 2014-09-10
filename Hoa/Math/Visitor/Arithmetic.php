@@ -273,21 +273,13 @@ class Arithmetic implements \Hoa\Visitor\Visit {
 
             $_functions = new \ArrayObject(array(
                 'abs'     => xcallable('abs'),
-                'acos'    => xcallable(function ( $value ) {
-                                 return acos(deg2rad($value));
-                             }),
-                'asin'    => xcallable(function ( $value ) {
-                                 return asin(deg2rad($value));
-                             }),
-                'atan'    => xcallable(function ( $value ) {
-                                 return atan(deg2rad($value));
-                             }),
+                'acos'    => xcallable('acos'),
+                'asin'    => xcallable('asin'),
+                'atan'    => xcallable('atan'),
                 'average' => xcallable($average),
                 'avg'     => xcallable($average),
                 'ceil'    => xcallable('ceil'),
-                'cos'     => xcallable(function ( $value ) {
-                                 return cos(deg2rad($value));
-                             }),
+                'cos'     => xcallable('cos'),
                 'count'   => xcallable(function ( ) {
                                  return count(func_get_args());
                              }),
@@ -302,16 +294,12 @@ class Arithmetic implements \Hoa\Visitor\Visit {
                 'min'     => xcallable('min'),
                 'pow'     => xcallable('pow'),
                 'rad2deg' => xcallable('rad2deg'),
-                'sin'     => xcallable(function ( $value ) {
-                                 return sin(deg2rad($value));
-                             }),
+                'sin'     => xcallable('sin'),
                 'sqrt'    => xcallable('sqrt'),
                 'sum'     => xcallable(function ( ) {
                                  return array_sum(func_get_args());
                              }),
-                'tan'     => xcallable(function ( $value ) {
-                                 return tan(deg2rad($value));
-                             }),
+                'tan'     => xcallable('tan')
             ));
         }
 
@@ -339,7 +327,7 @@ class Arithmetic implements \Hoa\Visitor\Visit {
                 'SQRT_PI' => M_SQRTPI,
                 'SQRT_2'  => M_SQRT2,
                 'SQRT_3'  => M_SQRT3,
-                'LN_PI'   => M_LNPI,
+                'LN_PI'   => M_LNPI
             ));
 
         $this->_constants = $_constants;
