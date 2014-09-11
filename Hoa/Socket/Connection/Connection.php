@@ -488,6 +488,9 @@ abstract class Connection
 
         $currentNode = $this->getCurrentNode();
 
+        if(null === $currentNode)
+            return false;
+
         if(   null === $type
            && null === $type = $currentNode->getEncryptionType())
             return stream_socket_enable_crypto($this->getStream(), $enable);
@@ -517,7 +520,12 @@ abstract class Connection
      */
     public function isEncrypted ( ) {
 
-        return null !== $this->getCurrentNode()->getEncryptionType();
+        $currentNode = $this->getCurrentNode();
+
+        if(null === $currentNode)
+            return false;
+
+        return null !== $currentNode->getEncryptionType();
     }
 
     /**
