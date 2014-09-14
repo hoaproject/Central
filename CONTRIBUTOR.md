@@ -44,6 +44,7 @@ cloak on IRC, etc.
   * Mathias Strasser (mathiasstrasser)
   * Emmanuel Thierry (sekiltoyai)
   * Pierre Tomasina (pierozi)
+  * Alex Walker (alexpw)
   * flip101
 
 # Special thanks
