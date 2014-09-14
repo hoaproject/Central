@@ -153,7 +153,13 @@ class Window implements \Hoa\Core\Event\Source {
             );
         }
 
-        $tput = Processus::execute('tput cols && tput lines', false);
+        $term = '';
+
+        if(isset($_SERVER['TERM']))
+            $term = 'TERM="' . $_SERVER['TERM'] . '" ';
+
+        $command = $term . 'tput cols && ' . $term . 'tput lines';
+        $tput    = Processus::execute($command, false);
 
         if(!empty($tput)) {
 
