@@ -384,6 +384,12 @@ class Mime implements \Hoa\Core\Parameter\Parameterizable {
 
         $this->_extension = substr($based, $poos + 1);
         $this->_mime      = static::getMimeFromExtension($this->_extension);
+
+        if(null === $this->_mime)
+            throw new Exception\MimeIsNotFound(
+                'No MIME type associated to the %s extension.',
+                5, $this->_extension);
+
         list($this->_media, $this->_type) = static::parseMime($this->_mime);
 
         return;
