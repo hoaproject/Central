@@ -23,11 +23,10 @@
     "require": {
         "atoum/atoum"            : "dev-extension",
         "atoum/praspel-extension": "dev-master",
-        "hoa/console"            : "dev-master",
-        "hoa/core"               : "dev-master",
-        "hoa/file"               : "dev-master"
+        "hoa/console"            : "~1.0",
+        "hoa/core"               : "~1.0",
+        "hoa/file"               : "~0.0"
     },
-    "minimum-stability": "dev",
-    "target-dir"       : "Hoa/Test",
-    "autoload"         : { "psr-0": { "Hoa\\Test": "." } }
+    "target-dir": "Hoa/Test",
+    "autoload"  : { "psr-0": { "Hoa\\Test": "." } }
 }
