@@ -22,11 +22,9 @@
         "source": "http://git.hoa-project.net/"
     },
     "require": {
-        "hoa/core"   : "dev-master",
+        "hoa/core"   : "~1.0",
         "ext-session": "*"
     },
-    "minimum-stability": "dev",
-    "target-dir"       : "Hoa/Session",
-    "autoload"         : { "psr-0": { "Hoa\\Session": "." }
-    }
+    "target-dir": "Hoa/Session",
+    "autoload"  : { "psr-0": { "Hoa\\Session": "." } }
 }
