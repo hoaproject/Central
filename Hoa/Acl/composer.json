@@ -22,10 +22,9 @@
         "source": "http://git.hoa-project.net/"
     },
     "require": {
-        "hoa/core" : "dev-master",
-        "hoa/graph": "dev-master"
+        "hoa/core" : "~1.0",
+        "hoa/graph": "~0.0"
     },
-    "minimum-stability": "dev",
-    "target-dir"       : "Hoa/Acl",
-    "autoload"         : { "psr-0": { "Hoa\\Acl": "." } }
+    "target-dir": "Hoa/Acl",
+    "autoload"  : { "psr-0": { "Hoa\\Acl": "." } }
 }
