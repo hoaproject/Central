@@ -23,18 +23,17 @@
         "source": "http://git.hoa-project.net/"
     },
     "require": {
-        "hoa/core"    : "dev-master",
-        "hoa/compiler": "dev-master",
-        "hoa/file"    : "dev-master",
-        "hoa/iterator": "dev-master",
-        "hoa/realdom" : "dev-master",
-        "hoa/string"  : "dev-master",
-        "hoa/visitor" : "dev-master"
+        "hoa/core"    : "~1.0",
+        "hoa/compiler": "~1.0",
+        "hoa/file"    : "~0.0",
+        "hoa/iterator": "~0.0",
+        "hoa/realdom" : "~0.0",
+        "hoa/string"  : "~1.0",
+        "hoa/visitor" : "~0.0"
     },
     "require-dev": {
-        "hoa/math": "dev-master"
+        "hoa/math": "~0.0"
     },
-    "minimum-stability": "dev",
-    "target-dir"       : "Hoa/Praspel",
-    "autoload"         : { "psr-0": { "Hoa\\Praspel": "." } }
+    "target-dir": "Hoa/Praspel",
+    "autoload"  : { "psr-0": { "Hoa\\Praspel": "." } }
 }
