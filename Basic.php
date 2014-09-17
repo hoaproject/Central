@@ -118,17 +118,20 @@ class Basic extends Dispatcher {
                 $name = strtolower($parameter->getName());
 
                 if(true === array_key_exists($name, $variables)) {
-
                     $arguments[$name] = $variables[$name];
                     continue;
                 }
 
-                if(false === $parameter->isOptional())
-                    throw new Exception(
-                        'The closured action for the rule with pattern %s needs ' .
-                        'a value for the parameter $%s and this value does not ' .
-                        'exist.',
-                        1, array($rule[\Hoa\Router::RULE_PATTERN], $name));
+                if (true === $parameter->isOptional()) {
+                    $arguments[$name] = $parameter->getDefaultValue();
+                    continue;
+                }
+
+                throw new Exception(
+                    'The closured action for the rule with pattern %s needs ' .
+                    'a value for the parameter $%s and this value does not ' .
+                    'exist.',
+                    1, array($rule[\Hoa\Router::RULE_PATTERN], $name));
             }
         }
         elseif(is_string($call) && null === $able) {
@@ -154,17 +157,20 @@ class Basic extends Dispatcher {
                 $name = strtolower($parameter->getName());
 
                 if(true === array_key_exists($name, $variables)) {
-
                     $arguments[$name] = $variables[$name];
                     continue;
                 }
 
-                if(false === $parameter->isOptional())
-                    throw new Exception(
-                        'The functional action for the rule with pattern %s needs ' .
-                        'a value for the parameter $%s and this value does not ' .
-                        'exist.',
-                        3, array($rule[\Hoa\Router::RULE_PATTERN], $name));
+                if (true === $parameter->isOptional()) {
+                    $arguments[$name] = $parameter->getDefaultValue();
+                    continue;
+                }
+
+                throw new Exception(
+                    'The functional action for the rule with pattern %s needs ' .
+                    'a value for the parameter $%s and this value does not ' .
+                    'exist.',
+                    3, array($rule[\Hoa\Router::RULE_PATTERN], $name));
             }
         }
         else {
@@ -230,16 +236,19 @@ class Basic extends Dispatcher {
                 $name = strtolower($parameter->getName());
 
                 if(true === array_key_exists($name, $variables)) {
-
                     $arguments[$name] = $variables[$name];
                     continue;
                 }
 
-                if(false === $parameter->isOptional())
-                    throw new Exception(
-                        'The action %s on the controller %s needs a value for ' .
-                        'the parameter $%s and this value does not exist.',
-                        6, array($action, get_class($controller), $name));
+                if (true === $parameter->isOptional()) {
+                    $arguments[$name] = $parameter->getDefaultValue();
+                    continue;
+                }
+
+                throw new Exception(
+                    'The action %s on the controller %s needs a value for ' .
+                    'the parameter $%s and this value does not exist.',
+                    6, array($action, get_class($controller), $name));
             }
         }
 
