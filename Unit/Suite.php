@@ -34,7 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Test\Unit {
+namespace Hoa\Test\Unit;
+
+use atoum;
 
 /**
  * Class \Hoa\Test\Unit\Suite.
@@ -46,7 +48,7 @@ namespace Hoa\Test\Unit {
  * @license    New BSD License
  */
 
-class Suite extends \atoum\test {
+class Suite extends atoum\test {
 
     public function __construct ( ) {
 
@@ -55,6 +57,5 @@ class Suite extends \atoum\test {
 
         return;
     }
-}
 
 }

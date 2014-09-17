@@ -34,23 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Test\Bin;
 
-from('Hoa')
-
-/**
- * \Hoa\File\Finder
- */
--> import('File.Finder')
-
-/**
- * \Hoa\File\Directory
- */
--> import('File.Directory');
-
-}
-
-namespace Hoa\Test\Bin {
+use Hoa\Console;
+use Hoa\File;
 
 /**
  * Class Hoa\Test\Bin\Clean.
@@ -62,7 +49,7 @@ namespace Hoa\Test\Bin {
  * @license    New BSD License
  */
 
-class Clean extends \Hoa\Console\Dispatcher\Kit {
+class Clean extends Console\Dispatcher\Kit {
 
     /**
      * Options description.
@@ -70,10 +57,10 @@ class Clean extends \Hoa\Console\Dispatcher\Kit {
      * @var \Hoa\Test\Bin\Clean array
      */
     protected $options = array(
-        array('all',       \Hoa\Console\GetOption::NO_ARGUMENT,       'a'),
-        array('libraries', \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'l'),
-        array('help',      \Hoa\Console\GetOption::NO_ARGUMENT,       'h'),
-        array('help',      \Hoa\Console\GetOption::NO_ARGUMENT,       '?')
+        array('all',       Console\GetOption::NO_ARGUMENT,       'a'),
+        array('libraries', Console\GetOption::REQUIRED_ARGUMENT, 'l'),
+        array('help',      Console\GetOption::NO_ARGUMENT,       'h'),
+        array('help',      Console\GetOption::NO_ARGUMENT,       '?')
     );
 
 
@@ -91,7 +78,7 @@ class Clean extends \Hoa\Console\Dispatcher\Kit {
         while(false !== $c = $this->getOption($v)) switch($c) {
 
             case 'a':
-                $iterator = new \Hoa\File\Finder();
+                $iterator = new File\Finder();
                 $iterator->in(resolve('hoa://Library/', true, true))
                          ->directories()
                          ->maxDepth(1);
@@ -157,15 +144,15 @@ class Clean extends \Hoa\Console\Dispatcher\Kit {
                            : $path);
             echo '  ⌛ ' , $status;
 
-            $directory = new \Hoa\File\Directory($path);
+            $directory = new File\Directory($path);
 
             if(false === $directory->delete())
-                echo '  ', \Hoa\Console\Chrome\Text::colorize('✖︎', 'foreground(red)'),
+                echo '  ', Console\Chrome\Text::colorize('✖︎', 'foreground(red)'),
                      ' ', $status, "\n";
             else {
 
-                \Hoa\Console\Cursor::clear('↔');
-                echo '  ', \Hoa\Console\Chrome\Text::colorize('✔︎', 'foreground(green)'),
+                Console\Cursor::clear('↔');
+                echo '  ', Console\Chrome\Text::colorize('✔︎', 'foreground(green)'),
                      ' ', $status, "\n";
             }
 
@@ -193,8 +180,6 @@ class Clean extends \Hoa\Console\Dispatcher\Kit {
 
         return;
     }
-}
-
 }
 
 __halt_compiler();

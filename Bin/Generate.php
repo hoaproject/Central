@@ -34,42 +34,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Test\Bin;
 
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . '.autoload.atoum.php';
 
-from('Hoa')
-
-/**
- * \Hoa\Console\Processus
- */
--> import('Console.Processus')
-
-/**
- * \Hoa\Console\Cursor
- */
--> import('Console.Cursor')
-
-/**
- * \Hoa\File\Finder
- */
--> import('File.Finder')
-
-/**
- * \Hoa\String\Search
- */
--> import('String.Search');
-
-from('Atoum')
-
-/**
- * \Atoum\PraspelExtension\Praspel\Generator
- */
--> import('PraspelExtension.Praspel.Generator');
-
-}
-
-namespace Hoa\Test\Bin {
+use Hoa\Core;
+use Hoa\Console;
+use Hoa\File;
+use Hoa\String;
+use Atoum\PraspelExtension;
 
 /**
  * Class Hoa\Test\Bin\Generate.
@@ -81,7 +54,7 @@ namespace Hoa\Test\Bin {
  * @license    New BSD License
  */
 
-class Generate extends \Hoa\Console\Dispatcher\Kit {
+class Generate extends Console\Dispatcher\Kit {
 
     /**
      * Options description.
@@ -89,11 +62,11 @@ class Generate extends \Hoa\Console\Dispatcher\Kit {
      * @var \Hoa\Test\Bin\Generate array
      */
     protected $options = array(
-        array('namespaces', \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'n'),
-        array('classes',    \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'c'),
-        array('dry-run',    \Hoa\Console\GetOption::NO_ARGUMENT,       'd'),
-        array('help',       \Hoa\Console\GetOption::NO_ARGUMENT,       'h'),
-        array('help',       \Hoa\Console\GetOption::NO_ARGUMENT,       '?')
+        array('namespaces', Console\GetOption::REQUIRED_ARGUMENT, 'n'),
+        array('classes',    Console\GetOption::REQUIRED_ARGUMENT, 'c'),
+        array('dry-run',    Console\GetOption::NO_ARGUMENT,       'd'),
+        array('help',       Console\GetOption::NO_ARGUMENT,       'h'),
+        array('help',       Console\GetOption::NO_ARGUMENT,       '?')
     );
 
 
@@ -117,7 +90,7 @@ class Generate extends \Hoa\Console\Dispatcher\Kit {
                     $namespace = trim(str_replace('.', '\\', $namespace), '\\');
 
                     if(false === $pos = strpos($namespace, '\\'))
-                        throw new \Hoa\Console\Exception(
+                        throw new Console\Exception(
                             'Namespace %s is too short.',
                             0, $namespace);
 
@@ -170,14 +143,14 @@ class Generate extends \Hoa\Console\Dispatcher\Kit {
                        : '');
         });
 
-        $phpBinary = \Hoa\Core::getPHPBinary()
-                         ?: \Hoa\Console\Processus::localte('php');
+        $phpBinary = Core::getPHPBinary()
+                         ?: Console\Processus::localte('php');
 
-        $envVariable   = '__HOA_ATOUM_PRASPEL_EXTENSION_' . md5(\Hoa\Core::uuid());
+        $envVariable   = '__HOA_ATOUM_PRASPEL_EXTENSION_' . md5(Core::uuid());
         $reflection    = null;
         $buffer        = null;
-        $reflectionner = new \Hoa\Console\Processus($phpBinary);
-        $reflectionner->on('input', function ( \Hoa\Core\Event\Bucket $bucket )
+        $reflectionner = new Console\Processus($phpBinary);
+        $reflectionner->on('input', function ( Core\Event\Bucket $bucket )
                                          use ( $envVariable ) {
 
             $bucket->getSource()->writeAll(
@@ -192,7 +165,7 @@ class Generate extends \Hoa\Console\Dispatcher\Kit {
 
             return false;
         });
-        $reflectionner->on('output', function ( \Hoa\Core\Event\Bucket $bucket )
+        $reflectionner->on('output', function ( Core\Event\Bucket $bucket )
                                      use ( &$buffer ) {
 
             $data    = $bucket->getData();
@@ -246,7 +219,7 @@ class Generate extends \Hoa\Console\Dispatcher\Kit {
 
             foreach($paths as $path) {
 
-                $length = \Hoa\String\Search::lcp(
+                $length = String\Search::lcp(
                     $reflection->getFilename(),
                     $path
                 );
@@ -263,7 +236,7 @@ class Generate extends \Hoa\Console\Dispatcher\Kit {
 
             if(false === $reflection->isInstantiable()) {
 
-                \Hoa\Console\Cursor::clear('↔');
+                Console\Cursor::clear('↔');
                 echo '  ⚡️ ', $status, '; not instantiable.', "\n";
                 continue;
             }
@@ -284,7 +257,7 @@ class Generate extends \Hoa\Console\Dispatcher\Kit {
                 echo "\n",
                      static::info('Content of the ' . $thePath . ':'),
                      "\n";
-                \Hoa\Console\Cursor::colorize('foreground(yellow)');
+                Console\Cursor::colorize('foreground(yellow)');
                 echo '    ┏', "\n",
                      '    ┃  ' ,
                      str_replace(
@@ -294,11 +267,11 @@ class Generate extends \Hoa\Console\Dispatcher\Kit {
                      ),
                      "\n",
                      '    ┗', "\n";
-                \Hoa\Console\Cursor::colorize('foreground(normal)');
+                Console\Cursor::colorize('foreground(normal)');
             }
 
-            \Hoa\Console\Cursor::clear('↔');
-            echo '  ', \Hoa\Console\Chrome\Text::colorize('✔︎', 'foreground(green)'),
+            Console\Cursor::clear('↔');
+            echo '  ', Console\Chrome\Text::colorize('✔︎', 'foreground(green)'),
                  ' ', $status, "\n";
         }
 
@@ -336,7 +309,7 @@ class Generate extends \Hoa\Console\Dispatcher\Kit {
      */
     protected static function info ( $message, $sub = false ) {
 
-        return \Hoa\Console\Chrome\Text::colorize(
+        return Console\Chrome\Text::colorize(
                   (false === $sub ? '# ' : '') . $message,
                   'foreground(yellow)'
                );
@@ -353,7 +326,7 @@ class Generate extends \Hoa\Console\Dispatcher\Kit {
     protected static function findClasses ( $root, $namespace ) {
 
         $out    = array();
-        $finder = new \Hoa\File\Finder();
+        $finder = new File\Finder();
         $finder->in($root)
                ->files()
                ->name('#^(?!\.).+\.php#');
@@ -375,8 +348,6 @@ class Generate extends \Hoa\Console\Dispatcher\Kit {
 
         return $out;
     }
-}
-
 }
 
 __halt_compiler();

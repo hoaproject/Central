@@ -34,23 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Test\Bin;
 
-from('Hoa')
-
-/**
- * \Hoa\Console\Processus
- */
--> import('Console.Processus')
-
-/**
- * \Hoa\File\Finder
- */
--> import('File.Finder');
-
-}
-
-namespace Hoa\Test\Bin {
+use Hoa\Console;
+use Hoa\File;
 
 /**
  * Class Hoa\Test\Bin\Run.
@@ -62,7 +49,7 @@ namespace Hoa\Test\Bin {
  * @license    New BSD License
  */
 
-class Run extends \Hoa\Console\Dispatcher\Kit {
+class Run extends Console\Dispatcher\Kit {
 
     /**
      * Options description.
@@ -70,13 +57,13 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
      * @var \Hoa\Test\Bin\Run array
      */
     protected $options = array(
-        array('all',         \Hoa\Console\GetOption::NO_ARGUMENT,       'a'),
-        array('libraries',   \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'l'),
-        array('namespaces',  \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'n'),
-        array('directories', \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'd'),
-        array('files',       \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'f'),
-        array('help',        \Hoa\Console\GetOption::NO_ARGUMENT,       'h'),
-        array('help',        \Hoa\Console\GetOption::NO_ARGUMENT,       '?')
+        array('all',         Console\GetOption::NO_ARGUMENT,       'a'),
+        array('libraries',   Console\GetOption::REQUIRED_ARGUMENT, 'l'),
+        array('namespaces',  Console\GetOption::REQUIRED_ARGUMENT, 'n'),
+        array('directories', Console\GetOption::REQUIRED_ARGUMENT, 'd'),
+        array('files',       Console\GetOption::REQUIRED_ARGUMENT, 'f'),
+        array('help',        Console\GetOption::NO_ARGUMENT,       'h'),
+        array('help',        Console\GetOption::NO_ARGUMENT,       '?')
     );
 
 
@@ -95,7 +82,7 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
         while(false !== $c = $this->getOption($v)) switch($c) {
 
             case 'a':
-                $iterator = new \Hoa\File\Finder();
+                $iterator = new File\Finder();
                 $iterator->in(resolve('hoa://Library/', true, true))
                          ->directories()
                          ->maxDepth(1);
@@ -124,7 +111,7 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
                     $tests       = $pathname . DS . 'Test';
 
                     if(!is_dir($tests))
-                        throw new \Hoa\Console\Exception(
+                        throw new Console\Exception(
                             'Library %s does not exist or has no test.',
                             0, $libraryName);
 
@@ -139,7 +126,7 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
                     $parts     = explode('\\', $namespace);
 
                     if(2 > count($parts))
-                        throw new \Hoa\Console\Exception(
+                        throw new Console\Exception(
                             'Namespace %s is too short.',
                             1, $namespace);
 
@@ -148,7 +135,7 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
                     $namespaceDirectory = $head . DS . $tail;
 
                     if(!is_dir($namespaceDirectory))
-                        throw new \Hoa\Console\Exception(
+                        throw new Console\Exception(
                             'Namespace %s does not exist.',
                             2, $namespace);
 
@@ -168,7 +155,7 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
                 foreach($this->parser->parseSpecialValue($v) as $directory) {
 
                     if(!is_dir($directory))
-                        throw new \Hoa\Console\Exception(
+                        throw new Console\Exception(
                             'Directory %s does not exist.',
                             3, $directory);
 
@@ -180,7 +167,7 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
                 foreach($this->parser->parseSpecialValue($v) as $file) {
 
                     if(!file_exists($file))
-                        throw new \Hoa\Console\Exception(
+                        throw new Console\Exception(
                             'File %s does not exist.',
                             4, $file);
 
@@ -218,7 +205,7 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
         else
             return $this->usage();
 
-        $processus = new \Hoa\Console\Processus($command);
+        $processus = new Console\Processus($command);
         $processus->on('input', function ( $bucket ) {
 
             return false;
@@ -257,8 +244,6 @@ class Run extends \Hoa\Console\Dispatcher\Kit {
 
         return;
     }
-}
-
 }
 
 __halt_compiler();
