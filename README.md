@@ -15,6 +15,23 @@ encryption, remote informations etc. Such a connection, along with an abstract
 connection handler, allows to embed and “merge” many connections inside the same
 processus side-by-side.
 
+## Installation
+
+With [Composer](http://getcomposer.org/), to include this library into your
+dependencies, you need to require
+[`hoa/socket`](https://packagist.org/packages/hoa/socket):
+
+```json
+{
+    "require": {
+        "hoa/socket": "~0.0"
+    }
+}
+```
+
+Please, read the website to [get more informations about how to
+install](http://hoa-project.net/Source.html).
+
 ## Quick usage
 
 As a quick overview, we will look at creating a server and a client, and
