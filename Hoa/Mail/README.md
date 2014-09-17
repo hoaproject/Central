@@ -12,6 +12,23 @@ Email can be sent with sendmail or SMTP. The SMTP layer supports TLS and
 
 In a near future, this library will also allow to receive and parse emails.
 
+## Installation
+
+With [Composer](http://getcomposer.org/), to include this library into your
+dependencies, you need to require
+[`hoa/mail`](https://packagist.org/packages/hoa/mail):
+
+```json
+{
+    "require": {
+        "hoa/mail": "~0.0"
+    }
+}
+```
+
+Please, read the website to [get more informations about how to
+install](http://hoa-project.net/Source.html).
+
 ## Quick usage
 
 We propose a quick overview to send a very simple email with only one content,
