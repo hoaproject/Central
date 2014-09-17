@@ -8,6 +8,23 @@ Moreover, Hoa aims at being a bridge between industrial and research worlds.
 This library allows to get the informations of the locale from the system, the
 HTTP client or something else.
 
+## Installation
+
+With [Composer](http://getcomposer.org/), to include this library into your
+dependencies, you need to require
+[`hoa/locale`](https://packagist.org/packages/hoa/locale):
+
+```json
+{
+    "require": {
+        "hoa/locale": "~0.0"
+    }
+}
+```
+
+Please, read the website to [get more informations about how to
+install](http://hoa-project.net/Source.html).
+
 ## Quick usage
 
 We propose a quick overview to get the locale and related informations about an
