@@ -15,6 +15,23 @@ The link between libraries and the application is represented by a kit which
 aggregates all important data, such as the dispatcher, the router, the view and
 data associated to the view.
 
+## Installation
+
+With [Composer](http://getcomposer.org/), to include this library into your
+dependencies, you need to require
+[`hoa/dispatcher`](https://packagist.org/packages/hoa/dispatcher):
+
+```json
+{
+    "require": {
+        "hoa/dispatcher": "~0.0"
+    }
+}
+```
+
+Please, read the website to [get more informations about how to
+install](http://hoa-project.net/Source.html).
+
 ## Quick usage
 
 We propose a quick overview of the basic dispatcher represented by the class
