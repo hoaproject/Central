@@ -16,6 +16,23 @@ A view is defined by 4 methods:
 
 That's all.
 
+## Installation
+
+With [Composer](http://getcomposer.org/), to include this library into your
+dependencies, you need to require
+[`hoa/view`](https://packagist.org/packages/hoa/view):
+
+```json
+{
+    "require": {
+        "hoa/view": "~2.0"
+    }
+}
+```
+
+Please, read the website to [get more informations about how to
+install](http://hoa-project.net/Source.html).
+
 ## Documentation
 
 Different documentations can be found on the website:
