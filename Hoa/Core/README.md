@@ -5,8 +5,8 @@ Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
 # Hoa\Core ![state](http://central.hoa-project.net/State/Core)
 
-This library is the foundation —the core— of all libraries of Hoa. It proposes
-fundamentals algorithms, paradigms and mechanisms, organized as follows:
+This library is the foundation —the core— of all libraries of Hoa. It provides
+fundamental algorithms, paradigms and mechanisms, organized as follows:
 
   * Core: core of the core;
   * Consistency: adds consistency to PHP (`from`/`import`, `xcallable`, `dnew`,
@@ -35,7 +35,6 @@ var_dump(HOA); // bool(true)
 
 With [Composer](https://getcomposer.org/), you do not need to require
 `Core.php`, only `vendor/autoload.php` as usual.
-
 
 ## Quick usage
 
