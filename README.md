@@ -9,6 +9,23 @@ This library allows to analyze performance of algorithms or programs by placing
 some “marks” in the code. Furthermore, this library provides some
 [DTrace](http://dtrace.org/guide/) programs.
 
+## Installation
+
+With [Composer](http://getcomposer.org/), to include this library into your
+dependencies, you need to require
+[`hoa/bench`](https://packagist.org/packages/hoa/bench):
+
+```json
+{
+    "require": {
+        "hoa/bench": "~2.0"
+    }
+}
+```
+
+Please, read the website to [get more informations about how to
+install](http://hoa-project.net/Source.html).
+
 ## Quick usage
 
 We propose a quick overview of two usages: the library itself and one DTrace
