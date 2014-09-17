@@ -23,8 +23,8 @@
     "require": {
         "atoum/atoum"            : "dev-extension",
         "atoum/praspel-extension": "dev-master",
-        "hoa/console"            : "~1.0",
-        "hoa/core"               : "~1.0",
+        "hoa/console"            : "~2.0",
+        "hoa/core"               : "~2.0",
         "hoa/file"               : "~0.0"
     },
     "target-dir": "Hoa/Test",
