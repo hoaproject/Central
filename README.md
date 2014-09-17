@@ -5,7 +5,7 @@ Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
 # Hoa\Dns ![state](http://central.hoa-project.net/State/Dns)
 
-This library allows to resolve domain name according to their types.
+This library allows to create a domain name resolver.
 
 ## Quick usage
 
@@ -46,7 +46,7 @@ Well, now, we will create our resolution server that will listen
 file:
 
 ```php
-$dns = new Hoa\Dns\Dns(
+$dns = new Hoa\Dns\Resolver(
     new Hoa\Socket\Server('udp://127.0.0.1:57005')
 );
 $dns->on('query', function ( Hoa\Core\Event\Bucket $bucket ) {
@@ -71,17 +71,17 @@ index responds `yeah \o/`, then we start our resolver:
 $ php Resolver.php
 ```
 
-And we make a HTTP request on `foo.hoa` (that will be resolve to `127.0.0.1`):
+And we make an HTTP request on `foo.hoa` (that will be resolve to `127.0.0.1`):
 
 ```sh
 $ curl foo.hoa --verbose
-* About to connect() to foo.hoa port 8888 (#0)
+* About to connect() to foo.hoa port 80 (#0)
 *   Trying 127.0.0.1... connected
-* Connected to foo.hoa (127.0.0.1) port 8888 (#0)
+* Connected to foo.hoa (127.0.0.1) port 80 (#0)
 > GET / HTTP/1.1
 > User-Agent: curl/a.b.c (…) libcurl/d.e.f
 > OpenSSL/g.h.i zlib/j.k.l
-> Host: foo.hoa:8888
+> Host: foo.hoa:80
 > Accept: */*
 >
 < HTTP/1.1 200 OK
