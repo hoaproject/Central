@@ -7,6 +7,23 @@ Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
 This library allows to create a domain name resolver.
 
+## Installation
+
+With [Composer](http://getcomposer.org/), to include this library into your
+dependencies, you need to require
+[`hoa/dns`](https://packagist.org/packages/hoa/dns):
+
+```json
+{
+    "require": {
+        "hoa/dns": "~2.0"
+    }
+}
+```
+
+Please, read the website to [get more informations about how to
+install](http://hoa-project.net/Source.html).
+
 ## Quick usage
 
 As a quick overview, we propose to create our own resolution server for the top
