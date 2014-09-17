@@ -10,6 +10,23 @@ This library provides tools to create and run tests for Hoa libraries.
 In each library, a `Test/` directory contains test suites. So far, only unit
 tests are supported. They are written with [atoum](http://atoum.org/).
 
+## Installation
+
+With [Composer](http://getcomposer.org/), to include this library into your
+dependencies, you need to require
+[`hoa/test`](https://packagist.org/packages/hoa/test):
+
+```json
+{
+    "require": {
+        "hoa/test": "~0.0"
+    }
+}
+```
+
+Please, read the website to [get more informations about how to
+install](http://hoa-project.net/Source.html).
+
 ## Quick usage
 
 As a quick overview, we see how to execute, write and generate unit tests. Let
