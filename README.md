@@ -12,6 +12,23 @@ request.
 For now, we have two routers: HTTP (routes understand URI and subdomains) and
 CLI (routes understand a full command-line).
 
+## Installation
+
+With [Composer](http://getcomposer.org/), to include this library into your
+dependencies, you need to require
+[`hoa/router`](https://packagist.org/packages/hoa/router):
+
+```json
+{
+    "require": {
+        "hoa/router": "~2.0"
+    }
+}
+```
+
+Please, read the website to [get more informations about how to
+install](http://hoa-project.net/Source.html).
+
 ## Quick usage
 
 We propose a quick overview of two usages: in a HTTP context and in a CLI
