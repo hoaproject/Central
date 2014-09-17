@@ -34,43 +34,42 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Test\Unit;
+namespace Hoa\Test\Protocol;
 
 use Hoa\Core;
-use Hoa\Test;
 use atoum;
 
 /**
- * Class \Hoa\Test\Unit\Suite.
+ * Class \Hoa\Test\Protocol\Vfs.
  *
- * Represent a unit test suite.
+ * Create the hoa://Test/Vfs/ component.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2014 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Suite extends atoum\test {
+class Vfs extends Core\Protocol {
 
-    public function __construct ( ) {
+    /**
+     * Component's name.
+     *
+     * @var \Hoa\Core\Protocol string
+     */
+    protected $_name = 'Vfs';
 
-        $this->setMethodPrefix('case');
-        parent::__construct();
 
-        $protocol = Core::getInstance()->getProtocol();
-        $protocol['Test']        = new Core\Protocol\Generic('Test', null);
-        $protocol['Test']['Vfs'] = new Test\Protocol\Vfs();
 
-        return;
-    }
+    /**
+     * Queue of the component.
+     *
+     * @access  public
+     * @param   string  $queue    Queue of the component (generally, a filename,
+     *                            with probably a query).
+     * @return  mixed
+     */
+    public function reach ( $queue = null ) {
 
-    public function getTestedClassName ( ) {
-
-        return 'StdClass';
-    }
-
-    public function getTestClassNamespace ( ) {
-
-        return '\\';
+        return (string) atoum\mock\streams\fs\file::get($queue);
     }
 }
