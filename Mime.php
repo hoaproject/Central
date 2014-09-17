@@ -145,14 +145,14 @@ class Mime implements Core\Parameter\Parameterizable {
      * @throw   \Hoa\Mime\Exception
      */
     public function __construct ( Stream $stream,
-                                  Array $parameters = array() ) {
+                                  Array $parameters = [] ) {
 
         $this->_parameters = new Core\Parameter(
             $this,
-            array(),
-            array(
+            [],
+            [
                 'magic' => null
-            )
+            ]
         );
         $this->_parameters->setParameters($parameters);
         $magic = $this->_parameters->getParameter('magic');
@@ -202,10 +202,10 @@ class Mime implements Core\Parameter\Parameterizable {
             throw new Exception(
                 'Magic file %s does not exist.', 0, $magic);
 
-        static::$_computed = array(
-            self::STRUCTURE_MEDIA_TYPE => array(),
-            self::STRUCTURE_EXTENSION  => array()
-        );
+        static::$_computed = [
+            self::STRUCTURE_MEDIA_TYPE => [],
+            self::STRUCTURE_EXTENSION  => []
+        ];
         $s_media_type    = &static::$_computed[self::STRUCTURE_MEDIA_TYPE];
         $s_extension     = &static::$_computed[self::STRUCTURE_EXTENSION];
         $splashed        = file($magic);
@@ -254,11 +254,11 @@ class Mime implements Core\Parameter\Parameterizable {
                     'Magic file %s seems to be corrupted (at line %d). ' .
                     'You should take a look at this piece of code:' .
                     $message,
-                    1, array($magic, $i), $exception);
+                    1, [$magic, $i], $exception);
             }
 
             if(!isset($s_media_type[$media]))
-                $s_media_type[$media] = array();
+                $s_media_type[$media] = [];
 
             if(null == $extensions) {
 
@@ -401,7 +401,7 @@ class Mime implements Core\Parameter\Parameterizable {
      */
     public function getOtherExtensions ( ) {
 
-        $out     = array();
+        $out     = [];
         $current = $this->getExtension();
         $others  = self::$_computed[self::STRUCTURE_MEDIA_TYPE]
                                    [$this->getMedia()]
