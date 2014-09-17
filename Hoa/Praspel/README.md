@@ -18,6 +18,23 @@ around the Praspel language.
 An interesting related project is
 [`atoum/praspel-extension`](http://central.hoa-project.net/Resource/Contributions/Atoum/PraspelExtension).
 
+## Installation
+
+With [Composer](http://getcomposer.org/), to include this library into your
+dependencies, you need to require
+[`hoa/praspel`](https://packagist.org/packages/hoa/praspel):
+
+```json
+{
+    "require": {
+        "hoa/praspel": "~0.0"
+    }
+}
+```
+
+Please, read the website to [get more informations about how to
+install](http://hoa-project.net/Source.html).
+
 ## Documentation
 
 Different documentations can be found on the website:
