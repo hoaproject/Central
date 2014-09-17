@@ -17,6 +17,23 @@ Some features from PHP5.4+ can be used naturally as defined in the documentation
 with prior versions, such as the `SessionHandlerInterface` interface or the
 `session_register_shutdown` function.
 
+## Installation
+
+With [Composer](http://getcomposer.org/), to include this library into your
+dependencies, you need to require
+[`hoa/session`](https://packagist.org/packages/hoa/session):
+
+```json
+{
+    "require": {
+        "hoa/session": "~0.0"
+    }
+}
+```
+
+Please, read the website to [get more informations about how to
+install](http://hoa-project.net/Source.html).
+
 ## Quick usage
 
 We propose a quick overview of three usages: manipulating a namespace,
