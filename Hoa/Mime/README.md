@@ -8,6 +8,23 @@ Moreover, Hoa aims at being a bridge between industrial and research worlds.
 This library allows to manipulate a MIME types database and get some related
 informations about streams.
 
+## Installation
+
+With [Composer](http://getcomposer.org/), to include this library into your
+dependencies, you need to require
+[`hoa/mime`](https://packagist.org/packages/hoa/mime):
+
+```json
+{
+    "require": {
+        "hoa/mime": "~2.0"
+    }
+}
+```
+
+Please, read the website to [get more informations about how to
+install](http://hoa-project.net/Source.html).
+
 ## Quick usage
 
 As a quick overview, we will see how to get general and stream-related
