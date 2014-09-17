@@ -10,6 +10,23 @@ This library allows to transform a process into a zombie: not alive, nor dead!
 This is possible only if the program is running behind
 [PHP-FPM](http://php.net/install.fpm) (which manages processes for us).
 
+## Installation
+
+With [Composer](http://getcomposer.org/), to include this library into your
+dependencies, you need to require
+[`hoa/zombie`](https://packagist.org/packages/hoa/zombie):
+
+```json
+{
+    "require": {
+        "hoa/zombie": "~2.0"
+    }
+}
+```
+
+Please, read the website to [get more informations about how to
+install](http://hoa-project.net/Source.html).
+
 ## Quick usage
 
 To create a zombie, all we have to do is to call the `Hoa\Zombie\Zombie::fork`
