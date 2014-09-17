@@ -8,6 +8,23 @@ Moreover, Hoa aims at being a bridge between industrial and research worlds.
 This library offers a static registry that stores key/value combinations. Any
 kind of PHP variable can be stored: an array, an object, a resource…
 
+## Installation
+
+With [Composer](http://getcomposer.org/), to include this library into your
+dependencies, you need to require
+[`hoa/registry`](https://packagist.org/packages/hoa/registry):
+
+```json
+{
+    "require": {
+        "hoa/registry": "~2.0"
+    }
+}
+```
+
+Please, read the website to [get more informations about how to
+install](http://hoa-project.net/Source.html).
+
 ## Quick usage
 
 As a quick example, we set an entry and retrieve it. The retrieval can be done
