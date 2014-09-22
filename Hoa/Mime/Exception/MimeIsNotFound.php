@@ -34,18 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Mime\Exception
- */
--> import('Mime.Exception.~');
-
-}
-
-namespace Hoa\Mime\Exception {
+namespace Hoa\Mime\Exception;
 
 /**
  * Class \Hoa\Mime\MimeIsNotFound.
@@ -58,5 +47,3 @@ namespace Hoa\Mime\Exception {
  */
 
 class MimeIsNotFound extends Exception { }
-
-}

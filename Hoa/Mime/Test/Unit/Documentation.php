@@ -34,23 +34,62 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Mime\Exception;
+namespace Hoa\Mime\Test\Unit;
 
-use Hoa\Core;
+use Hoa\Test;
+use Hoa\Mime as HMime;
+use Hoa\File as HFile;
 
 /**
- * Class \Hoa\Mime\Exception.
+ * Class \Hoa\Mime\Test\Unit\Documentation.
  *
- * Extending the \Hoa\Core\Exception class.
+ * Test suite of the examples in the documentation.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2014 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Exception extends Core\Exception { }
+class Documentation extends Test\Unit\Suite {
 
-/**
- * Flex entity.
- */
-Core\Consistency::flexEntity('Hoa\Mime\Exception\Exception');
+    public function case_getExtensionsFromMime_text_html ( ) {
+
+        $this
+            ->given($mime = 'text/html')
+            ->when($extensions = HMime::getExtensionsFromMime($mime))
+            ->then
+                ->array($extensions)
+                    ->isEqualTo([
+                        0 => 'html',
+                        1 => 'htm'
+                    ]);
+    }
+
+    public function case_getMimeFromExtension_webm ( ) {
+
+        $this
+            ->given($extension = 'webm')
+            ->when($mime = HMime::getMimeFromExtension($extension))
+            ->then
+                ->string($mime)
+                    ->isEqualTo('video/webm');
+    }
+
+    public function case_stream ( ) {
+
+        $this
+            ->given($file = 'hoa://Test/Vfs/index.html')
+            ->when($type = new HMime(new HFile\Read($file)))
+            ->then
+                ->string($type->getExtension())
+                    ->isEqualTo('html')
+                ->array($type->getOtherExtensions())
+                    ->isEqualTo([
+                        0 => 'htm'
+                    ])
+                ->string($type->getMime())
+                    ->isEqualTo('text/html')
+                ->boolean($type->isExperimental())
+                    ->isFalse();
+    }
+}

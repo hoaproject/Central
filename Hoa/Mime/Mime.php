@@ -34,23 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Mime;
 
-from('Hoa')
-
-/**
- * \Hoa\Mime\Exception
- */
--> import('Mime.Exception.~')
-
-/**
- * \Hoa\Mime\Exception\MimeIsNotFound
- */
--> import('Mime.Exception.MimeIsNotFound');
-
-}
-
-namespace Hoa\Mime {
+use Hoa\Core;
+use Hoa\Stream;
 
 /**
  * Class \Hoa\Mime.
@@ -63,7 +50,7 @@ namespace Hoa\Mime {
  * @license    New BSD License
  */
 
-class Mime implements \Hoa\Core\Parameter\Parameterizable {
+class Mime implements Core\Parameter\Parameterizable {
 
     /**
      * Structure: media/type part.
@@ -155,17 +142,17 @@ class Mime implements \Hoa\Core\Parameter\Parameterizable {
      * @param   \Hoa\Stream  $stream        Stream to study.
      * @param   array        $parameters    Parameters.
      * @return  void
-     * @throw   \Hoa\Controller\Exception
+     * @throw   \Hoa\Mime\Exception
      */
-    public function __construct ( \Hoa\Stream $stream,
-                                  Array $parameters = array() ) {
+    public function __construct ( Stream $stream,
+                                  Array $parameters = [] ) {
 
-        $this->_parameters = new \Hoa\Core\Parameter(
+        $this->_parameters = new Core\Parameter(
             $this,
-            array(),
-            array(
+            [],
+            [
                 'magic' => null
-            )
+            ]
         );
         $this->_parameters->setParameters($parameters);
         $magic = $this->_parameters->getParameter('magic');
@@ -215,10 +202,10 @@ class Mime implements \Hoa\Core\Parameter\Parameterizable {
             throw new Exception(
                 'Magic file %s does not exist.', 0, $magic);
 
-        static::$_computed = array(
-            self::STRUCTURE_MEDIA_TYPE => array(),
-            self::STRUCTURE_EXTENSION  => array()
-        );
+        static::$_computed = [
+            self::STRUCTURE_MEDIA_TYPE => [],
+            self::STRUCTURE_EXTENSION  => []
+        ];
         $s_media_type    = &static::$_computed[self::STRUCTURE_MEDIA_TYPE];
         $s_extension     = &static::$_computed[self::STRUCTURE_EXTENSION];
         $splashed        = file($magic);
@@ -267,11 +254,11 @@ class Mime implements \Hoa\Core\Parameter\Parameterizable {
                     'Magic file %s seems to be corrupted (at line %d). ' .
                     'You should take a look at this piece of code:' .
                     $message,
-                    1, array($magic, $i), $exception);
+                    1, [$magic, $i], $exception);
             }
 
             if(!isset($s_media_type[$media]))
-                $s_media_type[$media] = array();
+                $s_media_type[$media] = [];
 
             if(null == $extensions) {
 
@@ -368,11 +355,11 @@ class Mime implements \Hoa\Core\Parameter\Parameterizable {
      * @return  void
      * @throw   \Hoa\Mime\Exception\MimeIsNotFound
      */
-    protected function _find ( \Hoa\Stream $stream ) {
+    protected function _find ( Stream $stream ) {
 
         $name = $stream->getStreamName();
 
-        if($stream instanceof \Hoa\Stream\IStream\Pathable)
+        if($stream instanceof Stream\IStream\Pathable)
             $based = $stream->getBasename();
         else
             $based = basename($name);
@@ -414,7 +401,7 @@ class Mime implements \Hoa\Core\Parameter\Parameterizable {
      */
     public function getOtherExtensions ( ) {
 
-        $out     = array();
+        $out     = [];
         $current = $this->getExtension();
         $others  = self::$_computed[self::STRUCTURE_MEDIA_TYPE]
                                    [$this->getMedia()]
@@ -483,13 +470,7 @@ class Mime implements \Hoa\Core\Parameter\Parameterizable {
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Mime\Mime');
-
-}
+Core\Consistency::flexEntity('Hoa\Mime\Mime');

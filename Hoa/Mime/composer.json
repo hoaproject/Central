@@ -24,6 +24,9 @@
         "hoa/core"  : "~2.0",
         "hoa/stream": "~0.0"
     },
+    "require-dev": {
+        "hoa/file": "~0.0"
+    },
     "target-dir": "Hoa/Mime",
     "autoload"  : { "psr-0": { "Hoa\\Mime": "." } }
 }
