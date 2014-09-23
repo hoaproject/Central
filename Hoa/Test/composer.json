@@ -28,5 +28,10 @@
         "hoa/file"               : "~0.0"
     },
     "target-dir": "Hoa/Test",
-    "autoload"  : { "psr-0": { "Hoa\\Test": "." } }
+    "autoload"  : { "psr-0": { "Hoa\\Test": "." } },
+    "extra"     : {
+        "branch-alias": {
+            "dev-master": "0.x-dev"
+        }
+    }
 }
