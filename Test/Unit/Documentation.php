@@ -37,8 +37,8 @@
 namespace Hoa\Mime\Test\Unit;
 
 use Hoa\Test;
-use Hoa\Mime as HMime;
-use Hoa\File as HFile;
+use Hoa\Mime as LUT;
+use Hoa\File;
 
 /**
  * Class \Hoa\Mime\Test\Unit\Documentation.
@@ -56,7 +56,7 @@ class Documentation extends Test\Unit\Suite {
 
         $this
             ->given($mime = 'text/html')
-            ->when($extensions = HMime::getExtensionsFromMime($mime))
+            ->when($extensions = LUT::getExtensionsFromMime($mime))
             ->then
                 ->array($extensions)
                     ->isEqualTo([
@@ -69,7 +69,7 @@ class Documentation extends Test\Unit\Suite {
 
         $this
             ->given($extension = 'webm')
-            ->when($mime = HMime::getMimeFromExtension($extension))
+            ->when($mime = LUT::getMimeFromExtension($extension))
             ->then
                 ->string($mime)
                     ->isEqualTo('video/webm');
@@ -79,7 +79,7 @@ class Documentation extends Test\Unit\Suite {
 
         $this
             ->given($file = 'hoa://Test/Vfs/index.html')
-            ->when($type = new HMime(new HFile\Read($file)))
+            ->when($type = new LUT(new File\Read($file)))
             ->then
                 ->string($type->getExtension())
                     ->isEqualTo('html')
