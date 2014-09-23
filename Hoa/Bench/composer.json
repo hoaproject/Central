@@ -25,5 +25,10 @@
         "hoa/core": "~2.0"
     },
     "target-dir": "Hoa/Bench",
-    "autoload"  : { "psr-0": { "Hoa\\Bench": "." } }
+    "autoload"  : { "psr-0": { "Hoa\\Bench": "." } },
+    "extra"     : {
+        "branch-alias": {
+            "dev-master": "2.x-dev"
+        }
+    }
 }
