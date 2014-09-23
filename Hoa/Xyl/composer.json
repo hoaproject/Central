@@ -33,5 +33,10 @@
         "hoa/xml"         : "~0.0"
     },
     "target-dir": "Hoa/Xyl",
-    "autoload"  : { "psr-0": { "Hoa\\Xyl": "." } }
+    "autoload"  : { "psr-0": { "Hoa\\Xyl": "." } },
+    "extra"     : {
+        "branch-alias": {
+            "dev-master": "0.x-dev"
+        }
+    }
 }
