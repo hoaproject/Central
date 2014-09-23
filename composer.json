@@ -36,5 +36,10 @@
         "psr-0": { "Hoa\\Core": "." },
         "files": ["Core.php"]
     },
-    "bin": ["Bin/hoa"]
+    "bin"  : ["Bin/hoa"],
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.x-dev"
+        }
+    }
 }
