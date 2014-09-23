@@ -28,5 +28,10 @@
     "suggest"   : {
         "hoa/router": "Provide routers.",
         "hoa/stream": "Provide stream interfaces."
+    },
+    "extra"     : {
+        "branch-alias": {
+            "dev-master": "2.x-dev"
+        }
     }
 }
