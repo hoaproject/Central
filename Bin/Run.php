@@ -62,6 +62,7 @@ class Run extends Console\Dispatcher\Kit {
         array('namespaces',  Console\GetOption::REQUIRED_ARGUMENT, 'n'),
         array('directories', Console\GetOption::REQUIRED_ARGUMENT, 'd'),
         array('files',       Console\GetOption::REQUIRED_ARGUMENT, 'f'),
+        array('debug',       Console\GetOption::NO_ARGUMENT,       'D'),
         array('help',        Console\GetOption::NO_ARGUMENT,       'h'),
         array('help',        Console\GetOption::NO_ARGUMENT,       '?')
     );
@@ -78,6 +79,7 @@ class Run extends Console\Dispatcher\Kit {
 
         $directories = array();
         $files       = array();
+        $debug       = false;
 
         while(false !== $c = $this->getOption($v)) switch($c) {
 
@@ -175,6 +177,10 @@ class Run extends Console\Dispatcher\Kit {
                 }
               break;
 
+            case 'D':
+                $debug = $v;
+              break;
+
             case '__ambiguous':
                 $this->resolveOptionAmbiguity($v);
               break;
@@ -197,6 +203,9 @@ class Run extends Console\Dispatcher\Kit {
                    ' --bootstrap-file ' .
                        resolve('hoa://Library/Test/.bootstrap.atoum.php') .
                    ' --force-terminal';
+
+        if(true === $debug)
+            $command .= ' --debug';
 
         if(!empty($directories))
             $command .= ' --directories ' . implode(' ', $directories);
@@ -239,6 +248,7 @@ class Run extends Console\Dispatcher\Kit {
                  'n'    => 'Run tests of some namespaces.',
                  'd'    => 'Run tests of some directories.',
                  'f'    => 'Run tests of some files.',
+                 'D'    => 'Activate the debugging mode.',
                  'help' => 'This help.'
              )), "\n";
 
