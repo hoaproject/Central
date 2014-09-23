@@ -34,23 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Bench;
 
-from('Hoa')
-
-/**
- * \Hoa\Bench\Exception
- */
--> import('Bench.Exception')
-
-/**
- * \Hoa\Bench\Mark
- */
--> import('Bench.Mark');
-
-}
-
-namespace Hoa\Bench {
+use Hoa\Core;
 
 /**
  * Class \Hoa\Bench.
@@ -399,13 +385,7 @@ class Bench implements \Iterator, \Countable {
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Bench\Bench');
-
-}
+Core\Consistency::flexEntity('Hoa\Bench\Bench');
