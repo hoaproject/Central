@@ -28,5 +28,10 @@
         "hoa/file": "~0.0"
     },
     "target-dir": "Hoa/Mime",
-    "autoload"  : { "psr-0": { "Hoa\\Mime": "." } }
+    "autoload"  : { "psr-0": { "Hoa\\Mime": "." } },
+    "extra"     : {
+        "branch-alias": {
+            "dev-master": "2.x-dev"
+        }
+    }
 }
