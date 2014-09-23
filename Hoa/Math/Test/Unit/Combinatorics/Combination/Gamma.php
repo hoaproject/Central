@@ -34,68 +34,74 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Math\Combinatorics\Combination;
+namespace Hoa\Math\Test\Unit\Sampler\Combinatorics\Combination;
 
-use Hoa\Core;
+use Hoa\Math\Combinatorics\Combination\Gamma as CUT;
+use Hoa\Test;
 
 /**
- * Class \Hoa\Math\Combinatorics\Combination.
+ * Class \Hoa\Math\Test\Unit\Sampler\Combinatorics\Combination\Gamma.
  *
- * Some functions related to combinatorics.
+ * Test suite of the Γ iterator.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2014 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Combination {
+class Gamma extends Test\Unit\Suite {
 
-    /**
-     * Γ^n_k denotes the set of k-uples whose sum of elements is n. For example:
-     * Γ^3_2 = {(2, 0, 0), (1, 1, 0), (1, 0, 1), (0, 2, 0), (0, 1, 1), (0, 0,
-     * 2)}. For any k-uple γ and any α in {1, …, k}, γ_α denotes the α-th
-     * element of γ.
-     *
-     * @access  public
-     * @param   int   $n              n.
-     * @param   int   $k              k.
-     * @param   bool  $withoutZero    Do not produce solutions with a zero
-     *                                inside.
-     * @return  array
-     */
-    public static function Γ ( $n, $k, $withoutZero = false ) {
+    public function case_empty ( ) {
 
-        if(0 === $n)
-            return [];
+        $this
+            ->given(
+                $n        = 0,
+                $k        = 0,
+                $iterator = new CUT($n, $k)
+            )
+            ->when($result = iterator_to_array($iterator))
+            ->then
+                ->array($result)
+                    ->isEmpty();
+    }
 
-        $out  = [];
-        $tmp  = null;
-        $i    = 0;
-        $o    = array_fill(0, $n, 0);
-        $o[0] = $k;
+    public function case_n2_k3 ( ) {
 
-        while($k != $o[$i = $n - 1]) {
+        $this
+            ->given(
+                $n        = 2,
+                $k        = 3,
+                $iterator = new CUT($n, $k)
+            )
+            ->when($result = iterator_to_array($iterator))
+            ->then
+                ->array($result)
+                    ->isEqualTo([
+                        [3, 0],
+                        [2, 1],
+                        [1, 2],
+                        [0, 3]
+                    ]);
+    }
 
-            if(false === $withoutZero || !in_array(0, $o))
-                $out[] = $o;
+    public function case_n3_k2 ( ) {
 
-            $tmp   = $o[$i];
-            $o[$i] = 0;
-
-            while($o[$i] == 0) --$i;
-
-            --$o[$i];
-            $o[$i + 1] = $tmp + 1;
-        }
-
-        if(false === $withoutZero || !in_array(0, $o))
-            $out[] = $o;
-
-        return $out;
+        $this
+            ->given(
+                $n        = 3,
+                $k        = 2,
+                $iterator = new CUT($n, $k)
+            )
+            ->when($result = iterator_to_array($iterator))
+            ->then
+                ->array($result)
+                    ->isEqualTo([
+                        [2, 0, 0],
+                        [1, 1, 0],
+                        [1, 0, 1],
+                        [0, 2, 0],
+                        [0, 1, 1],
+                        [0, 0, 2]
+                    ]);
     }
 }
-
-/**
- * Flex entity.
- */
-Core\Consistency::flexEntity('Hoa\Math\Combinatorics\Combination\Combination');
