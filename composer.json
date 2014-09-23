@@ -28,7 +28,7 @@
     "suggest"   : {
         "hoa/socket": "Provide sockets."
     },
-    "extra"     : {
+    "extra": {
         "branch-alias": {
             "dev-master": "2.x-dev"
         }
