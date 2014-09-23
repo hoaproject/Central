@@ -26,5 +26,10 @@
         "ext-session": "*"
     },
     "target-dir": "Hoa/Session",
-    "autoload"  : { "psr-0": { "Hoa\\Session": "." } }
+    "autoload"  : { "psr-0": { "Hoa\\Session": "." } },
+    "extra"     : {
+        "branch-alias": {
+            "dev-master": "0.x-dev"
+        }
+    }
 }
