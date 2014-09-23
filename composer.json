@@ -26,5 +26,10 @@
         "ext-pdo" : "*"
     },
     "target-dir": "Hoa/Database",
-    "autoload"  : { "psr-0": { "Hoa\\Database": "." } }
+    "autoload"  : { "psr-0": { "Hoa\\Database": "." } },
+    "extra"     : {
+        "branch-alias": {
+            "dev-master": "0.x-dev"
+        }
+    }
 }
