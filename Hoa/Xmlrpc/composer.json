@@ -25,5 +25,10 @@
         "hoa/socket": "~0.0"
     },
     "target-dir": "Hoa/Xmlrpc",
-    "autoload"  : { "psr-0": { "Hoa\\Xmlrpc": "." } }
+    "autoload"  : { "psr-0": { "Hoa\\Xmlrpc": "." } },
+    "extra"     : {
+        "branch-alias": {
+            "dev-master": "0.x-dev"
+        }
+    }
 }
