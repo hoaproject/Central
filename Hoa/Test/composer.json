@@ -22,7 +22,7 @@
     },
     "require": {
         "atoum/atoum"            : "dev-extension",
-        "atoum/praspel-extension": "dev-master",
+        "atoum/praspel-extension": "~0.0",
         "hoa/console"            : "~2.0",
         "hoa/core"               : "~2.0",
         "hoa/file"               : "~0.0"
