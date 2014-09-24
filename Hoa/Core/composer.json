@@ -25,6 +25,9 @@
         "php"    : ">=5.4.0",
         "ext-spl": "*"
     },
+    "require-dev": {
+        "hoa/test": "~0.0"
+    },
     "suggest": {
         "hoa/console"   : "To use the `hoa` script.",
         "hoa/dispatcher": "To use the `hoa` script.",
