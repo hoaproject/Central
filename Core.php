@@ -46,10 +46,10 @@ and
     exit('Hoa main file (Core.php) must be included once.');
 
 (
-    !defined('PHP_VERSION_ID') or PHP_VERSION_ID < 50303
+    !defined('PHP_VERSION_ID') or PHP_VERSION_ID < 50400
 )
 and
-    exit('Hoa needs at least PHP5.3.3 to work; you have ' . phpversion() . '.');
+    exit('Hoa needs at least PHP5.4 to work; you have ' . phpversion() . '.');
 
 /**
  * \Hoa\Core\Consistency
