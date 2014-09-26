@@ -16,7 +16,8 @@
   <p><code>Hoa\Bench</code> propose deux manières d'<strong>analyser</strong>
   son application : avec PHP lui-même, ou alors avec
   <a href="http://dtrace.org/guide/">DTrace</a>, grâce à des programmes présents
-  dans le dossier <code>hoa://Library/Bench/Dtrace/</code>.</p>
+  dans le dossier
+  <a href="@central_resource:path=Library/Bench/Dtrace/"><code>hoa://Library/Bench/Dtrace/</code></a>.</p>
 
   <h2 id="Place_marks" for="main-toc">Placer des marques</h2>
 
@@ -199,7 +200,8 @@ if(isset($bench->foo))
   <h2 id="DTrace" for="main-toc">DTrace</h2>
 
   <p>La bibliothèque <code>Hoa\Bench</code> fournit également des programmes
-  DTrace dans le dossier <code>hoa://Library/Bench/Dtrace/</code>.  DTrace
+  DTrace dans le dossier
+  <a href="@central_resource:path=Library/Bench/Dtrace/"><code>hoa://Library/Bench/Dtrace/</code></a>.  DTrace
   permet de générer des <strong>traces</strong> afin de détecter des problèmes
   en temps réel dans un environnement de production. Il est intégré au niveau du
   noyau et au niveau applicatif, ce qui lui assure d'excellentes
@@ -222,8 +224,8 @@ function h ( ) {           }
 f();</code></pre>
   <p>Ce fichier est très simple mais il va nous servir de test pour exécuter le
   premier programme DTrace, à savoir
-  <code>hoa://Library/Bench/Dtrace/Execution.d</code>. Attention, il faut
-  exécuter DTrace en étant super-utilisateur ; ainsi :</p>
+  <a href="@central_resource:path=Library/Bench/Dtrace/Execution.d"><code>hoa://Library/Bench/Dtrace/Execution.d</code></a>.
+  Attention, il faut exécuter DTrace en étant super-utilisateur ; ainsi :</p>
   <pre><code class="language-shell">$ exed=`hoa core:resolve hoa://Library/Bench/Dtrace/Execution.d`
 $ sudo $exed -c "php Dtrace.php"
 Request start
@@ -263,11 +265,11 @@ Request start
 ✔          Exception has been caught
 Request end</code></pre>
   <p>Le second programme DTrace est
-  <code>hoa://Library/Bench/Dtrace/Stat.d</code> et permet de collecter quelques
-  statistiques sur l'exécution comme la liste de toutes les fonctions et
-  méthodes appelées avec leur nombre d'appels et la distribution du temps
-  d'exécution. Par exemple, si nous essayons sur notre première version de
-  <code>Dtrace.php</code>, nous allons avoir :</p>
+  <a href="@central_resource:path=Library/Bench/Dtrace/Stat.d"><code>hoa://Library/Bench/Dtrace/Stat.d</code></a>
+  et permet de collecter quelques statistiques sur l'exécution comme la liste de
+  toutes les fonctions et méthodes appelées avec leur nombre d'appels et la
+  distribution du temps d'exécution. Par exemple, si nous essayons sur notre
+  première version de <code>Dtrace.php</code>, nous allons avoir :</p>
   <pre><code class="language-shell">$ exed=`hoa core:resolve hoa://Library/Bench/Dtrace/Stat.d`
 $ sudo $exed -c "php Dtrace.php"
 Count calls:
