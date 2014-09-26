@@ -87,9 +87,9 @@ var_dump(Hoa\Mime\Mime::getMimeFromExtension('webm'));
   thanks to the <code>Hoa\Mime\Mime::extensionExists</code> method (still
   static).</p>
   <p>By default, <code>Hoa\Mime\Mime</code> will use the
-  <code>hoa://Library/Mime/Mime.types</code> file as a
-  <strong>database</strong>. We can specify <strong>another</strong> file by
-  using the <code>Hoa\Mime\Mime::compute</code> method:</p>
+  <a href="@central_resource:path=Library/Mime/Mime.types"><code>hoa://Library/Mime/Mime.types</code></a>
+  file as a <strong>database</strong>. We can specify <strong>another</strong>
+  file by using the <code>Hoa\Mime\Mime::compute</code> method:</p>
   <pre><code class="language-php">Hoa\Mime\Mime::compute('/etc/mime.types');</code></pre>
   <p>Every informations provided by the <code>Hoa\Mime\Mime</code> class are
   computed from this file. Consequently, it will be better to execute this
