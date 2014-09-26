@@ -785,8 +785,8 @@ Array
 </code></pre>
   <p>Rien de plus compliqué avec <code>Hoa\Router\Cli</code>. Nous pouvons
   toujours regarder le script <code>hoa</code> (dans
-  <code>hoa://Library/Core/Bin/Hoa.php</code>) pour avoir un exemple
-  concret.</p>
+  <a href="@central_resource:path=Library/Core/Bin/Hoa.php"><code>hoa://Library/Core/Bin/Hoa.php</code></a>)
+  pour avoir un exemple concret.</p>
 
   <h2 id="Continuer_avec_un_dispatcheur" for="main-toc">Continuer avec un
   dispatcheur</h2>
