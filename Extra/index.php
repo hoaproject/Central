@@ -36,12 +36,16 @@ $router
                     case 'github.com':
                     case 'github.io':
                     case 'githubusercontent.com':
-                        $remote = 'github';
+                        $remote = $_remotes[0];
                       break;
 
                     case 'hoa-project.net':
                     case 'hoa.io':
-                        $remote = 'hoa';
+                        $remote = $_remotes[1];
+                      break;
+
+                    default:
+                        $remote = $_remotes[0];
                 }
             }
             else
