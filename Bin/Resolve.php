@@ -42,7 +42,7 @@ use Hoa\Dns;
 use Hoa\Socket;
 
 /**
- * Class Hoa\Dns\Bin\Server.
+ * Class Hoa\Dns\Bin\Resolve.
  *
  * Quick DNS server.
  *
@@ -51,12 +51,12 @@ use Hoa\Socket;
  * @license    New BSD License
  */
 
-class Server extends Console\Dispatcher\Kit {
+class Resolve extends Console\Dispatcher\Kit {
 
     /**
      * Options description.
      *
-     * @var \Hoa\Dns\Bin\Server array
+     * @var \Hoa\Dns\Bin\Resolve array
      */
     protected $options = [
         ['listen', Console\GetOption::REQUIRED_ARGUMENT, 'l'],

@@ -200,7 +200,7 @@ yeah \o/
   server and to redirect some domains to IP addresses. The matching is based on
   regular expressions (please, see <a href="http://pcre.org/">PCRE</a>).
   Thus:</p>
-  <pre><code class="language-shell">$ hoa dns:server 'foo.*' to 1.2.3.4 '.*\.bar\..*' to 5.6.7.8
+  <pre><code class="language-shell">$ hoa dns:resolve 'foo.*' to 1.2.3.4 '.*\.bar\..*' to 5.6.7.8
 Server is up, on udp://127.0.0.1:57005!
 
 ▋</code></pre>
