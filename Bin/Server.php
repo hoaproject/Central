@@ -34,23 +34,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Dns\Bin;
 
-from('Hoa')
-
-/**
- * \Hoa\Socket\Server
- */
--> import('Socket.Server')
-
-/**
- * \Hoa\Dns
- */
--> import('Dns.~');
-
-}
-
-namespace Hoa\Dns\Bin {
+use Hoa\Core;
+use Hoa\Console;
+use Hoa\Dns;
+use Hoa\Socket;
 
 /**
  * Class Hoa\Dns\Bin\Server.
@@ -62,18 +51,18 @@ namespace Hoa\Dns\Bin {
  * @license    New BSD License
  */
 
-class Server extends \Hoa\Console\Dispatcher\Kit {
+class Server extends Console\Dispatcher\Kit {
 
     /**
      * Options description.
      *
      * @var \Hoa\Dns\Bin\Server array
      */
-    protected $options = array(
-        array('listen', \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'l'),
-        array('help',   \Hoa\Console\GetOption::NO_ARGUMENT,       'h'),
-        array('help',   \Hoa\Console\GetOption::NO_ARGUMENT,       '?')
-    );
+    protected $options = [
+        ['listen', Console\GetOption::REQUIRED_ARGUMENT, 'l'],
+        ['help',   Console\GetOption::NO_ARGUMENT,       'h'],
+        ['help',   Console\GetOption::NO_ARGUMENT,       '?']
+    ];
 
 
 
@@ -104,7 +93,7 @@ class Server extends \Hoa\Console\Dispatcher\Kit {
               break;
         }
 
-        $redirections = array();
+        $redirections = [];
         $inputs       = $this->parser->getInputs();
 
         if(empty($inputs)) {
@@ -132,8 +121,8 @@ class Server extends \Hoa\Console\Dispatcher\Kit {
             $redirections[$from] = $to;
         }
 
-        $dns = new \Hoa\Dns(new \Hoa\Socket\Server('udp://' . $listen));
-        $dns->on('query', function ( \Hoa\Core\Event\Bucket $bucket )
+        $dns = new Dns\Resolver(new Socket\Server('udp://' . $listen));
+        $dns->on('query', function ( Core\Event\Bucket $bucket )
                           use ( &$redirections ) {
 
             $data = $bucket->getData();
@@ -169,17 +158,15 @@ class Server extends \Hoa\Console\Dispatcher\Kit {
 
         echo 'Usage   : dns:server <options> [<regex> to <ip>]+', "\n",
              'Options :', "\n",
-             $this->makeUsageOptionsList(array(
+             $this->makeUsageOptionsList([
                  'l'    => 'Socket URI to listen (default: 127.0.0.1:57005).',
                  'help' => 'This help.'
-             )), "\n",
+             ]), "\n",
              'Example: `… dns:server \'foo.*\' to 1.2.3.4 \\', "\n",
              '                       \'bar.*\' to 5.6.7.8`.', "\n";
 
         return;
     }
-}
-
 }
 
 __halt_compiler();

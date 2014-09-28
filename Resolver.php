@@ -34,18 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Dns;
 
-from('Hoa')
-
-/**
- * \Hoa\Dns\Exception
- */
--> import('Dns.Exception');
-
-}
-
-namespace Hoa\Dns {
+use Hoa\Core;
+use Hoa\Socket;
 
 /**
  * Class \Hoa\Dns\Resolver.
@@ -58,7 +50,7 @@ namespace Hoa\Dns {
  * @license    New BSD License
  */
 
-class Resolver implements \Hoa\Core\Event\Listenable {
+class Resolver implements Core\Event\Listenable {
 
     /**
      * Listeners.
@@ -81,7 +73,7 @@ class Resolver implements \Hoa\Core\Event\Listenable {
      *
      * @var \Hoa\Dns array
      */
-    protected static $_types   = array(
+    protected static $_types   = [
         'invalid'     =>     0, // Invalid.
         'a'           =>     1, // Host address.
         'ns'          =>     2, // Authorative name server.
@@ -146,21 +138,21 @@ class Resolver implements \Hoa\Core\Event\Listenable {
         'zxfr'        =>   256, // BIND-specific, nonstandard.
         'dlv'         => 32769, // DNSSEC look-aside validation.
         'max'         => 65536
-    );
+    ];
 
     /**
      * Class values for resources and queries.
      *
      * @var \Hoa\Dns\Resolver array
      */
-    protected static $_classes = array(
+    protected static $_classes = [
         'in'    =>   1, // Internet.
         'cs'    =>   2, // CSNET (obsolete).
         'ch'    =>   3, // Chaos.
         'hs'    =>   4, // Hesiod.
         'qnone' => 254, // QClass none.
         'qany'  => 255  // QClass any.
-    );
+    ];
 
 
 
@@ -171,7 +163,7 @@ class Resolver implements \Hoa\Core\Event\Listenable {
      * @param   \Hoa\Socket\Server  $server    Server.
      * @return  void
      */
-    public function __construct ( \Hoa\Socket\Server $server ) {
+    public function __construct ( Socket\Server $server ) {
 
         if('udp' != $server->getSocket()->getTransport())
             throw new Exception(
@@ -181,7 +173,7 @@ class Resolver implements \Hoa\Core\Event\Listenable {
         set_time_limit(0);
 
         $this->_server = $server;
-        $this->_on     = new \Hoa\Core\Event\Listener($this, array('query'));
+        $this->_on     = new Core\Event\Listener($this, ['query']);
 
         return;
     }
@@ -248,11 +240,11 @@ class Resolver implements \Hoa\Core\Event\Listenable {
             $qclass  = (int) (string) ord($handle[$i]);
             $class   = array_search($qclass, static::$_classes) ?: $qclass;
 
-            $ips     = $this->_on->fire('query', new \Hoa\Core\Event\Bucket(array(
+            $ips     = $this->_on->fire('query', new Core\Event\Bucket([
                 'domain' => $domain,
                 'type'   => $type,
                 'class'  => $class
-            )));
+            ]));
             $ip      = null;
 
             if(false === $ips[0]) {
@@ -344,6 +336,4 @@ class Resolver implements \Hoa\Core\Event\Listenable {
 
         return;
     }
-}
-
 }
