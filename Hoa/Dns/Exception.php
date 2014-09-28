@@ -34,7 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Dns {
+namespace Hoa\Dns;
+
+use Hoa\Core;
 
 /**
  * Class \Hoa\Dns\Exception.
@@ -46,6 +48,4 @@ namespace Hoa\Dns {
  * @license    New BSD License
  */
 
-class Exception extends \Hoa\Core\Exception { }
-
-}
+class Exception extends Core\Exception { }

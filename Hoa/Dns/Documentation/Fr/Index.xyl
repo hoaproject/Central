@@ -220,7 +220,7 @@ yeah \o/
   serveur de résolution et de rediriger certains domaines vers des IP. Le
   filtrage se fait à l'aide d'expressions régulières (voir les
   <a href="http://pcre.org/">PCRE</a>). Ainsi :</p>
-  <pre><code class="language-shell">$ hoa dns:server 'foo.*' to 1.2.3.4 '.*\.bar\..*' to 5.6.7.8
+  <pre><code class="language-shell">$ hoa dns:resolve 'foo.*' to 1.2.3.4 '.*\.bar\..*' to 5.6.7.8
 Server is up, on udp://127.0.0.1:57005!
 
 ▋</code></pre>
