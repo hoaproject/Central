@@ -36,6 +36,9 @@
 
 namespace Hoa\Database\IDal;
 
+use Hoa\Database;
+use Hoa\Iterator;
+
 /**
  * Interface \Hoa\Database\IDal\WrapperStatement.
  *
@@ -44,7 +47,7 @@ namespace Hoa\Database\IDal;
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-interface WrapperStatement
+interface WrapperStatement extends Iterator\Aggregate
 {
     /**
      * Execute a prepared statement.
@@ -82,36 +85,32 @@ interface WrapperStatement
     public function fetchAll();
 
     /**
+     * Set the Iterator fetching style.
+     *
+     * @param   int  $orientation    This value must be DalStatement::FORWARD or
+     *                               DalStatement::BACKWARD constant.
+     * @param   int  $offset         This value must be one of the
+     *                               DalStatement::FROM_* constants or an
+     *                               arbitrary offset.
+     * @return  \Hoa\Database\IDal\WrapperStatement
+     */
+    public function setFetchingStyle(
+        $orientation = Database\DalStatement::FORWARD,
+        $offset      = Database\DalStatement::FROM_START
+    );
+
+    /**
      * Fetch the first row in the result set.
      *
      * @return  mixed
-     * @throws  \Hoa\Database\Exception
      */
     public function fetchFirst();
-
     /**
      * Fetch the last row in the result set.
      *
      * @return  mixed
-     * @throws  \Hoa\Database\Exception
      */
     public function fetchLast();
-
-    /**
-     * Fetch the next row in the result set.
-     *
-     * @return  mixed
-     * @throws  \Hoa\Database\Exception
-     */
-    public function fetchNext();
-
-    /**
-     * Fetch the previous row in the result set.
-     *
-     * @return  mixed
-     * @throws  \Hoa\Database\Exception
-     */
-    public function fetchPrior();
 
     /**
      * Return a single column from the next row of the result set or false if

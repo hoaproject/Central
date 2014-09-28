@@ -193,7 +193,11 @@ class Pdo implements Database\IDal\Wrapper
      */
     public function prepare($statement, array $options = [])
     {
-        $handle = $this->getConnection()->prepare($statement);
+        if (!isset($options[\PDO::ATTR_CURSOR])) {
+            $options[\PDO::ATTR_CURSOR] = \PDO::CURSOR_SCROLL;
+        }
+
+        $handle = $this->getConnection()->prepare($statement, $options);
 
         if (!($handle instanceof \PDOStatement)) {
             throw new Database\Exception(

@@ -53,7 +53,21 @@ class Statement implements Database\IDal\WrapperStatement
      *
      * @var \PDOStatement
      */
-    protected $_statement = null;
+    protected $_statement   = null;
+
+    /**
+     * The cursor orientation.
+     *
+     * @var int
+     */
+    protected $_orientation = 0;
+
+    /**
+     * The start cursor offset.
+     *
+     * @var int
+     */
+    protected $_offset      = 0;
 
 
 
@@ -154,18 +168,36 @@ class Statement implements Database\IDal\WrapperStatement
     }
 
     /**
-     * Fetch the next row in the result set.
+     * Set the Iterator fetching style.
      *
-     * @param   int  $orientation    Must be one of the \PDO::FETCH_ORI_*
-     *                               constants.
-     * @return  mixed
-     * @throws  \Hoa\Database\Exception
+     * @param   int  $orientation    This value must be DalStatement::FORWARD or
+     *                               DalStatement::BACKWARD constant.
+     * @param   int  $offset         This value must be one of the
+     *                               DalStatement::FROM_* constants or an
+     *                               arbitrary offset.
+     * @return  \Hoa\Database\Layer\Pdo\Statement
      */
-    protected function fetch($orientation = \PDO::FETCH_ORI_NEXT)
+    public function setFetchingStyle(
+        $orientation = Database\DalStatement::FORWARD,
+        $offset      = Database\DalStatement::FROM_START
+    ) {
+        $this->_orientation = $orientation;
+        $this->_offset      = $offset;
+
+        return $this;
+    }
+
+    /**
+     * Get an Iterator.
+     *
+     * @return  \Hoa\Database\Layer\Pdo\Iterator
+     */
+    public function getIterator()
     {
-        return $this->getStatement()->fetch(
-            \PDO::FETCH_ASSOC,
-            $orientation
+        return new Iterator(
+            $this->getStatement(),
+            $this->_orientation,
+            $this->_offset
         );
     }
 
@@ -173,44 +205,20 @@ class Statement implements Database\IDal\WrapperStatement
      * Fetch the first row in the result set.
      *
      * @return  mixed
-     * @throws  \Hoa\Database\Exception
      */
     public function fetchFirst()
     {
-        return $this->fetch(\PDO::FETCH_ORI_FIRST);
+        return $this->getStatement()->fetch(\PDO::FETCH_ASSOC, \PDO::FETCH_ORI_FIRST);
     }
 
     /**
      * Fetch the last row in the result set.
      *
      * @return  mixed
-     * @throws  \Hoa\Database\Exception
      */
     public function fetchLast()
     {
-        return $this->fetch(\PDO::FETCH_ORI_LAST);
-    }
-
-    /**
-     * Fetch the next row in the result set.
-     *
-     * @return  mixed
-     * @throws  \Hoa\Database\Exception
-     */
-    public function fetchNext()
-    {
-        return $this->fetch(\PDO::FETCH_ORI_NEXT);
-    }
-
-    /**
-     * Fetch the previous row in the result set.
-     *
-     * @return  mixed
-     * @throws  \Hoa\Database\Exception
-     */
-    public function fetchPrior()
-    {
-        return $this->fetch(\PDO::FETCH_ORI_PRIOR);
+        return $this->getStatement()->fetch(\PDO::FETCH_ASSOC, \PDO::FETCH_ORI_LAST);
     }
 
     /**

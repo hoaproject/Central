@@ -47,6 +47,34 @@ namespace Hoa\Database;
 class DalStatement
 {
     /**
+     * Fetch the next row in the result set.
+     *
+     * @var int
+     */
+    const FORWARD      = 0;
+
+    /**
+     * Fetch the previous row in the result set.
+     *
+     * @var int
+     */
+    const BACKWARD     = 1;
+
+    /**
+     * Start at the first offset.
+     *
+     * @var int
+     */
+    const FROM_START   = 0;
+
+    /**
+     * Start at the last offset.
+     *
+     * @var int
+     */
+    const FROM_END     = -1;
+
+    /**
      * The statement instance.
      *
      * @var \Hoa\Database\IDal\WrapperStatement
@@ -161,10 +189,38 @@ class DalStatement
     }
 
     /**
+     * Set the Iterator fetching style.
+     *
+     * @param   int  $orientation    This value must be DalStatement::FORWARD or
+     *                               DalStatement::BACKWARD constant.
+     * @param   int  $offset         This value must be one of the
+     *                               DalStatement::FROM_* constants or an
+     *                               arbitrary offset.
+     * @return  \Hoa\Database\DalStatement
+     */
+    public function setFetchingStyle(
+        $orientation = self::FORWARD,
+        $offset      = self::FROM_START
+    ) {
+        $this->getStatement()->setFetchingStyle($orientation, $offset);
+
+        return $this;
+    }
+
+    /**
+     * Get an Iterator.
+     *
+     * @return  \Hoa\Database\IDal\WrapperIterator
+     */
+    public function getIterator()
+    {
+        return $this->getStatement()->getIterator();
+    }
+
+    /**
      * Fetch the first row in the result set.
      *
      * @return  mixed
-     * @throws  \Hoa\Database\Exception
      */
     public function fetchFirst()
     {
@@ -175,33 +231,10 @@ class DalStatement
      * Fetch the last row in the result set.
      *
      * @return  mixed
-     * @throws  \Hoa\Database\Exception
      */
     public function fetchLast()
     {
         return $this->getStatement()->fetchLast();
-    }
-
-    /**
-     * Fetch the next row in the result set.
-     *
-     * @return  mixed
-     * @throws  \Hoa\Database\Exception
-     */
-    public function fetchNext()
-    {
-        return $this->getStatement()->fetchNext();
-    }
-
-    /**
-     * Fetch the previous row in the result set.
-     *
-     * @return  mixed
-     * @throws  \Hoa\Database\Exception
-     */
-    public function fetchPrior()
-    {
-        return $this->getStatement()->fetchPrior();
     }
 
     /**
