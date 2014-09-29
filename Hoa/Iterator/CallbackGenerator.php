@@ -37,44 +37,37 @@
 namespace Hoa\Iterator;
 
 /**
- * Class \Hoa\Iterator\Repeater.
+ * Class \Hoa\Iterator\CallbackGenerator.
  *
- * Repeat an iterator n-times.
+ * Yield a value based on a callback.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2014 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Repeater implements Iterator {
+class CallbackGenerator implements Iterator {
 
     /**
-     * Current iterator.
+     * Callback.
      *
-     * @var \Traversable object
+     * @var \Hoa\Iterator\CallbackGenerator callable
      */
-    protected $_iterator = null;
+    protected $_callback = null;
 
     /**
-     * Maximum repetition.
+     * Current key.
      *
-     * @var \Hoa\Iterator\Repeater int
+     * @var \Hoa\Iterator\Demultiplexer mixed
      */
-    protected $_n        = 1;
+    protected $_key      = 0;
 
     /**
-     * Current repetition.
+     * Current computed value.
      *
-     * @var \Hoa\Iterator\Repeater int
+     * @var \Hoa\Iterator\Demultiplexer mixed
      */
-    protected $_i        = 1;
-
-    /**
-     * Body (callable to execute each time).
-     *
-     * @var \Hoa\Iterator\Repeater callable
-     */
-    protected $_body     = null;
+    protected $_current  = null;
 
 
 
@@ -82,24 +75,12 @@ class Repeater implements Iterator {
      * Constructor.
      *
      * @access  public
-     * @param   \Traversable  $iterator    Iterator.
-     * @param   int           $n           Repeat $n-times.
-     * @param   callable      $body        Body.
+     * @param   callable  $callback    Callback.
      * @return  void
-     * @throw   \Hoa\Iterator\Exception
      */
-    public function __construct ( \Traversable $iterator, $n, $body = null ) {
+    public function __construct ( Callable $callback ) {
 
-        if(0 >= $n)
-            throw new Exception(
-                'n must be greater than 0, given %d.', 0, $n);
-
-        if($iterator instanceof \IteratorAggregate)
-            $iterator = $iterator->getIterator();
-
-        $this->_iterator = $iterator;
-        $this->_n        = $n;
-        $this->_body     = $body;
+        $this->_callback = $callback;
 
         return;
     }
@@ -112,7 +93,9 @@ class Repeater implements Iterator {
      */
     public function current ( ) {
 
-        return $this->_iterator->current();
+        $handle = $this->_callback;
+
+        return $this->_current = $handle($this->_key);
     }
 
     /**
@@ -123,7 +106,7 @@ class Repeater implements Iterator {
      */
     public function key ( ) {
 
-        return $this->_iterator->key();
+        return $this->_key;
     }
 
     /**
@@ -134,7 +117,9 @@ class Repeater implements Iterator {
      */
     public function next ( ) {
 
-        return $this->_iterator->next();
+        ++$this->_key;
+
+        return;
     }
 
     /**
@@ -145,7 +130,10 @@ class Repeater implements Iterator {
      */
     public function rewind ( ) {
 
-        return $this->_iterator->rewind();
+        $this->_key     = 0;
+        $this->_current = null;
+
+        return;
     }
 
     /**
@@ -155,26 +143,6 @@ class Repeater implements Iterator {
      * @return  bool
      */
     public function valid ( ) {
-
-        $valid = $this->_iterator->valid();
-
-        if(true === $valid)
-            return true;
-
-        if(null !== $this->_body) {
-
-            $handle = &$this->_body;
-            $handle($this->_i);
-        }
-
-        $this->rewind();
-
-        if($this->_n <= $this->_i++) {
-
-            $this->_i = 1;
-
-            return false;
-        }
 
         return true;
     }
