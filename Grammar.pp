@@ -63,8 +63,7 @@ value:
 
 string:
     ::quote_::
-    ( <escaped> | <string> )
-    ( ( <escaped> | <string> ) #concatenation )*
+    <string>
     ::_quote::
 
 number:
