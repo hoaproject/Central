@@ -23,6 +23,13 @@
     "require": {
         "hoa/core": "~2.0"
     },
+    "require-dev": {
+        "hoa/compiler": "~2.0",
+        "hoa/file"    : "~0.0",
+        "hoa/iterator": "~0.0",
+        "hoa/math"    : "~0.0",
+        "hoa/regex"   : "~0.0"
+    },
     "target-dir": "Hoa/Json",
     "autoload"  : { "psr-0": { "Hoa\\Json": "." } },
     "extra"     : {
