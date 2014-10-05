@@ -34,7 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Bench {
+namespace Hoa\Bench;
+
+use Hoa\Core;
 
 /**
  * Class \Hoa\Bench\Exception.
@@ -46,6 +48,4 @@ namespace Hoa\Bench {
  * @license    New BSD License
  */
 
-class Exception extends \Hoa\Core\Exception { }
-
-}
+class Exception extends Core\Exception { }

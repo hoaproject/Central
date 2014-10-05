@@ -34,18 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Bench\Exception
- */
--> import('Bench.Exception');
-
-}
-
-namespace Hoa\Bench {
+namespace Hoa\Bench;
 
 /**
  * Class \Hoa\Bench\Mark.
@@ -336,6 +325,4 @@ class Mark {
 
         return (string) $this->diff();
     }
-}
-
 }
