@@ -34,23 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Bench;
 
-from('Hoa')
-
-/**
- * \Hoa\Bench\Exception
- */
--> import('Bench.Exception')
-
-/**
- * \Hoa\Bench\Mark
- */
--> import('Bench.Mark');
-
-}
-
-namespace Hoa\Bench {
+use Hoa\Core;
 
 /**
  * Class \Hoa\Bench.
@@ -87,14 +73,14 @@ class Bench implements \Iterator, \Countable {
      *
      * @var \Hoa\Bench array
      */
-    protected static $_mark = array();
+    protected static $_mark = [];
 
     /**
      * Collection of filters.
      *
      * @var \Hoa\Bench array
      */
-    protected $_filters     = array();
+    protected $_filters     = [];
 
 
 
@@ -160,7 +146,7 @@ class Bench implements \Iterator, \Countable {
      */
     public function unsetAll ( ) {
 
-        self::$_mark = array();
+        self::$_mark = [];
 
         return;
     }
@@ -290,10 +276,10 @@ class Bench implements \Iterator, \Countable {
     public function getStatistic ( $considerFilters = true ) {
 
         if(empty(self::$_mark))
-            return array();
+            return [];
 
         $max = $this->getLongest()->diff();
-        $out = array();
+        $out = [];
 
         foreach($this as $id => $mark) {
 
@@ -305,10 +291,10 @@ class Bench implements \Iterator, \Countable {
                     if(true !== $filter($id, $result, $pourcent))
                         continue 2;
 
-            $out[$id] = array(
+            $out[$id] = [
                 self::STAT_RESULT   => $result,
                 self::STAT_POURCENT => $pourcent
-            );
+            ];
         }
 
         return $out;
@@ -399,13 +385,7 @@ class Bench implements \Iterator, \Countable {
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Bench\Bench');
-
-}
+Core\Consistency::flexEntity('Hoa\Bench\Bench');
