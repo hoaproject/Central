@@ -33,6 +33,7 @@ cloak on IRC, etc.
   * ➜ Sébastien Houzé (shouze)
   * Matthieu de Laubrie (metalaka, ex-derver)
   * Baptiste Leduc (korbeil)
+  * Marc Lemay (flug)
   * ➜ Renaud Littolff (marmotz)
   * ➜ Julien Lorrain (julien)
   * ➜ Jean Molliné (cyrano)
