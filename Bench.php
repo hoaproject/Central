@@ -37,6 +37,7 @@
 namespace Hoa\Bench;
 
 use Hoa\Core;
+use Hoa\Iterator;
 
 /**
  * Class \Hoa\Bench.
@@ -52,7 +53,7 @@ use Hoa\Core;
  * @license    New BSD License
  */
 
-class Bench implements \Iterator, \Countable {
+class Bench implements Iterator, \Countable {
 
     /**
      * Statistic : get the result.
