@@ -34,7 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Dispatcher {
+namespace Hoa\Dispatcher;
+
+use Hoa\Core;
 
 /**
  * Class \Hoa\Dispatcher\Exception.
@@ -46,6 +48,4 @@ namespace Hoa\Dispatcher {
  * @license    New BSD License
  */
 
-class Exception extends \Hoa\Core\Exception { }
-
-}
+class Exception extends Core\Exception { }
