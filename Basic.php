@@ -34,23 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Dispatcher;
 
-from('Hoa')
-
-/**
- * \Hoa\Dispatcher\Exception
- */
--> import('Dispatcher.Exception')
-
-/**
- * \Hoa\Dispatcher
- */
--> import('Dispatcher.~');
-
-}
-
-namespace Hoa\Dispatcher {
+use Hoa\Router;
+use Hoa\View;
 
 /**
  * Class \Hoa\Dispatcher\Basic.
@@ -75,23 +62,23 @@ class Basic extends Dispatcher {
      * @return  mixed
      * @throw   \Hoa\Dispatcher\Exception
      */
-    protected function resolve ( Array $rule, \Hoa\Router $router,
-                                 \Hoa\View\Viewable $view = null ) {
+    protected function resolve ( Array $rule, Router $router,
+                                 View\Viewable $view = null ) {
 
         $called     = null;
-        $variables  = &$rule[\Hoa\Router::RULE_VARIABLES];
+        $variables  = &$rule[Router::RULE_VARIABLES];
         $call       = isset($variables['controller'])
                           ? $variables['controller']
                           : (isset($variables['_call'])
                                  ? $variables['_call']
-                                 : $rule[\Hoa\Router::RULE_CALL]);
+                                 : $rule[Router::RULE_CALL]);
         $able       = isset($variables['action'])
                           ? $variables['action']
                           : (isset($variables['_able'])
                                  ? $variables['_able']
-                                 : $rule[\Hoa\Router::RULE_ABLE]);
-        $rtv        = array($router, $this, $view);
-        $arguments  = array();
+                                 : $rule[Router::RULE_ABLE]);
+        $rtv        = [$router, $this, $view];
+        $arguments  = [];
         $reflection = null;
 
         if($call instanceof \Closure) {
@@ -128,7 +115,7 @@ class Basic extends Dispatcher {
                         'The closured action for the rule with pattern %s needs ' .
                         'a value for the parameter $%s and this value does not ' .
                         'exist.',
-                        1, array($rule[\Hoa\Router::RULE_PATTERN], $name));
+                        1, [$rule[Router::RULE_PATTERN], $name]);
             }
         }
         elseif(is_string($call) && null === $able) {
@@ -164,7 +151,7 @@ class Basic extends Dispatcher {
                         'The functional action for the rule with pattern %s needs ' .
                         'a value for the parameter $%s and this value does not ' .
                         'exist.',
-                        3, array($rule[\Hoa\Router::RULE_PATTERN], $name));
+                        3, [$rule[Router::RULE_PATTERN], $name]);
             }
         }
         else {
@@ -201,8 +188,8 @@ class Basic extends Dispatcher {
                     throw new Exception(
                         'Controller %s is not found ' .
                         '(method: %s, asynchronous: %s).',
-                        4, array($controller, strtoupper($router->getMethod()),
-                                 true === $async ? 'true': 'false'), $e);
+                        4, [$controller, strtoupper($router->getMethod()),
+                            true === $async ? 'true': 'false'], $e);
                 }
 
                 $kitname = $this->getKitName();
@@ -218,9 +205,9 @@ class Basic extends Dispatcher {
                 throw new Exception(
                     'Action %s does not exist on the controller %s ' .
                     '(method: %s, asynchronous: %s).',
-                    5, array($action, get_class($controller),
-                             strtoupper($router->getMethod()),
-                             true === $async ? 'true': 'false'));
+                    5, [$action, get_class($controller),
+                        strtoupper($router->getMethod()),
+                        true === $async ? 'true': 'false']);
 
             $called     = $controller;
             $reflection = new \ReflectionMethod($controller, $action);
@@ -239,7 +226,7 @@ class Basic extends Dispatcher {
                     throw new Exception(
                         'The action %s on the controller %s needs a value for ' .
                         'the parameter $%s and this value does not exist.',
-                        6, array($action, get_class($controller), $name));
+                        6, [$action, get_class($controller), $name]);
             }
         }
 
@@ -250,6 +237,4 @@ class Basic extends Dispatcher {
 
         return $return;
     }
-}
-
 }

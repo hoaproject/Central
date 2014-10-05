@@ -34,7 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Dispatcher {
+namespace Hoa\Dispatcher;
+
+use Hoa\Router;
+use Hoa\View;
 
 /**
  * Class \Hoa\Dispatcher\Kit.
@@ -87,9 +90,9 @@ class Kit {
      * @param   \Hoa\View\Viewable    $view          The view.
      * @return  void
      */
-    public function __construct ( \Hoa\Router        $router,
-                                  Dispatcher         $dispatcher,
-                                  \Hoa\View\Viewable $view = null ) {
+    public function __construct ( Router        $router,
+                                  Dispatcher    $dispatcher,
+                                  View\Viewable $view = null ) {
 
         $this->router     = $router;
         $this->dispatcher = $dispatcher;
@@ -111,6 +114,4 @@ class Kit {
 
         return;
     }
-}
-
 }

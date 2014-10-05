@@ -34,23 +34,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Dispatcher;
 
-from('Hoa')
-
-/**
- * \Hoa\Dispatcher\Exception
- */
--> import('Dispatcher.Exception')
-
-/**
- * \Hoa\Router
- */
--> import('Router.~');
-
-}
-
-namespace Hoa\Dispatcher {
+use Hoa\Core;
+use Hoa\Router;
+use Hoa\View;
 
 /**
  * Class \Hoa\Dispatcher.
@@ -62,7 +50,7 @@ namespace Hoa\Dispatcher {
  * @license    New BSD License
  */
 
-abstract class Dispatcher implements \Hoa\Core\Parameter\Parameterizable {
+abstract class Dispatcher implements Core\Parameter\Parameterizable {
 
     /**
      * Parameters.
@@ -94,16 +82,16 @@ abstract class Dispatcher implements \Hoa\Core\Parameter\Parameterizable {
      * @param   array   $parameters    Parameters.
      * @return  void
      */
-    public function __construct ( Array $parameters = array() ) {
+    public function __construct ( Array $parameters = [] ) {
 
-        $this->_parameters = new \Hoa\Core\Parameter(
+        $this->_parameters = new Core\Parameter(
             __CLASS__,
-            array(
+            [
                 'controller' => 'main',
                 'action'     => 'main',
                 'method'     => null
-            ),
-            array(
+            ],
+            [
                 'synchronous.controller'  => 'Application\Controller\(:controller:U:)',
                 'synchronous.action'      => '(:action:U:)Action',
 
@@ -115,7 +103,7 @@ abstract class Dispatcher implements \Hoa\Core\Parameter\Parameterizable {
                  *
                  * 'variables.…'          => …
                  */
-            )
+            ]
         );
         $this->_parameters->setParameters($parameters);
 
@@ -142,8 +130,8 @@ abstract class Dispatcher implements \Hoa\Core\Parameter\Parameterizable {
      * @return  mixed
      * @throw   \Hoa\Controller\Exception
      */
-    public function dispatch ( \Hoa\Router        $router,
-                               \Hoa\View\Viewable $view = null ) {
+    public function dispatch ( Router        $router,
+                               View\Viewable $view = null ) {
 
         $rule = $router->getTheRule();
 
@@ -161,7 +149,7 @@ abstract class Dispatcher implements \Hoa\Core\Parameter\Parameterizable {
         $parameters        = $this->_parameters;
         $this->_parameters = clone $this->_parameters;
 
-        foreach($rule[\Hoa\Router::RULE_VARIABLES] as $key => $value)
+        foreach($rule[Router::RULE_VARIABLES] as $key => $value)
             $this->_parameters->setParameter('variables.' . $key, $value);
 
         $this->_parameters->setKeyword('method', $router->getMethod());
@@ -183,8 +171,8 @@ abstract class Dispatcher implements \Hoa\Core\Parameter\Parameterizable {
      * @return  mixed
      * @throw   \Hoa\Dispatcher\Exception
      */
-    abstract protected function resolve ( Array $rule, \Hoa\Router $router,
-                                          \Hoa\View\Viewable $view = null );
+    abstract protected function resolve ( Array $rule, Router $router,
+                                          View\Viewable $view = null );
 
     /**
      * Set kit's name.
@@ -214,13 +202,7 @@ abstract class Dispatcher implements \Hoa\Core\Parameter\Parameterizable {
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Dispatcher\Dispatcher');
-
-}
+Core\Consistency::flexEntity('Hoa\Dispatcher\Dispatcher');
