@@ -106,12 +106,13 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
 
         if(true === $verbose) {
 
-            echo \Hoa\Console\Chrome\Text::align(
-                     \Hoa\Console\Chrome\Text::colorize(
-                         'Hoa',
-                         'foreground(yellow) underlined'
-                     ),
-                     \Hoa\Console\Chrome\Text::ALIGN_CENTER
+            echo \Hoa\Console\Chrome\Text::colorize(
+                    '        _   _' . "\n" .
+                    '       | | | | ___   __ _' . "\n" .
+                    '       | |_| |/ _ \ / _` |' . "\n" .
+                    '       |  _  | (_) | (_| |' . "\n" .
+                    '       |_| |_|\___/ \__,_|' . "\n",
+                     'foreground(yellow)'
                  ), "\n\n",
                  'Welcome in the command-line interface of Hoa :-).',  "\n\n",
                  \Hoa\Console\Chrome\Text::colorize(
