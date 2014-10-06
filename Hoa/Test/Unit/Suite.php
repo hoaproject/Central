@@ -69,8 +69,26 @@ class Suite extends atoum\test {
         return 'StdClass';
     }
 
-    public function getTestClassNamespace ( ) {
+    public function getTestedClassNamespace ( ) {
 
         return '\\';
+    }
+
+    public function beforeTestMethod ( $methodName ) {
+
+        $out             = parent::beforeTestMethod($methodName);
+        $testedClassName = self::getTestedClassNameFromTestClass(
+            $this->getClass(),
+            $this->getTestNamespace()
+        );
+        $testedNamespace = substr(
+            $testedClassName,
+            0,
+            strrpos($testedClassName, '\\')
+        );
+
+        $this->getPhpMocker()->setDefaultNamespace($testedNamespace);
+
+        return $out;
     }
 }
