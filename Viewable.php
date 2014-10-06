@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\View {
+namespace Hoa\View;
 
 /**
  * Interface \Hoa\View\Viewable.
@@ -71,6 +71,4 @@ interface Viewable {
      * @ensures \result: \Hoa\Router;
      */
     public function getRouter ( );
-}
-
 }
