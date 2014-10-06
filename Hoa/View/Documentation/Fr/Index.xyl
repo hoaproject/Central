@@ -163,7 +163,7 @@ $superview   = new SuperView('Out.phtml', $output, $router);
 // Data.
 $data        = $superview->getData();
 $data->title = 'foobar';
-$data->foo   = (object) array('bar' => 'baz', 'qux' => 'hop');
+$data->foo   = (object) ['bar' => 'baz', 'qux' => 'hop'];
 
 // Render.
 $superview->render();</code></pre>

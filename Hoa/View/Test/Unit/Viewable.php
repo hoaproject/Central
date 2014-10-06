@@ -34,41 +34,27 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\View;
+namespace Hoa\View\Test\Unit;
+
+use Hoa\Test;
 
 /**
- * Interface \Hoa\View\Viewable.
+ * Class \Hoa\View\Test\Unit\Viewable.
  *
- * Describe what a view could be.
+ * Test suite of the interface.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2014 Ivan Enderlin.
  * @license    New BSD License
  */
 
-interface Viewable {
+class Viewable extends Test\Unit\Suite {
 
-    /**
-     * @description 'Get the output stream.';
-     * @ensures \result: \Hoa\Stream\IStream\Out;
-     */
-    public function getOutputStream ( );
+    public function case_interface ( ) {
 
-    /**
-     * @description 'Get the data holded by the view.';
-     * @ensures \result: \Hoa\Core\Data;
-     */
-    public function getData ( );
-
-    /**
-     * @description 'Make a render of the view.';
-     * @ensures \result: void;
-     */
-    public function render ( );
-
-    /**
-     * @description 'Get router.';
-     * @ensures \result: \Hoa\Router;
-     */
-    public function getRouter ( );
+        $this
+            ->when($result = new \Mock\Hoa\View\Viewable())
+                ->object($result)
+                    ->isInstanceOf('Hoa\View\Viewable');
+    }
 }
