@@ -65,7 +65,7 @@ class Zombie {
      * Try to create a zombie.
      *
      * @access  public
-     * @return  void
+     * @return  bool
      */
     public static function fork ( ) {
 
@@ -75,7 +75,7 @@ class Zombie {
 
         fastcgi_finish_request();
 
-        return;
+        return true;
     }
 
     /**
