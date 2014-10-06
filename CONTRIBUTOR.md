@@ -31,7 +31,7 @@ cloak on IRC, etc.
   * Nicolas Grekas (nicolas-grekas)
   * Sarah Haïm-Lubczanski (mere-teresa)
   * ➜ Sébastien Houzé (shouze)
-  * Matthieu de Laubrie (metalaka, ex-derver)
+  * ➜ Matthieu de Laubrie (metalaka)
   * Baptiste Leduc (korbeil)
   * Marc Lemay (flug)
   * ➜ Renaud Littolff (marmotz)
