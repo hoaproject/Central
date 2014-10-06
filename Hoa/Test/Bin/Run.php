@@ -79,6 +79,7 @@ class Run extends Console\Dispatcher\Kit {
 
         $directories = array();
         $files       = array();
+        $namespaces  = array();
         $debug       = false;
 
         while(false !== $c = $this->getOption($v)) switch($c) {
@@ -118,6 +119,7 @@ class Run extends Console\Dispatcher\Kit {
                             0, $libraryName);
 
                     $directories[] = $tests;
+                    $namespaces[]  = 'Hoa\\' . $libraryName;
                 }
               break;
 
@@ -150,6 +152,8 @@ class Run extends Console\Dispatcher\Kit {
 
                     if(is_dir($automaticTests))
                         $directories[] = $automaticTests;
+
+                    $namespaces[] = $namespace;
                 }
               break;
 
@@ -213,6 +217,9 @@ class Run extends Console\Dispatcher\Kit {
             $command .= ' --files ' . implode(' ', $files);
         else
             return $this->usage();
+
+        if(!empty($namespaces))
+            $command .= ' --namespaces ' . implode(' ', $namespaces);
 
         $processus = new Console\Processus($command);
         $processus->on('input', function ( $bucket ) {
