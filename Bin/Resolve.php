@@ -44,7 +44,7 @@ use Hoa\Socket;
 /**
  * Class Hoa\Dns\Bin\Resolve.
  *
- * Quick DNS server.
+ * Quick DNS resolver.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2014 Ivan Enderlin.
@@ -156,18 +156,18 @@ class Resolve extends Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        echo 'Usage   : dns:server <options> [<regex> to <ip>]+', "\n",
+        echo 'Usage   : dns:resolve <options> [<regex> to <ip>]+', "\n",
              'Options :', "\n",
              $this->makeUsageOptionsList([
                  'l'    => 'Socket URI to listen (default: 127.0.0.1:57005).',
                  'help' => 'This help.'
              ]), "\n",
-             'Example: `… dns:server \'foo.*\' to 1.2.3.4 \\', "\n",
-             '                       \'bar.*\' to 5.6.7.8`.', "\n";
+             'Example: `… dns:resolve \'foo.*\' to 1.2.3.4 \\', "\n",
+             '                        \'bar.*\' to 5.6.7.8`.', "\n";
 
         return;
     }
 }
 
 __halt_compiler();
-Quick DNS server.
+Quick DNS resolver.
