@@ -34,18 +34,54 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Zombie;
+namespace Hoa\Zombie\Test\Unit;
 
-use Hoa\Core;
+use Hoa\Test;
+use Hoa\Zombie as LUT;
 
 /**
- * Class \Hoa\Zombie\Exception.
+ * Class \Hoa\Zombie\Test\Unit\Documentation.
  *
- * Extending the \Hoa\Core\Exception class.
+ * Test suite of the examples in the documentation.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2014 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Exception extends Core\Exception { }
+class Zombie extends Test\Unit\Suite {
+
+    public function case_without_fpm ( ) {
+
+        $this
+            ->given(
+                $this->function->function_exists = function ( $name ) {
+
+                    if('fastcgi_finish_request' === $name)
+                        return false;
+
+                    return true;
+                }
+            )
+            ->exception(function ( ) {
+
+                LUT::fork();
+            })
+                ->isInstanceOf('Hoa\Zombie\Exception');
+    }
+
+    public function case_with_fpm ( ) {
+
+        $this
+            ->given(
+                $this->function->function_exists = function ( $name ) {
+
+                    return true;
+                },
+                $this->function->fastcgi_finish_request = true
+            )
+            ->when($result = LUT::fork())
+                ->boolean($result)
+                    ->isTrue();
+    }
+}
