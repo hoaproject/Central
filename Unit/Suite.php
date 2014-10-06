@@ -69,7 +69,7 @@ class Suite extends atoum\test {
         return 'StdClass';
     }
 
-    public function getTestClassNamespace ( ) {
+    public function getTestedClassNamespace ( ) {
 
         return '\\';
     }
