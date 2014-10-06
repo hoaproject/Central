@@ -34,7 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Zombie {
+namespace Hoa\Zombie;
+
+use Hoa\Core;
 
 /**
  * Class \Hoa\Zombie\Exception.
@@ -46,6 +48,4 @@ namespace Hoa\Zombie {
  * @license    New BSD License
  */
 
-class Exception extends \Hoa\Core\Exception { }
-
-}
+class Exception extends Core\Exception { }

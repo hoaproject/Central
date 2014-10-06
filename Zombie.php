@@ -34,18 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Zombie;
 
-from('Hoa')
-
-/**
- * \Hoa\Zombie\Exception
- */
--> import('Zombie.Exception');
-
-}
-
-namespace Hoa\Zombie {
+use Hoa\Core;
 
 /**
  * Class \Hoa\Zombie.
@@ -175,13 +166,7 @@ class Zombie {
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Zombie\Zombie');
-
-}
+Core\Consistency::flexEntity('Hoa\Zombie\Zombie');
