@@ -42,7 +42,7 @@ use Hoa\Zombie as LUT;
 /**
  * Class \Hoa\Zombie\Test\Unit\Documentation.
  *
- * Test suite of the examples in the documentation.
+ * Test suite of the zombie class.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2014 Ivan Enderlin.
