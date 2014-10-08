@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Database\IDal {
+namespace Hoa\Database\IDal;
 
 /**
  * Interface \Hoa\Database\IDal\WrapperStatement.
@@ -58,7 +58,7 @@ interface WrapperStatement {
      * @return  \Hoa\Database\IDal\WrapperStatement
      * @throw   \Hoa\Database\Exception
      */
-    public function execute ( Array $bindParameters = array() );
+    public function execute ( Array $bindParameters = [] );
 
     /**
      * Bind a parameter to te specified variable name.
@@ -158,6 +158,4 @@ interface WrapperStatement {
      * @throw   \Hoa\Database\Exception
      */
     public function errorInfo ( );
-}
-
 }

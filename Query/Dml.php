@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Database\Query {
+namespace Hoa\Database\Query;
 
 /**
  * Interface \Hoa\Database\Query\Dml.
@@ -55,6 +55,4 @@ interface Dml {
      * @return  string
      */
     public function __toString ( );
-}
-
 }

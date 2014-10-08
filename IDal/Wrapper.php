@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Database\IDal {
+namespace Hoa\Database\IDal;
 
 /**
  * Interface \Hoa\Database\IDal\Wrapper.
@@ -60,7 +60,7 @@ interface Wrapper {
      * @throw   \Hoa\Database\Exception
      */
     public function __construct ( $dns, $username, $password,
-                                  Array $driverOption = array() );
+                                  Array $driverOption = [] );
 
     /**
      * Initiate a transaction.
@@ -111,7 +111,7 @@ interface Wrapper {
      * @return  \Hoa\Database\IDal\WrapperStatement
      * @throw   \Hoa\Database\Exception
      */
-    public function prepare ( $statement, Array $options = array() );
+    public function prepare ( $statement, Array $options = [] );
 
     /**
      * Quote a string for use in a query.
@@ -204,6 +204,4 @@ interface Wrapper {
      * @throw   \Hoa\Database\Exception
      */
     public function getAttribute ( $attribute );
-}
-
 }

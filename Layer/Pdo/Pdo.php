@@ -34,28 +34,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Database\Layer\Pdo;
 
-from('Hoa')
+use Hoa\Core;
 
-/**
- * \Hoa\Database\Exception
- */
--> import('Database.Exception')
-
-/**
- * \Hoa\Database\Layer\Pdo\Statement
- */
--> import('Database.Layer.Pdo.Statement')
-
-/**
- * \Hoa\Database\IDal\Wrapper
- */
--> import('Database.IDal.Wrapper');
-
-}
-
-namespace Hoa\Database\Layer\Pdo {
+use Hoa\Database;
 
 /**
  * Class \Hoa\Database\Layer\Pdo.
@@ -67,7 +50,7 @@ namespace Hoa\Database\Layer\Pdo {
  * @license    New BSD License
  */
 
-class Pdo implements \Hoa\Database\IDal\Wrapper {
+class Pdo implements Database\IDal\Wrapper {
 
     /**
      * Connection to database.
@@ -90,10 +73,10 @@ class Pdo implements \Hoa\Database\IDal\Wrapper {
      * @throw   \Hoa\Database\Exception
      */
     public function __construct ( $dns, $username, $password,
-                                  Array $driverOptions = array() ) {
+                                  Array $driverOptions = [] ) {
 
         if(false === extension_loaded('pdo'))
-            throw new \Hoa\Database\Exception(
+            throw new Database\Exception(
                 'The module PDO is not enabled.', 0);
 
         $connection = null;
@@ -104,7 +87,7 @@ class Pdo implements \Hoa\Database\IDal\Wrapper {
         }
         catch ( \PDOException $e ) {
 
-            throw new \Hoa\Database\Exception(
+            throw new Database\Exception(
                 $e->getMessage(), $e->getCode(), null, $e);
         }
 
@@ -138,7 +121,7 @@ class Pdo implements \Hoa\Database\IDal\Wrapper {
     protected function getConnection ( ) {
 
         if(null === $this->_connection)
-            throw new \Hoa\Database\Exception(
+            throw new Database\Exception(
                 'Cannot return a null connection.', 1);
 
         return $this->_connection;
@@ -208,12 +191,12 @@ class Pdo implements \Hoa\Database\IDal\Wrapper {
      * @return  \Hoa\Database\Layer\Pdo\Statement
      * @throw   \Hoa\Database\Exception
      */
-    public function prepare ( $statement, Array $options = array() ) {
+    public function prepare ( $statement, Array $options = [] ) {
 
         $handle = $this->getConnection()->prepare($statement);
 
         if(!($handle instanceof \PDOStatement))
-            throw new \Hoa\Database\Exception(
+            throw new Database\Exception(
                 '%3$s (%1$s/%2$d).', 2, $this->errorInfo());
 
         return new Statement($handle);
@@ -251,7 +234,7 @@ class Pdo implements \Hoa\Database\IDal\Wrapper {
         $handle = $this->getConnection()->query($statement);
 
         if(!($handle instanceof \PDOStatement))
-            throw new \Hoa\Database\Exception(
+            throw new Database\Exception(
                 '%3$s (%1$s/%2$d).', 3, $this->errorInfo());
 
         return new Statement($handle);
@@ -336,8 +319,8 @@ class Pdo implements \Hoa\Database\IDal\Wrapper {
      */
     public function getAttributes ( ) {
 
-        $out        = array();
-        $attributes = array(
+        $out        = [];
+        $attributes = [
              0 => 'AUTOCOMMIT',
              1 => 'CASE',
              2 => 'CLIENT_VERSION',
@@ -350,9 +333,9 @@ class Pdo implements \Hoa\Database\IDal\Wrapper {
              9 => 'SERVER_INFO',
             10 => 'SERVER_VERSION',
             11 => 'TIMEOUT'
-        );
+        ];
 
-        foreach($attributes as $i => $attribute)
+        foreach($attributes as $attribute)
             $out[$attribute] = $this->getAttribute($attribute);
 
         return $out;
@@ -373,13 +356,7 @@ class Pdo implements \Hoa\Database\IDal\Wrapper {
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Database\Layer\Pdo\Pdo');
-
-}
+Core\Consistency::flexEntity('Hoa\Database\Layer\Pdo\Pdo');

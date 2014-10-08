@@ -34,23 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Database\Query\Dml
- */
--> import('Database.Query.Dml')
-
-/**
- * \Hoa\Database\Query\SelectCore
- */
--> import('Database.Query.SelectCore');
-
-}
-
-namespace Hoa\Database\Query {
+namespace Hoa\Database\Query;
 
 /**
  * Class \Hoa\Database\Query\Select.
@@ -69,21 +53,21 @@ class Select extends SelectCore implements Dml {
      *
      * @var \Hoa\Database\Query\Select array
      */
-    protected $_select  = array();
+    protected $_select  = [];
 
     /**
      * Ordering terms.
      *
      * @var \Hoa\Database\Query\Select array
      */
-    protected $_orderBy = array();
+    protected $_orderBy = [];
 
     /**
      * Limit expressions.
      *
      * @var \Hoa\Database\Query\Select array
      */
-    protected $_limit   = array();
+    protected $_limit   = [];
 
     /**
      * Offset expression.
@@ -231,6 +215,4 @@ class Select extends SelectCore implements Dml {
 
         return $out;
     }
-}
-
 }

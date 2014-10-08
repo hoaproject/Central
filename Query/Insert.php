@@ -34,23 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Database\Query\Dml
- */
--> import('Database.Query.Dml')
-
-/**
- * \Hoa\Database\Query\Select
- */
--> import('Database.Query.Select');
-
-}
-
-namespace Hoa\Database\Query {
+namespace Hoa\Database\Query;
 
 /**
  * Class \Hoa\Database\Query\Insert.
@@ -83,14 +67,14 @@ class Insert implements Dml {
      *
      * @var \Hoa\Database\Query\Insert array
      */
-    protected $_columns       = array();
+    protected $_columns       = [];
 
     /**
      * Values (tuples).
      *
      * @var \Hoa\Database\Query\Insert array
      */
-    protected $_values        = array();
+    protected $_values        = [];
 
     /**
      * Whether we should use default values or not.
@@ -174,7 +158,7 @@ class Insert implements Dml {
      * Declare an alternative to “INSERT”.
      *
      * @access  protected
-     * @param   string  $alternative    Alternative.
+     * @param   string  $or    Alternative.
      * @return  \Hoa\Database\Query\Insert
      */
     protected function _or ( $or ) {
@@ -216,10 +200,10 @@ class Insert implements Dml {
         else {
 
             if(is_string($this->_values))
-                $this->_values = array();
+                $this->_values = [];
 
             $values = &$this->_values[];
-            $values = array();
+            $values = [];
 
             foreach(func_get_args() as $expression)
                 $values[] = $expression;
@@ -285,13 +269,11 @@ class Insert implements Dml {
         if(is_string($this->_values))
             return $out . ' ' . $this->_values;
 
-        $tuples = array();
+        $tuples = [];
 
         foreach($this->_values as $tuple)
             $tuples[] = '(' . implode(', ', $tuple) . ')';
 
         return $out . ' VALUES ' . implode(', ', $tuples);
     }
-}
-
 }
