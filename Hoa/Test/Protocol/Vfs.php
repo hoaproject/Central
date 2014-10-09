@@ -74,12 +74,21 @@ class Vfs extends Core\Protocol {
             return null;
 
         $components = parse_url($queue);
-        $file       = atoum\mock\streams\fs\file::get($components['path']);
+        $path       = &$components['path'];
 
-        if(!isset($components['query']))
-            return (string) $file;
+        if(isset($components['query']))
+            parse_str($components['query'], $queries);
+        else
+            $queries = ['type' => 'file'];
 
-        parse_str($components['query'], $queries);
+        if(   isset($queries['type'])
+           && 'directory' === $queries['type']) {
+
+            $file = atoum\mock\streams\fs\directory::get($path);
+            $file->dir_opendir = true;
+        }
+        else
+            $file = atoum\mock\streams\fs\file::get($path);
 
         foreach($queries as $query => $value)
             switch($query) {
@@ -87,7 +96,7 @@ class Vfs extends Core\Protocol {
                 case 'atime':
                 case 'ctime':
                 case 'mtime':
-                    $file->getStat()[$query] = $value;
+                    $file->getStat()[$query] = intval($value);
                   break;
 
                 case 'permissions':
