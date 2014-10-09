@@ -56,7 +56,14 @@ class Vfs extends Core\Protocol {
      *
      * @var \Hoa\Core\Protocol string
      */
-    protected $_name = 'Vfs';
+    protected $_name    = 'Vfs';
+
+    /**
+     * Current opened streams.
+     *
+     * @var \Hoa\Test\Protocol\Vfs array
+     */
+    protected $_streams = [];
 
 
 
@@ -90,6 +97,11 @@ class Vfs extends Core\Protocol {
         else
             $file = atoum\mock\streams\fs\file::get($path);
 
+        $parentDirectory = dirname($path);
+
+        if(isset($this->_streams[$parentDirectory]))
+            $this->_streams[$parentDirectory]->dir_readdir[] = $file;
+
         foreach($queries as $query => $value)
             switch($query) {
 
@@ -104,6 +116,8 @@ class Vfs extends Core\Protocol {
                     $file->setPermissions($value);
                   break;
             }
+
+        $this->_streams[$path] = $file;
 
         return (string) $file;
     }
