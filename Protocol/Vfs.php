@@ -70,6 +70,32 @@ class Vfs extends Core\Protocol {
      */
     public function reach ( $queue = null ) {
 
-        return (string) atoum\mock\streams\fs\file::get($queue);
+        if(null === $queue)
+            return null;
+
+        $components = parse_url($queue);
+        $file       = atoum\mock\streams\fs\file::get($components['path']);
+
+        if(!isset($components['query']))
+            return (string) $file;
+
+        parse_str($components['query'], $queries);
+
+        foreach($queries as $query => $value)
+            switch($query) {
+
+                case 'atime':
+                case 'ctime':
+                case 'mtime':
+                    $file->getStat()[$query] = $value;
+                  break;
+
+                case 'permissions':
+                    $value = sprintf('%04d', $value);
+                    $file->setPermissions($value);
+                  break;
+            }
+
+        return (string) $file;
     }
 }
