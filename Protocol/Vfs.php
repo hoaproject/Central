@@ -96,7 +96,7 @@ class Vfs extends Core\Protocol {
                 case 'atime':
                 case 'ctime':
                 case 'mtime':
-                    $file->getStat()[$query] = $value;
+                    $file->getStat()[$query] = intval($value);
                   break;
 
                 case 'permissions':
