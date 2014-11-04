@@ -106,13 +106,6 @@ class          Response
     const STATUS_PROCESSING                        = '102 Processing';
 
     /**
-     * Checkpoint.
-     *
-     * @const string
-     */
-    const STATUS_CHECKPOINT                        = '103 Checkpoint';
-
-    /**
      * OK.
      *
      * @const string
