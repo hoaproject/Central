@@ -243,7 +243,7 @@ class          Response
      *
      * @const string
      */
-    const STATUS_RESUME_INCOMPLETE                 = '308 Resume Incomplete';
+    const STATUS_RESUME_INCOMPLETE                 = '308 Permanent Redirect';
 
     /**
      * Bad request.
@@ -334,7 +334,7 @@ class          Response
      *
      * @const string
      */
-    const STATUS_PRECONDITION_FAILED               = '412 PreCondition Failed';
+    const STATUS_PRECONDITION_FAILED               = '412 Precondition Failed';
 
     /**
      * Request entity too large.
@@ -411,7 +411,7 @@ class          Response
      *
      * @const string
      */
-    const STATUS_PRECONDITION_REQUIRED             = '428 PreCondition Required';
+    const STATUS_PRECONDITION_REQUIRED             = '428 Precondition Required';
 
     /**
      * Too Many Requests (please, see RFC6585).
