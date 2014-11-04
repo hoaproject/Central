@@ -376,7 +376,7 @@ class          Response
      *
      * @const string
      */
-    const STATUS_IM_A_TEAPOT                       = '418 I\'m a Teapot';
+    const STATUS_IM_A_TEAPOT                       = '418 I\'m a teapot';
 
     /**
      * Unprocessable Entity (please, see RFC4918).
