@@ -311,8 +311,7 @@ foreach($glob as $value)
 
 ### Look ahead
 
-`Hoa\Iterator\Lookahead` allows to look ahead for the next element. It extends
-[`CachingIterator`](http://php.net/cachingiterator).
+`Hoa\Iterator\Lookahead` allows to look ahead for the next element:
 
 ```php
 $counter   = new Hoa\Iterator\Counter(0, 5, 1);
@@ -323,7 +322,7 @@ foreach($lookahead as $value) {
     echo $value;
 
     if(true === $lookahead->hasNext())
-        echo ' (next: ', $lookahead->getInnerIterator()->current(), ')';
+        echo ' (next: ', $lookahead->getNext(), ')';
 
     echo "\n";
 }
@@ -381,13 +380,7 @@ alphabetic order):
     [`RecursiveArrayIterator`](http://php.net/recursivearrayiterator)),
   * `Hoa\Iterator\Recursive\Mock`,
   * `Hoa\Iterator\Recursive\RegularExpression`
-    (it extends [`RecursiveRegularExpression`](http://php.net/recursiveregexiterator)),
-  * `Hoa\Iterator\Recursive\Tree` (it extends
-    [`RecursiveTreeIterator`](http://php.net/recursivetreeiterator)).
-
-Also, there is the `Hoa\Iterator\HasChildren` iterator that represents an
-iterator with children (it extends
-[`ParentIterator`](http://php.net/parentiterator)).
+    (it extends [`RecursiveRegularExpression`](http://php.net/recursiveregexiterator)).
 
 ## Documentation
 

@@ -34,69 +34,36 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Iterator;
+namespace Hoa\Iterator\Test\Unit;
+
+use Hoa\Test;
+use Hoa\Iterator as LUT;
 
 /**
- * Class \Hoa\Iterator\FileSystem.
+ * Class \Hoa\Iterator\Test\Unit\Infinite.
  *
- * Extending the SPL FileSystemIterator class.
+ * Test suite of the infinite iterator.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2014 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class FileSystem extends \FilesystemIterator {
+class Infinite extends Test\Unit\Suite {
 
-    /**
-     * SplFileInfo classname.
-     *
-     * @var \Hoa\Iterator\FileSystem string
-     */
-    protected $_splFileInfoClass = null;
+    public function case_classic ( ) {
 
-
-
-    /**
-     * Constructor.
-     * Please, see \FileSystemIterator::__construct() method.
-     * We add the $splFileInfoClass parameter.
-     *
-     * @access  public
-     * @param   string  $path                Path.
-     * @param   int     $flags               Flags.
-     * @param   string  $splFileInfoClass    SplFileInfo classname.
-     */
-    public function __construct ( $path, $flags = null, $splFileInfoClass = null ) {
-
-        $this->_splFileInfoClass = $splFileInfoClass;
-
-        if(null === $flags)
-            parent::__construct($path);
-        else
-            parent::__construct($path, $flags);
-
-        return;
-    }
-
-    /**
-     * Current.
-     * Please, see \FileSystemIterator::current() method.
-     *
-     * @access  public
-     * @return  mixed
-     */
-    public function current ( ) {
-
-        $out = parent::current();
-
-        if(   null !== $this->_splFileInfoClass
-           && $out instanceof \SplFileInfo) {
-
-            $out->setInfoClass($this->_splFileInfoClass);
-            $out = $out->getFileInfo();
-        }
-
-        return $out;
+        $this
+            ->given(
+                $iterator = new LUT\Map(['a']),
+                $infinite = new LUT\Infinite($iterator),
+                $limit    = new LUT\Limit($infinite, 0, 100)
+            )
+            ->when($result = iterator_to_array($limit, false))
+            ->then
+                ->array($result)
+                    ->isEqualTo(array_fill(0, 100, 'a'))
+                    ->size
+                        ->isEqualTo(100);
     }
 }

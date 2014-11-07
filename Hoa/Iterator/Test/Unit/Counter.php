@@ -34,69 +34,60 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Iterator;
+namespace Hoa\Iterator\Test\Unit;
+
+use Hoa\Test;
+use Hoa\Iterator as LUT;
 
 /**
- * Class \Hoa\Iterator\FileSystem.
+ * Class \Hoa\Iterator\Test\Unit\Counter.
  *
- * Extending the SPL FileSystemIterator class.
+ * Test suite of the counter iterator.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2014 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class FileSystem extends \FilesystemIterator {
+class Counter extends Test\Unit\Suite {
 
-    /**
-     * SplFileInfo classname.
-     *
-     * @var \Hoa\Iterator\FileSystem string
-     */
-    protected $_splFileInfoClass = null;
+    public function case_classic ( ) {
 
-
-
-    /**
-     * Constructor.
-     * Please, see \FileSystemIterator::__construct() method.
-     * We add the $splFileInfoClass parameter.
-     *
-     * @access  public
-     * @param   string  $path                Path.
-     * @param   int     $flags               Flags.
-     * @param   string  $splFileInfoClass    SplFileInfo classname.
-     */
-    public function __construct ( $path, $flags = null, $splFileInfoClass = null ) {
-
-        $this->_splFileInfoClass = $splFileInfoClass;
-
-        if(null === $flags)
-            parent::__construct($path);
-        else
-            parent::__construct($path, $flags);
-
-        return;
+        $this
+            ->given($iterator = new LUT\Counter(0, 12, 3))
+            ->when($result = iterator_to_array($iterator))
+            ->then
+                ->array($result)
+                    ->isEqualTo([0, 3, 6, 9]);
     }
 
-    /**
-     * Current.
-     * Please, see \FileSystemIterator::current() method.
-     *
-     * @access  public
-     * @return  mixed
-     */
-    public function current ( ) {
+    public function case_offset ( ) {
 
-        $out = parent::current();
+        $this
+            ->given($iterator = new LUT\Counter(6, 12, 3))
+            ->when($result = iterator_to_array($iterator))
+            ->then
+                ->array($result)
+                    ->isEqualTo([6, 9]);
+    }
 
-        if(   null !== $this->_splFileInfoClass
-           && $out instanceof \SplFileInfo) {
+    public function case_too_small ( ) {
 
-            $out->setInfoClass($this->_splFileInfoClass);
-            $out = $out->getFileInfo();
-        }
+        $this
+            ->exception(function ( ) {
 
-        return $out;
+                new LUT\Counter(0, 0, 0);
+            })
+                ->isInstanceOf('Hoa\Iterator\Exception');
+    }
+
+    public function case_too_big ( ) {
+
+        $this
+            ->given($iterator = new LUT\Counter(0, 12, 13))
+            ->when($result = iterator_to_array($iterator))
+            ->then
+                ->array($result)
+                    ->isEqualTo([0]);
     }
 }

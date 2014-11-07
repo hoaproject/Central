@@ -34,16 +34,42 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Iterator\Recursive;
+namespace Hoa\Iterator\Test\Unit;
+
+use Hoa\Test;
+use Hoa\Iterator as LUT;
 
 /**
- * Class \Hoa\Iterator\Recursive\Tree.
+ * Class \Hoa\Iterator\Test\Unit\CallbackGenerator.
  *
- * Extending the SPL RecursiveTreeIterator class.
+ * Test suite of the callback generator iterator.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2014 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Tree extends \RecursiveTreeIterator { }
+class CallbackGenerator extends Test\Unit\Suite {
+
+    public function case_classic ( ) {
+
+        $this
+            ->given(
+                $iterator = new LUT\CallbackGenerator(function ( $key ) {
+
+                    return $key * 2;
+                }),
+                $limit    = new LUT\Limit($iterator, 0, 5)
+            )
+            ->when($result = iterator_to_array($limit))
+            ->then
+                ->array($result)
+                    ->isEqualTo([
+                        0,
+                        2,
+                        4,
+                        6,
+                        8
+                    ]);
+    }
+}

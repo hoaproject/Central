@@ -37,99 +37,87 @@
 namespace Hoa\Iterator;
 
 /**
- * Class \Hoa\Iterator\Counter.
+ * Class \Hoa\Iterator\Lookbehind.
  *
- * A counter.
+ * Look behind iterator.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2014 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Counter implements Iterator {
+class          Lookbehind
+    extends    IteratorIterator
+    implements Outer {
 
     /**
-     * From (lower bound).
+     * Current iterator.
      *
-     * @var \Hoa\Iterator\Counter int
+     * @var \Hoa\Iterator\Lookbehind object
      */
-    protected $_from = 0;
+    protected $_iterator        = null;
 
     /**
-     * Current key.
+     * Previous key.
      *
-     * @var \Hoa\Iterator\Counter int
+     * @var \Hoa\Iterator\Lookbehind mixed
      */
-    protected $_key  = 0;
+    protected $_previousKey     = -1;
 
     /**
-     * Current index.
+     * Previous value.
      *
-     * @var \Hoa\Iterator\Counter int
+     * @var \Hoa\Iterator\Lookbehind mixed
      */
-    protected $_i    = 0;
-
-    /**
-     * To (upper bound).
-     *
-     * @var \Hoa\Iterator\Counter int
-     */
-    protected $_to   = 0;
-
-    /**
-     * Step.
-     *
-     * @var \Hoa\Iterator\Counter int
-     */
-    protected $_step = 0;
+    protected $_previousCurrent = null;
 
 
 
     /**
-     * Constructor.
-     * Equivalent to:
-     *     for($i = $from; $i < $to; $i += $step)
+     * Construct.
      *
      * @access  public
-     * @param   int  $from    Start value.
-     * @param   int  $to      Maximum value.
-     * @param   int  $step    Step.
+     * @param   \Iterator  $iterator    Iterator.
      * @return  void
-     * @throw   \Hoa\Iterator\Exception
      */
-    public function __construct ( $from, $to, $step ) {
+    public function __construct ( \Iterator $iterator ) {
 
-        if($step <= 0)
-            throw new Exception(
-                'The step must be non-negative; given %d.', 0, $step);
-
-        $this->_from = $from;
-        $this->_to   = $to;
-        $this->_step = $step;
+        $this->_iterator = $iterator;
 
         return;
+    }
+
+    /**
+     * Get inner iterator.
+     *
+     * @access  public
+     * @return  \Iterator
+     */
+    public function getInnerIterator ( ) {
+
+        return $this->_iterator;
     }
 
     /**
      * Return the current element.
      *
      * @access  public
-     * @return  int
+     * @return  mixed
      */
     public function current ( ) {
 
-        return $this->_i;
+        return $this->getInnerIterator()->current();
     }
 
     /**
      * Return the key of the current element.
      *
      * @access  public
-     * @return  int
+     * @return  mixed
      */
     public function key ( ) {
 
-        return $this->_key;
+        return $this->getInnerIterator()->key();
     }
 
     /**
@@ -140,10 +128,10 @@ class Counter implements Iterator {
      */
     public function next ( ) {
 
-        ++$this->_key;
-        $this->_i += $this->_step;
+        $this->_previousKey     = $this->key();
+        $this->_previousCurrent = $this->current();
 
-        return;
+        return $this->getInnerIterator()->next();
     }
 
     /**
@@ -154,10 +142,10 @@ class Counter implements Iterator {
      */
     public function rewind ( ) {
 
-        $this->_key = 0;
-        $this->_i   = $this->_from;
+        $this->_previousKey     = -1;
+        $this->_previousCurrent = null;
 
-        return;
+        return $this->getInnerIterator()->rewind();
     }
 
     /**
@@ -168,6 +156,39 @@ class Counter implements Iterator {
      */
     public function valid ( ) {
 
-        return $this->_i < $this->_to;
+        return $this->getInnerIterator()->valid();
+    }
+
+    /**
+     * Check whether there is a previous element.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function hasPrevious ( ) {
+
+        return -1 !== $this->_previousKey;
+    }
+
+    /**
+     * Get previous value.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function getPrevious ( ) {
+
+        return $this->_previousCurrent;
+    }
+
+    /**
+     * Get previous key.
+     *
+     * @access  public
+     * @return  mixed
+     */
+    public function getPreviousKey ( ) {
+
+        return $this->_previousKey;
     }
 }

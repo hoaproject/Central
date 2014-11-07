@@ -34,69 +34,66 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Iterator;
+namespace Hoa\Iterator\Test\Unit;
+
+use Hoa\Test;
+use Hoa\Iterator as LUT;
 
 /**
- * Class \Hoa\Iterator\FileSystem.
+ * Class \Hoa\Iterator\Test\Unit\Limit.
  *
- * Extending the SPL FileSystemIterator class.
+ * Test suite of the limit iterator.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2014 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class FileSystem extends \FilesystemIterator {
+class Limit extends Test\Unit\Suite {
 
-    /**
-     * SplFileInfo classname.
-     *
-     * @var \Hoa\Iterator\FileSystem string
-     */
-    protected $_splFileInfoClass = null;
+    private static $_dummyArray = ['f', 'o', 'o', 'b', 'a', 'r'];
 
 
 
-    /**
-     * Constructor.
-     * Please, see \FileSystemIterator::__construct() method.
-     * We add the $splFileInfoClass parameter.
-     *
-     * @access  public
-     * @param   string  $path                Path.
-     * @param   int     $flags               Flags.
-     * @param   string  $splFileInfoClass    SplFileInfo classname.
-     */
-    public function __construct ( $path, $flags = null, $splFileInfoClass = null ) {
+    public function case_classic ( ) {
 
-        $this->_splFileInfoClass = $splFileInfoClass;
-
-        if(null === $flags)
-            parent::__construct($path);
-        else
-            parent::__construct($path, $flags);
-
-        return;
+        $this
+            ->given(
+                $iterator = new LUT\Map(self::$_dummyArray),
+                $limit    = new LUT\Limit($iterator, 2, 3)
+            )
+            ->when($result = iterator_to_array($limit))
+            ->then
+                ->array($result)
+                    ->isEqualTo([
+                        2 => 'o',
+                        3 => 'b',
+                        4 => 'a'
+                    ]);
     }
 
-    /**
-     * Current.
-     * Please, see \FileSystemIterator::current() method.
-     *
-     * @access  public
-     * @return  mixed
-     */
-    public function current ( ) {
+    public function case_negative_offset ( ) {
 
-        $out = parent::current();
+        $this
+            ->given($iterator = new LUT\Map(self::$_dummyArray))
+            ->exception(function ( ) use ( $iterator ) {
 
-        if(   null !== $this->_splFileInfoClass
-           && $out instanceof \SplFileInfo) {
+                new LUT\Limit($iterator, -2, 3);
+            })
+                ->isInstanceOf('OutOfRangeException');
+    }
 
-            $out->setInfoClass($this->_splFileInfoClass);
-            $out = $out->getFileInfo();
-        }
+    public function case_empty ( ) {
 
-        return $out;
+        $this
+            ->given(
+                $iterator = new LUT\Map(self::$_dummyArray),
+                $limit    = new LUT\Limit($iterator, 0, 0)
+            )
+            ->exception(function ( ) use ( $limit ) {
+
+                iterator_to_array($limit);
+            })
+                ->isInstanceOf('OutOfBoundsException');
     }
 }

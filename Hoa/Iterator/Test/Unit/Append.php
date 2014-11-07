@@ -34,69 +34,75 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Iterator;
+namespace Hoa\Iterator\Test\Unit;
+
+use Hoa\Test;
+use Hoa\Iterator as LUT;
 
 /**
- * Class \Hoa\Iterator\FileSystem.
+ * Class \Hoa\Iterator\Test\Unit\Append.
  *
- * Extending the SPL FileSystemIterator class.
+ * Test suite of the repeater iterator.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2014 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class FileSystem extends \FilesystemIterator {
+class Append extends Test\Unit\Suite {
 
-    /**
-     * SplFileInfo classname.
-     *
-     * @var \Hoa\Iterator\FileSystem string
-     */
-    protected $_splFileInfoClass = null;
+    public function case_classic ( ) {
 
-
-
-    /**
-     * Constructor.
-     * Please, see \FileSystemIterator::__construct() method.
-     * We add the $splFileInfoClass parameter.
-     *
-     * @access  public
-     * @param   string  $path                Path.
-     * @param   int     $flags               Flags.
-     * @param   string  $splFileInfoClass    SplFileInfo classname.
-     */
-    public function __construct ( $path, $flags = null, $splFileInfoClass = null ) {
-
-        $this->_splFileInfoClass = $splFileInfoClass;
-
-        if(null === $flags)
-            parent::__construct($path);
-        else
-            parent::__construct($path, $flags);
-
-        return;
+        $this
+            ->given(
+                $counter1 = new LUT\Counter(0, 12, 3),
+                $counter2 = new LUT\Counter(13, 23, 2),
+                $append   = new LUT\Append(),
+                $append->append($counter1),
+                $append->append($counter2)
+            )
+            ->when($result = iterator_to_array($append, false))
+            ->then
+                ->array($result)
+                    ->isEqualTo([
+                        0,
+                        3,
+                        6,
+                        9,
+                        13,
+                        15,
+                        17,
+                        19,
+                        21
+                    ]);
     }
 
-    /**
-     * Current.
-     * Please, see \FileSystemIterator::current() method.
-     *
-     * @access  public
-     * @return  mixed
-     */
-    public function current ( ) {
+    public function case_singleton ( ) {
 
-        $out = parent::current();
+        $this
+            ->given(
+                $counter1 = new LUT\Counter(0, 12, 3),
+                $append   = new LUT\Append(),
+                $append->append($counter1)
+            )
+            ->when($result = iterator_to_array($append))
+            ->then
+                ->array($result)
+                    ->isEqualTo([
+                        0,
+                        3,
+                        6,
+                        9
+                    ]);
+    }
 
-        if(   null !== $this->_splFileInfoClass
-           && $out instanceof \SplFileInfo) {
+    public function case_empty ( ) {
 
-            $out->setInfoClass($this->_splFileInfoClass);
-            $out = $out->getFileInfo();
-        }
-
-        return $out;
+        $this
+            ->given($append = new LUT\Append())
+            ->when($result = iterator_to_array($append))
+            ->then
+                ->array($result)
+                    ->isEmpty();
     }
 }

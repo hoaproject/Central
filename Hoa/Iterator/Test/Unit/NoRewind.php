@@ -34,16 +34,43 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Iterator\Recursive;
+namespace Hoa\Iterator\Test\Unit;
+
+use Hoa\Test;
+use Hoa\Iterator as LUT;
 
 /**
- * Class \Hoa\Iterator\Recursive\Lookahead.
+ * Class \Hoa\Iterator\Test\Unit\NoRewind.
  *
- * Extending the SPL RecursiveCachingIterator class.
+ * Test suite of the no-rewind iterator.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2014 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Lookahead extends \RecursiveCachingIterator { }
+class NoRewind extends Test\Unit\Suite {
+
+    public function case_classic ( ) {
+
+        $this
+            ->given(
+                $dummyArray = ['f', 'o', 'o', 'b', 'a', 'r'],
+                $iterator   = new LUT\Map($dummyArray),
+                $norewind   = new LUT\NoRewind($iterator)
+            )
+            ->when($result = iterator_to_array($norewind))
+            ->then
+                ->array($result)
+                    ->isEqualTo($dummyArray)
+
+            ->when($norewind->rewind())
+                ->boolean($norewind->valid())
+                    ->isFalse()
+
+            ->when($result = iterator_to_array($norewind))
+            ->then
+                ->array($result)
+                    ->isEmpty();
+    }
+}

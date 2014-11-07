@@ -34,16 +34,73 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Iterator;
+namespace Hoa\Iterator\Test\Unit;
+
+use Hoa\Test;
+use Hoa\Iterator as LUT;
 
 /**
- * Class \Hoa\Iterator\HasChildren.
+ * Class \Hoa\Iterator\Test\Unit\Repeater.
  *
- * Extending the SPL ParentIterator interface.
+ * Test suite of the repeater iterator.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2014 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class HasChildren extends \ParentIterator { }
+class Repeater extends Test\Unit\Suite {
+
+    private static $_dummyArray = ['f', 'o', 'o', 'b', 'a', 'r'];
+
+
+
+    public function case_classic ( ) {
+
+        $this
+            ->given(
+                $iterator = new LUT\Map(self::$_dummyArray),
+                $repeater = new LUT\Repeater($iterator, 3)
+            )
+            ->when($result = iterator_to_array($repeater))
+            ->then
+                ->array($result)
+                    ->isEqualTo(
+                        self::$_dummyArray +
+                        self::$_dummyArray +
+                        self::$_dummyArray
+                    );
+    }
+
+    public function case_with_body ( ) {
+
+        $self = $this;
+
+        $this
+            ->given(
+                $iterator = new LUT\Map(self::$_dummyArray),
+                $count    = 0,
+                $repeater = new LUT\Repeater(
+                    $iterator,
+                    3,
+                    function ( $repetition ) use ( $self, &$count ) {
+
+                        $this
+                            ->integer($repetition)
+                                ->isEqualTo($count + 1);
+
+                        ++$count;
+                    })
+            )
+            ->when($result = iterator_to_array($repeater))
+            ->then
+                ->array($result)
+                    ->isEqualTo(
+                        self::$_dummyArray +
+                        self::$_dummyArray +
+                        self::$_dummyArray
+                    )
+                ->integer($count)
+                    ->isEqualTo(3);
+    }
+}
