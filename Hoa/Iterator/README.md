@@ -85,7 +85,6 @@ foreach($foobar as $value)
 content of an iterator. It extends
 [`FilterIterator`](http://php.net/filteriterator) and
 [`CallbackFilterIterator`](http://php.net/callbackfilteriterator).
-`Hoa\Iterator\CallbackFilter` adds support for prior PHP5.4 versions.
 
 ```php
 $filter = new Hoa\Iterator\CallbackFilter(
@@ -106,7 +105,7 @@ foreach($filter as $value)
 ```
 
 Also, `Hoa\Iterator\RegularExpression` allows to filter based on a regular
-expression. It extends [`RegexIterator`](http://php.net/regexiterator).
+expression.
 
 ### Limit
 
@@ -337,6 +336,9 @@ foreach($lookahead as $value) {
  */
 ```
 
+The `Hoa\Iterator\Lookbehind` also exists and allows to look behind for the
+previous element.
+
 ### Callback generator
 
 `Hoa\Iterator\CallbackGenerator` allows to transform any callable into an
@@ -374,8 +376,6 @@ alphabetic order):
     [`RecursiveFilterIterator`](http://php.net/recursivefilteriterator)),
   * `Hoa\Iterator\Recursive\Iterator` (it extends
     [`RecursiveIteratorIterator`](http://php.net/recursiveiteratoriterator)),
-  * `Hoa\Iterator\Recursive\Lookahead` (it extends
-    [`RecursiveCachingIterator`](http://php.net/recursivecachingiterator)),
   * `Hoa\Iterator\Recursive\Map` (it extends
     [`RecursiveArrayIterator`](http://php.net/recursivearrayiterator)),
   * `Hoa\Iterator\Recursive\Mock`,
