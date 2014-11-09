@@ -141,31 +141,27 @@ class Requiresnapshot extends Console\Dispatcher\Kit {
         $nextSnapshotDT->add($sixWeeks);
         $today          = new \DateTime('now', $timeZone);
 
-        $needNewSnaphot  = '+' === $nextSnapshotDT->diff($today)->format('%R');
-        $numberOfDays    = 0;
-        $numberOfCommits = 0;
-        $output          = null;
+        $needNewSnapshot  = '+' === $nextSnapshotDT->diff($today)->format('%R');
+        $numberOfDays     = 0;
+        $numberOfCommits  = 0;
+        $output           = 'No snapshot is required.';
 
-        if(true === $needNewSnaphot) {
+        if(true === $needNewSnapshot) {
 
             $numberOfDays    = (int) $nextSnapshotDT->diff($today)->format('%a');
             $numberOfCommits = (int) Console\Processus::execute(
                 'git --git-dir=' . $path . '/.git ' .
                     'rev-list ' . $tag . '..origin/master --count'
             );
+            $needNewSnapshot = 0 < $numberOfCommits;
 
-            if(0 < $numberOfCommits)
-                $needNewSnaphot = true;
-
-            if(true === $verbose)
+            if(true === $needNewSnapshot)
                 $output = 'A snapshot is required, since ' . $numberOfDays .
                           ' day' . (1 < $numberOfDays ? 's' : '') .
                           ' (tag ' . $tag . ', ' . $numberOfCommits .
                           ' commit' . (1 < $numberOfCommits ? 's' : '') .
                           ' to publish)!';
         }
-        elseif(true === $verbose)
-            $output = 'No snapshot is required.';
 
         if(   true === $printSnapshot
            || true === $printDays
@@ -189,7 +185,7 @@ class Requiresnapshot extends Console\Dispatcher\Kit {
         elseif(true === $verbose)
             echo $output, "\n";
 
-        return !$needNewSnaphot;
+        return !$needNewSnapshot;
     }
 
     /**
