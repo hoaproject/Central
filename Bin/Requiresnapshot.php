@@ -39,25 +39,26 @@ namespace Hoa\Devtools\Bin;
 use Hoa\Console;
 
 /**
- * Class \Hoa\Devtools\Bin\Needsnapshot.
+ * Class \Hoa\Devtools\Bin\Requiresnapshot.
  *
- * Check if a library needs a new snapshot or not.
+ * Check if a library requires a new snapshot or not.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2014 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Needsnapshot extends Console\Dispatcher\Kit {
+class Requiresnapshot extends Console\Dispatcher\Kit {
 
     /**
      * Options description.
      *
-     * @var \Hoa\Devtools\Bin\Needsnapshot array
+     * @var \Hoa\Devtools\Bin\Requiresnapshot array
      */
     protected $options = [
-        ['help', Console\GetOption::NO_ARGUMENT, 'h'],
-        ['help', Console\GetOption::NO_ARGUMENT, '?']
+        ['no-verbose', Console\GetOption::NO_ARGUMENT, 'V'],
+        ['help',       Console\GetOption::NO_ARGUMENT, 'h'],
+        ['help',       Console\GetOption::NO_ARGUMENT, '?']
     ];
 
 
@@ -71,11 +72,16 @@ class Needsnapshot extends Console\Dispatcher\Kit {
     public function main ( ) {
 
         $library = null;
+        $verbose = Console::isDirect(STDOUT);
 
         while(false !== $c = $this->getOption($v)) switch($c) {
 
             case '__ambiguous':
                 $this->resolveOptionAmbiguity($v);
+              break;
+
+            case 'V':
+                $verbose = false;
               break;
 
             case 'h':
@@ -99,10 +105,10 @@ class Needsnapshot extends Console\Dispatcher\Kit {
                 0, $library);
 
         $tag = Console\Processus::execute(
-            'git --git-dir=' . $path . '/.git tag | tail -n 1',
+            'git --git-dir=' . $path . '/.git ' .
+                'tag | tail -n 1',
             false
         );
-        $tag = '1.14.09.11';
 
         if(empty($tag))
             throw new Console\Exception('No tag.', 1);
@@ -118,9 +124,32 @@ class Needsnapshot extends Console\Dispatcher\Kit {
         $nextSnapshot->add($sixWeeks);
         $today        = new \DateTime('now', $timeZone);
 
-        $out = '+' === $nextSnapshot->diff($today)->format('%R');
+        $needNewSnaphot = '+' === $nextSnapshot->diff($today)->format('%R');
 
-        return $out;
+        if(true === $needNewSnaphot) {
+
+            if(true === $verbose)
+                echo 'A snapshot is required, since ',
+                     $nextSnapshot->diff($today)->format('%a'),
+                     ' days ';
+
+            $numberOfCommits = (int) Console\Processus::execute(
+                'git --git-dir=' . $path . '/.git ' .
+                    'rev-list ' . $tag . '..origin/master --count'
+            );
+
+            if(true === $verbose)
+                echo '(', $numberOfCommits, ' commit',
+                     (1 < $numberOfCommits ? 's' : ''),
+                     ' to publish)!';
+
+            if(0 < $numberOfCommits)
+                $needNewSnaphot = true;
+        }
+        elseif(true === $verbose)
+            echo 'No snapshot is required.', "\n";
+
+        return !$needNewSnaphot;
     }
 
     /**
@@ -131,9 +160,11 @@ class Needsnapshot extends Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        echo 'Usage   : devtools:needsnapshot <options> library', "\n",
+        echo 'Usage   : devtools:requiresnapshot <options> library', "\n",
              'Options :', "\n",
              $this->makeUsageOptionsList([
+                 'V'    => 'No-verbose, i.e. be as quiet as possible, just ' .
+                           'print essential informations.',
                  'help' => 'This help.'
              ]), "\n";
 
@@ -142,4 +173,4 @@ class Needsnapshot extends Console\Dispatcher\Kit {
 }
 
 __halt_compiler();
-Check if a library needs a new snapshot or not.
+Check if a library requires a new snapshot or not.
