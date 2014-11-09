@@ -22,7 +22,8 @@
         "source": "http://git.hoa-project.net/"
     },
     "require": {
-        "hoa/core": "~2.0"
+        "hoa/core"    : "~2.0",
+        "hoa/iterator": "~0.0"
     },
     "target-dir": "Hoa/Bench",
     "autoload"  : { "psr-0": { "Hoa\\Bench": "." } },
