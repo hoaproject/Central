@@ -106,8 +106,7 @@ class Requiresnapshot extends Console\Dispatcher\Kit {
 
         $tag = Console\Processus::execute(
             'git --git-dir=' . $path . '/.git ' .
-                'tag | tail -n 1',
-            false
+                'describe --abbrev=0 --tags origin/master'
         );
 
         if(empty($tag))
