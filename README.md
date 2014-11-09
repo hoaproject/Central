@@ -27,6 +27,59 @@ install](http://hoa-project.net/Source.html).
 
 ## Quick usage
 
+We propose a quick overview of some commands.
+
+### `dependency`
+
+Check the dependencies of a specific library.
+
+```sh
+$ hoa devtools:dependency console
+Dependency for the library Console:
+    • hoa/core => ~…
+    • hoa/stream => ~…
+    • hoa/string => ~…
+```
+
+### `diagnostic`
+
+Help to write (and send) a diagnostic report. Very useful to help users.
+
+```sh
+$ hoa devtools:diagnostic --section bin
+[bin]
+self = "…/hoa"
+hoa = "/usr/local/lib/Hoa.central"
+php_dir = "…/bin"
+php = "…/bin/php"
+```
+
+### `paste`
+
+Paste something somewhere (by default, on `paste.hoa-project.net`).
+
+```sh
+$ echo 'foobar' | hoa devtools:paste
+http://paste.hoa-project.net:80/<id>
+```
+
+### `requiresnapshot`
+
+Check if a library requires a new snapshot or not.
+
+```sh
+$ hoa devtools:requiresnapshot console
+A snapshot is required, since … days (tag …, … commits to publish)!
+```
+
+### `state`
+
+Get the state of a library.
+
+```sh
+$ hoa devtools:state core
+finalized
+```
 
 ## Documentation
 
