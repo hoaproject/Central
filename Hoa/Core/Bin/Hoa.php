@@ -90,7 +90,7 @@ try {
             => 'main'
     ));
     $dispatcher->setKitName('Hoa\Console\Dispatcher\Kit');
-    exit($dispatcher->dispatch($router));
+    exit((int) $dispatcher->dispatch($router));
 }
 catch ( \Hoa\Core\Exception $e ) {
 
