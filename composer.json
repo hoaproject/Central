@@ -23,7 +23,7 @@
     },
     "require": {
         "hoa/core"    : "~2.0",
-        "hoa/iterator": "~0.0"
+        "hoa/iterator": "~1.0"
     },
     "target-dir": "Hoa/Bench",
     "autoload"  : { "psr-0": { "Hoa\\Bench": "." } },
