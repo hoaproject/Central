@@ -57,6 +57,9 @@ class Requiresnapshot extends Console\Dispatcher\Kit {
      */
     protected $options = [
         ['no-verbose', Console\GetOption::NO_ARGUMENT, 'V'],
+        ['snapshot',   Console\GetOption::NO_ARGUMENT, 's'],
+        ['days',       Console\GetOption::NO_ARGUMENT, 'd'],
+        ['commits',    Console\GetOption::NO_ARGUMENT, 'c'],
         ['help',       Console\GetOption::NO_ARGUMENT, 'h'],
         ['help',       Console\GetOption::NO_ARGUMENT, '?']
     ];
@@ -71,8 +74,11 @@ class Requiresnapshot extends Console\Dispatcher\Kit {
      */
     public function main ( ) {
 
-        $library = null;
-        $verbose = Console::isDirect(STDOUT);
+        $library       = null;
+        $verbose       = Console::isDirect(STDOUT);
+        $printSnapshot = false;
+        $printDays     = false;
+        $printCommits  = false;
 
         while(false !== $c = $this->getOption($v)) switch($c) {
 
@@ -82,6 +88,18 @@ class Requiresnapshot extends Console\Dispatcher\Kit {
 
             case 'V':
                 $verbose = false;
+              break;
+
+            case 's':
+                $printSnapshot = true;
+              break;
+
+            case 'd':
+                $printDays = true;
+              break;
+
+            case 'c':
+                $printCommits = true;
               break;
 
             case 'h':
@@ -112,41 +130,64 @@ class Requiresnapshot extends Console\Dispatcher\Kit {
         if(empty($tag))
             throw new Console\Exception('No tag.', 1);
 
-        $timeZone     = new \DateTimeZone('UTC');
-        $snapshot     = \DateTime::createFromFormat(
+        $timeZone       = new \DateTimeZone('UTC');
+        $snapshotDT     = \DateTime::createFromFormat(
             '*.y.m.d',
             $tag,
             $timeZone
         );
-        $sixWeeks     = new \DateInterval('P6W');
-        $nextSnapshot = clone $snapshot;
-        $nextSnapshot->add($sixWeeks);
-        $today        = new \DateTime('now', $timeZone);
+        $sixWeeks       = new \DateInterval('P6W');
+        $nextSnapshotDT = clone $snapshotDT;
+        $nextSnapshotDT->add($sixWeeks);
+        $today          = new \DateTime('now', $timeZone);
 
-        $needNewSnaphot = '+' === $nextSnapshot->diff($today)->format('%R');
+        $needNewSnaphot  = '+' === $nextSnapshotDT->diff($today)->format('%R');
+        $numberOfDays    = 0;
+        $numberOfCommits = 0;
+        $output          = null;
 
         if(true === $needNewSnaphot) {
 
-            if(true === $verbose)
-                echo 'A snapshot is required, since ',
-                     $nextSnapshot->diff($today)->format('%a'),
-                     ' days ';
-
+            $numberOfDays    = (int) $nextSnapshotDT->diff($today)->format('%a');
             $numberOfCommits = (int) Console\Processus::execute(
                 'git --git-dir=' . $path . '/.git ' .
                     'rev-list ' . $tag . '..origin/master --count'
             );
 
-            if(true === $verbose)
-                echo '(', $numberOfCommits, ' commit',
-                     (1 < $numberOfCommits ? 's' : ''),
-                     ' to publish)!';
-
             if(0 < $numberOfCommits)
                 $needNewSnaphot = true;
+
+            if(true === $verbose)
+                $output = 'A snapshot is required, since ' . $numberOfDays .
+                          ' day' . (1 < $numberOfDays ? 's' : '') .
+                          ' (tag ' . $tag . ', ' . $numberOfCommits .
+                          ' commit' . (1 < $numberOfCommits ? 's' : '') .
+                          ' to publish)!';
         }
         elseif(true === $verbose)
-            echo 'No snapshot is required.', "\n";
+            $output = 'No snapshot is required.';
+
+        if(   true === $printSnapshot
+           || true === $printDays
+           || true === $printCommits) {
+
+            $columns = [];
+
+            if(true === $printSnapshot)
+                $columns[] = $tag;
+
+            if(true === $printDays)
+                $columns[] = $numberOfDays . ' day' .
+                             (1 < $numberOfDays ? 's' : '');
+
+            if(true === $printCommits)
+                $columns[] = $numberOfCommits . ' commit' .
+                             (1 < $numberOfCommits ? 's' : '');
+
+            echo implode("\t", $columns), "\n";
+        }
+        elseif(true === $verbose)
+            echo $output, "\n";
 
         return !$needNewSnaphot;
     }
@@ -164,6 +205,11 @@ class Requiresnapshot extends Console\Dispatcher\Kit {
              $this->makeUsageOptionsList([
                  'V'    => 'No-verbose, i.e. be as quiet as possible, just ' .
                            'print essential informations.',
+                 's'    => 'Print the latest snapshot name in a column.',
+                 'd'    => 'Print the number of days since the latest ' .
+                           'snapshot in a column.',
+                 'c'    => 'Print the number of commits since the latest ' .
+                           'snapshot in a column.',
                  'help' => 'This help.'
              ]), "\n";
 
