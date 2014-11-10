@@ -218,13 +218,6 @@ class          Response
     const STATUS_USE_PROXY                         = '305 Use Proxy';
 
     /**
-     * Switch proxy.
-     *
-     * @const string
-     */
-    const STATUS_SWITCHING_PROXY                   = '306 Switching Proxy';
-
-    /**
      * Temporary redirect.
      *
      * @const string
