@@ -292,7 +292,7 @@ class          Response
      *
      * @const string
      */
-    const STATUS_REQUEST_TIME_OUT                  = '408 Request Time Out';
+    const STATUS_REQUEST_TIME_OUT                  = '408 Request Timeout';
 
     /**
      * Conflict.
