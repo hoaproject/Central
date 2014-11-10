@@ -169,11 +169,11 @@ class          Response
     const STATUS_ALREADY_REPORTED                  = '208 Already Reported';
 
     /**
-     * IM used (please, see RFC226).
+     * IM used (please, see RFC3229).
      *
      * @const string
      */
-    //const STATUS_IM_USED                         = '226 IM Used';
+    const STATUS_IM_USED                           = '226 IM Used';
 
     /**
      * Multiple choices.
