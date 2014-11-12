@@ -34,23 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Database\Layer\Pdo;
 
-from('Hoa')
-
-/**
- * \Hoa\Database\Exception
- */
--> import('Database.Exception')
-
-/**
- * \Hoa\Database\IDal\WrapperStatement
- */
--> import('Database.IDal.WrapperStatement');
-
-}
-
-namespace Hoa\Database\Layer\Pdo {
+use Hoa\Database;
 
 /**
  * Class \Hoa\Database\Layer\Pdo\Statement.
@@ -63,7 +49,7 @@ namespace Hoa\Database\Layer\Pdo {
  * @license    New BSD License
  */
 
-class Statement implements \Hoa\Database\IDal\WrapperStatement {
+class Statement implements Database\IDal\WrapperStatement {
 
     /**
      * The statement instance.
@@ -126,7 +112,7 @@ class Statement implements \Hoa\Database\IDal\WrapperStatement {
     public function execute ( Array $bindParameters = null ) {
 
         if(false === $this->getStatement()->execute($bindParameters))
-            throw new \Hoa\Database\Exception(
+            throw new Database\Exception(
                 '%3$s (%1$s/%2$d)', 0, $this->errorInfo());
 
         return $this;
@@ -283,6 +269,4 @@ class Statement implements \Hoa\Database\IDal\WrapperStatement {
 
         return $this->getStatement()->errorInfo();
     }
-}
-
 }

@@ -34,38 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Database\Query;
 
-from('Hoa')
-
-/**
- * \Hoa\Database\Query\Select
- */
--> import('Database.Query.Select')
-
-/**
- * \Hoa\Database\Query\Insert
- */
--> import('Database.Query.Insert')
-
-/**
- * \Hoa\Database\Query\Update
- */
--> import('Database.Query.Update')
-
-/**
- * \Hoa\Database\Query\Delete
- */
--> import('Database.Query.Delete')
-
-/**
- * \Hoa\Database\Query\Where
- */
--> import('Database.Query.Where');
-
-}
-
-namespace Hoa\Database\Query {
+use Hoa\Core;
 
 /**
  * Class \Hoa\Database\Query.
@@ -84,7 +55,7 @@ class Query {
      *
      * @var \Hoa\Database\Query array
      */
-    protected static $_queries = array();
+    protected static $_queries = [];
 
     /**
      * Current instance ID.
@@ -180,7 +151,6 @@ class Query {
         return $this->store($where->where($expression));
     }
 
-
     /**
      * Store the current instance if necessary.
      *
@@ -231,13 +201,7 @@ class Query {
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Database\Query\Query');
-
-}
+Core\Consistency::flexEntity('Hoa\Database\Query\Query');

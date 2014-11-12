@@ -34,23 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Database;
 
-from('Hoa')
-
-/**
- * \Hoa\Database\Exception
- */
--> import('Database.Exception')
-
-/**
- * \Hoa\Database\DalStatement
- */
--> import('Database.DalStatement');
-
-}
-
-namespace Hoa\Database {
+use Hoa\Core;
 
 /**
  * Class \Hoa\Database\Dal.
@@ -62,8 +48,8 @@ namespace Hoa\Database {
  * @license    New BSD License
  */
 
-class Dal implements \Hoa\Core\Parameter\Parameterizable,
-                     \Hoa\Core\Event\Source {
+class Dal implements Core\Parameter\Parameterizable,
+                     Core\Event\Source {
 
     /**
      * Abstract layer: DBA.
@@ -98,7 +84,7 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable,
      *
      * @var \Hoa\Database\Dal array
      */
-    private static $_instance     = array();
+    private static $_instance     = [];
 
     /**
      * Current singleton ID.
@@ -144,7 +130,7 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable,
      * @throw   \Hoa\Database\Exception
      */
     private function __construct ( $dalName, $dsn, $username, $password,
-                                   Array $driverOptions = array() ) {
+                                   Array $driverOptions = [] ) {
 
         // Please see https://bugs.php.net/55154.
         if(0 !== preg_match('#^sqlite:(.+)$#i', $dsn, $matches))
@@ -153,23 +139,23 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable,
         $id    = $this->__id = self::$_id;
         $event = 'hoa://Event/Database/' . $id;
 
-        \Hoa\Core\Event::register($event . ':opened', $this);
-        \Hoa\Core\Event::register($event . ':closed', $this);
+        Core\Event::register($event . ':opened', $this);
+        Core\Event::register($event . ':closed', $this);
 
         $this->setDal(dnew(
             '\Hoa\Database\Layer\\' . $dalName,
-            array($dsn, $username, $password, $driverOptions)
+            [$dsn, $username, $password, $driverOptions]
         ));
 
-        \Hoa\Core\Event::notify(
+        Core\Event::notify(
             $event . ':opened',
             $this,
-            new \Hoa\Core\Event\Bucket(array(
+            new Core\Event\Bucket([
                 'id'            => $id,
                 'dsn'           => $dsn,
                 'username'      => $username,
                 'driverOptions' => $driverOptions
-            ))
+            ])
         );
 
         return;
@@ -182,12 +168,12 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable,
      * @param   array   $parameters    Parameters.
      * @return  void
      */
-    public static function initializeParameters ( Array $parameters = array() ) {
+    public static function initializeParameters ( Array $parameters = [] ) {
 
-        self::$_parameters = new \Hoa\Core\Parameter(
+        self::$_parameters = new Core\Parameter(
             __CLASS__,
-            array(),
-            array(
+            [],
+            [
                 /**
                  * Example:
                  *   'connection.list.default.dal'      => Dal::PDO,
@@ -198,7 +184,7 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable,
                  */
 
                 'connection.autoload' => null // or connection ID, e.g. 'default'.
-            )
+            ]
         );
         self::$_parameters->setParameters($parameters);
 
@@ -215,13 +201,13 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable,
      * @param   string  $username         The username to connect to database.
      * @param   string  $password         The password to connect to database.
      * @param   array   $driverOptions    The driver options.
-     * @return  \Hoa\Database\IDal\Wrapper
+     * @return  \Hoa\Database\Dal
      * @throw   \Hoa\Database\Exception
      */
     public static function getInstance ( $id,
                                          $dalName  = null, $dsn      = null,
                                          $username = null, $password = null,
-                                         Array $driverOptions = array() ) {
+                                         Array $driverOptions = [] ) {
 
         if(null === self::$_parameters)
             self::initializeParameters();
@@ -249,7 +235,7 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable,
             $dsn           = @$handle['dsn']      ?: '';
             $username      = @$handle['username'] ?: '';
             $password      = @$handle['password'] ?: '';
-            $driverOptions = @$handle['options']  ?: array();
+            $driverOptions = @$handle['options']  ?: [];
         }
 
         return self::$_instance[$id] = new self(
@@ -318,14 +304,14 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable,
         self::$_id    = null;
         unset(self::$_instance[$id]);
 
-        \Hoa\Core\Event::notify(
+        Core\Event::notify(
             $event . ':closed',
             $this,
-            new \Hoa\Core\Event\Bucket(array('id' => $id))
+            new Core\Event\Bucket(['id' => $id])
         );
 
-        \Hoa\Core\Event::unregister($event . ':opened');
-        \Hoa\Core\Event::unregister($event . ':closed');
+        Core\Event::unregister($event . ':opened');
+        Core\Event::unregister($event . ':closed');
 
         return true;
     }
@@ -420,9 +406,9 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable,
      * @return  \Hoa\Database\DalStatement
      * @throw   \Hoa\Database\Exception
      */
-    public function prepare ( $statement, Array $options = array() ) {
+    public function prepare ( $statement, Array $options = [] ) {
 
-        return new \Hoa\Database\DalStatement(
+        return new DalStatement(
             $this->getDal()->prepare(
                 $statement, $options
             )
@@ -458,7 +444,7 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable,
      */
     public function query ( $statement ) {
 
-        return new \Hoa\Database\DalStatement(
+        return new DalStatement(
             $this->getDal()->query($statement)
         );
     }
@@ -563,6 +549,4 @@ class Dal implements \Hoa\Core\Parameter\Parameterizable,
 
         return $this->__id;
     }
-}
-
 }

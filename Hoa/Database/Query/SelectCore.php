@@ -34,23 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Database\Query\Join
- */
--> import('Database.Query.Join')
-
-/**
- * \Hoa\Database\Query\Where
- */
--> import('Database.Query.Where');
-
-}
-
-namespace Hoa\Database\Query {
+namespace Hoa\Database\Query;
 
 /**
  * Class \Hoa\Database\Query\SelectCore.
@@ -83,14 +67,14 @@ abstract class SelectCore extends Where {
      *
      * @var \Hoa\Database\Query\SelectCore array
      */
-    protected $_from          = array();
+    protected $_from          = [];
 
     /**
      * Group by expressions.
      *
      * @var \Hoa\Database\Query\SelectCore array
      */
-    protected $_groupBy       = array();
+    protected $_groupBy       = [];
 
     /**
      * Having expression.
@@ -108,7 +92,7 @@ abstract class SelectCore extends Where {
      * @param   array  $columns    Columns.
      * @return  void
      */
-    public function __construct ( Array $columns = array() ) {
+    public function __construct ( Array $columns = [] ) {
 
         $this->_columns = $columns;
 
@@ -378,11 +362,11 @@ abstract class SelectCore extends Where {
     public function reset ( ) {
 
         parent::reset();
-        $this->_columns       = array();
+        $this->_columns       = [];
         $this->_distinctOrAll = null;
-        $this->_groupBy       = array();
-        $this->_having        = array();
-        $this->_from          = array();
+        $this->_groupBy       = [];
+        $this->_having        = [];
+        $this->_from          = [];
 
         return $this;
     }
@@ -408,7 +392,7 @@ abstract class SelectCore extends Where {
         if(!empty($this->_from)) {
 
             $out    .= ' FROM ';
-            $handle  = array();
+            $handle  = [];
 
             foreach($this->_from as $alias => $from)
                 if(is_int($alias))
@@ -431,6 +415,4 @@ abstract class SelectCore extends Where {
 
         return $out;
     }
-}
-
 }

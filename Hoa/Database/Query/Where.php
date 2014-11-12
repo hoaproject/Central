@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Database\Query {
+namespace Hoa\Database\Query;
 
 /**
  * Class \Hoa\Database\Query\Where.
@@ -53,7 +53,7 @@ class Where {
      *
      * @var \Hoa\Database\Query\Where array
      */
-    protected $_where         = array();
+    protected $_where         = [];
 
     /**
      * Current logic operator.
@@ -131,7 +131,7 @@ class Where {
      */
     public function reset ( ) {
 
-        $this->_where = array();
+        $this->_where = [];
 
         return $this;
     }
@@ -149,6 +149,4 @@ class Where {
 
         return ' WHERE ' . implode(' ', $this->_where);
     }
-}
-
 }

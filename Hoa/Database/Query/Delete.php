@@ -34,23 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Database\Query\Dml
- */
--> import('Database.Query.Dml')
-
-/**
- * \Hoa\Database\Query\Where
- */
--> import('Database.Query.Where');
-
-}
-
-namespace Hoa\Database\Query {
+namespace Hoa\Database\Query;
 
 /**
  * Class \Hoa\Database\Query\Delete.
@@ -97,6 +81,4 @@ class Delete extends Where implements Dml {
 
         return 'DELETE FROM ' . $this->_from . parent::__toString();
     }
-}
-
 }

@@ -34,23 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Database\Query\Dml
- */
--> import('Database.Query.Dml')
-
-/**
- * \Hoa\Database\Query\Where
- */
--> import('Database.Query.Where');
-
-}
-
-namespace Hoa\Database\Query {
+namespace Hoa\Database\Query;
 
 /**
  * Class \Hoa\Database\Query\Update.
@@ -83,7 +67,7 @@ class Update extends Where implements Dml {
      *
      * @var \Hoa\Database\Query\Update string
      */
-    protected $_set   = array();
+    protected $_set   = [];
 
 
 
@@ -146,7 +130,7 @@ class Update extends Where implements Dml {
      * Declare an alternative to “INSERT”.
      *
      * @access  protected
-     * @param   string  $alternative    Alternative.
+     * @param   string  $or    Alternative.
      * @return  \Hoa\Database\Query\Update
      */
     protected function _or ( $or ) {
@@ -199,7 +183,7 @@ class Update extends Where implements Dml {
             $out .= ' OR ' . $this->_or;
 
         $out .= ' ' . $this->_table;
-        $set  = array();
+        $set  = [];
 
         foreach($this->_set as $name => $value)
             $set[] = $name . ' = ' . $value;
@@ -208,6 +192,4 @@ class Update extends Where implements Dml {
 
         return $out . parent::__toString();
     }
-}
-
 }

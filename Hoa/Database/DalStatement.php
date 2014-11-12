@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Database {
+namespace Hoa\Database;
 
 /**
  * Class \Hoa\Database\DalStatement.
@@ -109,7 +109,7 @@ class DalStatement {
      * @return  \Hoa\Database\DalStatement
      * @throw   \Hoa\Database\Exception
      */
-    public function execute ( Array $bindParameters = array() ) {
+    public function execute ( Array $bindParameters = [] ) {
 
         if(empty($bindParameters))
             return $this->getStatement()->execute();
@@ -262,6 +262,4 @@ class DalStatement {
 
         return $this->getStatement()->errorInfo();
     }
-}
-
 }

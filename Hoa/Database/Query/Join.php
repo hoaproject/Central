@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Database\Query {
+namespace Hoa\Database\Query;
 
 /**
  * Class \Hoa\Database\Query\Join.
@@ -86,7 +86,7 @@ class Join {
      *
      * @access  public
      * @param   string  $expression    Expression.
-     * @return  \Hoa\Database\Query\Join
+     * @return  \Hoa\Database\Query\Select
      */
     public function on ( $expression ) {
 
@@ -112,6 +112,4 @@ class Join {
 
         return $this->_parent;
     }
-}
-
 }
