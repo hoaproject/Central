@@ -94,6 +94,7 @@ application/srgs+xml		grxml
 application/timestamp-query
 application/timestamp-reply
 application/tve-trigger
+application/vcard+xml
 application/vemmi
 application/vnd.3gpp.pic-bw-large
 application/vnd.3gpp.pic-bw-small
