@@ -16,6 +16,7 @@ application/atom+xml		atom
 application/atomicmail
 application/batch-smtp
 application/beep+xml
+application/calendar+xml	xcs
 application/cals-1840
 application/cnrp+xml
 application/commonground
