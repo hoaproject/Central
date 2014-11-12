@@ -151,7 +151,6 @@ class Query {
         return $this->store($where->where($expression));
     }
 
-
     /**
      * Store the current instance if necessary.
      *

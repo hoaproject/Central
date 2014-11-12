@@ -37,7 +37,6 @@
 namespace Hoa\Database\Layer\Pdo;
 
 use Hoa\Core;
-
 use Hoa\Database;
 
 /**
