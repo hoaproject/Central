@@ -3,7 +3,7 @@
     "description": "The Hoa\\Locale library.",
     "type"       : "library",
     "keywords"   : ["library", "locale", "l10n", "language", "setlocale",
-                    "http"],
+                    "http", "rfc4646", "rfc2822", "rfc3282"],
     "homepage"   : "http://hoa-project.net/",
     "license"    : "BSD-3-Clause",
     "authors"    : [
