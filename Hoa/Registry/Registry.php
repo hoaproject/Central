@@ -34,18 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Registry;
 
-from('Hoa')
-
-/**
- * \Hoa\Registry\Exception
- */
--> import('Registry.Exception');
-
-}
-
-namespace Hoa\Registry {
+use Hoa\Core;
 
 /**
  * Class \Hoa\Registry.
@@ -169,7 +160,7 @@ class Registry extends \ArrayObject {
  * @license    New BSD License
  */
 
-class _Protocol extends \Hoa\Core\Protocol {
+class _Protocol extends Core\Protocol {
 
     /**
      * Component's name.
@@ -193,20 +184,14 @@ class _Protocol extends \Hoa\Core\Protocol {
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Registry\Registry');
+Core\Consistency::flexEntity('Hoa\Registry\Registry');
 
 /**
  * Add the hoa://Library/Registry component. Should be use to reach/get an entry
  * in the \Hoa\Registry, e.g.: resolve('hoa://Library/Registry#AnID').
  */
-$protocol              = Hoa\Core::getInstance()->getProtocol();
-$protocol['Library'][] = new Hoa\Registry\_Protocol();
-
-}
+$protocol              = Core::getInstance()->getProtocol();
+$protocol['Library'][] = new _Protocol();
