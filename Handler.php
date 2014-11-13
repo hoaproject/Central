@@ -34,90 +34,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-/**
- * Offering a PHP5.4 feature to prior versions.
- */
-if(PHP_VERSION_ID < 50400) {
-
-/**
- * Interface SessionHandlerInterface.
- *
- * SessionHandlerInterface is an interface which defines a prototype for
- * creating a custom session handler. In order to pass a custom session handler
- * to session_set_save_handler() using its OOP invocation, the class must
- * implement this interface.
- * Please note the callback methods of this class are designed to be called
- * internally by PHP and are not meant to be called from user-space code. 
- *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2014 Ivan Enderlin.
- * @license    New BSD License
- */
-interface SessionHandlerInterface {
-
-    /**
-     * Open a session.
-     *
-     * @access  public
-     * @param   string  $savePath    Path where the session is stocked.
-     * @param   string  $name        Session name.
-     * @return  bool
-     */
-    public function open ( $savePath, $name );
-
-    /**
-     * Close a session.
-     *
-     * @access  public
-     * @return  bool
-     */
-    public function close ( );
-
-    /**
-     * Read the session data.
-     *
-     * @access  public
-     * @param   string  $id    Session ID.
-     * @return  string
-     */
-    public function read ( $id );
-
-    /**
-     * Write the session data.
-     *
-     * @access  public
-     * @param   string  $id      Session ID.
-     * @param   string  $data    Session data.
-     * @return  mixed
-     */
-    public function write ( $id, $data );
-
-    /**
-     * Destroy a session.
-     *
-     * @access  public
-     * @param   string  $id    Session ID.
-     * @return  bool
-     */
-    public function destroy ( $id );
-
-    /**
-     * The garbage collection remove all old session data older than the value of
-     * $maxlifetime variable (in seconds).
-     *
-     * @access  public
-     * @param   int     $maxlifetime    Max lifetime of a session.
-     * @return  bool
-     */
-    public function gc ( $maxlifetime );
-}}
-
-}
-
-namespace Hoa\Session {
-
 /**
  * Interface \Hoa\Session\Handler.
  *
@@ -129,5 +45,3 @@ namespace Hoa\Session {
  */
 
 interface Handler extends \SessionHandlerInterface { }
-
-}

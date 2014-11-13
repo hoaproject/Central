@@ -34,18 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Session
- */
--> import('Session.~');
-
-}
-
-namespace Hoa\Session {
+namespace Hoa\Session;
 
 /**
  * Class \Hoa\Session\Flash.
@@ -137,6 +126,4 @@ class Flash extends Session {
 
         return $out;
     }
-}
-
 }

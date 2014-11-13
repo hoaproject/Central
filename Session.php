@@ -34,28 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Session;
 
-from('Hoa')
-
-/**
- * \Hoa\Session\Exception
- */
--> import('Session.Exception.~')
-
-/**
- * \Hoa\Session\Exception\Expired
- */
--> import('Session.Exception.Expired')
-
-/**
- * \Hoa\Session\Exception\Locked
- */
--> import('Session.Exception.Locked');
-
-}
-
-namespace Hoa\Session {
+use Hoa\Core;
+use Hoa\Iterator;
 
 /**
  * Class \Hoa\Session.
@@ -70,10 +52,10 @@ namespace Hoa\Session {
  */
 
 class          Session
-    implements \Hoa\Core\Event\Source,
+    implements Core\Event\Source,
                \ArrayAccess,
                \Countable,
-               \IteratorAggregate {
+               Iterator\Aggregate {
 
     /**
      * Event channel.
@@ -167,7 +149,7 @@ class          Session
      *
      * @var \Hoa\Session array
      */
-    protected static $_lock      = array();
+    protected static $_lock      = [];
 
 
 
@@ -209,11 +191,11 @@ class          Session
         $channel = static::EVENT_CHANNEL . $namespace;
         $expired = $channel . ':expired';
 
-        if(false === \Hoa\Core\Event::eventExists($channel))
-            \Hoa\Core\Event::register($channel, 'Hoa\Session');
+        if(false === Core\Event::eventExists($channel))
+            Core\Event::register($channel, 'Hoa\Session');
 
-        if(false === \Hoa\Core\Event::eventExists($expired))
-            \Hoa\Core\Event::register($expired, 'Hoa\Session');
+        if(false === Core\Event::eventExists($expired))
+            Core\Event::register($expired, 'Hoa\Session');
 
         if(true === $this->isExpired())
             $this->hasExpired();
@@ -248,7 +230,7 @@ class          Session
             throw new Exception(
                 'Session must be started before any ouput; ' .
                 'output started in %s at line %d.',
-                2, array($filename, $line));
+                2, [$filename, $line]);
 
         if(false === defined('SID')) {
 
@@ -266,7 +248,7 @@ class          Session
         static::$_started = true;
 
         if(!isset($_SESSION[static::TOP_NAMESPACE]))
-            $_SESSION[static::TOP_NAMESPACE] = array();
+            $_SESSION[static::TOP_NAMESPACE] = [];
 
         return;
     }
@@ -286,16 +268,16 @@ class          Session
             unset($_SESSION[static::TOP_NAMESPACE][$namespace]);
 
         if(!isset($_SESSION[static::TOP_NAMESPACE][$namespace]))
-            $_SESSION[static::TOP_NAMESPACE][$namespace] = array(
-                static::PROFILE => array(
+            $_SESSION[static::TOP_NAMESPACE][$namespace] = [
+                static::PROFILE => [
                     'started'   => new \DateTime(),
                     'last_used' => new \DateTime(),
                     'lifetime'  => new \DateTime(
                         '+' . ini_get('session.gc_maxlifetime') . ' second'
                     )
-                ),
-                static::BUCKET  => array()
-            );
+                ],
+                static::BUCKET  => []
+            ];
 
         $handle         = &$_SESSION[static::TOP_NAMESPACE][$namespace];
         $this->_profile = &$handle[static::PROFILE];
@@ -356,6 +338,7 @@ class          Session
         }
 
         $lifetime = $this->_profile['lifetime'];
+        var_dump($lifetime->format('d/m/Y H:i:s'));
         $current  = new \DateTime();
 
         if($lifetime > $current)
@@ -395,10 +378,10 @@ class          Session
                 'namespace are lost.',
                 5, $namespace);
 
-        \Hoa\Core\Event::notify(
+        Core\Event::notify(
             $expired,
             $this,
-            new \Hoa\Core\Event\Bucket()
+            new Core\Event\Bucket()
         );
 
         return;
@@ -568,7 +551,7 @@ class          Session
      * Iterate over data in the namespace.
      *
      * @access  public
-     * @return  \ArrayIterator
+     * @return  \Hoa\Iterator\Map
      * @throw   \Hoa\Session\Exception\Locked
      */
     public function getIterator ( ) {
@@ -578,7 +561,7 @@ class          Session
                 'Namespace %s is locked because it has been unset.',
                 12, $this->getNamespace());
 
-        return new \ArrayIterator($this->_bucket);
+        return new Iterator\Map($this->_bucket);
     }
 
     /**
@@ -612,7 +595,7 @@ class          Session
      */
     public function clean ( ) {
 
-        $this->_bucket = array();
+        $this->_bucket = [];
 
         return;
     }
@@ -631,8 +614,8 @@ class          Session
         $channel   = static::EVENT_CHANNEL . $namespace;
         $this->hasExpired(false);
         unset($_SESSION[static::TOP_NAMESPACE][$namespace]);
-        \Hoa\Core\Event::unregister($channel);
-        \Hoa\Core\Event::unregister($channel . ':expired');
+        Core\Event::unregister($channel);
+        Core\Event::unregister($channel . ':expired');
         static::$_lock[$namespace] = true;
 
         return;
@@ -657,7 +640,7 @@ class          Session
                 throw new Exception(
                     'Headers have been already sent, cannot destroy cookie; ' .
                     'output started in %s at line %d.',
-                    14, array($filename, $line));
+                    14, [$filename, $line]);
 
             $parameters = session_get_cookie_params();
             setcookie(
@@ -702,26 +685,7 @@ class          Session
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Session\Session');
-
-/**
- * Session shutdown function.
- * Offering a PHP5.4 feature to prior versions.
- *
- * @access  public
- * @return  void
- */
-if(!function_exists('session_register_shutdown')) {
-function session_register_shutdown ( ) {
-
-    return register_shutdown_function('session_write_close');
-}}
-
-}
+Core\Consistency::flexEntity('Hoa\Session\Session');
