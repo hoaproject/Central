@@ -34,23 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Locale;
 
-from('Hoa')
-
-/**
- * \Hoa\Locale\Exception
- */
--> import('Locale.Exception')
-
-/**
- * \Hoa\Locale\Localizer\Coerce
- */
--> import('Locale.Localizer.Coerce');
-
-}
-
-namespace Hoa\Locale {
+use Hoa\Core;
 
 /**
  * Class \Hoa\Locale.
@@ -308,23 +294,23 @@ class Locale {
             return false;
 
         if(isset($matches['r_grandfathered']))
-            return array(
+            return [
                 'grandfathered' => $matches['r_grandfathered']
-            );
+            ];
 
         if(isset($matches['r_privateuse']))
-            return array(
+            return [
                 'privateuse' => substr($matches['r_privateuse'], 2)
-            );
+            ];
 
-        $out = array(
+        $out = [
             'language'   => $matches['language'],
             'script'     => null,
             'region'     => null,
-            'variant'    => array(),
-            'extension'  => array(),
+            'variant'    => [],
+            'extension'  => [],
             'privateuse' => null
-        );
+        ];
 
         if(!empty($matches['script']))
             $out['script'] = substr($matches['script'], 1);
@@ -341,7 +327,7 @@ class Locale {
         if(!empty($matches['privateuse']))
             $out['privateuse'] = substr($matches['privateuse'], 3);
 
-        return array('langtag' => $out);
+        return ['langtag' => $out];
     }
 
     /**
@@ -433,13 +419,7 @@ class Locale {
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Locale\Locale');
-
-}
+Core\Consistency::flexEntity('Hoa\Locale\Locale');

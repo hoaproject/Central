@@ -34,18 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Locale\Localizer
- */
--> import('Locale.Localizer.~');
-
-}
-
-namespace Hoa\Locale\Localizer {
+namespace Hoa\Locale\Localizer;
 
 /**
  * Class \Hoa\Locale\Localizer\System.
@@ -80,6 +69,4 @@ class System implements Localizer {
             substr($locale, 0, strpos($locale, '.') ?: strlen($locale))
         );
     }
-}
-
 }

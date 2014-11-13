@@ -34,18 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Locale\Localizer
- */
--> import('Locale.Localizer.~');
-
-}
-
-namespace Hoa\Locale\Localizer {
+namespace Hoa\Locale\Localizer;
 
 /**
  * Class \Hoa\Locale\Localizer\Coerce.
@@ -92,6 +81,4 @@ class Coerce implements Localizer {
 
         return $this->_locale;
     }
-}
-
 }
