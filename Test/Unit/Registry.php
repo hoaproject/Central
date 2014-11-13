@@ -137,4 +137,38 @@ class Registry extends Test\Unit\Suite {
                 ->string($result)
                     ->isEqualTo($value);
     }
+
+    public function case_value_protocol_and_references ( ) {
+
+        $this
+            ->given(
+                $string = $this->realdom->string('a', 'z', 5),
+                $object = $this->realdom->class('StdClass'),
+                $key    = $this->sample($string),
+                $value  = $this->sample($object),
+                LUT::set($key, $value)
+            )
+            ->when(
+                $result1 = resolve('hoa://Library/Registry#' . $key),
+                $result2 = LUT::get($key)
+            )
+            ->then
+                ->object($result1)
+                    ->isInstanceOf('StdClass')
+                    ->isIdenticalTo($value)
+                    ->isIdenticalTo($result2)
+
+            ->given($dummy = $this->sample($string))
+            ->when(
+                $result1->foo = $dummy,
+                $result3 = resolve('hoa://Library/Registry#' . $key)
+            )
+            ->then
+                ->object($result1)
+                    ->isIdenticalTo($result2)
+                    ->isIdenticalTo($result3)
+
+                ->string($result1->foo)
+                    ->isEqualTo($dummy);
+    }
 }
