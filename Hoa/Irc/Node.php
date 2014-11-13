@@ -34,18 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Irc;
 
-from('Hoa')
-
-/**
- * \Hoa\Socket\Node
- */
--> import('Socket.Node');
-
-}
-
-namespace Hoa\Irc {
+use Hoa\Socket;
 
 /**
  * Class \Hoa\Irc\Node.
@@ -57,7 +48,7 @@ namespace Hoa\Irc {
  * @license    New BSD License
  */
 
-class Node extends \Hoa\Socket\Node {
+class Node extends Socket\Node {
 
     /**
      * Whether this is basically the first message.
@@ -159,6 +150,4 @@ class Node extends \Hoa\Socket\Node {
 
         return $this->_channel;
     }
-}
-
 }

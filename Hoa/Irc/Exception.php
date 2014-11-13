@@ -34,7 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Irc {
+namespace Hoa\Irc;
+
+use Hoa\Core;
 
 /**
  * Class \Hoa\Irc\Exception.
@@ -46,6 +48,4 @@ namespace Hoa\Irc {
  * @license    New BSD License
  */
 
-class Exception extends \Hoa\Core\Exception { }
-
-}
+class Exception extends Core\Exception { }
