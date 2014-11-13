@@ -34,28 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Irc;
 
-from('Hoa')
-
-/**
- * \Hoa\Irc\Exception
- */
--> import('Irc.Exception')
-
-/**
- * \Hoa\Irc\Node
- */
--> import('Irc.Node')
-
-/**
- * \Hoa\Socket\Connection\Handler
- */
--> import('Socket.Connection.Handler');
-
-}
-
-namespace Hoa\Irc {
+use Hoa\Core;
+use Hoa\Socket;
 
 /**
  * Class \Hoa\Irc\Client.
@@ -69,8 +51,8 @@ namespace Hoa\Irc {
  */
 
 class          Client
-    extends    \Hoa\Socket\Connection\Handler
-    implements \Hoa\Core\Event\Listenable {
+    extends    Socket\Connection\Handler
+    implements Core\Event\Listenable {
 
     /**
      * Listeners.
@@ -89,11 +71,11 @@ class          Client
      * @return  void
      * @throw   \Hoa\Socket\Exception
      */
-    public function __construct ( \Hoa\Socket\Client $client ) {
+    public function __construct ( Socket\Client $client ) {
 
         parent::__construct($client);
         $this->getConnection()->setNodeName('\Hoa\Irc\Node');
-        $this->_on = new \Hoa\Core\Event\Listener($this, array(
+        $this->_on = new Core\Event\Listener($this, [
             'open',
             'join',
             'message',
@@ -104,7 +86,7 @@ class          Client
             'kick',
             'invite',
             'error'
-        ));
+        ]);
 
         return;
     }
@@ -132,12 +114,12 @@ class          Client
      * @param   \Hoa\Socket\Node  $node    Node.
      * @return  void
      */
-    protected function _run ( \Hoa\Socket\Node $node ) {
+    protected function _run ( Socket\Node $node ) {
 
         if(false === $node->hasJoined()) {
 
             $node->setJoined(true);
-            $this->_on->fire('open', new \Hoa\Core\Event\Bucket());
+            $this->_on->fire('open', new Core\Event\Bucket());
 
             return;
         }
@@ -162,10 +144,10 @@ class          Client
                     $node->setChannel($channel);
 
                     $listener = 'join';
-                    $bucket   = array(
+                    $bucket   = [
                         'nickname' => $nickname,
                         'channel'  => trim($channel)
-                    );
+                    ];
                   break;
 
                 case 'PRIVMSG':
@@ -186,18 +168,18 @@ class          Client
                         $listener = 'message';
                     }
 
-                    $bucket   = array(
+                    $bucket   = [
                         'from'    => $this->parseNick($matches['prefix']),
                         'message' => $message
-                    );
+                    ];
                   break;
 
                 case 'PING':
                     $daemons  = explode(' ', $matches['trailing']);
                     $listener = 'ping';
-                    $bucket   = array(
+                    $bucket   = [
                         'daemons' => $daemons
-                    );
+                    ];
 
                     if(isset($daemons[1]))
                         $this->pong($daemons[0], $daemons[1]);
@@ -210,10 +192,10 @@ class          Client
                     $node->setChannel($channel);
 
                     $listener = 'kick';
-                    $bucket   = array(
+                    $bucket   = [
                         'from'    => $this->parseNick($matches['prefix']),
                         'channel' => trim($channel)
-                    );
+                    ];
                   break;
 
                 case 'INVITE':
@@ -221,28 +203,28 @@ class          Client
                     $node->setChannel($channel);
 
                     $listener = 'invite';
-                    $bucket   = array(
+                    $bucket   = [
                         'from'               => $this->parseNick($matches['prefix']),
                         'channel'            => trim($channel),
                         'invitation_channel' => trim($matches['trailing'])
-                    );
+                    ];
                   break;
 
                 default:
                     $listener = 'other-message';
-                    $bucket   = array(
+                    $bucket   = [
                         'line'        => $line,
                         'parsed_line' => $matches
-                    );
+                    ];
             }
 
-            $this->_on->fire($listener, new \Hoa\Core\Event\Bucket($bucket));
+            $this->_on->fire($listener, new Core\Event\Bucket($bucket));
         }
-        catch ( \Hoa\Core\Exception\Idle $e ) {
+        catch ( Core\Exception\Idle $e ) {
 
-            $this->_on->fire('error', new \Hoa\Core\Event\Bucket(array(
+            $this->_on->fire('error', new Core\Event\Bucket([
                 'exception' => $e
-            )));
+            ]));
         }
 
         return;
@@ -256,7 +238,7 @@ class          Client
      * @param   \Hoa\Socket\Node  $node       Node.
      * @return  \Closure
      */
-    protected function _send ( $message, \Hoa\Socket\Node $node ) {
+    protected function _send ( $message, Socket\Node $node ) {
 
         return $node->getConnection()->writeAll($message . CRLF);
     }
@@ -398,6 +380,4 @@ class          Client
 
         return $matches;
     }
-}
-
 }
