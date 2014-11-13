@@ -34,7 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Locale\Localizer {
+namespace Hoa\Locale\Localizer;
+
+use Hoa\Core;
 
 /**
  * Interface \Hoa\Locale\Localizer.
@@ -56,13 +58,7 @@ interface Localizer {
     public function getLocale ( );
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Locale\Localizer\Localizer');
-
-}
+Core\Consistency::flexEntity('Hoa\Locale\Localizer\Localizer');
