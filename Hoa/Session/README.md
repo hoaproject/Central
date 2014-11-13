@@ -13,10 +13,6 @@ Each namespace has a profile. Amongst many things, it implies we can control
 lifetime of each namespace individually. This library can be used in conjunction
 of `ext/session` (especially to configure session).
 
-Some features from PHP5.4+ can be used naturally as defined in the documentation
-with prior versions, such as the `SessionHandlerInterface` interface or the
-`session_register_shutdown` function.
-
 ## Installation
 
 With [Composer](http://getcomposer.org/), to include this library into your

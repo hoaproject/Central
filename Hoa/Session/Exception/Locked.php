@@ -34,18 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Session\Exception
- */
--> import('Session.Exception.~');
-
-}
-
-namespace Hoa\Session\Exception {
+namespace Hoa\Session\Exception;
 
 /**
  * Class \Hoa\Session\Exception\Locked.
@@ -58,5 +47,3 @@ namespace Hoa\Session\Exception {
  */
 
 class Locked extends Exception { }
-
-}
