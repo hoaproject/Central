@@ -34,23 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Locale\Localizer;
 
-from('Hoa')
-
-/**
- * \Hoa\Locale\Localizer
- */
--> import('Locale.Localizer.~')
-
-/**
- * \Hoa\Http\Runtime
- */
--> import('Http.Runtime');
-
-}
-
-namespace Hoa\Locale\Localizer {
+use Hoa\Http as HHttp;
 
 /**
  * Class \Hoa\Locale\Localizer\Http.
@@ -86,7 +72,7 @@ class Http implements Localizer {
      */
     public function __construct ( $headerValue = null ) {
 
-        $value = $headerValue ?: \Hoa\Http\Runtime::getHeader('accept-language');
+        $value = $headerValue ?: HHttp\Runtime::getHeader('accept-language');
 
         // Remove CFWS.
         $this->_value = preg_replace('#\([^\)]+\)|\s#', '', $value);
@@ -121,6 +107,4 @@ class Http implements Localizer {
 
         return $matches['language'];
     }
-}
-
 }

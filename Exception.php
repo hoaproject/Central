@@ -34,7 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Locale {
+namespace Hoa\Locale;
+
+use Hoa\Core;
 
 /**
  * Class \Hoa\Locale\Exception.
@@ -46,6 +48,4 @@ namespace Hoa\Locale {
  * @license    New BSD License
  */
 
-class Exception extends \Hoa\Core\Exception { }
-
-}
+class Exception extends Core\Exception { }
