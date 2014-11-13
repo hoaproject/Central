@@ -20,7 +20,7 @@ cloak on IRC, etc.
   * Endel Dreyer (endel)
   * Cédric Dugat (ph3nol)
   * ➜ Yohann Dupont (jir4)
-  * Guislain Duthieuw (guiled)
+  * ➜ Guislain Duthieuw (guiled)
   * ➜ Raphaël Emourgeon (iraphael)
   * ➜ Gérard Ernaelsten (maitrepylos)
   * ➜ Julian Espérat (savageman)
