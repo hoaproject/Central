@@ -111,11 +111,11 @@
 
 echo 'foobar';</code></pre>
   <p>Et nous ajoutons à <code>Responder.php</code> :</p>
-  <pre><code class="language-php">var_dump($fastcgi->send(array(
+  <pre><code class="language-php">var_dump($fastcgi->send([
     'REQUEST_METHOD'  => 'GET',
     'REQUEST_URI'     => '/',
     'SCRIPT_FILENAME' => __DIR__ . DS . 'Echo.php'
-)));
+]));
 
 /**
  * Will output:

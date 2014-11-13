@@ -64,11 +64,11 @@ Thus:
 $fastcgi = new Hoa\Fastcgi\Responder(
     new Hoa\Socket\Client('tcp://127.0.0.1:9000')
 );
-var_dump($fastcgi->send(array(
+var_dump($fastcgi->send([
     'REQUEST_METHOD'  => 'GET',
     'REQUEST_URI'     => '/',
     'SCRIPT_FILENAME' => __DIR__ . DS . 'Echo.php'
-)));
+]));
 // string(6) "foobar"
 ```
 

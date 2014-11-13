@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Fastcgi {
+namespace Hoa\Fastcgi;
 
 /**
  * Class \Hoa\Fastcgi\Connection.
@@ -139,7 +139,7 @@ abstract class Connection {
 
         foreach($pairs as $key => $value) {
 
-            foreach(array($key, $value) as $handle) {
+            foreach([$key, $value] as $handle) {
 
                 $length = strlen($handle);
 
@@ -172,7 +172,7 @@ abstract class Connection {
         if(null === $length)
             $length = strlen($pack);
 
-        $out = array();
+        $out = [];
         $i   = 0;
 
         for($i = 0; $length >= $i; $i += $keyLength + $valueLength) {
@@ -212,7 +212,7 @@ abstract class Connection {
            || empty($pack))
             return false;
 
-        $headers = array(
+        $headers = [
             self::HEADER_VERSION        =>  ord($pack[0]),
             self::HEADER_TYPE           =>  ord($pack[1]),
             self::HEADER_REQUEST_ID     => (ord($pack[2]) << 8) +
@@ -222,7 +222,7 @@ abstract class Connection {
             self::HEADER_PADDING_LENGTH =>  ord($pack[6]),
             self::HEADER_RESERVED       =>  ord($pack[7]),
             self::HEADER_CONTENT        =>  null
-        );
+        ];
         $length  = $headers[self::HEADER_CONTENT_LENGTH] +
                    $headers[self::HEADER_PADDING_LENGTH];
 
@@ -246,6 +246,4 @@ abstract class Connection {
      * @return  string
      */
     abstract protected function read ( $length );
-}
-
 }

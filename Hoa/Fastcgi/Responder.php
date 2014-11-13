@@ -34,38 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Fastcgi;
 
-from('Hoa')
-
-/**
- * \Hoa\Fastcgi\Exception
- */
--> import('Fastcgi.Exception.~')
-
-/**
- * \Hoa\Fastcgi\Exception\CannotMultiplex
- */
--> import('Fastcgi.Exception.CannotMultiplex')
-
-/**
- * \Hoa\Fastcgi\Exception\Overloaded
- */
--> import('Fastcgi.Exception.Overloaded')
-
-/**
- * \Hoa\Fastcgi\Exception\UnknownRole
- */
--> import('Fastcgi.Exception.UnknownRole')
-
-/**
- * \Hoa\Fastcgi\Connection
- */
--> import('Fastcgi.Connection');
-
-}
-
-namespace Hoa\Fastcgi {
+use Hoa\Socket;
 
 /**
  * Class \Hoa\Fastcgi\Responder.
@@ -171,16 +142,16 @@ class Responder extends Connection {
     /**
      * Response: content.
      *
-     * @var \Hoa\Fastcgi\Client string
+     * @var \Hoa\Fastcgi\Responder string
      */
     protected $_content = null;
 
     /**
      * Response: headers.
      *
-     * @var \Hoa\Fastcgi\Client array
+     * @var \Hoa\Fastcgi\Responder array
      */
-    protected $_headers = array();
+    protected $_headers = [];
 
 
 
@@ -191,7 +162,7 @@ class Responder extends Connection {
      * @param   \Hoa\Socket\Client  $client    Client connection.
      * @return  void
      */
-    public function __construct ( \Hoa\Socket\Client $client ) {
+    public function __construct ( Socket\Client $client ) {
 
         $this->setClient($client);
 
@@ -337,7 +308,7 @@ class Responder extends Connection {
      * @param   \Hoa\Socket\Client  $client    Client.
      * @return  \Hoa\Socket\Client
      */
-    public function setClient ( \Hoa\Socket\Client $client ) {
+    public function setClient ( Socket\Client $client ) {
 
         $old           = $this->_client;
         $this->_client = $client;
@@ -355,6 +326,4 @@ class Responder extends Connection {
 
         return $this->_client;
     }
-}
-
 }
