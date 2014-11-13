@@ -34,18 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Fastcgi\Exception
- */
--> import('Fastcgi.Exception.~');
-
-}
-
-namespace Hoa\Fastcgi\Exception {
+namespace Hoa\Fastcgi\Exception;
 
 /**
  * Class \Hoa\Fastcgi\Exception\CannotMultiplex.
@@ -61,5 +50,3 @@ namespace Hoa\Fastcgi\Exception {
  */
 
 class CannotMultiplex extends Exception { }
-
-}

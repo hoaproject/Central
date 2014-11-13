@@ -34,7 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Fastcgi\Exception {
+namespace Hoa\Fastcgi\Exception;
+
+use Hoa\Core;
 
 /**
  * Class \Hoa\Fastcgi\Exception.
@@ -46,15 +48,9 @@ namespace Hoa\Fastcgi\Exception {
  * @license    New BSD License
  */
 
-class Exception extends \Hoa\Core\Exception { }
-
-}
-
-namespace {
+class Exception extends Core\Exception { }
 
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Fastcgi\Exception\Exception');
-
-}
+Core\Consistency::flexEntity('Hoa\Fastcgi\Exception\Exception');
