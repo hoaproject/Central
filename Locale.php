@@ -150,7 +150,7 @@ class Locale {
      * @param   mixed  $localizer    Localizer or locale.
      * @return  void
      */
-    public function __construct ( $localizer ) {
+    public function __construct ( $localizer = null ) {
 
         if(!is_object($localizer))
             $localizer = new Localizer\Coerce($localizer);
