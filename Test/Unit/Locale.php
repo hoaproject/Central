@@ -94,10 +94,7 @@ class Locale extends Test\Unit\Suite {
             ->when($localizer = $locale->getLocalizer())
             ->then
                 ->object($localizer)
-                    ->isInstanceOf('Hoa\Locale\Localizer\Coerce')
-
-                ->variable($localizer->getLocale())
-                    ->isEqualTo('fr-FR');
+                    ->isInstanceOf('Hoa\Locale\Localizer\Coerce');
     }
 
     public function case_invalid_locale ( ) {
