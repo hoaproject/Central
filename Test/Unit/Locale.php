@@ -76,13 +76,10 @@ class Locale extends Test\Unit\Suite {
             ->then
                 ->object($localizer)
                     ->isInstanceOf('Hoa\Locale\Localizer\Coerce')
-
                 ->variable($localizer->getLocale())
                     ->isNull()
-
                 ->string($language)
                     ->isEqualTo('fr')
-
                 ->string($region)
                     ->isEqualTo('FR');
     }
@@ -128,7 +125,6 @@ class Locale extends Test\Unit\Suite {
                         ->then
                             ->integer($type)
                                 ->isEqualTo(LUT::TYPE_PRIVATEUSE)
-
                             ->string('x-' . $privateUse)
                                 ->isEqualTo($datum);
                 }
@@ -158,7 +154,6 @@ class Locale extends Test\Unit\Suite {
                         ->then
                             ->integer($type)
                                 ->isEqualTo(LUT::TYPE_GRANDFATHERED)
-
                             ->string($grandFathered)
                                 ->isEqualTo($datum);
                 }
