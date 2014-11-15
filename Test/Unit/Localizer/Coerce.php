@@ -49,7 +49,7 @@ use Hoa\Locale\Localizer\Coerce as CUT;
  * @license    New BSD License
  */
 
-class Locale extends Test\Unit\Suite {
+class Coerce extends Test\Unit\Suite {
 
     public function case_classic ( ) {
 
