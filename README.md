@@ -17,7 +17,7 @@ dependencies, you need to require
 ```json
 {
     "require": {
-        "hoa/locale": "~0.0"
+        "hoa/locale": "~1.0"
     }
 }
 ```
