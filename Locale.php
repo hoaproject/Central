@@ -279,7 +279,7 @@ class Locale {
                  (?<script>\-[a-z]{4})?
                  (?<region>\-(?:[a-z]{2}|[0-9]{4}))?
                  (?<variant>(?:\-(?:[a-z]{2}|[0-9]{3}))+)?
-                 (?<extension>(?:\-(?:[a-w]|[y-z]|\d)\-[a-z0-9]{2,8})+)?
+                 (?<extension>(?:\-(?:[a-wy-z]|\d)\-[a-z0-9]{2,8})+)?
                  (?<privateuse>\-x\-[a-z0-9]{1,8})?
                )
              | (?<r_privateuse>x\-[a-z0-9]{1,8})
