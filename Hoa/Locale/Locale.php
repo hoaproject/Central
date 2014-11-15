@@ -150,7 +150,7 @@ class Locale {
      * @param   mixed  $localizer    Localizer or locale.
      * @return  void
      */
-    public function __construct ( $localizer ) {
+    public function __construct ( $localizer = null ) {
 
         if(!is_object($localizer))
             $localizer = new Localizer\Coerce($localizer);
@@ -279,7 +279,7 @@ class Locale {
                  (?<script>\-[a-z]{4})?
                  (?<region>\-(?:[a-z]{2}|[0-9]{4}))?
                  (?<variant>(?:\-(?:[a-z]{2}|[0-9]{3}))+)?
-                 (?<extension>(?:\-(?:[a-w]|[y-z]|\d)\-[a-z0-9]{2,8})+)?
+                 (?<extension>(?:\-(?:[a-wy-z]|\d)\-[a-z0-9]{2,8})+)?
                  (?<privateuse>\-x\-[a-z0-9]{1,8})?
                )
              | (?<r_privateuse>x\-[a-z0-9]{1,8})
@@ -321,8 +321,21 @@ class Locale {
         if(!empty($matches['variant']))
             $out['variant'] = explode('-', substr($matches['variant'], 1));
 
-        if(!empty($matches['extension']))
-            $out['extension'] = 'TODO';
+        if(!empty($matches['extension'])) {
+
+            $handle = preg_split(
+                '/-(?=.-)/',
+                $matches['extension'],
+                -1,
+                PREG_SPLIT_NO_EMPTY
+            );
+
+            foreach($handle as $value) {
+
+                list($extensionName, $extensionValue) = explode('-', $value);
+                $out['extension'][$extensionName]     = $extensionValue;
+            }
+        }
 
         if(!empty($matches['privateuse']))
             $out['privateuse'] = substr($matches['privateuse'], 3);
