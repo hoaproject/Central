@@ -193,4 +193,44 @@ class Locale extends Test\Unit\Suite {
                 }
             });
     }
+
+    public function case_langtag_exploded ( ) {
+
+        $this
+            ->given($locale = 'zh-Hant-TW-xy-ab-123-f-oo-4-42-x-qux')
+            ->when($result = new LUT($locale))
+            ->then
+                ->string($result->getLanguage())
+                    ->isEqualTo('zh')
+                ->string($result->getScript())
+                    ->isEqualTo('Hant')
+                ->string($result->getRegion())
+                    ->isEqualTo('TW')
+                ->array($result->getVariants())
+                    ->isEqualTo(['xy', 'ab', '123'])
+                ->array($result->getExtensions())
+                    ->isEqualTo(['f' => 'oo', 4 => '42'])
+                ->string($result->getPrivateUse())
+                    ->isEqualTo('qux');
+    }
+
+    public function case_langtag_default ( ) {
+
+        $this
+            ->given($locale = 'fr')
+            ->when($result = new LUT($locale))
+            ->then
+                ->string($result->getLanguage())
+                    ->isEqualTo('fr')
+                ->variable($result->getScript())
+                    ->isNull()
+                ->variable($result->getRegion())
+                    ->isNull()
+                ->array($result->getVariants())
+                    ->isEmpty()
+                ->array($result->getExtensions())
+                    ->isEmpty()
+                ->variable($result->getPrivateUse())
+                    ->isNull();
+    }
 }
