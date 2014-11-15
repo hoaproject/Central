@@ -321,8 +321,21 @@ class Locale {
         if(!empty($matches['variant']))
             $out['variant'] = explode('-', substr($matches['variant'], 1));
 
-        if(!empty($matches['extension']))
-            $out['extension'] = 'TODO';
+        if(!empty($matches['extension'])) {
+
+            $handle = preg_split(
+                '/-(?=.-)/',
+                $matches['extension'],
+                -1,
+                PREG_SPLIT_NO_EMPTY
+            );
+
+            foreach($handle as $value) {
+
+                list($extensionName, $extensionValue) = explode('-', $value);
+                $out['extension'][$extensionName]     = $extensionValue;
+            }
+        }
 
         if(!empty($matches['privateuse']))
             $out['privateuse'] = substr($matches['privateuse'], 3);
