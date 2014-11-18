@@ -176,11 +176,6 @@ class Core implements Parameter\Parameterizable {
 
         setlocale(LC_CTYPE, 'C');
 
-        $date = ini_get('date.timezone');
-
-        if(empty($date))
-            ini_set('date.timezone', 'UTC');
-
         if(true === function_exists('mb_internal_encoding'))
             mb_internal_encoding('UTF-8');
 
