@@ -107,16 +107,16 @@ class Soundness extends Test\Unit\Suite {
         $this
             ->when(function ( ) use ( $compiler, $sampler ) {
 
-                foreach($sampler as $data) {
+                foreach($sampler as $datum) {
 
                     $this
-                        ->given(json_decode($data))
+                        ->given(json_decode($datum))
                         ->when($error = json_last_error())
                         ->then
                             ->integer($error)
                                 ->isEqualTo(JSON_ERROR_NONE)
 
-                        ->when($result = $compiler->parse($data, null, false))
+                        ->when($result = $compiler->parse($datum, null, false))
                         ->then
                             ->boolean($result)
                                 ->isTrue();
