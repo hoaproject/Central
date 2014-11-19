@@ -338,7 +338,6 @@ class          Session
         }
 
         $lifetime = $this->_profile['lifetime'];
-        var_dump($lifetime->format('d/m/Y H:i:s'));
         $current  = new \DateTime();
 
         if($lifetime > $current)
