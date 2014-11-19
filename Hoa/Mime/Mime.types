@@ -22,6 +22,7 @@ application/cnrp+xml
 application/commonground
 application/cpl+xml
 application/cybercash
+application/davmount+xml	davmount
 application/dca-rft
 application/dec-dx
 application/dvcs
