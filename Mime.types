@@ -550,6 +550,7 @@ text/sgml					sgml sgm
 text/t140
 text/tab-separated-values	tsv
 text/uri-list
+text/vcard					vcf vcard
 text/vnd.abc
 text/vnd.curl
 text/vnd.dmclientscript
