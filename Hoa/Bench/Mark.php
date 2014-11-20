@@ -207,7 +207,7 @@ class Mark {
      */
     public function reset ( ) {
 
-        $this->start    = 0.0.
+        $this->start    = 0.0;
         $this->stop     = 0.0;
         $this->pause    = 0.0;
         $this->_running = false;
