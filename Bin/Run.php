@@ -198,7 +198,16 @@ class Run extends Console\Dispatcher\Kit {
 
         $atoum = 'atoum';
 
-        if(isset($_SERVER['HOA_ATOUM_BIN']))
+        if(WITH_COMPOSER)
+            $atoum = __DIR__ . DS .
+                    '..' . DS .
+                    '..' . DS .
+                    '..' . DS .
+                    '..' . DS .
+                    '..' . DS .
+                    'bin' . DS .
+                    'atoum';
+        elseif(isset($_SERVER['HOA_ATOUM_BIN']))
             $atoum = $_SERVER['HOA_ATOUM_BIN'];
 
         $command = $atoum .
