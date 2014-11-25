@@ -26,7 +26,7 @@
         "ext-spl": "*"
     },
     "require-dev": {
-        "hoa/test": "~0.0"
+        "hoa/test": "~1.0"
     },
     "suggest": {
         "hoa/console"   : "To use the `hoa` script.",
