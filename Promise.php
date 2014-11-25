@@ -56,30 +56,66 @@ class Promise {
 
     const HANDLER_ONFULFILLED = 0;
     const HANDLER_FULFILL     = 1;
+    const HANDLER_ONREJECTED  = 2;
+    const HANDLER_REJECT      = 3;
 
     protected $_state    = self::STATE_PENDING;
     protected $_value    = null;
     protected $_deferred = null;
 
-    public function __construct ( $callback = null ) {
+    public function __construct ( $executor = null ) {
 
-        if(null !== $callback)
-            $callback(xcallable($this, 'fulfill'));
+        if(null !== $executor)
+            $executor(
+                xcallable($this, 'resolve'),
+                xcallable($this, 'reject')
+            );
 
         return;
     }
 
-    public function fulfill ( $value ) {
+    public function resolve ( $value ) {
 
-        if($value instanceof self) {
+        if(self::STATE_PENDING !== $this->_state)
+            throw new Exception(
+                'This promise is not pending, cannot resolve it.');
 
-            $value->then(xcallable($this, 'fulfill'));
+        try {
 
-            return;
+            if($value instanceof self) {
+
+                $value->then(
+                    xcallable($this, 'resolve'),
+                    xcallable($this, 'reject')
+                );
+
+                return;
+            }
+
+            $this->_value = $value;
+            $this->_state = self::STATE_FULFILLED;
+
+            if(null === $this->_deferred)
+                return;
+
+            $this->handle($this->_deferred);
+        }
+        catch ( \Exception $e ) {
+
+            $this->reject($e);
         }
 
-        $this->_value = $value;
-        $this->_state = self::STATE_FULFILLED;
+        return;
+    }
+
+    public function reject ( $reason ) {
+
+        if(self::STATE_PENDING !== $this->_state)
+            throw new Exception(
+                'This promise is not pending, cannot reject it.');
+
+        $this->_value = $reason;
+        $this->_state = self::STATE_REJECTED;
 
         if(null === $this->_deferred)
             return;
@@ -98,30 +134,67 @@ class Promise {
             return;
         }
 
-        if(null === $handler[self::HANDLER_ONFULFILLED]) {
+        $handlerOn = null;
 
-            $handler[self::HANDLER_FULFILL]($this->_value);
+        if(self::STATE_FULFILLED === $this->_state)
+            $handlerOn = $handler[self::HANDLER_ONFULFILLED];
+        else
+            $handlerOn = $handler[self::HANDLER_ONREJECTED];
 
-            return;
-        }
+        $out = null;
 
-        $out = $handler[self::HANDLER_ONFULFILLED]($this->_value);
-        $handler[self::HANDLER_FULFILL]($out);
+        if(null === $handlerOn)
+            $out = $this->_value;
+        else
+            try {
+
+                $out = $handlerOn($this->_value);
+            }
+            catch ( \Exception $e ) {
+
+                $handler[self::HANDLER_REJECT]($e);
+
+                return;
+            }
+
+        if(self::STATE_FULFILLED === $this->_state)
+            $handler[self::HANDLER_FULFILL]($out);
+        else
+            $handler[self::HANDLER_REJECT]($out);
 
         return;
     }
 
-    public function then ( $onFulfilled = null ) {
+    public function then ( $onFulfilled = null, $onRejected = null ) {
 
         $self = $this;
 
-        return new static(function ( $fulfill ) use ( $self, $onFulfilled ) {
+        return new static(function ( $fulfill, $reject ) use ( $self,
+                                                               $onFulfilled,
+                                                               $onRejected ) {
 
             $self->handle([
                 self::HANDLER_ONFULFILLED => $onFulfilled,
-                self::HANDLER_FULFILL     => $fulfill
+                self::HANDLER_FULFILL     => $fulfill,
+                self::HANDLER_ONREJECTED  => $onRejected,
+                self::HANDLER_REJECT      => $reject
             ]);
         });
+    }
+
+    public function __call ( $name, $arguments ) {
+
+        if('catch' === $name) {
+
+            if(!isset($arguments[0]))
+                throw new Exception(
+                    'The catch method must have one argument.', 0);
+
+            return $this->then(null, $arguments[0]);
+        }
+
+        throw new Exception(
+            'Method %s does not exist.', 1, $name);
     }
 }
 
