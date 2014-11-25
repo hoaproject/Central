@@ -92,7 +92,7 @@ class Promise {
                 return;
             }
 
-            $this->_value = $value;
+            $this->setValue($value);
             $this->_state = self::STATE_FULFILLED;
 
             if(null === $this->_deferred)
@@ -114,7 +114,7 @@ class Promise {
             throw new Exception(
                 'This promise is not pending, cannot reject it.');
 
-        $this->_value = $reason;
+        $this->setValue($reason);
         $this->_state = self::STATE_REJECTED;
 
         if(null === $this->_deferred)
@@ -136,7 +136,7 @@ class Promise {
 
         $handlerOn = null;
 
-        if(self::STATE_FULFILLED === $this->_state)
+        if(true === $this->isFulfilled())
             $handlerOn = $handler[self::HANDLER_ONFULFILLED];
         else
             $handlerOn = $handler[self::HANDLER_ONREJECTED];
@@ -144,11 +144,11 @@ class Promise {
         $out = null;
 
         if(null === $handlerOn)
-            $out = $this->_value;
+            $out = $this->getValue();
         else
             try {
 
-                $out = $handlerOn($this->_value);
+                $out = $handlerOn($this->getValue());
             }
             catch ( \Exception $e ) {
 
@@ -157,7 +157,7 @@ class Promise {
                 return;
             }
 
-        if(self::STATE_FULFILLED === $this->_state)
+        if(true === $this->isFulfilled())
             $handler[self::HANDLER_FULFILL]($out);
         else
             $handler[self::HANDLER_REJECT]($out);
@@ -195,6 +195,34 @@ class Promise {
 
         throw new Exception(
             'Method %s does not exist.', 1, $name);
+    }
+
+    public function isPending ( ) {
+
+        return self::STATE_PENDING === $this->_state;
+    }
+
+    public function isFulfilled ( ) {
+
+        return self::STATE_FULFILLED === $this->_state;
+    }
+
+    public function isRejected ( ) {
+
+        return self::STATE_REJECTED === $this->_state;
+    }
+
+    protected function setValue ( $value ) {
+
+        $old          = $this->_value;
+        $this->_value = $value;
+
+        return $old;
+    }
+
+    public function getValue ( ) {
+
+        return $this->_value;
     }
 }
 
