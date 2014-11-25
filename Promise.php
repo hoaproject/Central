@@ -78,7 +78,7 @@ class Promise {
 
         if(self::STATE_PENDING !== $this->_state)
             throw new Exception(
-                'This promise is not pending, cannot resolve it.');
+                'This promise is not pending, cannot resolve it.', 0);
 
         try {
 
@@ -112,7 +112,7 @@ class Promise {
 
         if(self::STATE_PENDING !== $this->_state)
             throw new Exception(
-                'This promise is not pending, cannot reject it.');
+                'This promise is not pending, cannot reject it.', 1);
 
         $this->setValue($reason);
         $this->_state = self::STATE_REJECTED;
@@ -188,13 +188,13 @@ class Promise {
 
             if(!isset($arguments[0]))
                 throw new Exception(
-                    'The catch method must have one argument.', 0);
+                    'The catch method must have one argument.', 2);
 
             return $this->then(null, $arguments[0]);
         }
 
         throw new Exception(
-            'Method %s does not exist.', 1, $name);
+            'Method %s does not exist.', 3, $name);
     }
 
     public function isPending ( ) {
