@@ -23,6 +23,9 @@
     "require": {
         "hoa/core": "~2.0"
     },
+    "require-dev": {
+        "hoa/test": "~1.0"
+    },
     "target-dir": "Hoa/Fastcgi",
     "autoload"  : { "psr-0": { "Hoa\\Fastcgi": "." } },
     "suggest"   : {
@@ -32,8 +35,5 @@
         "branch-alias": {
             "dev-master": "2.x-dev"
         }
-    },
-    "require-dev": {
-        "hoa/test": "~1.0"
     }
 }
