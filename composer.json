@@ -23,14 +23,14 @@
     "require": {
         "hoa/core": "~2.0"
     },
+    "require-dev": {
+        "hoa/test": "~1.0"
+    },
     "target-dir": "Hoa/Registry",
     "autoload"  : { "psr-0": { "Hoa\\Registry": "." } },
     "extra"     : {
         "branch-alias": {
             "dev-master": "2.x-dev"
         }
-    },
-    "require-dev": {
-        "hoa/test": "~1.0"
     }
 }
