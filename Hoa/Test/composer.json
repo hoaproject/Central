@@ -21,11 +21,13 @@
         "source": "http://git.hoa-project.net/"
     },
     "require": {
-        "hywan/atoum"            : "~1.0",
         "atoum/praspel-extension": "~0.0",
         "hoa/console"            : "~2.0",
         "hoa/core"               : "~2.0",
-        "hoa/file"               : "~0.0"
+        "hoa/dispatcher"         : "~0.0",
+        "hoa/file"               : "~0.0",
+        "hoa/router"             : "~2.0",
+        "hywan/atoum"            : "~1.0"
     },
     "target-dir": "Hoa/Test",
     "autoload"  : { "psr-0": { "Hoa\\Test": "." } },
