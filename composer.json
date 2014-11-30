@@ -27,7 +27,7 @@
         "hoa/dispatcher"         : "~0.0",
         "hoa/file"               : "~0.0",
         "hoa/router"             : "~2.0",
-        "hywan/atoum"            : "~1.0"
+        "atoum/atoum"            : "~1.0"
     },
     "target-dir": "Hoa/Test",
     "autoload"  : { "psr-0": { "Hoa\\Test": "." } },
