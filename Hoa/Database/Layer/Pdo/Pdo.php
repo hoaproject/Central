@@ -64,14 +64,14 @@ class Pdo implements Database\IDal\Wrapper {
      * Create a DAL instance, representing a connection to a database.
      *
      * @access  public
-     * @param   string  $dns              The DNS of database.
+     * @param   string  $dsn              The DSN of database.
      * @param   string  $username         The username to connect to database.
      * @param   string  $password         The password to connect to database.
      * @param   array   $driverOptions    The driver options.
      * @return  void
      * @throw   \Hoa\Database\Exception
      */
-    public function __construct ( $dns, $username, $password,
+    public function __construct ( $dsn, $username, $password,
                                   Array $driverOptions = [] ) {
 
         if(false === extension_loaded('pdo'))
@@ -82,7 +82,7 @@ class Pdo implements Database\IDal\Wrapper {
 
         try {
 
-            $connection = new \PDO($dns, $username, $password, $driverOptions);
+            $connection = new \PDO($dsn, $username, $password, $driverOptions);
         }
         catch ( \PDOException $e ) {
 
