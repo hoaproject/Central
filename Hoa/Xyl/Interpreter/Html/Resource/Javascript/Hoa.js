@@ -580,6 +580,18 @@ Hoa.Event = Hoa.Event || new function ( ) {
             );
         },
 
+        bareOn: function ( type, handler, useCapture ) {
+
+            var handle = delegator;
+            delegator  = document;
+
+            return handle.addEventListener(
+                type,
+                handler,
+                undefined === useCapture ? false : useCapture
+            );
+        },
+
         off: function ( type, handler, useCapture ) {
 
             var handle = delegator;
