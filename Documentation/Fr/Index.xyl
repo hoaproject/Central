@@ -783,8 +783,8 @@ Array
     [_tail] =>  baz
 )
 </code></pre>
-  <p>Rien de plus simple avec <code>Hoa\Router\Cli</code>. Nous pouvons
-  toujours regarder le script <code>hoa</code> (dans
+  <p>Rien de plus simple avec <code>Hoa\Router\Cli</code>. Nous pouvons toujours
+  regarder le script <code>hoa</code> (dans
   <a href="@central_resource:path=Library/Core/Bin/Hoa.php"><code>hoa://Library/Core/Bin/Hoa.php</code></a>)
   pour avoir un exemple concret.</p>
 
