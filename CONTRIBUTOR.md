@@ -32,6 +32,7 @@ cloak on IRC, etc.
   * Sarah Haïm-Lubczanski (mere-teresa)
   * ➜ Sébastien Houzé (shouze)
   * ➜ Matthieu de Laubrie (metalaka)
+  * Samuel Laulhau (lalop)
   * Baptiste Leduc (korbeil)
   * Marc Lemay (flug)
   * ➜ Renaud Littolff (marmotz)
