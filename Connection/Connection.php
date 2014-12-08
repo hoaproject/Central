@@ -214,11 +214,11 @@ abstract class Connection
      */
     public function connect ( ) {
 
-        $this->_disconnect = false;
         parent::__construct(
             $this->getSocket()->__toString(),
             $this->getContext()
         );
+        $this->_disconnect = false;
 
         return $this;
     }
