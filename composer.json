@@ -26,9 +26,12 @@
     "require-dev": {
         "hoa/test": "~1.0"
     },
-    "target-dir": "Hoa/Dispatcher",
-    "autoload"  : { "psr-0": { "Hoa\\Dispatcher": "." } },
-    "suggest"   : {
+    "autoload": {
+        "psr-4": {
+            "Hoa\\Dispatcher\\": "."
+        }
+    },
+    "suggest": {
         "hoa/router": "Provide routers.",
         "hoa/view"  : "Provide view interface."
     },
