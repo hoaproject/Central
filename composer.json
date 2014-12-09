@@ -26,9 +26,12 @@
     "require-dev": {
         "hoa/test": "~1.0"
     },
-    "target-dir": "Hoa/Fastcgi",
-    "autoload"  : { "psr-0": { "Hoa\\Fastcgi": "." } },
-    "suggest"   : {
+    "autoload": {
+        "psr-4": {
+            "Hoa\\Fastcgi\\": "."
+        }
+    },
+    "suggest": {
         "hoa/socket": "Provide sockets."
     },
     "extra": {
