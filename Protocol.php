@@ -549,14 +549,10 @@ class Library extends Protocol {
 
             $out = array();
 
-            foreach(explode(';', $this->_reach) as $part) {
+            foreach(explode(';', $this->_reach) as $part)
+                $out[] = "\r" . $part . strtolower($head ) . $queue;
 
-                $_pos  = strrpos(rtrim($part, DS), DS) + 1;
-                $_head = substr($part, 0, $_pos);
-                $_tail = rtrim(substr($part, $_pos), DS);
-                $out[] = "\r" . $_head . $_tail . DS . strtolower($head) . DS .
-                         ucfirst($_tail) . DS . $head . $queue;
-            }
+            $out[] = "\r" . dirname(dirname(dirname(__DIR__))) . $queue;
 
             return implode(';', $out);
         }
