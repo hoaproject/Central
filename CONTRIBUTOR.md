@@ -12,6 +12,7 @@ cloak on IRC, etc.
   * ➜ Julien Bianchi (jubianchi)
   * ➜ Julien Clauzel (thehawk)
   * ➜ Matthieu Codron (circlecode)
+  * Catalin Criste (crislinu)
   * Frédéric Dadeau (fdadeau)
   * Antoine Darche (ecureuilvirtuel)
   * Grégory Darche (tetardo)
