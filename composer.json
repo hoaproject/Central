@@ -33,7 +33,9 @@
     },
     "minimum-stability": "dev",
     "autoload"         : {
-        "psr-4": { "Hoa\\Core\\": "." },
+        "psr-4": {
+            "Hoa\\Core\\": "."
+        },
         "files": ["Core.php"]
     },
     "bin": ["Bin/hoa"]
