@@ -26,13 +26,16 @@
     "require-dev": {
         "hoa/test": "~1.0"
     },
-    "target-dir": "Hoa/View",
-    "autoload"  : { "psr-0": { "Hoa\\View": "." } },
-    "suggest"   : {
+    "autoload": {
+        "psr-4": {
+            "Hoa\\View\\": "."
+        }
+    },
+    "suggest": {
         "hoa/router": "Provide routers.",
         "hoa/stream": "Provide stream interfaces."
     },
-    "extra"     : {
+    "extra": {
         "branch-alias": {
             "dev-master": "2.x-dev"
         }
