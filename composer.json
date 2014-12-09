@@ -27,9 +27,12 @@
         "hoa/socket"  : "~0.0",
         "hoa/zombie"  : "~2.0"
     },
-    "target-dir": "Hoa/Worker",
-    "autoload"  : { "psr-0": { "Hoa\\Worker": "." } },
-    "extra"     : {
+    "autoload": {
+        "psr-4": {
+            "Hoa\\Worker\\": "."
+        }
+    },
+    "extra": {
         "branch-alias": {
             "dev-master": "2.x-dev"
         }
