@@ -135,7 +135,7 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
         if(WITH_COMPOSER)
             $iterator->append(new \GlobIterator(
                 dirname(dirname(dirname(dirname(__DIR)))) . DS . 'Bin' . DS . '*.php'
-            ))
+            ));
 
         $binaries = array();
 
