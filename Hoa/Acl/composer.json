@@ -25,9 +25,12 @@
         "hoa/core" : "~2.0",
         "hoa/graph": "~0.0"
     },
-    "target-dir": "Hoa/Acl",
-    "autoload"  : { "psr-0": { "Hoa\\Acl": "." } },
-    "extra"     : {
+    "autoload": {
+        "psr-4": {
+            "Hoa\\Acl\\": "."
+        }
+    },
+    "extra": {
         "branch-alias": {
             "dev-master": "0.x-dev"
         }
