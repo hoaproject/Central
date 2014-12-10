@@ -46,8 +46,6 @@ if(!defined('HOA')) {
     $composer = dirname(__DIR__) . DIRECTORY_SEPARATOR .
                 '..' . DIRECTORY_SEPARATOR .
                 '..' . DIRECTORY_SEPARATOR .
-                '..' . DIRECTORY_SEPARATOR .
-                '..' . DIRECTORY_SEPARATOR .
                 'autoload.php';
 
     if(file_exists($composer))
