@@ -34,9 +34,10 @@
         "hoa/router"    : "To use the `hoa` script.",
         "ext-mbstring"  : "ext/mbstring must be present (or a third implementation)."
     },
-    "target-dir": "Hoa/Core",
-    "autoload"  : {
-        "psr-0": { "Hoa\\Core": "." },
+    "autoload": {
+        "psr-4": {
+            "Hoa\\Core\\": "."
+        },
         "files": ["Core.php"]
     },
     "bin"  : ["Bin/hoa"],

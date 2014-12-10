@@ -127,17 +127,15 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
         $locations = resolve('hoa://Library', true, true);
         $iterator  = new \AppendIterator();
 
-        foreach($locations as $location) {
+        foreach($locations as $location)
+            $iterator->append(new \GlobIterator(
+                $location . '*' . DS . 'Bin' . DS . '*.php'
+            ));
 
-            if(WITH_COMPOSER)
-                $iterator->append(new \GlobIterator(
-                    $location . '*' . DS . '*' . DS . '*' . DS . 'Bin' . DS . '*.php'
-                ));
-            else
-                $iterator->append(new \GlobIterator(
-                    $location . '*' . DS . 'Bin' . DS . '*.php'
-                ));
-        }
+        if(WITH_COMPOSER)
+            $iterator->append(new \GlobIterator(
+                dirname(dirname(dirname(dirname(__DIR)))) . DS . 'Bin' . DS . '*.php'
+            ))
 
         $binaries = array();
 
