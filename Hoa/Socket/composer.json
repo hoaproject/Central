@@ -25,9 +25,12 @@
         "hoa/core"  : "~2.0",
         "hoa/stream": "~0.0"
     },
-    "target-dir": "Hoa/Socket",
-    "autoload"  : { "psr-0": { "Hoa\\Socket": "." } },
-    "extra"     : {
+    "autoload": {
+        "psr-4": {
+            "Hoa\\Socket\\": "."
+        }
+    },
+    "extra": {
         "branch-alias": {
             "dev-master": "0.x-dev"
         }
