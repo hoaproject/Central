@@ -203,8 +203,6 @@ class Run extends Console\Dispatcher\Kit {
                     '..' . DS .
                     '..' . DS .
                     '..' . DS .
-                    '..' . DS .
-                    '..' . DS .
                     'bin' . DS .
                     'atoum';
         elseif(isset($_SERVER['HOA_ATOUM_BIN']))
