@@ -228,4 +228,44 @@ class Locale extends Test\Unit\Suite {
                 ->variable($result->getPrivateUse())
                     ->isNull();
     }
+
+    public function case_reset ( ) {
+
+        $this
+            ->given(
+                $localizer = new LUT\Localizer\Coerce(
+                    'zh-Hant-TW-xy-ab-123-f-oo-4-42-x-qux'
+                )
+            )
+            ->when($locale = new LUT($localizer))
+            ->then
+                ->string($locale->getLanguage())
+                    ->isEqualTo('zh')
+                ->string($locale->getScript())
+                    ->isEqualTo('Hant')
+                ->string($locale->getRegion())
+                    ->isEqualTo('TW')
+                ->array($locale->getVariants())
+                    ->isEqualTo(['xy', 'ab', '123'])
+                ->array($locale->getExtensions())
+                    ->isEqualTo(['f' => 'oo', 4 => '42'])
+                ->string($locale->getPrivateUse())
+                    ->isEqualTo('qux')
+
+            ->given($localizer = new LUT\Localizer\Coerce('fr'))
+            ->when($locale->setLocalizer($localizer))
+            ->then
+                ->string($locale->getLanguage())
+                    ->isEqualTo('fr')
+                ->variable($locale->getScript())
+                    ->isNull()
+                ->variable($locale->getRegion())
+                    ->isNull()
+                ->array($locale->getVariants())
+                    ->isEmpty()
+                ->array($locale->getExtensions())
+                    ->isEmpty()
+                ->variable($locale->getPrivateUse())
+                    ->isNull();
+    }
 }

@@ -156,7 +156,6 @@ class Locale {
             $localizer = new Localizer\Coerce($localizer);
 
         $this->setLocalizer($localizer);
-        $this->computeLocale();
 
         return;
     }
@@ -190,14 +189,18 @@ class Locale {
     /**
      * Set localizer.
      *
-     * @access  protected
+     * @access  public
      * @param   \Hoa\Locale\Localizer  $localizer    Localizer.
      * @return  \Hoa\Locale\Localizer
      */
-    protected function setLocalizer ( Localizer $localizer ) {
+    public function setLocalizer ( Localizer $localizer ) {
+
+        $this->reset();
 
         $old              = $this->_localizer;
         $this->_localizer = $localizer;
+
+        $this->computeLocale();
 
         return $old;
     }
@@ -429,6 +432,38 @@ class Locale {
     public function getGrandfathered ( ) {
 
         return $this->_grandfathered;
+    }
+
+    /**
+     * Reset the object.
+     *
+     * @access  protected
+     * @return  void
+     */
+    protected function reset ( ) {
+
+        $class             = new \ReflectionClass(get_class($this));
+        $object            = new \ReflectionObject($this);
+        $defaultProperties = $class->getDefaultProperties();
+        $properties        = $object->getProperties();
+
+        foreach($properties as $property) {
+
+            $name = $property->getName();
+
+            if('_default' === $name)
+                continue;
+
+            $property->setAccessible(true);
+            $property->setValue(
+                $this,
+                array_key_exists($name, $defaultProperties)
+                    ? $defaultProperties[$name]
+                    : null
+            );
+        }
+
+        return;
     }
 }
 
