@@ -48,16 +48,16 @@
   for each method:</p>
   <ul>
     <li><code>getData</code> should preferably return a
-    <code>Hoa\Core\Data</code> object (see <a href="@lh:chapter=Core">the
+    <code>Hoa\Core\Data</code> object (see <a href="@hack:chapter=Core">the
     <code>Hoa\Core</code> library</a>); nevertheless, it is possible to return
     any kind of objects,</li>
     <li><code>getRouter</code> must return a router of kind
-    <code>Hoa\Router\Router</code> (see <a href="@lh:chapter=Router">the
+    <code>Hoa\Router\Router</code> (see <a href="@hack:chapter=Router">the
     <code>Hoa\Router</code> library</a>),</li>
     <li><code>render</code> returns a void value,</li>
     <li><code>getOutputStream</code> must return a stream implementing the
     <code>Hoa\Stream\IStream\Out</code> interface (see
-    <a href="@lh:chapter=Stream">the <code>Hoa\Stream</code> library</a>); it
+    <a href="@hack:chapter=Stream">the <code>Hoa\Stream</code> library</a>); it
     can be a file, a string, an HTTP response…</li>
   </ul>
   <p>Even if this approach may seem simplistic at first sight, this interface
@@ -66,7 +66,7 @@
 
   <h2 id="Example" for="main-toc">Example</h2>
 
-  <p><a href="@lh:chapter=Xyl">The <code>Hoa\Xyl</code> library</a> uses
+  <p><a href="@hack:chapter=Xyl">The <code>Hoa\Xyl</code> library</a> uses
   <code>Hoa\View\Viewable</code>, but it is a little bit complex for a first
   example (which must not prevent you to take a look at it!). That's why we are
   going to give a more simple and basic example.</p>
