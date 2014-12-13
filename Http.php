@@ -396,6 +396,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
         array_shift($muri);
         $sub = array_shift($msubdomain) ?: null;
+        $rule[Router::RULE_VARIABLES]['_uri']       =  $uri;
         $rule[Router::RULE_VARIABLES]['_method']    =  $method;
         $rule[Router::RULE_VARIABLES]['_domain']    =  static::getDomain();
         $rule[Router::RULE_VARIABLES]['_subdomain'] =  $sub;
