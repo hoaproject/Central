@@ -183,7 +183,7 @@ catch ( Hoa\Fastcgi\Exception\Exception $e ) {
   server.</p>
   <p>Manipulating FastCGI requests in this manner allows also to
   <strong>learn</strong> more about PHP and to manipulate PHP processus in
-  another way (please, see <a href="@lh:chapter=Zombie">the
+  another way (please, see <a href="@hack:chapter=Zombie">the
   <code>Hoa\Zombie</code> library</a>).</p>
 
 </yield>
