@@ -17,7 +17,7 @@
   cela est souvent synonyme de <strong>dysfonctionnement</strong>. Toutefois, il
   peut arriver que ce soit astucieux de le faire, notamment dans le cas de
   <strong>démons</strong> (voir
-  <a href="@lh:chapter=Worker"><code>Hoa\Worker</code></a>). Il est à noter
+  <a href="@hack:chapter=Worker"><code>Hoa\Worker</code></a>). Il est à noter
   qu'un zombie est également <strong>muet</strong> : il ne peut plus écrire sur
   la sortie standard puisqu'il n'est théoriquement plus attaché à aucun
   processus parent.</p>
@@ -88,7 +88,7 @@ file_put_contents(
 </code></pre>
   <p>Ensuite, nous continuons avec le fichier <code>Run.php</code> qui va
   exécuter <code>Zombie.php</code> grâce à
-  <a href="@lh:chapter=Fastcgi"><code>Hoa\Fastcgi</code></a> :</p>
+  <a href="@hack:chapter=Fastcgi"><code>Hoa\Fastcgi</code></a> :</p>
   <pre><code class="language-php">$fastcgi = new Hoa\Fastcgi\Responder(
     new Hoa\Socket\Client('tcp://127.0.0.1:9000')
 );
@@ -116,7 +116,7 @@ I guess I am sick…</code></pre>
   <p><code>Hoa\Zombie</code> permet de transformer un processus en
   <strong>zombie</strong> uniquement lorsqu'il est utilisé avec PHP FPM. Nous
   vous invitons à regarder
-  <a href="@lh:chapter=Worker"><code>Hoa\Worker</code></a> pour un exemple
+  <a href="@hack:chapter=Worker"><code>Hoa\Worker</code></a> pour un exemple
   d'utilisation plus <strong>complet</strong>.</p>
 
 </yield>

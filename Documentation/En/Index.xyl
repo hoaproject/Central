@@ -16,10 +16,10 @@
   <p>Putting a processus between life and death should be, in general, avoided,
   because it is often synonym of a <strong>dysfunction</strong>. However, it
   might happen to be shrewd, notably in the case of a <strong>demon</strong>
-  (see <a href="@lh:chapter=Worker">the <code>Hoa\Worker</code> library</a>). It
-  is important to notice that a zombie is also mute: it can no longer write on
-  its standard output because it is theorically no longer attached to a parent
-  processus.</p>
+  (see <a href="@hack:chapter=Worker">the <code>Hoa\Worker</code> library</a>).
+  It is important to notice that a zombie is also mute: it can no longer write
+  on its standard output because it is theorically no longer attached to a
+  parent processus.</p>
   <p>For now, <code>Hoa\Zombie</code> is able to create zombies only if it runs
   behind <a href="http://php.net/install.fpm">PHP FPM</a>. Remind us how PHP
   works: a <a href="http://fastcgi.com/">FastCGI</a> server (such as PHP FastCGI
@@ -83,7 +83,7 @@ file_put_contents(
 </code></pre>
   <p>Next, we continue with the <code>Run.php</code> file which will execute
   <code>Zombie.php</code> thanks to
-  <a href="@lh:chapter=Fastcgi"><code>Hoa\Fastcgi</code></a>:</p>
+  <a href="@hack:chapter=Fastcgi"><code>Hoa\Fastcgi</code></a>:</p>
   <pre><code class="language-php">$fastcgi = new Hoa\Fastcgi\Responder(
     new Hoa\Socket\Client('tcp://127.0.0.1:9000')
 );
@@ -109,8 +109,8 @@ I guess I am sick…</code></pre>
 
   <p><code>Hoa\Zombie</code> allows to turn a processus into a
   <strong>zombie</strong> only when it is used with PHP FPM. We invite you to
-  take a look at <a href="@lh:chapter=Worker"><code>Hoa\Worker</code></a> for a
-  <strong>complete</strong> example.</p>
+  take a look at <a href="@hack:chapter=Worker"><code>Hoa\Worker</code></a> for
+  a <strong>complete</strong> example.</p>
 
 </yield>
 </overlay>
