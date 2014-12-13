@@ -21,7 +21,7 @@
   une <strong>correspondance</strong> entre une requête et une règle existe,
   alors des <strong>données</strong> seront extraites de cette requête. Ces
   données peuvent être utilisées pour acheminer la requête quelque part. C'est
-  le rôle de <a href="@lh:chapter=Dispatcher"><code>Hoa\Dispatcher</code></a>,
+  le rôle de <a href="@hack:chapter=Dispatcher"><code>Hoa\Dispatcher</code></a>,
   qui fonctionne de paire avec <code>Hoa\Router</code>.</p>
   <p>Une règle doit être vue comme une succession de filtres. Si tous les
   filtres laissent passer la requête, alors la règle sera retenue pour acheminer
@@ -744,7 +744,7 @@ Array
   <p>La variable <code>_tail</code> a une signification particulière. Il faut
   savoir que nous nous en servons pour capturer les options et les entrées d'une
   ligne de commande afin de les analyser avec
-  <a href="@lh:chapter=Console#Lecture_d-options"><code>Hoa\Console</code></a>
+  <a href="@hack:chapter=Console#Lecture_d-options"><code>Hoa\Console</code></a>
   par la suite.</p>
   <p>Nous pouvons avoir envie que <code><em>group</em></code> soit
   <strong>optionnel</strong> (avec <code>default</code> comme valeur par
@@ -799,7 +799,7 @@ Array
   <code>_call</code> et <code>_able</code> : elles permettent de définir un
   <strong><em lang="en">callable</em></strong>. Ces variables peuvent être alors
   réutilisées pour <strong>dispatcher</strong> la requête. C'est exactement le
-  rôle de <a href="@lh:chapter=Dispatcher"><code>Hoa\Dispatcher</code></a> et
+  rôle de <a href="@hack:chapter=Dispatcher"><code>Hoa\Dispatcher</code></a> et
   c'est la suite logique de <code>Hoa\Router</code>.</p>
 
   <h2 id="Conclusion" for="main-toc">Conclusion</h2>
