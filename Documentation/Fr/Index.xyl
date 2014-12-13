@@ -15,7 +15,7 @@
   <h2 id="Introduction" for="main-toc">Introduction</h2>
 
   <p>Il est conseillé de lire le chapitre sur
-  <a href="@lh:chapter=Zombie"><code>Hoa\Zombie</code></a> dans lequel nous
+  <a href="@hack:chapter=Zombie"><code>Hoa\Zombie</code></a> dans lequel nous
   apprennons comment transformer un processus en <strong>zombie</strong>. C'est
   l'idée qu'exploite <code>Hoa\Worker</code> pour, une fois le zombie créé,
   mettre en place un <strong>serveur</strong> qui va recevoir des
@@ -178,7 +178,7 @@ Password: ▋</code></pre>
   <h2 id="Conclusion" for="main-toc">Conclusion</h2>
 
   <p><code>Hoa\Worker</code> est une démonstration de ce qu'il est possible de
-  faire avec <a href="@lh:chapter=Zombie"><code>Hoa\Zombie</code></a> mais pas
+  faire avec <a href="@hack:chapter=Zombie"><code>Hoa\Zombie</code></a> mais pas
   seulement. Il remplit parfaitement son rôle à savoir
   <strong>décharger</strong> l'application de traitements
   <strong>lourds</strong> et <strong>bloquants</strong>. Les commandes
