@@ -632,10 +632,11 @@ abstract class Model
      */
     protected static function setMappingLayer ( $layer, $name = '_default' ) {
 
-        if(!array_key_exists($name, static::$__mappingLayer))
-            return null;
+        $old = null;
 
-        $old                           = static::$__mappingLayer[$name];
+        if(array_key_exists($name, static::$__mappingLayer))
+            $old = static::$__mappingLayer[$name];
+
         static::$__mappingLayer[$name] = $layer;
 
         return $old;
