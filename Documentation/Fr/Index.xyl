@@ -15,7 +15,7 @@
 
   <h2 id="Introduction" for="main-toc">Introduction</h2>
 
-  <div id="overview" class="verbatim schema"></div>
+  <div id="overview" class="schema"></div>
   <script>
   Hoa.Document.onReady(function ( ) {
 
