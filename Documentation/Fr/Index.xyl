@@ -137,10 +137,8 @@ $worker->postMessage('mail gordon@freeman.hl Hello Gordon!');</code></pre>
   <a href="http://php.net/install.fpm">PHP FPM</a> :</p>
   <pre><code class="language-shell">$ php-fpm -d listen=127.0.0.1:9000</code></pre>
   <p>Ensuite, pour <strong>démarrer</strong> notre <em lang="en">worker</em>,
-  nous allons utiliser
-  <a href="@ll:chapter=Install#Hoa_en_ligne_de_commande">Hoa en ligne de
-  commande</a>, et plus particulièrement la commande <code>worker:start</code>.
-  Elle n'est qu'un alias pratique vers
+  nous allons utiliser Hoa en ligne de commande, et plus particulièrement la
+  commande <code>worker:start</code>. Elle n'est qu'un alias pratique vers
   <code>Hoa\Worker\Backend\Shared::start</code> qui nécessite l'adresse de
   PHP FPM (par défaut <code>127.0.0.1:9000</code>) et le chemin vers le fichier
   qui contient notre <em lang="en">worker</em> :</p>
