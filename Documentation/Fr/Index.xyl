@@ -26,7 +26,7 @@
   <p>Une règle doit être vue comme une succession de filtres. Si tous les
   filtres laissent passer la requête, alors la règle sera retenue pour acheminer
   la requête. Une requête est traitée de la façon suivante :</p>
-  <div id="filters" class="verbatim schema"></div>
+  <div id="filters" class="schema"></div>
   <script>
   Hoa.Document.onReady(function ( ) {
 
