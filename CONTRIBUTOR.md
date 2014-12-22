@@ -42,6 +42,7 @@ cloak on IRC, etc.
   * Joris Mulliez (jojolapine)
   * Matthieu Napoli (mnapoli)
   * Cosmin Nitu (ncosmin2001)
+  * Rémi Parpaillon (rparpa)
   * Grégoire Pineau (lyrixx)
   * ➜ Stéphane Py (stephpy)
   * Mathias Strasser (mathiasstrasser)
