@@ -37,6 +37,7 @@
 namespace Hoa\Math\Sampler;
 
 use Hoa\Core;
+use Hoa\Math;
 
 /**
  * Class \Hoa\Math\Sampler.
@@ -137,11 +138,27 @@ abstract class Sampler implements Core\Parameter\Parameterizable {
         if(null === $upper)
             $upper = $this->_parameters->getParameter('integer.max');
 
-        if(null === $exclude)
+        if(null === $exclude) {
+
+            if($lower > $upper)
+                throw new Math\Exception(
+                    'Unexpected values, integer %d should be lower than %d',
+                    0, [$lower, $upper]);
+
             return $this->_getInteger($lower, $upper);
+        }
+
 
         sort($exclude);
-        $sampled = $this->_getInteger($lower, $upper - count($exclude));
+
+        $upper -= count($exclude);
+
+        if($lower > $upper)
+            throw new Math\Exception(
+                'Unexpected values, integer %d should be lower than %d',
+                1, [$lower, $upper]);
+
+        $sampled = $this->_getInteger($lower, $upper);
 
         foreach($exclude as $e)
             if($sampled >= $e)
@@ -187,6 +204,11 @@ abstract class Sampler implements Core\Parameter\Parameterizable {
                          ? 3.4028235e38 - 1
                          : 1.7976931348623157e308 - 1;
             */
+
+        if($lower > $upper)
+            throw new Math\Exception(
+                'Unexpected values, float %f should be lower than %f',
+                2, [$lower, $upper]);
 
         return $this->_getFloat($lower, $upper);
     }
