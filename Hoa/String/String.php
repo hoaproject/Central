@@ -34,18 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\String;
 
-from('Hoa')
-
-/**
- * \Hoa\String\Exception
- */
--> import('String.Exception');
-
-}
-
-namespace Hoa\String {
+use Hoa\Core;
 
 /**
  * Class \Hoa\String.
@@ -235,12 +226,7 @@ class String implements \ArrayAccess, \Countable, \IteratorAggregate {
      */
     public function append ( $substring ) {
 
-        if(static::LTR === $this->getDirection())
-            $this->_string .= $substring;
-        else
-            $this->_string  = $substring . $this->_string;
-
-        $this->_direction  = null;
+        $this->_string .= $substring;
 
         return $this;
     }
@@ -254,12 +240,7 @@ class String implements \ArrayAccess, \Countable, \IteratorAggregate {
      */
     public function prepend ( $substring ) {
 
-        if(static::LTR === $this->getDirection())
-            $this->_string  = $substring . $this->_string;
-        else
-            $this->_string .= $substring;
-
-        $this->_direction = null;
+        $this->_string  = $substring . $this->_string;
 
         return $this;
     }
@@ -304,10 +285,10 @@ class String implements \ArrayAccess, \Countable, \IteratorAggregate {
      */
     public function compare ( $string ) {
 
-        if(false === class_exists('Collator', false))
-            return min(-1, max(1, strcmp($this->_string, (string) $string)));
+        if(null === $collator = static::getCollator())
+            return strcmp($this->_string, (string) $string);
 
-        return static::getCollator()->compare($this->_string, $string);
+        return $collator->compare($this->_string, $string);
     }
 
     /**
@@ -317,6 +298,9 @@ class String implements \ArrayAccess, \Countable, \IteratorAggregate {
      * @return  \Collator
      */
     public static function getCollator ( ) {
+
+        if(false === class_exists('Collator', false))
+            return null;
 
         if(null === static::$_collator)
             static::$_collator = new \Collator(setlocale(LC_COLLATE, null));
@@ -364,11 +348,14 @@ class String implements \ArrayAccess, \Countable, \IteratorAggregate {
 
         $pattern = static::safePattern($pattern);
 
-        if(true === $global)
-            if(0 === $flags)
+        if(0 === $flags) {
+
+            if(true === $global)
                 $flags = static::GROUP_BY_PATTERN;
-            else
-                $flags &= ~PREG_SPLIT_OFFSET_CAPTURE;
+        }
+        else
+            $flags &= ~PREG_SPLIT_OFFSET_CAPTURE;
+
 
         $offset = strlen(mb_substr($this->_string, 0, $offset));
 
@@ -804,22 +791,51 @@ class String implements \ArrayAccess, \Countable, \IteratorAggregate {
      */
     public static function toCode ( $char ) {
 
-        $ucs = mb_convert_encoding($char, 'UCS-2LE', 'UTF-8');
+        $char = (string) $char;
+        $code = ord($char[0]);
 
-        return ord($ucs[1]) * 256 + ord($ucs[0]);
+        if(!($code & 0x80)) // 0xxxxxxx
+            return $code;
+
+        if(($code & 0xe0) === 0xc0) { // 110xxxxx
+
+            $bytes = 2;
+            $code  = $code & ~0xc0;
+        }
+        elseif(($code & 0xf0) == 0xe0) { // 1110xxxx
+
+            $bytes = 3;
+            $code  = $code & ~0xe0;
+        }
+
+        elseif(($code & 0xf8) === 0xf0) { // 11110xxx
+
+            $bytes = 4;
+            $code  = $code & ~0xf0;
+        }
+
+        for($i = 2; $i <= $bytes; $i++) // 10xxxxxx
+            $code = ($code << 6) + (ord($char[$i - 1]) & ~0x80);
+
+        return $code;
     }
 
     /**
-     * Get a binary representation of the decimal code of a specific character.
+     * Get a binary representation of a specific character.
      *
      * @access  public
-     * @param   string  $char      Character.
-     * @param   int     $length    Length of the binary result.
+     * @param   string  $char    Character.
      * @return  string
      */
-    public static function toBinaryCode ( $char, $length = 32 ) {
+    public static function toBinaryCode ( $char ) {
 
-        return vsprintf('%0' . intval($length) . 'b', static::toCode($char));
+        $char = (string) $char;
+        $out  = null;
+
+        for($i = 0, $max = strlen($char); $i < $max; ++$i)
+            $out .= vsprintf('%08b', ord($char[$i]));
+
+        return $out;
     }
 
     /**
@@ -867,7 +883,7 @@ class String implements \ArrayAccess, \Countable, \IteratorAggregate {
                 throw new Exception(
                     '%s needs the class Normalizer to work properly, ' .
                     'or you can force a try by using %1$s(true).',
-                    1, array(__METHOD__));
+                    1, __METHOD__);
 
             $string        = iconv('UTF-8', 'ASCII//IGNORE//TRANSLIT', $this->_string);
             $this->_string = preg_replace('#(?:[\'"`^](\w))#u', '\1', $string);
@@ -905,13 +921,7 @@ class String implements \ArrayAccess, \Countable, \IteratorAggregate {
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\String\String');
-
-}
+Core\Consistency::flexEntity('Hoa\String\String');

@@ -34,18 +34,55 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\String;
+namespace Hoa\String\Test\Unit;
 
-use Hoa\Core;
+use Hoa\Test;
+use Hoa\String as LUT;
 
 /**
- * Class \Hoa\String\Exception.
+ * Class \Hoa\String\Test\Unit\Search.
  *
- * Extending the \Hoa\Core\Exception class.
+ * Test suite of the search algorithms.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2014 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Exception extends Core\Exception { }
+class Search extends Test\Unit\Suite {
+
+    public function case_approximated ( ) {
+
+        $this
+            ->given(
+                $x = 'GATAA',
+                $y = 'CAGATAAGAGAA',
+                $k = 1
+            )
+            ->when($result = LUT\Search::approximated($y, $x, $k))
+            ->then
+                ->array($result)
+                    ->isEqualTo([
+                        0 => [
+                            'i' => 1,
+                            'j' => 6,
+                            'l' => 5
+                        ],
+                        1 => [
+                            'i' => 2,
+                            'j' => 7,
+                            'l' => 5
+                        ],
+                        2 => [
+                            'i' => 3,
+                            'j' => 8,
+                            'l' => 5
+                        ],
+                        3 => [
+                            'i' => 7,
+                            'j' => 12,
+                            'l' => 5
+                        ]
+                    ]);
+    }
+}
