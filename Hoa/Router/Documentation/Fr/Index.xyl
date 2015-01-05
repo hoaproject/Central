@@ -149,6 +149,8 @@ print_r($router->getTheRule());
  *         [5] => 
  *         [6] => Array
  *             (
+ *                 [_uri] => hello
+ *                 [_method] => get
  *                 [_domain] => 
  *                 [_subdomain] => 
  *                 [_call] => 
@@ -215,10 +217,12 @@ print_r($theRule[$router::RULE_VARIABLES]);
  * Will output:
  *     Array
  *     (
- *         [_domain] => 
- *         [_subdomain] => 
- *         [_call] => 
- *         [_able] => 
+ *         [_uri] => hello_gordon
+ *         [_method] => get
+ *         [_domain] =>
+ *         [_subdomain] =>
+ *         [_call] =>
+ *         [_able] =>
  *         [_request] => Array
  *             (
  *             )
@@ -373,6 +377,8 @@ var_dump($router->unroute('h', array('who' => 'alyx')));
   <code>HEAD</code> et <code>OPTIONS</code>. Les <strong>variables</strong>
   réservées pour la méthode <code>Hoa\Router\Http::route</code> sont :</p>
   <ul>
+    <li><code>_uri</code>, l'<strong>adresse</strong> ;</li>
+    <li><code>_method</code>, la <strong>méthode</strong> HTTP ;</li>
     <li><code>_domain</code>, le <strong>domaine</strong> (de la forme
     <code>domain.tld</code>) ;</li>
     <li><code>_subdomain</code>, le <strong>sous-domaine</strong> (que nous
@@ -504,6 +510,8 @@ print_r($router->getTheRule());
  *         [5] => 
  *         [6] => Array
  *             (
+ *                 [_uri] =>  gordon.domain.tld/Project/Space-biker.html
+ *                 [_method] => get
  *                 [_domain] => gordon.domain.tld
  *                 [_subdomain] => gordon
  *                 [_call] => 
