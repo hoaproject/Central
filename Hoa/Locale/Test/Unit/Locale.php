@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2014, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -45,7 +45,7 @@ use Hoa\Locale as LUT;
  * Test suite of the locale main object.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2014 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Ivan Enderlin.
  * @license    New BSD License
  */
 
@@ -226,6 +226,46 @@ class Locale extends Test\Unit\Suite {
                 ->array($result->getExtensions())
                     ->isEmpty()
                 ->variable($result->getPrivateUse())
+                    ->isNull();
+    }
+
+    public function case_reset ( ) {
+
+        $this
+            ->given(
+                $localizer = new LUT\Localizer\Coerce(
+                    'zh-Hant-TW-xy-ab-123-f-oo-4-42-x-qux'
+                )
+            )
+            ->when($locale = new LUT($localizer))
+            ->then
+                ->string($locale->getLanguage())
+                    ->isEqualTo('zh')
+                ->string($locale->getScript())
+                    ->isEqualTo('Hant')
+                ->string($locale->getRegion())
+                    ->isEqualTo('TW')
+                ->array($locale->getVariants())
+                    ->isEqualTo(['xy', 'ab', '123'])
+                ->array($locale->getExtensions())
+                    ->isEqualTo(['f' => 'oo', 4 => '42'])
+                ->string($locale->getPrivateUse())
+                    ->isEqualTo('qux')
+
+            ->given($localizer = new LUT\Localizer\Coerce('fr'))
+            ->when($locale->setLocalizer($localizer))
+            ->then
+                ->string($locale->getLanguage())
+                    ->isEqualTo('fr')
+                ->variable($locale->getScript())
+                    ->isNull()
+                ->variable($locale->getRegion())
+                    ->isNull()
+                ->array($locale->getVariants())
+                    ->isEmpty()
+                ->array($locale->getExtensions())
+                    ->isEmpty()
+                ->variable($locale->getPrivateUse())
                     ->isNull();
     }
 }
