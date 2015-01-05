@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2014, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -51,7 +51,7 @@ define('PATH_DATA',      $path . 'Data.php');
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @author     Julien Bianchi <julien.bianchi@hoa-project.net>
- * @copyright  Copyright © 2007-2014 Ivan Enderlin, Julien Bianchi.
+ * @copyright  Copyright © 2007-2015 Ivan Enderlin, Julien Bianchi.
  * @license    New BSD License
  */
 
@@ -589,7 +589,7 @@ class Consistency {
  * native PHP callable (aka callback) to integrate Hoa's structures.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2014 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Ivan Enderlin.
  * @license    New BSD License
  */
 

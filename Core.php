@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2014, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -91,7 +91,7 @@ namespace Hoa\Core {
  * \Hoa\Core is the base of all libraries.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2014 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Ivan Enderlin.
  * @license    New BSD License
  */
 
@@ -466,7 +466,7 @@ class Core implements Parameter\Parameterizable {
      */
     public static function © ( ) {
 
-        return 'Copyright © 2007-2014 Ivan Enderlin. All rights reserved.' . "\n" .
+        return 'Copyright © 2007-2015 Ivan Enderlin. All rights reserved.' . "\n" .
                'New BSD License.';
     }
 }
