@@ -848,13 +848,13 @@ class String extends Test\Unit\Suite {
                     ->isTrue();
     }
 
-    public function case_to_ascii_no_normalizer ( ) {
+    public function case_to_ascii_no_transliterator_no_normalizer ( ) {
 
         $this
             ->given(
                 $this->function->class_exists = function ( $name ) {
 
-                    return 'Normalizer' !== $name;
+                    return false === in_array($name, ['Transliterator', 'Normalizer']);
                 },
                 $string = new LUT('Un été brûlant sur la côte')
             )
@@ -865,13 +865,13 @@ class String extends Test\Unit\Suite {
                 ->isInstanceOf('Hoa\String\Exception');
     }
 
-    public function case_to_ascii_no_normalizer_try ( ) {
+    public function case_to_ascii_no_transliterator_no_normalizer_try ( ) {
 
         $this
             ->given(
                 $this->function->class_exists = function ( $name ) {
 
-                    return 'Normalizer' !== $name;
+                    return false === in_array($name, ['Transliterator', 'Normalizer']);
                 },
                 $string = new LUT('Un été brûlant sur la côte')
             )
@@ -883,16 +883,75 @@ class String extends Test\Unit\Suite {
                     ->isEqualTo('Un ete brulant sur la cote');
     }
 
-    public function case_to_ascii ( ) {
+    public function case_to_ascii_no_transliterator ( ) {
 
         $this
-            ->given($string = new LUT('Un été brûlant sur la côte'))
+            ->given(
+                $this->function->class_exists = function ( $name ) {
+
+                    return 'Transliterator' !== $name;
+                },
+                $string = new LUT('Un été brûlant sur la côte')
+            )
             ->when($result = $string->toAscii())
             ->then
                 ->object($result)
                     ->isIdenticalTo($string)
                 ->string((string) $result)
                     ->isEqualTo('Un ete brulant sur la cote');
+    }
+
+    public function case_to_ascii ( ) {
+
+        $this
+            ->given(
+                $strings = [
+                    'Un été brûlant sur la côte'
+                    => 'Un ete brulant sur la cote',
+
+                    'Αυτή είναι μια δοκιμή'
+                    => 'Aute einai mia dokime',
+
+                    'أحبك'
+                    => 'ahbk',
+
+                    'キャンパス'
+                    => 'kyanpasu',
+
+                    'биологическом'
+                    => 'biologiceskom',
+
+                    '정, 병호'
+                    => 'jeong, byeongho',
+
+                    'ますだ, よしひこ'
+                    => 'masuda, yoshihiko',
+
+                    'मोनिच'
+                    => 'monica',
+
+                    'क्ष'
+                    => 'ksa',
+
+                    'أحبك 😀'
+                    => 'ahbk (grinning face)',
+
+                    '∀ i ∈ ℕ'
+                    => '(for all) i (element of) N'
+                ]
+            )
+            ->when(function ( ) use ( $strings ) {
+
+                foreach($strings as $original => $asciied)
+                    $this
+                        ->given($string = new LUT($original))
+                        ->when($result = $string->toAscii())
+                        ->then
+                            ->object($result)
+                                ->isIdenticalTo($string)
+                            ->string((string) $result)
+                                ->isEqualTo($asciied);
+            });
     }
 
     public function case_copy ( ) {

@@ -299,7 +299,7 @@ class String implements \ArrayAccess, \Countable, \IteratorAggregate {
      */
     public static function getCollator ( ) {
 
-        if(false === class_exists('Collator', false))
+        if(false === class_exists('Collator'))
             return null;
 
         if(null === static::$_collator)
@@ -459,6 +459,101 @@ class String implements \ArrayAccess, \Countable, \IteratorAggregate {
         $this->_string = mb_strtoupper($this->_string);
 
         return $this;
+    }
+
+    /**
+     * Transform a UTF-8 string into an ASCII one.
+     * First, try with a transliterator. If not available, will fallback to a
+     * normalizer. If not available, will try something homemade.
+     *
+     * @access  public
+     * @param   bool  $try    Try something if \Normalizer is not present.
+     * @return  \Hoa\String
+     * @throw   \Hoa\String\Exception
+     */
+    public function toAscii ( $try = false ) {
+
+        if(0 === preg_match('#[\x80-\xff]#', $this->_string))
+            return $this;
+
+        $string = $this->_string;
+
+        $transId = 'Any-Latin; ' .
+                   '[\p{S}] Name; ' .
+                   'Latin-ASCII';
+
+        if(null !== $transliterator = static::getTransliterator($transId)) {
+
+            $this->_string = preg_replace_callback(
+                '#\\\N\{([A-Z ]+)\}#u',
+                function ( Array $matches ) {
+
+                    return '(' . strtolower($matches[1]) . ')';
+                },
+                $transliterator->transliterate($string)
+            );
+
+            return $this;
+        }
+
+        if(false === class_exists('Normalizer')) {
+
+            if(false === $try)
+                throw new Exception(
+                    '%s needs the class Normalizer to work properly, ' .
+                    'or you can force a try by using %1$s(true).',
+                    1, __METHOD__);
+
+            $string        = static::transcode($string, 'UTF-8', 'ASCII//IGNORE//TRANSLIT');
+            $this->_string = preg_replace('#(?:[\'"`^](\w))#u', '\1', $string);
+
+            return $this;
+        }
+
+        $string        = \Normalizer::normalize($string, \Normalizer::NFKD);
+        $string        = preg_replace('#\p{Mn}+#u', '', $string);
+        $this->_string = static::transcode($string, 'UTF-8', 'ASCII//IGNORE//TRANSLIT');
+
+        return $this;
+    }
+
+    /**
+     * Transliterate the string into another.
+     * See self::getTransliterator for more information.
+     *
+     * @access  public
+     * @param   string  $identifier    Identifier.
+     * @param   int     $start         Start.
+     * @param   int     $end           End.
+     * @return  \Hoa\String
+     * @throw   \Hoa\String\Exception
+     */
+    public function transliterate ( $identifier, $start = 0, $end = null ) {
+
+        if(null === $transliterator = static::getTransliterator($identifier))
+            throw new Exception(
+                '%s needs the class Transliterator to work propertly.',
+                2, __METHOD__);
+
+        $this->_string = $transliterator->transliterate($this->_string, $start, $end);
+
+        return $this;
+    }
+
+    /**
+     * Get transliterator.
+     * See http://userguide.icu-project.org/transforms/general for $identifier.
+     *
+     * @access  public
+     * @param   string  $identifier    Identifier.
+     * @return  \Transliterator
+     */
+    public static function getTransliterator ( $identifier ) {
+
+        if(false === class_exists('Transliterator'))
+            return null;
+
+        return \Transliterator::create($identifier);
     }
 
     /**
@@ -863,41 +958,6 @@ class String implements \ArrayAccess, \Countable, \IteratorAggregate {
 
         return (bool) preg_match('##u', $string);
     }
-
-    /**
-     * Transform a UTF-8 string into an ASCII one.
-     *
-     * @access  public
-     * @param   bool  $try    Try something if \Normalizer is not present.
-     * @return  \Hoa\String
-     * @throw   \Hoa\String\Exception
-     */
-    public function toAscii ( $try = false ) {
-
-        if(0 === preg_match('#[\x80-\xff]#', $this->_string))
-            return $this;
-
-        if(false === class_exists('Normalizer', false)) {
-
-            if(false === $try)
-                throw new Exception(
-                    '%s needs the class Normalizer to work properly, ' .
-                    'or you can force a try by using %1$s(true).',
-                    1, __METHOD__);
-
-            $string        = iconv('UTF-8', 'ASCII//IGNORE//TRANSLIT', $this->_string);
-            $this->_string = preg_replace('#(?:[\'"`^](\w))#u', '\1', $string);
-
-            return $this;
-        }
-
-        $string        = \Normalizer::normalize($this->_string, \Normalizer::NFKD);
-        $string        = preg_replace('#\p{Mn}+#u', '', $string);
-        $this->_string = iconv('UTF-8', 'ASCII//IGNORE//TRANSLIT', $string);
-
-        return $this;
-    }
-
 
     /**
      * Copy current object string
