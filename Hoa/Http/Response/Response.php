@@ -225,11 +225,11 @@ class          Response
     const STATUS_TEMPORARY_REDIRECT                = '307 Temporary Redirect';
 
     /**
-     * Resume incomplete (please, see RFC7237).
+     * Permanent redirect (please, see RFC7238).
      *
      * @const string
      */
-    const STATUS_RESUME_INCOMPLETE                 = '308 Permanent Redirect';
+    const STATUS_PERMANENT_REDIRECT                = '308 Permanent Redirect';
 
     /**
      * Bad request (please, see RFC7231).
