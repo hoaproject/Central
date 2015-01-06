@@ -31,6 +31,7 @@ cloak on IRC, etc.
   * Kevin Gravier (mrkmg)
   * Nicolas Grekas (nicolas-grekas)
   * Sarah Haïm-Lubczanski (mere-teresa)
+  * Martin Hasoň (hason)
   * ➜ Sébastien Houzé (shouze)
   * ➜ Matthieu de Laubrie (metalaka)
   * Samuel Laulhau (lalop)
