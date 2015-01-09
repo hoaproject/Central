@@ -36,6 +36,7 @@
 
 namespace Hoa\Dispatcher\Test\Unit;
 
+use Hoa\Router;
 use Hoa\Test;
 
 /**
@@ -72,5 +73,116 @@ class Dispatcher extends Test\Unit\Suite {
             ->when($result = $dispatcher->getKitName())
                 ->string($result)
                     ->isEqualTo('foo');
+    }
+
+    public function case_dispatch_already_routed ( ) {
+
+        $this
+            ->given(
+                $dispatcher       = new \Mock\Hoa\Dispatcher(),
+                $parameters       = $dispatcher->getParameters(),
+                $routedRule       = null,
+                $routedRouter     = null,
+                $routedView       = null,
+                $routedParameters = null,
+                $this->calling($dispatcher)->resolve = function ( $rule, $router, $view )
+                                                       use      ( &$routedRule, &$routedRouter, &$routedView , &$routedParameters) {
+
+                    $routedRule       = $rule;
+                    $routedRouter     = $router;
+                    $routedView       = $view;
+                    $routedParameters = $this->getParameters();
+
+                    return;
+                },
+                $router = new Router\Cli(),
+                $router->get('a', '(?<foo>fooo) (?<bar>baar)'),
+                $router->route('fooo baar')
+            )
+            ->when($dispatcher->dispatch($router))
+            ->then
+                ->array($routedRule)
+                ->object($routedRouter)
+                    ->isIdenticalTo($router)
+                ->variable($routedView)
+                    ->isNull()
+                ->object($routedParameters)
+                    ->isInstanceOf('Hoa\Core\Parameter')
+
+                ->object($dispatcher->getParameters())
+                    ->isIdenticalTo($parameters)
+                ->object($parameters)
+                    ->isNotIdenticalTo($routedParameters)
+                ->string($routedParameters->getParameter('variables.foo'))
+                    ->isEqualTo('fooo')
+                ->string($routedParameters->getParameter('variables.bar'))
+                    ->isEqualTo('baar');
+    }
+
+    public function case_dispatch_auto_route ( ) {
+
+        $this
+            ->given(
+                $dispatcher       = new \Mock\Hoa\Dispatcher(),
+                $parameters       = $dispatcher->getParameters(),
+                $routedRule       = null,
+                $routedRouter     = null,
+                $routedView       = null,
+                $routedParameters = null,
+                $this->calling($dispatcher)->resolve = function ( $rule, $router, $view )
+                                                       use      ( &$routedRule, &$routedRouter, &$routedView , &$routedParameters) {
+
+                    $routedRule       = $rule;
+                    $routedRouter     = $router;
+                    $routedView       = $view;
+                    $routedParameters = $this->getParameters();
+
+                    return;
+                },
+                $router = new Router\Cli(),
+                $router->get('a', '(?<foo>fooo) (?<bar>baar)'),
+                $router->route('fooo baar'),
+                $theRule = $router->getTheRule(),
+
+                $router = new \Mock\Hoa\Router(),
+                $this->calling($router)->getTheRule[0] = $theRule,
+                $this->calling($router)->getTheRule[1] = null,
+                $this->calling($router)->route         = null
+            )
+            ->when($dispatcher->dispatch($router))
+            ->then
+                ->array($routedRule)
+                ->object($routedRouter)
+                    ->isIdenticalTo($router)
+                ->variable($routedView)
+                    ->isNull()
+                ->object($routedParameters)
+                    ->isInstanceOf('Hoa\Core\Parameter')
+
+                ->object($dispatcher->getParameters())
+                    ->isIdenticalTo($parameters)
+                ->object($parameters)
+                    ->isNotIdenticalTo($routedParameters)
+                ->string($routedParameters->getParameter('variables.foo'))
+                    ->isEqualTo('fooo')
+                ->string($routedParameters->getParameter('variables.bar'))
+                    ->isEqualTo('baar');
+    }
+
+    public function case_dispatch_return ( ) {
+
+        $this
+            ->given(
+                $dispatcher                          = new \Mock\Hoa\Dispatcher(),
+                $this->calling($dispatcher)->resolve = 42,
+
+                $router = new Router\Cli(),
+                $router->get('a', '(?<foo>foo) (?<bar>bar)'),
+                $router->route('foo bar')
+            )
+            ->when($result = $dispatcher->dispatch($router))
+            ->then
+                ->integer($result)
+                    ->isEqualTo(42);
     }
 }
