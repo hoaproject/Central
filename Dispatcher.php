@@ -87,16 +87,15 @@ abstract class Dispatcher implements Core\Parameter\Parameterizable {
         $this->_parameters = new Core\Parameter(
             __CLASS__,
             [
-                'controller' => 'main',
-                'action'     => 'main',
-                'method'     => null
+                'call' => 'main',
+                'able' => 'main'
             ],
             [
-                'synchronous.controller'  => 'Application\Controller\(:controller:U:)',
-                'synchronous.action'      => '(:action:U:)Action',
+                'synchronous.call' => '(:call:U:)',
+                'synchronous.able' => '(:able:U:)',
 
-                'asynchronous.controller' => '(:%synchronous.controller:)',
-                'asynchronous.action'     => '(:%synchronous.action:)Async',
+                'asynchronous.call' => '(:%synchronous.call:)',
+                'asynchronous.able' => '(:%synchronous.able:)Async',
 
                 /**
                  * Router variables.
@@ -152,9 +151,7 @@ abstract class Dispatcher implements Core\Parameter\Parameterizable {
         foreach($rule[Router::RULE_VARIABLES] as $key => $value)
             $this->_parameters->setParameter('variables.' . $key, $value);
 
-        $this->_parameters->setKeyword('method', $router->getMethod());
-
-        $out               = $this->resolve($rule, $router, $view);
+        $out = $this->resolve($rule, $router, $view);
         unset($this->_parameters);
         $this->_parameters = $parameters;
 
