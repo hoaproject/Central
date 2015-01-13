@@ -43,15 +43,26 @@ namespace {
 
 if(!defined('HOA')) {
 
-    $composer = dirname(__DIR__) . DIRECTORY_SEPARATOR .
-                '..' . DIRECTORY_SEPARATOR .
-                '..' . DIRECTORY_SEPARATOR .
-                'autoload.php';
+    $autoload_paths = array(
+        dirname(__DIR__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'autoload.php',
+        dirname(__DIR__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'autoload.php',
+    );
 
-    if(file_exists($composer))
-        require_once $composer;
-    else
-        require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Core.php';
+    $found = false;
+    foreach ($autoload_paths as $path) {
+        if (file_exists($path)) {
+            require $path;
+            $found = true;
+            break;
+        }
+    }
+
+    if (!$found) {
+        die(
+            'Hoa requires to be installed through composer.'.PHP_EOL.
+            'See http://getcomposer.org/download/'.PHP_EOL
+        );
+    }
 }
 
 \Hoa\Core::enableErrorHandler();
