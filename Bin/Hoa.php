@@ -58,10 +58,7 @@ if(!defined('HOA')) {
     }
 
     if (!$found) {
-        die(
-            'Hoa requires to be installed through composer.'.PHP_EOL.
-            'See http://getcomposer.org/download/'.PHP_EOL
-        );
+        require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Core.php';
     }
 }
 
