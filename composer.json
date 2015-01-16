@@ -25,6 +25,7 @@
         "hoa/core"        : "~2.0",
         "hoa/file"        : "~0.0",
         "hoa/http"        : "~0.0",
+        "hoa/locale"      : "~1.0",
         "hoa/praspel"     : "~0.0",
         "hoa/realdom"     : "~0.0",
         "hoa/router"      : "~2.0",

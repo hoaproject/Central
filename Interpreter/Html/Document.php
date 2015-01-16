@@ -89,13 +89,19 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
 
         $root = $this->getAbstractElementSuperRoot();
 
+        $locale   = $root->getLocale();
+        $language = null;
+
+        if(null !== $locale)
+            $language .= ' lang="' . $locale->getLanguage() . '"';
+
         $out->writeAll(
             '<!DOCTYPE html>' . "\n\n" .
             '<!--[if lt IE 7]><html class="ie6"><![endif]-->' . "\n" .
             '<!--[if    IE 7]><html class="ie7"><![endif]-->' . "\n" .
             '<!--[if    IE 8]><html class="ie8"><![endif]-->' . "\n" .
             '<!--[if (gte IE 9)|!(IE)]>' . "\n" .
-            '<html>' . "\n" .
+            '<html' . $language . '>' . "\n" .
             '<![endif]-->' . "\n" .
             '<head>' . "\n"
         );
