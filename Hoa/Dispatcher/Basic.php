@@ -164,17 +164,17 @@ class Basic extends Dispatcher {
 
                 if(false === $async) {
 
-                    $_controller = 'synchronous.controller';
-                    $_action     = 'synchronous.action';
+                    $_controller = 'synchronous.call';
+                    $_action     = 'synchronous.able';
                 }
                 else {
 
-                    $_controller = 'asynchronous.controller';
-                    $_action     = 'asynchronous.action';
+                    $_controller = 'asynchronous.call';
+                    $_action     = 'asynchronous.able';
                 }
 
-                $this->_parameters->setKeyword('controller', $controller);
-                $this->_parameters->setKeyword('action',     $action);
+                $this->_parameters->setKeyword('call', $controller);
+                $this->_parameters->setKeyword('able', $action);
 
                 $controller = $this->_parameters->getFormattedParameter($_controller);
                 $action     = $this->_parameters->getFormattedParameter($_action);
