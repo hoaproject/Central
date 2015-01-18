@@ -65,13 +65,14 @@ class Iframe extends Generic {
      * @var \Hoa\Xyl\Interpreter\Html\Iframe array
      */
     protected static $_attributes        = array(
-        'src'      => parent::ATTRIBUTE_TYPE_LINK,
-        'srcdoc'   => parent::ATTRIBUTE_TYPE_LINK,
-        'name'     => parent::ATTRIBUTE_TYPE_NORMAL,
-        'sandbox'  => parent::ATTRIBUTE_TYPE_NORMAL,
-        'seamless' => parent::ATTRIBUTE_TYPE_NORMAL,
-        'width'    => parent::ATTRIBUTE_TYPE_NORMAL,
-        'height'   => parent::ATTRIBUTE_TYPE_NORMAL
+        'allowfullscreen' => parent::ATTRIBUTE_TYPE_NORMAL,
+        'src'             => parent::ATTRIBUTE_TYPE_LINK,
+        'srcdoc'          => parent::ATTRIBUTE_TYPE_LINK,
+        'name'            => parent::ATTRIBUTE_TYPE_NORMAL,
+        'sandbox'         => parent::ATTRIBUTE_TYPE_NORMAL,
+        'seamless'        => parent::ATTRIBUTE_TYPE_NORMAL,
+        'width'           => parent::ATTRIBUTE_TYPE_NORMAL,
+        'height'          => parent::ATTRIBUTE_TYPE_NORMAL
     );
 
     /**
