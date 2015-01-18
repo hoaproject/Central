@@ -301,7 +301,7 @@ Hoa.ℙ(1) && (Hoa.DOM = Hoa.DOM || new function ( ) {
         var node = null;
 
         if(undefined !== ns)
-            node = document.createElementNS(name);
+            node = document.createElementNS(ns, name);
         else
             node = document.createElement(name);
 
