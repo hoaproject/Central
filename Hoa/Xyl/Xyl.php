@@ -256,6 +256,13 @@ class          Xyl
     protected $_fragments         = array();
 
     /**
+     * Locale.
+     *
+     * @var \Hoa\Locale object
+     */
+    protected $_locale            = null;
+
+    /**
      * Translations.
      *
      * @var \Hoa\Xyl array
@@ -1692,6 +1699,32 @@ class          Xyl
                 21);
 
         return $concrete->getConcreteElement($handle[0]);
+    }
+
+    /**
+     * Set locale.
+     *
+     * @access  public
+     * @param   \Hoa\Locale  $locale    Locale.
+     * @return  \Hoa\Locale
+     */
+    public function setLocale ( \Hoa\Locale $locale ) {
+
+        $old           = $this->_locale;
+        $this->_locale = $locale;
+
+        return $old;
+    }
+
+    /**
+     * Get locale.
+     *
+     * @access  public
+     * @return  \Hoa\Locale
+     */
+    public function getLocale ( ) {
+
+        return $this->_locale;
     }
 
     /**
