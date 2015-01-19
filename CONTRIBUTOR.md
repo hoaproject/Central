@@ -39,6 +39,7 @@ cloak on IRC, etc.
   * Marc Lemay (flug)
   * ➜ Renaud Littolff (marmotz)
   * ➜ Julien Lorrain (julien)
+  * Linus Metzler (limenet)
   * ➜ Jean Molliné (cyrano)
   * Joris Mulliez (jojolapine)
   * Matthieu Napoli (mnapoli)
