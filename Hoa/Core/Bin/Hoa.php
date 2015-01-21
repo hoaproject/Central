@@ -43,14 +43,26 @@ namespace {
 
 if(!defined('HOA')) {
 
-    $composer = dirname(__DIR__) . DIRECTORY_SEPARATOR .
-                '..' . DIRECTORY_SEPARATOR .
-                '..' . DIRECTORY_SEPARATOR .
-                'autoload.php';
+    $composer = array(
+        dirname(__DIR__) . DIRECTORY_SEPARATOR .
+        '..' . DIRECTORY_SEPARATOR .
+        '..' . DIRECTORY_SEPARATOR .
+        'autoload.php',
+        dirname(__DIR__) . DIRECTORY_SEPARATOR .
+        '..' . DIRECTORY_SEPARATOR .
+        '..' . DIRECTORY_SEPARATOR .
+        '..' . DIRECTORY_SEPARATOR .
+        'autoload.php'
+    );
 
-    if(file_exists($composer))
-        require_once $composer;
-    else
+    foreach($composer as $path)
+        if(file_exists($path)) {
+
+            require_once $path;
+            break;
+        }
+
+    if(!defined('HOA'))
         require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Core.php';
 }
 
