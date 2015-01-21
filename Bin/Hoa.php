@@ -43,23 +43,27 @@ namespace {
 
 if(!defined('HOA')) {
 
-    $autoload_paths = array(
-        dirname(__DIR__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'autoload.php',
-        dirname(__DIR__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'autoload.php',
+    $composer = array(
+        dirname(__DIR__) . DIRECTORY_SEPARATOR .
+        '..' . DIRECTORY_SEPARATOR .
+        '..' . DIRECTORY_SEPARATOR .
+        'autoload.php',
+        dirname(__DIR__) . DIRECTORY_SEPARATOR .
+        '..' . DIRECTORY_SEPARATOR .
+        '..' . DIRECTORY_SEPARATOR .
+        '..' . DIRECTORY_SEPARATOR .
+        'autoload.php'
     );
 
-    $found = false;
-    foreach ($autoload_paths as $path) {
-        if (file_exists($path)) {
-            require $path;
-            $found = true;
+    foreach($composer as $path)
+        if(file_exists($path)) {
+
+            require_once $path;
             break;
         }
-    }
 
-    if (!$found) {
+    if(!defined('HOA'))
         require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Core.php';
-    }
 }
 
 \Hoa\Core::enableErrorHandler();
