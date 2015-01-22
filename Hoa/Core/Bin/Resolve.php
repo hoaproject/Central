@@ -34,18 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Core\Bin;
 
-from('Hoa')
-
-/**
- * \Hoa\Console
- */
--> import('Console.~');
-
-}
-
-namespace Hoa\Core\Bin {
+use Hoa\Core;
+use Hoa\Console;
 
 /**
  * Class \Hoa\Core\Bin\Resolve.
@@ -57,21 +49,21 @@ namespace Hoa\Core\Bin {
  * @license    New BSD License
  */
 
-class Resolve extends \Hoa\Console\Dispatcher\Kit {
+class Resolve extends Console\Dispatcher\Kit {
 
     /**
      * Options description.
      *
      * @var \Hoa\Core\Bin\Resolve array
      */
-    protected $options = array(
-        array('exists',     \Hoa\Console\GetOption::NO_ARGUMENT, 'E'),
-        array('unfold',     \Hoa\Console\GetOption::NO_ARGUMENT, 'u'),
-        array('tree',       \Hoa\Console\GetOption::NO_ARGUMENT, 't'),
-        array('no-verbose', \Hoa\Console\GetOption::NO_ARGUMENT, 'V'),
-        array('help',       \Hoa\Console\GetOption::NO_ARGUMENT, 'h'),
-        array('help',       \Hoa\Console\GetOption::NO_ARGUMENT, '?')
-    );
+    protected $options = [
+        ['exists',     Console\GetOption::NO_ARGUMENT, 'E'],
+        ['unfold',     Console\GetOption::NO_ARGUMENT, 'u'],
+        ['tree',       Console\GetOption::NO_ARGUMENT, 't'],
+        ['no-verbose', Console\GetOption::NO_ARGUMENT, 'V'],
+        ['help',       Console\GetOption::NO_ARGUMENT, 'h'],
+        ['help',       Console\GetOption::NO_ARGUMENT, '?']
+    ];
 
 
 
@@ -86,7 +78,7 @@ class Resolve extends \Hoa\Console\Dispatcher\Kit {
         $exists  = true;
         $unfold  = false;
         $tree    = false;
-        $verbose = \Hoa\Console::isDirect(STDOUT);
+        $verbose = Console::isDirect(STDOUT);
 
         while(false !== $c = $this->getOption($v)) switch($c) {
 
@@ -123,7 +115,7 @@ class Resolve extends \Hoa\Console\Dispatcher\Kit {
 
         if(true === $tree) {
 
-            $protocol = \Hoa\Core::getProtocol();
+            $protocol = Core::getProtocol();
             $foo      = substr($path, 0, 6);
 
             if('hoa://' !== $foo)
@@ -146,7 +138,7 @@ class Resolve extends \Hoa\Console\Dispatcher\Kit {
         }
 
         if(true === $verbose)
-            echo \Hoa\Console\Chrome\Text::colorize($path, 'foreground(yellow)'),
+            echo Console\Chrome\Text::colorize($path, 'foreground(yellow)'),
                  ' is equivalent to:', "\n";
 
         $resolved = resolve($path, $exists, $unfold);
@@ -167,19 +159,17 @@ class Resolve extends \Hoa\Console\Dispatcher\Kit {
 
         echo 'Usage   : core:resolve <options> path', "\n",
              'Options :', "\n",
-             $this->makeUsageOptionsList(array(
+             $this->makeUsageOptionsList([
                  'E'    => 'Do not check if the resolution result exists.',
                  'u'    => 'Unfold all possible results.',
                  't'    => 'Print the tree from the path.',
                  'V'    => 'No-verbose, i.e. be as quiet as possible, just print ' .
                            'essential informations.',
                  'help' => 'This help.'
-             )), "\n";
+             ]), "\n";
 
         return;
     }
-}
-
 }
 
 __halt_compiler();

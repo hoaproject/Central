@@ -34,7 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Core\Exception {
+namespace Hoa\Core\Exception;
+
+use Hoa\Core;
 
 /**
  * Class \Hoa\Core\Exception\Idle.
@@ -100,7 +102,7 @@ class Idle extends \Exception {
      * @param   \Exception  $previous     Previous exception in chaining.
      * @return  void
      */
-    public function __construct ( $message, $code = 0, $arguments = array(),
+    public function __construct ( $message, $code = 0, $arguments = [],
                                   \Exception $previous = null ) {
 
         $this->_tmpArguments = $arguments;
@@ -154,7 +156,7 @@ class Idle extends \Exception {
             $arguments = $this->_tmpArguments;
 
             if(!is_array($arguments))
-                $arguments = array($arguments);
+                $arguments = [$arguments];
 
             foreach($arguments as $key => &$value)
                 if(null === $value)
@@ -331,7 +333,7 @@ class Idle extends \Exception {
  * @license    New BSD License
  */
 
-class Exception extends Idle implements \Hoa\Core\Event\Source {
+class Exception extends Idle implements Core\Event\Source {
 
     /**
      * Create an exception.
@@ -346,13 +348,13 @@ class Exception extends Idle implements \Hoa\Core\Event\Source {
      * @param   \Exception  $previous     Previous exception in chaining.
      * @return  void
      */
-    public function __construct ( $message, $code = 0, $arguments = array(),
+    public function __construct ( $message, $code = 0, $arguments = [],
                                   \Exception $previous = null ) {
 
         parent::__construct($message, $code, $arguments, $previous);
 
-        if(false === \Hoa\Core\Event::eventExists('hoa://Event/Exception'))
-            \Hoa\Core\Event::register('hoa://Event/Exception', __CLASS__);
+        if(false === Core\Event::eventExists('hoa://Event/Exception'))
+            Core\Event::register('hoa://Event/Exception', __CLASS__);
 
         $this->send();
 
@@ -367,10 +369,10 @@ class Exception extends Idle implements \Hoa\Core\Event\Source {
      */
     public function send ( ) {
 
-        \Hoa\Core\Event::notify(
+        Core\Event::notify(
             'hoa://Event/Exception',
             $this,
-            new \Hoa\Core\Event\Bucket($this)
+            new Core\Event\Bucket($this)
         );
 
         return;
@@ -400,7 +402,7 @@ class Error extends Exception {
      * @param   array   $trace      Trace.
      */
     public function __construct ( $message, $code, $file, $line,
-                                  Array $trace = array() ) {
+                                  Array $trace = [] ) {
 
         $this->file   = $file;
         $this->line   = $line;
@@ -445,7 +447,7 @@ class          Group
      * @param   \Exception  $previous     Previous exception in chaining.
      * @return  void
      */
-    public function __construct ( $message, $code = 0, $arguments = array(),
+    public function __construct ( $message, $code = 0, $arguments = [],
                                   \Exception $previous = null ) {
 
         parent::__construct($message, $code, $arguments, $previous);
@@ -645,13 +647,7 @@ class          Group
     }
 }
 
-}
-
-namespace {
-
 /**
  * Alias.
  */
 class_alias('Hoa\Core\Exception\Exception', 'Hoa\Core\Exception');
-
-}

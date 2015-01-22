@@ -34,7 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Core\Parameter {
+namespace Hoa\Core\Parameter;
+
+use Hoa\Core;
 
 /**
  * Interface \Hoa\Core\Parameter\Parameterizable.
@@ -80,14 +82,14 @@ class Parameter {
      *
      * @var \Hoa\Core\Parameter array
      */
-    protected $_parameters       = array();
+    protected $_parameters       = [];
 
     /**
      * Keywords.
      *
      * @var \Hoa\Core\Parameter array
      */
-    protected $_keywords         = array();
+    protected $_keywords         = [];
 
     /**
      * Constants values for zFormat.
@@ -101,7 +103,7 @@ class Parameter {
      *
      * @var \Hoa\Core\Parameter array
      */
-    protected $_cache            = array();
+    protected $_cache            = [];
 
 
 
@@ -116,13 +118,13 @@ class Parameter {
      * @throw   \Hoa\Core\Parameter
      */
     public function __construct ( $owner,
-                                  Array $keywords   = array(),
-                                  Array $parameters = array() ) {
+                                  Array $keywords   = [],
+                                  Array $parameters = [] ) {
 
         if(is_object($owner)) {
 
             if(!($owner instanceof Parameterizable))
-                throw new \Hoa\Core\Exception(
+                throw new Core\Exception(
                     'Only parameterizable object can have parameter; ' .
                     '%s does implement \Hoa\Core\Parameter\Parameterizable.',
                     0, get_class($owner));
@@ -136,7 +138,7 @@ class Parameter {
             if(false === $reflection->implementsInterface(
                             '\Hoa\Core\Parameter\Parameterizable'
                          ))
-                throw new \Hoa\Core\Exception(
+                throw new Core\Exception(
                     'Only parameterizable object can have parameter; ' .
                     '%s does implement \Hoa\Core\Parameter\Parameterizable.',
                     1, $owner);
@@ -158,7 +160,7 @@ class Parameter {
     public static function initializeConstants ( ) {
 
         $c = explode('…', date('d…j…N…w…z…W…m…n…Y…y…g…G…h…H…i…s…u…O…T…U'));
-        self::$_constants = array(
+        self::$_constants = [
             'd' => $c[0],
             'j' => $c[1],
             'N' => $c[2],
@@ -179,7 +181,7 @@ class Parameter {
             'O' => $c[17],
             'T' => $c[18],
             'U' => $c[19]
-        );
+        ];
 
         return;
     }
@@ -218,7 +220,7 @@ class Parameter {
             $class = str_replace(
                 '\\',
                 '',
-                \Hoa\Core\Consistency::getEntityShortestName($this->_owner)
+                Core\Consistency::getEntityShortestName($this->_owner)
             );
             $path  = 'hoa://Data/Etc/Configuration/.Cache/' . $class . '.php';
         }
@@ -228,16 +230,16 @@ class Parameter {
             $handle = require $path;
 
             if(!is_array($handle))
-                throw new \Hoa\Core\Exception(
+                throw new Core\Exception(
                     'Strange though it may appear, the configuration cache ' .
                     'file %s appears to be corrupted.', 0, $path);
 
             if(!array_key_exists('keywords', $handle))
-                throw new \Hoa\Core\Exception(
+                throw new Core\Exception(
                     'Need keywords in the configuration cache %s.', 1, $path);
 
             if(!array_key_exists('parameters', $handle))
-                throw new \Hoa\Core\Exception(
+                throw new Core\Exception(
                     'Need parameters in the configuration cache %s.', 2, $path);
 
             $this->_keywords   = $handle['keywords'];
@@ -356,7 +358,7 @@ class Parameter {
     public function unlinearizeBranche ( $branche ) {
 
         $parameters = $this->getParameters();
-        $out        = array();
+        $out        = [];
         $lBranche   = strlen($branche);
 
         foreach($parameters as $key => $value) {
@@ -364,7 +366,7 @@ class Parameter {
             if($branche !== substr($key, 0, $lBranche))
                 continue;
 
-            $handle  = array();
+            $handle  = [];
             $explode = preg_split(
                 '#((?<!\\\)\.)#',
                 substr($key, $lBranche + 1),
@@ -379,9 +381,9 @@ class Parameter {
                 $explode[$i] = str_replace('\\.', '.', $explode[$i]);
 
                 if($i != $end)
-                    $handle = array($explode[$i] => $handle);
+                    $handle = [$explode[$i] => $handle];
                 else
-                    $handle = array($explode[$i] => $this->zFormat($value));
+                    $handle = [$explode[$i] => $this->zFormat($value)];
 
                 --$i;
             }
@@ -515,22 +517,22 @@ class Parameter {
      *
      * Examples:
      *   Let keywords $k and parameters $p:
-     *     $k = array(
+     *     $k = [
      *         'foo'      => 'bar',
      *         'car'      => 'DeLoReAN',
      *         'power'    => 2.21,
      *         'answerTo' => 'life_universe_everything_else',
      *         'answerIs' => 42,
      *         'hello'    => 'wor.l.d'
-     *     );
-     *     $p = array(
+     *     ];
+     *     $p = [
      *         'plpl'        => '(:foo:U:)',
      *         'foo'         => 'ar(:%plpl:)',
      *         'favoriteCar' => 'A (:car:l:)!',
      *         'truth'       => 'To (:answerTo:ls/_/ /U:) is (:answerIs:).',
      *         'file'        => '/a/file/(:_Ymd:)/(:hello:trr:).(:power:e:)',
      *         'recursion'   => 'oof(:%foo:s#ar#az:)'
-     *     );
+     *     ];
      *   Then, after applying the zFormat, we get:
      *     • plpl:        'Bar', put the first letter in uppercase;
      *     • foo:         'arBar', call the parameter plpl;
@@ -586,7 +588,7 @@ class Parameter {
                 if('%' == $key[0]) {
 
                     if(false === array_key_exists($word, $parameters))
-                        throw new \Hoa\Core\Exception(
+                        throw new Core\Exception(
                             'Parameter %s is not found in parameters.',
                             0, $word);
 
@@ -601,10 +603,10 @@ class Parameter {
                     foreach(str_split($word) as $k => $v) {
 
                         if(!isset($constants[$v]))
-                            throw new \Hoa\Core\Exception(
+                            throw new Core\Exception(
                                 'Constant char %s is not supported in the ' .
                                 'rule %s.',
-                                1, array($v, $value));
+                                1, [$v, $value]);
 
                         $out .= $constants[$v];
                     }
@@ -613,9 +615,9 @@ class Parameter {
                 else {
 
                     if(false === array_key_exists($key, $keywords))
-                        throw new \Hoa\Core\Exception(
+                        throw new Core\Exception(
                             'Keyword %s is not found in the rule %s.',
-                            2, array($key, $value));
+                            2, [$key, $value]);
 
                     $out = $keywords[$key];
                 }
@@ -630,9 +632,9 @@ class Parameter {
                 );
 
                 if(empty($flags) || empty($flags[1]))
-                    throw new \Hoa\Core\Exception(
+                    throw new Core\Exception(
                         'Unrecognized format pattern %s in the rule %s.',
-                        3, array($match[0], $value));
+                        3, [$match[0], $value]);
 
                 foreach($flags[1] as $i => $flag)
                     switch($flag) {
@@ -677,7 +679,7 @@ class Parameter {
 
                         default:
                             if(!isset($flags[3]) && !isset($flags[4]))
-                                throw new \Hoa\Core\Exception(
+                                throw new Core\Exception(
                                     'Unrecognized format pattern in the rule %s.',
                                     4, $value);
 
@@ -713,19 +715,13 @@ class Parameter {
     private function resetCache ( ) {
 
         unset($this->_cache);
-        $this->_cache = array();
+        $this->_cache = [];
 
         return;
     }
 }
 
-}
-
-namespace {
-
 /**
  * Alias.
  */
 class_alias('Hoa\Core\Parameter\Parameter', 'Hoa\Core\Parameter');
-
-}

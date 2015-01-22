@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Core\Data {
+namespace Hoa\Core\Data;
 
 /**
  * Interface \Hoa\Core\Data\Datable.
@@ -75,7 +75,7 @@ class Data implements Datable, \ArrayAccess {
      *
      * @var \Hoa\Core\Data array
      */
-    protected $_data = array();
+    protected $_data = [];
 
     /**
      * Temporize the branch name.
@@ -155,7 +155,7 @@ class Data implements Datable, \ArrayAccess {
 
         if(false === array_key_exists($handle, $this->_data)) {
 
-            $this->_data[$handle] = array();
+            $this->_data[$handle] = [];
 
             if(null === $offset)
                 return $this->_data[$handle][] = new self();
@@ -268,7 +268,7 @@ class Data implements Datable, \ArrayAccess {
      */
     public function toArray ( ) {
 
-        $out = array();
+        $out = [];
 
         foreach($this->_data as $key => &$ii)
             foreach($ii as $i => &$value)
@@ -282,13 +282,7 @@ class Data implements Datable, \ArrayAccess {
     }
 }
 
-}
-
-namespace {
-
 /**
  * Alias.
  */
 class_alias('Hoa\Core\Data\Data', 'Hoa\Core\Data');
-
-}

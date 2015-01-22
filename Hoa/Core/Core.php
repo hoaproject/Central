@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Core {
 
 /**
  * Check if Hoa was well-included.
@@ -81,10 +81,6 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'Protocol.php';
  */
 //require_once __DIR__ . DIRECTORY_SEPARATOR . 'Data.php';
 
-}
-
-namespace Hoa\Core {
-
 /**
  * Class \Hoa\Core.
  *
@@ -102,7 +98,7 @@ class Core implements Parameter\Parameterizable {
      *
      * @var \Hoa\Core array
      */
-    private static $_rsdf     = array();
+    private static $_rsdf     = [];
 
     /**
      * Tree of components, starts by the root.
@@ -171,7 +167,7 @@ class Core implements Parameter\Parameterizable {
                     'suhosin.executor.include.whitelist="%s", thanks :-).',
                     0, implode(',', array_merge(
                         preg_split('#,#', $wl, -1, PREG_SPLIT_NO_EMPTY),
-                        array('hoa')
+                        ['hoa']
                     )));
 
         setlocale(LC_CTYPE, 'C');
@@ -206,19 +202,19 @@ class Core implements Parameter\Parameterizable {
      * @param   array   $parameters    Parameters of \Hoa\Core.
      * @return  \Hoa\Core
      */
-    public function initialize ( Array $parameters = array() ) {
+    public function initialize ( Array $parameters = [] ) {
 
         $root = dirname(dirname(__DIR__));
         $cwd  = 'cli' === PHP_SAPI
                     ? dirname(realpath($_SERVER['argv'][0]))
                     : getcwd();
-        $this->_parameters = new Parameter(
+        $this->_parameters = new Parameter\Parameter(
             $this,
-            array(
+            [
                 'root' => $root,
                 'cwd'  => $cwd
-            ),
-            array(
+            ],
+            [
                 'root.hoa'         => '(:root:)',
                 'root.application' => '(:cwd:h:)',
                 'root.data'        => '(:%root.application:h:)' . DS . 'Data' . DS,
@@ -247,7 +243,7 @@ class Core implements Parameter\Parameterizable {
 
                 'namespace.prefix.*'           => '(:%protocol.Data:)Library' . DS . ';(:%root.hoa:)' . DS,
                 'namespace.prefix.Application' => '(:%root.application:h:)' . DS,
-            )
+            ]
         );
 
         $this->_parameters->setKeyword('root', $root);
@@ -410,7 +406,7 @@ class Core implements Parameter\Parameterizable {
         if(!isset(static::$_rsdf[$class][$method])) {
 
             static::$_rsdf[$class][$method] = true;
-            return register_shutdown_function(array($class, $method));
+            return register_shutdown_function([$class, $method]);
         }
 
         return false;
@@ -430,7 +426,7 @@ class Core implements Parameter\Parameterizable {
         if(isset($_SERVER['_']))
             return $_SERVER['_'];
 
-        foreach(array('', '.exe') as $extension)
+        foreach(['', '.exe'] as $extension)
             if(file_exists($_ = PHP_BINDIR . DS . 'php' . $extension))
                 return realpath($_);
 
@@ -490,10 +486,12 @@ class_alias('Hoa\Core\Core', 'Hoa\Core');
  * @return  bool
  */
 if(!function_exists('_define')) {
-function _define ( $name, $value, $case = false ) {
 
-    return \Hoa\Core::_define($name, $value, $case);
-}}
+    function _define ( $name, $value, $case = false ) {
+
+        return Hoa\Core::_define($name, $value, $case);
+    }
+}
 
 /**
  * Alias of the \Hoa\Core\Event::getEvent() method.
@@ -503,14 +501,16 @@ function _define ( $name, $value, $case = false ) {
  * @return  \Hoa\Core\Event
  */
 if(!function_exists('event')) {
-function event ( $eventId ) {
 
-    return \Hoa\Core\Event\Event::getEvent($eventId);
-}}
+    function event ( $eventId ) {
+
+        return Hoa\Core\Event\Event::getEvent($eventId);
+    }
+}
 
 /**
  * Then, initialize Hoa.
  */
-\Hoa\Core::getInstance()->initialize();
+Hoa\Core::getInstance()->initialize();
 
 }

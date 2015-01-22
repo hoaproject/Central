@@ -34,7 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Core\Event {
+namespace Hoa\Core\Event;
+
+use Hoa\Core;
 
 /**
  * Interface \Hoa\Core\Event\Source.
@@ -177,14 +179,14 @@ class Event {
      *
      * @var \Hoa\Core\Event array
      */
-    private static $_register = array();
+    private static $_register = [];
 
     /**
      * Callables, i.e. observer objects.
      *
      * @var \Hoa\Core\Event array
      */
-    protected $_callable      = array();
+    protected $_callable      = [];
 
 
 
@@ -210,10 +212,10 @@ class Event {
     public static function getEvent ( $eventId ) {
 
         if(!isset(self::$_register[$eventId][0]))
-            self::$_register[$eventId] = array(
+            self::$_register[$eventId] = [
                 0 => new self(),
                 1 => null
-            );
+            ];
 
         return self::$_register[$eventId][0];
     }
@@ -231,12 +233,12 @@ class Event {
     public static function register ( $eventId, $source ) {
 
         if(true === self::eventExists($eventId))
-            throw new \Hoa\Core\Exception(
+            throw new Core\Exception(
                 'Cannot redeclare an event with the same ID, i.e. the event ' .
                 'ID %s already exists.', 0, $eventId);
 
         if(is_object($source) && !($source instanceof Source))
-            throw new \Hoa\Core\Exception(
+            throw new Core\Exception(
                 'The source must implement \Hoa\Core\Event\Source ' .
                 'interface; given %s.', 1, get_class($source));
         else {
@@ -244,7 +246,7 @@ class Event {
             $reflection = new \ReflectionClass($source);
 
             if(false === $reflection->implementsInterface('\Hoa\Core\Event\Source'))
-                throw new \Hoa\Core\Exception(
+                throw new Core\Exception(
                     'The source must implement \Hoa\Core\Event\Source ' .
                     'interface; given %s.', 2, $source);
         }
@@ -332,20 +334,20 @@ class Event {
     public static function notify ( $eventId, Source $source, Bucket $data ) {
 
         if(false === self::eventExists($eventId))
-            throw new \Hoa\Core\Exception(
+            throw new Core\Exception(
                 'Event ID %s does not exist, cannot send notification.',
                 3, $eventId);
 
         $sourceRef = self::$_register[$eventId][1];
 
         if(!($source instanceof $sourceRef))
-            throw new \Hoa\Core\Exception(
+            throw new Core\Exception(
                 'Source cannot create a notification because it\'s the ' .
                 'source or source\'s child (source reference: %s, given %s.',
-                4, array(
+                4, [
                     is_object($sourceRef) ? get_class($sourceRef) : $sourceRef,
                     get_class($source)
-                ));
+                ]);
 
         $data->setSource($source);
         $event = self::getEvent($eventId);
@@ -449,7 +451,7 @@ class Listener {
     public function addIds ( Array $ids ) {
 
         foreach($ids as $id)
-            $this->_listen[$id] = array();
+            $this->_listen[$id] = [];
 
         return;
     }
@@ -466,7 +468,7 @@ class Listener {
     public function attach ( $listenerId, $callable ) {
 
         if(false === $this->listenerExists($listenerId))
-            throw new \Hoa\Core\Exception(
+            throw new Core\Exception(
                 'Cannot listen %s because it is not defined.', 0, $listenerId);
 
         $callable                                         = xcallable($callable);
@@ -528,11 +530,11 @@ class Listener {
     public function fire ( $listenerId, Bucket $data ) {
 
         if(false === $this->listenerExists($listenerId))
-            throw new \Hoa\Core\Exception(
+            throw new Core\Exception(
                 'Cannot fire on %s because it is not defined.', 1);
 
         $data->setSource($this->_source);
-        $out = array();
+        $out = [];
 
         foreach($this->_listen[$listenerId] as $callable)
             $out[] = $callable($data);
@@ -541,13 +543,7 @@ class Listener {
     }
 }
 
-}
-
-namespace {
-
 /**
  * Alias.
  */
 class_alias('Hoa\Core\Event\Event', 'Hoa\Core\Event');
-
-}

@@ -36,7 +36,9 @@
 
 namespace Hoa\Core\Protocol {
 
-/**
+use Hoa\Core;
+
+/*
  * Class \Hoa\Core\Protocol.
  *
  * Abstract class for all hoa://'s components.
@@ -74,14 +76,14 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
      *
      * @var \Hoa\Core\Protocol array
      */
-    private $_components   = array();
+    private $_components   = [];
 
     /**
      * Cache of resolver.
      *
      * @var \Hoa\Core\Protocol array
      */
-    private static $_cache = array();
+    private static $_cache = [];
 
 
 
@@ -120,14 +122,14 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
     public function offsetSet ( $name, $component ) {
 
         if(!($component instanceof Protocol))
-            throw new \Hoa\Core\Exception(
+            throw new Core\Exception(
                 'Component must extend %s.', 0, __CLASS__);
 
         if(empty($name))
             $name = $component->getName();
 
         if(empty($name))
-            throw new \Hoa\Core\Exception(
+            throw new Core\Exception(
                 'Cannot add a component to the protocol hoa:// without a name.',
                 1);
 
@@ -147,7 +149,7 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
     public function offsetGet ( $name ) {
 
         if(!isset($this[$name]))
-            throw new \Hoa\Core\Exception(
+            throw new Core\Exception(
                 'Component %s does not exist.', 2, $name);
 
         return $this->_components[$name];
@@ -215,7 +217,7 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
             if(true !== $exists)
                 return $handle;
 
-            $out = array();
+            $out = [];
 
             foreach($handle as $solution)
                 if(file_exists($solution))
@@ -254,7 +256,7 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
 
         if(null === $accumulator) {
 
-            $accumulator = array();
+            $accumulator = [];
             $posId       = strpos($path, '#');
 
             if(false !== $posId) {
@@ -290,7 +292,7 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
                 return $this[$next]->reachId($id);
             }
 
-            $tnext  = $this[$next];
+            $tnext = $this[$next];
             $this->_resolveChoice($tnext->reach(), $accumulator);
 
             return $tnext->_resolve(substr($path, $pos + 1), $accumulator, $id);
@@ -337,7 +339,7 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
 
         $choices     = explode(';', $reach);
         $ref         = $accumulator;
-        $accumulator = array();
+        $accumulator = [];
 
         foreach($choices as $choice) {
 
@@ -366,7 +368,7 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
      */
     public static function clearCache ( ) {
 
-        self::$_cache = array();
+        self::$_cache = [];
 
         return;
     }
@@ -396,9 +398,9 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
      */
     public function reachId ( $id ) {
 
-        throw new \Hoa\Core\Exception(
+        throw new Core\Exception(
             'The component %s has no ID support (tried to reach #%s).',
-            4, array($this->getName(), $id));
+            4, [$this->getName(), $id]);
     }
 
     /**
@@ -442,11 +444,11 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
      * Get an iterator.
      *
      * @access  public
-     * @return  \ArrayObject
+     * @return  \ArrayIterator
      */
     public function getIterator ( ) {
 
-        return new \ArrayObject($this->_components);
+        return new \ArrayIterator($this->_components);
     }
 
     /**
@@ -463,9 +465,9 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
 
         foreach($this as $foo => $component) {
 
-            $i++;
+            ++$i;
             $out .= $component;
-            $i--;
+            --$i;
         }
 
         return $out;
@@ -473,8 +475,7 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate {
 }
 
 /**
- * Make the alias automatically (because it's not imported with the import()
- * function).
+ * Make the alias automatically.
  */
 class_alias('Hoa\Core\Protocol\Protocol', 'Hoa\Core\Protocol');
 
@@ -547,7 +548,7 @@ class Library extends Protocol {
             else
                 $queue = null;
 
-            $out = array();
+            $out = [];
 
             foreach(explode(';', $this->_reach) as $part)
                 $out[] = "\r" . $part . strtolower($head ) . $queue;
@@ -557,7 +558,7 @@ class Library extends Protocol {
             return implode(';', $out);
         }
 
-        $out = array();
+        $out = [];
 
         foreach(explode(';', $this->_reach) as $part) {
 
@@ -619,7 +620,7 @@ class Wrapper {
      */
     public static function realPath ( $path, $exists = true ) {
 
-        return \Hoa\Core::getProtocol()->resolve($path, $exists);
+        return Core::getProtocol()->resolve($path, $exists);
     }
 
     /**
@@ -1082,10 +1083,16 @@ namespace {
  * @return  mixed
  */
 if(!function_exists('resolve')) {
-function resolve ( $path, $exists = true, $unfold = false ) {
 
-    return \Hoa\Core::getInstance()->getProtocol()->resolve($path, $exists, $unfold);
-}}
+    function resolve ( $path, $exists = true, $unfold = false ) {
+
+        return Hoa\Core::getInstance()->getProtocol()->resolve(
+            $path,
+            $exists,
+            $unfold
+        );
+    }
+}
 
 /**
  * Register the hoa:// protocol.
