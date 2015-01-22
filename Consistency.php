@@ -36,13 +36,15 @@
 
 namespace Hoa\Core\Consistency {
 
+use Hoa\Core;
+use Hoa\Stream;
+
 /**
  * Hard-preload.
  */
-$path = __DIR__ . DIRECTORY_SEPARATOR;
-define('PATH_EVENT',     $path . 'Event.php');
-define('PATH_EXCEPTION', $path . 'Exception.php');
-define('PATH_DATA',      $path . 'Data.php');
+const PATH_EVENT     = __DIR__ . DIRECTORY_SEPARATOR . 'Event.php';
+const PATH_EXCEPTION = __DIR__ . DIRECTORY_SEPARATOR . 'Exception.php';
+const PATH_DATA      = __DIR__ . DIRECTORY_SEPARATOR . 'Data.php';
 
 /**
  * Class Hoa\Core\Consistency.
@@ -62,7 +64,7 @@ class Consistency {
      *
      * @var \Hoa\Core\Consistency array
      */
-    private static $_multiton = array();
+    private static $_multiton = [];
 
     /**
      * Libraries to considere.
@@ -76,35 +78,35 @@ class Consistency {
      *
      * @var \Hoa\Core\Consistency array
      */
-    protected $_roots         = array();
+    protected $_roots         = [];
 
     /**
      * Cache all imports.
      *
      * @var \Hoa\Core\Consistency array
      */
-    protected static $_cache  = array();
+    protected static $_cache  = [];
 
     /**
      * Cache all classes informations: path, alias and imported.
      *
      * @var \Hoa\Core\Consistency array
      */
-    protected static $_class  = array(
+    protected static $_class  = [
         // Hard-preload.
-        'Hoa\Core\Event'     => array(
+        'Hoa\Core\Event'     => [
             'path'  => PATH_EVENT,
             'alias' => null
-        ),
-        'Hoa\Core\Exception' => array(
+        ],
+        'Hoa\Core\Exception' => [
             'path'  => PATH_EXCEPTION,
             'alias' => null
-        ),
-        'Hoa\Core\Data'      => array(
+        ],
+        'Hoa\Core\Data'      => [
             'path'  => PATH_DATA,
             'alias' => null
-        )
-    );
+        ]
+    ];
 
     /**
      * Cache all classes from the current library family.
@@ -112,7 +114,7 @@ class Consistency {
      *
      * @var \Hoa\Core\Consistency array
      */
-    protected $__class        = array();
+    protected $__class        = [];
 
 
 
@@ -126,7 +128,7 @@ class Consistency {
     private function __construct ( $from ) {
 
         $this->_from = preg_split('#\s*(,|or)\s*#', trim($from, '()'));
-        $parameters  = \Hoa\Core::getInstance()->getParameters();
+        $parameters  = Core::getInstance()->getParameters();
         $wildcard    = $parameters->getFormattedParameter('namespace.prefix.*');
 
         foreach($this->_from as $f)
@@ -263,10 +265,10 @@ class Consistency {
 
         if(false === $imported) {
 
-            static::$_class[$classname] = array(
+            static::$_class[$classname] = [
                 'path'  => null,
                 'alias' => null
-            );
+            ];
 
             $count = count($parts);
 
@@ -377,7 +379,7 @@ class Consistency {
      * @return  object
      * @throw   \Hoa\Core\Exception
      */
-    public static function dnew ( $classname, Array $arguments = array() ) {
+    public static function dnew ( $classname, Array $arguments = [] ) {
 
         $classname = ltrim($classname, '\\');
 
@@ -387,7 +389,7 @@ class Consistency {
             $tail = str_replace('\\', '.', substr($classname, $pos + 1));
             $from = from($head);
 
-            foreach(array($tail, $tail . '.~') as $_tail)
+            foreach([$tail, $tail . '.~'] as $_tail)
                 foreach($from->getFroms() as $_from) {
 
                     $break = false;
@@ -429,7 +431,7 @@ class Consistency {
             $from = $this->_from[0];
 
         if(!isset($this->_roots[$from]))
-            $this->_roots[$from] = array();
+            $this->_roots[$from] = [];
 
         foreach(explode(';', $root) as $r)
             $this->_roots[$from][] = rtrim($r, '/\\') . DS;
@@ -538,7 +540,7 @@ class Consistency {
      */
     public static function isKeyword ( $word ) {
 
-        static $_list = array(
+        static $_list = [
             // PHP keywords.
             '__halt_compiler', 'abstract',     'and',           'array',
             'as',              'break',        'callable',      'case',
@@ -560,7 +562,7 @@ class Consistency {
             // Compile-time constants.
             '__class__',       '__dir__',      '__file__',      '__function__',
             '__line__',        '__method__',   '__namespace__', '__trait__'
-        );
+        ];
 
         return in_array(strtolower($word), $_list);
     }
@@ -620,8 +622,8 @@ class Xcallable {
      *     • $object, 'method';
      *     • $object, '';
      *     • function ( … ) { … };
-     *     • array('class', 'method');
-     *     • array($object, 'method').
+     *     • ['class', 'method'];
+     *     • [$object, 'method'].
      *
      * @access  public
      * @param   mixed   $call    First callable part.
@@ -641,7 +643,7 @@ class Xcallable {
         }
 
         if(!is_string($able))
-            throw new \Hoa\Core\Exception(
+            throw new Core\Exception(
                 'Bad callback form.', 0);
 
         if('' === $able)
@@ -650,7 +652,7 @@ class Xcallable {
                 if(false === strpos($call, '::')) {
 
                     if(!function_exists($call))
-                        throw new \Hoa\Core\Exception(
+                        throw new Core\Exception(
                             'Bad callback form.', 1);
 
                     $this->_callback = $call;
@@ -662,12 +664,12 @@ class Xcallable {
             }
             elseif(is_object($call)) {
 
-                if($call instanceof \Hoa\Stream\IStream\Out)
+                if($call instanceof Stream\IStream\Out)
                     $able = null;
                 elseif(method_exists($call, '__invoke'))
                     $able = '__invoke';
                 else
-                    throw new \Hoa\Core\Exception(
+                    throw new Core\Exception(
                         'Bad callback form.', 2);
             }
             elseif(is_array($call) && isset($call[0])) {
@@ -678,10 +680,10 @@ class Xcallable {
                 return $this->__construct($call[0], $call[1]);
             }
             else
-                throw new \Hoa\Core\Exception(
+                throw new Core\Exception(
                     'Bad callback form.', 3);
 
-        $this->_callback = array($call, $able);
+        $this->_callback = [$call, $able];
 
         return;
     }
@@ -710,7 +712,7 @@ class Xcallable {
      */
     public function distributeArguments ( Array $arguments ) {
 
-        return call_user_func_array(array($this, '__invoke'), $arguments);
+        return call_user_func_array([$this, '__invoke'], $arguments);
     }
 
     /**
@@ -721,7 +723,7 @@ class Xcallable {
      *                                 object if not precised).
      * @return  mixed
      */
-    public function getValidCallback ( Array &$arguments = array() ) {
+    public function getValidCallback ( Array &$arguments = [] ) {
 
         $callback = $this->_callback;
         $head     = null;
@@ -735,7 +737,7 @@ class Xcallable {
            && is_array($callback)
            && null === $callback[1]) {
 
-            if($head instanceof \Hoa\Core\Event\Bucket)
+            if($head instanceof Core\Event\Bucket)
                 $head = $head->getData();
 
             switch($type = gettype($head)) {
@@ -856,6 +858,7 @@ class Xcallable {
 
 namespace {
 
+
 /**
  * Implement a fake trait_exists function.
  *
@@ -865,13 +868,15 @@ namespace {
  * @return  bool
  */
 if(!function_exists('trait_exists')) {
-function trait_exists ( $traitname, $autoload = true ) {
 
-    if(true == $autoload)
-        class_exists($traitname, true);
+    function trait_exists ( $traitname, $autoload = true ) {
 
-    return false;
-}}
+        if(true == $autoload)
+            class_exists($traitname, true);
+
+        return false;
+    }
+}
 
 /**
  * Alias for \Hoa\Core\Consistency::from().
@@ -881,10 +886,12 @@ function trait_exists ( $traitname, $autoload = true ) {
  * @return  \Hoa\Core\Consistency
  */
 if(!function_exists('from')) {
-function from ( $namespace ) {
 
-    return \Hoa\Core\Consistency::from($namespace);
-}}
+    function from ( $namespace ) {
+
+        return Hoa\Core\Consistency::from($namespace);
+    }
+}
 
 /**
  * Alias of \Hoa\Core\Consistency::dnew().
@@ -895,10 +902,12 @@ function from ( $namespace ) {
  * @return  object
  */
 if(!function_exists('dnew')) {
-function dnew ( $classname, Array $arguments = array() ) {
 
-    return \Hoa\Core\Consistency::dnew($classname, $arguments);
-}}
+    function dnew ( $classname, Array $arguments = [] ) {
+
+        return Hoa\Core\Consistency::dnew($classname, $arguments);
+    }
+}
 
 /**
  * Alias of \Hoa\Core\Consistency\Xcallable.
@@ -909,13 +918,15 @@ function dnew ( $classname, Array $arguments = array() ) {
  * @return  mixed
  */
 if(!function_exists('xcallable')) {
-function xcallable ( $call, $able = '' ) {
 
-    if($call instanceof \Hoa\Core\Consistency\Xcallable)
-        return $call;
+    function xcallable ( $call, $able = '' ) {
 
-    return new \Hoa\Core\Consistency\Xcallable($call, $able);
-}}
+        if($call instanceof Hoa\Core\Consistency\Xcallable)
+            return $call;
+
+        return new Hoa\Core\Consistency\Xcallable($call, $able);
+    }
+}
 
 /**
  * Curry.
@@ -939,20 +950,22 @@ function xcallable ( $call, $able = '' ) {
  * @return  \Closure
  */
 if(!function_exists('curry')) {
-function curry ( $callable ) {
 
-    $arguments = func_get_args();
-    array_shift($arguments);
-    $ii        = array_keys($arguments, …, true);
+    function curry ( $callable ) {
 
-    return function ( ) use ( $callable, $arguments, $ii ) {
+        $arguments = func_get_args();
+        array_shift($arguments);
+        $ii        = array_keys($arguments, …, true);
 
-        return call_user_func_array(
-            $callable,
-            array_replace($arguments, array_combine($ii, func_get_args()))
-        );
-    };
-}}
+        return function ( ) use ( $callable, $arguments, $ii ) {
+
+            return call_user_func_array(
+                $callable,
+                array_replace($arguments, array_combine($ii, func_get_args()))
+            );
+        };
+    }
+}
 
 /**
  * Same as curry() but where all arguments are references.
@@ -963,29 +976,31 @@ function curry ( $callable ) {
  * @return  \Closure
  */
 if(!function_exists('curry_ref')) {
-function curry_ref ( &$callable, &$a = null, &$b = null, &$c = null, &$d = null,
-                                 &$e = null, &$f = null, &$g = null, &$h = null,
-                                 &$i = null, &$j = null, &$k = null, &$l = null,
-                                 &$m = null, &$n = null, &$o = null, &$p = null,
-                                 &$q = null, &$r = null, &$s = null, &$t = null,
-                                 &$u = null, &$v = null, &$w = null, &$x = null,
-                                 &$y = null, &$z = null ) {
 
-    $arguments = array();
+    function curry_ref ( &$callable, &$a = null, &$b = null, &$c = null, &$d = null,
+                                     &$e = null, &$f = null, &$g = null, &$h = null,
+                                     &$i = null, &$j = null, &$k = null, &$l = null,
+                                     &$m = null, &$n = null, &$o = null, &$p = null,
+                                     &$q = null, &$r = null, &$s = null, &$t = null,
+                                     &$u = null, &$v = null, &$w = null, &$x = null,
+                                     &$y = null, &$z = null ) {
 
-    for($i = 0, $max = func_num_args() - 1; $i < $max; ++$i)
-        $arguments[] = &${chr(97 + $i)};
+        $arguments = [];
 
-    $ii = array_keys($arguments, …, true);
+        for($i = 0, $max = func_num_args() - 1; $i < $max; ++$i)
+            $arguments[] = &${chr(97 + $i)};
 
-    return function ( ) use ( &$callable, &$arguments, $ii ) {
+        $ii = array_keys($arguments, …, true);
 
-        return call_user_func_array(
-            $callable,
-            array_replace($arguments, array_combine($ii, func_get_args()))
-        );
-    };
-}}
+        return function ( ) use ( &$callable, &$arguments, $ii ) {
+
+            return call_user_func_array(
+                $callable,
+                array_replace($arguments, array_combine($ii, func_get_args()))
+            );
+        };
+    }
+}
 
 /**
  * Make the alias automatically (because it's not imported with the import()

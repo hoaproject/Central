@@ -34,18 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Core\Bin;
 
-from('Hoa')
-
-/**
- * \Hoa\Console
- */
--> import('Console.~');
-
-}
-
-namespace Hoa\Core\Bin {
+use Hoa\Core;
+use Hoa\Console;
 
 /**
  * Class \Hoa\Core\Bin\Welcome.
@@ -57,19 +49,19 @@ namespace Hoa\Core\Bin {
  * @license    New BSD License
  */
 
-class Welcome extends \Hoa\Console\Dispatcher\Kit {
+class Welcome extends Console\Dispatcher\Kit {
 
     /**
      * Options description.
      *
      * @var \Hoa\Core\Bin\Welcome array
      */
-    protected $options = array(
-        array('library',    \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'l'),
-        array('no-verbose', \Hoa\Console\GetOption::NO_ARGUMENT,       'V'),
-        array('help',       \Hoa\Console\GetOption::NO_ARGUMENT,       'h'),
-        array('help',       \Hoa\Console\GetOption::NO_ARGUMENT,       '?')
-    );
+    protected $options = [
+        ['library',    Console\GetOption::REQUIRED_ARGUMENT, 'l'],
+        ['no-verbose', Console\GetOption::NO_ARGUMENT,       'V'],
+        ['help',       Console\GetOption::NO_ARGUMENT,       'h'],
+        ['help',       Console\GetOption::NO_ARGUMENT,       '?']
+    ];
 
 
 
@@ -82,7 +74,7 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
     public function main ( ) {
 
         $library = null;
-        $verbose = \Hoa\Console::isDirect(STDOUT);
+        $verbose = Console::isDirect(STDOUT);
 
         while(false !== $c = $this->getOption($v)) switch($c) {
 
@@ -106,7 +98,7 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
 
         if(true === $verbose) {
 
-            echo \Hoa\Console\Chrome\Text::colorize(
+            echo Console\Chrome\Text::colorize(
                     '        _   _' . "\n" .
                     '       | | | | ___   __ _' . "\n" .
                     '       | |_| |/ _ \ / _` |' . "\n" .
@@ -115,7 +107,7 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
                      'foreground(yellow)'
                  ), "\n\n",
                  'Welcome in the command-line interface of Hoa :-).',  "\n\n",
-                 \Hoa\Console\Chrome\Text::colorize(
+                 Console\Chrome\Text::colorize(
                      'List of available commands',
                      'foreground(green)'
                  ), "\n\n";
@@ -137,7 +129,7 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
                 dirname(dirname(dirname(dirname(__DIR__)))) . DS . 'Bin' . DS . '*.php'
             ));
 
-        $binaries = array();
+        $binaries = [];
 
         foreach($iterator as $entry) {
 
@@ -155,7 +147,7 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
                 continue;
 
             if(!isset($binaries[$lib]))
-                $binaries[$lib] = array();
+                $binaries[$lib] = [];
 
             $description = '';
 
@@ -177,32 +169,32 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
                 unset($lines);
             }
 
-            $binaries[$lib][] = array(
+            $binaries[$lib][] = [
                 'name'        => $bin,
                 'description' => $description
-            );
+            ];
         }
 
         if(true === $verbose) {
 
-            $out = array();
+            $out = [];
 
             foreach($binaries as $group => $commands) {
 
-                $out[] = array(mb_convert_case($group, MB_CASE_TITLE));
+                $out[] = [mb_convert_case($group, MB_CASE_TITLE)];
 
                 foreach($commands as $binary)
-                    $out[] = array(
+                    $out[] = [
                         '    ' .
-                        \Hoa\Console\Chrome\Text::colorize(
+                        Console\Chrome\Text::colorize(
                             $binary['name'],
                             'foreground(blue)'
                         ),
                         $binary['description']
-                    );
+                    ];
             }
 
-            echo \Hoa\Console\Chrome\Text::columnize($out);
+            echo Console\Chrome\Text::columnize($out);
         }
         else {
 
@@ -228,17 +220,15 @@ class Welcome extends \Hoa\Console\Dispatcher\Kit {
 
         echo 'Usage   : core:welcome <options>', "\n",
              'Options :', "\n",
-             $this->makeUsageOptionsList(array(
+             $this->makeUsageOptionsList([
                  'l'    => 'Filter libraries to list (comma-separated).',
                  'V'    => 'No-verbose, i.e. be as quiet as possible, just ' .
                            'print essential informations.',
                  'help' => 'This help.'
-             ));
+             ]);
 
         return;
     }
-}
-
 }
 
 __halt_compiler();

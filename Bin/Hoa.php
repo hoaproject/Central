@@ -34,7 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+use Hoa\Core;
+use Hoa\Console;
+use Hoa\Dispatcher;
+use Hoa\Router;
 
 /**
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
@@ -43,7 +46,7 @@ namespace {
 
 if(!defined('HOA')) {
 
-    $composer = array(
+    $composer = [
         dirname(__DIR__) . DIRECTORY_SEPARATOR .
         '..' . DIRECTORY_SEPARATOR .
         '..' . DIRECTORY_SEPARATOR .
@@ -53,7 +56,7 @@ if(!defined('HOA')) {
         '..' . DIRECTORY_SEPARATOR .
         '..' . DIRECTORY_SEPARATOR .
         'autoload.php'
-    );
+    ];
 
     foreach($composer as $path)
         if(file_exists($path)) {
@@ -66,43 +69,37 @@ if(!defined('HOA')) {
         require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Core.php';
 }
 
-\Hoa\Core::enableErrorHandler();
-\Hoa\Core::enableExceptionHandler();
-
-from('Hoa')
--> import('Router.Cli')
--> import('Dispatcher.Basic')
--> import('Console.Dispatcher.Kit')
--> import('Console.Cursor');
+Core::enableErrorHandler();
+Core::enableExceptionHandler();
 
 /**
- * Here we go…
+ * Here we go!
  */
 try {
 
-    $router = new \Hoa\Router\Cli();
+    $router = new Router\Cli();
     $router->get(
         'g',
         '(?:(?<vendor>\w+)\s+)?(?<library>\w+)?(?::(?<command>\w+))?(?<_tail>.*?)',
         'main',
         'main',
-        array(
+        [
             'vendor'  => 'hoa',
             'library' => 'core',
             'command' => 'welcome'
-        )
+        ]
     );
 
-    $dispatcher = new \Hoa\Dispatcher\Basic(array(
-        'synchronous.controller'
+    $dispatcher = new Dispatcher\Basic([
+        'synchronous.call'
             => '(:%variables.vendor:lU:)\(:%variables.library:lU:)\Bin\(:%variables.command:lU:)',
-        'synchronous.action'
+        'synchronous.able'
             => 'main'
-    ));
+    ]);
     $dispatcher->setKitName('Hoa\Console\Dispatcher\Kit');
     exit((int) $dispatcher->dispatch($router));
 }
-catch ( \Hoa\Core\Exception $e ) {
+catch ( Core\Exception $e ) {
 
     $message = $e->raise(true);
     $code    = 1;
@@ -115,14 +112,12 @@ catch ( \Exception $e ) {
 
 ob_start();
 
-\Hoa\Console\Cursor::colorize('foreground(white) background(red)');
+Console\Cursor::colorize('foreground(white) background(red)');
 echo $message, "\n";
-\Hoa\Console\Cursor::colorize('normal');
+Console\Cursor::colorize('normal');
 $content = ob_get_contents();
 
 ob_end_clean();
 
 file_put_contents('php://stderr', $content);
 exit($code);
-
-}

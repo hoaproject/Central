@@ -34,7 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Core\Bin {
+namespace Hoa\Core\Bin;
+
+use Hoa\Core;
+use Hoa\Console;
 
 /**
  * Class \Hoa\Core\Bin\Uuid.
@@ -46,17 +49,17 @@ namespace Hoa\Core\Bin {
  * @license    New BSD License
  */
 
-class Uuid extends \Hoa\Console\Dispatcher\Kit {
+class Uuid extends Console\Dispatcher\Kit {
 
     /**
      * Options description.
      *
      * @var \Hoa\Core\Bin\Uuid array
      */
-    protected $options = array(
-        array('help', \Hoa\Console\GetOption::NO_ARGUMENT, 'h'),
-        array('help', \Hoa\Console\GetOption::NO_ARGUMENT, '?')
-    );
+    protected $options = [
+        ['help', Console\GetOption::NO_ARGUMENT, 'h'],
+        ['help', Console\GetOption::NO_ARGUMENT, '?']
+    ];
 
 
 
@@ -80,7 +83,7 @@ class Uuid extends \Hoa\Console\Dispatcher\Kit {
               break;
         }
 
-        echo \Hoa\Core::uuid(), "\n";
+        echo Core::uuid(), "\n";
 
         return;
     }
@@ -95,14 +98,12 @@ class Uuid extends \Hoa\Console\Dispatcher\Kit {
 
         echo 'Usage   : core:uuid <options>', "\n",
              'Options :', "\n",
-             $this->makeUsageOptionsList(array(
+             $this->makeUsageOptionsList([
                   'help' => 'This help.'
-             )), "\n";
+             ]), "\n";
 
         return;
     }
-}
-
 }
 
 __halt_compiler();
