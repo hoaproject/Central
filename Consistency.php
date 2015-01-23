@@ -42,9 +42,9 @@ use Hoa\Stream;
 /**
  * Hard-preload.
  */
-const PATH_EVENT     = __DIR__ . DIRECTORY_SEPARATOR . 'Event.php';
-const PATH_EXCEPTION = __DIR__ . DIRECTORY_SEPARATOR . 'Exception.php';
-const PATH_DATA      = __DIR__ . DIRECTORY_SEPARATOR . 'Data.php';
+define('PATH_EVENT', __DIR__ . DIRECTORY_SEPARATOR . 'Event.php');
+define('PATH_EXCEPTION', __DIR__ . DIRECTORY_SEPARATOR . 'Exception.php');
+define('PATH_DATA', __DIR__ . DIRECTORY_SEPARATOR . 'Data.php');
 
 /**
  * Class Hoa\Core\Consistency.
