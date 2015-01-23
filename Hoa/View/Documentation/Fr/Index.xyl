@@ -50,17 +50,18 @@
   chacune de ces méthodes :</p>
   <ul>
     <li><code>getData</code> doit préférablement retourner un objet
-    <code>Hoa\Core\Data</code> (voir <a href="@lh:chapter=Core">la bibliothèque
-    <code>Hoa\Core</code></a>) ; il est néanmoins possible de retourner un objet
-    quelconque ;</li>
+    <code>Hoa\Core\Data</code> (voir <a href="@hack:chapter=Core">la
+    bibliothèque <code>Hoa\Core</code></a>) ; il est néanmoins possible de
+    retourner un objet quelconque ;</li>
     <li><code>getRouter</code> doit retourner un routeur de type
-    <code>Hoa\Router\Router</code> (voir <a href="@lh:chapter=Router">la
+    <code>Hoa\Router\Router</code> (voir <a href="@hack:chapter=Router">la
     bibliothèque <code>Hoa\Router</code></a>) ;</li>
     <li><code>render</code> ne doit rien retourner ;</li>
     <li><code>getOutputStream</code> doit retourner un flux implémentant
     l'interface <code>Hoa\Stream\IStream\Out</code> (voir
-    <a href="@lh:chapter=Stream">la bibliothèque <code>Hoa\Stream</code></a>) ;
-    ça peut être un fichier, une chaîne de caractères, une réponse HTTP…</li>
+    <a href="@hack:chapter=Stream">la bibliothèque
+    <code>Hoa\Stream</code></a>) ; ça peut être un fichier, une chaîne de
+    caractères, une réponse HTTP…</li>
   </ul>
   <p>Même si cette approche peut sembler simpliste au premier abord, cette
   interface couvre l'ensemble des besoins, et vous permet d'écrire la vue que
@@ -68,7 +69,7 @@
 
   <h2 id="Example" for="main-toc">Exemple</h2>
 
-  <p><a href="@lh:chapter=Xyl">La bibliothèque <code>Hoa\Xyl</code></a> 
+  <p><a href="@hack:chapter=Xyl">La bibliothèque <code>Hoa\Xyl</code></a>
   utilise <code>Hoa\View\Viewable</code>, mais elle est un peu complexe
   pour servir de premier exemple (ce qui ne vous empêche pas d'aller y
   jeter un œil !). C'est pourquoi nous allons donner un exemple plus simple et
@@ -82,8 +83,8 @@
     <li>les données seront <strong>isolées</strong>, ce qui veut dire qu'une vue
     n'aura pas accès aux données d'une autre vue ;</li>
     <li>nos données seront basées sur
-    <a href="http://php.net/reserved.classes">la classe <code>StdClass</code></a>
-    pour plus de simplicité.</li>
+    <a href="http://php.net/reserved.classes">la classe
+    <code>StdClass</code></a> pour plus de simplicité.</li>
   </ul>
   <p>Commençons par écrire la classe <code>SuperView</code> :</p>
   <pre data-line="44"><code class="language-php">class SuperView implements Hoa\View\Viewable {
