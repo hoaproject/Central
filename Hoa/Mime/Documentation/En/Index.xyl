@@ -139,7 +139,7 @@ var_dump(Hoa\Mime\Mime::getMimeFromExtension('webm'));
 
   <p>Hoa defines several languages, with their own types. It is for example the
   case of the PP language in
-  <a href="@lh:chapter=Compiler"><code>Hoa\Compiler</code></a>. Each library
+  <a href="@hack:chapter=Compiler"><code>Hoa\Compiler</code></a>. Each library
   which provides a <strong>new</strong> language has a
   <code>hoa://Library/<em>library-name</em>/.Mime</code> file, with the same
   format as <code>Mime.types</code>. For the PP language, its extension is
