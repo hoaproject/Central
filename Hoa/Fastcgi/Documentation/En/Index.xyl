@@ -14,7 +14,7 @@
 
   <h2 id="Introduction" for="main-toc">Introduction</h2>
 
-  <div id="overview" class="verbatim schema"></div>
+  <div id="overview" class="schema"></div>
   <script>
   Hoa.Document.onReady(function ( ) {
 
@@ -183,7 +183,7 @@ catch ( Hoa\Fastcgi\Exception\Exception $e ) {
   server.</p>
   <p>Manipulating FastCGI requests in this manner allows also to
   <strong>learn</strong> more about PHP and to manipulate PHP processus in
-  another way (please, see <a href="@lh:chapter=Zombie">the
+  another way (please, see <a href="@hack:chapter=Zombie">the
   <code>Hoa\Zombie</code> library</a>).</p>
 
 </yield>
