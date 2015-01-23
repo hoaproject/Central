@@ -90,7 +90,7 @@ try {
         ]
     );
 
-    $dispatcher = new Dispatcher\Basic([
+    $dispatcher = new Dispatcher\ClassMethod([
         'synchronous.call'
             => '(:%variables.vendor:lU:)\(:%variables.library:lU:)\Bin\(:%variables.command:lU:)',
         'synchronous.able'
