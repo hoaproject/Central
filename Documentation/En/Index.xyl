@@ -133,7 +133,7 @@ $dns->run();</code></pre>
 
   <h2 id="Test" for="main-toc">Test</h2>
 
-  <div id="overview" class="verbatim schema"></div>
+  <div id="overview" class="schema"></div>
   <script>
   Hoa.Document.onReady(function ( ) {
 
