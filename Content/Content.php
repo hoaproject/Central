@@ -34,18 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Mail\Content;
 
-from('Hoa')
-
-/**
- * \Hoa\Mail\Exception\Security
- */
--> import('Mail.Exception.Security');
-
-}
-
-namespace Hoa\Mail\Content {
+use Hoa\Core;
+use Hoa\Mail;
 
 /**
  * Class \Hoa\Mail\Content.
@@ -64,7 +56,7 @@ abstract class Content implements \ArrayAccess {
      *
      * @var \Hoa\Mail\Content array
      */
-    protected $_headers = array();
+    protected $_headers = [];
 
 
 
@@ -131,7 +123,7 @@ abstract class Content implements \ArrayAccess {
             $old = null;
 
         if(0 !== preg_match('#[' . CRLF . ']#', $value))
-            throw new \Hoa\Mail\Exception\Security(
+            throw new Mail\Exception\Security(
                 'Header “%s” contains illegal character.', 0, $header);
 
         $this->_headers[$header] = $value;
@@ -304,13 +296,7 @@ abstract class Content implements \ArrayAccess {
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Mail\Content\Content');
-
-}
+Core\Consistency::flexEntity('Hoa\Mail\Content\Content');

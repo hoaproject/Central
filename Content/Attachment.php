@@ -34,23 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Mail\Content;
 
-from('Hoa')
-
-/**
- * \Hoa\Mail\Content
- */
--> import('Mail.Content.~')
-
-/**
- * \Hoa\Mime
- */
--> import('Mime.~');
-
-}
-
-namespace Hoa\Mail\Content {
+use Hoa\Mime;
+use Hoa\Stream;
 
 /**
  * Class \Hoa\Mail\Content\Attachment.
@@ -82,17 +69,17 @@ class Attachment extends Content {
      *                                  use the stream basename).
      * @return  void
      */
-    public function __construct ( \Hoa\Stream $stream, $name = null ) {
+    public function __construct ( Stream $stream, $name = null ) {
 
         parent::__construct();
 
         if(null === $name)
-            if($stream instanceof \Hoa\Stream\IStream\Pathable)
+            if($stream instanceof Stream\IStream\Pathable)
                 $name = $stream->getBasename();
             else
                 $name = basename($stream->getStreamName());
 
-        $mime                        = new \Hoa\Mime($stream);
+        $mime                        = new Mime($stream);
         $this['content-type']        = $mime->getMime() ?: 'application/octet-stream';
         $this['content-disposition'] = 'attachment; ' .
                                        'filename=' . $name . ';';
@@ -108,7 +95,7 @@ class Attachment extends Content {
      * @param   \Hoa\Stream  $stream    Stream.
      * @return  \Hoa\Stream
      */
-    protected function setStream ( \Hoa\Stream $stream ) {
+    protected function setStream ( Stream $stream ) {
 
         $old           = $this->_stream;
         $this->_stream = $stream;
@@ -137,6 +124,4 @@ class Attachment extends Content {
 
         return base64_encode($this->getStream()->readAll());
     }
-}
-
 }

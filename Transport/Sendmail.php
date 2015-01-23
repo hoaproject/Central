@@ -34,23 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Mail\Transport;
 
-from('Hoa')
-
-/**
- * \Hoa\Mail\Exception
- */
--> import('Mail.Exception.~')
-
-/**
- * \Hoa\Mail\Transport\ITransport\Out
- */
--> import('Mail.Transport.I~.Out');
-
-}
-
-namespace Hoa\Mail\Transport {
+use Hoa\Mail;
 
 /**
  * Class \Hoa\Mail\Transport\Sendmail.
@@ -82,7 +68,7 @@ class Sendmail implements ITransport\Out {
      *                                function.
      * @return  void
      */
-    public function __construct ( Array $parameters = array() ) {
+    public function __construct ( Array $parameters = [] ) {
 
         $this->_parameters = $parameters;
 
@@ -122,7 +108,7 @@ class Sendmail implements ITransport\Out {
      * @param   \Hoa\Mail\Message  $message    Message.
      * @return  bool
      */
-    public function send ( \Hoa\Mail\Message $message ) {
+    public function send ( Mail\Message $message ) {
 
         $content  = $message->getFormattedContent();
         $headers  = $message->getHeaders();

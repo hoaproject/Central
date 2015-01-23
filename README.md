@@ -77,7 +77,7 @@ content: either textual or HTML.
 ```php
 $message->addContent(
     new Hoa\Mail\Content\Alternative(
-        array(
+        [
             new Hoa\Mail\Content\Text(
                 'Check this out: http://hoa-project.net/!'
             ),
@@ -85,7 +85,7 @@ $message->addContent(
                 '<a href="http://hoa-project.net/">Check this ' .
                 '<strong>out</strong>!</a>'
             )
-        )
+        ]
     )
 );
 ```

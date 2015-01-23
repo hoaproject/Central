@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Mail\Transport\ITransport {
+namespace Hoa\Mail\Transport\ITransport;
 
 /**
  * Interface \Hoa\Mail\Transport\ITransport\Transport
@@ -47,5 +47,3 @@ namespace Hoa\Mail\Transport\ITransport {
  */
 
 interface Transport { }
-
-}
