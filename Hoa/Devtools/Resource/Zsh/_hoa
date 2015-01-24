@@ -1,0 +1,26 @@
+#compdef hoa
+
+_hoa() {
+
+    local state list
+    typeset -A opt_args
+
+    _arguments \
+        '1: :->commands'\
+        '*: :->other'
+
+    list=`paste -s -d ' ' <( hoa )`
+
+    case $state in
+
+    commands)
+        _arguments '1:commands:('$list')'
+    ;;
+
+    *)
+        _files
+
+    esac
+}
+
+_hoa "$@"
