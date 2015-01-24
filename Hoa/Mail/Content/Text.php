@@ -34,18 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Mail\Content
- */
--> import('Mail.Content.~');
-
-}
-
-namespace Hoa\Mail\Content {
+namespace Hoa\Mail\Content;
 
 /**
  * Class \Hoa\Mail\Content\Text.
@@ -133,6 +122,4 @@ class Text extends Content {
 
         return base64_encode($this->get());
     }
-}
-
 }

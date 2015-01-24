@@ -34,23 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Mail\Content;
 
-from('Hoa')
-
-/**
- * \Hoa\Mail\Exception
- */
--> import('Mail.Exception.~')
-
-/**
- * \Hoa\Mail\Content
- */
--> import('Mail.Content.~');
-
-}
-
-namespace Hoa\Mail\Content {
+use Hoa\Mail;
 
 /**
  * Class \Hoa\Mail\Content\Message.
@@ -77,7 +63,7 @@ class Message extends Content {
      *
      * @var \Hoa\Mail\Content\Message array
      */
-    protected $_content = array();
+    protected $_content = [];
 
 
 
@@ -134,7 +120,7 @@ class Message extends Content {
         $content = $this->getContent();
 
         if(empty($content))
-            throw new \Hoa\Mail\Exception(
+            throw new Mail\Exception(
                 'The message does not have content.', 0);
 
         if(1 < count($content)) {
@@ -177,7 +163,7 @@ class Message extends Content {
      */
     public function getRecipients ( ) {
 
-        $out = array(static::getAddress($this['to']));
+        $out = [static::getAddress($this['to'])];
 
         if(isset($this['cc']))
             $this->_getRecipients($this['cc'], $out);
@@ -224,6 +210,4 @@ class Message extends Content {
 
         return parent::getFormattedContent(false);
     }
-}
-
 }

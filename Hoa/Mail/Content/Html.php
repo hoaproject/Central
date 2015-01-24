@@ -34,18 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Mail\Content\Text
- */
--> import('Mail.Content.Text');
-
-}
-
-namespace Hoa\Mail\Content {
+namespace Hoa\Mail\Content;
 
 /**
  * Class \Hoa\Mail\Content\Html.
@@ -73,6 +62,4 @@ class Html extends Text {
 
         return;
     }
-}
-
 }

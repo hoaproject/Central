@@ -34,18 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Mail\Content\Message
- */
--> import('Mail.Content.Message');
-
-}
-
-namespace Hoa\Mail\Content {
+namespace Hoa\Mail\Content;
 
 /**
  * Class \Hoa\Mail\Content\Alternative.
@@ -75,7 +64,7 @@ class Alternative extends Message {
      * @param   array  $contents    Alternative contents.
      * @return  void
      */
-    public function __construct ( Array $contents = array() ) {
+    public function __construct ( Array $contents = [] ) {
 
         foreach($contents as $content)
             $this->addContent($content);
@@ -84,6 +73,4 @@ class Alternative extends Message {
 
         return;
     }
-}
-
 }

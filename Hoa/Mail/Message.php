@@ -34,28 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Mail\Exception
- */
--> import('Mail.Exception.~')
-
-/**
- * \Hoa\Mail\Transport\ITransport\Out
- */
--> import('Mail.Transport.I~.Out')
-
-/**
- * \Hoa\Mail\Content\Message
- */
--> import('Mail.Content.Message');
-
-}
-
-namespace Hoa\Mail {
+namespace Hoa\Mail;
 
 /**
  * Class \Hoa\Mail\Message.
@@ -176,6 +155,4 @@ class Message extends Content\Message {
 
         return $transport->send($this);
     }
-}
-
 }

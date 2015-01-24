@@ -34,28 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Mail\Transport;
 
-from('Hoa')
-
-/**
- * \Hoa\Mail\Exception\Transport
- */
--> import('Mail.Exception.Transport')
-
-/**
- * \Hoa\Mail\Transport\ITransport\Out
- */
--> import('Mail.Transport.I~.Out')
-
-/**
- * \Hoa\Mail\Content
- */
--> import('Mail.Content.~');
-
-}
-
-namespace Hoa\Mail\Transport {
+use Hoa\Mail;
+use Hoa\Socket;
 
 /**
  * Class \Hoa\Mail\Transport\Smtp.
@@ -101,7 +83,7 @@ class Smtp implements ITransport\Out {
      * @param   string              $password    Password (if auth is needed).
      * @return  void
      */
-    public function __construct ( \Hoa\Socket\Client $client, $username = null,
+    public function __construct ( Socket\Client $client, $username = null,
                                   $password = null ) {
 
         $this->setClient($client);
@@ -118,7 +100,7 @@ class Smtp implements ITransport\Out {
      * @param   \Hoa\Socket\Client  $client    Client.
      * @return  \Hoa\Socket\Client
      */
-    protected function setClient ( \Hoa\Socket\Client $client ) {
+    protected function setClient ( Socket\Client $client ) {
 
         $old           = $this->_client;
         $this->_client = $client;
@@ -210,8 +192,8 @@ class Smtp implements ITransport\Out {
         $errorMessage .= ' (code: %d, message: “%s”).';
         $client->writeAll('QUIT' . CRLF);
 
-        throw new \Hoa\Mail\Exception\Transport(
-            $errorMessage, 0, array($_code, $_message));
+        throw new Mail\Exception\Transport(
+            $errorMessage, 0, [$_code, $_message]);
     }
 
     /**
@@ -223,7 +205,7 @@ class Smtp implements ITransport\Out {
      * @param   \Hoa\Mail\Message  $message    Message.
      * @return  bool
      */
-    public function send ( \Hoa\Mail\Message $message ) {
+    public function send ( Mail\Message $message ) {
 
         $content = $message->getFormattedContent();
         $headers = $message->getHeaders();
@@ -245,7 +227,7 @@ class Smtp implements ITransport\Out {
             $this->ifNot(220, 'Cannot start a TLS connection');
 
             if(true !== $client->enableEncryption(true, $client::ENCRYPTION_TLS))
-                throw new \Hoa\Mail\Exception\Transport(
+                throw new Mail\Exception\Transport(
                     'Cannot start a TLS connection.', 1);
         }
 
@@ -258,7 +240,7 @@ class Smtp implements ITransport\Out {
                 break;
 
         if(empty($matches))
-            throw new \Hoa\Mail\Exception\Transport(
+            throw new Mail\Exception\Transport(
                 'The server does not support authentification, we cannot ' .
                 'authenticate.', 2);
 
@@ -301,7 +283,7 @@ class Smtp implements ITransport\Out {
             $this->ifNot(235, 'Wrong username or password');
         }
         else
-            throw new \Hoa\Mail\Transport(
+            throw new Mail\Transport(
                 '%s does not support authentification algorithms available ' .
                 'on the server (%s).', 3, implode(', ', $auth));
 
@@ -335,6 +317,11 @@ class Smtp implements ITransport\Out {
     /**
      * H-MAC.
      * Please, see RFC2104, section 2 Definition of HMAC.
+     *
+     * @access  public
+     * @param   string  $key     Key.
+     * @param   string  $data    Data.
+     * @return  string
      */
     public static function hmac ( $key, $data ) {
 
@@ -353,6 +340,4 @@ class Smtp implements ITransport\Out {
 
         return md5($oKeyPad . pack('H32', md5($iKeyPad . $data)));
     }
-}
-
 }

@@ -34,18 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Mail\Transport\ITransport;
 
-from('Hoa')
-
-/**
- * \Hoa\Mail\Transport\ITransport\Transport
- */
--> import('Mail.Transport.I~.Transport');
-
-}
-
-namespace Hoa\Mail\Transport\ITransport {
+use Hoa\Mail;
 
 /**
  * Interface \Hoa\Mail\Transport\ITransport\Out
@@ -66,7 +57,5 @@ interface Out extends Transport {
      * @param   \Hoa\Mail\Message  $message    Message.
      * @return  bool
      */
-    public function send ( \Hoa\Mail\Message $message );
-}
-
+    public function send ( Mail\Message $message );
 }

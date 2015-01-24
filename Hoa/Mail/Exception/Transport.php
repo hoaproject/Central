@@ -34,18 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Mail\Exception
- */
--> import('Mail.Exception.~');
-
-}
-
-namespace Hoa\Mail\Exception {
+namespace Hoa\Mail\Exception;
 
 /**
  * Class \Hoa\Mail\Exception\Transport.
@@ -58,5 +47,3 @@ namespace Hoa\Mail\Exception {
  */
 
 class Transport extends Exception { }
-
-}
