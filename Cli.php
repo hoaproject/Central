@@ -34,33 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Router;
 
-from('Hoa')
-
-/**
- * \Hoa\Router\Exception
- */
--> import('Router.Exception.~')
-
-/**
- * \Hoa\Router\Exception\NotFound
- */
--> import('Router.Exception.NotFound')
-
-/**
- * \Hoa\Router
- */
--> import('Router.~')
-
-/**
- * \Hoa\Router\Generic
- */
--> import('Router.Generic');
-
-}
-
-namespace Hoa\Router {
+use Hoa\Core;
 
 /**
  * Class \Hoa\Router\Cli.
@@ -72,23 +48,23 @@ namespace Hoa\Router {
  * @license    New BSD License
  */
 
-class Cli extends Generic implements \Hoa\Core\Parameter\Parameterizable {
+class Cli extends Generic implements Core\Parameter\Parameterizable {
 
     /**
      * Parameters.
      *
      * @var \Hoa\Core\Parameter object
      */
-    protected $_parameters    = null;
+    protected $_parameters     = null;
 
     /**
      * CLI methods that the router understand.
      *
      * @var \Hoa\Router\Http array
      */
-    protected static $_methods = array(
+    protected static $_methods = [
         'get'
-    );
+    ];
 
 
 
@@ -98,15 +74,15 @@ class Cli extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      * @access  public
      * @return  void
      */
-    public function __construct ( Array $parameters = array() ) {
+    public function __construct ( Array $parameters = [] ) {
 
-        $this->_parameters = new \Hoa\Core\Parameter(
+        $this->_parameters = new Core\Parameter(
             $this,
-            array(),
-            array(
-                'rules.public'  => array(),
-                'rules.private' => array()
-            )
+            [],
+            [
+                'rules.public'  => [],
+                'rules.private' => []
+            ]
         );
         $this->_parameters->setParameters($parameters);
 
@@ -116,7 +92,7 @@ class Cli extends Generic implements \Hoa\Core\Parameter\Parameterizable {
                 = $rule;
 
             if(null === $variables)
-                $variables = array();
+                $variables = [];
 
             $this->addRule($id, $methods, $pattern, $call, $able, $variables);
         }
@@ -127,7 +103,7 @@ class Cli extends Generic implements \Hoa\Core\Parameter\Parameterizable {
                 = $rule;
 
             if(null === $variables)
-                $variables = array();
+                $variables = [];
 
             $this->addPrivateRule(
                 $id, $methods, $pattern, $call, $able, $variables
@@ -182,10 +158,9 @@ class Cli extends Generic implements \Hoa\Core\Parameter\Parameterizable {
                     ? 'Method %s is'
                     : 'Methods %s are') .
                 ' invalid for the rule %s (valid methods are: %s).',
-                1, array(implode(', ', $diff), $id,
-                         implode(', ', self::$_methods)));
+                1, [implode(', ', $diff), $id, implode(', ', self::$_methods)]);
 
-        $this->_rules[$id] = array(
+        $this->_rules[$id] = [
             Router::RULE_VISIBILITY => $visibility,
             Router::RULE_ID         => $id,
             Router::RULE_METHODS    => $methods,
@@ -193,7 +168,7 @@ class Cli extends Generic implements \Hoa\Core\Parameter\Parameterizable {
             Router::RULE_CALL       => $call,
             Router::RULE_ABLE       => $able,
             Router::RULE_VARIABLES  => $variables
-        );
+        ];
 
         return $this;
     }
@@ -281,7 +256,7 @@ class Cli extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      * @param   array   $variables    Variables.
      * @return  string
      */
-    public function unroute ( $id, Array $variables = array() ) {
+    public function unroute ( $id, Array $variables = [] ) {
 
         $rule      = $this->getRule($id);
         $pattern   = $rule[Router::RULE_PATTERN];
@@ -301,14 +276,14 @@ class Cli extends Generic implements \Hoa\Core\Parameter\Parameterizable {
         );
 
         return str_replace(
-            array(
+            [
                 '\.', '\\\\', '\+', '\*', '\?', '\[', '\]', '\^', '\$', '\(',
                 '\)', '\{', '\}', '\=', '\!', '\<', '\>', '\|', '\:', '\-'
-            ),
-            array(
+            ],
+            [
                 '.', '\\', '+', '*', '?', '[', ']', '^', '$', '(',
                 ')', '{', '}', '=', '!', '<', '>', '|', ':', '-'
-            ),
+            ],
             $out
         );
     }
@@ -381,6 +356,4 @@ class Cli extends Generic implements \Hoa\Core\Parameter\Parameterizable {
 
         return ltrim($out);
     }
-}
-
 }

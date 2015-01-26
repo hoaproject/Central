@@ -34,7 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Router\Exception {
+namespace Hoa\Router\Exception;
+
+use Hoa\Core;
 
 /**
  * Class \Hoa\Router\Exception.
@@ -46,15 +48,9 @@ namespace Hoa\Router\Exception {
  * @license    New BSD License
  */
 
-class Exception extends \Hoa\Core\Exception { }
-
-}
-
-namespace {
+class Exception extends Core\Exception { }
 
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Router\Exception\Exception');
-
-}
+Core\Consistency::flexEntity('Hoa\Router\Exception\Exception');

@@ -34,23 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Router\Exception
- */
--> import('Router.Exception.~')
-
-/**
- * \Hoa\Router
- */
--> import('Router.~');
-
-}
-
-namespace Hoa\Router {
+namespace Hoa\Router;
 
 /**
  * Class \Hoa\Router\Generic.
@@ -69,7 +53,7 @@ abstract class Generic implements Router {
      *
      * @var \Hoa\Router\Generic array
      */
-    protected $_rules          = array();
+    protected $_rules          = [];
 
     /**
      * The routed rule.
@@ -83,7 +67,7 @@ abstract class Generic implements Router {
      *
      * @var \Hoa\Router\Generic array
      */
-    protected static $_methods = array();
+    protected static $_methods = [];
 
 
 
@@ -120,7 +104,7 @@ abstract class Generic implements Router {
      * @throw   \Hoa\Router\Exception
      */
     public function addRule ( $id, Array $methods, $pattern, $call = null,
-                              $able = null, Array $variables = array() ) {
+                              $able = null, Array $variables = [] ) {
 
         return $this->_addRule(
             Router::VISIBILITY_PUBLIC,
@@ -147,7 +131,7 @@ abstract class Generic implements Router {
      * @throw   \Hoa\Router\Exception
      */
     public function addPrivateRule ( $id, Array $methods, $pattern, $call = null,
-                                     $able = null, Array $variables = array() ) {
+                                     $able = null, Array $variables = [] ) {
 
         return $this->_addRule(
             Router::VISIBILITY_PRIVATE,
@@ -197,7 +181,7 @@ abstract class Generic implements Router {
         $arguments[0] = $arguments[1];
         $arguments[1] = $handle;
 
-        return call_user_func_array(array($this, $method), $arguments);
+        return call_user_func_array([$this, $method], $arguments);
     }
 
     /**
@@ -264,6 +248,4 @@ abstract class Generic implements Router {
 
         return $this->_rule;
     }
-}
-
 }

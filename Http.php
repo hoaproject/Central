@@ -34,33 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Router;
 
-from('Hoa')
-
-/**
- * \Hoa\Router\Exception
- */
--> import('Router.Exception.~')
-
-/**
- * \Hoa\Router\Exception\NotFound
- */
--> import('Router.Exception.NotFound')
-
-/**
- * \Hoa\Router
- */
--> import('Router.~')
-
-/**
- * \Hoa\Router\Generic
- */
--> import('Router.Generic');
-
-}
-
-namespace Hoa\Router {
+use Hoa\Core;
 
 /**
  * Class \Hoa\Router\Http.
@@ -72,7 +48,7 @@ namespace Hoa\Router {
  * @license    New BSD License
  */
 
-class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
+class Http extends Generic implements Core\Parameter\Parameterizable {
 
     /**
      * Secure connection.
@@ -121,7 +97,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      *
      * @var \Hoa\Router\Http array
      */
-    protected static $_methods  = array(
+    protected static $_methods  = [
         'get',
         'post',
         'put',
@@ -129,7 +105,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
         'delete',
         'head',
         'options'
-    );
+    ];
 
     /**
      * Subdomain stack: static or dynamic.
@@ -156,16 +132,16 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      * @access  public
      * @return  void
      */
-    public function __construct ( Array $parameters = array() ) {
+    public function __construct ( Array $parameters = [] ) {
 
-        $this->_parameters = new \Hoa\Core\Parameter(
+        $this->_parameters = new Core\Parameter(
             $this,
-            array(),
-            array(
+            [],
+            [
                 'prefix'        => null,
-                'rules.public'  => array(),
-                'rules.private' => array()
-            )
+                'rules.public'  => [],
+                'rules.private' => []
+            ]
         );
         $this->_parameters->setParameters($parameters);
 
@@ -182,7 +158,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
                 = $rule;
 
             if(null === $variables)
-                $variables = array();
+                $variables = [];
 
             $this->addRule($id, $methods, $pattern, $call, $able, $variables);
         }
@@ -193,7 +169,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
                 = $rule;
 
             if(null === $variables)
-                $variables = array();
+                $variables = [];
 
             $this->addPrivateRule(
                 $id, $methods, $pattern, $call, $able, $variables
@@ -250,14 +226,13 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
                     ? 'Method %s is'
                     : 'Methods %s are') .
                 ' invalid for the rule %s (valid methods are: %s).',
-                1, array(implode(', ', $diff), $id,
-                         implode(', ', self::$_methods)));
+                1, [implode(', ', $diff), $id, implode(', ', self::$_methods)]);
 
         if(   _static == $this->_subdomainStack
            && false   != strpos($pattern, '@'))
             $this->_subdomainStack = _dynamic;
 
-        $this->_rules[$id] = array(
+        $this->_rules[$id] = [
             Router::RULE_VISIBILITY => $visibility,
             Router::RULE_ID         => $id,
             Router::RULE_METHODS    => $methods,
@@ -265,7 +240,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
             Router::RULE_CALL       => $call,
             Router::RULE_ABLE       => $able,
             Router::RULE_VARIABLES  => $variables
-        );
+        ];
 
         return $this;
     }
@@ -310,7 +285,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
             if(0 === preg_match('#^' . $prefix . '(.*)?$#', $uri, $matches))
                 throw new Exception\NotFound(
                     'Cannot match the path prefix %s in the URI %s.',
-                    3, array($prefix, $uri));
+                    3, [$prefix, $uri]);
 
             $uri = ltrim($matches[1],  '/');
         }
@@ -392,7 +367,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
                 $msubdomain
             );
         else
-            $msubdomain = array();
+            $msubdomain = [];
 
         array_shift($muri);
         $sub = array_shift($msubdomain) ?: null;
@@ -450,7 +425,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
      * @return  string
      * @throw   \Hoa\Router\Exception
      */
-    public function unroute ( $id, Array $variables = array(),
+    public function unroute ( $id, Array $variables = [],
                               $secured = null, $prefix = null ) {
 
         if(null === $prefix)
@@ -607,7 +582,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
                         throw new Exception(
                             'Variable %s is empty and it is not allowed when ' .
                             'unrouting rule %s.',
-                            7, array($m, $id));
+                            7, [$m, $id]);
 
                 return $variables[$m];
             },
@@ -628,14 +603,14 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
         $out = preg_replace('#(.)(?<![\)\\\])[\?\*\+]#', '\1', $out);
 
         return str_replace(
-            array(
+            [
                 '\.', '\\\\', '\+', '\*', '\?', '\[', '\]', '\^', '\$', '\(',
                 '\)', '\{', '\}', '\=', '\!', '\<', '\>', '\|', '\:', '\-'
-            ),
-            array(
+            ],
+            [
                 '.', '\\', '+', '*', '?', '[', ']', '^', '$', '(',
                 ')', '{', '}', '=', '!', '<', '>', '|', ':', '-'
-            ),
+            ],
             $out
         );
     }
@@ -701,7 +676,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
     public static function getQuery ( ) {
 
         if('cli' === php_sapi_name())
-            return array();
+            return [];
 
         if(!isset($_SERVER['REQUEST_URI']))
             throw new Exception(
@@ -710,7 +685,7 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
         $uri = $_SERVER['REQUEST_URI'];
 
         if(false === $pos = strpos($uri, '?'))
-            return array();
+            return [];
 
         parse_str(substr($uri, $pos + 1), $out);
 
@@ -968,6 +943,4 @@ class Http extends Generic implements \Hoa\Core\Parameter\Parameterizable {
                    ? static::SECURE
                    : static::UNSECURE;
     }
-}
-
 }

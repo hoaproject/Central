@@ -34,18 +34,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
 
-from('Hoa')
-
-/**
- * \Hoa\Router\Exception
- */
--> import('Router.Exception.~');
-
-}
-
-namespace Hoa\Router\Exception {
+namespace Hoa\Router\Exception;
 
 /**
  * Class \Hoa\Router\Exception\NotFound.
@@ -58,5 +48,3 @@ namespace Hoa\Router\Exception {
  */
 
 class NotFound extends Exception { }
-
-}
