@@ -34,7 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Router {
+namespace Hoa\Router;
+
+use Hoa\Core;
 
 /**
  * Interface \Hoa\Router.
@@ -124,7 +126,7 @@ interface Router {
      * @return  \Hoa\Router
      */
     public function addRule ( $id, Array $methods, $pattern, $call = null,
-                              $able = null, Array $variables = array() );
+                              $able = null, Array $variables = [] );
 
     /**
      * Add a private rule.
@@ -139,7 +141,7 @@ interface Router {
      * @return  \Hoa\Router
      */
     public function addPrivateRule ( $id, Array $methods, $pattern, $call = null,
-                                     $able = null, Array $variables = array() );
+                                     $able = null, Array $variables = [] );
 
     /**
      * Remove a rule.
@@ -184,7 +186,7 @@ interface Router {
      * @param   array   $variables    Variables.
      * @return  string
      */
-    public function unroute ( $id, Array $variables = array() );
+    public function unroute ( $id, Array $variables = [] );
 
     /**
      * Get method or mode where the router is called.
@@ -203,13 +205,7 @@ interface Router {
     public function isAsynchronous ( );
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Router\Router');
-
-}
+Core\Consistency::flexEntity('Hoa\Router\Router');
