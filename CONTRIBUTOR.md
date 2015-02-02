@@ -47,6 +47,7 @@ cloak on IRC, etc.
   * Rémi Parpaillon (rparpa)
   * Grégoire Pineau (lyrixx)
   * ➜ Stéphane Py (stephpy)
+  * Kim Sia Sim (simkimsia)
   * Mike Simonson (mikeSimonson)
   * Mathias Strasser (mathiasstrasser)
   * Emmanuel Thierry (sekiltoyai)
