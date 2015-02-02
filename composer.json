@@ -21,8 +21,9 @@
         "source": "http://git.hoa-project.net/"
     },
     "require": {
-        "atoum/atoum"            : "~2.0",
+        "atoum/atoum"            : "~2.0, >=2.0.1",
         "atoum/praspel-extension": "~0.0",
+        "atoum/ruler-extension"  : "~1.0, >=1.0.2",
         "hoa/console"            : "~2.0",
         "hoa/core"               : "~2.0",
         "hoa/dispatcher"         : "~0.0",

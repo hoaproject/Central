@@ -62,6 +62,7 @@ class Run extends Console\Dispatcher\Kit {
         ['namespaces',  Console\GetOption::REQUIRED_ARGUMENT, 'n'],
         ['directories', Console\GetOption::REQUIRED_ARGUMENT, 'd'],
         ['files',       Console\GetOption::REQUIRED_ARGUMENT, 'f'],
+        ['filter',      Console\GetOption::REQUIRED_ARGUMENT, 'F'],
         ['debug',       Console\GetOption::NO_ARGUMENT,       'D'],
         ['help',        Console\GetOption::NO_ARGUMENT,       'h'],
         ['help',        Console\GetOption::NO_ARGUMENT,       '?']
@@ -80,6 +81,7 @@ class Run extends Console\Dispatcher\Kit {
         $directories = [];
         $files       = [];
         $namespaces  = [];
+        $filter      = [];
         $debug       = false;
 
         while(false !== $c = $this->getOption($v)) switch($c) {
@@ -181,6 +183,10 @@ class Run extends Console\Dispatcher\Kit {
                 }
               break;
 
+            case 'F':
+                $filter = $v;
+              break;
+
             case 'D':
                 $debug = $v;
               break;
@@ -228,7 +234,10 @@ class Run extends Console\Dispatcher\Kit {
         if(!empty($namespaces))
             $command .= ' --namespaces ' . implode(' ', $namespaces);
 
-        $processus = new Console\Processus($command);
+        if(!empty($filter))
+            $command .= ' --filter \'' . str_replace('\'', '\'"\'"\'', $filter). '\'';
+
+        $processus = new Processus($command);
         $processus->on('input', function ( $bucket ) {
 
             return false;
@@ -262,11 +271,36 @@ class Run extends Console\Dispatcher\Kit {
                  'n'    => 'Run tests of some namespaces.',
                  'd'    => 'Run tests of some directories.',
                  'f'    => 'Run tests of some files.',
+                 'F'    => 'Filter tests with a ruler expression (see ' .
+                           'Hoa\Ruler).',
                  'D'    => 'Activate the debugging mode.',
                  'help' => 'This help.'
-             ]), "\n";
+             ]), "\n\n",
+             'Available variables for filter expressions:', "\n",
+             '    * method,', "\n",
+             '    * class,', "\n",
+             '    * namespace,', "\n",
+             '    * tags.', "\n";
 
         return;
+    }
+}
+
+class Processus extends Console\Processus {
+
+    /**
+     * Avoid to escape the command.
+     *
+     * @access  protected
+     * @param   string  $command    Command name.
+     * @return  string
+     */
+    protected function setCommand ( $command ) {
+
+        $old            = $this->getCommand();
+        $this->_command = $command;
+
+        return $old;
     }
 }
 
