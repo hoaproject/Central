@@ -105,18 +105,32 @@ class Ruler {
     }
 
     /**
-     * Short interpreter.
+     * Alias to the self::interprete method.
      *
      * @access  public
      * @param   string  $rule    Rule.
      * @return  \Hoa\Ruler\Model
      * @throw   \Hoa\Ruler\Exception
      */
-    public static function interprete ( $rule ) {
+    public static function interpret ( $rule ) {
 
         return static::getInterpreter()->visit(
             static::getCompiler()->parse($rule)
         );
+    }
+
+    /**
+     * Short interpreter.
+     *
+     * @access      public
+     * @param       string  $rule    Rule.
+     * @return      \Hoa\Ruler\Model
+     * @throw       \Hoa\Ruler\Exception
+     * @deprecated  Will be removed in 2.x.
+     */
+    public static function interprete ( $rule ) {
+
+        return static::interpret($rule);
     }
 
     /**
