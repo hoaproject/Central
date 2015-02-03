@@ -21,7 +21,7 @@
   un routeur. Une règle correspond à la requête est retenue. Cette règle est
   utilisée par le dispatcheur pour appeler un <em lang="en">callable</em> avec
   les données de cette requête. Les données sont portées par les variables de la
-  règle (voir <a href="@lh:chapter=Router">la bibliothèque
+  règle (voir <a href="@hack:chapter=Router">la bibliothèque
   <code>Hoa\Router</code></a> si des détails sont nécessaires).</p>
   <div id="processus" class="verbatim schema"></div>
   <script>
@@ -48,8 +48,8 @@
   contrôleur pour une fonction ou une fonction anonyme.</p>
   <p>En plus d'un routeur, un dispatcheur peut porter une <strong>vue</strong>
   et l'acheminer avec le reste des données. Le routeur est de type
-  <a href="@lh:chapter=Router"><code>Hoa\Router</code></a> et la vue est de type
-  <a href="@lh:chapter=View"><code>Hoa\View\Viewable</code></a>.</p>
+  <a href="@hack:chapter=Router"><code>Hoa\Router</code></a> et la vue est de type
+  <a href="@hack:chapter=View"><code>Hoa\View\Viewable</code></a>.</p>
 
   <h2 id="Utiliser_un_dispatcheur" for="main-toc">Utiliser un dispatcheur</h2>
 
