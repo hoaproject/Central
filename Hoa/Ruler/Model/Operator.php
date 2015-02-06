@@ -52,6 +52,20 @@ use Hoa\Visitor;
 class Operator implements Visitor\Element {
 
     /**
+     * Lazy evaluation should break.
+     *
+     * @const bool
+     */
+    const LAZY_BREAK    = false;
+
+    /**
+     * Lazy evaluation should continue.
+     *
+     * @const bool
+     */
+    const LAZY_CONTINUE = true;
+
+    /**
      * Name.
      *
      * @var \Hoa\Ruler\Model\Operator string
@@ -72,7 +86,12 @@ class Operator implements Visitor\Element {
      */
     protected $_function  = true;
 
-
+    /**
+     * Whether the operator is lazy or not.
+     *
+     * @var \Hoa\Ruler\Model\Operator bool
+     */
+    protected $_laziness = false;
 
     /**
      * Constructor.
@@ -87,6 +106,7 @@ class Operator implements Visitor\Element {
                                   $isFunction = true ) {
 
         $this->setName($name);
+        $this->setLaziness('and' === $name || 'or' === $name);
         $this->setArguments($arguments);
         $this->setFunction($isFunction);
 
@@ -175,6 +195,57 @@ class Operator implements Visitor\Element {
     public function isFunction ( ) {
 
         return $this->_function;
+    }
+
+    /**
+     * Set whether the operator is lazy or not.
+     *
+     * @access  protected
+     * @param   bool  $isLazy    Is a lazy operator or not.
+     * @return  bool
+     */
+    protected function setLaziness ( $isLazy ) {
+
+        $old             = $this->_laziness;
+        $this->_laziness = $isLazy;
+
+        return $old;
+    }
+
+    /**
+     * Check if the operator is lazy or not.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isLazy ( ) {
+
+        return $this->_laziness;
+    }
+
+    /**
+     * Check whether we should break the lazy evaluation or not.
+     *
+     * @access public
+     * @param  mixed  $value    Value to check.
+     * @return bool
+     */
+    public function shouldBreakLazyEvaluation ( $value ) {
+
+        switch($this->_name) {
+
+            case 'and':
+                if(false === $value)
+                    return self::LAZY_BREAK;
+              break;
+
+            case 'or':
+                if(true === $value)
+                    return self::LAZY_BREAK;
+              break;
+        }
+
+        return self::LAZY_CONTINUE;
     }
 
     /**
