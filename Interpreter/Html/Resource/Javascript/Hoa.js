@@ -314,13 +314,15 @@ Hoa.ℙ(1) && (Hoa.DOM = Hoa.DOM || new function ( ) {
         if(undefined === children)
             return node;
 
-        if(typeof children === 'string')
+        if(typeof children !== 'object')
             node.appendChild(that.text(children));
-        else
+        else if(children instanceof Array)
             children.hoa.forEach(function ( child ) {
 
                 node.appendChild(children[child]);
             });
+        else
+            node.appendChild(children);
 
         return node;
     };
