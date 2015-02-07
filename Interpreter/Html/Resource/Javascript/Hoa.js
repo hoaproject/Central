@@ -317,9 +317,9 @@ Hoa.ℙ(1) && (Hoa.DOM = Hoa.DOM || new function ( ) {
         if(typeof children === 'string')
             node.appendChild(that.text(children));
         else
-            children.forEach(function ( child ) {
+            children.hoa.forEach(function ( child ) {
 
-                node.appendChild(child);
+                node.appendChild(children[child]);
             });
 
         return node;
