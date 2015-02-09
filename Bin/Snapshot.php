@@ -53,7 +53,7 @@ class Snapshot extends Console\Dispatcher\Kit {
     /**
      * Options description.
      *
-     * @var \Hoa\Devtools\Bin\Requiresnapshot array
+     * @var \Hoa\Devtools\Bin\Snapshot array
      */
     protected $options = [
         ['break-bc', Console\GetOption::NO_ARGUMENT, 'b'],
