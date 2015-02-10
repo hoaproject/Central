@@ -320,25 +320,25 @@ class Shared implements \Hoa\Core\Event\Listenable {
      * @throw  \Hoa\Worker\Backend\Exception
      * @return  bool
      */
-    public static function start ( $socket, $workerPath, array $fastcgiParameters = array() ) {
+    public static function start ( $socket, $workerPath, Array $fastcgiParameters = array() ) {
 
         $server = new \Hoa\Fastcgi\Responder(
             new \Hoa\Socket\Client($socket)
         );
 
-        $headers = [
+        $headers = array(
             'GATEWAY_INTERFACE' => 'FastCGI/1.0',
             'SERVER_PROTOCOL'   => 'HTTP/1.1',
             'REQUEST_URI'       => $workerPath,
             'SCRIPT_FILENAME'   => $workerPath,
             'SCRIPT_NAME'       => DS . dirname($workerPath)
-        ];
+        );
 
-        $fastcgiParameters = array_merge([
-            'REQUEST_METHOD'    => 'GET'
-        ], $fastcgiParameters);
+        $defaultFastcgiParameters = array(
+            'REQUEST_METHOD' => 'GET'
+        );
 
-        return $server->send(array_merge($fastcgiParameters, $headers));
+        return $server->send(array_merge($defaultFastcgiParameters, $fastcgiParameters, $headers));
     }
 
     /**
