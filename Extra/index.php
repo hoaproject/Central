@@ -16,7 +16,7 @@ $router
             static $_formats = array('tree', 'raw');
             static $_remotes = array('github', 'hoa');
 
-            $http   = new \Hoa\Http\Response\Response();
+            $http   = new Hoa\Http\Response\Response();
             $format = $_formats[0];
 
             if(isset($_SERVER['HTTP_REFERER'])) {
@@ -85,7 +85,7 @@ $router
                 if('Contributions' === $family) {
 
                     if(2 > count($tails))
-                        throw new \Hoa\Router\Exception\NotFound(
+                        throw new Hoa\Router\Exception\NotFound(
                             'Contribution name is incomplete.', 0);
 
                     $library = array_shift($tails) . '/' .
@@ -126,7 +126,7 @@ $router
                 elseif('Contributions' === $family) {
 
                     if(2 > count($tails))
-                        throw new \Hoa\Router\Exception\NotFound(
+                        throw new Hoa\Router\Exception\NotFound(
                             'Contribution name is incomplete.', 0);
 
                     $library = 'Contributions-' .
@@ -165,7 +165,7 @@ $router
         function ( $library, $_request ) {
 
             $Library = ucfirst(strtolower($library));
-            $http    = new \Hoa\Http\Response\Response();
+            $http    = new Hoa\Http\Response\Response();
 
             if(false === file_exists('hoa://Library/' . $Library)) {
 
@@ -174,7 +174,7 @@ $router
                 return;
             }
 
-            $status = \Hoa\Console\Processus::execute('hoa core:state ' . $library);
+            $status = Hoa\Console\Processus::execute('hoa devtools:state ' . $library);
 
             if(empty($status)) {
 
@@ -216,9 +216,9 @@ try {
 
     $dispatcher->dispatch($router);
 }
-catch ( \Hoa\Router\Exception\NotFound $e ) {
+catch ( Hoa\Router\Exception\NotFound $e ) {
 
-    $http = new \Hoa\Http\Response\Response();
+    $http = new Hoa\Http\Response\Response();
     $http->sendStatus($http::STATUS_NOT_FOUND);
     $http->sendHeader('Content-Type', 'text/plain');
 
@@ -247,8 +247,8 @@ catch ( \Hoa\Router\Exception\NotFound $e ) {
          '    * Use ?format to turn the image into text' . "\n" .
          '      GET /State/Core?format=raw' . "\n";
 }
-catch ( \Exception $e ) {
+catch ( Exception $e ) {
 
-    $http = new \Hoa\Http\Response\Response();
+    $http = new Hoa\Http\Response\Response();
     $http->sendStatus($http::STATUS_INTERNAL_SERVER_ERROR);
 }
