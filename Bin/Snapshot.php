@@ -37,6 +37,7 @@
 namespace Hoa\Devtools\Bin;
 
 use Hoa\Console;
+use Hoa\File;
 
 /**
  * Class \Hoa\Devtools\Bin\Snapshot.
@@ -56,9 +57,13 @@ class Snapshot extends Console\Dispatcher\Kit {
      * @var \Hoa\Devtools\Bin\Snapshot array
      */
     protected $options = [
-        ['break-bc', Console\GetOption::NO_ARGUMENT, 'b'],
-        ['help',     Console\GetOption::NO_ARGUMENT, 'h'],
-        ['help',     Console\GetOption::NO_ARGUMENT, '?']
+        ['only-changelog',      Console\GetOption::NO_ARGUMENT,       'c'],
+        ['only-tag',            Console\GetOption::NO_ARGUMENT,       't'],
+        ['only-github-release', Console\GetOption::NO_ARGUMENT,       'g'],
+        ['break-bc',            Console\GetOption::NO_ARGUMENT,       'b'],
+        ['minimum-tag',         Console\GetOption::REQUIRED_ARGUMENT, 'm'],
+        ['help',                Console\GetOption::NO_ARGUMENT,       'h'],
+        ['help',                Console\GetOption::NO_ARGUMENT,       '?']
     ];
 
 
@@ -71,7 +76,8 @@ class Snapshot extends Console\Dispatcher\Kit {
      */
     public function main ( ) {
 
-        $breakBC = false;
+        $breakBC    = false;
+        $minimumTag = null;
 
         while(false !== $c = $this->getOption($v)) switch($c) {
 
@@ -81,6 +87,10 @@ class Snapshot extends Console\Dispatcher\Kit {
 
             case 'b':
                 $breakBC = $v;
+              break;
+
+            case 'm':
+                $minimumTag = $v;
               break;
 
             case 'h':
@@ -116,7 +126,30 @@ class Snapshot extends Console\Dispatcher\Kit {
 
         $newTag = $currentMCN . '.' . date('y.m.d');
 
-        echo 'We are going to release this library together, by following ',
+        if(null === $minimumTag)
+            $tags = [$tags[0]];
+        else {
+
+            $toInt = function ( $tag ) {
+
+                list($x, $y, $m, $d) = explode('.', $tag);
+
+                return $x * 1000000 + $y * 10000 + $m * 100 + $d * 1;
+            };
+
+            $_tags = [];
+            $_minimumTag = $toInt($minimumTag);
+
+            foreach($tags as $tag)
+                if($toInt($tag) >= $_minimumTag)
+                    $_tags[] = $tag;
+
+            $tags = $_tags;
+        }
+
+        $changelog = '';
+
+        echo 'We are going to snapshot this library together, by following ',
              'these steps:', "\n",
              '  1. tests must pass,', "\n",
              '  2. updating the CHANGELOG.md file,', "\n",
@@ -155,13 +188,16 @@ class Snapshot extends Console\Dispatcher\Kit {
                 echo 'Tests must be green. Execute:', "\n",
                      '    $ hoa test:run -d Test', "\n",
                      'to run the tests.', "\n";
-                $this->readLine('Press Enter when it is green.');
+
+                $this->readLine('Press Enter when it is green (or Ctrl-C to abort).');
             }
         );
 
         $step(
             'updating the CHANGELOG.md file',
-            function ( ) use ( $tags, $repositoryRoot ) {
+            function ( ) use ( $tags, $newTag, $repositoryRoot, &$changelog ) {
+
+                array_unshift($tags, 'HEAD');
 
                 $changelog = null;
 
@@ -169,8 +205,12 @@ class Snapshot extends Console\Dispatcher\Kit {
 
                     $fromStep = $tags[$i];
                     $toStep   = $tags[$i + 1];
+                    $title    = $fromStep;
 
-                    $changelog .= '# ' . '`' . $fromStep . '`' . "\n\n" .
+                    if('HEAD' === $fromStep)
+                        $title = $newTag;
+
+                    $changelog .= '# ' . $title . "\n\n" .
                                   Console\Processus::execute(
                                       'git --git-dir=' . $repositoryRoot . '/.git ' .
                                           'log ' .
@@ -179,13 +219,42 @@ class Snapshot extends Console\Dispatcher\Kit {
                                               $fromStep . '...' . $toStep,
                                       false
                                   ) . "\n\n";
-
-                    if($max < $i + 2)
-                        $changelog .=  $toStep . "\n\n" .
-                                      '(first snapshot)';
                 }
 
-                echo $changelog;
+                $file = new File\ReadWrite(
+                    $repositoryRoot . DS . 'CHANGELOG.md',
+                    File::MODE_READ_WRITE
+                );
+                $file->rewind();
+
+                $temporary = new File\ReadWrite($repositoryRoot . DS . '._hoa.CHANGELOG.md');
+                $temporary->truncate(0);
+                $temporary->writeAll($changelog);
+                $temporary->close();
+
+                echo 'The CHANGELOG is ready.', "\n";
+                $this->readLine('Press Enter to check and edit the file (empty the file to abort).');
+
+                Console\Chrome\Editor::open($temporary->getStreamName());
+
+                $temporary->open();
+                $changelog = $temporary->readAll();
+
+                if(empty(trim($changelog))) {
+
+                    $temporary->delete();
+                    $temporary->close();
+
+                    exit;
+                }
+
+                $previous = $file->readAll();
+                $file->truncate(0);
+                $file->writeAll($changelog . $previous);
+
+                $temporary->delete();
+                $temporary->close();
+                $file->close();
 
                 return;
             }
@@ -193,10 +262,21 @@ class Snapshot extends Console\Dispatcher\Kit {
 
         $step(
             'commit the CHANGELOG.md file',
-            function ( ) {
+            function ( ) use ( $newTag, $repositoryRoot ) {
 
-                echo 'Great! Now commit the CHANGELOG.md file!', "\n";
-                $this->readLine('Press Enter when it is done.');
+                echo Console\Processus::execute(
+                    'git --git-dir=' . $repositoryRoot . '/.git ' .
+                        'add ' .
+                            '--verbose ' .
+                            'CHANGELOG.md'
+                );
+                echo Console\Processus::execute(
+                    'git --git-dir=' . $repositoryRoot . '/.git ' .
+                        'commit ' .
+                            '--verbose ' .
+                            '--message "Prepare ' . $newTag . '." ' .
+                            'CHANGELOG.md'
+                );
 
                 return;
             }
@@ -219,7 +299,12 @@ class Snapshot extends Console\Dispatcher\Kit {
                             echo 'The `extra.branch-alias.dev-master` value ',
                                  'must be set to `',
                                  $currentMCN, '.x-dev`', "\n";
-                            $this->readLine('Press Enter when it is done.');
+
+                            $this->readLine('Press Enter to edit the file.');
+
+                            Console\Chrome\Editor::open(
+                                $repository . DS . 'composer.json'
+                            );
                         }
                     );
 
@@ -230,7 +315,8 @@ class Snapshot extends Console\Dispatcher\Kit {
                             echo 'Some libraries may depend on this one. ',
                                  'Issues must be opened to update this ',
                                  'dependency.', "\n";
-                            $this->readLine('Press Enter when it is done.');
+
+                            $this->readLine('Press Enter when it is done (or Ctrl-C to abort).');
                         }
                     );
 
@@ -241,7 +327,12 @@ class Snapshot extends Console\Dispatcher\Kit {
                             echo 'The installation Section must invite the ',
                                  'user to install the version ',
                                  '`~', $currentMCN, '.0`.', "\n";
-                            $this->readLine('Press Enter when it is done.');
+
+                            $this->readLine('Press Enter when it is done (or Ctrl-C to abort).');
+
+                            Console\Chrome\Editor::open(
+                                $repository . DS . 'README.md'
+                            );
                         }
                     );
 
@@ -249,9 +340,19 @@ class Snapshot extends Console\Dispatcher\Kit {
                         'commit the composer.json and README.md files',
                         function ( ) use ( $currentMCN ) {
 
-                            echo 'Great! Now commit the composer.json and ',
-                                 'README.md files!', "\n";
-                            $this->readLine('Press Enter when it is done.');
+                            echo Console\Processus::execute(
+                                'git --git-dir=' . $repositoryRoot . '/.git ' .
+                                    'add ' .
+                                        '--verbose ' .
+                                        'composer.json README.md'
+                            );
+                            echo Console\Processus::execute(
+                                'git --git-dir=' . $repositoryRoot . '/.git ' .
+                                    'commit ' .
+                                        '--verbose ' .
+                                        '--message "Update because of the BC break." ' .
+                                        'composer.json README.md'
+                            );
                         }
                     );
                 }
@@ -337,15 +438,57 @@ class Snapshot extends Console\Dispatcher\Kit {
 
                 echo "\n", 'To push tag, execute:', "\n",
                      '    $ git push ', $matches[1], "\n";
-                $this->readLine('Press Enter when it is done.');
+
+                $this->readLine('Press Enter when it is done (or Ctrl-C to abort).');
             }
         );
 
         $step(
             'create a release on Github',
-            function ( ) {
+            function ( ) use ( $newTag, $changelog ) {
 
-                
+                $temporary = new File\ReadWrite(
+                    $repositoryRoot . DS . '._hoa.GithubRelease.md'
+                    File::MODE_READ_WRITE
+                );
+                $temporary->truncate(0);
+
+                if(!empty($changelog))
+                    $temporary->writeAll($changelog);
+
+                $temporary->close();
+
+                Console\Chrome\Editor::open($temporary->getStreamName());
+
+                $temporary->open();
+                $body = $temporary->readAll();
+                $ouput = json_encode([
+                    'tag_name' => $newTag,
+                    'body'     => $body
+                ]);
+
+                $username = $this->readLine('Username: ');
+                $password = $this->readPassword('Password: ');
+                $auth     = base64_encode($username . ':' . $password);
+
+                $context = stream_context_create([
+                    'http' => [
+                        'method'  => 'POST',
+                        'header'  => 'Host: api.github.com' . CRLF .
+                                     'User-Agent: Hoa\Devtools' . CRLF .
+                                     'Accept: application/json' . CRLF .
+                                     'Content-Type: application/json' . CRLF .
+                                     'Content-Length: ' . strlen($output) . CRLF .
+                                     'Authorization: Basic ' . $auth . CRLF,
+                        'content' => $output
+                    ]
+                ]);
+
+                echo file_get_contents(
+                    'https://api.github.com/repos/hoaproject/' . $libraryName . '/releases',
+                    false,
+                    $context
+                );
             }
         );
 
@@ -367,6 +510,11 @@ class Snapshot extends Console\Dispatcher\Kit {
              $this->makeUsageOptionsList([
                  'b'    => 'Whether we have break the backward compatibility ' .
                            'or not.',
+                 'c'    => 'Only do steps related to the CHANGELOG.md file.',
+                 't'    => 'Only do steps related to the tag.',
+                 'g'    => 'Only do steps related to Github release.',
+                 'm'    => 'Set the minimum tag (default: the latest, often ' .
+                           'useful with --only-changelog).',
                  'help' => 'This help.'
              ]), "\n";
 
