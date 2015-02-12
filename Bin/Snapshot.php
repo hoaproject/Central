@@ -78,11 +78,42 @@ class Snapshot extends Console\Dispatcher\Kit {
 
         $breakBC    = false;
         $minimumTag = null;
+        $doSteps    = [
+            // -1 and 1 mean true,
+            // 0 means false.
+            'test'      => -1,
+            'changelog' => -1,
+            'tag'       => -1,
+            'github'    => -1
+        ];
+
+        $onlyStep = function ( $step ) use ( &$doSteps ) {
+
+            $doSteps[$step] = 1;
+
+            foreach($doSteps as &$doStep)
+                if(-1 === $doStep)
+                    $doStep = 0;
+
+            return;
+        };
 
         while(false !== $c = $this->getOption($v)) switch($c) {
 
             case '__ambiguous':
                 $this->resolveOptionAmbiguity($v);
+              break;
+
+            case 'c':
+                $onlyStep('changelog');
+              break;
+
+            case 't':
+                $onlyStep('tag');
+              break;
+
+            case 'g':
+                $onlyStep('github');
               break;
 
             case 'b':
@@ -110,7 +141,7 @@ class Snapshot extends Console\Dispatcher\Kit {
                 '%s is not a valid Git repository.',
                 0, $repositoryRoot);
 
-        $tags = explode(
+        $allTags = $tags = explode(
             "\n",
             Console\Processus::execute(
                 'git --git-dir=' . $repositoryRoot . '/.git ' .
@@ -158,7 +189,7 @@ class Snapshot extends Console\Dispatcher\Kit {
              '  5. pushing the tag,', "\n",
              '  6. creating a release on Github.', "\n";
 
-        $step = function ( $message, $task ) {
+        $step = function ( $stepGroup, $message, $task ) use ( $doSteps ) {
 
             echo "\n\n";
             Console\Cursor::colorize('foreground(black) background(yellow)');
@@ -166,7 +197,10 @@ class Snapshot extends Console\Dispatcher\Kit {
             Console\Cursor::colorize('normal');
             echo "\n";
 
-            $answer = $this->readLine('Would you like to do this one: [yes/no] ');
+            if(0 === $doSteps[$stepGroup])
+                $answer = 'no';
+            else
+                $answer = $this->readLine('Would you like to do this one: [yes/no] ');
 
             if('yes' === $answer) {
 
@@ -182,6 +216,7 @@ class Snapshot extends Console\Dispatcher\Kit {
         };
 
         $step(
+            'test',
             'tests must pass',
             function ( ) {
 
@@ -194,6 +229,7 @@ class Snapshot extends Console\Dispatcher\Kit {
         );
 
         $step(
+            'changelog',
             'updating the CHANGELOG.md file',
             function ( ) use ( $tags, $newTag, $repositoryRoot, &$changelog ) {
 
@@ -221,10 +257,7 @@ class Snapshot extends Console\Dispatcher\Kit {
                                   ) . "\n\n";
                 }
 
-                $file = new File\ReadWrite(
-                    $repositoryRoot . DS . 'CHANGELOG.md',
-                    File::MODE_READ_WRITE
-                );
+                $file = new File\ReadWrite($repositoryRoot . DS . 'CHANGELOG.md');
                 $file->rewind();
 
                 $temporary = new File\ReadWrite($repositoryRoot . DS . '._hoa.CHANGELOG.md');
@@ -261,6 +294,7 @@ class Snapshot extends Console\Dispatcher\Kit {
         );
 
         $step(
+            'changelog',
             'commit the CHANGELOG.md file',
             function ( ) use ( $newTag, $repositoryRoot ) {
 
@@ -283,9 +317,10 @@ class Snapshot extends Console\Dispatcher\Kit {
         );
 
         $step(
+            'tag',
             'creating a tag',
             function ( ) use ( $breakBC, $step, $currentMCN, $repositoryRoot,
-                               $tags, $newTag ) {
+                               $tags, $newTag, $allTags ) {
 
                 if(true === $breakBC) {
 
@@ -293,6 +328,7 @@ class Snapshot extends Console\Dispatcher\Kit {
                          'few more steps are required:', "\n";
 
                     $step(
+                        'tag',
                         'update the composer.json file',
                         function ( ) use ( $currentMCN ) {
 
@@ -309,6 +345,7 @@ class Snapshot extends Console\Dispatcher\Kit {
                     );
 
                     $step(
+                        'tag',
                         'open issues to update parent dependencies',
                         function ( ) {
 
@@ -321,6 +358,7 @@ class Snapshot extends Console\Dispatcher\Kit {
                     );
 
                     $step(
+                        'tag',
                         'update the README.md file',
                         function ( ) use ( $currentMCN ) {
 
@@ -337,6 +375,7 @@ class Snapshot extends Console\Dispatcher\Kit {
                     );
 
                     $step(
+                        'tag',
                         'commit the composer.json and README.md files',
                         function ( ) use ( $currentMCN ) {
 
@@ -375,7 +414,7 @@ class Snapshot extends Console\Dispatcher\Kit {
                 }
 
                 echo 'Here is the list of tags:', "\n",
-                     '  * ', implode(',' . "\n" . '  * ', $tags), '.', "\n",
+                     '  * ', implode(',' . "\n" . '  * ', $allTags), '.', "\n",
                      'We are going to create the following tag: ',
                      $newTag, '.', "\n";
 
@@ -392,6 +431,7 @@ class Snapshot extends Console\Dispatcher\Kit {
         );
 
         $step(
+            'tag',
             'push the new snapshot',
             function ( ) use ( $repositoryRoot ) {
 
@@ -444,11 +484,12 @@ class Snapshot extends Console\Dispatcher\Kit {
         );
 
         $step(
+            'github',
             'create a release on Github',
             function ( ) use ( $newTag, $changelog ) {
 
                 $temporary = new File\ReadWrite(
-                    $repositoryRoot . DS . '._hoa.GithubRelease.md'
+                    $repositoryRoot . DS . '._hoa.GithubRelease.md',
                     File::MODE_READ_WRITE
                 );
                 $temporary->truncate(0);
