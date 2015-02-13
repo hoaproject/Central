@@ -251,7 +251,7 @@ class Snapshot extends Console\Dispatcher\Kit {
                                       'git --git-dir=' . $repositoryRoot . '/.git ' .
                                           'log ' .
                                               '--first-parent ' .
-                                              '--pretty="format:  * %h %s (%aN, %aI)" ' .
+                                              '--pretty="format:  * %s (%aN, %aI)" ' .
                                               $fromStep . '...' . $toStep,
                                       false
                                   ) . "\n\n";
