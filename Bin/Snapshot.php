@@ -141,6 +141,8 @@ class Snapshot extends Console\Dispatcher\Kit {
                 '%s is not a valid Git repository.',
                 0, $repositoryRoot);
 
+        date_default_timezone_set('UTC');
+
         $allTags = $tags = explode(
             "\n",
             Console\Processus::execute(
