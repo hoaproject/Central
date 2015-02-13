@@ -72,6 +72,8 @@ $ hoa devtools:requiresnapshot console
 A snapshot is required, since … days (tag …, … commits to publish)!
 ```
 
+If yes, you are probably likely to use `hoa devtools:snapshot`.
+
 ### `state`
 
 Get the state of a library.
