@@ -479,7 +479,8 @@ class Snapshot extends Console\Dispatcher\Kit {
                 }
 
                 echo "\n", 'To push tag, execute:', "\n",
-                     '    $ git push ', $matches[1], "\n";
+                     '    $ git push ', $matches[1], "\n",
+                     '    $ git push ', $matches[1], ' --tags', "\n";
 
                 $this->readLine('Press Enter when it is done (or Ctrl-C to abort).');
             }
@@ -488,12 +489,9 @@ class Snapshot extends Console\Dispatcher\Kit {
         $step(
             'github',
             'create a release on Github',
-            function ( ) use ( $newTag, $changelog ) {
+            function ( ) use ( $newTag, $changelog, $repositoryRoot ) {
 
-                $temporary = new File\ReadWrite(
-                    $repositoryRoot . DS . '._hoa.GithubRelease.md',
-                    File::MODE_READ_WRITE
-                );
+                $temporary = new File\ReadWrite($repositoryRoot . DS . '._hoa.GithubRelease.md');
                 $temporary->truncate(0);
 
                 if(!empty($changelog))
@@ -504,8 +502,13 @@ class Snapshot extends Console\Dispatcher\Kit {
                 Console\Chrome\Editor::open($temporary->getStreamName());
 
                 $temporary->open();
+                $temporary->rewind();
                 $body = $temporary->readAll();
-                $ouput = json_encode([
+
+                $composer = json_decode(file_get_contents('composer.json'));
+                list(, $libraryName) = explode('/', $composer->name);
+
+                $output = json_encode([
                     'tag_name' => $newTag,
                     'body'     => $body
                 ]);
