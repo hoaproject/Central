@@ -504,6 +504,7 @@ class Snapshot extends Console\Dispatcher\Kit {
                 $temporary->open();
                 $temporary->rewind();
                 $body = $temporary->readAll();
+                $temporary->delete();
 
                 $composer = json_decode(file_get_contents('composer.json'));
                 list(, $libraryName) = explode('/', $composer->name);
