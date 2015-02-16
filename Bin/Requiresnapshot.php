@@ -74,7 +74,6 @@ class Requiresnapshot extends Console\Dispatcher\Kit {
      */
     public function main ( ) {
 
-        $library       = null;
         $verbose       = Console::isDirect(STDOUT);
         $printSnapshot = false;
         $printDays     = false;
@@ -109,21 +108,18 @@ class Requiresnapshot extends Console\Dispatcher\Kit {
               break;
         }
 
-        $this->parser->listInputs($library);
+        $this->parser->listInputs($repositoryRoot);
 
-        if(empty($library))
+        if(empty($repositoryRoot))
             return $this->usage();
 
-        $library = ucfirst(strtolower($library));
-        $path    = resolve('hoa://Library/' . $library);
-
-        if(false === file_exists($path))
+        if(false === file_exists($repositoryRoot . DS . '.git'))
             throw new Console\Exception(
-                'The %s library does not exist.',
-                0, $library);
+                '%s is not a valid Git repository.',
+                0, $repositoryRoot);
 
         $tag = Console\Processus::execute(
-            'git --git-dir=' . $path . '/.git ' .
+            'git --git-dir=' . $repositoryRoot . '/.git ' .
                 'describe --abbrev=0 --tags origin/master'
         );
 
@@ -150,7 +146,7 @@ class Requiresnapshot extends Console\Dispatcher\Kit {
 
             $numberOfDays    = (int) $nextSnapshotDT->diff($today)->format('%a');
             $numberOfCommits = (int) Console\Processus::execute(
-                'git --git-dir=' . $path . '/.git ' .
+                'git --git-dir=' . $repositoryRoot . '/.git ' .
                     'rev-list ' . $tag . '..origin/master --count'
             );
             $needNewSnapshot = 0 < $numberOfCommits;
@@ -196,7 +192,7 @@ class Requiresnapshot extends Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        echo 'Usage   : devtools:requiresnapshot <options> library', "\n",
+        echo 'Usage   : devtools:requiresnapshot <options> repository-root', "\n",
              'Options :', "\n",
              $this->makeUsageOptionsList([
                  'V'    => 'No-verbose, i.e. be as quiet as possible, just ' .
