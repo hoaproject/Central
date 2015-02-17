@@ -1,3 +1,8 @@
+# 0.15.02.17
+
+  * Add the CHANGELOG.md file. (Ivan Enderlin, 2015-02-17T09:26:47+01:00)
+  * Happy new year! (Ivan Enderlin, 2015-01-05T14:19:30+01:00)
+
 # 0.14.12.10
 
   * Move to PSR-4. (Ivan Enderlin, 2014-12-09T13:39:53+01:00)
