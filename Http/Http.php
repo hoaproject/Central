@@ -99,13 +99,13 @@ class Http extends Router\Generic implements Core\Parameter\Parameterizable {
      * @var \Hoa\Router\Http array
      */
     protected static $_methods  = [
-        'get',
-        'post',
-        'put',
-        'patch',
         'delete',
+        'get',
         'head',
-        'options'
+        'options',
+        'patch',
+        'post',
+        'put'
     ];
 
     /**
