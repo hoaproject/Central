@@ -219,7 +219,7 @@ class Http extends Router\Generic implements Core\Parameter\Parameterizable {
 
             $method = strtolower($method);
         });
-        $diff = array_diff($methods, self::$_methods);
+        $diff = array_diff($methods, static::$_methods);
 
         if(!empty($diff))
             throw new Router\Exception(
@@ -227,7 +227,7 @@ class Http extends Router\Generic implements Core\Parameter\Parameterizable {
                     ? 'Method %s is'
                     : 'Methods %s are') .
                 ' invalid for the rule %s (valid methods are: %s).',
-                1, [implode(', ', $diff), $id, implode(', ', self::$_methods)]);
+                1, [implode(', ', $diff), $id, implode(', ', static::$_methods)]);
 
         if(   _static == $this->_subdomainStack
            && false   != strpos($pattern, '@'))
