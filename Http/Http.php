@@ -95,17 +95,22 @@ class Http extends Router\Generic implements Core\Parameter\Parameterizable {
 
     /**
      * HTTP methods that the router understand.
+     * Must map http://www.iana.org/assignments/http-methods/http-methods.xhtml.
      *
      * @var \Hoa\Router\Http array
      */
     protected static $_methods  = [
+        'connect',
         'delete',
         'get',
         'head',
+        'link',
         'options',
         'patch',
         'post',
-        'put'
+        'put',
+        'trace',
+        'unlink'
     ];
 
     /**
