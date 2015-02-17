@@ -1,3 +1,9 @@
+# 2.15.02.17
+
+  * Add the CHANGELOG.md file. (Ivan Enderlin, 2015-02-17T09:33:56+01:00)
+  * Update schemas in the documentation. (Ivan Enderlin, 2015-01-23T19:23:04+01:00)
+  * Happy new year! (Ivan Enderlin, 2015-01-05T14:20:42+01:00)
+
 # 2.14.12.10
 
   * Move to PSR-4. (Ivan Enderlin, 2014-12-09T13:40:43+01:00)
@@ -10,7 +16,7 @@
 
 # 2.14.11.09
 
-  * Use `hoa/iteratoar` `~1.0`. (Ivan Enderlin, 2014-11-09T10:58:53+01:00)
+  * Use `hoa/iterator` `~1.0`. (Ivan Enderlin, 2014-11-09T10:58:53+01:00)
   * Move test into `Hoa\Json`. (Ivan Enderlin, 2014-10-04T12:14:45+02:00)
   * `Hoa\Json` has been released. (Ivan Enderlin, 2014-10-03T22:23:12+02:00)
   * Add the `getCompiler` method. (Ivan Enderlin, 2014-09-29T09:52:51+02:00)
