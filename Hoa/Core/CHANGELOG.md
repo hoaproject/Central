@@ -1,3 +1,8 @@
+# 2.15.02.18
+
+  * Allows third-parties to easily extend `hoa://`. (Ivan Enderlin, 2015-02-18T17:18:09+01:00)
+  * Add the CHANGELOG.md file. (Ivan Enderlin, 2015-02-18T09:16:30+01:00)
+
 # 2.15.01.24
 
   * Fix a bug. (Ivan Enderlin, 2015-01-23T18:52:18+01:00)

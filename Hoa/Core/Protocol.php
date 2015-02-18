@@ -735,7 +735,7 @@ class Wrapper {
      */
     public function stream_open ( $path, $mode, $options, &$openedPath ) {
 
-        $path = self::realPath($path, 'r' === $mode[0]);
+        $path = static::realPath($path, 'r' === $mode[0]);
 
         if(Protocol::NO_RESOLUTION === $path)
             return false;
@@ -873,7 +873,7 @@ class Wrapper {
      */
     public function dir_opendir ( $path, $options ) {
 
-        $path   = self::realPath($path);
+        $path   = static::realPath($path);
         $handle = null;
 
         if(null === $this->context)
@@ -931,13 +931,13 @@ class Wrapper {
 
         if(null === $this->context)
             return mkdir(
-                self::realPath($path, false),
+                static::realPath($path, false),
                 $mode,
                 $options | STREAM_MKDIR_RECURSIVE
             );
 
         return mkdir(
-            self::realPath($path, false),
+            static::realPath($path, false),
             $mode,
             $options | STREAM_MKDIR_RECURSIVE,
             $this->context
@@ -957,11 +957,11 @@ class Wrapper {
     public function rename ( $from, $to ) {
 
         if(null === $this->context)
-            return rename(self::realPath($from), self::realPath($to, false));
+            return rename(static::realPath($from), static::realPath($to, false));
 
         return rename(
-            self::realPath($from),
-            self::realPath($to, false),
+            static::realPath($from),
+            static::realPath($to, false),
             $this->context
         );
     }
@@ -979,9 +979,9 @@ class Wrapper {
     public function rmdir ( $path, $options ) {
 
         if(null === $this->context)
-            return rmdir(self::realPath($path));
+            return rmdir(static::realPath($path));
 
-        return rmdir(self::realPath($path), $this->context);
+        return rmdir(static::realPath($path), $this->context);
     }
 
     /**
@@ -995,9 +995,9 @@ class Wrapper {
     public function unlink ( $path ) {
 
         if(null === $this->context)
-            return unlink(self::realPath($path));
+            return unlink(static::realPath($path));
 
-        return unlink(self::realPath($path), $this->context);
+        return unlink(static::realPath($path), $this->context);
     }
 
     /**
@@ -1027,7 +1027,7 @@ class Wrapper {
      */
     public function url_stat ( $path, $flags ) {
 
-        $path = self::realPath($path);
+        $path = static::realPath($path);
 
         if(Protocol::NO_RESOLUTION === $path)
             if($flags & STREAM_URL_STAT_QUIET)
