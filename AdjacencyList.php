@@ -34,28 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Graph
- */
--> import('Graph.~')
-
-/**
- * \Hoa\Graph\Exception
- */
--> import('Graph.Exception')
-
-/**
- * \Hoa\Graph\IGraph\Node
- */
--> import('Graph.I~.Node');
-
-}
-
-namespace Hoa\Graph {
+namespace Hoa\Graph;
 
 /**
  * Class \Hoa\Graph\AdjacencyList.
@@ -108,7 +87,7 @@ class AdjacencyList extends Graph {
     public static function getInstance ( $type = parent::TYPE_ADJACENCYLIST ) {
 
         throw new Exception(
-            'Cannot get a new from a typped graph.', 0);
+            'Cannot get a new from a typed graph.', 0);
     }
 
     /**
@@ -121,10 +100,10 @@ class AdjacencyList extends Graph {
      * @throw   \Hoa\Graph\Exception
      */
     public function addNode ( IGraph\Node $node,
-                              $parent = array() ) {
+                              $parent = [] ) {
 
         if(!is_array($parent))
-            $parent = array($parent);
+            $parent = [$parent];
 
         if(parent::DISALLOW_LOOP === $this->isLoopAllow()) {
 
@@ -141,7 +120,7 @@ class AdjacencyList extends Graph {
         $this->nodes[$node->getNodeId()][self::NODE_VALUE] = $node;
 
         if(!isset($this->nodes[$node->getNodeId()][self::NODE_CHILD]))
-            $this->nodes[$node->getNodeId()][self::NODE_CHILD] = array();
+            $this->nodes[$node->getNodeId()][self::NODE_CHILD] = [];
 
         foreach($parent as $foo => $nodeId) {
 
@@ -210,7 +189,7 @@ class AdjacencyList extends Graph {
                 'Node %s does not exist.', 5, $nodeId);
 
         $parent = new \ArrayObject(
-            array(), \ArrayObject::ARRAY_AS_PROPS, 'ArrayIterator');
+            [], \ArrayObject::ARRAY_AS_PROPS, 'ArrayIterator');
 
         foreach($this->getNodes() as $id => $values ) {
 
@@ -246,7 +225,7 @@ class AdjacencyList extends Graph {
                 'Node %s does not exist.', 6, $nodeId);
 
         $child = new \ArrayObject(
-            array(), \ArrayObject::ARRAY_AS_PROPS, 'ArrayIterator');
+            [], \ArrayObject::ARRAY_AS_PROPS, 'ArrayIterator');
 
         foreach($this->nodes[$nodeId][self::NODE_CHILD] as $foo => $id)
             $child->offsetSet(
@@ -358,6 +337,4 @@ class AdjacencyList extends Graph {
 
         return $out;
     }
-}
-
 }

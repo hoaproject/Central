@@ -34,18 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Graph\IGraph\Node
- */
--> import('Graph.I~.Node');
-
-}
-
-namespace Hoa\Graph {
+namespace Hoa\Graph;
 
 /**
  * Class \Hoa\Graph\SimpleNode.
@@ -140,6 +129,4 @@ class SimpleNode implements IGraph\Node {
 
         return $this->nodeValue;
     }
-}
-
 }

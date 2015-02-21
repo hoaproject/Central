@@ -34,18 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Graph;
 
-from('Hoa')
-
-/**
- * \Hoa\Graph\Exception
- */
--> import('Graph.Exception');
-
-}
-
-namespace Hoa\Graph {
+use Hoa\Core;
 
 /**
  * Class \Hoa\Graph.
@@ -102,7 +93,7 @@ abstract class Graph {
      *
      * @var \Hoa\Graph array
      */
-    protected $nodes = array();
+    protected $nodes = [];
 
     /**
      * If allow loop when building graph, it is set to ALLOW_LOOP (true),
@@ -156,8 +147,8 @@ abstract class Graph {
      * @return  void
      * @throw   \Hoa\Graph\Exception
      */
-    abstract public function addNode ( \Hoa\Graph\IGraph\Node $node,
-                                       $parent = array() );
+    abstract public function addNode ( IGraph\Node $node,
+                                       $parent = [] );
 
     /**
      * Check if a node does already exist or not.
@@ -275,13 +266,8 @@ abstract class Graph {
     abstract public function __toString ( );
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Graph\Graph');
+Core\Consistency::flexEntity('Hoa\Graph\Graph');
 
-}
