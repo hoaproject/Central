@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Graph\IGraph {
+namespace Hoa\Graph\IGraph;
 
 /**
  * Interface \Hoa\Graph\IGraph\Node.
@@ -55,6 +55,4 @@ interface Node {
      * @return  mixed
      */
     public function getNodeId ( );
-}
-
 }
