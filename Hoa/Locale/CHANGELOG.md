@@ -1,3 +1,9 @@
+# 1.15.02.23
+
+  * Add the `CHANGELOG.md` file. (Ivan Enderlin, 2015-02-23T09:12:34+01:00)
+  * Happy new year! (Ivan Enderlin, 2015-01-05T15:02:25+01:00)
+  * Being able to set a new localizer. (Ivan Enderlin, 2014-12-12T18:33:52+01:00)
+
 # 1.14.12.10
 
   * Move to PSR-4. (Ivan Enderlin, 2014-12-09T13:55:45+01:00)
