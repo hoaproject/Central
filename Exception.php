@@ -34,7 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Graph {
+namespace Hoa\Graph;
+
+use Hoa\Core;
 
 /**
  * Class \Hoa\Graph\Exception.
@@ -46,6 +48,4 @@ namespace Hoa\Graph {
  * @license    New BSD License
  */
 
-class Exception extends \Hoa\Core\Exception { }
-
-}
+class Exception extends Core\Exception { }
