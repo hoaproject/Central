@@ -272,4 +272,3 @@ abstract class Graph {
  * Flex entity.
  */
 Core\Consistency::flexEntity('Hoa\Graph\Graph');
-
