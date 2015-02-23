@@ -124,6 +124,8 @@ abstract class Graph {
     protected function __construct ( $loop = self::DISALLOW_LOOP ) {
 
         $this->allowLoop($loop);
+
+        return;
     }
 
     /**

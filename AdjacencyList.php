@@ -95,6 +95,8 @@ class AdjacencyList extends Graph {
     public function __construct ( $loop = parent::DISALLOW_LOOP ) {
 
         parent::__construct($loop);
+
+        return;
     }
 
     /**

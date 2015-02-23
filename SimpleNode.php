@@ -64,7 +64,7 @@ class SimpleNode implements IGraph\Node {
      *
      * @var \Hoa\Graph\SimpleNode string
      */
-    protected $nodeId = null;
+    protected $nodeId    = null;
 
     /**
      * Node value.
@@ -87,6 +87,8 @@ class SimpleNode implements IGraph\Node {
 
         $this->setNodeId($nodeId);
         $this->setNodeValue($nodeValue);
+
+        return;
     }
 
     /**
