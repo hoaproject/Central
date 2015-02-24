@@ -1,3 +1,10 @@
+# 2.15.02.24
+
+  * Add the `CHANGELOG.md` file. (Ivan Enderlin, 2015-02-24T09:26:54+01:00)
+  * Update links in the documentation. (Ivan Enderlin, 2015-01-23T19:26:04+01:00)
+  * Update `Mime.types` with new MIME types (Linus Metzler, 2015-01-19T11:38:14+01:00)
+  * Happy new year! (Ivan Enderlin, 2015-01-05T14:42:39+01:00)
+
 # 2.14.12.10
 
   * Move to PSR-4. (Ivan Enderlin, 2014-12-09T13:57:52+01:00)
