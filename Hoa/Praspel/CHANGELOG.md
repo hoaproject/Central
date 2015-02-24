@@ -1,5 +1,6 @@
 # 0.15.02.24
 
+  * Add the `CHANGELOG.md` file. (Ivan Enderlin, 2015-02-24T09:36:29+01:00)
   * Happy new year! (Ivan Enderlin, 2015-01-05T14:44:27+01:00)
 
 # 0.14.12.10
