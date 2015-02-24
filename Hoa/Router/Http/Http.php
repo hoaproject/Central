@@ -34,9 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Router;
+namespace Hoa\Router\Http;
 
 use Hoa\Core;
+use Hoa\Router;
 
 /**
  * Class \Hoa\Router\Http.
@@ -48,7 +49,7 @@ use Hoa\Core;
  * @license    New BSD License
  */
 
-class Http extends Generic implements Core\Parameter\Parameterizable {
+class Http extends Router\Generic implements Core\Parameter\Parameterizable {
 
     /**
      * Secure connection.
@@ -94,17 +95,22 @@ class Http extends Generic implements Core\Parameter\Parameterizable {
 
     /**
      * HTTP methods that the router understand.
+     * Must map http://www.iana.org/assignments/http-methods/http-methods.xhtml.
      *
      * @var \Hoa\Router\Http array
      */
     protected static $_methods  = [
+        'connect',
+        'delete',
         'get',
+        'head',
+        'link',
+        'options',
+        'patch',
         'post',
         'put',
-        'patch',
-        'delete',
-        'head',
-        'options'
+        'trace',
+        'unlink'
     ];
 
     /**
@@ -211,22 +217,22 @@ class Http extends Generic implements Core\Parameter\Parameterizable {
                                   $call, $able, Array $variables ) {
 
         if(true === $this->ruleExists($id))
-            throw new Exception(
+            throw new Router\Exception(
                 'Cannot add rule %s because it already exists.', 0, $id);
 
         array_walk($methods, function ( &$method ) {
 
             $method = strtolower($method);
         });
-        $diff = array_diff($methods, self::$_methods);
+        $diff = array_diff($methods, static::$_methods);
 
         if(!empty($diff))
-            throw new Exception(
+            throw new Router\Exception(
                 (1 == count($diff)
                     ? 'Method %s is'
                     : 'Methods %s are') .
                 ' invalid for the rule %s (valid methods are: %s).',
-                1, [implode(', ', $diff), $id, implode(', ', self::$_methods)]);
+                1, [implode(', ', $diff), $id, implode(', ', static::$_methods)]);
 
         if(   _static == $this->_subdomainStack
            && false   != strpos($pattern, '@'))
@@ -283,7 +289,7 @@ class Http extends Generic implements Core\Parameter\Parameterizable {
             $prefix = ltrim($prefix, '/');
 
             if(0 === preg_match('#^' . $prefix . '(.*)?$#', $uri, $matches))
-                throw new Exception\NotFound(
+                throw new Router\Exception\NotFound(
                     'Cannot match the path prefix %s in the URI %s.',
                     3, [$prefix, $uri]);
 
@@ -332,7 +338,7 @@ class Http extends Generic implements Core\Parameter\Parameterizable {
         );
 
         if(empty($rules))
-            throw new Exception\NotFound(
+            throw new Router\Exception\NotFound(
                 'No rule to apply to route %s.', 4, $uri);
 
         $gotcha = false;
@@ -354,7 +360,7 @@ class Http extends Generic implements Core\Parameter\Parameterizable {
         }
 
         if(false === $gotcha)
-            throw new Exception\NotFound(
+            throw new Router\Exception\NotFound(
                 'Cannot found an appropriated rule to route %s.', 5, $uri);
 
         if(false !== $pos)
@@ -470,7 +476,7 @@ class Http extends Generic implements Core\Parameter\Parameterizable {
            && null !== $variables['_subdomain']) {
 
             if(empty($variables['_subdomain']))
-                throw new Exception(
+                throw new Router\Exception(
                     'Subdomain is empty, cannot unroute the rule %s properly.',
                     6, $id);
 
@@ -579,7 +585,7 @@ class Http extends Generic implements Core\Parameter\Parameterizable {
                     if(true === $allowEmpty)
                         return '';
                     else
-                        throw new Exception(
+                        throw new Router\Exception(
                             'Variable %s is empty and it is not allowed when ' .
                             'unrouting rule %s.',
                             7, [$m, $id]);
@@ -656,7 +662,7 @@ class Http extends Generic implements Core\Parameter\Parameterizable {
             return ltrim(@$_SERVER['argv'][1] ?: '', '/');
 
         if(!isset($_SERVER['REQUEST_URI']))
-            throw new Exception(
+            throw new Router\Exception(
                 'Cannot find URI so we cannot route.', 8);
 
         $uri = ltrim(urldecode($_SERVER['REQUEST_URI']), '/');
@@ -679,7 +685,7 @@ class Http extends Generic implements Core\Parameter\Parameterizable {
             return [];
 
         if(!isset($_SERVER['REQUEST_URI']))
-            throw new Exception(
+            throw new Router\Exception(
                 'Cannot find URI so we cannot get query.', 9);
 
         $uri = $_SERVER['REQUEST_URI'];
@@ -944,3 +950,8 @@ class Http extends Generic implements Core\Parameter\Parameterizable {
                    : static::UNSECURE;
     }
 }
+
+/**
+ * Flex entity.
+ */
+Core\Consistency::flexEntity('Hoa\Router\Http\Http');
