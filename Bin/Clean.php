@@ -56,12 +56,12 @@ class Clean extends Console\Dispatcher\Kit {
      *
      * @var \Hoa\Test\Bin\Clean array
      */
-    protected $options = array(
-        array('all',       Console\GetOption::NO_ARGUMENT,       'a'),
-        array('libraries', Console\GetOption::REQUIRED_ARGUMENT, 'l'),
-        array('help',      Console\GetOption::NO_ARGUMENT,       'h'),
-        array('help',      Console\GetOption::NO_ARGUMENT,       '?')
-    );
+    protected $options = [
+        ['all',       Console\GetOption::NO_ARGUMENT,       'a'],
+        ['libraries', Console\GetOption::REQUIRED_ARGUMENT, 'l'],
+        ['help',      Console\GetOption::NO_ARGUMENT,       'h'],
+        ['help',      Console\GetOption::NO_ARGUMENT,       '?']
+    ];
 
 
 
@@ -73,7 +73,7 @@ class Clean extends Console\Dispatcher\Kit {
      */
     public function main ( ) {
 
-        $libraries = array();
+        $libraries = [];
 
         while(false !== $c = $this->getOption($v)) switch($c) {
 
@@ -172,11 +172,11 @@ class Clean extends Console\Dispatcher\Kit {
 
         echo 'Usage   : test:clean <options>', "\n",
              'Options :', "\n",
-             $this->makeUsageOptionsList(array(
+             $this->makeUsageOptionsList([
                  'a'    => 'Clean all generated tests of all libraries.',
                  'l'    => 'Clean all generated tests of some libraries.',
                  'help' => 'This help.'
-             )), "\n";
+             ]), "\n";
 
         return;
     }

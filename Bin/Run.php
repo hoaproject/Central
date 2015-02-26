@@ -56,16 +56,16 @@ class Run extends Console\Dispatcher\Kit {
      *
      * @var \Hoa\Test\Bin\Run array
      */
-    protected $options = array(
-        array('all',         Console\GetOption::NO_ARGUMENT,       'a'),
-        array('libraries',   Console\GetOption::REQUIRED_ARGUMENT, 'l'),
-        array('namespaces',  Console\GetOption::REQUIRED_ARGUMENT, 'n'),
-        array('directories', Console\GetOption::REQUIRED_ARGUMENT, 'd'),
-        array('files',       Console\GetOption::REQUIRED_ARGUMENT, 'f'),
-        array('debug',       Console\GetOption::NO_ARGUMENT,       'D'),
-        array('help',        Console\GetOption::NO_ARGUMENT,       'h'),
-        array('help',        Console\GetOption::NO_ARGUMENT,       '?')
-    );
+    protected $options = [
+        ['all',         Console\GetOption::NO_ARGUMENT,       'a'],
+        ['libraries',   Console\GetOption::REQUIRED_ARGUMENT, 'l'],
+        ['namespaces',  Console\GetOption::REQUIRED_ARGUMENT, 'n'],
+        ['directories', Console\GetOption::REQUIRED_ARGUMENT, 'd'],
+        ['files',       Console\GetOption::REQUIRED_ARGUMENT, 'f'],
+        ['debug',       Console\GetOption::NO_ARGUMENT,       'D'],
+        ['help',        Console\GetOption::NO_ARGUMENT,       'h'],
+        ['help',        Console\GetOption::NO_ARGUMENT,       '?']
+    ];
 
 
 
@@ -77,9 +77,9 @@ class Run extends Console\Dispatcher\Kit {
      */
     public function main ( ) {
 
-        $directories = array();
-        $files       = array();
-        $namespaces  = array();
+        $directories = [];
+        $files       = [];
+        $namespaces  = [];
         $debug       = false;
 
         while(false !== $c = $this->getOption($v)) switch($c) {
@@ -256,7 +256,7 @@ class Run extends Console\Dispatcher\Kit {
 
         echo 'Usage   : test:run <options>', "\n",
              'Options :', "\n",
-             $this->makeUsageOptionsList(array(
+             $this->makeUsageOptionsList([
                  'a'    => 'Run tests of all libraries.',
                  'l'    => 'Run tests of some libraries.',
                  'n'    => 'Run tests of some namespaces.',
@@ -264,7 +264,7 @@ class Run extends Console\Dispatcher\Kit {
                  'f'    => 'Run tests of some files.',
                  'D'    => 'Activate the debugging mode.',
                  'help' => 'This help.'
-             )), "\n";
+             ]), "\n";
 
         return;
     }
