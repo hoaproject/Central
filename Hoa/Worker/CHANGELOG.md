@@ -1,7 +1,7 @@
 # 2.15.02.26
 
   * Add the `CHANGELOG.md` file. (Ivan Enderlin, 2015-02-26T08:40:10+01:00)
-  * FastCGI parameters can be passed to the worker. (Ivan Enderlin, 2015-02-16T09:26:20+01:00)
+  * FastCGI parameters can be passed to the worker. (Pierre Tomasina, 2015-02-16T09:26:20+01:00)
   * Update links in the documentation. (Ivan Enderlin, 2015-01-23T19:28:27+01:00)
   * Happy new year! (Ivan Enderlin, 2015-01-05T14:57:55+01:00)
 
