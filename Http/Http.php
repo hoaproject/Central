@@ -271,14 +271,12 @@ class Http extends Router\Generic implements Core\Parameter\Parameterizable {
         }
         else {
 
-            $uri = urldecode($uri);
-
             if(false !== $pos = strpos($uri, '@'))
                 list($subdomain, $uri) = explode('@', $uri, 2);
             else
                 $subdomain             = $this->getSubdomain();
 
-            $uri = ltrim($uri, '/');
+            $uri = ltrim(urldecode($uri), '/');
         }
 
         if(null === $prefix)
