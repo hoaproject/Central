@@ -61,13 +61,13 @@ class Generate extends Console\Dispatcher\Kit {
      *
      * @var \Hoa\Test\Bin\Generate array
      */
-    protected $options = array(
-        array('namespaces', Console\GetOption::REQUIRED_ARGUMENT, 'n'),
-        array('classes',    Console\GetOption::REQUIRED_ARGUMENT, 'c'),
-        array('dry-run',    Console\GetOption::NO_ARGUMENT,       'd'),
-        array('help',       Console\GetOption::NO_ARGUMENT,       'h'),
-        array('help',       Console\GetOption::NO_ARGUMENT,       '?')
-    );
+    protected $options = [
+        ['namespaces', Console\GetOption::REQUIRED_ARGUMENT, 'n'],
+        ['classes',    Console\GetOption::REQUIRED_ARGUMENT, 'c'],
+        ['dry-run',    Console\GetOption::NO_ARGUMENT,       'd'],
+        ['help',       Console\GetOption::NO_ARGUMENT,       'h'],
+        ['help',       Console\GetOption::NO_ARGUMENT,       '?']
+    ];
 
 
 
@@ -80,7 +80,7 @@ class Generate extends Console\Dispatcher\Kit {
     public function main ( ) {
 
         $dryRun  = false;
-        $classes = array();
+        $classes = [];
 
         while(false !== $c = $this->getOption($v)) switch($c) {
 
@@ -288,13 +288,13 @@ class Generate extends Console\Dispatcher\Kit {
 
         echo 'Usage   : test:generate <options>', "\n",
              'Options :', "\n",
-             $this->makeUsageOptionsList(array(
+             $this->makeUsageOptionsList([
                  'n'    => 'Generate tests of some namespaces.',
                  'c'    => 'Generate tests of some classes.',
                  'd'    => 'Generate tests but output them instead of save ' .
                            'them.',
                  'help' => 'This help.'
-             )), "\n";
+             ]), "\n";
 
         return;
     }
@@ -325,7 +325,7 @@ class Generate extends Console\Dispatcher\Kit {
      */
     protected static function findClasses ( $root, $namespace ) {
 
-        $out    = array();
+        $out    = [];
         $finder = new File\Finder();
         $finder->in($root)
                ->files()
