@@ -706,6 +706,59 @@ class Wrapper {
     }
 
     /**
+     * Change stream options.
+     * This method is called to set metadata on the stream. It is called when
+     * one of the following functions is called on a stream URL: touch, chmod,
+     * chown or chgrp.
+     *
+     * @access  public
+     * @param   string    $path      The file path or URL to set metadata.
+     * @param   int       $option    One of the following constant:
+     *                                 * STREAM_META_TOUCH,
+     *                                 * STREAM_META_OWNER_NAME,
+     *                                 * STREAM_META_OWNER,
+     *                                 * STREAM_META_GROUP_NAME,
+     *                                 * STREAM_META_GROUP,
+     *                                 * STREAM_META_ACCESS.
+     * @param   mixed     $values    Arguments of touch, chmod, chown and chgrp.
+     * @return  bool
+     */
+    public function stream_metadata ( $path, $option, $values ) {
+
+        $path = static::realPath($path, false);
+
+        switch($option) {
+
+            case STREAM_META_TOUCH:
+                $arity = count($values);
+
+                if(0 === $arity)
+                    $out = touch($path);
+                elseif(1 === $arity)
+                    $out = touch($path, $values[0]);
+                else
+                    $out = touch($path, $values[0], $values[1]);
+              break;
+
+            case STREAM_META_OWNER_NAME:
+            case STREAM_META_OWNER:
+                $out = chown($path, $values);
+              break;
+
+            case STREAM_META_GROUP_NAME:
+            case STREAM_META_GROUP:
+                $out = chgrp($path, $values);
+              break;
+
+            case STREAM_META_ACCESS:
+                $out = chmod($path, $values);
+              break;
+        }
+
+        return $out;
+    }
+
+    /**
      * Open file or URL.
      * This method is called immediately after the wrapper is initialized (f.e.
      * by fopen() and file_get_contents()).
