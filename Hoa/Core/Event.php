@@ -338,17 +338,6 @@ class Event {
                 'Event ID %s does not exist, cannot send notification.',
                 3, $eventId);
 
-        $sourceRef = self::$_register[$eventId][1];
-
-        if(!($source instanceof $sourceRef))
-            throw new Core\Exception(
-                'Source cannot create a notification because it\'s the ' .
-                'source or source\'s child (source reference: %s, given %s.',
-                4, [
-                    is_object($sourceRef) ? get_class($sourceRef) : $sourceRef,
-                    get_class($source)
-                ]);
-
         $data->setSource($source);
         $event = self::getEvent($eventId);
 
