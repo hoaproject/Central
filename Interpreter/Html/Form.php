@@ -54,11 +54,6 @@ from('Hoa')
 -> import('Http.Runtime')
 
 /**
- * \Hoa\File\Read
- */
--> import('File.Read')
-
-/**
  * \Hoa\Praspel
  */
 -> import('Praspel.~');
