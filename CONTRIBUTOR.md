@@ -17,6 +17,7 @@ cloak on IRC, etc.
   * Antoine Darche (ecureuilvirtuel)
   * Grégory Darche (tetardo)
   * Benjamin Delespierre (bdelespierre)
+  * Guillaume Dievart (guillaumedievart)
   * Gautier Di Folco (black-heaven)
   * Endel Dreyer (endel)
   * Cédric Dugat (ph3nol)
