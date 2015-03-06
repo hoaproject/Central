@@ -5,6 +5,7 @@ use Hoa\Devtools\Resource\PHPCsFixer\Fixer;
 // Hoa defined fixers.
 $fixers = [
     'Author.php',
+    'Copyright.php',
     'PhpdocAccess.php',
     'PhpdocThrows.php',
     'PhpdocVar.php'
@@ -20,6 +21,7 @@ foreach ($fixers as $fixer) {
 return
     Symfony\CS\Config\Config::create()
     ->addCustomFixer(new Fixer\Author())
+    ->addCustomFixer(new Fixer\Copyright())
     ->addCustomFixer(new Fixer\PhpdocAccess())
     ->addCustomFixer(new Fixer\PhpdocThrows())
     ->addCustomFixer(new Fixer\PhpdocVar())
@@ -37,6 +39,7 @@ return
 
         // Hoa defined
         'author',
+        'copyright',
         'phpdoc_access',
         'phpdoc_throws',
         'phpdoc_var'
