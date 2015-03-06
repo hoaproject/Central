@@ -30,6 +30,7 @@ return
         'align_double_arrow',
         'align_equals',
         'concat_with_spaces',
+        'no_blank_lines_after_class_opening',
         'ordered_use',
         'remove_leading_slash_use',
         'return',
