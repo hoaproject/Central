@@ -33,7 +33,6 @@ return
         'no_blank_lines_after_class_opening',
         'ordered_use',
         'remove_leading_slash_use',
-        'return',
         'short_array_syntax',
         'spaces_cast',
         'unused_use',
