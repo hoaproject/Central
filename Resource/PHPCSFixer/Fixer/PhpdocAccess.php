@@ -19,8 +19,8 @@ class PhpdocAccess extends AbstractFixer
 
         foreach ($tokens->findGivenKind(T_DOC_COMMENT) as $token) {
 
-            $doc         = new DocBlock($token->getContent());
-            $annotations = $doc->getAnnotationsOfType('access');
+            $docBlock    = new DocBlock($token->getContent());
+            $annotations = $docBlock->getAnnotationsOfType('access');
 
             if (empty($annotations)) {
                 continue;
@@ -30,7 +30,7 @@ class PhpdocAccess extends AbstractFixer
                 $annotation->remove();
             }
 
-            $token->setContent($doc->getContent());
+            $token->setContent($docBlock->getContent());
         }
 
         return $tokens->generateCode();

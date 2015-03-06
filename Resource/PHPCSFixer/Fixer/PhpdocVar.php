@@ -21,14 +21,14 @@ use SplFileInfo;
  */
 class PhpdocVar extends AbstractFixer
 {
-    public function fix(\SplFileInfo $file, $content)
+    public function fix(SplFileInfo $file, $content)
     {
         $tokens = Tokens::fromCode($content);
 
         foreach ($tokens->findGivenKind(T_DOC_COMMENT) as $token) {
 
-            $doc         = new DocBlock($token->getContent());
-            $annotations = $doc->getAnnotationsOfType('var');
+            $docBlock    = new DocBlock($token->getContent());
+            $annotations = $docBlock->getAnnotationsOfType('var');
 
             if (empty($annotations)) {
                 continue;
@@ -36,7 +36,7 @@ class PhpdocVar extends AbstractFixer
 
             foreach ($annotations as $annotation) {
 
-                $line        = $doc->getLine($annotation->getStart());
+                $line        = $docBlock->getLine($annotation->getStart());
                 $lineContent = $line->getContent();
 
                 if (0 !== preg_match('/^(?<before>.*?@var )(?<one>[^\s]+) (?<two>\w+)/', $lineContent, $matches)) {
@@ -51,7 +51,7 @@ class PhpdocVar extends AbstractFixer
 
             }
 
-            $token->setContent($doc->getContent());
+            $token->setContent($docBlock->getContent());
         }
 
         return $tokens->generateCode();
@@ -59,7 +59,7 @@ class PhpdocVar extends AbstractFixer
 
     public function getDescription()
     {
-        return '@var must contain one element.';
+        return '`@var` must contain one element.';
     }
 
     public function getName()
