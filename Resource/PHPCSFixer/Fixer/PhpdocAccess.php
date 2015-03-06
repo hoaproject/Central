@@ -31,6 +31,7 @@ class PhpdocAccess extends AbstractFixer
             }
 
             $token->setContent($docBlock->getContent());
+
         }
 
         return $tokens->generateCode();

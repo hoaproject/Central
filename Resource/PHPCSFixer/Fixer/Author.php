@@ -31,6 +31,7 @@ class Author extends AbstractFixer
             }
 
             $token->setContent($docBlock->getContent());
+
         }
 
         return $tokens->generateCode();

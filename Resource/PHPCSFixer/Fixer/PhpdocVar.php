@@ -52,6 +52,7 @@ class PhpdocVar extends AbstractFixer
             }
 
             $token->setContent($docBlock->getContent());
+
         }
 
         return $tokens->generateCode();
