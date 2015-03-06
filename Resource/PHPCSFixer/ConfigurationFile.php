@@ -5,6 +5,7 @@ use Hoa\Devtools\Resource\PHPCsFixer\Fixer;
 // Hoa defined fixers.
 $fixers = [
     'PhpdocAccess.php',
+    'PhpdocThrows.php',
     'PhpdocVar.php'
 ];
 
@@ -18,6 +19,7 @@ foreach ($fixers as $fixer) {
 return
     Symfony\CS\Config\Config::create()
     ->addCustomFixer(new Fixer\PhpdocAccess())
+    ->addCustomFixer(new Fixer\PhpdocThrows())
     ->addCustomFixer(new Fixer\PhpdocVar())
     ->level(Symfony\CS\FixerInterface::PSR2_LEVEL)
     ->fixers([
@@ -33,5 +35,6 @@ return
 
         // Hoa defined
         'phpdoc_access',
+        'phpdoc_throws',
         'phpdoc_var'
     ]);
