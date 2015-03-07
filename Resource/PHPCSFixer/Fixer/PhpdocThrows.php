@@ -9,7 +9,7 @@ use Symfony\CS\Tokenizer\Tokens;
 use SplFileInfo;
 
 /**
- * Transform `@throws` to `@throw`.
+ * Transform `@throw` to `@throws`.
  */
 class PhpdocThrows extends AbstractFixer
 {
@@ -20,21 +20,23 @@ class PhpdocThrows extends AbstractFixer
         foreach ($tokens->findGivenKind(T_DOC_COMMENT) as $token) {
 
             $docBlock    = new DocBlock($token->getContent());
-            $annotations = $docBlock->getAnnotationsOfType('throws');
+            $annotations = $docBlock->getAnnotationsOfType('throw');
 
             if (empty($annotations)) {
                 continue;
             }
 
             foreach ($annotations as $annotation) {
+
                 $line = $docBlock->getLine($annotation->getStart());
                 $line->setContent(
                     str_replace(
-                        '@throws',
                         '@throw ',
+                        '@throws',
                         $line->getContent()
                     )
                 );
+
             }
 
             $token->setContent($docBlock->getContent());
@@ -46,7 +48,7 @@ class PhpdocThrows extends AbstractFixer
 
     public function getDescription()
     {
-        return 'Replace `@throws` by `@throw`.';
+        return 'Replace `@throw` by `@throws`.';
     }
 
     public function getName()
