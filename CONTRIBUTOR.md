@@ -54,6 +54,7 @@ cloak on IRC, etc.
   * Emmanuel Thierry (sekiltoyai)
   * Pierre Tomasina (pierozi)
   * Alex Walker (alexpw)
+  * bureX
   * flip101
 
 # Special thanks
