@@ -52,7 +52,7 @@ cloak on IRC, etc.
   * Mike Simonson (mikesimonson)
   * Mathias Strasser (mathiasstrasser)
   * Emmanuel Thierry (sekiltoyai)
-  * Pierre Tomasina (pierozi)
+  * ➜ Pierre Tomasina (pierozi)
   * Alex Walker (alexpw)
   * bureX
   * flip101
