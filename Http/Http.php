@@ -780,7 +780,7 @@ class Http extends Router\Generic implements Core\Parameter\Parameterizable
                 return $domain = '';
             }
 
-            $domain = $_SERVER['SERVER_NAME'];
+            $domain = $_SERVER['HTTP_HOST'];
 
             if (empty($domain)) {
                 $domain = $_SERVER['SERVER_ADDR'];
