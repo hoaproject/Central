@@ -34,7 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Socket {
+namespace Hoa\Socket;
+
+use Hoa\Core;
 
 /**
  * Class \Hoa\Socket\Exception.
@@ -46,6 +48,4 @@ namespace Hoa\Socket {
  * @license    New BSD License
  */
 
-class Exception extends \Hoa\Core\Exception { }
-
-}
+class Exception extends Core\Exception { }

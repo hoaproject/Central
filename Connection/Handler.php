@@ -34,7 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Socket\Connection {
+namespace Hoa\Socket\Connection;
+
+use Hoa\Socket;
 
 /**
  * Class \Hoa\Socket\Connection\Handler.
@@ -69,7 +71,7 @@ abstract class Handler {
      *
      * @var \Hoa\Socket\Connection\Handler array
      */
-    protected $_connections        = array();
+    protected $_connections        = [];
 
 
 
@@ -138,7 +140,7 @@ abstract class Handler {
      * @param   \Hoa\Socket\Node  $node    Node.
      * @return  void
      */
-    abstract protected function _run ( \Hoa\Socket\Node $node );
+    abstract protected function _run ( Socket\Node $node );
 
     /**
      * Run the connection.
@@ -150,7 +152,7 @@ abstract class Handler {
 
         $connection = $this->getConnection();
 
-        if($connection instanceof \Hoa\Socket\Server)
+        if($connection instanceof Socket\Server)
             $connection->connectAndWait();
         else
             $connection->connect();
@@ -167,7 +169,7 @@ abstract class Handler {
 
                     $otherConnection = $other->getOriginalConnection();
 
-                    if(!($otherConnection instanceof \Hoa\Socket\Client))
+                    if(!($otherConnection instanceof Socket\Client))
                         continue;
 
                     $node = $otherConnection->getCurrentNode();
@@ -217,7 +219,7 @@ abstract class Handler {
 
         $thisConnection->consider($otherConnection);
 
-        if($otherConnection instanceof \Hoa\Socket\Server)
+        if($otherConnection instanceof Socket\Server)
             $other->setConnection($thisConnection);
 
         $this->_connections[] = $other;
@@ -235,7 +237,7 @@ abstract class Handler {
      * @param   \Hoa\Socket\Node  $node       Node (if null, current node).
      * @return  void
      */
-    abstract protected function _send ( $message, \Hoa\Socket\Node $node );
+    abstract protected function _send ( $message, Socket\Node $node );
 
     /**
      * Send a message to a specific node.
@@ -246,7 +248,7 @@ abstract class Handler {
      *                                        current node).
      * @return  mixed
      */
-    public function send ( $message, \Hoa\Socket\Node $node = null ) {
+    public function send ( $message, Socket\Node $node = null ) {
 
         if(null === $node)
             $node = $this->getConnection()->getCurrentNode();
@@ -290,13 +292,13 @@ abstract class Handler {
         $arguments   = func_get_args();
         array_unshift(
             $arguments,
-            function ( \Hoa\Socket\Node $node ) use ( $currentNode ) {
+            function ( Socket\Node $node ) use ( $currentNode ) {
 
                 return $node !== $currentNode;
             }
         );
 
-        return call_user_func_array(array($this, 'broadcastIf'), $arguments);
+        return call_user_func_array([$this, 'broadcastIf'], $arguments);
     }
 
     /**
@@ -325,7 +327,7 @@ abstract class Handler {
 
         $arguments = array_slice(func_get_args(), 2);
         array_unshift($arguments, $message, null);
-        $callable  = array($this, 'send');
+        $callable  = [$this, 'send'];
 
         foreach($connection->getNodes() as $node)
             if(   true === $predicate($node)
@@ -337,6 +339,4 @@ abstract class Handler {
 
         return;
     }
-}
-
 }

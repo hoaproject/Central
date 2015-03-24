@@ -34,23 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Socket;
 
-from('Hoa')
-
-/**
- * \Hoa\Socket\Exception
- */
--> import('Socket.Exception')
-
-/**
- * \Hoa\Socket\Transport
- */
--> import('Socket.Transport');
-
-}
-
-namespace Hoa\Socket {
+use Hoa\Core;
 
 /**
  * Class \Hoa\Socket.
@@ -344,13 +330,7 @@ class Socket {
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Socket\Socket');
-
-}
+Core\Consistency::flexEntity('Hoa\Socket\Socket');

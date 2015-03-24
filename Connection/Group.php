@@ -34,18 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Socket\Connection;
 
-from('Hoa')
-
-/**
- * \Hoa\Socket\Exception
- */
--> import('Socket.Exception');
-
-}
-
-namespace Hoa\Socket\Connection {
+use Hoa\Socket;
 
 /**
  * Class \Hoa\Socket\Connection\Group.
@@ -65,7 +56,7 @@ class Group implements \ArrayAccess, \IteratorAggregate, \Countable {
      *
      * @var \Hoa\Socket\Connection\Group array
      */
-    protected $_connections = array();
+    protected $_connections = [];
 
 
 
@@ -109,9 +100,9 @@ class Group implements \ArrayAccess, \IteratorAggregate, \Countable {
     public function offsetSet ( $offset, $connection ) {
 
         if(!($connection instanceof Handler))
-            throw new \Hoa\Socket\Exception(
+            throw new Socket\Exception(
                 '%s only accepts %s\Handler objects.',
-                0, array(__CLASS__, __NAMESPACE__));
+                0, [__CLASS__, __NAMESPACE__]);
 
         if(null === $offset)
             $this->_connections[]        = $connection;
@@ -133,7 +124,7 @@ class Group implements \ArrayAccess, \IteratorAggregate, \Countable {
      */
     public function offsetUnset ( $offset ) {
 
-        throw new \Hoa\Socket\Exception(
+        throw new Socket\Exception(
             'This operation is not allowed: you cannot unset a connection ' .
             'from a group.', 1);
 
@@ -187,7 +178,7 @@ class Group implements \ArrayAccess, \IteratorAggregate, \Countable {
     public function run ( ) {
 
         if(0 === count($this))
-            throw new \Hoa\Socket\Exception(
+            throw new Socket\Exception(
                 'Nothing to run. You should merge a connection.', 2);
 
         return $this->getFirstConnection()->run();
@@ -204,6 +195,4 @@ class Group implements \ArrayAccess, \IteratorAggregate, \Countable {
 
         return $this[key($this->_connections)];
     }
-}
-
 }

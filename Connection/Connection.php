@@ -34,43 +34,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Socket\Connection;
 
-from('Hoa')
-
-/**
- * \Hoa\Socket\Exception
- */
--> import('Socket.Exception')
-
-/**
- * \Hoa\Socket
- */
--> import('Socket.~')
-
-/**
- * \Hoa\Stream
- */
--> import('Stream.~')
-
-/**
- * \Hoa\Stream\IStream\In
- */
--> import('Stream.I~.In')
-
-/**
- * \Hoa\Stream\IStream\Out
- */
--> import('Stream.I~.Out')
-
-/**
- * \Hoa\Stream\IStream\Pathable
- */
--> import('Stream.I~.Pathable');
-
-}
-
-namespace Hoa\Socket\Connection {
+use Hoa\Core;
+use Hoa\Socket;
+use Hoa\Stream;
 
 /**
  * Class \Hoa\Socket\Connection.
@@ -83,10 +51,10 @@ namespace Hoa\Socket\Connection {
  */
 
 abstract class Connection
-    extends    \Hoa\Stream
-    implements \Hoa\Stream\IStream\In,
-               \Hoa\Stream\IStream\Out,
-               \Hoa\Stream\IStream\Pathable,
+    extends    Stream
+    implements Stream\IStream\In,
+               Stream\IStream\Out,
+               Stream\IStream\Pathable,
                \Iterator {
 
     /**
@@ -136,7 +104,7 @@ abstract class Connection
      *
      * @var \Hoa\Socket\Connection array
      */
-    protected $_nodes         = array();
+    protected $_nodes         = [];
 
     /**
      * Whether the stream is quiet.
@@ -178,7 +146,7 @@ abstract class Connection
      *
      * @var \Hoa\Socket\Server array
      */
-    protected $_iterator      = array();
+    protected $_iterator      = [];
 
 
 
@@ -327,7 +295,7 @@ abstract class Connection
             if($key === key($this->_iterator))
                 $return = true;
             else
-                $this->_iterator = array();
+                $this->_iterator = [];
         }
 
         return $return;
@@ -386,13 +354,13 @@ abstract class Connection
      * Set socket.
      *
      * @access  protected
-     * @param   string  $socket    Socket  URI.
+     * @param   string  $socket    Socket URI.
      * @return  \Hoa\Socket
      */
     protected function setSocket ( $socket ) {
 
         $old           = $this->_socket;
-        $this->_socket = new \Hoa\Socket($socket);
+        $this->_socket = new Socket($socket);
 
         return $old;
     }
@@ -685,12 +653,12 @@ abstract class Connection
     public function read ( $length ) {
 
         if(null === $this->getStream())
-            throw new \Hoa\Socket\Exception(
+            throw new Socket\Exception(
                 'Cannot read because socket is not established, ' .
                 'i.e. not connected.', 0);
 
         if(0 > $length)
-            throw new \Hoa\Socket\Exception(
+            throw new Socket\Exception(
                 'Length must be greater than 0, given %d.', 1, $length);
 
         if(true === $this->isEncrypted())
@@ -699,7 +667,7 @@ abstract class Connection
         if(false === $this->isRemoteAddressConsidered())
             return stream_socket_recvfrom($this->getStream(), $length);
 
-        $out                  = stream_socket_recvfrom(
+        $out = stream_socket_recvfrom(
             $this->getStream(),
             $length,
             0,
@@ -832,12 +800,12 @@ abstract class Connection
     public function write ( $string, $length ) {
 
         if(null === $this->getStream())
-            throw new \Hoa\Socket\Exception(
+            throw new Socket\Exception(
                 'Cannot write because socket is not established, ' .
                 'i.e. not connected.', 2);
 
         if(0 > $length)
-            throw new \Hoa\Socket\Exception(
+            throw new Socket\Exception(
                 'Length must be greater than 0, given %d.', 3, $length);
 
         if(strlen($string) > $length)
@@ -860,7 +828,7 @@ abstract class Connection
         }
 
         if(-1 === $out)
-            throw new \Hoa\Socket\Exception(
+            throw new Socket\Exception(
                 'Pipe is broken, cannot write data.', 4);
 
         return $out;
@@ -1021,13 +989,7 @@ abstract class Connection
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Socket\Connection\Connection');
-
-}
+Core\Consistency::flexEntity('Hoa\Socket\Connection\Connection');

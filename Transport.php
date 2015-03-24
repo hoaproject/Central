@@ -34,18 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Socket\Exception
- */
--> import('Socket.Exception');
-
-}
-
-namespace Hoa\Socket {
+namespace Hoa\Socket;
 
 /**
  * Class \Hoa\Socket\Transport.
@@ -86,6 +75,4 @@ class Transport {
 
         return in_array(strtolower($transport), self::get());
     }
-}
-
 }
