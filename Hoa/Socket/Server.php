@@ -34,28 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Socket;
 
-from('Hoa')
-
-/**
- * \Hoa\Socket\Exception
- */
--> import('Socket.Exception')
-
-/**
- * \Hoa\Socket\Connection
- */
--> import('Socket.Connection.~')
-
-/**
- * \Hoa\Socket\Node
- */
--> import('Socket.Node');
-
-}
-
-namespace Hoa\Socket {
+use Hoa\Stream;
 
 /**
  * Class \Hoa\Socket\Server.
@@ -123,21 +104,21 @@ class Server extends Connection {
      *
      * @var \Hoa\Socket\Server array
      */
-    protected $_servers  = array();
+    protected $_servers  = [];
 
     /**
      * Masters connection.
      *
      * @var \Hoa\Socket\Server array
      */
-    protected $_masters  = array();
+    protected $_masters  = [];
 
     /**
      * Stack of connections.
      *
      * @var \Hoa\Socket\Server array
      */
-    protected $_stack    = array();
+    protected $_stack    = [];
 
 
 
@@ -201,7 +182,7 @@ class Server extends Connection {
      * @return  resource
      * @throw   \Hoa\Socket\Exception
      */
-    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
+    protected function &_open ( $streamName, Stream\Context $context = null ) {
 
         if(null === $context)
             $this->_master = @stream_socket_server(
@@ -222,7 +203,7 @@ class Server extends Connection {
         if(false === $this->_master)
             throw new Exception(
                 'Server cannot join %s and returns an error (number %d): %s.',
-                1, array($streamName, $errno, $errstr));
+                1, [$streamName, $errno, $errstr]);
 
         $i                  = count($this->_masters);
         $this->_masters[$i] = $this->_master;
@@ -325,7 +306,7 @@ class Server extends Connection {
                 $id                = $this->getNodeId($client);
                 $node              = dnew(
                     $server->getNodeName(),
-                    array($id, $client, $server)
+                    [$id, $client, $server]
                 );
                 $this->_nodes[$id] = $node;
                 $this->_stack[]    = $client;
@@ -343,7 +324,7 @@ class Server extends Connection {
      * @param   \Hoa\Socket\Connection  $other    Other server.
      * @return  \Hoa\Socket\Server
      */
-    public function consider ( Connection\Connection $other ) {
+    public function consider ( Connection $other ) {
 
         if($other instanceof Client) {
 
@@ -370,10 +351,10 @@ class Server extends Connection {
      * Check if the current node belongs to a specific server.
      *
      * @access  public
-     * @param   \Hoa\Socket\Server  $server    Server.
+     * @param   \Hoa\Socket\Connection  $server    Server.
      * @return  bool
      */
-    public function is ( Connection\Connection $server ) {
+    public function is ( Connection $server ) {
 
         return $this->_node->getConnection() === $server;
     }
@@ -416,6 +397,4 @@ class Server extends Connection {
 
         return (bool) $this->getFlag() & self::LISTEN;
     }
-}
-
 }

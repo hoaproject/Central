@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Socket {
+namespace Hoa\Socket;
 
 /**
  * Class \Hoa\Socket\Node.
@@ -156,6 +156,4 @@ class Node {
 
         return $this->_encryptionType;
     }
-}
-
 }

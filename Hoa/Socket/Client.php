@@ -34,23 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Socket;
 
-from('Hoa')
-
-/**
- * \Hoa\Socket\Exception
- */
--> import('Socket.Exception')
-
-/**
- * \Hoa\Socket\Connection
- */
--> import('Socket.Connection.~');
-
-}
-
-namespace Hoa\Socket {
+use Hoa\Stream;
 
 /**
  * Class \Hoa\Socket\Client.
@@ -118,7 +104,7 @@ class Client extends Connection {
      *
      * @var \Hoa\Socket\Client array
      */
-    protected $_stack = array();
+    protected $_stack = [];
 
 
 
@@ -150,7 +136,7 @@ class Client extends Connection {
      * @return  resource
      * @throw   \Hoa\Socket\Exception
      */
-    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
+    protected function &_open ( $streamName, Stream\Context $context = null ) {
 
         if(null === $context)
             $connection = @stream_socket_client(
@@ -178,13 +164,13 @@ class Client extends Connection {
                 throw new Exception(
                     'Client returns an error (number %d): %s while trying ' .
                     'to join %s.',
-                    1, array($errno, $errstr, $streamName));
+                    1, [$errno, $errstr, $streamName]);
 
         $this->_stack[]    = $connection;
         $id                = $this->getNodeId($connection);
         $this->_node       = dnew(
             $this->getNodeName(),
-            array($id, $connection, $this)
+            [$id, $connection, $this]
         );
         $this->_nodes[$id] = $this->_node;
 
@@ -232,7 +218,7 @@ class Client extends Connection {
      * @param   \Hoa\Socket\Connection  $other    Other client.
      * @return  \Hoa\Socket\Client
      */
-    public function consider ( Connection\Connection $other ) {
+    public function consider ( Connection $other ) {
 
         if(!($other instanceof self))
             throw new Exception(
@@ -252,10 +238,10 @@ class Client extends Connection {
      * Check if the current node belongs to a specific server.
      *
      * @access  public
-     * @param   \Hoa\Socket\Client  $server    Server.
+     * @param   \Hoa\Socket\Connection  $server    Server.
      * @return  bool
      */
-    public function is ( Connection\Connection $server ) {
+    public function is ( Connection $server ) {
 
         return $this->getStream() === $server->getStream();
     }
@@ -305,6 +291,4 @@ class Client extends Connection {
 
         return (bool) ($this->getFlag() & self::PERSISTENT);
     }
-}
-
 }
