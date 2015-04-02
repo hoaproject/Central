@@ -2,7 +2,7 @@
     "name": "hoa/central",
     "type": "library",
     "description": "Hoa is a set of libraries.",
-    "keywords": ["library", "framework"],
+    "keywords": ["set", "library"],
     "homepage": "http://hoa-project.net/",
     "license": "BSD-3-Clause",
     "authors": [
@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "php": ">=5.3.3"
+        "php": ">=5.4.0"
     },
-    "bin": ["Bin/hoa"]
+    "bin": ["Hoa/Core/Bin/hoa"]
 }
