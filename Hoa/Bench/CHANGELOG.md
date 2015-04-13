@@ -1,3 +1,7 @@
+# 2.15.04.13
+
+  * Forget to translate a header text. (Ivan Enderlin, 2015-04-09T15:40:56+02:00)
+
 # 2.15.02.17
 
   * Add the CHANGELOG.md file. (Ivan Enderlin, 2015-02-17T09:20:07+01:00)
