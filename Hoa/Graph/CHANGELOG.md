@@ -1,3 +1,9 @@
+# 0.15.04.13
+
+  * Remove an empty line. (Ivan Enderlin, 2015-02-23T09:41:54+01:00)
+  * Remove `from`/`import` and update to PHP5.4. (Alexis von Glasow, 2015-02-23T09:40:05+01:00)
+  * Format code. #mania (Ivan Enderlin, 2015-02-23T09:02:24+01:00)
+
 # 0.15.02.20
 
   * Add the CHANGELOG.md file. (Ivan Enderlin, 2015-02-20T09:24:18+01:00)
