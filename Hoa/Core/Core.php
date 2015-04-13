@@ -170,8 +170,6 @@ class Core implements Parameter\Parameterizable {
                         ['hoa']
                     )));
 
-        setlocale(LC_CTYPE, 'C');
-
         if(true === function_exists('mb_internal_encoding'))
             mb_internal_encoding('UTF-8');
 
