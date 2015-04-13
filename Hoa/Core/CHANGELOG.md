@@ -1,3 +1,9 @@
+# 2.15.04.13
+
+  * Remove `setlocale`. (Ivan Enderlin, 2015-04-13T08:50:40+02:00)
+  * `notify` no longer checks the source reference. (Ivan Enderlin, 2015-03-03T10:28:32+01:00)
+  * Add the `stream_metadata` method on the wrapper. (Ivan Enderlin, 2015-02-26T17:16:03+01:00)
+
 # 2.15.02.18
 
   * Allows third-parties to easily extend `hoa://`. (Ivan Enderlin, 2015-02-18T17:18:09+01:00)
