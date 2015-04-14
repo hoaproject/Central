@@ -176,10 +176,10 @@ catch ( Hoa\Fastcgi\Exception\Exception $e ) {
 
   <h2 id="Conclusion" for="main-toc">Conclusion</h2>
 
-  <p><code>Hoa\Fastcgi</code> allows to <strong>execute PHP progams</strong> (or
+  <p><code>Hoa\Fastcgi</code> allows to <strong>execute PHP programs</strong> (or
   other external programs) in a very <strong>simple</strong> and
   <strong>fast</strong> way without worry about the location of PHP binaries,
-  sub-shells to excute them, manage errors etc. We only need a started CGI
+  sub-shells to execute them, manage errors etc. We only need a started CGI
   server.</p>
   <p>Manipulating FastCGI requests in this manner allows also to
   <strong>learn</strong> more about PHP and to manipulate PHP processus in
