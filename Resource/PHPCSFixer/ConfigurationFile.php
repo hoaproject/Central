@@ -1,32 +1,31 @@
 <?php
 
-use Hoa\Devtools\Resource\PHPCsFixer\Fixer;
-
 // Hoa defined fixers.
 $fixers = [
-    'Author.php',
-    'Copyright.php',
-    'PhpdocAccess.php',
-    'PhpdocThrows.php',
-    'PhpdocVar.php'
+    'Author',
+    'ControlFlowStatement',
+    'Copyright',
+    'OpeningTag',
+    'PhpdocAccess',
+    'PhpdocThrows',
+    'PhpdocVar'
 ];
+
+$out = Symfony\CS\Config\Config::create();
+$out->level(Symfony\CS\FixerInterface::PSR2_LEVEL);
 
 foreach ($fixers as $fixer) {
     require
         __DIR__ . DIRECTORY_SEPARATOR .
        'Fixer' . DIRECTORY_SEPARATOR .
-       $fixer;
+       $fixer . '.php';
+
+    $classname = 'Hoa\Devtools\Resource\PHPCsFixer\Fixer\\' . $fixer;
+    $out->addCustomFixer(new $classname());
 }
 
 return
-    Symfony\CS\Config\Config::create()
-    ->addCustomFixer(new Fixer\Author())
-    ->addCustomFixer(new Fixer\Copyright())
-    ->addCustomFixer(new Fixer\PhpdocAccess())
-    ->addCustomFixer(new Fixer\PhpdocThrows())
-    ->addCustomFixer(new Fixer\PhpdocVar())
-    ->level(Symfony\CS\FixerInterface::PSR2_LEVEL)
-    ->fixers([
+    $out->fixers([
         'align_double_arrow',
         'align_equals',
         'concat_with_spaces',
