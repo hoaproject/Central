@@ -32,9 +32,12 @@ return
         'no_blank_lines_after_class_opening',
         'ordered_use',
         'remove_leading_slash_use',
+        'remove_leading_slash_uses',
+        'self_accessor',
         'short_array_syntax',
         'spaces_cast',
         'unused_use',
+        'whitespacy_lines',
 
         // Hoa defined
         'author',
