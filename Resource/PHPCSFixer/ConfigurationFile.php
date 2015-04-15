@@ -41,7 +41,9 @@ return
 
         // Hoa defined
         'author',
+        'control_flow_statement',
         'copyright',
+        'opening_tag',
         'phpdoc_access',
         'phpdoc_throws',
         'phpdoc_var'
