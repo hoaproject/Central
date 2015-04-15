@@ -47,6 +47,7 @@ cloak on IRC, etc.
   * Cosmin Nitu (ncosmin2001)
   * Rémi Parpaillon (rparpa)
   * Grégoire Pineau (lyrixx)
+  * Rogerio Prado de Jesus (rogeriopradoj)
   * ➜ Stéphane Py (stephpy)
   * Kim Sia Sim (simkimsia)
   * Mike Simonson (mikesimonson)
