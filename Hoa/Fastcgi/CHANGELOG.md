@@ -1,3 +1,8 @@
+# 2.15.04.16
+
+  * Reformulate a sentence in the documentation. (Ivan Enderlin, 2015-04-15T08:41:57+02:00)
+  * Fix typos in the documentation. (Rogerio Prado de Jesus, 2015-04-14T11:06:06-03:00)
+
 # 2.15.02.19
 
   * Add the CHANGELOG.md file. (Ivan Enderlin, 2015-02-19T08:55:45+01:00)
