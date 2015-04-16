@@ -1,3 +1,9 @@
+# 1.15.04.16
+
+  * Add `atoum/ruler-extension`. (Ivan Enderlin, 2015-02-02T12:03:36+01:00)
+  * Add the `CHANGELOG.md` file. (Ivan Enderlin, 2015-02-26T08:26:18+01:00)
+  * Use short-array syntax. (Ivan Enderlin, 2015-02-26T08:21:04+01:00)
+
 # 1.15.02.20
 
   * Upgrade atoum version number. (Alexis von Glasow, 2015-02-20T14:28:36+01:00)
