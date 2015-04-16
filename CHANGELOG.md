@@ -1,3 +1,8 @@
+# 0.15.04.16
+
+  * Add the `CHANGELOG.md` file. (Ivan Enderlin, 2015-02-18T09:31:07+01:00)
+  * Fix links. (Ivan Enderlin, 2015-02-03T09:50:09+01:00)
+
 # 0.15.01.23
 
   * Add the `ClassMethod` dispatcher. (Ivan Enderlin, 2015-01-09T15:44:25+01:00)
