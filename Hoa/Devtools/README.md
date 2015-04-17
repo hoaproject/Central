@@ -29,6 +29,19 @@ install](http://hoa-project.net/Source.html).
 
 We propose a quick overview of some commands.
 
+### `cs`
+
+Fix coding style of Hoa. It embraces [PSR-1](http://www.php-fig.org/psr/psr-1/)
+and [PSR-2](http://www.php-fig.org/psr/psr-2/), in addition to some extra
+fixers.
+
+```sh
+$ hoa devtools:cs --diff .
+```
+
+Requires [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) to be
+installed.
+
 ### `dependency`
 
 Check the dependencies of a specific library.
