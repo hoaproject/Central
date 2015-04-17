@@ -5,8 +5,6 @@ $fixers = [
     'Author',
     'ControlFlowStatement',
     'Copyright',
-    'OpeningTag',
-    'PhpdocAccess',
     'PhpdocThrows',
     'PhpdocVar'
 ];
@@ -28,9 +26,11 @@ return
     $out->fixers([
         'align_double_arrow',
         'align_equals',
+        'blankline_after_open_tag',
         'concat_with_spaces',
         'no_blank_lines_after_class_opening',
         'ordered_use',
+        'phpdoc_no_access',
         'remove_leading_slash_use',
         'remove_leading_slash_uses',
         'self_accessor',
@@ -43,8 +43,6 @@ return
         'author',
         'control_flow_statement',
         'copyright',
-        'opening_tag',
-        'phpdoc_access',
         'phpdoc_throws',
         'phpdoc_var'
     ]);
