@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,17 +43,15 @@ use Hoa\Console;
  *
  * Paste something somewhere.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Paste extends Console\Dispatcher\Kit {
-
+class Paste extends Console\Dispatcher\Kit
+{
     /**
      * Options description.
      *
-     * @var \Hoa\Devtools\Bin\Paste array
+     * @var array
      */
     protected $options = [
         ['address', Console\GetOption::REQUIRED_ARGUMENT, 'a'],
@@ -66,27 +64,28 @@ class Paste extends Console\Dispatcher\Kit {
     /**
      * The entry method.
      *
-     * @access  public
      * @return  int
      */
-    public function main ( ) {
-
+    public function main()
+    {
         $address = 'paste.hoa-project.net:80';
 
-        while(false !== $c = $this->getOption($v)) switch($c) {
+        while (false !== $c = $this->getOption($v)) {
+            switch ($c) {
+                case 'a':
+                    $address = $v;
 
-            case 'a':
-                $address = $v;
-              break;
+                    break;
 
-            case 'h':
-            case '?':
-                return $this->usage();
-              break;
+                case 'h':
+                case '?':
+                    return $this->usage();
 
-            case '__ambiguous':
-                $this->resolveOptionAmbiguity($v);
-              break;
+                case '__ambiguous':
+                    $this->resolveOptionAmbiguity($v);
+
+                    break;
+            }
         }
 
         $input   = file_get_contents('php://stdin');
@@ -97,7 +96,7 @@ class Paste extends Console\Dispatcher\Kit {
                              'User-Agent: Hoa' . "\r\n" .
                              'Accept: */*' . "\r\n" .
                              'Content-Type: text/plain' . "\r\n" .
-                             'Content-Length: ' . strlen($input) ."\r\n",
+                             'Content-Length: ' . strlen($input) . "\r\n",
                 'content' => $input
             ]
         ]);
@@ -110,17 +109,17 @@ class Paste extends Console\Dispatcher\Kit {
     /**
      * The command usage.
      *
-     * @access  public
      * @return  int
      */
-    public function usage ( ) {
-
-        echo 'Usage   : devtools:paste <options>', "\n",
-             'Options :', "\n",
-             $this->makeUsageOptionsList([
-                 'a'    => 'Address to the paste server.',
-                 'help' => 'This help.'
-             ]), "\n";
+    public function usage()
+    {
+        echo
+            'Usage   : devtools:paste <options>', "\n",
+            'Options :', "\n",
+            $this->makeUsageOptionsList([
+                'a'    => 'Address to the paste server.',
+                'help' => 'This help.'
+            ]), "\n";
 
         return;
     }

@@ -37,16 +37,17 @@
 namespace Hoa\Devtools\Bin;
 
 use Hoa\Console;
+use Hoa\Core;
 
 /**
- * Class \Hoa\Devtools\Bin\Dependency.
+ * Class \Hoa\Devtools\Bin\Cs.
  *
- * This command manipulates dependencies of a library.
+ * Wrapper around `php-cs-fixer`.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Dependency extends Console\Dispatcher\Kit
+class Cs extends Console\Dispatcher\Kit
 {
     /**
      * Options description.
@@ -54,11 +55,10 @@ class Dependency extends Console\Dispatcher\Kit
      * @var array
      */
     protected $options = [
-        ['no-verbose',   Console\GetOption::NO_ARGUMENT, 'V'],
-        ['only-library', Console\GetOption::NO_ARGUMENT, 'l'],
-        ['only-version', Console\GetOption::NO_ARGUMENT, 'v'],
-        ['help',         Console\GetOption::NO_ARGUMENT, 'h'],
-        ['help',         Console\GetOption::NO_ARGUMENT, '?']
+        ['dry-run', Console\GetOption::NO_ARGUMENT, 'd'],
+        ['diff',    Console\GetOption::NO_ARGUMENT, 'D'],
+        ['help',    Console\GetOption::NO_ARGUMENT, 'h'],
+        ['help',    Console\GetOption::NO_ARGUMENT, '?']
     ];
 
 
@@ -70,86 +70,70 @@ class Dependency extends Console\Dispatcher\Kit
      */
     public function main()
     {
-        $verbose = Console::isDirect(STDOUT);
-        $print   = 'both';
+        $dryRun = false;
+        $diff   = false;
 
         while (false !== $c = $this->getOption($v)) {
             switch ($c) {
-                case 'V':
-                    $verbose = false;
+                case '__ambiguous':
+                    $this->resolveOptionAmbiguity($v);
 
                     break;
 
-                case 'l':
-                    $print = 'library';
+                case 'd':
+                    $dryRun = true;
 
                     break;
 
-                case 'v':
-                    $print = 'version';
+                case 'D':
+                    $diff = true;
 
                     break;
 
                 case 'h':
                 case '?':
+                default:
                     return $this->usage();
-
-                case '__ambiguous':
-                    $this->resolveOptionAmbiguity($v);
-
-                    break;
             }
         }
 
-        $this->parser->listInputs($library);
+        $this->parser->listInputs($path);
 
-        if (empty($library)) {
+        if (empty($path)) {
             return $this->usage();
         }
 
-        $library = ucfirst(strtolower($library));
-        $path    = 'hoa://Library/' . $library . '/composer.json';
+        $phpCsFixer        = Console\Processus::locate('php-cs-fixer');
+        $configurationFile = resolve(
+            'hoa://Library/Devtools/Resource/PHPCSFixer/ConfigurationFile.php'
+        );
 
-        if (true === $verbose) {
-            echo 'Dependency for the library ', $library, ':', "\n";
+        if (empty($phpCsFixer)) {
+            throw new Console\Exception('php-cs-fixer binary is not found.', 0);
         }
 
-        if (false === file_exists($path)) {
-            throw new Console\Exception(
-                'Not yet computed or the %s library does not exist.',
-                0,
-                $library
-            );
+        $arguments = ['fix', '--config-file' => $configurationFile];
+
+        if (true === $dryRun) {
+            $arguments[] = '--dry-run';
         }
 
-        $json = json_decode(file_get_contents($path), true);
-
-        if (true === $verbose) {
-            $item      = '    • ';
-            $separator = ' => ';
-        } else {
-            $item      = '';
-            $separator = ' ';
+        if (true === $diff) {
+            $arguments[] = '--diff';
         }
 
-        foreach ($json['require'] ?: [] as $dependency => $version) {
-            switch ($print) {
-                case 'both':
-                    echo $item, $dependency, $separator, $version, "\n";
+        $arguments[] = $path;
 
-                    break;
+        $processus = new Console\Processus($phpCsFixer, $arguments);
+        $processus->on('input', function () {
+            return false;
+        });
+        $processus->on('output', function (Core\Event\Bucket $bucket) {
+            echo $bucket->getData()['line'], "\n";
 
-                case 'library':
-                    echo $item, $dependency, "\n";
-
-                    break;
-
-                case 'version':
-                    echo $item, $version, "\n";
-
-                    break;
-            }
-        }
+            return;
+        });
+        $processus->run();
 
         return;
     }
@@ -162,13 +146,11 @@ class Dependency extends Console\Dispatcher\Kit
     public function usage()
     {
         echo
-            'Usage   : devtools:dependency <options> library', "\n",
+            'Usage   : devtools:cs <options> path', "\n",
             'Options :', "\n",
             $this->makeUsageOptionsList([
-                'V'    => 'No-verbose, i.e. be as quiet as possible, just print ' .
-                          'essential informations.',
-                'l'    => 'Print only the library name.',
-                'v'    => 'Print only the version.',
+                'd'    => 'Only shows which files would have been modified.',
+                'D'    => 'Produce diff for each file.',
                 'help' => 'This help.'
             ]), "\n";
 
@@ -177,4 +159,4 @@ class Dependency extends Console\Dispatcher\Kit
 }
 
 __halt_compiler();
-Manipulate dependencies of a library.
+Wrapper around `php-cs-fixer`.
