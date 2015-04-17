@@ -57,8 +57,10 @@ class Cs extends Console\Dispatcher\Kit {
      * @var \Hoa\Devtools\Bin\Cs array
      */
     protected $options = [
-        ['help', Console\GetOption::NO_ARGUMENT, 'h'],
-        ['help', Console\GetOption::NO_ARGUMENT, '?']
+        ['dry-run', Console\GetOption::NO_ARGUMENT, 'd'],
+        ['diff',    Console\GetOption::NO_ARGUMENT, 'D'],
+        ['help',    Console\GetOption::NO_ARGUMENT, 'h'],
+        ['help',    Console\GetOption::NO_ARGUMENT, '?']
     ];
 
 
@@ -71,10 +73,21 @@ class Cs extends Console\Dispatcher\Kit {
      */
     public function main ( ) {
 
+        $dryRun = false;
+        $diff   = false;
+
         while(false !== $c = $this->getOption($v)) switch($c) {
 
             case '__ambiguous':
                 $this->resolveOptionAmbiguity($v);
+              break;
+
+            case 'd':
+                $dryRun = true;
+              break;
+
+            case 'D':
+                $diff = true;
               break;
 
             case 'h':
@@ -84,9 +97,9 @@ class Cs extends Console\Dispatcher\Kit {
               break;
         }
 
-        $this->parser->listInputs($command, $path);
+        $this->parser->listInputs($path);
 
-        if(empty($command) || empty($path))
+        if(empty($path))
             return $this->usage();
 
         $phpCsFixer        = Console\Processus::locate('php-cs-fixer');
@@ -98,14 +111,17 @@ class Cs extends Console\Dispatcher\Kit {
             throw new Console\Exception(
                 'php-cs-fixer binary is not found.', 0);
 
-        $processus = new Console\Processus(
-            $phpCsFixer,
-            [
-                $command,
-                '--config-file' => $configurationFile,
-                $path
-            ]
-        );
+        $arguments = ['fix', '--config-file' => $configurationFile];
+
+        if(true === $dryRun)
+            $arguments[] = '--dry-run';
+
+        if(true === $diff)
+            $arguments[] = '--diff';
+
+        $arguments[] = $path;
+
+        $processus = new Console\Processus($phpCsFixer, $arguments);
         $processus->on('input', function ( ) {
 
             return false;
@@ -129,9 +145,11 @@ class Cs extends Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        echo 'Usage   : devtools:cs <options> command path', "\n",
+        echo 'Usage   : devtools:cs <options> path', "\n",
              'Options :', "\n",
              $this->makeUsageOptionsList([
+                 'd'    => 'Only shows which files would have been modified.',
+                 'D'    => 'Produce diff for each file.',
                  'help' => 'This help.'
              ]), "\n";
 
