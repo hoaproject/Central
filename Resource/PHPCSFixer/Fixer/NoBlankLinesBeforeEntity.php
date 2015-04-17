@@ -34,51 +34,59 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-// Hoa defined fixers.
-$fixers = [
-    'Author',
-    'ControlFlowStatement',
-    'Copyright',
-    'NoBlankLinesBeforeEntity',
-    'PhpdocThrows',
-    'PhpdocVar'
-];
+namespace Hoa\Devtools\Resource\PHPCSFixer\Fixer;
 
-$out = Symfony\CS\Config\Config::create();
-$out->level(Symfony\CS\FixerInterface::PSR2_LEVEL);
+use Symfony\CS\AbstractLinesBeforeNamespaceFixer;
+use Symfony\CS\FixerInterface;
+use Symfony\CS\Tokenizer\Tokens;
+use SplFileInfo;
 
-foreach ($fixers as $fixer) {
-    require
-        __DIR__ . DIRECTORY_SEPARATOR .
-       'Fixer' . DIRECTORY_SEPARATOR .
-       $fixer . '.php';
+/**
+ * Class \Hoa\Devtools\Resource\PHPCSFixer\Fixer\NoBlankLinesBeforeEntity.
+ *
+ * Remove blank lines before entity declarations (class, interface, trait etc.).
+ *
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @license    New BSD License
+ */
 
-    $classname = 'Hoa\Devtools\Resource\PHPCsFixer\Fixer\\' . $fixer;
-    $out->addCustomFixer(new $classname());
+class NoBlankLinesBeforeEntity extends AbstractLinesBeforeNamespaceFixer
+{
+    public function fix(SplFileInfo $file, $content)
+    {
+        $tokens = Tokens::fromCode($content);
+
+        foreach ($tokens as $index => $token) {
+            if ($token->isGivenKind(T_CLASS) ||
+                $token->isGivenKind(T_INTERFACE) ||
+                $token->isGivenKind(T_TRAIT)) {
+                $docCommentIndex = $tokens->getTokenOfKindSibling(
+                    $index,
+                    -1,
+                    [[T_DOC_COMMENT]],
+                    false
+                );
+                $firstSignificantIndex = $tokens->getNextNonWhitespace($docCommentIndex);
+                $this->fixLinesBeforeNamespace($tokens, $firstSignificantIndex, 1);
+            }
+        }
+
+        return $tokens->generateCode();
+    }
+
+    public function getDescription()
+    {
+        return 'Remove blank lines before entity declarations.';
+    }
+
+    public function getName()
+    {
+        return 'no_blank_lines_before_entity';
+    }
+
+    public function getLevel()
+    {
+        return FixerInterface::CONTRIB_LEVEL;
+    }
 }
-
-return
-    $out->fixers([
-        'align_double_arrow',
-        'align_equals',
-        'blankline_after_open_tag',
-        'concat_with_spaces',
-        'no_blank_lines_after_class_opening',
-        'ordered_use',
-        'phpdoc_no_access',
-        'remove_leading_slash_use',
-        'remove_leading_slash_uses',
-        'self_accessor',
-        'short_array_syntax',
-        'spaces_cast',
-        'unused_use',
-        'whitespacy_lines',
-
-        // Hoa defined
-        'author',
-        'control_flow_statement',
-        'copyright',
-        'no_blank_lines_before_entity',
-        'phpdoc_throws',
-        'phpdoc_var'
-    ]);
