@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,17 +43,15 @@ use Hoa\Console;
  *
  * This command manipulates dependencies of a library.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Dependency extends \Hoa\Console\Dispatcher\Kit {
-
+class Dependency extends Console\Dispatcher\Kit
+{
     /**
      * Options description.
      *
-     * @var \Hoa\Devtools\Bin\Dependency array
+     * @var array
      */
     protected $options = [
         ['no-verbose',   Console\GetOption::NO_ARGUMENT, 'V'],
@@ -68,82 +66,88 @@ class Dependency extends \Hoa\Console\Dispatcher\Kit {
     /**
      * The entry method.
      *
-     * @access  public
      * @return  int
      */
-    public function main ( ) {
-
+    public function main()
+    {
         $verbose = Console::isDirect(STDOUT);
         $print   = 'both';
 
-        while(false !== $c = $this->getOption($v)) switch($c) {
+        while (false !== $c = $this->getOption($v)) {
+            switch ($c) {
+                case 'V':
+                    $verbose = false;
 
-            case 'V':
-                $verbose = false;
-              break;
+                    break;
 
-            case 'l':
-                $print = 'library';
-              break;
+                case 'l':
+                    $print = 'library';
 
-            case 'v':
-                $print = 'version';
-              break;
+                    break;
 
-            case 'h':
-            case '?':
-                return $this->usage();
-              break;
+                case 'v':
+                    $print = 'version';
 
-            case '__ambiguous':
-                $this->resolveOptionAmbiguity($v);
-              break;
+                    break;
+
+                case 'h':
+                case '?':
+                    return $this->usage();
+
+                case '__ambiguous':
+                    $this->resolveOptionAmbiguity($v);
+
+                    break;
+            }
         }
 
         $this->parser->listInputs($library);
 
-        if(empty($library))
+        if (empty($library)) {
             return $this->usage();
+        }
 
         $library = ucfirst(strtolower($library));
         $path    = 'hoa://Library/' . $library . '/composer.json';
 
-        if(true === $verbose)
+        if (true === $verbose) {
             echo 'Dependency for the library ', $library, ':', "\n";
+        }
 
-        if(false === file_exists($path))
+        if (false === file_exists($path)) {
             throw new Console\Exception(
                 'Not yet computed or the %s library does not exist.',
-                0, $library);
+                0,
+                $library
+            );
+        }
 
         $json = json_decode(file_get_contents($path), true);
 
-        if(true === $verbose) {
-
+        if (true === $verbose) {
             $item      = '    • ';
             $separator = ' => ';
-        }
-        else {
-
+        } else {
             $item      = '';
             $separator = ' ';
         }
 
-        foreach($json['require'] ?: [] as $dependency => $version) {
-
-            switch($print) {
-
+        foreach ($json['require'] ?: [] as $dependency => $version) {
+            switch ($print) {
                 case 'both':
                     echo $item, $dependency, $separator, $version, "\n";
-                  break;
+
+                    break;
 
                 case 'library':
                     echo $item, $dependency, "\n";
-                  break;
+
+                    break;
 
                 case 'version':
                     echo $item, $version, "\n";
-                  break;
+
+                    break;
             }
         }
 
@@ -153,20 +157,20 @@ class Dependency extends \Hoa\Console\Dispatcher\Kit {
     /**
      * The command usage.
      *
-     * @access  public
      * @return  int
      */
-    public function usage ( ) {
-
-        echo 'Usage   : devtools:dependency <options> library', "\n",
-             'Options :', "\n",
-             $this->makeUsageOptionsList([
-                 'V'    => 'No-verbose, i.e. be as quiet as possible, just print ' .
-                           'essential informations.',
-                 'l'    => 'Print only the library name.',
-                 'v'    => 'Print only the version.',
-                 'help' => 'This help.'
-             ]), "\n";
+    public function usage()
+    {
+        echo
+            'Usage   : devtools:dependency <options> library', "\n",
+            'Options :', "\n",
+            $this->makeUsageOptionsList([
+                'V'    => 'No-verbose, i.e. be as quiet as possible, just print ' .
+                          'essential informations.',
+                'l'    => 'Print only the library name.',
+                'v'    => 'Print only the version.',
+                'help' => 'This help.'
+            ]), "\n";
 
         return;
     }

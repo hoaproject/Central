@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,17 +43,15 @@ use Hoa\Console;
  *
  * Check if a library requires a new snapshot or not.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Requiresnapshot extends Console\Dispatcher\Kit {
-
+class Requiresnapshot extends Console\Dispatcher\Kit
+{
     /**
      * Options description.
      *
-     * @var \Hoa\Devtools\Bin\Requiresnapshot array
+     * @var array
      */
     protected $options = [
         ['no-verbose', Console\GetOption::NO_ARGUMENT, 'V'],
@@ -69,65 +67,74 @@ class Requiresnapshot extends Console\Dispatcher\Kit {
     /**
      * The entry method.
      *
-     * @access  public
      * @return  int
      */
-    public function main ( ) {
-
+    public function main()
+    {
         $verbose       = Console::isDirect(STDOUT);
         $printSnapshot = false;
         $printDays     = false;
         $printCommits  = false;
 
-        while(false !== $c = $this->getOption($v)) switch($c) {
+        while (false !== $c = $this->getOption($v)) {
+            switch ($c) {
+                case '__ambiguous':
+                    $this->resolveOptionAmbiguity($v);
 
-            case '__ambiguous':
-                $this->resolveOptionAmbiguity($v);
-              break;
+                    break;
 
-            case 'V':
-                $verbose = false;
-              break;
+                case 'V':
+                    $verbose = false;
 
-            case 's':
-                $printSnapshot = true;
-              break;
+                    break;
 
-            case 'd':
-                $printDays = true;
-              break;
+                case 's':
+                    $printSnapshot = true;
 
-            case 'c':
-                $printCommits = true;
-              break;
+                    break;
 
-            case 'h':
-            case '?':
-            default:
-                return $this->usage();
-              break;
+                case 'd':
+                    $printDays = true;
+
+                    break;
+
+                case 'c':
+                    $printCommits = true;
+
+                    break;
+
+                case 'h':
+                case '?':
+                default:
+                    return $this->usage();
+            }
         }
 
         $this->parser->listInputs($repositoryRoot);
 
-        if(empty($repositoryRoot))
+        if (empty($repositoryRoot)) {
             return $this->usage();
+        }
 
-        if(false === file_exists($repositoryRoot . DS . '.git'))
+        if (false === file_exists($repositoryRoot . DS . '.git')) {
             throw new Console\Exception(
                 '%s is not a valid Git repository.',
-                0, $repositoryRoot);
+                0,
+                $repositoryRoot
+            );
+        }
 
         $tag = Console\Processus::execute(
             'git --git-dir=' . $repositoryRoot . '/.git ' .
                 'describe --abbrev=0 --tags origin/master'
         );
 
-        if(empty($tag))
+        if (empty($tag)) {
             throw new Console\Exception('No tag.', 1);
+        }
 
-        $timeZone       = new \DateTimeZone('UTC');
-        $snapshotDT     = \DateTime::createFromFormat(
+        $timeZone   = new \DateTimeZone('UTC');
+        $snapshotDT = \DateTime::createFromFormat(
             '*.y.m.d',
             $tag,
             $timeZone
@@ -142,8 +149,7 @@ class Requiresnapshot extends Console\Dispatcher\Kit {
         $numberOfCommits  = 0;
         $output           = 'No snapshot is required.';
 
-        if(true === $needNewSnapshot) {
-
+        if (true === $needNewSnapshot) {
             $numberOfDays    = (int) $nextSnapshotDT->diff($today)->format('%a');
             $numberOfCommits = (int) Console\Processus::execute(
                 'git --git-dir=' . $repositoryRoot . '/.git ' .
@@ -151,35 +157,41 @@ class Requiresnapshot extends Console\Dispatcher\Kit {
             );
             $needNewSnapshot = 0 < $numberOfCommits;
 
-            if(true === $needNewSnapshot)
-                $output = 'A snapshot is required, since ' . $numberOfDays .
-                          ' day' . (1 < $numberOfDays ? 's' : '') .
-                          ' (tag ' . $tag . ', ' . $numberOfCommits .
-                          ' commit' . (1 < $numberOfCommits ? 's' : '') .
-                          ' to publish)!';
+            if (true === $needNewSnapshot) {
+                $output =
+                    'A snapshot is required, since ' . $numberOfDays .
+                    ' day' . (1 < $numberOfDays ? 's' : '') .
+                    ' (tag ' . $tag . ', ' . $numberOfCommits .
+                    ' commit' . (1 < $numberOfCommits ? 's' : '') .
+                    ' to publish)!';
+            }
         }
 
-        if(   true === $printSnapshot
-           || true === $printDays
-           || true === $printCommits) {
-
+        if (true === $printSnapshot ||
+            true === $printDays ||
+            true === $printCommits) {
             $columns = [];
 
-            if(true === $printSnapshot)
+            if (true === $printSnapshot) {
                 $columns[] = $tag;
+            }
 
-            if(true === $printDays)
-                $columns[] = $numberOfDays . ' day' .
-                             (1 < $numberOfDays ? 's' : '');
+            if (true === $printDays) {
+                $columns[] =
+                    $numberOfDays . ' day' .
+                    (1 < $numberOfDays ? 's' : '');
+            }
 
-            if(true === $printCommits)
-                $columns[] = $numberOfCommits . ' commit' .
-                             (1 < $numberOfCommits ? 's' : '');
+            if (true === $printCommits) {
+                $columns[] =
+                    $numberOfCommits . ' commit' .
+                    (1 < $numberOfCommits ? 's' : '');
+            }
 
             echo implode("\t", $columns), "\n";
-        }
-        elseif(true === $verbose)
+        } elseif (true === $verbose) {
             echo $output, "\n";
+        }
 
         return !$needNewSnapshot;
     }
@@ -187,23 +199,23 @@ class Requiresnapshot extends Console\Dispatcher\Kit {
     /**
      * The command usage.
      *
-     * @access  public
      * @return  int
      */
-    public function usage ( ) {
-
-        echo 'Usage   : devtools:requiresnapshot <options> repository-root', "\n",
-             'Options :', "\n",
-             $this->makeUsageOptionsList([
-                 'V'    => 'No-verbose, i.e. be as quiet as possible, just ' .
-                           'print essential informations.',
-                 's'    => 'Print the latest snapshot name in a column.',
-                 'd'    => 'Print the number of days since the latest ' .
-                           'snapshot in a column.',
-                 'c'    => 'Print the number of commits since the latest ' .
-                           'snapshot in a column.',
-                 'help' => 'This help.'
-             ]), "\n";
+    public function usage()
+    {
+        echo
+            'Usage   : devtools:requiresnapshot <options> repository-root', "\n",
+            'Options :', "\n",
+            $this->makeUsageOptionsList([
+                'V'    => 'No-verbose, i.e. be as quiet as possible, just ' .
+                          'print essential informations.',
+                's'    => 'Print the latest snapshot name in a column.',
+                'd'    => 'Print the number of days since the latest ' .
+                          'snapshot in a column.',
+                'c'    => 'Print the number of commits since the latest ' .
+                          'snapshot in a column.',
+                'help' => 'This help.'
+            ]), "\n";
 
         return;
     }

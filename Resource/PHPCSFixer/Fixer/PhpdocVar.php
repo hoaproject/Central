@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,11 +36,11 @@
 
 namespace Hoa\Devtools\Resource\PHPCSFixer\Fixer;
 
+use SplFileInfo;
 use Symfony\CS\AbstractFixer;
 use Symfony\CS\DocBlock\DocBlock;
 use Symfony\CS\FixerInterface;
 use Symfony\CS\Tokenizer\Tokens;
-use SplFileInfo;
 
 /**
  * Class \Hoa\Devtools\Resource\PHPCSFixer\Fixer\PhpdocVar.
@@ -55,11 +55,9 @@ use SplFileInfo;
  *     @var type
  *     @var $classType
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
 class PhpdocVar extends AbstractFixer
 {
     public function fix(SplFileInfo $file, $content)
@@ -67,7 +65,6 @@ class PhpdocVar extends AbstractFixer
         $tokens = Tokens::fromCode($content);
 
         foreach ($tokens->findGivenKind(T_DOC_COMMENT) as $token) {
-
             $docBlock    = new DocBlock($token->getContent());
             $annotations = $docBlock->getAnnotationsOfType('var');
 
@@ -76,24 +73,19 @@ class PhpdocVar extends AbstractFixer
             }
 
             foreach ($annotations as $annotation) {
-
                 $line        = $docBlock->getLine($annotation->getStart());
                 $lineContent = $line->getContent();
 
                 if (0 !== preg_match('/^(?<before>.*?@var )(?<one>[^\s]+) (?<two>\w+)/', $lineContent, $matches)) {
-
                     if ('object' === $matches['two']) {
                         $line->setContent($matches['before'] . $matches['one'] . "\n");
                     } else {
                         $line->setContent($matches['before'] . $matches['two'] . "\n");
                     }
-
                 }
-
             }
 
             $token->setContent($docBlock->getContent());
-
         }
 
         return $tokens->generateCode();

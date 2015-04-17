@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,22 +36,20 @@
 
 namespace Hoa\Devtools\Resource\PHPCSFixer\Fixer;
 
+use SplFileInfo;
 use Symfony\CS\AbstractFixer;
 use Symfony\CS\DocBlock\DocBlock;
 use Symfony\CS\FixerInterface;
 use Symfony\CS\Tokenizer\Tokens;
-use SplFileInfo;
 
 /**
  * Class \Hoa\Devtools\Resource\PHPCSFixer\Fixer\PhpdocThrows.
  *
  * Transform `@throw` to `@throws`.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
 class PhpdocThrows extends AbstractFixer
 {
     public function fix(SplFileInfo $file, $content)
@@ -59,7 +57,6 @@ class PhpdocThrows extends AbstractFixer
         $tokens = Tokens::fromCode($content);
 
         foreach ($tokens->findGivenKind(T_DOC_COMMENT) as $token) {
-
             $docBlock    = new DocBlock($token->getContent());
             $annotations = $docBlock->getAnnotationsOfType('throw');
 
@@ -68,7 +65,6 @@ class PhpdocThrows extends AbstractFixer
             }
 
             foreach ($annotations as $annotation) {
-
                 $line = $docBlock->getLine($annotation->getStart());
                 $line->setContent(
                     str_replace(
@@ -77,11 +73,9 @@ class PhpdocThrows extends AbstractFixer
                         $line->getContent()
                     )
                 );
-
             }
 
             $token->setContent($docBlock->getContent());
-
         }
 
         return $tokens->generateCode();

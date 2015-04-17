@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,26 +36,23 @@
 
 namespace Hoa\Devtools\Bin;
 
-use Hoa\Core;
 use Hoa\Console;
+use Hoa\Core;
 
 /**
  * Class \Hoa\Devtools\Bin\Diagnostic.
  *
  * This command generates a diagnostic.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @author     Julien Clauzel <julien.clauzel@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin, Julien Clauzel.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Diagnostic extends Console\Dispatcher\Kit {
-
+class Diagnostic extends Console\Dispatcher\Kit
+{
     /**
      * Options description.
      *
-     * @var \Hoa\Devtools\Bin\Diagnostic array
+     * @var array
      */
     protected $options = [
         ['section', Console\GetOption::REQUIRED_ARGUMENT, 's'],
@@ -69,42 +66,45 @@ class Diagnostic extends Console\Dispatcher\Kit {
     /**
      * The entry method.
      *
-     * @access  public
      * @return  int
      */
-    public function main ( ) {
-
+    public function main()
+    {
         $sections   = [];
         $mail       = null;
         $diagnostic = [];
 
-        while(false !== $c = $this->getOption($v)) switch ($c) {
+        while (false !== $c = $this->getOption($v)) {
+            switch ($c) {
+                case 's':
+                    $sections = $this->parser->parseSpecialValue($v);
 
-            case 's':
-                $sections = $this->parser->parseSpecialValue($v);
-              break;
+                    break;
 
-            case 'm':
-                $mail = $v;
-              break;
+                case 'm':
+                    $mail = $v;
 
-            case 'h':
-            case '?':
-                return $this->usage();
-              break;
+                    break;
 
-            case '__ambiguous':
-                $this->resolveOptionAmbiguity($v);
-              break;
+                case 'h':
+                case '?':
+                    return $this->usage();
+
+                case '__ambiguous':
+                    $this->resolveOptionAmbiguity($v);
+
+                    break;
+            }
         }
 
-        $store = function ( $sections, $key, $value = null ) use ( &$diagnostic ) {
-
-            if(is_array($key) && null === $value)
-                foreach($key as $i => $name)
+        $store = function ($sections, $key, $value = null) use (&$diagnostic) {
+            if (is_array($key) && null === $value) {
+                foreach ($key as $i => $name) {
                     $diagnostic[$sections][$i] = $name;
-            else
+                }
+            } else {
                 $diagnostic[$sections][$key] = $value;
+            }
 
             return;
         };
@@ -155,21 +155,20 @@ class Diagnostic extends Console\Dispatcher\Kit {
             defined('PHP_BINARY') ? PHP_BINARY : 'unknown'
         );
 
-        foreach(get_loaded_extensions() as $extension) {
-
+        foreach (get_loaded_extensions() as $extension) {
             $reflection = new \ReflectionExtension($extension);
             $entry      = 'extension-' . strtolower($extension);
 
-            if(    'extension-standard' !== $entry
-                && 'extension-core'     !== $entry) {
-
+            if ('extension-standard' !== $entry &&
+                'extension-core'     !== $entry) {
                 $entries = [];
 
-                foreach($reflection->getINIEntries() as $key => $value)
+                foreach ($reflection->getINIEntries() as $key => $value) {
                     $entries[substr($key, strpos($key, '.') + 1)] = $value;
-            }
-            else
+                }
+            } else {
                 $entries = $reflection->getINIEntries();
+            }
 
             $store(
                 $entry,
@@ -182,16 +181,15 @@ class Diagnostic extends Console\Dispatcher\Kit {
             );
         }
 
-        if(empty($sections) || in_array('all', $sections))
+        if (empty($sections) || in_array('all', $sections)) {
             $ini = $this->arrayToIni($diagnostic);
-        else {
-
+        } else {
             $handle = [];
 
-            foreach($sections as $section) {
-
-                if(false === array_key_exists($section, $diagnostic))
+            foreach ($sections as $section) {
+                if (false === array_key_exists($section, $diagnostic)) {
                     return 1;
+                }
 
                 $handle[$section] = $diagnostic[$section];
             }
@@ -201,8 +199,7 @@ class Diagnostic extends Console\Dispatcher\Kit {
 
         echo $ini, "\n";
 
-        if(null !== $mail) {
-
+        if (null !== $mail) {
             $subject = 'Diagnostic from ' . get_current_user();
 
             return mail($mail, $subject, $ini) ? 0 : 1;
@@ -214,23 +211,23 @@ class Diagnostic extends Console\Dispatcher\Kit {
     /**
      * The command usage.
      *
-     * @access  public
      * @return  int
      */
-    public function usage ( ) {
-
-        echo 'Usage   : devtools:diagnostic <options>', "\n",
-             'Options :', "\n",
-             $this->makeUsageOptionsList([
-                 's'    => 'Sections (comma separated) to display, among:' . "\n" .
-                           '    • all;' . "\n" .
-                           '    • version;' . "\n" .
-                           '    • system;' . "\n" .
-                           '    • bin;' . "\n" .
-                           '    • extension-<name in lowercase> (see `php -m`).',
-                 'm'    => 'Email address where to send the diagnostic.',
-                 'help' => 'This help.'
-             ]), "\n";
+    public function usage()
+    {
+        echo
+            'Usage   : devtools:diagnostic <options>', "\n",
+            'Options :', "\n",
+            $this->makeUsageOptionsList([
+                's'    => 'Sections (comma separated) to display, among:' . "\n" .
+                          '    • all;' . "\n" .
+                          '    • version;' . "\n" .
+                          '    • system;' . "\n" .
+                          '    • bin;' . "\n" .
+                          '    • extension-<name in lowercase> (see `php -m`).',
+                'm'    => 'Email address where to send the diagnostic.',
+                'help' => 'This help.'
+            ]), "\n";
 
         return;
     }
@@ -238,25 +235,24 @@ class Diagnostic extends Console\Dispatcher\Kit {
     /**
      * Transform an array into INI format.
      *
-     * @access  public
      * @param   array  $array    Array to transform.
      * @return  string
      */
-    private function arrayToIni ( Array $array ) {
-
+    private function arrayToIni(Array $array)
+    {
         $out = null;
 
-        foreach($array as $section => $entries) {
-
-            if(null !== $out)
+        foreach ($array as $section => $entries) {
+            if (null !== $out) {
                 $out .= "\n\n";
+            }
 
             $out .= '[' . $section . ']';
 
-            foreach($entries as $key => $value) {
-
-                if (is_array($value))
+            foreach ($entries as $key => $value) {
+                if (is_array($value)) {
                     $value = implode(' ', $value);
+                }
 
                 $out .= "\n" . $key . ' = "' . $value . '"';
             }

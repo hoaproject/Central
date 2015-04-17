@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,17 +44,15 @@ use Hoa\Core;
  *
  * Wrapper around `php-cs-fixer`.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Cs extends Console\Dispatcher\Kit {
-
+class Cs extends Console\Dispatcher\Kit
+{
     /**
      * Options description.
      *
-     * @var \Hoa\Devtools\Bin\Cs array
+     * @var array
      */
     protected $options = [
         ['dry-run', Console\GetOption::NO_ARGUMENT, 'd'],
@@ -68,66 +66,69 @@ class Cs extends Console\Dispatcher\Kit {
     /**
      * The entry method.
      *
-     * @access  public
      * @return  int
      */
-    public function main ( ) {
-
+    public function main()
+    {
         $dryRun = false;
         $diff   = false;
 
-        while(false !== $c = $this->getOption($v)) switch($c) {
+        while (false !== $c = $this->getOption($v)) {
+            switch ($c) {
+                case '__ambiguous':
+                    $this->resolveOptionAmbiguity($v);
 
-            case '__ambiguous':
-                $this->resolveOptionAmbiguity($v);
-              break;
+                    break;
 
-            case 'd':
-                $dryRun = true;
-              break;
+                case 'd':
+                    $dryRun = true;
 
-            case 'D':
-                $diff = true;
-              break;
+                    break;
 
-            case 'h':
-            case '?':
-            default:
-                return $this->usage();
-              break;
+                case 'D':
+                    $diff = true;
+
+                    break;
+
+                case 'h':
+                case '?':
+                default:
+                    return $this->usage();
+            }
         }
 
         $this->parser->listInputs($path);
 
-        if(empty($path))
+        if (empty($path)) {
             return $this->usage();
+        }
 
         $phpCsFixer        = Console\Processus::locate('php-cs-fixer');
         $configurationFile = resolve(
             'hoa://Library/Devtools/Resource/PHPCSFixer/ConfigurationFile.php'
         );
 
-        if(empty($phpCsFixer))
-            throw new Console\Exception(
-                'php-cs-fixer binary is not found.', 0);
+        if (empty($phpCsFixer)) {
+            throw new Console\Exception('php-cs-fixer binary is not found.', 0);
+        }
 
         $arguments = ['fix', '--config-file' => $configurationFile];
 
-        if(true === $dryRun)
+        if (true === $dryRun) {
             $arguments[] = '--dry-run';
+        }
 
-        if(true === $diff)
+        if (true === $diff) {
             $arguments[] = '--diff';
+        }
 
         $arguments[] = $path;
 
         $processus = new Console\Processus($phpCsFixer, $arguments);
-        $processus->on('input', function ( ) {
-
+        $processus->on('input', function () {
             return false;
         });
-        $processus->on('output', function ( Core\Event\Bucket $bucket ) {
-
+        $processus->on('output', function (Core\Event\Bucket $bucket) {
             echo $bucket->getData()['line'], "\n";
 
             return;
@@ -140,18 +141,18 @@ class Cs extends Console\Dispatcher\Kit {
     /**
      * The command usage.
      *
-     * @access  public
      * @return  int
      */
-    public function usage ( ) {
-
-        echo 'Usage   : devtools:cs <options> path', "\n",
-             'Options :', "\n",
-             $this->makeUsageOptionsList([
-                 'd'    => 'Only shows which files would have been modified.',
-                 'D'    => 'Produce diff for each file.',
-                 'help' => 'This help.'
-             ]), "\n";
+    public function usage()
+    {
+        echo
+            'Usage   : devtools:cs <options> path', "\n",
+            'Options :', "\n",
+            $this->makeUsageOptionsList([
+                'd'    => 'Only shows which files would have been modified.',
+                'D'    => 'Produce diff for each file.',
+                'help' => 'This help.'
+            ]), "\n";
 
         return;
     }

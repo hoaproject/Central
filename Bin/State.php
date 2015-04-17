@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,17 +43,15 @@ use Hoa\Console;
  *
  * Get state of a library.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class State extends Console\Dispatcher\Kit {
-
+class State extends Console\Dispatcher\Kit
+{
     /**
      * Options description.
      *
-     * @var \Hoa\Devtools\Bin\State array
+     * @var array
      */
     protected $options = [
         ['help', Console\GetOption::NO_ARGUMENT, 'h'],
@@ -65,44 +63,49 @@ class State extends Console\Dispatcher\Kit {
     /**
      * The entry method.
      *
-     * @access  public
      * @return  int
      */
-    public function main ( ) {
-
+    public function main()
+    {
         $library = null;
 
-        while(false !== $c = $this->getOption($v)) switch($c) {
+        while (false !== $c = $this->getOption($v)) {
+            switch ($c) {
+                case '__ambiguous':
+                    $this->resolveOptionAmbiguity($v);
 
-            case '__ambiguous':
-                $this->resolveOptionAmbiguity($v);
-              break;
+                    break;
 
-            case 'h':
-            case '?':
-            default:
-                return $this->usage();
-              break;
+                case 'h':
+                case '?':
+                default:
+                    return $this->usage();
+        }
         }
 
         $this->parser->listInputs($library);
 
-        if(empty($library))
+        if (empty($library)) {
             return $this->usage();
+        }
 
         $library = ucfirst(strtolower($library));
         $path    = 'hoa://Library/' . $library;
 
-        if(false === file_exists($path))
+        if (false === file_exists($path)) {
             throw new Console\Exception(
                 'The %s library does not exist.',
-                0, $library);
+                0,
+                $library
+            );
+        }
 
         $status  = 'beta';
         $path   .= '/.State';
 
-        if(true === file_exists($path))
+        if (true === file_exists($path)) {
             $status = trim(file_get_contents($path));
+        }
 
         echo $status;
 
@@ -112,16 +115,16 @@ class State extends Console\Dispatcher\Kit {
     /**
      * The command usage.
      *
-     * @access  public
      * @return  int
      */
-    public function usage ( ) {
-
-        echo 'Usage   : devtools:state <options> library', "\n",
-             'Options :', "\n",
-             $this->makeUsageOptionsList([
-                 'help' => 'This help.'
-             ]), "\n";
+    public function usage()
+    {
+        echo
+            'Usage   : devtools:state <options> library', "\n",
+            'Options :', "\n",
+            $this->makeUsageOptionsList([
+                'help' => 'This help.'
+            ]), "\n";
 
         return;
     }
