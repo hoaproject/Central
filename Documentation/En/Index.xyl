@@ -131,15 +131,17 @@ echo $bench;
 $bench->foo;
 
 // Is “foo” exists?
-if(isset($bench->foo))
+if (isset($bench->foo)) {
     // Then, delete it, for example.
-    unset($bench->foo);</code></pre>
+    unset($bench->foo);
+}</code></pre>
   <p>Obviously, we can remove all marks thanks to the
   <code>Hoa\Bench\Bench::unsetAll</code> method. In addition, the
   <code>Hoa\Bench\Bench</code> class behaves like an iterator on all marks,
   thus:</p>
-  <pre><code class="language-php">foreach($bench as $id => $mark)
+  <pre><code class="language-php">foreach ($bench as $id => $mark) {
     echo $id, ' => ', ($mark->isRunning() ? 'running' : 'stopped'), "\n";
+}
 
 /**
  * Could output:
@@ -174,15 +176,13 @@ if(isset($bench->foo))
   <p>For example, if we have a lot of marks and we would like to filter the
   “noise”, it means marks with a low execution time (let say, lower than 5%), we
   can use the following filter:</p>
-  <pre><code class="language-php">$bench->filter(function ( $id, $time, $pourcent ) {
-
+  <pre><code class="language-php">$bench->filter(function($id, $time, $pourcent) {
     return $pourcent > 5;
 });</code></pre>
   <p>If we name our marks with a specific classification, we can filter
   according to the name of identifiers. For example, we would like all the marks
   that contain the sub-word <code>_critical</code>:</p>
-  <pre><code class="language-php">$bench->filter(function ( $id, $time, $pourcent ) {
-
+  <pre><code class="language-php">$bench->filter(function($id, $time, $pourcent ) {
     return 0 !== preg_match('#_critical#', $id);
 });</code></pre>
   <p>Obviously, we can add many filters.</p>
@@ -209,9 +209,9 @@ if(isset($bench->foo))
   <code>Dtrace.php</code> file:</p>
   <pre><code class="language-php">&amp;lt;?php
 
-function f ( ) { g(); h(); }
-function g ( ) { h();      }
-function h ( ) {           }
+function f() { g(); h(); }
+function g() { h();      }
+function h() {           }
 
 f();</code></pre>
   <p>This file is very simple but it will be our test to execute the first
@@ -234,12 +234,12 @@ Request end</code></pre>
   <code>Dtrace.php</code>:</p>
   <pre><code class="language-php">&amp;lt;?php
 
-function f ( ) { ++$i; g(); h();             }
-function g ( ) { h();                        }
-function h ( ) { throw new Exception('foo'); }
+function f() { ++$i; g(); h();             }
+function g() { h();                        }
+function h() { throw new Exception('foo'); }
 
-try                     { f(); }
-catch ( \Exception $e ) {      }
+try                   { f(); }
+catch (\Exception $e) {      }
   </code></pre>
   <p>And now, reexecute the DTrace program:</p>
   <pre><code class="language-shell">$ sudo $exed -c "php Dtrace.php"
