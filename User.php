@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Acl {
+namespace Hoa\Acl;
 
 /**
  * Class \Hoa\Acl\User.
@@ -216,6 +216,4 @@ class User {
 
         return $this->userLabel;
     }
-}
-
 }

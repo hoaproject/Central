@@ -34,7 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Acl {
+namespace Hoa\Acl;
+
+use Hoa\Core;
 
 /**
  * Class \Hoa\Acl\Exception.
@@ -46,6 +48,4 @@ namespace Hoa\Acl {
  * @license    New BSD License
  */
 
-class Exception extends \Hoa\Core\Exception { }
-
-}
+class Exception extends Core\Exception { }

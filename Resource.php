@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Acl {
+namespace Hoa\Acl;
 
 /**
  * Class \Hoa\Acl\Resource.
@@ -216,6 +216,4 @@ class Resource {
 
         return $this->resourceLabel;
     }
-}
-
 }

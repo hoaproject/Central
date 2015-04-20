@@ -34,43 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Acl;
 
-from('Hoa')
-
-/**
- * \Hoa\Acl\Exception
- */
--> import('Acl.Exception')
-
-/**
- * \Hoa\Acl\User
- */
--> import('Acl.User')
-
-/**
- * \Hoa\Acl\Group
- */
--> import('Acl.Group')
-
-/**
- * \Hoa\Acl\Permission
- */
--> import('Acl.Permission')
-
-/**
- * \Hoa\Acl\Resource
- */
--> import('Acl.Resource')
-
-/**
- * \Hoa\Graph
- */
--> import('Graph.~');
-
-}
-
-namespace Hoa\Acl {
+use Hoa\Core;
+use Hoa\Graph;
 
 /**
  * Class \Hoa\Acl.
@@ -138,12 +105,14 @@ class Acl {
      *                            class.
      * @return  void
      */
-    private function __construct ( $loop = \Hoa\Graph::DISALLOW_LOOP ) {
+    private function __construct ( $loop = Graph::DISALLOW_LOOP ) {
 
-        $this->groups = \Hoa\Graph::getInstance(
-            \Hoa\Graph::TYPE_ADJACENCYLIST,
+        $this->groups = Graph::getInstance(
+            Graph::TYPE_ADJACENCYLIST,
             $loop
         );
+
+        return;
     }
 
     /**
@@ -154,12 +123,12 @@ class Acl {
      *                            class.
      * @return  object
      */
-    public static function getInstance ( $loop = \Hoa\Graph::DISALLOW_LOOP ) {
+    public static function getInstance ( $loop = Graph::DISALLOW_LOOP ) {
 
-        if(null === self::$_instance)
-            self::$_instance = new self($loop);
+        if(null === static::$_instance)
+            static::$_instance = new static($loop);
 
-        return self::$_instance;
+        return static::$_instance;
     }
 
     /**
@@ -174,7 +143,10 @@ class Acl {
 
         if($this->userExists($user->getId()))
             throw new Exception(
-                'User %s is already registried.', 0, $user->getId());
+                'User %s is already registried.',
+                0,
+                $user->getId()
+            );
 
         $this->users[$user->getId()] = $user;
 
@@ -222,7 +194,7 @@ class Acl {
 
             $this->getGroups()->addNode($group, $inherit);
         }
-        catch ( \Hoa\Graph\Exception $e ) {
+        catch ( Graph\Exception $e ) {
 
             throw new Exception($e->getMessage(), $e->getCode());
         }
@@ -248,7 +220,7 @@ class Acl {
 
             $this->getGroups()->deleteNode($groupId, $propagate);
         }
-        catch ( \Hoa\Graph\Exception $e ) {
+        catch ( Graph\Exception $e ) {
 
             throw new Exception($e->getMessage(), $e->getCode());
         }
@@ -271,7 +243,10 @@ class Acl {
 
         if($this->resourceExists($resource->getId()))
             throw new Exception(
-                'Resource %s is already registried.', 1, $resource->getId());
+                'Resource %s is already registried.',
+                1,
+                $resource->getId()
+            );
 
         $this->resources[$resource->getId()] = $resource;
 
@@ -308,7 +283,10 @@ class Acl {
 
         if(false === $this->groupExists($groupId))
             throw new Exception(
-                'Group %s does not exist.', 2, $groupId);
+                'Group %s does not exist.',
+                2,
+                $groupId
+            );
 
         $this->getGroups()->getNode($groupId)->addPermission($permissions);
 
@@ -334,7 +312,10 @@ class Acl {
 
         if(false === $this->groupExists($groupId))
             throw new Exception(
-                'Group %s does not exist.', 3, $groupId);
+                'Group %s does not exist.',
+                3,
+                $groupId
+            );
 
         $this->getGroups()->getNode($groupId)->deletePermission($permissions);
 
@@ -359,14 +340,16 @@ class Acl {
                                 IAcl\Assert $assert = null ) {
 
         if($user instanceof User)
-            $user       = $user->getId();
+            $user = $user->getId();
 
         if($permission instanceof Permission)
             $permission = $permission->getId();
 
         if(is_array($permission))
             throw new Exception(
-                'Should check one permission, not a list of permissions.', 4);
+                'Should check one permission, not a list of permissions.',
+                4
+            );
 
         if(   null !== $resource
            && !($resource instanceof Resource))
@@ -404,22 +387,24 @@ class Acl {
     public function isGroupAllowed ( $group, $permission ) {
 
         if($group instanceof Group)
-            $group      = $group->getId();
+            $group = $group->getId();
 
         if($permission instanceof Permission)
             $permission = $permission->getId();
 
         if(is_array($permission))
-            throw new \Exception(
+            throw new Exception(
                 'Should check one permission, not a list of permissions.', 5);
 
         if(false === $this->groupExists($group))
             throw new Exception(
                 'Group %s does not exist.', 6, $group);
 
-        return $this->getGroups()
-                    ->getNode($group)
-                    ->permissionExists($permission);
+        return
+            $this
+                ->getGroups()
+                ->getNode($group)
+                ->permissionExists($permission);
     }
 
     /**
@@ -478,8 +463,7 @@ class Acl {
     public function getUser ( $userId ) {
 
         if(false === $this->userExists($userId))
-            throw new Exception(
-                'User %s does not exist.', 7, $userId);
+            throw new Exception('User %s does not exist.', 7, $userId);
 
         return $this->users[$userId];
     }
@@ -506,8 +490,7 @@ class Acl {
     public function getGroup ( $groupId ) {
 
         if(false === $this->groupExists($groupId))
-            throw new Exception(
-                'Group %s does not exist.', 8, $groupId);
+            throw new Exception('Group %s does not exist.', 8, $groupId);
 
         return $this->getGroups()->getNode($groupId);
     }
@@ -534,8 +517,7 @@ class Acl {
     public function getResource ( $resourceId ) {
 
         if(false === $this->resourceExists($resourceId))
-            throw new Exception(
-                'Resource %s does not exist.', 9, $resourceId);
+            throw new Exception('Resource %s does not exist.', 9, $resourceId);
 
         return $this->resources[$resourceId];
     }
@@ -563,13 +545,7 @@ class Acl {
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Acl\Acl');
-
-}
+Core\Consistency::flexEntity('Hoa\Acl\Acl');

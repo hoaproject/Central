@@ -34,23 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Acl;
 
-from('Hoa')
-
-/**
- * \Hoa\Acl\Exception
- */
--> import('Acl.Exception')
-
-/**
- * \Hoa\Graph\IGraph\Node
- */
--> import('Graph.I~.Node');
-
-}
-
-namespace Hoa\Acl {
+use Hoa\Graph;
 
 /**
  * Class \Hoa\Acl\Group.
@@ -63,7 +49,7 @@ namespace Hoa\Acl {
  * @license    New BSD License
  */
 
-class Group implements \Hoa\Graph\IGraph\Node {
+class Group implements Graph\IGraph\Node {
 
     /**
      * Group ID.
@@ -122,7 +108,9 @@ class Group implements \Hoa\Graph\IGraph\Node {
             if(!($permission instanceof Permission))
                 throw new Exception(
                     'Permission %s must be an instance of \Hoa\Acl\Permission',
-                    0, $permission);
+                    0,
+                    $permission
+                );
 
             if(true === $this->permissionExists($permission->getId()))
                 continue;
@@ -246,6 +234,4 @@ class Group implements \Hoa\Graph\IGraph\Node {
 
         return $this->getId();
     }
-}
-
 }

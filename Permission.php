@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Acl {
+namespace Hoa\Acl;
 
 /**
  * Class \Hoa\Acl\Permission.
@@ -131,6 +131,4 @@ class Permission {
 
         return $this->permissionLabel;
     }
-}
-
 }
