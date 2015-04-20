@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,46 +44,43 @@ use Hoa\Graph;
  * Describe a group. A group is based on a graph (coding by adjacency list) to
  * set up the multi-inheritance of the group.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Group implements Graph\IGraph\Node {
-
+class Group implements Graph\IGraph\Node
+{
     /**
      * Group ID.
      *
-     * @var \Hoa\Acl\Group mixed
+     * @var mixed
      */
     protected $groupId     = null;
 
     /**
      * Group label.
      *
-     * @var \Hoa\Acl\Group string
+     * @var string
      */
     protected $groupLabel  = null;
 
     /**
      * Collections of all permissions.
      *
-     * @var \Hoa\Acl\Group array
+     * @var array
      */
-    protected $permissions = array();
+    protected $permissions = [];
 
 
 
     /**
      * Built a new group.
      *
-     * @access  public
      * @param   mixed   $id       The group ID.
      * @param   string  $label    The group label.
      * @return  void
      */
-    public function __construct ( $id, $label = null ) {
-
+    public function __construct($id, $label = null)
+    {
         $this->setId($id);
         $this->setLabel($label);
 
@@ -93,27 +90,28 @@ class Group implements Graph\IGraph\Node {
     /**
      * Add permission.
      *
-     * @access  public
      * @param   array   $permissions    Permission to add.
      * @return  array
-     * @throw   \Hoa\Acl\Exception
+     * @throws  \Hoa\Acl\Exception
      */
-    public function addPermission ( $permissions = array() ) {
+    public function addPermission($permissions = [])
+    {
+        if (!is_array($permissions)) {
+            $permissions = [$permissions];
+        }
 
-        if(!is_array($permissions))
-            $permissions = array($permissions);
-
-        foreach($permissions as $foo => $permission) {
-
-            if(!($permission instanceof Permission))
+        foreach ($permissions as $permission) {
+            if (!($permission instanceof Permission)) {
                 throw new Exception(
                     'Permission %s must be an instance of \Hoa\Acl\Permission',
                     0,
                     $permission
                 );
+            }
 
-            if(true === $this->permissionExists($permission->getId()))
+            if (true === $this->permissionExists($permission->getId())) {
                 continue;
+            }
 
             $this->permissions[$permission->getId()] = $permission;
         }
@@ -124,23 +122,24 @@ class Group implements Graph\IGraph\Node {
     /**
      * Delete permission.
      *
-     * @access  public
      * @param   array   $permissions    Permission to add.
      * @return  array
-     * @throw   \Hoa\Acl\Exception
+     * @throws  \Hoa\Acl\Exception
      */
-    public function deletePermission ( $permissions = array() ) {
+    public function deletePermission($permissions = [])
+    {
+        if (!is_array($permissions)) {
+            $permissions = [$permissions];
+        }
 
-        if(!is_array($permissions))
-            $permissions = array($permissions);
-
-        foreach($permissions as $foo => $permission) {
-
-            if($permission instanceof Permission)
+        foreach ($permissions as $permission) {
+            if ($permission instanceof Permission) {
                 $permission = $permission->getId();
+            }
 
-            if(false === $this->permissionExists($permission))
+            if (false === $this->permissionExists($permission)) {
                 continue;
+            }
 
             unset($this->permissions[$permission]);
         }
@@ -151,35 +150,32 @@ class Group implements Graph\IGraph\Node {
     /**
      * Check if a permission exists.
      *
-     * @access  public
      * @param   mixed   $permissionId    The permission ID.
      * @return  bool
      */
-    public function permissionExists ( $permissionId ) {
-
+    public function permissionExists($permissionId)
+    {
         return isset($this->permissions[$permissionId]);
     }
 
     /**
      * Get all permissions, i.e. the permissions collection.
      *
-     * @access  public
      * @return  array
      */
-    public function getPermissions ( ) {
-
+    public function getPermissions()
+    {
         return $this->permissions;
     }
 
     /**
      * Set group ID.
      *
-     * @access  protected
      * @param   mixed      $id    The group ID.
      * @return  mixed
      */
-    protected function setId ( $id ) {
-
+    protected function setId($id)
+    {
         $old           = $this->groupId;
         $this->groupId = $id;
 
@@ -189,12 +185,11 @@ class Group implements Graph\IGraph\Node {
     /**
      * Set group label.
      *
-     * @access  public
      * @param   string  $label    The group label.
      * @return  string
      */
-    public function setLabel ( $label ) {
-
+    public function setLabel($label)
+    {
         $old              = $this->groupLabel;
         $this->groupLabel = $label;
 
@@ -204,22 +199,20 @@ class Group implements Graph\IGraph\Node {
     /**
      * Get group ID.
      *
-     * @access  public
      * @return  mixed
      */
-    public function getId ( ) {
-
+    public function getId()
+    {
         return $this->groupId;
     }
 
     /**
      * Get group label.
      *
-     * @access  public
      * @return  mixed
      */
-    public function getLabel ( ) {
-
+    public function getLabel()
+    {
         return $this->groupLabel;
     }
 
@@ -227,11 +220,10 @@ class Group implements Graph\IGraph\Node {
      * Get node ID, i.e. group ID as well (see
      * \Hoa\Graph\IGraph\Node).
      *
-     * @access  public
      * @return  mixed
      */
-    public function getNodeId ( ) {
-
+    public function getNodeId()
+    {
         return $this->getId();
     }
 }

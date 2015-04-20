@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,46 +41,43 @@ namespace Hoa\Acl;
  *
  * Describe a resource.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Resource {
-
+class Resource
+{
     /**
      * Resource ID.
      *
-     * @var \Hoa\Acl\Resource mixed
+     * @var mixed
      */
     protected $resourceId    = null;
 
     /**
      * Resource label.
      *
-     * @var \Hoa\Acl\Resource string
+     * @var string
      */
     protected $resourceLabel = null;
 
     /**
      * Collections of all users ID.
      *
-     * @var \Hoa\Acl\Resource array
+     * @var array
      */
-    protected $users         = array();
+    protected $users         = [];
 
 
 
     /**
      * Built a new resource.
      *
-     * @access  public
      * @param   mixed   $id       The resource ID.
      * @param   string  $label    The resource label.
      * @return  void
      */
-    public function __construct ( $id, $label = null ) {
-
+    public function __construct($id, $label = null)
+    {
         $this->setId($id);
         $this->setLabel($label);
 
@@ -90,22 +87,23 @@ class Resource {
     /**
      * Add user.
      *
-     * @access  public
      * @param   array   $users    User to add.
      * @return  array
      */
-    public function addUser ( $users = array() ) {
+    public function addUser($users = [])
+    {
+        if (!is_array($users)) {
+            $users = [$users];
+        }
 
-        if(!is_array($users))
-            $users = array($users);
-
-        foreach($users as $foo => $user) {
-
-            if($user instanceof User)
+        foreach ($users as $user) {
+            if ($user instanceof User) {
                 $user = $user->getId();
+            }
 
-            if(true === $this->userExists($user))
+            if (true === $this->userExists($user)) {
                 continue;
+            }
 
             $this->users[$user] = true;
         }
@@ -116,22 +114,21 @@ class Resource {
     /**
      * Delete user.
      *
-     * @access  public
      * @param   array   $users    User to add.
      * @return  array
-     * @throw   \Hoa\Acl\Exception
      */
-    public function deleteUser ( $users = array() ) {
-
+    public function deleteUser($users = [])
+    {
         $users = (array) $users;
 
-        foreach($users as $foo => $user) {
-
-            if($user instanceof User)
+        foreach ($users as $user) {
+            if ($user instanceof User) {
                 $user = $user->getId();
+            }
 
-            if(false === $this->userExists($user))
+            if (false === $this->userExists($user)) {
                 continue;
+            }
 
             unset($this->users[$user]);
         }
@@ -142,14 +139,14 @@ class Resource {
     /**
      * Check if a user exists.
      *
-     * @access  public
      * @param   mixed   $userId    The user ID.
      * @return  bool
      */
-    public function userExists ( $userId ) {
-
-        if($userId instanceof User)
+    public function userExists($userId)
+    {
+        if ($userId instanceof User) {
             $userId = $userId->getId();
+        }
 
         return isset($this->users[$userId]);
     }
@@ -157,23 +154,21 @@ class Resource {
     /**
      * Get all users, i.e. the users collection.
      *
-     * @access  public
      * @return  array
      */
-    public function getUsers ( ) {
-
+    public function getUsers()
+    {
         return array_keys($this->users);
     }
 
     /**
      * Set resource ID.
      *
-     * @access  protected
      * @param   mixed      $id    The resource ID.
      * @return  mixed
      */
-    protected function setId ( $id ) {
-
+    protected function setId($id)
+    {
         $old              = $this->resourceId;
         $this->resourceId = $id;
 
@@ -183,12 +178,11 @@ class Resource {
     /**
      * Set resource label.
      *
-     * @access  public
      * @param   string  $label    The resource label.
      * @return  string
      */
-    public function setLabel ( $label ) {
-
+    public function setLabel($label)
+    {
         $old                 = $this->resourceLabel;
         $this->resourceLabel = $label;
 
@@ -198,22 +192,20 @@ class Resource {
     /**
      * Get resource ID.
      *
-     * @access  public
      * @return  mixed
      */
-    public function getId ( ) {
-
+    public function getId()
+    {
         return $this->resourceId;
     }
 
     /**
      * Get resource label.
      *
-     * @access  public
      * @return  mixed
      */
-    public function getLabel ( ) {
-
+    public function getLabel()
+    {
         return $this->resourceLabel;
     }
 }
