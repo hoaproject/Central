@@ -80,9 +80,9 @@ we consider the `Dtrace.php` file that contains the following code:
 ```php
 <?php
 
-function f ( ) { g(); h(); }
-function g ( ) { h();      }
-function h ( ) {           }
+function f() { g(); h(); }
+function g() { h();      }
+function h() {           }
 
 f();
 ```
