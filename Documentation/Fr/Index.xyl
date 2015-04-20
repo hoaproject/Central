@@ -182,13 +182,13 @@ if (isset($bench->foo)) {
   <p>Par exemple, si nous avons beaucoup de marques et que nous voulons filtrer
   le « bruit », c'est à dire les marques avec des petits temps d'exécutions
   (disons inférieur à 5%), nous pouvons utiliser le filtre suivant :</p>
-  <pre><code class="language-php">$bench->filter(function($id, $time, $pourcent) {
+  <pre><code class="language-php">$bench->filter(function ($id, $time, $pourcent) {
     return $pourcent > 5;
 });</code></pre>
   <p>Si nous nommons nos marques avec une nomenclature particulière, nous
   pouvons filtrer à partir de leurs identifiants. Par exemple, nous voulons
   toutes les marques comportant le sous-mot <code>_critical</code> :</p>
-  <pre><code class="language-php">$bench->filter(function($id, $time, $pourcent) {
+  <pre><code class="language-php">$bench->filter(function ($id, $time, $pourcent) {
     return 0 !== preg_match('#_critical#', $id);
 });</code></pre>
   <p>Nous pouvons bien sûr ajouter plusieurs filtres.</p>

@@ -176,13 +176,13 @@ if (isset($bench->foo)) {
   <p>For example, if we have a lot of marks and we would like to filter the
   “noise”, it means marks with a low execution time (let say, lower than 5%), we
   can use the following filter:</p>
-  <pre><code class="language-php">$bench->filter(function($id, $time, $pourcent) {
+  <pre><code class="language-php">$bench->filter(function ($id, $time, $pourcent) {
     return $pourcent > 5;
 });</code></pre>
   <p>If we name our marks with a specific classification, we can filter
   according to the name of identifiers. For example, we would like all the marks
   that contain the sub-word <code>_critical</code>:</p>
-  <pre><code class="language-php">$bench->filter(function($id, $time, $pourcent ) {
+  <pre><code class="language-php">$bench->filter(function ($id, $time, $pourcent ) {
     return 0 !== preg_match('#_critical#', $id);
 });</code></pre>
   <p>Obviously, we can add many filters.</p>
