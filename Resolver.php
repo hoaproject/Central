@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -45,24 +45,22 @@ use Hoa\Socket;
  * Provide a DNS resolution server.
  * Please, see RFC6195, RFC1035 and RFC1034 for an overview.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Resolver implements Core\Event\Listenable {
-
+class Resolver implements Core\Event\Listenable
+{
     /**
      * Listeners.
      *
-     * @var \Hoa\Core\Event\Listener object
+     * @var \Hoa\Core\Event\Listener
      */
     protected $_on             = null;
 
     /**
      * Socket.
      *
-     * @var \Hoa\Socket object
+     * @var \Hoa\Socket
      */
     protected $_server         = null;
 
@@ -71,71 +69,71 @@ class Resolver implements Core\Event\Listenable {
      * Please, see
      * http://iana.org/assignments/dns-parameters/dns-parameters.xml.
      *
-     * @var \Hoa\Dns array
+     * @var array
      */
     protected static $_types   = [
-        'invalid'     =>     0, // Invalid.
-        'a'           =>     1, // Host address.
-        'ns'          =>     2, // Authorative name server.
-        'md'          =>     3, // Mail destination (obsolete, use MX).
-        'mf'          =>     4, // Mail forwarder (obsolete, use MX).
-        'cname'       =>     5, // Canonical name for an alias.
-        'soa'         =>     6, // Start of a zone of authority.
-        'mb'          =>     7, // Mailbox domain name.
-        'mg'          =>     8, // Mail group member.
-        'mr'          =>     9, // Mail rename name.
-        'null'        =>    10, // Null resource record.
-        'wks'         =>    11, // Well known service description.
-        'ptr'         =>    12, // Domain name pointer.
-        'hinfo'       =>    13, // Host information.
-        'minfo'       =>    14, // Mailbox or mail list information.
-        'mx'          =>    15, // Mail exchange.
-        'txt'         =>    16, // Text strings.
-        'rp'          =>    17, // Responsible person.
-        'afsdb'       =>    18, // AFS cell database.
-        'x25'         =>    19, // X_25 calling address.
-        'isdn'        =>    20, // ISDN calling address.
-        'rt'          =>    21, // Route through resource record.
-        'nsap'        =>    22, // NSAP address.
-        'ns_nsap_ptr' =>    23, // Reverse NSAP lookup (deprecated).
-        'sig'         =>    24, // Security signature.
-        'key'         =>    25, // Security key resource record.
-        'px'          =>    26, // X.400 mail mapping.
-        'gpos'        =>    27, // Geographical position (withdrawn).
-        'aaaa'        =>    28, // IPv6 Address.
-        'loc'         =>    29, // Location Information.
-        'nxt'         =>    30, // Next domain.
-        'eid'         =>    31, // Endpoint identifier.
-        'nimloc'      =>    32, // Nimrod Locator.
-        'srv'         =>    33, // Server Selection.
-        'atma'        =>    34, // ATM Address.
-        'naptr'       =>    35, // Naming Authority pointer.
-        'kx'          =>    36, // Key Exchange.
-        'cert'        =>    37, // Certification Record.
-        'a6'          =>    38, // IPv6 Address (obsolete, use aaaa).
-        'dname'       =>    39, // Non-terminal DNAME (for IPv6).
-        'sink'        =>    40, // Kitchen sink.
-        'opt'         =>    41, // EDNS0 option (meta-RR).
-        'apl'         =>    42, // Address prefix list.
-        'ds'          =>    43, // Delegation Signer
-        'sshfp'       =>    44, // SSH Fingerprint
-        'ipseckey'    =>    45, // IPSEC Key
-        'rrsig'       =>    46, // RRSet Signature
-        'nsec'        =>    47, // Negative Security
-        'dnskey'      =>    48, // DNS Key
-        'dhcid'       =>    49, // Dynamic host configuration identifier
-        'nsec3'       =>    50, // Negative security type 3
-        'nsec3param'  =>    51, // Negative security type 3 parameters
-        'hip'         =>    55, // Host Identity Protocol
-        'spf'         =>    99, // Sender Policy Framework
-        'tkey'        =>   249, // Transaction key
-        'tsig'        =>   250, // Transaction signature.
-        'ixfr'        =>   251, // Incremental zone transfer.
-        'axfr'        =>   252, // Transfer zone of authority.
-        'mailb'       =>   253, // Transfer mailbox records.
-        'maila'       =>   254, // Transfer mail agent records.
-        'any'         =>   255, // Wildcard match.
-        'zxfr'        =>   256, // BIND-specific, nonstandard.
+        'invalid'     => 0,     // Invalid.
+        'a'           => 1,     // Host address.
+        'ns'          => 2,     // Authorative name server.
+        'md'          => 3,     // Mail destination (obsolete, use MX).
+        'mf'          => 4,     // Mail forwarder (obsolete, use MX).
+        'cname'       => 5,     // Canonical name for an alias.
+        'soa'         => 6,     // Start of a zone of authority.
+        'mb'          => 7,     // Mailbox domain name.
+        'mg'          => 8,     // Mail group member.
+        'mr'          => 9,     // Mail rename name.
+        'null'        => 10,    // Null resource record.
+        'wks'         => 11,    // Well known service description.
+        'ptr'         => 12,    // Domain name pointer.
+        'hinfo'       => 13,    // Host information.
+        'minfo'       => 14,    // Mailbox or mail list information.
+        'mx'          => 15,    // Mail exchange.
+        'txt'         => 16,    // Text strings.
+        'rp'          => 17,    // Responsible person.
+        'afsdb'       => 18,    // AFS cell database.
+        'x25'         => 19,    // X_25 calling address.
+        'isdn'        => 20,    // ISDN calling address.
+        'rt'          => 21,    // Route through resource record.
+        'nsap'        => 22,    // NSAP address.
+        'ns_nsap_ptr' => 23,    // Reverse NSAP lookup (deprecated).
+        'sig'         => 24,    // Security signature.
+        'key'         => 25,    // Security key resource record.
+        'px'          => 26,    // X.400 mail mapping.
+        'gpos'        => 27,    // Geographical position (withdrawn).
+        'aaaa'        => 28,    // IPv6 Address.
+        'loc'         => 29,    // Location Information.
+        'nxt'         => 30,    // Next domain.
+        'eid'         => 31,    // Endpoint identifier.
+        'nimloc'      => 32,    // Nimrod Locator.
+        'srv'         => 33,    // Server Selection.
+        'atma'        => 34,    // ATM Address.
+        'naptr'       => 35,    // Naming Authority pointer.
+        'kx'          => 36,    // Key Exchange.
+        'cert'        => 37,    // Certification Record.
+        'a6'          => 38,    // IPv6 Address (obsolete, use aaaa).
+        'dname'       => 39,    // Non-terminal DNAME (for IPv6).
+        'sink'        => 40,    // Kitchen sink.
+        'opt'         => 41,    // EDNS0 option (meta-RR).
+        'apl'         => 42,    // Address prefix list.
+        'ds'          => 43,    // Delegation Signer
+        'sshfp'       => 44,    // SSH Fingerprint
+        'ipseckey'    => 45,    // IPSEC Key
+        'rrsig'       => 46,    // RRSet Signature
+        'nsec'        => 47,    // Negative Security
+        'dnskey'      => 48,    // DNS Key
+        'dhcid'       => 49,    // Dynamic host configuration identifier
+        'nsec3'       => 50,    // Negative security type 3
+        'nsec3param'  => 51,    // Negative security type 3 parameters
+        'hip'         => 55,    // Host Identity Protocol
+        'spf'         => 99,    // Sender Policy Framework
+        'tkey'        => 249,   // Transaction key
+        'tsig'        => 250,   // Transaction signature.
+        'ixfr'        => 251,   // Incremental zone transfer.
+        'axfr'        => 252,   // Transfer zone of authority.
+        'mailb'       => 253,   // Transfer mailbox records.
+        'maila'       => 254,   // Transfer mail agent records.
+        'any'         => 255,   // Wildcard match.
+        'zxfr'        => 256,   // BIND-specific, nonstandard.
         'dlv'         => 32769, // DNSSEC look-aside validation.
         'max'         => 65536
     ];
@@ -143,13 +141,13 @@ class Resolver implements Core\Event\Listenable {
     /**
      * Class values for resources and queries.
      *
-     * @var \Hoa\Dns\Resolver array
+     * @var array
      */
     protected static $_classes = [
-        'in'    =>   1, // Internet.
-        'cs'    =>   2, // CSNET (obsolete).
-        'ch'    =>   3, // Chaos.
-        'hs'    =>   4, // Hesiod.
+        'in'    => 1,   // Internet.
+        'cs'    => 2,   // CSNET (obsolete).
+        'ch'    => 3,   // Chaos.
+        'hs'    => 4,   // Hesiod.
         'qnone' => 254, // QClass none.
         'qany'  => 255  // QClass any.
     ];
@@ -159,16 +157,18 @@ class Resolver implements Core\Event\Listenable {
     /**
      * Construct the DNS server.
      *
-     * @access  public
      * @param   \Hoa\Socket\Server  $server    Server.
      * @return  void
      */
-    public function __construct ( Socket\Server $server ) {
-
-        if('udp' != $server->getSocket()->getTransport())
+    public function __construct(Socket\Server $server)
+    {
+        if ('udp' != $server->getSocket()->getTransport()) {
             throw new Exception(
                 'Server must listen on UDP transport; given %s.',
-                0, strtoupper($server->getSocket()->getTransport()));
+                0,
+                strtoupper($server->getSocket()->getTransport())
+            );
+        }
 
         set_time_limit(0);
 
@@ -181,14 +181,13 @@ class Resolver implements Core\Event\Listenable {
     /**
      * Attach a callable to this listenable object.
      *
-     * @access  public
      * @param   string  $listenerId    Listener ID.
      * @param   mixed   $callable      Callable.
      * @return  \Hoa\Dns\Resolver
-     * @throw   \Hoa\Core\Exception
+     * @throws  \Hoa\Core\Exception
      */
-    public function on ( $listenerId, $callable ) {
-
+    public function on($listenerId, $callable)
+    {
         $this->_on->attach($listenerId, $callable);
 
         return $this;
@@ -197,33 +196,33 @@ class Resolver implements Core\Event\Listenable {
     /**
      * Run the server.
      *
-     * @access  public
      * @return  void
      */
-    public function run ( ) {
-
+    public function run()
+    {
         $this->_server->considerRemoteAddress(true);
         $this->_server->connectAndWait();
 
-        while(true) {
-
+        while (true) {
             $buffer = $this->_server->read(1024);
 
-            if(empty($buffer))
+            if (empty($buffer)) {
                 continue;
+            }
 
             // Skip header.
             $handle = substr($buffer, 12);
             $domain = null;
 
             // QNAME.
-            for($i = 0, $m = strlen($handle); $i < $m; ++$i) {
-
-                if(0 === $length = ord($handle[$i]))
+            for ($i = 0, $m = strlen($handle); $i < $m; ++$i) {
+                if (0 === $length = ord($handle[$i])) {
                     break;
+                }
 
-                if(null !== $domain)
+                if (null !== $domain) {
                     $domain .= '.';
+                }
 
                 $domain .= substr($handle, $i + 1, $length);
                 $i      += $length;
@@ -247,8 +246,7 @@ class Resolver implements Core\Event\Listenable {
             ]));
             $ip      = null;
 
-            if(false === $ips[0]) {
-
+            if (false === $ips[0]) {
                 $this->_server->writeAll(
                     // Header.
 
@@ -281,8 +279,9 @@ class Resolver implements Core\Event\Listenable {
                 continue;
             }
 
-            foreach(explode('.', $ips[0]) as $foo)
+            foreach (explode('.', $ips[0]) as $foo) {
                 $ip .= pack('C', $foo);
+            }
 
             $this->_server->writeAll(
                 // Header.

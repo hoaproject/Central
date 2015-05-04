@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,8 +36,8 @@
 
 namespace Hoa\Dns\Bin;
 
-use Hoa\Core;
 use Hoa\Console;
+use Hoa\Core;
 use Hoa\Dns;
 use Hoa\Socket;
 
@@ -46,17 +46,15 @@ use Hoa\Socket;
  *
  * Quick DNS resolver.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Resolve extends Console\Dispatcher\Kit {
-
+class Resolve extends Console\Dispatcher\Kit
+{
     /**
      * Options description.
      *
-     * @var \Hoa\Dns\Bin\Resolve array
+     * @var array
      */
     protected $options = [
         ['listen', Console\GetOption::REQUIRED_ARGUMENT, 'l'],
@@ -69,73 +67,72 @@ class Resolve extends Console\Dispatcher\Kit {
     /**
      * The entry method.
      *
-     * @access  public
      * @return  int
      */
-    public function main ( ) {
-
+    public function main()
+    {
         $listen = '127.0.0.1:57005';
 
-        while(false !== $c = $this->getOption($v)) switch($c) {
+        while (false !== $c = $this->getOption($v)) {
+            switch ($c) {
+                case 'l':
+                    $listen = $v;
 
-            case 'l':
-                $listen = $v;
-              break;
+                    break;
 
-            case '__ambiguous':
-                $this->resolveOptionAmbiguity($v);
-              break;
+                case '__ambiguous':
+                    $this->resolveOptionAmbiguity($v);
 
-            case 'h':
-            case '?':
-            default:
-                return $this->usage();
-              break;
+                    break;
+
+                case 'h':
+                case '?':
+                default:
+                    return $this->usage();
+            }
         }
 
         $redirections = [];
         $inputs       = $this->parser->getInputs();
 
-        if(empty($inputs)) {
-
+        if (empty($inputs)) {
             $this->usage();
 
             return;
         }
 
-        for($i = 0, $max = count($inputs); $i < $max; $i += 3) {
-
+        for ($i = 0, $max = count($inputs); $i < $max; $i += 3) {
             $from = str_replace('#', '\#', $inputs[$i]);
 
-            if(false === @preg_match('#^' . $from . '$#', '', $_)) {
-
+            if (false === @preg_match('#^' . $from . '$#', '', $_)) {
                 echo 'Expression ', $from, ' does not compile correctly.', "\n";
 
                 return 1;
             }
 
-            if('to' !== $inputs[$i + 1])
+            if ('to' !== $inputs[$i + 1]) {
                 continue;
+            }
 
             $to                  = $inputs[$i + 2];
             $redirections[$from] = $to;
         }
 
         $dns = new Dns\Resolver(new Socket\Server('udp://' . $listen));
-        $dns->on('query', function ( Core\Event\Bucket $bucket )
-                          use ( &$redirections ) {
+        $dns->on('query', function (Core\Event\Bucket $bucket) use (&$redirections) {
 
             $data = $bucket->getData();
-            echo 'Resolving domain ', $data['domain'],
-                 ' of type ', $data['type'], ' to ';
+            echo
+                'Resolving domain ', $data['domain'],
+                ' of type ', $data['type'], ' to ';
 
-            foreach($redirections as $from => $to)
-                if(0 !== preg_match('#^' . $from . '$#', $data['domain'], $_)) {
-
+            foreach ($redirections as $from => $to) {
+                if (0 !== preg_match('#^' . $from . '$#', $data['domain'], $_)) {
                     echo $to, ".\n";
 
                     return $to;
                 }
+            }
 
             echo '127.0.0.1 (default).', "\n";
 
@@ -151,19 +148,19 @@ class Resolve extends Console\Dispatcher\Kit {
     /**
      * The command usage.
      *
-     * @access  public
      * @return  int
      */
-    public function usage ( ) {
-
-        echo 'Usage   : dns:resolve <options> [<regex> to <ip>]+', "\n",
-             'Options :', "\n",
-             $this->makeUsageOptionsList([
-                 'l'    => 'Socket URI to listen (default: 127.0.0.1:57005).',
-                 'help' => 'This help.'
-             ]), "\n",
-             'Example: `… dns:resolve \'foo.*\' to 1.2.3.4 \\', "\n",
-             '                        \'bar.*\' to 5.6.7.8`.', "\n";
+    public function usage()
+    {
+        echo
+            'Usage   : dns:resolve <options> [<regex> to <ip>]+', "\n",
+            'Options :', "\n",
+            $this->makeUsageOptionsList([
+                'l'    => 'Socket URI to listen (default: 127.0.0.1:57005).',
+                'help' => 'This help.'
+            ]), "\n",
+            'Example: `… dns:resolve \'foo.*\' to 1.2.3.4 \\', "\n",
+            '                        \'bar.*\' to 5.6.7.8`.', "\n";
 
         return;
     }
