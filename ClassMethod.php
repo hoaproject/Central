@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -45,26 +45,25 @@ use Hoa\View;
  * This class dispatches on a class/object and a method, nothing more. There is
  * no concept of controller or action, it is just _call and _able.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class ClassMethod extends Dispatcher {
-
+class ClassMethod extends Dispatcher
+{
     /**
      * Resolve the dispatch call.
      *
-     * @access  protected
      * @param   array                $rule      Rule.
      * @param   \Hoa\Router          $router    Router.
      * @param   \Hoa\View\Viewable   $view      View.
      * @return  mixed
-     * @throw   \Hoa\Dispatcher\Exception
+     * @throws  \Hoa\Dispatcher\Exception
      */
-    protected function resolve ( Array $rule, Router $router,
-                                 View\Viewable $view = null ) {
-
+    protected function resolve(
+        Array $rule,
+        Router $router,
+        View\Viewable $view = null
+    ) {
         $called     = null;
         $variables  = &$rule[Router::RULE_VARIABLES];
         $call       = isset($variables['_call'])
@@ -81,13 +80,10 @@ class ClassMethod extends Dispatcher {
         $class      = $call;
         $method     = $able;
 
-        if(false === $async) {
-
+        if (false === $async) {
             $_class  = 'synchronous.call';
             $_method = 'synchronous.able';
-        }
-        else {
-
+        } else {
             $_class  = 'asynchronous.call';
             $_method = 'asynchronous.able';
         }
@@ -99,55 +95,69 @@ class ClassMethod extends Dispatcher {
         $method = $this->_parameters->getFormattedParameter($_method);
 
         try {
-
             $class = dnew($class, $rtv);
-        }
-        catch ( \Exception $e ) {
-
+        } catch (\Exception $e) {
             throw new Exception(
                 'Class %s is not found ' .
                 '(method: %s, asynchronous: %s).',
-                0, [$class, strtoupper($variables['_method']),
-                    true === $async ? 'true': 'false'], $e);
+                0,
+                [
+                    $class,
+                    strtoupper($variables['_method']),
+                    true === $async
+                        ? 'true'
+                        : 'false'
+                ],
+                $e
+            );
         }
 
         $kitname = $this->getKitName();
 
-        if(   !empty($kitname)
-           && !isset($variables['_this'])
-           || !(   isset($variables['_this'])
-                && ($variables['_this'] instanceof $kitname))) {
-
+        if (!empty($kitname) &&
+            !isset($variables['_this']) ||
+            !(isset($variables['_this']) &&
+            ($variables['_this'] instanceof $kitname))) {
             $variables['_this'] = dnew($kitname, $rtv);
             $variables['_this']->construct();
         }
 
-        if(!method_exists($class, $method))
+        if (!method_exists($class, $method)) {
             throw new Exception(
                 'Method %s does not exist on the class %s ' .
                 '(method: %s, asynchronous: %s).',
-                1, [$method, get_class($class),
+                1,
+                [
+                    $method,
+                    get_class($class),
                     strtoupper($variables['_method']),
-                    true === $async ? 'true': 'false']);
+                    true === $async
+                        ? 'true'
+                        : 'false'
+                ]
+            );
+        }
 
         $called     = $class;
         $reflection = new \ReflectionMethod($class, $method);
 
-        foreach($reflection->getParameters() as $parameter) {
-
+        foreach ($reflection->getParameters() as $parameter) {
             $name = strtolower($parameter->getName());
 
-            if(true === array_key_exists($name, $variables)) {
-
+            if (true === array_key_exists($name, $variables)) {
                 $arguments[$name] = $variables[$name];
+
                 continue;
             }
 
-            if(false === $parameter->isOptional())
+            if (false === $parameter->isOptional()) {
                 throw new Exception(
                     'The method %s on the class %s needs a value for ' .
                     'the parameter $%s and this value does not exist.',
-                    2, [$method, get_class($class), $name]);
+                    2,
+                    [$method, get_class($class), $name]
+                );
+            }
         }
 
         return $reflection->invokeArgs($called, $arguments);

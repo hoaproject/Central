@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -45,15 +45,13 @@ use Hoa\Test;
  *
  * Test suite of the class/method dispatcher.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class ClassMethod extends Test\Unit\Suite {
-
-    public function case_callable_in_rule_pattern ( ) {
-
+class ClassMethod extends Test\Unit\Suite
+{
+    public function case_callable_in_rule_pattern()
+    {
         $this
             ->given(
                 $router = new MockRouter(),
@@ -78,8 +76,8 @@ class ClassMethod extends Test\Unit\Suite {
             ->when($dispatcher->dispatch($router));
     }
 
-    public function case_callable_in_rule_definition ( ) {
-
+    public function case_callable_in_rule_definition()
+    {
         $this
             ->given(
                 $router = new MockRouter(),
@@ -100,8 +98,8 @@ class ClassMethod extends Test\Unit\Suite {
             ->when($dispatcher->dispatch($router));
     }
 
-    public function case_asynchronous ( ) {
-
+    public function case_asynchronous()
+    {
         $this
             ->given(
                 $router = new MockRouter(),
@@ -123,8 +121,8 @@ class ClassMethod extends Test\Unit\Suite {
             ->when($dispatcher->dispatch($router));
     }
 
-    public function case_class_not_found ( ) {
-
+    public function case_class_not_found()
+    {
         $this
             ->given(
                 $router = new MockRouter(),
@@ -142,15 +140,15 @@ class ClassMethod extends Test\Unit\Suite {
                     'synchronous.able' => '(:able:)'
                 ])
             )
-            ->exception(function ( ) use ( $dispatcher, $router ) {
+            ->exception(function () use ($dispatcher, $router) {
 
                 $dispatcher->dispatch($router);
             })
                 ->isInstanceOf('Hoa\Dispatcher\Exception');
     }
 
-    public function case_method_not_found ( ) {
-
+    public function case_method_not_found()
+    {
         $this
             ->given(
                 $router = new MockRouter(),
@@ -168,15 +166,15 @@ class ClassMethod extends Test\Unit\Suite {
                     'synchronous.able' => '(:able:)'
                 ])
             )
-            ->exception(function ( ) use ( $dispatcher, $router ) {
+            ->exception(function () use ($dispatcher, $router) {
 
                 $dispatcher->dispatch($router);
             })
                 ->isInstanceOf('Hoa\Dispatcher\Exception');
     }
 
-    public function case_kit_dnew ( ) {
-
+    public function case_kit_dnew()
+    {
         $this
             ->given(
                 $router = new MockRouter(),
@@ -199,8 +197,8 @@ class ClassMethod extends Test\Unit\Suite {
             ->when($dispatcher->dispatch($router));
     }
 
-    public function case_an_argument_is_missing ( ) {
-
+    public function case_an_argument_is_missing()
+    {
         $this
             ->given(
                 $router = new MockRouter(),
@@ -218,15 +216,15 @@ class ClassMethod extends Test\Unit\Suite {
                     'synchronous.able' => '(:able:)'
                 ])
             )
-            ->exception(function ( ) use ( $dispatcher, $router ) {
+            ->exception(function () use ($dispatcher, $router) {
 
                 $dispatcher->dispatch($router);
             })
                 ->isInstanceOf('Hoa\Dispatcher\Exception');
     }
 
-    public function case_an_optional_argument_is_missing ( ) {
-
+    public function case_an_optional_argument_is_missing()
+    {
         $this
             ->given(
                 $router = new MockRouter(),
@@ -247,20 +245,21 @@ class ClassMethod extends Test\Unit\Suite {
             ->when($dispatcher->dispatch($router));
     }
 
-    protected function route ( Router $router, $uri, Array $extraVariables = [] ) {
-
+    protected function route(Router $router, $uri, Array $extraVariables = [])
+    {
         $router->route($uri);
-        $theRule = &$router->getTheRule();
+        $theRule                                  = &$router->getTheRule();
         $theRule[$router::RULE_VARIABLES]['test'] = $this;
 
-        foreach($extraVariables as $name => $value)
+        foreach ($extraVariables as $name => $value) {
             $theRule[$router::RULE_VARIABLES][$name] = $value;
+        }
 
         return $router;
     }
 
-    public function dispatchedMethod ( $test, $foo, $bar ) {
-
+    public function dispatchedMethod($test, $foo, $bar)
+    {
         $test
             ->string($foo)
                 ->isEqualTo('foo')
@@ -268,8 +267,8 @@ class ClassMethod extends Test\Unit\Suite {
                 ->isEqualTo('bar');
     }
 
-    public function dispatchedMethodAsync ( $test, $foo, $bar ) {
-
+    public function dispatchedMethodAsync($test, $foo, $bar)
+    {
         $test
             ->boolean(true)
                 ->isTrue();
@@ -277,8 +276,8 @@ class ClassMethod extends Test\Unit\Suite {
         return $this->dispatchedMethod($test, $foo, $bar);
     }
 
-    public function dispatchedMethodOptional ( $test, $foo, $bar = null ) {
-
+    public function dispatchedMethodOptional($test, $foo, $bar = null)
+    {
         $test
             ->string($foo)
                 ->isEqualTo('foo')
@@ -286,8 +285,8 @@ class ClassMethod extends Test\Unit\Suite {
                 ->isNull();
     }
 
-    public function dispatchedMethodWithKit ( $test, $_this ) {
-
+    public function dispatchedMethodWithKit($test, $_this)
+    {
         $test
             ->object($_this)
                 ->isInstanceOf(__NAMESPACE__ . '\MockKit')
@@ -296,22 +295,22 @@ class ClassMethod extends Test\Unit\Suite {
     }
 }
 
-class MockRouter extends Router\Cli {
-
+class MockRouter extends Router\Cli
+{
     public $asynchronous = false;
 
-    public function isAsynchronous ( ) {
-
+    public function isAsynchronous()
+    {
         return $this->asynchronous;
     }
 }
 
-class MockKit extends LUT\Kit {
-
+class MockKit extends LUT\Kit
+{
     public $hasBeenConstructed = false;
 
-    public function construct ( ) {
-
+    public function construct()
+    {
         $this->hasBeenConstructed = true;
     }
 }

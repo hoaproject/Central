@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,15 +44,13 @@ use Hoa\Test;
  *
  * Test suite of the abstract dispatcher.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Dispatcher extends Test\Unit\Suite {
-
-    public function case_getParameters ( ) {
-
+class Dispatcher extends Test\Unit\Suite
+{
+    public function case_getParameters()
+    {
         $this
             ->given($dispatcher = new \Mock\Hoa\Dispatcher())
             ->when($result = $dispatcher->getParameters())
@@ -61,8 +59,8 @@ class Dispatcher extends Test\Unit\Suite {
                     ->isInstanceOf('Hoa\Core\Parameter');
     }
 
-    public function case_kitname ( ) {
-
+    public function case_kitname()
+    {
         $this
             ->given($dispatcher = new \Mock\Hoa\Dispatcher())
             ->when($result = $dispatcher->setKitName('foo'))
@@ -75,18 +73,22 @@ class Dispatcher extends Test\Unit\Suite {
                     ->isEqualTo('foo');
     }
 
-    public function case_dispatch_already_routed ( ) {
-
+    public function case_dispatch_already_routed()
+    {
         $this
             ->given(
-                $dispatcher       = new \Mock\Hoa\Dispatcher(),
-                $parameters       = $dispatcher->getParameters(),
-                $routedRule       = null,
-                $routedRouter     = null,
-                $routedView       = null,
-                $routedParameters = null,
-                $this->calling($dispatcher)->resolve = function ( $rule, $router, $view )
-                                                       use      ( &$routedRule, &$routedRouter, &$routedView , &$routedParameters) {
+                $dispatcher                          = new \Mock\Hoa\Dispatcher(),
+                $parameters                          = $dispatcher->getParameters(),
+                $routedRule                          = null,
+                $routedRouter                        = null,
+                $routedView                          = null,
+                $routedParameters                    = null,
+                $this->calling($dispatcher)->resolve = function ($rule, $router, $view) use (
+                    &$routedRule,
+                    &$routedRouter,
+                    &$routedView,
+                    &$routedParameters
+                ) {
 
                     $routedRule       = $rule;
                     $routedRouter     = $router;
@@ -119,18 +121,22 @@ class Dispatcher extends Test\Unit\Suite {
                     ->isEqualTo('baar');
     }
 
-    public function case_dispatch_auto_route ( ) {
-
+    public function case_dispatch_auto_route()
+    {
         $this
             ->given(
-                $dispatcher       = new \Mock\Hoa\Dispatcher(),
-                $parameters       = $dispatcher->getParameters(),
-                $routedRule       = null,
-                $routedRouter     = null,
-                $routedView       = null,
-                $routedParameters = null,
-                $this->calling($dispatcher)->resolve = function ( $rule, $router, $view )
-                                                       use      ( &$routedRule, &$routedRouter, &$routedView , &$routedParameters) {
+                $dispatcher                          = new \Mock\Hoa\Dispatcher(),
+                $parameters                          = $dispatcher->getParameters(),
+                $routedRule                          = null,
+                $routedRouter                        = null,
+                $routedView                          = null,
+                $routedParameters                    = null,
+                $this->calling($dispatcher)->resolve = function ($rule, $router, $view) use (
+                    &$routedRule,
+                    &$routedRouter,
+                    &$routedView,
+                    &$routedParameters
+                ) {
 
                     $routedRule       = $rule;
                     $routedRouter     = $router;
@@ -169,8 +175,8 @@ class Dispatcher extends Test\Unit\Suite {
                     ->isEqualTo('baar');
     }
 
-    public function case_dispatch_return ( ) {
-
+    public function case_dispatch_return()
+    {
         $this
             ->given(
                 $dispatcher                          = new \Mock\Hoa\Dispatcher(),

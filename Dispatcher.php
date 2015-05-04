@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -45,31 +45,29 @@ use Hoa\View;
  *
  * Abstract dispatcher.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-abstract class Dispatcher implements Core\Parameter\Parameterizable {
-
+abstract class Dispatcher implements Core\Parameter\Parameterizable
+{
     /**
      * Parameters.
      *
-     * @var \Hoa\Core\Parameter object
+     * @var \Hoa\Core\Parameter
      */
     protected $_parameters  = null;
 
     /**
      * Current view.
      *
-     * @var \Hoa\View\Viewable object
+     * @var \Hoa\View\Viewable
      */
     protected $_currentView = null;
 
     /**
      * Kit's name.
      *
-     * @var \Hoa\Dispatcher string
+     * @var string
      */
     protected $_kit         = 'Hoa\Dispatcher\Kit';
 
@@ -78,12 +76,11 @@ abstract class Dispatcher implements Core\Parameter\Parameterizable {
     /**
      * Build a new dispatcher.
      *
-     * @access  public
      * @param   array   $parameters    Parameters.
      * @return  void
      */
-    public function __construct ( Array $parameters = [] ) {
-
+    public function __construct(Array $parameters = [])
+    {
         $this->_parameters = new Core\Parameter(
             __CLASS__,
             [
@@ -112,44 +109,42 @@ abstract class Dispatcher implements Core\Parameter\Parameterizable {
     /**
      * Get parameters.
      *
-     * @access  public
      * @return  \Hoa\Core\Parameter
      */
-    public function getParameters ( ) {
-
+    public function getParameters()
+    {
         return $this->_parameters;
     }
 
     /**
      * Dispatch a router rule.
      *
-     * @access  public
      * @param   \Hoa\Router         $router    Router.
      * @param   \Hoa\View\Viewable  $view      View.
      * @return  mixed
-     * @throw   \Hoa\Controller\Exception
+     * @throws  \Hoa\Controller\Exception
      */
-    public function dispatch ( Router        $router,
-                               View\Viewable $view = null ) {
-
+    public function dispatch(Router $router, View\Viewable $view = null)
+    {
         $rule = $router->getTheRule();
 
-        if(null === $rule) {
-
+        if (null === $rule) {
             $router->route();
             $rule = $router->getTheRule();
         }
 
-        if(null === $view)
+        if (null === $view) {
             $view = $this->_currentView;
-        else
+        } else {
             $this->_currentView = $view;
+        }
 
         $parameters        = $this->_parameters;
         $this->_parameters = clone $this->_parameters;
 
-        foreach($rule[Router::RULE_VARIABLES] as $key => $value)
+        foreach ($rule[Router::RULE_VARIABLES] as $key => $value) {
             $this->_parameters->setParameter('variables.' . $key, $value);
+        }
 
         $out = $this->resolve($rule, $router, $view);
         unset($this->_parameters);
@@ -161,26 +156,27 @@ abstract class Dispatcher implements Core\Parameter\Parameterizable {
     /**
      * Resolve the dispatch call.
      *
-     * @access  protected
      * @param   array               $rule      Rule.
      * @param   \Hoa\Router         $router    Router.
      * @param   \Hoa\View\Viewable  $view      View.
      * @return  mixed
-     * @throw   \Hoa\Dispatcher\Exception
+     * @throws  \Hoa\Dispatcher\Exception
      */
-    abstract protected function resolve ( Array $rule, Router $router,
-                                          View\Viewable $view = null );
+    abstract protected function resolve(
+        Array         $rule,
+        Router        $router,
+        View\Viewable $view = null
+    );
 
     /**
      * Set kit's name.
      *
-     * @access  public
      * @param   string  $kit    Kit's name.
      * @return  string
-     * @throw   \Hoa\Dispatcher\Exception
+     * @throws  \Hoa\Dispatcher\Exception
      */
-    public function setKitName ( $kit ) {
-
+    public function setKitName($kit)
+    {
         $old        = $this->_kit;
         $this->_kit = $kit;
 
@@ -190,11 +186,10 @@ abstract class Dispatcher implements Core\Parameter\Parameterizable {
     /**
      * Get kit's name.
      *
-     * @access  public
      * @return  string
      */
-    public function getKitName ( ) {
-
+    public function getKitName()
+    {
         return $this->_kit;
     }
 }
