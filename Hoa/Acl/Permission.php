@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,31 +34,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Acl {
+namespace Hoa\Acl;
 
 /**
  * Class \Hoa\Acl\Permission.
  *
  * Describe a permission profil.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Permission {
-
+class Permission
+{
     /**
      * Permission ID.
      *
-     * @var \Hoa\Acl\Permission mixed
+     * @var mixed
      */
     protected $permissionId    = null;
 
     /**
      * Permission label.
      *
-     * @var \Hoa\Acl\Permission string
+     * @var string
      */
     protected $permissionLabel = null;
 
@@ -67,13 +65,12 @@ class Permission {
     /**
      * Built a new permission.
      *
-     * @access  public
      * @param   mixed   $id       The permission ID.
      * @param   string  $label    The permission label.
      * @return  void
      */
-    public function __construct ( $id, $label = null ) {
-
+    public function __construct($id, $label = null)
+    {
         $this->setId($id);
         $this->setLabel($label);
 
@@ -83,12 +80,11 @@ class Permission {
     /**
      * Set permission ID.
      *
-     * @access  protected
      * @param   mixed      $id    The permission ID.
      * @return  mixed
      */
-    public function setId ( $id ) {
-
+    public function setId($id)
+    {
         $old                = $this->permissionId;
         $this->permissionId = $id;
 
@@ -98,12 +94,11 @@ class Permission {
     /**
      * Set permission label.
      *
-     * @access  public
      * @param   string  $label    The permission label.
      * @return  string
      */
-    public function setLabel ( $label ) {
-
+    public function setLabel($label)
+    {
         $old                   = $this->permissionLabel;
         $this->permissionLabel = $label;
 
@@ -113,24 +108,20 @@ class Permission {
     /**
      * Get permission ID.
      *
-     * @access  public
      * @return  mixed
      */
-    public function getId ( ) {
-
+    public function getId()
+    {
         return $this->permissionId;
     }
 
     /**
      * Get permission label.
      *
-     * @access  public
      * @return  mixed
      */
-    public function getLabel ( ) {
-
+    public function getLabel()
+    {
         return $this->permissionLabel;
     }
-}
-
 }

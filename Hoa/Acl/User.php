@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,53 +34,50 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Acl {
+namespace Hoa\Acl;
 
 /**
  * Class \Hoa\Acl\User.
  *
  * Describe a user.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class User {
-
+class User
+{
     /**
      * User ID.
      *
-     * @var \Hoa\Acl\User mixed
+     * @var mixed
      */
     protected $userId    = null;
 
     /**
      * User label.
      *
-     * @var \Hoa\Acl\User string
+     * @var string
      */
     protected $userLabel = null;
 
     /**
      * Collections of all groups ID.
      *
-     * @var \Hoa\Acl\User array
+     * @var array
      */
-    protected $groups    = array();
+    protected $groups    = [];
 
 
 
     /**
      * Built a new user.
      *
-     * @access  public
      * @param   mixed   $id       The user ID.
      * @param   string  $label    The user label.
      * @return  void
      */
-    public function __construct ( $id, $label = null ) {
-
+    public function __construct($id, $label = null)
+    {
         $this->setId($id);
         $this->setLabel($label);
 
@@ -90,22 +87,23 @@ class User {
     /**
      * Add group.
      *
-     * @access  public
      * @param   array   $groups    Group to add.
      * @return  array
      */
-    public function addGroup ( $groups = array() ) {
+    public function addGroup($groups = [])
+    {
+        if (!is_array($groups)) {
+            $groups = [$groups];
+        }
 
-        if(!is_array($groups))
-            $groups = array($groups);
-
-        foreach($groups as $foo => $group) {
-
-            if($group instanceof Group)
+        foreach ($groups as $group) {
+            if ($group instanceof Group) {
                 $group = $group->getId();
+            }
 
-            if(true === $this->groupExists($group))
+            if (true === $this->groupExists($group)) {
                 continue;
+            }
 
             $this->groups[$group] = true;
         }
@@ -116,22 +114,23 @@ class User {
     /**
      * Delete group.
      *
-     * @access  public
      * @param   array   $groups    Group to add.
      * @return  array
      */
-    public function deleteGroup ( $groups = array() ) {
+    public function deleteGroup($groups = [])
+    {
+        if (!is_array($groups)) {
+            $groups = [$groups];
+        }
 
-        if(!is_array($groups))
-            $groups = array($groups);
-
-        foreach($groups as $foo => $group) {
-
-            if($group instanceof Group)
+        foreach ($groups as $group) {
+            if ($group instanceof Group) {
                 $group = $group->getId();
+            }
 
-            if(false === $this->groupExists($group))
+            if (false === $this->groupExists($group)) {
                 continue;
+            }
 
             unset($this->groups[$group]);
         }
@@ -142,14 +141,14 @@ class User {
     /**
      * Check if a group exists.
      *
-     * @access  public
      * @param   mixed   $groupId    The group ID.
      * @return  bool
      */
-    public function groupExists ( $groupId ) {
-
-        if($groupId instanceof Group)
+    public function groupExists($groupId)
+    {
+        if ($groupId instanceof Group) {
             $groupId = $groupId->getId();
+        }
 
         return isset($this->groups[$groupId]);
     }
@@ -157,23 +156,21 @@ class User {
     /**
      * Get all groups, i.e. the groups collection.
      *
-     * @access  public
      * @return  array
      */
-    public function getGroups ( ) {
-
+    public function getGroups()
+    {
         return array_keys($this->groups);
     }
 
     /**
      * Set user ID.
      *
-     * @access  protected
      * @param   mixed      $id    The user ID.
      * @return  mixed
      */
-    protected function setId ( $id ) {
-
+    protected function setId($id)
+    {
         $old          = $this->userId;
         $this->userId = $id;
 
@@ -183,12 +180,11 @@ class User {
     /**
      * Set user label.
      *
-     * @access  public
      * @param   string  $label    The user label.
      * @return  string
      */
-    public function setLabel ( $label ) {
-
+    public function setLabel($label)
+    {
         $old             = $this->userLabel;
         $this->userLabel = $label;
 
@@ -198,24 +194,20 @@ class User {
     /**
      * Get user ID.
      *
-     * @access  public
      * @return  mixed
      */
-    public function getId ( ) {
-
+    public function getId()
+    {
         return $this->userId;
     }
 
     /**
      * Get user label.
      *
-     * @access  public
      * @return  mixed
      */
-    public function getLabel ( ) {
-
+    public function getLabel()
+    {
         return $this->userLabel;
     }
-}
-
 }
