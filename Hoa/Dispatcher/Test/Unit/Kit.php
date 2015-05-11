@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,23 +36,21 @@
 
 namespace Hoa\Dispatcher\Test\Unit;
 
-use Hoa\Test;
 use Hoa\Dispatcher as LUT;
+use Hoa\Test;
 
 /**
  * Class \Hoa\Dispatcher\Test\Unit\Kit.
  *
  * Test suite of the kit.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Kit extends Test\Unit\Suite {
-
-    public function case_construct ( ) {
-
+class Kit extends Test\Unit\Suite
+{
+    public function case_construct()
+    {
         $this
             ->given(
                 $router     = new \Mock\Hoa\Router(),
@@ -71,8 +69,8 @@ class Kit extends Test\Unit\Suite {
                     ->isNull();
     }
 
-    public function case_construct_no_view ( ) {
-
+    public function case_construct_no_view()
+    {
         $this
             ->given(
                 $router     = new \Mock\Hoa\Router(),

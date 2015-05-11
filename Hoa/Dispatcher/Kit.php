@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,38 +44,36 @@ use Hoa\View;
  *
  * A structure, given to action, that holds some important data.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Kit {
-
+class Kit
+{
     /**
      * The router.
      *
-     * @var \Hoa\Router object
+     * @var \Hoa\Router
      */
     public $router     = null;
 
     /**
      * The dispatcher.
      *
-     * @var \Hoa\Dispatcher object
+     * @var \Hoa\Dispatcher
      */
     public $dispatcher = null;
 
     /**
      * The view.
      *
-     * @var \Hoa\View\Viewable object
+     * @var \Hoa\View\Viewable
      */
     public $view       = null;
 
     /**
      * Data from the view.
      *
-     * @var \Hoa\Core\Data object
+     * @var \Hoa\Core\Data
      */
     public $data       = null;
 
@@ -84,22 +82,23 @@ class Kit {
     /**
      * Build a dispatcher kit.
      *
-     * @access  public
      * @param   \Hoa\Router           $router        The router.
      * @param   \Hoa\Dispatcher       $dispatcher    The dispatcher.
      * @param   \Hoa\View\Viewable    $view          The view.
      * @return  void
      */
-    public function __construct ( Router        $router,
-                                  Dispatcher    $dispatcher,
-                                  View\Viewable $view = null ) {
-
+    public function __construct(
+        Router        $router,
+        Dispatcher    $dispatcher,
+        View\Viewable $view = null
+    ) {
         $this->router     = $router;
         $this->dispatcher = $dispatcher;
         $this->view       = $view;
 
-        if(null !== $view)
+        if (null !== $view) {
             $this->data   = $view->getData();
+        }
 
         return;
     }
@@ -107,11 +106,10 @@ class Kit {
     /**
      * This method is called just after the __construct() method.
      *
-     * @access  public
      * @return  void
      */
-    public function construct ( ) {
-
+    public function construct()
+    {
         return;
     }
 }
