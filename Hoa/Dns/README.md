@@ -66,11 +66,12 @@ file:
 $dns = new Hoa\Dns\Resolver(
     new Hoa\Socket\Server('udp://127.0.0.1:57005')
 );
-$dns->on('query', function ( Hoa\Core\Event\Bucket $bucket ) {
-
+$dns->on('query', function (Hoa\Core\Event\Bucket $bucket) {
     $data = $bucket->getData();
-    echo 'Resolving domain ', $data['domain'],
-         ' of type ', $data['type'], "\n";
+
+    echo
+        'Resolving domain ', $data['domain'],
+        ' of type ', $data['type'], "\n";
 
     return '127.0.0.1';
 });

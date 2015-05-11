@@ -119,11 +119,12 @@ port 57005</code></pre>
   will <strong>associate</strong> the <code>127.0.0.1</code> IP address to all
   <code>*.hoa</code> domains, we will not consider sub-domains of
   <code>hoa</code> in this exercise.</p>
-  <pre><code class="language-php">$dns->on('query', function ( Hoa\Core\Event\Bucket $bucket ) {
-
+  <pre><code class="language-php">$dns->on('query', function (Hoa\Core\Event\Bucket $bucket) {
     $data = $bucket->getData();
-    echo 'Resolving domain ', $data['domain'],
-         ' of type ', $data['type'], "\n";
+
+    echo
+        'Resolving domain ', $data['domain'],
+        ' of type ', $data['type'], "\n";
 
     return '127.0.0.1';
 });
