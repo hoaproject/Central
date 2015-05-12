@@ -28,7 +28,7 @@ install](http://hoa-project.net/Source.html).
 
 ## Quick usage
 
-We propose a quick overview of two usages: the library itself and one DTrace
+We propose a quick overview of two usages: The library itself and one DTrace
 program.
 
 ### Benchmark
@@ -80,9 +80,9 @@ we consider the `Dtrace.php` file that contains the following code:
 ```php
 <?php
 
-function f ( ) { g(); h(); }
-function g ( ) { h();      }
-function h ( ) {           }
+function f() { g(); h(); }
+function g() { h();      }
+function h() {           }
 
 f();
 ```
@@ -104,7 +104,7 @@ Request start
 Request end
 ```
 
-Another program shows statistics about an execution: each function that has been
+Another program shows statistics about an execution: Each function that has been
 called, how many times, how long the execution has taken etc.
 
 ## Documentation

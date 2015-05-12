@@ -135,15 +135,17 @@ echo $bench;
 $bench->foo;
 
 // Is “foo” exists?
-if(isset($bench->foo))
+if (isset($bench->foo)) {
     // Then, delete it, for example.
-    unset($bench->foo);</code></pre>
+    unset($bench->foo);
+}</code></pre>
   <p>Bien entendu, nous pouvons supprimer toutes les marques grâce à la méthode
   <code>Hoa\Bench\Bench::unsetAll</code>. De plus, la classe
   <code>Hoa\Bench\Bench</code> se comporte comme un itérateur sur toutes les
   marques, ainsi :</p>
-  <pre><code class="language-php">foreach($bench as $id => $mark)
+  <pre><code class="language-php">foreach ($bench as $id => $mark) {
     echo $id, ' => ', ($mark->isRunning() ? 'running' : 'stopped'), "\n";
+}
 
 /**
  * Could output:
@@ -180,15 +182,13 @@ if(isset($bench->foo))
   <p>Par exemple, si nous avons beaucoup de marques et que nous voulons filtrer
   le « bruit », c'est à dire les marques avec des petits temps d'exécutions
   (disons inférieur à 5%), nous pouvons utiliser le filtre suivant :</p>
-  <pre><code class="language-php">$bench->filter(function ( $id, $time, $pourcent ) {
-
+  <pre><code class="language-php">$bench->filter(function ($id, $time, $pourcent) {
     return $pourcent > 5;
 });</code></pre>
   <p>Si nous nommons nos marques avec une nomenclature particulière, nous
   pouvons filtrer à partir de leurs identifiants. Par exemple, nous voulons
   toutes les marques comportant le sous-mot <code>_critical</code> :</p>
-  <pre><code class="language-php">$bench->filter(function ( $id, $time, $pourcent ) {
-
+  <pre><code class="language-php">$bench->filter(function ($id, $time, $pourcent) {
     return 0 !== preg_match('#_critical#', $id);
 });</code></pre>
   <p>Nous pouvons bien sûr ajouter plusieurs filtres.</p>
@@ -217,9 +217,9 @@ if(isset($bench->foo))
   <code>Dtrace.php</code> suivant :</p>
   <pre><code class="language-php">&amp;lt;?php
 
-function f ( ) { g(); h(); }
-function g ( ) { h();      }
-function h ( ) {           }
+function f() { g(); h(); }
+function g() { h();      }
+function h() {           }
 
 f();</code></pre>
   <p>Ce fichier est très simple mais il va nous servir de test pour exécuter le
@@ -242,12 +242,12 @@ Request end</code></pre>
   <code>Dtrace.php</code> :</p>
   <pre><code class="language-php">&amp;lt;?php
 
-function f ( ) { ++$i; g(); h();             }
-function g ( ) { h();                        }
-function h ( ) { throw new Exception('foo'); }
+function f() { ++$i; g(); h();             }
+function g() { h();                        }
+function h() { throw new Exception('foo'); }
 
-try                     { f(); }
-catch ( \Exception $e ) {      }
+try                   { f(); }
+catch (\Exception $e) {      }
   </code></pre>
   <p>Et réexécutons notre programme DTrace :</p>
   <pre><code class="language-shell">$ sudo $exed -c "php Dtrace.php"
