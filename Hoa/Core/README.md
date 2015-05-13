@@ -70,8 +70,7 @@ Libraries can use events and listeners (which have some similarities). For
 example, if we attach a function to the channel of exceptions:
 
 ```php
-event('hoa://Event/Exception')->attach(function ( $bucket ) {
-
+event('hoa://Event/Exception')->attach(function ($bucket) {
     $exception = $bucket->getData();
     echo 'Exception: ', $exception->getMessage(), "\n";
 })

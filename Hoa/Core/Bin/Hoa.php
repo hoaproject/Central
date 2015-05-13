@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,18 +34,16 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-use Hoa\Core;
 use Hoa\Console;
+use Hoa\Core;
 use Hoa\Dispatcher;
 use Hoa\Router;
 
 /**
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  */
 
-if(!defined('HOA')) {
-
+if (!defined('HOA')) {
     $composer = [
         dirname(__DIR__) . DIRECTORY_SEPARATOR .
         '..' . DIRECTORY_SEPARATOR .
@@ -58,15 +56,17 @@ if(!defined('HOA')) {
         'autoload.php'
     ];
 
-    foreach($composer as $path)
-        if(file_exists($path)) {
-
+    foreach ($composer as $path) {
+        if (file_exists($path)) {
             require_once $path;
+
             break;
         }
+    }
 
-    if(!defined('HOA'))
+    if (!defined('HOA')) {
         require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Core.php';
+    }
 }
 
 Core::enableErrorHandler();
@@ -76,7 +76,6 @@ Core::enableExceptionHandler();
  * Here we go!
  */
 try {
-
     $router = new Router\Cli();
     $router->get(
         'g',
@@ -98,14 +97,10 @@ try {
     ]);
     $dispatcher->setKitName('Hoa\Console\Dispatcher\Kit');
     exit((int) $dispatcher->dispatch($router));
-}
-catch ( Core\Exception $e ) {
-
+} catch (Core\Exception $e) {
     $message = $e->raise(true);
     $code    = 1;
-}
-catch ( \Exception $e ) {
-
+} catch (\Exception $e) {
     $message = $e->getMessage();
     $code    = 2;
 }

@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -51,50 +51,47 @@ define('PATH_DATA', __DIR__ . DIRECTORY_SEPARATOR . 'Data.php');
  *
  * This class manages all classes, importations etc.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @author     Julien Bianchi <julien.bianchi@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin, Julien Bianchi.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Consistency {
-
+class Consistency
+{
     /**
      * One singleton by library family.
      *
-     * @var \Hoa\Core\Consistency array
+     * @var array
      */
     private static $_multiton = [];
 
     /**
      * Libraries to considere.
      *
-     * @var \Hoa\Core\Consistency array
+     * @var array
      */
     protected $_from          = null;
 
     /**
      * Library's roots to considere.
      *
-     * @var \Hoa\Core\Consistency array
+     * @var array
      */
     protected $_roots         = [];
 
     /**
      * Cache all imports.
      *
-     * @var \Hoa\Core\Consistency array
+     * @var array
      */
     protected static $_cache  = [];
 
     /**
      * Cache all classes informations: path, alias and imported.
      *
-     * @var \Hoa\Core\Consistency array
+     * @var array
      */
     protected static $_class  = [
         // Hard-preload.
-        'Hoa\Core\Event'     => [
+        'Hoa\Core\Event' => [
             'path'  => PATH_EVENT,
             'alias' => null
         ],
@@ -102,7 +99,7 @@ class Consistency {
             'path'  => PATH_EXCEPTION,
             'alias' => null
         ],
-        'Hoa\Core\Data'      => [
+        'Hoa\Core\Data' => [
             'path'  => PATH_DATA,
             'alias' => null
         ]
@@ -112,7 +109,7 @@ class Consistency {
      * Cache all classes from the current library family.
      * It contains references to self:$_class.
      *
-     * @var \Hoa\Core\Consistency array
+     * @var array
      */
     protected $__class        = [];
 
@@ -121,22 +118,22 @@ class Consistency {
     /**
      * Singleton to manage a library family.
      *
-     * @access  public
      * @param   string  $from    Library family's name.
      * @return  void
      */
-    private function __construct ( $from ) {
-
+    private function __construct($from)
+    {
         $this->_from = preg_split('#\s*(,|or)\s*#', trim($from, '()'));
         $parameters  = Core::getInstance()->getParameters();
         $wildcard    = $parameters->getFormattedParameter('namespace.prefix.*');
 
-        foreach($this->_from as $f)
+        foreach ($this->_from as $f) {
             $this->setRoot(
                 $parameters->getFormattedParameter('namespace.prefix.' . $f)
                 ?: $wildcard,
                 $f
             );
+        }
 
         return;
     }
@@ -144,14 +141,14 @@ class Consistency {
     /**
      * Get the library family's singleton.
      *
-     * @access  public
      * @param   string  $namespace    Library family's name.
      * @return  \Hoa\Core\Consistency
      */
-    public static function from ( $namespace ) {
-
-        if(!isset(static::$_multiton[$namespace]))
+    public static function from($namespace)
+    {
+        if (!isset(static::$_multiton[$namespace])) {
             static::$_multiton[$namespace] = new static($namespace);
+        }
 
         return static::$_multiton[$namespace];
     }
@@ -159,15 +156,15 @@ class Consistency {
     /**
      * Import a class, an interface or a trait.
      *
-     * @access  public
      * @param   string  $pattern    Pattern.
      * @param   bool    $load       Whether loading directly or not.
      * @return  \Hoa\Core\Consistency
      */
-    public function import ( $pattern, $load = false ) {
-
-        foreach($this->_from as $from)
+    public function import($pattern, $load = false)
+    {
+        foreach ($this->_from as $from) {
             $this->_import($from . '.' . $pattern, $load);
+        }
 
         return $this;
     }
@@ -175,15 +172,15 @@ class Consistency {
     /**
      * Iterate over each solution found by an import.
      *
-     * @access  public
      * @param   string    $pattern     Pattern.
      * @param   callable  $callback    Callback (also disable cache).
      * @return  \Hoa\Core\Consistency
      */
-    public function foreachImport ( $pattern, $callback ) {
-
-        foreach($this->_from as $from)
-            $this->_import($from . '.'. $pattern, false, $callback);
+    public function foreachImport($pattern, $callback)
+    {
+        foreach ($this->_from as $from) {
+            $this->_import($from . '.' . $pattern, false, $callback);
+        }
 
         return $this;
     }
@@ -191,43 +188,42 @@ class Consistency {
     /**
      * Real import implementation.
      *
-     * @access  protected
      * @param   string    $pattern     Pattern.
      * @param   bool      $load        Whether loading directly or not.
      * @param   callable  $callback    Callback.
      * @return  bool
      */
-    protected function _import ( $pattern, $load, $callback = null ) {
-
+    protected function _import($pattern, $load, $callback = null)
+    {
         $parts = explode('.', $pattern);
 
-        if(!isset($parts[1]))
+        if (!isset($parts[1])) {
             return false;
+        }
 
-        if(false !== strpos($pattern, '~')) {
-
+        if (false !== strpos($pattern, '~')) {
             $handle = null;
 
-            foreach($parts as &$part) {
-
-                if(null !== $handle && '*' !== $handle)
+            foreach ($parts as &$part) {
+                if (null !== $handle && '*' !== $handle) {
                     $part = str_replace('~', $handle, $part);
+                }
 
                 $handle = $part;
             }
         }
 
-        if(false !== strpos($pattern, '*')) {
-
-            if('Hoa' !== $parts[0] && 'Hoathis' !== $parts[0])
+        if (false !== strpos($pattern, '*')) {
+            if ('Hoa' !== $parts[0] && 'Hoathis' !== $parts[0]) {
                 return false;
+            }
 
             $glob     = new \AppendIterator();
             $ds       = preg_quote(DS);
             $_pattern = '#' . $ds . $parts[0] . $ds . $parts[1] . $ds . '?$#i';
 
-            foreach(resolve('hoa://Library/' . $parts[1], true, true) as $path)
-                if(0 !== preg_match($_pattern, $path))
+            foreach (resolve('hoa://Library/' . $parts[1], true, true) as $path) {
+                if (0 !== preg_match($_pattern, $path)) {
                     $glob->append(new \CallbackFilterIterator(
                         new \GlobIterator(
                             $path . DS . implode(DS, array_slice($parts, 2)) . '.php',
@@ -235,8 +231,7 @@ class Consistency {
                           | \GlobIterator::CURRENT_AS_SELF
                           | \GlobIterator::SKIP_DOTS
                         ),
-                        function ( $current, $key ) use ( $path, $parts ) {
-
+                        function ($current, $key) use ($path, $parts) {
                             $current->__hoa_pattern =
                                 $parts[0] .
                                 '.' .
@@ -251,11 +246,14 @@ class Consistency {
                             return true;
                         }
                     ));
+                }
+            }
 
             $out = true;
 
-            foreach($glob as $filesystem)
+            foreach ($glob as $filesystem) {
                 $out &= $this->_import($filesystem->__hoa_pattern, $load, $callback);
+            }
 
             return (bool) $out;
         }
@@ -263,8 +261,7 @@ class Consistency {
         $classname = implode('\\', $parts);
         $imported  = array_key_exists($classname, static::$_class);
 
-        if(false === $imported) {
-
+        if (false === $imported) {
             static::$_class[$classname] = [
                 'path'  => null,
                 'alias' => null
@@ -272,8 +269,7 @@ class Consistency {
 
             $count = count($parts);
 
-            if($parts[$count - 2] === $parts[$count - 1]) {
-
+            if ($parts[$count - 2] === $parts[$count - 1]) {
                 $alias = implode('\\', array_slice($parts, 0, -1));
 
                 static::$_class[$classname]['alias'] = $alias;
@@ -284,20 +280,21 @@ class Consistency {
 
         $this->__class[$classname] = &static::$_class[$classname];
 
-        if(   true  === $load
-           && false === static::entityExists($classname, false)) {
-
+        if (true  === $load &&
+            false === static::entityExists($classname, false)) {
             spl_autoload_call($classname);
 
-            if(   null !== $callback
-               && true === static::entityExists($classname, false))
+            if (null !== $callback &&
+                true === static::entityExists($classname, false)) {
                 $callback($classname);
+            }
 
             return true;
         }
 
-        if(null !== $callback)
+        if (null !== $callback) {
             $callback($classname);
+        }
 
         return true;
     }
@@ -305,22 +302,21 @@ class Consistency {
     /**
      * Autoloader.
      *
-     * @access  public
      * @param   string  $classname    Classname.
      * @return  bool
      */
-    public static function autoload ( $classname ) {
-
-        if(false === strpos($classname, '\\'))
+    public static function autoload($classname)
+    {
+        if (false === strpos($classname, '\\')) {
             return false;
+        }
 
         $classname = ltrim($classname, '\\');
 
         // Hard-preload.
-        if(   'Hoa\Core' === substr($classname, 0, 8)
-           &&      false !== ($pos = strpos($classname, '\\', 10))
-           &&    'Bin\\' !== substr($classname, 9, 4)) {
-
+        if ('Hoa\Core' === substr($classname, 0, 8) &&
+            false      !== ($pos = strpos($classname, '\\', 10)) &&
+            'Bin\\'    !== substr($classname, 9, 4)) {
             require static::$_class[substr($classname, 0, $pos)]['path'];
 
             return true;
@@ -328,18 +324,16 @@ class Consistency {
 
         $head = substr($classname, 0, strpos($classname, '\\'));
 
-        if(false === array_key_exists($classname, static::$_class)) {
-
+        if (false === array_key_exists($classname, static::$_class)) {
             $_classname = str_replace('\\', '.', $classname);
-            $out = from($head)->_import($_classname, true);
+            $out        = from($head)->_import($_classname, true);
 
-            if(false === static::entityExists($classname))
+            if (false === static::entityExists($classname)) {
                 $out = from($head)->_import($_classname . '.~', true);
+            }
 
             return $out;
-        }
-        elseif(is_string($original = static::$_class[$classname])) {
-
+        } elseif (is_string($original = static::$_class[$classname])) {
             spl_autoload_call($original);
 
             return true;
@@ -355,17 +349,18 @@ class Consistency {
 
         $gotcha = false;
 
-        foreach($roots as $vendor => $_roots)
-            foreach($_roots as $root)
-                if(   true === file_exists($path = $root . $classpath)
-                   || true === file_exists($path = $root . $classpathExtended)) {
-
+        foreach ($roots as $vendor => $_roots) {
+            foreach ($_roots as $root) {
+                if (true === file_exists($path = $root . $classpath) ||
+                    true === file_exists($path = $root . $classpathExtended)) {
                     $gotcha = true;
                     require $path;
                     static::$_class[$classname]['path'] = $path;
 
                     break 2;
                 }
+            }
+        }
 
         return $gotcha;
     }
@@ -373,45 +368,44 @@ class Consistency {
     /**
      * Dynamic new, i.e. a native factory (import + load + instance).
      *
-     * @access  public
      * @param   string  $classname    Classname.
      * @param   array   $arguments    Constructor's arguments.
      * @return  object
-     * @throw   \Hoa\Core\Exception
+     * @throws  \Hoa\Core\Exception
      */
-    public static function dnew ( $classname, Array $arguments = [] ) {
-
+    public static function dnew($classname, Array $arguments = [])
+    {
         $classname = ltrim($classname, '\\');
 
-        if(!class_exists($classname, false)) {
-
+        if (!class_exists($classname, false)) {
             $head = substr($classname, 0, $pos = strpos($classname, '\\'));
             $tail = str_replace('\\', '.', substr($classname, $pos + 1));
             $from = from($head);
 
-            foreach([$tail, $tail . '.~'] as $_tail)
-                foreach($from->getFroms() as $_from) {
-
+            foreach ([$tail, $tail . '.~'] as $_tail) {
+                foreach ($from->getFroms() as $_from) {
                     $break = false;
                     $from->_import(
                         $_from . '.' . $_tail,
                         true,
-                        function ( $_classname ) use ( &$break, &$classname ) {
-
+                        function ($_classname) use (&$break, &$classname) {
                             $classname = $_classname;
                             $break     = true;
                         }
                     );
 
-                    if(true === $break)
+                    if (true === $break) {
                         break 2;
+                    }
                 }
+            }
         }
 
         $class = new \ReflectionClass($classname);
 
-        if(empty($arguments) || false === $class->hasMethod('__construct'))
+        if (empty($arguments) || false === $class->hasMethod('__construct')) {
             return $class->newInstance();
+        }
 
         return $class->newInstanceArgs($arguments);
     }
@@ -419,22 +413,24 @@ class Consistency {
     /**
      * Set the root of the current library family.
      *
-     * @access  public
      * @param   bool    $root    Root.
      * @param   string  $from    Library family's name (if null, first family
      *                           will be choosen).
      * @return  \Hoa\Core\Consistency
      */
-    public function setRoot ( $root, $from = null ) {
-
-        if(null === $from)
+    public function setRoot($root, $from = null)
+    {
+        if (null === $from) {
             $from = $this->_from[0];
+        }
 
-        if(!isset($this->_roots[$from]))
+        if (!isset($this->_roots[$from])) {
             $this->_roots[$from] = [];
+        }
 
-        foreach(explode(';', $root) as $r)
+        foreach (explode(';', $root) as $r) {
             $this->_roots[$from][] = rtrim($r, '/\\') . DS;
+        }
 
         return $this;
     }
@@ -442,61 +438,57 @@ class Consistency {
     /**
      * Get roots of the current library family.
      *
-     * @access  public
      * @return  array
      */
-    public function getRoot ( ) {
-
+    public function getRoot()
+    {
         return $this->_roots;
     }
 
     /**
      * Get froms.
      *
-     * @access  public
      * @return  array
      */
-    public function getFroms ( ) {
-
+    public function getFroms()
+    {
         return $this->_from;
     }
 
     /**
      * Get imported classes from the current library family.
      *
-     * @access  public
      * @return  array
      */
-    public function getImportedClasses ( ) {
-
+    public function getImportedClasses()
+    {
         return $this->__class;
     }
 
     /**
      * Get imported classes from all library families.
      *
-     * @access  public
      * @return  array
      */
-    public static function getAllImportedClasses ( ) {
-
+    public static function getAllImportedClasses()
+    {
         return static::$_class;
     }
 
     /**
      * Get the shortest name for an entity.
      *
-     * @access  public
      * @param   string  $entityName    Entity name.
      * @return  string
      */
-    public static function getEntityShortestName ( $entityName ) {
-
+    public static function getEntityShortestName($entityName)
+    {
         $parts = explode('\\', $entityName);
         $count = count($parts);
 
-        if($parts[$count - 2] === $parts[$count - 1])
+        if ($parts[$count - 2] === $parts[$count - 1]) {
             return implode('\\', array_slice($parts, 0, -1));
+        }
 
         return $entityName;
     }
@@ -504,27 +496,26 @@ class Consistency {
     /**
      * Check if an entity exists (class, interface, trait…).
      *
-     * @access  public
      * @param   string  $entityName    Entity name.
      * @param   bool    $autoloader    Run autoloader if necessary.
      * @return  bool
      */
-    public static function entityExists ( $entityName, $autoloader = false ) {
-
-        return    class_exists($entityName, $autoloader)
-               || interface_exists($entityName, false)
-               || trait_exists($entityName, false);
+    public static function entityExists($entityName, $autoloader = false)
+    {
+        return
+            class_exists($entityName, $autoloader) ||
+            interface_exists($entityName, false)   ||
+            trait_exists($entityName, false);
     }
 
     /**
      * Declare a flex entity (for nested library).
      *
-     * @access  public
      * @param   string  $entityName    Entity name.
      * @return  bool
      */
-    public static function flexEntity ( $entityName ) {
-
+    public static function flexEntity($entityName)
+    {
         return class_alias(
             $entityName,
             static::getEntityShortestName($entityName)
@@ -534,12 +525,11 @@ class Consistency {
     /**
      * Whether a word is reserved or not.
      *
-     * @access  public
      * @param   string  $word    Word.
      * @return  void
      */
-    public static function isKeyword ( $word ) {
-
+    public static function isKeyword($word)
+    {
         static $_list = [
             // PHP keywords.
             '__halt_compiler', 'abstract',     'and',           'array',
@@ -570,12 +560,11 @@ class Consistency {
     /**
      * Whether an ID is a valid PHP identifier.
      *
-     * @access  public
      * @param   string  $id    ID.
      * @return  bool
      */
-    public static function isIdentifier ( $id ) {
-
+    public static function isIdentifier($id)
+    {
         return 0 !== preg_match(
             '#^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$#',
             $id
@@ -590,24 +579,22 @@ class Consistency {
  * closure, they all have the same behaviour. This callable is an extension of
  * native PHP callable (aka callback) to integrate Hoa's structures.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Xcallable {
-
+class Xcallable
+{
     /**
      * Callback, with the PHP format.
      *
-     * @var \Hoa\Core\Consistency\Xcallable mixed
+     * @var mixed
      */
     protected $_callback = null;
 
     /**
      * Callable hash.
      *
-     * @var \Hoa\Core\Consistency\Xcallable string
+     * @var string
      */
     protected $_hash     = null;
 
@@ -625,35 +612,38 @@ class Xcallable {
      *     • ['class', 'method'];
      *     • [$object, 'method'].
      *
-     * @access  public
      * @param   mixed   $call    First callable part.
      * @param   mixed   $able    Second callable part (if needed).
      * @return  mixed
      */
-    public function __construct ( $call, $able = '' ) {
-
-        if(null === $call)
+    public function __construct($call, $able = '')
+    {
+        if (null === $call) {
             return null;
+        }
 
-        if($call instanceof \Closure) {
-
+        if ($call instanceof \Closure) {
             $this->_callback = $call;
 
             return;
         }
 
-        if(!is_string($able))
+        if (!is_string($able)) {
             throw new Core\Exception(
-                'Bad callback form.', 0);
+                'Bad callback form.',
+                0
+            );
+        }
 
-        if('' === $able)
-            if(is_string($call)) {
-
-                if(false === strpos($call, '::')) {
-
-                    if(!function_exists($call))
+        if ('' === $able) {
+            if (is_string($call)) {
+                if (false === strpos($call, '::')) {
+                    if (!function_exists($call)) {
                         throw new Core\Exception(
-                            'Bad callback form.', 1);
+                            'Bad callback form.',
+                            1
+                        );
+                    }
 
                     $this->_callback = $call;
 
@@ -661,27 +651,30 @@ class Xcallable {
                 }
 
                 list($call, $able) = explode('::', $call);
-            }
-            elseif(is_object($call)) {
-
-                if($call instanceof Stream\IStream\Out)
+            } elseif (is_object($call)) {
+                if ($call instanceof Stream\IStream\Out) {
                     $able = null;
-                elseif(method_exists($call, '__invoke'))
+                } elseif (method_exists($call, '__invoke')) {
                     $able = '__invoke';
-                else
+                } else {
                     throw new Core\Exception(
-                        'Bad callback form.', 2);
-            }
-            elseif(is_array($call) && isset($call[0])) {
-
-                if(!isset($call[1]))
+                        'Bad callback form.',
+                        2
+                    );
+                }
+            } elseif (is_array($call) && isset($call[0])) {
+                if (!isset($call[1])) {
                     return $this->__construct($call[0]);
+                }
 
                 return $this->__construct($call[0], $call[1]);
-            }
-            else
+            } else {
                 throw new Core\Exception(
-                    'Bad callback form.', 3);
+                    'Bad callback form.',
+                    3
+                );
+            }
+        }
 
         $this->_callback = [$call, $able];
 
@@ -691,12 +684,11 @@ class Xcallable {
     /**
      * Call the callable.
      *
-     * @access  public
      * @param   ...
      * @return  mixed
      */
-    public function __invoke ( ) {
-
+    public function __invoke()
+    {
         $arguments = func_get_args();
         $valid     = $this->getValidCallback($arguments);
 
@@ -706,58 +698,60 @@ class Xcallable {
     /**
      * Distribute arguments according to an array.
      *
-     * @access  public
      * @param   array  $arguments    Arguments.
      * @return  mixed
      */
-    public function distributeArguments ( Array $arguments ) {
-
+    public function distributeArguments(Array $arguments)
+    {
         return call_user_func_array([$this, '__invoke'], $arguments);
     }
 
     /**
      * Get a valid callback in the PHP meaning.
      *
-     * @access  public
      * @param   array   &$arguments    Arguments (could determine method on an
      *                                 object if not precised).
      * @return  mixed
      */
-    public function getValidCallback ( Array &$arguments = [] ) {
-
+    public function getValidCallback(Array &$arguments = [])
+    {
         $callback = $this->_callback;
         $head     = null;
 
-        if(isset($arguments[0]))
+        if (isset($arguments[0])) {
             $head = &$arguments[0];
+        }
 
         // If method is undetermined, we find it (we understand event bucket and
         // stream).
-        if(   null !== $head
-           && is_array($callback)
-           && null === $callback[1]) {
-
-            if($head instanceof Core\Event\Bucket)
+        if (null !== $head &&
+            is_array($callback) &&
+            null === $callback[1]) {
+            if ($head instanceof Core\Event\Bucket) {
                 $head = $head->getData();
+            }
 
-            switch($type = gettype($head)) {
-
+            switch ($type = gettype($head)) {
                 case 'string':
-                    if(1 === strlen($head))
+                    if (1 === strlen($head)) {
                         $method = 'writeCharacter';
-                    else
+                    } else {
                         $method = 'writeString';
-                  break;
+                    }
+
+                    break;
 
                 case 'boolean':
                 case 'integer':
                 case 'array':
                     $method = 'write' . ucfirst($type);
-                  break;
+
+                    break;
 
                 case 'double':
                     $method = 'writeFloat';
-                  break;
+
+                    break;
 
                 default:
                     $method = 'writeAll';
@@ -778,29 +772,32 @@ class Xcallable {
      *     * object(…)#…::…;
      *     * closure(…).
      *
-     * @access  public
      * @return  string
      */
-    public function getHash ( ) {
-
-        if(null !== $this->_hash)
+    public function getHash()
+    {
+        if (null !== $this->_hash) {
             return $this->_hash;
+        }
 
         $_ = &$this->_callback;
 
-        if(is_string($_))
+        if (is_string($_)) {
             return $this->_hash = 'function#' . $_;
+        }
 
-        if(is_array($_))
-            return $this->_hash =
-                       (is_object($_[0])
-                           ? 'object(' . spl_object_hash($_[0]) . ')' .
-                             '#' . get_class($_[0])
-                           : 'class#' . $_[0]) .
-                       '::' .
-                       (null !== $_[1]
-                           ? $_[1]
-                           : '???');
+        if (is_array($_)) {
+            return
+                $this->_hash =
+                    (is_object($_[0])
+                        ? 'object(' . spl_object_hash($_[0]) . ')' .
+                          '#' . get_class($_[0])
+                        : 'class#' . $_[0]) .
+                    '::' .
+                    (null !== $_[1]
+                        ? $_[1]
+                        : '???');
+        }
 
         return $this->_hash = 'closure(' . spl_object_hash($_) . ')';
     }
@@ -808,35 +805,36 @@ class Xcallable {
     /**
      * Get appropriated reflection instance.
      *
-     * @access  public
      * @param   ...
      * @return  \Reflector
      */
-    public function getReflection ( ) {
-
+    public function getReflection()
+    {
         $arguments = func_get_args();
         $valid     = $this->getValidCallback($arguments);
 
-        if(is_string($valid))
+        if (is_string($valid)) {
             return new \ReflectionFunction($valid);
+        }
 
-        if($valid instanceof \Closure)
+        if ($valid instanceof \Closure) {
             return new \ReflectionFunction($valid);
+        }
 
-        if(is_array($valid)) {
-
-            if(is_string($valid[0])) {
-
-                if(false === method_exists($valid[0], $valid[1]))
+        if (is_array($valid)) {
+            if (is_string($valid[0])) {
+                if (false === method_exists($valid[0], $valid[1])) {
                     return new \ReflectionClass($valid[0]);
+                }
 
                 return new \ReflectionMethod($valid[0], $valid[1]);
             }
 
             $object = new \ReflectionObject($valid[0]);
 
-            if(null === $valid[1])
+            if (null === $valid[1]) {
                 return $object;
+            }
 
             return $object->getMethod($valid[1]);
         }
@@ -845,11 +843,10 @@ class Xcallable {
     /**
      * Return the hash.
      *
-     * @access  public
      * @return  string
      */
-    public function __toString ( ) {
-
+    public function __toString()
+    {
         return $this->getHash();
     }
 }
@@ -862,17 +859,16 @@ namespace {
 /**
  * Implement a fake trait_exists function.
  *
- * @access  public
  * @param   string  $traitname    Traitname.
  * @param   bool    $autoload     Autoload.
  * @return  bool
  */
-if(!function_exists('trait_exists')) {
-
-    function trait_exists ( $traitname, $autoload = true ) {
-
-        if(true == $autoload)
+if (!function_exists('trait_exists')) {
+    function trait_exists($traitname, $autoload = true)
+    {
+        if (true == $autoload) {
             class_exists($traitname, true);
+        }
 
         return false;
     }
@@ -881,14 +877,12 @@ if(!function_exists('trait_exists')) {
 /**
  * Alias for \Hoa\Core\Consistency::from().
  *
- * @access  public
  * @param   string  $namespace    Library family's name.
  * @return  \Hoa\Core\Consistency
  */
-if(!function_exists('from')) {
-
-    function from ( $namespace ) {
-
+if (!function_exists('from')) {
+    function from($namespace)
+    {
         return Hoa\Core\Consistency::from($namespace);
     }
 }
@@ -896,15 +890,13 @@ if(!function_exists('from')) {
 /**
  * Alias of \Hoa\Core\Consistency::dnew().
  *
- * @access  public
  * @param   string  $classname    Classname.
  * @param   array   $arguments    Constructor's arguments.
  * @return  object
  */
-if(!function_exists('dnew')) {
-
-    function dnew ( $classname, Array $arguments = [] ) {
-
+if (!function_exists('dnew')) {
+    function dnew($classname, Array $arguments = [])
+    {
         return Hoa\Core\Consistency::dnew($classname, $arguments);
     }
 }
@@ -912,17 +904,16 @@ if(!function_exists('dnew')) {
 /**
  * Alias of \Hoa\Core\Consistency\Xcallable.
  *
- * @access  public
  * @param   mixed   $call    First callable part.
  * @param   mixed   $able    Second callable part (if needed).
  * @return  mixed
  */
-if(!function_exists('xcallable')) {
-
-    function xcallable ( $call, $able = '' ) {
-
-        if($call instanceof Hoa\Core\Consistency\Xcallable)
+if (!function_exists('xcallable')) {
+    function xcallable($call, $able = '')
+    {
+        if ($call instanceof Hoa\Core\Consistency\Xcallable) {
             return $call;
+        }
 
         return new Hoa\Core\Consistency\Xcallable($call, $able);
     }
@@ -944,21 +935,18 @@ if(!function_exists('xcallable')) {
  * The “…” character is the HORIZONTAL ELLIPSIS Unicode character (Unicode:
  * 2026, UTF-8: E2 80 A6).
  *
- * @access  public
  * @param   mixed  $callable    Callable (two parts).
  * @param   ...    ...          Arguments.
  * @return  \Closure
  */
-if(!function_exists('curry')) {
-
-    function curry ( $callable ) {
-
+if (!function_exists('curry')) {
+    function curry($callable)
+    {
         $arguments = func_get_args();
         array_shift($arguments);
         $ii        = array_keys($arguments, …, true);
 
-        return function ( ) use ( $callable, $arguments, $ii ) {
-
+        return function () use ($callable, $arguments, $ii) {
             return call_user_func_array(
                 $callable,
                 array_replace($arguments, array_combine($ii, func_get_args()))
@@ -970,30 +958,49 @@ if(!function_exists('curry')) {
 /**
  * Same as curry() but where all arguments are references.
  *
- * @access  public
  * @param   mixed  &$callable    Callable (two parts).
  * @param   ...    &...          Arguments.
  * @return  \Closure
  */
-if(!function_exists('curry_ref')) {
-
-    function curry_ref ( &$callable, &$a = null, &$b = null, &$c = null, &$d = null,
-                                     &$e = null, &$f = null, &$g = null, &$h = null,
-                                     &$i = null, &$j = null, &$k = null, &$l = null,
-                                     &$m = null, &$n = null, &$o = null, &$p = null,
-                                     &$q = null, &$r = null, &$s = null, &$t = null,
-                                     &$u = null, &$v = null, &$w = null, &$x = null,
-                                     &$y = null, &$z = null ) {
-
+if (!function_exists('curry_ref')) {
+    function curry_ref(
+        &$callable,
+        &$a = null,
+        &$b = null,
+        &$c = null,
+        &$d = null,
+        &$e = null,
+        &$f = null,
+        &$g = null,
+        &$h = null,
+        &$i = null,
+        &$j = null,
+        &$k = null,
+        &$l = null,
+        &$m = null,
+        &$n = null,
+        &$o = null,
+        &$p = null,
+        &$q = null,
+        &$r = null,
+        &$s = null,
+        &$t = null,
+        &$u = null,
+        &$v = null,
+        &$w = null,
+        &$x = null,
+        &$y = null,
+        &$z = null
+    ) {
         $arguments = [];
 
-        for($i = 0, $max = func_num_args() - 1; $i < $max; ++$i)
+        for ($i = 0, $max = func_num_args() - 1; $i < $max; ++$i) {
             $arguments[] = &${chr(97 + $i)};
+        }
 
         $ii = array_keys($arguments, …, true);
 
-        return function ( ) use ( &$callable, &$arguments, $ii ) {
-
+        return function () use (&$callable, &$arguments, $ii) {
             return call_user_func_array(
                 $callable,
                 array_replace($arguments, array_combine($ii, func_get_args()))

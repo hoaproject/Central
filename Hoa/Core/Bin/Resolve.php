@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,25 +36,23 @@
 
 namespace Hoa\Core\Bin;
 
-use Hoa\Core;
 use Hoa\Console;
+use Hoa\Core;
 
 /**
  * Class \Hoa\Core\Bin\Resolve.
  *
  * This command resolves some hoa:// paths.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Resolve extends Console\Dispatcher\Kit {
-
+class Resolve extends Console\Dispatcher\Kit
+{
     /**
      * Options description.
      *
-     * @var \Hoa\Core\Bin\Resolve array
+     * @var array
      */
     protected $options = [
         ['exists',     Console\GetOption::NO_ARGUMENT, 'E'],
@@ -70,64 +68,69 @@ class Resolve extends Console\Dispatcher\Kit {
     /**
      * The entry method.
      *
-     * @access  public
      * @return  int
      */
-    public function main ( ) {
-
+    public function main()
+    {
         $exists  = true;
         $unfold  = false;
         $tree    = false;
         $verbose = Console::isDirect(STDOUT);
 
-        while(false !== $c = $this->getOption($v)) switch($c) {
+        while (false !== $c = $this->getOption($v)) {
+            switch ($c) {
+                case 'E':
+                    $exists = false;
 
-            case 'E':
-                $exists = false;
-              break;
+                    break;
 
-            case 'u':
-                $unfold = true;
-              break;
+                case 'u':
+                    $unfold = true;
 
-            case 't':
-                $tree = true;
-              break;
+                    break;
 
-            case 'V':
-                $verbose = false;
-              break;
+                case 't':
+                    $tree = true;
 
-            case 'h':
-            case '?':
-                return $this->usage();
-              break;
+                    break;
 
-            case '__ambiguous':
-                $this->resolveOptionAmbiguity($v);
-              break;
+                case 'V':
+                    $verbose = false;
+
+                    break;
+
+                case 'h':
+                case '?':
+                    return $this->usage();
+
+                case '__ambiguous':
+                    $this->resolveOptionAmbiguity($v);
+
+                    break;
+            }
         }
 
         $this->parser->listInputs($path);
 
-        if(null === $path)
+        if (null === $path) {
             return $this->usage();
+        }
 
-        if(true === $tree) {
-
+        if (true === $tree) {
             $protocol = Core::getProtocol();
             $foo      = substr($path, 0, 6);
 
-            if('hoa://' !== $foo)
+            if ('hoa://' !== $foo) {
                 return;
+            }
 
             $path    = substr($path, 6);
             $current = $protocol;
 
-            foreach(explode('/', $path) as $component) {
-
-                if(!isset($current[$component]))
+            foreach (explode('/', $path) as $component) {
+                if (!isset($current[$component])) {
                     break;
+                }
 
                 $current = $current[$component];
             }
@@ -137,14 +140,17 @@ class Resolve extends Console\Dispatcher\Kit {
             return;
         }
 
-        if(true === $verbose)
-            echo Console\Chrome\Text::colorize($path, 'foreground(yellow)'),
-                 ' is equivalent to:', "\n";
+        if (true === $verbose) {
+            echo
+                Console\Chrome\Text::colorize($path, 'foreground(yellow)'),
+                ' is equivalent to:', "\n";
+        }
 
         $resolved = resolve($path, $exists, $unfold);
 
-        foreach((array) $resolved as $r)
+        foreach ((array) $resolved as $r) {
             echo $r, "\n";
+        }
 
         return;
     }
@@ -152,21 +158,21 @@ class Resolve extends Console\Dispatcher\Kit {
     /**
      * The command usage.
      *
-     * @access  public
      * @return  int
      */
-    public function usage ( ) {
-
-        echo 'Usage   : core:resolve <options> path', "\n",
-             'Options :', "\n",
-             $this->makeUsageOptionsList([
-                 'E'    => 'Do not check if the resolution result exists.',
-                 'u'    => 'Unfold all possible results.',
-                 't'    => 'Print the tree from the path.',
-                 'V'    => 'No-verbose, i.e. be as quiet as possible, just print ' .
-                           'essential informations.',
-                 'help' => 'This help.'
-             ]), "\n";
+    public function usage()
+    {
+        echo
+            'Usage   : core:resolve <options> path', "\n",
+            'Options :', "\n",
+            $this->makeUsageOptionsList([
+                'E'    => 'Do not check if the resolution result exists.',
+                'u'    => 'Unfold all possible results.',
+                't'    => 'Print the tree from the path.',
+                'V'    => 'No-verbose, i.e. be as quiet as possible, just print ' .
+                          'essential informations.',
+                'help' => 'This help.'
+            ]), "\n";
 
         return;
     }

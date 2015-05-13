@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,25 +36,23 @@
 
 namespace Hoa\Core\Bin;
 
-use Hoa\Core;
 use Hoa\Console;
+use Hoa\Core;
 
 /**
  * Class \Hoa\Core\Bin\Uuid.
  *
  * This command generates an UUID.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Uuid extends Console\Dispatcher\Kit {
-
+class Uuid extends Console\Dispatcher\Kit
+{
     /**
      * Options description.
      *
-     * @var \Hoa\Core\Bin\Uuid array
+     * @var array
      */
     protected $options = [
         ['help', Console\GetOption::NO_ARGUMENT, 'h'],
@@ -66,21 +64,21 @@ class Uuid extends Console\Dispatcher\Kit {
     /**
      * The entry method.
      *
-     * @access  public
      * @return  int
      */
-    public function main ( ) {
+    public function main()
+    {
+        while (false !== $c = $this->getOption($v)) {
+            switch ($c) {
+                case 'h':
+                case '?':
+                    return $this->usage();
 
-        while(false !== $c = $this->getOption($v)) switch($c) {
+                case '__ambiguous':
+                    $this->resolveOptionAmbiguity($v);
 
-            case 'h':
-            case '?':
-                return $this->usage();
-              break;
-
-            case '__ambiguous':
-                $this->resolveOptionAmbiguity($v);
-              break;
+                    break;
+            }
         }
 
         echo Core::uuid(), "\n";
@@ -91,16 +89,16 @@ class Uuid extends Console\Dispatcher\Kit {
     /**
      * The command usage.
      *
-     * @access  public
      * @return  int
      */
-    public function usage ( ) {
-
-        echo 'Usage   : core:uuid <options>', "\n",
-             'Options :', "\n",
-             $this->makeUsageOptionsList([
-                  'help' => 'This help.'
-             ]), "\n";
+    public function usage()
+    {
+        echo
+            'Usage   : core:uuid <options>', "\n",
+            'Options :', "\n",
+            $this->makeUsageOptionsList([
+                 'help' => 'This help.'
+            ]), "\n";
 
         return;
     }
