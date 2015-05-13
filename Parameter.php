@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,19 +43,17 @@ use Hoa\Core;
  *
  * Interface for parameterizable class.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-interface Parameterizable {
-
+interface Parameterizable
+{
     /**
      * Get parameters.
      *
-     * @access  public
      * @return  \Hoa\Core\Parameter
      */
-    public function getParameters ( );
+    public function getParameters();
 }
 
 /**
@@ -63,45 +61,43 @@ interface Parameterizable {
  *
  * Provide a parameter support.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Parameter {
-
+class Parameter
+{
     /**
      * Owner.
      *
-     * @var \Hoa\Core\Parameter string
+     * @var string
      */
     protected $_owner            = null;
 
     /**
      * Parameters.
      *
-     * @var \Hoa\Core\Parameter array
+     * @var array
      */
     protected $_parameters       = [];
 
     /**
      * Keywords.
      *
-     * @var \Hoa\Core\Parameter array
+     * @var array
      */
     protected $_keywords         = [];
 
     /**
      * Constants values for zFormat.
      *
-     * @var \Hoa\Core\Parameter array
+     * @var array
      */
     protected static $_constants = null;
 
     /**
      * Cache for zFormat.
      *
-     * @var \Hoa\Core\Parameter array
+     * @var array
      */
     protected $_cache            = [];
 
@@ -110,38 +106,39 @@ class Parameter {
     /**
      * Construct a new set of parameters.
      *
-     * @access  public
      * @param   mixed  $owner         Owner name or instance.
      * @param   array  $keywords      Keywords.
      * @param   array  $parameters    Parameters.
      * @return  void
-     * @throw   \Hoa\Core\Parameter
+     * @throws  \Hoa\Core\Parameter
      */
-    public function __construct ( $owner,
-                                  Array $keywords   = [],
-                                  Array $parameters = [] ) {
-
-        if(is_object($owner)) {
-
-            if(!($owner instanceof Parameterizable))
+    public function __construct(
+        $owner,
+        Array $keywords   = [],
+        Array $parameters = []
+    ) {
+        if (is_object($owner)) {
+            if (!($owner instanceof Parameterizable)) {
                 throw new Core\Exception(
                     'Only parameterizable object can have parameter; ' .
                     '%s does implement \Hoa\Core\Parameter\Parameterizable.',
-                    0, get_class($owner));
+                    0,
+                    get_class($owner)
+                );
+            }
 
             $owner = get_class($owner);
-        }
-        else {
-
+        } else {
             $reflection = new \ReflectionClass($owner);
 
-            if(false === $reflection->implementsInterface(
-                            '\Hoa\Core\Parameter\Parameterizable'
-                         ))
+            if (false === $reflection->implementsInterface('\Hoa\Core\Parameter\Parameterizable')) {
                 throw new Core\Exception(
                     'Only parameterizable object can have parameter; ' .
                     '%s does implement \Hoa\Core\Parameter\Parameterizable.',
-                    1, $owner);
+                    1,
+                    $owner
+                );
+            }
         }
 
         $this->_owner = $owner;
@@ -154,12 +151,11 @@ class Parameter {
     /**
      * Initialize constants.
      *
-     * @access  public
      * @return  void
      */
-    public static function initializeConstants ( ) {
-
-        $c = explode('…', date('d…j…N…w…z…W…m…n…Y…y…g…G…h…H…i…s…u…O…T…U'));
+    public static function initializeConstants()
+    {
+        $c                = explode('…', date('d…j…N…w…z…W…m…n…Y…y…g…G…h…H…i…s…u…O…T…U'));
         self::$_constants = [
             'd' => $c[0],
             'j' => $c[1],
@@ -189,64 +185,70 @@ class Parameter {
     /**
      * Get constants.
      *
-     * @access  public
      * @return  array
      */
-    public static function getConstants ( ) {
-
+    public static function getConstants()
+    {
         return self::$_constants;
     }
 
     /**
      * Set default parameters to a class.
      *
-     * @access  protected
      * @param   array  $parameters    Parameters to set.
      * @return  void
-     * @throw   \Hoa\Core\Exception
+     * @throws  \Hoa\Core\Exception
      */
-    private function setDefault ( Array $parameters ) {
-
-        if($this->_owner == 'Hoa\Core\Core') {
-
+    private function setDefault(Array $parameters)
+    {
+        if ($this->_owner == 'Hoa\Core\Core') {
             $class             = 'HoaCoreCore';
             $this->_parameters = $parameters;
             $path              = $this->zFormat(
                 $parameters['protocol.Data/Etc/Configuration']
             ) . '.Cache' . DS . 'HoaCoreCore.php';
-        }
-        else {
-
+        } else {
             $class = str_replace(
                 '\\',
                 '',
                 Core\Consistency::getEntityShortestName($this->_owner)
             );
-            $path  = 'hoa://Data/Etc/Configuration/.Cache/' . $class . '.php';
+            $path = 'hoa://Data/Etc/Configuration/.Cache/' . $class . '.php';
         }
 
-        if(file_exists($path)) {
-
+        if (file_exists($path)) {
             $handle = require $path;
 
-            if(!is_array($handle))
+            if (!is_array($handle)) {
                 throw new Core\Exception(
                     'Strange though it may appear, the configuration cache ' .
-                    'file %s appears to be corrupted.', 0, $path);
+                    'file %s appears to be corrupted.',
+                    0,
+                    $path
+                );
+            }
 
-            if(!array_key_exists('keywords', $handle))
+            if (!array_key_exists('keywords', $handle)) {
                 throw new Core\Exception(
-                    'Need keywords in the configuration cache %s.', 1, $path);
+                    'Need keywords in the configuration cache %s.',
+                    1,
+                    $path
+                );
+            }
 
-            if(!array_key_exists('parameters', $handle))
+            if (!array_key_exists('parameters', $handle)) {
                 throw new Core\Exception(
-                    'Need parameters in the configuration cache %s.', 2, $path);
+                    'Need parameters in the configuration cache %s.',
+                    2,
+                    $path
+                );
+            }
 
             $this->_keywords   = $handle['keywords'];
             $this->_parameters = $handle['parameters'];
-        }
-        else
+        } else {
             $this->_parameters = $parameters;
+        }
 
         return;
     }
@@ -254,16 +256,16 @@ class Parameter {
     /**
      * Set parameters.
      *
-     * @access  public
      * @param   array   $parameter    Parameters.
      * @return  void
      */
-    public function setParameters ( Array $parameters ) {
-
+    public function setParameters(Array $parameters)
+    {
         $this->resetCache();
 
-        foreach($parameters as $key => $value)
+        foreach ($parameters as $key => $value) {
             $this->setParameter($key, $value);
+        }
 
         return;
     }
@@ -271,29 +273,28 @@ class Parameter {
     /**
      * Get parameters.
      *
-     * @access  public
      * @return  array
      */
-    public function getParameters ( ) {
-
+    public function getParameters()
+    {
         return $this->_parameters;
     }
 
     /**
      * Set a parameter.
      *
-     * @access  public
      * @param   string  $key      Key.
      * @param   mixed   $value    Value.
      * @return  mixed
      */
-    public function setParameter ( $key, $value ) {
-
+    public function setParameter($key, $value)
+    {
         $this->resetCache();
         $old = null;
 
-        if(true === array_key_exists($key, $this->_parameters))
+        if (true === array_key_exists($key, $this->_parameters)) {
             $old = $this->_parameters[$key];
+        }
 
         $this->_parameters[$key] = $value;
 
@@ -303,14 +304,14 @@ class Parameter {
     /**
      * Get a parameter.
      *
-     * @access  public
      * @param   string  $parameter    Parameter.
      * @return  mixed
      */
-    public function getParameter ( $parameter ) {
-
-        if(array_key_exists($parameter, $this->_parameters))
+    public function getParameter($parameter)
+    {
+        if (array_key_exists($parameter, $this->_parameters)) {
             return $this->_parameters[$parameter];
+        }
 
         return null;
     }
@@ -318,14 +319,14 @@ class Parameter {
     /**
      * Get a formatted parameter (i.e. zFormatted).
      *
-     * @access  public
      * @param   string  $parameter    Parameter.
      * @return  mixed
      */
-    public function getFormattedParameter ( $parameter ) {
-
-        if(null === $value = $this->getParameter($parameter))
+    public function getFormattedParameter($parameter)
+    {
+        if (null === $value = $this->getParameter($parameter)) {
             return null;
+        }
 
         return $this->zFormat($value);
     }
@@ -333,17 +334,18 @@ class Parameter {
     /**
      * Check a branche exists.
      *
-     * @access  public
      * @param   string  $branche    Branche.
      * @return  bool
      */
-    public function brancheExists ( $branche ) {
-
+    public function brancheExists($branche)
+    {
         $qBranche = preg_quote($branche);
 
-        foreach($this->getParameters() as $key => $value)
-            if(0 !== preg_match('#^' . $qBranche . '(.*)?#', $key))
+        foreach ($this->getParameters() as $key => $value) {
+            if (0 !== preg_match('#^' . $qBranche . '(.*)?#', $key)) {
                 return true;
+            }
+        }
 
         return false;
     }
@@ -351,20 +353,19 @@ class Parameter {
     /**
      * Unlinearize a branche to an array.
      *
-     * @access  public
      * @param   string  $branche    Branche.
      * @return  array
      */
-    public function unlinearizeBranche ( $branche ) {
-
+    public function unlinearizeBranche($branche)
+    {
         $parameters = $this->getParameters();
         $out        = [];
         $lBranche   = strlen($branche);
 
-        foreach($parameters as $key => $value) {
-
-            if($branche !== substr($key, 0, $lBranche))
+        foreach ($parameters as $key => $value) {
+            if ($branche !== substr($key, 0, $lBranche)) {
                 continue;
+            }
 
             $handle  = [];
             $explode = preg_split(
@@ -373,17 +374,17 @@ class Parameter {
                 -1,
                 PREG_SPLIT_NO_EMPTY
             );
-            $end     = count($explode) - 1;
-            $i       = $end;
+            $end = count($explode) - 1;
+            $i   = $end;
 
-            while($i >= 0) {
-
+            while ($i >= 0) {
                 $explode[$i] = str_replace('\\.', '.', $explode[$i]);
 
-                if($i != $end)
+                if ($i != $end) {
                     $handle = [$explode[$i] => $handle];
-                else
+                } else {
                     $handle = [$explode[$i] => $this->zFormat($value)];
+                }
 
                 --$i;
             }
@@ -397,17 +398,17 @@ class Parameter {
     /**
      * Set keywords.
      *
-     * @access  public
      * @param   array   $keywords    Keywords.
      * @return  void
-     * @throw   \Hoa\Core\Exception
+     * @throws  \Hoa\Core\Exception
      */
-    public function setKeywords ( $keywords ) {
-
+    public function setKeywords($keywords)
+    {
         $this->resetCache();
 
-        foreach($keywords as $key => $value)
+        foreach ($keywords as $key => $value) {
             $this->setKeyword($key, $value);
+        }
 
         return;
     }
@@ -415,29 +416,28 @@ class Parameter {
     /**
      * Get keywords.
      *
-     * @access  public
      * @return  array
      */
-    public function getKeywords ( ) {
-
+    public function getKeywords()
+    {
         return $this->_keywords;
     }
 
     /**
      * Set a keyword.
      *
-     * @access  public
      * @param   string  $key      Key.
      * @param   mixed   $value    Value.
      * @return  mixed
      */
-    public function setKeyword ( $key, $value ) {
-
+    public function setKeyword($key, $value)
+    {
         $this->resetCache();
         $old = null;
 
-        if(true === array_key_exists($key, $this->_keywords))
+        if (true === array_key_exists($key, $this->_keywords)) {
             $old = $this->_keywords[$key];
+        }
 
         $this->_keywords[$key] = $value;
 
@@ -447,14 +447,14 @@ class Parameter {
     /**
      * Get a keyword.
      *
-     * @access  public
      * @param   string  $keyword    Keyword.
      * @return  mixed
      */
-    public function getKeyword ( $keyword ) {
-
-        if(true === array_key_exists($keyword, $this->_keywords))
+    public function getKeyword($keyword)
+    {
+        if (true === array_key_exists($keyword, $this->_keywords)) {
             return $this->_keywords[$keyword];
+        }
 
         return null;
     }
@@ -547,21 +547,23 @@ class Parameter {
      *     • recursion:   'oofarBaz', get 'arbar' first, and then, replace the
      *                    suffix 'ar' by 'az'.
      *
-     * @access  public
      * @param   string  $value    Parameter value.
      * @return  string
-     * @throw   \Hoa\Core\Exception
+     * @throws  \Hoa\Core\Exception
      */
-    public function zFormat ( $value ) {
-
-        if(!is_string($value))
+    public function zFormat($value)
+    {
+        if (!is_string($value)) {
             return $value;
+        }
 
-        if(isset($this->_cache[$value]))
+        if (isset($this->_cache[$value])) {
             return $this->_cache[$value];
+        }
 
-        if(null === self::$_constants)
+        if (null === self::$_constants) {
             self::initializeConstants();
+        }
 
         $self       = $this;
         $keywords   = $this->getKeywords();
@@ -569,61 +571,67 @@ class Parameter {
 
         return $this->_cache[$value] = preg_replace_callback(
             '#\(:(.*?):\)#',
-            function ( $match ) use ( $self, $value, &$keywords, &$parameters ) {
-
+            function ($match) use ($self, $value, &$keywords, &$parameters) {
                 preg_match(
                     '#([^:]+)(?::(.*))?#',
                     $match[1],
                     $submatch
                 );
 
-                if(!isset($submatch[1]))
+                if (!isset($submatch[1])) {
                     return '';
+                }
 
                 $out  = null;
                 $key  = $submatch[1];
                 $word = substr($key, 1);
 
                 // Call a parameter.
-                if('%' == $key[0]) {
-
-                    if(false === array_key_exists($word, $parameters))
+                if ('%' == $key[0]) {
+                    if (false === array_key_exists($word, $parameters)) {
                         throw new Core\Exception(
                             'Parameter %s is not found in parameters.',
-                            0, $word);
+                            0,
+                            $word
+                        );
+                    }
 
                     $handle = $parameters[$word];
                     $out    = $self->zFormat($handle);
                 }
                 // Call a constant.
-                elseif('_' == $key[0]) {
-
+                elseif ('_' == $key[0]) {
                     $constants = Parameter::getConstants();
 
-                    foreach(str_split($word) as $k => $v) {
-
-                        if(!isset($constants[$v]))
+                    foreach (str_split($word) as $k => $v) {
+                        if (!isset($constants[$v])) {
                             throw new Core\Exception(
                                 'Constant char %s is not supported in the ' .
                                 'rule %s.',
-                                1, [$v, $value]);
+                                1,
+                                [$v, $value]
+                            );
+                        }
 
                         $out .= $constants[$v];
                     }
                 }
                 // Call a keyword.
                 else {
-
-                    if(false === array_key_exists($key, $keywords))
+                    if (false === array_key_exists($key, $keywords)) {
                         throw new Core\Exception(
                             'Keyword %s is not found in the rule %s.',
-                            2, [$key, $value]);
+                            2,
+                            [$key, $value]
+                        );
+                    }
 
                     $out = $keywords[$key];
                 }
 
-                if(!isset($submatch[2]))
+                if (!isset($submatch[2])) {
                     return $out;
+                }
 
                 preg_match_all(
                     '#(h|t|r|e|l|u|U|s(/|%|\#)(.*?)(?<!\\\)\2(.*?)(?:(?<!\\\)\2|$))#',
@@ -631,74 +639,92 @@ class Parameter {
                     $flags
                 );
 
-                if(empty($flags) || empty($flags[1]))
+                if (empty($flags) || empty($flags[1])) {
                     throw new Core\Exception(
                         'Unrecognized format pattern %s in the rule %s.',
-                        3, [$match[0], $value]);
+                        3,
+                        [$match[0], $value]
+                    );
+                }
 
-                foreach($flags[1] as $i => $flag)
-                    switch($flag) {
-
+                foreach ($flags[1] as $i => $flag) {
+                    switch ($flag) {
                         case 'h':
                             $out = dirname($out);
-                          break;
+
+                            break;
 
                         case 't':
                             $out = basename($out);
-                          break;
+
+                            break;
 
                         case 'r':
-                            if(false !== $position = strrpos($out, '.', 1))
+                            if (false !== $position = strrpos($out, '.', 1)) {
                                 $out = substr($out, 0, $position);
-                          break;
+                            }
+
+                            break;
 
                         case 'e':
-                            if(false !== $position = strrpos($out, '.', 1))
+                            if (false !== $position = strrpos($out, '.', 1)) {
                                 $out = substr($out, $position + 1);
-                          break;
+                            }
+
+                            break;
 
                         case 'l':
                             $out = strtolower($out);
-                          break;
+
+                            break;
 
                         case 'u':
                             $out = strtoupper($out);
-                          break;
+
+                            break;
 
                         case 'U':
                             $handle = null;
 
-                            foreach(explode('\\', $out) as $part)
-                                if(null === $handle)
+                            foreach (explode('\\', $out) as $part) {
+                                if (null === $handle) {
                                     $handle  = ucfirst($part);
-                                else
+                                } else {
                                     $handle .= '\\' . ucfirst($part);
+                                }
+                            }
 
                             $out = $handle;
-                          break;
+
+                            break;
 
                         default:
-                            if(!isset($flags[3]) && !isset($flags[4]))
+                            if (!isset($flags[3]) && !isset($flags[4])) {
                                 throw new Core\Exception(
                                     'Unrecognized format pattern in the rule %s.',
-                                    4, $value);
+                                    4,
+                                    $value
+                                );
+                            }
 
                             $l = preg_quote($flags[3][$i], '#');
                             $r = $flags[4][$i];
 
-                            switch($flags[2][$i]) {
-
+                            switch ($flags[2][$i]) {
                                 case '%':
                                     $l  = '^' . $l;
-                                  break;
+
+                                    break;
 
                                 case '#':
                                     $l .= '$';
-                                  break;
+
+                                    break;
                             }
 
                             $out = preg_replace('#' . $l . '#', $r, $out);
                     }
+                }
 
                 return $out;
             },
@@ -709,11 +735,10 @@ class Parameter {
     /**
      * Reset zFormat cache.
      *
-     * @access  private
      * @return  void
      */
-    private function resetCache ( ) {
-
+    private function resetCache()
+    {
         unset($this->_cache);
         $this->_cache = [];
 

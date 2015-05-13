@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,25 +36,23 @@
 
 namespace Hoa\Core\Bin;
 
-use Hoa\Core;
 use Hoa\Console;
+use Hoa\Core;
 
 /**
  * Class \Hoa\Core\Bin\Welcome.
  *
  * Welcome screen.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Welcome extends Console\Dispatcher\Kit {
-
+class Welcome extends Console\Dispatcher\Kit
+{
     /**
      * Options description.
      *
-     * @var \Hoa\Core\Bin\Welcome array
+     * @var array
      */
     protected $options = [
         ['library',    Console\GetOption::REQUIRED_ARGUMENT, 'l'],
@@ -68,103 +66,110 @@ class Welcome extends Console\Dispatcher\Kit {
     /**
      * The entry method.
      *
-     * @access  public
      * @return  int
      */
-    public function main ( ) {
-
+    public function main()
+    {
         $library = null;
         $verbose = Console::isDirect(STDOUT);
 
-        while(false !== $c = $this->getOption($v)) switch($c) {
+        while (false !== $c = $this->getOption($v)) {
+            switch ($c) {
+                case 'l':
+                    $library = $this->parser->parseSpecialValue($v);
 
-            case 'l':
-                $library = $this->parser->parseSpecialValue($v);
-              break;
+                    break;
 
-            case 'V':
-                $verbose = false;
-              break;
+                case 'V':
+                    $verbose = false;
 
-            case 'h':
-            case '?':
-                return $this->usage();
-              break;
+                    break;
 
-            case '__ambiguous':
-                $this->resolveOptionAmbiguity($v);
-              break;
+                case 'h':
+                case '?':
+                    return $this->usage();
+
+                case '__ambiguous':
+                    $this->resolveOptionAmbiguity($v);
+
+                    break;
+            }
         }
 
-        if(true === $verbose) {
-
-            echo Console\Chrome\Text::colorize(
+        if (true === $verbose) {
+            echo
+                Console\Chrome\Text::colorize(
                     '        _   _' . "\n" .
                     '       | | | | ___   __ _' . "\n" .
                     '       | |_| |/ _ \ / _` |' . "\n" .
                     '       |  _  | (_) | (_| |' . "\n" .
                     '       |_| |_|\___/ \__,_|' . "\n",
                      'foreground(yellow)'
-                 ), "\n\n",
-                 'Welcome in the command-line interface of Hoa :-).',  "\n\n",
-                 Console\Chrome\Text::colorize(
-                     'List of available commands',
-                     'foreground(green)'
-                 ), "\n\n";
+                ), "\n\n",
+                'Welcome in the command-line interface of Hoa :-).',  "\n\n",
+                Console\Chrome\Text::colorize(
+                    'List of available commands',
+                    'foreground(green)'
+                ), "\n\n";
         }
 
-        if(null !== $library)
+        if (null !== $library) {
             $library = array_map('mb_strtolower', $library);
+        }
 
         $locations = resolve('hoa://Library', true, true);
         $iterator  = new \AppendIterator();
 
-        foreach($locations as $location)
+        foreach ($locations as $location) {
             $iterator->append(new \GlobIterator(
                 $location . '*' . DS . 'Bin' . DS . '*.php'
             ));
+        }
 
-        if(WITH_COMPOSER)
+        if (WITH_COMPOSER) {
             $iterator->append(new \GlobIterator(
                 dirname(dirname(dirname(dirname(__DIR__)))) . DS . 'Bin' . DS . '*.php'
             ));
+        }
 
         $binaries = [];
 
-        foreach($iterator as $entry) {
-
+        foreach ($iterator as $entry) {
             $pathname = $entry->getPathname();
             $lib      = mb_strtolower(basename(dirname(dirname($pathname))));
             $bin      = mb_strtolower(
                 mb_substr($entry->getBasename(), 0, -4)
             );
 
-            if(   null !== $library
-               && false === in_array($lib, $library))
+            if (null !== $library &&
+                false === in_array($lib, $library)) {
                 continue;
+            }
 
-            if('core' === $lib && 'hoa' === $bin)
+            if ('core' === $lib && 'hoa' === $bin) {
                 continue;
+            }
 
-            if(!isset($binaries[$lib]))
+            if (!isset($binaries[$lib])) {
                 $binaries[$lib] = [];
+            }
 
             $description = '';
 
-            if(true === $verbose) {
-
+            if (true === $verbose) {
                 $lines = file($pathname);
 
                 // Berk…
-                for($i = count($lines) - 1; $i >= 0; --$i)
-                    if('__halt_compiler();' . "\n" === $lines[$i]) {
-
+                for ($i = count($lines) - 1; $i >= 0; --$i) {
+                    if ('__halt_compiler();' . "\n" === $lines[$i]) {
                         $description = trim(implode(
                             '',
                             array_slice($lines, $i + 1)
                         ));
+
                         break;
                     }
+                }
 
                 unset($lines);
             }
@@ -175,15 +180,13 @@ class Welcome extends Console\Dispatcher\Kit {
             ];
         }
 
-        if(true === $verbose) {
-
+        if (true === $verbose) {
             $out = [];
 
-            foreach($binaries as $group => $commands) {
-
+            foreach ($binaries as $group => $commands) {
                 $out[] = [mb_convert_case($group, MB_CASE_TITLE)];
 
-                foreach($commands as $binary)
+                foreach ($commands as $binary) {
                     $out[] = [
                         '    ' .
                         Console\Chrome\Text::colorize(
@@ -192,17 +195,18 @@ class Welcome extends Console\Dispatcher\Kit {
                         ),
                         $binary['description']
                     ];
+                }
             }
 
             echo Console\Chrome\Text::columnize($out);
-        }
-        else {
-
+        } else {
             $out = null;
 
-            foreach($binaries as $group => $commands)
-                foreach($commands as $binary)
+            foreach ($binaries as $group => $commands) {
+                foreach ($commands as $binary) {
                     $out .= $group . ':' . $binary['name'] . "\n";
+                }
+            }
 
             echo $out;
         }
@@ -213,19 +217,19 @@ class Welcome extends Console\Dispatcher\Kit {
     /**
      * The command usage.
      *
-     * @access  public
      * @return  int
      */
-    public function usage ( ) {
-
-        echo 'Usage   : core:welcome <options>', "\n",
-             'Options :', "\n",
-             $this->makeUsageOptionsList([
-                 'l'    => 'Filter libraries to list (comma-separated).',
-                 'V'    => 'No-verbose, i.e. be as quiet as possible, just ' .
-                           'print essential informations.',
-                 'help' => 'This help.'
-             ]);
+    public function usage()
+    {
+        echo
+            'Usage   : core:welcome <options>', "\n",
+            'Options :', "\n",
+            $this->makeUsageOptionsList([
+                'l'    => 'Filter libraries to list (comma-separated).',
+                'V'    => 'No-verbose, i.e. be as quiet as possible, just ' .
+                          'print essential informations.',
+                'help' => 'This help.'
+            ]);
 
         return;
     }

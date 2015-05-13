@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -86,38 +86,36 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'Protocol.php';
  *
  * \Hoa\Core is the base of all libraries.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Core implements Parameter\Parameterizable {
-
+class Core implements Parameter\Parameterizable
+{
     /**
      * Stack of all registered shutdown function.
      *
-     * @var \Hoa\Core array
+     * @var array
      */
     private static $_rsdf     = [];
 
     /**
      * Tree of components, starts by the root.
      *
-     * @var \Hoa\Core\Protocol\Root object
+     * @var \Hoa\Core\Protocol\Root
      */
     private static $_root     = null;
 
     /**
      * Parameters.
      *
-     * @var \Hoa\Core\Parameter object
+     * @var \Hoa\Core\Parameter
      */
     protected $_parameters    = null;
 
     /**
      * Singleton.
      *
-     * @var \Hoa\Core object
+     * @var \Hoa\Core
      */
     private static $_instance = null;
 
@@ -126,11 +124,10 @@ class Core implements Parameter\Parameterizable {
     /**
      * Singleton.
      *
-     * @access  private
      * @return  void
      */
-    private function __construct ( ) {
-
+    private function __construct()
+    {
         static::_define('SUCCEED',       true);
         static::_define('FAILED',        false);
         static::_define('…',             '__hoa_core_fill');
@@ -155,26 +152,35 @@ class Core implements Parameter\Parameterizable {
         static::_define('_dynamic',      ~_static);
         static::_define('_concrete',     ~_abstract);
         static::_define('_overridable',  ~_final);
-        static::_define('WITH_COMPOSER', class_exists('Composer\Autoload\ClassLoader', false)
-                                      || ('cli' === PHP_SAPI
-                                      &&  file_exists(__DIR__ . DS . '..' . DS . '..' . DS . 'autoload.php')));
+        static::_define('WITH_COMPOSER', class_exists('Composer\Autoload\ClassLoader', false) ||
+                                         ('cli' === PHP_SAPI &&
+                                         file_exists(__DIR__ . DS . '..' . DS . '..' . DS . 'autoload.php')));
 
-        if(false !== $wl = ini_get('suhosin.executor.include.whitelist'))
-            if(false === in_array('hoa', explode(',', $wl)))
+        if (false !== $wl = ini_get('suhosin.executor.include.whitelist')) {
+            if (false === in_array('hoa', explode(',', $wl))) {
                 throw new Exception(
                     'The URL scheme hoa:// is not authorized by Suhosin. ' .
                     'You must add this to your php.ini or suhosin.ini: ' .
                     'suhosin.executor.include.whitelist="%s", thanks :-).',
-                    0, implode(',', array_merge(
-                        preg_split('#,#', $wl, -1, PREG_SPLIT_NO_EMPTY),
-                        ['hoa']
-                    )));
+                    0,
+                    implode(
+                        ',',
+                        array_merge(
+                            preg_split('#,#', $wl, -1, PREG_SPLIT_NO_EMPTY),
+                            ['hoa']
+                        )
+                    )
+                );
+            }
+        }
 
-        if(true === function_exists('mb_internal_encoding'))
+        if (true === function_exists('mb_internal_encoding')) {
             mb_internal_encoding('UTF-8');
+        }
 
-        if(true === function_exists('mb_regex_encoding'))
+        if (true === function_exists('mb_regex_encoding')) {
             mb_regex_encoding('UTF-8');
+        }
 
         return;
     }
@@ -182,13 +188,13 @@ class Core implements Parameter\Parameterizable {
     /**
      * Singleton.
      *
-     * @access  public
      * @return  \Hoa\Core
      */
-    public static function getInstance ( ) {
-
-        if(null === static::$_instance)
+    public static function getInstance()
+    {
+        if (null === static::$_instance) {
             static::$_instance = new static();
+        }
 
         return static::$_instance;
     }
@@ -196,16 +202,16 @@ class Core implements Parameter\Parameterizable {
     /**
      * Initialize the core.
      *
-     * @access  public
      * @param   array   $parameters    Parameters of \Hoa\Core.
      * @return  \Hoa\Core
      */
-    public function initialize ( Array $parameters = [] ) {
-
+    public function initialize(Array $parameters = [])
+    {
         $root = dirname(dirname(__DIR__));
-        $cwd  = 'cli' === PHP_SAPI
-                    ? dirname(realpath($_SERVER['argv'][0]))
-                    : getcwd();
+        $cwd  =
+            'cli' === PHP_SAPI
+                ? dirname(realpath($_SERVER['argv'][0]))
+                : getcwd();
         $this->_parameters = new Parameter\Parameter(
             $this,
             [
@@ -255,63 +261,62 @@ class Core implements Parameter\Parameterizable {
     /**
      * Get parameters.
      *
-     * @access  public
      * @return  \Hoa\Core\Parameter
      */
-    public function getParameters ( ) {
-
+    public function getParameters()
+    {
         return $this->_parameters;
     }
 
     /**
      * Set protocol according to the current parameter.
      *
-     * @access  public
      * @param   string  $path     Path (e.g. hoa://Data/Temporary).
      * @param   string  $reach    Reach value.
      * @return  void
      */
-    public function setProtocol ( $path = null, $reach = null ) {
-
+    public function setProtocol($path = null, $reach = null)
+    {
         $root = static::getProtocol();
 
-        if(null === $path && null === $reach) {
-
-            if(!isset($root['Library'])) {
-
+        if (null === $path && null === $reach) {
+            if (!isset($root['Library'])) {
                 static::$_root = null;
                 $root          = static::getProtocol();
             }
 
             $protocol = $this->getParameters()->unlinearizeBranche('protocol');
 
-            foreach($protocol as $components => $reach) {
-
+            foreach ($protocol as $components => $reach) {
                 $parts  = explode('/', trim($components, '/'));
                 $last   = array_pop($parts);
                 $handle = $root;
 
-                foreach($parts as $part)
+                foreach ($parts as $part) {
                     $handle = $handle[$part];
+                }
 
-                if('Library' === $last)
+                if ('Library' === $last) {
                     $handle[] = new Protocol\Library($last, $reach);
-                else
+                } else {
                     $handle[] = new Protocol\Generic($last, $reach);
+                }
             }
 
             return;
         }
 
-        if('hoa://' === substr($path, 0, 6))
+        if ('hoa://' === substr($path, 0, 6)) {
             $path = substr($path, 6);
+        }
 
         $path   = trim($path, '/');
         $parts  = explode('/', $path);
         $handle = $root;
 
-        foreach($parts as $part)
+        foreach ($parts as $part) {
             $handle = $handle[$part];
+        }
 
         $handle->setReach($reach);
         $root->clearCache();
@@ -325,16 +330,16 @@ class Core implements Parameter\Parameterizable {
      * If the constant is defined, this method returns false.
      * Else this method declares the constant.
      *
-     * @access  public
      * @param   string  $name     The name of the constant.
      * @param   string  $value    The value of the constant.
      * @param   bool    $case     True set the case-insensitive.
      * @return  bool
      */
-    public static function _define ( $name, $value, $case = false) {
-
-        if(!defined($name))
+    public static function _define($name, $value, $case = false)
+    {
+        if (!defined($name)) {
             return define($name, $value, $case);
+        }
 
         return false;
     }
@@ -342,13 +347,13 @@ class Core implements Parameter\Parameterizable {
     /**
      * Get protocol's root.
      *
-     * @access  public
      * @return  \Hoa\Core\Protocol\Root
      */
-    public static function getProtocol ( ) {
-
-        if(null === static::$_root)
+    public static function getProtocol()
+    {
+        if (null === static::$_root) {
             static::$_root = new Protocol\Root();
+        }
 
         return static::$_root;
     }
@@ -356,17 +361,16 @@ class Core implements Parameter\Parameterizable {
     /**
      * Enable exception handler: catch uncaught exception.
      *
-     * @access  public
      * @param   bool  $enable    Enable.
      * @return  mixed
      */
-    public static function enableExceptionHandler ( $enable = true ) {
-
-        if(false === $enable)
+    public static function enableExceptionHandler($enable = true)
+    {
+        if (false === $enable) {
             return restore_exception_handler();
+        }
 
-        return set_exception_handler(function ( $exception ) {
-
+        return set_exception_handler(function ($exception) {
             return Exception\Idle::uncaught($exception);
         });
     }
@@ -374,17 +378,16 @@ class Core implements Parameter\Parameterizable {
     /**
      * Enable error handler: transform PHP error into \Hoa\Core\Exception\Error.
      *
-     * @access  public
      * @param   bool  $enable    Enable.
      * @return  mixed
      */
-    public static function enableErrorHandler ( $enable = true ) {
-
-        if(false === $enable)
+    public static function enableErrorHandler($enable = true)
+    {
+        if (false === $enable) {
             return restore_error_handler();
+        }
 
-        return set_error_handler(function ( $no, $str, $file = null, $line = null, $ctx = null ) {
-
+        return set_error_handler(function ($no, $str, $file = null, $line = null, $ctx = null) {
             return Exception\Idle::error($no, $str, $file, $line, $ctx);
         });
     }
@@ -394,16 +397,15 @@ class Core implements Parameter\Parameterizable {
      * It may be analogous to a static __destruct, but it allows us to make more
      * that a __destruct method.
      *
-     * @access  public
      * @param   string  $class     Class.
      * @param   string  $method    Method.
      * @return  bool
      */
-    public static function registerShutdownFunction ( $class = '', $method = '' ) {
-
-        if(!isset(static::$_rsdf[$class][$method])) {
-
+    public static function registerShutdownFunction($class = '', $method = '')
+    {
+        if (!isset(static::$_rsdf[$class][$method])) {
             static::$_rsdf[$class][$method] = true;
+
             return register_shutdown_function([$class, $method]);
         }
 
@@ -413,20 +415,23 @@ class Core implements Parameter\Parameterizable {
     /**
      * Get PHP executable.
      *
-     * @access  public
      * @return  string
      */
-    public static function getPHPBinary ( ) {
-
-        if(defined('PHP_BINARY'))
+    public static function getPHPBinary()
+    {
+        if (defined('PHP_BINARY')) {
             return PHP_BINARY;
+        }
 
-        if(isset($_SERVER['_']))
+        if (isset($_SERVER['_'])) {
             return $_SERVER['_'];
+        }
 
-        foreach(['', '.exe'] as $extension)
-            if(file_exists($_ = PHP_BINDIR . DS . 'php' . $extension))
+        foreach (['', '.exe'] as $extension) {
+            if (file_exists($_ = PHP_BINDIR . DS . 'php' . $extension)) {
                 return realpath($_);
+            }
+        }
 
         return null;
     }
@@ -434,11 +439,10 @@ class Core implements Parameter\Parameterizable {
     /**
      * Generate an Universal Unique Identifier (UUID).
      *
-     * @access  public
      * @return  string
      */
-    public static function uuid ( ) {
-
+    public static function uuid()
+    {
         return sprintf(
             '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
             mt_rand(0, 0xffff),
@@ -455,13 +459,13 @@ class Core implements Parameter\Parameterizable {
     /**
      * Return the copyright and license of Hoa.
      *
-     * @access  public
      * @return  string
      */
-    public static function © ( ) {
-
-        return 'Copyright © 2007-2015 Ivan Enderlin. All rights reserved.' . "\n" .
-               'New BSD License.';
+    public static function ©()
+    {
+        return
+            'Copyright © 2007-2015 Ivan Enderlin. All rights reserved.' . "\n" .
+            'New BSD License.';
     }
 }
 
@@ -477,16 +481,14 @@ class_alias('Hoa\Core\Core', 'Hoa\Core');
 /**
  * Alias of \Hoa\Core::_define().
  *
- * @access  public
  * @param   string  $name     The name of the constant.
  * @param   string  $value    The value of the constant.
  * @param   bool    $case     True set the case-insentisitve.
  * @return  bool
  */
-if(!function_exists('_define')) {
-
-    function _define ( $name, $value, $case = false ) {
-
+if (!function_exists('_define')) {
+    function _define($name, $value, $case = false)
+    {
         return Hoa\Core::_define($name, $value, $case);
     }
 }
@@ -494,14 +496,12 @@ if(!function_exists('_define')) {
 /**
  * Alias of the \Hoa\Core\Event::getEvent() method.
  *
- * @access  public
  * @param   string  $eventId    Event ID.
  * @return  \Hoa\Core\Event
  */
-if(!function_exists('event')) {
-
-    function event ( $eventId ) {
-
+if (!function_exists('event')) {
+    function event($eventId)
+    {
         return Hoa\Core\Event\Event::getEvent($eventId);
     }
 }
