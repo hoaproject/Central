@@ -48,8 +48,7 @@ Then, we attach our listeners. When the connexion will be opened, we will join a
 channel, for example `#hoaproject` with the `Gordon` username:
 
 ```php
-$client->on('open', function ( Hoa\Core\Event\Bucket $bucket ) {
-
+$client->on('open', function (Hoa\Core\Event\Bucket $bucket) {
     $bucket->getSource()->join('Gordon', '#hoaproject');
 
     return;
@@ -59,8 +58,7 @@ $client->on('open', function ( Hoa\Core\Event\Bucket $bucket ) {
 Next, when someone will mention `Gordon`, we will answer `What?`:
 
 ```php
-$client->on('mention', function ( Hoa\Core\Event\Bucket $bucket ) {
-
+$client->on('mention', function (Hoa\Core\Event\Bucket $bucket) {
     $data    = $bucket->getData();
     $message = $data['message']; // do something with that.
 
@@ -99,8 +97,7 @@ Then, we will forward all messages received by the WebSocket server to the IRC
 client:
 
 ```php
-$server->on('message', function ( Hoa\Core\Event\Bucket $bucket ) use ( $client ) {
-
+$server->on('message', function (Hoa\Core\Event\Bucket $bucket) use ($client) {
     $data = $bucket->getData();
     $client->say($data['message']);
 

@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,31 +43,29 @@ use Hoa\Socket;
  *
  * Describe a IRC node.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Node extends Socket\Node {
-
+class Node extends Socket\Node
+{
     /**
      * Whether this is basically the first message.
      *
-     * @var \Hoa\Irc\Node bool
+     * @var bool
      */
     protected $_joined   = false;
 
     /**
      * Username.
      *
-     * @var \Hoa\Irc\Node string
+     * @var string
      */
     protected $_username = null;
 
     /**
      * Channel.
      *
-     * @var \Hoa\Irc\Node string
+     * @var string
      */
     protected $_channel  = null;
 
@@ -76,12 +74,11 @@ class Node extends Socket\Node {
     /**
      * Whether the client has already joined a channel or not.
      *
-     * @access  public
      * @param   bool  $joined    Joined or not.
      * @return  bool
      */
-    public function setJoined ( $joined ) {
-
+    public function setJoined($joined)
+    {
         $old           = $this->_joined;
         $this->_joined = $joined;
 
@@ -91,23 +88,21 @@ class Node extends Socket\Node {
     /**
      * Whether the client has already joined a channel or not.
      *
-     * @access  public
      * @return  bool
      */
-    public function hasJoined ( ) {
-
+    public function hasJoined()
+    {
         return $this->_joined;
     }
 
     /**
      * Set username.
      *
-     * @access  public
      * @param   string  $username    Username.
      * @return  string
      */
-    public function setUsername ( $username ) {
-
+    public function setUsername($username)
+    {
         $old             = $this->_username;
         $this->_username = $username;
 
@@ -117,23 +112,21 @@ class Node extends Socket\Node {
     /**
      * Get username.
      *
-     * @access  public
      * @return  string
      */
-    public function getUsername ( ) {
-
+    public function getUsername()
+    {
         return $this->_username;
     }
 
     /**
      * Set current channel.
      *
-     * @access  public
      * @param   string  $channel    Channel.
      * @return  string
      */
-    public function setChannel ( $channel ) {
-
+    public function setChannel($channel)
+    {
         $old            = $this->_channel;
         $this->_channel = $channel;
 
@@ -143,11 +136,10 @@ class Node extends Socket\Node {
     /**
      * Get current channel.
      *
-     * @access  public
      * @return  string
      */
-    public function getChannel ( ) {
-
+    public function getChannel()
+    {
         return $this->_channel;
     }
 }

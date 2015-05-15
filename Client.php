@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,20 +44,17 @@ use Hoa\Socket;
  *
  * An IRC client.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @author     Yohann Dupont <yohann.dupont@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin, Yohann Dupont.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
 class          Client
     extends    Socket\Connection\Handler
-    implements Core\Event\Listenable {
-
+    implements Core\Event\Listenable
+{
     /**
      * Listeners.
      *
-     * @var \Hoa\Core\Event\Listener object
+     * @var \Hoa\Core\Event\Listener
      */
     protected $_on = null;
 
@@ -66,27 +63,29 @@ class          Client
     /**
      * Constructor.
      *
-     * @access  public
      * @param   \Hoa\Socket\Client  $client    Client.
      * @return  void
-     * @throw   \Hoa\Socket\Exception
+     * @throws  \Hoa\Socket\Exception
      */
-    public function __construct ( Socket\Client $client ) {
-
+    public function __construct(Socket\Client $client)
+    {
         parent::__construct($client);
         $this->getConnection()->setNodeName('\Hoa\Irc\Node');
-        $this->_on = new Core\Event\Listener($this, [
-            'open',
-            'join',
-            'message',
-            'private-message',
-            'mention',
-            'other-message',
-            'ping',
-            'kick',
-            'invite',
-            'error'
-        ]);
+        $this->_on = new Core\Event\Listener(
+            $this,
+            [
+                'open',
+                'join',
+                'message',
+                'private-message',
+                'mention',
+                'other-message',
+                'ping',
+                'kick',
+                'invite',
+                'error'
+            ]
+        );
 
         return;
     }
@@ -94,14 +93,13 @@ class          Client
     /**
      * Attach a callable to this listenable object.
      *
-     * @access  public
      * @param   string  $listenerId    Listener ID.
      * @param   mixed   $callable      Callable.
      * @return  \Hoa\Irc\Client
-     * @throw   \Hoa\Core\Exception
+     * @throws  \Hoa\Core\Exception
      */
-    public function on ( $listenerId, $callable ) {
-
+    public function on($listenerId, $callable)
+    {
         $this->_on->attach($listenerId, $callable);
 
         return $this;
@@ -110,14 +108,12 @@ class          Client
     /**
      * Run a node.
      *
-     * @access  protected
      * @param   \Hoa\Socket\Node  $node    Node.
      * @return  void
      */
-    protected function _run ( Socket\Node $node ) {
-
-        if(false === $node->hasJoined()) {
-
+    protected function _run(Socket\Node $node)
+    {
+        if (false === $node->hasJoined()) {
             $node->setJoined(true);
             $this->_on->fire('open', new Core\Event\Bucket());
 
@@ -125,7 +121,6 @@ class          Client
         }
 
         try {
-
             $line = $node->getConnection()->readLine();
 
             preg_match(
@@ -134,11 +129,11 @@ class          Client
                 $matches
             );
 
-            if(!isset($matches['command']))
+            if (!isset($matches['command'])) {
                 $matches['command'] = null;
+            }
 
-            switch($matches['command']) {
-
+            switch ($matches['command']) {
                 case 366: // RPL_ENDOFNAMES
                     list($nickname, $channel) = explode(' ', $matches['middle'], 2);
                     $node->setChannel($channel);
@@ -148,22 +143,20 @@ class          Client
                         'nickname' => $nickname,
                         'channel'  => trim($channel)
                     ];
-                  break;
+
+                    break;
 
                 case 'PRIVMSG':
                     $middle   = trim($matches['middle']);
                     $message  = $matches['trailing'];
                     $username = $node->getUsername();
 
-                    if($username === $middle)
+                    if ($username === $middle) {
                         $listener = 'private-message';
-                    elseif(false !== strpos($message, $username)) {
-
+                    } elseif (false !== strpos($message, $username)) {
                         $node->setChannel($middle);
                         $listener = 'mention';
-                    }
-                    else {
-
+                    } else {
                         $node->setChannel($middle);
                         $listener = 'message';
                     }
@@ -172,7 +165,8 @@ class          Client
                         'from'    => $this->parseNick($matches['prefix']),
                         'message' => $message
                     ];
-                  break;
+
+                    break;
 
                 case 'PING':
                     $daemons  = explode(' ', $matches['trailing']);
@@ -181,11 +175,13 @@ class          Client
                         'daemons' => $daemons
                     ];
 
-                    if(isset($daemons[1]))
+                    if (isset($daemons[1])) {
                         $this->pong($daemons[0], $daemons[1]);
-                    else
+                    } else {
                         $this->pong($daemons[0]);
-                  break;
+                    }
+
+                    break;
 
                 case 'KICK':
                     list($channel, ) = explode(' ', $matches['middle'], 2);
@@ -196,7 +192,8 @@ class          Client
                         'from'    => $this->parseNick($matches['prefix']),
                         'channel' => trim($channel)
                     ];
-                  break;
+
+                    break;
 
                 case 'INVITE':
                     list($channel, ) = explode(' ', $matches['middle'], 2);
@@ -208,7 +205,8 @@ class          Client
                         'channel'            => trim($channel),
                         'invitation_channel' => trim($matches['trailing'])
                     ];
-                  break;
+
+                    break;
 
                 default:
                     $listener = 'other-message';
@@ -219,12 +217,13 @@ class          Client
             }
 
             $this->_on->fire($listener, new Core\Event\Bucket($bucket));
-        }
-        catch ( Core\Exception\Idle $e ) {
-
-            $this->_on->fire('error', new Core\Event\Bucket([
-                'exception' => $e
-            ]));
+        } catch (Core\Exception\Idle $e) {
+            $this->_on->fire(
+                'error',
+                new Core\Event\Bucket([
+                    'exception' => $e
+                ])
+            );
         }
 
         return;
@@ -233,29 +232,28 @@ class          Client
     /**
      * Send a message.
      *
-     * @access  protected
      * @param   string            $message    Message.
      * @param   \Hoa\Socket\Node  $node       Node.
      * @return  \Closure
      */
-    protected function _send ( $message, Socket\Node $node ) {
-
+    protected function _send($message, Socket\Node $node)
+    {
         return $node->getConnection()->writeAll($message . CRLF);
     }
 
     /**
      * Join a channel.
      *
-     * @access  public
      * @param   string  $username    Username.
      * @param   string  $channel     Channel.
      * @param   string  $password    Password.
      * @return  int
      */
-    public function join ( $username, $channel, $password = null ) {
-
-        if(null !== $password)
+    public function join($username, $channel, $password = null)
+    {
+        if (null !== $password) {
             $this->send('PASS ' . $password);
+        }
 
         $this->send('USER ' . $username . ' 0 * :' . $username);
 
@@ -270,18 +268,19 @@ class          Client
     /**
      * Say something on a channel.
      *
-     * @access  public
      * @param   string  $message    Message.
      * @param   string  $to         Channel or username.
      * @return  void
      */
-    public function say ( $message, $to = null ) {
-
-        if(null === $to)
+    public function say($message, $to = null)
+    {
+        if (null === $to) {
             $to = $this->getConnection()->getCurrentNode()->getChannel();
+        }
 
-        foreach(explode("\n", $message) as $line)
+        foreach (explode("\n", $message) as $line) {
             $this->send('PRIVMSG ' . $to . ' :' . $line);
+        }
 
         return;
     }
@@ -289,14 +288,14 @@ class          Client
     /**
      * Quit the network.
      *
-     * @access  public
      * @param   string  $message    Message.
      * @return  int
      */
-    public function quit ( $message = null ) {
-
-        if(null !== $message)
+    public function quit($message = null)
+    {
+        if (null !== $message) {
             $message = ' ' . $message;
+        }
 
         return $this->send('QUIT' . $message);
     }
@@ -304,27 +303,26 @@ class          Client
     /**
      * Set nickname.
      *
-     * @access  public
      * @param   string  $nickname    Nickname.
      * @return  int
      */
-    public function setNickname ( $nickname ) {
-
+    public function setNickname($nickname)
+    {
         return $this->send('NICK ' . $nickname);
     }
 
     /**
      * Set topic.
      *
-     * @access  public
      * @param   string  $topic      Topic.
      * @param   string  $channel    Channel.
      * @return  int
      */
-    public function setTopic ( $topic, $channel = null ) {
-
-        if(null === $channel)
+    public function setTopic($topic, $channel = null)
+    {
+        if (null === $channel) {
             $channel = $this->getConnection()->getCurrentNode()->getChannel();
+        }
 
         return $this->send('TOPIC ' . $channel . ' ' . $topic);
     }
@@ -332,15 +330,15 @@ class          Client
     /**
      * Invite someone on a channel.
      *
-     * @access  public
      * @param   string  $nickname    Nickname.
      * @param   string  $channel     Channel.
      * @return  int
      */
-    public function invite ( $nickname, $channel = null ) {
-
-        if(null === $channel)
+    public function invite($nickname, $channel = null)
+    {
+        if (null === $channel) {
             $channel = $this->getConnection()->getCurrentNode()->getChannel();
+        }
 
         return $this->send('INVITE ' . $nickname . ' ' . $channel);
     }
@@ -348,17 +346,17 @@ class          Client
     /**
      * Reply to a ping.
      *
-     * @access  public
      * @param   string  $daemon     Daemon1.
      * @param   string  $daemon2    Daemon2.
      * @return  int
      */
-    public function pong ( $daemon, $daemon2 = null ) {
-
+    public function pong($daemon, $daemon2 = null)
+    {
         $this->send('PONG ' . $daemon);
 
-        if(null !== $daemon2)
+        if (null !== $daemon2) {
             $this->send('PONG ' . $daemon2);
+        }
 
         return;
     }
@@ -366,12 +364,11 @@ class          Client
     /**
      * Parse a valid nick identifier.
      *
-     * @access  public
      * @param   string  $nick    Nick.
      * @return  array
      */
-    public function parseNick ( $nick ) {
-
+    public function parseNick($nick)
+    {
         preg_match(
             '#^(?<nick>[^!]+)!(?<user>[^@]+)@(?<host>.+)$#',
             $nick,
