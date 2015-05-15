@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,18 +41,15 @@ namespace Hoa\Database;
  *
  * The heigher class that represents a DAL statement.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @author     Raphaël Emourgeon <raphael.emourgeon@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin, Raphaël Emourgeon.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class DalStatement {
-
+class DalStatement
+{
     /**
      * The statement instance.
      *
-     * @var \Hoa\Database\IDal\WrapperStatement object
+     * @var \Hoa\Database\IDal\WrapperStatement
      */
     protected $statement = null;
 
@@ -61,28 +58,26 @@ class DalStatement {
     /**
      * Create a statement instance.
      *
-     * @access  public
      * @param   \Hoa\Database\IDal\WrapperStatement  $statement    The
      *                                                             statement
      *                                                             instance.
      * @return  void
      */
-    public function __construct ( IDal\WrapperStatement $statement ) {
-
+    public function __construct(IDal\WrapperStatement $statement)
+    {
         $this->setStatement($statement);
     }
 
     /**
      * Set the statement instance.
      *
-     * @access  protected
      * @param   \Hoa\Database\IDal\WrapperStatement  $statement    The
      *                                                             statement
      *                                                             instance.
      * @return  \Hoa\Database\IDal\WrapperStatement
      */
-    protected function setStatement ( IDal\WrapperStatement $statement ) {
-
+    protected function setStatement(IDal\WrapperStatement $statement)
+    {
         $old             = $this->statement;
         $this->statement = $statement;
 
@@ -92,27 +87,26 @@ class DalStatement {
     /**
      * Get the statement instance.
      *
-     * @access  protected
      * @return  \Hoa\Database\IDal\WrapperStatement
      */
-    protected function getStatement ( ) {
-
+    protected function getStatement()
+    {
         return $this->statement;
     }
 
     /**
      * Execute a prepared statement.
      *
-     * @access  public
      * @param   array   $bindParameters    Bind parameters values if bindParam is
      *                                     not called.
      * @return  \Hoa\Database\DalStatement
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function execute ( Array $bindParameters = [] ) {
-
-        if(empty($bindParameters))
+    public function execute(Array $bindParameters = [])
+    {
+        if (empty($bindParameters)) {
             return $this->getStatement()->execute();
+        }
 
         $this->getStatement()->execute($bindParameters);
 
@@ -122,26 +116,30 @@ class DalStatement {
     /**
      * Bind a parameter to te specified variable name.
      *
-     * @access  public
      * @param   mixed   $parameter    Parameter name.
      * @param   mixed   $value        Parameter value.
      * @param   int     $type         Type of value.
      * @param   int     $length       Length of data type.
      * @return  bool
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function bindParameter ( $parameter, &$value, $type = null,
-                                    $length = null) {
-
-        if(null === $type)
+    public function bindParameter(
+        $parameter,
+        &$value,
+        $type = null,
+        $length = null
+    ) {
+        if (null === $type) {
             return $this->getStatement()->bindParameter($parameter, $value);
+        }
 
-        if(null === $length)
+        if (null === $length) {
             return $this->getStatement()->bindParameter(
                 $parameter,
                 $value,
                 $type
             );
+        }
 
         return $this->getStatement()->bindParameter(
             $parameter,
@@ -154,60 +152,55 @@ class DalStatement {
     /**
      * Return an array containing all of the result set rows.
      *
-     * @access  public
      * @return  array
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function fetchAll ( ) {
-
+    public function fetchAll()
+    {
         return $this->getStatement()->fetchAll();
     }
 
     /**
      * Fetch the first row in the result set.
      *
-     * @access  public
      * @return  mixed
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function fetchFirst ( ) {
-
+    public function fetchFirst()
+    {
         return $this->getStatement()->fetchFirst();
     }
 
     /**
      * Fetch the last row in the result set.
      *
-     * @access  public
      * @return  mixed
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function fetchLast ( ) {
-
+    public function fetchLast()
+    {
         return $this->getStatement()->fetchLast();
     }
 
     /**
      * Fetch the next row in the result set.
      *
-     * @access  public
      * @return  mixed
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function fetchNext ( ) {
-
+    public function fetchNext()
+    {
         return $this->getStatement()->fetchNext();
     }
 
     /**
      * Fetch the previous row in the result set.
      *
-     * @access  public
      * @return  mixed
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function fetchPrior ( ) {
-
+    public function fetchPrior()
+    {
         return $this->getStatement()->fetchPrior();
     }
 
@@ -215,25 +208,23 @@ class DalStatement {
      * Return a single column from the next row of the result set or false if
      * there is no more row.
      *
-     * @access  public
      * @param   int  $column    Column index.
      * @return  mixed
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function fetchColumn ( $column = 0 ) {
-
+    public function fetchColumn($column = 0)
+    {
         return $this->getStatement()->fetchColumn($column);
     }
 
     /**
      * Close the cursor, enabling the statement to be executed again.
      *
-     * @access  public
      * @return  bool
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function closeCursor ( ) {
-
+    public function closeCursor()
+    {
         return $this->getStatement()->closeCursor();
     }
 
@@ -241,12 +232,11 @@ class DalStatement {
      * Fetch the SQLSTATE associated with the last operation on the statement
      * handle.
      *
-     * @access  public
      * @return  string
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function errorCode ( ) {
-
+    public function errorCode()
+    {
         return $this->getStatement()->errorCode();
     }
 
@@ -254,12 +244,11 @@ class DalStatement {
      * Fetch extends error information associated with the last operation on the
      * statement handle.
      *
-     * @access  public
      * @return  array
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function errorInfo ( ) {
-
+    public function errorInfo()
+    {
         return $this->getStatement()->errorInfo();
     }
 }

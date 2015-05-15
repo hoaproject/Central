@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,24 +43,22 @@ use Hoa\Core;
  *
  * Multiton of queries.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Query {
-
+class Query
+{
     /**
      * Multiton of queries.
      *
-     * @var \Hoa\Database\Query array
+     * @var array
      */
     protected static $_queries = [];
 
     /**
      * Current instance ID.
      *
-     * @var \Hoa\Database\Query string
+     * @var string
      */
     protected $_id             = null;
 
@@ -69,12 +67,11 @@ class Query {
     /**
      * Set current instance ID.
      *
-     * @access  public
      * @param   string  $id    ID.
      * @return  \Hoa\Database\Query
      */
-    public function setId ( $id ) {
-
+    public function setId($id)
+    {
         $this->_id = $id;
 
         return $this;
@@ -83,69 +80,63 @@ class Query {
     /**
      * Get current instance ID.
      *
-     * @access  public
      * @return  string
      */
-    public function getId ( ) {
-
+    public function getId()
+    {
         return $this->_id;
     }
 
     /**
      * Start a START query.
      *
-     * @access  public
      * @param   string  $column    Column.
      * @param   ...     ...
      * @return  \Hoa\Database\Query\Select
      */
-    public function select ( $column = null ) {
-
+    public function select($column = null)
+    {
         return $this->store(new Select(func_get_args()));
     }
 
     /**
      * Start an INSERT query.
      *
-     * @access  public
      * @return  \Hoa\Database\Query\Insert
      */
-    public function insert ( ) {
-
+    public function insert()
+    {
         return $this->store(new Insert());
     }
 
     /**
      * Start an UPDATE query.
      *
-     * @access  public
      * @return  \Hoa\Database\Query\Update
      */
-    public function update ( ) {
-
+    public function update()
+    {
         return $this->store(new Update());
     }
 
     /**
      * Start a DELETE query.
      *
-     * @access  public
      * @return  \Hoa\Database\Query\Delete
      */
-    public function delete ( ) {
-
+    public function delete()
+    {
         return $this->store(new Delete());
     }
 
     /**
      * Start a WHERE clause.
      *
-     * @access  public
      * @param   string  $expression    Expression.
      * @return  \Hoa\Database\Query\Where
      */
-    public function where ( $expression ) {
-
+    public function where($expression)
+    {
         $where = new Where();
 
         return $this->store($where->where($expression));
@@ -154,16 +145,16 @@ class Query {
     /**
      * Store the current instance if necessary.
      *
-     * @access  protected
      * @param   \Hoa\Database\Query\Dml  $object    Object.
      * @return  \Hoa\Database\Query\Dml
      */
-    protected function store ( $object ) {
-
-        if(null === $id = $this->getId())
+    protected function store($object)
+    {
+        if (null === $id = $this->getId()) {
             $out = $object;
-        else
+        } else {
             $out = static::$_queries[$id] = $object;
+        }
 
         $this->_id = null;
 
@@ -173,14 +164,14 @@ class Query {
     /**
      * Get a query (a clone of it).
      *
-     * @access  public
      * @param   string  $id    ID.
      * @return  \Hoa\Database\Query\Dml
      */
-    public static function get ( $id ) {
-
-        if(null === $out = static::getReference($id))
+    public static function get($id)
+    {
+        if (null === $out = static::getReference($id)) {
             return null;
+        }
 
         return clone $out;
     }
@@ -188,14 +179,14 @@ class Query {
     /**
      * Get a query (not a clone of it).
      *
-     * @access  public
      * @param   string  $id    ID.
      * @return  \Hoa\Database\Query\Dml
      */
-    public static function getReference ( $id ) {
-
-        if(false === array_key_exists($id, static::$_queries))
+    public static function getReference($id)
+    {
+        if (false === array_key_exists($id, static::$_queries)) {
             return null;
+        }
 
         return static::$_queries[$id];
     }
