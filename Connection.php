@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,13 +44,11 @@ namespace Hoa\Fastcgi;
  * http://fastcgi.com/devkit/doc/fcgi-spec.html.
  * Inspired by PHP SAPI code: php://sapi/cgi/fastcgi.*.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-abstract class Connection {
-
+abstract class Connection
+{
     /**
      * Header: version.
      *
@@ -105,53 +103,53 @@ abstract class Connection {
     /**
      * Pack data to a packet.
      *
-     * @access  public
      * @param   int     $type       Packet's type.
      * @param   string  $content    Content.
      * @param   id      $id         Packet's ID.
      * @return  string
      */
-    public function pack ( $type, $content, $id = 1 ) {
-
+    public function pack($type, $content, $id = 1)
+    {
         $length = strlen($content);
 
-        return chr(1) .                     // version
-               chr($type) .                 // type
-               chr(($id     >> 8) & 0xff) . // ID B1
-               chr( $id           & 0xff) . // ID B0
-               chr(($length >> 8) & 0xff) . // length B1
-               chr( $length       & 0xff) . // length b0
-               chr(0) .                     // padding length
-               chr(0) .                     // reserved
-               $content;
+        return
+            chr(1) .                     // version
+            chr($type) .                 // type
+            chr(($id     >> 8) & 0xff) . // ID B1
+            chr($id            & 0xff) . // ID B0
+            chr(($length >> 8) & 0xff) . // length B1
+            chr($length        & 0xff) . // length b0
+            chr(0) .                     // padding length
+            chr(0) .                     // reserved
+            $content;
     }
 
     /**
      * Pack pairs (key/value).
      *
-     * @access  public
      * @param   array  $pairs    Keys/values array.
      * @return  string
      */
-    public function packPairs ( Array $pairs ) {
-
+    public function packPairs(Array $pairs)
+    {
         $out = null;
 
-        foreach($pairs as $key => $value) {
-
-            foreach([$key, $value] as $handle) {
-
+        foreach ($pairs as $key => $value) {
+            foreach ([$key, $value] as $handle) {
                 $length = strlen($handle);
 
                 // B0
-                if($length < 0x80)
+                if ($length < 0x80) {
                     $out .= chr($length);
+                }
                 // B3 & B2 & B1 & B0
-                else
-                    $out .= chr(($length >> 24) | 0x80) .
-                            chr(($length >> 16) & 0xff) .
-                            chr(($length >>  8) & 0xff) .
-                            chr( $length        & 0xff);
+                else {
+                    $out .=
+                        chr(($length >> 24) | 0x80) .
+                        chr(($length >> 16) & 0xff) .
+                        chr(($length >>  8) & 0xff) .
+                        chr($length         & 0xff);
+                }
             }
 
             $out .= $key . $value;
@@ -163,35 +161,38 @@ abstract class Connection {
     /**
      * Unpack pairs (key/value).
      *
-     * @access  public
      * @param   string  $pack    Packet to unpack.
      * @return  string
      */
-    public function unpackPairs ( $pack ) {
-
-        if(null === $length)
+    public function unpackPairs($pack)
+    {
+        if (null === $length) {
             $length = strlen($pack);
+        }
 
         $out = [];
         $i   = 0;
 
-        for($i = 0; $length >= $i; $i += $keyLength + $valueLength) {
-
+        for ($i = 0; $length >= $i; $i += $keyLength + $valueLength) {
             $keyLength = ord($pack[$i++]);
 
-            if($keyLength >= 0x80)
-                $keyLength =   ($keyLength & 0x7f << 24)
-                             | (ord($pack[$i++])  << 16)
-                             | (ord($pack[$i++])  <<  8)
-                             |  ord($pack[$i++]);
+            if ($keyLength >= 0x80) {
+                $keyLength =
+                    ($keyLength & 0x7f << 24)
+                  | (ord($pack[$i++])  << 16)
+                  | (ord($pack[$i++])  <<  8)
+                  |  ord($pack[$i++]);
+            }
 
             $valueLength = ord($pack[$i++]);
 
-            if($valueLength >= 0x80)
-                $valueLength =   ($valueLength & 0x7f << 24)
-                               | (ord($pack[$i++])    << 16)
-                               | (ord($pack[$i++])    <<  8)
-                               |  ord($pack[$i++]);
+            if ($valueLength >= 0x80) {
+                $valueLength =
+                    ($valueLength & 0x7f << 24)
+                  | (ord($pack[$i++])    << 16)
+                  | (ord($pack[$i++])    <<  8)
+                  |  ord($pack[$i++]);
+            }
 
             $out[substr($pack, $i, $keyLength)]
                 = substr($pack, $i + $keyLength, $valueLength);
@@ -203,31 +204,33 @@ abstract class Connection {
     /**
      * Read a packet.
      *
-     * @access  public
      * @return  array
      */
-    protected function readPack ( ) {
-
-        if(   (null === $pack = $this->read(8))
-           || empty($pack))
+    protected function readPack()
+    {
+        if ((null === $pack = $this->read(8)) ||
+            empty($pack)) {
             return false;
+        }
 
         $headers = [
-            self::HEADER_VERSION        =>  ord($pack[0]),
-            self::HEADER_TYPE           =>  ord($pack[1]),
+            self::HEADER_VERSION        => ord($pack[0]),
+            self::HEADER_TYPE           => ord($pack[1]),
             self::HEADER_REQUEST_ID     => (ord($pack[2]) << 8) +
                                             ord($pack[3]),
             self::HEADER_CONTENT_LENGTH => (ord($pack[4]) << 8) +
                                             ord($pack[5]),
-            self::HEADER_PADDING_LENGTH =>  ord($pack[6]),
-            self::HEADER_RESERVED       =>  ord($pack[7]),
-            self::HEADER_CONTENT        =>  null
+            self::HEADER_PADDING_LENGTH => ord($pack[6]),
+            self::HEADER_RESERVED       => ord($pack[7]),
+            self::HEADER_CONTENT        => null
         ];
-        $length  = $headers[self::HEADER_CONTENT_LENGTH] +
-                   $headers[self::HEADER_PADDING_LENGTH];
+        $length =
+            $headers[self::HEADER_CONTENT_LENGTH] +
+            $headers[self::HEADER_PADDING_LENGTH];
 
-        if(0 === $length)
+        if (0 === $length) {
             return $headers;
+        }
 
         $headers[self::HEADER_CONTENT] = substr(
             $this->read($length),
@@ -241,9 +244,8 @@ abstract class Connection {
     /**
      * Read data.
      *
-     * @access  protected
      * @param   int     $length    Length of data to read.
      * @return  string
      */
-    abstract protected function read ( $length );
+    abstract protected function read($length);
 }

@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,13 +44,11 @@ use Hoa\Socket;
  * A FastCGI client with a responder role.
  * Inspired by PHP SAPI code: php://sapi/cgi/fastcgi.*.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Responder extends Connection {
-
+class Responder extends Connection
+{
     /**
      * Request: begin.
      *
@@ -135,21 +133,21 @@ class Responder extends Connection {
     /**
      * Client socket connection.
      *
-     * @var \Hoa\Socket\Client object
+     * @var \Hoa\Socket\Client
      */
     protected $_client  = null;
 
     /**
      * Response: content.
      *
-     * @var \Hoa\Fastcgi\Responder string
+     * @var string
      */
     protected $_content = null;
 
     /**
      * Response: headers.
      *
-     * @var \Hoa\Fastcgi\Responder array
+     * @var array
      */
     protected $_headers = [];
 
@@ -158,12 +156,11 @@ class Responder extends Connection {
     /**
      * Constructor.
      *
-     * @access  public
      * @param   \Hoa\Socket\Client  $client    Client connection.
      * @return  void
      */
-    public function __construct ( Socket\Client $client ) {
-
+    public function __construct(Socket\Client $client)
+    {
         $this->setClient($client);
 
         return;
@@ -172,18 +169,17 @@ class Responder extends Connection {
     /**
      * Send data on a FastCGI.
      *
-     * @access  public
      * @param   array   $headers    Headers.
      * @param   string  $content    Content (e.g. key=value for POST).
      * @return  string
-     * @throw   \Hoa\Socket\Exception
-     * @throw   \Hoa\Fastcgi\Exception
-     * @throw   \Hoa\Fastcgi\Exception\CannotMultiplex
-     * @throw   \Hoa\Fastcgi\Exception\Overloaded
-     * @throw   \Hoa\Fastcgi\Exception\UnknownRole
+     * @throws  \Hoa\Socket\Exception
+     * @throws  \Hoa\Fastcgi\Exception
+     * @throws  \Hoa\Fastcgi\Exception\CannotMultiplex
+     * @throws  \Hoa\Fastcgi\Exception\Overloaded
+     * @throws  \Hoa\Fastcgi\Exception\UnknownRole
      */
-    public function send ( Array $headers, $content = null ) {
-
+    public function send(Array $headers, $content = null)
+    {
         $client = $this->getClient();
         $client->connect();
         $client->setStreamBlocking(true);
@@ -201,52 +197,64 @@ class Responder extends Connection {
 
         $parameters .= $this->packPairs($headers);
 
-        if(null !== $parameters)
+        if (null !== $parameters) {
             $request .= $this->pack(self::REQUEST_PARAMETERS, $parameters);
+        }
 
         $request .= $this->pack(self::REQUEST_PARAMETERS, '');
 
-        if(null !== $content)
+        if (null !== $content) {
             $request .= $this->pack(self::STREAM_STDIN, $content);
+        }
 
         $request .= $this->pack(self::STREAM_STDIN, '');
         $client->writeAll($request);
         $handle   = null;
 
         do {
-
-            if(false === $handle = $this->readPack())
+            if (false === $handle = $this->readPack()) {
                 throw new Exception(
-                    'Bad request (not a well-formed FastCGI request).', 0);
+                    'Bad request (not a well-formed FastCGI request).',
+                    0
+                );
+            }
 
-            if(   self::STREAM_STDOUT === $handle[parent::HEADER_TYPE]
-               || self::STREAM_STDERR === $handle[parent::HEADER_TYPE])
+            if (self::STREAM_STDOUT === $handle[parent::HEADER_TYPE] ||
+                self::STREAM_STDERR === $handle[parent::HEADER_TYPE]) {
                 $response .= $handle[parent::HEADER_CONTENT];
-
-        } while(self::REQUEST_END !== $handle[parent::HEADER_TYPE]);
+            }
+        } while (self::REQUEST_END !== $handle[parent::HEADER_TYPE]);
 
         $client->disconnect();
 
-        switch(ord($handle[parent::HEADER_CONTENT][4])) {
-
+        switch (ord($handle[parent::HEADER_CONTENT][4])) {
             case self::STATUS_CANNOT_MULTIPLEX:
                 throw new Exception\CannotMultiplex(
                     'Application %s that you are trying to reach does not ' .
                     'support multiplexing.',
-                    0, $this->getClient()->getSocket()->__toString());
-              break;
+                    0,
+                    $this->getClient()->getSocket()->__toString()
+                );
+
+                break;
 
             case self::STATUS_OVERLOADED:
                 throw new Exception\Overloaded(
                     'Application %s is too busy and rejects your request.',
-                    1, $this->getClient()->getSocket()->__toString());
-              break;
+                    1,
+                    $this->getClient()->getSocket()->__toString()
+                );
+
+                break;
 
             case self::STATUS_UNKNOWN_ROLE:
                 throw new Exception\UnknownRole(
                     'Server for the application %s returns an unknown role.',
-                    2, $this->getClient()->getSocket()->__toString());
-              break;
+                    2,
+                    $this->getClient()->getSocket()->__toString()
+                );
+
+                break;
         }
 
         /**
@@ -257,8 +265,7 @@ class Responder extends Connection {
         $pos     = strpos($response, "\r\n\r\n");
         $headers = substr($response, 0, $pos);
 
-        foreach(explode("\r\n", $headers) as $header) {
-
+        foreach (explode("\r\n", $headers) as $header) {
             $semicolon = strpos($header, ':');
             $this->_headers[strtolower(trim(substr($header, 0, $semicolon)))]
                 = trim(substr($header, $semicolon + 1));
@@ -270,46 +277,42 @@ class Responder extends Connection {
     /**
      * Get response content.
      *
-     * @access  public
      * @return  string
      */
-    public function getResponseContent ( ) {
-
+    public function getResponseContent()
+    {
         return $this->_content;
     }
 
     /**
      * Get response headers.
      *
-     * @access  public
      * @return  array
      */
-    public function getResponseHeaders ( ) {
-
+    public function getResponseHeaders()
+    {
         return $this->_headers;
     }
 
     /**
      * Read data.
      *
-     * @access  protected
      * @param   int     $length    Length of data to read.
      * @return  string
      */
-    protected function read ( $length ) {
-
+    protected function read($length)
+    {
         return $this->getClient()->read($length);
     }
 
     /**
      * Set client.
      *
-     * @access  public
      * @param   \Hoa\Socket\Client  $client    Client.
      * @return  \Hoa\Socket\Client
      */
-    public function setClient ( Socket\Client $client ) {
-
+    public function setClient(Socket\Client $client)
+    {
         $old           = $this->_client;
         $this->_client = $client;
 
@@ -319,11 +322,10 @@ class Responder extends Connection {
     /**
      * Get client.
      *
-     * @access  public
      * @return  \Hoa\Socket\Client
      */
-    public function getClient ( ) {
-
+    public function getClient()
+    {
         return $this->_client;
     }
 }
