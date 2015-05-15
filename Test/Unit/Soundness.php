@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,27 +36,25 @@
 
 namespace Hoa\Json\Test\Unit;
 
-use Hoa\Test;
 use Hoa\Compiler as LUT;
 use Hoa\File;
 use Hoa\Iterator;
 use Hoa\Math;
 use Hoa\Regex;
+use Hoa\Test;
 
 /**
  * Class \Hoa\Json\Test\Unit\Soundness.
  *
  * Check soundness of the LL(k) compiler.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Soundness extends Test\Unit\Suite {
-
-    public function case_exaustive_json ( ) {
-
+class Soundness extends Test\Unit\Suite
+{
+    public function case_exaustive_json()
+    {
         $this->with_json(
             new LUT\Llk\Sampler\BoundedExhaustive(
                 $this->getJSONCompiler(),
@@ -66,8 +64,8 @@ class Soundness extends Test\Unit\Suite {
         );
     }
 
-    public function case_coverage_json ( ) {
-
+    public function case_coverage_json()
+    {
         $this->with_json(
             new LUT\Llk\Sampler\Coverage(
                 $this->getJSONCompiler(),
@@ -76,8 +74,8 @@ class Soundness extends Test\Unit\Suite {
         );
     }
 
-    public function case_uniform_random_json ( ) {
-
+    public function case_uniform_random_json()
+    {
         $this
             ->given(
                 $sampler = new LUT\Llk\Sampler\Uniform(
@@ -88,8 +86,7 @@ class Soundness extends Test\Unit\Suite {
             )
             ->with_json(
                 new Iterator\Limit(
-                    new Iterator\CallbackGenerator(function ( ) use ( $sampler ) {
-
+                    new Iterator\CallbackGenerator(function () use ($sampler) {
                         return $sampler->uniform();
                     }),
                     0,
@@ -99,16 +96,15 @@ class Soundness extends Test\Unit\Suite {
             );
     }
 
-    protected function with_json ( $sampler, $compiler = null ) {
-
-        if(null === $compiler)
+    protected function with_json($sampler, $compiler = null)
+    {
+        if (null === $compiler) {
             $compiler = $sampler->getCompiler();
+        }
 
         $this
-            ->when(function ( ) use ( $compiler, $sampler ) {
-
-                foreach($sampler as $datum) {
-
+            ->when(function () use ($compiler, $sampler) {
+                foreach ($sampler as $datum) {
                     $this
                         ->given(json_decode($datum))
                         ->when($error = json_last_error())
@@ -124,15 +120,15 @@ class Soundness extends Test\Unit\Suite {
             });
     }
 
-    protected function getJSONCompiler ( ) {
-
+    protected function getJSONCompiler()
+    {
         return LUT\Llk::load(
             new File\Read('hoa://Library/Json/Grammar.pp')
         );
     }
 
-    protected function getRegexSampler ( ) {
-
+    protected function getRegexSampler()
+    {
         return new Regex\Visitor\Isotropic(new Math\Sampler\Random());
     }
 }
