@@ -157,11 +157,8 @@ var_dump($fastcgi->getResponseContent());
   <p>The best way to catch all the exceptions is to catch
   <code>Hoa\Fastcgi\Exception\Exception</code>:</p>
   <pre><code class="language-php">try {
-
     $fastcgi->send(…);
-}
-catch ( Hoa\Fastcgi\Exception\Exception $e ) {
-
+} catch (Hoa\Fastcgi\Exception\Exception $e) {
     // compute $e.
 }</code></pre>
   <p>So far, the most used CGI servers support the multiplexing, high load and
