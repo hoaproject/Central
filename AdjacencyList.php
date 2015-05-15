@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,20 +41,18 @@ namespace Hoa\Graph;
  *
  * Code an adjacency list graph.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class AdjacencyList extends Graph {
-
+class AdjacencyList extends Graph
+{
     /**
      * Node value index.
      *
      * @const int
      */
     const NODE_VALUE = 0;
-    
+
     /**
      * Node child index.
      *
@@ -67,12 +65,11 @@ class AdjacencyList extends Graph {
     /**
      * Propagate the construction.
      *
-     * @access  public
      * @param   bool    $loop    Allow or not loop.
      * @return  void
      */
-    public function __construct ( $loop = parent::DISALLOW_LOOP ) {
-
+    public function __construct($loop = parent::DISALLOW_LOOP)
+    {
         parent::__construct($loop);
 
         return;
@@ -81,58 +78,70 @@ class AdjacencyList extends Graph {
     /**
      * Disallow to get a new instance.
      *
-     * @access  public
      * @param   string  $type    Type of graph needed.
      * @return  void
-     * @throw   \Hoa\Graph\Exception
+     * @throws  \Hoa\Graph\Exception
      */
-    public static function getInstance ( $type = parent::TYPE_ADJACENCYLIST ) {
-
+    public static function getInstance($type = parent::TYPE_ADJACENCYLIST)
+    {
         throw new Exception(
-            'Cannot get a new from a typed graph.', 0);
+            'Cannot get a new from a typed graph.',
+            0
+        );
     }
 
     /**
      * Add a node.
      *
-     * @access  public
      * @param   \Hoa\Graph\IGraph\Node  $node      Node to add.
      * @param   mixed                   $parent    Parent of node.
      * @return  void
-     * @throw   \Hoa\Graph\Exception
+     * @throws  \Hoa\Graph\Exception
      */
-    public function addNode ( IGraph\Node $node,
-                              $parent = [] ) {
-
-        if(!is_array($parent))
+    public function addNode(IGraph\Node $node, $parent = [])
+    {
+        if (!is_array($parent)) {
             $parent = [$parent];
+        }
 
-        if(parent::DISALLOW_LOOP === $this->isLoopAllow()) {
-
-            if(true === $this->nodeExists($node->getNodeId()))
+        if (parent::DISALLOW_LOOP === $this->isLoopAllow()) {
+            if (true === $this->nodeExists($node->getNodeId())) {
                 throw new Exception(
-                    'Node %s already exists.', 1, $node->getNodeId());
+                    'Node %s already exists.',
+                    1,
+                    $node->getNodeId()
+                );
+            }
 
-            if(in_array($node->getNodeId(), $parent))
+            if (in_array($node->getNodeId(), $parent)) {
                 throw new Exception(
-                    'Node %s cannot define itself in parent.', 2,
-                    $node->getNodeId());
+                    'Node %s cannot define itself in parent.',
+                    2,
+                    $node->getNodeId()
+                );
+            }
         }
 
         $this->nodes[$node->getNodeId()][self::NODE_VALUE] = $node;
 
-        if(!isset($this->nodes[$node->getNodeId()][self::NODE_CHILD]))
+        if (!isset($this->nodes[$node->getNodeId()][self::NODE_CHILD])) {
             $this->nodes[$node->getNodeId()][self::NODE_CHILD] = [];
+        }
 
-        foreach($parent as $foo => $nodeId) {
-
-            if($nodeId instanceof IGraph\Node)
+        foreach ($parent as $foo => $nodeId) {
+            if ($nodeId instanceof IGraph\Node) {
                 $nodeId = $nodeId->getNodeId();
+            }
 
-            if(parent::DISALLOW_LOOP === $this->isLoopAllow())
-                if(false === $this->nodeExists($nodeId))
+            if (parent::DISALLOW_LOOP === $this->isLoopAllow()) {
+                if (false === $this->nodeExists($nodeId)) {
                     throw new Exception(
-                        'Node %s does not exist.', 3, $nodeId);
+                        'Node %s does not exist.',
+                        3,
+                        $nodeId
+                    );
+                }
+            }
 
             $this->nodes[$nodeId][self::NODE_CHILD][] = $node->getNodeId();
         }
@@ -141,14 +150,14 @@ class AdjacencyList extends Graph {
     /**
      * Check if a node does already exist or not.
      *
-     * @access  public
      * @param   mixed   $nodeId    The node ID or the node instance.
      * @return  bool
      */
-    public function nodeExists ( $nodeId ) {
-
-        if($nodeId instanceof IGraph\Node)
+    public function nodeExists($nodeId)
+    {
+        if ($nodeId instanceof IGraph\Node) {
             $nodeId = $nodeId->getNodeId();
+        }
 
         return isset($this->nodes[$nodeId]);
     }
@@ -156,19 +165,19 @@ class AdjacencyList extends Graph {
     /**
      * Get a node.
      *
-     * @access  public
      * @param   mixed   $nodeId    The node ID or the node instance.
      * @return  object
-     * @throw   \Hoa\Graph\Exception
+     * @throws  \Hoa\Graph\Exception
      */
-    public function getNode ( $nodeId ) {
-
-        if($nodeId instanceof IGraph\Node)
+    public function getNode($nodeId)
+    {
+        if ($nodeId instanceof IGraph\Node) {
             $nodeId = $nodeId->getNodeId();
+        }
 
-        if(false === $this->nodeExists($nodeId))
-            throw new Exception(
-                'Node %s does not exist.', 4, $nodeId);
+        if (false === $this->nodeExists($nodeId)) {
+            throw new Exception('Node %s does not exist.', 4, $nodeId);
+        }
 
         return $this->nodes[$nodeId][self::NODE_VALUE];
     }
@@ -176,34 +185,39 @@ class AdjacencyList extends Graph {
     /**
      * Get parent of a specific node.
      *
-     * @access  public
      * @param   mixed   $nodeId    The node ID or the node instance.
      * @return  object
-     * @throw   \Hoa\Graph\Exception
+     * @throws  \Hoa\Graph\Exception
      */
-    public function getParent ( $nodeId ) {
-
-        if($nodeId instanceof IGraph\Node)
+    public function getParent($nodeId)
+    {
+        if ($nodeId instanceof IGraph\Node) {
             $nodeId = $nodeId->getNodeId();
+        }
 
-        if(false === $this->nodeExists($nodeId))
-            throw new Exception(
-                'Node %s does not exist.', 5, $nodeId);
+        if (false === $this->nodeExists($nodeId)) {
+            throw new Exception('Node %s does not exist.', 5, $nodeId);
+        }
 
         $parent = new \ArrayObject(
-            [], \ArrayObject::ARRAY_AS_PROPS, 'ArrayIterator');
+            [],
+            \ArrayObject::ARRAY_AS_PROPS,
+            'ArrayIterator'
+        );
 
-        foreach($this->getNodes() as $id => $values ) {
-
-            if(parent::DISALLOW_LOOP === $this->isLoopAllow())
-                if($nodeId == $id)
+        foreach ($this->getNodes() as $id => $values) {
+            if (parent::DISALLOW_LOOP === $this->isLoopAllow()) {
+                if ($nodeId == $id) {
                     continue;
+                }
+            }
 
-            if(in_array($nodeId, $values[self::NODE_CHILD]))
+            if (in_array($nodeId, $values[self::NODE_CHILD])) {
                 $parent->offsetSet(
                     $id,
                     $this->getNode($id)
                 );
+            }
         }
 
         return $parent;
@@ -212,28 +226,32 @@ class AdjacencyList extends Graph {
     /**
      * Get child of a specific node.
      *
-     * @access  public
      * @param   mixed   $nodeId    The node ID or the node instance.
      * @return  object
-     * @throw   \Hoa\Graph\Exception
+     * @throws  \Hoa\Graph\Exception
      */
-    public function getChild ( $nodeId ) {
-
-        if($nodeId instanceof IGraph\Node)
+    public function getChild($nodeId)
+    {
+        if ($nodeId instanceof IGraph\Node) {
             $nodeId = $nodeId->getNodeId();
+        }
 
-        if(false === $this->nodeExists($nodeId))
-            throw new Exception(
-                'Node %s does not exist.', 6, $nodeId);
+        if (false === $this->nodeExists($nodeId)) {
+            throw new Exception('Node %s does not exist.', 6, $nodeId);
+        }
 
         $child = new \ArrayObject(
-            [], \ArrayObject::ARRAY_AS_PROPS, 'ArrayIterator');
+            [],
+            \ArrayObject::ARRAY_AS_PROPS,
+            'ArrayIterator'
+        );
 
-        foreach($this->nodes[$nodeId][self::NODE_CHILD] as $foo => $id)
+        foreach ($this->nodes[$nodeId][self::NODE_CHILD] as $foo => $id) {
             $child->offsetSet(
                 $id,
                 $this->getNode($id)
             );
+        }
 
         return $child;
     }
@@ -241,38 +259,42 @@ class AdjacencyList extends Graph {
     /**
      * Delete a node.
      *
-     * @access  public
      * @param   mixed   $nodeId       The node ID or the node instance.
      * @param   bool    $propagate    Propagate the erasure.
      * @return  void
-     * @throw   \Hoa\Graph\Exception
+     * @throws  \Hoa\Graph\Exception
      */
-    public function deleteNode ( $nodeId, $propagate = parent::DELETE_RESTRICT ) {
-
-        if($nodeId instanceof IGraph\Node)
+    public function deleteNode($nodeId, $propagate = parent::DELETE_RESTRICT)
+    {
+        if ($nodeId instanceof IGraph\Node) {
             $nodeId = $nodeId->getNodeId();
+        }
 
-        if(false === $this->nodeExists($nodeId))
+        if (false === $this->nodeExists($nodeId)) {
             return;
+        }
 
-        if($propagate == parent::DELETE_RESTRICT)
-
-            if(empty($this->nodes[$nodeId][self::NODE_CHILD])) {
-
+        if ($propagate == parent::DELETE_RESTRICT) {
+            if (empty($this->nodes[$nodeId][self::NODE_CHILD])) {
                 unset($this->nodes[$nodeId]);
 
-                foreach($this->getNodes() as $id => $values )
-                    if(false !== $key = array_search($nodeId, $values[self::NODE_CHILD]))
+                foreach ($this->getNodes() as $id => $values) {
+                    if (false !== $key = array_search($nodeId, $values[self::NODE_CHILD])) {
                         unset($this->nodes[$id][self::NODE_CHILD][$key]);
-            }
-            else
+                    }
+                }
+            } else {
                 throw new Exception(
                     'Cannot delete %s node in restrict delete mode, because ' .
-                    'it has one or more children.', 7, $nodeId);
-        else {
-
-            foreach($this->nodes[$nodeId][self::NODE_CHILD] as $foo => $id)
+                    'it has one or more children.',
+                    7,
+                    $nodeId
+                );
+            }
+        } else {
+            foreach ($this->nodes[$nodeId][self::NODE_CHILD] as $foo => $id) {
                 $this->deleteNode($id, $propagate);
+            }
 
             $this->deleteNode($nodeId, parent::DELETE_RESTRICT);
         }
@@ -281,19 +303,19 @@ class AdjacencyList extends Graph {
     /**
      * Whether node is a leaf, i.e. does not have any child.
      *
-     * @access  public
      * @param   mixed   $nodeId    The node ID or the node instance.
      * @return  bool
-     * @throw   \Hoa\Graph\Exception
+     * @throws  \Hoa\Graph\Exception
      */
-    public function isLeaf ( $nodeId ) {
-
-        if($nodeId instanceof IGraph\Node)
+    public function isLeaf($nodeId)
+    {
+        if ($nodeId instanceof IGraph\Node) {
             $nodeId = $nodeId->getNodeId();
+        }
 
-        if(false === $this->nodeExists($nodeId))
-            throw new Exception(
-                'Node %s does not exist.', 8, $nodeId);
+        if (false === $this->nodeExists($nodeId)) {
+            throw new Exception('Node %s does not exist.', 8, $nodeId);
+        }
 
         return empty($this->nodes[$nodeId][self::NODE_CHILD]);
     }
@@ -301,19 +323,19 @@ class AdjacencyList extends Graph {
     /**
      * Whether node is a root, i.e. does not have any parent.
      *
-     * @access  public
      * @param   mixed   $nodeId    The node ID or the node instance.
      * @return  bool
-     * @throw   \Hoa\Graph\Exception
+     * @throws  \Hoa\Graph\Exception
      */
-    public function isRoot ( $nodeId ) {
-
-        if($nodeId instanceof IGraph\Node)
+    public function isRoot($nodeId)
+    {
+        if ($nodeId instanceof IGraph\Node) {
             $nodeId = $nodeId->getNodeId();
+        }
 
-        if(false === $this->nodeExists($nodeId))
-            throw new Exception(
-                'Node %s does not exist.', 9, $nodeId);
+        if (false === $this->nodeExists($nodeId)) {
+            throw new Exception('Node %s does not exist.', 9, $nodeId);
+        }
 
         return count($this->getParent($nodeId)) == 0;
     }
@@ -321,19 +343,23 @@ class AdjacencyList extends Graph {
     /**
      * Print the graph in the DOT language.
      *
-     * @access  public
      * @return  string
      */
-    public function __toString ( ) {
-
+    public function __toString()
+    {
         $out = 'digraph {' . "\n";
 
-        foreach($this->getNodes() as $nodeId => $foo)
+        foreach ($this->getNodes() as $nodeId => $foo) {
             $out .= '    ' . $nodeId . ';' . "\n";
+        }
 
-        foreach($this->getNodes() as $nodeId => $foo)
-            foreach($this->getChild($nodeId) as $fooo => $child)
-                $out .= '    ' . $nodeId . ' -> ' . $child->getNodeId() . ';' .  "\n";
+        foreach ($this->getNodes() as $nodeId => $foo) {
+            foreach ($this->getChild($nodeId) as $fooo => $child) {
+                $out .=
+                    '    ' . $nodeId . ' -> ' .
+                    $child->getNodeId() . ';' .  "\n";
+            }
+        }
 
         $out .= '}';
 
