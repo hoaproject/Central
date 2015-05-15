@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,24 +41,22 @@ namespace Hoa\Database\Query;
  *
  * Build a WHERE clause.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Where {
-
+class Where
+{
     /**
      * Expressions.
      *
-     * @var \Hoa\Database\Query\Where array
+     * @var array
      */
     protected $_where         = [];
 
     /**
      * Current logic operator.
      *
-     * @var \Hoa\Database\Query\Where string
+     * @var string
      */
     protected $_logicOperator = null;
 
@@ -67,19 +65,20 @@ class Where {
     /**
      * Add an expression (regular string or a WHERE clause).
      *
-     * @access  public
      * @param   mixed  $expression    Expression.
      * @return  \Hoa\Database\Query\Where
      */
-    public function where ( $expression ) {
-
+    public function where($expression)
+    {
         $where = null;
 
-        if(!empty($this->_where))
+        if (!empty($this->_where)) {
             $where = ($this->_logicOperator ?: 'AND') . ' ';
+        }
 
-        if($expression instanceof self)
+        if ($expression instanceof self) {
             $expression = '(' . substr($expression, 7) . ')';
+        }
 
         $this->_where[]       = $where . $expression;
         $this->_logicOperator = null;
@@ -90,31 +89,29 @@ class Where {
     /**
      * Redirect undefined calls to _calls.
      *
-     * @access  public
      * @param   string  $name      Name.
      * @param   array   $values    Values.
      * @return  \Hoa\Database\Query\Where
      */
-    public function __call ( $name, Array $values ) {
-
-        return call_user_func_array(array($this, '_' . $name), $values);
+    public function __call($name, Array $values)
+    {
+        return call_user_func_array([$this, '_' . $name], $values);
     }
 
     /**
      * Set the current logic operator.
      *
-     * @access  public
      * @param   string  $name   Name.
      * @return  \Hoa\Database\Query\Where
      */
-    public function __get ( $name ) {
-
-        switch(strtolower($name)) {
-
+    public function __get($name)
+    {
+        switch (strtolower($name)) {
             case 'and':
             case 'or':
                 $this->_logicOperator = strtoupper($name);
-              break;
+
+                break;
 
             default:
                 return $this->$name;
@@ -126,11 +123,10 @@ class Where {
     /**
      * Reset.
      *
-     * @access  public
      * @return  \Hoa\Database\Query\Where
      */
-    public function reset ( ) {
-
+    public function reset()
+    {
         $this->_where = [];
 
         return $this;
@@ -139,13 +135,13 @@ class Where {
     /**
      * Generate the query.
      *
-     * @access  public
      * @return  string
      */
-    public function __toString ( ) {
-
-        if(empty($this->_where))
+    public function __toString()
+    {
+        if (empty($this->_where)) {
             return null;
+        }
 
         return ' WHERE ' . implode(' ', $this->_where);
     }

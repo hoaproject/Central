@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,38 +41,36 @@ namespace Hoa\Database\Query;
  *
  * Build a SELECT query.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Select extends SelectCore implements Dml {
-
+class Select extends SelectCore implements Dml
+{
     /**
      * “Core” selects (whether we have union, unionAll, intersect or except).
      *
-     * @var \Hoa\Database\Query\Select array
+     * @var array
      */
     protected $_select  = [];
 
     /**
      * Ordering terms.
      *
-     * @var \Hoa\Database\Query\Select array
+     * @var array
      */
     protected $_orderBy = [];
 
     /**
      * Limit expressions.
      *
-     * @var \Hoa\Database\Query\Select array
+     * @var array
      */
     protected $_limit   = [];
 
     /**
      * Offset expression.
      *
-     * @var \Hoa\Database\Query\Select string
+     * @var string
      */
     protected $_offset  = null;
 
@@ -81,56 +79,51 @@ class Select extends SelectCore implements Dml {
     /**
      * Start a new SELECT query which is an union of the previous one.
      *
-     * @access  public
      * @return  \Hoa\Database\Query\Select
      */
-    public function union ( ) {
-
+    public function union()
+    {
         return $this->compose('UNION');
     }
 
     /**
      * Start a new SELECT query which is an unionAll of the previous one.
      *
-     * @access  public
      * @return  \Hoa\Database\Query\Select
      */
-    public function unionAll ( ) {
-
+    public function unionAll()
+    {
         return $this->compose('UNION ALL');
     }
 
     /**
      * Start a new SELECT query which is an intersection of the previous one.
      *
-     * @access  public
      * @return  \Hoa\Database\Query\Select
      */
-    public function intersect ( ) {
-
+    public function intersect()
+    {
         return $this->compose('INTERSECT');
     }
 
     /**
      * Start a new SELECT query which is an exception of the previous one.
      *
-     * @access  public
      * @return  \Hoa\Database\Query\Select
      */
-    public function except ( ) {
-
+    public function except()
+    {
         return $this->compose('EXCEPT');
     }
 
     /**
      * Compose SELECT queries.
      *
-     * @access  protected
      * @param   string  $operator    Composition operator.
      * @return  \Hoa\Database\Query\Select
      */
-    protected function compose ( $operator ) {
-
+    protected function compose($operator)
+    {
         $this->_select[] = parent::__toString() . ' ' . $operator;
         $this->reset();
 
@@ -140,15 +133,15 @@ class Select extends SelectCore implements Dml {
     /**
      * Add ordering terms.
      *
-     * @access  public
      * @param   string  $term    Term.
      * @param   ...     ...
      * @return  \Hoa\Database\Query\Select
      */
-    public function orderBy ( $term ) {
-
-        foreach(func_get_args() as $term)
+    public function orderBy($term)
+    {
+        foreach (func_get_args() as $term) {
             $this->_orderBy[] = $term;
+        }
 
         return $this;
     }
@@ -156,15 +149,15 @@ class Select extends SelectCore implements Dml {
     /**
      * Add limit expressions.
      *
-     * @access  public
      * @param   string  $expression    Expression.
      * @param   ...     ...
      * @return  \Hoa\Database\Query\Select
      */
-    public function limit ( $expression ) {
-
-        foreach(func_get_args() as $expression)
+    public function limit($expression)
+    {
+        foreach (func_get_args() as $expression) {
             $this->_limit[] = $expression;
+        }
 
         return $this;
     }
@@ -172,12 +165,11 @@ class Select extends SelectCore implements Dml {
     /**
      * Add offset expression.
      *
-     * @access  public
      * @param   string  $expression    Expression.
      * @return  \Hoa\Database\Query\Select
      */
-    public function offset ( $expression ) {
-
+    public function offset($expression)
+    {
         $this->_offset = $expression;
 
         return $this;
@@ -186,31 +178,32 @@ class Select extends SelectCore implements Dml {
     /**
      * Generate the query.
      *
-     * @access  public
      * @return  string
      */
-    public function __toString ( ) {
-
+    public function __toString()
+    {
         $out    = null;
         $select = implode(' ', $this->_select);
 
-        if(!empty($select))
+        if (!empty($select)) {
             $out .= $select . ' ';
+        }
 
         $out .= parent::__toString();
 
-        if(!empty($this->_orderBy))
+        if (!empty($this->_orderBy)) {
             $out .= ' ORDER BY ' . implode(', ', $this->_orderBy);
+        }
 
-        if(!empty($this->_limit)) {
-
+        if (!empty($this->_limit)) {
             $out .= ' LIMIT';
 
-            if(null !== $this->_offset)
+            if (null !== $this->_offset) {
                 $out .= ' ' . $this->_limit[0] .
                         ' OFFSET ' . $this->_offset;
-            else
+            } else {
                 $out .= ' ' . implode(', ', $this->_limit);
+            }
         }
 
         return $out;

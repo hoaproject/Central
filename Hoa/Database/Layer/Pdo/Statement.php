@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,18 +43,15 @@ use Hoa\Database;
  *
  * Wrap PDOStatement.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @author     Raphaël Emourgeon <raphael.emourgeon@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin, Raphaël Emourgeon.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Statement implements Database\IDal\WrapperStatement {
-
+class Statement implements Database\IDal\WrapperStatement
+{
     /**
      * The statement instance.
      *
-     * @var \PDOStatement object
+     * @var \PDOStatement
      */
     protected $_statement = null;
 
@@ -63,12 +60,11 @@ class Statement implements Database\IDal\WrapperStatement {
     /**
      * Create a statement instance.
      *
-     * @access  public
      * @param   \PDOStatement  $statement    The PDOStatement instance.
      * @return  void
      */
-    public function __construct ( \PDOStatement $statement ) {
-
+    public function __construct(\PDOStatement $statement)
+    {
         $this->setStatement($statement);
 
         return;
@@ -77,12 +73,11 @@ class Statement implements Database\IDal\WrapperStatement {
     /**
      * Set the statement instance.
      *
-     * @access  protected
      * @param   \PDOStatement  $statement    The PDOStatement instance.
      * @return  \PDOStatement
      */
-    protected function setStatement ( \PDOStatement $statement ) {
-
+    protected function setStatement(\PDOStatement $statement)
+    {
         $old              = $this->_statement;
         $this->_statement = $statement;
 
@@ -92,28 +87,30 @@ class Statement implements Database\IDal\WrapperStatement {
     /**
      * Get the statement instance.
      *
-     * @access  protected
      * @return  \PDOStatement
      */
-    protected function getStatement ( ) {
-
+    protected function getStatement()
+    {
         return $this->_statement;
     }
 
     /**
      * Execute a prepared statement.
      *
-     * @access  public
      * @param   array   $bindParameters    Bind parameters values if bindParam
      *                                     is not called.
      * @return  \Hoa\Database\Pdo\Statement
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function execute ( Array $bindParameters = null ) {
-
-        if(false === $this->getStatement()->execute($bindParameters))
+    public function execute(Array $bindParameters = null)
+    {
+        if (false === $this->getStatement()->execute($bindParameters)) {
             throw new Database\Exception(
-                '%3$s (%1$s/%2$d)', 0, $this->errorInfo());
+                '%3$s (%1$s/%2$d)',
+                0,
+                $this->errorInfo()
+            );
+        }
 
         return $this;
     }
@@ -121,22 +118,26 @@ class Statement implements Database\IDal\WrapperStatement {
     /**
      * Bind a parameter to te specified variable name.
      *
-     * @access  public
      * @param   mixed   $parameter    Parameter name.
      * @param   mixed   $value        Parameter value.
      * @param   int     $type         Type of value.
      * @param   int     $length       Length of data type.
      * @return  bool
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function bindParameter ( $parameter, &$value, $type = null,
-                                    $length = null ) {
-
-        if(null === $type)
+    public function bindParameter(
+        $parameter,
+        &$value,
+        $type = null,
+        $length = null
+    ) {
+        if (null === $type) {
             return $this->getStatement()->bindParam($parameter, $value);
+        }
 
-        if(null === $length)
+        if (null === $length) {
             return $this->getStatement()->bindParam($parameter, $value, $type);
+        }
 
         return $this->getStatement()->bindParam($parameter, $value, $type, $length);
     }
@@ -144,26 +145,24 @@ class Statement implements Database\IDal\WrapperStatement {
     /**
      * Return an array containing all of the result set rows.
      *
-     * @access  public
      * @return  array
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function fetchAll ( ) {
-
+    public function fetchAll()
+    {
         return $this->getStatement()->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
      * Fetch the next row in the result set.
      *
-     * @access  protected
      * @param   int  $orientation    Must be one of the \PDO::FETCH_ORI_*
      *                               constants.
      * @return  mixed
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    protected function fetch ( $orientation = \PDO::FETCH_ORI_NEXT ) {
-
+    protected function fetch($orientation = \PDO::FETCH_ORI_NEXT)
+    {
         return $this->getStatement()->fetch(
             \PDO::FETCH_ASSOC,
             $orientation
@@ -173,48 +172,44 @@ class Statement implements Database\IDal\WrapperStatement {
     /**
      * Fetch the first row in the result set.
      *
-     * @access  public
      * @return  mixed
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function fetchFirst ( ) {
-
+    public function fetchFirst()
+    {
         return $this->fetch(\PDO::FETCH_ORI_FIRST);
     }
 
     /**
      * Fetch the last row in the result set.
      *
-     * @access  public
      * @return  mixed
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function fetchLast ( ) {
-
+    public function fetchLast()
+    {
         return $this->fetch(\PDO::FETCH_ORI_LAST);
     }
 
     /**
      * Fetch the next row in the result set.
      *
-     * @access  public
      * @return  mixed
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function fetchNext ( ) {
-
+    public function fetchNext()
+    {
         return $this->fetch(\PDO::FETCH_ORI_NEXT);
     }
 
     /**
      * Fetch the previous row in the result set.
      *
-     * @access  public
      * @return  mixed
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function fetchPrior ( ) {
-
+    public function fetchPrior()
+    {
         return $this->fetch(\PDO::FETCH_ORI_PRIOR);
     }
 
@@ -222,25 +217,23 @@ class Statement implements Database\IDal\WrapperStatement {
      * Return a single column from the next row of the result set or false if
      * there is no more row.
      *
-     * @access  public
      * @param   int  $column    Column index.
      * @return  mixed
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function fetchColumn ( $column = 0 ) {
-
+    public function fetchColumn($column = 0)
+    {
         return $this->getStatement()->fetchColumn($column);
     }
 
     /**
      * Close the cursor, enabling the statement to be executed again.
      *
-     * @access  public
      * @return  bool
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function closeCursor ( ) {
-
+    public function closeCursor()
+    {
         return $this->getStatement()->closeCursor();
     }
 
@@ -248,12 +241,11 @@ class Statement implements Database\IDal\WrapperStatement {
      * Fetch the SQLSTATE associated with the last operation on the statement
      * handle.
      *
-     * @access  public
      * @return  string
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function errorCode ( ) {
-
+    public function errorCode()
+    {
         return $this->getStatement()->errorCode();
     }
 
@@ -261,12 +253,11 @@ class Statement implements Database\IDal\WrapperStatement {
      * Fetch extends error information associated with the last operation on the
      * statement handle.
      *
-     * @access  public
      * @return  array
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function errorInfo ( ) {
-
+    public function errorInfo()
+    {
         return $this->getStatement()->errorInfo();
     }
 }

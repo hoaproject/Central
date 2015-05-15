@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,23 +36,21 @@
 
 namespace Hoa\Database\Test\Unit\Query;
 
-use Hoa\Test;
 use Hoa\Database\Query as CUT;
+use Hoa\Test;
 
 /**
  * Class \Hoa\Database\Test\Unit\Query\Example.
  *
  * Test suite of some examples.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Example extends Test\Unit\Suite {
-
-    public function case_basic_one ( ) {
-
+class Example extends Test\Unit\Suite
+{
+    public function case_basic_one()
+    {
         $this
             ->given($q = new CUT())
             ->when(
@@ -63,8 +61,8 @@ class Example extends Test\Unit\Suite {
                     ->isEqualTo('SELECT a FROM foo');
     }
 
-    public function case_reuse ( ) {
-
+    public function case_reuse()
+    {
         $this
             ->given(
                 $q = new CUT(),
@@ -78,8 +76,8 @@ class Example extends Test\Unit\Suite {
                     ->isEqualTo('SELECT a FROM foo WHERE i > 3');
     }
 
-    public function case_bigger_one ( ) {
-
+    public function case_bigger_one()
+    {
         $this
             ->given($q = new CUT())
             ->when(
@@ -105,8 +103,8 @@ class Example extends Test\Unit\Suite {
                     );
     }
 
-    public function case_sub_selects ( ) {
-
+    public function case_sub_selects()
+    {
         $this
             ->given($q = new CUT())
             ->when(
@@ -131,8 +129,8 @@ class Example extends Test\Unit\Suite {
                     );
     }
 
-    public function case_sub_wheres ( ) {
-
+    public function case_sub_wheres()
+    {
         $this
             ->given($q = new CUT())
             ->when(
@@ -163,8 +161,8 @@ class Example extends Test\Unit\Suite {
                     );
     }
 
-    public function case_default_insert ( ) {
-
+    public function case_default_insert()
+    {
         $this
             ->given($q = new CUT())
             ->when(
@@ -179,8 +177,8 @@ class Example extends Test\Unit\Suite {
                     );
     }
 
-    public function case_basic_insert ( ) {
-
+    public function case_basic_insert()
+    {
         $this
             ->given($q = new CUT())
             ->when(
@@ -198,8 +196,8 @@ class Example extends Test\Unit\Suite {
                     );
     }
 
-    public function case_insert_select ( ) {
-
+    public function case_insert_select()
+    {
         $this
             ->given($q = new CUT())
             ->when(
@@ -222,8 +220,8 @@ class Example extends Test\Unit\Suite {
                     );
     }
 
-    public function case_basic_update ( ) {
-
+    public function case_basic_update()
+    {
         $this
             ->given($q = new CUT())
             ->when(
@@ -249,8 +247,8 @@ class Example extends Test\Unit\Suite {
                     );
     }
 
-    public function case_basic_delete ( ) {
-
+    public function case_basic_delete()
+    {
         $this
             ->given($q = new CUT())
             ->when(

@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,167 +41,154 @@ namespace Hoa\Database\IDal;
  *
  * Interface of a DAL wrapper.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-interface Wrapper {
-
+interface Wrapper
+{
     /**
      * Create a DAL instance, representing a connection to a database.
      *
-     * @access  public
      * @param   string  $dsn              The DSN of database.
      * @param   string  $username         The username to connect to database.
      * @param   string  $password         The password to connect to database.
      * @param   array   $driverOptions    The driver options.
      * @return  void
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function __construct ( $dsn, $username, $password,
-                                  Array $driverOption = [] );
+    public function __construct(
+        $dsn,
+        $username,
+        $password,
+        Array $driverOption = []
+    );
 
     /**
      * Initiate a transaction.
      *
-     * @access  public
      * @return  bool
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function beginTransaction ( );
+    public function beginTransaction();
 
     /**
      * Commit a transaction.
      *
-     * @access  public
      * @return  bool
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function commit ( );
+    public function commit();
 
     /**
      * Roll back a transaction.
      *
-     * @access  public
      * @return  bool
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function rollBack ( );
+    public function rollBack();
 
     /**
      * Return the ID of the last inserted row or sequence value.
      *
-     * @access  public
      * @param   string  $name    Name of sequence object (needed for some
      *                           driver).
      * @return  string
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function lastInsertId ( $name = null );
+    public function lastInsertId($name = null);
 
     /**
      * Prepare a statement for execution and returns a statement object.
      *
-     * @access  public
      * @param   string  $statement    This must be a valid SQL statement for the
      *                                target database server.
      * @param   array   $options      Options to set attributes values for the
      *                                AbstractLayer Statement.
      * @return  \Hoa\Database\IDal\WrapperStatement
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function prepare ( $statement, Array $options = [] );
+    public function prepare($statement, Array $options = []);
 
     /**
      * Quote a string for use in a query.
      *
-     * @access  public
      * @param   string  $string    The string to be quoted.
      * @param   int     $type      Provide a data type hint for drivers that
      *                             have alternate quoting styles.
      * @return  string
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function quote ( $string = null, $type = -1 );
+    public function quote($string = null, $type = -1);
 
     /**
      * Execute an SQL statement, returning a result set as a
      * \Hoa\Database\IDal\WrapperStatement object.
      *
-     * @access  public
      * @param   string  $statement    The SQL statement to prepare and execute.
      * @return  \Hoa\Database\IDal\WrapperStatement
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function query ( $statement );
+    public function query($statement);
 
     /**
      * Fetch the SQLSTATE associated with the last operation on the database
      * handle.
      *
-     * @access  public
      * @return  string
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function errorCode ( );
+    public function errorCode();
 
     /**
      * Fetch extends error information associated with the last operation on the
      * database handle.
      *
-     * @access  public
      * @return  array
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function errorInfo ( );
+    public function errorInfo();
 
     /**
      * Return an array of available drivers.
      *
-     * @access  public
      * @return  array
-     * @throw   \Hoa\Datatase\Exception
+     * @throws  \Hoa\Datatase\Exception
      */
-    public function getAvailableDrivers ( );
+    public function getAvailableDrivers();
 
     /**
      * Set attributes.
      *
-     * @access  public
      * @param   array   $attributes    Attributes values.
      * @return  array
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function setAttributes ( Array $attributes );
+    public function setAttributes(Array $attributes);
 
     /**
      * Set a specific attribute.
      *
-     * @access  public
      * @param   mixed   $attribute    Attribute name.
      * @param   mixed   $value        Attribute value.
      * @return  mixed
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function setAttribute ( $attribute, $value );
+    public function setAttribute($attribute, $value);
 
     /**
      * Retrieve all database connection attributes.
      *
-     * @access  public
      * @return  array
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function getAttributes ( );
+    public function getAttributes();
 
     /**
      * Retrieve a database connection attribute.
      *
-     * @access  public
      * @param   string  $attribute    Attribute name.
      * @return  mixed
-     * @throw   \Hoa\Database\Exception
+     * @throws  \Hoa\Database\Exception
      */
-    public function getAttribute ( $attribute );
+    public function getAttribute($attribute);
 }

@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,45 +41,43 @@ namespace Hoa\Database\Query;
  *
  * Build an INSERT query.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Insert implements Dml {
-
+class Insert implements Dml
+{
     /**
      * Source.
      *
-     * @var \Hoa\Database\Query\Insert string
+     * @var string
      */
     protected $_into          = null;
 
     /**
      * Alternative to INSERT.
      *
-     * @var \Hoa\Database\Query\Insert string
+     * @var string
      */
     protected $_or            = null;
 
     /**
      * Columns.
      *
-     * @var \Hoa\Database\Query\Insert array
+     * @var array
      */
     protected $_columns       = [];
 
     /**
      * Values (tuples).
      *
-     * @var \Hoa\Database\Query\Insert array
+     * @var array
      */
     protected $_values        = [];
 
     /**
      * Whether we should use default values or not.
      *
-     * @var \Hoa\Database\Query\Insert bool
+     * @var bool
      */
     protected $_defaultValues = false;
 
@@ -88,12 +86,11 @@ class Insert implements Dml {
     /**
      * Set source.
      *
-     * @access  public
      * @param   string  $name    Name.
      * @return  \Hoa\Database\Query\Insert
      */
-    public function into ( $name ) {
-
+    public function into($name)
+    {
         $this->_into = $name;
 
         return $this;
@@ -102,67 +99,61 @@ class Insert implements Dml {
     /**
      * Insert or rollback.
      *
-     * @access  public
      * @return  \Hoa\Database\Query\Insert
      */
-    public function rollback ( ) {
-
+    public function rollback()
+    {
         return $this->_or('ROLLBACK');
     }
 
     /**
      * Insert or abort.
      *
-     * @access  public
      * @return  \Hoa\Database\Query\Insert
      */
-    public function abort ( ) {
-
+    public function abort()
+    {
         return $this->_or('ABORT');
     }
 
     /**
      * Insert or replace.
      *
-     * @access  public
      * @return  \Hoa\Database\Query\Insert
      */
-    public function replace ( ) {
-
+    public function replace()
+    {
         return $this->_or('REPLACE');
     }
 
     /**
      * Insert or fail.
      *
-     * @access  public
      * @return  \Hoa\Database\Query\Insert
      */
-    public function fail ( ) {
-
+    public function fail()
+    {
         return $this->_or('FAIL');
     }
 
     /**
      * Insert or ignore.
      *
-     * @access  public
      * @return  \Hoa\Database\Query\Insert
      */
-    public function ignore ( ) {
-
+    public function ignore()
+    {
         return $this->_or('IGNORE');
     }
 
     /**
      * Declare an alternative to “INSERT”.
      *
-     * @access  protected
      * @param   string  $or    Alternative.
      * @return  \Hoa\Database\Query\Insert
      */
-    protected function _or ( $or ) {
-
+    protected function _or($or)
+    {
         $this->_or = $or;
 
         return $this;
@@ -171,15 +162,15 @@ class Insert implements Dml {
     /**
      * Set columns.
      *
-     * @access  public
      * @param   string  $column    Column name.
      * @param   ...     ...
      * @return  \Hoa\Database\Query\Insert
      */
-    public function on ( $column ) {
-
-        foreach(func_get_args() as $column)
+    public function on($column)
+    {
+        foreach (func_get_args() as $column) {
             $this->_columns[] = $column;
+        }
 
         return $this;
     }
@@ -188,25 +179,25 @@ class Insert implements Dml {
      * Set values (on call per tuple).
      * Expression can be: a regular value or a SELECT query.
      *
-     * @access  public
      * @param   mixed  $expression    Expression.
      * @param   ...    ...
      * @return  \Hoa\Database\Query\Insert
      */
-    public function values ( $expression ) {
-
-        if($expression instanceof Select)
+    public function values($expression)
+    {
+        if ($expression instanceof Select) {
             $this->_values = (string) $expression;
-        else {
-
-            if(is_string($this->_values))
+        } else {
+            if (is_string($this->_values)) {
                 $this->_values = [];
+            }
 
             $values = &$this->_values[];
             $values = [];
 
-            foreach(func_get_args() as $expression)
+            foreach (func_get_args() as $expression) {
                 $values[] = $expression;
+            }
         }
 
         return $this;
@@ -215,11 +206,10 @@ class Insert implements Dml {
     /**
      * Use default values.
      *
-     * @access  public
      * @return  \Hoa\Database\Query\Insert
      */
-    public function defaultValues ( ) {
-
+    public function defaultValues()
+    {
         $this->_defaultValues = true;
 
         return $this;
@@ -228,17 +218,14 @@ class Insert implements Dml {
     /**
      * Allow to use the “or” attribute to chain method calls.
      *
-     * @access  public
      * @param   string  $name    Name.
      * @return  mixed
      */
-    public function __get ( $name ) {
-
-        switch(strtolower($name)) {
-
+    public function __get($name)
+    {
+        switch (strtolower($name)) {
             case 'or':
                 return $this;
-              break;
 
             default:
                 return $this->$name;
@@ -248,31 +235,35 @@ class Insert implements Dml {
     /**
      * Generate the query.
      *
-     * @access  public
      * @return  string
      */
-    public function __toString ( ) {
-
+    public function __toString()
+    {
         $out = 'INSERT';
 
-        if(null !== $this->_or)
+        if (null !== $this->_or) {
             $out .= ' OR ' . $this->_or;
+        }
 
         $out .= ' INTO ' . $this->_into;
 
-        if(true === $this->_defaultValues)
+        if (true === $this->_defaultValues) {
             return $out . ' DEFAULT VALUES';
+        }
 
-        if(!empty($this->_columns))
+        if (!empty($this->_columns)) {
             $out .= ' (' . implode(', ', $this->_columns) . ')';
+        }
 
-        if(is_string($this->_values))
+        if (is_string($this->_values)) {
             return $out . ' ' . $this->_values;
+        }
 
         $tuples = [];
 
-        foreach($this->_values as $tuple)
+        foreach ($this->_values as $tuple) {
             $tuples[] = '(' . implode(', ', $tuple) . ')';
+        }
 
         return $out . ' VALUES ' . implode(', ', $tuples);
     }
