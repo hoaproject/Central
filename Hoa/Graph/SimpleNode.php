@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,24 +41,22 @@ namespace Hoa\Graph;
  *
  * It's just a simple node demo (may be used for example and test).
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class SimpleNode implements IGraph\Node {
-
+class SimpleNode implements IGraph\Node
+{
     /**
      * Node ID.
      *
-     * @var \Hoa\Graph\SimpleNode string
+     * @var string
      */
     protected $nodeId    = null;
 
     /**
      * Node value.
      *
-     * @var \Hoa\Graph\SimpleNode string
+     * @var string
      */
     protected $nodeValue = null;
 
@@ -67,13 +65,12 @@ class SimpleNode implements IGraph\Node {
     /**
      * Build a node that contains a string.
      *
-     * @access  public
      * @param   string  $nodeId       The node ID.
      * @param   string  $nodeValue    The node value.
      * @return  void
      */
-    public function __construct ( $nodeId, $nodeValue = null ) {
-
+    public function __construct($nodeId, $nodeValue = null)
+    {
         $this->setNodeId($nodeId);
         $this->setNodeValue($nodeValue);
 
@@ -83,12 +80,11 @@ class SimpleNode implements IGraph\Node {
     /**
      * Set node ID.
      *
-     * @access  protected
      * @param   string     $nodeId    The node ID.
      * @return  string
      */
-    protected function setNodeId ( $nodeId ) {
-
+    protected function setNodeId($nodeId)
+    {
         $old          = $this->nodeId;
         $this->nodeId = $nodeId;
 
@@ -98,12 +94,11 @@ class SimpleNode implements IGraph\Node {
     /**
      * Set node value.
      *
-     * @access  public
      * @param   string  $nodeValue    The node value.
      * @return  string
      */
-    public function setNodeValue ( $nodeValue = null ) {
-
+    public function setNodeValue($nodeValue = null)
+    {
         $old             = $this->nodeValue;
         $this->nodeValue = $nodeValue;
 
@@ -113,22 +108,20 @@ class SimpleNode implements IGraph\Node {
     /**
      * Get node ID, must be implement because of interface.
      *
-     * @access  public
      * @return  string
      */
-    public function getNodeId ( ) {
-
+    public function getNodeId()
+    {
         return $this->nodeId;
     }
 
     /**
      * Get node value.
      *
-     * @access  public
      * @return  string
      */
-    public function getNodeValue ( ) {
-
+    public function getNodeValue()
+    {
         return $this->nodeValue;
     }
 }

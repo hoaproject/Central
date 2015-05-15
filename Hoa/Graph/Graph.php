@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -46,13 +46,11 @@ use Hoa\Core;
  * \Hoa\Graph\AdjacencyList) extends this class. It is like an abstract
  * factory…
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-abstract class Graph {
-
+abstract class Graph
+{
     /**
      * Graph type.
      *
@@ -91,7 +89,7 @@ abstract class Graph {
     /**
      * All nodes.
      *
-     * @var \Hoa\Graph array
+     * @var array
      */
     protected $nodes = [];
 
@@ -99,7 +97,7 @@ abstract class Graph {
      * If allow loop when building graph, it is set to ALLOW_LOOP (true),
      * DISALLOW_LOOP (false) else.
      *
-     * @var \Hoa\Graph bool
+     * @var bool
      */
     protected $loop  = self::DISALLOW_LOOP;
 
@@ -108,12 +106,11 @@ abstract class Graph {
     /**
      * Get an empty graph.
      *
-     * @access  protected
      * @param   bool       $loop    Allow or not loop.
      * @return  void
      */
-    protected function __construct ( $loop = self::DISALLOW_LOOP ) {
-
+    protected function __construct($loop = self::DISALLOW_LOOP)
+    {
         $this->allowLoop($loop);
 
         return;
@@ -122,17 +119,20 @@ abstract class Graph {
     /**
      * Make an instance of a specific graph.
      *
-     * @access  public
      * @param   string  $type    Type of graph needed.
      * @return  void
-     * @throw   \Hoa\Graph\Exception
+     * @throws  \Hoa\Graph\Exception
      */
-    public static function getInstance ( $type = self::TYPE_ADJACENCYLIST ) {
-
-        if($type != self::TYPE_ADJACENCYLIST)
+    public static function getInstance($type = self::TYPE_ADJACENCYLIST)
+    {
+        if ($type != self::TYPE_ADJACENCYLIST) {
             throw new Exception(
                 'Type %s is not supported. Only self:TYPE_ADJACENCYLIST is ' .
-                'supported.', 0, $type);
+                'supported.',
+                0,
+                $type
+            );
+        }
 
         $arguments = func_get_args();
         array_shift($arguments);
@@ -143,105 +143,94 @@ abstract class Graph {
     /**
      * Add a node.
      *
-     * @access  public
      * @param   \Hoa\Graph\IGraph\Node  $node      Node to add.
      * @param   mixed                   $parent    Parent of node.
      * @return  void
-     * @throw   \Hoa\Graph\Exception
+     * @throws  \Hoa\Graph\Exception
      */
-    abstract public function addNode ( IGraph\Node $node,
-                                       $parent = [] );
+    abstract public function addNode(IGraph\Node $node, $parent = []);
 
     /**
      * Check if a node does already exist or not.
      *
-     * @access  public
      * @param   mixed   $nodeId    The node ID or the node instance.
      * @return  bool
      */
-    abstract public function nodeExists ( $nodeId );
+    abstract public function nodeExists($nodeId);
 
     /**
      * Get a node.
      *
-     * @access  public
      * @param   mixed   $nodeId    The node ID or the node instance.
      * @return  object
-     * @throw   \Hoa\Graph\Exception
+     * @throws  \Hoa\Graph\Exception
      */
-    abstract public function getNode ( $nodeId );
+    abstract public function getNode($nodeId);
 
     /**
      * Get all nodes.
      *
-     * @access  protected
      * @return  array
      */
-    protected function getNodes ( ) {
-
+    protected function getNodes()
+    {
         return $this->nodes;
     }
 
     /**
      * Get parent of a specific node.
      *
-     * @access  public
      * @param   mixed   $nodeId    The node ID or the node instance.
      * @return  object
-     * @throw   \Hoa\Graph\Exception
+     * @throws  \Hoa\Graph\Exception
      */
-    abstract public function getParent ( $nodeId );
+    abstract public function getParent($nodeId);
 
     /**
      * Get child of a specific node.
      *
-     * @access  public
      * @param   mixed   $nodeId    The node ID or the node instance.
      * @return  object
-     * @throw   \Hoa\Graph\Exception
+     * @throws  \Hoa\Graph\Exception
      */
-    abstract public function getChild ( $nodeId );
+    abstract public function getChild($nodeId);
 
     /**
      * Delete a node.
      *
-     * @access  public
      * @param   mixed   $nodeId       The node ID or the node instance.
      * @param   bool    $propagate    Propagate the erasure.
      * @return  void
-     * @throw   \Hoa\Graph\Exception
+     * @throws  \Hoa\Graph\Exception
      */
-    abstract public function deleteNode ( $nodeId, $propagate = self::DELETE_RESTRICT );
+    abstract public function deleteNode($nodeId, $propagate = self::DELETE_RESTRICT);
 
     /**
      * Whether node is a leaf, i.e. does not have any child.
      *
-     * @access  public
      * @param   mixed   $nodeId    The node ID or the node instance.
      * @return  bool
-     * @throw   \Hoa\Graph\Exception
+     * @throws  \Hoa\Graph\Exception
      */
-    abstract public function isLeaf ( $nodeId );
+    abstract public function isLeaf($nodeId);
 
     /**
      * Whether node is a root, i.e. does not have any parent.
      *
-     * @access  public
      * @param   mixed   $nodeId    The node ID or the node instance.
      * @return  bool
-     * @throw   \Hoa\Graph\Exception
+     * @throws  \Hoa\Graph\Exception
      */
-    abstract public function isRoot ( $nodeId );
+    abstract public function isRoot($nodeId);
 
     /**
      * Set the loop mode (self::ALLOW_LOOP or self::DISALLOW_LOOP).
      *
-     * @access  public
      * @param   bool    $loop    Allow or not loop.
      * @return  bool
      */
-    public function allowLoop ( $loop = self::DISALLOW_LOOP ) {
-
+    public function allowLoop($loop = self::DISALLOW_LOOP)
+    {
         $old        = $this->loop;
         $this->loop = $loop;
 
@@ -251,21 +240,19 @@ abstract class Graph {
     /**
      * Get the loop mode.
      *
-     * @access  public
      * @return  bool
      */
-    public function isLoopAllow ( ) {
-
+    public function isLoopAllow()
+    {
         return $this->loop;
     }
 
     /**
      * Print the graph in the DOT language.
      *
-     * @access  public
      * @return  string
      */
-    abstract public function __toString ( );
+    abstract public function __toString();
 }
 
 /**
