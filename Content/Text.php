@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,17 +41,15 @@ namespace Hoa\Mail\Content;
  *
  * This class represents a text.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Text extends Content {
-
+class Text extends Content
+{
     /**
      * Content.
      *
-     * @var \Hoa\Mail\Content\Text string
+     * @var string
      */
     protected $_content = null;
 
@@ -60,12 +58,11 @@ class Text extends Content {
     /**
      * Construct a text content.
      *
-     * @access  public
      * @param   string  $content    Content.
      * @return  void
      */
-    public function __construct ( $content = null ) {
-
+    public function __construct($content = null)
+    {
         parent::__construct();
         $this['content-type'] = 'text/plain; charset=utf-8';
         $this->append($content);
@@ -76,12 +73,11 @@ class Text extends Content {
     /**
      * Prepend content (in memory order, i.e. from left-to-right only).
      *
-     * @access  public
      * @param   string  $content    Content.
      * @return  string
      */
-    public function prepend ( $content ) {
-
+    public function prepend($content)
+    {
         $this->_content = $content . $this->_content;
 
         return $this;
@@ -90,12 +86,11 @@ class Text extends Content {
     /**
      * Append content (in memory order, i.e. from left-to-right only).
      *
-     * @access  public
      * @param   string  $content    Content.
      * @return  string
      */
-    public function append ( $content ) {
-
+    public function append($content)
+    {
         $this->_content .= $content;
 
         return $this;
@@ -104,22 +99,20 @@ class Text extends Content {
     /**
      * Get the content.
      *
-     * @access  public
      * @return  string
      */
-    public function get ( ) {
-
+    public function get()
+    {
         return $this->_content;
     }
 
     /**
      * Get final “plain” content.
      *
-     * @access  protected
      * @return  string
      */
-    protected function _getContent ( ) {
-
+    protected function _getContent()
+    {
         return base64_encode($this->get());
     }
 }

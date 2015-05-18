@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,17 +44,15 @@ use Hoa\Stream;
  *
  * This class represents an attachment.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Attachment extends Content {
-
+class Attachment extends Content
+{
     /**
      * Stream.
      *
-     * @var \Hoa\Stream object
+     * @var \Hoa\Stream
      */
     protected $_stream = null;
 
@@ -63,26 +61,26 @@ class Attachment extends Content {
     /**
      * Construct an attachment with a stream and a name.
      *
-     * @access  public
      * @param   \Hoa\Stream  $stream    Stream that contains the attachment.
      * @param   string       $name      Name of the attachment (if null, will
      *                                  use the stream basename).
      * @return  void
      */
-    public function __construct ( Stream $stream, $name = null ) {
-
+    public function __construct(Stream $stream, $name = null)
+    {
         parent::__construct();
 
-        if(null === $name)
-            if($stream instanceof Stream\IStream\Pathable)
+        if (null === $name) {
+            if ($stream instanceof Stream\IStream\Pathable) {
                 $name = $stream->getBasename();
-            else
+            } else {
                 $name = basename($stream->getStreamName());
+            }
+        }
 
         $mime                        = new Mime($stream);
         $this['content-type']        = $mime->getMime() ?: 'application/octet-stream';
-        $this['content-disposition'] = 'attachment; ' .
-                                       'filename=' . $name . ';';
+        $this['content-disposition'] = 'attachment; filename=' . $name . ';';
         $this->setStream($stream);
 
         return;
@@ -91,12 +89,11 @@ class Attachment extends Content {
     /**
      * Set the stream.
      *
-     * @access  protected
      * @param   \Hoa\Stream  $stream    Stream.
      * @return  \Hoa\Stream
      */
-    protected function setStream ( Stream $stream ) {
-
+    protected function setStream(Stream $stream)
+    {
         $old           = $this->_stream;
         $this->_stream = $stream;
 
@@ -106,22 +103,20 @@ class Attachment extends Content {
     /**
      * Get the stream.
      *
-     * @access  public
      * @return  \Hoa\Stream
      */
-    public function getStream ( ) {
-
+    public function getStream()
+    {
         return $this->_stream;
     }
 
     /**
      * Get final “plain” content.
      *
-     * @access  protected
      * @return  string
      */
-    protected function _getContent ( ) {
-
+    protected function _getContent()
+    {
         return base64_encode($this->getStream()->readAll());
     }
 }

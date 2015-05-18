@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,13 +44,11 @@ use Hoa\Mail;
  * This class represents a message, that can also be a content of another
  * message.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Message extends Content {
-
+class Message extends Content
+{
     /**
      * Boundary hash prefix.
      *
@@ -61,7 +59,7 @@ class Message extends Content {
     /**
      * Content.
      *
-     * @var \Hoa\Mail\Content\Message array
+     * @var array
      */
     protected $_content = [];
 
@@ -70,11 +68,10 @@ class Message extends Content {
     /**
      * Constructor.
      *
-     * @access  public
      * @return  void
      */
-    public function __construct ( ) {
-
+    public function __construct()
+    {
         $this['content-type'] = 'multipart/mixed';
 
         return;
@@ -83,12 +80,11 @@ class Message extends Content {
     /**
      * Add a content part.
      *
-     * @access  public
      * @param   \Hoa\Mail\Content  $content    Content part.
      * @return  \Hoa\Mail\Content\Message
      */
-    public function addContent ( Content $content ) {
-
+    public function addContent(Content $content)
+    {
         $this->_content[] = $content;
 
         return $this;
@@ -97,59 +93,56 @@ class Message extends Content {
     /**
      * Get content.
      *
-     * @access  public
      * @return  array
      */
-    public function getContent ( ) {
-
+    public function getContent()
+    {
         return $this->_content;
     }
 
     /**
      * Get final “plain” content.
      *
-     * @access  protected
      * @return  string
-     * @throw   \Hoa\Mail\Exception
+     * @throws  \Hoa\Mail\Exception
      */
-    protected function _getContent ( ) {
-
-        if(!isset($this['date']))
+    protected function _getContent()
+    {
+        if (!isset($this['date'])) {
             $this['date'] = date('r');
+        }
 
         $content = $this->getContent();
 
-        if(empty($content))
-            throw new Mail\Exception(
-                'The message does not have content.', 0);
+        if (empty($content)) {
+            throw new Mail\Exception('The message does not have content.', 0);
+        }
 
-        if(1 < count($content)) {
-
+        if (1 < count($content)) {
             $boundary             = '__bndry-' .
                                     md5(static::BOUNDARY . microtime(true));
             $frontier             = '--' . $boundary;
-            $this['content-type'] = $this['content-type'] .
-                                    '; boundary=' . $boundary;
+            $this['content-type'] = $this['content-type'] . '; boundary=' . $boundary;
 
             $message = static::formatHeaders($this->getHeaders()) . CRLF;
 
-            foreach($content as $c)
+            foreach ($content as $c) {
                 $message .= $frontier . CRLF . $c . CRLF;
+            }
 
-            if(null !== $frontier)
+            if (null !== $frontier) {
                 $message .= $frontier . '--' . CRLF;
-        }
-        else {
-
+            }
+        } else {
             $oldContentType = $this['content-type'];
             unset($this['content-type']);
 
-            $message = static::formatHeaders($this->getHeaders()) .
-                       current($content);
+            $message =
+                static::formatHeaders($this->getHeaders()) .
+                current($content);
 
             $this['content-type'] = $oldContentType;
         }
-
 
         return $message;
     }
@@ -158,18 +151,19 @@ class Message extends Content {
      * Get all recipients of the message.
      * The first recipient (index 0) is $this['to'].
      *
-     * @access  public
      * @return  array
      */
-    public function getRecipients ( ) {
-
+    public function getRecipients()
+    {
         $out = [static::getAddress($this['to'])];
 
-        if(isset($this['cc']))
+        if (isset($this['cc'])) {
             $this->_getRecipients($this['cc'], $out);
+        }
 
-        if(isset($this['bcc']))
+        if (isset($this['bcc'])) {
             $this->_getRecipients($this['bcc'], $out);
+        }
 
         return $out;
     }
@@ -177,24 +171,23 @@ class Message extends Content {
     /**
      * Get recipients from a specific line (value of a header).
      *
-     * @access  protected
      * @param   string  $line    Line.
      * @param   array   &$out    Out.
      * @return  void
      */
-    protected function _getRecipients ( $line, Array &$out ) {
-
+    protected function _getRecipients($line, Array &$out)
+    {
         $line = preg_replace_callback(
             '#("|\')[^\1]+\1#',
-            function ( $matches ) {
-
+            function ($matches) {
                 return '';
             },
             $line
         );
 
-        foreach(explode(',', $line) as $contact)
+        foreach (explode(',', $line) as $contact) {
             $out[] = static::getAddress($contact);
+        }
 
         return;
     }
@@ -202,12 +195,11 @@ class Message extends Content {
     /**
      * Override the parent::getFormattedContent method.
      *
-     * @access  public
      * @param   bool  $headers    With headers or not (forced to false here).
      * @return  string
      */
-    public function getFormattedContent ( $headers = false ) {
-
+    public function getFormattedContent($headers = false)
+    {
         return parent::getFormattedContent(false);
     }
 }

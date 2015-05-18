@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,17 +44,15 @@ use Hoa\Mail;
  *
  * Abstract message content.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-abstract class Content implements \ArrayAccess {
-
+abstract class Content implements \ArrayAccess
+{
     /**
      * Headers.
      *
-     * @var \Hoa\Mail\Content array
+     * @var array
      */
     protected $_headers = [];
 
@@ -63,11 +61,10 @@ abstract class Content implements \ArrayAccess {
     /**
      * Construct a generic content.
      *
-     * @access  public
      * @return  void
      */
-    public function __construct ( ) {
-
+    public function __construct()
+    {
         $this['content-transfer-encoding'] = 'base64';
         $this['content-disposition']       = 'inline';
 
@@ -77,12 +74,11 @@ abstract class Content implements \ArrayAccess {
     /**
      * Check whether a header is defined.
      *
-     * @access  public
      * @param   string  $header    Header.
      * @return  bool
      */
-    public function offsetExists ( $header ) {
-
+    public function offsetExists($header)
+    {
         $header = mb_strtolower($header);
 
         return true === array_key_exists($header, $this->_headers);
@@ -91,16 +87,16 @@ abstract class Content implements \ArrayAccess {
     /**
      * Get a specific header.
      *
-     * @access  public
      * @param   string  $header    Header.
      * @return  string
      */
-    public function offsetGet ( $header ) {
-
+    public function offsetGet($header)
+    {
         $header = mb_strtolower($header);
 
-        if(false === $this->offsetExists($header))
+        if (false === $this->offsetExists($header)) {
             return null;
+        }
 
         return $this->_headers[$header];
     }
@@ -108,23 +104,27 @@ abstract class Content implements \ArrayAccess {
     /**
      * Set a header.
      *
-     * @access  public
      * @param   string  $header    Header.
      * @param   string  $value     Value.
      * @return  string
      */
-    public function offsetSet ( $header, $value ) {
-
+    public function offsetSet($header, $value)
+    {
         $header = mb_strtolower($header);
 
-        if(true === $this->offsetExists($header))
+        if (true === $this->offsetExists($header)) {
             $old = $this->_headers[$header];
-        else
+        } else {
             $old = null;
+        }
 
-        if(0 !== preg_match('#[' . CRLF . ']#', $value))
+        if (0 !== preg_match('#[' . CRLF . ']#', $value)) {
             throw new Mail\Exception\Security(
-                'Header “%s” contains illegal character.', 0, $header);
+                'Header “%s” contains illegal character.',
+                0,
+                $header
+            );
+        }
 
         $this->_headers[$header] = $value;
 
@@ -134,12 +134,11 @@ abstract class Content implements \ArrayAccess {
     /**
      * Unset a header.
      *
-     * @access  public
      * @param   string  $header    Header.
      * @return  void
      */
-    public function offsetUnset ( $header ) {
-
+    public function offsetUnset($header)
+    {
         $header = mb_strtolower($header);
         unset($this->_headers[$header]);
 
@@ -149,40 +148,39 @@ abstract class Content implements \ArrayAccess {
     /**
      * Get all headers.
      *
-     * @access  public
      * @return  array
      */
-    public function getHeaders ( ) {
-
+    public function getHeaders()
+    {
         return $this->_headers;
     }
 
     /**
      * Get final “plain” content.
      *
-     * @access  protected
      * @return  string
      */
-    abstract protected function _getContent ( );
+    abstract protected function _getContent();
 
     /**
      * Get final formatted content.
      *
-     * @access  public
      * @param   bool  $headers    With headers or not.
      * @return  string
      */
-    public function getFormattedContent ( $headers = true ) {
-
+    public function getFormattedContent($headers = true)
+    {
         $out = null;
 
-        if(true === $headers)
+        if (true === $headers) {
             $out .= static::formatHeaders($this->getHeaders()) . CRLF;
+        }
 
         $content = $this->_getContent();
 
-        if('base64' === $this['content-transfer-encoding'])
+        if ('base64' === $this['content-transfer-encoding']) {
             $content = trim(chunk_split($content, 76, CRLF));
+        }
 
         $out .= $content;
 
@@ -192,23 +190,21 @@ abstract class Content implements \ArrayAccess {
     /**
      * Get formatted headers.
      *
-     * @access  public
      * @param   array  $headers    Headers.
      * @return  string
      */
-    public static function formatHeaders ( Array $headers ) {
-
+    public static function formatHeaders(Array $headers)
+    {
         $out = null;
 
-        foreach($headers as $header => $value) {
-
+        foreach ($headers as $header => $value) {
             /*
             $value = preg_replace_callback(
                 '#(?<value>[^<]+)(?<tail><[^>]+>)#',
                 function ( Array $matches ) {
-
-                    return static::qPrintEncode($matches['value']) .
-                           $matches['tail'];
+                    return
+                        static::qPrintEncode($matches['value']) .
+                        $matches['tail'];
                 },
                 $value
             );
@@ -223,29 +219,32 @@ abstract class Content implements \ArrayAccess {
     /**
      * Encode UTF-8 to quoted-printable format.
      *
-     * @access  public
      * @param   string  $string    String to encode.
      * @return  string
      */
-    public static function qPrintEncode ( $string ) {
-
-        if(0 === preg_match('#[\x80-\xff]+#', $string))
+    public static function qPrintEncode($string)
+    {
+        if (0 === preg_match('#[\x80-\xff]+#', $string)) {
             return $string;
+        }
 
-        return '=?utf-8?Q?' . preg_replace_callback(
-            '#[\x80-\xff]+#',
-            function ( $matches ) {
+        return
+            '=?utf-8?Q?' .
+            preg_replace_callback(
+                '#[\x80-\xff]+#',
+                function ($matches) {
+                    $substring = $matches[0];
+                    $out       = null;
 
-                $substring = $matches[0];
-                $out       = null;
+                    for ($i = 0, $max = strlen($substring); $i < $max; ++$i) {
+                        $out .= '=' . dechex(ord($substring[$i]));
+                    }
 
-                for($i = 0, $max = strlen($substring); $i < $max; ++$i)
-                    $out .= '=' . dechex(ord($substring[$i]));
-
-                return strtoupper($out);
-            },
-            $string
-        ) . '?=';
+                    return strtoupper($out);
+                },
+                $string
+            ) .
+            '?=';
     }
 
     /**
@@ -255,13 +254,13 @@ abstract class Content implements \ArrayAccess {
      *     <gordon@freeman.net>
      * We will get gordon@freeman.net.
      *
-     * @access  public
      * @return  string
      */
-    public static function getAddress ( $contact ) {
-
-        if(0 !== preg_match('#[^<]*<(?<address>[^>]+)#', $contact, $match))
+    public static function getAddress($contact)
+    {
+        if (0 !== preg_match('#[^<]*<(?<address>[^>]+)#', $contact, $match)) {
             return $match['address'];
+        }
 
         return trim($contact);
     }
@@ -270,15 +269,15 @@ abstract class Content implements \ArrayAccess {
      * Get domain of an adress from a contact string.
      * With the example of self::getAddress, we will get freeman.net.
      *
-     * @access  public
      * @return  string
      */
-    public static function getDomain ( $contact ) {
-
+    public static function getDomain($contact)
+    {
         $address = static::getAddress($contact);
 
-        if(false !== $pos = strpos($address, '@'))
+        if (false !== $pos = strpos($address, '@')) {
             return substr($address, $pos + 1);
+        }
 
         return $address;
     }
@@ -287,11 +286,10 @@ abstract class Content implements \ArrayAccess {
      * Transform this object as a string.
      * Alias of $this->getFormattedContent().
      *
-     * @access  public
      * @return  string
      */
-    public function __toString ( ) {
-
+    public function __toString()
+    {
         return $this->getFormattedContent();
     }
 }
