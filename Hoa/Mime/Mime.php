@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -45,13 +45,11 @@ use Hoa\Stream;
  * Get informations relative to MIME (media, type, extension, other extensions)
  * about a stream.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Mime implements Core\Parameter\Parameterizable {
-
+class Mime implements Core\Parameter\Parameterizable
+{
     /**
      * Structure: media/type part.
      *
@@ -83,7 +81,7 @@ class Mime implements Core\Parameter\Parameterizable {
     /**
      * Parameters.
      *
-     * @var \Hoa\Core\Parameter object
+     * @var \Hoa\Core\Parameter
      */
     private $_parameters        = null;
 
@@ -101,35 +99,35 @@ class Mime implements Core\Parameter\Parameterizable {
      *         )
      *     )
      *
-     * @var \Hoa\Mime array
+     * @var array
      */
     protected static $_computed = null;
 
     /**
      * Extension.
      *
-     * @var \Hoa\Mime string
+     * @var string
      */
     protected $_extension       = null;
 
     /**
      * MIME (media/type).
      *
-     * @var \Hoa\Mime string
+     * @var string
      */
     protected $_mime            = null;
 
     /**
      * Media.
      *
-     * @var \Hoa\Mime string
+     * @var string
      */
     protected $_media           = null;
 
     /**
      * Type.
      *
-     * @var \Hoa\Mime string
+     * @var string
      */
     protected $_type            = null;
 
@@ -138,15 +136,13 @@ class Mime implements Core\Parameter\Parameterizable {
     /**
      * Get informations relative to MIME about a stream.
      *
-     * @access  public
      * @param   \Hoa\Stream  $stream        Stream to study.
      * @param   array        $parameters    Parameters.
      * @return  void
-     * @throw   \Hoa\Mime\Exception
+     * @throws  \Hoa\Mime\Exception
      */
-    public function __construct ( Stream $stream,
-                                  Array $parameters = [] ) {
-
+    public function __construct(Stream $stream, Array $parameters = [])
+    {
         $this->_parameters = new Core\Parameter(
             $this,
             [],
@@ -157,8 +153,7 @@ class Mime implements Core\Parameter\Parameterizable {
         $this->_parameters->setParameters($parameters);
         $magic = $this->_parameters->getParameter('magic');
 
-        if(null === $magic) {
-
+        if (null === $magic) {
             $this->_parameters->setParameter(
                 'magic',
                 'hoa://Library/Mime/Mime.types'
@@ -166,8 +161,9 @@ class Mime implements Core\Parameter\Parameterizable {
             $magic = $this->_parameters->getParameter('magic');
         }
 
-        if(null === static::$_computed)
+        if (null === static::$_computed) {
             static::compute($magic);
+        }
 
         $this->_find($stream);
 
@@ -177,75 +173,76 @@ class Mime implements Core\Parameter\Parameterizable {
     /**
      * Get parameters.
      *
-     * @access  public
      * @return  \Hoa\Core\Parameter
      */
-    public function getParameters ( ) {
-
+    public function getParameters()
+    {
         return $this->_parameters;
     }
 
     /**
      * Compute a magic file.
      *
-     * @access  public
      * @param   string  $magic    Magic file to compute.
      * @return  void
-     * @throw   \Hoa\Mime\Exception
+     * @throws  \Hoa\Mime\Exception
      */
-    public static function compute ( $magic = null ) {
-
-        if(null === $magic)
+    public static function compute($magic = null)
+    {
+        if (null === $magic) {
             $magic = 'hoa://Library/Mime/Mime.types';
+        }
 
-        if(!file_exists($magic))
+        if (!file_exists($magic)) {
             throw new Exception(
-                'Magic file %s does not exist.', 0, $magic);
+                'Magic file %s does not exist.',
+                0,
+                $magic
+            );
+        }
 
         static::$_computed = [
             self::STRUCTURE_MEDIA_TYPE => [],
             self::STRUCTURE_EXTENSION  => []
         ];
-        $s_media_type    = &static::$_computed[self::STRUCTURE_MEDIA_TYPE];
-        $s_extension     = &static::$_computed[self::STRUCTURE_EXTENSION];
-        $splashed        = file($magic);
-        $max             = count($splashed) - 1;
+        $s_media_type = &static::$_computed[self::STRUCTURE_MEDIA_TYPE];
+        $s_extension  = &static::$_computed[self::STRUCTURE_EXTENSION];
+        $splashed     = file($magic);
+        $max          = count($splashed) - 1;
 
-        foreach($splashed as $i => $line) {
-
+        foreach ($splashed as $i => $line) {
             $line = trim($line);
 
-            if(empty($line) || '#' == $line[0])
+            if (empty($line) || '#' == $line[0]) {
                 continue;
+            }
 
-            if(false === strpos($line, "\t")) {
-
+            if (false === strpos($line, "\t")) {
                 $mime       = $line;
                 $extensions = null;
-            }
-            else
+            } else {
                 list($mime, $extensions) = preg_split('#' . "\t" . '+#', $line);
+            }
 
             try {
-
                 list($media, $type) = static::parseMime($mime);
-            }
-            catch ( Exception $exception ) {
-
+            } catch (Exception $exception) {
                 $message = null;
                 $m       = min($max, $i + 3);
                 $foo     = strlen((string) $m);
 
-                for($e = max(0, $i - 3);
+                for (
+                    $e = max(0, $i - 3);
                     $e <= $m;
-                    ++$e) {
-
+                    ++$e
+                ) {
                     $message .= "\n" . sprintf('%' . $foo . 'd', $e) . '. ';
 
-                    if($i == $e)
+                    if ($i == $e) {
                         $message .= '➜  ';
-                    else
+                    } else {
                         $message .= '   ';
+                    }
 
                     $message .= trim($splashed[$e]);
                 }
@@ -254,14 +251,17 @@ class Mime implements Core\Parameter\Parameterizable {
                     'Magic file %s seems to be corrupted (at line %d). ' .
                     'You should take a look at this piece of code:' .
                     $message,
-                    1, [$magic, $i], $exception);
+                    1,
+                    [$magic, $i],
+                    $exception
+                );
             }
 
-            if(!isset($s_media_type[$media]))
+            if (!isset($s_media_type[$media])) {
                 $s_media_type[$media] = [];
+            }
 
-            if(null == $extensions) {
-
+            if (null == $extensions) {
                 $s_media_type[$media][$type] = null;
 
                 continue;
@@ -270,8 +270,9 @@ class Mime implements Core\Parameter\Parameterizable {
             $extensions                  = explode(' ', $extensions);
             $s_media_type[$media][$type] = $extensions;
 
-            foreach($extensions as $extension)
+            foreach ($extensions as $extension) {
                 $s_extension[$extension] = $mime;
+            }
         }
 
         return;
@@ -280,14 +281,14 @@ class Mime implements Core\Parameter\Parameterizable {
     /**
      * Check if extension exists in the magic file.
      *
-     * @access  public
      * @param   string  $extension    Extension to check.
      * @return  bool
      */
-    public static function extensionExists ( $extension ) {
-
-        if(null === static::$_computed)
+    public static function extensionExists($extension)
+    {
+        if (null === static::$_computed) {
             static::compute();
+        }
 
         return isset(static::$_computed[self::STRUCTURE_EXTENSION][$extension]);
     }
@@ -295,21 +296,25 @@ class Mime implements Core\Parameter\Parameterizable {
     /**
      * Get extensions from a MIME (media/type).
      *
-     * @access  public
      * @param   string  $mime    MIME.
      * @return  array
-     * @throw   \Hoa\Mime\Exception\MimeIsNotFound
+     * @throws  \Hoa\Mime\Exception\MimeIsNotFound
      */
-    public static function getExtensionsFromMime( $mime ) {
-
-        if(null === static::$_computed)
+    public static function getExtensionsFromMime($mime)
+    {
+        if (null === static::$_computed) {
             static::compute();
+        }
 
         list($media, $type) = static::parseMime($mime);
 
-        if(!isset(static::$_computed[self::STRUCTURE_MEDIA_TYPE][$media][$type]))
+        if (!isset(static::$_computed[self::STRUCTURE_MEDIA_TYPE][$media][$type])) {
             throw new Exception\MimeIsNotFound(
-                'MIME type %s does not exist.', 2, $mime);
+                'MIME type %s does not exist.',
+                2,
+                $mime
+            );
+        }
 
         return static::$_computed[self::STRUCTURE_MEDIA_TYPE][$media][$type];
     }
@@ -317,14 +322,14 @@ class Mime implements Core\Parameter\Parameterizable {
     /**
      * Get MIME (media/type) from extension.
      *
-     * @access  public
      * @param   string  $extension    Extension to considere.
      * @return  string
      */
-    public static function getMimeFromExtension ( $extension ) {
-
-        if(false === static::extensionExists($extension))
+    public static function getMimeFromExtension($extension)
+    {
+        if (false === static::extensionExists($extension)) {
             return null;
+        }
 
         return static::$_computed[self::STRUCTURE_EXTENSION][$extension];
     }
@@ -333,16 +338,19 @@ class Mime implements Core\Parameter\Parameterizable {
      * Parse MIME, i.e. extract media and type. Please, see self::MIME_*
      * constants as result array index.
      *
-     * @access  public
      * @param   string  $mime    MIME to parse.
      * @return  array
-     * @throw   \Hoa\Mime\Exception
+     * @throws  \Hoa\Mime\Exception
      */
-    public static function parseMime ( $mime ) {
-
-        if(false === strpos($mime, '/'))
+    public static function parseMime($mime)
+    {
+        if (false === strpos($mime, '/')) {
             throw new Exception(
-                'MIME %s is not well-formed (media/type).', 3, $mime);
+                'MIME %s is not well-formed (media/type).',
+                3,
+                $mime
+            );
+        }
 
         return explode('/', $mime);
     }
@@ -350,32 +358,38 @@ class Mime implements Core\Parameter\Parameterizable {
     /**
      * Find informations about stream.
      *
-     * @access  protected
      * @param   \Hoa\Stream  $stream    Stream to study.
      * @return  void
-     * @throw   \Hoa\Mime\Exception\MimeIsNotFound
+     * @throws  \Hoa\Mime\Exception\MimeIsNotFound
      */
-    protected function _find ( Stream $stream ) {
-
+    protected function _find(Stream $stream)
+    {
         $name = $stream->getStreamName();
 
-        if($stream instanceof Stream\IStream\Pathable)
+        if ($stream instanceof Stream\IStream\Pathable) {
             $based = $stream->getBasename();
-        else
+        } else {
             $based = basename($name);
+        }
 
-        if(false === $poos = strrpos($based, '.'))
+        if (false === $poos = strrpos($based, '.')) {
             throw new Exception\MimeIsNotFound(
                 'Cannot find MIME type of %s, because extension is not found.',
-                4, $name);
+                4,
+                $name
+            );
+        }
 
         $this->_extension = substr($based, $poos + 1);
         $this->_mime      = static::getMimeFromExtension($this->_extension);
 
-        if(null === $this->_mime)
+        if (null === $this->_mime) {
             throw new Exception\MimeIsNotFound(
                 'No MIME type associated to the %s extension.',
-                5, $this->_extension);
+                5,
+                $this->_extension
+            );
+        }
 
         list($this->_media, $this->_type) = static::parseMime($this->_mime);
 
@@ -385,31 +399,33 @@ class Mime implements Core\Parameter\Parameterizable {
     /**
      * Get extension.
      *
-     * @access  public
      * @return  string
      */
-    public function getExtension ( ) {
-
+    public function getExtension()
+    {
         return $this->_extension;
     }
 
     /**
      * Get other extensions (associated to the same MIME).
      *
-     * @access  public
      * @return  array
      */
-    public function getOtherExtensions ( ) {
-
+    public function getOtherExtensions()
+    {
         $out     = [];
         $current = $this->getExtension();
-        $others  = self::$_computed[self::STRUCTURE_MEDIA_TYPE]
-                                   [$this->getMedia()]
-                                   [$this->getType()];
+        $others  =
+            self::$_computed
+                [self::STRUCTURE_MEDIA_TYPE]
+                [$this->getMedia()]
+                [$this->getType()];
 
-        foreach($others as $other)
-            if($other !== $current)
+        foreach ($others as $other) {
+            if ($other !== $current) {
                 $out[] = $other;
+            }
+        }
 
         return $out;
     }
@@ -417,55 +433,50 @@ class Mime implements Core\Parameter\Parameterizable {
     /**
      * Get MIME (media/type).
      *
-     * @access  public
      * @return  string
      */
-    public function getMime ( ) {
-
+    public function getMime()
+    {
         return $this->_mime;
     }
 
     /**
      * Get media.
      *
-     * @access  public
      * @return  string
      */
-    public function getMedia ( ) {
-
+    public function getMedia()
+    {
         return $this->_media;
     }
 
     /**
      * Get type.
      *
-     * @access  public
      * @return  string
      */
-    public function getType ( ) {
-
+    public function getType()
+    {
         return $this->_type;
     }
 
     /**
      * Check if the MIME is experimental or not.
      *
-     * @access  public
      * @return  bool
      */
-    public function isExperimental ( ) {
-
+    public function isExperimental()
+    {
         return 'x-' === substr($this->getType(), 0, 2);
     }
 
     /**
      * Check if the MIME is a vendor's one or not.
      *
-     * @access  public
      * @return  bool
      */
-    public function isVendor ( ) {
-
+    public function isVendor()
+    {
         return 'vnd.' === substr($this->getType(), 0, 4);
     }
 }
