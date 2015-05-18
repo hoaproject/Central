@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,33 +36,30 @@
 
 namespace Hoa\Registry\Test\Unit;
 
-use Hoa\Test;
 use Hoa\Registry as LUT;
+use Hoa\Test;
 
 /**
  * Class \Hoa\Registry\Test\Unit\Registry.
  *
  * Test suite of the registry.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Registry extends Test\Unit\Suite {
-
-    public function case_no_instance ( ) {
-
+class Registry extends Test\Unit\Suite
+{
+    public function case_no_instance()
+    {
         $this
-            ->exception(function ( ) {
-
+            ->exception(function () {
                 new LUT();
             })
                 ->isInstanceOf('Hoa\Registry\Exception');
     }
 
-    public function case_classic ( ) {
-
+    public function case_classic()
+    {
         $this
             ->given(
                 $string = $this->realdom->string('a', 'z', 5),
@@ -76,8 +73,8 @@ class Registry extends Test\Unit\Suite {
                     ->isEqualTo($value);
     }
 
-    public function case_value_is_an_object ( ) {
-
+    public function case_value_is_an_object()
+    {
         $this
             ->given(
                 $string = $this->realdom->string('a', 'z', 5),
@@ -93,8 +90,8 @@ class Registry extends Test\Unit\Suite {
                     ->isIdenticalTo($value);
     }
 
-    public function case_isRegistered ( ) {
-
+    public function case_isRegistered()
+    {
         $this
             ->given(
                 $string = $this->realdom->string('a', 'z', 5),
@@ -123,8 +120,8 @@ class Registry extends Test\Unit\Suite {
                     ->isFalse();
     }
 
-    public function case_protocol ( ) {
-
+    public function case_protocol()
+    {
         $this
             ->given(
                 $string = $this->realdom->string('a', 'z', 5),
@@ -138,8 +135,8 @@ class Registry extends Test\Unit\Suite {
                     ->isEqualTo($value);
     }
 
-    public function case_value_protocol_and_references ( ) {
-
+    public function case_value_protocol_and_references()
+    {
         $this
             ->given(
                 $string = $this->realdom->string('a', 'z', 5),

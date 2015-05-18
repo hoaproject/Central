@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,17 +43,15 @@ use Hoa\Core;
  *
  * Hold a register of something.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Registry extends \ArrayObject {
-
+class Registry extends \ArrayObject
+{
     /**
      * Instance.
      *
-     * @var \Hoa\Registry object
+     * @var \Hoa\Registry
      */
     private static $_instance = null;
 
@@ -62,15 +60,17 @@ class Registry extends \ArrayObject {
     /**
      * Private constructor.
      *
-     * @access  public
      * @return  void
-     * @throw   \Hoa\Registry\Exception
+     * @throws  \Hoa\Registry\Exception
      */
-    public function __construct ( ) {
-
+    public function __construct()
+    {
         throw new Exception(
             'Cannot instance the %s object. Use set, get, remove ' .
-            'and isRegistered static methods instead.', 0, __CLASS__);
+            'and isRegistered static methods instead.',
+            0,
+            __CLASS__
+        );
 
         return;
     }
@@ -78,13 +78,13 @@ class Registry extends \ArrayObject {
     /**
      * Get instance of \Hoa\Registry.
      *
-     * @access  protected
      * @return  object
      */
-    protected static function getInstance ( ) {
-
-        if(null === static::$_instance)
+    protected static function getInstance()
+    {
+        if (null === static::$_instance) {
             static::$_instance = new parent();
+        }
 
         return static::$_instance;
     }
@@ -92,13 +92,12 @@ class Registry extends \ArrayObject {
     /**
      * Set a new registry.
      *
-     * @access  public
      * @param   mixed   $index     Index of registry.
      * @param   mixed   $value     Value of registry.
      * @return  void
      */
-    public static function set ( $index, $value ) {
-
+    public static function set($index, $value)
+    {
         static::getInstance()->offsetSet($index, $value);
 
         return;
@@ -107,18 +106,21 @@ class Registry extends \ArrayObject {
     /**
      * Get a registry.
      *
-     * @access  public
      * @param   mixed   $index     Index of registry.
      * @return  mixed
-     * @throw   \Hoa\Registry\Exception
+     * @throws  \Hoa\Registry\Exception
      */
-    public static function get ( $index ) {
-
+    public static function get($index)
+    {
         $registry = static::getInstance();
 
-        if(false === $registry->offsetExists($index))
-            throw new Exception('Registry %s does not exist.',
-                1, $index);
+        if (false === $registry->offsetExists($index)) {
+            throw new Exception(
+                'Registry %s does not exist.',
+                1,
+                $index
+            );
+        }
 
         return $registry->offsetGet($index);
     }
@@ -126,24 +128,22 @@ class Registry extends \ArrayObject {
     /**
      * Check if an index is registered.
      *
-     * @access  public
      * @param   mixed   $index     Index of registry.
      * @return  bool
      */
-    public static function isRegistered ( $index ) {
-
+    public static function isRegistered($index)
+    {
         return static::getInstance()->offsetExists($index);
     }
 
     /**
      * Unset an registry.
      *
-     * @access  public
      * @param   mixed   $index    Index of registry.
      * @return  void
      */
-    public static function remove ( $index ) {
-
+    public static function remove($index)
+    {
         static::getInstance()->offsetUnset($index);
 
         return;
@@ -155,17 +155,15 @@ class Registry extends \ArrayObject {
  *
  * hoa://Library/Registry component.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class _Protocol extends Core\Protocol {
-
+class _Protocol extends Core\Protocol
+{
     /**
      * Component's name.
      *
-     * @var \Hoa\Core\Protocol string
+     * @var string
      */
     protected $_name = 'Registry';
 
@@ -174,12 +172,11 @@ class _Protocol extends Core\Protocol {
     /**
      * ID of the component.
      *
-     * @access  public
      * @param   string  $id    ID of the component.
      * @return  mixed
      */
-    public function reachId ( $id ) {
-
+    public function reachId($id)
+    {
         return Registry::get($id);
     }
 }
