@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,33 +36,30 @@
 
 namespace Hoa\Locale\Test\Unit;
 
-use Hoa\Test;
 use Hoa\Locale as LUT;
+use Hoa\Test;
 
 /**
  * Class \Hoa\Locale\Test\Unit\Locale.
  *
  * Test suite of the locale main object.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Locale extends Test\Unit\Suite {
-
-    public function case_no_default_no_locale ( ) {
-
+class Locale extends Test\Unit\Suite
+{
+    public function case_no_default_no_locale()
+    {
         $this
-            ->exception(function ( ) {
-
+            ->exception(function () {
                 new LUT();
             })
                 ->isInstanceOf('Hoa\Locale\Exception');
     }
 
-    public function case_no_locale ( ) {
-
+    public function case_no_locale()
+    {
         $this
             ->given(
                 LUT::setDefault('fr-FR'),
@@ -84,8 +81,8 @@ class Locale extends Test\Unit\Suite {
                     ->isEqualTo('FR');
     }
 
-    public function case_locale_autoBoxing ( ) {
-
+    public function case_locale_autoBoxing()
+    {
         $this
             ->given($locale = new LUT('fr-FR'))
             ->when($localizer = $locale->getLocalizer())
@@ -94,28 +91,25 @@ class Locale extends Test\Unit\Suite {
                     ->isInstanceOf('Hoa\Locale\Localizer\Coerce');
     }
 
-    public function case_invalid_locale ( ) {
-
+    public function case_invalid_locale()
+    {
         $this
-            ->exception(function ( ) {
-
+            ->exception(function () {
                 new LUT('fr_FR');
             })
                 ->isInstanceOf('Hoa\Locale\Exception');
     }
 
-    public function case_type_privateUse ( ) {
-
+    public function case_type_privateUse()
+    {
         $this
             ->given(
                 $regex = $this->realdom->regex(
                     '/x\-[a-z0-9]{1,8}/'
                 )
             )
-            ->when(function ( ) use ( $regex ) {
-
-                foreach($this->sampleMany($regex, 1000) as $datum) {
-
+            ->when(function () use ($regex) {
+                foreach ($this->sampleMany($regex, 1000) as $datum) {
                     $this
                         ->given($locale = new LUT($datum))
                         ->when(
@@ -131,8 +125,8 @@ class Locale extends Test\Unit\Suite {
             });
     }
 
-    public function case_type_grandfathered ( ) {
-
+    public function case_type_grandfathered()
+    {
         $this
             ->given(
                 $regex = $this->realdom->regex(
@@ -141,10 +135,8 @@ class Locale extends Test\Unit\Suite {
                     '/[a-wyz](\-[a-z0-9]{2,8}){1,2}/'
                 )
             )
-            ->when(function ( ) use ( $regex ) {
-
-                foreach($this->sampleMany($regex, 1000) as $datum) {
-
+            ->when(function () use ($regex) {
+                foreach ($this->sampleMany($regex, 1000) as $datum) {
                     $this
                         ->given($locale = new LUT($datum))
                         ->when(
@@ -160,8 +152,8 @@ class Locale extends Test\Unit\Suite {
             });
     }
 
-    public function case_type_langtag ( ) {
-
+    public function case_type_langtag()
+    {
         $this
             ->given(
                 $regex = $this->realdom->regex(
@@ -175,10 +167,8 @@ class Locale extends Test\Unit\Suite {
                     '/'
                 )
             )
-            ->when(function ( ) use ( $regex ) {
-
-                foreach($this->sampleMany($regex, 1000) as $datum) {
-
+            ->when(function () use ($regex) {
+                foreach ($this->sampleMany($regex, 1000) as $datum) {
                     $this
                         ->given($locale = new LUT($datum))
                         ->when($type = $locale->getType())
@@ -189,8 +179,8 @@ class Locale extends Test\Unit\Suite {
             });
     }
 
-    public function case_langtag_exploded ( ) {
-
+    public function case_langtag_exploded()
+    {
         $this
             ->given($locale = 'zh-Hant-TW-xy-ab-123-f-oo-4-42-x-qux')
             ->when($result = new LUT($locale))
@@ -209,8 +199,8 @@ class Locale extends Test\Unit\Suite {
                     ->isEqualTo('qux');
     }
 
-    public function case_langtag_default ( ) {
-
+    public function case_langtag_default()
+    {
         $this
             ->given($locale = 'fr')
             ->when($result = new LUT($locale))
@@ -229,8 +219,8 @@ class Locale extends Test\Unit\Suite {
                     ->isNull();
     }
 
-    public function case_reset ( ) {
-
+    public function case_reset()
+    {
         $this
             ->given(
                 $localizer = new LUT\Localizer\Coerce(

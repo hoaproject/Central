@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,13 +41,11 @@ namespace Hoa\Locale\Localizer;
  *
  * Arbitrary locale.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Coerce implements Localizer {
-
+class Coerce implements Localizer
+{
     /**
      * Locale.
      *
@@ -60,12 +58,11 @@ class Coerce implements Localizer {
     /**
      * Force a locale.
      *
-     * @access  public
      * @param   string  $locale    Locale.
      * @return  void
      */
-    public function __construct ( $locale ) {
-
+    public function __construct($locale)
+    {
         $this->_locale = $locale;
 
         return;
@@ -74,11 +71,10 @@ class Coerce implements Localizer {
     /**
      * Get locale.
      *
-     * @access  public
      * @return  string
      */
-    public function getLocale ( ) {
-
+    public function getLocale()
+    {
         return $this->_locale;
     }
 }
