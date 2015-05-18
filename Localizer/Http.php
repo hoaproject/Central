@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -46,17 +46,15 @@ use Hoa\Http as HHttp;
  * Overview: http://www.w3.org/International/articles/language-tags/.
  * Specifications: RFC2822 and RFC3282.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Http implements Localizer {
-
+class Http implements Localizer
+{
     /**
      * Value of the Accept-Language header.
      *
-     * @var \Hoa\Locale\Localizer\Http string
+     * @var string
      */
     protected $_value = null;
 
@@ -65,13 +63,12 @@ class Http implements Localizer {
     /**
      * Constructor.
      *
-     * @access  public
      * @param   string  $headerValue    Accept-Language value. If null, will be
      *                                  deduced from the current HTTP request.
      * @return  void
      */
-    public function __construct ( $headerValue = null ) {
-
+    public function __construct($headerValue = null)
+    {
         $value = $headerValue ?: HHttp\Runtime::getHeader('accept-language');
 
         // Remove CFWS.
@@ -85,25 +82,25 @@ class Http implements Localizer {
      * Please, see RFC3282 3. The Accept-Language header and
      * RFC2822 3.2.3. Folding white space and comments.
      *
-     * @access  public
      * @return  string
      */
-    public function getLocale ( ) {
-
-        foreach(explode(',', $this->_value) as $language) {
-
+    public function getLocale()
+    {
+        foreach (explode(',', $this->_value) as $language) {
             $match = preg_match(
                 '#^(?<language>[^;]+)(;q=(?<q>0(?:\.\d{0,3})|1(?:\.0{0,3})))?$#',
                 $language,
                 $matches
             );
 
-            if(0 !== $match)
+            if (0 !== $match) {
                 break;
+            }
         }
 
-        if(empty($matches))
+        if (empty($matches)) {
             return null;
+        }
 
         return $matches['language'];
     }

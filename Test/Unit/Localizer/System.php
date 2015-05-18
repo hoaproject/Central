@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,23 +36,21 @@
 
 namespace Hoa\Locale\Test\Unit\Localizer;
 
-use Hoa\Test;
 use Hoa\Locale\Localizer\System as CUT;
+use Hoa\Test;
 
 /**
  * Class \Hoa\Locale\Test\Unit\Localizer\System.
  *
  * Test suite of the system localizer.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class System extends Test\Unit\Suite {
-
-    public function case_classic ( ) {
-
+class System extends Test\Unit\Suite
+{
+    public function case_classic()
+    {
         $this
             ->given(
                 $this->function->setlocale = 'C/fr_FR.UTF-8/C/C/C/C',
@@ -64,8 +62,8 @@ class System extends Test\Unit\Suite {
                     ->isEqualTo('fr-FR');
     }
 
-    public function case_null ( ) {
-
+    public function case_null()
+    {
         $this
             ->given(
                 $this->function->setlocale = 'C/C/C/C/C/C',
@@ -77,8 +75,8 @@ class System extends Test\Unit\Suite {
                     ->isNull();
     }
 
-    public function case_not_encoding ( ) {
-
+    public function case_not_encoding()
+    {
         $this
             ->given(
                 $this->function->setlocale = 'C/fr_FR/C/C/C/C',
