@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,19 +43,16 @@ use Hoa\Mail;
  *
  * Represent a transport to send mails.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-interface Out extends Transport {
-
+interface Out extends Transport
+{
     /**
      * Send a message.
      *
-     * @access  public
      * @param   \Hoa\Mail\Message  $message    Message.
      * @return  bool
      */
-    public function send ( Mail\Message $message );
+    public function send(Mail\Message $message);
 }

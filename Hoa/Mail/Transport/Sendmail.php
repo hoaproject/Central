@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,17 +44,15 @@ use Hoa\Mail;
  * This class allows to send an email by using sendmail (through the PHP mail()
  * function).
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Sendmail implements ITransport\Out {
-
+class Sendmail implements ITransport\Out
+{
     /**
      * Additional parameters for the mail() function.
      *
-     * @var \Hoa\Mail\Transport\Sendmail array
+     * @var array
      */
     protected $_parameters = null;
 
@@ -63,13 +61,12 @@ class Sendmail implements ITransport\Out {
     /**
      * Constructor.
      *
-     * @access  public
      * @param   array  $parameters    Additional parameters for the mail()
      *                                function.
      * @return  void
      */
-    public function __construct ( Array $parameters = [] ) {
-
+    public function __construct(Array $parameters = [])
+    {
         $this->_parameters = $parameters;
 
         return;
@@ -78,12 +75,11 @@ class Sendmail implements ITransport\Out {
     /**
      * Set additional parameters.
      *
-     * @access  protected
      * @param   array  $parameters    Additional parameters.
      * @return  array
      */
-    protected function setParameters ( Array $parameters ) {
-
+    protected function setParameters(Array $parameters)
+    {
         $old               = $this->_parameters;
         $this->_parameters = $parameters;
 
@@ -93,23 +89,21 @@ class Sendmail implements ITransport\Out {
     /**
      * Get additional parameters.
      *
-     * @access  public
      * @return  array
      */
-    public function getParameters ( ) {
-
+    public function getParameters()
+    {
         return $this->_parameters;
     }
 
     /**
      * Send a message.
      *
-     * @access  public
      * @param   \Hoa\Mail\Message  $message    Message.
      * @return  bool
      */
-    public function send ( Mail\Message $message ) {
-
+    public function send(Mail\Message $message)
+    {
         $content  = $message->getFormattedContent();
         $headers  = $message->getHeaders();
         $pos      = strpos($content, CRLF . CRLF);
@@ -124,6 +118,4 @@ class Sendmail implements ITransport\Out {
             $message->formatHeaders($this->getParameters())
         );
     }
-}
-
 }

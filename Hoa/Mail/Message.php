@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,13 +41,11 @@ namespace Hoa\Mail;
  *
  * This class represents a message that can be sent through a transport.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Message extends Content\Message {
-
+class Message extends Content\Message
+{
     /**
      * MIME version.
      *
@@ -58,14 +56,14 @@ class Message extends Content\Message {
     /**
      * Default transport layer.
      *
-     * @var \Hoa\Mail\Transport\ITransport\Out object
+     * @var \Hoa\Mail\Transport\ITransport\Out
      */
     protected static $_defaultTransport = null;
 
     /**
      * Transport layer.
      *
-     * @var \Hoa\Mail\Transport\ITransport\Out object
+     * @var \Hoa\Mail\Transport\ITransport\Out
      */
     protected $_transport               = null;
 
@@ -75,11 +73,10 @@ class Message extends Content\Message {
     /**
      * Construct a message.
      *
-     * @access  public
      * @return  void
      */
-    public function __construct ( ) {
-
+    public function __construct()
+    {
         parent::__construct();
         $this['mime-version'] = static::MIME_VERSION;
 
@@ -89,12 +86,11 @@ class Message extends Content\Message {
     /**
      * Set default transport layer.
      *
-     * @access  public
      * @param   \Hoa\Mail\Transport\ITransport\Out  $transport    Transport.
      * @return  \Hoa\Mail\Transport\ITransport\Out
      */
-    public static function setDefaultTransport ( Transport\ITransport\Out $transport ) {
-
+    public static function setDefaultTransport(Transport\ITransport\Out $transport)
+    {
         $old                       = static::$_defaultTransport;
         static::$_defaultTransport = $transport;
 
@@ -104,23 +100,21 @@ class Message extends Content\Message {
     /**
      * Get default transport layer.
      *
-     * @access  public
      * @return  \Hoa\Mail\Transport\ITransport\Out
      */
-    public static function getDefaultTransport ( ) {
-
+    public static function getDefaultTransport()
+    {
         return static::$_defaultTransport;
     }
 
     /**
      * Set transport layer.
      *
-     * @access  public
      * @param   \Hoa\Mail\Transport\ITransport\Out  $transport    Transport.
      * @return  \Hoa\Mail\Transport\ITransport\Out
      */
-    public function setTransport ( Transport\ITransport\Out $transport ) {
-
+    public function setTransport(Transport\ITransport\Out $transport)
+    {
         $old              = $this->_transport;
         $this->_transport = $transport;
 
@@ -130,28 +124,29 @@ class Message extends Content\Message {
     /**
      * Get a transport layer (the current or default one).
      *
-     * @access  public
      * @return  \Hoa\Mail\Transport\ITransport\Out
      */
-    public function getTransport ( ) {
-
+    public function getTransport()
+    {
         return $this->_transport ?: static::getDefaultTransport();
     }
 
     /**
      * Send the message.
      *
-     * @access  public
      * @return  bool
-     * @throw   \Hoa\Mail\Exception
+     * @throws  \Hoa\Mail\Exception
      */
-    public function send ( ) {
-
+    public function send()
+    {
         $transport = $this->getTransport();
 
-        if(null === $transport)
+        if (null === $transport) {
             throw new Exception(
-                'Cannot send a message without specifying a transport.', 0);
+                'Cannot send a message without specifying a transport.',
+                0
+            );
+        }
 
         return $transport->send($this);
     }

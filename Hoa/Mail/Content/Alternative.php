@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,13 +41,11 @@ namespace Hoa\Mail\Content;
  *
  * Represent an alternative content.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Alternative extends Message {
-
+class Alternative extends Message
+{
     /**
      * Boundary hash prefix.
      *
@@ -60,14 +58,14 @@ class Alternative extends Message {
     /**
      * Constructor.
      *
-     * @access  public
      * @param   array  $contents    Alternative contents.
      * @return  void
      */
-    public function __construct ( Array $contents = [] ) {
-
-        foreach($contents as $content)
+    public function __construct(Array $contents = [])
+    {
+        foreach ($contents as $content) {
             $this->addContent($content);
+        }
 
         $this['content-type'] = 'multipart/alternative';
 
