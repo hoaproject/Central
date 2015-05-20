@@ -47,20 +47,16 @@ There are different ways to declare routes but the more usual is as follows:
 ```php
 $router = new Hoa\Router\Http();
 $router
-    ->get('u', '/hello', function ( ) {
-
+    ->get('u', '/hello', function () {
         echo 'world!', "\n";
     })
-    ->post('v', '/hello', function ( Array $_request ) {
-
+    ->post('v', '/hello', function (Array $_request) {
         echo $_request['a'] + $_request['b'], "\n";
     })
-    ->get('w', '/bye', function ( ) {
-
+    ->get('w', '/bye', function () {
         echo 'ohh :-(', "\n";
     })
-    ->get('x', '/hello_(?<nick>\w+)', function ( $nick ) {
-
+    ->get('x', '/hello_(?<nick>\w+)', function ($nick) {
         echo 'Welcome ', ucfirst($nick), '!', "\n";
     });
 ```
@@ -111,11 +107,11 @@ $router = new Hoa\Router\Cli();
 $router->get(
     'g',
     '(?<group>\w+):(?<subcommand>\w+)(?<options>.*?)'
-    function ( $group, $subcommand, $options ) {
-
-        echo 'Group     : ', $group, "\n",
-             'Subcommand: ', $subcommand, "\n",
-             'Options   : ', trim($options), "\n";
+    function ($group, $subcommand, $options) {
+        echo
+            'Group     : ', $group, "\n",
+            'Subcommand: ', $subcommand, "\n",
+            'Options   : ', trim($options), "\n";
     }
 );
 ```

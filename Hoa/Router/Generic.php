@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,31 +41,29 @@ namespace Hoa\Router;
  *
  * Generic router.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-abstract class Generic implements Router {
-
+abstract class Generic implements Router
+{
     /**
      * All rules buckets.
      *
-     * @var \Hoa\Router\Generic array
+     * @var array
      */
     protected $_rules          = [];
 
     /**
      * The routed rule.
      *
-     * @var \Hoa\Router\Generic array
+     * @var array
      */
     protected $_rule           = null;
 
     /**
      * Methods that the router understand.
      *
-     * @var \Hoa\Router\Generic array
+     * @var array
      */
     protected static $_methods = [];
 
@@ -74,7 +72,6 @@ abstract class Generic implements Router {
     /**
      * Fallback for add*Rule() methods.
      *
-     * @access  public
      * @param   int     $visibility    Visibility (please, see
      *                                 Router::VISIBILITY_* constants).
      * @param   string  $id            ID.
@@ -84,16 +81,21 @@ abstract class Generic implements Router {
      * @param   mixed   $able          Able (second part).
      * @param   array   $variables     Variables (default or additional values).
      * @return  \Hoa\Router\Generic
-     * @throw   \Hoa\Router\Exception
+     * @throws  \Hoa\Router\Exception
      */
-    abstract protected function _addRule ( $visibility, $id, Array $methods,
-                                           $pattern, $call, $able,
-                                           Array $variables );
+    abstract protected function _addRule(
+        $visibility,
+        $id,
+        Array $methods,
+        $pattern,
+        $call,
+        $able,
+        Array $variables
+    );
 
     /**
      * Add a public rule.
      *
-     * @access  public
      * @param   string  $id           ID.
      * @param   array   $methods      HTTP methods allowed by the rule.
      * @param   string  $pattern      Pattern (on-subdomain@on-request).
@@ -101,11 +103,16 @@ abstract class Generic implements Router {
      * @param   mixed   $able         Able (second part).
      * @param   array   $variables    Variables (default or additional values).
      * @return  \Hoa\Router\Generic
-     * @throw   \Hoa\Router\Exception
+     * @throws  \Hoa\Router\Exception
      */
-    public function addRule ( $id, Array $methods, $pattern, $call = null,
-                              $able = null, Array $variables = [] ) {
-
+    public function addRule(
+        $id,
+        Array $methods,
+        $pattern,
+        $call            = null,
+        $able            = null,
+        Array $variables = []
+    ) {
         return $this->_addRule(
             Router::VISIBILITY_PUBLIC,
             $id,
@@ -120,7 +127,6 @@ abstract class Generic implements Router {
     /**
      * Add a private rule.
      *
-     * @access  public
      * @param   string  $id           ID.
      * @param   array   $methods      HTTP methods allowed by the rule.
      * @param   string  $pattern      Pattern (on-subdomain@on-request).
@@ -128,11 +134,15 @@ abstract class Generic implements Router {
      * @param   mixed   $able         Able (second part).
      * @param   array   $variables    Variables (default or additional values).
      * @return  \Hoa\Router\Generic
-     * @throw   \Hoa\Router\Exception
+     * @throws  \Hoa\Router\Exception
      */
-    public function addPrivateRule ( $id, Array $methods, $pattern, $call = null,
-                                     $able = null, Array $variables = [] ) {
-
+    public function addPrivateRule(
+        $id,
+        Array $methods,
+        $pattern,$call   = null,
+        $able            = null,
+        Array $variables = []
+    ) {
         return $this->_addRule(
             Router::VISIBILITY_PRIVATE,
             $id,
@@ -156,26 +166,25 @@ abstract class Generic implements Router {
      *     any(…)        : addRule(…, array(<all methods>), …);
      *     head_delete(…): addRule(…, array('head', 'delete'), …).
      *
-     * @access  public
      * @param   string  $name         Please, see API documentation.
      * @param   array   $arguments    Arguments for add*Rule() methods.
      * @return  \Hoa\Router\Generic
-     * @throw   \Hoa\Router\Exception
+     * @throws  \Hoa\Router\Exception
      */
-    public function __call ( $name, $arguments ) {
-
-        if('_' == $name[0]) {
-
+    public function __call($name, $arguments)
+    {
+        if ('_' === $name[0]) {
             $name   = substr($name, 1);
             $method = 'addPrivateRule';
-        }
-        else
+        } else {
             $method = 'addRule';
+        }
 
-        if('any' == $name)
+        if ('any' === $name) {
             array_unshift($arguments, static::$_methods);
-        else
+        } else {
             array_unshift($arguments, explode('_', $name));
+        }
 
         $handle       = $arguments[0];
         $arguments[0] = $arguments[1];
@@ -187,12 +196,11 @@ abstract class Generic implements Router {
     /**
      * Remove a rule.
      *
-     * @access  public
      * @param   string  $id    ID.
      * @return  void
      */
-    public function removeRule ( $id ) {
-
+    public function removeRule($id)
+    {
         unset($this->_rules[$id]);
 
         return;
@@ -201,39 +209,36 @@ abstract class Generic implements Router {
     /**
      * Check whether a rule exists.
      *
-     * @access  public
      * @param   string  $id    ID.
      * @return  bool
      */
-    public function ruleExists ( $id ) {
-
+    public function ruleExists($id)
+    {
         return isset($this->_rules[$id]);
     }
 
     /**
      * Get all rules.
      *
-     * @access  public
      * @return  array
      */
-    public function getRules ( ) {
-
+    public function getRules()
+    {
         return $this->_rules;
     }
 
     /**
      * Get a specific rule.
      *
-     * @access  public
      * @param   string  $id    ID.
      * @return  array
-     * @throw   \Hoa\Router\Exception
+     * @throws  \Hoa\Router\Exception
      */
-    public function getRule ( $id ) {
-
-        if(false === $this->ruleExists($id))
-            throw new Exception(
-                'Rule %s does not exist.', 2, $id);
+    public function getRule($id)
+    {
+        if (false === $this->ruleExists($id)) {
+            throw new Exception('Rule %s does not exist.', 0, $id);
+        }
 
         return $this->_rules[$id];
     }
@@ -241,11 +246,10 @@ abstract class Generic implements Router {
     /**
      * Get the selected rule after routing.
      *
-     * @access  public
      * @return  array
      */
-    public function &getTheRule ( ) {
-
+    public function &getTheRule()
+    {
         return $this->_rule;
     }
 }

@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,13 +43,11 @@ use Hoa\Core;
  *
  * Router interface.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-interface Router {
-
+interface Router
+{
     /**
      * Rule visibility: public.
      *
@@ -116,7 +114,6 @@ interface Router {
     /**
      * Add a public rule.
      *
-     * @access  public
      * @param   string  $id           ID.
      * @param   array   $methods      Methods.
      * @param   string  $pattern      Pattern.
@@ -125,13 +122,18 @@ interface Router {
      * @param   array   $variables    Variables (default or additional values).
      * @return  \Hoa\Router
      */
-    public function addRule ( $id, Array $methods, $pattern, $call = null,
-                              $able = null, Array $variables = [] );
+    public function addRule(
+        $id,
+        Array $methods,
+        $pattern,
+        $call            = null,
+        $able            = null,
+        Array $variables = []
+    );
 
     /**
      * Add a private rule.
      *
-     * @access  public
      * @param   string  $id           ID.
      * @param   array   $methods      Methods.
      * @param   string  $pattern      Pattern.
@@ -140,69 +142,68 @@ interface Router {
      * @param   array   $variables    Variables (default or additional values).
      * @return  \Hoa\Router
      */
-    public function addPrivateRule ( $id, Array $methods, $pattern, $call = null,
-                                     $able = null, Array $variables = [] );
+    public function addPrivateRule(
+        $id,
+        Array $methods,
+        $pattern,
+        $call            = null,
+        $able            = null,
+        Array $variables = []
+    );
 
     /**
      * Remove a rule.
      *
-     * @access  public
      * @param   string  $id    ID.
      * @return  void
      */
-    public function removeRule ( $id );
+    public function removeRule($id);
 
     /**
      * Check whether a rule exists.
      *
-     * @access  public
      * @param   string  $id    ID.
      * @return  bool
      */
-    public function ruleExists ( $id );
+    public function ruleExists($id);
 
     /**
      * Get the selected rule after routing.
      *
-     * @access  public
      * @return  mixed
      */
-    public function &getTheRule ( );
+    public function &getTheRule();
 
     /**
      * Find the appropriated rule.
      *
-     * @access  public
      * @return  \Hoa\Router
-     * @throw   \Hoa\Router\Exception\NotFound
+     * @throws  \Hoa\Router\Exception\NotFound
      */
-    public function route ( );
+    public function route();
 
     /**
      * Unroute a rule (i.e. route()^-1).
      *
-     * @access  public
      * @param   string  $id           ID.
      * @param   array   $variables    Variables.
      * @return  string
      */
-    public function unroute ( $id, Array $variables = [] );
+    public function unroute($id, Array $variables = []);
 
     /**
      * Get method or mode where the router is called.
      *
-     * @access  public
      * @return  string
      */
-    public function getMethod ( );
+    public function getMethod();
 
     /**
      * Whether the router is called asynchronously or not.
      *
-     * @access  public
      * @return  bool
      */
-    public function isAsynchronous ( );
+    public function isAsynchronous();
 }
 
 /**
