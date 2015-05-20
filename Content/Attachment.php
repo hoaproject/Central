@@ -61,12 +61,13 @@ class Attachment extends Content
     /**
      * Construct an attachment with a stream and a name.
      *
-     * @param   \Hoa\Stream  $stream    Stream that contains the attachment.
-     * @param   string       $name      Name of the attachment (if null, will
-     *                                  use the stream basename).
+     * @param   \Hoa\Stream  $stream      Stream that contains the attachment.
+     * @param   string       $name        Name of the attachment (if null, will
+     *                                    use the stream basename).
+     * @param   string       $mimeType    Force a MIME type.
      * @return  void
      */
-    public function __construct(Stream $stream, $name = null)
+    public function __construct(Stream $stream, $name = null, $mimeType = null)
     {
         parent::__construct();
 
@@ -78,8 +79,12 @@ class Attachment extends Content
             }
         }
 
-        $mime                        = new Mime($stream);
-        $this['content-type']        = $mime->getMime() ?: 'application/octet-stream';
+        if (null === $mimeType) {
+            $mime     = new Mime($stream);
+            $mimeType = $mime->getMime() ?: 'application/octet-stream';
+        }
+
+        $this['content-type']        = $mimeType;
         $this['content-disposition'] = 'attachment; filename=' . $name . ';';
         $this->setStream($stream);
 
