@@ -89,8 +89,8 @@
   <p>Prenons un exemple avec le routeur HTTP représenté par la classe
   <code>Hoa\Router\Http</code> :</p>
   <pre><code class="language-php">$router = new Hoa\Router\Http();
-$router->addRule('h', array('get'),         '/hello')
-       ->addRule('l', array('get', 'post'), '/login');</code></pre>
+$router->addRule('h', ['get'],         '/hello')
+       ->addRule('l', ['get', 'post'], '/login');</code></pre>
   <p>Nous avons déclarés deux règles : <code>h</code> et <code>l</code>. La
   règle <code>h</code> n'est accessible qu'à travers la méthode HTTP
   <code>GET</code> et seule la requête (l'URI) <code>/hello</code> correspond.
@@ -109,7 +109,7 @@ $router->addRule('h', array('get'),         '/hello')
   <p>Et enfin, pour représenter une règle privée, le nom devra commencer par le
   symbole « <code>_</code> ». Ainsi, ces deux déclarations sont strictement
   équivalentes :</p>
-  <pre><code class="language-php">$router->addPrivateRule('f', array('get', 'post'), '/foobar');
+  <pre><code class="language-php">$router->addPrivateRule('f', ['get', 'post'], '/foobar');
 $router->_get_post('f', '/foobar');</code></pre>
   <p>Notons que nous pouvons supprimer à tout moment une règle avec la méthode
   <code>Hoa\Router\Router::removeRule</code> à laquelle nous passons
@@ -182,11 +182,8 @@ print_r($router->getTheRule());
   <p>L'exception <code>Hoa\Router\Exception\NotFound</code> signifie que la
   requête ne correspond à aucune règle. Par exemple :</p>
   <pre><code class="language-php">try {
-
     $router->route('/foobar');
-}
-catch ( Hoa\Router\Exception\NotFound $e ) {
-
+} catch (Hoa\Router\Exception\NotFound $e) {
     echo $e->getMessage();
 }
 
@@ -262,7 +259,7 @@ print_r($theRule[$router::RULE_VARIABLES]);
     '/hello_(?&amp;lt;who>\w+)(?&amp;lt;format>\.[a-z]+)?',
     null,
     null,
-    array('format' => '.txt')
+    ['format' => '.txt']
 );
 
 $router->route('/hello_gordon');
@@ -331,7 +328,7 @@ var_dump($theRule[$router::RULE_VARIABLES]['who']);
   la règle <code>h</code> avec comme valeur <code>alyx</code> pour
   <code>who</code> et rien pour le format (la valeur par défaut sera utilisée).
   Alors, nous écrirons :</p>
-  <pre><code class="language-php">var_dump($router->unroute('h', array('who' => 'alyx')));
+  <pre><code class="language-php">var_dump($router->unroute('h', ['who' => 'alyx']));
 
 /**
  * Will output:
@@ -342,7 +339,7 @@ var_dump($theRule[$router::RULE_VARIABLES]['who']);
   syntaxe finale peut changer à tout moment sans casser l'application. Par
   exemple, changeons la règle <code>h</code> pour :</p>
   <pre><code class="language-php">$router->get('h', '/users/(?&amp;lt;who>\w+)/hello(?&amp;lt;format>\.[a-z]+)?');
-var_dump($router->unroute('h', array('who' => 'alyx')));
+var_dump($router->unroute('h', ['who' => 'alyx']));
 
 /**
  * Will output:
@@ -538,10 +535,10 @@ print_r($router->getTheRule());
   <pre><code class="language-php">var_dump(
     $router->unroute(
         'p',
-        array(
+        [
             'user'    => 'gordon',
             'project' => 'Space-biker'
-        )
+        ]
     )
 );
 
@@ -557,10 +554,10 @@ print_r($router->getTheRule());
   <pre><code class="language-php">var_dump(
     $router->unroute(
         'p',
-        array(
+        [
             'project'    => 'Space-biker',
-            '_subdomain' => 'my-subdomain')
-        )
+            '_subdomain' => 'my-subdomain'
+        ]
     )
 );
 
@@ -587,22 +584,22 @@ print_r($router->getTheRule());
   <pre><code class="language-php">$router->get('s', '(?&amp;lt;three>[^\.]+)\.(?&amp;lt;two>[^\.]+)\.(?&amp;lt;one>.+)@');
 var_dump(
     // Normal.
-    $router->unroute('s', array('three' => 'foo', 'two' => 'bar', 'one' => 'baz')),
+    $router->unroute('s', ['three' => 'foo', 'two' => 'bar', 'one' => 'baz']),
 
     // Force.
-    $router->unroute('s', array('_subdomain' => 'my-subdomain')),
+    $router->unroute('s', ['_subdomain' => 'my-subdomain']),
 
     // Current subdomain.
-    $router->unroute('s', array('_subdomain' => '__self__')),
+    $router->unroute('s', ['_subdomain' => '__self__']),
 
     // No subdomain.
-    $router->unroute('s', array('_subdomain' => '__root__')),
+    $router->unroute('s', ['_subdomain' => '__root__']),
 
     // Shift only sub3.
-    $router->unroute('s', array('_subdomain' => '__shift__')),
+    $router->unroute('s', ['_subdomain' => '__shift__']),
 
     // Shift two sub-domains.
-    $router->unroute('s', array('_subdomain' => '__shift__ * 2'))
+    $router->unroute('s', ['_subdomain' => '__shift__ * 2'])
 );
 
 /**
@@ -635,11 +632,11 @@ var_dump(
   <pre><code class="language-php">var_dump(
     $router->unroute(
         'p',
-        array(
+        [
             'user'      => 'gordon',
             'project'   => 'Space-biker',
             '_fragment' => 'Introduction'
-        )
+        ]
     )
 );
 
@@ -683,7 +680,7 @@ var_dump(
   <pre><code class="language-php">var_dump(
     $router->unroute(
         'p',
-        array('user' => 'gordon', 'project' => 'Space-biker'),
+        ['user' => 'gordon', 'project' => 'Space-biker'],
         true
     )
 );
@@ -763,10 +760,10 @@ Array
     '(?&amp;lt;group>\w+)?(:(?&amp;lt;subcommand>\w+))?(?&amp;lt;_tail>.*?)',
     null,
     null,
-    array(
+    [
         'group'      => 'default',
         'subcommand' => 'default'
-    )
+    ]
 );</code></pre>
   <p>Ainsi, nous pourrions avoir <code><em>group</em></code>,
   <code><em>group:subcommand</em></code> ou <code><em>:subcommand</em></code>.
