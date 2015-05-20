@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -42,13 +42,11 @@ namespace Hoa\Session;
  * Flash is a special top-namespace that contains namespaces which are
  * destructed when empty. Each data is destructed after a read.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Flash extends Session {
-
+class Flash extends Session
+{
     /**
      * Event channel.
      *
@@ -70,12 +68,11 @@ class Flash extends Session {
      * If session has not been previously started, it will be done
      * automatically.
      *
-     * @access  public
      * @param   string  $namespace      Namespace.
      * @return  void
      */
-    public function __construct ( $namespace = '_defaultFlash' ) {
-
+    public function __construct($namespace = '_defaultFlash')
+    {
         parent::__construct($namespace, parent::NO_CACHE);
 
         return;
@@ -84,12 +81,11 @@ class Flash extends Session {
     /**
      * Get a data.
      *
-     * @access  public
      * @param   mixed  $offset    Data name.
      * @return  mixed
      */
-    public function offsetGet ( $offset ) {
-
+    public function offsetGet($offset)
+    {
         $out = parent::offsetGet($offset);
         $this->offsetUnset($offset);
 
@@ -99,16 +95,16 @@ class Flash extends Session {
     /**
      * Unset a data.
      *
-     * @access  public
      * @param   mixed  $offset    Data name.
      * @return  void
      */
-    public function offsetUnset ( $offset ) {
-
+    public function offsetUnset($offset)
+    {
         parent::offsetUnset($offset);
 
-        if(true === $this->isEmpty())
+        if (true === $this->isEmpty()) {
             $this->delete();
+        }
 
         return;
     }
@@ -116,11 +112,10 @@ class Flash extends Session {
     /**
      * Iterate over data in the namespace.
      *
-     * @access  public
      * @return  \ArrayIterator
      */
-    public function getIterator ( ) {
-
+    public function getIterator()
+    {
         $out = parent::getIterator();
         $this->delete();
 
