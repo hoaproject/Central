@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -45,31 +45,29 @@ use Hoa\Socket;
  * are able to run() a connection (client or server), to merge() with other ones
  * and to send messages in different ways (A -> A, A -> B, A -> *\A etc.).
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-abstract class Handler {
-
+abstract class Handler
+{
     /**
      * Original connection.
      *
-     * @var \Hoa\Socket\Connection object
+     * @var \Hoa\Socket\Connection
      */
     protected $_originalConnection = null;
 
     /**
      * Current connection.
      *
-     * @var \Hoa\Socket\Connection object
+     * @var \Hoa\Socket\Connection
      */
     protected $_connection         = null;
 
     /**
      * All other connections that have been merged.
      *
-     * @var \Hoa\Socket\Connection\Handler array
+     * @var array
      */
     protected $_connections        = [];
 
@@ -78,12 +76,11 @@ abstract class Handler {
     /**
      * Constructor. Must be called.
      *
-     * @access  public
      * @param   \Hoa\Socket\Connection  $connection    Connection.
      * @return  void
      */
-    public function __construct ( Connection $connection ) {
-
+    public function __construct(Connection $connection)
+    {
         $this->_originalConnection = $connection;
         $this->setConnection($connection);
 
@@ -93,12 +90,11 @@ abstract class Handler {
     /**
      * Set current connection.
      *
-     * @access  protected
      * @param   \Hoa\Socket\Connection  $connection    Connection.
      * @return  \Hoa\Socket\Connection
      */
-    protected function setConnection ( Connection $connection ) {
-
+    protected function setConnection(Connection $connection)
+    {
         $old               = $this->_connection;
         $this->_connection = $connection;
 
@@ -108,22 +104,20 @@ abstract class Handler {
     /**
      * Get original connection.
      *
-     * @access  protected
      * @return  \Hoa\Socket\Connection
      */
-    protected function getOriginalConnection ( ) {
-
+    protected function getOriginalConnection()
+    {
         return $this->_originalConnection;
     }
 
     /**
      * Get current connection.
      *
-     * @access  public
      * @return  \Hoa\Socket\Connection
      */
-    public function getConnection ( ) {
-
+    public function getConnection()
+    {
         return $this->_connection;
     }
 
@@ -136,46 +130,44 @@ abstract class Handler {
      *
      * The body is given by this method.
      *
-     * @access  protected
      * @param   \Hoa\Socket\Node  $node    Node.
      * @return  void
      */
-    abstract protected function _run ( Socket\Node $node );
+    abstract protected function _run(Socket\Node $node);
 
     /**
      * Run the connection.
      *
-     * @access  public
      * @return  void
      */
-    public function run ( ) {
-
+    public function run()
+    {
         $connection = $this->getConnection();
 
-        if($connection instanceof Socket\Server)
+        if ($connection instanceof Socket\Server) {
             $connection->connectAndWait();
-        else
+        } else {
             $connection->connect();
+        }
 
-        while(true) foreach($connection->select() as $node) {
+        while (true) {
+            foreach ($connection->select() as $node) {
 
             // Connection has failed to detect the node, maybe it is a resource
             // from a merged client in a server.
-            if(false === is_object($node)) {
-
+            if (false === is_object($node)) {
                 $socket = $node;
 
-                foreach($this->_connections as $other) {
-
+                foreach ($this->_connections as $other) {
                     $otherConnection = $other->getOriginalConnection();
 
-                    if(!($otherConnection instanceof Socket\Client))
+                    if (!($otherConnection instanceof Socket\Client)) {
                         continue;
+                    }
 
                     $node = $otherConnection->getCurrentNode();
 
-                    if($node->getSocket() === $socket) {
-
+                    if ($node->getSocket() === $socket) {
                         $other->_run($node);
 
                         continue 2;
@@ -183,17 +175,16 @@ abstract class Handler {
                 }
             }
 
-            foreach($this->_connections as $other) {
+                foreach ($this->_connections as $other) {
+                    if (true === $connection->is($other->getOriginalConnection())) {
+                        $other->_run($node);
 
-                if(true === $connection->is($other->getOriginalConnection())) {
-
-                    $other->_run($node);
-
-                    continue 2;
+                        continue 2;
+                    }
                 }
-            }
 
-            $this->_run($node);
+                $this->_run($node);
+            }
         }
 
         $connection->disconnect();
@@ -208,19 +199,19 @@ abstract class Handler {
      * are helpful but this whole class eases the merge of “high-level”
      * connections.
      *
-     * @access  public
      * @param   \Hoa\Socket\Connection  $other    Connection to merge.
      * @return  \Hoa\Socket\Connection
      */
-    public function merge ( self $other ) {
-
+    public function merge(self $other)
+    {
         $thisConnection  = $this->getConnection();
         $otherConnection = $other->getConnection();
 
         $thisConnection->consider($otherConnection);
 
-        if($otherConnection instanceof Socket\Server)
+        if ($otherConnection instanceof Socket\Server) {
             $other->setConnection($thisConnection);
+        }
 
         $this->_connections[] = $other;
 
@@ -232,39 +223,37 @@ abstract class Handler {
      * If the send() method is overrided with more arguments, this method could
      * return a function: it works like a currying.
      *
-     * @access  protected
      * @param   string            $message    Message.
      * @param   \Hoa\Socket\Node  $node       Node (if null, current node).
      * @return  void
      */
-    abstract protected function _send ( $message, Socket\Node $node );
+    abstract protected function _send($message, Socket\Node $node);
 
     /**
      * Send a message to a specific node.
      *
-     * @access  public
      * @param   string            $message    Message.
      * @param   \Hoa\Socket\Node  $node       Node (if null, current node).
      *                                        current node).
      * @return  mixed
      */
-    public function send ( $message, Socket\Node $node = null ) {
-
-        if(null === $node)
+    public function send($message, Socket\Node $node = null)
+    {
+        if (null === $node) {
             $node = $this->getConnection()->getCurrentNode();
+        }
 
-        if(null === $node)
+        if (null === $node) {
             return null;
+        }
 
         $old  = $this->getConnection()->_setStream($node->getSocket());
         $send = $this->_send($message, $node);
 
-        if($send instanceof \Closure) {
-
+        if ($send instanceof \Closure) {
             $self = $this;
 
-            return function ( ) use ( &$send, &$old, &$self ) {
-
+            return function () use (&$send, &$old, &$self) {
                 $out = call_user_func_array($send, func_get_args());
                 $self->getConnection()->_setStream($old);
 
@@ -281,19 +270,17 @@ abstract class Handler {
      * Broadcast a message, i.e. send the message to all other nodes except the
      * current one.
      *
-     * @access  public
      * @param   string  $message    Message.
      * @param   …       …           …
      * @return  void
      */
-    public function broadcast ( $message ) {
-
+    public function broadcast($message)
+    {
         $currentNode = $this->getConnection()->getCurrentNode();
         $arguments   = func_get_args();
         array_unshift(
             $arguments,
-            function ( Socket\Node $node ) use ( $currentNode ) {
-
+            function (Socket\Node $node) use ($currentNode) {
                 return $node !== $currentNode;
             }
         );
@@ -304,23 +291,23 @@ abstract class Handler {
     /**
      * Broadcast a message to a subset of nodes that respect a predicate.
      *
-     * @access  public
      * @param   \Closure  $predicate    Predicate. Take a node in argument.
      * @param   string    $message      Message.
      * @param   …         …             …
      * @return  void
      */
-    public function broadcastIf ( \Closure $predicate, $message ) {
-
+    public function broadcastIf(\Closure $predicate, $message)
+    {
         $connection    = $this->getConnection();
         $currentSocket = $this->getOriginalConnection()->getSocket();
 
-        if(1 === func_num_args()) {
-
-            foreach($connection->getNodes() as $node)
-                if(   true === $predicate($node)
-                   && $node->getConnection()->getSocket() === $currentSocket)
+        if (1 === func_num_args()) {
+            foreach ($connection->getNodes() as $node) {
+                if (true === $predicate($node) &&
+                    $node->getConnection()->getSocket() === $currentSocket) {
                     $this->send($message, $node);
+                }
+            }
 
             return;
         }
@@ -329,13 +316,13 @@ abstract class Handler {
         array_unshift($arguments, $message, null);
         $callable  = [$this, 'send'];
 
-        foreach($connection->getNodes() as $node)
-            if(   true === $predicate($node)
-               && $node->getConnection()->getSocket() === $currentSocket) {
-
+        foreach ($connection->getNodes() as $node) {
+            if (true === $predicate($node) &&
+                $node->getConnection()->getSocket() === $currentSocket) {
                 $arguments[1] = $node;
                 call_user_func_array($callable, $arguments);
             }
+        }
 
         return;
     }

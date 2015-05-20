@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,13 +43,11 @@ use Hoa\Stream;
  *
  * Established a client connection.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Client extends Connection {
-
+class Client extends Connection
+{
     /**
      * Open client socket asynchronously.
      *
@@ -102,7 +100,7 @@ class Client extends Connection {
     /**
      * Stack of connections.
      *
-     * @var \Hoa\Socket\Client array
+     * @var array
      */
     protected $_stack = [];
 
@@ -111,7 +109,6 @@ class Client extends Connection {
     /**
      * Start a connection.
      *
-     * @access  public
      * @param   string  $socket     Socket URI.
      * @param   int     $timeout    Timeout.
      * @param   int     $flag       Flag, see the child::* constants.
@@ -119,9 +116,12 @@ class Client extends Connection {
      *                              \Hoa\Stream\Context class).
      * @return  void
      */
-    public function __construct ( $socket, $timeout = 30,
-                                  $flag = self::CONNECT, $context = null ) {
-
+    public function __construct(
+        $socket,
+        $timeout = 30,
+        $flag    = self::CONNECT,
+        $context = null
+    ) {
         parent::__construct($socket, $timeout, self::CONNECT & $flag, $context);
 
         return;
@@ -130,15 +130,14 @@ class Client extends Connection {
     /**
      * Open the stream and return the associated resource.
      *
-     * @access  protected
      * @param   string               $streamName    Socket URI.
      * @param   \Hoa\Stream\Context  $context       Context.
      * @return  resource
-     * @throw   \Hoa\Socket\Exception
+     * @throws  \Hoa\Socket\Exception
      */
-    protected function &_open ( $streamName, Stream\Context $context = null ) {
-
-        if(null === $context)
+    protected function &_open($streamName, Stream\Context $context = null)
+    {
+        if (null === $context) {
             $connection = @stream_socket_client(
                 $streamName,
                 $errno,
@@ -146,7 +145,7 @@ class Client extends Connection {
                 $this->getTimeout()/*,
                 $this->getFlag()*/
             );
-        else
+        } else {
             $connection = @stream_socket_client(
                 $streamName,
                 $errno,
@@ -155,23 +154,24 @@ class Client extends Connection {
                 $this->getFlag(),
                 $context->getContext()*/
             );
+        }
 
-        if(false === $connection)
-            if($errno == 0)
-                throw new Exception(
-                    'Client cannot join %s.', 0, $streamName);
-            else
+        if (false === $connection) {
+            if ($errno == 0) {
+                throw new Exception('Client cannot join %s.', 0, $streamName);
+            } else {
                 throw new Exception(
                     'Client returns an error (number %d): %s while trying ' .
                     'to join %s.',
-                    1, [$errno, $errstr, $streamName]);
+                    1,
+                    [$errno, $errstr, $streamName]
+                );
+            }
+        }
 
         $this->_stack[]    = $connection;
         $id                = $this->getNodeId($connection);
-        $this->_node       = dnew(
-            $this->getNodeName(),
-            [$id, $connection, $this]
-        );
+        $this->_node       = dnew($this->getNodeName(), [$id, $connection, $this]);
         $this->_nodes[$id] = $this->_node;
 
         return $connection;
@@ -180,13 +180,13 @@ class Client extends Connection {
     /**
      * Close the current stream.
      *
-     * @access  protected
      * @return  bool
      */
-    protected function _close ( ) {
-
-        if(true === $this->isPersistent())
+    protected function _close()
+    {
+        if (true === $this->isPersistent()) {
             return false;
+        }
 
         return @fclose($this->getStream());
     }
@@ -194,19 +194,19 @@ class Client extends Connection {
     /**
      * Select connections.
      *
-     * @access  public
      * @return  \Hoa\Socket\Client
      */
-    public function select ( ) {
-
+    public function select()
+    {
         $read   = $this->_stack;
         $write  = null;
         $except = null;
 
         @stream_select($read, $write, $except, $this->getTimeout(), 0);
 
-        foreach($read as $socket)
+        foreach ($read as $socket) {
             $this->_iterator[] = $socket;
+        }
 
         return $this;
     }
@@ -214,18 +214,22 @@ class Client extends Connection {
     /**
      * Consider another client when selecting connection.
      *
-     * @access  public
      * @param   \Hoa\Socket\Connection  $other    Other client.
      * @return  \Hoa\Socket\Client
      */
-    public function consider ( Connection $other ) {
-
-        if(!($other instanceof self))
+    public function consider(Connection $other)
+    {
+        if (!($other instanceof self)) {
             throw new Exception(
-                'Other client must be of type %s.', 2, __CLASS__);
+                'Other client must be of type %s.',
+                2,
+                __CLASS__
+            );
+        }
 
-        if(true === $other->isDisconnected())
+        if (true === $other->isDisconnected()) {
             $other->connect();
+        }
 
         $otherNode                         = $other->getCurrentNode();
         $this->_stack[]                    = $otherNode->getSocket();
@@ -237,23 +241,21 @@ class Client extends Connection {
     /**
      * Check if the current node belongs to a specific server.
      *
-     * @access  public
      * @param   \Hoa\Socket\Connection  $server    Server.
      * @return  bool
      */
-    public function is ( Connection $server ) {
-
+    public function is(Connection $server)
+    {
         return $this->getStream() === $server->getStream();
     }
 
     /**
      * Set and get the current selected connection.
      *
-     * @access  public
      * @return  \Hoa\Socket\Node
      */
-    public function current ( ) {
-
+    public function current()
+    {
         $current = parent::_current();
 
         return $this->_node = $this->_nodes[$this->getNodeId($current)];
@@ -262,33 +264,30 @@ class Client extends Connection {
     /**
      * Check if the connection is connected or not.
      *
-     * @access  public
      * @return  bool
      */
-    public function isConnected ( ) {
-
+    public function isConnected()
+    {
         return (bool) ($this->getFlag() & self::CONNECT);
     }
 
     /**
      * Check if the connection is asynchronous or not.
      *
-     * @access  public
      * @return  bool
      */
-    public function isAsynchronous ( ) {
-
+    public function isAsynchronous()
+    {
         return (bool) ($this->getFlag() & self::ASYNCHRONOUS);
     }
 
     /**
      * Check if the connection is persistent or not.
      *
-     * @access  public
      * @return  bool
      */
-    public function isPersistent ( ) {
-
+    public function isPersistent()
+    {
         return (bool) ($this->getFlag() & self::PERSISTENT);
     }
 }

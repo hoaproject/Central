@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,25 +41,23 @@ namespace Hoa\Socket;
  *
  * Basic transports manipulation.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Transport {
-
+class Transport
+{
     /**
      * Get all enable transports.
      *
-     * @access  public
      * @return  array
      */
-    public static function get ( ) {
-
+    public static function get()
+    {
         static $_ = null;
 
-        if(null === $_)
+        if (null === $_) {
             $_ = stream_get_transports();
+        }
 
         return $_;
     }
@@ -67,12 +65,11 @@ class Transport {
     /**
      * Check if a transport exists.
      *
-     * @access  public
      * @param   string  $transport    Transport to check.
      * @return  bool
      */
-    public static function exists ( $transport ) {
-
+    public static function exists($transport)
+    {
         return in_array(strtolower($transport), self::get());
     }
 }

@@ -76,18 +76,18 @@ an iterator.  Finally, we will read a line and write an uppercassed echo. Thus:
 $server = new Hoa\Socket\Server('tcp://127.0.0.1:4242');
 $server->connectAndWait();
 
-while(true) foreach($server->select() as $node) {
+while (true) {
+    foreach ($server->select() as $node) {
+        $line = $server->readLine();
 
-    $line = $server->readLine();
+        if (empty($line)) {
+            $server->disconnect();
+            continue;
+        }
 
-    if(empty($line)) {
-
-        $server->disconnect();
-        continue;
+        echo '< ', $line, "\n";
+        $server->writeLine(strtoupper($line));
     }
-
-    echo '< ', $line, "\n";
-    $server->writeLine(strtoupper($line));
 }
 ```
 
@@ -121,12 +121,12 @@ $client->connect();
 
 $readline = new Hoa\Console\Readline\Readline();
 
-while(true) {
-
+while (true) {
     $line = $readline->readLine('> ');
 
-    if('quit' === $line)
+    if ('quit' === $line) {
         break;
+    }
 
     $client->writeLine($line);
 
@@ -156,7 +156,7 @@ library](http://central.hoa-project.net/Resource/Library/Websocket)).
 
 We will focus on a server. A server has the magic `run` method that starts an
 infinite loop and make some computation on active nodes. This is basically the
-`while(true)` in our previous examples. In addition, we would like to easily
+`while (true)` in our previous examples. In addition, we would like to easily
 send a message to a specific node, or send a message to all nodes except one.
 The `Hoa\Socket\Connection\Handler` class asks the user to implement only two
 methods: `_run` and `_send`, and provides the `run` method, along with `send`
@@ -165,15 +165,14 @@ about the implementation of different network topologies. All is managed by the
 handler.  Thus:
 
 ```php
-class MyServer extends Hoa\Socket\Connection\Handler {
-
-    protected function _run ( Hoa\Socket\Node $node ) {
-
+class MyServer extends Hoa\Socket\Connection\Handler
+{
+    protected function _run (Hoa\Socket\Node $node)
+    {
         $connection = $node->getConnection();
         $line       = $connection->readLine();
 
-        if(empty($line)) {
-
+        if (empty($line)) {
             $connection->disconnect();
             return;
         }
@@ -184,8 +183,8 @@ class MyServer extends Hoa\Socket\Connection\Handler {
         return;
     }
 
-    protected function _send ( $message, Hoa\Socket\Node $node ) {
-
+    protected function _send ($message, Hoa\Socket\Node $node)
+    {
         return $node->getConnection()->writeLine($message);
     }
 }
@@ -243,8 +242,7 @@ $group[]   = $irc;
 
 $websocket->on(
     'message',
-    function ( Hoa\Core\Event\Bucket $bucket ) use ( $irc ) {
-
+    function (Hoa\Core\Event\Bucket $bucket) use ($irc) {
         $data = $bucket->getData();
         $irc->say($data['message']);
 
