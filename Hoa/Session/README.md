@@ -45,13 +45,10 @@ not empty, we print `other times` and dump the saved time. Thus:
 ```php
 $user = new Hoa\Session\Session('user');
 
-if($user->isEmpty()) {
-
+if ($user->isEmpty()) {
     echo 'first time', "\n";
     $user['foo'] = time();
-}
-else {
-
+} else {
     echo 'other times', "\n";
     var_dump($user['foo']);
 }
@@ -79,21 +76,17 @@ the session is empty:
 
 ```php
 event('hoa://Event/Session/user:expired')
-    ->attach(function ( Hoa\Core\Event\Bucket $bucket ) {
-
+    ->attach(function (Hoa\Core\Event\Bucket $bucket) {
         echo 'expired', "\n";
     });
 
 $user = new Hoa\Session\Session('user');
 
-if($user->isEmpty()) {
-
+if ($user->isEmpty()) {
     $user->hasExpired();
     echo 'first time', "\n";
     $user['foo'] = time();
-}
-else {
-
+} else {
     echo 'other times', "\n";
     var_dump($user['foo']);
 }
