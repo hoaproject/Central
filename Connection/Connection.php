@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -45,106 +45,104 @@ use Hoa\Stream;
  *
  * Abstract connection, useful for client and server.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
 abstract class Connection
     extends    Stream
     implements Stream\IStream\In,
                Stream\IStream\Out,
                Stream\IStream\Pathable,
-               \Iterator {
-
+               \Iterator
+{
     /**
      * Socket.
      *
-     * @var \Hoa\Socket object
+     * @var \Hoa\Socket
      */
     protected $_socket        = null;
 
     /**
      * Timeout.
      *
-     * @var \Hoa\Socket\Connection int
+     * @var int
      */
     protected $_timeout       = 30;
 
     /**
      * Flag.
      *
-     * @var \Hoa\Socket\Connection int
+     * @var int
      */
     protected $_flag          = 0;
 
     /**
      * Context ID.
      *
-     * @var \Hoa\Socket\Connection string
+     * @var string
      */
-    protected $_context      = null;
+    protected $_context       = null;
 
     /**
      * Node name.
      *
-     * @var \Hoa\Socket\Connection string
+     * @var string
      */
-    protected $_nodeName     = '\Hoa\Socket\Node';
+    protected $_nodeName      = '\Hoa\Socket\Node';
 
     /**
      * Current node.
      *
-     * @var \Hoa\Socket\Node object
+     * @var \Hoa\Socket\Node
      */
     protected $_node          = null;
 
     /**
      * List of nodes (connections) when selecting.
      *
-     * @var \Hoa\Socket\Connection array
+     * @var array
      */
     protected $_nodes         = [];
 
     /**
      * Whether the stream is quiet.
      *
-     * @var \Hoa\Socket\Connection bool
+     * @var bool
      */
     protected $_quiet        = false;
 
     /**
      * Whether the stream is mute.
      *
-     * @var \Hoa\Socket\Connection bool
+     * @var bool
      */
     protected $_mute          = false;
 
     /**
      * Whether the stream is disconnected.
      *
-     * @var \Hoa\Socket\Connection bool
+     * @var bool
      */
     protected $_disconnect    = true;
 
     /**
      * Whether we should consider remote address or not.
      *
-     * @var \Hoa\Socket\Connection bool
+     * @var bool
      */
     protected $_remote        = false;
 
     /**
      * Remote address.
      *
-     * @var \Hoa\Socket\Connection string
+     * @var string
      */
     protected $_remoteAddress = null;
 
     /**
      * Temporize selected connections when selecting.
      *
-     * @var \Hoa\Socket\Server array
+     * @var array
      */
     protected $_iterator      = [];
 
@@ -153,7 +151,6 @@ abstract class Connection
     /**
      * Start a connection.
      *
-     * @access  public
      * @param   string  $socket     Socket URI.
      * @param   int     $timeout    Timeout.
      * @param   int     $flag       Flag, see the child::* constants.
@@ -161,11 +158,13 @@ abstract class Connection
      *                              \Hoa\Stream\Context class).
      * @return  void
      */
-    public function __construct ( $socket, $timeout, $flag, $context = null ) {
+    public function __construct($socket, $timeout, $flag, $context = null)
+    {
 
         // Children could setSocket() before __construct.
-        if(null !== $socket)
+        if (null !== $socket) {
             $this->setSocket($socket);
+        }
 
         $this->setTimeout($timeout);
         $this->setFlag($flag);
@@ -177,11 +176,10 @@ abstract class Connection
     /**
      * Connect.
      *
-     * @access  public
      * @return  \Hoa\Socket\Connection
      */
-    public function connect ( ) {
-
+    public function connect()
+    {
         parent::__construct(
             $this->getSocket()->__toString(),
             $this->getContext()
@@ -194,37 +192,33 @@ abstract class Connection
     /**
      * Select connections.
      *
-     * @access  public
      * @return  \Hoa\Socket\Connection
      */
-    abstract public function select ( );
+    abstract public function select();
 
     /**
      * Consider another connection when selecting connection.
      *
-     * @access  public
      * @param   \Hoa\Socket\Connection  $other    Other connection.
      * @return  \Hoa\Socket\Connection
      */
-    abstract public function consider ( Connection $other );
+    abstract public function consider(Connection $other);
 
     /**
      * Check if the current node belongs to a specific server.
      *
-     * @access  public
      * @param   \Hoa\Socket\Connection  $connection    Connection.
      * @return  bool
      */
-    abstract public function is ( Connection $connection );
+    abstract public function is(Connection $connection);
 
     /**
      * Set the current selected connection.
      *
-     * @access  public
      * @return  resource
      */
-    protected function _current ( ) {
-
+    protected function _current()
+    {
         $current = current($this->_iterator);
         $this->_setStream($current);
 
@@ -234,7 +228,6 @@ abstract class Connection
     /**
      * Set and get the current selected connection.
      *
-     * @access  public
      * @return  \Hoa\Socket\Node
      */
     //abstract public function current ( );
@@ -242,11 +235,10 @@ abstract class Connection
     /**
      * Get the current selected connection index.
      *
-     * @access  public
      * @return  int
      */
-    public function key ( ) {
-
+    public function key()
+    {
         return key($this->_iterator);
     }
 
@@ -254,22 +246,20 @@ abstract class Connection
      * Advance the internal pointer of the connection iterator and return the
      * current selected connection.
      *
-     * @access  public
      * @return  mixed
      */
-    public function next ( ) {
-
+    public function next()
+    {
         return next($this->_iterator);
     }
 
     /**
      * Rewind the internal iterator pointer and the first connection.
      *
-     * @access  public
      * @return  mixed
      */
-    public function rewind ( ) {
-
+    public function rewind()
+    {
         return reset($this->_iterator);
     }
 
@@ -277,25 +267,25 @@ abstract class Connection
      * Check if there is a current connection after calls to the rewind() or the
      * next() methods.
      *
-     * @access  public
      * @return  bool
      */
-    public function valid ( ) {
-
-        if(empty($this->_iterator))
+    public function valid()
+    {
+        if (empty($this->_iterator)) {
             return false;
+        }
 
         $key    = key($this->_iterator);
         $return = (bool) next($this->_iterator);
         prev($this->_iterator);
 
-        if(false === $return) {
-
+        if (false === $return) {
             end($this->_iterator);
-            if($key === key($this->_iterator))
+            if ($key === key($this->_iterator)) {
                 $return = true;
-            else
+            } else {
                 $this->_iterator = [];
+            }
         }
 
         return $return;
@@ -304,11 +294,10 @@ abstract class Connection
     /**
      * Disable further receptions.
      *
-     * @access  public
      * @return  bool
      */
-    public function quiet ( ) {
-
+    public function quiet()
+    {
         return $this->_quiet =
             stream_socket_shutdown($this->getStream(), STREAM_SHUT_RD);
     }
@@ -316,11 +305,10 @@ abstract class Connection
     /**
      * Disable further transmissions.
      *
-     * @access  public
      * @return  bool
      */
-    public function mute ( ) {
-
+    public function mute()
+    {
         return $this->_mute =
             stream_socket_shutdown($this->getStream(), STREAM_SHUT_WR);
     }
@@ -328,11 +316,10 @@ abstract class Connection
     /**
      * Disable further receptions and transmissions, i.e. disconnect.
      *
-     * @access  public
      * @return  bool
      */
-    public function quietAndMute ( ) {
-
+    public function quietAndMute()
+    {
         return $this->_disconnect =
             stream_socket_shutdown($this->getStream(), STREAM_SHUT_RDWR);
     }
@@ -340,11 +327,10 @@ abstract class Connection
     /**
      * Disconnect.
      *
-     * @access  public
      * @return  void
      */
-    public function disconnect ( ) {
-
+    public function disconnect()
+    {
         $this->_disconnect = $this->close();
 
         return;
@@ -353,12 +339,11 @@ abstract class Connection
     /**
      * Set socket.
      *
-     * @access  protected
      * @param   string  $socket    Socket URI.
      * @return  \Hoa\Socket
      */
-    protected function setSocket ( $socket ) {
-
+    protected function setSocket($socket)
+    {
         $old           = $this->_socket;
         $this->_socket = new Socket($socket);
 
@@ -368,12 +353,11 @@ abstract class Connection
     /**
      * Set timeout.
      *
-     * @access  protected
      * @param   int        $timeout    Timeout.
      * @return  int
      */
-    protected function setTimeout ( $timeout ) {
-
+    protected function setTimeout($timeout)
+    {
         $old            = $this->_timeout;
         $this->_timeout = $timeout;
 
@@ -383,12 +367,11 @@ abstract class Connection
     /**
      * Set flag.
      *
-     * @access  protected
      * @param   int        $flag    Flag.
      * @return  int
      */
-    protected function setFlag ( $flag ) {
-
+    protected function setFlag($flag)
+    {
         $old         = $this->_flag;
         $this->_flag = $flag;
 
@@ -398,12 +381,11 @@ abstract class Connection
     /**
      * Set context.
      *
-     * @access  protected
      * @param   string     $context    Context ID.
      * @return  string
      */
-    protected function setContext ( $context ) {
-
+    protected function setContext($context)
+    {
         $old            = $this->_context;
         $this->_context = $context;
 
@@ -413,12 +395,11 @@ abstract class Connection
     /**
      * Set node name.
      *
-     * @access  public
      * @param   string  $node    Node name.
      * @return  string
      */
-    public function setNodeName ( $node ) {
-
+    public function setNodeName($node)
+    {
         $old             = $this->_nodeName;
         $this->_nodeName = $node;
 
@@ -428,12 +409,11 @@ abstract class Connection
     /**
      * Whether we should consider remote address or not.
      *
-     * @access  public
      * @param   bool  $consider    Should we consider remote address or not.
      * @return  bool
      */
-    public function considerRemoteAddress ( $consider ) {
-
+    public function considerRemoteAddress($consider)
+    {
         $old           = $this->_remote;
         $this->_remote = $consider;
 
@@ -443,7 +423,6 @@ abstract class Connection
     /**
      * Enable or disable encryption.
      *
-     * @access  public
      * @param   bool        $enable           Whether enable encryption.
      * @param   int         $type             Type of encryption (please, see
      *                                        children ENCRYPTION_* constants).
@@ -451,26 +430,31 @@ abstract class Connection
      *                                        this session stream.
      * @return  bool
      */
-    public function enableEncryption ( $enable, $type = null,
-                                       $sessionStream = null ) {
-
+    public function enableEncryption(
+        $enable,
+        $type          = null,
+        $sessionStream = null
+    ) {
         $currentNode = $this->getCurrentNode();
 
-        if(null === $currentNode)
+        if (null === $currentNode) {
             return false;
+        }
 
-        if(   null === $type
-           && null === $type = $currentNode->getEncryptionType())
+        if (null === $type &&
+            null === $type = $currentNode->getEncryptionType()) {
             return stream_socket_enable_crypto($this->getStream(), $enable);
+        }
 
         $currentNode->setEncryptionType($type);
 
-        if(null === $sessionStream)
+        if (null === $sessionStream) {
             return stream_socket_enable_crypto(
                 $this->getStream(),
                 $enable,
                 $type
             );
+        }
 
         return stream_socket_enable_crypto(
             $this->getStream(),
@@ -483,15 +467,15 @@ abstract class Connection
     /**
      * Check if the connection is encrypted or not.
      *
-     * @access  public
      * @return  mixed
      */
-    public function isEncrypted ( ) {
-
+    public function isEncrypted()
+    {
         $currentNode = $this->getCurrentNode();
 
-        if(null === $currentNode)
+        if (null === $currentNode) {
             return false;
+        }
 
         return null !== $currentNode->getEncryptionType();
     }
@@ -499,144 +483,131 @@ abstract class Connection
     /**
      * Get socket.
      *
-     * @access  public
      * @return  \Hoa\Socket
      */
-    public function getSocket ( ) {
-
+    public function getSocket()
+    {
         return $this->_socket;
     }
 
     /**
      * Get timeout.
      *
-     * @access  public
      * @return  int
      */
-    public function getTimeout ( ) {
-
+    public function getTimeout()
+    {
         return $this->_timeout;
     }
 
     /**
      * Get flag.
      *
-     * @access  public
      * @return  int
      */
-    public function getFlag ( ) {
-
+    public function getFlag()
+    {
         return $this->_flag;
     }
 
     /**
      * Get context.
      *
-     * @access  public
      * @return  string
      */
-    public function getContext ( ) {
-
+    public function getContext()
+    {
         return $this->_context;
     }
 
     /**
      * Get node name.
      *
-     * @access  public
      * @return  string
      */
-    public function getNodeName ( ) {
-
+    public function getNodeName()
+    {
         return $this->_nodeName;
     }
 
     /**
      * Get node ID.
      *
-     * @access  protected
      * @param   resource  $resource    Resource.
      * @return  string
      */
-    protected function getNodeId ( $resource ) {
-
+    protected function getNodeId($resource)
+    {
         return md5((int) $resource);
     }
 
     /**
      * Get current node.
      *
-     * @access  public
      * @return  \Hoa\Socket\Node
      */
-    public function getCurrentNode ( ) {
-
+    public function getCurrentNode()
+    {
         return $this->_node;
     }
 
     /**
      * Get nodes list.
      *
-     * @access  public
      * @return  array
      */
-    public function getNodes ( ) {
-
+    public function getNodes()
+    {
         return $this->_nodes;
     }
 
     /**
      * Check if the stream is quiet.
      *
-     * @access  public
      * @return  bool
      */
-    public function isQuiet ( ) {
-
+    public function isQuiet()
+    {
         return $this->_quiet;
     }
 
     /**
      * Check if the stream is mute.
      *
-     * @access  public
      * @return  bool
      */
-    public function isMute ( ) {
-
+    public function isMute()
+    {
         return $this->_mute;
     }
 
     /**
      * Check if the stream is disconnected.
      *
-     * @access  public
      * @return  bool
      */
-    public function isDisconnected ( ) {
-
+    public function isDisconnected()
+    {
         return false !== $this->_disconnect;
     }
 
     /**
      * Check if we should consider remote address or not.
      *
-     * @access  public
      * @return  bool
      */
-    public function isRemoteAddressConsidered ( ) {
-
+    public function isRemoteAddressConsidered()
+    {
         return $this->_remote;
     }
 
     /**
      * Get remote address.
      *
-     * @access  public
      * @return  string
      */
-    public function getRemoteAddress ( ) {
-
+    public function getRemoteAddress()
+    {
         return $this->_remoteAddress;
     }
 
@@ -645,27 +616,35 @@ abstract class Connection
      * Warning: if this method returns false, it means that the buffer is empty.
      * You should use the Hoa\Stream::setStreamBlocking(true) method.
      *
-     * @access  public
      * @param   int     $length    Length.
      * @return  string
-     * @throw   \Hoa\Socket\Exception
+     * @throws  \Hoa\Socket\Exception
      */
-    public function read ( $length ) {
-
-        if(null === $this->getStream())
+    public function read($length)
+    {
+        if (null === $this->getStream()) {
             throw new Socket\Exception(
                 'Cannot read because socket is not established, ' .
-                'i.e. not connected.', 0);
+                'i.e. not connected.',
+                0
+            );
+        }
 
-        if(0 > $length)
+        if (0 > $length) {
             throw new Socket\Exception(
-                'Length must be greater than 0, given %d.', 1, $length);
+                'Length must be greater than 0, given %d.',
+                1,
+                $length
+            );
+        }
 
-        if(true === $this->isEncrypted())
+        if (true === $this->isEncrypted()) {
             return fread($this->getStream(), $length);
+        }
 
-        if(false === $this->isRemoteAddressConsidered())
+        if (false === $this->isRemoteAddressConsidered()) {
             return stream_socket_recvfrom($this->getStream(), $length);
+        }
 
         $out = stream_socket_recvfrom(
             $this->getStream(),
@@ -681,12 +660,11 @@ abstract class Connection
     /**
      * Alias of $this->read().
      *
-     * @access  public
      * @param   int     $length    Length.
      * @return  string
      */
-    public function readString ( $length ) {
-
+    public function readString($length)
+    {
         return $this->read($length);
     }
 
@@ -694,46 +672,42 @@ abstract class Connection
      * Read a character.
      * It is equivalent to $this->read(1).
      *
-     * @access  public
      * @return  string
      */
-    public function readCharacter ( ) {
-
+    public function readCharacter()
+    {
         return $this->read(1);
     }
 
     /**
      * Read a boolean.
      *
-     * @access  public
      * @return  bool
      */
-    public function readBoolean ( ) {
-
+    public function readBoolean()
+    {
         return (bool) $this->read(1);
     }
 
     /**
      * Read an integer.
      *
-     * @access  public
      * @param   int     $length    Length.
      * @return  int
      */
-    public function readInteger ( $length = 1 ) {
-
+    public function readInteger($length = 1)
+    {
         return (int) $this->read($length);
     }
 
     /**
      * Read a float.
      *
-     * @access  public
      * @param   int     $length    Length.
      * @return  float
      */
-    public function readFloat ( $length = 1 ) {
-
+    public function readFloat($length = 1)
+    {
         return (float) $this->read($length);
     }
 
@@ -741,25 +715,24 @@ abstract class Connection
      * Read an array.
      * Alias of the $this->scanf() method.
      *
-     * @access  public
      * @param   string  $format    Format (see printf's formats).
      * @return  array
      */
-    public function readArray ( $format = null ) {
-
+    public function readArray($format = null)
+    {
         return $this->scanf($format);
     }
 
     /**
      * Read a line.
      *
-     * @access  public
      * @return  string
      */
-    public function readLine ( ) {
-
-        if(true === $this->isEncrypted())
+    public function readLine()
+    {
+        if (true === $this->isEncrypted()) {
             return rtrim(fgets($this->getStream(), 1 << 15), "\n");
+        }
 
         return stream_get_line($this->getStream(), 1 << 15, "\n");
     }
@@ -767,69 +740,74 @@ abstract class Connection
     /**
      * Read all, i.e. read as much as possible.
      *
-     * @access  public
      * @param   int  $offset    Offset (not used).
      * @return  string
      */
-    public function readAll ( $offset = -1 ) {
-
+    public function readAll($offset = -1)
+    {
         return stream_get_contents($this->getStream());
     }
 
     /**
      * Parse input from a stream according to a format.
      *
-     * @access  public
      * @param   string  $format    Format (see printf's formats).
      * @return  array
      */
-    public function scanf ( $format ) {
-
+    public function scanf($format)
+    {
         return sscanf($this->readAll(), $format);
     }
 
     /**
      * Write n characters.
      *
-     * @access  public
      * @param   string  $string    String.
      * @param   int     $length    Length.
      * @return  mixed
-     * @throw   \Hoa\Socket\Exception
+     * @throws  \Hoa\Socket\Exception
      */
-    public function write ( $string, $length ) {
-
-        if(null === $this->getStream())
+    public function write($string, $length)
+    {
+        if (null === $this->getStream()) {
             throw new Socket\Exception(
                 'Cannot write because socket is not established, ' .
-                'i.e. not connected.', 2);
+                'i.e. not connected.',
+                2
+            );
+        }
 
-        if(0 > $length)
+        if (0 > $length) {
             throw new Socket\Exception(
-                'Length must be greater than 0, given %d.', 3, $length);
+                'Length must be greater than 0, given %d.',
+                3,
+                $length
+            );
+        }
 
-        if(strlen($string) > $length)
+        if (strlen($string) > $length) {
             $string = substr($string, 0, $length);
+        }
 
-        if(true === $this->isEncrypted())
+        if (true === $this->isEncrypted()) {
             $out = fwrite($this->getStream(), $string, $length);
-        else {
-
-            if(   false === $this->isRemoteAddressConsidered()
-               || null  === $remote = $this->getRemoteAddress())
+        } else {
+            if (false === $this->isRemoteAddressConsidered() ||
+                null  === $remote = $this->getRemoteAddress()) {
                 $out = @stream_socket_sendto($this->getStream(), $string);
-            else
+            } else {
                 $out = @stream_socket_sendto(
                     $this->getStream(),
                     $string,
                     0,
                     $remote
                 );
+            }
         }
 
-        if(-1 === $out)
-            throw new Socket\Exception(
-                'Pipe is broken, cannot write data.', 4);
+        if (-1 === $out) {
+            throw new Socket\Exception('Pipe is broken, cannot write data.', 4);
+        }
 
         return $out;
     }
@@ -837,12 +815,11 @@ abstract class Connection
     /**
      * Write a string.
      *
-     * @access  public
      * @param   string  $string    String.
      * @return  mixed
      */
-    public function writeString ( $string ) {
-
+    public function writeString($string)
+    {
         $string = (string) $string;
 
         return $this->write($string, strlen($string));
@@ -851,36 +828,33 @@ abstract class Connection
     /**
      * Write a character.
      *
-     * @access  public
      * @param   string  $char    Character.
      * @return  mixed
      */
-    public function writeCharacter ( $char ) {
-
+    public function writeCharacter($char)
+    {
         return $this->write((string) $char[0], 1);
     }
 
     /**
      * Write a boolean.
      *
-     * @access  public
      * @param   bool    $boolean    Boolean.
      * @return  mixed
      */
-    public function writeBoolean ( $boolean ) {
-
+    public function writeBoolean($boolean)
+    {
         return $this->write((string) (bool) $boolean, 1);
     }
 
     /**
      * Write an integer.
      *
-     * @access  public
      * @param   int     $integer    Integer.
      * @return  mixed
      */
-    public function writeInteger ( $integer ) {
-
+    public function writeInteger($integer)
+    {
         $integer = (string) (int) $integer;
 
         return $this->write($integer, strlen($integer));
@@ -889,12 +863,11 @@ abstract class Connection
     /**
      * Write a float.
      *
-     * @access  public
      * @param   float   $float    Float.
      * @return  mixed
      */
-   public function writeFloat ( $float ) {
-
+   public function writeFloat($float)
+   {
        $float = (string) (float) $float;
 
        return $this->write($float, strlen($float));
@@ -903,14 +876,14 @@ abstract class Connection
     /**
      * Write a line.
      *
-     * @access  public
      * @param   string  $line    Line.
      * @return  mixed
      */
-    public function writeLine ( $line ) {
-
-        if(false === $n = strpos($line, "\n"))
+    public function writeLine($line)
+    {
+        if (false === $n = strpos($line, "\n")) {
             return $this->write($line . "\n", strlen($line) + 1);
+        }
 
         ++$n;
 
@@ -920,12 +893,11 @@ abstract class Connection
     /**
      * Write an array.
      *
-     * @access  public
      * @param   array   $array    Array.
      * @return  mixed
      */
-    public function writeArray ( Array $array ) {
-
+    public function writeArray(Array $array)
+    {
         $array = serialize($array);
 
         return $this->write($array, strlen($array));
@@ -934,57 +906,52 @@ abstract class Connection
     /**
      * Write all, i.e. as much as possible.
      *
-     * @access  public
      * @param   string  $string    String.
      * @return  mixed
      */
-    public function writeAll ( $string ) {
-
+    public function writeAll($string)
+    {
         return $this->write($string, strlen($string));
     }
 
     /**
      * Truncate a file to a given length.
      *
-     * @access  public
      * @param   int     $size    Size.
      * @return  bool
      */
-    public function truncate ( $size ) {
-
+    public function truncate($size)
+    {
         return false;
     }
 
     /**
      * Test for end-of-file.
      *
-     * @access  public
      * @return  bool
      */
-    public function eof ( ) {
-
+    public function eof()
+    {
         return feof($this->getStream());
     }
 
     /**
      * Get filename component of path.
      *
-     * @access  public
      * @return  string
      */
-    public function getBasename ( ) {
-
+    public function getBasename()
+    {
         return basename($this->getSocket()->__toString());
     }
 
     /**
      * Get directory name component of path.
      *
-     * @access  public
      * @return  string
      */
-    public function getDirname ( ) {
-
+    public function getDirname()
+    {
         return dirname($this->getSocket()->__toString());
     }
 }

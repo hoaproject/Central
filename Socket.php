@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,13 +43,11 @@ use Hoa\Core;
  *
  * Socket analyzer.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Socket {
-
+class Socket
+{
     /**
      * Address type: IPv6.
      *
@@ -81,28 +79,28 @@ class Socket {
     /**
      * Address.
      *
-     * @var \Hoa\Socket string
+     * @var string
      */
     protected $_address     = null;
 
     /**
      * Address type. Please, see the self::ADDRESS_* constants.
      *
-     * @var \Hoa\Socket int
+     * @var int
      */
     protected $_addressType = 0;
 
     /**
      * Port.
      *
-     * @var \Hoa\Socket int
+     * @var int
      */
     protected $_port        = -1;
 
     /**
      * Transport.
      *
-     * @var \Hoa\Socket string
+     * @var string
      */
     protected $_transport   = null;
 
@@ -111,12 +109,11 @@ class Socket {
     /**
      * Constructor.
      *
-     * @access  public
      * @param   string  $uri    URI.
      * @return  void
      */
-    public function __construct ( $uri ) {
-
+    public function __construct($uri)
+    {
         $this->setURI($uri);
 
         return;
@@ -125,13 +122,12 @@ class Socket {
     /**
      * Set URI.
      *
-     * @access  public
      * @param   string  $uri    URI.
      * @return  string
-     * @throw   \Hoa\Socket\Exception
+     * @throws  \Hoa\Socket\Exception
      */
-    public function setURI ( $uri ) {
-
+    public function setURI($uri)
+    {
         $m = preg_match(
             '#(?<scheme>[^:]+)://' .
                 '(?:\[(?<ipv6_>[^\]]+)\]:(?<ipv6_port>\d+)$|' .
@@ -141,56 +137,62 @@ class Socket {
             $uri,
             $matches);
 
-        if(0 === $m)
+        if (0 === $m) {
             throw new Exception(
                 'URI %s is not recognized (it is not an IPv6, IPv4 nor ' .
-                'domain name.', 0, $uri);
+                'domain name.',
+                0,
+                $uri
+            );
+        }
 
         $this->setTransport($matches['scheme']);
 
-        if(isset($matches['ipv6_']) && !empty($matches['ipv6_'])) {
-
+        if (isset($matches['ipv6_']) && !empty($matches['ipv6_'])) {
             $this->_address     = $matches['ipv6_'];
             $this->_addressType = self::ADDRESS_IPV6;
             $this->setPort($matches['ipv6_port']);
-        }
-        elseif(isset($matches['ipv6']) && !empty($matches['ipv6'])) {
-
+        } elseif (isset($matches['ipv6']) && !empty($matches['ipv6'])) {
             $this->_address     = $matches['ipv6'];
             $this->_addressType = self::ADDRESS_IPV6;
-        }
-        elseif(isset($matches['ipv4']) && !empty($matches['ipv4'])) {
-
+        } elseif (isset($matches['ipv4']) && !empty($matches['ipv4'])) {
             $this->_address     = $matches['ipv4'];
             $this->_addressType = self::ADDRESS_IPV4;
 
-            if('*' == $this->_address)
+            if ('*' === $this->_address) {
                 $this->_address = '0.0.0.0';
+            }
 
-            if(isset($matches['ipv4_port']))
+            if (isset($matches['ipv4_port'])) {
                 $this->setPort($matches['ipv4_port']);
-        }
-        elseif(isset($matches['domain'])) {
+            }
+        } elseif (isset($matches['domain'])) {
+            $this->_address = $matches['domain'];
 
-            $this->_address     = $matches['domain'];
-
-            if(false !== strpos($this->_address, '/'))
+            if (false !== strpos($this->_address, '/')) {
                 $this->_addressType = self::ADDRESS_PATH;
-            else
+            } else {
                 $this->_addressType = self::ADDRESS_DOMAIN;
+            }
 
-            if(isset($matches['domain_port']))
+            if (isset($matches['domain_port'])) {
                 $this->setPort($matches['domain_port']);
+            }
         }
 
-        if(   self::ADDRESS_IPV6 == $this->_addressType
-           && (
-                !defined('STREAM_PF_INET6')
-             || (function_exists('socket_create') && !defined('AF_INET6'))
-              ))
+        if (self::ADDRESS_IPV6 == $this->_addressType &&
+            (
+                !defined('STREAM_PF_INET6') ||
+                (function_exists('socket_create') && !defined('AF_INET6'))
+            )
+           ) {
             throw new Exception(
                 'IPv6 support has been disabled from PHP, we cannot use ' .
-                'the %s URI.', 1, $uri);
+                'the %s URI.',
+                1,
+                $uri
+            );
+        }
 
         return;
     }
@@ -198,16 +200,19 @@ class Socket {
     /**
      * Set the port.
      *
-     * @access  protected
      * @param   int  $port    Port.
      * @return  int
-     * @throw   \Hoa\Socket\Exception
+     * @throws  \Hoa\Socket\Exception
      */
-    protected function setPort ( $port ) {
-
-        if($port < 0)
+    protected function setPort($port)
+    {
+        if ($port < 0) {
             throw new Exception(
-                'Port must be greater or equal than zero, given %d.', 2, $port);
+                'Port must be greater or equal than zero, given %d.',
+                2,
+                $port
+            );
+        }
 
         $old         = $this->_port;
         $this->_port = $port;
@@ -218,18 +223,21 @@ class Socket {
     /**
      * Set the transport.
      *
-     * @access  protected
      * @param   string  $transport    Transport (TCP, UDP etc.).
      * @return  string
-     * @throw   \Hoa\Socket\Exception
+     * @throws  \Hoa\Socket\Exception
      */
-    protected function setTransport ( $transport ) {
-
+    protected function setTransport($transport)
+    {
         $transport = strtolower($transport);
 
-        if(false === Transport::exists($transport))
+        if (false === Transport::exists($transport)) {
             throw new Exception(
-                'Transport %s is not enabled on this machin.', 3, $transport);
+                'Transport %s is not enabled on this machin.',
+                3,
+                $transport
+            );
+        }
 
         $old              = $this->_transport;
         $this->_transport = $transport;
@@ -240,88 +248,82 @@ class Socket {
     /**
      * Get the address.
      *
-     * @access  public
      * @return  string
      */
-    public function getAddress ( ) {
-
+    public function getAddress()
+    {
         return $this->_address;
     }
 
     /**
      * Get the address type.
      *
-     * @access  public
      * @return  int
      */
-    public function getAddressType ( ) {
-
+    public function getAddressType()
+    {
         return $this->_addressType;
     }
 
     /**
      * Check if a port was declared.
      *
-     * @access  public
      * @return  string
      */
-    public function hasPort ( ) {
-
+    public function hasPort()
+    {
         return -1 != $this->getPort();
     }
 
     /**
      * Get the port.
      *
-     * @access  public
      * @return  int
      */
-    public function getPort ( ) {
-
+    public function getPort()
+    {
         return $this->_port;
     }
 
     /**
      * Check if a transport was declared.
      *
-     * @access  public
      * @return  bool
      */
-    public function hasTransport ( ) {
-
+    public function hasTransport()
+    {
         return null !== $this->getTransport();
     }
 
     /**
      * Get the transport.
      *
-     * @access  public
      * @return  string
      */
-    public function getTransport ( ) {
-
+    public function getTransport()
+    {
         return $this->_transport;
     }
 
     /**
      * Get a string that represents the socket address.
      *
-     * @access  public
      * @return  string
      */
-    public function __toString ( ) {
-
+    public function __toString()
+    {
         $out = null;
 
-        if(true === $this->hasTransport())
+        if (true === $this->hasTransport()) {
             $out .= $this->getTransport() . '://';
+        }
 
-        if(true === $this->hasPort()) {
-
-            if(self::ADDRESS_IPV6 === $this->getAddressType())
+        if (true === $this->hasPort()) {
+            if (self::ADDRESS_IPV6 === $this->getAddressType()) {
                 $out .= '[' . $this->getAddress() . ']';
-            else
+            } else {
                 $out .= $this->getAddress();
+            }
 
             return $out . ':' . $this->getPort();
         }

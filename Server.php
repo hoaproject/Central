@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,13 +43,11 @@ use Hoa\Stream;
  *
  * Established a server connection.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Server extends Connection {
-
+class Server extends Connection
+{
     /**
      * Tell a stream to bind to the specified target.
      *
@@ -95,28 +93,28 @@ class Server extends Connection {
     /**
      * Master connection.
      *
-     * @var \Hoa\Socket\Server resource
+     * @var resource
      */
     protected $_master   = null;
 
     /**
      * All considered server.
      *
-     * @var \Hoa\Socket\Server array
+     * @var array
      */
     protected $_servers  = [];
 
     /**
      * Masters connection.
      *
-     * @var \Hoa\Socket\Server array
+     * @var array
      */
     protected $_masters  = [];
 
     /**
      * Stack of connections.
      *
-     * @var \Hoa\Socket\Server array
+     * @var array
      */
     protected $_stack    = [];
 
@@ -125,7 +123,6 @@ class Server extends Connection {
     /**
      * Start a connection.
      *
-     * @access  public
      * @param   string  $socket     Socket URI.
      * @param   int     $timeout    Timeout.
      * @param   int     $flag       Flag, see the child::* constants.
@@ -133,40 +130,49 @@ class Server extends Connection {
      *                              \Hoa\Stream\Context class).
      * @return  void
      */
-    public function __construct ( $socket, $timeout = 30,
-                                  $flag = -1, $context = null ) {
-
+    public function __construct(
+        $socket,
+        $timeout = 30,
+        $flag    = -1,
+        $context = null
+    ) {
         $this->setSocket($socket);
         $socket = $this->getSocket();
 
-        if($flag == -1)
-            switch($socket->getTransport()) {
-
+        if ($flag == -1) {
+            switch ($socket->getTransport()) {
                 case 'tcp':
                     $flag = self::BIND | self::LISTEN;
-                  break;
+
+                    break;
 
                 case 'udp':
                     $flag = self::BIND;
-                  break;
-            }
-        else
-            switch($socket->getTransport()) {
 
+                    break;
+            }
+        } else {
+            switch ($socket->getTransport()) {
                 case 'tcp':
                     $flag &= self::LISTEN;
-                  break;
+
+                    break;
 
                 case 'udp':
-                    if($flag & self::LISTEN)
+                    if ($flag & self::LISTEN) {
                         throw new Exception(
                             'Cannot use the flag ' .
                             '\Hoa\Socket\Server::LISTEN ' .
-                            'for connect-less transports (such as UDP).', 0);
+                            'for connect-less transports (such as UDP).',
+                            0
+                        );
+                    }
 
                     $flag = self::BIND;
-                  break;
+
+                    break;
             }
+        }
 
         parent::__construct(null, $timeout, $flag, $context);
 
@@ -176,22 +182,21 @@ class Server extends Connection {
     /**
      * Open the stream and return the associated resource.
      *
-     * @access  protected
      * @param   string               $streamName    Socket URI.
      * @param   \Hoa\Stream\Context  $context       Context.
      * @return  resource
-     * @throw   \Hoa\Socket\Exception
+     * @throws  \Hoa\Socket\Exception
      */
-    protected function &_open ( $streamName, Stream\Context $context = null ) {
-
-        if(null === $context)
+    protected function &_open($streamName, Stream\Context $context = null)
+    {
+        if (null === $context) {
             $this->_master = @stream_socket_server(
                 $streamName,
                 $errno,
                 $errstr,
                 $this->getFlag()
             );
-        else
+        } else {
             $this->_master = @stream_socket_server(
                 $streamName,
                 $errno,
@@ -199,11 +204,15 @@ class Server extends Connection {
                 $this->getFlag(),
                 $context->getContext()
             );
+        }
 
-        if(false === $this->_master)
+        if (false === $this->_master) {
             throw new Exception(
                 'Server cannot join %s and returns an error (number %d): %s.',
-                1, [$streamName, $errno, $errstr]);
+                1,
+                [$streamName, $errno, $errstr]
+            );
+        }
 
         $i                  = count($this->_masters);
         $this->_masters[$i] = $this->_master;
@@ -216,19 +225,18 @@ class Server extends Connection {
     /**
      * Close the current stream.
      *
-     * @access  protected
      * @return  bool
      */
-    protected function _close ( ) {
-
+    protected function _close()
+    {
         $current = $this->getStream();
 
-        if(false === in_array($current, $this->_masters, true)) {
-
+        if (false === in_array($current, $this->_masters, true)) {
             $i = array_search($current, $this->_stack);
 
-            if(false !== $i)
+            if (false !== $i) {
                 unset($this->_stack[$i]);
+            }
 
             // $this->_node is voluntary kept in memory until a new node will be
             // used.
@@ -247,19 +255,21 @@ class Server extends Connection {
     /**
      * Connect and accept the first connection.
      *
-     * @access  public
      * @return  \Hoa\Socket\Server
-     * @throw   \Hoa\Socket\Exception
+     * @throws  \Hoa\Socket\Exception
      */
-    public function connect ( ) {
-
+    public function connect()
+    {
         parent::connect();
 
         $client = @stream_socket_accept($this->_master);
 
-        if(false === $client)
+        if (false === $client) {
             throw new Exception(
-                'Operation timed out (nothing to accept).', 2);
+                'Operation timed out (nothing to accept).',
+                2
+            );
+        }
 
         $this->_setStream($client);
 
@@ -269,50 +279,51 @@ class Server extends Connection {
     /**
      * Connect but wait for select and accept new connections.
      *
-     * @access  public
      * @return  \Hoa\Socket\Server
      */
-    public function connectAndWait ( ) {
-
+    public function connectAndWait()
+    {
         return parent::connect();
     }
 
     /**
      * Select connections.
      *
-     * @access  public
      * @return  \Hoa\Socket\Server
-     * @throw   \Hoa\Socket\Exception
+     * @throws  \Hoa\Socket\Exception
      */
-    public function select ( ) {
-
+    public function select()
+    {
         $read   = $this->_stack;
         $write  = null;
         $except = null;
 
         @stream_select($read, $write, $except, $this->getTimeout(), 0);
 
-        foreach($read as $socket)
-            if(true === in_array($socket, $this->_masters, true)) {
-
+        foreach ($read as $socket) {
+            if (true === in_array($socket, $this->_masters, true)) {
                 $client = @stream_socket_accept($socket);
 
-                if(false === $client)
+                if (false === $client) {
                     throw new Exception(
-                        'Operation timed out (nothing to accept).', 3);
+                        'Operation timed out (nothing to accept).',
+                        3
+                    );
+                }
 
-                $m                 = array_search($socket, $this->_masters, true);
-                $server            = $this->_servers[$m];
-                $id                = $this->getNodeId($client);
-                $node              = dnew(
+                $m      = array_search($socket, $this->_masters, true);
+                $server = $this->_servers[$m];
+                $id     = $this->getNodeId($client);
+                $node   = dnew(
                     $server->getNodeName(),
                     [$id, $client, $server]
                 );
                 $this->_nodes[$id] = $node;
                 $this->_stack[]    = $client;
-            }
-            else
+            } else {
                 $this->_iterator[] = $socket;
+            }
+        }
 
         return $this;
     }
@@ -320,24 +331,24 @@ class Server extends Connection {
     /**
      * Consider another server when selecting connection.
      *
-     * @access  public
      * @param   \Hoa\Socket\Connection  $other    Other server.
      * @return  \Hoa\Socket\Server
      */
-    public function consider ( Connection $other ) {
-
-        if($other instanceof Client) {
-
-            if(true === $other->isDisconnected())
+    public function consider(Connection $other)
+    {
+        if ($other instanceof Client) {
+            if (true === $other->isDisconnected()) {
                 $other->connect();
+            }
 
             $this->_stack[] = $other->getStream();
 
             return $this;
         }
 
-        if(true === $other->isDisconnected())
+        if (true === $other->isDisconnected()) {
             $other->connectAndWait();
+        }
 
         $i                  = count($this->_masters);
         $this->_masters[$i] = $other->_master;
@@ -350,28 +361,27 @@ class Server extends Connection {
     /**
      * Check if the current node belongs to a specific server.
      *
-     * @access  public
      * @param   \Hoa\Socket\Connection  $server    Server.
      * @return  bool
      */
-    public function is ( Connection $server ) {
-
+    public function is(Connection $server)
+    {
         return $this->_node->getConnection() === $server;
     }
 
     /**
      * Set and get the current selected connection.
      *
-     * @access  public
      * @return  \Hoa\Socket\Node
      */
-    public function current ( ) {
-
+    public function current()
+    {
         $current = parent::_current();
         $id      = $this->getNodeId($current);
 
-        if(!isset($this->_nodes[$id]))
+        if (!isset($this->_nodes[$id])) {
             return $current;
+        }
 
         return $this->_node = $this->_nodes[$this->getNodeId($current)];
     }
@@ -379,22 +389,20 @@ class Server extends Connection {
     /**
      * Check if the server bind or not.
      *
-     * @access  public
      * @return  bool
      */
-    public function isBinding ( ) {
-
+    public function isBinding()
+    {
         return (bool) $this->getFlag() & self::BIND;
     }
 
     /**
      * Check if the server is listening or not.
      *
-     * @access  public
      * @return  bool
      */
-    public function isListening ( ) {
-
+    public function isListening()
+    {
         return (bool) $this->getFlag() & self::LISTEN;
     }
 }

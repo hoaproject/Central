@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,17 +44,15 @@ use Hoa\Socket;
  * Represent a group of connection handlers.
  * Add semantics around Hoa\Socket\Connection\Handler.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Group implements \ArrayAccess, \IteratorAggregate, \Countable {
-
+class Group implements \ArrayAccess, \IteratorAggregate, \Countable
+{
     /**
      * All connections.
      *
-     * @var \Hoa\Socket\Connection\Group array
+     * @var array
      */
     protected $_connections = [];
 
@@ -63,26 +61,25 @@ class Group implements \ArrayAccess, \IteratorAggregate, \Countable {
     /**
      * Check if a connection offset exists.
      *
-     * @access  public
      * @param   mixed  $offset    Offset.
      * @return  bool
      */
-    public function offsetExists ( $offset ) {
-
+    public function offsetExists($offset)
+    {
         return true === array_key_exists($offset, $this->_connections);
     }
 
     /**
      * Get a specific connection.
      *
-     * @access  public
      * @param   mixed  $offset    Offset.
      * @return  \Hoa\Socket\Connection\Handler
      */
-    public function offsetGet ( $offset ) {
-
-        if(false === $this->offsetExists($offset))
+    public function offsetGet($offset)
+    {
+        if (false === $this->offsetExists($offset)) {
             return null;
+        }
 
         return $this->_connections[$offset];
     }
@@ -90,27 +87,31 @@ class Group implements \ArrayAccess, \IteratorAggregate, \Countable {
     /**
      * Add a connection.
      *
-     * @access  public
      * @param   mixed                           $offset        Offset.
      * @param   \Hoa\Socket\Connection\Handler  $connection    Connection
      *                                                         (handler).
      * @return  void
-     * @throw   \Hoa\Socket\Exception
+     * @throws  \Hoa\Socket\Exception
      */
-    public function offsetSet ( $offset, $connection ) {
-
-        if(!($connection instanceof Handler))
+    public function offsetSet($offset, $connection)
+    {
+        if (!($connection instanceof Handler)) {
             throw new Socket\Exception(
                 '%s only accepts %s\Handler objects.',
-                0, [__CLASS__, __NAMESPACE__]);
+                0,
+                [__CLASS__, __NAMESPACE__]
+            );
+        }
 
-        if(null === $offset)
-            $this->_connections[]        = $connection;
-        else
+        if (null === $offset) {
+            $this->_connections[] = $connection;
+        } else {
             $this->_connections[$offset] = $connection;
+        }
 
-        if(1 < count($this))
+        if (1 < count($this)) {
             $this->getFirstConnection()->merge($connection);
+        }
 
         return;
     }
@@ -118,15 +119,16 @@ class Group implements \ArrayAccess, \IteratorAggregate, \Countable {
     /**
      * Nothing (not allowed).
      *
-     * @access  public
      * @return  void
-     * @throw   \Hoa\Socket\Exception
+     * @throws  \Hoa\Socket\Exception
      */
-    public function offsetUnset ( $offset ) {
-
+    public function offsetUnset($offset)
+    {
         throw new Socket\Exception(
             'This operation is not allowed: you cannot unset a connection ' .
-            'from a group.', 1);
+            'from a group.',
+            1
+        );
 
         return;
     }
@@ -134,35 +136,32 @@ class Group implements \ArrayAccess, \IteratorAggregate, \Countable {
     /**
      * Get iterator of all declared connections.
      *
-     * @access  public
      * @return  \ArrayIterator
      */
-    public function getIterator ( ) {
-
+    public function getIterator()
+    {
         return new \ArrayIterator($this->_connections);
     }
 
     /**
      * Count number of declared connections.
      *
-     * @access  public
      * @return  int
      */
-    public function count ( ) {
-
+    public function count()
+    {
         return count($this->_connections);
     }
 
     /**
      * Semantics alias of $this->offsetSet(null, $connection).
      *
-     * @access  public
      * @param   \Hoa\Socket\Connection\Handler  $connection    Connection
      *                                                         (handler).
      * @return  \Hoa\Socket\Connection\Group
      */
-    public function merge ( Handler $connection ) {
-
+    public function merge(Handler $connection)
+    {
         $this[] = $connection;
 
         return $this;
@@ -171,15 +170,17 @@ class Group implements \ArrayAccess, \IteratorAggregate, \Countable {
     /**
      * Run the group of connections.
      *
-     * @access  public
      * @return  void
-     * @throw   \Hoa\Socket\Exception
+     * @throws  \Hoa\Socket\Exception
      */
-    public function run ( ) {
-
-        if(0 === count($this))
+    public function run()
+    {
+        if (0 === count($this)) {
             throw new Socket\Exception(
-                'Nothing to run. You should merge a connection.', 2);
+                'Nothing to run. You should merge a connection.',
+                2
+            );
+        }
 
         return $this->getFirstConnection()->run();
     }
@@ -188,11 +189,10 @@ class Group implements \ArrayAccess, \IteratorAggregate, \Countable {
      * Get the first declared connection (where other connections have been
      * merged).
      *
-     * @access  public
      * @return  \Hoa\Socket\Connection\Handler
      */
-    public function getFirstConnection ( ) {
-
+    public function getFirstConnection()
+    {
         return $this[key($this->_connections)];
     }
 }

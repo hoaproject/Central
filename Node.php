@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,38 +41,36 @@ namespace Hoa\Socket;
  *
  * Represent a generic node.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Node {
-
+class Node
+{
     /**
      * Node's ID.
      *
-     * @var \Hoa\Socket\Node string
+     * @var string
      */
     protected $_id             = null;
 
     /**
      * Node's socket resource.
      *
-     * @var \Hoa\Socket\Node resource
+     * @var resource
      */
     private $_socket           = null;
 
     /**
      * Get server.
      *
-     * @var \Hoa\Socket\Connection object
+     * @var \Hoa\Socket\Connection
      */
     private $_connection       = null;
 
     /**
      * Encryption type.
      *
-     * @var \Hoa\Socket\Node int
+     * @var int
      */
     protected $_encryptionType = null;
 
@@ -81,14 +79,13 @@ class Node {
     /**
      * Constructor.
      *
-     * @access  public
      * @param   string                  $id            ID.
      * @param   resource                $socket        Socket.
      * @param   \Hoa\Socket\Connection  $connection    Connection.
      * @return  void
      */
-    public function __construct ( $id, $socket, Connection $connection ) {
-
+    public function __construct($id, $socket, Connection $connection)
+    {
         $this->_id         = $id;
         $this->_socket     = $socket;
         $this->_connection = $connection;
@@ -99,47 +96,43 @@ class Node {
     /**
      * Get node's ID.
      *
-     * @access  public
      * @return  string
      */
-    public function getId ( ) {
-
+    public function getId()
+    {
         return $this->_id;
     }
 
     /**
      * Get node's socket resource.
      *
-     * @access  public
      * @return  resource
      */
-    public function getSocket ( ) {
-
+    public function getSocket()
+    {
         return $this->_socket;
     }
 
     /**
      * Get connection.
      *
-     * @access  public
      * @return  \Hoa\Socket\Connection
      */
-    public function getConnection ( ) {
-
+    public function getConnection()
+    {
         return $this->_connection;
     }
 
     /**
      * Set encryption type.
      *
-     * @access  public
      * @param   int  $type    Type of encryption (please, see ENCRYPTION_*
      *                        constants from Hoa\Socket\Client and
      *                        Hoa\Socket\Server).
      * @return  int
      */
-    public function setEncryptionType ( $type ) {
-
+    public function setEncryptionType($type)
+    {
         $old                   = $this->_encryptionType;
         $this->_encryptionType = $type;
 
@@ -149,11 +142,10 @@ class Node {
     /**
      * Get encryption type.
      *
-     * @access  public
      * @return  int
      */
-    public function getEncryptionType ( ) {
-
+    public function getEncryptionType()
+    {
         return $this->_encryptionType;
     }
 }
