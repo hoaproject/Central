@@ -1,3 +1,8 @@
+# 0.15.05.20
+
+  * Force MIME type with the constructor. (Ivan Enderlin, 2015-05-20T15:04:16+02:00)
+  * Move to PSR-1 and PSR-2. (Ivan Enderlin, 2015-05-18T09:01:31+02:00)
+
 # 0.15.02.23
 
   * Add the `CHANGELOG.md` file. (Ivan Enderlin, 2015-02-23T09:20:29+01:00)
