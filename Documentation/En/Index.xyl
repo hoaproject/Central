@@ -83,20 +83,22 @@
     for more simplicity.</li>
   </ul>
   <p>Let's start by writing the <code>SuperView</code> class:</p>
-  <pre data-line="44"><code class="language-php">class SuperView implements Hoa\View\Viewable {
-
+  <pre data-line="46"><code class="language-php">class SuperView implements Hoa\View\Viewable
+{
     protected $_in     = null;
     protected $_out    = null;
     protected $_data   = null;
     protected $_router = null;
 
-    public function __construct (                        $in,
-                                  Hoa\Stream\IStream\Out $out,
-                                  Hoa\Router\Router      $router = null,
-                                  StdClass               $data   = null ) {
-
-        if(null === $data)
+    public function __construct(
+        $in,
+        Hoa\Stream\IStream\Out $out,
+        Hoa\Router\Router $router = null,
+        StdClass $data            = null
+    ) {
+        if (null === $data) {
             $data = new StdClass();
+        }
 
         $this->_in     = $in;
         $this->_out    = $out;
@@ -106,18 +108,18 @@
         return;
     }
 
-    public function getOutputStream ( ) {
-
+    public function getOutputStream()
+    {
         return $this->_out;
     }
 
-    public function getData ( ) {
-
+    public function getData()
+    {
         return $this->_data;
     }
 
-    public function render ( ) {
-
+    public function render()
+    {
         $data   = $this->getData();
         $router = $this->getRouter();
 
@@ -131,8 +133,8 @@
         return;
     }
 
-    public function getRouter ( ) {
-
+    public function getRouter()
+    {
         return $this->_router;
     }
 }</code></pre>
@@ -144,7 +146,7 @@
   variables (in addition to <code class="language-php">$this</code>), namely
   <code class="language-php">$data</code> and
   <code class="language-php">$router</code>, to ease the usage. Finally the
-  line 44 uses the output stream to write computed data.</p>
+  line 46 uses the output stream to write computed data.</p>
   <p>Now, let's test by writing a <code>Test.php</code> file:</p>
   <pre data-line="9,17"><code class="language-php">// Output.
 $output = new Hoa\Http\Response();
@@ -171,8 +173,8 @@ $superview->render();</code></pre>
 &amp;lt;h1>foobar&amp;lt;/h1></code></pre>
   <p>Excellent. Now, we will add the <code>import</code> method to create
   <strong>sub-views</strong>. Thus in the <code>SuperView</code> class:</p>
-  <pre><code class="language-php">    public function import ( $in, $data = null ) {
-
+  <pre><code class="language-php">    public function import($in, $data = null)
+    {
         $new = new static(
             $in,
             $this->getOutputStream(),
