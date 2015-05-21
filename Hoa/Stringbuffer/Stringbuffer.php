@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,54 +34,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Stringbuffer;
 
-from('Hoa')
-
-/**
- * \Hoa\Stream
- */
--> import('Stream.~')
-
-/**
- * \Hoa\Stream\IStream\Bufferable
- */
--> import('Stream.I~.Bufferable')
-
-/**
- * \Hoa\Stream\IStream\Lockable
- */
--> import('Stream.I~.Lockable')
-
-/**
- * \Hoa\Stream\IStream\Pointable
- */
--> import('Stream.I~.Pointable');
-
-}
-
-namespace Hoa\Stringbuffer {
+use Hoa\Core;
+use Hoa\Stream;
 
 /**
  * Class \Hoa\Stringbuffer.
  *
  * This class allows to manipulate a string as a stream.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
 abstract class Stringbuffer
-    extends    \Hoa\Stream
-    implements \Hoa\Stream\IStream\Bufferable,
-               \Hoa\Stream\IStream\Lockable,
-               \Hoa\Stream\IStream\Pointable {
-
+    extends    Stream
+    implements Stream\IStream\Bufferable,
+               Stream\IStream\Lockable,
+               Stream\IStream\Pointable
+{
     /**
      * String buffer index.
      *
-     * @var \Hoa\Stringbuffer int
+     * @var int
      */
     private static $_i = 0;
 
@@ -90,15 +65,15 @@ abstract class Stringbuffer
     /**
      * Open a new string buffer.
      *
-     * @access  public
      * @param   string  $streamName    Stream name.
      * @return  void
-     * @throw   \Hoa\Stream\Exception
+     * @throws  \Hoa\Stream\Exception
      */
-    public function __construct ( $streamName = null ) {
-
-        if(null === $streamName)
+    public function __construct($streamName = null)
+    {
+        if (null === $streamName) {
             $streamName = 'hoa://Library/Stringbuffer#' . self::$_i++;
+        }
 
         parent::__construct($streamName, null);
 
@@ -108,18 +83,17 @@ abstract class Stringbuffer
     /**
      * Open the stream and return the associated resource.
      *
-     * @access  protected
      * @param   string               $streamName    Stream name (here, it is
      *                                              null).
      * @param   \Hoa\Stream\Context  $context       Context.
      * @return  resource
-     * @throw   \Hoa\Stringbuffer\Exception
+     * @throws  \Hoa\Stringbuffer\Exception
      */
-    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
-
-        if(false === $out = @tmpfile())
-            throw new Exception(
-                'Failed to open a string buffer.', 0);
+    protected function &_open($streamName, Stream\Context $context = null)
+    {
+        if (false === $out = @tmpfile()) {
+            throw new Exception('Failed to open a string buffer.', 0);
+        }
 
         return $out;
     }
@@ -127,11 +101,10 @@ abstract class Stringbuffer
     /**
      * Close the current stream.
      *
-     * @access  protected
      * @return  bool
      */
-    protected function _close ( ) {
-
+    protected function _close()
+    {
         return @fclose($this->getStream());
     }
 
@@ -139,13 +112,12 @@ abstract class Stringbuffer
      * Start a new buffer.
      * The callable acts like a light filter.
      *
-     * @access  public
      * @param   mixed  $callable    Callable.
      * @param   int    $size        Size.
      * @return  int
      */
-    public function newBuffer ( $callable = null, $size = null ) {
-
+    public function newBuffer($callable = null, $size = null)
+    {
         $this->setStreamBuffer($size);
 
         //@TODO manage $callable as a filter?
@@ -156,97 +128,90 @@ abstract class Stringbuffer
     /**
      * Flush the output to a stream.
      *
-     * @access  public
      * @return  bool
      */
-    public function flush ( ) {
-
+    public function flush()
+    {
         return fflush($this->getStream());
     }
 
     /**
      * Delete buffer.
      *
-     * @access  public
      * @return  bool
      */
-    public function deleteBuffer ( ) {
-
+    public function deleteBuffer()
+    {
         return $this->disableStreamBuffer();
     }
 
     /**
      * Get bufffer level.
      *
-     * @access  public
      * @return  int
      */
-    public function getBufferLevel ( ) {
-
+    public function getBufferLevel()
+    {
         return 1;
     }
 
     /**
      * Get buffer size.
      *
-     * @access  public
      * @return  int
      */
-    public function getBufferSize ( ) {
-
+    public function getBufferSize()
+    {
         return $this->getStreamBufferSize();
     }
 
     /**
      * Portable advisory locking.
      *
-     * @access  public
      * @param   int     $operation    Operation, use the
      *                                \Hoa\Stream\IStream\Lockable::LOCK_* constants.
      * @return  bool
      */
-    public function lock ( $operation ) {
-
+    public function lock($operation)
+    {
         return flock($this->getStream(), $operation);
     }
 
     /**
      * Rewind the position of a stream pointer.
      *
-     * @access  public
      * @return  bool
      */
-    public function rewind ( ) {
-
+    public function rewind()
+    {
         return rewind($this->getStream());
     }
 
     /**
      * Seek on a stream pointer.
      *
-     * @access  public
      * @param   int     $offset    Offset (negative value should be supported).
      * @param   int     $whence    When, use the \Hoa\Stream\IStream\Pointable::SEEK_*
      *                             constants.
      * @return  int
      */
-    public function seek ( $offset, $whence = \Hoa\Stream\IStream\Pointable::SEEK_SET ) {
-
+    public function seek($offset, $whence = Stream\IStream\Pointable::SEEK_SET)
+    {
         return fseek($this->getStream(), $offset, $whence);
     }
 
     /**
      * Get the current position of the stream pointer.
      *
-     * @access  public
      * @return  int
      */
-    public function tell ( ) {
-
+    public function tell()
+    {
         $stream = $this->getStream();
 
-        if(null === $stream)
+        if (null === $stream) {
             return 0;
+        }
 
         return ftell($stream);
     }
@@ -254,12 +219,11 @@ abstract class Stringbuffer
     /**
      * Initialize the string buffer.
      *
-     * @access  public
      * @param   string  $string    String.
      * @return  \Hoa\Stringbuffer
      */
-    public function initializeWith ( $string ) {
-
+    public function initializeWith($string)
+    {
         ftruncate($this->getStream(), 0);
         fwrite($this->getStream(), $string, strlen($string));
         $this->rewind();
@@ -273,17 +237,15 @@ abstract class Stringbuffer
  *
  * hoa://Library/Stringbuffer component.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class _Protocol extends \Hoa\Core\Protocol {
-
+class _Protocol extends Core\Protocol
+{
     /**
      * Component's name.
      *
-     * @var \Hoa\Core\Protocol string
+     * @var string
      */
     protected $_name = 'Stringbuffer';
 
@@ -292,18 +254,18 @@ class _Protocol extends \Hoa\Core\Protocol {
     /**
      * ID of the component.
      *
-     * @access  public
      * @param   string  $id    ID of the component.
      * @return  mixed
      */
-    public function reachId ( $id ) {
-
+    public function reachId($id)
+    {
         $stream = resolve(
             'hoa://Library/Stream#hoa://Library/Stringbuffer#' . $id
         );
 
-        if(null === $stream)
+        if (null === $stream) {
             return null;
+        }
 
         $meta = $stream->getStreamMetaData();
 
@@ -311,19 +273,14 @@ class _Protocol extends \Hoa\Core\Protocol {
     }
 }
 
-}
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Stringbuffer\Stringbuffer');
+Core\Consistency::flexEntity('Hoa\Stringbuffer\Stringbuffer');
 
 /**
  * Add the hoa://Library/Stringbuffer component. Help to know to real path of a
  * stringbuffer.
  */
-$protocol              = \Hoa\Core::getInstance()->getProtocol();
-$protocol['Library'][] = new \Hoa\Stringbuffer\_Protocol();
-
-}
+$protocol              = Core::getInstance()->getProtocol();
+$protocol['Library'][] = new _Protocol();

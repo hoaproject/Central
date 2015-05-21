@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,65 +34,46 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Stringbuffer;
 
-from('Hoa')
-
-/**
- * \Hoa\Stringbuffer\Exception
- */
--> import('Stringbuffer.Exception')
-
-/**
- * \Hoa\Stringbuffer
- */
--> import('Stringbuffer.~')
-
-/**
- * \Hoa\Stream\IStream\In
- */
--> import('Stream.I~.In');
-
-}
-
-namespace Hoa\Stringbuffer {
+use Hoa\Stream;
 
 /**
  * Class \Hoa\Stringbuffer\Read.
  *
  * Read a string buffer.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Read extends Stringbuffer implements \Hoa\Stream\IStream\In {
-
+class Read extends Stringbuffer implements Stream\IStream\In
+{
     /**
      * Test for end-of-file.
      *
-     * @access  public
      * @return  bool
      */
-    public function eof ( ) {
-
+    public function eof()
+    {
         return feof($this->getStream());
     }
 
     /**
      * Read n characters.
      *
-     * @access  public
      * @param   int     $length    Length.
      * @return  string
-     * @throw   \Hoa\Stringbuffer\Exception
+     * @throws  \Hoa\Stringbuffer\Exception
      */
-    public function read ( $length ) {
-
-        if(0 > $length)
+    public function read($length)
+    {
+        if (0 > $length) {
             throw new Exception(
-                'Length must be greater than 0, given %d.', 0, $length);
+                'Length must be greater than 0, given %d.',
+                0,
+                $length
+            );
+        }
 
         return fread($this->getStream(), $length);
     }
@@ -100,58 +81,53 @@ class Read extends Stringbuffer implements \Hoa\Stream\IStream\In {
     /**
      * Alias of $this->read().
      *
-     * @access  public
      * @param   int     $length    Length.
      * @return  string
      */
-    public function readString ( $length ) {
-
+    public function readString($length)
+    {
         return $this->read($length);
     }
 
     /**
      * Read a character.
      *
-     * @access  public
      * @return  string
      */
-    public function readCharacter ( ) {
-
+    public function readCharacter()
+    {
         return fgetc($this->getStream());
     }
 
     /**
      * Read a boolean.
      *
-     * @access  public
      * @return  bool
      */
-    public function readBoolean ( ) {
-
+    public function readBoolean()
+    {
         return (bool) $this->read(1);
     }
 
     /**
      * Read an integer.
      *
-     * @access  public
      * @param   int     $length    Length.
      * @return  int
      */
-    public function readInteger ( $length = 1 ) {
-
+    public function readInteger($length = 1)
+    {
         return (int) $this->read($length);
     }
 
     /**
      * Read a float.
      *
-     * @access  public
      * @param   int     $length    Length.
      * @return  float
      */
-    public function readFloat ( $length = 1 ) {
-
+    public function readFloat($length = 1)
+    {
         return (float) $this->read($length);
     }
 
@@ -159,60 +135,53 @@ class Read extends Stringbuffer implements \Hoa\Stream\IStream\In {
      * Read an array.
      * Alias of the $this->scanf() method.
      *
-     * @access  public
      * @param   string  $format    Format (see printf's formats).
      * @return  array
      */
-    public function readArray ( $format = null ) {
-
+    public function readArray($format = null)
+    {
         return $this->scanf($format);
     }
 
     /**
      * Read a line.
      *
-     * @access  public
      * @return  string
      */
-    public function readLine ( ) {
-
+    public function readLine()
+    {
         return fgets($this->getStream());
     }
 
     /**
      * Read all, i.e. read as much as possible.
      *
-     * @access  public
      * @param   int  $offset    Offset.
      * @return  string
      */
-    public function readAll ( $offset = 0 ) {
-
+    public function readAll($offset = 0)
+    {
         return stream_get_contents($this->getStream(), -1, $offset);
     }
 
     /**
      * Parse input from a stream according to a format.
      *
-     * @access  public
      * @param   string  $format    Format (see printf's formats).
      * @return  array
      */
-    public function scanf ( $format ) {
-
+    public function scanf($format)
+    {
         return fscanf($this->getStream(), $format);
     }
 
     /**
      * Transform this object to a string.
      *
-     * @access  public
      * @return  string
      */
-    public function __toString ( ) {
-
+    public function __toString()
+    {
         return $this->readAll();
     }
-}
-
 }

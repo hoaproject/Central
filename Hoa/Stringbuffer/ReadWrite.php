@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,73 +34,49 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Stringbuffer;
 
-from('Hoa')
-
-/**
- * \Hoa\Stringbuffer\Exception
- */
--> import('Stringbuffer.Exception')
-
-/**
- * \Hoa\Stringbuffer
- */
--> import('Stringbuffer.~')
-
-/**
- * \Hoa\Stream\IStream\In
- */
--> import('Stream.I~.In')
-
-/**
- * \Hoa\Stream\IStream\Out
- */
--> import('Stream.I~.Out');
-
-}
-
-namespace Hoa\Stringbuffer {
+use Hoa\Stream;
 
 /**
  * Class \Hoa\Stringbuffer\ReadWrite.
  *
  * Read/write a string buffer.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
 class          ReadWrite
     extends    Stringbuffer
-    implements \Hoa\Stream\IStream\In,
-               \Hoa\Stream\IStream\Out {
-
+    implements Stream\IStream\In,
+               Stream\IStream\Out
+{
     /**
      * Test for end-of-file.
      *
-     * @access  public
      * @return  bool
      */
-    public function eof ( ) {
-
+    public function eof()
+    {
         return feof($this->getStream());
     }
 
     /**
      * Read n characters.
      *
-     * @access  public
      * @param   int     $length    Length.
      * @return  string
-     * @throw   \Hoa\Stringbuffer\Exception
+     * @throws  \Hoa\Stringbuffer\Exception
      */
-    public function read ( $length ) {
-
-        if(0 > $length)
+    public function read($length)
+    {
+        if (0 > $length) {
             throw new Exception(
-                'Length must be greater than 0, given %d.', 0, $length);
+                'Length must be greater than 0, given %d.',
+                0,
+                $length
+            );
+        }
 
         return fread($this->getStream(), $length);
     }
@@ -108,58 +84,53 @@ class          ReadWrite
     /**
      * Alias of $this->read().
      *
-     * @access  public
      * @param   int     $length    Length.
      * @return  string
      */
-    public function readString ( $length ) {
-
+    public function readString($length)
+    {
         return $this->read($length);
     }
 
     /**
      * Read a character.
      *
-     * @access  public
      * @return  string
      */
-    public function readCharacter ( ) {
-
+    public function readCharacter()
+    {
         return fgetc($this->getStream());
     }
 
     /**
      * Read a boolean.
      *
-     * @access  public
      * @return  bool
      */
-    public function readBoolean ( ) {
-
+    public function readBoolean()
+    {
         return (bool) $this->read(1);
     }
 
     /**
      * Read an integer.
      *
-     * @access  public
      * @param   int     $length    Length.
      * @return  int
      */
-    public function readInteger ( $length = 1 ) {
-
+    public function readInteger($length = 1)
+    {
         return (int) $this->read($length);
     }
 
     /**
      * Read a float.
      *
-     * @access  public
      * @param   int     $length    Length.
      * @return  float
      */
-    public function readFloat ( $length = 1 ) {
-
+    public function readFloat($length = 1)
+    {
         return (float) $this->read($length);
     }
 
@@ -167,64 +138,63 @@ class          ReadWrite
      * Read an array.
      * Alias of the $this->scanf() method.
      *
-     * @access  public
      * @param   string  $format    Format (see printf's formats).
      * @return  array
      */
-    public function readArray ( $format = null ) {
-
+    public function readArray($format = null)
+    {
         return $this->scanf($format);
     }
 
     /**
      * Read a line.
      *
-     * @access  public
      * @return  string
      */
-    public function readLine ( ) {
-
+    public function readLine()
+    {
         return fgets($this->getStream());
     }
 
     /**
      * Read all, i.e. read as much as possible.
      *
-     * @access  public
      * @param   int  $offset    Offset.
      * @return  string
      */
-    public function readAll ( $offset = 0 ) {
-
+    public function readAll($offset = 0)
+    {
         return stream_get_contents($this->getStream(), -1, $offset);
     }
 
     /**
      * Parse input from a stream according to a format.
      *
-     * @access  public
      * @param   string  $format    Format (see printf's formats).
      * @return  array
      */
-    public function scanf ( $format ) {
-
+    public function scanf($format)
+    {
         return fscanf($this->getStream(), $format);
     }
 
     /**
      * Write n characters.
      *
-     * @access  public
      * @param   string  $string    String.
      * @param   int     $length    Length.
      * @return  mixed
-     * @throw   \Hoa\Stringbuffer\Exception
+     * @throws  \Hoa\Stringbuffer\Exception
      */
-    public function write ( $string, $length ) {
-
-        if(0 > $length)
+    public function write($string, $length)
+    {
+        if (0 > $length) {
             throw new Exception(
-                'Length must be greater than 0, given %d.', 1, $length);
+                'Length must be greater than 0, given %d.',
+                1,
+                $length
+            );
+        }
 
         return fwrite($this->getStream(), $string, $length);
     }
@@ -232,12 +202,11 @@ class          ReadWrite
     /**
      * Write a string.
      *
-     * @access  public
      * @param   string  $string    String.
      * @return  mixed
      */
-    public function writeString ( $string ) {
-
+    public function writeString($string)
+    {
         $string = (string) $string;
 
         return $this->write($string, strlen($string));
@@ -246,36 +215,33 @@ class          ReadWrite
     /**
      * Write a character.
      *
-     * @access  public
      * @param   string  $char    Character.
      * @return  mixed
      */
-    public function writeCharacter ( $char ) {
-
+    public function writeCharacter($char)
+    {
         return $this->write((string) $char[0], 1);
     }
 
     /**
      * Write a boolean.
      *
-     * @access  public
      * @param   bool    $boolean    Boolean.
      * @return  mixed
      */
-    public function writeBoolean ( $boolean ) {
-
+    public function writeBoolean($boolean)
+    {
         return $this->write((string) (bool) $boolean, 1);
     }
 
     /**
      * Write an integer.
      *
-     * @access  public
      * @param   int     $integer    Integer.
      * @return  mixed
      */
-    public function writeInteger ( $integer ) {
-
+    public function writeInteger($integer)
+    {
         $integer = (string) (int) $integer;
 
         return $this->write($integer, strlen($integer));
@@ -284,12 +250,11 @@ class          ReadWrite
     /**
      * Write a float.
      *
-     * @access  public
      * @param   float   $float    Float.
      * @return  mixed
      */
-    public function writeFloat ( $float ) {
-
+    public function writeFloat($float)
+    {
         $float = (string) (float) $float;
 
         return $this->write($float, strlen($float));
@@ -298,12 +263,11 @@ class          ReadWrite
     /**
      * Write an array.
      *
-     * @access  public
      * @param   array   $array    Array.
      * @return  mixed
      */
-    public function writeArray ( Array $array ) {
-
+    public function writeArray(Array $array)
+    {
         $array = var_export($array, true);
 
         return $this->write($array, strlen($array));
@@ -312,14 +276,14 @@ class          ReadWrite
     /**
      * Write a line.
      *
-     * @access  public
      * @param   string  $line    Line.
      * @return  mixed
      */
-    public function writeLine ( $line ) {
-
-        if(false === $n = strpos($line, "\n"))
+    public function writeLine($line)
+    {
+        if (false === $n = strpos($line, "\n")) {
             return $this->write($line . "\n", strlen($line) + 1);
+        }
 
         ++$n;
 
@@ -329,37 +293,32 @@ class          ReadWrite
     /**
      * Write all, i.e. as much as possible.
      *
-     * @access  public
      * @param   string  $string    String.
      * @return  mixed
      */
-    public function writeAll ( $string ) {
-
+    public function writeAll($string)
+    {
         return $this->write($string, strlen($string));
     }
 
     /**
      * Truncate a file to a given length.
      *
-     * @access  public
      * @param   int     $size    Size.
      * @return  bool
      */
-    public function truncate ( $size ) {
-
+    public function truncate($size)
+    {
         return ftruncate($this->getStream(), $size);
     }
 
     /**
      * Transform this object to a string.
      *
-     * @access  public
      * @return  string
      */
-    public function __toString ( ) {
-
+    public function __toString()
+    {
         return $this->readAll();
     }
-}
-
 }

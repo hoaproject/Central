@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,55 +34,37 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Stringbuffer;
 
-from('Hoa')
-
-/**
- * \Hoa\Stringbuffer\Exception
- */
--> import('Stringbuffer.Exception')
-
-/**
- * \Hoa\Stringbuffer
- */
--> import('Stringbuffer.~')
-
-/**
- * \Hoa\Stream\IStream\Out
- */
--> import('Stream.I~.Out');
-
-}
-
-namespace Hoa\Stringbuffer {
+use Hoa\Stream;
 
 /**
  * Class \Hoa\Stringbuffer\Write.
  *
  * Write into a string buffer.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Write extends Stringbuffer implements \Hoa\Stream\IStream\Out {
-
+class Write extends Stringbuffer implements Stream\IStream\Out
+{
     /**
      * Write n characters.
      *
-     * @access  public
      * @param   string  $string    String.
      * @param   int     $length    Length.
      * @return  mixed
-     * @throw   \Hoa\Stringbuffer\Exception
+     * @throws  \Hoa\Stringbuffer\Exception
      */
-    public function write ( $string, $length ) {
-
-        if(0 > $length)
+    public function write($string, $length)
+    {
+        if (0 > $length) {
             throw new Exception(
-                'Length must be greater than 0, given %d.', 0, $length);
+                'Length must be greater than 0, given %d.',
+                0,
+                $length
+            );
+        }
 
         return fwrite($this->getStream(), $string, $length);
     }
@@ -90,12 +72,11 @@ class Write extends Stringbuffer implements \Hoa\Stream\IStream\Out {
     /**
      * Write a string.
      *
-     * @access  public
      * @param   string  $string    String.
      * @return  mixed
      */
-    public function writeString ( $string ) {
-
+    public function writeString($string)
+    {
         $string = (string) $string;
 
         return $this->write($string, strlen($string));
@@ -104,36 +85,33 @@ class Write extends Stringbuffer implements \Hoa\Stream\IStream\Out {
     /**
      * Write a character.
      *
-     * @access  public
      * @param   string  $char    Character.
      * @return  mixed
      */
-    public function writeCharacter ( $char ) {
-
+    public function writeCharacter($char)
+    {
         return $this->write((string) $char[0], 1);
     }
 
     /**
      * Write a boolean.
      *
-     * @access  public
      * @param   bool    $boolean    Boolean.
      * @return  mixed
      */
-    public function writeBoolean ( $boolean ) {
-
+    public function writeBoolean($boolean)
+    {
         return $this->write((string) (bool) $boolean, 1);
     }
 
     /**
      * Write an integer.
      *
-     * @access  public
      * @param   int     $integer    Integer.
      * @return  mixed
      */
-    public function writeInteger ( $integer ) {
-
+    public function writeInteger($integer)
+    {
         $integer = (string) (int) $integer;
 
         return $this->write($integer, strlen($integer));
@@ -142,12 +120,11 @@ class Write extends Stringbuffer implements \Hoa\Stream\IStream\Out {
     /**
      * Write a float.
      *
-     * @access  public
      * @param   float   $float    Float.
      * @return  mixed
      */
-    public function writeFloat ( $float ) {
-
+    public function writeFloat($float)
+    {
         $float = (string) (float) $float;
 
         return $this->write($float, strlen($float));
@@ -156,12 +133,11 @@ class Write extends Stringbuffer implements \Hoa\Stream\IStream\Out {
     /**
      * Write an array.
      *
-     * @access  public
      * @param   array   $array    Array.
      * @return  mixed
      */
-    public function writeArray ( Array $array ) {
-
+    public function writeArray(Array $array)
+    {
         $array = var_export($array, true);
 
         return $this->write($array, strlen($array));
@@ -170,14 +146,14 @@ class Write extends Stringbuffer implements \Hoa\Stream\IStream\Out {
     /**
      * Write a line.
      *
-     * @access  public
      * @param   string  $line    Line.
      * @return  mixed
      */
-    public function writeLine ( $line ) {
-
-        if(false === $n = strpos($line, "\n"))
+    public function writeLine($line)
+    {
+        if (false === $n = strpos($line, "\n")) {
             return $this->write($line . "\n", strlen($line) + 1);
+        }
 
         ++$n;
 
@@ -187,26 +163,22 @@ class Write extends Stringbuffer implements \Hoa\Stream\IStream\Out {
     /**
      * Write all, i.e. as much as possible.
      *
-     * @access  public
      * @param   string  $string    String.
      * @return  mixed
      */
-    public function writeAll ( $string ) {
-
+    public function writeAll($string)
+    {
         return $this->write($string, strlen($string));
     }
 
     /**
      * Truncate a file to a given length.
      *
-     * @access  public
      * @param   int     $size    Size.
      * @return  bool
      */
-    public function truncate ( $size ) {
-
+    public function truncate($size)
+    {
         return ftruncate($this->getStream(), $size);
     }
-}
-
 }
