@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,17 +44,15 @@ use Hoa\File;
  *
  * Clean generated tests.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Clean extends Console\Dispatcher\Kit {
-
+class Clean extends Console\Dispatcher\Kit
+{
     /**
      * Options description.
      *
-     * @var \Hoa\Test\Bin\Clean array
+     * @var array
      */
     protected $options = [
         ['all',       Console\GetOption::NO_ARGUMENT,       'a'],
@@ -68,92 +66,94 @@ class Clean extends Console\Dispatcher\Kit {
     /**
      * The entry method.
      *
-     * @access  public
      * @return  int
      */
-    public function main ( ) {
-
+    public function main()
+    {
         $libraries = [];
 
-        while(false !== $c = $this->getOption($v)) switch($c) {
+        while (false !== $c = $this->getOption($v)) {
+            switch ($c) {
+                case 'a':
+                    $iterator = new File\Finder();
+                    $iterator->in(resolve('hoa://Library/', true, true))
+                             ->directories()
+                             ->maxDepth(1);
 
-            case 'a':
-                $iterator = new File\Finder();
-                $iterator->in(resolve('hoa://Library/', true, true))
-                         ->directories()
-                         ->maxDepth(1);
+                    foreach ($iterator as $fileinfo) {
+                        $libraryName    = $fileinfo->getBasename();
+                        $pathname       = resolve('hoa://Library/' . $libraryName);
+                        $automaticTests = $pathname . DS . 'Test' . DS .
+                                          'Praspel' . DS;
 
-                foreach($iterator as $fileinfo) {
+                        if (is_dir($automaticTests)) {
+                            $libraries[] = $automaticTests;
+                        }
+                    }
 
-                    $libraryName    = $fileinfo->getBasename();
-                    $pathname       = resolve('hoa://Library/' . $libraryName);
-                    $automaticTests = $pathname . DS . 'Test' . DS .
-                                      'Praspel' . DS;
+                    if (empty($libraries)) {
+                        echo 'Already clean.';
 
-                    if(is_dir($automaticTests))
-                        $libraries[] = $automaticTests;
-                }
+                        return;
+                    }
 
-                if(empty($libraries)) {
+                    break;
 
-                    echo 'Already clean.';
+                case 'l':
+                    foreach ($this->parser->parseSpecialValue($v) as $library) {
+                        $libraryName    = ucfirst(strtolower($library));
+                        $pathname       = resolve('hoa://Library/' . $libraryName);
+                        $automaticTests = $pathname . DS . 'Test' . DS .
+                                          'Praspel' . DS;
 
-                    return;
-                }
-              break;
+                        if (is_dir($automaticTests)) {
+                            $libraries[] = $automaticTests;
+                        }
+                    }
 
-            case 'l':
-                foreach($this->parser->parseSpecialValue($v) as $library) {
+                    if (empty($libraries)) {
+                        echo 'Already clean.';
 
-                    $libraryName    = ucfirst(strtolower($library));
-                    $pathname       = resolve('hoa://Library/' . $libraryName);
-                    $automaticTests = $pathname . DS . 'Test' . DS .
-                                      'Praspel' . DS;
+                        return;
+                    }
 
-                    if(is_dir($automaticTests))
-                        $libraries[] = $automaticTests;
-                }
+                    break;
 
-                if(empty($libraries)) {
+                case '__ambiguous':
+                    $this->resolveOptionAmbiguity($v);
 
-                    echo 'Already clean.';
+                    break;
 
-                    return;
-                }
-              break;
-
-            case '__ambiguous':
-                $this->resolveOptionAmbiguity($v);
-              break;
-
-            case 'h':
-            case '?':
-            default:
-                return $this->usage();
-              break;
+                case 'h':
+                case '?':
+                default:
+                    return $this->usage();
+            }
         }
 
-        if(empty($libraries))
+        if (empty($libraries)) {
             return $this->usage();
+        }
 
-        foreach($libraries as $path) {
-
-            $status = 'Clean ' .
-                      (40 < strlen($path)
-                           ? '…' . substr($path, -39)
-                           : $path);
+        foreach ($libraries as $path) {
+            $status =
+                'Clean ' .
+                (40 < strlen($path)
+                     ? '…' . substr($path, -39)
+                     : $path);
             echo '  ⌛ ' , $status;
 
             $directory = new File\Directory($path);
 
-            if(false === $directory->delete())
-                echo '  ', Console\Chrome\Text::colorize('✖︎', 'foreground(red)'),
-                     ' ', $status, "\n";
-            else {
-
+            if (false === $directory->delete()) {
+                echo
+                    '  ', Console\Chrome\Text::colorize('✖︎', 'foreground(red)'),
+                    ' ', $status, "\n";
+            } else {
                 Console\Cursor::clear('↔');
-                echo '  ', Console\Chrome\Text::colorize('✔︎', 'foreground(green)'),
-                     ' ', $status, "\n";
+                echo
+                    '  ', Console\Chrome\Text::colorize('✔︎', 'foreground(green)'),
+                    ' ', $status, "\n";
             }
 
             $directory->close();
@@ -165,18 +165,18 @@ class Clean extends Console\Dispatcher\Kit {
     /**
      * The command usage.
      *
-     * @access  public
      * @return  int
      */
-    public function usage ( ) {
-
-        echo 'Usage   : test:clean <options>', "\n",
-             'Options :', "\n",
-             $this->makeUsageOptionsList([
-                 'a'    => 'Clean all generated tests of all libraries.',
-                 'l'    => 'Clean all generated tests of some libraries.',
-                 'help' => 'This help.'
-             ]), "\n";
+    public function usage()
+    {
+        echo
+            'Usage   : test:clean <options>', "\n",
+            'Options :', "\n",
+            $this->makeUsageOptionsList([
+                'a'    => 'Clean all generated tests of all libraries.',
+                'l'    => 'Clean all generated tests of some libraries.',
+                'help' => 'This help.'
+            ]), "\n";
 
         return;
     }

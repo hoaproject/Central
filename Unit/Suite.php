@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,46 +36,44 @@
 
 namespace Hoa\Test\Unit;
 
+use atoum;
 use Hoa\Core;
 use Hoa\Test;
-use atoum;
 
 /**
  * Class \Hoa\Test\Unit\Suite.
  *
  * Represent a unit test suite.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Suite extends atoum\test {
-
-    public function __construct ( ) {
-
+class Suite extends atoum\test
+{
+    public function __construct()
+    {
         $this->setMethodPrefix('case');
         parent::__construct();
 
-        $protocol = Core::getInstance()->getProtocol();
+        $protocol                = Core::getInstance()->getProtocol();
         $protocol['Test']        = new Core\Protocol\Generic('Test', null);
         $protocol['Test']['Vfs'] = new Test\Protocol\Vfs();
 
         return;
     }
 
-    public function getTestedClassName ( ) {
-
+    public function getTestedClassName()
+    {
         return 'StdClass';
     }
 
-    public function getTestedClassNamespace ( ) {
-
+    public function getTestedClassNamespace()
+    {
         return '\\';
     }
 
-    public function beforeTestMethod ( $methodName ) {
-
+    public function beforeTestMethod($methodName)
+    {
         $out             = parent::beforeTestMethod($methodName);
         $testedClassName = self::getTestedClassNameFromTestClass(
             $this->getClass(),

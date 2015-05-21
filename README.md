@@ -57,16 +57,14 @@ $ hoa test:run --all
 First, let's create the `Hoa/Foo/Test/Unit/Bar.php` file, that contains:
 
 ```php
-namespace Hoa\Foo\Test\Unit {
+namespace Hoa\Foo\Test\Unit;
 
-class Bar extends \Hoa\Test\Unit\Suite {
-
-    public function caseBaz ( ) {
-
+class Bar extends \Hoa\Test\Unit\Suite
+{
+    public function caseBaz()
+    {
         $this->integer(7 * 3 * 2)->isEqualTo(42);
     }
-}
-
 }
 ```
 
@@ -89,20 +87,18 @@ atoum](http://central.hoa-project.net/Resource/Contributions/Atoum/PraspelExtens
 Let `Hoa\Foo\Baz` be the following class:
 
 ```php
-namespace Hoa\Foo {
+namespace Hoa\Foo;
 
-class Baz {
-
+class Baz
+{
     /**
      * @requires x: /foo.+ba[rz]/;
      * @ensures  \result: true;
      */
-    public function qux ( ) {
-
+    public function qux()
+    {
         // …
     }
-}
-
 }
 ```
 

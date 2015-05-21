@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,17 +44,15 @@ use Hoa\File;
  *
  * Run tests.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Run extends Console\Dispatcher\Kit {
-
+class Run extends Console\Dispatcher\Kit
+{
     /**
      * Options description.
      *
-     * @var \Hoa\Test\Bin\Run array
+     * @var array
      */
     protected $options = [
         ['all',         Console\GetOption::NO_ARGUMENT,       'a'],
@@ -73,177 +71,205 @@ class Run extends Console\Dispatcher\Kit {
     /**
      * The entry method.
      *
-     * @access  public
      * @return  int
      */
-    public function main ( ) {
-
+    public function main()
+    {
         $directories = [];
         $files       = [];
         $namespaces  = [];
         $filter      = [];
         $debug       = false;
 
-        while(false !== $c = $this->getOption($v)) switch($c) {
+        while (false !== $c = $this->getOption($v)) {
+            switch ($c) {
+                case 'a':
+                    $iterator = new File\Finder();
+                    $iterator->in(resolve('hoa://Library/', true, true))
+                             ->directories()
+                             ->maxDepth(1);
 
-            case 'a':
-                $iterator = new File\Finder();
-                $iterator->in(resolve('hoa://Library/', true, true))
-                         ->directories()
-                         ->maxDepth(1);
+                    foreach ($iterator as $fileinfo) {
+                        $libraryName    = $fileinfo->getBasename();
+                        $pathname       = resolve('hoa://Library/' . $libraryName);
+                        $tests          = $pathname . DS . 'Test' . DS;
+                        $manualTests    = $tests . 'Unit';
+                        $automaticTests = $tests . 'Praspel' . DS . 'Unit';
 
-                foreach($iterator as $fileinfo) {
+                        if (is_dir($manualTests)) {
+                            $directories[] = $manualTests;
+                        }
 
-                    $libraryName    = $fileinfo->getBasename();
-                    $pathname       = resolve('hoa://Library/' . $libraryName);
-                    $tests          = $pathname . DS . 'Test' . DS;
-                    $manualTests    = $tests . 'Unit';
-                    $automaticTests = $tests . 'Praspel' . DS . 'Unit';
+                        if (is_dir($automaticTests)) {
+                            $directories[] = $automaticTests;
+                        }
+                    }
 
-                    if(is_dir($manualTests))
-                        $directories[] = $manualTests;
+                  break;
 
-                    if(is_dir($automaticTests))
-                        $directories[] = $automaticTests;
-                }
-              break;
+                case 'l':
+                    foreach ($this->parser->parseSpecialValue($v) as $library) {
+                        $libraryName = ucfirst(strtolower($library));
+                        $pathname    = resolve('hoa://Library/' . $libraryName);
+                        $tests       = $pathname . DS . 'Test';
 
-            case 'l':
-                foreach($this->parser->parseSpecialValue($v) as $library) {
+                        if (!is_dir($tests)) {
+                            throw new Console\Exception(
+                                'Library %s does not exist or has no test.',
+                                0,
+                                $libraryName
+                            );
+                        }
 
-                    $libraryName = ucfirst(strtolower($library));
-                    $pathname    = resolve('hoa://Library/' . $libraryName);
-                    $tests       = $pathname . DS . 'Test';
+                        $directories[] = $tests;
+                        $namespaces[]  = 'Hoa\\' . $libraryName;
+                    }
 
-                    if(!is_dir($tests))
-                        throw new Console\Exception(
-                            'Library %s does not exist or has no test.',
-                            0, $libraryName);
+                  break;
 
-                    $directories[] = $tests;
-                    $namespaces[]  = 'Hoa\\' . $libraryName;
-                }
-              break;
+                case 'n':
+                    foreach ($this->parser->parseSpecialValue($v) as $namespace) {
+                        $namespace = str_replace('.', '\\', $namespace);
+                        $parts     = explode('\\', $namespace);
 
-            case 'n':
-                foreach($this->parser->parseSpecialValue($v) as $namespace) {
+                        if (2 > count($parts)) {
+                            throw new Console\Exception(
+                                'Namespace %s is too short.',
+                                1,
+                                $namespace
+                            );
+                        }
 
-                    $namespace = str_replace('.', '\\', $namespace);
-                    $parts     = explode('\\', $namespace);
+                        $head               = resolve('hoa://Library/' . $parts[1]);
+                        $tail               = implode(DS, array_slice($parts, 2));
+                        $namespaceDirectory = $head . DS . $tail;
 
-                    if(2 > count($parts))
-                        throw new Console\Exception(
-                            'Namespace %s is too short.',
-                            1, $namespace);
+                        if (!is_dir($namespaceDirectory)) {
+                            throw new Console\Exception(
+                                'Namespace %s does not exist.',
+                                2,
+                                $namespace
+                            );
+                        }
 
-                    $head               = resolve('hoa://Library/' . $parts[1]);
-                    $tail               = implode(DS, array_slice($parts, 2));
-                    $namespaceDirectory = $head . DS . $tail;
+                        $tests          = $head . DS . 'Test' . DS;
+                        $manualTests    = $tests . 'Unit' . DS . $tail;
+                        $automaticTests = $tests . 'Praspel' . DS . 'Unit' . DS . $tail;
 
-                    if(!is_dir($namespaceDirectory))
-                        throw new Console\Exception(
-                            'Namespace %s does not exist.',
-                            2, $namespace);
+                        if (is_dir($manualTests)) {
+                            $directories[] = $manualTests;
+                        }
 
-                    $tests          = $head . DS . 'Test' . DS;
-                    $manualTests    = $tests . 'Unit' . DS . $tail;
-                    $automaticTests = $tests . 'Praspel' . DS . 'Unit' . DS . $tail;
+                        if (is_dir($automaticTests)) {
+                            $directories[] = $automaticTests;
+                        }
 
-                    if(is_dir($manualTests))
-                        $directories[] = $manualTests;
+                        $namespaces[] = $namespace;
+                    }
 
-                    if(is_dir($automaticTests))
-                        $directories[] = $automaticTests;
+                  break;
 
-                    $namespaces[] = $namespace;
-                }
-              break;
+                case 'd':
+                    foreach ($this->parser->parseSpecialValue($v) as $directory) {
+                        if (!is_dir($directory)) {
+                            throw new Console\Exception(
+                                'Directory %s does not exist.',
+                                3,
+                                $directory
+                            );
+                        }
 
-            case 'd':
-                foreach($this->parser->parseSpecialValue($v) as $directory) {
+                        $directories[] = $directory;
+                    }
 
-                    if(!is_dir($directory))
-                        throw new Console\Exception(
-                            'Directory %s does not exist.',
-                            3, $directory);
+                  break;
 
-                    $directories[] = $directory;
-                }
-              break;
+                case 'f':
+                    foreach ($this->parser->parseSpecialValue($v) as $file) {
+                        if (!file_exists($file)) {
+                            throw new Console\Exception(
+                                'File %s does not exist.',
+                                4,
+                                $file
+                            );
+                        }
 
-            case 'f':
-                foreach($this->parser->parseSpecialValue($v) as $file) {
+                        $files[] = $file;
+                    }
 
-                    if(!file_exists($file))
-                        throw new Console\Exception(
-                            'File %s does not exist.',
-                            4, $file);
+                  break;
 
-                    $files[] = $file;
-                }
-              break;
+                case 'F':
+                    $filter = $v;
 
-            case 'F':
-                $filter = $v;
-              break;
+                  break;
 
-            case 'D':
-                $debug = $v;
-              break;
+                case 'D':
+                    $debug = $v;
 
-            case '__ambiguous':
-                $this->resolveOptionAmbiguity($v);
-              break;
+                  break;
 
-            case 'h':
-            case '?':
-            default:
-                return $this->usage();
-              break;
+                case '__ambiguous':
+                    $this->resolveOptionAmbiguity($v);
+
+                  break;
+
+                case 'h':
+                case '?':
+                default:
+                    return $this->usage();
+
+                  break;
+            }
         }
 
         $atoum = 'atoum';
 
-        if(WITH_COMPOSER)
-            $atoum = __DIR__ . DS .
-                    '..' . DS .
-                    '..' . DS .
-                    '..' . DS .
-                    'bin' . DS .
-                    'atoum';
-        elseif(isset($_SERVER['HOA_ATOUM_BIN']))
+        if (WITH_COMPOSER) {
+            $atoum =
+                __DIR__ . DS .
+                '..' . DS .
+                '..' . DS .
+                '..' . DS .
+                'bin' . DS .
+                'atoum';
+        } elseif (isset($_SERVER['HOA_ATOUM_BIN'])) {
             $atoum = $_SERVER['HOA_ATOUM_BIN'];
+        }
 
-        $command = $atoum .
-                   ' --configurations ' .
-                       resolve('hoa://Library/Test/.atoum.php') .
-                   ' --bootstrap-file ' .
-                       resolve('hoa://Library/Test/.bootstrap.atoum.php') .
-                   ' --force-terminal';
+        $command =
+            $atoum .
+            ' --configurations ' .
+                resolve('hoa://Library/Test/.atoum.php') .
+            ' --bootstrap-file ' .
+                resolve('hoa://Library/Test/.bootstrap.atoum.php') .
+            ' --force-terminal';
 
-        if(true === $debug)
+        if (true === $debug) {
             $command .= ' --debug';
+        }
 
-        if(!empty($directories))
+        if (!empty($directories)) {
             $command .= ' --directories ' . implode(' ', $directories);
-        elseif(!empty($files))
+        } elseif (!empty($files)) {
             $command .= ' --files ' . implode(' ', $files);
-        else
+        } else {
             return $this->usage();
+        }
 
-        if(!empty($namespaces))
+        if (!empty($namespaces)) {
             $command .= ' --namespaces ' . implode(' ', $namespaces);
+        }
 
-        if(!empty($filter))
-            $command .= ' --filter \'' . str_replace('\'', '\'"\'"\'', $filter). '\'';
+        if (!empty($filter)) {
+            $command .= ' --filter \'' . str_replace('\'', '\'"\'"\'', $filter) . '\'';
+        }
 
         $processus = new Processus($command);
-        $processus->on('input', function ( $bucket ) {
-
+        $processus->on('input', function ($bucket) {
             return false;
         });
-        $processus->on('output', function ( $bucket ) {
-
+        $processus->on('output', function ($bucket) {
             $data = $bucket->getData();
 
             echo $data['line'], "\n";
@@ -258,45 +284,44 @@ class Run extends Console\Dispatcher\Kit {
     /**
      * The command usage.
      *
-     * @access  public
      * @return  int
      */
-    public function usage ( ) {
-
-        echo 'Usage   : test:run <options>', "\n",
-             'Options :', "\n",
-             $this->makeUsageOptionsList([
-                 'a'    => 'Run tests of all libraries.',
-                 'l'    => 'Run tests of some libraries.',
-                 'n'    => 'Run tests of some namespaces.',
-                 'd'    => 'Run tests of some directories.',
-                 'f'    => 'Run tests of some files.',
-                 'F'    => 'Filter tests with a ruler expression (see ' .
-                           'Hoa\Ruler).',
-                 'D'    => 'Activate the debugging mode.',
-                 'help' => 'This help.'
-             ]), "\n\n",
-             'Available variables for filter expressions:', "\n",
-             '    * method,', "\n",
-             '    * class,', "\n",
-             '    * namespace,', "\n",
-             '    * tags.', "\n";
+    public function usage()
+    {
+        echo
+            'Usage   : test:run <options>', "\n",
+            'Options :', "\n",
+            $this->makeUsageOptionsList([
+                'a'    => 'Run tests of all libraries.',
+                'l'    => 'Run tests of some libraries.',
+                'n'    => 'Run tests of some namespaces.',
+                'd'    => 'Run tests of some directories.',
+                'f'    => 'Run tests of some files.',
+                'F'    => 'Filter tests with a ruler expression (see ' .
+                          'Hoa\Ruler).',
+                'D'    => 'Activate the debugging mode.',
+                'help' => 'This help.'
+            ]), "\n\n",
+            'Available variables for filter expressions:', "\n",
+            '    * method,', "\n",
+            '    * class,', "\n",
+            '    * namespace,', "\n",
+            '    * tags.', "\n";
 
         return;
     }
 }
 
-class Processus extends Console\Processus {
-
+class Processus extends Console\Processus
+{
     /**
      * Avoid to escape the command.
      *
-     * @access  protected
      * @param   string  $command    Command name.
      * @return  string
      */
-    protected function setCommand ( $command ) {
-
+    protected function setCommand($command)
+    {
         $old            = $this->getCommand();
         $this->_command = $command;
 
