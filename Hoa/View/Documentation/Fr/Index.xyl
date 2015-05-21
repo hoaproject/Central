@@ -87,20 +87,22 @@
     <code>StdClass</code></a> pour plus de simplicité.</li>
   </ul>
   <p>Commençons par écrire la classe <code>SuperView</code> :</p>
-  <pre data-line="44"><code class="language-php">class SuperView implements Hoa\View\Viewable {
-
+  <pre data-line="46"><code class="language-php">class SuperView implements Hoa\View\Viewable
+{
     protected $_in     = null;
     protected $_out    = null;
     protected $_data   = null;
     protected $_router = null;
 
-    public function __construct (                        $in,
-                                  Hoa\Stream\IStream\Out $out,
-                                  Hoa\Router\Router      $router = null,
-                                  StdClass               $data   = null ) {
-
-        if(null === $data)
+    public function __construct(
+        $in,
+        Hoa\Stream\IStream\Out $out,
+        Hoa\Router\Router $router = null,
+        StdClass $data            = null
+    ) {
+        if (null === $data) {
             $data = new StdClass();
+        }
 
         $this->_in     = $in;
         $this->_out    = $out;
@@ -110,18 +112,18 @@
         return;
     }
 
-    public function getOutputStream ( ) {
-
+    public function getOutputStream()
+    {
         return $this->_out;
     }
 
-    public function getData ( ) {
-
+    public function getData()
+    {
         return $this->_data;
     }
 
-    public function render ( ) {
-
+    public function render()
+    {
         $data   = $this->getData();
         $router = $this->getRouter();
 
@@ -135,8 +137,8 @@
         return;
     }
 
-    public function getRouter ( ) {
-
+    public function getRouter()
+    {
         return $this->_router;
     }
 }</code></pre>
@@ -149,7 +151,7 @@
   <code class="language-php">$this</code>), à savoir
   <code class="language-php">$data</code> et
   <code class="language-php">$router</code>, pour lui faciliter l'écriture.
-  Enfin, la ligne 44 utilise le flux de sortie pour écrire les données.</p>
+  Enfin, la ligne 46 utilise le flux de sortie pour écrire les données.</p>
   <p>Testons en écrivant un fichier <code>Test.php</code> :</p>
   <pre data-line="9,17"><code class="language-php">// Output.
 $output = new Hoa\Http\Response();
@@ -177,7 +179,8 @@ $superview->render();</code></pre>
   <p>Excellent. Maintenant ajoutons le moyen de créer des
   <strong>sous-vues</strong> avec la méthode <code>import</code> par exemple.
   Ainsi, nous ajoutons dans la classe <code>SuperView</code> :</p>
-  <pre><code class="language-php">    public function import ( $in, $data = null ) {
+  <pre><code class="language-php">    public function import($in, $data = null)
+    {
 
         $new = new static(
             $in,

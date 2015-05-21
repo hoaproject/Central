@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,34 +41,32 @@ namespace Hoa\View;
  *
  * Describe what a view could be.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-interface Viewable {
-
+interface Viewable
+{
     /**
      * @description 'Get the output stream.';
      * @ensures \result: \Hoa\Stream\IStream\Out;
      */
-    public function getOutputStream ( );
+    public function getOutputStream();
 
     /**
      * @description 'Get the data holded by the view.';
      * @ensures \result: \Hoa\Core\Data;
      */
-    public function getData ( );
+    public function getData();
 
     /**
      * @description 'Make a render of the view.';
      * @ensures \result: void;
      */
-    public function render ( );
+    public function render();
 
     /**
      * @description 'Get router.';
      * @ensures \result: \Hoa\Router;
      */
-    public function getRouter ( );
+    public function getRouter();
 }
