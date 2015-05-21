@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,32 +36,30 @@
 
 namespace Hoa\Test\Protocol;
 
-use Hoa\Core;
 use atoum;
+use Hoa\Core;
 
 /**
  * Class \Hoa\Test\Protocol\Vfs.
  *
  * Create the hoa://Test/Vfs/ component.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Vfs extends Core\Protocol {
-
+class Vfs extends Core\Protocol
+{
     /**
      * Component's name.
      *
-     * @var \Hoa\Core\Protocol string
+     * @var string
      */
     protected $_name    = 'Vfs';
 
     /**
      * Current opened streams.
      *
-     * @var \Hoa\Test\Protocol\Vfs array
+     * @var array
      */
     protected $_streams = [];
 
@@ -70,52 +68,55 @@ class Vfs extends Core\Protocol {
     /**
      * Queue of the component.
      *
-     * @access  public
      * @param   string  $queue    Queue of the component (generally, a filename,
      *                            with probably a query).
      * @return  mixed
      */
-    public function reach ( $queue = null ) {
-
-        if(null === $queue)
+    public function reach($queue = null)
+    {
+        if (null === $queue) {
             return null;
+        }
 
         $components = parse_url($queue);
         $path       = &$components['path'];
 
-        if(isset($components['query']))
+        if (isset($components['query'])) {
             parse_str($components['query'], $queries);
-        else
+        } else {
             $queries = ['type' => 'file'];
-
-        if(   isset($queries['type'])
-           && 'directory' === $queries['type']) {
-
-            $file = atoum\mock\streams\fs\directory::get($path);
-            $file->dir_opendir = true;
         }
-        else
+
+        if (isset($queries['type']) &&
+            'directory' === $queries['type']) {
+            $file              = atoum\mock\streams\fs\directory::get($path);
+            $file->dir_opendir = true;
+        } else {
             $file = atoum\mock\streams\fs\file::get($path);
+        }
 
         $parentDirectory = dirname($path);
 
-        if(isset($this->_streams[$parentDirectory]))
+        if (isset($this->_streams[$parentDirectory])) {
             $this->_streams[$parentDirectory]->dir_readdir[] = $file;
+        }
 
-        foreach($queries as $query => $value)
-            switch($query) {
-
+        foreach ($queries as $query => $value) {
+            switch ($query) {
                 case 'atime':
                 case 'ctime':
                 case 'mtime':
                     $file->getStat()[$query] = intval($value);
-                  break;
+
+                    break;
 
                 case 'permissions':
                     $value = sprintf('%04d', $value);
                     $file->setPermissions($value);
-                  break;
+
+                    break;
             }
+        }
 
         $this->_streams[$path] = $file;
 

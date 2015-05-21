@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -38,28 +38,25 @@ namespace Hoa\Test\Bin;
 
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . '.autoload.atoum.php';
 
-use Hoa\Core;
 use Hoa\Console;
+use Hoa\Core;
 use Hoa\File;
 use Hoa\String;
-use Atoum\PraspelExtension;
 
 /**
  * Class Hoa\Test\Bin\Generate.
  *
  * Automatically generate test suites.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Generate extends Console\Dispatcher\Kit {
-
+class Generate extends Console\Dispatcher\Kit
+{
     /**
      * Options description.
      *
-     * @var \Hoa\Test\Bin\Generate array
+     * @var array
      */
     protected $options = [
         ['namespaces', Console\GetOption::REQUIRED_ARGUMENT, 'n'],
@@ -74,111 +71,112 @@ class Generate extends Console\Dispatcher\Kit {
     /**
      * The entry method.
      *
-     * @access  public
      * @return  int
      */
-    public function main ( ) {
-
+    public function main()
+    {
         $dryRun  = false;
         $classes = [];
 
-        while(false !== $c = $this->getOption($v)) switch($c) {
+        while (false !== $c = $this->getOption($v)) {
+            switch ($c) {
+                case 'n':
+                    foreach ($this->parser->parseSpecialValue($v) as $namespace) {
+                        $namespace = trim(str_replace('.', '\\', $namespace), '\\');
 
-            case 'n':
-                foreach($this->parser->parseSpecialValue($v) as $namespace) {
+                        if (false === $pos = strpos($namespace, '\\')) {
+                            throw new Console\Exception(
+                                'Namespace %s is too short.',
+                                0,
+                                $namespace
+                            );
+                        }
 
-                    $namespace = trim(str_replace('.', '\\', $namespace), '\\');
+                        $tail = substr($namespace, strpos($namespace, '\\') + 1);
+                        $root = resolve('hoa://Library/' . str_replace('\\', '/', $tail));
 
-                    if(false === $pos = strpos($namespace, '\\'))
-                        throw new Console\Exception(
-                            'Namespace %s is too short.',
-                            0, $namespace);
+                        $classes = array_merge(
+                            $classes,
+                            static::findClasses($root, $namespace)
+                        );
+                    }
 
-                    $tail = substr($namespace, strpos($namespace, '\\') + 1);
-                    $root = resolve($a = 'hoa://Library/' .
-                                    str_replace('\\', '/', $tail));
+                    break;
 
-                    $classes = array_merge(
-                        $classes,
-                        static::findClasses($root, $namespace)
-                    );
-                }
-              break;
+                case 'c':
+                    foreach ($this->parser->parseSpecialValue($v) as $class) {
+                        $classes[] = $class;
+                    }
 
-            case 'c':
-                foreach($this->parser->parseSpecialValue($v) as $class)
-                    $classes[] = $class;
-              break;
+                    break;
 
-            case 'd':
-                $dryRun = $v;
-              break;
+                case 'd':
+                    $dryRun = $v;
 
-            case '__ambiguous':
-                $this->resolveOptionAmbiguity($v);
-              break;
+                    break;
 
-            case 'h':
-            case '?':
-            default:
-                return $this->usage();
-              break;
+                case '__ambiguous':
+                    $this->resolveOptionAmbiguity($v);
+
+                    break;
+
+                case 'h':
+                case '?':
+                default:
+                    return $this->usage();
+            }
         }
 
-        if(empty($classes))
+        if (empty($classes)) {
             return $this->usage();
+        }
 
-        foreach($classes as $i => $class)
+        foreach ($classes as $i => $class) {
             $classes[$i] = str_replace('.', '\\', $class);
+        }
 
         $generator = new \Atoum\PraspelExtension\Praspel\Generator();
-        $generator->setTestNamespacer(function ( $namespace ) {
-
+        $generator->setTestNamespacer(function ($namespace) {
             $parts = explode('\\', $namespace);
 
-            return implode('\\', array_slice($parts, 0, 2)) .
-                   '\\Test\\Praspel\\Unit' .
-                   (isset($parts[2])
-                       ? '\\' . implode('\\', array_slice($parts, 2))
-                       : '');
+            return
+                implode('\\', array_slice($parts, 0, 2)) .
+                '\\Test\\Praspel\\Unit' .
+                (isset($parts[2])
+                    ? '\\' . implode('\\', array_slice($parts, 2))
+                    : '');
         });
 
-        $phpBinary = Core::getPHPBinary()
-                         ?: Console\Processus::localte('php');
+        $phpBinary = Core::getPHPBinary() ?: Console\Processus::localte('php');
 
         $envVariable   = '__HOA_ATOUM_PRASPEL_EXTENSION_' . md5(Core::uuid());
         $reflection    = null;
         $buffer        = null;
         $reflectionner = new Console\Processus($phpBinary);
-        $reflectionner->on('input', function ( Core\Event\Bucket $bucket )
-                                         use ( $envVariable ) {
-
+        $reflectionner->on('input', function (Core\Event\Bucket $bucket) use ($envVariable) {
             $bucket->getSource()->writeAll(
                 '<?php' . "\n" .
                 'require_once \'' . dirname(__DIR__) . DS . '.bootstrap.atoum.php\';' . "\n" .
                 '$class = getenv(\'' . $envVariable . '\');' . "\n" .
-                'if(class_exists(\'\mageekguy\atoum\scripts\runner\', false))' . "\n" .
+                'if (class_exists(\'\mageekguy\atoum\scripts\runner\', false)) {' . "\n" .
                 '    \atoum\scripts\runner::disableAutorun();' . "\n" .
+                '}' . "\n" .
                 '$reflection = new \Atoum\PraspelExtension\Praspel\Reflection\RClass($class);' . "\n" .
                 'echo serialize($reflection), "\n";'
             );
 
             return false;
         });
-        $reflectionner->on('output', function ( Core\Event\Bucket $bucket )
-                                     use ( &$buffer ) {
-
+        $reflectionner->on('output', function (Core\Event\Bucket $bucket) use (&$buffer) {
             $data    = $bucket->getData();
             $buffer .= $data['line'] . "\n";
 
             return;
         });
-        $reflectionner->on('stop', function ( ) use ( &$buffer, &$reflection ) {
-
+        $reflectionner->on('stop', function () use (&$buffer, &$reflection) {
             $handle = @unserialize($buffer);
 
-            if(false === $handle) {
-
+            if (false === $handle) {
                 echo $buffer, "\n";
 
                 return;
@@ -189,8 +187,7 @@ class Generate extends Console\Dispatcher\Kit {
             return;
         });
 
-        foreach($classes as $class) {
-
+        foreach ($classes as $class) {
             $status = $class . ' (in ';
             echo '  ⌛ ' , $status;
 
@@ -217,62 +214,68 @@ class Generate extends Console\Dispatcher\Kit {
             $max     = 0;
             $thePath = 0;
 
-            foreach($paths as $path) {
-
+            foreach ($paths as $path) {
                 $length = String\Search::lcp(
                     $reflection->getFilename(),
                     $path
                 );
 
-                if($length > $max)
+                if ($length > $max) {
                     $thePath = $path;
+                }
             }
 
-            $statusTail = (40 < strlen($thePath)
-                               ? '…' . substr($thePath, -39)
-                               : $thePath) . ')';
+            $statusTail =
+                (40 < strlen($thePath)
+                    ? '…' . substr($thePath, -39)
+                    : $thePath) . ')';
             echo $statusTail;
             $status .= $statusTail;
 
-            if(false === $reflection->isInstantiable()) {
-
+            if (false === $reflection->isInstantiable()) {
                 Console\Cursor::clear('↔');
                 echo '  ⚡️ ', $status, '; not instantiable.', "\n";
+
                 continue;
             }
 
             $dirname = dirname($thePath);
 
-            if(false === is_dir($dirname))
-                if(false === $dryRun)
+            if (false === is_dir($dirname)) {
+                if (false === $dryRun) {
                     mkdir($dirname, 0755, true);
-                else
-                    echo "\n",
-                         static::info('Creating directory: ' . $dirname . '.');
-
-            if(false === $dryRun)
-                file_put_contents($thePath, $output);
-            else {
-
-                echo "\n",
-                     static::info('Content of the ' . $thePath . ':'),
-                     "\n";
-                Console\Cursor::colorize('foreground(yellow)');
-                echo '    ┏', "\n",
-                     '    ┃  ' ,
-                     str_replace(
+                } else {
+                    echo
                         "\n",
-                        "\n" . '    ┃  ',
-                        trim($output)
-                     ),
-                     "\n",
-                     '    ┗', "\n";
+                        static::info('Creating directory: ' . $dirname . '.');
+                }
+            }
+
+            if (false === $dryRun) {
+                file_put_contents($thePath, $output);
+            } else {
+                echo
+                    "\n",
+                    static::info('Content of the ' . $thePath . ':'),
+                    "\n";
+                Console\Cursor::colorize('foreground(yellow)');
+                echo
+                    '    ┏', "\n",
+                    '    ┃  ' ,
+                    str_replace(
+                       "\n",
+                       "\n" . '    ┃  ',
+                       trim($output)
+                    ),
+                    "\n",
+                    '    ┗', "\n";
                 Console\Cursor::colorize('foreground(normal)');
             }
 
             Console\Cursor::clear('↔');
-            echo '  ', Console\Chrome\Text::colorize('✔︎', 'foreground(green)'),
-                 ' ', $status, "\n";
+            echo
+                '  ', Console\Chrome\Text::colorize('✔︎', 'foreground(green)'),
+                ' ', $status, "\n";
         }
 
         return;
@@ -281,20 +284,20 @@ class Generate extends Console\Dispatcher\Kit {
     /**
      * The command usage.
      *
-     * @access  public
      * @return  int
      */
-    public function usage ( ) {
-
-        echo 'Usage   : test:generate <options>', "\n",
-             'Options :', "\n",
-             $this->makeUsageOptionsList([
-                 'n'    => 'Generate tests of some namespaces.',
-                 'c'    => 'Generate tests of some classes.',
-                 'd'    => 'Generate tests but output them instead of save ' .
-                           'them.',
-                 'help' => 'This help.'
-             ]), "\n";
+    public function usage()
+    {
+        echo
+            'Usage   : test:generate <options>', "\n",
+            'Options :', "\n",
+            $this->makeUsageOptionsList([
+                'n'    => 'Generate tests of some namespaces.',
+                'c'    => 'Generate tests of some classes.',
+                'd'    => 'Generate tests but output them instead of save ' .
+                          'them.',
+                'help' => 'This help.'
+            ]), "\n";
 
         return;
     }
@@ -302,49 +305,50 @@ class Generate extends Console\Dispatcher\Kit {
     /**
      * Format a message for the dry-run mode.
      *
-     * @access  protected
      * @param   string  $message    Message.
      * @param   bool    $sub        Whether this is a sub-message or not.
      * @return  string
      */
-    protected static function info ( $message, $sub = false ) {
-
-        return Console\Chrome\Text::colorize(
-                  (false === $sub ? '# ' : '') . $message,
-                  'foreground(yellow)'
-               );
+    protected static function info($message, $sub = false)
+    {
+        return
+            Console\Chrome\Text::colorize(
+               (false === $sub ? '# ' : '') . $message,
+               'foreground(yellow)'
+            );
     }
 
     /**
      * Find all classes from a root.
      *
-     * @access  protected
      * @param   string  $root         Root.
      * @param   string  $namespace    Namespace to prepend.
      * @return  array
      */
-    protected static function findClasses ( $root, $namespace ) {
-
+    protected static function findClasses($root, $namespace)
+    {
         $out    = [];
         $finder = new File\Finder();
         $finder->in($root)
                ->files()
                ->name('#^(?!\.).+\.php#');
 
-        foreach($finder as $fileinfo)
-            $out[] = $namespace . '\\' .
-                     str_replace(
-                         DS,
-                         '\\',
-                         trim(
-                             substr(
-                                $fileinfo->getRelativePathname(),
-                                0,
-                                -4
-                             ),
-                             DS
-                         )
-                     );
+        foreach ($finder as $fileinfo) {
+            $out[] =
+                $namespace . '\\' .
+                str_replace(
+                    DS,
+                    '\\',
+                    trim(
+                        substr(
+                           $fileinfo->getRelativePathname(),
+                           0,
+                           -4
+                        ),
+                        DS
+                    )
+                );
+        }
 
         return $out;
     }
