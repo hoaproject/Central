@@ -7,12 +7,12 @@ Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
 This library defines a view interface: `Hoa\View\Viewable`.
 
-A view is defined by 4 methods:
+A view is defined by 4 methods:
 
-  * `getOutputStream`: where to write the view;
-  * `getData`: what data we have;
-  * `render`: to run the rendering;
-  * `getRouter`: how do we locate resources and other documents.
+  * `getOutputStream`: Where to write the view,
+  * `getData`: What data we have,
+  * `render`: To run the rendering,
+  * `getRouter`: How do we locate resources and other documents.
 
 That's all.
 
