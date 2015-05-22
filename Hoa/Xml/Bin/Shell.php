@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,61 +34,47 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xml\Bin;
 
-from('Hoa')
-
-/**
- * \Hoa\Xml\Read
- */
--> import('Xml.Read')
-
-/**
- * \Hoa\File\Read
- */
--> import('File.Read');
-
-}
-
-namespace Hoa\Xml\Bin {
+use Hoa\Console;
+use Hoa\Core;
+use Hoa\File;
 
 /**
  * Class \Hoa\Xml\Bin\Shell.
  *
  * Interactive XML shell.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Shell extends \Hoa\Console\Dispatcher\Kit {
-
+class Shell extends Console\Dispatcher\Kit
+{
     /**
      * Options description.
      *
-     * @var \Hoa\Xml\Bin\Shell array
+     * @var array
      */
-    protected $options = array(
-        array('color', \Hoa\Console\GetOption::OPTIONAL_ARGUMENT, 'c'),
-        array('help', \Hoa\Console\GetOption::NO_ARGUMENT,        'h'),
-        array('help', \Hoa\Console\GetOption::NO_ARGUMENT,        '?')
-    );
+    protected $options = [
+        ['color', Console\GetOption::OPTIONAL_ARGUMENT, 'c'],
+        ['help',  Console\GetOption::NO_ARGUMENT,       'h'],
+        ['help',  Console\GetOption::NO_ARGUMENT,       '?']
+    ];
 
     /**
      * Current color level (among: 1, 8 and 256).
      *
-     * @var \Hoa\Xml\Bin\Shell int
+     * @var int
      */
     protected $_color  = 1;
 
     /**
      * Palette.
      *
-     * @var \Hoa\Xml\Bin\Shell array
+     * @var array
      */
-    protected $_colors = array(
-        8 => array(
+    protected $_colors = [
+        8 => [
             'oc'        => '34',
             'tagname'   => '32',
             'attrname'  => '34',
@@ -99,8 +85,8 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
             'pi'        => '35',
             'entity'    => '37',
             'text'      => '33'
-        ),
-        256 => array(
+        ],
+        256 => [
             'oc'        => '38;5;240',
             'tagname'   => '38;5;64',
             'attrname'  => '38;5;245',
@@ -111,64 +97,62 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
             'pi'        => '38;5;125',
             'entity'    => '38;5;255',
             'text'      => '38;5;166'
-        )
-    );
+        ]
+    ];
 
 
 
     /**
      * The entry method.
      *
-     * @access  public
      * @return  int
      */
-    public function main ( ) {
-
+    public function main()
+    {
         $filename = null;
 
-        while(false !== $c = $this->getOption($v)) switch($c) {
+        while (false !== $c = $this->getOption($v)) {
+            switch ($c) {
+                case 'c':
+                    $v = true === $v ? 256 : intval($v);
 
-            case 'c':
-                $v = true === $v ? 256 : intval($v);
+                    switch ($v) {
+                        case 1:
+                        case 8:
+                        case 256:
+                            $this->_color = $v;
 
-                switch($v) {
+                            break;
+                    }
 
-                    case 1:
-                    case 8:
-                    case 256:
-                        $this->_color = $v;
-                      break;
-                }
-              break;
+                  break;
 
-            case 'h':
-            case '?':
-                return $this->usage();
-              break;
+                case 'h':
+                case '?':
+                    return $this->usage();
 
-            case '__ambiguous':
-                $this->resolveOptionAmbiguity($v);
-              break;
+                case '__ambiguous':
+                    $this->resolveOptionAmbiguity($v);
+
+                    break;
+            }
         }
 
         $this->parser->listInputs($filename);
 
-        if(null === $filename)
+        if (null === $filename) {
             return $this->usage();
+        }
 
         $line = 'load ' . $filename;
 
         do {
-
             try {
-
                 @list($command, $argument) = preg_split('#\s+#', $line, 2);
 
-                switch($command) {
-
+                switch ($command) {
                     case 'load':
-                        if('%' === $argument) {
-
+                        if ('%' === $argument) {
                             $root = new \Hoa\Xml\Read(
                                 new \Hoa\File\Read(
                                     $root->getInnerStream()->getStreamName()
@@ -176,9 +160,7 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
                                 false
                             );
                             echo 'Reloaded!';
-                        }
-                        else {
-
+                        } else {
                             $root = new \Hoa\Xml\Read(
                                 new \Hoa\File\Read($argument),
                                 false
@@ -191,28 +173,31 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
 
                     case 'h':
                     case 'help':
-                        echo 'Usage:', "\n",
-                             '    h[elp] to print this help;', "\n",
-                             '    %      to print loaded filename;', "\n",
-                             '    load   to load a file (`load %` to reload);', "\n",
-                             '    ls     to print current tree;', "\n",
-                             '    cd     to move in the tree with XPath;', "\n",
-                             '    pwd    to print the current path;', "\n",
-                             '    color  to change color (among 1, 8 and 256);', "\n",
-                             '    q[uit] to quit.', "\n";
-                      break;
+                        echo
+                            'Usage:', "\n",
+                            '    h[elp] to print this help;', "\n",
+                            '    %      to print loaded filename;', "\n",
+                            '    load   to load a file (`load %` to reload);', "\n",
+                            '    ls     to print current tree;', "\n",
+                            '    cd     to move in the tree with XPath;', "\n",
+                            '    pwd    to print the current path;', "\n",
+                            '    color  to change color (among 1, 8 and 256);', "\n",
+                            '    q[uit] to quit.', "\n";
+
+                        break;
 
                     case '%':
                         echo $root->getInnerStream()->getStreamName(), "\n";
-                      break;
+
+                        break;
 
                     case 'ls':
                         echo $this->cout($current->readDOM()), "\n";
-                      break;
+
+                        break;
 
                     case 'cd':
-                        if(null === $argument) {
-
+                        if (null === $argument) {
                             echo 'Need an argument.', "\n";
 
                             break;
@@ -220,55 +205,55 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
 
                         $handle = $current->xpath($argument);
 
-                        if(empty($handle)) {
-
+                        if (empty($handle)) {
                             echo $argument, ' is not found.', "\n";
 
                             break;
                         }
 
                         $current = $handle[0];
-                      break;
+
+                        break;
 
                     case 'pwd':
                         echo $current->readDOM()->getNodePath(), "\n";
-                      break;
+
+                        break;
 
                     case 'color':
                         $argument = intval($argument);
 
-                        if(     1 !== $argument
-                           &&   8 !== $argument
-                           && 256 !== $argument) {
-
-                            echo $argument,
-                                 ' is not valid color (1, 8 or 256).', "\n";
+                        if (1   !== $argument &&
+                            8   !== $argument &&
+                            256 !== $argument) {
+                            echo
+                                $argument,
+                                ' is not valid color (1, 8 or 256).', "\n";
 
                             break;
                         }
 
                         $this->_color = $argument;
-                      break;
+
+                        break;
 
                     case 'q':
                     case 'quit':
-                      break 2;
+                        break 2;
 
                     default:
-                        if(!empty($command))
+                        if (!empty($command)) {
                             echo 'Command ', $command, ' not found.', "\n";
+                        }
                 }
-            }
-            catch ( \Hoa\Core\Exception $e ) {
-
+            } catch (Core\Exception $e) {
                 echo $e->getMessage(), "\n";
 
                 continue;
             }
 
             echo "\n";
-
-        } while(false !== $line = $this->readLine('> '));
+        } while (false !== $line = $this->readLine('> '));
 
         return;
     }
@@ -276,17 +261,17 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
     /**
      * The command usage.
      *
-     * @access  public
      * @return  int
      */
-    public function usage ( ) {
-
-        echo 'Usage   : xml:shell <options> [filename]', "\n",
-             'Options :', "\n",
-             $this->makeUsageOptionsList(array(
-                 'c'    => 'Allowed colors number among 1, 8 and 256 (default).',
-                 'help' => 'This help.'
-             )), "\n";
+    public function usage()
+    {
+        echo
+            'Usage   : xml:shell <options> [filename]', "\n",
+            'Options :', "\n",
+            $this->makeUsageOptionsList([
+                'c'    => 'Allowed colors number among 1, 8 and 256 (default).',
+                'help' => 'This help.'
+            ]), "\n";
 
         return;
     }
@@ -294,70 +279,77 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
     /**
      * Pretty print XML tree.
      *
-     * @access  public
      * @param   \DOMNode  $element    Element.
      * @return  string
      */
-    public function cout ( \DOMNode $element ) {
-
-        if(1 === $this->_color)
+    public function cout(\DOMNode $element)
+    {
+        if (1 === $this->_color) {
             return $element->C14N();
+        }
 
         $out   = null;
         $nodes = $element->childNodes;
 
-        for($i = 0, $max = $nodes->length; $i < $max; ++$i) {
-
+        for ($i = 0, $max = $nodes->length; $i < $max; ++$i) {
             $node = $nodes->item($i);
 
-            switch($node->nodeType) {
-
+            switch ($node->nodeType) {
                 case XML_ELEMENT_NODE:
-                    $out .= $this->color('<', 'oc') .
-                            $this->color($node->tagName, 'tagname');
+                    $out .=
+                        $this->color('<', 'oc') .
+                        $this->color($node->tagName, 'tagname');
 
-                    foreach($node->attributes as $attr)
-                        $out .= ' ' .
-                                $this->color($attr->name, 'attrname') .
-                                $this->color('=', '=') .
-                                $this->color('"', 'q') .
-                                $this->color($attr->value, 'attrvalue') .
-                                $this->color('"', 'q');
+                    foreach ($node->attributes as $attr) {
+                        $out .=
+                            ' ' .
+                            $this->color($attr->name, 'attrname') .
+                            $this->color('=', '=') .
+                            $this->color('"', 'q') .
+                            $this->color($attr->value, 'attrvalue') .
+                            $this->color('"', 'q');
+                    }
 
-                    $out .= $this->color('>', 'oc') .
-                            $this->cout($node) .
-                            $this->color('</', 'oc') .
-                            $this->color($node->tagName, 'tagname') .
-                            $this->color('>', 'oc');
-                  break;
+                    $out .=
+                        $this->color('>', 'oc') .
+                        $this->cout($node) .
+                        $this->color('</', 'oc') .
+                        $this->color($node->tagName, 'tagname') .
+                        $this->color('>', 'oc');
+
+                    break;
 
                 case XML_TEXT_NODE:
                     $out .= $this->color($node->wholeText, 'text');
-                  break;
+
+                    break;
 
                 case XML_CDATA_SECTION_NODE:
-                  break;
+                    break;
 
                 case XML_ENTITY_REF_NODE:
                     $out .= $this->color('&' . $node->name . ';', 'entity');
-                  break;
+
+                    break;
 
                 case XML_ENTITY_NODE:
-                  break;
+                    break;
 
                 case XML_PI_NODE:
                     $out .= $this->color(
-                        '<?' . $node->target. ' ' . $node->data . '?>',
+                        '<?' . $node->target . ' ' . $node->data . '?>',
                         'pi'
                     );
-                  break;
+
+                    break;
 
                 case XML_COMMENT_NODE:
                     $out .= $this->color(
                         '<!--' . $node->data . '-->',
                         'comment'
                     );
-                  break;
+
+                    break;
 
                 default:
                     var_dump($node->nodeType);
@@ -370,19 +362,17 @@ class Shell extends \Hoa\Console\Dispatcher\Kit {
     /**
      * Use colors.
      *
-     * @access  public
      * @param   string  $text     Text.
      * @param   string  $token    Token.
      * @return  string
      */
-    public function color ( $text, $token ) {
-
-        return "\033[" . $this->_colors[$this->_color][$token] . 'm' .
-               $text .
-               "\033[0m";
+    public function color($text, $token)
+    {
+        return
+            "\033[" . $this->_colors[$this->_color][$token] . 'm' .
+            $text .
+            "\033[0m";
     }
-}
-
 }
 
 __halt_compiler();

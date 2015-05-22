@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,94 +34,73 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xml\Element;
 
-from('Hoa')
-
-/**
- * \Hoa\Xml\Exception
- */
--> import('Xml.Exception.~')
-
-/**
- * \Hoa\Xml\Element
- */
--> import('Xml.Element.~')
-
-/**
- * \Hoa\Xml\Element\Model\Phrasing
- */
--> import('Xml.Element.Model.Phrasing');
-
-}
-
-namespace Hoa\Xml\Element {
+use Hoa\Xml;
 
 /**
  * Class \Hoa\Xml\Element\Concrete.
  *
  * This class represents a XML element in a XML tree.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Concrete implements Element, \Countable, \IteratorAggregate, \ArrayAccess {
-
+class Concrete implements Element, \Countable, \IteratorAggregate, \ArrayAccess
+{
     /**
      * Store all elements of the abstract tree.
      *
-     * @var \Hoa\Xml\Element\Concrete array
+     * @var array
      */
-    protected static $_store      = array();
+    protected static $_store      = [];
 
     /**
      * Super roots of each abstract elements.
      *
-     * @var \Hoa\Xml\Element\Concrete array
+     * @var array
      */
-    protected static $_superRoots = array();
+    protected static $_superRoots = [];
 
     /**
      * Instances of conrete elements of each abstract element.
      *
-     * @var \Hoa\Xml\Element\Concrete array
+     * @var array
      */
-    protected static $_multiton   = array();
+    protected static $_multiton   = [];
 
     /**
      * Name of the concrete element.
      *
-     * @var \Hoa\Xml\Element\Concrete string
+     * @var string
      */
     protected $_name              = null;
 
     /**
      * Concrete children.
      *
-     * @var \Hoa\Xml\Element\Concrete array
+     * @var array
      */
-    protected $_children          = array();
+    protected $_children          = [];
 
     /**
      * Concrete children for the iterator.
      *
-     * @var \Hoa\Xml\Element\Concrete array
+     * @var array
      */
-    protected $_iterator          = array();
+    protected $_iterator          = [];
 
     /**
      * Abstract element.
      *
-     * @var \Hoa\Xml\Element object
+     * @var \Hoa\Xml\Element
      */
     protected $abstract           = null;
 
     /**
      * Super root of the abstract element.
      *
-     * @var \Hoa\Xml\Element object
+     * @var \Hoa\Xml\Element
      */
     protected $_superRoot         = null;
 
@@ -130,7 +109,6 @@ class Concrete implements Element, \Countable, \IteratorAggregate, \ArrayAccess 
     /**
      * Build a concrete tree.
      *
-     * @access  public
      * @param   \Hoa\Xml\Element  $abstract     Abstract element.
      * @param   \Hoa\Xml\Element  $superRoot    Super root.
      * @param   array             $rank         Rank: abstract elements to
@@ -138,45 +116,52 @@ class Concrete implements Element, \Countable, \IteratorAggregate, \ArrayAccess 
      * @param   string            $namespace    Namespace.
      * @return  void
      */
-    final public function __construct ( \Hoa\Xml\Element $abstract,
-                                        \Hoa\Xml\Element $superRoot,
-                                        Array            $rank = array(),
-                                        $namespace             = null ) {
-
+    final public function __construct(
+        Element $abstract,
+        Element $superRoot,
+        Array $rank = [],
+        $namespace  = null
+    ) {
         self::$_store[]      = $abstract;
         self::$_superRoots[] = $superRoot;
         self::$_multiton[]   = $this;
 
-        if(null !== $namespace)
+        if (null !== $namespace) {
             $abstract->useNamespace($namespace);
-
-        if(null === $this->_name) {
-
-            $this->_name     = strtolower(get_class($this));
-
-            if(false !== $po = strrpos($this->_name, '\\'))
-                $this->_name = substr($this->_name, $po + 1);
         }
 
-        $this->abstract      = $abstract;
-        $this->_superRoot    = $superRoot;
+        if (null === $this->_name) {
+            $this->_name = strtolower(get_class($this));
 
-        if($this instanceof Model\Phrasing)
+            if (false !== $po = strrpos($this->_name, '\\')) {
+                $this->_name = substr($this->_name, $po + 1);
+            }
+        }
+
+        $this->abstract   = $abstract;
+        $this->_superRoot = $superRoot;
+
+        if ($this instanceof Model\Phrasing) {
             $iterator = $abstract->readAsPhrasingModel($namespace);
-        else
+        } else {
             $iterator = $abstract->selectChildElements();
+        }
 
-        foreach($iterator as $child) {
-
+        foreach ($iterator as $child) {
             $name = $child->getName();
 
-            if(!isset($rank[$name]))
-                throw new \Hoa\Xml\Exception(
+            if (!isset($rank[$name])) {
+                throw new Xml\Exception(
                     'Cannot build the concrete tree because the abstract ' .
-                    'element <%s> has no ranked concrete element.', 0, $name);
+                    'element <%s> has no ranked concrete element.',
+                    0,
+                    $name
+                );
+            }
 
             $c = $rank[$name];
             $h = new $c($child, $superRoot, $rank, $namespace);
+
             $this->_children[$h->getName()][] = $h;
             $this->_iterator[]                = $h;
         }
@@ -189,51 +174,50 @@ class Concrete implements Element, \Countable, \IteratorAggregate, \ArrayAccess 
     /**
      * Simplify overloading of the constructor.
      *
-     * @access  public
      * @return  void
      */
-    public function construct ( ) {
-
+    public function construct()
+    {
         return;
     }
 
     /**
      * Get the abstract element ID.
      *
-     * @access  public
      * @param   \Hoa\Xml\Element  $element    Abstract element.
      * @return  mixed
      */
-    public static function getAbstractElementId ( \Hoa\Xml\Element $element ) {
-
+    public static function getAbstractElementId(Element $element)
+    {
         return array_search($element, self::$_store);
     }
 
     /**
      * Get the abstract element.
      *
-     * @access  public
      * @return  \Hoa\Xml\Element
      */
-    public function getAbstractElement ( ) {
-
+    public function getAbstractElement()
+    {
         return $this->abstract;
     }
 
     /**
      * Get the associated concrete element of an abstract element.
      *
-     * @access  public
      * @param   \Hoa\Xml\Element  $element    Abstract element.
      * @return  \Hoa\Xml\Element\Concrete
-     * @throw   \Hoa\Xml\Exception
+     * @throws  \Hoa\Xml\Exception
      */
-    public static function getConcreteElement ( \Hoa\Xml\Element $element ) {
-
-        if(false === $id = self::getAbstractElementId($element))
-            throw new \Hoa\Xml\Exception(
+    public static function getConcreteElement(Element $element)
+    {
+        if (false === $id = self::getAbstractElementId($element)) {
+            throw new Xml\Exception(
                 'The basic element %s has no concrete equivalent.',
-                1, $element->getName());
+                1,
+                $element->getName()
+            );
+        }
 
         return self::$_multiton[$id];
     }
@@ -241,28 +225,30 @@ class Concrete implements Element, \Countable, \IteratorAggregate, \ArrayAccess 
     /**
      * Get the super-root of the abstract element.
      *
-     * @access  public
      * @return  \Hoa\Xml\Element
      */
-    public function getAbstractElementSuperRoot ( ) {
-
+    public function getAbstractElementSuperRoot()
+    {
         return $this->_superRoot;
     }
 
     /**
      * Get the super-root of an abstract element.
      *
-     * @access  public
      * @param   \Hoa\Xml\Element  $element    Abstract element.
      * @return  \Hoa\Xml\Element
      * @throws  \Hoa\Xml\Exception
      */
-    public static function getAbstractElementSuperRootOf ( \Hoa\Xml\Element $element ) {
-
-        if(false === $id = self::getAbstractElementId($element))
-            throw new \Hoa\Xml\Exception(
+    public static function getAbstractElementSuperRootOf(Element $element)
+    {
+        if (false === $id = self::getAbstractElementId($element)) {
+            throw new Xml\Exception(
                 'The concrete element %s has no concrete equivalent and we ' .
-                'cannot retrieve the super-root.', 2, $element->getName());
+                'cannot retrieve the super-root.',
+                2,
+                $element->getName()
+            );
+        }
 
         return self::$_superRoots[$id];
     }
@@ -270,46 +256,42 @@ class Concrete implements Element, \Countable, \IteratorAggregate, \ArrayAccess 
     /**
      * Get the name of the concrete element.
      *
-     * @access  public
      * @return  string
      */
-    public function getName ( ) {
-
+    public function getName()
+    {
         return $this->_name;
     }
 
     /**
      * Count children number.
      *
-     * @access  public
      * @return  int
      */
-    public function count ( ) {
-
+    public function count()
+    {
         return count($this->_iterator);
     }
 
     /**
      * Get the iterator.
      *
-     * @access  public
      * @return  \ArrayIterator
      */
-    public function getIterator ( ) {
-
+    public function getIterator()
+    {
         return new \ArrayIterator($this->_iterator);
     }
 
     /**
      * Set a child.
      *
-     * @access  public
      * @param   string                     $name     Child name.
      * @param   \Hoa\Xml\Element\Concrete  $value    Value.
      * @return  void
      */
-    public function __set ( $name, Concrete $value ) {
-
+    public function __set($name, Concrete $value)
+    {
         $this->_children[$name][] = $value;
         $this->_iterator[]        = $value;
 
@@ -319,14 +301,14 @@ class Concrete implements Element, \Countable, \IteratorAggregate, \ArrayAccess 
     /**
      * Get a child.
      *
-     * @access  public
      * @param   string  $name    Child value.
      * @return  mixed
      */
-    public function __get ( $name ) {
-
-        if(!isset($this->_children[$name]))
+    public function __get($name)
+    {
+        if (!isset($this->_children[$name])) {
             return null;
+        }
 
         return $this->_children[$name];
     }
@@ -334,26 +316,25 @@ class Concrete implements Element, \Countable, \IteratorAggregate, \ArrayAccess 
     /**
      * Check if an element exists.
      *
-     * @access  public
      * @param   int     $offset    Element index.
      * @return  bool
      */
-    public function offsetExists ( $offset ) {
-
+    public function offsetExists($offset)
+    {
         return isset($this->_iterator[$offset]);
     }
 
     /**
      * Get an element.
      *
-     * @access  public
      * @param   int     $offset    Element index.
      * @return  \Hoa\Xyl\Element\Concrete
      */
-    public function offsetGet ( $offset ) {
-
-        if(false === $this->offsetExists($offset))
+    public function offsetGet($offset)
+    {
+        if (false === $this->offsetExists($offset)) {
             return null;
+        }
 
         return $this->_iterator[$offset];
     }
@@ -361,20 +342,21 @@ class Concrete implements Element, \Countable, \IteratorAggregate, \ArrayAccess 
     /**
      * Set an element to an index.
      *
-     * @access  public
      * @param   string                     $offset    Element index.
      * @param   \Hoa\Xyl\Element\Concrete  $value     Element.
      * @return  void
      */
-    public function offsetSet ( $offset, $element ) {
-
-        if(is_string($element))
+    public function offsetSet($offset, $element)
+    {
+        if (is_string($element)) {
             $name = $element;
-        else
+        } else {
             $name = $element->getName();
+        }
 
-        if(!isset($this->_children[$name]))
-            $this->_children[$name] = array();
+        if (!isset($this->_children[$name])) {
+            $this->_children[$name] = [];
+        }
 
         $this->_children[$name][$offset] = $element;
         $this->_iterator[$offset]        = $element;
@@ -385,14 +367,14 @@ class Concrete implements Element, \Countable, \IteratorAggregate, \ArrayAccess 
     /**
      * Remove an element.
      *
-     * @access  public
      * @param   string  $offset    Element index.
      * @return  void
      */
-    public function offsetUnset ( $offset ) {
-
-        if(!isset($this->_iterator[$offset]))
+    public function offsetUnset($offset)
+    {
+        if (!isset($this->_iterator[$offset])) {
             return;
+        }
 
         $element = $this->_iterator[$offset];
         $name    = $element->getName();
@@ -407,18 +389,15 @@ class Concrete implements Element, \Countable, \IteratorAggregate, \ArrayAccess 
     /**
      * Redirect unknown call on the abstract element.
      *
-     * @access  public
      * @param   string  $name         Name.
      * @param   array   $arguments    Arguments.
      * @return  mixed
      */
-    public function __call ( $name, Array $arguments = array() ) {
-
+    public function __call($name, Array $arguments = [])
+    {
         return call_user_func_array(
-            array($this->abstract, $name),
+            [$this->abstract, $name],
             $arguments
         );
     }
-}
-
 }

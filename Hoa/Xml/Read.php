@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,50 +34,23 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xml;
 
-from('Hoa')
-
-/**
- * \Hoa\Xml\Exception
- */
--> import('Xml.Exception.~')
-
-/**
- * \Hoa\Xml
- */
--> import('Xml.~')
-
-/**
- * \Hoa\Stream\IStream\In
- */
--> import('Stream.I~.In')
-
-/**
- * \Hoa\Xml\Element\Read
- */
--> import('Xml.Element.Read', true);
-
-}
-
-namespace Hoa\Xml {
+use Hoa\Stream;
 
 /**
  * Class \Hoa\Xml\Read.
  *
  * Read a XML element.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Read extends Xml implements \Hoa\Stream\IStream\In {
-
+class Read extends Xml implements Stream\IStream\In
+{
     /**
      * Start the stream reader as if it is a XML document.
      *
-     * @access  public
      * @param   \Hoa\Stream\IStream\In  $stream                 Stream to read.
      * @param   bool                    $initializeNamespace    Whether we
      *                                                          initialize
@@ -85,10 +58,11 @@ class Read extends Xml implements \Hoa\Stream\IStream\In {
      * @param   mixed                   $entityResolver         Entity resolver.
      * @return  void
      */
-    public function __construct ( \Hoa\Stream\IStream\In $stream,
-                                  $initializeNamespace = true,
-                                  $entityResolver      = null ) {
-
+    public function __construct(
+        Stream\IStream\In $stream,
+        $initializeNamespace = true,
+        $entityResolver      = null
+    ) {
         parent::__construct(
             '\Hoa\Xml\Element\Read',
             $stream,
@@ -102,142 +76,128 @@ class Read extends Xml implements \Hoa\Stream\IStream\In {
     /**
      * Test for end-of-file.
      *
-     * @access  public
      * @return  bool
      */
-    public function eof ( ) {
-
+    public function eof()
+    {
         return $this->getStream()->eof();
     }
 
     /**
      * Read n characters.
      *
-     * @access  public
      * @param   int     $length    Length.
      * @return  string
-     * @throw   \Hoa\Xml\Exception
+     * @throws  \Hoa\Xml\Exception
      */
-    public function read ( $length ) {
-
+    public function read($length)
+    {
         return $this->getStream()->read($length);
     }
 
     /**
      * Alias of $this->read().
      *
-     * @access  public
      * @param   int     $length    Length.
      * @return  string
      */
-    public function readString ( $length ) {
-
+    public function readString($length)
+    {
         return $this->getStream()->readString($length);
     }
 
     /**
      * Read a character.
      *
-     * @access  public
      * @return  string
      */
-    public function readCharacter ( ) {
-
+    public function readCharacter()
+    {
         return $this->getStream()->readCharacter();
     }
 
     /**
      * Read a boolean.
      *
-     * @access  public
      * @return  bool
      */
-    public function readBoolean ( ) {
-
+    public function readBoolean()
+    {
         return $this->getStream()->readBoolean();
     }
 
     /**
      * Read an integer.
      *
-     * @access  public
      * @param   int     $length    Length.
      * @return  int
      */
-    public function readInteger ( $length = 1 ) {
-
+    public function readInteger($length = 1)
+    {
         return $this->getStream()->readInteger($length);
     }
 
     /**
      * Read a float.
      *
-     * @access  public
      * @param   int     $length    Length.
      * @return  float
      */
-    public function readFloat ( $length = 1 ) {
-
+    public function readFloat($length = 1)
+    {
         return $this->getStream()->readFloat($length);
     }
 
     /**
      * Read the XML tree as an array.
      *
-     * @access  public
      * @param   string  $argument    Not use here.
      * @return  array
      */
-    public function readArray ( $argument = null ) {
-
+    public function readArray($argument = null)
+    {
         return $this->getStream()->readArray($argument);
     }
 
     /**
      * Read a line.
      *
-     * @access  public
      * @return  string
      */
-    public function readLine ( ) {
-
+    public function readLine()
+    {
         return $this->getStream()->readLine();
     }
 
     /**
      * Read all, i.e. read as much as possible.
      *
-     * @access  public
      * @param   int  $offset    Offset.
      * @return  string
      */
-    public function readAll ( $offset = 0 ) {
-
+    public function readAll($offset = 0)
+    {
         return $this->getStream()->readAll($context);
     }
 
     /**
      * Parse input from a stream according to a format.
      *
-     * @access  public
      * @param   string  $format    Format (see printf's formats).
      * @return  array
      */
-    public function scanf ( $format ) {
-
+    public function scanf($format)
+    {
         return $this->getStream()->scanf($format);
     }
 
     /**
      * Read content as a DOM tree.
      *
-     * @access  public
      * @return  \DOMElement
      */
-    public function readDOM ( ) {
-
+    public function readDOM()
+    {
         return $this->getStream()->readDOM();
     }
-}
-
 }
