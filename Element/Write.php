@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,71 +34,50 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xml\Element;
 
-from('Hoa')
-
-/**
- * \Hoa\Xml\Exception
- */
--> import('Xml.Exception.~')
-
-/**
- * \Hoa\Xml\Element\Basic
- */
--> import('Xml.Element.Basic')
-
-/**
- * \Hoa\Stream\IStream\Out
- */
--> import('Stream.I~.Out')
-
-/**
- * \Hoa\Stringbuffer\ReadWrite
- */
--> import('Stringbuffer.ReadWrite');
-
-}
-
-namespace Hoa\Xml\Element {
+use Hoa\Stream;
+use Hoa\Stringbuffer;
+use Hoa\Xml;
 
 /**
  * Class \Hoa\Xml\Element\Write.
  *
  * Write a XML element.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Write extends Basic implements \Hoa\Stream\IStream\Out {
-
+class Write extends Basic implements Stream\IStream\Out
+{
     /**
      * Write n characters.
      *
-     * @access  public
      * @param   string  $string    String.
      * @param   int     $length    Length.
      * @return  mixed
-     * @throw   \Hoa\Xml\Exception
+     * @throws  \Hoa\Xml\Exception
      */
-    public function write ( $string, $length ) {
+    public function write($string, $length)
+    {
+        if (0 > $length) {
+            throw new Xml\Exception(
+                'Length must be greater than 0, given %d.',
+                0,
+                $length
+            );
+        }
 
-        if(0 > $length)
-            throw new \Hoa\Xml\Exception(
-                'Length must be greater than 0, given %d.', 0, $length);
-
-        if(null === parent::$_buffer) {
-
-            parent::$_buffer = new \Hoa\Stringbuffer\ReadWrite();
+        if (null === parent::$_buffer) {
+            parent::$_buffer = new Stringbuffer\ReadWrite();
             parent::$_buffer->initializeWith($this->__toString());
         }
 
         $l = parent::$_buffer->write($string, $length);
 
-        if($l !== $length)
+        if ($l !== $length) {
             return false;
+        }
 
         $this[0] = parent::$_buffer->readAll();
 
@@ -108,12 +87,11 @@ class Write extends Basic implements \Hoa\Stream\IStream\Out {
     /**
      * Write a string.
      *
-     * @access  public
      * @param   string  $string    String.
      * @return  mixed
      */
-    public function writeString ( $string ) {
-
+    public function writeString($string)
+    {
         $string = (string) $string;
 
         return $this->write($string, strlen($string));
@@ -122,36 +100,33 @@ class Write extends Basic implements \Hoa\Stream\IStream\Out {
     /**
      * Write a character.
      *
-     * @access  public
      * @param   string  $char    Character.
      * @return  mixed
      */
-    public function writeCharacter ( $char ) {
-
+    public function writeCharacter($char)
+    {
         return $this->write((string) $char[0], 1);
     }
 
     /**
      * Write a boolean.
      *
-     * @access  public
      * @param   bool    $boolean    Boolean.
      * @return  mixed
      */
-    public function writeBoolean ( $boolean ) {
-
+    public function writeBoolean($boolean)
+    {
         return $this->write((string) (bool) $boolean, 1);
     }
 
     /**
      * Write an integer.
      *
-     * @access  public
      * @param   int     $integer    Integer.
      * @return  mixed
      */
-    public function writeInteger ( $integer ) {
-
+    public function writeInteger($integer)
+    {
         $integer = (string) (int) $integer;
 
         return $this->write($integer, strlen($integer));
@@ -160,12 +135,11 @@ class Write extends Basic implements \Hoa\Stream\IStream\Out {
     /**
      * Write a float.
      *
-     * @access  public
      * @param   float   $float    Float.
      * @return  mixed
      */
-    public function writeFloat ( $float ) {
-
+    public function writeFloat($float)
+    {
         $float = (string) (float) $float;
 
         return $this->write($float, strlen($float));
@@ -174,61 +148,59 @@ class Write extends Basic implements \Hoa\Stream\IStream\Out {
     /**
      * Write an array.
      *
-     * @access  public
      * @param   array   $array    Array.
      * @return  mixed
      */
-    public function writeArray ( Array $array ) {
-
+    public function writeArray(Array $array)
+    {
         $document = $this->readDOM()->ownerDocument;
 
-        foreach($array as $name => $value) {
-
-            if(is_object($value)) {
-
-                if(!isset($this->{$name}))
+        foreach ($array as $name => $value) {
+            if (is_object($value)) {
+                if (!isset($this->{$name})) {
                     $this->addChild($name);
+                }
 
                 $this->{$name}->readDOM()->parentNode->appendChild(
                     $document->importNode(clone $value->readDOM(), true)
                 );
-            }
-            elseif(is_array($value) && !empty($value)) {
-
-                if(!isset($value[0]))
+            } elseif (is_array($value) && !empty($value)) {
+                if (!isset($value[0])) {
                     $handle = $this->addChild($name);
+                }
 
-                foreach($value as $subname => $subvalue)
-                    if(is_object($subvalue)) {
-
-                        if(!isset($this->{$name}))
+                foreach ($value as $subname => $subvalue) {
+                    if (is_object($subvalue)) {
+                        if (!isset($this->{$name})) {
                             $this->addChild($name);
+                        }
 
                         $this->{$name}->readDOM()->parentNode->appendChild(
                             $document->importNode(clone $subvalue->readDOM(), true)
                         );
-                    }
-                    else {
-
-                        if(!isset($this->{$name}))
+                    } else {
+                        if (!isset($this->{$name})) {
                             $this->addChild($name);
+                        }
 
-                        if(is_array($subvalue)) {
-
+                        if (is_array($subvalue)) {
                             $handle->addChild($subname, null)
                                    ->writeArray($subvalue);
 
                             continue;
                         }
 
-                        if(is_bool($subvalue))
+                        if (is_bool($subvalue)) {
                             $subvalue = $subvalue ? 'true' : 'false';
+                        }
 
-                        if(is_string($subname))
+                        if (is_string($subname)) {
                             $handle->addChild($subname, $subvalue);
-                        else
+                        } else {
                             $this->addChild($name, $subvalue);
+                        }
                     }
+                }
             }
         }
 
@@ -238,14 +210,14 @@ class Write extends Basic implements \Hoa\Stream\IStream\Out {
     /**
      * Write a line.
      *
-     * @access  public
      * @param   string  $line    Line.
      * @return  mixed
      */
-    public function writeLine ( $line ) {
-
-        if(false === $n = strpos($line, "\n"))
+    public function writeLine($line)
+    {
+        if (false === $n = strpos($line, "\n")) {
             return $this->write($line . "\n", strlen($line) + 1);
+        }
 
         ++$n;
 
@@ -255,41 +227,37 @@ class Write extends Basic implements \Hoa\Stream\IStream\Out {
     /**
      * Write all, i.e. as much as possible.
      *
-     * @access  public
      * @param   string  $string    String.
      * @return  mixed
      */
-    public function writeAll ( $string ) {
-
+    public function writeAll($string)
+    {
         return $this->write($string, strlen($string));
     }
 
     /**
      * Truncate to a given length.
      *
-     * @access  public
      * @param   int     $size    Size.
      * @return  bool
      */
-    public function truncate ( $size ) {
-
+    public function truncate($size)
+    {
         return parent::$_buffer->truncate($size);
     }
 
     /**
      * Write a DOM tree.
      *
-     * @access  public
      * @param   \DOMNode  $dom    DOM tree.
      * @return  mixed
      * @todo
      */
-    public function writeDOM ( \DOMNode $dom ) {
-
+    public function writeDOM(\DOMNode $dom)
+    {
         $sx = simplexml_import_dom($dom, __CLASS__);
 
-        throw new \Hoa\Xml\Exception(
-            'Hmm, TODO?', 42);
+        throw new Xml\Exception('Hmm, TODO?', 42);
 
         return true;
     }
@@ -298,14 +266,14 @@ class Write extends Basic implements \Hoa\Stream\IStream\Out {
      * Write attributes.
      * If an attribute does not exist, it will be created.
      *
-     * @access  public
      * @param   array   $attributes    Attributes.
      * @return  void
      */
-    public function writeAttributes ( Array $attributes ) {
-
-        foreach($attributes as $name => $value)
+    public function writeAttributes(Array $attributes)
+    {
+        foreach ($attributes as $name => $value) {
             $this->writeAttribute($name, $value);
+        }
 
         return;
     }
@@ -314,13 +282,12 @@ class Write extends Basic implements \Hoa\Stream\IStream\Out {
      * Write an attribute.
      * If the attribute does not exist, it will be created.
      *
-     * @access  public
      * @param   string  $name     Name.
      * @param   string  $value    Value.
      * @return  void
      */
-    public function writeAttribute ( $name, $value ) {
-
+    public function writeAttribute($name, $value)
+    {
         $this[$name] = $value;
 
         return;
@@ -329,16 +296,13 @@ class Write extends Basic implements \Hoa\Stream\IStream\Out {
     /**
      * Remove an attribute.
      *
-     * @access  public
      * @param   string  $name    Name.
      * @return  void
      */
-    public function removeAttribute ( $name ) {
-
+    public function removeAttribute($name)
+    {
         unset($this[$name]);
 
         return;
     }
-}
-
 }

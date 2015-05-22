@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,56 +34,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xml\Element;
 
-from('Hoa')
-
-/**
- * \Hoa\Xml\Exception
- */
--> import('Xml.Exception.~')
-
-/**
- * \Hoa\Xml\Element\Basic
- */
--> import('Xml.Element.Basic')
-
-/**
- * \Hoa\Stream\IStream\In
- */
--> import('Stream.I~.In')
-
-/**
- * \Hoa\Stringbuffer\ReadWrite
- */
--> import('Stringbuffer.ReadWrite');
-
-}
-
-namespace Hoa\Xml\Element {
+use Hoa\Stream;
+use Hoa\Stringbuffer;
+use Hoa\Xml;
 
 /**
  * Class \Hoa\Xml\Element\Read.
  *
  * Read a XML element.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Read extends Basic implements \Hoa\Stream\IStream\In {
-
+class Read extends Basic implements Stream\IStream\In
+{
     /**
      * Test for end-of-file.
      *
-     * @access  public
      * @return  bool
      */
-    public function eof ( ) {
-
-        if(null === parent::$_buffer)
+    public function eof()
+    {
+        if (null === parent::$_buffer) {
             return true;
+        }
 
         return parent::$_buffer->eof();
     }
@@ -91,20 +67,22 @@ class Read extends Basic implements \Hoa\Stream\IStream\In {
     /**
      * Read n characters.
      *
-     * @access  public
      * @param   int     $length    Length.
      * @return  string
-     * @throw   \Hoa\Xml\Exception
+     * @throws  \Hoa\Xml\Exception
      */
-    public function read ( $length ) {
+    public function read($length)
+    {
+        if (0 > $length) {
+            throw new Xml\Exception(
+                'Length must be greater than 0, given %d.',
+                0,
+                $length
+            );
+        }
 
-        if(0 > $length)
-            throw new \Hoa\Xml\Exception(
-                'Length must be greater than 0, given %d.', 0, $length);
-
-        if(null === parent::$_buffer) {
-
-            parent::$_buffer = new \Hoa\Stringbuffer\ReadWrite();
+        if (null === parent::$_buffer) {
+            parent::$_buffer = new Stringbuffer\ReadWrite();
             parent::$_buffer->initializeWith($this->__toString());
         }
 
@@ -114,86 +92,80 @@ class Read extends Basic implements \Hoa\Stream\IStream\In {
     /**
      * Alias of $this->read().
      *
-     * @access  public
      * @param   int     $length    Length.
      * @return  string
      */
-    public function readString ( $length ) {
-
+    public function readString($length)
+    {
         return $this->read($length);
     }
 
     /**
      * Read a character.
      *
-     * @access  public
      * @return  string
      */
-    public function readCharacter ( ) {
-
+    public function readCharacter()
+    {
         return $this->read(1);
     }
 
     /**
      * Read a boolean.
      *
-     * @access  public
      * @return  bool
      */
-    public function readBoolean ( ) {
-
+    public function readBoolean()
+    {
         return (bool) $this->read(1);
     }
 
     /**
      * Read an integer.
      *
-     * @access  public
      * @param   int     $length    Length.
      * @return  int
      */
-    public function readInteger ( $length = 1 ) {
-
+    public function readInteger($length = 1)
+    {
         return (int) $this->read($length);
     }
 
     /**
      * Read a float.
      *
-     * @access  public
      * @param   int     $length    Length.
      * @return  float
      */
-    public function readFloat ( $length = 1 ) {
-
+    public function readFloat($length = 1)
+    {
         return (float) $this->read($length);
     }
 
     /**
      * Read the XML tree as an array.
      *
-     * @access  public
      * @param   string  $argument    Not use here.
      * @return  array
      */
-    public function readArray ( $argument = null ) {
-
+    public function readArray($argument = null)
+    {
         return (array) $this;
     }
 
     /**
      * Read a line.
      *
-     * @access  public
      * @return  string
      */
-    public function readLine ( ) {
-
+    public function readLine()
+    {
         $handle = $this->readAll();
         $n      = strpos($handle, "\n");
 
-        if(false === $n)
+        if (false === $n) {
             return $handle;
+        }
 
         return substr($handle, 0, $n);
     }
@@ -201,26 +173,22 @@ class Read extends Basic implements \Hoa\Stream\IStream\In {
     /**
      * Read all, i.e. read as much as possible.
      *
-     * @access  public
      * @param   int  $offset    Offset (not used).
      * @return  string
      */
-    public function readAll ( $offset = 0 ) {
-
+    public function readAll($offset = 0)
+    {
         return $this->__toString();
     }
 
     /**
      * Parse input from a stream according to a format.
      *
-     * @access  public
      * @param   string  $format    Format (see printf's formats).
      * @return  array
      */
-    public function scanf ( $format ) {
-
+    public function scanf($format)
+    {
         return sscanf($this->readAll(), $format);
     }
-}
-
 }

@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,50 +34,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xml;
 
-from('Hoa')
-
-/**
- * \Hoa\Xml\Exception
- */
--> import('Xml.Exception.~')
-
-/**
- * \Hoa\Xml
- */
--> import('Xml.~')
-
-/**
- * \Hoa\Stream\IStream\Out
- */
--> import('Stream.I~.Out')
-
-/**
- * \Hoa\Xml\Element\Write
- */
--> import('Xml.Element.Write', true);
-
-}
-
-namespace Hoa\Xml {
+use Hoa\Core;
+use Hoa\Stream;
 
 /**
  * Class \Hoa\Xml\Write.
  *
  * Write into a XML element.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Write extends Xml implements \Hoa\Stream\IStream\Out {
-
+class Write extends Xml implements Stream\IStream\Out
+{
     /**
      * Start the stream reader/writer as if it is a XML document.
      *
-     * @access  public
      * @param   \Hoa\Stream\IStream\Out  $stream                 Stream to
      *                                                           read/write.
      * @param   bool                     $initializeNamespace    Whether we
@@ -86,10 +60,11 @@ class Write extends Xml implements \Hoa\Stream\IStream\Out {
      * @param   mixed                    $entityResolver         Entity resolver.
      * @return  void
      */
-    public function __construct ( \Hoa\Stream\IStream\Out $stream,
-                                  $initializeNamespace = true,
-                                  $entityResolver      = null ) {
-
+    public function __construct(
+        Stream\IStream\Out $stream,
+        $initializeNamespace = true,
+        $entityResolver      = null
+    ) {
         parent::__construct(
             '\Hoa\Xml\Element\Write',
             $stream,
@@ -109,16 +84,16 @@ class Write extends Xml implements \Hoa\Stream\IStream\Out {
      * It transforms the XML tree as a XML string, truncates the stream to zero
      * and writes all this string into the stream.
      *
-     * @access  public
      * @param   \Hoa\Core\Event\Bucket  $bucket    Event's bucket.
      * @return  void
      */
-    public function _close ( \Hoa\Core\Event\Bucket $bucket ) {
-
+    public function _close(Core\Event\Bucket $bucket)
+    {
         $handle = $this->getStream()->selectRoot()->asXML();
 
-        if(true === $this->getInnerStream()->truncate(0))
+        if (true === $this->getInnerStream()->truncate(0)) {
             $this->getInnerStream()->writeAll($handle);
+        }
 
         return;
     }
@@ -126,161 +101,146 @@ class Write extends Xml implements \Hoa\Stream\IStream\Out {
     /**
      * Write n characters.
      *
-     * @access  public
      * @param   string  $string    String.
      * @param   int     $length    Length.
      * @return  mixed
-     * @throw   \Hoa\Xml\Exception
+     * @throws  \Hoa\Xml\Exception
      */
-    public function write ( $string, $length ) {
-
+    public function write($string, $length)
+    {
         return $this->getStream()->write($string, $length);
     }
 
     /**
      * Write a string.
      *
-     * @access  public
      * @param   string  $string    String.
      * @return  mixed
      */
-    public function writeString ( $string ) {
-
+    public function writeString($string)
+    {
         return $this->getStream()->writeString($string);
     }
 
     /**
      * Write a character.
      *
-     * @access  public
      * @param   string  $char    Character.
      * @return  mixed
      */
-    public function writeCharacter ( $char ) {
-
+    public function writeCharacter($char)
+    {
         return $this->getStream()->writeCharacter($char);
     }
 
     /**
      * Write a boolean.
      *
-     * @access  public
      * @param   bool    $boolean    Boolean.
      * @return  mixed
      */
-    public function writeBoolean ( $boolean ) {
-
+    public function writeBoolean($boolean)
+    {
         return $this->getStream()->writeBoolean($boolean);
     }
 
     /**
      * Write an integer.
      *
-     * @access  public
      * @param   int     $integer    Integer.
      * @return  mixed
      */
-    public function writeInteger ( $integer ) {
-
+    public function writeInteger($integer)
+    {
         return $this->getStream()->writeInteger($integer);
     }
 
     /**
      * Write a float.
      *
-     * @access  public
      * @param   float   $float    Float.
      * @return  mixed
      */
-    public function writeFloat ( $float ) {
-
+    public function writeFloat($float)
+    {
         return $this->getStream()->writeFloat($float);
     }
 
     /**
      * Write an array.
      *
-     * @access  public
      * @param   array   $array    Array.
      * @return  mixed
      */
-    public function writeArray ( Array $array ) {
-
+    public function writeArray(Array $array)
+    {
         return $this->getStream()->writeArray($array);
     }
 
     /**
      * Write a line.
      *
-     * @access  public
      * @param   string  $line    Line.
      * @return  mixed
      */
-    public function writeLine ( $line ) {
-
+    public function writeLine($line)
+    {
         return $this->getStream()->writeLine($line);
     }
 
     /**
      * Write all, i.e. as much as possible.
      *
-     * @access  public
      * @param   string  $string    String.
      * @return  mixed
      */
-    public function writeAll ( $string ) {
-
+    public function writeAll($string)
+    {
         return $this->getStream()->writeAll($string);
     }
 
     /**
      * Truncate to a given length.
      *
-     * @access  public
      * @param   int     $size    Size.
      * @return  bool
      */
-    public function truncate ( $size ) {
-
+    public function truncate($size)
+    {
         return $this->getStream()->truncate($size);
     }
 
     /**
      * Write a DOM tree.
      *
-     * @access  public
      * @param   \DOMNode  $dom    DOM tree.
      * @return  mixed
      */
-    public function writeDOM ( \DOMNode $dom ) {
-
+    public function writeDOM(\DOMNode $dom)
+    {
         return $this->getStream()->writeDOM($dom);
     }
 
     /**
      * Write attributes.
      *
-     * @access  public
      * @param   array   $attributes    Attributes.
      * @return  void
      */
-    public function writeAttributes ( Array $attributes ) {
-
+    public function writeAttributes(Array $attributes)
+    {
         return $this->getStream()->writeAttributes($attributes);
     }
 
     /**
      * Write an attribute.
      *
-     * @access  public
      * @param   string  $name     Name.
      * @param   string  $value    Value.
      * @return  void
      */
-    public function writeAttribute ( $name, $value ) {
-
+    public function writeAttribute($name, $value)
+    {
         return $this->getStream()->writeAttribute($name, $value);
     }
-}
-
 }

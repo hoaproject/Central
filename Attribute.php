@@ -34,18 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Xml\Exception
- */
--> import('Xml.Exception.~');
-
-}
-
-namespace Hoa\Xml {
+namespace Hoa\Xml;
 
 /**
  * Class \Hoa\Xml\Attribute.
@@ -238,6 +227,4 @@ class Attribute {
 
         return substr($out, 0, -1);
     }
-}
-
 }
