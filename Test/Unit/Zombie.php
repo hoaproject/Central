@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,38 +44,34 @@ use Hoa\Zombie as LUT;
  *
  * Test suite of the zombie class.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Zombie extends Test\Unit\Suite {
-
-    public function case_without_fpm ( ) {
-
+class Zombie extends Test\Unit\Suite
+{
+    public function case_without_fpm()
+    {
         $this
             ->given(
-                $this->function->function_exists = function ( $name ) {
-
-                    if('fastcgi_finish_request' === $name)
+                $this->function->function_exists = function ($name) {
+                    if ('fastcgi_finish_request' === $name) {
                         return false;
+                    }
 
                     return true;
                 }
             )
-            ->exception(function ( ) {
-
+            ->exception(function () {
                 LUT::fork();
             })
                 ->isInstanceOf('Hoa\Zombie\Exception');
     }
 
-    public function case_with_fpm ( ) {
-
+    public function case_with_fpm()
+    {
         $this
             ->given(
-                $this->function->function_exists = function ( $name ) {
-
+                $this->function->function_exists = function ($name) {
                     return true;
                 },
                 $this->function->fastcgi_finish_request = true
