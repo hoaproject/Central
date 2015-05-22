@@ -73,11 +73,11 @@ Then, in the `Run.php` file, we write:
 $fastcgi = new Hoa\Fastcgi\Responder(
     new Hoa\Socket\Client('tcp://127.0.0.1:9000')
 );
-echo $fastcgi->send(array(
+echo $fastcgi->send([
     'GATEWAY_INTERFACE' => 'FastCGI/1.0',
     'REQUEST_METHOD'    => 'GET',
     'SCRIPT_FILENAME'   => __DIR__ . DS . 'Zombie.php'
-));
+]);
 ```
 
 And finally, we can test:

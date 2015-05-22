@@ -94,11 +94,11 @@ file_put_contents(
 );
 
 // Start Zombie.php and print the response before it becomes undead.
-echo $fastcgi->send(array(
+echo $fastcgi->send([
     'GATEWAY_INTERFACE' => 'FastCGI/1.0',
     'REQUEST_METHOD'    => 'GET',
     'SCRIPT_FILENAME'   => __DIR__ . DS . 'Zombie.php'
-));</code></pre>
+]);</code></pre>
   <p>Et enfin, nous testons :</p>
   <pre><code class="language-shell">$ php-fpm -d listen=127.0.0.1:9000
 $ php Run.php

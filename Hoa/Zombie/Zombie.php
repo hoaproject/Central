@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,35 +43,32 @@ use Hoa\Core;
  *
  * Zombie!
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Zombie {
-
+class Zombie
+{
     /**
      * Test if we can start a zombie.
      *
-     * @access  public
      * @return  bool
      */
-    public static function test ( ) {
-
+    public static function test()
+    {
         return true === function_exists('fastcgi_finish_request');
     }
 
     /**
      * Try to create a zombie.
      *
-     * @access  public
      * @return  bool
      */
-    public static function fork ( ) {
-
-        if(true !== static::test())
+    public static function fork()
+    {
+        if (true !== static::test()) {
             throw new Exception(
                 'This program must run behind PHP-FPM to create a zombie.', 0);
+        }
 
         fastcgi_finish_request();
 
@@ -81,11 +78,10 @@ class Zombie {
     /**
      * Oh, why not decapitate?
      *
-     * @access  public
      * @return  void
      */
-    public static function decapitate ( ) {
-
+    public static function decapitate()
+    {
         static::_kill();
 
         return;
@@ -94,11 +90,10 @@ class Zombie {
     /**
      * Maybe, we can bludgeon the zombie?
      *
-     * @access  public
      * @return  void
      */
-    public static function bludgeon ( ) {
-
+    public static function bludgeon()
+    {
         static::_kill();
 
         return;
@@ -107,11 +102,10 @@ class Zombie {
     /**
      * Grilled zombies, hummm!
      *
-     * @access  public
      * @return  void
      */
-    public static function burn ( ) {
-
+    public static function burn()
+    {
         static::_kill();
 
         return;
@@ -120,11 +114,10 @@ class Zombie {
     /**
      * One… two… three… … splash!
      *
-     * @access  public
      * @return  void
      */
-    public static function explode ( ) {
-
+    public static function explode()
+    {
         static::_kill();
 
         return;
@@ -133,11 +126,10 @@ class Zombie {
     /**
      * Would like a slice?
      *
-     * @access  public
      * @return  void
      */
-    public static function cutOff ( ) {
-
+    public static function cutOff()
+    {
         static::_kill();
 
         return;
@@ -146,22 +138,20 @@ class Zombie {
     /**
      * Whatever, really kill the zombie.
      *
-     * @access  public
      * @return  void
      */
-    protected static function _kill ( ) {
-
+    protected static function _kill()
+    {
         exit;
     }
 
     /**
      * Get PHP's process ID.
      *
-     * @access  public
      * @return  int
      */
-    public static function getPid ( ) {
-
+    public static function getPid()
+    {
         return getmypid();
     }
 }
