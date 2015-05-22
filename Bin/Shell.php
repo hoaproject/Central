@@ -57,8 +57,8 @@ class Shell extends Console\Dispatcher\Kit
      */
     protected $options = [
         ['color', Console\GetOption::OPTIONAL_ARGUMENT, 'c'],
-        ['help',  Console\GetOption::NO_ARGUMENT,        'h'],
-        ['help',  Console\GetOption::NO_ARGUMENT,        '?']
+        ['help',  Console\GetOption::NO_ARGUMENT,       'h'],
+        ['help',  Console\GetOption::NO_ARGUMENT,       '?']
     ];
 
     /**
