@@ -113,6 +113,6 @@ class Text extends Content
      */
     protected function _getContent()
     {
-        return base64_encode($this->get());
+        return parent::qPrintEncode($this->get());
     }
 }
