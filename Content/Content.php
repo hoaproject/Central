@@ -217,38 +217,6 @@ abstract class Content implements \ArrayAccess
     }
 
     /**
-     * Encode UTF-8 to quoted-printable format.
-     * See RFC2047.
-     *
-     * @param   string  $string    String to encode.
-     * @return  string
-     */
-    public static function qPrintEncode($string)
-    {
-        if (0 === preg_match('#[\x80-\xff]+#', $string)) {
-            return $string;
-        }
-
-        return
-            '=?utf-8?Q?' .
-            preg_replace_callback(
-                '#[\x80-\xff]+#',
-                function ($matches) {
-                    $substring = $matches[0];
-                    $out       = null;
-
-                    for ($i = 0, $max = strlen($substring); $i < $max; ++$i) {
-                        $out .= '=' . dechex(ord($substring[$i]));
-                    }
-
-                    return strtoupper($out);
-                },
-                $string
-            ) .
-            '?=';
-    }
-
-    /**
      * Extract address from a contact string, such as:
      *     Gordon Freeman <gordon@freeman.net>
      * or

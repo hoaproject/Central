@@ -34,86 +34,52 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Mail\Content;
+namespace Hoa\Mail\Content\Encoder;
 
 /**
- * Class \Hoa\Mail\Content\Text.
+ * Class \Hoa\Mail\Content\Encoder\QuotedPrintable.
  *
- * This class represents a text.
+ * Encode and decode a string as described in the RFC2045 Section 6.7 and
+ * RFC2047, Sections 4 and 5.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Text extends Content
+class QuotedPrintable implements Encoder
 {
     /**
-     * Content.
      *
-     * @var string
-     */
-    protected $_content = null;
-
-
-
-    /**
-     * Construct a text content.
-     *
-     * @param   string  $content    Content.
-     * @return  void
-     */
-    public function __construct($content = null)
-    {
-        parent::__construct();
-        unset($this['content-transfer-encoding']);
-        $this['content-type'] = 'text/plain; charset=utf-8';
-        $this->append($content);
-
-        return;
-    }
-
-    /**
-     * Prepend content (in memory order, i.e. from left-to-right only).
-     *
-     * @param   string  $content    Content.
+     * @param   string  $string    String to encode.
      * @return  string
      */
-    public function prepend($content)
+    public static function encode($string)
     {
-        $this->_content = $content . $this->_content;
+        if (0 === preg_match('#[\x80-\xff]+#', $string)) {
+            return $string;
+        }
 
-        return $this;
+        // RFC2045, Section 6.7, rule 1.
+        return
+            '=?utf-8?Q?' .
+            preg_replace_callback(
+                '#[\x80-\xff]+#',
+                function ($matches) {
+                    $substring = $matches[0];
+                    $out       = null;
+
+                    for ($i = 0, $max = strlen($substring); $i < $max; ++$i) {
+                        $out .= '=' . strtoupper(dechex(ord($substring[$i])));
+                    }
+
+                    return strtoupper($out);
+                },
+                $string
+            ) .
+            '?=';
     }
 
-    /**
-     * Append content (in memory order, i.e. from left-to-right only).
-     *
-     * @param   string  $content    Content.
-     * @return  string
-     */
-    public function append($content)
+    public static function decode($string)
     {
-        $this->_content .= $content;
 
-        return $this;
-    }
-
-    /**
-     * Get the content.
-     *
-     * @return  string
-     */
-    public function get()
-    {
-        return $this->_content;
-    }
-
-    /**
-     * Get final “plain” content.
-     *
-     * @return  string
-     */
-    protected function _getContent()
-    {
-        return Encoder\QuotedPrintable::encode($this->get());
     }
 }

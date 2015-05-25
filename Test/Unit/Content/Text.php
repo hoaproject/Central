@@ -49,7 +49,6 @@ use Hoa\Test;
  */
 class Text extends Test\Unit\Suite
 {
-    /*
     public function case_basic()
     {
         $this
@@ -61,14 +60,12 @@ class Text extends Test\Unit\Suite
             ->then
                 ->string($result)
                     ->isEqualTo(
-                        'content-transfer-encoding: base64' . CRLF .
                         'content-disposition: inline' . CRLF .
                         'content-type: text/plain; charset=utf-8' . CRLF .
                         CRLF .
-                        'Zm9vYmFy'
+                        'foobar'
                     );
     }
-    */
 
     public function case_content_type()
     {
