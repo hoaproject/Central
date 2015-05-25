@@ -73,6 +73,7 @@ class Message extends Content
     public function __construct()
     {
         $this['content-type'] = 'multipart/mixed';
+        $this['date']         = date('r');
 
         return;
     }
@@ -108,10 +109,6 @@ class Message extends Content
      */
     protected function _getContent()
     {
-        if (!isset($this['date'])) {
-            $this['date'] = date('r');
-        }
-
         $content = $this->getContent();
 
         if (empty($content)) {
