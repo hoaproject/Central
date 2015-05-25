@@ -80,8 +80,16 @@ class Attachment extends Content
         }
 
         if (null === $mimeType) {
-            $mime     = new Mime($stream);
-            $mimeType = $mime->getMime() ?: 'application/octet-stream';
+            $mimeType = null;
+
+            try {
+                $mime     = new Mime($stream);
+                $mimeType = $mime->getMime();
+            } catch (Mime\Exception $e) { }
+
+            if (null === $mimeType) {
+                $mimeType = 'application/octet-stream';
+            }
         }
 
         $this['content-type']        = $mimeType;
