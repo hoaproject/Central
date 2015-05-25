@@ -146,13 +146,15 @@ class Message extends Content
 
     /**
      * Get all recipients of the message.
-     * The first recipient (index 0) is $this['to'].
+     * The first recipient (index 0) is `$this['to']`.
      *
      * @return  array
      */
     public function getRecipients()
     {
-        $out = [static::getAddress($this['to'])];
+        $out = [];
+
+        $this->_getRecipients($this['to'], $out);
 
         if (isset($this['cc'])) {
             $this->_getRecipients($this['cc'], $out);
