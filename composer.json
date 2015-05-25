@@ -25,6 +25,7 @@
         "hoa/mime": "~2.0"
     },
     "require-dev": {
+        "hoa/file": "~0.0",
         "hoa/test": "~1.0"
     },
     "autoload": {
