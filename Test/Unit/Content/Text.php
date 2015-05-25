@@ -75,7 +75,6 @@ class Text extends Test\Unit\Suite
             ->then
                 ->array($result)
                     ->hasKey('content-type')
-
                 ->string($result['content-type'])
                     ->isEqualTo('text/plain; charset=utf-8');
     }
