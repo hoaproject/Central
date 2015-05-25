@@ -218,6 +218,7 @@ abstract class Content implements \ArrayAccess
 
     /**
      * Encode UTF-8 to quoted-printable format.
+     * See RFC2047.
      *
      * @param   string  $string    String to encode.
      * @return  string
