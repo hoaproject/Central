@@ -24,6 +24,9 @@
         "hoa/core": "~2.0",
         "hoa/mime": "~2.0"
     },
+    "require-dev": {
+        "hoa/test": "~1.0"
+    },
     "autoload": {
         "psr-4": {
             "Hoa\\Mail\\": "."
