@@ -76,17 +76,18 @@ content: either textual or HTML.
 
 ```php
 $message->addContent(
-    new Hoa\Mail\Content\Alternative(
-        [
-            new Hoa\Mail\Content\Text(
-                'Check this out: http://hoa-project.net/!'
-            ),
-            new Hoa\Mail\Content\Html(
-                '<a href="http://hoa-project.net/">Check this ' .
-                '<strong>out</strong>!</a>'
-            )
-        ]
-    )
+    // We have either…
+    new Hoa\Mail\Content\Alternative([
+        // … a text content
+        new Hoa\Mail\Content\Text(
+            'Check this out: http://hoa-project.net/!'
+        ),
+        // … or an HTML content.
+        new Hoa\Mail\Content\Html(
+            '<a href="http://hoa-project.net/">Check this ' .
+            '<strong>out</strong>!</a>'
+        )
+    ])
 );
 ```
 
@@ -106,6 +107,38 @@ And finally, we send the email:
 
 ```php
 $message->send();
+```
+
+### Complex email
+
+Now imagine we do not want the image to be only attached but appear in the HTML
+content. These contents are related. Here is how to construct the email (with
+more variables to clarify):
+
+```php
+// The image.
+$attachment = new Hoa\Mail\Content\Attachment(
+    new Hoa\File\Read('Attachment.jpg'),
+    'Foobar.jpg'
+);
+// The text content.
+$text = new Hoa\Mail\Content\Text('Check this out: http://hoa-project.net/!');
+// The HTML content.
+$html = new Hoa\Mail\Content\Html(
+    '<img src="' .
+    // The HTML image URL is the attachment ID URL.
+    $attachment->getIdUrl() .
+    '" />'
+);
+
+$message->addContent(
+    // Alternative contents and attachment are related.
+    new Hoa\Mail\Content\Related([
+        // We still have 2 alternative contents: text or HTML.
+        new Hoa\Mail\Content\Alternative([$text, $html]),
+        $attachment
+    ])
+);
 ```
 
 ## Documentation
