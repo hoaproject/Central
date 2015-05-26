@@ -142,6 +142,6 @@ class Attachment extends Content
      */
     protected function _getContent()
     {
-        return base64_encode($this->getStream()->readAll());
+        return Encoder\Base64::encode($this->getStream()->readAll());
     }
 }

@@ -176,13 +176,7 @@ abstract class Content implements \ArrayAccess
             $out .= static::formatHeaders($this->getHeaders()) . CRLF;
         }
 
-        $content = $this->_getContent();
-
-        if ('base64' === $this['content-transfer-encoding']) {
-            $content = trim(chunk_split($content, 76, CRLF));
-        }
-
-        $out .= $content;
+        $out .= $this->_getContent();
 
         return $out;
     }
