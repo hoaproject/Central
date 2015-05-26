@@ -64,8 +64,8 @@ class Text extends Content
     public function __construct($content = null)
     {
         parent::__construct();
-        unset($this['content-transfer-encoding']);
-        $this['content-type'] = 'text/plain; charset=utf-8';
+        $this['content-transfer-encoding'] = 'quoted-printable';
+        $this['content-type']              = 'text/plain; charset=utf-8';
         $this->append($content);
 
         return;

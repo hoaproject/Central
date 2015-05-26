@@ -60,6 +60,7 @@ class Html extends Test\Unit\Suite
             ->then
                 ->string($result)
                     ->isEqualTo(
+                        'content-transfer-encoding: quoted-printable' . CRLF .
                         'content-disposition: inline' . CRLF .
                         'content-type: text/html; charset=utf-8' . CRLF .
                         CRLF .

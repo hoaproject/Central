@@ -60,6 +60,7 @@ class Text extends Test\Unit\Suite
             ->then
                 ->string($result)
                     ->isEqualTo(
+                        'content-transfer-encoding: quoted-printable' . CRLF .
                         'content-disposition: inline' . CRLF .
                         'content-type: text/plain; charset=utf-8' . CRLF .
                         CRLF .
@@ -161,6 +162,6 @@ class Text extends Test\Unit\Suite
             ->when($result = $content->getFormattedContent(false))
             ->then
                 ->string($result)
-                    ->isEqualTo('=?utf-8?Q?f=C3=B4=C3=B2b=C4=81r?=');
+                    ->isEqualTo('f=C3=B4=C3=B2b=C4=81r');
     }
 }
