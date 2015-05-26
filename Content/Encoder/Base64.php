@@ -39,8 +39,8 @@ namespace Hoa\Mail\Content\Encoder;
 /**
  * Class \Hoa\Mail\Content\Encoder\Base64.
  *
- * Encode and decode a string as described in the RFC4648. Also respect the
- * column limitation.
+ * Encode and decode a string as described in the RFC4648 and RFC2045
+ * Section 6.8.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
