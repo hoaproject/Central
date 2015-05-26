@@ -127,9 +127,7 @@ class Message extends Content
                 $message .= $frontier . CRLF . $c . CRLF;
             }
 
-            if (null !== $frontier) {
-                $message .= $frontier . '--' . CRLF;
-            }
+            $message .= $frontier . '--' . CRLF;
         } else {
             $oldContentType = $this['content-type'];
             unset($this['content-type']);
