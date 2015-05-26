@@ -141,4 +141,109 @@ class Content extends Test\Unit\Suite
                         'content-disposition'       => 'inline'
                     ]);
     }
+
+    public function case_get_formatted_content_with_headers()
+    {
+        $this
+            ->given(
+                $content                              = new SUT(),
+                $this->calling($content)->_getContent = 'foobar'
+            )
+            ->when($result = $content->getFormattedContent())
+            ->then
+                ->string($result)
+                    ->isEqualTo(
+                        'content-transfer-encoding: base64' . CRLF .
+                        'content-disposition: inline' . CRLF .
+                        CRLF .
+                        'foobar'
+                    );
+    }
+
+    public function case_get_formatted_content_without_headers()
+    {
+        $this
+            ->given(
+                $content                              = new SUT(),
+                $this->calling($content)->_getContent = 'foobar'
+            )
+            ->when($result = $content->getFormattedContent(false))
+            ->then
+                ->string($result)
+                    ->isEqualTo('foobar');
+    }
+
+    public function case_format_no_header()
+    {
+        $this
+            ->given($headers = [])
+            ->when($result = SUT::formatHeaders($headers))
+            ->then
+                ->variable($result)
+                    ->isNull();
+    }
+
+    public function case_format_headers()
+    {
+        $this
+            ->given($headers = ['a' => 'b', 'c' => 'd'])
+            ->when($result = SUT::formatHeaders($headers))
+            ->then
+                ->string($result)
+                    ->isEqualTo(
+                        'a: b' . CRLF .
+                        'c: d' . CRLF
+                    );
+    }
+
+    public function case_get_address()
+    {
+        $this
+            ->given($_contact = $this->realdom->regex('#([^<]*<)?.+#'))
+            ->when(function () use ($_contact) {
+                foreach ($this->sampleMany($_contact, 1000) as $contact) {
+                    if (false !== $pos = strpos($contact, '<')) {
+                        $address = substr($contact, $pos + 1);
+                    } else {
+                        $address = trim($contact);
+                    }
+
+                    $this
+                        ->string(SUT::getAddress($contact))
+                            ->isEqualTo($address);
+                }
+            });
+    }
+
+    public function case_get_domain()
+    {
+        $this
+            ->given($_contact = $this->realdom->regex('#(.+@)?.+#'))
+            ->when(function () use ($_contact) {
+                foreach ($this->sampleMany($_contact, 1000) as $contact) {
+                    if (false !== $pos = strpos($contact, '@')) {
+                        $domain = substr($contact, $pos + 1);
+                    } else {
+                        $domain = $contact;
+                    }
+
+                    $this
+                        ->string(SUT::getDomain($contact))
+                            ->isEqualTo($domain);
+                }
+            });
+    }
+
+    public function case_to_string()
+    {
+        $this
+            ->given(
+                $content                              = new SUT(),
+                $this->calling($content)->_getContent = 'foobar'
+            )
+            ->when($result = $content->__toString())
+            ->then
+                ->string($result)
+                    ->isEqualTo($content->getFormattedContent());
+    }
 }
