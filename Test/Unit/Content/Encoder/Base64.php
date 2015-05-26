@@ -49,7 +49,7 @@ use Hoa\Test;
  */
 class Base64 extends Test\Unit\Suite
 {
-    public function case_encode_decode()
+    public function case_basic_encode_decode()
     {
         $this
             ->given(
@@ -67,7 +67,7 @@ class Base64 extends Test\Unit\Suite
                     ->isEqualTo($decoded);
     }
 
-    public function case_long_encode_decode()
+    public function case_encode_decode_76_columns_max()
     {
         $this
             ->given(
