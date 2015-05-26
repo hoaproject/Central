@@ -87,6 +87,6 @@ class Base64 implements Encoder
      */
     public static function decode($string, $isHeaderValue = false)
     {
-        throw new Mail\Exception('Not implemented.');
+        throw new Mail\Exception('Not implemented.', 0);
     }
 }
