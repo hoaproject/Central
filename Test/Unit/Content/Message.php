@@ -190,4 +190,86 @@ class Message extends Test\Unit\Suite
                         'gordon@hoa-project.net'
                     ]);
     }
+
+    public function case_no_content()
+    {
+        $this
+            ->given($message = new SUT())
+            ->exception(function () use ($message) {
+                $message->getFormattedContent();
+            })
+                ->isInstanceOf('Hoa\Mail\Exception');
+    }
+
+    public function case_one_content()
+    {
+        $this
+            ->given(
+                $this->function->date = function() use (&$date) {
+                    return $date = date('r', 42);
+                },
+                $content = new Text('foo'),
+                $message = new SUT(),
+                $message->addContent($content)
+            )
+            ->when($result = $message->getFormattedContent())
+            ->then
+                ->string($result)
+                    ->isEqualTo(
+                        'date: ' . $date . CRLF .
+                        'content-disposition: inline' . CRLF .
+                        'content-type: text/plain; charset=utf-8' . CRLF .
+                        CRLF .
+                        'foo'
+                    );
+    }
+
+    public function case_many_contents()
+    {
+        $this
+            ->given(
+                $this->function->date = function() use (&$date) {
+                    return $date = date('r', 42);
+                },
+                $this->function->microtime = function() use (&$microtime) {
+                    return $microtime = 42;
+                },
+                $content1 = new Text('foo'),
+                $content2 = new Text('bar'),
+                $content3 = new Text('baz'),
+                $content4 = new Text('qux'),
+                $message  = new SUT(),
+                $message->addContent($content1),
+                $message->addContent($content2),
+                $message->addContent($content3),
+                $message->addContent($content4)
+            )
+            ->when($result = $message->getFormattedContent())
+            ->then
+                ->string($result)
+                    ->isEqualTo(
+                        'content-type: multipart/mixed; boundary=__bndry-889c9d2eee9fc547c03ab71ac5c93db3' . CRLF .
+                        'date: Thu, 01 Jan 1970 01:00:42 +0100' . CRLF .
+                        CRLF .
+
+                        // Content 1.
+                        '--__bndry-889c9d2eee9fc547c03ab71ac5c93db3' . CRLF .
+                        $content1->getFormattedContent() . CRLF .
+
+                        // Content 2.
+                        '--__bndry-889c9d2eee9fc547c03ab71ac5c93db3' . CRLF .
+                        $content2->getFormattedContent() . CRLF .
+
+                        // Content 3.
+                        '--__bndry-889c9d2eee9fc547c03ab71ac5c93db3' . CRLF .
+                        $content3->getFormattedContent() . CRLF .
+
+                        // Content 4.
+                        '--__bndry-889c9d2eee9fc547c03ab71ac5c93db3' . CRLF .
+                        $content4->getFormattedContent() . CRLF .
+
+                        '--__bndry-889c9d2eee9fc547c03ab71ac5c93db3' .
+                        '--' . CRLF
+                    );
+    }
 }
