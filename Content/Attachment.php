@@ -93,7 +93,10 @@ class Attachment extends Content
         }
 
         $this['content-type']        = $mimeType;
-        $this['content-disposition'] = 'attachment; filename=' . $name . ';';
+        $this['content-disposition'] =
+            'attachment; filename="' .
+            str_replace('"', '-', $name) .
+            '";';
         $this->setStream($stream);
 
         return;

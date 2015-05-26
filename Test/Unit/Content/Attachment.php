@@ -63,7 +63,7 @@ class Attachment extends Test\Unit\Suite
                 ->string($result->getFormattedContent())
                     ->isEqualTo(
                         'content-transfer-encoding: base64' . CRLF .
-                        'content-disposition: attachment; filename=Hello.txt;' . CRLF .
+                        'content-disposition: attachment; filename="Hello.txt";' . CRLF .
                         'content-type: text/plain' . CRLF .
                         CRLF .
                         'Zm9vYmFy'
@@ -84,7 +84,7 @@ class Attachment extends Test\Unit\Suite
                 ->string($result['content-type'])
                     ->isEqualTo('text/plain')
                 ->string($result['content-disposition'])
-                    ->isEqualTo('attachment; filename=' . $filename . ';');
+                    ->isEqualTo('attachment; filename="' . $filename . '";');
     }
 
     public function case_get_stream()
@@ -115,7 +115,20 @@ class Attachment extends Test\Unit\Suite
             ->when($result = new SUT($stream, $name))
             ->then
                 ->string($result['content-disposition'])
-                    ->isEqualTo('attachment; filename=' . $name . ';');
+                    ->isEqualTo('attachment; filename="' . $name . '";');
+    }
+
+    public function case_force_name_with_quotes_inside()
+    {
+        $this
+            ->given(
+                $filename = 'Foo.txt',
+                $stream   = new File\ReadWrite(resolve('hoa://Test/Vfs/' . $filename))
+            )
+            ->when($result = new SUT($stream, 'B"a"r.txt'))
+            ->then
+                ->string($result['content-disposition'])
+                    ->isEqualTo('attachment; filename="B-a-r.txt";');
     }
 
     public function case_force_mime_type()
@@ -134,7 +147,7 @@ class Attachment extends Test\Unit\Suite
                 ->string($result['content-type'])
                     ->isEqualTo($mimeType)
                 ->string($result['content-disposition'])
-                    ->isEqualTo('attachment; filename=' . $name . ';');
+                    ->isEqualTo('attachment; filename="' . $name . '";');
     }
 
     public function case_unknown_mime_type()
