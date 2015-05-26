@@ -188,6 +188,34 @@ abstract class Content implements \ArrayAccess
     }
 
     /**
+     * Get Content-ID of this content.
+     * Please, see RFC2111.
+     *
+     * If ID does not exist, a random one will be generated.
+     *
+     * @return  string
+     */
+    public function getId()
+    {
+        if (!isset($this['content-id'])) {
+            $this['content-id'] = md5(uniqid()) . '*mail@hoa-project.net';
+        }
+
+        return $this['content-id'];
+    }
+
+    /**
+     * Get URL of this content.
+     * Please, see RFC2111.
+     *
+     * @return  string
+     */
+    public function getIdUrl()
+    {
+        return 'cid:' . $this->getId();
+    }
+
+    /**
      * Get formatted headers.
      *
      * @param   array  $headers    Headers.

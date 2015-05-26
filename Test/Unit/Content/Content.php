@@ -173,6 +173,46 @@ class Content extends Test\Unit\Suite
                     ->isEqualTo('foobar');
     }
 
+    public function case_get_id_auto_generated()
+    {
+        $this
+            ->given(
+                $this->function->md5 = 'foo',
+                $content             = new SUT()
+            )
+            ->when($result = $content->getId())
+            ->then
+                ->string($result)
+                    ->isEqualTo('foo*mail@hoa-project.net');
+    }
+
+    public function case_get_id_forced()
+    {
+        $this
+            ->given(
+                $id                    = 'foo@bar.baz',
+                $content               = new SUT(),
+                $content['content-id'] = $id
+            )
+            ->when($result = $content->getId())
+            ->then
+                ->string($result)
+                    ->isEqualTo($id);
+    }
+
+    public function case_get_id_url()
+    {
+        $this
+            ->given(
+                $content = new SUT(),
+                $id      = $content->getId()
+            )
+            ->when($result = $content->getIdUrl())
+            ->then
+                ->string($result)
+                    ->isEqualTo('cid:' . $id);
+    }
+
     public function case_format_no_header()
     {
         $this
