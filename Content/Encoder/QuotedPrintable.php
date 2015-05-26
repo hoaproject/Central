@@ -80,6 +80,5 @@ class QuotedPrintable implements Encoder
 
     public static function decode($string)
     {
-
     }
 }

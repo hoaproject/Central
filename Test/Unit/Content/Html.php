@@ -47,7 +47,7 @@ use Hoa\Test;
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class HTML extends Test\Unit\Suite
+class Html extends Test\Unit\Suite
 {
     public function case_basic()
     {

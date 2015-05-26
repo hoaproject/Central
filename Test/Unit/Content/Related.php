@@ -78,7 +78,7 @@ class Related extends Test\Unit\Suite
     {
         $this
             ->given(
-                $this->function->microtime = function() use (&$microtime) {
+                $this->function->microtime = function () use (&$microtime) {
                     return $microtime = 42;
                 },
                 $related1 = new CHtml('<strong>foo</strong>'),
