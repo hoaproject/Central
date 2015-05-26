@@ -58,9 +58,9 @@ class Attachment extends Test\Unit\Suite
                 $stream->writeAll('foobar'),
                 $name   = 'Hello.txt'
             )
-            ->when($content = new SUT($stream, $name))
+            ->when($result = new SUT($stream, $name))
             ->then
-                ->string($content->getFormattedContent())
+                ->string($result->getFormattedContent())
                     ->isEqualTo(
                         'content-transfer-encoding: base64' . CRLF .
                         'content-disposition: attachment; filename=Hello.txt;' . CRLF .
@@ -79,11 +79,11 @@ class Attachment extends Test\Unit\Suite
                 $stream   = new File\ReadWrite(resolve('hoa://Test/Vfs/' . $filename)),
                 $stream->writeAll($html)
             )
-            ->when($content = new SUT($stream))
+            ->when($result = new SUT($stream))
             ->then
-                ->string($content['content-type'])
+                ->string($result['content-type'])
                     ->isEqualTo('text/plain')
-                ->string($content['content-disposition'])
+                ->string($result['content-disposition'])
                     ->isEqualTo('attachment; filename=' . $filename . ';');
     }
 
@@ -96,9 +96,9 @@ class Attachment extends Test\Unit\Suite
                 $stream   = new File\ReadWrite(resolve('hoa://Test/Vfs/' . $filename)),
                 $stream->writeAll($html)
             )
-            ->when($content = new SUT($stream))
+            ->when($result = new SUT($stream))
             ->then
-                ->object($content->getStream())
+                ->object($result->getStream())
                     ->isIdenticalTo($stream);
     }
 
@@ -112,9 +112,9 @@ class Attachment extends Test\Unit\Suite
                 $stream->writeAll($html),
                 $name     = 'Bar.txt'
             )
-            ->when($content = new SUT($stream, $name))
+            ->when($result = new SUT($stream, $name))
             ->then
-                ->string($content['content-disposition'])
+                ->string($result['content-disposition'])
                     ->isEqualTo('attachment; filename=' . $name . ';');
     }
 
@@ -129,11 +129,11 @@ class Attachment extends Test\Unit\Suite
                 $name     = 'Bar.txt',
                 $mimeType = 'text/x-test-plain'
             )
-            ->when($content = new SUT($stream, $name, $mimeType))
+            ->when($result = new SUT($stream, $name, $mimeType))
             ->then
-                ->string($content['content-type'])
+                ->string($result['content-type'])
                     ->isEqualTo($mimeType)
-                ->string($content['content-disposition'])
+                ->string($result['content-disposition'])
                     ->isEqualTo('attachment; filename=' . $name . ';');
     }
 
@@ -144,9 +144,9 @@ class Attachment extends Test\Unit\Suite
                 $stream = new File\ReadWrite(resolve('hoa://Test/Vfs/Foo.hoa-test')),
                 $stream->writeAll('foobar')
             )
-            ->when($content = new SUT($stream))
+            ->when($result = new SUT($stream))
             ->then
-                ->string($content['content-type'])
+                ->string($result['content-type'])
                     ->isEqualTo('application/octet-stream');
     }
 
@@ -158,11 +158,11 @@ class Attachment extends Test\Unit\Suite
                 $stream = new File\ReadWrite(resolve('hoa://Test/Vfs/Foo.text')),
                 $stream->writeAll($text)
             )
-            ->when($content = new SUT($stream))
+            ->when($result = new SUT($stream))
             ->then
-                ->string($content['content-transfer-encoding'])
+                ->string($result['content-transfer-encoding'])
                     ->isEqualTo('base64')
-                ->string($content->getFormattedContent(false))
+                ->string($result->getFormattedContent(false))
                     ->isEqualTo(base64_encode($text));
     }
 }
