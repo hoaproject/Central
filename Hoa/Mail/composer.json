@@ -2,7 +2,8 @@
     "name"       : "hoa/mail",
     "description": "The Hoa\\Mail library.",
     "type"       : "library",
-    "keywords"   : ["library", "mail", "smtp", "sendmail", "pop3", "imap"],
+    "keywords"   : ["library", "mail", "smtp", "sendmail", "imap", "rfc2111",
+                    "rfc4648", "rfc2045", "rfc2047", "rfc2104"],
     "homepage"   : "http://hoa-project.net/",
     "license"    : "BSD-3-Clause",
     "authors"    : [
