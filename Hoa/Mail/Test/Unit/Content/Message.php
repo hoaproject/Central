@@ -63,7 +63,7 @@ class Message extends Test\Unit\Suite
     {
         $this
             ->when(
-                $this->function->date = function() use (&$date) {
+                $this->function->date = function () use (&$date) {
                     return $date = date('r', 42);
                 },
                 $result = new SUT()
@@ -205,7 +205,7 @@ class Message extends Test\Unit\Suite
     {
         $this
             ->given(
-                $this->function->date = function() use (&$date) {
+                $this->function->date = function () use (&$date) {
                     return $date = date('r', 42);
                 },
                 $content = new Text('foo'),
@@ -228,10 +228,10 @@ class Message extends Test\Unit\Suite
     {
         $this
             ->given(
-                $this->function->date = function() use (&$date) {
+                $this->function->date = function () use (&$date) {
                     return $date = date('r', 42);
                 },
-                $this->function->microtime = function() use (&$microtime) {
+                $this->function->microtime = function () use (&$microtime) {
                     return $microtime = 42;
                 },
                 $content1 = new Text('foo'),

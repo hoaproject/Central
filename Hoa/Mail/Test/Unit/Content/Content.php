@@ -36,8 +36,8 @@
 
 namespace Hoa\Mail\Test\Unit\Content;
 
-use Mock\Hoa\Mail\Content as SUT;
 use Hoa\Test;
+use Mock\Hoa\Mail\Content as SUT;
 
 /**
  * Class \Hoa\Mail\Test\Unit\Content\Content.

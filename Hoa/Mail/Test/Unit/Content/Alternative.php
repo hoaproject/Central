@@ -37,8 +37,8 @@
 namespace Hoa\Mail\Test\Unit\Content;
 
 use Hoa\Mail\Content\Alternative as SUT;
-use Hoa\Mail\Content\Text;
 use Hoa\Mail\Content\Html;
+use Hoa\Mail\Content\Text;
 use Hoa\Test;
 
 /**
@@ -78,7 +78,7 @@ class Alternative extends Test\Unit\Suite
     {
         $this
             ->given(
-                $this->function->microtime = function() use (&$microtime) {
+                $this->function->microtime = function () use (&$microtime) {
                     return $microtime = 42;
                 },
                 $content1    = new Text('foo'),
