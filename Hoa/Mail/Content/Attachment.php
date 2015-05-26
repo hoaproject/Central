@@ -80,12 +80,31 @@ class Attachment extends Content
         }
 
         if (null === $mimeType) {
-            $mime     = new Mime($stream);
-            $mimeType = $mime->getMime() ?: 'application/octet-stream';
+            $mimeType = null;
+
+            try {
+                $mime     = new Mime($stream);
+                $mimeType = $mime->getMime();
+            } catch (Mime\Exception $e) { }
+
+            if (null === $mimeType) {
+                $mimeType = 'application/octet-stream';
+            }
+        }
+
+        $size = null;
+
+        if ($stream instanceof Stream\IStream\Statable) {
+            $size = '; size=' . $stream->getSize();
         }
 
         $this['content-type']        = $mimeType;
-        $this['content-disposition'] = 'attachment; filename=' . $name . ';';
+        $this['content-disposition'] =
+            'attachment; filename="' .
+            str_replace('"', '-', $name) .
+            '"' .
+            $size;
+
         $this->setStream($stream);
 
         return;

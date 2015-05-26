@@ -34,86 +34,58 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Mail\Content;
+namespace Hoa\Mail\Test\Unit\Content;
+
+use Hoa\Mail\Content\Html as SUT;
+use Hoa\Test;
 
 /**
- * Class \Hoa\Mail\Content\Text.
+ * Class \Hoa\Mail\Test\Unit\Content\Html.
  *
- * This class represents a text.
+ * Test suite of the HTML content.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Text extends Content
+class HTML extends Test\Unit\Suite
 {
-    /**
-     * Content.
-     *
-     * @var string
-     */
-    protected $_content = null;
-
-
-
-    /**
-     * Construct a text content.
-     *
-     * @param   string  $content    Content.
-     * @return  void
-     */
-    public function __construct($content = null)
+    public function case_basic()
     {
-        parent::__construct();
-        unset($this['content-transfer-encoding']);
-        $this['content-type'] = 'text/plain; charset=utf-8';
-        $this->append($content);
-
-        return;
+        $this
+            ->given(
+                $html    = '<strong>foobar</strong>',
+                $content = new SUT($html)
+            )
+            ->when($result = $content->getFormattedContent())
+            ->then
+                ->string($result)
+                    ->isEqualTo(
+                        'content-disposition: inline' . CRLF .
+                        'content-type: text/html; charset=utf-8' . CRLF .
+                        CRLF .
+                        '<strong>foobar</strong>'
+                    );
     }
 
-    /**
-     * Prepend content (in memory order, i.e. from left-to-right only).
-     *
-     * @param   string  $content    Content.
-     * @return  string
-     */
-    public function prepend($content)
+    public function case_html_is_text()
     {
-        $this->_content = $content . $this->_content;
-
-        return $this;
+        $this
+            ->when($content = new SUT())
+            ->then
+                ->object($content)
+                    ->isInstanceOf('Hoa\Mail\Content\Html');
     }
 
-    /**
-     * Append content (in memory order, i.e. from left-to-right only).
-     *
-     * @param   string  $content    Content.
-     * @return  string
-     */
-    public function append($content)
+    public function case_content_type()
     {
-        $this->_content .= $content;
+        $this
+            ->given($content = new SUT())
+            ->when($result = $content->getHeaders())
+            ->then
+                ->array($result)
+                    ->hasKey('content-type')
 
-        return $this;
-    }
-
-    /**
-     * Get the content.
-     *
-     * @return  string
-     */
-    public function get()
-    {
-        return $this->_content;
-    }
-
-    /**
-     * Get final “plain” content.
-     *
-     * @return  string
-     */
-    protected function _getContent()
-    {
-        return Encoder\QuotedPrintable::encode($this->get());
+                ->string($result['content-type'])
+                    ->isEqualTo('text/html; charset=utf-8');
     }
 }

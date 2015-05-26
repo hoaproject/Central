@@ -37,83 +37,39 @@
 namespace Hoa\Mail\Content;
 
 /**
- * Class \Hoa\Mail\Content\Text.
+ * Class \Hoa\Mail\Content\Related.
  *
- * This class represents a text.
+ * Represent a set of content that are related.
+ * See RFC2111.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Text extends Content
+class Related extends Message
 {
     /**
-     * Content.
+     * Boundary hash prefix.
      *
-     * @var string
+     * @const string
      */
-    protected $_content = null;
+    const BOUNDARY = '@hoaproject-related-';
 
 
 
     /**
-     * Construct a text content.
+     * Constructor.
      *
-     * @param   string  $content    Content.
+     * @param   array  $contents    Related contents.
      * @return  void
      */
-    public function __construct($content = null)
+    public function __construct(Array $contents = [])
     {
-        parent::__construct();
-        unset($this['content-transfer-encoding']);
-        $this['content-type'] = 'text/plain; charset=utf-8';
-        $this->append($content);
+        foreach ($contents as $content) {
+            $this->addContent($content);
+        }
+
+        $this['content-type'] = 'multipart/related';
 
         return;
-    }
-
-    /**
-     * Prepend content (in memory order, i.e. from left-to-right only).
-     *
-     * @param   string  $content    Content.
-     * @return  string
-     */
-    public function prepend($content)
-    {
-        $this->_content = $content . $this->_content;
-
-        return $this;
-    }
-
-    /**
-     * Append content (in memory order, i.e. from left-to-right only).
-     *
-     * @param   string  $content    Content.
-     * @return  string
-     */
-    public function append($content)
-    {
-        $this->_content .= $content;
-
-        return $this;
-    }
-
-    /**
-     * Get the content.
-     *
-     * @return  string
-     */
-    public function get()
-    {
-        return $this->_content;
-    }
-
-    /**
-     * Get final “plain” content.
-     *
-     * @return  string
-     */
-    protected function _getContent()
-    {
-        return Encoder\QuotedPrintable::encode($this->get());
     }
 }

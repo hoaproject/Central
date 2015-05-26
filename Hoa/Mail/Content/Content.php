@@ -188,6 +188,34 @@ abstract class Content implements \ArrayAccess
     }
 
     /**
+     * Get Content-ID of this content.
+     * Please, see RFC2111.
+     *
+     * If ID does not exist, a random one will be generated.
+     *
+     * @return  string
+     */
+    public function getId()
+    {
+        if (!isset($this['content-id'])) {
+            $this['content-id'] = md5(uniqid()) . '*mail@hoa-project.net';
+        }
+
+        return $this['content-id'];
+    }
+
+    /**
+     * Get URL of this content.
+     * Please, see RFC2111.
+     *
+     * @return  string
+     */
+    public function getIdUrl()
+    {
+        return 'cid:' . $this->getId();
+    }
+
+    /**
      * Get formatted headers.
      *
      * @param   array  $headers    Headers.
@@ -214,37 +242,6 @@ abstract class Content implements \ArrayAccess
         }
 
         return $out;
-    }
-
-    /**
-     * Encode UTF-8 to quoted-printable format.
-     *
-     * @param   string  $string    String to encode.
-     * @return  string
-     */
-    public static function qPrintEncode($string)
-    {
-        if (0 === preg_match('#[\x80-\xff]+#', $string)) {
-            return $string;
-        }
-
-        return
-            '=?utf-8?Q?' .
-            preg_replace_callback(
-                '#[\x80-\xff]+#',
-                function ($matches) {
-                    $substring = $matches[0];
-                    $out       = null;
-
-                    for ($i = 0, $max = strlen($substring); $i < $max; ++$i) {
-                        $out .= '=' . dechex(ord($substring[$i]));
-                    }
-
-                    return strtoupper($out);
-                },
-                $string
-            ) .
-            '?=';
     }
 
     /**

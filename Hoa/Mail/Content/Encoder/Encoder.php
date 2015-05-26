@@ -34,86 +34,26 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Mail\Content;
+namespace Hoa\Mail\Content\Encoder;
+
+use Hoa\Core;
 
 /**
- * Class \Hoa\Mail\Content\Text.
+ * Interface \Hoa\Mail\Content\Encoder\Encoder.
  *
- * This class represents a text.
+ * Interface for encoders and decoders. Decoding must always target UTF-8.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Text extends Content
+interface Encoder
 {
-    /**
-     * Content.
-     *
-     * @var string
-     */
-    protected $_content = null;
+    public static function encode($string);
 
-
-
-    /**
-     * Construct a text content.
-     *
-     * @param   string  $content    Content.
-     * @return  void
-     */
-    public function __construct($content = null)
-    {
-        parent::__construct();
-        unset($this['content-transfer-encoding']);
-        $this['content-type'] = 'text/plain; charset=utf-8';
-        $this->append($content);
-
-        return;
-    }
-
-    /**
-     * Prepend content (in memory order, i.e. from left-to-right only).
-     *
-     * @param   string  $content    Content.
-     * @return  string
-     */
-    public function prepend($content)
-    {
-        $this->_content = $content . $this->_content;
-
-        return $this;
-    }
-
-    /**
-     * Append content (in memory order, i.e. from left-to-right only).
-     *
-     * @param   string  $content    Content.
-     * @return  string
-     */
-    public function append($content)
-    {
-        $this->_content .= $content;
-
-        return $this;
-    }
-
-    /**
-     * Get the content.
-     *
-     * @return  string
-     */
-    public function get()
-    {
-        return $this->_content;
-    }
-
-    /**
-     * Get final “plain” content.
-     *
-     * @return  string
-     */
-    protected function _getContent()
-    {
-        return Encoder\QuotedPrintable::encode($this->get());
-    }
+    public static function decode($string);
 }
+
+/**
+ * Flex entity.
+ */
+Core\Consistency::flexEntity('Hoa\Mail\Content\Encoder\Encoder');

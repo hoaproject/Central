@@ -73,6 +73,7 @@ class Message extends Content
     public function __construct()
     {
         $this['content-type'] = 'multipart/mixed';
+        $this['date']         = date('r');
 
         return;
     }
@@ -108,10 +109,6 @@ class Message extends Content
      */
     protected function _getContent()
     {
-        if (!isset($this['date'])) {
-            $this['date'] = date('r');
-        }
-
         $content = $this->getContent();
 
         if (empty($content)) {
@@ -130,9 +127,7 @@ class Message extends Content
                 $message .= $frontier . CRLF . $c . CRLF;
             }
 
-            if (null !== $frontier) {
-                $message .= $frontier . '--' . CRLF;
-            }
+            $message .= $frontier . '--' . CRLF;
         } else {
             $oldContentType = $this['content-type'];
             unset($this['content-type']);
@@ -149,13 +144,15 @@ class Message extends Content
 
     /**
      * Get all recipients of the message.
-     * The first recipient (index 0) is $this['to'].
+     * The first recipient (index 0) is `$this['to']`.
      *
      * @return  array
      */
     public function getRecipients()
     {
-        $out = [static::getAddress($this['to'])];
+        $out = [];
+
+        $this->_getRecipients($this['to'], $out);
 
         if (isset($this['cc'])) {
             $this->_getRecipients($this['cc'], $out);
