@@ -49,7 +49,7 @@ use Hoa\Test;
  */
 class QuotedPrintable extends Test\Unit\Suite
 {
-    public function case_rfc2045_section_6_7_rule1()
+    public function case_encode_rfc2045_section_6_7_rule1()
     {
         $this
             ->given($datum = 'abc')
@@ -78,7 +78,7 @@ class QuotedPrintable extends Test\Unit\Suite
                     ->isEqualTo('abc' . CRLF . 'def');
     }
 
-    public function case_rfc2045_section6_7_rule2()
+    public function case_encode_rfc2045_section6_7_rule2()
     {
         $this
             ->given(
@@ -99,7 +99,7 @@ class QuotedPrintable extends Test\Unit\Suite
             });
     }
 
-    public function case_rfc2045_section6_7_rule3()
+    public function case_encode_rfc2045_section6_7_rule3()
     {
         $this
             ->given($tab = 'abc' . "\t\t" . 'def')
@@ -127,7 +127,7 @@ class QuotedPrintable extends Test\Unit\Suite
                     ->isEqualTo('abc =20' . CRLF);
     }
 
-    public function case_rfc2045_section_6_7_rule4()
+    public function case_encode_rfc2045_section_6_7_rule4()
     {
         $this
             ->given($datum = 'abc' . CRLF . 'def' . CRLF . 'ghi' . CRLF)
@@ -137,7 +137,7 @@ class QuotedPrintable extends Test\Unit\Suite
                     ->isEqualTo($datum);
     }
 
-    public function case_rfc2045_section_6_7_rule5()
+    public function case_encode_rfc2045_section_6_7_rule5()
     {
         $this
             ->given($datum = 'abc')
@@ -159,5 +159,18 @@ class QuotedPrintable extends Test\Unit\Suite
                         'abc def ghi jkl mno pqr stu vwx yz abc def ghi jkl mno pqr stu vwx yz abc =' . CRLF .
                         'def ghi jkl mno pqr stu vwx yz' . CRLF
                     );
+    }
+
+    public function case_encode_rfc2047_sections_4_and_5()
+    {
+        $this
+            ->given(
+                $decoded = '😄!',
+                $encoded = '=?utf-8?Q?=F0=9F=98=84!?='
+            )
+            ->when($result = SUT::encode($decoded, true))
+            ->then
+                ->string($result)
+                    ->isEqualTo($encoded);
     }
 }

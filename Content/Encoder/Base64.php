@@ -36,11 +36,13 @@
 
 namespace Hoa\Mail\Content\Encoder;
 
+use Hoa\Mail;
+
 /**
  * Class \Hoa\Mail\Content\Encoder\Base64.
  *
- * Encode and decode a string as described in the RFC4648 and RFC2045
- * Section 6.8.
+ * Encode and decode a string as described in the RFC4648, RFC2045
+ * Section 6.8 and RFC2047.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
@@ -50,34 +52,41 @@ class Base64 implements Encoder
     /**
      * Encode into base64.
      *
-     * @param   string  $string    String to encode.
+     * @param   string  $string           String to encode.
+     * @param   bool    $isHeaderValue    Whether the string is a header value.
      * @return  string
      */
-    public static function encode($string)
+    public static function encode($string, $isHeaderValue = false)
     {
-        return trim(
-            chunk_split(
-                base64_encode($string),
-                76,
-                CRLF
-            )
-        );
+        $pre  = null;
+        $post = null;
+
+        if (true === $isHeaderValue) {
+            $pre  = '=?utf-8?B?';
+            $post = '?=';
+        }
+
+        return
+            $pre .
+            trim(
+                chunk_split(
+                    base64_encode($string),
+                    76,
+                    CRLF
+                )
+            ) .
+            $post;
     }
 
     /**
      * Decode from base64.
      *
-     * @param   string  $string    String to decode.
+     * @param   string  $string           String to decode.
+     * @param   bool    $isHeaderValue    Whether the string is a header value.
      * @return  string
      */
-    public static function decode($string)
+    public static function decode($string, $isHeaderValue = false)
     {
-        return base64_decode(
-            str_replace(
-                CRLF,
-                '',
-                $string
-            )
-        );
+        throw new Mail\Exception('Not implemented.');
     }
 }

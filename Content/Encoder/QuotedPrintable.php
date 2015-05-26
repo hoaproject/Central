@@ -52,11 +52,20 @@ class QuotedPrintable implements Encoder
     /**
      * Encode into quoted-printable format.
      *
-     * @param   string  $string    String to encode.
+     * @param   string  $string           String to encode.
+     * @param   bool    $isHeaderValue    Whether the string is a header value.
      * @return  string
      */
-    public static function encode($string)
+    public static function encode($string, $isHeaderValue = false)
     {
+        $pre  = null;
+        $post = null;
+
+        if (true === $isHeaderValue) {
+            $pre  = '=?utf-8?Q?';
+            $post = '?=';
+        }
+
         // RFC2045, Section 6.7, rules 1 and 2.
         $string = preg_replace_callback(
             // 0x00 to 0xff minus:
@@ -103,16 +112,17 @@ class QuotedPrintable implements Encoder
             false
         );
 
-        return $string;
+        return $pre . $string . $post;
     }
 
     /**
      * Decode from quoted-printable format.
      *
-     * @param   string  $string    String to decode.
+     * @param   string  $string           String to decode.
+     * @param   bool    $isHeaderValue    Whether the string is a header value.
      * @return  string
      */
-    public static function decode($string)
+    public static function decode($string, $isHeaderValue = false)
     {
         throw new Mail\Exception('Not implemented.');
     }

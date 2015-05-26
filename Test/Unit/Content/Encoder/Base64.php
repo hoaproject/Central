@@ -49,7 +49,7 @@ use Hoa\Test;
  */
 class Base64 extends Test\Unit\Suite
 {
-    public function case_basic_encode_decode()
+    public function case_basic_encode()
     {
         $this
             ->given(
@@ -59,15 +59,10 @@ class Base64 extends Test\Unit\Suite
             ->when($result = SUT::encode($decoded))
             ->then
                 ->string($result)
-                    ->isEqualTo($encoded)
-
-            ->when($result = SUT::decode($result))
-            ->then
-                ->string($result)
-                    ->isEqualTo($decoded);
+                    ->isEqualTo($encoded);
     }
 
-    public function case_encode_decode_76_columns_max()
+    public function case_long_encode()
     {
         $this
             ->given(
@@ -80,11 +75,19 @@ class Base64 extends Test\Unit\Suite
             ->when($result = SUT::encode($decoded))
             ->then
                 ->string($result)
-                    ->isEqualTo($encoded)
+                    ->isEqualTo($encoded);
+    }
 
-            ->when($result = SUT::decode($result))
+    public function case_encode_rfc2047_sections_4_and_5()
+    {
+        $this
+            ->given(
+                $decoded = 'foobar',
+                $encoded = '=?utf-8?B?Zm9vYmFy?='
+            )
+            ->when($result = SUT::encode($decoded, true))
             ->then
                 ->string($result)
-                    ->isEqualTo($decoded);
+                    ->isEqualTo($encoded);
     }
 }

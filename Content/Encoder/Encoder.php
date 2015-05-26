@@ -51,18 +51,20 @@ interface Encoder
     /**
      * Encode a string.
      *
-     * @param   string  $string    String to encode.
+     * @param   string  $string           String to encode.
+     * @param   bool    $isHeaderValue    Whether the string is a header value.
      * @return  string
      */
-    public static function encode($string);
+    public static function encode($string, $isHeaderValue = false);
 
     /**
      * Decode a string.
      *
-     * @param   string  $string    String to decode.
+     * @param   string  $string           String to decode.
+     * @param   bool    $isHeaderValue    Whether the string is a header value.
      * @return  string
      */
-    public static function decode($string);
+    public static function decode($string, $isHeaderValue = false);
 }
 
 /**
