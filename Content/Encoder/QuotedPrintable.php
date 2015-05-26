@@ -36,6 +36,8 @@
 
 namespace Hoa\Mail\Content\Encoder;
 
+use Hoa\Mail;
+
 /**
  * Class \Hoa\Mail\Content\Encoder\QuotedPrintable.
  *
@@ -48,37 +50,70 @@ namespace Hoa\Mail\Content\Encoder;
 class QuotedPrintable implements Encoder
 {
     /**
+     * Encode into quoted-printable format.
      *
      * @param   string  $string    String to encode.
      * @return  string
      */
     public static function encode($string)
     {
-        if (0 === preg_match('#[\x80-\xff]+#', $string)) {
-            return $string;
-        }
+        // RFC2045, Section 6.7, rules 1 and 2.
+        $string = preg_replace_callback(
+            // 0x00 to 0xff minus:
+            //   (from rule 1)
+            //   * 0x0a,
+            //   * 0x0d,
+            //   (from rule 2)
+            //   * 0x21 to 0x3c,
+            //   * 0x3e to 0x7e,
+            //   (from rule 3)
+            //   * 0x09,
+            //   * 0x20.
+            '#[\x00-\x08\x0b\x0c\x0e-\x1f\x3d-\x3d\x7f-\xff]#',
+            function ($matches) {
+                $substring = $matches[0];
+                $out       = null;
 
-        // RFC2045, Section 6.7, rule 1.
-        return
-            '=?utf-8?Q?' .
-            preg_replace_callback(
-                '#[\x80-\xff]+#',
-                function ($matches) {
-                    $substring = $matches[0];
-                    $out       = null;
+                for ($i = 0, $max = strlen($substring); $i < $max; ++$i) {
+                    $out .= vsprintf('=%02X', ord($substring[$i]));
+                }
 
-                    for ($i = 0, $max = strlen($substring); $i < $max; ++$i) {
-                        $out .= '=' . strtoupper(dechex(ord($substring[$i])));
-                    }
+                return $out;
+            },
+            $string
+        );
 
-                    return strtoupper($out);
-                },
-                $string
-            ) .
-            '?=';
+        // RFC2045, Section 6.7, rule 3.
+        $string = preg_replace_callback(
+            '#([\x09\x20])' . CRLF . '#',
+            function ($matches) {
+                return vsprintf('=%02X', ord($matches[1])) . CRLF;
+            },
+            $string
+        );
+
+        // RFC2045, Section 6.7, rule 4.
+        //     CRLF is not encoded.
+
+        // RFC2045, Section 6.7, rule 5.
+        $string = wordwrap(
+            $string,
+            75,
+            ' =' . CRLF,
+            false
+        );
+
+        return $string;
     }
 
+    /**
+     * Decode from quoted-printable format.
+     *
+     * @param   string  $string    String to decode.
+     * @return  string
+     */
     public static function decode($string)
     {
+        throw new Mail\Exception('Not implemented.');
     }
 }

@@ -48,8 +48,20 @@ use Hoa\Core;
  */
 interface Encoder
 {
+    /**
+     * Encode a string.
+     *
+     * @param   string  $string    String to encode.
+     * @return  string
+     */
     public static function encode($string);
 
+    /**
+     * Decode a string.
+     *
+     * @param   string  $string    String to decode.
+     * @return  string
+     */
     public static function decode($string);
 }
 
