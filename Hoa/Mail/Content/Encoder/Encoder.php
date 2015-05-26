@@ -48,9 +48,23 @@ use Hoa\Core;
  */
 interface Encoder
 {
-    public static function encode($string);
+    /**
+     * Encode a string.
+     *
+     * @param   string  $string           String to encode.
+     * @param   bool    $isHeaderValue    Whether the string is a header value.
+     * @return  string
+     */
+    public static function encode($string, $isHeaderValue = false);
 
-    public static function decode($string);
+    /**
+     * Decode a string.
+     *
+     * @param   string  $string           String to decode.
+     * @param   bool    $isHeaderValue    Whether the string is a header value.
+     * @return  string
+     */
+    public static function decode($string, $isHeaderValue = false);
 }
 
 /**

@@ -217,6 +217,7 @@ class Message extends Test\Unit\Suite
                 ->string($result)
                     ->isEqualTo(
                         'date: ' . $date . CRLF .
+                        'content-transfer-encoding: quoted-printable' . CRLF .
                         'content-disposition: inline' . CRLF .
                         'content-type: text/plain; charset=utf-8' . CRLF .
                         CRLF .

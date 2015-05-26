@@ -176,13 +176,7 @@ abstract class Content implements \ArrayAccess
             $out .= static::formatHeaders($this->getHeaders()) . CRLF;
         }
 
-        $content = $this->_getContent();
-
-        if ('base64' === $this['content-transfer-encoding']) {
-            $content = trim(chunk_split($content, 76, CRLF));
-        }
-
-        $out .= $content;
+        $out .= $this->_getContent();
 
         return $out;
     }
@@ -226,17 +220,15 @@ abstract class Content implements \ArrayAccess
         $out = null;
 
         foreach ($headers as $header => $value) {
-            /*
             $value = preg_replace_callback(
                 '#(?<value>[^<]+)(?<tail><[^>]+>)#',
-                function ( Array $matches ) {
+                function (Array $matches) {
                     return
-                        static::qPrintEncode($matches['value']) .
+                        Encoder\QuotedPrintable::encode($matches['value'], true) .
                         $matches['tail'];
                 },
                 $value
             );
-            */
 
             $out .= $header . ': ' . $value . CRLF;
         }

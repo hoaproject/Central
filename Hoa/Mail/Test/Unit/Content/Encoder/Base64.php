@@ -34,86 +34,60 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Mail\Content;
+namespace Hoa\Mail\Test\Unit\Content\Encoder;
+
+use Hoa\Mail\Content\Encoder\Base64 as SUT;
+use Hoa\Test;
 
 /**
- * Class \Hoa\Mail\Content\Text.
+ * Class \Hoa\Mail\Test\Unit\Content\Encoder\Base64.
  *
- * This class represents a text.
+ * Test suite of the base64 encoder.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Text extends Content
+class Base64 extends Test\Unit\Suite
 {
-    /**
-     * Content.
-     *
-     * @var string
-     */
-    protected $_content = null;
-
-
-
-    /**
-     * Construct a text content.
-     *
-     * @param   string  $content    Content.
-     * @return  void
-     */
-    public function __construct($content = null)
+    public function case_basic_encode()
     {
-        parent::__construct();
-        $this['content-transfer-encoding'] = 'quoted-printable';
-        $this['content-type']              = 'text/plain; charset=utf-8';
-        $this->append($content);
-
-        return;
+        $this
+            ->given(
+                $decoded = 'foobar',
+                $encoded = 'Zm9vYmFy'
+            )
+            ->when($result = SUT::encode($decoded))
+            ->then
+                ->string($result)
+                    ->isEqualTo($encoded);
     }
 
-    /**
-     * Prepend content (in memory order, i.e. from left-to-right only).
-     *
-     * @param   string  $content    Content.
-     * @return  string
-     */
-    public function prepend($content)
+    public function case_long_encode()
     {
-        $this->_content = $content . $this->_content;
-
-        return $this;
+        $this
+            ->given(
+                $decoded = str_repeat('foobar', 15),
+                $encoded =
+                    'Zm9vYmFyZm9vYmFyZm9vYmFyZm9vYmFyZm9vYmFyZm9vYmFyZm9v' .
+                    'YmFyZm9vYmFyZm9vYmFyZm9v' . CRLF .
+                    'YmFyZm9vYmFyZm9vYmFyZm9vYmFyZm9vYmFyZm9vYmFy'
+            )
+            ->when($result = SUT::encode($decoded))
+            ->then
+                ->string($result)
+                    ->isEqualTo($encoded);
     }
 
-    /**
-     * Append content (in memory order, i.e. from left-to-right only).
-     *
-     * @param   string  $content    Content.
-     * @return  string
-     */
-    public function append($content)
+    public function case_encode_rfc2047_sections_4_and_5()
     {
-        $this->_content .= $content;
-
-        return $this;
-    }
-
-    /**
-     * Get the content.
-     *
-     * @return  string
-     */
-    public function get()
-    {
-        return $this->_content;
-    }
-
-    /**
-     * Get final “plain” content.
-     *
-     * @return  string
-     */
-    protected function _getContent()
-    {
-        return Encoder\QuotedPrintable::encode($this->get());
+        $this
+            ->given(
+                $decoded = 'foobar',
+                $encoded = '=?utf-8?B?Zm9vYmFy?='
+            )
+            ->when($result = SUT::encode($decoded, true))
+            ->then
+                ->string($result)
+                    ->isEqualTo($encoded);
     }
 }

@@ -39,18 +39,18 @@ namespace Hoa\Mail\Content\Encoder;
 use Hoa\Mail;
 
 /**
- * Class \Hoa\Mail\Content\Encoder\QuotedPrintable.
+ * Class \Hoa\Mail\Content\Encoder\Base64.
  *
- * Encode and decode a string as described in the RFC2045 Section 6.7 and
- * RFC2047, Sections 4 and 5.
+ * Encode and decode a string as described in the RFC4648, RFC2045
+ * Section 6.8 and RFC2047.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class QuotedPrintable implements Encoder
+class Base64 implements Encoder
 {
     /**
-     * Encode into quoted-printable format.
+     * Encode into base64.
      *
      * @param   string  $string           String to encode.
      * @param   bool    $isHeaderValue    Whether the string is a header value.
@@ -62,61 +62,24 @@ class QuotedPrintable implements Encoder
         $post = null;
 
         if (true === $isHeaderValue) {
-            $pre  = '=?utf-8?Q?';
+            $pre  = '=?utf-8?B?';
             $post = '?=';
         }
 
-        // RFC2045, Section 6.7, rules 1 and 2.
-        $string = preg_replace_callback(
-            // 0x00 to 0xff minus:
-            //   (from rule 1)
-            //   * 0x0a,
-            //   * 0x0d,
-            //   (from rule 2)
-            //   * 0x21 to 0x3c,
-            //   * 0x3e to 0x7e,
-            //   (from rule 3)
-            //   * 0x09,
-            //   * 0x20.
-            '#[\x00-\x08\x0b\x0c\x0e-\x1f\x3d-\x3d\x7f-\xff]#',
-            function ($matches) {
-                $substring = $matches[0];
-                $out       = null;
-
-                for ($i = 0, $max = strlen($substring); $i < $max; ++$i) {
-                    $out .= vsprintf('=%02X', ord($substring[$i]));
-                }
-
-                return $out;
-            },
-            $string
-        );
-
-        // RFC2045, Section 6.7, rule 3.
-        $string = preg_replace_callback(
-            '#([\x09\x20])' . CRLF . '#',
-            function ($matches) {
-                return vsprintf('=%02X', ord($matches[1])) . CRLF;
-            },
-            $string
-        );
-
-        // RFC2045, Section 6.7, rule 4.
-        //     CRLF is not encoded.
-
-        // RFC2045, Section 6.7, rule 5.
-        $string = wordwrap(
-            $string,
-            75,
-            ' =' . CRLF,
-            false
-        );
-
-        return $pre . $string . $post;
+        return
+            $pre .
+            trim(
+                chunk_split(
+                    base64_encode($string),
+                    76,
+                    CRLF
+                )
+            ) .
+            $post;
     }
 
     /**
-     * Decode from quoted-printable format.
+     * Decode from base64.
      *
      * @param   string  $string           String to decode.
      * @param   bool    $isHeaderValue    Whether the string is a header value.
