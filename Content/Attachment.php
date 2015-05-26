@@ -92,11 +92,19 @@ class Attachment extends Content
             }
         }
 
+        $size = null;
+
+        if ($stream instanceof Stream\IStream\Statable) {
+            $size = '; size=' . $stream->getSize();
+        }
+
         $this['content-type']        = $mimeType;
         $this['content-disposition'] =
             'attachment; filename="' .
             str_replace('"', '-', $name) .
-            '";';
+            '"' .
+            $size;
+
         $this->setStream($stream);
 
         return;

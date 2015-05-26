@@ -63,7 +63,7 @@ class Attachment extends Test\Unit\Suite
                 ->string($result->getFormattedContent())
                     ->isEqualTo(
                         'content-transfer-encoding: base64' . CRLF .
-                        'content-disposition: attachment; filename="Hello.txt";' . CRLF .
+                        'content-disposition: attachment; filename="Hello.txt"; size=6' . CRLF .
                         'content-type: text/plain' . CRLF .
                         CRLF .
                         'Zm9vYmFy'
@@ -75,16 +75,15 @@ class Attachment extends Test\Unit\Suite
         $this
             ->given(
                 $filename = 'Foo.txt',
-                $html     = '<strong>foobar</strong>',
                 $stream   = new File\ReadWrite(resolve('hoa://Test/Vfs/' . $filename)),
-                $stream->writeAll($html)
+                $stream->writeAll('<strong>foobar</strong>')
             )
             ->when($result = new SUT($stream))
             ->then
                 ->string($result['content-type'])
                     ->isEqualTo('text/plain')
                 ->string($result['content-disposition'])
-                    ->isEqualTo('attachment; filename="' . $filename . '";');
+                    ->isEqualTo('attachment; filename="' . $filename . '"; size=23');
     }
 
     public function case_get_stream()
@@ -92,9 +91,8 @@ class Attachment extends Test\Unit\Suite
         $this
             ->given(
                 $filename = 'Foo.txt',
-                $html     = '<strong>foobar</strong>',
                 $stream   = new File\ReadWrite(resolve('hoa://Test/Vfs/' . $filename)),
-                $stream->writeAll($html)
+                $stream->writeAll('<strong>foobar</strong>')
             )
             ->when($result = new SUT($stream))
             ->then
@@ -107,15 +105,14 @@ class Attachment extends Test\Unit\Suite
         $this
             ->given(
                 $filename = 'Foo.txt',
-                $html     = '<strong>foobar</strong>',
                 $stream   = new File\ReadWrite(resolve('hoa://Test/Vfs/' . $filename)),
-                $stream->writeAll($html),
+                $stream->writeAll('<strong>foobar</strong>'),
                 $name     = 'Bar.txt'
             )
             ->when($result = new SUT($stream, $name))
             ->then
                 ->string($result['content-disposition'])
-                    ->isEqualTo('attachment; filename="' . $name . '";');
+                    ->isEqualTo('attachment; filename="' . $name . '"; size=23');
     }
 
     public function case_force_name_with_quotes_inside()
@@ -128,7 +125,7 @@ class Attachment extends Test\Unit\Suite
             ->when($result = new SUT($stream, 'B"a"r.txt'))
             ->then
                 ->string($result['content-disposition'])
-                    ->isEqualTo('attachment; filename="B-a-r.txt";');
+                    ->isEqualTo('attachment; filename="B-a-r.txt"; size=0');
     }
 
     public function case_force_mime_type()
@@ -136,9 +133,8 @@ class Attachment extends Test\Unit\Suite
         $this
             ->given(
                 $filename = 'Foo.txt',
-                $html     = '<strong>foobar</strong>',
                 $stream   = new File\ReadWrite(resolve('hoa://Test/Vfs/' . $filename)),
-                $stream->writeAll($html),
+                $stream->writeAll('<strong>foobar</strong>'),
                 $name     = 'Bar.txt',
                 $mimeType = 'text/x-test-plain'
             )
@@ -147,7 +143,7 @@ class Attachment extends Test\Unit\Suite
                 ->string($result['content-type'])
                     ->isEqualTo($mimeType)
                 ->string($result['content-disposition'])
-                    ->isEqualTo('attachment; filename="' . $name . '";');
+                    ->isEqualTo('attachment; filename="' . $name . '"; size=23');
     }
 
     public function case_unknown_mime_type()
