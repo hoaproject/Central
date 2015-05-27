@@ -95,8 +95,9 @@ class Attachment extends Content
 
         $size = null;
 
-        if ($stream instanceof Stream\IStream\Statable) {
-            $size = '; size=' . $stream->getSize();
+        if ($stream instanceof Stream\IStream\Statable &&
+            false !== $_size = $stream->getSize()) {
+            $size = '; size=' . $_size;
         }
 
         $this['content-type']        = $mimeType;
