@@ -88,6 +88,10 @@ abstract class Generic
      */
     public function getSize()
     {
+        if (false === $this->getStatistic()) {
+            return false;
+        }
+
         return filesize($this->getStreamName());
     }
 
@@ -98,7 +102,7 @@ abstract class Generic
      */
     public function getStatistic()
     {
-        return stat($this->getStreamName());
+        return fstat($this->getStream());
     }
 
     /**
