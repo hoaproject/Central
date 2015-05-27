@@ -89,7 +89,7 @@ class Related extends Test\Unit\Suite
             ->then
                 ->string($result)
                     ->isEqualTo(
-                        'content-type: multipart/related; boundary=__bndry-4200f97b27dcfb5905f0c9c7b680920d' . CRLF .
+                        'content-type: multipart/related; boundary="__bndry-4200f97b27dcfb5905f0c9c7b680920d"' . CRLF .
                         CRLF .
 
                         // Related 1.

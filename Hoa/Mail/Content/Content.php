@@ -192,10 +192,10 @@ abstract class Content implements \ArrayAccess
     public function getId()
     {
         if (!isset($this['content-id'])) {
-            $this['content-id'] = md5(uniqid()) . '*mail@hoa-project.net';
+            $this['content-id'] = '<' . md5(uniqid()) . '*mail@hoa-project.net>';
         }
 
-        return $this['content-id'];
+        return trim($this['content-id'], '<>');
     }
 
     /**

@@ -249,7 +249,7 @@ class Message extends Test\Unit\Suite
             ->then
                 ->string($result)
                     ->isEqualTo(
-                        'content-type: multipart/mixed; boundary=__bndry-889c9d2eee9fc547c03ab71ac5c93db3' . CRLF .
+                        'content-type: multipart/mixed; boundary="__bndry-889c9d2eee9fc547c03ab71ac5c93db3"' . CRLF .
                         'date: Thu, 01 Jan 1970 01:00:42 +0100' . CRLF .
                         CRLF .
 

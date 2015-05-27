@@ -89,7 +89,7 @@ class Alternative extends Test\Unit\Suite
             ->then
                 ->string($result)
                     ->isEqualTo(
-                        'content-type: multipart/alternative; boundary=__bndry-3d469222fa3ab341c0d491b98a8aa315' . CRLF .
+                        'content-type: multipart/alternative; boundary="__bndry-3d469222fa3ab341c0d491b98a8aa315"' . CRLF .
                         CRLF .
 
                         // Content 1.

@@ -116,10 +116,14 @@ class Message extends Content
         }
 
         if (1 < count($content)) {
-            $boundary             = '__bndry-' .
-                                    md5(static::BOUNDARY . microtime(true));
-            $frontier             = '--' . $boundary;
-            $this['content-type'] = $this['content-type'] . '; boundary=' . $boundary;
+            $boundary =
+                '__bndry-' .
+                md5(static::BOUNDARY . microtime(true));
+            $frontier = '--' . $boundary;
+
+            $this['content-type'] =
+                $this['content-type'] . '; ' .
+                'boundary="' . $boundary . '"';
 
             $message = static::formatHeaders($this->getHeaders()) . CRLF;
 
