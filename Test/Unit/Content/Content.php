@@ -183,21 +183,23 @@ class Content extends Test\Unit\Suite
             ->when($result = $content->getId())
             ->then
                 ->string($result)
-                    ->isEqualTo('foo*mail@hoa-project.net');
+                    ->isEqualTo('foo*mail@hoa-project.net')
+                ->string($content['content-id'])
+                    ->isEqualTo('<foo*mail@hoa-project.net>');
     }
 
     public function case_get_id_forced()
     {
         $this
             ->given(
-                $id                    = 'foo@bar.baz',
+                $id                    = '<foo@bar.baz>',
                 $content               = new SUT(),
                 $content['content-id'] = $id
             )
             ->when($result = $content->getId())
             ->then
                 ->string($result)
-                    ->isEqualTo($id);
+                    ->isEqualTo(trim($id, '<>'));
     }
 
     public function case_get_id_url()
