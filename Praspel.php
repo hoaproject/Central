@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,50 +34,26 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Praspel;
 
-from('Hoa')
-
-/**
- * \Hoa\Praspel\Trace
- */
--> import('Praspel.Trace')
-
-/**
- * \Hoa\Praspel\Visitor\Interpreter
- */
--> import('Praspel.Visitor.Interpreter')
-
-/**
- * \Hoa\Compiler\Llk
- */
--> import('Compiler.Llk.~')
-
-/**
- * \Hoa\File\Read
- */
--> import('File.Read');
-
-}
-
-namespace Hoa\Praspel {
+use Hoa\Compiler;
+use Hoa\Core;
+use Hoa\File;
 
 /**
  * Class \Hoa\Praspel\Praspel.
  *
  * Take a specification + data and validate/verify a callable.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Praspel {
-
+class Praspel
+{
     /**
      * Registry of all contracts.
      *
-     * @var \ArrayObject object
+     * @var \ArrayObject
      */
     protected static $_registry = null;
 
@@ -86,28 +62,30 @@ class Praspel {
     /**
      * Short interpreter.
      *
-     * @access  public
      * @param   string  $praspel        Praspel.
      * @param   string  $bindToClass    Classname to bind.
      * @return  \Hoa\Praspel\Model\Clause
      */
-    public static function interprete ( $praspel, $bindToClass = null ) {
-
+    public static function interprete($praspel, $bindToClass = null)
+    {
         static $_compiler    = null;
         static $_interpreter = null;
 
-        if(null === $_compiler)
-            $_compiler = \Hoa\Compiler\Llk::load(
-                new \Hoa\File\Read('hoa://Library/Praspel/Grammar.pp')
+        if (null === $_compiler) {
+            $_compiler = Compiler\Llk::load(
+                new File\Read('hoa://Library/Praspel/Grammar.pp')
             );
+        }
 
-        if(null === $_interpreter)
+        if (null === $_interpreter) {
             $_interpreter = new Visitor\Interpreter();
+        }
 
         $ast = $_compiler->parse($praspel);
 
-        if(null !== $bindToClass)
+        if (null !== $bindToClass) {
             $_interpreter->bindToClass($bindToClass);
+        }
 
         return $_interpreter->visit($ast);
     }
@@ -115,21 +93,22 @@ class Praspel {
     /**
      * Extract Praspel (as a string) from a comment.
      *
-     * @access  public
      * @param   string  $comment    Comment.
      * @return  string
      */
-    public static function extractFromComment ( $comment ) {
-
+    public static function extractFromComment($comment)
+    {
         $i = preg_match('#/\*(.*?)\*/#s', $comment, $matches);
 
-        if(0 === $i)
+        if (0 === $i) {
             return '';
+        }
 
         $i = preg_match_all('#^[\s\*]*\s*\*\s?([^\n]*)$#m', $matches[1], $maatches);
 
-        if(0 === $i)
+        if (0 === $i) {
             return '';
+        }
 
         return trim(implode("\n", $maatches[1]));
     }
@@ -137,38 +116,32 @@ class Praspel {
     /**
      * Get registry of all contracts.
      *
-     * @access  public
      * @return  \ArrayObject
      */
-    public static function getRegistry ( ) {
-
-        if(null === static::$_registry)
+    public static function getRegistry()
+    {
+        if (null === static::$_registry) {
             static::$_registry = new \ArrayObject();
+        }
 
         return static::$_registry;
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Praspel\Praspel');
+Core\Consistency::flexEntity('Hoa\Praspel\Praspel');
 
 /**
  * Alias of \Hoa\Praspel::interprete().
  *
- * @access  public
  * @param   string  $praspel    Praspel
  * @return  \Hoa\Praspel\Model\Clause
  */
-if(!function_exists('praspel')) {
-function praspel ( $praspel ) {
-
-    return \Hoa\Praspel::interprete($praspel);
-}}
-
+if (!function_exists('praspel')) {
+    function praspel($praspel)
+    {
+        return Praspel::interprete($praspel);
+    }
 }

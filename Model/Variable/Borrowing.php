@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,36 +34,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Praspel\Model\Variable;
 
-from('Hoa')
-
-/**
- * \Hoa\Praspel\Exception\Model
- */
--> import('Praspel.Exception.Model')
-
-/**
- * \Hoa\Praspel\Model\Variable
- */
--> import('Praspel.Model.Variable.~');
-
-}
-
-namespace Hoa\Praspel\Model\Variable {
+use Hoa\Math;
+use Hoa\Praspel;
 
 /**
  * Class \Hoa\Praspel\Model\Variable\Borrowing.
  *
  * Represent a borrowing variable.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Borrowing extends Variable {
-
+class Borrowing extends Variable
+{
     /**
      * Type: \old(e).
      *
@@ -97,16 +82,17 @@ class Borrowing extends Variable {
     /**
      * Build a variable.
      *
-     * @access  public
      * @param   string                     $name      Name.
      * @param   bool                       $local     Local.
      * @param   \Hoa\Praspel\Model\Clause  $clause    Clause.
      * @return  void
-     * @throw   \Hoa\Praspel\Exception\Model
+     * @throws  \Hoa\Praspel\Exception\Model
      */
-    public function __construct ( $name, $local,
-                                  \Hoa\Praspel\Model\Clause $clause = null ) {
-
+    public function __construct(
+        $name,
+        $local,
+        Praspel\Model\Clause $clause = null
+    ) {
         parent::__construct($name, $local, $clause);
         $this->determineType();
 
@@ -116,22 +102,25 @@ class Borrowing extends Variable {
     /**
      * Determine type of the variable.
      *
-     * @access  protected
      * @return  void
-     * @throw   \Hoa\Praspel\Exception\Model
+     * @throws  \Hoa\Praspel\Exception\Model
      */
-    protected function determineType ( ) {
-
+    protected function determineType()
+    {
         $name = $this->getName();
 
-        if('\old(' === substr($name, 0, 5))
+        if ('\old(' === substr($name, 0, 5)) {
             $this->computeOld(substr($name, 5, -1));
-        elseif(false !== strpos($name, '>', 2))
+        } elseif (false !== strpos($name, '>', 2)) {
             $this->computeDynamicResolution($name);
-        else
-            throw new \Hoa\Praspel\Exception\Model(
+        } else {
+            throw new Praspel\Exception\Model(
                 'Variable %s would be a borrowing one, but its type cannot ' .
-                'be determined.', 0, $name);
+                'be determined.',
+                0,
+                $name
+            );
+        }
 
         return;
     }
@@ -139,33 +128,37 @@ class Borrowing extends Variable {
     /**
      * Compute \old(…).
      *
-     * @access  protected
      * @param   string  $name    Name.
      * @return  void
-     * @throw   \Hoa\Praspel\Exception\Model
+     * @throws  \Hoa\Praspel\Exception\Model
      */
-    protected function computeOld ( $name ) {
-
+    protected function computeOld($name)
+    {
         $clause      = $this->getClause();
         $this->_type = static::TYPE_OLD;
         $parent      = $clause->getParent();
 
-        while(   false === $parent->clauseExists('requires')
-              && null  !== $parent = $parent->getParent());
+        while (
+            false === $parent->clauseExists('requires') &&
+            null  !== $parent = $parent->getParent()
+        );
 
-        if(   null === $parent
-           || false === $parent->clauseExists('requires'))
-            throw new \Hoa\Praspel\Exception\Model(
-                'No parent or no requires.', 1);
+        if (null === $parent ||
+            false === $parent->clauseExists('requires')) {
+            throw new Praspel\Exception\Model('No parent or no requires.', 1);
+        }
 
         $requires         = $parent->getClause('requires');
         $inScopeVariables = $requires->getInScopeVariables();
 
-        if(!isset($inScopeVariables[$name]))
-            throw new \Hoa\Praspel\Exception\Model(
+        if (!isset($inScopeVariables[$name])) {
+            throw new Praspel\Exception\Model(
                 'Variable %s does not exist, cannot get its old value ' .
                 '(in @%s).',
-                2, array($name, $clause->getName()));
+                2,
+                [$name, $clause->getName()]
+            );
+        }
 
         $this->_variable = &$inScopeVariables[$name];
 
@@ -175,54 +168,65 @@ class Borrowing extends Variable {
     /**
      * Compute dynamic resolution.
      *
-     * @access  protected
      * @param   string  $name    Name.
      * @return  void
-     * @throw   \Hoa\Praspel\Exception\Model
+     * @throws  \Hoa\Praspel\Exception\Model
      */
-    protected function computeDynamicResolution ( $name ) {
-
+    protected function computeDynamicResolution($name)
+    {
         $this->_type = static::TYPE_EXTERNAL;
 
         $clause = $this->getClause();
         $parts  = explode('->', $name);
         $head   = array_shift($parts);
 
-        if('this' !== $head)
-            //$head = $clause->getVariable($parts[0]);
-            throw new \Hoa\Praspel\Exception\Model('Not yet implemented!');
+        if ('this' !== $head) {
+            throw new Praspel\Exception\Model('Not yet implemented!');
+        }
 
-        $registry    = \Hoa\Praspel::getRegistry();
+        $registry    = Praspel::getRegistry();
         $root        = $clause->getRoot();
         $bindedClass = $root->getBindedClass();
 
-        if(null === $bindedClass)
-            throw new \Hoa\Praspel\Exception\Model(
+        if (null === $bindedClass) {
+            throw new Praspel\Exception\Model(
                 'Cannot resolve the dynamic identifier %s; ' .
                 '%s::getBindedClass returned null.',
-                3, array($name, get_class($root)));
+                3,
+                [$name, get_class($root)]
+            );
+        }
 
         $attribute = array_shift($parts);
         $id        = $bindedClass . '::$' . $attribute;
 
-        if(!isset($registry[$id]))
-            throw new \Hoa\Praspel\Exception\Model(
+        if (!isset($registry[$id])) {
+            throw new Praspel\Exception\Model(
                 'The contract identifier %s does not exist in the registry.',
-                4, $name);
+                4,
+                $name
+            );
+        }
 
         $entry = $registry[$id];
 
-        if(false === $entry->clauseExists('invariant'))
-            throw new \Hoa\Praspel\Exception\Model(
+        if (false === $entry->clauseExists('invariant')) {
+            throw new Praspel\Exception\Model(
                 '%s is not declared with an @invariant clause.',
-                5, $id);
+                5,
+                $id
+            );
+        }
 
         $targetedClause = $entry->getClause('invariant');
 
-        if(!isset($targetedClause[$attribute]))
-            throw new \Hoa\Praspel\Exception\Model(
+        if (!isset($targetedClause[$attribute])) {
+            throw new Praspel\Exception\Model(
                 'The identifier %s does not exist.',
-                6, $attribute);
+                6,
+                $attribute
+            );
+        }
 
         $variable        = $targetedClause[$attribute];
         $this->_variable = $variable;
@@ -233,22 +237,20 @@ class Borrowing extends Variable {
     /**
      * Get type.
      *
-     * @access  public
      * @return  int
      */
-    public function getType ( ) {
-
+    public function getType()
+    {
         return $this->_type;
     }
 
     /**
      * Get the borrowed variable.
      *
-     * @access  public
      * @return  \Hoa\Praspel\Model\Variable
      */
-    public function getBorrowedVariable ( ) {
-
+    public function getBorrowedVariable()
+    {
         return $this->_variable;
     }
 
@@ -256,14 +258,13 @@ class Borrowing extends Variable {
      * Allow to write $variable->in = … to define domains (if $name is not equal
      * to "in", then it is a normal behavior).
      *
-     * @access  public
      * @param   string  $name     Name.
      * @param   mixed   $value    Value.
      * @return  void
-     * @throw   \Hoa\Praspel\Exception\Model
+     * @throws  \Hoa\Praspel\Exception\Model
      */
-    public function __set ( $name, $value ) {
-
+    public function __set($name, $value)
+    {
         return $this->getBorrowedVariable()->__set($name, $value);
     }
 
@@ -274,127 +275,115 @@ class Borrowing extends Variable {
      * @param   mixed  $q    Sampled value.
      * @return  boolean
      */
-    public function predicate ( $q = null ) {
-
+    public function predicate($q = null)
+    {
         return $this->getBorrowedVariable()->predicate($q);
     }
 
     /**
      * Call the sample() method on realistic domains.
      *
-     * @access  public
      * @param   \Hoa\Math\Sampler  $sampler    Sampler.
      * @return  mixed
-     * @throw   \Hoa\Realdom\Exception
+     * @throws  \Hoa\Realdom\Exception
      */
-    public function sample ( \Hoa\Math\Sampler $sampler = null ) {
-
+    public function sample(Math\Sampler $sampler = null)
+    {
         return $this->getBorrowedVariable()->sample($sampler);
     }
 
     /**
      * Call the reset() method on realistic domains.
      *
-     * @access  public
      * @return  void
      */
-    public function reset ( ) {
-
+    public function reset()
+    {
         return $this->getBorrowedVariable()->reset();
     }
 
     /**
      * Define a “key” constraint. Use $variable->key(…)->in = …;
      *
-     * @access  public
      * @param   mixed  $scalar    Value.
      * @return  \Hoa\Praspel\Model\Variable
      */
-    public function key ( $scalar ) {
-
+    public function key($scalar)
+    {
         return $this->getBorrowedVariable()->key($scalar);
     }
 
     /**
      * Define a “contains” constraint.
      *
-     * @access  public
      * @param   mixed  $scalar    Value.
      * @return  \Hoa\Praspel\Model\Variable
      */
-    public function contains ( $scalar ) {
-
+    public function contains($scalar)
+    {
         return $this->getBorrowedVariable()->contains($scalar);
     }
 
     /**
      * Add an “is” constraint.
      *
-     * @access  public
      * @param   string  ...    Keywords.
      * @return  \Hoa\Praspel\Model\Variable
      */
-    public function is ( ) {
-
-        throw new \Hoa\Praspel\Exception\Model('TODO');
+    public function is()
+    {
+        throw new Praspel\Exception\Model('TODO');
     }
 
     /**
      * Declare a “domainof” (alias).
      *
-     * @access  public
      * @param   \Hoa\Praspel\Model\Variable  $variable    Variable.
      * @return  \Hoa\Praspel\Model\Variable
-     * @throw   \Hoa\Realdom\Exception
+     * @throws  \Hoa\Realdom\Exception
      */
-    public function domainof ( $variable ) {
-
+    public function domainof($variable)
+    {
         return $this->getBorrowedVariable()->domainof($variable);
     }
 
     /**
      * Get domains.
      *
-     * @access  public
      * @return  \Hoa\Realdom\Disjunction
      */
-    public function &getDomains ( ) {
-
+    public function &getDomains()
+    {
         return $this->getBorrowedVariable()->getDomains();
     }
 
     /**
      * Get held realdoms.
      *
-     * @access  public
      * @return  \Hoa\Realdom\Disjunction
      */
-    public function &getHeld ( ) {
-
+    public function &getHeld()
+    {
         return $this->getBorrowedVariable()->getHeld();
     }
 
     /**
      * Check if the variable is local (let) or not.
      *
-     * @access  public
      * @return  bool
      */
-    public function isLocal ( ) {
-
+    public function isLocal()
+    {
         return $this->getBorrowedVariable()->isLocal();
     }
 
     /**
      * Get constraints.
      *
-     * @access  public
      * @return  array
      */
-    public function getConstraints ( ) {
-
+    public function getConstraints()
+    {
         return $this->getBorrowedVariable()->getConstraints();
     }
-}
-
 }

@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,35 +34,25 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Praspel\Preambler;
 
-from('Hoa')
-
-/**
- * \Hoa\Praspel\Exception\Preambler
- */
--> import('Praspel.Exception.Preambler');
-
-}
-
-namespace Hoa\Praspel\Preambler {
+use Hoa\Core;
+use Hoa\Praspel;
 
 /**
  * Class \Hoa\Praspel\Preambler\Handler.
  *
  * Handle a class and ease to run a preamble.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Handler {
-
+class Handler
+{
     /**
      * Callable to validate and verify.
      *
-     * @var \Hoa\Core\Consistency\Xcallable object
+     * @var \Hoa\Core\Consistency\Xcallable
      */
     protected $__callable = null;
 
@@ -71,12 +61,11 @@ class Handler {
     /**
      * Construct.
      *
-     * @access  public
      * @param   \Hoa\Core\Consistency\Xcallable   $callable    Callable.
      * @return  void
      */
-    public function __construct ( \Hoa\Core\Consistency\Xcallable  $callable ) {
-
+    public function __construct(Core\Consistency\Xcallable  $callable)
+    {
         $this->__setCallable($callable);
 
         return;
@@ -85,23 +74,25 @@ class Handler {
     /**
      * Get reflection object.
      *
-     * @access  public
      * @param   object  &$object    Object.
      * @return  \ReflectionObject
-     * @throw   \Hoa\Praspel\Exception\Preambler
+     * @throws  \Hoa\Praspel\Exception\Preambler
      */
-    public function __getReflectionObject ( &$object ) {
-
+    public function __getReflectionObject(&$object)
+    {
         static $_out    = null;
         static $_object = null;
 
-        if(null === $_out) {
-
+        if (null === $_out) {
             $callback = $this->__getCallable()->getValidCallback();
 
-            if(!is_object($callback[0]))
-                throw new \Hoa\Praspel\Exception\Preambler(
-                    'Callable %s is not an object.', 0, $this->__getCallable());
+            if (!is_object($callback[0])) {
+                throw new Praspel\Exception\Preambler(
+                    'Callable %s is not an object.',
+                    0,
+                    $this->__getCallable()
+                );
+            }
 
             $_object = $callback[0];
             $_out    = new \ReflectionObject($_object);
@@ -115,20 +106,22 @@ class Handler {
     /**
      * Set an attribute.
      *
-     * @access  public
      * @param   string  $name     Name.
      * @param   mixed   $value    Value.
      * @return  \Hoa\Praspel\Preambler\Handler
-     * @throw   \Hoa\Praspel\Exception\Preambler
+     * @throws  \Hoa\Praspel\Exception\Preambler
      */
-    public function __set ( $name, $value ) {
-
+    public function __set($name, $value)
+    {
         $reflectionObject = $this->__getReflectionObject($object);
 
-        if(false === $reflectionObject->hasProperty($name))
-            throw new \Hoa\Praspel\Exception\Preambler(
+        if (false === $reflectionObject->hasProperty($name)) {
+            throw new Praspel\Exception\Preambler(
                 'Attribute %s on object %s does not exist, cannot set it.',
-                1, array($name, $reflectionObject->getName()));
+                1,
+                [$name, $reflectionObject->getName()]
+            );
+        }
 
         $attribute = $reflectionObject->getProperty($name);
         $attribute->setAccessible(true);
@@ -140,19 +133,21 @@ class Handler {
     /**
      * Get an attribute.
      *
-     * @access  public
      * @param   string  $name    Name.
      * @return  mixed
-     * @throw   \Hoa\Praspel\Exception\Preambler
+     * @throws  \Hoa\Praspel\Exception\Preambler
      */
-    public function __get ( $name ) {
-
+    public function __get($name)
+    {
         $reflectionObject = $this->__getReflectionObject($object);
 
-        if(false === $reflectionObject->hasProperty($name))
-            throw new \Hoa\Praspel\Exception\Preambler(
+        if (false === $reflectionObject->hasProperty($name)) {
+            throw new Praspel\Exception\Preambler(
                 'Attribute %s on object %s does not exist, cannot get it.',
-                2, array($name, $reflectionObject->getName()));
+                2,
+                [$name, $reflectionObject->getName()]
+            );
+        }
 
         $attribute = $reflectionObject->getProperty($name);
         $attribute->setAccessible(true);
@@ -163,12 +158,11 @@ class Handler {
     /**
      * Set callable.
      *
-     * @access  public
      * @param   \Hoa\Core\Consistency\Xcallable  $callable    Callable.
      * @return  \Hoa\Core\Consistency\Xcallable
      */
-    public function __setCallable ( \Hoa\Core\Consistency\Xcallable $callable ) {
-
+    public function __setCallable(Core\Consistency\Xcallable $callable)
+    {
         $old              = $this->__callable;
         $this->__callable = $callable;
 
@@ -178,13 +172,10 @@ class Handler {
     /**
      * Get callable.
      *
-     * @access  public
      * @return  \Hoa\Core\Consistency\Xcallable
      */
-    public function __getCallable ( ) {
-
+    public function __getCallable()
+    {
         return $this->__callable;
     }
-}
-
 }

@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,76 +34,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Praspel\Model;
 
-from('Hoa')
-
-/**
- * \Hoa\Praspel\Exception\Model
- */
--> import('Praspel.Exception.Model')
-
-/**
- * \Hoa\Praspel\Model\Clause
- */
--> import('Praspel.Model.Clause')
-
-/**
- * \Hoa\Praspel\Model\Is
- */
--> import('Praspel.Model.Is')
-
-/**
- * \Hoa\Praspel\Model\Requires
- */
--> import('Praspel.Model.Requires')
-
-/**
- * \Hoa\Praspel\Model\Ensures
- */
--> import('Praspel.Model.Ensures')
-
-/**
- * \Hoa\Praspel\Model\Requires
- */
--> import('Praspel.Model.Throwable')
-
-/**
- * \Hoa\Praspel\Model\Invariant
- */
--> import('Praspel.Model.Invariant')
-
-/**
- * \Hoa\Praspel\Model\DefaultBehavior
- */
--> import('Praspel.Model.DefaultBehavior')
-
-/**
- * \Hoa\Praspel\Model\Collection
- */
--> import('Praspel.Model.Collection')
-
-/**
- * \Hoa\Praspel\Model\Description
- */
--> import('Praspel.Model.Description');
-
-}
-
-namespace Hoa\Praspel\Model {
+use Hoa\Praspel;
 
 /**
  * Class \Hoa\Praspel\Model\Behavior.
  *
  * Represent the @behavior clause.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Behavior extends Clause {
-
+class Behavior extends Clause
+{
     /**
      * Name.
      *
@@ -114,28 +58,28 @@ class Behavior extends Clause {
     /**
      * Allowed clauses.
      *
-     * @var \Hoa\Praspel\Model\Behavior array
+     * @var array
      */
-    protected static $_allowedClauses = array(
+    protected static $_allowedClauses = [
         'requires',
         'behavior',
         'default',
         'ensures',
         'throwable',
         'description'
-    );
+    ];
 
     /**
      * Clauses.
      *
-     * @var \Hoa\Praspel\Model\Behavior array
+     * @var array
      */
-    protected $_clauses               = array();
+    protected $_clauses               = [];
 
     /**
      * Identifier (@behavior <identifier> { … }).
      *
-     * @var \Hoa\Praspel\Model\Behavior string
+     * @var string
      */
     protected $_identifier            = null;
 
@@ -144,96 +88,122 @@ class Behavior extends Clause {
     /**
      * Get or create a specific clause.
      *
-     * @access  public
      * @param   string  $clause    Clause (without leading arobase).
      * @return  \Hoa\Praspel\Model\Clause
-     * @throw   \Hoa\Praspel\Exception\Model
+     * @throws  \Hoa\Praspel\Exception\Model
      */
-    public function getClause ( $clause ) {
-
-        if(isset($this->_clauses[$clause]))
+    public function getClause($clause)
+    {
+        if (isset($this->_clauses[$clause])) {
             return $this->_clauses[$clause];
+        }
 
         $handle = null;
 
-        if(false === in_array($clause, static::getAllowedClauses()))
-            throw new \Hoa\Praspel\Exception\Model(
+        if (false === in_array($clause, static::getAllowedClauses())) {
+            throw new Praspel\Exception\Model(
                 'Clause @%s is not allowed in @%s.',
-                0, array($clause, $this->getId()));
+                0,
+                [$clause, $this->getId()]
+            );
+        }
 
-        switch($clause) {
-
+        switch ($clause) {
             case 'is':
                 $handle = new Is($this);
-              break;
+
+                break;
 
             case 'requires':
                 $handle = new Requires($this);
-              break;
+
+                break;
 
             case 'ensures':
-                if(true === $this->clauseExists('behavior'))
-                    throw new \Hoa\Praspel\Exception\Model(
+                if (true === $this->clauseExists('behavior')) {
+                    throw new Praspel\Exception\Model(
                         'Cannot add the @ensures clause, since a @behavior ' .
-                        'clause exists at the same level.', 1);
+                        'clause exists at the same level.',
+                        1
+                    );
+                }
 
                 $handle = new Ensures($this);
-              break;
+
+                break;
 
             case 'throwable':
-                if(true === $this->clauseExists('behavior'))
-                    throw new \Hoa\Praspel\Exception\Model(
+                if (true === $this->clauseExists('behavior')) {
+                    throw new Praspel\Exception\Model(
                         'Cannot add the @throwable clause, since a @behavior ' .
-                        'clause exists at the same level.', 2);
+                        'clause exists at the same level.',
+                        2
+                    );
+                }
 
                 $handle = new Throwable($this);
-              break;
+
+                break;
 
             case 'invariant':
                 $handle = new Invariant($this);
-              break;
+
+                break;
 
             case 'behavior':
-                if(   true === $this->clauseExists('ensures')
-                   || true === $this->clauseExists('throwable'))
-                    throw new \Hoa\Praspel\Exception\Model(
+                if (true === $this->clauseExists('ensures') ||
+                    true === $this->clauseExists('throwable')) {
+                    throw new Praspel\Exception\Model(
                         'Cannot add the @behavior clause, since an @ensures ' .
-                        'or a @throwable clause exists at the same level.', 3);
+                        'or a @throwable clause exists at the same level.',
+                        3
+                    );
+                }
 
                 $handle = new Collection(
                     new self($this),
-                    function ( Behavior $clause, $identifier ) {
-
+                    function (Behavior $clause, $identifier) {
                         $clause->setIdentifier($identifier);
 
                         return;
                     }
                 );
-              break;
+
+                break;
 
             case 'default':
-                if(   true === $this->clauseExists('ensures')
-                   || true === $this->clauseExists('throwable'))
-                    throw new \Hoa\Praspel\Exception\Model(
+                if (true === $this->clauseExists('ensures') ||
+                    true === $this->clauseExists('throwable')) {
+                    throw new Praspel\Exception\Model(
                         'Cannot add the @default clause, since an @ensures ' .
-                        'or a @throwable clause exists at the same level.', 4);
+                        'or a @throwable clause exists at the same level.',
+                        4
+                    );
+                }
 
-                if(false === $this->clauseExists('behavior'))
-                    throw new \Hoa\Praspel\Exception\Model(
+                if (false === $this->clauseExists('behavior')) {
+                    throw new Praspel\Exception\Model(
                         'Cannot add a @default clause if at least one ' .
-                        '@behavior clause has not been declared.', 5);
+                        '@behavior clause has not been declared.',
+                        5
+                    );
+                }
 
                 $handle = new DefaultBehavior($this);
-              break;
+
+                break;
 
             case 'description':
                 $handle = new Description($this);
-              break;
+
+                break;
 
             default:
-                throw new \Hoa\Praspel\Exception\Model(
+                throw new Praspel\Exception\Model(
                     'Clause @%s is unknown.',
-                    6, array($clause, $this->getName()));
+                    6,
+                    [$clause, $this->getName()]
+                );
         }
 
         return $this->_clauses[$clause] = $handle;
@@ -242,18 +212,20 @@ class Behavior extends Clause {
     /**
      * Add a clause.
      *
-     * @access  public
      * @param   \Hoa\Praspel\Model\Clause  $clause    Clause.
      * @return  \Hoa\Praspel\Model\Clause
      */
-    public function addClause ( Clause $clause ) {
-
+    public function addClause(Clause $clause)
+    {
         $name = $clause->getName();
 
-        if(false === in_array($name, static::getAllowedClauses()))
-            throw new \Hoa\Praspel\Exception\Model(
+        if (false === in_array($name, static::getAllowedClauses())) {
+            throw new Praspel\Exception\Model(
                 'Clause @%s is not allowed in @%s.',
-                7, array($name, $this->getId()));
+                7,
+                [$name, $this->getId()]
+            );
+        }
 
         $clause->setParent($this);
 
@@ -263,34 +235,31 @@ class Behavior extends Clause {
     /**
      * Check if a clause already exists, i.e. has been declared.
      *
-     * @access  public
      * @param   string  $clause    Clause (without leading arobase).
      * @return  bool
      */
-    public function clauseExists ( $clause ) {
-
+    public function clauseExists($clause)
+    {
         return isset($this->_clauses[$clause]);
     }
 
     /**
      * Get allowed clauses.
      *
-     * @access  public
      * @return  array
      */
-    public static function getAllowedClauses ( ) {
-
+    public static function getAllowedClauses()
+    {
         return static::$_allowedClauses;
     }
 
     /**
      * Set identifier.
      *
-     * @access  public
      * @return  string
      */
-    public function setIdentifier ( $identifier ) {
-
+    public function setIdentifier($identifier)
+    {
         $old               = $this->_identifier;
         $this->_identifier = $identifier;
 
@@ -300,24 +269,20 @@ class Behavior extends Clause {
     /**
      * Get identifier.
      *
-     * @access  public
      * @return  string
      */
-    public function getIdentifier ( ) {
-
+    public function getIdentifier()
+    {
         return $this->_identifier;
     }
 
     /**
      * Get identifier (fallback).
      *
-     * @access  protected
      * @return  string
      */
-    protected function _getId ( ) {
-
+    protected function _getId()
+    {
         return $this->getName() . '_' . $this->getIdentifier();
     }
-}
-
 }

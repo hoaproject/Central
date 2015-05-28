@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,31 +34,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Praspel\Model\Clause
- */
--> import('Praspel.Model.Clause');
-
-}
-
-namespace Hoa\Praspel\Model {
+namespace Hoa\Praspel\Model;
 
 /**
  * Class \Hoa\Praspel\Model\Is.
  *
  * Represent the @is clause.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Is extends Clause {
-
+class Is extends Clause
+{
     /**
      * Name.
      *
@@ -76,7 +63,7 @@ class Is extends Clause {
     /**
      * Properties.
      *
-     * @var \Hoa\Praspel\Model\Is int
+     * @var int
      */
     protected $_property = 0;
 
@@ -85,24 +72,22 @@ class Is extends Clause {
     /**
      * Check if a property is declared.
      *
-     * @access  public
      * @param   int  $property    Property.
      * @return  bool
      */
-    public function is ( $property ) {
-
+    public function is($property)
+    {
         return $property === ($this->_property & $property);
     }
 
     /**
      * Set the property value.
      *
-     * @access  public
      * @param   int  $property    Property.
      * @return  int
      */
-    public function setProperty ( $property ) {
-
+    public function setProperty($property)
+    {
         $old             = $this->_property;
         $this->_property = $property;
 
@@ -112,12 +97,11 @@ class Is extends Clause {
     /**
      * Add a property.
      *
-     * @access  public
      * @param   int  $property    Property.
      * @return  int
      */
-    public function addProperty ( $property ) {
-
+    public function addProperty($property)
+    {
         $old              = $this->_property;
         $this->_property |= $property;
 
@@ -127,12 +111,11 @@ class Is extends Clause {
     /**
      * Remove a property.
      *
-     * @access  public
      * @param   int  $property    Property.
      * @return  int
      */
-    public function removeProperty ( $property ) {
-
+    public function removeProperty($property)
+    {
         $old              = $this->_property;
         $this->_property ^= $property;
 
@@ -142,26 +125,25 @@ class Is extends Clause {
     /**
      * Get the property value.
      *
-     * @access  public
      * @return  int
      */
-    public function getProperty ( ) {
-
+    public function getProperty()
+    {
         return $this->_property;
     }
 
     /**
      * Get property name.
      *
-     * @access  public
      * @return  string
      */
-    public function getPropertyName ( ) {
+    public function getPropertyName()
+    {
+        $out = [];
 
-        $out = array();
-
-        if(true === $this->is(static::PURE))
+        if (true === $this->is(static::PURE)) {
             $out[] = 'pure';
+        }
 
         return implode(', ', $out);
     }
@@ -169,20 +151,16 @@ class Is extends Clause {
     /**
      * Get property value from a string.
      *
-     * @access  public
      * @param   string  $property    Property name.
      * @return  int
      */
-    public static function getPropertyValue ( $property ) {
-
-        switch($property) {
-
+    public static function getPropertyValue($property)
+    {
+        switch ($property) {
             case 'pure':
                 return static::PURE;
         }
 
         return 0;
     }
-}
-
 }

@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,31 +34,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Praspel\Iterator {
+namespace Hoa\Praspel\Iterator;
 
 /**
  * Class \Hoa\Praspel\Iterator\WeakStack.
  *
  * A weak stack is a SplStack with null elements that are not iterated.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class WeakStack extends \SplStack {
-
+class WeakStack extends \SplStack
+{
     /**
      * Skip null elements while validated the current one.
      *
-     * @access  public
      * @return  bool
      */
-    public function valid ( ) {
-
-        while(   true === parent::valid()
-              && null === $this->current()
-              && null === parent::next());
+    public function valid()
+    {
+        while (
+            true === parent::valid() &&
+            null === $this->current() &&
+            null === parent::next()
+        );
 
         return parent::valid();
     }
@@ -67,17 +66,16 @@ class WeakStack extends \SplStack {
      * Check whether the stack is empty or not.
      * An element is present if different of null.
      *
-     * @access  public
      * @return  bool
      */
-    public function isEmpty ( ) {
-
-        foreach($this as $element)
-            if(null !== $element)
+    public function isEmpty()
+    {
+        foreach ($this as $element) {
+            if (null !== $element) {
                 return false;
+            }
+        }
 
         return true;
     }
-}
-
 }

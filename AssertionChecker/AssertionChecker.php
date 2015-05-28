@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,61 +34,46 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Praspel\AssertionChecker;
 
-from('Hoa')
-
-/**
- * \Hoa\Praspel\Preambler\Handler
- */
--> import('Praspel.Preambler.Handler')
-
-/**
- * \Hoa\Praspel\Visitor\Praspel
- */
--> import('Praspel.Visitor.Praspel');
-
-}
-
-namespace Hoa\Praspel\AssertionChecker {
+use Hoa\Core;
+use Hoa\Praspel;
 
 /**
  * Class \Hoa\Praspel\AssertionChecker.
  *
  * Generic assertion checker.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-abstract class AssertionChecker {
-
+abstract class AssertionChecker
+{
     /**
      * Specification.
      *
-     * @var \Hoa\Praspel\Model\Specification object
+     * @var \Hoa\Praspel\Model\Specification
      */
     protected $_specification  = null;
 
     /**
      * Data of the specification.
      *
-     * @var \Hoa\Praspel array
+     * @var array
      */
     protected $_data           = null;
 
     /**
      * Whether we are able to automatically generate data.
      *
-     * @var \Hoa\Praspel bool
+     * @var bool
      */
     protected $_generateData   = false;
 
     /**
      * Callable to validate and verify.
      *
-     * @var \Hoa\Core\Consistency\Xcallable object
+     * @var \Hoa\Core\Consistency\Xcallable
      */
     protected $_callable       = null;
 
@@ -97,16 +82,16 @@ abstract class AssertionChecker {
     /**
      * Construct.
      *
-     * @access  public
      * @param   \Hoa\Praspel\Model\Specification  $specification    Specification.
      * @param   \Hoa\Core\Consistency\Xcallable   $callable         Callable.
      * @param   bool                              $genrateData      Generate data.
      * @return  void
      */
-    public function __construct ( \Hoa\Praspel\Model\Specification $specification,
-                                  \Hoa\Core\Consistency\Xcallable  $callable,
-                                  $generateData = false ) {
-
+    public function __construct(
+        Praspel\Model\Specification $specification,
+        Core\Consistency\Xcallable  $callable,
+        $generateData = false
+    ) {
         $this->setSpecification($specification);
         $this->setCallable($callable);
         $this->automaticallyGenerateData($generateData);
@@ -118,13 +103,12 @@ abstract class AssertionChecker {
      * Preamble: put the system under test into a specific state in order to be
      * able to execute the test.
      *
-     * @access  public
      * @param   mixed  $preamble    Preamble callable.
      * @return  void
      */
-    public function preamble ( $preamble ) {
-
-        $preambler = new \Hoa\Praspel\Preambler\Handler($this->getCallable());
+    public function preamble($preamble)
+    {
+        $preambler = new Praspel\Preambler\Handler($this->getCallable());
         $preamble($preambler);
         $this->setCallable($preambler->__getCallable());
 
@@ -134,48 +118,47 @@ abstract class AssertionChecker {
     /**
      * Assertion checker.
      *
-     * @access  public
      * @return  bool
-     * @throw   \Hoa\Praspel\Exception\Generic
-     * @throw   \Hoa\Praspel\Exception\Group
+     * @throws  \Hoa\Praspel\Exception\Generic
+     * @throws  \Hoa\Praspel\Exception\Group
      */
-    abstract public function evaluate ( );
+    abstract public function evaluate();
 
     /**
      * Generate data.
      * Isotropic random generation of data from the @requires clause.
      *
-     * @access  public
      * @param   \Hoa\Praspel\Model\Specification  $specification    Specification.
      * @return  array
      */
-    public static function generateData ( \Hoa\Praspel\Model\Specification $specification ) {
-
-        $data     = array();
+    public static function generateData(Praspel\Model\Specification $specification)
+    {
+        $data     = [];
         $behavior = $specification;
 
         do {
-
-            if(true === $behavior->clauseExists('requires'))
-                foreach($behavior->getClause('requires') as $name => $variable)
+            if (true === $behavior->clauseExists('requires')) {
+                foreach ($behavior->getClause('requires') as $name => $variable) {
                     $data[$name] = $variable->sample();
+                }
+            }
 
-            if(false === $behavior->clauseExists('behavior'))
+            if (false === $behavior->clauseExists('behavior')) {
                 break;
+            }
 
             $behaviors = $behavior->getClause('behavior');
             $count     = count($behaviors);
             $i         = mt_rand(0, $count);
 
-            if($i === $count) {
-
-                if(true === $behavior->clauseExists('default'))
+            if ($i === $count) {
+                if (true === $behavior->clauseExists('default')) {
                     $behavior = $behavior->getClause('default');
-            }
-            else
+                }
+            } else {
                 $behavior = $behaviors->getNth($i);
-
-        } while(true);
+            }
+        } while (true);
 
         return $data;
     }
@@ -183,12 +166,11 @@ abstract class AssertionChecker {
     /**
      * Set specification.
      *
-     * @access  protected
      * @param   \Hoa\Praspel\Model\Specification  $specification    Specification.
      * @return  \Hoa\Praspel\Model\Specification
      */
-    protected function setSpecification ( \Hoa\Praspel\Model\Specification $specification ) {
-
+    protected function setSpecification(Praspel\Model\Specification $specification)
+    {
         $old                  = $this->_specification;
         $this->_specification = $specification;
 
@@ -198,23 +180,21 @@ abstract class AssertionChecker {
     /**
      * Get specification.
      *
-     * @access  public
      * @return  \Hoa\Praspel\Model\Specification
      */
-    public function getSpecification ( ) {
-
+    public function getSpecification()
+    {
         return $this->_specification;
     }
 
     /**
      * Enable or disable the automatic data generation.
      *
-     * @access  public
      * @param   bool  $generateData    Generate data or not.
      * @return  bool
      */
-    public function automaticallyGenerateData ( $generateData ) {
-
+    public function automaticallyGenerateData($generateData)
+    {
         $old                 = $this->_generateData;
         $this->_generateData = $generateData;
 
@@ -224,23 +204,21 @@ abstract class AssertionChecker {
     /**
      * Whether we are able to automatically generate data.
      *
-     * @access  public
      * @return  bool
      */
-    public function canGenerateData ( ) {
-
+    public function canGenerateData()
+    {
         return $this->_generateData;
     }
 
     /**
      * Set data.
      *
-     * @access  public
      * @param   array  $data    Data.
      * @return  array
      */
-    public function setData ( Array $data ) {
-
+    public function setData(Array $data)
+    {
         $old         = $this->_data;
         $this->_data = $data;
 
@@ -250,23 +228,21 @@ abstract class AssertionChecker {
     /**
      * Get data.
      *
-     * @access  public
      * @return  array
      */
-    public function getData ( ) {
-
+    public function getData()
+    {
         return $this->_data;
     }
 
     /**
      * Set callable.
      *
-     * @access  protected
      * @param   \Hoa\Core\Consistency\Xcallable  $callable    Callable.
      * @return  \Hoa\Core\Consistency\Xcallable
      */
-    protected function setCallable ( \Hoa\Core\Consistency\Xcallable $callable ) {
-
+    protected function setCallable(Core\Consistency\Xcallable $callable)
+    {
         $old             = $this->_callable;
         $this->_callable = $callable;
 
@@ -276,36 +252,29 @@ abstract class AssertionChecker {
     /**
      * Get callable.
      *
-     * @access  public
      * @return  \Hoa\Core\Consistency\Xcallable
      */
-    public function getCallable ( ) {
-
+    public function getCallable()
+    {
         return $this->_callable;
     }
 
     /**
      * Get visitor Praspel.
      *
-     * @access  protected
      * @return  \Hoa\Praspel\Visitor\Praspel
      */
-    protected function getVisitorPraspel ( ) {
-
-        if(null === $this->_visitorPraspel)
-            $this->_visitorPraspel = new \Hoa\Praspel\Visitor\Praspel();
+    protected function getVisitorPraspel()
+    {
+        if (null === $this->_visitorPraspel) {
+            $this->_visitorPraspel = new Praspel\Visitor\Praspel();
+        }
 
         return $this->_visitorPraspel;
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Praspel\AssertionChecker\AssertionChecker');
-
-}
+Core\Consistency::flexEntity('Hoa\Praspel\AssertionChecker\AssertionChecker');

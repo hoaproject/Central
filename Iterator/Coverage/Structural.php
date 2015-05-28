@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,61 +34,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Praspel\Iterator\Coverage;
 
-from('Hoa')
-
-/**
- * \Hoa\Praspel\Exception\Generic
- */
--> import('Praspel.Exception.Generic')
-
-/**
- * \Hoa\Praspel\Iterator\WeakStack
- */
--> import('Praspel.Iterator.WeakStack')
-
-/**
- * \Hoa\Praspel\Iterator\Coverage
- */
--> import('Praspel.Iterator.Coverage.~')
-
-/**
- * \Hoa\Praspel\Iterator\Coverage\Domain
- */
--> import('Praspel.Iterator.Coverage.Domain')
-
-/**
- * \Hoa\Iterator\Recursive
- */
--> import('Iterator.Recursive.~')
-
-/**
- * \Hoa\Iterator\Demultiplexer
- */
--> import('Iterator.Demultiplexer')
-
-/**
- * \Hoa\Iterator\Recursive\Mock
- */
--> import('Iterator.Recursive.Mock');
-
-}
-
-namespace Hoa\Praspel\Iterator\Coverage {
+use Hoa\Iterator;
+use Hoa\Praspel;
 
 /**
  * Class \Hoa\Praspel\Iterator\Coverage\Structural.
  *
  * Structural coverage.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Structural implements \Hoa\Iterator\Recursive {
-
+class Structural implements Iterator\Recursive
+{
     /**
      * State of the iterator: will compute a @requires clause.
      *
@@ -120,14 +80,14 @@ class Structural implements \Hoa\Iterator\Recursive {
     /**
      * Specification to cover.
      *
-     * @var \Hoa\Praspel\Model\Specification object
+     * @var \Hoa\Praspel\Model\Specification
      */
     protected $_specification = null;
 
     /**
      * Coverage criteria.
      *
-     * @var \Hoa\Praspel\Iterator\Coverage\Structural int
+     * @var int
      */
     protected $_criteria      = 3; //   Coverage::CRITERIA_NORMAL
                                    // | Coverage::CRITERIA_EXCEPTIONAL
@@ -135,14 +95,14 @@ class Structural implements \Hoa\Iterator\Recursive {
     /**
      * Path.
      *
-     * @var \SplQueue object
+     * @var \SplQueue
      */
     protected $_path          = null;
 
     /**
      * Stack (to manage backtracks, yields, etc.)
      *
-     * @var \SplStack object
+     * @var \SplStack
      */
     protected $_stack         = null;
 
@@ -156,7 +116,7 @@ class Structural implements \Hoa\Iterator\Recursive {
     /**
      * Key.
      *
-     * @var \Hoa\Praspel\Iterator\Coverage\Structural int
+     * @var int
      */
     protected $_key           = -1;
 
@@ -164,7 +124,7 @@ class Structural implements \Hoa\Iterator\Recursive {
      * Current (with two indexes: pre and post, with SplStack
      * associated).
      *
-     * @var \Hoa\Praspel\Iterator\Coverage\Structural array
+     * @var array
      */
     protected $_current       = null;
 
@@ -173,12 +133,11 @@ class Structural implements \Hoa\Iterator\Recursive {
     /**
      * Constructor.
      *
-     * @access  public
      * @param   \Hoa\Praspel\Model\Specification  $specification    Specification.
      * @return  void
      */
-    public function __construct ( \Hoa\Praspel\Model\Specification $specification ) {
-
+    public function __construct(Praspel\Model\Specification $specification)
+    {
         $this->_specification = $specification;
         $this->setCriteria(
             Coverage::CRITERIA_NORMAL | Coverage::CRITERIA_EXCEPTIONAL
@@ -190,18 +149,19 @@ class Structural implements \Hoa\Iterator\Recursive {
     /**
      * Get the current value.
      *
-     * @access  public
      * @return  array
      */
-    public function current ( ) {
+    public function current()
+    {
+        $out = ['pre' => [], 'post' => []];
 
-        $out = array('pre' => array(), 'post' => array());
-
-        foreach($this->_path as $element)
-            if($element instanceof \Hoa\Praspel\Model\Requires)
+        foreach ($this->_path as $element) {
+            if ($element instanceof Praspel\Model\Requires) {
                 $out['pre'][] = $element;
-            else
+            } else {
                 $out['post'][] = $element;
+            }
+        }
 
         return $out;
     }
@@ -209,29 +169,27 @@ class Structural implements \Hoa\Iterator\Recursive {
     /**
      * Get the current key.
      *
-     * @access  public
      * @return  int
      */
-    public function key ( ) {
-
+    public function key()
+    {
         return $this->_key;
     }
 
     /**
      * Advance the internal collection pointer, and return the current value.
      *
-     * @access  public
      * @return  void
      */
-    public function next ( ) {
-
+    public function next()
+    {
         $this->_current = null;
 
-        if(0 === count($this->_stack))
+        if (0 === count($this->_stack)) {
             return;
+        }
 
-        while(0 === $this->_pop->top()) {
-
+        while (0 === $this->_pop->top()) {
             $this->_pop->pop();
             $this->_path->pop();
             $this->_pop->push($this->_pop->pop() - 1);
@@ -239,61 +197,54 @@ class Structural implements \Hoa\Iterator\Recursive {
 
         list($behavior, $state) = array_values($this->_stack->pop());
 
-        switch($state) {
-
+        switch ($state) {
             case static::STATE_REQUIRES:
                 ++$this->_key;
 
-                if(true === $behavior->clauseExists('requires')) {
-
+                if (true === $behavior->clauseExists('requires')) {
                     $this->_current = $behavior->getClause('requires');
                     $this->_path->push($this->_current);
-                }
-                else {
-
+                } else {
                     $this->_current = true;
                     $this->_path->push(null);
                 }
 
-                if(true === $behavior->clauseExists('behavior')) {
-
+                if (true === $behavior->clauseExists('behavior')) {
                     $behaviors = $behavior->getClause('behavior')->getIterator();
-                    $this->_stack->push(array(
+                    $this->_stack->push([
                         'behavior' => $behavior,
                         'state'    => static::STATE_BEHAVIOR
-                    ));
-                    $this->_stack->push(array(
+                    ]);
+                    $this->_stack->push([
                         'behavior' => $behaviors,
                         'state'    => static::STATE_BEHAVIOR
-                    ));
+                    ]);
 
                     $this->_pop->push(
                         count($behaviors)
                       + (2 * $behavior->clauseExists('default'))
                     );
-                }
-                else {
-
-                    $this->_stack->push(array(
+                } else {
+                    $this->_stack->push([
                         'behavior' => $behavior,
                         'state'    => static::STATE_ENSURES
-                    ));
+                    ]);
                     $this->_pop->push(2);
                     $this->next();
                 }
-              break;
+
+                break;
 
             case static::STATE_BEHAVIOR:
-                if(true === $behavior->valid()) {
-
-                    $this->_stack->push(array(
+                if (true === $behavior->valid()) {
+                    $this->_stack->push([
                         'behavior' => $behavior,
                         'state'    => static::STATE_BEHAVIOR
-                    ));
-                    $this->_stack->push(array(
+                    ]);
+                    $this->_stack->push([
                         'behavior' => $behavior->current(),
                         'state'    => static::STATE_REQUIRES
-                    ));
+                    ]);
                     $behavior->next();
                     $this->next();
 
@@ -302,24 +253,25 @@ class Structural implements \Hoa\Iterator\Recursive {
 
                 list($parentBehavior, ) = array_values($this->_stack->pop());
 
-                if(true === $parentBehavior->clauseExists('default'))
-                    $this->_stack->push(array(
+                if (true === $parentBehavior->clauseExists('default')) {
+                    $this->_stack->push([
                         'behavior' => $parentBehavior->getClause('default'),
                         'state'    => static::STATE_ENSURES
-                    ));
+                    ]);
+                }
 
                 $this->next();
-              break;
+
+                break;
 
             case static::STATE_ENSURES:
-                $this->_stack->push(array(
+                $this->_stack->push([
                     'behavior' => $behavior,
                     'state'    => static::STATE_THROWABLE
-                ));
+                ]);
 
-                if(   false === $behavior->clauseExists('ensures')
-                   || 0     === (Coverage::CRITERIA_NORMAL & $this->getCriteria())) {
-
+                if (false === $behavior->clauseExists('ensures') ||
+                    0     === (Coverage::CRITERIA_NORMAL & $this->getCriteria())) {
                     $this->_pop->push($this->_pop->pop() - 1);
                     $this->next();
 
@@ -330,12 +282,12 @@ class Structural implements \Hoa\Iterator\Recursive {
                 $this->_current = $behavior->getClause('ensures');
                 $this->_path->push($this->_current);
                 $this->_pop->push(0);
-              break;
+
+                break;
 
             case static::STATE_THROWABLE:
-                if(   false === $behavior->clauseExists('throwable')
-                   || 0     === (Coverage::CRITERIA_EXCEPTIONAL & $this->getCriteria())) {
-
+                if (false === $behavior->clauseExists('throwable') ||
+                    0     === (Coverage::CRITERIA_EXCEPTIONAL & $this->getCriteria())) {
                     $this->_pop->push($this->_pop->pop() - 1);
                     $this->next();
 
@@ -347,7 +299,8 @@ class Structural implements \Hoa\Iterator\Recursive {
 
                 $this->_path->push($this->_current);
                 $this->_pop->push(0);
-              break;
+
+                break;
         }
 
         return;
@@ -356,22 +309,21 @@ class Structural implements \Hoa\Iterator\Recursive {
     /**
      * Rewind the internal collection pointer, and return the first collection.
      *
-     * @access  public
      * @return  array
      */
-    public function rewind ( ) {
-
+    public function rewind()
+    {
         $this->_key = -1;
 
         unset($this->_path);
-        $this->_path = new \Hoa\Praspel\Iterator\WeakStack();
+        $this->_path = new Praspel\Iterator\WeakStack();
 
         unset($this->_stack);
         $this->_stack = new \SplStack();
-        $this->_stack->push(array(
+        $this->_stack->push([
             'behavior' => $this->_specification,
             'state'    => static::STATE_REQUIRES
-        ));
+        ]);
 
         unset($this->_pop);
         $this->_pop = new \SplQueue();
@@ -386,29 +338,30 @@ class Structural implements \Hoa\Iterator\Recursive {
      * Check if there is a current element after calls to the rewind() or the
      * next() methods.
      *
-     * @access  public
      * @return  bool
      */
-    public function valid ( ) {
-
+    public function valid()
+    {
         return null !== $this->_current;
     }
 
     /**
      * Set coverage criteria.
      *
-     * @access  public
      * @param   int  $criteria    Criteria (please, see Coverage::CRITERIA_*
      *                            constants).
      * @return  int
      */
-    public function setCriteria ( $criteria ) {
-
-        if(   0 !== (Coverage::CRITERIA_DOMAIN & $criteria)
-           && 0 !== (Coverage::CRITERIA_EXCEPTIONAL & $criteria))
-            throw new \Hoa\Praspel\Exception\Generic(
+    public function setCriteria($criteria)
+    {
+        if (0 !== (Coverage::CRITERIA_DOMAIN & $criteria) &&
+            0 !== (Coverage::CRITERIA_EXCEPTIONAL & $criteria)) {
+            throw new Praspel\Exception\Generic(
                 'Mixing CRITERIA_EXCEPTIONAL and CRITERIA_DOMAIN is not ' .
-                'supported yet. Sorry.', 0);
+                'supported yet. Sorry.',
+                0
+            );
+        }
 
         $old             = $this->_criteria;
         $this->_criteria = $criteria;
@@ -419,22 +372,20 @@ class Structural implements \Hoa\Iterator\Recursive {
     /**
      * get coverage criteria.
      *
-     * @access  public
      * @return  int
      */
-    public function getCriteria ( ) {
-
+    public function getCriteria()
+    {
         return $this->_criteria;
     }
 
     /**
      * Check if we can go deeper (structural to domain coverage).
      *
-     * @access  public
      * @return  bool
      */
-    public function hasChildren ( ) {
-
+    public function hasChildren()
+    {
         return 0 !== (Coverage::CRITERIA_DOMAIN & $this->getCriteria());
     }
 
@@ -442,37 +393,39 @@ class Structural implements \Hoa\Iterator\Recursive {
      * Get the domain coverage iterator from the current variables from pre and
      * post clauses.
      *
-     * @access  public
      * @return  \Hoa\Iterator\Recursive
      */
-    public function getChildren ( ) {
-
-        $variables = array();
+    public function getChildren()
+    {
+        $variables = [];
         $current   = $this->current();
 
-        foreach($current['pre'] as $clause)
-            foreach($clause->getLocalVariables() as $variable)
+        foreach ($current['pre'] as $clause) {
+            foreach ($clause->getLocalVariables() as $variable) {
                 $variables[] = $variable;
+            }
+        }
 
-        foreach($current['post'] as $clause)
-            foreach($clause->getLocalVariables() as $variable)
+        foreach ($current['post'] as $clause) {
+            foreach ($clause->getLocalVariables() as $variable) {
                 $variables[] = $variable;
+            }
+        }
 
-        return new \Hoa\Iterator\Recursive\Mock(
-            new \Hoa\Iterator\Demultiplexer(
+        return new Iterator\Recursive\Mock(
+            new Iterator\Demultiplexer(
                 new Domain($variables),
-                function ( $current ) {
+                function ($current) {
+                    $out = ['pre' => [], 'post' => []];
 
-                    $out = array('pre' => array(), 'post' => array());
-
-                    foreach($current as $name => $variable) {
-
+                    foreach ($current as $name => $variable) {
                         $clause = $variable->getHolder()->getClause();
 
-                        if($clause instanceof \Hoa\Praspel\Model\Requires)
+                        if ($clause instanceof Praspel\Model\Requires) {
                             $out['pre'][$name]  = $variable;
-                        else
+                        } else {
                             $out['post'][$name] = $variable;
+                        }
                     }
 
                     return $out;
@@ -480,6 +433,4 @@ class Structural implements \Hoa\Iterator\Recursive {
             )
         );
     }
-}
-
 }

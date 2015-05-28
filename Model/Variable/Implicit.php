@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,57 +34,49 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Praspel\Model\Variable;
+
+use Hoa\Praspel;
+use Hoa\Realdom;
 
 from('Hoa')
-
-/**
- * \Hoa\Praspel\Exception\Model
- */
--> import('Praspel.Exception.Model')
-
-/**
- * \Hoa\Praspel\Model\Variable
- */
--> import('Praspel.Model.Variable.~')
 
 /**
  * \Hoa\Realdom\Disjunction
  */
 -> import('Realdom.Disjunction', true);
 
-}
-
-namespace Hoa\Praspel\Model\Variable {
-
 /**
  * Class \Hoa\Praspel\Model\Variable\Implicit.
  *
  * Represent an implicit variable.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Implicit extends Variable {
-
+class Implicit extends Variable
+{
     /**
      * Build a variable.
      *
-     * @access  public
      * @param   string                     $name      Name.
      * @param   bool                       $local     Local.
      * @param   \Hoa\Praspel\Model\Clause  $clause    Clause.
      * @return  void
-     * @throw   \Hoa\Praspel\Exception\Model
+     * @throws  \Hoa\Praspel\Exception\Model
      */
-    public function __construct ( $name, $local,
-                                  \Hoa\Praspel\Model\Clause $clause = null ) {
-
-        if('this' !== $name)
-            throw new \Hoa\Praspel\Exception\Model(
-                'Variable %s is not an implicit one.', 0, $name);
+    public function __construct(
+        $name,
+        $local,
+        Praspel\Model\Clause $clause = null
+    ) {
+        if ('this' !== $name) {
+            throw new Praspel\Exception\Model(
+                'Variable %s is not an implicit one.',
+                0,
+                $name
+            );
+        }
 
         parent::__construct($name, $local, $clause);
 
@@ -96,18 +88,17 @@ class Implicit extends Variable {
     /**
      * Bind the variable to a specific value.
      *
-     * @access  public
      * @param   mixed  $value    Value.
      * @return  void
      */
-    public function bindTo ( $value ) {
-
-        foreach($this->getDomains() as $domain)
-            if($domain instanceof \Hoa\Realdom\Object)
+    public function bindTo($value)
+    {
+        foreach ($this->getDomains() as $domain) {
+            if ($domain instanceof Realdom\Object) {
                 $domain->setObject($value);
+            }
+        }
 
         return;
     }
-}
-
 }
