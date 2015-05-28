@@ -56,8 +56,9 @@
   méthode <code>Hoa\Worker\Run::widExists</code>, dans le cas échant nous
   allons le créer avec la méthode <code>Hoa\Worker\Run::register</code>.
   Ainsi :</p>
-  <pre><code class="language-php">if(false === Hoa\Worker\Run::widExists('demorker'))
-    Hoa\Worker\Run::register('demorker', 'tcp://127.0.0.1:123456');</code></pre>
+  <pre><code class="language-php">if (false === Hoa\Worker\Run::widExists('demorker')) {
+    Hoa\Worker\Run::register('demorker', 'tcp://127.0.0.1:123456');
+}</code></pre>
   <p>Nous sommes maintenant certains que le profil existe. Nous pouvons alors
   <strong>démarrer</strong> notre <em lang="en">worker</em>. Pour cela, nous
   devons utiliser son <strong>identifiant</strong> et son <strong>mot de
@@ -70,8 +71,7 @@
   lang="en">worker</em> :</p>
   <pre><code class="language-php">$file   = new Hoa\File\Write(__DIR__ . DS . 'Log');
 $worker = new Hoa\Worker\Backend\Shared('demorker', 'iamapassword');
-$worker->on('message', function ( Hoa\Core\Event\Bucket $bucket ) use ( $file ) {
-
+$worker->on('message', function (Hoa\Core\Event\Bucket $bucket) use ($file) {
     // compute messages.
     $data = $bucket->getData();
     $file->writeAll($data['message'] . "\n");

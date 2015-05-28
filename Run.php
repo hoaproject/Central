@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,54 +34,43 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Worker\Exception
- */
--> import('Worker.Exception');
-
-}
-
-namespace Hoa\Worker {
+namespace Hoa\Worker;
 
 /**
  * Class \Hoa\Worker\Run.
  *
  * Manipulate .wid files.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Run {
-
+class Run
+{
     /**
      * Register a socketable object as a worker ID.
      *
-     * @access  public
      * @param   string  $workerId    Worker ID.
      * @param   string  $socket      Socket URI.
      * @return  bool
-     * @throw   \Hoa\Worker\Exception
+     * @throws  \Hoa\Worker\Exception
      */
-    public static function register ( $workerId, $socket ) {
-
-        if(true === static::widExists($workerId))
+    public static function register($workerId, $socket)
+    {
+        if (true === static::widExists($workerId)) {
             throw new Exception(
                 'Worker ID %s already exists, we cannot create it again.',
-                0, $workerId);
+                0,
+                $workerId
+            );
+        }
 
         file_put_contents(
             static::find($workerId),
-            serialize(array(
+            serialize([
                 'id'     => $workerId,
                 'socket' => $socket,
                 'start'  => microtime(true)
-            ))
+            ])
         );
 
         return true;
@@ -90,14 +79,14 @@ class Run {
     /**
      * Unregister a worker ID.
      *
-     * @access  public
      * @param   string  $workerId    Worker ID.
      * @return  bool
      */
-    public static function unregister ( $workerId ) {
-
-        if(false === static::widExists($workerId))
+    public static function unregister($workerId)
+    {
+        if (false === static::widExists($workerId)) {
             return true;
+        }
 
         return @unlink(static::find($workerId));
     }
@@ -105,15 +94,18 @@ class Run {
     /**
      * Get a worker ID data.
      *
-     * @access  public
      * @param   string  $workerId    Worker ID.
      * @return  string
      */
-    public static function get ( $workerId ) {
-
-        if(false === static::widExists($workerId))
+    public static function get($workerId)
+    {
+        if (false === static::widExists($workerId)) {
             throw new Exception(
-                'Worker ID %s does not exist.', 1, $workerId);
+                'Worker ID %s does not exist.',
+                1,
+                $workerId
+            );
+        }
 
         return unserialize(file_get_contents(static::find($workerId)));
     }
@@ -121,33 +113,32 @@ class Run {
     /**
      * Check if a .wid exists.
      *
-     * @access  public
      * @param   string  $workerId    Worker ID.
      * @return  bool
      */
-    public static function widExists ( $workerId ) {
-
+    public static function widExists($workerId)
+    {
         return true === file_exists(static::find($workerId));
     }
 
     /**
      * Find a .wid.
      *
-     * @access  public
      * @param   string  $workerId    Worker ID.
      * @return  string
-     * @throw   \Hoa\Worker\Exception
+     * @throws  \Hoa\Worker\Exception
      */
-    public static function find ( $workerId ) {
-
-        if(   false !== strpos($workerId, '/')
-           || false !== strpos($workerId, '\\'))
+    public static function find($workerId)
+    {
+        if (false !== strpos($workerId, '/') ||
+            false !== strpos($workerId, '\\')) {
             throw new Exception(
                 'Worker ID must not contain / or \ character; given %s.',
-                2, $workerId);
+                2,
+                $workerId
+            );
+        }
 
         return 'hoa://Data/Variable/Run/' . $workerId . '.wid';
     }
-}
-
 }

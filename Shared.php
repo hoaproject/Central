@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,50 +34,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Worker;
 
-from('Hoa')
-
-/**
- * \Hoa\Worker\Exception
- */
--> import('Worker.Exception')
-
-/**
- * \Hoa\Worker\Run
- */
--> import('Worker.Run')
-
-/**
- * \Hoa\Worker\Backend\Shared
- */
--> import('Worker.Backend.Shared')
-
-/**
- * \Hoa\Socket\Client
- */
--> import('Socket.Client');
-
-}
-
-namespace Hoa\Worker {
+use Hoa\Socket;
 
 /**
  * Class \Hoa\Worker\Shared.
  *
  * Worker frontend, user's API.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Shared {
-
+class Shared
+{
     /**
      * Client.
      *
-     * @var \Hoa\Socket\Client object
+     * @var \Hoa\Socket\Client
      */
     protected $_client = null;
 
@@ -86,23 +60,19 @@ class Shared {
     /**
      * Build a worker pipe.
      *
-     * @access  public
      * @param   mixed   $workerId    Worker ID or a socket client (i.e. a
      *                               \Hoa\Socket\Client object).
      * @return  void
-     * @throw   \Hoa\Worker\Exception
+     * @throws  \Hoa\Worker\Exception
      */
-    public function __construct ( $workerId ) {
-
-        if(is_string($workerId)) {
-
+    public function __construct($workerId)
+    {
+        if (is_string($workerId)) {
             $wid           = Run::get($workerId);
-            $this->_client = new \Hoa\Socket\Client($wid['socket']);
+            $this->_client = new Socket\Client($wid['socket']);
 
             return;
-        }
-        elseif($workerId instanceof \Hoa\Socket\Client) {
-
+        } elseif ($workerId instanceof Socket\Client) {
             $this->_client = $workerId;
 
             return;
@@ -111,7 +81,11 @@ class Shared {
         throw new Exception(
             'Either you give a worker ID or you give an object of type ' .
             '\Hoa\Socket\Client, but not anything else; given %s',
-            0, is_object($workerId) ? get_class($workerId) : $workerId);
+            0,
+            is_object($workerId)
+                ? get_class($workerId)
+                : $workerId
+        );
 
         return;
     }
@@ -119,12 +93,11 @@ class Shared {
     /**
      * Post a message to the shared worker.
      *
-     * @access  public
      * @param   mixed   $message    Message (everything you want).
      * @return  void
      */
-    public function postMessage ( $message ) {
-
+    public function postMessage($message)
+    {
         $this->_client->connect();
         $this->_client->writeAll(Backend\Shared::pack(
             Backend\Shared::TYPE_MESSAGE,
@@ -138,16 +111,17 @@ class Shared {
     /**
      * Get informations about the shared worker.
      *
-     * @access  public
      * @return  array
      */
-    public function getInformations ( ) {
-
+    public function getInformations()
+    {
         $this->_client->connect();
-        $this->_client->writeAll(Backend\Shared::pack(
-            Backend\Shared::TYPE_INFORMATIONS,
-            "\0"
-        ));
+        $this->_client->writeAll(
+            Backend\Shared::pack(
+                Backend\Shared::TYPE_INFORMATIONS,
+                "\0"
+            )
+        );
         $this->_client->read(2); // skip type.
         $length  = unpack('Nl', $this->_client->read(4));
         $message = $this->_client->read($length['l']);
@@ -156,6 +130,4 @@ class Shared {
 
         return unserialize($message);
     }
-}
-
 }

@@ -36,16 +36,16 @@ First, we need to register the worker (i.e. creating a `.wid` file), called
 `demorker`:
 
 ```php
-if(false === Hoa\Worker\Run::widExists('demorker'))
+if (false === Hoa\Worker\Run::widExists('demorker')) {
     Hoa\Worker\Run::register('demorker', 'tcp://127.0.0.1:123456');
+}
 ```
 
 Then, we start the worker (with a password) and we listen to messages:
 
 ```php
 $worker = new Hoa\Worker\Backend\Shared('demorker', 'iamapassword');
-$worker->on('message', function ( Hoa\Core\Event\Bucket $bucket ) {
-
+$worker->on('message', function(Hoa\Core\Event\Bucket $bucket) {
     $data = $bucket->getData();
     // compute $data['message'].
 });

@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,43 +34,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Worker\Backend;
 
-from('Hoa')
-
-/**
- * \Hoa\Worker\Backend\Exception
- */
--> import('Worker.Backend.Exception')
-
-/**
- * \Hoa\Worker\Run
- */
--> import('Worker.Run')
-
-/**
- * \Hoa\Zombie
- */
--> import('Zombie.~')
-
-/**
- * \Hoa\Socket\Client
- */
--> import('Socket.Client')
-
-/**
- * \Hoa\Socket\Server
- */
--> import('Socket.Server')
-
-/**
- * \Hoa\Fastcgi\Responder
- */
--> import('Fastcgi.Responder');
-
-}
-
-namespace Hoa\Worker\Backend {
+use Hoa\Core;
+use Hoa\Fastcgi;
+use Hoa\Socket;
+use Hoa\Worker;
+use Hoa\Zombie;
 
 /**
  * Class \Hoa\Worker\Backend\Shared.
@@ -97,13 +67,11 @@ namespace Hoa\Worker\Backend {
  * When the shared worker is stopped, the associated .wid file (if exists) is
  * removed.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Shared implements \Hoa\Core\Event\Listenable {
-
+class Shared implements Core\Event\Listenable
+{
     /**
      * Message type: stop.
      *
@@ -128,49 +96,49 @@ class Shared implements \Hoa\Core\Event\Listenable {
     /**
      * Socket URI.
      *
-     * @var \Hoa\Worker\Backend\Shared string
+     * @var string
      */
     protected $_socket      = null;
 
     /**
      * Worker ID.
      *
-     * @var \Hoa\Worker\Backend\Shared string
+     * @var string
      */
     protected $_wid         = null;
 
     /**
      * Listeners.
      *
-     * @var \Hoa\Core\Event\Listener object
+     * @var \Hoa\Core\Event\Listener
      */
     protected $_on          = null;
 
     /**
      * Worker's password (needed to stop the worker).
      *
-     * @var \Hoa\Worker\Backend\Shared string
+     * @var string
      */
     protected $_password    = null;
 
     /**
      * Start time.
      *
-     * @var \Hoa\Worker\Backend\Shared float
+     * @var float
      */
     protected $_startTime   = 0;
 
     /**
      * Number of received messages.
      *
-     * @var \Hoa\Worker\Backend\Shared float
+     * @var float
      */
     protected $_messages    = 0;
 
     /**
      * Last received message time.
      *
-     * @var \Hoa\Worker\Backend\Shared float
+     * @var float
      */
     protected $_lastMessage = 0;
 
@@ -179,34 +147,37 @@ class Shared implements \Hoa\Core\Event\Listenable {
     /**
      * Construct a worker.
      *
-     * @access  public
      * @param   mixed   $workerId    Worker ID or a socket client (i.e. a
      *                               \Hoa\Socket\Client object).
      * @param   string  $password    Worker's password.
      * @return  void
-     * @throw   \Hoa\Worker\Exception
-     * @throw   \Hoa\Worker\Backend\Exception
+     * @throws  \Hoa\Worker\Exception
+     * @throws  \Hoa\Worker\Backend\Exception
      */
-    public function __construct ( $workerId, $password ) {
-
-        if(   !is_string($workerId)
-           && !($workerId instanceof \Hoa\Socket\Client))
+    public function __construct($workerId, $password)
+    {
+        if (!is_string($workerId) &&
+            !($workerId instanceof Socket\Client)) {
             throw new Exception(
                 'Either you give a worker ID or you give an object of type ' .
                 '\Hoa\Socket\Client, but not anything else; given %s',
-                0, is_object($workerId) ? get_class($workerId) : $workerId);
+                0,
+                is_object($workerId)
+                    ? get_class($workerId)
+                    : $workerId
+            );
+        }
 
-        if(is_string($workerId)) {
-
+        if (is_string($workerId)) {
             $this->_wid = $workerId;
-            $handle     = \Hoa\Worker\Run::get($workerId);
+            $handle     = Worker\Run::get($workerId);
             $workerId   = $handle['socket'];
         }
 
         set_time_limit(0);
 
         $this->_socket    = $workerId;
-        $this->_on        = new \Hoa\Core\Event\Listener($this, array('message'));
+        $this->_on        = new Core\Event\Listener($this, ['message']);
         $this->_password  = sha1($password);
         $this->_startTime = microtime(true);
 
@@ -216,14 +187,13 @@ class Shared implements \Hoa\Core\Event\Listenable {
     /**
      * Attach a callable to this listenable object.
      *
-     * @access  public
      * @param   string  $listenerId    Listener ID.
      * @param   mixed   $callable      Callable.
      * @return  \Hoa\Worker\Backend\Shared
-     * @throw   \Hoa\Core\Exception
+     * @throws  \Hoa\Core\Exception
      */
-    public function on ( $listenerId, $callable ) {
-
+    public function on($listenerId, $callable)
+    {
         $this->_on->attach($listenerId, $callable);
 
         return $this;
@@ -233,79 +203,83 @@ class Shared implements \Hoa\Core\Event\Listenable {
      * Run the shared worker.
      * It creates a zombie with \Hoa\Zombie.
      *
-     * @access  public
      * @return  void
-     * @throw   \Hoa\Worker\Backend\Exception
+     * @throws  \Hoa\Worker\Backend\Exception
      */
-    public function run ( ) {
-
-        $server = new \Hoa\Socket\Server($this->_socket);
+    public function run()
+    {
+        $server = new Socket\Server($this->_socket);
         $server->connectAndWait();
 
-        \Hoa\Zombie::fork();
+        Zombie::fork();
 
         $_eom = pack('C', 0);
 
-        while(true) foreach($server->select() as $node) {
+        while (true) {
+            foreach ($server->select() as $node) {
+                $request = unpack('nr', $server->read(2));
+                $length  = unpack('Nl', $server->read(4));
+                $message = unserialize($server->read($length['l']));
+                $eom     = unpack('Ce', $server->read(1));
 
-            $request = unpack('nr', $server->read(2));
-            $length  = unpack('Nl', $server->read(4));
-            $message = unserialize($server->read($length['l']));
-            $eom     = unpack('Ce', $server->read(1));
+                if ($eom['e'] != $_eom) {
+                    $server->disconnect();
 
-            if($eom['e'] != $_eom) {
+                    continue;
+                }
+
+                switch ($request['r']) {
+                    case static::TYPE_MESSAGE:
+                        $this->_on->fire(
+                            'message',
+                            new Core\Event\Bucket([
+                                'message' => $message
+                            ])
+                        );
+                        ++$this->_messages;
+                        $this->_lastMessage = time();
+
+                        break;
+
+                    case static::TYPE_STOP:
+                        if ($this->_password === $message) {
+                            $server->disconnect();
+
+                            break 3;
+                        }
+
+                        break;
+
+                    case static::TYPE_INFORMATIONS:
+                        $message = [
+                            'id'                    => $this->_wid,
+                            'socket'                => $this->_socket,
+                            'start'                 => $this->_startTime,
+                            'pid'                   => getmypid(),
+                            'memory'                => memory_get_usage(true),
+                            'memory_allocated'      => memory_get_usage(),
+                            'memory_peak'           => memory_get_peak_usage(true),
+                            'memory_allocated_peak' => memory_get_usage(),
+                            'messages'              => $this->_messages,
+                            'last_message'          => $this->_lastMessage,
+                            'filename'              => $_SERVER['SCRIPT_FILENAME']
+                        ];
+                        $server->writeAll(
+                            static::pack(static::TYPE_MESSAGE, $message)
+                        );
+
+                        break;
+                }
 
                 $server->disconnect();
-
-                continue;
             }
-
-            switch($request['r']) {
-
-                case static::TYPE_MESSAGE:
-                    $this->_on->fire('message', new \Hoa\Core\Event\Bucket(array(
-                        'message' => $message
-                    )));
-                    ++$this->_messages;
-                    $this->_lastMessage = time();
-                  break;
-
-                case static::TYPE_STOP:
-                    if($this->_password === $message) {
-
-                        $server->disconnect();
-
-                        break 3;
-                    }
-                  break;
-
-                case static::TYPE_INFORMATIONS:
-                    $message = array(
-                        'id'                    => $this->_wid,
-                        'socket'                => $this->_socket,
-                        'start'                 => $this->_startTime,
-                        'pid'                   => getmypid(),
-                        'memory'                => memory_get_usage(true),
-                        'memory_allocated'      => memory_get_usage(),
-                        'memory_peak'           => memory_get_peak_usage(true),
-                        'memory_allocated_peak' => memory_get_usage(),
-                        'messages'              => $this->_messages,
-                        'last_message'          => $this->_lastMessage,
-                        'filename'              => $_SERVER['SCRIPT_FILENAME']
-                    );
-                    $server->writeAll(
-                        static::pack(static::TYPE_MESSAGE, $message)
-                    );
-                  break;
-            }
-
-            $server->disconnect();
         }
 
         $server->disconnect();
 
-        if(null !== $this->_wid)
-            \Hoa\Worker\Run::unregister($this->_wid);
+        if (null !== $this->_wid) {
+            Worker\Run::unregister($this->_wid);
+        }
 
         return;
     }
@@ -313,42 +287,46 @@ class Shared implements \Hoa\Core\Event\Listenable {
     /**
      * Start the shared worker.
      *
-     * @access  public
      * @param   string  $socket             Socket URI to PHP-FPM server.
      * @param   string  $workerPath         Path to the shared worker program.
-     * @param   array   $fastcgiParameters  Array of additional parameters for FastCGI.
+     * @param   array   $fastcgiParameters  Additional parameters for FastCGI.
      * @return  bool
      */
-    public static function start ( $socket, $workerPath, Array $fastcgiParameters = array() ) {
-
-        $server = new \Hoa\Fastcgi\Responder(
-            new \Hoa\Socket\Client($socket)
+    public static function start($socket, $workerPath, Array $fastcgiParameters = [])
+    {
+        $server = new Fastcgi\Responder(
+            new Socket\Client($socket)
         );
 
-        $headers = array(
+        $headers = [
             'GATEWAY_INTERFACE' => 'FastCGI/1.0',
             'SERVER_PROTOCOL'   => 'HTTP/1.1',
             'REQUEST_URI'       => $workerPath,
             'SCRIPT_FILENAME'   => $workerPath,
             'SCRIPT_NAME'       => DS . dirname($workerPath)
-        );
+        ];
 
-        $defaultFastcgiParameters = array(
+        $defaultFastcgiParameters = [
             'REQUEST_METHOD' => 'GET'
-        );
+        ];
 
-        return $server->send(array_merge($defaultFastcgiParameters, $fastcgiParameters, $headers));
+        return $server->send(
+            array_merge(
+                $defaultFastcgiParameters,
+                $fastcgiParameters,
+                $headers
+            )
+        );
     }
 
     /**
      * Stop the shared worker.
      *
-     * @access  public
      * @return  bool
      */
-    public function stop ( ) {
-
-        $client = new \Hoa\Socket\Client($this->_socket);
+    public function stop()
+    {
+        $client = new Socket\Client($this->_socket);
         $client->connect();
         $client->writeAll(static::pack(static::TYPE_STOP, $this->_password));
         $client->disconnect();
@@ -359,20 +337,18 @@ class Shared implements \Hoa\Core\Event\Listenable {
     /**
      * Pack a message.
      *
-     * @access  public
      * @param   int     $type       Please, see self::TYPE_* constants.
      * @param   mixed   $message    Whatever you want.
      * @return  string
      */
-    public static function pack ( $type, $message ) {
-
+    public static function pack($type, $message)
+    {
         $message = serialize($message);
 
-        return pack('n', $type ) .
-               pack('N', strlen($message)) .
-               $message .
-               pack('C', 0);
+        return
+            pack('n', $type) .
+            pack('N', strlen($message)) .
+            $message .
+            pack('C', 0);
     }
-}
-
 }
