@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,82 +34,75 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Worker\Bin;
 
-from('Hoa')
-
-/**
- * \Hoa\Worker\Backend\Shared
- */
--> import('Worker.Backend.Shared');
-
-}
-
-namespace Hoa\Worker\Bin {
+use Hoa\Console;
+use Hoa\Core;
+use Hoa\Worker;
 
 /**
  * Class \Hoa\Worker\Bin\Stop.
  *
  * Stop worker.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Stop extends \Hoa\Console\Dispatcher\Kit {
-
+class Stop extends Console\Dispatcher\Kit
+{
     /**
      * Options description.
      *
-     * @var \Hoa\Worker\Bin\Stop array
+     * @var array
      */
-    protected $options = array(
-        array('run',  \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'r'),
-        array('help', \Hoa\Console\GetOption::NO_ARGUMENT,       'h'),
-        array('help', \Hoa\Console\GetOption::NO_ARGUMENT,       '?')
-    );
+    protected $options = [
+        ['run',  Console\GetOption::REQUIRED_ARGUMENT, 'r'],
+        ['help', Console\GetOption::NO_ARGUMENT,       'h'],
+        ['help', Console\GetOption::NO_ARGUMENT,       '?']
+    ];
 
 
 
     /**
      * The entry method.
      *
-     * @access  public
      * @return  int
      */
-    public function main ( ) {
-
+    public function main()
+    {
         $run = 'hoa://Data/Variable/Run/';
 
-        while(false !== $c = $this->getOption($v)) switch($c) {
+        while (false !== $c = $this->getOption($v)) {
+            switch ($c) {
+                case 'r':
+                    $run = $v;
 
-            case 'r':
-                $run = $v;
-              break;
+                    break;
 
-            case 'h':
-            case '?':
-                return $this->usage();
-              break;
+                case 'h':
+                case '?':
+                    return $this->usage();
 
-            case '__ambiguous':
-                $this->resolveOptionAmbiguity($v);
-              break;
+                case '__ambiguous':
+                    $this->resolveOptionAmbiguity($v);
+
+                    break;
+            }
         }
 
         $this->parser->listInputs($workerId);
 
-        if(null === $workerId)
+        if (null === $workerId) {
             return $this->usage();
+        }
 
 
         $run  = resolve($run);
-        \Hoa\Core::getInstance()->initialize(array(
+        Core::getInstance()->initialize([
             'protocol.Data/Variable/Run' => "\r" . $run . DS
-        ));
+        ]);
         $password = $this->readPassword('Password: ');
-        $sw       = new \Hoa\Worker\Backend\Shared($workerId, $password);
+        $sw       = new Worker\Backend\Shared($workerId, $password);
         $sw->stop();
 
         return;
@@ -118,22 +111,20 @@ class Stop extends \Hoa\Console\Dispatcher\Kit {
     /**
      * The command usage.
      *
-     * @access  public
      * @return  int
      */
-    public function usage ( ) {
-
-        echo 'Usage   : worker:stop <options> <worker_id>', "\n",
-             'Options :', "\n",
-             $this->makeUsageOptionsList(array(
-                 'run'  => 'Define hoa://Data/Variable/Run/ path.',
-                 'help' => 'This help.'
-             )), "\n";
+    public function usage()
+    {
+        echo
+            'Usage   : worker:stop <options> <worker_id>', "\n",
+            'Options :', "\n",
+            $this->makeUsageOptionsList([
+                'run'  => 'Define hoa://Data/Variable/Run/ path.',
+                'help' => 'This help.'
+            ]), "\n";
 
         return;
     }
-}
-
 }
 
 __halt_compiler();
