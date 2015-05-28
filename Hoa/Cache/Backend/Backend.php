@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,74 +34,54 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Cache\Backend;
 
-from('Hoa')
-
-/**
- * \Hoa\Cache
- */
--> import('Cache.~');
-
-}
-
-namespace Hoa\Cache\Backend {
+use Hoa\Cache;
+use Hoa\Core;
 
 /**
  * Class \Hoa\Cache\Backend.
  *
+ * Backend parent class.
  *
- *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  *
  */
-
-abstract class Backend extends \Hoa\Cache {
-
+abstract class Backend extends Cache
+{
     /**
      * Save data.
      *
-     * @access  public
      * @param   mixed  $data    Data to store.
      * @return  void
      */
-    abstract public function store ( $data );
+    abstract public function store($data);
 
     /**
      * Load data.
      *
-     * @access  public
      * @return  mixed
      */
-    abstract public function load ( );
+    abstract public function load();
 
     /**
      * Clean data.
      *
-     * @access  public
      * @param   int  $lifetime    Lifetime of caches.
      * @return  void
      */
-    abstract public function clean ( $lifetime = \Hoa\Cache::CLEAN_EXPIRED );
+    abstract public function clean($lifetime = Cache::CLEAN_EXPIRED);
 
     /**
      * Remove data.
      *
-     * @access  public
      * @return  void
      */
-    abstract public function remove ( );
+    abstract public function remove();
 }
-
-}
-
-namespace {
 
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Cache\Backend\Backend');
-
-}
+Core\Consistency::flexEntity('Hoa\Cache\Backend\Backend');

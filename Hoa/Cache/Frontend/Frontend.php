@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,41 +34,25 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Cache\Frontend;
 
-from('Hoa')
-
-/**
- * \Hoa\Cache\Exception
- */
--> import('Cache.Exception')
-
-/**
- * \Hoa\Cache
- */
--> import('Cache.~');
-
-}
-
-namespace Hoa\Cache\Frontend {
+use Hoa\Cache;
+use Hoa\Core;
 
 /**
  * Class \Hoa\Cache\Frontend.
  *
+ * Frontend parent-class.
  *
- *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
- *
  */
-
-abstract class Frontend extends \Hoa\Cache {
-
+abstract class Frontend extends Cache
+{
     /**
      * Backend object.
      *
-     * @var \Hoa\Cache\Backend object
+     * @var \Hoa\Cache\Backend
      */
     protected $_backend = null;
 
@@ -77,12 +61,11 @@ abstract class Frontend extends \Hoa\Cache {
     /**
      * Constructor.
      *
-     * @access  public
      * @param   \Hoa\Cache\Backend  $backend    Backend instance.
      * @return  void
      */
-    public function __construct ( \Hoa\Cache\Backend $backend ) {
-
+    public function __construct(Cache\Backend $backend)
+    {
         parent::__construct();
 
         $this->_backend = $backend;
@@ -93,14 +76,14 @@ abstract class Frontend extends \Hoa\Cache {
     /**
      * Clean cache.
      *
-     * @access  public
      * @param   int  $lifetime    Lifetime of caches.
      * @return  void
      */
-    public function cleanCache ( $lifetime = \Hoa\Cache::CLEAN_EXPIRED ) {
-
-        if(null === $this->_backend)
+    public function cleanCache($lifetime = Cache::CLEAN_EXPIRED)
+    {
+        if (null === $this->_backend) {
             return;
+        }
 
         return $this->_backend->clean($lifetime);
     }
@@ -108,22 +91,15 @@ abstract class Frontend extends \Hoa\Cache {
     /**
      * Get the backend.
      *
-     * @access  public
      * @return  \Hoa\Cache\Backend
      */
-    public function getBackend ( ) {
-
+    public function getBackend()
+    {
         return $this->_backend;
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Cache\Frontend\Frontend');
-
-}
+Core\Consistency::flexEntity('Hoa\Cache\Frontend\Frontend');

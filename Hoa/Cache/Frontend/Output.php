@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,55 +34,40 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Cache\Frontend
- */
--> import('Cache.Frontend.~');
-
-}
-
-namespace Hoa\Cache\Frontend {
+namespace Hoa\Cache\Frontend;
 
 /**
  * Class \Hoa\Cache\Frontend\Output.
  *
  * Ouput catching system for frontend cache.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Output extends Frontend {
-
+class Output extends Frontend
+{
     /**
      * Output buffer level.
      *
-     * @var \Hoa\Cache\Frontend\Output array
+     * @var array
      */
-    protected $_level = array();
+    protected $_level = [];
 
 
 
     /**
      * Start an output buffering.
      *
-     * @access  public
      * @param   string  id    ID of cache.
      * @return  bool
      */
-    public function start ( $id = null ) {
-
+    public function start($id = null)
+    {
         $this->makeId($id);
         $md5 = $this->getIdMd5();
         $out = $this->_backend->load();
 
-        if(false !== $out) {
-
+        if (false !== $out) {
             echo $out;
 
             return false;
@@ -98,16 +83,16 @@ class Output extends Frontend {
     /**
      * End an output buffering.
      *
-     * @access  public
      * @return  void
      */
-    public function end ( ) {
-
+    public function end()
+    {
         $content = '';
         $md5     = $this->getIdMd5();
 
-        while(ob_get_level() >= $this->_level[$md5])
+        while (ob_get_level() >= $this->_level[$md5]) {
             $content .= ob_get_clean();
+        }
 
         $this->_backend->store($content);
         $this->removeId();
@@ -116,6 +101,4 @@ class Output extends Frontend {
 
         return;
     }
-}
-
 }

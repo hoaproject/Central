@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,64 +34,45 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Cache\Backend;
 
-from('Hoa')
-
-/**
- * \Hoa\Cache\Exception
- */
--> import('Cache.Exception')
-
-/**
- * \Hoa\Cache\Backend
- */
--> import('Cache.Backend.~')
-
-/**
- * \Hoa\File\Finder
- */
--> import('File.Finder');
-
-}
-
-namespace Hoa\Cache\Backend {
+use Hoa\Cache;
+use Hoa\File as HoaFile;
 
 /**
  * Class \Hoa\Cache\Backend\File.
  *
  * File backend manager.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class File extends Backend {
-
+class File extends Backend
+{
     /**
      * Save cache content into a file.
      *
-     * @access  public
      * @param   mixed  $data    Data to store.
      * @return  void
      */
-    public function store ( $data ) {
-
+    public function store($data)
+    {
         $this->clean();
 
-        if(true === $this->_parameters->getParameter('serialize_content'))
+        if (true === $this->_parameters->getParameter('serialize_content')) {
             $data = serialize($data);
+        }
 
-        if(true === $this->_parameters->getParameter('file.compress.active'))
+        if (true === $this->_parameters->getParameter('file.compress.active')) {
             $data = gzcompress(
                 $data,
                 $this->_parameters->getParameter('file.compress.level')
             );
+        }
 
         $this->setId($this->getIdMd5());
-        $directory = $this->_parameters
-                          ->getFormattedParameter('file.cache.directory');
+        $directory =
+            $this->_parameters->getFormattedParameter('file.cache.directory');
 
         @mkdir($directory, 0755, true);
 
@@ -107,29 +88,30 @@ class File extends Backend {
     /**
      * Load a cache file.
      *
-     * @access  public
      * @return  mixed
      */
-    public function load ( ) {
-
+    public function load()
+    {
         $this->clean();
         $this->setId($this->getIdMd5());
 
-        $filename = $this->_parameters
-                          ->getFormattedParameter('file.cache.directory') .
-                    $this->_parameters
-                         ->getFormattedParameter('file.cache.file');
+        $filename =
+            $this->_parameters->getFormattedParameter('file.cache.directory') .
+            $this->_parameters->getFormattedParameter('file.cache.file');
 
-        if(false === file_exists($filename))
+        if (false === file_exists($filename)) {
             return false;
+        }
 
         $content = file_get_contents($filename);
 
-        if(true === $this->_parameters->getParameter('file.compress.active'))
+        if (true === $this->_parameters->getParameter('file.compress.active')) {
             $content = gzuncompress($content);
+        }
 
-        if(true === $this->_parameters->getParameter('serialize_content'))
+        if (true === $this->_parameters->getParameter('serialize_content')) {
             $content = unserialize($content);
+        }
 
         return $content;
     }
@@ -139,27 +121,27 @@ class File extends Backend {
      * Note : \Hoa\Cache::CLEAN_USER is not supported, it's reserved for APC
      * backend.
      *
-     * @access  public
      * @param   int  $lifetime    Lifetime of caches.
      * @return  void
-     * @throw   \Hoa\Cache\Exception
+     * @throws  \Hoa\Cache\Exception
      */
-    public function clean ( $lifetime = \Hoa\Cache::CLEAN_EXPIRED ) {
+    public function clean($lifetime = Cache::CLEAN_EXPIRED)
+    {
+        switch ($lifetime) {
+            case Cache::CLEAN_ALL:
+                break;
 
-        switch($lifetime) {
-
-            case \Hoa\Cache::CLEAN_ALL:
-              break;
-
-            case \Hoa\Cache::CLEAN_EXPIRED:
+            case Cache::CLEAN_EXPIRED:
                 $lifetime = $this->_parameters->getParameter('lifetime');
-              break;
 
-            case \Hoa\Cache::CLEAN_USER:
-                throw new \Hoa\Cache\Exception(
+                break;
+
+            case Cache::CLEAN_USER:
+                throw new Cache\Exception(
                     '\Hoa\Cache::CLEAN_USER constant is not supported by %s.' .
-                    2, __CLASS__);
-              break;
+                    2,
+                    __CLASS__
+                );
 
             default:
                 $lifetime = $lifetime;
@@ -168,22 +150,21 @@ class File extends Backend {
         $this->setId($this->getIdMd5());
 
         try {
-
             $cacheDirectory = $this->_parameters->getFormattedParameter(
                 'file.cache.directory'
             );
-            $finder = new \Hoa\File\Finder();
-            $finder->in($cacheDirectory)
-                   ->files()
-                   ->modified('since ' . $lifetime . ' seconds');
+            $finder = new HoaFile\Finder();
+            $finder
+                ->in($cacheDirectory)
+                ->files()
+                ->modified('since ' . $lifetime . ' seconds');
 
-            foreach($finder as $file) {
-
+            foreach ($finder as $file) {
                 $file->open()->delete();
                 $file->close();
             }
+        } catch (HoaFile\Exception\FileDoesNotExist $e) {
         }
-        catch ( \Hoa\File\Exception\FileDoesNotExist $e ) { }
 
         return;
     }
@@ -191,24 +172,20 @@ class File extends Backend {
     /**
      * Remove a cache file.
      *
-     * @access  public
      * @return  void
      */
-    public function remove ( ) {
-
+    public function remove()
+    {
         $this->setId($this->getIdMd5());
 
-        $filename = $this->_parameters
-                         ->getFormattedParameter('file.cache.directory') .
-                    $this->_parameters
-                         ->getFormattedParameter('file.cache.file');
+        $filename =
+            $this->_parameters->getFormattedParameter('file.cache.directory') .
+            $this->_parameters->getFormattedParameter('file.cache.file');
 
-        $file = new \Hoa\File\Read($filename);
+        $file = new HoaFile\Read($filename);
         $file->delete();
         $file->close();
 
         return;
     }
-}
-
 }

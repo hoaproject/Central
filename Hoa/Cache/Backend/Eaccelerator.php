@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,23 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Cache\Backend;
 
-from('Hoa')
-
-/**
- * \Hoa\Cache\Exception
- */
--> import('Cache.Exception')
-
-/**
- * \Hoa\Cache\Backend
- */
--> import('Cache.Backend.~');
-
-}
-
-namespace Hoa\Cache\Backend {
+use Hoa\Cache;
 
 /**
  * Class \Hoa\Cache\Backend\Eaccelerator.
@@ -58,26 +44,26 @@ namespace Hoa\Cache\Backend {
  * Eaccelerator backend manager.
  * EAccelerator is an extension, take care that EAccelerator is loaded.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Eaccelerator extends Backend {
-
+class Eaccelerator extends Backend
+{
     /**
      * Check if EAccelerator is loaded, else an exception is thrown.
      *
-     * @access  public
      * @param   array   $parameters    Parameters.
      * @return  void
-     * @throw   \Hoa\Cache\Exception
+     * @throws  \Hoa\Cache\Exception
      */
-    public function __construct ( Array $parameters = array() ) {
-
-        if(!extension_loaded('eaccelerator'))
-            throw new \Hoa\Cache\Exception(
-                'EAccelerator is not loaded on server.', 0);
+    public function __construct(Array $parameters = [])
+    {
+        if (!extension_loaded('eaccelerator')) {
+            throw new Cache\Exception(
+                'EAccelerator is not loaded on server.',
+                0
+            );
+        }
 
         parent::__construct($parameters);
 
@@ -88,12 +74,11 @@ class Eaccelerator extends Backend {
      * Save cache content in EAccelerator store.
      * All data is obligatory serialized.
      *
-     * @access  public
      * @param   mixed  $data    Data to store.
      * @return  void
      */
-    public function store ( $data ) {
-
+    public function store($data)
+    {
         $this->clean();
 
         return eaccelerator_put(
@@ -107,11 +92,10 @@ class Eaccelerator extends Backend {
      * Load data from EAccelerator cache.
      * Data is obligatory unseralized, please see the self::save() method.
      *
-     * @access  public
      * @return  void
      */
-    public function load ( ) {
-
+    public function load()
+    {
         $this->clean();
 
         $content = eaccelerator_get($this->getIdMd5());
@@ -124,40 +108,45 @@ class Eaccelerator extends Backend {
      * Note : \Hoa\Cache::CLEAN_USER is not supported, it's reserved for APC
      * backend.
      *
-     * @access  public
      * @param   int  $lifetime    Lifetime of caches.
      * @return  void
-     * @throw   \Hoa\Cache\Exception
+     * @throws  \Hoa\Cache\Exception
      */
-    public function clean ( $lifetime = \Hoa\Cache::CLEAN_EXPIRED ) {
-
-        switch($lifetime) {
-
-            case \Hoa\Cache::CLEAN_ALL:
+    public function clean($lifetime = Cache::CLEAN_EXPIRED)
+    {
+        switch ($lifetime) {
+            case Cache::CLEAN_ALL:
                 $infos = eaccelerator_list_keys();
 
                 // EAccelerator bug (http://eaccelerator.net/ticket/287).
-                foreach($infos as $foo => $info) {
+                foreach ($infos as $foo => $info) {
+                    $key =
+                        0 === strpos($info['name'], ':')
+                            ? substr($info['name'], 1)
+                            : $info['name'];
 
-                    $key = 0 === strpos($info['name'], ':')
-                               ? substr($info['name'], 1)
-                               : $info['name'];
-
-                    if(false === eaccelerator_rm($key))
+                    if (false === eaccelerator_rm($key)) {
                         throw new \Hoa\Cache\Exception(
-                            'Remove all existing cache file failed (maybe for the %s cache).',
-                            1, $key);
+                            'Remove all existing cache file failed ' .
+                            '(maybe for the %s cache).',
+                            1,
+                            $key
+                        );
+                    }
                 }
-              break;
 
-            case \Hoa\Cache::CLEAN_EXPIRED:
+                break;
+
+            case Cache::CLEAN_EXPIRED:
                 // Manage by EAccelerator.
-              break;
+                break;
 
-            case \Hoa\Cache::CLEAN_USER:
+            case Cache::CLEAN_USER:
                 throw new \Hoa\Cache\Exception(
                     '\Hoa\Cache::CLEAN_USER constant is not supported by ' .
-                    'EAccelerator backend.', 2);
+                    'EAccelerator backend.',
+                    2
+                );
         }
 
         return;
@@ -166,15 +155,12 @@ class Eaccelerator extends Backend {
     /**
      * Remove a cache data.
      *
-     * @access  public
      * @return  void
      */
-    public function remove ( ) {
-
+    public function remove()
+    {
         eaccelerator_rm($this->getIdMd5());
 
         return;
     }
-}
-
 }

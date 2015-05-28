@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,28 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Cache\Backend;
 
-from('Hoa')
-
-/**
- * \Hoa\Cache\Exception
- */
--> import('Cache.Exception')
-
-/**
- * \Hoa\Cache\Backend
- */
--> import('Cache.Backend.~')
-
-/**
- * \Hoa\File\Directory
- */
--> import('File.Directory');
-
-}
-
-namespace Hoa\Cache\Backend {
+use Hoa\Cache;
+use Hoa\File as HoaFile;
 
 /**
  * Class \Hoa\Cache\Backend\Sqlite.
@@ -63,17 +45,15 @@ namespace Hoa\Cache\Backend {
  * SQLite backend manager.
  * SQLite is an extension, take care that SQLite is loaded.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Sqlite extends Backend {
-
+class Sqlite extends Backend
+{
     /**
      * SQLite connexion.
      *
-     * @var \Hoa\Cache\Backend\Sqlite resource
+     * @var resource
      */
     protected $_sqlite = null;
 
@@ -82,16 +62,18 @@ class Sqlite extends Backend {
     /**
      * Check if SQLite is loaded, else an exception is thrown.
      *
-     * @access  public
      * @param   array  $parameters    Parameters.
      * @return  void
-     * @throw   \Hoa\Cache\Exception
+     * @throws  \Hoa\Cache\Exception
      */
-    public function __construct ( Array $parameters = array() ) {
-
-        if(!extension_loaded('sqlite'))
-            throw new \Hoa\Cache\Exception(
-                'SQLite is not loaded on server.', 0);
+    public function __construct(Array $parameters = [])
+    {
+        if (!extension_loaded('sqlite')) {
+            throw new Cache\Exception(
+                'SQLite is not loaded on server.',
+                0
+            );
+        }
 
         parent::__construct($parameters);
 
@@ -101,47 +83,51 @@ class Sqlite extends Backend {
     /**
      * Save cache content in SQLite database.
      *
-     * @access  public
      * @param   mixed  $data    Data to store.
      * @return  void
      */
-    public function store ( $data ) {
-
+    public function store($data)
+    {
         $this->setSqlite();
         $this->clean();
 
-        if(true  === $this->_parameters->getParameter('serialize_content'))
-            $data  = serialize($data);
+        if (true  === $this->_parameters->getParameter('serialize_content')) {
+            $data = serialize($data);
+        }
 
-        $lifetime  = $this->_parameters->getParameter('lifetime');
-        $md5       = $this->getIdMd5();
+        $lifetime = $this->_parameters->getParameter('lifetime');
+        $md5      = $this->getIdMd5();
 
-        $statement = 'SELECT data FROM hoa_cache ' . "\n" .
-                     'WHERE  id = \'' . sqlite_escape_string($this->getIdMd5()) . '\'';
-        $query     = sqlite_query($statement, $this->getSqlite());
+        $statement =
+            'SELECT data FROM hoa_cache ' . "\n" .
+            'WHERE  id = \'' . sqlite_escape_string($this->getIdMd5()) . '\'';
+        $query = sqlite_query($statement, $this->getSqlite());
 
-        if(0     === sqlite_num_rows($query))
-            $statement = 'INSERT INTO hoa_cache (' . "\n" .
-                         '       id, '             . "\n" .
-                         '       data, '           . "\n" .
-                         '       will_expire_at '  . "\n" .
-                         ')'                       . "\n" .
-                         'VALUES ('                . "\n" .
-                         '       \'' .
-                         sqlite_escape_string($md5) . '\', '  . "\n" .
-                         '       \'' .
-                         sqlite_escape_string($data) . '\', ' . "\n" .
-                         '       \'' .
-                         (time() + $lifetime) . '\' '         . "\n" .
-                         ')';
-        else
-            $statement = 'UPDATE hoa_cache ' . "\n" .
-                         'SET    data           = \'' .
-                         sqlite_escape_string($data)  . '\', ' . "\n" .
-                         '       will_expire_at = \'' .
-                         (time() + $lifetime) . '\' '          . "\n" .
-                         'WHERE  id             = \'' .
-                         sqlite_escape_string($md5) . '\'';
+        if (0 === sqlite_num_rows($query)) {
+            $statement =
+                'INSERT INTO hoa_cache (' . "\n" .
+                '    id, ' . "\n" .
+                '    data, ' . "\n" .
+                '    will_expire_at ' . "\n" .
+                ')' . "\n" .
+                'VALUES (' . "\n" .
+                '    \'' .
+                sqlite_escape_string($md5) . '\', ' . "\n" .
+                '    \'' .
+                sqlite_escape_string($data) . '\', ' . "\n" .
+                '    \'' .
+                (time() + $lifetime) . '\' ' . "\n" .
+                ')';
+        } else {
+            $statement =
+                'UPDATE hoa_cache ' . "\n" .
+                'SET    data           = \'' .
+                sqlite_escape_string($data)  . '\', ' . "\n" .
+                '       will_expire_at = \'' .
+                (time() + $lifetime) . '\' ' . "\n" .
+                'WHERE  id             = \'' .
+                sqlite_escape_string($md5) . '\'';
+        }
 
         return sqlite_query($statement, $this->getSqlite());
     }
@@ -149,26 +135,28 @@ class Sqlite extends Backend {
     /**
      * Load data from SQLite database.
      *
-     * @access  public
      * @return  mixed
      */
-    public function load ( ) {
-
+    public function load()
+    {
         $this->setSqlite();
         $this->clean();
 
-        $statement = 'SELECT data FROM hoa_cache ' . "\n" .
-                     'WHERE  id = \'' .
-                     sqlite_escape_string($this->getIdMd5()) . '\'';
-        $query     = sqlite_query($statement, $this->getSqlite());
+        $statement =
+            'SELECT data FROM hoa_cache ' . "\n" .
+            'WHERE  id = \'' .
+            sqlite_escape_string($this->getIdMd5()) . '\'';
+        $query = sqlite_query($statement, $this->getSqlite());
 
-        if(0 === sqlite_num_rows($query))
+        if (0 === sqlite_num_rows($query)) {
             return false;
+        }
 
         $content = sqlite_fetch_single($query);
 
-        if(true === $this->_parameters->getParameter('serialize_content'))
+        if (true === $this->_parameters->getParameter('serialize_content')) {
             $content = unserialize($content);
+        }
 
         return $content;
     }
@@ -176,31 +164,35 @@ class Sqlite extends Backend {
     /**
      * Clean expired cache.
      *
-     * @access  public
      * @param   string  $lifetime    Lifetime of caches.
      * @return  void
-     * @throw   \Hoa\Cache\Exception
+     * @throws  \Hoa\Cache\Exception
      */
-    public function clean ( $lifetime = \Hoa\Cache::CLEAN_EXPIRED ) {
-
+    public function clean($lifetime = Cache::CLEAN_EXPIRED)
+    {
         $this->setSqlite();
 
-        switch($lifetime) {
-
-            case \Hoa\Cache::CLEAN_ALL:
+        switch ($lifetime) {
+            case Cache::CLEAN_ALL:
                 $statement = 'DELETE FROM hoa_cache';
-              break;
 
-            case \Hoa\Cache::CLEAN_EXPIRED:
-                $statement = 'DELETE FROM hoa_cache ' . "\n" .
-                             'WHERE  will_expire_at < ' . sqlite_escape_string(time());
-              break;
+                break;
 
-            case \Hoa\Cache::CLEAN_USER:
-                throw new \Hoa\Cache\Exception(
+            case Cache::CLEAN_EXPIRED:
+                $statement =
+                    'DELETE FROM hoa_cache ' . "\n" .
+                    'WHERE  will_expire_at < ' . sqlite_escape_string(time());
+
+                break;
+
+            case Cache::CLEAN_USER:
+                throw new Cache\Exception(
                     '\Hoa\Cache::CLEAN_USER constant is not supported by ' .
-                    'SQLite cache backend.', 1);
-              break;
+                    'SQLite cache backend.',
+                    1
+                );
+
+                break;
         }
 
         sqlite_query($statement, $this->getSqlite());
@@ -211,15 +203,15 @@ class Sqlite extends Backend {
     /**
      * Remove a cache data.
      *
-     * @access  public
      * @return  void
      */
-    public function remove ( ) {
-
+    public function remove()
+    {
         $this->setSqlite();
 
-        $statement = 'DELETE FROM hoa_cache ' . "\n" .
-                     'WHERE  id = \'' . sqlite_escape_string($id_md5) . '\'';
+        $statement =
+            'DELETE FROM hoa_cache ' . "\n" .
+            'WHERE  id = \'' . sqlite_escape_string($id_md5) . '\'';
 
         sqlite_query($statement, $this->getSqlite());
 
@@ -234,37 +226,40 @@ class Sqlite extends Backend {
      * By default, the database -> host value will be choosen, but if it's
      * empty, the cache_directory will be choosen to place the database file.
      *
-     * @access  protected
      * @return  void
-     * @throw   \Hoa\Cache\Exception
+     * @throws  \Hoa\Cache\Exception
      */
-    protected function setSqlite ( ) {
-
-        if(null !== $this->_sqlite)
+    protected function setSqlite()
+    {
+        if (null !== $this->_sqlite) {
             return;
+        }
 
-        $database     = $this->_parameters->getParameter('sqlite.database.host');
+        $database = $this->_parameters->getParameter('sqlite.database.host');
 
-        if(empty($database))
+        if (empty($database)) {
             $database = $this->_parameters->getParameter('sqlite.cache.directory');
+        }
 
         $new = false;
 
-        if($database == ':memory:')
+        if (':memory:' === $database) {
             $new = true;
-
-        else {
-
+        } else {
             $new  = true;
-            \Hoa\File\Directory::create(
+            HoaFile\Directory::create(
                 $database,
-                \Hoa\File\Directory::MODE_CREATE_RECURSIVE
+                HoaFile\Directory::MODE_CREATE_RECURSIVE
             );
         }
 
-        if(false === $this->_sqlite = @sqlite_open($database, 0644, $error))
-            throw new \Hoa\Cache\Exception(
-                'Unable to connect to SQLite database : %s.', 2, $error);
+        if (false === $this->_sqlite = @sqlite_open($database, 0644, $error)) {
+            throw new Cache\Exception(
+                'Unable to connect to SQLite database : %s.',
+                2,
+                $error
+            );
+        }
 
         $new and $this->createSchema();
 
@@ -274,11 +269,10 @@ class Sqlite extends Backend {
     /**
      * Get the SQLite resource.
      *
-     * @access  protected
      * @return  resource
      */
-    protected function getSqlite ( ) {
-
+    protected function getSqlite()
+    {
         return $this->_sqlite;
     }
 
@@ -286,27 +280,34 @@ class Sqlite extends Backend {
      * Create the schema, i.e. create the hoa_cache table and the
      * hoa_cache_unique index.
      *
-     * @access  protected
      * @return  void
-     * @throw   \Hoa\Cache\Exception
+     * @throws  \Hoa\Cache\Exception
      */
-    protected function createSchema ( ) {
+    protected function createSchema()
+    {
+        $statements = [
+            'table' =>
+                'CREATE TABLE hoa_cache (' . "\n" .
+                '    id VARCHAR(32), ' . "\n" .
+                '    data LONGVARCHAR, ' . "\n" .
+                '    will_expire_at TIMESTAMP' . "\n" .
+                ')',
+            'index' =>
+                'CREATE UNIQUE INDEX hoa_cache_unique ON hoa_cache (' . "\n" .
+                '    id' . "\n" .
+               ')'
+        ];
 
-        $statements   = array(
-            'table'   => 'CREATE TABLE hoa_cache ('     . "\n" .
-                         '    id VARCHAR(32), '         . "\n" .
-                         '    data LONGVARCHAR, '       . "\n" .
-                         '    will_expire_at TIMESTAMP' . "\n" .
-                         ')',
-            'index'   => 'CREATE UNIQUE INDEX hoa_cache_unique ON hoa_cache (' . "\n" .
-                         '    id' . "\n" .
-                         ')'
-        );
-
-        foreach($statements as $name => $statement)
-            if(false === sqlite_query($statement, $this->getSqlite()))
-                throw new \Hoa\Cache\Exception(
-                    sqlite_error_string(sqlite_last_error($this->getSqlite())), 3);
+        foreach ($statements as $name => $statement) {
+            if (false === sqlite_query($statement, $this->getSqlite())) {
+                throw new Cache\Exception(
+                    sqlite_error_string(
+                        sqlite_last_error($this->getSqlite())
+                    ),
+                    3
+                );
+            }
+        }
 
         return;
     }
@@ -314,15 +315,12 @@ class Sqlite extends Backend {
     /**
      * Close the SQLite connexion.
      *
-     * @access  public
      * @return  void
      */
-    public function __destruct ( ) {
-
+    public function __destruct()
+    {
         sqlite_close($this->getSqlite());
 
         return;
     }
-}
-
 }

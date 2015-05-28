@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,23 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Cache\Backend;
 
-from('Hoa')
-
-/**
- * \Hoa\Cache\Exception
- */
--> import('Cache.Exception')
-
-/**
- * \Hoa\Cache\Backend
- */
--> import('Cache.Backend.~');
-
-}
-
-namespace Hoa\Cache\Backend {
+use Hoa\Cache;
 
 /**
  * Class \Hoa\Cache\Backend\Memcache.
@@ -59,17 +45,15 @@ namespace Hoa\Cache\Backend {
  * Memcache is PECL extension, so it's not installed in PHP. Take care
  * that Memcache module is loaded.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Memcache extends Backend {
-
+class Memcache extends Backend
+{
     /**
      * Memcache object.
      *
-     * @var Memcache object
+     * @var Memcache
      */
     protected $_memcache = null;
 
@@ -78,16 +62,18 @@ class Memcache extends Backend {
     /**
      * Check if Memcache is loaded and prepare variables.
      *
-     * @access  public
      * @param   array  $parameters    Parameters.
      * @return  void
-     * @throw   \Hoa\Cache\Exception
+     * @throws  \Hoa\Cache\Exception
      */
-    public function __construct ( Array $parameters = array() ) {
-
-        if(!extension_loaded('memcache'))
-            throw new \Hoa\Cache\Exception(
-                'Memcache module extension is not loaded on server.', 0);
+    public function __construct(Array $parameters = [])
+    {
+        if (!extension_loaded('memcache')) {
+            throw new Cache\Exception(
+                'Memcache module extension is not loaded on server.',
+                0
+            );
+        }
 
         parent::__construct($parameters);
 
@@ -97,25 +83,28 @@ class Memcache extends Backend {
     /**
      * Save cache content into a Memcache items.
      *
-     * @access  public
      * @param   mixed  $data    Data to store.
      * @return  void
      */
-    public function store ( $data ) {
-
+    public function store($data)
+    {
         $this->setMemcache();
         $this->clean();
 
-        if(true === $this->_parameters->getParameter('serialize_content'))
+        if (true === $this->_parameters->getParameter('serialize_content')) {
             $data = serialize($data);
+        }
 
-        $flag     = $this->_parameters->getParameter('memcache.compress.active')
-                        ? MEMCACHE_COMPRESSED
-                        : 0;
+        $flag =
+            $this->_parameters->getParameter('memcache.compress.active')
+                ? MEMCACHE_COMPRESSED
+                : 0;
         $lifetime = $this->_parameters->getParameter('lifetime');
 
-        if($lifetime > 2592000) // 30 days.
+        if ($lifetime > 2592000) {
+            // 30 days.
             $lifetime = 2592000;
+        }
 
         return $this->_memcache->set(
             $this->getIdMd5(),
@@ -128,18 +117,18 @@ class Memcache extends Backend {
     /**
      * Load a Memcache items.
      *
-     * @access  public
      * @return  mixed
      */
-    public function load ( ) {
-
+    public function load()
+    {
         $this->setMemcache();
         $this->clean();
 
         $content = $this->_memcache->get($this->getIdMd5());
 
-        if(true === $this->_parameters->getParameter('serialize_content'))
+        if (true === $this->_parameters->getParameter('serialize_content')) {
             $content = unserialize($content);
+        }
 
         return $content;
     }
@@ -148,24 +137,29 @@ class Memcache extends Backend {
      * Flush all existing items on Memcache server.
      * Note : only \Hoa\Cache::CLEAN_ALL is supported by Memcache.
      *
-     * @access  public
      * @param   int  $lifetime    Specific lifetime.
      * @return  void
-     * @throw   \Hoa\Cache\Exception
+     * @throws  \Hoa\Cache\Exception
      */
-    public function clean ( $lifetime = \Hoa\Cache::CLEAN_ALL ) {
-
+    public function clean($lifetime = Cache::CLEAN_ALL)
+    {
         $this->setMemcache();
 
-        if($lifetime != \Hoa\Cache::CLEAN_ALL)
-            throw new \Hoa\Cache\Exception(
+        if ($lifetime != Cache::CLEAN_ALL) {
+            throw new Cache\Exception(
                 'Only \Hoa\Cache::CLEAN_ALL constant is supported by ' .
-                'Memcache backend.', 1);
+                'Memcache backend.',
+                1
+            );
+        }
 
-        if(false === @$this->_memcache->flush())
-            throw new \Hoa\Cache\Exception(
+        if (false === @$this->_memcache->flush()) {
+            throw new Cache\Exception(
                 'Flush all existing items on Memcache server %s failed.',
-                2, $this->_parameters->getParameter('memcache.database.host'));
+                2,
+                $this->_parameters->getParameter('memcache.database.host')
+            );
+        }
 
         return;
     }
@@ -173,11 +167,10 @@ class Memcache extends Backend {
     /**
      * Remove a memcache items.
      *
-     * @access  public
      * @return  void
      */
-    public function remove ( ) {
-
+    public function remove()
+    {
         $this->setMemcache();
         $this->_memcache->delete($this->getIdMd5());
 
@@ -187,13 +180,13 @@ class Memcache extends Backend {
     /**
      * Set Memcache object.
      *
-     * @access  protected
      * @return  bool
      */
-    protected function setMemcache ( ) {
-
-        if(is_object($this->_memcache))
+    protected function setMemcache()
+    {
+        if (is_object($this->_memcache)) {
             return true;
+        }
 
         $this->_memcache = new \Memcache();
         $this->_memcache->addServer(
@@ -208,19 +201,15 @@ class Memcache extends Backend {
     /**
      * Close connection to Memcache.
      *
-     * @access  public
      * @return  void
      */
-    public function __destruct ( ) {
-
-        if($this->_memcache !== null) {
-
+    public function __destruct()
+    {
+        if ($this->_memcache !== null) {
             $this->_memcache->close();
             unset($this->_memcache);
         }
 
         return;
     }
-}
-
 }
