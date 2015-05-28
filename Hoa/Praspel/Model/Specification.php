@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,36 +34,25 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Praspel\Model;
 
 from('Hoa')
-
-/**
- * \Hoa\Praspel\Model\Behavior
- */
--> import('Praspel.Model.Behavior')
 
 /**
  * \Hoa\Realdom\Disjunction
  */
 -> import('Realdom.Disjunction', true);
 
-}
-
-namespace Hoa\Praspel\Model {
-
 /**
  * Class \Hoa\Praspel\Model\Specification.
  *
  * Represent a specification (contains all clauses).
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Specification extends Behavior {
-
+class Specification extends Behavior
+{
     /**
      * Name.
      *
@@ -74,9 +63,9 @@ class Specification extends Behavior {
     /**
      * Allowed clauses.
      *
-     * @var \Hoa\Praspel\Model\Specification array
+     * @var array
      */
-    protected static $_allowedClauses = array(
+    protected static $_allowedClauses = [
         'is',
         'invariant',
         'requires',
@@ -85,19 +74,19 @@ class Specification extends Behavior {
         'ensures',
         'throwable',
         'description'
-    );
+    ];
 
     /**
      * Implicit variables.
      *
-     * @var \Hoa\Praspel\Model\Specification array
+     * @var array
      */
-    protected $_implicitVariables     = array();
+    protected $_implicitVariables     = [];
 
     /**
      * Binded class.
      *
-     * @var \Hoa\Praspel\Model\Specification string
+     * @var string
      */
     protected $_bindedClass           = null;
 
@@ -106,39 +95,38 @@ class Specification extends Behavior {
     /**
      * Cancel the constructor from the parent.
      *
-     * @access  public
      * @return  void
      */
-    public function __construct ( ) {
-
+    public function __construct()
+    {
         return;
     }
 
     /**
      * Get an implicit variable.
      *
-     * @access  public
      * @param   string  $identifier    Identifier.
      * @return  \Hoa\Praspel\Model\Variable\Implicit
      */
-    public function getImplicitVariable ( $identifier ) {
-
-        if(isset($this->_implicitVariables[$identifier]))
+    public function getImplicitVariable($identifier)
+    {
+        if (isset($this->_implicitVariables[$identifier])) {
             return $this->_implicitVariables[$identifier];
+        }
 
-        return $this->_implicitVariables[$identifier]
-                   = new Variable\Implicit($identifier, false, $this);
+        return
+            $this->_implicitVariables[$identifier] =
+                new Variable\Implicit($identifier, false, $this);
     }
 
     /**
      * Bind this specification to a specific class.
      * Obligatory for dynamic or static resolutions.
      *
-     * @access  public
      * @return  string
      */
-    public function bindToClass ( $classname ) {
-
+    public function bindToClass($classname)
+    {
         $old                = $this->_bindedClass;
         $this->_bindedClass = ltrim($classname, '\\');
 
@@ -148,24 +136,20 @@ class Specification extends Behavior {
     /**
      * Get binded class.
      *
-     * @access  public
      * @return  string
      */
-    public function getBindedClass ( ) {
-
+    public function getBindedClass()
+    {
         return $this->_bindedClass;
     }
 
     /**
      * Get identifier (fallback).
      *
-     * @access  protected
      * @return  string
      */
-    protected function _getId ( ) {
-
+    protected function _getId()
+    {
         return 'praspel';
     }
-}
-
 }

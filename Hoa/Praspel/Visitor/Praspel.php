@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,147 +34,142 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Praspel\Visitor;
 
-from('Hoa')
-
-/**
- * \Hoa\Praspel\Exception\Compiler
- */
--> import('Praspel.Exception.Compiler')
-
-/**
- * \Hoa\Visitor\Visit
- */
--> import('Visitor.Visit');
-
-}
-
-namespace Hoa\Praspel\Visitor {
+use Hoa\Praspel as HoaPraspel;
+use Hoa\Realdom;
+use Hoa\Visitor;
 
 /**
  * Class \Hoa\Praspel\Visitor\Praspel.
  *
  * Compile the model to Praspel code.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Praspel implements \Hoa\Visitor\Visit {
-
+class Praspel implements Visitor\Visit
+{
     /**
      * Visit an element.
      *
-     * @access  public
      * @param   \Hoa\Visitor\Element  $element    Element to visit.
      * @param   mixed                 &$handle    Handle (reference).
      * @param   mixed                 $eldnah     Handle (not reference).
      * @return  mixed
      */
-    public function visit ( \Hoa\Visitor\Element $element,
-                            &$handle = null, $eldnah = null ) {
-
+    public function visit(
+        Visitor\Element $element,
+        &$handle = null,
+        $eldnah  = null
+    ) {
         $out = null;
 
         // Hoa\Praspel.
 
-        if($element instanceof \Hoa\Praspel\Model\Specification) {
+        if ($element instanceof HoaPraspel\Model\Specification) {
+            $oout = [];
 
-            $oout = array();
-
-            foreach($element::getAllowedClauses() as $clause)
-                if(true === $element->clauseExists($clause))
+            foreach ($element::getAllowedClauses() as $clause) {
+                if (true === $element->clauseExists($clause)) {
                     $oout[] = $element->getClause($clause)->accept(
                         $this,
                         $handle,
                         $eldnah
                     );
+                }
+            }
 
             $out = implode("\n", $oout);
-        }
-        elseif($element instanceof \Hoa\Praspel\Model\Is) {
-
+        } elseif ($element instanceof HoaPraspel\Model\Is) {
             $out = '@is ' . $element->getPropertyName() . ';';
-        }
-        elseif($element instanceof \Hoa\Praspel\Model\Declaration) {
-
+        } elseif ($element instanceof HoaPraspel\Model\Declaration) {
             $clause = $element->getName();
             $out    = '@' . $clause;
-            $oout   = array();
+            $oout   = [];
 
-            foreach($element->getLocalVariables() as $name => $var)
+            foreach ($element->getLocalVariables() as $name => $var) {
                 $oout[] = ' ' . $var->accept($this, $handle, $eldnah);
+            }
 
-            foreach($element->getPredicates() as $predicate)
+            foreach ($element->getPredicates() as $predicate) {
                 $oout[] = ' \pred(\'' . $predicate . '\')';
+            }
 
             $out .= implode(' and', $oout) . ';';
-        }
-        elseif($element instanceof \Hoa\Praspel\Model\Variable) {
-
+        } elseif ($element instanceof HoaPraspel\Model\Variable) {
             $name = $element->getName();
 
-            if(true === $element->isLocal())
+            if (true === $element->isLocal()) {
                 $out = 'let ';
+            }
 
             $out .= $name;
 
-            if(null === $alias = $element->getAlias())
-                $out .= ': ' .
-                        $element->getDomains()->accept($this, $handle, $eldnah);
-            else
+            if (null === $alias = $element->getAlias()) {
+                $out .=
+                    ': ' .
+                    $element->getDomains()->accept($this, $handle, $eldnah);
+            } else {
                 $out .= ' domainof ' . $alias;
+            }
 
             $constraints = $element->getConstraints();
 
-            if(isset($constraints['is']))
-                $out .= ' and ' . $name . ' is ' .
-                        implode(', ', $constraints['is']);
+            if (isset($constraints['is'])) {
+                $out .=
+                    ' and ' . $name . ' is ' .
+                    implode(', ', $constraints['is']);
+            }
 
-            if(isset($constraints['contains']))
-                foreach($constraints['contains'] as $contains)
-                    $out .= ' and ' . $name . ' contains ' .
-                            $contains->accept($this, $handle, $eldnah);
+            if (isset($constraints['contains'])) {
+                foreach ($constraints['contains'] as $contains) {
+                    $out .=
+                        ' and ' . $name . ' contains ' .
+                        $contains->accept($this, $handle, $eldnah);
+                }
+            }
 
-            if(isset($constraints['key']))
-                foreach($constraints['key'] as $pairs)
-                    $out .= ' and ' . $name . '[' .
-                            $pairs[0]->accept($this, $handle, $eldnah) .
-                            ']: ' . $pairs[1]->accept($this, $handle, $eldnah);
-        }
-        elseif($element instanceof \Hoa\Praspel\Model\Throwable) {
+            if (isset($constraints['key'])) {
+                foreach ($constraints['key'] as $pairs) {
+                    $out .=
+                        ' and ' . $name . '[' .
+                        $pairs[0]->accept($this, $handle, $eldnah) .
+                        ']: ' . $pairs[1]->accept($this, $handle, $eldnah);
+                }
+            }
+        } elseif ($element instanceof HoaPraspel\Model\Throwable) {
+            $oout = [];
 
-            $oout = array();
-
-            foreach($element as $identifier) {
-
+            foreach ($element as $identifier) {
                 $exception = $element[$identifier];
 
-                if(true === $exception->isDisjointed())
+                if (true === $exception->isDisjointed()) {
                     continue;
-
-                $line = ' ' . $exception->getInstanceName() . ' ' .
-                        $identifier;
-
-                foreach((array) $exception->getDisjunction() as $_identifier) {
-
-                    $_exception = $element[$_identifier];
-                    $line      .= ' or ' . $_exception->getInstanceName() . ' ' .
-                                  $_identifier;
                 }
 
-                if(null !== $with = $exception->getWith()) {
+                $line =
+                    ' ' . $exception->getInstanceName() . ' ' .
+                    $identifier;
 
+                foreach ((array) $exception->getDisjunction() as $_identifier) {
+                    $_exception = $element[$_identifier];
+                    $line      .=
+                        ' or ' . $_exception->getInstanceName() . ' ' .
+                        $_identifier;
+                }
+
+                if (null !== $with = $exception->getWith()) {
                     $line .= ' with ';
-                    $liine = array();
+                    $liine = [];
 
-                    foreach($with as $var)
+                    foreach ($with as $var) {
                         $liine[] = $var->accept($this, $handle, $eldnah);
+                    }
 
-                    foreach($with->getPredicates() as $predicate)
+                    foreach ($with->getPredicates() as $predicate) {
                         $liine[] = '\pred(\'' . $predicate . '\')';
+                    }
 
                     $line .= implode(' and ', $liine);
                 }
@@ -183,14 +178,12 @@ class Praspel implements \Hoa\Visitor\Visit {
             }
 
             $out = '@throwable' . implode(' or', $oout) . ';';
-        }
-        elseif($element instanceof \Hoa\Praspel\Model\DefaultBehavior) {
-
+        } elseif ($element instanceof HoaPraspel\Model\DefaultBehavior) {
             $out  = '@default {' . "\n";
-            $oout = array();
+            $oout = [];
 
-            foreach($element::getAllowedClauses() as $clause)
-                if(true === $element->clauseExists($clause))
+            foreach ($element::getAllowedClauses() as $clause) {
+                if (true === $element->clauseExists($clause)) {
                     $oout[] = '    ' . str_replace(
                         "\n",
                         "\n" . '    ',
@@ -200,16 +193,16 @@ class Praspel implements \Hoa\Visitor\Visit {
                             $eldnah
                         )
                     );
+                }
+            }
 
             $out .= implode("\n", $oout) . "\n" . '}';
-        }
-        elseif($element instanceof \Hoa\Praspel\Model\Behavior) {
-
+        } elseif ($element instanceof HoaPraspel\Model\Behavior) {
             $out  = '@behavior ' . $element->getIdentifier() . ' {' . "\n";
-            $oout = array();
+            $oout = [];
 
-            foreach($element::getAllowedClauses() as $clause)
-                if(true === $element->clauseExists($clause))
+            foreach ($element::getAllowedClauses() as $clause) {
+                if (true === $element->clauseExists($clause)) {
                     $oout[] = '    ' . str_replace(
                         "\n",
                         "\n" . '    ',
@@ -219,71 +212,66 @@ class Praspel implements \Hoa\Visitor\Visit {
                             $eldnah
                         )
                     );
+                }
+            }
 
             $out .= implode("\n", $oout) . "\n" . '}';
+        } elseif ($element instanceof HoaPraspel\Model\Description) {
+            $oout = [];
 
-        }
-        elseif($element instanceof \Hoa\Praspel\Model\Description) {
-
-            $oout = array();
-
-            foreach($element as $example)
-                $oout[] = '@description \'' .
-                          preg_replace('#(?<!\\\)\'#', '\\\'', $example) .
-                          '\';';
+            foreach ($element as $example) {
+                $oout[] =
+                    '@description \'' .
+                    preg_replace('#(?<!\\\)\'#', '\\\'', $example) .
+                    '\';';
+            }
 
             $out = implode("\n", $oout);
-        }
-        elseif($element instanceof \Hoa\Praspel\Model\Collection)
-            foreach($element as $el)
+        } elseif ($element instanceof HoaPraspel\Model\Collection) {
+            foreach ($element as $el) {
                 $out .= $el->accept($this, $handle, $eldnah);
+            }
+        }
 
         // Hoa\Realdom.
 
-        elseif($element instanceof \Hoa\Realdom\Disjunction) {
-
+        elseif ($element instanceof Realdom\Disjunction) {
             $realdoms = $element->getUnflattenedRealdoms();
 
-            if(!empty($realdoms)) {
+            if (!empty($realdoms)) {
+                $oout = [];
 
-                $oout = array();
-
-                foreach($realdoms as $realdom)
+                foreach ($realdoms as $realdom) {
                     $oout[] = $realdom->accept($this, $handle, $eldnah);
+                }
 
                 $out .= implode(' or ', $oout);
             }
-        }
-        elseif($element instanceof \Hoa\Realdom) {
-
-            if($element instanceof \Hoa\Realdom\IRealdom\Constant)
+        } elseif ($element instanceof Realdom) {
+            if ($element instanceof Realdom\IRealdom\Constant) {
                 $out .= $element->getConstantRepresentation();
-            else {
+            } else {
+                $oout = [];
 
-                $oout = array();
-
-                foreach($element->getArguments() as $argument)
+                foreach ($element->getArguments() as $argument) {
                     $oout[] = $argument->accept($this, $handle, $eldnah);
+                }
 
                 $out .= $element->getName() . '(' . implode(', ', $oout) . ')';
             }
-        }
-        elseif($element instanceof \Hoa\Realdom\Crate\Constant) {
-
+        } elseif ($element instanceof Realdom\Crate\Constant) {
             $praspel  = $element->getPraspelRepresentation();
             $out     .= $praspel();
-        }
-        elseif($element instanceof \Hoa\Realdom\Crate\Variable) {
-
+        } elseif ($element instanceof Realdom\Crate\Variable) {
             $out .= $element->getVariable()->getName();
+        } else {
+            throw new HoaPraspel\Exception\Compiler(
+                '%s is not yet implemented.',
+                0,
+                get_class($element)
+            );
         }
-
-        else
-            throw new \Hoa\Praspel\Exception\Compiler(
-                '%s is not yet implemented.', 0, get_class($element));
 
         return $out;
     }
-}
-
 }

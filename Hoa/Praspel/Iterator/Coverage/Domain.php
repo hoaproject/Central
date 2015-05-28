@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,63 +34,52 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Praspel\Iterator\Coverage;
 
-from('Hoa')
-
-/**
- * \Hoa\Iterator
- */
--> import('Iterator.~');
-
-}
-
-namespace Hoa\Praspel\Iterator\Coverage {
+use Hoa\Iterator;
 
 /**
  * Class \Hoa\Praspel\Iterator\Coverage\Domain.
  *
  * Domain coverage.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Domain implements \Hoa\Iterator {
-
+class Domain implements Iterator
+{
     /**
      * Variables to cover.
      *
-     * @var \Hoa\Praspel\Iterator\Coverage\Domain array
+     * @var array
      */
-    protected $_variables = array();
+    protected $_variables = [];
 
     /**
      * Number of variables.
      *
-     * @var \Hoa\Praspel\Iterator\Coverage\Domain int
+     * @var int
      */
     protected $_max       = 0;
 
     /**
      * Key.
      *
-     * @var \Hoa\Praspel\Iterator\Coverage\Domain int
+     * @var int
      */
     protected $_key       = 0;
 
     /**
      * Current (contains all current domains).
      *
-     * @var \Hoa\Praspel\Iterator\Coverage\Domain array
+     * @var array
      */
     protected $_current   = null;
 
     /**
      * Whether the iterator has reached the end or not.
      *
-     * @var \Hoa\Praspel\Iterator\Coverage\Domain bool
+     * @var bool
      */
     protected $_break     = true;
 
@@ -99,14 +88,14 @@ class Domain implements \Hoa\Iterator {
     /**
      * Constructor.
      *
-     * @access  public
      * @param   mixed  $variables    Variables.
      * @return  void
      */
-    public function __construct ( $variables ) {
-
-        foreach($variables as $variable)
+    public function __construct($variables)
+    {
+        foreach ($variables as $variable) {
             $this->_variables[] = $variable->getDomains()->getIterator();
+        }
 
         $this->_max   = count($this->_variables) - 1;
         $this->_break = empty($this->_variables);
@@ -117,27 +106,24 @@ class Domain implements \Hoa\Iterator {
     /**
      * Get the current value.
      *
-     * @access  public
      * @return  array
      */
-    public function current ( ) {
-
+    public function current()
+    {
         return $this->_current;
     }
 
     /**
      * Prepare the current value.
      *
-     * @access  protected
      * @return  void
      */
-    protected function _current ( ) {
+    protected function _current()
+    {
+        $this->_current = [];
 
-        $this->_current = array();
-
-        foreach($this->_variables as $variable) {
-
-            $current = $variable->current();
+        foreach ($this->_variables as $variable) {
+            $current                                          = $variable->current();
             $this->_current[$current->getHolder()->getName()] = $current;
         }
 
@@ -147,34 +133,32 @@ class Domain implements \Hoa\Iterator {
     /**
      * Get the current key.
      *
-     * @access  public
      * @return  int
      */
-    public function key ( ) {
-
+    public function key()
+    {
         return $this->_key;
     }
 
     /**
      * Advance the internal collection pointer, and return the current value.
      *
-     * @access  public
      * @return  array
      */
-    public function next ( ) {
-
-        for($i = 0; $i <= $this->_max; ++$i) {
-
+    public function next()
+    {
+        for ($i = 0; $i <= $this->_max; ++$i) {
             $this->_variables[$i]->next();
 
-            if(false !== $this->_variables[$i]->valid())
+            if (false !== $this->_variables[$i]->valid()) {
                 break;
+            }
 
             $this->_variables[$i]->rewind();
 
-            if($i === $this->_max) {
-
+            if ($i === $this->_max) {
                 $this->_break = true;
+
                 break;
             }
         }
@@ -188,16 +172,16 @@ class Domain implements \Hoa\Iterator {
     /**
      * Rewind the internal collection pointer, and return the first collection.
      *
-     * @access  public
      * @return  array
      */
-    public function rewind ( ) {
-
+    public function rewind()
+    {
         $this->_break = empty($this->_variables);
         $this->_key   = 0;
 
-        foreach($this->_variables as $variable)
+        foreach ($this->_variables as $variable) {
             $variable->rewind();
+        }
 
         $this->_current();
 
@@ -208,13 +192,10 @@ class Domain implements \Hoa\Iterator {
      * Check if there is a current element after calls to the rewind() or the
      * next() methods.
      *
-     * @access  public
      * @return  bool
      */
-    public function valid ( ) {
-
+    public function valid()
+    {
         return false === $this->_break;
     }
-}
-
 }

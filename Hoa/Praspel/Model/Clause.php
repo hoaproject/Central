@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,31 +34,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Praspel\Model;
 
-from('Hoa')
-
-/**
- * \Hoa\Visitor\Element
- */
--> import('Visitor.Element');
-
-}
-
-namespace Hoa\Praspel\Model {
+use Hoa\Visitor;
 
 /**
  * Class \Hoa\Praspel\Model\Clause.
  *
  * Represent a clause.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-abstract class Clause implements \Hoa\Visitor\Element {
-
+abstract class Clause implements Visitor\Element
+{
     /**
      * Name.
      *
@@ -69,7 +58,7 @@ abstract class Clause implements \Hoa\Visitor\Element {
     /**
      * Parent clause.
      *
-     * @var \Hoa\Praspel\Model\Clause object
+     * @var \Hoa\Praspel\Model\Clause
      */
     protected $_parent = null;
 
@@ -78,12 +67,11 @@ abstract class Clause implements \Hoa\Visitor\Element {
     /**
      * Build a clause.
      *
-     * @access  public
      * @param   \Hoa\Praspel\Model\Clause  $parent    Parent.
      * @return  void
      */
-    public function __construct ( Clause $parent ) {
-
+    public function __construct(Clause $parent)
+    {
         $this->setParent($parent);
 
         return;
@@ -92,12 +80,11 @@ abstract class Clause implements \Hoa\Visitor\Element {
     /**
      * Set parent clause.
      *
-     * @access  protected
      * @param   \Hoa\Praspel\Model\Clause  $parent    Parent.
      * @return  \Hoa\Praspel\Model\Clause
      */
-    protected function setParent ( Clause $parent ) {
-
+    protected function setParent(Clause $parent)
+    {
         $old           = $this->_parent;
         $this->_parent = $parent;
 
@@ -107,26 +94,25 @@ abstract class Clause implements \Hoa\Visitor\Element {
     /**
      * Get parent clause.
      *
-     * @access  public
      * @return  \Hoa\Praspel\Model\Clause
      */
-    public function getParent ( ) {
-
+    public function getParent()
+    {
         return $this->_parent;
     }
 
     /**
      * Get the root clause.
      *
-     * @access  public
      * @return  \Hoa\Praspel\Model\Clause
      */
-    public function getRoot ( ) {
-
+    public function getRoot()
+    {
         $parent = $this;
 
-        while(null !== $nextParent = $parent->getParent())
+        while (null !== $nextParent = $parent->getParent()) {
             $parent = $nextParent;
+        }
 
         return $parent;
     }
@@ -134,28 +120,27 @@ abstract class Clause implements \Hoa\Visitor\Element {
     /**
      * Get clause name.
      *
-     * @access  public
      * @return  string
      */
-    public function getName ( ) {
-
+    public function getName()
+    {
         return static::NAME;
     }
 
     /**
      * Get identifier.
      *
-     * @access  public
      * @return  string
      */
-    public function getId ( ) {
-
+    public function getId()
+    {
         $out    = null;
         $parent = $this->getParent();
 
-        if(   null !== $parent
-           && !($parent instanceof Specification))
+        if (null !== $parent &&
+            !($parent instanceof Specification)) {
             $out .= $this->getParent()->getId() . '_';
+        }
 
         return $out . $this->_getId();
     }
@@ -163,28 +148,26 @@ abstract class Clause implements \Hoa\Visitor\Element {
     /**
      * Get identifier (fallback).
      *
-     * @access  protected
      * @return  string
      */
-    protected function _getId ( ) {
-
+    protected function _getId()
+    {
         return $this->getName();
     }
 
     /**
      * Accept a visitor.
      *
-     * @access  public
      * @param   \Hoa\Visitor\Visit  $visitor    Visitor.
      * @param   mixed               &$handle    Handle (reference).
      * @param   mixed               $eldnah     Handle (no reference).
      * @return  mixed
      */
-    public function accept ( \Hoa\Visitor\Visit $visitor,
-                             &$handle = null, $eldnah = null ) {
-
+    public function accept(
+        Visitor\Visit $visitor,
+        &$handle = null,
+        $eldnah  = null
+    ) {
         return $visitor->visit($this, $handle, $eldnah);
     }
-}
-
 }

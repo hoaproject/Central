@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,70 +34,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Praspel\AssertionChecker;
 
-from('Hoa')
-
-/**
- * \Hoa\Praspel\Exception\AssertionChecker
- */
--> import('Praspel.Exception.AssertionChecker')
-
-/**
- * \Hoa\Praspel\Exception\Group
- */
--> import('Praspel.Exception.Group')
-
-/**
- * \Hoa\Praspel\Exception\Failure\Precondition
- */
--> import('Praspel.Exception.Failure.Precondition')
-
-/**
- * \Hoa\Praspel\Exception\Failure\Postcondition
- */
--> import('Praspel.Exception.Failure.Postcondition')
-
-/**
- * \Hoa\Praspel\Exception\Failure\Exceptional
- */
--> import('Praspel.Exception.Failure.Exceptional')
-
-/**
- * \Hoa\Praspel\Exception\Failure\Invariant
- */
--> import('Praspel.Exception.Failure.Invariant')
-
-/**
- * \Hoa\Praspel\Exception\Failure\InternalPrecondition
- */
--> import('Praspel.Exception.Failure.InternalPrecondition')
-
-/**
- * \Hoa\Praspel\AssertionChecker
- */
--> import('Praspel.AssertionChecker.~');
-
-}
-
-namespace Hoa\Praspel\AssertionChecker {
+use Hoa\Praspel;
 
 /**
  * Class \Hoa\Praspel\AssertionChecker\Runtime.
  *
  * Assertion checker: runtime (so-called RAC).
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Runtime extends AssertionChecker {
-
+class Runtime extends AssertionChecker
+{
     /**
      * Visitor Praspel.
      *
-     * @var \Hoa\Praspel\Visitor\Praspel object
+     * @var \Hoa\Praspel\Visitor\Praspel
      */
     protected $_visitorPraspel   = null;
 
@@ -106,36 +60,35 @@ class Runtime extends AssertionChecker {
     /**
      * Runtime assertion checker.
      *
-     * @access  public
      * @param   \Hoa\Praspel\Trace  $trace    Trace.
      * @return  bool
-     * @throw   \Hoa\Praspel\Exception\AssertionChecker
-     * @throw   \Hoa\Praspel\Exception\Group
+     * @throws  \Hoa\Praspel\Exception\AssertionChecker
+     * @throws  \Hoa\Praspel\Exception\Group
      */
-    public function evaluate ( &$trace = false ) {
-
+    public function evaluate(&$trace = false)
+    {
         // Start.
-        $registry      = \Hoa\Praspel::getRegistry();
+        $registry      = Praspel::getRegistry();
         $verdict       = true;
         $callable      = $this->getCallable();
         $reflection    = $callable->getReflection();
         $specification = $this->getSpecification();
-        $exceptions    = new \Hoa\Praspel\Exception\Group(
+        $exceptions    = new Praspel\Exception\Group(
             'The Runtime Assertion Checker has detected failures for %s.',
-            0, $callable
+            0,
+            $callable
         );
         $classname     = null;
         $isConstructor = false;
 
-        if($reflection instanceof \ReflectionMethod) {
-
+        if ($reflection instanceof \ReflectionMethod) {
             $reflection->setAccessible(true);
 
-            if('__construct' === $reflection->getName())
+            if ('__construct' === $reflection->getName()) {
                 $isConstructor = true;
+            }
 
-            if(false === $reflection->isStatic()) {
-
+            if (false === $reflection->isStatic()) {
                 $_callback = $callable->getValidCallback();
                 $_object   = $_callback[0];
                 $specification->getImplicitVariable('this')->bindTo($_object);
@@ -144,20 +97,24 @@ class Runtime extends AssertionChecker {
             $classname = $reflection->getDeclaringClass()->getName();
         }
 
-        if(false !== $trace && !($trace instanceof Trace))
-            $trace = new \Hoa\Praspel\Trace();
+        if (false !== $trace && !($trace instanceof Trace)) {
+            $trace = new Praspel\Trace();
+        }
 
         // Prepare data.
-        if(null === $data = $this->getData())
-            if(true === $this->canGenerateData()) {
-
+        if (null === $data = $this->getData()) {
+            if (true === $this->canGenerateData()) {
                 $data = static::generateData($specification);
                 $this->setData($data);
-            }
-            else
-                throw new \Hoa\Praspel\Exception\AssertionChecker(
+            } else {
+                throw new Praspel\Exception\AssertionChecker(
                     'No data were given. The System Under Test %s needs data ' .
-                    'to be executed.', 1, $callable);
+                    'to be executed.',
+                    1,
+                    $callable
+                );
+            }
+        }
 
         $arguments = $this->getArgumentData(
             $reflection,
@@ -169,22 +126,23 @@ class Runtime extends AssertionChecker {
         $invariant  = $specification->getClause('invariant');
         $attributes = $this->getAttributeData($callable);
 
-        foreach($attributes as $name => $_) {
-
+        foreach ($attributes as $name => $_) {
             $entryName = $classname . '::$' . $name;
 
-            if(!isset($registry[$entryName]))
+            if (!isset($registry[$entryName])) {
                 continue;
+            }
 
             $entry = $registry[$entryName];
 
-            if(true === $entry->clauseExists('invariant'))
-                foreach($entry->getClause('invariant') as $variable)
+            if (true === $entry->clauseExists('invariant')) {
+                foreach ($entry->getClause('invariant') as $variable) {
                     $invariant->addVariable($variable->getName(), $variable);
+                }
+            }
         }
 
-        if(false === $isConstructor) {
-
+        if (false === $isConstructor) {
             $verdict &= $this->checkClause(
                 $invariant,
                 $attributes,
@@ -194,8 +152,9 @@ class Runtime extends AssertionChecker {
                 $trace
             );
 
-            if(0 < count($exceptions))
+            if (0 < count($exceptions)) {
                 throw $exceptions;
+            }
         }
 
         // Check requires and behaviors.
@@ -208,31 +167,33 @@ class Runtime extends AssertionChecker {
             $trace
         );
 
-        if(0 < count($exceptions))
+        if (0 < count($exceptions)) {
             throw $exceptions;
+        }
 
-        $rootBehavior      = $behavior instanceof \Hoa\Praspel\Model\Specification;
+        $rootBehavior      = $behavior instanceof Praspel\Model\Specification;
         $numberOfArguments = count($arguments);
 
-        if($numberOfArguments < $numberOfRequiredArguments) {
-
-            $exceptions[] = new \Hoa\Praspel\Exception\Failure\Precondition(
+        if ($numberOfArguments < $numberOfRequiredArguments) {
+            $exceptions[] = new Praspel\Exception\Failure\Precondition(
                 'Callable %s needs %d arguments; %d given.',
-                2, array($callable, $numberOfRequiredArguments, $numberOfArguments)
+                2,
+                [$callable, $numberOfRequiredArguments, $numberOfArguments]
             );
 
             throw $exceptions;
         }
 
-        $_exceptions = true === $rootBehavior
-                           ? $exceptions
-                           : new \Hoa\Praspel\Exception\Group(
-                                 'Behavior %s is broken.',
-                                 3, $behavior->getIdentifier()
-                             );
+        $_exceptions =
+            true === $rootBehavior
+                ? $exceptions
+                : new Praspel\Exception\Group(
+                    'Behavior %s is broken.',
+                    3,
+                    $behavior->getIdentifier()
+                );
 
         try {
-
             // Invoke.
             $return = $this->invoke(
                 $callable,
@@ -243,8 +204,7 @@ class Runtime extends AssertionChecker {
             $arguments['\result'] = $return;
 
             // Check normal postcondition.
-            if(true === $behavior->clauseExists('ensures')) {
-
+            if (true === $behavior->clauseExists('ensures')) {
                 $ensures  = $behavior->getClause('ensures');
                 $verdict &= $this->checkClause(
                     $ensures,
@@ -255,53 +215,57 @@ class Runtime extends AssertionChecker {
                     $trace
                 );
             }
-        }
-        catch ( \Hoa\Praspel\Exception $internalException ) {
-
-            $_exceptions[] = new \Hoa\Praspel\Exception\Failure\InternalPrecondition(
+        } catch (Praspel\Exception $internalException) {
+            $_exceptions[] = new Praspel\Exception\Failure\InternalPrecondition(
                 'The System Under Test has broken an internal contract.',
-                4, null, $internalException);
-        }
-        catch ( \Exception $exception ) {
-
+                4,
+                null,
+                $internalException
+            );
+        } catch (\Exception $exception) {
             $arguments['\result'] = $exception;
 
             // Check exceptional postcondition.
-            if(true === $behavior->clauseExists('throwable')) {
-
+            if (true === $behavior->clauseExists('throwable')) {
                 $throwable  = $behavior->getClause('throwable');
                 $verdict   &= $this->checkExceptionalClause(
                     $throwable,
                     $arguments
                 );
 
-                if(false == $verdict)
-                    $_exceptions[]  = new \Hoa\Praspel\Exception\Failure\Exceptional(
+                if (false == $verdict) {
+                    $_exceptions[]  = new Praspel\Exception\Failure\Exceptional(
                         'The exception %s has been unexpectedly thrown.',
-                        5, get_class($arguments['\result']), $exception);
-            }
-            else {
-
+                        5,
+                        get_class($arguments['\result']),
+                        $exception
+                    );
+                }
+            } else {
                 $verdict       &= false;
-                $_exceptions[]  = new \Hoa\Praspel\Exception\Failure\Exceptional(
+                $_exceptions[]  = new Praspel\Exception\Failure\Exceptional(
                     'The System Under Test cannot terminate exceptionally ' .
                     'because no exceptional postcondition has been specified ' .
                     '(there is no @throwable clause).',
-                    6, array(), $exception);
+                    6,
+                    [],
+                    $exception
+                );
             }
         }
 
-        if(   0      <  count($_exceptions)
-           && false === $rootBehavior) {
-
+        if (0      <  count($_exceptions) &&
+            false === $rootBehavior) {
             $_behavior = $behavior;
 
-            while(   (null !== $_behavior = $_behavior->getParent())
-                  && !($_behavior instanceof \Hoa\Praspel\Model\Specification)) {
-
-                $handle = new \Hoa\Praspel\Exception\Group(
+            while (
+                (null !== $_behavior = $_behavior->getParent()) &&
+                !($_behavior instanceof Praspel\Model\Specification)
+            ) {
+                $handle = new Praspel\Exception\Group(
                     'Behavior %s is broken.',
-                    7, $_behavior->getIdentifier()
+                    7,
+                    $_behavior->getIdentifier()
                 );
                 $handle[]    = $_exceptions;
                 $_exceptions = $handle;
@@ -310,8 +274,9 @@ class Runtime extends AssertionChecker {
             $exceptions[] = $_exceptions;
         }
 
-        if(0 < count($exceptions))
+        if (0 < count($exceptions)) {
             throw $exceptions;
+        }
 
         // Check invariant.
         $attributes = $this->getAttributeData($callable);
@@ -324,8 +289,9 @@ class Runtime extends AssertionChecker {
             $trace
         );
 
-        if(0 < count($exceptions))
+        if (0 < count($exceptions)) {
             throw $exceptions;
+        }
 
         return (bool) $verdict;
     }
@@ -333,7 +299,6 @@ class Runtime extends AssertionChecker {
     /**
      * Get argument data.
      *
-     * @access  protected
      * @param   \ReflectionFunctionAbstract   $reflection                   Reflection.
      * @param   array                        &$data                         Data.
      * @param   int                           $numberOfRequiredArguments    Number of
@@ -341,29 +306,28 @@ class Runtime extends AssertionChecker {
      *                                                                      arguments.
      * @return  array
      */
-    protected function getArgumentData ( \ReflectionFunctionAbstract  $reflection,
-                                         Array                       &$data,
-                                         &$numberOfRequiredArguments ) {
-
-        $arguments                 = array();
+    protected function getArgumentData(
+        \ReflectionFunctionAbstract  $reflection,
+        Array                       &$data,
+        &$numberOfRequiredArguments
+    ) {
+        $arguments                 = [];
         $numberOfRequiredArguments = 0;
 
-        foreach($reflection->getParameters() as $parameter) {
-
+        foreach ($reflection->getParameters() as $parameter) {
             $name = $parameter->getName();
 
-            if(true === array_key_exists($name, $data)) {
-
+            if (true === array_key_exists($name, $data)) {
                 $arguments[$name] = &$data[$name];
 
-                if(false === $parameter->isOptional())
+                if (false === $parameter->isOptional()) {
                     ++$numberOfRequiredArguments;
+                }
 
                 continue;
             }
 
-            if(false === $parameter->isOptional()) {
-
+            if (false === $parameter->isOptional()) {
                 ++$numberOfRequiredArguments;
 
                 // Let the error be caught by a @requires clause.
@@ -379,27 +343,27 @@ class Runtime extends AssertionChecker {
     /**
      * Get attribute data.
      *
-     * @access  protected
      * @param   \Hoa\Core\Consistency\Xcallable  $callable    Callable.
      * @return  array
      */
-    protected function getAttributeData ( \Hoa\Core\Consistency\Xcallable $callable ) {
-
+    protected function getAttributeData(Core\Consistency\Xcallable $callable)
+    {
         $callback = $callable->getValidCallback();
 
-        if($callback instanceof \Closure)
-            return array();
+        if ($callback instanceof \Closure) {
+            return [];
+        }
 
         $object = $callback[0];
 
-        if(!is_object($object))
-            return array();
+        if (!is_object($object)) {
+            return [];
+        }
 
         $reflectionObject = new \ReflectionObject($object);
-        $attributes       = array();
+        $attributes       = [];
 
-        foreach($reflectionObject->getProperties() as $property) {
-
+        foreach ($reflectionObject->getProperties() as $property) {
             $property->setAccessible(true);
             $attributes[$property->getName()] = $property->getValue($object);
         }
@@ -418,18 +382,19 @@ class Runtime extends AssertionChecker {
      *                                                                 it is a
      *                                                                 constructor.
      * @return   mixed
-     * @throw    \Exception
+     * @throws   \Exception
      */
-    protected function invoke ( \Hoa\Core\Consistency\Xcallable &$callable,
-                                \ReflectionFunctionAbstract     &$reflection,
-                                Array                           &$arguments,
-                                $isConstructor ) {
-
-        if($reflection instanceof \ReflectionFunction)
+    protected function invoke(
+        Core\Consistency\Xcallable &$callable,
+        \ReflectionFunctionAbstract &$reflection,
+        Array &$arguments,
+        $isConstructor
+    ) {
+        if ($reflection instanceof \ReflectionFunction) {
             return $reflection->invokeArgs($arguments);
+        }
 
-        if(false === $isConstructor) {
-
+        if (false === $isConstructor) {
             $_callback = $callable->getValidCallback();
             $_object   = $_callback[0];
 
@@ -447,7 +412,6 @@ class Runtime extends AssertionChecker {
     /**
      * Check behavior clauses.
      *
-     * @access  protected
      * @param   \Hoa\Praspel\Model\Behavior    &$behavior      Behavior clause.
      * @param   array                          &$data          Data.
      * @param   \Hoa\Praspel\Exception\Group    $exceptions    Exceptions group.
@@ -455,19 +419,19 @@ class Runtime extends AssertionChecker {
      *                                                         variable.
      * @param   \Hoa\Praspel\Trace              $trace         Trace.
      * @return  bool
-     * @throw   \Hoa\Praspel\Exception
+     * @throws  \Hoa\Praspel\Exception
      */
-    protected function checkBehavior ( \Hoa\Praspel\Model\Behavior  &$behavior,
-                                       Array                        &$data,
-                                       \Hoa\Praspel\Exception\Group  $exceptions,
-                                       $assign = false,
-                                       $trace  = false ) {
-
+    protected function checkBehavior(
+        Praspel\Model\Behavior &$behavior,
+        Array &$data,
+        Praspel\Exception\Group $exceptions,
+        $assign = false,
+        $trace  = false
+    ) {
         $verdict = true;
 
         // Check precondition.
-        if(true === $behavior->clauseExists('requires')) {
-
+        if (true === $behavior->clauseExists('requires')) {
             $requires = $behavior->getClause('requires');
             $verdict  = $this->checkClause(
                 $requires,
@@ -478,29 +442,28 @@ class Runtime extends AssertionChecker {
                 $trace
             );
 
-            if(false === $verdict)
+            if (false === $verdict) {
                 return false;
+            }
         }
 
         // Check behaviors.
-        if(true === $behavior->clauseExists('behavior')) {
-
+        if (true === $behavior->clauseExists('behavior')) {
             $_verdict  = false;
             $behaviors = $behavior->getClause('behavior');
             $exceptions->beginTransaction();
 
-            foreach($behaviors as $_behavior) {
-
-                $_exceptions = new \Hoa\Praspel\Exception\Group(
+            foreach ($behaviors as $_behavior) {
+                $_exceptions = new Praspel\Exception\Group(
                     'Behavior %s is broken.',
-                    8, $_behavior->getIdentifier()
+                    8,
+                    $_behavior->getIdentifier()
                 );
 
                 $_trace = null;
 
-                if(!empty($trace)) {
-
-                    $_trace = new \Hoa\Praspel\Model\Behavior($trace);
+                if (!empty($trace)) {
+                    $_trace = new Praspel\Model\Behavior($trace);
                     $_trace->setIdentifier($_behavior->getIdentifier());
                 }
 
@@ -512,10 +475,10 @@ class Runtime extends AssertionChecker {
                     $_trace
                 );
 
-                if(true === $_verdict) {
-
-                    if(!empty($trace))
+                if (true === $_verdict) {
+                    if (!empty($trace)) {
                         $trace->addClause($_trace);
+                    }
 
                     break;
                 }
@@ -524,19 +487,15 @@ class Runtime extends AssertionChecker {
                 unset($_trace);
             }
 
-            if(false === $_verdict) {
-
-                if(true === $behavior->clauseExists('default')) {
-
+            if (false === $_verdict) {
+                if (true === $behavior->clauseExists('default')) {
                     $exceptions->rollbackTransaction();
                     $_verdict = true;
                     $behavior = $behavior->getClause('default');
-                }
-                else
+                } else {
                     $exceptions->commitTransaction();
-            }
-            else {
-
+                }
+            } else {
                 $exceptions->rollbackTransaction();
                 $behavior = $_behavior;
             }
@@ -550,7 +509,6 @@ class Runtime extends AssertionChecker {
     /**
      * Check a clause.
      *
-     * @access  protected
      * @param   \Hoa\Praspel\Model\Declaration   $clause        Clause.
      * @param   array                           &$data          Data.
      * @param   \Hoa\Praspel\Exception\Group     $exceptions    Exceptions group.
@@ -560,28 +518,30 @@ class Runtime extends AssertionChecker {
      *                                                          variable.
      * @param   \Hoa\Praspel\Trace               $trace         Trace.
      * @return  bool
-     * @throw   \Hoa\Praspel\Exception
+     * @throws  \Hoa\Praspel\Exception
      */
-    protected function checkClause ( \Hoa\Praspel\Model\Declaration  $clause,
-                                     Array                          &$data,
-                                     \Hoa\Praspel\Exception\Group    $exceptions,
-                                     $exception,
-                                     $assign = false,
-                                     $trace  = false ) {
-
+    protected function checkClause(
+        Praspel\Model\Declaration $clause,
+        Array &$data,
+        \Hoa\Praspel\Exception\Group $exceptions,
+        $exception,
+        $assign = false,
+        $trace  = false
+    ) {
         $verdict     = true;
         $traceClause = null;
 
-        if(!empty($trace))
+        if (!empty($trace)) {
             $traceClause = clone $clause;
+        }
 
-        foreach($clause as $name => $variable) {
-
-            if(false === array_key_exists($name, $data)) {
-
+        foreach ($clause as $name => $variable) {
+            if (false === array_key_exists($name, $data)) {
                 $exceptions[] = new $exception(
                     'Variable %s in @%s is required and has no value.',
-                    9, array($name, $clause->getName()));
+                    9,
+                    [$name, $clause->getName()]
+                );
 
                 continue;
             }
@@ -590,45 +550,43 @@ class Runtime extends AssertionChecker {
             $_verdict      = false;
             $traceVariable = null;
 
-            if(null !== $traceClause) {
-
+            if (null !== $traceClause) {
                 $traceVariable        = clone $variable;
                 $traceVariableDomains = $traceVariable->getDomains();
             }
 
             $i = 0;
 
-            foreach($variable->getDomains() as $realdom) {
-
-                if(false === $_verdict && true === $realdom->predicate($datum))
+            foreach ($variable->getDomains() as $realdom) {
+                if (false === $_verdict && true === $realdom->predicate($datum)) {
                     $_verdict = true;
-                elseif(null !== $traceClause)
+                } elseif (null !== $traceClause) {
                     unset($traceVariableDomains[$i--]);
+                }
 
                 ++$i;
             }
 
-            if(false === $_verdict) {
-
-                if(null !== $traceClause)
+            if (false === $_verdict) {
+                if (null !== $traceClause) {
                     unset($traceClause[$name]);
+                }
 
                 $exceptions[] = new $exception(
                     'Variable %s does not verify the constraint @%s %s.',
                     10,
-                    array(
+                    [
                         $name,
                         $clause->getName(),
                         $this->getVisitorPraspel()->visit($variable)
-                    ));
-            }
-            else {
-
-                if(true === $assign)
+                    ]
+                );
+            } else {
+                if (true === $assign) {
                     $variable->setValue($datum);
+                }
 
-                if(null !== $traceClause) {
-
+                if (null !== $traceClause) {
                     unset($traceClause[$name]);
                     $traceClause->addVariable($name, $traceVariable);
                 }
@@ -637,15 +595,13 @@ class Runtime extends AssertionChecker {
             $verdict &= $_verdict;
         }
 
-        $predicateEvaluator = function ( $__hoa_arguments, $__hoa_code ) {
-
+        $predicateEvaluator = function ($__hoa_arguments, $__hoa_code) {
             extract($__hoa_arguments);
 
             return true == eval('return ' . $__hoa_code . ';');
         };
 
-        foreach($clause->getPredicates() as $predicate) {
-
+        foreach ($clause->getPredicates() as $predicate) {
             $_predicate = $predicate;
 
             preg_match_all(
@@ -654,42 +610,52 @@ class Runtime extends AssertionChecker {
                 $matches
             );
 
-            $predicateArguments = array();
+            $predicateArguments = [];
 
-            foreach($matches[1] as $variable)
-                if(true === array_key_exists($variable, $data))
+            foreach ($matches[1] as $variable) {
+                if (true === array_key_exists($variable, $data)) {
                     $predicateArguments[$variable] = $data[$variable];
+                }
+            }
 
-            if(false !== strpos($_predicate, '\result')) {
-
-                if(   !($clause instanceof \Hoa\Praspel\Model\Ensures)
-                   && !($clause instanceof \Hoa\Praspel\Model\Throwable)) {
-
+            if (false !== strpos($_predicate, '\result')) {
+                if (!($clause instanceof Praspel\Model\Ensures) &&
+                    !($clause instanceof Praspel\Model\Throwable)) {
                     $verdict      &= false;
                     $exceptions[]  = new $exception(
                         'Illegal \result in the following predicate: %s.',
-                        11, $predicate);
+                        11,
+                        $predicate
+                    );
 
                     continue;
                 }
 
                 $placeholder = '__hoa_praspel_' . uniqid();
-                $_predicate  = str_replace('\\result', '$' . $placeholder, $_predicate);
+                $_predicate  = str_replace(
+                    '\\result',
+                    '$' . $placeholder,
+                    $_predicate
+                );
                 $predicateArguments[$placeholder] = $data['\result'];
             }
 
             $_verdict = $predicateEvaluator($predicateArguments, $_predicate);
 
-            if(false === $_verdict)
+            if (false === $_verdict) {
                 $exceptions[] = new $exception(
                     'Violation of the following predicate: %s.',
-                    11, $predicate);
+                    11,
+                    $predicate
+                );
+            }
 
             $verdict &= $_verdict;
         }
 
-        if(!empty($trace))
+        if (!empty($trace)) {
             $trace->addClause($traceClause);
+        }
 
         return (bool) $verdict;
     }
@@ -697,36 +663,34 @@ class Runtime extends AssertionChecker {
     /**
      * Check an exceptional clause.
      *
-     * @access  protected
      * @param   \Hoa\Praspel\Model\Throwable   $clause    Clause.
      * @param   array                         &$data      Data.
      * @return  bool
-     * @throw   \Hoa\Praspel\Exception
+     * @throws  \Hoa\Praspel\Exception
      */
-    protected function checkExceptionalClause ( \Hoa\Praspel\Model\Throwable  $clause,
-                                                Array                        &$data ) {
-
+    protected function checkExceptionalClause(
+        Praspel\Model\Throwable $clause,
+        Array &$data
+    ) {
         $verdict = false;
 
-        foreach($clause as $identifier) {
-
+        foreach ($clause as $identifier) {
             $_exception   = $clause[$identifier];
             $instanceName = $_exception->getInstanceName();
 
-            if($data['\result'] instanceof $instanceName) {
-
+            if ($data['\result'] instanceof $instanceName) {
                 $verdict = true;
+
                 break;
             }
 
-            foreach((array) $_exception->getDisjunction() as $_identifier) {
-
+            foreach ((array) $_exception->getDisjunction() as $_identifier) {
                 $__exception   = $clause[$_identifier];
                 $_instanceName = $__exception->getInstanceName();
 
-                if($exception instanceof $_instanceName) {
-
+                if ($exception instanceof $_instanceName) {
                     $verdict = true;
+
                     break;
                 }
             }
@@ -734,6 +698,4 @@ class Runtime extends AssertionChecker {
 
         return $verdict;
     }
-}
-
 }

@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,75 +34,51 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Praspel\Model;
 
-from('Hoa')
-
-/**
- * \Hoa\Praspel\Exception\Model
- */
--> import('Praspel.Exception.Model')
-
-/**
- * \Hoa\Visitor\Element
- */
--> import('Visitor.Element')
-
-/**
- * \Hoa\Iterator\Aggregate
- */
--> import('Iterator.Aggregate')
-
-/**
- * \Hoa\Iterator\Map
- */
--> import('Iterator.Map');
-
-}
-
-namespace Hoa\Praspel\Model {
+use Hoa\Iterator;
+use Hoa\Praspel;
+use Hoa\Visitor;
 
 /**
  * Class \Hoa\Praspel\Model\Collection.
  *
  * Represent a collection of clauses.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
 class          Collection
-    implements \Hoa\Visitor\Element,
-               \Hoa\Iterator\Aggregate,
+    implements Visitor\Element,
+               Iterator\Aggregate,
                \ArrayAccess,
-               \Countable {
-
+               \Countable
+{
     /**
      * Clauses.
      *
-     * @var \Hoa\Praspel\Model\Collection array
+     * @var array
      */
-    protected $_clauses   = array();
+    protected $_clauses   = [];
 
     /**
      * Mapping from position to clauses (instead of identifier).
      *
-     * @var \Hoa\Praspel\Model\Collection array
+     * @var array
      */
-    protected $_mapping   = array();
+    protected $_mapping   = [];
 
     /**
      * Reference clause.
      *
-     * @var \Hoa\Praspel\Model\Clause object
+     * @var \Hoa\Praspel\Model\Clause
      */
     protected $_clause    = null;
 
     /**
      * Post-clone function.
      *
-     * @var \Closure closure
+     * @var closure
      */
     protected $_postClone = null;
 
@@ -111,14 +87,12 @@ class          Collection
     /**
      * Build a collection of clauses.
      *
-     * @access  public
      * @param   \Hoa\Praspel\Model\Clause  $clause       Clause.
      * @param   \Closure                   $postClone    Post-clone function.
      * @return  void
      */
-    public function __construct ( Clause   $clause,
-                                  \Closure $postClone = null ) {
-
+    public function __construct(Clause $clause, \Closure $postClone = null)
+    {
         $this->_clause    = $clause;
         $this->_postClone = $postClone;
 
@@ -128,33 +102,31 @@ class          Collection
     /**
      * Check whether an offset exists.
      *
-     * @access  public
      * @param   string  $offset    Offset.
      * @return  bool
      */
-    public function offsetExists ( $offset ) {
-
+    public function offsetExists($offset)
+    {
         return false !== array_key_exists($offset, $this->_clauses);
     }
 
     /**
      * Get a clause.
      *
-     * @access  public
      * @param   string  $offset    Offset.
      * @return  \Hoa\Praspel\Model\Clause
      */
-    public function offsetGet ( $offset ) {
-
-        if(false === $this->offsetExists($offset)) {
-
+    public function offsetGet($offset)
+    {
+        if (false === $this->offsetExists($offset)) {
             $clause                  = $this->getClause();
             $this->_clauses[$offset] = clone $clause;
             $this->_mapping[]        = &$this->_clauses[$offset];
             $postClone               = $this->getPostClone();
 
-            if(null !== $postClone)
+            if (null !== $postClone) {
                 $postClone($this->_clauses[$offset], $offset);
+            }
         }
 
         return $this->_clauses[$offset];
@@ -163,26 +135,25 @@ class          Collection
     /**
      * Alias of $this->offsetGet($offset).
      *
-     * @access  public
      * @param   string  $identifier    Identifier.
      * @return  \Hoa\Praspel\Model\Clause
      */
-    public function get ( $offset ) {
-
+    public function get($offset)
+    {
         return $this->offsetGet($offset);
     }
 
     /**
      * Get a clause from its position.
      *
-     * @access  public
      * @param   string  $position    Position.
      * @return  \Hoa\Praspel\Model\Clause
      */
-    public function getNth ( $position ) {
-
-        if(!isset($this->_mapping[$position]))
+    public function getNth($position)
+    {
+        if (!isset($this->_mapping[$position])) {
             return null;
+        }
 
         return $this->_mapping[$position];
     }
@@ -190,85 +161,78 @@ class          Collection
     /**
      * Disabled.
      *
-     * @access  public
      * @return  void
-     * @throw   \Hoa\Praspel\Exception\Model
+     * @throws  \Hoa\Praspel\Exception\Model
      */
-    public function offsetSet ( $offset, $value ) {
-
-        throw new \Hoa\Praspel\Exception\Model('Operation denied.', 0);
+    public function offsetSet($offset, $value)
+    {
+        throw new Praspel\Exception\Model('Operation denied.', 0);
     }
 
     /**
      * Disabled.
      *
-     * @access  public
      * @return  void
-     * @throw   \Hoa\Praspel\Exception\Model
+     * @throws  \Hoa\Praspel\Exception\Model
      */
-    public function offsetUnset ( $offset ) {
-
-        throw new \Hoa\Praspel\Exception\Model('Operation denied.', 0);
+    public function offsetUnset($offset)
+    {
+        throw new Praspel\Exception\Model('Operation denied.', 1);
     }
 
     /**
      * Get reference clause.
      *
-     * @access  protected
      * @return  \Hoa\Praspel\Model\Clause
      */
-    protected function getClause ( ) {
-
+    protected function getClause()
+    {
         return $this->_clause;
     }
 
     /**
      * Get post-clone function.
      *
-     * @access  protected
      * @return  \Closure
      */
-    protected function getPostClone ( ) {
-
+    protected function getPostClone()
+    {
         return $this->_postClone;
     }
 
     /**
      * Iterate over all clauses.
      *
-     * @access  public
      * @return  \Hoa\Iterator\Map
      */
-    public function getIterator ( ) {
-
-        return new \Hoa\Iterator\Map($this->_clauses);
+    public function getIterator()
+    {
+        return new Iterator\Map($this->_clauses);
     }
 
     /**
      * Count number of clauses.
      *
-     * @access  public
      * @return  int
      */
-    public function count ( ) {
-
+    public function count()
+    {
         return count($this->_clauses);
     }
 
     /**
      * Accept a visitor.
      *
-     * @access  public
      * @param   \Hoa\Visitor\Visit  $visitor    Visitor.
      * @param   mixed               &$handle    Handle (reference).
      * @param   mixed               $eldnah     Handle (no reference).
      * @return  mixed
      */
-    public function accept ( \Hoa\Visitor\Visit $visitor,
-                             &$handle = null, $eldnah = null ) {
-
+    public function accept(
+        Visitor\Visit $visitor,
+        &$handle = null,
+        $eldnah  = null
+    ) {
         return $visitor->visit($this, $handle, $eldnah);
     }
-}
-
 }

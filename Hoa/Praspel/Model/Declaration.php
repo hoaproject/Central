@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,93 +34,44 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Praspel\Model;
 
-from('Hoa')
-
-/**
- * \Hoa\Praspel\Exception\Model
- */
--> import('Praspel.Exception.Model')
-
-/**
- * \Hoa\Praspel\Model\Clause
- */
--> import('Praspel.Model.Clause')
-
-/**
- * \Hoa\Praspel\Model\Variable
- */
--> import('Praspel.Model.Variable.~')
-
-/**
- * \Hoa\Praspel\Model\Variable\Borrowing
- */
--> import('Praspel.Model.Variable.Borrowing')
-
-/**
- * \Hoa\Realdom\Crate\Variable
- */
--> import('Realdom.Crate.Variable')
-
-/**
- * \Hoa\Realdom\Crate\Constant
- */
--> import('Realdom.Crate.Constant')
-
-/**
- * \Hoa\Iterator\Aggregate
- */
--> import('Iterator.Aggregate')
-
-/**
- * \Hoa\Iterator\CallbackFilter
- */
--> import('Iterator.CallbackFilter')
-
-/**
- * \Hoa\Iterator\Map
- */
--> import('Iterator.Map');
-
-}
-
-namespace Hoa\Praspel\Model {
+use Hoa\Iterator;
+use Hoa\Praspel;
+use Hoa\Realdom;
 
 /**
  * Class \Hoa\Praspel\Model\Declaration.
  *
  * Represent a declaration.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
 abstract class Declaration
     extends    Clause
-    implements \Hoa\Iterator\Aggregate,
+    implements Iterator\Aggregate,
                \ArrayAccess,
-               \Countable {
-
+               \Countable
+{
     /**
      * Declared variables.
      *
-     * @var \Hoa\Praspel\Model\Declaration array
+     * @var array
      */
-    protected $_variables  = array();
+    protected $_variables  = [];
 
     /**
      * Predicates.
      *
-     * @var \Hoa\Praspel\Model\Declaration array
+     * @var array
      */
-    protected $_predicates = array();
+    protected $_predicates = [];
 
     /**
      * Whether declaring a local variable or not.
      *
-     * @var \Hoa\Praspel\Model\Declaration bool
+     * @var bool
      */
     protected $_let        = false;
 
@@ -129,61 +80,54 @@ abstract class Declaration
     /**
      * Check if a variable exists.
      *
-     * @access  public
      * @param   string  $offset    Variable name.
      * @return  bool
      */
-    public function offsetExists ( $offset ) {
-
+    public function offsetExists($offset)
+    {
         return isset($this->_variables[$offset]);
     }
 
     /**
      * Get or create a variable.
      *
-     * @access  public
      * @param   string  $offset    Variable name.
      * @return  \Hoa\Praspel\Model\Variable
      */
-    public function offsetGet ( $offset ) {
-
+    public function offsetGet($offset)
+    {
         return $this->getVariable($offset);
     }
 
     /**
      * Declare or get a new variable.
      *
-     * @access  public
      * @param   string  $name         Variable name.
      * @param   bool    $borrowing    Borrowing variable or not.
      * @return  mixed
      */
-    public function getVariable ( $name, $borrowing = false ) {
-
-        if(true === $borrowing) {
-
+    public function getVariable($name, $borrowing = false)
+    {
+        if (true === $borrowing) {
             $out        = new Variable\Borrowing($name, $this->_let, $this);
             $this->_let = false;
 
             return $out;
         }
 
-        if('\old(' === substr($name, 0, 5)) {
-
+        if ('\old(' === substr($name, 0, 5)) {
             $variable = $this->getVariable($name, true);
 
-            return new \Hoa\Realdom\Crate\Constant(
+            return new Realdom\Crate\Constant(
                 $variable->getBorrowedVariable(),
-                function ( ) use ( $variable ) {
-
+                function () use ($variable) {
                     return $variable->getName();
                 },
                 $this
             );
         }
 
-        if(false === $this->offsetExists($name)) {
-
+        if (false === $this->offsetExists($name)) {
             $variable   = new Variable($name, $this->_let, $this);
             $this->_let = false;
 
@@ -196,26 +140,24 @@ abstract class Declaration
     /**
      * Add a variable.
      *
-     * @access  public
      * @param   string                       $name        Name.
      * @param   \Hoa\Praspel\Model\Variable  $variable    Variable.
      * @return  \Hoa\Praspel\Model\Variable
      */
-    public function addVariable ( $name, Variable $variable ) {
-
+    public function addVariable($name, Variable $variable)
+    {
         return $this->_variables[$name] = $variable;
     }
 
     /**
      * Set a value to a variable.
      *
-     * @access  public
      * @param   string  $offset    Variable name.
      * @param   mixed   $value     Variable value.
      * @return  mixed
      */
-    public function offsetSet ( $offset, $value ) {
-
+    public function offsetSet($offset, $value)
+    {
         $variable = $this->offsetGet($offset);
         $old      = $variable->getValue();
         $variable->setValue($value);
@@ -226,12 +168,11 @@ abstract class Declaration
     /**
      * Delete a variable.
      *
-     * @access  public
      * @param   string  $offset    Variable name.
      * @return  void
      */
-    public function offsetUnset ( $offset ) {
-
+    public function offsetUnset($offset)
+    {
         unset($this->_variables[$offset]);
 
         return;
@@ -241,14 +182,14 @@ abstract class Declaration
      * Allow to write $clause->let['var'] = … to define a local variable (if
      * $name is not equal to "let", then it is a normal behavior).
      *
-     * @access  public
      * @param   string  $name     Name.
      * @return  \Hoa\Praspel\Model\Declaration
      */
-    public function __get ( $name ) {
-
-        if('let' !== $name)
+    public function __get($name)
+    {
+        if ('let' !== $name) {
             return $this->$name;
+        }
 
         $this->_let = true;
 
@@ -258,15 +199,13 @@ abstract class Declaration
     /**
      * Iterator over local variables.
      *
-     * @access  public
      * @return  \Hoa\Iterator\CallbackFilter
      */
-    public function getIterator ( ) {
-
-        return new \Hoa\Iterator\CallbackFilter(
-            new \Hoa\Iterator\Map($this->getLocalVariables()),
-            function ( Variable $variable ) {
-
+    public function getIterator()
+    {
+        return new Iterator\CallbackFilter(
+            new Iterator\Map($this->getLocalVariables()),
+            function (Variable $variable) {
                 return false === $variable->isLocal();
             }
         );
@@ -275,46 +214,44 @@ abstract class Declaration
     /**
      * Count number of variables.
      *
-     * @access  public
      * @return  int
      */
-    public function count ( ) {
-
+    public function count()
+    {
         return count($this->_variables);
     }
 
     /**
      * Get local variables.
      *
-     * @access  public
      * @return  array
      */
-    public function &getLocalVariables ( ) {
-
+    public function &getLocalVariables()
+    {
         return $this->_variables;
     }
 
     /**
      * Get in-scope variables.
      *
-     * @access  public
      * @return  array
      */
-    public function getInScopeVariables ( ) {
-
-        $out     = array();
+    public function getInScopeVariables()
+    {
+        $out     = [];
         $clause  = $this->getName();
         $current = $this;
 
-        while(null !== $current = $current->getParent()) {
-
-            if(false === $current->clauseExists($clause))
+        while (null !== $current = $current->getParent()) {
+            if (false === $current->clauseExists($clause)) {
                 continue;
+            }
 
             $localVariables = &$current->getClause($clause)->getLocalVariables();
 
-            foreach($localVariables as $name => &$variables)
+            foreach ($localVariables as $name => &$variables) {
                 $out[$name] = &$variables;
+            }
         }
 
         return $out;
@@ -323,12 +260,11 @@ abstract class Declaration
     /**
      * Add a predicate.
      *
-     * @access  public
      * @param   string  $predicate    Predicate.
      * @return  \Hoa\Praspel\Model\Declaration
      */
-    public function predicate ( $predicate ) {
-
+    public function predicate($predicate)
+    {
         $this->_predicates[] = $predicate;
 
         return $this;
@@ -337,13 +273,10 @@ abstract class Declaration
     /**
      * Get all predicates.
      *
-     * @access  public
      * @return  array
      */
-    public function getPredicates ( ) {
-
+    public function getPredicates()
+    {
         return $this->_predicates;
     }
-}
-
 }

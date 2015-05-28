@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,31 +34,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Praspel\Model\Behavior
- */
--> import('Praspel.Model.Behavior');
-
-}
-
-namespace Hoa\Praspel\Model {
+namespace Hoa\Praspel\Model;
 
 /**
  * Class \Hoa\Praspel\Model\DefaultBehavior.
  *
  * Represent a default behavior.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class DefaultBehavior extends Behavior {
-
+class DefaultBehavior extends Behavior
+{
     /**
      * Name.
      *
@@ -69,26 +56,23 @@ class DefaultBehavior extends Behavior {
     /**
      * Allowed clauses.
      *
-     * @var \Hoa\Praspel\Model\DefaultBehavior array
+     * @var array
      */
-    protected static $_allowedClauses = array(
+    protected static $_allowedClauses = [
         'invariant',
         'ensures',
         'throwable'
-    );
+    ];
 
 
 
     /**
      * Get identifier (fallback).
      *
-     * @access  protected
      * @return  string
      */
-    protected function _getId ( ) {
-
+    protected function _getId()
+    {
         return $this->getName();
     }
-}
-
 }

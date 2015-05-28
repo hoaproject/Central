@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,45 +34,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Praspel\Model;
 
-from('Hoa')
-
-/**
- * \Hoa\Praspel\Model\Clause
- */
--> import('Praspel.Model.Clause')
-
-/**
- * \Hoa\Iterator\Aggregate
- */
--> import('Iterator.Aggregate')
-
-/**
- * \Hoa\Iterator\Map
- */
--> import('Iterator.Map');
-
-}
-
-namespace Hoa\Praspel\Model {
+use Hoa\Iterator;
 
 /**
  * Class \Hoa\Praspel\Model\Description.
  *
  * Represent the @description clause.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
 class          Description
     extends    Clause
-    implements \Hoa\Iterator\Aggregate,
+    implements Iterator\Aggregate,
                \ArrayAccess,
-               \Countable {
-
+               \Countable
+{
     /**
      * Name.
      *
@@ -83,35 +62,34 @@ class          Description
     /**
      * Examples.
      *
-     * @var \Hoa\Praspel\Model\Description array
+     * @var array
      */
-    protected $_examples = array();
+    protected $_examples = [];
 
 
 
     /**
      * Check if an example exists.
      *
-     * @access  public
      * @param   int  $offset    Offset.
      * @return  bool
      */
-    public function offsetExists ( $offset ) {
-
+    public function offsetExists($offset)
+    {
         return isset($this->_examples[$offset]);
     }
 
     /**
      * Get an example.
      *
-     * @access  public
      * @param   int  $offset    Offset.
      * @return  string
      */
-    public function offsetGet ( $offset ) {
-
-        if(false === $this->offsetExists($offset))
+    public function offsetGet($offset)
+    {
+        if (false === $this->offsetExists($offset)) {
             return null;
+        }
 
         return $this->_examples[$offset];
     }
@@ -119,17 +97,17 @@ class          Description
     /**
      * Set an example.
      *
-     * @access  public
      * @param   int     $offset    Offset.
      * @param   string  $value     Example value.
      * @return  \Hoa\Praspel\Model\Description
      */
-    public function offsetSet ( $offset, $value ) {
-
-        if(null === $offset)
-            $this->_examples[]        = $value;
-        else
+    public function offsetSet($offset, $value)
+    {
+        if (null === $offset) {
+            $this->_examples[] = $value;
+        } else {
             $this->_examples[$offset] = $value;
+        }
 
         return $this;
     }
@@ -137,12 +115,11 @@ class          Description
     /**
      * Unset an example.
      *
-     * @access  public
      * @param   int  $offset    Offset.
      * @return  void
      */
-    public function offsetUnset ( $offset ) {
-
+    public function offsetUnset($offset)
+    {
         unset($this->_examples[$offset]);
 
         return;
@@ -151,24 +128,20 @@ class          Description
     /**
      * Iterator over examples.
      *
-     * @access  public
      * @return  \Hoa\Iterator\Map
      */
-    public function getIterator ( ) {
-
-        return new \Hoa\Iterator\Map($this->_examples);
+    public function getIterator()
+    {
+        return new Iterator\Map($this->_examples);
     }
 
     /**
      * Count number of examples.
      *
-     * @access  public
      * @return  int
      */
-    public function count ( ) {
-
+    public function count()
+    {
         return count($this->_examples);
     }
-}
-
 }

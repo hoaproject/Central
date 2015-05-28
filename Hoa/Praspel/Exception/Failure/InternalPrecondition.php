@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,29 +34,16 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Praspel\Exception\Failure
- */
--> import('Praspel.Exception.Failure.~');
-
-}
-
-namespace Hoa\Praspel\Exception\Failure {
+namespace Hoa\Praspel\Exception\Failure;
 
 /**
  * Class \Hoa\Praspel\Exception\Failure\InternalPrecondition.
  *
  * Extending the \Hoa\Praspel\Exception\Failure class.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class InternalPrecondition extends Failure { }
-
+class InternalPrecondition extends Failure
+{
 }

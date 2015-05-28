@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,41 +34,22 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Praspel\Iterator\Coverage;
 
-from('Hoa')
-
-/**
- * \Hoa\Praspel\Iterator\Coverage\Structural
- */
--> import('Praspel.Iterator.Coverage.Structural')
-
-/**
- * \Hoa\Iterator\Aggregate
- */
--> import('Iterator.Aggregate')
-
-/**
- * \Hoa\Iterator\Recursive\Iterator
- */
--> import('Iterator.Recursive.Iterator');
-
-}
-
-namespace Hoa\Praspel\Iterator\Coverage {
+use Hoa\Core;
+use Hoa\Iterator;
+use Hoa\Praspel;
 
 /**
  * Class \Hoa\Praspel\Iterator\Coverage.
  *
  * Coverage recursive iterator.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Coverage implements \Hoa\Iterator\Aggregate {
-
+class Coverage implements Iterator\Aggregate
+{
     /**
      * Criteria: normal (@requires and @ensures).
      *
@@ -93,7 +74,7 @@ class Coverage implements \Hoa\Iterator\Aggregate {
     /**
      * Iterator (of the specification to cover).
      *
-     * @var \Hoa\Praspel\Iterator\Coverage\Structural object
+     * @var \Hoa\Praspel\Iterator\Coverage\Structural
      */
     protected $_iterator = null;
 
@@ -102,12 +83,11 @@ class Coverage implements \Hoa\Iterator\Aggregate {
     /**
      * Constructor.
      *
-     * @access  public
      * @param   \Hoa\Praspel\Model\Specification  $specification    Specification.
      * @return  void
      */
-    public function __construct ( \Hoa\Praspel\Model\Specification $specification ) {
-
+    public function __construct(Praspel\Model\Specification $specification)
+    {
         $this->_iterator = new Structural($specification);
 
         return;
@@ -116,35 +96,27 @@ class Coverage implements \Hoa\Iterator\Aggregate {
     /**
      * Set coverage criteria.
      *
-     * @access  public
      * @param   int  $criteria    Criteria (please, see self::CRITERIA_*
      *                            constants).
      * @return  int
      */
-    public function setCriteria ( $criteria ) {
-
+    public function setCriteria($criteria)
+    {
         return $this->_iterator->setCriteria($criteria);
     }
 
     /**
      * Get iterator.
      *
-     * @access  public
      * @return  \Hoa\Iterator\Recursive\Iterator
      */
-    public function getIterator ( ) {
-
-        return new \Hoa\Iterator\Recursive\Iterator($this->_iterator);
+    public function getIterator()
+    {
+        return new Iterator\Recursive\Iterator($this->_iterator);
     }
 }
-
-}
-
-namespace {
 
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Praspel\Iterator\Coverage\Coverage');
-
-}
+Core\Consistency::flexEntity('Hoa\Praspel\Iterator\Coverage\Coverage');

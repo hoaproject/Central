@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,28 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Praspel\Preambler;
 
-from('Hoa')
-
-/**
- * \Hoa\Praspel\Exception\Preambler
- */
--> import('Praspel.Exception.Preambler')
-
-/**
- * \Hoa\Praspel\AssertionChecker
- */
--> import('Praspel.AssertionChecker.~')
-
-/**
- * \Hoa\Praspel
- */
--> import('Praspel.~');
-
-}
-
-namespace Hoa\Praspel\Preambler {
+use Hoa\Praspel;
 
 /**
  * Class \Hoa\Praspel\Preambler\EncapsulationShunter.
@@ -63,19 +44,17 @@ namespace Hoa\Praspel\Preambler {
  * Shunt encapsulation: instanciate a class and set its state by using
  * invariants and not methods calls.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class EncapsulationShunter {
-
+class EncapsulationShunter
+{
     /**
      * Assertion checker.
      * Needed to generate data for the constructor (when we need to instanciate
      * an object).
      *
-     * @var \Hoa\Praspel\AssertionChecker object
+     * @var \Hoa\Praspel\AssertionChecker
      */
     protected $_assertionChecker = null;
 
@@ -84,15 +63,15 @@ class EncapsulationShunter {
     /**
      * Constructor.
      *
-     * @access  public
      * @param   \Hoa\Praspel\AssertionChecker  $assertionChecker    Assertion
      *                                                              checker.
      * @return  void
      */
-    public function __construct ( \Hoa\Praspel\AssertionChecker $assertionChecker = null ) {
-
-        if(null !== $assertionChecker)
+    public function __construct(Praspel\AssertionChecker $assertionChecker = null)
+    {
+        if (null !== $assertionChecker) {
             $this->setAssertionChecker($assertionChecker);
+        }
 
         return;
     }
@@ -100,58 +79,56 @@ class EncapsulationShunter {
     /**
      * Invoke the encapsulation shunter.
      *
-     * @access  public
      * @param   \Hoa\Praspel\Preambler\Handler  $preambler    Preambler.
      * @return  void
-     * @throw   \Hoa\Praspel\Exception\Preambler
+     * @throws  \Hoa\Praspel\Exception\Preambler
      */
-    public function __invoke ( Handler $preambler ) {
-
+    public function __invoke(Handler $preambler)
+    {
         $callable   = $preambler->__getCallable();
         $reflection = $callable->getReflection();
-        $registry   = \Hoa\Praspel::getRegistry();
+        $registry   = Praspel::getRegistry();
 
-        if($reflection instanceof \ReflectionClass) {
-
+        if ($reflection instanceof \ReflectionClass) {
             $_object = $reflection->newInstance();
             $preambler->__setCallable(xcallable($_object, '__construct'));
-        }
-        elseif(!($reflection instanceof \ReflectionMethod))
-            throw new \Hoa\Praspel\Exception\Preambler(
-                'The callable must be a class and a (dynamic) method name.', 0);
-        else {
-
+        } elseif (!($reflection instanceof \ReflectionMethod)) {
+            throw new Praspel\Exception\Preambler(
+                'The callable must be a class and a (dynamic) method name.',
+                0
+            );
+        } else {
             $callback = $callable->getValidCallback();
 
-            if(!is_object($callback[0])) {
-
+            if (!is_object($callback[0])) {
                 $reflectionClass  = $reflection->getDeclaringClass();
                 $_reflectionClass = $reflectionClass;
 
-                while(
-                    ( null === $constructor      = $_reflectionClass->getConstructor())
-                 && (false !== $_reflectionClass = $_reflectionClass->getParentClass())
+                while (
+                    (null  === $constructor      = $_reflectionClass->getConstructor()) &&
+                    (false !== $_reflectionClass = $_reflectionClass->getParentClass())
                 );
 
-                if(null === $constructor)
+                if (null === $constructor) {
                     $_object = $reflectionClass->newInstance();
-                else {
-
+                } else {
                     $className = $_reflectionClass->getName();
                     $id        = $className . '::__construct';
 
-                    if(!isset($registry[$id]))
-                        $registry[$id] = \Hoa\Praspel::interprete(
-                            \Hoa\Praspel::extractFromComment(
+                    if (!isset($registry[$id])) {
+                        $registry[$id] = Praspel::interprete(
+                            Praspel::extractFromComment(
                                 $constructor->getDocComment()
                             ),
                             $className
                         );
+                    }
 
                     $assertionChecker = $this->getAssertionChecker();
 
-                    if(null === $assertionChecker)
+                    if (null === $assertionChecker) {
                         $assertionChecker = '\Hoa\Praspel\AssertionChecker';
+                    }
 
                     $arguments = $assertionChecker::generateData($registry[$id]);
                     $_object   = $reflectionClass->newInstanceArgs($arguments);
@@ -165,30 +142,35 @@ class EncapsulationShunter {
         $className        = $reflectionObject->getName();
         $properties       = $reflectionObject->getProperties();
 
-        foreach($properties as $property) {
-
+        foreach ($properties as $property) {
             $propertyName = $property->getName();
             $id           = $className . '::$' . $propertyName;
 
-            if(false === isset($registry[$id]))
-                $registry[$id] = \Hoa\Praspel::interprete(
-                    \Hoa\Praspel::extractFromComment(
+            if (false === isset($registry[$id])) {
+                $registry[$id] = Praspel::interprete(
+                    Praspel::extractFromComment(
                         $property->getDocComment()
                     ),
                     $className
                 );
+            }
 
             $specification = $registry[$id];
 
-            if(false === $specification->clauseExists('invariant'))
-                throw new \Hoa\Praspel\Exception\Preambler(
+            if (false === $specification->clauseExists('invariant')) {
+                throw new Praspel\Exception\Preambler(
                     'Cannot generate a value from %s because it has no ' .
                     '@invariant clause.',
-                    1, $id);
+                    1,
+                    $id
+                );
+            }
 
-            $preambler->$propertyName = $specification->getClause('invariant')
-                                                      ->getVariable($propertyName)
-                                                      ->sample();
+            $preambler->$propertyName =
+                $specification
+                    ->getClause('invariant')
+                    ->getVariable($propertyName)
+                    ->sample();
         }
 
         return;
@@ -197,13 +179,12 @@ class EncapsulationShunter {
     /**
      * Set an assertion checker.
      *
-     * @access  public
      * @param   \Hoa\Praspel\AssertionChecker  $assertionChecker    Assertion
      *                                                              checker.
      * @return  \Hoa\Praspel\AssertionChecker
      */
-    public function setAssertionChecker ( \Hoa\Praspel\AssertionChecker $assertionChecker ) {
-
+    public function setAssertionChecker(Praspel\AssertionChecker $assertionChecker)
+    {
         $old                     = $this->_assertionChecker;
         $this->_assertionChecker = $assertionChecker;
 
@@ -213,13 +194,10 @@ class EncapsulationShunter {
     /**
      * Get the assertion checker.
      *
-     * @access  public
      * @return  \Hoa\Praspel\AssertionChecker
      */
-    public function getAssertionChecker ( ) {
-
+    public function getAssertionChecker()
+    {
         return $this->_assertionChecker;
     }
-}
-
 }
