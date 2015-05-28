@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,62 +34,53 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Cache\Frontend;
 
-from('Hoa')
-
-/**
- * \Hoa\Cache\Frontend
- */
--> import('Cache.Frontend.~');
-
-}
-
-namespace Hoa\Cache\Frontend {
+use Hoa\Cache;
 
 /**
  * Class \Hoa\Cache\Frontend\AFunction.
  *
  * Function catching system for frontend cache.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class AFunction extends Frontend {
-
+class AFunction extends Frontend
+{
     /**
      * Function arguments.
      *
-     * @var \Hoa\Cache\Frontend\Funtion array
+     * @var array
      */
-    protected $_arguments = array();
+    protected $_arguments = [];
 
 
 
     /**
      * Overload member class with __call.
      *
-     * @access  public
      * @param   string  $function     Function called.
      * @param   array   $arguments    Arguments of method.
      * @return  mixed
-     * @throw   \Hoa\Cache\Exception
+     * @throws  \Hoa\Cache\Exception
      */
-    public function __call ( $function, Array $arguments ) {
-
-        if(!function_exists($function))
-            throw new \Hoa\Cache\Exception('Function %s does not exists.',
-                0, $function);
+    public function __call($function, Array $arguments)
+    {
+        if (!function_exists($function)) {
+            throw new Cache\Exception(
+                'Function %s does not exists.',
+                0,
+                $function
+            );
+        }
 
         $this->_arguments = $this->ksort($arguments);
         $idExtra          = serialize($this->_arguments);
         $this->makeId($function . '/' . $idExtra);
-        $content          = $this->_backend->load();
+        $content = $this->_backend->load();
 
-        if(false !== $content) {
-
+        if (false !== $content) {
             echo $content[0];   // output
 
             return $content[1]; // return
@@ -101,13 +92,11 @@ class AFunction extends Frontend {
         $output = ob_get_contents();
         ob_end_clean();
 
-        $this->_backend->store(array($output, $return));
+        $this->_backend->store([$output, $return]);
         $this->removeId();
 
         echo $output;
 
         return $return;
     }
-}
-
 }

@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Cache {
+namespace Hoa\Cache;
 
 /**
  * Class \Hoa\Cache\Memoize.
@@ -106,61 +106,56 @@ namespace Hoa\Cache {
  * first implementation. Try to compute fib(1024) with the two last
  * implementations, it's fast and inconceivable with the first one.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Memoize {
-
+class Memoize
+{
     /**
      * Multiton (indexed by callable's hash).
      *
-     * @var \Hoa\Cache\Memoize array
+     * @var array
      */
-    private static $_multiton = array();
+    private static $_multiton = [];
 
     /**
      * Callable.
      *
-     * @var \Hoa\Core\Consistency\Xcallable object
+     * @var \Hoa\Core\Consistency\Xcallable
      */
     protected $_callable      = null;
 
     /**
      * All callable arguments (md5 serialize).
      *
-     * @var \Hoa\Cache\Memoize array
+     * @var array
      */
-    protected $_arguments     = array();
+    protected $_arguments     = [];
 
 
 
     /**
      * Singleton.
      *
-     * @access  private
      * @return  void
      */
-    private function __construct ( ) {
-
+    private function __construct()
+    {
         return;
     }
 
     /**
      * Get a memoization (multiton).
      *
-     * @access  public
      * @param   mixed   $callable    Callable.
      * @return  \Hoa\Cache\Memoize
      */
-    public static function getInstance ( $callable ) {
-
+    public static function getInstance($callable)
+    {
         $callable = xcallable($callable);
         $hash     = $callable->getHash();
 
-        if(!isset(self::$_multiton[$hash])) {
-
+        if (!isset(self::$_multiton[$hash])) {
             self::$_multiton[$hash]            = new static();
             self::$_multiton[$hash]->_callable = $callable;
         }
@@ -171,39 +166,33 @@ class Memoize {
     /**
      * Memoization algorithm.
      *
-     * @access  public
      * @param   ...  ...    Arguments.
      * @return  mixed
      */
-    public function __invoke ( ) {
-
+    public function __invoke()
+    {
         $arguments = func_get_args();
         $id        = md5(serialize($arguments));
 
-        if(!isset($this->_arguments[$id]))
+        if (!isset($this->_arguments[$id])) {
             $this->_arguments[$id] = $this->_callable->distributeArguments(
                 $arguments
             );
+        }
 
         return $this->_arguments[$id];
     }
 }
 
-}
-
-namespace {
-
 /**
  * Alias of \Hoa\Cache\Memoize::getInstance().
  *
- * @access  public
  * @param   mixed   $callable    Callable.
  * @return  \Hoa\Cache\Memoize
  */
-if(!function_exists('memoize')) {
-function memoize ( $callable ) {
-
-    return \Hoa\Cache\Memoize::getInstance($callable);
-}}
-
+if (!function_exists('memoize')) {
+    function memoize($callable)
+    {
+        return Memoize::getInstance($callable);
+    }
 }

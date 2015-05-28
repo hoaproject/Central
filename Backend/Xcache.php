@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,23 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Cache\Backend;
 
-from('Hoa')
-
-/**
- * \Hoa\Cache\Exception
- */
--> import('Cache.Exception')
-
-/**
- * \Hoa\Cache\Backend
- */
--> import('Cache.Backend.~');
-
-}
-
-namespace Hoa\Cache\Backend {
+use Hoa\Cache;
 
 /**
  * Class \Hoa\Cache\Backend\Xcache.
@@ -58,26 +44,26 @@ namespace Hoa\Cache\Backend {
  * Xcache manager.
  * XCache is an extension, take care that XCache is loaded.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Xcache extends Backend {
-
+class Xcache extends Backend
+{
     /**
      * Check if XCache is loaded, else an exception is thrown.
      *
-     * @access  public
      * @param   array  $parameters    Parameters.
      * @return  void
-     * @throw   \Hoa\Cache\Exception
+     * @throws  \Hoa\Cache\Exception
      */
-    public function __construct ( Array $parameters = array() ) {
-
-        if(!extension_loaded('xcache'))
-            throw new \Hoa\Cache\Exception(
-                'XCache is not loaded on server.', 0);
+    public function __construct(Array $parameters = [])
+    {
+        if (!extension_loaded('xcache')) {
+            throw new Cache\Exception(
+                'XCache is not loaded on server.',
+                0
+            );
+        }
 
         parent::__construct($parameters);
 
@@ -87,17 +73,17 @@ class Xcache extends Backend {
     /**
      * Save cache content in XCache store.
      *
-     * @access  public
      * @param   string  $data    Data to store.
      * @return  void
-     * @throw   \Hoa\Cache\Exception
+     * @throws  \Hoa\Cache\Exception
      */
-    public function store ( $data ) {
-
+    public function store($data)
+    {
         $this->clean();
 
-        if(true === $this->_parameters->getParameter('serialize_content'))
+        if (true === $this->_parameters->getParameter('serialize_content')) {
             $data = serialize($data);
+        }
 
         xcache_set(
             $this->getIdMd5(),
@@ -111,17 +97,17 @@ class Xcache extends Backend {
     /**
      * Load data from XCache cache.
      *
-     * @access  public
      * @return  mixed
      */
-    public function load ( ) {
-
+    public function load()
+    {
         $this->clean();
 
         $content = xcache_get($this->getIdMd5());
 
-        if(true === $this->_parameters->getParameter('serialize_content'))
+        if (true === $this->_parameters->getParameter('serialize_content')) {
             $content = unserialize($content);
+        }
 
         return $content;
     }
@@ -131,35 +117,37 @@ class Xcache extends Backend {
      * Note : \Hoa\Cache::CLEAN_USER is not supported, it's reserved for APC
      * backend.
      *
-     * @access  public
      * @param   int  $lifetime    Lifetime of caches.
      * @return  void
-     * @throw   \Hoa\Cache\Exception
+     * @throws  \Hoa\Cache\Exception
      */
-    public function clean ( $lifetime = \Hoa\Cache::CLEAN_EXPIRED ) {
-
-        switch($lifetime) {
-
-            case \Hoa\Cache::CLEAN_ALL:
-                for($i = 0, $n = xcache_count(XC_TYPE_VAR); $i < $n; $i++)
-                    if(false !== xcache_clear_cache(XC_TYPE_VAR, $i))
-                        throw new \Hoa\Cache\Exception(
-                            'Clear all cache of XCache failed '. 
+    public function clean($lifetime = Cache::CLEAN_EXPIRED)
+    {
+        switch ($lifetime) {
+            case Cache::CLEAN_ALL:
+                for ($i = 0, $n = xcache_count(XC_TYPE_VAR); $i < $n; $i++) {
+                    if (false !== xcache_clear_cache(XC_TYPE_VAR, $i)) {
+                        throw new Cache\Exception(
+                            'Clear all cache of XCache failed ' .
                             '(maybe for the cache number %s).',
-                            1, $i);
-              break;
+                            1,
+                            $i
+                        );
+                    }
+                }
 
-            case \Hoa\Cache::CLEAN_EXPIRED:
+                break;
+
+            case Cache::CLEAN_EXPIRED:
                 // Manage by XCache.
-              break;
+                break;
 
-            case \Hoa\Cache::CLEAN_USER:
-                throw new \Hoa\Cache\Exception(
+            case Cache::CLEAN_USER:
+                throw new Cache\Exception(
                     '\Hoa\Cache::CLEAN_USER constant is not supported by ' .
-                    'XCache backend.', 2);
-
-            default:
-                return;
+                    'XCache backend.',
+                    2
+                );
         }
 
         return;
@@ -168,16 +156,13 @@ class Xcache extends Backend {
     /**
      * Remove a cache data.
      *
-     * @access  public
      * @return  void
-     * @throw   \Hoa\Cache\Exception
+     * @throws  \Hoa\Cache\Exception
      */
-    public function remove ( ) {
-
+    public function remove()
+    {
         xcache_clear_cache(XC_TYPE_VAR, $this->getId());
 
         return;
     }
-}
-
 }

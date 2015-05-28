@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,28 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Cache\Backend;
 
-from('Hoa')
-
-/**
- * \Hoa\Cache\Exception
- */
--> import('Cache.Exception')
-
-/**
- * \Hoa\Cache\Backend
- */
--> import('Cache.Backend.~')
-
-/**
- * \Hoa\File\Finder
- */
--> import('File.Finder');
-
-}
-
-namespace Hoa\Cache\Backend {
+use Hoa\Cache;
+use Hoa\File as HoaFile;
 
 /**
  * Class \Hoa\Cache\Backend\ZendPlatform.
@@ -63,15 +45,13 @@ namespace Hoa\Cache\Backend {
  * ZendPlatform backend manager (yes yes, Zend :-)).
  * Inspiration from Zend\Cache\Backend\ZendPlatform class for making this class.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  * @todo       Need to be tested. I do not have the Zend Platform, I cannot
  *             make the test myself.
  */
-
-class ZendPlatform extends Backend {
-
+class ZendPlatform extends Backend
+{
     /**
      * Internal ZendPlatform prefix.
      *
@@ -84,42 +64,54 @@ class ZendPlatform extends Backend {
     /**
      * Validate that the Zend Platform is loaded and licensed.
      *
-     * @access  public
      * @param   array  $parameters    Parameters.
      * @return  void
-     * @throw   \Hoa\Cache\Exception
+     * @throws  \Hoa\Cache\Exception
      */
-    public function __construct ( Array $parameters = array() ) {
+    public function __construct(Array $parameters = [])
+    {
+        if (!function_exists('accelerator_license_info')) {
+            throw new Cache\Exception(
+                'The Zend Platform extension must be loaded to use this backend.',
+                0
+            );
+        }
 
-        if(!function_exists('accelerator_license_info'))
-            throw new \Hoa\Cache\Exception(
-                'The Zend Platform extension must be loaded for using this backend.', 0);
-
-        if(!function_exists('accelerator_get_configuration')) {
-
+        if (!function_exists('accelerator_get_configuration')) {
             $licenseInfos = accelerator_license_info();
-            throw new \Hoa\Cache\Exception(
-                'The Zend Platform extension is not loaded correctly : %s.',
-                1, $licenseInfos['failure_reason']);
+            throw new Cache\Exception(
+                'The Zend Platform extension is not loaded correctly: %s.',
+                1,
+                $licenseInfos['failure_reason']
+            );
         }
 
         $configurations = accelerator_get_configuration();
 
-        if(@!$configurations['output_cache_licensed'])
-            throw new \Hoa\Cache\Exception(
+        if (@!$configurations['output_cache_licensed']) {
+            throw new Cache\Exception(
                 'The Zend Platform extension does not have the proper license ' .
-                'to use content caching features.', 2);
+                'to use content caching features.',
+                2
+            );
+        }
 
-        if(@!$configurations['output_cache_enabled'])
-            throw new \Hoa\Cache\Exception(
-                'The Zend Platform content caching feature must be enabled for ' .
-                'using this backend, set the ' .
-                'zend_accelerator.output_cache_enabled directive to on.', 3);
+        if (@!$configurations['output_cache_enabled']) {
+            throw new Cache\Exception(
+                'The Zend Platform content caching feature must be enabled to ' .
+                'use this backend, set the ' .
+                'zend_accelerator.output_cache_enabled directive to on.',
+                3
+            );
+        }
 
-        if(!is_writable($configuration['output_cache_dir']))
-            throw new \Hoa\Cache\Exception(
+        if (!is_writable($configuration['output_cache_dir'])) {
+            throw new Cache\Exception(
                 'The cache copies directory %s must be writable.',
-                4, $configuration['output_cache_dir']);
+                4,
+                $configuration['output_cache_dir']
+            );
+        }
 
         parent::__construct($parameters);
 
@@ -130,17 +122,16 @@ class ZendPlatform extends Backend {
      * Save cache content into the ZendPlatform storage.
      * Data is already serialized.
      *
-     * @access  public
      * @param   string  $data    Data to store.
      * @return  void
      */
-    public function store ( $data ) {
-
+    public function store($data)
+    {
         $this->clean();
 
         output_cache_put(
             $this->getIdMd5(),
-            array($data, time())
+            [$data, time()]
         );
 
         return;
@@ -149,11 +140,10 @@ class ZendPlatform extends Backend {
     /**
      * Load a cache file.
      *
-     * @access  public
      * @return  mixed
      */
-    public function load ( ) {
-
+    public function load()
+    {
         $this->clean();
 
         $content = output_cache_get(
@@ -161,8 +151,9 @@ class ZendPlatform extends Backend {
             $this->_parameters->getParameter('lifetime')
         );
 
-        if(isset($return[0]))
+        if (isset($return[0])) {
             return $return[0];
+        }
 
         return false;
     }
@@ -172,49 +163,51 @@ class ZendPlatform extends Backend {
      * Note : \Hoa\Cache::CLEAN_USER is not supported, it's reserved for APC
      * backend.
      *
-     * @access  public
      * @param   string  $lifetime    Lifetime of caches.
      * @return  void
-     * @throw   \Hoa\Cache\Exception
+     * @throws  \Hoa\Cache\Exception
      */
-    public function clean ( $lifetime = \Hoa\Cache::CLEAN_EXPIRED ) {
+    public function clean($lifetime = Cache::CLEAN_EXPIRED)
+    {
+        switch ($lifetime) {
+            case Cache::CLEAN_ALL:
+                break;
 
-        switch($lifetime) {
-
-            case \Hoa\Cache::CLEAN_ALL:
-              break;
-
-            case \Hoa\Cache::CLEAN_EXPIRED:
+            case Cache::CLEAN_EXPIRED:
                 $lifetime = $this->_parameters->getParameter('lifetime');
-              break;
 
-            case \Hoa\Cache::CLEAN_USER:
+                break;
+
+            case Cache::CLEAN_USER:
                 throw new \Hoa\Cache\Exception(
                     '\Hoa\Cache::CLEAN_USER constant is not supported by ' .
-                    'ZendPlatform cache backend.', 3);
-              break;
+                    'ZendPlatform cache backend.',
+                    3
+                );
+
+                break;
 
             default:
                 $lifetime = $lifetime;
         }
 
-        $directory = ini_get('zend_accelerator.output_cache_dir') . DS .
-                     '.php_cache_api';
+        $directory =
+            ini_get('zend_accelerator.output_cache_dir') . DS .
+           '.php_cache_api';
 
         try {
+            $finder = new HoaFile\Finder();
+            $finder
+                ->in($directory)
+                ->files()
+                ->modified('since ' . $lifetime . ' seconds');
 
-            $finder = new \Hoa\File\Finder();
-            $finder->in($directory)
-                   ->files()
-                   ->modified('since ' . $lifetime . ' seconds');
-
-            foreach($finder as $file) {
-
+            foreach ($finder as $file) {
                 $file->open()->delete();
                 $file->close();
             }
+        } catch (File\Exception\FileDoesNotExist $e) {
         }
-        catch ( \Hoa\File\Exception\FileDoesNotExist $e ) { }
 
         return;
     }
@@ -222,15 +215,12 @@ class ZendPlatform extends Backend {
     /**
      * Remove a cache file.
      *
-     * @access  public
      * @return  void
      */
-    public function remove ( ) {
-
+    public function remove()
+    {
         output_cache_remove_key($this->getIdMd5());
 
         return;
     }
-}
-
 }

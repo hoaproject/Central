@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,30 +34,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Cache;
 
-from('Hoa')
-
-/**
- * \Hoa\Cache\Exception
- */
--> import('Cache.Exception');
-
-}
-
-namespace Hoa\Cache {
+use Hoa\Core;
 
 /**
  * Class \Hoa\Cache.
  *
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-abstract class Cache implements \Hoa\Core\Parameter\Parameterizable {
-
+abstract class Cache implements Core\Parameter\Parameterizable
+{
     /**
      * Clean all entries.
      *
@@ -82,34 +71,33 @@ abstract class Cache implements \Hoa\Core\Parameter\Parameterizable {
     /**
      * Parameters.
      *
-     * @var \Hoa\Core\Parameter object
+     * @var \Hoa\Core\Parameter
      */
     private $_parameters  = null;
 
     /**
      * Current ID (key : id, value : id_md5).
      *
-     * @var \Hoa\Cache array
+     * @var array
      */
-    protected static $_id = array();
+    protected static $_id = [];
 
 
 
     /**
      * Constructor.
      *
-     * @access  public
      * @param   array   $parameters    Parameters.
      * @return  void
      */
-    public function __construct ( Array $parameters = array() ) {
-
-        $this->_parameters = new \Hoa\Core\Parameter(
+    public function __construct(Array $parameters = [])
+    {
+        $this->_parameters = new Core\Parameter(
             __CLASS__,
-            array(
+            [
                 'id' => null
-            ),
-            array(
+            ],
+            [
                 'lifetime'                     => 3600,
                 'serialize_content'            => true,
                 'make_id_with.cookie'          => true,
@@ -143,7 +131,7 @@ abstract class Cache implements \Hoa\Core\Parameter\Parameterizable {
                 'xcache'                       => '',
 
                 'zendplatform'                 => ''
-            )
+            ]
         );
 
         $this->_parameters->setParameters($parameters);
@@ -154,11 +142,10 @@ abstract class Cache implements \Hoa\Core\Parameter\Parameterizable {
     /**
      * Get parameters.
      *
-     * @access  public
      * @return  \Hoa\Core\Parameter
      */
-    public function getParameters ( ) {
-
+    public function getParameters()
+    {
         return $this->_parameters;
     }
 
@@ -168,38 +155,43 @@ abstract class Cache implements \Hoa\Core\Parameter\Parameterizable {
      * As an idenfier shoud be unique, we add environments variables values. In
      * this way, the identifier represents the current state of application.
      *
-     * @access  protected
      * @param   string    $id    Identifier.
      * @return  string
-     * @throw   \Hoa\Cache\Exception
+     * @throws  \Hoa\Cache\Exception
      */
-    protected function makeId ( $id = null ) {
-
+    protected function makeId($id = null)
+    {
         $_id = $id;
 
-        if(   true === $this->_parameters->getParameter('make_id_with.cookie')
-           && isset($_COOKIE))
+        if (true === $this->_parameters->getParameter('make_id_with.cookie') &&
+            isset($_COOKIE)) {
             $_id .= serialize($this->ksort($_COOKIE));
+        }
 
-        if(   true === $this->_parameters->getParameter('make_id_with.files')
-           && isset($_FILES))
+        if (true === $this->_parameters->getParameter('make_id_with.files') &&
+            isset($_FILES)) {
             $_id .= serialize($this->ksort($_FILES));
+        }
 
-        if(   true === $this->_parameters->getParameter('make_id_with.get')
-           && isset($_GET))
+        if (true === $this->_parameters->getParameter('make_id_with.get') &&
+            isset($_GET)) {
             $_id .= serialize($this->ksort($_GET));
+        }
 
-        if(   true === $this->_parameters->getParameter('make_id_with.post')
-           && isset($_POST))
+        if (true === $this->_parameters->getParameter('make_id_with.post') &&
+            isset($_POST)) {
             $_id .= serialize($this->ksort($_POST));
+        }
 
-        if(   true === $this->_parameters->getParameter('make_id_with.server')
-           && isset($_SERVER))
+        if (true === $this->_parameters->getParameter('make_id_with.server') &&
+            isset($_SERVER)) {
             $_id .= serialize($this->ksort($_SERVER));
+        }
 
-        if(   true === $this->_parameters->getParameter('make_id_with.session')
-           && isset($_SESSION))
+        if (true === $this->_parameters->getParameter('make_id_with.session') &&
+            isset($_SESSION)) {
             $_id .= serialize($this->ksort($_SESSION));
+        }
 
         return self::$_id[$id] = md5($id . $_id);
     }
@@ -207,12 +199,11 @@ abstract class Cache implements \Hoa\Core\Parameter\Parameterizable {
     /**
      * Set the current ID.
      *
-     * @access  protected
      * @param   string  $id    ID.
      * @return  string
      */
-    protected function setId ( $id ) {
-
+    protected function setId($id)
+    {
         $old = $this->_parameters->getKeyword('id');
         $this->_parameters->setKeyword('id', $id);
 
@@ -222,12 +213,11 @@ abstract class Cache implements \Hoa\Core\Parameter\Parameterizable {
     /**
      * Get last ID.
      *
-     * @access  protected
      * @return  string
-     * @throw   \Hoa\Cache\Exception
+     * @throws  \Hoa\Cache\Exception
      */
-    protected function getId ( ) {
-
+    protected function getId()
+    {
         end(self::$_id);
 
         return key(self::$_id);
@@ -236,12 +226,11 @@ abstract class Cache implements \Hoa\Core\Parameter\Parameterizable {
     /**
      * Get last ID in MD5 format.
      *
-     * @access  protected
      * @return  string
-     * @throw   \Hoa\Cache\Exception
+     * @throws  \Hoa\Cache\Exception
      */
-    protected function getIdMd5 ( ) {
-
+    protected function getIdMd5()
+    {
         end(self::$_id);
 
         return current(self::$_id);
@@ -251,11 +240,10 @@ abstract class Cache implements \Hoa\Core\Parameter\Parameterizable {
      * Remove a couple of ID/ID_MD5.
      * By default, the last ID is removed.
      *
-     * @access  protected
      * @return  void
      */
-    protected function removeId  () {
-
+    protected function removeId()
+    {
         unset(self::$_id[$this->getId()]);
 
         return;
@@ -264,28 +252,23 @@ abstract class Cache implements \Hoa\Core\Parameter\Parameterizable {
     /**
      * Sort array of arrays etc., according to keys, recursively.
      *
-     * @access  public
      * @param   array   $array    Array to sort.
      * @return  array
      */
-    public function ksort ( Array &$array ) {
-
+    public function ksort(Array &$array)
+    {
         ksort($array);
-        foreach($array as $key => $value)
-            if(is_array($value))
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
                 $array[$key] = $this->ksort($value);
+            }
+        }
 
         return $array;
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Cache\Cache');
-
-}
+Core\Consistency::flexEntity('Hoa\Cache\Cache');

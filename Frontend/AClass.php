@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,44 +34,33 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Cache\Frontend;
 
-from('Hoa')
-
-/**
- * \Hoa\Cache\Frontend
- */
--> import('Cache.Frontend.~');
-
-}
-
-namespace Hoa\Cache\Frontend {
+use Hoa\Cache;
 
 /**
  * Class \Hoa\Cache\Frontend\AClass.
  *
  * Class catching system for frontend cache.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class AClass extends Frontend {
-
+class AClass extends Frontend
+{
     /**
      * Object to cache.
      *
-     * @var \Hoa\Cache\Frontend\AClass mixed
+     * @var mixed
      */
     protected $_object    = null;
 
     /**
      * Method arguments.
      *
-     * @var \Hoa\Cache\Frontend\AClass array
+     * @var array
      */
-    protected $_arguments = array();
+    protected $_arguments = [];
 
 
 
@@ -79,18 +68,19 @@ class AClass extends Frontend {
      * Redirect constructor call to __call method if necessary. Else, it's like
      * the parent constructor.
      *
-     * @access  public
      * @return  mixed
      */
-    public function __construct ( ) {
-
+    public function __construct()
+    {
         $arguments = func_get_args();
 
-        if(null === $this->_object)
-            if(isset($arguments[1]))
+        if (null === $this->_object) {
+            if (isset($arguments[1])) {
                 return parent::__construct($arguments[0], $arguments[1]);
-            else
+            } else {
                 return parent::__construct($arguments[0]);
+            }
+        }
 
         return $this->__call('__construct', $arguments);
     }
@@ -100,30 +90,32 @@ class AClass extends Frontend {
      * When we call method on this object, all should be redirected to set
      * object.
      *
-     * @access  public
      * @param   string  $method       Method called.
      * @param   array   $arguments    Arguments of method.
      * @return  mixed
-     * @throw   \Hoa\Cache\Exception
+     * @throws  \Hoa\Cache\Exception
      */
-    public function __call ( $method, Array $arguments ) {
+    public function __call($method, Array $arguments)
+    {
+        $gc =
+            is_string($this->_object)
+                ? $this->_object
+                : get_class($this->_object);
 
-        $gc = is_string($this->_object)
-                  ? $this->_object
-                  : get_class($this->_object);
-
-        if(!method_exists($this->_object, $method))
-            throw new \Hoa\Cache\Exception(
+        if (!method_exists($this->_object, $method)) {
+            throw new Cache\Exception(
                 'Method %s of %s object does not exists.',
-                0, array($method, $gc));
+                0,
+                [$method, $gc]
+            );
+        }
 
         $this->_arguments = $this->ksort($arguments);
         $idExtra          = serialize($this->_arguments);
         $this->makeId($gc . '::' . $method . '/' .  $idExtra);
-        $content          = $this->_backend->load();
+        $content = $this->_backend->load();
 
-        if(false !== $content) {
-
+        if (false !== $content) {
             echo $content[0];   // output
 
             return $content[1]; // return
@@ -132,27 +124,30 @@ class AClass extends Frontend {
         ob_start();
         ob_implicit_flush(false);
 
-        if(is_string($this->_object) && $method == '__construct') {
-
+        if (is_string($this->_object) && $method == '__construct') {
             $reflection = new \ReflectionClass($this->_object);
 
-            if(!$reflection->isInstantiable())
-                throw new \Hoa\Cache\Exception(
-                    'Class %s is not instanciable.', 1, $this->_object);
+            if (!$reflection->isInstantiable()) {
+                throw new Cache\Exception(
+                    'Class %s is not instanciable.',
+                    1,
+                    $this->_object
+                );
+            }
 
             $this->_object = $reflection->newInstanceArgs($arguments);
             $return        = $this->_object;
-        }
-        else
+        } else {
             $return = call_user_func_array(
-                array($this->_object, $method),
+                [$this->_object, $method],
                 $arguments
             );
+        }
 
         $output = ob_get_contents();
         ob_end_clean();
 
-        $this->_backend->store(array($output, $return));
+        $this->_backend->store([$output, $return]);
         $this->removeId();
 
         echo $output;
@@ -163,23 +158,22 @@ class AClass extends Frontend {
     /**
      * Set object to call.
      *
-     * @access  public
      * @param   mixed  $object    Could be an instance or a string for static call.
      * @return  ojbect
-     * @throw   \Hoa\Cache\Exception
+     * @throws  \Hoa\Cache\Exception
      */
-    public function setCacheObject ( $object = null ) {
-
-        if(is_string($object) || is_object($object)) {
-
+    public function setCacheObject($object = null)
+    {
+        if (is_string($object) || is_object($object)) {
             $this->_object = $object;
 
             return $this;
         }
 
-        throw new \Hoa\Cache\Exception('%s could be a string or a object.',
-            2, $object);
+        throw new Cache\Exception(
+            '%s could be a string or a object.',
+            2,
+            $object
+        );
     }
-}
-
 }
