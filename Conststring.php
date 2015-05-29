@@ -46,7 +46,7 @@ use Hoa\Math;
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Conststring extends String implements IRealdom\Constant
+class Conststring extends RealdomString implements IRealdom\Constant
 {
     /**
      * Realistic domain name.

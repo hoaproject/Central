@@ -39,7 +39,7 @@ namespace Hoa\Realdom;
 use Hoa\Math;
 
 /**
- * Class \Hoa\Realdom\String.
+ * Class \Hoa\Realdom\Date.
  *
  * Realistic domain: date.
  *
@@ -69,8 +69,8 @@ class Date extends Realdom
      * @var array
      */
     protected $_arguments        = [
-        'String  format'    => 'c',
-        'Integer timestamp' => -1
+        'RealdomString  format'    => 'c',
+        'Integer        timestamp' => -1
     ];
 
 
