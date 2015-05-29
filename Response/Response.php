@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,38 +34,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Http\Response;
 
-from('Hoa')
-
-/**
- * \Hoa\Http\Exception
- */
--> import('Http.Exception.~')
-
-/**
- * \Hoa\Http\Exception\CrossBufferization
- */
--> import('Http.Exception.CrossBufferization')
-
-/**
- * \Hoa\Http
- */
--> import('Http.~')
-
-/**
- * \Hoa\Stream\IStream\Out
- */
--> import('Stream.I~.Out')
-
-/**
- * \Hoa\Stream\IStream\Bufferable
- */
--> import('Stream.I~.Bufferable');
-
-}
-
-namespace Hoa\Http\Response {
+use Hoa\Core;
+use Hoa\Http;
+use Hoa\Stream;
 
 /**
  * Class \Hoa\Http\Response.
@@ -74,16 +47,14 @@ namespace Hoa\Http\Response {
  *
  * @TODO Follow http://tools.ietf.org/html/draft-nottingham-http-new-status-03.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
 class          Response
-    extends    \Hoa\Http
-    implements \Hoa\Stream\IStream\Out,
-               \Hoa\Stream\IStream\Bufferable {
-
+    extends    Http
+    implements Stream\IStream\Out,
+               Stream\IStream\Bufferable
+{
     /**
      * Continue (please, see RFC7231).
      *
@@ -493,14 +464,14 @@ class          Response
     /**
      * Status (different ordering).
      *
-     * @var \Hoa\Http\Response arra
+     * @var arra
      */
-    private $_status       = array();
+    private $_status       = [];
 
     /**
      * This object hash.
      *
-     * @var \Hoa\Http\Response string
+     * @var string
      */
     private $_hash         = null;
 
@@ -508,16 +479,15 @@ class          Response
      * ob_*() is stateless, so we manage a stack to avoid cross-buffers
      * manipulations.
      *
-     * @var \Hoa\Http\Response array
+     * @var array
      */
-    private static $_stack = array();
+    private static $_stack = [];
 
 
 
     /**
      * Constructor.
      *
-     * @access  public
      * @param   bool    $newBuffer    Whether we run $this->newBuffer().
      *                                Following arguments are for this
      *                                method.
@@ -525,22 +495,21 @@ class          Response
      * @param   int     $size         Size.
      * @return  void
      */
-    public function __construct ( $newBuffer = true,
-                                  $callable  = null,
-                                  $size      = null ) {
-
+    public function __construct($newBuffer = true, $callable = null, $size = null)
+    {
         parent::__construct();
         $this->_hash = spl_object_hash($this);
 
-        if(true === $newBuffer)
+        if (true === $newBuffer) {
             $this->newBuffer($callable, $size);
+        }
 
-        if(empty($this->_status)) {
-
+        if (empty($this->_status)) {
             $reflection = new \ReflectionClass($this);
 
-            foreach($reflection->getConstants() as $value)
+            foreach ($reflection->getConstants() as $value) {
                 $this->_status[$this->getStatus($value)] = $value;
+            }
         }
 
         return;
@@ -549,33 +518,43 @@ class          Response
     /**
      * Parse a HTTP packet.
      *
-     * @access  public
      * @param   string  $packet    HTTP packet.
      * @return  void
      */
-    public function parse ( $packet ) {
-
+    public function parse($packet)
+    {
         $headers = explode("\r\n", $packet);
         $status  = array_shift($headers);
         $this->setBody(null);
 
-        foreach($headers as $i => $header)
-            if('' == trim($header)) {
-
+        foreach ($headers as $i => $header) {
+            if ('' == trim($header)) {
                 unset($headers[$i]);
-                $this->setBody(trim(
-                    implode("\r\n", array_splice($headers, $i))
-                ));
+                $this->setBody(
+                    trim(
+                        implode("\r\n", array_splice($headers, $i))
+                    )
+                );
+
                 break;
             }
+        }
 
-        if(0 === preg_match('#^HTTP/(1\.(?:0|1))\s+(\d{3})#i', $status, $matches))
+        if (0 === preg_match('#^HTTP/(1\.(?:0|1))\s+(\d{3})#i', $status, $matches)) {
             throw new \Hoa\Http\Exception(
-                'HTTP status is not well-formed: %s.', 0, $status);
+                'HTTP status is not well-formed: %s.',
+                0,
+                $status
+            );
+        }
 
-        if(!isset($this->_status[$matches[2]]))
+        if (!isset($this->_status[$matches[2]])) {
             throw new \Hoa\Http\Exception(
-                'Unknow HTTP status %d in %s.', 1, array($matches[2], $status));
+                'Unknow HTTP status %d in %s.',
+                1,
+                [$matches[2], $status]
+            );
+        }
 
         $this->setHttpVersion((float) $matches[1]);
         $this->_parse($headers);
@@ -587,32 +566,29 @@ class          Response
     /**
      * Get real status from static::STATUS_* constants.
      *
-     * @access  public
      * @return  int
      */
-    public static function getStatus ( $status ) {
-
+    public static function getStatus($status)
+    {
         return (int) substr($status, 0, 3);
     }
 
     /**
      * Send a new status.
      *
-     * @access  public
      * @param   string  $status     Status. Please, see static::STATUS_*
      *                              constants.
      * @param   bool    $replace    Whether replace an existing sent header.
      * @return  void
      */
-    public function sendStatus ( $status, $replace = true ) {
-
+    public function sendStatus($status, $replace = true)
+    {
         return $this->sendHeader('status', $status, $replace, $status);
     }
 
     /**
      * Send a new header.
      *
-     * @access  public
      * @param   string  $header     Header.
      * @param   string  $value      Value.
      * @param   bool    $replace    Whether replace an existing sent header.
@@ -620,12 +596,14 @@ class          Response
      *                              static::STATUS_* constants.
      * @return  void
      */
-    public function sendHeader ( $header, $value, $replace = true,
-                                 $status = null ) {
-
-        if(   0     === strcasecmp('status', $header)
-           && false === self::$_fcgi) {
-
+    public function sendHeader(
+        $header,
+        $value,
+        $replace = true,
+        $status  = null
+    ) {
+        if (0     === strcasecmp('status', $header) &&
+            false === self::$_fcgi) {
             header(
                 'HTTP/1.1 ' . $value,
                 $replace,
@@ -647,13 +625,13 @@ class          Response
     /**
      * Send all headers.
      *
-     * @access  public
      * @return  void
      */
-    public function sendHeaders ( ) {
-
-        foreach($this->_headers as $header => $value)
+    public function sendHeaders()
+    {
+        foreach ($this->_headers as $header => $value) {
             $this->sendHeader($header, $value);
+        }
 
         return;
     }
@@ -661,11 +639,10 @@ class          Response
     /**
      * Get send headers.
      *
-     * @access  public
      * @return  void
      */
-    public function getSentHeaders ( ) {
-
+    public function getSentHeaders()
+    {
         return implode("\r\n", headers_list());
     }
 
@@ -673,30 +650,31 @@ class          Response
      * Start a new buffer.
      * The callable acts like a filter.
      *
-     * @access  public
      * @param   mixed   $callable    Callable.
      * @param   int     $size        Size.
      * @return  int
      */
-    public function newBuffer ( $callable = null, $size = null ) {
-
+    public function newBuffer($callable = null, $size = null)
+    {
         $last = current(self::$_stack);
         $hash = $this->getHash();
 
-        if(false === $last || $hash != $last[0])
-            self::$_stack[] = array(
+        if (false === $last || $hash != $last[0]) {
+            self::$_stack[] = [
                 0 => $hash,
                 1 => 1
-            );
-        else
+            ];
+        } else {
             ++self::$_stack[key(self::$_stack)][1];
+        }
 
         end(self::$_stack);
 
-        if(null === $callable)
+        if (null === $callable) {
             ob_start();
-        else
+        } else {
             ob_start(xcallable($callable), null === $size ? 0 : $size);
+        }
 
         return $this->getBufferLevel();
     }
@@ -704,19 +682,20 @@ class          Response
     /**
      * Flush the buffer.
      *
-     * @access  public
      * @param   bool  $force    Force to flush the output buffer.
      * @return  void
      */
-    public function flush ( $force = false ) {
-
-        if(0 >= $this->getBufferSize())
+    public function flush($force = false)
+    {
+        if (0 >= $this->getBufferSize()) {
             return;
+        }
 
         ob_flush();
 
-        if(true === $force)
+        if (true === $force) {
             flush();
+        }
 
         return;
     }
@@ -724,29 +703,33 @@ class          Response
     /**
      * Delete buffer.
      *
-     * @access  public
      * @return  bool
-     * @throw   \Hoa\Http\Exception\CrossBufferization
+     * @throws  \Hoa\Http\Exception\CrossBufferization
      */
-    public function deleteBuffer ( ) {
-
+    public function deleteBuffer()
+    {
         $key = key(self::$_stack);
 
-        if($this->getHash() != self::$_stack[$key][0])
+        if ($this->getHash() != self::$_stack[$key][0]) {
             throw new \Hoa\Http\Exception\CrossBufferization(
                 'Cannot delete this buffer because it was not opened by this ' .
                 'class (%s, %s).',
-                2, array(get_class($this), $this->getHash()));
+                2,
+                [get_class($this), $this->getHash()]
+            );
+        }
 
         $out = ob_end_clean();
 
-        if(false === $out)
+        if (false === $out) {
             return false;
+        }
 
         --self::$_stack[$key][1];
 
-        if(0 >= self::$_stack[$key][1])
+        if (0 >= self::$_stack[$key][1]) {
             unset(self::$_stack[$key]);
+        }
 
         return true;
     }
@@ -754,42 +737,44 @@ class          Response
     /**
      * Get buffer level.
      *
-     * @access  public
      * @return  int
      */
-    public function getBufferLevel ( ) {
-
+    public function getBufferLevel()
+    {
         return ob_get_level();
     }
 
     /**
      * Get buffer size.
      *
-     * @access  public
      * @return  int
      */
-    public function getBufferSize ( ) {
-
+    public function getBufferSize()
+    {
         return ob_get_length();
     }
 
     /**
      * Write n characters.
      *
-     * @access  public
      * @param   string  $string    String.
      * @param   int     $length    Length.
      * @return  mixed
-     * @throw   \Hoa\Http\Exception
+     * @throws  \Hoa\Http\Exception
      */
-    public function write ( $string, $length ) {
-
-        if(0 > $length)
+    public function write($string, $length)
+    {
+        if (0 > $length) {
             throw new \Hoa\Http\Exception(
-                'Length must be greater than 0, given %d.', 3, $length);
+                'Length must be greater than 0, given %d.',
+                3,
+                $length
+            );
+        }
 
-        if(strlen($string) > $length)
+        if (strlen($string) > $length) {
             $string = substr($string, 0, $length);
+        }
 
         echo $string;
 
@@ -799,12 +784,11 @@ class          Response
     /**
      * Write a string.
      *
-     * @access  public
      * @param   string  $string    String.
      * @return  mixed
      */
-    public function writeString ( $string ) {
-
+    public function writeString($string)
+    {
         echo (string) $string;
 
         return;
@@ -813,12 +797,11 @@ class          Response
     /**
      * Write a character.
      *
-     * @access  public
      * @param   string  $character    Character.
      * @return  mixed
      */
-    public function writeCharacter ( $character ) {
-
+    public function writeCharacter($character)
+    {
         echo $character[0];
 
         return;
@@ -827,12 +810,11 @@ class          Response
     /**
      * Write a boolean.
      *
-     * @access  public
      * @param   bool    $boolean    Boolean.
      * @return  mixed
      */
-    public function writeBoolean ( $boolean ) {
-
+    public function writeBoolean($boolean)
+    {
         echo (string) (bool) $boolean;
 
         return;
@@ -841,12 +823,11 @@ class          Response
     /**
      * Write an integer.
      *
-     * @access  public
      * @param   int     $integer    Integer.
      * @return  mixed
      */
-    public function writeInteger ( $integer ) {
-
+    public function writeInteger($integer)
+    {
         echo (string) (int) $integer;
 
         return;
@@ -855,12 +836,11 @@ class          Response
     /**
      * Write a float.
      *
-     * @access  public
      * @param   float   $float    Float.
      * @return  mixed
      */
-    public function writeFloat ( $float ) {
-
+    public function writeFloat($float)
+    {
         echo (string) (float) $float;
 
         return;
@@ -869,12 +849,11 @@ class          Response
     /**
      * Write an array.
      *
-     * @access  public
      * @param   array   $array    Array.
      * @return  mixed
      */
-    public function writeArray ( Array $array ) {
-
+    public function writeArray(Array $array)
+    {
         echo var_export($array, true);
 
         return;
@@ -883,14 +862,14 @@ class          Response
     /**
      * Write a line.
      *
-     * @access  public
      * @param   string  $line    Line.
      * @return  mixed
      */
-    public function writeLine ( $line ) {
-
-        if(false !== $n = strpos($line, "\n"))
+    public function writeLine($line)
+    {
+        if (false !== $n = strpos($line, "\n")) {
             $line = substr($line, 0, $n + 1);
+        }
 
         echo $line;
 
@@ -900,12 +879,11 @@ class          Response
     /**
      * Write all, i.e. as much as possible.
      *
-     * @access  public
      * @param   string  $string    String.
      * @return  mixed
      */
-    public function writeAll ( $string ) {
-
+    public function writeAll($string)
+    {
         echo $string;
 
         return;
@@ -914,14 +892,12 @@ class          Response
     /**
      * Truncate a file to a given length.
      *
-     * @access  public
      * @param   int     $size    Size.
      * @return  bool
      */
-    public function truncate ( $size ) {
-
-        if(0 === $size) {
-
+    public function truncate($size)
+    {
+        if (0 === $size) {
             ob_clean();
 
             return true;
@@ -929,8 +905,9 @@ class          Response
 
         $bSize = $this->getBufferSize();
 
-        if($size >= $bSize)
+        if ($size >= $bSize) {
             return true;
+        }
 
         echo substr(ob_get_clean(), 0, $size);
 
@@ -940,46 +917,39 @@ class          Response
     /**
      * Get this object hash.
      *
-     * @access  public
      * @return  string
      */
-    public function getHash ( ) {
-
+    public function getHash()
+    {
         return $this->_hash;
     }
 
     /**
      * Delete head buffer.
      *
-     * @access  public
      * @return  void
      */
-    public function __destruct ( ) {
-
+    public function __destruct()
+    {
         $last = current(self::$_stack);
 
-        if($this->getHash() != $last[0])
+        if ($this->getHash() != $last[0]) {
             return;
+        }
 
-        for($i = 0, $max = $last[1]; $i < $max; ++$i) {
-
+        for ($i = 0, $max = $last[1]; $i < $max; ++$i) {
             $this->flush();
 
-            if(0 < $this->getBufferLevel())
+            if (0 < $this->getBufferLevel()) {
                 $this->deleteBuffer();
+            }
         }
 
         return;
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Http\Response\Response');
-
-}
+Core\Consistency::flexEntity('Hoa\Http\Response\Response');
