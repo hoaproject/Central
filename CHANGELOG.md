@@ -1,3 +1,7 @@
+# 1.15.05.29
+
+  * Move to PSR-1 and PSR-2. (Ivan Enderlin, 2015-05-15T09:58:49+02:00)
+
 # 1.15.02.23
 
   * Add the CHANGELOG.md file. (Ivan Enderlin, 2015-02-23T09:05:55+01:00)
