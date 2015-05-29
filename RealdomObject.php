@@ -39,14 +39,14 @@ namespace Hoa\Realdom;
 use Hoa\Math;
 
 /**
- * Class \Hoa\Realdom\Object.
+ * Class \Hoa\Realdom\RealdomObject.
  *
  * Realistic domain: object.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Object extends Realdom
+class RealdomObject extends Realdom
 {
     /**
      * Realistic domain name.
