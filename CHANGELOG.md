@@ -1,3 +1,7 @@
+# 0.15.05.29
+
+  * Move to PSR-1 and PSR-2, and drop `from`/`import`. (Ivan Enderlin, 2015-05-21T09:22:56+02:00)
+
 # 0.15.02.25
 
   * Add the `CHANGELOG.md` file. (Ivan Enderlin, 2015-02-25T09:46:27+01:00)
