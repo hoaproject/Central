@@ -37,7 +37,7 @@
 namespace Hoa\Realdom;
 
 use Hoa\Math;
-use Hoa\String;
+use Hoa\Ustring;
 
 /**
  * Class \Hoa\Realdom\RealdomString.
@@ -88,12 +88,12 @@ class          RealdomString
     {
         if ($this['codepointMin'] instanceof Conststring) {
             $char                 = mb_substr($this['codepointMin']->getConstantValue(), 0, 1);
-            $this['codepointMin'] = new Constinteger(String::toCode($char));
+            $this['codepointMin'] = new Constinteger(Ustring::toCode($char));
         }
 
         if ($this['codepointMax'] instanceof Conststring) {
             $char                 = mb_substr($this['codepointMax']->getConstantValue(), 0, 1);
-            $this['codepointMax'] = new Constinteger(String::toCode($char));
+            $this['codepointMax'] = new Constinteger(Ustring::toCode($char));
         }
 
         return;
@@ -128,7 +128,7 @@ class          RealdomString
         $max    = $this['codepointMax']->getConstantValue();
 
         foreach ($split as $letter) {
-            $handle = String::toCode($letter);
+            $handle = Ustring::toCode($letter);
             $out    = $out && ($min <= $handle) && ($handle <= $max);
         }
 
@@ -153,7 +153,7 @@ class          RealdomString
         }
 
         for ($i = 0; $i < $length; ++$i) {
-            $string .= String::fromCode($sampler->getInteger(
+            $string .= Ustring::fromCode($sampler->getInteger(
                 $min,
                 $max,
                 $this->_discredited
@@ -171,7 +171,7 @@ class          RealdomString
      */
     public function discredit($value)
     {
-        $_value = String::toCode($value);
+        $_value = Ustring::toCode($value);
 
         if (true  === in_array($_value, $this->_discredited) ||
             false === $this->predicate($value)) {
