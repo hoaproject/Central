@@ -1,3 +1,8 @@
+# 0.15.05.29
+
+  * Move to PSR-1-2 & drop PHP5.3 & `from`/`import`. (Ivan Enderlin, 2015-05-29T08:54:03+02:00)
+  * Add the CHANGELOG.md file. (Ivan Enderlin, 2015-02-20T09:28:15+01:00)
+
 # 0.15.01.06
 
   * s/_RESUME_INCOMPLETE/_PERMANENT_REDIRECT/ (Ivan Enderlin, 2015-01-05T23:44:27+01:00)
