@@ -1,3 +1,7 @@
+# 2.15.05.29
+
+  * Move to PSR-1 and PSR-2. (Ivan Enderlin, 2015-05-20T09:27:10+02:00)
+
 # 2.15.02.26
 
   * Decode URI after having splitted subdomain and URI. (Ivan Enderlin, 2015-02-26T11:28:50+01:00)
