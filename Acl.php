@@ -42,9 +42,9 @@ use Hoa\Graph;
 /**
  * Class \Hoa\Acl.
  *
- * The ACL main class. It contains all users, groups, and resources collections.
+ * The ACL main class. It contains all users, groups, and services collections.
  * It also proposes to check if a user is allow or not to do an action according
- * to its groups, and resources.
+ * to its groups and services.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
@@ -87,11 +87,11 @@ class Acl
     protected $groups         = null;
 
     /**
-     * Array of all resources.
+     * Array of all services.
      *
      * @var array
      */
-    protected $resources      = [];
+    protected $services       = [];
 
 
 
@@ -226,40 +226,40 @@ class Acl
     }
 
     /**
-     * Add a resource.
+     * Add a service.
      *
-     * @param   \Hoa\Acl\Resource  $resource    Resource to add.
+     * @param   \Hoa\Acl\Service  $service    Service to add.
      * @return  void
      * @throws  \Hoa\Acl\Exception
      */
-    public function addResource(Resource $resource)
+    public function addService(Service $service)
     {
-        if ($this->resourceExists($resource->getId())) {
+        if ($this->serviceExists($service->getId())) {
             throw new Exception(
-                'Resource %s is already registried.',
+                'Service %s is already registried.',
                 1,
-                $resource->getId()
+                $service->getId()
             );
         }
 
-        $this->resources[$resource->getId()] = $resource;
+        $this->services[$service->getId()] = $service;
 
         return;
     }
 
     /**
-     * Delete a resource.
+     * Delete a service.
      *
-     * @param   mixed   $resource    Resource to delete.
+     * @param   mixed   $service    Service to delete.
      * @return  void
      */
-    public function deleteResource($resource)
+    public function deleteService($service)
     {
-        if ($resource instanceof Resource) {
-            $resource = $resource->getId();
+        if ($service instanceof Service) {
+            $service = $service->getId();
         }
 
-        unset($this->resources[$resource]);
+        unset($this->services[$service]);
 
         return;
     }
@@ -335,7 +335,7 @@ class Acl
     public function isAllowed(
         $user,
         $permission,
-        $resource           = null,
+        $service            = null,
         IAcl\Assert $assert = null
     ) {
         if ($user instanceof User) {
@@ -353,16 +353,16 @@ class Acl
             );
         }
 
-        if (null !== $resource &&
-            !($resource instanceof Resource)) {
-            $resource = $this->getResource($resource);
+        if (null !== $service &&
+            !($service instanceof Service)) {
+            $service = $this->getService($service);
         }
 
         $user = $this->getUser($user);
         $out  = false;
 
-        if (null !== $resource &&
-            false === $resource->userExists($user->getId())) {
+        if (null  !== $service &&
+            false === $service->userExists($user->getId())) {
             return false;
         }
 
@@ -452,18 +452,18 @@ class Acl
     }
 
     /**
-     * Check if a resource exists or not.
+     * Check if a service exists or not.
      *
-     * @param   string  $resourceId    The resource ID.
+     * @param   string  $serviceId    The service ID.
      * @return  bool
      */
-    public function resourceExists($resourceId)
+    public function serviceExists($serviceId)
     {
-        if ($resourceId instanceof Resource) {
-            $resourceId = $resourceId->getId();
+        if ($serviceId instanceof Service) {
+            $serviceId = $serviceId->getId();
         }
 
-        return isset($this->resources[$resourceId]);
+        return isset($this->services[$serviceId]);
     }
 
     /**
@@ -519,29 +519,29 @@ class Acl
     }
 
     /**
-     * Get a specific resource.
+     * Get a specific service.
      *
-     * @param   string  $resourceId    The resource ID.
-     * @return  \Hoa\Acl\Resource
+     * @param   string  $serviceId    The service ID.
+     * @return  \Hoa\Acl\Service
      * @throws  \Hoa\Acl\Exception
      */
-    public function getResource($resourceId)
+    public function getService($serviceId)
     {
-        if (false === $this->resourceExists($resourceId)) {
-            throw new Exception('Resource %s does not exist.', 9, $resourceId);
+        if (false === $this->serviceExists($serviceId)) {
+            throw new Exception('Service %s does not exist.', 9, $serviceId);
         }
 
-        return $this->resources[$resourceId];
+        return $this->services[$serviceId];
     }
 
     /**
-     * Get all resources.
+     * Get all services.
      *
      * @return  array
      */
-    protected function getResources()
+    protected function getServices()
     {
-        return $this->getResources;
+        return $this->getServices;
     }
 
     /**

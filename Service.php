@@ -37,43 +37,43 @@
 namespace Hoa\Acl;
 
 /**
- * Class \Hoa\Acl\Resource.
+ * Class \Hoa\Acl\Service.
  *
- * Describe a resource.
+ * Describe a service.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Resource
+class Service
 {
     /**
-     * Resource ID.
+     * Service ID.
      *
      * @var mixed
      */
-    protected $resourceId    = null;
+    protected $serviceId    = null;
 
     /**
-     * Resource label.
+     * Service label.
      *
      * @var string
      */
-    protected $resourceLabel = null;
+    protected $serviceLabel = null;
 
     /**
      * Collections of all users ID.
      *
      * @var array
      */
-    protected $users         = [];
+    protected $users        = [];
 
 
 
     /**
-     * Built a new resource.
+     * Built a new service.
      *
-     * @param   mixed   $id       The resource ID.
-     * @param   string  $label    The resource label.
+     * @param   mixed   $id       The service ID.
+     * @param   string  $label    The service label.
      * @return  void
      */
     public function __construct($id, $label = null)
@@ -162,50 +162,50 @@ class Resource
     }
 
     /**
-     * Set resource ID.
+     * Set service ID.
      *
-     * @param   mixed      $id    The resource ID.
+     * @param   mixed      $id    The service ID.
      * @return  mixed
      */
     protected function setId($id)
     {
-        $old              = $this->resourceId;
-        $this->resourceId = $id;
+        $old             = $this->serviceId;
+        $this->serviceId = $id;
 
         return $old;
     }
 
     /**
-     * Set resource label.
+     * Set service label.
      *
-     * @param   string  $label    The resource label.
+     * @param   string  $label    The service label.
      * @return  string
      */
     public function setLabel($label)
     {
-        $old                 = $this->resourceLabel;
-        $this->resourceLabel = $label;
+        $old                = $this->serviceLabel;
+        $this->serviceLabel = $label;
 
         return $old;
     }
 
     /**
-     * Get resource ID.
+     * Get service ID.
      *
      * @return  mixed
      */
     public function getId()
     {
-        return $this->resourceId;
+        return $this->serviceId;
     }
 
     /**
-     * Get resource label.
+     * Get service label.
      *
      * @return  mixed
      */
     public function getLabel()
     {
-        return $this->resourceLabel;
+        return $this->serviceLabel;
     }
 }
