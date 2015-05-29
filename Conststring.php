@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,36 +34,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Realdom;
 
-from('Hoa')
-
-/**
- * \Hoa\Realdom\String
- */
--> import('Realdom.String')
-
-/**
- * \Hoa\Realdom\IRealdom\Constant
- */
--> import('Realdom.I~.Constant');
-
-}
-
-namespace Hoa\Realdom {
+use Hoa\Math;
 
 /**
  * Class \Hoa\Realdom\Conststring.
  *
  * Realistic domain: conststring.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Conststring extends String implements IRealdom\Constant {
-
+class Conststring extends String implements IRealdom\Constant
+{
     /**
      * Realistic domain name.
      *
@@ -74,73 +58,68 @@ class Conststring extends String implements IRealdom\Constant {
     /**
      * Realistic domain defined arguments.
      *
-     * @var \Hoa\Realdom array
+     * @var array
      */
-    protected $_arguments = array(
+    protected $_arguments = [
         'value' => ''
-    );
+    ];
 
 
 
     /**
      * Construct a realistic domain.
      *
-     * @access  protcted
      * @return  void
      */
-    protected function construct ( ) {
-
+    protected function construct()
+    {
         return;
     }
 
     /**
      * Predicate whether the sampled value belongs to the realistic domains.
      *
-     * @access  protected
      * @param   mixed  $q    Sampled value.
      * @return  boolean
      */
-    protected function _predicate ( $q ) {
-
-        return    is_string($q)
-               && $this['value'] === $q;
+    protected function _predicate($q)
+    {
+        return
+            is_string($q) &&
+            $this['value'] === $q;
     }
 
     /**
      * Sample one new value.
      *
-     * @access  protected
      * @param   \Hoa\Math\Sampler  $sampler    Sampler.
      * @return  mixed
      */
-    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
-
+    protected function _sample(Math\Sampler $sampler)
+    {
         return $this['value'];
     }
 
     /**
      * Get constant value.
      *
-     * @access  public
      * @return  string
      */
-    public function getConstantValue ( ) {
-
+    public function getConstantValue()
+    {
         return $this['value'];
     }
 
     /**
      * Get representation of the realistic domain.
      *
-     * @access  public
      * @return  string
      */
-    public function getConstantRepresentation ( ) {
-
-        return '\'' .
-               preg_replace('#(?<!\\\)\'#', '\\\'', $this['value']) .
-               '\'';
+    public function getConstantRepresentation()
+    {
+        return
+            '\'' .
+            preg_replace('#(?<!\\\)\'#', '\\\'', $this['value']) .
+            '\'';
     }
-}
-
 }

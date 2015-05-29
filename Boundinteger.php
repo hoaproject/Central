@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,71 +34,26 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Realdom;
 
-from('Hoa')
-
-/**
- * \Hoa\Realdom\Exception\InvalidArgument
- */
--> import('Realdom.Exception.InvalidArgument')
-
-/**
- * \Hoa\Realdom\Integer
- */
--> import('Realdom.Integer')
-
-/**
- * \Hoa\Realdom\IRealdom\Interval
- */
--> import('Realdom.I~.Interval')
-
-/**
- * \Hoa\Realdom\IRealdom\Nonconvex
- */
--> import('Realdom.I~.Nonconvex')
-
-/**
- * \Hoa\Realdom\IRealdom\Finite
- */
--> import('Realdom.I~.Finite')
-
-/**
- * \Hoa\Realdom\IRealdom\Enumerable
- */
--> import('Realdom.I~.Enumerable')
-
-/**
- * \Hoa\Iterator\Counter
- */
--> import('Iterator.Counter')
-
-/**
- * \Hoa\Iterator\CallbackFilter
- */
--> import('Iterator.CallbackFilter');
-
-}
-
-namespace Hoa\Realdom {
+use Hoa\Iterator;
+use Hoa\Math;
 
 /**
  * Class \Hoa\Realdom\Boundinteger.
  *
  * Realistic domain: boundinteger.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
 class          Boundinteger
     extends    Integer
     implements IRealdom\Interval,
                IRealdom\Nonconvex,
                IRealdom\Finite,
-               IRealdom\Enumerable {
-
+               IRealdom\Enumerable
+{
     /**
      * Realistic domain name.
      *
@@ -109,37 +64,39 @@ class          Boundinteger
     /**
      * Realistic domains defined arguments.
      *
-     * @var \Hoa\Realdom array
+     * @var array
      */
-    protected $_arguments   = array(
+    protected $_arguments   = [
         'Constinteger lower' => PHP_INT_MIN,
         'Constinteger upper' => PHP_INT_MAX
-    );
+    ];
 
     /**
      * Discredited values.
      *
-     * @var \Hoa\Realdom\Boundinteger array
+     * @var array
      */
-    protected $_discredited = array();
+    protected $_discredited = [];
 
 
 
     /**
      * Construct a realistic domain.
      *
-     * @access  protected
      * @return  void
      */
-    protected function construct ( ) {
-
+    protected function construct()
+    {
         $lower = $this['lower']->getConstantValue();
         $upper = $this['upper']->getConstantValue();
 
-        if($lower > $upper)
+        if ($lower > $upper) {
             throw new Exception\InvalidArgument(
                 '$lower must be strictly lower than $upper; given %d and %d.',
-                0, array($lower, $upper));
+                0,
+                [$lower, $upper]
+            );
+        }
 
         return;
     }
@@ -147,26 +104,25 @@ class          Boundinteger
     /**
      * Predicate whether the sampled value belongs to the realistic domains.
      *
-     * @access  protected
      * @param   mixed   $q    Sampled value.
      * @return  boolean
      */
-    protected function _predicate ( $q ) {
-
-        return    parent::_predicate($q)
-               && $q >= $this['lower']->getConstantValue()
-               && $q <= $this['upper']->getConstantValue();
+    protected function _predicate($q)
+    {
+        return
+            parent::_predicate($q) &&
+            $q >= $this['lower']->getConstantValue() &&
+            $q <= $this['upper']->getConstantValue();
     }
 
     /**
      * Sample one new value.
      *
-     * @access  protected
      * @param   \Hoa\Math\Sampler  $sampler    Sampler.
      * @return  mixed
      */
-    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
-
+    protected function _sample(Math\Sampler $sampler)
+    {
         return $sampler->getInteger(
             $this['lower']->sample($sampler),
             $this['upper']->sample($sampler),
@@ -177,39 +133,37 @@ class          Boundinteger
     /**
      * Get lower bound of the domain.
      *
-     * @access  public
      * @return  \Hoa\Realdom
      */
-    public function getLowerBound ( ) {
-
+    public function getLowerBound()
+    {
         return $this['lower']->getConstantValue();
     }
 
     /**
      * Get upper bound of the domain.
      *
-     * @access  public
      * @return  \Hoa\Realdom
      */
-    public function getUpperBound ( ) {
-
+    public function getUpperBound()
+    {
         return $this['upper']->getConstantValue();
     }
 
     /**
      * Reduce the lower bound.
      *
-     * @access  public
      * @param   mixed  $value    Value.
      * @return  bool
      */
-    public function reduceRightTo ( $value ) {
-
+    public function reduceRightTo($value)
+    {
         $lower = $this['lower']->getConstantValue();
         $upper = min($this['upper']->getConstantValue(), $value);
 
-        if($lower > $upper)
+        if ($lower > $upper) {
             return false;
+        }
 
         $this['upper'] = new Constinteger($value);
 
@@ -219,17 +173,17 @@ class          Boundinteger
     /**
      * Reduce the upper bound.
      *
-     * @access  public
      * @param   int  $value    Value.
      * @return  bool
      */
-    public function reduceLeftTo ( $value ) {
-
+    public function reduceLeftTo($value)
+    {
         $lower = max($this['lower']->getConstantValue(), $value);
         $upper = $this['upper']->getConstantValue();
 
-        if($lower > $upper)
+        if ($lower > $upper) {
             return false;
+        }
 
         $this['lower'] = new Constinteger($value);
 
@@ -239,15 +193,15 @@ class          Boundinteger
     /**
      * Discredit a value.
      *
-     * @access  public
      * @param   mixed  $value    Value to discredit.
      * @return  \Hoa\Realdom
      */
-    public function discredit ( $value ) {
-
-        if(   true  === in_array($value, $this->_discredited)
-           || false === $this->predicate($value))
+    public function discredit($value)
+    {
+        if (true  === in_array($value, $this->_discredited) ||
+            false === $this->predicate($value)) {
             return $this;
+        }
 
         $this->_discredited[] = $value;
 
@@ -257,38 +211,36 @@ class          Boundinteger
     /**
      * Get size of the domain.
      *
-     * @access  public
      * @return  int
      */
-    public function getSize ( ) {
-
-        return $this['upper']->getConstantValue() -
-               $this['lower']->getConstantValue() -
-               count($this->_discredited)         + 1;
+    public function getSize()
+    {
+        return
+            $this['upper']->getConstantValue() -
+            $this['lower']->getConstantValue() -
+            count($this->_discredited) +
+            1;
     }
 
     /**
      * Enumerate.
      *
-     * @access  public
      * @return  \Hoa\Iterator\Counter
      */
-    public function getIterator ( ) {
-
+    public function getIterator()
+    {
         $discredited = &$this->_discredited;
 
-        return new \Hoa\Iterator\CallbackFilter(
-            new \Hoa\Iterator\Counter(
-                $this['lower']->getConstantValue(),
-                $this['upper']->getConstantValue() + 1,
-                1
-            ),
-            function ( $value ) use ( &$discredited ) {
-
-                return false === in_array($value, $discredited);
-            }
-        );
+        return
+            new Iterator\CallbackFilter(
+                new Iterator\Counter(
+                    $this['lower']->getConstantValue(),
+                    $this['upper']->getConstantValue() + 1,
+                    1
+                ),
+                function ($value) use (&$discredited) {
+                    return false === in_array($value, $discredited);
+                }
+            );
     }
-}
-
 }

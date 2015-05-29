@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,40 +34,25 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Realdom\Crate;
 
-from('Hoa')
-
-/**
- * \Hoa\Realdom\Exception
- */
--> import('Realdom.Exception.~')
-
-/**
- * \Hoa\Realdom\IRealdom\Crate
- */
--> import('Realdom.I~.Crate');
-
-}
-
-namespace Hoa\Realdom\Crate {
+use Hoa\Realdom;
+use Hoa\Visitor;
 
 /**
  * Class \Hoa\Realdom\Crate\Variable.
  *
  * Represent a variable.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Variable implements \Hoa\Realdom\IRealdom\Crate {
-
+class Variable implements Realdom\IRealdom\Crate
+{
     /**
      * Variable.
      *
-     * @var \Hoa\Realdom\IRealdom\Holder object
+     * @var \Hoa\Realdom\IRealdom\Holder
      */
     protected $_variable = null;
 
@@ -76,12 +61,11 @@ class Variable implements \Hoa\Realdom\IRealdom\Crate {
     /**
      * Constructor.
      *
-     * @access  public
      * @param   \Hoa\Realdom\IRealdom\Holder  $variable    Variable.
      * @return  void
      */
-    public function __construct ( \Hoa\Realdom\IRealdom\Holder $variable ) {
-
+    public function __construct(Realdom\IRealdom\Holder $variable)
+    {
         $this->setVariable($variable);
 
         return;
@@ -90,12 +74,11 @@ class Variable implements \Hoa\Realdom\IRealdom\Crate {
     /**
      * Set variable.
      *
-     * @access  public
      * @param   \Hoa\Realdom\IRealdom\Holder  $variable    Variable.
      * @return  \Hoa\Realdom\IRealdom\Holder
      */
-    public function setVariable ( \Hoa\Realdom\IRealdom\Holder $variable ) {
-
+    public function setVariable(Realdom\IRealdom\Holder $variable)
+    {
         $old             = $this->_variable;
         $this->_variable = $variable;
         $this->_domains  = &$variable->getDomains();
@@ -106,37 +89,35 @@ class Variable implements \Hoa\Realdom\IRealdom\Crate {
     /**
      * Get variable.
      *
-     * @access  public
      * @return  \Hoa\Realdom\IRealdom\Holder
      */
-    public function getVariable ( ) {
-
+    public function getVariable()
+    {
         return $this->_variable;
     }
 
     /**
      * Get domains of the variable.
      *
-     * @access  public
      * @return  \Hoa\Realdom\Disjunction
      */
-    public function &getDomains ( ) {
-
+    public function &getDomains()
+    {
         return $this->_domains;
     }
 
     /**
      * Get crate types.
      *
-     * @access  public
      * @return  array
      */
-    public function getTypes ( ) {
+    public function getTypes()
+    {
+        $out = [];
 
-        $out = array();
-
-        foreach($this->getDomains() as $realdom)
+        foreach ($this->getDomains() as $realdom) {
             $out[] = get_class($realdom);
+        }
 
         return $out;
     }
@@ -144,17 +125,16 @@ class Variable implements \Hoa\Realdom\IRealdom\Crate {
     /**
      * Accept a visitor.
      *
-     * @access  public
      * @param   \Hoa\Visitor\Visit  $visitor    Visitor.
      * @param   mixed               &$handle    Handle (reference).
      * @param   mixed               $eldnah     Handle (no reference).
      * @return  mixed
      */
-    public function accept ( \Hoa\Visitor\Visit $visitor,
-                             &$handle = null, $eldnah = null ) {
-
+    public function accept(
+        Visitor\Visit $visitor,
+        &$handle = null,
+        $eldnah  = null
+    ) {
         return $visitor->visit($this, $handle, $eldnah);
     }
-}
-
 }

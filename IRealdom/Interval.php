@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,53 +34,45 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Realdom\IRealdom {
+namespace Hoa\Realdom\IRealdom;
 
 /**
  * Interface \Hoa\Realdom\IRealdom\Interval.
  *
  * Represent domain with bounds.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-interface Interval {
-
+interface Interval
+{
     /**
      * Get lower bound of the domain.
      *
-     * @access  public
      * @return  \Hoa\Realdom
      */
-    public function getLowerBound ( );
+    public function getLowerBound();
 
     /**
      * Get upper bound of the domain.
      *
-     * @access  public
      * @return  \Hoa\Realdom
      */
-    public function getUpperBound ( );
+    public function getUpperBound();
 
     /**
      * Reduce the lower bound.
      *
-     * @access  public
      * @param   mixed  $value    Value.
      * @return  bool
      */
-    public function reduceRightTo ( $value );
+    public function reduceRightTo($value);
 
     /**
      * Reduce the upper bound.
      *
-     * @access  public
      * @param   mixed  $value    Value.
      * @return  bool
      */
-    public function reduceLeftTo ( $value );
-}
-
+    public function reduceLeftTo($value);
 }

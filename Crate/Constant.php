@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,61 +34,42 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Realdom\Crate;
 
-from('Hoa')
-
-/**
- * \Hoa\Realdom\Exception
- */
--> import('Realdom.Exception.~')
-
-/**
- * \Hoa\Realdom\IRealdom\Crate
- */
--> import('Realdom.I~.Crate')
-
-/**
- * \Hoa\Realdom\IRealdom\Constant
- */
--> import('Realdom.I~.Constant');
-
-}
-
-namespace Hoa\Realdom\Crate {
+use Hoa\Praspel;
+use Hoa\Realdom;
+use Hoa\Visitor;
 
 /**
  * Class \Hoa\Realdom\Crate\Constant.
  *
  * Represent a mocked constant.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
 class          Constant
-    implements \Hoa\Realdom\IRealdom\Crate,
-               \Hoa\Realdom\IRealdom\Constant {
-
+    implements Realdom\IRealdom\Crate,
+               Realdom\IRealdom\Constant
+{
     /**
      * Holder.
      *
-     * @var \Hoa\Realdom\IRealdom\Holder object
+     * @var \Hoa\Realdom\IRealdom\Holder
      */
     protected $_holder                = null;
 
     /**
      * Praspel representation.
      *
-     * @var \Closure object
+     * @var \Closure
      */
     protected $_praspelRepresentation = null;
 
     /**
      * Original declaration object.
      *
-     * @var \Hoa\Praspel\Model\Declaration object
+     * @var \Hoa\Praspel\Model\Declaration
      */
     protected $_declaration           = null;
 
@@ -97,7 +78,6 @@ class          Constant
     /**
      * Constructor.
      *
-     * @access  public
      * @param   \Hoa\Realdom\IRealdom\Holder    $holder         Holder.
      * @param   \Closure                        $praspel        Praspel
      *                                                          representation.
@@ -106,10 +86,11 @@ class          Constant
      *                                                          object.
      * @return  void
      */
-    public function __construct ( \Hoa\Realdom\IRealdom\Holder $holder,
-                                  \Closure $praspel,
-                                  \Hoa\Praspel\Model\Declaration $declaration = null ) {
-
+    public function __construct(
+        Realdom\IRealdom\Holder $holder,
+        \Closure $praspel,
+        Praspel\Model\Declaration $declaration = null
+    ) {
         $this->setHolder($holder);
         $this->setPraspelRepresentation($praspel);
         $this->setDeclaration($declaration);
@@ -120,12 +101,11 @@ class          Constant
     /**
      * Set holder.
      *
-     * @access  protected
      * @param   \Hoa\Realdom\IRealdom\Holder  $holder    Holder.
      * @return  \Hoa\Realdom\IRealdom\Holder
      */
-    protected function setHolder ( \Hoa\Realdom\IRealdom\Holder $holder) {
-
+    protected function setHolder(Realdom\IRealdom\Holder $holder)
+    {
         $old           = $this->_holder;
         $this->_holder = $holder;
 
@@ -135,42 +115,42 @@ class          Constant
     /**
      * Get holder.
      *
-     * @access  public
      * @return  \Hoa\Realdom\IRealdom\Holder
      */
-    public function getHolder ( ) {
-
+    public function getHolder()
+    {
         return $this->_holder;
     }
 
     /**
      * Get crate types.
      *
-     * @access  public
      * @return  array
-     * @throw   \Hoa\Realdom\Exception
+     * @throws  \Hoa\Realdom\Exception
      */
-    public function getTypes ( ) {
-
+    public function getTypes()
+    {
         $held   = $this->getHolder()->getHeld();
-        $out    = array();
+        $out    = [];
         $prefix = 'Hoa\Realdom\\';
 
-        foreach($held as $realdom) {
-
-            if($realdom instanceof \Hoa\Realdom\RealdomArray)
+        foreach ($held as $realdom) {
+            if ($realdom instanceof Realdom\RealdomArray) {
                 $out[] = $prefix . 'Constarray';
-            elseif($realdom instanceof \Hoa\Realdom\Boolean)
+            } elseif ($realdom instanceof Realdom\Boolean) {
                 $out[] = $prefix . 'Constboolean';
-            elseif($realdom instanceof \Hoa\Realdom\Float)
+            } elseif ($realdom instanceof Realdom\Float) {
                 $out[] = $prefix . 'Constfloat';
-            elseif($realdom instanceof \Hoa\Realdom\Integer)
+            } elseif ($realdom instanceof Realdom\Integer) {
                 $out[] = $prefix . 'Constinteger';
-            elseif($realdom instanceof \Hoa\Realdom\String)
+            } elseif ($realdom instanceof Realdom\String) {
                 $out[] = $prefix . 'Conststring';
-            else
-                throw new \Hoa\Realdom\Exception(
-                    'Cannot determine the type.', 0);
+            } else {
+                throw new Realdom\Exception(
+                    'Cannot determine the type.',
+                    0
+                );
+            }
         }
 
         return $out;
@@ -179,23 +159,21 @@ class          Constant
     /**
      * Get constant value.
      *
-     * @access  public
      * @return  mixed
      */
-    public function getConstantValue ( ) {
-
+    public function getConstantValue()
+    {
         return $this->getHolder()->getValue();
     }
 
     /**
      * Set Praspel representation.
      *
-     * @access  protected
      * @param   \Closure  $praspel    Praspel representation.
      * @return  \Closure
      */
-    protected function setPraspelRepresentation ( \Closure $praspel ) {
-
+    protected function setPraspelRepresentation(\Closure $praspel)
+    {
         $old                          = $this->_praspelRepresentation;
         $this->_praspelRepresentation = $praspel;
 
@@ -205,23 +183,21 @@ class          Constant
     /**
      * Get Praspel representation.
      *
-     * @access  public
      * @return  \Closure
      */
-    public function getPraspelRepresentation ( ) {
-
+    public function getPraspelRepresentation()
+    {
         return $this->_praspelRepresentation;
     }
 
     /**
      * Set original declaration object.
      *
-     * @access  public
      * @param   \Hoa\Praspel\Model\Declaration  $declaration    Declaration.
      * @return  \Hoa\Praspel\Model\Declaration
      */
-    public function setDeclaration ( \Hoa\Praspel\Model\Declaration $declaration ) {
-
+    public function setDeclaration(Praspel\Model\Declaration $declaration)
+    {
         $old                = $this->_declaration;
         $this->_declaration = $declaration;
 
@@ -231,39 +207,36 @@ class          Constant
     /**
      * Get original declaration object.
      *
-     * @access  public
      * @return  \Hoa\Praspel\Model\Declaration
      */
-    public function getDeclaration ( ) {
-
+    public function getDeclaration()
+    {
         return $this->_declaration;
     }
 
     /**
      * Get representation of the realistic domain.
      *
-     * @access  public
      * @return  string
      */
-    public function getConstantRepresentation ( ) {
-
+    public function getConstantRepresentation()
+    {
         return '';
     }
 
     /**
      * Accept a visitor.
      *
-     * @access  public
      * @param   \Hoa\Visitor\Visit  $visitor    Visitor.
      * @param   mixed               &$handle    Handle (reference).
      * @param   mixed               $eldnah     Handle (no reference).
      * @return  mixed
      */
-    public function accept ( \Hoa\Visitor\Visit $visitor,
-                             &$handle = null, $eldnah = null ) {
-
+    public function accept(
+        Visitor\Visit $visitor,
+        &$handle = null,
+        $eldnah  = null
+    ) {
         return $visitor->visit($this, $handle, $eldnah);
     }
-}
-
 }

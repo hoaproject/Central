@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,44 +34,23 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Realdom;
 
-from('Hoa')
-
-/**
- * \Hoa\Realdom\Integer
- */
--> import('Realdom.Integer')
-
-/**
- * \Hoa\Realdom\IRealdom\Nonconvex
- */
--> import('Realdom.I~.Nonconvex')
-
-/**
- * \Hoa\Realdom\IRealdom\Finite
- */
--> import('Realdom.I~.Finite');
-
-}
-
-namespace Hoa\Realdom {
+use Hoa\Math;
 
 /**
  * Class \Hoa\Realdom\Natural.
  *
  * Realistic domain: natural.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
 class          Natural
     extends    Integer
     implements IRealdom\Nonconvex,
-               IRealdom\Finite {
-
+               IRealdom\Finite
+{
     /**
      * Realistic domain name.
      *
@@ -82,32 +61,31 @@ class          Natural
     /**
      * Realistic domain defined arguments.
      *
-     * @var \Hoa\Realdom array
+     * @var array
      */
-    protected $_arguments   = array(
+    protected $_arguments   = [
         'Constinteger start' => 0,
         'Constinteger step'  => 1
-    );
+    ];
 
     /**
      * Discredited values.
      *
-     * @var \Hoa\Realdom\Natural array
+     * @var array
      */
-    protected $_discredited = array();
+    protected $_discredited = [];
 
 
 
     /**
      * Reset the realistic domain.
      *
-     * @access  public
      * @return  void
      */
-    public function reset ( ) {
-
+    public function reset()
+    {
         $this->setValue(null);
-        $this->_discredited = array();
+        $this->_discredited = [];
 
         return;
     }
@@ -115,12 +93,11 @@ class          Natural
     /**
      * Predicate whether the sampled value belongs to the realistic domains.
      *
-     * @access  protected
      * @param   mixed  $q    Sampled value.
      * @return  boolean
      */
-    protected function _predicate ( $q ) {
-
+    protected function _predicate($q)
+    {
         $q -= $this['start']->getConstantValue();
 
         return 0 === $q % $this['step']->getConstantValue();
@@ -129,22 +106,20 @@ class          Natural
     /**
      * Sample one new value.
      *
-     * @access  protected
      * @param   \Hoa\Math\Sampler  $sampler    Sampler.
      * @return  mixed
      */
-    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
-
+    protected function _sample(Math\Sampler $sampler)
+    {
         $sampled = $this->getValue();
 
         do {
-
-            if(null === $sampled)
+            if (null === $sampled) {
                 $sampled = $this['start']->getConstantValue();
-            else
+            } else {
                 $sampled += $this['step']->getConstantValue();
-
-        } while(true === in_array($sampled, $this->_discredited));
+            }
+        } while (true === in_array($sampled, $this->_discredited));
 
         return $sampled;
     }
@@ -152,15 +127,15 @@ class          Natural
     /**
      * Discredit a value.
      *
-     * @access  public
      * @param   mixed  $value    Value to discredit.
      * @return  \Hoa\Realdom
      */
-    public function discredit ( $value ) {
-
-        if(   true  === in_array($value, $this->_discredited)
-           || false === $this->predicate($value))
+    public function discredit($value)
+    {
+        if (true  === in_array($value, $this->_discredited) ||
+            false === $this->predicate($value)) {
             return $this;
+        }
 
         $this->_discredited[] = $value;
 
@@ -170,13 +145,10 @@ class          Natural
     /**
      * Get size of the domain.
      *
-     * @access  public
      * @return  int
      */
-    public function getSize ( ) {
-
+    public function getSize()
+    {
         return PHP_INT_MAX;
     }
-}
-
 }

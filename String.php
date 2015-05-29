@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,49 +34,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Realdom;
 
-from('Hoa')
-
-/**
- * \Hoa\Realdom
- */
--> import('Realdom.~')
-
-/**
- * \Hoa\String
- */
--> import('String.~')
-
-/**
- * \Hoa\Realdom\IRealdom\Nonconvex
- */
--> import('Realdom.I~.Nonconvex')
-
-/**
- * \Hoa\Realdom\IRealdom\Finite
- */
--> import('Realdom.I~.Finite');
-
-}
-
-namespace Hoa\Realdom {
+use Hoa\Math;
+use Hoa\String as HoaString;
 
 /**
  * Class \Hoa\Realdom\String.
  *
  * Realistic domain: string.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
 class          String
     extends    Realdom
     implements IRealdom\Nonconvex,
-               IRealdom\Finite {
-
+               IRealdom\Finite
+{
     /**
      * Realistic domain name.
      *
@@ -87,41 +62,38 @@ class          String
     /**
      * Realistic domain defined arguments.
      *
-     * @var \Hoa\Realdom array
+     * @var array
      */
-    protected $_arguments   = array(
+    protected $_arguments   = [
         'Constinteger|Conststring codepointMin' => 0x20,
         'Constinteger|Conststring codepointMax' => 0x7e,
         'Integer                  length'
-    );
+    ];
 
     /**
      * Discredited values.
      *
-     * @var \Hoa\Realdom\String array
+     * @var array
      */
-    protected $_discredited = array();
+    protected $_discredited = [];
 
 
 
     /**
      * Construct a realistic domain.
      *
-     * @access  protected
      * @return  void
      */
-    protected function construct ( ) {
-
-        if($this['codepointMin'] instanceof Conststring) {
-
-            $char = mb_substr($this['codepointMin']->getConstantValue(), 0, 1);
-            $this['codepointMin'] = new Constinteger(\Hoa\String::toCode($char));
+    protected function construct()
+    {
+        if ($this['codepointMin'] instanceof Conststring) {
+            $char                 = mb_substr($this['codepointMin']->getConstantValue(), 0, 1);
+            $this['codepointMin'] = new Constinteger(HoaString::toCode($char));
         }
 
-        if($this['codepointMax'] instanceof Conststring) {
-
-            $char = mb_substr($this['codepointMax']->getConstantValue(), 0, 1);
-            $this['codepointMax'] = new Constinteger(\Hoa\String::toCode($char));
+        if ($this['codepointMax'] instanceof Conststring) {
+            $char                 = mb_substr($this['codepointMax']->getConstantValue(), 0, 1);
+            $this['codepointMax'] = new Constinteger(HoaString::toCode($char));
         }
 
         return;
@@ -130,22 +102,24 @@ class          String
     /**
      * Predicate whether the sampled value belongs to the realistic domains.
      *
-     * @access  protected
      * @param   mixed  $q    Sampled value.
      * @return  boolean
      */
-    protected function _predicate ( $q ) {
-
-        if(!is_string($q))
+    protected function _predicate($q)
+    {
+        if (!is_string($q)) {
             return false;
+        }
 
         $length = mb_strlen($q);
 
-        if(false === $this['length']->predicate($length))
+        if (false === $this['length']->predicate($length)) {
             return false;
+        }
 
-        if(0 === $length)
+        if (0 === $length) {
             return true;
+        }
 
         $split  = preg_split('#(?<!^)(?!$)#u', $q);
         $out    = true;
@@ -153,9 +127,8 @@ class          String
         $min    = $this['codepointMin']->getConstantValue();
         $max    = $this['codepointMax']->getConstantValue();
 
-        foreach($split as $letter) {
-
-            $handle = \Hoa\String::toCode($letter);
+        foreach ($split as $letter) {
+            $handle = HoaString::toCode($letter);
             $out    = $out && ($min <= $handle) && ($handle <= $max);
         }
 
@@ -165,26 +138,27 @@ class          String
     /**
      * Sample one new value.
      *
-     * @access  protected
      * @param   \Hoa\Math\Sampler  $sampler    Sampler.
      * @return  mixed
      */
-    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
-
+    protected function _sample(Math\Sampler $sampler)
+    {
         $string = null;
         $min    = $this['codepointMin']->getConstantValue();
         $max    = $this['codepointMax']->getConstantValue();
         $length = $this['length']->sample($sampler);
 
-        if(0 > $length)
+        if (0 > $length) {
             return false;
+        }
 
-        for($i = 0; $i < $length; ++$i)
-            $string .= \Hoa\String::fromCode($sampler->getInteger(
+        for ($i = 0; $i < $length; ++$i) {
+            $string .= HoaString::fromCode($sampler->getInteger(
                 $min,
                 $max,
                 $this->_discredited
             ));
+        }
 
         return $string;
     }
@@ -192,17 +166,17 @@ class          String
     /**
      * Discredit a value.
      *
-     * @access  public
      * @param   mixed  $value    Value to discredit.
      * @return  \Hoa\Realdom
      */
-    public function discredit ( $value ) {
+    public function discredit($value)
+    {
+        $_value = HoaString::toCode($value);
 
-        $_value = \Hoa\String::toCode($value);
-
-        if(   true  === in_array($_value, $this->_discredited)
-           || false === $this->predicate($value))
+        if (true  === in_array($_value, $this->_discredited) ||
+            false === $this->predicate($value)) {
             return $this;
+        }
 
         $this->_discredited[] = $_value;
 
@@ -212,17 +186,15 @@ class          String
     /**
      * Get size of the domain.
      *
-     * @access  public
      * @return  int
      */
-    public function getSize ( ) {
+    public function getSize()
+    {
 
         // @TODO : this is only for length=1.
-        return $this['codepointMax']->getConstantValue() -
-               $this['codepointMin']->getConstantValue() -
-               count($this->_discredited)                + 1;
-
+        return
+            $this['codepointMax']->getConstantValue() -
+            $this['codepointMin']->getConstantValue() -
+            count($this->_discredited)                + 1;
     }
-}
-
 }

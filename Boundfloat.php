@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,46 +34,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Realdom;
 
-from('Hoa')
-
-/**
- * \Hoa\Realdom\Exception\InvalidArgument
- */
--> import('Realdom.Exception.InvalidArgument')
-
-/**
- * \Hoa\Realdom\Float
- */
--> import('Realdom.Float')
-
-/**
- * \Hoa\Realdom\Constfloat
- */
--> import('Realdom.Constfloat')
-
-/**
- * \Hoa\Realdom\IRealdom\Interval
- */
--> import('Realdom.I~.Interval');
-
-}
-
-namespace Hoa\Realdom {
+use Hoa\Math;
 
 /**
  * Class \Hoa\Realdom\Boundfloat.
  *
  * Realistic domain: boundfloat.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Boundfloat extends Float implements IRealdom\Interval {
-
+class Boundfloat extends Float implements IRealdom\Interval
+{
     /**
      * Realistic domain name.
      *
@@ -84,55 +58,56 @@ class Boundfloat extends Float implements IRealdom\Interval {
     /**
      * Realistic domains defined arguments.
      *
-     * @var \Hoa\Realdom array
+     * @var array
      */
-    protected $_arguments = array(
+    protected $_arguments = [
         'Constfloat lower' => PHP_FLOAT_MIN,
         'Constfloat upper' => PHP_FLOAT_MAX
-    );
+    ];
 
 
 
     /**
      * Construct a realistic domain.
      *
-     * @access  protected
      * @return  void
      */
-    protected function construct ( ) {
-
+    protected function construct()
+    {
         $lower = $this['lower']->getConstantValue();
         $upper = $this['upper']->getConstantValue();
 
-        if($lower > $upper)
+        if ($lower > $upper) {
             throw new Exception\InvalidArgument(
                 '$lower must be strictly lower than $upper; given %d and %d.',
-                0, array($lower, $upper));
+                0,
+                [$lower, $upper]
+            );
+        }
     }
 
     /**
      * Predicate whether the sampled value belongs to the realistic domains.
      *
-     * @access  protected
      * @param   mixed   $q    Sampled value.
      * @return  boolean
      */
-    protected function _predicate ( $q ) {
-
-        return    parent::_predicate($q)
-               && $q >= $this['lower']->getConstantValue()
-               && $q <= $this['upper']->getConstantValue();
+    protected function _predicate($q)
+    {
+        return
+            parent::_predicate($q) &&
+            $q >= $this['lower']->getConstantValue() &&
+            $q <= $this['upper']->getConstantValue();
     }
 
     /**
      * Sample one new value.
      *
-     * @access  protected
      * @param   \Hoa\Math\Sampler  $sampler    Sampler.
      * @return  mixed
      */
-    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
-
+    protected function _sample(Math\Sampler $sampler)
+    {
         return $sampler->getFloat(
             $this['lower']->sample($sampler),
             $this['upper']->sample($sampler)
@@ -142,39 +117,37 @@ class Boundfloat extends Float implements IRealdom\Interval {
     /**
      * Get lower bound of the domain.
      *
-     * @access  public
      * @return  \Hoa\Realdom
      */
-    public function getLowerBound ( ) {
-
+    public function getLowerBound()
+    {
         return $this['lower']->getConstantValue();
     }
 
     /**
      * Get upper bound of the domain.
      *
-     * @access  public
      * @return  \Hoa\Realdom
      */
-    public function getUpperBound ( ) {
-
+    public function getUpperBound()
+    {
         return $this['upper']->getConstantValue();
     }
 
     /**
      * Reduce the lower bound.
      *
-     * @access  public
      * @param   mixed  $value    Value.
      * @return  bool
      */
-    public function reduceRightTo ( $value ) {
-
+    public function reduceRightTo($value)
+    {
         $lower = $this['lower']->getConstantValue();
         $upper = min($this['upper']->getConstantValue(), $value);
 
-        if($lower > $upper)
+        if ($lower > $upper) {
             return false;
+        }
 
         $this['upper'] = new Constinteger($value);
 
@@ -184,22 +157,20 @@ class Boundfloat extends Float implements IRealdom\Interval {
     /**
      * Reduce the upper bound.
      *
-     * @access  public
      * @param   int  $value    Value.
      * @return  bool
      */
-    public function reduceLeftTo ( $value ) {
-
+    public function reduceLeftTo($value)
+    {
         $lower = max($this['lower']->getConstantValue(), $value);
         $upper = $this['upper']->getConstantValue();
 
-        if($lower > $upper)
+        if ($lower > $upper) {
             return false;
+        }
 
         $this['lower'] = new Constinteger($value);
 
         return true;
     }
-}
-
 }
