@@ -28,7 +28,7 @@
         "hoa/file"    : "~0.0",
         "hoa/iterator": "~1.0",
         "hoa/realdom" : "~0.0",
-        "hoa/string"  : "~2.0",
+        "hoa/ustring" : "~3.0",
         "hoa/visitor" : "~1.0"
     },
     "require-dev": {
