@@ -1,3 +1,8 @@
+# 0.15.05.29
+
+  * Move to PSR-1 and PSR-2. (Ivan Enderlin, 2015-05-20T09:48:38+02:00)
+  * Remove `from`/`import` and drop PHP5.3. (Ivan Enderlin, 2015-03-24T10:13:43+01:00)
+
 # 0.15.02.25
 
   * Add the `CHANGELOG.md` file. (Ivan Enderlin, 2015-02-25T09:39:09+01:00)
