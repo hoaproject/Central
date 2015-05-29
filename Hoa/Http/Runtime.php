@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,41 +34,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Http\Request
- */
--> import('Http.Request');
-
-}
-
-namespace Hoa\Http {
+namespace Hoa\Http;
 
 /**
  * Class \Hoa\Http\Runtime.
  *
  * Runtime informations.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Runtime {
-
+class Runtime
+{
     /**
      * Get HTTP method.
      *
-     * @access  public
      * @return  string
      */
-    public static function getMethod ( ) {
-
-        if('cli' === php_sapi_name())
+    public static function getMethod()
+    {
+        if ('cli' === php_sapi_name()) {
             return 'get';
+        }
 
         return strtolower($_SERVER['REQUEST_METHOD']);
     }
@@ -76,63 +63,58 @@ class Runtime {
     /**
      * Get URI.
      *
-     * @access  public
      * @return  string
      */
-    public static function getUri ( ) {
-
+    public static function getUri()
+    {
         return $_SERVER['REQUEST_URI'];
     }
 
     /**
      * Get data.
      *
-     * @access  public
      * @param   bool  $extended    Whether we want a larger support of
      *                             content-type for example.
      * @return  mixed
      */
-    public static function getData ( $extended = true ) {
-
-        switch(static::getMethod()) {
-
+    public static function getData($extended = true)
+    {
+        switch (static::getMethod()) {
             case Request::METHOD_GET:
                 return $_GET;
-              break;
 
             case Request::METHOD_POST:
                 $contentType = static::getHeader('Content-Type');
 
-                switch($contentType) {
-
+                switch ($contentType) {
                     case 'application/x-www-form-urlencoded':
                         return $_POST;
-                      break;
 
                     case 'application/json':
                         $input = file_get_contents('php://input');
 
-                        if(   true !== $extended
-                           || true !== function_exists('json_decode'))
+                        if (true !== $extended ||
+                            true !== function_exists('json_decode')) {
                             return $input;
+                        }
 
                         $json = json_decode($input, true);
 
-                        if(JSON_ERROR_NONE !== json_last_error())
+                        if (JSON_ERROR_NONE !== json_last_error()) {
                             return $input;
+                        }
 
                         return $json;
-                      break;
 
                     default:
                         return file_get_contents('php://input');
                 }
-              break;
+
+                break;
 
             case Request::METHOD_PUT:
             case Request::METHOD_PATCH:
                 return file_get_contents('php://input');
-              break;
 
             default:
                 return null;
@@ -142,13 +124,13 @@ class Runtime {
     /**
      * Whether there is data or not.
      *
-     * @access  public
      * @return  bool
      */
-    public static function hasData ( ) {
-
-        if(Request::METHOD_GET === static::getMethod())
+    public static function hasData()
+    {
+        if (Request::METHOD_GET === static::getMethod()) {
             return !empty($_GET);
+        }
 
         return 0 < intval(static::getHeader('Content-Length'));
     }
@@ -156,31 +138,35 @@ class Runtime {
     /**
      * Get all headers.
      *
-     * @access  public
      * @return  array
      */
-    public static function getHeaders ( ) {
+    public static function getHeaders()
+    {
+        static $_headers = [];
 
-        static $_headers = array();
-
-        if(!empty($_headers))
+        if (!empty($_headers)) {
             return $_headers;
+        }
 
-        if(true === function_exists('apache_request_headers'))
-            foreach(apache_request_headers() as $header => $value)
+        if (true === function_exists('apache_request_headers')) {
+            foreach (apache_request_headers() as $header => $value) {
                 $_headers[strtolower($header)] = $value;
-        else {
-
-            if(isset($_SERVER['CONTENT_TYPE']))
+            }
+        } else {
+            if (isset($_SERVER['CONTENT_TYPE'])) {
                 $_headers['content-type'] = $_SERVER['CONTENT_TYPE'];
+            }
 
-            if(isset($_SERVER['CONTENT_LENGTH']))
+            if (isset($_SERVER['CONTENT_LENGTH'])) {
                 $_headers['content-length'] = $_SERVER['CONTENT_LENGTH'];
+            }
 
-            foreach($_SERVER as $key => $value)
-                if('HTTP_' === substr($key, 0, 5))
+            foreach ($_SERVER as $key => $value) {
+                if ('HTTP_' === substr($key, 0, 5)) {
                     $_headers[strtolower(str_replace('_', '-', substr($key, 5)))]
                         = $value;
+                }
+            }
         }
 
         return $_headers;
@@ -189,20 +175,18 @@ class Runtime {
     /**
      * Get a specific header.
      *
-     * @access  public
      * @param   string  $header    Header name.
      * @return  string
      */
-    public static function getHeader ( $header ) {
-
+    public static function getHeader($header)
+    {
         $headers = static::getHeaders();
         $header  = strtolower($header);
 
-        if(true !== array_key_exists($header, $headers))
+        if (true !== array_key_exists($header, $headers)) {
             return null;
+        }
 
         return $headers[$header];
     }
-}
-
 }

@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,36 +34,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Http\Exception
- */
--> import('Http.Exception.~')
-
-/**
- * \Hoa\Http
- */
--> import('Http.~');
-
-}
-
-namespace Hoa\Http {
+namespace Hoa\Http;
 
 /**
  * Class \Hoa\Http\Request.
  *
  * HTTP request support.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Request extends Http {
-
+class Request extends Http
+{
     /**
      * Method: CONNECT.
      *
@@ -137,14 +119,14 @@ class Request extends Http {
     /**
      * Request method (please, see self::METHOD_* constants).
      *
-     * @var \Hoa\Http\Request string
+     * @var string
      */
     protected $_method = null;
 
     /**
      * Request URL.
      *
-     * @var \Hoa\Http\Request string
+     * @var string
      */
     protected $_url    = null;
 
@@ -153,33 +135,38 @@ class Request extends Http {
     /**
      * Parse a HTTP packet.
      *
-     * @access  public
      * @param   string  $packet    HTTP packet.
      * @return  void
-     * @throw   \Hoa\Http\Exception
+     * @throws  \Hoa\Http\Exception
      */
-    public function parse ( $packet ) {
-
+    public function parse($packet)
+    {
         $headers = explode("\r\n", $packet);
         $http    = array_shift($headers);
         $this->setBody(null);
 
-        foreach($headers as $i => $header)
-            if('' == trim($header)) {
-
+        foreach ($headers as $i => $header) {
+            if ('' == trim($header)) {
                 unset($headers[$i]);
-                $this->setBody(trim(
-                    implode("\r\n", array_splice($headers, $i))
-                ));
+                $this->setBody(
+                    trim(
+                        implode("\r\n", array_splice($headers, $i))
+                    )
+                );
+
                 break;
             }
+        }
 
-        if(0 === preg_match('#^([^\s]+)\s+([^\s]+)\s+HTTP/(1\.(?:0|1))$#i', $http, $matches))
+        if (0 === preg_match('#^([^\s]+)\s+([^\s]+)\s+HTTP/(1\.(?:0|1))$#i', $http, $matches)) {
             throw new Exception(
-                'HTTP headers are not well-formed: %s', 0, $http);
+                'HTTP headers are not well-formed: %s',
+                0,
+                $http
+            );
+        }
 
-        switch($method = strtolower($matches[1])) {
-
+        switch ($method = strtolower($matches[1])) {
             case self::METHOD_CONNECT:
             case self::METHOD_DELETE:
             case self::METHOD_GET:
@@ -190,7 +177,8 @@ class Request extends Http {
             case self::METHOD_PUT:
             case self::METHOD_TRACE:
                 $this->_method = $method;
-              break;
+
+                break;
 
             default:
                 $this->_method = self::METHOD_EXTENDED;
@@ -207,13 +195,12 @@ class Request extends Http {
     /**
      * Set request method.
      *
-     * @access  public
      * @param   string  $method    Method (please, see self::METHOD_*
      *                             constants).
      * @return  string
      */
-    public function setMethod ( $method ) {
-
+    public function setMethod($method)
+    {
         $old           = $this->_method;
         $this->_method = $method;
 
@@ -223,23 +210,21 @@ class Request extends Http {
     /**
      * Get request method.
      *
-     * @access  public
      * @return  string
      */
-    public function getMethod ( ) {
-
+    public function getMethod()
+    {
         return $this->_method;
     }
 
     /**
      * Set request URL.
      *
-     * @access  public
      * @param   string  $url    URL.
      * @return  string
      */
-    public function setUrl ( $url ) {
-
+    public function setUrl($url)
+    {
         $old        = $this->_url;
         $this->_url = $url;
 
@@ -249,27 +234,24 @@ class Request extends Http {
     /**
      * Get request URL.
      *
-     * @access  public
      * @return  string
      */
-    public function getUrl ( ) {
-
+    public function getUrl()
+    {
         return $this->_url;
     }
 
     /**
      * Dump (parse^-1).
      *
-     * @access  public
      * @return  string
      */
-    public function __toString ( ) {
-
-        return strtoupper($this->getMethod()) . ' ' .
-               $this->getUrl() . ' ' .
-               'HTTP/' . $this->getHttpVersion() . CRLF .
-               parent::__toString() . CRLF;
+    public function __toString()
+    {
+        return
+            strtoupper($this->getMethod()) . ' ' .
+            $this->getUrl() . ' ' .
+            'HTTP/' . $this->getHttpVersion() . CRLF .
+            parent::__toString() . CRLF;
     }
-}
-
 }
