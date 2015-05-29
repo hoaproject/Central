@@ -1,3 +1,8 @@
+# 1.15.05.29
+
+  * Update atoum/atoum. (Ivan Enderlin, 2015-05-29T14:53:57+02:00)
+  * Move to PSR-1 and PSR-2. (Ivan Enderlin, 2015-05-21T09:34:33+02:00)
+
 # 1.15.04.16
 
   * Add `atoum/ruler-extension`. (Ivan Enderlin, 2015-02-02T12:03:36+01:00)
