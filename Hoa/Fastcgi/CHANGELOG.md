@@ -1,3 +1,7 @@
+# 2.15.05.29
+
+  * Move to PSR-1 and PSR-2. (Ivan Enderlin, 2015-05-15T09:45:15+02:00)
+
 # 2.15.04.16
 
   * Reformulate a sentence in the documentation. (Ivan Enderlin, 2015-04-15T08:41:57+02:00)
