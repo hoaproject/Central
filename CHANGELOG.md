@@ -1,3 +1,7 @@
+# 0.15.05.29
+
+  * Move to PSR-1 and PSR-2. (Ivan Enderlin, 2015-05-15T09:49:53+02:00)
+
 # 0.15.04.13
 
   * Remove an empty line. (Ivan Enderlin, 2015-02-23T09:41:54+01:00)
