@@ -1,3 +1,8 @@
+# 2.15.05.29
+
+  * Move to PSR-1-2 & drop PHP5.3 & `from`/`import`. (Ivan Enderlin, 2015-05-28T10:38:00+02:00)
+  * Fix credits! Sorry @pierozi 😄. (Ivan Enderlin, 2015-02-26T09:13:32+01:00)
+
 # 2.15.02.26
 
   * Add the `CHANGELOG.md` file. (Ivan Enderlin, 2015-02-26T08:40:10+01:00)
