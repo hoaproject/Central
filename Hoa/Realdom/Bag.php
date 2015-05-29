@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,31 +34,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Realdom;
 
-from('Hoa')
-
-/**
- * \Hoa\Realdom
- */
--> import('Realdom.~');
-
-}
-
-namespace Hoa\Realdom {
+use Hoa\Math;
 
 /**
  * Class \Hoa\Realdom\Bag.
  *
  * Realistic domain: bag.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Bag extends Realdom {
-
+class Bag extends Realdom
+{
     /**
      * Realistic domain name.
      *
@@ -69,7 +58,7 @@ class Bag extends Realdom {
     /**
      * Realistic domain defined arguments.
      *
-     * @var \Hoa\Realdom\Bag array
+     * @var array
      */
     protected $_arguments = …;
 
@@ -78,16 +67,16 @@ class Bag extends Realdom {
     /**
      * Predicate whether the sampled value belongs to the realistic domains.
      *
-     * @access  protected
      * @param   mixed  $q    Sampled value.
      * @return  boolean
      */
-    protected function _predicate ( $q ) {
-
+    protected function _predicate($q)
+    {
         $out = false;
 
-        foreach($this->getArguments() as $domain)
+        foreach ($this->getArguments() as $domain) {
             $out = $out || $domain->predicate($q);
+        }
 
         return $out;
     }
@@ -95,15 +84,14 @@ class Bag extends Realdom {
     /**
      * Sample one new value.
      *
-     * @access  protected
      * @param   \Hoa\Math\Sampler  $sampler    Sampler.
      * @return  mixed
      */
-    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
-
-        return $this->arguments[$sampler->getInteger(0, count($this) - 1)]
-                    ->sample($sampler);
+    protected function _sample(Math\Sampler $sampler)
+    {
+        return
+            $this
+                ->arguments[$sampler->getInteger(0, count($this) - 1)]
+                ->sample($sampler);
     }
-}
-
 }

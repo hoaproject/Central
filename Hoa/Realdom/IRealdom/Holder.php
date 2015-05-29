@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,43 +34,36 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Realdom\IRealdom {
+namespace Hoa\Realdom\IRealdom;
 
 /**
  * Interface \Hoa\Realdom\IRealdom\Holder.
  *
  * This interface describes all kind of structures that hold realdoms.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-interface Holder {
-
+interface Holder
+{
     /**
      * Get held realdoms.
      *
-     * @access  public
      * @return  \Hoa\Realdom\Disjunction
      */
-    public function &getHeld ( );
+    public function &getHeld();
 
     /**
      * Get holder name.
      *
-     * @access  public
      * @return  string
      */
-    public function getName ( );
+    public function getName();
 
     /**
      * Get value of the holder.
      *
-     * @access  public
      * @return  mixed
      */
-    public function &getValue ( );
-}
-
+    public function &getValue();
 }

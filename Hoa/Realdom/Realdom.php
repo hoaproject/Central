@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,94 +34,26 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Realdom;
 
-from('Hoa')
-
-/**
- * \Hoa\Realdom\Exception
- */
--> import('Realdom.Exception.~')
-
-/**
- * \Hoa\Realdom\Exception\IllegalArgument
- */
--> import('Realdom.Exception.IllegalArgument')
-
-/**
- * \Hoa\Realdom\Exception\MissingArgument
- */
--> import('Realdom.Exception.MissingArgument')
-
-/**
- * \Hoa\Realdom\Disjunction
- */
--> import('Realdom.Disjunction', true)
-
-/**
- * \Hoa\Realdom\Constarray
- */
--> import('Realdom.Constarray')
-
-/**
- * \Hoa\Realdom\Constboolean
- */
--> import('Realdom.Constboolean')
-
-/**
- * \Hoa\Realdom\Constfloat
- */
--> import('Realdom.Constfloat')
-
-/**
- * \Hoa\Realdom\Constinteger
- */
--> import('Realdom.Constinteger')
-
-/**
- * \Hoa\Realdom\Constnull
- */
--> import('Realdom.Constnull')
-
-/**
- * \Hoa\Realdom\Conststring
- */
--> import('Realdom.Conststring')
-
-/**
- * \Hoa\Math\Sampler
- */
--> import('Math.Sampler.~')
-
-/**
- * \Hoa\Visitor\Element
- */
--> import('Visitor.Element')
-
-/**
- * \Hoa\Praspel\Visitor\Praspel
- */
--> import('Praspel.Visitor.Praspel');
-
-}
-
-namespace Hoa\Realdom {
+use Hoa\Core;
+use Hoa\Math;
+use Hoa\Praspel;
+use Hoa\Visitor;
 
 /**
  * Class \Hoa\Realdom.
  *
  * Abstract-top-super realistic domain :-).
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
 abstract class Realdom
     implements \ArrayAccess,
                \Countable,
-               \Hoa\Visitor\Element {
-
+               Visitor\Element
+{
     /**
      * Realistic domain name.
      *
@@ -132,77 +64,77 @@ abstract class Realdom
     /**
      * Realistic domain defined arguments.
      *
-     * @var \Hoa\Realdom array
+     * @var array
      */
     protected $_arguments                    = null;
 
     /**
      * Realistic domain arguments.
      *
-     * @var \Hoa\Realdom array
+     * @var array
      */
     protected $arguments                     = null;
 
     /**
      * Default sampler.
      *
-     * @var \Hoa\Math\Sampler object
+     * @var \Hoa\Math\Sampler
      */
     protected static $_sampler               = null;
 
     /**
      * Current sampler.
      *
-     * @var \Hoa\Math\Sampler object
+     * @var \Hoa\Math\Sampler
      */
     protected $__sampler                     = null;
 
     /**
      * Sampled value.
      *
-     * @var \Hoa\Realdom mixed
+     * @var mixed
      */
     protected $_value                        = null;
 
     /**
      * Number of max try when sampling a new value.
      *
-     * @var \Hoa\Realdom int
+     * @var int
      */
     protected static $_maxtry                = 64;
 
     /**
      * Constraints.
      *
-     * @var \Hoa\Realdom array
+     * @var array
      */
     protected $_constraints                  = null;
 
     /**
      * Holder.
      *
-     * @var \Hoa\Realdom\IRealdom\Holder object
+     * @var \Hoa\Realdom\IRealdom\Holder
      */
     protected $_holder                       = null;
 
     /**
      * Whether the realdom has been constructed or not.
      *
-     * @var \Hoa\Realdom bool
+     * @var bool
      */
     protected $_constructed                  = false;
 
     /**
      * Default Praspel visitor.
      *
-     * @var \Hoa\Visitor\Visit object
+     * @var \Hoa\Visitor\Visit
      */
     protected static $_defaultPraspelVisitor = null;
 
     /**
      * Praspel visitor.
      *
-     * @var \Hoa\Visitor\Visit object
+     * @var \Hoa\Visitor\Visit
      */
     protected $_praspelVisitor               = null;
 
@@ -211,56 +143,55 @@ abstract class Realdom
     /**
      * Build a realistic domain.
      *
-     * @access  public
      * @return  void
-     * @throw   \Hoa\Realdom\Exception\IllegalArgument
-     * @throw   \Hoa\Realdom\Exception\MissingArgument
+     * @throws  \Hoa\Realdom\Exception\IllegalArgument
+     * @throws  \Hoa\Realdom\Exception\MissingArgument
      */
-    final public function __construct ( ) {
-
-        switch($this->_arguments) {
-
+    final public function __construct()
+    {
+        switch ($this->_arguments) {
             case null:
-                $this->arguments = array();
-              break;
+                $this->arguments = [];
+
+                break;
 
             case …:
                 $this->arguments = func_get_args();
                 self::autoBoxing($this->arguments, $this);
-              break;
+
+                break;
 
             default:
                 $arguments       = func_get_args();
-                $hints           = array();
-                $this->arguments = array();
+                $hints           = [];
+                $this->arguments = [];
                 $i               = 0;
 
                 reset($this->_arguments);
 
-                foreach($arguments as $argument) {
-
+                foreach ($arguments as $argument) {
                     $name = key($this->_arguments);
                     $hint = null;
 
-                    if(… === $argument) {
-
-                        if(is_int($name))
+                    if (… === $argument) {
+                        if (is_int($name)) {
                             throw new Exception\IllegalArgument(
                                 'Argument %s passed to %s() does not have a ' .
                                 'default value.',
-                                0, array($i + 1, $this->getName()));
+                                0,
+                                [$i + 1, $this->getName()]
+                            );
+                        }
 
                         $argument = current($this->_arguments);
                     }
 
-                    if(is_int($name)) {
-
+                    if (is_int($name)) {
                         $name = current($this->_arguments);
                         ++$i;
                     }
 
-                    if(false !== $pos = strrpos($name, ' ')) {
-
+                    if (false !== $pos = strrpos($name, ' ')) {
                         $hint = trim(substr($name, 0, $pos));
                         $name = substr($name, $pos + 1);
                     }
@@ -270,15 +201,12 @@ abstract class Realdom
                     next($this->_arguments);
                 }
 
-                while(list($name, $default) = each($this->_arguments)) {
-
-                    if(is_int($name)) {
-
+                while (list($name, $default) = each($this->_arguments)) {
+                    if (is_int($name)) {
                         $j = 0;
                         array_walk(
                             $this->_arguments,
-                            function ( $_, $key ) use ( &$j ) {
-
+                            function ($_, $key) use (&$j) {
                                 $j += is_int($key);
 
                                 return;
@@ -289,13 +217,14 @@ abstract class Realdom
                             1 < $j
                                 ? '%s() expects at least %d parameters, %d given.'
                                 : '%s() expects at least %d parameter, %d given.',
-                            1, array($this->getName(), $j, $i));
+                            1,
+                            [$this->getName(), $j, $i]
+                        );
                     }
 
                     $hint = null;
 
-                    if(false !== $pos = strrpos($name, ' ')) {
-
+                    if (false !== $pos = strrpos($name, ' ')) {
                         $hint = trim(substr($name, 0, $pos));
                         $name = substr($name, $pos + 1);
                     }
@@ -306,75 +235,76 @@ abstract class Realdom
 
                 self::autoBoxing($this->arguments, $this);
 
-                foreach($this->arguments as &$argument) {
-
+                foreach ($this->arguments as &$argument) {
                     $hint = current($hints);
 
-                    if(null === $hint) {
-
+                    if (null === $hint) {
                         next($hints);
 
                         continue;
                     }
 
-                    if($argument instanceof IRealdom\Holder)
+                    if ($argument instanceof IRealdom\Holder) {
                         $_realdoms = $argument->getHeld();
-                    elseif($argument instanceof IRealdom\Crate)
+                    } elseif ($argument instanceof IRealdom\Crate) {
                         $_realdoms = $argument->getTypes();
-                    elseif($argument instanceof Disjunction)
+                    } elseif ($argument instanceof Disjunction) {
                         $_realdoms = $argument->getRealdoms();
-                    else
-                        $_realdoms = array($argument);
+                    } else {
+                        $_realdoms = [$argument];
+                    }
 
                     $k = 0;
 
                     $_hints = explode('|', $hint);
 
-                    foreach($_hints as &$_hint)
-                        if('\\' !== $_hint[0])
+                    foreach ($_hints as &$_hint) {
+                        if ('\\' !== $_hint[0]) {
                             $_hint = __NAMESPACE__ . '\\' . $_hint;
+                        }
+                    }
 
-                    foreach($_realdoms as $_realdom) {
-
+                    foreach ($_realdoms as $_realdom) {
                         $flag = false;
 
-                        foreach($_hints as $__hint) {
-
-                            if(   $_realdom instanceof $__hint
-                               || $_realdom === $__hint) {
-
+                        foreach ($_hints as $__hint) {
+                            if ($_realdom instanceof $__hint ||
+                                $_realdom === $__hint) {
                                 $flag = true;
 
                                 break;
                             }
                         }
 
-                        if(false === $flag)
+                        if (false === $flag) {
                             unset($_realdoms[$k]);
-                        else
+                        } else {
                             ++$k;
+                        }
                     }
 
-                    switch(count($_realdoms)) {
-
+                    switch (count($_realdoms)) {
                         case 0:
-                            if($argument instanceof IRealdom\Holder)
+                            if ($argument instanceof IRealdom\Holder) {
                                 throw new Exception\IllegalArgument(
                                     'Argument %d passed to %s() must be of ' .
                                     'type %s, variable %s does not satisfy ' .
                                     'this constraint.',
-                                    2, array(
+                                    2,
+                                    [
                                         key($hints),
                                         $this->getName(),
                                         mb_strtolower($hint),
                                         $argument->getName()
-                                    )
+                                    ]
                                 );
+                            }
 
                             throw new Exception\IllegalArgument(
                                 'Argument %d passed to %s() must be of type ' .
                                 '%s, %s given.',
-                                3, array(
+                                3,
+                                [
                                     key($hints),
                                     $this->getName(),
                                     mb_strtolower($hint),
@@ -382,26 +312,30 @@ abstract class Realdom
                                         $_ = get_class($argument),
                                         mb_strrpos($_, '\\') + 1
                                     ))
-                                )
+                                ]
                             );
-                          break;
+
+                            break;
 
                         case 1:
-                            if($argument instanceof IRealdom\Crate)
+                            if ($argument instanceof IRealdom\Crate) {
                                 break;
+                            }
 
                             $argument = $_realdoms[0];
-                          break;
+
+                            break;
 
                         default:
                             throw new Exception\IllegalArgument(
                                 'Variable %s, passed as argument %d of %s(), ' .
                                 'has to many domains.',
-                                4, array(
+                                4,
+                                [
                                     $argument->getName(),
                                     key($hints),
                                     $this->getName()
-                                )
+                                ]
                             );
                     }
 
@@ -415,84 +349,88 @@ abstract class Realdom
     /**
      * Constructor of the realistic domain.
      *
-     * @access  protected
      * @return  void
      */
-    protected function construct ( ) {
-
+    protected function construct()
+    {
         return;
     }
 
     /**
      * Auto-boxing.
      *
-     * @access  public
      * @param   array         &$arguments    Arguments.
      * @param   \Hoa\Realdom  $self          Self (if we auto-box arguments).
      * @return  void
      */
-    public static function autoBoxing ( Array   &$arguments,
-                                        Realdom $self = null ) {
-
-        if(    is_object($self)
-           && (get_class($self) === 'Hoa\Realdom\Constarray'
-           ||  get_class($self) === 'Hoa\Realdom\Constboolean'
-           ||  get_class($self) === 'Hoa\Realdom\Constfloat'
-           ||  get_class($self) === 'Hoa\Realdom\Constinteger'
-           ||  get_class($self) === 'Hoa\Realdom\Constnull'
-           ||  get_class($self) === 'Hoa\Realdom\Conststring'))
+    public static function autoBoxing(Array &$arguments, Realdom $self = null)
+    {
+        if (is_object($self) &&
+            (get_class($self) === 'Hoa\Realdom\Constarray' ||
+             get_class($self) === 'Hoa\Realdom\Constboolean' ||
+             get_class($self) === 'Hoa\Realdom\Constfloat' ||
+             get_class($self) === 'Hoa\Realdom\Constinteger' ||
+             get_class($self) === 'Hoa\Realdom\Constnull' ||
+             get_class($self) === 'Hoa\Realdom\Conststring')) {
             return;
+        }
 
-        foreach($arguments as &$argument)
-            switch(gettype($argument)) {
-
+        foreach ($arguments as &$argument) {
+            switch (gettype($argument)) {
                 case 'array':
-                    $handle = array();
+                    $handle = [];
 
-                    foreach($argument as &$pair) {
-
+                    foreach ($argument as &$pair) {
                         $handle[] = &$pair[0];
 
-                        if(isset($pair[1]))
+                        if (isset($pair[1])) {
                             $handle[] = &$pair[1];
+                        }
                     }
 
                     self::autoBoxing($handle);
 
                     $argument = new Constarray($argument);
-                  break;
+
+                    break;
 
                 case 'boolean':
                     $argument = new Constboolean($argument);
-                  break;
+
+                    break;
 
                 case 'double':
                     $argument = new Constfloat($argument);
-                  break;
+
+                    break;
 
                 case 'integer':
                     $argument = new Constinteger($argument);
-                  break;
+
+                    break;
 
                 case 'NULL':
                     $argument = new Constnull($argument);
-                  break;
+
+                    break;
 
                 case 'string':
                     $argument = new Conststring($argument);
-                  break;
+
+                    break;
 
                 default:
-                    if($argument instanceof IRealdom\Holder) {
-
+                    if ($argument instanceof IRealdom\Holder) {
                         $argument = $argument->getHeld();
 
-                        if(null !== $self)
+                        if (null !== $self) {
                             $argument = $argument[0];
+                        }
 
                         break;
                     }
             }
+        }
 
         return;
     }
@@ -500,40 +438,39 @@ abstract class Realdom
     /**
      * Check if an argument exists.
      *
-     * @access  public
      * @param   string  $offset    Attribute name.
      * @return  bool
      */
-    public function offsetExists ( $offset ) {
-
-        return    isset($this->arguments[$offset])
-               && !($this->arguments[$offset] instanceof Constnull);
+    public function offsetExists($offset)
+    {
+        return
+            isset($this->arguments[$offset]) &&
+            !($this->arguments[$offset] instanceof Constnull);
     }
 
     /**
      * Get an argument value.
      *
-     * @access  public
      * @param   string  $offset    Attribute name.
      * @return  mixed
      */
-    public function offsetGet ( $offset ) {
-
-        return true === $this->offsetExists($offset)
-                   ? $this->arguments[$offset]
-                   : null;
+    public function offsetGet($offset)
+    {
+        return
+            true === $this->offsetExists($offset)
+                ? $this->arguments[$offset]
+                : null;
     }
 
     /**
      * Set an argument value.
      *
-     * @access  public
      * @param   string  $offset    Attribute name.
      * @param   mixed   $value     Attribute value.
      * @return  mixed
      */
-    public function offsetSet ( $offset, $value ) {
-
+    public function offsetSet($offset, $value)
+    {
         $old                      = $this->offsetGet($offset);
         $this->arguments[$offset] = $value;
 
@@ -543,12 +480,11 @@ abstract class Realdom
     /**
      * Unset an argument.
      *
-     * @access  public
      * @param   string  $offset    Attribute name.
      * @return  void
      */
-    public function offsetUnset ( $offset ) {
-
+    public function offsetUnset($offset)
+    {
         unset($this->arguments[$offset]);
 
         return;
@@ -557,45 +493,41 @@ abstract class Realdom
     /**
      * Get all arguments values.
      *
-     * @access  public
      * @return  array
      */
-    public function getArguments ( ) {
-
+    public function getArguments()
+    {
         return $this->arguments;
     }
 
     /**
      * Get arity.
      *
-     * @access  public
      * @return  int
      */
-    public function count ( ) {
-
+    public function count()
+    {
         return count($this->arguments);
     }
 
     /**
      * Get the realistic domain name.
      *
-     * @access  public
      * @return  string
      */
-    public function getName ( ) {
-
+    public function getName()
+    {
         return static::NAME;
     }
 
     /**
      * Set the default sampler.
      *
-     * @access  public
      * @param   \Hoa\Math\Sampler  $sampler    Sampler.
      * @return  \Hoa\Math\Sampler
      */
-    public static function setDefaultSampler ( \Hoa\Math\Sampler $sampler ) {
-
+    public static function setDefaultSampler(Math\Sampler $sampler)
+    {
         $old              = static::$_sampler;
         static::$_sampler = $sampler;
 
@@ -605,23 +537,21 @@ abstract class Realdom
     /**
      * Get the default sampler.
      *
-     * @access  public
      * @return  \Hoa\Math\Sampler
      */
-    public static function getDefaultSampler ( ) {
-
+    public static function getDefaultSampler()
+    {
         return static::$_sampler;
     }
 
     /**
      * Set the sampler.
      *
-     * @access  public
      * @param   \Hoa\Math\Sampler  $sampler    Sampler.
      * @return  \Hoa\Math\Sampler
      */
-    public function setSampler ( \Hoa\Math\Sampler $sampler ) {
-
+    public function setSampler(Math\Sampler $sampler)
+    {
         $old             = $this->__sampler;
         $this->__sampler = $sampler;
 
@@ -631,23 +561,21 @@ abstract class Realdom
     /**
      * Get the sampler.
      *
-     * @access  public
      * @return  \Hoa\Math\Sampler
      */
-    public function getSampler ( ) {
-
+    public function getSampler()
+    {
         return $this->__sampler ?: static::$_sampler;
     }
 
     /**
      * Set the sampled value.
      *
-     * @access  protected
      * @param   mixed      $sampled    Sampled value.
      * @return  mixed
      */
-    protected function setValue ( $sampled ) {
-
+    protected function setValue($sampled)
+    {
         $old          = $this->_value;
         $this->_value = $sampled;
 
@@ -657,23 +585,21 @@ abstract class Realdom
     /**
      * Get the sampled value.
      *
-     * @access  public
      * @return  mixed
      */
-    public function getValue ( ) {
-
+    public function getValue()
+    {
         return $this->_value;
     }
 
     /**
      * Set the max try number.
      *
-     * @access  public
      * @param   int     $maxtry    Max try authorized.
      * @return  int
      */
-    public static function setMaxTry ( $maxtry ) {
-
+    public static function setMaxTry($maxtry)
+    {
         $old           = self::$_maxtry;
         self::$_maxtry = $maxtry;
 
@@ -683,31 +609,29 @@ abstract class Realdom
     /**
      * Get the max try number.
      *
-     * @access  public
      * @return  int
      */
-    public static function getMaxTry ( ) {
-
+    public static function getMaxTry()
+    {
         return self::$_maxtry;
     }
 
     /**
      * Reset the realistic domain.
      *
-     * @access  public
      * @return  void
      */
-    public function reset ( ) {
-
-        if(false === $this->_constructed) {
-
+    public function reset()
+    {
+        if (false === $this->_constructed) {
             $this->construct();
             $this->_constructed = true;
         }
 
-        if(   $this instanceof IRealdom\Nonconvex
-           && isset($this->_discredited))
-            $this->_discredited = array();
+        if ($this instanceof IRealdom\Nonconvex &&
+            isset($this->_discredited)) {
+            $this->_discredited = [];
+        }
 
         return;
     }
@@ -715,14 +639,15 @@ abstract class Realdom
     /**
      * Helper to reset all arguments.
      *
-     * @access  protected
      * @return  void
      */
-    protected function resetArguments ( ) {
-
-        foreach($this->getArguments() as $name => $argument)
-            if($argument instanceof self)
+    protected function resetArguments()
+    {
+        foreach ($this->getArguments() as $name => $argument) {
+            if ($argument instanceof self) {
                 $argument->reset();
+            }
+        }
 
         return;
     }
@@ -730,14 +655,12 @@ abstract class Realdom
     /**
      * Predicate whether the sampled value belongs to the realistic domains.
      *
-     * @access  public
      * @param   mixed  $q    Sampled value.
      * @return  boolean
      */
-    public function predicate ( $q ) {
-
-        if(false === $this->_constructed) {
-
+    public function predicate($q)
+    {
+        if (false === $this->_constructed) {
             $this->construct();
             $this->_constructed = true;
         }
@@ -748,51 +671,53 @@ abstract class Realdom
     /**
      * Predicate whether the sampled value belongs to the realistic domains.
      *
-     * @access  protected
      * @param   mixed  $q    Sampled value.
      * @return  boolean
      */
-    abstract protected function _predicate ( $q );
+    abstract protected function _predicate($q);
 
     /**
      * Sample a new value.
      *
-     * @access  public
      * @param   \Hoa\Math\Sampler  $sampler    Sampler.
      * @return  mixed
-     * @throw   \Hoa\Realdom\Exception
+     * @throws  \Hoa\Realdom\Exception
      */
-    public function sample ( \Hoa\Math\Sampler $sampler = null ) {
-
-        if(false === $this->_constructed) {
-
+    public function sample(Math\Sampler $sampler = null)
+    {
+        if (false === $this->_constructed) {
             $this->construct();
             $this->_constructed = true;
         }
 
-        if(   null === $sampler
-           && null === $sampler = $this->getSampler())
+        if (null === $sampler &&
+            null === $sampler = $this->getSampler()) {
             throw new Exception(
                 'No sampler set. Please, use the %s::setDefaultSampler() or ' .
                 '%1$s::setSampler() method.',
-                4, __CLASS__);
+                4,
+                __CLASS__
+            );
+        }
 
         $maxtry = $this->getMaxTry();
 
         do {
-
             $sampled   = $this->_sample($sampler);
             $predicate = $this->predicate($sampled);
 
-            if(false === $predicate)
+            if (false === $predicate) {
                 $this->reset();
+            }
+        } while (false === $predicate && 0 < --$maxtry);
 
-        } while(false === $predicate && 0 < --$maxtry);
-
-        if(0 >= $maxtry)
+        if (0 >= $maxtry) {
             throw new Exception(
                 'Cannot sample a value, all tries failed (%d tries) from %s.',
-                5, array($this->getMaxTry(), $this->getName()));
+                5,
+                [$this->getMaxTry(), $this->getName()]
+            );
+        }
 
         $this->setValue($sampled);
 
@@ -802,21 +727,19 @@ abstract class Realdom
     /**
      * Sample one new value.
      *
-     * @access  protected
      * @param   \Hoa\Math\Sampler  $sampler    Sampler.
      * @return  mixed
      */
-    abstract protected function _sample ( \Hoa\Math\Sampler $sampler );
+    abstract protected function _sample(Math\Sampler $sampler);
 
     /**
      * Check if the realistic domain intersects with another.
      *
-     * @access  public
      * @param   \Hoa\Realdom  $realdom    Realistic domain.
      * @return  bool
      */
-    public function intersectWith ( Realdom $realdom ) {
-
+    public function intersectWith(Realdom $realdom)
+    {
         return false;
     }
 
@@ -824,12 +747,11 @@ abstract class Realdom
      * Set constraints.
      * Please, see Hoa\Praspel.
      *
-     * @access  public
      * @param   array  &$constraints    Contraints.
      * @return  \Hoa\Realdom
      */
-    public function setConstraints ( Array &$constraints ) {
-
+    public function setConstraints(Array &$constraints)
+    {
         $this->_constraints = &$constraints;
 
         return $this;
@@ -838,24 +760,22 @@ abstract class Realdom
     /**
      * Get constraints.
      *
-     * @access  protected
      * @return  array
      */
-    protected function &getConstraints ( ) {
-
+    protected function &getConstraints()
+    {
         return $this->_constraints;
     }
 
     /**
      * Propagate constraints (public).
      *
-     * @access  protected
      * @param   string  $type     Type.
      * @param   int     $index    Index.
      * @return  void
      */
-    public function propagateConstraints ( $type, $index ) {
-
+    public function propagateConstraints($type, $index)
+    {
         $this->_propagateConstraints($type, $index, $this->getConstraints());
 
         return;
@@ -864,30 +784,31 @@ abstract class Realdom
     /**
      * Propagate constraints.
      *
-     * @access  protected
      * @param   string  $type           Type.
      * @param   int     $index          Index.
      * @param   array   $constraints    Constraints.
      * @return  void
-     * @throw   \Hoa\Realdom\Exception\Inconsistent
+     * @throws  \Hoa\Realdom\Exception\Inconsistent
      */
-    protected function _propagateConstraints ( $type, $index,
-                                               Array &$constraints ) {
-
+    protected function _propagateConstraints(
+        $type,
+        $index,
+        Array &$constraints
+    ) {
         return;
     }
 
     /**
      * Test the “is” constraint.
      *
-     * @access  public
      * @param   string  $qualifier    Qualifier.
      * @return  bool
      */
-    public function is ( $qualifier ) {
-
-        if(!isset($this->_constraints['is']))
+    public function is($qualifier)
+    {
+        if (!isset($this->_constraints['is'])) {
             return false;
+        }
 
         return in_array($qualifier, $this->_constraints['is']);
     }
@@ -895,12 +816,11 @@ abstract class Realdom
     /**
      * Set holder.
      *
-     * @access  public
      * @param   \Hoa\Realdom\IRealdom\Holder  $holder    Holder.
      * @return  \Hoa\Realdom\IRealdom\Holder
      */
-    public function setHolder ( IRealdom\Holder $holder ) {
-
+    public function setHolder(IRealdom\Holder $holder)
+    {
         $old           = $holder;
         $this->_holder = $holder;
 
@@ -910,23 +830,21 @@ abstract class Realdom
     /**
      * Get holder.
      *
-     * @access  public
      * @return  \Hoa\Realdom\IRealdom\Holder
      */
-    public function getHolder ( ) {
-
+    public function getHolder()
+    {
         return $this->_holder;
     }
 
     /**
      * Set default Praspel visitor.
      *
-     * @access  public
      * @param   \Hoa\Visitor\Visit  $visitor    Visitor.
      * @return  \Hoa\Visitor\Visit
      */
-    public static function setDefaultPraspelVisitor ( \Hoa\Visitor\Visit $visitor ) {
-
+    public static function setDefaultPraspelVisitor(Visitor\Visit $visitor)
+    {
         $old                            = static::$_defaultPraspelVisitor;
         static::$_defaultPraspelVisitor = $visitor;
 
@@ -937,14 +855,14 @@ abstract class Realdom
      * Get default Praspel visitor.
      * If default visitor is null, Hoa\Praspel\Visitor\Praspel will be used.
      *
-     * @access  public
      * @param   \Hoa\Visitor\Visit  $visitor    Visitor.
      * @return  \Hoa\Visitor\Visit
      */
-    public static function getDefaultPraspelVisitor ( ) {
-
-        if(null === static::$_defaultPraspelVisitor)
-            static::$_defaultPraspelVisitor = new \Hoa\Praspel\Visitor\Praspel();
+    public static function getDefaultPraspelVisitor()
+    {
+        if (null === static::$_defaultPraspelVisitor) {
+            static::$_defaultPraspelVisitor = new Praspel\Visitor\Praspel();
+        }
 
         return static::$_defaultPraspelVisitor;
     }
@@ -952,12 +870,11 @@ abstract class Realdom
     /**
      * Set Praspel visitor.
      *
-     * @access  public
      * @param   \Hoa\Visitor\Visit  $visitor    Visitor.
      * @return  \Hoa\Visitor\Visit
      */
-    public function setPraspelVisitor ( \Hoa\Visitor\Visit $visitor ) {
-
+    public function setPraspelVisitor(Visitor\Visit $visitor)
+    {
         $old                   = $this->_praspelVisitor;
         $this->_praspelVisitor = $visitor;
 
@@ -967,37 +884,31 @@ abstract class Realdom
     /**
      * Get Praspel visitor.
      *
-     * @access  public
      * @return  \Hoa\Visitor\Visit
      */
-    public function getPraspelVisitor ( ) {
-
+    public function getPraspelVisitor()
+    {
         return $this->_praspelVisitor ?: static::getDefaultPraspelVisitor();
     }
 
     /**
      * Accept a visitor.
      *
-     * @access  public
      * @param   \Hoa\Visitor\Visit  $visitor    Visitor.
      * @param   mixed               &$handle    Handle (reference).
      * @param   mixed               $eldnah     Handle (no reference).
      * @return  mixed
      */
-    public function accept ( \Hoa\Visitor\Visit $visitor,
-                             &$handle = null, $eldnah = null ) {
-
+    public function accept(
+        Visitor\Visit $visitor,
+        &$handle = null,
+        $eldnah = null
+    ) {
         return $visitor->visit($this, $handle, $eldnah);
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Realdom\Realdom');
-
-}
+Core\Consistency::flexEntity('Hoa\Realdom\Realdom');

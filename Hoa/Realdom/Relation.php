@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,31 +34,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Realdom\RealdomArray
- */
--> import('Realdom.RealdomArray');
-
-}
-
-namespace Hoa\Realdom {
+namespace Hoa\Realdom;
 
 /**
  * Class \Hoa\Realdom\Relation.
  *
  * Realistic domain: relation.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Relation extends RealdomArray {
-
+class Relation extends RealdomArray
+{
     /**
      * Realistic domain name.
      *
@@ -69,26 +56,24 @@ class Relation extends RealdomArray {
     /**
      * Realistic domain defined arguments.
      *
-     * @var \Hoa\Realdom\Relation array
+     * @var array
      */
-    protected $_arguments = array(
+    protected $_arguments = [
         'Conststring classname',
         'Integer     length'
-    );
+    ];
 
 
 
-    public function construct ( ) {
-
-        $this['pairs'] = new Constarray(array(array(
+    public function construct()
+    {
+        $this['pairs'] = new Constarray([[
             0 => realdom()->natural(),
             1 => realdom()->class($this['classname']->getConstantValue())
-        )));
+        ]]);
 
         parent::construct();
 
         return;
     }
-}
-
 }

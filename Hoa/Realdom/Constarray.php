@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,41 +34,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Realdom;
 
-from('Hoa')
-
-/**
- * \Hoa\Realdom\RealdomArray
- */
--> import('Realdom.RealdomArray')
-
-/**
- * \Hoa\Realdom\IRealdom\Constant
- */
--> import('Realdom.I~.Constant')
-
-/**
- * \Hoa\Realdom\Constinteger
- */
--> import('Realdom.Constinteger');
-
-}
-
-namespace Hoa\Realdom {
+use Hoa\Math;
 
 /**
  * Class \Hoa\Realdom\Constarray.
  *
  * Realistic domain: constarray.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Constarray extends RealdomArray implements IRealdom\Constant {
-
+class Constarray extends RealdomArray implements IRealdom\Constant
+{
     /**
      * Realistic domain name.
      *
@@ -79,22 +58,21 @@ class Constarray extends RealdomArray implements IRealdom\Constant {
     /**
      * Realistic domain defined arguments.
      *
-     * @var \Hoa\Realdom array
+     * @var array
      */
-    protected $_arguments = array(
+    protected $_arguments = [
         'pairs'
-    );
+    ];
 
 
 
     /**
      * Construct a realistic domain.
      *
-     * @access  protected
      * @return  void
      */
-    protected function construct ( ) {
-
+    protected function construct()
+    {
         $this['length'] = new Constinteger(count($this['pairs']));
 
         return;
@@ -103,17 +81,16 @@ class Constarray extends RealdomArray implements IRealdom\Constant {
     /**
      * Reset realistic domain.
      *
-     * @access  public
      * @return  void
      */
-    public function reset ( ) {
-
-        foreach($this['pairs'] as $pair) {
-
+    public function reset()
+    {
+        foreach ($this['pairs'] as $pair) {
             $pair[0]->reset();
 
-            if(isset($pair[1]))
+            if (isset($pair[1])) {
                 $pair[1]->reset();
+            }
         }
 
         return;
@@ -122,44 +99,46 @@ class Constarray extends RealdomArray implements IRealdom\Constant {
     /**
      * Predicate whether the sampled value belongs to the realistic domains.
      *
-     * @access  protected
      * @param   mixed  $q    Sampled value.
      * @return  boolean
      */
-    protected function _predicate ( $q ) {
-
-        if(!is_array($q))
+    protected function _predicate($q)
+    {
+        if (!is_array($q)) {
             return false;
+        }
 
         $count = count($q);
 
-        if(false === $this['length']->predicate($count))
+        if (false === $this['length']->predicate($count)) {
             return false;
+        }
 
         $pairs = $this['pairs'];
 
-        foreach($q as $_key => $_value) {
-
+        foreach ($q as $_key => $_value) {
             $out = false;
 
-            foreach($pairs as $pair) {
-
+            foreach ($pairs as $pair) {
                 $key   = $pair[0];
                 $value = $pair[1];
 
-                if(false === $key->predicate($_key))
+                if (false === $key->predicate($_key)) {
                     continue;
+                }
 
-                if(false === $value->predicate($_value))
+                if (false === $value->predicate($_value)) {
                     continue;
+                }
 
                 $out = true;
 
                 break;
             }
 
-            if(false === $out)
+            if (false === $out) {
                 return false;
+            }
         }
 
         return $out;
@@ -168,18 +147,15 @@ class Constarray extends RealdomArray implements IRealdom\Constant {
     /**
      * Sample one new value.
      *
-     * @access  protected
      * @param   \Hoa\Math\Sampler  $sampler    Sampler.
      * @return  mixed
      */
-    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
+    protected function _sample(Math\Sampler $sampler)
+    {
+        $out = [];
 
-        $out = array();
-
-        foreach($this['pairs'] as $pair) {
-
-            if(!isset($pair[1])) {
-
+        foreach ($this['pairs'] as $pair) {
+            if (!isset($pair[1])) {
                 $out[] = $pair[0]->sample($sampler);
 
                 continue;
@@ -196,39 +172,37 @@ class Constarray extends RealdomArray implements IRealdom\Constant {
     /**
      * Get constant value.
      *
-     * @access  public
      * @return  float
      */
-    public function getConstantValue ( ) {
-
+    public function getConstantValue()
+    {
         return $this['pairs'];
     }
 
     /**
      * Get representation of the realistic domain.
      *
-     * @access  public
      * @return  string
      */
-    public function getConstantRepresentation ( ) {
+    public function getConstantRepresentation()
+    {
+        $handle = [];
 
-        $handle = array();
-
-        foreach($this['pairs'] as $pair) {
-
+        foreach ($this['pairs'] as $pair) {
             $_handle = null;
 
-            foreach($pair as $_pair) {
-
-                if(null === $_handle)
+            foreach ($pair as $_pair) {
+                if (null === $_handle) {
                     $_handle  = isset($pair[1]) ? 'from ' :  'to ';
-                else
+                } else {
                     $_handle .= ' to ';
+                }
 
-                if(null !== $holder = $_pair->getHolder())
+                if (null !== $holder = $_pair->getHolder()) {
                     $_handle .= $holder->getName();
-                else
+                } else {
                     $_handle .= $this->getPraspelVisitor()->visit($_pair);
+                }
             }
 
             $handle[] = $_handle;
@@ -236,6 +210,4 @@ class Constarray extends RealdomArray implements IRealdom\Constant {
 
         return '[' . implode(', ', $handle) . ']';
     }
-}
-
 }

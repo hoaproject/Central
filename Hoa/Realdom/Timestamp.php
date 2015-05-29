@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,41 +34,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Realdom;
 
-from('Hoa')
-
-/**
- * \Hoa\Realdom
- */
--> import('Realdom.~')
-
-/**
- * \Hoa\Realdom\Constinteger
- */
--> import('Realdom.Constinteger')
-
-/**
- * \Hoa\Realdom\Conststring
- */
--> import('Realdom.Conststring');
-
-}
-
-namespace Hoa\Realdom {
+use Hoa\Math;
 
 /**
  * Class \Hoa\Realdom\Timestamp.
  *
  * Realistic domain: timestamp.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Timestamp extends Constinteger {
-
+class Timestamp extends Constinteger
+{
     /**
      * Realistic domain name.
      *
@@ -79,50 +58,45 @@ class Timestamp extends Constinteger {
     /**
      * Realistic domain defined arguments.
      *
-     * @var \Hoa\Realdom array
+     * @var array
      */
-    protected $_arguments = array(
+    protected $_arguments = [
         'Conststring date' => 'now'
-    );
+    ];
 
 
 
     /**
      * Predicate whether the sampled value belongs to the realistic domains.
      *
-     * @access  protected
      * @param   mixed  $q    Sampled value.
      * @return  boolean
      */
-    protected function _predicate ( $q ) {
-
+    protected function _predicate($q)
+    {
         return $q == $this->getConstantValue();
     }
 
     /**
      * Sample one new value.
      *
-     * @access  protected
      * @param   \Hoa\Math\Sampler  $sampler    Sampler.
      * @return  mixed
      */
-    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
-
+    protected function _sample(Math\Sampler $sampler)
+    {
         return $this->getConstantValue();
     }
 
     /**
      * Get constant value.
      *
-     * @access  public
      * @return  int
      */
-    public function getConstantValue ( ) {
-
+    public function getConstantValue()
+    {
         $datetime = new \DateTime($this['date']->getConstantValue());
 
         return (int) $datetime->format('U');
     }
-}
-
 }

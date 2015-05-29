@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,38 +34,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Realdom\IRealdom;
 
-from('Hoa')
-
-/**
- * \Hoa\Visitor\Element
- */
--> import('Visitor.Element');
-
-}
-
-namespace Hoa\Realdom\IRealdom {
+use Hoa\Visitor;
 
 /**
  * Interface \Hoa\Realdom\IRealdom\Crate.
  *
  * Represent a mocked realdom.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-interface Crate extends \Hoa\Visitor\Element {
-
+interface Crate extends Visitor\Element
+{
     /**
      * Get crate types.
      *
-     * @access  public
      * @return  array
      */
-    public function getTypes ( );
-}
-
+    public function getTypes();
 }

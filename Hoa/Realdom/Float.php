@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,36 +34,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Realdom;
 
-from('Hoa')
-
-/**
- * \Hoa\Realdom
- */
--> import('Realdom.~')
-
-/**
- * \Hoa\Realdom\Number
- */
--> import('Realdom.Number');
-
-}
-
-namespace Hoa\Realdom {
+use Hoa\Math;
 
 /**
  * Class \Hoa\Realdom\Float.
  *
  * Realistic domain: float.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Float extends Realdom implements Number {
-
+class Float extends Realdom implements Number
+{
     /**
      * Realistic domain name.
      *
@@ -76,26 +60,22 @@ class Float extends Realdom implements Number {
     /**
      * Predicate whether the sampled value belongs to the realistic domains.
      *
-     * @access  protected
      * @param   mixed  $q    Sampled value.
      * @return  boolean
      */
-    protected function _predicate ( $q ) {
-
+    protected function _predicate($q)
+    {
         return is_float($q);
     }
 
     /**
      * Sample one new value.
      *
-     * @access  protected
      * @param   \Hoa\Math\Sampler  $sampler    Sampler.
      * @return  mixed
      */
-    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
-
+    protected function _sample(Math\Sampler $sampler)
+    {
         return $sampler->getFloat();
     }
-}
-
 }

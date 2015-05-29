@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,36 +34,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Realdom;
 
-from('Hoa')
-
-/**
- * \Hoa\Realdom
- */
--> import('Realdom.~')
-
-/**
- * \Hoa\Realdom\String
- */
--> import('Realdom.String');
-
-}
-
-namespace Hoa\Realdom {
+use Hoa\Math;
 
 /**
  * Class \Hoa\Realdom\Color
  *
  * Realistic domain: color.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Color extends String {
-
+class Color extends String
+{
     /**
      * Realistic domain name.
      *
@@ -80,7 +64,7 @@ class Color extends String {
     /**
      * Realistic domains defined arguments.
      *
-     * @var \Hoa\Realdom array
+     * @var array
      */
     protected $_arguments = null;
 
@@ -89,42 +73,40 @@ class Color extends String {
     /**
      * Construct a realistic domain.
      *
-     * @access  protected
      * @return  void
      */
-    protected function construct ( ) {
-
+    protected function construct()
+    {
         return;
     }
 
     /**
      * Predicate whether the sampled value belongs to the realistic domains.
      *
-     * @access  protected
      * @param   mixed  $q    Sampled value.
      * @return  boolean
      */
-    protected function _predicate ( $q ) {
-
+    protected function _predicate($q)
+    {
         return 0 !== preg_match(static::REGEX, $q, $m);
     }
 
     /**
      * Sample one new value.
      *
-     * @access  protected
      * @param   \Hoa\Math\Sampler  $sampler    Sampler.
      * @return  string
      */
-    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
-
-        if(0 === $sampler->getInteger(0, 1))
+    protected function _sample(Math\Sampler $sampler)
+    {
+        if (0 === $sampler->getInteger(0, 1)) {
             return '#' . sprintf(
                 '%02' . implode('%02', $this->samplePattern($sampler)),
                 $sampler->getInteger(0, 255),
                 $sampler->getInteger(0, 255),
                 $sampler->getInteger(0, 255)
             );
+        }
 
         return '#' . sprintf(
             '%' . implode('%', $this->samplePattern($sampler)),
@@ -137,31 +119,24 @@ class Color extends String {
     /**
      * Sample patterns.
      *
-     * @access  public
      * @param   \Hoa\Math\Sampler  $sampler    Sampler.
      * @return  array
      */
-    public function samplePattern ( \Hoa\Math\Sampler $sampler ) {
-
-        switch($sampler->getInteger(0, 2)) {
-
+    public function samplePattern(Math\Sampler $sampler)
+    {
+        switch ($sampler->getInteger(0, 2)) {
             case 0:
-                return array('x', 'x', 'x');
-              break;
+                return ['x', 'x', 'x'];
 
             case 1:
-                return array('X', 'X', 'X');
-              break;
+                return ['X', 'X', 'X'];
 
             case 2:
-                return array(
+                return [
                     0 === $sampler->getInteger(0, 1) ? 'x' : 'X',
                     0 === $sampler->getInteger(0, 1) ? 'x' : 'X',
                     0 === $sampler->getInteger(0, 1) ? 'x' : 'X',
-                );
-              break;
+                ];
         }
     }
-}
-
 }

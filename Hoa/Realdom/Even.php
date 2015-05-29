@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,31 +34,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Realdom;
 
-from('Hoa')
-
-/**
- * \Hoa\Realdom
- */
--> import('Realdom.~');
-
-}
-
-namespace Hoa\Realdom {
+use Hoa\Math;
 
 /**
  * Class \Hoa\Realdom\Even.
  *
  * Realistic domain: even.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Even extends Realdom {
-
+class Even extends Realdom
+{
     /**
      * Realistic domain name.
      *
@@ -71,40 +60,37 @@ class Even extends Realdom {
      *
      * @var \Hoa\Realdom array
      */
-    protected $_arguments = array(
+    protected $_arguments = [
         'Integer number'
-    );
+    ];
 
 
 
     /**
      * Predicate whether the sampled value belongs to the realistic domains.
      *
-     * @access  protected
      * @param   mixed   $q    Sampled value.
      * @return  boolean
      */
-    protected function _predicate ( $q ) {
-
+    protected function _predicate($q)
+    {
         return $this['number']->predicate($q) && ($q & 1) == 0;
     }
 
     /**
      * Sample one new value.
      *
-     * @access  protected
      * @param   \Hoa\Math\Sampler  $sampler    Sampler.
      * @return  mixed
      */
-    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
-
+    protected function _sample(Math\Sampler $sampler)
+    {
         $q = $this['number']->sample($sampler);
 
-        if(($q & 1) == 1)
+        if (($q & 1) == 1) {
             ++$q;
+        }
 
         return $q;
     }
-}
-
 }

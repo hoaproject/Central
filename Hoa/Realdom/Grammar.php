@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,51 +34,23 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Realdom;
 
-from('Hoa')
-
-/**
- * \Hoa\Realdom
- */
--> import('Realdom.~')
-
-/**
- * \Hoa\Realdom\String
- */
--> import('Realdom.String')
-
-/**
- * \Hoa\Compiler\Llk
- */
--> import('Compiler.Llk.~')
-
-/**
- * \Hoa\Regex\Visitor\Isotropic
- */
--> import('Regex.Visitor.Isotropic')
-
-/**
- * \Hoa\File\Read
- */
--> import('File.Read');
-
-}
-
-namespace Hoa\Realdom {
+use Hoa\Compiler;
+use Hoa\File;
+use Hoa\Math;
+use Hoa\Regex;
 
 /**
  * Class \Hoa\Realdom\Grammar.
  *
  * Realistic domain: grammar.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Grammar extends String {
-
+class Grammar extends String
+{
     /**
      * Realistic domain name.
      *
@@ -89,23 +61,23 @@ class Grammar extends String {
     /**
      * Realistic domain defined arguments.
      *
-     * @var \Hoa\Realdom array
+     * @var array
      */
-    protected $_arguments       = array(
+    protected $_arguments       = [
         'Conststring grammar'
-    );
+    ];
 
     /**
      * Grammar compiler.
      *
-     * @var \Hoa\Compiler\Llk object
+     * @var \Hoa\Compiler\Llk
      */
     protected $_compiler        = null;
 
     /**
      * Sampler.
      *
-     * @var \Hoa\Compiler\Llk\Sampler object
+     * @var \Hoa\Compiler\Llk\Sampler
      */
     protected $_compilerSampler = null;
 
@@ -114,13 +86,12 @@ class Grammar extends String {
     /**
      * Construct a realistic domain.
      *
-     * @access  protected
      * @return  void
      */
-    protected function construct ( ) {
-
-        $this->_compiler = \Hoa\Compiler\Llk::load(
-            new \Hoa\File\Read($this['grammar']->getConstantValue())
+    protected function construct()
+    {
+        $this->_compiler = Compiler\Llk::load(
+            new File\Read($this['grammar']->getConstantValue())
         );
 
         return;
@@ -129,21 +100,17 @@ class Grammar extends String {
     /**
      * Predicate whether the sampled value belongs to the realistic domains.
      *
-     * @access  protected
      * @param   mixed  $q    Sampled value.
      * @return  boolean
      */
-    protected function _predicate ( $q ) {
-
+    protected function _predicate($q)
+    {
         // How to handle size (because the unit of size is token, not
         // character)?
 
         try {
-
             $this->_compiler->parse($q, null, false);
-        }
-        catch ( \Exception $e ) {
-
+        } catch (\Exception $e) {
             return false;
         }
 
@@ -153,28 +120,25 @@ class Grammar extends String {
     /**
      * Sample one new value.
      *
-     * @access  protected
      * @param   \Hoa\Math\Sampler  $sampler    Sampler.
      * @return  mixed
      */
-    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
+    protected function _sample(Math\Sampler $sampler)
+    {
+        static $_values = [];
 
-        static $_values = array();
-
-        if(null === $this->_compilerSampler)
-            $this->_compilerSampler = new \Hoa\Compiler\Llk\Sampler\Coverage(
+        if (null === $this->_compilerSampler) {
+            $this->_compilerSampler = new Compiler\Llk\Sampler\Coverage(
                 $this->_compiler,
-                new \Hoa\Regex\Visitor\Isotropic($sampler)
+                new Regex\Visitor\Isotropic($sampler)
             );
+        }
 
-        if(empty($_values)) {
-
+        if (empty($_values)) {
             $_values = iterator_to_array($this->_compilerSampler);
             shuffle($_values);
         }
 
         return array_shift($_values);
     }
-}
-
 }

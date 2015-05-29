@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,46 +34,23 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Realdom;
 
-from('Hoa')
-
-/**
- * \Hoa\Realdom
- */
--> import('Realdom.~')
-
-/**
- * \Hoa\Compiler\Llk
- */
--> import('Compiler.Llk.~')
-
-/**
- * \Hoa\File\Read
- */
--> import('File.Read')
-
-/**
- * \Hoa\Regex\Visitor\Isotropic
- */
--> import('Regex.Visitor.Isotropic');
-
-}
-
-namespace Hoa\Realdom {
+use Hoa\Compiler;
+use Hoa\File;
+use Hoa\Math;
+use Hoa\Regex as HoaRegex;
 
 /**
  * Class \Hoa\Realdom\Regex.
  *
  * Realistic domain: regex.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Regex extends Realdom {
-
+class Regex extends Realdom
+{
     /**
      * Realistic domain name.
      *
@@ -84,50 +61,51 @@ class Regex extends Realdom {
     /**
      * Realistic domain defined arguments.
      *
-     * @var \Hoa\Realdom array
+     * @var array
      */
-    protected $_arguments         = array(
+    protected $_arguments       = [
         'Conststring regex'
-    );
+    ];
 
     /**
      * Regex compiler.
      *
-     * @var \Hoa\Compiler\Llk object
+     * @var \Hoa\Compiler\Llk
      */
-    protected static $_compiler   = null;
+    protected static $_compiler = null;
 
     /**
      * Regex visitor that use realdom.
      *
-     * @var \Hoa\Regex\Visitor\Isotropic object
+     * @var \Hoa\Regex\Visitor\Isotropic
      */
-    protected static $_visitor    = null;
+    protected static $_visitor  = null;
 
     /**
      * AST.
      *
-     * @var \Hoa\Compiler\TreeNode object
+     * @var \Hoa\Compiler\TreeNode
      */
-    protected $_ast               = null;
+    protected $_ast             = null;
 
 
 
     /**
      * Construct a realistic domain.
      *
-     * @access  protected
      * @return  void
      */
-    protected function construct ( ) {
-
-        if(null === self::$_compiler)
-            self::$_compiler = \Hoa\Compiler\Llk::load(
-                new \Hoa\File\Read('hoa://Library/Regex/Grammar.pp')
+    protected function construct()
+    {
+        if (null === self::$_compiler) {
+            self::$_compiler = Compiler\Llk::load(
+                new File\Read('hoa://Library/Regex/Grammar.pp')
             );
+        }
 
-        if(!isset($this['regex']))
+        if (!isset($this['regex'])) {
             $this['regex'] = new Conststring('');
+        }
 
         $this->_ast = self::$_compiler->parse(
             mb_substr(
@@ -143,29 +121,26 @@ class Regex extends Realdom {
     /**
      * Predicate whether the sampled value belongs to the realistic domains.
      *
-     * @access  protected
      * @param   mixed  $q    Sampled value.
      * @return  boolean
      */
-    protected function _predicate ( $q ) {
-
+    protected function _predicate($q)
+    {
         return 0 !== preg_match($this['regex']->getConstantValue(), $q);
     }
 
     /**
      * Sample one new value.
      *
-     * @access  protected
      * @param   \Hoa\Math\Sampler  $sampler    Sampler.
      * @return  mixed
      */
-    protected function _sample ( \Hoa\Math\Sampler $sampler ) {
-
-        if(null === self::$_visitor)
-            self::$_visitor = new \Hoa\Regex\Visitor\Isotropic($sampler);
+    protected function _sample(Math\Sampler $sampler)
+    {
+        if (null === self::$_visitor) {
+            self::$_visitor = new HoaRegex\Visitor\Isotropic($sampler);
+        }
 
         return self::$_visitor->visit($this->_ast);
     }
-}
-
 }
