@@ -532,26 +532,93 @@ class Consistency
     {
         static $_list = [
             // PHP keywords.
-            '__halt_compiler', 'abstract',     'and',           'array',
-            'as',              'break',        'callable',      'case',
-            'catch',           'class',        'clone',         'const',
-            'continue',        'declare',      'default',       'die',
-            'do',              'echo',         'else',          'elseif',
-            'empty',           'enddeclare',   'endfor',        'endforeach',
-            'endif',           'endswitch',    'endwhile',      'eval',
-            'exit',            'extends',      'final',         'for',
-            'foreach',         'function',     'global',        'goto',
-            'if',              'implements',   'include',       'include_once',
-            'instanceof',      'insteadof',    'interface',     'isset',
-            'list',            'namespace',    'new',           'or',
-            'print',           'private',      'protected',     'public',
-            'require',         'require_once', 'return',        'static',
-            'switch',          'throw',        'trait',         'try',
-            'unset',           'use',          'var',           'while',
-            'xor',             'yield',
+            '__halt_compiler',
+            'abstract',
+            'and',
+            'array',
+            'as',
+            'bool',
+            'break',
+            'callable',
+            'case',
+            'catch',
+            'class',
+            'clone',
+            'const',
+            'continue',
+            'declare',
+            'default',
+            'die',
+            'do',
+            'echo',
+            'else',
+            'elseif',
+            'empty',
+            'enddeclare',
+            'endfor',
+            'endforeach',
+            'endif',
+            'endswitch',
+            'endwhile',
+            'eval',
+            'exit',
+            'extends',
+            'false',
+            'final',
+            'float',
+            'for',
+            'foreach',
+            'function',
+            'global',
+            'goto',
+            'if',
+            'implements',
+            'include',
+            'include_once',
+            'instanceof',
+            'insteadof',
+            'int',
+            'interface',
+            'isset',
+            'list',
+            'mixed',
+            'namespace',
+            'new',
+            'null',
+            'numeric',
+            'object',
+            'or',
+            'print',
+            'private',
+            'protected',
+            'public',
+            'require',
+            'require_once',
+            'resource',
+            'return',
+            'static',
+            'string',
+            'switch',
+            'throw',
+            'trait',
+            'true',
+            'try',
+            'unset',
+            'use',
+            'var',
+            'while',
+            'xor',
+            'yield',
+
             // Compile-time constants.
-            '__class__',       '__dir__',      '__file__',      '__function__',
-            '__line__',        '__method__',   '__namespace__', '__trait__'
+            '__class__',
+            '__dir__',
+            '__file__',
+            '__function__',
+            '__line__',
+            '__method__',
+            '__namespace__',
+            '__trait__'
         ];
 
         return in_array(strtolower($word), $_list);
@@ -871,6 +938,29 @@ if (!function_exists('trait_exists')) {
         }
 
         return false;
+    }
+}
+
+if (70000 > PHP_VERSION_ID) {
+    /**
+     * Implement a fake BaseException class, introduced in PHP7.0.
+     */
+    abstract class BaseException extends Exception
+    {
+    }
+
+    /**
+     * Implement a fake EngineException class, introduced in PHP7.0.
+     */
+    class EngineException extends Exception
+    {
+    }
+
+    /**
+     * Implement a fake ParseException class, introduced in PHP7.0.
+     */
+    class ParseException extends Exception
+    {
     }
 }
 
