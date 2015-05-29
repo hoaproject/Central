@@ -170,7 +170,7 @@ class Html extends \Hoa\Xyl\Interpreter {
         'audio'           => '\Hoa\Xyl\Interpreter\Html\Media',
         'source'          => '\Hoa\Xyl\Interpreter\Html\Source',
         'track'           => '\Hoa\Xyl\Interpreter\Html\Track',
-        'object'          => '\Hoa\Xyl\Interpreter\Html\Object',
+        'object'          => '\Hoa\Xyl\Interpreter\Html\HtmlObject',
         'param'           => '\Hoa\Xyl\Interpreter\Html\Param',
 
         // Tabular data.

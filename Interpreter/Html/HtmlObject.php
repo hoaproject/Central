@@ -48,7 +48,7 @@ from('Hoa')
 namespace Hoa\Xyl\Interpreter\Html {
 
 /**
- * Class \Hoa\Xyl\Interpreter\Html\Object.
+ * Class \Hoa\Xyl\Interpreter\Html\HtmlObject.
  *
  * The <object /> component.
  *
@@ -57,12 +57,12 @@ namespace Hoa\Xyl\Interpreter\Html {
  * @license    New BSD License
  */
 
-class Object extends Generic {
+class HtmlObject extends Generic {
 
     /**
      * Attributes description.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Object array
+     * @var \Hoa\Xyl\Interpreter\Html\HtmlObject array
      */
     protected static $_attributes        = array(
         'data'   => parent::ATTRIBUTE_TYPE_NORMAL,
@@ -76,7 +76,7 @@ class Object extends Generic {
     /**
      * Attributes mapping between XYL and HTML.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Object array
+     * @var \Hoa\Xyl\Interpreter\Html\HtmlObject array
      */
     protected static $_attributesMapping = …;
 }
