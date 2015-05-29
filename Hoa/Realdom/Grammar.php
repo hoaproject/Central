@@ -49,7 +49,7 @@ use Hoa\Regex;
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Grammar extends String
+class Grammar extends RealdomString
 {
     /**
      * Realistic domain name.

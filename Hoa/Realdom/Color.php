@@ -46,7 +46,7 @@ use Hoa\Math;
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Color extends String
+class Color extends RealdomString
 {
     /**
      * Realistic domain name.

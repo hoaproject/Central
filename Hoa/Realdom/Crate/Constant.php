@@ -139,11 +139,11 @@ class          Constant
                 $out[] = $prefix . 'Constarray';
             } elseif ($realdom instanceof Realdom\Boolean) {
                 $out[] = $prefix . 'Constboolean';
-            } elseif ($realdom instanceof Realdom\Float) {
+            } elseif ($realdom instanceof Realdom\RealdomFloat) {
                 $out[] = $prefix . 'Constfloat';
             } elseif ($realdom instanceof Realdom\Integer) {
                 $out[] = $prefix . 'Constinteger';
-            } elseif ($realdom instanceof Realdom\String) {
+            } elseif ($realdom instanceof Realdom\RealdomString) {
                 $out[] = $prefix . 'Conststring';
             } else {
                 throw new Realdom\Exception(

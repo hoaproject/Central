@@ -37,17 +37,17 @@
 namespace Hoa\Realdom;
 
 use Hoa\Math;
-use Hoa\String as HoaString;
+use Hoa\Ustring;
 
 /**
- * Class \Hoa\Realdom\String.
+ * Class \Hoa\Realdom\RealdomString.
  *
  * Realistic domain: string.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class          String
+class          RealdomString
     extends    Realdom
     implements IRealdom\Nonconvex,
                IRealdom\Finite
@@ -88,12 +88,12 @@ class          String
     {
         if ($this['codepointMin'] instanceof Conststring) {
             $char                 = mb_substr($this['codepointMin']->getConstantValue(), 0, 1);
-            $this['codepointMin'] = new Constinteger(HoaString::toCode($char));
+            $this['codepointMin'] = new Constinteger(Ustring::toCode($char));
         }
 
         if ($this['codepointMax'] instanceof Conststring) {
             $char                 = mb_substr($this['codepointMax']->getConstantValue(), 0, 1);
-            $this['codepointMax'] = new Constinteger(HoaString::toCode($char));
+            $this['codepointMax'] = new Constinteger(Ustring::toCode($char));
         }
 
         return;
@@ -128,7 +128,7 @@ class          String
         $max    = $this['codepointMax']->getConstantValue();
 
         foreach ($split as $letter) {
-            $handle = HoaString::toCode($letter);
+            $handle = Ustring::toCode($letter);
             $out    = $out && ($min <= $handle) && ($handle <= $max);
         }
 
@@ -153,7 +153,7 @@ class          String
         }
 
         for ($i = 0; $i < $length; ++$i) {
-            $string .= HoaString::fromCode($sampler->getInteger(
+            $string .= Ustring::fromCode($sampler->getInteger(
                 $min,
                 $max,
                 $this->_discredited
@@ -171,7 +171,7 @@ class          String
      */
     public function discredit($value)
     {
-        $_value = HoaString::toCode($value);
+        $_value = Ustring::toCode($value);
 
         if (true  === in_array($_value, $this->_discredited) ||
             false === $this->predicate($value)) {
