@@ -1,3 +1,8 @@
+# 0.15.05.29
+
+  * Move to `Hoa\Ustring`. (Ivan Enderlin, 2015-05-29T14:50:47+02:00)
+  * Move to PSR-1-2 & drop PHP5.3 & `from`/`import`. (Ivan Enderlin, 2015-05-28T12:10:30+02:00)
+
 # 0.15.02.24
 
   * Add the `CHANGELOG.md` file. (Ivan Enderlin, 2015-02-24T09:36:29+01:00)
