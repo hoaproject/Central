@@ -1,3 +1,8 @@
+# 0.15.05.29
+
+  * Rename `Object` into `HtmlObject`. (Ivan Enderlin, 2015-05-29T11:17:06+02:00)
+  * Remove a useless import. (Ivan Enderlin, 2015-03-03T09:47:47+01:00)
+
 # 0.15.02.26
 
   * Add the `CHANGELOG.md` file. (Ivan Enderlin, 2015-02-26T08:52:33+01:00)
