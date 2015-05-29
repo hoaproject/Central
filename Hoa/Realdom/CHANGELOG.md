@@ -1,3 +1,11 @@
+# 0.15.05.29
+
+  * Move to `Hoa\Ustring`. (Ivan Enderlin, 2015-05-29T14:51:11+02:00)
+  * Rename `String` to `RealdomString`. (Ivan Enderlin, 2015-05-29T12:09:27+02:00)
+  * Rename `Float` to `RealdomFloat`. (Ivan Enderlin, 2015-05-29T12:05:19+02:00)
+  * Rename `Object` to `RealdomObject`. (Ivan Enderlin, 2015-05-29T11:59:37+02:00)
+  * Move to PSR-1-2 & drop PHP5.3 & `from`/`import`. (Ivan Enderlin, 2015-05-29T09:48:51+02:00)
+
 # 0.15.02.24
 
   * Add the `CHANGELOG.md` file. (Ivan Enderlin, 2015-02-24T09:41:27+01:00)
