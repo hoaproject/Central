@@ -46,7 +46,7 @@ use Hoa\Math;
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Boundfloat extends Float implements IRealdom\Interval
+class Boundfloat extends RealdomFloat implements IRealdom\Interval
 {
     /**
      * Realistic domain name.

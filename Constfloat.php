@@ -46,7 +46,7 @@ use Hoa\Math;
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Constfloat extends Float implements IRealdom\Constant
+class Constfloat extends RealdomFloat implements IRealdom\Constant
 {
     /**
      * Realistic domain name.

@@ -39,14 +39,14 @@ namespace Hoa\Realdom;
 use Hoa\Math;
 
 /**
- * Class \Hoa\Realdom\Float.
+ * Class \Hoa\Realdom\RealdomFloat.
  *
  * Realistic domain: float.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Float extends Realdom implements Number
+class RealdomFloat extends Realdom implements Number
 {
     /**
      * Realistic domain name.
