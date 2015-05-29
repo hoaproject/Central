@@ -1,3 +1,10 @@
+# 2.15.05.29
+
+  * Add new keywords from PHP7. (Ivan Enderlin, 2015-05-29T14:49:48+02:00)
+  * Type-hint with `BaseException` when necessary. (Ivan Enderlin, 2015-05-29T11:34:14+02:00)
+  * Implement fake Base-, Engine- and ParseException… (Ivan Enderlin, 2015-05-29T11:30:59+02:00)
+  * Move to PSR-1 and PSR-2. (Ivan Enderlin, 2015-05-13T11:24:06+02:00)
+
 # 2.15.04.13
 
   * Remove `setlocale`. (Ivan Enderlin, 2015-04-13T08:50:40+02:00)
