@@ -1,3 +1,11 @@
+# 2.15.05.29
+
+  * Fix English typography. (Ivan Enderlin, 2015-05-12T08:46:01+02:00)
+  * Fix CS. (Ivan Enderlin, 2015-04-20T10:10:01+02:00)
+  * Move the CHANGELOG to PSR-1 and PSR-2. (Ivan Enderlin, 2015-04-20T09:34:20+02:00)
+  * Move documentation to PSR-1 and PSR-2. (Ivan Enderlin, 2015-04-20T09:31:12+02:00)
+  * Move to PSR-1 and PSR-2. (Ivan Enderlin, 2015-04-20T09:23:09+02:00)
+
 # 2.15.04.13
 
   * Forget to translate a header text. (Ivan Enderlin, 2015-04-09T15:40:56+02:00)
