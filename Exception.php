@@ -264,11 +264,11 @@ class Idle extends \Exception
     /**
      * Catch uncaught exception (only \Hoa\Core\Exception\Idle and children).
      *
-     * @param   \Exception  $exception    The exception.
+     * @param   \BaseException  $exception    The exception.
      * @return  void
-     * @throws  \Exception
+     * @throws  \BaseException
      */
-    public static function uncaught(\Exception $exception)
+    public static function uncaught(\BaseException $exception)
     {
         if (!($exception instanceof self)) {
             throw $exception;
@@ -338,17 +338,17 @@ class Exception extends Idle implements Core\Event\Source
      * array that contains the list of formatted string for the message. If
      * chaining, we can add a previous exception.
      *
-     * @param   string      $message      Formatted message.
-     * @param   int         $code         Code (the ID).
-     * @param   array       $arguments    Arguments to format message.
-     * @param   \Exception  $previous     Previous exception in chaining.
+     * @param   string          $message      Formatted message.
+     * @param   int             $code         Code (the ID).
+     * @param   array           $arguments    Arguments to format message.
+     * @param   \BaseException  $previous     Previous exception in chaining.
      * @return  void
      */
     public function __construct(
         $message,
-        $code                = 0,
-        $arguments           = [],
-        \Exception $previous = null
+        $code                    = 0,
+        $arguments               = [],
+        \BaseException $previous = null
     ) {
         parent::__construct($message, $code, $arguments, $previous);
 
