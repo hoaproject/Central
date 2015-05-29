@@ -38,7 +38,7 @@ namespace Hoa\Praspel\Visitor;
 
 use Hoa\Praspel;
 use Hoa\Realdom;
-use Hoa\String;
+use Hoa\Ustring;
 use Hoa\Visitor;
 
 from('Hoa')
@@ -573,13 +573,13 @@ class Interpreter implements Visitor\Visit
                                 return "\033[D";
 
                             case 'x':
-                                return String::fromCode(hexdec($value));
+                                return Ustring::fromCode(hexdec($value));
 
                             case '\\':
                                 return $value[1];
 
                             default:
-                                return String::fromCode(octdec($value));
+                                return Ustring::fromCode(octdec($value));
                         }
 
                     case 'accepted':
