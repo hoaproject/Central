@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Praspel;
+namespace Hoa\Praspel {
 
 use Hoa\Compiler;
 use Hoa\Core;
@@ -133,6 +133,10 @@ class Praspel
  */
 Core\Consistency::flexEntity('Hoa\Praspel\Praspel');
 
+}
+
+namespace {
+
 /**
  * Alias of \Hoa\Praspel::interpret().
  *
@@ -142,6 +146,8 @@ Core\Consistency::flexEntity('Hoa\Praspel\Praspel');
 if (!function_exists('praspel')) {
     function praspel($praspel)
     {
-        return Praspel::interpret($praspel);
+        return Hoa\Praspel::interpret($praspel);
     }
+}
+
 }
