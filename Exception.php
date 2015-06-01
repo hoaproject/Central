@@ -268,7 +268,7 @@ class Idle extends \Exception
      * @return  void
      * @throws  \BaseException
      */
-    public static function uncaught(\BaseException $exception)
+    public static function uncaught($exception)
     {
         if (!($exception instanceof self)) {
             throw $exception;
@@ -346,9 +346,9 @@ class Exception extends Idle implements Core\Event\Source
      */
     public function __construct(
         $message,
-        $code                = 0,
-        $arguments           = [],
-        \Exception $previous = null
+        $code      = 0,
+        $arguments = [],
+        $previous  = null
     ) {
         parent::__construct($message, $code, $arguments, $previous);
 
