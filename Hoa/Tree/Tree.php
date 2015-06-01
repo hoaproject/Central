@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,51 +34,37 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Tree;
 
-from('Hoa')
-
-/**
- * \Hoa\Tree\Exception
- */
--> import('Tree.Exception')
-
-/**
- * \Hoa\Tree\Generic
- */
--> import('Tree.Generic');
-
-}
-
-namespace Hoa\Tree {
+use Hoa\Core;
 
 /**
  * Class \Hoa\Tree.
  *
  * Manipule a tree.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Tree extends Generic {
-
+class Tree extends Generic
+{
     /**
      * Insert a child.
      * Fill the child list from left to right.
      *
-     * @access  public
      * @param   \Hoa\Tree  $child    Child to insert.
      * @return  \Hoa\Tree
-     * @throw   \Hoa\Tree\Exception
+     * @throws  \Hoa\Tree\Exception
      */
-    public function insert ( Generic $child ) {
-
-        if(!($child instanceof Tree))
+    public function insert(Generic $child)
+    {
+        if (!($child instanceof self)) {
             throw new Exception(
                 'Child must be an instance of \Hoa\Tree; given %s.',
-                0, get_class($child));
+                0,
+                get_class($child)
+            );
+        }
 
         $this->_childs[$child->getValue()->getId()] = $child;
 
@@ -88,13 +74,12 @@ class Tree extends Generic {
     /**
      * Delete a child.
      *
-     * @access  public
      * @param   mixed   $nodeId    Node ID.
      * @return  \Hoa\Tree\Generic
-     * @throw   \Hoa\Tree\Exception
+     * @throws  \Hoa\Tree\Exception
      */
-    public function delete ( $nodeId ) {
-
+    public function delete($nodeId)
+    {
         unset($this->_childs[$nodeId]);
 
         return $this;
@@ -103,33 +88,25 @@ class Tree extends Generic {
     /**
      * Check if the node is a leaf.
      *
-     * @access  public
      * @return  bool
      */
-    public function isLeaf ( ) {
-
+    public function isLeaf()
+    {
         return empty($this->_childs);
     }
 
     /**
      * Check if the node is a node (i.e. not a leaf).
      *
-     * @access  public
      * @return  bool
      */
-    public function isNode ( ) {
-
+    public function isNode()
+    {
         return !empty($this->_childs);
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Tree\Tree');
-
-}
+Core\Consistency::flexEntity('Hoa\Tree\Tree');

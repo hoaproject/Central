@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,40 +34,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Tree\Visitor;
 
-from('Hoa')
-
-/**
- * \Hoa\Tree\Visitor\Generic
- */
--> import('Tree.Visitor.Generic')
-
-/**
- * \Hoa\Visitor\Visit
- */
--> import('Visitor.Visit');
-
-}
-
-namespace Hoa\Tree\Visitor {
+use Hoa\Visitor;
 
 /**
  * Class \Hoa\Tree\Visitor\Dump.
  *
  * Dump a tree.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Dump extends Generic implements \Hoa\Visitor\Visit {
-
+class Dump extends Generic implements Visitor\Visit
+{
     /**
      * Tree deep.
      *
-     * @var \Hoa\Tree\Visitor\Dump int
+     * @var int
      */
     protected $_i = 0;
 
@@ -76,13 +60,12 @@ class Dump extends Generic implements \Hoa\Visitor\Visit {
     /**
      * Just change the default transversal order value.
      *
-     * @access  public
      * @param   int     $order    Traversal order (please, see the * self::*_ORDER
      *                            constants).
      * @return  void
      */
-    public function __construct ( $order = parent::IN_ORDER ) {
-
+    public function __construct($order = parent::IN_ORDER)
+    {
         parent::__construct($order);
 
         return;
@@ -91,19 +74,18 @@ class Dump extends Generic implements \Hoa\Visitor\Visit {
     /**
      * Visit an element.
      *
-     * @access  public
      * @param   \Hoa\Visitor\Element  $element    Element to visit.
      * @param   mixed                 &$handle    Handle (reference).
      * @param   mixed                 $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visit ( \Hoa\Visitor\Element $element,
-                            &$handle = null,
-                             $eldnah = null ) {
-
+    public function visit(
+        Visitor\Element $element,
+        &$handle = null,
+        $eldnah  = null
+    ) {
         $pre    = null;
-        $in     = '> ' . str_repeat('  ', $this->_i) .
-                  $element->getValue() . "\n";
+        $in     = '> ' . str_repeat('  ', $this->_i) . $element->getValue() . "\n";
         $post   = null;
         $childs = $element->getChilds();
         $i      = 0;
@@ -111,29 +93,25 @@ class Dump extends Generic implements \Hoa\Visitor\Visit {
 
         ++$this->_i;
 
-        foreach($childs as $id => $child)
-            if($i++ < $max)
+        foreach ($childs as $id => $child) {
+            if ($i++ < $max) {
                 $pre  .= $child->accept($this, $handle, $eldnah);
-            else
+            } else {
                 $post .= $child->accept($this, $handle, $eldnah);
+            }
+        }
 
         --$this->_i;
 
-        switch($this->getOrder()) {
-
+        switch ($this->getOrder()) {
             case parent::IN_ORDER:
                 return $in  . $pre . $post;
-              break;
 
             case parent::POST_ORDER:
                 return $post . $in . $pre;
-              break;
 
             default:
                 return $pre  . $in . $post;
-              break;
         }
     }
-}
-
 }

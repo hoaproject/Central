@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,74 +34,47 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Tree;
 
-from('Hoa')
-
-/**
- * \Hoa\Tree\Exception
- */
--> import('Tree.Exception')
-
-/**
- * \Hoa\Tree\ITree\Node
- */
--> import('Tree.I~.Node')
-
-/**
- * \Hoa\Tree\SimpleNode
- */
--> import('Tree.SimpleNode')
-
-/**
- * \Hoa\Visitor\Element
- */
--> import('Visitor.Element');
-
-}
-
-namespace Hoa\Tree {
+use Hoa\Visitor;
 
 /**
  * Class \Hoa\Tree\Generic.
  *
  * Here is an abstract tree.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
 abstract class Generic
-    implements \Hoa\Visitor\Element,
+    implements Visitor\Element,
                \Iterator,
                \SeekableIterator,
-               \Countable {
-
+               \Countable
+{
     /**
      * Node value.
      *
-     * @var \Hoa\Tree\ITree\Node object
+     * @var \Hoa\Tree\ITree\Node
      */
     protected $_value  = null;
 
     /**
      * List of childs.
      *
-     * @var \Hoa\Tree\Generic array
+     * @var array
      */
-    protected $_childs = array();
+    protected $_childs = [];
 
 
     /**
      * Build a node. It can be a root, a node or a leaf of course.
      *
-     * @access  public
      * @param   mixed   $value    Node value.
      * @return  void
      */
-    public function __construct ( $value = null ) {
-
+    public function __construct($value = null)
+    {
         $this->setValue($value);
 
         return;
@@ -110,14 +83,14 @@ abstract class Generic
     /**
      * Set the node value.
      *
-     * @access  public
      * @param   mixed   $value    Node value.
      * @return  mixed
      */
-    public function setValue ( $value ) {
-
-        if(!($value instanceof \Hoa\Tree\ITree\Node))
-            $value    = new \Hoa\Tree\SimpleNode(md5($value), $value);
+    public function setValue($value)
+    {
+        if (!($value instanceof ITree\Node)) {
+            $value = new SimpleNode(md5($value), $value);
+        }
 
         $old          = $this->_value;
         $this->_value = $value;
@@ -128,55 +101,50 @@ abstract class Generic
     /**
      * Get the node value.
      *
-     * @access  public
      * @return  \Hoa\Tree\ITree\Node
      */
-    public function getValue ( ) {
-
+    public function getValue()
+    {
         return $this->_value;
     }
 
     /**
      * Get the current child for the iterator.
      *
-     * @access  public
      * @return  \Hoa\Tree\Generic
      */
-    public function current ( ) {
-
+    public function current()
+    {
         return current($this->_childs);
     }
 
     /**
      * Get the current child id for the iterator.
      *
-     * @access  public
      * @return  int
      */
-    public function key ( ) {
-
+    public function key()
+    {
         return key($this->_childs);
     }
 
     /**
      * Advance the internal child pointer, and return the current child.
      *
-     * @access  public
      * @return  \Hoa\Tree\Generic
      */
-    public function next ( ) {
-
+    public function next()
+    {
         return next($this->_childs);
     }
 
     /**
      * Rewind the internal child pointer, and return the first child.
      *
-     * @access  public
      * @return  \Hoa\Tree\Generic
      */
-    public function rewind ( ) {
-
+    public function rewind()
+    {
         return reset($this->_childs);
     }
 
@@ -184,23 +152,23 @@ abstract class Generic
      * Check if there is a current element after calls to the rewind or the next
      * methods.
      *
-     * @access  public
      * @return  bool
      */
-    public function valid ( ) {
-
-        if(empty($this->_collection))
+    public function valid()
+    {
+        if (empty($this->_collection)) {
             return false;
+        }
 
         $key    = key($this->_collection);
         $return = (bool) next($this->_childs);
         prev($this->_collection);
 
-        if(false === $return) {
-
+        if (false === $return) {
             end($this->_childs);
-            if($key === key($this->_childs))
+            if ($key === key($this->_childs)) {
                 $return = true;
+            }
         }
 
         return $return;
@@ -209,19 +177,20 @@ abstract class Generic
     /**
      * Seek to a position.
      *
-     * @access  public
      * @param   mixed   $position    Position to seek.
      * @return  void
      */
-    public function seek ( $position ) {
-
-        if(!array_key_exists($position, $this->_collection))
+    public function seek($position)
+    {
+        if (!array_key_exists($position, $this->_collection)) {
             return;
+        }
 
         $this->rewind();
 
-        while($position != $this->key())
+        while ($position != $this->key()) {
             $this->next();
+        }
 
         return;
     }
@@ -229,27 +198,25 @@ abstract class Generic
     /**
      * Count number of elements in collection.
      *
-     * @access  public
      * @return  int
      */
-    public function count ( ) {
-
+    public function count()
+    {
         return count($this->_childs);
     }
 
     /**
      * Get a specific child.
      *
-     * @access  public
      * @param   mixed   $nodeId    Node ID.
      * @return  \Hoa\Tree\Generic
-     * @throw   \Hoa\Tree\Exception
+     * @throws  \Hoa\Tree\Exception
      */
-    public function getChild ( $nodeId ) {
-
-        if(false === $this->childExists($nodeId))
-            throw new Exception(
-                'Child %s does not exist.', 0, $nodeId);
+    public function getChild($nodeId)
+    {
+        if (false === $this->childExists($nodeId)) {
+            throw new Exception('Child %s does not exist.', 0, $nodeId);
+        }
 
         return $this->_childs[$nodeId];
     }
@@ -257,23 +224,21 @@ abstract class Generic
     /**
      * Get all childs.
      *
-     * @access  public
      * @return  array
      */
-    public function getChilds ( ) {
-
+    public function getChilds()
+    {
         return $this->_childs;
     }
 
     /**
      * Check if a child exists.
      *
-     * @access  public
      * @param   mixed   $nodeId    Node ID.
      * @return  bool
      */
-    public function childExists ( $nodeId ) {
-
+    public function childExists($nodeId)
+    {
         return array_key_exists($nodeId, $this->getChilds());
     }
 
@@ -281,54 +246,48 @@ abstract class Generic
      * Insert a child.
      * Fill the child list from left to right.
      *
-     * @access  public
      * @param   \Hoa\Tree\Generic  $child    Child to insert.
      * @return  \Hoa\Tree\Generic
-     * @throw   \Hoa\Tree\Exception
+     * @throws  \Hoa\Tree\Exception
      */
-    abstract public function insert ( \Hoa\Tree\Generic $child );
+    abstract public function insert(Generic $child);
 
     /**
      * Delete a child.
      *
-     * @access  public
      * @param   int     $i    Child index.
      * @return  \Hoa\Tree\Generic
-     * @throw   \Hoa\Tree\Exception
+     * @throws  \Hoa\Tree\Exception
      */
-    abstract public function delete ( $i );
+    abstract public function delete($i);
 
     /**
      * Check if the node is a leaf.
      *
-     * @access  public
      * @return  bool
      */
-    abstract public function isLeaf ( );
+    abstract public function isLeaf();
 
     /**
      * Check if the node is a node (i.e. not a leaf).
      *
-     * @access  public
      * @return  bool
      */
-    abstract public function isNode ( );
+    abstract public function isNode();
 
     /**
      * Accept a visitor.
      *
-     * @access  public
      * @param   \Hoa\Visitor\Visit  $visitor    Visitor.
-     * @param   mixed              &$handle    Handle (reference).
-     * @param   mixed              $eldnah     Handle (not reference).
+     * @param   mixed              &$handle     Handle (reference).
+     * @param   mixed               $eldna      Handle (not reference).
      * @return  mixed
      */
-    public function accept ( \Hoa\Visitor\Visit $visitor,
-                             &$handle = null,
-                              $eldnah = null ) {
-
+    public function accept(
+        Visitor\Visit $visitor,
+        &$handle = null,
+        $eldnah  = null
+    ) {
         return $visitor->visit($this, $handle, $eldnah);
     }
-}
-
 }
