@@ -140,7 +140,7 @@ class Socket
         if (0 === $m) {
             throw new Exception(
                 'URI %s is not recognized (it is not an IPv6, IPv4 nor ' .
-                'domain name.',
+                'domain name).',
                 0,
                 $uri
             );
