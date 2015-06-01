@@ -1,3 +1,7 @@
+# 2.15.06.01
+
+  * Assert `$previous` still receive an `Exception`. (Ivan Enderlin, 2015-06-01T10:51:32+02:00)
+
 # 2.15.05.29
 
   * Add new keywords from PHP7. (Ivan Enderlin, 2015-05-29T14:49:48+02:00)
