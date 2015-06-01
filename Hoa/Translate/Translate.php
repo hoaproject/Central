@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,45 +34,45 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Translate {
+namespace Hoa\Translate;
+
+use Hoa\Core;
+use Hoa\Stream;
 
 /**
  * Class \Hoa\Translate.
  *
  * Generic class for translaters.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-abstract class Translate implements \IteratorAggregate {
-
+abstract class Translate implements \IteratorAggregate
+{
     /**
      * Stream.
      *
-     * @var \Hoa\Stream\IStream\In object
+     * @var \Hoa\Stream\IStream\In
      */
     protected $_stream = null;
 
     /**
      * Messages.
      *
-     * @var \Hoa\Translate array
+     * @var array
      */
-    protected $_data   = array();
+    protected $_data   = [];
 
 
 
     /**
      * Constructor.
      *
-     * @access  public
      * @param   \Hoa\Stream\IStream\In  $stream    Stream.
      * @return  void
      */
-    public function __construct ( \Hoa\Stream\IStream\In $stream ) {
-
+    public function __construct(Stream\IStream\In $stream)
+    {
         $this->setStream($stream);
 
         return;
@@ -81,12 +81,11 @@ abstract class Translate implements \IteratorAggregate {
     /**
      * Set stream.
      *
-     * @access  protected
      * @param   \Hoa\Stream\IStream\In  $stream    Stream.
      * @return  \Hoa\Stream\IStream\In
      */
-    protected function setStream ( \Hoa\Stream\IStream\In $stream ) {
-
+    protected function setStream(Stream\IStream\In $stream)
+    {
         $old           = $this->_stream;
         $this->_stream = $stream;
 
@@ -96,23 +95,21 @@ abstract class Translate implements \IteratorAggregate {
     /**
      * Get stream.
      *
-     * @access  public
      * @return  \Hoa\Stream\IStream\In
      */
-    public function getStream ( ) {
-
+    public function getStream()
+    {
         return $this->_stream;
     }
 
     /**
      * Set messages.
      *
-     * @access  protected
      * @param   array  $data    Data.
      * @return  array
      */
-    protected function setData ( Array $data ) {
-
+    protected function setData(Array $data)
+    {
         $old         = $this->_data;
         $this->_data = $data;
 
@@ -122,56 +119,46 @@ abstract class Translate implements \IteratorAggregate {
     /**
      * Get messages.
      *
-     * @access  public
      * @return  array
      */
-    public function getData ( ) {
-
+    public function getData()
+    {
         return $this->_data;
     }
 
     /**
      * Iterate over messages.
      *
-     * @access  public
      * @return  \ArrayIterator
      */
-    public function getIterator ( ) {
-
+    public function getIterator()
+    {
         return new \ArrayIterator($this->_data);
     }
 
     /**
      * Get translation for regular message.
      *
-     * @access  public
      * @param   string  $message    Message.
      * @param   mixed   …           Parameters.
      * @return  string
      */
-    abstract public function _ ( $message );
+    abstract public function _($message);
 
     /**
      * Get translation for plural messages.
      * Messages are concatenated by NUL (\0), or \0 or ^@. They can be escaped
      * by \.
      *
-     * @access  public
      * @param   string  $message    Message.
      * @param   int     $n          n (to select the plural).
      * @param   mixed   …           Parameters.
      * @return  string
      */
-    abstract public function _n ( $message, $n );
+    abstract public function _n($message, $n);
 }
-
-}
-
-namespace {
 
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Translate\Translate');
-
-}
+Core\Consistency::flexEntity('Hoa\Translate\Translate');

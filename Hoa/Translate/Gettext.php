@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,88 +34,74 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Translate;
 
-from('Hoa')
-
-/**
- * \Hoa\Translate\Exception
- */
--> import('Translate.Exception')
-
-/**
- * \Hoa\Translate
- */
--> import('Translate.~');
-
-}
-
-namespace Hoa\Translate {
+use Hoa\Stream;
 
 /**
  * Class \Hoa\Translate\Gettext.
  *
  * GetText format reader.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Gettext extends Translate {
-
+class Gettext extends Translate
+{
     /**
      * Endianness.
      *
-     * @var \Hoa\Translate\Gettext bool
+     * @var bool
      */
     protected $_bigEndian              = false;
 
     /**
      * Revision.
      *
-     * @var \Hoa\Translate\Gettext int
+     * @var int
      */
     protected $_revision               = 0;
 
     /**
      * Headers.
      *
-     * @var \Hoa\Translate\Gettext array
+     * @var array
      */
-    protected $_headers                = array();
+    protected $_headers                = [];
 
     /**
      * Plural function ID.
      *
-     * @var \Hoa\Translate\Gettext string
+     * @var string
      */
     protected $_plural                 = null;
 
     /**
      * Plural functions.
      *
-     * @var \Hoa\Translate\Gettext array
+     * @var array
      */
-    protected static $_pluralFunctions = array();
+    protected static $_pluralFunctions = [];
 
 
 
     /**
      * Constructor.
      *
-     * @access  public
      * @param   \Hoa\Stream\IStream\In  $stream    Stream.
      * @return  void
      */
-    public function __construct ( \Hoa\Stream\IStream\In $stream ) {
-
+    public function __construct(Stream\IStream\In $stream)
+    {
         parent::__construct($stream);
 
-        if(!($stream instanceof \Hoa\Stream\IStream\Pointable))
+        if (!($stream instanceof Stream\IStream\Pointable)) {
             throw new Exception(
                 'Stream %s must also be pointable.',
-                0, $stream->getStreamName());
+                0,
+                $stream->getStreamName()
+            );
+        }
 
         $stream->seek(0);
         $this->setEndianness();
@@ -127,27 +113,29 @@ class Gettext extends Translate {
     /**
      * Compute endianness.
      *
-     * @access  protected
      * @return  void
      */
-    protected function setEndianness ( ) {
-
+    protected function setEndianness()
+    {
         $magicNumber = unpack('V1', $this->getStream()->read(4));
 
-        switch(dechex($magicNumber[1])) {
-
+        switch (dechex($magicNumber[1])) {
             case '950412de':
                 $this->_bigEndian = false;
-              break;
+
+                break;
 
             case 'de120495':
                 $this->_bigEndian = true;
-              break;
+
+                break;
 
             default:
                 throw new Exception(
                     '%s is not a GNU MO file.',
-                    1, $this->getStream()->getStreamName());
+                    1,
+                    $this->getStream()->getStreamName()
+                );
         }
 
         return;
@@ -156,11 +144,10 @@ class Gettext extends Translate {
     /**
      * Unpack data/messages.
      *
-     * @access  protected
      * @return  void
      */
-    protected function unpack ( ) {
-
+    protected function unpack()
+    {
         /**
          * Schema:
          *
@@ -216,13 +203,13 @@ class Gettext extends Translate {
         $stream   = $this->getStream();
         $out      = &$this->_data;
         $this->setRevision($this->_read(1));
-        $notsh    = array(
+        $notsh = [
             'N' => $this->_read(1),
             'O' => $this->_read(1),
             'T' => $this->_read(1),
             'S' => $this->_read(1),
             'H' => $this->_read(1)
-        );
+        ];
 
         $stream->seek($notsh['O']);
         $originalStringOffset = $this->_read(2 * $notsh['N'], null);
@@ -230,14 +217,13 @@ class Gettext extends Translate {
         $stream->seek($notsh['T']);
         $translateStringOffset = $this->_read(2 * $notsh['N'], null);
 
-        for($e = 0, $max = $notsh['N']; $e < $max; ++$e) {
-
-            if(0 === $originalStringOffset[$e * 2 + 1]) {
-
+        for ($e = 0, $max = $notsh['N']; $e < $max; ++$e) {
+            if (0 === $originalStringOffset[$e * 2 + 1]) {
                 $_headers = $this->getHeaders();
 
-                if(!empty($_headers))
+                if (!empty($_headers)) {
                     continue;
+                }
 
                 $stream->seek($translateStringOffset[$e * 2 + 2]);
                 $this->setHeaders(
@@ -262,22 +248,23 @@ class Gettext extends Translate {
     /**
      * Read bytes on the stream.
      *
-     * @access  public
      * @param   int  $bytes      Number of bytes to read.
      * @param   int  $pointer    Pointer/index if read an array.
      * @return  mixed
      */
-    protected function _read ( $bytes, $pointer = 1 ) {
-
+    protected function _read($bytes, $pointer = 1)
+    {
         $buffer = $this->getStream()->read(4 * $bytes);
 
-        if(false === $this->isBigEndian())
+        if (false === $this->isBigEndian()) {
             $out = unpack('V' . $bytes, $buffer);
-        else
+        } else {
             $out = unpack('N' . $bytes, $buffer);
+        }
 
-        if(isset($out[$pointer]))
+        if (isset($out[$pointer])) {
             return $out[$pointer];
+        }
 
         return $out;
     }
@@ -285,21 +272,22 @@ class Gettext extends Translate {
     /**
      * Get translation for regular message.
      *
-     * @access  public
      * @param   string  $message    Message.
      * @param   mixed   …           Parameters.
      * @return  string
      */
-    public function _ ( $message ) {
-
-        if(!isset($this->_data[$message]))
+    public function _($message)
+    {
+        if (!isset($this->_data[$message])) {
             return $message;
+        }
 
         $parameters = func_get_args();
         array_shift($parameters);
 
-        if(false === $out = @vsprintf($this->_data[$message], $parameters))
+        if (false === $out = @vsprintf($this->_data[$message], $parameters)) {
             return $message;
+        }
 
         return $out;
     }
@@ -309,59 +297,60 @@ class Gettext extends Translate {
      * Messages are concatenated by NUL (\0), or \0 or ^@. They can be escaped
      * by \.
      *
-     * @access  public
      * @param   string  $message    Message.
      * @param   int     $n          n (to select the plural).
      * @param   mixed   …           Parameters.
      * @return  string
-     * @throw   \Hoa\Translate\Exception
+     * @throws  \Hoa\Translate\Exception
      */
-    public function _n ( $message, $n ) {
-
-        if(false === $this->_plural)
+    public function _n($message, $n)
+    {
+        if (false === $this->_plural) {
             return $message;
+        }
 
         $n          = max(1, $n);
         $parameters = array_slice(func_get_args(), 2);
         $message    = preg_replace('#(?<!\\\)(\\\0|\^@)#', "\0", $message);
         $message    = preg_replace('#\\\(\\\0|\^@)#',      '\1', $message);
 
-        if(!isset($this->_data[$message]))
+        if (!isset($this->_data[$message])) {
             return $message;
+        }
 
         $plurals = explode("\0", $this->_data[$message]);
 
-        if(!isset($this->_headers['Plural-Forms'])) {
-
+        if (!isset($this->_headers['Plural-Forms'])) {
             $this->_plural = false;
 
             return $message;
         }
 
-        if(null === $this->_plural) {
-
+        if (null === $this->_plural) {
             $pluralForms = $this->_headers['Plural-Forms'];
 
-            if(false === preg_match('#^nplurals=(\d+);\s*plural=(.+?);?$#s',
-                                    $pluralForms, $matches))
+            if (false === preg_match('#^nplurals=(\d+);\s*plural=(.+?);?$#s', $pluralForms, $matches)) {
                 return $plurals[0];
+            }
 
             list(, $nplurals, $plural) = $matches;
-            $_plural = preg_replace('#n#',   '$n', $plural);
-            $_plural = preg_replace('#\s+#', '',   $_plural);
-            $id      = '__hoa_translate_gettext_' . md5($_plural);
+            $_plural                   = preg_replace('#n#',   '$n', $plural);
+            $_plural                   = preg_replace('#\s+#', '',   $_plural);
+            $id                        = '__hoa_translate_gettext_' . md5($_plural);
 
-            if(!isset(static::$_pluralFunctions[$id])) {
-
-                 $handle = @create_function(
+            if (!isset(static::$_pluralFunctions[$id])) {
+                $handle = @create_function(
                     '$n',
                     'return (int) (' . $_plural . ');'
                 );
 
-                if(false === $handle)
+                if (false === $handle) {
                     throw new Exception(
                         'Something is wrong with your plurial form %s.',
-                        2, $plural);
+                        2,
+                        $plural
+                    );
+                }
 
                 static::$_pluralFunctions[$id] = $handle;
             }
@@ -372,11 +361,13 @@ class Gettext extends Translate {
         $pluralFunction = static::$_pluralFunctions[$this->_plural];
         $i              = $pluralFunction($n);
 
-        if(!isset($plurals[$i]))
+        if (!isset($plurals[$i])) {
             return $plurals[0];
+        }
 
-        if(false === $out = @vsprintf($plurals[$i], $parameters))
+        if (false === $out = @vsprintf($plurals[$i], $parameters)) {
             return $plurals[$i];
+        }
 
         return $out;
     }
@@ -384,23 +375,21 @@ class Gettext extends Translate {
     /**
      * Check if the file is in big endian.
      *
-     * @access  public
      * @return  bool
      */
-    public function isBigEndian ( ) {
-
+    public function isBigEndian()
+    {
         return $this->_bigEndian;
     }
 
     /**
      * Set file format revision.
      *
-     * @access  protected
      * @param   int  $revision    File format revision.
      * @return  int
      */
-    protected function setRevision ( $revision ) {
-
+    protected function setRevision($revision)
+    {
         $old             = $this->_revision;
         $this->_revision = $revision;
 
@@ -410,29 +399,27 @@ class Gettext extends Translate {
     /**
      * Get file format revision.
      *
-     * @access  public
      * @return  int
      */
-    public function getRevision ( ) {
-
+    public function getRevision()
+    {
         return $this->_revision;
     }
 
     /**
      * Unpack headers from a string.
      *
-     * @access  public
      * @param   string  $headers    Headers.
      * @return  array
      */
-    public static function unpackHeaders ( $headers ) {
+    public static function unpackHeaders($headers)
+    {
+        $out = [];
 
-        $out = array();
-
-        foreach(explode("\n", $headers) as $line) {
-
-            if(empty($line))
+        foreach (explode("\n", $headers) as $line) {
+            if (empty($line)) {
                 continue;
+            }
 
             list($type, $value) = explode(':', $line, 2);
             $out[trim($type)]   = trim($value);
@@ -444,12 +431,11 @@ class Gettext extends Translate {
     /**
      * Set headers.
      *
-     * @access  public
      * @param   array  $headers    Headers.
      * @return  array
      */
-    protected function setHeaders ( Array $headers ) {
-
+    protected function setHeaders(Array $headers)
+    {
         $old            = $this->_headers;
         $this->_headers = $headers;
 
@@ -459,13 +445,10 @@ class Gettext extends Translate {
     /**
      * Get headers.
      *
-     * @access  public
      * @return  array
      */
-    public function getHeaders ( ) {
-
+    public function getHeaders()
+    {
         return $this->_headers;
     }
-}
-
 }
