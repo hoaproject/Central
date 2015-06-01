@@ -37,6 +37,7 @@
 namespace Hoa\Test\Bin;
 
 use Hoa\Console;
+use Hoa\Core;
 use Hoa\File;
 
 /**
@@ -91,6 +92,11 @@ class Run extends Console\Dispatcher\Kit
 
                     foreach ($iterator as $fileinfo) {
                         $libraryName    = $fileinfo->getBasename();
+
+                        if (true === Core\Consistency::isKeyword($libraryName)) {
+                            continue;
+                        }
+
                         $pathname       = resolve('hoa://Library/' . $libraryName);
                         $tests          = $pathname . DS . 'Test' . DS;
                         $manualTests    = $tests . 'Unit';
