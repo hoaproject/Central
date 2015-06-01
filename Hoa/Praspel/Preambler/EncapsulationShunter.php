@@ -116,7 +116,7 @@ class EncapsulationShunter
                     $id        = $className . '::__construct';
 
                     if (!isset($registry[$id])) {
-                        $registry[$id] = Praspel::interprete(
+                        $registry[$id] = Praspel::interpret(
                             Praspel::extractFromComment(
                                 $constructor->getDocComment()
                             ),
@@ -147,7 +147,7 @@ class EncapsulationShunter
             $id           = $className . '::$' . $propertyName;
 
             if (false === isset($registry[$id])) {
-                $registry[$id] = Praspel::interprete(
+                $registry[$id] = Praspel::interpret(
                     Praspel::extractFromComment(
                         $property->getDocComment()
                     ),

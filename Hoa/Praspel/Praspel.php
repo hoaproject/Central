@@ -66,7 +66,7 @@ class Praspel
      * @param   string  $bindToClass    Classname to bind.
      * @return  \Hoa\Praspel\Model\Clause
      */
-    public static function interprete($praspel, $bindToClass = null)
+    public static function interpret($praspel, $bindToClass = null)
     {
         static $_compiler    = null;
         static $_interpreter = null;
@@ -134,7 +134,7 @@ class Praspel
 Core\Consistency::flexEntity('Hoa\Praspel\Praspel');
 
 /**
- * Alias of \Hoa\Praspel::interprete().
+ * Alias of \Hoa\Praspel::interpret().
  *
  * @param   string  $praspel    Praspel
  * @return  \Hoa\Praspel\Model\Clause
@@ -142,6 +142,6 @@ Core\Consistency::flexEntity('Hoa\Praspel\Praspel');
 if (!function_exists('praspel')) {
     function praspel($praspel)
     {
-        return Praspel::interprete($praspel);
+        return Praspel::interpret($praspel);
     }
 }
