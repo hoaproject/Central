@@ -500,7 +500,7 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
 
         foreach($validates as $name => $realdom) {
 
-            $praspel  = \Hoa\Praspel::interprete(
+            $praspel  = \Hoa\Praspel::interpret(
                 '@requires i: ' . $realdom . ';'
             );
             $clause   = $praspel->getClause('requires');
