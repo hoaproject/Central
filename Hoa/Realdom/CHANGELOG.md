@@ -1,3 +1,7 @@
+# 0.15.06.01
+
+  * Make the `realdom` function global. (Ivan Enderlin, 2015-06-01T12:16:59+02:00)
+
 # 0.15.05.29
 
   * Move to `Hoa\Ustring`. (Ivan Enderlin, 2015-05-29T14:51:11+02:00)
