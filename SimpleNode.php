@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,42 +34,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Tree\ITree\Node
- */
--> import('Tree.I~.Node');
-
-}
-
-namespace Hoa\Tree {
+namespace Hoa\Tree;
 
 /**
  * Class \Hoa\Tree\SimpleNode.
  *
  * It's just a simple node demo (may be used for example and test).
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class SimpleNode implements ITree\Node {
-
+class SimpleNode implements ITree\Node
+{
     /**
      * Node ID.
      *
-     * @var \Hoa\Tree\SimpleNode string
+     * @var string
      */
     protected $_id    = null;
 
     /**
      * Node value.
      *
-     * @var \Hoa\Tree\SimpleNode string
+     * @var string
      */
     protected $_value = null;
 
@@ -78,13 +65,12 @@ class SimpleNode implements ITree\Node {
     /**
      * Build a node that contains a string.
      *
-     * @access  public
      * @param   string  $id       The node ID.
      * @param   string  $value    The node value.
      * @return  void
      */
-    public function __construct ( $id, $value = null ) {
-
+    public function __construct($id, $value = null)
+    {
         $this->setId($id);
         $this->setValue($value);
     }
@@ -92,12 +78,11 @@ class SimpleNode implements ITree\Node {
     /**
      * Set node ID.
      *
-     * @access  protected
      * @param   string     $id    The node ID.
      * @return  string
      */
-    protected function setId ( $id ) {
-
+    protected function setId($id)
+    {
         $old       = $this->_id;
         $this->_id = $id;
 
@@ -107,12 +92,11 @@ class SimpleNode implements ITree\Node {
     /**
      * Set node value.
      *
-     * @access  public
      * @param   string  $value    The node value.
      * @return  string
      */
-    public function setValue ( $value = null ) {
-
+    public function setValue($value = null)
+    {
         $old          = $this->_value;
         $this->_value = $value;
 
@@ -122,35 +106,30 @@ class SimpleNode implements ITree\Node {
     /**
      * Get node ID, must be implement because of interface.
      *
-     * @access  public
      * @return  string
      */
-    public function getId ( ) {
-
+    public function getId()
+    {
         return $this->_id;
     }
 
     /**
      * Get node value.
      *
-     * @access  public
      * @return  string
      */
-    public function getValue ( ) {
-
+    public function getValue()
+    {
         return $this->_value;
     }
 
     /**
      * Get the node string representation.
      *
-     * @access  public
      * @return  string
      */
-    public function __toString ( ) {
-
+    public function __toString()
+    {
         return (string) $this->getValue();
     }
-}
-
 }

@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,40 +34,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Tree\Visitor;
 
-from('Hoa')
-
-/**
- * \Hoa\Tree\Visitor\Generic
- */
--> import('Tree.Visitor.Generic')
-
-/**
- * \Hoa\Visitor\Visit
- */
--> import('Visitor.Visit');
-
-}
-
-namespace Hoa\Tree\Visitor {
+use Hoa\Visitor;
 
 /**
  * Class \Hoa\Tree\Visitor\Dot.
  *
  * Transform a tree in DOT language.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Dot extends Generic implements \Hoa\Visitor\Visit {
-
+class Dot extends Generic implements Visitor\Visit
+{
     /**
      * Tree deep.
      *
-     * @var \Hoa\Tree\Visitor\Dot int
+     * @var int
      */
     protected $_i = 0;
 
@@ -76,21 +60,20 @@ class Dot extends Generic implements \Hoa\Visitor\Visit {
     /**
      * Visit an element.
      *
-     * @access  public
      * @param   \Hoa\Visitor\Element  $element    Element to visit.
-     * @param   mixed                &$handle    Handle (reference).
-     * @param   mixed                $eldnah     Handle (not reference).
+     * @param   mixed                &$handle     Handle (reference).
+     * @param   mixed                 $eldnah     Handle (not reference).
      * @return  string
      */
-    public function visit ( \Hoa\Visitor\Element $element,
-                            &$handle = null,
-                             $eldnah = null ) {
-
+    public function visit(
+        Visitor\Element $element,
+        &$handle = null,
+        $eldnah  = null
+    ) {
         $ou  = null;
         $t   = null;
 
-        if($this->_i == 0) {
-
+        if ($this->_i == 0) {
             $ou  = 'digraph {' . "\n";
             $t   = '}' . "\n";
         }
@@ -99,24 +82,23 @@ class Dot extends Generic implements \Hoa\Visitor\Visit {
         $bar = null;
         ++$this->_i;
 
-        if(null == $eldnah) {
-
+        if (null == $eldnah) {
             $eldnah  = $foo;
-            $ou     .= '    "' . md5($foo) . '" [label = "' . $foo . '"];' .
-                       "\n";
+            $ou     .= '    "' . md5($foo) . '" [label = "' . $foo . '"];' . "\n";
         }
 
-        foreach($element->getChilds() as $i => $child) {
-
+        foreach ($element->getChilds() as $child) {
             $left   = md5($eldnah);
             $right  = md5($eldnah . '.' . $child->getValue());
 
-            $ou    .= '    "' . $left  . '" -> "' . $right . '";' . "\n" .
-                      '    "' . $right . '" [label = "' .
-                      str_replace('\\', '\\\\', $child->getValue())
-                      . '"];' . "\n";
-            $bar   .= $child->accept($this, $handle, $eldnah . '.' .
-                      $child->getValue());
+            $ou .=
+                '    "' . $left  . '" -> "' . $right . '";' . "\n" .
+                '    "' . $right . '" [label = "' .
+                str_replace('\\', '\\\\', $child->getValue()) .
+                '"];' . "\n";
+            $bar .=
+                $child->accept($this, $handle, $eldnah . '.' .
+                $child->getValue());
         }
 
         $ou .= $bar;
@@ -125,6 +107,4 @@ class Dot extends Generic implements \Hoa\Visitor\Visit {
 
         return $ou . $t;
     }
-}
-
 }

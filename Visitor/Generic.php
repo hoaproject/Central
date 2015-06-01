@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,20 +34,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Tree\Visitor {
+namespace Hoa\Tree\Visitor;
 
 /**
  * Class \Hoa\Tree\Visitor\Generic.
  *
  * Abstract tree visitor.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-abstract class Generic {
-
+abstract class Generic
+{
     /**
      * Pre-order traversal.
      *
@@ -72,7 +70,7 @@ abstract class Generic {
     /**
      * Traversal order.
      *
-     * @var \Hoa\Tree\Visitor\Generic int
+     * @var int
      */
     protected $_order = self::PRE_ORDER;
 
@@ -81,13 +79,12 @@ abstract class Generic {
     /**
      * Build the visitor and set the traversal order.
      *
-     * @access  public
      * @param   int     $order    Traversal order (please, see the self::*_ORDER
      *                            constants).
      * @return  void
      */
-    public function __construct ( $order = self::PRE_ORDER ) {
-
+    public function __construct($order = self::PRE_ORDER)
+    {
         $this->setOrder($order);
 
         return;
@@ -96,13 +93,12 @@ abstract class Generic {
     /**
      * Set the traversal order.
      *
-     * @access  protected
      * @param   int     $order    Traversal order (please, see the self::*_ORDER
      *                            constants).
      * @return  int
      */
-    protected function setOrder ( $order ) {
-
+    protected function setOrder($order)
+    {
         $old          = $this->_order;
         $this->_order = $order;
 
@@ -112,13 +108,10 @@ abstract class Generic {
     /**
      * Get the traversal order.
      *
-     * @access  public
      * @return  int
      */
-    public function getOrder ( ) {
-
+    public function getOrder()
+    {
         return $this->_order;
     }
-}
-
 }
