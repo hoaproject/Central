@@ -46,7 +46,7 @@ from('Hoa')
 /**
  * \Hoa\Praspel
  */
--> import('Praspel.~', true);
+-> import('Praspel.~');
 
 }
 
@@ -258,7 +258,7 @@ abstract class Model
                 43, $name);
 
         if(null === $attribute['contract'])
-            $attribute['contract'] = praspel($attribute['comment']);
+            $attribute['contract'] = \Hoa\Praspel::interpret($attribute['comment']);
 
         $realdom   = $attribute['contract']
                          ->getClause('invariant')
@@ -365,7 +365,7 @@ abstract class Model
         if(false !== $attribute['comment']) {
 
             if(null === $attribute['contract'])
-                $attribute['contract'] = praspel($attribute['comment']);
+                $attribute['contract'] = \Hoa\Praspel::interpret($attribute['comment']);
 
             $verdict = $attribute['contract']
                            ->getClause('invariant')
@@ -476,7 +476,7 @@ abstract class Model
         if(false !== $attribute['comment']) {
 
             if(null === $attribute['contract'])
-                $attribute['contract'] = praspel($attribute['comment']);
+                $attribute['contract'] = \Hoa\Praspel::interpret($attribute['comment']);
 
             $verdict = $attribute['contract']
                            ->getClause('invariant')
