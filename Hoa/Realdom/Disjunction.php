@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Realdom;
+namespace Hoa\Realdom {
 
 use Hoa\Core;
 use Hoa\Math;
@@ -516,6 +516,10 @@ class          Disjunction
     }
 }
 
+}
+
+namespace {
+
 /**
  * Alias for creating a new disjunction.
  *
@@ -524,6 +528,8 @@ class          Disjunction
 if (!function_exists('realdom')) {
     function realdom()
     {
-        return new Disjunction();
+        return new Hoa\Realdom\Disjunction();
     }
+}
+
 }
