@@ -1,3 +1,8 @@
+# 0.15.06.01
+
+  * Make the `praspel` function global. (Ivan Enderlin, 2015-06-01T12:19:17+02:00)
+  * Change `interprete` method name to `interpret`. (Ivan Enderlin, 2015-06-01T12:02:37+02:00)
+
 # 0.15.05.29
 
   * Move to `Hoa\Ustring`. (Ivan Enderlin, 2015-05-29T14:50:47+02:00)
