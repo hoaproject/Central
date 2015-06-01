@@ -346,9 +346,9 @@ class Exception extends Idle implements Core\Event\Source
      */
     public function __construct(
         $message,
-        $code                    = 0,
-        $arguments               = [],
-        \BaseException $previous = null
+        $code                = 0,
+        $arguments           = [],
+        \Exception $previous = null
     ) {
         parent::__construct($message, $code, $arguments, $previous);
 
