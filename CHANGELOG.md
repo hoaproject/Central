@@ -1,3 +1,7 @@
+# 2.15.06.02
+
+  * Remove exception type-hint because of PHP7. (Ivan Enderlin, 2015-06-01T15:51:57+02:00)
+
 # 2.15.06.01
 
   * Assert `$previous` still receive an `Exception`. (Ivan Enderlin, 2015-06-01T10:51:32+02:00)
