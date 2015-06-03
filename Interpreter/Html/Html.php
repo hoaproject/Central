@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,47 +34,27 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xyl\Interpreter\Html;
 
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Interpreter
- */
--> import('Xyl.Interpreter.~')
-
-/**
- * \Hoa\Xyl\Interpreter\Common\*
- */
--> import('Xyl.Interpreter.Common.*')
-
-/**
- * \Hoa\Xyl\Interpreter\Html\*
- */
--> import('Xyl.Interpreter.Html.*');
-
-}
-
-namespace Hoa\Xyl\Interpreter\Html {
+use Hoa\Core;
+use Hoa\Xyl;
 
 /**
  * Class \Hoa\Xyl\Interpreter\Html.
  *
  * HTML interpreter.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Html extends \Hoa\Xyl\Interpreter {
-
+class Html extends Xyl\Interpreter
+{
     /**
      * Rank: abstract elements to concrete elements.
      *
-     * @var \Hoa\Xyl\Interpreter\Html array
+     * @var array
      */
-    protected $_rank         = array(
+    protected $_rank = [
         // XYL.
         'document'        => '\Hoa\Xyl\Interpreter\Html\Document',
         'title'           => '\Hoa\Xyl\Interpreter\Html\GenericPhrasing',
@@ -213,23 +193,17 @@ class Html extends \Hoa\Xyl\Interpreter {
 
         // Phrasing model.
         '__text'          => '\Hoa\Xyl\Interpreter\Html\Text'
-    );
+    ];
 
     /**
      * Resource path.
      *
-     * @var \Hoa\Xyl\Interpreter\Html string
+     * @var string
      */
     protected $_resourcePath = 'Html/Resource/';
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Xyl\Interpreter\Html\Html');
-
-}
+Core\Consistency::flexEntity('Hoa\Xyl\Interpreter\Html\Html');

@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,65 +34,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xyl;
 
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Exception
- */
--> import('Xyl.Exception')
-
-/**
- * \Hoa\Xyl\Element
- */
--> import('Xyl.Element.~')
-
-/**
- * \Hoa\Xyl\Element\Basic
- */
--> import('Xyl.Element.Basic', true)
-
-/**
- * \Hoa\Xyl\Interpreter
- */
--> import('Xyl.Interpreter.~')
-
-/**
- * \Hoa\Xml
- */
--> import('Xml.~')
-
-/**
- * \Hoa\Xml\Attribute
- */
--> import('Xml.Attribute')
-
-/**
- * \Hoa\View\Viewable
- */
--> import('View.Viewable');
-
-}
-
-namespace Hoa\Xyl {
+use Hoa\Core;
+use Hoa\Locale;
+use Hoa\Router;
+use Hoa\Stream;
+use Hoa\Translate;
+use Hoa\View;
+use Hoa\Xml;
 
 /**
  * Class \Hoa\Xyl.
  *
  * XYL documents handler.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
 class          Xyl
-    extends    \Hoa\Xml
+    extends    Xml
     implements Element,
-               \Hoa\View\Viewable,
-               \Hoa\Core\Parameter\Parameterizable {
-
+               View\Viewable,
+               Core\Parameter\Parameterizable
+{
     /**
      * XYL's namespace.
      *
@@ -159,14 +124,14 @@ class          Xyl
     /**
      * Parameters.
      *
-     * @var \Hoa\Core\Parameter object
+     * @var \Hoa\Core\Parameter
      */
     protected static $_parameters = null;
 
     /**
      * Data bucket.
      *
-     * @var \Hoa\Xyl array
+     * @var array
      */
     protected $_data              = null;
 
@@ -180,35 +145,35 @@ class          Xyl
     /**
      * Concrete tree.
      *
-     * @var \Hoa\Xyl\Element\Concrete object
+     * @var \Hoa\Xyl\Element\Concrete
      */
     protected $_concrete          = null;
 
     /**
      * Evaluate XPath expression.
      *
-     * @var DOMXPath object
+     * @var DOMXPath
      */
     protected static $_xe         = null;
 
     /**
      * Output stream.
      *
-     * @var \Hoa\Stream\IStream\Out object
+     * @var \Hoa\Stream\IStream\Out
      */
     protected $_out               = null;
 
     /**
      * Interpreter.
      *
-     * @var \Hoa\Xyl\Interpreter object
+     * @var \Hoa\Xyl\Interpreter
      */
     protected $_interpreter       = null;
 
     /**
      * Router.
      *
-     * @var \Hoa\Router\Http object
+     * @var \Hoa\Router\Http
      */
     protected $_router            = null;
 
@@ -216,70 +181,70 @@ class          Xyl
      * Mowgli c'est le p'tit DOM (euh, p'tit homme !)
      * Well, it's the document root.
      *
-     * @var DOMDocument object
+     * @var DOMDocument
      */
     protected $_mowgli            = null;
 
     /**
      * Type. Please, see self::TYPE_* constants.
      *
-     * @var \Hoa\Xyl int
+     * @var int
      */
     protected $_type              = null;
 
     /**
      * Temporize stylesheets.
      *
-     * @var \Hoa\Xyl array
+     * @var array
      */
-    protected $_stylesheets       = array();
+    protected $_stylesheets       = [];
 
     /**
      * Computed metas.
      *
-     * @var \Hoa\Xyl array
+     * @var array
      */
-    protected $_metas             = array();
+    protected $_metas             = [];
 
     /**
      * Computed overlay references.
      *
-     * @var \Hoa\Xyl array
+     * @var array
      */
-    protected $_overlays          = array();
+    protected $_overlays          = [];
 
     /**
      * Fragments.
      *
-     * @var \Hoa\Xyl array
+     * @var array
      */
-    protected $_fragments         = array();
+    protected $_fragments         = [];
 
     /**
      * Locale.
      *
-     * @var \Hoa\Locale object
+     * @var \Hoa\Locale
      */
     protected $_locale            = null;
 
     /**
      * Translations.
      *
-     * @var \Hoa\Xyl array
+     * @var array
      */
-    protected $_translations      = array();
+    protected $_translations      = [];
 
     /**
      * Get ID of the instance.
      *
-     * @var \Hoa\Xyl int
+     * @var int
      */
     private $_i                   = 0;
 
     /**
      * Get last ID of instances.
      *
-     * @var \Hoa\Xyl int
+     * @var int
      */
     private static $_ci           = 0;
 
@@ -287,7 +252,7 @@ class          Xyl
      * Whether the document is open from the constructor or from the
      * self::open() method.
      *
-     * @var \Hoa\Xyl bool
+     * @var bool
      */
     private $_innerOpen           = false;
 
@@ -296,7 +261,6 @@ class          Xyl
     /**
      * Interprete a stream as XYL.
      *
-     * @access  public
      * @param   \Hoa\Stream\IStream\In     $in              Stream to interprete
      *                                                      as XYL.
      * @param   \Hoa\Stream\IStream\Out    $out             Stream for rendering.
@@ -305,17 +269,18 @@ class          Xyl
      * @param   mixed                      $entityResolver  Entity resolver.
      * @param   array                      $parameters      Parameters.
      * @return  void
-     * @throw   \Hoa\Xyl\Exception
-     * @throw   \Hoa\Xml\Exception
-     * @throw   \Hoa\Xml\Exception\NamespaceMissing
+     * @throws  \Hoa\Xyl\Exception
+     * @throws  \Hoa\Xml\Exception
+     * @throws  \Hoa\Xml\Exception\NamespaceMissing
      */
-    public function __construct ( \Hoa\Stream\IStream\In  $in,
-                                  \Hoa\Stream\IStream\Out $out,
-                                  Interpreter             $interpreter,
-                                  \Hoa\Router\Http        $router         = null,
-                                                          $entityResolver = null,
-                                  Array                   $parameters     = array() ) {
-
+    public function __construct(
+        Stream\IStream\In $in,
+        Stream\IStream\Out $out,
+        Interpreter $interpreter,
+        Router\Http $router = null,
+        $entityResolver     = null,
+        Array $parameters   = []
+    ) {
         parent::__construct(
             '\Hoa\Xyl\Element\Basic',
             $in,
@@ -323,64 +288,69 @@ class          Xyl
             $entityResolver
         );
 
-        if(false === $this->namespaceExists(self::NAMESPACE_ID))
+        if (false === $this->namespaceExists(self::NAMESPACE_ID)) {
             throw new Exception(
                 'The XYL file %s has no XYL namespace (%s) declared.',
-                0, array($in->getStreamName(), self::NAMESPACE_ID));
+                0,
+                [$in->getStreamName(), self::NAMESPACE_ID]
+            );
+        }
 
-        if(null === self::$_parameters) {
-
-            self::$_parameters = new \Hoa\Core\Parameter(
+        if (null === self::$_parameters) {
+            self::$_parameters = new Core\Parameter(
                 $this,
-                array(
+                [
                     'theme' => 'classic'
-                ),
-                array(
+                ],
+                [
                     'theme' => '(:theme:lU:)'
-                )
+                ]
             );
             $this->getParameters()->setParameters($parameters);
         }
 
         $this->_i           = self::$_ci++;
-        $this->_data        = new \Hoa\Core\Data();
+        $this->_data        = new Core\Data();
         $this->_out         = $out;
         $this->_interpreter = $interpreter;
         $this->_router      = $router;
         $this->_mowgli      = $this->getStream()->readDOM()->ownerDocument;
 
-        switch(strtolower($this->getName())) {
-
+        switch (strtolower($this->getName())) {
             case 'document':
                 $this->_type = self::TYPE_DOCUMENT;
-              break;
+
+                break;
 
             case 'definition':
                 $this->_type = self::TYPE_DEFINITION;
-              break;
+
+                break;
 
             case 'overlay':
                 $this->_type = self::TYPE_OVERLAY;
-              break;
+
+                break;
 
             case 'fragment':
                 $this->_type = self::TYPE_FRAGMENT;
-              break;
+
+                break;
 
             default:
-                throw new Exception(
-                    'Unknown document <%s>.', 1, $this->getName());
+                throw new Exception('Unknown document <%s>.', 1, $this->getName());
         }
 
         $this->useNamespace(self::NAMESPACE_ID);
-        $protocol              = \Hoa\Core::getInstance()->getProtocol();
+        $protocol              = Core::getInstance()->getProtocol();
         $protocol['Library'][] = new _Protocol(
             'Xyl[' . $this->_i . ']',
             'Xyl' . DS . 'Interpreter' . DS . $this->_interpreter->getResourcePath()
         );
 
-        if(null !== $router && false === $router->ruleExists('_resource'))
+        if (null !== $router && false === $router->ruleExists('_resource')) {
             $router->_get('_resource', '/(?<theme>)/(?<resource>)');
+        }
 
         return;
     }
@@ -388,34 +358,31 @@ class          Xyl
     /**
      * Get parameters.
      *
-     * @access  public
      * @return  \Hoa\Core\Parameter
      */
-    public function getParameters ( ) {
-
+    public function getParameters()
+    {
         return self::$_parameters;
     }
 
     /**
      * Get data.
      *
-     * @access  public
      * @return  \Hoa\Core\Data
      */
-    public function getData ( ) {
-
+    public function getData()
+    {
         return $this->_data;
     }
 
     /**
      * Set output stream.
      *
-     * @access  public
      * @param   \Hoa\Stream\IStream\Out  $out    Stream for rendering.
      * @return  \Hoa\Stream\IStream\Out
      */
-    public function setOutputStream ( \Hoa\Stream\IStream\Out $out ) {
-
+    public function setOutputStream(Stream\IStream\Out $out)
+    {
         $old        = $this->_out;
         $this->_out = $out;
 
@@ -425,11 +392,10 @@ class          Xyl
     /**
      * Get output stream.
      *
-     * @access  public
      * @return  \Hoa\Stream\IStream\Out
      */
-    public function getOutputStream ( ) {
-
+    public function getOutputStream()
+    {
         return $this->_out;
     }
 
@@ -437,11 +403,10 @@ class          Xyl
      * Get type.
      * Please, see the self::TYPE_* constants.
      *
-     * @access  public
      * @return  int
      */
-    public function getType ( ) {
-
+    public function getType()
+    {
         return $this->_type;
     }
 
@@ -449,22 +414,20 @@ class          Xyl
      * Get type as string.
      * Please, see the self::TYPE_* constants.
      *
-     * @access  public
      * @return  int
      */
-    public function getTypeAsString ( ) {
-
+    public function getTypeAsString()
+    {
         return strtolower($this->getName());
     }
 
     /**
      * Add a <?xyl-use?> processing-instruction (only that).
      *
-     * @access  public
      * @return  void
      */
-    public function addUse ( $href ) {
-
+    public function addUse($href)
+    {
         $this->_mowgli->insertBefore(
             new \DOMProcessingInstruction(
                 'xyl-use',
@@ -479,34 +442,36 @@ class          Xyl
     /**
      * Compute <?xyl-use?> processing-instruction.
      *
-     * @access  protected
      * @param   \DOMDocument  $ownerDocument      Document that ownes PIs.
      * @param   \DOMDocument  $receiptDocument    Document that receipts
      *                                            uses.
      * @param   \Hoa\Xyl      $self               Owner XYL document.
      * @return  bool
-     * @throw   \Hoa\Xyl\Exception
+     * @throws  \Hoa\Xyl\Exception
      */
-    protected function computeUse ( \DOMDocument $ownerDocument   = null,
-                                    \DOMDocument $receiptDocument = null,
-                                    Xyl          $self            = null ) {
+    protected function computeUse(
+        \DOMDocument $ownerDocument   = null,
+        \DOMDocument $receiptDocument = null,
+        Xyl          $self            = null
+    ) {
+        if (null === $ownerDocument) {
+            $ownerDocument = $this->_mowgli;
+        }
 
-        if(null === $ownerDocument)
-            $ownerDocument   = $this->_mowgli;
-
-        if(null === $receiptDocument)
+        if (null === $receiptDocument) {
             $receiptDocument = $this->_mowgli;
+        }
 
-        if(null === $self)
+        if (null === $self) {
             $self = $this;
+        }
 
         $streamClass = get_class($self->getInnerStream());
         $dirname     = dirname($self->getInnerStream()->getStreamName());
         $type        = $this->getType();
-        $remove      =    self::TYPE_DOCUMENT == $type
-                       || self::TYPE_FRAGMENT == $type;
-        $hrefs       = array();
-        $uses        = array();
+        $remove      = self::TYPE_DOCUMENT == $type || self::TYPE_FRAGMENT == $type;
+        $hrefs       = [];
+        $uses        = [];
         $xpath       = new \DOMXPath($ownerDocument);
         $xyl_use     = $xpath->query('/processing-instruction(\'xyl-use\')');
         unset($xpath);
@@ -514,18 +479,17 @@ class          Xyl
         $this->computeStylesheet($ownerDocument);
         $this->computeMeta($ownerDocument);
 
-        if(0 === $xyl_use->length)
+        if (0 === $xyl_use->length) {
             return false;
+        }
 
-        for($i = 0, $m = $xyl_use->length; $i < $m; ++$i) {
-
-            $item      = $xyl_use->item($i);
-            $use       = $item;
+        for ($i = 0, $m = $xyl_use->length; $i < $m; ++$i) {
+            $item = $xyl_use->item($i);
+            $use  = $item;
             $remove and $ownerDocument->removeChild($item);
-            $useParsed = new \Hoa\Xml\Attribute($use->data);
+            $useParsed = new Xml\Attribute($use->data);
 
-            if(false === $useParsed->attributeExists('href')) {
-
+            if (false === $useParsed->attributeExists('href')) {
                 unset($useParsed);
 
                 continue;
@@ -534,15 +498,17 @@ class          Xyl
             $href = $this->computeLink($useParsed->readAttribute('href'), true);
             unset($useParsed);
 
-            if(0 === preg_match('#^(([^:]+://)|([A-Z]:)|/)#', $href))
+            if (0 === preg_match('#^(([^:]+://)|([A-Z]:)|/)#', $href)) {
                 $href = $dirname . DS . $href;
+            }
 
-            if(false === file_exists($href))
-                throw new Exception(
-                    'File %s is not found, cannot use it.', 2, $href);
+            if (false === file_exists($href)) {
+                throw new Exception('File %s is not found, cannot use it.', 2, $href);
+            }
 
-            if(true === in_array($href, $hrefs))
+            if (true === in_array($href, $hrefs)) {
                 continue;
+            }
 
             $hrefs[]  = $href;
             $fragment = new static(
@@ -552,15 +518,20 @@ class          Xyl
                 $this->_router
             );
 
-            if(self::TYPE_DEFINITION != $fragment->getType())
+            if (self::TYPE_DEFINITION != $fragment->getType()) {
                 throw new Exception(
                     '%s must only contain <definition> of <yield> (and some ' .
-                    '<?xyl-use) elements.', 3, $href);
+                    '<?xyl-use) elements.',
+                    3,
+                    $href
+                );
+            }
 
-            foreach($fragment->xpath('//__current_ns:yield[@name]') as $yield)
+            foreach ($fragment->xpath('//__current_ns:yield[@name]') as $yield) {
                 $receiptDocument->documentElement->appendChild(
                     $receiptDocument->importNode($yield->readDOM(), true)
                 );
+            }
 
             $fragment->computeUse(
                 $fragment->readDOM()->ownerDocument,
@@ -579,58 +550,67 @@ class          Xyl
     /**
      * Compute <yield /> tags.
      *
-     * @access  protected
      * @return  void
      */
-    protected function computeYielder ( ) {
-
+    protected function computeYielder()
+    {
         $stream          = $this->getStream();
         $streamClass     = get_class($this->getInnerStream());
-        $openedFragments = array();
+        $openedFragments = [];
         $type            = $this->getType();
-        $remove          =    self::TYPE_DOCUMENT == $type
-                           || self::TYPE_FRAGMENT == $type;
+        $remove          = self::TYPE_DOCUMENT == $type ||
+                           self::TYPE_FRAGMENT == $type;
 
-        foreach($stream->xpath('//__current_ns:yield[@select]') as $yield) {
-
+        foreach ($stream->xpath('//__current_ns:yield[@select]') as $yield) {
             $yieldomized = $yield->readDOM();
             $select      = $yield->readAttribute('select');
 
-            if(self::SELECTOR_FILE != static::getSelector($select, $matches))
+            if (self::SELECTOR_FILE != static::getSelector($select, $matches)) {
                 continue;
+            }
 
-            if(empty($matches[2]))
+            if (empty($matches[2])) {
                 throw new Exception(
                     'Fragment selection %s is incomplet, an ID ' .
                     'must be specified.',
-                    4, $select);
+                    4,
+                    $select
+                );
+            }
 
             list(, $as, $sId) = $matches;
 
-            if(!isset($this->_fragments[$as]))
+            if (!isset($this->_fragments[$as])) {
                 throw new Exception(
                     'Fragment alias %s in selector %s does not exist.',
-                    5, array($as, $select));
+                    5,
+                    [$as, $select]
+                );
+            }
 
             $href = $this->_fragments[$as];
 
-            if(!isset($openedFragments[$href]))
+            if (!isset($openedFragments[$href])) {
                 $openedFragments[$href] = new static(
                     new $streamClass($href),
                     $this->getOutputStream(),
                     $this->_interpreter,
                     $this->_router
                 );
+            }
 
             $fragment = $openedFragments[$href];
             $snippet  = $fragment->xpath(
                 '//__current_ns:snippet[@id="' . $sId . '"]'
             );
 
-            if(empty($snippet))
+            if (empty($snippet)) {
                 throw new Exception(
                     'Snippet %s does not exist in fragment %s.',
-                    6, array($sId, $href));
+                    6,
+                    [$sId, $href]
+                );
+            }
 
             $yieldomized->parentNode->insertBefore(
                 $this->_mowgli->importNode($snippet[0]->readDOM(), true),
@@ -639,19 +619,16 @@ class          Xyl
             $yieldomized->parentNode->removeChild($yieldomized);
         }
 
-        foreach($stream->xpath('//__current_ns:yield[@name]') as $yield) {
-
+        foreach ($stream->xpath('//__current_ns:yield[@name]') as $yield) {
             $yieldomized = $yield->readDOM();
             $name        = $yieldomized->getAttribute('name');
 
-            if(true === $remove) {
-
+            if (true === $remove) {
                 $yieldomized->removeAttribute('name');
                 $yieldomized->removeAttribute('bind');
             }
 
-            foreach($stream->xpath('//__current_ns:' . $name) as $ciao) {
-
+            foreach ($stream->xpath('//__current_ns:' . $name) as $ciao) {
                 $placeholder = $ciao->readDOM();
                 $xpath       = new \DOMXpath($placeholder->ownerDocument);
                 $parent      = $placeholder->parentNode;
@@ -660,52 +637,54 @@ class          Xyl
                 $_yield->useNamespace(self::NAMESPACE_ID);
                 $ciao->useNamespace(self::NAMESPACE_ID);
 
-                if(false === $remove) {
-
+                if (false === $remove) {
                     $handle->removeAttribute('name');
                     $handle->removeAttribute('bind');
                 }
 
-                if(true === $placeholder->hasAttribute('bind'))
+                if (true === $placeholder->hasAttribute('bind')) {
                     $handle->setAttribute(
                         'bind',
                         $placeholder->getAttribute('bind')
                     );
+                }
 
                 $selects = $_yield->xpath('.//__current_ns:yield[@select]');
 
-                foreach($selects as $select) {
-
+                foreach ($selects as $select) {
                     $selectdomized = $select->readDOM();
                     $_select       = $select->readAttribute('select');
 
-                    switch(static::getSelector($_select, $matches)) {
-
+                    switch (static::getSelector($_select, $matches)) {
                         case self::SELECTOR_QUERY:
-                            $_ = \Hoa\Xml\Element\Basic::getCssToXPathInstance();
+                            $_ = Xml\Element\Basic::getCssToXPathInstance();
                             $_->compile(':root ' . $matches[1]);
                             $_select = $_->getXPath();
-                          break;
+
+                            break;
 
                         case self::SELECTOR_XPATH:
                             $_select = $matches[1];
-                          break;
+
+                            break;
 
                         default:
                             throw new Exception(
                                 'Selector %s is not supported in a @select ' .
                                 'attribute of the <yield /> component.',
-                                7, $_select);
-                          break;
+                                7,
+                                $_select
+                            );
                     }
 
                     $result = $xpath->query('./' . $_select, $placeholder);
 
-                    foreach($result ?: array() as $selected)
+                    foreach ($result ?: [] as $selected) {
                         $selectdomized->parentNode->insertBefore(
                             $selected,
                             $selectdomized
                         );
+                    }
 
                     $selectdomized->parentNode->removeChild($selectdomized);
                 }
@@ -714,27 +693,29 @@ class          Xyl
                     './/__current_ns:*[@yield-select]'
                 );
 
-                foreach($attributesSelects as $select) {
-
+                foreach ($attributesSelects as $select) {
                     $_select = $select->readAttribute('yield-select');
 
-                    switch(static::getSelector($_select, $matches)) {
-
+                    switch (static::getSelector($_select, $matches)) {
                         case self::SELECTOR_XPATH:
                             $_select = $matches[1];
-                          break;
+
+                            break;
 
                         default:
                             throw new Exception(
                                 'Selector %s is not supported in a ' .
                                 '@yield-select attribute.',
-                                8, $_select);
-                          break;
+                                8,
+                                $_select
+                            );
                     }
 
-                    foreach($ciao->xpath($_select) as $_el)
-                        foreach($_el->readAttributes() as $key => $value)
+                    foreach ($ciao->xpath($_select) as $_el) {
+                        foreach ($_el->readAttributes() as $key => $value) {
                             $select->writeAttribute($key, $value);
+                        }
+                    }
 
                     $select->removeAttribute('yield-select');
                 }
@@ -751,12 +732,11 @@ class          Xyl
     /**
      * Add a <?xyl-overlay?> processing-instruction (only that).
      *
-     * @access  public
      * @param   string  $href    Overlay's path.
      * @return  void
      */
-    public function addOverlay ( $href ) {
-
+    public function addOverlay($href)
+    {
         $this->_mowgli->insertBefore(
             new \DOMProcessingInstruction(
                 'xyl-overlay',
@@ -768,33 +748,37 @@ class          Xyl
         return;
     }
 
-    public function removeOverlay ( $href ) {
-
+    public function removeOverlay($href)
+    {
         $href          = str_replace('"', '\"', $href);
         $ownerDocument = $this->_mowgli;
         $xpath         = new \DOMXpath($ownerDocument);
         $xyl_overlay   = $xpath->query('/processing-instruction(\'xyl-overlay\')');
 
-        for($i = 0, $m = $xyl_overlay->length; $i < $m; ++$i) {
-
+        for ($i = 0, $m = $xyl_overlay->length; $i < $m; ++$i) {
             $item          = $xyl_overlay->item($i);
-            $overlayParsed = new \Hoa\Xml\Attribute($item->data);
+            $overlayParsed = new Xml\Attribute($item->data);
 
-            if(false === $overlayParsed->attributeExists('href'))
+            if (false === $overlayParsed->attributeExists('href')) {
                 continue;
+            }
 
-            if($overlayParsed->readAttribute('href') !== $href)
+            if ($overlayParsed->readAttribute('href') !== $href) {
                 continue;
+            }
 
             $ownerDocument->removeChild($item);
+
             break;
         }
 
-        if(!isset($this->_overlays[$href]))
+        if (!isset($this->_overlays[$href])) {
             return false;
+        }
 
-        foreach(array_reverse($this->_overlays[$href]) as $overlay)
+        foreach (array_reverse($this->_overlays[$href]) as $overlay) {
             $overlay->parentNode->removeChild($overlay);
+        }
 
         unset($this->_overlays[$href]);
         $this->partiallyUninterprete();
@@ -805,49 +789,50 @@ class          Xyl
     /**
      * Compute <?xyl-overlay?> processing-instruction.
      *
-     * @access  protected
      * @param   \DOMDocument  $ownerDocument      Document that ownes PIs.
      * @param   \DOMDocument  $receiptDocument    Document that receipts
      *                                            overlays.
      * @param   \Hoa\Xyl      $self               Owner XYL document.
      * @return  bool
-     * @throw   \Hoa\Xyl\Exception
+     * @throws  \Hoa\Xyl\Exception
      */
-    protected function computeOverlay ( \DOMDocument $ownerDocument   = null,
-                                        \DOMDocument $receiptDocument = null,
-                                        Xyl          $self            = null ) {
+    protected function computeOverlay(
+        \DOMDocument $ownerDocument   = null,
+        \DOMDocument $receiptDocument = null,
+        Xyl          $self            = null
+    ) {
+        if (null === $ownerDocument) {
+            $ownerDocument = $this->_mowgli;
+        }
 
-        if(null === $ownerDocument)
-            $ownerDocument   = $this->_mowgli;
-
-        if(null === $receiptDocument)
+        if (null === $receiptDocument) {
             $receiptDocument = $this->_mowgli;
+        }
 
-        if(null === $self)
+        if (null === $self) {
             $self = $this;
+        }
 
         $streamClass = get_class($self->getInnerStream());
         $dirname     = dirname($self->getInnerStream()->getStreamName());
         $type        = $this->getType();
-        $remove      =    self::TYPE_DOCUMENT == $type
-                       || self::TYPE_FRAGMENT == $type;
-        $hrefs       = array();
+        $remove      = self::TYPE_DOCUMENT == $type || self::TYPE_FRAGMENT == $type;
+        $hrefs       = [];
         $xpath       = new \DOMXPath($ownerDocument);
         $xyl_overlay = $xpath->query('/processing-instruction(\'xyl-overlay\')');
         unset($xpath);
 
-        if(0 === $xyl_overlay->length)
+        if (0 === $xyl_overlay->length) {
             return false;
+        }
 
-        for($i = 0, $m = $xyl_overlay->length; $i < $m; ++$i) {
-
-            $item          = $xyl_overlay->item($i);
-            $overlay       = $item;
+        for ($i = 0, $m = $xyl_overlay->length; $i < $m; ++$i) {
+            $item    = $xyl_overlay->item($i);
+            $overlay = $item;
             $remove and $ownerDocument->removeChild($item);
-            $overlayParsed = new \Hoa\Xml\Attribute($overlay->data);
+            $overlayParsed = new Xml\Attribute($overlay->data);
 
-            if(false === $overlayParsed->attributeExists('href')) {
-
+            if (false === $overlayParsed->attributeExists('href')) {
                 unset($overlayParsed);
 
                 continue;
@@ -857,15 +842,17 @@ class          Xyl
             $href  = $this->computeLink($_href, true);
             unset($overlayParsed);
 
-            if(0 === preg_match('#^(([^:]+://)|([A-Z]:)|/)#', $href))
+            if (0 === preg_match('#^(([^:]+://)|([A-Z]:)|/)#', $href)) {
                 $href = $dirname . DS . $href;
+            }
 
-            if(false === file_exists($href))
-                throw new Exception(
-                    'File %s is not found, cannot use it.', 9, $href);
+            if (false === file_exists($href)) {
+                throw new Exception('File %s is not found, cannot use it.', 9, $href);
+            }
 
-            if(true === in_array($href, $hrefs))
+            if (true === in_array($href, $hrefs)) {
                 continue;
+            }
 
             $hrefs[]  = $href;
             $fragment = new static(
@@ -875,23 +862,28 @@ class          Xyl
                 $this->_router
             );
 
-            if(self::TYPE_OVERLAY != $fragment->getType())
+            if (self::TYPE_OVERLAY !== $fragment->getType()) {
                 throw new Exception(
                     '%s must only contain <overlay> (and some <?xyl-overlay) ' .
-                    'elements.', 10, $href);
+                    'elements.',
+                    10,
+                    $href
+                );
+            }
 
-            $this->_overlays[$_href] = array();
+            $this->_overlays[$_href] = [];
             $fod                     = $fragment->readDOM()->ownerDocument;
             $this->computeFragment($fod, $fragment);
 
-            foreach($fragment->selectChildElements() as $element)
+            foreach ($fragment->selectChildElements() as $element) {
                 $this->_computeOverlay(
                     $receiptDocument->documentElement,
                     $receiptDocument->importNode($element->readDOM(), true),
                     $this->_overlays[$_href]
                 );
+            }
 
-            $this->computeUse    ($fod, $receiptDocument, $fragment);
+            $this->computeUse($fod, $receiptDocument, $fragment);
             $this->computeOverlay($fod, $receiptDocument, $fragment);
         }
 
@@ -901,38 +893,41 @@ class          Xyl
     /**
      * Next step for computing overlay.
      *
-     * @access  private
      * @param   \DOMElement  $from        Receiver fragment.
      * @param   \DOMElement  $to          Overlay fragment.
      * @param   array        $overlays    Overlays accumulator.
      * @return  void
      */
-    private function _computeOverlay ( \DOMElement $from, \DOMElement $to,
-                                       Array &$overlays ) {
-
-        if(false === $to->hasAttribute('id'))
+    private function _computeOverlay(
+        \DOMElement $from,
+        \DOMElement $to,
+        Array &$overlays
+    ) {
+        if (false === $to->hasAttribute('id')) {
             return $this->_computeOverlayPosition($from, $to, $overlays);
+        }
 
         $xpath = new \DOMXPath($from->ownerDocument);
         $query = $xpath->query('//*[@id="' . $to->getAttribute('id') . '"]');
 
-        if(0 === $query->length)
-            if($from->parentNode == $this->_mowgli) // reference component
+        if (0 === $query->length) {
+            if ($from->parentNode == $this->_mowgli) {
+                // reference component
                 return null;
-            else
+            } else {
                 return $this->_computeOverlayPosition($from, $to, $overlays);
+            }
+        }
 
         $from  = $query->item(0);
 
-        foreach($to->attributes as $name => $node)
-            switch($name) {
-
+        foreach ($to->attributes as $name => $node) {
+            switch ($name) {
                 case 'id':
-                  break;
+                    break;
 
                 case 'class':
-                    if(false === $from->hasAttribute('class')) {
-
+                    if (false === $from->hasAttribute('class')) {
                         $from->setAttribute('class', $node->value);
 
                         break;
@@ -950,26 +945,29 @@ class          Xyl
                             )
                         )
                     );
-                  break;
+
+                    break;
 
                 default:
                     $from->setAttribute($name, $node->value);
             }
+        }
 
-        $children = array();
+        $children = [];
 
-        for($h = $to->childNodes, $i = 0, $m = $h->length; $i < $m; ++$i) {
-
+        for ($h = $to->childNodes, $i = 0, $m = $h->length; $i < $m; ++$i) {
             $element = $h->item($i);
 
-            if(XML_ELEMENT_NODE != $element->nodeType)
+            if (XML_ELEMENT_NODE != $element->nodeType) {
                 continue;
+            }
 
             $children[] = $element;
         }
 
-        foreach($children as $child)
+        foreach ($children as $child) {
             $this->_computeOverlay($from, $child, $overlays);
+        }
 
         return;
     }
@@ -977,18 +975,17 @@ class          Xyl
     /**
      * Compute position while computing overlay.
      *
-     * @access  private
      * @param   \DOMElement  $from        Receiver fragment.
      * @param   \DOMElement  $to          Overlay fragment.
      * @param   array        $overlays    Overlays accumulator.
      * @return  void
      */
-    private function _computeOverlayPosition ( \DOMElement  $from,
-                                               \DOMElement  $to,
-                                               Array       &$overlays ) {
-
-        if(false === $to->hasAttribute('position')) {
-
+    private function _computeOverlayPosition(
+        \DOMElement $from,
+        \DOMElement $to,
+        Array       &$overlays
+    ) {
+        if (false === $to->hasAttribute('position')) {
             $from->appendChild($to);
             $overlays[] = $to;
 
@@ -996,23 +993,22 @@ class          Xyl
         }
 
         $children  = $from->childNodes;
-        $positions = array();
+        $positions = [];
         $e         = 0;
-        $search    = array();
-        $replace   = array();
+        $search    = [];
+        $replace   = [];
         $child     = null;
 
-        for($i = 0, $m = $children->length; $i < $m; ++$i) {
-
+        for ($i = 0, $m = $children->length; $i < $m; ++$i) {
             $child = $children->item($i);
 
-            if(XML_ELEMENT_NODE != $child->nodeType)
+            if (XML_ELEMENT_NODE != $child->nodeType) {
                 continue;
+            }
 
             $positions[$e] = $i;
 
-            if($child->hasAttribute('id')) {
-
+            if ($child->hasAttribute('id')) {
                 $search[]  = 'element(#' . $child->getAttribute('id') . ')';
                 $replace[] = $e;
             }
@@ -1026,13 +1022,14 @@ class          Xyl
         $handle    = str_replace($search, $replace, $to->getAttribute('position'));
         $position  = max(0, (int) static::evaluateXPath($handle));
 
-        if($position < $last)
+        if ($position < $last) {
             $from->insertBefore(
                 $to,
                 $from->childNodes->item($positions[$position])
             );
-        else
+        } else {
             $from->appendChild($to);
+        }
 
         $to->removeAttribute('position');
         $overlays[] = $to;
@@ -1043,13 +1040,12 @@ class          Xyl
     /**
      * Add a <?xyl-fragment?> processing-instruction (only that).
      *
-     * @access  public
      * @param   string  $href    Fragment's path.
      * @param   string  $as      Fragment's alias.
      * @return  void
      */
-    public function addFragment ( $href, $as = null ) {
-
+    public function addFragment($href, $as = null)
+    {
         $this->_mowgli->insertBefore(
             new \DOMProcessingInstruction(
                 'xyl-fragment',
@@ -1067,42 +1063,42 @@ class          Xyl
     /**
      * Compute <?xyl-fragment?> processing-instruction.
      *
-     * @access  protected
      * @param   \DOMDocument  $ownerDocument    Document that ownes PIs.
      * @param   \Hoa\Xyl      $self             Owner XYL document.
      * @return  bool
-     * @throw   \Hoa\Xyl\Exception
+     * @throws  \Hoa\Xyl\Exception
      */
-    protected function computeFragment ( \DOMDocument $ownerDocument = null,
-                                         Xyl          $self          = null ) {
-
-        if(null === $ownerDocument)
+    protected function computeFragment(
+        \DOMDocument $ownerDocument = null,
+        Xyl          $self          = null
+    ) {
+        if (null === $ownerDocument) {
             $ownerDocument = $this->_mowgli;
+        }
 
-        if(null === $self)
+        if (null === $self) {
             $self = $this;
+        }
 
         $dirname      = dirname($self->getInnerStream()->getStreamName());
         $type         = $this->getType();
-        $remove       =    self::TYPE_DOCUMENT == $type
-                        || self::TYPE_FRAGMENT == $type;
+        $remove       = self::TYPE_DOCUMENT == $type || self::TYPE_FRAGMENT == $type;
         $xpath        = new \DOMXPath($ownerDocument);
         $xyl_fragment = $xpath->query('/processing-instruction(\'xyl-fragment\')');
         $xpath->registerNamespace('__current_ns', self::NAMESPACE_ID);
-        $fragments    = array();
+        $fragments    = [];
 
-        if(0 === $xyl_fragment->length)
+        if (0 === $xyl_fragment->length) {
             return false;
+        }
 
-        for($i = 0, $m = $xyl_fragment->length; $i < $m; ++$i) {
-
+        for ($i = 0, $m = $xyl_fragment->length; $i < $m; ++$i) {
             $item           = $xyl_fragment->item($i);
             $fragment       = $item;
             $remove and $ownerDocument->removeChild($item);
-            $fragmentParsed = new \Hoa\Xml\Attribute($fragment->data);
+            $fragmentParsed = new Xml\Attribute($fragment->data);
 
-            if(false === $fragmentParsed->attributeExists('href')) {
-
+            if (false === $fragmentParsed->attributeExists('href')) {
                 unset($fragmentParsed);
 
                 continue;
@@ -1113,45 +1109,49 @@ class          Xyl
                 true
             );
 
-            if(false === $fragmentParsed->attributeExists('as'))
+            if (false === $fragmentParsed->attributeExists('as')) {
                 $as = $href;
-            else
+            } else {
                 $as = $fragmentParsed->readAttribute('as');
+            }
 
-            if(0 === preg_match('#^(([^:]+://)|([A-Z]:)|/)#', $href))
+            if (0 === preg_match('#^(([^:]+://)|([A-Z]:)|/)#', $href)) {
                 $href = $dirname . DS . $href;
+            }
 
-            if(false === file_exists($href))
-                throw new Exception(
-                    'File %s is not found, cannot use it.', 11, $href);
+            if (false === file_exists($href)) {
+                throw new Exception('File %s is not found, cannot use it.', 11, $href);
+            }
 
             unset($fragmentParsed);
 
-            if(isset($fragments[$as]))
+            if (isset($fragments[$as])) {
                 throw new Exception(
                     'Alias %s already exists for fragment %s, cannot ' .
                     'redeclare it for fragment %s in the same document.',
-                    12, array($as, $fragments[$as], $href));
+                    12,
+                    [$as, $fragments[$as], $href]
+                );
+            }
 
-            if(!isset($this->_fragments[$as])) {
-
+            if (!isset($this->_fragments[$as])) {
                 $this->_fragments[$as] = $href;
 
                 continue;
             }
 
-            while(isset($this->_fragments[$newAs = uniqid() . '-' . $as]));
+            while (isset($this->_fragments[$newAs = uniqid() . '-' . $as]));
 
             $renamed = $xpath->query('//__current_ns:yield[' .
                 'starts-with(@select, "?f:' . $as . '") or ' .
                 'starts-with(@select, "?file:' . $as . '")' .
             ']');
 
-            if(0 === $renamed->length)
+            if (0 === $renamed->length) {
                 continue;
+            }
 
-            for($j = 0, $n = $renamed->length; $j < $n; ++$j) {
-
+            for ($j = 0, $n = $renamed->length; $j < $n; ++$j) {
                 $handle = $renamed->item($j);
                 $select = $handle->getAttribute('select');
                 $handle->setAttribute(
@@ -1175,12 +1175,11 @@ class          Xyl
     /**
      * Add a <?xyl-stylesheet?> processing-instruction (only that).
      *
-     * @access  public
      * @param   string  $href    Stylesheet's path.
      * @return  void
      */
-    public function addStylesheet ( $href ) {
-
+    public function addStylesheet($href)
+    {
         $this->_mowgli->insertBefore(
             new \DOMProcessingInstruction(
                 'xyl-stylesheet',
@@ -1195,75 +1194,67 @@ class          Xyl
     /**
      * Compute <?xyl-stylesheet?> processing-instruction.
      *
-     * @access  protected
      * @param   \DOMDocument  $ownerDocument    Document that ownes PIs.
      * @return  void
      */
-    protected function computeStylesheet ( \DOMDocument $ownerDocument ) {
-
+    protected function computeStylesheet(\DOMDocument $ownerDocument)
+    {
         $xpath     = new \DOMXPath($ownerDocument);
         $xyl_style = $xpath->query('/processing-instruction(\'xyl-stylesheet\')');
         unset($xpath);
 
-        if(0 === $xyl_style->length)
+        if (0 === $xyl_style->length) {
             return;
+        }
 
-        for($i = 0, $m = $xyl_style->length; $i < $m; ++$i) {
-
+        for ($i = 0, $m = $xyl_style->length; $i < $m; ++$i) {
             $item        = $xyl_style->item($i);
-            $styleParsed = new \Hoa\Xml\Attribute($item->data);
+            $styleParsed = new Xml\Attribute($item->data);
 
-            if(true === $styleParsed->attributeExists('href')) {
-
+            if (true === $styleParsed->attributeExists('href')) {
                 $href = $this->computeLink(
                     $styleParsed->readAttribute('href'),
                     true
                 );
 
-                if(true === $styleParsed->attributeExists('position')) {
-
+                if (true === $styleParsed->attributeExists('position')) {
                     $position = max(0, (int) static::evaluateXPath(str_replace(
                         'last()',
                         ($k = key($this->_stylesheets)) ? $k + 1 : 0,
                         $styleParsed->readAttribute('position')
                     )));
 
-                    if(isset($this->_stylesheets[$position])) {
+                    if (isset($this->_stylesheets[$position])) {
+                        $handle = [];
 
-                        $handle = array();
-
-                        foreach($this->_stylesheets as $i => $foo)
-                            if($position > $i) {
-
+                        foreach ($this->_stylesheets as $i => $foo) {
+                            if ($position > $i) {
                                 $handle[$i] = $foo;
                                 unset($this->_stylesheets[$i]);
-                            }
-                            else
+                            } else {
                                 break;
+                            }
+                        }
 
                         $handle[$position] = $href;
 
-                        foreach($this->_stylesheets as $i => $foo) {
-
-                            if($i === $position) {
-
+                        foreach ($this->_stylesheets as $i => $foo) {
+                            if ($i === $position) {
                                 $handle[$position = $i + 1] = $foo;
                                 unset($this->_stylesheets[$i]);
-                            }
-                            else
+                            } else {
                                 break;
+                            }
                         }
 
                         $this->_stylesheets = $handle + $this->_stylesheets;
-                    }
-                    else {
-
+                    } else {
                         $this->_stylesheets[$position] = $href;
                         ksort($this->_stylesheets, SORT_NUMERIC);
                     }
-                }
-                else
+                } else {
                     $this->_stylesheets[] = $href;
+                }
             }
 
             $ownerDocument->removeChild($item);
@@ -1276,16 +1267,16 @@ class          Xyl
     /**
      * Add a <?xyl-meta?> processing-instruction (only that).
      *
-     * @access  public
      * @param   array   $attributes    Attributes.
      * @return  void
      */
-    public function addMeta ( Array $attributes ) {
-
+    public function addMeta(Array $attributes)
+    {
         $handle = null;
 
-        foreach($attributes as $key => $value)
+        foreach ($attributes as $key => $value) {
             $handle .= $key . '="' . str_replace('"', '\"', $value) . '" ';
+        }
 
         $this->_mowgli->insertBefore(
             new \DOMProcessingInstruction('xyl-meta', substr($handle, 0, -1)),
@@ -1298,23 +1289,22 @@ class          Xyl
     /**
      * Compute <?xyl-meta?> processing-instruction.
      *
-     * @access  protected
      * @param   \DOMDocument  $ownerDocument    Document that ownes PIs.
      * @return  void
      */
-    protected function computeMeta ( \DOMDocument $ownerDocument ) {
-
+    protected function computeMeta(\DOMDocument $ownerDocument)
+    {
         $xpath    = new \DOMXPath($ownerDocument);
         $xyl_meta = $xpath->query('/processing-instruction(\'xyl-meta\')');
         unset($xpath);
 
-        if(0 === $xyl_meta->length)
+        if (0 === $xyl_meta->length) {
             return;
+        }
 
-        for($i = 0, $m = $xyl_meta->length; $i < $m; ++$i) {
-
+        for ($i = 0, $m = $xyl_meta->length; $i < $m; ++$i) {
             $item           = $xyl_meta->item($i);
-            $this->_metas[] = new \Hoa\Xml\Attribute($item->data);
+            $this->_metas[] = new Xml\Attribute($item->data);
             $ownerDocument->removeChild($item);
         }
 
@@ -1324,27 +1314,32 @@ class          Xyl
     /**
      * Compute concrete tree.
      *
-     * @access  protected
      * @param   \Hoa\Xyl\Interpreter  $interpreter    Interpreter.
      * @return  void
-     * @throw   \Hoa\Xyl\Exception
+     * @throws  \Hoa\Xyl\Exception
      */
-    protected function computeConcrete ( Interpreter $interpreter = null ) {
-
-        if(null !== $this->_concrete)
+    protected function computeConcrete(Interpreter $interpreter = null)
+    {
+        if (null !== $this->_concrete) {
             return;
+        }
 
-        if(null === $interpreter)
+        if (null === $interpreter) {
             $interpreter = $this->_interpreter;
+        }
 
         $rank = $interpreter->getRank();
         $root = $this->getStream();
         $name = strtolower($root->getName());
 
-        if(false === array_key_exists($name, $rank))
+        if (false === array_key_exists($name, $rank)) {
             throw new Exception(
                 'Cannot create the concrete tree because the root <%s> is ' .
-                'unknown from the rank.', 13, $name);
+                'unknown from the rank.',
+                13,
+                $name
+            );
+        }
 
         $class           = $rank[$name];
         $this->_concrete = new $class($root, $this, $rank, self::NAMESPACE_ID);
@@ -1356,17 +1351,17 @@ class          Xyl
      * Distribute data into the XYL tree. Data are linked to element through a
      * reference to the data bucket in this object.
      *
-     * @access  protected
      * @param   Element\Concrete  $element    Compute data on this element.
      * @return  void
      */
-    protected function computeDataBinding ( Element\Concrete $element ) {
-
-        if(true === $this->isInnerOpened())
+    protected function computeDataBinding(Element\Concrete $element)
+    {
+        if (true === $this->isInnerOpened()) {
             return;
+        }
 
         $this->_isDataComputed = true;
-        $data = $this->getData()->toArray();
+        $data                  = $this->getData()->toArray();
 
         return $element->computeDataBinding($data);
     }
@@ -1374,29 +1369,27 @@ class          Xyl
     /**
      * Compute link.
      *
-     * @access  public
      * @param   string  $link    Link.
      * @param   bool    $late    If hoa:// resolving is postponed.
      * @return  string
      */
-    public function computeLink ( $link, $late = false ) {
-
+    public function computeLink($link, $late = false)
+    {
         // Router.
-        if(0 !== preg_match('#^@(?:([^:]+):([^\#]+)|([^:\#]+):?)(?:\#(.+))?$#',
-                            $link, $matches)) {
-
+        if (0 !== preg_match('#^@(?:([^:]+):([^\#]+)|([^:\#]+):?)(?:\#(.+))?$#', $link, $matches)) {
             $router = $this->getRouter();
 
-            if(null === $router)
+            if (null === $router) {
                 return $link;
+            }
 
-            if(!empty($matches[3])) {
-
-                if(!empty($matches[4]))
+            if (!empty($matches[3])) {
+                if (!empty($matches[4])) {
                     return $router->unroute(
                         $matches[3],
-                        array('_fragment' => $matches[4])
+                        ['_fragment' => $matches[4]]
                     );
+                }
 
                 return $router->unroute($matches[3]);
             }
@@ -1404,56 +1397,62 @@ class          Xyl
             $id = $matches[1];
             parse_str($matches[2], $kv);
 
-            if(!empty($matches[4]))
+            if (!empty($matches[4])) {
                 $kv['_fragment'] = $matches[4];
+            }
 
             return $router->unroute($id, $kv);
         }
 
         // hoa://.
-        if('hoa://' === substr($link, 0, 6)) {
-
-            if(0 !== preg_match('#^hoa://Library/Xyl/(.*)$#', $link, $m)) {
-
+        if ('hoa://' === substr($link, 0, 6)) {
+            if (0 !== preg_match('#^hoa://Library/Xyl/(.*)$#', $link, $m)) {
                 $handle = 'hoa://Application/Public/' . $m[1];
                 $_link  = $this->resolve($handle);
 
-                if(true !== file_exists($_link)) {
-
+                if (true !== file_exists($_link)) {
                     $dirname = dirname($_link);
 
-                    if(   true  !== is_dir($dirname)
-                       && false === @mkdir($dirname, 0755, true))
+                    if (true  !== is_dir($dirname) &&
+                        false === @mkdir($dirname, 0755, true)) {
                         throw new Exception(
                             'Cannot create directory for the resource %s.',
-                            14, $handle);
+                            14,
+                            $handle
+                        );
+                    }
 
-                    if(false === @copy($this->resolve($link), $_link))
+                    if (false === @copy($this->resolve($link), $_link)) {
                         throw new Exception(
-                            'Resource %s can not be copied to %s.', 15,
-                            array($link, $_link));
+                            'Resource %s can not be copied to %s.',
+                            15,
+                            [$link, $_link]
+                        );
+                    }
                 }
 
                 $link = $handle;
             }
 
-            if(0 !== preg_match('#^hoa://Application/Public/(.+/.+)$#', $link, $m)) {
-
-                $theme  = $this->getParameters()->getFormattedParameter('theme');
+            if (0 !== preg_match('#^hoa://Application/Public/(.+/.+)$#', $link, $m)) {
+                $theme                 = $this->getParameters()->getFormattedParameter('theme');
                 list($type, $resource) = explode('/', $m[1], 2);
-                $rule   = '_' . strtolower($type);
-                $router = $this->getRouter();
+                $rule                  = '_' . strtolower($type);
+                $router                = $this->getRouter();
 
-                if(null === $router)
-                    throw new Exception(
-                        'Need a router to compute %s.', 16, $link);
+                if (null === $router) {
+                    throw new Exception('Need a router to compute %s.', 16, $link);
+                }
 
-                if(false === $router->ruleExists($rule)) {
-
-                    if(false === $router->ruleExists('_resource'))
+                if (false === $router->ruleExists($rule)) {
+                    if (false === $router->ruleExists('_resource')) {
                         throw new Exception(
                             'Cannot compute %s because the rule _resource ' .
-                            'does not exist in the router.', 17, $link);
+                            'does not exist in the router.',
+                            17,
+                            $link
+                        );
+                    }
 
                     $rule     = '_resource';
                     $resource = $m[1];
@@ -1461,7 +1460,7 @@ class          Xyl
 
                 return $router->unroute(
                     $rule,
-                    array('theme' => $theme, 'resource' => $resource)
+                    ['theme' => $theme, 'resource' => $resource]
                 );
             }
 
@@ -1474,24 +1473,25 @@ class          Xyl
     /**
      * Interprete XYL as…
      *
-     * @access  public
      * @param   \Hoa\Xyl\Interpreter  $interpreter    Interpreter.
      * @param   bool                  $computeData    Whether we compute data or
      *                                                not.
      * @return  \Hoa\Xyl
      * @throws  \Hoa\Xyl\Exception
      */
-    public function interprete ( Interpreter $interpreter = null,
-                                 $computeData = false ) {
-
+    public function interprete(
+        Interpreter $interpreter = null,
+        $computeData             = false
+    ) {
         $this->computeUse();
         $this->computeFragment();
         $this->computeOverlay();
         $this->computeYielder();
         $this->computeConcrete($interpreter);
 
-        if(true === $computeData)
+        if (true === $computeData) {
             $this->computeDataBinding($this->_concrete);
+        }
 
         return $this;
     }
@@ -1499,11 +1499,10 @@ class          Xyl
     /**
      * Uninterprete partially the document.
      *
-     * @access  public
      * @return  \Hoa\Xyl
      */
-    public function partiallyUninterprete ( ) {
-
+    public function partiallyUninterprete()
+    {
         $this->_isDataComputed = false;
         $this->_concrete       = null;
 
@@ -1513,31 +1512,29 @@ class          Xyl
     /**
      * Run the render.
      *
-     * @access  public
      * @param   \Hoa\Xyl\Element\Concrete  $element    Element.
      * @param   bool                       $force      Force to re-compute the
      *                                                 interpretation.
      * @return  string
      */
-    public function render ( Element\Concrete $element = null, $force = false ) {
-
-        if(null === $element)
-            $element = $this->_concrete;
-
-        if(null === $element) {
-
-            $this->interprete(null, true);
+    public function render(Element\Concrete $element = null, $force = false)
+    {
+        if (null === $element) {
             $element = $this->_concrete;
         }
-        elseif(false !== $force) {
 
+        if (null === $element) {
+            $this->interprete(null, true);
+            $element = $this->_concrete;
+        } elseif (false !== $force) {
             $this->partiallyUninterprete();
 
             return $this->render();
         }
 
-        if(false === $this->_isDataComputed)
+        if (false === $this->_isDataComputed) {
             $this->computeDataBinding($element);
+        }
 
         return $element->render($this->getOutputStream());
     }
@@ -1545,14 +1542,13 @@ class          Xyl
     /**
      * Open a document with the same context as this one.
      *
-     * @access  public
      * @param   string  $streamName    Stream name.
      * @param   bool    $interprete    Whether we interprete the document.
      * @return  \Hoa\Xyl
-     * @throw   \Hoa\Xyl\Exception
+     * @throws  \Hoa\Xyl\Exception
      */
-    public function open ( $streamName, $interprete = true ) {
-
+    public function open($streamName, $interprete = true)
+    {
         $in  = get_class($this->getInnerStream());
         $new = new static(
             new $in($streamName),
@@ -1562,8 +1558,9 @@ class          Xyl
         );
         $new->_innerOpen = true;
 
-        if(true === $interprete)
+        if (true === $interprete) {
             $new->interprete();
+        }
 
         return $new;
     }
@@ -1571,23 +1568,21 @@ class          Xyl
     /**
      * Get the concrete tree.
      *
-     * @access  public
      * @return  \Hoa\Xyl\Element\Concrete
      */
-    public function getConcrete ( ) {
-
+    public function getConcrete()
+    {
         return $this->_concrete;
     }
 
     /**
      * Set theme.
      *
-     * @access  public
      * @param   string  $theme    Theme.
      * @return  string
      */
-    public function setTheme ( $theme ) {
-
+    public function setTheme($theme)
+    {
         $old = $this->getTheme();
         $this->getParameters()->setKeyword('theme', $theme);
 
@@ -1597,45 +1592,41 @@ class          Xyl
     /**
      * Get theme.
      *
-     * @access  public
      * @return  string
      */
-    public function getTheme ( ) {
-
+    public function getTheme()
+    {
         return $this->getParameters()->getKeyword('theme');
     }
 
     /**
      * Get all stylesheets in <?xyl-stylesheet?>
      *
-     * @access  public
      * @return  array
      */
-    public function getStylesheets ( ) {
-
+    public function getStylesheets()
+    {
         return $this->_stylesheets;
     }
 
     /**
      * Get all metas in <?xyl-meta?>
      *
-     * @access  public
      * @return  array
      */
-    public function getMetas ( ) {
-
+    public function getMetas()
+    {
         return $this->_metas;
     }
 
     /**
      * Set router.
      *
-     * @access  public
      * @param   \Hoa\Router\Http  $router    Router.
      * @return  \Hoa\Router\Http
      */
-    public function setRouter ( \Hoa\Router\Http $router ) {
-
+    public function setRouter(Router\Http $router)
+    {
         $old           = $this->_router;
         $this->_router = $router;
 
@@ -1645,35 +1636,36 @@ class          Xyl
     /**
      * Get router.
      *
-     * @access  public
      * @return  \Hoa\Router\Http
      */
-    public function getRouter ( ) {
-
+    public function getRouter()
+    {
         return $this->_router;
     }
 
     /**
      * Get a specific snippet (if the document is a <fragment />).
      *
-     * @access  public
      * @param   string  $id    ID.
      * @return  \Hoa\Xyl\Element\Concrete
      */
-    public function getSnippet ( $id ) {
-
+    public function getSnippet($id)
+    {
         $handle = $this->xpath(
             '/__current_ns:fragment/__current_ns:snippet[@id="' . $id . '"]'
         );
 
-        if(empty($handle))
-            throw new Exception(
-                'Snippet %s does not exist.', 18, $id);
+        if (empty($handle)) {
+            throw new Exception('Snippet %s does not exist.', 18, $id);
+        }
 
-        if(null === $concrete = $this->getConcrete())
+        if (null === $concrete = $this->getConcrete()) {
             throw new Exception(
                 'Take care to interprete the document before getting a ' .
-                'snippet.', 19);
+                'snippet.',
+                19
+            );
+        }
 
         return $concrete->getConcreteElement($handle[0]);
     }
@@ -1681,22 +1673,27 @@ class          Xyl
     /**
      * Get an identified element. This is only a shortcut, a helper.
      *
-     * @access  public
      * @param   string  $id    ID.
      * @return  \Hoa\Xyl\Element\Concrete
      */
-    public function getElement ( $id ) {
-
+    public function getElement($id)
+    {
         $handle = $this->xpath('//__current_ns:*[@id="' . $id . '"]');
 
-        if(empty($handle))
+        if (empty($handle)) {
             throw new Exception(
-                'Element with ID %s does not exist.', 20, $id);
+                'Element with ID %s does not exist.',
+                20,
+                $id
+            );
+        }
 
-        if(null === $concrete = $this->getConcrete())
+        if (null === $concrete = $this->getConcrete()) {
             throw new Exception(
                 'Take care to interprete the document before getting a form.',
-                21);
+                21
+            );
+        }
 
         return $concrete->getConcreteElement($handle[0]);
     }
@@ -1704,12 +1701,11 @@ class          Xyl
     /**
      * Set locale.
      *
-     * @access  public
      * @param   \Hoa\Locale  $locale    Locale.
      * @return  \Hoa\Locale
      */
-    public function setLocale ( \Hoa\Locale $locale ) {
-
+    public function setLocale(Locale $locale)
+    {
         $old           = $this->_locale;
         $this->_locale = $locale;
 
@@ -1719,25 +1715,22 @@ class          Xyl
     /**
      * Get locale.
      *
-     * @access  public
      * @return  \Hoa\Locale
      */
-    public function getLocale ( ) {
-
+    public function getLocale()
+    {
         return $this->_locale;
     }
 
     /**
      * Add a translation.
      *
-     * @access  public
      * @param   \Hoa\Translate  $translation    Translation.
      * @param   string          $id             Translation ID.
      * @return  void
      */
-    public function addTranslation ( \Hoa\Translate $translation,
-                                     $id = '__main__' ) {
-
+    public function addTranslation(Translate $translation, $id = '__main__')
+    {
         $this->_translations[$id] = $translation;
 
         return;
@@ -1746,14 +1739,14 @@ class          Xyl
     /**
      * Get translation.
      *
-     * @access  public
      * @param   string  $id    Translation ID.
      * @return  \Hoa\Translate
      */
-    public function getTranslation ( $id  = '__main__' ) {
-
-        if(!isset($this->_translations[$id]))
+    public function getTranslation($id  = '__main__')
+    {
+        if (!isset($this->_translations[$id])) {
             return null;
+        }
 
         return $this->_translations[$id];
     }
@@ -1761,14 +1754,14 @@ class          Xyl
     /**
      * Evaluate an XPath expression.
      *
-     * @access  public
      * @param   string  $expression    Expression.
      * @return  mixed
      */
-    public static function evaluateXPath ( $expression ) {
-
-        if(null === static::$_xe)
+    public static function evaluateXPath($expression)
+    {
+        if (null === static::$_xe) {
             static::$_xe = new \DOMXpath(new \DOMDocument());
+        }
 
         return static::$_xe->evaluate($expression);
     }
@@ -1777,11 +1770,10 @@ class          Xyl
      * Whether the document is open from the constructor or from the
      * self::open() method.
      *
-     * @access  public
      * @return  bool
      */
-    public function isInnerOpened ( ) {
-
+    public function isInnerOpened()
+    {
         return $this->_innerOpen;
     }
 
@@ -1790,28 +1782,29 @@ class          Xyl
      *     * hoa://Library/Xyl/ to hoa://Library/Xyl[i];
      *     * hoa://Application/Public/ to hoa://Application/Public/<theme>/.
      *
-     * @access  public
      * @param   string  $hoa    hoa:// path.
      * @param   bool    $late   If hoa:// real resolving is postponed.
      * @return  string
      */
-    public function resolve ( $hoa, $late = false ) {
-
+    public function resolve($hoa, $late = false)
+    {
         $exists = false;
 
-        if(0 !== preg_match('#^hoa://Library/Xyl(/.*|$)#', $hoa, $matches)) {
-
+        if (0 !== preg_match('#^hoa://Library/Xyl(/.*|$)#', $hoa, $matches)) {
             $hoa    = 'hoa://Library/Xyl[' . $this->_i . ']' . $matches[1];
             $exists = true;
         }
 
-        if(0 !== preg_match('#^hoa://Application/Public(/.*)#', $hoa, $matches))
-            $hoa = 'hoa://Application/Public/' .
-                   $this->getParameters()->getFormattedParameter('theme') .
-                   $matches[1];
+        if (0 !== preg_match('#^hoa://Application/Public(/.*)#', $hoa, $matches)) {
+            $hoa =
+                'hoa://Application/Public/' .
+                $this->getParameters()->getFormattedParameter('theme') .
+                $matches[1];
+        }
 
-        if(true === $late)
+        if (true === $late) {
             return $hoa;
+        }
 
         return resolve($hoa, $exists);
     }
@@ -1819,33 +1812,37 @@ class          Xyl
     /**
      * Get selector type.
      *
-     * @access  public
      * @param   string  $selector    Selector.
      * @return  int
-     * @throw   \Hoa\Xyl\Exception
+     * @throws  \Hoa\Xyl\Exception
      */
-    public static function getSelector ( $selector, &$matches = false ) {
+    public static function getSelector($selector, &$matches = false)
+    {
 
         // ?q:a b c
         // ?query:a b c
-        if(0 !== preg_match('#^\?q(?:uery)?:(.*)$#i', $selector, $matches))
+        if (0 !== preg_match('#^\?q(?:uery)?:(.*)$#i', $selector, $matches)) {
             return self::SELECTOR_QUERY;
+        }
 
         // ?x:a/b/c
         // ?xpath:a/b/c
-        elseif(0 !== preg_match('#^\?x(?:path)?:(.*)$#i', $selector, $matches))
+        elseif (0 !== preg_match('#^\?x(?:path)?:(.*)$#i', $selector, $matches)) {
             return self::SELECTOR_XPATH;
+        }
 
         // ?f:a/b/c
         // ?file:a/b/c
-        elseif(0 !== preg_match('#^\?f(?:ile)?:([^\#]+)(?:\#(.*))?$#i', $selector, $matches))
+        elseif (0 !== preg_match('#^\?f(?:ile)?:([^\#]+)(?:\#(.*))?$#i', $selector, $matches)) {
             return self::SELECTOR_FILE;
+        }
 
         // ?a/b/c
         // ?p:a/b/c
         // ?path:a/b/c
-        elseif(0 !== preg_match('#^\?(?:p(?:ath)?:)?(.*)$#i', $selector, $matches))
+        elseif (0 !== preg_match('#^\?(?:p(?:ath)?:)?(.*)$#i', $selector, $matches)) {
             return self::SELECTOR_PATH;
+        }
 
         throw new Exception(
             'Selector %s is not a valid selector.', 22, $selector);
@@ -1854,12 +1851,11 @@ class          Xyl
     /**
      * Destruct XYL object.
      *
-     * @access  public
      * @return  void
      */
-    public function __destruct ( ) {
-
-        $protocol = \Hoa\Core::getInstance()->getProtocol();
+    public function __destruct()
+    {
+        $protocol = Core::getInstance()->getProtocol();
         unset($protocol['Library']['Xyl[' . $this->_i . ']']);
 
         return;
@@ -1871,24 +1867,17 @@ class          Xyl
  *
  * hoa://Library/Xyl component.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class _Protocol extends \Hoa\Core\Protocol { }
-
+class _Protocol extends Core\Protocol
+{
 }
-
-namespace {
 
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Xyl\Xyl');
+Core\Consistency::flexEntity('Hoa\Xyl\Xyl');
 
-from('Hoa') -> import('Xyl.Interpreter.Common.Debug');
 event('hoa://Event/Exception')
     ->attach(xcallable('Hoa\Xyl\Interpreter\Common\Debug', 'receiveException'));
-
-}

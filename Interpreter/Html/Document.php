@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,45 +34,25 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xyl\Interpreter\Html;
 
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Exception
- */
--> import('Xyl.Exception')
-
-/**
- * \Hoa\Xyl\Interpreter\Html\Concrete
- */
--> import('Xyl.Interpreter.Html.Concrete')
-
-/**
- * \Hoa\Xyl\Element\Executable
- */
--> import('Xyl.Element.Executable');
-
-}
-
-namespace Hoa\Xyl\Interpreter\Html {
+use Hoa\Stream;
+use Hoa\Xyl;
 
 /**
  * Class \Hoa\Xyl\Interpreter\Html\Document.
  *
  * The <document /> component.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
-
+class Document extends Concrete implements Xyl\Element\Executable
+{
     /**
      * Title.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Title object
+     * @var \Hoa\Xyl\Interpreter\Html\Title
      */
     protected $_title = null;
 
@@ -81,19 +61,19 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
     /**
      * Paint the element.
      *
-     * @access  protected
      * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
      * @return  void
      */
-    protected function paint ( \Hoa\Stream\IStream\Out $out ) {
-
+    protected function paint(Stream\IStream\Out $out)
+    {
         $root = $this->getAbstractElementSuperRoot();
 
         $locale   = $root->getLocale();
         $language = null;
 
-        if(null !== $locale)
+        if (null !== $locale) {
             $language .= ' lang="' . $locale->getLanguage() . '"';
+        }
 
         $out->writeAll(
             '<!DOCTYPE html>' . "\n\n" .
@@ -106,8 +86,7 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
             '<head>' . "\n"
         );
 
-        if(null !== $this->_title) {
-
+        if (null !== $this->_title) {
             $out->writeAll('  ');
             $this->_title->render($out);
         }
@@ -119,20 +98,21 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
             '  <meta http-equiv="content-type" content="text/css; charset=utf-8" />' . "\n"
         );
 
-        foreach($root->getMetas() as $meta)
+        foreach ($root->getMetas() as $meta) {
             $out->writeAll('  <meta ' . $meta . ' />' . "\n");
+        }
 
         $stylesheets = $root->getStylesheets();
 
-        if(!empty($stylesheets)) {
-
+        if (!empty($stylesheets)) {
             $out->writeAll("\n");
 
-            foreach($stylesheets as $href)
+            foreach ($stylesheets as $href) {
                 $out->writeAll(
                     '  <link type="text/css" href="' . $href .
                     '" rel="stylesheet" />' . "\n"
                 );
+            }
         }
 
         $out->writeAll(
@@ -140,9 +120,11 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
             '<body>' . "\n\n"
         );
 
-        foreach($this as $child)
-            if('title' != $child->getName())
+        foreach ($this as $child) {
+            if ('title' != $child->getName()) {
                 $child->render($out);
+            }
+        }
 
         $out->writeAll(
             "\n\n" . '</body>' . "\n" . '</html>'
@@ -154,22 +136,20 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
     /**
      * Pre-execute an element.
      *
-     * @access  public
      * @return  void
      */
-    public function preExecute ( ) {
-
+    public function preExecute()
+    {
         return;
     }
 
     /**
      * Post-execute an element.
      *
-     * @access  public
      * @return  void
      */
-    public function postExecute ( ) {
-
+    public function postExecute()
+    {
         $this->computeTitle();
 
         return;
@@ -178,15 +158,15 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
     /**
      * Compute title.
      *
-     * @access  protected
      * @return  void
      */
-    protected function computeTitle ( ) {
-
+    protected function computeTitle()
+    {
         $xpath = $this->xpath('./__current_ns:title');
 
-        if(empty($xpath))
+        if (empty($xpath)) {
             return;
+        }
 
         $this->_title = $this->getConcreteElement($xpath[0]);
 
@@ -196,13 +176,10 @@ class Document extends Concrete implements \Hoa\Xyl\Element\Executable {
     /**
      * Get the <title /> component.
      *
-     * @access  public
      * @return  \Hoa\Xyl\Interpreter\Html\Title
      */
-    public function getTitle ( ) {
-
+    public function getTitle()
+    {
         return $this->_title;
     }
-}
-
 }

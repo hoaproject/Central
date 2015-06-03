@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,56 +34,42 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xyl\Interpreter\Common;
 
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Element\Concrete
- */
--> import('Xyl.Element.Concrete');
-
-}
-
-namespace Hoa\Xyl\Interpreter\Common {
+use Hoa\Stream;
+use Hoa\Xyl;
 
 /**
  * Class \Hoa\Xyl\Interpreter\Common\XylElse.
  *
  * The <else /> component.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class XylElse extends \Hoa\Xyl\Element\Concrete {
-
+class XylElse extends Xyl\Element\Concrete
+{
     /**
      * Paint the element.
      *
-     * @access  protected
      * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
      * @return  void
      */
-    public function paint ( \Hoa\Stream\IStream\Out $out ) {
-
+    public function paint(Stream\IStream\Out $out)
+    {
         return;
     }
 
     /**
      * Structural compute (if/elseif/else).
      *
-     * @access  public
      * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
      * @return  void
      */
-    public function structuralCompute ( \Hoa\Stream\IStream\Out $out ) {
-
+    public function structuralCompute(Stream\IStream\Out $out)
+    {
         $this->computeValue($out);
 
         return;
     }
-}
-
 }

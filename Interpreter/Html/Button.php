@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,42 +34,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Interpreter\Html\GenericPhrasing
- */
--> import('Xyl.Interpreter.Html.GenericPhrasing')
-
-/**
- * \Hoa\Xyl\Interpreter\Html\Form
- */
--> import('Xyl.Interpreter.Html.Form');
-
-}
-
-namespace Hoa\Xyl\Interpreter\Html {
+namespace Hoa\Xyl\Interpreter\Html;
 
 /**
  * Class \Hoa\Xyl\Interpreter\Html\Button.
  *
  * The <button /> component.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Button extends GenericPhrasing {
-
+class Button extends GenericPhrasing
+{
     /**
      * Attributes description.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Button array
+     * @var array
      */
-    protected static $_attributes        = array(
+    protected static $_attributes        = [
         'autofocus'      => parent::ATTRIBUTE_TYPE_NORMAL,
         'async'          => parent::ATTRIBUTE_TYPE_NORMAL,
         'asyncaction'    => parent::ATTRIBUTE_TYPE_LINK,
@@ -87,14 +69,14 @@ class Button extends GenericPhrasing {
         'name'           => parent::ATTRIBUTE_TYPE_NORMAL,
         'type'           => parent::ATTRIBUTE_TYPE_NORMAL,
         'value'          => parent::ATTRIBUTE_TYPE_NORMAL
-    );
+    ];
 
     /**
      * Attributes mapping between XYL and HTML.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Button array
+     * @var array
      */
-    protected static $_attributesMapping = array(
+    protected static $_attributesMapping = [
         'autofocus',
         'async'          => 'data-async',
         'asyncaction'    => 'data-asyncaction',
@@ -112,20 +94,20 @@ class Button extends GenericPhrasing {
         'name',
         'type',
         'value'
-    );
+    ];
 
     /**
      * Whether content could exist or not.
      * 0 to false, 1 to true, 2 to maybe.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Button int
+     * @var int
      */
     protected $_contentFlow              = 2;
 
     /**
      * Whether the input is valid or not.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Input bool
+     * @var bool
      */
     protected $_validity                 = null;
 
@@ -134,26 +116,25 @@ class Button extends GenericPhrasing {
     /**
      * Get form.
      *
-     * @access  public
      * @return  \Hoa\Xyl\Interpreter\Html\Form
      */
-    public function getForm ( ) {
-
+    public function getForm()
+    {
         return Form::getMe($this);
     }
 
     /**
      * Whether the input is valid or not.
      *
-     * @access  public
      * @param   bool   $revalid    Re-valid or not.
      * @param   mixed  $value      Value to test.
      * @return  bool
      */
-    public function isValid ( $revalid = false, $value ) {
-
-        if(false === $revalid && null !== $this->_validity)
+    public function isValid($revalid = false, $value)
+    {
+        if (false === $revalid && null !== $this->_validity) {
             return $this->_validity;
+        }
 
         $this->_validity = $value === $this->readAttribute('value');
 
@@ -163,16 +144,13 @@ class Button extends GenericPhrasing {
     /**
      * Set value.
      *
-     * @access  public
      * @param   mixed  $value    Value.
      * @return  string
      */
-    public function setValue ( $value ) {
-
+    public function setValue($value)
+    {
         $this->writeAttribute('value', $value);
 
         return;
     }
-}
-
 }

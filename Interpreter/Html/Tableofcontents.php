@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,63 +34,44 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xyl\Interpreter\Html;
 
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Interpreter\Html\Generic
- */
--> import('Xyl.Interpreter.Html.Generic')
-
-/**
- * \Hoa\Xyl\Element\Executable
- */
--> import('Xyl.Element.Executable');
-
-}
-
-namespace Hoa\Xyl\Interpreter\Html {
+use Hoa\Stream;
 
 /**
  * Class \Hoa\Xyl\Interpreter\Html\Tableofcontents.
  *
  * The <tableofcontents /> component.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Tableofcontents extends Generic {
-
+class Tableofcontents extends Generic
+{
     /**
      * Headings.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Tableofcontents array
+     * @var array
      */
-    protected $_headings = array();
+    protected $_headings = [];
 
 
 
     /**
      * Paint the element.
      *
-     * @access  protected
      * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
      * @return  void
      */
-    protected function paint ( \Hoa\Stream\IStream\Out $out ) {
-
+    protected function paint(Stream\IStream\Out $out)
+    {
         $this->writeAttribute('class', 'toc');
         $out->writeAll('<ol' . $this->readAttributesAsString() . '>');
 
         $links = $this->selectChildElements('a');
 
-        if(!empty($links)) {
-
-            foreach($links as $link) {
-
+        if (!empty($links)) {
+            foreach ($links as $link) {
                 $out->writeAll('<li>');
                 $this->getConcreteElement($link)->render($out);
                 $out->writeAll('</li>');
@@ -101,8 +82,7 @@ class Tableofcontents extends Generic {
             return;
         }
 
-        if(empty($this->_headings)) {
-
+        if (empty($this->_headings)) {
             $out->writeAll('</ol>');
 
             return;
@@ -111,45 +91,45 @@ class Tableofcontents extends Generic {
         $n     = 1;
         $first = true;
 
-        foreach($this->_headings as $heading) {
-
+        foreach ($this->_headings as $heading) {
             $ni = $heading->getLevel();
 
-            if(true === $first)
+            if (true === $first) {
                 $n = $ni;
+            }
 
-            if($n < $ni)
-                for($i = $ni - $n - 1; $i >= 0; --$i)
+            if ($n < $ni) {
+                for ($i = $ni - $n - 1; $i >= 0; --$i) {
                     $out->writeAll('<ol class="toc toc-depth-' . $ni . '">');
-            elseif($n > $ni) {
-
+                }
+            } elseif ($n > $ni) {
                 $out->writeAll('</li>');
 
-                for($i = $n - $ni - 1; $i >= 0; --$i)
+                for ($i = $n - $ni - 1; $i >= 0; --$i) {
                     $out->writeAll('</ol></li>');
+                }
+            } elseif (false === $first) {
+                $out->writeAll('</li>');
+            } else {
+                $first = false;
             }
-            else
-                if(false === $first)
-                    $out->writeAll('</li>');
-                else
-                    $first = false;
 
             $n = $ni;
 
             $out->writeAll('<li>');
 
-            if(true === $heading->attributeExists('id')) {
-
+            if (true === $heading->attributeExists('id')) {
                 $out->writeAll('<a href="#' . $heading->readAttribute('id') . '">');
                 $heading->computeTransientValue($out);
                 $out->writeAll('</a>');
-            }
-            else
+            } else {
                 $heading->computeTransientValue($out);
+            }
         }
 
-        for($i = $n - 2; $i >= 0; --$i)
+        for ($i = $n - 2; $i >= 0; --$i) {
             $out->writeAll('</li></ol>');
+        }
 
         return;
     }
@@ -157,12 +137,11 @@ class Tableofcontents extends Generic {
     /**
      * Add a heading in the table of content.
      *
-     * @access  public
      * @param   \Hoa\Xyl\Interpreter\Html\Heading  $heading    Heading.
      * @return  void
      */
-    public function addHeading ( Heading $heading ) {
-
+    public function addHeading(Heading $heading)
+    {
         $this->_headings[] = $heading;
 
         return;
@@ -171,13 +150,10 @@ class Tableofcontents extends Generic {
     /**
      * Get headings.
      *
-     * @access  public
      * @return  array
      */
-    public function getHeadings ( ) {
-
+    public function getHeadings()
+    {
         return $this->_headings;
     }
-}
-
 }

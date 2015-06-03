@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,38 +34,23 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Interpreter\Html\Generic
- */
--> import('Xyl.Interpreter.Html.Generic');
-
-}
-
-namespace Hoa\Xyl\Interpreter\Html {
+namespace Hoa\Xyl\Interpreter\Html;
 
 /**
  * Class \Hoa\Xyl\Interpreter\Html\Hr.
  *
  * The <hr /> component.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Hr extends Generic {
-
+class Hr extends Generic
+{
     /**
      * Whether content could exist or not.
      * 0 to false, 1 to true, 2 to maybe.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Hr int
+     * @var int
      */
     protected $_contentFlow = 0;
-}
-
 }

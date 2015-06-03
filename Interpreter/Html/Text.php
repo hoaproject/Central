@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,18 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xyl\Interpreter\Html;
 
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Interpreter\Html\Concrete
- */
--> import('Xyl.Interpreter.Html.Concrete');
-
-}
-
-namespace Hoa\Xyl\Interpreter\Html {
+use Hoa\Stream;
 
 /**
  * Class \Hoa\Xyl\Interpreter\Html\Text.
@@ -53,26 +44,21 @@ namespace Hoa\Xyl\Interpreter\Html {
  * The <__text /> component (inter-text, please see the
  * \Hoa\Xml\Element\Model\Phrasing interface).
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Text extends Concrete {
-
+class Text extends Concrete
+{
     /**
      * Paint the element.
      *
-     * @access  protected
      * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
      * @return  void
      */
-    protected function paint ( \Hoa\Stream\IStream\Out $out ) {
-
+    protected function paint(Stream\IStream\Out $out)
+    {
         $out->writeAll($this->readAll());
 
         return;
     }
-}
-
 }

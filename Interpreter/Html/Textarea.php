@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,42 +34,26 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xyl\Interpreter\Html;
 
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Interpreter\Html\Generic
- */
--> import('Xyl.Interpreter.Html.Generic')
-
-/**
- * \Hoa\Xyl\Interpreter\Html\Form
- */
--> import('Xyl.Interpreter.Html.Form');
-
-}
-
-namespace Hoa\Xyl\Interpreter\Html {
+use Hoa\Stream;
 
 /**
  * Class \Hoa\Xyl\Interpreter\Html\Textarea.
  *
  * The <textarea /> component.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Textarea extends Generic {
-
+class Textarea extends Generic
+{
     /**
      * Attributes description.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Textarea array
+     * @var array
      */
-    protected static $_attributes        = array(
+    protected static $_attributes        = [
         'autocomplete' => parent::ATTRIBUTE_TYPE_NORMAL,
         'autofocus'    => parent::ATTRIBUTE_TYPE_NORMAL,
         'cols'         => parent::ATTRIBUTE_TYPE_NORMAL,
@@ -86,14 +70,14 @@ class Textarea extends Generic {
         'rows'         => parent::ATTRIBUTE_TYPE_NORMAL,
         'validate'     => parent::ATTRIBUTE_TYPE_CUSTOM,
         'wrap'         => parent::ATTRIBUTE_TYPE_NORMAL
-    );
+    ];
 
     /**
      * Attributes mapping between XYL and HTML.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Textarea array
+     * @var array
      */
-    protected static $_attributesMapping = array(
+    protected static $_attributesMapping = [
         'autocomplete',
         'autofocus',
         'cols',
@@ -108,19 +92,19 @@ class Textarea extends Generic {
         'required',
         'rows',
         'wrap'
-    );
+    ];
 
     /**
      * Whether the textarea is valid or not.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Textarea bool
+     * @var bool
      */
     protected $_validity                 = null;
 
     /**
      * Temporize value.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Textarea string
+     * @var string
      */
     protected $_value                    = null;
 
@@ -129,20 +113,20 @@ class Textarea extends Generic {
     /**
      * Paint the element.
      *
-     * @access  protected
      * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
      * @return  void
      */
-    protected function paint ( \Hoa\Stream\IStream\Out $out ) {
-
+    protected function paint(Stream\IStream\Out $out)
+    {
         $name = $this->getName();
 
         $out->writeAll('<' . $name . $this->readAttributesAsString() . '>');
 
-        if(null === $this->_value)
+        if (null === $this->_value) {
             $this->computeValue($out);
-        else
+        } else {
             $out->writeAll($this->_value);
+        }
 
         $out->writeAll('</' . $name . '>');
 
@@ -152,51 +136,46 @@ class Textarea extends Generic {
     /**
      * Get form.
      *
-     * @access  public
      * @return  \Hoa\Xyl\Interpreter\Html\Form
      */
-    public function getForm ( ) {
-
+    public function getForm()
+    {
         return Form::getMe($this);
     }
 
     /**
      * Whether the input is valid or not.
      *
-     * @access  public
      * @param   bool   $revalid    Re-valid or not.
      * @param   mixed  $value      Value to test.
      * @return  bool
      */
-    public function isValid ( $revalid = false, $value ) {
-
-        if(false === $revalid && null !== $this->_validity)
+    public function isValid($revalid = false, $value)
+    {
+        if (false === $revalid && null !== $this->_validity) {
             return $this->_validity;
+        }
 
         $this->_validity = true;
 
-        if(   (null === $value || '' === $value)
-           &&  true === $this->attributeExists('required')) {
-
+        if ((null === $value || '' === $value) &&
+            true === $this->attributeExists('required')) {
             $this->_validity = false;
 
             return Form::postValidation($this->_validity, $value, $this);
         }
 
-        if(true === $this->attributeExists('maxlength')) {
-
+        if (true === $this->attributeExists('maxlength')) {
             $maxlength = intval($this->readAttribute('maxlength'));
 
-            if(mb_strlen($value) > $maxlength) {
-
+            if (mb_strlen($value) > $maxlength) {
                 $this->_validity = false;
 
                 return Form::postValidation($this->_validity, $value, $this);
             }
         }
 
-        if(true === $this->attributeExists('readonly')) {
-
+        if (true === $this->attributeExists('readonly')) {
             $this->_validity = $value === $this->computeValue();
 
             return Form::postValidation($this->_validity, $value, $this);
@@ -208,16 +187,13 @@ class Textarea extends Generic {
     /**
      * Set value.
      *
-     * @access  public
      * @param   mixed  $value    Value.
      * @return  string
      */
-    public function setValue ( $value ) {
-
+    public function setValue($value)
+    {
         $this->_value = $value;
 
         return;
     }
-}
-
 }

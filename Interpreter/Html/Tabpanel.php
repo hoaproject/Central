@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,66 +34,45 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xyl\Interpreter\Html;
 
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Interpreter\Html\Generic
- */
--> import('Xyl.Interpreter.Html.Generic')
-
-/**
- * \Hoa\Xyl\Element\Executable
- */
--> import('Xyl.Element.Executable');
-
-}
-
-namespace Hoa\Xyl\Interpreter\Html {
+use Hoa\Xyl;
 
 /**
  * Class \Hoa\Xyl\Interpreter\Html\Tabpanel.
  *
  * The <tabpanel /> component.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Tabpanel extends Generic implements \Hoa\Xyl\Element\Executable {
-
+class Tabpanel extends Generic implements Xyl\Element\Executable
+{
     /**
      * Pre-execute an element.
      *
-     * @access  public
      * @return  void
      */
-    public function preExecute ( ) {
-
+    public function preExecute()
+    {
         $this->writeAttribute('role', 'tabpanel');
         $atLeast = false;
 
-        if(true === $this->abstract->attributeExists('aria-hidden')) {
-
+        if (true === $this->abstract->attributeExists('aria-hidden')) {
             $hidden = 'true' === $this->abstract->readAttribute('aria-hidden');
             $this->writeAttribute('aria-hidden',   $hidden ? 'true'  : 'false');
             $this->writeAttribute('aria-expanded', $hidden ? 'false' : 'true');
             $atLeast = true;
-
         }
 
-        if(true === $this->abstract->attributeExists('aria-expanded')) {
-
+        if (true === $this->abstract->attributeExists('aria-expanded')) {
             $expanded = 'true' === $this->abstract->readAttribute('aria-expanded');
             $this->writeAttribute('aria-expanded', $expanded ? 'true'  : 'false');
             $this->writeAttribute('aria-hidden',   $expanded ? 'false' : 'true');
             $atLeast = true;
         }
 
-        if(false === $atLeast) {
-
+        if (false === $atLeast) {
             $this->writeAttribute('aria-hidden',   'true');
             $this->writeAttribute('aria-expanded', 'false');
         }
@@ -110,24 +89,20 @@ class Tabpanel extends Generic implements \Hoa\Xyl\Element\Executable {
     /**
      * Post-execute an element.
      *
-     * @access  public
      * @return  void
      */
-    public function postExecute ( ) {
-
+    public function postExecute()
+    {
         return;
     }
 
     /**
      * Get component name.
      *
-     * @access  public
      * @return  string
      */
-    public function getName ( ) {
-
+    public function getName()
+    {
         return 'div';
     }
-}
-
 }

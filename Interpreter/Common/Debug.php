@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,58 +34,49 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xyl\Interpreter\Common;
 
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Element\Concrete
- */
--> import('Xyl.Element.Concrete');
-
-}
-
-namespace Hoa\Xyl\Interpreter\Common {
+use Hoa\Core;
+use Hoa\Stream;
+use Hoa\Xyl;
 
 /**
  * Class \Hoa\Xyl\Interpreter\Common\Debug.
  *
  * The <debug /> component.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Debug extends \Hoa\Xyl\Element\Concrete {
-
+class Debug extends Xyl\Element\Concrete
+{
     protected static $_message = null;
 
     /**
      * Paint the element.
      *
-     * @access  protected
      * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
      * @return  void
      */
-    protected function paint ( \Hoa\Stream\IStream\Out $out ) {
-
+    protected function paint(Stream\IStream\Out $out)
+    {
         // Early draft.
-        $out->writeAll('<div class="debug"' .
-                       $this->readAttributesAsString() . '>' . "\n");
+        $out->writeAll(
+            '<div class="debug"' .
+            $this->readAttributesAsString() .
+            '>' . "\n"
+        );
         $out->writeAll(self::$_message);
         $out->writeAll('</div>' . "\n");
 
         return;
     }
 
-    public static function receiveException ( \Hoa\Core\Event\Bucket $bucket ) {
-
+    public static function receiveException(Core\Event\Bucket $bucket)
+    {
         // Early draft.
         self::$_message = $bucket->getData()->raise();
 
         return;
     }
-}
-
 }

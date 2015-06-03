@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,59 +34,45 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Interpreter\Html\Form
- */
--> import('Xyl.Interpreter.Html.Form');
-
-}
-
-namespace Hoa\Xyl\Interpreter\Html {
+namespace Hoa\Xyl\Interpreter\Html;
 
 /**
  * Class \Hoa\Xyl\Interpreter\Html\Async.
  *
  * The <async /> component.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Async extends Form {
-
+class Async extends Form
+{
     /**
      * Attributes description.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Form array
+     * @var array
      */
-    protected static $_attributes        = array(
+    protected static $_attributes        = [
         'scope' => parent::ATTRIBUTE_TYPE_NORMAL
-    );
+    ];
 
     /**
      * Attributes mapping between XYL and HTML.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Form array
+     * @var array
      */
-    protected static $_attributesMapping = array(
+    protected static $_attributesMapping = [
         'scope' => 'data-asyncscope',
-    );
+    ];
 
 
 
     /**
      * Pre-execute an element.
      *
-     * @access  public
      * @return  void
      */
-    public function preExecute ( ) {
-
+    public function preExecute()
+    {
         $this->writeAttribute('data-async', 'true');
         parent::preExecute();
 
@@ -96,13 +82,10 @@ class Async extends Form {
     /**
      * Get component name.
      *
-     * @access  public
      * @return  string
      */
-    public function getName ( ) {
-
+    public function getName()
+    {
         return 'form';
     }
-}
-
 }

@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,52 +34,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xyl\Interpreter\Html;
 
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Interpreter\Html\Generic
- */
--> import('Xyl.Interpreter.Html.Generic')
-
-/**
- * \Hoa\Xyl\Element\Executable
- */
--> import('Xyl.Element.Executable')
-
-/**
- * \Hoa\Http\Runtime
- */
--> import('Http.Runtime')
-
-/**
- * \Hoa\Praspel
- */
--> import('Praspel.~');
-
-}
-
-namespace Hoa\Xyl\Interpreter\Html {
+use Hoa\Http;
+use Hoa\Praspel;
+use Hoa\Stream;
+use Hoa\Xyl;
 
 /**
  * Class \Hoa\Xyl\Interpreter\Html\Form.
  *
  * The <form /> component.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Form extends Generic implements \Hoa\Xyl\Element\Executable {
-
+class Form extends Generic implements Xyl\Element\Executable
+{
     /**
      * Attributes description.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Form array
+     * @var array
      */
-    protected static $_attributes        = array(
+    protected static $_attributes        = [
         'accept-charset' => parent::ATTRIBUTE_TYPE_NORMAL,
         'action'         => parent::ATTRIBUTE_TYPE_LINK,
         'autocomplete'   => parent::ATTRIBUTE_TYPE_NORMAL,
@@ -91,14 +68,14 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
         // client, security, all (=true)
         'novalidate'     => parent::ATTRIBUTE_TYPE_NORMAL,
         'target'         => parent::ATTRIBUTE_TYPE_NORMAL
-    );
+    ];
 
     /**
      * Attributes mapping between XYL and HTML.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Form array
+     * @var array
      */
-    protected static $_attributesMapping = array(
+    protected static $_attributesMapping = [
         'accept-charset',
         'action',
         'autocomplete',
@@ -108,19 +85,19 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
         'name',
         'novalidate',
         'target'
-    );
+    ];
 
     /**
      * Form data.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Form array
+     * @var array
      */
     protected $_formData                 = null;
 
     /**
      * Whether the form is valid or not.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Form bool
+     * @var bool
      */
     protected $_validity                 = null;
 
@@ -129,12 +106,11 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
     /**
      * Paint the element.
      *
-     * @access  protected
      * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
      * @return  void
      */
-    protected function paint ( \Hoa\Stream\IStream\Out $out ) {
-
+    protected function paint(Stream\IStream\Out $out)
+    {
         $name = $this->getName();
 
         $out->writeAll('<' . $name . $this->readAttributesAsString() . '>');
@@ -157,34 +133,39 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
      *     • aria-live
      *     • aria-relevant
      *
-     * @access  public
      * @return  void
      */
-    public function preExecute ( ) {
-
-        if('true' === $this->abstract->readAttribute('async')) {
-
-            if(false === $this->attributeExists('aria-atomic'))
+    public function preExecute()
+    {
+        if ('true' === $this->abstract->readAttribute('async')) {
+            if (false === $this->attributeExists('aria-atomic')) {
                 $this->writeAttribute('aria-atomic', 'true');
+            }
 
-            if(false === $this->attributeExists('aria-busy'))
+            if (false === $this->attributeExists('aria-busy')) {
                 $this->writeAttribute('aria-busy', 'false');
+            }
 
-            if(false === $this->attributeExists('aria-live'))
+            if (false === $this->attributeExists('aria-live')) {
                 $this->writeAttribute('aria-live', 'polite');
+            }
 
-            if(false === $this->attributeExists('aria-relevant'))
+            if (false === $this->attributeExists('aria-relevant')) {
                 $this->writeAttribute('aria-relevant', 'all');
+            }
         }
 
-        if(false === $this->attributeExists('action'))
+        if (false === $this->attributeExists('action')) {
             $this->writeAttribute('action', '#');
+        }
 
-        if(false === $this->attributeExists('method'))
+        if (false === $this->attributeExists('method')) {
             $this->writeAttribute('method', 'post');
+        }
 
-        if(true === $this->attributeExists('novalidate'))
+        if (true === $this->attributeExists('novalidate')) {
             $this->writeAttribute('novalidate', 'true');
+        }
 
         return;
     }
@@ -192,11 +173,10 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
     /**
      * Post-execute an element.
      *
-     * @access  public
      * @return  void
      */
-    public function postExecute ( ) {
-
+    public function postExecute()
+    {
         return;
     }
 
@@ -205,10 +185,10 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
      *
      * TODO : add fieldset support.
      *
-     * @access  public
      * @return  array
      */
-    public function getElements ( ) {
+    public function getElements()
+    {
 
         // Form elements.
         $out = array_merge(
@@ -220,7 +200,7 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
             $this->xpath('.//__current_ns:output[@name]')
         );
 
-        if(null !== $id = $this->readAttribute('id'))
+        if (null !== $id = $this->readAttribute('id')) {
             // Form-associated elements.
             $out = array_merge(
                 $out,
@@ -231,6 +211,7 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
                 $this->xpath('//__current_ns:keygen[@name   and @form="' . $id . '"]'),
                 $this->xpath('//__current_ns:output[@name   and @form="' . $id . '"]')
             );
+        }
 
         return $out;
     }
@@ -238,22 +219,22 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
     /**
      * Get submit elements.
      *
-     * @access  public
      * @return  array
      */
-    public function getSubmitElements ( ) {
-
+    public function getSubmitElements()
+    {
         $out = array_merge(
             $this->xpath('.//__current_ns:input[@type="submit"]'),
             $this->xpath('.//__current_ns:input[@type="image"]')
         );
 
-        if(null !== $id = $this->readAttribute('id'))
+        if (null !== $id = $this->readAttribute('id')) {
             // Form-associated elements.
             $out = array_merge(
                 $this->xpath('//__current_ns:input[@type="submit" and @form="' .  $id . '"]'),
                 $this->xpath('//__current_ns:input[@type="image"  and @form="' .  $id . '"]')
             );
+        }
 
         return $out;
     }
@@ -261,28 +242,28 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
     /**
      * Whether the form has been sent or not.
      *
-     * @access  public
      * @return  bool
      */
-    public function hasBeenSent ( ) {
-
+    public function hasBeenSent()
+    {
         $novalidate = $this->abstract->readAttributeAsList('novalidate');
 
-        if(    false === $this->abstract->attributeExists('novalidate')
-           || (false === in_array('security', $novalidate)
-           &&  false === in_array('all', $novalidate)
-           &&  false === in_array('true', $novalidate))) {
-
+        if (false === $this->abstract->attributeExists('novalidate') ||
+            (false === in_array('security', $novalidate) &&
+            false === in_array('all', $novalidate) &&
+            false === in_array('true', $novalidate))) {
             $method = strtolower($this->readAttribute('method')) ?: 'post';
 
-            if($method !== \Hoa\Http\Runtime::getMethod())
+            if ($method !== Http\Runtime::getMethod()) {
                 return false;
+            }
 
             $enctype = $this->readAttribute('enctype')
                            ?: 'application/x-www-form-urlencoded';
 
-            if($enctype !== \Hoa\Http\Runtime::getHeader('Content-Type'))
+            if ($enctype !== Http\Runtime::getHeader('Content-Type')) {
                 return false;
+            }
 
             // add verifications if:
             //     <input type="submit" formaction="…" form*="…" />
@@ -294,66 +275,64 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
     /**
      * Whether the form is valid or not.
      *
-     * @access  public
      * @param   bool  $revalid    Re-valid or not.
      * @return  bool
      */
-    public function isValid ( $revalid = false ) {
-
-        if(false === $revalid && null !== $this->_validity)
+    public function isValid($revalid = false)
+    {
+        if (false === $revalid && null !== $this->_validity) {
             return $this->_validity;
+        }
 
         $novalidate = $this->abstract->readAttributeAsList('novalidate');
         // what about @formnovalidate on submitable element?
 
-        if(   true === in_array('all', $novalidate)
-           || true === in_array('true', $novalidate))
+        if (true === in_array('all', $novalidate) ||
+            true === in_array('true', $novalidate)) {
             return $this->_validity = true;
+        }
 
         $this->_validity = true;
-        $data            = \Hoa\Http\Runtime::getData();
+        $data            = Http\Runtime::getData();
         unset($data['__utf8']);
         $this->flat($data, $flat);
 
-        if(false === is_array($data) || empty($data))
+        if (false === is_array($data) || empty($data)) {
             return $this->_validity = false;
+        }
 
         $elements   = $this->getElements();
-        $names      = array();
-        $validation = array();
+        $names      = [];
+        $validation = [];
 
-        foreach($elements as &$_element) {
-
+        foreach ($elements as &$_element) {
             $_element = $this->getConcreteElement($_element);
             $name     = $_element->readAttribute('name');
 
-            if(!isset($names[$name]))
-                $names[$name] = array();
+            if (!isset($names[$name])) {
+                $names[$name] = [];
+            }
 
             $names[$name][] = $_element;
         }
 
-        foreach($data as $index => $datum) {
-
-            if(!is_array($datum)) {
-
-                if(!isset($names[$index])) {
-
+        foreach ($data as $index => $datum) {
+            if (!is_array($datum)) {
+                if (!isset($names[$index])) {
                     $validation[$index] = false;
 
                     continue;
                 }
 
-                if(1 < count($names[$index])) {
-
+                if (1 < count($names[$index])) {
                     $validation[$index] = false;
 
-                    foreach($names[$index] as $element) {
-
+                    foreach ($names[$index] as $element) {
                         $handle = $element->isValid($revalid, $datum);
 
-                        if(true === $handle)
+                        if (true === $handle) {
                             $element->setValue($datum);
+                        }
 
                         $validation[$index] = $validation[$index] || $handle;
                     }
@@ -402,24 +381,27 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
             */
         }
 
-        foreach($names as $name => $element)
-            foreach($element as $el)
-                if((   $el instanceof Input
-                    || $el instanceof Textarea
-                    || $el instanceof Select)
-                   && true === $el->attributeExists('required'))
+        foreach ($names as $name => $element) {
+            foreach ($element as $el) {
+                if (($el instanceof Input ||
+                    $el instanceof Textarea ||
+                    $el instanceof Select) &&
+                    true === $el->attributeExists('required')) {
                     $validation[$name] = false;
+                }
+            }
+        }
 
         $handle = &$this->_validity;
-        array_walk($validation, function ( $verdict ) use ( &$handle ) {
-
+        array_walk($validation, function ($verdict) use (&$handle) {
             $handle = $handle && $verdict;
         });
 
         self::postVerification($this->_validity, $this);
 
-        if(true === $this->_validity)
+        if (true === $this->_validity) {
             $this->_formData = $data;
+        }
 
         return $this->_validity;
     }
@@ -427,26 +409,26 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
     /**
      * Flat array into name[k1][k2]…[kn] = value
      *
-     * @access  protected
      * @param   mixed   $value    Array.
      * @param   array   &$out     Result.
      * @param   string  $key      Key (prefix).
      * @return  void
      */
-    protected function flat ( &$value, &$out, $key = null ) {
-
-        if(!is_array($value)) {
-
+    protected function flat(&$value, &$out, $key = null)
+    {
+        if (!is_array($value)) {
             $out[$key] = &$value;
 
             return;
         }
 
-        foreach($value as $k => &$v)
-            if(null === $key)
+        foreach ($value as $k => &$v) {
+            if (null === $key) {
                 $this->flat($v, $out, $k);
-            else
+            } else {
                 $this->flat($v, $out, $key . '[' . $k . ']');
+            }
+        }
 
         return;
     }
@@ -454,7 +436,6 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
     /**
      * Post simple validation.
      *
-     * @access  public
      * @param   bool   $verdict             Verdict.
      * @param   bool   &$value              Value.
      * @param   \Hoa\Xyl\Interpreter\Html\Concrete  $element    Element that
@@ -463,24 +444,28 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
      *                                      not.
      * @return  bool
      */
-    public static function postValidation ( $verdict, &$value, Concrete $element,
-                                            $postVerification = true ) {
-
+    public static function postValidation(
+        $verdict,
+        &$value,
+        Concrete $element,
+        $postVerification = true
+    ) {
         // Order is important.
-        $validates = array();
+        $validates = [];
 
-        if(true === $element->abstract->attributeExists('validate'))
+        if (true === $element->abstract->attributeExists('validate')) {
             $validates['@'] = $element->abstract->readAttribute('validate');
+        }
 
         $validates = array_merge(
             $validates,
             $element->abstract->readCustomAttributes('validate')
         );
 
-        if(empty($validates)) {
-
-            if(true === $postVerification)
+        if (empty($validates)) {
+            if (true === $postVerification) {
                 static::postVerification($verdict, $element);
+            }
 
             return $verdict;
         }
@@ -488,37 +473,39 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
         // Order is not important.
         $errors = $element->abstract->readCustomAttributesAsList('error');
 
-        if(true === $element->abstract->attributeExists('error'))
+        if (true === $element->abstract->attributeExists('error')) {
             $errors['@'] = $element->abstract->readAttributeAsList('error');
+        }
 
-        if(ctype_digit($value))
+        if (ctype_digit($value)) {
             $value = (int) $value;
-        elseif(is_numeric($value))
+        } elseif (is_numeric($value)) {
             $value = (float) $value;
+        }
 
         $decision = true;
 
-        foreach($validates as $name => $realdom) {
-
-            $praspel  = \Hoa\Praspel::interpret(
+        foreach ($validates as $name => $realdom) {
+            $praspel = Praspel::interpret(
                 '@requires i: ' . $realdom . ';'
             );
             $clause   = $praspel->getClause('requires');
             $variable = $clause['i'];
             $decision = $variable->predicate($value);
 
-            if('@' === $name)
+            if ('@' === $name) {
                 $decision = $verdict && $decision;
+            }
 
-            if(true === $decision) {
-
+            if (true === $decision) {
                 unset($errors[$name]);
 
                 continue;
             }
 
-            if(!isset($errors[$name]))
+            if (!isset($errors[$name])) {
                 continue;
+            }
 
             $handle = $element->xpath(
                 '//__current_ns:error[@id="' .
@@ -526,8 +513,9 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
                 '"]'
             );
 
-            foreach($handle as $error)
+            foreach ($handle as $error) {
                 $element->getConcreteElement($error)->setVisibility(true);
+            }
 
             unset($errors[$name]);
 
@@ -536,8 +524,9 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
 
         $verdict = $decision;
 
-        if(true === $postVerification)
+        if (true === $postVerification) {
             static::postVerification($verdict, $element, isset($errors['@']));
+        }
 
         return $verdict;
     }
@@ -545,28 +534,32 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
     /**
      * Post-verification.
      *
-     * @access  public
      * @param   bool                                $verdict    Verdict.
      * @param   \Hoa\Xyl\Interpreter\Html\Concrete  $element    Element that
      *                                                          requires it.
      * @return  void
      */
-    public static function postVerification ( $verdict, Concrete $element,
-                                              $raise = true ) {
-
-        if(true === $verdict)
+    public static function postVerification(
+        $verdict,
+        Concrete $element,
+        $raise = true
+    ) {
+        if (true === $verdict) {
             return;
+        }
 
-        if(true !== $raise)
+        if (true !== $raise) {
             return;
+        }
 
         $onerror = $element->abstract->readAttributeAsList('error');
         $errors  = $element->xpath(
             '//__current_ns:error[@id="' . implode('" or @id="', $onerror) . '"]'
         );
 
-        foreach($errors as $error)
+        foreach ($errors as $error) {
             $element->getConcreteElement($error)->setVisibility(true);
+        }
 
         return;
     }
@@ -574,17 +567,18 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
     /**
      * Get a data from the form.
      *
-     * @access  public
      * @param   string  $index    Index (if null, return all data).
      * @return  mixed
      */
-    public function getData ( $index = null ) {
-
-        if(null === $index)
+    public function getData($index = null)
+    {
+        if (null === $index) {
             return $this->_formData;
+        }
 
-        if(!isset($this->_formData[$index]))
+        if (!isset($this->_formData[$index])) {
             return null;
+        }
 
         return $this->_formData[$index];
     }
@@ -592,24 +586,23 @@ class Form extends Generic implements \Hoa\Xyl\Element\Executable {
     /**
      * Get form associated to an element.
      *
-     * @access  public
      * @param   \Hoa\Xyl\Interpreter\Html\Concrete  $element    Element.
      * @return  \Hoa\Xyl\Interpreter\Html\Form
      */
-    public static function getMe ( Concrete $element ) {
-
-        if(true === $element->attributeExists('form'))
+    public static function getMe(Concrete $element)
+    {
+        if (true === $element->attributeExists('form')) {
             $form = $element->xpath(
                 '//__current_ns:form[@id="' . $element->readAttribute('form') . '"]'
             );
-        else
+        } else {
             $form = $element->xpath('.//ancestor::__current_ns:form');
+        }
 
-        if(empty($form))
+        if (empty($form)) {
             return null;
+        }
 
         return $form[0];
     }
-}
-
 }

@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,38 +34,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xyl\Element;
 
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Exception
- */
--> import('Xyl.Exception')
-
-/**
- * \Hoa\Xyl
- */
--> import('Xyl.~')
-
-/**
- * \Hoa\Xml\Element\Concrete
- */
--> import('Xml.Element.Concrete')
-
-/**
- * \Hoa\Xyl\Element
- */
--> import('Xyl.Element.~')
-
-/**
- * \Hoa\Stringbuffer\ReadWrite
- */
--> import('Stringbuffer.ReadWrite');
-
-}
-
-namespace Hoa\Xyl\Element {
+use Hoa\Stream;
+use Hoa\Stringbuffer;
+use Hoa\Xml;
+use Hoa\Xyl;
 
 /**
  * Class \Hoa\Xyl\Element\Concrete.
@@ -73,13 +47,11 @@ namespace Hoa\Xyl\Element {
  * This class represents the top-XYL-element. It manages data binding, value
  * computing etc.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
-
+abstract class Concrete extends Xml\Element\Concrete implements Element
+{
     /**
      * Attribute type: unknown.
      *
@@ -125,28 +97,28 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
     /**
      * Data bucket.
      *
-     * @var \Hoa\Xyl\Element\Concrete array
+     * @var array
      */
-    private $_bucket              = array('data' => null);
+    private $_bucket              = ['data' => null];
 
     /**
      * Data bucket for attributes.
      *
-     * @var \Hoa\Xyl\Element\Concrete array
+     * @var array
      */
     private $_attributeBucket     = null;
 
     /**
      * Visibility.
      *
-     * @var \Hoa\Xyl\Element\Concrete bool
+     * @var bool
      */
     protected $_visibility        = true;
 
     /**
      * Transient value.
      *
-     * @var \Hoa\Xyl\Element\Concrete string
+     * @var string
      */
     protected $_transientValue    = null;
 
@@ -155,9 +127,9 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      * Each element can declare its own attributes and inherit its parent's
      * attributes.
      *
-     * @var \Hoa\Xyl\Element\Concrete array
+     * @var array
      */
-    protected static $_attributes = array(
+    protected static $_attributes = [
         'id'        => self::ATTRIBUTE_TYPE_ID,
         'title'     => self::ATTRIBUTE_TYPE_NORMAL,
         'lang'      => self::ATTRIBUTE_TYPE_NORMAL,
@@ -168,12 +140,12 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         'data'      => self::ATTRIBUTE_TYPE_CUSTOM,
         'aria'      => self::ATTRIBUTE_TYPE_CUSTOM,
         'role'      => self::ATTRIBUTE_TYPE_NORMAL
-    );
+    ];
 
     /**
      * Whether this is the last iteration or not.
      *
-     * @var \Hoa\Xyl\Element\Concrete bool
+     * @var bool
      */
     protected $_lastIteration     = false;
 
@@ -183,34 +155,34 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      * Distribute data into the XYL tree. Data are linked to element through a
      * reference to the data bucket in the super root.
      *
-     * @access  public
      * @param   array   &$data      Data.
      * @param   array   &$parent    Parent.
      * @return  void
      */
-    public function computeDataBinding ( Array &$data, Array &$parent = null ) {
-
+    public function computeDataBinding(Array &$data, Array &$parent = null)
+    {
         $executable = $this instanceof Executable;
         $bindable   = $this->abstract->attributeExists('bind');
 
-        if(false === $bindable) {
-
-            foreach(static::getDeclaredAttributes() as $attribute => $type)
-                $bindable |= 0 !== preg_match(
-                                       '#\(\?[^\)]+\)#',
-                                       $this->abstract->readAttribute($attribute)
-                                   );
+        if (false === $bindable) {
+            foreach (static::getDeclaredAttributes() as $attribute => $type) {
+                $bindable |=
+                    0 !== preg_match(
+                        '#\(\?[^\)]+\)#',
+                        $this->abstract->readAttribute($attribute)
+                    );
+            }
 
             $bindable = (bool) $bindable;
         }
 
         // Propagate binding.
-        if(false === $bindable) {
-
+        if (false === $bindable) {
             $executable and $this->preExecute();
 
-            foreach($this as $element)
+            foreach ($this as $element) {
                 $element->computeDataBinding($data, $parent);
+            }
 
             $executable and $this->postExecute();
 
@@ -218,23 +190,24 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         }
 
         // Inner-binding.
-        if(false === $this->abstract->attributeExists('bind')) {
-
-            if(null === $parent)
-                $parent = array(
+        if (false === $this->abstract->attributeExists('bind')) {
+            if (null === $parent) {
+                $parent = [
                     'parent'  => null,
                     'current' => 0,
                     'branche' => '_',
-                    'data'    => array(array(
+                    'data'    => [[
                         '_' => $data
-                    ))
-                );
+                    ]]
+                ];
+            }
 
             $this->_attributeBucket = &$parent;
             $executable and $this->preExecute();
 
-            foreach($this as $element)
+            foreach ($this as $element) {
                 $element->computeDataBinding($data, $parent);
+            }
 
             $executable and $this->postExecute();
 
@@ -249,19 +222,21 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
             $data
         );
 
-        if(null === $parent)
+        if (null === $parent) {
             $this->_bucket['data'] = $data;
+        }
 
         $bindable   and $this->_attributeBucket = &$parent;
         $executable and $this->preExecute();
 
-        if(isset($data[0][$bind])) {
-
-            if(is_string($data[0][$bind]))
+        if (isset($data[0][$bind])) {
+            if (is_string($data[0][$bind])) {
                 return;
+            }
 
-            foreach($this as $element)
+            foreach ($this as $element) {
                 $element->computeDataBinding($data[0][$bind], $this->_bucket);
+            }
         }
 
         $executable and $this->postExecute();
@@ -274,45 +249,46 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      * Move pointer into bucket or fill a new bucket and return the last
      * reachable branche.
      *
-     * @access  protected
      * @param   string     $expression    Expression (please, see inline
      *                                    comments to study all cases).
      * @param   array      &$bucket       Bucket.
      * @return  string
      */
-    protected function selectData ( $expression, Array &$bucket ) {
-
-        switch(\Hoa\Xyl::getSelector($expression, $matches)) {
-
-            case \Hoa\Xyl::SELECTOR_PATH:
+    protected function selectData($expression, Array &$bucket)
+    {
+        switch (Xyl::getSelector($expression, $matches)) {
+            case Xyl::SELECTOR_PATH:
                 $split = preg_split(
                     '#(?<!\\\)\/#',
                     $matches[1]
                 );
 
-                foreach($split as &$s)
+                foreach ($split as &$s) {
                     $s = str_replace('\/', '/', $s);
+                }
 
                 $branche = array_pop($split);
                 $handle  = &$bucket;
 
-                foreach($split as $part)
+                foreach ($split as $part) {
                     $handle = &$bucket[0][$part];
+                }
 
                 $bucket = $handle;
 
                 return $branche;
-              break;
 
-            case \Hoa\Xyl::SELECTOR_QUERY:
-                dump('*** QUERY');
-                dump($matches);
-              break;
+            case Xyl::SELECTOR_QUERY:
+                var_dump('*** QUERY');
+                var_dump($matches);
 
-            case \Hoa\Xyl::SELECTOR_XPATH:
-                dump('*** XPATH');
-                dump($matches);
-              break;
+                break;
+
+            case Xyl::SELECTOR_XPATH:
+                var_dump('*** XPATH');
+                var_dump($matches);
+
+                break;
         }
 
         return null;
@@ -321,18 +297,19 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
     /**
      * Get current data of this element.
      *
-     * @access  protected
      * @return  mixed
      */
-    protected function getCurrentData ( ) {
-
-        if(empty($this->_bucket['data']))
+    protected function getCurrentData()
+    {
+        if (empty($this->_bucket['data'])) {
             return;
+        }
 
         $current = $this->_bucket['data'][$this->_bucket['current']];
 
-        if(!isset($current[$this->_bucket['branche']]))
+        if (!isset($current[$this->_bucket['branche']])) {
             return null;
+        }
 
         return $current[$this->_bucket['branche']];
     }
@@ -340,26 +317,24 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
     /**
      * First update for iterate data bucket.
      *
-     * @access  private
      * @return  void
      */
-    private function firstUpdate ( ) {
-
-        if(!isset($this->_bucket['parent']))
+    private function firstUpdate()
+    {
+        if (!isset($this->_bucket['parent'])) {
             return;
+        }
 
-        $parent                   = &$this->_bucket['parent'];
-        $this->_bucket['data']    = &$parent['data'][$parent['current']]
-                                            [$parent['branche']];
+        $parent                = &$this->_bucket['parent'];
+        $this->_bucket['data'] = &$parent['data'][$parent['current']][$parent['branche']];
         reset($this->_bucket['data']);
         $this->_bucket['current'] = 0;
 
-        if(!isset($this->_bucket['data'][0])) {
-
+        if (!isset($this->_bucket['data'][0])) {
             unset($this->_bucket['data']);
-            $this->_bucket['data'] = array(
+            $this->_bucket['data'] = [
                 &$parent['data'][$parent['current']][$parent['branche']]
-            );
+            ];
         }
 
         return;
@@ -368,13 +343,13 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
     /**
      * Continue to update the data bucket while iterating.
      *
-     * @access  private
      * @return  bool
      */
-    private function update ( ) {
-
-        if(!is_array($this->_bucket['data']))
+    private function update()
+    {
+        if (!is_array($this->_bucket['data'])) {
             return false;
+        }
 
         $this->_bucket['current'] = key($this->_bucket['data']);
         $handle                   = current($this->_bucket['data']);
@@ -385,35 +360,32 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
     /**
      * Make the render of the XYL tree.
      *
-     * @access  public
      * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
      * @return  void
      */
-    public function render ( \Hoa\Stream\IStream\Out $out ) {
-
-        if(false === $this->getVisibility())
+    public function render(Stream\IStream\Out $out)
+    {
+        if (false === $this->getVisibility()) {
             return;
+        }
 
         $this->firstUpdate();
 
-        if(   isset($this->_bucket['branche'])
-           && (empty($this->_bucket['data'])
-           ||  empty($this->_bucket['data']
-                                   [$this->_bucket['current']]
-                                   [$this->_bucket['branche']])))
+        if (isset($this->_bucket['branche']) &&
+            (empty($this->_bucket['data']) ||
+            empty($this->_bucket['data'][$this->_bucket['current']][$this->_bucket['branche']]))) {
             return;
+        }
 
         $data = &$this->_bucket['data'];
 
         do {
-
             $next                 = is_array($data) ? next($data) : false;
             $this->_lastIteration = false === $next;
 
             $this->paint($out);
             $next = $next && $this->update();
-
-        } while(false !== $next);
+        } while (false !== $next);
 
         return;
     }
@@ -421,49 +393,49 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
     /**
      * Paint the element.
      *
-     * @access  protected
      * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
      * @return  void
      */
-    abstract protected function paint ( \Hoa\Stream\IStream\Out $out );
+    abstract protected function paint(Stream\IStream\Out $out);
 
     /**
      * Compute value. If the @bind attribute exists, compute the current data,
      * else compute the abstract element casted as string if no child is
      * present, else rendering all children.
      *
-     * @access  public
      * @param   \Hoa\Stream\IStream\Out  $out    Output stream. If null, we
      *                                           return the result.
      * @return  string
      */
-    public function computeValue ( \Hoa\Stream\IStream\Out $out = null ) {
-
+    public function computeValue(Stream\IStream\Out $out = null)
+    {
         $data = false;
 
-        if(true === $this->abstract->attributeExists('bind'))
-            $data = $this->_transientValue
-                  = $this->getCurrentData();
+        if (true === $this->abstract->attributeExists('bind')) {
+            $data = $this->_transientValue = $this->getCurrentData();
+        }
 
-        if(null === $out)
-            if(false !== $data)
+        if (null === $out) {
+            if (false !== $data) {
                 return $data;
-            else
-                return $data = $this->_transientValue
-                             = $this->abstract->readAll();
+            } else {
+                return $data = $this->_transientValue = $this->abstract->readAll();
+            }
+        }
 
-        if(0 === count($this)) {
-
-            if(false !== $data)
+        if (0 === count($this)) {
+            if (false !== $data) {
                 $out->writeAll($data);
-            else
+            } else {
                 $out->writeAll($this->abstract->readAll());
+            }
 
             return;
         }
 
-        foreach($this as $child)
+        foreach ($this as $child) {
             $child->render($out);
+        }
 
         return;
     }
@@ -472,20 +444,21 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      * Get transient value, i.e. get the last compute value if exists (if no
      * exists, compute right now).
      *
-     * @access  public
      * @param   \Hoa\Stream\IStream\Out  $out    Output stream. If null, we
      *                                           return the result.
      * @return  string
      */
-    public function computeTransientValue ( \Hoa\Stream\IStream\Out $out = null ) {
-
+    public function computeTransientValue(Stream\IStream\Out $out = null)
+    {
         $data = $this->_transientValue;
 
-        if(null === $data)
+        if (null === $data) {
             return $this->computeValue($out);
+        }
 
-        if(null === $out)
+        if (null === $out) {
             return $data;
+        }
 
         $out->writeAll($data);
 
@@ -495,11 +468,10 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
     /**
      * Clean transient value.
      *
-     * @access  protected
      * @return  void
      */
-    protected function cleanTransientValue ( ) {
-
+    protected function cleanTransientValue()
+    {
         $this->_transientValue = null;
 
         return;
@@ -508,16 +480,16 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
     /**
      * Compute attribute value.
      *
-     * @access  public
      * @param   string  $value    Attribute value.
      * @param   int     $type     Attribute type.
      * @param   string  $name     Attribute name.
      * @return  string
      */
-    public function computeAttributeValue ( $value,
-                                            $type = self::ATTRIBUTE_TYPE_UNKNOWN,
-                                            $name = null ) {
-
+    public function computeAttributeValue(
+        $value,
+        $type = self::ATTRIBUTE_TYPE_UNKNOWN,
+        $name = null
+    ) {
         /*
         // (!variable).
         $value = preg_replace_callback(
@@ -534,29 +506,26 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         */
 
         // (?inner-bind).
-        if(   null !== $this->_attributeBucket
-           || !empty($this->_bucket['data'])) {
-
-            if(null === $this->_attributeBucket) {
-
+        if (null !== $this->_attributeBucket ||
+            !empty($this->_bucket['data'])) {
+            if (null === $this->_attributeBucket) {
                 $handle = &$this->_bucket;
                 $data   = $handle['data'][$handle['current']];
-            }
-            else {
-
+            } else {
                 $handle = &$this->_attributeBucket;
                 $data   = $handle['data'][$handle['current']][$handle['branche']];
             }
 
-            if(is_array($data) && isset($data[0]))
+            if (is_array($data) && isset($data[0])) {
                 $data = $data[0];
+            }
 
             $value  = preg_replace_callback(
                 '#\(\?(?:p(?:ath)?:)?([^\)]+)\)#',
-                function ( Array $matches ) use ( &$data ) {
-
-                    if(!is_array($data) || !isset($data[$matches[1]]))
+                function (Array $matches) use (&$data) {
+                    if (!is_array($data) || !isset($data[$matches[1]])) {
                         return '';
+                    }
 
                     return $data[$matches[1]];
                 },
@@ -565,14 +534,16 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
         }
 
         // Link.
-        if(   self::ATTRIBUTE_TYPE_LINK    === $type
-           || self::ATTRIBUTE_TYPE_UNKNOWN === $type)
+        if (self::ATTRIBUTE_TYPE_LINK    === $type ||
+            self::ATTRIBUTE_TYPE_UNKNOWN === $type) {
             $value = $this->getAbstractElementSuperRoot()->computeLink($value);
+        }
 
         // Formatter.
-        if(   null !== $name
-           && true === $this->abstract->attributeExists($name . '-formatter'))
+        if (null !== $name &&
+            true === $this->abstract->attributeExists($name . '-formatter')) {
             $value = $this->formatValue($value, $name . '-');
+        }
 
         return $value;
     }
@@ -585,46 +556,44 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
      *     @attr-formatter-argumentName="argumentValue"
      *
      *
-     * @access  protected
      * @param   string     $value    Value.
      * @param   string     $name     Name.
      * @return  string
      */
-    protected function formatValue ( $value, $name = null ) {
-
+    protected function formatValue($value, $name = null)
+    {
         $_formatter = $name . 'formatter';
         $formatter  = $this->abstract->readAttribute($_formatter);
         $arguments  = $this->abstract->readCustomAttributes($_formatter);
 
-        foreach($arguments as &$argument)
+        foreach ($arguments as &$argument) {
             $argument = $this->_formatValue(
                 $this->computeAttributeValue($argument)
             );
+        }
 
         $reflection   = xcallable($formatter)->getReflection();
-        $distribution = array();
+        $distribution = [];
         $placeholder  = $this->_formatValue($value);
 
-        foreach($reflection->getParameters() as $parameter) {
-
+        foreach ($reflection->getParameters() as $parameter) {
             $name = strtolower($parameter->getName());
 
-            if(true === array_key_exists($name, $arguments)) {
-
+            if (true === array_key_exists($name, $arguments)) {
                 $distribution[$name] = $arguments[$name];
-                continue;
-            }
-            elseif(null !== $placeholder) {
 
+                continue;
+            } elseif (null !== $placeholder) {
                 $distribution[$name] = $placeholder;
                 $placeholder         = null;
             }
         }
 
-        if($reflection instanceof \ReflectionMethod)
+        if ($reflection instanceof \ReflectionMethod) {
             $value = $reflection->invokeArgs(null, $distribution);
-        else
+        } else {
             $value = $reflection->invokeArgs($distribution);
+        }
 
         return $value;
     }
@@ -632,22 +601,22 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
     /**
      * Format value to a specific type.
      *
-     * @access  protected
      * @param   string  $value    Value.
      * @return  mixed
      */
-    protected function _formatValue ( $value ) {
-
-        if(ctype_digit($value))
+    protected function _formatValue($value)
+    {
+        if (ctype_digit($value)) {
             $value = intval($value);
-        elseif(is_numeric($value))
+        } elseif (is_numeric($value)) {
             $value = floatval($value);
-        elseif('true' === $value)
+        } elseif ('true' === $value) {
             $value = true;
-        elseif('false' === $value)
+        } elseif ('false' === $value) {
             $value = false;
-        elseif('null' === $value)
+        } elseif ('null' === $value) {
             $value = null;
+        }
         // what about constants?
 
         return $value;
@@ -656,15 +625,15 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
     /**
      * Compute from strings, directly on the output stream.
      *
-     * @access  protected
      * @return  void
      */
-    protected function computeFromString ( $xyl ) {
-
-        if(0 < count($this))
+    protected function computeFromString($xyl)
+    {
+        if (0 < count($this)) {
             return null;
+        }
 
-        $stringBuffer = new \Hoa\Stringbuffer\ReadWrite();
+        $stringBuffer = new Stringbuffer\ReadWrite();
         $stringBuffer->initializeWith(
             '<?xml version="1.0" encoding="utf-8"?>' .
             '<fragment xmlns="' . \Hoa\Xyl::NAMESPACE_ID . '">' .
@@ -682,29 +651,30 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
     /**
      * Check if this is the last iteration or not.
      *
-     * @access  public
      * @return  bool
      */
-    public function isLastIteration ( ) {
-
+    public function isLastIteration()
+    {
         return $this->_lastIteration;
     }
 
     /**
      * Get all declared attributes.
      *
-     * @access  protected
      * @return  array
      */
-    protected function getDeclaredAttributes ( ) {
-
+    protected function getDeclaredAttributes()
+    {
         $out      = static::_getDeclaredAttributes();
         $abstract = $this->abstract;
 
-        foreach($out as $attr => $type)
-            if(self::ATTRIBUTE_TYPE_CUSTOM === $type)
-                foreach($abstract->readCustomAttributes($attr) as $a => $_)
+        foreach ($out as $attr => $type) {
+            if (self::ATTRIBUTE_TYPE_CUSTOM === $type) {
+                foreach ($abstract->readCustomAttributes($attr) as $a => $_) {
                     $out[$attr . '-' . $a] = self::ATTRIBUTE_TYPE_UNKNOWN;
+                }
+            }
+        }
 
         return $out;
     }
@@ -712,22 +682,20 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
     /**
      * Get all declared attributes in a trivial way.
      *
-     * @access  protected
      * @return  array
      */
-    protected static function _getDeclaredAttributes ( ) {
-
-        $out    = array();
+    protected static function _getDeclaredAttributes()
+    {
+        $out    = [];
         $parent = get_called_class();
 
         do {
-
-            if(!isset($parent::$_attributes))
+            if (!isset($parent::$_attributes)) {
                 continue;
+            }
 
             $out = array_merge($out, $parent::$_attributes);
-
-        } while(false !== ($parent = get_parent_class($parent)));
+        } while (false !== ($parent = get_parent_class($parent)));
 
         return $out;
     }
@@ -735,12 +703,11 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
     /**
      * Set visibility.
      *
-     * @access  public
      * @param   bool    $visibility    Visibility.
      * @return  bool
      */
-    public function setVisibility ( $visibility ) {
-
+    public function setVisibility($visibility)
+    {
         $old               = $this->_visibility;
         $this->_visibility = $visibility;
 
@@ -750,13 +717,10 @@ abstract class Concrete extends \Hoa\Xml\Element\Concrete implements Element {
     /**
      * Get visibility.
      *
-     * @access  public
      * @return  bool
      */
-    public function getVisibility ( ) {
-
+    public function getVisibility()
+    {
         return $this->_visibility;
     }
-}
-
 }

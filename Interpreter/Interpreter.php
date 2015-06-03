@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,42 +34,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xyl\Interpreter;
 
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Element\Concrete
- */
--> import('Xyl.Element.Concrete');
-
-}
-
-namespace Hoa\Xyl\Interpreter {
+use Hoa\Core;
 
 /**
  * Class \Hoa\Xyl\Interpreter.
  *
  * Abstract interpreter.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-abstract class Interpreter {
-
+abstract class Interpreter
+{
     /**
      * Rank: abstract elements to concrete elements.
      *
-     * @var \Hoa\Xyl\Interpreter array
+     * @var array
      */
-    protected $_rank         = array();
+    protected $_rank         = [];
 
     /**
      * Resource path.
      *
-     * @var \Hoa\Xyl\Interpreter string
+     * @var string
      */
     protected $_resourcePath = null;
 
@@ -78,12 +67,11 @@ abstract class Interpreter {
     /**
      * Construct interpreter.
      *
-     * @access  public
      * @param   array  $rank    Rank.
      * @return  void
      */
-    public function __construct ( Array $rank = array() ) {
-
+    public function __construct(Array $rank = [])
+    {
         $this->setComponents($rank);
 
         return;
@@ -92,14 +80,14 @@ abstract class Interpreter {
     /**
      * Set ranks.
      *
-     * @access  public
      * @param   array  $rank    Ranks.
      * @return  void
      */
-    public function setComponents ( Array $rank ) {
-
-        foreach($rank as $element => $component)
+    public function setComponents(Array $rank)
+    {
+        foreach ($rank as $element => $component) {
             $this->setComponent($element, $component);
+        }
 
         return;
     }
@@ -107,13 +95,12 @@ abstract class Interpreter {
     /**
      * Set rank.
      *
-     * @access  public
      * @param   array  $element      Element.
      * @param   array  $component    Classname of the component.
      * @return  void
      */
-    public function setComponent ( $element, $component ) {
-
+    public function setComponent($element, $component)
+    {
         $this->_rank[$element] = $component;
 
         return;
@@ -122,33 +109,25 @@ abstract class Interpreter {
     /**
      * Get rank.
      *
-     * @access  public
      * @return  array
      */
-    public function getRank ( ) {
-
+    public function getRank()
+    {
         return $this->_rank;
     }
 
     /**
      * Get resource path.
      *
-     * @access  public
      * @return  string
      */
-    public function getResourcePath ( ) {
-
+    public function getResourcePath()
+    {
         return $this->_resourcePath;
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Xyl\Interpreter\Interpreter');
-
-}
+Core\Consistency::flexEntity('Hoa\Xyl\Interpreter\Interpreter');

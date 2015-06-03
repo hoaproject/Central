@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,49 +34,36 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Interpreter\Html\Generic
- */
--> import('Xyl.Interpreter.Html.Generic');
-
-}
-
-namespace Hoa\Xyl\Interpreter\Html {
+namespace Hoa\Xyl\Interpreter\Html;
 
 /**
  * Class \Hoa\Xyl\Interpreter\Html\Img.
  *
  * The <img /> component.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Img extends Generic {
-
+class Img extends Generic
+{
     /**
      * Attributes description.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Img array
+     * @var array
      */
-    protected static $_attributes        = array(
+    protected static $_attributes        = [
         'alt'    => parent::ATTRIBUTE_TYPE_NORMAL,
         'src'    => parent::ATTRIBUTE_TYPE_LINK,
         'width'  => parent::ATTRIBUTE_TYPE_NORMAL,
         'height' => parent::ATTRIBUTE_TYPE_NORMAL,
         'ismap'  => parent::ATTRIBUTE_TYPE_NORMAL,
         'usemap' => parent::ATTRIBUTE_TYPE_NORMAL
-    );
+    ];
 
     /**
      * Attributes mapping between XYL and HTML.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Img array
+     * @var array
      */
     protected static $_attributesMapping = …;
 
@@ -84,9 +71,7 @@ class Img extends Generic {
      * Whether content could exist or not.
      * 0 to false, 1 to true, 2 to maybe.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Hr int
+     * @var int
      */
     protected $_contentFlow              = 0;
-}
-
 }

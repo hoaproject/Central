@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,60 +34,43 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xyl\Interpreter\Html;
 
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Interpreter\Html\GenericPhrasing
- */
--> import('Xyl.Interpreter.Html.GenericPhrasing')
-
-/**
- * \Hoa\Xyl\Element\Executable
- */
--> import('Xyl.Element.Executable');
-
-}
-
-namespace Hoa\Xyl\Interpreter\Html {
+use Hoa\Xyl;
 
 /**
  * Class \Hoa\Xyl\Interpreter\Html\Heading.
  *
  * The <h1 /> to <h6 /> components.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Heading extends GenericPhrasing implements \Hoa\Xyl\Element\Executable {
-
+class Heading extends GenericPhrasing implements Xyl\Element\Executable
+{
     /**
      * Attributes description.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Heading array
+     * @var array
      */
-    protected static $_attributes        = array(
+    protected static $_attributes        = [
         'for' => parent::ATTRIBUTE_TYPE_LIST
-    );
+    ];
 
     /**
      * Attributes mapping between XYL and HTML.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Heading array
+     * @var array
      */
     protected static $_attributesMapping = null;
 
     /**
      * Pre-execute an element.
      *
-     * @access  public
      * @return  void
      */
-    public function preExecute ( ) {
-
+    public function preExecute()
+    {
         $this->computeFor();
 
         return;
@@ -96,24 +79,23 @@ class Heading extends GenericPhrasing implements \Hoa\Xyl\Element\Executable {
     /**
      * Post-execute an element.
      *
-     * @access  public
      * @return  void
      */
-    public function postExecute ( ) {
-
+    public function postExecute()
+    {
         return;
     }
 
     /**
      * Compute @for.
      *
-     * @access  protected
      * @return  void
      */
-    protected function computeFor ( ) {
-
-        if(false === $this->abstract->attributeExists('for'))
+    protected function computeFor()
+    {
+        if (false === $this->abstract->attributeExists('for')) {
             return;
+        }
 
         $tocs = $this->xpath(
             '//__current_ns:tableofcontents[@id="' .
@@ -121,11 +103,13 @@ class Heading extends GenericPhrasing implements \Hoa\Xyl\Element\Executable {
             '"]'
         );
 
-        if(empty($tocs))
+        if (empty($tocs)) {
             return;
+        }
 
-        foreach($tocs as $toc)
+        foreach ($tocs as $toc) {
             $this->getConcreteElement($toc)->addHeading($this);
+        }
 
         return;
     }
@@ -133,13 +117,10 @@ class Heading extends GenericPhrasing implements \Hoa\Xyl\Element\Executable {
     /**
      * Get the heading level.
      *
-     * @access  public
      * @return  int
      */
-    public function getLevel ( ) {
-
+    public function getLevel()
+    {
         return (int) substr($this->getName(), -1);
     }
-}
-
 }

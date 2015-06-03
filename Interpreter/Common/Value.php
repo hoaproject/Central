@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,66 +34,51 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xyl\Interpreter\Common;
 
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Element\Concrete
- */
--> import('Xyl.Element.Concrete')
-
-/**
- * \Hoa\Xml\Element\Model\Phrasing
- */
--> import('Xml.Element.Model.Phrasing');
-
-}
-
-namespace Hoa\Xyl\Interpreter\Common {
+use Hoa\Stream;
+use Hoa\Xml;
+use Hoa\Xyl;
 
 /**
  * Class \Hoa\Xyl\Interpreter\Common\Value.
  *
  * The <value /> component.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
 class          Value
-    extends    \Hoa\Xyl\Element\Concrete
-    implements \Hoa\Xml\Element\Model\Phrasing {
-
+    extends    Xyl\Element\Concrete
+    implements Xml\Element\Model\Phrasing
+{
     /**
      * Attributes description.
      *
-     * @var \Hoa\Xyl\Interpreter\Common\Value array
+     * @var array
      */
-    protected static $_attributes = array(
+    protected static $_attributes = [
         'link'      => self::ATTRIBUTE_TYPE_LINK,
         'formatter' => self::ATTRIBUTE_TYPE_CUSTOM
-    );
+    ];
 
 
 
     /**
      * Paint the element.
      *
-     * @access  protected
      * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
      * @return  void
      */
-    public function paint ( \Hoa\Stream\IStream\Out $out ) {
-
+    public function paint(Stream\IStream\Out $out)
+    {
         $value = $this->computeValue();
 
-        if(true === $this->abstract->attributeExists('formatter'))
+        if (true === $this->abstract->attributeExists('formatter')) {
             $value = $this->formatValue(empty($value) ? null : $value);
+        }
 
-        if(true === $this->abstract->attributeExists('link')) {
-
+        if (true === $this->abstract->attributeExists('link')) {
             $out->writeAll($this->computeAttributeValue(
                 $this->abstract->readAttribute('link'),
                 parent::ATTRIBUTE_TYPE_LINK
@@ -106,6 +91,4 @@ class          Value
 
         return;
     }
-}
-
 }

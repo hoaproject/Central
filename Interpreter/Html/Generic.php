@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,44 +34,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xyl\Interpreter\Html;
 
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Interpreter\Html\Concrete
- */
--> import('Xyl.Interpreter.Html.Concrete');
-
-}
-
-namespace Hoa\Xyl\Interpreter\Html {
+use Hoa\Stream;
 
 /**
  * Class \Hoa\Xyl\Interpreter\Html\Generic.
  *
  * Abstract/generic component.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Generic extends Concrete {
-
+class Generic extends Concrete
+{
     /**
      * Paint the element.
      *
-     * @access  protected
      * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
      * @return  void
      */
-    protected function paint ( \Hoa\Stream\IStream\Out $out ) {
-
+    protected function paint(Stream\IStream\Out $out)
+    {
         $name = $this->getName();
 
-        if(0 !== $this->_contentFlow) {
-
+        if (0 !== $this->_contentFlow) {
             $out->writeAll('<' . $name . $this->readAttributesAsString() . '>');
             $this->computeValue($out);
             $out->writeAll('</' . $name . '>');
@@ -83,6 +70,4 @@ class Generic extends Concrete {
 
         return;
     }
-}
-
 }
