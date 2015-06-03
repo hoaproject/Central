@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,37 +34,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Interpreter\Html\Generic
- */
--> import('Xyl.Interpreter.Html.Generic');
-
-}
-
-namespace Hoa\Xyl\Interpreter\Html {
+namespace Hoa\Xyl\Interpreter\Html;
 
 /**
  * Class \Hoa\Xyl\Interpreter\Html\Media.
  *
  * Abstract media component or <audio /> component.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Media extends Generic {
-
+class Media extends Generic
+{
     /**
      * Attributes description.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Media array
+     * @var array
      */
-    protected static $_attributes        = array(
+    protected static $_attributes        = [
         'src'        => parent::ATTRIBUTE_TYPE_LINK,
         'preload'    => parent::ATTRIBUTE_TYPE_NORMAL,
         'autoplay'   => parent::ATTRIBUTE_TYPE_NORMAL,
@@ -72,14 +59,12 @@ class Media extends Generic {
         'loop'       => parent::ATTRIBUTE_TYPE_NORMAL,
         'muted'      => parent::ATTRIBUTE_TYPE_NORMAL,
         'controls'   => parent::ATTRIBUTE_TYPE_NORMAL
-    );
+    ];
 
     /**
      * Attributes mapping between XYL and HTML.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Media array
+     * @var array
      */
     protected static $_attributesMapping = …;
-}
-
 }

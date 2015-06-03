@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,95 +34,84 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xyl\Interpreter\Common;
 
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Element\Concrete
- */
--> import('Xyl.Element.Concrete');
-
-}
-
-namespace Hoa\Xyl\Interpreter\Common {
+use Hoa\Stream;
+use Hoa\Xyl;
 
 /**
  * Class \Hoa\Xyl\Interpreter\Common\Translate.
  *
  * The <_ /> component.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Translate extends \Hoa\Xyl\Element\Concrete {
-
+class Translate extends Xyl\Element\Concrete
+{
     /**
      * Attributes description.
      *
-     * @var \Hoa\Xyl\Interpreter\Common\Value array
+     * @var array
      */
-    protected static $_attributes = array(
+    protected static $_attributes = [
         'n'    => self::ATTRIBUTE_TYPE_NORMAL,
         'with' => self::ATTRIBUTE_TYPE_CUSTOM
-    );
+    ];
 
 
 
     /**
      * Paint the element.
      *
-     * @access  protected
      * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
      * @return  void
      */
-    public function paint ( \Hoa\Stream\IStream\Out $out ) {
-
+    public function paint(Stream\IStream\Out $out)
+    {
         $root  = $this->getAbstractElementSuperRoot();
         $value = $this->computeValue();
         $with  = '__main__';
 
-        if(true === $this->abstract->attributeExists('with'))
+        if (true === $this->abstract->attributeExists('with')) {
             $with = $this->abstract->readAttribute('with');
+        }
 
 
         $translation = $root->getTranslation($with);
 
-        if(null === $translation) {
-
+        if (null === $translation) {
             $out->writeAll($value);
 
             return;
         }
 
         $callable  = null;
-        $arguments = array($value);
+        $arguments = [$value];
 
-        if(true === $this->abstract->attributeExists('n')) {
-
+        if (true === $this->abstract->attributeExists('n')) {
             $callable    = xcallable($translation, '_n');
             $arguments[] = $this->abstract->readAttribute('n');
-        }
-        else
+        } else {
             $callable = xcallable($translation, '_');
+        }
 
         $with = $this->abstract->readCustomAttributes('with');
 
-        if(!empty($with))
-            foreach($with as $w)
+        if (!empty($with)) {
+            foreach ($with as $w) {
                 $arguments[] = $this->computeAttributeValue($w);
+            }
+        }
 
         $result = $callable->distributeArguments($arguments);
 
-        if(false !== strpos($result, '<'))
+        if (false !== strpos($result, '<')) {
             $this->computeFromString($result);
-        else
+        } else {
             $out->writeAll($result);
+        }
 
         return;
     }
-}
-
 }

@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,61 +34,45 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xyl\Interpreter\Html;
 
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Interpreter\Html\Generic
- */
--> import('Xyl.Interpreter.Html.Generic')
-
-/**
- * \Hoa\Xyl\Element\Executable
- */
--> import('Xyl.Element.Executable');
-
-}
-
-namespace Hoa\Xyl\Interpreter\Html {
+use Hoa\Xyl;
 
 /**
  * Class \Hoa\Xyl\Interpreter\Html\Tabs.
  *
  * The <tabs /> component.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Tabs extends Generic implements \Hoa\Xyl\Element\Executable {
-
+class Tabs extends Generic implements Xyl\Element\Executable
+{
     /**
      * Pre-execute an element.
      *
-     * @access  public
      * @return  void
      */
-    public function preExecute ( ) {
-
+    public function preExecute()
+    {
         $this->writeAttribute('data-tabs', 'true');
 
-        foreach($this->xpath('//__current_ns:tab[@for]') as $tab) {
-
+        foreach ($this->xpath('//__current_ns:tab[@for]') as $tab) {
             $id       = $tab->readAttribute('for');
             $tabpanel = $this->xpath(
                 '//__current_ns:tabpanel[@id="' . $id .  '"]'
             );
 
-            if(empty($tabpanel))
+            if (empty($tabpanel)) {
                 continue;
+            }
 
             $tabpanel = $tabpanel[0];
             $tabpanel->writeAttribute('aria-labelledby', $id . '__tab');
 
-            if(false === $tab->attributeExists('selected'))
+            if (false === $tab->attributeExists('selected')) {
                 continue;
+            }
 
             $tab->writeAttribute('aria-selected',      'true');
             $tabpanel->writeAttribute('aria-hidden',   'false');
@@ -101,24 +85,20 @@ class Tabs extends Generic implements \Hoa\Xyl\Element\Executable {
     /**
      * Post-execute an element.
      *
-     * @access  public
      * @return  void
      */
-    public function postExecute ( ) {
-
+    public function postExecute()
+    {
         return;
     }
 
     /**
      * Get component name.
      *
-     * @access  public
      * @return  string
      */
-    public function getName ( ) {
-
+    public function getName()
+    {
         return 'div';
     }
-}
-
 }

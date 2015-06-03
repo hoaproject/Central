@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,57 +34,39 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xyl\Interpreter\Html;
 
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Interpreter\Html\GenericPhrasing
- */
--> import('Xyl.Interpreter.Html.GenericPhrasing')
-
-/**
- * \Hoa\Xyl\Element\Executable
- */
--> import('Xyl.Element.Executable');
-
-}
-
-namespace Hoa\Xyl\Interpreter\Html {
+use Hoa\Stream;
 
 /**
  * Class \Hoa\Xyl\Interpreter\Html\Code.
  *
  * The <code /> component.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Code extends GenericPhrasing {
-
+class Code extends GenericPhrasing
+{
     /**
      * Paint the element.
      *
-     * @access  protected
      * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
      * @return  void
      */
-    protected function paint ( \Hoa\Stream\IStream\Out $out ) {
-
+    protected function paint(Stream\IStream\Out $out)
+    {
         $out->writeAll('<code' . $this->readAttributesAsString() . '>');
 
-        if(   true        === $this->attributeExists('class')
-           && 'language-' === substr($this->readAttribute('class'), 0, 9))
+        if (true        === $this->attributeExists('class') &&
+            'language-' === substr($this->readAttribute('class'), 0, 9)) {
             $out->writeAll($this->computeValue());
-        else
+        } else {
             $this->computeValue($out);
+        }
 
         $out->writeAll('</code>');
 
         return;
     }
-}
-
 }

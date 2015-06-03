@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,42 +34,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Interpreter\Html\Generic
- */
--> import('Xyl.Interpreter.Html.Generic')
-
-/**
- * \Hoa\Xyl\Interpreter\Html\Form
- */
--> import('Xyl.Interpreter.Html.Form');
-
-}
-
-namespace Hoa\Xyl\Interpreter\Html {
+namespace Hoa\Xyl\Interpreter\Html;
 
 /**
  * Class \Hoa\Xyl\Interpreter\Html\Select.
  *
  * The <select /> component.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Select extends Generic {
-
+class Select extends Generic
+{
     /**
      * Attributes description.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Select array
+     * @var array
      */
-    protected static $_attributes        = array(
+    protected static $_attributes        = [
         'autofocus' => parent::ATTRIBUTE_TYPE_NORMAL,
         'disabled'  => parent::ATTRIBUTE_TYPE_NORMAL,
         'form'      => parent::ATTRIBUTE_TYPE_NORMAL,
@@ -77,19 +59,19 @@ class Select extends Generic {
         'name'      => parent::ATTRIBUTE_TYPE_NORMAL,
         'required'  => parent::ATTRIBUTE_TYPE_NORMAL,
         'size'      => parent::ATTRIBUTE_TYPE_NORMAL
-    );
+    ];
 
     /**
      * Attributes mapping between XYL and HTML.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Select array
+     * @var array
      */
     protected static $_attributesMapping = …;
 
     /**
      * Whether the select is valid or not.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Input bool
+     * @var bool
      */
     protected $_validity                 = null;
 
@@ -98,89 +80,83 @@ class Select extends Generic {
     /**
      * Get all <option /> components.
      *
-     * @access  public
      * @return  array
      */
-    public function getOptions ( ) {
-
+    public function getOptions()
+    {
         return $this->xpath('.//__current_ns:option');
     }
 
     /**
      * Get the selected <option /> components.
      *
-     * @access  public
      * @return  array
      */
-    public function getSelectedOptions ( ) {
-
+    public function getSelectedOptions()
+    {
         return $this->xpath('.//__current_ns:option[@selected]');
     }
 
     /**
      * Get form.
      *
-     * @access  public
      * @return  \Hoa\Xyl\Interpreter\Html\Form
      */
-    public function getForm ( ) {
-
+    public function getForm()
+    {
         return Form::getMe($this);
     }
 
     /**
      * Whether the input is valid or not.
      *
-     * @access  public
      * @param   bool   $revalid    Re-valid or not.
      * @param   mixed  $value      Value to test.
      * @return  bool
      */
-    public function isValid ( $revalid = false, $value ) {
-
-        if(false === $revalid && null !== $this->_validity)
+    public function isValid($revalid = false, $value)
+    {
+        if (false === $revalid && null !== $this->_validity) {
             return $this->_validity;
+        }
 
         $this->_validity = true;
 
-        if(   (null === $value || '' === $value || array() === $value)
-           &&  true === $this->attributeExists('required')) {
-
+        if ((null === $value || '' === $value || [] === $value) &&
+            true === $this->attributeExists('required')) {
             $this->_validity = false;
 
             return Form::postValidation($this->_validity, $value, $this);
         }
 
-        if(empty($value)) {
-
+        if (empty($value)) {
             $this->_validity = true;
 
             return Form::postValidation($this->_validity, $value, $this);
         }
 
-        if(is_array($value)) {
-
-            if(false === $this->attributeExists('multiple')) {
-
+        if (is_array($value)) {
+            if (false === $this->attributeExists('multiple')) {
                 $this->_validity = false;
 
                 return Form::postValidation($this->_validity, $value, $this);
             }
+        } else {
+            $value = [$value];
         }
-        else
-            $value = array($value);
 
-        foreach($this->getOptions() as $option) {
-
+        foreach ($this->getOptions() as $option) {
             $option = $this->getConcreteElement($option);
 
-            if(false === $option->attributeExists('value'))
+            if (false === $option->attributeExists('value')) {
                 continue;
+            }
 
             $handle = $option->readAttribute('value');
 
-            if(false !== $i = array_search($handle, $value))
+            if (false !== $i = array_search($handle, $value)) {
                 unset($value[$i]);
+            }
         }
 
         $this->_validity = empty($value);
@@ -191,27 +167,25 @@ class Select extends Generic {
     /**
      * Set value.
      *
-     * @access  public
      * @param   mixed  $value    Value.
      * @return  string
      */
-    public function setValue ( $value ) {
-
-        foreach($this->getOptions() as $option) {
-
+    public function setValue($value)
+    {
+        foreach ($this->getOptions() as $option) {
             $option = $this->getConcreteElement($option);
 
-            if(false === $option->attributeExists('value'))
+            if (false === $option->attributeExists('value')) {
                 continue;
+            }
 
-            if($value !== $option->readAttribute('value'))
+            if ($value !== $option->readAttribute('value')) {
                 continue;
+            }
 
             $option->writeAttribute('selected', 'selected');
         }
 
         return;
     }
-}
-
 }

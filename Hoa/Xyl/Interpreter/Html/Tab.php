@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,65 +34,54 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xyl\Interpreter\Html;
 
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Interpreter\Html\GenericPhrasing
- */
--> import('Xyl.Interpreter.Html.GenericPhrasing');
-
-}
-
-namespace Hoa\Xyl\Interpreter\Html {
+use Hoa\Stream;
 
 /**
  * Class \Hoa\Xyl\Interpreter\Html\Tab.
  *
  * The <tab /> component.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Tab extends GenericPhrasing {
-
+class Tab extends GenericPhrasing
+{
     /**
      * Attributes description.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Form array
+     * @var array
      */
-    protected static $_attributes        = array(
+    protected static $_attributes        = [
         'for'      => parent::ATTRIBUTE_TYPE_NORMAL,
         'selected' => parent::ATTRIBUTE_TYPE_NORMAL
-    );
+    ];
 
     /**
      * Attributes mapping between XYL and HTML.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Form array
+     * @var array
      */
-    protected static $_attributesMapping = array();
+    protected static $_attributesMapping = [];
 
 
 
     /**
      * Paint the element.
      *
-     * @access  protected
      * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
      * @return  void
      */
-    protected function paint ( \Hoa\Stream\IStream\Out $out ) {
-
+    protected function paint(Stream\IStream\Out $out)
+    {
         $name     = $this->getName();
         $for      = $this->abstract->readAttribute('for');
         $selected = $this->abstract->readAttribute('aria-selected');
 
-        if('true' !== $selected)
+        if ('true' !== $selected) {
             $selected = 'false';
+        }
 
         $this->writeAttribute('role', 'presentation');
         $out->writeAll(
@@ -110,13 +99,10 @@ class Tab extends GenericPhrasing {
     /**
      * Get component name.
      *
-     * @access  public
      * @return  string
      */
-    public function getName ( ) {
-
+    public function getName()
+    {
         return 'li';
     }
-}
-
 }

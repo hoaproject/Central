@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,64 +34,48 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xyl\Interpreter\Common;
 
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Element\Concrete
- */
--> import('Xyl.Element.Concrete')
-
-/**
- * \Hoa\Xml\Element\Model\Phrasing
- */
--> import('Xml.Element.Model.Phrasing');
-
-}
-
-namespace Hoa\Xyl\Interpreter\Common {
+use Hoa\Stream;
+use Hoa\Xml;
+use Hoa\Xyl;
 
 /**
  * Class \Hoa\Xyl\Interpreter\Common\XylYield.
  *
  * The <yield /> component.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
 class          XylYield
-    extends    \Hoa\Xyl\Element\Concrete
-    implements \Hoa\Xml\Element\Model\Phrasing {
-
+    extends    Xyl\Element\Concrete
+    implements Xml\Element\Model\Phrasing
+{
     /**
      * Attributes description.
      *
-     * @var \Hoa\Xyl\Interpreter\Common\XylYield array
+     * @var array
      */
-    protected static $_attributes = array(
+    protected static $_attributes = [
         'separator' => self::ATTRIBUTE_TYPE_NORMAL
-    );
+    ];
 
     /**
      * Paint the element.
      *
-     * @access  protected
      * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
      * @return  void
      */
-    public function paint ( \Hoa\Stream\IStream\Out $out ) {
-
+    public function paint(Stream\IStream\Out $out)
+    {
         $this->computeValue($out);
 
-        if(   true === $this->abstract->attributeExists('separator')
-           && false === $this->isLastIteration())
+        if (true === $this->abstract->attributeExists('separator') &&
+            false === $this->isLastIteration()) {
             $out->writeAll($this->abstract->readAttribute('separator'));
+        }
 
         return;
     }
-}
-
 }

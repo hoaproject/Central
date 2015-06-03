@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,60 +34,49 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Xyl\Interpreter\Html;
 
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Element\Concrete
- */
--> import('Xyl.Element.Concrete');
-
-}
-
-namespace Hoa\Xyl\Interpreter\Html {
+use Hoa\Xyl;
 
 /**
  * Class \Hoa\Xyl\Interpreter\Html\Concrete.
  *
  * Parent of all XYL components for this interpreter.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
-
+abstract class Concrete extends Xyl\Element\Concrete
+{
     /**
      * Attributes mapping between XYL and HTML.
      * If $_attributesMapping is equal to “…”, it means that all XYL attributes
      * are copied as HTML attributes. Else, it is a simple mapping, e.g.:
      *     'href' => 'src'
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Concrete array
+     * @var array
      */
     protected static $_attributesMapping = …;
 
     /**
      * HTML attributes.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Concrete array
+     * @var array
      */
-    protected $_htmlAttributes           = array();
+    protected $_htmlAttributes           = [];
 
     /**
      * HTML attributes type (from mapping).
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Concrete array
+     * @var array
      */
-    protected $_htmlAttributesType       = array();
+    protected $_htmlAttributesType       = [];
 
     /**
      * Whether content could exist or not.
      * 0 to false, 1 to true, 2 to maybe.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Concrete int
+     * @var int
      */
     protected $_contentFlow              = 2;
 
@@ -96,11 +85,10 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
     /**
      * Construct element.
      *
-     * @access  public
      * @return  void
      */
-    public function construct ( ) {
-
+    public function construct()
+    {
         parent::construct();
         $this->mapAttributes();
 
@@ -110,19 +98,16 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
     /**
      * Map attributes (from XYL to HTML).
      *
-     * @access  protected
      * @return  void
      */
-    protected function mapAttributes ( ) {
-
+    protected function mapAttributes()
+    {
         $parent = get_called_class();
-        $mapped = array();
+        $mapped = [];
 
         do {
-
             static::_mapAttributes($this, $parent, $mapped);
-
-        } while(__CLASS__ !== $parent = get_parent_class($parent));
+        } while (__CLASS__ !== $parent = get_parent_class($parent));
 
         static::_mapAttributes($this, $parent, $mapped);
 
@@ -132,46 +117,47 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
     /**
      * Real attributes mapping.
      *
-     * @access  private
      * @param   \Hoa\Xyl\Element\Concrete  $self       Element that will receive
      *                                                 attributes.
      * @param   string                     $parent     Parent's name.
      * @param   array                      &$mapped    Mapped attributes.
      * @return  void
      */
-    private static function _mapAttributes ( $self, $parent, Array &$mapped ) {
-
-        if(   !isset($parent::$_attributesMapping)
-           || !isset($parent::$_attributes))
+    private static function _mapAttributes($self, $parent, Array &$mapped)
+    {
+        if (!isset($parent::$_attributesMapping) ||
+            !isset($parent::$_attributes)) {
             return;
+        }
 
         $map = $parent::$_attributesMapping;
 
-        if(… === $map)
+        if (… === $map) {
             $map = array_keys($parent::$_attributes);
+        }
 
         $map = array_diff($map, $mapped);
 
-        foreach($map as $from => $to) {
-
-            if(is_int($from))
+        foreach ($map as $from => $to) {
+            if (is_int($from)) {
                 $from = $to;
+            }
 
             $type                           = $parent::$_attributes[$from];
             $self->_htmlAttributesType[$to] = $type;
             $mapped[]                       = $from;
 
-            if(self::ATTRIBUTE_TYPE_CUSTOM == $type) {
-
+            if (self::ATTRIBUTE_TYPE_CUSTOM == $type) {
                 $values = $self->abstract->readCustomAttributes($from);
 
-                foreach($values as $name => $value)
+                foreach ($values as $name => $value) {
                     $self->writeAttribute($to . '-' . $name, $value);
+                }
 
                 continue;
-            }
-            elseif(null === $value = $self->abstract->readAttribute($from))
+            } elseif (null === $value = $self->abstract->readAttribute($from)) {
                 continue;
+            }
 
             $self->writeAttribute($to, $value);
         }
@@ -182,27 +168,26 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
     /**
      * Read all attributes.
      *
-     * @access  public
      * @return  array
      */
-    public function readAttributes ( ) {
-
+    public function readAttributes()
+    {
         return $this->_htmlAttributes;
     }
 
     /**
      * Read a specific attribute.
      *
-     * @access  public
      * @param   string  $name    Attribute's name.
      * @return  string
      */
-    public function readAttribute ( $name ) {
-
+    public function readAttribute($name)
+    {
         $attributes = $this->readAttributes();
 
-        if(false === array_key_exists($name, $attributes))
+        if (false === array_key_exists($name, $attributes)) {
             return null;
+        }
 
         return $attributes[$name];
     }
@@ -210,27 +195,26 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
     /**
      * Whether an attribute exists.
      *
-     * @access  public
      * @param   string  $name    Attribute's name.
      * @return  bool
      */
-    public function attributeExists ( $name ) {
-
+    public function attributeExists($name)
+    {
         return true === array_key_exists($name, $this->readAttributes());
     }
 
     /**
      * Read attributes value as a list.
      *
-     * @access  public
      * @return  array
      */
-    public function readAttributesAsList ( ) {
-
+    public function readAttributesAsList()
+    {
         $attributes = $this->readAttributes();
 
-        foreach($attributes as $name => &$value)
+        foreach ($attributes as $name => &$value) {
             $value = explode(' ', $value);
+        }
 
         return $attributes;
     }
@@ -238,12 +222,11 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
     /**
      * Read a attribute value as a list.
      *
-     * @access  public
      * @param   string  $name    Attribute's name.
      * @return  array
      */
-    public function readAttributeAsList ( $name ) {
-
+    public function readAttributeAsList($name)
+    {
         return explode(' ', $this->readAttribute($name));
     }
 
@@ -253,19 +236,20 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
      *     <component data-abc="def" data-uvw="xyz" />
      * “data” is a custom attribute, so the $set.
      *
-     * @access  public
      * @param   string  $set    Set name.
      * @return  array
      */
-    public function readCustomAttributes ( $set ) {
-
-        $out     = array();
+    public function readCustomAttributes($set)
+    {
+        $out     = [];
         $set    .= '-';
         $strlen  = strlen($set);
 
-        foreach($this->readAttributes() as $name => $value)
-            if($set === substr($name, 0, $strlen))
+        foreach ($this->readAttributes() as $name => $value) {
+            if ($set === substr($name, 0, $strlen)) {
                 $out[substr($name, $strlen)] = $value;
+            }
+        }
 
         return $out;
     }
@@ -273,16 +257,16 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
     /**
      * Read custom attributes values as a list.
      *
-     * @access  public
      * @param   string  $set    Set name.
      * @return  array
      */
-    public function readCustomAttributesAsList ( $set ) {
+    public function readCustomAttributesAsList($set)
+    {
+        $out = [];
 
-        $out = array();
-
-        foreach($this->readCustomAttributes($set) as $name => $value)
+        foreach ($this->readCustomAttributes($set) as $name => $value) {
             $out[$name] = explode(' ', $value);
+        }
 
         return $out;
     }
@@ -290,31 +274,35 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
     /**
      * Read attributes as a string.
      *
-     * @access  public
      * @param   bool  $compute    Whether we automatically call the
      *                            Hoa\Xyl\Element\Concrete::computeAttributeValue()
      *                            method.
      * @return  string
      */
-    public function readAttributesAsString ( $compute = true ) {
-
+    public function readAttributesAsString($compute = true)
+    {
         $out = null;
 
-        foreach($this->readAttributes() as $name => $value)
-            if(null !== $value)
-                $out .= ' ' . $name . '="' . str_replace(
-                            '"',
-                            '\"',
-                            true === $compute
-                                ? $this->computeAttributeValue(
-                                      $value,
-                                      isset($this->_htmlAttributesType[$name])
-                                          ? $this->_htmlAttributesType[$name]
-                                          : parent::ATTRIBUTE_TYPE_NORMAL,
-                                      $name
-                                  )
-                                : $value
-                        ) . '"';
+        foreach ($this->readAttributes() as $name => $value) {
+            if (null !== $value) {
+                $out .=
+                    ' ' . $name . '="' .
+                    str_replace(
+                        '"',
+                        '\"',
+                        true === $compute
+                            ? $this->computeAttributeValue(
+                                $value,
+                                isset($this->_htmlAttributesType[$name])
+                                    ? $this->_htmlAttributesType[$name]
+                                    : parent::ATTRIBUTE_TYPE_NORMAL,
+                                $name
+                            )
+                            : $value
+                    ) .
+                    '"';
+            }
+        }
 
         return $out;
     }
@@ -323,14 +311,14 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
      * Write attributes.
      * If an attribute does not exist, it will be created.
      *
-     * @access  public
      * @param   array   $attributes    Attributes.
      * @return  void
      */
-    public function writeAttributes ( Array $attributes ) {
-
-        foreach($attributes as $name => $value)
+    public function writeAttributes(Array $attributes)
+    {
+        foreach ($attributes as $name => $value) {
             $this->writeAttribute($name, $value);
+        }
 
         return;
     }
@@ -339,13 +327,12 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
      * Write an attribute.
      * If the attribute does not exist, it will be created.
      *
-     * @access  public
      * @param   string  $name     Name.
      * @param   string  $value    Value.
      * @return  void
      */
-    public function writeAttribute ( $name, $value ) {
-
+    public function writeAttribute($name, $value)
+    {
         $this->_htmlAttributes[$name] = $value;
 
         return;
@@ -357,16 +344,16 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
      *     <component data-abc="def" data-uvw="xyz" />
      * “data” is a custom attribute, so the $set.
      *
-     * @access  public
      * @param   string  $set      Set name.
      * @param   array   $pairs    Pairs of attribute/value (e.g. abc => def,
      *                            uvw => xyz).
      * @return  void
      */
-    public function writeCustomAttributes ( $set, Array $pairs ) {
-
-        foreach($pairs as $attribute => $value)
+    public function writeCustomAttributes($set, Array $pairs)
+    {
+        foreach ($pairs as $attribute => $value) {
             $this->writeAttribute($set . '-' . $attribute, $value);
+        }
 
         return;
     }
@@ -374,12 +361,11 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
     /**
      * Remove an attribute.
      *
-     * @access  public
      * @param   string  $name    Name.
      * @return  void
      */
-    public function removeAttribute ( $name ) {
-
+    public function removeAttribute($name)
+    {
         unset($this->_htmlAttributes[$name]);
 
         return;
@@ -388,13 +374,10 @@ abstract class Concrete extends \Hoa\Xyl\Element\Concrete {
     /**
      * Get component name.
      *
-     * @access  public
      * @reurn   string
      */
-    public function getName ( ) {
-
+    public function getName()
+    {
         return $this->abstract->getName();
     }
-}
-
 }

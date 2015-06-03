@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,35 +34,22 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Xyl\Interpreter\Html\GenericPhrasing
- */
--> import('Xyl.Interpreter.Html.GenericPhrasing');
-
-}
-
-namespace Hoa\Xyl\Interpreter\Html {
+namespace Hoa\Xyl\Interpreter\Html;
 
 /**
  * Class \Hoa\Xyl\Interpreter\Html\Error.
  *
  * The <error /> component.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Error extends GenericPhrasing {
-
+class Error extends GenericPhrasing
+{
     /**
      * Visibility.
      *
-     * @var \Hoa\Xyl\Interpreter\Html\Error bool
+     * @var bool
      */
     protected $_visibility = false;
 
@@ -71,12 +58,11 @@ class Error extends GenericPhrasing {
     /**
      * Paint the element.
      *
-     * @access  protected
      * @param   \Hoa\Stream\IStream\Out  $out    Out stream.
      * @return  void
      */
-    protected function paint ( \Hoa\Stream\IStream\Out $out ) {
-
+    protected function paint(Stream\IStream\Out $out)
+    {
         $this->writeAttribute('class', 'error');
         $out->writeAll('<div' . $this->readAttributesAsString() . '>');
         $this->computeValue($out);
@@ -88,14 +74,11 @@ class Error extends GenericPhrasing {
     /**
      * Raise the error (just change the visibility).
      *
-     * @access  public
      * @param   bool   $raise    Whether we raise the error or not.
      * @return  bool
      */
-    public function raise ( $raise = true ) {
-
+    public function raise($raise = true)
+    {
         return $this->setVisibility($raise);
     }
-}
-
 }
