@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,50 +34,25 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\XmlRpc\Message;
 
-from('Hoa')
-
-/**
- * \Hoa\XmlRpc\Exception
- */
--> import('XmlRpc.Exception.~')
-
-/**
- * \Hoa\XmlRpc\Message
- */
--> import('XmlRpc.Message.~')
-
-/**
- * \Hoa\Stringbuffer\Read
- */
--> import('Stringbuffer.Read')
-
-/**
- * \Hoa\Xml\Read
- */
--> import('Xml.Read');
-
-}
-
-namespace Hoa\XmlRpc\Message {
+use Hoa\Stringbuffer;
+use Hoa\Xml;
 
 /**
  * Class \Hoa\XmlRpc\Message\Message\Request.
  *
  * Represent a response message.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Response extends Message {
-
+class Response extends Message
+{
     /**
      * Response.
      *
-     * @var \Hoa\Xml\Read object
+     * @var \Hoa\Xml\Read
      */
     protected $_response = null;
 
@@ -86,17 +61,15 @@ class Response extends Message {
     /**
      * Construct a new response.
      */
-    public function __construct ( $response ) {
-
-        $buffer = new \Hoa\Stringbuffer\Read();
+    public function __construct($response)
+    {
+        $buffer = new Stringbuffer\Read();
         $buffer->initializeWith($response);
-        $this->_response = new \Hoa\Xml\Read($buffer, false);
+        $this->_response = new Xml\Read($buffer, false);
         $this->computeValues(
             $this->_response->xpath('/methodResponse/params/param/value/*')
         );
 
         return;
     }
-}
-
 }

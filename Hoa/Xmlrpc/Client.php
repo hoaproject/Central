@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,52 +34,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\XmlRpc;
 
-from('Hoa')
-
-/**
- * \Hoa\XmlRpc\Exception
- */
--> import('XmlRpc.Exception.~')
-
-/**
- * \Hoa\XmlRpc\Exception\Fault
- */
--> import('XmlRpc.Exception.Fault')
-
-/**
- * \Hoa\XmlRpc\Message\Response
- */
--> import('XmlRpc.Message.Response');
-
-}
-
-namespace Hoa\XmlRpc {
+use Hoa\Socket;
 
 /**
  * Class \Hoa\XmlRpc\Client.
  *
  * A XML-RPC client.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Client {
-
+class Client
+{
     /**
      * Client.
      *
-     * @var \Hoa\Socket\Client object
+     * @var \Hoa\Socket\Client
      */
     protected $_client = null;
 
     /**
      * Script to call (e.g. xmlrpc.cgi).
      *
-     * @var \Hoa\XmlRpc\Client string
+     * @var string
      */
     protected $_script = null;
 
@@ -88,14 +67,13 @@ class Client {
     /**
      * Constructor.
      *
-     * @access  public
      * @param   \Hoa\Socket\Client  $client    Client.
      * @param   string              $script    Script.
      * @return  void
-     * @throw   \Hoa\Socket\Exception
+     * @throws  \Hoa\Socket\Exception
      */
-    public function __construct ( \Hoa\Socket\Client $client, $script ) {
-
+    public function __construct(Socket\Client $client, $script)
+    {
         $this->_client = $client;
         $this->_script = $script;
         $client->connect();
@@ -106,43 +84,44 @@ class Client {
     /**
      * Pack message to HTTP header format.
      *
-     * @access  public
      * @param   string  $message    Message.
      * @return  string
      */
-    public function getHeader ( $message ) {
-
-        return 'POST /' . $this->getScript() . ' HTTP/1.1' . "\r\n" .
-               'User-Agent: Hoa' . "\r\n" .
-               'Host: ' . $this->_client->getSocket()->getAddress() . "\r\n" .
-               'Content-Type: text/xml' . "\r\n" .
-               'Content-Length: ' . strlen($message) . "\r\n" .
-               "\r\n" .
-               $message;
+    public function getHeader($message)
+    {
+        return
+            'POST /' . $this->getScript() . ' HTTP/1.1' . "\r\n" .
+            'User-Agent: Hoa' . "\r\n" .
+            'Host: ' . $this->_client->getSocket()->getAddress() . "\r\n" .
+            'Content-Type: text/xml' . "\r\n" .
+            'Content-Length: ' . strlen($message) . "\r\n" .
+            "\r\n" .
+            $message;
     }
 
     /**
      * Send a request and get a response.
      *
-     * @access  public
      * @param   \Hoa\XmlRpc\Message\Request  $message    Message.
      * @return  \Hoa\XmlRpc\Message\Response
-     * @throw   \Hoa\XmlRpc\Exception\Fault
+     * @throws  \Hoa\XmlRpc\Exception\Fault
      */
-    public function send ( Message\Request $message ) {
-
+    public function send(Message\Request $message)
+    {
         $request  = $message->__toString();
         $this->_client->writeAll($this->getHeader($request));
         $response = $this->_client->readAll();
 
-        if(false === $pos = strpos($response, "\r\n\r\n"))
+        if (false === $pos = strpos($response, "\r\n\r\n")) {
             throw new Exception(
-                'Oops, an unknown error occured. Headers seem to be corrupted.', 0);
+                'Oops, an unknown error occured. Headers seem to be corrupted.',
+                0
+            );
+        }
 
         $response = substr($response, $pos + 4);
 
-        if(0 !== preg_match('#<methodResponse>(\s|\n)*<fault>#i', $response)) {
-
+        if (0 !== preg_match('#<methodResponse>(\s|\n)*<fault>#i', $response)) {
             preg_match(
                 '#<(i4|int)>(?:\s|\n)*(\d+)(?:\s|\n)*</\1>#i',
                 $response,
@@ -157,11 +136,13 @@ class Client {
             $faultCode   = -1;
             $faultString = 'An ununderstable fault from the server occured.';
 
-            if(isset($faultCodeMatches[2]))
+            if (isset($faultCodeMatches[2])) {
                 $faultCode   = $faultCodeMatches[2];
+            }
 
-            if(isset($faultStringMatches[1]))
+            if (isset($faultStringMatches[1])) {
                 $faultString = $faultStringMatches[1];
+            }
 
             throw new Exception\Fault($faultString, $faultCode, $request);
         }
@@ -172,13 +153,10 @@ class Client {
     /**
      * Get script.
      *
-     * @access  public
      * @return  string
      */
-    public function getScript ( ) {
-
+    public function getScript()
+    {
         return $this->_script;
     }
-}
-
 }
