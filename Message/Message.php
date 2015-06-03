@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,18 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\XmlRpc\Message;
 
-from('Hoa')
-
-/**
- * \Hoa\XmlRpc\Exception
- */
--> import('XmlRpc.Exception.~');
-
-}
-
-namespace Hoa\XmlRpc\Message {
+use Hoa\Core;
 
 /**
  * Class \Hoa\XmlRpc\Message.
@@ -53,13 +44,11 @@ namespace Hoa\XmlRpc\Message {
  * Write XML-RPC values intuitively on a message.
  * XML-RPC specification can be found at: http://xmlrpc.com/spec.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Message {
-
+class Message
+{
     /**
      * Values bucket: value index.
      *
@@ -161,28 +150,28 @@ class Message {
     /**
      * Values bucket (value, type).
      *
-     * @var \Hoa\XmlRpc\Message array
+     * @var array
      */
-    protected $_values = array();
+    protected $_values = [];
 
     /**
      * Parent (for nested values).
      *
-     * @var \Hoa\XmlRpc\Message object
+     * @var \Hoa\XmlRpc\Message
      */
     protected $_parent = null;
 
     /**
      * Current name for structure.
      *
-     * @var \Hoa\XmlRpc\Message string
+     * @var string
      */
     protected $_name   = 'undefined';
 
     /**
      * Type of the current value.
      *
-     * @var \Hoa\XmlRpc\Message int
+     * @var int
      */
     protected $_is     = self::IS_SCALAR;
 
@@ -191,16 +180,14 @@ class Message {
     /**
      * Build a new value object.
      *
-     * @access  public
      * @param   int                  $is        Type of object. Please,
      *                                          see the self::IS_*
      *                                          constants.
      * @param   \Hoa\XmlRpc\Message  $parent    Parent.
      * @return  void
      */
-    public function __construct ( $is = self::IS_SCALAR,
-                                  $parent = null ) {
-
+    public function __construct($is = self::IS_SCALAR, $parent = null)
+    {
         $this->_is = $is;
         $this->setParent($parent);
 
@@ -210,17 +197,17 @@ class Message {
     /**
      * Generic method to “with” (:-p).
      *
-     * @access  protected
      * @param   mixed  $value    Value.
      * @param   int    $type     Type. Please, see the self::TYPE_* constants.
      * @return  \Hoa\XmlRpc\Message
      */
-    protected function _with ( $value, $type ) {
-
-        if(self::IS_STRUCTURE == $this->_is)
-            $this->_values[$this->_name] = array($value, $type);
-        else
-            $this->_values[]             = array($value, $type);
+    protected function _with($value, $type)
+    {
+        if (self::IS_STRUCTURE == $this->_is) {
+            $this->_values[$this->_name] = [$value, $type];
+        } else {
+            $this->_values[] = [$value, $type];
+        }
 
         return $this;
     }
@@ -228,11 +215,10 @@ class Message {
     /**
      * Start an array.
      *
-     * @access  public
      * @return  \Hoa\XmlRpc\Message
      */
-    public function withArray ( ) {
-
+    public function withArray()
+    {
         $self = __CLASS__;
 
         return new $self(self::IS_ARRAY, $this);
@@ -241,11 +227,10 @@ class Message {
     /**
      * Stop an array.
      *
-     * @access  public
      * @return  \Hoa\XmlRpc\Message
      */
-    public function endArray ( ) {
-
+    public function endArray()
+    {
         $parent = $this->getParent();
         $parent->_with($this->getValues(), self::TYPE_ARRAY);
 
@@ -255,84 +240,77 @@ class Message {
     /**
      * Add a base64 value.
      *
-     * @access  public
      * @param   mixed   $data    Data.
      * @return  \Hoa\XmlRpc\Message
      */
-    public function withBase64 ( $data ) {
-
+    public function withBase64($data)
+    {
         return $this->_with($data, self::TYPE_BASE64);
     }
 
     /**
      * Add a boolean value.
      *
-     * @access  public
      * @param   mixed   $data    Data.
      * @return  \Hoa\XmlRpc\Message
      */
-    public function withBoolean ( $data ) {
-
+    public function withBoolean($data)
+    {
         return $this->_with((boolean) $data, self::TYPE_BOOLEAN);
     }
 
     /**
      * Add a date/time value.
      *
-     * @access  public
      * @param   mixed   $data    Data.
      * @return  \Hoa\XmlRpc\Message
      */
-    public function withDateTime ( $timestamp ) {
-
+    public function withDateTime($timestamp)
+    {
         return $this->_with($timestamp, self::TYPE_DATETIME);
     }
 
     /**
      * Add a float value.
      *
-     * @access  public
      * @param   mixed   $data    Data.
      * @return  \Hoa\XmlRpc\Message
      */
-    public function withFloat ( $float ) {
-
-       return $this->_with((float) $float, self::TYPE_FLOAT);
+    public function withFloat($float)
+    {
+        return $this->_with((float) $float, self::TYPE_FLOAT);
     }
 
     /**
      * Add an integer value.
      *
-     * @access  public
      * @param   mixed   $data    Data.
      * @return  \Hoa\XmlRpc\Message
      */
-    public function withInteger ( $integer ) {
-
+    public function withInteger($integer)
+    {
         return $this->_with((int) $integer, self::TYPE_INTEGER);
     }
 
     /**
      * Add a string value.
      *
-     * @access  public
      * @param   mixed   $data    Data.
      * @return  \Hoa\XmlRpc\Message
      */
-    public function withString ( $string ) {
-
+    public function withString($string)
+    {
         return $this->_with((string) $string, self::TYPE_STRING);
     }
 
     /**
      * Start a structure.
      *
-     * @access  public
      * @param   mixed   $data    Data.
      * @return  \Hoa\XmlRpc\Message
      */
-    public function withStructure ( ) {
-
+    public function withStructure()
+    {
         $self = __CLASS__;
 
         return new $self(self::IS_STRUCTURE, $this);
@@ -341,14 +319,14 @@ class Message {
     /**
      * Add a named value.
      *
-     * @access  public
      * @param   string  $name    Name.
      * @return  \Hoa\XmlRpc\Message
      */
-    public function withName ( $name ) {
-
-        if(self::IS_STRUCTURE !== $this->_is)
+    public function withName($name)
+    {
+        if (self::IS_STRUCTURE !== $this->_is) {
             return $this;
+        }
 
         $this->_name = $name;
 
@@ -358,11 +336,10 @@ class Message {
     /**
      * Stop a structure.
      *
-     * @access  public
      * @return  \Hoa\XmlRpc\Message
      */
-    public function endStructure ( ) {
-
+    public function endStructure()
+    {
         $parent = $this->getParent();
         $parent->_with($this->getValues(), self::TYPE_STRUCTURE);
 
@@ -372,24 +349,22 @@ class Message {
     /**
      * Add a null value.
      *
-     * @access  public
      * @param   mixed   $data    Data.
      * @return  \Hoa\XmlRpc\Message
      */
-    public function withNull ( ) {
-
+    public function withNull()
+    {
         return $this->_with(null, self::TYPE_NULL);
     }
 
     /**
      * Set current parent.
      *
-     * @access  protected
      * @param   \Hoa\XmlRpc\Message  $parent    Parent.
      * @return  \Hoa\XmlRpc\Message
      */
-    protected function setParent ( $parent ) {
-
+    protected function setParent($parent)
+    {
         $old           = $this->_parent;
         $this->_parent = $parent;
 
@@ -399,120 +374,111 @@ class Message {
     /**
      * Get current parent.
      *
-     * @access  public
      * @return  \Hoa\XmlRpc\Message
      */
-    public function getParent ( ) {
-
+    public function getParent()
+    {
         return $this->_parent;
     }
 
     /**
      * Get values bucket.
      *
-     * @access  public
      * @return  array
      */
-    public function getValues ( ) {
-
+    public function getValues()
+    {
         return $this->_values;
     }
 
     /**
      * Get a value as a XML string.
      *
-     * @access  public
      * @param   mixed  $value    Value.
      * @param   int    $type     Type. Please, see the self::TYPE_* constants.
      * @return  string
      */
-    public function getValueAsString ( $value, $type ) {
-
-        switch($type) {
-
+    public function getValueAsString($value, $type)
+    {
+        switch ($type) {
             case self::TYPE_ARRAY:
                 $out = '<array>' . "\n" . '  <data>' . "\n";
 
-                foreach($value as $v)
-                    $out .= '    <value>' . $this->getValueAsString(
-                               $v[self::VALUE],
-                               $v[self::TYPE]
-                            ) . '</value>' . "\n";
+                foreach ($value as $v) {
+                    $out .=
+                        '    <value>' . $this->getValueAsString(
+                           $v[self::VALUE],
+                           $v[self::TYPE]
+                        ) . '</value>' . "\n";
+                }
 
-                  return $out . '  </data>' . "\n" . '</array>';
-              break;
+                return $out . '  </data>' . "\n" . '</array>';
 
             case self::TYPE_BASE64:
                 return '<base64>' . base64_encode($value) . '</base64>';
-              break;
 
             case self::TYPE_BOOLEAN:
                 return '<boolean>' . (true == $value ? '1' : '0') . '</boolean>';
-              break;
 
             case self::TYPE_DATETIME:
                 return '<dateTime.iso8601>' . date('c', $value) . '</dateTime.iso8601>';
-              break;
 
             case self::TYPE_FLOAT:
                 return '<double>' . $value . '</double>';
-              break;
 
             case self::TYPE_INTEGER:
                 return '<i4>' . $value . '</i4>';
-              break;
 
             case self::TYPE_STRING:
                 return '<string>' . htmlspecialchars($value) . '</string>';
-              break;
 
             case self::TYPE_STRUCTURE:
                 $out = '<struct>' . "\n";
 
-                foreach($value as $name => $v)
-                    $out .= '  <member>' . "\n" .
-                            '    <name>' . $name . '</name>' . "\n" .
-                            '    <value>' . $this->getValueAsString(
-                                $v[self::VALUE],
-                                $v[self::TYPE]
-                            ) . '</value>' . "\n" .
-                            '  </member>' . "\n";
+                foreach ($value as $name => $v) {
+                    $out .=
+                        '  <member>' . "\n" .
+                        '    <name>' . $name . '</name>' . "\n" .
+                        '    <value>' . $this->getValueAsString(
+                            $v[self::VALUE],
+                            $v[self::TYPE]
+                        ) . '</value>' . "\n" .
+                        '  </member>' . "\n";
+                }
 
                 return $out . '</struct>';
-              break;
 
             case self::TYPE_NULL:
                 return '<nil />';
-              break;
         }
     }
 
     /**
      * Get values formatted (comprehensive array).
      *
-     * @access  public
      * @return  array
      */
-    public function getFormattedValues ( ) {
-
+    public function getFormattedValues()
+    {
         return $this->_getFormattedValues($this->getValues());
     }
 
     /**
      * Built formatted values.
      *
-     * @access  protected
      * @return  array
      */
-    protected function _getFormattedValues ( $values ) {
-
-        if(!is_array($values))
+    protected function _getFormattedValues($values)
+    {
+        if (!is_array($values)) {
             return $values;
+        }
 
-        $formatted = array();
+        $formatted = [];
 
-        foreach($values as $key => $value)
+        foreach ($values as $key => $value) {
             $formatted[$key] = $this->_getFormattedValues($value[self::VALUE]);
+        }
 
         return $formatted;
     }
@@ -520,72 +486,80 @@ class Message {
     /**
      * Compute XML values into values bucket.
      *
-     * @access  protected
      * @param   array                $values    Values XML collection.
      * @param   \Hoa\XmlRpc\Message  $self      Current valued object.
      * @return  void
      */
-    protected function computeValues ( $values, $self = null ) {
-
-        if(null === $self)
+    protected function computeValues($values, $self = null)
+    {
+        if (null === $self) {
             $self = $this;
+        }
 
-        if(!is_array($values))
-            $values = array($values);
+        if (!is_array($values)) {
+            $values = [$values];
+        }
 
-        foreach($values as $value) {
-
-            switch(strtolower($value->getName())) {
-
+        foreach ($values as $value) {
+            switch (strtolower($value->getName())) {
                 case 'array':
                     $self = $self->withArray();
 
-                    foreach($value->data as $data)
+                    foreach ($value->data as $data) {
                         $this->computeValues($data->xpath('./value/*'), $self);
+                    }
 
                     $self = $self->endArray();
-                  break;
+
+                    break;
 
                 case 'base64':
                     $self->withBase64(base64_decode($value->readAll()));
-                  break;
+
+                    break;
 
                 case 'boolean':
                     $self->withBoolean((boolean) (int) $value->readAll());
-                  break;
+
+                    break;
 
                 case 'datetime.iso8601':
                     $self->withDateTime(strtotime($value->readAll()));
-                  break;
+
+                    break;
 
                 case 'double':
                     $self->withFloat((float) $value->readAll());
-                  break;
+
+                    break;
 
                 case 'i4':
                 case 'int':
                     $self->withInteger((int) $value->readAll());
-                  break;
+
+                    break;
 
                 case 'string':
                     $self->withString(htmlspecialchars_decode($value->readAll()));
-                  break;
+
+                    break;
 
                 case 'struct':
                     $self = $self->withStructure();
 
-                    foreach($value->member as $member) {
-
+                    foreach ($value->member as $member) {
                         $self->withName($member->name->readAll());
                         $this->computeValues($member->xpath('./value/*'), $self);
                     }
 
                     $self = $self->endStructure();
-                  break;
+
+                    break;
 
                 case 'nil':
                     $self->withNull();
-                  break;
+
+                    break;
             }
         }
 
@@ -593,13 +567,7 @@ class Message {
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\XmlRpc\Message\Message');
-
-}
+Core\Consistency::flexEntity('Hoa\XmlRpc\Message\Message');

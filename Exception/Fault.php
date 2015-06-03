@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,35 +34,22 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\XmlRpc\Exception
- */
--> import('XmlRpc.Exception.~');
-
-}
-
-namespace Hoa\XmlRpc\Exception {
+namespace Hoa\XmlRpc\Exception;
 
 /**
  * Class \Hoa\XmlRpc\Exception\Fault.
  *
  * Extending the \Hoa\XmlRpc\Exception class.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Fault extends Exception {
-
+class Fault extends Exception
+{
     /**
      * Request.
      *
-     * @var \Hoa\XmlRpc\Exception\Fault string
+     * @var string
      */
     protected $request = null;
 
@@ -71,14 +58,13 @@ class Fault extends Exception {
     /**
      * Create an exception.
      *
-     * @access  public
      * @param   string  $message    Message (faultString)
      * @param   int     $code       Code (faultCode).
      * @param   string  $request    Request.
      * @return  void
      */
-    public function __construct ( $message, $code, $request ) {
-
+    public function __construct($message, $code, $request)
+    {
         parent::__construct($message, $code);
         $this->_request = $request;
 
@@ -88,13 +74,10 @@ class Fault extends Exception {
     /**
      * Get request that caused the fault.
      *
-     * @access  public
      * @return  string
      */
-    public function getRequest ( ) {
-
+    public function getRequest()
+    {
         return $this->_request;
     }
-}
-
 }
