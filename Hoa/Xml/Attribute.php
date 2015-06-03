@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,19 +41,17 @@ namespace Hoa\Xml;
  *
  * Parse and manipulate attributes.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Attribute {
-
+class Attribute
+{
     /**
      * List of attributes.
      *
-     * @var \Hoa\Xml\Attribute array
+     * @var array
      */
-    protected $_attributes = array();
+    protected $_attributes = [];
 
 
 
@@ -61,15 +59,15 @@ class Attribute {
     /**
      * Parse a string as attributes.
      *
-     * @access  public
      * @param   string  $string    String that might represent attributes.
      * @return  void
-     * @throw   \Hoa\Xml\Exception
+     * @throws  \Hoa\Xml\Exception
      */
-    public function __construct ( $string = null ) {
-
-        if(null === $string)
+    public function __construct($string = null)
+    {
+        if (null === $string) {
             return;
+        }
 
         $out = preg_match_all(
             '#(\w+)\s*(=\s*(?<!\\\)(?:("|\')|)(?(3)(.*?)(?<!\\\)\3|(\w+))\s*)?#',
@@ -78,50 +76,53 @@ class Attribute {
             PREG_SET_ORDER
         );
 
-        if(0 === $out)
+        if (0 === $out) {
             throw new Exception(
-                'The string %s does not represent attributes.', 0, $string);
+                'The string %s does not represent attributes.',
+                0,
+                $string
+            );
+        }
 
-        foreach($attributes as $i => $attribute)
-            // Boolean: abc
-            if(!isset($attribute[2]))
+        foreach ($attributes as $i => $attribute) {
+            if (!isset($attribute[2])) {
+                // Boolean: abc
                 $this->_attributes[$attribute[1]] = $attribute[1];
-
-            // Quote: abc="def" or abc='def'
-            elseif(!isset($attribute[5]))
+            } elseif (!isset($attribute[5])) {
+                // Quote: abc="def" or abc='def'
                 $this->_attributes[$attribute[1]] = str_replace(
                     '\\' . $attribute[3],
                     $attribute[3],
                     $attribute[4]
                 );
-
-            // No-quote: abc=def
-            else
+            } else {
+                // No-quote: abc=def
                 $this->_attributes[$attribute[1]] = $attribute[5];
+            }
+        }
     }
 
     /**
      * Read all attributes.
      *
-     * @access  public
      * @return  array
      */
-    public function readAttributes ( ) {
-
+    public function readAttributes()
+    {
         return $this->_attributes;
     }
 
     /**
      * Read a specific attribute.
      *
-     * @access  public
      * @param   string  $name    Attribute's name.
      * @return  string
      */
-    public function readAttribute ( $name ) {
-
-        if(false === $this->attributeExists($name))
+    public function readAttribute($name)
+    {
+        if (false === $this->attributeExists($name)) {
             return null;
+        }
 
         return $this->_attributes[$name];
     }
@@ -129,27 +130,26 @@ class Attribute {
     /**
      * Whether an attribute exists.
      *
-     * @access  public
      * @param   string  $name    Attribute's name.
      * @return  bool
      */
-    public function attributeExists ( $name ) {
-
+    public function attributeExists($name)
+    {
         return true === array_key_exists($name, $this->_attributes);
     }
 
     /**
      * Read attributes value as a list.
      *
-     * @access  public
      * @return  array
      */
-    public function readAttributesAsList ( ) {
-
+    public function readAttributesAsList()
+    {
         $attributes = $this->_attributes;
 
-        foreach($attributes as $name => &$value)
+        foreach ($attributes as $name => &$value) {
             $value = explode(' ', $value);
+        }
 
         return $attributes;
     }
@@ -157,12 +157,11 @@ class Attribute {
     /**
      * Read a attribute value as a list.
      *
-     * @access  public
      * @param   string  $name    Attribute's name.
      * @return  array
      */
-    public function readAttributeAsList ( $name ) {
-
+    public function readAttributeAsList($name)
+    {
         return explode(' ', $this->readAttribute($name));
     }
 
@@ -170,14 +169,14 @@ class Attribute {
      * Write attributes.
      * If an attribute does not exist, it will be created.
      *
-     * @access  public
      * @param   array   $attributes    Attributes.
      * @return  void
      */
-    public function writeAttributes ( Array $attributes ) {
-
-        foreach($attributes as $name => $value)
+    public function writeAttributes(Array $attributes)
+    {
+        foreach ($attributes as $name => $value) {
             $this->writeAttribute($name, $value);
+        }
 
         return;
     }
@@ -186,13 +185,12 @@ class Attribute {
      * Write an attribute.
      * If the attribute does not exist, it will be created.
      *
-     * @access  public
      * @param   string  $name     Name.
      * @param   string  $value    Value.
      * @return  void
      */
-    public function writeAttribute ( $name, $value ) {
-
+    public function writeAttribute($name, $value)
+    {
         $this->_attributes[$name] = $value;
 
         return;
@@ -201,12 +199,11 @@ class Attribute {
     /**
      * Remove an attribute.
      *
-     * @access  public
      * @param   string  $name    Name.
      * @return  void
      */
-    public function removeAttribute ( $name ) {
-
+    public function removeAttribute($name)
+    {
         unset($this->_attributes[$name]);
 
         return;
@@ -215,15 +212,15 @@ class Attribute {
     /**
      * Format attributes.
      *
-     * @access  public
      * @return  string
      */
-    public function __toString ( ) {
-
+    public function __toString()
+    {
         $out = null;
 
-        foreach($this->_attributes as $key => $value)
+        foreach ($this->_attributes as $key => $value) {
             $out .= $key . '="' . str_replace('"', '\"', $value) . '" ';
+        }
 
         return substr($out, 0, -1);
     }
