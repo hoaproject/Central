@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,39 +34,25 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Serialize\Serializable
- */
--> import('Serialize.Serializable');
-
-}
-
-namespace Hoa\Serialize {
+namespace Hoa\Serialize;
 
 /**
  * Interface \Hoa\Serialize\Cryonicable.
  *
- * Force to implement __wakeup() and __sleep() method, in addition to the
+ * Invite to implement __wakeup() and __sleep() method, in addition to the
  * serialize common methods.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-interface Cryonicable extends Serializable {
-
+interface Cryonicable extends Serializable
+{
     /**
      * Try to reestablish the object statement and behavior before it is slept.
      *
-     * @access  public
      * @return  void
      */
-    public function __wakeup ( );
+    public function __wakeup();
 
     /**
      * Commit pending data or perform similar cleanup tasks.
@@ -75,10 +61,7 @@ interface Cryonicable extends Serializable {
      * A trivial complete workaround should be:
      *     return array_keys(get_object_vars($this));
      *
-     * @access  public
      * @return  mixed
      */
-    public function __sleep ( );
-}
-
+    public function __sleep();
 }
