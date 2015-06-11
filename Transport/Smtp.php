@@ -222,7 +222,7 @@ class Smtp implements ITransport\Out
 
             if (true !== $client->enableEncryption(true, $client::ENCRYPTION_TLS)) {
                 throw new Mail\Exception\Transport(
-                    'Cannot start a TLS connection.',
+                    'Cannot enable a TLS connection.',
                     1
                 );
             }
