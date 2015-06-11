@@ -57,14 +57,14 @@ class Smtp implements ITransport\Out
     protected $_client   = null;
 
     /**
-     * Username (if authentification is needed).
+     * Username (if authentication is needed).
      *
      * @var string
      */
     protected $_username = null;
 
     /**
-     * Password (if authentification is needed).
+     * Password (if authentication is needed).
      *
      * @var string
      */
@@ -117,7 +117,7 @@ class Smtp implements ITransport\Out
     }
 
     /**
-     * Set username (if authentification is needed).
+     * Set username (if authentication is needed).
      *
      * @param   string  $username    Username.
      * @return  string
@@ -141,7 +141,7 @@ class Smtp implements ITransport\Out
     }
 
     /**
-     * Set password (if authentification is needed).
+     * Set password (if authentication is needed).
      *
      * @param   string  $password    Password.
      * @return  string
@@ -240,7 +240,7 @@ class Smtp implements ITransport\Out
 
         if (empty($matches)) {
             throw new Mail\Exception\Transport(
-                'The server does not support authentification, we cannot ' .
+                'The server does not support authentication, we cannot ' .
                 'authenticate.',
                 2
             );
@@ -252,14 +252,14 @@ class Smtp implements ITransport\Out
 
         if (true === in_array('PLAIN', $auth)) {
             $client->writeAll('AUTH PLAIN' . CRLF);
-            $this->ifNot(334, 'Authentification failed (PLAIN)');
+            $this->ifNot(334, 'Authentication failed (PLAIN)');
 
             $challenge = base64_encode("\0" . $username . "\0" . $password);
             $client->writeAll($challenge . CRLF);
             $this->ifNot(235, 'Wrong username or password');
         } elseif (true === in_array('LOGIN', $auth)) {
             $client->writeAll('AUTH LOGIN' . CRLF);
-            $this->ifNot(334, 'Authentification failed (LOGIN)');
+            $this->ifNot(334, 'Authentication failed (LOGIN)');
 
             $challenge = base64_encode($username);
             $client->writeAll($challenge . CRLF);
@@ -270,7 +270,7 @@ class Smtp implements ITransport\Out
             $this->ifNot(235, 'Wrong password');
         } elseif (true === in_array('CRAM-MD5', $auth)) {
             $client->writeAll('AUTH CRAM-MD5' . CRLF);
-            $line = $this->ifNot(334, 'Authentification failed (CRAM-MD5)');
+            $line = $this->ifNot(334, 'Authentication failed (CRAM-MD5)');
 
             $handle    = base64_decode(substr($line, 4));
             $challenge = base64_encode(
@@ -280,7 +280,7 @@ class Smtp implements ITransport\Out
             $this->ifNot(235, 'Wrong username or password');
         } else {
             throw new Mail\Transport(
-                '%s does not support authentification algorithms available ' .
+                '%s does not support authentication algorithms available ' .
                 'on the server (%s).',
                 3,
                 [__CLASS__, implode(', ', $auth)]

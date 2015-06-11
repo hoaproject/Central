@@ -8,7 +8,7 @@ Moreover, Hoa aims at being a bridge between industrial and research worlds.
 This library allows to compose and send rich emails (textual contents, HTML
 documents, alternative contents, attachments etc., this is very extensible).
 Email can be sent with sendmail or SMTP. The SMTP layer supports TLS and
-`PLAIN`, `LOGIN` and `CRAM-MD5` authentifications.
+`PLAIN`, `LOGIN` and `CRAM-MD5` authentications.
 
 In a near future, this library will also allow to receive and parse emails.
 
