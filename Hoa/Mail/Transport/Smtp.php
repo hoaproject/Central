@@ -222,14 +222,15 @@ class Smtp implements ITransport\Out
 
             if (true !== $client->enableEncryption(true, $client::ENCRYPTION_TLS)) {
                 throw new Mail\Exception\Transport(
-                    'Cannot start a TLS connection.',
+                    'Cannot enable a TLS connection.',
                     1
                 );
             }
+
+            $client->writeAll('EHLO ' . $domain . CRLF);
+            $ehlo = preg_split('#' . CRLF . '250[\-\s]+#', $client->read(2048));
         }
 
-        $client->writeAll('EHLO ' . $domain . CRLF);
-        $ehlo    = preg_split('#' . CRLF . '250[\-\s]+#', $client->read(2048));
         $matches = null;
 
         foreach ($ehlo as $entry) {
