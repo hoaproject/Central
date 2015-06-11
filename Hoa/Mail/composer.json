@@ -3,7 +3,8 @@
     "description": "The Hoa\\Mail library.",
     "type"       : "library",
     "keywords"   : ["library", "mail", "smtp", "sendmail", "imap", "rfc2111",
-                    "rfc4648", "rfc2045", "rfc2047", "rfc2104"],
+                    "rfc4648", "rfc2045", "rfc2047", "rfc2104", "rfc2487",
+                    "rfc3207"],
     "homepage"   : "http://hoa-project.net/",
     "license"    : "BSD-3-Clause",
     "authors"    : [
