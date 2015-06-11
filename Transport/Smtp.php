@@ -226,10 +226,11 @@ class Smtp implements ITransport\Out
                     1
                 );
             }
+
+            $client->writeAll('EHLO ' . $domain . CRLF);
+            $ehlo = preg_split('#' . CRLF . '250[\-\s]+#', $client->read(2048));
         }
 
-        $client->writeAll('EHLO ' . $domain . CRLF);
-        $ehlo    = preg_split('#' . CRLF . '250[\-\s]+#', $client->read(2048));
         $matches = null;
 
         foreach ($ehlo as $entry) {
