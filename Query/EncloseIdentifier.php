@@ -37,36 +37,106 @@
 namespace Hoa\Database\Query;
 
 /**
- * Interface \Hoa\Database\Query\Dml.
+ * Trait \Hoa\Database\Query\EncloseIdentifier.
  *
- * Represent Data Manipulation Language queries.
+ * Enclose identifier feature.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-interface Dml
+trait EncloseIdentifier
 {
+    /**
+     * State of the enclosing: Either true for enable the enclosing feature
+     * or false for disable it.
+     *
+     * @var bool
+     */
+    protected $_enableEnclose = false;
+
+    /**
+     * Enclose opening symbol.
+     *
+     * @var string
+     */
+    protected $_openingSymbol = '"';
+
+    /**
+     * Enclose closing symbol.
+     *
+     * @var string
+     */
+    protected $_closingSymbol = '"';
+
+
+
     /**
      * Set enclose symbols.
      *
      * @param   string  $openingSymbol    Opening symbol.
      * @param   string  $closingSymbol    Closing symbol.
-     * @return  \Hoa\Database\Query\Dml
+     * @return  \Hoa\Database\Query\EncloseNames
      */
-    public function setEncloseSymbol($openingSymbol, $closingSymbol = null);
+    public function setEncloseSymbol($openingSymbol, $closingSymbol = null)
+    {
+        $this->_openingSymbol = $openingSymbol;
+        $this->_closingSymbol =
+            (null === $closingSymbol)
+                ? $openingSymbol
+                : $closingSymbol;
+
+        return $this;
+    }
 
     /**
      * Enable or disable enclosing identifiers.
      *
      * @param   bool  $enable    Enable or disable.
-     * @return  \Hoa\Database\Query\Dml
+     * @return  bool
      */
-    public function enableEncloseIdentifier($enable = true);
+    public function enableEncloseIdentifier($enable = true)
+    {
+        $old                  = $this->_enableEnclose;
+        $this->_enableEnclose = $enable;
+
+        return $old;
+    }
 
     /**
-     * Generate the query.
+     * Enclose identifiers with defined symbol.
      *
+     * @param   array|string  $identifiers    Table/column/alias identifiers.
+     * @return  array|string
+     */
+    protected function enclose($identifiers)
+    {
+        if (false === $this->_enableEnclose) {
+            return $identifiers;
+        }
+
+        if (false === is_array($identifiers)) {
+            return $this->_enclose($identifiers);
+        }
+
+        foreach ($identifiers as &$identifier) {
+            $identifier = $this->_enclose($identifier);
+        }
+
+        return $identifiers;
+    }
+
+    /**
+     * Enclose identifier with defined symbol.
+     *
+     * @param   string  $identifier    Identifier.
      * @return  string
      */
-    public function __toString();
+    protected function _enclose($identifier)
+    {
+        if (0 === preg_match('#\s|\(#', $identifier)) {
+            return $this->_openingSymbol . $identifier . $this->_closingSymbol;
+        }
+
+        return $identifier;
+    }
 }

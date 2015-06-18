@@ -192,7 +192,9 @@ class Select extends SelectCore implements Dml
         $out .= parent::__toString();
 
         if (!empty($this->_orderBy)) {
-            $out .= ' ORDER BY ' . implode(', ', $this->_orderBy);
+            $out .=
+                ' ORDER BY ' .
+                implode(', ', $this->enclose($this->_orderBy));
         }
 
         if (!empty($this->_limit)) {

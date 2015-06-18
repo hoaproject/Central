@@ -46,6 +46,8 @@ namespace Hoa\Database\Query;
  */
 class Insert implements Dml
 {
+    use EncloseIdentifier;
+
     /**
      * Source.
      *
@@ -245,14 +247,14 @@ class Insert implements Dml
             $out .= ' OR ' . $this->_or;
         }
 
-        $out .= ' INTO ' . $this->_into;
+        $out .= ' INTO ' . $this->enclose($this->_into);
 
         if (true === $this->_defaultValues) {
             return $out . ' DEFAULT VALUES';
         }
 
         if (!empty($this->_columns)) {
-            $out .= ' (' . implode(', ', $this->_columns) . ')';
+            $out .= ' (' . implode(', ', $this->enclose($this->_columns)) . ')';
         }
 
         if (is_string($this->_values)) {

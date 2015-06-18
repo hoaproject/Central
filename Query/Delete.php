@@ -46,6 +46,8 @@ namespace Hoa\Database\Query;
  */
 class Delete extends Where implements Dml
 {
+    use EncloseIdentifier;
+
     /**
      * Table name.
      *
@@ -75,6 +77,9 @@ class Delete extends Where implements Dml
      */
     public function __toString()
     {
-        return 'DELETE FROM ' . $this->_from . parent::__toString();
+        return
+            'DELETE FROM ' .
+            $this->enclose($this->_from) .
+            parent::__toString();
     }
 }
