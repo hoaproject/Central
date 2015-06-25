@@ -1,3 +1,8 @@
+# 1.15.06.25
+
+  * Fix ruler-extension namespace. (Metalaka, 2015-06-22T20:17:36+02:00)
+  * Skip library whose name is a PHP keyword. (Ivan Enderlin, 2015-06-01T10:12:40+02:00)
+
 # 1.15.05.29
 
   * Update atoum/atoum. (Ivan Enderlin, 2015-05-29T14:53:57+02:00)
