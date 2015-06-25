@@ -56,15 +56,17 @@ class Run extends Console\Dispatcher\Kit
      * @var array
      */
     protected $options = [
-        ['all',         Console\GetOption::NO_ARGUMENT,       'a'],
-        ['libraries',   Console\GetOption::REQUIRED_ARGUMENT, 'l'],
-        ['namespaces',  Console\GetOption::REQUIRED_ARGUMENT, 'n'],
-        ['directories', Console\GetOption::REQUIRED_ARGUMENT, 'd'],
-        ['files',       Console\GetOption::REQUIRED_ARGUMENT, 'f'],
-        ['filter',      Console\GetOption::REQUIRED_ARGUMENT, 'F'],
-        ['debug',       Console\GetOption::NO_ARGUMENT,       'D'],
-        ['help',        Console\GetOption::NO_ARGUMENT,       'h'],
-        ['help',        Console\GetOption::NO_ARGUMENT,       '?']
+        ['all',                  Console\GetOption::NO_ARGUMENT,       'a'],
+        ['libraries',            Console\GetOption::REQUIRED_ARGUMENT, 'l'],
+        ['namespaces',           Console\GetOption::REQUIRED_ARGUMENT, 'n'],
+        ['directories',          Console\GetOption::REQUIRED_ARGUMENT, 'd'],
+        ['files',                Console\GetOption::REQUIRED_ARGUMENT, 'f'],
+        ['filter',               Console\GetOption::REQUIRED_ARGUMENT, 'F'],
+        ['debug',                Console\GetOption::NO_ARGUMENT,       'D'],
+        ['php-binary',           Console\GetOption::REQUIRED_ARGUMENT, 'p'],
+        ['concurrent-processes', Console\GetOption::REQUIRED_ARGUMENT, 'P'],
+        ['help',                 Console\GetOption::NO_ARGUMENT,       'h'],
+        ['help',                 Console\GetOption::NO_ARGUMENT,       '?']
     ];
 
 
@@ -76,11 +78,13 @@ class Run extends Console\Dispatcher\Kit
      */
     public function main()
     {
-        $directories = [];
-        $files       = [];
-        $namespaces  = [];
-        $filter      = [];
-        $debug       = false;
+        $directories         = [];
+        $files               = [];
+        $namespaces          = [];
+        $filter              = [];
+        $debug               = false;
+        $php                 = null;
+        $concurrentProcesses = 2;
 
         while (false !== $c = $this->getOption($v)) {
             switch ($c) {
@@ -111,7 +115,7 @@ class Run extends Console\Dispatcher\Kit
                         }
                     }
 
-                  break;
+                    break;
 
                 case 'l':
                     foreach ($this->parser->parseSpecialValue($v) as $library) {
@@ -131,7 +135,7 @@ class Run extends Console\Dispatcher\Kit
                         $namespaces[]  = 'Hoa\\' . $libraryName;
                     }
 
-                  break;
+                    break;
 
                 case 'n':
                     foreach ($this->parser->parseSpecialValue($v) as $namespace) {
@@ -173,7 +177,7 @@ class Run extends Console\Dispatcher\Kit
                         $namespaces[] = $namespace;
                     }
 
-                  break;
+                    break;
 
                 case 'd':
                     foreach ($this->parser->parseSpecialValue($v) as $directory) {
@@ -188,7 +192,7 @@ class Run extends Console\Dispatcher\Kit
                         $directories[] = $directory;
                     }
 
-                  break;
+                    break;
 
                 case 'f':
                     foreach ($this->parser->parseSpecialValue($v) as $file) {
@@ -203,29 +207,39 @@ class Run extends Console\Dispatcher\Kit
                         $files[] = $file;
                     }
 
-                  break;
+                    break;
 
                 case 'F':
                     $filter = $v;
 
-                  break;
+                    break;
 
                 case 'D':
                     $debug = $v;
 
-                  break;
+                    break;
+
+                case 'p':
+                    $php = $v;
+
+                    break;
+
+                case 'P':
+                    $concurrentProcesses = intval($v);
+
+                    break;
 
                 case '__ambiguous':
                     $this->resolveOptionAmbiguity($v);
 
-                  break;
+                    break;
 
                 case 'h':
                 case '?':
                 default:
                     return $this->usage();
 
-                  break;
+                    break;
             }
         }
 
@@ -249,10 +263,15 @@ class Run extends Console\Dispatcher\Kit
                 resolve('hoa://Library/Test/.atoum.php') .
             ' --bootstrap-file ' .
                 resolve('hoa://Library/Test/.bootstrap.atoum.php') .
-            ' --force-terminal';
+            ' --force-terminal' .
+            ' --max-children-number ' . $concurrentProcesses;
 
         if (true === $debug) {
             $command .= ' --debug';
+        }
+
+        if (null !== $php) {
+            $command .= ' --php ' . $php;
         }
 
         if (!empty($directories)) {
@@ -306,6 +325,8 @@ class Run extends Console\Dispatcher\Kit
                 'F'    => 'Filter tests with a ruler expression (see ' .
                           'Hoa\Ruler).',
                 'D'    => 'Activate the debugging mode.',
+                'p'    => 'Path a specific PHP binary.',
+                'P'    => 'Maximum concurrent processes that can run.',
                 'help' => 'This help.'
             ]), "\n\n",
             'Available variables for filter expressions:', "\n",
