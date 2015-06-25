@@ -325,7 +325,7 @@ class Run extends Console\Dispatcher\Kit
                 'F'    => 'Filter tests with a ruler expression (see ' .
                           'Hoa\Ruler).',
                 'D'    => 'Activate the debugging mode.',
-                'p'    => 'Path a specific PHP binary.',
+                'p'    => 'Path to a specific PHP binary.',
                 'P'    => 'Maximum concurrent processes that can run.',
                 'help' => 'This help.'
             ]), "\n\n",
