@@ -53,6 +53,7 @@ class String extends Test\Unit\Suite
     {
         $this
             ->given(
+                $this->getPhpMocker()->setDefaultNamespace('Hoa\Ustring'),
                 $this->function->function_exists = function ($name) {
                     return 'mb_substr' !== $name;
                 }
@@ -60,7 +61,7 @@ class String extends Test\Unit\Suite
             ->exception(function () {
                 new LUT();
             })
-                ->isInstanceOf('Hoa\String\Exception');
+                ->isInstanceOf('Hoa\Ustring\Exception');
     }
 
     public function case_append_ltr()
@@ -163,6 +164,7 @@ class String extends Test\Unit\Suite
     {
         $this
             ->given(
+                $this->getPhpMocker()->setDefaultNamespace('Hoa\Ustring'),
                 $this->function->class_exists = function ($name) {
                     return 'Collator' !== $name;
                 },
@@ -195,7 +197,8 @@ class String extends Test\Unit\Suite
     {
         $this
             ->given(
-                $this->function->setlocale = 'fr_FR',
+                $this->getPhpMocker()->setDefaultNamespace('Hoa\Ustring'),
+                $this->function->setlocale = OS_WIN ? 'fr' : 'fr_FR',
                 $collator = LUT::getCollator()
             )
             ->when($result = $collator->getLocale(\Locale::VALID_LOCALE))
@@ -916,6 +919,7 @@ class String extends Test\Unit\Suite
     {
         $this
             ->given(
+                $this->getPhpMocker()->setDefaultNamespace('Hoa\Ustring'),
                 $this->function->class_exists = function ($name) {
                     return false === in_array($name, ['Transliterator', 'Normalizer']);
                 },
@@ -924,13 +928,14 @@ class String extends Test\Unit\Suite
             ->exception(function () use ($string) {
                 $string->toAscii();
             })
-                ->isInstanceOf('Hoa\String\Exception');
+                ->isInstanceOf('Hoa\Ustring\Exception');
     }
 
     public function case_to_ascii_no_transliterator_no_normalizer_try()
     {
         $this
             ->given(
+                $this->getPhpMocker()->setDefaultNamespace('Hoa\Ustring'),
                 $this->function->class_exists = function ($name) {
                     return false === in_array($name, ['Transliterator', 'Normalizer']);
                 },
@@ -948,6 +953,7 @@ class String extends Test\Unit\Suite
     {
         $this
             ->given(
+                $this->getPhpMocker()->setDefaultNamespace('Hoa\Ustring'),
                 $this->function->class_exists = function ($name) {
                     return 'Transliterator' !== $name;
                 },

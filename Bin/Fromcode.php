@@ -36,86 +36,18 @@
 
 namespace Hoa\String\Bin;
 
-use Hoa\Console;
-use Hoa\String;
+use Hoa\Ustring;
 
 /**
  * Class Hoa\String\Bin\Fromcode.
  *
- * Get a character from its code. Please, see Hoa\String\String::fromCode.
+ * Get a character from its code. Please, see Hoa\Ustring\Ustring::fromCode.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Fromcode extends Console\Dispatcher\Kit
+class Fromcode extends Ustring\Bin\Fromcode
 {
-    /**
-     * Options description.
-     *
-     * @var array
-     */
-    protected $options = [
-        ['base', Console\GetOption::REQUIRED_ARGUMENT, 'b'],
-        ['help', Console\GetOption::NO_ARGUMENT,       'h'],
-        ['help', Console\GetOption::NO_ARGUMENT,       '?']
-    ];
-
-
-
-    /**
-     * The entry method.
-     *
-     * @return  int
-     */
-    public function main()
-    {
-        $base = 16;
-
-        while (false !== $c = $this->getOption($v)) {
-            switch ($c) {
-                case 'b':
-                    $base = intval($v);
-
-                    break;
-
-                case '__ambiguous':
-                    $this->resolveOptionAmbiguity($v);
-
-                    break;
-
-                case 'h':
-                case '?':
-                default:
-                    return $this->usage();
-            }
-        }
-
-        $this->parser->listInputs($code);
-
-        $char = String::fromCode(base_convert($code, $base, 10));
-
-        echo $char;
-
-        return;
-    }
-
-    /**
-     * The command usage.
-     *
-     * @return  int
-     */
-    public function usage()
-    {
-        echo
-            'Usage   : string:fromcode <char>', "\n",
-            'Options :', "\n",
-            $this->makeUsageOptionsList([
-                'b'    => 'Specify the base of the code (16 by default).',
-                'help' => 'This help.'
-            ]), "\n";
-
-        return;
-    }
 }
 
 __halt_compiler();

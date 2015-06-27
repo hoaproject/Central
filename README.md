@@ -8,6 +8,12 @@ Moreover, Hoa aims at being a bridge between industrial and research worlds.
 This library allows to manipulate UTF-8 strings easily with some search
 algorithms.
 
+## Warning
+
+This library is deprecated, and doesn't support `php >= 7` because of new
+reserved keyword `string`, please use
+[`Hoa\Ustring`](http://central.hoa-project.net/Resource/Library/Ustring).
+
 ## Installation
 
 With [Composer](http://getcomposer.org/), to include this library into your

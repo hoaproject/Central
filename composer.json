@@ -21,8 +21,8 @@
         "source": "http://git.hoa-project.net/"
     },
     "require": {
-        "hoa/core"    : "~2.0",
-        "ext-iconv"   : "*"
+        "hoa/ustring" : "~3.0",
+        "php"         : "<7"
     },
     "require-dev": {
         "hoa/test": "~1.0"

@@ -36,86 +36,18 @@
 
 namespace Hoa\String\Bin;
 
-use Hoa\Console;
-use Hoa\String;
+use Hoa\Ustring;
 
 /**
  * Class Hoa\String\Bin\Tocode.
  *
- * Transform a character into its code. Please, see Hoa\String\String::toCode.
+ * Transform a character into its code. Please, see Hoa\Ustring\Ustring::toCode.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Tocode extends Console\Dispatcher\Kit
+class Tocode extends Ustring\Bin\Tocode
 {
-    /**
-     * Options description.
-     *
-     * @var array
-     */
-    protected $options = [
-        ['base', Console\GetOption::REQUIRED_ARGUMENT, 'b'],
-        ['help', Console\GetOption::NO_ARGUMENT,       'h'],
-        ['help', Console\GetOption::NO_ARGUMENT,       '?']
-    ];
-
-
-
-    /**
-     * The entry method.
-     *
-     * @return  int
-     */
-    public function main()
-    {
-        $base = 16;
-
-        while (false !== $c = $this->getOption($v)) {
-            switch ($c) {
-                case 'b':
-                    $base = intval($v);
-
-                    break;
-
-                case '__ambiguous':
-                    $this->resolveOptionAmbiguity($v);
-
-                    break;
-
-                case 'h':
-                case '?':
-                default:
-                    return $this->usage();
-            }
-        }
-
-        $this->parser->listInputs($char);
-
-        $code = base_convert((string) String::toCode($char), 10, $base);
-
-        echo $code, "\n";
-
-        return;
-    }
-
-    /**
-     * The command usage.
-     *
-     * @return  int
-     */
-    public function usage()
-    {
-        echo
-            'Usage   : string:tocode <char>', "\n",
-            'Options :', "\n",
-            $this->makeUsageOptionsList([
-                'b'    => 'Get the code in a specific base (16 by default).',
-                'help' => 'This help.'
-            ]), "\n";
-
-        return;
-    }
 }
 
 __halt_compiler();
