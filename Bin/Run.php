@@ -95,7 +95,7 @@ class Run extends Console\Dispatcher\Kit
                              ->maxDepth(1);
 
                     foreach ($iterator as $fileinfo) {
-                        $libraryName    = $fileinfo->getBasename();
+                        $libraryName = $fileinfo->getBasename();
 
                         if (true === Core\Consistency::isKeyword($libraryName)) {
                             continue;
