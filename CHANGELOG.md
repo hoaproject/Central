@@ -1,3 +1,7 @@
+# 2.15.07.05
+
+  * `stream_open` returns `false` if not a resource. (Ivan Enderlin, 2015-07-05T15:10:32+02:00)
+
 # 2.15.06.02
 
   * Remove exception type-hint because of PHP7. (Ivan Enderlin, 2015-06-01T15:51:57+02:00)
