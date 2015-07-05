@@ -792,6 +792,10 @@ class Wrapper
             );
         }
 
+        if (false === is_resource($openedPath)) {
+            return false;
+        }
+
         $this->_stream     = $openedPath;
         $this->_streamName = $path;
 
