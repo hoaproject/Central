@@ -327,6 +327,8 @@ class Mime implements Core\Parameter\Parameterizable
      */
     public static function getMimeFromExtension($extension)
     {
+        $extension = strtolower($extension);
+        
         if (false === static::extensionExists($extension)) {
             return null;
         }
