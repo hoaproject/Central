@@ -41,7 +41,7 @@ require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . '.autoload.atoum.php';
 use Hoa\Console;
 use Hoa\Core;
 use Hoa\File;
-use Hoa\String;
+use Hoa\Ustring;
 
 /**
  * Class Hoa\Test\Bin\Generate.
@@ -215,7 +215,7 @@ class Generate extends Console\Dispatcher\Kit
             $thePath = 0;
 
             foreach ($paths as $path) {
-                $length = String\Search::lcp(
+                $length = Ustring\Search::lcp(
                     $reflection->getFilename(),
                     $path
                 );
