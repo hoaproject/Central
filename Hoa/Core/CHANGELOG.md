@@ -1,3 +1,7 @@
+# 2.15.07.07
+
+  * Update retro-compatibility with PHP7. (Ivan Enderlin, 2015-07-07T14:11:11+02:00)
+
 # 2.15.07.05
 
   * `stream_open` returns `false` if not a resource. (Ivan Enderlin, 2015-07-05T15:10:32+02:00)
