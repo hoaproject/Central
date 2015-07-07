@@ -943,24 +943,18 @@ if (!function_exists('trait_exists')) {
 
 if (70000 > PHP_VERSION_ID) {
     /**
-     * Implement a fake BaseException class, introduced in PHP7.0.
+     * Implement a fake Throwable class, introduced in PHP7.0.
      */
-    abstract class BaseException extends Exception
+    interface Throwable
     {
-    }
-
-    /**
-     * Implement a fake EngineException class, introduced in PHP7.0.
-     */
-    class EngineException extends Exception
-    {
-    }
-
-    /**
-     * Implement a fake ParseException class, introduced in PHP7.0.
-     */
-    class ParseException extends Exception
-    {
+        public function getMessage();
+        public function getCode();
+        public function getFile();
+        public function getLine();
+        public function getTrace();
+        public function getPrevious();
+        public function getTraceAsString();
+        public function __toString();
     }
 }
 
