@@ -65,7 +65,7 @@ class Start extends Console\Dispatcher\Kit
     /**
      * The entry method.
      *
-     * @return  int
+     * @return  void
      */
     public function main()
     {
@@ -108,7 +108,7 @@ class Start extends Console\Dispatcher\Kit
     /**
      * The command usage.
      *
-     * @return  int
+     * @return  void
      */
     public function usage()
     {

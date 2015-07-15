@@ -96,6 +96,7 @@ class Run
      *
      * @param   string  $workerId    Worker ID.
      * @return  string
+     * @throws  \Hoa\Worker\Exception
      */
     public static function get($workerId)
     {
