@@ -120,7 +120,7 @@ abstract class Graph
      * Make an instance of a specific graph.
      *
      * @param   string  $type    Type of graph needed.
-     * @return  void
+     * @return  Graph
      * @throws  \Hoa\Graph\Exception
      */
     public static function getInstance($type = self::TYPE_ADJACENCYLIST)
