@@ -39,7 +39,7 @@ namespace Hoa\Database;
 /**
  * Class \Hoa\Database\DalStatement.
  *
- * The heigher class that represents a DAL statement.
+ * The higher class that represents a DAL statement.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License

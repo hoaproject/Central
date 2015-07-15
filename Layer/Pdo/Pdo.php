@@ -117,7 +117,7 @@ class Pdo implements Database\IDal\Wrapper
      * Get the connection instance.
      *
      * @return  PDO
-     * @throws  \Hoa\Database\Dal\Exception
+     * @throws  \Hoa\Database\Exception
      */
     protected function getConnection()
     {

@@ -41,7 +41,7 @@ use Hoa\Core;
 /**
  * Class \Hoa\Database\Dal.
  *
- * The heigher class of the Database Abstract Layer. It wrappes all DAL.
+ * The higher class of the Database Abstract Layer. It wrappes all DAL.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
@@ -117,11 +117,11 @@ class Dal implements Core\Parameter\Parameterizable, Core\Event\Source
      * Create a DAL instance, representing a connection to a database.
      * The constructor is private to make a multiton.
      *
-     * @param   string   $dalName          The database abstract layer name.
-     * @param   string   $dsn              The DSN of database.
-     * @param   string   $username         The username to connect to database.
-     * @param   string   $password         The password to connect to database.
-     * @param   array    $driverOptions    The driver options.
+     * @param   string  $dalName          The database abstract layer name.
+     * @param   string  $dsn              The DSN of database.
+     * @param   string  $username         The username to connect to database.
+     * @param   string  $password         The password to connect to database.
+     * @param   array   $driverOptions    The driver options.
      * @return  void
      * @throws  \Hoa\Database\Exception
      */
@@ -165,7 +165,7 @@ class Dal implements Core\Parameter\Parameterizable, Core\Event\Source
     /**
      * Initialize parameters.
      *
-     * @param   array   $parameters    Parameters.
+     * @param   array  $parameters    Parameters.
      * @return  void
      */
     public static function initializeParameters(Array $parameters = [])
@@ -477,7 +477,7 @@ class Dal implements Core\Parameter\Parameterizable, Core\Event\Source
      * Return an array of available drivers.
      *
      * @return  array
-     * @throws  \Hoa\Datatase\Exception
+     * @throws  \Hoa\Database\Exception
      */
     public function getAvailableDrivers()
     {
@@ -487,7 +487,7 @@ class Dal implements Core\Parameter\Parameterizable, Core\Event\Source
     /**
      * Set attributes.
      *
-     * @param   array   $attributes    Attributes values.
+     * @param   array  $attributes    Attributes values.
      * @return  array
      * @throws  \Hoa\Database\Exception
      */
