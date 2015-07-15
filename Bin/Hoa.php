@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Hoa
  *
@@ -56,12 +57,15 @@ if (!defined('HOA')) {
         '..' . DIRECTORY_SEPARATOR .
         'autoload.php'
     ];
+
     foreach ($composer as $path) {
         if (file_exists($path)) {
             require_once $path;
+
             break;
         }
     }
+
     if (!defined('HOA')) {
         require_once
             dirname(__DIR__) . DIRECTORY_SEPARATOR .
@@ -70,6 +74,7 @@ if (!defined('HOA')) {
             'Core.php';
     }
 }
+
 Core::enableErrorHandler();
 Core::enableExceptionHandler();
 
@@ -89,6 +94,7 @@ try {
             'command' => 'welcome'
         ]
     );
+
     $dispatcher = new Dispatcher\ClassMethod([
         'synchronous.call'
             => '(:%variables.vendor:lU:)\(:%variables.library:lU:)\Bin\(:%variables.command:lU:)',
@@ -106,10 +112,13 @@ try {
 }
 
 ob_start();
+
 Console\Cursor::colorize('foreground(white) background(red)');
 echo $message, "\n";
 Console\Cursor::colorize('normal');
 $content = ob_get_contents();
+
 ob_end_clean();
+
 file_put_contents('php://stderr', $content);
 exit($code);
