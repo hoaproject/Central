@@ -87,7 +87,7 @@ class Service
     /**
      * Add user.
      *
-     * @param   array   $users    User to add.
+     * @param   array  $users    User to add.
      * @return  array
      */
     public function addUser($users = [])
@@ -114,7 +114,7 @@ class Service
     /**
      * Delete user.
      *
-     * @param   array   $users    User to add.
+     * @param   array  $users    User to add.
      * @return  array
      */
     public function deleteUser($users = [])
@@ -139,7 +139,7 @@ class Service
     /**
      * Check if a user exists.
      *
-     * @param   mixed   $userId    The user ID.
+     * @param   mixed  $userId    The user ID.
      * @return  bool
      */
     public function userExists($userId)
@@ -164,7 +164,7 @@ class Service
     /**
      * Set service ID.
      *
-     * @param   mixed      $id    The service ID.
+     * @param   mixed  $id    The service ID.
      * @return  mixed
      */
     protected function setId($id)
