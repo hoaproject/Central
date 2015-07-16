@@ -621,10 +621,12 @@ class Http extends Router\Generic implements Core\Parameter\Parameterizable
         Array $variables,
         $allowEmpty = true
     ) {
+        $unusedVariables = $variables;
+
         // (?<named>…)
         $out = preg_replace_callback(
             '#\(\?\<([^>]+)>[^\)]*\)[\?\*\+]{0,2}#',
-            function (Array $matches) use (&$id, &$variables, &$allowEmpty) {
+            function (Array $matches) use (&$id, &$variables, &$allowEmpty, &$unusedVariables) {
                 $m = strtolower($matches[1]);
 
                 if (!isset($variables[$m]) || '' === $variables[$m]) {
@@ -639,6 +641,8 @@ class Http extends Router\Generic implements Core\Parameter\Parameterizable
                         );
                     }
                 }
+
+                unset($unusedVariables[$m]);
 
                 return $variables[$m];
             },
@@ -658,7 +662,7 @@ class Http extends Router\Generic implements Core\Parameter\Parameterizable
         // …?, …*, …+
         $out = preg_replace('#(.)(?<![\)\\\])[\?\*\+]#', '\1', $out);
 
-        return str_replace(
+        $out = str_replace(
             [
                 '\.', '\\\\', '\+', '\*', '\?', '\[', '\]', '\^', '\$', '\(',
                 '\)', '\{', '\}', '\=', '\!', '\<', '\>', '\|', '\:', '\-'
@@ -669,6 +673,8 @@ class Http extends Router\Generic implements Core\Parameter\Parameterizable
             ],
             $out
         );
+
+        return $out . (!empty($unusedVariables) ? '?' . http_build_query($unusedVariables) : '');
     }
 
     /**
