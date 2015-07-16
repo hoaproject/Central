@@ -5,7 +5,8 @@ Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
 # Hoa\Cli ![state](http://central.hoa-project.net/State/Cli)
 
-This meta-library provides the `hoa` command line.
+This meta-library provides the `hoa` command line. This is a shell tool to
+access to libraries' commands.
 
 ## Installation
 
@@ -26,7 +27,26 @@ install](http://hoa-project.net/Source.html).
 
 ## Quick usage
 
-…
+Once installed, commands from libraries can be run with the following command
+line pattern:
+
+```sh
+$ hoa <library-name>:<command-name> <options> <inputs>
+```
+
+Running `hoa` with no argument will list all the available commands with a small
+description. Note: If the option `--no-verbose` is present, the list of commands
+will not be formatted. Thus, used in conjunction with Zsh resources present in
+[`Hoa\Devtools`](http://central.hoa-project.net/Resource/Library/Devtools/Resource/Zsh), you
+will be able to auto-complete any commands from any libraries for free.
+
+On every command, there is at least the `-h`, `--help` and `-?` options,
+providing helps and usages.
+
+To provide a command from a library, create a class inside the `Bin/` directory.
+For instance, for a potential `Hoa\Foo` library, the `bar` command will be
+described by the `Hoa\Foo\Bin\Bar` class, located inside the `Foo/Bin/bar.php`
+file.
 
 ## Documentation
 
