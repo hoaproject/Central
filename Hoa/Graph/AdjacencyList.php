@@ -186,7 +186,7 @@ class AdjacencyList extends Graph
      * Get parent of a specific node.
      *
      * @param   mixed   $nodeId    The node ID or the node instance.
-     * @return  object
+     * @return  \ArrayObject
      * @throws  \Hoa\Graph\Exception
      */
     public function getParent($nodeId)
@@ -227,7 +227,7 @@ class AdjacencyList extends Graph
      * Get child of a specific node.
      *
      * @param   mixed   $nodeId    The node ID or the node instance.
-     * @return  object
+     * @return  \ArrayObject
      * @throws  \Hoa\Graph\Exception
      */
     public function getChild($nodeId)
