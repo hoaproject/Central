@@ -82,7 +82,7 @@ class Acl
     /**
      * Graph of groups.
      *
-     * @var \Hoa\Acl \Hoa\Graph
+     * @var \Hoa\Graph
      */
     protected $groups         = null;
 
@@ -98,8 +98,8 @@ class Acl
     /**
      * Built an access control list.
      *
-     * @param   bool     $loop    Allow or not loop. Please, see the \Hoa\Graph
-     *                            class.
+     * @param   bool  $loop    Allow or not loop. Please, see the \Hoa\Graph
+     *                         class.
      * @return  void
      */
     private function __construct($loop = Graph::DISALLOW_LOOP)
@@ -115,8 +115,8 @@ class Acl
     /**
      * Get the instance of \Hoa\Acl, make a singleton.
      *
-     * @param   bool     $loop    Allow or not loop. Please, see the \Hoa\Graph
-     *                            class.
+     * @param   bool  $loop    Allow or not loop. Please, see the \Hoa\Graph
+     *                         class.
      * @return  object
      */
     public static function getInstance($loop = Graph::DISALLOW_LOOP)
@@ -153,7 +153,7 @@ class Acl
     /**
      * Delete a user.
      *
-     * @param   mixed   $user    User to delete.
+     * @param   mixed  $user    User to delete.
      * @return  void
      */
     public function deleteUser($user)
@@ -201,8 +201,8 @@ class Acl
     /**
      * Delete a group.
      *
-     * @param   mixed   $groupId       The group ID.
-     * @param   bool    $propagate     Propagate the erasure.
+     * @param   mixed  $groupId      The group ID.
+     * @param   bool   $propagate    Propagate the erasure.
      * @return  void
      * @throws  \Hoa\Acl\Exception
      */
@@ -250,7 +250,7 @@ class Acl
     /**
      * Delete a service.
      *
-     * @param   mixed   $service    Service to delete.
+     * @param   mixed  $service    Service to delete.
      * @return  void
      */
     public function deleteService($service)
@@ -267,8 +267,8 @@ class Acl
     /**
      * Allow a group to make an action according to permissions.
      *
-     * @param   mixed   $groupId        The group ID.
-     * @param   array   $permissions    Collection of permissions.
+     * @param   mixed  $groupId        The group ID.
+     * @param   array  $permissions    Collection of permissions.
      * @return  bool
      * @throws  \Hoa\Acl\Exception
      */
@@ -294,8 +294,8 @@ class Acl
     /**
      * Deny a group to make an action according to permissions.
      *
-     * @param   mixed   $groupId        The group ID.
-     * @param   array   $permissions    Collection of permissions.
+     * @param   mixed  $groupId        The group ID.
+     * @param   array  $permissions    Collection of permissions.
      * @return  bool
      * @throws  \Hoa\Acl\Exception
      */
@@ -325,10 +325,14 @@ class Acl
     /**
      * Check if a user is allowed to reach a action according to the permission.
      *
-     * @param   mixed   $user          User to check (should be the user ID or
-     *                                 the user instance).
-     * @param   mixed   $permission    List of permission (should be permission
-     *                                 ID, permission instance).
+     * @param   mixed                $user          User to check (should be the
+     *                                              user ID or the user
+     *                                              instance).
+     * @param   mixed                $permission    List of permission (should
+     *                                              be permission ID, permission
+     *                                              instance).
+     * @param   mixed                $service       Service or serviceId.
+     * @param   Hoa\Acl\IAcl\Assert  $assert        Assert.
      * @return  bool
      * @throws  \Hoa\Acl\Exception
      */
@@ -382,10 +386,10 @@ class Acl
     /**
      * Check if a group is allowed to reach a action according to the permission.
      *
-     * @param   mixed   $group         Group to check (should be the group ID or
-     *                                 the group instance).
-     * @param   mixed   $permission    List of permission (should be permission
-     *                                 ID, permission instance).
+     * @param   mixed  $group         Group to check (should be the group ID or
+     *                                the group instance).
+     * @param   mixed  $permission    List of permission (should be permission
+     *                                ID, permission instance).
      * @return  bool
      * @throws  \Hoa\Acl\Exception
      */
@@ -541,7 +545,7 @@ class Acl
      */
     protected function getServices()
     {
-        return $this->getServices;
+        return $this->services;
     }
 
     /**

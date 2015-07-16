@@ -80,7 +80,7 @@ class Permission
     /**
      * Set permission ID.
      *
-     * @param   mixed      $id    The permission ID.
+     * @param   mixed  $id    The permission ID.
      * @return  mixed
      */
     public function setId($id)

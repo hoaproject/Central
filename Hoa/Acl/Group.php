@@ -90,7 +90,7 @@ class Group implements Graph\IGraph\Node
     /**
      * Add permission.
      *
-     * @param   array   $permissions    Permission to add.
+     * @param   array  $permissions    Permission to add.
      * @return  array
      * @throws  \Hoa\Acl\Exception
      */
@@ -122,7 +122,7 @@ class Group implements Graph\IGraph\Node
     /**
      * Delete permission.
      *
-     * @param   array   $permissions    Permission to add.
+     * @param   array  $permissions    Permission to add.
      * @return  array
      * @throws  \Hoa\Acl\Exception
      */
@@ -150,7 +150,7 @@ class Group implements Graph\IGraph\Node
     /**
      * Check if a permission exists.
      *
-     * @param   mixed   $permissionId    The permission ID.
+     * @param   mixed  $permissionId    The permission ID.
      * @return  bool
      */
     public function permissionExists($permissionId)
@@ -171,7 +171,7 @@ class Group implements Graph\IGraph\Node
     /**
      * Set group ID.
      *
-     * @param   mixed      $id    The group ID.
+     * @param   mixed  $id    The group ID.
      * @return  mixed
      */
     protected function setId($id)

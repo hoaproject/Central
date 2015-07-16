@@ -87,7 +87,7 @@ class User
     /**
      * Add group.
      *
-     * @param   array   $groups    Group to add.
+     * @param   array  $groups    Group to add.
      * @return  array
      */
     public function addGroup($groups = [])
@@ -114,7 +114,7 @@ class User
     /**
      * Delete group.
      *
-     * @param   array   $groups    Group to add.
+     * @param   array  $groups    Group to add.
      * @return  array
      */
     public function deleteGroup($groups = [])
@@ -141,7 +141,7 @@ class User
     /**
      * Check if a group exists.
      *
-     * @param   mixed   $groupId    The group ID.
+     * @param   mixed  $groupId    The group ID.
      * @return  bool
      */
     public function groupExists($groupId)
@@ -166,7 +166,7 @@ class User
     /**
      * Set user ID.
      *
-     * @param   mixed      $id    The user ID.
+     * @param   mixed  $id    The user ID.
      * @return  mixed
      */
     protected function setId($id)
