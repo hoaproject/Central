@@ -92,13 +92,13 @@ $worker->run();
   <code>/path/to/wid/directory</code> :</p>
   <pre><code class="language-php">Hoa\Core\Core::getInstance()->setProtocol(
     'hoa://Data/Variable/Run',
-    '/path/to/wid/directory/'
+    '/path/to/wid/directory'
 );
-var_dump(resolve('hoa://Data/Variable/Run/'));
+var_dump(resolve('hoa://Data/Variable/Run'));
 
 /**
  * Will output:
- *     string(21) "/path/to/wid/directory/
+ *     string(21) "/path/to/wid/directory
  */</code></pre>
   <p>Notons que si nous utilisons Hoa avec son dossier <code>Data/</code> alors
   <code>hoa://Data/</code> se définira <strong>automatiquement</strong> vers ce

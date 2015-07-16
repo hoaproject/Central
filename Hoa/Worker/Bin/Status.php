@@ -66,11 +66,11 @@ class Status extends Console\Dispatcher\Kit
     /**
      * The entry method.
      *
-     * @return  int
+     * @return  void
      */
     public function main()
     {
-        $run = 'hoa://Data/Variable/Run/';
+        $run = 'hoa://Data/Variable/Run';
 
         while (false !== $c = $this->getOption($v)) {
             switch ($c) {
@@ -204,7 +204,7 @@ class Status extends Console\Dispatcher\Kit
     /**
      * The command usage.
      *
-     * @return  int
+     * @return  void
      */
     public function usage()
     {
