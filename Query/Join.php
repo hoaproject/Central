@@ -66,7 +66,7 @@ class Join
      * Constructor.
      *
      * @param   \Hoa\Database\Query\Select  $parent    Parent query.
-     * @param   string                      $from      FROM entry (“friends”).
+     * @param   array                       $from      FROM entry (“friends”).
      * @return  void
      */
     public function __construct(Select $parent, Array &$from)

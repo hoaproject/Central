@@ -60,7 +60,7 @@ interface Wrapper
         $dsn,
         $username,
         $password,
-        Array $driverOption = []
+        Array $driverOptions = []
     );
 
     /**
@@ -152,7 +152,7 @@ interface Wrapper
      * Return an array of available drivers.
      *
      * @return  array
-     * @throws  \Hoa\Datatase\Exception
+     * @throws  \Hoa\Database\Exception
      */
     public function getAvailableDrivers();
 

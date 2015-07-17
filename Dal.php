@@ -506,7 +506,7 @@ class Dal implements Core\Parameter\Parameterizable, Core\Event\Source
      */
     public function setAttribute($attribute, $value)
     {
-        return $this->getDal()->setAtribute($attribute, $value);
+        return $this->getDal()->setAttribute($attribute, $value);
     }
 
     /**
