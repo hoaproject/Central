@@ -142,17 +142,17 @@ class Client extends Connection
                 $streamName,
                 $errno,
                 $errstr,
-                $this->getTimeout()/*,
-                $this->getFlag()*/
+                $this->getTimeout(),
+                $this->getFlag()
             );
         } else {
             $connection = @stream_socket_client(
                 $streamName,
                 $errno,
                 $errstr,
-                $this->getTimeout()/*,
+                $this->getTimeout(),
                 $this->getFlag(),
-                $context->getContext()*/
+                $context->getContext()
             );
         }
 
