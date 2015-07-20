@@ -1,3 +1,8 @@
+# 0.15.07.20
+
+  * Reintroduce flags and reverse when connecting a client. (Ivan Enderlin, 2015-07-20T18:43:09+02:00)
+  * Fix an exception message. (Ivan Enderlin, 2015-06-01T15:15:37+02:00)
+
 # 0.15.05.29
 
   * Move to PSR-1 and PSR-2. (Ivan Enderlin, 2015-05-20T09:48:38+02:00)
