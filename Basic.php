@@ -80,10 +80,10 @@ class Basic extends Dispatcher
         $arguments  = [];
         $reflection = null;
 
-        if ($call instanceof \Closure) {
+        if($call instanceof \Closure) {
             $kitname = $this->getKitName();
 
-            if (!empty($kitname)) {
+            if(!empty($kitname)) {
                 $kit = dnew($this->getKitName(), $rtv);
 
                 if (!($kit instanceof Kit)) {
@@ -100,29 +100,34 @@ class Basic extends Dispatcher
             $called     = $call;
             $reflection = new \ReflectionMethod($call, '__invoke');
 
-            foreach ($reflection->getParameters() as $parameter) {
+            foreach($reflection->getParameters() as $parameter) {
                 $name = strtolower($parameter->getName());
 
-                if (true === array_key_exists($name, $variables)) {
+                if(true === array_key_exists($name, $variables)) {
                     $arguments[$name] = $variables[$name];
 
                     continue;
                 }
 
-                if (false === $parameter->isOptional()) {
-                    throw new Exception(
-                        'The closured action for the rule with pattern %s needs ' .
-                        'a value for the parameter $%s and this value does not ' .
-                        'exist.',
+                if (true === $parameter->isOptional()) {
+                    $arguments[$name] = $parameter->getDefaultValue();
+
+                    continue;
+                }
+
+                throw new Exception(
+                    'The closured action for the rule with pattern %s needs ' .
+                    'a value for the parameter $%s and this value does not ' .
+                    'exist.',
                         1,
                         [$rule[Router::RULE_PATTERN], $name]
                     );
-                }
             }
+        }
         } elseif (is_string($call) && null === $able) {
             $kitname = $this->getKitName();
 
-            if (!empty($kitname)) {
+            if(!empty($kitname)) {
                 $kit = dnew($this->getKitName(), $rtv);
 
                 if (!($kit instanceof Kit)) {
@@ -138,32 +143,37 @@ class Basic extends Dispatcher
 
             $reflection = new \ReflectionFunction($call);
 
-            foreach ($reflection->getParameters() as $parameter) {
+            foreach($reflection->getParameters() as $parameter) {
                 $name = strtolower($parameter->getName());
 
-                if (true === array_key_exists($name, $variables)) {
+                if(true === array_key_exists($name, $variables)) {
                     $arguments[$name] = $variables[$name];
 
                     continue;
                 }
 
-                if (false === $parameter->isOptional()) {
-                    throw new Exception(
-                        'The functional action for the rule with pattern %s needs ' .
-                        'a value for the parameter $%s and this value does not ' .
-                        'exist.',
+                if (true === $parameter->isOptional()) {
+                    $arguments[$name] = $parameter->getDefaultValue();
+
+                    continue;
+                }
+
+                throw new Exception(
+                    'The functional action for the rule with pattern %s needs ' .
+                    'a value for the parameter $%s and this value does not ' .
+                    'exist.',
                         3,
                         [$rule[Router::RULE_PATTERN], $name]
                     );
-                }
             }
+        }
         } else {
             $async      = $router->isAsynchronous();
             $controller = $call;
             $action     = $able;
 
-            if (!is_object($call)) {
-                if (false === $async) {
+            if(!is_object($call)) {
+                if(false === $async) {
                     $_controller = 'synchronous.call';
                     $_action     = 'synchronous.able';
                 } else {
@@ -203,7 +213,7 @@ class Basic extends Dispatcher
 
                 if (method_exists($controller, 'construct')) {
                     $controller->construct();
-                }
+            }
             }
 
             if (!method_exists($controller, $action)) {
@@ -214,7 +224,7 @@ class Basic extends Dispatcher
                     [
                         $action,
                         get_class($controller),
-                        strtoupper($router->getMethod()),
+                             strtoupper($router->getMethod()),
                         true === $async
                             ? 'true'
                             : 'false'
@@ -225,19 +235,24 @@ class Basic extends Dispatcher
             $called     = $controller;
             $reflection = new \ReflectionMethod($controller, $action);
 
-            foreach ($reflection->getParameters() as $parameter) {
+            foreach($reflection->getParameters() as $parameter) {
                 $name = strtolower($parameter->getName());
 
-                if (true === array_key_exists($name, $variables)) {
+                if(true === array_key_exists($name, $variables)) {
                     $arguments[$name] = $variables[$name];
 
                     continue;
                 }
 
-                if (false === $parameter->isOptional()) {
-                    throw new Exception(
-                        'The action %s on the controller %s needs a value for ' .
-                        'the parameter $%s and this value does not exist.',
+                if (true === $parameter->isOptional()) {
+                    $arguments[$name] = $parameter->getDefaultValue();
+
+                    continue;
+                }
+
+                throw new Exception(
+                    'The action %s on the controller %s needs a value for ' .
+                    'the parameter $%s and this value does not exist.',
                         6,
                         [
                             $action,
@@ -245,8 +260,8 @@ class Basic extends Dispatcher
                             $name
                         ]
                     );
-                }
             }
+        }
         }
 
         if ($reflection instanceof \ReflectionFunction) {
