@@ -6,7 +6,7 @@ Moreover, Hoa aims at being a bridge between industrial and research worlds.
 # Hoa\Cli ![state](http://central.hoa-project.net/State/Cli)
 
 This meta-library provides the `hoa` command line. This is a shell tool to
-access to libraries' commands.
+access libraries' commands.
 
 ## Installation
 
