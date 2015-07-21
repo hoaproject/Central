@@ -207,6 +207,7 @@ class Smtp implements ITransport\Out
 
         $client = $this->getClient();
         $client->connect();
+        $client->setStreamBlocking(true);
 
         $this->ifNot(220, 'Not able to connect to the server');
 
