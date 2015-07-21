@@ -80,10 +80,10 @@ class Basic extends Dispatcher
         $arguments  = [];
         $reflection = null;
 
-        if ($call instanceof \Closure) {
+        if($call instanceof \Closure) {
             $kitname = $this->getKitName();
 
-            if (!empty($kitname)) {
+            if(!empty($kitname)) {
                 $kit = dnew($this->getKitName(), $rtv);
 
                 if (!($kit instanceof Kit)) {
@@ -100,10 +100,10 @@ class Basic extends Dispatcher
             $called     = $call;
             $reflection = new \ReflectionMethod($call, '__invoke');
 
-            foreach ($reflection->getParameters() as $parameter) {
+            foreach($reflection->getParameters() as $parameter) {
                 $name = strtolower($parameter->getName());
 
-                if (true === array_key_exists($name, $variables)) {
+                if(true === array_key_exists($name, $variables)) {
                     $arguments[$name] = $variables[$name];
 
                     continue;
@@ -123,10 +123,11 @@ class Basic extends Dispatcher
                         [$rule[Router::RULE_PATTERN], $name]
                     );
             }
+        }
         } elseif (is_string($call) && null === $able) {
             $kitname = $this->getKitName();
 
-            if (!empty($kitname)) {
+            if(!empty($kitname)) {
                 $kit = dnew($this->getKitName(), $rtv);
 
                 if (!($kit instanceof Kit)) {
@@ -142,10 +143,10 @@ class Basic extends Dispatcher
 
             $reflection = new \ReflectionFunction($call);
 
-            foreach ($reflection->getParameters() as $parameter) {
+            foreach($reflection->getParameters() as $parameter) {
                 $name = strtolower($parameter->getName());
 
-                if (true === array_key_exists($name, $variables)) {
+                if(true === array_key_exists($name, $variables)) {
                     $arguments[$name] = $variables[$name];
 
                     continue;
@@ -165,13 +166,14 @@ class Basic extends Dispatcher
                         [$rule[Router::RULE_PATTERN], $name]
                     );
             }
+        }
         } else {
             $async      = $router->isAsynchronous();
             $controller = $call;
             $action     = $able;
 
-            if (!is_object($call)) {
-                if (false === $async) {
+            if(!is_object($call)) {
+                if(false === $async) {
                     $_controller = 'synchronous.call';
                     $_action     = 'synchronous.able';
                 } else {
@@ -211,7 +213,7 @@ class Basic extends Dispatcher
 
                 if (method_exists($controller, 'construct')) {
                     $controller->construct();
-                }
+            }
             }
 
             if (!method_exists($controller, $action)) {
@@ -222,7 +224,7 @@ class Basic extends Dispatcher
                     [
                         $action,
                         get_class($controller),
-                        strtoupper($router->getMethod()),
+                             strtoupper($router->getMethod()),
                         true === $async
                             ? 'true'
                             : 'false'
@@ -233,10 +235,10 @@ class Basic extends Dispatcher
             $called     = $controller;
             $reflection = new \ReflectionMethod($controller, $action);
 
-            foreach ($reflection->getParameters() as $parameter) {
+            foreach($reflection->getParameters() as $parameter) {
                 $name = strtolower($parameter->getName());
 
-                if (true === array_key_exists($name, $variables)) {
+                if(true === array_key_exists($name, $variables)) {
                     $arguments[$name] = $variables[$name];
 
                     continue;
@@ -259,6 +261,7 @@ class Basic extends Dispatcher
                         ]
                     );
             }
+        }
         }
 
         if ($reflection instanceof \ReflectionFunction) {
