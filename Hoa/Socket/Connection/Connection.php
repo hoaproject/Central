@@ -160,7 +160,6 @@ abstract class Connection
      */
     public function __construct($socket, $timeout, $flag, $context = null)
     {
-
         // Children could setSocket() before __construct.
         if (null !== $socket) {
             $this->setSocket($socket);
