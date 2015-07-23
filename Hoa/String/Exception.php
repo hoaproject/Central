@@ -36,16 +36,16 @@
 
 namespace Hoa\String;
 
-use Hoa\Core;
+use Hoa\Ustring;
 
 /**
  * Class \Hoa\String\Exception.
  *
- * Extending the \Hoa\Core\Exception class.
+ * Extending the \Hoa\Ustring\Exception class.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Exception extends Core\Exception
+class Exception extends Ustring\Exception
 {
 }
