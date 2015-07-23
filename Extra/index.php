@@ -198,12 +198,12 @@ $router
                 return;
             }
 
-            $http->sendHeader('Content-Type', 'image/png');
+            $http->sendHeader('Content-Type', 'image/svg+xml');
             echo file_get_contents(
                 __DIR__  . DS .
                 'Badges' . DS .
                 'Image'  . DS .
-                ucfirst($status) . '.png'
+                ucfirst($status) . '.svg'
             );
 
             return;
