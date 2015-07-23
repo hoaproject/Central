@@ -27,6 +27,7 @@
         "hoa/cli"                : "~1.0",
         "hoa/core"               : "~2.0",
         "hoa/file"               : "~0.0",
+        "hoa/ustring"            : "~3.0"
     },
     "autoload": {
         "psr-4": {
