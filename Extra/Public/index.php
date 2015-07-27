@@ -2,6 +2,7 @@
 
 require_once __DIR__ . DIRECTORY_SEPARATOR .
              '..' . DIRECTORY_SEPARATOR .
+             '..' . DIRECTORY_SEPARATOR .
              'Hoa' . DIRECTORY_SEPARATOR .
              'Core' . DIRECTORY_SEPARATOR .
              'Core.php';
