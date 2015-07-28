@@ -1,3 +1,7 @@
+# 0.15.07.28
+
+  * Fix phpDoc. (Metalaka, 2015-07-15T18:05:42+02:00)
+
 # 0.15.05.29
 
   * Move to PSR-1 and PSR-2. (Ivan Enderlin, 2015-05-15T09:26:23+02:00)
