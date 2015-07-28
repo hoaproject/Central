@@ -1,3 +1,7 @@
+# 0.15.07.28
+
+  * Require `hoa/cli`. (Ivan Enderlin, 2015-07-23T08:46:47+02:00)
+
 # 0.15.04.17
 
   * Mention `hoa devtools:cs`. (Ivan Enderlin, 2015-04-17T11:40:32+02:00)
