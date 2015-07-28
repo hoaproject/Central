@@ -1,3 +1,8 @@
+# 0.15.07.28
+
+  * Fix API documentation. (Ivan Enderlin, 2015-07-16T08:25:41+02:00)
+  * Fix phpDoc. (Metalaka, 2015-07-15T18:16:06+02:00)
+
 # 0.15.05.29
 
   * Move to PSR-1 and PSR-2. (Ivan Enderlin, 2015-05-15T09:49:53+02:00)
