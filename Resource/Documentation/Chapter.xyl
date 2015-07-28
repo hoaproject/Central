@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<overlay xmlns="http://hoa-project.net/xyl/xylophone">
+  <yield id="main_content">
+    <script src="hoa://Application/Public/Javascript/Hoa.js"></script>
+    <script src="hoa://Application/Public/Javascript/Hoa.Graph.js"></script>
+    <script src="hoa://Application/Public/Javascript/Hoa.Graph.style.js"></script>
+    <script src="hoa://Application/Public/Javascript/Prism.js"></script>
+    <script src="hoa://Application/Public/Javascript/Prism.hoa.js"></script>
+    <script src="hoa://Application/Public/Javascript/Prism.plugin.line.js"></script>
+
+    <small><a href="../index.html">← index</a></small>
+
+    <h1>Hack book of <code bind="?name" /></h1>
+
+    <ul role="toolbar" class="fright" style="margin-top: 0; margin-bottom: 1em">
+      <li><a href="@board:repository=(?library)" title="Board" class="plain">
+            <img src="hoa://Application/Public/Image/Icon/Waffle.svg"
+                 alt="Git" height="30px" /></a></li>
+      <li><a href="@git:repository=Library/(?library)" title="Git" class="plain">
+            <img src="hoa://Application/Public/Image/Icon/Git.svg"
+                 alt="Git" height="30px" /></a></li>
+      <li><a href="@github:repository=(?library)" title="Github" class="plain">
+            <img src="hoa://Application/Public/Image/Icon/Github.svg"
+                 alt="Github" height="30px" /></a></li>
+    </ul>
+
+    <yield id="chapter" />
+  </yield>
+</overlay>

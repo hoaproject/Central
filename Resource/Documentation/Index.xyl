@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<overlay xmlns="http://hoa-project.net/xyl/xylophone">
+  <yield id="main_content">
+    <h1>Hack book</h1>
+
+    <yield bind="?vendors">
+      <yield bind="?vendor">
+        <h2 id="(?name)" bind="?name" />
+
+        <ul>
+          <li bind="?library">
+            <a href="@c:vendor=(?vendor)&amp;chapter=(?library)">
+              <code bind="?fullname" />
+            </a>
+          </li>
+        </ul>
+      </yield>
+    </yield>
+  </yield>
+</overlay>
