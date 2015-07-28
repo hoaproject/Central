@@ -1,3 +1,7 @@
+# 2.15.07.28
+
+  * Extend `Hoa\Ustring` and mark library as deprecated. (Metalaka, 2015-06-27T19:20:06+02:00)
+
 # 2.15.05.29
 
   * Move to PSR-1 and PSR-2. (Ivan Enderlin, 2015-05-18T09:49:37+02:00)
