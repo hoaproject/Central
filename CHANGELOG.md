@@ -1,3 +1,7 @@
+# 0.15.07.28
+
+  * Fix phpDoc. (Metalaka, 2015-07-15T17:42:02+02:00)
+
 # 0.15.05.29
 
   * Rename `Resource` to `Service`. (Ivan Enderlin, 2015-05-29T11:51:15+02:00)
