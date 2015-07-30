@@ -674,7 +674,11 @@ class Http extends Router\Generic implements Core\Parameter\Parameterizable
             $out
         );
 
-        return $out . (!empty($unusedVariables) ? '?' . http_build_query($unusedVariables) : '');
+        return
+            $out .
+            (!empty($unusedVariables)
+                ? '?' . http_build_query($unusedVariables)
+                : '');
     }
 
     /**
