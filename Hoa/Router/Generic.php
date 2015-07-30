@@ -139,7 +139,8 @@ abstract class Generic implements Router
     public function addPrivateRule(
         $id,
         Array $methods,
-        $pattern,$call   = null,
+        $pattern,
+        $call            = null,
         $able            = null,
         Array $variables = []
     ) {
