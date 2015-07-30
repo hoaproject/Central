@@ -1,3 +1,14 @@
+# 1.15.07.30
+
+  * Require `hoa/devtools`. (Ivan Enderlin, 2015-07-23T08:57:11+02:00)
+  * Require `hoa/ustring`. (Ivan Enderlin, 2015-07-23T08:47:45+02:00)
+  * Require `hoa/cli`. (Ivan Enderlin, 2015-07-23T08:47:36+02:00)
+  * Move to PSR-1 and PSR-2. (Ivan Enderlin, 2015-07-06T13:12:33+02:00)
+  * Use `Hoa\Ustring` instead of `Hoa\String`. (Ivan Enderlin, 2015-07-06T13:12:09+02:00)
+  * Fix CS. (Ivan Enderlin, 2015-06-27T16:06:54+02:00)
+  * Fix usage wording. (Ivan Enderlin, 2015-06-25T16:43:43+02:00)
+  * Add `--php-binary` & `--concurrent-processes`. (Ivan Enderlin, 2015-06-16T14:33:03+02:00)
+
 # 1.15.06.25
 
   * Fix ruler-extension namespace. (Metalaka, 2015-06-22T20:17:36+02:00)
