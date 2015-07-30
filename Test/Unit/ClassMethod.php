@@ -245,6 +245,28 @@ class ClassMethod extends Test\Unit\Suite
             ->when($dispatcher->dispatch($router));
     }
 
+    public function case_arguments_are_unordered()
+    {
+        $this
+            ->given(
+                $router = new MockRouter(),
+                $router->get(
+                    'a',
+                    '(?<bar>bar) (?<foo>foo)',
+                    __CLASS__,
+                    'dispatchedMethod'
+                ),
+                $this->route($router, 'bar foo'),
+
+                $dispatcher = new LUT\ClassMethod(),
+                $dispatcher->getParameters()->setParameters([
+                    'synchronous.call' => '(:call:U:)',
+                    'synchronous.able' => '(:able:)'
+                ])
+            )
+            ->when($dispatcher->dispatch($router));
+    }
+
     protected function route(Router $router, $uri, Array $extraVariables = [])
     {
         $router->route($uri);
