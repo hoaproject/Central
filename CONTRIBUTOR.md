@@ -30,6 +30,7 @@ cloak on IRC, etc.
   * Aymeric Gerlier (skan)
   * Ben Getsug (bgetsug)
   * ➜ Alexis von Glasow (avonglasow)
+  * Kévin Gomez (k-phoen)
   * Kevin Gravier (mrkmg)
   * Nicolas Grekas (nicolas-grekas)
   * Sarah Haïm-Lubczanski (mere-teresa)
