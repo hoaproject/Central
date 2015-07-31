@@ -1458,10 +1458,13 @@ class          Xyl
                     $resource = $m[1];
                 }
 
-                return $router->unroute(
-                    $rule,
-                    ['theme' => $theme, 'resource' => $resource]
-                );
+                $variables = ['resource' => $resource];
+
+                if (!empty($theme)) {
+                    $variables['theme'] = $theme;
+                }
+
+                return $router->unroute($rule, $variables);
             }
 
             return $this->resolve($link, $late);
