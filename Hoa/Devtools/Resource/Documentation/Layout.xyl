@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xyl-stylesheet href="hoa://Application/Public/Css/Core.css"?>
+<?xyl-stylesheet href="hoa://Application/Public/Css/Layout.css"?>
+<?xyl-stylesheet href="hoa://Application/Public/Css/UI.css"?>
+<?xyl-stylesheet href="hoa://Application/Public/Css/Code.css"?>
+<?xyl-stylesheet href="hoa://Application/Public/Css/Graph.css"?>
+
+<document xmlns="http://hoa-project.net/xyl/xylophone">
+  <title>Hack book</title>
+
+  <div id="body">
+    <header>
+      <img src="hoa://Application/Public/Image/Hoa.png" alt="Hoa" />
+    </header>
+
+    <main>
+      <yield id="main_content" />
+    </main>
+
+    <footer>
+      <p>Hoa is the creation of Ivan Enderlin, all rights reserved.</p>
+      <p>Generated <value formatter="date" formatter-format="c" />.</p>
+    </footer>
+  </div>
+</document>
