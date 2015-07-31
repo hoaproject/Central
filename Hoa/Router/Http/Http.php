@@ -621,7 +621,13 @@ class Http extends Router\Generic implements Core\Parameter\Parameterizable
         Array $variables,
         $allowEmpty = true
     ) {
-        $unusedVariables = $variables;
+        $unusedVariables = [];
+
+        foreach ($variables as $key => $variable) {
+            if ('_' !== $key[0]) {
+                $unusedVariables[$key] = $variable;
+            }
+        }
 
         // (?<named>…)
         $out = preg_replace_callback(
