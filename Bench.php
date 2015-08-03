@@ -266,6 +266,8 @@ class Bench implements Iterator, \Countable
             return [];
         }
 
+        $runningMarks = $this->pause();
+
         $max = $this->getLongest()->diff();
         $out = [];
 
@@ -286,6 +288,8 @@ class Bench implements Iterator, \Countable
                 self::STAT_POURCENT => $pourcent
             ];
         }
+
+        $this->resume($runningMarks);
 
         return $out;
     }
@@ -308,6 +312,41 @@ class Bench implements Iterator, \Countable
         }
 
         return $outMark;
+    }
+
+    /**
+     * Pause all marks.
+     *
+     * @return  array
+     */
+    public function pause()
+    {
+        $runningMarks = [];
+
+        foreach ($this as $mark) {
+            if (true === $mark->isRunning() && false === $mark->isPause()) {
+                $runningMarks[] = $mark;
+            }
+        }
+
+        foreach ($runningMarks as $mark) {
+            $mark->pause();
+        }
+
+        return $runningMarks;
+    }
+
+    /**
+     * Resume all marks.
+     *
+     * @param   array  $runningMarks    The marks to resume.
+     * @return  void
+     */
+    public function resume($runningMarks)
+    {
+        foreach ($runningMarks as $mark) {
+            $mark->start();
+        }
     }
 
     /**
