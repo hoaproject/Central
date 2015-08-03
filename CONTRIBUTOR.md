@@ -36,6 +36,7 @@ cloak on IRC, etc.
   * Sarah Haïm-Lubczanski (mere-teresa)
   * Martin Hasoň (hason)
   * ➜ Sébastien Houzé (shouze)
+  * Stéphane Hulard (shulard)
   * ➜ Matthieu de Laubrie (metalaka)
   * Samuel Laulhau (lalop)
   * Baptiste Leduc (korbeil)
