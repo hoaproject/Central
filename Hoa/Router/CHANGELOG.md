@@ -1,3 +1,10 @@
+# 2.15.08.03
+
+  * `getDomain` uses `HTTP_HOST` instead of `SERVER_NAME`. (camael24, 2015-03-20T15:01:51+01:00)
+  * Filter protected variables when unrouting. (Ivan Enderlin, 2015-07-30T16:46:01+02:00)
+  * Fix CS. (Ivan Enderlin, 2015-07-30T08:11:37+02:00)
+  * Append unused variables to the querystring when unrouting rules (Kévin Gomez, 2015-07-16T23:02:02+02:00)
+
 # 2.15.05.29
 
   * Move to PSR-1 and PSR-2. (Ivan Enderlin, 2015-05-20T09:27:10+02:00)
