@@ -53,7 +53,7 @@
   nous pourrons démarrer un <em lang="en">worker</em> uniquement à partir de son
   identifiant.</p>
   <p>La première étape va donc être de vérifier que le profil existe grâce à la
-  méthode <code>Hoa\Worker\Run::widExists</code>, dans le cas échant nous
+  méthode <code>Hoa\Worker\Run::widExists</code>, dans le cas contraire nous
   allons le créer avec la méthode <code>Hoa\Worker\Run::register</code>.
   Ainsi :</p>
   <pre><code class="language-php">if (false === Hoa\Worker\Run::widExists('demorker')) {
@@ -153,8 +153,8 @@ $worker->postMessage('mail gordon@freeman.hl Hello Gordon!');</code></pre>
   <pre><code class="language-shell">$ hoa worker:status --run /path/to/wid/directory/
 Shared worker informations
 
-ID        PID   Socket                  Uptime      Messages  Last  
-demorker  2465  tcp://127.0.0.1:123456  0d00:03:15  0         -     
+ID        PID   Socket                  Uptime      Messages  Last
+demorker  2465  tcp://127.0.0.1:123456  0d00:03:15  0         -
 
 demorker  ||||||||||||||||||||||||||||||||||||   |  1,398Kb 1,398Kb 1,536Kb
 
