@@ -322,12 +322,12 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate
     protected function _resolveChoice($reach, Array &$accumulator)
     {
         if (empty($accumulator)) {
-            $accumulator = explode(';', $reach);
+            $accumulator = explode(RS, $reach);
 
             return;
         }
 
-        if (false === strpos($reach, ';')) {
+        if (false === strpos($reach, RS)) {
             if (false !== $pos = strrpos($reach, "\r")) {
                 $reach = substr($reach, $pos + 1);
 
@@ -343,7 +343,7 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate
             return;
         }
 
-        $choices     = explode(';', $reach);
+        $choices     = explode(RS, $reach);
         $ref         = $accumulator;
         $accumulator = [];
 
@@ -543,25 +543,25 @@ class Library extends Protocol
 
             $out = [];
 
-            foreach (explode(';', $this->_reach) as $part) {
+            foreach (explode(RS, $this->_reach) as $part) {
                 $out[] = "\r" . $part . strtolower($head) . $queue;
             }
 
             $out[] = "\r" . dirname(dirname(dirname(__DIR__))) . $queue;
 
-            return implode(';', $out);
+            return implode(RS, $out);
         }
 
         $out = [];
 
-        foreach (explode(';', $this->_reach) as $part) {
+        foreach (explode(RS, $this->_reach) as $part) {
             $pos   = strrpos(rtrim($part, DS), DS) + 1;
             $head  = substr($part, 0, $pos);
             $tail  = substr($part, $pos);
             $out[] = $head . strtolower($tail);
         }
 
-        $this->_reach = implode(';', $out);
+        $this->_reach = implode(RS, $out);
 
         return parent::reach($queue);
     }
