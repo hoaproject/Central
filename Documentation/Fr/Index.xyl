@@ -76,8 +76,7 @@ $worker->on('message', function (Hoa\Core\Event\Bucket $bucket) use ($file) {
     $data = $bucket->getData();
     $file->writeAll($data['message'] . "\n");
 });
-$worker->run();
-</code></pre>
+$worker->run();</code></pre>
   <p>Nous sommes <strong>libres</strong> de faire ce que nous voulons pour
   traiter la <strong>tâche</strong> !  Le format est totalement libre : binaire,
   compressé, ligne de commande, objet sérialisé… nous pouvons envoyer ce que
