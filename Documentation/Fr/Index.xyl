@@ -164,8 +164,9 @@ demorker  ||||||||||||||||||||||||||||||||||||   |  1,398Kb 1,398Kb 1,536Kb
   <em>via</em> un navigateur, peu importe) !</p>
   <p>Enfin, pour <strong>arrêter</strong> le <em lang="en">worker</em>
   proprement, nous avons la commande <code>worker:stop</code>, qui n'est qu'un
-  alias de <code>Hoa\Worker\Backend\Shared</code>, nécessitant l'identifiant du
-  <em lang="en">worker</em> et son <strong>mot de passe</strong> :</p>
+  alias de <code>Hoa\Worker\Backend\Shared::stop</code>, nécessitant
+  l'identifiant du <em lang="en">worker</em> et son <strong>mot de
+  passe</strong> :</p>
   <pre><code class="language-shell">$ hoa worker:stop --run /path/to/wid/directory/ demorker
 Password: ▋</code></pre>
   <p>Si le mot de passe est correct, le <em lang="en">worker</em> sera arrêté et
