@@ -87,30 +87,36 @@ interface WrapperStatement extends Iterator\Aggregate
     /**
      * Set the Iterator fetching style.
      *
-     * @param   int  $orientation    This value must be DalStatement::FORWARD or
-     *                               DalStatement::BACKWARD constant.
-     * @param   int  $offset         This value must be one of the
-     *                               DalStatement::FROM_* constants or an
-     *                               arbitrary offset.
+     * @param   int        $orientation    This value must be
+     *                                     DalStatement::FORWARD or
+     *                                     DalStatement::BACKWARD constant.
+     * @param   int        $offset         This value must be one of the
+     *                                     DalStatement::FROM_* constants or
+     *                                     an arbitrary offset.
+     * @param   int|array  $style          This value must be one of the
+     *                                     DalStatement::AS_* constants.
      * @return  \Hoa\Database\IDal\WrapperStatement
      */
     public function setFetchingStyle(
         $orientation = Database\DalStatement::FORWARD,
-        $offset      = Database\DalStatement::FROM_START
+        $offset      = Database\DalStatement::FROM_START,
+        $style       = Database\DalStatement::AS_MAP
     );
 
     /**
      * Fetch the first row in the result set.
      *
+     * @param   int  $style    Must be one of the DalStatement::AS_* constants.
      * @return  mixed
      */
-    public function fetchFirst();
+    public function fetchFirst($style = null);
     /**
      * Fetch the last row in the result set.
      *
+     * @param   int  $style    Must be one of the DalStatement::AS_* constants.
      * @return  mixed
      */
-    public function fetchLast();
+    public function fetchLast($style = null);
 
     /**
      * Return a single column from the next row of the result set or false if

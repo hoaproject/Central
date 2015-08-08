@@ -51,28 +51,117 @@ class DalStatement
      *
      * @var int
      */
-    const FORWARD      = 0;
+    const FORWARD                         = 0;
 
     /**
      * Fetch the previous row in the result set.
      *
      * @var int
      */
-    const BACKWARD     = 1;
+    const BACKWARD                        = 1;
 
     /**
      * Start at the first offset.
      *
      * @var int
      */
-    const FROM_START   = 0;
+    const FROM_START                      = 0;
 
     /**
      * Start at the last offset.
      *
      * @var int
      */
-    const FROM_END     = -1;
+    const FROM_END                        = -1;
+
+    /**
+     * Specifies that the fetch method shall return each row as an object with
+     * variable names that correspond to the column names returned in the result
+     * set. AS_LAZY_OBJECT creates the object variable names as they are
+     * accessed.
+     *
+     * @var int
+     */
+    const AS_LAZY_OBJECT                  = 1;
+
+    /**
+     * Specifies that the fetch method shall return each row as an array indexed
+     * by column name as returned in the corresponding result set. If the result
+     * set contains multiple columns with the same name, AS_MAP returns only a
+     * single value per column name.
+     *
+     * @var int
+     */
+    const AS_MAP                          = 2;
+
+    /**
+     * Specifies that the fetch method shall return each row as an array indexed
+     * by column number as returned in the corresponding result set, starting at
+     * column 0.
+     *
+     * @var int
+     */
+    const AS_SET                          = 3;
+
+    /**
+     * Specifies that the fetch method shall return each row as an object with
+     * property names that correspond to the column names returned in the result
+     * set.
+     *
+     * @var int
+     */
+    const AS_OBJECT                       = 5;
+
+    /**
+     * Specifies that the fetch method shall return a new instance of the
+     * requested class, mapping the columns to named properties in the class.
+     * The magic __set method is called if the property doesn't exist in the
+     * requested class.
+     *
+     * @var int
+     */
+    const AS_CLASS                        = 8;
+
+    /**
+     * Specifies that the fetch method shall update an existing instance of the
+     * requested class, mapping the columns to named properties in the class.
+     *
+     * @var int
+     */
+    const AS_REUSABLE_OBJECT              = 9;
+
+    /**
+     * Specifies that the fetch method shall return each row as an array indexed
+     * by column name as returned in the corresponding result set. If the result
+     * set contains multiple columns with the same name, AS_DEBUG_MAP returns an
+     * array of values per column name.
+     *
+     * @var int
+     */
+    const AS_DEBUG_MAP                    = 11;
+
+    /**
+     * Determine the class name from the value of first column.
+     *
+     * @var int
+     */
+    const FROM_CLASS_NAME_IN_FIRST_COLUMN = 262144;
+
+    /**
+     * As FETCH_INTO but object is provided as a serialized string.
+     * Available since PHP 5.1.0. Since PHP 5.3.0 the class constructor is never
+     * called if this flag is set.
+     *
+     * @var int
+     */
+    const FROM_SERIALIZED                 = 524288;
+
+    /**
+     * Call the constructor before setting properties. Available since PHP 5.2.0.
+     *
+     * @var int
+     */
+    const FROM_PROPERTIES_LATE            = 1048576;
 
     /**
      * The statement instance.
@@ -191,18 +280,22 @@ class DalStatement
     /**
      * Set the Iterator fetching style.
      *
-     * @param   int  $orientation    This value must be DalStatement::FORWARD or
-     *                               DalStatement::BACKWARD constant.
-     * @param   int  $offset         This value must be one of the
-     *                               DalStatement::FROM_* constants or an
-     *                               arbitrary offset.
+     * @param   int        $orientation    This value must be
+     *                                     DalStatement::FORWARD or
+     *                                     DalStatement::BACKWARD constant.
+     * @param   int        $offset         This value must be one of the
+     *                                     DalStatement::FROM_* constants or
+     *                                     an arbitrary offset.
+     * @param   int|array  $style          This value must be one of the
+     *                                     DalStatement::AS_* constants.
      * @return  \Hoa\Database\DalStatement
      */
     public function setFetchingStyle(
         $orientation = self::FORWARD,
-        $offset      = self::FROM_START
+        $offset      = self::FROM_START,
+        $style       = self::AS_MAP
     ) {
-        $this->getStatement()->setFetchingStyle($orientation, $offset);
+        $this->getStatement()->setFetchingStyle($orientation, $offset, $style);
 
         return $this;
     }
@@ -220,21 +313,23 @@ class DalStatement
     /**
      * Fetch the first row in the result set.
      *
+     * @param   int  $style    Must be one of the DalStatement::AS_* constants.
      * @return  mixed
      */
-    public function fetchFirst()
+    public function fetchFirst($style = null)
     {
-        return $this->getStatement()->fetchFirst();
+        return $this->getStatement()->fetchFirst($style);
     }
 
     /**
      * Fetch the last row in the result set.
      *
+     * @param   int  $style    Must be one of the DalStatement::AS_* constants.
      * @return  mixed
      */
-    public function fetchLast()
+    public function fetchLast($style = null)
     {
-        return $this->getStatement()->fetchLast();
+        return $this->getStatement()->fetchLast($style);
     }
 
     /**

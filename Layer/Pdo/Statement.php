@@ -60,14 +60,21 @@ class Statement implements Database\IDal\WrapperStatement
      *
      * @var int
      */
-    protected $_orientation = 0;
+    protected $_orientation = Database\DalStatement::FORWARD;
 
     /**
      * The start cursor offset.
      *
      * @var int
      */
-    protected $_offset      = 0;
+    protected $_offset      = Database\DalStatement::FROM_START;
+
+    /**
+     * The fetching style.
+     *
+     * @var int
+     */
+    protected $_style       = Database\DalStatement::AS_MAP;
 
 
 
@@ -170,19 +177,24 @@ class Statement implements Database\IDal\WrapperStatement
     /**
      * Set the Iterator fetching style.
      *
-     * @param   int  $orientation    This value must be DalStatement::FORWARD or
-     *                               DalStatement::BACKWARD constant.
-     * @param   int  $offset         This value must be one of the
-     *                               DalStatement::FROM_* constants or an
-     *                               arbitrary offset.
+     * @param   int        $orientation    This value must be
+     *                                     DalStatement::FORWARD or
+     *                                     DalStatement::BACKWARD constant.
+     * @param   int        $offset         This value must be one of the
+     *                                     DalStatement::FROM_* constants or
+     *                                     an arbitrary offset.
+     * @param   int|array  $style          This value must be one of the
+     *                                     DalStatement::AS_* constants.
      * @return  \Hoa\Database\Layer\Pdo\Statement
      */
     public function setFetchingStyle(
         $orientation = Database\DalStatement::FORWARD,
-        $offset      = Database\DalStatement::FROM_START
+        $offset      = Database\DalStatement::FROM_START,
+        $style       = Database\DalStatement::AS_MAP
     ) {
         $this->_orientation = $orientation;
         $this->_offset      = $offset;
+        $this->_style       = $style;
 
         return $this;
     }
@@ -197,28 +209,48 @@ class Statement implements Database\IDal\WrapperStatement
         return new Iterator(
             $this->getStatement(),
             $this->_orientation,
-            $this->_offset
+            $this->_offset,
+            $this->_style
         );
     }
 
     /**
      * Fetch the first row in the result set.
      *
+     * @param   int  $style    Must be one of the DalStatement::AS_* constants.
      * @return  mixed
      */
-    public function fetchFirst()
+    public function fetchFirst($style = null)
     {
-        return $this->getStatement()->fetch(\PDO::FETCH_ASSOC, \PDO::FETCH_ORI_FIRST);
+        return $this->fetch($style, \PDO::FETCH_ORI_FIRST);
     }
 
     /**
      * Fetch the last row in the result set.
      *
+     * @param   int  $style    Must be one of the DalStatement::AS_* constants.
      * @return  mixed
      */
-    public function fetchLast()
+    public function fetchLast($style = null)
     {
-        return $this->getStatement()->fetch(\PDO::FETCH_ASSOC, \PDO::FETCH_ORI_LAST);
+        return $this->fetch($style, \PDO::FETCH_ORI_LAST);
+    }
+
+    /**
+     * Fetch a row in the result set.
+     *
+     * @param   int  $style          Must be one of the DalStatement::AS_*
+     *                               constants.
+     * @param   int  $orientation    Must be one of the \PDO::FETCH_ORI_*
+     *                               constants.
+     * @return  mixed
+     */
+    protected function fetch($style, $orientation)
+    {
+        return $this->getStatement()->fetch(
+            $style ?: $this->_style,
+            $orientation
+        );
     }
 
     /**
