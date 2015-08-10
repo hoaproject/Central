@@ -46,6 +46,8 @@ namespace Hoa\Database\Query;
  */
 abstract class SelectCore extends Where
 {
+    use EncloseIdentifier;
+
     /**
      * Columns.
      *
@@ -332,7 +334,10 @@ abstract class SelectCore extends Where
         end($this->_from);
         $key               = key($this->_from);
         $value             = current($this->_from);
-        $this->_from[$key] = $value . ' ' . $type . ' ' . $source;
+        $this->_from[$key] =
+            $this->enclose($value) .' ' .
+            $type . ' ' .
+            $this->enclose($source);
 
         return new Join($this, $this->_from);
     }
@@ -368,7 +373,7 @@ abstract class SelectCore extends Where
         }
 
         if (!empty($this->_columns)) {
-            $out .= ' ' . implode(', ', $this->_columns);
+            $out .= ' ' . implode(', ', $this->enclose($this->_columns));
         } else {
             $out .= ' *';
         }
@@ -379,9 +384,11 @@ abstract class SelectCore extends Where
 
             foreach ($this->_from as $alias => $from) {
                 if (is_int($alias)) {
-                    $handle[] = $from;
+                    $handle[] = $this->enclose($from);
                 } else {
-                    $handle[] = $from . ' AS ' . $alias;
+                    $handle[] =
+                        $this->enclose($from) .
+                        ' AS ' . $this->enclose($alias);
                 }
             }
 
@@ -391,7 +398,9 @@ abstract class SelectCore extends Where
         $out .= parent::__toString();
 
         if (!empty($this->_groupBy)) {
-            $out .= ' GROUP BY ' . implode(', ', $this->_groupBy);
+            $out .=
+                ' GROUP BY ' .
+                implode(', ', $this->enclose($this->_groupBy));
 
             if (!empty($this->_having)) {
                 $out .= ' HAVING ' . $this->_having;

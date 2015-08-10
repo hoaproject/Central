@@ -46,6 +46,8 @@ namespace Hoa\Database\Query;
  */
 class Update extends Where implements Dml
 {
+    use EncloseIdentifier;
+
     /**
      * Table.
      *
@@ -63,7 +65,7 @@ class Update extends Where implements Dml
     /**
      * Pairs to update.
      *
-     * @var string
+     * @var array
      */
     protected $_set   = [];
 
@@ -172,11 +174,11 @@ class Update extends Where implements Dml
             $out .= ' OR ' . $this->_or;
         }
 
-        $out .= ' ' . $this->_table;
+        $out .= ' ' . $this->enclose($this->_table);
         $set  = [];
 
         foreach ($this->_set as $name => $value) {
-            $set[] = $name . ' = ' . $value;
+            $set[] = $this->enclose($name) . ' = ' . $value;
         }
 
         $out .= ' SET ' . implode(', ', $set);
