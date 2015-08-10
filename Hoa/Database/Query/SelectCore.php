@@ -335,7 +335,7 @@ abstract class SelectCore extends Where
         $key               = key($this->_from);
         $value             = current($this->_from);
         $this->_from[$key] =
-            $this->enclose($value) .' ' .
+            $this->enclose($value) . ' ' .
             $type . ' ' .
             $this->enclose($source);
 
