@@ -110,7 +110,7 @@ class EncloseIdentifier extends Test\Unit\Suite
             ->then
                 ->string($result)
                     ->isEqualTo('SELECT [a], [b] FROM [foo]');
-        }
+    }
 
     public function case_select()
     {
