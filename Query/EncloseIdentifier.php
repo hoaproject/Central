@@ -80,10 +80,7 @@ trait EncloseIdentifier
     public function setEncloseSymbol($openingSymbol, $closingSymbol = null)
     {
         $this->_openingSymbol = $openingSymbol;
-        $this->_closingSymbol =
-            (null === $closingSymbol)
-                ? $openingSymbol
-                : $closingSymbol;
+        $this->_closingSymbol = $closingSymbol ?: $openingSymbol;
 
         return $this;
     }
