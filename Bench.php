@@ -289,7 +289,7 @@ class Bench implements Iterator, \Countable
             ];
         }
 
-        $this->resume($runningMarks);
+        static::resume($runningMarks);
 
         return $out;
     }
@@ -339,14 +339,16 @@ class Bench implements Iterator, \Countable
     /**
      * Resume all marks.
      *
-     * @param   array  $runningMarks    The marks to resume.
+     * @param   array  $marks    The marks to resume.
      * @return  void
      */
-    public function resume($runningMarks)
+    public static function resume(Array $marks)
     {
-        foreach ($runningMarks as $mark) {
+        foreach ($marks as $mark) {
             $mark->start();
         }
+
+        return;
     }
 
     /**
