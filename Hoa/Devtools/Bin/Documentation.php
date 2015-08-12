@@ -187,11 +187,15 @@ class Documentation extends Console\Dispatcher\Kit
                 $vendors[$vendor] = [];
             }
 
-            $vendors[$vendor][] = [
+            $vendors[$vendor][$library] = [
                 'library'  => $library,
                 'vendor'   => $vendor,
                 'fullname' => $vendor . '\\' . $library
             ];
+        }
+
+        foreach ($vendors as $vendor => &$libraries) {
+            $libraries = array_values($libraries);
         }
 
         $layout = new File\Read('hoa://Library/Devtools/Resource/Documentation/Layout.xyl');
