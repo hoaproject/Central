@@ -1,0 +1,720 @@
+<overlay xmlns="http://hoa-project.net/xyl/xylophone">
+<yield id="chapter">
+
+  <p>Ensuring <strong>software quality</strong> is not easy. The
+  <code>Hoa\Test</code> library provides several tools to write and to execute
+  tests, to generate test data or tests themselves etc. This is the basis to
+  test all Hoa's libraries. Research papers have been published and
+  implemented inside <code>Hoa\Test</code> and related libraries (like
+  <code>Hoa\Praspel</code>, <code>Hoa\Realdom</code> etc.).</p>
+
+  <h2 id="Table_of_contents">Table of contents</h2>
+
+  <tableofcontents id="main-toc" />
+
+  <h2 id="Introduction" for="main-toc">Introduction</h2>
+
+  <p>Software quality is a vast topic in Computer Science. There is a lot of
+  strategies, a lot of metrics… and a lot of confusion. One way to ensure
+  quality in Hoa is based on the testing strategy. Let's introduce this
+  chapter by some definitions and by presenting the tools provided by the
+  <code>Hoa\Test</code> library.</p>
+
+  <h3 id="Nature_of_tests" for="main-toc">Nature of tests</h3>
+
+  <p>Informally, a test is executed on a <strong>System Under Test</strong>,
+  abbreviated SUT, and is composed of two parts:</p>
+  <ol>
+    <li><strong>Test data</strong> to execute the SUT, and</li>
+    <li>An <strong>oracle</strong>, establishing the <strong>test
+    verdict</strong>: Are the result of the execution and the state of
+    the SUT after its execution the ones we expect or not?</li>
+  </ol>
+  <p>The values of the verdict are: <strong>Success</strong>,
+  <strong>fail</strong> or <strong>inconclusive</strong>. A success means this
+  is what we expect, a fail means this is not what we expect and an
+  inconclusive means this is not possible to give an answer. The important
+  part is: <q>“what <em>we</em> expect”</q>. By extension, we understand a
+  test does not check the SUT is <strong>verified</strong>.</p>
+  <blockquote cite="Dijkstra">Testing shows the presence, not the absence of
+  bugs.</blockquote>
+  <p>A test only checks the SUT is <strong>valid</strong>. The difference is
+  that a valid system has no bug for some <strong>non exhaustive
+  executions</strong>, but a verified system does what it is designed to do.
+  Despites tests do not proof the absence of bugs, they are useful (easy to
+  write, easy to read, not all system can be proven etc.). Nevertheless,
+  depending of the chosen test data, tests can be close to proofs. As an
+  example, a test with exhaustive test data can be considered as a proof.</p>
+  <p>A test can be written <strong>manually</strong>, for instance by a test
+  engineer. A SUT is provided, the engineer uses test data to execute it and
+  the test verdict is established by the engineer itself. In the case of an
+  <strong>automated</strong> test, the execution of the SUT and the test
+  verdict are computed by the machine. This is the role of the “xUnit”
+  frameworks, such as <a href="http://atoum.org/">atoum</a> or
+  <a href="http://phpunit.de/">PHPUnit</a>. The engineer will use the frameworks
+  to write tests and the machine will execute them. Finally,
+  <strong>automatic</strong> tests are generated and executed by the machine.
+  The machine may rely on a specification, like a contract, to automatically
+  generate the tests (please, see <a href="@hack:chapter=Praspel">the
+  <code>Hoa\Praspel</code> library</a> or the research papers bellow we have
+  published about it to learn more about the Design-by-Contract and
+  Contract-based Testing paradigms). Automatic tests have two sub-categories:
+  <strong>Online</strong> and <strong>offline</strong> tests. Online means the
+  tests are generated and executed in one-pass, while offline means the tests
+  are executed and then executed later (with the test data or not).</p>
+  <p>In Hoa, we have both <strong>automated</strong> and <strong>offline
+  automatic</strong> tests.</p>
+  <p>This is a high classification of tests. A thinner one is described by the
+  following schema explaining what kind of tests to write:</p>
+  <figure>
+    <object
+      type="image/svg+xml"
+      data="http://central.hoa-project.net/Resource/Library/Test/Documentation/Image/Cartography.svg?format=raw"
+      width="100%" style="max-width: 870px"></object>
+    <figcaption>Dimensions of the test universe is represented by
+    3 axis.</figcaption>
+  </figure>
+  <p>The “Conception support” axis describes the <strong>visibility</strong> we
+  have on the System Under Test: Either <strong>black box</strong> or
+  <strong>white box</strong>. Their meanings are different according to the
+  context but we can consider a system as a white box if we look and use what
+  is <strong>inside</strong> the box, else this is a black box. For instance,
+  for unit tests, let say with a function as the SUT, black box testing will
+  consider only the inputs and the outputs of the function without considering
+  its body (even if it reads or writes global variables, streams etc.). On the
+  other hand, white box testing will consider the body of the function and the
+  testing strategy will be totally different.  What we expect from a black box
+  or a white box system is not the same.</p>
+  <p>The “System size" axis describes at what <strong>level</strong> (or
+  altitude) do we test: From the lowest one, <strong>unit</strong> (a function
+  or a method) to the highest one, the whole <strong>system</strong>, which
+  includes <strong>components</strong> (a set of functions) and the
+  <strong>integration</strong> of these components inside other ones, which
+  together form the system. All levels are important: This is not because a
+  function does what it is supposed to do that it will integrate nicely with
+  another one.</p>
+  <p>Finally, the “Type of test” axis describes the <strong>goal</strong> of the
+  tests: Either <strong>functional</strong> (“everything works as expected and
+  that's it”), <strong>robustness</strong> (“this is not possible to put the
+  system into an error state if we do something unexpected”),
+  <strong>performance</strong> (“the system supports heavy loads and behaves
+  as expected under these conditions”) etc.</p>
+  <p>In Hoa, we have <strong>white box</strong> and <strong>black box</strong>,
+  <strong>unit</strong> and <strong>functional</strong> tests. We also include
+  performance tests in some libraries.</p>
+  <p>Remember that each point in this test universe may imply different tools
+  and different development practices. When talking about tests, this is
+  important to have this schema in minds and to wonder where our problematic
+  locates.</p>
+
+  <h3 id="Test_test_case_and_test_suite" for="main_toc">Test, test case and test
+  suite</h3>
+
+  <p>Formally, a <strong>test</strong> of a SUT is a set of data (called test
+  data) that fixes the values of the arguments (also called inputs) of the
+  SUT. A <strong>test case</strong> is a pair composed of a state (the context
+  in which the test is executed) and a test. A <strong>test suite</strong> is
+  a set of test cases. Therefore, there is two states from the test point of
+  view: A <strong>pre-state</strong> —before the execution of the SUT— and a
+  <strong>post-state</strong> —after the execution—.</p>
+  <p>Building the pre-state is something crucial: The goal is to put the SUT into a
+  specific (pre-)state in order to test it. The part of the test case
+  responsible to create the pre-state is called the <strong>preamble</strong>.
+  Thus, the preambler is a code that puts the SUT into a specific state.</p>
+  <p>So, when writing a test case, we will have 3 items to consider:</p>
+  <ol>
+    <li>The <strong>preamble</strong>, to put the SUT into a specific
+    state,</li>
+    <li>The <strong>execution</strong>, to run the SUT and get a result,</li>
+    <li>The <strong>oracle</strong>, to compute the test verdict (based on the
+    execution result and the post-state).</li>
+  </ol>
+  <p>The oracle consists of a sequence of assertions: “Is this value equals
+  to…?”, “Is this value changed this way…?” etc. It is supposed to be able to
+  check the form of some data as much as comparing other data between the
+  pre-state and the post-state.</p>
+  <p>In a test case, we represent and introduce the preamble, the execution and
+  the oracle respectively by the <code>given</code>, <code>when</code> and
+  <code>then</code> keywords. This will be detail hereinafter.</p>
+
+  <h3 id="Test_framework" for="main-toc">Test framework</h3>
+
+  <p>Hoa did not developed its own test framework for several reasons. The main
+  one is this is a laboreous task. It implies more development, more tools to
+  maintain, less people focused on Hoa etc. Instead, we prefer to choose a
+  good project to rely on and contribute to it. Then, we choose
+  <a href="http://atoum.org/">atoum</a>, <q>“a simple, modern and intuitive test
+  framework”</q>.</p>
+  <p>Thus, <code>Hoa\Test</code> is the basis to test all Hoa's libraries. It
+  wraps atoum and it aims at being a bridge between Hoa's features and
+  atoum's features. It also adds some features when needed. This is more than
+  an abstract layer on top of atoum.  <code>Hoa\Test</code> also provides its
+  own command-line to run the tests with everything pre-packaged. Consequently,
+  <code>Hoa\Test</code> provides a ready-to-use test environment targeting
+  Hoa.</p>
+  <p>One shall not be surprised to see some contributors of Hoa as contributors
+  of atoum. The two communities are strongly linked. Hoa also provides
+  official contributions to atoum like
+  <a href="@central_resource:path=Contributions/Atoum/PraspelExtension">the
+  <code>atoum/praspel-extension</code> extension</a> and some other
+  extensions are based on Hoa, like
+  <a href="https://github.com/atoum/ruler-extension">the
+  <code>atoum/ruler-extension</code> extension</a> which is based on
+  <a href="@hack:chapter=Ruler">the <code>Hoa\Ruler</code> library</a>, also
+  used by <code>Hoa\Test</code>. Even some atoum's extensions are tested with
+  atoum and Hoa (with <code>atoum/praspel-extension</code>). The loop is
+  complete.</p>
+
+  <h3 id="Research_papers" for="main-toc">Research papers</h3>
+
+  <p>Several <strong>research papers</strong> (articles, journal and a PhD
+  thesis) have been published about <code>Hoa\Test</code>,
+  <code>Hoa\Praspel</code> and <code>Hoa\Realdom</code>:</p>
+  <ul>
+    <li><cite>A Constraint Solver for PHP Arrays</cite>, presented at
+    <a href="http://cstva2013.univ-fcomte.fr/">CSTVA 2013</a> (Luxembourg,
+    Luxembourg), <a href="@research:article=Cstva13">article</a>,
+    <a href="@keynote:keynote=Cstva13/EGB13.pdf">presentation</a> and
+    <a href="@event:event=Cstva13">details</a>,</li>
+    <li><cite>Grammar-Based Testing using Realistic Domains in PHP</cite>,
+    presented at
+    <a href="https://sites.google.com/site/amost2012/">A-MOST 2012</a>
+    (Montréal, Canada), <a href="@research:article=Amost12">article</a>,
+    <a href="@keynote:keynote=Amost12/EDGB12.pdf">presentation</a> and
+    <a href="@event:event=Amost12">details</a>,</li>
+    <li><cite>Praspel: A Specification Language for Contract-Driven Testing in
+    PHP</cite>, presented at <a href="http://ictss2011.lri.fr/">ICTSS
+    2011</a> (Paris, France), <a href="@research:article=Ictss11">article</a> and
+    <a href="@keynote:keynote=Ictss11/EDGB11.pdf">presentation</a>.</li>
+  </ul>
+  <p>These papers are about test data <strong>generation</strong> and
+  <strong>validation</strong>, including Design-by-Contract and Contract-based
+  Testing in PHP, along with Grammar-based Testing and Solver-based Testing.</p>
+
+  <h2 id="Writing_tests" for="main-toc">Writing tests</h2>
+
+  <p>Each library provides a <code>Test/</code> directory at the root of the
+  repository. This is where tests are located. Automated unit tests can be found in
+  the <code>Test/Unit/</code> directory while automatically generated unit tests can
+  be found in the <code>Test/Praspel/Unit/</code> directory (not by default,
+  they must be generated first).</p>
+
+  <h3 id="Automated_unit_tests" for="main-toc">Automated unit tests</h3>
+
+  <p>In Hoa, a test suite is represented by a file, containing a class. A test
+  case is a method in this class, expressing the preamble, the execution of
+  the SUT and the oracle.  The template of a test suite is then the following
+  (let's say for the <code>Test/Unit/Bar.php</code> test suite of the
+  <code>Hoa\Foo</code> library):</p>
+  <pre><code class="language-php">namespace Hoa\Foo\Test\Unit;
+
+use Hoa\Foo\Bar as SUT;
+use Hoa\Test;
+
+class Bar extends Test\Unit\Suite
+{
+    public function case_classic()
+    {
+        // test case.
+    }
+}</code></pre>
+  <p>We define an alias <code>SUT</code> to the current System Under Test. In a
+  unit test context, this is a method or a class. We can also declare the
+  <code>CUT</code> alias, standing for Class Under Test, and <code>LUT</code>
+  for Library Under Test. <code>LUT</code> is useful if we need to access to
+  other classes in the same library. Because they are unit tests, we should not
+  use other classes but remember that a test case is composed of a preamble and
+  it needs to be build. In this case, <code>LUT</code> could be defined to
+  <code>Hoa\Foo</code>.</p>
+  <p>The <code>Bar</code> class extends the <code>Hoa\Test\Unit\Suite</code>
+  class, which defines a unit test suite. It offers all the test API we need
+  to write tests.</p>
+  <p>Test cases are public method. They do not use a camel case notation but an
+  underscore lower-cased notation. They must be prefixed by
+  <code>case_</code>. The template of a test case must follow the preamble,
+  execution and oracle principle, respectively represented by the
+  <code>given</code>, <code>when</code> and <code>then</code> keywords, and
+  thus must be written as follows:</p>
+  <pre><code class="language-php">public function case_classic()
+{
+    $this
+        ->given(
+            …,
+            …,
+            …
+        )
+        ->when(
+            …,
+            $result = …
+        )
+        ->then
+            ->…;
+}</code></pre>
+  <p>The <code>given</code> and <code>when</code> “control flow structures” are
+  function calls with an unbounded arity. They are void methods, they do
+  nothing. The goal is not to pass something to them but to declare variables,
+  to establish the preamble and to execute the test. For instance:</p>
+  <pre><code class="language-php">public function case_sum()
+{
+    $this
+        ->given(
+            $x = 1,
+            $y = 2
+        )
+        ->when(
+            $result = $x + $y
+        )
+        ->then
+            ->integer($result)
+                ->isEqualTo(3);
+}</code></pre>
+  <p>This is strictly equivalent to write:</p>
+  <pre><code class="language-php">public function case_sum()
+{
+    // Given:
+    $x = 1;
+    $y = 2;
+    // When:
+    $result = $x + $y;
+    // Then:
+    $this->integer($result)>-isEqualTo(3);
+}</code></pre>
+  <p>We however use the first form, which is clearer: Indentation, special
+  keywords (through method names) and force us to clearly separate these
+  3 parts: Preamble, test execution and oracle.</p>
+  <p>The <code class="language-php">$result</code> variable is special. It must
+  always <strong>hold the result</strong> of the test execution, i.e. the
+  result of the SUT's <code class="language-php">return</code> statement. This
+  is a <strong>convention</strong>.</p>
+  <p>One test case can contain multiple test executions with multiple oracles
+  (for instance if a SUT returns different results according to the time).
+  Then, the test case must be written as follows:</p>
+  <pre><code class="language-php">public function case_classic()
+{
+    $this
+        ->given(…)
+        ->when($result = …)
+        ->then
+            ->…
+
+        ->when($result = …)
+        ->then
+            ->…
+
+        ->when($result = …)
+        ->then
+            ->…;
+}</code></pre>
+  <p>Assertions are always used after the <code>then</code> part and most of the
+  time has the form <code><em>assertion-group</em>-><em>assertion</em></code>.
+  We can link assertion groups too. For instance:</p>
+  <pre><code class="language-php">public function case_sum()
+{
+    $this
+        ->given(
+            $x = 1,
+            $y = 2
+        )
+        ->when(
+            $result = $x + $y
+        )
+        ->then
+            ->integer($result)
+                ->isLowerThan(4)
+                ->isGreaterThan(2)
+            ->string((string) $result)
+                ->isNotEmpty();
+}</code></pre>
+  <p><a href="http://docs.atoum.org/en/latest/asserters.html">The list of all
+  assertions</a> can be find on atoum's documentation. Even if this is pretty
+  natural to write assertions because it is close to “human conventions”,
+  sometimes this is useful to discover that a specific assertion already exists,
+  like <code>float->isNearlyEqualTo</code> which compares two floats as
+  expected most of the time. So feel free to check atoum's documentation
+  often!</p>
+
+  <h4 id="Automatic_test_data_generation" for="main-toc">Automatic test data
+  generation</h4>
+
+  <p><code>Hoa\Test</code> includes
+  <a href="@central_resource:path=Contributions/Atoum/PraspelExtension">the
+  <code>atoum/praspel-extension</code> extension</a>. This extension
+  includes <a href="@hack:chapter=Praspel">the <code>Hoa\Praspel</code>
+  library</a> and <a href="@hack:chapter=Realdom">the
+  <code>Hoa\Realdom</code> library</a> inside atoum. When doing manual or
+  automated tests, this extension can be used to <strong>automatically generate
+  test data</strong>.</p>
+  <p>All we need is to describe a realistic domain (see
+  <a href="@hack:chapter=Realdom">the <code>Hoa\Realdom</code> library</a>) with
+  the <code>realdom</code> assertion group and then use the <code>sample</code>
+  “assertion” (internally this is a <em>handler</em> but the syntax is the same)
+  to generate one value or <code>sampleMany</code> to generate many values. For
+  instance, to automatically generate an integer in the interval 7 to 13 or 42
+  to 153:</p>
+  <pre><code class="language-php">public function case_sum()
+{
+    $this
+        ->given(
+            $_x =
+                $this
+                    ->realdom
+                        ->boundinteger(7, 13)
+                        ->or
+                        ->boundinteger(42, 153),
+            $x = $this->sample($_x)
+        )
+        ->when(…)
+        ->then
+          ->…;
+}</code></pre>
+  <p>Actually, <code>atoum/praspel-extension</code> provides 3 asserters to
+  generate data and 1 asserter to validate data:</p>
+  <ol>
+    <li><code>realdom</code> to create a a realistic domain disjunction (see the
+    <code>or</code> in the previous example),</li>
+    <li><code>sample</code> to generate one datum from a realistic domains
+    disjunction,</li>
+    <li><code>sampleMany</code> to generate several data,</li>
+    <li><code>predicate</code> to validate a datum against a realistic domain
+    disjunction.</li>
+  </ol>
+  <p><code>Hoa\Realdom</code> provides a standard realistic domain collection,
+  which includes very useful ones, like <code>regex</code> that describes a
+  regular expression (in <a href="http://pcre.org/">the PCRE format</a>).
+  Thus, we are able to <strong>automatically generate</strong> a datum against
+  or <strong>validate</strong> data <strong>matching regular
+  expressions</strong>. The following example generate one string similar to
+  an email address:</p>
+  <pre><code class="language-php">$this
+    ->given(
+        $email = $this->sample(
+            $this->realdom->regex('/[\w\-_]+(\.[\w\-\_]+)*@\w\.(net|org)/')
+        ),
+        …
+    )
+    ->…</code></pre>
+  <p>The following example declare a realistic domain representing a date with
+  the <code>d/m H:i</code> format, between yesterday and the next Monday:</p>
+  <pre><code class="language-php">$this
+    ->given(
+        $_date = $this->realdom->date(
+            'd/m H:i',
+            $this->realdom->boundinteger(
+                $this->realdom->timestamp('yesterday'),
+                $this->realdom->timestamp('next Monday')
+            )
+        )
+    )
+    ->…</code></pre>
+  <p>Then, to generate one date:</p>
+  <pre><code class="language-php">$this->sample($_date)</code></pre>
+  <p>Or to sample 42 dates:</p>
+  <pre><code class="language-php">$this->sampleMany($_date, 42)</code></pre>
+  <p>Similarly, booleans, arrays, classes, colors, strings based on grammars
+  etc. can be generated… but also validated! The <code>predicate</code>
+  asserter is a real one, contrary to <code>realdom</code>, <code>sample</code>
+  and <code>sampleMany</code>. By nature, it computes a boolean: Either
+  <code class="language-php">true</code> or
+  <code class="language-php">false</code>. It can be used on a realistic domain
+  disjunction, for instance:</p>
+  <pre><code class="language-php">$this
+    ->given(
+        $_date = $this->realdom->date(
+            'd/m H:i',
+            $this->realdom->boundinteger(
+                $this->realdom->timestamp('yesterday'),
+                $this->realdom->timestamp('next Monday')
+            )
+        ),
+        $stuff = …
+    )
+    ->when($result = SUT::compute($stuff)
+    ->then
+        ->predicate($_date, $result);</code></pre>
+  <p>In the above example, the <code>_date</code> realistic domain is described,
+  not to generate a datum but to validate the result from the SUT.</p>
+  <p>To get more information about Grammar-based Testing, please, see
+  <a href="@hack:chapter=Compiler">the <code>Hoa\Compiler</code> library</a>.
+  To get more information about Solver-based Testing, please, see the
+  <a href="@hack:chapter=Realdom">the <code>Hoa\Realdom</code> library</a>. In
+  all cases, please, see <a href="#Research_papers">our research papers</a>.</p>
+
+  <h3 id="Automatically_generated_tests" for="main-toc">Automatically generated
+  tests</h3>
+
+  <p>This section has been addressed by a PhD thesis and several
+  <a href="#Research_papers">research papers</a>. However, tools are not
+  stable yet and documentation is under-writing. Please, refer to
+  <a href="@hack:chapter=Praspel">the <code>Hoa\Praspel</code> library</a> to
+  get more information.</p>
+
+  <h2 id="Run_tests" for="main-toc">Run tests</h2>
+
+  <p>Most of the time, we will run tests from inside a library repository.
+  <a href="https://getcomposer.org/">Composer</a> will be required to install
+  dependencies of the library, which includes <code>Hoa\Test</code> as a
+  development dependency. Thus, from the root of the library repository:</p>
+  <pre><code class="language-shell">$ composer install</code></pre>
+  <p>By default it will install development dependencies. If not, force it by
+  adding the <code>--dev</code> option.</p>
+  <p>A <code>vendor/</code> directory is then created. Inside this directory, we
+  will find the <code>bin/hoa</code> command (please, see
+  <a href="@hack:chapter=Cli">the <code>Hoa\Cli</code> library</a>). Executing
+  this command without any option will list all available sub-commands for this
+  current installation. We should see the test commands. To execute tests, we
+  will use the <code>test:run</code> sub-command. We must provide the directory
+  where tests are stored, which is always <code>Test/</code>. Thus:</p>
+  <pre><code class="language-shell">$ vendor/bin/hoa test:run --directories Test/</code></pre>
+  <p>Note that the <code>--directories</code> option has a plural form. This is
+  because we can specify more than one directory name by using a comma.</p>
+  <p>At this point, we will see test executing themselves.</p>
+
+  <h3 id="Interpreting_the_test_result" for="main-toc">Interpreting the test
+  result</h3>
+
+  <p>The CLI test reporter will use colours to indicate the <strong>test
+  verdict</strong>: green for success, red for fail or inconclusive. In case
+  of a success, we should see:</p>
+  <pre><code>Success (<em>S</em> tests, <em>c</em>/<em>C</em> methods, <em>V</em> void method, <em>K</em> skipped method, <em>A</em> assertions)!</code></pre>
+  <p>where:</p>
+  <ul>
+    <li><code><em>S</em></code> is the number of test suites,</li>
+    <li><code><em>c</em></code> and <code><em>C</em></code> are the numbers of
+    test cases,</li>
+    <li><code><em>V</em></code> is the number of inconclusive test cases,</li>
+    <li><code><em>K</em></code> is the number of skipped test cases,</li>
+    <li><code><em>A</em></code> is the numbre of assertions.</li>
+  </ul>
+  <p>In case of a failure, we should see:</p>
+  <pre><code>Failure (<em>S</em> tests, <em>c</em>/<em>C</em> methods, <em>V</em> void method, <em>K</em> skipped method, …, <em>F</em> failure, <em>E</em> error, <em>X</em> exception)!
+> There is <em>F</em> failure:
+…</code></pre>
+  <ul>
+    <li><code><em>F</em></code> is the number of failed test cases,</li>
+    <li><code><em>E</em></code> is the number of unexpected errors,</li>
+    <li><code><em>X</em></code> is the number of unexpected exceptions.</li>
+  </ul>
+  <p>For each failure description, a “diff” will be computed, i.e. a textual
+  differential representation of what we expect and what we got.</p>
+
+  <h3 id="Debugging_mode" for="main-toc">Debugging mode</h3>
+
+  <p>In some cases it is possible that debugging information are accessible but
+  hidden for a regular running. To enable the outputs, we need to use the
+  <code>--debug</code> option; thus:</p>
+  <pre><code class="language-shell">$ vendor/bin/hoa test:run --directories Test/ --debug</code></pre>
+  <p>The order of the option does not matter, as usual with the <code>hoa</code>
+  command.</p>
+  <p>To produce a debugging information, we should use the <code>dump</code>
+  handler while writing the test case. For instance:</p>
+  <pre data-line="12"><code class="language-php">public function case_sum()
+{
+    $this
+        ->given(
+            $x = 1,
+            $y = 2
+        )
+        ->when(
+            $result = $x + $y
+        )
+        ->then
+            ->dump($result)
+            ->integer($result)
+                ->isEqualTo(3);
+}</code></pre>
+
+  <h3 id="Select_tests_to_run" for="main-toc">Select tests to run</h3>
+
+  <p>Selecting tests to run enables a <strong>faster feedback</strong> and a
+  <strong>shorter “test loop”</strong>. We previously saw the
+  <code>--directories</code> option to pick some directories: Either the test
+  root directory <code>Test/</code> or one or many sub-directories (with
+  <code>--directories Test/Foo/,Test/Bar/,Test/Baz/Qux/</code> for
+  instance).</p>
+  <p>We also have the <code>--files</code> option to select one or many
+  specific <strong>files to run</strong>. For instance:</p>
+  <pre><code class="language-shell">$ vendor/bin/hoa test:run --files Test/Unit/Foo.php,Test/Unit/Bar.php</code></pre>
+  <p>Finally, <code>Hoa\Test</code> requires
+  <a href="https://github.com/atoum/ruler-extension">the
+  <code>atoum/ruler-extension</code> extension</a> to be installed. This
+  extension allows to precisely <strong>filter</strong> tests to run. We
+  access to it with the <code>--filter</code> option followed by an
+  <strong>expression</strong>. Fun fact: Expressions are based on
+  <a href="@hack:chapter=Ruler">the <code>Hoa\Ruler</code> library</a>!</p>
+  <p>The following variables are available in a filter expression:</p>
+  <ul>
+    <li><code>method</code> represents the test case name,</li>
+    <li><code>class</code> represents the test suite name,</li>
+    <li><code>namespace</code> represents the test suite namespace,</li>
+    <li><code>tags</code> represents test suite or test case's tags.</li>
+  </ul>
+  <p>All standard operators from the <code>Hoa\Ruler</code> library can be use.
+  So for instance, to only run the <code>Hoa\Foo\Test\Unit\Bar</code> test
+  suite, which is represented by a class, we will write:</p>
+  <pre><code clas="language-shell">$ vendor/bin/hoa test:run --directories Test/ --filter 'class = "Hoa\Foo\Test\Unit\Bar"'</code></pre>
+  <p>Or, to run only two specific test cases, let's say
+  <code>case_sum</code> and <code>case_baz</code>:</p>
+  <pre><code clas="language-shell">$ vendor/bin/hoa test:run --directories Test/ --filter 'method = "case_sum" or method = "case_baz"'</code></pre>
+  <p>The previous example is strictly equivalent to:</p>
+  <pre><code clas="language-shell">$ vendor/bin/hoa test:run --directories Test/ --filter 'method in ["case_sum", "case_baz"]'</code></pre>
+  <p>Another example to filter by test suites' name: Only the ones that end by
+  <code>Qux</code>:</p>
+  <pre><code clas="language-shell">$ vendor/bin/hoa test:run --directories Test/ --filter 'class matches "Qux$"'</code></pre>
+  <p>The <code>matches</code> operator requires a regular expression to
+  <a href="http://pcre.org/">the PCRE format</a>.</p>
+  <p>Finally, test suites and test cases can hold one or more tags, thanks to the
+  <code>@tags</code> annotation. An annotation is a comment of kind <code>/**
+  <em>…</em> */</code> located on top of a class, interface, method,
+  function etc. Tags allow to have a transversal classification of test cases.
+  For instance:</p>
+  <pre><code class="language-php">/**
+ * @tags featureA featureB
+ */
+public function case_sum()
+{
+    // …
+}</code></pre>
+  <p>To run only test cases with the tag <code>featureA</code>, we will use the
+  following command-line:</p>
+  <pre><code clas="language-shell">$ vendor/bin/hoa test:run --directories Test/ --filter '"featureA" in tags'</code></pre>
+  <p>Here, the variable <code>tags</code> contains an array of strings,
+  representing tag names.</p>
+
+  <h3 id="Choose_the_PHP_virtual_machine" for="main-toc">Choose the PHP virtual
+  machine</h3>
+
+  <p>When testing, this is also useful to be able to select one specific
+  <strong>PHP virtual machine</strong>, like <a href="http://php.net/">a
+  specific version of PHP</a> (the default virtual machine) or
+  <a href="http://hhvm.com/">the latest version of HHVM</a> for instance. There
+  is several PHP virtual machines nowadays and we cannot ignore them.</p>
+  <p>We select a virtual machine by using the
+  <code>--php-binary</code> option and by providing a path to the virtual CLI
+  binary; thus, for instance:</p>
+  <pre><code class="language-shell">$ vendor/bin/hoa test:run --directories … --php-binary /usr/bin/php</code></pre>
+  <p>We can imagine the <code>--php-binary</code> option value defined by a
+  global variable. Thus, we could re-use the same script to execute tests
+  against several PHP virtual machines, like:</p>
+  <pre><code class="language-shell">$ PHP_BIN=/usr/bin/php vendor/bin/hoa test:run --directories … --php-binary $PHP_BIN</code></pre>
+  <p>Please, remember to use PHP syntax and features described in
+  <a href="https://github.com/php/php-langspec">the PHP specification</a> as
+  most as possible.</p>
+
+  <h3 id="Test_execution_engine" for="main-toc">Test execution engine</h3>
+
+  <p>atoum provides several test execution engines, such as:</p>
+  <ul>
+    <li><strong>Inline</strong>, one test case after another in the same
+    process,</li>
+    <li><strong>Isolate</strong>, one test case after another but each time in a
+    new process,</li>
+    <li><strong>Concurrent</strong>, “all” test cases at the same time in
+    separated processes.</li>
+  </ul>
+  <p>When running tests, isolation is really important: No memory conflict, no
+  execution conflict, state of the System Under Test is reset each time etc.
+  The test verdict does not depend of a previous run and is therefore
+  <strong>deterministic</strong> and <strong>unambiguous</strong> (also if the
+  SUT is).</p>
+  <p>By default, <code>Hoa\Test</code> will use the <strong>concurrent</strong>
+  test execution engine. All test cases are not executed at the same time; in
+  fact the number of test cases to run is defined by the number of processes to
+  use. By default, this is either 2 or 4 depending of the platform but we can
+  specify it by using the <code>--concurrent-processes</code> option. Thus, to
+  force using 1024 processes to run tests (assuming we have a monster
+  computer):</p>
+  <pre><code class="language-shell">$ vendor/bin/hoa test:run --directories Test/ --concurrent-processes 1024</code></pre>
+  <p>Because the inline test execution engine is not interesting for Hoa's
+  usecases and contextes and because the isolate test execution engine has more
+  cons than pros compared to the concurrent one (mainly the latter is faster
+  than the former), we cannot change the test execution engine. However, to
+  emulate the isolate test engine, we could force
+  <code>--concurrent-processes</code> to 1.</p>
+
+  <h2 id="Virtual_file_system" for="main-toc">Virtual file system</h2>
+
+  <p>The <code>Hoa\Test</code> library provides a virtual file system over its
+  <code>hoa://</code> protocol to ease testing of files or directories.</p>
+  <p>The <strong>root</strong> of the virtual file system is
+  <code>hoa://Test/Vfs/</code>. Everything added after this root will be a path
+  to a <strong>virtual file</strong> or a <strong>directory</strong>.
+  Additional <strong>query strings</strong> can be present to specify more
+  information, such as permissions, access time etc. The parent-child relation
+  is automatically created, not need to specify that a file is a child of a
+  directory, this is deduced from the path.</p>
+  <p>Note: The virtual file system is only accessible from inside a test
+  case.</p>
+
+  <h3 id="Files_or_directories" for="main-toc">Files or directories</h3>
+
+  <p>A virtual file <code>Foo</code> can be represented by the following path:
+  <code>hoa://Test/Vfs/Foo</code>. In this case, either we open it with
+  regular stream functions like
+  <a href="http://php.net/fopen"><code>fopen</code></a>,
+  <a href="http://php.net/fread"><code>fread</code></a>,
+  <a href="http://php.net/fwrite"><code>fwrite</code></a>,
+  <a href="http://php.net/file_put_content"><code>file_put_content</code></a>
+  etc. or, with <a href="@hack:chapter=File">the <code>Hoa\File</code>
+  library</a>, thus:</p>
+  <pre><code class="language-php">$file = new Hoa\File\ReadWrite('hoa://Test/Vfs/Foo');
+$file->writeAll('Hello world!');
+
+var_dump($file->readAll());
+
+/**
+ * Will output:
+ *     string(12) "Hello world!"
+ */</code></pre>
+  <p>To create a directory, we must specify a stream type by using the
+  <code>type</code> query string; thus:</p>
+  <pre><code class="language-php">$directory = new Hoa\File\Directory('hoa://Test/Vfs/Foo?type=directory');</code></pre>
+  <p>This is due to the fact we cannot deduce stream type based on its name. By
+  default, <code>type=file</code> is implied.</p>
+  <p>For the rest, it works like any regular files or directories, nothing
+  different.</p>
+
+  <h3 id="Permissions" for="main-toc">Permissions</h3>
+
+  <p>To change the permissions, either the specific stream permission functions
+  can be used or we can set them directly by using the
+  <code>permissions</code> query string followed by an octal value; thus:</p>
+  <pre><code class="language-php">$file = new Hoa\File\ReadWrite('hoa://Test/Vfs/Foo?permissions=0644');
+var_dump($file->getReadablePermissions());
+
+/**
+ * Will output:
+ *     string(10) "-rw-r--r--"
+ */</code></pre>
+  <p>As any query strings, we can concatenate key-values by using the
+  <code>&amp;amp;</code> symbol. For instance,
+  <code>type=directory&amp;amp;permissions=0644</code> represents a directory
+  with the <code>0644</code> permissions.</p>
+
+  <h3 id="Access_change_and_modify_time" for="main-toc">Access-, change- and
+  modify-time</h3>
+
+  <p>This can also be useful to define access-, change- and modify-time by
+  respectively using the <code>atime</code>, <code>ctime</code> and
+  <code>mtime</code> query strings. The expected values are an integer
+  representing a timestamp (a number of seconds). Thus, to represent a file
+  that has been accessed in the future (in 1 minute):</p>
+<pre><code class="language-php">$aTime = time() + 60;
+$file  = new Hoa\File\ReadWrite('hoa://Test/Vfs/Foo?atime=' . $aTime);</code></pre>
+
+  <h2 id="Conclusion" for="main-toc">Conclusion</h2>
+
+  <p>The <code>Hoa\Test</code> library is a set of tools to make <strong>white
+  box</strong> or <strong>black box</strong>, <strong>unit</strong> or
+  <strong>functional</strong>, <strong>automated</strong> and
+  <strong>automatic unit</strong> tests. This is more than a wrapper around
+  <a href="http://atoum.org/">atoum</a>: It provides a test structure and
+  conventions, a <strong>virtual file system</strong> and
+  <strong>extensions</strong> to <strong>automatically generate</strong> test
+  data, automatically generate tests or to get a powerful test
+  <strong>filtering</strong> system. Grammar-based Testing, Solver-based
+  Testing, Random-based Testing, Contract-based Testing… all these paradigms
+  live in <code>Hoa\Test</code>. Several <a href="#Research_papers">research
+  papers have been published</a> in major test literature and conferences.</p>
+
+</yield>
+</overlay>
