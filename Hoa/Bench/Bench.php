@@ -225,6 +225,43 @@ class Bench implements Iterator, \Countable
     }
 
     /**
+     * Pause all marks and return only previously running tasks.
+     *
+     * @return  array
+     */
+    public function pause()
+    {
+        $runningMarks = [];
+
+        foreach ($this as $mark) {
+            if (true === $mark->isRunning() && false === $mark->isPause()) {
+                $runningMarks[] = $mark;
+            }
+        }
+
+        foreach ($runningMarks as $mark) {
+            $mark->pause();
+        }
+
+        return $runningMarks;
+    }
+
+    /**
+     * Resume a specific set of marks.
+     *
+     * @param   array  $marks    The marks to resume.
+     * @return  void
+     */
+    public static function resume(Array $marks)
+    {
+        foreach ($marks as $mark) {
+            $mark->start();
+        }
+
+        return;
+    }
+
+    /**
      * Add a filter.
      * Used in the self::getStatistic() method, no in iterator.
      * A filter is a callable that will receive 3 values about a mark: ID, time
@@ -266,6 +303,8 @@ class Bench implements Iterator, \Countable
             return [];
         }
 
+        $runningMarks = $this->pause();
+
         $max = $this->getLongest()->diff();
         $out = [];
 
@@ -286,6 +325,8 @@ class Bench implements Iterator, \Countable
                 self::STAT_POURCENT => $pourcent
             ];
         }
+
+        static::resume($runningMarks);
 
         return $out;
     }
