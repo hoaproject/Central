@@ -1,3 +1,10 @@
+# 2.15.08.13
+
+  * Update API documentation and re-order methods. (Ivan Enderlin, 2015-08-12T09:03:30+02:00)
+  * The `resume` method is now static. (Ivan Enderlin, 2015-08-12T09:02:22+02:00)
+  * Introduce the `pause` and `resume` methods. (Aymeric GERLIER, 2015-08-03T17:23:57+02:00)
+  * Add a `.gitignore` file. (Stéphane HULARD, 2015-08-03T11:20:04+02:00)
+
 # 2.15.05.29
 
   * Fix English typography. (Ivan Enderlin, 2015-05-12T08:46:01+02:00)
