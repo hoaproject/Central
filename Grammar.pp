@@ -41,7 +41,7 @@
 //
 
 
-%skip   space           \s
+%skip   space           [\x20\x09\x0a\x0d]+
 
 %token  true            true
 %token  false           false
