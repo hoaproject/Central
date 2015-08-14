@@ -201,6 +201,13 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate
     public function resolve($path, $exists = true, $unfold = false)
     {
         if (substr($path, 0, 6) !== 'hoa://') {
+            if (true === is_dir($path)) {
+                $path = rtrim($path, '/\\');
+
+                if (0 === strlen($path)) {
+                    $path = '/';
+                }
+            }
             return $path;
         }
 
@@ -215,6 +222,16 @@ abstract class Protocol implements \ArrayAccess, \IteratorAggregate
             }
 
             $handle = array_values(array_unique($handle, SORT_REGULAR));
+
+            foreach ($handle as &$entry) {
+                if (true === is_dir($entry)) {
+                    $entry = rtrim($entry, '/\\');
+
+                    if (0 === strlen($entry)) {
+                        $entry = '/';
+                    }
+                }
+            }
 
             self::$_cache[$path] = $handle;
         }
