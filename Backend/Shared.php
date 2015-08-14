@@ -77,21 +77,21 @@ class Shared implements Core\Event\Listenable
      *
      * @const int
      */
-    const TYPE_STOP         = 0;
+    const TYPE_STOP        = 0;
 
     /**
      * Message type: message (normal).
      *
      * @const int
      */
-    const TYPE_MESSAGE      = 1;
+    const TYPE_MESSAGE     = 1;
 
     /**
      * Message type: informations.
      *
      * @const int
      */
-    const TYPE_INFORMATIONS = 2;
+    const TYPE_INFORMATION = 2;
 
     /**
      * Socket URI.
@@ -250,7 +250,7 @@ class Shared implements Core\Event\Listenable
 
                         break;
 
-                    case static::TYPE_INFORMATIONS:
+                    case static::TYPE_INFORMATION:
                         $message = [
                             'id'                    => $this->_wid,
                             'socket'                => $this->_socket,

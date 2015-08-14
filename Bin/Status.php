@@ -102,13 +102,13 @@ class Status extends Console\Dispatcher\Kit
         $t    = 0;
 
         echo Console\Chrome\Text::colorize(
-            'Shared worker informations',
+            'Shared worker information',
             'foreground(yellow)'
         ), "\n\n";
 
         foreach (glob($run . DS . '*.wid') as $wid) {
             $worker = new Worker\Shared(substr(basename($wid), 0, -4));
-            $infos  = $worker->getInformations();
+            $infos  = $worker->getInformation();
             $uptime = new \DateTime();
             $uptime->setTimestamp((int) $infos['start']);
             $last   = new \DateTime();
