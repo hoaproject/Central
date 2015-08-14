@@ -147,8 +147,8 @@ $worker->postMessage('mail gordon@freeman.hl Hello Gordon!');</code></pre>
   <strong>liste</strong> de tous les <em lang="en">workers</em> ainsi que des
   <strong>informations</strong> et <strong>statistiques</strong> associées comme
   les identifiants, adresses des serveurs, âge, consommation mémoire actuelle,
-  moyenne et maximum etc. En réalité, elle n'est qu'un alias vers
-  <code>Hoa\Worker\Shared::getInformations()</code>. Ainsi :</p>
+  moyenne et maximum etc. En réalité, elle n'est qu'un alias vers la méthode
+  <code>Hoa\Worker\Shared::getInformation</code>. Ainsi :</p>
   <pre><code class="language-shell">$ hoa worker:status --run /path/to/wid/directory/
 Shared worker informations
 

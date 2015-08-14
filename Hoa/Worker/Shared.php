@@ -109,16 +109,16 @@ class Shared
     }
 
     /**
-     * Get informations about the shared worker.
+     * Get information about the shared worker.
      *
      * @return  array
      */
-    public function getInformations()
+    public function getInformation()
     {
         $this->_client->connect();
         $this->_client->writeAll(
             Backend\Shared::pack(
-                Backend\Shared::TYPE_INFORMATIONS,
+                Backend\Shared::TYPE_INFORMATION,
                 "\0"
             )
         );
