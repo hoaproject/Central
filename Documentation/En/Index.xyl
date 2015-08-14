@@ -13,12 +13,12 @@
 
   <h2 id="Introduction" for="main-toc">Introduction</h2>
 
-  <p>It is advisable to read the chapter on
-  <a href="@hack:chapter=Zombie"><code>Hoa\Zombie</code></a> to learn how to
-  transform a processus into a <strong>zombie</strong>. It is the idea behind
-  <code>Hoa\Worker</code> to setup a <strong>server</strong> that will receive
-  the <strong>messages</strong> after the zombie creation. On each received message,
-  an <strong>event</strong> will be issued so that we intercept to execute a
+  <p>It is advisable to read <a href="@hack:chapter=Zombie">the
+  <code>Hoa\Zombie</code> chapter</a> to learn how to transform a processus into
+  a <strong>zombie</strong>. This is the idea behind <code>Hoa\Worker</code> to
+  setup a <strong>server</strong> that will receive <strong>messages</strong>
+  after the zombie creation. For each received message, an
+  <strong>event</strong> will be issued so that we intercept to execute a
   <strong>task</strong>.</p>
   <p>These tasks can be of several kinds such as sending a notification
   (e.g. by email), doing important operations on database, handling many files
@@ -27,26 +27,27 @@
   <strong>parallel</strong> and must not interfere with the execution of the
   application.</p>
   <p>Although the established protocol allows some <strong>integrity</strong>
-  and <strong>security</strong> for messages, it is preferable to do communication
-  from <strong>server to server</strong> and not through the client.
+  and <strong>security</strong> check for messages, it is preferable to do
+  communication from <strong>server to server</strong> and not through the
+  client.</p>
   <p><code>Hoa\Worker</code> is made of two parts:</p>
   <ul>
     <li><code>Hoa\Worker\Backend\Shared</code> to
     <strong>create</strong> a <strong>shared</strong> worker
-    between <strong>many</strong> processes ,</li>
+    between <strong>many</strong> processes,</li>
     <li><code>Hoa\Worker\Shared</code> to <strong>send</strong> messages to
     the worker.</li>
   </ul>
 
   <h2 id="Shared_workers" for="main-toc">Shared workers</h2>
 
-  <p>A worker is primarily <strong>identified</strong> by
-  a <code>workerId</code>, sometime abbreviated <code>wid</code>. This identifier
+  <p>A worker is primarily <strong>identified</strong> by a
+  <code>workerId</code>, sometimes abbreviated <code>wid</code>. This identifier
   is used to create a <strong>profile</strong> for our worker thanks to
-  <code>Hoa\Worker\Run</code> that does only this.
-  Only an identifier and the server address created in the worker are required
-  to establish a profile. Then, we can start a worker based on its identifier.</p>
-  <p>The first step will be to check the profile exists through
+  <code>Hoa\Worker\Run</code> that does only this.  Only an identifier and the
+  server address created in the worker are required to establish a profile.
+  Then, we can start a worker based on its identifier.</p>
+  <p>The first step will be to check that the profile exists through the
   <code>Hoa\Worker\Run::widExists</code> method. On the other hand, we will
   create it with the <code>Hoa\Worker\Run::register</code> method. Thus:</p>
   <pre><code class="language-php">if (false === Hoa\Worker\Run::widExists('demorker')) {
@@ -68,8 +69,8 @@ $worker->on('message', function (Hoa\Core\Event\Bucket $bucket) use ($file) {
 });
 $worker->run();</code></pre>
   <p>We are <strong>free</strong> to do what we want to process the
-  <strong>task</strong>!  The format is completely free: binary, compressed,
-  command line, serialized object… we can send what we want.</p>
+  <strong>task</strong>!  The format is completely free: Binary, compressed,
+  command line, serialized object… we can send whatever we want.</p>
 
   <h3 id="Where_are_the_wid_profiles_stored" for="main-toc">Where are the
   <code>wid</code> profiles stored?</h3>
@@ -105,13 +106,13 @@ var_dump(resolve('hoa://Data/Variable/Run'));
 $worker->postMessage('mail gordon@freeman.hl Hello Gordon!');</code></pre>
   <p>Of course, the client will seek the worker profile in the
   <code>hoa://Data/Variable/Run/<em>workerId</em>.wid</code> file. If we
-  have redefined it in the worker, we will also require to redefine it in the
+  have redefined it in the worker, we will also require to redefine it in the
   client.</p>
   <p>We can use the <code>Hoa\Worker\Shared::postMessage</code> method as many
   times as we wish but beware, it connects and disconnects <strong>each
-  time</ strong> to the worker to not disturb the execution of our main
+  time</strong> to the worker to not disturb the execution of our main
   application. We must then consider sending the <strong>maximum</strong> of
-  informations every time (e.g. through an array, the data are serialized in
+  information every time (e.g. through an array, the data are serialized in
   all cases).</p>
 
   <h2 id="Use_dedicated_commands" for="main-toc">Use dedicated commands</h2>
@@ -127,12 +128,12 @@ $worker->postMessage('mail gordon@freeman.hl Hello Gordon!');</code></pre>
   <pre><code class="language-shell">$ hoa worker:start /path/to/your/worker.php</code></pre>
   <p>To check that our worker has been created, we can use the
   <code>worker:status</code> command that will return the <strong>list</strong>
-  of all the workers as well as <strong>informations</strong> and
-  <strong>statistics</strong> like the identifiers, servers addresses, age,
-  current memory consumption, average and maximum etc. In reality, it is only
-  an alias to <code>Hoa\Worker\Shared::getInformations()</code>. Thus:</p>
+  of all the workers as well as <strong>information</strong> and
+  <strong>statistics</strong> like the identifiers, server addresses, age,
+  current memory consumption, average and maximum etc. In reality, it is only an
+  alias to the <code>Hoa\Worker\Shared::getInformation</code> method. Thus:</p>
   <pre><code class="language-shell">$ hoa worker:status --run /path/to/wid/directory/
-Shared worker informations
+Shared worker information
 
 ID        PID   Socket                  Uptime      Messages  Last
 demorker  2465  tcp://127.0.0.1:123456  0d00:03:15  0         -
@@ -140,7 +141,7 @@ demorker  2465  tcp://127.0.0.1:123456  0d00:03:15  0         -
 demorker  ||||||||||||||||||||||||||||||||||||   |  1,398Kb 1,398Kb 1,536Kb
 
 1 shared worker is running.</code></pre>
-  <p>Note: the color code does not appear in the example.</p>
+  <p>Note: The color code does not appear in the example.</p>
   <p>Our worker is now in place. We can <strong>run</strong> the client without
   problem (in command line, <em>via</em> a browser, whatever!).</p>
   <p>Finally, to properly <strong>stop</strong> the worker, we have the
@@ -149,9 +150,9 @@ demorker  ||||||||||||||||||||||||||||||||||||   |  1,398Kb 1,398Kb 1,536Kb
   its <strong>password</strong>:</p>
   <pre><code class="language-shell">$ hoa worker:stop --run /path/to/wid/directory/ demorker
 Password: ▋</code></pre>
-  <p>If password is correct, the worker will stop and the client won't be
-  able to communicate with it and will throw a
-  <code>Hoa\Worker\Exception</code> exception.</p>
+  <p>If the password is correct, the worker will stop and the client won't be
+  able to communicate with it and will throw a <code>Hoa\Worker\Exception</code>
+  exception.</p>
 
   <h2 id="Conclusion" for="main-toc">Conclusion</h2>
 
