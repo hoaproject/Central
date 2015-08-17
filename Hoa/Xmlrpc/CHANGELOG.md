@@ -1,3 +1,8 @@
+# 0.15.08.17
+
+  * Add a `.gitignore` file. (Stéphane HULARD, 2015-08-03T11:51:33+02:00)
+  * Move to PSR-1-2 & remove `from`/`import`. (Ivan Enderlin, 2015-06-03T11:05:39+02:00)
+
 # 0.15.02.26
 
   * Add the `CHANGELOG.md` file. (Ivan Enderlin, 2015-02-26T08:48:23+01:00)
