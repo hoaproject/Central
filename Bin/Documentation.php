@@ -121,18 +121,23 @@ class Documentation extends Console\Dispatcher\Kit
             resolve('hoa://Library/Devtools/Resource/Documentation') . DS .
             'HackBook.output';
 
-        if (true === is_dir($workspace)) {
-            $directory = new File\Directory($workspace);
-            $directory->delete();
-            unset($directory);
-        }
-
         if (true === $clean) {
+            if (true === is_dir($workspace)) {
+                $directory = new File\Directory($workspace);
+                $directory->delete();
+                unset($directory);
+            }
+
             return;
         }
 
+        clearstatcache(true);
+
         $workspace .= DS . $lang;
-        File\Directory::create($workspace);
+
+        if (false === is_dir($workspace)) {
+            File\Directory::create($workspace);
+        }
 
         Console\Cursor::colorize('foreground(yellow)');
         echo 'Selected language: ', $lang, '.', "\n\n";
@@ -217,7 +222,7 @@ class Documentation extends Console\Dispatcher\Kit
         $xyl->addOverlay('hoa://Library/Devtools/Resource/Documentation/Index.xyl');
         $xyl->render();
 
-        echo 'Generated ';
+        echo 'Generate', "\t";
         Console\Cursor::colorize('foreground(green)');
         echo 'index.html';
         Console\Cursor::colorize('normal');
@@ -254,10 +259,24 @@ class Documentation extends Console\Dispatcher\Kit
                         ]
                     );
 
+                if (true === file_exists($out) &&
+                    filemtime($in) <= filemtime($out)) {
+                    echo 'Skip', "\t\t";
+                    Console\Cursor::colorize('foreground(green)');
+                    echo $library['fullname'];
+                    Console\Cursor::colorize('normal');
+                    echo '.', "\n";
+
+                    continue;
+                }
+
+                $out = new File\Write($out);
+                $out->truncate(0);
+
                 if (null === $xyl) {
                     $xyl = new Xyl(
                         $layout,
-                        new File\Write($out),
+                        $out,
                         new Xyl\Interpreter\Html(),
                         $router
                     );
@@ -280,7 +299,7 @@ class Documentation extends Console\Dispatcher\Kit
 
                 $xyl->removeOverlay($in);
 
-                echo 'Generated ';
+                echo 'Generate', "\t";
                 Console\Cursor::colorize('foreground(green)');
                 echo $library['fullname'];
                 Console\Cursor::colorize('normal');
