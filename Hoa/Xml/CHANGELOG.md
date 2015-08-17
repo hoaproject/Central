@@ -1,3 +1,8 @@
+# 0.15.08.17
+
+  * Add a `.gitignore` file. (Stéphane HULARD, 2015-08-03T11:51:06+02:00)
+  * Fix CS. (Ivan Enderlin, 2015-06-03T09:50:20+02:00)
+
 # 0.15.05.29
 
   * !fixup (Ivan Enderlin, 2015-05-22T09:39:03+02:00)
