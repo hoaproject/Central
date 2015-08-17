@@ -1,3 +1,13 @@
+# 2.15.08.17
+
+  * Fix a typo in the French documentation. (Ivan Enderlin, 2015-08-14T16:30:26+02:00)
+  * Write the English documentation. (Raphaël Emourgeon, 2015-07-21T20:51:13+02:00)
+  * Fix missing method name in the French documentation. (Raphaël Emourgeon, 2015-08-08T16:17:12+02:00)
+  * Fix new line after block code in the French documentation. (Raphaël Emourgeon, 2015-08-08T16:17:00+02:00)
+  * Fix a typo in the documentation. (Ivan Enderlin, 2015-08-04T07:45:40+02:00)
+  * Add a `.gitignore` file (Stéphane HULARD, 2015-08-03T11:10:42+02:00)
+  * Fix phpDoc. (Metalaka, 2015-07-15T18:31:45+02:00)
+
 # 2.15.05.29
 
   * Move to PSR-1-2 & drop PHP5.3 & `from`/`import`. (Ivan Enderlin, 2015-05-28T10:38:00+02:00)
