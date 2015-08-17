@@ -1,3 +1,7 @@
+# 0.15.08.17
+
+  * Add a `.gitignore` file. (Stéphane HULARD, 2015-08-03T11:21:46+02:00)
+
 # 0.15.05.29
 
   * Move to PSR-1-2 & drop PHP5.3 & `from`/`import`. (Ivan Enderlin, 2015-05-28T11:05:35+02:00)
