@@ -1,3 +1,11 @@
+# 0.15.08.17
+
+  * Add a `.gitignore` file. (Stéphane HULARD, 2015-08-03T11:36:08+02:00)
+  * Avoid sending a second `EHLO` if no `STARTTLS`. (Ivan Enderlin, 2015-06-11T09:35:23+02:00)
+  * Update an exception message. (Ivan Enderlin, 2015-06-11T09:35:07+02:00)
+  * Reference RFC2487 and RFC3207 in `composer.json`. (Ivan Enderlin, 2015-06-11T09:17:28+02:00)
+  * s/authentification/authentication/. (Ivan Enderlin, 2015-06-11T09:07:45+02:00)
+
 # 0.15.06.03
 
   * Content-ID must be surrounded by `<` and `>`. (Ivan Enderlin, 2015-05-27T15:05:51+02:00)
