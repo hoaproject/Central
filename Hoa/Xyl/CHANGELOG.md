@@ -1,3 +1,10 @@
+# 0.15.08.17
+
+  * Add a `.gitignore` file. (Stéphane HULARD, 2015-08-03T11:52:03+02:00)
+  * Unset `theme` when unrouting `hoa://App…/Public`. (Ivan Enderlin, 2015-07-31T08:51:31+02:00)
+  * Move to PSR-1-2 & remove `from`/`import`. (Ivan Enderlin, 2015-06-03T10:33:23+02:00)
+  * Update regarding Hoa\Praspel API changes. (Ivan Enderlin, 2015-06-01T12:05:21+02:00)
+
 # 0.15.05.29
 
   * Rename `Object` into `HtmlObject`. (Ivan Enderlin, 2015-05-29T11:17:06+02:00)
