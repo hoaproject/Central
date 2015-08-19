@@ -41,15 +41,13 @@
 //
 
 
-%skip   space           \s
+%skip   space           [\x20\x09\x0a\x0d]+
 
 %token  true            true
 %token  false           false
 %token  null            null
-%token  quote_          "                             -> string
-%token  string:escaped  \\(["\\/bfnrt]|u[0-9a-fA-F]{4})
-%token  string:string   [^"\\]+
-%token  string:_quote   "                             -> default
+//%token  string          "([\x20-\x21\x23-\x5b-\x{10ffff}]|\\(["\\/bfnrt]|u[0-9a-fA-F]{4}))+"
+%token  string          "(\w|\\(["\\/bfnrt]))+"
 %token  brace_          {
 %token _brace           }
 %token  bracket_        \[
@@ -62,9 +60,7 @@ value:
     <true> | <false> | <null> | string() | object() | array() | number()
 
 string:
-    ::quote_::
     <string>
-    ::_quote::
 
 number:
     <number>

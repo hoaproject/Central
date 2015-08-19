@@ -107,6 +107,13 @@ class Soundness extends Test\Unit\Suite
                 foreach ($sampler as $datum) {
                     $this
                         ->given(json_decode($datum))
+                        ->executeOnFailure(function () use ($datum) {
+                            if (true === function_exists('json_last_error_msg')) {
+                                echo
+                                    'Data:  ' . $datum, "\n",
+                                    'Error: ' . json_last_error_msg(), "\n";
+                            }
+                        })
                         ->when($error = json_last_error())
                         ->then
                             ->integer($error)
