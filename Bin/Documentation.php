@@ -210,6 +210,7 @@ class Documentation extends Console\Dispatcher\Kit
             new Xyl\Interpreter\Html(),
             $router
         );
+        $xyl->setTheme('');
         $data = $xyl->getData();
 
         foreach ($vendors as $vendor => $libraries) {
