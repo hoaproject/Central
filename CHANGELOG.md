@@ -1,3 +1,10 @@
+# 1.15.08.25
+
+  * Show datum and JSON error on test case failure. (Ivan Enderlin, 2015-08-13T09:13:45+02:00)
+  * Update the `string` rule to avoid skip tokens. (Ivan Enderlin, 2015-08-13T09:11:26+02:00)
+  * Restrict whitespace definition (in skip token). (Ivan Enderlin, 2015-08-13T08:47:36+02:00)
+  * Add a `.gitignore` file. (Stéphane HULARD, 2015-08-03T11:34:14+02:00)
+
 # 1.15.05.29
 
   * Move to PSR-1 and PSR-2. (Ivan Enderlin, 2015-05-15T09:58:49+02:00)
