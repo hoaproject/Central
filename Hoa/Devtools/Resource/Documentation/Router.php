@@ -13,14 +13,18 @@ $router
         '(?<chapter>)\.html'
     )
     ->get(
-        'learn',
-        'http://hoa-project.net/Literature/Learn/(?<chapter>)\.html'
-    )
-    ->get(
         'full',
         '/(?<vendor>)/(?<chapter>)\.html'
     )
 
+    ->_get(
+        'literature',
+        'http://hoa-project.net/Literature\.html'
+    )
+    ->_get(
+        'learn',
+        'http://hoa-project.net/Literature/Learn/(?<chapter>)\.html'
+    )
     ->get(
         '_resource',
         'http://static.hoa-project.net/(?<resource>)'
