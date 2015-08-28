@@ -1,3 +1,12 @@
+# 0.15.08.28
+
+  * Fix CS. (Ivan Enderlin, 2015-08-28T10:41:59+02:00)
+  * Format API documentation. (Ivan Enderlin, 2015-08-28T09:51:09+02:00)
+  * Add reference to RFC2821. (Ivan Enderlin, 2015-08-28T09:44:05+02:00)
+  * Better line reading and timeout support for SMTP. (Ivan Enderlin, 2015-08-28T09:39:10+02:00)
+  * Complete the API documentation. (Ivan Enderlin, 2015-08-28T09:34:43+02:00)
+  * Force TCP connection to be in blocking mode for SMTP. (Ivan Enderlin, 2015-08-28T09:44:59+02:00)
+
 # 0.15.08.17
 
   * Add a `.gitignore` file. (Stéphane HULARD, 2015-08-03T11:36:08+02:00)
