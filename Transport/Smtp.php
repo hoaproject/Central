@@ -170,28 +170,57 @@ class Smtp implements ITransport\Out
      *
      * @param   int     $code              Expected code.
      * @param   string  $errorMessage      Error message if $code is not valid.
-     * @return  bool
+     * @param   string  $timeOutMessage    Time out message.
+     * @return  string|array
      * @throws  \Hoa\Mail\Exception\Transport
      */
-    protected function ifNot($code, $errorMessage)
+    protected function ifNot($code, $errorMessage, $timeOutMessage)
     {
         $client = $this->getClient();
-        $line   = $client->readLine();
-        $_code  = intval(substr($line, 0, 3));
+        $out    = [];
+        $regex  = '#^(?<code>\d{3})(?<separator>[ \-])(?<message>.+)$#';
 
-        if ($code === $_code) {
-            return $line;
+        do {
+            $line = $client->readLine();
+
+            if (true === $client->hasTimedOut()) {
+                $client->writeAll('QUIT' . CRLF);
+                $client->disconnect();
+
+                throw new Mail\Exception\Transport($timeOutMessage, 0);
+            }
+
+            if (0 === preg_match($regex, $line, $matches)) {
+                throw new Mail\Exception\Transport(
+                    'The server sent an invalid response:' . "\n" .
+                    '    ' . $line,
+                    1
+                );
+            }
+
+            $_code = intval($matches['code']);
+
+            if ($code !== $_code) {
+                $_message      = trim(substr($line, 4));
+                $errorMessage .= ' (code: %d, message: “%s”).';
+                $client->writeAll('QUIT' . CRLF);
+                $client->disconnect();
+
+                throw new Mail\Exception\Transport(
+                    $errorMessage,
+                    2,
+                    [$_code, $_message]
+                );
+            }
+
+            $out[] = rtrim($matches['message']);
+        } while('-' === $matches['separator']);
+
+        if (1 === count($out)) {
+            return $out[0];
         }
 
-        $_message      = trim(substr($line, 4));
-        $errorMessage .= ' (code: %d, message: “%s”).';
-        $client->writeAll('QUIT' . CRLF);
-
-        throw new Mail\Exception\Transport(
-            $errorMessage,
-            0,
-            [$_code, $_message]
-        );
+        return $out;
     }
 
     /**
@@ -210,28 +239,46 @@ class Smtp implements ITransport\Out
         $client = $this->getClient();
         $client->connect();
         $client->setStreamBlocking(true);
+        $client->setStreamTimeout(5 * 60);
 
-        $this->ifNot(220, 'Not able to connect to the server');
-
-        $domain = $message->getDomain(
-            $this->getUsername() ?: $headers['from']
+        $this->ifNot(
+            220,
+            'Not able to connect to the server',
+            'The server timed out while trying to connect.'
         );
+
+        $domain = $message->getDomain($this->getUsername() ?: $headers['from']);
         $client->writeAll('EHLO ' . $domain . CRLF);
-        $ehlo = preg_split('#' . CRLF . '250[\-\s]+#', $client->read(2048));
+
+        $ehlo = $this->ifNot(
+            250,
+            'Not able to get supported extensions from the server.',
+            'The server timed out while answering to a `EHLO` command.'
+        );
 
         if (true === in_array('STARTTLS', $ehlo)) {
             $client->writeAll('STARTTLS' . CRLF);
-            $this->ifNot(220, 'Cannot start a TLS connection');
+
+            $this->ifNot(
+                220,
+                'Cannot start a TLS connection',
+                'The server timed out while starting a TLS encryption.'
+            );
 
             if (true !== $client->enableEncryption(true, $client::ENCRYPTION_TLS)) {
                 throw new Mail\Exception\Transport(
                     'Cannot enable a TLS connection.',
-                    1
+                    3
                 );
             }
 
             $client->writeAll('EHLO ' . $domain . CRLF);
-            $ehlo = preg_split('#' . CRLF . '250[\-\s]+#', $client->read(2048));
+            $ehlo = $this->ifNot(
+                250,
+                'Not able to get supported extensions from the server.',
+                'The server timed out while answering to a `EHLO` command ' .
+                'after having established a TLS connection.'
+            );
         }
 
         $matches = null;
@@ -246,7 +293,7 @@ class Smtp implements ITransport\Out
             throw new Mail\Exception\Transport(
                 'The server does not support authentication, we cannot ' .
                 'authenticate.',
-                2
+                4
             );
         }
 
@@ -256,61 +303,136 @@ class Smtp implements ITransport\Out
 
         if (true === in_array('PLAIN', $auth)) {
             $client->writeAll('AUTH PLAIN' . CRLF);
-            $this->ifNot(334, 'Authentication failed (PLAIN)');
+
+            $this->ifNot(
+                334,
+                'Authentication failed (PLAIN)',
+                'The server timed out while answering to an `AUTH PLAIN` ' .
+                'authentication.'
+            );
 
             $challenge = base64_encode("\0" . $username . "\0" . $password);
             $client->writeAll($challenge . CRLF);
-            $this->ifNot(235, 'Wrong username or password');
+
+            $this->ifNot(
+                235,
+                'Wrong username or password',
+                'The server timed out while asserting whether the password ' .
+                'is correct for an `AUTH PLAIN` authentication.'
+            );
         } elseif (true === in_array('LOGIN', $auth)) {
             $client->writeAll('AUTH LOGIN' . CRLF);
-            $this->ifNot(334, 'Authentication failed (LOGIN)');
+
+            $this->ifNot(
+                334,
+                'Authentication failed (LOGIN)',
+                'The server timed out while answering to an `AUTH LOGIN` ' .
+                'authentication.'
+            );
 
             $challenge = base64_encode($username);
             $client->writeAll($challenge . CRLF);
-            $this->ifNot(334, 'Wrong username');
+
+            $this->ifNot(
+                334,
+                'Wrong username',
+                'The server timed out while asserting whether the username ' .
+                'is correct for an `AUTH LOGIN` authentication.'
+            );
 
             $challenge = base64_encode($password);
             $client->writeAll($challenge . CRLF);
-            $this->ifNot(235, 'Wrong password');
+
+            $this->ifNot(
+                235,
+                'Wrong password',
+                'The server timed out while asserting whether the password ' .
+                'is correct for an `AUTH LOGIN` authentication.'
+            );
         } elseif (true === in_array('CRAM-MD5', $auth)) {
             $client->writeAll('AUTH CRAM-MD5' . CRLF);
-            $line = $this->ifNot(334, 'Authentication failed (CRAM-MD5)');
+
+            $line = $this->ifNot(
+                334,
+                'Authentication failed (CRAM-MD5)',
+                'The server timed out while answering to an `AUTH CRAM-MD5` ' .
+                'authentication.'
+            );
 
             $handle    = base64_decode(substr($line, 4));
             $challenge = base64_encode(
                 $username . ' ' . static::hmac($password, $handle)
             );
             $client->writeAll($challenge . CRLF);
-            $this->ifNot(235, 'Wrong username or password');
+
+            $this->ifNot(
+                235,
+                'Wrong username or password',
+                'The server timed out while asserting whether the username ' .
+                'and password are correct for an `AUTH CRAM-MD5` authentication.'
+            );
         } else {
             throw new Mail\Transport(
                 '%s does not support authentication algorithms available ' .
                 'on the server (%s).',
-                3,
+                5,
                 [__CLASS__, implode(', ', $auth)]
             );
         }
 
+        $client->setStreamTimeout(5 * 60);
         $from = $message->getAddress($headers['from']);
         $client->writeAll('MAIL FROM: <' . $from . '>' . CRLF);
-        $this->ifNot(250, 'Sender ' . $from . ' is wrong');
+
+        $this->ifNot(
+            250,
+            'Sender ' . $from . ' is wrong',
+            'The server timed out while asserting whether the sender\'s  ' .
+            'email is correct.'
+        );
+
+        $client->setStreamTimeout(5 * 60);
 
         foreach ($message->getRecipients() as $recipient) {
             $client->writeAll('RCPT TO: <' . $recipient . '>' . CRLF);
-            $this->ifNot(250, 'Recipient ' . $recipient . ' is wrong');
+
+            $this->ifNot(
+                250,
+                'Recipient ' . $recipient . ' is wrong',
+                'The server timed out while asserting whether the ' .
+                'recipient\'s emails are correct.'
+            );
         }
 
+        $client->setStreamTimeout(5 * 60);
         $client->writeAll('DATA' . CRLF);
-        $this->ifNot(354, 'Cannot send data');
 
+        $this->ifNot(
+            354,
+            'Cannot send data',
+            'The server timed out while answering to a `DATA` command.'
+        );
+
+        $client->setStreamTimeout(10 * 60);
         $client->writeAll(
             $content . CRLF .
             '.' . CRLF
         );
-        $this->ifNot(250, 'Something went wrong with data');
+
+        $this->ifNot(
+            250,
+            'Something went wrong with data',
+            'The server timed out while asserting all the data have been ' .
+            'received correctly.'
+        );
 
         $client->writeAll('QUIT' . CRLF);
-        $this->ifNot(221, 'Cannot quit properly');
+
+        $this->ifNot(
+            221,
+            'Cannot quit properly',
+            'The server timed out while trying to quit properly.'
+        );
 
         $client->disconnect();
 
