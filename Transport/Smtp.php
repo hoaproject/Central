@@ -214,7 +214,7 @@ class Smtp implements ITransport\Out
             }
 
             $out[] = rtrim($matches['message']);
-        } while('-' === $matches['separator']);
+        } while ('-' === $matches['separator']);
 
         if (1 === count($out)) {
             return $out[0];
