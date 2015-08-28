@@ -168,6 +168,8 @@ class Smtp implements ITransport\Out
      * Check if the client replied correctly. If not, throw an exception
      * containing an error message.
      *
+     * @param   int     $code              Expected code.
+     * @param   string  $errorMessage      Error message if $code is not valid.
      * @return  bool
      * @throws  \Hoa\Mail\Exception\Transport
      */
