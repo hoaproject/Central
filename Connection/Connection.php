@@ -56,6 +56,20 @@ abstract class Connection
                \Iterator
 {
     /**
+     * Read data out-of-band.
+     *
+     * @const int
+     */
+    const READ_OUT_OF_BAND = STREAM_OOB;
+
+    /**
+     * Read data but do not consume them.
+     *
+     * @const int
+     */
+    const READ_PEEK        = STREAM_PEEK;
+
+    /**
      * Socket.
      *
      * @var \Hoa\Socket
@@ -615,11 +629,12 @@ abstract class Connection
      * Warning: if this method returns false, it means that the buffer is empty.
      * You should use the Hoa\Stream::setStreamBlocking(true) method.
      *
-     * @param   int     $length    Length.
+     * @param   int    $length    Length.
+     * @param   int    $flags     Flags.
      * @return  string
      * @throws  \Hoa\Socket\Exception
      */
-    public function read($length)
+    public function read($length, $flags = 0)
     {
         if (null === $this->getStream()) {
             throw new Socket\Exception(
@@ -642,13 +657,13 @@ abstract class Connection
         }
 
         if (false === $this->isRemoteAddressConsidered()) {
-            return stream_socket_recvfrom($this->getStream(), $length);
+            return stream_socket_recvfrom($this->getStream(), $length, $flags);
         }
 
         $out = stream_socket_recvfrom(
             $this->getStream(),
             $length,
-            0,
+            $flags,
             $address
         );
         $this->_remoteAddress = !empty($address) ? $address : null;
