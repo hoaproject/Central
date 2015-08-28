@@ -225,6 +225,8 @@ class Smtp implements ITransport\Out
 
     /**
      * Send a message.
+     * Timeouts are defined as the RFC2821 Section 4.5.3.2 suggests.
+     *
      * @TODO: Implement the DIGEST-MD5 and GSSAPI auth protocol. Implement SSLv1
      * and v2 support.
      *
