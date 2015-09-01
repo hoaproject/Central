@@ -67,6 +67,14 @@ php_dir = "…/bin"
 php = "…/bin/php"
 ```
 
+### `documentation`
+
+Generate the documentation of all libraries installed:
+
+```sh
+$ hoa devtools:documentation
+```
+
 ### `paste`
 
 Paste something somewhere (by default, on `paste.hoa-project.net`).
