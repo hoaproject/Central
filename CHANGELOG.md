@@ -1,3 +1,14 @@
+# 0.15.09.01
+
+  * Add more rules in the documentation router. (Ivan Enderlin, 2015-09-01T15:54:00+02:00)
+  * Add the `documentation` command. (Ivan Enderlin, 2015-09-01T08:45:05+02:00)
+  * Add the `literature` router rule for the doc. (Ivan Enderlin, 2015-08-27T09:29:56+02:00)
+  * Disable XYL theme when generating the doc. (Ivan Enderlin, 2015-08-20T07:54:41+02:00)
+  * Skip unmodified chapters. (Ivan Enderlin, 2015-08-17T07:08:10+02:00)
+  * Only compute the documentation once. (Ivan Enderlin, 2015-08-11T16:51:45+02:00)
+  * Update `.gitignore` file. (Stéphane HULARD, 2015-08-03T11:26:57+02:00)
+  * Merge `Hoathis\Documentation` into `Hoa\Devtools`. (Ivan Enderlin, 2015-07-28T16:55:43+02:00)
+
 # 0.15.07.28
 
   * Require `hoa/cli`. (Ivan Enderlin, 2015-07-23T08:46:47+02:00)
