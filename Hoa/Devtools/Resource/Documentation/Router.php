@@ -44,4 +44,18 @@ $router
     ->_get(
         'github',
         'https://github.com/hoaproject/(?<repository>)'
+    )
+    ->_get(
+        'research',
+        'http://hoa-project.net/Literature/Research/(?<article>[\w\d]+)\.pdf',
+        'Literature\Research'
+    )
+    ->_get(
+        'event',
+        'http://hoa-project.net/Event/(?<event>\w+)\.html',
+        'Generic'
+    )
+    ->_get(
+        'keynote',
+        'http://keynote.hoa-project.net/(?<keynote>)'
     );
