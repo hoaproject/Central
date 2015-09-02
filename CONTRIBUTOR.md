@@ -52,6 +52,7 @@ cloak on IRC, etc.
   * Grégoire Pineau (lyrixx)
   * Rogerio Prado de Jesus (rogeriopradoj)
   * ➜ Stéphane Py (stephpy)
+  * ➜ Steven Rémot (stevenremot)
   * Kim Sia Sim (simkimsia)
   * Mike Simonson (mikesimonson)
   * Mathias Strasser (mathiasstrasser)
