@@ -36,8 +36,8 @@ $ hoa <library-name>:<command-name> <options> <inputs>
 
 Running `hoa` with no argument will list all the available commands with a small
 description. Note: If the option `--no-verbose` is present, the list of commands
-will not be formatted. Thus, used in conjunction with Zsh resources present in
-[`Hoa\Devtools`](http://central.hoa-project.net/Resource/Library/Devtools/Resource/Zsh), you
+will not be formatted. Thus, used in conjunction with [Zsh
+resources](http://central.hoa-project.net/Resource/Contributions/Zsh/Hoa), you
 will be able to auto-complete any commands from any libraries for free.
 
 On every command, there is at least the `-h`, `--help` and `-?` options,
