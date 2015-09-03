@@ -1,3 +1,7 @@
+# 2.15.09.03
+
+  * Remove the `bin` property in `composer.json`. (Ivan Enderlin, 2015-09-03T10:21:32+02:00)
+
 # 2.15.09.01
 
   * Fix `resolve` use. (Metalaka, 2015-07-15T19:10:30+02:00)
