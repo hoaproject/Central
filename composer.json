@@ -29,6 +29,7 @@
     "config": {
         "bin-dir": "bin/"
     },
+    "bin"  : ["Bin/hoa"],
     "extra": {
         "branch-alias": {
             "dev-master": "1.x-dev"
