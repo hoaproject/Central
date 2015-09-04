@@ -281,6 +281,7 @@ class Documentation extends Console\Dispatcher\Kit
                         new Xyl\Interpreter\Html(),
                         $router
                     );
+                    $xyl->setTheme('');
                     $xyl->addOverlay('hoa://Library/Devtools/Resource/Documentation/Chapter.xyl');
                 } else {
                     $xyl->setOutputStream(
