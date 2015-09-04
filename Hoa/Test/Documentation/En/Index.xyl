@@ -69,7 +69,7 @@
   <figure>
     <object
       type="image/svg+xml"
-      data="http://central.hoa-project.net/Resource/Library/Test/Documentation/Image/Cartography.svg?format=raw"
+      data="http://central.hoa-project.net/Resource/Library/Test/Documentation/Image/Cartography.svg?format=raw&amp;remote=hoa"
       width="100%" style="max-width: 870px"></object>
     <figcaption>Dimensions of the test universe is represented by
     3 axis.</figcaption>
