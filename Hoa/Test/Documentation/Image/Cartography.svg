@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+                     "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  version="1.1"
+  width="700"
+  height="400"
+  viewBox="60 0 780 480">
+  <title>Cartography of tests</title>
+
+  <style>
+    @font-face {
+        font-family: Text;
+        src: url('http://static.hoa-project.net/Font/Museo.woff') format('woff'),
+             url('http://static.hoa-project.net/Font/Museo.eot')  format('eot'),
+             url('http://static.hoa-project.net/Font/Museo.ttf')  format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    text {
+        font-family: Text;
+    }
+
+    line {
+        stroke: #000;
+        stroke-width: 2;
+    }
+
+    circle {
+        fill: #000;
+        stroke-width: 0;
+
+    }
+
+    rect,
+    path {
+        fill: none;
+        stroke: #000;
+        stroke-width: 1;
+        stroke-linejoin: round;
+    }
+
+    .arrow {
+        fill: #000;
+    }
+
+    rect {
+        stroke-linecap: round;
+    }
+
+    text,
+    .middle📌 {
+        text-anchor: middle;
+        dominant-baseline: middle;
+    }
+
+    .north📌 {
+        text-anchor: middle;
+        dominant-baseline: central;
+        transform: translate(0, 1em);
+    }
+
+    .north-east📌 {
+        text-anchor: end;
+        dominant-baseline: central;
+        transform: translate(-.5em, 1em);
+    }
+
+    .east📌 {
+        text-anchor: end;
+        dominant-baseline: central;
+        transform: translate(-.5em, 0);
+    }
+
+    .south-east📌 {
+        text-anchor: end;
+        dominant-baseline: auto;
+        transform: translate(-.5em, -.5em);
+    }
+
+    .south📌 {
+        text-anchor: middle;
+        dominant-baseline: auto;
+        transform: translate(0, -.5em);
+    }
+
+    .south-west📌 {
+        text-anchor: start;
+        dominant-baseline: auto;
+        transform: translate(.5em, -.5em);
+    }
+
+    .west📌 {
+        text-anchor: start;
+        dominant-baseline: central;
+        transform: translate(.5em, 0);
+    }
+
+    .north-west📌 {
+        text-anchor: start;
+        dominant-baseline: central;
+        transform: translate(.5em, 1em);
+    }
+  </style>
+
+  <defs>
+    <marker
+      id="arrowHead"
+      viewBox="0 0 10 10" 
+      refX="1" refY="5"
+      markerWidth="6" 
+      markerHeight="6"
+      orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow" />
+    </marker>
+  </defs>
+
+  <g>
+    <line
+      x1="375"
+      y1="250"
+      x2="375"
+      y2="50"
+      marker-end="url(#arrowHead)" />
+
+    <text x="375" y="50" class="south-east📌">System size</text>
+
+    <circle cx="375" cy="210" r="3" />
+    <circle cx="375" cy="170" r="3" />
+    <circle cx="375" cy="130" r="3" />
+    <circle cx="375" cy="90"  r="3" />
+
+    <text x="375" y="210" class="east📌">unit</text>
+    <text x="375" y="170" class="east📌">component</text>
+    <text x="375" y="130" class="east📌">integration</text>
+    <text x="375" y="90"  class="east📌">system</text>
+  </g>
+
+  <g>
+    <line
+      x1="375"
+      y1="250"
+      x2="650"
+      y2="250"
+      marker-end="url(#arrowHead)" />
+
+    <text x="650" y="250" class="north-west📌">Conception</text>
+    <text x="650" y="265" class="north-west📌">support</text>
+
+    <circle cx="465" cy="250" r="3" />
+    <circle cx="565" cy="250" r="3" />
+
+    <text x="465" y="235" class="south📌">black</text>
+    <text x="465" y="250" class="south📌">box</text>
+    <text x="565" y="235" class="south📌">white</text>
+    <text x="565" y="250" class="south📌">box</text>
+  </g>
+
+  <g transform="rotate(45 375 250)">
+    <line
+      x1="375"
+      y1="250"
+      x2="375"
+      y2="450"
+      marker-end="url(#arrowHead)" />
+
+    <text x="375" y="450" class="north-west📌">Type of test</text>
+
+    <circle cx="375" cy="290" r="3" />
+    <circle cx="375" cy="330" r="3" />
+    <circle cx="375" cy="370" r="3" />
+    <circle cx="375" cy="410" r="3" />
+
+    <text x="375" y="290" class="west📌">functional</text>
+    <text x="375" y="330" class="west📌">robustness</text>
+    <text x="375" y="370" class="west📌">performance</text>
+    <text x="375" y="410" class="west📌">usability</text>
+  </g>
+</svg>
