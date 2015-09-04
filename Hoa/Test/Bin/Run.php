@@ -290,7 +290,17 @@ class Run extends Console\Dispatcher\Kit
             $command .= ' --filter \'' . str_replace('\'', '\'"\'"\'', $filter) . '\'';
         }
 
-        $processus = new Processus($command);
+
+        $_server                     = $_SERVER;
+        $_server['HOA_PREVIOUS_CWD'] = getcwd();
+
+        $processus = new Processus(
+            $command,
+            null,
+            null,
+            resolve('hoa://Library/Test/'),
+            $_server
+        );
         $processus->on('input', function ($bucket) {
             return false;
         });
