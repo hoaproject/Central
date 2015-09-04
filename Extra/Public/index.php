@@ -20,7 +20,15 @@ $router
             $http   = new Hoa\Http\Response\Response();
             $format = $_formats[0];
 
-            if (isset($_SERVER['HTTP_REFERER'])) {
+            if (isset($_request['remote'])) {
+                if (false === in_array($_request['remote'], $_remotes)) {
+                    $http->sendStatus($http::STATUS_NOT_ACCEPTABLE);
+
+                    return;
+                }
+
+                $remote = $_request['remote'];
+            } elseif (isset($_SERVER['HTTP_REFERER'])) {
                 $referer = parse_url($_SERVER['HTTP_REFERER']);
                 $host    = implode(
                     '.',
@@ -50,16 +58,6 @@ $router
                 }
             } else {
                 $remote = $_remotes[0];
-            }
-
-            if (isset($_request['remote'])) {
-                if (false === in_array($_request['remote'], $_remotes)) {
-                    $http->sendStatus($http::STATUS_NOT_ACCEPTABLE);
-
-                    return;
-                }
-
-                $remote = $_request['remote'];
             }
 
             if (isset($_request['format'])) {
