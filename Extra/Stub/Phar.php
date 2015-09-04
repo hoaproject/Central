@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2014, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -33,49 +33,57 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
 $root = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Hoa');
 
 require $root . DIRECTORY_SEPARATOR . 'Core' . DIRECTORY_SEPARATOR . 'Core.php';
 
-\Hoa\Core::enableErrorHandler();
-\Hoa\Core::enableExceptionHandler();
+Hoa\Core::enableErrorHandler();
+Hoa\Core::enableExceptionHandler();
 
-if('1' === ini_get('phar.readonly'))
-    throw new \Hoa\Core\Exception(
+if ('1' === ini_get('phar.readonly')) {
+    throw new Hoa\Core\Exception(
         'The directive phar.readonly is set to 1; must be set to 0.' . "\n" .
-        'Tips: php -d phar.readonly=0 %s.', 0, @$argv[0] ?: __FILE__);
+        'Tips: php -d phar.readonly=0 %s.',
+        0,
+        @$argv[0] ?: __FILE__
+    );
+}
 
-if(isset($_SERVER['argv'][1]))
+if (isset($_SERVER['argv'][1])) {
     $name = $_SERVER['argv'][1];
-else
+} else {
     $name = 'Hoa.phar';
+}
 
-if(file_exists($name) && false === unlink($name))
-    throw new \Hoa\Core\Exception(
-        'Phar %s already exists and we cannot delete it.', 1, $name);
+if (file_exists($name) && false === unlink($name)) {
+    throw new Hoa\Core\Exception(
+        'Phar %s already exists and we cannot delete it.',
+        1,
+        $name
+    );
+}
 
-class Filter extends \FilterIterator {
-
-    public function accept ( ) {
-
+class Filter extends FilterIterator
+{
+    public function accept()
+    {
         return false === strpos($this->current()->getPathname(), '.git');
     }
 }
 
-$phar = new \Phar(__DIR__ . DS . $name);
-$phar->setMetadata(array(
+$phar = new Phar(__DIR__ . DS . $name);
+$phar->setMetadata([
     'author'       => 'Ivan Enderlin, Hoa community',
     'license'      => 'New BSD License',
     'copyright'    => \Hoa\Core::©(),
     'version.name' => $name,
     'datetime'     => date('c')
-));
-$phar->setSignatureAlgorithm(\Phar::SHA1);
+]);
+$phar->setSignatureAlgorithm(Phar::SHA1);
 $phar->buildFromIterator(
     new Filter(
-        new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($root)
+        new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($root)
         )
     ),
     $root
@@ -83,68 +91,77 @@ $phar->buildFromIterator(
 $phar->setStub(<<<'STUB'
 <?php
 
-\Phar::mapPhar('Hoa.phar');
+Phar::mapPhar('Hoa.phar');
 require 'phar://Hoa.phar/Core/Core.php';
 
-$phar = new \Phar(__FILE__);
+$phar = new Phar(__FILE__);
 
-foreach(array_slice($_SERVER['argv'], 1) ?: array('-h') as $option)
-    switch(strtolower($option)) {
-
+foreach (array_slice($_SERVER['argv'], 1) ?: ['-h'] as $option) {
+    switch (strtolower($option)) {
         case '-m':
         case '--metadata':
             echo 'Metadata:' . "\n\n";
             $metadata = $phar->getMetadata();
             $max      = 0;
 
-            foreach($metadata as $key => $value)
+            foreach ($metadata as $key => $value) {
                 $max < $l = strlen($key) and $max = $l;
+            }
 
-            foreach($metadata as $key => $value)
+            foreach ($metadata as $key => $value) {
                 echo sprintf(
                     '%-' . $max . 's : %s',
                     $key,
                     str_replace("\n", ' ', $value)
                 ) . "\n";
-          break;
+            }
+
+            break;
 
         case '-t':
         case '--test':
             echo (HOA ? 'true' : 'false') . "\n";
-          break;
+
+            break;
 
         case '-s':
         case '--signature':
             $signature = $phar->getSignature();
             echo $signature['hash_type'] . ': ' . $signature['hash'] . "\n";
-          break;
+
+            break;
 
         case '-p':
         case '--phar':
-            echo 'Phar archive version: ' . $phar->getVersion() . "\n" .
-                 'Phar API version    : ' . \Phar::apiVersion() . "\n";
-          break;
+            echo
+                'Phar archive version: ' . $phar->getVersion() . "\n" .
+                'Phar API version    : ' . \Phar::apiVersion() . "\n";
+
+            break;
 
         case '-e':
         case '--extract':
             $phar->extractTo(__DIR__);
             echo 'Extracted in ' . __DIR__ . "\n";
-          break;
+
+            break;
 
         case '-h':
         case '-?':
         case '--help':
         default:
-            echo 'Usage   : ' . $_SERVER['argv'][0] . ' <options>' . "\n" .
-                 'Options :' . "\n" .
-                 '    -m, --metadata  : Print all metadata.' . "\n" .
-                 '    -t, --test      : Test if Hoa is in this Phar.' . "\n" .
-                 '    -s, --signature : Print signature.' . "\n" .
-                 '    -p, --phar      : Phar informations.' . "\n" .
-                 '    -e, --extract   : Extract Hoa in the current directory.' . "\n" .
-                 '    -h, --help      : This help.' . "\n" .
-                 '    -?, --help      : This help.' . "\n";
+            echo
+                'Usage   : ' . $_SERVER['argv'][0] . ' <options>' . "\n" .
+                'Options :' . "\n" .
+                '    -m, --metadata  : Print all metadata.' . "\n" .
+                '    -t, --test      : Test if Hoa is in this Phar.' . "\n" .
+                '    -s, --signature : Print signature.' . "\n" .
+                '    -p, --phar      : Phar informations.' . "\n" .
+                '    -e, --extract   : Extract Hoa in the current directory.' . "\n" .
+                '    -h, --help      : This help.' . "\n" .
+                '    -?, --help      : This help.' . "\n";
     }
+}
 
 __HALT_COMPILER();
 STUB
