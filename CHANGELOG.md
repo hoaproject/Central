@@ -1,3 +1,7 @@
+# 0.15.09.08
+
+  * Add a `.gitignore` file. (Stéphane HULARD, 2015-08-03T11:43:30+02:00)
+
 # 0.15.06.01
 
   * Make the `realdom` function global. (Ivan Enderlin, 2015-06-01T12:16:59+02:00)
