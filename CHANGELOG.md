@@ -1,3 +1,7 @@
+# 0.15.09.08
+
+  * Add a `.gitignore` file. (Stéphane HULARD, 2015-08-03T11:32:35+02:00)
+
 # 0.15.07.28
 
   * Fix API documentation. (Ivan Enderlin, 2015-07-16T08:25:41+02:00)
