@@ -1,3 +1,8 @@
+# 0.15.09.08
+
+  * Add a `.gitignore` file. (Stéphane HULARD, 2015-08-25T15:14:42+02:00)
+  * Fire `error` event if nickname is already in use. (Jir4, 2014-02-04T20:08:32+01:00)
+
 # 0.15.05.29
 
   * Move to PSR-1 and PSR-2. (Ivan Enderlin, 2015-05-15T09:55:36+02:00)
