@@ -58,7 +58,7 @@ interface WrapperIterator extends Iterator\Iterator
      * @param   int            $offset         This value can be one of the
      *                                         DalStatement::FROM_* constants
      *                                         or an arbitrary offset.
-     * @param   int|array      $style          This value must be one of the
+     * @param   int            $style          This value must be one of the
      *                                         DalStatement::AS_* constants.
      * @return  void
      */

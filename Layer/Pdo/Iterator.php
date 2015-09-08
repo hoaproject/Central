@@ -88,7 +88,7 @@ class Iterator implements Database\IDal\WrapperIterator
      * @param   int            $offset         This value can be one of the
      *                                         DalStatement::FROM_* constants
      *                                         or an arbitrary offset.
-     * @param   int|array      $style          This value must be one of the
+     * @param   int            $style          This value must be one of the
      *                                         DalStatement::AS_* constants.
      * @return  void
      */
@@ -102,23 +102,7 @@ class Iterator implements Database\IDal\WrapperIterator
         $this->_orientation = $orientation;
         $this->_offset      = $offset;
 
-        if (is_array($style)) {
-            if (Database\DalStatement::AS_REUSABLE_OBJECT === $style[0]) {
-                $this->getStatement()->setFetchMode(
-                    $style[0],
-                    $style[1]
-                );
-            }
-            else { // Database\DalStatement::AS_CLASS
-                $this->getStatement()->setFetchMode(
-                    $style[0],
-                    $style[1],
-                    $style[2]
-                );
-            }
-        } else {
-            $this->getStatement()->setFetchMode($style);
-        }
+        $this->getStatement()->setFetchMode($style);
 
         return;
     }

@@ -51,28 +51,28 @@ class DalStatement
      *
      * @var int
      */
-    const FORWARD                         = 0;
+    const FORWARD            = 0;
 
     /**
      * Fetch the previous row in the result set.
      *
      * @var int
      */
-    const BACKWARD                        = 1;
+    const BACKWARD           = 1;
 
     /**
      * Start at the first offset.
      *
      * @var int
      */
-    const FROM_START                      = 0;
+    const FROM_START         = 0;
 
     /**
      * Start at the last offset.
      *
      * @var int
      */
-    const FROM_END                        = -1;
+    const FROM_END           = -1;
 
     /**
      * Specifies that the fetch method shall return each row as an object with
@@ -82,7 +82,7 @@ class DalStatement
      *
      * @var int
      */
-    const AS_LAZY_OBJECT                  = 1;
+    const AS_LAZY_OBJECT     = 1;
 
     /**
      * Specifies that the fetch method shall return each row as an array indexed
@@ -92,7 +92,7 @@ class DalStatement
      *
      * @var int
      */
-    const AS_MAP                          = 2;
+    const AS_MAP             = 2;
 
     /**
      * Specifies that the fetch method shall return each row as an array indexed
@@ -101,7 +101,7 @@ class DalStatement
      *
      * @var int
      */
-    const AS_SET                          = 3;
+    const AS_SET             = 3;
 
     /**
      * Specifies that the fetch method shall return each row as an object with
@@ -110,7 +110,7 @@ class DalStatement
      *
      * @var int
      */
-    const AS_OBJECT                       = 5;
+    const AS_OBJECT          = 5;
 
     /**
      * Specifies that the fetch method shall return a new instance of the
@@ -120,7 +120,7 @@ class DalStatement
      *
      * @var int
      */
-    const AS_CLASS                        = 8;
+    const AS_CLASS           = 8;
 
     /**
      * Specifies that the fetch method shall update an existing instance of the
@@ -128,7 +128,7 @@ class DalStatement
      *
      * @var int
      */
-    const AS_REUSABLE_OBJECT              = 9;
+    const AS_REUSABLE_OBJECT = 9;
 
     /**
      * Specifies that the fetch method shall return each row as an array indexed
@@ -138,30 +138,7 @@ class DalStatement
      *
      * @var int
      */
-    const AS_DEBUG_MAP                    = 11;
-
-    /**
-     * Determine the class name from the value of first column.
-     *
-     * @var int
-     */
-    const FROM_CLASS_NAME_IN_FIRST_COLUMN = 262144;
-
-    /**
-     * As FETCH_INTO but object is provided as a serialized string.
-     * Available since PHP 5.1.0. Since PHP 5.3.0 the class constructor is never
-     * called if this flag is set.
-     *
-     * @var int
-     */
-    const FROM_SERIALIZED                 = 524288;
-
-    /**
-     * Call the constructor before setting properties. Available since PHP 5.2.0.
-     *
-     * @var int
-     */
-    const FROM_PROPERTIES_LATE            = 1048576;
+    const AS_DEBUG_MAP       = 11;
 
     /**
      * The statement instance.
@@ -280,14 +257,13 @@ class DalStatement
     /**
      * Set the Iterator fetching style.
      *
-     * @param   int        $orientation    This value must be
-     *                                     DalStatement::FORWARD or
-     *                                     DalStatement::BACKWARD constant.
-     * @param   int        $offset         This value must be one of the
-     *                                     DalStatement::FROM_* constants or
-     *                                     an arbitrary offset.
-     * @param   int|array  $style          This value must be one of the
-     *                                     DalStatement::AS_* constants.
+     * @param   int  $orientation    This value must be DalStatement::FORWARD
+     *                               or DalStatement::BACKWARD constant.
+     * @param   int  $offset         This value must be one of the
+     *                               DalStatement::FROM_* constants or an
+     *                               arbitrary offset.
+     * @param   int  $style          This value must be one of the
+     *                               DalStatement::AS_* constants.
      * @return  \Hoa\Database\DalStatement
      */
     public function setFetchingStyle(

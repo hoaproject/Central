@@ -87,14 +87,13 @@ interface WrapperStatement extends Iterator\Aggregate
     /**
      * Set the Iterator fetching style.
      *
-     * @param   int        $orientation    This value must be
-     *                                     DalStatement::FORWARD or
-     *                                     DalStatement::BACKWARD constant.
-     * @param   int        $offset         This value must be one of the
-     *                                     DalStatement::FROM_* constants or
-     *                                     an arbitrary offset.
-     * @param   int|array  $style          This value must be one of the
-     *                                     DalStatement::AS_* constants.
+     * @param   int  $orientation    This value must be DalStatement::FORWARD
+     *                               or DalStatement::BACKWARD constant.
+     * @param   int  $offset         This value must be one of the
+     *                               DalStatement::FROM_* constants or an
+     *                               arbitrary offset.
+     * @param   int  $style          This value must be one of the
+     *                               DalStatement::AS_* constants.
      * @return  \Hoa\Database\IDal\WrapperStatement
      */
     public function setFetchingStyle(
