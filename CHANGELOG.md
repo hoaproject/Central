@@ -1,3 +1,7 @@
+# 2.15.09.08
+
+  * Add a `.gitignore` file. (Stéphane HULARD, 2015-08-03T11:50:02+02:00)
+
 # 2.15.05.29
 
   * Fix typography. (Ivan Enderlin, 2015-05-21T09:43:09+02:00)
