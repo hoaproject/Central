@@ -1,3 +1,11 @@
+# 0.15.09.08
+
+  * Fix CS. (Ivan Enderlin, 2015-08-10T08:13:56+02:00)
+  * Simplify code by using the `?:` operator. (Ivan Enderlin, 2015-08-10T08:04:07+02:00)
+  * Add tests for enclose identifier feature. (Metalaka, 2015-06-26T15:26:14+02:00)
+  * Introduce enclose identifier feature. (Metalaka, 2015-06-19T01:38:30+02:00)
+  * Add a `.gitignore` file. (Stéphane HULARD, 2015-08-03T11:25:42+02:00)
+
 # 0.15.07.28
 
   * Fix phpDoc. (Metalaka, 2015-07-15T18:05:42+02:00)
