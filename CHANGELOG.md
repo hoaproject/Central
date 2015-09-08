@@ -1,3 +1,9 @@
+# 0.15.09.08
+
+  * Introduce read flags (PEEK and OOB). (Ivan Enderlin, 2015-08-28T09:52:51+02:00)
+  * Add `.gitignore` file. (Stéphane HULARD, 2015-08-03T10:04:02+02:00)
+  * Fix CS. (Ivan Enderlin, 2015-07-22T14:38:42+02:00)
+
 # 0.15.07.20
 
   * Reintroduce flags and reverse when connecting a client. (Ivan Enderlin, 2015-07-20T18:43:09+02:00)
