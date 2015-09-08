@@ -1,3 +1,7 @@
+# 0.15.09.08
+
+  * Add a `.gitignore` file. (Stéphane HULARD, 2015-08-03T11:41:34+02:00)
+
 # 0.15.06.01
 
   * Make the `praspel` function global. (Ivan Enderlin, 2015-06-01T12:19:17+02:00)
