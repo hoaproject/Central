@@ -1,3 +1,7 @@
+# 1.15.09.08
+
+  * Add a `.gitignore` file. (Stéphane HULARD, 2015-08-03T11:34:55+02:00)
+
 # 1.15.05.29
 
   * Format an example. (Ivan Enderlin, 2015-05-18T09:16:13+02:00)
