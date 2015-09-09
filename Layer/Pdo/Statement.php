@@ -56,18 +56,18 @@ class Statement implements Database\IDal\WrapperStatement
     protected $_statement   = null;
 
     /**
-     * The cursor orientation.
-     *
-     * @var int
-     */
-    protected $_orientation = Database\DalStatement::FORWARD;
-
-    /**
      * The start cursor offset.
      *
      * @var int
      */
     protected $_offset      = Database\DalStatement::FROM_START;
+
+    /**
+     * The cursor orientation.
+     *
+     * @var int
+     */
+    protected $_orientation = Database\DalStatement::FORWARD;
 
     /**
      * The fetching style.
@@ -177,22 +177,22 @@ class Statement implements Database\IDal\WrapperStatement
     /**
      * Set the Iterator fetching style.
      *
-     * @param   int  $orientation    This value must be DalStatement::FORWARD
-     *                               or DalStatement::BACKWARD constant.
      * @param   int  $offset         This value must be one of the
      *                               DalStatement::FROM_* constants or an
      *                               arbitrary offset.
+     * @param   int  $orientation    This value must be DalStatement::FORWARD
+     *                               or DalStatement::BACKWARD constant.
      * @param   int  $style          This value must be one of the
      *                               DalStatement::AS_* constants.
      * @return  \Hoa\Database\Layer\Pdo\Statement
      */
     public function setFetchingStyle(
-        $orientation = Database\DalStatement::FORWARD,
         $offset      = Database\DalStatement::FROM_START,
+        $orientation = Database\DalStatement::FORWARD,
         $style       = Database\DalStatement::AS_MAP
     ) {
-        $this->_orientation = $orientation;
         $this->_offset      = $offset;
+        $this->_orientation = $orientation;
         $this->_style       = $style;
 
         return $this;
@@ -207,8 +207,8 @@ class Statement implements Database\IDal\WrapperStatement
     {
         return new Iterator(
             $this->getStatement(),
-            $this->_orientation,
             $this->_offset,
+            $this->_orientation,
             $this->_style
         );
     }

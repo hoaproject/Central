@@ -47,20 +47,6 @@ namespace Hoa\Database;
 class DalStatement
 {
     /**
-     * Fetch the next row in the result set.
-     *
-     * @var int
-     */
-    const FORWARD            = 0;
-
-    /**
-     * Fetch the previous row in the result set.
-     *
-     * @var int
-     */
-    const BACKWARD           = 1;
-
-    /**
      * Start at the first offset.
      *
      * @var int
@@ -73,6 +59,20 @@ class DalStatement
      * @var int
      */
     const FROM_END           = -1;
+
+    /**
+     * Fetch the next row in the result set.
+     *
+     * @var int
+     */
+    const FORWARD            = 0;
+
+    /**
+     * Fetch the previous row in the result set.
+     *
+     * @var int
+     */
+    const BACKWARD           = 1;
 
     /**
      * Specifies that the fetch method shall return each row as an object with
@@ -257,21 +257,21 @@ class DalStatement
     /**
      * Set the Iterator fetching style.
      *
-     * @param   int  $orientation    This value must be DalStatement::FORWARD
-     *                               or DalStatement::BACKWARD constant.
      * @param   int  $offset         This value must be one of the
      *                               DalStatement::FROM_* constants or an
      *                               arbitrary offset.
+     * @param   int  $orientation    This value must be DalStatement::FORWARD
+     *                               or DalStatement::BACKWARD constant.
      * @param   int  $style          This value must be one of the
      *                               DalStatement::AS_* constants.
      * @return  \Hoa\Database\DalStatement
      */
     public function setFetchingStyle(
-        $orientation = self::FORWARD,
         $offset      = self::FROM_START,
+        $orientation = self::FORWARD,
         $style       = self::AS_MAP
     ) {
-        $this->getStatement()->setFetchingStyle($orientation, $offset, $style);
+        $this->getStatement()->setFetchingStyle($offset, $orientation, $style);
 
         return $this;
     }

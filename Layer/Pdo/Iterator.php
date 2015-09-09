@@ -56,18 +56,18 @@ class Iterator implements Database\IDal\WrapperIterator
     protected $_statement   = null;
 
     /**
-     * The cursor orientation.
-     *
-     * @var int
-     */
-    protected $_orientation = 0;
-
-    /**
      * The start cursor offset.
      *
      * @var int
      */
     protected $_offset      = 0;
+
+    /**
+     * The cursor orientation.
+     *
+     * @var int
+     */
+    protected $_orientation = 0;
 
     /**
      * The cursor row.
@@ -82,25 +82,25 @@ class Iterator implements Database\IDal\WrapperIterator
      * Create an iterator instance.
      *
      * @param   \PDOStatement  $statement      The PDOStatement instance.
-     * @param   int            $orientation    This value must be
-     *                                         DalStatement::FORWARD or
-     *                                         DalStatement::BACKWARD constant.
      * @param   int            $offset         This value can be one of the
      *                                         DalStatement::FROM_* constants
      *                                         or an arbitrary offset.
+     * @param   int            $orientation    This value must be
+     *                                         DalStatement::FORWARD or
+     *                                         DalStatement::BACKWARD constant.
      * @param   int            $style          This value must be one of the
      *                                         DalStatement::AS_* constants.
      * @return  void
      */
     public function __construct(
         \PDOStatement $statement,
-        $orientation,
         $offset,
+        $orientation,
         $style
     ) {
         $this->_statement   = $statement;
-        $this->_orientation = $orientation;
         $this->_offset      = $offset;
+        $this->_orientation = $orientation;
 
         $this->getStatement()->setFetchMode($style);
 
