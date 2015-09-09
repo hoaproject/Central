@@ -53,28 +53,21 @@ class Iterator implements Database\IDal\WrapperIterator
      *
      * @var \PDOStatement
      */
-    protected $_statement   = null;
+    protected $_statement = null;
 
     /**
-     * The start cursor offset.
+     * The fetching style options.
      *
-     * @var int
+     * @var array
      */
-    protected $_offset      = 0;
-
-    /**
-     * The cursor orientation.
-     *
-     * @var int
-     */
-    protected $_orientation = 0;
+    protected $_style     = [];
 
     /**
      * The cursor row.
      *
      * @var array
      */
-    protected $_row         = null;
+    protected $_row       = null;
 
 
 
@@ -82,27 +75,40 @@ class Iterator implements Database\IDal\WrapperIterator
      * Create an iterator instance.
      *
      * @param   \PDOStatement  $statement      The PDOStatement instance.
-     * @param   int            $offset         This value can be one of the
-     *                                         DalStatement::FROM_* constants
-     *                                         or an arbitrary offset.
-     * @param   int            $orientation    This value must be
-     *                                         DalStatement::FORWARD or
-     *                                         DalStatement::BACKWARD constant.
-     * @param   int            $style          This value must be one of the
-     *                                         DalStatement::AS_* constants.
+     * @param   array          $style          An array of fetching style
+     *                                         options.
      * @return  void
      */
     public function __construct(
         \PDOStatement $statement,
-        $offset,
-        $orientation,
         $style
     ) {
-        $this->_statement   = $statement;
-        $this->_offset      = $offset;
-        $this->_orientation = $orientation;
+        $this->_statement = $statement;
+        $this->_style     = $style;
 
-        $this->getStatement()->setFetchMode($style);
+        switch ($style[Database\DalStatement::STYLE_MODE]) {
+            case Database\DalStatement::AS_CLASS:
+                $this->getStatement()->setFetchMode(
+                    $style[Database\DalStatement::STYLE_MODE],
+                    $style[Database\DalStatement::STYLE_CLASS_NAME],
+                    $style[Database\DalStatement::STYLE_CONSTRUCTOR_ARGUMENTS]
+                );
+
+                break;
+
+            case Database\DalStatement::AS_REUSABLE_OBJECT:
+                $this->getStatement()->setFetchMode(
+                    $style[Database\DalStatement::STYLE_MODE],
+                    $style[Database\DalStatement::STYLE_OBJECT]
+                );
+
+                break;
+
+            default:
+                $this->getStatement()->setFetchMode(
+                    $style[Database\DalStatement::STYLE_MODE]
+                );
+        }
 
         return;
     }
@@ -136,7 +142,7 @@ class Iterator implements Database\IDal\WrapperIterator
     {
         $this->_row = $this->getStatement()->fetch(
             null,
-            $this->_orientation
+            $this->_style[Database\DalStatement::STYLE_ORIENTATION]
         );
 
         return;
@@ -169,7 +175,7 @@ class Iterator implements Database\IDal\WrapperIterator
      */
     public function rewind()
     {
-        if (Database\DalStatement::FROM_END === $this->_offset) {
+        if (Database\DalStatement::FROM_END === $this->_style[Database\DalStatement::STYLE_OFFSET]) {
             $this->_row = $this->getStatement()->fetch(
                 null,
                 \PDO::FETCH_ORI_LAST
@@ -178,7 +184,7 @@ class Iterator implements Database\IDal\WrapperIterator
             $this->_row = $this->getStatement()->fetch(
                 null,
                 \PDO::FETCH_ORI_ABS,
-                $this->_offset
+                $this->_style[Database\DalStatement::STYLE_OFFSET]
             );
         }
 

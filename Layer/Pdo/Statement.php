@@ -53,28 +53,18 @@ class Statement implements Database\IDal\WrapperStatement
      *
      * @var \PDOStatement
      */
-    protected $_statement   = null;
+    protected $_statement = null;
 
     /**
-     * The start cursor offset.
+     * The fetching style options.
      *
-     * @var int
+     * @var array
      */
-    protected $_offset      = Database\DalStatement::FROM_START;
-
-    /**
-     * The cursor orientation.
-     *
-     * @var int
-     */
-    protected $_orientation = Database\DalStatement::FORWARD;
-
-    /**
-     * The fetching style.
-     *
-     * @var int
-     */
-    protected $_style       = Database\DalStatement::AS_MAP;
+    protected $_style     = [
+        Database\DalStatement::STYLE_OFFSET      => Database\DalStatement::FROM_START,
+        Database\DalStatement::STYLE_ORIENTATION => Database\DalStatement::FORWARD,
+        Database\DalStatement::STYLE_MODE        => Database\DalStatement::AS_MAP
+    ];
 
 
 
@@ -177,23 +167,35 @@ class Statement implements Database\IDal\WrapperStatement
     /**
      * Set the Iterator fetching style.
      *
-     * @param   int  $offset         This value must be one of the
-     *                               DalStatement::FROM_* constants or an
-     *                               arbitrary offset.
-     * @param   int  $orientation    This value must be DalStatement::FORWARD
-     *                               or DalStatement::BACKWARD constant.
-     * @param   int  $style          This value must be one of the
-     *                               DalStatement::AS_* constants.
+     * @param   int    $offset         This value must be one of the
+     *                                 DalStatement::FROM_* constants or an
+     *                                 arbitrary offset.
+     * @param   int    $orientation    This value must be DalStatement::FORWARD
+     *                                 or DalStatement::BACKWARD constant.
+     * @param   int    $style          This value must be one of the
+     *                                 DalStatement::AS_* constants.
+     * @param   mixed  $arg1           For AS_CLASS: The Class name.
+     *                                 For AS_REUSABLE_OBJECT: An object.
+     * @param   array  $arg2           For AS_CLASS: Constructor arguments.
      * @return  \Hoa\Database\Layer\Pdo\Statement
      */
     public function setFetchingStyle(
         $offset      = Database\DalStatement::FROM_START,
         $orientation = Database\DalStatement::FORWARD,
-        $style       = Database\DalStatement::AS_MAP
+        $style       = Database\DalStatement::AS_MAP,
+        $arg1        = null,
+        $arg2        = null
     ) {
-        $this->_offset      = $offset;
-        $this->_orientation = $orientation;
-        $this->_style       = $style;
+        $this->_style[Database\DalStatement::STYLE_OFFSET]      = $offset;
+        $this->_style[Database\DalStatement::STYLE_ORIENTATION] = $orientation;
+        $this->_style[Database\DalStatement::STYLE_MODE]        = $style;
+
+        if (Database\DalStatement::AS_CLASS === $style) {
+            $this->_style[Database\DalStatement::STYLE_CLASS_NAME]            = $arg1;
+            $this->_style[Database\DalStatement::STYLE_CONSTRUCTOR_ARGUMENTS] = $arg2;
+        } elseif (Database\DalStatement::AS_REUSABLE_OBJECT === $style) {
+            $this->_style[Database\DalStatement::STYLE_OBJECT] = $arg1;
+        }
 
         return $this;
     }
@@ -207,8 +209,6 @@ class Statement implements Database\IDal\WrapperStatement
     {
         return new Iterator(
             $this->getStatement(),
-            $this->_offset,
-            $this->_orientation,
             $this->_style
         );
     }

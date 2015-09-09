@@ -52,20 +52,12 @@ interface WrapperIterator extends Iterator\Iterator
      * Create an iterator instance.
      *
      * @param   \PDOStatement  $statement      The PDOStatement instance.
-     * @param   int            $offset         This value can be one of the
-     *                                         DalStatement::FROM_* constants
-     *                                         or an arbitrary offset.
-     * @param   int            $orientation    This value must be
-     *                                         DalStatement::FORWARD or
-     *                                         DalStatement::BACKWARD constant.
-     * @param   int            $style          This value must be one of the
-     *                                         DalStatement::AS_* constants.
+     * @param   array          $style          An array of fetching style
+     *                                         options.
      * @return  void
      */
     public function __construct(
         \PDOStatement $statement,
-        $offset,
-        $orientation,
         $style
     );
 }
