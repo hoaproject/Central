@@ -41,7 +41,7 @@
   <p>A test only checks the SUT is <strong>valid</strong>. The difference is
   that a valid system has no bug for some <strong>non exhaustive
   executions</strong>, but a verified system does what it is designed to do.
-  Despites tests do not proof the absence of bugs, they are useful (easy to
+  Despite tests do not proof the absence of bugs, they are useful (easy to
   write, easy to read, not all system can be proven etc.). Nevertheless,
   depending of the chosen test data, tests can be close to proofs. As an
   example, a test with exhaustive test data can be considered as a proof.</p>
@@ -140,8 +140,8 @@
   <h3 id="Test_framework" for="main-toc">Test framework</h3>
 
   <p>Hoa did not developed its own test framework for several reasons. The main
-  one is this is a laboreous task. It implies more development, more tools to
-  maintain, less people focused on Hoa etc. Instead, we prefer to choose a
+  one is that this is a laborious task. It implies more development, more tools
+  to maintain, less people focused on Hoa etc. Instead, we prefer to choose a
   good project to rely on and contribute to it. Then, we choose
   <a href="http://atoum.org/">atoum</a>, <q>“a simple, modern and intuitive test
   framework”</q>.</p>
@@ -548,7 +548,7 @@ class Bar extends Test\Unit\Suite
     <li><code>namespace</code> represents the test suite namespace,</li>
     <li><code>tags</code> represents test suite or test case's tags.</li>
   </ul>
-  <p>All standard operators from the <code>Hoa\Ruler</code> library can be use.
+  <p>All standard operators from the <code>Hoa\Ruler</code> library can be used.
   So for instance, to only run the <code>Hoa\Foo\Test\Unit\Bar</code> test
   suite, which is represented by a class, we will write:</p>
   <pre><code clas="language-shell">$ vendor/bin/hoa test:run --directories Test/ --filter 'class = "Hoa\Foo\Test\Unit\Bar"'</code></pre>
@@ -625,7 +625,7 @@ public function case_sum()
   computer):</p>
   <pre><code class="language-shell">$ vendor/bin/hoa test:run --directories Test/ --concurrent-processes 1024</code></pre>
   <p>Because the inline test execution engine is not interesting for Hoa's
-  usecases and contextes and because the isolate test execution engine has more
+  usecases and contexts and because the isolate test execution engine has more
   cons than pros compared to the concurrent one (mainly the latter is faster
   than the former), we cannot change the test execution engine. However, to
   emulate the isolate test engine, we could force
@@ -668,7 +668,7 @@ var_dump($file->readAll());
   <p>To create a directory, we must specify a stream type by using the
   <code>type</code> query string; thus:</p>
   <pre><code class="language-php">$directory = new Hoa\File\Directory('hoa://Test/Vfs/Foo?type=directory');</code></pre>
-  <p>This is due to the fact we cannot deduce stream type based on its name. By
+  <p>This is due to the fact that we cannot deduce stream type based on its name. By
   default, <code>type=file</code> is implied.</p>
   <p>For the rest, it works like any regular files or directories, nothing
   different.</p>
