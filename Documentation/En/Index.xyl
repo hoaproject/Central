@@ -668,8 +668,8 @@ var_dump($file->readAll());
   <p>To create a directory, we must specify a stream type by using the
   <code>type</code> query string; thus:</p>
   <pre><code class="language-php">$directory = new Hoa\File\Directory('hoa://Test/Vfs/Foo?type=directory');</code></pre>
-  <p>This is due to the fact that we cannot deduce stream type based on its name. By
-  default, <code>type=file</code> is implied.</p>
+  <p>This is due to the fact that we cannot deduce stream type based on its
+  name. By default, <code>type=file</code> is implied.</p>
   <p>For the rest, it works like any regular files or directories, nothing
   different.</p>
 
