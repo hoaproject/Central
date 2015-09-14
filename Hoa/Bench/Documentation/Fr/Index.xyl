@@ -114,6 +114,11 @@ echo $bench;
  *     __global__  ||||||||||||||||||||||||||||||||||||||||||||||||||||    45ms, 100.0%
  *     aMark       |||||||||||||                                           11ms,  24.8%
  */</code></pre>
+  <p>Nous pouvons également mettre en pause toutes les marques et récupérer
+  quelles marques étaient en cours d'exécution à ce moment grâce à la méthode
+  <code>Hoa\Bench\Bench::pause</code>. La méthode
+  <code>Hoa\Bench\Bench::resume</code> permet de redémarrer un ensemble de
+  marques.</p>
   <p>D'autres opérations sont possibles, comme :</p>
   <ul>
     <li>obtenir la durée d'exécution, grâce à la méthode
