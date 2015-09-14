@@ -56,6 +56,7 @@ cloak on IRC, etc.
   * Kim Sia Sim (simkimsia)
   * Mike Simonson (mikesimonson)
   * Mathias Strasser (mathiasstrasser)
+  * David Thalmann (boast)
   * Emmanuel Thierry (sekiltoyai)
   * ➜ Pierre Tomasina (pierozi)
   * Alex Walker (alexpw)
