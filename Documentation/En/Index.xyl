@@ -111,6 +111,9 @@ echo $bench;
  *     __global__  ||||||||||||||||||||||||||||||||||||||||||||||||||||    45ms, 100.0%
  *     aMark       |||||||||||||                                           11ms,  24.8%
  */</code></pre>
+  <p>We can also pause all marks and get what marks was running with
+  <code>Hoa\Bench\Bench::pause</code> method. The
+  <code>Hoa\Bench\Bench::resume</code> method allow to restart a set of marks.</p>
   <p>Other operations are available, such as:</p>
   <ul>
     <li>get the execution time, thanks to the <code>Hoa\Bench\Mark::diff</code>
