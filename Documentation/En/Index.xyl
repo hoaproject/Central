@@ -476,7 +476,7 @@ class Bar extends Test\Unit\Suite
   <p>The CLI test reporter will use colours to indicate the <strong>test
   verdict</strong>: green for success, red for fail or inconclusive. In case
   of a success, we should see:</p>
-  <pre><code>Success (<em>S</em> tests, <em>c</em>/<em>C</em> methods, <em>V</em> void method, <em>K</em> skipped method, <em>A</em> assertions)!</code></pre>
+  <pre><code>Success (<em>S</em> test suites, <em>c</em>/<em>C</em> test cases, <em>V</em> void test cases, <em>K</em> skipped test cases, <em>A</em> assertions)!</code></pre>
   <p>where:</p>
   <ul>
     <li><code><em>S</em></code> is the number of test suites,</li>
@@ -487,7 +487,7 @@ class Bar extends Test\Unit\Suite
     <li><code><em>A</em></code> is the numbre of assertions.</li>
   </ul>
   <p>In case of a failure, we should see:</p>
-  <pre><code>Failure (<em>S</em> tests, <em>c</em>/<em>C</em> methods, <em>V</em> void method, <em>K</em> skipped method, …, <em>F</em> failure, <em>E</em> error, <em>X</em> exception)!
+  <pre><code>Failure (<em>S</em> test suites, <em>c</em>/<em>C</em> test cases, <em>V</em> void test cases, <em>K</em> skipped test cases, …, <em>F</em> failure, <em>E</em> error, <em>X</em> exception)!
 > There is <em>F</em> failure:
 …</code></pre>
   <ul>
