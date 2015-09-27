@@ -8,7 +8,7 @@ cloak on IRC, etc.
 
   * ➜ Ivan Enderlin (hywan)
   * Timothée Barray (tyx)
-  * Jonathan Van Belle (Grummfy)
+  * Jonathan Van Belle (grummfy)
   * Abdallah Ben Othman (badoul)
   * ➜ Julien Bianchi (jubianchi)
   * ➜ Julien Clauzel (thehawk)
