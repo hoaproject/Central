@@ -61,7 +61,7 @@
   Contract-based Testing paradigms). Automatic tests have two sub-categories:
   <strong>Online</strong> and <strong>offline</strong> tests. Online means the
   tests are generated and executed in one-pass, while offline means the tests
-  are executed and then executed later (with the test data or not).</p>
+  are generated and then executed later (with the test data or not).</p>
   <p>In Hoa, we have both <strong>automated</strong> and <strong>offline
   automatic</strong> tests.</p>
   <p>This is a high classification of tests. A thinner one is described by the
