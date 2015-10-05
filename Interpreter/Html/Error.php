@@ -36,6 +36,7 @@
 
 namespace Hoa\Xyl\Interpreter\Html;
 
+use Hoa\Stream;
 /**
  * Class \Hoa\Xyl\Interpreter\Html\Error.
  *
