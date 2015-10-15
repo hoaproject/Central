@@ -115,9 +115,11 @@ class Mouse implements Core\Event\Listenable
 
         static::$_enabled = true;
 
-        echo "\033[1;2'z";
-        echo "\033[?1000h";
-        echo "\033[?1003h";
+        Console::getOutput()->writeAll(
+            "\033[1;2'z" .
+            "\033[?1000h" .
+            "\033[?1003h"
+        );
 
         $instance = static::getInstance();
         $bucket   = [
@@ -225,8 +227,10 @@ class Mouse implements Core\Event\Listenable
             return;
         }
 
-        echo "\033[?1003l";
-        echo "\033[?1000l";
+        Console::getOutput()->writeAll(
+            "\033[?1003l" .
+            "\033[?1000l"
+        );
 
         static::$_enabled = false;
 
