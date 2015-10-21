@@ -1,3 +1,7 @@
+# 0.15.10.21
+
+  * Add a `.gitignore` file (Stéphane HULARD, 2015-08-03T11:18:35+02:00)
+
 # 0.15.07.28
 
   * Fix phpDoc. (Metalaka, 2015-07-15T17:42:02+02:00)
