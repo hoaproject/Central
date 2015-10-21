@@ -1,3 +1,8 @@
+# 2.15.10.21
+
+  * Documentation: Fix typographical error(s) (orthographic-pedant, 2015-10-07T14:45:46-04:00)
+  * Add a `.gitignore` file. (Stéphane HULARD, 2015-08-03T11:44:52+02:00)
+
 # 2.15.08.03
 
   * `getDomain` uses `HTTP_HOST` instead of `SERVER_NAME`. (camael24, 2015-03-20T15:01:51+01:00)
