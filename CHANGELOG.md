@@ -1,3 +1,8 @@
+# 0.15.10.21
+
+  * Documentation: Unset XYL theme. (Ivan Enderlin, 2015-09-04T07:49:43+02:00)
+  * Zsh support has been moved to a contribution. (Ivan Enderlin, 2015-09-02T14:10:31+02:00)
+
 # 0.15.09.01
 
   * Add more rules in the documentation router. (Ivan Enderlin, 2015-09-01T15:54:00+02:00)
