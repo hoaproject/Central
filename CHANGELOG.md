@@ -1,3 +1,13 @@
+# 1.15.10.21
+
+  * Documentation: Fix English one. (Raphaël Emourgeon, 2015-09-29T23:51:46+02:00)
+  * Documentation: Format. (Ivan Enderlin, 2015-09-10T08:15:22+02:00)
+  * Documentation: Minor English fixes. (Raphaël Emourgeon, 2015-09-09T22:15:34+02:00)
+  * Force `atoum` to run in a specific CWD. (Ivan Enderlin, 2015-09-01T12:03:27+02:00)
+  * Force timezone. (Ivan Enderlin, 2015-09-01T12:03:18+02:00)
+  * Documentation: Fix schema loading error. (Ivan Enderlin, 2015-09-04T08:26:02+02:00)
+  * Documentation: Translate to English. (Ivan Enderlin, 2015-08-12T08:02:15+02:00)
+
 # 1.15.07.30
 
   * Require `hoa/devtools`. (Ivan Enderlin, 2015-07-23T08:57:11+02:00)
