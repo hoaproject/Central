@@ -1,3 +1,9 @@
+# 2.15.10.21
+
+  * Documentation: Fix typo. (Raphaël Emourgeon, 2015-09-14T21:15:43+02:00)
+  * Documentation: Introduce `pause` and `resume` methods. (Raphaël Emourgeon, 2015-09-14T19:09:10+02:00)
+  * Documentation: Describe the `pause` & `resume` methods. (Ivan Enderlin, 2015-09-14T08:21:30+02:00)
+
 # 2.15.08.13
 
   * Update API documentation and re-order methods. (Ivan Enderlin, 2015-08-12T09:03:30+02:00)
