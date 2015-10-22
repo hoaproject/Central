@@ -277,7 +277,7 @@ class Bar extends Test\Unit\Suite
     // When:
     $result = $x + $y;
     // Then:
-    $this->integer($result)>-isEqualTo(3);
+    $this->integer($result)->isEqualTo(3);
 }</code></pre>
   <p>We however use the first form, which is clearer: Indentation, special
   keywords (through method names) and force us to clearly separate these
