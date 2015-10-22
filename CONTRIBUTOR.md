@@ -46,6 +46,7 @@ cloak on IRC, etc.
   * ➜ Julien Lorrain (julien)
   * Linus Metzler (limenet)
   * ➜ Jean Molliné (cyrano)
+  * Simon Mönch (smoench)
   * Joris Mulliez (jojolapine)
   * Matthieu Napoli (mnapoli)
   * Cosmin Nitu (ncosmin2001)
