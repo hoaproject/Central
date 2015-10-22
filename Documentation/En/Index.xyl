@@ -14,7 +14,7 @@
 
   <h2 id="Introduction" for="main-toc">Introduction</h2>
 
-  <p>Software quality is a vast topic in Computer Science. There is a lot of
+  <p>Software quality is a vast topic in Computer Science. There are many
   strategies, a lot of metrics… and a lot of confusion. One way to ensure
   quality in Hoa is based on the testing strategy. Let's introduce this
   chapter by some definitions and by presenting the tools provided by the
@@ -31,9 +31,11 @@
     the SUT after its execution the ones we expect or not?</li>
   </ol>
   <p>The values of the verdict are: <strong>Success</strong>,
-  <strong>fail</strong> or <strong>inconclusive</strong>. A success means this
-  is what we expect, a fail means this is not what we expect and an
-  inconclusive means this is not possible to give an answer. The important
+  
+  <strong>fail</strong> or <strong>inconclusive</strong>. “Success” means that
+  the results is what we expected, “fail” means that the result was not as
+  expected and inconclusive means that it was not possible to determine if the
+  result was either a success or failure. The important
   part is: <q>“what <em>we</em> expect”</q>. By extension, we understand a
   test does not check the SUT is <strong>verified</strong>.</p>
   <blockquote cite="Dijkstra">Testing shows the presence, not the absence of
@@ -41,13 +43,13 @@
   <p>A test only checks the SUT is <strong>valid</strong>. The difference is
   that a valid system has no bug for some <strong>non exhaustive
   executions</strong>, but a verified system does what it is designed to do.
-  Despite tests do not proof the absence of bugs, they are useful (easy to
+  Despite this, tests do not prove the absence of bugs, they are useful (easy to
   write, easy to read, not all system can be proven etc.). Nevertheless,
-  depending of the chosen test data, tests can be close to proofs. As an
+  depending on the chosen test data, tests can be close to proofs. As an
   example, a test with exhaustive test data can be considered as a proof.</p>
   <p>A test can be written <strong>manually</strong>, for instance by a test
   engineer. A SUT is provided, the engineer uses test data to execute it and
-  the test verdict is established by the engineer itself. In the case of an
+  the test verdict is established by the engineer. In the case of an
   <strong>automated</strong> test, the execution of the SUT and the test
   verdict are computed by the machine. This is the role of the “xUnit”
   frameworks, such as <a href="http://atoum.org/">atoum</a> or
@@ -56,7 +58,7 @@
   <strong>automatic</strong> tests are generated and executed by the machine.
   The machine may rely on a specification, like a contract, to automatically
   generate the tests (please, see <a href="@hack:chapter=Praspel">the
-  <code>Hoa\Praspel</code> library</a> or the research papers bellow we have
+  <code>Hoa\Praspel</code> library</a> or the research papers below that we have
   published about it to learn more about the Design-by-Contract and
   Contract-based Testing paradigms). Automatic tests have two sub-categories:
   <strong>Online</strong> and <strong>offline</strong> tests. Online means the
@@ -77,25 +79,25 @@
   <p>The “Conception support” axis describes the <strong>visibility</strong> we
   have on the System Under Test: Either <strong>black box</strong> or
   <strong>white box</strong>. Their meanings are different according to the
-  context but we can consider a system as a white box if we look and use what
-  is <strong>inside</strong> the box, else this is a black box. For instance,
-  for unit tests, let say with a function as the SUT, black box testing will
+  context but we can consider a system as a white box if we look at and use what
+  is <strong>inside</strong> the box, else it is a black box. For instance,
+  with unit tests, let's say with a function as the SUT, black box testing will
   consider only the inputs and the outputs of the function without considering
   its body (even if it reads or writes global variables, streams etc.). On the
   other hand, white box testing will consider the body of the function and the
   testing strategy will be totally different.  What we expect from a black box
   or a white box system is not the same.</p>
   <p>The “System size" axis describes at what <strong>level</strong> (or
-  altitude) do we test: From the lowest one, <strong>unit</strong> (a function
-  or a method) to the highest one, the whole <strong>system</strong>, which
-  includes <strong>components</strong> (a set of functions) and the
-  <strong>integration</strong> of these components inside other ones, which
-  together form the system. All levels are important: This is not because a
-  function does what it is supposed to do that it will integrate nicely with
-  another one.</p>
+  altitude) the system will be tested: From the lowest one,
+  <strong>unit</strong> (a function or a method) to the highest one, the whole
+  <strong>system</strong>, which includes <strong>components</strong> (a set of
+  functions) and the <strong>integration</strong> of these components inside
+  other ones, which together form the system. All levels are important: While 
+  unit tests ensure that a function does what it is supposed to, they do not ensure
+  that a function integrates correctly with others in the system.</p>
   <p>Finally, the “Type of test” axis describes the <strong>goal</strong> of the
   tests: Either <strong>functional</strong> (“everything works as expected and
-  that's it”), <strong>robustness</strong> (“this is not possible to put the
+  that's it”), <strong>robustness</strong> (“it is not possible to put the
   system into an error state if we do something unexpected”),
   <strong>performance</strong> (“the system supports heavy loads and behaves
   as expected under these conditions”) etc.</p>
@@ -103,9 +105,9 @@
   <strong>unit</strong> and <strong>functional</strong> tests. We also include
   performance tests in some libraries.</p>
   <p>Remember that each point in this test universe may imply different tools
-  and different development practices. When talking about tests, this is
-  important to have this schema in minds and to wonder where our problematic
-  locates.</p>
+  and different development practices. When talking about tests, it is
+  important to have this schema in mind and to consider where our problematic
+  lies.</p>
 
   <h3 id="Test_test_case_and_test_suite" for="main_toc">Test, test case and test
   suite</h3>
@@ -114,13 +116,13 @@
   data) that fixes the values of the arguments (also called inputs) of the
   SUT. A <strong>test case</strong> is a pair composed of a state (the context
   in which the test is executed) and a test. A <strong>test suite</strong> is
-  a set of test cases. Therefore, there is two states from the test point of
+  a set of test cases. Therefore, there are two states from the test point of
   view: A <strong>pre-state</strong> —before the execution of the SUT— and a
   <strong>post-state</strong> —after the execution—.</p>
   <p>Building the pre-state is something crucial: The goal is to put the SUT into a
   specific (pre-)state in order to test it. The part of the test case
-  responsible to create the pre-state is called the <strong>preamble</strong>.
-  Thus, the preambler is a code that puts the SUT into a specific state.</p>
+  responsible for creating the pre-state is called the <strong>preamble</strong>.
+  Thus, the preambler is code that puts the SUT into a specific state.</p>
   <p>So, when writing a test case, we will have 3 items to consider:</p>
   <ol>
     <li>The <strong>preamble</strong>, to put the SUT into a specific
@@ -129,23 +131,23 @@
     <li>The <strong>oracle</strong>, to compute the test verdict (based on the
     execution result and the post-state).</li>
   </ol>
-  <p>The oracle consists of a sequence of assertions: “Is this value equals
+  <p>The oracle consists of a sequence of assertions: “Is this value equal
   to…?”, “Is this value changed this way…?” etc. It is supposed to be able to
   check the form of some data as much as comparing other data between the
   pre-state and the post-state.</p>
   <p>In a test case, we represent and introduce the preamble, the execution and
   the oracle respectively by the <code>given</code>, <code>when</code> and
-  <code>then</code> keywords. This will be detail hereinafter.</p>
+  <code>then</code> keywords. This will be detailed hereinafter.</p>
 
   <h3 id="Test_framework" for="main-toc">Test framework</h3>
 
-  <p>Hoa did not developed its own test framework for several reasons. The main
+  <p>Hoa did not develop its own test framework for several reasons. The main
   one is that this is a laborious task. It implies more development, more tools
-  to maintain, less people focused on Hoa etc. Instead, we prefer to choose a
-  good project to rely on and contribute to it. Then, we choose
+  to maintain, less people focused on Hoa etc. Instead, we chose to rely on a
+  good project and contribute to it. We chose
   <a href="http://atoum.org/">atoum</a>, <q>“a simple, modern and intuitive test
   framework”</q>.</p>
-  <p>Thus, <code>Hoa\Test</code> is the basis to test all Hoa's libraries. It
+  <p>Thus, <code>Hoa\Test</code> is the basis used to test all of Hoa's libraries. It
   wraps atoum and it aims at being a bridge between Hoa's features and
   atoum's features. It also adds some features when needed. This is more than
   an abstract layer on top of atoum.  <code>Hoa\Test</code> also provides its
@@ -227,9 +229,9 @@ class Bar extends Test\Unit\Suite
   it needs to be build. In this case, <code>LUT</code> could be defined to
   <code>Hoa\Foo</code>.</p>
   <p>The <code>Bar</code> class extends the <code>Hoa\Test\Unit\Suite</code>
-  class, which defines a unit test suite. It offers all the test API we need
+  class, which defines a unit test suite. It offers the complete test API needed
   to write tests.</p>
-  <p>Test cases are public method. They do not use a camel case notation but an
+  <p>Test cases are public methods. They do not use a camel case notation but an
   underscore lower-cased notation. They must be prefixed by
   <code>case_</code>. The template of a test case must follow the preamble,
   execution and oracle principle, respectively represented by the
@@ -268,7 +270,7 @@ class Bar extends Test\Unit\Suite
             ->integer($result)
                 ->isEqualTo(3);
 }</code></pre>
-  <p>This is strictly equivalent to write:</p>
+  <p>This is strictly equivalent to the following:</p>
   <pre><code class="language-php">public function case_sum()
 {
     // Given:
@@ -279,8 +281,8 @@ class Bar extends Test\Unit\Suite
     // Then:
     $this->integer($result)>-isEqualTo(3);
 }</code></pre>
-  <p>We however use the first form, which is clearer: Indentation, special
-  keywords (through method names) and force us to clearly separate these
+  <p>We use, however, the first form. It is clearer: Indentation, special
+  keywords (through method names) and it forces us to clearly separate these
   3 parts: Preamble, test execution and oracle.</p>
   <p>The <code class="language-php">$result</code> variable is special. It must
   always <strong>hold the result</strong> of the test execution, i.e. the
@@ -326,9 +328,9 @@ class Bar extends Test\Unit\Suite
                 ->isNotEmpty();
 }</code></pre>
   <p><a href="http://docs.atoum.org/en/latest/asserters.html">The list of all
-  assertions</a> can be find on atoum's documentation. Even if this is pretty
+  assertions</a> can be find on atoum's documentation. Even if it is pretty
   natural to write assertions because it is close to “human conventions”,
-  sometimes this is useful to discover that a specific assertion already exists,
+  sometimes it is useful to discover that a specific assertion already exists,
   like <code>float->isNearlyEqualTo</code> which compares two floats as
   expected most of the time. So feel free to check atoum's documentation
   often!</p>
@@ -505,7 +507,7 @@ class Bar extends Test\Unit\Suite
   <pre><code class="language-shell">$ vendor/bin/hoa test:run --directories Test/ --debug</code></pre>
   <p>The order of the option does not matter, as usual with the <code>hoa</code>
   command.</p>
-  <p>To produce a debugging information, we should use the <code>dump</code>
+  <p>To produce debugging information, we should use the <code>dump</code>
   handler while writing the test case. For instance:</p>
   <pre data-line="12"><code class="language-php">public function case_sum()
 {
@@ -526,7 +528,7 @@ class Bar extends Test\Unit\Suite
   <h3 id="Select_tests_to_run" for="main-toc">Select tests to run</h3>
 
   <p>Selecting tests to run enables a <strong>faster feedback</strong> and a
-  <strong>shorter “test loop”</strong>. We previously saw the
+  <strong>shorter “test loop”</strong>. We previously used the
   <code>--directories</code> option to pick some directories: Either the test
   root directory <code>Test/</code> or one or many sub-directories (with
   <code>--directories Test/Foo/,Test/Bar/,Test/Baz/Qux/</code> for
@@ -583,22 +585,23 @@ public function case_sum()
   <h3 id="Choose_the_PHP_virtual_machine" for="main-toc">Choose the PHP virtual
   machine</h3>
 
-  <p>When testing, this is also useful to be able to select one specific
+  <p>When testing, it is also useful to be able to select one specific
   <strong>PHP virtual machine</strong>, like <a href="http://php.net/">a
   specific version of PHP</a> (the default virtual machine) or
   <a href="http://hhvm.com/">the latest version of HHVM</a> for instance. There
-  is several PHP virtual machines nowadays and we cannot ignore them.</p>
+  exist several PHP virtual machines nowadays and we cannot ignore them.</p>
   <p>We select a virtual machine by using the
   <code>--php-binary</code> option and by providing a path to the virtual CLI
   binary; thus, for instance:</p>
   <pre><code class="language-shell">$ vendor/bin/hoa test:run --directories … --php-binary /usr/bin/php</code></pre>
-  <p>We can imagine the <code>--php-binary</code> option value defined by a
-  global variable. Thus, we could re-use the same script to execute tests
-  against several PHP virtual machines, like:</p>
+  <p>We can imagine that the <code>--php-binary</code> option value is determined by a
+  global variable. In this case we could re-use the same script to execute
+  tests against several PHP virtual machines, like:</p> 
   <pre><code class="language-shell">$ PHP_BIN=/usr/bin/php vendor/bin/hoa test:run --directories … --php-binary $PHP_BIN</code></pre>
-  <p>Please, remember to use PHP syntax and features described in
-  <a href="https://github.com/php/php-langspec">the PHP specification</a> as
-  most as possible.</p>
+  <p>Please, remember to use
+  PHP syntax and features described in <a
+  href="https://github.com/php/php-langspec">the PHP specification</a> as much
+  as possible.</p>
 
   <h3 id="Test_execution_engine" for="main-toc">Test execution engine</h3>
 
@@ -611,20 +614,20 @@ public function case_sum()
     <li><strong>Concurrent</strong>, “all” test cases at the same time in
     separated processes.</li>
   </ul>
-  <p>When running tests, isolation is really important: No memory conflict, no
-  execution conflict, state of the System Under Test is reset each time etc.
+  <p>When running tests, isolation is really important: No memory conflicts, no
+  execution conflicts, the state of the System Under Test is reset each time etc.
   The test verdict does not depend of a previous run and is therefore
-  <strong>deterministic</strong> and <strong>unambiguous</strong> (also if the
-  SUT is).</p>
+  <strong>deterministic</strong> and <strong>unambiguous</strong> (in as far as
+  the SUT is).</p>
   <p>By default, <code>Hoa\Test</code> will use the <strong>concurrent</strong>
   test execution engine. All test cases are not executed at the same time; in
   fact the number of test cases to run is defined by the number of processes to
   use. By default, this is either 2 or 4 depending of the platform but we can
   specify it by using the <code>--concurrent-processes</code> option. Thus, to
-  force using 1024 processes to run tests (assuming we have a monster
-  computer):</p>
+  force the use of 1024 processes when running the tests (assuming that we have
+  a monster computer):</p>
   <pre><code class="language-shell">$ vendor/bin/hoa test:run --directories Test/ --concurrent-processes 1024</code></pre>
-  <p>Because the inline test execution engine is not interesting for Hoa's
+  <p>Because the inline test execution engine is not relevant for Hoa's
   usecases and contexts and because the isolate test execution engine has more
   cons than pros compared to the concurrent one (mainly the latter is faster
   than the former), we cannot change the test execution engine. However, to
@@ -640,7 +643,7 @@ public function case_sum()
   to a <strong>virtual file</strong> or a <strong>directory</strong>.
   Additional <strong>query strings</strong> can be present to specify more
   information, such as permissions, access time etc. The parent-child relation
-  is automatically created, not need to specify that a file is a child of a
+  is automatically created, it is not necessary to specify that a file is a child of a
   directory, this is deduced from the path.</p>
   <p>Note: The virtual file system is only accessible from inside a test
   case.</p>
@@ -706,7 +709,7 @@ $file  = new Hoa\File\ReadWrite('hoa://Test/Vfs/Foo?atime=' . $aTime);</code></p
   <p>The <code>Hoa\Test</code> library is a set of tools to make <strong>white
   box</strong> or <strong>black box</strong>, <strong>unit</strong> or
   <strong>functional</strong>, <strong>automated</strong> and
-  <strong>automatic unit</strong> tests. This is more than a wrapper around
+  <strong>automatic unit</strong> tests. It is more than a wrapper around
   <a href="http://atoum.org/">atoum</a>: It provides a test structure and
   conventions, a <strong>virtual file system</strong> and
   <strong>extensions</strong> to <strong>automatically generate</strong> test
