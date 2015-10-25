@@ -57,6 +57,22 @@ class Cli extends atoum\reports\realtime
         $secondLevelPrompt = new atoum\cli\prompt('=> ', $defaultPromptColorizer);
         $thirdLevelPrompt  = new atoum\cli\prompt('==> ', $defaultPromptColorizer);
 
+        $atoumPathField = new runner\atoum\path\cli();
+        $atoumPathField
+            ->setPrompt($firstLevelPrompt)
+            ->setTitleColorizer($defaultColorizer)
+        ;
+
+        $this->addField($atoumPathField);
+
+        $atoumVersionField = new runner\atoum\version\cli();
+        $atoumVersionField
+            ->setTitlePrompt($firstLevelPrompt)
+            ->setTitleColorizer($defaultColorizer)
+        ;
+
+        $this->addField($atoumVersionField);
+
         $phpPathField = new runner\php\path\cli();
         $phpPathField
             ->setPrompt($firstLevelPrompt)
