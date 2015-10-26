@@ -127,6 +127,13 @@ class Console
     protected static $_mode   = [];
 
     /**
+     * Input.
+     *
+     * @var \Hoa\Console\Input
+     */
+    protected static $_input  = null;
+
+    /**
      * Output.
      *
      * @var \Hoa\Console\Output
@@ -145,9 +152,10 @@ class Console
     /**
      * Prepare the environment for advanced interactions.
      *
+     * @param   bool  $force    Force it if STDIN is not direct.
      * @return  bool
      */
-    public static function advancedInteraction()
+    public static function advancedInteraction($force = false)
     {
         if (null !== self::$_advanced) {
             return self::$_advanced;
@@ -157,12 +165,12 @@ class Console
             return self::$_advanced = false;
         }
 
-        if (false === self::isDirect(STDIN)) {
+        if (false === $force && false === self::isDirect(STDIN)) {
             return self::$_advanced = false;
         }
 
-        self::$_old = Processus::execute('stty -g');
-        Processus::execute('stty -echo -icanon min 1 time 0');
+        self::$_old = Processus::execute('stty -g < /dev/tty', false);
+        Processus::execute('stty -echo -icanon min 1 time 0 < /dev/tty', false);
 
         return self::$_advanced = true;
     }
@@ -178,7 +186,7 @@ class Console
             return;
         }
 
-        Processus::execute('stty ' . self::$_old);
+        Processus::execute('stty ' . self::$_old . ' < /dev/tty', false);
 
         return;
     }
@@ -304,6 +312,34 @@ class Console
             self::IS_LINK      === $mode ||
             self::IS_SOCKET    === $mode ||
             self::IS_BLOCK     === $mode;
+    }
+
+    /**
+     * Set input layer.
+     *
+     * @param   \Hoa\Console\Input  $input    Input.
+     * @return  \Hoa\Console\Input
+     */
+    public static function setInput(Input $input)
+    {
+        $old            = static::$_input;
+        static::$_input = $input;
+
+        return $old;
+    }
+
+    /**
+     * Get input layer.
+     *
+     * @return  \Hoa\Console\Input
+     */
+    public static function getInput()
+    {
+        if (null === static::$_input) {
+            static::$_input = new Input();
+        }
+
+        return static::$_input;
     }
 
     /**
