@@ -41,6 +41,7 @@ cloak on IRC, etc.
   * ➜ Matthieu de Laubrie (metalaka)
   * Samuel Laulhau (lalop)
   * Baptiste Leduc (korbeil)
+  * Daniel Leech (dantleech)
   * Marc Lemay (flug)
   * ➜ Renaud Littolff (marmotz)
   * ➜ Julien Lorrain (julien)
