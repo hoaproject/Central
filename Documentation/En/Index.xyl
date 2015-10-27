@@ -31,13 +31,12 @@
     the SUT after its execution the ones we expect or not?</li>
   </ol>
   <p>The values of the verdict are: <strong>Success</strong>,
-  
   <strong>fail</strong> or <strong>inconclusive</strong>. “Success” means that
   the results is what we expected, “fail” means that the result was not as
   expected and inconclusive means that it was not possible to determine if the
-  result was either a success or failure. The important
-  part is: <q>“what <em>we</em> expect”</q>. By extension, we understand a
-  test does not check the SUT is <strong>verified</strong>.</p>
+  result was either a success or failure. The important part is: <q>“what
+  <em>we</em> expect”</q>. By extension, we understand a test does not check
+  the SUT is <strong>verified</strong>.</p>
   <blockquote cite="Dijkstra">Testing shows the presence, not the absence of
   bugs.</blockquote>
   <p>A test only checks the SUT is <strong>valid</strong>. The difference is
@@ -232,11 +231,11 @@ class Bar extends Test\Unit\Suite
   class, which defines a unit test suite. It offers the complete test API needed
   to write tests.</p>
   <p>Test cases are public methods. They do not use a camel case notation but an
-  underscore lower-cased notation. They must be prefixed by
-  <code>case_</code>. The template of a test case must follow the preamble,
-  execution and oracle principle, respectively represented by the
-  <code>given</code>, <code>when</code> and <code>then</code> keywords, and
-  thus must be written as follows:</p>
+  underscore lower-cased notation. They must be prefixed by <code>case_</code>.
+  The template of a test case must follow the preamble, execution and oracle
+  principle, respectively represented by the <code>given</code>,
+  <code>when</code> and <code>then</code> keywords, and thus must be written as
+  follows:</p>
   <pre><code class="language-php">public function case_classic()
 {
     $this
@@ -285,12 +284,12 @@ class Bar extends Test\Unit\Suite
   keywords (through method names) and it forces us to clearly separate these
   3 parts: Preamble, test execution and oracle.</p>
   <p>The <code class="language-php">$result</code> variable is special. It must
-  always <strong>hold the result</strong> of the test execution, i.e. the
-  result of the SUT's <code class="language-php">return</code> statement. This
-  is a <strong>convention</strong>.</p>
+  always <strong>hold the result</strong> of the test execution, i.e. the result
+  of the SUT's <code class="language-php">return</code> statement. This is a
+  <strong>convention</strong>.</p>
   <p>One test case can contain multiple test executions with multiple oracles
-  (for instance if a SUT returns different results according to the time).
-  Then, the test case must be written as follows:</p>
+    (for instance if a SUT returns different results according to the time).
+    Then, the test case must be written as follows:</p>
   <pre><code class="language-php">public function case_classic()
 {
     $this
@@ -553,15 +552,15 @@ class Bar extends Test\Unit\Suite
   <p>All standard operators from the <code>Hoa\Ruler</code> library can be used.
   So for instance, to only run the <code>Hoa\Foo\Test\Unit\Bar</code> test
   suite, which is represented by a class, we will write:</p>
-  <pre><code clas="language-shell">$ vendor/bin/hoa test:run --directories Test/ --filter 'class = "Hoa\Foo\Test\Unit\Bar"'</code></pre>
+  <pre><code class="language-shell">$ vendor/bin/hoa test:run --directories Test/ --filter 'class = "Hoa\Foo\Test\Unit\Bar"'</code></pre>
   <p>Or, to run only two specific test cases, let's say
   <code>case_sum</code> and <code>case_baz</code>:</p>
-  <pre><code clas="language-shell">$ vendor/bin/hoa test:run --directories Test/ --filter 'method = "case_sum" or method = "case_baz"'</code></pre>
+  <pre><code class="language-shell">$ vendor/bin/hoa test:run --directories Test/ --filter 'method = "case_sum" or method = "case_baz"'</code></pre>
   <p>The previous example is strictly equivalent to:</p>
-  <pre><code clas="language-shell">$ vendor/bin/hoa test:run --directories Test/ --filter 'method in ["case_sum", "case_baz"]'</code></pre>
+  <pre><code class="language-shell">$ vendor/bin/hoa test:run --directories Test/ --filter 'method in ["case_sum", "case_baz"]'</code></pre>
   <p>Another example to filter by test suites' name: Only the ones that end by
   <code>Qux</code>:</p>
-  <pre><code clas="language-shell">$ vendor/bin/hoa test:run --directories Test/ --filter 'class matches "Qux$"'</code></pre>
+  <pre><code class="language-shell">$ vendor/bin/hoa test:run --directories Test/ --filter 'class matches "Qux$"'</code></pre>
   <p>The <code>matches</code> operator requires a regular expression to
   <a href="http://pcre.org/">the PCRE format</a>.</p>
   <p>Finally, test suites and test cases can hold one or more tags, thanks to the
@@ -578,7 +577,7 @@ public function case_sum()
 }</code></pre>
   <p>To run only test cases with the tag <code>featureA</code>, we will use the
   following command-line:</p>
-  <pre><code clas="language-shell">$ vendor/bin/hoa test:run --directories Test/ --filter '"featureA" in tags'</code></pre>
+  <pre><code class="language-shell">$ vendor/bin/hoa test:run --directories Test/ --filter '"featureA" in tags'</code></pre>
   <p>Here, the variable <code>tags</code> contains an array of strings,
   representing tag names.</p>
 
@@ -598,10 +597,9 @@ public function case_sum()
   global variable. In this case we could re-use the same script to execute
   tests against several PHP virtual machines, like:</p> 
   <pre><code class="language-shell">$ PHP_BIN=/usr/bin/php vendor/bin/hoa test:run --directories … --php-binary $PHP_BIN</code></pre>
-  <p>Please, remember to use
-  PHP syntax and features described in <a
-  href="https://github.com/php/php-langspec">the PHP specification</a> as much
-  as possible.</p>
+  <p>Please, remember to use PHP syntax and features described in
+  <a href="https://github.com/php/php-langspec">the PHP specification</a> as
+  much as possible.</p>
 
   <h3 id="Test_execution_engine" for="main-toc">Test execution engine</h3>
 
@@ -643,8 +641,8 @@ public function case_sum()
   to a <strong>virtual file</strong> or a <strong>directory</strong>.
   Additional <strong>query strings</strong> can be present to specify more
   information, such as permissions, access time etc. The parent-child relation
-  is automatically created, it is not necessary to specify that a file is a child of a
-  directory, this is deduced from the path.</p>
+  is automatically created, it is not necessary to specify that a file is a
+  child of a directory, this is deduced from the path.</p>
   <p>Note: The virtual file system is only accessible from inside a test
   case.</p>
 
@@ -679,8 +677,8 @@ var_dump($file->readAll());
   <h3 id="Permissions" for="main-toc">Permissions</h3>
 
   <p>To change the permissions, either the specific stream permission functions
-  can be used or we can set them directly by using the
-  <code>permissions</code> query string followed by an octal value; thus:</p>
+  can be used or we can set them directly by using the <code>permissions</code>
+  query string followed by an octal value; thus:</p>
   <pre><code class="language-php">$file = new Hoa\File\ReadWrite('hoa://Test/Vfs/Foo?permissions=0644');
 var_dump($file->getReadablePermissions());
 
