@@ -1,3 +1,10 @@
+# 1.15.10.29
+
+  * Documentation: Update VFS and `type` query string. (Ivan Enderlin, 2015-10-29T22:44:36+01:00)
+  * VFS: Force `type=file`. If absent, no resolution. (Ivan Enderlin, 2015-10-29T22:29:27+01:00)
+  * Documentation: Fix typos, markup, format… (Ivan Enderlin, 2015-10-27T14:48:12+01:00)
+  * Documentation: Fix a typo. (Simon Mönch, 2015-10-21T18:00:59+02:00)
+
 # 1.15.10.21
 
   * Documentation: Fix English one. (Raphaël Emourgeon, 2015-09-29T23:51:46+02:00)
