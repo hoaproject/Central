@@ -1,3 +1,8 @@
+# 0.15.10.29
+
+  * Test: Specify file type with `hoa://Test/Vfs`. (Ivan Enderlin, 2015-10-29T22:24:14+01:00)
+  * Format API documentation. (Ivan Enderlin, 2015-08-28T16:03:14+02:00)
+
 # 0.15.08.28
 
   * Fix CS. (Ivan Enderlin, 2015-08-28T10:41:59+02:00)
