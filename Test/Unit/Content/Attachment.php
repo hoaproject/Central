@@ -54,7 +54,7 @@ class Attachment extends Test\Unit\Suite
     {
         $this
             ->given(
-                $stream = new File\ReadWrite(resolve('hoa://Test/Vfs/Foo.text')),
+                $stream = new File\ReadWrite(resolve('hoa://Test/Vfs/Foo.text?type=file')),
                 $stream->writeAll('foobar'),
                 $name   = 'Hello.txt'
             )
@@ -75,7 +75,7 @@ class Attachment extends Test\Unit\Suite
         $this
             ->given(
                 $filename = 'Foo.txt',
-                $stream   = new File\ReadWrite(resolve('hoa://Test/Vfs/' . $filename)),
+                $stream   = new File\ReadWrite(resolve('hoa://Test/Vfs/' . $filename . '?type=file')),
                 $stream->writeAll('<strong>foobar</strong>')
             )
             ->when($result = new SUT($stream))
@@ -91,7 +91,7 @@ class Attachment extends Test\Unit\Suite
         $this
             ->given(
                 $filename = 'Foo.txt',
-                $stream   = new File\ReadWrite(resolve('hoa://Test/Vfs/' . $filename)),
+                $stream   = new File\ReadWrite(resolve('hoa://Test/Vfs/' . $filename . '?type=file')),
                 $stream->writeAll('<strong>foobar</strong>')
             )
             ->when($result = new SUT($stream))
@@ -105,7 +105,7 @@ class Attachment extends Test\Unit\Suite
         $this
             ->given(
                 $filename = 'Foo.txt',
-                $stream   = new File\ReadWrite(resolve('hoa://Test/Vfs/' . $filename)),
+                $stream   = new File\ReadWrite(resolve('hoa://Test/Vfs/' . $filename . '?type=file')),
                 $stream->writeAll('<strong>foobar</strong>'),
                 $name     = 'Bar.txt'
             )
@@ -120,7 +120,7 @@ class Attachment extends Test\Unit\Suite
         $this
             ->given(
                 $filename = 'Foo.txt',
-                $stream   = new File\ReadWrite(resolve('hoa://Test/Vfs/' . $filename))
+                $stream   = new File\ReadWrite(resolve('hoa://Test/Vfs/' . $filename . '?type=file'))
             )
             ->when($result = new SUT($stream, 'B"a"r.txt'))
             ->then
@@ -133,7 +133,7 @@ class Attachment extends Test\Unit\Suite
         $this
             ->given(
                 $filename = 'Foo.txt',
-                $stream   = new File\ReadWrite(resolve('hoa://Test/Vfs/' . $filename)),
+                $stream   = new File\ReadWrite(resolve('hoa://Test/Vfs/' . $filename . '?type=file')),
                 $stream->writeAll('<strong>foobar</strong>'),
                 $name     = 'Bar.txt',
                 $mimeType = 'text/x-test-plain'
@@ -150,7 +150,7 @@ class Attachment extends Test\Unit\Suite
     {
         $this
             ->given(
-                $stream = new File\ReadWrite(resolve('hoa://Test/Vfs/Foo.hoa-test')),
+                $stream = new File\ReadWrite(resolve('hoa://Test/Vfs/Foo.hoa-test?type=file')),
                 $stream->writeAll('foobar')
             )
             ->when($result = new SUT($stream))
@@ -164,7 +164,7 @@ class Attachment extends Test\Unit\Suite
         $this
             ->given(
                 $text   = 'foobar',
-                $stream = new File\ReadWrite(resolve('hoa://Test/Vfs/Foo.text')),
+                $stream = new File\ReadWrite(resolve('hoa://Test/Vfs/Foo.text?type=file')),
                 $stream->writeAll($text)
             )
             ->when($result = new SUT($stream))
