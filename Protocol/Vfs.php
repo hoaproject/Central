@@ -81,18 +81,23 @@ class Vfs extends Core\Protocol
         $components = parse_url($queue);
         $path       = &$components['path'];
 
-        if (isset($components['query'])) {
-            parse_str($components['query'], $queries);
-        } else {
-            $queries = ['type' => 'file'];
+        if (isset($this->_streams[$path])) {
+            return $this->_streams[$path];
         }
 
-        if (isset($queries['type']) &&
-            'directory' === $queries['type']) {
+        if (!isset($components['query'])) {
+            return 'atoum:/' . Core\Protocol::NO_RESOLUTION;
+        }
+
+        parse_str($components['query'], $queries);
+
+        if ('directory' === $queries['type']) {
             $file              = atoum\mock\streams\fs\directory::get($path);
             $file->dir_opendir = true;
-        } else {
+        } elseif ('file' === $queries['type']) {
             $file = atoum\mock\streams\fs\file::get($path);
+        } else {
+            return 'atoum:/' . Core\Protocol::NO_RESOLUTION;
         }
 
         $parentDirectory = dirname($path);
