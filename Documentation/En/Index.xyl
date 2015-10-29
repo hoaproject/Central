@@ -649,15 +649,15 @@ public function case_sum()
   <h3 id="Files_or_directories" for="main-toc">Files or directories</h3>
 
   <p>A virtual file <code>Foo</code> can be represented by the following path:
-  <code>hoa://Test/Vfs/Foo</code>. In this case, either we open it with
-  regular stream functions like
+  <code>hoa://Test/Vfs/Foo?type=file</code>. In this case, either we open it
+  with regular stream functions like
   <a href="http://php.net/fopen"><code>fopen</code></a>,
   <a href="http://php.net/fread"><code>fread</code></a>,
   <a href="http://php.net/fwrite"><code>fwrite</code></a>,
   <a href="http://php.net/file_put_content"><code>file_put_content</code></a>
   etc. or, with <a href="@hack:chapter=File">the <code>Hoa\File</code>
   library</a>, thus:</p>
-  <pre><code class="language-php">$file = new Hoa\File\ReadWrite('hoa://Test/Vfs/Foo');
+  <pre><code class="language-php">$file = new Hoa\File\ReadWrite('hoa://Test/Vfs/Foo?type=file');
 $file->writeAll('Hello world!');
 
 var_dump($file->readAll());
@@ -666,11 +666,12 @@ var_dump($file->readAll());
  * Will output:
  *     string(12) "Hello world!"
  */</code></pre>
-  <p>To create a directory, we must specify a stream type by using the
-  <code>type</code> query string; thus:</p>
+  <p>To create a file or a directory, we must use the <code>type</code> query
+  string. Using <code>type=file</code> creates a file, while
+  <code>type=directory</code> creates a directory; thus:</p>
   <pre><code class="language-php">$directory = new Hoa\File\Directory('hoa://Test/Vfs/Foo?type=directory');</code></pre>
   <p>This is due to the fact that we cannot deduce stream type based on its
-  name. By default, <code>type=file</code> is implied.</p>
+  name. This query string is only necessary when creating the file.</p>
   <p>For the rest, it works like any regular files or directories, nothing
   different.</p>
 
@@ -679,7 +680,7 @@ var_dump($file->readAll());
   <p>To change the permissions, either the specific stream permission functions
   can be used or we can set them directly by using the <code>permissions</code>
   query string followed by an octal value; thus:</p>
-  <pre><code class="language-php">$file = new Hoa\File\ReadWrite('hoa://Test/Vfs/Foo?permissions=0644');
+  <pre><code class="language-php">$file = new Hoa\File\ReadWrite('hoa://Test/Vfs/Foo?type=file&amp;amp;permissions=0644');
 var_dump($file->getReadablePermissions());
 
 /**
@@ -700,7 +701,7 @@ var_dump($file->getReadablePermissions());
   representing a timestamp (a number of seconds). Thus, to represent a file
   that has been accessed in the future (in 1 minute):</p>
 <pre><code class="language-php">$aTime = time() + 60;
-$file  = new Hoa\File\ReadWrite('hoa://Test/Vfs/Foo?atime=' . $aTime);</code></pre>
+$file  = new Hoa\File\ReadWrite('hoa://Test/Vfs/Foo?type=file&amp;amp;atime=' . $aTime);</code></pre>
 
   <h2 id="Conclusion" for="main-toc">Conclusion</h2>
 
