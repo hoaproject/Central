@@ -1,3 +1,8 @@
+# 2.15.10.29
+
+  * Test: Specify file type with `hoa://Test/Vfs`. (Ivan Enderlin, 2015-10-29T22:26:00+01:00)
+  * Add a `.gitignore` file. (Stéphane HULARD, 2015-08-03T11:39:40+02:00)
+
 # 2.15.07.28
 
   * Support uppercase file extensions (Ben Getsug, 2015-06-30T15:09:23-05:00)
