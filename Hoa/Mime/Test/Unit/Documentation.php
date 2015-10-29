@@ -76,7 +76,7 @@ class Documentation extends Test\Unit\Suite
     public function case_stream()
     {
         $this
-            ->given($file = 'hoa://Test/Vfs/index.html')
+            ->given($file = resolve('hoa://Test/Vfs/index.html?type=file'))
             ->when($type = new LUT(new File\Read($file)))
             ->then
                 ->string($type->getExtension())
