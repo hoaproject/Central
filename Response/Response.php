@@ -252,11 +252,11 @@ class          Response
     const STATUS_NOT_ACCEPTABLE                    = '406 Not Acceptable';
 
     /**
-     * Proxy authentification required (please, see RFC7235).
+     * Proxy authentication required (please, see RFC7235).
      *
      * @const string
      */
-    const STATUS_PROXY_AUTHENTIFICATION_REQUIRED   = '407 Proxy Authentification Required';
+    const STATUS_PROXY_AUTHENTICATION_REQUIRED   = '407 Proxy Authentication Required';
 
     /**
      * Request time-out (please, see RFC7231).
@@ -455,11 +455,11 @@ class          Response
     const STATUS_NOT_EXTENDED                      = '510 Not Extended';
 
     /**
-     * Network Authentification Required (please, see RFC6585).
+     * Network Authentication Required (please, see RFC6585).
      *
      * @const string
      */
-    const STATUS_NETWORK_AUTHENTIFICATION_REQUIRED = '511 Network Authentification Required';
+    const STATUS_NETWORK_AUTHENTICATION_REQUIRED = '511 Network Authentication Required';
 
     /**
      * Status (different ordering).
@@ -551,7 +551,7 @@ class          Response
 
         if (!isset($this->_status[$matches[2]])) {
             throw new Http\Exception(
-                'Unknow HTTP status %d in %s.',
+                'Unknown HTTP status %d in %s.',
                 1,
                 [$matches[2], $status]
             );
