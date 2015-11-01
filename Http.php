@@ -128,7 +128,7 @@ abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable
     /**
      * Helper to parse HTTP headers and distribute them in array accesses.
      *
-     * @param   array  $hedaers    Headers to parse and distribute.
+     * @param   array  $headers    Headers to parse and distribute.
      * @return  array
      */
     protected function _parse(Array $headers)

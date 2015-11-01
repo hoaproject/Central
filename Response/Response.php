@@ -464,7 +464,7 @@ class          Response
     /**
      * Status (different ordering).
      *
-     * @var arra
+     * @var array
      */
     private $_status       = [];
 
@@ -520,6 +520,7 @@ class          Response
      *
      * @param   string  $packet    HTTP packet.
      * @return  void
+     * @throws  \Hoa\Http\Exception
      */
     public function parse($packet)
     {
@@ -541,7 +542,7 @@ class          Response
         }
 
         if (0 === preg_match('#^HTTP/(1\.(?:0|1))\s+(\d{3})#i', $status, $matches)) {
-            throw new \Hoa\Http\Exception(
+            throw new Http\Exception(
                 'HTTP status is not well-formed: %s.',
                 0,
                 $status
@@ -549,7 +550,7 @@ class          Response
         }
 
         if (!isset($this->_status[$matches[2]])) {
-            throw new \Hoa\Http\Exception(
+            throw new Http\Exception(
                 'Unknow HTTP status %d in %s.',
                 1,
                 [$matches[2], $status]
@@ -566,6 +567,7 @@ class          Response
     /**
      * Get real status from static::STATUS_* constants.
      *
+     * @param   string  $status    Status.
      * @return  int
      */
     public static function getStatus($status)
@@ -639,7 +641,7 @@ class          Response
     /**
      * Get send headers.
      *
-     * @return  void
+     * @return  string
      */
     public function getSentHeaders()
     {
@@ -711,7 +713,7 @@ class          Response
         $key = key(self::$_stack);
 
         if ($this->getHash() != self::$_stack[$key][0]) {
-            throw new \Hoa\Http\Exception\CrossBufferization(
+            throw new Http\Exception\CrossBufferization(
                 'Cannot delete this buffer because it was not opened by this ' .
                 'class (%s, %s).',
                 2,
@@ -765,7 +767,7 @@ class          Response
     public function write($string, $length)
     {
         if (0 > $length) {
-            throw new \Hoa\Http\Exception(
+            throw new Http\Exception(
                 'Length must be greater than 0, given %d.',
                 3,
                 $length
