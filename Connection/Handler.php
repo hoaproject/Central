@@ -199,8 +199,8 @@ abstract class Handler
      * are helpful but this whole class eases the merge of “high-level”
      * connections.
      *
-     * @param   \Hoa\Socket\Connection  $other    Connection to merge.
-     * @return  \Hoa\Socket\Connection
+     * @param   \Hoa\Socket\Connection\Handler  $other    Connection to merge.
+     * @return  \Hoa\Socket\Connection\Handler
      */
     public function merge(self $other)
     {
