@@ -102,6 +102,10 @@ class Document extends Concrete implements Xyl\Element\Executable
             $out->writeAll('  <meta ' . $meta . ' />' . "\n");
         }
 
+        foreach ($root->getDocumentLinks() as $link) {
+            $out->writeAll('  <link ' . $link . ' />' . "\n");
+        }
+
         $stylesheets = $root->getStylesheets();
 
         if (!empty($stylesheets)) {

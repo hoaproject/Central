@@ -207,6 +207,13 @@ class          Xyl
     protected $_metas             = [];
 
     /**
+     * Computed document links.
+     *
+     * @var array
+     */
+    protected $_documentLinks     = [];
+
+    /**
      * Computed overlay references.
      *
      * @var array
@@ -476,8 +483,9 @@ class          Xyl
         $xyl_use     = $xpath->query('/processing-instruction(\'xyl-use\')');
         unset($xpath);
 
-        $this->computeStylesheet($ownerDocument);
         $this->computeMeta($ownerDocument);
+        $this->computeDocumentLinks($ownerDocument);
+        $this->computeStylesheet($ownerDocument);
 
         if (0 === $xyl_use->length) {
             return false;
@@ -1312,6 +1320,65 @@ class          Xyl
     }
 
     /**
+     * Add a <?xyl-link?> processing-instruction (only that).
+     *
+     * @param   array   $attributes    Attributes.
+     * @return  void
+     */
+    public function addLink(Array $attributes)
+    {
+        $handle = null;
+
+        foreach ($attributes as $key => $value) {
+            $handle .= $key . '="' . str_replace('"', '\"', $value) . '" ';
+        }
+
+        $this->_mowgli->insertBefore(
+            new \DOMProcessingInstruction('xyl-link', substr($handle, 0, -1)),
+            $this->_mowgli->documentElement
+        );
+
+        return;
+    }
+
+    /**
+     * Compute <?xyl-link?> processing-instruction.
+     *
+     * @param   \DOMDocument  $ownerDocument    Document that ownes PIs.
+     * @return  void
+     */
+    protected function computeDocumentLinks(\DOMDocument $ownerDocument)
+    {
+        $xpath    = new \DOMXPath($ownerDocument);
+        $xyl_link = $xpath->query('/processing-instruction(\'xyl-link\')');
+        unset($xpath);
+
+        if (0 === $xyl_link->length) {
+            return;
+        }
+
+        for ($i = 0, $m = $xyl_link->length; $i < $m; ++$i) {
+            $item         = $xyl_link->item($i);
+            $documentLink = new Xml\Attribute($item->data);
+
+            if (true === $documentLink->attributeExists('href')) {
+                $documentLink->writeAttribute(
+                    'href',
+                    $this->computeLink(
+                        $documentLink->readAttribute('href'),
+                        true
+                    )
+                );
+            }
+
+            $this->_documentLinks[] = $documentLink;
+            $ownerDocument->removeChild($item);
+        }
+
+        return;
+    }
+
+    /**
      * Compute concrete tree.
      *
      * @param   \Hoa\Xyl\Interpreter  $interpreter    Interpreter.
@@ -1620,6 +1687,16 @@ class          Xyl
     public function getMetas()
     {
         return $this->_metas;
+    }
+
+    /**
+     * Get all links in <?xyl-link?>
+     *
+     * @return  array
+     */
+    public function getDocumentLinks()
+    {
+        return $this->_documentLinks;
     }
 
     /**
