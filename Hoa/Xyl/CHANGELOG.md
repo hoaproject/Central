@@ -1,3 +1,9 @@
+# 0.15.11.09
+
+  * Add `<?xyl-link?>` support. (Ivan Enderlin, 2015-11-02T08:46:28+01:00)
+  * Hywan mania. (Dupont Yohann, 2015-10-05T09:50:30+02:00)
+  * Add a missing alias on `Hoa\Stream`. (Dupont Yohann, 2015-10-05T09:48:23+02:00)
+
 # 0.15.08.17
 
   * Add a `.gitignore` file. (Stéphane HULARD, 2015-08-03T11:52:03+02:00)
