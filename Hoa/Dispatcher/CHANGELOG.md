@@ -1,3 +1,7 @@
+# 0.15.11.09
+
+  * Add a `.gitignore` file. (Stéphane HULARD, 2015-08-03T11:27:38+02:00)
+
 # 0.15.05.29
 
   * Move to PSR-1 and PSR-2. (Ivan Enderlin, 2015-05-04T20:24:40+02:00)
