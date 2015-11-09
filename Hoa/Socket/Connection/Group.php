@@ -119,6 +119,7 @@ class Group implements \ArrayAccess, \IteratorAggregate, \Countable
     /**
      * Nothing (not allowed).
      *
+     * @param   mixed  $offset    Offset.
      * @return  void
      * @throws  \Hoa\Socket\Exception
      */
