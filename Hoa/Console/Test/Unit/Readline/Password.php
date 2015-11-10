@@ -34,22 +34,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Console\Readline;
+namespace Hoa\Console\Test\Unit\Readline;
+
+use Hoa\Console as LUT;
+use Hoa\Console\Readline\Password as SUT;
+use Hoa\Test;
 
 /**
- * Class \Hoa\Console\Readline\Password.
+ * Class \Hoa\Console\Test\Unit\Readline\Password.
  *
- * Read, edit, bind… a password from the input.
+ * Test suite of the password readline.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Password extends Readline
+class Password extends Test\Unit\Suite
 {
-    /**
-     * State: continue to read and no output.
-     *
-     * @const int
-     */
-    const STATE_CONTINUE = 5; // parent::STATE_CONTINUE | parent::STATE_NO_ECHO
+    public function case_ensure_hidden()
+    {
+        $this
+            ->when($result = SUT::STATE_CONTINUE)
+            ->then
+                ->integer($result)
+                    ->isEqualTo(
+                        LUT\Readline::STATE_CONTINUE |
+                        LUT\Readline::STATE_NO_ECHO
+                    );
+    }
 }

@@ -37,7 +37,6 @@
 namespace Hoa\Console;
 
 use Hoa\Core;
-use Hoa\Stream;
 
 /**
  * Class \Hoa\Console.
@@ -165,7 +164,9 @@ class Console
             return self::$_advanced = false;
         }
 
-        if (false === $force && false === self::isDirect(STDIN)) {
+        if (false === $force &&
+            true  === defined('STDIN') &&
+            false === self::isDirect(STDIN)) {
             return self::$_advanced = false;
         }
 
@@ -368,6 +369,20 @@ class Console
         }
 
         return static::$_output;
+    }
+
+    /**
+     * Set tput.
+     *
+     * @param   \Hoa\Console\Tput  $tput    Tput.
+     * @return  \Hoa\Console\Tput
+     */
+    public static function setTput(Tput $tput)
+    {
+        $old           = static::$_tput;
+        static::$_tput = $tput;
+
+        return $old;
     }
 
     /**
