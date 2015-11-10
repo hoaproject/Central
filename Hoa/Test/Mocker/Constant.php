@@ -34,67 +34,51 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Test\Unit;
+namespace Hoa\Test\Mocker;
 
 use atoum;
-use Hoa\Core;
-use Hoa\Test;
 
 /**
- * Class \Hoa\Test\Unit\Suite.
+ * Class \Hoa\Test\Mocker\Constant.
  *
- * Represent a unit test suite.
+ * Be able to mock constants.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Suite extends atoum\test
+class Constant
 {
-    public function __construct()
+    protected $_phpMocker = null;
+
+    public function __construct(atoum\php\mocker $phpMocker)
     {
-        $this->setMethodPrefix('case');
-        parent::__construct();
-
-        $protocol                = Core::getInstance()->getProtocol();
-        $protocol['Test']        = new Core\Protocol\Generic('Test', null);
-        $protocol['Test']['Vfs'] = new Test\Protocol\Vfs();
-
-        $constantMocker = new Test\Mocker\Constant($this->getPhpMocker());
-        $this->getAssertionManager()->setPropertyHandler(
-            'constant',
-            function () use ($constantMocker) {
-                return $constantMocker;
-            }
-        );
+        $this->setPhpMocker($phpMocker);
 
         return;
     }
 
-    public function getTestedClassName()
+    public function __get($constantName)
     {
-        return 'StdClass';
+        return constant($this->getPhpMocker()->getDefaultNamespace() . $constantName);
     }
 
-    public function getTestedClassNamespace()
+    public function __set($constantName, $value)
     {
-        return '\\';
+        define($this->getPhpMocker()->getDefaultNamespace() . $constantName, $value);
+
+        return $this;
     }
 
-    public function beforeTestMethod($methodName)
+    protected function setPhpMocker(atoum\php\mocker $phpMocker)
     {
-        $out             = parent::beforeTestMethod($methodName);
-        $testedClassName = self::getTestedClassNameFromTestClass(
-            $this->getClass(),
-            $this->getTestNamespace()
-        );
-        $testedNamespace = substr(
-            $testedClassName,
-            0,
-            strrpos($testedClassName, '\\')
-        );
+        $old              = $this->_phpMocker;
+        $this->_phpMocker = $phpMocker;
 
-        $this->getPhpMocker()->setDefaultNamespace($testedNamespace);
+        return $old;
+    }
 
-        return $out;
+    protected function getPhpMocker()
+    {
+        return $this->_phpMocker;
     }
 }
