@@ -81,35 +81,42 @@ class Dal implements Core\Parameter\Parameterizable, Core\Event\Source
      *
      * @var array
      */
-    private static $_instance     = [];
+    private static $_instance        = [];
 
     /**
      * Current singleton ID.
      *
      * @var string
      */
-    private static $_id           = null;
+    private static $_id              = null;
 
     /**
      * Current ID.
      *
      * @var string
      */
-    protected $__id               = null;
+    protected $__id                  = null;
 
     /**
      * The layer instance.
      *
      * @var \Hoa\Database\IDal\Wrapper
      */
-    protected $_layer             = null;
+    protected $_layer                = null;
 
     /**
      * Parameter of \Hoa\Database\Dal.
      *
      * @var \Hoa\Core\Parameter
      */
-    protected static $_parameters = null;
+    protected static $_parameters    = null;
+
+    /**
+     * The layer connection parameter.
+     *
+     * @var array
+     */
+    protected $_connectionParameters = [];
 
 
 
@@ -117,47 +124,18 @@ class Dal implements Core\Parameter\Parameterizable, Core\Event\Source
      * Create a DAL instance, representing a connection to a database.
      * The constructor is private to make a multiton.
      *
-     * @param   string  $dalName          The database abstract layer name.
-     * @param   string  $dsn              The DSN of database.
-     * @param   string  $username         The username to connect to database.
-     * @param   string  $password         The password to connect to database.
-     * @param   array   $driverOptions    The driver options.
+     * @param   array   $connectionParameters    The layer connection parameter.
      * @return  void
-     * @throws  \Hoa\Database\Exception
      */
-    private function __construct(
-        $dalName,
-        $dsn,
-        $username,
-        $password,
-        Array $driverOptions = []
-    ) {
-        // Please see https://bugs.php.net/55154.
-        if (0 !== preg_match('#^sqlite:(.+)$#i', $dsn, $matches)) {
-            $dsn = 'sqlite:' . resolve($matches[1]);
-        }
+    private function __construct(Array $connectionParameters)
+    {
+        $this->_connectionParameters = $connectionParameters;
 
         $id    = $this->__id = self::$_id;
         $event = 'hoa://Event/Database/' . $id;
 
         Core\Event::register($event . ':opened', $this);
         Core\Event::register($event . ':closed', $this);
-
-        $this->setDal(dnew(
-            '\Hoa\Database\Layer\\' . $dalName,
-            [$dsn, $username, $password, $driverOptions]
-        ));
-
-        Core\Event::notify(
-            $event . ':opened',
-            $this,
-            new Core\Event\Bucket([
-                'id'            => $id,
-                'dsn'           => $dsn,
-                'username'      => $username,
-                'driverOptions' => $driverOptions
-            ])
-        );
 
         return;
     }
@@ -244,13 +222,13 @@ class Dal implements Core\Parameter\Parameterizable, Core\Event\Source
             $driverOptions = @$handle['options']  ?: [];
         }
 
-        return self::$_instance[$id] = new self(
+        return self::$_instance[$id] = new self([
             $dalName,
             $dsn,
             $username,
             $password,
             $driverOptions
-        );
+        ]);
     }
 
     /**
@@ -295,6 +273,46 @@ class Dal implements Core\Parameter\Parameterizable, Core\Event\Source
     public function getParameters()
     {
         return self::$_parameters;
+    }
+
+    /**
+     * Open a connection to the database.
+     *
+     * @return  void
+     */
+    private function open()
+    {
+        list(
+            $dalName,
+            $dsn,
+            $username,
+            $password,
+            $driverOptions
+        ) = $this->_connectionParameters;
+
+        // Please see https://bugs.php.net/55154.
+        if (0 !== preg_match('#^sqlite:(.+)$#i', $dsn, $matches)) {
+            $dsn = 'sqlite:' . resolve($matches[1]);
+        }
+
+        $this->setDal(dnew(
+            '\Hoa\Database\Layer\\' . $dalName,
+            [$dsn, $username, $password, $driverOptions]
+        ));
+
+        $id = $this->getId();
+        Core\Event::notify(
+            'hoa://Event/Database/' . $id . ':opened',
+            $this,
+            new Core\Event\Bucket([
+                'id'            => $id,
+                'dsn'           => $dsn,
+                'username'      => $username,
+                'driverOptions' => $driverOptions
+            ])
+        );
+
+        return;
     }
 
     /**
@@ -344,6 +362,10 @@ class Dal implements Core\Parameter\Parameterizable, Core\Event\Source
      */
     protected function getDal()
     {
+        if (null === $this->_layer) {
+            $this->open();
+        }
+
         return $this->_layer;
     }
 
@@ -506,7 +528,7 @@ class Dal implements Core\Parameter\Parameterizable, Core\Event\Source
      */
     public function setAttribute($attribute, $value)
     {
-        return $this->getDal()->setAtribute($attribute, $value);
+        return $this->getDal()->setAttribute($attribute, $value);
     }
 
     /**

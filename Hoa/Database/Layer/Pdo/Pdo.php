@@ -275,7 +275,7 @@ class Pdo implements Database\IDal\Wrapper
      * Return an array of available drivers.
      *
      * @return  array
-     * @throws  \Hoa\Datatase\Exception
+     * @throws  \Hoa\Database\Exception
      */
     public function getAvailableDrivers()
     {

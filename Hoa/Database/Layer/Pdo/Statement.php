@@ -99,7 +99,7 @@ class Statement implements Database\IDal\WrapperStatement
      *
      * @param   array   $bindParameters    Bind parameters values if bindParam
      *                                     is not called.
-     * @return  \Hoa\Database\Pdo\Statement
+     * @return  \Hoa\Database\Layer\Pdo\Statement
      * @throws  \Hoa\Database\Exception
      */
     public function execute(Array $bindParameters = null)

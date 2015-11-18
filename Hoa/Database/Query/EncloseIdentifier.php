@@ -75,7 +75,7 @@ trait EncloseIdentifier
      *
      * @param   string  $openingSymbol    Opening symbol.
      * @param   string  $closingSymbol    Closing symbol.
-     * @return  \Hoa\Database\Query\EncloseNames
+     * @return  \Hoa\Database\Query\EncloseIdentifier
      */
     public function setEncloseSymbol($openingSymbol, $closingSymbol = null)
     {
