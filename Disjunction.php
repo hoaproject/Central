@@ -37,6 +37,7 @@
 namespace Hoa\Realdom {
 
 use Hoa\Core;
+use Hoa\Exception as HoaException;
 use Hoa\Math;
 use Hoa\Visitor;
 
@@ -189,7 +190,7 @@ class          Disjunction
                 );
             } catch (Exception $e) {
                 throw $e;
-            } catch (Core\Exception $e) {
+            } catch (HoaException\Exception $e) {
                 throw new Exception(
                     'Realistic domain %s() does not exist (or something ' .
                     'wrong happened).',
