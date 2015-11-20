@@ -35,8 +35,8 @@
  */
 
 use Hoa\Console;
-use Hoa\Core;
 use Hoa\Dispatcher;
+use Hoa\Exception;
 use Hoa\Router;
 
 /**
@@ -75,8 +75,8 @@ if (!defined('HOA')) {
     }
 }
 
-Core::enableErrorHandler();
-Core::enableExceptionHandler();
+Exception\Error::enableErrorHandler();
+Exception::enableUncaughtHandler();
 
 /**
  * Here we go!
@@ -103,7 +103,7 @@ try {
     ]);
     $dispatcher->setKitName('Hoa\Console\Dispatcher\Kit');
     exit((int) $dispatcher->dispatch($router));
-} catch (Core\Exception $e) {
+} catch (Exception $e) {
     $message = $e->raise(true);
     $code    = 1;
 } catch (\Exception $e) {
