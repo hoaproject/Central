@@ -36,16 +36,16 @@
 
 namespace Hoa\Praspel\Exception;
 
-use Hoa\Core;
+use Hoa\Exception as HoaException;
 
 /**
  * Class \Hoa\Praspel\Exception\Generic.
  *
- * Extending the \Hoa\Core\Exception\Group class.
+ * Extending the \Hoa\Exception\Exception\Group class.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Group extends Core\Exception\Group implements Exception
+class Group extends HoaException\Group implements Exception
 {
 }
