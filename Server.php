@@ -129,7 +129,7 @@ class Server extends Connection
      * @param   string  $context    Context ID (please, see the
      *                              \Hoa\Stream\Context class).
      * @return  void
-     * @throws  \Hoa\Core\Exception
+     * @throws  \Hoa\Socket\Exception
      */
     public function __construct(
         $socket,

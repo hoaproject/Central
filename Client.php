@@ -216,7 +216,7 @@ class Client extends Connection
      *
      * @param   \Hoa\Socket\Connection  $other    Other client.
      * @return  \Hoa\Socket\Client
-     * @throws  \Hoa\Core\Exception
+     * @throws  \Hoa\Socket\Exception
      */
     public function consider(Connection $other)
     {
