@@ -22,8 +22,9 @@
         "source": "http://git.hoa-project.net/"
     },
     "require": {
-        "hoa/core": "~2.0",
-        "ext-pdo" : "*"
+        "hoa/core"     : "~2.0",
+        "hoa/exception": "~0.0",
+        "ext-pdo"      : "*"
     },
     "require-dev": {
         "hoa/test": "~1.0"
