@@ -37,6 +37,7 @@
 namespace Hoa\Irc;
 
 use Hoa\Core;
+use Hoa\Exception;
 use Hoa\Socket;
 
 /**
@@ -96,7 +97,7 @@ class          Client
      * @param   string  $listenerId    Listener ID.
      * @param   mixed   $callable      Callable.
      * @return  \Hoa\Irc\Client
-     * @throws  \Hoa\Core\Exception
+     * @throws  \Hoa\Exception\Exception
      */
     public function on($listenerId, $callable)
     {
@@ -225,7 +226,7 @@ class          Client
             }
 
             $this->_on->fire($listener, new Core\Event\Bucket($bucket));
-        } catch (Core\Exception\Idle $e) {
+        } catch (Exception\Idle $e) {
             $this->_on->fire(
                 'error',
                 new Core\Event\Bucket([
