@@ -37,7 +37,7 @@
 namespace Hoa\Xml\Bin;
 
 use Hoa\Console;
-use Hoa\Core;
+use Hoa\Exception;
 use Hoa\File;
 
 /**
@@ -246,7 +246,7 @@ class Shell extends Console\Dispatcher\Kit
                             echo 'Command ', $command, ' not found.', "\n";
                         }
                 }
-            } catch (Core\Exception $e) {
+            } catch (Exception\Exception $e) {
                 echo $e->getMessage(), "\n";
 
                 continue;

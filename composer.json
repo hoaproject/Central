@@ -23,6 +23,7 @@
     "require": {
         "hoa/core"        : "~2.0",
         "hoa/compiler"    : "~2.0",
+        "hoa/exception"   : "~0.0",
         "hoa/file"        : "~0.0",
         "hoa/stream"      : "~0.0",
         "hoa/stringbuffer": "~0.0"
