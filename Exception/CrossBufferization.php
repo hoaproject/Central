@@ -39,7 +39,7 @@ namespace Hoa\Http\Exception;
 /**
  * Class \Hoa\Http\Exception\CrossBufferization.
  *
- * Extending the \Hoa\Core\Exception class.
+ * Extending the \Hoa\Http\Exception class.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
