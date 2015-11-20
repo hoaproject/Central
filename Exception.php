@@ -34,18 +34,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Log {
+namespace Hoa\Log;
+
+use Hoa\Exception as HoaException;
 
 /**
  * Class \Hoa\Log\Exception.
  *
- * Extending the \Hoa\Core\Exception class.
+ * Extending the \Hoa\Exception\Exception class.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2015 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Exception extends \Hoa\Core\Exception { }
-
+class Exception extends HoaException
+{
 }
