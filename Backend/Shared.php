@@ -190,7 +190,7 @@ class Shared implements Core\Event\Listenable
      * @param   string  $listenerId    Listener ID.
      * @param   mixed   $callable      Callable.
      * @return  \Hoa\Worker\Backend\Shared
-     * @throws  \Hoa\Core\Exception
+     * @throws  \Hoa\Exception\Exception
      */
     public function on($listenerId, $callable)
     {

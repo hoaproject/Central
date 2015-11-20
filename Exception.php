@@ -36,14 +36,16 @@
 
 namespace Hoa\Worker;
 
+use Hoa\Exception as HoaException;
+
 /**
  * Class \Hoa\Worker\Exception.
  *
- * Extending the \Hoa\Core\Exception class.
+ * Extending the \Hoa\Exception\Exception class.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Exception extends \Hoa\Core\Exception
+class Exception extends HoaException
 {
 }
