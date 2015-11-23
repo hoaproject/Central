@@ -37,6 +37,7 @@
 namespace Hoa\Session;
 
 use Hoa\Core;
+use Hoa\Event;
 use Hoa\Iterator;
 
 /**
@@ -50,7 +51,7 @@ use Hoa\Iterator;
  * @license    New BSD License
  */
 class          Session
-    implements Core\Event\Source,
+    implements Event\Source,
                \ArrayAccess,
                \Countable,
                Iterator\Aggregate
@@ -197,12 +198,12 @@ class          Session
         $channel = static::EVENT_CHANNEL . $namespace;
         $expired = $channel . ':expired';
 
-        if (false === Core\Event::eventExists($channel)) {
-            Core\Event::register($channel, 'Hoa\Session');
+        if (false === Event::eventExists($channel)) {
+            Event::register($channel, 'Hoa\Session');
         }
 
-        if (false === Core\Event::eventExists($expired)) {
-            Core\Event::register($expired, 'Hoa\Session');
+        if (false === Event::eventExists($expired)) {
+            Event::register($expired, 'Hoa\Session');
         }
 
         if (true === $this->isExpired()) {
@@ -397,10 +398,10 @@ class          Session
             );
         }
 
-        Core\Event::notify(
+        Event::notify(
             $expired,
             $this,
-            new Core\Event\Bucket()
+            new Event\Bucket()
         );
 
         return;
@@ -649,8 +650,8 @@ class          Session
         $channel   = static::EVENT_CHANNEL . $namespace;
         $this->hasExpired(false);
         unset($_SESSION[static::TOP_NAMESPACE][$namespace]);
-        Core\Event::unregister($channel);
-        Core\Event::unregister($channel . ':expired');
+        Event::unregister($channel);
+        Event::unregister($channel . ':expired');
         static::$_lock[$namespace] = true;
 
         return;
