@@ -37,8 +37,8 @@
 namespace Hoa\Dns\Bin;
 
 use Hoa\Console;
-use Hoa\Core;
 use Hoa\Dns;
+use Hoa\Event;
 use Hoa\Socket;
 
 /**
@@ -119,7 +119,7 @@ class Resolve extends Console\Dispatcher\Kit
         }
 
         $dns = new Dns\Resolver(new Socket\Server('udp://' . $listen));
-        $dns->on('query', function (Core\Event\Bucket $bucket) use (&$redirections) {
+        $dns->on('query', function (Event\Bucket $bucket) use (&$redirections) {
 
             $data = $bucket->getData();
             echo
