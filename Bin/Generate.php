@@ -40,6 +40,7 @@ require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . '.autoload.atoum.php';
 
 use Hoa\Console;
 use Hoa\Core;
+use Hoa\Event;
 use Hoa\File;
 use Hoa\Ustring;
 
@@ -153,7 +154,7 @@ class Generate extends Console\Dispatcher\Kit
         $reflection    = null;
         $buffer        = null;
         $reflectionner = new Console\Processus($phpBinary);
-        $reflectionner->on('input', function (Core\Event\Bucket $bucket) use ($envVariable) {
+        $reflectionner->on('input', function (Event\Bucket $bucket) use ($envVariable) {
             $bucket->getSource()->writeAll(
                 '<?php' . "\n" .
                 'require_once \'' . dirname(__DIR__) . DS . '.bootstrap.atoum.php\';' . "\n" .
@@ -167,7 +168,7 @@ class Generate extends Console\Dispatcher\Kit
 
             return false;
         });
-        $reflectionner->on('output', function (Core\Event\Bucket $bucket) use (&$buffer) {
+        $reflectionner->on('output', function (Event\Bucket $bucket) use (&$buffer) {
             $data    = $bucket->getData();
             $buffer .= $data['line'] . "\n";
 
