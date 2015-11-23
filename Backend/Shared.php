@@ -36,7 +36,7 @@
 
 namespace Hoa\Worker\Backend;
 
-use Hoa\Core;
+use Hoa\Event;
 use Hoa\Fastcgi;
 use Hoa\Socket;
 use Hoa\Worker;
@@ -70,8 +70,10 @@ use Hoa\Zombie;
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Shared implements Core\Event\Listenable
+class Shared implements Event\Listenable
 {
+    use Event\Listens;
+
     /**
      * Message type: stop.
      *
@@ -106,13 +108,6 @@ class Shared implements Core\Event\Listenable
      * @var string
      */
     protected $_wid         = null;
-
-    /**
-     * Listeners.
-     *
-     * @var \Hoa\Core\Event\Listener
-     */
-    protected $_on          = null;
 
     /**
      * Worker's password (needed to stop the worker).
@@ -176,27 +171,12 @@ class Shared implements Core\Event\Listenable
 
         set_time_limit(0);
 
-        $this->_socket    = $workerId;
-        $this->_on        = new Core\Event\Listener($this, ['message']);
+        $this->_socket = $workerId;
+        $this->setListener(new Event\Listener($this, ['message']));
         $this->_password  = sha1($password);
         $this->_startTime = microtime(true);
 
         return;
-    }
-
-    /**
-     * Attach a callable to this listenable object.
-     *
-     * @param   string  $listenerId    Listener ID.
-     * @param   mixed   $callable      Callable.
-     * @return  \Hoa\Worker\Backend\Shared
-     * @throws  \Hoa\Exception\Exception
-     */
-    public function on($listenerId, $callable)
-    {
-        $this->_on->attach($listenerId, $callable);
-
-        return $this;
     }
 
     /**
@@ -230,9 +210,9 @@ class Shared implements Core\Event\Listenable
 
                 switch ($request['r']) {
                     case static::TYPE_MESSAGE:
-                        $this->_on->fire(
+                        $this->getListener()->fire(
                             'message',
-                            new Core\Event\Bucket([
+                            new Event\Bucket([
                                 'message' => $message
                             ])
                         );
