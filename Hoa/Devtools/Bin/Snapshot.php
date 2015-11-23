@@ -149,16 +149,24 @@ class Snapshot extends Console\Dispatcher\Kit
 
         date_default_timezone_set('UTC');
 
-        $allTags = $tags = explode(
-            "\n",
-            Console\Processus::execute(
-                'git --git-dir=' . $repositoryRoot . '/.git ' .
-                    'tag'
-            )
+        $allTags = $tags = [];
+
+        $_tags = Console\Processus::execute(
+            'git --git-dir=' . $repositoryRoot . '/.git ' .
+                'tag'
         );
+
+        if (!empty($_tags)) {
+            $allTags = $tags = explode("\n", $_tags);
+        }
+
         rsort($tags);
 
-        list($currentMCN) = explode('.', $tags[0], 2);
+        $currentMCN = 0;
+
+        if (!empty($tags)) {
+            list($currentMCN) = explode('.', $tags[0], 2);
+        }
 
         if (true === $breakBC) {
             ++$currentMCN;
@@ -167,7 +175,9 @@ class Snapshot extends Console\Dispatcher\Kit
         $newTag = $currentMCN . '.' . date('y.m.d');
 
         if (null === $minimumTag) {
-            $tags = [$tags[0]];
+            if (!empty($tags)) {
+                $tags = [$tags[0]];
+            }
         } else {
             $toInt = function ($tag) {
                 list($x, $y, $m, $d) = explode('.', $tag);
@@ -238,29 +248,42 @@ class Snapshot extends Console\Dispatcher\Kit
             'changelog',
             'updating the CHANGELOG.md file',
             function () use ($tags, $newTag, $repositoryRoot, &$changelog) {
-                array_unshift($tags, 'HEAD');
-
                 $changelog = null;
 
-                for ($i = 0, $max = count($tags) - 1; $i < $max; ++$i) {
-                    $fromStep = $tags[$i];
-                    $toStep   = $tags[$i + 1];
-                    $title    = $fromStep;
-
-                    if ('HEAD' === $fromStep) {
-                        $title = $newTag;
-                    }
-
+                if (empty($tags)) {
                     $changelog .=
-                        '# ' . $title . "\n\n" .
+                        '# ' . $newTag . "\n\n" .
                         Console\Processus::execute(
                             'git --git-dir=' . $repositoryRoot . '/.git ' .
                                 'log ' .
                                     '--first-parent ' .
-                                    '--pretty="format:  * %s (%aN, %aI)" ' .
-                                    $fromStep . '...' . $toStep,
+                                    '--pretty="format:  * %s (%aN, %aI)"',
                             false
-                        ) . "\n\n";
+                        ) . "\n\n" .
+                        '(first snapshot)' . "\n";
+                } else {
+                    array_unshift($tags, 'HEAD');
+
+                    for ($i = 0, $max = count($tags) - 1; $i < $max; ++$i) {
+                        $fromStep = $tags[$i];
+                        $toStep   = $tags[$i + 1];
+                        $title    = $fromStep;
+
+                        if ('HEAD' === $fromStep) {
+                            $title = $newTag;
+                        }
+
+                        $changelog .=
+                            '# ' . $title . "\n\n" .
+                            Console\Processus::execute(
+                                'git --git-dir=' . $repositoryRoot . '/.git ' .
+                                    'log ' .
+                                        '--first-parent ' .
+                                        '--pretty="format:  * %s (%aN, %aI)" ' .
+                                        $fromStep . '...' . $toStep,
+                                false
+                            ) . "\n\n";
+                    }
                 }
 
                 $file = new File\ReadWrite($repositoryRoot . DS . 'CHANGELOG.md');
