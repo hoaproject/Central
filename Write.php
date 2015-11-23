@@ -37,6 +37,7 @@
 namespace Hoa\Xml;
 
 use Hoa\Core;
+use Hoa\Event;
 use Hoa\Stream;
 
 /**
@@ -84,10 +85,10 @@ class Write extends Xml implements Stream\IStream\Out
      * It transforms the XML tree as a XML string, truncates the stream to zero
      * and writes all this string into the stream.
      *
-     * @param   \Hoa\Core\Event\Bucket  $bucket    Event's bucket.
+     * @param   \Hoa\Event\Bucket  $bucket    Event's bucket.
      * @return  void
      */
-    public function _close(Core\Event\Bucket $bucket)
+    public function _close(Event\Bucket $bucket)
     {
         $handle = $this->getStream()->selectRoot()->asXML();
 
