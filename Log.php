@@ -67,7 +67,7 @@ namespace Hoa\Log {
  * @license    New BSD License
  */
 
-class Log implements \Hoa\Core\Event\Source {
+class Log implements Event\Source {
 
     /**
      * Priority: emergency, system is unusable.
@@ -241,7 +241,7 @@ class Log implements \Hoa\Core\Event\Source {
         if(!isset(self::$_instances[$id])) {
 
             self::$_instances[$id] = new self();
-            \Hoa\Core\Event::register(
+            Event::register(
                 'hoa://Event/Log/' . $id,
                 self::$_instances[$id]
             );
@@ -409,10 +409,10 @@ class Log implements \Hoa\Core\Event\Source {
             $extra
         );
 
-        \Hoa\Core\Event::notify(
+        Event::notify(
             'hoa://Event/Log/' . self::$_currentId,
             $this,
-            new \Hoa\Core\Event\Bucket(array('log' => $handle))
+            new Event\Bucket(array('log' => $handle))
         );
 
         if($type & self::DEBUG) {
