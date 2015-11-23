@@ -38,6 +38,7 @@ namespace Hoa\Devtools\Bin;
 
 use Hoa\Console;
 use Hoa\Core;
+use Hoa\Event;
 
 /**
  * Class \Hoa\Devtools\Bin\Cs.
@@ -128,7 +129,7 @@ class Cs extends Console\Dispatcher\Kit
         $processus->on('input', function () {
             return false;
         });
-        $processus->on('output', function (Core\Event\Bucket $bucket) {
+        $processus->on('output', function (Event\Bucket $bucket) {
             echo $bucket->getData()['line'], "\n";
 
             return;
