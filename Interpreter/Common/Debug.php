@@ -36,7 +36,7 @@
 
 namespace Hoa\Xyl\Interpreter\Common;
 
-use Hoa\Core;
+use Hoa\Event;
 use Hoa\Stream;
 use Hoa\Xyl;
 
@@ -72,7 +72,7 @@ class Debug extends Xyl\Element\Concrete
         return;
     }
 
-    public static function receiveException(Core\Event\Bucket $bucket)
+    public static function receiveException(Event\Bucket $bucket)
     {
         // Early draft.
         self::$_message = $bucket->getData()->raise();
