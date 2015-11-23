@@ -37,6 +37,7 @@
 namespace Hoa\Database;
 
 use Hoa\Core;
+use Hoa\Event;
 
 /**
  * Class \Hoa\Database\Dal.
@@ -46,7 +47,7 @@ use Hoa\Core;
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Dal implements Core\Parameter\Parameterizable, Core\Event\Source
+class Dal implements Core\Parameter\Parameterizable, Event\Source
 {
     /**
      * Abstract layer: DBA.
@@ -134,8 +135,8 @@ class Dal implements Core\Parameter\Parameterizable, Core\Event\Source
         $id    = $this->__id = self::$_id;
         $event = 'hoa://Event/Database/' . $id;
 
-        Core\Event::register($event . ':opened', $this);
-        Core\Event::register($event . ':closed', $this);
+        Event::register($event . ':opened', $this);
+        Event::register($event . ':closed', $this);
 
         return;
     }
@@ -301,10 +302,10 @@ class Dal implements Core\Parameter\Parameterizable, Core\Event\Source
         ));
 
         $id = $this->getId();
-        Core\Event::notify(
+        Event::notify(
             'hoa://Event/Database/' . $id . ':opened',
             $this,
-            new Core\Event\Bucket([
+            new Event\Bucket([
                 'id'            => $id,
                 'dsn'           => $dsn,
                 'username'      => $username,
@@ -329,14 +330,14 @@ class Dal implements Core\Parameter\Parameterizable, Core\Event\Source
         self::$_id    = null;
         unset(self::$_instance[$id]);
 
-        Core\Event::notify(
+        Event::notify(
             $event . ':closed',
             $this,
-            new Core\Event\Bucket(['id' => $id])
+            new Event\Bucket(['id' => $id])
         );
 
-        Core\Event::unregister($event . ':opened');
-        Core\Event::unregister($event . ':closed');
+        Event::unregister($event . ':opened');
+        Event::unregister($event . ':closed');
 
         return true;
     }
