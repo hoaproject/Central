@@ -116,12 +116,12 @@ class Autoloader
 
         if ($entity === Consistency::getEntityShortestName($entity) &&
             false   !== $pos = strrpos($entity, '\\')) {
-            return $this->load(
+            return spl_autoload_call(
                 $entity . '\\' . substr($entity, $pos + 1)
             );
         }
 
-        return false;
+        return null;
     }
 
     /**
@@ -222,3 +222,10 @@ class Autoloader
         return $class->newInstanceArgs($arguments);
     }
 }
+
+/**
+ * Autoloader.
+ */
+$autoloader = new Autoloader();
+$autoloader->addNamespace('Hoa', dirname(__DIR__));
+$autoloader->register();
