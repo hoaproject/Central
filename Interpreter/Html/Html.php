@@ -152,6 +152,7 @@ class Html extends Xyl\Interpreter
         'track'           => '\Hoa\Xyl\Interpreter\Html\Track',
         'object'          => '\Hoa\Xyl\Interpreter\Html\HtmlObject',
         'param'           => '\Hoa\Xyl\Interpreter\Html\Param',
+        'canvas'          => '\Hoa\Xyl\Interpreter\Html\Canvas',
 
         // Tabular data.
         'table'           => '\Hoa\Xyl\Interpreter\Html\Table',
