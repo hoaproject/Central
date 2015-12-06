@@ -39,7 +39,10 @@ namespace Hoa\Socket;
 /**
  * Class \Hoa\Socket\Transport.
  *
- * Basic transports manipulation.
+ * Transports manipulation. Can be used to register new transports. A URI is of
+ * kind `scheme://uri`. A callable is associated to a `scheme` and represents a
+ * factory building valid `Hoa\Socket\Socket` instances (so with `tcp://` or
+ * `udp://` “native” schemes).
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
@@ -47,19 +50,25 @@ namespace Hoa\Socket;
 class Transport
 {
     /**
-     * Get all enable transports.
+     * Additionnal transports (scheme to callable).
+     *
+     * @var array
+     */
+    protected static $_transports = [];
+
+
+
+    /**
+     * Get all enabled transports.
      *
      * @return  array
      */
     public static function get()
     {
-        static $_ = null;
-
-        if (null === $_) {
-            $_ = stream_get_transports();
-        }
-
-        return $_;
+        return array_merge(
+            stream_get_transports(),
+            array_keys(static::$_transports)
+        );
     }
 
     /**
@@ -70,6 +79,40 @@ class Transport
      */
     public static function exists($transport)
     {
-        return in_array(strtolower($transport), self::get());
+        return in_array(strtolower($transport), static::get());
+    }
+
+    /**
+     * Register a new transport.
+     * Note: It is possible to override a standard transport.
+     *
+     * @param  string    $transport    Transport name.
+     * @param  callable  $factory      Associated factory to build a valid
+     *                                 `Hoa\Socket\Socket` object.
+     * @return void
+     */
+    public static function register($transport, callable $factory)
+    {
+        static::$_transports[$transport] = $factory;
+
+        return;
+    }
+
+    /**
+     * Get the factory associated to a specific transport.
+     *
+     * @param  string  $transport    Transport.
+     * @return callable
+     */
+    public static function getFactory($transport)
+    {
+        if (false === static::exists($transport) ||
+            !isset(static::$_transports[$transport])) {
+            return function ($socketUri) {
+                return new Socket($socketUri);
+            };
+        }
+
+        return static::$_transports[$transport];
     }
 }

@@ -352,13 +352,31 @@ abstract class Connection
     /**
      * Set socket.
      *
-     * @param   string  $socket    Socket URI.
+     * @param   string  $socketUri    Socket URI.
      * @return  \Hoa\Socket
+     * @throws  \Hoa\Socket\Exception
      */
-    protected function setSocket($socket)
+    protected function setSocket($socketUri)
     {
+        if (false === $pos = strpos($socketUri, '://')) {
+            $socket = new Socket($socketUri);
+        } else {
+            $transport = substr($socketUri, 0, $pos);
+            $factory   = Socket\Transport::getFactory($transport);
+            $socket    = $factory($socketUri);
+
+            if (!($socket instanceof Socket)) {
+                throw new Socket\Exception(
+                    'The transport registered for scheme “%s” is not valid: ' .
+                    'It must return a valid Hoa\Socket\Socket instance.',
+                    0,
+                    $scheme
+                );
+            }
+        }
+
         $old           = $this->_socket;
-        $this->_socket = new Socket($socket);
+        $this->_socket = $socket;
 
         return $old;
     }
@@ -640,14 +658,14 @@ abstract class Connection
             throw new Socket\Exception(
                 'Cannot read because socket is not established, ' .
                 'i.e. not connected.',
-                0
+                1
             );
         }
 
         if (0 > $length) {
             throw new Socket\Exception(
                 'Length must be greater than 0, given %d.',
-                1,
+                2,
                 $length
             );
         }
@@ -787,14 +805,14 @@ abstract class Connection
             throw new Socket\Exception(
                 'Cannot write because socket is not established, ' .
                 'i.e. not connected.',
-                2
+                3
             );
         }
 
         if (0 > $length) {
             throw new Socket\Exception(
                 'Length must be greater than 0, given %d.',
-                3,
+                4,
                 $length
             );
         }
@@ -820,7 +838,7 @@ abstract class Connection
         }
 
         if (-1 === $out) {
-            throw new Socket\Exception('Pipe is broken, cannot write data.', 4);
+            throw new Socket\Exception('Pipe is broken, cannot write data.', 5);
         }
 
         return $out;
