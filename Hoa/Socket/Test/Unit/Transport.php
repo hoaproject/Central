@@ -36,8 +36,8 @@
 
 namespace Hoa\Socket\Test\Unit;
 
-use Hoa\Socket\Transport as SUT;
 use Hoa\Socket as LUT;
+use Hoa\Socket\Transport as SUT;
 use Hoa\Test;
 
 /**
