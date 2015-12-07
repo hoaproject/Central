@@ -53,8 +53,8 @@ class Video extends Media
      */
     protected static $_attributes        = [
         'poster' => parent::ATTRIBUTE_TYPE_LINK,
-        'width'  => parent::ATTRIBUTE_TYPE_NORMAL,
-        'height' => parent::ATTRIBUTE_TYPE_NORMAL
+        'height' => parent::ATTRIBUTE_TYPE_NORMAL,
+        'width'  => parent::ATTRIBUTE_TYPE_NORMAL
     ];
 
     /**
