@@ -36,7 +36,7 @@
 
 namespace Hoa\Acl;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Graph;
 
 /**
@@ -562,4 +562,4 @@ class Acl
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Acl\Acl');
+Consistency::flexEntity('Hoa\Acl\Acl');
