@@ -36,7 +36,7 @@
 
 namespace Hoa\Realdom {
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Exception as HoaException;
 use Hoa\Math;
 use Hoa\Visitor;
@@ -179,7 +179,7 @@ class          Disjunction
         } elseif ('Variable' === $name) {
             $handle = new Crate\Variable($arguments[0]);
         } else {
-            if (Core\Consistency::isKeyword($name)) {
+            if (Consistency::isKeyword($name)) {
                 $name = 'Realdom' . $name;
             }
 

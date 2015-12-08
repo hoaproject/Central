@@ -36,7 +36,7 @@
 
 namespace Hoa\Realdom\Exception;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Exception as HoaException;
 
 /**
@@ -54,4 +54,4 @@ class Exception extends HoaException
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Realdom\Exception\Exception');
+Consistency::flexEntity('Hoa\Realdom\Exception\Exception');

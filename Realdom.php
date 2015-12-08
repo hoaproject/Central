@@ -36,7 +36,7 @@
 
 namespace Hoa\Realdom;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Math;
 use Hoa\Praspel;
 use Hoa\Visitor;
@@ -911,4 +911,4 @@ abstract class Realdom
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Realdom\Realdom');
+Consistency::flexEntity('Hoa\Realdom\Realdom');
