@@ -36,6 +36,7 @@
 
 namespace Hoa\Mime;
 
+use Hoa\Consistency;
 use Hoa\Core;
 use Hoa\Stream;
 
@@ -486,4 +487,4 @@ class Mime implements Core\Parameter\Parameterizable
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Mime\Mime');
+Consistency::flexEntity('Hoa\Mime\Mime');
