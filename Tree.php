@@ -36,7 +36,7 @@
 
 namespace Hoa\Tree;
 
-use Hoa\Core;
+use Hoa\Consistency;
 
 /**
  * Class \Hoa\Tree.
@@ -109,4 +109,4 @@ class Tree extends Generic
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Tree\Tree');
+Consistency::flexEntity('Hoa\Tree\Tree');
