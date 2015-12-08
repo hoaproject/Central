@@ -36,7 +36,7 @@
 
 namespace Hoa\Bench;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Iterator;
 
 /**
@@ -423,4 +423,4 @@ class Bench implements Iterator, \Countable
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Bench\Bench');
+Consistency::flexEntity('Hoa\Bench\Bench');
