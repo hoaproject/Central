@@ -36,8 +36,8 @@
 
 namespace Hoa\Test\Bin;
 
+use Hoa\Consistency;
 use Hoa\Console;
-use Hoa\Core;
 use Hoa\File;
 
 /**
@@ -97,7 +97,7 @@ class Run extends Console\Dispatcher\Kit
                     foreach ($iterator as $fileinfo) {
                         $libraryName = $fileinfo->getBasename();
 
-                        if (true === Core\Consistency::isKeyword($libraryName)) {
+                        if (true === Consistency::isKeyword($libraryName)) {
                             continue;
                         }
 
