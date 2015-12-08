@@ -36,7 +36,7 @@
 
 namespace Hoa\Zombie;
 
-use Hoa\Core;
+use Hoa\Consistency;
 
 /**
  * Class \Hoa\Zombie.
@@ -159,4 +159,4 @@ class Zombie
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Zombie\Zombie');
+Consistency::flexEntity('Hoa\Zombie\Zombie');
