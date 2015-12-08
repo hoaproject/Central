@@ -38,6 +38,7 @@ namespace Hoa\Xyl;
 
 use Hoa\Consistency;
 use Hoa\Core;
+use Hoa\Event;
 use Hoa\Locale;
 use Hoa\Router;
 use Hoa\Stream;
@@ -1960,5 +1961,5 @@ class _Protocol extends Core\Protocol
  */
 Consistency::flexEntity('Hoa\Xyl\Xyl');
 
-event('hoa://Event/Exception')
+Event::getEvent('hoa://Event/Exception')
     ->attach(xcallable('Hoa\Xyl\Interpreter\Common\Debug', 'receiveException'));
