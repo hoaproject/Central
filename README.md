@@ -45,7 +45,7 @@ Then, we start the worker (with a password) and we listen to messages:
 
 ```php
 $worker = new Hoa\Worker\Backend\Shared('demorker', 'iamapassword');
-$worker->on('message', function(Hoa\Core\Event\Bucket $bucket) {
+$worker->on('message', function(Hoa\Event\Bucket $bucket) {
     $data = $bucket->getData();
     // compute $data['message'].
 });
