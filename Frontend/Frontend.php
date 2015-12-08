@@ -37,7 +37,7 @@
 namespace Hoa\Cache\Frontend;
 
 use Hoa\Cache;
-use Hoa\Core;
+use Hoa\Consistency;
 
 /**
  * Class \Hoa\Cache\Frontend.
@@ -102,4 +102,4 @@ abstract class Frontend extends Cache
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Cache\Frontend\Frontend');
+Consistency::flexEntity('Hoa\Cache\Frontend\Frontend');

@@ -37,7 +37,7 @@
 namespace Hoa\Cache\Backend;
 
 use Hoa\Cache;
-use Hoa\Core;
+use Hoa\Consistency;
 
 /**
  * Class \Hoa\Cache\Backend.
@@ -84,4 +84,4 @@ abstract class Backend extends Cache
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Cache\Backend\Backend');
+Consistency::flexEntity('Hoa\Cache\Backend\Backend');

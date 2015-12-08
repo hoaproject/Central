@@ -36,6 +36,7 @@
 
 namespace Hoa\Cache;
 
+use Hoa\Consistency;
 use Hoa\Core;
 
 /**
@@ -271,4 +272,4 @@ abstract class Cache implements Core\Parameter\Parameterizable
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Cache\Cache');
+Consistency::flexEntity('Hoa\Cache\Cache');

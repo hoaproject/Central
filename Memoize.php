@@ -121,7 +121,7 @@ class Memoize
     /**
      * Callable.
      *
-     * @var \Hoa\Core\Consistency\Xcallable
+     * @var \Hoa\Consistency\Xcallable
      */
     protected $_callable      = null;
 
