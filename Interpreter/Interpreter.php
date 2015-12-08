@@ -36,7 +36,7 @@
 
 namespace Hoa\Xyl\Interpreter;
 
-use Hoa\Core;
+use Hoa\Consistency;
 
 /**
  * Class \Hoa\Xyl\Interpreter.
@@ -130,4 +130,4 @@ abstract class Interpreter
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Xyl\Interpreter\Interpreter');
+Consistency::flexEntity('Hoa\Xyl\Interpreter\Interpreter');

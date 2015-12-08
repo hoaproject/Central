@@ -36,7 +36,7 @@
 
 namespace Hoa\Xyl\Element;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Xml;
 
 /**
@@ -54,4 +54,4 @@ interface Element extends Xml\Element
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Xyl\Element\Element');
+Consistency::flexEntity('Hoa\Xyl\Element\Element');

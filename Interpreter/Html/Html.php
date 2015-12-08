@@ -36,7 +36,7 @@
 
 namespace Hoa\Xyl\Interpreter\Html;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Xyl;
 
 /**
@@ -207,4 +207,4 @@ class Html extends Xyl\Interpreter
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Xyl\Interpreter\Html\Html');
+Consistency::flexEntity('Hoa\Xyl\Interpreter\Html\Html');

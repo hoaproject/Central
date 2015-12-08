@@ -36,6 +36,7 @@
 
 namespace Hoa\Xyl;
 
+use Hoa\Consistency;
 use Hoa\Core;
 use Hoa\Locale;
 use Hoa\Router;
@@ -1957,7 +1958,7 @@ class _Protocol extends Core\Protocol
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Xyl\Xyl');
+Consistency::flexEntity('Hoa\Xyl\Xyl');
 
 event('hoa://Event/Exception')
     ->attach(xcallable('Hoa\Xyl\Interpreter\Common\Debug', 'receiveException'));
