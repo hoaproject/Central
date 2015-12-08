@@ -36,7 +36,7 @@
 
 namespace Hoa\Graph;
 
-use Hoa\Core;
+use Hoa\Consistency;
 
 /**
  * Class \Hoa\Graph.
@@ -258,4 +258,4 @@ abstract class Graph
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Graph\Graph');
+Consistency::flexEntity('Hoa\Graph\Graph');
