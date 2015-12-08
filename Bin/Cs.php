@@ -37,7 +37,6 @@
 namespace Hoa\Devtools\Bin;
 
 use Hoa\Console;
-use Hoa\Core;
 use Hoa\Event;
 
 /**
