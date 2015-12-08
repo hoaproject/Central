@@ -37,14 +37,14 @@
 namespace Hoa\Xyl\Interpreter\Html;
 
 /**
- * Class \Hoa\Xyl\Interpreter\Html\Video.
+ * Class \Hoa\Xyl\Interpreter\Html\Canvas.
  *
- * The <video /> component.
+ * The `<canvas />` component.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Video extends Media
+class Canvas extends GenericPhrasing
 {
     /**
      * Attributes description.
@@ -52,7 +52,6 @@ class Video extends Media
      * @var array
      */
     protected static $_attributes        = [
-        'poster' => parent::ATTRIBUTE_TYPE_LINK,
         'height' => parent::ATTRIBUTE_TYPE_NORMAL,
         'width'  => parent::ATTRIBUTE_TYPE_NORMAL
     ];
