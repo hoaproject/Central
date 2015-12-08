@@ -36,7 +36,7 @@
 
 namespace Hoa\Locale;
 
-use Hoa\Core;
+use Hoa\Consistency;
 
 /**
  * Class \Hoa\Locale.
@@ -454,4 +454,4 @@ class Locale
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Locale\Locale');
+Consistency::flexEntity('Hoa\Locale\Locale');

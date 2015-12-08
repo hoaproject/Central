@@ -36,7 +36,7 @@
 
 namespace Hoa\Locale\Localizer;
 
-use Hoa\Core;
+use Hoa\Consistency;
 
 /**
  * Interface \Hoa\Locale\Localizer.
@@ -58,4 +58,4 @@ interface Localizer
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Locale\Localizer\Localizer');
+Consistency::flexEntity('Hoa\Locale\Localizer\Localizer');
