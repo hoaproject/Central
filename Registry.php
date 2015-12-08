@@ -36,6 +36,7 @@
 
 namespace Hoa\Registry;
 
+use Hoa\Consistency;
 use Hoa\Core;
 
 /**
@@ -184,7 +185,7 @@ class _Protocol extends Core\Protocol
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Registry\Registry');
+Consistency::flexEntity('Hoa\Registry\Registry');
 
 /**
  * Add the hoa://Library/Registry component. Should be use to reach/get an entry
