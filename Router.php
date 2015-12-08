@@ -36,7 +36,7 @@
 
 namespace Hoa\Router;
 
-use Hoa\Core;
+use Hoa\Consistency;
 
 /**
  * Interface \Hoa\Router.
@@ -209,4 +209,4 @@ interface Router
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Router\Router');
+Consistency::flexEntity('Hoa\Router\Router');

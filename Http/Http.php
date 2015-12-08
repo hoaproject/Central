@@ -36,6 +36,7 @@
 
 namespace Hoa\Router\Http;
 
+use Hoa\Consistency;
 use Hoa\Core;
 use Hoa\Router;
 
@@ -1017,4 +1018,4 @@ class Http extends Router\Generic implements Core\Parameter\Parameterizable
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Router\Http\Http');
+Consistency::flexEntity('Hoa\Router\Http\Http');
