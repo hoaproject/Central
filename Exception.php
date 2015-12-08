@@ -46,6 +46,6 @@ namespace Hoa\Prototype {
  * @license    New BSD License
  */
 
-class Exception extends \Hoa\Core\Exception { }
+class Exception extends \Hoa\Exception { }
 
 }

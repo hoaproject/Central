@@ -259,6 +259,6 @@ namespace {
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Prototype\Prototype');
+Hoa\Consistency::flexEntity('Hoa\Prototype\Prototype');
 
 }
