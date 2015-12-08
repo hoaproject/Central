@@ -36,7 +36,7 @@
 
 namespace Hoa\String;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Ustring;
 
 /**
@@ -58,4 +58,4 @@ class String extends Ustring
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\String\String');
+Consistency::flexEntity('Hoa\String\String');
