@@ -36,6 +36,7 @@
 
 namespace Hoa\Dispatcher;
 
+use Hoa\Consistency;
 use Hoa\Router;
 use Hoa\View;
 
@@ -95,7 +96,7 @@ class ClassMethod extends Dispatcher
         $method = $this->_parameters->getFormattedParameter($_method);
 
         try {
-            $class = dnew($class, $rtv);
+            $class = Consistency\Autoloader::dnew($class, $rtv);
         } catch (\Exception $e) {
             throw new Exception(
                 'Class %s is not found ' .
@@ -118,7 +119,7 @@ class ClassMethod extends Dispatcher
             !isset($variables['_this']) ||
             !(isset($variables['_this']) &&
             ($variables['_this'] instanceof $kitname))) {
-            $variables['_this'] = dnew($kitname, $rtv);
+            $variables['_this'] = Consistency\Autoloader::dnew($kitname, $rtv);
             $variables['_this']->construct();
         }
 

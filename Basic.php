@@ -36,6 +36,7 @@
 
 namespace Hoa\Dispatcher;
 
+use Hoa\Consistency;
 use Hoa\Router;
 use Hoa\View;
 
@@ -84,7 +85,7 @@ class Basic extends Dispatcher
             $kitname = $this->getKitName();
 
             if (!empty($kitname)) {
-                $kit = dnew($this->getKitName(), $rtv);
+                $kit = Consistency\Autoloader::dnew($this->getKitName(), $rtv);
 
                 if (!($kit instanceof Kit)) {
                     throw new Exception(
@@ -123,7 +124,7 @@ class Basic extends Dispatcher
             $kitname = $this->getKitName();
 
             if (!empty($kitname)) {
-                $kit = dnew($this->getKitName(), $rtv);
+                $kit = Consistency::dnew($this->getKitName(), $rtv);
 
                 if (!($kit instanceof Kit)) {
                     throw new Exception(
@@ -178,7 +179,7 @@ class Basic extends Dispatcher
                 $action     = $this->_parameters->getFormattedParameter($_action);
 
                 try {
-                    $controller = dnew($controller, $rtv);
+                    $controller = Consistency\Autoloader::dnew($controller, $rtv);
                 } catch (\Exception $e) {
                     throw new Exception(
                         'Controller %s is not found ' .
@@ -198,7 +199,7 @@ class Basic extends Dispatcher
                 $kitname = $this->getKitName();
 
                 if (!empty($kitname)) {
-                    $variables['_this'] = dnew($kitname, $rtv);
+                    $variables['_this'] = Consistency\Autoloader::dnew($kitname, $rtv);
                 }
 
                 if (method_exists($controller, 'construct')) {
