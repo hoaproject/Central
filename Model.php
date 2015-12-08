@@ -694,6 +694,6 @@ namespace {
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Model\Model');
+Hoa\Consistency::flexEntity('Hoa\Model\Model');
 
 }
