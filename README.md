@@ -75,7 +75,7 @@ Considering the previous example, we will declare the namespace as expired when
 the session is empty:
 
 ```php
-event('hoa://Event/Session/user:expired')
+Hoa\Event\Event::getEvent('hoa://Event/Session/user:expired')
     ->attach(function (Hoa\Event\Bucket $bucket) {
         echo 'expired', "\n";
     });

@@ -389,7 +389,7 @@ class          Session
         $expired = static::EVENT_CHANNEL . $namespace . ':expired';
 
         if (true  === $exception &&
-            false === event($expired)->isListened()) {
+            false === Event::getEvent($expired)->isListened()) {
             throw new Exception\Expired(
                 'Namespace %s has expired. All data belonging to this ' .
                 'namespace are lost.',
