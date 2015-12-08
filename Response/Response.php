@@ -36,7 +36,7 @@
 
 namespace Hoa\Http\Response;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Http;
 use Hoa\Stream;
 
@@ -954,4 +954,4 @@ class          Response
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Http\Response\Response');
+Consistency::flexEntity('Hoa\Http\Response\Response');

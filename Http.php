@@ -36,7 +36,7 @@
 
 namespace Hoa\Http;
 
-use Hoa\Core;
+use Hoa\Consistency;
 
 /**
  * Class \Hoa\Http.
@@ -291,4 +291,4 @@ abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Http\Http');
+Consistency::flexEntity('Hoa\Http\Http');
