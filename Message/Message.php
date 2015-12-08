@@ -36,7 +36,7 @@
 
 namespace Hoa\XmlRpc\Message;
 
-use Hoa\Core;
+use Hoa\Consistency;
 
 /**
  * Class \Hoa\XmlRpc\Message.
@@ -570,4 +570,4 @@ class Message
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\XmlRpc\Message\Message');
+Consistency::flexEntity('Hoa\XmlRpc\Message\Message');
